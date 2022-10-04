@@ -2,62 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8005F3B03
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 03:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D195F3B05
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 03:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiJDBbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 21:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53058 "EHLO
+        id S229658AbiJDBec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 21:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiJDBbh (ORCPT
+        with ESMTP id S229462AbiJDBe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 21:31:37 -0400
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [IPv6:2a0c:5a00:149::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B0124F3D
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 18:31:34 -0700 (PDT)
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-        by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <m.v.b@runbox.com>)
-        id 1ofWmR-00CmHE-53; Tue, 04 Oct 2022 03:31:31 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
-         s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-        bh=D12fPQ5j3j3zSJ/Nfz7wHUZeYeIAFD/CgfUoI8BE3ZA=; b=KWm+bB2tlzfdk2RsQd5XOvV6l2
-        n3XwWNFf6zH1vpPYFqUjRI2G8lehv4j1L9ZQeEXvaUZkK4TVcCVBYCOS3DaK3z7IRKPqq2/p7rayd
-        /vFucL90mtoJjFcsX34rvh3gMoUgQHb+MiCBqUINNi7DeqTg0Y0OhztjvyF2UlYUHqvENRy995cv1
-        nQpHrBQaizuYfDX3BIGfrYce6XZwbA5q0M/vL80pvfzTnL5uNQcgcLmWcL9kwsnG3nTPmJuAdPcxB
-        Em+o0AytxrTGw93rCB3EllmKCVTVQlc2gE8QquiGmHnLYmEfY3CcMZ/Ktr4NfL3uh7jRiDI6+9m16
-        54nimbAA==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-        by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-        (envelope-from <m.v.b@runbox.com>)
-        id 1ofWmQ-0000M8-74; Tue, 04 Oct 2022 03:31:30 +0200
-Received: by submission01.runbox with esmtpsa  [Authenticated ID (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        id 1ofWmO-0000kW-Bs; Tue, 04 Oct 2022 03:31:28 +0200
-Message-ID: <41d15ac1-7977-db49-f8e9-df642616c745@runbox.com>
-Date:   Mon, 3 Oct 2022 21:31:25 -0400
+        Mon, 3 Oct 2022 21:34:29 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FA824F3D
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 18:34:28 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id a3so6843039wrt.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 18:34:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Ba7+VCWbkSLdpJi3cP/QjqQGiLdpPdQDJwXzgD1/onY=;
+        b=LDHsaymAavJtj3LDueXJl2RdUB3co7vxf5coiblnwptFT1MJTUAJ/7NiGmIi0N62BQ
+         YXM/NoPBl/tGd/0nj1jh5V4Yr7ZqYFEYOcZacScdEz+MDbhaA4VLxe5Ppfq398+YRMQ7
+         ot4EjIMKcTsLYr8W/YrZ9LS3Z3FsnNb8JkadHtD6kDLMrD+141aE+a7iv+RYaM54cQmW
+         cdNgshd/R2VGEMmq6affMREJOr4+0dssk6YslPUpKf1wzymfBgKEUB8UB1RUkMUkQml7
+         8tIQM7MSnS3aNDAgBG9EJtmI+sONjqYMEvvO0237gIzIMi9/8WkfauuQC6PAnECixlIu
+         dYtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Ba7+VCWbkSLdpJi3cP/QjqQGiLdpPdQDJwXzgD1/onY=;
+        b=TP1UdNULvP/7Wcl+YxHXLtaSyR0Vgid/N8kjd+v3ERb2TU5YtwyKSPnXmhyVpFvdrR
+         EtMMnEhBHN2AxnqP3byAaqqw0W/C2c3amZ//r3/lbhmbp2D+Dd3Z/k+BAlMC4ug3P9MB
+         nYYIwYKPbm9W+FqpBA12H0nEso+Zsa2ztxXyJhxd4z490dK3E5hmmzejK6B2JgU4zicn
+         zfrq4P/jUl4tahnDTQbqNroFGRmooeCFmpFaSFEU9j4w6f5hUWUenst8JF/4EVfvNUTc
+         ZEGTZL0wfk3KHaVYPgv+/thX8CeVpnle5kI6ReaNAik5WBfVrNx2OJbOskHa9WNBjqLE
+         /DlA==
+X-Gm-Message-State: ACrzQf2uDuGQ7eo9O9YBOiejVqto6fp8AaFk9WeM1W4GFJ7l6nVrmX4G
+        sMrxAfBnx2p17scqfPc3ldw0uVUAsPEJGusNtmPa7g==
+X-Google-Smtp-Source: AMsMyM6krLGiwys9XeWRnQqFdw/0YjkEcWg5F182whJ0d8Wtva7lQmEXb9BgNObGQCN0qtEVegHxoyk1iR6ApX6Sc6M=
+X-Received: by 2002:a5d:68d0:0:b0:22c:dfba:3bd6 with SMTP id
+ p16-20020a5d68d0000000b0022cdfba3bd6mr11297684wrw.300.1664847266592; Mon, 03
+ Oct 2022 18:34:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 1/2] xen/gntdev: Prevent leaking grants
-Content-Language: en-CA
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Gerd Hoffmann <kraxel@redhat.com>
-References: <20221002222006.2077-1-m.v.b@runbox.com>
- <20221002222006.2077-2-m.v.b@runbox.com> <YzotDube4gTn7r9b@itl-email>
-From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
-In-Reply-To: <YzotDube4gTn7r9b@itl-email>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220928072204.1613330-1-irogers@google.com> <20220928072204.1613330-4-irogers@google.com>
+ <e685d636-52cd-b34a-2d10-90c16b2e57cf@linux.intel.com>
+In-Reply-To: <e685d636-52cd-b34a-2d10-90c16b2e57cf@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 3 Oct 2022 18:34:14 -0700
+Message-ID: <CAP-5=fXnzHBuNORVCznEi6yhoJXXD6bVaevw6qygsGf8BgmiWA@mail.gmail.com>
+Subject: Re: [PATCH v1 03/22] perf metrics: Don't scale counts going into metrics
+To:     Xing Zhengjun <zhengjun.xing@linux.intel.com>
+Cc:     Kan Liang <kan.liang@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>, perry.taylor@intel.com,
+        caleb.biggers@intel.com, kshipra.bopardikar@intel.com,
+        samantha.alt@intel.com, ahmad.yasin@intel.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,250 +85,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-02 20:29, Demi Marie Obenour wrote:
-> On Sun, Oct 02, 2022 at 06:20:05PM -0400, M. Vefa Bicakci wrote:
->> Prior to this commit, if a grant mapping operation failed partially,
->> some of the entries in the map_ops array would be invalid, whereas all
->> of the entries in the kmap_ops array would be valid. This in turn would
->> cause the following logic in gntdev_map_grant_pages to become invalid:
->>
->>    for (i = 0; i < map->count; i++) {
->>      if (map->map_ops[i].status == GNTST_okay) {
->>        map->unmap_ops[i].handle = map->map_ops[i].handle;
->>        if (!use_ptemod)
->>          alloced++;
->>      }
->>      if (use_ptemod) {
->>        if (map->kmap_ops[i].status == GNTST_okay) {
->>          if (map->map_ops[i].status == GNTST_okay)
->>            alloced++;
->>          map->kunmap_ops[i].handle = map->kmap_ops[i].handle;
->>        }
->>      }
->>    }
->>    ...
->>    atomic_add(alloced, &map->live_grants);
->>
->> Assume that use_ptemod is true (i.e., the domain mapping the granted
->> pages is a paravirtualized domain). In the code excerpt above, note that
->> the "alloced" variable is only incremented when both kmap_ops[i].status
->> and map_ops[i].status are set to GNTST_okay (i.e., both mapping
->> operations are successful).  However, as also noted above, there are
->> cases where a grant mapping operation fails partially, breaking the
->> assumption of the code excerpt above.
->>
->> The aforementioned causes map->live_grants to be incorrectly set. In
->> some cases, all of the map_ops mappings fail, but all of the kmap_ops
->> mappings succeed, meaning that live_grants may remain zero. This in turn
->> makes it impossible to unmap the successfully grant-mapped pages pointed
->> to by kmap_ops, because unmap_grant_pages has the following snippet of
->> code at its beginning:
->>
->>    if (atomic_read(&map->live_grants) == 0)
->>      return; /* Nothing to do */
->>
->> In other cases where only some of the map_ops mappings fail but all
->> kmap_ops mappings succeed, live_grants is made positive, but when the
->> user requests unmapping the grant-mapped pages, __unmap_grant_pages_done
->> will then make map->live_grants negative, because the latter function
->> does not check if all of the pages that were requested to be unmapped
->> were actually unmapped, and the same function unconditionally subtracts
->> "data->count" (i.e., a value that can be greater than map->live_grants)
->> from map->live_grants. The side effects of a negative live_grants value
->> have not been studied.
->>
->> The net effect of all of this is that grant references are leaked in one
->> of the above conditions. In Qubes OS v4.1 (which uses Xen's grant
->> mechanism extensively for X11 GUI isolation), this issue manifests
->> itself with warning messages like the following to be printed out by the
->> Linux kernel in the VM that had granted pages (that contain X11 GUI
->> window data) to dom0: "g.e. 0x1234 still pending", especially after the
->> user rapidly resizes GUI VM windows (causing some grant-mapping
->> operations to partially or completely fail, due to the fact that the VM
->> unshares some of the pages as part of the window resizing, making the
->> pages impossible to grant-map from dom0).
->>
->> The fix for this issue involves counting all successful map_ops and
->> kmap_ops mappings separately, and then adding the sum to live_grants.
->> During unmapping, only the number of successfully unmapped grants is
->> subtracted from live_grants. The code is also modified to check for
->> negative live_grants values after the subtraction and warn the user.
->>
->> Link: https://github.com/QubesOS/qubes-issues/issues/7631
->> Fixes: dbe97cff7dd9 ("xen/gntdev: Avoid blocking in unmap_grant_pages()")
-> 
-> Looks like this patch has been pretty buggy, sorry.  This is the second
-> time there has been a problem with it.  Thanks for the fix.
+On Thu, Sep 29, 2022 at 1:49 AM Xing Zhengjun
+<zhengjun.xing@linux.intel.com> wrote:
+>
+> On 9/28/2022 3:21 PM, Ian Rogers wrote:
+> > Counts are scaled prior to going into saved_value, reverse the scaling
+> > so that metrics don't double scale values.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >   tools/perf/util/stat-shadow.c | 9 +++++++--
+> >   1 file changed, 7 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/tools/perf/util/stat-shadow.c b/tools/perf/util/stat-shadow.c
+> > index 9e1eddeff21b..b5cedd37588f 100644
+> > --- a/tools/perf/util/stat-shadow.c
+> > +++ b/tools/perf/util/stat-shadow.c
+> > @@ -865,11 +865,16 @@ static int prepare_metric(struct evsel **metric_events,
+> >                       if (!v)
+> >                               break;
+> >                       stats = &v->stats;
+> > -                     scale = 1.0;
+> > +                     /*
+> > +                      * If an event was scaled during stat gathering, reverse
+> > +                      * the scale before computing the metric.
+> > +                      */
+> > +                     scale = 1.0 / metric_events[i]->scale;
+> > +
+> This look likes not work for kernel side events like
+> /sys/devices/uncore_imc_*/events/cas_count_read(write).
 
-Hi,
+I've not been able to reproduce this. I've tried:
 
-No problem! :-) Debugging this issue and coming up with a fix was a
-nice challenge for me.
+  {
+    "MetricName": "IanTest",
+    "MetricExpr": "uncore_imc@cas_count_read@ * 6.103515625e-5 +
+uncore_imc@cas_count_write@ * 6.103515625e-5"
+  }
 
-> 
->> Cc: stable@vger.kernel.org
->> Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
->> ---
->>
->> Changes since v1:
->> - To determine which unmap operations were successful, the previous
->>    version of this patch set the "unmap_ops[i].status" and
->>    "kunmap_ops[i].status" fields to the value "1" prior to passing these
->>    data structures to the hypervisor. Instead of doing that, the code now
->>    checks whether the "handle" fields in the same data structures were
->>    *not* set to "INVALID_GRANT_HANDLE". (Suggested by Juergen Gross.)
->> ---
->>   drivers/xen/gntdev.c | 22 +++++++++++++++++-----
->>   1 file changed, 17 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/xen/gntdev.c b/drivers/xen/gntdev.c
->> index 84b143eef395..eb0586b9767d 100644
->> --- a/drivers/xen/gntdev.c
->> +++ b/drivers/xen/gntdev.c
->> @@ -367,8 +367,7 @@ int gntdev_map_grant_pages(struct gntdev_grant_map *map)
->>   	for (i = 0; i < map->count; i++) {
->>   		if (map->map_ops[i].status == GNTST_okay) {
->>   			map->unmap_ops[i].handle = map->map_ops[i].handle;
->> -			if (!use_ptemod)
->> -				alloced++;
->> +			alloced++;
->>   		} else if (!err)
->>   			err = -EINVAL;
->>   
->> @@ -377,8 +376,7 @@ int gntdev_map_grant_pages(struct gntdev_grant_map *map)
->>   
->>   		if (use_ptemod) {
->>   			if (map->kmap_ops[i].status == GNTST_okay) {
->> -				if (map->map_ops[i].status == GNTST_okay)
->> -					alloced++;
->> +				alloced++;
->>   				map->kunmap_ops[i].handle = map->kmap_ops[i].handle;
->>   			} else if (!err)
->>   				err = -EINVAL;
->> @@ -394,8 +392,14 @@ static void __unmap_grant_pages_done(int result,
->>   	unsigned int i;
->>   	struct gntdev_grant_map *map = data->data;
->>   	unsigned int offset = data->unmap_ops - map->unmap_ops;
->> +	int successful_unmaps = 0;
->> +	int live_grants;
->>   
->>   	for (i = 0; i < data->count; i++) {
->> +		if (map->unmap_ops[offset + i].status == GNTST_okay &&
->> +		    map->unmap_ops[offset + i].handle != INVALID_GRANT_HANDLE)
->> +			successful_unmaps++;
->> +
->>   		WARN_ON(map->unmap_ops[offset + i].status != GNTST_okay &&
->>   			map->unmap_ops[offset + i].handle != INVALID_GRANT_HANDLE);
->>   		pr_debug("unmap handle=%d st=%d\n",
->> @@ -403,6 +407,10 @@ static void __unmap_grant_pages_done(int result,
->>   			map->unmap_ops[offset+i].status);
->>   		map->unmap_ops[offset+i].handle = INVALID_GRANT_HANDLE;
->>   		if (use_ptemod) {
->> +			if (map->kunmap_ops[offset + i].status == GNTST_okay &&
->> +			    map->kunmap_ops[offset + i].handle != INVALID_GRANT_HANDLE)
->> +				successful_unmaps++;
->> +
->>   			WARN_ON(map->kunmap_ops[offset + i].status != GNTST_okay &&
->>   				map->kunmap_ops[offset + i].handle != INVALID_GRANT_HANDLE);
->>   			pr_debug("kunmap handle=%u st=%d\n",
->> @@ -411,11 +419,15 @@ static void __unmap_grant_pages_done(int result,
->>   			map->kunmap_ops[offset+i].handle = INVALID_GRANT_HANDLE;
->>   		}
->>   	}
->> +
->>   	/*
->>   	 * Decrease the live-grant counter.  This must happen after the loop to
->>   	 * prevent premature reuse of the grants by gnttab_mmap().
->>   	 */
->> -	atomic_sub(data->count, &map->live_grants);
->> +	live_grants = atomic_sub_return(successful_unmaps, &map->live_grants);
->> +	if (WARN_ON(live_grants < 0))
->> +		pr_err("%s: live_grants became negative (%d) after unmapping %d pages!\n",
->> +		       __func__, live_grants, successful_unmaps);
->>   
->>   	/* Release reference taken by __unmap_grant_pages */
->>   	gntdev_put_map(NULL, map);
->> -- 
->> 2.37.3
-> 
-> Is there a possibility that live_grants could overflow, as it is now
-> set to a value twice as large as what it had been previously?
+where it scales the two counters and sums them. I see:
 
-Good point! My answer in summary: I think that the code could be improved,
-but with reasonable values for the "limit" module parameter, there should
-not be issues.
+$ perf stat -M IanTest -a sleep 1
 
-Grant mappings are set up via ioctl calls, and the structure field that
-holds the number of grant references has u32 type:
+Performance counter stats for 'system wide':
 
-(Quoting from kernel v5.15.71 for convenience)
-include/uapi/xen/gntdev.h
-=== 8< ===
-struct ioctl_gntdev_map_grant_ref {
-	/* IN parameters */
-	/* The number of grants to be mapped. */
-	__u32 count;
-=== >8 ===
+           298.70 MiB  uncore_imc/cas_count_write/      #   721.00
+IanTest
+           429.64 MiB  uncore_imc/cas_count_read/
 
-However, the number of grant references is further limited in the actual
-ioctl handler function gntdev_ioctl_map_grant_ref(), which calls
-gntdev_test_page_count() to ensure that the number of granted pages
-requested to be mapped does not exceed "limit". "limit" defaults to 64K,
-which should be okay to use with an atomic_t type (i.e., a 32-bit signed
-integer type) like "live_grants", assuming that the system administrator
-does not go overboard and set "limit" to a very large value:
+      1.004877710 seconds time elapsed
 
-drivers/xen/gntdev.c
-=== 8< ===
-static unsigned int limit = 64*1024;
-module_param(limit, uint, 0644);
-MODULE_PARM_DESC(limit,
-	"Maximum number of grants that may be mapped by one mapping request");
+So the metric's value nearly matches the sum. If the scaled values had
+been used the sum would have been something like 0.044454345703124995.
 
-/* trimmed */
+From the code, this is the only place a metric's "ID" (event/counter)
+is associated with a value, so I would be confused if there were a
+code path where reversing the scaling wasn't happening.
 
-bool gntdev_test_page_count(unsigned int count)
-{
-	return !count || count > limit;
-}
+Thanks,
+Ian
 
-/* trimmed */
-
-static long gntdev_ioctl_map_grant_ref(struct gntdev_priv *priv,
-				       struct ioctl_gntdev_map_grant_ref __user *u)
-{
-	/* trimmed */
-
-	pr_debug("priv %p, add %d\n", priv, op.count);
-	if (unlikely(gntdev_test_page_count(op.count)))
-		return -EINVAL;
-
-	/* trimmed */
-}
-=== >8 ===
-
-To be fair, the "count" field of the gndev_grant_map structure is a signed
-integer, so very large values of count could overflow live_grants, as
-live_grants needs to accommodate values up to and including 2*count.
-
-drivers/xen/gntdev-common.h
-=== 8< ===
-struct gntdev_grant_map {
-	atomic_t in_use;
-	struct mmu_interval_notifier notifier;
-	bool notifier_init;
-	struct list_head next;
-	int index;
-	int count;
-	/* trimmed */
-}
-=== >8 ===
-
-> If not, you can add:
-> 
-> Acked-by: Demi Marie Obenour <demi@invisiblethingslab.com>
-
-Thank you! I hope that the explanation and rationale above are satisfactory.
-Please let me know what you think.
-
-Vefa
+> >                       source_count = evsel__source_count(metric_events[i]);
+> >
+> >                       if (v->metric_other)
+> > -                             metric_total = v->metric_total;
+> > +                             metric_total = v->metric_total * scale;
+> >               }
+> >               n = strdup(evsel__metric_id(metric_events[i]));
+> >               if (!n)
+>
+> --
+> Zhengjun Xing
