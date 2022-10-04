@@ -2,149 +2,546 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E195F450E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69DA85F450A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbiJDODB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 10:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
+        id S229708AbiJDOCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 10:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiJDOC5 (ORCPT
+        with ESMTP id S229469AbiJDOCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 10:02:57 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429665D0C5;
-        Tue,  4 Oct 2022 07:02:56 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-345528ceb87so136462647b3.11;
-        Tue, 04 Oct 2022 07:02:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=TR5SAJXFGC1nDy2HAPbOzDqZLUl4bxPSNS4KiodXPBA=;
-        b=ODABosh2WEoafTy1FxycIrl08tnWb4XcbVBosrmRQRYRk18/f0IJCY53gDOQLgaH1d
-         cnzdiQfyy3aOmueHuIBUapQYRBjJqobOaJ2nD9l01GlMpoJRMkUrSN5XaXYplTMGlceW
-         YMuNzIgbFT+Uz2PdcrHreKSWLXjLrSWk3YL32wbKIC8W0e8sLtlSV6LBWKeirpeAPrPj
-         O2vNGaHi+7KJRHWJ8+0s4G1aaSRkvmPaG24suNyLuXNx/9qAItQwdO+ozuqNVBnGIGDW
-         4eyTcupSvwG5l7hA9ct0cH7Dozufzq9fFyOLM7ly6e5GojpXzpnIo+T4iqe2n3foXe70
-         En7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=TR5SAJXFGC1nDy2HAPbOzDqZLUl4bxPSNS4KiodXPBA=;
-        b=2r974264Ggat7GPwuIK238baZEZgFUTF8uNiIkY/lG9tbIJhfrrfmIPrULqnnJxrd+
-         cW42k1+i9Chm/069gzkaue6INUEtTTyDMM945I5Oj3UDI11dfvhta8mjWnbQBF3EGifv
-         1T8DLQUmdrf6a+ljpa2nJjxQOHDIqBX0n8fPDRAZDvtDFYo8vxutum+/RYWnD0tj1ioC
-         neY61bQH3yo5zdjGjZXbneTOXB/sarZtMLVbfcqW6pxsxHJooTA2xXcMZH2g9mVCunJG
-         +2Ab4J2i8OFd35pwghI8MURpQNAQsuNF7MMyhjZff4RZpkl7L2NNJ240dk5YXlUeLZrP
-         TQ2g==
-X-Gm-Message-State: ACrzQf2dV7bh1/ZizcO1kXuyc6bmP+d4z3WUvmmOmGhQpEhHhEcaXQiN
-        4uxcOeKfW/+R0HB8hzBH/uC28TxtEA2EBfV58lc=
-X-Google-Smtp-Source: AMsMyM6/enW4yMl7nEiPTn3SY2RZwgwa25M+qgpNc51oKtFaV3an6svt2n92gr9f3KXbSyUwg8t9SqdpcULH3fSl+So=
-X-Received: by 2002:a81:a087:0:b0:357:3a80:1fca with SMTP id
- x129-20020a81a087000000b003573a801fcamr16479943ywg.481.1664892174802; Tue, 04
- Oct 2022 07:02:54 -0700 (PDT)
+        Tue, 4 Oct 2022 10:02:44 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF3855D0F4
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 07:02:41 -0700 (PDT)
+Received: from localhost.localdomain (unknown [112.22.233.62])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxnmv6PDxjsOQlAA--.60093S2;
+        Tue, 04 Oct 2022 22:02:39 +0800 (CST)
+From:   Rui Wang <wangrui@loongson.cn>
+To:     loongarch@lists.linux.dev
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
+        Rui Wang <wangrui@loongson.cn>
+Subject: [PATCH] LoongArch: mm: Refactor TLB handlers
+Date:   Tue,  4 Oct 2022 22:02:30 +0800
+Message-Id: <20221004140230.748788-1-wangrui@loongson.cn>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <CAHk-=wjwvBc3VQMNtUVUrMBVoMPSPu26OuatZ_+1gZ2m-PmmRA@mail.gmail.com>
- <20221004135301.1420873-1-Jason@zx2c4.com>
-In-Reply-To: <20221004135301.1420873-1-Jason@zx2c4.com>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Tue, 4 Oct 2022 16:02:11 +0200
-Message-ID: <CAKXUXMyvk6WJr2M09+=D43QocX_igoaU0-qMN-MCwQk++O=vwA@mail.gmail.com>
-Subject: Re: [PATCH] alpha: remove osf_{readv,writev}
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Bxnmv6PDxjsOQlAA--.60093S2
+X-Coremail-Antispam: 1UD129KBjvAXoW3KFyrJFWkZF1xGryruF1ftFb_yoW8Jr1DCo
+        W8WF4UJ3Z7Ww1rurn8Za17AanrGF10y3saq34jyr1Fga4F93s8K3yDJa1j9FZ09r109F18
+        Zay7GFn5Zr47AFykn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUUYY7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xva
+        j40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2
+        x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWU
+        JVW8JwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK
+        6ry5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
+        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y
+        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
+        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUe_M3DUUUU
+X-CM-SenderInfo: pzdqw2txl6z05rqj20fqof0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 4, 2022 at 3:53 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> As of 987f20a9dcce ("a.out: Remove the a.out implementation"),
-> sys_osf_{readv,writev} is now the same as sys_{readv,writev}. So remove
-> the osf indirection, and point the syscall table directly at the generic
-> functions, as is done on other platforms.
->
-> Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Eric W. Biederman <ebiederm@xmission.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
-> Only compiled and QEMU-booted with no userspace, but seems simple
-> enough?
->
+This patch simplifies TLB load, store and modify exception handlers:
 
-This patch looks exactly the same as the patch I sent a few hours ago:
+1. Reduce instructions. such as alu/csr and memory access
+2. Execute tlbsrch only in the fast path.
+3. Return directly from the fast path for huge pages.
 
-https://lore.kernel.org/lkml/20221004071302.11471-1-lukas.bulwahn@gmail.com/
+And fixes the concurrent modification issue of fast path for huge pages.
+This issue will occur in the following steps:
 
-My patch was completely untested; good that this one is at least
-compile tested and went through basic boot tests.
+   CPU-1 (In TLB exception)         CPU-2 (In THP)
+1: Load PMD entry (HUGE=1)
+2: Goto huge path
+3:                                  Store PMD entry (HUGE=0)
+4: Reload PMD entry (HUGE=0)
+5: Fill TLB entry (PA is incorrect)
 
-Any of the two patches, the one above or this one, can be picked.
+This also slightly improves the TLB processing performance:
 
-Reviewed-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+* Normal pages: 2.15%
+* Huge pages:   1.70%
 
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <unistd.h>
+  #include <sys/mman.h>
 
+  int main(int argc, char *argv[])
+  {
+        size_t page_size;
+        size_t mem_size;
+        size_t off;
+        void *base;
+        int flags;
+        int i;
 
-Lukas
+        if (argc < 2) {
+                fprintf(stderr, "%s MEM_SIZE [HUGE]\n", argv[0]);
+                return -1;
+        }
 
->  arch/alpha/kernel/osf_sys.c            | 12 ------------
->  arch/alpha/kernel/syscalls/syscall.tbl |  4 ++--
->  2 files changed, 2 insertions(+), 14 deletions(-)
->
-> diff --git a/arch/alpha/kernel/osf_sys.c b/arch/alpha/kernel/osf_sys.c
-> index b3ad8c44c971..6c6c4337e201 100644
-> --- a/arch/alpha/kernel/osf_sys.c
-> +++ b/arch/alpha/kernel/osf_sys.c
-> @@ -1278,18 +1278,6 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
->         return addr;
->  }
->
-> -SYSCALL_DEFINE3(osf_readv, unsigned long, fd,
-> -               const struct iovec __user *, vector, unsigned long, count)
-> -{
-> -       return sys_readv(fd, vector, count);
-> -}
-> -
-> -SYSCALL_DEFINE3(osf_writev, unsigned long, fd,
-> -               const struct iovec __user *, vector, unsigned long, count)
-> -{
-> -       return sys_writev(fd, vector, count);
-> -}
-> -
->  SYSCALL_DEFINE2(osf_getpriority, int, which, int, who)
->  {
->         int prio = sys_getpriority(which, who);
-> diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
-> index 3515bc4f16a4..8ebacf37a8cf 100644
-> --- a/arch/alpha/kernel/syscalls/syscall.tbl
-> +++ b/arch/alpha/kernel/syscalls/syscall.tbl
-> @@ -125,8 +125,8 @@
->  116    common  osf_gettimeofday                sys_osf_gettimeofday
->  117    common  osf_getrusage                   sys_osf_getrusage
->  118    common  getsockopt                      sys_getsockopt
-> -120    common  readv                           sys_osf_readv
-> -121    common  writev                          sys_osf_writev
-> +120    common  readv                           sys_readv
-> +121    common  writev                          sys_writev
->  122    common  osf_settimeofday                sys_osf_settimeofday
->  123    common  fchown                          sys_fchown
->  124    common  fchmod                          sys_fchmod
-> --
-> 2.37.3
->
+        page_size = sysconf(_SC_PAGESIZE);
+        flags = MAP_PRIVATE | MAP_ANONYMOUS;
+        mem_size = strtoul(argv[1], NULL, 10);
+        if (argc > 2)
+                flags |= MAP_HUGETLB;
+
+        for (i = 0; i < 10; i++) {
+                base = mmap(NULL, mem_size, PROT_READ, flags, -1, 0);
+                if (base == MAP_FAILED) {
+                        fprintf(stderr, "Map memory failed!\n");
+                        return -1;
+                }
+
+                for (off = 0; off < mem_size; off += page_size)
+                        *(volatile int *)(base + off);
+
+                munmap(base, mem_size);
+        }
+
+        return 0;
+  }
+
+Signed-off-by: Rui Wang <wangrui@loongson.cn>
+---
+ arch/loongarch/mm/tlbex.S | 223 ++++++++++++++++----------------------
+ 1 file changed, 93 insertions(+), 130 deletions(-)
+
+diff --git a/arch/loongarch/mm/tlbex.S b/arch/loongarch/mm/tlbex.S
+index 39743337999e..c97bcaad2ff4 100644
+--- a/arch/loongarch/mm/tlbex.S
++++ b/arch/loongarch/mm/tlbex.S
+@@ -10,6 +10,11 @@
+ #include <asm/regdef.h>
+ #include <asm/stackframe.h>
+ 
++#define PTRS_PER_PGD_BITS	(PAGE_SHIFT - 3)
++#define PTRS_PER_PUD_BITS	(PAGE_SHIFT - 3)
++#define PTRS_PER_PMD_BITS	(PAGE_SHIFT - 3)
++#define PTRS_PER_PTE_BITS	(PAGE_SHIFT - 3)
++
+ 	.macro tlb_do_page_fault, write
+ 	SYM_FUNC_START(tlb_do_page_fault_\write)
+ 	SAVE_ALL
+@@ -52,25 +57,17 @@ SYM_FUNC_START(handle_tlb_load)
+ 
+ vmalloc_done_load:
+ 	/* Get PGD offset in bytes */
+-	srli.d	t0, t0, PGDIR_SHIFT
+-	andi	t0, t0, (PTRS_PER_PGD - 1)
+-	slli.d	t0, t0, 3
+-	add.d	t1, t1, t0
++	bstrpick.d	ra, t0, PTRS_PER_PGD_BITS + PGDIR_SHIFT - 1, PGDIR_SHIFT
++	alsl.d		t1, ra, t1, 3
+ #if CONFIG_PGTABLE_LEVELS > 3
+-	csrrd	t0, LOONGARCH_CSR_BADV
+ 	ld.d	t1, t1, 0
+-	srli.d	t0, t0, PUD_SHIFT
+-	andi	t0, t0, (PTRS_PER_PUD - 1)
+-	slli.d	t0, t0, 3
+-	add.d	t1, t1, t0
++	bstrpick.d	ra, t0, PTRS_PER_PUD_BITS + PUD_SHIFT - 1, PUD_SHIFT
++	alsl.d		t1, ra, t1, 3
+ #endif
+ #if CONFIG_PGTABLE_LEVELS > 2
+-	csrrd	t0, LOONGARCH_CSR_BADV
+ 	ld.d	t1, t1, 0
+-	srli.d	t0, t0, PMD_SHIFT
+-	andi	t0, t0, (PTRS_PER_PMD - 1)
+-	slli.d	t0, t0, 3
+-	add.d	t1, t1, t0
++	bstrpick.d	ra, t0, PTRS_PER_PMD_BITS + PMD_SHIFT - 1, PMD_SHIFT
++	alsl.d		t1, ra, t1, 3
+ #endif
+ 	ld.d	ra, t1, 0
+ 
+@@ -79,27 +76,20 @@ vmalloc_done_load:
+ 	 * instead contains the tlb pte. Check the PAGE_HUGE bit and
+ 	 * see if we need to jump to huge tlb processing.
+ 	 */
+-	andi	t0, ra, _PAGE_HUGE
+-	bnez	t0, tlb_huge_update_load
++	rotri.d	ra, ra, _PAGE_HUGE_SHIFT + 1
++	bltz	ra, tlb_huge_update_load
+ 
+-	csrrd	t0, LOONGARCH_CSR_BADV
+-	srli.d	t0, t0, PAGE_SHIFT
+-	andi	t0, t0, (PTRS_PER_PTE - 1)
+-	slli.d	t0, t0, _PTE_T_LOG2
+-	add.d	t1, ra, t0
++	rotri.d	ra, ra, 64 - (_PAGE_HUGE_SHIFT + 1)
++	bstrpick.d	t0, t0, PTRS_PER_PTE_BITS + PAGE_SHIFT - 1, PAGE_SHIFT
++	alsl.d	t1, t0, ra, _PTE_T_LOG2
+ 
+ #ifdef CONFIG_SMP
+ smp_pgtable_change_load:
+-#endif
+-#ifdef CONFIG_SMP
+ 	ll.d	t0, t1, 0
+ #else
+ 	ld.d	t0, t1, 0
+ #endif
+-	tlbsrch
+-
+-	srli.d	ra, t0, _PAGE_PRESENT_SHIFT
+-	andi	ra, ra, 1
++	andi	ra, t0, _PAGE_PRESENT
+ 	beqz	ra, nopage_tlb_load
+ 
+ 	ori	t0, t0, _PAGE_VALID
+@@ -109,8 +99,8 @@ smp_pgtable_change_load:
+ #else
+ 	st.d	t0, t1, 0
+ #endif
+-	ori	t1, t1, 8
+-	xori	t1, t1, 8
++	tlbsrch
++	bstrins.d	t1, zero, 3, 3
+ 	ld.d	t0, t1, 0
+ 	ld.d	t1, t1, 8
+ 	csrwr	t0, LOONGARCH_CSR_TLBELO0
+@@ -133,23 +123,22 @@ vmalloc_load:
+ 	 */
+ tlb_huge_update_load:
+ #ifdef CONFIG_SMP
+-	ll.d	t0, t1, 0
+-#else
+-	ld.d	t0, t1, 0
++	ll.d	ra, t1, 0
+ #endif
+-	srli.d	ra, t0, _PAGE_PRESENT_SHIFT
+-	andi	ra, ra, 1
+-	beqz	ra, nopage_tlb_load
+-	tlbsrch
++	andi	t0, ra, _PAGE_PRESENT
++	beqz	t0, nopage_tlb_load
+ 
+-	ori	t0, t0, _PAGE_VALID
+ #ifdef CONFIG_SMP
++	ori	t0, ra, _PAGE_VALID
+ 	sc.d	t0, t1, 0
+ 	beqz	t0, tlb_huge_update_load
+-	ld.d	t0, t1, 0
++	ori	t0, ra, _PAGE_VALID
+ #else
++	rotri.d	ra, ra, 64 - (_PAGE_HUGE_SHIFT + 1)
++	ori	t0, ra, _PAGE_VALID
+ 	st.d	t0, t1, 0
+ #endif
++	tlbsrch
+ 	addu16i.d	t1, zero, -(CSR_TLBIDX_EHINV >> 16)
+ 	addi.d		ra, t1, 0
+ 	csrxchg		ra, t1, LOONGARCH_CSR_TLBIDX
+@@ -173,9 +162,8 @@ tlb_huge_update_load:
+ 	srli.d	t1, t1, (_PAGE_HGLOBAL_SHIFT - _PAGE_GLOBAL_SHIFT)
+ 	or	t0, t0, t1
+ 
+-	addi.d	ra, t0, 0
+-	csrwr	t0, LOONGARCH_CSR_TLBELO0
+-	addi.d	t0, ra, 0
++	move	ra, t0
++	csrwr	ra, LOONGARCH_CSR_TLBELO0
+ 
+ 	/* Convert to entrylo1 */
+ 	addi.d	t1, zero, 1
+@@ -193,6 +181,11 @@ tlb_huge_update_load:
+ 	addu16i.d	t0, zero, (CSR_TLBIDX_PS >> 16)
+ 	addu16i.d	t1, zero, (PS_DEFAULT_SIZE << (CSR_TLBIDX_PS_SHIFT - 16))
+ 	csrxchg		t1, t0, LOONGARCH_CSR_TLBIDX
++leave_huge_load:
++	csrrd	t0, EXCEPTION_KS0
++	csrrd	t1, EXCEPTION_KS1
++	csrrd	ra, EXCEPTION_KS2
++	ertn
+ 
+ nopage_tlb_load:
+ 	dbar	0
+@@ -215,26 +208,17 @@ SYM_FUNC_START(handle_tlb_store)
+ 
+ vmalloc_done_store:
+ 	/* Get PGD offset in bytes */
+-	srli.d	t0, t0, PGDIR_SHIFT
+-	andi	t0, t0, (PTRS_PER_PGD - 1)
+-	slli.d	t0, t0, 3
+-	add.d	t1, t1, t0
+-
++	bstrpick.d	ra, t0, PTRS_PER_PGD_BITS + PGDIR_SHIFT - 1, PGDIR_SHIFT
++	alsl.d		t1, ra, t1, 3
+ #if CONFIG_PGTABLE_LEVELS > 3
+-	csrrd	t0, LOONGARCH_CSR_BADV
+ 	ld.d	t1, t1, 0
+-	srli.d	t0, t0, PUD_SHIFT
+-	andi	t0, t0, (PTRS_PER_PUD - 1)
+-	slli.d	t0, t0, 3
+-	add.d	t1, t1, t0
++	bstrpick.d	ra, t0, PTRS_PER_PUD_BITS + PUD_SHIFT - 1, PUD_SHIFT
++	alsl.d		t1, ra, t1, 3
+ #endif
+ #if CONFIG_PGTABLE_LEVELS > 2
+-	csrrd	t0, LOONGARCH_CSR_BADV
+ 	ld.d	t1, t1, 0
+-	srli.d	t0, t0, PMD_SHIFT
+-	andi	t0, t0, (PTRS_PER_PMD - 1)
+-	slli.d	t0, t0, 3
+-	add.d	t1, t1, t0
++	bstrpick.d	ra, t0, PTRS_PER_PMD_BITS + PMD_SHIFT - 1, PMD_SHIFT
++	alsl.d		t1, ra, t1, 3
+ #endif
+ 	ld.d	ra, t1, 0
+ 
+@@ -243,28 +227,21 @@ vmalloc_done_store:
+ 	 * instead contains the tlb pte. Check the PAGE_HUGE bit and
+ 	 * see if we need to jump to huge tlb processing.
+ 	 */
+-	andi	t0, ra, _PAGE_HUGE
+-	bnez	t0, tlb_huge_update_store
++	rotri.d	ra, ra, _PAGE_HUGE_SHIFT + 1
++	bltz	ra, tlb_huge_update_store
+ 
+-	csrrd	t0, LOONGARCH_CSR_BADV
+-	srli.d	t0, t0, PAGE_SHIFT
+-	andi	t0, t0, (PTRS_PER_PTE - 1)
+-	slli.d	t0, t0, _PTE_T_LOG2
+-	add.d	t1, ra, t0
++	rotri.d	ra, ra, 64 - (_PAGE_HUGE_SHIFT + 1)
++	bstrpick.d	t0, t0, PTRS_PER_PTE_BITS + PAGE_SHIFT - 1, PAGE_SHIFT
++	alsl.d	t1, t0, ra, _PTE_T_LOG2
+ 
+ #ifdef CONFIG_SMP
+ smp_pgtable_change_store:
+-#endif
+-#ifdef CONFIG_SMP
+ 	ll.d	t0, t1, 0
+ #else
+ 	ld.d	t0, t1, 0
+ #endif
+-	tlbsrch
+-
+-	srli.d	ra, t0, _PAGE_PRESENT_SHIFT
+-	andi	ra, ra, ((_PAGE_PRESENT | _PAGE_WRITE) >> _PAGE_PRESENT_SHIFT)
+-	xori	ra, ra, ((_PAGE_PRESENT | _PAGE_WRITE) >> _PAGE_PRESENT_SHIFT)
++	andi	ra, t0, _PAGE_PRESENT | _PAGE_WRITE
++	xori	ra, ra, _PAGE_PRESENT | _PAGE_WRITE
+ 	bnez	ra, nopage_tlb_store
+ 
+ 	ori	t0, t0, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
+@@ -274,9 +251,8 @@ smp_pgtable_change_store:
+ #else
+ 	st.d	t0, t1, 0
+ #endif
+-
+-	ori	t1, t1, 8
+-	xori	t1, t1, 8
++	tlbsrch
++	bstrins.d	t1, zero, 3, 3
+ 	ld.d	t0, t1, 0
+ 	ld.d	t1, t1, 8
+ 	csrwr	t0, LOONGARCH_CSR_TLBELO0
+@@ -299,25 +275,23 @@ vmalloc_store:
+ 	 */
+ tlb_huge_update_store:
+ #ifdef CONFIG_SMP
+-	ll.d	t0, t1, 0
+-#else
+-	ld.d	t0, t1, 0
++	ll.d	ra, t1, 0
+ #endif
+-	srli.d	ra, t0, _PAGE_PRESENT_SHIFT
+-	andi	ra, ra, ((_PAGE_PRESENT | _PAGE_WRITE) >> _PAGE_PRESENT_SHIFT)
+-	xori	ra, ra, ((_PAGE_PRESENT | _PAGE_WRITE) >> _PAGE_PRESENT_SHIFT)
+-	bnez	ra, nopage_tlb_store
+-
+-	tlbsrch
+-	ori	t0, t0, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
++	andi	t0, ra, _PAGE_PRESENT | _PAGE_WRITE
++	xori	t0, t0, _PAGE_PRESENT | _PAGE_WRITE
++	bnez	t0, nopage_tlb_store
+ 
+ #ifdef CONFIG_SMP
++	ori	t0, ra, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
+ 	sc.d	t0, t1, 0
+ 	beqz	t0, tlb_huge_update_store
+-	ld.d	t0, t1, 0
++	ori	t0, ra, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
+ #else
++	rotri.d	ra, ra, 64 - (_PAGE_HUGE_SHIFT + 1)
++	ori	t0, ra, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
+ 	st.d	t0, t1, 0
+ #endif
++	tlbsrch
+ 	addu16i.d	t1, zero, -(CSR_TLBIDX_EHINV >> 16)
+ 	addi.d		ra, t1, 0
+ 	csrxchg		ra, t1, LOONGARCH_CSR_TLBIDX
+@@ -340,9 +314,8 @@ tlb_huge_update_store:
+ 	srli.d	t1, t1, (_PAGE_HGLOBAL_SHIFT - _PAGE_GLOBAL_SHIFT)
+ 	or	t0, t0, t1
+ 
+-	addi.d	ra, t0, 0
+-	csrwr	t0, LOONGARCH_CSR_TLBELO0
+-	addi.d	t0, ra, 0
++	move	ra, t0
++	csrwr	ra, LOONGARCH_CSR_TLBELO0
+ 
+ 	/* Convert to entrylo1 */
+ 	addi.d	t1, zero, 1
+@@ -361,6 +334,11 @@ tlb_huge_update_store:
+ 	addu16i.d	t0, zero, (CSR_TLBIDX_PS >> 16)
+ 	addu16i.d	t1, zero, (PS_DEFAULT_SIZE << (CSR_TLBIDX_PS_SHIFT - 16))
+ 	csrxchg		t1, t0, LOONGARCH_CSR_TLBIDX
++leave_huge_store:
++	csrrd	t0, EXCEPTION_KS0
++	csrrd	t1, EXCEPTION_KS1
++	csrrd	ra, EXCEPTION_KS2
++	ertn
+ 
+ nopage_tlb_store:
+ 	dbar	0
+@@ -383,25 +361,17 @@ SYM_FUNC_START(handle_tlb_modify)
+ 
+ vmalloc_done_modify:
+ 	/* Get PGD offset in bytes */
+-	srli.d	t0, t0, PGDIR_SHIFT
+-	andi	t0, t0, (PTRS_PER_PGD - 1)
+-	slli.d	t0, t0, 3
+-	add.d	t1, t1, t0
++	bstrpick.d	ra, t0, PTRS_PER_PGD_BITS + PGDIR_SHIFT - 1, PGDIR_SHIFT
++	alsl.d		t1, ra, t1, 3
+ #if CONFIG_PGTABLE_LEVELS > 3
+-	csrrd	t0, LOONGARCH_CSR_BADV
+ 	ld.d	t1, t1, 0
+-	srli.d	t0, t0, PUD_SHIFT
+-	andi	t0, t0, (PTRS_PER_PUD - 1)
+-	slli.d	t0, t0, 3
+-	add.d	t1, t1, t0
++	bstrpick.d	ra, t0, PTRS_PER_PUD_BITS + PUD_SHIFT - 1, PUD_SHIFT
++	alsl.d		t1, ra, t1, 3
+ #endif
+ #if CONFIG_PGTABLE_LEVELS > 2
+-	csrrd	t0, LOONGARCH_CSR_BADV
+ 	ld.d	t1, t1, 0
+-	srli.d	t0, t0, PMD_SHIFT
+-	andi	t0, t0, (PTRS_PER_PMD - 1)
+-	slli.d	t0, t0, 3
+-	add.d	t1, t1, t0
++	bstrpick.d	ra, t0, PTRS_PER_PMD_BITS + PMD_SHIFT - 1, PMD_SHIFT
++	alsl.d		t1, ra, t1, 3
+ #endif
+ 	ld.d	ra, t1, 0
+ 
+@@ -410,27 +380,20 @@ vmalloc_done_modify:
+ 	 * instead contains the tlb pte. Check the PAGE_HUGE bit and
+ 	 * see if we need to jump to huge tlb processing.
+ 	 */
+-	andi	t0, ra, _PAGE_HUGE
+-	bnez	t0, tlb_huge_update_modify
++	rotri.d	ra, ra, _PAGE_HUGE_SHIFT + 1
++	bltz	ra, tlb_huge_update_modify
+ 
+-	csrrd	t0, LOONGARCH_CSR_BADV
+-	srli.d	t0, t0, PAGE_SHIFT
+-	andi	t0, t0, (PTRS_PER_PTE - 1)
+-	slli.d	t0, t0, _PTE_T_LOG2
+-	add.d	t1, ra, t0
++	rotri.d	ra, ra, 64 - (_PAGE_HUGE_SHIFT + 1)
++	bstrpick.d	t0, t0, PTRS_PER_PTE_BITS + PAGE_SHIFT - 1, PAGE_SHIFT
++	alsl.d	t1, t0, ra, _PTE_T_LOG2
+ 
+ #ifdef CONFIG_SMP
+ smp_pgtable_change_modify:
+-#endif
+-#ifdef CONFIG_SMP
+ 	ll.d	t0, t1, 0
+ #else
+ 	ld.d	t0, t1, 0
+ #endif
+-	tlbsrch
+-
+-	srli.d	ra, t0, _PAGE_WRITE_SHIFT
+-	andi	ra, ra, 1
++	andi	ra, t0, _PAGE_WRITE
+ 	beqz	ra, nopage_tlb_modify
+ 
+ 	ori	t0, t0, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
+@@ -440,8 +403,8 @@ smp_pgtable_change_modify:
+ #else
+ 	st.d	t0, t1, 0
+ #endif
+-	ori	t1, t1, 8
+-	xori	t1, t1, 8
++	tlbsrch
++	bstrins.d	t1, zero, 3, 3
+ 	ld.d	t0, t1, 0
+ 	ld.d	t1, t1, 8
+ 	csrwr	t0, LOONGARCH_CSR_TLBELO0
+@@ -464,23 +427,19 @@ vmalloc_modify:
+ 	 */
+ tlb_huge_update_modify:
+ #ifdef CONFIG_SMP
+-	ll.d	t0, t1, 0
+-#else
+-	ld.d	t0, t1, 0
++	ll.d	ra, t1, 0
+ #endif
+-
+-	srli.d	ra, t0, _PAGE_WRITE_SHIFT
+-	andi	ra, ra, 1
+-	beqz	ra, nopage_tlb_modify
+-
+-	tlbsrch
+-	ori	t0, t0, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
++	andi	t0, ra, _PAGE_WRITE
++	beqz	t0, nopage_tlb_modify
+ 
+ #ifdef CONFIG_SMP
++	ori	t0, ra, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
+ 	sc.d	t0, t1, 0
+ 	beqz	t0, tlb_huge_update_modify
+-	ld.d	t0, t1, 0
++	ori	t0, ra, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
+ #else
++	rotri.d	ra, ra, 64 - (_PAGE_HUGE_SHIFT + 1)
++	ori	t0, ra, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
+ 	st.d	t0, t1, 0
+ #endif
+ 	/*
+@@ -499,9 +458,8 @@ tlb_huge_update_modify:
+ 	srli.d	t1, t1, (_PAGE_HGLOBAL_SHIFT - _PAGE_GLOBAL_SHIFT)
+ 	or	t0, t0, t1
+ 
+-	addi.d	ra, t0, 0
+-	csrwr	t0, LOONGARCH_CSR_TLBELO0
+-	addi.d	t0, ra, 0
++	move	ra, t0
++	csrwr	ra, LOONGARCH_CSR_TLBELO0
+ 
+ 	/* Convert to entrylo1 */
+ 	addi.d	t1, zero, 1
+@@ -520,6 +478,11 @@ tlb_huge_update_modify:
+ 	addu16i.d	t0, zero, (CSR_TLBIDX_PS >> 16)
+ 	addu16i.d	t1, zero, (PS_DEFAULT_SIZE << (CSR_TLBIDX_PS_SHIFT - 16))
+ 	csrxchg		t1, t0, LOONGARCH_CSR_TLBIDX
++leave_huge_modify:
++	csrrd	t0, EXCEPTION_KS0
++	csrrd	t1, EXCEPTION_KS1
++	csrrd	ra, EXCEPTION_KS2
++	ertn
+ 
+ nopage_tlb_modify:
+ 	dbar	0
+-- 
+2.37.3
+
