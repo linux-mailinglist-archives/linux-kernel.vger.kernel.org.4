@@ -2,180 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E24135F4A76
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 22:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 765EB5F4A7E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 22:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbiJDUqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 16:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
+        id S229505AbiJDUud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 16:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiJDUqw (ORCPT
+        with ESMTP id S229453AbiJDUua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 16:46:52 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2057.outbound.protection.outlook.com [40.107.223.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FF2696E5
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 13:46:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b2xVFTq9SNO7TFCg/aqpFv6VzKANSxYuww9Yjy9SBKW8EIoceAx71u7fvIuIX9iKVcZLYZIPmcdOqo3TpuI9No9U3fdjeRSN9w/H457C81YNMjMnqgUlO4As45wtwvLu1bcJVUQ0Ud+frikmZWKOga5OxVIVRbNM6vzASgLCog/SGAl0pwFuDxVlClhgGeaQBjEGtEEQybRRqqBcbIFaCYZlb9zsMbiSwxHH4zwVyI6h+QgfbgyX1qrS7V06p9XfoB/hFjdVqip47yuuhz4luUEesKn3/XlbRPmwd7kL21EG44WsmIlrSerIAl/8G3u5PjapEDscktn1HtK8vcNC8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ks4OwvTKiwBw2ZIwzAKvBlF+TC6QLTJM4j3Jgj4qEfg=;
- b=UejUsGx5WlnJuNhnncTTxGSEFU9WoMnkAXpzfv+hztUqGaCyYcfDsTUFX6pyNGxVcR0/okask7aMGYllovsPSO5hNb5YFPNDCjG2dhi5jiBiENNjvh2xr0Mxv5fcjnO0uPA/zhscCyPDDjVsfnget0rNIIupTcNE85PoU2J1vDRSzCH0hYA+GD0LCV0BFOKHLihgANrh27npjzE5CgWkiTot9jrTBIDkqtYR0jRjC75C+42tKgkH0LCKu/TQf1Bjca05+GTI8BEyHJM2MSrNPt9+HZpidS+vUloRyvx0tGqrbheOcPQfiGXXNXwMKR1KVOGRx9nlppOtUAolynv9Rg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ks4OwvTKiwBw2ZIwzAKvBlF+TC6QLTJM4j3Jgj4qEfg=;
- b=qT2UI+J5X2Vj6dYg8DFPOJ75xJwOr4c/2QGmJzT99ZWIHFnZqWXCmFl2ykaPcpSW6PAL0ejosBIT3JbpVJpaJ0XxEzNwwOBg//LjFQvNl9XUGnyjN8MYNXB1jv6G3UzvYqXud35x8iDEexwEGT8ZFRsKvmVirfF6028Wyu2gr2Y=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB2941.namprd12.prod.outlook.com (2603:10b6:208:a9::12)
- by SJ0PR12MB5609.namprd12.prod.outlook.com (2603:10b6:a03:42c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.30; Tue, 4 Oct
- 2022 20:46:46 +0000
-Received: from MN2PR12MB2941.namprd12.prod.outlook.com
- ([fe80::588c:ac12:d318:bfee]) by MN2PR12MB2941.namprd12.prod.outlook.com
- ([fe80::588c:ac12:d318:bfee%7]) with mapi id 15.20.5676.031; Tue, 4 Oct 2022
- 20:46:46 +0000
-Message-ID: <d3b272e1-3b5d-c843-e8ac-57dc5e3a7ced@amd.com>
-Date:   Tue, 4 Oct 2022 16:46:44 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] drm/amdgpu/dm/mst: Fix incorrect usage of
- drm_dp_add_payload_part2()
-Content-Language: en-US
-To:     Lyude Paul <lyude@redhat.com>, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>, Wayne Lin <Wayne.Lin@amd.com>,
-        Ian Chen <ian.chen@amd.com>,
-        Mikita Lipski <mikita.lipski@amd.com>,
-        Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Claudio Suarez <cssk@net-c.es>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221004202429.124422-1-lyude@redhat.com>
-From:   Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
-In-Reply-To: <20221004202429.124422-1-lyude@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR13CA0008.namprd13.prod.outlook.com
- (2603:10b6:208:160::21) To MN2PR12MB2941.namprd12.prod.outlook.com
- (2603:10b6:208:a9::12)
+        Tue, 4 Oct 2022 16:50:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD08B5FAE4;
+        Tue,  4 Oct 2022 13:50:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 795FA61522;
+        Tue,  4 Oct 2022 20:50:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80DE0C433C1;
+        Tue,  4 Oct 2022 20:50:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664916624;
+        bh=lqWjHI9NBUUM724MhIy63OWllMBD4Wk6VPg2fo9VCpU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uvT1CHVfE78uNt8XRoidqxIxj7EJHwSZ/FyzzgppMdpmmpeoY/yFE2Q5BOR9kYfQy
+         zSSwB3Ml+g4pC+XBDZ0I5oXbxq05jtp1tSfrNGdDAknXw9rFzeLuVX9X2Bc10GYHCL
+         pb3bGSPVBP4PU1PDWcTpyX1DyKsgShNOd9elSF4cEKbTl0FPrDxHM+w2+6VfPGJDUS
+         NIn+6XHteTgd/TYZJ1LADDst0PFIzcXWgoEy1UBQPkm5RJ91VXwPdbibjJKLIZE6XZ
+         FCBFD9JqOkvvq9muRXwfg2+6/CH3AHdOSmesrc8500Xx9kPIX2wLUm/W/PXmEO1Y3f
+         RNpHz00K6SZfQ==
+Date:   Tue, 4 Oct 2022 13:50:20 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "keescook@chromium.org" <keescook@chromium.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "babu.moger@amd.com" <babu.moger@amd.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "gustavoars@kernel.org" <gustavoars@kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v2 33/39] x86/cpufeatures: Limit shadow stack to Intel
+ CPUs
+Message-ID: <YzycjLUVh/WhPtKa@dev-arch.thelio-3990X>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-34-rick.p.edgecombe@intel.com>
+ <202210031656.23FAA3195@keescook>
+ <559f937f-cab4-d408-6d95-fc85b4809aa9@intel.com>
+ <202210032147.ED1310CEA8@keescook>
+ <YzxViiyfMRKrmoMY@dev-arch.thelio-3990X>
+ <ae5fea4b-8c33-c523-9d6d-3f27a9ae03d0@amd.com>
+ <9e9396e207529af53b4755cce9d1744c0691e8b2.camel@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB2941:EE_|SJ0PR12MB5609:EE_
-X-MS-Office365-Filtering-Correlation-Id: cd2af34a-b5a1-40f1-0c50-08daa6498dac
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HKLwt0E7jjqPDQmxpWPq2P0tP3lRvA87JhK8u4E11sx/jAm2EhLDMrr3tlrHI/RVkMn5ryKI7V390O/O7qpxqAJGx0SxdYa8i/ceHZ4T2k61B4vsSmUcPmYrDRFOcb6nq+hNfYow51EVTL4rnFtrFFIUosLyQDDGavDa20g4rDWTPen6mTdV5LkN+q8cbZtr2q6+35IKvbWe1RzOw4NlzNH8CO1Nrt7rfuiMFmylSQqcW89yZfm5aFSIBltPIUazGVf3zFg+FTZU1kiC2qzq7zycy7zoE1nB2sL0nISvg9r+VwaQxsXxrVgZMWZhFxz0fj1v4en+S9lysGq7CXLclarqVVjtcuU5umTf/IXXVJX2tLBcp97jw8IygEQuroQJcU5pp6Pvl9rRKsiKTcHp3XUa7oBvBlXc2KSxnfBE84HzbIfoF/4gOAIwgDJlCyOwY06C59FnTxHF7NKZrHIuIqg5bASeDth9YXN43H6ZpqZuqu94CtIKs2s/0KyF61IIuO2m4A+6dBwhB0KNcOgn4jX2TPkU0GX50XxvoetaV5B/pizTRZhLTFCy9/aQgRDNT1UER0oSTXFnWFXq3KH2oCAoEN7dYRxkP9LeqeoaW0YL2DhnGItuLO06kSaswdzXpfe8HWG6OOrP8eg84OBXIMA1I7fTPAnXQvqyb6/OItAkRF77SeZDY0QXUIJ3CkpJ8tm8vxykPVXf1HbW8fy59XnkFiTmeQ+wtJIbxUmZJ/kY9uYjUisXV+zjvTVH4OO/
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB2941.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(346002)(366004)(396003)(376002)(451199015)(4326008)(66556008)(8676002)(66476007)(186003)(83380400001)(41300700001)(36756003)(66946007)(6512007)(966005)(6486002)(38100700002)(26005)(53546011)(478600001)(86362001)(31696002)(6506007)(54906003)(316002)(2616005)(31686004)(2906002)(8936002)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?amVMczhyNnZrUUVONzZoOHI0d0xTYlVuOG1PbFJDczV0NnlHRUJmMGtJSnRM?=
- =?utf-8?B?bjdVa09ocUZEb1piZzllYlBBK2ZnM3B3YnNHRHEzSnBSZlk4R3NadVN3TDVs?=
- =?utf-8?B?OUlFakszTUMxYzkxSDFhZk83MXZOaFY5Si9hZ1NEdkpqMkRaRldFdnNtR21F?=
- =?utf-8?B?R2hxNGRJWk9Xcnh0NTBLa3dKejZVOVFpNWQ3eS9XQURZWXBSTFhYK2JLcHZV?=
- =?utf-8?B?d2hKQ3RXaXY2QTlhZnEzMHRZQXAxaWZBbTZtR1RzYWxEQVdqd3ZLR3IzYWhH?=
- =?utf-8?B?aUtNb1FxUVB4RHZtZkRtYkRBTzd0YXByeTJBNnJkMVNYWm10Uk9OY1JNTjE3?=
- =?utf-8?B?bWVCb282Si9wdFBnd0l6VkZ2RXdnaURsN2ExTHMwUHFRdU1OMHBtclFWOVp6?=
- =?utf-8?B?d2pObXppV3lsNUlpYnlBUnAxK2IyekM2WE1VTU5iZWljVGtKc0JFdi9RUEYw?=
- =?utf-8?B?THQyT0g0Z3c1UGRLMktUY2F5TmhoVi9WUm1xblY2ZlBDSFJ2amozN1lZQ0gw?=
- =?utf-8?B?YmxLNTc2V1MyZy9Ydng3MFN3ZVlldnlQVVluSlhwQ25YdWxtQWRGczQ5RGlw?=
- =?utf-8?B?U2l5amdQZDg2T1BvTzlkRmFRbVdxeFlQSzNqTTcyT0F2QWhkalU2OHZOcERE?=
- =?utf-8?B?R2QzU01melRZaXh3VS9SWVg0dVoxM2MxQXBFNGxEMm03YmlNU3V5TkVoSkQ1?=
- =?utf-8?B?eFFOT2pmNDVtazhleFVCUU9VaXFkNWpnVmxIbDQ0ckdKU3VBY29WT1ZsbTJs?=
- =?utf-8?B?aU1XZ0Rhd28rdFhNMWpUT0FFeE9nV3FOR0FMdEE0VXhSN25NS2lnUGtLeXg4?=
- =?utf-8?B?S1loLzBYMG03NTEyT0FQYkRiYnRrYkNTc3RTZUE2TGFqUVZtWXFSNitKWmI4?=
- =?utf-8?B?NzNhZTBmV2NXeEJ1Wi9DOUduY2YxRzM5dEtjNlVaNlNxalRhb00yUCtuT290?=
- =?utf-8?B?QlpVU2YwTjhTLzhzdWRzQ1FiY2FocWhUb2tuQ1Btcllvb0dGUVhjUnJNVURm?=
- =?utf-8?B?cmlIRmxsRjNVUys4aitaWnJ4TXRMRVZmUHE2QVIvNVkzNzMrQzB0VmtucmRF?=
- =?utf-8?B?WUNGeTRUY1hsMzJjMVhsWExmRktIMlNCeXVsZXY4cFMzL1hWWVBZUnM1UDg0?=
- =?utf-8?B?bXFyZlMwdU5oVjZ4dWF1cHl1bkM5a3ZYb1kyS01tYTY5KzMySS9zY0s0OUZz?=
- =?utf-8?B?aXZKNEhIc2tZdjAxWk0wa2duckxOZE84ZlAxeGhpTllVUktEUFQwU2VidVkv?=
- =?utf-8?B?VGNBaUxvS0JRcTNYWW5aSUh3WVFTazlVUmkyVzV6bWgwVUxTNUYxbGE2WHM4?=
- =?utf-8?B?ZXRXbWZ4QU4xMWIwazZwam9EdDlOZDFYb2IxaTdqYy9sOCtoVDNneHUyVWtB?=
- =?utf-8?B?OVE2SjBCbHNLTTJzWCtTby9PNTZ1R0dXZnZzTFpabjRUVVQrY21oelNzSWNZ?=
- =?utf-8?B?Q0ZIc3MrVzNyaGx5bE5WdkJPQ3VkNVQwaTlyRjVvaWxuYzBmYnFBWEpMdXNG?=
- =?utf-8?B?aDArR3I0VU43b2dBbzk0L2V1bVNpL1ZYKzZubFJ3OGlZeGhkTVBHUlp5L2I1?=
- =?utf-8?B?Tyt5dTZidzJGKzEzTHRHTlRlVG1MdWIwblkyVTlsVWhONTRSYllSRW1TTkI1?=
- =?utf-8?B?UUVPaFFlL2xrL1laNkpsZ2dtTWUxakk1ZmQ0OUFGU3pucmZPaVBRdVVxU2da?=
- =?utf-8?B?YldWdWFQQzBJTEo1NlE3YllVN2o2WTAxNDVaZ0ZEVnN4VHpmN1d1b1ZOY1Uw?=
- =?utf-8?B?Q0JzM1hhcXkvWElVNzVGVlRBT2xVNFhscGJDMVZvVk8xLzZNUkxCWCtnbWZF?=
- =?utf-8?B?Ty9iUXdEWUxXYzRJSDY1K3VzVW56bUJ4VVhkbExRa0NMcmloNlo4VUc2RjRU?=
- =?utf-8?B?dlBzVFYzejVHUitPajNwNnliT25UdHpyNmRGNnkzaGVDRGdDeDFaTldsM09K?=
- =?utf-8?B?U1BPbVpXMGp0ZWdnM0Zud1RHVjE1eGJzZUx1RnVyakV5QjM3TlpOdENpeFBu?=
- =?utf-8?B?b1ZGeU9laGlXR2JVWWRwREUzOUl1Z0tjTTVjcThsQThRdjZ5VWNlaWs3d3dX?=
- =?utf-8?B?dHlteTFaaUdjUlB3QVhBNjkwOGZwTkI3cnZXVVZIV3hla2YzUkFGMVM5dmJi?=
- =?utf-8?Q?/3hv1TFhAcwdRzsWo2S1tvG4Y?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd2af34a-b5a1-40f1-0c50-08daa6498dac
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB2941.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2022 20:46:46.7595
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: p4Aw+IUpYpvt2/CziotvdWirUne9LQVozRkIE8xf2OcNdCelcD6CjH6bEbMFepvbSvonla+dpoLSYTJ8eRSe3g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5609
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9e9396e207529af53b4755cce9d1744c0691e8b2.camel@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-10-04 16:24, Lyude Paul wrote:
-> Yikes, it appears somehow I totally made a mistake here. We're currently
-> checking to see if drm_dp_add_payload_part2() returns a non-zero value to
-> indicate success. That's totally wrong though, as this function only
-> returns a zero value on success - not the other way around.
+On Tue, Oct 04, 2022 at 08:34:54PM +0000, Edgecombe, Rick P wrote:
+> On Tue, 2022-10-04 at 14:43 -0500, John Allen wrote:
+> > On 10/4/22 10:47 AM, Nathan Chancellor wrote:
+> > > Hi Kees,
+> > > 
+> > > On Mon, Oct 03, 2022 at 09:54:26PM -0700, Kees Cook wrote:
+> > > > On Mon, Oct 03, 2022 at 05:09:04PM -0700, Dave Hansen wrote:
+> > > > > On 10/3/22 16:57, Kees Cook wrote:
+> > > > > > On Thu, Sep 29, 2022 at 03:29:30PM -0700, Rick Edgecombe
+> > > > > > wrote:
+> > > > > > > Shadow stack is supported on newer AMD processors, but the
+> > > > > > > kernel
+> > > > > > > implementation has not been tested on them. Prevent basic
+> > > > > > > issues from
+> > > > > > > showing up for normal users by disabling shadow stack on
+> > > > > > > all CPUs except
+> > > > > > > Intel until it has been tested. At which point the
+> > > > > > > limitation should be
+> > > > > > > removed.
+> > > > > > > 
+> > > > > > > Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> > > > > > 
+> > > > > > So running the selftests on an AMD system is sufficient to
+> > > > > > drop this
+> > > > > > patch?
+> > > > > 
+> > > > > Yes, that's enough.
+> > > > > 
+> > > > > I _thought_ the AMD folks provided some tested-by's at some
+> > > > > point in the
+> > > > > past.  But, maybe I'm confusing this for one of the other
+> > > > > shared
+> > > > > features.  Either way, I'm sure no tested-by's were dropped on
+> > > > > purpose.
+> > > > > 
+> > > > > I'm sure Rick is eager to trim down his series and this would
+> > > > > be a great
+> > > > > patch to drop.  Does anyone want to make that easy for Rick?
+> > > > > 
+> > > > > <hint> <hint>
+> > > > 
+> > > > Hey Gustavo, Nathan, or Nick! I know y'all have some fancy AMD
+> > > > testing
+> > > > rigs. Got a moment to spin up this series and run the selftests?
+> > > > :)
+> > > 
+> > > I do have access to a system with an EPYC 7513, which does have
+> > > Shadow
+> > > Stack support (I can see 'shstk' in the "Flags" section of lscpu
+> > > with
+> > > this series). As far as I understand it, AMD only added Shadow
+> > > Stack
+> > > with Zen 3; my regular AMD test system is Zen 2 (probably should
+> > > look at
+> > > procurring a Zen 3 or Zen 4 one at some point).
+> > > 
+> > > I applied this series on top of 6.0 and reverted this change then
+> > > booted
+> > > it on that system. After building the selftest (which did require
+> > > 'make headers_install' and a small addition to make it build beyond
+> > > that, see below), I ran it and this was the result. I am not sure
+> > > if
+> > > that is expected or not but the other results seem promising for
+> > > dropping this patch.
+> > > 
+> > >    $ ./test_shadow_stack_64
+> > >    [INFO]  new_ssp = 7f8a36c9fff8, *new_ssp = 7f8a36ca0001
+> > >    [INFO]  changing ssp from 7f8a374a0ff0 to 7f8a36c9fff8
+> > >    [INFO]  ssp is now 7f8a36ca0000
+> > >    [OK]    Shadow stack pivot
+> > >    [OK]    Shadow stack faults
+> > >    [INFO]  Corrupting shadow stack
+> > >    [INFO]  Generated shadow stack violation successfully
+> > >    [OK]    Shadow stack violation test
+> > >    [INFO]  Gup read -> shstk access success
+> > >    [INFO]  Gup write -> shstk access success
+> > >    [INFO]  Violation from normal write
+> > >    [INFO]  Gup read -> write access success
+> > >    [INFO]  Violation from normal write
+> > >    [INFO]  Gup write -> write access success
+> > >    [INFO]  Cow gup write -> write access success
+> > >    [OK]    Shadow gup test
+> > >    [INFO]  Violation from shstk access
+> > >    [OK]    mprotect() test
+> > >    [OK]    Userfaultfd test
+> > >    [FAIL]  Alt shadow stack test
+> > 
+> > The selftest is looking OK on my system (Dell PowerEdge R6515 w/ EPYC
+> > 7713). I also just pulled a fresh 6.0 kernel and applied the series
+> > including the fix Nathan mentions below.
+> > 
+> > $ tools/testing/selftests/x86/test_shadow_stack_64
+> > [INFO]  new_ssp = 7f30cccc5ff8, *new_ssp = 7f30cccc6001
+> > [INFO]  changing ssp from 7f30cd4c6ff0 to 7f30cccc5ff8
+> > [INFO]  ssp is now 7f30cccc6000
+> > [OK]    Shadow stack pivot
+> > [OK]    Shadow stack faults
+> > [INFO]  Corrupting shadow stack
+> > [INFO]  Generated shadow stack violation successfully
+> > [OK]    Shadow stack violation test
+> > [INFO]  Gup read -> shstk access success
+> > [INFO]  Gup write -> shstk access success
+> > [INFO]  Violation from normal write
+> > [INFO]  Gup read -> write access success
+> > [INFO]  Violation from normal write
+> > [INFO]  Gup write -> write access success
+> > [INFO]  Cow gup write -> write access success
+> > [OK]    Shadow gup test
+> > [INFO]  Violation from shstk access
+> > [OK]    mprotect() test
+> > [OK]    Userfaultfd test
+> > [OK]    Alt shadow stack test.
 > 
-> So, fix that.
-> 
-> Signed-off-by: Lyude Paul <lyude@redhat.com>
-> Issue: https://gitlab.freedesktop.org/drm/amd/-/issues/2171
-> Fixes: 4d07b0bc4034 ("drm/display/dp_mst: Move all payload info into the atomic state")
-> ---
->   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-> index b8077fcd4651..00598def5b39 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-> @@ -297,7 +297,7 @@ bool dm_helpers_dp_mst_send_payload_allocation(
->   		clr_flag = MST_ALLOCATE_NEW_PAYLOAD;
->   	}
->   
-> -	if (enable && drm_dp_add_payload_part2(mst_mgr, mst_state->base.state, payload)) {
-> +	if (enable && drm_dp_add_payload_part2(mst_mgr, mst_state->base.state, payload) == 0) {
->   		amdgpu_dm_set_mst_status(&aconnector->mst_status,
->   			set_flag, false);
->   	} else {
+> Thanks for the testing. Based on the test, I wonder if this could be a
+> SW bug. Nathan, could I send you a tweaked test with some more debug
+> information?
 
-Hi Lyude,
+Yes, more than happy to help you look into this further!
 
-Maybe I'm missing something, but I can't find the 
-drm_dp_add_payload_part2() function on amd-staging-drm-next. Which repo 
-are you using?
-
-Thanks
-Siqueira
-
+> John, are we sure AMD and Intel systems behave the same with respect to
+> CPUs not creating Dirty=1,Write=0 PTEs in rare situations? Or any other
+> CET related differences we should hash out? Otherwise I'll drop the
+> patch for the next version. (and assuming the issue Nathan hit doesn't
+> turn up anything HW related).
