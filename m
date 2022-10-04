@@ -2,105 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A99E5F3E9F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6B25F3EA3
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 10:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbiJDInE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 04:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
+        id S230264AbiJDIna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 04:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiJDInB (ORCPT
+        with ESMTP id S230238AbiJDInZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:43:01 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF433220D9
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:43:00 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 10so20152899lfy.5
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:43:00 -0700 (PDT)
+        Tue, 4 Oct 2022 04:43:25 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0742286EE
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 01:43:23 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id bj12so27281429ejb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 01:43:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=J73b4rCSJChNmSabTX0OyIO95LIj8AGlGWLppEgGIjc=;
-        b=Upt5Azmhd3ZE9V3mhXnOBq80QPJXbgzbLsB/rzphKpXsk5TlFRH7TNeEXgSxUH7t/Z
-         8B0tBDjD3o3+6vHzYFVKHvHRQmNvznjADKMzmm3Y8mP6Y/gChcyxHnA6nhkEd++oLCtN
-         KklNwxyBLG432OghgyZ8qbe21wq3C4VbZd6aXvgeWGWE/p4jdMI247fL67qsHvdXRZVd
-         sM9ZY29SKFPI9XCxZMMrYOWhnoq2abLFPd6Ey8ExGOltc3fOUxkRd1uBXDvFWxcxgBMr
-         YUgnIracXOmod4M+g03O4/jv9itKFBakz0+kJRXVLdskOIt2d0+0Cnoo6MnfSz3PP3Qa
-         Y7QA==
+        bh=9y6mckp6QwqVlkCMwSWHyLCrVK+e0UEzLE8ZnwJRiY8=;
+        b=ktTkCfG+LGxaPC1FxhwkFYJUP/uVyiOL59RxCdYRtkujLdjXw8gvt2wUv+3x36ZqEK
+         gr+uKk6uEhNT17sQPZ+KjFSX97a/KZpXepfHXgmhrDb/3eL9AHcIu+haa3EHsmJlJnzs
+         R+SN9ofuPDXQjzLSQb4X72bpgfANjBE8P6Ib46jOf8xbgd6EArUjlzdayYBgqbKSLnRb
+         yA9oWfoFVPykqzj7yWWyR9cV4XJmxmMBtiBzim10xNw0tIseI7tW35fyhQC0NGXVzhMy
+         VlAoApKSJ0FnZlTgOKRnAPpO6m++30KnTUXBS3hDU/FaSdixESMfE5c4EeyFBh4KwinZ
+         wxtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=J73b4rCSJChNmSabTX0OyIO95LIj8AGlGWLppEgGIjc=;
-        b=jTOPPs/mK5JLzkFexb46t2hmugMWNkExhRDe9jpcMOgCZ5Mm+kAwvYDTuQFhCi0wJo
-         hD9RwZryC8ANHyBhCCsZj9T9dPUBn83XkjA8LnGgs1fOPYe/M9qr26Klx5QNhSd8OWiU
-         OEpraHnDVav6OwnVWiiLW9j/e3gLsyDtsHTE2FP3hamM5PYLjbf87bNSmBK/w/yIsNta
-         C/rwHmymAlEqfa2NMBSMlI2jKtoedqAPum6nUpWHIFx+epM//THwcesTmZ3Nmj7mmott
-         gglL/M28yM2uOQVcka5nhsWZdfMyhu+FQzs9f4RZNgmrmVCZl52uOufjndoqYAesh5p9
-         WIzQ==
-X-Gm-Message-State: ACrzQf1EnoofNzGYBc/3k7Zk8f6TN9ShMERpUcETXVCm4RNrHqxOvStT
-        KN92Bu8c67KqDnlXZ9wfVzKspifuINuDgEzpsL0=
-X-Google-Smtp-Source: AMsMyM5gOO7YMOV59pxwHM43WmBgl+RMW9zIMphDiZTAbcuNe29MN6J/D+Du4yoIOynG1DBlYLyQwWnATX6RcGblVBU=
-X-Received: by 2002:a19:6459:0:b0:4a2:2dad:2eca with SMTP id
- b25-20020a196459000000b004a22dad2ecamr3671492lfj.428.1664872979166; Tue, 04
- Oct 2022 01:42:59 -0700 (PDT)
+        bh=9y6mckp6QwqVlkCMwSWHyLCrVK+e0UEzLE8ZnwJRiY8=;
+        b=dZmaOzQHdk72U6g68dY2nOBHMIcN2eDx1MuTcBndu+VgKCFoQobfXLmurA9HOZLfTF
+         ytWM/clRmophetWUmG2LmzNoieoGKWi1pEyuw2LAz4bQ5X3oOHdTabWt3/Dh1leEcSgV
+         m1FkGYfGBSpyL9dQuhZTvWU4zar3mbVeDyBtCpuD2MDWC8cpIbOtjEmYgq6CxGPOrth+
+         9i1YBILCKvlZTI4HRFr6EzGOS70CRBBy4+52qoBKmPbi4NN0ObscnnRJ5pWPSC4RLqz4
+         PGjziVPkZJAv68X+7BnMcCIdqH4PaxYaKnUlyf8FGvTYJkHVwzjC907FnGUa5IEU8fZ/
+         tR9g==
+X-Gm-Message-State: ACrzQf1By5v5WhQYqk21aOK6xJB8zZr6CLayrHLgKFG3fhuf5mhuM9Fk
+        RmC7LwsX5bMDpUY/B8ytWd5FbvLiZCez6f6kQuGZqQ==
+X-Google-Smtp-Source: AMsMyM7smwSso6PfOzdvyNfHYtM5xmnUQGdDRlyqmuW7idFRUM5gJbnvbj0OLrfrEFIn9hTirM/sNLEnKZ34nmjZXfM=
+X-Received: by 2002:a17:906:8a46:b0:781:71fc:d23f with SMTP id
+ gx6-20020a1709068a4600b0078171fcd23fmr18624979ejc.500.1664873002520; Tue, 04
+ Oct 2022 01:43:22 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:ab3:618:0:b0:1e8:f07:8ee7 with HTTP; Tue, 4 Oct 2022
- 01:42:58 -0700 (PDT)
-Reply-To: annghallaghe@gmail.com
-From:   Ann Ghallagher <beogomoustapha11@gmail.com>
-Date:   Tue, 4 Oct 2022 08:42:58 +0000
-Message-ID: <CAJFbKoc=GrubhknOLdke29LZpA3qr6Wk8uVDa+T+znThAyT7cw@mail.gmail.com>
-Subject: Hi
-To:     undisclosed-recipients:;
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com> <20220930060819.5320-1-hal.feng@linux.starfivetech.com>
+In-Reply-To: <20220930060819.5320-1-hal.feng@linux.starfivetech.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 4 Oct 2022 10:43:11 +0200
+Message-ID: <CACRpkdb-7YxfJB5YpYf4t1rT+u=mctLyVbCwm4+TtEHm1k2ANA@mail.gmail.com>
+Subject: Re: [PATCH v1 22/30] pinctrl: Create subdirectory for StarFive drivers
+To:     Hal Feng <hal.feng@linux.starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.2 required=5.0 tests=BAYES_80,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:133 listed in]
-        [list.dnswl.org]
-        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.8885]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [beogomoustapha11[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [beogomoustapha11[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: ******
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dear,
+On Fri, Sep 30, 2022 at 8:08 AM Hal Feng
+<hal.feng@linux.starfivetech.com> wrote:
 
-Nice to meet you, hope you=E2=80=99re enjoying a blissful day? I'm Ann
-Ghallagher. I'm a U.S. Army officer from the United States of America,
-I am supportive and caring, I like swimming and cooking am gentle
-although I am a soldier but I'm kind, wanting to get a good friend, I
-would like to establish mutual friendship with you.I want to make a
-deal with you so if you are interested contact my email
-(annghallaghe@gmail.com) or should I tell you about the deal here?
+> From: Jianlong Huang <jianlong.huang@starfivetech.com>
+>
+> Move the StarFive JH7100 pinctrl driver to a new subdirectory
+> in preparation for adding more StarFive pinctrl drivers. No
+> functional change.
+>
+> Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
+> Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
 
-Regards,
+I applied this patch for v6.1 so you don't have to reiterate it, it's clearly
+just infrastructure that you'll need going forward.
 
-Ann
+Yours,
+Linus Walleij
