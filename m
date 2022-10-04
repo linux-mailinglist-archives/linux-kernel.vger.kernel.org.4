@@ -2,167 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B315F477C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD7A5F477A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 18:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbiJDQYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 12:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60964 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiJDQYH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229884AbiJDQYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 4 Oct 2022 12:24:07 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6F7DEF0;
-        Tue,  4 Oct 2022 09:24:06 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294BuvS5022266;
-        Tue, 4 Oct 2022 18:23:49 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=yDMKyG65ckdC56hoAnM4nP4F4DEhQI3AW8B11BrUlAQ=;
- b=lH268rpkEPHoxuFVf3Cp3y9sJ/n2RIAc+d6vJA5LZac6+1UILc+iGaqk08+KYbyszyiO
- 8Lcp5NcB8rol/XYkSTDMFeLPsdF4Ot7L9hcGsYG5K4fyHlM43FemJR1i/YJi6W9kqxRw
- IXFM463RP4Zj9LrUpzAkCnlWD3gQ6G98dopMfNEKxlIcCWzrxdzNUZjG6XzNdiktiiGA
- 5SQatfa4tGsBcq7bSOehZsV0wSPwpEHaPlzBrFVFNkAypn8LRXMPwTUpc2pqWmUFXdzT
- DJ4zc0OIpYJtpoDLS4wJ6hRaOrUXXRbmH8BDVafsSxk4dpN7/JKBUg72jExPtmOcwgCN 4A== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jxapc1xda-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 18:23:49 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 128A610002A;
-        Tue,  4 Oct 2022 18:23:43 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 848FF245510;
-        Tue,  4 Oct 2022 18:23:43 +0200 (CEST)
-Received: from [10.211.7.73] (10.75.127.121) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Tue, 4 Oct
- 2022 18:23:40 +0200
-Message-ID: <97d1e574-ab68-cbd8-9300-b1a81f2dc2a9@foss.st.com>
-Date:   Tue, 4 Oct 2022 18:23:39 +0200
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229626AbiJDQYC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Oct 2022 12:24:02 -0400
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0B361DB0
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 09:23:58 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:e15b:43db:96f7:952f])
+        by albert.telenet-ops.be with bizsmtp
+        id TsPv2800f2GKRF306sPv17; Tue, 04 Oct 2022 18:23:57 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1ofki3-000hGR-8o; Tue, 04 Oct 2022 18:23:55 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1ofki2-007yf0-JW; Tue, 04 Oct 2022 18:23:54 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Oleksij Rempel <linux@rempel-privat.de>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] net: pse-pd: PSE_REGULATOR should depend on REGULATOR
+Date:   Tue,  4 Oct 2022 18:23:53 +0200
+Message-Id: <709caac8873ff2a8b72b92091429be7c1a939959.1664900558.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v9 4/4] remoteproc: virtio: Create platform device for the
- remoteproc_virtio
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Stefano Stabellini <stefanos@xilinx.com>,
-        Bruce Ashfield <bruce.ashfield@xilinx.com>
-References: <20220921135044.917140-1-arnaud.pouliquen@foss.st.com>
- <20220921135044.917140-5-arnaud.pouliquen@foss.st.com>
- <20221004143954.GA1479221-robh@kernel.org>
- <fa229aa5-5fb7-eb18-3b8a-59d8a98ccaba@foss.st.com>
- <CAL_JsqLnm7+YQAiSeCk5Db1oNcg=rwJd4Fnve4j+-ssC-dZOHQ@mail.gmail.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-In-Reply-To: <CAL_JsqLnm7+YQAiSeCk5Db1oNcg=rwJd4Fnve4j+-ssC-dZOHQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.121]
-X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-04_07,2022-09-29_03,2022-06-22_01
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The Regulator based PSE controller driver relies on regulator support to
+be enabled.  If regulator support is disabled, it will still compile
+fine, but won't operate correctly.
 
+Hence add a dependency on REGULATOR, to prevent asking the user about
+this driver when configuring a kernel without regulator support.
 
-On 10/4/22 17:43, Rob Herring wrote:
-> On Tue, Oct 4, 2022 at 10:18 AM Arnaud POULIQUEN
-> <arnaud.pouliquen@foss.st.com> wrote:
->>
->> Hello Rob,
->>
->> On 10/4/22 16:39, Rob Herring wrote:
->>> On Wed, Sep 21, 2022 at 03:50:44PM +0200, Arnaud Pouliquen wrote:
->>>> Define a platform driver to manage the remoteproc virtio device as
->>>> a platform devices.
->>>>
->>>> The platform device allows to pass rproc_vdev_data platform data to
->>>> specify properties that are stored in the rproc_vdev structure.
->>>>
->>>> Such approach will allow to preserve legacy remoteproc virtio device
->>>> creation but also to probe the device using device tree mechanism.
->>>>
->>>> remoteproc_virtio.c update:
->>>>   - Add rproc_virtio_driver platform driver. The probe ops replaces
->>>>     the rproc_rvdev_add_device function.
->>>>   - All reference to the rvdev->dev has been updated to rvdev-pdev->dev.
->>>>   - rproc_rvdev_release is removed as associated to the rvdev device.
->>>>   - The use of rvdev->kref counter is replaced by get/put_device on the
->>>>     remoteproc virtio platform device.
->>>>   - The vdev device no longer increments rproc device counter.
->>>>     increment/decrement is done in rproc_virtio_probe/rproc_virtio_remove
->>>>     function in charge of the vrings allocation/free.
->>>>
->>>> remoteproc_core.c update:
->>>>   Migrate from the rvdev device to the rvdev platform device.
->>>>   From this patch, when a vdev resource is found in the resource table
->>>>   the remoteproc core register a platform device.
->>>>
->>>> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
->>>> Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
->>>> ---
->>>>  drivers/remoteproc/remoteproc_core.c     |  12 +-
->>>>  drivers/remoteproc/remoteproc_internal.h |   2 -
->>>>  drivers/remoteproc/remoteproc_virtio.c   | 143 ++++++++++++-----------
->>>>  include/linux/remoteproc.h               |   6 +-
->>>>  4 files changed, 82 insertions(+), 81 deletions(-)
->>>
->>> [...]
->>>
->>>> +/* Platform driver */
->>>> +static const struct of_device_id rproc_virtio_match[] = {
->>>> +    { .compatible = "virtio,rproc" },
->>>
->>> This is not documented. Add a binding schema if you need DT support.
->>
->>
->> Mathieu also pointed this out to me in V8, you can see the discussion here [1]
->>
->> Here is an extract:
->> "Yes I saw the warning, but for this first series it is not possible to declare
->> the associated "rproc-virtio" device in device tree.
->> So at this step it seems not make senses to create the devicetree bindings file.
->> More than that I don't know how I could justify the properties in bindings if
->> there is not driver code associated.
->>
->> So i would be in favor of not adding the bindings in this series but to define
->> bindings in the first patch of my "step 2" series; as done on my github:
->> https://github.com/arnopo/linux/commit/9616d89a4f478cf78865a244efcde108d900f69f
->> "
-> 
-> Okay, since I only just started checking this (in a more reliable way
-> than checkpatch does).
-> 
-> But why do you need the DT match entry if it is not usable yet? You
-> could just add that in later when the binding is defined. Review of
-> the binding could say that 'virtio,rproc' should be something else and
-> you'd have to change it.
+Fixes: 66741b4e94ca7bb1 ("net: pse-pd: add regulator based PSE driver")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/net/pse-pd/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Probably because I am too formatted to add a compatible when I create a driver,
-this solution yet logical did not come to my mind...
+diff --git a/drivers/net/pse-pd/Kconfig b/drivers/net/pse-pd/Kconfig
+index 73d163704068ac27..687dec49c1e13fa0 100644
+--- a/drivers/net/pse-pd/Kconfig
++++ b/drivers/net/pse-pd/Kconfig
+@@ -14,6 +14,7 @@ if PSE_CONTROLLER
+ 
+ config PSE_REGULATOR
+ 	tristate "Regulator based PSE controller"
++	depends on REGULATOR || COMPILE_TEST
+ 	help
+ 	  This module provides support for simple regulator based Ethernet Power
+ 	  Sourcing Equipment without automatic classification support. For
+-- 
+2.25.1
 
-I will send a fix to suppress the compatible.
-
-Thanks,
-Arnaud
-
-> 
-> Rob
