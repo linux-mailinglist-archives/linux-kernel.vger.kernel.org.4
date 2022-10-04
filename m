@@ -2,200 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 481895F4C40
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:55:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E145F4C3D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiJDWzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 18:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
+        id S229941AbiJDWyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 18:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiJDWzF (ORCPT
+        with ESMTP id S229996AbiJDWxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 18:55:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8022013FB6
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 15:55:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664924100;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DC7n5vrJm9+7rtzmCox+oVCN8flf2wk8nlQItN2YxhA=;
-        b=W72N73GBVXuNma9FdfBikf9sd4fupF03OjMiVi6ldd4VlkkjCmlVIWvPDtbmcAls/AqL7R
-        Lu5YEYC187FvMV2xrPretJbgVuvmgyGV3io4XKOWO1lfM8yEjd7JccxlI1CTOXD6WgDMoZ
-        dvu3TF5yMSQlYhcKYa2UdBeXw6XLwjo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-2-0IBI0tUgMT6xquT_Hvi9Dg-1; Tue, 04 Oct 2022 18:53:38 -0400
-X-MC-Unique: 0IBI0tUgMT6xquT_Hvi9Dg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 644173800C22;
-        Tue,  4 Oct 2022 22:53:38 +0000 (UTC)
-Received: from [10.22.10.217] (unknown [10.22.10.217])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D34C235429;
-        Tue,  4 Oct 2022 22:53:37 +0000 (UTC)
-Message-ID: <35942f9a-e21c-9317-3d9f-61cbac5f8dfd@redhat.com>
-Date:   Tue, 4 Oct 2022 18:53:37 -0400
+        Tue, 4 Oct 2022 18:53:47 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4716F25A
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 15:53:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1664924025; x=1696460025;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=61OqWLOJ1qZP4yhC+R446jKFAiOWBMQf9fOX2cvP8VE=;
+  b=d6F9x+DdkcZtKou+kXZ7UxwsgXEYC0unc5uMd8YIjhQsaCa+bjDKTH3X
+   AWjhU5kKc3ZALc9qUNYft716BmYqXR42h10aqHBdcQRL7oIN+lEcbL9+x
+   ifGKeqtlK80SiRwf4KkCP6yQ5URlujfzDYdagod3RgNx/FMX0qnmLWQdU
+   EbJ618EwoyZ2Dim/hS1n8hGOGTFwnLPYyJ9giUppteIedsZvZ3pdWbXY3
+   XOtrwnri5dVD9oA0GEMrE+XHZc2cg5cZNiOfVD7FwfbrfbxMzER0HMB1x
+   3cAa7DfWxPfgKeOwADr4ImNSCn93lA9lFFK2/9bZiJZ1/jLkuEIFIjsU0
+   g==;
+X-IronPort-AV: E=Sophos;i="5.95,158,1661788800"; 
+   d="scan'208";a="211344473"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 05 Oct 2022 06:53:43 +0800
+IronPort-SDR: tC92Ge5+jurFHHgPE2y3tDu1gCIypEGFU8BCheoxj50znyitGdy/vrGrFfks5SuJanVpiSH6O9
+ xLtqBtyYjIUorw+P7ceudh7ZaiOw5w7wNYZv6l3bj3mHhVEjBsPNEQTHli8f9I0aZyPtGFsra0
+ f2+6t0BjbhWDEF9gmtwxm+2/CCtjGvKPNApS4sxTLrIaJv4CDt2XPQi08ohiuED3E4P7JPgDeq
+ A1bmJtYZ/Z4gBpsQAMYhX7Q8PeLGdZgfwYQvhQD2V/Xuy4KdbxyUYGiSUFX/N7VJmLDVz3+3Gb
+ AIQl1d8e8L1MXmj9EX3glFrV
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Oct 2022 15:07:57 -0700
+IronPort-SDR: vVRF00XniOtB50SL56n9TSFpHI0NvoILmJXAaTZsXkfnnscNjJ6WMVwCIXo4TizRICH7ohT01B
+ KjImjP0ajAlMfx6HeoqiyuZMfugeZGKZEsSG+MvfFEGxKLu4OaGnhjMJRLMGWujKOMvlAHHmAT
+ Qc8q8wqnI4pnYUtr2nX5NKnoVIZz+FT0aDrNtKn5hJldoEj82RqYYkz6VlJqjqbDsoCSo0e+Cv
+ ScWUwehFcaUs4nH2AqhRToqL5HvLXixLPDo9fK9MqsSUsfJ+RCBKzMf5Val8cmXIgIs9UOCfxM
+ RRk=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Oct 2022 15:53:44 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MhtKg1gHNz1RwtC
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 15:53:43 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1664924021; x=1667516022; bh=61OqWLOJ1qZP4yhC+R446jKFAiOWBMQf9fO
+        X2cvP8VE=; b=RqzS3Znx3azzqhmri2R6GRvXevwMldY4Q0y+Zio730o1JGh4xCj
+        vfEdfvWDYoZNSDwYNkoQLgSJ4K3dVJSVASX3fo7lK8weO33sR0BSL2CvXNWkIDpo
+        BB3uUK7p2BrZzy5scAfQ5O+SejCVp9NLuiM3MbK+0OEYd7vh8IOB0lNhJh2DDHW8
+        2q6fDbDjE6uLBagSX2x/Rm/2ExDZoztdgAtXSDyQdP4HeJafx0MQf68rFLo1PqL3
+        +nCoGHk2n4xafB4H31I+B7WGE5Vukhi6CyW9TQY/6q+U6NrzWsc3eRekSzR/PcQq
+        8xcitNKl7+QRFrO9lE9dAgLHKiRvMUTKcTw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Gp8ZaUoCp3KU for <linux-kernel@vger.kernel.org>;
+        Tue,  4 Oct 2022 15:53:41 -0700 (PDT)
+Received: from [10.225.163.106] (unknown [10.225.163.106])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MhtKc0qG9z1RvLy;
+        Tue,  4 Oct 2022 15:53:39 -0700 (PDT)
+Message-ID: <5e696c5f-c39f-88a4-5f94-03fdf884bb34@opensource.wdc.com>
+Date:   Wed, 5 Oct 2022 07:53:38 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v8 3/3] blk-cgroup: Optimize blkcg_rstat_flush()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH V3 6/8] block, bfq: retrieve independent access ranges
+ from request queue
 Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20221004151748.293388-1-longman@redhat.com>
- <20221004151748.293388-4-longman@redhat.com> <YzyAT/lfyKhOnOpy@blackbook>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YzyAT/lfyKhOnOpy@blackbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, andrea.righi@canonical.com, glen.valante@linaro.org,
+        arie.vanderhoeven@seagate.com, rory.c.chen@seagate.com,
+        Federico Gavioli <f.gavioli97@gmail.com>
+References: <20221004094010.80090-1-paolo.valente@linaro.org>
+ <20221004094010.80090-7-paolo.valente@linaro.org>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20221004094010.80090-7-paolo.valente@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/4/22 14:49, Michal Koutný wrote:
-> Hello.
->
-> On Tue, Oct 04, 2022 at 11:17:48AM -0400, Waiman Long <longman@redhat.com> wrote:
->> To protect against destruction of blkg, a percpu reference is gotten
->> when putting into the lockless list and put back when removed.
-> Just to conclude my previous remark about the loop, let me try
-> explaining it more precisely:
->
-> blkcg->lhead via blkg_iostat_set holds reference to blkcg_gq
->     (taken in in blk_cgroup_bio_start)
->
-> blkcg_gq holds reference to its blkcg_gq->blkcg
->     (taken in blkg_create)
->
-> The cycle has two edges, the latter is broken in __blkg_release but
-> that's a release callback of the involved blkcg_gq->refcnt, so it won't
-> be called.
->
-> The first edges is broken in blkcg_rstat_flush and that's more promising.
-> The current code does the final flushes -- in css_release_work_fn.
-> The problem is that it's the release callback of blkcg->css, i.e. it's
-> also referenced on the cycle, therefore this final flush won't happen
-> before cycle is broken.
->
-> Fortunately, any other caller of cgroup_rstat_flush comes to the rescue
-> -- the blkcg_rstat_flush on the stuck blkcg would decompose lhead list
-> and the reference cycle is broken.
->
-> In summary, I think this adds the reference cycle but its survival time
-> is limited to the soonest cgroup_rstat_flush call, which should not
-> cause practical troubles.
+On 10/4/22 18:40, Paolo Valente wrote:
+> From: Federico Gavioli <f.gavioli97@gmail.com>
+> 
+> This patch implements the code to gather the content of the
+> independent_access_ranges structure from the request_queue and copy
+> it into the queue's bfq_data. This copy is done at queue initialization.
+> 
+> We copy the access ranges into the bfq_data to avoid taking the queue
+> lock each time we access the ranges.
+> 
+> This implementation, however, puts a limit to the maximum independent
+> ranges supported by the scheduler. Such a limit is equal to the constant
+> BFQ_MAX_ACTUATORS. This limit was placed to avoid the allocation of
+> dynamic memory.
+> 
+> Reviewed-by: Damien Le Moal <Damien.LeMoal@wdc.com>
 
-Thanks for the explanation. I now get what you are referring to. Yes, 
-this delayed blkcg removal problem is annoying. I think the following 
-patch should eliminate this issue. What do you think?
+I merely commented on a point you raised. That was not a patch review. So
+please do not add my RB tag without me sending it. And my preferred email
+address is damien.lemoal@opensource.wdc.com.
 
-Cheers,
-Longman
+Also, please send the whole series to have context for each patch.
 
-----------------8<-------------[ cut here ]------------------
+> Co-developed-by: Rory Chen <rory.c.chen@seagate.com>
+> Signed-off-by: Federico Gavioli <f.gavioli97@gmail.com>
+> Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
+> Signed-off-by: Rory Chen <rory.c.chen@seagate.com>
+> ---
+>  block/bfq-cgroup.c  |  2 +-
+>  block/bfq-iosched.c | 59 ++++++++++++++++++++++++++++++++++++++-------
+>  block/bfq-iosched.h | 12 +++++++++
+>  3 files changed, 63 insertions(+), 10 deletions(-)
+> 
+> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+> index 3b4a0363d617..080d9160217b 100644
+> --- a/block/bfq-cgroup.c
+> +++ b/block/bfq-cgroup.c
+> @@ -764,7 +764,7 @@ static void *__bfq_bic_change_cgroup(struct bfq_data *bfqd,
+>  	struct bfq_entity *entity;
+>  	unsigned int act_idx;
+>  
+> -	for (act_idx = 0; act_idx < BFQ_MAX_ACTUATORS; act_idx++) {
+> +	for (act_idx = 0; act_idx < bfqd->num_ia_ranges; act_idx++) {
+>  		struct bfq_queue *async_bfqq = bic_to_bfqq(bic, 0, act_idx);
+>  		struct bfq_queue *sync_bfqq = bic_to_bfqq(bic, 1, act_idx);
+>  
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index d8a15427a96d..9203b4604da8 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -689,7 +689,7 @@ static void bfq_limit_depth(blk_opf_t opf, struct blk_mq_alloc_data *data)
+>  		limit = (limit * depth) >> bfqd->full_depth_shift;
+>  	}
+>  
+> -	for (act_idx = 0; act_idx < BFQ_MAX_ACTUATORS; act_idx++) {
+> +	for (act_idx = 0; act_idx < bfqd->num_ia_ranges; act_idx++) {
+>  		struct bfq_queue *bfqq =
+>  			bic ? bic_to_bfqq(bic, op_is_sync(opf), act_idx) : NULL;
+>  
+> @@ -1829,10 +1829,25 @@ static bool bfq_bfqq_higher_class_or_weight(struct bfq_queue *bfqq,
+>  /* get the index of the actuator that will serve bio */
+>  static unsigned int bfq_actuator_index(struct bfq_data *bfqd, struct bio *bio)
+>  {
+> -	/*
+> -	 * Multi-actuator support not complete yet, so always return 0
+> -	 * for the moment.
+> -	 */
+> +	struct blk_independent_access_range *iar;
+> +	unsigned int i;
+> +	sector_t end;
+> +
+> +	if (bfqd->num_ia_ranges == 1)
+> +		return 0;
+> +
+> +	/* bio_end_sector(bio) gives the sector after the last one */
+> +	end = bio_end_sector(bio) - 1;
+> +
+> +	for (i = 0; i < bfqd->num_ia_ranges; i++) {
+> +		iar = &(bfqd->ia_ranges[i]);
+> +		if (end >= iar->sector && end < iar->sector + iar->nr_sectors)
+> +			return i;
+> +	}
+> +
+> +	WARN_ONCE(true,
+> +		  "bfq_actuator_index: bio sector out of ranges: end=%llu\n",
+> +		  end);
+>  	return 0;
+>  }
+>  
+> @@ -2477,7 +2492,6 @@ static void bfq_remove_request(struct request_queue *q,
+>  
+>  	if (rq->cmd_flags & REQ_META)
+>  		bfqq->meta_pending--;
+> -
+>  }
+>  
+>  static bool bfq_bio_merge(struct request_queue *q, struct bio *bio,
+> @@ -2673,7 +2687,7 @@ void bfq_end_wr_async_queues(struct bfq_data *bfqd,
+>  {
+>  	int i, j, k;
+>  
+> -	for (k = 0; k < BFQ_MAX_ACTUATORS; k++) {
+> +	for (k = 0; k < bfqd->num_ia_ranges; k++) {
+>  		for (i = 0; i < 2; i++)
+>  			for (j = 0; j < IOPRIO_NR_LEVELS; j++)
+>  				if (bfqg->async_bfqq[i][j][k])
+> @@ -5432,7 +5446,7 @@ static void bfq_exit_icq(struct io_cq *icq)
+>  	if (bfqd)
+>  		spin_lock_irqsave(&bfqd->lock, flags);
+>  
+> -	for (act_idx = 0; act_idx < BFQ_MAX_ACTUATORS; act_idx++) {
+> +	for (act_idx = 0; act_idx < bfqd->num_ia_ranges; act_idx++) {
+>  		if (bic->stable_merge_bfqq[act_idx])
+>  			bfq_put_stable_ref(bic->stable_merge_bfqq[act_idx]);
+>  
+> @@ -7003,7 +7017,7 @@ void bfq_put_async_queues(struct bfq_data *bfqd, struct bfq_group *bfqg)
+>  {
+>  	int i, j, k;
+>  
+> -	for (k = 0; k < BFQ_MAX_ACTUATORS; k++) {
+> +	for (k = 0; k < bfqd->num_ia_ranges; k++) {
+>  		for (i = 0; i < 2; i++)
+>  			for (j = 0; j < IOPRIO_NR_LEVELS; j++)
+>  				__bfq_put_async_bfqq(bfqd, &bfqg->async_bfqq[i][j][k]);
+> @@ -7120,6 +7134,8 @@ static int bfq_init_queue(struct request_queue *q, struct elevator_type *e)
+>  {
+>  	struct bfq_data *bfqd;
+>  	struct elevator_queue *eq;
+> +	unsigned int i;
+> +	struct blk_independent_access_ranges *ia_ranges = q->disk->ia_ranges;
+>  
+>  	eq = elevator_alloc(q, e);
+>  	if (!eq)
+> @@ -7162,6 +7178,31 @@ static int bfq_init_queue(struct request_queue *q, struct elevator_type *e)
+>  
+>  	bfqd->queue = q;
+>  
+> +	/*
+> +	 * If the disk supports multiple actuators, we copy the independent
+> +	 * access ranges from the request queue structure.
+> +	 */
+> +	spin_lock_irq(&q->queue_lock);
+> +	if (ia_ranges) {
+> +		/*
+> +		 * Check if the disk ia_ranges size exceeds the current bfq
+> +		 * actuator limit.
+> +		 */
+> +		if (ia_ranges->nr_ia_ranges > BFQ_MAX_ACTUATORS) {
+> +			pr_crit("nr_ia_ranges higher than act limit: iars=%d, max=%d.\n",
+> +					ia_ranges->nr_ia_ranges, BFQ_MAX_ACTUATORS);
+> +			pr_crit("Falling back to single actuator mode.\n");
+> +			bfqd->num_ia_ranges = 1;
 
-  block/blk-cgroup.c     | 15 ++++++++++++++-
-  include/linux/cgroup.h |  1 +
-  kernel/cgroup/rstat.c  | 20 ++++++++++++++++++++
-  3 files changed, 35 insertions(+), 1 deletion(-)
+Setting this to one, one would expect bfqd->ia_ranges[0] to contain valid
+information. So shouldn't you set it to sector 0 and nr_sector == capacity ?
 
-diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-index 63569b05db0d..f896caef9947 100644
---- a/block/blk-cgroup.c
-+++ b/block/blk-cgroup.c
-@@ -1122,10 +1122,12 @@ struct list_head *blkcg_get_cgwb_list(struct 
-cgroup_subsys_state *css)
-   */
-  static void blkcg_destroy_blkgs(struct blkcg *blkcg)
-  {
-+    int cpu;
-+
-      might_sleep();
+> +		} else {
+> +			bfqd->num_ia_ranges = ia_ranges->nr_ia_ranges;
+> +
+> +			for (i = 0; i < bfqd->num_ia_ranges; i++)
+> +				bfqd->ia_ranges[i] = ia_ranges->ia_range[i];
+> +		}
+> +	} else
+> +		bfqd->num_ia_ranges = 1;
 
-+    css_get(&blkcg->css);
-      spin_lock_irq(&blkcg->lock);
--
-      while (!hlist_empty(&blkcg->blkg_list)) {
-          struct blkcg_gq *blkg = hlist_entry(blkcg->blkg_list.first,
-                          struct blkcg_gq, blkcg_node);
-@@ -1148,6 +1150,17 @@ static void blkcg_destroy_blkgs(struct blkcg *blkcg)
-      }
+Missing the curly brackets after else.
 
-      spin_unlock_irq(&blkcg->lock);
-+
-+    /*
-+     * Flush all the non-empty percpu lockless lists.
-+     */
-+    for_each_possible_cpu(cpu) {
-+        struct llist_head *lhead = per_cpu_ptr(blkcg->lhead, cpu);
-+
-+        if (!llist_empty(lhead))
-+            cgroup_rstat_css_flush(&blkcg->css, cpu);
-+    }
-+    css_put(&blkcg->css);
-  }
+> +	spin_unlock_irq(&q->queue_lock);
+> +
+>  	INIT_LIST_HEAD(&bfqd->dispatch);
+>  
+>  	hrtimer_init(&bfqd->idle_slice_timer, CLOCK_MONOTONIC,
+> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+> index f9ccf468edc2..34f7603bb62f 100644
+> --- a/block/bfq-iosched.h
+> +++ b/block/bfq-iosched.h
+> @@ -796,6 +796,18 @@ struct bfq_data {
+>  	 */
+>  	unsigned int word_depths[2][2];
+>  	unsigned int full_depth_shift;
+> +
+> +	/*
+> +	 * Number of independent access ranges. This is equal to 1 in
+> +	 * case of single actuator drives.
+> +	 */
+> +	unsigned int num_ia_ranges;
+> +
+> +	/*
+> +	 * Disk independent access ranges for each actuator
+> +	 * in this device.
+> +	 */
+> +	struct blk_independent_access_range ia_ranges[BFQ_MAX_ACTUATORS];
+>  };
+>  
+>  enum bfqq_state_flags {
 
-  /**
-diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-index ac5d0515680e..33e226a34073 100644
---- a/include/linux/cgroup.h
-+++ b/include/linux/cgroup.h
-@@ -763,6 +763,7 @@ void cgroup_rstat_flush(struct cgroup *cgrp);
-  void cgroup_rstat_flush_irqsafe(struct cgroup *cgrp);
-  void cgroup_rstat_flush_hold(struct cgroup *cgrp);
-  void cgroup_rstat_flush_release(void);
-+void cgroup_rstat_css_flush(struct cgroup_subsys_state *css, int cpu);
-
-  /*
-   * Basic resource stats.
-diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
-index feb59380c896..a4e18d627b54 100644
---- a/kernel/cgroup/rstat.c
-+++ b/kernel/cgroup/rstat.c
-@@ -251,6 +251,26 @@ void cgroup_rstat_flush_release(void)
-      spin_unlock_irq(&cgroup_rstat_lock);
-  }
-
-+/**
-+ * cgroup_rstat_css_flush - flush stats for the given css and cpu
-+ * @css: target css to be flush
-+ * @cpu: the cpu that holds the stats to be flush
-+ *
-+ * A lightweight rstat flush operation for a given css and cpu.
-+ * Only the cpu_lock is being held for mutual exclusion, the 
-cgroup_rstat_lock
-+ * isn't used.
-+ */
-+void cgroup_rstat_css_flush(struct cgroup_subsys_state *css, int cpu)
-+{
-+    raw_spinlock_t *cpu_lock = per_cpu_ptr(&cgroup_rstat_cpu_lock, cpu);
-+
-+    raw_spin_lock_irq(cpu_lock);
-+    rcu_read_lock();
-+    css->ss->css_rstat_flush(css, cpu);
-+    rcu_read_unlock();
-+    raw_spin_unlock_irq(cpu_lock);
-+}
-+
-  int cgroup_rstat_init(struct cgroup *cgrp)
-  {
-      int cpu;
 -- 
-
+Damien Le Moal
+Western Digital Research
 
