@@ -2,80 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 239445F45DE
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48C35F45E1
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 16:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiJDOqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 10:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
+        id S229940AbiJDOsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 10:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbiJDOqD (ORCPT
+        with ESMTP id S229808AbiJDOsO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 10:46:03 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4B861B2E
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 07:46:01 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 126so17049817ybw.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 07:46:01 -0700 (PDT)
+        Tue, 4 Oct 2022 10:48:14 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F115924BF3
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 07:48:11 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id g2so8483484qkk.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 07:48:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=9dr7qJ7Qml93GSKT3iv83T/pfmaFSKB83Wj12OdpTQ8=;
-        b=BQUx0AnFkzWaEdyMHn06vsVqq+yQguDgxDoorjEzwbCeIhb79FOsXeaumiJird5sbr
-         2g/PeBB9u87eoalbUaukckm53a5qp3qdr5tb27Dbc0Pib/XrQrrbSd+be50cvo4aY8FZ
-         bqpZ1QIMsyoCXGebe/HmBUfWDjYnU1huyVBw0DUZgiEN2RA/kMimiTBnPSUHWKNpehEa
-         X+N4ebBwrfiOX4Zbph+suwdKVXRHYowi56Bq/I1heGJ3QFnECihqOdBXggwWPe2Sq5rL
-         zBwqXVTLPedYXauuUC3MWxR/C3R9UJGcUkb4cFFCFchDZ+7oFMXCfYCV0vG9L/9te7sn
-         NNlQ==
+        d=linuxfoundation.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=ihftkltNveJbQdV47ucYZdqJk9biYFJbbWec+UAUaqI=;
+        b=bCOclblMw4zaokxU052XVeIH9IFOsnNvnBLTBNQQxDiYphNQW14xmYUVoJa7/SvzOX
+         qBTxFSblw8bPY01muWGwvsgRYJUDWeQa+OXchhb8JbbPQAZKzWdKQdmR67BRmmhvbBKJ
+         uk1jbSJv+lkQ8beE7uQosuUrHRinvgB6Z4fHs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=9dr7qJ7Qml93GSKT3iv83T/pfmaFSKB83Wj12OdpTQ8=;
-        b=r1iOhtLqLssxEujlSKk5daYMTgk2R1qXxZdaJRej08dGOn2E13c4SirNf9bq9nGBsF
-         mUjs6POL3Wku/atgqrRk2N/NIXnc/U9FbmjX19ybEhhUNRlClCzFMuAAW3aKVMrfCabG
-         hRP/Oi+mMCcglUPeokQVymMS1qCcc/roSIsr6jaXAqWxfDMF+efChlQQBSMu+vK5lfFT
-         mZ71L+EDACLEQVm3xOg5SPfXKJUrbPxLWxodFL7jm6MSLQaKvSlUbAPNgQHxVqLPMDDa
-         JpDiybZRjT7rNzyqqMShysk0sA3/j2cfsIxHu0Hq+u1qia9TEixlEpFitDVTRP14U4Ff
-         /5Vg==
-X-Gm-Message-State: ACrzQf0bofLKF+AJ6nUUI4C21zVD+okpdtFK0BE2pOO6mMfYeChfVUJu
-        X/ueVjimzMJgX0oqKm5B8CmM1qGnuWausHzGdB3epw==
-X-Google-Smtp-Source: AMsMyM4GlEKH++HoB5HPsS9oEYIc89cjO+AgKYwLjkK0bJ21xdnrimtiaSFkoCg2fZuKNZ0WWx6CCLoFq3t7mgRVYEc=
-X-Received: by 2002:a5b:c:0:b0:6bd:f84c:b63e with SMTP id a12-20020a5b000c000000b006bdf84cb63emr7242772ybp.275.1664894761093;
- Tue, 04 Oct 2022 07:46:01 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=ihftkltNveJbQdV47ucYZdqJk9biYFJbbWec+UAUaqI=;
+        b=eBSfzAf3JO2Dp912J9IeSDpN49Rlp3mlUCdCLtibD/ZyVFBwktMEiIJjX3+UOdwdyV
+         pspiyULq5372ek5/So+nWE+SaNBykyd+hmGve98HetlYEOTcqanFno/2bw36oH2r29xd
+         pFRPa4bYgDdm2kDP/I1MQFfTQRemU+QJxpQGD4EExy9kjo/+OZA5qMhtRayESrWH7e9P
+         SApBZ4iLN9DEMX2TjqTv1OCWYJs3w6PLYRAZc5K0ruJdWmCyctHmvbBwMz2HPltHBlS4
+         WNPVcRALJMfwpJyRwZ2g6NoFveRUAk8Qg6yZrSzbKcPyYb3hPK57gQe8NP5hdoSjRPAq
+         euiQ==
+X-Gm-Message-State: ACrzQf1jPD7U8Vgf3DBLWtFCMmfsUnZ2FROdy84wBFMzVaQuQCVup7zv
+        ypPcV8sTHjSqgywvs75LfTBsOQ==
+X-Google-Smtp-Source: AMsMyM6+Bc9ggdImprFSEV1hRtemUxuVGWvA6/LDu4e+5bM+Ys3Rxli+THNpHa5WG/LMSjfwREz93g==
+X-Received: by 2002:a05:620a:158d:b0:6cd:efb1:8eb6 with SMTP id d13-20020a05620a158d00b006cdefb18eb6mr16903244qkk.185.1664894891065;
+        Tue, 04 Oct 2022 07:48:11 -0700 (PDT)
+Received: from meerkat.local (bras-base-mtrlpq5031w-grc-33-142-113-79-147.dsl.bell.ca. [142.113.79.147])
+        by smtp.gmail.com with ESMTPSA id y3-20020a05620a44c300b006ce60296f97sm57780qkp.68.2022.10.04.07.48.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 07:48:10 -0700 (PDT)
+Date:   Tue, 4 Oct 2022 10:48:08 -0400
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     "Artem S. Tashkinov" <aros@gmx.com>
+Cc:     Mike Rapoport <rppt@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+Message-ID: <20221004144808.q6jq77quysduw5wt@meerkat.local>
+References: <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
+ <20221002141321.394de676@rorschach.local.home>
+ <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
+ <20221002180844.2e91b1f1@rorschach.local.home>
+ <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com>
+ <YzoY+dxLuCfOp0sL@ZenIV>
+ <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com>
+ <YzqjfU66alRlGk5y@kernel.org>
+ <20221003153718.o7fhrain5fnwwu3l@meerkat.local>
+ <b23586ae-3082-08dc-7bc7-94c3fecffbf9@gmx.com>
 MIME-Version: 1.0
-References: <20221001190807.358691-1-marijn.suijten@somainline.org> <20221001190807.358691-4-marijn.suijten@somainline.org>
-In-Reply-To: <20221001190807.358691-4-marijn.suijten@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 4 Oct 2022 17:45:50 +0300
-Message-ID: <CAA8EJppYJ-PYCsaKn=sGDpnJJdW2QBx=MOqUr6qzY0bAZtpGxA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] drm/msm/dsi: Account for DSC's bits_per_pixel having
- 4 fractional bits
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        Marek Vasut <marex@denx.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b23586ae-3082-08dc-7bc7-94c3fecffbf9@gmx.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,150 +84,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 1 Oct 2022 at 22:08, Marijn Suijten
-<marijn.suijten@somainline.org> wrote:
->
-> drm_dsc_config's bits_per_pixel field holds a fractional value with 4
-> bits, which all panel drivers should adhere to for
-> drm_dsc_pps_payload_pack() to generate a valid payload.  All code in the
-> DSI driver here seems to assume that this field doesn't contain any
-> fractional bits, hence resulting in the wrong values being computed.
-> Since none of the calculations leave any room for fractional bits or
-> seem to indicate any possible area of support, disallow such values
-> altogether.
->
-> Fixes: b9080324d6ca ("drm/msm/dsi: add support for dsc data")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->  drivers/gpu/drm/msm/dsi/dsi_host.c | 34 +++++++++++++++++++++++-------
->  1 file changed, 26 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index cb6f2fa11f58..42a5c9776f52 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -847,6 +847,11 @@ static void dsi_update_dsc_timing(struct msm_dsi_host *msm_host, bool is_cmd_mod
->         u32 pkt_per_line;
->         u32 bytes_in_slice;
->         u32 eol_byte_num;
-> +       int bpp = dsc->bits_per_pixel >> 4;
-> +
-> +       if (dsc->bits_per_pixel & 0xf)
-> +               /* dsi_populate_dsc_params() already caught this case */
-> +               pr_err("DSI does not support fractional bits_per_pixel\n");
->
->         /* first calculate dsc parameters and then program
->          * compress mode registers
-> @@ -860,7 +865,7 @@ static void dsi_update_dsc_timing(struct msm_dsi_host *msm_host, bool is_cmd_mod
->         if (slice_per_intf > dsc->slice_count)
->                 dsc->slice_count = 1;
->
-> -       bytes_in_slice = DIV_ROUND_UP(dsc->slice_width * dsc->bits_per_pixel, 8);
-> +       bytes_in_slice = DIV_ROUND_UP(dsc->slice_width * bpp, 8);
+On Tue, Oct 04, 2022 at 12:24:23PM +0000, Artem S. Tashkinov wrote:
+> > It can't, actually, which is I think is the crux of misunderstanding here. I
+> > think what Artem is proposing is to *auto-create bugzilla accounts* for anyone
+> > who shows up in MAINTAINERS, so that they can be cc'd on a bug report.
+> > However, everyone understood this as "add these people as default assignees,"
+> > which is not the case.
+> > 
+> > If we auto-create accounts for MAINTAINERS, that would allow them to be cc'd
+> > by an actual human being triaging bugs, but won't lead to any discernable
+> > increase of bugzilla mail.
+> > 
+> > Artem, please correct me if I'm wrong.
+> 
+> Exactly. Only maintainers and mailing lists will be assigned
+> automatically as it is _now_. Other developers need to be CC'ed _manually_.
+> 
+> There's no SPAM issue or never has been about what I proposed. Absolute
+> most people will never CC anyone 'cause bug reporters are normally quite
+> lazy or not experienced enough to grep git logs.
 
+It's still not a perfect plan, because this is what tends to happen:
 
-bytes_in_slice = DIV_ROUND_UP(dsc->slice_width * dsc->bits_per_pixel, 8 * 16); ?
+1. someone is cc'd via the bugzilla interface
+2. the maintainer responds via replying to the email and cc's someone else
+3. bugzilla doesn't automatically synchronize the email Cc: fields and the
+   bug's cc list, so any responses posted via the web interface don't go to
+   people who were cc'd via email
 
->
->         dsc->slice_chunk_size = bytes_in_slice;
->
-> @@ -913,6 +918,7 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->         u32 va_end = va_start + mode->vdisplay;
->         u32 hdisplay = mode->hdisplay;
->         u32 wc;
-> +       int ret;
->
->         DBG("");
->
-> @@ -948,7 +954,9 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->                 /* we do the calculations for dsc parameters here so that
->                  * panel can use these parameters
->                  */
-> -               dsi_populate_dsc_params(dsc);
-> +               ret = dsi_populate_dsc_params(dsc);
-> +               if (ret)
-> +                       return;
->
->                 /* Divide the display by 3 but keep back/font porch and
->                  * pulse width same
-> @@ -1229,6 +1237,10 @@ static int dsi_cmd_dma_add(struct msm_dsi_host *msm_host,
->         if (packet.size < len)
->                 memset(data + packet.size, 0xff, len - packet.size);
->
-> +       if (msg->type == MIPI_DSI_PICTURE_PARAMETER_SET)
-> +               print_hex_dump(KERN_DEBUG, "ALL:", DUMP_PREFIX_NONE,
-> +                               16, 1, data, len, false);
-> +
->         if (cfg_hnd->ops->tx_buf_put)
->                 cfg_hnd->ops->tx_buf_put(msm_host);
->
-> @@ -1786,6 +1798,12 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
->         int data;
->         int final_value, final_scale;
->         int i;
-> +       int bpp = dsc->bits_per_pixel >> 4;
-> +
-> +       if (dsc->bits_per_pixel & 0xf) {
-> +               pr_err("DSI does not support fractional bits_per_pixel\n");
-> +               return -EINVAL;
-> +       }
->
->         dsc->rc_model_size = 8192;
->         dsc->first_line_bpg_offset = 12;
-> @@ -1807,7 +1825,7 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
->         }
->
->         dsc->initial_offset = 6144; /* Not bpp 12 */
-> -       if (dsc->bits_per_pixel != 8)
-> +       if (bpp != 8)
->                 dsc->initial_offset = 2048;     /* bpp = 12 */
->
->         mux_words_size = 48;            /* bpc == 8/10 */
-> @@ -1830,16 +1848,16 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
->          * params are calculated
->          */
->         groups_per_line = DIV_ROUND_UP(dsc->slice_width, 3);
-> -       dsc->slice_chunk_size = dsc->slice_width * dsc->bits_per_pixel / 8;
-> -       if ((dsc->slice_width * dsc->bits_per_pixel) % 8)
-> +       dsc->slice_chunk_size = dsc->slice_width * bpp / 8;
-> +       if ((dsc->slice_width * bpp) % 8)
+Let me ponder what can be done about that.
 
-One can use fixed point math here too:
+If you're interested in helping to get the bugzilla product list into a sane
+format, I can suggest that you work on creating a mapping file between
+bugzilla product/component and MAINTAINERS entry, maybe just for the
+"S: Maintained" and "S: Supported" ones?
 
-dsc->slice_chunk_size = (dsc->slice_width * dsc->bits_per_pixel  + 8 *
-16 - 1)/ (8 * 16);
+E.g., starting from the top:
 
->                 dsc->slice_chunk_size++;
->
->         /* rbs-min */
->         min_rate_buffer_size =  dsc->rc_model_size - dsc->initial_offset +
-> -                               dsc->initial_xmit_delay * dsc->bits_per_pixel +
-> +                               dsc->initial_xmit_delay * bpp +
->                                 groups_per_line * dsc->first_line_bpg_offset;
->
-> -       hrd_delay = DIV_ROUND_UP(min_rate_buffer_size, dsc->bits_per_pixel);
-> +       hrd_delay = DIV_ROUND_UP(min_rate_buffer_size, bpp);
->
->         dsc->initial_dec_delay = hrd_delay - dsc->initial_xmit_delay;
->
-> @@ -1862,7 +1880,7 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
->         data = 2048 * (dsc->rc_model_size - dsc->initial_offset + num_extra_mux_bits);
->         dsc->slice_bpg_offset = DIV_ROUND_UP(data, groups_total);
->
-> -       target_bpp_x16 = dsc->bits_per_pixel * 16;
-> +       target_bpp_x16 = bpp * 16;
->
->         data = (dsc->initial_xmit_delay * target_bpp_x16) / 16;
+    3CR990 NETWORK DRIVER -> Drivers/3CR990
+    3WARE SAS/SATA-RAID SCSI DRIVERS (3W-XXXX, 3W-9XXX, 3W-SAS) -> Drivers/3WARE
+    53C700 AND 53C700-66 SCSI DRIVER -> Drivers/53C700
+    ... etc ...
 
-It looks like this can be replaced with the direct multiplication
-instead, maybe with support for overflow/rounding.
+That would allow me to automate the creation of components *and* work on a
+better email bridge than what bugzilla can currently do.
 
->         final_value =  dsc->rc_model_size - data + num_extra_mux_bits;
-> --
-> 2.37.3
->
-
-
--- 
-With best wishes
-Dmitry
+-K
