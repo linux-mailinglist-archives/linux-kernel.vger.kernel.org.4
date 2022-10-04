@@ -2,86 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49A85F49AC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 21:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C28725F49B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 21:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiJDTYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 15:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
+        id S229708AbiJDTYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 15:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiJDTYN (ORCPT
+        with ESMTP id S229680AbiJDTYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 15:24:13 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A8D65815
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 12:24:12 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id g23so8760335qtu.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 12:24:12 -0700 (PDT)
+        Tue, 4 Oct 2022 15:24:31 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1716AA01
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 12:24:30 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id q9so13483536pgq.8
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 12:24:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
+        d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=UGv+4Ut0HLLEjpaUAPUVZXaZ900gJu9AykveplMCL1U=;
-        b=URvG7DwIubm3/EQ91sUr7I/IZcR0Fhyn+9ZTW+dQQr9NpmeWjM6ahJZObGsJ3U0SiB
-         g3p7kThvV4Jq3HV0K0aeEhaDa8gR+gQyU11rYMjBUkgDwmi1+V6eS0hoVnb5xn4/RmNq
-         oCN7gfhRM46mNb7BZR8+tN7a9LRWayvP8oW3Y=
+        bh=TPHGjn63G4Sj8mZqFRVnqMa0MXMfRBRw4erndCFr2yc=;
+        b=N62in1FHINxzmpEMCxU1iYHaOAzaej9i3j46sXOtPXoNR+pnNbuAfgPGOWR0M9aNRx
+         FEybgsaF2Wj0UOJ4KmCZJPR8YXthw0ow2bau2vicE2MOXSf7UQWfApIDbTrlrboQ5js5
+         ZfuVhu1x6EtUT6X3rjEQV1fJMnlg/mTn3ESLE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=UGv+4Ut0HLLEjpaUAPUVZXaZ900gJu9AykveplMCL1U=;
-        b=DfQfjAzkLoKsDxphjxbQYnaT4Xyk40Rs2LZTt6+OOOMQN1a9AZD3LAxUyyAa4uv6Sb
-         AOj8gRABllggz0UwEtbxTAe5RdRsYYf4Rfihf/GJRsuGA2viGUSyLyRxcG2DaWd2RBu4
-         NPyu+Zpm8hVmpEbjd6dk6IOMc6x6HNuDi5enrdA7Eu1TBlQfOl4KZpyJw4QMCp/YBBpA
-         e6Z/JCswRWvrDASat4Lv1rIJBlT9Ovz/Hn7nPiAIUJPn1RctOIsfzAYsO2KfT6XxMg2y
-         +QdOglXsNPnqW0YBThO7Fr8DJuCcU0GwN/j3VJGtXQqK0ZDaIosShAeKCBxErTHwemR4
-         2wRw==
-X-Gm-Message-State: ACrzQf2Kk6aBL1lK3KmUU6WbOhNi5BN+3CcpS4229aX692TvEuJXmAzl
-        x/strsMxO4m2pM0FBEoMA9Mq8g==
-X-Google-Smtp-Source: AMsMyM7F6US4MHrT1SRGsB2cYTu7Yy8NeSol1EU/9LJMbcPgPun/zAiBU19d8ou6TvWTXeuJMMX5Gg==
-X-Received: by 2002:a05:622a:180d:b0:35b:d283:7e65 with SMTP id t13-20020a05622a180d00b0035bd2837e65mr21012590qtc.106.1664911451349;
-        Tue, 04 Oct 2022 12:24:11 -0700 (PDT)
-Received: from meerkat.local (bras-base-mtrlpq5031w-grc-33-142-113-79-147.dsl.bell.ca. [142.113.79.147])
-        by smtp.gmail.com with ESMTPSA id d10-20020ac851ca000000b0038c60a3fa8bsm1075495qtn.85.2022.10.04.12.24.10
+        bh=TPHGjn63G4Sj8mZqFRVnqMa0MXMfRBRw4erndCFr2yc=;
+        b=284v66QWqYFQFQQFOE6nLoSILM8Zi6dK9AGE0Uuou1RRh6s1IpJa1BBh9j3Ygkwl2N
+         T82kUG2sAkpP/FUWQQHCr3qOvjMKo6+6xlmaMGuAXDJM6t/MToa7DdD0WQO14xNzr7ie
+         BgOaPkYF6i9baGdWo5srp5aL9Fa8Xf25HPimVmcIq9cdOvU0iTu5Rr6q7oqebE3W+JkE
+         tMkWiex0/BDqnZCq1uBBqiaUYIZQ3EEIqUmD4y6I38zjGCxXzBLUh3vjNysd3zjPG06w
+         xF4EQCJHjC9/meMW/rk7eimyLYqmhf3GaEpbONlUe5Kje4RohqE87K1dhm28mR/VOnsg
+         5ygQ==
+X-Gm-Message-State: ACrzQf15CwvjFL+YWHfbSllJuLv3nKRf324InCJ5g2iAONf7HKkPFk9I
+        7nDRhsllrUNMmoxmKFOy7Dizww==
+X-Google-Smtp-Source: AMsMyM4HxL0s5qvx/MF11QUaz7zgb8PObZXUvmqkMZ2tOrL2yDra9OycFNKkIhPW7kbGndOV83ZFTg==
+X-Received: by 2002:a63:da03:0:b0:439:dcdd:67f4 with SMTP id c3-20020a63da03000000b00439dcdd67f4mr24551120pgh.27.1664911469526;
+        Tue, 04 Oct 2022 12:24:29 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d1-20020a170903230100b00177efb56475sm9328173plh.85.2022.10.04.12.24.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 12:24:10 -0700 (PDT)
-Date:   Tue, 4 Oct 2022 15:24:08 -0400
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     Jani Nikula <jani.nikula@intel.com>
-Cc:     Thorsten Leemhuis <linux@leemhuis.info>,
-        "Artem S. Tashkinov" <aros@gmx.com>,
-        ksummit <ksummit@lists.linux.dev>, workflows@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-Message-ID: <20221004192408.z6gxc7unclm7vbdg@meerkat.local>
-References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
- <20221004175354.bfvg3vhfqch35ib5@meerkat.local>
- <87fsg3s8co.fsf@intel.com>
+        Tue, 04 Oct 2022 12:24:28 -0700 (PDT)
+Date:   Tue, 4 Oct 2022 12:24:27 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [OPTIONAL/RFC v2 37/39] x86/cet: Add PTRACE interface for CET
+Message-ID: <202210041224.E4C63B1@keescook>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-38-rick.p.edgecombe@intel.com>
+ <202210031658.EEC88324FD@keescook>
+ <YzvyYDOg8GZIBtz8@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87fsg3s8co.fsf@intel.com>
+In-Reply-To: <YzvyYDOg8GZIBtz8@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 10:21:27PM +0300, Jani Nikula wrote:
-> As to bots, one idea would be to go through old & unchanged bugs after
-> every kernel release or so, ask to reproduce on the new kernel, and auto
-> close if there's no response within some time frame. This could be very
-> relaxed for starters, but would start closing all the stale and
-> neglected bugs that have crept up that are of no use to anyone.
+On Tue, Oct 04, 2022 at 11:44:16AM +0300, Mike Rapoport wrote:
+> On Mon, Oct 03, 2022 at 04:59:43PM -0700, Kees Cook wrote:
+> > On Thu, Sep 29, 2022 at 03:29:34PM -0700, Rick Edgecombe wrote:
+> > > From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> > > 
+> > > Some applications (like GDB and CRIU) would like to tweak CET state via
+> > 
+> > Eee. Does GDB really need this? Can we make this whole thing
+> > CONFIG-depend on CRIU?
+> 
+> GDB, at least its Intel fork uses this. I don't see how they can jump
+> between frames without an ability to modify shadow stack contents.
+> 
+> Last I looked they used NT_X86_CET to update SSP and ptrace(POKEDATA) to
+> write to the shadow stack.
 
-This is what Fedora does, and I've always felt it creates more annoyance than
-good, but if that's the consensus, I'll be happy to implement this.
+Okay, thanks! I appreciate having specific examples. :)
 
--K
+-- 
+Kees Cook
