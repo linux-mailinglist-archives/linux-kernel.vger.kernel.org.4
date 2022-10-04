@@ -2,167 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F0F5F49C2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 21:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9B35F49C3
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 21:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbiJDTcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 15:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52840 "EHLO
+        id S229658AbiJDTeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 15:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiJDTcS (ORCPT
+        with ESMTP id S229515AbiJDTeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 15:32:18 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E541A696F6
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 12:32:16 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 70so13714271pjo.4
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 12:32:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=2IH8tEaBNUJUhlSQeqfFFR10kAzhCNDmBQkNCBhNbwo=;
-        b=IdypEmuXWawFBdcHvEhd6ksx6DklfESbyWquWbCkuj85gFh8vAi3YTFtL6x1TFDBdo
-         4vpS7F1oLY/TRy8lXUYx/Tzbe3wKWlW2rY647p4DR2Zx0xz9Vmk2lZntCiHnmMqPhacs
-         S9dn+pkGTWgmV8c5ZA8O42VK4MOFeIf7uXPI0=
+        Tue, 4 Oct 2022 15:34:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8A4696D2
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 12:34:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664912044;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=F5xmAN9t6CeE2TFrsq+QgzxqKIzmy0qcB2aGqOypPbg=;
+        b=BUfjo1pKaAhWfrazQwSj/dowlERF8DaJVE4wULp3QxVVHtnKwqdhr2VonmFEBBU0jx5WB2
+        1BFfVuea/wqmX4iCVNcHbQ6jk0mNoz1RzxZoxik7AtZ66YP0MMOXHqvqANV6KTxe9TgbOW
+        XIfvYNUCs8ppWXkvSt5Ng6xldDuB/pY=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-524-d4l1OzjiOgmNC4V5gKJ7Iw-1; Tue, 04 Oct 2022 15:34:03 -0400
+X-MC-Unique: d4l1OzjiOgmNC4V5gKJ7Iw-1
+Received: by mail-qk1-f199.google.com with SMTP id j13-20020a05620a288d00b006be7b2a758fso12370092qkp.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 12:34:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=2IH8tEaBNUJUhlSQeqfFFR10kAzhCNDmBQkNCBhNbwo=;
-        b=NVSItPFDHKdgdVR0zf+9PLTYgX0cRV7aB1nOTfbP84wnYgEGjXmfu6DxUOVWBKUCKc
-         LnIyoXzp+0lxvwXLAmDoDrCbSLTb9sNadVNcHbqNdfMxyDl2Wwx+ht0EaOB3KSNQOobz
-         tbcLvh55HI9SpeFw412xmNVcdV3/n2hyNJQxaJKqCMUAbfw4ME0rBId5UclUWr4TliJR
-         TW0QxGDVyVm3X+1cl+hx/Zi/uBCd6DhTNdywPWfp29f6Ba/Qj3+N2oPK1rJQxgRvSZjj
-         k6d51wMBAyMnebMHNjp8B7T0cxVdZJx2mhuRWVf703zv/FO5PcNF1OCQo+D4oiXzAkhC
-         cpkQ==
-X-Gm-Message-State: ACrzQf0yFX4ZCMXs5S5/recdKLDRlTI2GOKdkK/WK9u3iWLgA8Raj8ES
-        zpZd4Lv/c2DgRPfdJyfmcF00vw==
-X-Google-Smtp-Source: AMsMyM7ZgnbRL5j5vxtAYQskFyiI9m6Jng0jRwmWtojPF0jt9sUxdX7NDJFfugkkHWlwVBeeLzBCdQ==
-X-Received: by 2002:a17:90b:380e:b0:202:d747:a044 with SMTP id mq14-20020a17090b380e00b00202d747a044mr1255562pjb.170.1664911935982;
-        Tue, 04 Oct 2022 12:32:15 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a4-20020a170902ecc400b00179f370dbe7sm9265341plh.287.2022.10.04.12.32.15
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=F5xmAN9t6CeE2TFrsq+QgzxqKIzmy0qcB2aGqOypPbg=;
+        b=7WFrS537whkSBSqpnlu8zxFHk86O2+HXSzIxT7BrzhNdN4Gb+gm0wS3DDsFdigfwCo
+         kcQm5U2cv3G/c3cO4AadyuasMJmOHBm5RByAglNLvv73ov8/8CUo6LuXrJX0pGGAb9m9
+         NOlxJ6NUq7iOBfVLF8vlKrh/63glkxz2IADj4HHZP9a0Yx0306nwln0an9qsZuE77XtT
+         GPUQbSSThk+dy02v6bTfDHk94fbQ2xjFdNXmM1uJ2Jhinus7dcCJoyTFNlU6MNVw19HU
+         tsPcEQDTGI1q+M1I6HQQZF/3441JBBhOyqoRHIYMPgzO0PFfXMC/79Lb8adJNx+M/Ltr
+         cKiA==
+X-Gm-Message-State: ACrzQf2AIzoBCXBOGsYOo2nUrzhlQslcGml8sRujUdhJ9VgguLBqLVnR
+        rhSaMU5VYpAu+PpFrRjnSg5DyKXrlyi7u2eESQ/gpHCI/dVRiKfFmKju0m4SakcGuezLXK+6UnY
+        orgN/UhHPBCrW5QGoQhXbvE8B
+X-Received: by 2002:a05:622a:341:b0:35d:44fc:3908 with SMTP id r1-20020a05622a034100b0035d44fc3908mr21104944qtw.507.1664912042645;
+        Tue, 04 Oct 2022 12:34:02 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5jAF/2MHQhLJAx9+6UCeRp8zUWOpJ+7sJqhIuTupkh+lahPG8XXzChn6HoW8Wyr49jN/OPRQ==
+X-Received: by 2002:a05:622a:341:b0:35d:44fc:3908 with SMTP id r1-20020a05622a034100b0035d44fc3908mr21104926qtw.507.1664912042438;
+        Tue, 04 Oct 2022 12:34:02 -0700 (PDT)
+Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id z5-20020a05622a028500b00342fb07944fsm13299811qtw.82.2022.10.04.12.34.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 12:32:15 -0700 (PDT)
-Date:   Tue, 4 Oct 2022 12:32:14 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     'Dave Hansen' <dave.hansen@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
+        Tue, 04 Oct 2022 12:34:01 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Mike Rapoport <rppt@linux.vnet.ibm.com>, peterx@redhat.com,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
         Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        "joao.moreira@intel.com" <joao.moreira@intel.com>,
-        John Allen <john.allen@amd.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "eranian@google.com" <eranian@google.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 24/39] x86/cet/shstk: Add user-mode shadow stack
- support
-Message-ID: <202210041229.99F8CB38B@keescook>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-25-rick.p.edgecombe@intel.com>
- <202210031203.EB0DC0B7DD@keescook>
- <474d3aca-0cf0-8962-432b-77ac914cc563@intel.com>
- <4b9c6208d1174c27a795cef487eb97b5@AcuMS.aculab.com>
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Subject: [PATCH v3 0/3] mm/hugetlb: Fix selftest failures with write check
+Date:   Tue,  4 Oct 2022 15:33:57 -0400
+Message-Id: <20221004193400.110155-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.37.3
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4b9c6208d1174c27a795cef487eb97b5@AcuMS.aculab.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 10:17:57AM +0000, David Laight wrote:
-> From: Dave Hansen
-> > Sent: 03 October 2022 21:05
-> > 
-> > On 10/3/22 12:43, Kees Cook wrote:
-> > >> +static inline void set_clr_bits_msrl(u32 msr, u64 set, u64 clear)
-> > >> +{
-> > >> +	u64 val, new_val;
-> > >> +
-> > >> +	rdmsrl(msr, val);
-> > >> +	new_val = (val & ~clear) | set;
-> > >> +
-> > >> +	if (new_val != val)
-> > >> +		wrmsrl(msr, new_val);
-> > >> +}
-> > > I always get uncomfortable when I see these kinds of generalized helper
-> > > functions for touching cpu bits, etc. It just begs for future attacker
-> > > abuse to muck with arbitrary bits -- even marked inline there is a risk
-> > > the compiler will ignore that in some circumstances (not as currently
-> > > used in the code, but I'm imagining future changes leading to such a
-> > > condition). Will you humor me and change this to a macro instead? That'll
-> > > force it always inline (even __always_inline isn't always inline):
-> > 
-> > Oh, are you thinking that this is dangerous because it's so surgical and
-> > non-intrusive?  It's even more powerful to an attacker than, say
-> > wrmsrl(), because there they actually have to know what the existing
-> > value is to update it.  With this helper, it's quite easy to flip an
-> > individual bit without disturbing the neighboring bits.
-> > 
-> > Is that it?
-> > 
-> > I don't _like_ the #defines, but doing one here doesn't seem too onerous
-> > considering how critical MSRs are.
-> 
-> How often is the 'msr' number not a compile-time constant?
-> Adding rd/wrmsr variants that verify this would reduce the
-> attack surface as well.
+v3:
+- Rebase to akpm mm-unstable
+v2:
+- Fix the commit message of patch 1, replacing CoW with wr-unprotect
+  example
 
-Oh, yes! I do this all the time with FORTIFY shenanigans. Right, so,
-instead of a macro, the "cannot be un-inlined" could be enforced with
-this (untested):
+Currently akpm mm-unstable fails with uffd hugetlb private mapping test
+randomly on a write check.
 
-static __always_inline void set_clr_bits_msrl(u32 msr, u64 set, u64 clear)
-{
-	u64 val, new_val;
+The initial bisection of that points to the recent pmd unshare series, but
+it turns out there's no direction relationship with the series but only
+some timing change caused the race to start trigger.
 
-	BUILD_BUG_ON(!__builtin_constant_p(msr) ||
-		     !__builtin_constant_p(set) ||
-		     !__builtin_constant_p(clear));
+The race should be fixed in patch 1.  Patch 2 is a trivial cleanup on the
+similar race with hugetlb migrations, patch 3 comment on the write check
+so when anyone read it again it'll be clear why it's there.
 
-	rdmsrl(msr, val);
-	new_val = (val & ~clear) | set;
+Thanks,
 
-	if (new_val != val)
-		wrmsrl(msr, new_val);
-}
+Peter Xu (3):
+  mm/hugetlb: Fix race condition of uffd missing/minor handling
+  mm/hugetlb: Use hugetlb_pte_stable in migration race check
+  mm/selftest: uffd: Explain the write missing fault check
+
+ mm/hugetlb.c                             | 66 ++++++++++++++++++++----
+ tools/testing/selftests/vm/userfaultfd.c | 22 +++++++-
+ 2 files changed, 76 insertions(+), 12 deletions(-)
 
 -- 
-Kees Cook
+2.37.3
+
