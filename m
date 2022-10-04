@@ -2,195 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9009B5F4C14
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 331805F4C17
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbiJDWml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 18:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55980 "EHLO
+        id S229751AbiJDWoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 18:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiJDWmh (ORCPT
+        with ESMTP id S229631AbiJDWoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 18:42:37 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C51C6E2D4;
-        Tue,  4 Oct 2022 15:42:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664923355; x=1696459355;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=pUZu669TqDi2QqL/trPkOvwR7EAWNHs1AtpgYIrtqpk=;
-  b=ZTpHss1hhaFzXfdyh31Gixm4KISa09W+L8F0X000VaD3YmzMyjZJUvOh
-   RpAOX/RBi043WdKvuVEz2cxHi7aOcmbPJl+T01voTcC7qUbWoBifrUpO2
-   O/mN1oirH8I0u2AZYqZTQteSU/7pR5/cnibP8EV3yNMy4+m49soje24/5
-   Sd55fz9NseI9G3RzUuX98F/AdivoWNk0kHphfRee+SQgbe3TOzcyaFSO1
-   hrm7T9J66XP8P1kJaPJ69b3nqTJH7JVyg8sRB3tBSiqGmZFeINYnVT0Q5
-   g1m386TMu6Tqk9kxzqsFZeK1Em91BzfJ+382qt5c6e41AL0+plqFgEuiU
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="389334624"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="389334624"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 15:42:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="624122933"
-X-IronPort-AV: E=Sophos;i="5.95,158,1661842800"; 
-   d="scan'208";a="624122933"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga002.jf.intel.com with ESMTP; 04 Oct 2022 15:42:34 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 4 Oct 2022 15:42:33 -0700
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 4 Oct 2022 15:42:33 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 4 Oct 2022 15:42:33 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.170)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 4 Oct 2022 15:42:32 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LUo47I131wjXSRWPtM6tgt9xNRvNCW/Ls3dq3VZ6ehD1zL7UTQj4Put2pF3lVsh6Z2qwlXhAP7CJ//S2GxnwVkh3gwgP5GhS8jIm/XuKuPUhNkyioB+IsQpJ/ps5GIY0ZR7CQCT2PNZcbb0pM2MUmWcIQKxadEsm+0sRymoxZcflnUXwChpHxsxMe+1VVPDUZyxWjWDhTVmVwnCoCLTFt1Ow5B+FXChIKnqFKde8n60daDqSyuk+FNSfZVPyMVl5CJoUAfyWtxw4fobYb1Vhz7GPGWm1eavws4176mQo/3BkgTyJ7w5duqMYSc1+ac2ApfHeEOcCazdRMw/VfNzQ6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pUZu669TqDi2QqL/trPkOvwR7EAWNHs1AtpgYIrtqpk=;
- b=OoBXS7QnitfXa60SNGNsf0EUUIfYh8NW1gdzIRCZxfnisM/B2veyI9gseg0QfFrruIF/vvt8/P7/Lv5Vb17sM7m74MpxGN9D0lNgdRnoVP5m3wupBg6WMidHr3QpWtseeA1qP3OTvgQ7lNsUcR1N1+N7wSRdwskqlQ2HAx8B/cK/S/HObbbkqFWI85Iafi2Rt0yk77Jmzr7IV/dSfJkJX0T8J9IVbYdF7nJrmAdaPIInyYJbCCQet4P2ETAlz+znzfZgyCkw+4GxczNU/w3rECKflpTvb2yMBguU8mOHUcJpB/sOOh0lkhBjLlfg0O+XLg+Hcc6kHl0sJZE6Asq9JA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by CY5PR11MB6366.namprd11.prod.outlook.com (2603:10b6:930:3a::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.31; Tue, 4 Oct
- 2022 22:42:31 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::6eb:99bf:5c45:a94b]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::6eb:99bf:5c45:a94b%3]) with mapi id 15.20.5676.028; Tue, 4 Oct 2022
- 22:42:30 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "jarkko@kernel.org" <jarkko@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-CC:     "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RESEND PATCH 3/3] x86/sgx: Add xa_store_range() return value
- check in sgx_setup_epc_section()
-Thread-Topic: [RESEND PATCH 3/3] x86/sgx: Add xa_store_range() return value
- check in sgx_setup_epc_section()
-Thread-Index: AQHY13Pfg2WQsgd00UuSgGOh0H9u1K3+0GKAgAAF4IA=
-Date:   Tue, 4 Oct 2022 22:42:30 +0000
-Message-ID: <57b607fa66a84996174fd16be415ec65dbffe8d4.camel@intel.com>
-References: <cover.1664834225.git.kai.huang@intel.com>
-         <c02b60d3b92469a2ccfc0780e974d29da578be73.1664834225.git.kai.huang@intel.com>
-         <Yzyx5333eIuX0zaT@kernel.org>
-In-Reply-To: <Yzyx5333eIuX0zaT@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.44.4 (3.44.4-1.fc36) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|CY5PR11MB6366:EE_
-x-ms-office365-filtering-correlation-id: bcd1ead8-c9b0-4577-253c-08daa659b8ce
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BIkmICehW8tI9jUytNESwHrL7kdC57ozOgURwMIYxwcQxAlBLSP9UDqJcg60+o2lglg5n8H/Yo6HO74XMnvKYyfBNUD+dmW9Zig/mZw3Tvwd3Av3Ysu7M1zRk7cjWrtS5X1jI9DegJ6Odos3WcZqxFg/nL2wTK4B4uOCO4tlGMF6F0oIuR3NC/M4y/NxjffNW1qJANzXvD2BJG/VwT2tVMlV5IBqbcIzxnnMUEccoCs6l+YJfCzn3f/zNQlvbgm3ou4vzqyZ8j6qlT1qJNlaU3IXenUiOw7cq5wyFYc95WxNa/aCFd+pTZIYRiqGVXcEqsRzSRlVLN+BYFjx39KEn2SJG/GjQUeykZ4EZWHpbUerk+7sWpEudOubqhYz5DjBjrsVSnHhcEVCJ5J59KPgAT0at/MWmUOLFDWNhMMLCxBlKA/WiMQliV/FDSEp12Z2a74zplilSTqT7xXuLfg9TqT210rC9xQAI1TbZNMkJh/oiEpHRCeZLfwomctkuhUU0lYKhWxI5eNLi61PcVxa7HBFxA7WOKZtK/GjChLMLu3wNMhUEtk6+ZJ9CK9ifmWtILdpQQpXe94NDk0cM1vW2aFhNLo4Xp4nVNXhO5tDYWidH4LFh3N5PLxxh2FCzUaw4UFHbTCbRgNwPFKnKcaI+M5dLEE9tevVkiMFA/bPJwsiSdo6sgAtQN1X6Ll16CwxKq7HLnr81ff5RrYl2ggH7QFieHaktfe05ty7BYYlvD2gU/yODTWakgiSgJagIQ86t1Sr4T696N1LvyVOYKBuMQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(39860400002)(136003)(396003)(366004)(451199015)(6486002)(64756008)(38100700002)(122000001)(82960400001)(86362001)(54906003)(66446008)(110136005)(4326008)(2906002)(8676002)(36756003)(478600001)(76116006)(66476007)(66556008)(91956017)(41300700001)(316002)(38070700005)(5660300002)(26005)(66946007)(8936002)(6512007)(6506007)(71200400001)(83380400001)(186003)(2616005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZURobHA5blFxaWR1WFkyQmJrS3UxcFJTbkI5emw5L2hLMGp3anBDUW9YMnB3?=
- =?utf-8?B?RVkraVh2bCtrbngrNmR5RkpndGNMQ2J4OS8xUlprYW1BUjlNOWxtZnVXUEZz?=
- =?utf-8?B?NHd4Um5nSWMzbys2R2pvZk5EOWU0MzJWMmlVMndPM2lGU0tPQXQvR1pFQzI5?=
- =?utf-8?B?ZVRZdHhYM1FLMWhVVkgrWHlXalA3aVZXeHd6YldWV2FMeGdKbGpZQnlFc0J3?=
- =?utf-8?B?L2p3SU1pWXRGNHAxR2NUVWtPU3FmYmRDY1dDYUEwZVUzekU4czJOcWc5NGxy?=
- =?utf-8?B?VlNBU1krKzEwVjZLbUdsL1ZIVm1xZ3I2ODZ6c2dWb0w3eE15YVBQRGlsVk9V?=
- =?utf-8?B?UzZDMXVVSEdqWlh4dGFBT3hQOHVnZDRVY0lnVStNcFcwMTRQR0k1MzZHN05G?=
- =?utf-8?B?eExaU2xqU1N2T0FYUmozZUI0a2lZNjZ5NDRPQ1ZqZzRKaHlSamxBWm54UkMz?=
- =?utf-8?B?VnFwWk5yRVRMam1zc0dIcHRtckVqeTRMUEdYeUlFU2V6a0JqaGZsa3FxeFRP?=
- =?utf-8?B?clkwcXg0cTcwejhNQUsxOVh0N2gxVHI1a2hmdkRxR0lETWNPdXFRcnk4UDlP?=
- =?utf-8?B?NkJNb1RWZXlRTktod1d4QzJ5bFRIMElFWGcrdjAxN0MwdTJSZzBmWk1PRXJr?=
- =?utf-8?B?V3IwdmVYWlFKMW1QQTNTbmIrSE1WdXJ3SGhtYXZjWUswM3BQR2dxTE95K2l2?=
- =?utf-8?B?RWFWOWJKRTQxS3BXVVhHcE1UZ1hHZ0xCV3RMTHJScVRRZ1kvSkw5dWNUUTI0?=
- =?utf-8?B?TVBxWFUwOGgrZUhCaE9jeW0vVWlhYVBqZHZsVGxMbktzTTRSdWFrWW1tZTlx?=
- =?utf-8?B?Q0p0anlsdlMrbjFnb0YxMThObjB0aG5TTEIvcFRvNFhDVWxQejI5L2kwTVJq?=
- =?utf-8?B?VlJqN3JJbnFYcEZqLzNnZzVMa0ZUWWgvb01sT0RrZnNKUHlTcFRDSlFLSVEr?=
- =?utf-8?B?WHV5aU5PSW9ISm54bTUrU0R0N1VDOXc0TVdOdEV6YTVZaDdwNVJiZk1YS2Qw?=
- =?utf-8?B?QUxaanBjcGlZMzdnL0lVY3ZwSU1WemxTYy9TR1U4RU5PQ0djTmRnUXE0QWJ6?=
- =?utf-8?B?S21kQkV6b1JQVUNJTFVzRGlQaTMxTWp0OGpZSjZGT1hYM0swdG80VXlwZitj?=
- =?utf-8?B?cnV5Y29ZWmxONmxtQWFLVUNvTHZ0Z2ttQUZTZXNwcmY0OU00SGFiS1dZN0tK?=
- =?utf-8?B?RW1iaFBVd05jS0JIZmp3N2JmdE14R1hWUy9GZWZVcFppM0ZkYjhkQ2wrekdB?=
- =?utf-8?B?aWl0YVlLQlFiRFB5d0N4QXRwY2d4RTN4K1JTa0RRQXdJUm1ad0ZMb3ZOT1pY?=
- =?utf-8?B?dW9Lai9kZW9JNTlkSjgzUFBZcVRVSFBhcU05QzlCNTVyT091MGtZdDQzd1pN?=
- =?utf-8?B?aVRuQkErTTBrdGtYekJHOXZ1L3QxRXE4TzB4eTZRdXVFQUFjZ2dLMTVzYlJI?=
- =?utf-8?B?MnQ0eGFFcUE5b1BlUjk3bnMvMUdYTkRubTN3YjcwdHpjWk8wV2dWbWMzUjEy?=
- =?utf-8?B?NnJtUjJnVllZcU55SDRhS01JL25BYmovUVNmSkZIZzJLWDNBcjdzRDFPb2Jl?=
- =?utf-8?B?dW9oUmU0R2loRzJSS3k3QVdRWkhsaXhSVTV1SHF5YWdEcUlCY29Db0dEVmJB?=
- =?utf-8?B?a1U5VGNtL3Ayek9aVFJOT0JlOFF5Qi9BY1pPd3kxRWVPbUpHdlloWVVqWGgy?=
- =?utf-8?B?TVV2NTJLVStGQXdBclJvZENYVmx4NjhMb0xBT01kL3F3S3NZQUVxM1pUV1FN?=
- =?utf-8?B?NDVmMi93R1ljT0RxbXVqZ3ZQdnpCa3pZSUlmTit6SnlFV1RsWDA1S1VJZ054?=
- =?utf-8?B?d3R6a3pGeDJUWlpkQ2hBaEZjWGZTZ2lacTB5MTY2M1k0K29VM2Y2a3g2V3ZX?=
- =?utf-8?B?ell4U2RuYU80NXFDUmV0bDc3SjZzWlNIZklETWZUVi9xbjFqT2RmeENxYjRt?=
- =?utf-8?B?WFFaUnV4dEFNeTU0Z2QwZXlrMzNqNUtIWEZjM2ZtaWJvcENSdHV2L0ZFRzRj?=
- =?utf-8?B?VkJkQUM0VHVNVzNLRXB6SUM4RVlNZy9lOFpjTVlYOFJwQUZhWDFTUzVudFVS?=
- =?utf-8?B?Z1pLUVlJQkd5UVV1a0RjdmNaZTVET3JIZGsxU2syZEdEbktqbnQ5RC8xdnZr?=
- =?utf-8?Q?UXNH3RWvMuItzxsUwI8X0t9NW?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <2F6EC10AFEF56544BE55FC4027A9361C@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 4 Oct 2022 18:44:21 -0400
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988276E2D7
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 15:44:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1664923460; x=1696459460;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8B8DayQYztnQfX7cBdJ3VMLiDN0ENGwam9eFXKcYEWo=;
+  b=df3FwM0piQn49lDg7Mo0/90avlbgGHZ6os2CgdzyYNWcNPkIEuUjAtQT
+   ndrpk7NiJUXt2mHXGhN7ikcMqBlgk/5gp71d3fFhGBp4gBOqh979E+0f3
+   ivhEkNoDGYW2um1OqaWgHxog+oGrIFIPljj326eUeIqTNrFDuIhWz7hWo
+   Bh5qkInpD+jUh/WMtjZQpW0QFCXkjgYF/5NxPEJKbdeo6IOH1NCHM+xvD
+   L8/Mq6ZCLrWoU5sAUB4lqso784BvZyKXyooK8xq5+EQW42/GRLVQYa15H
+   5tygohC07FVjIc7Ep6uKGXtjdIXnZfK7cQrcRGYAUFy+Zlyz1F2oCAQjk
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.95,158,1661788800"; 
+   d="scan'208";a="325094468"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 05 Oct 2022 06:44:20 +0800
+IronPort-SDR: BoNAPs832MzkY5+hF1099x1EMtsBZNHVJWcBLkUH4Rlzchf5QqVsPSLuFO+Fv63pdbANS+4LRd
+ 1GACM/nlw4xqh3PHBx+5y9JZ+PvaVQiqi9T1leDF8HuCoV/1+YYfyz8ZdN4uDXRbhaUx2H8vXd
+ MIPOqxOCRD3ZwPhqty+g45UH7XExXOxLK5A++psi9Fk1lPHbiDYvah1RRISlMh14dP/lnoUpwj
+ ldsxWFpXmfsHVrJ1ttQwQNfO0WlplfU0DbboEnsedJqZYkikWS47oClx0gTzyMeY7oNFS0A+NF
+ Q2LAahCRx5Pm4eVVdxqIN5h2
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Oct 2022 14:58:33 -0700
+IronPort-SDR: q5Ltk5tKwr/8gWU5oOJ2KSi9HLfzplWM9UD6QuTXl8pBccG7W2ONRzKhwBt5ThHFmgDjK9eR3B
+ 87TtbHu6u0ebwljaOgBlpOFhSq9XzNeC+88BrgtiDh3pklg06wTwQaV43n29hL7ZC5WJxK94Kw
+ UVfZtJCPHesGxuWwqjxEjT5Ic1LIZljWyVuQ0OlGccewWCCOzje33ZFPcS480DD5W6QLenANlf
+ hLp7gX6Tbqtwi8b76yGgk3tXZL0qhmubZThH/33ev0SZlVn3XR4nD8Pyqf+KzvdNcBG94ytcSB
+ wkk=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Oct 2022 15:44:20 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Mht6q5wQ8z1Rwrq
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 15:44:19 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1664923458; x=1667515459; bh=8B8DayQYztnQfX7cBdJ3VMLiDN0ENGwam9e
+        FXKcYEWo=; b=fTrsdRGdl5M0PBK/QJKEu1+fhmcjh9rVoDjyYiuFZbYcHuPF0FJ
+        3SvemXC9wSXL2hgvGYMbtAb3sPZobd8kZd7CL9V55OSDvnZLgfMKBnHoi4buGpbW
+        xiHgSKQULTqnlvLX7GebhrWzFaI8lSWmmXEkGxGQ5i+2aeG6sBf97++hv/wFR3Fd
+        6OF/g6PGlNoQRufV4scCSNHG/IDPKIYuGLNGV/zyDFEtX0jClGCbUk/nOTKkGNN8
+        2pHm4C8DRu83pBjA2ecBRNZ8kb8aEltHEwTfphykvTDt9QzulhLKVbBm3amTkDqe
+        BzGWPRdZUmpUmiLXr+8wkHtBugNpmUB/GAA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id GdpVtob4ZfTp for <linux-kernel@vger.kernel.org>;
+        Tue,  4 Oct 2022 15:44:18 -0700 (PDT)
+Received: from [10.225.163.106] (unknown [10.225.163.106])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Mht6m2TR2z1RvLy;
+        Tue,  4 Oct 2022 15:44:16 -0700 (PDT)
+Message-ID: <1c10c66e-0b9d-4a62-15e1-f535898cad5c@opensource.wdc.com>
+Date:   Wed, 5 Oct 2022 07:44:15 +0900
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bcd1ead8-c9b0-4577-253c-08daa659b8ce
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Oct 2022 22:42:30.8851
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LoB52Uku3XiDD00GW+q2q96Xs/jn37p1zHQcptLM7sZtL6D1u8J73PSo1gJ2Ci7LoI9EnOHrhzlQdl4UORik/w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6366
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v3 5/7] scsi: pm8001: Use sas_task_find_rq() for tagging
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>, jinpu.wang@cloud.ionos.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     hare@suse.de, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxarm@huawei.com,
+        ipylypiv@google.com, changyuanl@google.com, yanaijie@huawei.com
+References: <1664882833-39804-1-git-send-email-john.garry@huawei.com>
+ <1664882833-39804-6-git-send-email-john.garry@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <1664882833-39804-6-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIyLTEwLTA1IGF0IDAxOjIxICswMzAwLCBKYXJra28gU2Fra2luZW4gd3JvdGU6
-DQo+IE9uIFR1ZSwgT2N0IDA0LCAyMDIyIGF0IDExOjA0OjI5QU0gKzEzMDAsIEthaSBIdWFuZyB3
-cm90ZToNCj4gPiBJbiBzZ3hfc2V0dXBfZXBjX3NlY3Rpb24oKSwgeGFfc3RvcmVfcmFuZ2UoKSBp
-cyBjYWxsZWQgdG8gc3RvcmUgRVBDDQo+ID4gcGFnZXMnIG93bmVyIHNlY3Rpb24gdG8gYW4gWGFy
-cmF5IHVzaW5nIHBoeXNpY2FsIGFkZHJlc3NlcyBvZiB0aG9zZSBFUEMNCj4gPiBwYWdlcyBhcyBp
-bmRleC4gIEN1cnJlbnRseSwgdGhlIHJldHVybiB2YWx1ZSBvZiB4YV9zdG9yZV9yYW5nZSgpIGlz
-IG5vdA0KPiA+IGNoZWNrZWQsIGJ1dCBhY3R1YWxseSBpdCBjYW4gZmFpbCAoaS5lLiBkdWUgdG8g
-LUVOT01FTSkuDQo+ID4gDQo+ID4gTm90IGNoZWNraW5nIHRoZSByZXR1cm4gdmFsdWUgb2YgeGFf
-c3RvcmVfcmFuZ2UoKSB3b3VsZCByZXN1bHQgaW4gdGhlDQo+ID4gRVBDIHNlY3Rpb24gYmVpbmcg
-dXNlZCBieSBTR1ggZHJpdmVyIChhbmQgS1ZNIFNHWCBndWVzdHMpLCBidXQgcGFydCBvcg0KPiA+
-IGFsbCBvZiBpdHMgRVBDIHBhZ2VzIG5vdCBiZWluZyBoYW5kbGVkIGJ5IHRoZSBtZW1vcnkgZmFp
-bHVyZSBoYW5kbGluZyBvZg0KPiA+IEVQQyBwYWdlLiAgU3VjaCBpbmNvbnNpc3RlbmN5IHNob3Vs
-ZCBiZSBhdm9pZGVkLCBldmVuIGF0IHRoZSBjb3N0IHRoYXQNCj4gPiB0aGlzIHNlY3Rpb24gd29u
-J3QgYmUgdXNlZCBieSB0aGUga2VybmVsLg0KPiA+IA0KPiA+IEFkZCB0aGUgbWlzc2luZyBjaGVj
-ayBvZiB0aGUgcmV0dXJuIHZhbHVlIG9mIHhhX3N0b3JlX3JhbmdlKCksIGFuZCB3aGVuDQo+ID4g
-aXQgZmFpbHMsIGNsZWFuIHVwIGFuZCBmYWlsIHRvIGluaXRpYWxpemUgdGhlIEVQQyBzZWN0aW9u
-Lg0KPiA+IA0KPiA+IEZpeGVzOiA0MGUwZTc4NDNlMjMgKCJ4ODYvc2d4OiBBZGQgaW5mcmFzdHJ1
-Y3R1cmUgdG8gaWRlbnRpZnkgU0dYIEVQQyBwYWdlcyIpDQo+ID4gU2lnbmVkLW9mZi1ieTogS2Fp
-IEh1YW5nIDxrYWkuaHVhbmdAaW50ZWwuY29tPg0KPiANCj4gUmV2aWV3ZWQtYnk6IEphcmtrbyBT
-YWtraW5lbiA8amFya2tvQGtlcm5lbC5vcmc+DQo+IA0KPiBUaGlzIG5lZWRzOg0KPiANCj4gQ2M6
-IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmcgIyB2NS4xNysNCj4gDQo+IERhdmUsIGNhbiB5b3UgcGlj
-ayB0aGlzIGluZGVwZW5kZW50bHkgb2YgcmVzdCBvZiB0aGUgcGF0Y2ggc2V0DQo+ICh1bmxlc3Mg
-b2ZjIHlvdSBoYXZlIGNoYW5nZSBzdWdnZXN0aW9ucyk/DQo+IA0KPiBCUiwgSmFya2tvDQoNClRo
-YW5rcyBKYXJra28uICBJIHdpbGwgYWRkIHRoZSAiQ2Mgc3RhYmxlIiBwYXJ0IGlmIEkgbmVlZCB0
-byBzZW5kIG91dCBhIG5ldw0KdmVyc2lvbi4NCiANCi0tIA0KVGhhbmtzLA0KLUthaQ0KDQoNCg==
+On 10/4/22 20:27, John Garry wrote:
+> The request associated with a scsi command coming from the block layer
+> has a unique tag, so use that when possible for getting a CCB.
+> 
+> Unfortunately we don't support reserved commands in the SCSI midlayer yet,
+> so in the interim continue to manage those tags internally (along with
+> tags for private commands).
+> 
+> Signed-off-by: John Garry <john.garry@huawei.com>
+> Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+
+(see the end for a nit)
+
+> ---
+>  drivers/scsi/pm8001/pm8001_init.c | 12 ++++--------
+>  drivers/scsi/pm8001/pm8001_sas.c  | 13 +++++++++----
+>  drivers/scsi/pm8001/pm8001_sas.h  | 11 ++++++++---
+>  drivers/scsi/pm8001/pm80xx_hwi.c  | 17 +++--------------
+>  4 files changed, 24 insertions(+), 29 deletions(-)
+> 
+> diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
+> index 0edc9857a8bd..abb884ddcaf9 100644
+> --- a/drivers/scsi/pm8001/pm8001_init.c
+> +++ b/drivers/scsi/pm8001/pm8001_init.c
+> @@ -196,7 +196,7 @@ static void pm8001_free(struct pm8001_hba_info *pm8001_ha)
+>  	}
+>  	PM8001_CHIP_DISP->chip_iounmap(pm8001_ha);
+>  	flush_workqueue(pm8001_wq);
+> -	bitmap_free(pm8001_ha->tags);
+> +	bitmap_free(pm8001_ha->rsvd_tags);
+>  	kfree(pm8001_ha);
+>  }
+>  
+> @@ -1208,18 +1208,15 @@ static int pm8001_init_ccb_tag(struct pm8001_hba_info *pm8001_ha)
+>  	struct Scsi_Host *shost = pm8001_ha->shost;
+>  	struct device *dev = pm8001_ha->dev;
+>  	u32 max_out_io, ccb_count;
+> -	u32 can_queue;
+>  	int i;
+>  
+>  	max_out_io = pm8001_ha->main_cfg_tbl.pm80xx_tbl.max_out_io;
+>  	ccb_count = min_t(int, PM8001_MAX_CCB, max_out_io);
+>  
+> -	/* Update to the scsi host*/
+> -	can_queue = ccb_count - PM8001_RESERVE_SLOT;
+> -	shost->can_queue = can_queue;
+> +	shost->can_queue = ccb_count - PM8001_RESERVE_SLOT;
+>  
+> -	pm8001_ha->tags = bitmap_zalloc(ccb_count, GFP_KERNEL);
+> -	if (!pm8001_ha->tags)
+> +	pm8001_ha->rsvd_tags = bitmap_zalloc(PM8001_RESERVE_SLOT, GFP_KERNEL);
+> +	if (!pm8001_ha->rsvd_tags)
+>  		goto err_out;
+>  
+>  	/* Memory region for ccb_info*/
+> @@ -1244,7 +1241,6 @@ static int pm8001_init_ccb_tag(struct pm8001_hba_info *pm8001_ha)
+>  		pm8001_ha->ccb_info[i].task = NULL;
+>  		pm8001_ha->ccb_info[i].ccb_tag = PM8001_INVALID_TAG;
+>  		pm8001_ha->ccb_info[i].device = NULL;
+> -		++pm8001_ha->tags_num;
+>  	}
+>  
+>  	return 0;
+> diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
+> index 066dfa9f4683..f46588cd5c73 100644
+> --- a/drivers/scsi/pm8001/pm8001_sas.c
+> +++ b/drivers/scsi/pm8001/pm8001_sas.c
+> @@ -65,9 +65,12 @@ static int pm8001_find_tag(struct sas_task *task, u32 *tag)
+>    */
+>  void pm8001_tag_free(struct pm8001_hba_info *pm8001_ha, u32 tag)
+>  {
+> -	void *bitmap = pm8001_ha->tags;
+> +	void *bitmap = pm8001_ha->rsvd_tags;
+>  	unsigned long flags;
+>  
+> +	if (tag >= PM8001_RESERVE_SLOT)
+> +		return;
+> +
+>  	spin_lock_irqsave(&pm8001_ha->bitmap_lock, flags);
+>  	__clear_bit(tag, bitmap);
+>  	spin_unlock_irqrestore(&pm8001_ha->bitmap_lock, flags);
+> @@ -80,18 +83,20 @@ void pm8001_tag_free(struct pm8001_hba_info *pm8001_ha, u32 tag)
+>    */
+>  int pm8001_tag_alloc(struct pm8001_hba_info *pm8001_ha, u32 *tag_out)
+>  {
+> -	void *bitmap = pm8001_ha->tags;
+> +	void *bitmap = pm8001_ha->rsvd_tags;
+>  	unsigned long flags;
+>  	unsigned int tag;
+>  
+>  	spin_lock_irqsave(&pm8001_ha->bitmap_lock, flags);
+> -	tag = find_first_zero_bit(bitmap, pm8001_ha->tags_num);
+> -	if (tag >= pm8001_ha->tags_num) {
+> +	tag = find_first_zero_bit(bitmap, PM8001_RESERVE_SLOT);
+> +	if (tag >= PM8001_RESERVE_SLOT) {
+>  		spin_unlock_irqrestore(&pm8001_ha->bitmap_lock, flags);
+>  		return -SAS_QUEUE_FULL;
+>  	}
+>  	__set_bit(tag, bitmap);
+>  	spin_unlock_irqrestore(&pm8001_ha->bitmap_lock, flags);
+> +
+> +	/* reserved tags are in the lower region of the tagset */
+>  	*tag_out = tag;
+>  	return 0;
+>  }
+> diff --git a/drivers/scsi/pm8001/pm8001_sas.h b/drivers/scsi/pm8001/pm8001_sas.h
+> index 9acaadf02150..b584e68664d8 100644
+> --- a/drivers/scsi/pm8001/pm8001_sas.h
+> +++ b/drivers/scsi/pm8001/pm8001_sas.h
+> @@ -510,8 +510,7 @@ struct pm8001_hba_info {
+>  	u32			chip_id;
+>  	const struct pm8001_chip_info	*chip;
+>  	struct completion	*nvmd_completion;
+> -	int			tags_num;
+> -	unsigned long		*tags;
+> +	unsigned long		*rsvd_tags;
+>  	struct pm8001_phy	phy[PM8001_MAX_PHYS];
+>  	struct pm8001_port	port[PM8001_MAX_PHYS];
+>  	u32			id;
+> @@ -737,9 +736,15 @@ pm8001_ccb_alloc(struct pm8001_hba_info *pm8001_ha,
+>  		 struct pm8001_device *dev, struct sas_task *task)
+>  {
+>  	struct pm8001_ccb_info *ccb;
+> +	struct request *rq = NULL;
+>  	u32 tag;
+>  
+> -	if (pm8001_tag_alloc(pm8001_ha, &tag)) {
+> +	if (task)
+> +		rq = sas_task_find_rq(task);
+> +
+> +	if (rq) {
+> +		tag = rq->tag + PM8001_RESERVE_SLOT;
+> +	} else if (pm8001_tag_alloc(pm8001_ha, &tag)) {
+>  		pm8001_dbg(pm8001_ha, FAIL, "Failed to allocate a tag\n");
+>  		return NULL;
+>  	}
+> diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+> index 4484c498bcb6..ed2d65d3749a 100644
+> --- a/drivers/scsi/pm8001/pm80xx_hwi.c
+> +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+> @@ -4247,24 +4247,13 @@ static int check_enc_sat_cmd(struct sas_task *task)
+>  
+>  static u32 pm80xx_chip_get_q_index(struct sas_task *task)
+>  {
+> -	struct scsi_cmnd *scmd = NULL;
+> +	struct request *rq = sas_task_find_rq(task);
+>  	u32 blk_tag;
+>  
+> -	if (task->uldd_task) {
+> -		struct ata_queued_cmd *qc;
+> -
+> -		if (dev_is_sata(task->dev)) {
+> -			qc = task->uldd_task;
+> -			scmd = qc->scsicmd;
+> -		} else {
+> -			scmd = task->uldd_task;
+> -		}
+> -	}
+> -
+> -	if (!scmd)
+> +	if (!rq)
+>  		return 0;
+>  
+> -	blk_tag = blk_mq_unique_tag(scsi_cmd_to_rq(scmd));
+> +	blk_tag = blk_mq_unique_tag(rq);
+>  	return blk_mq_unique_tag_to_hwq(blk_tag);
+
+Nit: You could simplify:
+
+	return blk_mq_unique_tag_to_hwq(blk_mq_unique_tag(rq));
+
+No need for blk_tag variable I think.
+
+>  }
+>  
+
+-- 
+Damien Le Moal
+Western Digital Research
+
