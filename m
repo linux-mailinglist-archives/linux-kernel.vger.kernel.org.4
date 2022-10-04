@@ -2,123 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6B95F46D4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB085F4705
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 17:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiJDPkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 11:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
+        id S229598AbiJDP5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 11:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiJDPj5 (ORCPT
+        with ESMTP id S229612AbiJDP52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 11:39:57 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BCADFC8
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 08:39:54 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id bp15so8220182lfb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 08:39:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=4t0N2bprBniMQRcB/3qFmooQSc3A7XC7fAMoxb8s4/g=;
-        b=C32agy2ULzvIFgr79jFj59nUVP8RorH8QzYqciN6EgVs+VNKdcz7q4CV/cJPDoLkap
-         pVTwYnTBSzV/xbP8DR8g+Dr1SHKCjwbo4G9hBlXcZSlyQG6x3rI5yk5KP4hhxK51maiq
-         GP4iRrKEtjAkaonVPyD30GbmgQGksw1icwsTsXjv/kNyrKGTYdP6fKKGZgSaiUqI3juO
-         TyeWtPibkqaL2vZDx0wGOtu2LSjjCW1+OvOFPT1TJy4tZObbK3E+/gzHjnf3ezE02F3Y
-         hBrNuVTSe81htxqDyxYC1pzaQL1kYbCggbjBGk/VdPqGw0kb39aLFZdyhvA2ugVE0H/d
-         e/CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=4t0N2bprBniMQRcB/3qFmooQSc3A7XC7fAMoxb8s4/g=;
-        b=kap/qexmBBhG/rMcPlSmzzzuHOoWysq/OoHwSovnp7SEUf5rnXGW/E+wEEsJnvw5xu
-         783yyhMwEGLjOW0ZUYsBozR6JSX7JHqmFzBXLJJanTy07XhggdeaG+fk8q/NT63bTqWK
-         bcU6+Hb4pR38XdbjpZVLn5g7giyT88StnBLsDqpUy1F/qEG7Oy9naxZFqcNB3LWqSL4p
-         b4GiV0UvDnns1atZSO+6DvYdiBzt37zrYfN9a83u8HET3v03dGJJyWu7myaglIbKkFYh
-         e3YMO/gIkzPlDXdN0IE+/vjEYvA1wkeNxKqdJzxJ9lsWanwB1I3W40WOOMqqqAIdfpON
-         nWCw==
-X-Gm-Message-State: ACrzQf2ZLP3PXGvhh6GWp0qS/Q5CQBY5K40rYT9hI5Ahs4abU2hqqdVl
-        ovVwDBhi/Kso+PEN2QaiKeiGlepGutFTYFvhZiN3ew==
-X-Google-Smtp-Source: AMsMyM5k0EwfNM7bE4QTJeF9u69v1+y2xAlpFHPuF6waoo+QftXzYBsJvVbwshD+nLREU1ta1b6NNHSmr8A/Tz3xiMY=
-X-Received: by 2002:a05:6512:2392:b0:4a2:550a:e21d with SMTP id
- c18-20020a056512239200b004a2550ae21dmr1274483lfv.550.1664897992505; Tue, 04
- Oct 2022 08:39:52 -0700 (PDT)
+        Tue, 4 Oct 2022 11:57:28 -0400
+X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Oct 2022 08:57:26 PDT
+Received: from uho.ysoft.cz (uho.ysoft.cz [81.19.3.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A451543C9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 08:57:25 -0700 (PDT)
+Received: from vokac-Latitude-7410.ysoft.local (unknown [10.1.8.111])
+        by uho.ysoft.cz (Postfix) with ESMTP id 20435A042B;
+        Tue,  4 Oct 2022 17:40:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ysoft.com;
+        s=20160406-ysoft-com; t=1664898027;
+        bh=i9PnxML2126tErWZLbzvJMO++0lET7Udk97r6lwj1NY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=M4FBZUpJafUb+eJ24wfxuU2UfA/BIx/eDfRtKsNfgmZbg3/TKc+TH89UXza/gVk5i
+         mIrDBzs6UFY5r1g6351zz4YrFfRH5uMZLRIonH9PtJxKhkfwMU+wu/xTGg1BOVvxKZ
+         TCW+qvi2iBRcDHAv6OOYRqp2+OEVzSsI707b/XTQ=
+From:   Petr Benes <petr.benes@ysoft.com>
+To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>
+Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Petr Benes <petr.benes@ysoft.com>, petrben@gmail.com,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
+Subject: [PATCH] ARM: dts: imx6dl-yapp4: Do not allow PM to switch PU regulator off on Q/QP
+Date:   Tue,  4 Oct 2022 17:39:20 +0200
+Message-Id: <20221004153920.104984-1-petr.benes@ysoft.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-2-chao.p.peng@linux.intel.com> <CA+EHjTyrexb_LX7Jm9-MGwm4DBvfjCrADH4oumFyAvs2_0oSYw@mail.gmail.com>
- <20220930162301.i226o523teuikygq@box.shutemov.name> <CA+EHjTyphrouY1FV2NQOBLDG81JYhiHFGBNKjT1K2j+pVNij+A@mail.gmail.com>
- <20221003110129.bbee7kawhw5ed745@box.shutemov.name>
-In-Reply-To: <20221003110129.bbee7kawhw5ed745@box.shutemov.name>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Tue, 4 Oct 2022 16:39:15 +0100
-Message-ID: <CA+EHjTzS1YDS0DxMyKaUqgykKp5G637NoGPQxdORQfLfKRNqrQ@mail.gmail.com>
-Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Fix our design flaw in supply voltage distribution on the Quad and QuadPlus
+based boards.
 
-On Mon, Oct 3, 2022 at 12:01 PM Kirill A. Shutemov <kirill@shutemov.name> wrote:
->
-> On Mon, Oct 03, 2022 at 08:33:13AM +0100, Fuad Tabba wrote:
-> > > I think it is "don't do that" category. inaccessible_register_notifier()
-> > > caller has to know what file it operates on, no?
-> >
-> > The thing is, you could oops the kernel from userspace. For that, all
-> > you have to do is a memfd_create without the MFD_INACCESSIBLE,
-> > followed by a KVM_SET_USER_MEMORY_REGION using that as the private_fd.
-> > I ran into this using my port of this patch series to arm64.
->
-> My point is that it has to be handled on a different level. KVM has to
-> reject private_fd if it is now inaccessible. It should be trivial by
-> checking file->f_inode->i_sb->s_magic.
+The problem is that we supply the SoC cache (VDD_CACHE_CAP) from VDD_PU
+instead of VDD_SOC. The VDD_PU internal regulator can be disabled by PM
+if VPU or GPU is not used. If that happens the system freezes. To prevent
+that configure the reg_pu regulator to be always on.
 
-Yes, that makes sense.
+Fixes: 0de4ab81ab26 ("ARM: dts: imx6dl-yapp4: Add Y Soft IOTA Crux/Crux+ board")
+Cc: petrben@gmail.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Petr Benes <petr.benes@ysoft.com>
+Signed-off-by: Michal Vokáč <michal.vokac@ysoft.com>
+---
+ arch/arm/boot/dts/imx6q-yapp4-crux.dts       | 4 ++++
+ arch/arm/boot/dts/imx6qp-yapp4-crux-plus.dts | 4 ++++
+ 2 files changed, 8 insertions(+)
 
-Thanks,
-/fuad
+diff --git a/arch/arm/boot/dts/imx6q-yapp4-crux.dts b/arch/arm/boot/dts/imx6q-yapp4-crux.dts
+index deb18c57cf18..22f647eb12e7 100644
+--- a/arch/arm/boot/dts/imx6q-yapp4-crux.dts
++++ b/arch/arm/boot/dts/imx6q-yapp4-crux.dts
+@@ -45,6 +45,10 @@ &oled_1309 {
+ 	status = "okay";
+ };
+ 
++&reg_pu {
++	regulator-always-on;
++};
++
+ &reg_usb_h1_vbus {
+ 	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/imx6qp-yapp4-crux-plus.dts b/arch/arm/boot/dts/imx6qp-yapp4-crux-plus.dts
+index a450a77f920f..b580ce891f7e 100644
+--- a/arch/arm/boot/dts/imx6qp-yapp4-crux-plus.dts
++++ b/arch/arm/boot/dts/imx6qp-yapp4-crux-plus.dts
+@@ -45,6 +45,10 @@ &oled_1309 {
+ 	status = "okay";
+ };
+ 
++&reg_pu {
++	regulator-always-on;
++};
++
+ &reg_usb_h1_vbus {
+ 	status = "okay";
+ };
+-- 
+2.25.1
 
-> --
->   Kiryl Shutsemau / Kirill A. Shutemov
