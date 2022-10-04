@@ -2,139 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F415F4809
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FDDF5F480D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 19:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiJDRHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 13:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
+        id S229874AbiJDRJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 13:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbiJDRHq (ORCPT
+        with ESMTP id S229868AbiJDRJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 13:07:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B04356C0;
-        Tue,  4 Oct 2022 10:07:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 112DEB80D63;
-        Tue,  4 Oct 2022 17:07:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B08C9C43470;
-        Tue,  4 Oct 2022 17:07:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664903262;
-        bh=cfuYWnUnLF3oyQfiCEANznX/wJ0xdE1PYwmKb3Zjcpc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NIBSnyPMGKCjTJTX+TjkcvICndjoiMIaM+H+gqTBscRYVfMx/seS5VyCDR+loHg5V
-         +ubJ+xjWtxb9fVWMP9u9mFiMnY6vrvt0J5T1WPLhznF5RL9pbqghsL/LLJ4Or6NjvV
-         F0R+K6Ht6SaI6WDIbecDbcJhLwuwGVqDq+twClQh2C0Ks/jw5CEy1gwhkL2jTv7rlq
-         Dy1TikLCYBcm65znYQE7qCJegTdP8rCumiulk0uxADIH5P01zLq5TrDmESWbjBoFXO
-         KLMuM1cPqv3AFRT4+g0LEtr/wf5C+wTdwiIZ3uYSQHH0oGfzZ1msEzi4MjV1jVw9SQ
-         o9Lw1qwpIZ9cg==
-Received: by mail-ua1-f41.google.com with SMTP id d3so4410429uav.7;
-        Tue, 04 Oct 2022 10:07:42 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0+oSVTntGFPmzQXgH8KWSVHoA/Z+Qc3WurP9wFWQSY5DG+OrVs
-        1EzUbsXI4HC5eZDGDe1v6xuk+VL4pNul8JcuuA==
-X-Google-Smtp-Source: AMsMyM5R0EOu9eL0BN+NRipjnzbeCa0CWFT6+krUrQ6/aIpUPkOQd4aZi5GLco4ZK72si4+RcwN6JGCS2lXv8AJWMoA=
-X-Received: by 2002:ab0:70c8:0:b0:39f:7528:6289 with SMTP id
- r8-20020ab070c8000000b0039f75286289mr12133566ual.36.1664903261540; Tue, 04
- Oct 2022 10:07:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220914-arm-perf-tool-spe1-2-v2-v3-0-8189fc04dcc6@kernel.org>
- <20220914-arm-perf-tool-spe1-2-v2-v3-1-8189fc04dcc6@kernel.org> <YzU/o3kxS/BYpJhn@leoy-yangtze.lan>
-In-Reply-To: <YzU/o3kxS/BYpJhn@leoy-yangtze.lan>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 4 Oct 2022 12:07:30 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+3pt_yr5LLFNR-DsXQycD-_gd5fum8QbfxUzHPR-zfJw@mail.gmail.com>
-Message-ID: <CAL_Jsq+3pt_yr5LLFNR-DsXQycD-_gd5fum8QbfxUzHPR-zfJw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] perf: Skip and warn on unknown format 'configN' attrs
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Tue, 4 Oct 2022 13:09:37 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555EF19B;
+        Tue,  4 Oct 2022 10:09:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=HISWwRKFuRO/9DyL6LlzLd2PnC0+qLYEQ5vpRXdvxxs=; b=QIT+ry9z0NeFwQYlagP2UmOgLM
+        31WtS7itVh/X+EZIv7YdWGzt6CcT11oZrClXmHlG5YMlGvSpWY1amZcpyuozcPtX9fDqmIzOmLZUM
+        MieJR7+2ir7J3x5SayV4/vO15WBKYaCnqyz0DOvD0CprhJ6k1+xiki7UWszsTW3sZV/PXF/AD1qk1
+        PdDT8sQx0eC0QxB1D5XG8DRw2d2eNg6DAvyuz/XmnJeaWh1QzlYLwgapQFjz7xocNOzUtQ5SSg8zJ
+        aS5kn+mQNt6yJUoCSkGsDGrVNUF6sQotpu2KC6CkTOi9Aa3aiWCjLKD7NAA2Y7Yzgo0C3THpVDXt+
+        B10m1Pnw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oflQ0-00HKVc-RF; Tue, 04 Oct 2022 17:09:20 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C80B43001CE;
+        Tue,  4 Oct 2022 19:09:15 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9BF5F209B80F8; Tue,  4 Oct 2022 19:09:15 +0200 (CEST)
+Date:   Tue, 4 Oct 2022 19:09:15 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marco Elver <elver@google.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
         Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Jiri Olsa <jolsa@kernel.org>,
         Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        James Clark <james.clark@arm.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, Dmitry Vyukov <dvyukov@google.com>
+Subject: Re: [PATCH] perf: Fix missing SIGTRAPs due to pending_disable abuse
+Message-ID: <Yzxou9HB/1XjMXWI@hirez.programming.kicks-ass.net>
+References: <20220927121322.1236730-1-elver@google.com>
+ <YzM/BUsBnX18NoOG@hirez.programming.kicks-ass.net>
+ <YzNu5bgASbuVi0S3@elver.google.com>
+ <YzQcqe9p9C5ZbjZ1@elver.google.com>
+ <YzRgcnMXWuUZ4rlt@elver.google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzRgcnMXWuUZ4rlt@elver.google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 1:48 AM Leo Yan <leo.yan@linaro.org> wrote:
->
-> Hi Rob,
->
-> On Wed, Sep 14, 2022 at 03:08:34PM -0500, Rob Herring wrote:
->
-> [...]
->
-> > +void perf_pmu__warn_invalid_formats(struct perf_pmu *pmu)
-> > +{
-> > +     struct perf_pmu_format *format;
-> > +
-> > +     list_for_each_entry(format, &pmu->format, list)
-> > +             if (format->value >= PERF_PMU_FORMAT_VALUE_CONFIG_END) {
-> > +                     pr_warning("WARNING: '%s' format '%s' requires 'perf_event_attr::config%d'"
-> > +                                "which is not supported by this version of perf!\n",
-> > +                                pmu->name, format->name, format->value);
-> > +                     return;
-> > +             }
-> > +}
->
-> Though I saw you and Namhyung have discussion in underway, this patch
-> set is fine for me.  I validated the patches at my side (with a bit
-> hacking in Arm SPE driver for faking invert filter).  You could add my
-> tested tag for this patch set:
->
-> Tested-by: Leo Yan <leo.yan@linaro.org>
->
-> But I want to remind two things after I used "perf test" to validate
-> this patch set:
->
->   $ ./perf test list
->   6: Parse event definition strings
->   6:1: Test event parsing
->   6:2: Test parsing of "hybrid" CPU events
->   6:3: Parsing of all PMU events from sysfs
->   6:4: Parsing of given PMU events from sysfs
->   6:5: Parsing of aliased events from sysfs
->   6:6: Parsing of aliased events
->   6:7: Parsing of terms (event modifiers)
->   $ ./perf test -v 6
->
-> The first one is this patch set introduces segmentation fault for the
-> case "Parsing of aliased events" (See tests/parse-events.c).  But the
-> issue is caused by the test case itself; we need to add below line into
-> test_event_fake_pmu() for initialisation list header.
+On Wed, Sep 28, 2022 at 04:55:46PM +0200, Marco Elver wrote:
+> On Wed, Sep 28, 2022 at 12:06PM +0200, Marco Elver wrote:
+> 
+> > My second idea about introducing something like irq_work_raw_sync().
+> > Maybe it's not that crazy if it is actually safe. I expect this case
+> > where we need the irq_work_raw_sync() to be very very rare.
+> 
+> The previous irq_work_raw_sync() forgot about irq_work_queue_on(). Alas,
+> I might still be missing something obvious, because "it's never that
+> easy". ;-)
+> 
+> And for completeness, the full perf patch of what it would look like
+> together with irq_work_raw_sync() (consider it v1.5). It's already
+> survived some shorter stress tests and fuzzing.
 
-Thanks.
+So.... I don't like it. But I cooked up the below, which _almost_ works :-/
 
->     INIT_LIST_HEAD(&perf_pmu__fake.format);
+For some raisin it sometimes fails with 14999 out of 15000 events
+delivered and I've not yet figured out where it goes sideways. I'm
+currently thinking it's that sigtrap clear on OFF.
 
-I ended up fixing this in perf_pmu__warn_invalid_formats() instead as
-the test dealing with internal stuct pmu details didn't seem right:
+Still, what do you think of the approach?
 
-+       /* fake pmu doesn't have format list */
-+       if (pmu == &perf_pmu__fake)
-+               return;
+---
+ include/linux/perf_event.h |  8 ++--
+ kernel/events/core.c       | 92 +++++++++++++++++++++++++---------------------
+ 2 files changed, 55 insertions(+), 45 deletions(-)
+
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index ee8b9ecdc03b..c54161719d37 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -736,9 +736,11 @@ struct perf_event {
+ 	struct fasync_struct		*fasync;
+ 
+ 	/* delayed work for NMIs and such */
+-	int				pending_wakeup;
+-	int				pending_kill;
+-	int				pending_disable;
++	unsigned int			pending_wakeup	:1;
++	unsigned int			pending_disable	:1;
++	unsigned int			pending_sigtrap	:1;
++	unsigned int			pending_kill	:3;
 +
-
->
-> The second question is for testing config3 in "perf test".  You could
-> see the file tests/parse-events.c has included several test cases for
-> config/config1/config2.  It's good to add the same testing for config3
-> as well, please see test__checkevent_pmu() and test__checkterms_simple()
-> for relevant code.
-
-Okay, will add in the next version.
-
-Rob
+ 	unsigned long			pending_addr;	/* SIGTRAP */
+ 	struct irq_work			pending;
+ 
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 2621fd24ad26..8e5dbe971d9e 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -2268,11 +2268,15 @@ event_sched_out(struct perf_event *event,
+ 	event->pmu->del(event, 0);
+ 	event->oncpu = -1;
+ 
+-	if (READ_ONCE(event->pending_disable) >= 0) {
+-		WRITE_ONCE(event->pending_disable, -1);
++	if (event->pending_disable) {
++		event->pending_disable = 0;
+ 		perf_cgroup_event_disable(event, ctx);
+ 		state = PERF_EVENT_STATE_OFF;
+ 	}
++
++	if (event->pending_sigtrap && state == PERF_EVENT_STATE_OFF)
++		event->pending_sigtrap = 0;
++
+ 	perf_event_set_state(event, state);
+ 
+ 	if (!is_software_event(event))
+@@ -2463,8 +2467,7 @@ EXPORT_SYMBOL_GPL(perf_event_disable);
+ 
+ void perf_event_disable_inatomic(struct perf_event *event)
+ {
+-	WRITE_ONCE(event->pending_disable, smp_processor_id());
+-	/* can fail, see perf_pending_event_disable() */
++	event->pending_disable = 1;
+ 	irq_work_queue(&event->pending);
+ }
+ 
+@@ -2527,6 +2530,9 @@ event_sched_in(struct perf_event *event,
+ 	if (event->attr.exclusive)
+ 		cpuctx->exclusive = 1;
+ 
++	if (event->pending_disable || event->pending_sigtrap)
++		irq_work_queue(&event->pending);
++
+ out:
+ 	perf_pmu_enable(event->pmu);
+ 
+@@ -6440,47 +6446,40 @@ static void perf_sigtrap(struct perf_event *event)
+ 		      event->attr.type, event->attr.sig_data);
+ }
+ 
+-static void perf_pending_event_disable(struct perf_event *event)
++/*
++ * Deliver the pending work in-event-context or follow the context.
++ */
++static void __perf_pending_event(struct perf_event *event)
+ {
+-	int cpu = READ_ONCE(event->pending_disable);
++	int cpu = READ_ONCE(event->oncpu);
+ 
++	/*
++	 * If the event isn't running; we done. event_sched_in() will restart
++	 * the irq_work when needed.
++	 */
+ 	if (cpu < 0)
+ 		return;
+ 
++	/*
++	 * Yay, we hit home and are in the context of the event.
++	 */
+ 	if (cpu == smp_processor_id()) {
+-		WRITE_ONCE(event->pending_disable, -1);
+-
+-		if (event->attr.sigtrap) {
++		if (event->pending_sigtrap) {
++			event->pending_sigtrap = 0;
+ 			perf_sigtrap(event);
+-			atomic_set_release(&event->event_limit, 1); /* rearm event */
+-			return;
+ 		}
+-
+-		perf_event_disable_local(event);
+-		return;
++		if (event->pending_disable) {
++			event->pending_disable = 0;
++			perf_event_disable_local(event);
++		}
+ 	}
+ 
+ 	/*
+-	 *  CPU-A			CPU-B
+-	 *
+-	 *  perf_event_disable_inatomic()
+-	 *    @pending_disable = CPU-A;
+-	 *    irq_work_queue();
+-	 *
+-	 *  sched-out
+-	 *    @pending_disable = -1;
+-	 *
+-	 *				sched-in
+-	 *				perf_event_disable_inatomic()
+-	 *				  @pending_disable = CPU-B;
+-	 *				  irq_work_queue(); // FAILS
+-	 *
+-	 *  irq_work_run()
+-	 *    perf_pending_event()
+-	 *
+-	 * But the event runs on CPU-B and wants disabling there.
++	 * Requeue if there's still any pending work left, make sure to follow
++	 * where the event went.
+ 	 */
+-	irq_work_queue_on(&event->pending, cpu);
++	if (event->pending_disable || event->pending_sigtrap)
++		irq_work_queue_on(&event->pending, cpu);
+ }
+ 
+ static void perf_pending_event(struct irq_work *entry)
+@@ -6488,19 +6487,23 @@ static void perf_pending_event(struct irq_work *entry)
+ 	struct perf_event *event = container_of(entry, struct perf_event, pending);
+ 	int rctx;
+ 
+-	rctx = perf_swevent_get_recursion_context();
+ 	/*
+ 	 * If we 'fail' here, that's OK, it means recursion is already disabled
+ 	 * and we won't recurse 'further'.
+ 	 */
++	rctx = perf_swevent_get_recursion_context();
+ 
+-	perf_pending_event_disable(event);
+-
++	/*
++	 * The wakeup isn't bound to the context of the event -- it can happen
++	 * irrespective of where the event is.
++	 */
+ 	if (event->pending_wakeup) {
+ 		event->pending_wakeup = 0;
+ 		perf_event_wakeup(event);
+ 	}
+ 
++	__perf_pending_event(event);
++
+ 	if (rctx >= 0)
+ 		perf_swevent_put_recursion_context(rctx);
+ }
+@@ -9203,11 +9206,20 @@ static int __perf_event_overflow(struct perf_event *event,
+ 	if (events && atomic_dec_and_test(&event->event_limit)) {
+ 		ret = 1;
+ 		event->pending_kill = POLL_HUP;
+-		event->pending_addr = data->addr;
+-
+ 		perf_event_disable_inatomic(event);
+ 	}
+ 
++	if (event->attr.sigtrap) {
++		/*
++		 * Should not be able to return to user space without processing
++		 * pending_sigtrap (kernel events can overflow multiple times).
++		 */
++		WARN_ON_ONCE(event->pending_sigtrap && event->attr.exclude_kernel);
++		event->pending_sigtrap = 1;
++		event->pending_addr = data->addr;
++		irq_work_queue(&event->pending);
++	}
++
+ 	READ_ONCE(event->overflow_handler)(event, data, regs);
+ 
+ 	if (*perf_event_fasync(event) && event->pending_kill) {
+@@ -11528,7 +11540,6 @@ perf_event_alloc(struct perf_event_attr *attr, int cpu,
+ 
+ 
+ 	init_waitqueue_head(&event->waitq);
+-	event->pending_disable = -1;
+ 	init_irq_work(&event->pending, perf_pending_event);
+ 
+ 	mutex_init(&event->mmap_mutex);
+@@ -11551,9 +11562,6 @@ perf_event_alloc(struct perf_event_attr *attr, int cpu,
+ 	if (parent_event)
+ 		event->event_caps = parent_event->event_caps;
+ 
+-	if (event->attr.sigtrap)
+-		atomic_set(&event->event_limit, 1);
+-
+ 	if (task) {
+ 		event->attach_state = PERF_ATTACH_TASK;
+ 		/*
