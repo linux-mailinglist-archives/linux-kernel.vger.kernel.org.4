@@ -2,58 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F7B5F4C1E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A915F4C20
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 00:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbiJDWps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 18:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33246 "EHLO
+        id S230392AbiJDWpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 18:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbiJDWpn (ORCPT
+        with ESMTP id S230350AbiJDWpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 18:45:43 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68864F192;
-        Tue,  4 Oct 2022 15:45:41 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 4 Oct 2022 18:45:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF5B5300D;
+        Tue,  4 Oct 2022 15:45:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mht8L0QSjz4xDn;
-        Wed,  5 Oct 2022 09:45:38 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1664923539;
-        bh=VLbDgrb7jeNhNRMHmVfeAUsikRAntGBmoxvtb8owLaM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=K/1fMqEbLkZW5q380KFNwEknWdDMRWLySfEakFNwRjDbCcypGYRI3jMNmBJDeSx1d
-         HcxdVAsI0F7a/7EeqI/v0jGU+nDA8Rob2EBbkOqk+84Q6VfdyCTBdG4OQvla38N1Yt
-         cXS/2X2THhglbFhyc77hBFF3ipNa8rFA96TO1+aaPSJf1sFcNYfjvB6KjvJ55OG2zW
-         qQjVTfC0vh+b8ocs2QS4RYgvi0eZnlSs1qo0w0aZefbBbvOglkFN/bV3mKmnuHIzhu
-         BTq/Akl5HSv/E5Bwr/P+rV4qglKrpPSpXuqImg6w6W+LAg9eDBErE+CDsmrkx5jlqW
-         w3x/DcoDBHBrA==
-Date:   Wed, 5 Oct 2022 09:45:36 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     David Miller <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        David Vernet <void@manifault.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stanislav Fomichev <sdf@google.com>
-Subject: Re: linux-next: manual merge of the net-next tree with the bpf tree
-Message-ID: <20221005094536.679c55e1@canb.auug.org.au>
-In-Reply-To: <20221003190727.0921e479@kernel.org>
-References: <20221004122428.653bd5cd@canb.auug.org.au>
-        <20221003190727.0921e479@kernel.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75255B81BF7;
+        Tue,  4 Oct 2022 22:45:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A64EC433D6;
+        Tue,  4 Oct 2022 22:45:41 +0000 (UTC)
+Date:   Tue, 4 Oct 2022 18:45:44 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "Artem S. Tashkinov" <aros@gmx.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+Message-ID: <20221004184544.371daf46@gandalf.local.home>
+In-Reply-To: <CAMuHMdW1yp76X6xMFSXnpRNXPBVVLuyqm=UCOZ0uQem0_50poQ@mail.gmail.com>
+References: <Yzg7pHspc72I7TAb@mit.edu>
+        <e98597e8-9ddb-bbf0-7652-691327186a92@gmx.com>
+        <YzmBjgXq9geMnL1B@mit.edu>
+        <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
+        <20221002141321.394de676@rorschach.local.home>
+        <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
+        <20221002180844.2e91b1f1@rorschach.local.home>
+        <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com>
+        <YzoY+dxLuCfOp0sL@ZenIV>
+        <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com>
+        <YzqjfU66alRlGk5y@kernel.org>
+        <251201be-9552-3a51-749c-3daf4d181250@gmx.com>
+        <CAMuHMdX8Ko_LiqsWafzcqheW_7SZmtzEvgrpBbyoCLxyWqjqBg@mail.gmail.com>
+        <1d3fdc6a-a98a-fe3b-2e3e-acc2ffa24f9d@gmx.com>
+        <20221003102029.1fe4f31b@gandalf.local.home>
+        <fde043f3-da34-9fc6-379b-922f29284e66@gmx.com>
+        <CAMuHMdW1yp76X6xMFSXnpRNXPBVVLuyqm=UCOZ0uQem0_50poQ@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.YE0yhnbwf.UMCRzoDHIheM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,42 +71,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/.YE0yhnbwf.UMCRzoDHIheM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 4 Oct 2022 14:32:26 +0200
+Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 
-Hi Jakub,
+> > I _did_ CC him privately by adding his _personal_ e-mail. I'm astonished
+> > not only you don't believe me you turn my words inside out.  
+> 
+> I think there is a misunderstanding of the meaning of "CC privately".
+> To me it means no public data disclosing entity (be it a public mailing
+> list, or a public bug tracker) was CCed as well.
+> To you, it seems to mean you used his personal email address instead
+> of a mailing list address.
 
-On Mon, 3 Oct 2022 19:07:27 -0700 Jakub Kicinski <kuba@kernel.org> wrote:
->
-> Unrelated to the conflict but do you see this when building the latest
-> by any chance? Is it just me and my poor old gcc 8.5?
->=20
-> vmlinux.o: warning: objtool: ___ksymtab+bpf_dispatcher_xdp_func+0x0: data=
- relocation to !ENDBR: bpf_dispatcher_xdp_func+0x0
-> vmlinux.o: warning: objtool: bpf_dispatcher_xdp+0xa0: data relocation to =
-!ENDBR: bpf_dispatcher_xdp_func+0x0
+Exactly. If I can go find it, it wasn't "private".
 
-I don't get those messages.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/.YE0yhnbwf.UMCRzoDHIheM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM8t5AACgkQAVBC80lX
-0Gz91Qf9E1ojiA6qxk7bNCljWKPy/DaHWjiZGTBqtH5+miY6l+/dqwGKX5VmiEYo
-ZcZIqJjyAfmnVwA2rKkfJx0JnWbKn5NV7C0p0F5viRNkRS+C566pxJkiAorWZSvE
-ocyDhu0xjW0b9K24j/hcudXm4yC2zgcFIaMWVFeOA/m2XpGGIiEAIkUEhQwafk5R
-LiPA6sKcd88yo2AppmSlZAi0A1C6WGstJ3EyaPNEqGtEFOD9ITgIJtRw2AHyFMeO
-IyKMx2gHvIxcvspx2EEes/YK9CEhX6gbGi/mGe6aa3vQB5DjUKp4R3llE7Rxb05l
-X0PsZrycf4t3e34V2bTCDz4WH3JM6A==
-=djYm
------END PGP SIGNATURE-----
-
---Sig_/.YE0yhnbwf.UMCRzoDHIheM--
+-- Steve
