@@ -2,84 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E60185F4B2D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD155F4B2E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 23:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbiJDVvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 17:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42236 "EHLO
+        id S230163AbiJDVvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 17:51:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiJDVvB (ORCPT
+        with ESMTP id S230185AbiJDVv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 17:51:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839473642B;
-        Tue,  4 Oct 2022 14:51:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B35E61514;
-        Tue,  4 Oct 2022 21:51:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B6BEC433C1;
-        Tue,  4 Oct 2022 21:50:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664920259;
-        bh=6boUdhJngz/cXDcozyutWrj0ul8v1+j8KBsEbBhdJ8c=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bJMyBFBK5upyLNQ6AL/7utlLnwZvpbEXnmbgOX9tzrJFX6Fnv6wtRLLbnE30XMfCV
-         49x1xwg5TtAsvN+N1g0JCykz0ROGyrWk2natizRqWLedf42Dm3x5euiaya1HvYBr6M
-         ZuIZNWARGGBcYXFahgu/xf0GH7sdNAKKSVGysS+qnXbs2OnuhnK7kiMVWVJg5Tu5mW
-         t/l+4v3ztcz2/grzSa4aCh4cyMjt751lL5J6+Afyvt1mPApDH4LRTOvzI3r/2MzD6P
-         Ug85FqJciJbwzmOsvPWvAGcD8nWuiMM+JFyehDOEl3ep7CEFRQ8IFJsapX53ssIzlI
-         FOwj1ITDmhmvA==
-Received: by mail-vk1-f178.google.com with SMTP id w19so1128113vkm.3;
-        Tue, 04 Oct 2022 14:50:59 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0pii738KhykggDOQs+XHy/KMIbKVjbArEXTyfDb6WWdaEFUOza
-        cPgik5JbQmZFOTTcCc1mLEegio9SMrBVfT4JdA==
-X-Google-Smtp-Source: AMsMyM5k1UcSbUyFyaAh6XpxFNX3CnpVl20p///vTw93Ej31fIyVeKGKbFs1a1aqQHwYz3nZoql2XDGaDcmh1D6Jpv8=
-X-Received: by 2002:a1f:9e44:0:b0:39e:e4ff:1622 with SMTP id
- h65-20020a1f9e44000000b0039ee4ff1622mr12561716vke.15.1664920258513; Tue, 04
- Oct 2022 14:50:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220919143123.28250-1-vidyas@nvidia.com> <20220926111923.22487-1-vidyas@nvidia.com>
-In-Reply-To: <20220926111923.22487-1-vidyas@nvidia.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 4 Oct 2022 16:50:48 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJ1qLC7zEL=hhgvsdimgcxxkPhN9LCJy3DnYZ8K8LJkLQ@mail.gmail.com>
-Message-ID: <CAL_JsqJ1qLC7zEL=hhgvsdimgcxxkPhN9LCJy3DnYZ8K8LJkLQ@mail.gmail.com>
-Subject: Re: [PATCH V2] PCI: dwc: Fix n_fts[] array overrun
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     jingoohan1@gmail.com, gustavo.pimentel@synopsys.com,
-        lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 4 Oct 2022 17:51:26 -0400
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BF83642B
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 14:51:23 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 81598C009; Tue,  4 Oct 2022 23:51:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1664920281; bh=qaNkDQFrkcyo3sLZ2xyMU1UXskCEKW4uD45n4O+N46A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Hh2ylzjJGpmxgi1mMy18Os4jqoatBYtpB850uLC6tROsK8uB0p7PNmcgDK4K8V0Rr
+         MAJtbQgN1f+AFY/9UWdQAlkIiPPIMJMqxOrqliHJkObWoaVYjRl2iRFiiP6V5oxJ7g
+         gP9KfUK99U6qvffPSnzj57LSpzNAT+eYwUsADVQHbymskyT1QnvzWLPDRRzgxR0ZVF
+         5UnSsroDq3xu5jdApModjfnMVIUFu9iwruj6ad2Wb4oRI2VwY20TROLjmkBL20yo8F
+         uRlzYDvhBi7ojqcW22O97Jq/fKS5G5vew6v++cQ7rfDxk2PEUyjdJnVkt6sT2T7mi5
+         YcnC2MwWTQSTA==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 78832C009;
+        Tue,  4 Oct 2022 23:51:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1664920280; bh=qaNkDQFrkcyo3sLZ2xyMU1UXskCEKW4uD45n4O+N46A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HACU+p+4txJQlTl6SapHOc0xHw2ZYJr2w7goWUGamRmOkobXJ4KYfNZKEl6t7s1QA
+         jWEKlVI+3jvRJlJPeVCXk7XQPd19aI9t8a5FNLj4ZRL7w/G1zbrpamdQC7PZbQCfea
+         Th17QUI6BcNYvFwuI+kBw9pqv0RfUMixSc1IFHcI3uV6Shb/2YfzX99OFpQSS6T0Ae
+         NdjdpUl38bmcY1QcV8NQvi+VL7yRmZhkr5I8t6jvdK3nQjy1zWobvO4jVdVK/YTBFE
+         vXUx+e4EpHRYm6F1YcQS/UDD+GuK5xxWfBNp1RFPwL41zNbRgHjTtb3Qh4nGlKy7tm
+         YwaHYds4Qg1Ag==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 9a191204;
+        Tue, 4 Oct 2022 21:51:15 +0000 (UTC)
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com
+Subject: [PATCH 1/2] 9p: client_create/destroy: only call trans_mod->close after create
+Date:   Wed,  5 Oct 2022 06:51:13 +0900
+Message-Id: <20221004215114.1850991-1-asmadeus@codewreck.org>
+X-Mailer: git-send-email 2.37.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 6:19 AM Vidya Sagar <vidyas@nvidia.com> wrote:
->
-> commit aeaa0bfe89654 ("PCI: dwc: Move N_FTS setup to common setup")
-> incorrectly uses pci->link_gen in deriving the index to the
-> n_fts[] array also introducing the issue of accessing beyond the
-> boundaries of array for greater than Gen-2 speeds. This change fixes
-> that issue.
->
-> Fixes: aeaa0bfe8965 ("PCI: dwc: Move N_FTS setup to common setup")
-> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> Acked-by: Jingoo Han <jingoohan1@gmail.com>
-> ---
-> V2:
-> * Addressed review comments from Bjorn
-> * Added "Acked-by: Jingoo Han <jingoohan1@gmail.com>"
->
->  drivers/pci/controller/dwc/pcie-designware.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+destroy code would incorrectly call close() if trans_mod exists after some
+hasty code cleanup: we need to make sure we only call close after create
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+The new bool added to track this has been added in a hole of the struct
+and will not increase p9_client's size.
+It might be possible to do better with a bit more work, but that will
+have to do for now.
+
+Link: https://lkml.kernel.org/r/00000000000015ac7905e97ebaed@google.com
+Reported-by: syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com
+Reported-by: Leon Romanovsky <leon@kernel.org>
+Fixes: 3ff51294a055 ("9p: p9_client_create: use p9_client_destroy on failure")
+Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+---
+v4: start over from scratch with a pool to properly track initialization
+state instead of kludging over clnt->trans itself which is "private" to
+the trans
+
+ include/net/9p/client.h | 2 ++
+ net/9p/client.c         | 3 ++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/include/net/9p/client.h b/include/net/9p/client.h
+index 78ebcf782ce5..3f7f473da05a 100644
+--- a/include/net/9p/client.h
++++ b/include/net/9p/client.h
+@@ -89,6 +89,7 @@ struct p9_req_t {
+  * @lock: protect @fids and @reqs
+  * @msize: maximum data size negotiated by protocol
+  * @proto_version: 9P protocol version to use
++ * @trans_initialized: Whether transport's close() is safe to call
+  * @trans_mod: module API instantiated with this client
+  * @status: connection state
+  * @trans: tranport instance state and API
+@@ -103,6 +104,7 @@ struct p9_client {
+ 	spinlock_t lock;
+ 	unsigned int msize;
+ 	unsigned char proto_version;
++	bool trans_initialized;
+ 	struct p9_trans_module *trans_mod;
+ 	enum p9_trans_status status;
+ 	void *trans;
+diff --git a/net/9p/client.c b/net/9p/client.c
+index bfa80f01992e..cf2d5b60b61b 100644
+--- a/net/9p/client.c
++++ b/net/9p/client.c
+@@ -992,6 +992,7 @@ struct p9_client *p9_client_create(const char *dev_name, char *options)
+ 	err = clnt->trans_mod->create(clnt, dev_name, options);
+ 	if (err)
+ 		goto out;
++	clnt->trans_initialized = true;
+ 
+ 	if (clnt->msize > clnt->trans_mod->maxsize) {
+ 		clnt->msize = clnt->trans_mod->maxsize;
+@@ -1036,7 +1037,7 @@ void p9_client_destroy(struct p9_client *clnt)
+ 
+ 	p9_debug(P9_DEBUG_MUX, "clnt %p\n", clnt);
+ 
+-	if (clnt->trans_mod)
++	if (clnt->trans_mod && clnt->trans_initialized)
+ 		clnt->trans_mod->close(clnt);
+ 
+ 	v9fs_put_trans(clnt->trans_mod);
+-- 
+2.35.1
+
