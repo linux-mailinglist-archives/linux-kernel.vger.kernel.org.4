@@ -2,89 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38365F3A39
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 01:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2D55F3A41
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 02:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbiJCX7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 19:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
+        id S230002AbiJDAAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 20:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiJCX7u (ORCPT
+        with ESMTP id S229731AbiJDAAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 19:59:50 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24F0643A
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 16:59:45 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id u24so4100490plq.12
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 16:59:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=RIJLKN8u3zDyFaSBgpFe42GEBZf7a4VcF4ED49hMdZc=;
-        b=U+gKP1h4Pv9jFJIM8fjrqS3Zno7OwmnOpMAEvlBoaqn2bYimBV48LjwocIwL22pTj/
-         XGCusQxLHKaS1oM8qYA/31YZIM1g4yyqMOyA0EeUSQHwPMu/2406h3E8d5UGens+Sg6R
-         JFsWqk+j7+9V4+Cv11zUIopHfUbO1vKfQtibE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=RIJLKN8u3zDyFaSBgpFe42GEBZf7a4VcF4ED49hMdZc=;
-        b=nG2Zo4yjqBojPWMa3eaUGT9g/PA3Li+Z1NBTbapBb8bjyNQBaKJtEes8jYwytS/j55
-         Hmci3H5zAiyYQAyheCnqES3ktRFraKBZn7AaCNR3IscV475Pce6idWqJQxUuUN5jpYhJ
-         dfgd+TMNxDD2a+oSlv+3dVpZFBrzBzD7AWHZs8h+iTRxLfFY9ktgJNV1IBflMWzD7Cns
-         gUD5Ee/ic4lujYcpiselGistekrkF7dCjh+IvsPF9zSdalTbowWP9luoCmqMbzlnwUTl
-         KfaXi5degTv92m6ZoeQKzydE5OaSH16KiH3Rnh15v5mXyg5ZDtb1abIm4Lzlkahl5oZN
-         BECw==
-X-Gm-Message-State: ACrzQf1d0yBGooYhB3rP06g/GTrzxRspr8iv5oYssYiH2uW8lnJ4fvjy
-        0PIpXVLvXzZAUX3pKrFcX40+/w==
-X-Google-Smtp-Source: AMsMyM5ug1R6yL4efHcI6RcSe9hN88kwzJ/nJywTthiwC0PYrD9jVlLYOuUXb9T8VVj14hEZ5CWOZA==
-X-Received: by 2002:a17:90a:7c4a:b0:20a:b201:461a with SMTP id e10-20020a17090a7c4a00b0020ab201461amr5640401pjl.181.1664841585370;
-        Mon, 03 Oct 2022 16:59:45 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id mp8-20020a17090b190800b0020ad26fa65dsm284824pjb.56.2022.10.03.16.59.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 16:59:44 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 16:59:43 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [OPTIONAL/RFC v2 37/39] x86/cet: Add PTRACE interface for CET
-Message-ID: <202210031658.EEC88324FD@keescook>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-38-rick.p.edgecombe@intel.com>
+        Mon, 3 Oct 2022 20:00:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B1595B9;
+        Mon,  3 Oct 2022 17:00:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1928C611E1;
+        Tue,  4 Oct 2022 00:00:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6FCFBC433D6;
+        Tue,  4 Oct 2022 00:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664841615;
+        bh=o436ThbRfti45CB7PWHupiscFBYbUoSuCZASACkC23g=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=iYpnPS4GHEcpQaJL8AOzJppWBo+YAYS2UmzIWEWKBM467nKBNcr5E4puikJd1Lgyg
+         MEBxgJWMit8hoFpLsf+ETj5REYYEOdQwktIh1ZfhKy3iY9UWVC6mzhettFgyL4p0jM
+         7Hc4VeS8+Wz0xRR/CPhSFhb5suVra/Z/ox4hl1HZlQwc2Ge/JlBnnNqvEOp99Xzrct
+         8PNgwBxi/MwSHglWBed+bQQH7RGrTdeYsb6dt9LylYXhYgUipXg+cPEBKj+4IK6vew
+         gf+UDFLvP/Q+r+cnBIYGztH0XzvJHPvGGE3ELRW5TjX7J0C/YYS/CqaWN5XpGjADqS
+         /VzWeoKJ3h6JQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5B963E4D013;
+        Tue,  4 Oct 2022 00:00:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-38-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] net: ipa: update comments
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166484161537.2431.9070338378744641097.git-patchwork-notify@kernel.org>
+Date:   Tue, 04 Oct 2022 00:00:15 +0000
+References: <20220930224527.3503404-1-elder@linaro.org>
+In-Reply-To: <20220930224527.3503404-1-elder@linaro.org>
+To:     Alex Elder <elder@linaro.org>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mka@chromium.org, evgreen@chromium.org,
+        andersson@kernel.org, quic_cpratapa@quicinc.com,
+        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
+        quic_subashab@quicinc.com, elder@kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,13 +61,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:34PM -0700, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Hello:
+
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Fri, 30 Sep 2022 17:45:27 -0500 you wrote:
+> This patch just updates comments throughout the IPA code.
 > 
-> Some applications (like GDB and CRIU) would like to tweak CET state via
+> Transaction state is now tracked using indexes into an array rather
+> than linked lists, and a few comments refer to the "old way" of
+> doing things.  The description of how transactions are used was
+> changed to refer to "operations" rather than "commands", to
+> (hopefully) remove a possible ambiguity.
+> 
+> [...]
 
-Eee. Does GDB really need this? Can we make this whole thing
-CONFIG-depend on CRIU?
+Here is the summary with links:
+  - [net-next] net: ipa: update comments
+    https://git.kernel.org/netdev/net-next/c/ace5dc61620b
 
+You are awesome, thank you!
 -- 
-Kees Cook
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
