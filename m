@@ -1,143 +1,116 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A83B5F3B93
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 05:06:16 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id CCD9C5F3B98
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 05:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiJDDGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Oct 2022 23:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55800 "EHLO
+        id S229520AbiJDDQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Oct 2022 23:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJDDGI (ORCPT
+        with ESMTP id S229441AbiJDDQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Oct 2022 23:06:08 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD812A967;
-        Mon,  3 Oct 2022 20:06:05 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhMzG5dmtz4wgr;
-        Tue,  4 Oct 2022 14:06:02 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1664852764;
-        bh=KaoAdFRv76b7rRGW35lgp7SYKID3xoN5gkoVTMtSlRc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=LdhbgaLGFGjeJ9Paa6YlOKqyBJA7D/wyBWT0hd5TqpL9mE6SzbKU2RQPZ9izmMJ77
-         R2kNrwnBbXVaW5z669jBZqbqS2ylhn6C3HroymogBFqiAWtu9EMN/oJ2Hv25fiVGQF
-         VCF/GHqflkMJw7S6f7e5v6Mw1xT+DLSoSeUuN11QJ4bwObdWNftsAsQE6crioJgRSb
-         Fr5IrYYHRfGSEjV961+uHB1NMzlrIR191UIrR+SOOrxb0CxLLnMgRVb1GIeNw6YyQ4
-         F5v7V7ba/YzkauELSP1XGhrwl67SB42S5r89+xGZPvhiUkbRR1/KrdWwbDoMNDKNmc
-         LHJTB+kGkP7Nw==
-Date:   Tue, 4 Oct 2022 14:05:58 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Airlie <airlied@redhat.com>
-Cc:     broonie@kernel.org, Lucas Stach <l.stach@pengutronix.de>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Subject: Re: linux-next: build failure after merge of the drm tree
-Message-ID: <20221004140558.64f59f2c@canb.auug.org.au>
-In-Reply-To: <CAMwc25oshRcJBoCT70B+b42bh5sPqgyoHuBx6K6ZLrwBMHnJzw@mail.gmail.com>
-References: <20220930105434.111407-1-broonie@kernel.org>
-        <20221004132047.435d42db@canb.auug.org.au>
-        <CAMwc25oshRcJBoCT70B+b42bh5sPqgyoHuBx6K6ZLrwBMHnJzw@mail.gmail.com>
+        Mon, 3 Oct 2022 23:16:45 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FF72DA98
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Oct 2022 20:16:45 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id v186so12022474pfv.11
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Oct 2022 20:16:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=Flg3/SpxZ4nlW0rldGn9nsAn/YMX4bI0O25ZeoXC7Ig=;
+        b=ctblUqYuosqB1quvT3Bznf0Bk3tuq0qXvibeg4/bptRlCh2Y3wcYoeB8YaviOCSfrX
+         mHLBG4QygPS4VQ3GVdIIF19qv62BE320QvDB6QMzmNZsGCqRN3/apITFrxWSANT9Lrum
+         hFoM9n5NnCm9XgZB2AUZIAelG6AX4MPvKsdD/2Z/v3bs1DdZSexsi3HExGMqu/6HqEvF
+         b3It2bOzeW8Pzjp6kHEldbRIkrRE1rL6l16DixN/daHAdZo8Px0RP6au1IkL54l/3Cv/
+         czKo9QmRkjh7cakDPAts4TkKKuSHAjoCSlp7DyjlTxNfEt4c3xx5wz/QvxEbzfhxj7a7
+         3KEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Flg3/SpxZ4nlW0rldGn9nsAn/YMX4bI0O25ZeoXC7Ig=;
+        b=kbgJfkzHaw5O6OcSIsufrD/M/3HWdaGHkRarpulE1U1+QO6OSgHn+bLsFsP12npuAq
+         VtISxEN4s2Xasq6pdxfhqTG8i8U3VLgSqBgitHqnwHzTPU4OIavWbr+0exzG96rTFGGU
+         Kj2Q81pCDtLxLIbTTg766DJu79uDJUiid5xs2uT+HW1fXt8gT+dRQW80q+PL1Q5TeX9C
+         IaJksxGxlcdxXvwa1rEqgkdgxuvqKyzH+tRj61iXjM7e6sHa8RHhMwcpU+cCxT/G6g0m
+         kjGk+R3CcudVDjRHQOMz4rTtJnWaibUJoBcNbSpXiCG7L4hRfFVqTLfbqXwfbGXubEgv
+         9OBA==
+X-Gm-Message-State: ACrzQf14AY12dz0NVjXf+PrbR9PKRTXM0Nsm0kPb+blc8E0I04X8mEFC
+        VExplRwyzf1LcBMm66awBM4=
+X-Google-Smtp-Source: AMsMyM6ihKXmuoIzYH2AKcrJ/ujeBN/lJxh6ggAJBg3SJOS718b0OtaKU0DMRJLYCNDSxjMdEl6uwg==
+X-Received: by 2002:a65:6a12:0:b0:445:84f6:676a with SMTP id m18-20020a656a12000000b0044584f6676amr12807775pgu.40.1664853404600;
+        Mon, 03 Oct 2022 20:16:44 -0700 (PDT)
+Received: from localhost.localdomain ([171.78.165.127])
+        by smtp.googlemail.com with ESMTPSA id w8-20020a63f508000000b0043b565cb57csm7609408pgh.73.2022.10.03.20.16.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 20:16:44 -0700 (PDT)
+From:   Abdun Nihaal <abdun.nihaal@gmail.com>
+To:     almaz.alexandrovich@paragon-software.com
+Cc:     ntfs3@lists.linux.dev, linux-kernel@vger.kernel.org,
+        skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Abdun Nihaal <abdun.nihaal@gmail.com>,
+        syzbot+fa4648a5446460b7b963@syzkaller.appspotmail.com
+Subject: [PATCH] fs/ntfs3: Validate attribute data and valid sizes
+Date:   Tue,  4 Oct 2022 08:45:02 +0530
+Message-Id: <20221004031502.20007-1-abdun.nihaal@gmail.com>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <000000000000c2333105e9cc7b1c@google.com>
+References: <000000000000c2333105e9cc7b1c@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/zn3cNZXJ4akLAJ9548KNlKz";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/zn3cNZXJ4akLAJ9548KNlKz
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The data_size and valid_size fields of non resident attributes should be
+less than the its alloc_size field, but this is not checked in
+ntfs_read_mft function.
 
-Hi Dave,
+Syzbot reports a allocation order warning due to a large unchecked value
+of data_size getting assigned to inode->i_size which is then passed to
+kcalloc.
 
-On Tue, 4 Oct 2022 12:24:37 +1000 David Airlie <airlied@redhat.com> wrote:
->
-> On Tue, Oct 4, 2022 at 12:21 PM Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
-> >
-> > On Fri, 30 Sep 2022 11:54:34 +0100 broonie@kernel.org wrote: =20
-> > >
-> > > After merging the drm tree, today's linux-next build (x86_64
-> > > allmodconfig) failed like this:
-> > >
-> > > /tmp/next/build/drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stre=
-am.c: In function 'dc_stream_remove_writeback':
-> > > /tmp/next/build/drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stre=
-am.c:527:55: error: array subscript [0, 0] is outside array bounds of 'stru=
-ct dc_writeback_info[1]' [-Werror=3Darray-bounds]
-> > >   527 |     stream->writeback_info[j] =3D stream->writeback_info[i];
-> > >       |                                 ~~~~~~~~~~~~~~~~~~~~~~^~~
-> > > cc1: all warnings being treated as errors
-> > >
-> > > Caused by
-> > >
-> > >     5d8c3e836fc224 ("drm/amd/display: fix array-bounds error in dc_st=
-ream_remove_writeback()")
-> > >
-> > > I have reverted that commit for today. =20
-> >
-> > I am still getting this failure.  The full error is:
-> >
-> > drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c: In function =
-'dc_stream_remove_writeback':
-> > drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c:527:83: error=
-: array subscript [0, 0] is outside array bounds of 'struct dc_writeback_in=
-fo[1]' [-Werror=3Darray-bounds]
-> >   527 |                                 stream->writeback_info[j] =3D s=
-tream->writeback_info[i];
-> >       |                                                             ~~~=
-~~~~~~~~~~~~~~~~~~~^~~
-> > In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dc.h:126=
-9,
-> >                  from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core=
-_types.h:29,
-> >                  from drivers/gpu/drm/amd/amdgpu/../display/dc/basics/d=
-c_common.h:29,
-> >                  from drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_=
-stream.c:27:
-> > drivers/gpu/drm/amd/amdgpu/../display/dc/dc_stream.h:241:34: note: whil=
-e referencing 'writeback_info'
-> >   241 |         struct dc_writeback_info writeback_info[MAX_DWB_PIPES];
-> >       |                                  ^~~~~~~~~~~~~~ =20
->=20
-> I'm not seeing it here, what gcc is this with?
+Add sanity check for ensuring that the data_size and valid_size fields
+are not larger than alloc_size field.
 
-I am using an x86_64 cross compiler hosted on ppc64le - gcc v11.2.0 (on
-Debian).
+Link: https://syzkaller.appspot.com/bug?extid=fa4648a5446460b7b963
+Reported-and-tested-by: syzbot+fa4648a5446460b7b963@syzkaller.appspotmail.com
+Fixes: (82cae269cfa95) fs/ntfs3: Add initialization of super block
+Signed-off-by: Abdun Nihaal <abdun.nihaal@gmail.com>
+---
+ fs/ntfs3/inode.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
---=20
-Cheers,
-Stephen Rothwell
+diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
+index e9cf00d14733..9c244029be75 100644
+--- a/fs/ntfs3/inode.c
++++ b/fs/ntfs3/inode.c
+@@ -132,6 +132,13 @@ static struct inode *ntfs_read_mft(struct inode *inode,
+ 	if (le16_to_cpu(attr->name_off) + attr->name_len > asize)
+ 		goto out;
+ 
++	if (attr->non_res) {
++		t64 = le64_to_cpu(attr->nres.alloc_size);
++		if (le64_to_cpu(attr->nres.data_size) > t64 ||
++		    le64_to_cpu(attr->nres.valid_size) > t64)
++			goto out;
++	}
++
+ 	switch (attr->type) {
+ 	case ATTR_STD:
+ 		if (attr->non_res ||
+-- 
+2.37.3
 
---Sig_/zn3cNZXJ4akLAJ9548KNlKz
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM7oxYACgkQAVBC80lX
-0GxCgwgAirX4hMjmK8WlBWOZCmyEx6ZfWt3FpSnRNI5RuL5GOSP/n7YCwjV7W4D/
-i9qtIOBy/d7DUc1wGOm0zzmVFxA7gTTVbDzVIR/HM8Ua+Z0VLsaX4HtNpqnRQKiH
-7YCTkzet6ZS5IuryLx+TGtdPdNvx+3U6b/alD1451o1D+gQAfiSMHBqEx0JFTvBE
-RMAAvce1RvIoKE2QMcjllgdUQOkHda2r0J2VChv6anK2WeLcfbGD0YFgvQP7B4P/
-5A09YflWT4c5/aToSwPpRD2wxpgRand7UB9D/1ces+R0aF1zH1Bi0HfNIezgcm8M
-qI1v4Xquw6YyBXKXfObTIj2bRyG/Rg==
-=jndg
------END PGP SIGNATURE-----
-
---Sig_/zn3cNZXJ4akLAJ9548KNlKz--
