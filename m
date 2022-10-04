@@ -2,72 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4B95F48FE
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 20:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4CF25F48FF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Oct 2022 20:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbiJDSDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 14:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
+        id S229607AbiJDSEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 14:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiJDSDB (ORCPT
+        with ESMTP id S229472AbiJDSEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 14:03:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DB0474C7;
-        Tue,  4 Oct 2022 11:03:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0DF4DB81B5E;
-        Tue,  4 Oct 2022 18:02:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59189C433C1;
-        Tue,  4 Oct 2022 18:02:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664906577;
-        bh=XB8wRP/Kj3AZw2HyVY3jFV+pQ3ygjqk2Qvvg0S28p2Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nav9wVIfPeRtCBRp+YN9/U4/MvUcoktehCWe2cndYL+6naMK00IdG8sYK0nLfO/u+
-         QQKHWzctjBoRohRnFkGbJXPq3l4Bj0vAHPQRWDkGfZHnvi6Vv/werM5FwDvQzg92iD
-         PXB4XjrBwd20mdL2SPD3tEBDXLf9STunkDVRrFuo=
-Date:   Tue, 4 Oct 2022 20:02:55 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
+        Tue, 4 Oct 2022 14:04:09 -0400
+Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CB6474C7
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 11:04:09 -0700 (PDT)
+Received: by mail-oo1-xc29.google.com with SMTP id r15-20020a4abf0f000000b004761c7e6be1so9291419oop.9
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 11:04:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=sor9D9i/EJpgjGPLpMubXbPXNL6NfcDkrHXBrZqrku4=;
+        b=etS61wv0tV5Tr5yGB26lMRJz5KF87CbWf8vsC0mcngDXaqkhSZKuaPi8OghfGOQLQj
+         aP98reDcR1aPBsiupOp8u3oTidiuNovXySlB1hshVQjrHYVtiJmk1WYMVamRA54IQTb6
+         359w1y6S03b8fDqbMY6dbwRQ8Nj6JfRjoQhMY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=sor9D9i/EJpgjGPLpMubXbPXNL6NfcDkrHXBrZqrku4=;
+        b=NdCp0pTi4rxxD7MRAYvOZw9BA2IgFgB8a9OS2UuSnorL6wXsKn9ugdNtfCq7Dl4+Tc
+         a+mF6l5+qZw9Smuem4x+HER0I7JotUC51+ZIs8i+RpDUXGXDvUNX5S/Q697aiXgHBeEu
+         eaiFIJbdk4bx9bhbfwaB21t8svbQdcDdbo8n2I4fF7lFbDwO8U3a/17BV4VYjlzLu9jr
+         UMwqQ3vC/qk4BcTxtjTTQVfFEaW8/oLV+tJHJo4SMt3z5wcb6U9dxDV8QJeVGGPV2Qqk
+         +Ss5hb797EWuNDqWO1JlmqZxvpPdbBwecOBdnQifMGm3xuBmJ3kxgetwYa9VXf0ibRzE
+         xmRg==
+X-Gm-Message-State: ACrzQf0iLsacb0lzU1ZFaaTbode5xSoGuvFn/12VHd+36HgV8K/kHKX3
+        Z5myQmVvGGec8LyTgCNUg+qV9/tCRj4LHg==
+X-Google-Smtp-Source: AMsMyM6N1r7azXX++X/RGAs5iwrvNe7F3fmvjoZVLk6nikprxAq2HdX79Kuu0htDSYq9fDfijhAbng==
+X-Received: by 2002:a9d:6004:0:b0:660:cd92:f891 with SMTP id h4-20020a9d6004000000b00660cd92f891mr1105400otj.94.1664906646404;
+        Tue, 04 Oct 2022 11:04:06 -0700 (PDT)
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com. [209.85.167.176])
+        by smtp.gmail.com with ESMTPSA id e4-20020a05683013c400b00655dda40f54sm3145745otq.78.2022.10.04.11.04.05
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Oct 2022 11:04:05 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id s192so987216oie.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 11:04:05 -0700 (PDT)
+X-Received: by 2002:aca:b957:0:b0:351:4ecf:477d with SMTP id
+ j84-20020acab957000000b003514ecf477dmr469103oif.126.1664906645054; Tue, 04
+ Oct 2022 11:04:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info> <20221004175354.bfvg3vhfqch35ib5@meerkat.local>
+In-Reply-To: <20221004175354.bfvg3vhfqch35ib5@meerkat.local>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 4 Oct 2022 11:03:48 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi7HyGxs2Ad-UiF-3qeLJnPc_WGKOVqYqaTjrbRig0V9Q@mail.gmail.com>
+Message-ID: <CAHk-=wi7HyGxs2Ad-UiF-3qeLJnPc_WGKOVqYqaTjrbRig0V9Q@mail.gmail.com>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla blues"
 To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
 Cc:     Thorsten Leemhuis <linux@leemhuis.info>,
         "Artem S. Tashkinov" <aros@gmx.com>,
         ksummit <ksummit-discuss@lists.linuxfoundation.org>,
         workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
         "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-Message-ID: <Yzx1T05Ut0of55KY@kroah.com>
-References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
- <20221004175354.bfvg3vhfqch35ib5@meerkat.local>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221004175354.bfvg3vhfqch35ib5@meerkat.local>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 01:53:54PM -0400, Konstantin Ryabitsev wrote:
-> As I have stated multiple times, the hard part will be keeping a team of
-> people who are willing to do the bug triage work, but maybe we can start with
-> Greg KH using his intern funds to hire someone (assuming he's not already
-> using these funds for someone to help him with all the other tasks).
+On Tue, Oct 4, 2022 at 10:53 AM Konstantin Ryabitsev
+<konstantin@linuxfoundation.org> wrote:
+>
+> 2. Create and maintain a mapping from MAINTAINER subsystem entries to
+>    Product/Component categories in Bugzilla (the scheme to be established).
 
-I have no interns anymore, and the ones that the LF does have in the
-kernel program are using all of the remaining budget that we have, so
-much so that we have a whole bunch of unpaid ones at the same time as we
-have so many people applying for the process.
+It's probably worth asking the 0day people what they do.
 
-So I don't think you can use those funds, they are all spoken for,
-sorry.
+Maybe they do it all manually and have no real helping infrastructure,
+but I see emails from them that often (but certainly not always) seem
+to get the right people involved.
 
-greg k-h
+And while the MAINTAINER file is useful for a fiel mapping, I'm not
+convinced it's all that useful for the "product/component category"
+mapping, because I doubt people will actually fill that in well (and
+reliably) enough.
+
+With actual bisection data, it's fairly easy (get the emails from the
+commit that got bisected). But things like "use the backtrace in the
+oops to figure out who to add to participants" is likely a bit more of
+a "use clever heuristics" kind of thing.
+
+Anyway, I do think that some kind of automation would be really good,
+at least for reports that have bisection information or backtraces in
+them. Without automation, people _will_ be overwhelmed on the first
+level response to bug reports (ie the "try to figure out who to bring
+in" front).
+
+But if the automation is too stupid, people will start ignoring the
+report emails just on the assumption that it got thihngs wrong.
+
+Of course, if the automation is really solid enough, I think it should
+work on lore.kernel.org, not on just a bugzilla thing.
+
+             Linus
