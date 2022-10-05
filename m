@@ -2,48 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75C25F4EFD
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 06:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7CB5F4F05
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 06:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiJEEDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 00:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58634 "EHLO
+        id S229807AbiJEETP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 00:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiJEEDK (ORCPT
+        with ESMTP id S229539AbiJEETL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 00:03:10 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323F438A1A;
-        Tue,  4 Oct 2022 21:03:08 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2954346Y016346
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 5 Oct 2022 00:03:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1664942586; bh=N3HFCZ/oTNqAcXJpI/zlIBM/Py4SJWDHmTVs4uW72as=;
-        h=Date:From:To:Cc:Subject;
-        b=YtdieY1OT+GpFR9CCm1wXoWM8o6qvgF85ARYUvrbOlJCwLMMWFzbaQmqPp6SlA18y
-         eYsfqSisQFZ7zLTulNLklA6hGdeVc6lm7gsQua9eX7gGFyf8NlwFr4bFhyms+Ksg/b
-         lXucOf4DDAylHROKx+Kp6xzyW3w2yIrG4v8fOOYWiB3lPV6cwPsB1y0uSmA+XYLJ/p
-         wWd96pWOo65engwcnTMFDkNJwWUgoEZ8hO7De/h4D9DGcGEAsMTyn3ekdftsuMenDx
-         GHjgrH4/sA9rj/7lZGjABt+0fX3ym63f8uq7rkgDum0TtNPyeIDF2cwMjCepGGAIae
-         xQLr3+IiTXcgQ==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 66CE815C35F2; Wed,  5 Oct 2022 00:03:04 -0400 (EDT)
-Date:   Wed, 5 Oct 2022 00:03:04 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org
-Subject: [GIT PULL] ext4 changes for 6.1
-Message-ID: <Yz0B+L+vHKIARzKj@mit.edu>
+        Wed, 5 Oct 2022 00:19:11 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E3965279;
+        Tue,  4 Oct 2022 21:19:10 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id v10-20020a17090a634a00b00205e48cf845so626053pjs.4;
+        Tue, 04 Oct 2022 21:19:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=JqYaSs8nnjKHk4wZ+yCo6aZO+FDfi0LL5kl9tHDj7j8=;
+        b=CTFOmMqHKnJPrPJnfFZkFWSrGvYDUeHw5orJcik7dTxKZ4FWH/0cX0PKKWFDr8SaGG
+         DpEBF1wLzffxmmTs9mvQBKnXsp2CxOAsVMlPjXmWAjACN4bZwZ6PX5PO53Iz4ofR3XZq
+         3qenV/LYxFaLuDxqSDH/7/gwgnlhXFsV+dJ08tDy8y42q5pBvFYj1hUL4AT6eZYFtaax
+         zYKAgem7iYTC4gk5OANoklvycbtf2J94WAXdU608Z5jqm3P0E2cI0VGrbYF7WXWibW7s
+         lf0IirVcS03jZbYI5JnryvFTq+hUUBJ4fzvtXJDwPMRUONqiQb+LfA0iza+BOEeg0ttH
+         QPew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=JqYaSs8nnjKHk4wZ+yCo6aZO+FDfi0LL5kl9tHDj7j8=;
+        b=D/b+iDE8m8tukTF6UAWo5TzLPXpZAHl1MqNd/DxPFAEFIH7hoXncEVxuKDTprcebco
+         MzG6clzyjO7cVtWmeKKU+CrzwTxqMq+7d7LY1ztfBbcuKthmcOQYVWGZ5S36QeMBtNPD
+         XZe1Gyzbc+wpdpanjSS3KUGmUHDOu6piMaD+oxNWDlsfWBCSW+3tcTAjCRRO6G8LN2yu
+         Z3kN0k6q5LMP7qM3XpqCFLp4UpquYwH1C1uTULr1S44K82HonxjDaZU23SXrlTYSh9Rw
+         U9QW1wSwZ2VIgiOk/ba/HGJiaOaImqpRLyViPD6WoufIY5G+/43pIZ45V+yEd3ru1nbM
+         9W1g==
+X-Gm-Message-State: ACrzQf3sDmNMvP3R3zqLCHCBAoBbF380rkaiEC0X8/sPZt9SkIHTUxae
+        7d64r06Nikp2I2E1VrU5h1E=
+X-Google-Smtp-Source: AMsMyM6pF3OTw2eCu6EvKnL05epDKzZm0fc+COF4b5oBhaPgBWskpjcYprU3v0FQYxWiHZuSJUV8hg==
+X-Received: by 2002:a17:90b:1a92:b0:20a:f34a:2b9 with SMTP id ng18-20020a17090b1a9200b0020af34a02b9mr40921pjb.74.1664943550031;
+        Tue, 04 Oct 2022 21:19:10 -0700 (PDT)
+Received: from T590 ([117.136.79.112])
+        by smtp.gmail.com with ESMTPSA id j23-20020a63cf17000000b0041cd5ddde6fsm9241347pgg.76.2022.10.04.21.19.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 21:19:09 -0700 (PDT)
+Date:   Wed, 5 Oct 2022 12:18:55 +0800
+From:   Ming Lei <tom.leiming@gmail.com>
+To:     Stefan Hajnoczi <stefanha@gmail.com>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>, io-uring@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kirill Tkhai <kirill.tkhai@openvz.org>,
+        Manuel Bentele <development@manuel-bentele.de>,
+        qemu-devel@nongnu.org, Kevin Wolf <kwolf@redhat.com>,
+        rjones@redhat.com, Xie Yongji <xieyongji@bytedance.com>,
+        "Denis V. Lunev" <den@openvz.org>,
+        Stefano Garzarella <sgarzare@redhat.com>
+Subject: Re: ublk-qcow2: ublk-qcow2 is available
+Message-ID: <Yz0FrzJVZTqlQtJ5@T590>
+References: <Yza1u1KfKa7ycQm0@T590>
+ <Yzs9xQlVuW41TuNC@fedora>
+ <YzwARuAZdaoGTUfP@T590>
+ <CAJSP0QXVK=wUy_JgJ9NmNMtKTRoRX0MwOZUuFWU-1mVWWKij8A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <CAJSP0QXVK=wUy_JgJ9NmNMtKTRoRX0MwOZUuFWU-1mVWWKij8A@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,187 +79,224 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit a078dff870136090b5779ca2831870a6c5539d36:
+On Tue, Oct 04, 2022 at 09:53:32AM -0400, Stefan Hajnoczi wrote:
+> On Tue, 4 Oct 2022 at 05:44, Ming Lei <tom.leiming@gmail.com> wrote:
+> >
+> > On Mon, Oct 03, 2022 at 03:53:41PM -0400, Stefan Hajnoczi wrote:
+> > > On Fri, Sep 30, 2022 at 05:24:11PM +0800, Ming Lei wrote:
+> > > > ublk-qcow2 is available now.
+> > >
+> > > Cool, thanks for sharing!
+> > >
+> > > >
+> > > > So far it provides basic read/write function, and compression and snapshot
+> > > > aren't supported yet. The target/backend implementation is completely
+> > > > based on io_uring, and share the same io_uring with ublk IO command
+> > > > handler, just like what ublk-loop does.
+> > > >
+> > > > Follows the main motivations of ublk-qcow2:
+> > > >
+> > > > - building one complicated target from scratch helps libublksrv APIs/functions
+> > > >   become mature/stable more quickly, since qcow2 is complicated and needs more
+> > > >   requirement from libublksrv compared with other simple ones(loop, null)
+> > > >
+> > > > - there are several attempts of implementing qcow2 driver in kernel, such as
+> > > >   ``qloop`` [2], ``dm-qcow2`` [3] and ``in kernel qcow2(ro)`` [4], so ublk-qcow2
+> > > >   might useful be for covering requirement in this field
+> > > >
+> > > > - performance comparison with qemu-nbd, and it was my 1st thought to evaluate
+> > > >   performance of ublk/io_uring backend by writing one ublk-qcow2 since ublksrv
+> > > >   is started
+> > > >
+> > > > - help to abstract common building block or design pattern for writing new ublk
+> > > >   target/backend
+> > > >
+> > > > So far it basically passes xfstest(XFS) test by using ublk-qcow2 block
+> > > > device as TEST_DEV, and kernel building workload is verified too. Also
+> > > > soft update approach is applied in meta flushing, and meta data
+> > > > integrity is guaranteed, 'make test T=qcow2/040' covers this kind of
+> > > > test, and only cluster leak is reported during this test.
+> > > >
+> > > > The performance data looks much better compared with qemu-nbd, see
+> > > > details in commit log[1], README[5] and STATUS[6]. And the test covers both
+> > > > empty image and pre-allocated image, for example of pre-allocated qcow2
+> > > > image(8GB):
+> > > >
+> > > > - qemu-nbd (make test T=qcow2/002)
+> > >
+> > > Single queue?
+> >
+> > Yeah.
+> >
+> > >
+> > > >     randwrite(4k): jobs 1, iops 24605
+> > > >     randread(4k): jobs 1, iops 30938
+> > > >     randrw(4k): jobs 1, iops read 13981 write 14001
+> > > >     rw(512k): jobs 1, iops read 724 write 728
+> > >
+> > > Please try qemu-storage-daemon's VDUSE export type as well. The
+> > > command-line should be similar to this:
+> > >
+> > >   # modprobe virtio_vdpa # attaches vDPA devices to host kernel
+> >
+> > Not found virtio_vdpa module even though I enabled all the following
+> > options:
+> >
+> >         --- vDPA drivers
+> >           <M>   vDPA device simulator core
+> >           <M>     vDPA simulator for networking device
+> >           <M>     vDPA simulator for block device
+> >           <M>   VDUSE (vDPA Device in Userspace) support
+> >           <M>   Intel IFC VF vDPA driver
+> >           <M>   Virtio PCI bridge vDPA driver
+> >           <M>   vDPA driver for Alibaba ENI
+> >
+> > BTW, my test environment is VM and the shared data is done in VM too, and
+> > can virtio_vdpa be used inside VM?
+> 
+> I hope Xie Yongji can help explain how to benchmark VDUSE.
+> 
+> virtio_vdpa is available inside guests too. Please check that
+> VIRTIO_VDPA ("vDPA driver for virtio devices") is enabled in "Virtio
+> drivers" menu.
+> 
+> >
+> > >   # modprobe vduse
+> > >   # qemu-storage-daemon \
+> > >       --blockdev file,filename=test.qcow2,cache.direct=of|off,aio=native,node-name=file \
+> > >       --blockdev qcow2,file=file,node-name=qcow2 \
+> > >       --object iothread,id=iothread0 \
+> > >       --export vduse-blk,id=vduse0,name=vduse0,num-queues=$(nproc),node-name=qcow2,writable=on,iothread=iothread0
+> > >   # vdpa dev add name vduse0 mgmtdev vduse
+> > >
+> > > A virtio-blk device should appear and xfstests can be run on it
+> > > (typically /dev/vda unless you already have other virtio-blk devices).
+> > >
+> > > Afterwards you can destroy the device using:
+> > >
+> > >   # vdpa dev del vduse0
+> > >
+> > > >
+> > > > - ublk-qcow2 (make test T=qcow2/022)
+> > >
+> > > There are a lot of other factors not directly related to NBD vs ublk. In
+> > > order to get an apples-to-apples comparison with qemu-* a ublk export
+> > > type is needed in qemu-storage-daemon. That way only the difference is
+> > > the ublk interface and the rest of the code path is identical, making it
+> > > possible to compare NBD, VDUSE, ublk, etc more precisely.
+> >
+> > Maybe not true.
+> >
+> > ublk-qcow2 uses io_uring to handle all backend IO(include meta IO) completely,
+> > and so far single io_uring/pthread is for handling all qcow2 IOs and IO
+> > command.
+> 
+> qemu-nbd doesn't use io_uring to handle the backend IO, so we don't
 
-  ext4: fixup possible uninitialized variable access in ext4_mb_choose_next_group_cr1() (2022-09-26 13:21:05 -0400)
+I tried to use it via --aio=io_uring for setting up qemu-nbd, but not succeed.
 
-are available in the Git repository at:
+> know whether the benchmark demonstrates that ublk is faster than NBD,
+> that the ublk-qcow2 implementation is faster than qemu-nbd's qcow2,
+> whether there are miscellaneous implementation differences between
+> ublk-qcow2 and qemu-nbd (like using the same io_uring context for both
+> ublk and backend IO), or something else.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus
+The theory shouldn't be too complicated:
 
-for you to fetch changes up to 1b45cc5c7b920fd8bf72e5a888ec7abeadf41e09:
+1) io uring passthough(pt) communication is fast than socket, and io command
+is carried over io_uring pt commands, and should be fast than virio
+communication too.
 
-  ext4: fix potential out of bound read in ext4_fc_replay_scan() (2022-09-30 23:46:54 -0400)
+2) io uring io handling is fast than libaio which is taken in the
+test on qemu-nbd, and all qcow2 backend io(include meta io) is handled
+by io_uring.
 
-----------------------------------------------------------------
-The first two changes that involve files outside of fs/ext4:
+https://github.com/ming1/ubdsrv/blob/master/tests/common/qcow2_common
 
-- submit_bh() can never return an error, so change it to return void,
-  and remove the unused checks from its callers
+3) ublk uses one single io_uring to handle all io commands and qcow2
+backend IOs, so batching handling is common, and it is easy to see
+dozens of IOs/io commands handled in single syscall, or even more.
 
-- fix I_DIRTY_TIME handling so it will be set even if the inode
-  already has I_DIRTY_INODE
+> 
+> I'm suggesting measuring changes to just 1 variable at a time.
+> Otherwise it's hard to reach a conclusion about the root cause of the
+> performance difference. Let's learn why ublk-qcow2 performs well.
 
-Performance:
+Turns out the latest Fedora 37-beta doesn't support vdpa yet, so I built
+qemu from the latest github tree, and finally it starts to work. And test kernel
+is v6.0 release.
 
-- Always enable i_version counter (as btrfs and xfs already do).
-  Remove some uneeded i_version bumps to avoid unnecessary nfs cache
-  invalidations.
+Follows the test result, and all three devices are setup as single
+queue, and all tests are run in single job, still done in one VM, and
+the test images are stored on XFS/virito-scsi backed SSD.
 
-- Wake up journal waters in FIFO order, to avoid some journal users
-  from not getting a journal handle for an unfairly long time.
+The 1st group tests all three block device which is backed by empty
+qcow2 image.
 
-- In ext4_write_begin() allocate any necessary buffer heads before
-  starting the journal handle.
+The 2nd group tests all the three block devices backed by pre-allocated
+qcow2 image.
 
-- Don't try to prefetch the block allocation bitmaps for a read-only
-  file system.
+Except for big sequential IO(512K), there is still not small gap between
+vdpa-virtio-blk and ublk.
 
-Bug Fixes:
+1. run fio on block device over empty qcow2 image
+1) qemu-nbd
+running qcow2/001
+run perf test on empty qcow2 image via nbd
+	fio (nbd(/mnt/data/ublk_null_8G_nYbgF.qcow2), libaio, bs 4k, dio, hw queues:1)...
+	randwrite: jobs 1, iops 8549
+	randread: jobs 1, iops 34829
+	randrw: jobs 1, iops read 11363 write 11333
+	rw(512k): jobs 1, iops read 590 write 597
 
-- Fix a number of fast commit bugs, including resources leaks and out
-  of bound references in various error handling paths and/or if the fast
-  commit log is corrupted.
 
-- Avoid stopping the online resize early when expanding a file system
-  which is less than 16TiB to a size greater than 16TiB.
+2) ublk-qcow2
+running qcow2/021
+run perf test on empty qcow2 image via ublk
+	fio (ublk/qcow2( -f /mnt/data/ublk_null_8G_s761j.qcow2), libaio, bs 4k, dio, hw queues:1, uring_comp: 0, get_data: 0).
+	randwrite: jobs 1, iops 16086
+	randread: jobs 1, iops 172720
+	randrw: jobs 1, iops read 35760 write 35702
+	rw(512k): jobs 1, iops read 1140 write 1149
 
-- Fix apparent metadata corruption caused by a race with a metadata
-  buffer head getting migrated while it was trying to be read.
+3) vdpa-virtio-blk
+running debug/test_dev
+run io test on specified device
+	fio (vdpa(/dev/vdc), libaio, bs 4k, dio, hw queues:1)...
+	randwrite: jobs 1, iops 8626
+	randread: jobs 1, iops 126118
+	randrw: jobs 1, iops read 17698 write 17665
+	rw(512k): jobs 1, iops read 1023 write 1031
 
-- Mark the lazy initialization thread freezable to prevent suspend
-  failures.
 
-- Other miscellaneous bug fixes.
+2. run fio on block device over pre-allocated qcow2 image
+1) qemu-nbd
+running qcow2/002
+run perf test on pre-allocated qcow2 image via nbd
+	fio (nbd(/mnt/data/ublk_data_8G_sc0SB.qcow2), libaio, bs 4k, dio, hw queues:1)...
+	randwrite: jobs 1, iops 21439
+	randread: jobs 1, iops 30336
+	randrw: jobs 1, iops read 11476 write 11449
+	rw(512k): jobs 1, iops read 718 write 722
 
-Cleanups:
+2) ublk-qcow2
+running qcow2/022
+run perf test on pre-allocated qcow2 image via ublk
+	fio (ublk/qcow2( -f /mnt/data/ublk_data_8G_yZiaJ.qcow2), libaio, bs 4k, dio, hw queues:1, uring_comp: 0, get_data: 0).
+	randwrite: jobs 1, iops 98757
+	randread: jobs 1, iops 110246
+	randrw: jobs 1, iops read 47229 write 47161
+	rw(512k): jobs 1, iops read 1416 write 1427
 
-- Break up the incredibly long ext4_full_super() function by
-  refactoring to move code into more understandable, smaller
-  functions.
+3) vdpa-virtio-blk
+running debug/test_dev
+run io test on specified device
+	fio (vdpa(/dev/vdc), libaio, bs 4k, dio, hw queues:1)...
+	randwrite: jobs 1, iops 47317
+	randread: jobs 1, iops 74092
+	randrw: jobs 1, iops read 27196 write 27234
+	rw(512k): jobs 1, iops read 1447 write 1458
 
-- Remove the deprecated (and ignored) noacl and nouser_attr mount
-  option.
 
-- Factor out some common code in fast commit handling.
-
-- Other miscellaneous cleanups.
-
-----------------------------------------------------------------
-Andrew Perepechko (1):
-      jbd2: wake up journal waiters in FIFO order, not LIFO
-
-Baokun Li (1):
-      ext4: fix null-ptr-deref in ext4_write_info
-
-Eric Whitney (1):
-      ext4: minor defrag code improvements
-
-Gaosheng Cui (1):
-      ext4: remove ext4_inline_data_fiemap() declaration
-
-Guoqing Jiang (1):
-      ext4: remove redundant checking in ext4_ioctl_checkpoint
-
-Jan Kara (3):
-      ext4: avoid crash when inline data creation follows DIO write
-      ext4: fix check for block being out of directory size
-      mbcache: Avoid nesting of cache->c_list_lock under bit locks
-
-Jason Yan (16):
-      ext4: goto right label 'failed_mount3a'
-      ext4: remove cantfind_ext4 error handler
-      ext4: factor out ext4_set_def_opts()
-      ext4: factor out ext4_handle_clustersize()
-      ext4: factor out ext4_fast_commit_init()
-      ext4: factor out ext4_inode_info_init()
-      ext4: factor out ext4_encoding_init()
-      ext4: factor out ext4_init_metadata_csum()
-      ext4: factor out ext4_check_feature_compatibility()
-      ext4: factor out ext4_geometry_check()
-      ext4: factor out ext4_group_desc_init() and ext4_group_desc_free()
-      ext4: factor out ext4_load_and_init_journal()
-      ext4: factor out ext4_journal_data_mode_check()
-      ext4: unify the ext4 super block loading operation
-      ext4: remove useless local variable 'blocksize'
-      ext4: move DIOREAD_NOLOCK setting to ext4_set_def_opts()
-
-Jeff Layton (2):
-      ext4: unconditionally enable the i_version counter
-      ext4: fix i_version handling in ext4
-
-Jerry Lee 李修賢 (1):
-      ext4: continue to expand file system when the target size doesn't reach
-
-Jinke Han (1):
-      ext4: place buffer head allocation before handle start
-
-Josh Triplett (1):
-      ext4: don't run ext4lazyinit for read-only filesystems
-
-Lalith Rajendran (1):
-      ext4: make ext4_lazyinit_thread freezable
-
-Lukas Czerner (2):
-      ext4: don't increase iversion counter for ea_inodes
-      fs: record I_DIRTY_TIME even if inode already has I_DIRTY_INODE
-
-Ritesh Harjani (IBM) (4):
-      jbd2: drop useless return value of submit_bh
-      fs/ntfs: drop useless return value of submit_bh from ntfs_submit_bh_for_read
-      fs/buffer: drop useless return value of submit_bh
-      fs/buffer: make submit_bh & submit_bh_wbc return type as void
-
-Yang Xu (1):
-      ext4: remove deprecated noacl/nouser_xattr options
-
-Ye Bin (14):
-      jbd2: fix potential buffer head reference count leak
-      jbd2: fix potential use-after-free in jbd2_fc_wait_bufs
-      ext4: fix miss release buffer head in ext4_fc_write_inode
-      ext4: factor out ext4_fc_disabled()
-      ext4: adjust fast commit disable judgement order in ext4_fc_track_inode
-      jbd2: add miss release buffer head in fc_do_one_pass()
-      ext4: fix potential memory leak in ext4_fc_record_modified_inode()
-      ext4: fix potential memory leak in ext4_fc_record_regions()
-      ext4: update 'state->fc_regions_size' after successful memory allocation
-      ext4: remove unnecessary drop path references in mext_check_coverage()
-      ext4: factor out ext4_free_ext_path()
-      ext4: introduce EXT4_FC_TAG_BASE_LEN helper
-      ext4: factor out ext4_fc_get_tl()
-      ext4: fix potential out of bound read in ext4_fc_replay_scan()
-
-Zhang Yi (1):
-      ext4: ext4_read_bh_lock() should submit IO if the buffer isn't uptodate
-
-Zhihao Cheng (1):
-      ext4: fix dir corruption when ext4_dx_add_entry() fails
-
- Documentation/filesystems/vfs.rst |    3 +
- fs/buffer.c                       |   23 +-
- fs/ext4/ext4.h                    |    5 +-
- fs/ext4/extents.c                 |  107 ++--
- fs/ext4/extents_status.c          |    3 +-
- fs/ext4/fast_commit.c             |  210 +++++---
- fs/ext4/fast_commit.h             |    3 +
- fs/ext4/file.c                    |    6 +
- fs/ext4/inode.c                   |   17 +-
- fs/ext4/ioctl.c                   |    7 +-
- fs/ext4/migrate.c                 |    3 +-
- fs/ext4/move_extent.c             |   26 +-
- fs/ext4/namei.c                   |   17 +-
- fs/ext4/resize.c                  |    2 +-
- fs/ext4/super.c                   | 1253 ++++++++++++++++++++++++--------------------
- fs/ext4/verity.c                  |    6 +-
- fs/ext4/xattr.c                   |    1 +
- fs/fs-writeback.c                 |   37 +-
- fs/jbd2/commit.c                  |   12 +-
- fs/jbd2/journal.c                 |   19 +-
- fs/jbd2/recovery.c                |    1 +
- fs/jbd2/transaction.c             |    6 +-
- fs/mbcache.c                      |   17 +-
- fs/ntfs/file.c                    |    4 +-
- fs/xfs/xfs_super.c                |   10 +-
- include/linux/buffer_head.h       |    2 +-
- include/linux/fs.h                |    9 +-
- 27 files changed, 998 insertions(+), 811 deletions(-)
+thanks,
+Ming
