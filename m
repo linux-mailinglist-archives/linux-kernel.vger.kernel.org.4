@@ -2,127 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBDF35F59DC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 20:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE135F59E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 20:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiJES2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 14:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
+        id S229724AbiJES3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 14:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbiJES2m (ORCPT
+        with ESMTP id S230423AbiJES3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 14:28:42 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B7F7F27E
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 11:28:40 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id m15so24126772edb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 11:28:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=FBEfO1rQUq7kj71Ct0f//FmMkbcVfUhb6nYeOsxTaRw=;
-        b=O99hsOVXQr2ervEPtCirAL8UoEUshuvpPpQcBU32Kb0SU4lrUDoWMEMvlAGYISluhA
-         uSOnOS6bha1OdgG0iu8G6IoLCb5OpNTn07J7x1Hj/9BhFwbl6ujEQt0cEzRae5sn900F
-         SJ/WUzgYocwDLteWgSuBEsO2OdPwDekm4YOlBfTrJ/bKNG11IE/D0sptwIwiPvsGkz18
-         fS61tvdU3o87+IuwXhM7srDCu0Z4tEpJgbSAeRqgWlDLjM1KuC2jBtuYTFnbGbAwGpJH
-         jrGrtWgTUS9PaHPHYFYaWSijACplWf8VveHi0eKfTyLX5wlpKgNBo3Y5HCpMOMa5yjeu
-         2wYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=FBEfO1rQUq7kj71Ct0f//FmMkbcVfUhb6nYeOsxTaRw=;
-        b=ilR2cc9DD8Zaui+T8P0gqlh6LsHz9vPEISU6aEi7QICwNU7F3EN3HFEDefxeMsUlfZ
-         macfAa6AJVq1++rckhze0t4JYViiUBnmLyAgcE2gOoFXF+JWVjZ3VGPYHalfQA0g7/Qd
-         cMUqBXeYLZJL4jsrx+vQq6se1KKPVXkuTyxdhdYQ+pajBqTQ6/6TVDSMWgmz/B6Uc7yV
-         96UwRz7wBDBPL8ds+16sPL6113U0l5m9Jll0AaG4PgjtMKIq9yGuvNF+pXyd1QlhUVL6
-         rf1JOko77HjY9xUsiKG+zrVRCCGFSnPDTPVKdyhRtMzL0SxgzurJND1f5Ed/SeUoXrUc
-         /rIw==
-X-Gm-Message-State: ACrzQf0WxZ9pIOn5p+PqT+5juiv97Sr+jWJuLxJoZz6ED5fxurmAwxw+
-        8DMA5zR+vG1rkWY3eukIQ3ccZgHvAAmbdvBTdAa27Q==
-X-Google-Smtp-Source: AMsMyM7LeAex/s852ufNxcEBQjp+6mvRJR3gI6My56jq3iz4cu9l3F6UcZ29fYLW7iVRAZuhjzy8IPA5BEQopgbiFD4=
-X-Received: by 2002:a05:6402:5cb:b0:452:e416:2bc4 with SMTP id
- n11-20020a05640205cb00b00452e4162bc4mr994771edx.114.1664994518712; Wed, 05
- Oct 2022 11:28:38 -0700 (PDT)
+        Wed, 5 Oct 2022 14:29:45 -0400
+Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984C3DEDD
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 11:29:39 -0700 (PDT)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 789713EED5;
+        Wed,  5 Oct 2022 20:29:37 +0200 (CEST)
+Date:   Wed, 5 Oct 2022 20:29:35 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        Lyude Paul <lyude@redhat.com>
+Subject: Re: [PATCH 5/5] drm/dsc: Prevent negative BPG offsets from shadowing
+ adjacent bitfields
+Message-ID: <20221005182935.7xdp5axnags5obu6@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Sean Paul <sean@poorly.run>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        Lyude Paul <lyude@redhat.com>
+References: <20221001190807.358691-1-marijn.suijten@somainline.org>
+ <20221001190807.358691-6-marijn.suijten@somainline.org>
+ <55d7e20b-79cd-ece6-b643-8b542beb7474@quicinc.com>
+ <20221004215745.zdfvulqx4exlujgk@SoMainline.org>
+ <1a5ed43e-914e-079d-96bf-c9e3912a9473@quicinc.com>
+ <20221004223940.stfsyvubx7ecd3a3@SoMainline.org>
+ <57732804-9eb1-2f92-f2cd-0ae66f3e28cd@quicinc.com>
 MIME-Version: 1.0
-References: <20221005175149.611068-1-mark.rutland@arm.com>
-In-Reply-To: <20221005175149.611068-1-mark.rutland@arm.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Wed, 5 Oct 2022 11:28:27 -0700
-Message-ID: <CAGS_qxok+UigJqoROJO2ryUXAWet5V8FL62cn0mr1iuporLu6g@mail.gmail.com>
-Subject: Re: [PATCH] kunit: log numbers in decimal and hex
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, brendan.higgins@linux.dev,
-        davidgow@google.com, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <57732804-9eb1-2f92-f2cd-0ae66f3e28cd@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 5, 2022 at 10:52 AM Mark Rutland <mark.rutland@arm.com> wrote:
->
-> When KUNIT_EXPECT_EQ() or KUNIT_ASSERT_EQ() log a failure, they log the
-> two values being compared, with numerical values logged in decimal.
->
-> In some cases, decimal output is painful to consume, and hexadecimal
-> output would be more helpful. For example, this is the case for tests
-> I'm currently developing for the arm64 insn encoding/decoding code,
-> where comparing two 32-bit instruction opcodes results in output such
-> as:
->
-> |  # test_insn_add_shifted_reg: EXPECTATION FAILED at arch/arm64/lib/test_insn.c:2791
-> |  Expected obj_insn == gen_insn, but
-> |      obj_insn == 2332164128
-> |      gen_insn == 1258422304
->
-> To make this easier to consume, this patch logs the values in both
-> decimal and hexadecimal:
->
-> |  # test_insn_add_shifted_reg: EXPECTATION FAILED at arch/arm64/lib/test_insn.c:2791
-> |  Expected obj_insn == gen_insn, but
-> |      obj_insn == 2332164128 (0x8b020020)
-> |      gen_insn == 1258422304 (0x4b020020)
->
-> As can be seen from the example, having hexadecimal makes it
-> significantly easier for a human to spot which specific bits are
-> incorrect.
->
-> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-> Cc: Brendan Higgins <brendan.higgins@linux.dev>
-> Cc: David Gow <davidgow@google.com>
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: kunit-dev@googlegroups.com
+On 2022-10-05 08:33:23, Abhinav Kumar wrote:
+[..]
+> hmm .... downstream seems to have the & just before the reg write
+> 
+> https://git.codelinaro.org/clo/la/platform/vendor/opensource/display-drivers/-/blob/DISPLAY.LA.2.0.r1-08000-WAIPIO.0/msm/sde/sde_hw_dsc_1_2.c#L310
 
-Acked-by: Daniel Latypov <dlatypov@google.com>
+https://git.codelinaro.org/clo/la/platform/vendor/opensource/display-drivers/-/blob/DISPLAY.LA.2.0.r1-08000-WAIPIO.0/msm/sde/sde_hw_dsc.c#L156
 
-This is definitely something that has irked me as well.
+The reference code for NON-v1.2 doesn't do this here, but you already
+confirmed by the docs - and I confirmed by testing a set of size #1 -
+that the register is fine with having only 6 bits.
 
-I vaguely feel like this can clutter up the output for things that are
-just ints, e.g.
-    Expected len == 0, but
-        len == 2 (0x2)
+> But yes, we can move this to the dsi calculation to match what others 
+> are doing. I am fine with that.
 
-But I can't think of any suggestions that are actually worth doing [1].
-And since this feels like a common enough case, I don't think the
-existing workarounds [2] are sufficiently ergonomic.
+Thanks, done that in v2.
 
-So I think always showing the hex makes sense.
+> > [..]
+> 
+> Even I wasnt. When I was reviewing this series, it seemed like a valid 
+> change so I checked the latest downstream code like i always do to see 
+> whether and how this is handled and found that these issues were 
+> addressed there so thought i would update that here.
 
-[1]
-E.g. only emitting hex when the number in question is >16, but that
-feels too magic (also needs more if's).
-E.g. adding in a macro argument/separate set of macros that always format in hex
+Thanks for confirming that it was done in the correct/same way :)
 
-[2] can use these to coerce hex output
-         KUNIT_EXPECT_EQ_MSG(test, obj_insn, gen_insn, "obj=0x%llx, gen=0x%llx",
-                             obj_insn, gen_insn);
-         KUNIT_EXPECT_PTR_EQ(test, obj_insn, gen_insn);
+> > [..]
+> Its not really parallel development OR competing drivers.
+> The design of these features downstream (not just DSC but many others) 
+> is quite different because some of the downstream designs wont get 
+> accepted upstream as its tightly coupled with our 
+> compositor/device-tree. Thats where we are slowly trying to implement 
+> these in an upstream compatible way.
+
+But this is what it feels like.
+
+To me this sounds like downstream is more of a staging / prototyping
+area that is actively used in production, while the driver
+implementation is fleshed out and slowly brought to mainline in a
+careful and controlled manner.
+
+That's not a bad thing, but it does mean that mainline always lags
+behind in terms of features and hardware support.  At least I'm glad
+to hear that downstream is slowly using more DRM primitives, and the
+driver is becoming more digestible as well.
+
+> BTW, that being said. Its not always the case that every issue seen 
+> upstream has already been fixed downstream. In fact, on some occasions 
+> we found something fixed in upstream in a better way and ported them 
+> downstream too.
+
+I wasn't expecting anything else, as different drivers have inevitably
+different details and different bugs.  The issues this series fixes
+weren't applicable to the downstream kernel because it (at the time)
+wasn't even using this drm_dsc_config struct with different semantics.
+Regardless, it's good to hear that fixes are transplanted in both ways
+even if it does mean extra overhead maintaining and keeping tabs on two
+drivers at once.
+
+- Marijn
