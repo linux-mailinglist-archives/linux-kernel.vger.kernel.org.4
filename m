@@ -2,192 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BBE25F5D35
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 01:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 989F55F5D36
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 01:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiJEXZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 19:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55678 "EHLO
+        id S229660AbiJEX1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 19:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiJEXZH (ORCPT
+        with ESMTP id S229482AbiJEX1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 19:25:07 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94EF543318
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 16:25:06 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id m81so258208oia.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 16:25:06 -0700 (PDT)
+        Wed, 5 Oct 2022 19:27:11 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34DBA844F6
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 16:27:09 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id u10so151016wrq.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 16:27:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ISAhMH5CXhMhm+1I427tmkYhfjMJ9VeL8BRy8vi5aDg=;
-        b=Hv+Er/u1QUUMk2kRd/0THVgtqLoGx8V8d2vgB9TBKRsCdT6am1CAJjVlCP8D9CbGle
-         736QJMJOO9Kmd6eDoJI/6b1syOcP3tLqa/IDk4VdA0EYbefLXx/SxQz6xlGG0yG1UMtZ
-         0N0CzKsBwn67wr0WqwBLNlPTWtYGwdQtP7HmfxjbETjvMjZt4YmI8PnCcD2H8R707+kn
-         P4faM9ADQpc31G2ax5Rhi69mzRRT/k7ughzWjn2VeyyKk8vNmj8vOy1tGtbsucxjaUzz
-         AImN+C2uKh6TYfGlnSZvmwb9zB6BVvd97ZieJIk5kC36TMoI8L/eOCGwwPWMZ0bIxXo6
-         eQHA==
+        bh=QK9Ffo7noBOOh68pwr2VdWG30paSM0HTeytlJI3ponQ=;
+        b=X9cU4nMrm7TIMWhG4EGG2kJdfwvMNeHdgPmMiXncsa7X2+uTXPuygqXzWmK0IeSqM/
+         BaybWEoyEEeZB4QjL7geXkScLmUx564HUYiv6dbK9cIiGW1Wgrfj2U8tzeBK9vKFIQGl
+         y+/OkP8BJ9icwnMBiO7Yn9lAB2k/GT1eEgtJI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ISAhMH5CXhMhm+1I427tmkYhfjMJ9VeL8BRy8vi5aDg=;
-        b=x2J4JG4FVZ3FP+AsufnaJc9xfxaaWuqGC6jM/nX0VEYKsxAE3YWzJ79wGoiSAKZsX8
-         xrnVgktzZ6+COIeCem/6V7Qq0EwVosigq7H2TZAOjJ0eFQ8LYX1xXvzYWgYYqWqWaG4X
-         CHpmKviIfx7yaeObpy9+hMfE/EUFmktcImknXMDwTB7JqaXOCpWhR7WtQYA61rXJU3GU
-         OQmcPzY+utb6cd7fI5eojF145hSEHlPbv07xdlUM0xwkxaJtfRgeNQU/xntBtTuVwAP/
-         gQBkTy5lCaWyavbpQZKdgt4z38Pn0jSw24d5hHBXFuKZBi8iMheFD6QgdIJzK5pFCj7b
-         JvMA==
-X-Gm-Message-State: ACrzQf2FeeiBbygQHinUjdvJzH8wimQ09sMA7Vq1XII2EKlZK8thsQ3f
-        gRJRF+YqtGuMa1WtXKNrIISmxUrNuRjXiB6q8hejEQ==
-X-Google-Smtp-Source: AMsMyM7C2vSU/ABLi9NuabyIuI+l9SPY2QCOOlyvIwq45W+bnQFzXL5sL0YnWQX6S+6E6bU2OgRN2wUXgQnECLcWrSw=
-X-Received: by 2002:a05:6808:f8e:b0:351:a39:e7ca with SMTP id
- o14-20020a0568080f8e00b003510a39e7camr3302472oiw.269.1665012305681; Wed, 05
- Oct 2022 16:25:05 -0700 (PDT)
+        bh=QK9Ffo7noBOOh68pwr2VdWG30paSM0HTeytlJI3ponQ=;
+        b=vT8UtbHOhKgZ3vrsBqK5x9cMXlBUgGQx9k7ntTJNvtptgxO1fIARcyfZ+xKPD96Ikm
+         gnm984941IiRUTpkmaywGAaEWr3vKtor6FNLA+D2xfCsrvsnRIeTPlK0P9eaVhh+36X0
+         ywPo5PYYDPCdV5LYrNFE2wiguVrQbPFhqrZ83P+jXK6ZVjWxwCEECHJ+IzXs8oqzgcjJ
+         zD1JYrLpDMoz92jSKrufh9fqAmBxg6xxXrx6Y8/i7oX046HNPuYorYNGeft9FQUI2b9H
+         Xmz3sGXXgcf5O/Zibm2yEhnb1ZUcj4IUBuWHTwtTcRgSrBE7DPP1q7Bvt8lwOtNTh6aY
+         O+OA==
+X-Gm-Message-State: ACrzQf3KhuCrdF7aPACY0FS4+Ww1Ah56/8dPxiIV7xwXquds8hffUYwm
+        zdXM8xMD6XMcgGFQSrGAQQB5QxMR7hsJnQXcrqwIiQ==
+X-Google-Smtp-Source: AMsMyM6mp6fKFkJ2vplYvf78dCTCXwCG8epih4Xm6z/FouJvLVmg01VxhT6Xry4RKpOb9g04BFLD4gGbHeF5/pC53uE=
+X-Received: by 2002:a5d:4a06:0:b0:22e:3e36:d7e7 with SMTP id
+ m6-20020a5d4a06000000b0022e3e36d7e7mr1206969wrq.410.1665012427627; Wed, 05
+ Oct 2022 16:27:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221005220227.1959-1-surajjs@amazon.com>
-In-Reply-To: <20221005220227.1959-1-surajjs@amazon.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 5 Oct 2022 16:24:54 -0700
-Message-ID: <CALMp9eTU9s+2fZ809bfOWYoGXsiziQOxCM-5Ly0JF2HeSEkwhA@mail.gmail.com>
-Subject: Re: [PATCH] x86/speculation: Mitigate eIBRS PBRSB predictions with WRMSR
-To:     Suraj Jitindar Singh <surajjs@amazon.com>
-Cc:     kvm@vger.kernel.org, sjitindarsingh@gmail.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@suse.de, dave.hansen@linux.intel.com,
-        seanjc@google.com, pbonzini@redhat.com, peterz@infradead.org,
-        jpoimboe@kernel.org, daniel.sneddon@linux.intel.com,
-        pawan.kumar.gupta@linux.intel.com, benh@kernel.crashing.org,
-        stable@vger.kernel.org
+References: <20221004003811.4075765-1-jrosenth@chromium.org>
+ <Yzvz9hn1G8rU4VaO@kroah.com> <Yzxl2oczTtwEvIqt@chromium.org>
+ <Yzxsu2Ms43eTfOYR@kroah.com> <Yzy6KNUHFqxWZb9U@chromium.org>
+ <CAODwPW-7Y_CbCch+Y5unH3yJD1T=3epYvqja6w_CB-23C9x9sw@mail.gmail.com> <Yz0jVbfDOITZfE9M@kroah.com>
+In-Reply-To: <Yz0jVbfDOITZfE9M@kroah.com>
+From:   Julius Werner <jwerner@chromium.org>
+Date:   Wed, 5 Oct 2022 16:26:55 -0700
+Message-ID: <CAODwPW8R2uXFJ_5V737Dy8z-WJHUwKkLyG4MW_Q50fs-OFm7Sw@mail.gmail.com>
+Subject: Re: [PATCH v12] firmware: google: Implement cbmem in sysfs driver
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Julius Werner <jwerner@chromium.org>,
+        Jack Rosenthal <jrosenth@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        chrome-platform@lists.linux.dev,
+        Stephen Boyd <swboyd@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Guenter Roeck <groeck@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 5, 2022 at 3:03 PM Suraj Jitindar Singh <surajjs@amazon.com> wrote:
+> If the kernel is reporting a value, that value needs to be documented
+> somewhere.  If the kernel is acting on that value, it needs to know what
+> those values are.
 >
-> tl;dr: The existing mitigation for eIBRS PBRSB predictions uses an INT3 to
-> ensure a call instruction retires before a following unbalanced RET. Replace
-> this with a WRMSR serialising instruction which has a lower performance
-> penalty.
->
-> == Background ==
->
-> eIBRS (enhanced indirect branch restricted speculation) is used to prevent
-> predictor addresses from one privilege domain from being used for prediction
-> in a higher privilege domain.
->
-> == Problem ==
->
-> On processors with eIBRS protections there can be a case where upon VM exit
-> a guest address may be used as an RSB prediction for an unbalanced RET if a
-> CALL instruction hasn't yet been retired. This is termed PBRSB (Post-Barrier
-> Return Stack Buffer).
->
-> A mitigation for this was introduced in:
-> (2b1299322016731d56807aa49254a5ea3080b6b3 x86/speculation: Add RSB VM Exit protections)
->
-> This mitigation [1] has a ~1% performance impact on VM exit compared to without
-> it [2].
->
-> == Solution ==
->
-> The WRMSR instruction can be used as a speculation barrier and a serialising
-> instruction. Use this on the VM exit path instead to ensure that a CALL
-> instruction (in this case the call to vmx_spec_ctrl_restore_host) has retired
-> before the prediction of a following unbalanced RET.
->
-> This mitigation [3] has a negligible performance impact.
->
-> == Testing ==
->
-> Run the outl_to_kernel kvm-unit-tests test 200 times per configuration which
-> counts the cycles for an exit to kernel mode.
->
-> [1] With existing mitigation:
-> Average: 2026 cycles
-> [2] With no mitigation:
-> Average: 2008 cycles
-> [3] With proposed mitigation:
-> Average: 2008 cycles
->
-> Signed-off-by: Suraj Jitindar Singh <surajjs@amazon.com>
-> Cc: stable@vger.kernel.org
-> ---
->  arch/x86/include/asm/nospec-branch.h | 7 +++----
->  arch/x86/kvm/vmx/vmenter.S           | 3 +--
->  arch/x86/kvm/vmx/vmx.c               | 5 +++++
->  3 files changed, 9 insertions(+), 6 deletions(-)
->
-> diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
-> index c936ce9f0c47..e5723e024b47 100644
-> --- a/arch/x86/include/asm/nospec-branch.h
-> +++ b/arch/x86/include/asm/nospec-branch.h
-> @@ -159,10 +159,9 @@
->    * A simpler FILL_RETURN_BUFFER macro. Don't make people use the CPP
->    * monstrosity above, manually.
->    */
-> -.macro FILL_RETURN_BUFFER reg:req nr:req ftr:req ftr2=ALT_NOT(X86_FEATURE_ALWAYS)
-> -       ALTERNATIVE_2 "jmp .Lskip_rsb_\@", \
-> -               __stringify(__FILL_RETURN_BUFFER(\reg,\nr)), \ftr, \
-> -               __stringify(__FILL_ONE_RETURN), \ftr2
-> +.macro FILL_RETURN_BUFFER reg:req nr:req ftr:req
-> +       ALTERNATIVE "jmp .Lskip_rsb_\@", \
-> +               __stringify(__FILL_RETURN_BUFFER(\reg,\nr)), \ftr
->
->  .Lskip_rsb_\@:
->  .endm
-> diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
-> index 6de96b943804..eb82797bd7bf 100644
-> --- a/arch/x86/kvm/vmx/vmenter.S
-> +++ b/arch/x86/kvm/vmx/vmenter.S
-> @@ -231,8 +231,7 @@ SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
->          * single call to retire, before the first unbalanced RET.
->           */
->
-> -       FILL_RETURN_BUFFER %_ASM_CX, RSB_CLEAR_LOOPS, X86_FEATURE_RSB_VMEXIT,\
-> -                          X86_FEATURE_RSB_VMEXIT_LITE
-> +       FILL_RETURN_BUFFER %_ASM_CX, RSB_CLEAR_LOOPS, X86_FEATURE_RSB_VMEXIT
->
->
->         pop %_ASM_ARG2  /* @flags */
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index c9b49a09e6b5..fdcd8e10c2ab 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -7049,8 +7049,13 @@ void noinstr vmx_spec_ctrl_restore_host(struct vcpu_vmx *vmx,
->          * For legacy IBRS, the IBRS bit always needs to be written after
->          * transitioning from a less privileged predictor mode, regardless of
->          * whether the guest/host values differ.
-> +        *
-> +        * For eIBRS affected by Post Barrier RSB Predictions a serialising
-> +        * instruction (wrmsr) must be executed to ensure a call instruction has
-> +        * retired before the prediction of a following unbalanced ret.
->          */
->         if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS) ||
-> +           cpu_feature_enabled(X86_FEATURE_RSB_VMEXIT_LITE) ||
->             vmx->spec_ctrl != hostval)
->                 native_wrmsrl(MSR_IA32_SPEC_CTRL, hostval);
+> In this specific instance it seems that the kernel knows a subset of the
+> values, and some random userspace tool knows all of them?  Think about
+> what you would want to see here if you knew nothing about this at all.
 
-Okay. I see how this almost meets the requirements. But this WRMSR is
-conditional, which means that there's a speculative path through this
-code that ends up at the unbalanced RET without executing the WRMSR.
+The kernel doesn't know any of the values. The kernel is just telling
+userspace that spaces with these IDs exist and providing an interface
+to access them, it's not supposed to know what any of them mean.
 
-Also, for your timings of "no mitigation" and this proposed mitigation
-to be the same, I assume that the guest in your timing test has a
-different IA32_SPEC_CTRL value than the host, which isn't always going
-to be the case in practice. How much does this WRMSR cost if the guest
-and the host have the same IA32_SPEC_CTRL value?
-
-> --
-> 2.17.1
->
+In terms of what you'd want to see in the documentation, I think what
+Jack's patch provides is already the best solution? We're referring to
+the definitions in the coreboot source tree as the source of truth for
+exact details about what each of these IDs mean. Do you want that
+documentation to say more explicitly that these are coreboot-internal
+data structures exposed for use by coreboot-aware userspace tools and
+that their exact meaning and format is only described within coreboot
+sources? Or do you want us to put a full link to coreboot's gitiles
+page for the file instead of just the file name? Other than that I'm
+not sure how we could make this more explicit -- we don't have a big
+official documentation page separate from the source code for all
+these IDs in coreboot, unfortunately (like I said, some of them a
+large and standardized but most of them are small, platform-specific
+things for communicating between different firmware stages that don't
+need much explanation beyond the source code itself and don't always
+have a fixed format).
