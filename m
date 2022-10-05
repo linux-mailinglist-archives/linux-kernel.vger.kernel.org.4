@@ -2,83 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216EE5F502F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 09:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3851B5F5033
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 09:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiJEHLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 03:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
+        id S229685AbiJEHMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 03:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiJEHLP (ORCPT
+        with ESMTP id S229507AbiJEHMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 03:11:15 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBED6D9E5
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 00:11:14 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id n12so4944190wrp.10
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 00:11:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=B4NuR15p1M5h+Qpf+trsp5mYdzxvdiwFoP+0+HDomaA=;
-        b=TuK5WGh0hEIyfywa/E8MohJHIfkBV4b2cRp99lOsAUg/E/4ktietnlg4HZGuIHCBlK
-         yVwXX9K7be9jl4x/XN65u6YZ2QT5yoEVFV/Z0l66h8Pcnh5bCVujYYwEH+RRa/3wlxSX
-         F6F1REJPglaOz3SyvhsJ/7PwDIGXBtkIO0D9/Lgv091Bu2h4lBO91wwY7eNu4Nzpg2W9
-         lV19fbIMkKJADRZVksT/KtnYzkiw09kquLpZ0kyp8VdgIWV+mFVbyMT5fZBlJnN4ZqlA
-         9buxUhkk0mL+M0BvnNWs3NzZkAnUFi+wW24E5A2DAPk44yeOy/z3CO2VP7wXq7NAiZVO
-         W3Fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=B4NuR15p1M5h+Qpf+trsp5mYdzxvdiwFoP+0+HDomaA=;
-        b=lDgZzSXd1lKMozX5AuXlUyhiq/iUEwv7yDJOGDTqyU1zgTFWILjS6EHbP+fBdQpGJk
-         S5QRh6MMve5zroVCYscUGcqx510gPCaAr7JwTdhlgBfzHMPEAx02GIn7AcHSAoZ780XW
-         LrBCkpMZ0zGle1ju8X3zfigXOBkahMxNvOL+wE4z+H0S1N0aY7oQcE3lviPRmi3wSNIE
-         WqagpEvUi8WUUstLZh3edN8JA1QbgVr28w5+rccxMJDq3avNRrJ90GYSfQt59v/xto1t
-         BK0voDCzIpZkXKqPGQG2QNOP8TecgRVt7lqh6YO3VOoebqt8fRqFau6rHIeV42zdIPEG
-         pI0A==
-X-Gm-Message-State: ACrzQf26l2oJcfP2XnN1NN6+bLCsP6Cjwu9n1TxJ+FhVJYOY1tSi8+uJ
-        BtA9eIiD2dmYj9uigYZCoso6Kw==
-X-Google-Smtp-Source: AMsMyM5Dd3WxdNnd9W4ljS+WL4sP+ML6m11PngmoIu9sDz9xnz0n/YxZIW53GLiY5XtM0gP+ujnwKg==
-X-Received: by 2002:a5d:4581:0:b0:228:a8e5:253c with SMTP id p1-20020a5d4581000000b00228a8e5253cmr17416176wrq.506.1664953873383;
-        Wed, 05 Oct 2022 00:11:13 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:94af:b87a:5119:ff73? ([2a01:e0a:982:cbb0:94af:b87a:5119:ff73])
-        by smtp.gmail.com with ESMTPSA id d3-20020a5d6dc3000000b0022e3cba367fsm7752494wrz.100.2022.10.05.00.11.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Oct 2022 00:11:12 -0700 (PDT)
-Message-ID: <720cc44b-a6fd-5424-1db6-fda1290c23e7@linaro.org>
-Date:   Wed, 5 Oct 2022 09:11:11 +0200
+        Wed, 5 Oct 2022 03:12:45 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09A41DA62
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 00:12:42 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ofyZx-0000sn-8Q; Wed, 05 Oct 2022 09:12:29 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ofyZw-004iI1-Ny; Wed, 05 Oct 2022 09:12:27 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ofyZu-005hvF-AQ; Wed, 05 Oct 2022 09:12:26 +0200
+Date:   Wed, 5 Oct 2022 09:12:26 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Wolfram Sang <wsa@kernel.org>, broonie@kernel.org,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Scally <djrscally@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: linux-next: manual merge of the pm tree with the i2c tree
+Message-ID: <20221005071226.4ounaaq42frkdpa3@pengutronix.de>
+References: <20220929121853.100271-1-broonie@kernel.org>
+ <20221005111836.1d43b228@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: it6505: add properties to restrict
- output bandwidth
-Content-Language: en-US
-To:     allen.chen@ite.com.tw
-Cc:     devicetree@vger.kernel.org, Kenneth.Hung@ite.com.tw,
-        jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        Jau-Chih.Tseng@ite.com.tw, airlied@linux.ie,
-        dri-devel@lists.freedesktop.org, narmstrong@baylibre.com,
-        linux-kernel@vger.kernel.org, robert.foss@linaro.org,
-        treapking@chromium.org, Hermes.Wu@ite.com.tw, robh+dt@kernel.org,
-        Laurent.pinchart@ideasonboard.com, andrzej.hajda@intel.com,
-        jonas@kwiboo.se
-References: <20220929014456.30077-1-allen.chen@ite.com.tw>
- <20220929014456.30077-2-allen.chen@ite.com.tw>
- <aaf68eff-17da-3f27-c8dc-48b9659e7b50@linaro.org>
- <087811c1bc224a468f117ca4f2fff3cd@ite.com.tw>
-Organization: Linaro Developer Services
-In-Reply-To: <087811c1bc224a468f117ca4f2fff3cd@ite.com.tw>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="d7wx7pxlkn2m3xij"
+Content-Disposition: inline
+In-Reply-To: <20221005111836.1d43b228@canb.auug.org.au>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,82 +57,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/10/2022 08:19, allen.chen@ite.com.tw wrote:
-> Hi
-> 
-> data-lanes is output configuration. Maybe it is not suitable to put data-lanes in input endpoint.
-> extcon doesn't have output endpoint, so I don't know where to put is better.
 
-Ok it wasn't clear enough
+--d7wx7pxlkn2m3xij
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Then rename the property to something more specific like:
-ite,dp-output-data-lane-count
+On Wed, Oct 05, 2022 at 11:18:36AM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> On Thu, 29 Sep 2022 13:18:53 +0100 broonie@kernel.org wrote:
+> >
+> > Today's linux-next merge of the pm tree got a conflict in:
+> >=20
+> >   drivers/platform/x86/intel/int3472/tps68470.c
+> >=20
+> > between commit:
+> >=20
+> >   ed5c2f5fd10dd ("i2c: Make remove callback return void")
+> >=20
+> > from the i2c tree and commit:
+> >=20
+> >   06a659d1f0a0a ("platform/x86: int3472: Support multiple gpio lookups =
+in board data")
+> >=20
+> > from the pm tree.
+> >=20
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> >=20
+> > diff --cc drivers/platform/x86/intel/int3472/tps68470.c
+> > index 5dd81bb05255b,49fc379fe680a..0000000000000
+> > --- a/drivers/platform/x86/intel/int3472/tps68470.c
+> > +++ b/drivers/platform/x86/intel/int3472/tps68470.c
+> > @@@ -178,13 -227,18 +227,16 @@@ static int skl_int3472_tps68470_probe(s
+> >   	return ret;
+> >   }
+> >  =20
+> >  -static int skl_int3472_tps68470_remove(struct i2c_client *client)
+> >  +static void skl_int3472_tps68470_remove(struct i2c_client *client)
+> >   {
+> >   	const struct int3472_tps68470_board_data *board_data;
+> > + 	int i;
+> >  =20
+> >   	board_data =3D int3472_tps68470_get_board_data(dev_name(&client->dev=
+));
+> > - 	if (board_data)
+> > - 		gpiod_remove_lookup_table(board_data->tps68470_gpio_lookup_table);
+> > + 	if (board_data) {
+> > + 		for (i =3D 0; i < board_data->n_gpiod_lookups; i++)
+> > + 			gpiod_remove_lookup_table(board_data->tps68470_gpio_lookup_tables[=
+i]);
+> > + 	}
+> >  -
+> >  -	return 0;
+> >   }
+> >  =20
+> >   static const struct acpi_device_id int3472_device_id[] =3D {
+>=20
+> This is now a conflict between the i2c tree and Linus' tree.
 
-Use the same naming scheme for the other property:
-ite,dp-output-max-pixel-clock-khz
+In the meantime the i2c tree is pulled, too and Linus solved the
+conflict in the same way in b86406d42ae3c41ae0ce332ea24350829b88af51.
 
-Neil
+Best regards
+Uwe
 
-> 
-> -----Original Message-----
-> From: Neil Armstrong <neil.armstrong@linaro.org>
-> Sent: Thursday, September 29, 2022 4:40 PM
-> To: Allen Chen (陳柏宇) <allen.chen@ite.com.tw>
-> Cc: open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS <devicetree@vger.kernel.org>; Kenneth Hung (洪家倫) <Kenneth.Hung@ite.com.tw>; Jernej Skrabec <jernej.skrabec@gmail.com>; Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>; Jau-Chih Tseng (曾昭智) <Jau-Chih.Tseng@ite.com.tw>; David Airlie <airlied@linux.ie>; open list:DRM DRIVERS <dri-devel@lists.freedesktop.org>; Neil Armstrong <narmstrong@baylibre.com>; open list <linux-kernel@vger.kernel.org>; Robert Foss <robert.foss@linaro.org>; Pin-yen Lin <treapking@chromium.org>; Hermes Wu (吳佳宏) <Hermes.Wu@ite.com.tw>; Rob Herring <robh+dt@kernel.org>; Laurent Pinchart <Laurent.pinchart@ideasonboard.com>; Andrzej Hajda <andrzej.hajda@intel.com>; Jonas Karlman <jonas@kwiboo.se>
-> Subject: Re: [PATCH v2 1/2] dt-bindings: it6505: add properties to restrict output bandwidth
-> 
-> Hi,
-> 
-> On 29/09/2022 03:44, allen wrote:
->> From: allen chen <allen.chen@ite.com.tw>
->>
->> Add properties to restrict dp output data-lanes and clock.
->>
->> Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
->> Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
->> ---
->>    .../devicetree/bindings/display/bridge/ite,it6505.yaml | 10 ++++++++++
->>    1 file changed, 10 insertions(+)
->>
->> diff --git
->> a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
->> b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
->> index 833d11b2303a..62b9f2192202 100644
->> --- a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
->> +++ b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
->> @@ -52,6 +52,14 @@ properties:
->>        maxItems: 1
->>        description: extcon specifier for the Power Delivery
->>    
->> +  data-lanes:
->> +    maxItems: 1
->> +    description: restrict the dp output data-lanes with value of 1-4
-> 
-> Can't you use the data-lanes property in the first port endpoint ?
-> 
-> Look at Documentation/devicetree/bindings/display/bridge/ti,sn65dsi83.yaml
-> 
->> +
->> +  max-pixel-clock-khz:
->> +    maxItems: 1
->> +    description: restrict max pixel clock
-> 
-> New vendor specific properties should have the ite, prefix.
-> 
->> +
->>      port:
->>        $ref: /schemas/graph.yaml#/properties/port
->>        description: A port node pointing to DPI host port node @@ -84,6
->> +92,8 @@ examples:
->>                pwr18-supply = <&it6505_pp18_reg>;
->>                reset-gpios = <&pio 179 1>;
->>                extcon = <&usbc_extcon>;
->> +            data-lanes = <2>;
->> +            max-pixel-clock-khz = <150000>;
->>    
->>                port {
->>                    it6505_in: endpoint {
-> 
-> Thanks,
-> Neil
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
+--d7wx7pxlkn2m3xij
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmM9LlcACgkQwfwUeK3K
+7Ak8Jwf+N6Hjj989m4OAPECZi9fVsUL6Wrs+3sKLCMCOfMZ7iWwhrd959ho5Hi/g
+p9VdOoYhtdE6FYiXo1XktMWUoCP063Mc6tyCQFH5F6nPNt6OXeehDhlUaqitEbwK
+IvVaLYcm6Tuv6UuGZcNBYMGeECwbWVdGyfNWg1X8BWbYzlSdvatY8TC4EP+aOkDQ
+Xx/CiyWr3UCfdL57zMgA0qmzwR5Aoq/mV+Nf1V/499QErVYn+WTmfyvHGtCkEYZO
+muO2gsDyFm679HGwyha0Q4oQUS3rSmYoPmP20X0ftvXynoeIn4Ebi8yMrGE4gCK+
+yuurpS9Tk9X2TIUh+gKbkXXKXI5A2A==
+=izQm
+-----END PGP SIGNATURE-----
+
+--d7wx7pxlkn2m3xij--
