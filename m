@@ -2,171 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E791F5F585D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 18:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D66695F5863
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 18:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbiJEQdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 12:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
+        id S230071AbiJEQeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 12:34:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbiJEQdJ (ORCPT
+        with ESMTP id S230438AbiJEQeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 12:33:09 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2046.outbound.protection.outlook.com [40.107.223.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C021659EE;
-        Wed,  5 Oct 2022 09:33:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TJAi52TobbJ/q7+elLwkjIolP7mxGqJhA7BPiyAY9UZ0accezrAWP6dk/gnip5xuUB9cSg9zSc5YKg2kCG9lf7eOb5VkA/lHl4MVrU6toj32qFne9ORXR7DaojLEF54ktV1meDIGn5VyJGWCqmNe0TW9GxniXofV4bLwBpchKw5HNgkCWuJBVfY5lsbz7NBc0Qz28IlZF0Xj9jWx991WFjZI9/uyGSlaiP7oKgUI6e1oYnFokrdKMByrsXueZvqxx/YjRn/mHTRqs2hHqWaBxffOveD1bZfqrECYDNfJ/75UdTnkx41ynd/ERiaA/RxG9SE/mMc/YB1DSkVYqQ7z0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jkJkH3sTDf9f5zCEYluJNom8sZfVif8I5KIIUqa3e1Q=;
- b=DRhbUdzsz6PNMXqN2VXXlcWZikFTr9J/kBQJCaP5vD9oNPPMO6FmSvZ45SkPD+sPaYEfP4JrZJuGQgcTlUxwqshBJXeM9GPRBddZ6Y3BYQIqmaPIjSRi3vd9CkV5C1rDye+0p9tdfjgOeGRdwqYaXMnb15NUAG45XjpACmADcAcjA3JQN49ST6xmnoPL0AtMNOChJcnXDzXQkwHAhPz44yfBkCRHQQOVAG7a3aXn+T72UhvwLRqDmITGjg1Em5agDvz8FYyUsAPxs3N90qAwog25yCaEpSNlWRKWc/PJnQi8AjDnhQ5+UXC0hWwpvWywfWG/On0egllvVev2L40eYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jkJkH3sTDf9f5zCEYluJNom8sZfVif8I5KIIUqa3e1Q=;
- b=IYX9A9GcCu92YrSUR5lwrbvJ45L1GebsG789J7sSddxxr+rbBivWY2kOPb0XOTe8trMw0CJZSihc/WGdQ9Oq1LqVaB0F/Ioy8OxshT53lOrgFRWZsw++1oW44qcpbD7aW+ohrUjbd431JGg7T6XQtITpDPp9M2ChgtJwK/lH/v8=
-Received: from DS7PR03CA0340.namprd03.prod.outlook.com (2603:10b6:8:55::21) by
- DM4PR12MB5245.namprd12.prod.outlook.com (2603:10b6:5:398::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5676.24; Wed, 5 Oct 2022 16:33:05 +0000
-Received: from DM6NAM11FT049.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:55:cafe::48) by DS7PR03CA0340.outlook.office365.com
- (2603:10b6:8:55::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23 via Frontend
- Transport; Wed, 5 Oct 2022 16:33:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT049.mail.protection.outlook.com (10.13.172.188) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5709.10 via Frontend Transport; Wed, 5 Oct 2022 16:33:05 +0000
-Received: from ashkalraubuntuserver.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 5 Oct 2022 11:33:03 -0500
-From:   Ashish Kalra <Ashish.Kalra@amd.com>
-To:     <rafael@kernel.org>, <lenb@kernel.org>, <james.morse@arm.com>,
-        <tony.luck@intel.com>, <bp@alien8.de>, <robert.moore@intel.com>,
-        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devel@acpica.org>
-Subject: [PATCH v2] ACPI: APEI: Fix num_ghes to unsigned int
-Date:   Wed, 5 Oct 2022 16:32:53 +0000
-Message-ID: <20221005163253.455910-1-Ashish.Kalra@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 5 Oct 2022 12:34:22 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548E67E83F
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 09:33:59 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id b2so15386172lfp.6
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 09:33:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=fsDytsrXABRiHHLdkomit3W/4SQyAKiKJzv17uaMpSE=;
+        b=f79WZ1CmFqHwvH+p6fcw9MAZwCeE4Y0jytRrvpG5oNagbKEN/cGNhxlPfDTgAilmIL
+         LRJwD/J5nWGLRSi7njSfd3FVREwQ5CEX8IOzVdF8u0kyJJ57IRIkLXOTvPecNi3A9V9c
+         Tz6NWbOT3Cj04sVi1gyeZRh0uso8A2pmY0qHVA+8lFrgZB7eBS4xucXwtn0L7zGYI9fF
+         C8gxBR7Zms4ORtGFCduxQONtzzsoZa2j+6tbzxtCyXlvoRLjKxFUjNKeC8uYEs2nSqUA
+         WNq3lUsL8gxqYu3m7vVS+ON5miMOz0ikYD84TvhHaFFINKRHkJrfywUbvmNlradLvDPa
+         qE/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=fsDytsrXABRiHHLdkomit3W/4SQyAKiKJzv17uaMpSE=;
+        b=zMeciIcKXN5NV7srdogwgYlTm2GAnTCmwdedj4nyRaXzBzG5khd53zNbUO4N5fHQQJ
+         ll8WZytYA+Cnk9/TQWgk0TmwUdGlyDRShk5oMCgQlzbz3g+59PHWVmjMZ8hNnHxiWkIk
+         9n0Vhr0W3jFeoqB4Muj8dMQn5EWU08o/4aDlCpB40qRTdhJEGpKvL1vyLGLvBpTZevvb
+         oPVhcsnnSP1CB8yzP9NoBOHKEQJJIprFznulx/xtkH80AeCo0zXQvmITPKbpHBUYXv7+
+         2BPMjMlIA6aSoVwPj0JpUzLeOlSCtITRxw4YJg/b8uDrzBfFbv3MvJWX4jLqKB8wm2oZ
+         lFJQ==
+X-Gm-Message-State: ACrzQf0EYcmI4gZakFaTMW6y6Z6eQVNRJp/mnYR9+Qx4eLdVUF+GkYOD
+        hKuyPl2zfk8n00XXlTg7hqx/lA==
+X-Google-Smtp-Source: AMsMyM6R1rJ0EDep0X30zwEZyQnjfv12SmZCyEK74LSEbsUR/NHwNWRbzWm06v352s5lwPYFNRhPig==
+X-Received: by 2002:a05:6512:6d4:b0:4a2:5045:db6a with SMTP id u20-20020a05651206d400b004a25045db6amr249061lff.199.1664987630856;
+        Wed, 05 Oct 2022 09:33:50 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id k16-20020a05651210d000b0048cf43c3a85sm2388561lfg.238.2022.10.05.09.33.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Oct 2022 09:33:50 -0700 (PDT)
+Message-ID: <1f3ebf6f-117f-62a7-8e02-3e8a3bcf7e9f@linaro.org>
+Date:   Wed, 5 Oct 2022 18:33:49 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT049:EE_|DM4PR12MB5245:EE_
-X-MS-Office365-Filtering-Correlation-Id: f3562d2f-a854-47fd-6796-08daa6ef4789
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fGoJUAEqkWgM0Gkq0EoySNozgqUjsH4pHiLW4noRxSHVp6tM1s088LJJSmTTi/J5RegY5t/T+6Qwe1FWTb90ITeId5eQ4T+GKCaV7O/JfZfBVdUpnr6WrdU2NxBfBnpaWlaDvYXkPPJqqSfQ/oCMSq3cuxQgVI+SEBBL8dkSAxPu7BJz0MhIgIzx9iTYu5uiw6CtxlzbTLNSLwrapfKNvSpEk8xcG5zJyb1YRLc+e7yijR/mIdFIvmlgf+RUebkTdQ7m2JNR8GIrVoo3Q7EwjsRK738mHyBrQlOkumsVVtukaXpJd6RX1CheIXXuX2n5xieOJkuDxkwnAktx1/teMIpIwnGo+FYD3LfCUK/DqW66A+yJfOpGbfa16UTymhtf2vsnLz1tAWD/Y387VUWeRX/m89FkpWz+JNFmJEXFLpaT+/veUVy3r1XTlHpg8tvaFVX+IgDftl8wcbp6hRvEcaqFYZm+zj3Salo4dMsAXS3jPWn3n8dkJ3C5jUccIlDmKD4T/WpXOjFBpBHF/SxYttq9PnW/Rw6uD4KJuQEehL3PxSor6qK+/a2oTd0XxtvKLlYA8WuPjZ+uBVR3yg79/BQgxplSjBRuF6pvewxi7A8yv8VWtth8E87+oeBgAFbNOo46zxiJhu+mGe9OzctGatyDDXzZJKLmOgXRVIsMLYLGNnL2cj3KTVw9yat8MlKz0UQKh+fzs3x6RFNzq7cY80/lEGR5TKSJ+zGDeqLjg6mCLKjCUSZOgTDa0lBOPY9fdWkUmH/B/XqbOzJ0YB+jZZmAIu4uZ1FZIZoABCka9uTRM/8IxFsuuaqq3+5tpyca
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(136003)(346002)(39860400002)(451199015)(46966006)(36840700001)(40470700004)(2906002)(7696005)(41300700001)(26005)(36756003)(5660300002)(478600001)(6666004)(82740400003)(86362001)(40480700001)(40460700003)(8936002)(81166007)(356005)(82310400005)(47076005)(186003)(426003)(1076003)(16526019)(336012)(36860700001)(83380400001)(2616005)(316002)(110136005)(70586007)(70206006)(8676002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2022 16:33:05.2834
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f3562d2f-a854-47fd-6796-08daa6ef4789
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT049.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5245
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 3/5] dt-bindings: watchdog: mediatek: Convert mtk-wdt to
+ json-schema
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, wim@linux-watchdog.org
+Cc:     linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        allen-kh.cheng@mediatek.com, seiya.wang@mediatek.com,
+        tinghan.shen@mediatek.com, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221005113517.70628-1-angelogioacchino.delregno@collabora.com>
+ <20221005113517.70628-4-angelogioacchino.delregno@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221005113517.70628-4-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ashish Kalra <ashish.kalra@amd.com>
+On 05/10/2022 13:35, AngeloGioacchino Del Regno wrote:
+> Convert the MediaTek watchdog bindings to schema.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Change num_ghes from int to unsigned int, preventing an overflow
-and causing subsequent vmalloc to fail.
+There is already work in progress:
 
-The overflow happens in the ghes_estatus_pool_init() when calculating
-len during execution of the statement below as both multiplication
-operands here are signed int :
+https://lore.kernel.org/all/20220422121017.23920-3-allen-kh.cheng@mediatek.com/
 
-len += (num_ghes * GHES_ESOURCE_PREALLOC_MAX_SIZE);
-
-The following call trace is observed because of this bug:
-
-[    9.317108] swapper/0: vmalloc error: size 18446744071562596352, exceeds total pages, mode:0xcc0(GFP_KERNEL), nodemask=(null),cpuset=/,mems_allowed=0-1
-[    9.317131] Call Trace:
-[    9.317134]  <TASK>
-[    9.317137]  dump_stack_lvl+0x49/0x5f
-[    9.317145]  dump_stack+0x10/0x12
-[    9.317146]  warn_alloc.cold+0x7b/0xdf
-[    9.317150]  ? __device_attach+0x16a/0x1b0
-[    9.317155]  __vmalloc_node_range+0x702/0x740
-[    9.317160]  ? device_add+0x17f/0x920
-[    9.317164]  ? dev_set_name+0x53/0x70
-[    9.317166]  ? platform_device_add+0xf9/0x240
-[    9.317168]  __vmalloc_node+0x49/0x50
-[    9.317170]  ? ghes_estatus_pool_init+0x43/0xa0
-[    9.317176]  vmalloc+0x21/0x30
-[    9.317177]  ghes_estatus_pool_init+0x43/0xa0
-[    9.317179]  acpi_hest_init+0x129/0x19c
-[    9.317185]  acpi_init+0x434/0x4a4
-[    9.317188]  ? acpi_sleep_proc_init+0x2a/0x2a
-[    9.317190]  do_one_initcall+0x48/0x200
-[    9.317195]  kernel_init_freeable+0x221/0x284
-[    9.317200]  ? rest_init+0xe0/0xe0
-[    9.317204]  kernel_init+0x1a/0x130
-[    9.317205]  ret_from_fork+0x22/0x30
-[    9.317208]  </TASK>
-
-Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
----
- drivers/acpi/apei/ghes.c | 2 +-
- include/acpi/ghes.h      | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-index d91ad378c00d..6d7c202142a6 100644
---- a/drivers/acpi/apei/ghes.c
-+++ b/drivers/acpi/apei/ghes.c
-@@ -163,7 +163,7 @@ static void ghes_unmap(void __iomem *vaddr, enum fixed_addresses fixmap_idx)
- 	clear_fixmap(fixmap_idx);
- }
- 
--int ghes_estatus_pool_init(int num_ghes)
-+int ghes_estatus_pool_init(unsigned int num_ghes)
- {
- 	unsigned long addr, len;
- 	int rc;
-diff --git a/include/acpi/ghes.h b/include/acpi/ghes.h
-index 34fb3431a8f3..292a5c40bd0c 100644
---- a/include/acpi/ghes.h
-+++ b/include/acpi/ghes.h
-@@ -71,7 +71,7 @@ int ghes_register_vendor_record_notifier(struct notifier_block *nb);
- void ghes_unregister_vendor_record_notifier(struct notifier_block *nb);
- #endif
- 
--int ghes_estatus_pool_init(int num_ghes);
-+int ghes_estatus_pool_init(unsigned int num_ghes);
- 
- /* From drivers/edac/ghes_edac.c */
- 
--- 
-2.25.1
+Best regards,
+Krzysztof
 
