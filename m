@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AD665F59BF
+	by mail.lfdr.de (Postfix) with ESMTP id 876B45F59C0
 	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 20:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbiJESRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 14:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
+        id S230507AbiJESSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 14:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbiJESR0 (ORCPT
+        with ESMTP id S230487AbiJESR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 14:17:26 -0400
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [5.144.164.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B887A4F3AB;
-        Wed,  5 Oct 2022 11:17:24 -0700 (PDT)
+        Wed, 5 Oct 2022 14:17:28 -0400
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168417FE5D
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 11:17:26 -0700 (PDT)
 Received: from localhost.localdomain (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 989963EEFE;
-        Wed,  5 Oct 2022 20:17:22 +0200 (CEST)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 9BF103EF3C;
+        Wed,  5 Oct 2022 20:17:24 +0200 (CEST)
 From:   Marijn Suijten <marijn.suijten@somainline.org>
 To:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
@@ -43,75 +43,55 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
         David Airlie <airlied@linux.ie>
-Subject: [PATCH v2 6/7] drm/msm/dpu1: Account for DSC's bits_per_pixel having 4 fractional bits
-Date:   Wed,  5 Oct 2022 20:16:56 +0200
-Message-Id: <20221005181657.784375-7-marijn.suijten@somainline.org>
+Subject: [PATCH v2 7/7] drm/msm/dsi: Prevent signed BPG offsets from bleeding into adjacent bits
+Date:   Wed,  5 Oct 2022 20:16:57 +0200
+Message-Id: <20221005181657.784375-8-marijn.suijten@somainline.org>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221005181657.784375-1-marijn.suijten@somainline.org>
 References: <20221005181657.784375-1-marijn.suijten@somainline.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to the comment this DPU register contains the bits per pixel
-as a 6.4 fractional value, conveniently matching the contents of
-bits_per_pixel in struct drm_dsc_config which also uses 4 fractional
-bits.  However, the downstream source this implementation was
-copy-pasted from has its bpp field stored _without_ fractional part.
+The bpg_offset array contains negative BPG offsets which fill the full 8
+bits of a char thanks to two's complement: this however results in those
+bits bleeding into the next field when the value is packed into DSC PPS
+by the drm_dsc_helper function, which only expects range_bpg_offset to
+contain 6-bit wide values.  As a consequence random slices appear
+corrupted on-screen (tested on a Sony Tama Akatsuki device with sdm845).
 
-This makes the entire convoluted math obsolete as it is impossible to
-pull those 4 fractional bits out of thin air, by somehow trying to reuse
-the lowest 2 bits of a non-fractional bpp (lsb = bpp % 4??).
+Use AND operators to limit these two's complement values to 6 bits,
+similar to the AMD and i915 drivers.
 
-The rest of the code merely attempts to keep the integer part a multiple
-of 4, which is rendered useless thanks to data |= dsc->bits_per_pixel <<
-12; already filling up those bits anyway (but not on downstream).
-
-Fixes: c110cfd1753e ("drm/msm/disp/dpu1: Add support for DSC")
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Vinod Koul <vkoul@kernel.org>
+Fixes: b9080324d6ca ("drm/msm/dsi: add support for dsc data")
 Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+ drivers/gpu/drm/msm/dsi/dsi_host.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
-index 46cc2afd2bb9..c63e6eef1ba6 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
-@@ -47,7 +47,7 @@ static void dpu_hw_dsc_config(struct dpu_hw_dsc *hw_dsc,
- 			      u32 initial_lines)
- {
- 	struct dpu_hw_blk_reg_map *c = &hw_dsc->hw;
--	u32 data, lsb, bpp;
-+	u32 data;
- 	u32 slice_last_group_size;
- 	u32 det_thresh_flatness;
- 	bool is_cmd_mode = !(mode & DSC_MODE_VIDEO);
-@@ -61,14 +61,7 @@ static void dpu_hw_dsc_config(struct dpu_hw_dsc *hw_dsc,
- 	data = (initial_lines << 20);
- 	data |= ((slice_last_group_size - 1) << 18);
- 	/* bpp is 6.4 format, 4 LSBs bits are for fractional part */
--	data |= dsc->bits_per_pixel << 12;
--	lsb = dsc->bits_per_pixel % 4;
--	bpp = dsc->bits_per_pixel / 4;
--	bpp *= 4;
--	bpp <<= 4;
--	bpp |= lsb;
--
--	data |= bpp << 8;
-+	data |= (dsc->bits_per_pixel << 8);
- 	data |= (dsc->block_pred_enable << 7);
- 	data |= (dsc->line_buf_depth << 3);
- 	data |= (dsc->simple_422 << 2);
+diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+index 4717d49d76be..b3cff3d3aa85 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi_host.c
++++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+@@ -1806,7 +1806,11 @@ static int dsi_populate_dsc_params(struct msm_dsi_host *msm_host, struct drm_dsc
+ 	for (i = 0; i < DSC_NUM_BUF_RANGES; i++) {
+ 		dsc->rc_range_params[i].range_min_qp = min_qp[i];
+ 		dsc->rc_range_params[i].range_max_qp = max_qp[i];
+-		dsc->rc_range_params[i].range_bpg_offset = bpg_offset[i];
++		/*
++		 * Range BPG Offset contains two's-complement signed values that fill
++		 * 8 bits, yet the registers and DCS PPS field are only 6 bits wide.
++		 */
++		dsc->rc_range_params[i].range_bpg_offset = bpg_offset[i] & DSC_RANGE_BPG_OFFSET_MASK;
+ 	}
+ 
+ 	dsc->initial_offset = 6144; /* Not bpp 12 */
 -- 
 2.38.0
 
