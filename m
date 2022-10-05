@@ -2,177 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D6F5F5D07
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 01:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1E45F5D0A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 01:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbiJEXEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 19:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54612 "EHLO
+        id S229666AbiJEXEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 19:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiJEXES (ORCPT
+        with ESMTP id S229644AbiJEXEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 19:04:18 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A28E8559C;
-        Wed,  5 Oct 2022 16:04:17 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-35ceeae764dso2815427b3.4;
-        Wed, 05 Oct 2022 16:04:17 -0700 (PDT)
+        Wed, 5 Oct 2022 19:04:41 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12ED5281
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 16:04:39 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d24so113969pls.4
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 16:04:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dZaNz1pzQi1epRSfLigI6QZ/E9hSkPxllAw4SwzkTA0=;
-        b=Yb0fwn3nuUtB7A4O2nb5i95beKvK7pOkkOL0dBgrb8IZJFVjlvkzmIJgmViiLUVb0E
-         DCdSYQ+m7UWT6nR6kR1BRreRwIaWW4U7bHiugL5jPdUvwVMRcAzt/xJpTxAi66dE2SG1
-         ItFjkD6hnFs8RSbNuhK9StcWV12Rz34k9Nbf7xNPcoajW6xlfmMsXSib+ZRa7EQ7sUv1
-         Csk4KPjIH/vCwLA4JBTnAgWQVFuclRPq5oh2hfZbYEbHMm36nvaRY2Y1P3Jmcui3v+C0
-         nWf2lv3blrpLTkCj1CSy+aVStQmk7a9GWMtI+Gg4fPPpf6a4Ro3YAUep14iuhn6V4oEr
-         xvGg==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jgRj2ZCIBOPvv2vrQKP0ikzjUJMhfZt/TjHRjna0hT8=;
+        b=OZJj8MPpJqsvyoDuOfDgThPOcY9022j7upMbXVbrpITsuDOZ/otUbTi8w8BzeisJjN
+         YyGwKs5zVrVa6x1Ou1wLWXk/MdCV5yQRWTCYuCgW7Mzp8z5zxSJwXu89tv05KA5OZcir
+         oTZ3Ctmxnx8evSj9tnWnLQooKEzSGpKzy/LOk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dZaNz1pzQi1epRSfLigI6QZ/E9hSkPxllAw4SwzkTA0=;
-        b=yKHTUtxRwabSbv5Jd7Ke5OQWEASVMF+K0zfevhq/YdOunGJ9rLs8IeuDpm6BVgHKku
-         lzo/dOe0lV0QvzvnIZ9QQjHPZEmp933KLRD10azysrP8OJhycSqKXzlz0yMhpLSlBED7
-         p4fzQCe95Z0q0WkL6vP5uL2fsAL37P5mwiQIZoBCnRFaaQOBO6Y/XltEZtGuKhRTAgBi
-         7ZSCUIzheRM/eQqAOs+VBjYtcxVlygI0Rly2e+++FBvobOKALx8a+g6WtgrS4VUuvNDl
-         TY6iBJyaiRUw6BnMVyNFFkGO+kmLha6nkJDlfA+tq7b3ZV8vczcuTtt0dbjykPE+Y2lG
-         7A3Q==
-X-Gm-Message-State: ACrzQf1rtQi9jfUXNIMK/zK9htzL8M7Q0aI96qAEnf7g9qCCSpiemTB2
-        LlEEudajXMQ5RTFCE0jQ2r16oFoQIVzaUjkr7BI=
-X-Google-Smtp-Source: AMsMyM712/OQJaHW071yNXGMW+ozmWYfCCrrv5e4dFJMZLILTTYuyBylZdOVm+K5Sf4sKt0xLwiZ4m8jBrqdWE7i2uE=
-X-Received: by 2002:a0d:df0b:0:b0:358:83d4:95a2 with SMTP id
- i11-20020a0ddf0b000000b0035883d495a2mr2024360ywe.475.1665011056641; Wed, 05
- Oct 2022 16:04:16 -0700 (PDT)
+        bh=jgRj2ZCIBOPvv2vrQKP0ikzjUJMhfZt/TjHRjna0hT8=;
+        b=F0d/MlfYC7LZHMeqPFDYpdAq/y2bNnfbxzEGZs7miME2gAQxSPG8eckrukm5iBK3ap
+         JGygPkrqrA+EEPwnw+7dASCW8bCuDpI2frEuhJV2jZEkeOBgn3JP8wBS1L6ZeqZEormc
+         CHDWRYw89gEH+QITxbW4P0FQXk1qKwV4tupktiAyJhdYopiuYbxGSokWtCgcTNI2qTIs
+         dhmKP7SFAs9GSnFlIX0u5lNQ0sotkYTvTTDUMJP0Vq/NKChCivX/hHLjGqNyhYHxa5fJ
+         In0fJTZwLcahP0EdyaTZl13cRmfboAy94GOfdaQ5+Au/ZpmHihOQNUfeVMTh8I1nH2op
+         Z2Kg==
+X-Gm-Message-State: ACrzQf3Ozvdjb7bndQQdPnWC0JccC+3ChceFIYndVuEQwJLghbGdcnph
+        iMGvQUeWhkCCMVauH40X9pWY9/hBFxBXkjKj3E9GPw==
+X-Google-Smtp-Source: AMsMyM7voRDrO+U4f9HHRvzDRite3Lp95pBLvBHqlnJYymAty/PuaoCe8kq53u7AypcSmqxJCeodgw==
+X-Received: by 2002:a17:90b:2751:b0:20a:e437:a9e8 with SMTP id qi17-20020a17090b275100b0020ae437a9e8mr7268521pjb.181.1665011078236;
+        Wed, 05 Oct 2022 16:04:38 -0700 (PDT)
+Received: from arishabh.c.googlers.com.com (30.176.125.34.bc.googleusercontent.com. [34.125.176.30])
+        by smtp.gmail.com with ESMTPSA id y1-20020a626401000000b0053e8f4a10c1sm11403322pfb.217.2022.10.05.16.04.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 16:04:37 -0700 (PDT)
+From:   Rishabh Agrawal <rishabhagr@chromium.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     biernacki@google.com, mattedavis@google.com,
+        vaibhav.shankar@intel.com, zwisler@google.com,
+        Rishabh Agrawal <rishabhagr@chromium.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org
+Subject: [PATCH] Add hardcoded crystal clock for KabyLake
+Date:   Wed,  5 Oct 2022 23:04:21 +0000
+Message-Id: <20221005230407.1.I918ccc908c5c836c1e21e01d2cf6f59b0157bcc3@changeid>
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 MIME-Version: 1.0
-References: <20221004131750.2306251-1-roberto.sassu@huaweicloud.com> <20221004131750.2306251-3-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20221004131750.2306251-3-roberto.sassu@huaweicloud.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 5 Oct 2022 16:04:03 -0700
-Message-ID: <CAEf4Bzby0g3o3i07p-irS4NupQFO+eer6TOageEBOJEdWvz1ZA@mail.gmail.com>
-Subject: Re: [RESEND][PATCH 2/6] libbpf: Define bpf_get_fd_opts and introduce bpf_map_get_fd_by_id_opts()
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        shuah@kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 4, 2022 at 6:18 AM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> Define a new data structure called bpf_get_fd_opts, with the member
-> open_flags, to be used by callers of the _opts variants of
-> bpf_*_get_fd_by_id() to specify the permissions needed for the file
-> descriptor to be obtained.
->
-> Also, introduce bpf_map_get_fd_by_id_opts(), to let the caller pass a
-> bpf_get_fd_opts structure.
->
-> Finally, keep the existing bpf_map_get_fd_by_id(), and call
-> bpf_map_get_fd_by_id_opts() with NULL as opts argument, to request
-> read-write permissions (current behavior).
->
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  tools/lib/bpf/bpf.c      | 12 +++++++++++-
->  tools/lib/bpf/bpf.h      | 10 ++++++++++
->  tools/lib/bpf/libbpf.map |  1 +
->  3 files changed, 22 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> index 1d49a0352836..4b03063edf1d 100644
-> --- a/tools/lib/bpf/bpf.c
-> +++ b/tools/lib/bpf/bpf.c
-> @@ -948,19 +948,29 @@ int bpf_prog_get_fd_by_id(__u32 id)
->         return libbpf_err_errno(fd);
->  }
->
-> -int bpf_map_get_fd_by_id(__u32 id)
-> +int bpf_map_get_fd_by_id_opts(__u32 id,
-> +                             const struct bpf_get_fd_opts *opts)
->  {
->         const size_t attr_sz = offsetofend(union bpf_attr, open_flags);
->         union bpf_attr attr;
->         int fd;
->
-> +       if (!OPTS_VALID(opts, bpf_get_fd_opts))
-> +               return libbpf_err(-EINVAL);
-> +
->         memset(&attr, 0, attr_sz);
->         attr.map_id = id;
-> +       attr.open_flags = OPTS_GET(opts, open_flags, 0);
->
->         fd = sys_bpf_fd(BPF_MAP_GET_FD_BY_ID, &attr, attr_sz);
->         return libbpf_err_errno(fd);
->  }
->
-> +int bpf_map_get_fd_by_id(__u32 id)
-> +{
-> +       return bpf_map_get_fd_by_id_opts(id, NULL);
-> +}
-> +
->  int bpf_btf_get_fd_by_id(__u32 id)
->  {
->         const size_t attr_sz = offsetofend(union bpf_attr, open_flags);
-> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> index 9c50beabdd14..c60eda3c88ad 100644
-> --- a/tools/lib/bpf/bpf.h
-> +++ b/tools/lib/bpf/bpf.h
-> @@ -365,7 +365,17 @@ LIBBPF_API int bpf_prog_get_next_id(__u32 start_id, __u32 *next_id);
->  LIBBPF_API int bpf_map_get_next_id(__u32 start_id, __u32 *next_id);
->  LIBBPF_API int bpf_btf_get_next_id(__u32 start_id, __u32 *next_id);
->  LIBBPF_API int bpf_link_get_next_id(__u32 start_id, __u32 *next_id);
-> +
-> +struct bpf_get_fd_opts {
+Set KabyLake crystal clock manually since the TSC calibration is off
+by 0.5%. All the tests that are based on the timer/clock will fail in
+this case.
 
-should we call it "bpf_get_fd_by_id_opts" ? kernel command is
-specifically about getting object FD by its external ID, so let's
-reflect this in the name?
+The HPET has been disabled by upstream due to PC10 issue causing the
+3 hatch devices, dratini, jinlon, and kohaku to not calibrate the clock
+precisely. These 3 devices are KabyLake devices. Intel team has verified
+that all KBL devices have 24.0 MHz clock frequency, therefore this
+change is valid.
 
-Otherwise it looks good.
+Signed-off-by: Rishabh Agrawal <rishabhagr@chromium.org>
+---
 
+ arch/x86/kernel/tsc.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
-> +       size_t sz; /* size of this struct for forward/backward compatibility */
-> +       __u32 open_flags; /* permissions requested for the operation on fd */
-> +       size_t :0;
-> +};
-> +#define bpf_get_fd_opts__last_field open_flags
-> +
->  LIBBPF_API int bpf_prog_get_fd_by_id(__u32 id);
-> +LIBBPF_API int bpf_map_get_fd_by_id_opts(__u32 id,
-> +                                        const struct bpf_get_fd_opts *opts);
->  LIBBPF_API int bpf_map_get_fd_by_id(__u32 id);
->  LIBBPF_API int bpf_btf_get_fd_by_id(__u32 id);
->  LIBBPF_API int bpf_link_get_fd_by_id(__u32 id);
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index 04fab9f1fdd7..2e665b21d84f 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -371,6 +371,7 @@ LIBBPF_1.0.0 {
->
->  LIBBPF_1.1.0 {
->         global:
-> +               bpf_map_get_fd_by_id_opts;
->                 user_ring_buffer__discard;
->                 user_ring_buffer__free;
->                 user_ring_buffer__new;
-> --
-> 2.25.1
->
+diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+index cafacb2e58cc..63a06224fa48 100644
+--- a/arch/x86/kernel/tsc.c
++++ b/arch/x86/kernel/tsc.c
+@@ -644,10 +644,21 @@ unsigned long native_calibrate_tsc(void)
+ 	 * Denverton SoCs don't report crystal clock, and also don't support
+ 	 * CPUID.0x16 for the calculation below, so hardcode the 25MHz crystal
+ 	 * clock.
++	 *
++	 * Intel KabyLake devices' clocks are off by 0.5% when using the below
++	 * calculation, so hardcode 24.0 MHz crystal clock.
+ 	 */
+-	if (crystal_khz == 0 &&
+-			boot_cpu_data.x86_model == INTEL_FAM6_ATOM_GOLDMONT_D)
+-		crystal_khz = 25000;
++	if (crystal_khz == 0) {
++		switch (boot_cpu_data.x86_model) {
++		case INTEL_FAM6_ATOM_GOLDMONT_D:
++			crystal_khz = 25000;
++			break;
++		case INTEL_FAM6_KABYLAKE_L:
++			crystal_khz = 24000;
++			break;
++		}
++
++	}
+ 
+ 	/*
+ 	 * TSC frequency reported directly by CPUID is a "hardware reported"
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
+
