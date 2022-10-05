@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BADBA5F599E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 20:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 115905F599F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 20:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbiJESPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 14:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
+        id S230325AbiJESPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 14:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbiJESPp (ORCPT
+        with ESMTP id S229917AbiJESPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 14:15:45 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596583E765;
-        Wed,  5 Oct 2022 11:15:44 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id w18so18384596wro.7;
-        Wed, 05 Oct 2022 11:15:44 -0700 (PDT)
+        Wed, 5 Oct 2022 14:15:48 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B674153E;
+        Wed,  5 Oct 2022 11:15:45 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id a3so14855392wrt.0;
+        Wed, 05 Oct 2022 11:15:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=+/Q7rcsfvUmW67dI6FY00wmkiMbNJ/gUVedisN8grUo=;
-        b=YrqJlXoHx+Z9FCPNh2KVhVo+4iGkiAGiTo+Pd8s8TOTNq+A1XjVJ15t8KRXMuZEQjs
-         1Idrf1vwxJqOZvI5vEJaD7Lyt3ssa1ZDizBJlnUT3fWgBT1pNXWndgOhYuR6uKkN2csw
-         b0zbZJ9+BrzpEbfYDvdJjavGvZhIrrVn+LsnJ0mUG6CpwnRVl5d5SqXe7/XupPbM7YE/
-         92vWetbjjxdckNxjkoAIqMoj5s45qDETeIGvoePZXxWNagCLKIgA2k3cj0wI81VJqY01
-         jjFi3hL7QKlSFo7Q00CwsLCgkzXSKHUezmm5gfOgvQO1xbGuo8L3kBrWQQ/sEWnf0EeT
-         bZlg==
+        bh=JNBCQTrJtJtzwzSV+uvLf0mfe5glLJKE+lcG6vBcSn0=;
+        b=el4JyhBEXx+JUvWWyT1zqV4jL1mOtoBtphc0OLQy5t86AeKdzL03tcPAnqz2bUl1PU
+         ofMXnJincl7CHXv6wiVqEk/IgKWzwARL6OeHG16FL0OgKIBLTeVuYmJu2lglQ/s51XpG
+         c7kMv766hpqhMWmDY6YrxW5f6rKniOiKr4qtJ9YHZMieU+vgaHpUh3HR3zPu4XvC+/ns
+         BNQmYrb7N/w0IBtEs+JP8+UkSYejk3NhIJ0nxZljuFcbtfezWL1yrb1nkrS8D51rgNGi
+         DHgVgVVpJDuW2CDkqYvLQGCRLVpKTpyFiLVLoEZdMz4mcGGBTQGCTmocJo09uM1P+AHR
+         2f3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=+/Q7rcsfvUmW67dI6FY00wmkiMbNJ/gUVedisN8grUo=;
-        b=a+p1moBhkS6pBlfmK2ESMX4GHzwMui7Kf+4RgyaVxxtTsBRuVnMhSfRIbA9be0QBpy
-         wZs/utZrs7HYEGaNpitqu/YoFC++oFsTL9/RBIV+pLtMqqRNOPpHOsLvXKfqCaEF97qE
-         cpyovbP94veO1CiyimAIKh4Y13R2J7H/YJ7Lpq00TahHT8iNjJjPlYf9pnqZ7zmbej65
-         a+N7LSvUjLMhpUD7BWucjAvWxllOD+W9Zrx0N6RFkC7mvZYW2cLMsv+2PmSwO3VpBhgA
-         Fk0nmtSoR8uwi+NvmvqdI8HY7JIdwET0MuBtMAt4W1uyl6gnJNmSen5886HWhaZGgYNW
-         t9DQ==
-X-Gm-Message-State: ACrzQf1mIQqoepQ20lSi/63cnNSx97gLbvLi387eaSQpa254JavBeHUv
-        bhNJh9JjVt7ceZobWqP7KB4XUcbHb1I=
-X-Google-Smtp-Source: AMsMyM6I6I1Z2b3qoRY9xTVGSxD/HX1KEa8fBRizI1kUl4QtAxXWMq7yPZlHizsZw/arjp8DEfyILw==
-X-Received: by 2002:a05:6000:2c1:b0:226:e816:b6a4 with SMTP id o1-20020a05600002c100b00226e816b6a4mr664382wry.330.1664993742688;
-        Wed, 05 Oct 2022 11:15:42 -0700 (PDT)
+        bh=JNBCQTrJtJtzwzSV+uvLf0mfe5glLJKE+lcG6vBcSn0=;
+        b=bM+Z6VJFMQOqN1nM/rof19ZTbFt6I1pV9G+H2yPUGQ58qrwVORjozBdeXe/UfzjFfp
+         usHfiYI4Zw+BPreH04oQ/GEtdA7GaP3YG7ugxQBIgXkfPkBM9wgO9BFjIOHshGnBTYB+
+         tFEeGEU7Vcfgp2B6TUCnVKm3aRlkdGUEikJfH72dGsCJSfskiM17yydEvY8msxMTE/TH
+         ew5QqEkbLkSo6GXC4joh/s7S5ZneNTKCo5jbBMx4Ho18iAOgU4YhPMzceM+tUwE+P2dL
+         PZ+QZDcbyDc3PZN5sR6VSqviUxzkLsAd06ttRCoRZc3+NX27Nv1bZnol73tUBC3A0IZU
+         CIvA==
+X-Gm-Message-State: ACrzQf2ZxvjDhmkOxbpokyFSz9YwlQLJb6RI43XHFg2Kzmpdr4GUJKOZ
+        B8yvzFvWrqXhm8IsbYS/MrGNHSmOd9o=
+X-Google-Smtp-Source: AMsMyM5ZxfrOiS3ii9bbEr51DXEP/K7fWFuDo1Ns38uMeNHw00LExyU9lSCSU0C3LUVDNlcyh4GJfQ==
+X-Received: by 2002:a05:6000:1446:b0:22b:968:446 with SMTP id v6-20020a056000144600b0022b09680446mr586589wrx.493.1664993743733;
+        Wed, 05 Oct 2022 11:15:43 -0700 (PDT)
 Received: from localhost.localdomain ([46.216.9.29])
-        by smtp.googlemail.com with ESMTPSA id g20-20020a05600c4ed400b003b4ac05a8a4sm4176240wmq.27.2022.10.05.11.15.41
+        by smtp.googlemail.com with ESMTPSA id g20-20020a05600c4ed400b003b4ac05a8a4sm4176240wmq.27.2022.10.05.11.15.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 11:15:42 -0700 (PDT)
+        Wed, 05 Oct 2022 11:15:43 -0700 (PDT)
 From:   Dzmitry Sankouski <dsankouski@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Dzmitry Sankouski <dsankouski@gmail.com>,
@@ -60,9 +60,9 @@ Cc:     Dzmitry Sankouski <dsankouski@gmail.com>,
         linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT),
         devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
         DEVICE TREE BINDINGS)
-Subject: [PATCH v6 1/2] dt-bindings: arm: add xiaomi,sagit board based on msm8998 chip
-Date:   Wed,  5 Oct 2022 21:15:27 +0300
-Message-Id: <20221005181528.1038629-2-dsankouski@gmail.com>
+Subject: [PATCH v6 2/2] arm64: dts: qcom: sagit: add initial device tree for sagit
+Date:   Wed,  5 Oct 2022 21:15:28 +0300
+Message-Id: <20221005181528.1038629-3-dsankouski@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221005181528.1038629-1-dsankouski@gmail.com>
 References: <20221005181528.1038629-1-dsankouski@gmail.com>
@@ -78,25 +78,739 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add xiaomi,sagit board (Xiaomi Mi 6) binding.
+New device support - Xiaomi Mi6 phone
+
+What works:
+- storage
+- usb
+- power regulators
 
 Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
 ---
- Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ .../boot/dts/qcom/msm8998-xiaomi-sagit.dts    | 681 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm8998.dtsi          |   8 +
+ 3 files changed, 690 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dts
 
-diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-index fb1d00bcc847..294075bafb97 100644
---- a/Documentation/devicetree/bindings/arm/qcom.yaml
-+++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-@@ -239,6 +239,7 @@ properties:
-               - sony,xperia-lilac
-               - sony,xperia-maple
-               - sony,xperia-poplar
-+              - xiaomi,sagit
-           - const: qcom,msm8998
+diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+index 1d86a33de528..0460aabf1b59 100644
+--- a/arch/arm64/boot/dts/qcom/Makefile
++++ b/arch/arm64/boot/dts/qcom/Makefile
+@@ -46,6 +46,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-oneplus-dumpling.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-sony-xperia-yoshino-lilac.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-sony-xperia-yoshino-maple.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-sony-xperia-yoshino-poplar.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-xiaomi-sagit.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-1000.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-4000.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= qrb5165-rb5.dtb
+diff --git a/arch/arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dts b/arch/arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dts
+new file mode 100644
+index 000000000000..e44f6a745a2c
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dts
+@@ -0,0 +1,681 @@
++// SPDX-License-Identifier: BSD-3-Clause
++/*
++ * Xiaomi Mi 6 (sagit) device tree source based on msm8998-mtp.dtsi
++ *
++ * Copyright (c) 2022, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2022, Degdag Mohamed <degdagmohamed@gmail.com>
++ * Copyright (c) 2022, Dzmitry Sankouski <dsankouski@gmail.com>
++ */
++
++/dts-v1/;
++
++#include "msm8998.dtsi"
++#include "pm8005.dtsi"
++#include "pm8998.dtsi"
++#include "pmi8998.dtsi"
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/leds/common.h>
++#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
++
++/*
++ * Delete following upstream (msm8998.dtsi) reserved
++ * memory mappings which are different in this device.
++ */
++/delete-node/ &mpss_mem;
++/delete-node/ &venus_mem;
++/delete-node/ &mba_mem;
++/delete-node/ &slpi_mem;
++/delete-node/ &ipa_fw_mem;
++/delete-node/ &ipa_gsi_mem;
++/delete-node/ &gpu_mem;
++/delete-node/ &wlan_msa_mem;
++
++/ {
++	model = "Xiaomi Mi 6";
++	compatible = "xiaomi,sagit", "qcom,msm8998";
++	chassis-type = "handset";
++	/* Required for bootloader to select correct board */
++	qcom,board-id = <30 0>;
++
++	reserved-memory {
++		/*
++		 * The following memory regions on downstream are "dynamically allocated"
++		 * but given the same addresses every time. Hard code them as these addresses
++		 * are where the Xiaomi signed firmware expects them to be.
++		 */
++		ipa_fws_region: ipa@f7800000 {
++			compatible = "shared-dma-pool";
++			reg = <0x0 0xf7800000 0x0 0x5000>;
++			no-map;
++		};
++
++		zap_shader_region: gpu@f7900000 {
++			compatible = "shared-dma-pool";
++			reg = <0x0 0xf7900000 0x0 0x2000>;
++			no-map;
++		};
++
++		mpss_mem: memory@8d000000 {
++			reg = <0x0 0x8d000000 0x0 0x7000000>;
++			no-map;
++		};
++
++		venus_mem: memory@94000000 {
++			reg = <0x0 0x94000000 0x0 0x500000>;
++			no-map;
++		};
++
++		mba_mem: memory@94500000 {
++			reg = <0x0 0x94500000 0x0 0x200000>;
++			no-map;
++		};
++
++		slpi_mem: memory@94700000 {
++			reg = <0x0 0x94700000 0x0 0x10000>;
++			no-map;
++		};
++
++		ipa_fw_mem: memory@95600000 {
++			reg = <0x0 0x95600000 0x0 0x10000>;
++			no-map;
++		};
++
++		ipa_gsi_mem: memory@95610000 {
++			reg = <0x0 0x95610000 0x0 0x5000>;
++			no-map;
++		};
++
++		gpu_mem: memory@95615000 {
++			reg = <0x0 0x95615000 0x0 0x100000>;
++			no-map;
++		};
++
++		wlan_msa_mem: memory@95715000 {
++			reg = <0x0 0x95715000 0x0 0x100000>;
++			no-map;
++		};
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++		label = "Volume buttons";
++		autorepeat;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&vol_up_key_default>;
++
++		key-vol-up {
++			label = "Volume up";
++			gpios = <&pm8998_gpio 6 GPIO_ACTIVE_LOW>;
++			linux,code = <KEY_VOLUMEUP>;
++			debounce-interval = <15>;
++			wakeup-source;
++		};
++	};
++
++	gpio-hall-sensor {
++		compatible = "gpio-keys";
++		label = "Hall effect sensor";
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&hall_sensor_default_state>;
++
++		event-hall-sensor {
++			label = "Hall Effect Sensor";
++			gpios = <&tlmm 124 GPIO_ACTIVE_LOW>;
++			linux,input-type = <EV_SW>;
++			linux,code = <SW_LID>;
++			linux,can-disable;
++			wakeup-source;
++		};
++	};
++
++	vph_pwr: vph-pwr-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "vph_pwr";
++		regulator-min-microvolt = <3700000>;
++		regulator-max-microvolt = <3700000>;
++		regulator-always-on;
++		regulator-boot-on;
++	};
++
++	disp_vddts_vreg: disp-vddts-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "disp-vddts-regulator";
++		gpio = <&tlmm 50 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		regulator-boot-on;
++	};
++};
++
++&blsp1_i2c5 {
++	pinctrl-names = "default", "sleep";
++
++	touchscreen@20 {
++		compatible = "syna,rmi4-i2c";
++		reg = <0x20>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		interrupt-parent = <&tlmm>;
++		interrupts = <125 IRQ_TYPE_EDGE_FALLING>;
++
++		pinctrl-names = "default", "sleep";
++		pinctrl-0 = <&ts_active_state>;
++		pinctrl-1 = <&ts_int_suspend_state &ts_reset_suspend_state>;
++
++		vdd-supply = <&disp_vddts_vreg>;
++		vio-supply = <&vreg_l6a_1p8>;
++
++		syna,reset-delay-ms = <20>;
++		syna,startup-delay-ms = <20>;
++
++		rmi4-f01@1 {
++			reg = <0x01>;
++			syna,nosleep-mode = <1>;
++		};
++
++		rmi4-f12@12 {
++			reg = <0x12>;
++			touchscreen-x-mm = <64>;
++			touchscreen-y-mm = <114>;
++			syna,sensor-type = <1>;
++			syna,rezero-wait-ms = <20>;
++		};
++
++		rmi4-f1a@1a {
++			reg = <0x1a>;
++			syna,codes = <KEY_BACK KEY_APPSELECT>;
++		};
++	};
++	status = "okay";
++};
++
++&blsp1_i2c5_sleep {
++	/delete-property/ bias-pull-up;
++	bias-disable;
++};
++
++&blsp1_uart3 {
++	bluetooth {
++		compatible = "qcom,wcn3990-bt";
++
++		vddio-supply = <&vreg_s4a_1p8>;
++		vddxo-supply = <&vreg_l7a_1p8>;
++		vddrf-supply = <&vreg_l17a_1p3>;
++		vddch0-supply = <&vreg_l25a_3p3>;
++		max-speed = <3200000>;
++	};
++	status = "okay";
++};
++
++&blsp1_uart3_on {
++	rx {
++		/delete-property/ bias-disable;
++		/*
++		 * Configure a pull-up on 46 (RX). This is needed to
++		 * avoid garbage data when the TX pin of the Bluetooth
++		 * module is in tri-state (module powered off or not
++		 * driving the signal yet).
++		 */
++		bias-pull-up;
++	};
++
++	cts {
++		/delete-property/ bias-disable;
++		/*
++		 * Configure a pull-down on 47 (CTS) to match the pull
++		 * of the Bluetooth module.
++		 */
++		bias-pull-down;
++	};
++};
++
++&blsp2_uart1 {
++	status = "okay";
++};
++
++&pm8005_regulators {
++	compatible = "qcom,pm8005-regulators";
++
++	vdd_s1-supply = <&vph_pwr>;
++
++	pm8005_s1: s1 { /* VDD_GFX supply */
++		regulator-min-microvolt = <524000>;
++		regulator-max-microvolt = <1100000>;
++		regulator-enable-ramp-delay = <500>;
++
++		/* hack until we rig up the gpu consumer */
++		regulator-always-on;
++	};
++};
++
++&pm8998_gpio {
++	vol_up_key_default: vol-up-key-default-state {
++		pins = "gpio6";
++		function = "normal";
++		bias-pull-up;
++		input-enable;
++		qcom,drive-strength = <PMIC_GPIO_STRENGTH_NO>;
++	};
++
++	audio_mclk_pin: audio-mclk-pin-active-state {
++		pins = "gpio13";
++		function = "func2";
++		power-source = <0>;
++	};
++};
++
++&qusb2phy {
++	vdda-pll-supply = <&vreg_l12a_1p8>;
++	vdda-phy-dpdm-supply = <&vreg_l24a_3p075>;
++	status = "okay";
++};
++
++&rpm_requests {
++	regulators-0 {
++		compatible = "qcom,rpm-pm8998-regulators";
++
++		vdd_s1-supply = <&vph_pwr>;
++		vdd_s2-supply = <&vph_pwr>;
++		vdd_s3-supply = <&vph_pwr>;
++		vdd_s4-supply = <&vph_pwr>;
++		vdd_s5-supply = <&vph_pwr>;
++		vdd_s6-supply = <&vph_pwr>;
++		vdd_s7-supply = <&vph_pwr>;
++		vdd_s8-supply = <&vph_pwr>;
++		vdd_s9-supply = <&vph_pwr>;
++		vdd_s10-supply = <&vph_pwr>;
++		vdd_s11-supply = <&vph_pwr>;
++		vdd_s12-supply = <&vph_pwr>;
++		vdd_s13-supply = <&vph_pwr>;
++		vdd_l1_l27-supply = <&vreg_s7a_1p025>;
++		vdd_l2_l8_l17-supply = <&vreg_s3a_1p35>;
++		vdd_l3_l11-supply = <&vreg_s7a_1p025>;
++		vdd_l4_l5-supply = <&vreg_s7a_1p025>;
++		vdd_l6-supply = <&vreg_s5a_2p04>;
++		vdd_l7_l12_l14_l15-supply = <&vreg_s5a_2p04>;
++		vdd_l9-supply = <&vreg_bob>;
++		vdd_l10_l23_l25-supply = <&vreg_bob>;
++		vdd_l13_l19_l21-supply = <&vreg_bob>;
++		vdd_l16_l28-supply = <&vreg_bob>;
++		vdd_l18_l22-supply = <&vreg_bob>;
++		vdd_l20_l24-supply = <&vreg_bob>;
++		vdd_l26-supply = <&vreg_s3a_1p35>;
++		vdd_lvs1_lvs2-supply = <&vreg_s4a_1p8>;
++
++		vreg_s3a_1p35: s3 {
++			regulator-min-microvolt = <1352000>;
++			regulator-max-microvolt = <1352000>;
++		};
++
++		vreg_s4a_1p8: s4 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++			regulator-allow-set-load;
++		};
++
++		vreg_s5a_2p04: s5 {
++			regulator-min-microvolt = <1904000>;
++			regulator-max-microvolt = <2040000>;
++		};
++
++		vreg_s7a_1p025: s7 {
++			regulator-min-microvolt = <900000>;
++			regulator-max-microvolt = <1028000>;
++		};
++
++		vreg_l1a_0p875: l1 {
++			regulator-min-microvolt = <880000>;
++			regulator-max-microvolt = <880000>;
++		};
++
++		vreg_l2a_1p2: l2 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1200000>;
++		};
++
++		vreg_l3a_1p0: l3 {
++			regulator-min-microvolt = <1000000>;
++			regulator-max-microvolt = <1000000>;
++		};
++
++		vreg_l5a_0p8: l5 {
++			regulator-min-microvolt = <800000>;
++			regulator-max-microvolt = <800000>;
++		};
++
++		vreg_l6a_1p8: l6 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
++		vreg_l7a_1p8: l7 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
++		vreg_l8a_1p2: l8 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1200000>;
++		};
++
++		vreg_l9a_1p8: l9 {
++			regulator-min-microvolt = <1808000>;
++			regulator-max-microvolt = <2960000>;
++		};
++
++		vreg_l10a_1p8: l10 {
++			regulator-min-microvolt = <1808000>;
++			regulator-max-microvolt = <2960000>;
++		};
++
++		vreg_l11a_1p0: l11 {
++			regulator-min-microvolt = <1000000>;
++			regulator-max-microvolt = <1000000>;
++		};
++
++		vreg_l12a_1p8: l12 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
++		vreg_l13a_2p95: l13 {
++			regulator-min-microvolt = <1808000>;
++			regulator-max-microvolt = <2960000>;
++		};
++
++		vreg_l14a_1p8: l14 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
++		vreg_l15a_1p8: l15 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
++		vreg_l16a_2p7: l16 {
++			regulator-min-microvolt = <2704000>;
++			regulator-max-microvolt = <2704000>;
++		};
++
++		vreg_l17a_1p3: l17 {
++			regulator-min-microvolt = <1304000>;
++			regulator-max-microvolt = <1304000>;
++		};
++
++		vreg_l18a_2p7: l18 {
++			regulator-min-microvolt = <2704000>;
++			regulator-max-microvolt = <2704000>;
++		};
++
++		vreg_l19a_3p0: l19 {
++			regulator-min-microvolt = <3008000>;
++			regulator-max-microvolt = <3008000>;
++		};
++
++		vreg_l20a_2p95: l20 {
++			regulator-min-microvolt = <2960000>;
++			regulator-max-microvolt = <2960000>;
++			regulator-allow-set-load;
++		};
++
++		vreg_l21a_2p95: l21 {
++			regulator-min-microvolt = <2960000>;
++			regulator-max-microvolt = <2960000>;
++			regulator-system-load = <800000>;
++			regulator-allow-set-load;
++		};
++
++		vreg_l22a_2p85: l22 {
++			regulator-min-microvolt = <2864000>;
++			regulator-max-microvolt = <2864000>;
++		};
++
++		vreg_l23a_3p3: l23 {
++			regulator-min-microvolt = <3312000>;
++			regulator-max-microvolt = <3312000>;
++		};
++
++		vreg_l24a_3p075: l24 {
++			regulator-min-microvolt = <3088000>;
++			regulator-max-microvolt = <3088000>;
++		};
++
++		vreg_l25a_3p3: l25 {
++			regulator-min-microvolt = <3104000>;
++			regulator-max-microvolt = <3312000>;
++		};
++
++		vreg_l26a_1p2: l26 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1200000>;
++			regulator-allow-set-load;
++		};
++
++		vreg_l28_3p0: l28 {
++			regulator-min-microvolt = <3008000>;
++			regulator-max-microvolt = <3008000>;
++		};
++
++		vreg_lvs1a_1p8: lvs1 { };
++
++		vreg_lvs2a_1p8: lvs2 { };
++	};
++
++	regulators-1 {
++		compatible = "qcom,rpm-pmi8998-regulators";
++
++		vdd_bob-supply = <&vph_pwr>;
++
++		vreg_bob: bob {
++			regulator-min-microvolt = <3312000>;
++			regulator-max-microvolt = <3600000>;
++		};
++	};
++};
++
++&tlmm {
++	gpio-reserved-ranges = <0 4>, <81 4>;
++
++	cci1_default_state: cci1-default-state {
++		pins = "gpio19", "gpio20";
++		function = "cci_i2c";
++		bias-disable;
++		drive-strength = <2>;
++	};
++
++	cdc_reset_n_state: cdc-reset-n-state {
++		pins = "gpio64";
++		function = "gpio";
++		bias-pull-down;
++		drive-strength = <16>;
++		output-high;
++	};
++
++	hall_sensor_default_state: hall-sensor-default-state {
++		pins = "gpio124";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-disable;
++		input-enable;
++	};
++
++	mdss_dsi_active_state: mdss-dsi-active-state {
++		pins = "gpio94";
++		function = "gpio";
++		drive-strength = <8>;
++		bias-disable;
++	};
++
++	mdss_dsi_suspend_state: mdss-dsi-suspend-state {
++		pins = "gpio94";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-pull-down;
++	};
++
++	mdss_te_active_state: mdss-te-active-state {
++		pins = "gpio10";
++		function = "mdp_vsync_a";
++		drive-strength = <2>;
++		bias-pull-down;
++	};
++
++	mdss_te_suspend_state: mdss-te-suspend-state {
++		pins = "gpio10";
++		function = "mdp_vsync_a";
++		drive-strength = <2>;
++		bias-pull-down;
++	};
++
++	msm_mclk0_active_state: msm-mclk0-active-state {
++		pins = "gpio13";
++		function = "cam_mclk";
++		drive-strength = <2>;
++		bias-disable;
++	};
++
++	msm_mclk0_suspend_state: msm-mclk0-suspend-state {
++		pins = "gpio13";
++		function = "cam_mclk";
++		drive-strength = <2>;
++		bias-pull-down;
++	};
++
++	msm_mclk1_active_state: msm-mclk1-active-state {
++		pins = "gpio14";
++		function = "cam_mclk";
++		drive-strength = <2>;
++		bias-disable;
++	};
++
++	msm_mclk1_suspend_state: msm-mclk1-suspend-state {
++		pins = "gpio14";
++		function = "cam_mclk";
++		drive-strength = <2>;
++		bias-pull-down;
++	};
++
++	nfc_int_active_state: nfc-int-active-state {
++		pins = "gpio92";
++		function = "gpio";
++		drive-strength = <6>;
++		bias-pull-up;
++	};
++
++	nfc_int_suspend_state: nfc-int-suspend-state {
++		pins = "gpio92";
++		function = "gpio";
++		drive-strength = <6>;
++		bias-pull-up;
++	};
++
++	nfc_enable_active_state: nfc-enable-active-state {
++		pins = "gpio12", "gpio116";
++		function = "gpio";
++		drive-strength = <6>;
++		bias-pull-up;
++	};
++
++	nfc_enable_suspend_state: nfc-enable-suspend-state {
++		pins = "gpio12", "gpio116";
++		function = "gpio";
++		drive-strength = <6>;
++		bias-disable;
++	};
++
++	ts_active_state: ts-active-state {
++		pins = "gpio89", "gpio125";
++		function = "gpio";
++		drive-strength = <16>;
++		bias-pull-up;
++		input-enable;
++	};
++
++	ts_int_suspend_state: ts-int-suspend-state {
++		pins = "gpio125";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-disable;
++	};
++
++	ts_reset_suspend_state: ts-reset-suspend-state {
++		pins = "gpio89";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-disable;
++	};
++
++	wcd_int_n_state: wcd-int-n-state {
++		pins = "gpio54";
++		function = "gpio";
++		bias-pull-down;
++		drive-strength = <2>;
++		input-enable;
++	};
++
++	wsa_leftspk_pwr_n_state: wsa-leftspk-pwr-n-state {
++		pins = "gpio65";
++		function = "gpio";
++		bias-disable;
++		drive-strength = <2>;
++		output-low;
++	};
++
++	wsa_rightspk_pwr_n_state: wsa-rightspk-pwr-n-state {
++		pins = "gpio66";
++		function = "gpio";
++		bias-disable;
++		drive-strength = <2>;
++		output-low;
++	};
++};
++
++&pm8998_resin {
++	linux,code = <KEY_VOLUMEDOWN>;
++};
++
++&ufshc {
++	vcc-supply = <&vreg_l20a_2p95>;
++	vccq-supply = <&vreg_l26a_1p2>;
++	vccq2-supply = <&vreg_s4a_1p8>;
++	vcc-max-microamp = <750000>;
++	vccq-max-microamp = <560000>;
++	vccq2-max-microamp = <750000>;
++	status = "okay";
++};
++
++&ufsphy {
++	vdda-phy-supply = <&vreg_l1a_0p875>;
++	vdda-pll-supply = <&vreg_l2a_1p2>;
++	vddp-ref-clk-supply = <&vreg_l26a_1p2>;
++	status = "okay";
++};
++
++&usb3 {
++	/* Disable USB3 clock requirement as the device only supports USB2 */
++	qcom,select-utmi-as-pipe-clk;
++	status = "okay";
++};
++
++&usb3_dwc3 {
++	/* Drop the unused USB 3 PHY */
++	phys = <&qusb2phy>;
++	phy-names = "usb2-phy";
++
++	/* Fastest mode for USB 2 */
++	maximum-speed = "high-speed";
++
++	/* Force to peripheral until we can switch modes */
++	dr_mode = "peripheral";
++};
++
++&wifi {
++	vdd-0.8-cx-mx-supply = <&vreg_l5a_0p8>;
++	vdd-1.8-xo-supply = <&vreg_l7a_1p8>;
++	vdd-1.3-rfa-supply = <&vreg_l17a_1p3>;
++	vdd-3.3-ch0-supply = <&vreg_l25a_3p3>;
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/qcom/pm8998.dtsi b/arch/arm64/boot/dts/qcom/pm8998.dtsi
+index d09f2954b6f9..7929fa64e1ef 100644
+--- a/arch/arm64/boot/dts/qcom/pm8998.dtsi
++++ b/arch/arm64/boot/dts/qcom/pm8998.dtsi
+@@ -52,6 +52,14 @@ pm8998_pwrkey: pwrkey {
+ 				bias-pull-up;
+ 				linux,code = <KEY_POWER>;
+ 			};
++
++			pm8998_resin: resin {
++				compatible = "qcom,pm8941-resin";
++				bias-pull-up;
++				interrupts = <GIC_SPI 0x8 1 IRQ_TYPE_EDGE_BOTH>;
++				debounce = <15625>;
++				status = "disabled";
++			};
+ 		};
  
-       - items:
+ 		pm8998_temp: temp-alarm@2400 {
 -- 
 2.30.2
 
