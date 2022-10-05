@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1E35F55B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 15:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 788175F55B6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 15:40:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbiJENk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 09:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
+        id S230189AbiJENkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 09:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiJENkG (ORCPT
+        with ESMTP id S230190AbiJENkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 09:40:06 -0400
-Received: from smtp-1909.mail.infomaniak.ch (smtp-1909.mail.infomaniak.ch [IPv6:2001:1600:3:17::1909])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7AFEE2E
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 06:39:49 -0700 (PDT)
+        Wed, 5 Oct 2022 09:40:07 -0400
+Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc09])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E8471BE92
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 06:39:52 -0700 (PDT)
 Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MjFzt6glYzMqPd3;
-        Wed,  5 Oct 2022 15:39:38 +0200 (CEST)
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MjFzv2KKNzMqFpd;
+        Wed,  5 Oct 2022 15:39:39 +0200 (CEST)
 Received: from philippe-pc.toradex.int (unknown [31.10.206.125])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4MjFzt4Qq1zMpnPl;
-        Wed,  5 Oct 2022 15:39:38 +0200 (CEST)
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4MjFzv04mqzMpnPh;
+        Wed,  5 Oct 2022 15:39:39 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pschenker.ch;
-        s=20220412; t=1664977178;
-        bh=6zUwdKLzRxtYDq/hGVP9cXox20ACTudefkYhW9W1meg=;
+        s=20220412; t=1664977179;
+        bh=5WAdU/ZfhtphXUGEjTHM+U+v64EjHQonzrwuNMeg3Tg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AYc1UvyxewTxvuOVJlG9k0PdAnnv6BDZEcFf7vE+p9UjMRObCAtuP4J6T0K4zSkXJ
-         YJkhLoIB0fwZ3nhiQWUqEA5f2VAa0pwX6pGQT2IYRKA8GWiwV2ncUzKlA10FPFwY3X
-         VnTOEZRJMkg9Qf4/brM1cOPknfPdyAY9LhoMnlas=
+        b=r9u59RnzsjMSHIWxsH/mdFGumJpz+Xoj/fsX2l7Wk3wdvrM6mpdnxhIM/vlIkg5El
+         HlB0RWUOGC/kD20fV/nmh+/9Iy3wtpZFV7Nu6mPED9NXt7g/smG9U0u/3SWK0hinYD
+         zMAy4vfJAO0NcDXvpIpG+W0C6k4nndqtluZSeDc0=
 From:   Philippe Schenker <dev@pschenker.ch>
 To:     devicetree@vger.kernel.org
 Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
@@ -39,17 +39,17 @@ Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] arm: dts: colibri-imx6ull: add -hog to gpio hogs
-Date:   Wed,  5 Oct 2022 15:39:28 +0200
-Message-Id: <20221005133929.1243443-3-dev@pschenker.ch>
+Subject: [PATCH 4/4] arm: dts: colibri-imx7: fix confusing naming
+Date:   Wed,  5 Oct 2022 15:39:29 +0200
+Message-Id: <20221005133929.1243443-4-dev@pschenker.ch>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221005133929.1243443-1-dev@pschenker.ch>
 References: <20221005133929.1243443-1-dev@pschenker.ch>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,119 +58,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Philippe Schenker <philippe.schenker@toradex.com>
 
-Since it seems to be a naming-convention to add -hog for gpio hogs do
-this.
+fix the naming of node-name vs label-name to the correct one, that is
+the label was always correct.
 
 Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
+
 ---
 
- arch/arm/boot/dts/imx6ull-colibri-iris-v2.dts      | 8 ++++----
- arch/arm/boot/dts/imx6ull-colibri-iris.dtsi        | 4 ++--
- arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dts | 8 ++++----
- 3 files changed, 10 insertions(+), 10 deletions(-)
+ arch/arm/boot/dts/imx7-colibri.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-iris-v2.dts b/arch/arm/boot/dts/imx6ull-colibri-iris-v2.dts
-index fac7428685b4..f6b31118be17 100644
---- a/arch/arm/boot/dts/imx6ull-colibri-iris-v2.dts
-+++ b/arch/arm/boot/dts/imx6ull-colibri-iris-v2.dts
-@@ -29,7 +29,7 @@ &backlight {
+diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
+index a8c31ee65623..3bea7549b762 100644
+--- a/arch/arm/boot/dts/imx7-colibri.dtsi
++++ b/arch/arm/boot/dts/imx7-colibri.dtsi
+@@ -652,7 +652,7 @@ &iomuxc {
+ 	 * NOTE: This pin group conflicts with pin groups pinctrl_pwm2/pinctrl_pwm3.
+ 	 * Don't use them simultaneously.
+ 	 */
+-	pinctrl_atmel_adapter: atmelconnectorgrp {
++	pinctrl_atmel_adapter: atmeladaptergrp {
+ 		fsl,pins = <
+ 			MX7D_PAD_GPIO1_IO09__GPIO1_IO9		0x74 /* SODIMM 28 / INT */
+ 			MX7D_PAD_GPIO1_IO10__GPIO1_IO10		0x14 /* SODIMM 30 / RST */
+@@ -660,7 +660,7 @@ MX7D_PAD_GPIO1_IO10__GPIO1_IO10		0x14 /* SODIMM 30 / RST */
+ 	};
  
- &gpio1 {
- 	/* This turns the LVDS transceiver on */
--	lvds-power-on {
-+	lvds-power-on-hog {
- 		gpio-hog;
- 		gpios = <14 GPIO_ACTIVE_HIGH>; /* SODIMM 99 */
- 		line-name = "LVDS_POWER_ON";
-@@ -42,7 +42,7 @@ &gpio2 {
- 	 * This switches the LVDS transceiver to the single-channel
- 	 * output mode.
- 	 */
--	lvds-ch-mode {
-+	lvds-ch-mode-hog {
- 		gpio-hog;
- 		gpios = <0 GPIO_ACTIVE_HIGH>; /* SODIMM 55 */
- 		line-name = "LVDS_CH_MODE";
-@@ -52,7 +52,7 @@ lvds-ch-mode {
- 	/*
- 	 * This switches the LVDS transceiver to the 24-bit RGB mode.
- 	 */
--	lvds-rgb-mode {
-+	lvds-rgb-mode-hog {
- 		gpio-hog;
- 		gpios = <1 GPIO_ACTIVE_HIGH>; /* SODIMM 63 */
- 		line-name = "LVDS_RGB_MODE";
-@@ -64,7 +64,7 @@ &gpio5 {
- 	/*
- 	 * This switches the LVDS transceiver to VESA color mapping mode.
- 	 */
--	lvds-color-map {
-+	lvds-color-map-hog {
- 		gpio-hog;
- 		gpios = <3 GPIO_ACTIVE_HIGH>; /* SODIMM 95 */
- 		line-name = "LVDS_COLOR_MAP";
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-iris.dtsi b/arch/arm/boot/dts/imx6ull-colibri-iris.dtsi
-index 7f3b37baba88..166a0aefc869 100644
---- a/arch/arm/boot/dts/imx6ull-colibri-iris.dtsi
-+++ b/arch/arm/boot/dts/imx6ull-colibri-iris.dtsi
-@@ -59,7 +59,7 @@ &gpio1 {
- 	 * in userspace.
- 	 * The same applies to uart1_tx_on.
- 	 */
--	uart25_tx_on {
-+	uart25_tx_on-hog {
- 		gpio-hog;
- 		gpios = <15 0>;
- 		output-high;
-@@ -67,7 +67,7 @@ uart25_tx_on {
- };
- 
- &gpio2 {
--	uart1_tx_on {
-+	uart1_tx_on-hog {
- 		gpio-hog;
- 		gpios = <7 0>;
- 		output-high;
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dts b/arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dts
-index ed89d07beae5..488da6df56fa 100644
---- a/arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dts
-+++ b/arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dts
-@@ -29,7 +29,7 @@ &backlight {
- 
- &gpio1 {
- 	/* This turns the LVDS transceiver on */
--	lvds-power-on {
-+	lvds-power-on-hog {
- 		gpio-hog;
- 		gpios = <14 GPIO_ACTIVE_HIGH>; /* SODIMM 99 */
- 		line-name = "LVDS_POWER_ON";
-@@ -42,7 +42,7 @@ &gpio2 {
- 	 * This switches the LVDS transceiver to the single-channel
- 	 * output mode.
- 	 */
--	lvds-ch-mode {
-+	lvds-ch-mode-hog {
- 		gpio-hog;
- 		gpios = <0 GPIO_ACTIVE_HIGH>; /* SODIMM 55 */
- 		line-name = "LVDS_CH_MODE";
-@@ -52,7 +52,7 @@ lvds-ch-mode {
- 	/*
- 	 * This switches the LVDS transceiver to the 24-bit RGB mode.
- 	 */
--	lvds-rgb-mode {
-+	lvds-rgb-mode-hog {
- 		gpio-hog;
- 		gpios = <1 GPIO_ACTIVE_HIGH>; /* SODIMM 63 */
- 		line-name = "LVDS_RGB_MODE";
-@@ -64,7 +64,7 @@ &gpio5 {
- 	/*
- 	 * This switches the LVDS transceiver to VESA color mapping mode.
- 	 */
--	lvds-color-map {
-+	lvds-color-map-hog {
- 		gpio-hog;
- 		gpios = <3 GPIO_ACTIVE_HIGH>; /* SODIMM 95 */
- 		line-name = "LVDS_COLOR_MAP";
+ 	/* Atmel MXT touchsceen + boards with built-in Capacitive Touch Connector */
+-	pinctrl_atmel_connector: atmeladaptergrp {
++	pinctrl_atmel_connector: atmelconnectorgrp {
+ 		fsl,pins = <
+ 			MX7D_PAD_EPDC_BDR0__GPIO2_IO28		0x14 /* SODIMM 106 / RST */
+ 			MX7D_PAD_EPDC_DATA15__GPIO2_IO15	0x74 /* SODIMM 107 / INT */
 -- 
 2.37.3
 
