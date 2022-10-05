@@ -2,133 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8505F5903
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70ED55F590B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiJERS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 13:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
+        id S230143AbiJERWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 13:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbiJERSp (ORCPT
+        with ESMTP id S229808AbiJERWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 13:18:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7606746857
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 10:18:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664990316;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EQGZeMMosYwUdiU0OrsifprAdKF8zlo/1AkIo/J/cWU=;
-        b=CQC02lrzZJLtnIDXu608v/TiWvqFKwNv+ehEioMnW1D062Tvn8/nJBtuZn/4kf8kjfmG8I
-        Q7loWStUNmk7AGZ+4RnyMJvXTB6vtxSFk9ZmT1n7ZcvV6weGoH2oRmVqQ2vw9afDiwfLQR
-        390VIELFQiwV2btbRQZVFH8cm3+azic=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-607-aqXj4L9DPCKfRxMHuB_WlA-1; Wed, 05 Oct 2022 13:18:35 -0400
-X-MC-Unique: aqXj4L9DPCKfRxMHuB_WlA-1
-Received: by mail-qt1-f198.google.com with SMTP id g6-20020ac84b66000000b0035cf832dec9so11560812qts.6
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 10:18:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=EQGZeMMosYwUdiU0OrsifprAdKF8zlo/1AkIo/J/cWU=;
-        b=trr+MKhfTyIH6y9kiBpfP2VSjibVsyMJ1AjllJ+oj8h/0ofGDpf8t2CTm1UQYfOiCQ
-         YM1iGvYatAL77dnrjbl31d+pW8eNIKVhPkrAD/Hz/j07cChzI6f+6asyxrLX3Gg1YC/V
-         cP0Y6WXHgVyT4gFVHbaMpCnkg0kfogSEXH/BehfQ4Kqq0KQABQa7aYH50rBwTkVMpSJm
-         UvvQ4FpfLSkHQHl9IHB03hGo1BJt9Z6Y8CxssTT9r5q9Es0a3JQP3vS4/O0bMiYEIGxS
-         0ozUtUpsO2fIyPs5dSOZuBr/6ireJ/rwrFjnZhET0lsiZT8HaZM/SRZstjblBgtCkPxu
-         w2fA==
-X-Gm-Message-State: ACrzQf25yIrjdRdrEsOItnmYBlgjl+t2NJMkfXTzF1fi6Szej6aMfI66
-        uO7Ffaz1IlYCes6xq2qQwGZajvGb0iPuBDrhGvVXu0tY4bOGIguAcdPSU+zaqwAdAhkLP9PM1OH
-        XKQ+MNSZZ3cE9e/DSUOAfoXLX
-X-Received: by 2002:a05:620a:2a02:b0:6ce:90fb:51b8 with SMTP id o2-20020a05620a2a0200b006ce90fb51b8mr486804qkp.460.1664990314781;
-        Wed, 05 Oct 2022 10:18:34 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7aP3yRogasFXufFvt47NK7C57mBsP2uou9HRoFvjEEhQfi2tAKg2wbRInBFvXH0icM++ahPA==
-X-Received: by 2002:a05:620a:2a02:b0:6ce:90fb:51b8 with SMTP id o2-20020a05620a2a0200b006ce90fb51b8mr486784qkp.460.1664990314537;
-        Wed, 05 Oct 2022 10:18:34 -0700 (PDT)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id x6-20020a37ae06000000b006b9c9b7db8bsm16665351qke.82.2022.10.05.10.18.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 10:18:34 -0700 (PDT)
-Date:   Wed, 5 Oct 2022 13:18:32 -0400
-From:   Brian Foster <bfoster@redhat.com>
-To:     Chaitanya Kulkarni <kch@nvidia.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        axboe@kernel.dk, damien.lemoal@opensource.wdc.com,
-        johannes.thumshirn@wdc.com, bvanassche@acm.org,
-        ming.lei@redhat.com, shinichiro.kawasaki@wdc.com,
-        vincent.fu@samsung.com, yukuai3@huawei.com
-Subject: Re: [PATCH 2/6] null_blk: allow write zeores on membacked
-Message-ID: <Yz28aEOOUqrCUhe2@bfoster>
-References: <20221005031701.79077-1-kch@nvidia.com>
- <20221005031701.79077-3-kch@nvidia.com>
+        Wed, 5 Oct 2022 13:22:41 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842747D1F5;
+        Wed,  5 Oct 2022 10:22:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664990560; x=1696526560;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=QPECApqlN0wp6pBzU1AFMijHUtHHCxXdPWVpt0R//EA=;
+  b=dJ3HoVRO4Ou6ClD8rR0h4+lzgK1a0R4tccMgl1wNCqX7xhD0CpTQ2WX/
+   MrRdeTBKvmBDfM0Mkmx9TuGXbOKlqxKoajoHErc051G0J1jWOV3i+WWvC
+   YCO0pkcbCACMIWbTjXO1GVGrdVIp8anWhxyBvAN1auWHf1fjFK3/dcTf8
+   N+RE4DgR/6feiX5jJRS/skCg4SQqTLwVnmEGLbiUb7UtPWBReS/JuBRts
+   e0UV9p0GI8doukwheO+mMiZfhT0DSoBTMf72U346EWBe73FPxnRRhPH+3
+   fPEUuhGgXxkSaG4l3jhsBb0lRjA76dsYxp+ERnkBjbS3Lp+XbMjbIulnh
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="367333335"
+X-IronPort-AV: E=Sophos;i="5.95,161,1661842800"; 
+   d="scan'208";a="367333335"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 10:22:39 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="799560939"
+X-IronPort-AV: E=Sophos;i="5.95,161,1661842800"; 
+   d="scan'208";a="799560939"
+Received: from gionescu-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.39.173])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 10:22:38 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH 1/5] docs: Switch the default HTML theme to alabaster
+In-Reply-To: <20221004201222.281845-2-corbet@lwn.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20221004201222.281845-1-corbet@lwn.net>
+ <20221004201222.281845-2-corbet@lwn.net>
+Date:   Wed, 05 Oct 2022 20:22:35 +0300
+Message-ID: <87o7uqqj6s.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221005031701.79077-3-kch@nvidia.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 08:16:57PM -0700, Chaitanya Kulkarni wrote:
-> Add a helper functions to enable the REQ_OP_WRITE_ZEROES operations
-> when null_blk is configured with the membacked mode.
-> 
-> Since write-zeroes is a non-trivial I/O operation we need this to
-> add a blktest so we can test the non-trivial I/O path from the
-> application to the block layer.
-> 
-> Signed-off-by: Chaitanya Kulkarni <kch@nvidia.com>
+On Tue, 04 Oct 2022, Jonathan Corbet <corbet@lwn.net> wrote:
+> The read-the-docs theme is not entirely attractive and doesn't give us
+> control over the left column.  "Alabaster" is deemed the default Sphinx
+> theme, it is currently maintained and shipped bundled with Sphinx itself,
+> so there is no need to install it separately.  Switch over to this theme as
+> the default for building kernel documentation; the DOCS_THEME environment
+> variable can still be used to select a different theme.
+>
+> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
 > ---
->  drivers/block/null_blk/main.c | 46 ++++++++++++++++++++++++++++++++++-
->  1 file changed, 45 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/block/null_blk/main.c b/drivers/block/null_blk/main.c
-> index fc3e883f7b84..2d592b4eb815 100644
-> --- a/drivers/block/null_blk/main.c
-> +++ b/drivers/block/null_blk/main.c
-...
-> @@ -875,6 +877,24 @@ static void null_free_sector(struct nullb *nullb, sector_t sector,
->  	}
->  }
+>  Documentation/conf.py | 26 ++++++++++++++++++++++++--
+>  1 file changed, 24 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/conf.py b/Documentation/conf.py
+> index 22c9d4df1967..629f4afeb0eb 100644
+> --- a/Documentation/conf.py
+> +++ b/Documentation/conf.py
+> @@ -194,6 +194,24 @@ finally:
+>      else:
+>          version = release = "unknown version"
 >  
-> +static void null_zero_sector(struct nullb_device *d, sector_t sect,
-> +			     sector_t nr_sects, bool cache)
-> +{
-
-Any reason to not just pass the tree root directly here instead of the
-cache boolean? It might make the callers more readable and also
-eliminates the need to pass the nullb_device.
-
-Brian
-
-> +	struct radix_tree_root *root = cache ? &d->cache : &d->data;
-> +	struct nullb_page *t_page;
-> +	unsigned int offset;
-> +	void *dest;
+> +#
+> +# HACK: there seems to be no easy way for us to get at the version and
+> +# release information passed in from the makefile...so go pawing through the
+> +# command-line options and find it for ourselves.
+> +#
+> +def get_cline_version():
+> +    c_version = c_release = ''
+> +    for arg in sys.argv:
+> +        if arg.startswith('version='):
+> +            c_version = arg[8:]
+> +        elif arg.startswith('release='):
+> +            c_release = arg[8:]
+> +    if c_version:
+> +        if c_release:
+> +            return c_version + '-' + c_release
+> +        return c_version
+> +    return version # Whatever we came up with before
 > +
-> +	t_page = radix_tree_lookup(root, sect >> PAGE_SECTORS_SHIFT);
-> +	if (!t_page)
-> +		return;
-> +
-> +	offset = (sect & SECTOR_MASK) << SECTOR_SHIFT;
-> +	dest = kmap_atomic(t_page->page);
-> +	memset(dest + offset, 0, SECTOR_SIZE * nr_sects);
-> +	kunmap_atomic(dest);
-> +}
-> +
->  static struct nullb_page *null_radix_tree_insert(struct nullb *nullb, u64 idx,
->  	struct nullb_page *t_page, bool is_cache)
->  {
-...
 
+This is a bit sad. There should be a way to set the description in the
+theme template at a later time, when version is available. This is how
+the rtd theme does it [1].
+
+Would only need to inject one line in the template html, but I don't
+know how to do that. :(
+
+I wonder if the right way to do this would be to define our own theme,
+which would mostly just extend alabaster, but would have small tweaks
+[2]. Where are the Jinja experts when you need one?!
+
+
+BR,
+Jani.
+
+
+[1] https://github.com/readthedocs/sphinx_rtd_theme/blob/master/sphinx_rtd_theme/layout.html#L150
+[2] https://www.sphinx-doc.org/en/master/templating.html
+
+>  # The language for content autogenerated by Sphinx. Refer to documentation
+>  # for a list of supported languages.
+>  #
+> @@ -247,7 +265,7 @@ highlight_language = 'none'
+>  # a list of builtin themes.
+>  
+>  # Default theme
+> -html_theme = 'sphinx_rtd_theme'
+> +html_theme = 'alabaster'
+>  html_css_files = []
+>  
+>  if "DOCS_THEME" in os.environ:
+> @@ -324,6 +342,10 @@ if  html_theme == 'classic':
+>          'bodyfont':            "serif",
+>          'headfont':            "sans-serif",
+>      }
+> +else:
+> +    html_theme_options = {
+> +        'description': get_cline_version(),
+> +    }
+>  
+>  sys.stderr.write("Using %s theme\n" % html_theme)
+>  
+> @@ -371,7 +393,7 @@ html_use_smartypants = False
+>  
+>  # Custom sidebar templates, maps document names to template names.
+>  # Note that the RTD theme ignores this
+> -html_sidebars = { '**': ['searchbox.html', 'localtoc.html', 'sourcelink.html']}
+> +html_sidebars = { '**': ["about.html", 'searchbox.html', 'localtoc.html', 'sourcelink.html']}
+>  
+>  # Additional templates that should be rendered to pages, maps page names to
+>  # template names.
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center
