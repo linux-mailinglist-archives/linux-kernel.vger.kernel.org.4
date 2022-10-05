@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5B525F4D03
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 02:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67EFF5F4D0D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 02:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiJEAXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 20:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41860 "EHLO
+        id S229539AbiJEAa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 20:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiJEAXj (ORCPT
+        with ESMTP id S229509AbiJEAau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 20:23:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83727564CE;
-        Tue,  4 Oct 2022 17:23:38 -0700 (PDT)
+        Tue, 4 Oct 2022 20:30:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B14756B82;
+        Tue,  4 Oct 2022 17:30:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 423C2B81C4A;
-        Wed,  5 Oct 2022 00:23:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D07BC433D6;
-        Wed,  5 Oct 2022 00:23:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED89BB81B54;
+        Wed,  5 Oct 2022 00:30:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45066C433D6;
+        Wed,  5 Oct 2022 00:30:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664929416;
-        bh=mD2LhzbA1iNs/rh93HQfgura4zsxg+NMKqeLVu1NIjY=;
+        s=k20201202; t=1664929847;
+        bh=y4Zwm8QOPM6J2mvf2FDbEYt5AqCQVuApnRv1mKgcby8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aDBNU+BgzpTyr6yGIvISpEwHfm+2L1vy7GF/sgfKOEbOGU4EaYdOzNCILp27ei3m3
-         rW3PP+D4Uc7G9fF/YHMtcs7WjK6f6GptN3+ETHikB9RP09pOfKQ//f38/CrYXPtKb9
-         g+b7jBS6jmHHVOlwmEI6IOQ0hL3tC+eAsOGlPISZaDnHiobRmNSylsYTcAW+yH5sQ4
-         mgGEnICPC35b+ICJKF/AUMrDrIh+oDAuQjphn2RAu/PvqvHQbhZwsufkuIVtX8b+po
-         Kbsd+2iJ8gzqnw2YGIe2zp0XaksS71SREDZhy0d4Zqcx3YJfDUYWE3jLiTW/eQGPo7
-         /+dd34UeROEew==
-Date:   Tue, 4 Oct 2022 17:23:34 -0700
+        b=VEoHgV50wq7+CCtjldXASZQq4dfOAIQECU2Ieaczh37GmqqGS57nIuP588wl5TmCk
+         3B33uPCR24m791TKLtDOH2u7ptipHps4i2V8ZW8iKy11Sg5Uj3mLyo4gJo/H3CSkxi
+         maj/277l9cWCTJHba8dalj/Nq0HSKnRK6KYEsYFhTlV9Rntc1iZvDEMQPnNttqQztc
+         jnHRDt4k5QZezRezDhI3VVmBcFIGyiKsWww1A0PVEmezbHnOyzno2f09/VAEnlP6Ip
+         fd4IRhGu1iuYAcVBXSOVTAuBQTuhiZqVbBlCAbfjCy8yMYSCX78HScIVl7K2tjxz04
+         bn1yg48lGg6xA==
+Date:   Tue, 4 Oct 2022 17:30:46 -0700
 From:   Jakub Kicinski <kuba@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+3a080099974c271cd7e9@syzkaller.appspotmail.com>,
-        bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        fw@strlen.de, harshit.m.mogalapalli@oracle.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
-        linux-hardening@vger.kernel.org
-Subject: Re: [syzbot] upstream boot error: WARNING in netlink_ack
-Message-ID: <20221004172334.2cb0233e@kernel.org>
-In-Reply-To: <20221004170400.52c97523@kernel.org>
-References: <000000000000a793cc05ea313b87@google.com>
-        <CACT4Y+a8b-knajrXWs8OnF1ijCansRxEicU=YJz6PRk-JuSKvg@mail.gmail.com>
-        <F58E0701-8F53-46FE-8324-4DEA7A806C20@chromium.org>
-        <20221004104253.29c1f3c7@kernel.org>
-        <202210041600.7C90DF917@keescook>
-        <20221004170400.52c97523@kernel.org>
+To:     Stephen Hemminger <stephen@networkplumber.org>,
+        Peter Kosyh <pkosyh@yandex.ru>
+Cc:     Ajit Khaparde <ajit.khaparde@broadcom.com>,
+        Sriharsha Basavapatna <sriharsha.basavapatna@broadcom.com>,
+        Somnath Kotur <somnath.kotur@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: Re: [PATCH] net: benet: use snprintf instead sprintf and IFNAMSIZ
+ instead hardcoded constant.
+Message-ID: <20221004173046.5ec6d3ca@kernel.org>
+In-Reply-To: <20221004082936.0d0c9bcb@hermes.local>
+References: <20221004095034.377665-1-pkosyh@yandex.ru>
+        <20221004082936.0d0c9bcb@hermes.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -63,13 +61,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Oct 2022 17:04:00 -0700 Jakub Kicinski wrote:
-> > why does a fixed size mean no memset?  
+On Tue, 4 Oct 2022 08:29:36 -0700 Stephen Hemminger wrote:
+> On Tue,  4 Oct 2022 12:50:34 +0300
+> Peter Kosyh <pkosyh@yandex.ru> wrote:
 > 
-> Copy and paste, it seems to originate from:
+> > printf to array 'eqo->desc' of size 32 may cause buffer overflow when
+> > using non-standard IFNAMSIZ.
+> > 
+> > Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> > 
+> > Signed-off-by: Peter Kosyh <pkosyh@yandex.ru>  
 > 
-> 0c19b0adb8dd ("netlink: avoid memset of 0 bytes sparse warning")
-> 
-> Any idea why sparse would not like empty memsets?
+> NACK
+> Non-standard IFNAMSIZ will break uapi and many things.
+> I see no reason for kernel or tools like iproute2 to support or
+> fix those related bugs.
 
-Google answers is. Let me test if sparse still wants the workaround.
+I think the commit message is missing the point, but the warning
+may be legit.
+
+Pater please read the requirements for sending patches based on
+automated checkers:
+
+  Documentation/process/researcher-guidelines.rst
