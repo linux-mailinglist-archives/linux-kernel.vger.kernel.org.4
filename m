@@ -2,99 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90D915F537E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 13:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE305F53CA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 13:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbiJELey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 07:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35596 "EHLO
+        id S230374AbiJELkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 07:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbiJELeS (ORCPT
+        with ESMTP id S230283AbiJELjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 07:34:18 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BA8760EC;
-        Wed,  5 Oct 2022 04:33:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IfD4r/Qnubl/ZXrWJ/hqbcL8YwiA7Xmp7ErQUUoOr/8=; b=gsBoeSTnoX+6nNnHosNB3RX2Wm
-        2KEAZ9IKZ6OFskIwRx4wlx1XDS5f6QKQwxVbR7IEnPXs8WAqjkYjcUmjmD7DHrI27myjjTcWSR4L0
-        EQAO5RE/1ivJ/IS+G684FlDnjJeT7th1V7fEqLtmbqJYWRPwOFtMKBPaRoHUhXV4kgQAlq/yriK+4
-        UJsZvNlFIXt9nSU6fX9RzUOYWIqlF67OhnS4+fd+dfHaR0cwVwcRhMSrnb0Db1/ODuryYNf7oxY0a
-        lUkfz/Efv4zbhc47OmDtOlhzmhj6SttDkG3sf6YcYKhp96HsB/gw3aAUP0iQ00IPapI3xFEkiwYIK
-        NLOHHI1A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1og2eB-000K0k-A8; Wed, 05 Oct 2022 11:33:07 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Wed, 5 Oct 2022 07:39:53 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC5378598;
+        Wed,  5 Oct 2022 04:37:03 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AA0493004A1;
-        Wed,  5 Oct 2022 13:33:02 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 90FCA29982FC3; Wed,  5 Oct 2022 13:33:02 +0200 (CEST)
-Date:   Wed, 5 Oct 2022 13:33:02 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 10/39] x86/mm: Introduce _PAGE_COW
-Message-ID: <Yz1rbqGHOzmu8Hig@hirez.programming.kicks-ass.net>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-11-rick.p.edgecombe@intel.com>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E89C966022F0;
+        Wed,  5 Oct 2022 12:35:34 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1664969735;
+        bh=qULQP86b4+eOLbpwlAGXJqEihDLHn7C+UcPb7jg5t+g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Q0yhxJbk5tyqyqWjbgBIUzlzZjuBMrTyew3wuGl1794jdF37AkJhVurw7XNMad0N/
+         N2kyyb6D74789UyOvdbRTl2YThKP8RFP5BH/id8MKWNxLRp7cI+eCMYTPlbTCTWuRo
+         kiU1uNgDtx2pQUHgYsMT6mZbYr8S/n1ZJi/K6aKbzP7oOGrBCOXZZje822OolTTUve
+         QjHUzodK7X+n0to/OZJ2TqgloJJkPN2wulPgBM1rt8kA8sUfbtAy2J7Q2BamxNNkvG
+         JFMHuPpAKg2kOq0CQmsN1ADQhB4GZAd8TckSwQR1a+1nuIxdYU/NR8fpuGrUj1wysb
+         E8dWCOA8ftrlw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     wim@linux-watchdog.org
+Cc:     linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        allen-kh.cheng@mediatek.com, seiya.wang@mediatek.com,
+        angelogioacchino.delregno@collabora.com, tinghan.shen@mediatek.com,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/5] MediaTek watchdog: MT6795 support and YAML conversion
+Date:   Wed,  5 Oct 2022 13:35:12 +0200
+Message-Id: <20221005113517.70628-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-11-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:07PM -0700, Rick Edgecombe wrote:
+This series converts mtk-wdt.txt to dt-schema, fixes watchdog compatibles
+for MT8186 and MT8195, and adds support for the watchdog and toprgu reset
+found on the MediaTek Helio X10 MT6795 SoC.
 
-Mucho confusion here:
+AngeloGioacchino Del Regno (5):
+  arm64: dts: mediatek: mt8186: Fix watchdog compatible
+  arm64: dts: mediatek: mt8195: Fix watchdog compatible
+  dt-bindings: watchdog: mediatek: Convert mtk-wdt to json-schema
+  dt-bindings: watchdog: mediatek,mtk-wdt: Add compatible for MT6795
+  watchdog: mtk_wdt: Add support for MT6795 Helio X10 watchdog and
+    toprgu
 
-> (a) (Write=0,Cow=1,Dirty=0) A modified, copy-on-write (COW) page.
-> (b) (Write=0,Cow=1,Dirty=0) A R/O page that has been COW'ed. The user page
-> (d) (Write=0,Cow=1,Dirty=0) A shared shadow stack PTE. When a shadow stack
+ .../bindings/watchdog/mediatek,mtk-wdt.yaml   | 81 +++++++++++++++++++
+ .../devicetree/bindings/watchdog/mtk-wdt.txt  | 42 ----------
+ arch/arm64/boot/dts/mediatek/mt8186.dtsi      |  3 +-
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  3 +-
+ drivers/watchdog/mtk_wdt.c                    |  6 ++
+ 5 files changed, 89 insertions(+), 46 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
 
-are all identical cases;
-
-> (c) (Write=0,Cow=0,Dirty=1) A shadow stack PTE.
-> (e) (Write=0,Cow=0,Dirty=1) A Cow PTE created when a processor without
-
-as are these.
+-- 
+2.37.2
 
