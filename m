@@ -2,351 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE6A5F512F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 10:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C645F5131
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 10:53:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiJEIxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 04:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35764 "EHLO
+        id S229902AbiJEIxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 04:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbiJEIxN (ORCPT
+        with ESMTP id S229479AbiJEIxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 04:53:13 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FB45B79A;
-        Wed,  5 Oct 2022 01:53:11 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id bu30so5010806wrb.8;
-        Wed, 05 Oct 2022 01:53:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=mD6VQz9WFibdMEj3yNS/4C4w2+rLYFQZrNucxRHHEtY=;
-        b=A6WLIwGWyAEhmxZDImz1iQ844kw150/x0h0r+1y7znBPW+BlHRJOuFNsrGgvEZTK6t
-         p06pzqX++HbOUBlLM+ftH2FKTJvvl33oHiG8H+IrfqQ52rmTXWSKEKTCSs7Er4Pfy97K
-         GoViwvHi4gAiAiX+fErCG4jxYfyDWT0KaeO63BxtMXlw+h0ila/yRBKEs58ZJ/ninAlb
-         RWT5U8UeUmvNl3mATpMyw9RJiZT4WBYDOs9qahzosliGzqYqnTa+crKmEBsY2Ih34j4G
-         AXilxEbMKHUEHIoA793CHFs50dUqTvLjUn3glC6h4fWnuXVxdb7YWpBNCw3exkwlH4PY
-         WU4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=mD6VQz9WFibdMEj3yNS/4C4w2+rLYFQZrNucxRHHEtY=;
-        b=qng5majokAsS9ZhVCTrsmapZWrcSz5Hu+PIHjggkIVuG4G/2gFJrKouSe9+0Gr7Ak3
-         LwYnR713zfrkVUNXYjVkbulcxRsdSJgN6NNO8HMhyd62/Dg3riHR3vJVMwszBAXtB2iX
-         AxfN64bXAYwxJX47HDndffP/xQSPNLkYGmc063feESbuw+O6zecHJJWcnESjMjl5yZFd
-         EXhfIKkUlnzwHXGZjrcWQGAZI+kOYjKVJ63Bhxtotym7VJd9syuRcnoHDWkTceg56R+m
-         6LjM0CMoCuJSGTxQcR4FoDk4oHhMYrOnD8bAHHSkabN7Xxud+fM+R6h0eStAhIXLOrco
-         kEoQ==
-X-Gm-Message-State: ACrzQf3bzywm5Myx2IODFFcD8rw6vR6sCyMs6hJ6ZS2Fn3UazHj6Na5d
-        62MpRdFj/CaBdFYzvUpSgks=
-X-Google-Smtp-Source: AMsMyM5hDGdEa/xKgl8AgOcKpbznzBkeBn9SKMOSOpOG9vkOeAuVudAIO2tnRJUJPwWaTAEN37ypNQ==
-X-Received: by 2002:a5d:6e92:0:b0:22c:c09c:8f23 with SMTP id k18-20020a5d6e92000000b0022cc09c8f23mr18871016wrz.389.1664959990354;
-        Wed, 05 Oct 2022 01:53:10 -0700 (PDT)
-Received: from debby ([2a01:e0a:a6d:a8d0:7ff4:8f61:5574:9f95])
-        by smtp.gmail.com with ESMTPSA id bg34-20020a05600c3ca200b003a6a3595edasm1322175wmb.27.2022.10.05.01.53.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 01:53:09 -0700 (PDT)
-From:   Romain Perier <romain.perier@gmail.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        Daniel Palmer <daniel@0x0f.com>,
-        Romain Perier <romain.perier@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Willy Tarreau <w@1wt.eu>
-Subject: [PATCH RESEND v6 1/1] clk: mstar: msc313 cpupll clk driver
-Date:   Wed,  5 Oct 2022 10:53:05 +0200
-Message-Id: <20221005085305.42075-2-romain.perier@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221005085305.42075-1-romain.perier@gmail.com>
-References: <20221005085305.42075-1-romain.perier@gmail.com>
+        Wed, 5 Oct 2022 04:53:48 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40175B05F;
+        Wed,  5 Oct 2022 01:53:46 -0700 (PDT)
+Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mj7cN2cncz6864m;
+        Wed,  5 Oct 2022 16:52:20 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 5 Oct 2022 10:53:44 +0200
+Received: from [10.48.148.227] (10.48.148.227) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 5 Oct 2022 09:53:43 +0100
+Message-ID: <27148ec5-d1ae-d9a2-1b00-a4c34d2da198@huawei.com>
+Date:   Wed, 5 Oct 2022 09:53:52 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v5 0/7] libsas and drivers: NCQ error handling
+From:   John Garry <john.garry@huawei.com>
+To:     Niklas Cassel <Niklas.Cassel@wdc.com>
+CC:     "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "jinpu.wang@cloud.ionos.com" <jinpu.wang@cloud.ionos.com>,
+        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linuxarm <linuxarm@huawei.com>,
+        yangxingui <yangxingui@huawei.com>,
+        yanaijie <yanaijie@huawei.com>
+References: <1664262298-239952-1-git-send-email-john.garry@huawei.com>
+ <YzwvpUUftX6Ziurt@x1-carbon>
+ <cfa52b91-db81-a179-76c2-8a61266c099d@huawei.com>
+In-Reply-To: <cfa52b91-db81-a179-76c2-8a61266c099d@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.48.148.227]
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Palmer <daniel@0x0f.com>
+On 04/10/2022 15:04, John Garry wrote:
+>> Notes unrelated to this patch:
+>>
+>> Both before and after this series, this driver prints:
+>> [  215.845053] ata21.00: exception Emask 0x0 SAct 0xfc0000 SErr 0x0 action 0x6
+>> [  215.852308] ata21.00: failed command: WRITE FPDMA QUEUED
+>> [  215.857801] ata21.00: cmd 61/00:00:00:3a:d3/01:00:b3:04:00/40 tag 18 ncq dma 131072 out
+>>                           res 43/04:00:ff:3a:d3/00:00:b3:04:00/40 Emask 0x400 (NCQ error) <F>
+>> [  215.874396] ata21.00: status: { DRDY SENSE ERR }
+>> [  215.879192] ata21.00: error: { ABRT }
+>> [  215.882997] ata21.00: failed command: WRITE FPDMA QUEUED
+>> [  215.888479] ata21.00: cmd 61/00:00:00:3b:d3/01:00:b3:04:00/40 tag 19 ncq dma 131072 out
+>>                           res 00/00:00:00:00:00/00:00:00:00:00/00 Emask 0x2 (HSM violation)
+>> [  215.904814] ata21.00: failed command: WRITE FPDMA QUEUED
+>> [  215.910311] ata21.00: cmd 61/00:00:00:3c:d3/01:00:b3:04:00/40 tag 20 ncq dma 131072 out
+>>                           res 00/00:00:00:00:00/00:00:00:00:00/00 Emask 0x2 (HSM violation)
+>> [  215.932679] ata21.00: failed command: WRITE FPDMA QUEUED
+>> [  215.941203] ata21.00: cmd 61/00:00:00:3d:d3/01:00:b3:04:00/40 tag 21 ncq dma 131072 out
+>>                           res 00/00:00:00:00:00/00:00:00:00:00/00 Emask 0x2 (HSM violation)
+>> [  215.963616] ata21.00: failed command: WRITE FPDMA QUEUED
+>> [  215.972150] ata21.00: cmd 61/00:00:00:3e:d3/01:00:b3:04:00/40 tag 22 ncq dma 131072 out
+>>                           res 00/00:00:00:00:00/00:00:00:00:00/00 Emask 0x2 (HSM violation)
+>> [  215.994532] ata21.00: failed command: WRITE FPDMA QUEUED
+>> [  216.003124] ata21.00: cmd 61/00:00:00:3f:d3/01:00:b3:04:00/40 tag 23 ncq dma 131072 out
+>>                           res 00/00:00:00:00:00/00:00:00:00:00/00 Emask 0x2 (HSM violation)
+>>
+>> HSM (Host State Machine) violation errors.
+>>
+>> For the same SATA drive connected via AHCI this will instead give:
+>>
+>> [ 3796.944923] ata14.00: exception Emask 0x0 SAct 0x80800003 SErr 0xc0000 action 0x0
+>> [ 3796.959375] ata14.00: irq_stat 0x40000008
+>> [ 3796.970140] ata14: SError: { CommWake 10B8B }
+>> [ 3796.981231] ata14.00: failed command: WRITE FPDMA QUEUED
+>> [ 3796.993237] ata14.00: cmd 61/00:08:00:7e:73/02:00:8e:08:00/40 tag 1 ncq dma 262144 out
+>>                           res 43/04:01:00:00:00/00:00:00:00:00/40 Emask 0x1 (device error)
+>> [ 3797.017984] ata14.00: status: { DRDY SENSE ERR }
+>> [ 3797.026833] ata14.00: error: { ABRT }
+>> [ 3797.034664] ata14.00: failed command: WRITE FPDMA QUEUED
+>> [ 3797.043015] ata14.00: cmd 61/00:b8:00:60:73/0a:00:8e:08:00/40 tag 23 ncq dma 1310720 out
+>>                           res 43/04:00:df:67:73/00:00:8e:08:00/40 Emask 0x400 (NCQ error) <F>
+>> [ 3797.065224] ata14.00: status: { DRDY SENSE ERR }
+>> [ 3797.072914] ata14.00: error: { ABRT }
+>> [ 3797.079598] ata14.00: failed command: WRITE FPDMA QUEUED
+>> [ 3797.087920] ata14.00: cmd 61/00:f8:00:6a:73/0a:00:8e:08:00/40 tag 31 ncq dma 1310720 out
+>>                           res 43/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device error)
+>> [ 3797.109800] ata14.00: status: { DRDY SENSE ERR }
+>> [ 3797.117451] ata14.00: error: { ABRT }
+>>
+>> device error errors.
+>>
+>>
+>> Except for the I/O that caused the NCQ error, the remaining outstanding I/Os,
+>> regardless if they were aborted by the drive, as a side-effect of reading the
+>> NCQ error log (see 13.7.4 Queued Error Log (10h) in SATA 3.5a spec),
+>> or if they were aborted by the host (by sas_ata_device_link_abort()),
+>> I don't think it is correct to report these as HSM violation errors.
+>>
+>> HSM violation errors are e.g. when you try to issue a command to a drive
+>> that has ATA_BUSY bit set.
+> We had a similar issue for hisi_sas and solved in patch 4/7: don't set
+> ATA_ERR in the fis for those IO which complete with error, but abort the
+> IO via sas_abort_task().
+> 
+> For pm80xx the IO is either rejected (actually completes with rejection)
+> or is aborted via internal abort command. Maybe we can do similar for
+> pm8001 as we allow the IO to complete in both cases with error. I'll check.
 
-Add a driver for the CPU pll/ARM pll/MIPS pll that is present
-in MStar SoCs.
+Hi Niklas,
 
-Currently there is no documentation for this block so it's possible
-this driver isn't entirely correct.
+Could you try a change like this on top:
 
-Only tested on the version of this IP in the MStar/SigmaStar
-ARMv7 SoCs.
+void sas_ata_device_link_abort(struct domain_device *device, bool 
+force_reset)
+{
+	struct ata_port *ap = device->sata_dev.ap;
+	struct ata_link *link = &ap->link;
 
-Signed-off-by: Daniel Palmer <daniel@0x0f.com>
-Co-developed-by: Willy Tarreau <w@1wt.eu>
-Signed-off-by: Willy Tarreau <w@1wt.eu>
----
- drivers/clk/mstar/Kconfig             |   7 +
- drivers/clk/mstar/Makefile            |   1 +
- drivers/clk/mstar/clk-msc313-cpupll.c | 220 ++++++++++++++++++++++++++
- 3 files changed, 228 insertions(+)
- create mode 100644 drivers/clk/mstar/clk-msc313-cpupll.c
++	device->sata_dev.fis[2] = ATA_ERR | ATA_DRDY;
++	device->sata_dev.fis[3] = 0x04;
 
-diff --git a/drivers/clk/mstar/Kconfig b/drivers/clk/mstar/Kconfig
-index de37e1bce2d2..b9bcb5e02814 100644
---- a/drivers/clk/mstar/Kconfig
-+++ b/drivers/clk/mstar/Kconfig
-@@ -1,4 +1,11 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+config MSTAR_MSC313_CPUPLL
-+	bool "MStar CPUPLL driver"
-+	depends on ARCH_MSTARV7 || COMPILE_TEST
-+	default ARCH_MSTARV7
-+	help
-+	  Support for the CPU PLL present on MStar/Sigmastar SoCs.
-+
- config MSTAR_MSC313_MPLL
- 	bool "MStar MPLL driver"
- 	depends on ARCH_MSTARV7 || COMPILE_TEST
-diff --git a/drivers/clk/mstar/Makefile b/drivers/clk/mstar/Makefile
-index f8dcd25ede1d..17d97eedcd36 100644
---- a/drivers/clk/mstar/Makefile
-+++ b/drivers/clk/mstar/Makefile
-@@ -3,4 +3,5 @@
- # Makefile for mstar specific clk
- #
- 
-+obj-$(CONFIG_MSTAR_MSC313_CPUPLL) += clk-msc313-cpupll.o
- obj-$(CONFIG_MSTAR_MSC313_MPLL) += clk-msc313-mpll.o
-diff --git a/drivers/clk/mstar/clk-msc313-cpupll.c b/drivers/clk/mstar/clk-msc313-cpupll.c
-new file mode 100644
-index 000000000000..a93e2dba09d3
---- /dev/null
-+++ b/drivers/clk/mstar/clk-msc313-cpupll.c
-@@ -0,0 +1,220 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2019 Daniel Palmer <daniel@thingy.jp>
-+ */
-+
-+#include <linux/clk-provider.h>
-+#include <linux/device.h>
-+#include <linux/kernel.h>
-+#include <linux/of_address.h>
-+#include <linux/platform_device.h>
-+
-+/*
-+ * This IP is not documented outside of the messy vendor driver.
-+ * Below is what we think the registers look like based on looking at
-+ * the vendor code and poking at the hardware:
-+ *
-+ * 0x140 -- LPF low. Seems to store one half of the clock transition
-+ * 0x144 /
-+ * 0x148 -- LPF high. Seems to store one half of the clock transition
-+ * 0x14c /
-+ * 0x150 -- vendor code says "toggle lpf enable"
-+ * 0x154 -- mu?
-+ * 0x15c -- lpf_update_count?
-+ * 0x160 -- vendor code says "switch to LPF". Clock source config? Register bank?
-+ * 0x164 -- vendor code says "from low to high" which seems to mean transition from LPF low to
-+ * LPF high.
-+ * 0x174 -- Seems to be the PLL lock status bit
-+ * 0x180 -- Seems to be the current frequency, this might need to be populated by software?
-+ * 0x184 /  The vendor driver uses these to set the initial value of LPF low
-+ *
-+ * Frequency seems to be calculated like this:
-+ * (parent clock (432mhz) / register_magic_value) * 16 * 524288
-+ * Only the lower 24 bits of the resulting value will be used. In addition, the
-+ * PLL doesn't seem to be able to lock on frequencies lower than 220 MHz, as
-+ * divisor 0xfb586f (220 MHz) works but 0xfb7fff locks up.
-+ *
-+ * Vendor values:
-+ * frequency - register value
-+ *
-+ * 400000000  - 0x0067AE14
-+ * 600000000  - 0x00451EB8,
-+ * 800000000  - 0x0033D70A,
-+ * 1000000000 - 0x002978d4,
-+ */
-+
-+#define REG_LPF_LOW_L		0x140
-+#define REG_LPF_LOW_H		0x144
-+#define REG_LPF_HIGH_BOTTOM	0x148
-+#define REG_LPF_HIGH_TOP	0x14c
-+#define REG_LPF_TOGGLE		0x150
-+#define REG_LPF_MYSTERYTWO	0x154
-+#define REG_LPF_UPDATE_COUNT	0x15c
-+#define REG_LPF_MYSTERYONE	0x160
-+#define REG_LPF_TRANSITIONCTRL	0x164
-+#define REG_LPF_LOCK		0x174
-+#define REG_CURRENT		0x180
-+
-+#define LPF_LOCK_TIMEOUT	100000000
-+
-+#define MULTIPLIER_1		16
-+#define MULTIPLIER_2		524288
-+#define MULTIPLIER		(MULTIPLIER_1 * MULTIPLIER_2)
-+
-+struct msc313_cpupll {
-+	void __iomem *base;
-+	struct clk_hw clk_hw;
-+};
-+
-+#define to_cpupll(_hw) container_of(_hw, struct msc313_cpupll, clk_hw)
-+
-+static u32 msc313_cpupll_reg_read32(struct msc313_cpupll *cpupll, unsigned int reg)
-+{
-+	u32 value;
-+
-+	value = ioread16(cpupll->base + reg + 4) << 16;
-+	value |= ioread16(cpupll->base + reg);
-+
-+	return value;
-+}
-+
-+static void msc313_cpupll_reg_write32(struct msc313_cpupll *cpupll, unsigned int reg, u32 value)
-+{
-+	u16 l = value & 0xffff, h = (value >> 16) & 0xffff;
-+
-+	iowrite16(l, cpupll->base + reg);
-+	iowrite16(h, cpupll->base + reg + 4);
-+}
-+
-+static void msc313_cpupll_setfreq(struct msc313_cpupll *cpupll, u32 regvalue)
-+{
-+	ktime_t timeout;
-+
-+	msc313_cpupll_reg_write32(cpupll, REG_LPF_HIGH_BOTTOM, regvalue);
-+
-+	iowrite16(0x1, cpupll->base + REG_LPF_MYSTERYONE);
-+	iowrite16(0x6, cpupll->base + REG_LPF_MYSTERYTWO);
-+	iowrite16(0x8, cpupll->base + REG_LPF_UPDATE_COUNT);
-+	iowrite16(BIT(12), cpupll->base + REG_LPF_TRANSITIONCTRL);
-+
-+	iowrite16(0, cpupll->base + REG_LPF_TOGGLE);
-+	iowrite16(1, cpupll->base + REG_LPF_TOGGLE);
-+
-+	timeout = ktime_add_ns(ktime_get(), LPF_LOCK_TIMEOUT);
-+	while (!(ioread16(cpupll->base + REG_LPF_LOCK))) {
-+		if (ktime_after(ktime_get(), timeout)) {
-+			pr_err("timeout waiting for LPF_LOCK\n");
-+			return;
-+		}
-+		cpu_relax();
-+	}
-+
-+	iowrite16(0, cpupll->base + REG_LPF_TOGGLE);
-+
-+	msc313_cpupll_reg_write32(cpupll, REG_LPF_LOW_L, regvalue);
-+}
-+
-+static unsigned long msc313_cpupll_frequencyforreg(u32 reg, unsigned long parent_rate)
-+{
-+	unsigned long long prescaled = ((unsigned long long)parent_rate) * MULTIPLIER;
-+
-+	if (prescaled == 0 || reg == 0)
-+		return 0;
-+	return DIV_ROUND_DOWN_ULL(prescaled, reg);
-+}
-+
-+static u32 msc313_cpupll_regforfrequecy(unsigned long rate, unsigned long parent_rate)
-+{
-+	unsigned long long prescaled = ((unsigned long long)parent_rate) * MULTIPLIER;
-+
-+	if (prescaled == 0 || rate == 0)
-+		return 0;
-+	return DIV_ROUND_UP_ULL(prescaled, rate);
-+}
-+
-+static unsigned long msc313_cpupll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-+{
-+	struct msc313_cpupll *cpupll = to_cpupll(hw);
-+
-+	return msc313_cpupll_frequencyforreg(msc313_cpupll_reg_read32(cpupll, REG_LPF_LOW_L),
-+					     parent_rate);
-+}
-+
-+static long msc313_cpupll_round_rate(struct clk_hw *hw, unsigned long rate,
-+				     unsigned long *parent_rate)
-+{
-+	u32 reg = msc313_cpupll_regforfrequecy(rate, *parent_rate);
-+	long rounded = msc313_cpupll_frequencyforreg(reg, *parent_rate);
-+
-+	/*
-+	 * This is my poor attempt at making sure the resulting
-+	 * rate doesn't overshoot the requested rate.
-+	 */
-+	for (; rounded >= rate && reg > 0; reg--)
-+		rounded = msc313_cpupll_frequencyforreg(reg, *parent_rate);
-+
-+	return rounded;
-+}
-+
-+static int msc313_cpupll_set_rate(struct clk_hw *hw, unsigned long rate, unsigned long parent_rate)
-+{
-+	struct msc313_cpupll *cpupll = to_cpupll(hw);
-+	u32 reg = msc313_cpupll_regforfrequecy(rate, parent_rate);
-+
-+	msc313_cpupll_setfreq(cpupll, reg);
-+
-+	return 0;
-+}
-+
-+static const struct clk_ops msc313_cpupll_ops = {
-+	.recalc_rate	= msc313_cpupll_recalc_rate,
-+	.round_rate	= msc313_cpupll_round_rate,
-+	.set_rate	= msc313_cpupll_set_rate,
-+};
-+
-+static const struct of_device_id msc313_cpupll_of_match[] = {
-+	{ .compatible = "mstar,msc313-cpupll" },
-+	{}
-+};
-+
-+static int msc313_cpupll_probe(struct platform_device *pdev)
-+{
-+	struct clk_init_data clk_init = {};
-+	struct clk_parent_data cpupll_parent = { .index	= 0 };
-+	struct device *dev = &pdev->dev;
-+	struct msc313_cpupll *cpupll;
-+	int ret;
-+
-+	cpupll = devm_kzalloc(&pdev->dev, sizeof(*cpupll), GFP_KERNEL);
-+	if (!cpupll)
-+		return -ENOMEM;
-+
-+	cpupll->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(cpupll->base))
-+		return PTR_ERR(cpupll->base);
-+
-+	/* LPF might not contain the current frequency so fix that up */
-+	msc313_cpupll_reg_write32(cpupll, REG_LPF_LOW_L,
-+				  msc313_cpupll_reg_read32(cpupll, REG_CURRENT));
-+
-+	clk_init.name = dev_name(dev);
-+	clk_init.ops = &msc313_cpupll_ops;
-+	clk_init.parent_data = &cpupll_parent;
-+	clk_init.num_parents = 1;
-+	cpupll->clk_hw.init = &clk_init;
-+
-+	ret = devm_clk_hw_register(dev, &cpupll->clk_hw);
-+	if (ret)
-+		return ret;
-+
-+	return devm_of_clk_add_hw_provider(&pdev->dev, of_clk_hw_simple_get, &cpupll->clk_hw);
-+}
-+
-+static struct platform_driver msc313_cpupll_driver = {
-+	.driver = {
-+		.name = "mstar-msc313-cpupll",
-+		.of_match_table = msc313_cpupll_of_match,
-+	},
-+	.probe = msc313_cpupll_probe,
-+};
-+builtin_platform_driver(msc313_cpupll_driver);
--- 
-2.35.1
+	link->eh_info.err_mask |= AC_ERR_DEV;
+	if (force_reset)
+		link->eh_info.action |= ATA_EH_RESET;
+	ata_link_abort(link);
+}
+EXPORT_SYMBOL_GPL(sas_ata_device_link_abort);
+
+I tried it myself and it looked to work ok, except I have a problem with 
+my arm64 system in that the read log ext times-out and all TF show 
+"device error", like:
+
+[  350.257870] ata1.00: qc timeout (cmd 0x47)
+[  350.262054] pm80xx0:: mpi_sata_completion 2293: task null, freeing 
+CCB tag 2
+[  350.269128] ata1.00: Read log 0x10 page 0x00 failed, Emask 0x40
+
+[  350.281581] ata1: failed to read log page 10h (errno=-5)
+[  350.577181] ata1.00: exception Emask 0x1 SAct 0xffffffff SErr 0x0 
+action 0x6 frozen
+[  350.584836] ata1.00: failed command: READ FPDMA QUEUED
+[  350.589970] ata1.00: cmd 60/00:00:80:26:00/01:00:00:00:00/40 tag 0 
+ncq dma 131072 in
+          res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device 
+error)
+[  350.605533] ata1.00: status: { DRDY ERR }
+[  350.609541] ata1.00: error: { ABRT }
+[  350.613115] ata1.00: failed command: READ FPDMA QUEUED
+[  350.618248] ata1.00: cmd 60/00:00:80:26:00/01:00:00:00:00/40 tag 1 
+ncq dma 131072 in
+          res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device 
+error)
+[  350.633809] ata1.00: status: { DRDY ERR
+[  350.637813] ata1.00: error: { ABRT }
+[  350.641384] ata1.00: failed command: READ FPDMA QUEUED
+[  350.646515] ata1.00: cmd 60/00:00:80:26:00/01:00:00:00:00/40 tag 2 
+ncq dma 131072 in
+          res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device 
+error)
+[  350.662076] ata1.00: status: { DRDY ERR
+[  350.666080] ata1.00: error: { ABRT }
+[  350.669652] ata1.00: failed command: READ FPDMA QUEUED
+[  350.674784] ata1.00: cmd 60/00:00:d8:26:00/01:00:00:00:00/40 tag 3 
+ncq dma 131072 in
+          res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device 
+error)
+[  350.690344] ata1.00: status: { DRDY ERR
+[  350.694348] ata1.00: error: { ABRT }
+[  350.697919] ata1.00: failed command: READ FPDMA QUEUED
+[  350.703051] ata1.00: cmd 60/00:00:e0:26:00/01:00:00:00:00/40 tag 4 
+ncq dma 131072 in
+          res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device 
+error)
+[  350.718612] ata1.00: status: { DRDY ERR
+[  350.722623] ata1.00: error: { ABRT }
+[  350.726196] ata1.00: failed command: READ FPDMA QUEUED
+[  350.731329] ata1.00: cmd 60/00:00:c8:26:00/01:00:00:00:00/40 tag 5 
+ncq dma 131072 in
+          res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device 
+error)
+
+...
+
+
+Thanks,
+John
 
