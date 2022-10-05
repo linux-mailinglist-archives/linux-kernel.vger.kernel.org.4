@@ -2,200 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D54E35F5437
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 14:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE2D5F5441
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 14:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229450AbiJEMLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 08:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60036 "EHLO
+        id S230017AbiJEMPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 08:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiJEMLV (ORCPT
+        with ESMTP id S229901AbiJEMPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 08:11:21 -0400
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4CC2BE3B
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 05:11:17 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 496ED400F8;
-        Wed,  5 Oct 2022 12:11:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        content-transfer-encoding:content-type:content-type:in-reply-to
-        :references:from:from:content-language:subject:subject
-        :user-agent:mime-version:date:date:message-id:received:received
-        :received:received; s=mta-01; t=1664971874; x=1666786275; bh=Yh1
-        4YdeAHF7vpRcVXwa3NG7XiaY7uA/RQXn1y52glug=; b=llVbk7QF9CXGn3akBGB
-        BJDj+UOcuGVMMEWSp/YZIRanRVJzsCmkIpdcNyLWRssZD/EvlVrTzlVefJ8Hm6TI
-        hvwTfFPIhoKbwY0ugqD6TaLPpA8bbFhiXYHMQTLbbmrmJeG/Thwj+nfgQiy2snAd
-        VeP/umMr4D3KYyUznx9f/wbw=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id EiKQp7DzEdgd; Wed,  5 Oct 2022 15:11:14 +0300 (MSK)
-Received: from T-EXCH-02.corp.yadro.com (T-EXCH-02.corp.yadro.com [172.17.10.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id C5E5841221;
-        Wed,  5 Oct 2022 15:11:14 +0300 (MSK)
-Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
- T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Wed, 5 Oct 2022 15:11:14 +0300
-Received: from [10.199.21.212] (10.199.21.212) by T-EXCH-08.corp.yadro.com
- (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Wed, 5 Oct 2022
- 15:11:13 +0300
-Message-ID: <418b8bbb-84d0-7293-42cd-8c552e4357eb@yadro.com>
-Date:   Wed, 5 Oct 2022 15:11:12 +0300
+        Wed, 5 Oct 2022 08:15:50 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD495491D6;
+        Wed,  5 Oct 2022 05:15:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664972149; x=1696508149;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=I/0/uca7PMc1JB5EXowgPj8CdkujWBJBOjIoOK0lALU=;
+  b=jwt49dlHesGnub2c+Ds5OvLQDRnB37QbswMpmkptptJ26pcrJClPWHm1
+   E9bBOuGJEXkMH/X+GW3u/kXzc2KB5TbbaNE4rCKWLvJq3TRL/PAfDGjin
+   nvblShxYUnnWn5RjmxZQE23+bTsr92Hz8xmr8KyDJ+rOBVqvLh+g75Rlk
+   jvb3/5ABtBi+qHjYr6Pp161BjOkLQjGqyR6S+Gzdg5wele+R80mtrRzEF
+   pu7J/JAkPYBtqwcIB6K903uJtmBYCOx928oqwVSPidxkexjO1waQ7Z+ip
+   d1B8mOYPYi3ZqnqbyvWmT10zJbCw45W4agOKA6SjlEfuNUGl75ajC+KSh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="304126065"
+X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
+   d="scan'208";a="304126065"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 05:15:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="799468529"
+X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
+   d="scan'208";a="799468529"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 05 Oct 2022 05:15:45 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1og3JP-002eDW-0J;
+        Wed, 05 Oct 2022 15:15:43 +0300
+Date:   Wed, 5 Oct 2022 15:15:42 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        jic23@kernel.org, lars@metafoo.de, chiaen_wu@richtek.com,
+        alice_chen@richtek.com, cy_huang@richtek.com,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, szunichen@gmail.com
+Subject: Re: [PATCH v13 5/5] leds: flash: mt6370: Add MediaTek MT6370
+ flashlight support
+Message-ID: <Yz11bkxz9lK4wOHE@smile.fi.intel.com>
+References: <cover.1664991040.git.chiaen_wu@richtek.com>
+ <1bcd19dbd09650ddac7b96b0fe2932698be2731e.1664991040.git.chiaen_wu@richtek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] mailbox: Error out early if the mbox driver has
- failed to submit the message
-Content-Language: en-US
-From:   Evgeny Shatokhin <e.shatokhin@yadro.com>
-To:     Jassi Brar <jassisinghbrar@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, Ilya Kuznetsov <ilya@yadro.com>,
-        <linux@yadro.com>
-References: <20220915164730.515767-1-e.shatokhin@yadro.com>
- <20220915164730.515767-3-e.shatokhin@yadro.com>
- <CABb+yY2Yg1J4WZeB5MKmOONKNsS8468rJmeGkG1TS0Uw71bwYw@mail.gmail.com>
- <8a378429-ab75-0ebc-a852-24c9d3bb9298@yadro.com>
-In-Reply-To: <8a378429-ab75-0ebc-a852-24c9d3bb9298@yadro.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.199.21.212]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-08.corp.yadro.com (172.17.11.58)
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1bcd19dbd09650ddac7b96b0fe2932698be2731e.1664991040.git.chiaen_wu@richtek.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Oct 05, 2022 at 07:43:58PM +0800, ChiaEn Wu wrote:
+> From: Alice Chen <alice_chen@richtek.com>
+> 
+> The MediaTek MT6370 is a highly-integrated smart power management IC,
+> which includes a single cell Li-Ion/Li-Polymer switching battery
+> charger, a USB Type-C & Power Delivery (PD) controller, dual Flash
+> LED current sources, a RGB LED driver, a backlight WLED driver,
+> a display bias driver and a general LDO for portable devices.
+> 
+> Add support for the MT6370 Flash LED driver. Flash LED in MT6370
+> has 2 channels and support torch/strobe mode.
 
-On 18.09.2022 19:32, Evgeny Shatokhin wrote:
-> Thank you for a quick reply!
-> 
-> On 16.09.2022 20:04, Jassi Brar wrote:
->> On Thu, Sep 15, 2022 at 11:50 AM Evgenii Shatokhin
->> <e.shatokhin@yadro.com> wrote:
->>>
->>> mbox_send_message() places the pointer to the message to the queue
->>> (add_to_rbuf) then calls msg_submit(chan) to submit the first of the
->>> queued messaged to the mailbox. Some of mailbox drivers can return
->>> errors from their .send_data() callbacks, e.g., if the message is
->>> invalid or there is something wrong with the mailbox device.
->>>
->> The message can't be invalid because the client code is written for a
->> particular provider.
-> 
-> As of mainline kernel v6.0-rc5, there are mailbox controller drivers 
-> which check if the messages are valid in their .send_data() callbacks. 
-> Example:
-> 
-> drivers/mailbox/rockchip-mailbox.c, rockchip_mbox_send_data():
->      if (msg->rx_size > mb->buf_size) {
->          dev_err(mb->mbox.dev, "Transmit size over buf size(%d)\n",
->              mb->buf_size);
->          return -EINVAL;
->      }
-> 
-> Other examples are zynqmp_ipi_send_data() from 
-> drivers/mailbox/zynqmp-ipi-mailbox.c, ti_msgmgr_send_data() from 
-> drivers/mailbox/ti-msgmgr.c, etc.
-> 
-> If this is incorrect and the controller drivers should not do such 
-> things, I'd suggest to clearly state it in the docs, because it is far 
-> from obvious from Documentation/driver-api/mailbox.rst at the moment.
-> 
-> That is, one could state that checking if the messages to be transmitted 
-> are valid is a responsibility of the callers of mailbox API rather than 
-> of the controller driver.
-> 
-> I could prepare such patch for the docs. Objections?
-> 
->>
->> Though it is possible for the mailbox controller to break down for
->> some reason. In that case, the blocking api will keep retrying until
->> successful. 
-> 
-> As far as I can see from the code, the behaviour seems to be different.
-> 
-> mbox_send_message() calls msg_submit() to send the message the first 
-> time. If that fails, hrtimer is not armed, so there will be no attempts 
-> to send the message again till tx_out ms pass:
-> 
->      err = chan->mbox->ops->send_data(chan, data);
->      if (!err) {
->          chan->active_req = data;
->          chan->msg_count--;
->      }
-> exit:
->      spin_unlock_irqrestore(&chan->lock, flags);
-> 
->      if (!err && (chan->txdone_method & TXDONE_BY_POLL)) {
->          /* kick start the timer immediately to avoid delays */
->          spin_lock_irqsave(&chan->mbox->poll_hrt_lock, flags);
->          hrtimer_start(&chan->mbox->poll_hrt, 0, HRTIMER_MODE_REL);
->          spin_unlock_irqrestore(&chan->mbox->poll_hrt_lock, flags);
->      }
-> 
-> This is from msg_submit(). Thus, the hrtimer will not fire, tx_tick() 
-> will not be called until tx_out ms have passed, and no attempts to send 
-> the message again will be made here.
-> 
-> In addition, complete(&chan->tx_complete) will not be called, so, 
-> mbox_send_message() will have to needlessly wait whole tx_out ms.
-> Only after that, it will call tx_tick(chan, -ETIME), which will, in 
-> turn, call msg_submit() to try to send the message again. If the mbox 
-> has not recovered, sending will fail again.
-> 
-> Then, mbox_send_message() will exit with -ETIME. The pointer to the 
-> message will remain in chan->msg_data[], but the framework will not 
-> attempt to send it again until the client calls mbox_send_message() for 
-> another, possibly unrelated message.
-> 
-> In this case, to sum up, mbox_send_message():
-> * needlessly waits for tx_out ms;
-> * only tries to send the message twice rather than makes retries until 
-> successful;
-> * does not inform the client about the actual error happened, just 
-> returns -ETIME;
-> * keeps the pointer to the message in chan->msg_data[], which is too 
-> easy to overlook on the client side. Too easy for the client to, say, 
-> reuse the structure and cause trouble.
-> 
-> What I suggest is to leave it to the client (or some other 
-> provider-specific code using the client) what to do with the failures.
-> 
-> If the error is reported by the controller driver, don't wait in 
-> mbox_send_message(), just pass the error to the client and exit. If the 
-> client decides to ignore the error - OK, its problem. Or - it may kick 
-> the mbox device somehow in a provider-specific way to make it work, or - 
-> reset the channel, or - do anything else to make things work again.
-> 
-> The behaviour of mbox_send_message() would then become more consistent: 
-> either it has sent the message successfully or it failed and returned an 
-> error, without side-effects (like the pointer to that message kept in 
-> the internal buffer).
-> 
-> I do not think this change would break the existing controller drivers 
-> and client drivers.
-> 
-> What do you think?
-> 
->> But ideally the client, upon getting -ETIME, should free()
->> and request() the channel reset it (because controller drivers usually
->> don't contain the logic to automatically reset upon some error).
->>
->> thanks.
+...
 
-Any updates on this?
-Looking forward to your comments.
+> +config LEDS_MT6370_FLASH
+> +	tristate "Flash LED Support for MediaTek MT6370 PMIC"
 
-Regards,
-Evgenii
+> +	depends on LEDS_CLASS && OF
+
+Why do you have OF dependency?
+
+> +	depends on LEDS_CLASS_FLASH || !LEDS_CLASS_FLASH
+> +	depends on V4L2_FLASH_LED_CLASS || !V4L2_FLASH_LED_CLASS
+> +	depends on MFD_MT6370
+> +	help
+> +	  Support 2 channels and torch/strobe mode.
+> +	  Say Y here to enable support for
+> +	  MT6370_FLASH_LED device.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called "leds-mt6370-flash".
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
