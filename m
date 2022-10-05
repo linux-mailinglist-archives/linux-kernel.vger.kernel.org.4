@@ -2,144 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D985F50AB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 10:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 352ED5F50AF
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 10:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbiJEIOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 04:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37130 "EHLO
+        id S229998AbiJEIPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 04:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiJEIOQ (ORCPT
+        with ESMTP id S229737AbiJEIOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 04:14:16 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36CE72851
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 01:14:14 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id z4so24495718lft.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 01:14:14 -0700 (PDT)
+        Wed, 5 Oct 2022 04:14:51 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15140DF61;
+        Wed,  5 Oct 2022 01:14:48 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id z18so9890070qvn.6;
+        Wed, 05 Oct 2022 01:14:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Y0uHbn035tWwWO1RtVHpJOVJwEZiCVXw2pgVenq9fnw=;
-        b=Xn/CjIA/NowDCL3dCSGCkqk0O2+030/EAsGXX/lTaALu9eI3v3CFG/SO7ED4xUlqAN
-         N31qdCJHbTdPefleT2DVAgFt+rNYlXodKuw+POSA3Sp1TpURdVbbIVzPgtdi4CMduil6
-         8Enj6zNwfEHEIu52i/KBgKsGfFNXJez8OokYjqfekYe3t+1SRb4VPH75kSGFKeYgXAGX
-         4BB7c+BSd8WmhWm3Yw7g2MKnp7mmMb+7GSXjZWqj3O8Ce3T5XNC2PXlzZ0/sHh6coZDa
-         wDpSfNla/jFPJS+GdqJMb7pUrfkf2JwJrw5P3pNndHjWt9rx/qGzjC6WEHgnhwfGIfme
-         jPeg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=+Gd9tGdNqsQu4v63s2hpxh7QJ0rYIJUhnAhh++yKUyU=;
+        b=nz8aIgUVQ9bMxKt7JGxC6J/vkRhz7fPSdw9D3wPw4Eyty9FUwR8JXuavRFNVucCiKE
+         TvkIG0SC5lrbtA1wFAX07FZqZeJMyxKD7dUH7o/4kMBlTrZOvLxI7dX5p9GeuCEgwbty
+         5DrHHlSXZz9G+9hX3sqHLmqywj0wB00HWOOpQElYKpNJ4o4oQ4xlm9Q2L/YMrbIneftw
+         /0LKvsGUJDtEmeFZfgmd0+qOcr6CdtgwN+gGiRxixTzUts04Fh+ifyrBq+InDVSNbyBU
+         d0LqVBsYCuo4cbjqrKCRad0fyc9JdRsr6HL23K0MkLDIiWNN+nXf/+cPftHLB2EsSpaN
+         oT7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Y0uHbn035tWwWO1RtVHpJOVJwEZiCVXw2pgVenq9fnw=;
-        b=bOCB1Wq9XMKodNHdmbQv8IGP5q/enhYEriWL3WevVocCl4xZIkC/sfDJDEndL2KuBc
-         OGOccMCI+0dHapgLsHJ1OAzBGBi51t5fsFSoWKq+SO6u4Y2RiEfRFFB7AMDeapriamRl
-         RmrKJn4lnaImdot2XciI6Ejce5vW/3kuh8oA3cpDfZU9H9bY63KJvgXnfVQ6nRZqm1LQ
-         6Lwl3uooh3NUhZBGIWZHJblkNvkgZXHYPYRphlxqvhCIWizQEsAeBGV+nNND43rYt5oe
-         W7bLnUoGhmcwJ3XIO828FlKdWmwRwB0BrVBBqf3BvBxA1dEzLw3NxjosVFb8KQ5ypsL7
-         qzYQ==
-X-Gm-Message-State: ACrzQf3ofej7M0ryCVo0e988VyXvbHGY7vXJ7iUv/lXl3xW4hVZ56uUe
-        WIgpRjr/Co3+5znK36Aeg4eeTA==
-X-Google-Smtp-Source: AMsMyM6Wxvb70JmOJdSPcYnIs7XcdHOlzpt4207AZkXQMEhldb8cdP9iXuuVbyoxjqnO1qX2Y98o0g==
-X-Received: by 2002:a05:6512:1084:b0:4a2:eb2:9d9e with SMTP id j4-20020a056512108400b004a20eb29d9emr10128640lfg.553.1664957653264;
-        Wed, 05 Oct 2022 01:14:13 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id g22-20020a05651222d600b0048b143c09c2sm2252172lfu.259.2022.10.05.01.14.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Oct 2022 01:14:12 -0700 (PDT)
-Message-ID: <d2ce98d7-1025-9c6e-e207-00e91942077a@linaro.org>
-Date:   Wed, 5 Oct 2022 10:14:11 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=+Gd9tGdNqsQu4v63s2hpxh7QJ0rYIJUhnAhh++yKUyU=;
+        b=Sbc7oWnW9aNdYqTHvMUbH/FJac8ulUVMWXlvjkZHnlyJCb+Hq4DkftZQ57idUx/sLd
+         5hNTeU0k9oUS7QrUzn0ncWT5Pzmc+m08qGXgYurPQqgxhK+1OWHUxhvBkIQWpzkXCT5c
+         GLmp8jW8r9i+w1F5WGiD4cwZp0mbWWExfOET8xQnyjCrP9w6EZmzsTnQCb052j+1Xq26
+         KzKSWilfYFhgBDxhSmQYCd8pegy6lBU8xi7qFsEdGJ3/ZPx+k4wsr6F8eV8EMmYClwX7
+         z7XpZ56lbDoNWpCR5DFL8iczE/UTE/Zup1D4BxYF6ygONj70iX9lS1XF79K4BkBwj2/I
+         jm9A==
+X-Gm-Message-State: ACrzQf2SLnmzHKmEa/kTFcCWKFNAzxs3zDNVWjUTru8BRNMXdFyYMxBF
+        +8ayAaXp3QW+YpccPfpgCEZW/vRUfrNAguJxdBk=
+X-Google-Smtp-Source: AMsMyM5ezlbQ1FH5UHLUmLn/HN9FgfeoEXzJaPgrUC0h/t/FLSf1bn3m7sMEJJ/noJ2bk8gG/KAPF37ISl6R/oDHUns=
+X-Received: by 2002:ad4:5be1:0:b0:496:a686:2bec with SMTP id
+ k1-20020ad45be1000000b00496a6862becmr22549207qvc.85.1664957688045; Wed, 05
+ Oct 2022 01:14:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 1/2] spi: dt-bindings: amlogic, meson-gx-spicc: Add
- pinctrl names for SPI signal states
-Content-Language: en-US
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Da Xue <da@libre.computer>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20221004-up-aml-fix-spi-v2-0-3e8ae91a1925@baylibre.com>
- <20221004-up-aml-fix-spi-v2-1-3e8ae91a1925@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221004-up-aml-fix-spi-v2-1-3e8ae91a1925@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <9dda705a8d67826306f6c6129722d3ad8edc96fc.1664816175.git.chiaen_wu@richtek.com>
+ <CAL_Jsq+YeZRizJFYuU7RPTcFRe1cDjLgsTidisJ_P5PNC4eKiw@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+YeZRizJFYuU7RPTcFRe1cDjLgsTidisJ_P5PNC4eKiw@mail.gmail.com>
+From:   ChiaEn Wu <peterwu.pub@gmail.com>
+Date:   Wed, 5 Oct 2022 16:14:11 +0800
+Message-ID: <CABtFH5Ld91S65RiDu4iSpFhAMiFWaQdj-yDRM79=WUkArpA0JA@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: mfd: mt6370: fix the interrupt order of
+ the charger in the example
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        matthias.bgg@gmail.com, sre@kernel.org, chiaen_wu@richtek.com,
+        cy_huang@richtek.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/10/2022 13:10, Amjad Ouled-Ameur wrote:
-> SPI pins of the SPICC Controller in Meson-GX needs to be controlled by
-> pin biais when idle. Therefore define three pinctrl names:
-> - default: SPI pins are controlled by spi function.
-> - idle-high: SCLK pin is pulled-up, but MOSI/MISO are still controlled
-> by spi function.
-> - idle-low: SCLK pin is pulled-down, but MOSI/MISO are still controlled
-> by spi function.
-> 
-> Reported-by: Da Xue <da@libre.computer>
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> ---
->  .../devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml   | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
-> index 0c10f7678178..53013e27f507 100644
-> --- a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
-> +++ b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
-> @@ -43,6 +43,14 @@ properties:
->      minItems: 1
->      maxItems: 2
->  
-> +  pinctrl-0:
-> +    minItems: 1
+On Mon, Oct 3, 2022 at 11:34 PM Rob Herring <robh+dt@kernel.org> wrote:
+>
 
-maxItems?
+...
 
-> +
-> +  pinctrl-1:
-> +    maxItems: 1
-> +
-> +  pinctrl-names: true
+>
+> This doesn't fix all the warnings. These still remain:
+>
+> /home/rob/proj/linux-dt/.build-arm64/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:
+> pmic@34: indicator: 'color' is a required property
+>         From schema:
+> /home/rob/proj/linux-dt/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+> /home/rob/proj/linux-dt/.build-arm64/Documentation/devicetree/bindings/mfd/mediatek,mt6370.example.dtb:
+> indicator: $nodename:0: 'indicator' does not match
+> '^multi-led(@[0-9a-f])?$'
+>         From schema:
+> /home/rob/proj/linux-dt/Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
 
-Why do you need all these in the bindings?
+Hi Rob,
 
-> +
->  if:
->    properties:
->      compatible:
-> @@ -69,6 +77,13 @@ else:
->        items:
->          - const: core
->  
-> +    pinctrl-names:
-> +      minItems: 1
-> +      items:
-> +        - const: default
-> +        - const: idle-high
-> +        - const: idle-low
+In my opinion, the root cause of these warnings is the incorrect usage
+of 'allOf' in our LED indicator dts as follows,
+(https://lore.kernel.org/all/27df85c30277a171ae85ff6d5b7d867625765d0a.1663926551.git.chiaen_wu@richtek.com/)
+----------
++allOf:
++  - $ref: leds-class-multicolor.yaml#
++
++properties:
++  compatible:
++    const: mediatek,mt6370-indicator
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++patternProperties:
++  "^multi-led@[0-3]$":
++    type: object
+----------
 
-This does not match what you wrote in the bindings - you mentioned only
-two set of pin controls.
+and this patch for Linux 6.0
+(https://lore.kernel.org/all/20220624112106.111351-1-krzysztof.kozlowski@linaro.org/)
 
+I will revise our LED indicator dts in the next version(v13) of
+'MT6370 patch series' like this,
+----------
+// Remove 'allOf'
 
-Best regards,
-Krzysztof
++properties:
++  compatible:
++    const: mediatek,mt6370-indicator
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++patternProperties:
++  "^multi-led@[0-3]$":
++    type: object
++    $ref: leds-class-multicolor.yaml#          // Add this line
++    unevaluatedProperties: false               // Add this line
+----------
 
+And this '[PATCH v2] dt-bindings: mfd: mt6370: fix the interrupt order
+of the charger in the example' patch is for fix charger example in MFD
+dts.
+Thank you so much.
+
+-- 
+Best Regards,
+ChiaEn Wu
