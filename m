@@ -2,78 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F15A35F5B51
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 22:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F475F5B55
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 23:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbiJEU65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 16:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47970 "EHLO
+        id S230350AbiJEVAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 17:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiJEU6x (ORCPT
+        with ESMTP id S230029AbiJEVAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 16:58:53 -0400
-Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [IPv6:2001:4b7a:2000:18::170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F2881692;
-        Wed,  5 Oct 2022 13:58:50 -0700 (PDT)
-Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 60BC12013E;
-        Wed,  5 Oct 2022 22:58:47 +0200 (CEST)
-Date:   Wed, 5 Oct 2022 22:58:45 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        David Airlie <airlied@linux.ie>
-Subject: Re: [PATCH v2 5/7] drm/msm/dsi: Account for DSC's bits_per_pixel
- having 4 fractional bits
-Message-ID: <20221005205845.rwkzyit4daizi3z4@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        David Airlie <airlied@linux.ie>
-References: <20221005181657.784375-1-marijn.suijten@somainline.org>
- <20221005181657.784375-6-marijn.suijten@somainline.org>
- <CAA8EJpr=0w0KReqNW2jP8DzvXLgo_o6bKmwMOed2sXb6d8HKhg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA8EJpr=0w0KReqNW2jP8DzvXLgo_o6bKmwMOed2sXb6d8HKhg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        Wed, 5 Oct 2022 17:00:33 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F7A80F5E;
+        Wed,  5 Oct 2022 14:00:32 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id A8DAA58042F;
+        Wed,  5 Oct 2022 17:00:29 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Wed, 05 Oct 2022 17:00:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1665003629; x=1665007229; bh=TsI02B3sVh
+        QFKOVk9keaf6ReQTAWUpnqUMBU0gDCsKo=; b=ZfXYeIiQfqotQD9UYVd1ADllex
+        ZcKI/ME+E8BnDEeC7Uyk0EfebWGcsqBgfUwspGkHnUYF/5yqAmHMWbmDFnfEOqSl
+        Af2L5RjStJdNCf16q9UC/sXQ3Z45+wV0IniaMQaj14s1KxRlR/yej+tdp5Cxkre6
+        JmenQyIcjlLYjczhbeEOflo2DxRCIehNXukUDSklJQSwkNt9QpdjxUnEHSl/PigD
+        W3urFP4w/03Szc8AIyLlnye0c2gPRv8Rqzx6NmSKcpO98VT9+gvNbEGzqqVsVAKB
+        tIR/55XxKHTlzanIxwooyWcaqYgAMqwQHvPv1k8PmmGyvVsS/GHYTSD+Decw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1665003629; x=1665007229; bh=TsI02B3sVhQFKOVk9keaf6ReQTAW
+        UpnqUMBU0gDCsKo=; b=LUSBUNMySfpRFCaT3bDv2jAXpEbZTjVcfi/fzv/VOWTy
+        sy/lpl/u07TOPIHmvqOnQuuuaKqvu43M5WLlMSpSomYPnzbIAgpEZ4d2D9wdTQSk
+        Cwy/9jq6L4ICcHDEIiu6Dy1YdIJWwGIkAGicFOnSvb/GfXqxzoaBKTG8FDIJedHI
+        YRC21dnKN8H8iiCMm3/CiRD4C5jAk4UqPLg7ilF11mQnRWQ6Lpoe30Fkyg4JyO/K
+        Uh49Nx0qGQnyB3KMLzs9usanQ9uuu6lafuSIgVtiBjoRrGtf1xJvY2PGWJaaRYbG
+        plgELycl+0Fki2ZtrarjXlDlyai45qpp74otDle/1A==
+X-ME-Sender: <xms:bfA9Y4Qq_ZIUQVd0D3cL8GaCDgUHL2g1Q_do6apVEhaqjRSc7vQZnQ>
+    <xme:bfA9Y1zOo_tkDKWyF34r8IStGqzMptvQ79hA-qAyCkctdlE3Vl1n2yNBlbI_tTnCW
+    BgYgHVqjPfbw7cOESI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeifedgudehhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:bfA9Y13dVUzq07ASpYteds6eLmf-QmwR9DyTcezfVFbnS0Db8bx2oA>
+    <xmx:bfA9Y8A6EKLT0u8H91K1DTIB5r8DqIl8JvSmDTiZN0HHpt7YzhYoeA>
+    <xmx:bfA9YxhI9XpXul5uNYfPWMYaFv_3fts3JadyysFm8BHu6h2EgyGUbQ>
+    <xmx:bfA9Y5inTSB5K1uuyplw4g7smGzUgTpVZj-6Rz9aWbW_qOeXW0SrXQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 27340B60089; Wed,  5 Oct 2022 17:00:29 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
+Mime-Version: 1.0
+Message-Id: <9527fd97-41d1-4f68-aa9e-8a4424fa94f1@app.fastmail.com>
+In-Reply-To: <DM4PR84MB19274B41DEE65D882D4C8F27885D9@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+References: <20220728161459.7738-1-nick.hawkins@hpe.com>
+ <20220728161459.7738-4-nick.hawkins@hpe.com>
+ <DM4PR84MB19274B41DEE65D882D4C8F27885D9@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+Date:   Wed, 05 Oct 2022 23:00:07 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        "Mark Brown" <broonie@kernel.org>
+Cc:     "Rob Herring" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v6 3/5] ARM: dts: hpe: Add spi driver node
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,141 +93,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-05 22:31:43, Dmitry Baryshkov wrote:
-> On Wed, 5 Oct 2022 at 21:17, Marijn Suijten
-> <marijn.suijten@somainline.org> wrote:
-> >
-> > drm_dsc_config's bits_per_pixel field holds a fractional value with 4
-> > bits, which all panel drivers should adhere to for
-> > drm_dsc_pps_payload_pack() to generate a valid payload.  All code in the
-> > DSI driver here seems to assume that this field doesn't contain any
-> > fractional bits, hence resulting in the wrong values being computed.
-> > Since none of the calculations leave any room for fractional bits or
-> > seem to indicate any possible area of support, disallow such values
-> > altogether.
-> >
-> > Fixes: b9080324d6ca ("drm/msm/dsi: add support for dsc data")
-> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> > ---
-> >  drivers/gpu/drm/msm/dsi/dsi_host.c | 25 +++++++++++++++++--------
-> >  1 file changed, 17 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> > index f42794cdd4c1..4717d49d76be 100644
-> > --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> > +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> > @@ -33,7 +33,7 @@
-> >
-> >  #define DSI_RESET_TOGGLE_DELAY_MS 20
-> >
-> > -static int dsi_populate_dsc_params(struct drm_dsc_config *dsc);
-> > +static int dsi_populate_dsc_params(struct msm_dsi_host *msm_host, struct drm_dsc_config *dsc);
-> >
-> >  static int dsi_get_version(const void __iomem *base, u32 *major, u32 *minor)
-> >  {
-> > @@ -908,6 +908,7 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
-> >         u32 va_end = va_start + mode->vdisplay;
-> >         u32 hdisplay = mode->hdisplay;
-> >         u32 wc;
-> > +       int ret;
-> >
-> >         DBG("");
-> >
-> > @@ -943,7 +944,9 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
-> >                 /* we do the calculations for dsc parameters here so that
-> >                  * panel can use these parameters
-> >                  */
-> > -               dsi_populate_dsc_params(dsc);
-> > +               ret = dsi_populate_dsc_params(msm_host, dsc);
-> > +               if (ret)
-> > +                       return;
-> >
-> >                 /* Divide the display by 3 but keep back/font porch and
-> >                  * pulse width same
-> > @@ -1769,7 +1772,7 @@ static char bpg_offset[DSC_NUM_BUF_RANGES] = {
-> >         2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -12, -12, -12, -12
-> >  };
-> >
-> > -static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
-> > +static int dsi_populate_dsc_params(struct msm_dsi_host *msm_host, struct drm_dsc_config *dsc)
-> >  {
-> >         int mux_words_size;
-> >         int groups_per_line, groups_total;
-> > @@ -1780,6 +1783,12 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
-> >         int data;
-> >         int final_value, final_scale;
-> >         int i;
-> > +       u16 bpp = dsc->bits_per_pixel >> 4;
-> > +
-> > +       if (dsc->bits_per_pixel & 0xf) {
-> > +               DRM_DEV_ERROR(&msm_host->pdev->dev, "DSI does not support fractional bits_per_pixel\n");
-> > +               return -EINVAL;
-> > +       }
-> >
-> >         dsc->rc_model_size = 8192;
-> >         dsc->first_line_bpg_offset = 12;
-> > @@ -1801,7 +1810,7 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
-> >         }
-> >
-> >         dsc->initial_offset = 6144; /* Not bpp 12 */
-> > -       if (dsc->bits_per_pixel != 8)
-> > +       if (bpp != 8)
-> >                 dsc->initial_offset = 2048;     /* bpp = 12 */
-> >
-> >         mux_words_size = 48;            /* bpc == 8/10 */
-> > @@ -1824,14 +1833,14 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
-> >          * params are calculated
-> >          */
-> >         groups_per_line = DIV_ROUND_UP(dsc->slice_width, 3);
-> > -       dsc->slice_chunk_size = DIV_ROUND_UP(dsc->slice_width * dsc->bits_per_pixel, 8);
-> > +       dsc->slice_chunk_size = DIV_ROUND_UP(dsc->slice_width * bpp, 8);
-> 
-> I'd still prefer if we can get closer to drm_dsc_compute_rc_parameters().
-> The mentioned function has the following code:
-> 
-> vdsc_cfg->slice_chunk_size = DIV_ROUND_UP(vdsc_cfg->slice_width *
-> 
-> vdsc_cfg->bits_per_pixel,
->                                                           (8 * 16));
+On Wed, Oct 5, 2022, at 10:33 PM, Hawkins, Nick wrote:
+>
+> Was there a particular issue with this patch? I just realized that 
+> patches 1,2, and 5 were accepted but not 3 or 4.
 
-Fwiw this discussion happened in dsi_update_dsc_timing() where a similar
-calculation was the sole user of bits_per_pixel.  This function,
-dsi_populate_dsc_params(), has more uses of bits_per_pixel so it made
-more sense to compute and document this "discrepancy" up front.
-drm_dsc_compute_rc_parameters() doesn't document where this "16" comes
-from, unfortunately (requiring knowledge of the contents of the struct).
+It looks like you sent the patch to a lot of people, without addressing
+anyone in particular. I certainly did not expect to pick it up like this.
 
-> In fact, could you please take a look if we can switch to using this
-> function and drop our code?
+When you resend the missing patches after 6.1-rc1, please send the
+ones you want to be merged through the soc tree to:soc@kernel.org,
+with reviewers and mailing lists on Cc, but nobody else as the
+recipient.
 
-There's alread a:
+For the SoC tree, I usually have separate branches for code
+changes (usually just Kconfig and MAINTAINERS entries in case of
+arm64), devicetree changes, defconfig changes and driver (typically
+drivers/soc, but could be others that have no separate subsystem
+maintainers), so ideally you send a set of patches or a pull request
+for each such topic branch.
 
-	/* FIXME: need to call drm_dsc_compute_rc_parameters() so that rest of
-	 * params are calculated
-	 */
-
-And it was trivial to replace everything below that comment with this
-function call; I have not checked the math in detail but it assigns
-_every_ field that was also assigned here, and the resulting values
-provide an identical DCS PPS (which I happened to be printing to compare
-to downstream, leading to find all the issues solved in this series) and
-working phone screen.
-
-Makes me wonder why this wasn't caught in review and replaced from the
-get-go...
-
-Do you want me to do this in a v3, before applying this fractional-bits
-fix?  At that point this becomes the only user of bits_per_pixel:
-
-	dsc->initial_offset = 6144; /* Not bpp 12 */
-	if (bpp != 8)
-		dsc->initial_offset = 2048;	/* bpp = 12 */
-
-Note that intel_vdsc.c has the exact same code right where they fill
-vdsc_cfg->initial_offset:
-
-	int bpp = vdsc_cfg->bits_per_pixel >> 4;
-
-I'm inclined to leave this as it is.
-
-- Marijn
+      Arnd
