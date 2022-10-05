@@ -2,75 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35AC5F53E4
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 13:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E2445F53E6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 13:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbiJELqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 07:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
+        id S229598AbiJELqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 07:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbiJELpu (ORCPT
+        with ESMTP id S230244AbiJELp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 07:45:50 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C5677EBC;
-        Wed,  5 Oct 2022 04:43:42 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id iv17so10592548wmb.4;
-        Wed, 05 Oct 2022 04:43:42 -0700 (PDT)
+        Wed, 5 Oct 2022 07:45:58 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3EE7A52F;
+        Wed,  5 Oct 2022 04:44:03 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id ay7-20020a05600c1e0700b003b49861bf48so1906618wmb.0;
+        Wed, 05 Oct 2022 04:44:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=W6qv0ViPJkY8OMf7gCb2BTdhteqfeMKqJSVpdSmx6VE=;
-        b=gLQXZdwQFNcIPiNsAUhwIVmvboutqDbEMq4Qb881oHBhKuEujcTl56vQgldJKPVldV
-         HHTcV7nCPP+j5XmiDe8KruNgVW+GGWFFh3KxY69I0LsYYuiyZIxuGiwHT5PJy7TRQj3s
-         gc3evtlXc/UwtW7DK/p2yae384gbqwni9/XSJScLYWvUXHgAEdM6so6NQyk8id5STqj4
-         0PbrTCYSMQFpHRL9Uh/jN4RvLVew4cGvbI1j8HR3TXNMOAsoWt0zX49JLvcW3MSh7Ihx
-         /Fxat9tu/o/Se0Km4IFqVWzTrkGe4WmsK8XwvBxlH0Fsc1PQHc0slIQild5jgoHKISxL
-         9+jQ==
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=I6JO1askOXv3fIRom3nLLKljILvMiIWCZXOL0gCR+zI=;
+        b=Wc8WRlG+WpW8mbJvGsJThiHj1HY0CcYuGKBnatg6+VXXQi3avdhmYgTfOe3XPQAcY7
+         I/JLrMiFquIOHeVyojQCB7iwK71vi1HkS7r2JM46K/HiaK0rYukCIhxzlO4R5sb0j/NB
+         cAQ1owdKdxK3SaU4jfpOkhuphZUT1GwKDK+j7jou0ujCPuSoxkr6wKBAak22bMFVHydB
+         asvpTNDz5gNPWcXeELDQV2bhdW3+FfJzQqOS+lLyu5Tp6+w0ne0v5XK0iipYT9cLSutr
+         xtAN7myNx3rNfc3gEK9iOWxyQjAoT2zw2XL661qkxCw8sFgab0k0FrBsgtbBQOTi4oh9
+         iC/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=W6qv0ViPJkY8OMf7gCb2BTdhteqfeMKqJSVpdSmx6VE=;
-        b=zD6QHI8x1PZiHclbM9tcgLlJzwcd9+knx7HfFjGtGK+uk/M0LSczwDj8Q43FYaLAlZ
-         Amz29UcyiWu9DcgBN7I/MXxUDYXvXME9hLC0zjmloN6h7EeMWpnfABCamZEmzVAT1P81
-         iwsZo3JMPKGmWexlKbm9+V+GE3nQFLF5KdQap9rHme7+B+QGtxnc1xVYTVvKJQc5fa3V
-         kC2LnC0CcIr1j8OnR+gCZsQgySk28dXSHT8hXovc4SrXddEvD5DMr7oksEQsDWR9nRxm
-         eeaPADMdek8yGv2yGoLo/uPMMXOcjvG+V21X+cUTPgmvAcM5sKn7iA4Zgw7Pqzuq6Slx
-         uHuA==
-X-Gm-Message-State: ACrzQf1BwKaBq3sWDZxTERoAFyDcH3yFv89nOIlRFooT+FNY6RubE7AV
-        l5RzF2g30AEyyNvLB6sv/T223PxzfyLhLOs9jNc=
-X-Google-Smtp-Source: AMsMyM7u9zQ+IVHlVQ2lSVyIeKOacx5hFx18AE1QqfTAM1qyFoOl7v2i6X2neEgj58ah+n7E6IEBR2LXPYEGCxDkM80=
-X-Received: by 2002:a05:600c:6885:b0:3bd:d782:623c with SMTP id
- fn5-20020a05600c688500b003bdd782623cmr2923336wmb.102.1664970186415; Wed, 05
- Oct 2022 04:43:06 -0700 (PDT)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I6JO1askOXv3fIRom3nLLKljILvMiIWCZXOL0gCR+zI=;
+        b=D5pTYbgsqx+wwJJXuVwGBA70Jj7ubuLlEckqxuhMPHZVCvmHusPhzyl/Nn0AzqBfKZ
+         sxDsVFHcEkJvi4nio5MMDNQod+8bOVT2XFX58aM9ElycP/FLT/qWQEWkIUnA7YwSI8pH
+         UQhtGJI/LrJ4HEtNJ8CqWZv8uTqmB5BVp4/PCKmdXL7WNoJEOGSGK7l6Zo2pcCoL8m72
+         7JweTQ0+LjWqe2U2JsWpmPZNwte3s8oxJC+oFyEDB9ASYGq2lohj6vCGtsWVr6SWfTga
+         3UAW0wPHIBMrNxTNeKHgkWEIkJRUZssOpLAhJFCqBOQb7aefKv8yFXV51XgDOu/z4uzT
+         D/MA==
+X-Gm-Message-State: ACrzQf0GGT6HuYJNORWw8Ig/9qijVEtXGNbiog3g9yuXy0wwqNVcYkaP
+        rVCerVR05vX/BjtbR0y4+p+iaRu/fys=
+X-Google-Smtp-Source: AMsMyM6kySg7JhOnbqTNzF3k0OyNUxybSz4HxCID9n6Z9GWv0v0/EuIV6zyBPaOH+zhl/XtyQ8wAPQ==
+X-Received: by 2002:a05:600c:1c84:b0:3b3:ef37:afd3 with SMTP id k4-20020a05600c1c8400b003b3ef37afd3mr2874007wms.155.1664970220260;
+        Wed, 05 Oct 2022 04:43:40 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id z12-20020a05600c220c00b003a63a3b55c3sm1631689wml.14.2022.10.05.04.43.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 04:43:39 -0700 (PDT)
+Date:   Wed, 5 Oct 2022 12:43:38 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: build failure of next-20221005 due to 4078ec1ef5ed ("LoongArch: Use
+ TLB for ioremap()")
+Message-ID: <Yz1t6rPLOzKT8Id+@debian>
 MIME-Version: 1.0
-References: <20221005085439.740992-1-megi@xff.cz>
-In-Reply-To: <20221005085439.740992-1-megi@xff.cz>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Wed, 5 Oct 2022 07:42:54 -0400
-Message-ID: <CAMdYzYrEXEqOmMeozGBbAAvrujZcOxLh4VYOmu5DSjPWTS-5zQ@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: dts: rockchip: rk356x: Fix PCIe register map
- and ranges
-To:     Ondrej Jirman <megi@xff.cz>
-Cc:     linux-rockchip@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-        Johan Jonker <jbx6244@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Rockchip SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -81,131 +69,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 5, 2022 at 4:54 AM Ondrej Jirman <megi@xff.cz> wrote:
->
+Hi All,
 
-Good Morning,
+The builds of loongarch allmodconfig have failed to build next-20221005
+with errors
 
-> I have two Realtek PCIe wifi cards connected over the 4 port PCIe swtich
-> to Quartz64-A. The cards fail to work, when nvme SSD is connected at the
-> same time to the bridge. Without nvme connected, cards work fine. The
-> issue seems to be related to mixed use of devices which make use of I/O
-> ranges and memory ranges.
->
-> This patch changes I/O, MEM and config mappings so that config and I/O
-> mappings use the 0xf4000000 outbound address space, and MEM range uses
-> the whole 0x300000000 outbound space.
->
-> This is simialar to how BSP does the mappings.
+sound/soc/mediatek/common/mtk-btcvsd.c: In function 'mtk_btcvsd_snd_remove':
+sound/soc/mediatek/common/mtk-btcvsd.c:1394:32: error: unused variable 'btcvsd' [-Werror=unused-variable]
+ 1394 |         struct mtk_btcvsd_snd *btcvsd = dev_get_drvdata(&pdev->dev);
+      |                                ^~~~~~
 
-This change was very recent in the BSP stuff (Jan 2022):
-https://github.com/rockchip-linux/kernel/commit/cfab7abefc4093daa379fbd90a1e7ac1a484332b
-A few other interesting changes there as well. They added a 32 bit
-window in the lower range and made the entire upper range a 64 bit
-relocatable (why?) and prefetchable window. They also set the viewport
-number to 8. The dt-binding says this is autodetected, but I wonder if
-the value is being detected correctly.
 
-It looks like it is dependent in BSP on a backported change from mainline:
-https://github.com/rockchip-linux/kernel/commit/50a01d3c10a6212f66364575a3c8f66c07f41591
+sound/soc/sof/intel/hda.c: In function 'hda_dsp_remove':
+sound/soc/sof/intel/hda.c:1185:26: error: unused variable 'bus' [-Werror=unused-variable]
+ 1185 |         struct hdac_bus *bus = sof_to_bus(sdev);
+      |                          ^~~
 
-Can someone weigh in why the dw core has config in the reg node
-instead of ranges?
 
->
-> I changed num-ob-windows to value detected by the kernel so if for whatever
-> reason the kernel ever starts respecting this DT property, it would not
-> switch to sharing I/O and CFG spaces via a single iATU mapping for
-> no reason.
+drivers/mfd/asic3.c: In function 'asic3_mfd_remove':
+drivers/mfd/asic3.c:940:23: error: unused variable 'asic' [-Werror=unused-variable]
+  940 |         struct asic3 *asic = platform_get_drvdata(pdev);
+      |                       ^~~~
 
-This worries me that this value may be being detected incorrectly,
-they set it to this for a reason. It's not unheard of for Rockchip to
-need to override what they encode in the silicon.
 
-Very Respectfully,
-Peter Geis
+drivers/gpu/drm/exynos/exynos7_drm_decon.c: In function 'decon_remove':
+drivers/gpu/drm/exynos/exynos7_drm_decon.c:771:31: error: unused variable 'ctx' [-Werror=unused-variable]
+  771 |         struct decon_context *ctx = dev_get_drvdata(&pdev->dev);
+      |               
 
->
-> This change to the regs/ranges makes the issue go away and both nvme and
-> wifi cards work when connected at the same time to the bridge. I tested
-> the nvme with large amount of reads/writes, both behind the PCIe bridge
-> and when directly connected to Quartz64-A board.
->
-> Signed-off-by: Ondrej Jirman <megi@xff.cz>
-> ---
-> BSP for reference: https://github.com/rockchip-linux/kernel/blob/develop-4.19/arch/arm64/boot/dts/rockchip/rk3568.dtsi#L2370
->
-> v2:
-> - change ranges to use 0x300000000 fully for MEM and make use of
->   the 0xf4000000 outbound range for IO and config
-> - full retest with/without the switch
-> - if lscpi/dmesg is useful in the future for comparison, see:
->   https://xff.cz/kernels/random/quartz64a-pcie/
->
-> I used this script for the tests:
->
-> #!/bin/bash
->
-> OUT=/mnt/data
-> n=8
->
-> test -f /tmp/test.dat || \
->     dd if=/dev/urandom of=/tmp/test.dat bs=1M count=1024
-> md5sum /tmp/test.dat
->
-> i=0
-> while test $i -lt $n
-> do
->     dd if=/tmp/test.dat of=$OUT/test$i.dat bs=4M oflag=direct
->
->     i=$(($i+1))
-> done
->
-> i=0
-> while test $i -lt $n
-> do
->     dd if=$OUT/test$i.dat bs=4M iflag=direct | md5sum
->
->     i=$(($i+1))
-> done
->
->
->  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> index 319981c3e9f7..99fd9543fc6f 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> @@ -855,7 +855,8 @@ pcie2x1: pcie@fe260000 {
->                 compatible = "rockchip,rk3568-pcie";
->                 reg = <0x3 0xc0000000 0x0 0x00400000>,
->                       <0x0 0xfe260000 0x0 0x00010000>,
-> -                     <0x3 0x3f000000 0x0 0x01000000>;
-> +                     <0x0 0xf4000000 0x0 0x01f00000>;
-> +
->                 reg-names = "dbi", "apb", "config";
->                 interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>,
->                              <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>,
-> @@ -877,15 +878,15 @@ pcie2x1: pcie@fe260000 {
->                                 <0 0 0 4 &pcie_intc 3>;
->                 linux,pci-domain = <0>;
->                 num-ib-windows = <6>;
-> -               num-ob-windows = <2>;
-> +               num-ob-windows = <8>;
->                 max-link-speed = <2>;
->                 msi-map = <0x0 &gic 0x0 0x1000>;
->                 num-lanes = <1>;
->                 phys = <&combphy2 PHY_TYPE_PCIE>;
->                 phy-names = "pcie-phy";
->                 power-domains = <&power RK3568_PD_PIPE>;
-> -               ranges = <0x01000000 0x0 0x3ef00000 0x3 0x3ef00000 0x0 0x00100000
-> -                         0x02000000 0x0 0x00000000 0x3 0x00000000 0x0 0x3ef00000>;
-> +               ranges = <0x01000000 0x0 0x00000000 0x0 0xf5f00000 0x0 0x00100000
-> +                         0x02000000 0x0 0x40000000 0x3 0x00000000 0x0 0x40000000>;
->                 resets = <&cru SRST_PCIE20_POWERUP>;
->                 reset-names = "pipe";
->                 #address-cells = <3>;
-> --
-> 2.37.3
->
+
+git bisect pointed to 4078ec1ef5ed ("LoongArch: Use TLB for ioremap()")
+
+I will be happy to test any patch or provide any extra log if needed.
+
+
+-- 
+Regards
+Sudip
