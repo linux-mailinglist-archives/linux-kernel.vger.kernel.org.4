@@ -2,122 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1E45F5D0A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 01:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 941BB5F5D0C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 01:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbiJEXEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 19:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
+        id S229669AbiJEXFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 19:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbiJEXEl (ORCPT
+        with ESMTP id S229597AbiJEXFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 19:04:41 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12ED5281
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 16:04:39 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d24so113969pls.4
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 16:04:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jgRj2ZCIBOPvv2vrQKP0ikzjUJMhfZt/TjHRjna0hT8=;
-        b=OZJj8MPpJqsvyoDuOfDgThPOcY9022j7upMbXVbrpITsuDOZ/otUbTi8w8BzeisJjN
-         YyGwKs5zVrVa6x1Ou1wLWXk/MdCV5yQRWTCYuCgW7Mzp8z5zxSJwXu89tv05KA5OZcir
-         oTZ3Ctmxnx8evSj9tnWnLQooKEzSGpKzy/LOk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jgRj2ZCIBOPvv2vrQKP0ikzjUJMhfZt/TjHRjna0hT8=;
-        b=F0d/MlfYC7LZHMeqPFDYpdAq/y2bNnfbxzEGZs7miME2gAQxSPG8eckrukm5iBK3ap
-         JGygPkrqrA+EEPwnw+7dASCW8bCuDpI2frEuhJV2jZEkeOBgn3JP8wBS1L6ZeqZEormc
-         CHDWRYw89gEH+QITxbW4P0FQXk1qKwV4tupktiAyJhdYopiuYbxGSokWtCgcTNI2qTIs
-         dhmKP7SFAs9GSnFlIX0u5lNQ0sotkYTvTTDUMJP0Vq/NKChCivX/hHLjGqNyhYHxa5fJ
-         In0fJTZwLcahP0EdyaTZl13cRmfboAy94GOfdaQ5+Au/ZpmHihOQNUfeVMTh8I1nH2op
-         Z2Kg==
-X-Gm-Message-State: ACrzQf3Ozvdjb7bndQQdPnWC0JccC+3ChceFIYndVuEQwJLghbGdcnph
-        iMGvQUeWhkCCMVauH40X9pWY9/hBFxBXkjKj3E9GPw==
-X-Google-Smtp-Source: AMsMyM7voRDrO+U4f9HHRvzDRite3Lp95pBLvBHqlnJYymAty/PuaoCe8kq53u7AypcSmqxJCeodgw==
-X-Received: by 2002:a17:90b:2751:b0:20a:e437:a9e8 with SMTP id qi17-20020a17090b275100b0020ae437a9e8mr7268521pjb.181.1665011078236;
-        Wed, 05 Oct 2022 16:04:38 -0700 (PDT)
-Received: from arishabh.c.googlers.com.com (30.176.125.34.bc.googleusercontent.com. [34.125.176.30])
-        by smtp.gmail.com with ESMTPSA id y1-20020a626401000000b0053e8f4a10c1sm11403322pfb.217.2022.10.05.16.04.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 16:04:37 -0700 (PDT)
-From:   Rishabh Agrawal <rishabhagr@chromium.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     biernacki@google.com, mattedavis@google.com,
-        vaibhav.shankar@intel.com, zwisler@google.com,
-        Rishabh Agrawal <rishabhagr@chromium.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org
-Subject: [PATCH] Add hardcoded crystal clock for KabyLake
-Date:   Wed,  5 Oct 2022 23:04:21 +0000
-Message-Id: <20221005230407.1.I918ccc908c5c836c1e21e01d2cf6f59b0157bcc3@changeid>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+        Wed, 5 Oct 2022 19:05:47 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5A580482;
+        Wed,  5 Oct 2022 16:05:43 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MjVY03zjzz4x1V;
+        Thu,  6 Oct 2022 10:05:39 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1665011142;
+        bh=A0V5pjXxCzniBJ5+600GSJRFvqnZVvgBuAkokXMKh0o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=S/E18Dtowg3qgUS0/+smZMnJBZNFO1vQoNGji47aC8ysGFliaJtWpIkd7W3SI9/UI
+         ga1dZivrbP6hxToMi92xebSF97WjYLsqERAGL1eGmnHXCsBb0YcsrdifLSg64tSJIJ
+         VBvfdArlhFhnDcDGopG3l3kWWNYsiMXETYT6MFOKxHu7S8FcLDP9kckDm5QbvoyNKz
+         Jn0PXcEnDYoH/VQpq4FnnS27sVPaRiv7U3M7CI7jmBjgMnXyD3TGmCOYmX+qBCl5zE
+         wj96GFqSrsAhDWInLWblS+Cxv8JGHhfTRwCmMCohd52LGGBi1VWN20Abixyw/6a59S
+         NZMVr8vuynQMg==
+Date:   Thu, 6 Oct 2022 10:05:37 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Wolfram Sang <wsa@the-dreams.de>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Alex Helms <alexander.helms.jy@renesas.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the i2c tree
+Message-ID: <20221006100537.4d788d1c@canb.auug.org.au>
+In-Reply-To: <20221004112059.5677a13e@canb.auug.org.au>
+References: <20221004112059.5677a13e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/7l.EgzzU/ar/B.qBL9zV9BV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set KabyLake crystal clock manually since the TSC calibration is off
-by 0.5%. All the tests that are based on the timer/clock will fail in
-this case.
+--Sig_/7l.EgzzU/ar/B.qBL9zV9BV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The HPET has been disabled by upstream due to PC10 issue causing the
-3 hatch devices, dratini, jinlon, and kohaku to not calibrate the clock
-precisely. These 3 devices are KabyLake devices. Intel team has verified
-that all KBL devices have 24.0 MHz clock frequency, therefore this
-change is valid.
+Hi all,
 
-Signed-off-by: Rishabh Agrawal <rishabhagr@chromium.org>
----
+On Tue, 4 Oct 2022 11:20:59 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>=20
+> After merging the i2c tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
+>=20
+> drivers/clk/clk-versaclock7.c:1304:19: error: initialization of 'void (*)=
+(struct i2c_client *)' from incompatible pointer type 'int (*)(struct i2c_c=
+lient *)' [-Werror=3Dincompatible-pointer-types]
+>  1304 |         .remove =3D vc7_remove,
+>       |                   ^~~~~~~~~~
+> drivers/clk/clk-versaclock7.c:1304:19: note: (near initialization for 'vc=
+7_i2c_driver.remove')
+>=20
+> Caused by commit
+>=20
+>   48c5e98fedd9 ("clk: Renesas versaclock7 ccf device driver")
+>=20
+> from the clk tree interacting with commit
+>=20
+>   ed5c2f5fd10d ("i2c: Make remove callback return void")
+>=20
+> from the i2c tree.
+>=20
+> I have applied the following merge fix patch.
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 4 Oct 2022 11:13:45 +1100
+> Subject: [PATCH] clk: fix up for "i2c: Make remove callback return void"
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/clk/clk-versaclock7.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/clk/clk-versaclock7.c b/drivers/clk/clk-versaclock7.c
+> index 050807cf971f..8e4f86e852aa 100644
+> --- a/drivers/clk/clk-versaclock7.c
+> +++ b/drivers/clk/clk-versaclock7.c
+> @@ -1235,14 +1235,12 @@ static int vc7_probe(struct i2c_client *client)
+>  	return ret;
+>  }
+> =20
+> -static int vc7_remove(struct i2c_client *client)
+> +static void vc7_remove(struct i2c_client *client)
+>  {
+>  	struct vc7_driver_data *vc7 =3D i2c_get_clientdata(client);
+> =20
+>  	of_clk_del_provider(client->dev.of_node);
+>  	clk_unregister_fixed_rate(vc7->clk_apll.clk);
+> -
+> -	return 0;
+>  }
+> =20
+>  static bool vc7_volatile_reg(struct device *dev, unsigned int reg)
+> --=20
+> 2.35.1
 
- arch/x86/kernel/tsc.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+I have applied this patch to the merge of the clk tree today (since
+Linus has merged the i2c tree).
 
-diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-index cafacb2e58cc..63a06224fa48 100644
---- a/arch/x86/kernel/tsc.c
-+++ b/arch/x86/kernel/tsc.c
-@@ -644,10 +644,21 @@ unsigned long native_calibrate_tsc(void)
- 	 * Denverton SoCs don't report crystal clock, and also don't support
- 	 * CPUID.0x16 for the calculation below, so hardcode the 25MHz crystal
- 	 * clock.
-+	 *
-+	 * Intel KabyLake devices' clocks are off by 0.5% when using the below
-+	 * calculation, so hardcode 24.0 MHz crystal clock.
- 	 */
--	if (crystal_khz == 0 &&
--			boot_cpu_data.x86_model == INTEL_FAM6_ATOM_GOLDMONT_D)
--		crystal_khz = 25000;
-+	if (crystal_khz == 0) {
-+		switch (boot_cpu_data.x86_model) {
-+		case INTEL_FAM6_ATOM_GOLDMONT_D:
-+			crystal_khz = 25000;
-+			break;
-+		case INTEL_FAM6_KABYLAKE_L:
-+			crystal_khz = 24000;
-+			break;
-+		}
-+
-+	}
- 
- 	/*
- 	 * TSC frequency reported directly by CPUID is a "hardware reported"
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/7l.EgzzU/ar/B.qBL9zV9BV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM+DcEACgkQAVBC80lX
+0Gxvbgf/SCH5CJGi0C2IYUI8yNCzeMoAimRYHb4UjR0UB+pB6ACLfgoAfWXHhuXW
+7J7WxTUzzGt+4d3DRDGic87Cx6fnK+KxlF1rVurT7882IC7r6HgiWYt1msvVjluQ
+f2MXWLuV3kfaK8FlOOnO87rcW6O/SMb8Y7f0TAODWdp2n5nAnkI/MOmMpdow51ov
+fumu8IPPxBsKIfxrdoCxqLRKX5Y144YP/zbeNqF8bSrDrr98SjhUwbGhvcUaxdVc
+NaH0Me/DKKcN27BTLQVh3NXkS/fAsMjcW2tVyjBFEAHMv6OuEv2B1A8Mz/lOXHcB
+oMEIos47NHD2k8XoyMisXWPBvBGB0w==
+=9BoB
+-----END PGP SIGNATURE-----
+
+--Sig_/7l.EgzzU/ar/B.qBL9zV9BV--
