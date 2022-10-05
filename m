@@ -2,67 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777175F584D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 18:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E791F5F585D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 18:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiJEQdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 12:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
+        id S230040AbiJEQdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 12:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiJEQc6 (ORCPT
+        with ESMTP id S230016AbiJEQdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 12:32:58 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EE4659DB
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 09:32:57 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-358bf076f1fso98924477b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 09:32:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=tO1cqxBl5Ixvz5qgHxYOFF3bhJ6a/cA5ECS1RiJpe5w=;
-        b=sZOqwo+6l3Eyq2GP9Hk9q+guT9/5nNNfx+IJZD4FQ/kD1cYOJWESWbTN7cVcekzIvs
-         9zW11zGtGbtQwTnzR11EH9hecRi47wjVDL6tmTyJLqrKhzKBy1qAJTFpz13CoRTt7MC3
-         JacPBVny5y0UaDs+6ZBLptq9TyASLCq6PIwY2z6H3Jz8b2xvnmGmvFA/PH72QQws51bP
-         kApR3xalIDfe8aNPYR38GOZKjvhPSQXJgCP0WHz4RSUIGOv1Dv1WOk1Fz+v/9aLA3rwr
-         VzPPO7VLOu7kXuO1JSZbITpMPDNimCWVb1aeBLX2Es07fzAf10kBC2tFu4/PkaGdvYlo
-         NNlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=tO1cqxBl5Ixvz5qgHxYOFF3bhJ6a/cA5ECS1RiJpe5w=;
-        b=m6n3lf0vR2SYI+6xO/vgC4tOvReBqd0b3RARIncFI+Vb0wVzYs8gjvN7/L1lB4rzsi
-         bGxh3E6lCbRUt0On5QdFLoPofs9iBFnM8TwMFDUklJv0Wnqh0s+Zz7XKHV99oWlNEWLh
-         un+fyudUh0TgeD8NLS61zrzSpv/v0efH24VM6OSFRXqk4TBX2ldG7sIEpmFfFV6mLQGW
-         AIDj/rIainICqjUUB78Okx4PlAcGlOY97kXWTRxMaFRoACoxvr7EG5wrToJ6BZ+f7IEs
-         +waIrAjgUk+jVIyrP40lS+w/aLF/Vh4oxoMWgnS4eETv72YNwrofagwjVxY4RlAi7uga
-         IAAw==
-X-Gm-Message-State: ACrzQf17J0/XgfFsIrID1Zu2oRCxGXNzxnWJ2V6S4Wyu3Y2/hedvZBVI
-        OTdlC17yJvvnkgpO9/i0SLVkmM+/RXUz4JMmZav58Q==
-X-Google-Smtp-Source: AMsMyM6Ug/uEVFi6hVoJw88GCsPdVF+D5xbdtYx5P1Ezm8OSxTN5hccFF4CzvTnYqxxkNQgu3/r/KYo7H0RHmAOoWAg=
-X-Received: by 2002:a81:6ccf:0:b0:35b:c5a5:1df3 with SMTP id
- h198-20020a816ccf000000b0035bc5a51df3mr597262ywc.132.1664987576017; Wed, 05
- Oct 2022 09:32:56 -0700 (PDT)
+        Wed, 5 Oct 2022 12:33:09 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2046.outbound.protection.outlook.com [40.107.223.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C021659EE;
+        Wed,  5 Oct 2022 09:33:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TJAi52TobbJ/q7+elLwkjIolP7mxGqJhA7BPiyAY9UZ0accezrAWP6dk/gnip5xuUB9cSg9zSc5YKg2kCG9lf7eOb5VkA/lHl4MVrU6toj32qFne9ORXR7DaojLEF54ktV1meDIGn5VyJGWCqmNe0TW9GxniXofV4bLwBpchKw5HNgkCWuJBVfY5lsbz7NBc0Qz28IlZF0Xj9jWx991WFjZI9/uyGSlaiP7oKgUI6e1oYnFokrdKMByrsXueZvqxx/YjRn/mHTRqs2hHqWaBxffOveD1bZfqrECYDNfJ/75UdTnkx41ynd/ERiaA/RxG9SE/mMc/YB1DSkVYqQ7z0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jkJkH3sTDf9f5zCEYluJNom8sZfVif8I5KIIUqa3e1Q=;
+ b=DRhbUdzsz6PNMXqN2VXXlcWZikFTr9J/kBQJCaP5vD9oNPPMO6FmSvZ45SkPD+sPaYEfP4JrZJuGQgcTlUxwqshBJXeM9GPRBddZ6Y3BYQIqmaPIjSRi3vd9CkV5C1rDye+0p9tdfjgOeGRdwqYaXMnb15NUAG45XjpACmADcAcjA3JQN49ST6xmnoPL0AtMNOChJcnXDzXQkwHAhPz44yfBkCRHQQOVAG7a3aXn+T72UhvwLRqDmITGjg1Em5agDvz8FYyUsAPxs3N90qAwog25yCaEpSNlWRKWc/PJnQi8AjDnhQ5+UXC0hWwpvWywfWG/On0egllvVev2L40eYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jkJkH3sTDf9f5zCEYluJNom8sZfVif8I5KIIUqa3e1Q=;
+ b=IYX9A9GcCu92YrSUR5lwrbvJ45L1GebsG789J7sSddxxr+rbBivWY2kOPb0XOTe8trMw0CJZSihc/WGdQ9Oq1LqVaB0F/Ioy8OxshT53lOrgFRWZsw++1oW44qcpbD7aW+ohrUjbd431JGg7T6XQtITpDPp9M2ChgtJwK/lH/v8=
+Received: from DS7PR03CA0340.namprd03.prod.outlook.com (2603:10b6:8:55::21) by
+ DM4PR12MB5245.namprd12.prod.outlook.com (2603:10b6:5:398::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5676.24; Wed, 5 Oct 2022 16:33:05 +0000
+Received: from DM6NAM11FT049.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:55:cafe::48) by DS7PR03CA0340.outlook.office365.com
+ (2603:10b6:8:55::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23 via Frontend
+ Transport; Wed, 5 Oct 2022 16:33:05 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT049.mail.protection.outlook.com (10.13.172.188) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5709.10 via Frontend Transport; Wed, 5 Oct 2022 16:33:05 +0000
+Received: from ashkalraubuntuserver.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Wed, 5 Oct 2022 11:33:03 -0500
+From:   Ashish Kalra <Ashish.Kalra@amd.com>
+To:     <rafael@kernel.org>, <lenb@kernel.org>, <james.morse@arm.com>,
+        <tony.luck@intel.com>, <bp@alien8.de>, <robert.moore@intel.com>,
+        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devel@acpica.org>
+Subject: [PATCH v2] ACPI: APEI: Fix num_ghes to unsigned int
+Date:   Wed, 5 Oct 2022 16:32:53 +0000
+Message-ID: <20221005163253.455910-1-Ashish.Kalra@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220913140817.GA9091@hu-pkondeti-hyd.qualcomm.com>
- <20220915062027.GA14713@hu-pkondeti-hyd.qualcomm.com> <CAJuCfpE_nM2uqixnds0d6wbsz4=OQ3KPoJ5HOqDhQXaxFGxwXQ@mail.gmail.com>
- <CAJuCfpEeNzDQ-CvMN3fP5LejOzpnfgUgvkzpPj1CLF-8NqNoww@mail.gmail.com>
-In-Reply-To: <CAJuCfpEeNzDQ-CvMN3fP5LejOzpnfgUgvkzpPj1CLF-8NqNoww@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 5 Oct 2022 09:32:44 -0700
-Message-ID: <CAJuCfpFr3JfwkWbDqkU=NUJbCYuCWGySwNusMCdmS3z95WD2AQ@mail.gmail.com>
-Subject: Re: PSI idle-shutoff
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Charan Teja Kalla <quic_charante@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT049:EE_|DM4PR12MB5245:EE_
+X-MS-Office365-Filtering-Correlation-Id: f3562d2f-a854-47fd-6796-08daa6ef4789
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fGoJUAEqkWgM0Gkq0EoySNozgqUjsH4pHiLW4noRxSHVp6tM1s088LJJSmTTi/J5RegY5t/T+6Qwe1FWTb90ITeId5eQ4T+GKCaV7O/JfZfBVdUpnr6WrdU2NxBfBnpaWlaDvYXkPPJqqSfQ/oCMSq3cuxQgVI+SEBBL8dkSAxPu7BJz0MhIgIzx9iTYu5uiw6CtxlzbTLNSLwrapfKNvSpEk8xcG5zJyb1YRLc+e7yijR/mIdFIvmlgf+RUebkTdQ7m2JNR8GIrVoo3Q7EwjsRK738mHyBrQlOkumsVVtukaXpJd6RX1CheIXXuX2n5xieOJkuDxkwnAktx1/teMIpIwnGo+FYD3LfCUK/DqW66A+yJfOpGbfa16UTymhtf2vsnLz1tAWD/Y387VUWeRX/m89FkpWz+JNFmJEXFLpaT+/veUVy3r1XTlHpg8tvaFVX+IgDftl8wcbp6hRvEcaqFYZm+zj3Salo4dMsAXS3jPWn3n8dkJ3C5jUccIlDmKD4T/WpXOjFBpBHF/SxYttq9PnW/Rw6uD4KJuQEehL3PxSor6qK+/a2oTd0XxtvKLlYA8WuPjZ+uBVR3yg79/BQgxplSjBRuF6pvewxi7A8yv8VWtth8E87+oeBgAFbNOo46zxiJhu+mGe9OzctGatyDDXzZJKLmOgXRVIsMLYLGNnL2cj3KTVw9yat8MlKz0UQKh+fzs3x6RFNzq7cY80/lEGR5TKSJ+zGDeqLjg6mCLKjCUSZOgTDa0lBOPY9fdWkUmH/B/XqbOzJ0YB+jZZmAIu4uZ1FZIZoABCka9uTRM/8IxFsuuaqq3+5tpyca
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(136003)(346002)(39860400002)(451199015)(46966006)(36840700001)(40470700004)(2906002)(7696005)(41300700001)(26005)(36756003)(5660300002)(478600001)(6666004)(82740400003)(86362001)(40480700001)(40460700003)(8936002)(81166007)(356005)(82310400005)(47076005)(186003)(426003)(1076003)(16526019)(336012)(36860700001)(83380400001)(2616005)(316002)(110136005)(70586007)(70206006)(8676002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2022 16:33:05.2834
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f3562d2f-a854-47fd-6796-08daa6ef4789
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT049.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5245
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,211 +97,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 2, 2022 at 11:11 PM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Fri, Sep 16, 2022 at 10:45 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> >
-> > On Wed, Sep 14, 2022 at 11:20 PM Pavan Kondeti
-> > <quic_pkondeti@quicinc.com> wrote:
-> > >
-> > > On Tue, Sep 13, 2022 at 07:38:17PM +0530, Pavan Kondeti wrote:
-> > > > Hi
-> > > >
-> > > > The fact that psi_avgs_work()->collect_percpu_times()->get_recent_times()
-> > > > run from a kworker thread, PSI_NONIDLE condition would be observed as
-> > > > there is a RUNNING task. So we would always end up re-arming the work.
-> > > >
-> > > > If the work is re-armed from the psi_avgs_work() it self, the backing off
-> > > > logic in psi_task_change() (will be moved to psi_task_switch soon) can't
-> > > > help. The work is already scheduled. so we don't do anything there.
-> >
-> > Hi Pavan,
-> > Thanks for reporting the issue. IIRC [1] was meant to fix exactly this
-> > issue. At the time it was written I tested it and it seemed to work.
-> > Maybe I missed something or some other change introduced afterwards
-> > affected the shutoff logic. I'll take a closer look next week when I'm
-> > back at my computer and will consult with Johannes.
->
-> Sorry for the delay. I had some time to look into this and test psi
-> shutoff on my device and I think you are right. The patch I mentioned
-> prevents new psi_avgs_work from being scheduled when the only non-idle
-> task is psi_avgs_work itself, however the regular 2sec averaging work
-> will still go on. I think we could record the fact that the only
-> active task is psi_avgs_work in record_times() using a new
-> psi_group_cpu.state_mask flag and then prevent psi_avgs_work() from
-> rescheduling itself if that flag is set for all non-idle cpus. I'll
-> test this approach and will post a patch for review if that works.
+From: Ashish Kalra <ashish.kalra@amd.com>
 
-Hi Pavan,
-Testing PSI shutoff on Android proved more difficult than I expected.
-Lots of tasks to silence and I keep encountering new ones.
-The approach I was thinking about is something like this:
+Change num_ghes from int to unsigned int, preventing an overflow
+and causing subsequent vmalloc to fail.
 
+The overflow happens in the ghes_estatus_pool_init() when calculating
+len during execution of the statement below as both multiplication
+operands here are signed int :
+
+len += (num_ghes * GHES_ESOURCE_PREALLOC_MAX_SIZE);
+
+The following call trace is observed because of this bug:
+
+[    9.317108] swapper/0: vmalloc error: size 18446744071562596352, exceeds total pages, mode:0xcc0(GFP_KERNEL), nodemask=(null),cpuset=/,mems_allowed=0-1
+[    9.317131] Call Trace:
+[    9.317134]  <TASK>
+[    9.317137]  dump_stack_lvl+0x49/0x5f
+[    9.317145]  dump_stack+0x10/0x12
+[    9.317146]  warn_alloc.cold+0x7b/0xdf
+[    9.317150]  ? __device_attach+0x16a/0x1b0
+[    9.317155]  __vmalloc_node_range+0x702/0x740
+[    9.317160]  ? device_add+0x17f/0x920
+[    9.317164]  ? dev_set_name+0x53/0x70
+[    9.317166]  ? platform_device_add+0xf9/0x240
+[    9.317168]  __vmalloc_node+0x49/0x50
+[    9.317170]  ? ghes_estatus_pool_init+0x43/0xa0
+[    9.317176]  vmalloc+0x21/0x30
+[    9.317177]  ghes_estatus_pool_init+0x43/0xa0
+[    9.317179]  acpi_hest_init+0x129/0x19c
+[    9.317185]  acpi_init+0x434/0x4a4
+[    9.317188]  ? acpi_sleep_proc_init+0x2a/0x2a
+[    9.317190]  do_one_initcall+0x48/0x200
+[    9.317195]  kernel_init_freeable+0x221/0x284
+[    9.317200]  ? rest_init+0xe0/0xe0
+[    9.317204]  kernel_init+0x1a/0x130
+[    9.317205]  ret_from_fork+0x22/0x30
+[    9.317208]  </TASK>
+
+Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
 ---
- include/linux/psi_types.h |  3 +++
- kernel/sched/psi.c        | 12 +++++++++---
- 2 files changed, 12 insertions(+), 3 deletions(-)
+ drivers/acpi/apei/ghes.c | 2 +-
+ include/acpi/ghes.h      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
-index c7fe7c089718..8d936f22cb5b 100644
---- a/include/linux/psi_types.h
-+++ b/include/linux/psi_types.h
-@@ -68,6 +68,9 @@ enum psi_states {
-         NR_PSI_STATES = 7,
- };
-
-+/* state_mask flag to keep re-arming averaging work */
-+#define PSI_STATE_WAKE_CLOCK        (1 << NR_PSI_STATES)
-+
- enum psi_aggregators {
-         PSI_AVGS = 0,
-         PSI_POLL,
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index ecb4b4ff4ce0..dd62ad28bacd 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -278,6 +278,7 @@ static void get_recent_times(struct psi_group
-*group, int cpu,
-                 if (delta)
-                         *pchanged_states |= (1 << s);
-         }
-+        *pchanged_states |= (state_mask & PSI_STATE_WAKE_CLOCK);
+diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+index d91ad378c00d..6d7c202142a6 100644
+--- a/drivers/acpi/apei/ghes.c
++++ b/drivers/acpi/apei/ghes.c
+@@ -163,7 +163,7 @@ static void ghes_unmap(void __iomem *vaddr, enum fixed_addresses fixmap_idx)
+ 	clear_fixmap(fixmap_idx);
  }
-
- static void calc_avgs(unsigned long avg[3], int missed_periods,
-@@ -413,7 +414,7 @@ static void psi_avgs_work(struct work_struct *work)
-         struct delayed_work *dwork;
-         struct psi_group *group;
-         u32 changed_states;
--        bool nonidle;
-+        bool wake_clock;
-         u64 now;
-
-         dwork = to_delayed_work(work);
-@@ -424,7 +425,7 @@ static void psi_avgs_work(struct work_struct *work)
-         now = sched_clock();
-
-         collect_percpu_times(group, PSI_AVGS, &changed_states);
--        nonidle = changed_states & (1 << PSI_NONIDLE);
-+        wake_clock = changed_states & PSI_STATE_WAKE_CLOCK;
-         /*
-          * If there is task activity, periodically fold the per-cpu
-          * times and feed samples into the running averages. If things
-@@ -435,7 +436,7 @@ static void psi_avgs_work(struct work_struct *work)
-         if (now >= group->avg_next_update)
-                 group->avg_next_update = update_averages(group, now);
-
--        if (nonidle) {
-+        if (wake_clock) {
-                 schedule_delayed_work(dwork, nsecs_to_jiffies(
-                                 group->avg_next_update - now) + 1);
-         }
-@@ -742,6 +743,11 @@ static void psi_group_change(struct psi_group
-*group, int cpu,
-         if (unlikely(groupc->tasks[NR_ONCPU] && cpu_curr(cpu)->in_memstall))
-                 state_mask |= (1 << PSI_MEM_FULL);
-
-+        if (wake_clock || test_state(groupc->tasks, PSI_NONIDLE)) {
-+                /* psi_avgs_work was not the only task on the CPU */
-+                state_mask |= PSI_STATE_WAKE_CLOCK;
-+        }
-+
-         groupc->state_mask = state_mask;
-
-         write_seqcount_end(&groupc->seq);
+ 
+-int ghes_estatus_pool_init(int num_ghes)
++int ghes_estatus_pool_init(unsigned int num_ghes)
+ {
+ 	unsigned long addr, len;
+ 	int rc;
+diff --git a/include/acpi/ghes.h b/include/acpi/ghes.h
+index 34fb3431a8f3..292a5c40bd0c 100644
+--- a/include/acpi/ghes.h
++++ b/include/acpi/ghes.h
+@@ -71,7 +71,7 @@ int ghes_register_vendor_record_notifier(struct notifier_block *nb);
+ void ghes_unregister_vendor_record_notifier(struct notifier_block *nb);
+ #endif
+ 
+-int ghes_estatus_pool_init(int num_ghes);
++int ghes_estatus_pool_init(unsigned int num_ghes);
+ 
+ /* From drivers/edac/ghes_edac.c */
+ 
 -- 
+2.25.1
 
-This should detect the activity caused by psi_avgs_work() itself and
-ignore it when deciding to reschedule the averaging work. In the
-formula you posted:
-
-non_idle_time = (work_start_now - wakeup_now) + (sleep_prev - work_end_prev)
-
-the first term is calculated only if the PSI state is still active
-(https://elixir.bootlin.com/linux/latest/source/kernel/sched/psi.c#L271).
-psi_group_change() will reset that state if psi_avgs_work() was the
-only task on that CPU, so it won't affect non_idle_time. The code
-above is to take care of the second term. Could you please check if
-this approach helps? As I mentioned I'm having trouble getting all the
-tasks silent on Android for a clear test.
-
-The issue with deferrable timers that you mentioned, how often does
-that happen? If it happens only occasionally and prevents PSI shutoff
-for a couple of update cycles then I don't think that's a huge
-problem. Once PSI shutoff happens it should stay shut. Is that the
-case?
-Thanks,
-Suren.
-
-
-> Thanks,
-> Suren.
->
-> > Thanks,
-> > Suren.
-> >
-> > [1] 1b69ac6b40eb "psi: fix aggregation idle shut-off"
-> >
-> > > >
-> > > > Probably I am missing some thing here. Can you please clarify how we
-> > > > shut off re-arming the psi avg work?
-> > > >
-> > >
-> > > I have collected traces on an idle system (running android12-5.10 with minimal
-> > > user space). This is a older kernel, however the issue remain on latest kernel
-> > > as per code inspection.
-> > >
-> > > I have eliminated noise created by other work items. For example, vmstat_work.
-> > > This is a deferrable work but gets executed since this is queued on the same
-> > > CPU on which PSI work timer is queued. So I have increased
-> > > sysctl_stat_interval to 60 * HZ to supress this work.
-> > >
-> > > As we can see from the traces, CPU#7 comes out of idle only to execute PSI
-> > > work for every 2 seconds. The work is always re-armed from the psi_avgs_work()
-> > > as it finds PSI_NONIDLE condition. The non-idle time is essentially
-> > >
-> > > non_idle_time = (work_start_now - wakeup_now) + (sleep_prev - work_end_prev)
-> > >
-> > > The first term accounts the non-idle time since the task woken up (queued) to
-> > > the execution of the work item. It is around ~4 usec (54.119420 - 54.119416)
-> > >
-> > > The second term account for the previous update. ~2 usec (52.135424 -
-> > > 52.135422).
-> > >
-> > > PSI work needs to be run when there is some activity after the last update is done
-> > > i.e last time the work is run. Since we use non-deferrable timer, the other
-> > > deferrable timers gets woken up and they might queue work or wakeup other threads
-> > > and creates activity which inturn makes PSI work to be scheduled.
-> > >
-> > > PSI work can't just be made deferrable work. Because, it is a system level
-> > > work and if the CPU on which it is queued is idle for longer duration but the
-> > > other CPUs are active, we miss PSI updates. What we probably need is a global
-> > > deferrable timers [1] i.e this timer should not be bound to any CPU but
-> > > run when any of the CPU comes out of idle. As long as one CPU is busy, we keep
-> > > running the PSI but if the whole system is idle, we never wakeup.
-> > >
-> > >           <idle>-0     [007]    52.135402: cpu_idle:             state=4294967295 cpu_id=7
-> > >           <idle>-0     [007]    52.135415: workqueue_activate_work: work struct 0xffffffc011bd5010
-> > >           <idle>-0     [007]    52.135417: sched_wakeup:         comm=kworker/7:3 pid=196 prio=120 target_cpu=007
-> > >           <idle>-0     [007]    52.135421: sched_switch:         prev_comm=swapper/7 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=kworker/7:3 next_pid=196 next_prio=120
-> > >      kworker/7:3-196   [007]    52.135421: workqueue_execute_start: work struct 0xffffffc011bd5010: function psi_avgs_work
-> > >      kworker/7:3-196   [007]    52.135422: timer_start:          timer=0xffffffc011bd5040 function=delayed_work_timer_fn expires=4294905814 [timeout=494] cpu=7 idx=123 flags=D|P|I
-> > >      kworker/7:3-196   [007]    52.135422: workqueue_execute_end: work struct 0xffffffc011bd5010: function psi_avgs_work
-> > >      kworker/7:3-196   [007]    52.135424: sched_switch:         prev_comm=kworker/7:3 prev_pid=196 prev_prio=120 prev_state=I ==> next_comm=swapper/7 next_pid=0 next_prio=120
-> > >           <idle>-0     [007]    52.135428: cpu_idle:             state=0 cpu_id=7
-> > >
-> > >           <system is idle and gets woken up after 2 seconds due to PSI work>
-> > >
-> > >           <idle>-0     [007]    54.119402: cpu_idle:             state=4294967295 cpu_id=7
-> > >           <idle>-0     [007]    54.119414: workqueue_activate_work: work struct 0xffffffc011bd5010
-> > >           <idle>-0     [007]    54.119416: sched_wakeup:         comm=kworker/7:3 pid=196 prio=120 target_cpu=007
-> > >           <idle>-0     [007]    54.119420: sched_switch:         prev_comm=swapper/7 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=kworker/7:3 next_pid=196 next_prio=120
-> > >      kworker/7:3-196   [007]    54.119420: workqueue_execute_start: work struct 0xffffffc011bd5010: function psi_avgs_work
-> > >      kworker/7:3-196   [007]    54.119421: timer_start:          timer=0xffffffc011bd5040 function=delayed_work_timer_fn expires=4294906315 [timeout=499] cpu=7 idx=122 flags=D|P|I
-> > >      kworker/7:3-196   [007]    54.119422: workqueue_execute_end: work struct 0xffffffc011bd5010: function psi_avgs_work
-> > >
-> > > [1]
-> > > https://lore.kernel.org/lkml/1430188744-24737-1-git-send-email-joonwoop@codeaurora.org/
-> > >
-> > > Thanks,
-> > > Pavan
