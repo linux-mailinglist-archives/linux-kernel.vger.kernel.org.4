@@ -2,114 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B8ED5F591A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F215F591C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbiJERZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 13:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
+        id S230123AbiJER0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 13:26:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiJERZx (ORCPT
+        with ESMTP id S229593AbiJER0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 13:25:53 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F417DF75
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 10:25:51 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id c7so15791797pgt.11
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 10:25:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date;
-        bh=hoatWM9ozoryzp81ugwuVdaw9vFYVzmYTBOT17b7aaI=;
-        b=gIFf01eSbK2nZVpULQQ42DWnKsnifrnfUC3C+n75VahsZLw6X4vzvAE2VCPE1j48X0
-         IaaNKd/qYL8krO6D3d/aoP9gMlWpx+y3lL7NClxUYU53fEDEEhbfVvZ7aE0aqvAmV4IK
-         3y2vFjqYCsjN97+iPd/YqH2yMZej0l7hTXKxgH2VLxsIVo9OOIqo5v/PBf19pcnriVOx
-         t/1ieEGtExO1t8rBxYT+5frSnex7m46Hec+pQZzYr1Eu3vJbnWH5zukHNd0QoGHb6DNu
-         cBOPZ9XSaw1Li4xEvr8wnq6qlZhHieRk/DcIuLbLP5LbN2Sjnc8DBnkr7+yceNvIu8Nw
-         zaDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=hoatWM9ozoryzp81ugwuVdaw9vFYVzmYTBOT17b7aaI=;
-        b=YfgrQw2WWPwYS7vV1HS0N3DB7tdfXFRc9OPWNpsODeSU0MYbCpF5py6HoblsqNCp6Q
-         NGDAKWBlFkc+XCNBnFXkBGhwlNIr1pLoOOKft0PwPj+UAD45n4l+akxn0JgeMoc9kApy
-         xw9lR0xK8I4vQqRjUhcVkBxxc9a0jrBDszqMWMARQeG4qlBnANNu6/uPd2r378r6bvsi
-         aYZEx08Smjc7B69scEXTG+EviDFFZyXoYXGXNRXNWbwfXaEeG6PNE8ISQFzX2WPpa8c+
-         JFqAUsvuTftL1xO0aKD8OWwFM7jlC6xhLY+YYpvv/ZSYDUzfAS3250qrDRYEPtmySEpV
-         YYdQ==
-X-Gm-Message-State: ACrzQf3UmHURXE5J5POsJJokxX1cL+d0CBYmGwDQVCpZPB91K7nTIQsb
-        i8meH/ASa2R8cpRgxz57TP9fC5XoUJjfcg==
-X-Google-Smtp-Source: AMsMyM4TyVkvtTWOPo0nT5OoEytcoTQ9Csm4KgzKugBBadka1vCy2hdL+79TtN4k8+wmclpr81Shfg==
-X-Received: by 2002:a05:6a02:186:b0:439:49a3:479b with SMTP id bj6-20020a056a02018600b0043949a3479bmr733364pgb.171.1664990751147;
-        Wed, 05 Oct 2022 10:25:51 -0700 (PDT)
-Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
-        by smtp.gmail.com with ESMTPSA id j7-20020a170902690700b00176b84eb29asm1777510plk.301.2022.10.05.10.25.49
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Oct 2022 10:25:50 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v4 2/7] Enable balloon drivers to report inflated memory
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <20221005090158.2801592-3-alexander.atanasov@virtuozzo.com>
-Date:   Wed, 5 Oct 2022 10:25:47 -0700
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
-        Linux Virtualization <virtualization@lists.linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <88EDC41D-408F-4ADF-A933-0A6F36E5F262@gmail.com>
-References: <20221005090158.2801592-1-alexander.atanasov@virtuozzo.com>
- <20221005090158.2801592-3-alexander.atanasov@virtuozzo.com>
-To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 5 Oct 2022 13:26:47 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246557E03C;
+        Wed,  5 Oct 2022 10:26:46 -0700 (PDT)
+Date:   Wed, 5 Oct 2022 19:26:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1664990803;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fj95Dr0AciJvLIhuAttqQiDA1VupLLtSJgyv/b0xPHw=;
+        b=DCFNYVWAtT9sIoXQMxW8P9eS/VBebCuxkSzT/fdWLhEBTWZBs2c46M7tpGarJdbEozdyrJ
+        dNDRczS+uYoYRuXBksas7JugL2PmRLhKd/ePQis5Cyhx8H/6mqJclCfVnrpU9cQN/1eSmk
+        OQe08fO2lMosXWggCw3+Bb3fS3jLXMvtLwK2Sh2lx4Oa9mDNmGUni/PPawDmKkuhgIkPkX
+        3snvFe9ca06UqIYOagGxo8yZhi3BbgCVPoWh2i0jAcefU9QCoir24tcCK1YhFK8NxJl+Bg
+        jGsYuTLbtSBZyScaFyvMZHizeN7YlhMW2/oISNk28MESriCQ7tTRMuz2DrLZOA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1664990803;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fj95Dr0AciJvLIhuAttqQiDA1VupLLtSJgyv/b0xPHw=;
+        b=Z+OVxzKA4WFx0GobQJezxTBgeL17dA7h9cooRp8lhHJnHWtDFXusbVzIYs6FJ9n6kXWkrl
+        CVpWuSmCwVnm7BAw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Sultan Alsawaf <sultan@kerneltoast.com>
+Subject: Re: [PATCH 2/2] random: spread out jitter callback to different CPUs
+Message-ID: <Yz2+UsgVGRSm+o7W@linutronix.de>
+References: <20220930231050.749824-1-Jason@zx2c4.com>
+ <20220930231050.749824-2-Jason@zx2c4.com>
+ <YzgGmh6EQtWzO4HV@zx2c4.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YzgGmh6EQtWzO4HV@zx2c4.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Oct 5, 2022, at 2:01 AM, Alexander Atanasov =
-<alexander.atanasov@virtuozzo.com> wrote:
+On 2022-10-01 11:21:30 [+0200], Jason A. Donenfeld wrote:
+> Sultan points out that timer_pending() returns false before the function
+> has actually run, while add_timer_on() adds directly to the timer base,
+> which means del_timer_sync() might fail to notice a pending timer, which
+> means UaF. This seems like a somewhat hard problem to solve. So I think
+> I'll just drop this patch 2/2 here until a better idea comes around.
 
-> Add counters to be updated by the balloon drivers.
-> Create balloon notifier to propagate changes.
+I don't know what you exactly intend but this:
 
-I missed the other patches before (including this one). Sorry, but next
-time, please cc me.
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 79d7d4e4e5828..18d785f5969e5 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1195,6 +1195,7 @@ static void __cold try_to_generate_entropy(void)
+ 	struct entropy_timer_state stack;
+ 	unsigned int i, num_different = 0;
+ 	unsigned long last = random_get_entropy();
++	unsigned int cpu = raw_smp_processor_id();
+ 
+ 	for (i = 0; i < NUM_TRIAL_SAMPLES - 1; ++i) {
+ 		stack.entropy = random_get_entropy();
+@@ -1207,10 +1208,17 @@ static void __cold try_to_generate_entropy(void)
+ 		return;
+ 
+ 	stack.samples = 0;
+-	timer_setup_on_stack(&stack.timer, entropy_timer, 0);
++	timer_setup_on_stack(&stack.timer, entropy_timer, TIMER_PINNED);
+ 	while (!crng_ready() && !signal_pending(current)) {
+-		if (!timer_pending(&stack.timer))
+-			mod_timer(&stack.timer, jiffies + 1);
++
++		if (!timer_pending(&stack.timer)) {
++			cpu = cpumask_next(cpu, cpu_online_mask);
++			if (cpu == nr_cpumask_bits)
++				cpu = cpumask_first(cpu_online_mask);
++
++			stack.timer.expires = jiffies;
++			add_timer_on(&stack.timer, cpu);
++		}
+ 		mix_pool_bytes(&stack.entropy, sizeof(stack.entropy));
+ 		schedule();
+ 		stack.entropy = random_get_entropy();
 
-I was looking through the series and I did not see actual users of the
-notifier. Usually, it is not great to build an API without users.
+will enqueue a timer once none is pending. That is on first invocation
+_or_ as soon as the callback is about to be invoked. So basically the
+timer is about to be called and you enqueue it right away.
+With "expires = jiffies" the timer will be invoked on every tick while
+"jiffies + 1" will invoke it on every other tick.
 
-[snip]=20
+You will start the timer on "this-CPU + 1" and iterate it in a round
+robin fashion through all CPUs. It seems this is important. I don't
+think that you need to ensure that the CPU running
+try_to_generate_entropy() will not fire the timer since it won't happen
+most of the time (due to the round-robin thingy). This is (of course)
+different between a busy system and an idle one.
 
-> +
-> +static int balloon_notify(unsigned long val)
-> +{
-> +	return srcu_notifier_call_chain(&balloon_chain, val, NULL);
+That del_timer_sync() at the end is what you want. If the timer is
+pending (as in enqueued in the timer wheel) then it will be removed
+before it is invoked. If the timer's callback is invoked then it will
+spin until the callback is done.
 
-Since you know the inflated_kb value here, why not to use it as an =
-argument
-to the callback? I think casting to (void *) and back is best. But you =
-can
-also provide pointer to the value. Doesn=E2=80=99t it sound better than =
-having
-potentially different notifiers reading different values?
+I *think* you are aware that schedule() here is kind of pointless
+because if there is not much going on (this is the only task in the
+system), then you leave schedule() right away and continue. Assuming
+random_get_entropy() is returning current clock (which is either the
+rdtsc on x86 or random_get_entropy_fallback() somewhere else) then you
+get little noise.
 
-Anyhow, without users (actual notifiers) it=E2=80=99s kind of hard to =
-know how
-reasonable it all is. For instance, is it balloon_notify() supposed to
-prevent further balloon inflating/deflating until the notifier =
-completes?
-Accordingly, are callers to balloon_notify() expected to relinquish =
-locks
-before calling balloon_notify() to prevent deadlocks and high latency?
+With some additional trace prints:
 
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 79d7d4e4e5828..802e0d9254611 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1195,6 +1195,8 @@ static void __cold try_to_generate_entropy(void)
+ 	struct entropy_timer_state stack;
+ 	unsigned int i, num_different = 0;
+ 	unsigned long last = random_get_entropy();
++	unsigned int cpu = raw_smp_processor_id();
++	unsigned long v1, v2;
+ 
+ 	for (i = 0; i < NUM_TRIAL_SAMPLES - 1; ++i) {
+ 		stack.entropy = random_get_entropy();
+@@ -1207,15 +1209,26 @@ static void __cold try_to_generate_entropy(void)
+ 		return;
+ 
+ 	stack.samples = 0;
+-	timer_setup_on_stack(&stack.timer, entropy_timer, 0);
++	timer_setup_on_stack(&stack.timer, entropy_timer, TIMER_PINNED);
++	v1 = v2 = 0;
+ 	while (!crng_ready() && !signal_pending(current)) {
+-		if (!timer_pending(&stack.timer))
+-			mod_timer(&stack.timer, jiffies + 1);
++
++		if (!timer_pending(&stack.timer)) {
++			cpu = cpumask_next(cpu, cpu_online_mask);
++			if (cpu == nr_cpumask_bits)
++				cpu = cpumask_first(cpu_online_mask);
++
++			stack.timer.expires = jiffies;
++			add_timer_on(&stack.timer, cpu);
++		}
+ 		mix_pool_bytes(&stack.entropy, sizeof(stack.entropy));
+ 		schedule();
+-		stack.entropy = random_get_entropy();
++		v1 = random_get_entropy();
++		stack.entropy = v1;
++		trace_printk("%lx | %lx\n", v1, v1 - v2);
++		v2 = v1;
+ 	}
+-
++	tracing_off();
+ 	del_timer_sync(&stack.timer);
+ 	destroy_timer_on_stack(&stack.timer);
+ 	mix_pool_bytes(&stack.entropy, sizeof(stack.entropy));
+
+I get:
+
+|       swapper/0-1       [002] .....     2.570083: try_to_generate_entropy: 275e8a56d | 2e4
+|       swapper/0-1       [002] .....     2.570084: try_to_generate_entropy: 275e8a82c | 2bf
+|       swapper/0-1       [002] .....     2.570084: try_to_generate_entropy: 275e8ab10 | 2e4
+|       swapper/0-1       [002] .....     2.570084: try_to_generate_entropy: 275e8adcf | 2bf
+|       swapper/0-1       [002] .....     2.570084: try_to_generate_entropy: 275e8b0b3 | 2e4
+|       swapper/0-1       [002] .....     2.570084: try_to_generate_entropy: 275e8b372 | 2bf
+|       swapper/0-1       [002] .....     2.570085: try_to_generate_entropy: 275e8b85c | 4ea
+|       swapper/0-1       [002] .....     2.570085: try_to_generate_entropy: 275e8bb1b | 2bf
+|       swapper/0-1       [002] .....     2.570085: try_to_generate_entropy: 275e8be49 | 32e
+|       swapper/0-1       [002] .....     2.570085: try_to_generate_entropy: 275e8c12d | 2e4
+|       swapper/0-1       [002] .....     2.570087: try_to_generate_entropy: 275e8de15 | 1ce8
+|       swapper/0-1       [002] .....     2.570088: try_to_generate_entropy: 275e8e168 | 353
+|       swapper/0-1       [002] .....     2.570088: try_to_generate_entropy: 275e8e471 | 309
+|       swapper/0-1       [002] .....     2.570088: try_to_generate_entropy: 275e8e833 | 3c2
+|       swapper/0-1       [002] .....     2.570088: try_to_generate_entropy: 275e8edd6 | 5a3
+
+So with sizeof(entropy) = 8 bytes you add 8 bytes only little changes in
+lower bits.
+That is maybe where you say that I don't need to worry because it is a
+very good hash function and the timer accounts only one bit of entropy
+every jiffy.
+
+> Jason
+
+Sebastian
