@@ -2,218 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 055D55F4CED
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 02:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 563C55F4CF3
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 02:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbiJEAIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 20:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53040 "EHLO
+        id S229552AbiJEANu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 20:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiJEAIs (ORCPT
+        with ESMTP id S229534AbiJEANl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 20:08:48 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2131.outbound.protection.outlook.com [40.107.220.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9334F6E8B1;
-        Tue,  4 Oct 2022 17:08:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QumN1A3BZpyDbyL+i3f5YwMjH4RizlM+5tjkQSeGe/k0dMynfChjooqhZHDBI5l5PdFRXzpMgj+f7cE6HQTtT+dSFpc5d5AgISZy7Qjtxu0e1EGFh9VEAEX1r82BW6WbDKVGsHc0FmlwxE6+cJJAwVnApaTLcfESAMlJTwuB1TpyAapqIATYVREOnl16TfTD/A7aJr2OMMh9JAYuG6tNBEalziNyfpIobCg21M54LMrDqQCfkw1CHNQu3+3v5fvVrpAiwaU/tf1z20Z7JCqtHPx5knASqiHMqeEv7RwNOFy20FnTRCHRxxDf44wai2XI4KxfCVj3ihL7STPgC30Cag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iYExmqY75AVXf4/LvUvI6rNCzDD0nloxrL8vM7JWdQU=;
- b=CILHE0Pve4W5Azd30VRQ5VFvCx/vrCiRwVcgcO0Y2KhD5YODVF2OKrUht3T41wlrPi4jrgA9F5+CP64mncYwLv5F8qzXYOb/qcPz6p3zfwdFdKpWJ1hvdkz4iOW+hx/JXsdF2S+cCPMNwtHK28HkUapiO1j9UQIxsMsP/LkmuG6lmKWHwefErMY/oDt1/4ELmbw8Dcd94qIa71FfFmJIdq447XFL0TEgl2hBggPbXKBTpzY96DK3NS55n3LYspKXrZEZSdqFlfl0Ah6ngNigjWKaiE1A/s2ToPc7PyiTAZHPXN02UQvGEEsOktqIdQOQ/TKnk/5Gjr2FO79ET4nQdg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+        Tue, 4 Oct 2022 20:13:41 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288B63CBCD
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 17:13:34 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id u16-20020a250950000000b006be72659056so444250ybm.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 17:13:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iYExmqY75AVXf4/LvUvI6rNCzDD0nloxrL8vM7JWdQU=;
- b=ptNzkT6mmfcfT3TO4hH1/cQqcsrqg4eq9x8HZAPy2Ui+HOXfmdZU2UsYCrZXkjR9SViyTDH8FWJLUjTmho/tKMvd+givuobMQFG2AnL2rNSrn9slycyKFLd8m1W1WpFU+vi1fiVXzEoEe/vwTXfJJIObwyaKtyhefZDGzGsyMsE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by DM4PR10MB6111.namprd10.prod.outlook.com
- (2603:10b6:8:bf::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.20; Wed, 5 Oct
- 2022 00:08:45 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::ee5e:cbf9:e304:942f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::ee5e:cbf9:e304:942f%7]) with mapi id 15.20.5676.028; Wed, 5 Oct 2022
- 00:08:45 +0000
-Date:   Tue, 4 Oct 2022 17:08:41 -0700
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH v3 net-next 12/14] dt-bindings: net: dsa: ocelot: add
- ocelot-ext documentation
-Message-ID: <YzzLCYHmTcrHbZcH@colin-ia-desktop>
-References: <20220926002928.2744638-1-colin.foster@in-advantage.com>
- <20220926002928.2744638-13-colin.foster@in-advantage.com>
- <ec63b5aa-3dec-3c27-e987-25e36b1632ba@linaro.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ec63b5aa-3dec-3c27-e987-25e36b1632ba@linaro.org>
-X-ClientProxiedBy: BYAPR05CA0022.namprd05.prod.outlook.com
- (2603:10b6:a03:c0::35) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|DM4PR10MB6111:EE_
-X-MS-Office365-Filtering-Correlation-Id: 79f0a969-94d1-44e4-bf86-08daa665c4bd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +dbNJbP3ZmtcuY7qMGa6n+Jc9QcRFnwgjRUGY/k5qut0KG6gG5896ZWyWOVRJgJGrwHCaTOPYIKG0MjCabdFujlPG046qkBhTjUz5u36AGnvRynRvAIMcRX+ZXh85CXvRoug+TP5P9dfLMDYMHogRWi3fPTnS1XL5oo/NwkPSqWQLBuMVGowwSXOhPxTiJ+cUDv3Dt1M8wk46udlB7LEnBkR4hQ5SBESC9tyBn/zTq5Yt8lb4Qq130oFK1nAUEp9Rm4lJi0E+BgfANWXAzcMS8odf2PuB28jfMXCJBXiFhe1fsV1m8kcPJsBNXfrR47O/4puYuSVNPFkPQKZ1FqlxWB/NoeF147QAmEqaMQJ81KORZveeTNoNFo8WWGjs8T8VtnHQNCBcc9AfMJ5aWkAY2q6ZOioZm9p+mAfwST4tP89mBOzZLwkE+YnWNf1jy2eIaCcf3SchX2+du7n1dnzLqht0/aXvCy21Jxd5qD3aKG5imqBQzCaEGz359XsqfE98eYTv9gJn065m46CaTBn9sllwbYUEaCu97wIEsOok4Rl4965LAZYd79OiuA03Wx5lOz5i0zeSOjaAW2BjL/mj5IZHnBye7ALmr1BzMmW79IFthrcnjfbSnkGxMtpk8Jfgzp6o3LgfQuw7XfHgVd2HkBr7GETgTZwXxZ6Gz++T/KM4+kISbfuV8avfTcB5DRWexg8W8LrGoBmkMPj5ei33A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(39840400004)(136003)(396003)(366004)(376002)(451199015)(44832011)(83380400001)(66946007)(6506007)(66556008)(8676002)(41300700001)(26005)(6666004)(4326008)(5660300002)(66476007)(2906002)(86362001)(7416002)(33716001)(38100700002)(186003)(478600001)(9686003)(54906003)(8936002)(6512007)(53546011)(316002)(6486002)(6916009);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tzSymp4QUZPbbLImkmgvj+StmNMY5vJrnaOjFL0tnuZEEjM1e+0BxYVUijzR?=
- =?us-ascii?Q?cG07hVszWjqufrp6sduopnvyyKqlUtvTMAMG4VTNVz2aBq+6ct8SgUc5wQm1?=
- =?us-ascii?Q?4+R42rvkm+ugaUocZrD+zYT41PhPXOL75J8qfBFovOXarslHgpJLTg68XfbI?=
- =?us-ascii?Q?Rfas4A7gp9E0JYcmw1K7zMbEIt3wV908c20ZoioXppKX6tDVdI7DdXgZ5FXD?=
- =?us-ascii?Q?ZEJ81r46xjm7dF/8IwHiTpiqrXbWd/F2jXljmTVQcBaFxEDW/qTodXIoIBc3?=
- =?us-ascii?Q?9iuggkfDEWr+sm3azIEj8DZA/hBdkxMBn2soV/guLm/qrUM3+OayMUHidJTf?=
- =?us-ascii?Q?t7iTIkpVsAkDTuuS7jBTgXE5zxFCUMZT28lSHT14YAOHjL8SE3BCaweXCndi?=
- =?us-ascii?Q?Dvc91wK+jaKnHKBJAJ0cUTlg08EVSQPZUdfpEYBG23MsARzon7k5VbE1rqEd?=
- =?us-ascii?Q?223K01CZGXvvvbyHcLXegFuEUFJjlR04kmE1khC4oCV6CF2f+jB4tfH+AXOp?=
- =?us-ascii?Q?SeQ/qrKwzskHCAD75O5g7ejbpz4iUsYmuPi9Ri1+4Gp8BjzEiiV33oFwrpz3?=
- =?us-ascii?Q?PbmX8J2gsi1aNa/yylFIHntGKkq9joUs4Q4mypvGXRfzvCtWFXrcbx0TNRHH?=
- =?us-ascii?Q?beA8fLAkI/t/Wx4700gWawocIrHNt7WLChJZQ1RUrfiEtafrWkhqgcEHeppn?=
- =?us-ascii?Q?vXAviwtyr/jCC++rgic15Wf8iMX17ATINsSutBMft9uTHIyhLMO+zLlKu6qW?=
- =?us-ascii?Q?fDEvUMCXZX0wXoMtQcxYuv4QdsLCrQsqL/BK+nAzot9c8zltj1cEubZihhY+?=
- =?us-ascii?Q?h0MPt5umNhTUDVzyVZukiJsyuo08aiGO7FIU4fKccjcObryEVr75Wx9rNMTA?=
- =?us-ascii?Q?UiThKEm8TedWUBZl9yczMo3zQbK2JlRdEDK14d7JvQOgtgeIwd4SgNDqlOop?=
- =?us-ascii?Q?UjJ5iunUxc08r65jMHClhhG+a5o5eEdWjT9LCLAuFWvPwO9dlcB0YTMADW8h?=
- =?us-ascii?Q?VEo/ImEYzSGadb0V/yBWgUI3CJYBLckaDqTNgIO1Iow4dRO83Q53Lvd+O2/b?=
- =?us-ascii?Q?hvhNPQXXf6EsTLs1zXeiLTwTiPBAUI2gcd2HpsozrQJ9UOI0u+bJ5uvfPPbK?=
- =?us-ascii?Q?I/rL+zsnWYcgmK52gYwZ7svSIKFjgWO4WJE27Xka+iUDicoKEqUVeHhS0MBz?=
- =?us-ascii?Q?QoE488NJ+KqG0H/JrF2682M8DAWYa6DmnHWgPqu3ebcTCUxfT0fr5PFYbARL?=
- =?us-ascii?Q?ohpebI80BnozvyAcTApZH4+ybHMjZjXrLhCR6qvAM4o7mTeb5CnF23338pSA?=
- =?us-ascii?Q?Gg/54qY+759bdzQ0ub8W8X0YKC8J2BEUKixKze9Al1tkYa+QTcW9MUWrqsHS?=
- =?us-ascii?Q?2DRzu3Re7zQADQx4NMv1mZ3v+uIPK6JFM1fpFXRuUBf7/7D8IuRLPTdPmwy8?=
- =?us-ascii?Q?d3uWZGNsaqNl52JEQEQ73tlIFA8LsP0iVZeTw6AgsIrktItuqZouZS+yClLt?=
- =?us-ascii?Q?qZbJJVCUG9TsdMJdS+Mhr4QypMSF7L2oWEkDbEVVB2zZmlJp6ptqTAE0c7M3?=
- =?us-ascii?Q?PbccMIPmRxTdn9X+Ot4BcdQaor9GddEgrIdUacODxp3cDb3G4m8T6NJZknh+?=
- =?us-ascii?Q?wQ=3D=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 79f0a969-94d1-44e4-bf86-08daa665c4bd
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2022 00:08:45.3086
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ey9NUlyhQkPTl/phCcDsz/aGv9oPpjNJjCnafSA1T0ajdujL4t++CXmy5Rf4+3I7TJYqv5hfa+CprmWVuH5wGrU3J4mrEWXYY2Z4LwsynTU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6111
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date;
+        bh=ALlsjTVmbFyHzlceNb3zXq0xbc4i58mJkMbiPt8Nklg=;
+        b=WXsW31CKjwyBzaVilJ2DnAeTlCI+vDf2ypDdUDNBvs+jgXLQStreLyIFlIIELEsBrU
+         OdNeDpnaugvcltOyqkbpjbDhXBw53GM6T8XjSsmSl/4WxTRZ2CXiCwaxFOIN0J2COD0o
+         7fofUJcp/f/ibUvXMs75ijky51J70fLUynG4a1zHNPtZ3gw6FswYvHiZRxxRXZc9RuZd
+         UVW7GS/uFKH5FeUWZDzk3olBA6kAkR70QLY3UMXJcyiJnsPUDjHy0bg7VdKwQU6sS7PY
+         1Lb5+FSv/X3GW9r7HwNI2BIWoWRIVs3ILHNxFpAxCxa5XySSR2xaS1wY9fDLz58qdUkF
+         ZCzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=ALlsjTVmbFyHzlceNb3zXq0xbc4i58mJkMbiPt8Nklg=;
+        b=3fXn0CMG4Mdwe4GJyE3h9HLxmbIcCOepUdv7fIh8JWjnAfyPuI9MKdIv3SvHspslJY
+         r3z5+9OEHPmJQtmAdlUVfgPCUzvbK0OWh+davbBlYrBU8TZ388gz3lICpfVoofH6zytV
+         Z5dOSTHBYuX8EVaFj5PseAKkhy4YY8rLrBTvjH/NtdlKxPesDyhRvQtZKpmYL088zvDG
+         maZSJlB1VUSqf3KDQ0NdX5Uvd0OwJD0C4DN3THsgizqbzmboyRkZJlaJjq4w9oabMjFe
+         UxnEuQhpR9jwbn88BRg7WeyWSqaLgFkXTbB0sXlGuwI4AOCfZPiUS0QzPojNST3eN7Mo
+         nl9g==
+X-Gm-Message-State: ACrzQf01PrjitCUkzVTn950Y6apNNAeB/0R0jjK2BxyL5joA1/MbVHxV
+        OQKPT280fy9RnKgzybDJqgqB3la/CUE=
+X-Google-Smtp-Source: AMsMyM52vg4YK8/fSwfK04NxkWNQzncvTu04WP5OlBYW1o0xmWzW9ukoUY3J3XNF6KUOVJ0nwa7BTRCu+Ho=
+X-Received: from yuzhao.bld.corp.google.com ([2620:15c:183:200:d76c:54ee:23e5:ee12])
+ (user=yuzhao job=sendgmr) by 2002:a25:790d:0:b0:670:6032:b1df with SMTP id
+ u13-20020a25790d000000b006706032b1dfmr27235358ybc.629.1664928813418; Tue, 04
+ Oct 2022 17:13:33 -0700 (PDT)
+Date:   Tue,  4 Oct 2022 18:13:26 -0600
+Message-Id: <20221005001326.157644-1-yuzhao@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+Subject: [PATCH] fscrypt: fix lockdep warning
+From:   Yu Zhao <yuzhao@google.com>
+To:     "Theodore Y . Ts'o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yu Zhao <yuzhao@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+fscrypt_initialize() shouldn't allocate memory without GFP_NOFS.
 
-On Tue, Oct 04, 2022 at 01:19:33PM +0200, Krzysztof Kozlowski wrote:
-> On 26/09/2022 02:29, Colin Foster wrote:
-> > The ocelot-ext driver is another sub-device of the Ocelot / Felix driver
-> > system, which currently supports the four internal copper phys.
-> > 
-> > Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-...
-> > +  # Ocelot-ext VSC7512
-> > +  - |
-> > +    spi {
-> > +        soc@0 {
-> 
-> soc in spi is a bit confusing.
-> 
-> Does it even pass the tests? You have unit address but no reg.
+The problem seems to go back to 2015
+commit 57e5055b0a5e ("f2fs crypto: add f2fs encryption facilities")
+but I have never heard of any complaints, hence not CC'ing stable.
 
-I omitted those from the documentation. Rob's bot is usually quick to
-alert me when I forgot to run dt_binding_check and something fails
-though. I'll double check, but I thought everything passed.
+  ======================================================
+  WARNING: possible circular locking dependency detected
+  6.0.0-lockdep #1 Not tainted
+  ------------------------------------------------------
+  kswapd0/77 is trying to acquire lock:
+  71ffff808b254a18 (jbd2_handle){++++}-{0:0}, at: start_this_handle+0x76c/0x8dc
 
-> 
-> > +            compatible = "mscc,vsc7512";
-> 
-> 
-> > +            #address-cells = <1>;
-> > +            #size-cells = <1>;
-> > +
-> > +            ethernet-switch@0 {
-> > +                compatible = "mscc,vsc7512-switch";
-> > +                reg = <0 0>;
-> 
-> 0 is the address on which soc bus?
+  but task is already holding lock:
+  ffffffea26533310 (fs_reclaim){+.+.}-{0:0}, at: 0x1
 
-This one Vladimir brought up as well. The MIPS cousin of this chip
-is the VSC7514. They have exactly (or almost exactly) the same hardware,
-except the 7514 has an internal MIPS while the 7512 has an 8051.
+  which lock already depends on the new lock.
 
-Both chips can be controlled externally via SPI or PCIe. This is adding
-control for the chip via SPI.
+  <snipped>
 
-For the 7514, you can see there's an array of 20 register ranges that
-all get mmap'd to 20 different regmaps.
+  other info that might help us debug this:
 
-(Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml)
+  Chain exists of:
+    jbd2_handle --> fscrypt_init_mutex --> fs_reclaim
 
-    switch@1010000 {
-      compatible = "mscc,vsc7514-switch";
-      reg = <0x1010000 0x10000>,
-            <0x1030000 0x10000>,
-            <0x1080000 0x100>,
-            <0x10e0000 0x10000>,
-            <0x11e0000 0x100>,
-            <0x11f0000 0x100>,
-            <0x1200000 0x100>,
-            <0x1210000 0x100>,
-            <0x1220000 0x100>,
-            <0x1230000 0x100>,
-            <0x1240000 0x100>,
-            <0x1250000 0x100>,
-            <0x1260000 0x100>,
-            <0x1270000 0x100>,
-            <0x1280000 0x100>,
-            <0x1800000 0x80000>,
-            <0x1880000 0x10000>,
-            <0x1040000 0x10000>,
-            <0x1050000 0x10000>,
-            <0x1060000 0x10000>,
-            <0x1a0 0x1c4>;
-      reg-names = "sys", "rew", "qs", "ptp", "port0", "port1",
-            "port2", "port3", "port4", "port5", "port6",
-            "port7", "port8", "port9", "port10", "qsys",
-            "ana", "s0", "s1", "s2", "fdma";
+   Possible unsafe locking scenario:
 
+         CPU0                    CPU1
+         ----                    ----
+    lock(fs_reclaim);
+                                 lock(fscrypt_init_mutex);
+                                 lock(fs_reclaim);
+    lock(jbd2_handle);
 
-The suggestion was to keep the device trees of the 7512 and 7514 as
-similar as possible, so this will essentially become:
-    switch@71010000 {
-      compatible = "mscc,vsc7512-switch";
-      reg = <0x71010000 0x10000>,
-            <0x71030000 0x10000>,
-      ...
+   *** DEADLOCK ***
 
+  3 locks held by kswapd0/77:
+   #0: ffffffea26533310 (fs_reclaim){+.+.}-{0:0}, at: 0x1
+   #1: ffffffea26529220 (shrinker_rwsem){++++}-{3:3}, at: shrink_slab+0x54/0x464
+   #2: 6dffff808abe90e8 (&type->s_umount_key#47){++++}-{3:3}, at: trylock_super+0x2c/0x8c
+
+  <snipped>
+
+Signed-off-by: Yu Zhao <yuzhao@google.com>
+---
+ fs/crypto/crypto.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/fs/crypto/crypto.c b/fs/crypto/crypto.c
+index e78be66bbf01..e10fc30142a6 100644
+--- a/fs/crypto/crypto.c
++++ b/fs/crypto/crypto.c
+@@ -316,6 +316,7 @@ EXPORT_SYMBOL(fscrypt_decrypt_block_inplace);
+ int fscrypt_initialize(unsigned int cop_flags)
+ {
+ 	int err = 0;
++	unsigned int flags;
+ 
+ 	/* No need to allocate a bounce page pool if this FS won't use it. */
+ 	if (cop_flags & FS_CFLG_OWN_PAGES)
+@@ -326,8 +327,10 @@ int fscrypt_initialize(unsigned int cop_flags)
+ 		goto out_unlock;
+ 
+ 	err = -ENOMEM;
++	flags = memalloc_nofs_save();
+ 	fscrypt_bounce_page_pool =
+ 		mempool_create_page_pool(num_prealloc_crypto_pages, 0);
++	memalloc_nofs_restore(flags);
+ 	if (!fscrypt_bounce_page_pool)
+ 		goto out_unlock;
+ 
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
 
