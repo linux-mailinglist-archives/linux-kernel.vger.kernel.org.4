@@ -2,73 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 248445F5D40
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 01:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACDCA5F5D4A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 01:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbiJEXcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 19:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36224 "EHLO
+        id S229644AbiJEXpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 19:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiJEXcP (ORCPT
+        with ESMTP id S229445AbiJEXpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 19:32:15 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B211E1F2F9
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 16:32:14 -0700 (PDT)
+        Wed, 5 Oct 2022 19:45:40 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6CE3AE58;
+        Wed,  5 Oct 2022 16:45:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665012734; x=1696548734;
+  t=1665013536; x=1696549536;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=91qVlIFziYga16vsHFmmUqSlEGvN2rzt64LQa0EMhAE=;
-  b=mztQYnpuP+xCZtKUdDtAFenThBavWfKRxu9eLh3OPEPWAg5JXU4/9o9J
-   E58QkL2NTkPhPfh8SJzMe6311aZJOLGWSAM3MlLJvaI60QkuIf1n3zCbN
-   abMqqNBkSY5uBbTrtRvWBRgmJ9fDt5iPnNVrF6B4RMand31MbctBE3wK0
-   TnmTa16GWcu9k5iavQe0yLnkzjK5YExJMdJ39kANAFkyWBKv1HeiFQJam
-   BZSWWvj+SVsiPsP6Lg/f/1n4NGBhvu0a+cvjk+V5dB2cg92j6lOYM3U0a
-   GTq8mYhkTsHBYpwzq96mKS8QeGzuai8c2mF6wztToNDr+UVNMUGUJ9PUv
+  bh=RaUYcwQGnWtyL4YdEtWWSVHb+tZ4OaJxFPhXTQo15fI=;
+  b=OATsYPwV8GB1X2+FMXRUosmX5C196Swy+NmJ9wWUwvimCxhCemfny9zJ
+   21/u1wIHXu+6r8QtRMD1CFvyFrAx9IB0G6XzF3o73UOOdQxXucdcA7fYD
+   tM+8rj1mFQXQWoVF7votnwd6rj5bdwH1NMts2GjZhYB4TrU+5AZ0saBNo
+   3OlgrLZNw5Ft9IMqeUTs4fUPgMxCL93urk29Tw5yXYhx5fdp4iWITI0gN
+   lHHjn05S/fcCMZ3dFjqLEu0/AaqSZp2l4qs/Nc3DU4wNMHkdhVYK7gpW1
+   MuKn9Bn12O01CWSvO51J5dxm/j8vzKl+X7FQgTfKvixmU1dYFwqCSUt4z
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="303275438"
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="389589881"
 X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
-   d="scan'208";a="303275438"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 16:32:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="624516596"
+   d="scan'208";a="389589881"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 16:45:36 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="713627051"
 X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
-   d="scan'208";a="624516596"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga002.jf.intel.com with ESMTP; 05 Oct 2022 16:32:13 -0700
-Date:   Wed, 5 Oct 2022 16:38:41 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [RFC PATCH 09/23] sched/fair: Use task-class performance score
- to pick the busiest group
-Message-ID: <20221005233841.GA29251@ranerica-svr.sc.intel.com>
-References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
- <20220909231205.14009-10-ricardo.neri-calderon@linux.intel.com>
- <YzLYDPU+upHeUG65@hirez.programming.kicks-ass.net>
+   d="scan'208";a="713627051"
+Received: from cmbrown1-mobl.amr.corp.intel.com (HELO desk) ([10.212.186.202])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 16:45:35 -0700
+Date:   Wed, 5 Oct 2022 16:45:33 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Suraj Jitindar Singh <surajjs@amazon.com>, kvm@vger.kernel.org,
+        sjitindarsingh@gmail.com, linux-kernel@vger.kernel.org,
+        x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@suse.de,
+        dave.hansen@linux.intel.com, seanjc@google.com,
+        pbonzini@redhat.com, peterz@infradead.org, jpoimboe@kernel.org,
+        daniel.sneddon@linux.intel.com, benh@kernel.crashing.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] x86/speculation: Mitigate eIBRS PBRSB predictions with
+ WRMSR
+Message-ID: <20221005234533.cr4jpzsb3cprlc2c@desk>
+References: <20221005220227.1959-1-surajjs@amazon.com>
+ <CALMp9eTU9s+2fZ809bfOWYoGXsiziQOxCM-5Ly0JF2HeSEkwhA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <YzLYDPU+upHeUG65@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+In-Reply-To: <CALMp9eTU9s+2fZ809bfOWYoGXsiziQOxCM-5Ly0JF2HeSEkwhA@mail.gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,99 +66,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 01:01:32PM +0200, Peter Zijlstra wrote:
-> On Fri, Sep 09, 2022 at 04:11:51PM -0700, Ricardo Neri wrote:
-> > update_sd_pick_busiest() keeps on selecting as the busiest group scheduling
-> > groups of identical priority. Since both groups have the same priority,
-> > either group is a good choice. The classes of tasks in the scheduling
-> > groups can break this tie.
-> > 
-> > Pick as busiest the scheduling group that yields a higher task-class
-> > performance score after load balancing.
-> 
-> > +/**
-> > + * sched_asym_class_pick - Select a sched group based on classes of tasks
-> > + * @a:		A scheduling group
-> > + * @b:		A second scheduling group
-> > + * @a_stats:	Load balancing statistics of @a
-> > + * @b_stats:	Load balancing statistics of @b
-> > + *
-> > + * Returns: true if @a has the same priority and @a has classes of tasks that
-> > + * yield higher overall throughput after load balance. Returns false otherwise.
-> > + */
-> > +static bool sched_asym_class_pick(struct sched_group *a,
-> > +				  struct sched_group *b,
-> > +				  struct sg_lb_stats *a_stats,
-> > +				  struct sg_lb_stats *b_stats)
-> > +{
-> > +	/*
-> > +	 * Only use the class-specific preference selection if both sched
-> > +	 * groups have the same priority.
-> > +	 */
-> > +	if (arch_asym_cpu_priority(a->asym_prefer_cpu) !=
-> > +	    arch_asym_cpu_priority(b->asym_prefer_cpu))
-> > +		return false;
-> > +
-> > +	return sched_asym_class_prefer(a_stats, b_stats);
-> > +}
-> > +
-> >  #else /* CONFIG_SCHED_TASK_CLASSES */
-> >  static void update_rq_task_classes_stats(struct sg_lb_task_class_stats *class_sgs,
-> >  					 struct rq *rq)
-> 
-> > @@ -9049,6 +9111,12 @@ static bool update_sd_pick_busiest(struct lb_env *env,
-> >  		/* Prefer to move from lowest priority CPU's work */
-> >  		if (sched_asym_prefer(sg->asym_prefer_cpu, sds->busiest->asym_prefer_cpu))
-> >  			return false;
-> > +
-> > +		/* @sg and @sds::busiest have the same priority. */
-> > +		if (sched_asym_class_pick(sds->busiest, sg, &sds->busiest_stat, sgs))
-> > +			return false;
-> > +
-> > +		/* @sg has lower priority than @sds::busiest. */
-> >  		break;
-> >  
-> >  	case group_misfit_task:
-> 
-> So why does only this one instance of asym_prefer() require tie
-> breaking?
+On Wed, Oct 05, 2022 at 04:24:54PM -0700, Jim Mattson wrote:
+>On Wed, Oct 5, 2022 at 3:03 PM Suraj Jitindar Singh <surajjs@amazon.com> wrote:
+>>
+>> tl;dr: The existing mitigation for eIBRS PBRSB predictions uses an INT3 to
+>> ensure a call instruction retires before a following unbalanced RET. Replace
+>> this with a WRMSR serialising instruction which has a lower performance
+>> penalty.
+>>
+>> == Background ==
+>>
+>> eIBRS (enhanced indirect branch restricted speculation) is used to prevent
+>> predictor addresses from one privilege domain from being used for prediction
+>> in a higher privilege domain.
+>>
+>> == Problem ==
+>>
+>> On processors with eIBRS protections there can be a case where upon VM exit
+>> a guest address may be used as an RSB prediction for an unbalanced RET if a
+>> CALL instruction hasn't yet been retired. This is termed PBRSB (Post-Barrier
+>> Return Stack Buffer).
+>>
+>> A mitigation for this was introduced in:
+>> (2b1299322016731d56807aa49254a5ea3080b6b3 x86/speculation: Add RSB VM Exit protections)
+>>
+>> This mitigation [1] has a ~1% performance impact on VM exit compared to without
+>> it [2].
+>>
+>> == Solution ==
+>>
+>> The WRMSR instruction can be used as a speculation barrier and a serialising
+>> instruction. Use this on the VM exit path instead to ensure that a CALL
+>> instruction (in this case the call to vmx_spec_ctrl_restore_host) has retired
+>> before the prediction of a following unbalanced RET.
+>>
+>> This mitigation [3] has a negligible performance impact.
+>>
+>> == Testing ==
+>>
+>> Run the outl_to_kernel kvm-unit-tests test 200 times per configuration which
+>> counts the cycles for an exit to kernel mode.
+>>
+>> [1] With existing mitigation:
+>> Average: 2026 cycles
+>> [2] With no mitigation:
+>> Average: 2008 cycles
+>> [3] With proposed mitigation:
+>> Average: 2008 cycles
+>>
+>> Signed-off-by: Suraj Jitindar Singh <surajjs@amazon.com>
+>> Cc: stable@vger.kernel.org
+>> ---
+>>  arch/x86/include/asm/nospec-branch.h | 7 +++----
+>>  arch/x86/kvm/vmx/vmenter.S           | 3 +--
+>>  arch/x86/kvm/vmx/vmx.c               | 5 +++++
+>>  3 files changed, 9 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+>> index c936ce9f0c47..e5723e024b47 100644
+>> --- a/arch/x86/include/asm/nospec-branch.h
+>> +++ b/arch/x86/include/asm/nospec-branch.h
+>> @@ -159,10 +159,9 @@
+>>    * A simpler FILL_RETURN_BUFFER macro. Don't make people use the CPP
+>>    * monstrosity above, manually.
+>>    */
+>> -.macro FILL_RETURN_BUFFER reg:req nr:req ftr:req ftr2=ALT_NOT(X86_FEATURE_ALWAYS)
+>> -       ALTERNATIVE_2 "jmp .Lskip_rsb_\@", \
+>> -               __stringify(__FILL_RETURN_BUFFER(\reg,\nr)), \ftr, \
+>> -               __stringify(__FILL_ONE_RETURN), \ftr2
+>> +.macro FILL_RETURN_BUFFER reg:req nr:req ftr:req
+>> +       ALTERNATIVE "jmp .Lskip_rsb_\@", \
+>> +               __stringify(__FILL_RETURN_BUFFER(\reg,\nr)), \ftr
+>>
+>>  .Lskip_rsb_\@:
+>>  .endm
+>> diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
+>> index 6de96b943804..eb82797bd7bf 100644
+>> --- a/arch/x86/kvm/vmx/vmenter.S
+>> +++ b/arch/x86/kvm/vmx/vmenter.S
+>> @@ -231,8 +231,7 @@ SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
+>>          * single call to retire, before the first unbalanced RET.
+>>           */
+>>
+>> -       FILL_RETURN_BUFFER %_ASM_CX, RSB_CLEAR_LOOPS, X86_FEATURE_RSB_VMEXIT,\
+>> -                          X86_FEATURE_RSB_VMEXIT_LITE
+>> +       FILL_RETURN_BUFFER %_ASM_CX, RSB_CLEAR_LOOPS, X86_FEATURE_RSB_VMEXIT
+>>
+>>
+>>         pop %_ASM_ARG2  /* @flags */
+>> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+>> index c9b49a09e6b5..fdcd8e10c2ab 100644
+>> --- a/arch/x86/kvm/vmx/vmx.c
+>> +++ b/arch/x86/kvm/vmx/vmx.c
+>> @@ -7049,8 +7049,13 @@ void noinstr vmx_spec_ctrl_restore_host(struct vcpu_vmx *vmx,
+>>          * For legacy IBRS, the IBRS bit always needs to be written after
+>>          * transitioning from a less privileged predictor mode, regardless of
+>>          * whether the guest/host values differ.
+>> +        *
+>> +        * For eIBRS affected by Post Barrier RSB Predictions a serialising
+>> +        * instruction (wrmsr) must be executed to ensure a call instruction has
+>> +        * retired before the prediction of a following unbalanced ret.
+>>          */
+>>         if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS) ||
+>> +           cpu_feature_enabled(X86_FEATURE_RSB_VMEXIT_LITE) ||
+>>             vmx->spec_ctrl != hostval)
+>>                 native_wrmsrl(MSR_IA32_SPEC_CTRL, hostval);
+>
+>Okay. I see how this almost meets the requirements. But this WRMSR is
+>conditional, which means that there's a speculative path through this
+>code that ends up at the unbalanced RET without executing the WRMSR.
 
-This is the only place in which two sched groups with running tasks and of
-equal priority are compared.
-
-In all other places sched_asym_prefer() is used to compare the destination
-CPU with others. Since asym_packing is done only when the destination CPU is
-idle, there is no need to break this tie.
-
-> 
-> I must also re-iterate how much I hate having two different means of
-> dealing with big-little topologies.
-
-Yes, that is true. We discussed the challenges of using EAS on x86 during
-this year's Linux Plumbers Conference. For the discussion at hand, I think
-that the most relevant part is the difficulty to assess CPU capacity
-on Intel processors given the presence of SMT, a large range of turbo
-frequencies and hardware-controlled frequency scaling.
-
-We are looking into these challenges.
-
-This patchset focuses mainly on the infrastructure to support IPC classes of
-tasks in the scheduler. We use it on this tie break when using asym_packing,
-but it could be used in capacity computations.
-
-> 
-> And while looking through this, I must ask about the comment that goes
-> with sched_set_itmt_core_prio() vs the sg->asym_prefer_cpu assignment in
-> init_sched_groups_capacity(), what-up ?!
-
-Are you referring to this comment?
-
-	"No need to rebuild sched domain after updating
-	 the CPU priorities. The sched domains have no
-	 dependency on CPU priorities"
-
-If yes, then it looks wrong to me. Sched domains are rebuilt after updating
-priorities.
-
-Thanks and BR,
-Ricardo
+Agree. I was just about to post this.
