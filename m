@@ -2,90 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2A75F503E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 09:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 230025F5041
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 09:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiJEHRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 03:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55002 "EHLO
+        id S229545AbiJEHT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 03:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJEHRm (ORCPT
+        with ESMTP id S229450AbiJEHTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 03:17:42 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C146161714;
-        Wed,  5 Oct 2022 00:17:39 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mj5W56QXRz4x1D;
-        Wed,  5 Oct 2022 18:17:36 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1664954258;
-        bh=0ja0Pdb7di8zesD+XsNPwAag4Edj4/WtYKkmBFlNNtc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=jrNyyldbI9us85oXNwaMkiZIn02EpZfmvhU6y2WTRq7iMyUj+xzUpdGW3OQTscQRb
-         eVQUGjzoHYx4wUliT3xg8Fz+btCf6RUyC9FliUfGS4vIxDQRHkeV2Xay2nz8tLlbac
-         /0Pta5UYuY8EeTBBxq1Ox/LM954xm8mW/9qC7CD7jjfOi+qPvGRBatybjieow7w6t8
-         +FUF2CAwRe/Uu73zZ/8xnnItW22y47ftFdnt40p8DlCUSSsz3d7zjur2S+jvZJvVXM
-         DtZ4LIvpP1b6ym/4RcZtLO2QaVECww8fBpVYhPwsQ/Bdjp1y8DiK0boseducxN+QZa
-         bOnfCVgqMPdSA==
-Date:   Wed, 5 Oct 2022 18:17:34 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the block tree
-Message-ID: <20221005181734.08b2f1d9@canb.auug.org.au>
+        Wed, 5 Oct 2022 03:19:54 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522F311448
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 00:19:53 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ofyh3-0001Rh-T0; Wed, 05 Oct 2022 09:19:49 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ofyh2-004iJ7-GG; Wed, 05 Oct 2022 09:19:47 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ofyh0-005hw8-4a; Wed, 05 Oct 2022 09:19:46 +0200
+Date:   Wed, 5 Oct 2022 09:19:46 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>, kernel@pengutronix.de,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2] watchdog: Add tracing events for the most usual
+ watchdog events
+Message-ID: <20221005071946.blttrgv2s5amnrrj@pengutronix.de>
+References: <20221004091950.3419662-1-u.kleine-koenig@pengutronix.de>
+ <20221004185146.5d4419ba@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Hw.QCxmD1CBS43ov6D9jU3r";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="onluzhifnupekgas"
+Content-Disposition: inline
+In-Reply-To: <20221004185146.5d4419ba@gandalf.local.home>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Hw.QCxmD1CBS43ov6D9jU3r
-Content-Type: text/plain; charset=US-ASCII
+
+--onluzhifnupekgas
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Tue, Oct 04, 2022 at 06:51:46PM -0400, Steven Rostedt wrote:
+> On Tue,  4 Oct 2022 11:19:49 +0200
+> Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de> wrote:
+>=20
+> > +DEFINE_EVENT(watchdog_template, watchdog_start,
+> > +	TP_PROTO(struct watchdog_device *wdd, int err),
+> > +	TP_ARGS(wdd, err));
+> > +
+> > +TRACE_EVENT(watchdog_set_timeout,
+> > +
+> > +	TP_PROTO(struct watchdog_device *wdd, unsigned int timeout, int err),
+> > +
+> > +	TP_ARGS(wdd, timeout, err),
+> > +
+> > +	TP_STRUCT__entry(
+> > +		__field(int, id)
+> > +		__field(unsigned int, timeout)
+> > +		__field(int, err)
+> > +	),
+> > +
+> > +	TP_fast_assign(
+> > +		__entry->id =3D wdd->id;
+> > +		__entry->timeout =3D timeout;
+> > +		__entry->err =3D err;
+> > +	),
+> > +
+> > +	TP_printk("watchdog%d timeout=3D%u err=3D%d", __entry->id, __entry->t=
+imeout, __entry->err)
+> > +);
+>=20
+> Nit, but I would probably put the above TRACE_EVENT() below the two
+> DEFINE_EVENT()s below. That way we have all the DEFINE_EVENT()s for a
+> specific DECLARE_EVENT_CLASS() together. Otherwise people may get confuse=
+d.
 
-After merging the block tree, today's linux-next build (htmldocs)
-produced this warning:
+I thought about that, too. The argument for the order I chose is that
+having start at the start and stop at the end is also intuitive.
 
-include/linux/skbuff.h:1051: warning: Function parameter or member 'scm_io_=
-uring' not described in 'sk_buff'
+But I don't care much and would let the watchdog guys decide what they
+prefer.
 
-Introduced by commit
+@Wim+Guenter: Feel free to reorder at application time or ask for a v3
+if this v2 doesn't fit your preference.
 
-  0dd99edbfae7 ("io_uring/af_unix: defer registered files gc to io_uring re=
-lease")
+Best regards
+Uwe
 
 --=20
-Cheers,
-Stephen Rothwell
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---Sig_/Hw.QCxmD1CBS43ov6D9jU3r
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--onluzhifnupekgas
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM9L44ACgkQAVBC80lX
-0GypuQf/cSR3beUofv5pHVw8oXavjrdNuOR7Cw/+Tqh16jFNs2iWFIxGj/aZOZC7
-gmZfnAGVh2sCIPuDLf9/vuPFhFYmEeBFdKvk8RH48TbZkYxiDyqzVXQ6uHNj1Pxe
-rafhmrBOP766NlXemvimAEzE9f3WkrAEc432ETmDYA/DWktB/vqkwKbbvtJg3n2o
-DaRukyHdHmWuEOur/15C6eMkilAz/kwmTJlGUVmcaMTm6KgATFME0BBGohYi51d8
-zXvb/HgYNy4Jqat2T1/VYW4l6L87WmTMXfoYnQ/t6FEiogYzr01cwxn4UBiPl4QW
-Wwa2oW8pBqn2AG3L6m/gNlYVE96WFg==
-=MTvk
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmM9MA8ACgkQwfwUeK3K
+7AmGmggAhu24SwVndLMAH9hud/53KpV/1cjHvZTeu26vCFlSb3CyyZ6YZ1IWPWBA
++4udQ4iYxhu/6vSxjHaZHMEuFQWcDw2JbWiMcntgwrO8F3OEmu4JByV8EzYENfrD
+g15qyeVPh8li/hIamDL6t2p7wUsa3WeA4TIJvwC71aSnP3f6GuaUMrEjU6DRgb5J
+4f5gyShTNY1CUhiZ1fv3N2E2BvAxDMgm5WJBvjgismmg++HoRopRtPJD9sNKPspX
+K4yq4RUPXDtq/VFncKrUZAuBgSd9XN1YNnUwBZFFW79/qrpevyWMDy58JDjpE29C
+Sv4gqDyNvSuCeWy+Dp8D5YhxkMNRMg==
+=mPaQ
 -----END PGP SIGNATURE-----
 
---Sig_/Hw.QCxmD1CBS43ov6D9jU3r--
+--onluzhifnupekgas--
