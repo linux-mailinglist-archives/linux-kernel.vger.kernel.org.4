@@ -2,208 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D0A5F5BAC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 23:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EAC65F5BAF
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 23:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbiJEV0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 17:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59600 "EHLO
+        id S231136AbiJEV20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 17:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiJEV0m (ORCPT
+        with ESMTP id S229681AbiJEV2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 17:26:42 -0400
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E2B6292C;
-        Wed,  5 Oct 2022 14:26:41 -0700 (PDT)
-Received: by mail-oi1-f171.google.com with SMTP id w70so4872852oie.2;
-        Wed, 05 Oct 2022 14:26:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9xTAUGvQFV5dOfW+1G7/dUfNq1caWoLnlGaJPpXqOts=;
-        b=mOOhvvOAqkWr2ul3bUmesXcHBH761tLVLz/Q4dE5WH4THtvJ/97V+nq+79uP0/lGrP
-         mOwrzGJlTeUeBRbueQF32x/XSHaFvDyHtFQX9FEBZuIe9IwaurZHWxXG20OJeh/jjSJm
-         OagfjfF/WDnd5VRSS2n25kWKnbyNaewfyKiQyrnpVHDfc2WcbNWe1qWKJjpUYwPL1/8T
-         0lrBmq4KDR/NGoAcdywxKTTlgAjs7O5YgulVmukLZ4P6A9yCtCK95L7UQvE2FbV+LOjA
-         yVSVopmgIeZ848U8b99KIk3xL2uVCX9E/v5SvwY0s6LyW2mZokt5VDX5KOlS7f7fKeQD
-         +nnw==
-X-Gm-Message-State: ACrzQf3XbTWo2MScYJUVrUkEdQM+ziUmQ/spCTxsZWgMI2353o5Hxz9k
-        IY0Gm2/67iZh2tw1BUuGFw==
-X-Google-Smtp-Source: AMsMyM7DsNQswsQGbYuUgMMC4zg/a9tHbi3BPyQPXvPExzfujz79SgKUqYx5TQQdTKa89CvFT0Oa1w==
-X-Received: by 2002:a05:6808:190e:b0:350:4905:734c with SMTP id bf14-20020a056808190e00b003504905734cmr3414960oib.158.1665005200902;
-        Wed, 05 Oct 2022 14:26:40 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i205-20020acaead6000000b00353ef11d6c9sm1815744oih.19.2022.10.05.14.26.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 14:26:39 -0700 (PDT)
-Received: (nullmailer pid 122305 invoked by uid 1000);
-        Wed, 05 Oct 2022 21:26:39 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: misc: Convert IDT 89HPESx to DT schema
-Date:   Wed,  5 Oct 2022 16:26:31 -0500
-Message-Id: <20221005212631.122145-1-robh@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Wed, 5 Oct 2022 17:28:19 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC78D6C740;
+        Wed,  5 Oct 2022 14:28:18 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:41014)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1ogBw8-00D173-0e; Wed, 05 Oct 2022 15:28:16 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:53660 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1ogBw6-00AJ8c-Ti; Wed, 05 Oct 2022 15:28:15 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <CAHC9VhShpEVTuogj4h74PxbEeTUNn4odo8SE6GBvb6sGUM0LHw@mail.gmail.com>
+        <87sfk3mim9.fsf@email.froward.int.ebiederm.org>
+        <CAHk-=wiCqicQrnQPeHbDF7ECKHk_ceYzZK5dYq7y5nZTZhpB8g@mail.gmail.com>
+        <87r0zmigx6.fsf@email.froward.int.ebiederm.org>
+        <CAHC9VhSK=oYxV=MzT7BLD3TuzQYiX0aY7h1aPb25wuRN=vPyKg@mail.gmail.com>
+        <87a66ae15h.fsf@email.froward.int.ebiederm.org>
+        <CAHC9VhTmfRhYCJibpZ20ibH-JhVMrwbpFdCtKUz5tqFHsjLRiw@mail.gmail.com>
+Date:   Wed, 05 Oct 2022 16:27:09 -0500
+In-Reply-To: <CAHC9VhTmfRhYCJibpZ20ibH-JhVMrwbpFdCtKUz5tqFHsjLRiw@mail.gmail.com>
+        (Paul Moore's message of "Wed, 5 Oct 2022 12:04:27 -0400")
+Message-ID: <874jwic66q.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1ogBw6-00AJ8c-Ti;;;mid=<874jwic66q.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1+pzk/xFxwA038CMk9+07SgSJFZrrAJ06o=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Paul Moore <paul@paul-moore.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 478 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 11 (2.3%), b_tie_ro: 10 (2.0%), parse: 0.88
+        (0.2%), extract_message_metadata: 18 (3.7%), get_uri_detail_list: 1.85
+        (0.4%), tests_pri_-1000: 29 (6.0%), tests_pri_-950: 1.27 (0.3%),
+        tests_pri_-900: 0.94 (0.2%), tests_pri_-90: 78 (16.4%), check_bayes:
+        76 (15.9%), b_tokenize: 7 (1.4%), b_tok_get_all: 8 (1.7%),
+        b_comp_prob: 2.5 (0.5%), b_tok_touch_all: 55 (11.5%), b_finish: 1.31
+        (0.3%), tests_pri_0: 308 (64.4%), check_dkim_signature: 0.94 (0.2%),
+        check_dkim_adsp: 4.1 (0.9%), poll_dns_idle: 0.04 (0.0%), tests_pri_10:
+        3.8 (0.8%), tests_pri_500: 24 (5.1%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [GIT PULL] LSM patches for v6.1
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the IDT 89HPESx device binding to DT schema format.
+Paul Moore <paul@paul-moore.com> writes:
 
-"onsemi,24c64" was not a documented compatible string, so update the
-example to "atmel,24c64". It's not clear what's in use here as no
-upstream dts files have the eeprom child node.
+> On Wed, Oct 5, 2022 at 11:33 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>> Paul Moore <paul@paul-moore.com> writes:
+>> > On Wed, Oct 5, 2022 at 8:39 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>> >> Linus Torvalds <torvalds@linux-foundation.org> writes:
+>
+> ...
+>
+>> >> Effectively he said that where two or more out of tree LSM policies want
+>> >> something it makes no sense to discussion the actual reasons people want
+>> >> to use the hook.
+>> >
+>> > Runtime kernel configuration is inherently "out of tree", this
+>> > includes not only loadable LSM security policies (e.g. a SELinux
+>> > policy), the system's firewall configuration, things like sysctl.conf,
+>> > and countless others.  Please understand that "out of tree" in this
+>> > context is not the same as when it is used in the context of kernel
+>> > code; the former is actually a positive thing ("look we can configure
+>> > the kernel behavior the way we want!") while the latter is a
+>> > maintenance and support nightmare.
+>>
+>> Paul are you saying my experience with /proc/net pointing incorrectly at
+>> /proc/self/net instead of /proc/thread-self/net is invalid?
+>
+> My comment was that runtime kernel configuration is always going to be
+> out of tree due to its very nature, and conflating runtime
+> configuration with kernel code is a mistake.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-Serge, Okay with dual licensing?
----
- .../devicetree/bindings/misc/idt,89hpesx.yaml | 72 +++++++++++++++++++
- .../devicetree/bindings/misc/idt_89hpesx.txt  | 44 ------------
- 2 files changed, 72 insertions(+), 44 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/misc/idt,89hpesx.yaml
- delete mode 100644 Documentation/devicetree/bindings/misc/idt_89hpesx.txt
+When the runtime configuration has it's own llvm backend I have
+trouble seeing the difference.  It is code that controls kernel behavior
+that does not live in the kernel.
 
-diff --git a/Documentation/devicetree/bindings/misc/idt,89hpesx.yaml b/Documentation/devicetree/bindings/misc/idt,89hpesx.yaml
-new file mode 100644
-index 000000000000..452236e79354
---- /dev/null
-+++ b/Documentation/devicetree/bindings/misc/idt,89hpesx.yaml
-@@ -0,0 +1,72 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/misc/idt,89hpesx.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: EEPROM / CSR SMBus-slave interface of IDT 89HPESx devices
-+
-+maintainers:
-+  - Serge Semin <fancer.lancer@gmail.com>
-+
-+select:
-+  properties:
-+    compatible:
-+      contains:
-+        pattern: '^idt,89hpes'
-+  required:
-+    - compatible
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - pattern: '^idt,89hpes(8nt2|12nt3|12n3a?|24n3a?|(12|24)t3g2|4t4g2|10t4g2|[56]t5|8t5a?)$'
-+      - pattern: '^idt,89hpes(6t6g2|16t7|(24t6|32t8|48t12|16t4a?)(g2)?)$'
-+      - pattern: '^idt,89hpes(24nt6a|32nt8[ab]|12nt12|16nt16|24nt24|32nt24[ab])g2$'
-+      - pattern: '^idt,89hpes((32h8|48h12a?|22h16|34h16|64h16a?)(g2)?|16h16)$'
-+
-+  reg:
-+    maxItems: 1
-+
-+  '#address-cells':
-+    const: 1
-+  
-+  '#size-cells':
-+    const: 0
-+
-+patternProperties:
-+  '^eeprom@':
-+    $ref: /schemas/eeprom/at24.yaml#
-+    unevaluatedProperties: false
-+
-+    properties:
-+      compatible:
-+        description: Only a subset of devices are supported
-+        pattern: ',24c(32|64|128|256|512)$'
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        idt@74 {
-+            compatible = "idt,89hpes32nt8ag2";
-+            reg = <0x74>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            eeprom@50 {
-+                compatible = "atmel,24c64";
-+                reg = <0x50>;
-+                read-only;
-+            };
-+        };
-+    };
-+...
-diff --git a/Documentation/devicetree/bindings/misc/idt_89hpesx.txt b/Documentation/devicetree/bindings/misc/idt_89hpesx.txt
-deleted file mode 100644
-index b9093b79ab7d..000000000000
---- a/Documentation/devicetree/bindings/misc/idt_89hpesx.txt
-+++ /dev/null
-@@ -1,44 +0,0 @@
--EEPROM / CSR SMBus-slave interface of IDT 89HPESx devices
--
--Required properties:
--  - compatible : should be "<manufacturer>,<type>"
--		 Basically there is only one manufacturer: idt, but some
--		 compatible devices may be produced in future. Following devices
--		 are supported: 89hpes8nt2, 89hpes12nt3, 89hpes24nt6ag2,
--		 89hpes32nt8ag2, 89hpes32nt8bg2, 89hpes12nt12g2, 89hpes16nt16g2,
--		 89hpes24nt24g2, 89hpes32nt24ag2, 89hpes32nt24bg2;
--		 89hpes12n3, 89hpes12n3a, 89hpes24n3, 89hpes24n3a;
--		 89hpes32h8, 89hpes32h8g2, 89hpes48h12, 89hpes48h12g2,
--		 89hpes48h12ag2, 89hpes16h16, 89hpes22h16, 89hpes22h16g2,
--		 89hpes34h16, 89hpes34h16g2, 89hpes64h16, 89hpes64h16g2,
--		 89hpes64h16ag2;
--		 89hpes12t3g2, 89hpes24t3g2, 89hpes16t4, 89hpes4t4g2,
--		 89hpes10t4g2, 89hpes16t4g2, 89hpes16t4ag2, 89hpes5t5,
--		 89hpes6t5, 89hpes8t5, 89hpes8t5a, 89hpes24t6, 89hpes6t6g2,
--		 89hpes24t6g2, 89hpes16t7, 89hpes32t8, 89hpes32t8g2,
--		 89hpes48t12, 89hpes48t12g2.
--  - reg :	 I2C address of the IDT 89HPESx device.
--
--Optionally there can be EEPROM-compatible subnode:
--  - compatible:  There are five EEPROM devices supported: 24c32, 24c64, 24c128,
--		 24c256 and 24c512 differed by size.
--  - reg:         Custom address of EEPROM device (If not specified IDT 89HPESx
--    (optional)	 device will try to communicate with EEPROM sited by default
--		 address - 0x50)
--  - read-only :	 Parameterless property disables writes to the EEPROM
--    (optional)
--
--Example:
--	idt@60 {
--		compatible = "idt,89hpes32nt8ag2";
--		reg = <0x74>;
--		#address-cells = <1>;
--		#size-cells = <0>;
--
--		eeprom@50 {
--			compatible = "onsemi,24c64";
--			reg = <0x50>;
--			read-only;
--		};
--	};
--
--- 
-2.35.1
+Apparmor and selinux polices are not quite that generic but as I have
+discovered much to my pain routine clean-ups that userspace does not
+care about are blocked because apparmor and selinux policies have bugs.
 
+When I can not fix kernel bugs because of policy bugs, it has the
+same kind of effect as keeping an interface the same for out of
+tree code.  A little worse actually.
+
+Most kernel runtime configuration is a on/off of a numeric setting
+with logic that is enabled by that in the kernel.  Those I can agree
+are not the same.  
+
+Given that the logic and it's bugs are going to be out of tree I do not
+agree that we should only consider what goes into the kernel when
+looking into that kind of code.  Instead we should treat it will all of
+the due diligence that we attempt to use when creating a system call.
+That very much has not happened here.
+
+Eric
