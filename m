@@ -2,174 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6A65F5B0A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 22:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97BD05F5B0E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 22:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbiJEUdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 16:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43318 "EHLO
+        id S230517AbiJEUfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 16:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbiJEUdk (ORCPT
+        with ESMTP id S230505AbiJEUfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 16:33:40 -0400
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A233FEED;
-        Wed,  5 Oct 2022 13:33:38 -0700 (PDT)
-Received: from pps.filterd (m0134423.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 295H0NFO029781;
-        Wed, 5 Oct 2022 20:33:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pps0720;
- bh=IQ0T+/d4QYhY/gOZucqLAIDl/8OE+LVL1s85t7GbXCY=;
- b=EhkNfuSlkALi5UNfeXmqBMf8lptFmWJqRVRW8LCYZ5UsPIcmn+oJiNUUlZPmpWjTCDOq
- DqerLScUXUZod7DlDFWtjp1aoRAdkvfcrOBVKwHwIj2vSJY6RHzs1CHrFJpZA+1wKQ1Y
- VZADPgXUEQNEJJEcWsrrlmpJ0A2KbYGQkrNpsoltVq6Jg7WiSsv/Y5KodJC4eukQftGz
- +ekWx/q98Id4Mq/MMWf/rFGWzSl+J4oLv+yevxNV3E2aJ9PX5B/JJXTcmis/MVUXPTYy
- JnAf8uTzaW4qUmetY9B3l3wIxhzfzMBDZkka35rdR1O2bbNvHgjVX2V9rZtFCCaCg/Q6 Og== 
-Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3k1dxq9jyw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Oct 2022 20:33:07 +0000
-Received: from p1wg14924.americas.hpqcorp.net (unknown [10.119.18.113])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 9CE07801AD4;
-        Wed,  5 Oct 2022 20:33:06 +0000 (UTC)
-Received: from p1wg14924.americas.hpqcorp.net (10.119.18.113) by
- p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 5 Oct 2022 08:33:06 -1200
-Received: from p1wg14919.americas.hpqcorp.net (16.230.19.122) by
- p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
- via Frontend Transport; Wed, 5 Oct 2022 08:33:06 -1200
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (192.58.206.38)
- by edge.it.hpe.com (16.230.19.122) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 5 Oct 2022 08:33:06 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gSTt2/dPtGwUG34j4LRJpBQS1omL/EIJfeJPzYOpy36CCYmSoAvfVolC83jwStvDBP5jQPMpt4irYnvyaPWTxG4wc6WLu2KidSfza9eaysWoncmAUtVEkE5t4ipV/D3Eq9vZ5g2PdBTwkGLQdWs/Kn9MBXUg+ikNM6K19T8aqKzRndXEuubzrE+GP4jJwiYhEt98/+S0eZ1xIcBXo/o4Vo6PTq2+LFEQgqk8Au7cMs7YTrQduAiDOyB0M1OfhxAOO7lcmviNggz/eKFIYcTeCzQuovjhf3vYd6qMkCeSCyCm/WKB16Qnrgy8XofX/dQGi5GZKCn0PCfER5nFIgvpow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IQ0T+/d4QYhY/gOZucqLAIDl/8OE+LVL1s85t7GbXCY=;
- b=TUlpml0/ZyOkv2T+6Iu2pOzib6ae/I2OM/KHk7ezQrZQzje5v8EXt0/4fZmV6RtsKOlE6RKulXnJ0zG+giwFEhfwGkRD3DDXcBRq0KnsNqTiZm1wp7ZdRc9+ngJrAdEF3/F9FeDz6GOmqX/OxU1scv87q+WE1jz8MyPesZ3qifObYFdWQHkmGPJxMQAIYNE+ssR2IaCyyXH2iVDQPMfCg+fnuoWQW2VvlH5MHc6zprckseqMxHByJJoyyxzW8SDm7Qo1v/R+ELbRZcocKcEYIWOWmTKBW7Tl7b4seQYp//q+0n72s3OGYgZiJPiCSF9bXJ8pxYRm9vGMTBknI/NBww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4e::10) by
- PH7PR84MB1766.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:154::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Wed, 5 Oct
- 2022 20:33:05 +0000
-Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::f4f4:4c43:9c7c:333c]) by DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::f4f4:4c43:9c7c:333c%8]) with mapi id 15.20.5676.024; Wed, 5 Oct 2022
- 20:33:05 +0000
-From:   "Hawkins, Nick" <nick.hawkins@hpe.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     "broonie@kernel.org" <broonie@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "arnd@arndb.de" <arnd@arndb.de>
-Subject: RE: [PATCH v6 3/5] ARM: dts: hpe: Add spi driver node
-Thread-Topic: [PATCH v6 3/5] ARM: dts: hpe: Add spi driver node
-Thread-Index: AQHYop5JdjqhGItMzECDlzz3VYR3aK4ArTmg
-Date:   Wed, 5 Oct 2022 20:33:05 +0000
-Message-ID: <DM4PR84MB19274B41DEE65D882D4C8F27885D9@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
-References: <20220728161459.7738-1-nick.hawkins@hpe.com>
- <20220728161459.7738-4-nick.hawkins@hpe.com>
-In-Reply-To: <20220728161459.7738-4-nick.hawkins@hpe.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR84MB1927:EE_|PH7PR84MB1766:EE_
-x-ms-office365-filtering-correlation-id: b3836acd-ef16-47dd-15f5-08daa710ce6b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: itPwG0KL37q5cQIg+X5YRPRe0MY8m8zCA3vhDlsFSu78N74Sxay8+EP166/sSDqWfLmwPhJKeRcAhl/t2kzCxUFLVDDfz5vQIW1tEC91kfiERlZP2xOOA2KHGEBPTLtibWrRXq8VKk9gwP0i3x1ifK7iyvwP7Ma1zhDS/PRfrE7v1Cjs4PPMAt+j/5MVPbrG4QNqE9iygNveMIIVg9b+KIm/iu9fQOBU2Y3tA2x2JOO0nL6LZQgDRWCwYjz6///x8v3WukN3PLTv+pKtrCh2lW+fKeHKmxcgTcfcEzClrVZmLP4FSG0r9yyW+Cr9BsW93XTLKzUVvV47nGAMsodCqdo3J3Ns7ER9YKl4x7S+zN77H8vKvNvpRhGTqpsFuTo6tYOEuAF4EXakBJrnXXlxN/ETBCouahyUIcUNFXtQiUt/Pbeu/5Dzavt9zxn/wqSzXvYAWx9wKVpweEHqnq8H3QUc6QbhncDxumwbI+8PZxHUxsv3/Fum8FNiqqkN1E1b6Kncw0zuWWg3G1EnUlTnskvNNcjebH+dr6cCTxhC/CJx7aDTTNgBlBRc/qFADPPWeyjaNl8antfLKpN8menmtQUog4QEsh7XrXDRoef8SgkgAFNuV9euPgxB1t6zJ0H3g6cJmDJdUEZejmmGBRtpuyk9gaf9avaYTCgLRUkV7T8b7udOxtDtpvy2ZO8CEabJo0rmEFAVSBnY/ym9kvQCRhb0E8WZ679QdVNrfuXb4CEsQ3NOUJCnTa0EYY9m9m17
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(366004)(39860400002)(346002)(376002)(396003)(136003)(451199015)(66476007)(2906002)(66946007)(6916009)(38070700005)(54906003)(55016003)(8936002)(64756008)(52536014)(82960400001)(8676002)(33656002)(41300700001)(316002)(5660300002)(86362001)(66556008)(76116006)(66446008)(558084003)(186003)(71200400001)(6506007)(26005)(7696005)(55236004)(4326008)(38100700002)(478600001)(9686003)(122000001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?l/HQVJXDGkSA/CHqUqmaV0cpgPTSbF0iYlgJHzsU/e8JxZt9ZCEY5/F2+Thb?=
- =?us-ascii?Q?BCt3poOEOw80LeFC5xzsShiC/qMlmJTczenMPR87sEf1PwG2ts6DlwmZApj0?=
- =?us-ascii?Q?1oh2h3Kvhv2nFtsy2+R0QKE+qesYEiUlNTil8qG6I9Ss39052Addf0N3d+AW?=
- =?us-ascii?Q?2cMXmBU8OOjahIHH30IWR/fP2czoQwCOc2Nj7zc1IuTNXTEJvTgP/Xo9KT3G?=
- =?us-ascii?Q?CZ8DCCpmwq4S9ieZurr9I9Z/3JkT9Mh341vyMAOT50bLIMeks6yBln/4t0Dt?=
- =?us-ascii?Q?tt1O2zPqeDsLn95IQjiutcOAg+IJ01glM6d+wGroK4cFR/f6TIY5k4w7i5/R?=
- =?us-ascii?Q?mQudknV4dnxiBMktqJ9GOO0ozGfpKBEQBq7wE2Qy9ryhj7Gfj7kwiZBItk4H?=
- =?us-ascii?Q?wP6y3N0cF8a0ncMmefoy3a/TUp9oMsA4mSuMztoCC1SG+fZA0NaXXZvJ/r4V?=
- =?us-ascii?Q?s2b+LA1a2VLOqIlK2Wi3vzOJYqAGI4owrMWXfbmJDSzRHBqaKw6jbeilrdID?=
- =?us-ascii?Q?t5K1SoCYISzQOESV4+KhNdcSQVNeyK7FJ1lonT88Z583gCllBT1YaYvUNUcI?=
- =?us-ascii?Q?KHItEiXvnrSuNTwrEO7Hn0zoityRyv6HOO59S6d8bvD2Jfc5ykjK7CjejdYC?=
- =?us-ascii?Q?GIrk39oIKWVvESVKso46PI36618+V+mAKVEOj/HzaYWdKQCDsFWanTMlnbgE?=
- =?us-ascii?Q?qdutN4WC0SYJi1Uu3qTVSCi1bZHVgEQFxO66eVJP2QqS6lLYiL9micV7nn1Q?=
- =?us-ascii?Q?pwOdbcUyYVXx3JmDUxBo2bl6ELBUirLvFxYzy9eurlcpSOOtdUlvE3S/fLRY?=
- =?us-ascii?Q?iOuNzJX/qd18gg9oWZdW0benw5yZh8beR4BJbc6Dycq3owosGEsvCgbzjTlz?=
- =?us-ascii?Q?xqDz/LOEKEsY7KkHmV6afAiH0T1OXGf+M9umXeRSjjCHxDCWkXIbX5N4cc/H?=
- =?us-ascii?Q?dV7rkz1KkGpN4JEknsEw1EPoHuvrsmbyhVXjCtpYC9wgFGj7PFUTmtlcAcKU?=
- =?us-ascii?Q?Rp4+GmkuJF0OzubX+xWme9f30fqTEbvDo3PNgRfr6kfx1iHoJ3b1328ti2hd?=
- =?us-ascii?Q?aNaOXFxqJUZHvtVm5mklknIN8L1jPTWBoMpiUaBdFIKcjIphbq1iuyDUeqGN?=
- =?us-ascii?Q?OFemgEX1aTE+5EPcZ/+pwqCouWjFvpxqfKl3UvOWFZYsa87bX5i1kqupHYBH?=
- =?us-ascii?Q?HXuRYb8xrOYoqzYsLrwyKl6htqU3XL77lZoQFFuwS+mn3X+YTmUd5NFu9/iK?=
- =?us-ascii?Q?3Eg3ZNv4NQjExPwatr0gtyNK87tEC4607uRYylqOOUEO84pUsNZ0B1LQ1EPR?=
- =?us-ascii?Q?vPiHhuJ6xyCm8eH/NnjwCZ27GdZ8ibtROwcT0uHAaJRov11H8TeO6TAXKWVI?=
- =?us-ascii?Q?qPvqMpMb4DaZhY6Mh1OJqR9NUELFE2Pa6qSdchv6+PN4NvyCpnjb2U7HWWoZ?=
- =?us-ascii?Q?ZFM+QgkX8qghK8rRbXQNw4+2IJ0Y6dKKXpaO7nqDW1Otzs2vHXLobFp/ugz5?=
- =?us-ascii?Q?xWhLQJ5kfQw7tC5HbeGHS7dnO1/FwHhKNTA0fztFD0vM59HrS11MbCinw9L6?=
- =?us-ascii?Q?Tx2jNcjpNViBD3LAxOJptEObFmenwqD57UetbcXr?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 5 Oct 2022 16:35:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C645A1A830
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 13:35:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665002111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Spyd4QK8zfzxDBXuoxBL/PDaUjw/dZKhbr0mZm9nT1c=;
+        b=J2AkCIOEgNto0KicFy4SuVv5o/Kd6AqLuXUdnuUcOgMPNcMv0vJZ0qeJLi4RxcZQT04SDu
+        5zE4jRMITT2bz8TtXrJ6qFqpIcBoVTqjA8EF6Gt/XMySnbqX9PbXn4/q9En9nfqmFN2jJQ
+        u0k0qp7pdzlJL6meP0ybIJOf6Snfys0=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-398-rF-T5CvSO7OCPsbjJVGuQw-1; Wed, 05 Oct 2022 16:35:10 -0400
+X-MC-Unique: rF-T5CvSO7OCPsbjJVGuQw-1
+Received: by mail-qk1-f200.google.com with SMTP id m16-20020a05620a291000b006e2b66fd93fso2235485qkp.12
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 13:35:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Spyd4QK8zfzxDBXuoxBL/PDaUjw/dZKhbr0mZm9nT1c=;
+        b=TZd8nR0QQF7zYnF5+D9DJ6YVVU8djLom21XKiEkkZlclqpRNuz/N1pJ/8fUD9b26Dq
+         3qhkXSHTYW9fk4LSF+OVTyS3nyNuf7iHUoj68UZxuUgCbk5KXEbFEGdYpkh7JYgfPzix
+         J9EPpMyzJOKEcgP1JLpWHF77bTC0ned8jg4Fx2s6li+5TmKAiiO5/rpcWjJ6jhGgV16s
+         eLBxeqok6aMLWj3Joc18tt7Pg0U3lUu2WoxMUd3/kQ8/7aU8hqqp1emB9UvzAFYQDFV2
+         NxppRB4WLaKykaXk+aPgwH/RkwFMVBel/7S17O3wuA9XG0qmEy2R6ls/wkWi9e2RfdwJ
+         VbRw==
+X-Gm-Message-State: ACrzQf0ZAggkuC/gOS+b4tG1mPdAy1Vtwf2EEWGrjsXD/dOTxmEQGIvk
+        gFtahcel3vi3KiNxaKNr64MsQ1hz6Tee2zmpV+iw8ytDpVIUuOos/f5PgbY6mKCrbjtGPqvFjLQ
+        0TEpvsyQsHt0oJvgNima9tbpI
+X-Received: by 2002:ae9:e70a:0:b0:6ce:bfc0:f98b with SMTP id m10-20020ae9e70a000000b006cebfc0f98bmr935028qka.381.1665002108326;
+        Wed, 05 Oct 2022 13:35:08 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4XAXGxI08IXKU2+P8nxYIGcJ4Cjc/Q8ZELN25KxB1W3P8p9sLvCKgIKsx7ZggEAFUf6g9lCw==
+X-Received: by 2002:ae9:e70a:0:b0:6ce:bfc0:f98b with SMTP id m10-20020ae9e70a000000b006cebfc0f98bmr935012qka.381.1665002108085;
+        Wed, 05 Oct 2022 13:35:08 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id h8-20020a05620a400800b006bb9e4b96e6sm18233280qko.24.2022.10.05.13.35.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 13:35:07 -0700 (PDT)
+Date:   Wed, 5 Oct 2022 16:35:06 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v1 4/7] mm/ksm: fix KSM COW breaking with userfaultfd-wp
+ via FAULT_FLAG_UNSHARE
+Message-ID: <Yz3qekna97ndP4FK@x1n>
+References: <20220930141931.174362-1-david@redhat.com>
+ <20220930141931.174362-5-david@redhat.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: b3836acd-ef16-47dd-15f5-08daa710ce6b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Oct 2022 20:33:05.0630
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: miaImvQQlnQrxpwzPOxxUjY1kBaYUAR4wX7Tk93MvXD8bqHthsyGOslRkfp8l+LmRzQteI3Is9mdJTy7K2dHOg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR84MB1766
-X-OriginatorOrg: hpe.com
-X-Proofpoint-GUID: Im-CltAK7wpFIcl73EOrsQk_eY24RhJR
-X-Proofpoint-ORIG-GUID: Im-CltAK7wpFIcl73EOrsQk_eY24RhJR
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-05_05,2022-10-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=538
- adultscore=0 suspectscore=0 impostorscore=0 malwarescore=0 phishscore=0
- clxscore=1011 lowpriorityscore=0 spamscore=0 priorityscore=1501 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210050126
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220930141931.174362-5-david@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Sep 30, 2022 at 04:19:28PM +0200, David Hildenbrand wrote:
+> Let's stop breaking COW via a fake write fault and let's use
+> FAULT_FLAG_UNSHARE instead. This avoids any wrong side effects of the fake
+> write fault, such as mapping the PTE writable and marking the pte
+> dirty/softdirty.
+> 
+> Also, this fixes KSM interaction with userfaultfd-wp: when we have a KSM
+> page that's write-protected by userfaultfd, break_ksm()->handle_mm_fault()
+> will fail with VM_FAULT_SIGBUS and will simpy return in break_ksm() with 0.
+> The warning in dmesg indicates this wrong handling:
+> 
+> [  230.096368] FAULT_FLAG_ALLOW_RETRY missing 881
+> [  230.100822] CPU: 1 PID: 1643 Comm: ksm-uffd-wp [...]
+> [  230.110124] Hardware name: [...]
+> [  230.117775] Call Trace:
+> [  230.120227]  <TASK>
+> [  230.122334]  dump_stack_lvl+0x44/0x5c
+> [  230.126010]  handle_userfault.cold+0x14/0x19
+> [  230.130281]  ? tlb_finish_mmu+0x65/0x170
+> [  230.134207]  ? uffd_wp_range+0x65/0xa0
+> [  230.137959]  ? _raw_spin_unlock+0x15/0x30
+> [  230.141972]  ? do_wp_page+0x50/0x590
+> [  230.145551]  __handle_mm_fault+0x9f5/0xf50
+> [  230.149652]  ? mmput+0x1f/0x40
+> [  230.152712]  handle_mm_fault+0xb9/0x2a0
+> [  230.156550]  break_ksm+0x141/0x180
+> [  230.159964]  unmerge_ksm_pages+0x60/0x90
+> [  230.163890]  ksm_madvise+0x3c/0xb0
+> [  230.167295]  do_madvise.part.0+0x10c/0xeb0
+> [  230.171396]  ? do_syscall_64+0x67/0x80
+> [  230.175157]  __x64_sys_madvise+0x5a/0x70
+> [  230.179082]  do_syscall_64+0x58/0x80
+> [  230.182661]  ? do_syscall_64+0x67/0x80
+> [  230.186413]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Greetings all,
+Since it's already there, worth adding the test into ksm_test.c?
 
-Was there a particular issue with this patch? I just realized that patches =
-1,2, and 5 were accepted but not 3 or 4.
+> 
+> Consequently, we will no longer trigger a fake write fault and break COW
+> without any such side-effects.
+> 
+> This is primarily a fix for KSM+userfaultfd-wp, however, the fake write
+> fault was always questionable. As this fix is not easy to backport and it's
+> not very critical, let's not cc stable.
 
-Thanks,
+A patch to cc most of the stable would probably need to still go with the
+old write approach but attaching ALLOW_RETRY.  But I agree maybe that may
+not need to bother, or a report should have arrived earlier..  The unshare
+approach looks much cleaner indeed.
 
--Nick Hawkins
+> 
+> Fixes: 529b930b87d9 ("userfaultfd: wp: hook userfault handler to write protection fault")
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+
+Acked-by: Peter Xu <peterx@redhat.com>
+
+-- 
+Peter Xu
 
