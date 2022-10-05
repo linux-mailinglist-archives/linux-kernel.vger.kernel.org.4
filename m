@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9E45F4F1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 06:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D375F4F1F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 06:57:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiJEEy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 00:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
+        id S229700AbiJEE5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 00:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiJEEyy (ORCPT
+        with ESMTP id S229587AbiJEE5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 00:54:54 -0400
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9111004B
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 21:54:50 -0700 (PDT)
+        Wed, 5 Oct 2022 00:57:46 -0400
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D470073318
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 21:57:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1664945692; x=1696481692;
+  t=1664945865; x=1696481865;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=X/wnYvLEfjWPiHP0g6qUoEkTmreuHxScsfCtdjtKDoI=;
-  b=KtTMEz7Tz0rWiF6u+TyzDsUx/GG7TrbljiAc1Pt4LS0/SwxX4lFTP1IE
-   fBZ77q0EZpuNj25Qykyf5KhMFJWCWZ32GIYpq9h9HLy0abFm1CQ+8Uiy9
-   mtCf2k1JD1cLrkEViK9ZvxLFnbc8lmrJF+II03Z+KjAR13LLkqnXWz3tL
-   0etiax4wPf8p4oMzFMAGf0DRSTNHcfZ+Gbts+vm+1lwCxsNZooX+4BKF/
-   F6KAySmYxqjukT3tderzOf6OFGaUfozJJJ1gxl2cTz4PxEaXHz40E7qEH
-   sVZQSnjLcM3XepiyeSY2/DNqRAC3KBzafQHrHZdYXrwVakZHjwdb6WlS0
-   A==;
+  bh=KN2lg6zzWucjSOK5rPZIymytpXrjThzSinPr5sbnfPY=;
+  b=rRivYDUqtdPixDH0iO9YWq3bb7fEebd9EMEm8QQAwKB/05GvpFUXDeUm
+   fsSCzbGQc0J45RqMltVnVSUuvbwrxCpYO0K+WGaT4wHVxwrElmeK9j4nJ
+   LTBVxKYFAERlKqIXdikb+AF4/5qPILqzwpwqpMofYJzZ/qqQX+u6oNs3F
+   2XNmLw+B71NFy0v01AvLRntczNQAGA49zPZDdpwg3TIP+KTY39EGSOypx
+   aBaZh8gYRgKVd3fPNOTg3donjY5XlnmZfUHf6JK7G2XzsQGhYClTgQzG8
+   +bmDnsez8x+fGe4wOC/BNiG7w4kXzGZs1IoigX0cIrRLI9ojtATrh35NT
+   w==;
 X-IronPort-AV: E=Sophos;i="5.95,159,1661788800"; 
-   d="scan'208";a="325117122"
+   d="scan'208";a="213418998"
 Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 05 Oct 2022 12:54:49 +0800
-IronPort-SDR: whQzsPKeMPhqz/+UPcz/hRpB43keSRudPff8eg/NgsgZKaVLVVWVhxC/WeIPVvU1fECkrQvW3J
- 8GCNcV1aOfL+UAmGgbZDGhxxoIxl59+v5X2owBDoX0Psjdx5y5vfxB3uhbUkEDRxPRI5RUsUUL
- n/LbRl4eaAgNmDE2boIhvbbbdC+iGIKDjAfNgGsoAQE7d6hHdeCMsysdiHM0P8AWvzFZisR3FX
- lomkvXXucjxqGx8lX0jtOvFALuTZaLwiKTC09uE6ybFEg9YZMe+xShe6sXempBdWcwxYX1T0zp
- Q37LrEAfRsDQucB+tY0vralm
+  by ob1.hgst.iphmx.com with ESMTP; 05 Oct 2022 12:57:43 +0800
+IronPort-SDR: suuXI4jnxy5NE0hSoSkqZ3icvagmy/Cz3VdAlt2TrBd4Yi4dFUXj4M0Y+9fDn5M/4rqrXy7lZ3
+ EhoOjF1klzxBkMy4zpXxh7EZuegew2uq/z4GCyJ3kOo6Ufh/Q1YKONpgJfsp1QedUszaPuO+kt
+ TsjhKs73sjB6Ft8Bt7iL9+PC+wFlgXZnmHN8dv5kGPeZIM+PgDkDR5jDS9l/tixFbmlkYnWIV/
+ Wy/Ewpy0BLfvVho6RgrGy1roDaKk9GSP7rFjQGINt1mQCSmjR9s7gzzIvEbxJIz8t6ZjPRYK5w
+ R3/BZK2DLXYIDIaFYGBtcerJ
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Oct 2022 21:09:02 -0700
-IronPort-SDR: m0TQHzvN7b2aYnuTpnaBAo/Q96wAdFinNBg0Xfla44q5GnURqF3ysJvMefP240UMZ/OHojDnu3
- 5WDuYAQKD8fEMYOJsuXgbJcc8U7vJ/3x832pNJUKQP6pkEYNg9N5IUGvQsCKs7lgpBVzPYuWKP
- cpmmqs1IwsONVQ9Q4DI96N8Pvzh4p9AcM7VwDh5M6Oz6+vSPTVe1OPKKhYTEik1RbDpLJI7TOL
- R0aK7MhG8NzUpJOqLkonXDEMz7xO+kt2KK58jeHxaV8siaqUdKfCuWwc9YlVV1uua4UrO1d8le
- cIg=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Oct 2022 21:11:56 -0700
+IronPort-SDR: omw+w0dzwpLq7+1SXRJ4RJSvaxzLNEiF3Tzq2wMwK5FBsqcf0EFbgMHKDTnx4f6P9YlZmRIOGV
+ 7cFv903sKQUSa/oeilEjSmdqUPSg83e2s18P6ABGHXxwneIeYN9UzE7a36OKRY66l1QLaV6dWN
+ iHESWUX/YZlNM0KYG/ftkuNeoYOZ4lAU6yd3HzDbDgiF4bLZBWVrGcAOfH0EXJyvTP/cm7JaC4
+ VcEX4wmXzg/lsQh+6GXW7upp8Hj74vw3EcoFSJt5+TSoq34FbK0AmvirfJ1NdlLY2PaPO7G6Gd
+ q5M=
 WDCIronportException: Internal
 Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Oct 2022 21:54:49 -0700
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Oct 2022 21:57:43 -0700
 Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Mj2LJ6C4Kz1Rwt8
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 21:54:48 -0700 (PDT)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Mj2Pf6bMGz1RwtC
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 21:57:42 -0700 (PDT)
 Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)"
         header.d=opensource.wdc.com
@@ -57,27 +57,27 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
         opensource.wdc.com; h=content-transfer-encoding:content-type
         :in-reply-to:organization:from:references:to:content-language
         :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1664945687; x=1667537688; bh=X/wnYvLEfjWPiHP0g6qUoEkTmreuHxScsfC
-        tdjtKDoI=; b=I45lrdqZJ44GFSl/+oBfP47bm9o4FQE7J+aQgmTDuydXl+k6Udw
-        QJBeahxO3k77MCHH39X6yLg7HVLPCbWrstD7RqRPxXQUiFjh+auU/ShrMYSDSP9f
-        VABP7UGxkocDuxGO9mJRMNLTgrLigBbDtWDYVA7T95nR5WimB1n1W5vi+d19Ki66
-        ILmeuwmFJlHl9BLMfP/aRY52FD3Utl6yiZOqJXOwMUfVjMom1ELCp4ZoZnbETmVQ
-        IQVBF9DRCkGR77WEH72NlSQ6Un85/5TTBnM5qaNOI6727z8FufdA3uK01ivfG6dk
-        4WEtJjkcx4NK+i2kZu/kjD3QWegUdUjmRHg==
+        1664945861; x=1667537862; bh=KN2lg6zzWucjSOK5rPZIymytpXrjThzSinP
+        r5sbnfPY=; b=Cb86wCHARoD5+C2rhmnkRLbbxhZ9ngOW4nA9yNvWEY4LZgfZVN1
+        /mpvQcb+sK4Bd9s4C6HIg7gCqGR6dOmi+W8H/mdzEbW6q0tt3XpF9LEHNfhWdRHP
+        d0PsqbW7iqSEJNBlbUWQcAmcs+YPoC+hwSWTBWwgqSZkKPubXHPaafVJM8vKIYtC
+        BcJFtidTdQXeA1m9XbdMU7ju4vLDA5GEQcCnTa3XrdgHuOCuQjEakHHePkjfIHRb
+        Pl7lbAQkSikjtsq+ZijcHkv9ulRsGrAFlef0R+5wyBtP8xcYoqrXJvKQRyCtRyXL
+        10vyvVk8+/f3VvhNrCwVNwHf60Hb0koR3rw==
 X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
 Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
         by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Zx9T7XrGq-3h for <linux-kernel@vger.kernel.org>;
-        Tue,  4 Oct 2022 21:54:47 -0700 (PDT)
+        with ESMTP id Z54cWO9mrI2s for <linux-kernel@vger.kernel.org>;
+        Tue,  4 Oct 2022 21:57:41 -0700 (PDT)
 Received: from [10.225.163.106] (unknown [10.225.163.106])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Mj2LG1chxz1RvLy;
-        Tue,  4 Oct 2022 21:54:45 -0700 (PDT)
-Message-ID: <66698df8-74ca-e802-2250-04aecafa1106@opensource.wdc.com>
-Date:   Wed, 5 Oct 2022 13:54:44 +0900
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Mj2Pc1vZNz1RvLy;
+        Tue,  4 Oct 2022 21:57:40 -0700 (PDT)
+Message-ID: <89b93617-2fb1-3757-9f80-ddc06f02683f@opensource.wdc.com>
+Date:   Wed, 5 Oct 2022 13:57:39 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.1
-Subject: Re: [PATCH 1/6] null_blk: allow write zeores on non-membacked
+Subject: Re: [PATCH 2/6] null_blk: allow write zeores on membacked
 Content-Language: en-US
 To:     Chaitanya Kulkarni <kch@nvidia.com>, linux-block@vger.kernel.org,
         linux-kernel@vger.kernel.org
@@ -85,15 +85,16 @@ Cc:     axboe@kernel.dk, johannes.thumshirn@wdc.com, bvanassche@acm.org,
         ming.lei@redhat.com, shinichiro.kawasaki@wdc.com,
         vincent.fu@samsung.com, yukuai3@huawei.com
 References: <20221005031701.79077-1-kch@nvidia.com>
- <20221005031701.79077-2-kch@nvidia.com>
+ <20221005031701.79077-3-kch@nvidia.com>
 From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Organization: Western Digital Research
-In-Reply-To: <20221005031701.79077-2-kch@nvidia.com>
+In-Reply-To: <20221005031701.79077-3-kch@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -101,81 +102,117 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 10/5/22 12:16, Chaitanya Kulkarni wrote:
-> Add a helper function to enable the REQ_OP_WRITE_ZEROES operations
-> when null_blk is configured with the non-membacked operations.
+> Add a helper functions to enable the REQ_OP_WRITE_ZEROES operations
+> when null_blk is configured with the membacked mode.
 > 
 > Since write-zeroes is a non-trivial I/O operation we need this to
 > add a blktest so we can test the non-trivial I/O path from the
 > application to the block layer.
+
+Why a separate patch for this ? Introducing the module argument and
+configfs equivalent separately in 2 different patches is strange and does
+not facilitate review.
+
+This patch should be merged with patch 1.
+
 > 
 > Signed-off-by: Chaitanya Kulkarni <kch@nvidia.com>
 > ---
->  drivers/block/null_blk/main.c     | 13 +++++++++++++
->  drivers/block/null_blk/null_blk.h |  1 +
->  2 files changed, 14 insertions(+)
+>  drivers/block/null_blk/main.c | 46 ++++++++++++++++++++++++++++++++++-
+>  1 file changed, 45 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/block/null_blk/main.c b/drivers/block/null_blk/main.c
-> index 1f154f92f4c2..fc3e883f7b84 100644
+> index fc3e883f7b84..2d592b4eb815 100644
 > --- a/drivers/block/null_blk/main.c
 > +++ b/drivers/block/null_blk/main.c
-> @@ -209,6 +209,10 @@ static bool g_discard;
->  module_param_named(discard, g_discard, bool, 0444);
->  MODULE_PARM_DESC(discard, "Support discard operations (requires memory-backed null_blk device). Default: false");
->  
-> +static bool g_write_zeroes;
-> +module_param_named(write_zeroes, g_write_zeroes, bool, 0444);
-> +MODULE_PARM_DESC(write_zeroes, "Support write-zeores operations. Default: false");
-
-Why not make this a number of sectors representing the maximum size of a
-write zero command (blk_queue_max_write_zeroes_sectors()) ? That would
-allow exercising split write zeros BIOs.
-
-> +
->  static unsigned long g_cache_size;
->  module_param_named(cache_size, g_cache_size, ulong, 0444);
->  MODULE_PARM_DESC(mbps, "Cache size in MiB for memory-backed device. Default: 0 (none)");
-> @@ -678,6 +682,7 @@ static struct nullb_device *null_alloc_dev(void)
->  	dev->blocking = g_blocking;
->  	dev->memory_backed = g_memory_backed;
->  	dev->discard = g_discard;
-> +	dev->write_zeroes = g_write_zeroes;
->  	dev->cache_size = g_cache_size;
->  	dev->mbps = g_mbps;
->  	dev->use_per_node_hctx = g_use_per_node_hctx;
-> @@ -1800,6 +1805,13 @@ static void null_config_discard(struct nullb *nullb)
->  	blk_queue_max_discard_sectors(nullb->q, UINT_MAX >> 9);
+> @@ -420,6 +420,7 @@ NULLB_DEVICE_ATTR(blocking, bool, NULL);
+>  NULLB_DEVICE_ATTR(use_per_node_hctx, bool, NULL);
+>  NULLB_DEVICE_ATTR(memory_backed, bool, NULL);
+>  NULLB_DEVICE_ATTR(discard, bool, NULL);
+> +NULLB_DEVICE_ATTR(write_zeroes, bool, NULL);
+>  NULLB_DEVICE_ATTR(mbps, uint, NULL);
+>  NULLB_DEVICE_ATTR(cache_size, ulong, NULL);
+>  NULLB_DEVICE_ATTR(zoned, bool, NULL);
+> @@ -544,6 +545,7 @@ static struct configfs_attribute *nullb_device_attrs[] = {
+>  	&nullb_device_attr_power,
+>  	&nullb_device_attr_memory_backed,
+>  	&nullb_device_attr_discard,
+> +	&nullb_device_attr_write_zeroes,
+>  	&nullb_device_attr_mbps,
+>  	&nullb_device_attr_cache_size,
+>  	&nullb_device_attr_badblocks,
+> @@ -618,7 +620,7 @@ static ssize_t memb_group_features_show(struct config_item *item, char *page)
+>  			"poll_queues,power,queue_mode,shared_tag_bitmap,size,"
+>  			"submit_queues,use_per_node_hctx,virt_boundary,zoned,"
+>  			"zone_capacity,zone_max_active,zone_max_open,"
+> -			"zone_nr_conv,zone_size\n");
+> +			"zone_nr_conv,zone_size,write_zeroes\n");
 >  }
 >  
-> +static void null_config_write_zeroes(struct nullb *nullb)
+>  CONFIGFS_ATTR_RO(memb_group_, features);
+> @@ -875,6 +877,24 @@ static void null_free_sector(struct nullb *nullb, sector_t sector,
+>  	}
+>  }
+>  
+> +static void null_zero_sector(struct nullb_device *d, sector_t sect,
+> +			     sector_t nr_sects, bool cache)
 > +{
-> +	if (!nullb->dev->write_zeroes)
+> +	struct radix_tree_root *root = cache ? &d->cache : &d->data;
+> +	struct nullb_page *t_page;
+> +	unsigned int offset;
+> +	void *dest;
+> +
+> +	t_page = radix_tree_lookup(root, sect >> PAGE_SECTORS_SHIFT);
+> +	if (!t_page)
 > +		return;
-> +	blk_queue_max_write_zeroes_sectors(nullb->q, UINT_MAX >> 9);
+> +
+> +	offset = (sect & SECTOR_MASK) << SECTOR_SHIFT;
+> +	dest = kmap_atomic(t_page->page);
+> +	memset(dest + offset, 0, SECTOR_SIZE * nr_sects);
+> +	kunmap_atomic(dest);
 > +}
 > +
->  static const struct block_device_operations null_bio_ops = {
->  	.owner		= THIS_MODULE,
->  	.submit_bio	= null_submit_bio,
-> @@ -2111,6 +2123,7 @@ static int null_add_dev(struct nullb_device *dev)
->  		blk_queue_virt_boundary(nullb->q, PAGE_SIZE - 1);
+>  static struct nullb_page *null_radix_tree_insert(struct nullb *nullb, u64 idx,
+>  	struct nullb_page *t_page, bool is_cache)
+>  {
+> @@ -1191,6 +1211,27 @@ blk_status_t null_handle_discard(struct nullb_device *dev,
+>  	return BLK_STS_OK;
+>  }
 >  
->  	null_config_discard(nullb);
-> +	null_config_write_zeroes(nullb);
+> +static blk_status_t null_handle_write_zeroes(struct nullb_device *dev,
+> +					     sector_t sector, sector_t nr_sectors)
+> +{
+> +	unsigned int bytes_left = nr_sectors << 9;
+> +	struct nullb *nullb = dev->nullb;
+> +	size_t curr_bytes;
+> +
+> +	spin_lock_irq(&nullb->lock);
+> +	while (bytes_left > 0) {
+> +		curr_bytes = min_t(size_t, bytes_left, nullb->dev->blocksize);
+> +		nr_sectors = curr_bytes >> SECTOR_SHIFT;
+> +		null_zero_sector(nullb->dev, sector, nr_sectors, false);
+> +		if (null_cache_active(nullb))
+> +			null_zero_sector(nullb->dev, sector, nr_sectors, true);
+> +		sector += nr_sectors;
+> +		bytes_left -= curr_bytes;
+> +	}
+> +	spin_unlock_irq(&nullb->lock);
+> +	return BLK_STS_OK;
+> +}
+> +
+>  static int null_handle_flush(struct nullb *nullb)
+>  {
+>  	int err;
+> @@ -1357,6 +1398,9 @@ static inline blk_status_t null_handle_memory_backed(struct nullb_cmd *cmd,
+>  	if (op == REQ_OP_DISCARD)
+>  		return null_handle_discard(dev, sector, nr_sectors);
 >  
->  	if (config_item_name(&dev->item)) {
->  		/* Use configfs dir name as the device name */
-> diff --git a/drivers/block/null_blk/null_blk.h b/drivers/block/null_blk/null_blk.h
-> index 94ff68052b1e..2c0c9c29158f 100644
-> --- a/drivers/block/null_blk/null_blk.h
-> +++ b/drivers/block/null_blk/null_blk.h
-> @@ -111,6 +111,7 @@ struct nullb_device {
->  	bool power; /* power on/off the device */
->  	bool memory_backed; /* if data is stored in memory */
->  	bool discard; /* if support discard */
-> +	bool write_zeroes; /* if support write_zeroes */
->  	bool zoned; /* if device is zoned */
->  	bool virt_boundary; /* virtual boundary on/off for the device */
->  	bool no_sched; /* no IO scheduler for the device */
+> +	if (op == REQ_OP_WRITE_ZEROES)
+> +		return null_handle_write_zeroes(dev, sector, nr_sectors);
+> +
+>  	if (dev->queue_mode == NULL_Q_BIO)
+>  		err = null_handle_bio(cmd);
+>  	else
 
 -- 
 Damien Le Moal
