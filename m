@@ -2,520 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D6E5F5AD4
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 22:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB6C55F5AD6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 22:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbiJEUOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 16:14:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
+        id S230151AbiJEUQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 16:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJEUOG (ORCPT
+        with ESMTP id S229484AbiJEUQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 16:14:06 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF41B1AF2D
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 13:14:04 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id bu30so7618616wrb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 13:14:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=x8RV8VG+A4vngdgkQwHX3NLb0hjKfGrsT3m3maaP/EU=;
-        b=m8gfm9uxhvPKKE//tDmfaojO9Kj90ty5lb0l0k/YYMUHA96yGsza06b5nX43BCKWqt
-         E3H4zq4tHepnH9Gc/nRhwX4jgIDdnSvPTn4ieEwbnZkybPV+7hii6xdhAGLjlk0Opuye
-         QSfdcqGBl2E4z1rVdWz7YYtp/QqX4XH3xR1/vku1l4INl9lAOTWFpMRJYSF0+DD3P5ue
-         Y9wOkuu+INxZxHKZYibUoN9FFBDZmC5eZnm5SLYou0rHXT98oXrIggZ4oyxGpq3lxC2h
-         WlyyBOct7hPv2BF4m/pThE3HVktjRPtLfQUjHOFpJvaaLzB+oP2BsUlJP/b+g7wz0o8H
-         YIkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=x8RV8VG+A4vngdgkQwHX3NLb0hjKfGrsT3m3maaP/EU=;
-        b=6wwVh/VmDEVp34t8XjP4e6GW5FWngowQu6LNFbTeUIvcXPUn24ziZDG+u7hHvUwkeE
-         Avw4/jyMa5bPAQ1dXVkUsiS1JT8YbCRHWG4Z/Ri1p6XyZ6B3cGKmJqoyE8ITPWwMX5Kf
-         hN0diASVJpCKsaihyab6QwzxIWzM1Qkwc3ufiQZAHLrELsbomJPRvJWEe8s9utM3j6d8
-         PjCXV9DEtUNQmsSg38Lr8N2b5VrOzdSnUuF0bF/2G/K8tHttYkHlOS9SR1YmSe3hHep5
-         aDIF022YzrNryGxJ1hG/eIvXxoiWufEbluQfsTug3/wP+L6E9JHu9hafb6UcLJte9nBM
-         mSHA==
-X-Gm-Message-State: ACrzQf1jyipfphWQcYnaIwDWEgZXTqUJBStw1BZi8YH6SPmZ0jUsXpI4
-        g1hlyDtUOthQo5Onr8OAme0YhcfQTg==
-X-Google-Smtp-Source: AMsMyM5cOEtubVD24PO2IBl5Xln4D8Hu2tvec4KQQrRqilxO7IhlIIHUPJOZ5MdAn4nGwj2p048eWw==
-X-Received: by 2002:adf:cf10:0:b0:22e:4e50:9161 with SMTP id o16-20020adfcf10000000b0022e4e509161mr785337wrj.587.1665000843099;
-        Wed, 05 Oct 2022 13:14:03 -0700 (PDT)
-Received: from localhost.localdomain ([46.53.254.212])
-        by smtp.gmail.com with ESMTPSA id p16-20020adff210000000b0022ae0965a8asm15730778wro.24.2022.10.05.13.14.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 13:14:02 -0700 (PDT)
-Date:   Wed, 5 Oct 2022 23:14:00 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] proc: test how it holds up with mapping'less process
-Message-ID: <Yz3liL6Dn+n2SD8Q@localhost.localdomain>
+        Wed, 5 Oct 2022 16:16:46 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2055.outbound.protection.outlook.com [40.107.102.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C446D554;
+        Wed,  5 Oct 2022 13:16:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ONJWIiVu57OA5gs/1JlPsOJliD2Y0ZYNZPkm/SyN+Odxezyxm0G+aFyAZvtf/Ko0rYSXm9IklGTHLQ4esaYID6eEFhNS5qGf/0ZgUOEw0KDTb9Pl2zj4K5jipOsgUBBVxPKjQV9Xif2AcwD6sToKN7IVPJuJq/lV8/GukUQ1oiM6KfG6cswDyXA9JmoosnUhQmfuyXQhoB/DnhJj0HLZ3k7cU3jaOcnhC5rxULc/C9JZ0RGiA6IankJmJAepRRah7kSbjgZuiVXniGuT3++rQcevQZzORhfVtCfQYGPmjwybNvFT93p0GSA9xP7/KPOmdiGh1FnT8Ywx1rA3j6z+EA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2mHBnoijPfOkMvIkS75PcX00WIHRQNsGV7yWprInEfI=;
+ b=GEvKHxiDXoLPV8ll3eDOhoGCDnlhsNcymiSqgfzzAIjrJeSDul3NZ9Hd0VzbcBCSVyEVZbY4F1F9yNScoMPS186NlteP0fIlJjMNzKuuHP5f15dYYWlf5suoXcXZz3ALiCCYDAa+q1Qthl8erkrJ9AfuqtOMdO+XXk7gYofdwWXOTIMXnf24sVzXe4tHzwMR1q2VjlSbCQKRK6Vk8NVp7AKPMMqTjEf0reTKG4uXShvkByUCxIVl681i9+ldfUZp9LdUZ5yiMdvWmmWr5Gpg+gINcYxfOGbZ3TU7RFCTWn0w+GGIb+cubzY2AVyGYsmnpnvlFaruEsFdu0fVu7DGRw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2mHBnoijPfOkMvIkS75PcX00WIHRQNsGV7yWprInEfI=;
+ b=iDMRlQyRVYc+rRV+SRo4ofJ7Vahyxe1b0VZJuxutrCrmue0nGS/U5hWyA6T51Z8+49PPJUh/67gDBLgMdFwejxx3GVOXiKSRkrapHfJeDs4CYLXxZdLZRg+L+mJggquTPrlzLL0uxY0i/EvVF5QPIFMkx16aQdOI7YQwcWSM7ZFYD3JG+5UK59fxt5XfJujW98T3VcsL3bmAX+3EZI43w2pGQQn2OUh5Tz8votgk3JqUmhpmKiQtcdib+/99Oz2HLrJrx2S+jIBuOM3O7VsxvL8vvrX09Z2IZ72DUghc5k6qJtZNhrsC8mE+5HX7BiFb1qUH4VxqEZuc5hO71bjImg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ SJ0PR12MB5502.namprd12.prod.outlook.com (2603:10b6:a03:300::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5676.23; Wed, 5 Oct 2022 20:16:41 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::b07f:53b1:426e:a29d]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::b07f:53b1:426e:a29d%5]) with mapi id 15.20.5676.033; Wed, 5 Oct 2022
+ 20:16:41 +0000
+Message-ID: <1b154a54-381a-a8f6-f0ce-20bce05f27fc@nvidia.com>
+Date:   Wed, 5 Oct 2022 21:16:34 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 2/4] ALSA: hda: Rework snd_hdac_stream_reset() to use
+ macros
+Content-Language: en-US
+To:     =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>, Takashi Iwai <tiwai@suse.de>
+Cc:     alsa-devel@alsa-project.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Mohan Kumar D <mkumard@nvidia.com>
+References: <20220818141517.109280-1-amadeuszx.slawinski@linux.intel.com>
+ <20220818141517.109280-3-amadeuszx.slawinski@linux.intel.com>
+ <657d2418-0c3e-296f-8f4a-dc10ced2dffe@nvidia.com>
+ <87a66av4gk.wl-tiwai@suse.de>
+ <9677f39a-5297-bb1c-d4e3-62484ec1cf25@nvidia.com>
+ <87lepugy85.wl-tiwai@suse.de>
+ <d2772c7b-bea9-e3bd-3b6b-c657566649d8@nvidia.com>
+ <cd3918c8-64c2-fc8f-c184-3fec3ae01e3c@linux.intel.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <cd3918c8-64c2-fc8f-c184-3fec3ae01e3c@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: LO4P123CA0386.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:18f::13) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|SJ0PR12MB5502:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7119c964-8513-4856-1335-08daa70e8429
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rau3+l9cHMPVMNX4qUd8LlRvlw66TUXMr2CvacDqQ/OsaauaimI7ysu8msQ8IDhaBKm/75obCaxz77o+2/M46qH38/Bq2f88ofer/9xvst/su2+LBsLjjLiAzfYGtsa1PBcqH5knyuV51yddNZSpl+Ofq/MPxqJ3ni1htc6IrTCeYr8SaRYtCyeo0XVfvd0Iv8UMRtLRTWePaUkVz3AehhsaY7YHDEhpnLuK7TsUbqfV29Y/Ffuuh9T2OHWGSp75JgwZAf2qTh5OdLekoHylGcuQTu6IJlGTWNUq2hlspsDZDS+pqK0wJeNS5bcVkeZGeoza1pBpNCNJi1Fk2+vynYI1fxx3/M0yPY2Y3otr8sD/dMMXneaF7lis5brcA1aD2kdS4TL9jFT6JsKSzTaEqSgtcB4s7JcsUQ1Gvc6AZSYllDCRWzkXzrH9BbZcq2RgFS8jDntRjmQVeby7QdKNrjyx+kXNIJNVHg4dOzyMCRxsOxwnmdw4BiUkqWdm4iIB4CI2ZNaUoN1dbhFzaEANt+drS9n0MwK6qo4xleTG68fNRu/Kiigckm+40SR79mNq6typ8p5EAvWTcEjV9lQkpDooHDUCcE4ugdQCSsuHz46ghiIuxbPOU8mjqOB1FpMfAWqvLuJPpMOKjF2INhKGAQyxvJiXIQ97rQHyYys9/cYSR+EBjkBHeWS+pYsJM9wwFu2wo5jDD7Csu1Z3swmruf5XC2VnF+kMAdI42FlGY2QZcnNYg8y9npktUmH2i5VnI9HBRO2m9epQndS2QoDaG58EuxeN8U53YeA2aHF19VI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(136003)(376002)(39860400002)(396003)(451199015)(478600001)(6486002)(83380400001)(110136005)(54906003)(31686004)(53546011)(36756003)(41300700001)(6506007)(107886003)(6666004)(8936002)(6512007)(4326008)(8676002)(5660300002)(66476007)(66556008)(66946007)(86362001)(31696002)(2906002)(186003)(2616005)(316002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RnpJWWNYN096UFdwaXdXTDh3RW14Y0VqZjJMNzQ5UzYxS0ExQUI1V3piNmhL?=
+ =?utf-8?B?dkJLYXFXQXZ1R2xhYmF1OG5LelRyWkViVnYxL3pvTnI2RHhhQmdIMkkxTlZ5?=
+ =?utf-8?B?YkxWVGFQZTJXYmQvcWs5QWZLZk1LeFNqN0NtcVJ6Wm1hZ25nbHFnWXVKWk9y?=
+ =?utf-8?B?SmxhdGhCY1FoOWdvZjBCRStwWWJueEtsdExsTGVwbitpUStHc1p1VzVlWnkx?=
+ =?utf-8?B?d2c2Ly9DTnl0K2wzUG4zck05TXRZQW5hQVpNSHNvN2pGVUZ1VEVtSGNTZEZY?=
+ =?utf-8?B?QjVsS0VYMjR2UjRSZGF6SlZ5OE4zSnFKcWQzM2gvSFRrSTNBWHE4clRMT0Nt?=
+ =?utf-8?B?a1gvR01NV2RqL0F0N3BsVTc1VnpvVVh2RjlTQnAxMWc5dFF3LzlCbUFFcmR3?=
+ =?utf-8?B?ZFFSbGpLei92eU01Nzk3SjN5bFViUVlWeUhaSGFjUmxCYk1aV0k0UWc5eTBh?=
+ =?utf-8?B?Mmd3NEpLTGJLbEZCK21lQ3VqZHo5VGF5aUN1cnpYaVA5MXFteVdoVFozSnIz?=
+ =?utf-8?B?REd0OVlDdmdtRmJuMUFPN21LUEVPaEVrak0va1R5Z0JuMEQ3V0xITk82V0hP?=
+ =?utf-8?B?c2NDYlJQK1hGSDZUbGwrSVpyUWZnTGJiUkNSU1BPMTdjNFFyV2wrd0o2cUtn?=
+ =?utf-8?B?VWQ1eVdaZVEzZmtZSTJDRGNEOHViUUZKY1VvVmtRUHIyOHRTNy9kTUpQK0RI?=
+ =?utf-8?B?TDNManJnMWV4MFMzakhFTUMyaHEyYVdKSmRibURXNmxmcWdBdnM4T2lUT2Jp?=
+ =?utf-8?B?K0lNL1JYSEZHRW5QSVFTRlAydHZRYXU3MFBEMkYwMWZxTjNjNC8rRWdsWkJD?=
+ =?utf-8?B?NnV6UTA0aXBvQS9aVW1xVlN1Wkl1cGdyK1U5dkFIcjh2bWsyWkpiTGdhNVZz?=
+ =?utf-8?B?SVJ0akZGVzk3SXVtMU80REY4Y2I0QUpwRkVzSXpYN0Q1ME5RVEpCcU1Vc3Vy?=
+ =?utf-8?B?a01JQmM2d00va1FHS3dsMnlwSjh2Z3dmNE1KZkt6YmlCSTBvN0RkRjVtVXBI?=
+ =?utf-8?B?Z003T084enR3ZUJOWXNpZzdVMnFXWkVROGRUck8wSkw5UG9ad0FnMExGMFRw?=
+ =?utf-8?B?WkxhN3hlelZmUm1vOFJvR1FTZFhqTG16dzVlVU9LWmlsbG1JZG9yRWxFd2hn?=
+ =?utf-8?B?MlNPWDJ1b3o2WVl4bk0zMXhLOW5aZlJXTUw0ZHdmSjl1NFVBNjZ4d0Z6SXB2?=
+ =?utf-8?B?bXRzREVOMGtsYnNYUVdIcEpacU9vek9hNTNLVkJVQWtNVmMzNmxuUDA4TWhp?=
+ =?utf-8?B?Y1kyK3lPTVRXbWRKSUxKVDdkbys5S2lkd0RCTHQ5RHZXbXEzamc1MHZXU2NP?=
+ =?utf-8?B?aEh6ZFE5OVo4N0xDQW1oeUZURlNmWDR5c0ZYUmZpMnJNZzZ5S3p5UUFKc1Ry?=
+ =?utf-8?B?OUN6ci9paldhbVk1SjJrQ21oRXREaWRGSFh2QzE0V1FvUGFtWlVlZU5mVU9N?=
+ =?utf-8?B?NWE5N2dNTk1LblMvUXpMcHF3dG5ZYThIYTdzdXMxSkdoZ1Fuc2JMNjJvRlFH?=
+ =?utf-8?B?dXJ0b3RHN2pmNkM0a0ZLWWlpOVpuVVRoUTdhVlFEdDNjaWptZ0lEWE5mazhx?=
+ =?utf-8?B?VEJSMDZmdXlaVjM5OTQvdTZRcXJUaHRhUFMxWTJEUXlsNm84akY3MGpwVGVh?=
+ =?utf-8?B?UzhTM0ViRUR5YytPOTlvYlJOMzV6S2gxRlo1MGJwQmpnbExveWRreCtSTzBi?=
+ =?utf-8?B?cU1uTDVxNFpva2RSWnhuK1J4K3d2R05KdjlUMkRPWS9yS2hsTFFtNzRXZVlo?=
+ =?utf-8?B?YkNKR0M3bXdJZXVyekQzVi9xQ3RodFVGMSs5WFQ1dVA0RHE2TU5jSXVRdUkz?=
+ =?utf-8?B?WU5rRDFCNWtjaXJnbElqSTFMU2RySjg4aHJjZ1FGYXYvWStSNU1DK0lIanUz?=
+ =?utf-8?B?TTRFNHdMeUdrbFBpMnN0TUUyejdjMlEwS3R0N2ZSQ0VtclZIeTJPVXdlditl?=
+ =?utf-8?B?NlM1R1lVOUVWb3kvWDhPeko3Ty9BeEZmbjFYY1VMVmEzdFlHNHZ4TE1hb0tu?=
+ =?utf-8?B?QUZTY3hHT0hzWXNUeWVnbFNjdlRWcTQ0WkFsVFY2enNaTDF0Wm1Xdk96ckhE?=
+ =?utf-8?B?YTdCelJKbHdhQllaK1hZOU1xRjg3eFppMlFGOEJsZlVBd1Z1YkF0MXpnUVZn?=
+ =?utf-8?B?bTE1KzZJYjgrZkVLVFdlanZtMVZ1UXdmZlQwbW1RdVBaL2pFQW9kcm1oT0tX?=
+ =?utf-8?B?c1JZdEdFZ3ZBb3JhQlVZZUJ6elArRnVwT0w3dHRWeHN3amV0S1p5S3BNTEg0?=
+ =?utf-8?B?UGIwNStTTENTenNmS2JQSmlPYi93PT0=?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7119c964-8513-4856-1335-08daa70e8429
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2022 20:16:41.7979
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vWXo+j/rflmN3OEEH26A+sp46NZY6MJ3C8jSuA5SDMxVXHQilK8Q5LJh+PKw8t6UcNh2MgRlSQPRsqDVNk/2Fg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5502
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create process without mappings and check
 
-	/proc/*/maps
-	/proc/*/numa_maps
-	/proc/*/smaps
-	/proc/*/smaps_rollup
 
-They must be empty (excluding vsyscall page) or full of zeroes.
+On 05/10/2022 15:47, Amadeusz Sławiński wrote:
 
-Retroactively this test should've caught embarassing /proc/*/smaps_rollup
-oops:
+...
 
-[17752.703567] BUG: kernel NULL pointer dereference, address: 0000000000000000
-[17752.703580] #PF: supervisor read access in kernel mode
-[17752.703583] #PF: error_code(0x0000) - not-present page
-[17752.703587] PGD 0 P4D 0
-[17752.703593] Oops: 0000 [#1] PREEMPT SMP PTI
-[17752.703598] CPU: 0 PID: 60649 Comm: cat Tainted: G        W         5.19.9-100.fc35.x86_64 #1
-[17752.703603] Hardware name: To Be Filled By O.E.M. To Be Filled By O.E.M./X99 Extreme6/3.1, BIOS P3.30 08/05/2016
-[17752.703607] RIP: 0010:show_smaps_rollup+0x159/0x2e0
+> Well in worse case we can revert the patch in question, but I would like 
+> to get it working...
+> 
+> Maybe also try to raise timeout to 1000, as what original code called 
+> timeout, was actually number of retries? So 300 * udelay(3) which is 
+> more or less 900us, so we can round it up for test?
+> 
+> I mean, something like:
+> 
+> --- a/sound/hda/hdac_stream.c
+> +++ b/sound/hda/hdac_stream.c
+> @@ -176,7 +176,7 @@ void snd_hdac_stream_reset(struct hdac_stream *azx_dev)
+>          snd_hdac_stream_updateb(azx_dev, SD_CTL, 0, SD_CTL_STREAM_RESET);
+> 
+>          /* wait for hardware to report that the stream entered reset */
+> -       snd_hdac_stream_readb_poll(azx_dev, SD_CTL, val, (val & 
+> SD_CTL_STREAM_RESET), 3, 300);
+> +       snd_hdac_stream_readb_poll(azx_dev, SD_CTL, val, (val & 
+> SD_CTL_STREAM_RESET), 3, 1000);
+> 
+>          if (azx_dev->bus->dma_stop_delay && dma_run_state)
+>                  udelay(azx_dev->bus->dma_stop_delay);
+> @@ -184,7 +184,7 @@ void snd_hdac_stream_reset(struct hdac_stream *azx_dev)
+>          snd_hdac_stream_updateb(azx_dev, SD_CTL, SD_CTL_STREAM_RESET, 0);
+> 
+>          /* wait for hardware to report that the stream is out of reset */
+> -       snd_hdac_stream_readb_poll(azx_dev, SD_CTL, val, !(val & 
+> SD_CTL_STREAM_RESET), 3, 300);
+> +       snd_hdac_stream_readb_poll(azx_dev, SD_CTL, val, !(val & 
+> SD_CTL_STREAM_RESET), 3, 1000);
+> 
+>          /* reset first position - may not be synced with hw at this 
+> time */
+>          if (azx_dev->posbuf)
+> 
+> 
+> in addition to Takashi suggestion?
 
-Note 1:
-	ProtectionKey field in /proc/*/smaps is optional,
-	so check most of its contents, not everything.
 
-Note 2:
-	due to the nature of this test, child process hardly can signal
-	its readiness (after unmapping everything!) to parent.
-	I feel like "sleep(1)" is justified.
-	If you know how to do it without sleep please tell me.
+Thanks. Tried that on top of Takaski's patch but still not working :-(
 
-Note 3:
-	/proc/*/statm is not tested but can be.
+Jon
 
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
----
-
- tools/testing/selftests/proc/.gitignore      |    1 
- tools/testing/selftests/proc/Makefile        |    1 
- tools/testing/selftests/proc/proc-empty-vm.c |  386 +++++++++++++++++++++++++++
- 3 files changed, 388 insertions(+)
-
---- a/tools/testing/selftests/proc/.gitignore
-+++ b/tools/testing/selftests/proc/.gitignore
-@@ -5,6 +5,7 @@
- /proc-fsconfig-hidepid
- /proc-loadavg-001
- /proc-multiple-procfs
-+/proc-empty-vm
- /proc-pid-vm
- /proc-self-map-files-001
- /proc-self-map-files-002
---- a/tools/testing/selftests/proc/Makefile
-+++ b/tools/testing/selftests/proc/Makefile
-@@ -8,6 +8,7 @@ TEST_GEN_PROGS += fd-001-lookup
- TEST_GEN_PROGS += fd-002-posix-eq
- TEST_GEN_PROGS += fd-003-kthread
- TEST_GEN_PROGS += proc-loadavg-001
-+TEST_GEN_PROGS += proc-empty-vm
- TEST_GEN_PROGS += proc-pid-vm
- TEST_GEN_PROGS += proc-self-map-files-001
- TEST_GEN_PROGS += proc-self-map-files-002
-new file mode 100644
---- /dev/null
-+++ b/tools/testing/selftests/proc/proc-empty-vm.c
-@@ -0,0 +1,386 @@
-+/*
-+ * Copyright (c) 2022 Alexey Dobriyan <adobriyan@gmail.com>
-+ *
-+ * Permission to use, copy, modify, and distribute this software for any
-+ * purpose with or without fee is hereby granted, provided that the above
-+ * copyright notice and this permission notice appear in all copies.
-+ *
-+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-+ */
-+/*
-+ * Create a process without mappings by unmapping everything at once and
-+ * holding it with ptrace(2). See what happens to
-+ *
-+ *	/proc/${pid}/maps
-+ *	/proc/${pid}/numa_maps
-+ *	/proc/${pid}/smaps
-+ *	/proc/${pid}/smaps_rollup
-+ */
-+#undef NDEBUG
-+#include <assert.h>
-+#include <errno.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <fcntl.h>
-+#include <sys/mman.h>
-+#include <sys/ptrace.h>
-+#include <sys/resource.h>
-+#include <sys/types.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+
-+/*
-+ * 0: vsyscall VMA doesn't exist	vsyscall=none
-+ * 1: vsyscall VMA is --xp		vsyscall=xonly
-+ * 2: vsyscall VMA is r-xp		vsyscall=emulate
-+ */
-+static int g_vsyscall;
-+static const char *g_proc_pid_maps_vsyscall;
-+static const char *g_proc_pid_smaps_vsyscall;
-+
-+static const char proc_pid_maps_vsyscall_0[] = "";
-+static const char proc_pid_maps_vsyscall_1[] =
-+"ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]\n";
-+static const char proc_pid_maps_vsyscall_2[] =
-+"ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]\n";
-+
-+static const char proc_pid_smaps_vsyscall_0[] = "";
-+
-+static const char proc_pid_smaps_vsyscall_1[] =
-+"ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]\n"
-+"Size:                  4 kB\n"
-+"KernelPageSize:        4 kB\n"
-+"MMUPageSize:           4 kB\n"
-+"Rss:                   0 kB\n"
-+"Pss:                   0 kB\n"
-+"Pss_Dirty:             0 kB\n"
-+"Shared_Clean:          0 kB\n"
-+"Shared_Dirty:          0 kB\n"
-+"Private_Clean:         0 kB\n"
-+"Private_Dirty:         0 kB\n"
-+"Referenced:            0 kB\n"
-+"Anonymous:             0 kB\n"
-+"LazyFree:              0 kB\n"
-+"AnonHugePages:         0 kB\n"
-+"ShmemPmdMapped:        0 kB\n"
-+"FilePmdMapped:         0 kB\n"
-+"Shared_Hugetlb:        0 kB\n"
-+"Private_Hugetlb:       0 kB\n"
-+"Swap:                  0 kB\n"
-+"SwapPss:               0 kB\n"
-+"Locked:                0 kB\n"
-+"THPeligible:    0\n"
-+/*
-+ * "ProtectionKey:" field is conditional. It is possible to check it as well,
-+ * but I don't have such machine.
-+ */
-+;
-+
-+static const char proc_pid_smaps_vsyscall_2[] =
-+"ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]\n"
-+"Size:                  4 kB\n"
-+"KernelPageSize:        4 kB\n"
-+"MMUPageSize:           4 kB\n"
-+"Rss:                   0 kB\n"
-+"Pss:                   0 kB\n"
-+"Pss_Dirty:             0 kB\n"
-+"Shared_Clean:          0 kB\n"
-+"Shared_Dirty:          0 kB\n"
-+"Private_Clean:         0 kB\n"
-+"Private_Dirty:         0 kB\n"
-+"Referenced:            0 kB\n"
-+"Anonymous:             0 kB\n"
-+"LazyFree:              0 kB\n"
-+"AnonHugePages:         0 kB\n"
-+"ShmemPmdMapped:        0 kB\n"
-+"FilePmdMapped:         0 kB\n"
-+"Shared_Hugetlb:        0 kB\n"
-+"Private_Hugetlb:       0 kB\n"
-+"Swap:                  0 kB\n"
-+"SwapPss:               0 kB\n"
-+"Locked:                0 kB\n"
-+"THPeligible:    0\n"
-+/*
-+ * "ProtectionKey:" field is conditional. It is possible to check it as well,
-+ * but I'm too tired.
-+ */
-+;
-+
-+static void sigaction_SIGSEGV(int _, siginfo_t *__, void *___)
-+{
-+	_exit(EXIT_FAILURE);
-+}
-+
-+static void sigaction_SIGSEGV_vsyscall(int _, siginfo_t *__, void *___)
-+{
-+	_exit(g_vsyscall);
-+}
-+
-+/*
-+ * vsyscall page can't be unmapped, probe it directly.
-+ */
-+static void vsyscall(void)
-+{
-+	pid_t pid;
-+	int wstatus;
-+
-+	pid = fork();
-+	if (pid < 0) {
-+		fprintf(stderr, "fork, errno %d\n", errno);
-+		exit(1);
-+	}
-+	if (pid == 0) {
-+		setrlimit(RLIMIT_CORE, &(struct rlimit){});
-+
-+		/* Hide "segfault at ffffffffff600000" messages. */
-+		struct sigaction act = {};
-+		act.sa_flags = SA_SIGINFO;
-+		act.sa_sigaction = sigaction_SIGSEGV_vsyscall;
-+		sigaction(SIGSEGV, &act, NULL);
-+
-+		g_vsyscall = 0;
-+		/* gettimeofday(NULL, NULL); */
-+		asm volatile (
-+			"call %P0"
-+			:
-+			: "i" (0xffffffffff600000), "D" (NULL), "S" (NULL)
-+			: "rax", "rcx", "r11"
-+		);
-+
-+		g_vsyscall = 1;
-+		*(volatile int *)0xffffffffff600000UL;
-+
-+		g_vsyscall = 2;
-+		exit(g_vsyscall);
-+	}
-+	waitpid(pid, &wstatus, 0);
-+	if (WIFEXITED(wstatus)) {
-+		g_vsyscall = WEXITSTATUS(wstatus);
-+	} else {
-+		fprintf(stderr, "error: vsyscall wstatus %08x\n", wstatus);
-+		exit(1);
-+	}
-+}
-+
-+static int test_proc_pid_maps(pid_t pid)
-+{
-+	char buf[4096];
-+	snprintf(buf, sizeof(buf), "/proc/%u/maps", pid);
-+	int fd = open(buf, O_RDONLY);
-+	if (fd == -1) {
-+		perror("open /proc/${pid}/maps");
-+		return EXIT_FAILURE;
-+	} else {
-+		ssize_t rv = read(fd, buf, sizeof(buf));
-+		close(fd);
-+		if (g_vsyscall == 0) {
-+			assert(rv == 0);
-+		} else {
-+			size_t len = strlen(g_proc_pid_maps_vsyscall);
-+			assert(rv == len);
-+			assert(memcmp(buf, g_proc_pid_maps_vsyscall, len) == 0);
-+		}
-+		return EXIT_SUCCESS;
-+	}
-+}
-+
-+static int test_proc_pid_numa_maps(pid_t pid)
-+{
-+	char buf[4096];
-+	snprintf(buf, sizeof(buf), "/proc/%u/numa_maps", pid);
-+	int fd = open(buf, O_RDONLY);
-+	if (fd == -1) {
-+		if (errno == ENOENT) {
-+			/*
-+			 * /proc/${pid}/numa_maps is under CONFIG_NUMA,
-+			 * it doesn't necessarily exist.
-+			 */
-+			return EXIT_SUCCESS;
-+		}
-+		perror("open /proc/${pid}/numa_maps");
-+		return EXIT_FAILURE;
-+	} else {
-+		ssize_t rv = read(fd, buf, sizeof(buf));
-+		close(fd);
-+		assert(rv == 0);
-+		return EXIT_SUCCESS;
-+	}
-+}
-+
-+static int test_proc_pid_smaps(pid_t pid)
-+{
-+	char buf[4096];
-+	snprintf(buf, sizeof(buf), "/proc/%u/smaps", pid);
-+	int fd = open(buf, O_RDONLY);
-+	if (fd == -1) {
-+		if (errno == ENOENT) {
-+			/*
-+			 * /proc/${pid}/smaps is under CONFIG_PROC_PAGE_MONITOR,
-+			 * it doesn't necessarily exist.
-+			 */
-+			return EXIT_SUCCESS;
-+		}
-+		perror("open /proc/${pid}/smaps");
-+		return EXIT_FAILURE;
-+	} else {
-+		ssize_t rv = read(fd, buf, sizeof(buf));
-+		close(fd);
-+		if (g_vsyscall == 0) {
-+			assert(rv == 0);
-+		} else {
-+			size_t len = strlen(g_proc_pid_maps_vsyscall);
-+			/* TODO "ProtectionKey:" */
-+			assert(rv > len);
-+			assert(memcmp(buf, g_proc_pid_maps_vsyscall, len) == 0);
-+		}
-+		return EXIT_SUCCESS;
-+	}
-+}
-+
-+static const char g_smaps_rollup[] =
-+"00000000-00000000 ---p 00000000 00:00 0                                  [rollup]\n"
-+"Rss:                   0 kB\n"
-+"Pss:                   0 kB\n"
-+"Pss_Dirty:             0 kB\n"
-+"Pss_Anon:              0 kB\n"
-+"Pss_File:              0 kB\n"
-+"Pss_Shmem:             0 kB\n"
-+"Shared_Clean:          0 kB\n"
-+"Shared_Dirty:          0 kB\n"
-+"Private_Clean:         0 kB\n"
-+"Private_Dirty:         0 kB\n"
-+"Referenced:            0 kB\n"
-+"Anonymous:             0 kB\n"
-+"LazyFree:              0 kB\n"
-+"AnonHugePages:         0 kB\n"
-+"ShmemPmdMapped:        0 kB\n"
-+"FilePmdMapped:         0 kB\n"
-+"Shared_Hugetlb:        0 kB\n"
-+"Private_Hugetlb:       0 kB\n"
-+"Swap:                  0 kB\n"
-+"SwapPss:               0 kB\n"
-+"Locked:                0 kB\n"
-+;
-+
-+static int test_proc_pid_smaps_rollup(pid_t pid)
-+{
-+	char buf[4096];
-+	snprintf(buf, sizeof(buf), "/proc/%u/smaps_rollup", pid);
-+	int fd = open(buf, O_RDONLY);
-+	if (fd == -1) {
-+		if (errno == ENOENT) {
-+			/*
-+			 * /proc/${pid}/smaps_rollup is under CONFIG_PROC_PAGE_MONITOR,
-+			 * it doesn't necessarily exist.
-+			 */
-+			return EXIT_SUCCESS;
-+		}
-+		perror("open /proc/${pid}/smaps_rollup");
-+		return EXIT_FAILURE;
-+	} else {
-+		ssize_t rv = read(fd, buf, sizeof(buf));
-+		close(fd);
-+		assert(rv == sizeof(g_smaps_rollup) - 1);
-+		assert(memcmp(buf, g_smaps_rollup, sizeof(g_smaps_rollup) - 1) == 0);
-+		return EXIT_SUCCESS;
-+	}
-+}
-+
-+int main(void)
-+{
-+	int rv = EXIT_SUCCESS;
-+
-+	vsyscall();
-+
-+	switch (g_vsyscall) {
-+	case 0:
-+		g_proc_pid_maps_vsyscall  = proc_pid_maps_vsyscall_0;
-+		g_proc_pid_smaps_vsyscall = proc_pid_smaps_vsyscall_0;
-+		break;
-+	case 1:
-+		g_proc_pid_maps_vsyscall  = proc_pid_maps_vsyscall_1;
-+		g_proc_pid_smaps_vsyscall = proc_pid_smaps_vsyscall_1;
-+		break;
-+	case 2:
-+		g_proc_pid_maps_vsyscall  = proc_pid_maps_vsyscall_2;
-+		g_proc_pid_smaps_vsyscall = proc_pid_smaps_vsyscall_2;
-+		break;
-+	default:
-+		abort();
-+	}
-+
-+	pid_t pid = fork();
-+	if (pid == -1) {
-+		perror("fork");
-+		return EXIT_FAILURE;
-+	} else if (pid == 0) {
-+		rv = ptrace(PTRACE_TRACEME, 0, NULL, NULL);
-+		if (rv != 0) {
-+			if (errno == EPERM) {
-+				fprintf(stderr,
-+"Did you know? ptrace(PTRACE_TRACEME) doesn't work under strace.\n"
-+				);
-+				kill(getppid(), SIGTERM);
-+				return EXIT_FAILURE;
-+			}
-+			perror("ptrace PTRACE_TRACEME");
-+			return EXIT_FAILURE;
-+		}
-+
-+		/*
-+		 * Hide "segfault at ..." messages. Signal handler won't run.
-+		 */
-+		struct sigaction act = {};
-+		act.sa_flags = SA_SIGINFO;
-+		act.sa_sigaction = sigaction_SIGSEGV;
-+		sigaction(SIGSEGV, &act, NULL);
-+
-+#ifdef __amd64__
-+		munmap(NULL, ((size_t)1 << 47) - 4096);
-+#else
-+#error "implement 'unmap everything'"
-+#endif
-+		return EXIT_FAILURE;
-+	} else {
-+		/*
-+		 * TODO find reliable way to signal parent that munmap(2) completed.
-+		 * Child can't do it directly because it effectively doesn't exist
-+		 * anymore. Looking at child's VM files isn't 100% reliable either:
-+		 * due to a bug they may not become empty or empty-like.
-+		 */
-+		sleep(1);
-+
-+		if (rv == EXIT_SUCCESS) {
-+			rv = test_proc_pid_maps(pid);
-+		}
-+		if (rv == EXIT_SUCCESS) {
-+			rv = test_proc_pid_numa_maps(pid);
-+		}
-+		if (rv == EXIT_SUCCESS) {
-+			rv = test_proc_pid_smaps(pid);
-+		}
-+		if (rv == EXIT_SUCCESS) {
-+			rv = test_proc_pid_smaps_rollup(pid);
-+		}
-+		/*
-+		 * TODO test /proc/${pid}/statm, task_statm()
-+		 * ->start_code, ->end_code aren't updated by munmap().
-+		 * Output can be "0 0 0 2 0 0 0\n" where "2" can be anything.
-+		 */
-+
-+		/* Cut the rope. */
-+		int wstatus;
-+		waitpid(pid, &wstatus, 0);
-+		assert(WIFSTOPPED(wstatus));
-+		assert(WSTOPSIG(wstatus) == SIGSEGV);
-+	}
-+
-+	return rv;
-+}
+-- 
+nvpublic
