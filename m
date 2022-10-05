@@ -2,115 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F475F5B55
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 23:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 454A85F5B57
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 23:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbiJEVAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 17:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
+        id S230358AbiJEVAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 17:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiJEVAd (ORCPT
+        with ESMTP id S230383AbiJEVAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 17:00:33 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F7A80F5E;
-        Wed,  5 Oct 2022 14:00:32 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id A8DAA58042F;
-        Wed,  5 Oct 2022 17:00:29 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Wed, 05 Oct 2022 17:00:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1665003629; x=1665007229; bh=TsI02B3sVh
-        QFKOVk9keaf6ReQTAWUpnqUMBU0gDCsKo=; b=ZfXYeIiQfqotQD9UYVd1ADllex
-        ZcKI/ME+E8BnDEeC7Uyk0EfebWGcsqBgfUwspGkHnUYF/5yqAmHMWbmDFnfEOqSl
-        Af2L5RjStJdNCf16q9UC/sXQ3Z45+wV0IniaMQaj14s1KxRlR/yej+tdp5Cxkre6
-        JmenQyIcjlLYjczhbeEOflo2DxRCIehNXukUDSklJQSwkNt9QpdjxUnEHSl/PigD
-        W3urFP4w/03Szc8AIyLlnye0c2gPRv8Rqzx6NmSKcpO98VT9+gvNbEGzqqVsVAKB
-        tIR/55XxKHTlzanIxwooyWcaqYgAMqwQHvPv1k8PmmGyvVsS/GHYTSD+Decw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1665003629; x=1665007229; bh=TsI02B3sVhQFKOVk9keaf6ReQTAW
-        UpnqUMBU0gDCsKo=; b=LUSBUNMySfpRFCaT3bDv2jAXpEbZTjVcfi/fzv/VOWTy
-        sy/lpl/u07TOPIHmvqOnQuuuaKqvu43M5WLlMSpSomYPnzbIAgpEZ4d2D9wdTQSk
-        Cwy/9jq6L4ICcHDEIiu6Dy1YdIJWwGIkAGicFOnSvb/GfXqxzoaBKTG8FDIJedHI
-        YRC21dnKN8H8iiCMm3/CiRD4C5jAk4UqPLg7ilF11mQnRWQ6Lpoe30Fkyg4JyO/K
-        Uh49Nx0qGQnyB3KMLzs9usanQ9uuu6lafuSIgVtiBjoRrGtf1xJvY2PGWJaaRYbG
-        plgELycl+0Fki2ZtrarjXlDlyai45qpp74otDle/1A==
-X-ME-Sender: <xms:bfA9Y4Qq_ZIUQVd0D3cL8GaCDgUHL2g1Q_do6apVEhaqjRSc7vQZnQ>
-    <xme:bfA9Y1zOo_tkDKWyF34r8IStGqzMptvQ79hA-qAyCkctdlE3Vl1n2yNBlbI_tTnCW
-    BgYgHVqjPfbw7cOESI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeifedgudehhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:bfA9Y13dVUzq07ASpYteds6eLmf-QmwR9DyTcezfVFbnS0Db8bx2oA>
-    <xmx:bfA9Y8A6EKLT0u8H91K1DTIB5r8DqIl8JvSmDTiZN0HHpt7YzhYoeA>
-    <xmx:bfA9YxhI9XpXul5uNYfPWMYaFv_3fts3JadyysFm8BHu6h2EgyGUbQ>
-    <xmx:bfA9Y5inTSB5K1uuyplw4g7smGzUgTpVZj-6Rz9aWbW_qOeXW0SrXQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 27340B60089; Wed,  5 Oct 2022 17:00:29 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
-Mime-Version: 1.0
-Message-Id: <9527fd97-41d1-4f68-aa9e-8a4424fa94f1@app.fastmail.com>
-In-Reply-To: <DM4PR84MB19274B41DEE65D882D4C8F27885D9@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
-References: <20220728161459.7738-1-nick.hawkins@hpe.com>
- <20220728161459.7738-4-nick.hawkins@hpe.com>
- <DM4PR84MB19274B41DEE65D882D4C8F27885D9@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
-Date:   Wed, 05 Oct 2022 23:00:07 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
-        "Mark Brown" <broonie@kernel.org>
-Cc:     "Rob Herring" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v6 3/5] ARM: dts: hpe: Add spi driver node
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 5 Oct 2022 17:00:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E491980F6A
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 14:00:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665003636;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bxjNtwOtJYr7Ap1Thb18UVXDvZENMtx4lxtXJfDuLn8=;
+        b=eT/5nypuPOomML8eZjpp44Wr7DcIVCd/9dK6375Kyevndf/0Uf1e4nJer8ynHn6lO9DlB5
+        DQ9h4SDfL/OIsm+mJH/GVrpAdBJzNnOVNQvFvMm4VU7QdLgSBIXPDLzl7dllGY6UTN3XGm
+        sYWVc1oOY2WRb7oxLcL1qf00WpNbK+Y=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-590-HY1VU5cnNIu0f3tJ_ZgdDg-1; Wed, 05 Oct 2022 17:00:34 -0400
+X-MC-Unique: HY1VU5cnNIu0f3tJ_ZgdDg-1
+Received: by mail-qk1-f197.google.com with SMTP id h8-20020a05620a284800b006b5c98f09fbso15384740qkp.21
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 14:00:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=bxjNtwOtJYr7Ap1Thb18UVXDvZENMtx4lxtXJfDuLn8=;
+        b=AawryY/xYv/v7BwVrNKbF3a3OP03hZ+2oqyBAUvQKbII5E2uoZ2EPnas/UBVrtXmm7
+         JiNT1990vXJFFgGZphTmmbb7xF1SZDiQa9AL1MsSzk3qO1JtiDuQW0MjUm1Qp0QuO2/E
+         qAS0K1eOmvJHXLxvA9+I4yerJFhgyNgZVKYz+z6+PhDXQFWFYVBxO22BDRy9iRyN7N+O
+         8zd24KaPZ6hk6uJ9/JFNvlmyUY4OSEIdOnJ/Mu3ptRaAAlOlom1HDvbSIC8guotqN4I+
+         +rWoYnwcQ02LiVgtv8FryjLRwg5FIK0uqiDHHgSmDctXOivhtp/A02D8OyYNDwWOf1kv
+         SA8Q==
+X-Gm-Message-State: ACrzQf2COvlfDuKl3JnEV7lsixCRYZKD/TUHqaa4GwgexfuWuCaQgrj+
+        /1zO09YE4H7e98LuhDE8odc8RQyr4332vEeCR7Dx01OgWMumiNDzGLTbceVs/1e7hz1jYUD/qWc
+        YE10Kv5idFV62ritxAfjwYwJ1
+X-Received: by 2002:a05:620a:22db:b0:6ce:4e82:5cc7 with SMTP id o27-20020a05620a22db00b006ce4e825cc7mr1023716qki.29.1665003634517;
+        Wed, 05 Oct 2022 14:00:34 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6WRvK3gEOhihmoFanKnOif3yzMLKCR7MYDIPihW7KP3HSKBLvonz45HUyg9WkbjDcr0jqQog==
+X-Received: by 2002:a05:620a:22db:b0:6ce:4e82:5cc7 with SMTP id o27-20020a05620a22db00b006ce4e825cc7mr1023685qki.29.1665003634222;
+        Wed, 05 Oct 2022 14:00:34 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id i25-20020ac84899000000b0039351b26714sm876918qtq.7.2022.10.05.14.00.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 14:00:33 -0700 (PDT)
+Date:   Wed, 5 Oct 2022 17:00:32 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v1 6/7] mm/ksm: convert break_ksm() to use
+ walk_page_range_vma()
+Message-ID: <Yz3wcDZPFvKBmnet@x1n>
+References: <20220930141931.174362-1-david@redhat.com>
+ <20220930141931.174362-7-david@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220930141931.174362-7-david@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 5, 2022, at 10:33 PM, Hawkins, Nick wrote:
->
-> Was there a particular issue with this patch? I just realized that 
-> patches 1,2, and 5 were accepted but not 3 or 4.
+On Fri, Sep 30, 2022 at 04:19:30PM +0200, David Hildenbrand wrote:
+> FOLL_MIGRATION exists only for the purpose of break_ksm(), and
+> actually, there is not even the need to wait for the migration to
+> finish, we only want to know if we're dealing with a KSM page.
+> 
+> Using follow_page() just to identify a KSM page overcomplicates GUP
+> code. Let's use walk_page_range_vma() instead, because we don't actually
+> care about the page itself, we only need to know a single property --
+> no need to even grab a reference on the page.
+> 
+> In my setup (AMD Ryzen 9 3900X), running the KSM selftest to test unmerge
+> performance on 2 GiB (taskset 0x8 ./ksm_tests -D -s 2048), this results in
+> a performance degradation of ~4% (old: ~5010 MiB/s, new: ~4800 MiB/s).
+> I don't think we particularly care for now.
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-It looks like you sent the patch to a lot of people, without addressing
-anyone in particular. I certainly did not expect to pick it up like this.
+[...]
 
-When you resend the missing patches after 6.1-rc1, please send the
-ones you want to be merged through the soc tree to:soc@kernel.org,
-with reviewers and mailing lists on Cc, but nobody else as the
-recipient.
+> +int break_ksm_pud_entry(pud_t *pud, unsigned long addr, unsigned long next,
+> +			struct mm_walk *walk)
+> +{
+> +	/* We only care about page tables to walk to a single base page. */
+> +	if (pud_leaf(*pud) || !pud_present(*pud))
+> +		return 1;
+> +	return 0;
+> +}
 
-For the SoC tree, I usually have separate branches for code
-changes (usually just Kconfig and MAINTAINERS entries in case of
-arm64), devicetree changes, defconfig changes and driver (typically
-drivers/soc, but could be others that have no separate subsystem
-maintainers), so ideally you send a set of patches or a pull request
-for each such topic branch.
+Is this needed?  I thought the pgtable walker handlers this already.
 
-      Arnd
+[...]
+
+>  static int break_ksm(struct vm_area_struct *vma, unsigned long addr)
+>  {
+> -	struct page *page;
+>  	vm_fault_t ret = 0;
+>  
+> +	if (WARN_ON_ONCE(!IS_ALIGNED(addr, PAGE_SIZE)))
+> +		return -EINVAL;
+> +
+>  	do {
+>  		bool ksm_page = false;
+>  
+>  		cond_resched();
+> -		page = follow_page(vma, addr,
+> -				FOLL_GET | FOLL_MIGRATION | FOLL_REMOTE);
+> -		if (IS_ERR_OR_NULL(page))
+> -			break;
+> -		if (PageKsm(page))
+> -			ksm_page = true;
+> -		put_page(page);
+> +		ret = walk_page_range_vma(vma, addr, addr + PAGE_SIZE,
+> +					  &break_ksm_ops, &ksm_page);
+> +		if (WARN_ON_ONCE(ret < 0))
+> +			return ret;
+
+I'm not sure this would be worth it, especially with a 4% degrade.  The
+next patch will be able to bring 50- LOC, but this patch does 60+ anyway,
+based on another new helper just introduced...
+
+I just don't see whether there's strong enough reason to do so to drop
+FOLL_MIGRATE.  It's different to the previous VM_FAULT_WRITE refactor
+because of the unshare approach was much of a good reasoning to me.
+
+Perhaps I missed something?
+
+-- 
+Peter Xu
+
