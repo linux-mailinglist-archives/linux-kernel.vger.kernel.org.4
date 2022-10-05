@@ -2,82 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C509C5F51E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E51C15F51E9
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiJEJkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 05:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55546 "EHLO
+        id S229722AbiJEJoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 05:44:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbiJEJkf (ORCPT
+        with ESMTP id S229472AbiJEJoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 05:40:35 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B511D674;
-        Wed,  5 Oct 2022 02:40:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qfdlG7TuUH6DQ07dKCl1Vium/3gxszLw48q2k2MlonM=; b=VgaDIOUiLJ7Bk+v1TK1YwDdylq
-        HbZHde6uT0sXYBvO5ZYngOhfMFPLC/xl2axGQ83oPwnzXkVlhV/Ik1c/ILK6aZThbMeq7q2J5B/Xz
-        m3gB3KuEPd2YrPQIbsqZ62RBvlcK4lfpd5lLbNPaVX0Egx1VZyeKSZWtKRslGCD3FaJ8tajwFSMZu
-        ROCra382vLhU0ruPOd6rYM63HoPM+rpYvFg/kgvQx4OEvP0HYUe+QlJcPiKSWLwHjPeEkaeRlue7D
-        wPtMyGPV7PL/TAxnPOgf278iRMZoQ1b2qz20mXvDVQEJGtKkR76GILsyWs69lCq0jOyn+f6fsaDjJ
-        iyXxG6NA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1og0sQ-000vaG-Qb; Wed, 05 Oct 2022 09:39:43 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E493230007E;
-        Wed,  5 Oct 2022 11:39:40 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C9B5F29982713; Wed,  5 Oct 2022 11:39:40 +0200 (CEST)
-Date:   Wed, 5 Oct 2022 11:39:40 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Subject: Re: [PATCH v2 07/39] x86/cet: Add user control-protection fault
- handler
-Message-ID: <Yz1Q3EGtvZBKNR31@hirez.programming.kicks-ass.net>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-8-rick.p.edgecombe@intel.com>
+        Wed, 5 Oct 2022 05:44:11 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0B828E24;
+        Wed,  5 Oct 2022 02:44:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664963050; x=1696499050;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=IG4eeVo0o0ZX8usM5+UZ5ju6UZk+OfIU4VkFCt8UokQ=;
+  b=Qq/nA1bDuL2ewBO9qQYxrMvi1CaD8ISZ2C4p16F73zEQS5Ssz0wEM8cf
+   k++ciVzmIvMoPvaqOJKCa16y/dCf/qPCUZnsdMcOYaZzYz48nI3xzrFgE
+   h0fcm9ed34nET7FqgbedAzO+rijTtTVOZG9a2w7ImipQZ6yTKUl9EJN3l
+   MEXaHjeXNZ3DJcSh17m4plcfR3QYLjsqC3m1SUzwCaMZ68UsgykV8ktER
+   S8xmw9GJzCitArWtQQ2f8LG/RmAlRqL7Dv+fBns0srhz5Chof+lXREPRj
+   adVNLpg6/42cz7BB24EKlNOz41hczCRiFMn577YVvGE0ybdM4TS7D25Ra
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="303097975"
+X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
+   d="scan'208";a="303097975"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 02:44:09 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="624259828"
+X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
+   d="scan'208";a="624259828"
+Received: from mtantera-mobl3.ger.corp.intel.com (HELO refaase-MOBL1.ger.corp.intel.com) ([10.252.39.164])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 02:44:04 -0700
+Date:   Wed, 5 Oct 2022 12:43:44 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Kumaravel.Thiagarajan@microchip.com
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, andy.shevchenko@gmail.com,
+        u.kleine-koenig@pengutronix.de, johan@kernel.org,
+        wander@redhat.com, etremblay@distech-controls.com,
+        macro@orcam.me.uk, geert+renesas@glider.be, jk@ozlabs.org,
+        phil.edworthy@renesas.com, Lukas Wunner <lukas@wunner.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        UNGLinuxDriver@microchip.com
+Subject: RE: [PATCH v2 tty-next 2/3] 8250: microchip: pci1xxxx: Add rs485
+ support to quad-uart driver.
+In-Reply-To: <BN8PR11MB3668B169D079C3F9D1C3BB72E95A9@BN8PR11MB3668.namprd11.prod.outlook.com>
+Message-ID: <10e3e06c-10b2-1e65-2f4-32a5f0965c8@linux.intel.com>
+References: <20221001061507.3508603-1-kumaravel.thiagarajan@microchip.com> <20221001061507.3508603-3-kumaravel.thiagarajan@microchip.com> <d184aa6d-23e-edf6-4cee-f5f4ad6bf90@linux.intel.com>
+ <BN8PR11MB3668B169D079C3F9D1C3BB72E95A9@BN8PR11MB3668.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-8-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: multipart/mixed; boundary="8323329-2055571603-1664963048=:1580"
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,129 +67,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:04PM -0700, Rick Edgecombe wrote:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-> index d62b2cb85cea..b7dde8730236 100644
-> --- a/arch/x86/kernel/traps.c
-> +++ b/arch/x86/kernel/traps.c
+--8323329-2055571603-1664963048=:1580
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 
-> @@ -229,16 +223,74 @@ enum cp_error_code {
->  	CP_ENCL	     = 1 << 15,
->  };
->  
-> -DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
-> +#ifdef CONFIG_X86_SHADOW_STACK
-> +static const char * const control_protection_err[] = {
-> +	"unknown",
-> +	"near-ret",
-> +	"far-ret/iret",
-> +	"endbranch",
-> +	"rstorssp",
-> +	"setssbsy",
-> +};
-> +
-> +static DEFINE_RATELIMIT_STATE(cpf_rate, DEFAULT_RATELIMIT_INTERVAL,
-> +			      DEFAULT_RATELIMIT_BURST);
-> +
-> +static void do_user_control_protection_fault(struct pt_regs *regs,
-> +					     unsigned long error_code)
->  {
-> -	if (!cpu_feature_enabled(X86_FEATURE_IBT)) {
-> -		pr_err("Unexpected #CP\n");
-> -		BUG();
-> +	struct task_struct *tsk;
-> +	unsigned long ssp;
-> +
-> +	/* Read SSP before enabling interrupts. */
-> +	rdmsrl(MSR_IA32_PL3_SSP, ssp);
-> +
-> +	cond_local_irq_enable(regs);
-> +
-> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
-> +		WARN_ONCE(1, "User-mode control protection fault with shadow support disabled\n");
-> +
-> +	tsk = current;
-> +	tsk->thread.error_code = error_code;
-> +	tsk->thread.trap_nr = X86_TRAP_CP;
-> +
-> +	/* Ratelimit to prevent log spamming. */
-> +	if (show_unhandled_signals && unhandled_signal(tsk, SIGSEGV) &&
-> +	    __ratelimit(&cpf_rate)) {
-> +		unsigned int cpec;
-> +
-> +		cpec = error_code & CP_EC;
-> +		if (cpec >= ARRAY_SIZE(control_protection_err))
-> +			cpec = 0;
-> +
-> +		pr_emerg("%s[%d] control protection ip:%lx sp:%lx ssp:%lx error:%lx(%s)%s",
-> +			 tsk->comm, task_pid_nr(tsk),
-> +			 regs->ip, regs->sp, ssp, error_code,
-> +			 control_protection_err[cpec],
-> +			 error_code & CP_ENCL ? " in enclave" : "");
-> +		print_vma_addr(KERN_CONT " in ", regs->ip);
-> +		pr_cont("\n");
->  	}
->  
-> -	if (WARN_ON_ONCE(user_mode(regs) || (error_code & CP_EC) != CP_ENDBR))
-> -		return;
+On Tue, 4 Oct 2022, Kumaravel.Thiagarajan@microchip.com wrote:
 
-Why are you removing the (error_code & CP_EC) != CP_ENDBR check from the
-kernel handler?
+> > -----Original Message-----
+> > From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > Sent: Monday, October 3, 2022 2:51 PM
+> > To: Kumaravel Thiagarajan - I21417 <Kumaravel.Thiagarajan@microchip.com>
+> > Subject: Re: [PATCH v2 tty-next 2/3] 8250: microchip: pci1xxxx: Add rs485
+> > support to quad-uart driver.
+> > 
+> > On Sat, 1 Oct 2022, Kumaravel Thiagarajan wrote:
+> > 
+> > > pci1xxxx uart supports rs485 mode of operation in the hardware with
+> > > auto-direction control with configurable delay for releasing RTS after
+> > > the transmission. This patch adds support for the rs485 mode.
+> > >
+> > > Signed-off-by: Kumaravel Thiagarajan
+> > > <kumaravel.thiagarajan@microchip.com>
+> > > ---
+> > > Changes in v2:
+> > > - move pci1xxxx_rs485_config to a separate patch with
+> > >   pci1xxxx_rs485_supported.
+> > > ---
+> > >  drivers/tty/serial/8250/8250_pci1xxxx.c | 57
+> > > +++++++++++++++++++++++++
+> > >  1 file changed, 57 insertions(+)
+> > >
+> > > diff --git a/drivers/tty/serial/8250/8250_pci1xxxx.c
+> > > b/drivers/tty/serial/8250/8250_pci1xxxx.c
+> > > index 41a4b94f52b4..999e5a284266 100644
+> > > --- a/drivers/tty/serial/8250/8250_pci1xxxx.c
+> > > +++ b/drivers/tty/serial/8250/8250_pci1xxxx.c
+> > > +
+> > > +             if (rs485->delay_rts_after_send) {
+> > > +                     baud_period_in_ns = ((clock_div >> 8) * 16);
+> > 
+> > Is this 16 perhaps UART_BIT_SAMPLE_CNT?
+> Yes. Is there any macro definition for that? I could not find any 
+> definition in the above name. 
 
-> +	force_sig_fault(SIGSEGV, SEGV_CPERR, (void __user *)0);
-> +	cond_local_irq_disable(regs);
-> +}
-> +#else
-> +static void do_user_control_protection_fault(struct pt_regs *regs,
-> +					     unsigned long error_code)
-> +{
-> +	WARN_ONCE(1, "User-mode control protection fault with shadow support disabled\n");
-> +}
-> +#endif
-> +
-> +#ifdef CONFIG_X86_KERNEL_IBT
-> +
-> +static __ro_after_init bool ibt_fatal = true;
-> +
-> +extern void ibt_selftest_ip(void); /* code label defined in asm below */
->  
-> +static void do_kernel_control_protection_fault(struct pt_regs *regs)
-> +{
->  	if (unlikely(regs->ip == (unsigned long)&ibt_selftest_ip)) {
->  		regs->ax = 0;
->  		return;
-> @@ -283,9 +335,29 @@ static int __init ibt_setup(char *str)
->  }
->  
->  __setup("ibt=", ibt_setup);
-> -
-> +#else
-> +static void do_kernel_control_protection_fault(struct pt_regs *regs)
-> +{
-> +	WARN_ONCE(1, "Kernel-mode control protection fault with IBT disabled\n");
-> +}
->  #endif /* CONFIG_X86_KERNEL_IBT */
->  
-> +#if defined(CONFIG_X86_KERNEL_IBT) || defined(CONFIG_X86_SHADOW_STACK)
-> +DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
-> +{
-> +	if (!cpu_feature_enabled(X86_FEATURE_IBT) &&
-> +	    !cpu_feature_enabled(X86_FEATURE_SHSTK)) {
-> +		pr_err("Unexpected #CP\n");
-> +		BUG();
-> +	}
-> +
-> +	if (user_mode(regs))
-> +		do_user_control_protection_fault(regs, error_code);
-> +	else
-> +		do_kernel_control_protection_fault(regs);
+You're adding it in your 1/3 patch :-).
 
-These function names are weirdly long, surely they can do without the
-_fault part at the very least. And as stated above, I would really like
-the kernel thing to retain the error_code argument.
+-- 
+ i.
 
-> +}
-> +#endif /* defined(CONFIG_X86_KERNEL_IBT) || defined(CONFIG_X86_SHADOW_STACK) */
-
-
+--8323329-2055571603-1664963048=:1580--
