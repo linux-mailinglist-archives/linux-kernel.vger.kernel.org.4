@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6684C5F4FB7
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 08:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD2305F4FBE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 08:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiJEGVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 02:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45046 "EHLO
+        id S229463AbiJEGXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 02:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiJEGVS (ORCPT
+        with ESMTP id S229445AbiJEGXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 02:21:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA7E53D30;
-        Tue,  4 Oct 2022 23:21:17 -0700 (PDT)
+        Wed, 5 Oct 2022 02:23:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5368E74B94;
+        Tue,  4 Oct 2022 23:23:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90761B81C77;
-        Wed,  5 Oct 2022 06:21:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3169C433D6;
-        Wed,  5 Oct 2022 06:21:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93765B81C48;
+        Wed,  5 Oct 2022 06:23:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2592C433D6;
+        Wed,  5 Oct 2022 06:23:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664950875;
-        bh=Kq4gcz5R4LOlRKyPItd/K64WIZHUieGWE3R5FkDlrGg=;
+        s=korg; t=1664950981;
+        bh=VAMnvAJnxm6F8Ulg+VAsWUC9n6NdVJkfOZIQb8NsMls=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=og9RHtmP5t3S1cEYgFdc1xyqBNaV93o+0U+YJvmhFVZ1ogFpv5WIotSMFPI2uqkcg
-         zFdUD6fNJ/FLRDM7XsFAfPn2SJczVszTDdl0BHGZ21VObYguokTEx9Mm2cv93cMGim
-         8BCE9bImULVzqHLV0+5ad/lH7tHBvwxVJ4YZ9LQo=
-Date:   Wed, 5 Oct 2022 08:21:55 +0200
+        b=MxbFswYIkHI12aX0RqMUk6N7FZJy+2SlU9+anc7VpwXqL/3THUUJ6kU0qTx2tHIzO
+         VWsjK/qg9syow8a3M0y1/ZleQ1RxkguAiN1W+ZsSM4gBMa9RDYPI0Kno4/sfr3VReD
+         86r0BzUimvI/00N0OkNsHPWrFZUzrHQKdDJxtFkw=
+Date:   Wed, 5 Oct 2022 08:23:41 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Elliot Berman <quic_eberman@quicinc.com>
 Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
@@ -53,17 +53,16 @@ Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
         Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 13/14] gunyah: rsc_mgr: Add auxiliary devices for
- console
-Message-ID: <Yz0ig/Dnp4ovHjeN@kroah.com>
+Subject: Re: [PATCH v4 06/14] virt: gunyah: Add sysfs nodes
+Message-ID: <Yz0i7VNc4oK58yh9@kroah.com>
 References: <20220928195633.2348848-1-quic_eberman@quicinc.com>
- <20220928195633.2348848-14-quic_eberman@quicinc.com>
- <Yzbev2mZodsZhFY3@kroah.com>
- <1db27cda-356e-bae2-3c6a-b7916123a269@quicinc.com>
+ <20220928195633.2348848-7-quic_eberman@quicinc.com>
+ <Yzbcd0r768pRgRMr@kroah.com>
+ <2a8c1752-818d-bf19-5a3a-095b969c5c5a@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1db27cda-356e-bae2-3c6a-b7916123a269@quicinc.com>
+In-Reply-To: <2a8c1752-818d-bf19-5a3a-095b969c5c5a@quicinc.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -73,37 +72,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 04:49:27PM -0700, Elliot Berman wrote:
-> On 9/30/2022 5:19 AM, Greg Kroah-Hartman wrote:
-> > On Wed, Sep 28, 2022 at 12:56:32PM -0700, Elliot Berman wrote:
-> > > Gunyah resource manager exposes a concrete functionalities which
-> > > complicate a single resource manager driver.
+On Tue, Oct 04, 2022 at 04:50:51PM -0700, Elliot Berman wrote:
+> 
+> 
+> On 9/30/2022 5:09 AM, Greg Kroah-Hartman wrote:
+> > On Wed, Sep 28, 2022 at 12:56:25PM -0700, Elliot Berman wrote:
+> > > Add /sys/hypervisor support when detecting that Linux is running in a
+> > > Gunyah environment. Export the version of Gunyah which is reported via
+> > > the hyp_identify hypercall.
+> > > 
+> > > Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> > > ---
+> > >   .../ABI/testing/sysfs-hypervisor-gunyah       | 15 ++++
+> > >   MAINTAINERS                                   |  1 +
+> > >   drivers/virt/Makefile                         |  1 +
+> > >   drivers/virt/gunyah/Makefile                  |  2 +
+> > >   drivers/virt/gunyah/sysfs.c                   | 71 +++++++++++++++++++
+> > >   5 files changed, 90 insertions(+)
+> > >   create mode 100644 Documentation/ABI/testing/sysfs-hypervisor-gunyah
+> > >   create mode 100644 drivers/virt/gunyah/Makefile
+> > >   create mode 100644 drivers/virt/gunyah/sysfs.c
+> > > 
+> > > diff --git a/Documentation/ABI/testing/sysfs-hypervisor-gunyah b/Documentation/ABI/testing/sysfs-hypervisor-gunyah
+> > > new file mode 100644
+> > > index 000000000000..7d74e74e9edd
+> > > --- /dev/null
+> > > +++ b/Documentation/ABI/testing/sysfs-hypervisor-gunyah
+> > > @@ -0,0 +1,15 @@
+> > > +What:		/sys/hypervisor/gunyah/api
+> > > +Date:		October 2022
+> > > +KernelVersion:	6.1
+> > > +Contact:	linux-arm-msm@vger.kernel.org
+> > > +Description:	If running under Gunyah:
+> > > +		The Gunyah API version.
 > > 
-> > I am sorry, but I do not understand this sentance.  What is so
-> > complicated about individual devices being created?  Where are they
-> > created?  What bus?
+> > What does this version mean?  What format is it in?
+> > 
 > 
-> There's no complexity here with using individual devices, that's why I
-> wanted to create secondary (auxiliary devices).
+> The version is incremented on backwards-incompatible API changes. It's an
+> integer: I've updated the description to mention it's an integer. FYI -- we
+> are still currently at "1" and not aiming to increment this number. I'd like
+> to get it reported in sysfs in case the version is incremented later.
+
+If you change it in the future to be backwards incompatible, then you
+have to change your kernel code anyway and userspace still has to keep
+working the same so it would use a totally different interface.
+
+So why is this even needed at all?
+
+> > > +
+> > > +What:		/sys/hypervisor/gunyah/variant
+> > > +Date:		October 2022
+> > > +KernelVersion:	6.1
+> > > +Contact:	linux-arm-msm@vger.kernel.org
+> > > +Description:	If running under Gunyah:
+> > > +		Reports the build variant of Gunyah:
+> > > +		The open source build of Gunyah will report "81".
+> > > +		The Qualcomm build of Gunyah will report "72".
+> > 
+> > So there are only 2 versions variants?  What happens when you get a
+> > third?  And why the odd numbers?
+> > 
 > 
-> IOW -- "I have a platform device that does a lot of different things. Split
-> up the different functionalities of that device into sub devices using the
-> auxiliary bus."
+> The kernel isn't parsing the reported build variant and is passing the
+> reported value up to the sysfs node. If a new third variant comes along, its
+> build variant number would be reported. Would it be preferred to instead
+> link to Gunyah's definitions for the build variant?
 
-Why not just have multiple platform devices?  You control them, don't
-make it more complex than it should be.
-
-And why are these platform devices at all?
-
-As you say:
-
-> A key requirement for utilizing the auxiliary bus is that there is no
-> dependency on a physical bus, device, register accesses or regmap support.
-> These individual devices split from the core cannot live on the platform bus
-> as they are not physical devices that are controlled by DT/ACPI.
-
-These are not in the DT.  So just make your own bus for them instead of
-using a platform device.  Don't abuse a platform device please.
+Just document what these random numbers mean please and what userspace
+is to do with them.  If nothing, and this is just information, who would
+use that information?  And if no one, why report it at all? 
 
 thanks,
 
