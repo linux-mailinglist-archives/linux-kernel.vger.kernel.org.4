@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C26A5F50F7
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 10:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81EF75F50FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 10:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiJEIiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 04:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39730 "EHLO
+        id S230109AbiJEIiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 04:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbiJEIh6 (ORCPT
+        with ESMTP id S229935AbiJEIh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 04:37:58 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B56733D8
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 01:37:57 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id c3-20020a1c3503000000b003bd21e3dd7aso648804wma.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 01:37:57 -0700 (PDT)
+        Wed, 5 Oct 2022 04:37:59 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E99A72FDC
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 01:37:58 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id r13so3343253wrj.11
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 01:37:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=rclrG9kvjyiwEqNQMIJctVN4MQ1mov4Pr4W0bFer3vY=;
-        b=moKmb7HPK9Qk+BTdZ4nrzbQl2dwrdGWJaP1j3hMfIMSCbjAHLlt/HoHM2bnbbLjGqG
-         VOoupnOdLjkVoyyby+M9HpCRyr3T+0iY5wX7llxGQJuZjj04WjtwBAzM9nVaAYsafW6t
-         MXhf+h+t4J6ZEzzsnYm7xgPzTfh9WOU1dxnqVAZtZ20oBNGRN+50UGMkwRXHPf+QQGT1
-         1KtAqIHWDpgSSiFkiqKYyHNirOigyDvvowrpjPpjUfMUy9AcLQeKkLWSP8NN1U72KD/a
-         mHwRh9ojh70faKuONfFXZ9ADhlla58k2153WD5+i+XSFcakpHP/QV7W8IzY9ayev5Wfk
-         1+AA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=q9iQElDOirbdVJ/B2wLi7+yO3Wyao1noVf51AiDgJFo=;
+        b=OlZtr53AiAqaCEsScp6R2DjaV8/Fb58pybt1lgbnH1EgriiP6LztWPIzooExFSAD76
+         Z8j6s0Ka7MEt0NlNVNhmVGUxKgK386YUGGF8uTLnV4/TU6kklTCpZakSoMJ6xZGc7Jvl
+         DiDAsgfgSZcKMovt4bsYV/+0fIPNy0UJjhFZ1kJFz+IhxB8mGC0iI97bCC7qZZ+Vodx8
+         3+TCboQO0Cty3kxXJA4GkLspQVRi8+fw/Gw1xWf42w/W92nYWuTVvvJ50BPwKl/0dxXD
+         BIr6W8R2U1z0BXDEllV+CUVSoBPXzBBcxb1VJfV1Zr9r9OYjEm9InX5qKdpNZId3ncRo
+         GP6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=rclrG9kvjyiwEqNQMIJctVN4MQ1mov4Pr4W0bFer3vY=;
-        b=fi68F9CD4rrf/SvQoPJ8e4Vu6OHZtTJqiN4ztYhBDD9ns0xychoQ51SnSLeUzFPl6x
-         Qu8rnxmcJRzb666ClT/oLKswCidyrySfnv1TH4W13lWMNw8MmPaMPC+GFaRp1W6bp3Jv
-         oUufIVUef2K1KXbb3ImBkesFZLjFDkh3KRupC9dF5HCzXbDS55v+N7aXlU3mWDKLn2cw
-         x85v8LZb6uS20CaVOsHC1wXIbXPdwtG0+fu5bRbJ0UHt6czyGaEgbNT8FKfL2deS+OZP
-         uy5U2GHJMSVdhfuvfArp5q1UA+lTQrgKXBzKkEs5f+UizT/+WA0V58VxbhUPRPGNch/k
-         Lcsg==
-X-Gm-Message-State: ACrzQf2KoPlxYQCeJNZnyss04aYmNAiKn/ZqaKadKfIhMMytVW5qL6VM
-        duObBXe2/ZwpXdBsNije2KnvMlyAZ/ZVbQ==
-X-Google-Smtp-Source: AMsMyM73/1tTQofHlN4/cBMxLKa9fwOmXuOj38gXnRo8qFjlUlvp8DBYmGOC37YD5HrgRm9GRCDmtw==
-X-Received: by 2002:a05:600c:1e08:b0:3b4:8fef:d63c with SMTP id ay8-20020a05600c1e0800b003b48fefd63cmr2465706wmb.158.1664959075772;
-        Wed, 05 Oct 2022 01:37:55 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=q9iQElDOirbdVJ/B2wLi7+yO3Wyao1noVf51AiDgJFo=;
+        b=Q/ka0RPklWzBMrUhKJZS4NJW8z+1fBrMXbY+kWgsBaL2PJzzfoa31ogMPIbyRfBOHE
+         mdGneP5tZVSQjZ2R33xuOq8LdWL6X1ly+GvUStqpOXZaIP3I19z1vvHJJ62iw7WJBRKT
+         6R1Kk9uUu/cQzZzlaaa8pbfpqHXbCUT0EyUaKtcnaTrCvcZKI/thKgpCOiVbTAPPTxBi
+         KYMjxzNAvzoPPFDlKoGeZluN6v9ZeR34xxSjgmH7nTo0XAsppidANEF9jBEE6y3Bdrvf
+         mHs+IpJM5eqcPChfZhbsSqu5lOqA54q9qqoozsqH3Nf+GwMWsSfNrPEL/KIouUqtv0yd
+         GUFQ==
+X-Gm-Message-State: ACrzQf348LibccAoRc6XcZgadzLyV5NjSmEXpLT8+/UkW37JNFrFvJZ8
+        P3G7zxGM+N6t+2hL7YHqMegadw==
+X-Google-Smtp-Source: AMsMyM67V0zhQ5v9XoNEOaJtjEfK70k66EnzjM1HriUB1ZeCiVO06hT9kkF9RIZKg2KyVjhY5zxbMw==
+X-Received: by 2002:a05:6000:1acf:b0:22b:36ad:28e with SMTP id i15-20020a0560001acf00b0022b36ad028emr18582345wry.314.1664959077080;
+        Wed, 05 Oct 2022 01:37:57 -0700 (PDT)
 Received: from localhost.localdomain (hst-221-6.medicom.bg. [84.238.221.6])
-        by smtp.gmail.com with ESMTPSA id g6-20020a05600c310600b003b47e75b401sm1318171wmo.37.2022.10.05.01.37.54
+        by smtp.gmail.com with ESMTPSA id g6-20020a05600c310600b003b47e75b401sm1318171wmo.37.2022.10.05.01.37.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 01:37:55 -0700 (PDT)
+        Wed, 05 Oct 2022 01:37:56 -0700 (PDT)
 From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
 Cc:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH 0/3] Few corrections in non-tz firmware boot
-Date:   Wed,  5 Oct 2022 11:37:27 +0300
-Message-Id: <20221005083730.963322-1-stanimir.varbanov@linaro.org>
+Subject: [PATCH 1/3] venus: firmware: Correct reset bit
+Date:   Wed,  5 Oct 2022 11:37:28 +0300
+Message-Id: <20221005083730.963322-2-stanimir.varbanov@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221005083730.963322-1-stanimir.varbanov@linaro.org>
+References: <20221005083730.963322-1-stanimir.varbanov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,20 +70,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here are 3 patches which corrects reset bits, non-pix memory region and
-use writel/readl with memory barriers included.
+The reset bit for A9SS reset register is BIT(4) and for XTSS_SW_RESET
+it is BIT(0). Use the defines for those reset bits.
 
-Those patches in fact fixes iommu context faults seen on Chromebook
-(sc7180) during testing suspend/resume.
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+---
+ drivers/media/platform/qcom/venus/firmware.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Stanimir Varbanov (3):
-  venus: firmware: Correct reset bit
-  venus: firmware: Correct non-pix start and end addresses
-  venus: firmware: Correct assertion of reset bit on remote processor
-
- drivers/media/platform/qcom/venus/firmware.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
-
+diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
+index 14b6f1d05991..3851cedc3329 100644
+--- a/drivers/media/platform/qcom/venus/firmware.c
++++ b/drivers/media/platform/qcom/venus/firmware.c
+@@ -68,9 +68,11 @@ int venus_set_hw_state(struct venus_core *core, bool resume)
+ 		venus_reset_cpu(core);
+ 	} else {
+ 		if (IS_V6(core))
+-			writel(1, core->wrapper_tz_base + WRAPPER_TZ_XTSS_SW_RESET);
++			writel(WRAPPER_XTSS_SW_RESET_BIT,
++			       core->wrapper_tz_base + WRAPPER_TZ_XTSS_SW_RESET);
+ 		else
+-			writel(1, core->wrapper_base + WRAPPER_A9SS_SW_RESET);
++			writel(WRAPPER_A9SS_SW_RESET_BIT,
++			       core->wrapper_base + WRAPPER_A9SS_SW_RESET);
+ 	}
+ 
+ 	return 0;
 -- 
 2.25.1
 
