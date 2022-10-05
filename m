@@ -2,136 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E645F5D6A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 01:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4101C5F5D61
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 01:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbiJEX7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 19:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
+        id S229618AbiJEXxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 19:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJEX7T (ORCPT
+        with ESMTP id S229608AbiJEXxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 19:59:19 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691BBD13F;
-        Wed,  5 Oct 2022 16:59:17 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MjWkq57tCz4xGR;
-        Thu,  6 Oct 2022 10:59:15 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1665014355;
-        bh=ZiP+7X6vJOlOtas5bfBwJ9czNkaHQb78pfGJ/b1jMhc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=SC3qBkpUrpbdb3wr50Ir7Ci2d8BnRrj7DuceHnAnVzgtETVEMpwl04WjUroruq83c
-         mfqAhbdcmePZH18mwuLNGm56ivG6HohNQlJdpkbyFv0NHfF896Q5eBDPp6Sbp/tvg+
-         Si5EG7OGZyv625XcSZtb/zDOc7RIWC9gjGhFGULcJYTvJ/PX/yBGluJnKcPrQCP6xz
-         Fu4jcyQwsrPzn1u6N5xCeA6pdVmnZ70O3BoADGyI99y3uO1z9mdNyPU4SmrAoorG9S
-         SdZ5baQ8O2kNByk+5NomyXtyELTM4Rx76HQO3zcmWRMlcqH4m7hW3e566TWZdgIun9
-         w3lAAFbW3Gt+w==
-Date:   Thu, 6 Oct 2022 10:59:13 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Al Viro <viro@ZenIV.linux.org.uk>,
-        Steve French <smfrench@gmail.com>
-Cc:     Atte =?UTF-8?B?SGVpa2tpbMOk?= <atteh.mailbox@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Steve French <stfrench@microsoft.com>
-Subject: linux-next: manual merge of the vfs tree with the ksmbd tree
-Message-ID: <20221006105913.5be8a631@canb.auug.org.au>
+        Wed, 5 Oct 2022 19:53:34 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E357886834
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 16:53:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665014011; x=1696550011;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Y8G0HgLt0BP++iDvodCxnez7sIDU3Ki7f33eNAKKvh4=;
+  b=TvyNHQDI1lLRASMeceUTPdaXdx86RbNVDAjhsF+N6wZ+2PYr0b6MF5X1
+   KlaTmr70dkq7bg8EKuoF/DXT/bAaQA9jCtCE3uUi4i4r2Z9iFuK6tTSu7
+   SJnDcmC2bzum2mo0nJ0gsH8CmtYHyqW5U1FNbYQkIvkYnszUAh4ccyL7n
+   n3C0fuxbTlYefg1jf2mNlrDiWorQsjXpTcjjhAS2Vde5mOw5X4TcSeh/a
+   yE1FFTGmEgCuPzR5xbkCIvn2DT1dkBEZ5Au5yZBYhBw/t2QY5tCG2eh0B
+   ihGeOHddzG7UW7uN+oGml1bwkstzyHXYf8hKDoa3pjLhIsmMWmnBo+lH8
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="304882063"
+X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
+   d="scan'208";a="304882063"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 16:53:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="749954529"
+X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
+   d="scan'208";a="749954529"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga004.jf.intel.com with ESMTP; 05 Oct 2022 16:53:31 -0700
+Date:   Wed, 5 Oct 2022 16:59:59 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [RFC PATCH 15/23] thermal: intel: hfi: Report per-cpu
+ class-specific performance scores
+Message-ID: <20221005235959.GB29251@ranerica-svr.sc.intel.com>
+References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
+ <20220909231205.14009-16-ricardo.neri-calderon@linux.intel.com>
+ <YzLlk8NL5qkOOxzX@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mAqK48flFuwYx5jEjaycAW4";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzLlk8NL5qkOOxzX@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/mAqK48flFuwYx5jEjaycAW4
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Sep 27, 2022 at 01:59:15PM +0200, Peter Zijlstra wrote:
+> On Fri, Sep 09, 2022 at 04:11:57PM -0700, Ricardo Neri wrote:
+> > Support the arch_get_task_class_score() interface of the scheduler. Use the
+> > data that Intel Thread Director provides to inform the scheduler the
+> > performance of a class of tasks when placed on a given CPU.
+> > 
+> 
+> > +static void get_one_hfi_cap(struct hfi_instance *hfi_instance, s16 index,
+> > +			    struct hfi_cpu_data *hfi_caps, int class)
+> > +{
+> > +	struct hfi_cpu_data *caps;
+> > +
+> > +	/* Find the capabilities of @cpu */
+> > +	caps = hfi_instance->data + index * hfi_features.cpu_stride +
+> > +	       class * hfi_features.class_stride;
+> > +	memcpy(hfi_caps, caps, sizeof(*hfi_caps));
+> > +}
+> > +
+> > +int intel_hfi_get_task_class_score(int class, int cpu)
+> > +{
+> > +	struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, cpu);
+> > +	struct hfi_instance *instance;
+> > +	struct hfi_cpu_data caps;
+> > +	unsigned long flags;
+> > +	int cap;
+> > +
+> > +	if (cpu < 0 || cpu >= nr_cpu_ids)
+> > +		return -EINVAL;
+> > +
+> > +	if (class == TASK_CLASS_UNCLASSIFIED)
+> > +		return -EINVAL;
+> > +
+> > +	if (class >= (int)hfi_features.nr_classes)
+> > +		return -EINVAL;
+> > +
+> > +	instance = info->hfi_instance;
+> > +	if (!instance)
+> > +		return -ENOENT;
+> > +
+> > +	raw_spin_lock_irqsave(&instance->table_lock, flags);
+> > +	get_one_hfi_cap(instance, info->index, &caps, class);
+> > +	cap = caps.perf_cap;
+> > +	raw_spin_unlock_irqrestore(&instance->table_lock, flags);
+> > +
+> > +	return cap;
+> > +}
+> 
+> Does any of that data actually ever change? Isn't the class score fixed
+> per CPU type?
 
-Hi all,
+Yes, data can change. The Intel SDM Vol 3 Section 14.6.7 states that the
+table can be updated during runtime.
 
-Today's linux-next merge of the vfs tree got a conflict in:
-
-  fs/ksmbd/vfs.c
-
-between commit:
-
-  dbab80e2071a ("ksmbd: make utf-8 file name comparison work in __caseless_=
-lookup()")
-
-from the ksmbd tree and commit:
-
-  25885a35a720 ("Change calling conventions for filldir_t")
-
-from the vfs tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/ksmbd/vfs.c
-index 8d8af724df70,48b2b901f6e5..000000000000
---- a/fs/ksmbd/vfs.c
-+++ b/fs/ksmbd/vfs.c
-@@@ -1150,23 -1149,13 +1148,23 @@@ static bool __caseless_lookup(struct di
-  	buf =3D container_of(ctx, struct ksmbd_readdir_data, ctx);
- =20
-  	if (buf->used !=3D namlen)
-- 		return 0;
-+ 		return true;
- -	if (!strncasecmp((char *)buf->private, name, namlen)) {
- +	if (IS_ENABLED(CONFIG_UNICODE) && buf->um) {
- +		const struct qstr q_buf =3D {.name =3D buf->private,
- +					   .len =3D buf->used};
- +		const struct qstr q_name =3D {.name =3D name,
- +					    .len =3D namlen};
- +
- +		cmp =3D utf8_strncasecmp(buf->um, &q_buf, &q_name);
- +	}
- +	if (cmp < 0)
- +		cmp =3D strncasecmp((char *)buf->private, name, namlen);
- +	if (!cmp) {
-  		memcpy((char *)buf->private, name, namlen);
-  		buf->dirent_count =3D 1;
-- 		return -EEXIST;
-+ 		return false;
-  	}
-- 	return 0;
-+ 	return true;
-  }
- =20
-  /**
-
---Sig_/mAqK48flFuwYx5jEjaycAW4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM+GlEACgkQAVBC80lX
-0Gwp4ggAhhaWNI6+8iGakKPf3dwk7a9OHhr+symb2j79dlZxdKsAoBd+yAzVsSu4
-QnBfXN9HjbObQbNRzmHcgW29P7zAO5niv31PTn2tdo5H23C2FTDMAa7OmWBgMiw8
-fUnC3v3VGZ/dFTk+tS5i3C7qvuDo6FOWx0z+mBkTJpmprcG5jB8zuOnXAMLp54o3
-tJVmZWmG3DVa03UJHPRqs441LF28K8/QsF+nVAKFp9KFDE+nQSxNNTgFZPaLKGl7
-js8hXFsj6U7SbQ39sg+FVYhIw9c27qCAYYr3ZCOd62WSHa+5cMylzKlZQuN+29zq
-rMJ1h4jVJ4hk1FjwESZkpKf6iM5cJA==
-=K+4k
------END PGP SIGNATURE-----
-
---Sig_/mAqK48flFuwYx5jEjaycAW4--
+Thanks and BR,
+Ricardo
