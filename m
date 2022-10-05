@@ -2,93 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BEB95F4FC7
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 08:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67CA55F4FCD
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 08:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbiJEG1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 02:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
+        id S229650AbiJEGbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 02:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiJEG1f (ORCPT
+        with ESMTP id S229484AbiJEGbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 02:27:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA86E733D1
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 23:27:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664951253;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hzgr+GJhjprVie4kFrMDBNKKq7b6UhoiqIdbK544F4E=;
-        b=V2pcW8pfnK2k0nFcECm0LecMnB3vZkMTRUXdSdYRuetceQK/ToYQUWbSUi/qr0Aiqokysm
-        4bg0TZmEtmnJ7uVAwpaifjqX95qQj9ZSBoQdW1Uwp/gGFkNdZbNZSHt9V5kK/K5xcgN60R
-        qWjjvI+oSWSYja8l3tnVtOxzJeLnVZc=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-312-rXli1fhRN8G_OcWRc0C3yA-1; Wed, 05 Oct 2022 02:27:31 -0400
-X-MC-Unique: rXli1fhRN8G_OcWRc0C3yA-1
-Received: by mail-wr1-f70.google.com with SMTP id i1-20020adfa501000000b0022cd1e1137bso4807485wrb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 23:27:31 -0700 (PDT)
+        Wed, 5 Oct 2022 02:31:01 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240847437A
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 23:31:00 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id bu30so4526118wrb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Oct 2022 23:31:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VNh/E9aqZ9j1ZwtVMrozJo0+hjPOaqMfX5Hz5rXYYPg=;
+        b=pcCsAWjQaX8lNFDUCS0ZWpZagAJtm3hgmjX7Hcwhwswwx4uLHdrojc+vUJ8PJrILoL
+         Cz9Arp70EDEnRCBvKwF1pu6g0iztnM7VD2gfhVIUSyj1raSb6ewgnwd3oOpzdFM7SHSv
+         C+X51zJ5jfdT2n/G6yQQnz102cVtIDFelJTK5t4WZylXHBfkslFImZMc7aDKC/VatwN+
+         HyOTgiaJ3+pche4q7wSa7zALP3GWlKWbOPg//GpKTTSpylUhxEb0htoa39M3t9sRhLuL
+         0TZNKUQtv2OBup7MEj6fs1m3sFV1SdXXR22CtT5ILR0A0IeCfloTr240fOyDG+auW/V9
+         aPKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Hzgr+GJhjprVie4kFrMDBNKKq7b6UhoiqIdbK544F4E=;
-        b=ssu52N08rWioYX2EE983bMgU5G6eO89Q2H4JKZWPdHnd9886xXUCDn4IFKv7ljkfCR
-         N7sYgIjWSjHWvHOtGptK+oQaIg9abP8BMsqJ8VYAfyAvQ27IGQ+Xn3gnIgQsN+jbDP5g
-         3ch0L8ZZHGudTBJjd+Q27Zl87zQzxn74v1UIdkDSRlygguQMcymUmbGU7z42ngKFwkVq
-         mBvdTAd57B+2IxKH/sPX4qIjiAZnc65FrE8IJk6QrtBD4RBJ7vva3F3gTyMkDwxvdZ41
-         NUjzB/AaTZ+N4aFmPfBneiBp5WV2LTtX1xV0LU+54k2l3pMer1wLtDU+D+otn2+uEUj7
-         Whag==
-X-Gm-Message-State: ACrzQf2Sq/BP3X1kUxbvx2e6cK7Zqd+cm8iStfGGKAx8jOYESTTBe8Kt
-        UZ2EaqknskvtW5NKL6YBblh3g+pe4xe3GoatyQ7dARSC9M+M/9ac15/MYhpElcbu6w64HN3sp66
-        ZEpBTHWfkvszYtkI105ZeX1Pb
-X-Received: by 2002:a5d:6dac:0:b0:22a:fbff:b2d3 with SMTP id u12-20020a5d6dac000000b0022afbffb2d3mr17477375wrs.543.1664951250886;
-        Tue, 04 Oct 2022 23:27:30 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM51k5PL/MMj9nNisaw28ILfu80lWeQorWwHNn3p0/GD+K8Uowfp7d1JM62SxQHy7Gip404Y4Q==
-X-Received: by 2002:a5d:6dac:0:b0:22a:fbff:b2d3 with SMTP id u12-20020a5d6dac000000b0022afbffb2d3mr17477361wrs.543.1664951250690;
-        Tue, 04 Oct 2022 23:27:30 -0700 (PDT)
-Received: from [192.168.0.5] (ip-109-43-177-249.web.vodafone.de. [109.43.177.249])
-        by smtp.gmail.com with ESMTPSA id r6-20020a5d4986000000b0022ccae2fa62sm2068711wrq.22.2022.10.04.23.27.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 23:27:29 -0700 (PDT)
-Message-ID: <69854d56-510c-dab0-7cd6-f593ae2bef14@redhat.com>
-Date:   Wed, 5 Oct 2022 08:27:26 +0200
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VNh/E9aqZ9j1ZwtVMrozJo0+hjPOaqMfX5Hz5rXYYPg=;
+        b=vPDE1jXWEqN/v/qhNc9FAghLDLq42+bvEKSsbIji4K/lIFeHB6WaWozU/nn5sJ21a/
+         9yV1kkipMfnOYfNAuvu5QxsgqhCPIYjSVe2OkUQgTZj74XNdgKcoGeZxgFIBg5JYu3zs
+         Agrp5r7ddzelhualoojS9NBczlZtCDFGtsIS1kMRJDhV3KDOe97EWHHN/7i3bi2FvLJt
+         N7GCHuUnO9XzS3CGIUeAJ8NsnuJ9dooqBtD2jqjfb8pMx3gDjRbIDSKm8dk4HI0S2b0S
+         3WCiLdYyWzIY/Wzve3ezr8z0wjZTFpenMCSIk6g8HttXkiEsPy34EMQZ0Say2ukM+AJK
+         sv7g==
+X-Gm-Message-State: ACrzQf35ExK2WnShiWRhLaYu4EZ3ao5HPF9yukpMILyXMIqZ5d8EbxAZ
+        4ljZAGxPJhsTmVo3dRMk6/A=
+X-Google-Smtp-Source: AMsMyM6rVmggdWkxJgo0ghZNDXjeqwt4qI9o8llYD6s8ItLCZpyAn1dxYWMcfs/xDQYa/jjjZCHAqA==
+X-Received: by 2002:a05:6000:184e:b0:22e:4612:496d with SMTP id c14-20020a056000184e00b0022e4612496dmr6879712wri.91.1664951458465;
+        Tue, 04 Oct 2022 23:30:58 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id m4-20020a05600c40c400b003b497138093sm932414wmh.47.2022.10.04.23.30.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 23:30:58 -0700 (PDT)
+Date:   Wed, 5 Oct 2022 07:30:56 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: mainline build failure due to 81c0386c1376 ("regmap: mmio: Support
+ accelerared noinc operations")
+Message-ID: <Yz0koHybNXGTFfDr@debian>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-References: <20220930210751.225873-1-scgl@linux.ibm.com>
- <20220930210751.225873-4-scgl@linux.ibm.com>
- <85399389-9b5a-d72a-5db1-b8418008ad58@redhat.com>
- <dca9e17ffbe71c76665ba25a6d9cd91d4aa0c329.camel@linux.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-Subject: Re: [PATCH v1 3/9] Documentation: KVM: s390: Describe
- KVM_S390_MEMOP_F_CMPXCHG
-In-Reply-To: <dca9e17ffbe71c76665ba25a6d9cd91d4aa0c329.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,36 +72,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/10/2022 20.51, Janis Schoetterl-Glausch wrote:
-> On Tue, 2022-10-04 at 10:16 +0200, Thomas Huth wrote:
->> On 30/09/2022 23.07, Janis Schoetterl-Glausch wrote:
->>> Describe the semantics of the new KVM_S390_MEMOP_F_CMPXCHG flag for
->>> absolute vm write memops which allows user space to perform (storage key
->>> checked) cmpxchg operations on guest memory.
->>>
->>> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
->>> ---
->>>    Documentation/virt/kvm/api.rst | 18 +++++++++++++++++-
->>>    1 file changed, 17 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
->>> index abd7c32126ce..0e02d66e38ae 100644
->>> --- a/Documentation/virt/kvm/api.rst
->>> +++ b/Documentation/virt/kvm/api.rst
->>> @@ -3771,6 +3771,7 @@ Parameters are specified via the following structure::
->>>    		struct {
-> 
-> What is the reason you initially didn't copy the /* in */ comment here?
+Hi All,
 
-You mean in commit 41408c28f283b ? Uh, don't ask me, that's more than 7 
-years ago...
+The latest mainline kernel branch fails to build alpha allmodconfig
+with the error:
 
-Anyway, please be aware that the MEMOP ioctl is defined as IOW only:
+drivers/base/regmap/regmap-mmio.c: In function 'regmap_mmio_noinc_write':
+drivers/base/regmap/regmap-mmio.c:222:17: error: implicit declaration of function 'writesb'; did you mean 'writeb'? [-Werror=implicit-function-declaration]
+  222 |                 writesb(ctx->regs + reg, (const u8 *)val, val_count);
+      |                 ^~~~~~~
+      |                 writeb
+drivers/base/regmap/regmap-mmio.c:225:17: error: implicit declaration of function 'writesw'; did you mean 'writew'? [-Werror=implicit-function-declaration]
+  225 |                 writesw(ctx->regs + reg, (const u16 *)val, val_count);
+      |                 ^~~~~~~
+      |                 writew
+drivers/base/regmap/regmap-mmio.c:228:17: error: implicit declaration of function 'writesl'; did you mean 'writel'? [-Werror=implicit-function-declaration]
+  228 |                 writesl(ctx->regs + reg, (const u32 *)val, val_count);
+      |                 ^~~~~~~
+      |                 writel
+drivers/base/regmap/regmap-mmio.c:232:17: error: implicit declaration of function 'writesq'; did you mean 'writeq'? [-Werror=implicit-function-declaration]
+  232 |                 writesq(ctx->regs + reg, (const u64 *)val, val_count);
+      |                 ^~~~~~~
+      |                 writeq
+drivers/base/regmap/regmap-mmio.c: In function 'regmap_mmio_noinc_read':
+drivers/base/regmap/regmap-mmio.c:358:17: error: implicit declaration of function 'readsb'; did you mean 'readb'? [-Werror=implicit-function-declaration]
+  358 |                 readsb(ctx->regs + reg, (u8 *)val, val_count);
+      |                 ^~~~~~
+      |                 readb
+drivers/base/regmap/regmap-mmio.c:361:17: error: implicit declaration of function 'readsw'; did you mean 'readw'? [-Werror=implicit-function-declaration]
+  361 |                 readsw(ctx->regs + reg, (u16 *)val, val_count);
+      |                 ^~~~~~
+      |                 readw
+drivers/base/regmap/regmap-mmio.c:364:17: error: implicit declaration of function 'readsl'; did you mean 'readl'? [-Werror=implicit-function-declaration]
+  364 |                 readsl(ctx->regs + reg, (u32 *)val, val_count);
+      |                 ^~~~~~
+      |                 readl
+drivers/base/regmap/regmap-mmio.c:368:17: error: implicit declaration of function 'readsq'; did you mean 'readq'? [-Werror=implicit-function-declaration]
+  368 |                 readsq(ctx->regs + reg, (u64 *)val, val_count);
+      |                 ^~~~~~
+      |                 readq
 
-#define KVM_S390_MEM_OP _IOW(KVMIO, 0xb1, struct kvm_s390_mem_op)
 
-... so if you now introduce an "out" field in that struct, this might have 
-some impact, e.g. on Valgrind etc.
+git bisect pointed to 81c0386c1376 ("regmap: mmio: Support accelerared noinc operations")
 
-  Thomas
+I will be happy to test any patch or provide any extra log if needed.
 
+Note:
+Already reported for next-20220818 at https://lore.kernel.org/lkml/Yv4hhoTTcRuk%2F2Kl@debian/
+
+-- 
+Regards
+Sudip
