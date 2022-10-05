@@ -2,82 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F295F5426
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 14:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5855F542A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 14:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiJEMER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 08:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
+        id S229993AbiJEMFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 08:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJEMEO (ORCPT
+        with ESMTP id S229453AbiJEMFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 08:04:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7285264AB
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 05:04:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664971452;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BlPrrfcGT4CkXDtYZUhRJ8tm3C0EIa49OiJh2AlYYUE=;
-        b=hyN6B0sv9uaqgAzV4kjrD00l5nGN30CcBYHQEaM2ENLJ3O7gfhPLlZ48ufqNxY0z35AFuC
-        bmR9Bb94bf78Gog4Zkb+uvo78pn2m7JvZH0HkIAKvF/oR2QNtchOVPvPQ+HtbFMOqbCwIb
-        eI3hN2LwenuGa0LKS4rGSuCnKrGHijg=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-650-eqYy07J5Ml-7oMrvuiaXhg-1; Wed, 05 Oct 2022 08:04:11 -0400
-X-MC-Unique: eqYy07J5Ml-7oMrvuiaXhg-1
-Received: by mail-qt1-f198.google.com with SMTP id ay22-20020a05622a229600b0035bbb349e79so11191103qtb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 05:04:11 -0700 (PDT)
+        Wed, 5 Oct 2022 08:05:11 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E532715A
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 05:05:09 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id o20-20020a05600c4fd400b003b4a516c479so885342wmq.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 05:05:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=KRm1i/FjODl/xyx7vhUvSFcaqvqmNQu9ppzqZg/T/ms=;
+        b=QGdPK5xtP16USepja+6IFY3t0sutFWFGuiF9aUcx9bJ9o7194uWmKtswuYqxAcv5bM
+         wb7omhj6AzKSYZMBjH+0czzPCKIpToHkvmOLK6XCgOpFJKRKJ+pFrxM2YhgeI0/lp0eL
+         uZZTaQb2flYHuara6S0m/L0zo45uO7Hv+bITBTHsqNknbOJEpr1jppFU+9TO8TQ3xtEF
+         XqN20K+U3vpTgv7KVs3wMINFnUg0O/JuVRlXB/HjlDf+RzQdZp0wDbLK4pSg15o7VjA7
+         45Pu97RZd1ibCcOQK47w1fRItxg1Jmgg6cDVvRbQDbUyLxVZx4NtrBtczwsOugyQGmJm
+         GxoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=BlPrrfcGT4CkXDtYZUhRJ8tm3C0EIa49OiJh2AlYYUE=;
-        b=4jMmyKok2OQBIlWdP8nAnt/MEwtwA12vNtxUprPMfJ0iO+bMOFD6wAbt9yskXeD1Vo
-         QPACsFr0hM/H1NiKh2AvZWnrbjMP2OEU4gacUGuzzQSUHoCQhRglv3oljQjHMFZn1GGP
-         4Kx0m4vMNoewqtNHU5ohbYC4kJG07WU+ovry8/KInolP/QtIgyvALwSNYvj/iPmiGayi
-         ZLjtNaqSmivVMVJELWHvflSQ/nvnIpfZG4Dli75nt+9n6XEdCd3gqZRhLrPoz+aF7umE
-         QFfRXUOdElJOqs08mYfjfonfeudbfdeiYLptnXxx3LumTS6Yna/wIkTQQsJdo4uWsq0L
-         Ecxg==
-X-Gm-Message-State: ACrzQf16mcn3t6LjLmyeiGRaGwPcB1uUi6e53Urx0PKmC5b+0lMa3X0P
-        Xv04znhE0rcytY7XoL96vKQsNXfVl/1A/f67CDjcQfhmBGeW9RcPtwO0ll9dVCna7RzvVADUVzd
-        CQ9wiiy7eb6cWk4twrUTMxeiP
-X-Received: by 2002:a05:620a:bcc:b0:6ce:c077:acf3 with SMTP id s12-20020a05620a0bcc00b006cec077acf3mr19618716qki.263.1664971451484;
-        Wed, 05 Oct 2022 05:04:11 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4hKMNqZ8bYcjvLp5n2KqUIIJBdLNHxVrMW4wzuvyPidckVVWCZhPsj+BIWR03I5VfGgnaIIg==
-X-Received: by 2002:a05:620a:bcc:b0:6ce:c077:acf3 with SMTP id s12-20020a05620a0bcc00b006cec077acf3mr19618692qki.263.1664971451078;
-        Wed, 05 Oct 2022 05:04:11 -0700 (PDT)
-Received: from [172.20.5.108] (rrcs-66-57-248-11.midsouth.biz.rr.com. [66.57.248.11])
-        by smtp.googlemail.com with ESMTPSA id o2-20020ac87c42000000b0035cebb79aaesm15016302qtv.18.2022.10.05.05.04.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Oct 2022 05:04:10 -0700 (PDT)
-Message-ID: <d074cb45-72d3-a4a4-30f9-cfb664bb010a@redhat.com>
-Date:   Wed, 5 Oct 2022 14:04:09 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=KRm1i/FjODl/xyx7vhUvSFcaqvqmNQu9ppzqZg/T/ms=;
+        b=c/VXs6Q76z9fMma5ZxS8cScHp7KfjX0UDDycYJemYVQkoj3ACPFaH5/XUJ+hRe1oG7
+         vyTcXrYdtiw7mQrNSPuShFcqQuYbD9fdsmgGD9IaLElTdqrMJxTNGpmE+VwsnT7L1WZb
+         liMTjhVkOi9bg15fIrFmAMfuOTT6+WkcGKnQFYOCS7lMr0FunmJWcVsr04p/tAw3M7lI
+         KigenjInvoBCzu1ruTdmoOMATtA1GEcI1EqHmpiUIrme4/ZxCTzjbrwlP3dZjsWpSG/r
+         vgPhi1rnMqct7lg1xuEZhbPHCdRtQ3o9IPhu+j+ysNZ+hwQzYJXQMEui5+x1mu+mxGXF
+         D+aA==
+X-Gm-Message-State: ACrzQf1B02VNw5hCWQY8eHE9KeFoArgwdDdDknf/P9NxiYlh0P9vaLSa
+        iNPYZJ88SSp9xRuFB4wz6Fh6Sw==
+X-Google-Smtp-Source: AMsMyM7AnYe1pqnRsauylbxoTUQU0jGRG2FZqzUPWskH9jW2VW09NmxOnIodOZ/Ey98Lc3/tpRT91Q==
+X-Received: by 2002:a05:600c:35c5:b0:3b4:bf50:f84a with SMTP id r5-20020a05600c35c500b003b4bf50f84amr2972425wmq.22.1664971508060;
+        Wed, 05 Oct 2022 05:05:08 -0700 (PDT)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id v16-20020a5d6790000000b0022e3e7813f0sm7799583wru.107.2022.10.05.05.05.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 05:05:07 -0700 (PDT)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     davem@davemloft.net, edumazet@google.com, khalasa@piap.pl,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH 1/4] net: ethernet: xscale: fix space style issues
+Date:   Wed,  5 Oct 2022 12:04:58 +0000
+Message-Id: <20221005120501.3527435-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: Finish removing MPX from arch/x86?
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arjan van de Ven <arjan@linux.intel.com>
-References: <547a1203-0339-7ad2-9505-eab027046298@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <547a1203-0339-7ad2-9505-eab027046298@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,31 +68,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/4/22 19:34, Dave Hansen wrote:
-> We zapped the userspace MPX ABIs and most of its supporting code in here:
-> 
-> 	45fc24e89b7c ("x86/mpx: remove MPX from arch/x86")
-> 
-> But, the XSAVE enabling and KVM code were left in place.  This let folks
-> at least keep running guests with MPX.
-> 
-> It's been a couple of years and I don't think I've had a single person
-> opine about the loss of MPX.  Intel also followed through and there's no
-> MPX to be found on newer CPUs like my "Tiger Lake" 11th Gen Intel(R)
-> Core(TM) i7-1165G7.
-> 
-> Is it time to zap MPX from arch/x86/kvm/?
+Fix all checkpatch issue about space/newlines.
 
-I agree that the likelihood of anybody complaining about MPX is low but 
-Jim is right that the timeline for removing it is unfortunately quite long.
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+ drivers/net/ethernet/xscale/ixp4xx_eth.c | 16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
 
-Removing MPX from XFEATURE_MASK_USER_SUPPORTED is possible, though we 
-need to add a new XFEATURE_MASK_GUEST_SUPPORTED that includes MPX.  I'll 
-take a look.
-
-Also, it's worth noting that MPX lives in the sigcontext ABI because it 
-uses the non-compacted format.  Because of that it is not possible to 
-remove the structs from include/asm/fpu/types.h, for example.
-
-Paolo
+diff --git a/drivers/net/ethernet/xscale/ixp4xx_eth.c b/drivers/net/ethernet/xscale/ixp4xx_eth.c
+index 3b0c5f177447..71d36ff7cd1b 100644
+--- a/drivers/net/ethernet/xscale/ixp4xx_eth.c
++++ b/drivers/net/ethernet/xscale/ixp4xx_eth.c
+@@ -115,7 +115,6 @@
+ #define DEFAULT_RX_CNTRL0	RX_CNTRL0_RX_EN
+ #define DEFAULT_CORE_CNTRL	CORE_MDC_EN
+ 
+-
+ /* NPE message codes */
+ #define NPE_GETSTATUS			0x00
+ #define NPE_EDB_SETPORTADDRESS		0x01
+@@ -141,7 +140,6 @@
+ #define NPE_NOTIFY_MAC_RECOVERY_DONE	0x16
+ #define NPE_MAC_RECOVERY_START		0x17
+ 
+-
+ #ifdef __ARMEB__
+ typedef struct sk_buff buffer_t;
+ #define free_buffer dev_kfree_skb
+@@ -247,7 +245,6 @@ struct desc {
+ #endif
+ };
+ 
+-
+ #define rx_desc_phys(port, n)	((port)->desc_tab_phys +		\
+ 				 (n) * sizeof(struct desc))
+ #define rx_desc_ptr(port, n)	(&(port)->desc_tab[n])
+@@ -260,6 +257,7 @@ struct desc {
+ static inline void memcpy_swab32(u32 *dest, u32 *src, int cnt)
+ {
+ 	int i;
++
+ 	for (i = 0; i < cnt; i++)
+ 		dest[i] = swab32(src[i]);
+ }
+@@ -566,7 +564,6 @@ static void ixp4xx_mdio_remove(void)
+ 	mdiobus_free(mdio_bus);
+ }
+ 
+-
+ static void ixp4xx_adjust_link(struct net_device *dev)
+ {
+ 	struct port *port = netdev_priv(dev);
+@@ -597,7 +594,6 @@ static void ixp4xx_adjust_link(struct net_device *dev)
+ 		    dev->name, port->speed, port->duplex ? "full" : "half");
+ }
+ 
+-
+ static inline void debug_pkt(struct net_device *dev, const char *func,
+ 			     u8 *data, int len)
+ {
+@@ -616,7 +612,6 @@ static inline void debug_pkt(struct net_device *dev, const char *func,
+ #endif
+ }
+ 
+-
+ static inline void debug_desc(u32 phys, struct desc *desc)
+ {
+ #if DEBUG_DESC
+@@ -661,7 +656,6 @@ static inline void queue_put_desc(unsigned int queue, u32 phys,
+ 	   length and queues >= 32 don't support this check anyway. */
+ }
+ 
+-
+ static inline void dma_unmap_tx(struct port *port, struct desc *desc)
+ {
+ #ifdef __ARMEB__
+@@ -674,7 +668,6 @@ static inline void dma_unmap_tx(struct port *port, struct desc *desc)
+ #endif
+ }
+ 
+-
+ static void eth_rx_irq(void *pdev)
+ {
+ 	struct net_device *dev = pdev;
+@@ -792,7 +785,6 @@ static int eth_poll(struct napi_struct *napi, int budget)
+ 	return received;		/* not all work done */
+ }
+ 
+-
+ static void eth_txdone_irq(void *unused)
+ {
+ 	u32 phys;
+@@ -932,7 +924,6 @@ static netdev_tx_t eth_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	return NETDEV_TX_OK;
+ }
+ 
+-
+ static void eth_set_mcast_list(struct net_device *dev)
+ {
+ 	struct port *port = netdev_priv(dev);
+@@ -976,7 +967,6 @@ static void eth_set_mcast_list(struct net_device *dev)
+ 		     &port->regs->rx_control[0]);
+ }
+ 
+-
+ static int eth_ioctl(struct net_device *dev, struct ifreq *req, int cmd)
+ {
+ 	if (!netif_running(dev))
+@@ -1046,7 +1036,6 @@ static const struct ethtool_ops ixp4xx_ethtool_ops = {
+ 	.set_link_ksettings = phy_ethtool_set_link_ksettings,
+ };
+ 
+-
+ static int request_queues(struct port *port)
+ {
+ 	int err;
+@@ -1157,6 +1146,7 @@ static void destroy_queues(struct port *port)
+ 		for (i = 0; i < RX_DESCS; i++) {
+ 			struct desc *desc = rx_desc_ptr(port, i);
+ 			buffer_t *buff = port->rx_buff_tab[i];
++
+ 			if (buff) {
+ 				dma_unmap_single(&port->netdev->dev,
+ 						 desc->data - NET_IP_ALIGN,
+@@ -1167,6 +1157,7 @@ static void destroy_queues(struct port *port)
+ 		for (i = 0; i < TX_DESCS; i++) {
+ 			struct desc *desc = tx_desc_ptr(port, i);
+ 			buffer_t *buff = port->tx_buff_tab[i];
++
+ 			if (buff) {
+ 				dma_unmap_tx(port, desc);
+ 				free_buffer(buff);
+@@ -1320,6 +1311,7 @@ static int eth_close(struct net_device *dev)
+ 			struct desc *desc;
+ 			u32 phys;
+ 			int n = queue_get_desc(port->plat->txreadyq, port, 1);
++
+ 			BUG_ON(n < 0);
+ 			desc = tx_desc_ptr(port, n);
+ 			phys = tx_desc_phys(port, n);
+-- 
+2.35.1
 
