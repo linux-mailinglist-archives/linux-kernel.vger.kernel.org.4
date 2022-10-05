@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE2D5F5441
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 14:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 641585F544B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 14:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbiJEMPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 08:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38296 "EHLO
+        id S230042AbiJEMTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 08:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbiJEMPu (ORCPT
+        with ESMTP id S229901AbiJEMTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 08:15:50 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD495491D6;
-        Wed,  5 Oct 2022 05:15:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664972149; x=1696508149;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=I/0/uca7PMc1JB5EXowgPj8CdkujWBJBOjIoOK0lALU=;
-  b=jwt49dlHesGnub2c+Ds5OvLQDRnB37QbswMpmkptptJ26pcrJClPWHm1
-   E9bBOuGJEXkMH/X+GW3u/kXzc2KB5TbbaNE4rCKWLvJq3TRL/PAfDGjin
-   nvblShxYUnnWn5RjmxZQE23+bTsr92Hz8xmr8KyDJ+rOBVqvLh+g75Rlk
-   jvb3/5ABtBi+qHjYr6Pp161BjOkLQjGqyR6S+Gzdg5wele+R80mtrRzEF
-   pu7J/JAkPYBtqwcIB6K903uJtmBYCOx928oqwVSPidxkexjO1waQ7Z+ip
-   d1B8mOYPYi3ZqnqbyvWmT10zJbCw45W4agOKA6SjlEfuNUGl75ajC+KSh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="304126065"
-X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
-   d="scan'208";a="304126065"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 05:15:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="799468529"
-X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
-   d="scan'208";a="799468529"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 05 Oct 2022 05:15:45 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1og3JP-002eDW-0J;
-        Wed, 05 Oct 2022 15:15:43 +0300
-Date:   Wed, 5 Oct 2022 15:15:42 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        jic23@kernel.org, lars@metafoo.de, chiaen_wu@richtek.com,
-        alice_chen@richtek.com, cy_huang@richtek.com,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, szunichen@gmail.com
-Subject: Re: [PATCH v13 5/5] leds: flash: mt6370: Add MediaTek MT6370
- flashlight support
-Message-ID: <Yz11bkxz9lK4wOHE@smile.fi.intel.com>
-References: <cover.1664991040.git.chiaen_wu@richtek.com>
- <1bcd19dbd09650ddac7b96b0fe2932698be2731e.1664991040.git.chiaen_wu@richtek.com>
+        Wed, 5 Oct 2022 08:19:10 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBAA4AD58
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 05:19:09 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 78so15092174pgb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 05:19:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Kch95tHHe8y0dIqkTVplEFHJb/ntNCXtwkxDszyYdcA=;
+        b=qa9Xxrj8Khk7MeFieImHaceH75MPZZe87Zof7eaXtUpnMY/1CSnGMku/XOPUyReJZH
+         acmkdT9DjZp3f47I5AAtO+N6JghZLByO4VOBpZZWjBdAHWX2teizcZKnOQCVhczUldqY
+         vxA4dNJEkE0rFePanxfk7bBEjVoG3jB1/lLISsgamfpLBAvLNHOm5FrHGtP4Vx8v7D9k
+         5aGLpTrWnpN5JfhITIsYHKHUjnDqDEsKZr2mp/mzZ+zxgd2T0wjUC/rMuGi7VWC7zbTU
+         McLADrx0jdxLo6Q30lSGObCzYW5afDMoYvovGwQs5SaK8GHOBEzVBDCoW7PgPJ8r8ayr
+         IS5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Kch95tHHe8y0dIqkTVplEFHJb/ntNCXtwkxDszyYdcA=;
+        b=tSLjb3vUR3NLua+eoskNmAlc2cT7u3OOabr4Wu3abRLWs65TQxvRUC/adA7hpYHsAz
+         6S0e5s5lxLEacjBihcMg8NipYBy2MdtGHGVNAywP1xXpOX6n2AhCZHi85eUZ1oEp5GOw
+         7FFg9jQSYaYVOSMHkzNdJUU/xY/onVZvZXxFAKRCVfWW/XikpuHNwzwszoW2QgoY/1kG
+         +WbHb1sn5/r5nHFZfzsGdPyL2WNaWck4fJzUzZtmqHbfI7BPwt5eNi29EDKgtqucdJWG
+         /JmA9ESL6W8CTCAy81T2b+NfSf3FZiuA3H0GjYNnIE2+TmfZLqfXtZ6jxWWjfBzZ/SY5
+         Y4SA==
+X-Gm-Message-State: ACrzQf0aWOqOp9iI4sFM9F9Pk2vCAYSXl/mCgDp5MDgSBILju1Bi6bhS
+        h7OeX5qoxtKQXI54jPexq5oVESvEBPSGJw==
+X-Google-Smtp-Source: AMsMyM4MRlFjL3Z/LGK71aFd/IwfHhTGKouTQN3w7MTh+a/6Qf4G1a386Nl5Kzzozog4KF/dCBZ60g==
+X-Received: by 2002:a05:6a00:c82:b0:561:ad4a:ca0d with SMTP id a2-20020a056a000c8200b00561ad4aca0dmr10889958pfv.50.1664972348547;
+        Wed, 05 Oct 2022 05:19:08 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id y23-20020a17090264d700b00176e2fa216csm10523961pli.52.2022.10.05.05.19.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Oct 2022 05:19:07 -0700 (PDT)
+Message-ID: <3dcff83c-3ddf-b068-270b-f886de8eba7f@kernel.dk>
+Date:   Wed, 5 Oct 2022 06:19:06 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1bcd19dbd09650ddac7b96b0fe2932698be2731e.1664991040.git.chiaen_wu@richtek.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: linux-next: build warning after merge of the block tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20221005181734.08b2f1d9@canb.auug.org.au>
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20221005181734.08b2f1d9@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,40 +75,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 05, 2022 at 07:43:58PM +0800, ChiaEn Wu wrote:
-> From: Alice Chen <alice_chen@richtek.com>
+On 10/5/22 1:17 AM, Stephen Rothwell wrote:
+> Hi all,
 > 
-> The MediaTek MT6370 is a highly-integrated smart power management IC,
-> which includes a single cell Li-Ion/Li-Polymer switching battery
-> charger, a USB Type-C & Power Delivery (PD) controller, dual Flash
-> LED current sources, a RGB LED driver, a backlight WLED driver,
-> a display bias driver and a general LDO for portable devices.
+> After merging the block tree, today's linux-next build (htmldocs)
+> produced this warning:
 > 
-> Add support for the MT6370 Flash LED driver. Flash LED in MT6370
-> has 2 channels and support torch/strobe mode.
+> include/linux/skbuff.h:1051: warning: Function parameter or member 'scm_io_uring' not described in 'sk_buff'
+> 
+> Introduced by commit
+> 
+>   0dd99edbfae7 ("io_uring/af_unix: defer registered files gc to io_uring release")
 
-...
-
-> +config LEDS_MT6370_FLASH
-> +	tristate "Flash LED Support for MediaTek MT6370 PMIC"
-
-> +	depends on LEDS_CLASS && OF
-
-Why do you have OF dependency?
-
-> +	depends on LEDS_CLASS_FLASH || !LEDS_CLASS_FLASH
-> +	depends on V4L2_FLASH_LED_CLASS || !V4L2_FLASH_LED_CLASS
-> +	depends on MFD_MT6370
-> +	help
-> +	  Support 2 channels and torch/strobe mode.
-> +	  Say Y here to enable support for
-> +	  MT6370_FLASH_LED device.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called "leds-mt6370-flash".
+Thanks, fixed.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Jens Axboe
 
 
