@@ -2,161 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 830AA5F5229
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 12:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FAF35F522D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 12:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiJEKEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 06:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56502 "EHLO
+        id S229843AbiJEKEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 06:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiJEKEH (ORCPT
+        with ESMTP id S229548AbiJEKEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 06:04:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F9D857263
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 03:04:06 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1FFDE113E;
-        Wed,  5 Oct 2022 03:04:13 -0700 (PDT)
-Received: from wubuntu (unknown [10.57.32.122])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6B1BB3F67D;
-        Wed,  5 Oct 2022 03:04:04 -0700 (PDT)
-Date:   Wed, 5 Oct 2022 11:04:02 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org,
-        Youssef Esmat <youssefesmat@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>, bristot@redhat.com,
-        clark.williams@gmail.com, bigeasy@linutronix.de,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: Sum of weights idea for CFS PI
-Message-ID: <20221005100402.3i46oqx5lxsw2qer@wubuntu>
-References: <cb6c406e-1431-fcfd-ef82-87259760ead9@joelfernandes.org>
- <20220930134931.mpopdvri4xuponw2@wubuntu>
- <00140e95-0fe2-1ce4-1433-a3211f9da20c@joelfernandes.org>
- <20221003161404.kdow5uyj7kvbqyxs@wubuntu>
- <bb28d85a-c50f-a25f-aeb4-672eecb75b55@joelfernandes.org>
+        Wed, 5 Oct 2022 06:04:33 -0400
+Received: from mail.steuer-voss.de (mail.steuer-voss.de [85.183.69.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193F05726D;
+        Wed,  5 Oct 2022 03:04:30 -0700 (PDT)
+X-Virus-Scanned: Debian amavisd-new at mail.steuer-voss.de
+Received: by mail.steuer-voss.de (Postfix, from userid 1000)
+        id 80BDB10D3; Wed,  5 Oct 2022 12:04:22 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.steuer-voss.de (Postfix) with ESMTP id 7DFAB10D2;
+        Wed,  5 Oct 2022 12:04:22 +0200 (CEST)
+Date:   Wed, 5 Oct 2022 12:04:22 +0200 (CEST)
+From:   Nikolaus Voss <nv@vosn.de>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+cc:     David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yael Tzur <yaelt@google.com>
+Subject: Re: [PATCH] KEYS: encrypted: fix key instantiation with user-provided
+ data
+In-Reply-To: <42dbb8f6bc0a3e8339a5283bf26a50bd7bec3767.camel@linux.ibm.com>
+Message-ID: <aac62bfc-2425-ffeb-1c49-e0963bdbfa99@vosn.de>
+References: <20220919072317.E41421357@mail.steuer-voss.de>    <53730789a41358673b1715dd650706e9ffcb1199.camel@linux.ibm.com>    <35fd816-d755-967-5712-b5496875ac7a@vosn.de>   <2ee1e3e68d847001c4bf856d980a553e52de5023.camel@linux.ibm.com>  
+ <439012d8-dd4-7fd2-3788-49cf72faa99@vosn.de>  <6b4229386dced275f745619f190f64a71b7c0aec.camel@linux.ibm.com>  <2fe0144d-ee19-ec17-9566-16bce6386925@vosn.de> <42dbb8f6bc0a3e8339a5283bf26a50bd7bec3767.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <bb28d85a-c50f-a25f-aeb4-672eecb75b55@joelfernandes.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joel
+On Wed, 28 Sep 2022, Mimi Zohar wrote:
+> On Wed, 2022-09-28 at 14:08 +0200, Nikolaus Voss wrote:
+>> On Wed, 21 Sep 2022, Mimi Zohar wrote:
+>>> On Wed, 2022-09-21 at 09:24 +0200, Nikolaus Voss wrote:
+>>>> On Tue, 20 Sep 2022, Mimi Zohar wrote:
+>>>>> On Tue, 2022-09-20 at 18:23 +0200, Nikolaus Voss wrote:
+>>>>>> On Tue, 20 Sep 2022, Mimi Zohar wrote:
+>>>>>>> On Fri, 2022-09-16 at 07:45 +0200, Nikolaus Voss wrote:
+>>>>>>>> Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
+>>>>>>>> decrypted data") added key instantiation with user provided decrypted data.
+>>>>>>>> The user data is hex-ascii-encoded but was just memcpy'ed to the binary buffer.
+>>>>>>>> Fix this to use hex2bin instead.
+>>>>>>>
+>>>>>>> Thanks, Nikolaus.  We iterated a number of times over what would be the
+>>>>>>> safest userspace input.  One of the last changes was that the key data
+>>>>>>> should be hex-ascii-encoded.  Unfortunately, the LTP
+>>>>>>> testcases/kernel/syscalls/keyctl09.c example isn't hex-ascii-encoded
+>>>>>>> and the example in Documentation/security/keys/trusted-encrypted.rst
+>>>>>>> just cat's a file.  Both expect the length to be the length of the
+>>>>>>> userspace provided data.   With this patch, when hex2bin() fails, there
+>>>>>>> is no explanation.
+>>>>>>
+>>>>>> That's true. But it's true for all occurrences of hex2bin() in this file.
+>>>>>> I could pr_err() an explanation, improve the trusted-encrypted.rst example
+>>>>>> and respin the patch. Should I, or do you have another suggestion?
+>>>>>
+>>>>>> I wasn't aware of keyctl09.c, but quickly looking into it, the user data
+>>>>>> _is_ hex-ascii-encoded, only the length is "wrong": Imho, the specified
+>>>>>> length should be the binary length as this is consistent with key-length
+>>>>>> specs in other cases (e.g. when loading the key from a blob).
+>>>>>> keyctl09.c could be easy to fix, if only the length is modified. Should
+>>>>>> I propose a patch? What is the correct/appropriate workflow there?
+>>>>>
+>>>>> I'm concerned that this change breaks existing encrypted keys created
+>>>>> with user-provided data.  Otherwise I'm fine with your suggestion.
+>>>>
+>>>> Ok, but this change does not touch the hex-ascii format of encrypted key
+>>>> blobs?
+>>>
+>>> True, but any persistent data based on this key would be affected.
+>>
+>> Persistent data is stored encypted with e.g. the master key in hex-ascii
+>> already and should not be affected. Only persistent data stored
+>> unencrypted is affected, but the encrypted-keys stuff is just about
+>> avoiding that. Or do I still misunderstand something?
+>
+> Perhaps an existing encrypted key usage example would help clarify what
+> is meant by persistent data.  The two original encrypted key usages are
+> the EVM HMAC key and ecryptfs.  The EVM key is an encrypted key used to
+> calculate the EVM HMAC, which is stored in security.evm.  In that
+> scenario, the persistent data would be the data stored in security.evm.
+>
+> Would this patch break existing kernel/application persistent data
+> based on encrypted keys created with user-provided data?
 
-On 10/04/22 16:27, Joel Fernandes wrote:
+As far as I can tell, it does not.
 
-[...]
-
-> I am treating the following the same:
-> 
->  	a.  when A is running, it would be as above.
->  	b.  but if A was sleeping, B, C, and D would get 1/3.
-> 
->  similar to
-> 
->  	a.  when A is running *and blocked on C for all its runtime*
-> 		^^ -- in this case, B and D should not have their distributions
-> 		      changed at all because they are not participating in the
-> 		      lock acquire and release. So they should neither be hurt
-> 		      any more, nor be boosted. They should simply stay same [1]
-> 
->  	b.  but if A was sleeping, B, C, and D would get 1/3.
-> 
-> 
-> [1] Why? Consider 3 tasks in the all-RT case, A high, B medium and C low prio.
-> 
-> If all are running 100% and A does not block on C, B is blocked by A
-> indefinitely. So the prio of A and B are inverted. We seek to rectify this, that
-> is we need make changes such that, B is returned back to the blocked state. We
-> do this by boosting C.
-> 
-> In other words, the prio inheritance will cause B's distribution to not be
-> changed (it was supposed to be blocked before and it is now going to be blocked
-> state again).
-> 
-> CFS should not behave any differently, B's distribution should not be changed
-> before/after the priority inhertiance of A by C. That's just my opinion - and
-> that's how I calculated to distribution. With that mind, could you go back to
-> seeing if my math was originally correct or did I mess something up?
-
-It's not about the math. But I think the before and after can't be the same for
-C..
-
-> I do think though that Youssef's point of not worrying about being too accurate
-> is reasonable if the critical sections are short lived but I'm not sure.
-
-.. I do agree with that as well. I was just trying to highlight that looking at
-average can be misleading and I don't see C taking too much time.
-
-If any worries I have, it'd be not accounting correctly for the stolen time
-C takes from A. Otherwise A + C share combined would be higher than it should
-be. Which might be the problem you're trying to highlight but I am unable to
-get/see. But this is an implementation detail and an artefact of wrong
-accounting, not how shares are summed.
-
-> > I don't think this is valid. If A is blocked on C for 50% of the time, and
-> > sleeping for 50% of the time, when did it get blocked/unblocked?
-> > 
-> > This will have an impact on the average share for C and skew it, no?
-> > 
-> > Unless I missed something, the average share of C being (3/5 + 1/3) is an
-> > impossible state. You need to consider the portion of time when C runs as 1/5,
-> > when A is actually not blocked on anything, too.
-> > 
-> > Hmm actually I just re-read your statement below and you just say 3/5 (18/30)
-> > is too much. You didn't consider the average. I'll leave the above in hope to
-> > help me understand what am I missing and where I went wrong :-)
-> > 
-> > Generally IMHO looking at the average will not help. I think if the share
-> > values make sense in each state individually (and I believe they are), that
-> > would be enough. AFAICS, B and D are still taking the right amount of time when
-> > C inherits the bandwidth. And C by definition will run longer when A is blocked
-> > on it for the whole duration of this blocked time.
-> 
-> I was degenerating the case where A sleeps (say I/O) vs A blocks, to simplify
-> the math, and then taking average of that. I think that's reasonable?
-
-I'm not sure. This is skewing the results in my view.
-
-I think the comparison should just be:
-
-1) A, B, C, and D are all running and nothing gets blocked at all. Then shares
-   would be:
-
-   2/5, 1/5, 1/5, 1/5
-
-2) A is blocked and C; B, C, D are running with no blocked time. Shares would
-   be:
-
-   - , 1/5, 3/5, 1/5
-
-By definition, we want to treat A in (2) as RUNNING because as soon as
-C unblocks A we should return to (1). From B and D perspective, their share is
-not impacted throughout this transition. Which is AFAIU is what we want to
-achieve.
-
-I think considering the sleeping time and averaging can lead to misleading
-results if care is not taken.
-
-Anyway - just trying to explain how I see it and why C is unlikely to be taking
-too much time. I could be wrong. As Youssef said, I think there's no
-fundamental problem here.
-
-My 2 cents ;-)
-
-
-Thanks!
-
---
-Qais Yousef
+Niko
