@@ -2,152 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D76655F552E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 15:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4955F552D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 15:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiJENQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 09:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36154 "EHLO
+        id S229853AbiJENQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 09:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiJENQf (ORCPT
+        with ESMTP id S229763AbiJENQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 09:16:35 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C49DD79624
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 06:16:33 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B286113E;
-        Wed,  5 Oct 2022 06:16:40 -0700 (PDT)
-Received: from e121896.arm.com (unknown [10.57.3.4])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B13C63F792;
-        Wed,  5 Oct 2022 06:16:30 -0700 (PDT)
-From:   James Clark <james.clark@arm.com>
-To:     coresight@lists.linaro.org
-Cc:     suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
-        mike.leach@linaro.org, leo.yan@linaro.org, Sudeep.Holla@arm.com,
-        James Clark <james.clark@arm.com>,
-        Aishwarya TCV <Aishwarya.TCV@arm.com>,
-        Cristian Marussi <Cristian.Marussi@arm.com>,
-        Suzuki Poulose <Suzuki.Poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] coresight: cti: Fix hang in cti_disable_hw()
-Date:   Wed,  5 Oct 2022 14:14:52 +0100
-Message-Id: <20221005131452.1506328-1-james.clark@arm.com>
-X-Mailer: git-send-email 2.28.0
+        Wed, 5 Oct 2022 09:16:31 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BE779639
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 06:16:29 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id y100so22424590ede.6
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 06:16:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=mzwnm047GWUEy8Gr4IBSDc4HWnR7mCcNMXv8/AXaSHM=;
+        b=Sgw7kibjRUew1kKZAYu1iILRcZSbw2ZHReFe4LLeT8WGXMdnIsLmOtPHiPQMddLnHv
+         VgQYo+KbYuCes7vL/5O7Q9tiKPEpMRVR54y+WOgtgO7cMTzc3h4UvVGKJpER46DTiYf4
+         vaxafjj3zR02M5pPd8al+L490g0tM/F3+PIIWApwp+Glqht7IuWvOu3A4E9wZaW0hriN
+         Fnjw61w1PexJ2r7KRVCtmWxT+maxeKZ6sBVmZC2fWtu8FT6RKIc3UA2L0fQKx2NQM8vU
+         toEkAVLgRUpNuPeNnLxbS7Zu869iDFj3bzdisG/2xxprvCKvjVkQsE5WSws3tG4ZUTEk
+         mYbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=mzwnm047GWUEy8Gr4IBSDc4HWnR7mCcNMXv8/AXaSHM=;
+        b=XoeR4efGhVipmVi1ndBzlQotg+aR/rYvrgVhF9nhCjV2p+M/Uv6EJZRVGNEEKG5Iu2
+         aDlSbkeJ1Gk+UpCGFqX1xq8aSTSVn1A+zq6fek4CFrbuQledia3hGWdu7WNSNnLWhMIW
+         SsywxWEavtLb3oQRg1jUAu64cwLQ/Ud5Rr1bK37v7o2A+WRoRmRivyYw/8nwE6Mx7JhI
+         j+aIH2huPttVWNB15RenNiSxfGLLTqDmWmV7hGshhcFRYAxHKUcD2c0iHPVjMG3xivMi
+         wVOuhr0PoKCUsotPyPmftj+mBL5s/yElkcf2A8Z+GgA2GkpF7w+rgbsIHTDnwmLU1+q8
+         vviw==
+X-Gm-Message-State: ACrzQf117g2+UFi+36llnzVnOEZrjgW03JQMVN5jZuAHdlcxUDi8Qunt
+        ARWxoMP/regRWXf+IGuh5T9EyPIhtlKxGwFd0tKJjg==
+X-Google-Smtp-Source: AMsMyM4TPr49jvyXNw6/x/L/W14/KnLz5KALjrRfn/0GUjyx6n6X5alhXutwUz+8ZdWMRWXMWVeVyntvBKG4hkb9RrE=
+X-Received: by 2002:a05:6402:90c:b0:457:b5ce:5f18 with SMTP id
+ g12-20020a056402090c00b00457b5ce5f18mr29128877edz.309.1664975787933; Wed, 05
+ Oct 2022 06:16:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220922050718.1079651-1-Naresh.Solanki@9elements.com>
+ <20220922050718.1079651-2-Naresh.Solanki@9elements.com> <20220929193251.GA2606428-robh@kernel.org>
+In-Reply-To: <20220929193251.GA2606428-robh@kernel.org>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+Date:   Wed, 5 Oct 2022 18:46:16 +0530
+Message-ID: <CABqG17hf7QhJuHO60V=ue8ev7cSnikr0nntkLAQkqnfyPc31xQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add binding for max6639
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Roland Stigge <stigge@antcom.de>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cti_enable_hw() and cti_disable_hw() are called from an atomic context
-so shouldn't use runtime PM because it can result in a sleep when
-communicating with firmware.
+Hi Rob,
 
-Since commit 3c6656337852 ("Revert "firmware: arm_scmi: Add clock
-management to the SCMI power domain""), this causes a hang on Juno when
-running the Perf Coresight tests or running this command:
+I can add common fan bindings.
+Below are the properties that I can think of:
+max-rpm, pulse-per-revolution
+Let me know what you think.
 
-  perf record -e cs_etm//u -- ls
+Regards,
+Naresh Solanki
 
-This was also missed until the revert commit because pm_runtime_put()
-was called with the wrong device until commit 692c9a499b28 ("coresight:
-cti: Correct the parameter for pm_runtime_put")
 
-With lock and scheduler debugging enabled the following is output:
 
-   coresight cti_sys0: cti_enable_hw -- dev:cti_sys0  parent: 20020000.cti
-   BUG: sleeping function called from invalid context at drivers/base/power/runtime.c:1151
-   in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 330, name: perf-exec
-   preempt_count: 2, expected: 0
-   RCU nest depth: 0, expected: 0
-   INFO: lockdep is turned off.
-   irq event stamp: 0
-   hardirqs last  enabled at (0): [<0000000000000000>] 0x0
-   hardirqs last disabled at (0): [<ffff80000822b394>] copy_process+0xa0c/0x1948
-   softirqs last  enabled at (0): [<ffff80000822b394>] copy_process+0xa0c/0x1948
-   softirqs last disabled at (0): [<0000000000000000>] 0x0
-   CPU: 3 PID: 330 Comm: perf-exec Not tainted 6.0.0-00053-g042116d99298 #7
-   Hardware name: ARM LTD ARM Juno Development Platform/ARM Juno Development Platform, BIOS EDK II Sep 13 2022
-   Call trace:
-    dump_backtrace+0x134/0x140
-    show_stack+0x20/0x58
-    dump_stack_lvl+0x8c/0xb8
-    dump_stack+0x18/0x34
-    __might_resched+0x180/0x228
-    __might_sleep+0x50/0x88
-    __pm_runtime_resume+0xac/0xb0
-    cti_enable+0x44/0x120
-    coresight_control_assoc_ectdev+0xc0/0x150
-    coresight_enable_path+0xb4/0x288
-    etm_event_start+0x138/0x170
-    etm_event_add+0x48/0x70
-    event_sched_in.isra.122+0xb4/0x280
-    merge_sched_in+0x1fc/0x3d0
-    visit_groups_merge.constprop.137+0x16c/0x4b0
-    ctx_sched_in+0x114/0x1f0
-    perf_event_sched_in+0x60/0x90
-    ctx_resched+0x68/0xb0
-    perf_event_exec+0x138/0x508
-    begin_new_exec+0x52c/0xd40
-    load_elf_binary+0x6b8/0x17d0
-    bprm_execve+0x360/0x7f8
-    do_execveat_common.isra.47+0x218/0x238
-    __arm64_sys_execve+0x48/0x60
-    invoke_syscall+0x4c/0x110
-    el0_svc_common.constprop.4+0xfc/0x120
-    do_el0_svc+0x34/0xc0
-    el0_svc+0x40/0x98
-    el0t_64_sync_handler+0x98/0xc0
-    el0t_64_sync+0x170/0x174
-
-Fix the issue by removing the runtime PM calls completely. They are not
-needed here because it must have already been done when building the
-path for a trace.
-
-Fixes: 835d722ba10a ("coresight: cti: Initial CoreSight CTI Driver")
-Reported-by: Aishwarya TCV <Aishwarya.TCV@arm.com>
-Reported-by: Cristian Marussi <Cristian.Marussi@arm.com>
-Signed-off-by: Suzuki Poulose <Suzuki.Poulose@arm.com>
-Signed-off-by: James Clark <james.clark@arm.com>
----
- drivers/hwtracing/coresight/coresight-cti-core.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/drivers/hwtracing/coresight/coresight-cti-core.c b/drivers/hwtracing/coresight/coresight-cti-core.c
-index 8988b2ed2ea6..c5f7fc4e2552 100644
---- a/drivers/hwtracing/coresight/coresight-cti-core.c
-+++ b/drivers/hwtracing/coresight/coresight-cti-core.c
-@@ -94,7 +94,6 @@ static int cti_enable_hw(struct cti_drvdata *drvdata)
- 	unsigned long flags;
- 	int rc = 0;
- 
--	pm_runtime_get_sync(dev->parent);
- 	spin_lock_irqsave(&drvdata->spinlock, flags);
- 
- 	/* no need to do anything if enabled or unpowered*/
-@@ -119,7 +118,6 @@ static int cti_enable_hw(struct cti_drvdata *drvdata)
- 	/* cannot enable due to error */
- cti_err_not_enabled:
- 	spin_unlock_irqrestore(&drvdata->spinlock, flags);
--	pm_runtime_put(dev->parent);
- 	return rc;
- }
- 
-@@ -175,7 +173,6 @@ static int cti_disable_hw(struct cti_drvdata *drvdata)
- 	coresight_disclaim_device_unlocked(csdev);
- 	CS_LOCK(drvdata->base);
- 	spin_unlock(&drvdata->spinlock);
--	pm_runtime_put(dev->parent);
- 	return 0;
- 
- 	/* not disabled this call */
--- 
-2.28.0
-
+On Fri, 30 Sept 2022 at 01:02, Rob Herring <robh@kernel.org> wrote:
+>
+> On Thu, Sep 22, 2022 at 07:07:17AM +0200, Naresh Solanki wrote:
+> > From: Marcello Sylvester Bauer <sylv@sylv.io>
+> >
+> > Add Devicetree binding documentation for Maxim MAX6639 temperature
+> > monitor with PWM fan-speed controller.
+> >
+> > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> > ---
+> >  .../bindings/hwmon/maxim,max6639.yaml         | 112 ++++++++++++++++++
+> >  1 file changed, 112 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> > new file mode 100644
+> > index 000000000000..c845fb989af2
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+> > @@ -0,0 +1,112 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +
+> > +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Maxim max6639
+> > +
+> > +maintainers:
+> > +  - Roland Stigge <stigge@antcom.de>
+> > +
+> > +description: |
+> > +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
+> > +  fan-speed controller.  It monitors its own temperature and one external
+> > +  diode-connected transistor or the temperatures of two external diode-connected
+> > +  transistors, typically available in CPUs, FPGAs, or GPUs.
+> > +
+> > +  Datasheets:
+> > +    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - maxim,max6639
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  '#address-cells':
+> > +    const: 1
+> > +
+> > +  '#size-cells':
+> > +    const: 0
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - "fan@0"
+> > +  - "fan@1"
+> > +
+> > +additionalProperties: false
+> > +
+> > +patternProperties:
+> > +  "^fan@[0-1]$":
+> > +    type: object
+> > +    description: |
+> > +      Represents the two fans and their specific configuration.
+> > +
+> > +    properties:
+> > +      reg:
+> > +        description: |
+> > +          The fan number.
+>
+> Addresses are a property of the parent (the fan controller), not the
+> fan.
+>
+> > +        items:
+> > +          minimum: 0
+> > +          maximum: 1
+> > +
+> > +      pwm-polarity:
+> > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > +        enum: [0, 1]
+> > +        default: 1
+> > +        description:
+> > +          PWM output is low at 100% duty cycle when this bit is set to zero. PWM
+> > +          output is high at 100% duty cycle when this bit is set to 1.
+>
+> IIRC, the PWM binding provides for this. The parent should probably be a
+> PWM provider.
+>
+> > +
+> > +      pulses-per-revolution:
+> > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > +        enum: [1, 2, 3, 4]
+> > +        default: 2
+> > +        description:
+> > +          Value specifying the number of pulses per revolution of the controlled
+> > +          FAN.
+> > +
+> > +      maxim,rpm-range:
+> > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > +        enum: [2000, 4000, 8000, 16000]
+> > +        default: 4000
+> > +        description:
+> > +          Scales the tachometer counter by setting the maximum (full-scale) value
+> > +          of the RPM range for max6639.
+>
+> Is this a property of the fan? How is this maxim specific?
+>
+>
+> The bigger issue here is we need a common fan binding. I'm not inclined
+> to accept any more fan controller bindings with fan properties until we
+> do.
+>
+> Rob
