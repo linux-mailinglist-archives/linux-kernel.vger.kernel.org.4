@@ -2,105 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D61015F5B85
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 23:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 657F85F5B8D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 23:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbiJEVO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 17:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42206 "EHLO
+        id S231235AbiJEVOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 17:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiJEVOZ (ORCPT
+        with ESMTP id S231210AbiJEVOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 17:14:25 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC7424BD9;
-        Wed,  5 Oct 2022 14:14:24 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 295L6WwP029173;
-        Wed, 5 Oct 2022 21:14:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=m8rcUOmSkkOBsqzuwn+dnbX0t6FP3OQ03nPOvq9bcVk=;
- b=XOYcf+MXIAmdVZGqMdudKj4Ym6rvpoqI2Ev50qjtjLJSWnBk5opZd4PQIaqUZcXSERPV
- KNxAge5Al6viiDU5nCoUBSDAvGMRgsR5qRWWe0oeCr5JKIMlSPic/jE3QIGWXcsrzjGk
- oOB2p1FugaRC1gw3iG30Pr4fzMQrmYFDYRL2suxLJL3+JmB5j6+6FscQFsuXP6U9AnlE
- BgrRBYrAb2Xg9W3IvmJMszpUfYilNq1OgoP4EfBko67xasOTeJIeFrvOJRXKGl7wjzqv
- UVySLkwHGPXMcpkSATJdOGwoDjTa83EuhOztoht6Ix500Mcpf6/MOkw0tCMTya8BrOwW qQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k0escvc9g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Oct 2022 21:14:08 +0000
-Received: from pps.filterd (NALASPPMTA04.qualcomm.com [127.0.0.1])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 295Ku7JN006827;
-        Wed, 5 Oct 2022 21:14:07 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA04.qualcomm.com (PPS) with ESMTPS id 3k1e0drn5q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Oct 2022 21:14:07 +0000
-Received: from NALASPPMTA04.qualcomm.com (NALASPPMTA04.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 295L27se014655;
-        Wed, 5 Oct 2022 21:14:07 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (PPS) with ESMTPS id 295LE73u027387
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Oct 2022 21:14:07 +0000
-Received: from [10.38.244.136] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 5 Oct 2022
- 14:14:04 -0700
-Message-ID: <a110f32a-261c-e5da-2c1d-609ba9ec1680@quicinc.com>
-Date:   Wed, 5 Oct 2022 14:14:02 -0700
+        Wed, 5 Oct 2022 17:14:30 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361097539B;
+        Wed,  5 Oct 2022 14:14:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5DB522191A;
+        Wed,  5 Oct 2022 21:14:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1665004466; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=01sgoEm54YTMwT5GObElbBalf5G3CbGpxBxdCVhq1Pw=;
+        b=HOBDxms5f1DZa0kq0S2PE0X76B3PZFp3+ZcEUrQ7ufALeM+9RutSRpx/kWEF+GgrWgmgoE
+        +UJNyRWei/WMNITz7p5p83jv1Iy6Vz0CYmLw8+EgT6wsgKt5m3j+hgIbO86GKRRo2BOqvf
+        XnCLX0npbTInOVFKucSlWG5xGo7Kckc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1665004466;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=01sgoEm54YTMwT5GObElbBalf5G3CbGpxBxdCVhq1Pw=;
+        b=UwVsJ+/pT0W4J4hWxz0reUKGR1ZbPK98QiHRwgavUFkUb2vzYAePozrBGR6uJaWA4wXdm9
+        RAryWAN1Pr6EajBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3152B13345;
+        Wed,  5 Oct 2022 21:14:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id nmkHNqrzPWNYRQAAMHmgww
+        (envelope-from <neilb@suse.de>); Wed, 05 Oct 2022 21:14:18 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 1/7] drm/msm/dsi: Remove useless math in DSC
- calculations
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        <phone-devel@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-CC:     <~postmarketos/upstreaming@lists.sr.ht>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>
-References: <20221005181657.784375-1-marijn.suijten@somainline.org>
- <20221005181657.784375-2-marijn.suijten@somainline.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20221005181657.784375-2-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 2omwmzd_ViBXMlRXd0jRT5coS9A-OjGr
-X-Proofpoint-GUID: 2omwmzd_ViBXMlRXd0jRT5coS9A-OjGr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-05_05,2022-10-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 clxscore=1015 suspectscore=0 mlxscore=0
- mlxlogscore=999 impostorscore=0 spamscore=0 bulkscore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210050131
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Jeff Layton" <jlayton@kernel.org>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Subject: Re: [PATCH v6 6/9] nfsd: use the getattr operation to fetch i_version
+In-reply-to: <13714490816df1ff36ab06bbf32df5440cad7913.camel@kernel.org>
+References: <20220930111840.10695-1-jlayton@kernel.org>,
+ <20220930111840.10695-7-jlayton@kernel.org>,
+ <166484034920.14457.15225090674729127890@noble.neil.brown.name>,
+ <13714490816df1ff36ab06bbf32df5440cad7913.camel@kernel.org>
+Date:   Thu, 06 Oct 2022 08:14:04 +1100
+Message-id: <166500444418.16615.7547789313879225413@noble.neil.brown.name>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,49 +80,207 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 05 Oct 2022, Jeff Layton wrote:
+> On Tue, 2022-10-04 at 10:39 +1100, NeilBrown wrote:
+> > On Fri, 30 Sep 2022, Jeff Layton wrote:
+> > > Now that we can call into vfs_getattr to get the i_version field, use
+> > > that facility to fetch it instead of doing it in nfsd4_change_attribute.
+> > >=20
+> > > Neil also pointed out recently that IS_I_VERSION directory operations
+> > > are always logged, and so we only need to mitigate the rollback problem
+> > > on regular files. Also, we don't need to factor in the ctime when
+> > > reexporting NFS or Ceph.
+> > >=20
+> > > Set the STATX_VERSION (and BTIME) bits in the request when we're dealing
+> > > with a v4 request. Then, instead of looking at IS_I_VERSION when
+> > > generating the change attr, look at the result mask and only use it if
+> > > STATX_VERSION is set. With this change, we can drop the fetch_iversion
+> > > export operation as well.
+> > >=20
+> > > Move nfsd4_change_attribute into nfsfh.c, and change it to only factor
+> > > in the ctime if it's a regular file and the fs doesn't advertise
+> > > STATX_ATTR_VERSION_MONOTONIC.
+> > >=20
+> > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > > ---
+> > >  fs/nfs/export.c          |  7 -------
+> > >  fs/nfsd/nfs4xdr.c        |  4 +++-
+> > >  fs/nfsd/nfsfh.c          | 40 ++++++++++++++++++++++++++++++++++++++++
+> > >  fs/nfsd/nfsfh.h          | 29 +----------------------------
+> > >  fs/nfsd/vfs.h            |  7 ++++++-
+> > >  include/linux/exportfs.h |  1 -
+> > >  6 files changed, 50 insertions(+), 38 deletions(-)
+> > >=20
+> > > diff --git a/fs/nfs/export.c b/fs/nfs/export.c
+> > > index 01596f2d0a1e..1a9d5aa51dfb 100644
+> > > --- a/fs/nfs/export.c
+> > > +++ b/fs/nfs/export.c
+> > > @@ -145,17 +145,10 @@ nfs_get_parent(struct dentry *dentry)
+> > >  	return parent;
+> > >  }
+> > > =20
+> > > -static u64 nfs_fetch_iversion(struct inode *inode)
+> > > -{
+> > > -	nfs_revalidate_inode(inode, NFS_INO_INVALID_CHANGE);
+> > > -	return inode_peek_iversion_raw(inode);
+> > > -}
+> > > -
+> > >  const struct export_operations nfs_export_ops =3D {
+> > >  	.encode_fh =3D nfs_encode_fh,
+> > >  	.fh_to_dentry =3D nfs_fh_to_dentry,
+> > >  	.get_parent =3D nfs_get_parent,
+> > > -	.fetch_iversion =3D nfs_fetch_iversion,
+> > >  	.flags =3D EXPORT_OP_NOWCC|EXPORT_OP_NOSUBTREECHK|
+> > >  		EXPORT_OP_CLOSE_BEFORE_UNLINK|EXPORT_OP_REMOTE_FS|
+> > >  		EXPORT_OP_NOATOMIC_ATTR,
+> > > diff --git a/fs/nfsd/nfs4xdr.c b/fs/nfsd/nfs4xdr.c
+> > > index 1e9690a061ec..779c009314c6 100644
+> > > --- a/fs/nfsd/nfs4xdr.c
+> > > +++ b/fs/nfsd/nfs4xdr.c
+> > > @@ -2869,7 +2869,9 @@ nfsd4_encode_fattr(struct xdr_stream *xdr, struct=
+ svc_fh *fhp,
+> > >  			goto out;
+> > >  	}
+> > > =20
+> > > -	err =3D vfs_getattr(&path, &stat, STATX_BASIC_STATS, AT_STATX_SYNC_AS=
+_STAT);
+> > > +	err =3D vfs_getattr(&path, &stat,
+> > > +			  STATX_BASIC_STATS | STATX_BTIME | STATX_VERSION,
+> > > +			  AT_STATX_SYNC_AS_STAT);
+> > >  	if (err)
+> > >  		goto out_nfserr;
+> > >  	if (!(stat.result_mask & STATX_BTIME))
+> > > diff --git a/fs/nfsd/nfsfh.c b/fs/nfsd/nfsfh.c
+> > > index a5b71526cee0..9168bc657378 100644
+> > > --- a/fs/nfsd/nfsfh.c
+> > > +++ b/fs/nfsd/nfsfh.c
+> > > @@ -634,6 +634,10 @@ void fh_fill_pre_attrs(struct svc_fh *fhp)
+> > >  		stat.mtime =3D inode->i_mtime;
+> > >  		stat.ctime =3D inode->i_ctime;
+> > >  		stat.size  =3D inode->i_size;
+> > > +		if (v4 && IS_I_VERSION(inode)) {
+> > > +			stat.version =3D inode_query_iversion(inode);
+> > > +			stat.result_mask |=3D STATX_VERSION;
+> > > +		}
+> >=20
+> > This is increasingly ugly.  I wonder if it is justified at all...
+> >=20
+>=20
+> I'm fine with dropping that. So if the getattrs fail, we should just not
+> offer up pre/post attrs?
+>=20
+> > >  	}
+> > >  	if (v4)
+> > >  		fhp->fh_pre_change =3D nfsd4_change_attribute(&stat, inode);
+> > > @@ -665,6 +669,8 @@ void fh_fill_post_attrs(struct svc_fh *fhp)
+> > >  	if (err) {
+> > >  		fhp->fh_post_saved =3D false;
+> > >  		fhp->fh_post_attr.ctime =3D inode->i_ctime;
+> > > +		if (v4 && IS_I_VERSION(inode))
+> > > +			fhp->fh_post_attr.version =3D inode_query_iversion(inode);
+> >=20
+> > ... ditto ...
+> >=20
+> > >  	} else
+> > >  		fhp->fh_post_saved =3D true;
+> > >  	if (v4)
+> > > @@ -754,3 +760,37 @@ enum fsid_source fsid_source(const struct svc_fh *=
+fhp)
+> > >  		return FSIDSOURCE_UUID;
+> > >  	return FSIDSOURCE_DEV;
+> > >  }
+> > > +
+> > > +/*
+> > > + * We could use i_version alone as the change attribute.  However, i_v=
+ersion
+> > > + * can go backwards on a regular file after an unclean shutdown.  On i=
+ts own
+> > > + * that doesn't necessarily cause a problem, but if i_version goes bac=
+kwards
+> > > + * and then is incremented again it could reuse a value that was previ=
+ously
+> > > + * used before boot, and a client who queried the two values might inc=
+orrectly
+> > > + * assume nothing changed.
+> > > + *
+> > > + * By using both ctime and the i_version counter we guarantee that as =
+long as
+> > > + * time doesn't go backwards we never reuse an old value. If the files=
+ystem
+> > > + * advertises STATX_ATTR_VERSION_MONOTONIC, then this mitigation is no=
+t needed.
+> > > + *
+> > > + * We only need to do this for regular files as well. For directories,=
+ we
+> > > + * assume that the new change attr is always logged to stable storage =
+in some
+> > > + * fashion before the results can be seen.
+> > > + */
+> > > +u64 nfsd4_change_attribute(struct kstat *stat, struct inode *inode)
+> > > +{
+> > > +	u64 chattr;
+> > > +
+> > > +	if (stat->result_mask & STATX_VERSION) {
+> > > +		chattr =3D stat->version;
+> > > +
+> > > +		if (S_ISREG(inode->i_mode) &&
+> > > +		    !(stat->attributes & STATX_ATTR_VERSION_MONOTONIC)) {
+> >=20
+> > I would really rather that the fs got to make this decision.
+> > If it can guarantee that the i_version is monotonic even over a crash
+> > (which is probably can for directory, and might need changes to do for
+> > files) then it sets STATX_ATTR_VERSION_MONOTONIC and nfsd trusts it
+> > completely.
+> > If it cannot, then it doesn't set the flag.
+> > i.e. the S_ISREG() test should be in the filesystem, not in nfsd.
+> >=20
+>=20
+> This sounds reasonable, but for one thing.
+>=20
+> From RFC 7862:
+>=20
+>    While Section 5.4 of [RFC5661] discusses
+>    per-file system attributes, it is expected that the value of
+>    change_attr_type will not depend on the value of "homogeneous" and
+>    will only change in the event of a migration.
+>=20
+> The change_attr_type4 must be the same for all filehandles under a
+> particular filesystem.
+>=20
+> If we do what you suggest though, then it's easily possible for the fs
+> to set STATX_ATTR_VERSION_MONOTONIC on=C2=A0directories but not files. If we
+> later want to allow nfsd to advertise a change_attr_type4, we won't be
+> able to rely on the STATX_ATTR_VERSION_MONOTONIC to tell us how to fill
+> that out.
+>=20
+> Maybe that's ok. I suppose we could add a new field to the export
+> options that filesystems can set to advertise what sort of change attr
+> they offer?
+>=20
 
+There are 3 cases:
+1/ a file/dir which advertises MONOTONIC is easy to handle.
+2/ an IS_I_VERSION file/dir that does not advertise MONOTONIC will only fail
+   to be MONOTONIC across unclean restart (correct?).  nfsd can
+   compensate using an xattr on the root to count crashes, or just adding cti=
+me.
+3/ a non-IS_I_VERSION fs that does not advertise MONOTONIC cannot
+   be compensated for by nfsd.
 
-On 10/5/2022 11:16 AM, Marijn Suijten wrote:
-> Multiplying a value by 2 and adding 1 to it always results in a value
-> that is uneven, and that 1 gets truncated immediately when performing
-> integer division by 2 again.  There is no "rounding" possible here.
-> 
-> After that target_bpp_x16 is used to store a multiplication of
-> bits_per_pixel by 16 which is only ever read to immediately be divided
-> by 16 again, and is elided in much the same way.
-> 
-> Fixes: b9080324d6ca ("drm/msm/dsi: add support for dsc data")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/dsi/dsi_host.c | 10 +---------
->   1 file changed, 1 insertion(+), 9 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index 8e4bc586c262..70077d1f0f21 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -1784,7 +1784,6 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
->   	int hrd_delay;
->   	int pre_num_extra_mux_bits, num_extra_mux_bits;
->   	int slice_bits;
-> -	int target_bpp_x16;
->   	int data;
->   	int final_value, final_scale;
->   	int i;
-> @@ -1864,14 +1863,7 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
->   	data = 2048 * (dsc->rc_model_size - dsc->initial_offset + num_extra_mux_bits);
->   	dsc->slice_bpg_offset = DIV_ROUND_UP(data, groups_total);
->   
-> -	/* bpp * 16 + 0.5 */
-> -	data = dsc->bits_per_pixel * 16;
-> -	data *= 2;
-> -	data++;
-> -	data /= 2;
-> -	target_bpp_x16 = data;
-> -
-> -	data = (dsc->initial_xmit_delay * target_bpp_x16) / 16;
-> +	data = dsc->initial_xmit_delay * dsc->bits_per_pixel;
->   	final_value =  dsc->rc_model_size - data + num_extra_mux_bits;
->   	dsc->final_offset = final_value;
->   
+If we ever want nfsd to advertise MONOTONIC, then we must be able to
+reject non-IS_I_VERSION filesystems that don't advertise MONOTONIC on
+all files.
+
+Maybe we need a global nfsd option which defaults to "monotoric" and
+causes those files to be rejected, but can be set to "non-monotonic" and
+then allows all files to be exported.
+
+It would be nice to make it easy to run multiple nfsd instances each on a
+different IP address.  Each can then have different options.  This could
+also be used to reexport an NFS mount using unmodified filehandles.
+
+Currently you need a network namespace to create a new nfsd.  I wonder
+if that is a little too much of a barrier.  But maybe we could automate
+the creation of working network namespaces for nfsd....
+
+NeilBrown
