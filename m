@@ -2,85 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C77A75F51BD
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 710DF5F51C2
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbiJEJae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 05:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
+        id S229590AbiJEJcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 05:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiJEJac (ORCPT
+        with ESMTP id S229573AbiJEJcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 05:30:32 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D9E1D31D
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 02:30:27 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id n198so1057584iod.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 02:30:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date;
-        bh=5N+aMihLorZXBHcklDfHgYNT/W4ZQvt0cLc1vwY1KVE=;
-        b=X7UEsEgJjqoNOvLJY6FO8Tvqtxut8IYL1K1nWtA4Ui76fyc6YdbJ4dnle9IV0O9KA2
-         vNcjVtJDxEAyNrcYdDn4Hh058EhNW+hV35PRDyoVvQhplRT2cxek5UOFLXX8KDVN+e1L
-         wcxI50AMEzfnCxpRPvIcVLWa6rKPNFL/tTjeowkFHNJN6nWe70CusOrgfyRAeNfAi4Ch
-         CNkPMVSxXUIo7GYepknInryuIakQxoXU6vtEfVk3N5ZeT3nFcnr/UzX3hDb8F6KXiAsB
-         heOw8t0vuhx8PLP+/WndBfEYY3BvLw1VBxYvho+kBEt4NkHrdE5edzJBMXB12mxboq/l
-         2y8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=5N+aMihLorZXBHcklDfHgYNT/W4ZQvt0cLc1vwY1KVE=;
-        b=Tvz33D+2dQ0JzHFblkwvE/WldiD6Rtfs3/TIQ2fcrhflEesSIPm5T0JRDiIh7n2MNL
-         GiawCztGL3PzNBWM8Phr94RfzTp6cCPmoKi/XmLrverRD8q3vqvQ/POnB7FwWmYygBqq
-         0PsRrpUzGjvPfc0H1oIszF7dpXhe2cOqYy27o6Jc26ZTd6rUKmD2PCh3EER8NQva08l2
-         J5gLvm/N6jr/RXQvkYzCBtEj9IvGcAO9J9lAc2gd1hSdSeGXCgfTF31fNpo3GOPhHwyX
-         /Gozo/7jeBjGhGeZ6N6BfRa3gV1XPi5ggHaSm0AaFmANzR4q0tN/uymraIcnxm9FzXyJ
-         qTIQ==
-X-Gm-Message-State: ACrzQf0uh+2d2uqmbW533Fix6N/C1LhivaOStmlCYRPvLezH9N6EfrCd
-        G/aD28yk8+qy+W0evWZe4fMLjtuRFC6LKTRpLds=
-X-Google-Smtp-Source: AMsMyM6p12i9TE1fLu8jd0RqnEy2qUSJ3sW8kJdZfnbWU2aUQgzklK9lcu5J3Qx/PTHy5ExjtF6H4R8icl5tetL/aA4=
-X-Received: by 2002:a05:6638:238a:b0:35a:25b7:a1a7 with SMTP id
- q10-20020a056638238a00b0035a25b7a1a7mr15697554jat.92.1664962226512; Wed, 05
- Oct 2022 02:30:26 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6e02:174b:0:0:0:0 with HTTP; Wed, 5 Oct 2022 02:30:26
- -0700 (PDT)
-Reply-To: jennifermbaya036@gmail.com
-From:   "Mrs.Jennifer Mbaya" <ezechielgnonlonfoun@gmail.com>
-Date:   Wed, 5 Oct 2022 10:30:26 +0100
-Message-ID: <CA+=aNsgDsCCsCaJfm8p1AVDzwM=z4gZxSVrY=VnUkrScNfqoqw@mail.gmail.com>
-Subject: Edunsaaja
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: **
+        Wed, 5 Oct 2022 05:32:08 -0400
+Received: from linderud.pw (linderud.dev [163.172.10.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4501FCC8;
+        Wed,  5 Oct 2022 02:32:05 -0700 (PDT)
+Received: from linderud.pw (localhost [127.0.0.1])
+        by linderud.pw (Postfix) with ESMTP id 7901FC028C;
+        Wed,  5 Oct 2022 11:31:32 +0200 (CEST)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linderud.pw;
+        s=linderud; t=1664962292;
+        bh=vX7y6tt/nR7ILFaDhy4O+3QY4gLJC6/KfUIc2fyat80=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=psdPxcswAtbpqhhvz02MMbbqJYpbjn4JOpJ/c9FIcVshDDoOD/gV8PU1KbOQVgPid
+         kfGbQZgxgeBB7EUOS3lr5YRaNR7JAPw4qIfOuKdBwJcD4NeW50Y2PuEYa2lGcjFWEM
+         aRxRNnM1+V99rsH4RuS2ZEAAiCy8yDT1Z3tGq7/Q1H6+1Rafxh91wwzZ9gxn/PCBTd
+         jKEv7EjbpLhar9D9mkx7TuTvYkeJbybqtohXNUW3K8v6veClk6x2z9KtxOZ/bn3aVA
+         0ruXxqgkIPIttK9zARpT76aghe3hgViuL99+21T5WWEcZ74cEyLRG8B10prkzOaJPy
+         XyCg7vVZAjjcj493RMyOdTLn95Hv3qd8sAxSWZ5H+UWb0jhRGX9hH4rQHsGgHoHse2
+         BzjEdCxieToDaDlgqp26eqI2qfM82ptCMhXoZN44XNLdmE7/HypdFFfTLCLsmraCVM
+         qs8oyCopfIivWEQS7877w7K13dfL++aJO8wzeQXvJmHi3w/+8+8UyJVGSfnpWYt/Vw
+         a7q3JddBiFC8DT7UVwtfIpCOYIHV3nZX955PqU3W/qqxZcS22CFkKhOduVDhXWhddk
+         9KAoVde29KujeLhO4Uu9XJxHFqtZRFQ0ZPlB7y+cxgwmeGrZQ1KckkvRCFa93t7rQz
+         6+WvQbpPzUgdnt9gEHx5WOO0=
+Received: from localhost (unknown [194.69.103.253])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: morten)
+        by linderud.pw (Postfix) with ESMTPSA id 39AB7C01AE;
+        Wed,  5 Oct 2022 11:31:32 +0200 (CEST)
+Date:   Wed, 5 Oct 2022 11:31:28 +0200
+From:   Morten Linderud <morten@linderud.pw>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: Re: [PATCH] tpm/eventlog: Don't abort tpm_read_log on faulty ACPI
+ config
+Message-ID: <20221005093128.nsudft5yl32xj2gg@framework>
+References: <20210920203447.4124005-1-morten@linderud.pw>
+ <Yzy2STXGSBmSLhmA@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yzy2STXGSBmSLhmA@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Edunsaaja
+On Wed, Oct 05, 2022 at 01:40:09AM +0300, Jarkko Sakkinen wrote:
+> On Mon, Sep 20, 2021 at 10:34:47PM +0200, Morten Linderud wrote:
+> > Some vendors report faulty values in the acpi TPM2 table. This causes
+> 
+> s/acpi/ACPI/
+> 
+> > the function to abort with EIO and essentially short circuits the
+> 
+> s/the function/tpm_read_log()/
+> 
+> > tpm_read_log function as we never even attempt to read the EFI
+> > configuration table for a log.
+> 
+> > 
+> > This changes the condition to only look for a positive return value,
+> > else hands over the eventlog discovery to the EFI configuration table
+> > which should hopefully work better.
+> 
+> Please, write in imperative ("Change...").
+> 
+> Also exlicitly state how are you changing the check for
+> tpm_read_log_acpi() in tpm_read_log().
+> 
+> You could *even* have a snippet how the checks change
+> here for clarity.
+> 
+> > It's unclear to me if there is a better solution to this then just
+> > failing. However, I do not see any clear reason why we can't properly
+> > fallback to the EFI configuration table.
+> 
+> This paragraph should not be part of the commit message.
+> 
+> Rest of the commit message made sense can you add also fixes tag
+> as this is clearly a bug fix?
+> 
+> Also, please remove the two spurious diff's from the commit that
+> are not relevant for a stable bug fix (pr_warn() and comment
+> removal).
 
-Nimess=C3=A4si on palkinto Yhdistyneilt=C3=A4 Kansakunnilta ja Maailman
-terveysj=C3=A4rjest=C3=B6lt=C3=A4, joka on osa kansainv=C3=A4list=C3=A4 val=
-uuttarahastoa, johon
-s=C3=A4hk=C3=B6postisi, osoite ja raha on luovutettu meille siirtoa varten,
-vahvista yst=C3=A4v=C3=A4llisesti tietosi siirtoa varten.
-Meit=C3=A4 kehotettiin siirt=C3=A4m=C3=A4=C3=A4n kaikki vireill=C3=A4 oleva=
-t tapahtumat
-seuraavien kahden aikana, mutta jos olet vastaanottanut rahasi, j=C3=A4t=C3=
-=A4
-t=C3=A4m=C3=A4 viesti huomioimatta, jos et toimi heti.
-Tarvitsemme kiireellist=C3=A4 vastausta t=C3=A4h=C3=A4n viestiin, t=C3=A4m=
-=C3=A4 ei ole yksi
-niist=C3=A4 Internet-huijareista, se on pandemiaapu.
-Jennifer
+Yo,
+
+This is the v1 of the patch which you reviewed a year ago.
+https://marc.info/?l=linux-integrity&m=163225066613340&w=2
+
+V2 mostly fixed the commit message, but there where some more pointers. I'm
+happy to submit a V3 if we can agree on all the details.
+
+V2 review is here:
+https://marc.info/?l=linux-integrity&m=165475008823837&w=2
+
+-- 
+Morten Linderud
+PGP: 9C02FF419FECBE16
