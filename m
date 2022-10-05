@@ -2,166 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5965F5316
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 13:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D722F5F5319
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 13:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiJELDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 07:03:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51040 "EHLO
+        id S229768AbiJELEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 07:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiJELDc (ORCPT
+        with ESMTP id S229910AbiJELD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 07:03:32 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559106D9FB;
-        Wed,  5 Oct 2022 04:03:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id F0EB21F388;
-        Wed,  5 Oct 2022 11:03:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1664967808; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j+lb+y1NjPOXtKvMZH/DFSB4E2HI7Wk27OuXyDj7Pes=;
-        b=NeSTlqtefVIhVrpE2j7hWcZujiU0XdWdbPT/yrn5c6+g7S+PnJHPeS8tQSPNLA2J/lIEPJ
-        uUSitahwGL9qaxr4ykGiI9/9i1mis5j9Lmc3xdFGTwSBrzf5TYPd+8y7QNMgkd3Ywx0E5r
-        GzTvyNBQpG77W1on4cRgnKomoFOqbYo=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A31B613345;
-        Wed,  5 Oct 2022 11:03:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id WZ6SJn9kPWMEQwAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 05 Oct 2022 11:03:27 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-doc@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org
-Subject: [PATCH v3 4/4] xen/pv: support selecting safe/unsafe msr accesses
-Date:   Wed,  5 Oct 2022 13:03:02 +0200
-Message-Id: <20221005110302.13455-5-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20221005110302.13455-1-jgross@suse.com>
-References: <20221005110302.13455-1-jgross@suse.com>
+        Wed, 5 Oct 2022 07:03:59 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE9E77E9B;
+        Wed,  5 Oct 2022 04:03:50 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2958qPcR020832;
+        Wed, 5 Oct 2022 11:03:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=+mYGFIRKQdUCBWFR+Fyy7VoH7jwpQQOKiTdQo2jNTxI=;
+ b=FvH87cl2h0l5HLCRhoMnsat267RpZim8om4EXdEFTiTr9BO0Lb0Gii3Pb3GTl+S+/jCM
+ QGlA/IqXhJAQ4/pwVe+oB3aGjad+8z610kTQ8DY7bWtZHfg3swJFFzJgJx8A+TwILbtx
+ g4HifRZ+lI2oq7WtNXWMZmthmQ6EloOAkFjU+lxHj6C3jZILLBjJzIvLzmLEAMiz8P6Z
+ puqTksSsPtpWtH0mY4XRlRytt6m7cNQ0e97akEiewx63Vte96ZtGKjH3h9ZgHKoUrkQT
+ Vi+Xur1OyPdvevjg8x+CvqkjGnaMQ/dV3hc24FowQZvT70MeRrDZbKQ3gXaESxGCeRcD /Q== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k14et6sj6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Oct 2022 11:03:37 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 295AoFZF024397;
+        Wed, 5 Oct 2022 11:03:35 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3jxd695f8h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Oct 2022 11:03:35 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 295B42cM52101496
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 5 Oct 2022 11:04:02 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8ADF1A405B;
+        Wed,  5 Oct 2022 11:03:32 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1E7B1A4059;
+        Wed,  5 Oct 2022 11:03:32 +0000 (GMT)
+Received: from oc-nschnelle.boeblingen.de.ibm.com (unknown [9.155.199.46])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  5 Oct 2022 11:03:32 +0000 (GMT)
+Message-ID: <a9994ee0e97457965a2dd2b5e9795f0fde5bc466.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 5/5] iommu/s390: Fix incorrect pgsize_bitmap
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev
+Cc:     linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
+        jgg@nvidia.com, linux-kernel@vger.kernel.org
+Date:   Wed, 05 Oct 2022 13:03:31 +0200
+In-Reply-To: <ce73a798-c2e4-7d2f-1c2e-854170ea0b59@arm.com>
+References: <20221004120706.2957492-1-schnelle@linux.ibm.com>
+         <20221004120706.2957492-6-schnelle@linux.ibm.com>
+         <eb1955e4-a618-ebf0-562d-17f9dd58b0da@arm.com>
+         <b3c6fd2b-74d4-91d7-dc53-ba526c41b067@linux.ibm.com>
+         <a02a3cee-773a-da00-616f-04652c0905ce@arm.com>
+         <0da03411190c004e85cc856965b0aca901fd78fb.camel@linux.ibm.com>
+         <ce73a798-c2e4-7d2f-1c2e-854170ea0b59@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: zsg0W-JMzeP-X056nGTdArOUhGxjiy43
+X-Proofpoint-ORIG-GUID: zsg0W-JMzeP-X056nGTdArOUhGxjiy43
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-05_01,2022-10-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ priorityscore=1501 mlxscore=0 adultscore=0 lowpriorityscore=0
+ impostorscore=0 clxscore=1015 suspectscore=0 spamscore=0 malwarescore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210050070
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of always doing the safe variants for reading and writing MSRs
-in Xen PV guests, make the behavior controllable via Kconfig option
-and a boot parameter.
+On Wed, 2022-10-05 at 10:53 +0100, Robin Murphy wrote:
+> On 2022-10-04 17:13, Niklas Schnelle wrote:
+> > On Tue, 2022-10-04 at 16:31 +0100, Robin Murphy wrote:
+> > > On 2022-10-04 16:12, Matthew Rosato wrote:
+> > > > On 10/4/22 11:02 AM, Robin Murphy wrote:
+> > > > > On 2022-10-04 13:07, Niklas Schnelle wrote:
+> > > > > > The .pgsize_bitmap property of struct iommu_ops is not a page mask but
+> > > > > > rather has a bit set for each size of pages the IOMMU supports. As the
+> > > > > > comment correctly pointed out at this moment the code only support 4K
+> > > > > > pages so simply use SZ_4K here.
+> > > > > 
+> > > > > Unless it's already been done somewhere else, you'll want to switch over to the {map,unmap}_pages() interfaces as well to avoid taking a hit on efficiency here. The "page mask" thing was an old hack to trick the core API into making fewer map/unmap calls where the driver could map arbitrary numbers of pages at once anyway. The multi-page interfaces now do that more honestly and generally better (since they work for non-power-of-two sizes as well).
+> > > > 
+> > > > Thanks for the heads up -- Niklas has some additional series coming soon as described here:
+> > > > 
+> > > > https://lore.kernel.org/linux-iommu/a10424adbe01a0fd40372cbd0736d11e517951a1.camel@linux.ibm.com/
+> > > > 
+> > > > So implementing the _pages() interfaces is soon up on the roadmap.  But given what you say I wonder if this patch should just wait until the series that implements {map,unmap}_pages().
+> > > 
+> > > Perhaps, although the full change should be trivial enough that there's
+> > > probably just as much argument for doing the whole thing in its own
+> > > right for the sake of this cleanup. The main point is that
+> > > S390_IOMMU_PGSIZES is not incorrect as such, it's just not spelling out
+> > > the deliberate trick that it's achieving - everyone copied it from
+> > > intel-iommu, but since that got converted to the new interfaces the
+> > > original explanation is now gone. The only effect of "fixing" it in
+> > > isolation right now will be to make large VFIO mappings slower.
+> > > 
+> > > Robin.
+> > 
+> > The patch changing to map_pages()/unmap_pages() is currently part of a
+> > larger series of improvements, some of which are less trivial. So I'm
+> > planning to send those as RFC first. Those include changing the
+> > spin_lock protected list to RCU so the map/unmap can paralellize
+> > better. Another one is atomic updates to the IOMMU tables to do away
+> > with locks in map/unmap. So I think pulling that whole
+> > series into this one isn't ideal. I could pull just the
+> > map_pages()/unmap_pages() change though.
+> 
+> Yeah, literally just updating the s390_iommu_{map,unmap} function 
+> prototypes and replacing "size" with "pgsize * count" within is all 
+> that's needed to clean up this hack properly. That can (and probably 
+> should) be completely independent of other improvements deeper down.
+> 
+> Thanks,
+> Robin.
+> 
 
-The default will be the current behavior, which is to always use the
-safe variant.
+Pretty much, it's a bit cleaner to slightly change
+s390_iommu_update_trans() to take pgcount as argument since that
+currently calculates the pgcount from the size anyway which is
+redundant if we have a pgcount already but that's redudant if we have
+the pgcount already. But yes it's all pretty simple and I reordered
+things for v5 already.
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
- .../admin-guide/kernel-parameters.txt         |  6 +++++
- arch/x86/xen/Kconfig                          |  9 +++++++
- arch/x86/xen/enlighten_pv.c                   | 24 +++++++++++--------
- 3 files changed, 29 insertions(+), 10 deletions(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 426fa892d311..1bda9cf18fae 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -6836,6 +6836,12 @@
- 			Crash from Xen panic notifier, without executing late
- 			panic() code such as dumping handler.
- 
-+	xen_msr_safe=	[X86,XEN]
-+			Format: <bool>
-+			Select whether to always use non-faulting (safe) MSR
-+			access functions when running as Xen PV guest. The
-+			default value is controlled by CONFIG_XEN_PV_MSR_SAFE.
-+
- 	xen_nopvspin	[X86,XEN]
- 			Disables the qspinlock slowpath using Xen PV optimizations.
- 			This parameter is obsoleted by "nopvspin" parameter, which
-diff --git a/arch/x86/xen/Kconfig b/arch/x86/xen/Kconfig
-index 85246dd9faa1..9b1ec5d8c99c 100644
---- a/arch/x86/xen/Kconfig
-+++ b/arch/x86/xen/Kconfig
-@@ -92,3 +92,12 @@ config XEN_DOM0
- 	select X86_X2APIC if XEN_PVH && X86_64
- 	help
- 	  Support running as a Xen Dom0 guest.
-+
-+config XEN_PV_MSR_SAFE
-+	bool "Always use safe MSR accesses in PV guests"
-+	default y
-+	depends on XEN_PV
-+	help
-+	  Use safe (not faulting) MSR access functions even if the MSR access
-+	  should not fault anyway.
-+	  The default can be changed by using the "xen_msr_safe" boot parameter.
-diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
-index d5b0844a1b7c..daae454191f2 100644
---- a/arch/x86/xen/enlighten_pv.c
-+++ b/arch/x86/xen/enlighten_pv.c
-@@ -108,6 +108,16 @@ struct tls_descs {
-  */
- static DEFINE_PER_CPU(struct tls_descs, shadow_tls_desc);
- 
-+static __read_mostly bool xen_msr_safe = IS_ENABLED(CONFIG_XEN_PV_MSR_SAFE);
-+
-+static int __init parse_xen_msr_safe(char *str)
-+{
-+	if (str)
-+		return strtobool(str, &xen_msr_safe);
-+	return -EINVAL;
-+}
-+early_param("xen_msr_safe", parse_xen_msr_safe);
-+
- static void __init xen_pv_init_platform(void)
- {
- 	/* PV guests can't operate virtio devices without grants. */
-@@ -1011,22 +1021,16 @@ static int xen_write_msr_safe(unsigned int msr, unsigned int low,
- 
- static u64 xen_read_msr(unsigned int msr)
- {
--	/*
--	 * This will silently swallow a #GP from RDMSR.  It may be worth
--	 * changing that.
--	 */
- 	int err;
- 
--	return xen_read_msr_safe(msr, &err);
-+	return xen_do_read_msr(msr, xen_msr_safe ? &err : NULL);
- }
- 
- static void xen_write_msr(unsigned int msr, unsigned low, unsigned high)
- {
--	/*
--	 * This will silently swallow a #GP from WRMSR.  It may be worth
--	 * changing that.
--	 */
--	xen_write_msr_safe(msr, low, high);
-+	int err;
-+
-+	xen_do_write_msr(msr, low, high, xen_msr_safe ? &err : NULL);
- }
- 
- /* This is called once we have the cpu_possible_mask */
--- 
-2.35.3
+Speaking of v5, if that were the final form, what do you think would be
+the best tree to take it? Except for patch 1 they depend on the removal
+of the bus_next field in struct zpci_dev. That commit is not yet in
+Linus' tree but already in the s390 feature branch on git.kernel.org so
+if these changes were to go via the s390 tree that would be taken care
+of. Otherwise one would have to merge that tree first. Or as an
+alternative I also have a kernel.org account and can provide this
+series as a GPG signed branch based on the s390 tree.
 
