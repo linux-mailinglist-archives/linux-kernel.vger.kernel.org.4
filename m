@@ -1,382 +1,191 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A4A5F563B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 16:14:10 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 58C475F5644
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 16:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiJEOOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 10:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
+        id S229697AbiJEOTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 10:19:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbiJEOOA (ORCPT
+        with ESMTP id S229459AbiJEOTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 10:14:00 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438CB7C33A;
-        Wed,  5 Oct 2022 07:13:59 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 295DbnR9012930;
-        Wed, 5 Oct 2022 14:13:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=M8evBa/i+BwZ32m38a3q5zdDdYZKhmZAofBOCds6t4c=;
- b=p0xHP3rGHmp9h7fjCHxQvJanlyaAlFF4f+/RDz4g1eoo/gcivDmkEWnzkYT6uBzk5Uf+
- aPt5fWWC/jTDNhDTQuErSG8G+5HCVRTp8dV6TlCCFMTYt8jtARsfI+dTOlqJDeKPu76/
- MKhRWwdS0jHd+niVOguvOr2RxptM3Vtc6iRFfweYybCeRBLI8L+Rx3Qow76mf9NlDcOn
- aPQFIQn9rjoYYCZSZ1Vbcv7lUVFptMUsJEEDJz3IFGmAdy6Nr9chOWU1qQKI1MF5JT/X
- eFB5BvbuFgWzLbbO+ArTpWwxgI7bXCeooHszgjRjkEW1Fr+pk8H9jSPEmCwXcjM7SQB3 mQ== 
+        Wed, 5 Oct 2022 10:19:43 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0731AD9E;
+        Wed,  5 Oct 2022 07:19:30 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 295EJHIL022889;
+        Wed, 5 Oct 2022 14:19:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=lOKUdL4SfmoA4A/iH/3PevuocbiAUEp6EmppSdK48jc=;
+ b=XKLXoQM5btz9Gums2sa3wp0H7zSpVg9qp9Od6Kdba1Ozp3iiMn+4G/wJ8sZcuQ7xV7Mc
+ hlBdLT+GQJ0YpOjIH9vRq3Lqy5Aw8LAFpi2M6m6HjhibfvZrNB3fNdHnPfSFvQDAeNWZ
+ HgoEaG4VhGiHaOd+y5ZdyUxOz9K0xpPKGnCi/rwaFN0Wnz4mgl1Yo7BBo5wWL4wt4YD1
+ DVTM0i3oI0+bUcSey5kvth3nXIUWIlS/ydZVOEg6MBiG9Ms/q1B31zBGZinJZ9j8bYmV
+ KOkisajbZqZsDyggodwo6xWViTyOl1KhgbqeEhsZiuNssMWCkDRROOFkfS7gCW4J7yR9 OA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k15shggwe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Oct 2022 14:19:17 +0000
+Received: from pps.filterd (NALASPPMTA05.qualcomm.com [127.0.0.1])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 295EEN17027124;
+        Wed, 5 Oct 2022 14:19:16 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k1ap29uj0-1
+        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 3jxemkxjsu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Oct 2022 14:13:55 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 295DcFSU013857;
-        Wed, 5 Oct 2022 14:13:55 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k1ap29uh3-1
+        Wed, 05 Oct 2022 14:19:16 +0000
+Received: from NALASPPMTA05.qualcomm.com (NALASPPMTA05.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 295EGhcA029167;
+        Wed, 5 Oct 2022 14:19:15 GMT
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 295EJFLW031723
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Oct 2022 14:13:54 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 295E67w2008184;
-        Wed, 5 Oct 2022 14:13:52 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3jxctj5p16-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Oct 2022 14:13:52 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 295EDnHD34472628
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 5 Oct 2022 14:13:49 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 462A05204E;
-        Wed,  5 Oct 2022 14:13:49 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.242])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id C7D345204F;
-        Wed,  5 Oct 2022 14:13:48 +0000 (GMT)
-Date:   Wed, 5 Oct 2022 16:13:46 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-Subject: Re: [PATCH v1 1/9] s390/uaccess: Add storage key checked cmpxchg
- access to user space
-Message-ID: <20221005161346.3c735249@p-imbrenda>
-In-Reply-To: <20220930210751.225873-2-scgl@linux.ibm.com>
-References: <20220930210751.225873-1-scgl@linux.ibm.com>
-        <20220930210751.225873-2-scgl@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Wed, 05 Oct 2022 14:19:15 +0000
+Received: from [10.38.242.178] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 5 Oct 2022
+ 07:19:13 -0700
+Message-ID: <3bf05883-e8dc-5e11-ed83-7f8f7b801737@quicinc.com>
+Date:   Wed, 5 Oct 2022 07:19:11 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH 4/5] drm/msm/dpu1: Account for DSC's bits_per_pixel having
+ 4 fractional bits
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        <phone-devel@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        <freedreno@lists.freedesktop.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        <dri-devel@lists.freedesktop.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Martin Botka <martin.botka@somainline.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sean Paul <sean@poorly.run>, <linux-kernel@vger.kernel.org>
+References: <20221001190807.358691-1-marijn.suijten@somainline.org>
+ <20221001190807.358691-5-marijn.suijten@somainline.org>
+ <7f7a5d78-e50f-b6af-bb3e-bbfbc7fa5f75@quicinc.com>
+ <20221004221134.roino4u2waawgh6u@SoMainline.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20221004221134.roino4u2waawgh6u@SoMainline.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: R0F7TXFF4spYhlUcSlnlSGo7qLPxMefO
-X-Proofpoint-GUID: PbdNM6zFOlRDSulwBK7Gr_ibpYXBPpz8
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: eawUBwmjs2ZNif2dVeoV7CCQHHci12b7
+X-Proofpoint-ORIG-GUID: eawUBwmjs2ZNif2dVeoV7CCQHHci12b7
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
  definitions=2022-10-05_03,2022-10-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 phishscore=0 spamscore=0 mlxscore=0 bulkscore=0
- lowpriorityscore=0 clxscore=1011 mlxlogscore=999 suspectscore=0
- malwarescore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2210050088
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ impostorscore=0 lowpriorityscore=0 mlxlogscore=999 spamscore=0 mlxscore=0
+ phishscore=0 priorityscore=1501 suspectscore=0 adultscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210050090
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sep 2022 23:07:43 +0200
-Janis Schoetterl-Glausch <scgl@linux.ibm.com> wrote:
 
-> Add cmpxchg functionality similar to that in cmpxchg.h except that the
-> target is a user space address and that the address' storage key is
-> matched with the access_key argument in order to honor key-controlled
-> protection.
-> The access is performed by changing to the secondary-spaces mode and
-> setting the PSW key for the duration of the compare and swap.
 
-this whole patch is very complex, I think it can be simplified and made
-more maintainable (see my comments below)
+On 10/4/2022 3:11 PM, Marijn Suijten wrote:
+> On 2022-10-04 10:03:07, Abhinav Kumar wrote:
+>>
+>>
+>> On 10/1/2022 12:08 PM, Marijn Suijten wrote:
+>>> According to the comment this DPU register contains the bits per pixel
+>>> as a 6.4 fractional value, conveniently matching the contents of
+>>> bits_per_pixel in struct drm_dsc_config which also uses 4 fractional
+>>> bits.  However, the downstream source this implementation was
+>>> copy-pasted from has its bpp field stored _without_ fractional part.
+>>>
+>>> This makes the entire convoluted math obsolete as it is impossible to
+>>> pull those 4 fractional bits out of thin air, by somehow trying to reuse
+>>> the lowest 2 bits of a non-fractional bpp (lsb = bpp % 4??).
+>>>
+>>> The rest of the code merely attempts to keep the integer part a multiple
+>>> of 4, which is rendered useless thanks to data |= dsc->bits_per_pixel <<
+>>> 12; already filling up those bits anyway (but not on downstream).
+>>>
+>>> Fixes: c110cfd1753e ("drm/msm/disp/dpu1: Add support for DSC")
+>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+>>
+>> Many of this bugs are because the downstream code from which this
+>> implementation was derived wasnt the latest perhaps?
+> 
+> Perhaps, this code is "identical" to what I'm looking at in some
+> downstream 4.14 / 4.19, where the upstream struct for DSC either wasn't
+> there or wasn't used.  We have to find and address these bugs one by one
+> to make our panels work, and this series gets one platform (sdm845) down
+> but has more work pending for others (sm8250 has my current focus).
+> 
+> Or are you suggesting to "redo" the DSC integration work based on a
+> (much) newer display techpack (SDE driver)?
 
-in the end here we need an atomic compare and swap with key checking,
-if we are doing a syscall for it, we are clearly not looking for
-performance.
+There is no need to redo the DSC integration now.
+
+The code I am referring to is here :
+
+https://git.codelinaro.org/clo/la/platform/vendor/opensource/display-drivers/-/blob/DISPLAY.LA.2.0.r1-08000-WAIPIO.0/msm/sde_dsc_helper.c#L240
+
+So with respect to the redundant math in patches 1/3/4/5 of this series, 
+I dont see all the redundant math anymore in this calculation.
+
+This is what i meant by my comment.
+
+When DSC changes were pushed, they were indeed validated on sdm845 
+devices by Vinod so there was a certain level of confidence on those 
+changes.
+
+At this point, we should just consider these as bug-fixes for upstream 
+and keep going. A full redo is not required.
+
+At some point in the next couple of months, we plan to add DSC 1.2 
+support to MSM.
+
+We will check for any missing changes (if any after this series of 
+yours) and push those as part of that.
 
 > 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> ---
+>> Earlier, downstream had its own DSC struct maybe leading to this
+>> redundant math but now we have migrated over to use the upstream struct
+>> drm_dsc_config.
 > 
+> Found the 3-year-old `disp: msm: use upstream dsc config data` commit
+> that makes this change.  It carries a similar comment:
 > 
-> Possible variations:
->   * check the assumptions made in cmpxchg_user_key_size and error out
->   * call functions called by copy_to_user
->      * access_ok? is a nop
->      * should_fail_usercopy?
->      * instrument_copy_to_user? doesn't make sense IMO
->   * don't be overly strict in cmpxchg_user_key
+>      /* integer bpp support only */
 > 
+> The superfluous math was howerver removed earlier, in:
 > 
->  arch/s390/include/asm/uaccess.h | 187 ++++++++++++++++++++++++++++++++
->  1 file changed, 187 insertions(+)
+>      disp: msm: fix dsc parameters related to 10 bpc 10 bpp
 > 
-> diff --git a/arch/s390/include/asm/uaccess.h b/arch/s390/include/asm/uaccess.h
-> index f7038b800cc3..0ce90b7e2b75 100644
-> --- a/arch/s390/include/asm/uaccess.h
-> +++ b/arch/s390/include/asm/uaccess.h
-> @@ -19,6 +19,8 @@
->  #include <asm/extable.h>
->  #include <asm/facility.h>
->  #include <asm-generic/access_ok.h>
-> +#include <asm/page.h>
-> +#include <linux/log2.h>
->  
->  void debug_user_asce(int exit);
->  
-> @@ -390,4 +392,189 @@ do {									\
->  		goto err_label;						\
->  } while (0)
->  
-> +static __always_inline int __cmpxchg_user_key_small(int size, u64 address,
-> +						    unsigned __int128 *old_p,
-> +						    unsigned __int128 new, u8 access_key)
-> +{
-
-can this whole function be simplified to be a C wrapper for the 4 byte
-version of compare and swap?
-
-> +	u32 shift, mask, old_word, new_word, align_mask, tmp, diff;
-> +	u64 aligned;
-> +	int ret = -EFAULT;
-> +
-> +	switch (size) {
-> +	case 2:
-> +		align_mask = 2;
-> +		aligned = (address ^ (address & align_mask));
-> +		shift = (sizeof(u32) - (address & align_mask) - size) * 8;
-> +		mask = 0xffff << shift;
-> +		old_word = ((u16)*old_p) << shift;
-> +		new_word = ((u16)new) << shift;
-> +		break;
-> +	case 1:
-> +		align_mask = 3;
-> +		aligned = (address ^ (address & align_mask));
-> +		shift = (sizeof(u32) - (address & align_mask) - size) * 8;
-> +		mask = 0xff << shift;
-> +		old_word = ((u8)*old_p) << shift;
-> +		new_word = ((u8)new) << shift;
-> +		break;
-> +	}
-> +	asm volatile(
-> +		       "spka	0(%[access_key])\n"
-> +		"	sacf	256\n"
-> +		"0:	l	%[tmp],%[aligned]\n"
-> +		"1:	nr	%[tmp],%[hole_mask]\n"
-> +		"	or	%[new_word],%[tmp]\n"
-> +		"	or	%[old_word],%[tmp]\n"
-> +		"	lr	%[tmp],%[old_word]\n"
-> +		"2:	cs	%[tmp],%[new_word],%[aligned]\n"
-> +		"3:	jnl	4f\n"
-> +		"	xrk	%[diff],%[tmp],%[old_word]\n"
-> +		"	nr	%[diff],%[hole_mask]\n"
-> +		"	xr	%[new_word],%[diff]\n"
-> +		"	xr	%[old_word],%[diff]\n"
-> +		"	xrk	%[diff],%[tmp],%[old_word]\n"
-> +		"	jz	2b\n"
-> +		"4:	ipm	%[ret]\n"
-> +		"	srl	%[ret],28\n"
-> +		"5:	sacf	768\n"
-> +		"	spka	%[default_key]\n"
-> +		EX_TABLE(0b, 5b) EX_TABLE(1b, 5b)
-> +		EX_TABLE(2b, 5b) EX_TABLE(3b, 5b)
-> +		: [old_word] "+&d" (old_word),
-> +		  [new_word] "+&d" (new_word),
-> +		  [tmp] "=&d" (tmp),
-> +		  [aligned] "+Q" (*(u32 *)aligned),
-> +		  [diff] "=&d" (diff),
-> +		  [ret] "+d" (ret)
-> +		: [access_key] "a" (access_key << 4),
-> +		  [hole_mask] "d" (~mask),
-> +		  [default_key] "J" (PAGE_DEFAULT_KEY)
-> +		: "cc"
-> +	);
-> +	*old_p = (tmp & mask) >> shift;
-> +	return ret;
-> +}
-> +
-> +/**
-> + * cmpxchg_user_key_size() - cmpxchg with user space target, honoring storage keys
-> + * @size: Size of the value being cmpxchg'ed, one of 1,2,4,8,16.
-> + * @address: User space address of value to compare to *@old_p and exchange with
-> + *           *@new. Must be aligned to @size.
-> + * @old_p: Pointer to old value. Interpreted as a @size byte integer and compared
-> + *         to the content pointed to by @address in order to determine if the
-> + *         exchange occurs. The value read from @address is written back to *@old_p.
-> + * @new: New value to place at @address, interpreted as a @size byte integer.
-> + * @access_key: Access key to use for checking storage key protection.
-> + *
-> + * Perform a cmpxchg on a user space target, honoring storage key protection.
-> + * @access_key alone determines how key checking is performed, neither
-> + * storage-protection-override nor fetch-protection-override apply.
-> + *
-> + * Return:	0: successful exchange
-> + *		1: exchange failed
-> + *		-EFAULT: @address not accessible or not naturally aligned
-> + *		-EINVAL: invalid @size
-> + */
-> +static __always_inline int cmpxchg_user_key_size(int size, void __user *address,
-> +						 unsigned __int128 *old_p,
-> +						 unsigned __int128 new, u8 access_key)
-> +{
-> +	union {
-> +		u32 word;
-> +		u64 doubleword;
-> +	} old;
-> +	int ret = -EFAULT;
-> +
-> +	/*
-> +	 * The following assumes that:
-> +	 *  * the current psw key is the default key
-> +	 *  * no storage protection overrides are in effect
-> +	 */
-> +	might_fault();
-> +	switch (size) {
-> +	case 16:
-> +		asm volatile(
-> +			       "spka	0(%[access_key])\n"
-> +			"	sacf	256\n"
-> +			"0:	cdsg	%[old],%[new],%[target]\n"
-> +			"1:	ipm	%[ret]\n"
-> +			"	srl	%[ret],28\n"
-> +			"2:	sacf	768\n"
-> +			"	spka	%[default_key]\n"
-> +			EX_TABLE(0b, 2b) EX_TABLE(1b, 2b)
-> +			: [old] "+d" (*old_p),
-> +			  [target] "+Q" (*(unsigned __int128 __user *)address),
-> +			  [ret] "+d" (ret)
-> +			: [access_key] "a" (access_key << 4),
-> +			  [new] "d" (new),
-> +			  [default_key] "J" (PAGE_DEFAULT_KEY)
-> +			: "cc"
-> +		);
-> +		return ret;
-> +	case 8:
-> +		old.doubleword = *old_p;
-> +		asm volatile(
-> +			       "spka	0(%[access_key])\n"
-> +			"	sacf	256\n"
-> +			"0:	csg	%[old],%[new],%[target]\n"
-> +			"1:	ipm	%[ret]\n"
-> +			"	srl	%[ret],28\n"
-> +			"2:	sacf	768\n"
-> +			"	spka	%[default_key]\n"
-> +			EX_TABLE(0b, 2b) EX_TABLE(1b, 2b)
-> +			: [old] "+d" (old.doubleword),
-> +			  [target] "+Q" (*(u64 __user *)address),
-> +			  [ret] "+d" (ret)
-> +			: [access_key] "a" (access_key << 4),
-> +			  [new] "d" ((u64)new),
-> +			  [default_key] "J" (PAGE_DEFAULT_KEY)
-> +			: "cc"
-> +		);
-> +		*old_p = old.doubleword;
-> +		return ret;
-> +	case 4:
-> +		old.word = *old_p;
-> +		asm volatile(
-> +			       "spka	0(%[access_key])\n"
-> +			"	sacf	256\n"
-> +			"0:	cs	%[old],%[new],%[target]\n"
-> +			"1:	ipm	%[ret]\n"
-> +			"	srl	%[ret],28\n"
-> +			"2:	sacf	768\n"
-> +			"	spka	%[default_key]\n"
-> +			EX_TABLE(0b, 2b) EX_TABLE(1b, 2b)
-> +			: [old] "+d" (old.word),
-> +			  [target] "+Q" (*(u32 __user *)address),
-> +			  [ret] "+d" (ret)
-> +			: [access_key] "a" (access_key << 4),
-> +			  [new] "d" ((u32)new),
-> +			  [default_key] "J" (PAGE_DEFAULT_KEY)
-> +			: "cc"
-
-this is the same code 3 times with only very minimal changes.
-can you factor it out in macros?
-
-something like this:
-
-#define DO_COMPARE_AND_SWAP(instr, _old, _addr, _ret, _key, _new) \
-	asm volatile(
-			"spka	0(%[access_key])\n"
-		"	sacf	256\n" 
-		"0:	" instr "%[old],%[new],%[target]\n"
-		"1:	ipm	%[ret]\n"
- 		"	srl 	%[ret],28\n"
-		"2:	sacf	768\n"
-		"	spka	%[default_key]\n"
-		EX_TABLE(0b, 2b) EX_TABLE(1b, 2b)
-		: [old] "+d"(_old),
-		  [target] "+Q" (*(_addr)),
-		  [ret] "+d" (_ret)
-		: [access_key] "a" ((_key) << 4),
-		  [new] "d" (_new),
-		  [default_key] "J" (PAGE_DEFAULT_KEY)
-		: "cc"
-
-and then in the code:
-
-DO_COMPARE_AND_SWAP("cs", old.word, (u32 __user *)address, ret, access_key, (u32)new)
-
-this way the code is not duplicated
-
-
-or have you tried it already and there are issues I didn't think of?
-
-> +		);
-> +		*old_p = old.word;
-> +		return ret;
-> +	case 2:
-> +	case 1:
-> +		return __cmpxchg_user_key_small(size, (u64)address, old_p, new, access_key);
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +#define cmpxchg_user_key(target_p, old_p, new, access_key)			\
-> +({										\
-> +	__typeof__(old_p) __old_p = (old_p);					\
-> +	unsigned __int128 __old = *__old_p;					\
-> +	size_t __size = sizeof(*(target_p));					\
-> +	int __ret;								\
-> +										\
-> +	BUILD_BUG_ON(__size != sizeof(*__old_p));				\
-> +	BUILD_BUG_ON(__size != sizeof(new));					\
-> +	BUILD_BUG_ON(__size > 16 || !is_power_of_2(__size));			\
-
-and here an if to see if you need the _small version or the regular
-one, with the _small version being a wrapper around the regular one
-
-> +	__ret = cmpxchg_user_key_size(__size, (target_p), &__old, (new),	\
-> +				      (access_key));				\
-> +	*__old_p = __old;							\
-> +	__ret;									\
-> +})
-> +
->  #endif /* __S390_UACCESS_H */
-
+> - Marijn
+> 
+>> That being said, this patch LGTM
+>> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
