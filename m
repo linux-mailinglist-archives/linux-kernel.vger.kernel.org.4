@@ -2,103 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596DC5F56BD
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 16:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FBF05F56BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 16:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbiJEOv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 10:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40450 "EHLO
+        id S230020AbiJEOvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 10:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbiJEOvy (ORCPT
+        with ESMTP id S229507AbiJEOvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 10:51:54 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CED39BA3;
-        Wed,  5 Oct 2022 07:51:40 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id h10so8896789qvq.7;
-        Wed, 05 Oct 2022 07:51:40 -0700 (PDT)
+        Wed, 5 Oct 2022 10:51:15 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2064D7B7BD
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 07:51:14 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id bp15so12421754lfb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 07:51:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QmwHGbQvoaY/TFnVnQHLYh+/HcbN2RGXwWhx0V1Vk9k=;
-        b=gjopUXWEZ2d4VoVGBtuZoCBUSvJH7WREhR7WR11jhtntHE3SQQYlg/x+6wrvTAsJk3
-         93Dt9/jOsZvODxZQWIAtUjtuxTMNcyRXOIPqh3i55auTjpzoenFBT10IO2RsBbcZg4uf
-         TGegROqwPPIW+Y0Tr2AvjculHSsduUoLV0KrXTZ5spN2ysXOoBkvCiMq+SG8vZubKacr
-         Ef1Vm7XastiLJF64He8wgSpm+vCXqZoRYbJSXZjmBulauTHPSOVhQs9HakuQxkIxNLgH
-         buZzpSBeNthrzb+PE/CuX7ioHIcgh5H1ztahj01c55VwIKbGozfWztmYNff5UFEkrj3u
-         iTlg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=h5EgGPVm4WtQrmT0wcNwLb1/9YJNLS2w6d18NQrshN4=;
+        b=PBjFqLnLVrlg4HIHAA83ypl9+efBowPxAevsjQQnG8DzWFZCPvTdE9KEXhj7MiXeFP
+         wHxlFtS3UzG9vHhjupbOGhmQi4nNfet9ei7LmbHNoGd8PkRYHzw+t1AuGPOZZ5gTTtuY
+         OE9TzUurr+eHetiKN6rCNp/q3mcWvqmId4oLTtf27OSWbqisnpEO7aWk8b6FpWq51Rxo
+         c0qdJUJhHuyxP48BtdTAQyCjK9T5YyYob25eoO/mKLuDzce53Lp8G60sXa5Dq8vAoGZL
+         ENnW4xs9IpJF1JePwQDndy4482Jv1c61NM2Pg0KEUKhvJQjt4AL0Pwj8SXdAbeKHiL9q
+         BQQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QmwHGbQvoaY/TFnVnQHLYh+/HcbN2RGXwWhx0V1Vk9k=;
-        b=CVyhxTNtLiJdrmo+6iLrHIcB/NOQJhXsx+9RIdZT69qzizGqa8s3H1EmxCOxOfydwM
-         8Ob+QxxYcPSkBUTrOzaMuqXoJTdyKMdxyIB/XruXPgpQrI4WM0xFsaj5mXnSuZnMcw+4
-         U5NXai3kqnHge3Wt9GzPW5TApeMrABfKfxi4EowFpCm65aNAbm7ZtxmSzVKrCGDTbexb
-         nVYJK9BcQPfg1mW2A5zZe4+rvfu9S4admPO6MneYA4Qg5T/J4rbPwkPdOpJFVB/+6YlD
-         uiswqucWzgkmLSzDNc5tWvbPLFUD8cdvTlqFvxA6vmooMab2P7+SZuZR2m+5mJ+wfVdt
-         Jmww==
-X-Gm-Message-State: ACrzQf3+phlCmRAoUtZlS+roVWJKN8aiOhm+g885vGuh2wTrKDiqxVRV
-        M1gpcE87+5ib8DwHTDNYq6Y2UgA+Ymq62gqoGzPIaNs026I=
-X-Google-Smtp-Source: AMsMyM6jPYkeTeR2NY0nznahmo00ZU8+Sz3HtZuQGhqi/KV6Ys61YV9lrpQewAzLs9fbvppOY7Z7IWcq3tpVk+eMeBs=
-X-Received: by 2002:a05:6214:19cf:b0:4a9:4241:2399 with SMTP id
- j15-20020a05621419cf00b004a942412399mr121185qvc.64.1664981499641; Wed, 05 Oct
- 2022 07:51:39 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=h5EgGPVm4WtQrmT0wcNwLb1/9YJNLS2w6d18NQrshN4=;
+        b=aYJa/VPmmzDqivmcdcP73txvxRkfhispmwKA1iivteXXdOdF9iYZMmznI392edHP8f
+         ELUysYAgRcb33Xmwwl8O0GSGqwSdTwtHAzgiVFVYvpt9KCMe8UYDROznJjz1CugWmE8n
+         mnVVKxRflZIBwf0blWP6OpstU+UGSTP6yzqZN2AC+fNiYZZE4GKUOlTgaAd7CONoRJW/
+         goKt3K1jOuKel52839bkSwGhg9VVFm2Rv159kBAyvhJd8u/YLzbGE6oy2jVLxIW7me45
+         yfLglJGx6M1Uiex4yrDM26lwV9vw9SUKRz50gQGED71EgZu52WE357PN9qXtNFgJQHRv
+         ebjA==
+X-Gm-Message-State: ACrzQf3r+DGsHs654BfUEaq1EgH/48A1CM1FCKRFEhUkwj2vnVjg+emQ
+        aON3+pBOeHYAHExg0RoQ0A9FHYd5YtqRjQ==
+X-Google-Smtp-Source: AMsMyM7WWzwvjZBfktTFkPyEkixiLQOffQtJBWZkxHjBUglRPsXdwgi1Zyj5wpjvUJwTQ98hIP06Gw==
+X-Received: by 2002:a05:6512:487:b0:4a2:2977:3a83 with SMTP id v7-20020a056512048700b004a229773a83mr88827lfq.88.1664981472385;
+        Wed, 05 Oct 2022 07:51:12 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id q3-20020a0565123a8300b00499fe9ce5f2sm2369292lfu.175.2022.10.05.07.51.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Oct 2022 07:51:11 -0700 (PDT)
+Message-ID: <c04cc64a-9fea-db34-b9ee-486b54fbc223@linaro.org>
+Date:   Wed, 5 Oct 2022 16:51:11 +0200
 MIME-Version: 1.0
-References: <20221005133120.50483-1-olivier.moysan@foss.st.com> <20221005133120.50483-2-olivier.moysan@foss.st.com>
-In-Reply-To: <20221005133120.50483-2-olivier.moysan@foss.st.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 5 Oct 2022 17:51:03 +0300
-Message-ID: <CAHp75VdVfs-e-HGSRejm4c07A_4KuUGSFNvYTtjLC+3JtuhkEg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/8] iio: adc: stm32-adc: fix channel sampling time init
-To:     Olivier Moysan <olivier.moysan@foss.st.com>
-Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        nuno.sa@analog.com, Paul Cercueil <paul@crapouillou.net>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        Yannick Brosseau <yannick.brosseau@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2 1/3] dt-bindings: power: supply: Add Richtek RT9467
+ battery charger
+Content-Language: en-US
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, sre@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     chiaen_wu@richtek.com, cy_huang@richtek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <cover.1664997251.git.chiaen_wu@richtek.com>
+ <0a4a6dfcec35160bb89a932ff73bc2cc0bbd6555.1664997251.git.chiaen_wu@richtek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <0a4a6dfcec35160bb89a932ff73bc2cc0bbd6555.1664997251.git.chiaen_wu@richtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 5, 2022 at 4:36 PM Olivier Moysan
-<olivier.moysan@foss.st.com> wrote:
->
-> Fix channel init for ADC generic channel bindings.
-> In generic channel initialization, stm32_adc_smpr_init() is called
-> to initialize channel sampling time. The "st,min-sample-time-ns"
-> property is an optional property. If it is not defined,
-> stm32_adc_smpr_init() is currently skipped.
-> However stm32_adc_smpr_init() must always be called,
-> to force a minimum sampling time for the internal channels,
-> as the minimum sampling time is known.
-> Make stm32_adc_smpr_init() call unconditional.
+On 05/10/2022 13:37, ChiaEn Wu wrote:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
+> 
+> Add bindings for the Richtek RT9467 battery charger.
+> 
+> Co-developed-by: ChiYuan Huang <cy_huang@richtek.com>
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
 
-The lines are quite different by their lengths. Are you sure you sent
-the updated version (see also below)?
 
-> Fixes: 796e5d0b1e9b ("iio: adc: stm32-adc: use generic binding for sample-time")
->
-> Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I have told you already that the tag block doesn't tolerate blank lines.
+Best regards,
+Krzysztof
 
--- 
-With Best Regards,
-Andy Shevchenko
