@@ -2,162 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A6F5F5208
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C48C05F51FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiJEJsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 05:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35166 "EHLO
+        id S229750AbiJEJrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 05:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiJEJsN (ORCPT
+        with ESMTP id S229463AbiJEJru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 05:48:13 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD1C6CF4F
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 02:48:11 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 70so15110359pjo.4
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 02:48:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=uAiOjs73GnPtRWDKlCBYpOmHeG3ElDSPTXYVbLmJn3Y=;
-        b=dh/s9gbrJ1NP2il6j7m7392rb5m/0olUhLw6ywfYrwbm+b05mgthbXGVeHCne6faSe
-         nEB8FWIww9/Mh3TPJYBTwQxHk9YQhBfOYEWSgISGS3x2V+1PSzpPW0fGwHCNvRUrDmsC
-         V4LPjNBP1ZNWd2lWycmQ+cVlk2hOYpk0wbD3BQW90ktRdTfHVQoOGdzFfsVLA+UV8P0L
-         yaYjHeb70WMgWdHpn0iX5L8LgNN78O1ThcYXr+GHqSaFRNBAWLFYqLr8IpSUK6wbVOaM
-         BO7XUtm7Hdl6sqI52mxM7YweUuOKwjFV07IZc9k6gah2y9PsEzpdZlxqQ3TbFVT9xR+n
-         gOow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=uAiOjs73GnPtRWDKlCBYpOmHeG3ElDSPTXYVbLmJn3Y=;
-        b=l7SghzjNpVSxuJCqfRtM+wmrKqWfQtksWWApP0OedKTDjrR5yc43hU1ykbDLl8aAsK
-         JCUN8l8xLMOwMULStbefMhbxELp9zY5haoZoZDbI7UsjSeuU70vduh8cULhr5dQMDhUM
-         Cd8mXp4K4Tx3fc8voDEN0Sg+cZhrK6JlQPkjBTlhNE/WQh1lZhxuYIzx3P3X3SUgE5Ew
-         MlgzGp4X8GuLcqmWEhsarsdbhwyefZhS3XYyiw3UclR8gZl4TPJtJOBVqg2QMCO/+9wJ
-         cxZE1fUSZvYaCCWCXOFZXqm3zy8tl3NNLwDqmhkyrVUsJRRdyrazsvViP9NqEB6fJ5jy
-         PFvw==
-X-Gm-Message-State: ACrzQf1nrXvbpy6x/TCjpoD+9RMz4wgyh5FgQvRCPEv7IV+EqfiDH3uZ
-        vICp0ju5d/eTy5arRflYHL8mfityD19iAuyOk/Mx8g==
-X-Google-Smtp-Source: AMsMyM6eqXlNc1atZOkkKgiG1yV3Y78Coz+AbzCXphLyt0GPdUFcokJxxEDnXeFGnrVe0bHv3fHf9rWqZFSPgK8TTJI=
-X-Received: by 2002:a17:90b:4d07:b0:1ef:521c:f051 with SMTP id
- mw7-20020a17090b4d0700b001ef521cf051mr4350723pjb.164.1664963290949; Wed, 05
- Oct 2022 02:48:10 -0700 (PDT)
+        Wed, 5 Oct 2022 05:47:50 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDBA6B158;
+        Wed,  5 Oct 2022 02:47:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664963269; x=1696499269;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=SzOBLgxHKniFgGvjcnsU55f0FumWPhC2D5ITWHrm9t4=;
+  b=U4XxL666HYOAZhQiYwgeN0pYswvmvMXvtcwdQwjLyeXYORI5RZSMY6l1
+   f1rJmAxsfnJv/YOdXfmS2CTs6Zz8hsjEz2ZBMTCyEev35aH8q5IcMb89u
+   i3byXXtKmpRd8tT5y3lAnADbDn/BzQSLPQpc3j9HRQQMSxSEpubEyY1aH
+   reBt36D7C4Xl+Pob9dWI+4Tgp3SXCRMQpIGHMmgikHAgDF78uN3bxaYo0
+   MtSYOIo5AsuhxUmy6O/1ipWvGK20B4dnwU2GUxPANKpsWwZjMNPrvzqlC
+   7IC9T7Q67G+2XDrSKQC1pCL13oEiOdPvvs+udzHb5H4eRV/pu4kpUSGjh
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="329533895"
+X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
+   d="scan'208";a="329533895"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 02:47:48 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="749699117"
+X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
+   d="scan'208";a="749699117"
+Received: from mtantera-mobl3.ger.corp.intel.com (HELO refaase-MOBL1.ger.corp.intel.com) ([10.252.39.164])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 02:47:45 -0700
+Date:   Wed, 5 Oct 2022 12:47:42 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Lizhi Hou <lizhi.hou@amd.com>
+cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, trix@redhat.com,
+        tumic@gpxsee.org, max.zhen@amd.com, sonal.santan@amd.com,
+        larry.liu@amd.com, brian.xu@amd.com
+Subject: Re: [PATCH V5 XDMA 1/2] dmaengine: xilinx: xdma: Add xilinx xdma
+ driver
+In-Reply-To: <a0ab26b3-be2d-c1d6-e8ea-3ab9ad57962b@amd.com>
+Message-ID: <ad41afcb-a7b1-bfd9-56af-6f5b7875de8d@linux.intel.com>
+References: <1664409507-64079-1-git-send-email-lizhi.hou@amd.com> <1664409507-64079-2-git-send-email-lizhi.hou@amd.com> <6ba2221c-bbc9-a33c-7e62-85c2d87ceeed@linux.intel.com> <56f971da-5116-58dc-2df6-53ed465c8ec4@amd.com> <c86fb070-9d46-9558-f7ee-216fc657cf1a@linux.intel.com>
+ <a0ab26b3-be2d-c1d6-e8ea-3ab9ad57962b@amd.com>
 MIME-Version: 1.0
-References: <20221005032257.80681-1-kch@nvidia.com> <20221005032257.80681-2-kch@nvidia.com>
- <6fee2d7a-7fd1-73ee-2911-87a4ed3e8769@opensource.wdc.com>
-In-Reply-To: <6fee2d7a-7fd1-73ee-2911-87a4ed3e8769@opensource.wdc.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 5 Oct 2022 11:47:34 +0200
-Message-ID: <CAPDyKFpBpiydQn+=24CqtaH_qa3tQfN2gQSiUrHCjnLSuy4=Kg@mail.gmail.com>
-Subject: Re: [RFC PATCH 01/21] block: add and use init tagset helper
-To:     Chaitanya Kulkarni <kch@nvidia.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-scsi@vger.kernel.org, axboe@kernel.dk, efremov@linux.com,
-        josef@toxicpanda.com, idryomov@gmail.com,
-        dongsheng.yang@easystack.cn, haris.iqbal@ionos.com,
-        jinpu.wang@ionos.com, mst@redhat.com, jasowang@redhat.com,
-        pbonzini@redhat.com, stefanha@redhat.com, ohad@wizery.com,
-        andersson@kernel.org, baolin.wang@linux.alibaba.com,
-        richard@nod.at, miquel.raynal@bootlin.com, vigneshr@ti.com,
-        marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
-        kbusch@kernel.org, hch@lst.de, sagi@grimberg.me, sth@linux.ibm.com,
-        hoeppner@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, hare@suse.de, bhelgaas@google.com,
-        john.garry@huawei.com, mcgrof@kernel.org,
-        christophe.jaillet@wanadoo.fr, vaibhavgupta40@gmail.com,
-        wsa+renesas@sang-engineering.com, johannes.thumshirn@wdc.com,
-        bvanassche@acm.org, ming.lei@redhat.com,
-        shinichiro.kawasaki@wdc.com, vincent.fu@samsung.com,
-        christoph.boehmwalder@linbit.com, joel@jms.id.au,
-        vincent.whitchurch@axis.com, nbd@other.debian.org,
-        ceph-devel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, asahi@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-886140070-1664963268=:1580"
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Oct 2022 at 07:11, Damien Le Moal
-<damien.lemoal@opensource.wdc.com> wrote:
->
-> On 10/5/22 12:22, Chaitanya Kulkarni wrote:
-> > Add and use the helper to initialize the common fields of the tag_set
-> > such as blk_mq_ops, number of h/w queues, queue depth, command size,
-> > numa_node, timeout, BLK_MQ_F_XXX flags, driver data. This initialization
-> > is spread all over the block drivers. This avoids the code repetation of
-> > the inialization code of the tag set in current block drivers and any
->
-> s/inialization/initialization
-> s/repetation/repetition
->
-> > future ones.
-> >
-> > Signed-off-by: Chaitanya Kulkarni <kch@nvidia.com>
-> > ---
-> >  block/blk-mq.c                | 20 ++++++++++++++++++++
-> >  drivers/block/null_blk/main.c | 10 +++-------
-> >  include/linux/blk-mq.h        |  5 +++++
-> >  3 files changed, 28 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/block/blk-mq.c b/block/blk-mq.c
-> > index 8070b6c10e8d..e3a8dd81bbe2 100644
-> > --- a/block/blk-mq.c
-> > +++ b/block/blk-mq.c
-> > @@ -4341,6 +4341,26 @@ static int blk_mq_alloc_tag_set_tags(struct blk_mq_tag_set *set,
-> >       return blk_mq_realloc_tag_set_tags(set, 0, new_nr_hw_queues);
-> >  }
-> >
-> > +void blk_mq_init_tag_set(struct blk_mq_tag_set *set,
-> > +             const struct blk_mq_ops *ops, unsigned int nr_hw_queues,
-> > +             unsigned int queue_depth, unsigned int cmd_size, int numa_node,
-> > +             unsigned int timeout, unsigned int flags, void *driver_data)
->
-> That is an awful lot of arguments... I would be tempted to say pack all
-> these into a struct but then that would kind of negate this patchset goal.
-> Using a function with that many arguments will be error prone, and hard to
-> review... Not a fan.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-I completely agree.
+--8323329-886140070-1664963268=:1580
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-But there is also another problem going down this route. If/when we
-realize that there is another parameter needed in the blk_mq_tag_set.
-Today that's quite easy to add (assuming the parameter can be
-optional), without changing the blk_mq_init_tag_set() interface.
+On Tue, 4 Oct 2022, Lizhi Hou wrote:
 
->
-> > +{
-> > +     if (!set)
-> > +             return;
-> > +
-> > +     set->ops = ops;
-> > +     set->nr_hw_queues = nr_hw_queues;
-> > +     set->queue_depth = queue_depth;
-> > +     set->cmd_size = cmd_size;
-> > +     set->numa_node = numa_node;
-> > +     set->timeout = timeout;
-> > +     set->flags = flags;
-> > +     set->driver_data = driver_data;
-> > +}
-> > +
->
+> 
+> On 10/4/22 09:43, Ilpo Järvinen wrote:
+> > On Tue, 4 Oct 2022, Lizhi Hou wrote:
+> > 
+> > > On 10/4/22 01:18, Ilpo Järvinen wrote:
+> > > > On Wed, 28 Sep 2022, Lizhi Hou wrote:
+> > > > 
+> > > > > Add driver to enable PCIe board which uses XDMA (the DMA/Bridge
+> > > > > Subsystem
+> > > > > for PCI Express). For example, Xilinx Alveo PCIe devices.
+> > > > >       https://www.xilinx.com/products/boards-and-kits/alveo.html
+> > > > > 
+> > > > > The XDMA engine support up to 4 Host to Card (H2C) and 4 Card to Host
+> > > > > (C2H)
+> > > > > channels. Memory transfers are specified on a per-channel basis in
+> > > > > descriptor linked lists, which the DMA fetches from host memory and
+> > > > > processes. Events such as descriptor completion and errors are
+> > > > > signaled
+> > > > > using interrupts. The hardware detail is provided by
+> > > > >       https://docs.xilinx.com/r/en-US/pg195-pcie-dma/Introduction
+> > > > > 
+> > > > > This driver implements dmaengine APIs.
+> > > > >       - probe the available DMA channels
+> > > > >       - use dma_slave_map for channel lookup
+> > > > >       - use virtual channel to manage dmaengine tx descriptors
+> > > > >       - implement device_prep_slave_sg callback to handle host scatter
+> > > > > gather
+> > > > >         list
+> > > > >       - implement device_config to config device address for DMA
+> > > > > transfer
+> > > > > 
+> > > > > Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
+> > > > > Signed-off-by: Sonal Santan <sonal.santan@amd.com>
+> > > > > Signed-off-by: Max Zhen <max.zhen@amd.com>
+> > > > > Signed-off-by: Brian Xu <brian.xu@amd.com>
+> > > > > ---
+> > > > > +	*chans = devm_kzalloc(&xdev->pdev->dev, sizeof(**chans) *
+> > > > > (*chan_num),
+> > > > > +			      GFP_KERNEL);
+> > > > > +	if (!*chans)
+> > > > > +		return -ENOMEM;
+> > > > > +
+> > > > > +	for (i = 0, j = 0; i < pdata->max_dma_channels; i++) {
+> > > > > +		ret = xdma_read_reg(xdev, base + i * XDMA_CHAN_STRIDE,
+> > > > > +				    XDMA_CHAN_IDENTIFIER,
+> > > > > &identifier);
+> > > > > +		if (ret) {
+> > > > > +			xdma_err(xdev, "failed to read channel id:
+> > > > > %d", ret);
+> > > > > +			return ret;
+> > > > > +		}
+> > > > Is it ok to not rollback the allocation in case of an error occurs?
+> > > In this loop, the failures are returned by read/write registers. The
+> > > read/write register failure indicates serious hardware issue and the
+> > > hardware
+> > > may not be rollback in this situation.
+> > What I meant is that you allocated memory above (to *chans, see above).
+> > Shouldn't that memory be free in case the hw is not working before you
+> > return the error from this function?
+> > 
+> > Check also the other returns below for the same problemx.
+> 
+> The memory does not need to be freed immediately. And it should not be memory
+> leak because devm_* is used.
 
-[...]
+Ah, sorry. I think I checked exactly that there wasn't m in it but 
+clearly there is now that I recheck.
 
-Kind regards
-Uffe
+
+-- 
+ i.
+
+--8323329-886140070-1664963268=:1580--
