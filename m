@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38D85F58E9
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 122605F58EE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbiJEROq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 13:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50706 "EHLO
+        id S230417AbiJERPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 13:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiJEROc (ORCPT
+        with ESMTP id S230354AbiJEROu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 13:14:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7057C7B1FD;
-        Wed,  5 Oct 2022 10:14:31 -0700 (PDT)
+        Wed, 5 Oct 2022 13:14:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75405596;
+        Wed,  5 Oct 2022 10:14:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0A416157B;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E35BB81DEE;
+        Wed,  5 Oct 2022 17:14:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98E61C43470;
         Wed,  5 Oct 2022 17:14:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFEA9C433C1;
-        Wed,  5 Oct 2022 17:14:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664990070;
-        bh=SrRvD4SwDz0Bv8OnFxJh7YVeUXOe4OG5XNkeYsdBWws=;
+        s=k20201202; t=1664990073;
+        bh=8Xp7kAM5LFTUlTIW2fFuG237a9Rp9DQyu+qIH5FHc8o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FwQLqwX5iYTvFNc4YjoKoPCRcxDPLarKMHG5waZRZEbVk7dlYD+urFb6t+dPSN+us
-         MJmw7dFf8Ly2VIlW2vJMGejDHR6UJ2bGzx0sudczdTbPJWeESHtYBkGwp7XqlU4kMF
-         RhV3RXMF9+5aV9OOUhc5jNoydOPhu2CInUh5gO3ZlDGF3x018umuOR+LXLr1K6wDCq
-         3BJMwgsqIBk/0yaOXJnCy/qdZoOrR/LCNxBek/5dBiAMZ8i6JzhAz4vLhhPnIMT/Ae
-         iWhF1+GpWqe3JOMfFamLn8oNRkjnj6VZI/wZg2VYxHiMsRohPq1q7QHNPufdKzuvq6
-         +rKa6tDsaj0yQ==
+        b=AvKcXrht676yYvQGDJdFCIUTXKRsGrYCoZPMTheAR/Bp+QIOs2kxqDHMCXVe+qQ0X
+         zjh1I627d0plUQfjSNnXCn9ZVw6rKjgLpDV/aQGFJ4agaMlhfFi8KBEUUP2xRRZpLp
+         8xi0SCil0nsoVHlqm2Z5BkI8/WQr0pej4QQKD0mN9nlH2ilsIkUrkJWagS69e6Ob8A
+         yJgBl2kgh/hXjE29IM5hYrobHOOXH7FPowVtL5upSr3XSVxu+eBzWppbvceKBmOQm1
+         7aZns+2xJljwJb4Bw0yE3dOb2kKSkUdAc6MHc2HF8Gr+Od2itxfP71Bu85vX79ViCs
+         3UPQ1eLM+TFoA==
 From:   Conor Dooley <conor@kernel.org>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -43,9 +43,9 @@ To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Conor Dooley <conor.dooley@microchip.com>
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH 3/6] serial: sifive: select by default if SOC_CANAAN
-Date:   Wed,  5 Oct 2022 18:13:46 +0100
-Message-Id: <20221005171348.167476-4-conor@kernel.org>
+Subject: [PATCH 4/6] riscv: stop selecting the PolarFire SoC clock driver
+Date:   Wed,  5 Oct 2022 18:13:47 +0100
+Message-Id: <20221005171348.167476-5-conor@kernel.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221005171348.167476-1-conor@kernel.org>
 References: <20221005171348.167476-1-conor@kernel.org>
@@ -62,36 +62,26 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-With the aim of dropping direct selects of drivers from Kconfig.socs,
-default the SiFive serial drivers to enabled if SOC_CANAAN.
+The driver is now enabled by default if SOC_MICROCHIP so there is no
+longer a need to select it in Kconfig.socs
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- drivers/tty/serial/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/riscv/Kconfig.socs | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 768f1138c9fb..58f6f8e11592 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -972,7 +972,7 @@ config SERIAL_OMAP_CONSOLE
- config SERIAL_SIFIVE
- 	tristate "SiFive UART support"
- 	depends on OF
--	default SOC_SIFIVE
-+	default SOC_SIFIVE || SOC_CANAAN
- 	select SERIAL_CORE
+diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
+index 69774bb362d6..83f14afd4086 100644
+--- a/arch/riscv/Kconfig.socs
++++ b/arch/riscv/Kconfig.socs
+@@ -2,7 +2,6 @@ menu "SoC selection"
+ 
+ config SOC_MICROCHIP_POLARFIRE
+ 	bool "Microchip PolarFire SoCs"
+-	select MCHP_CLK_MPFS
+ 	select SIFIVE_PLIC
  	help
- 	  Select this option if you are building a kernel for a device that
-@@ -982,7 +982,7 @@ config SERIAL_SIFIVE
- config SERIAL_SIFIVE_CONSOLE
- 	bool "Console on SiFive UART"
- 	depends on SERIAL_SIFIVE=y
--	default SOC_SIFIVE
-+	default SOC_SIFIVE || SOC_CANAAN
- 	select SERIAL_CORE_CONSOLE
- 	select SERIAL_EARLYCON
- 	help
+ 	  This enables support for Microchip PolarFire SoC platforms.
 -- 
 2.37.3
 
