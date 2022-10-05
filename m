@@ -2,214 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7735F5C65
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 00:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4E15F5C6A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 00:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiJEWId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 18:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
+        id S229906AbiJEWIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 18:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiJEWI3 (ORCPT
+        with ESMTP id S230022AbiJEWIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 18:08:29 -0400
-Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFF97D1FE;
-        Wed,  5 Oct 2022 15:08:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
-        t=1665007693; bh=EP5w5Py7qGU7eoaC5DXCRrO4upQ0zZ+os7jFdVOEkcs=;
-        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
-        b=IxhbghS/hDMmdHfbFKipfT50NOyN3+cVahpj9PNPU3nbleQgHPivvcZFxWRJpWfXC
-         eOj21VMVC+q9mq/Jfp/D3Zdou4de5FriM4z+O1JyW4JlXIEb/GVKfdHnBx7FLMk9pn
-         Dmzf92I2fqt8WFxdX/cSQkjQslgNCSOqfxo3lGAI=
-Date:   Thu, 6 Oct 2022 00:08:12 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     linux-rockchip@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-        Johan Jonker <jbx6244@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Rockchip SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] arm64: dts: rockchip: rk356x: Fix PCIe register map
- and ranges
-Message-ID: <20221005220812.4psu6kckej63yo2z@core>
-Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
-        Peter Geis <pgwipeout@gmail.com>,
-        linux-rockchip@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-        Johan Jonker <jbx6244@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Rockchip SoC support" <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <20221005085439.740992-1-megi@xff.cz>
- <CAMdYzYrEXEqOmMeozGBbAAvrujZcOxLh4VYOmu5DSjPWTS-5zQ@mail.gmail.com>
+        Wed, 5 Oct 2022 18:08:49 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C1A83066
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 15:08:41 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d10so260526pfh.6
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 15:08:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9svDT8ORTcq0fWO9r8OMLcDTyMMPAPgB288zzZCitY0=;
+        b=oDFGMldwG8KZwyaCLbdaQPftkZxN3Moa8DT7hu2fp/5dKSDSPz/gpganRpov4mgikd
+         IxtVOUJdJb8pETiG7IeSMayqcUVpwSKPJ8Rg4la7zDGCMqPv/f0eal5lej2C/gl9uhQj
+         90kNESY5GaWQlNtWmCremFWjchXUgdezl0oKH9ZnVZcKdVDT9AM/HvnJeVjRLACdeOI0
+         Ro6uPKzZNlbpoOHfaISusIzalGjBw4p3IcMCGfkKCJbvH0jeJRnyDhbtmaz3L93bOxZw
+         3Zh2s9t3DqxaCf9AF/DyLGdMsX8XKJJo/vU3E4WflKrEZ3NCyWB5On0em0V2TRrNvvdM
+         HC2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9svDT8ORTcq0fWO9r8OMLcDTyMMPAPgB288zzZCitY0=;
+        b=W0t3r4iLRsX50SInx9tVP/ssHmoPOY00SlYxXT5ouHCimzc0/EKp0aauN8/iv6XCM+
+         3dPKuOM7S1ZLte/Wqpp+oWllEC/fxGtcopabIL2c44ibKteYlMbPfHt7twORDIo0zjPC
+         BUdxCokAcPQ/3tAUh3M3oAHYzVh/kNCpQcLZsBrS5u2tDKXDBcHjCHOBDvc1O0BuVHm6
+         p6/RR8yaPcqxiwj2JrFZ1hhJNyVshKATBOPbVkjGYQp/KMwW69msxBUCCieBotJdDjiB
+         GY7xlaHn/AqloDznGDGoduUhFUgd5dgEZhl8VFfe8zNx4MY0/PelVjnYWVs1BDkLMs6L
+         nwmw==
+X-Gm-Message-State: ACrzQf1W/PB7mrcpllErA7+O9STks/eVjSVSP7fX2eSbPob2rvgwINSE
+        UYnlc+4tMIgd+XiFxxwaaNh6Gw==
+X-Google-Smtp-Source: AMsMyM4Qv3EPnbEPt5IAw3TfyWB5j7sKL+5LeDE+z/8pFek4M6fYLCe4pyOuY8embZ2T6oUiwC0+iQ==
+X-Received: by 2002:a63:fa42:0:b0:44d:b59c:674b with SMTP id g2-20020a63fa42000000b0044db59c674bmr1604886pgk.207.1665007721016;
+        Wed, 05 Oct 2022 15:08:41 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id c13-20020a170902d48d00b0016c0eb202a5sm10996155plg.225.2022.10.05.15.08.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 15:08:40 -0700 (PDT)
+Date:   Wed, 5 Oct 2022 22:08:37 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sandipan Das <sandipan.das@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [kvm-unit-tests PATCH 2/2] x86/pmu: Add AMD Guest PerfMonV2
+ testcases
+Message-ID: <Yz4AZZWE1/wWhXFP@google.com>
+References: <20220905123946.95223-1-likexu@tencent.com>
+ <20220905123946.95223-7-likexu@tencent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMdYzYrEXEqOmMeozGBbAAvrujZcOxLh4VYOmu5DSjPWTS-5zQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_PASS,T_SPF_HELO_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220905123946.95223-7-likexu@tencent.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 05, 2022 at 07:42:54AM -0400, Peter Geis wrote:
-> On Wed, Oct 5, 2022 at 4:54 AM Ondrej Jirman <megi@xff.cz> wrote:
-> >
-> 
-> Good Morning,
-> 
-> > I have two Realtek PCIe wifi cards connected over the 4 port PCIe swtich
-> > to Quartz64-A. The cards fail to work, when nvme SSD is connected at the
-> > same time to the bridge. Without nvme connected, cards work fine. The
-> > issue seems to be related to mixed use of devices which make use of I/O
-> > ranges and memory ranges.
-> >
-> > This patch changes I/O, MEM and config mappings so that config and I/O
-> > mappings use the 0xf4000000 outbound address space, and MEM range uses
-> > the whole 0x300000000 outbound space.
-> >
-> > This is simialar to how BSP does the mappings.
-> 
-> This change was very recent in the BSP stuff (Jan 2022):
-> https://github.com/rockchip-linux/kernel/commit/cfab7abefc4093daa379fbd90a1e7ac1a484332b
-> A few other interesting changes there as well. They added a 32 bit
-> window in the lower range and made the entire upper range a 64 bit
-> relocatable (why?) and prefetchable window. They also set the viewport
-> number to 8. The dt-binding says this is autodetected, but I wonder if
-> the value is being detected correctly.
-> 
-> It looks like it is dependent in BSP on a backported change from mainline:
-> https://github.com/rockchip-linux/kernel/commit/50a01d3c10a6212f66364575a3c8f66c07f41591
-> 
-> Can someone weigh in why the dw core has config in the reg node
-> instead of ranges?
-> 
-> >
-> > I changed num-ob-windows to value detected by the kernel so if for whatever
-> > reason the kernel ever starts respecting this DT property, it would not
-> > switch to sharing I/O and CFG spaces via a single iATU mapping for
-> > no reason.
-> 
-> This worries me that this value may be being detected incorrectly,
-> they set it to this for a reason. It's not unheard of for Rockchip to
-> need to override what they encode in the silicon.
+Can you provide a single series for all of the KVM-Unit-Tests PMU work (separate
+from the KVM patches)?  Ya, it'll be big and is a blatant violation of "do one
+thing", but trying to manually handle the dependencies on the review side is time
+consuming.
 
-I just noticed that you may be thinking that BSP does some detection. It does
-not. It just uses either value from DT or hardcoded value 2 in the code.
+One thought to help keep track of dependencies between KVM and KUT would be to
+add dummy commits between each sub-series, with the dummy commit containing a lore
+link to the relevant KVM patches/series.  That would allow throwing everything into
+one series without losing track of things.  Hopefully.
 
-https://github.com/rockchip-linux/kernel/blob/develop-4.19/drivers/pci/controller/dwc/pcie-designware-host.c#L450
+On Mon, Sep 05, 2022, Like Xu wrote:
+> diff --git a/lib/x86/processor.h b/lib/x86/processor.h
+> index 9c490d9..b9592c4 100644
+> --- a/lib/x86/processor.h
+> +++ b/lib/x86/processor.h
+> @@ -796,8 +796,12 @@ static inline void flush_tlb(void)
+>  
+>  static inline u8 pmu_version(void)
+>  {
+> -	if (!is_intel())
+> +	if (!is_intel()) {
+> +		/* Performance Monitoring Version 2 Supported */
+> +		if (cpuid(0x80000022).a & 0x1)
 
-regards,
-	o.
+Add an X86_FEATURE_*, that way this is self-documenting.
 
-> Very Respectfully,
-> Peter Geis
-> 
-> >
-> > This change to the regs/ranges makes the issue go away and both nvme and
-> > wifi cards work when connected at the same time to the bridge. I tested
-> > the nvme with large amount of reads/writes, both behind the PCIe bridge
-> > and when directly connected to Quartz64-A board.
-> >
-> > Signed-off-by: Ondrej Jirman <megi@xff.cz>
-> > ---
-> > BSP for reference: https://github.com/rockchip-linux/kernel/blob/develop-4.19/arch/arm64/boot/dts/rockchip/rk3568.dtsi#L2370
-> >
-> > v2:
-> > - change ranges to use 0x300000000 fully for MEM and make use of
-> >   the 0xf4000000 outbound range for IO and config
-> > - full retest with/without the switch
-> > - if lscpi/dmesg is useful in the future for comparison, see:
-> >   https://xff.cz/kernels/random/quartz64a-pcie/
-> >
-> > I used this script for the tests:
-> >
-> > #!/bin/bash
-> >
-> > OUT=/mnt/data
-> > n=8
-> >
-> > test -f /tmp/test.dat || \
-> >     dd if=/dev/urandom of=/tmp/test.dat bs=1M count=1024
-> > md5sum /tmp/test.dat
-> >
-> > i=0
-> > while test $i -lt $n
-> > do
-> >     dd if=/tmp/test.dat of=$OUT/test$i.dat bs=4M oflag=direct
-> >
-> >     i=$(($i+1))
-> > done
-> >
-> > i=0
-> > while test $i -lt $n
-> > do
-> >     dd if=$OUT/test$i.dat bs=4M iflag=direct | md5sum
-> >
-> >     i=$(($i+1))
-> > done
-> >
-> >
-> >  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 9 +++++----
-> >  1 file changed, 5 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> > index 319981c3e9f7..99fd9543fc6f 100644
-> > --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> > +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> > @@ -855,7 +855,8 @@ pcie2x1: pcie@fe260000 {
-> >                 compatible = "rockchip,rk3568-pcie";
-> >                 reg = <0x3 0xc0000000 0x0 0x00400000>,
-> >                       <0x0 0xfe260000 0x0 0x00010000>,
-> > -                     <0x3 0x3f000000 0x0 0x01000000>;
-> > +                     <0x0 0xf4000000 0x0 0x01f00000>;
-> > +
-> >                 reg-names = "dbi", "apb", "config";
-> >                 interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>,
-> >                              <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>,
-> > @@ -877,15 +878,15 @@ pcie2x1: pcie@fe260000 {
-> >                                 <0 0 0 4 &pcie_intc 3>;
-> >                 linux,pci-domain = <0>;
-> >                 num-ib-windows = <6>;
-> > -               num-ob-windows = <2>;
-> > +               num-ob-windows = <8>;
-> >                 max-link-speed = <2>;
-> >                 msi-map = <0x0 &gic 0x0 0x1000>;
-> >                 num-lanes = <1>;
-> >                 phys = <&combphy2 PHY_TYPE_PCIE>;
-> >                 phy-names = "pcie-phy";
-> >                 power-domains = <&power RK3568_PD_PIPE>;
-> > -               ranges = <0x01000000 0x0 0x3ef00000 0x3 0x3ef00000 0x0 0x00100000
-> > -                         0x02000000 0x0 0x00000000 0x3 0x00000000 0x0 0x3ef00000>;
-> > +               ranges = <0x01000000 0x0 0x00000000 0x0 0xf5f00000 0x0 0x00100000
-> > +                         0x02000000 0x0 0x40000000 0x3 0x00000000 0x0 0x40000000>;
-> >                 resets = <&cru SRST_PCIE20_POWERUP>;
-> >                 reset-names = "pipe";
-> >                 #address-cells = <3>;
-> > --
-> > 2.37.3
-> >
+> +			return 2;
+>  		return 0;
+> +	}
+>  
+>  	return cpuid(10).a & 0xff;
+>  }
+> @@ -824,6 +828,9 @@ static inline u8 pmu_nr_gp_counters(void)
+>  {
+>  	if (is_intel()) {
+>  		return (cpuid(10).a >> 8) & 0xff;
+> +	} else if (this_cpu_has_perf_global_ctrl()) {
+
+Eww.  Took me too long to connect the dots to understand how this guarantees that
+leaf 0x80000022 is available.  With an X86_FEATURE_* this can simply be:
+
+	} else if (this_cpu_has(X86_FEATURE_AMD_PMU_V2) {
+
+or whatever name is appropriate.
+
+> +		/* Number of Core Performance Counters. */
+> +		return cpuid(0x80000022).b & 0xf;
+>  	} else if (!has_amd_perfctr_core()) {
+>  		return AMD64_NUM_COUNTERS;
+>  	}
+> diff --git a/x86/pmu.c b/x86/pmu.c
+> index 11607c0..6d5363b 100644
+> --- a/x86/pmu.c
+> +++ b/x86/pmu.c
+> @@ -72,6 +72,9 @@ struct pmu_event {
+>  #define PMU_CAP_FW_WRITES	(1ULL << 13)
+>  static u32 gp_counter_base;
+>  static u32 gp_select_base;
+> +static u32 global_status_msr;
+> +static u32 global_ctl_msr;
+> +static u32 global_status_clr_msr;
+
+What do you think about naming these like MSR #defines?  E.g.
+
+  MSR_PERF_GLOBAL_CTRL
+  MSR_PERF_GLOBAL_STATUS
+  MSR_PERF_GLOBAL_STATUS_CLR
+
+There's a little risk of causing confusing, but I think it would make the code
+easier to read.
+
+>  static unsigned int gp_events_size;
+>  static unsigned int nr_gp_counters;
+>  
+> @@ -150,8 +153,7 @@ static void global_enable(pmu_counter_t *cnt)
+>  		return;
+>  
+>  	cnt->idx = event_to_global_idx(cnt);
+> -	wrmsr(MSR_CORE_PERF_GLOBAL_CTRL, rdmsr(MSR_CORE_PERF_GLOBAL_CTRL) |
+> -			(1ull << cnt->idx));
+> +	wrmsr(global_ctl_msr, rdmsr(global_ctl_msr) | (1ull << cnt->idx));
+
+Opportunistically use BIT_ULL().
+
+>  }
+>  
+>  static void global_disable(pmu_counter_t *cnt)
+> @@ -159,8 +161,7 @@ static void global_disable(pmu_counter_t *cnt)
+>  	if (pmu_version() < 2)
+>  		return;
+>  
+> -	wrmsr(MSR_CORE_PERF_GLOBAL_CTRL, rdmsr(MSR_CORE_PERF_GLOBAL_CTRL) &
+> -			~(1ull << cnt->idx));
+> +	wrmsr(global_ctl_msr, rdmsr(global_ctl_msr) & ~(1ull << cnt->idx));
+
+BIT_ULL()
+
+>  }
+>  
+>  static inline uint32_t get_gp_counter_msr(unsigned int i)
+> @@ -326,6 +327,23 @@ static void check_counters_many(void)
+>  	report(i == n, "all counters");
+>  }
+>  
+> +static bool is_the_count_reproducible(pmu_counter_t *cnt)
+> +{
+> +	unsigned int i;
+> +	uint64_t count;
+> +
+> +	__measure(cnt, 0);
+> +	count = cnt->count;
+> +
+> +	for (i = 0; i < 10; i++) {
+> +		__measure(cnt, 0);
+> +		if (count != cnt->count)
+> +			return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+>  static void check_counter_overflow(void)
+>  {
+>  	uint64_t count;
+> @@ -334,13 +352,14 @@ static void check_counter_overflow(void)
+>  		.ctr = gp_counter_base,
+>  		.config = EVNTSEL_OS | EVNTSEL_USR | (*gp_events)[1].unit_sel /* instructions */,
+>  	};
+> +	bool precise_event = is_the_count_reproducible(&cnt);
+> +
+>  	__measure(&cnt, 0);
+>  	count = cnt.count;
+>  
+>  	/* clear status before test */
+>  	if (pmu_version() > 1) {
+
+Please provide helper(s) to replace the myriad open coded "pmu_version() > ???"
+checks.  E.g. this one appears to be:
+
+	if (this_cpu_has_perf_global_status_clr())
+
+I obviously don't care about the verbosity, it's that people like me might not
+know what the PMU version has to do with an MSR being accessible.
