@@ -2,60 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3065F4DFB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 04:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCFF5F4DFF
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 05:01:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiJEC6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 22:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52992 "EHLO
+        id S229570AbiJEDBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 23:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiJEC62 (ORCPT
+        with ESMTP id S229494AbiJEDBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 22:58:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC4566A42;
-        Tue,  4 Oct 2022 19:58:25 -0700 (PDT)
+        Tue, 4 Oct 2022 23:01:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A295D10B;
+        Tue,  4 Oct 2022 20:01:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E67CAB81C82;
-        Wed,  5 Oct 2022 02:58:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56335C433C1;
-        Wed,  5 Oct 2022 02:58:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9496B81C76;
+        Wed,  5 Oct 2022 03:01:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DD2AC433C1;
+        Wed,  5 Oct 2022 03:01:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664938702;
-        bh=nhuFmYnUCX7jGJj/igSj3CBNeD2gxo/OyINL/iZYw0Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z6FtTcPBhKTiSZSffH3UtpW32C7jS8vHajBjEoeQkKPqbZSsZd7QwXJvXfagcUEes
-         37SB3Vl5nVRgwuz1p2zkDUmIsG+oKoO+hI3L6x4DwSHKGWPhQTU1w1CUWJdDarTIT6
-         lu+UaWl1toEsxifP5fsrZZ4re3A+LLm0cm+W9fG+MXzVJympMVgOcnC7Rymi3OyBBO
-         YeNvsIVZ6IKaWCKZXi+o+kfnGqH2hl5Gd4ruNG0yF0j2zkpipEHI/dSuy3MziKMs6X
-         j6M/Jc/D8CuHXV0C4K4Aatss/PYmFgGe7bhGhfonTtT1GrwWwURqzTHBBJC9JLmfXA
-         AlsY3mPb+ncNQ==
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     linux-pci@vger.kernel.org
-Cc:     Vidya Sagar <vidyas@nvidia.com>,
-        "Saheed O . Bolarinwa" <refactormyself@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rajat Jain <rajatja@google.com>,
-        "Kenneth R . Crudup" <kenny@panix.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Abhishek Sahu <abhsahu@nvidia.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Krishna Thota <kthota@nvidia.com>,
-        Manikanta Maddireddy <mmaddireddy@nvidia.com>,
-        Vidya Sagar <sagar.tv@gmail.com>, sagupta@nvidia.com,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH 3/3] PCI/ASPM: Correct LTR_L1.2_THRESHOLD computation
-Date:   Tue,  4 Oct 2022 21:58:09 -0500
-Message-Id: <20221005025809.2247547-4-helgaas@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221005025809.2247547-1-helgaas@kernel.org>
-References: <20221005025809.2247547-1-helgaas@kernel.org>
+        s=k20201202; t=1664938887;
+        bh=2K4KiV7cPFLSD3RGGa7NSZcyE05Kqz67W50GPiHXla8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FcChFZKOLy8PrM/3mS4FU94zl7cO7jcTJijAbPcaDeobVoGq4jgy9eN3FyoWQv06F
+         xePczqWR+x6ZRMNwSItfmx2PUjFbdfKvMTHzI0y1/iqcNSwrKJ9RMatq+hvFwMZEbu
+         GtzKO6mxx4N0EdH2anf7olBtuq5PStHtEenWCPNfmOwkuoObQMd2w2DfUoqBekEwbu
+         OrzKStlqEVhUYHIRAErUwkMGbEJRj+iCphgIbz3kNJOx1iOJ4c7A8aHqO9CXDlVBXW
+         ZakIdt3/9n0Ai9F4TZ49dpMytq0yLMG6PB/RnU9x/Pgaygg+0mMty/DvVbIUcv5kj8
+         PIQSjRCFA5jSA==
+Date:   Tue, 4 Oct 2022 20:01:26 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Stephen Zhang <starzhangzsd@gmail.com>
+Cc:     Dave Chinner <david@fromorbit.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-xfs@vger.kernel.org, Shida Zhang <zhangshida@kylinos.cn>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the xfs tree
+Message-ID: <YzzzhsZQ4qlDrcFW@magnolia>
+References: <20221004072302.345bfd4a@canb.auug.org.au>
+ <20221003222103.GM3600936@dread.disaster.area>
+ <20221004225012.501e11ed@canb.auug.org.au>
+ <YzxX7ks+YD7U1dcl@magnolia>
+ <20221004210400.GO3600936@dread.disaster.area>
+ <CANubcdV462CTQQsmkaPG-dP1Cgy6BqHKj-gXZzh=U=pH+i7dfg@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANubcdV462CTQQsmkaPG-dP1Cgy6BqHKj-gXZzh=U=pH+i7dfg@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,104 +62,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+On Wed, Oct 05, 2022 at 10:52:05AM +0800, Stephen Zhang wrote:
+> Dave Chinner <david@fromorbit.com> 于2022年10月5日周三 05:06写道：
+> > As it is, I use the convention of putting an explicit From: tag in
+> > the commit message that matches the SOB so tools pulling stuff from
+> > mailing lists do the right thing with them (same as any third-party
+> > provided patch in a series).
+> >
+> > > That said... I think we should get in the habit of asking patch authors
+> > > to make sure that at least one of the email or name strings match
+> > > between the From and SOB tags.  I can see how people who grok even less
+> > > about how Chinese names work than I do (read: lawyers) might get fussy
+> > > about this kind of thing.
+> >
+> > As per above, the normal solution is an explicit "From: <foo>" line
+> > that matches the SOB.  It's just annoying that our new-fangled tools
+> > haven't encoded this long-standing convention to warn us when we
+> > pull a patch with a from-tag that doesn't match a sob-tag.
+> >
+> 
+> Sorry, but I'm not sure whether what you mean is adding another "From: " line
+> right above the SOB tag like:
+> ====
+> From: name2 <email address2>
+> Date: Mon, 12 Sep 2022 xx:xx:xx +0800
+> Subject: [PATCH ] xfs: fix xxx and xxx
+> 
+> ...
+> the commit  message
+> ...
+> 
+> From: name <email address>             //added line
+> signed-off-by:  name <email address>
+> ...
+> ====
 
-80d7d7a904fa ("PCI/ASPM: Calculate LTR_L1.2_THRESHOLD from device
-characteristics") replaced a fixed value (163840ns) with one computed from
-T_POWER_OFF, Common_Mode_Restore_Time, etc., but it encoded the
-LTR_L1.2_THRESHOLD value incorrectly.
+I think Dave means something like this patch of mine:
+https://lore.kernel.org/linux-xfs/166473478893.1083155.2555785331844801316.stgit@magnolia/T/#u
 
-This is especially a problem for small thresholds, e.g., 63ns fell into the
-"threshold_ns < 1024" case and was encoded as 32ns:
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     djwong@kernel.org
+Cc:     linux-xfs@vger.kernel.org
+Date:   Sun, 02 Oct 2022 11:19:48 -0700
+Subject: [PATCH 3/4] xfs: set the buffer type after holding the AG[IF] across trans_roll
 
-  LTR_L1.2_THRESHOLD_Scale = 1 (multiplier is 32ns)
-  LTR_L1.2_THRESHOLD_Value = 63 >> 5 = 1
-  LTR_L1.2_THRESHOLD       = multiplier * value = 32ns * 1 = 32ns
+From: Darrick J. Wong <djwong@kernel.org>
 
-Correct the algorithm to encode all times of 1023ns (0x3ff) or smaller
-exactly and larger times conservatively (the encoded threshold is never
-smaller than was requested).  This reduces the chance of entering L1.2
-when the device can't tolerate the exit latency.
+Currently, the only way to lock an allocation group is to hold the AGI
+and AGF buffers.  If repair needs to roll the transaction while
+repairing some AG metadata, it maintains that lock by holding the two
+buffers across the transaction roll and joins them afterwards.
 
-Fixes: 80d7d7a904fa ("PCI/ASPM: Calculate LTR_L1.2_THRESHOLD from device characteristics")
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+However, repair is not the same as the other parts of XFS that employ
+this bhold/bjoin sequence, because it's possible that the AGI or AGF
+buffers are not actually dirty before the roll.  In this case, the
+buffer log item can detach from the buffer, which means that we have to
+re-set the buffer type in the bli after joining the buffer to the new
+transaction so that log recovery will know what to do if the fs fails.
+
+Signed-off-by: Darrick J. Wong <djwong@kernel.org>
 ---
- drivers/pci/pcie/aspm.c | 49 +++++++++++++++++++++++++++--------------
- 1 file changed, 32 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-index f12d117f44e0..53a1fa306e1e 100644
---- a/drivers/pci/pcie/aspm.c
-+++ b/drivers/pci/pcie/aspm.c
-@@ -8,6 +8,7 @@
-  */
- 
- #include <linux/kernel.h>
-+#include <linux/math.h>
- #include <linux/module.h>
- #include <linux/moduleparam.h>
- #include <linux/pci.h>
-@@ -350,29 +351,43 @@ static u32 calc_l1ss_pwron(struct pci_dev *pdev, u32 scale, u32 val)
- 	return 0;
- }
- 
-+/*
-+ * Encode an LTR_L1.2_THRESHOLD value for the L1 PM Substates Control 1
-+ * register.  Ports enter L1.2 when the most recent LTR value is greater
-+ * than or equal to LTR_L1.2_THRESHOLD, so we round up to make sure we
-+ * don't enter L1.2 too aggressively.
-+ *
-+ * See PCIe r6.0, sec 5.5.1, 6.18, 7.8.3.3.
-+ */
- static void encode_l12_threshold(u32 threshold_us, u32 *scale, u32 *value)
- {
--	u32 threshold_ns = threshold_us * 1000;
-+	u64 threshold_ns = (u64) threshold_us * 1000;
- 
--	/* See PCIe r3.1, sec 7.33.3 and sec 6.18 */
--	if (threshold_ns < 32) {
--		*scale = 0;
-+	/*
-+	 * LTR_L1.2_THRESHOLD_Value ("value") is a 10-bit field with max
-+	 * value of 0x3ff.
-+	 */
-+	if (threshold_ns <= 0x3ff * 1) {
-+		*scale = 0;		/* Value times 1ns */
- 		*value = threshold_ns;
--	} else if (threshold_ns < 1024) {
--		*scale = 1;
--		*value = threshold_ns >> 5;
--	} else if (threshold_ns < 32768) {
--		*scale = 2;
--		*value = threshold_ns >> 10;
--	} else if (threshold_ns < 1048576) {
--		*scale = 3;
--		*value = threshold_ns >> 15;
--	} else if (threshold_ns < 33554432) {
--		*scale = 4;
--		*value = threshold_ns >> 20;
-+	} else if (threshold_ns <= 0x3ff * 32) {
-+		*scale = 1;		/* Value times 32ns */
-+		*value = roundup(threshold_ns, 32) / 32;
-+	} else if (threshold_ns <= 0x3ff * 1024) {
-+		*scale = 2;		/* Value times 1024ns */
-+		*value = roundup(threshold_ns, 1024) / 1024;
-+	} else if (threshold_ns <= 0x3ff * 32768) {
-+		*scale = 3;		/* Value times 32768ns */
-+		*value = roundup(threshold_ns, 32768) / 32768;
-+	} else if (threshold_ns <= 0x3ff * 1048576) {
-+		*scale = 4;		/* Value times 1048576ns */
-+		*value = roundup(threshold_ns, 1048576) / 1048576;
-+	} else if (threshold_ns <= 0x3ff * (u64) 33554432) {
-+		*scale = 5;		/* Value times 33554432ns */
-+		*value = roundup(threshold_ns, 33554432) / 33554432;
- 	} else {
- 		*scale = 5;
--		*value = threshold_ns >> 25;
-+		*value = 0x3ff;		/* Max representable value */
- 	}
- }
- 
--- 
-2.25.1
+Notice how after the Subject: there is a blank line (which terminates
+the headers) followed by a new From: line in the body?  And the
+name/email in that second From: line matches the SOB later on?
 
+--D
+
+> 
+> Thanks,
+> Stephen.
