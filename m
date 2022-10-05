@@ -2,85 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67EFF5F4D0D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 02:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D96425F4D12
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 02:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbiJEAa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 20:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
+        id S229518AbiJEAeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 20:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiJEAau (ORCPT
+        with ESMTP id S229509AbiJEAeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 20:30:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B14756B82;
-        Tue,  4 Oct 2022 17:30:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 4 Oct 2022 20:34:18 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3870A56B82;
+        Tue,  4 Oct 2022 17:34:17 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED89BB81B54;
-        Wed,  5 Oct 2022 00:30:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45066C433D6;
-        Wed,  5 Oct 2022 00:30:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664929847;
-        bh=y4Zwm8QOPM6J2mvf2FDbEYt5AqCQVuApnRv1mKgcby8=;
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhwYd4Xvtz4x1D;
+        Wed,  5 Oct 2022 11:34:13 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1664930053;
+        bh=paQd6ikY9lE6Pe/hj3vtoqHStYRO3Yb6qPf04KFMpG4=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VEoHgV50wq7+CCtjldXASZQq4dfOAIQECU2Ieaczh37GmqqGS57nIuP588wl5TmCk
-         3B33uPCR24m791TKLtDOH2u7ptipHps4i2V8ZW8iKy11Sg5Uj3mLyo4gJo/H3CSkxi
-         maj/277l9cWCTJHba8dalj/Nq0HSKnRK6KYEsYFhTlV9Rntc1iZvDEMQPnNttqQztc
-         jnHRDt4k5QZezRezDhI3VVmBcFIGyiKsWww1A0PVEmezbHnOyzno2f09/VAEnlP6Ip
-         fd4IRhGu1iuYAcVBXSOVTAuBQTuhiZqVbBlCAbfjCy8yMYSCX78HScIVl7K2tjxz04
-         bn1yg48lGg6xA==
-Date:   Tue, 4 Oct 2022 17:30:46 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Stephen Hemminger <stephen@networkplumber.org>,
-        Peter Kosyh <pkosyh@yandex.ru>
-Cc:     Ajit Khaparde <ajit.khaparde@broadcom.com>,
-        Sriharsha Basavapatna <sriharsha.basavapatna@broadcom.com>,
-        Somnath Kotur <somnath.kotur@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: Re: [PATCH] net: benet: use snprintf instead sprintf and IFNAMSIZ
- instead hardcoded constant.
-Message-ID: <20221004173046.5ec6d3ca@kernel.org>
-In-Reply-To: <20221004082936.0d0c9bcb@hermes.local>
-References: <20221004095034.377665-1-pkosyh@yandex.ru>
-        <20221004082936.0d0c9bcb@hermes.local>
+        b=DK09CE7qEDlQYvel4CxvPjuBIPnDocbJkkh2WkLXhsDtuEC1mLyksDidNFFe2SAwj
+         PTTle2L+/yWGY/xsVQwy3+G9eX25BFPyonKbUD/dXY9XRD9HA5p8T/gsSKJeBQyI7S
+         YXLtAujauOcjvlgBwkDsTVyoX79wHa7ahv3Xt5GucaTLlV3ZMLrZtkgt/aLKGAVEth
+         hqOICDXK0nAz3jVZdiMs95F7rkByADcFd610dhty2K8RKA5BjLtSA4GAGMIMff+97q
+         AQ+BHLm17ZUVKJmKgu+L0jYTgOnmF66dRxBNoh4DkZWODpabDFWQr541Od/6nnH+OD
+         sNPli67cTym9Q==
+Date:   Wed, 5 Oct 2022 11:34:11 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dave Airlie <airlied@redhat.com>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the amdgpu tree
+Message-ID: <20221005113411.0224d4a8@canb.auug.org.au>
+In-Reply-To: <20220831090026.2e6b57ac@canb.auug.org.au>
+References: <20220811121050.0da83776@canb.auug.org.au>
+        <20220831090026.2e6b57ac@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/vjBMNJSiiEsDGO4kNnHK.T7";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Oct 2022 08:29:36 -0700 Stephen Hemminger wrote:
-> On Tue,  4 Oct 2022 12:50:34 +0300
-> Peter Kosyh <pkosyh@yandex.ru> wrote:
-> 
-> > printf to array 'eqo->desc' of size 32 may cause buffer overflow when
-> > using non-standard IFNAMSIZ.
-> > 
-> > Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> > 
-> > Signed-off-by: Peter Kosyh <pkosyh@yandex.ru>  
-> 
-> NACK
-> Non-standard IFNAMSIZ will break uapi and many things.
-> I see no reason for kernel or tools like iproute2 to support or
-> fix those related bugs.
+--Sig_/vjBMNJSiiEsDGO4kNnHK.T7
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I think the commit message is missing the point, but the warning
-may be legit.
+Hi all,
 
-Pater please read the requirements for sending patches based on
-automated checkers:
+On Wed, 31 Aug 2022 09:00:26 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> On Thu, 11 Aug 2022 12:10:49 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
+> > After merging the amdgpu tree, today's linux-next build (htmldocs)
+> > produced these warnings:
+> >=20
+> > drivers/gpu/drm/amd/display/dc/dc.h:465: warning: Enum value 'MPC_SPLIT=
+_AVOID' not described in enum 'pipe_split_policy'
+> > drivers/gpu/drm/amd/display/dc/dc.h:465: warning: Enum value 'MPC_SPLIT=
+_AVOID_MULT_DISP' not described in enum 'pipe_split_policy'
+> >=20
+> > Introduced by commit
+> >=20
+> >   a2b3b9d57bdb ("drm/amd/display: Document pipe split policy") =20
+>=20
+> I am still seeing these warnings.
 
-  Documentation/process/researcher-guidelines.rst
+Still ...
+
+This now commit
+
+  ea76895ffab1 ("drm/amd/display: Document pipe split policy")
+
+in the drm tree.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/vjBMNJSiiEsDGO4kNnHK.T7
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM80QQACgkQAVBC80lX
+0GxUAgf/b/dyXFMqAIaQ2r3Fr2uqeHwd9C/IvEctFXQ1hB9ieIexUgoaw2Ju+q89
+qrQsmB+QhhWyz/LViHFO+oWT0kv/MCqpyQQ5eOM27tFD3+a+uDV5GpEkCo+gSmjR
+t4yefM04VaqFTaeAN+DYUrhIreVkfwYGWhBcJwlMau21QgGjWIz8gpvmy11Obc1m
+WLyjiGuzbE+QPDkCzp8wNHUhT4Y03n5lnfyCxVpLEIDYH53/7B6Nz9oikfRuaCYN
+g8tXcepN9k5M44jYAwJKQqqsGP6qGgTkkUtuTqS1dbXU/49fMbuwuqvGoyWUVUSE
+Q+1aJ76vlYgrjqdgQnMonlH/jmDznA==
+=7Agk
+-----END PGP SIGNATURE-----
+
+--Sig_/vjBMNJSiiEsDGO4kNnHK.T7--
