@@ -2,521 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABFFE5F5655
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 16:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 199795F565C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 16:26:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiJEOZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 10:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
+        id S229797AbiJEO0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 10:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiJEOZh (ORCPT
+        with ESMTP id S229750AbiJEO0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 10:25:37 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2171A4686A
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 07:25:35 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id r13so4718060wrj.11
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 07:25:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date;
-        bh=YW0U49IJ9akiaPa3ZT/tCyDJCJ9H1v1xiGmSKPb9ZnY=;
-        b=gN3VraA1EN+MVapKnD0wr7oLCkMm4oiDdxbpzZpJiHxMP1i4Iqlwd8GCsmUZylWdM0
-         80qzw06S+JKFKrQC0Xwl3EGi4K5m6RvVeGZhcyL2d3WOQEmzfsHidDEqswq6Y4zVknL3
-         BQLgPt2AwC5L/aRzx42jdX5N8sf/LH7RUzLNHcoe5NxNlCOHCUvM8YDVc+5bWLKXhL1k
-         RnLof8oMcK5JEPBGAAslZhD9DvTwy/cGj1Vn1HFAQj7cV1PTlnCrgc47neoqrqvzYwF0
-         Vsf/s5TZ1DkbCdArZhhrEXI568DPgSZuJhYN3nal4ZjeboEZZg2Uz5UPA8I+jm9cTjSU
-         /B2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=YW0U49IJ9akiaPa3ZT/tCyDJCJ9H1v1xiGmSKPb9ZnY=;
-        b=xV2UOQ4UANQgnWL+QBVZv7UutGmnV+KusVY1iKqplzVRVv4sCT2azWDI+QAgqjf6Wf
-         mFYDwamWfsaJWy/jWaK/RfG2kheb9+KRH8tUEvcksvqCGThHjvrcvbNTbpo8yjXo/Q06
-         fQtWwIVrepPSmEMwJ8QBN9HuTWbDJtHxeAeI1Mn1r5RGWeKFZdGXHqz/83nRGawhYYFX
-         zHsVB0xp4Lv5ZOGDo+vfGBNuwFgQ+Qr7Q/9MFdl6HWH7Wrp+RKUR7Xk9Es7cGmmjj5Dt
-         z2CcQzFAwRumZcXXMpCy0DkHNNsq7flhBnYLdc362bmz1fvsKhF3dGIYZK3CMme6PjAX
-         03+A==
-X-Gm-Message-State: ACrzQf3fS+Ly6VSDro+JGENsfkN1ukLBrOqxirHtrGjJpvFfatibaC+A
-        vIzoX6UtdZHNWffN01meTLAPtw==
-X-Google-Smtp-Source: AMsMyM6P1cwVqaIKfQ9xLVl1241oLDwsWCeAJuyhZ8kAKNsPA//DdGxeqShBe3vPKyKXk9giQ+naLg==
-X-Received: by 2002:a05:6000:1788:b0:22e:3d0f:2547 with SMTP id e8-20020a056000178800b0022e3d0f2547mr10564561wrg.621.1664979933480;
-        Wed, 05 Oct 2022 07:25:33 -0700 (PDT)
-Received: from smtpclient.apple (global-5-142.n-2.net.cam.ac.uk. [131.111.5.142])
-        by smtp.gmail.com with ESMTPSA id i8-20020a1c3b08000000b003b535ad4a5bsm2218476wma.9.2022.10.05.07.25.32
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Oct 2022 07:25:32 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH] riscv: Fix build with CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-From:   Jessica Clarke <jrtc27@jrtc27.com>
-In-Reply-To: <CAJF2gTTMJqpYdm4ebnBp8df0HfQSD0RBK5xNVa=mQbq0djBrYQ@mail.gmail.com>
-Date:   Wed, 5 Oct 2022 15:25:32 +0100
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Conor Dooley <conor@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@rivosinc.com>, Dao Lu <daolu@rivosinc.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <B496688F-28CA-43E7-8D87-0E61AA17E6D5@jrtc27.com>
-References: <20220922060958.44203-1-samuel@sholland.org>
- <2546376.ElGaqSPkdT@phil> <2E96A836-764D-4D07-AB79-3861B9CC2B1F@jrtc27.com>
- <13396584.uLZWGnKmhe@phil>
- <CAOnJCUKdBpbj=KDz5oibB_N_SjOiMrkWcttczuGbisi_nMWaVA@mail.gmail.com>
- <Yy+Plxzj4bckXrhy@spud>
- <CAOnJCU+fA-pxLPRviqW2d7q-E__qJYkZKkCdiNHXhJBjWCRPaA@mail.gmail.com>
- <YzS5kT2CCBPxqLg+@spud>
- <CAOnJCUKn-rNwyw5BK7=hNM-vnJ=VROjipCiDtB4BL=LZ3kKAAg@mail.gmail.com>
- <YzifTW5Y7O191gCo@spud>
- <CAOnJCUKtoiXKaS81BZyvpybFDkh-undHLqE5ZxoNmf9AtAtvfw@mail.gmail.com>
- <E5A6B840-A306-48E8-A60F-1D852B0639D6@jrtc27.com>
- <CAJF2gTSwm9UkbvKpWuPTPyNQhApJivwwfJ_A9YA6WoC4HNsxbg@mail.gmail.com>
- <1CECF1C3-6FA1-49CC-8A7A-1E18E401B88B@jrtc27.com>
- <CAJF2gTTMJqpYdm4ebnBp8df0HfQSD0RBK5xNVa=mQbq0djBrYQ@mail.gmail.com>
-To:     Guo Ren <guoren@kernel.org>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 5 Oct 2022 10:26:31 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6091B52FFE;
+        Wed,  5 Oct 2022 07:26:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YOMq8xbq6uyE/aEMlsqPKNF3/FJYPW9ZZrFwnjFMF7NNch/Hq1hqJyYpqLH086UU15tVyWF//96V4Hig8Cgg8I0nUAKUm3v7Tl0UzEnlxPHTzQCuf39fJGRJA/O/ZaAO+xR2Uu0s1evTgozSY4IslcLwvRYN4AXrmgqAfIazxqzC7m+nngFT5bygfkYA6lTM7IO2hVK7WSB/JNMydqks9/llMZT3zmxqLkpo/rqQX+z2mWN6uwOLBCwX9kY3qqtegA8fM1wbXgYY5cBGI6s2dcylOqu7OGHfmDUVwjIhcHwpbD/K1qXqAf5y9EJKTpPlLMataxMtad39dsb52C6Lxw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KHN3gdrQG86GKSCaPwO8G/MsmOowRdwtfkfnoHy6Ijo=;
+ b=PvgYV53QapAmqSWk2sMagld00E32klgS5DGrLB5NFztn3NDiGeXd0bd0NqzoSuqglMp7pl2xA0zkVcnEEJCZ0TM7N0ksQhZySZkMqLgY6+/7+7HXGa6L/l/PIuYFS0SDojL1rscrbfvAIlr+YqMjatsaztjpwNY53JFjGH+CTRZXLeeV3et6Ez2RYn0yHQrRYIlsOArIw3sx44qBa1FVdtlt7bI1Eb0ryHtYCjAXryjXogZm9532xIrYtzuzR++jcS6nNh/wmrGQqtpD2qEz4h/hy607uKD5mGpdgY6VyaxwkilC6GK6zSnluEXtNJVlLCM2lfTxe1hVn1Ge86EaHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KHN3gdrQG86GKSCaPwO8G/MsmOowRdwtfkfnoHy6Ijo=;
+ b=HkdElRH3HG5njaq3RKbOkx1i9njJPwUIUxYFaJJO0ei+jsdd/WdFLbm85nvntMWrFh6DEZ6wNSeX6BCk8WFaCqgZbxKUjTnxOAUvpI+8wQMtjPXQ6OCf2f+FhE2Bqw7I7DPAl/fnQ/T9TMT50coJv5vDkW8j1TGKwv9WuX3VsUdorloTdBUjtnWyaDGPffh/eTqEkzkFPS/Yyu+kCGX7nXVHlGsBMX+hXUMDRuukIsM+6wjsb7KIxXuhoFut2+hrfXD5W24KKkUHbieq6Pd7R8nPWhoJ4C/zq4tcD8frPCBbws/ZnojQ6um9yjRJ5lOWgKqOMp7v84J7vFQTQD8cPw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ PH7PR12MB5974.namprd12.prod.outlook.com (2603:10b6:510:1d9::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.31; Wed, 5 Oct
+ 2022 14:26:28 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::b07f:53b1:426e:a29d]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::b07f:53b1:426e:a29d%5]) with mapi id 15.20.5676.033; Wed, 5 Oct 2022
+ 14:26:28 +0000
+Message-ID: <d2772c7b-bea9-e3bd-3b6b-c657566649d8@nvidia.com>
+Date:   Wed, 5 Oct 2022 15:26:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 2/4] ALSA: hda: Rework snd_hdac_stream_reset() to use
+ macros
+Content-Language: en-US
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Mohan Kumar D <mkumard@nvidia.com>
+References: <20220818141517.109280-1-amadeuszx.slawinski@linux.intel.com>
+ <20220818141517.109280-3-amadeuszx.slawinski@linux.intel.com>
+ <657d2418-0c3e-296f-8f4a-dc10ced2dffe@nvidia.com>
+ <87a66av4gk.wl-tiwai@suse.de>
+ <9677f39a-5297-bb1c-d4e3-62484ec1cf25@nvidia.com>
+ <87lepugy85.wl-tiwai@suse.de>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <87lepugy85.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0673.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:351::8) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|PH7PR12MB5974:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0479a84c-4aaf-4130-0eb9-08daa6dd9753
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: W8MggWypJ5Ln7V72kTN7e/t6e+aVYUqIwvdNqJRMw/Te/xZF9WS2wugyeId/NMZ1qaDdb3O2HMT2rJidITZRLyw27o7cqOfdQ/OjwmhZKV54OIc176onNQYYo2ts/U57k58gikJfqU9SCMQpGyKhCbi8bSTVo+DAlU3SaXkrlcD4vWkmrIkUyRwy6q0OAe1yJfxFcS48xvc30buVp4/7VGb9TS5XZuEI9Lyls62kd98JM48L2+yBuK4tZ6/RdXbY5xELg+TD6txeIZkRNVpkTCyc2Jk41vO1JmZ/txuUvdeA7rzQW44RypZWucVMFe9iZHqSVdyEhw0haLdHXcyl7PXyC6e8mBe2P8JAfUWVfXuyVgf4BAIsbVRMKcOV13HzdUTs+pjBNl8ja+CIYX5p2pEOSX1Vdnf7Xv0DejVvJ6TACOGKOu5FyWF5Js3XCseyt8VAwIhraHz7/ai02neROWTbf2KMa91M7/6zyIHQGZ1mm8RX67pQBPUs9yJes59mdLM8n5ni8i9KMaj4D0nZfZp7z6jdfQVdd22aPT4QFDlVOD66oFLQC2DS7nDRi/XYmSKnBN77AI1Bz7jwzcCu+knXWGcApAm6BOnRvPEYdM82Gky2K53mQC6iEmvGCwWC8+aV5ubTFvcbBIqfoFY+k1iefy4P90ahnSd9NfxFzhoVWyIp6EmrCZU974eFrDujPZ9jzn+5T2+6QgF8i41ZmLeXpT+kx16Q9zslJ7hBkZ3KFcM3DclAuJ3hY+lIMHditp0Xpp6liA9GIhpHMqiA5LOQMYsxfeHJ0gNJh9Z9hgA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(136003)(376002)(366004)(396003)(451199015)(36756003)(31686004)(31696002)(2906002)(5660300002)(186003)(83380400001)(2616005)(38100700002)(107886003)(6666004)(6512007)(6506007)(6486002)(478600001)(53546011)(86362001)(54906003)(6916009)(66946007)(66556008)(66476007)(8676002)(4326008)(316002)(41300700001)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZlRrbnZrTzRtc3RBbExka0hjZjZZdjFKb09WTzFIR1RYQmlhY0lZVURrK1Yr?=
+ =?utf-8?B?OEEvSWRzVFpLeTAxaml5RlZuUUNOdmI0ZENrZ0tmcWVsQTk3czZNMFA5Nnh3?=
+ =?utf-8?B?TkhpM3pxUXZGRGFEVllMNlBlakJMem1VL0lHWFpVYzlnSkR1TStHR0M5Mk5a?=
+ =?utf-8?B?UEVaUUdJdjZ6R3JaQ0hoTDhWeTBWTDNkdG93UTlMSFF5V01vQlVmQm5nMXVm?=
+ =?utf-8?B?M0xXVm8xYkNzRlViYUozTlZCV2czUUpwQ0kzVlk3N3NNaTE1Qk5xYUUzOUJT?=
+ =?utf-8?B?ay93TVo3UkgxMzlsSUtjNkY3VnpkUW03K3ROUzl4UlNENzk2WVFjVXlhUWFK?=
+ =?utf-8?B?WDZZT0g0S09ZT3NtOGtkbFcvN1U2RDkzWEVkUjFrTS9UMXVQK1YyWG1mcUJr?=
+ =?utf-8?B?WUtmR0xiOENRcUhkdC8rdkdFMnM3NXlQcStjbi83aHdrd0NqUkNkdzMvOXpl?=
+ =?utf-8?B?MkhXbW96SGVMTkhYdCtobWp6QzFQTlVJU0RZNlRkdnJDaXp3dTFWdzNpV1U3?=
+ =?utf-8?B?c0taaXhxaDAzMkRnUkZueVVudXZrVldTWTRVampGOUN4eGdGU2o1N01xRW41?=
+ =?utf-8?B?VDBRUmc3N01jMjUvSk5Zakt3bVZQdURJaHFmTWV2bmFVVW41NTZCVS9JcVRQ?=
+ =?utf-8?B?RldWcUI0RFQ5dGZqaW52aHVFY2NsdTJETVJxOGc3cEQrQ0hYWEpBbHc0cksx?=
+ =?utf-8?B?MFNic2pIWFpEeFBoVktwczU0WUZOVzdSUE5SVGtCZmJhcER0YXFUUU1BNGJy?=
+ =?utf-8?B?VjlvMStrSTJqbEh3dlVLa2ttOFhhOXNLakMrZExUUlpyaDJ1V3o5Zm8rOUQ4?=
+ =?utf-8?B?ZTBEQUJ6ajhwMWhQRldERkpsdHh1M0s1Tm5CdDdOTThrMC9pMUZSVnBYNU96?=
+ =?utf-8?B?WjVQemRucGZubE1Zc0kyaE1PUkVNSDMrdG1KT2pvYk84bDBlYitwOHMxS2RY?=
+ =?utf-8?B?c0oxOVBBY2V2M1ByS3NXUGVYV3RwK0xKUml5bmR3WGVROGU3MnluVytZQTdH?=
+ =?utf-8?B?R1VoZ3R0WWJvY3JlOUcvZVhHd0Y2ZFZoZGxoMlZzeDNKUlFtN2xwR1hCK0Ni?=
+ =?utf-8?B?LzRmYzRna3ZYTWY4TGpJTHJQbDQ5TGgyKzZ6cGx5NW1wOU56bktYRCsxVStr?=
+ =?utf-8?B?cnluSkYvSGl1SzZWQ0JXNWoyOUdLMWlmdGFqb3lOMnJhZnlHL3kwb0U0REwv?=
+ =?utf-8?B?MmU3WVhJYTNwMTk1NGM3aGg4dU9kU2NOME5HZ1NnMDUyK1NlM0xYOUF2cFhC?=
+ =?utf-8?B?bkk5MjlMV3VLbFY2dFBWQUo5VGpIWGRwMjV5N3VWM3Y4SGZmcDc0azNDS3lr?=
+ =?utf-8?B?NzV0WURndk1tSXpPbEFDZjZmNDlrZzJBbnlGVlFpQklGQVYzVXNER1hoMTFu?=
+ =?utf-8?B?OThxZHZvUzNkd2lXd3dHV21LZWhDVUFNeWtUUUgreU85QTJSN2FhS2gzNUIx?=
+ =?utf-8?B?UExsWGdyQ3NvYUF6aFROem9XaVJ0dWZEeGRzQ0F1Y043WkJQcWVtczVJR3F1?=
+ =?utf-8?B?cktZNnl3QjJjdGxhSlNrWkEzclpqaVREVFdMOXFCUWFEaE9jTU1zZnJlMnNs?=
+ =?utf-8?B?TVJ1VmJxbENCM0NBSW5mL0VTaTYxN2ZpWDB5ZDhuZldKQjNKVnZzY2FRTFhm?=
+ =?utf-8?B?SDFjZVhVeFRJTzdqSzEyTmtOaUVaWnlSTXBPVlgra2RTUjhjTSt3ZWx4anVi?=
+ =?utf-8?B?eFRsUnlzR0VxL1M5UGZ4OE9rMmJSQ1k0U09xWlRnbGNXN2xUT2M5TmV6aFRC?=
+ =?utf-8?B?c3Y5UmJnc1Z2WEJVZ3NFQzV4VlhNT3VxMmJFT092U2toMkdPTjVEdUNkSnhK?=
+ =?utf-8?B?Z2Jmc05PazlCWmw0bnBSOUFaQ1o4ckVzSGlrYXJsYTRTMW1jRDlFS25pYVo4?=
+ =?utf-8?B?VHp4RFVEaEZTNDhSWXVZMlpLeG5NekxUTHF3TkR6TGtQd1FjREhjMWtzU2pk?=
+ =?utf-8?B?Y3g1M0RWLzhuR0FHQUV0OTd6aHhleEYveENwaHFIU2RwZnhzL2lVajZBYytD?=
+ =?utf-8?B?ckQxNkU3bWpnR3FST3FjTFpPSWJLU3JNdWt2cHhTQVM1b2l1RGM4Rndmc2Q5?=
+ =?utf-8?B?Qzg0cHJ0T0Ztc0FUcW1RU2VscHFCdmVlNFl2ZEtmejdJU3hrTVFScnFZWW1u?=
+ =?utf-8?B?V1Bhb2ZkLy80M2hnU2xVbktucVhOT2NseE9zdC9tZHZJa0ZkUklOeURPNWk1?=
+ =?utf-8?B?cXdEZ29NN3JWRUtTTjRhQTZUcXJTWVBiWGtvNzFWVXEzcUhRdGx5UURpYmZ5?=
+ =?utf-8?B?RGUvWWowTG1zakxPNHk0UlQ2OGxBPT0=?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0479a84c-4aaf-4130-0eb9-08daa6dd9753
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2022 14:26:28.5788
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tcyR4DG7/NFGKT+W01apfDtDkoDQEp9IxoqVtxT8V9D651a7raeD+G2ivBdJCvfY2RT9yxBpWY0+KDQy5x+GgA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5974
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5 Oct 2022, at 02:40, Guo Ren <guoren@kernel.org> wrote:
->=20
-> ,
->=20
-> On Wed, Oct 5, 2022 at 9:01 AM Jessica Clarke <jrtc27@jrtc27.com> =
-wrote:
->>=20
->> On 5 Oct 2022, at 01:38, Guo Ren <guoren@kernel.org> wrote:
->>>=20
->>> On Wed, Oct 5, 2022 at 1:24 AM Jessica Clarke <jrtc27@jrtc27.com> =
-wrote:
->>>>=20
->>>> On 4 Oct 2022, at 17:52, Atish Patra <atishp@atishpatra.org> wrote:
->>>>>=20
->>>>> On Sat, Oct 1, 2022 at 1:13 PM Conor Dooley <conor@kernel.org> =
-wrote:
->>>>>>=20
->>>>>> On Wed, Sep 28, 2022 at 08:26:01PM -0700, Atish Patra wrote:
->>>>>>> On Wed, Sep 28, 2022 at 2:16 PM Conor Dooley <conor@kernel.org> =
-wrote:
->>>>>>>>=20
->>>>>>>> On Wed, Sep 28, 2022 at 12:21:55AM -0700, Atish Patra wrote:
->>>>>>>>> On Sat, Sep 24, 2022 at 4:15 PM Conor Dooley =
-<conor@kernel.org> wrote:
->>>>>>>>>>=20
->>>>>>>>>> On Fri, Sep 23, 2022 at 11:01:28AM -0700, Atish Patra wrote:
->>>>>>>>>>> On Fri, Sep 23, 2022 at 12:18 AM Heiko Stuebner =
-<heiko@sntech.de> wrote:
->>>>>>>>>>>>=20
->>>>>>>>>>>> Hi,
->>>>>>>>>>>>=20
->>>>>>>>>>>> Am Donnerstag, 22. September 2022, 17:52:46 CEST schrieb =
-Jessica Clarke:
->>>>>>>>>>>>> On 22 Sept 2022, at 16:45, Heiko Stuebner =
-<heiko@sntech.de> wrote:
->>>>>>>>>>>>>>=20
->>>>>>>>>>>>>> Am Donnerstag, 22. September 2022, 08:09:58 CEST schrieb =
-Samuel Holland:
->>>>>>>>>>>>>>> commit 8eb060e10185 ("arch/riscv: add Zihintpause =
-support") broke
->>>>>>>>>>>>>>> building with CONFIG_CC_OPTIMIZE_FOR_SIZE enabled (gcc =
-11.1.0):
->>>>>>>>>>>>>>>=20
->>>>>>>>>>>>>>> CC arch/riscv/kernel/vdso/vgettimeofday.o
->>>>>>>>>>>>>>> In file included from <command-line>:
->>>>>>>>>>>>>>> ./arch/riscv/include/asm/jump_label.h: In function =
-'cpu_relax':
->>>>>>>>>>>>>>> ././include/linux/compiler_types.h:285:33: warning: =
-'asm' operand 0 probably does not match constraints
->>>>>>>>>>>>>>> 285 | #define asm_volatile_goto(x...) asm goto(x)
->>>>>>>>>>>>>>> | ^~~
->>>>>>>>>>>>>>> ./arch/riscv/include/asm/jump_label.h:41:9: note: in =
-expansion of macro 'asm_volatile_goto'
->>>>>>>>>>>>>>> 41 | asm_volatile_goto(
->>>>>>>>>>>>>>> | ^~~~~~~~~~~~~~~~~
->>>>>>>>>>>>>>> ././include/linux/compiler_types.h:285:33: error: =
-impossible constraint in 'asm'
->>>>>>>>>>>>>>> 285 | #define asm_volatile_goto(x...) asm goto(x)
->>>>>>>>>>>>>>> | ^~~
->>>>>>>>>>>>>>> ./arch/riscv/include/asm/jump_label.h:41:9: note: in =
-expansion of macro 'asm_volatile_goto'
->>>>>>>>>>>>>>> 41 | asm_volatile_goto(
->>>>>>>>>>>>>>> | ^~~~~~~~~~~~~~~~~
->>>>>>>>>>>>>>> make[1]: *** [scripts/Makefile.build:249: =
-arch/riscv/kernel/vdso/vgettimeofday.o] Error 1
->>>>>>>>>>>>>>> make: *** [arch/riscv/Makefile:128: vdso_prepare] Error =
-2
->>>>>>>>>>>>>>>=20
->>>>>>>>>>>>>>> Having a static branch in cpu_relax() is problematic =
-because that
->>>>>>>>>>>>>>> function is widely inlined, including in some quite =
-complex functions
->>>>>>>>>>>>>>> like in the VDSO. A quick measurement shows this static =
-branch is
->>>>>>>>>>>>>>> responsible by itself for around 40% of the jump table.
->>>>>>>>>>>>>>>=20
->>>>>>>>>>>>>>> Drop the static branch, which ends up being the same =
-number of
->>>>>>>>>>>>>>> instructions anyway. If Zihintpause is supported, we =
-trade the nop from
->>>>>>>>>>>>>>> the static branch for a div. If Zihintpause is =
-unsupported, we trade the
->>>>>>>>>>>>>>> jump from the static branch for (what gets interpreted =
-as) a nop.
->>>>>>>>>>>>>>>=20
->>>>>>>>>>>>>>> Fixes: 8eb060e10185 ("arch/riscv: add Zihintpause =
-support")
->>>>>>>>>>>>>>> Signed-off-by: Samuel Holland <samuel@sholland.org>
->>>>>>>>>>>>>>> ---
->>>>>>>>>>>>>>>=20
->>>>>>>>>>>>>>> arch/riscv/include/asm/hwcap.h | 3 ---
->>>>>>>>>>>>>>> arch/riscv/include/asm/vdso/processor.h | 25 =
-++++++++++---------------
->>>>>>>>>>>>>>> 2 files changed, 10 insertions(+), 18 deletions(-)
->>>>>>>>>>>>>>>=20
->>>>>>>>>>>>>>> diff --git a/arch/riscv/include/asm/hwcap.h =
-b/arch/riscv/include/asm/hwcap.h
->>>>>>>>>>>>>>> index 6f59ec64175e..b21d46e68386 100644
->>>>>>>>>>>>>>> --- a/arch/riscv/include/asm/hwcap.h
->>>>>>>>>>>>>>> +++ b/arch/riscv/include/asm/hwcap.h
->>>>>>>>>>>>>>> @@ -68,7 +68,6 @@ enum riscv_isa_ext_id {
->>>>>>>>>>>>>>> */
->>>>>>>>>>>>>>> enum riscv_isa_ext_key {
->>>>>>>>>>>>>>> RISCV_ISA_EXT_KEY_FPU, /* For 'F' and 'D' */
->>>>>>>>>>>>>>> - RISCV_ISA_EXT_KEY_ZIHINTPAUSE,
->>>>>>>>>>>>>>> RISCV_ISA_EXT_KEY_MAX,
->>>>>>>>>>>>>>> };
->>>>>>>>>>>>>>>=20
->>>>>>>>>>>>>>> @@ -88,8 +87,6 @@ static __always_inline int =
-riscv_isa_ext2key(int num)
->>>>>>>>>>>>>>> return RISCV_ISA_EXT_KEY_FPU;
->>>>>>>>>>>>>>> case RISCV_ISA_EXT_d:
->>>>>>>>>>>>>>> return RISCV_ISA_EXT_KEY_FPU;
->>>>>>>>>>>>>>> - case RISCV_ISA_EXT_ZIHINTPAUSE:
->>>>>>>>>>>>>>> - return RISCV_ISA_EXT_KEY_ZIHINTPAUSE;
->>>>>>>>>>>>>>> default:
->>>>>>>>>>>>>>> return -EINVAL;
->>>>>>>>>>>>>>> }
->>>>>>>>>>>>>>> diff --git a/arch/riscv/include/asm/vdso/processor.h =
-b/arch/riscv/include/asm/vdso/processor.h
->>>>>>>>>>>>>>> index 1e4f8b4aef79..789bdb8211a2 100644
->>>>>>>>>>>>>>> --- a/arch/riscv/include/asm/vdso/processor.h
->>>>>>>>>>>>>>> +++ b/arch/riscv/include/asm/vdso/processor.h
->>>>>>>>>>>>>>> @@ -4,30 +4,25 @@
->>>>>>>>>>>>>>>=20
->>>>>>>>>>>>>>> #ifndef __ASSEMBLY__
->>>>>>>>>>>>>>>=20
->>>>>>>>>>>>>>> -#include <linux/jump_label.h>
->>>>>>>>>>>>>>> #include <asm/barrier.h>
->>>>>>>>>>>>>>> -#include <asm/hwcap.h>
->>>>>>>>>>>>>>>=20
->>>>>>>>>>>>>>> static inline void cpu_relax(void)
->>>>>>>>>>>>>>> {
->>>>>>>>>>>>>>> - if =
-(!static_branch_likely(&riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_ZIHINTPAUSE])=
-) {
->>>>>>>>>>>>>>> #ifdef __riscv_muldiv
->>>>>>>>>>>>>>> - int dummy;
->>>>>>>>>>>>>>> - /* In lieu of a halt instruction, induce a =
-long-latency stall. */
->>>>>>>>>>>>>>> - __asm__ __volatile__ ("div %0, %0, zero" : "=3Dr" =
-(dummy));
->>>>>>>>>>>>>>> + int dummy;
->>>>>>>>>>>>>>> + /* In lieu of a halt instruction, induce a =
-long-latency stall. */
->>>>>>>>>>>>>>> + __asm__ __volatile__ ("div %0, %0, zero" : "=3Dr" =
-(dummy));
->>>>>>>>>>>>>>> #endif
->>>>>>>>>>>>>>> - } else {
->>>>>>>>>>>>>>> - /*
->>>>>>>>>>>>>>> - * Reduce instruction retirement.
->>>>>>>>>>>>>>> - * This assumes the PC changes.
->>>>>>>>>>>>>>> - */
->>>>>>>>>>>>>>> + /*
->>>>>>>>>>>>>>> + * Reduce instruction retirement.
->>>>>>>>>>>>>>> + * This assumes the PC changes.
->>>>>>>>>>>>>>> + */
->>>>>>>>>>>>>>> #ifdef __riscv_zihintpause
->>>>>>>>>>>>>>> - __asm__ __volatile__ ("pause");
->>>>>>>>>>>>>>> + __asm__ __volatile__ ("pause");
->>>>>>>>>>>>>>> #else
->>>>>>>>>>>>>>> - /* Encoding of the pause instruction */
->>>>>>>>>>>>>>> - __asm__ __volatile__ (".4byte 0x100000F");
->>>>>>>>>>>>>>> + /* Encoding of the pause instruction */
->>>>>>>>>>>>>>> + __asm__ __volatile__ (".4byte 0x100000F");
->>>>>>>>>>>>>>> #endif
->>>>>>>>>>>>>>=20
->>>>>>>>>>>>>> hmm, though before this part of the code was only ever =
-accessed
->>>>>>>>>>>>>> when the zhintpause extension was really available on the =
-running
->>>>>>>>>>>>>> machine while now the pause instruction is called every =
-time.
->>>>>>>>>>>>>>=20
->>>>>>>>>>>>>> So I'm just wondering, can't this run into some "illegal =
-instruction"
->>>>>>>>>>>>>> thingy on machines not supporting the extension?
->>>>>>>>>>>>>=20
->>>>>>>>>>>>> No. The encoding for pause was deliberately chosen to be =
-one of the
->>>>>>>>>>>>> =E2=80=9Cuseless=E2=80=9D encodings of fence, with the =
-hope that existing
->>>>>>>>>>>>> microarchitectures might take a while to execute it and =
-thus it would
->>>>>>>>>>>>> still function as a slow-running instruction. It=E2=80=99s =
-somewhat
->>>>>>>>>>>>> questionable whether the div is even needed, the worst =
-that happens is
->>>>>>>>>>>>> cpu_relax isn=E2=80=99t very relaxed and you spin a bit =
-faster. Any
->>>>>>>>>>>>> implementations where that=E2=80=99s true probably also =
-don=E2=80=99t have fancy
->>>>>>>>>>>>> clock/power management anyway, and div isn=E2=80=99t going =
-to be a low-power
->>>>>>>>>>>>> operation so the only real effect is likely hammering on =
-contended
->>>>>>>>>>>>> atomics a bit more, and who cares about that on the low =
-core count
->>>>>>>>>>>>> systems we have today.
->>>>>>>>>>>>=20
->>>>>>>>>>>> thanks a lot for that explanation, which made things a lot =
-clearer.
->>>>>>>>>>>>=20
->>>>>>>>>>>> So as you said, dropping the div part might make the =
-function even smaller,
->>>>>>>>>>>> though somehow part of me would want to add some sort of =
-comment to
->>>>>>>>>>>> the function for when the next developer stumbles over the =
-unconditional
->>>>>>>>>>>> use of pause :-) .
->>>>>>>>>>>>=20
->>>>>>>>>>>=20
->>>>>>>>>>> I agree. If that's what microarch will do, we can drop div =
-altogether.
->>>>>>>>>>> Though microarch may be treated as nop even if it is =
-undesirable.
->>>>>>>>>>> IIRC, the div was introduced for the rocket chip which would =
-induce a
->>>>>>>>>>> long latency stall with div instruction (zero as operands).
->>>>>>>>>>>=20
->>>>>>>>>>> Does any other core or newer rocket chip actually induce a =
-latency
->>>>>>>>>>> stall with div instruction ?
->>>>>>>>>>> If not, it is equivalent to NOP as well. We can definitely =
-remove the div.
->>>>>>>>>>> The only cores affected will be the older rocket core.
->>>>>>>>>>>=20
->>>>>>>>>>> Tagging some folks to understand what their core does.
->>>>>>>>>>>=20
->>>>>>>>>>> @Paul Walmsley @Guo Ren @Conor Dooley ?
->>>>>>>>>>=20
->>>>>>>>>> I am no microarch expert by _any_ stretch of the imagination, =
-but
->>>>>>>>>> from a quick experiment it looks like the u54s on PolarFire =
-SoC behave
->>>>>>>>>> in the same way, and div w/ zero operands does in fact take =
-significantly
->>>>>>>>>> longer than regular division (looks to be about 3x).
->>>>>>>>>>=20
->>>>>>>>>=20
->>>>>>>>> Thanks. Do you have any data on how much the "pause" =
-instruction takes.
->>>>>>>>=20
->>>>>>>> So these numbers you may consider as being pulled out of a =
-magic hat
->>>>>>>> as all I am doing is reading the counters from userspace and =
-there is
->>>>>>>> some variance etc. Plus the fact that I just started hacking at =
-some
->>>>>>>> existing code I had lying around as I'm pretty snowed under at =
-the
->>>>>>>> moment.
->>>>>>>>=20
->>>>>>>> Doing the following takes about 70 cycles on both a PolarFire =
-SoC and an
->>>>>>>> unmatched:
->>>>>>>> long divisor =3D 2, dividend =3D 100000, dest;
->>>>>>>> asm("div %0, zero, zero" : "=3Dr" (dest));
->>>>>>>> and equates to:
->>>>>>>> sd a5,-48(s0)
->>>>>>>> div a5,zero,zero
->>>>>>>>=20
->>>>>>>> Clocking in at about 40 cycles is some actual divisions, I just =
-did the
->>>>>>>> following a dozen times, doing a trivial computation:
->>>>>>>> long divisor =3D 2, dividend =3D 100000, dest;
->>>>>>>> asm("div %0, %1, %2" : "=3Dr" (dividend) : "r" (dividend), "r" =
-(divisor))
->>>>>>>>=20
->>>>>>>> ie, a load of the following:
->>>>>>>> sd a5,-48(s0)
->>>>>>>> ld a5,-48(s0)
->>>>>>>> ld a4,-40(s0)
->>>>>>>> div a5,a5,a4
->>>>>>>>=20
->>>>>>>> So clearly the div w/ zero args makes a difference...
->>>>>>>>=20
->>>>>>>> On PolarFire SoC, `0x100000F` takes approx 6 cycles. On my =
-unmatched, it
->>>>>>>> takes approx 40. Again, I just had an asm block & called the =
-instruction
->>>>>>>> a number times and took the average - here it was 48 times.
->>>>>>>>=20
->>>>>>>> Take the actual numbers with a fist full of salt, but at least =
-the
->>>>>>>> relative numbers should be of some use to you.
->>>>>>>>=20
->>>>>>>> Hope that's somewhat helpful, maybe next week I can do =
-something a
->>>>>>>> little more useful for you...
->>>>>>>>=20
->>>>>>>=20
->>>>>>> Thanks. It would be good to understand what happens when "pause" =
-is
->>>>>>> executed on these boards ?
->>>>>>=20
->>>>>> The actual pause instruction? uhh, so with the usual "I don't =
-know what
->>>>>> I am doing" disclaimer, I ran each of the .insn and pause =
-instruction 48
->>>>>> times in a row and checked the time elapsed via rdcycle & then =
-ran that
->>>>>> c program 1000 times in a bash loop. Got the below, the insns =
-were run
->>>>>> first and then the pauses.
->>>>>> insn pause
->>>>>> min 2.3 3.2
->>>>>> max 9.5 10.6
->>>>>> avg 27.0 29.1
->>>>>> 5% 2.9 4.2
->>>>>> 95% 18.1 19.1
->>>>>>=20
->>>>>> Swapping the pause & insn order around made a minor difference, =
-but not
->>>>>> enough to report on. I'd be very wary of drawing any real =
-conclusions
->>>>>> from this data, but at least both are roughly similar (and =
-certainly not
->>>>>> even close to doing the div w/ zero args.
->>>>>>=20
->>>>>=20
->>>>> Yeah. That's what I was expecting. So we can't drop the div for =
-now. Otherwise,
->>>>> the existing hardware(don't support Zhintpause) suffers by =
-spinning faster.
->>>>=20
->>>> But does that actually matter in practice? If it doesn=E2=80=99t =
-noticeable
->>>> affect performance then you don=E2=80=99t need to keep the div. =
-There are a lot
->>>> of architectures that even just define cpu_relax() as barrier().
->>> Div is not semantic accurate for standard code, it should be in
->>> vendors' errata. I agree to leave nop as default and put a pause
->>> instead after the feature is detected.
->>=20
->> Nobody=E2=80=99s suggesting a literal nop instruction, that would be =
-worse than
->> either div or pause. It=E2=80=99s always safe to execute pause, the =
-question is
->> just whether on existing systems that don=E2=80=99t implement =
-Zihintpause it
->> gets executed too quickly such that performance is degraded due to
->> spinning more aggressively.
->=20
-> Why do you ensure pause can't be an illegal instruction in some old =
-machine?
 
-Because that=E2=80=99s how it=E2=80=99s defined; it uses one of the many =
-hints
-(instructions that aren=E2=80=99t a canonical nop but are defined to =
-behave
-like one in terms of architectural side-effects) from RV32I/RV64I.
 
-> Why do you ensure div could save power for all microarchitectures?
+On 05/10/2022 15:07, Takashi Iwai wrote:
+> On Wed, 05 Oct 2022 15:52:01 +0200,
+> Jon Hunter wrote:
+>>
+>>
+>> On 05/10/2022 13:29, Takashi Iwai wrote:
+>>
+>> ...
+>>
+>>>> HDA playback is failing on -next for various Tegra boards. Bisect is
+>>>> point to this commit and reverting it fixes the problem. I was a bit
+>>>> puzzled why this change is causing a problem, but looking closer there
+>>>> is a difference between the previous code that was calling
+>>>> snd_hdac_stream_readb() and the new code that is calling
+>>>> snd_hdac_stream_readb_poll(). The function snd_hdac_stream_readb()
+>>>> calls snd_hdac_aligned_mmio() is see if the device has an aligned MMIO
+>>>> which Tegra does and then would call snd_hdac_aligned_read(). However,
+>>>> now the code always call readb() and this is breaking Tegra.
+>>>>
+>>>> So it is either necessary to update snd_hdac_stream_readb_poll() to
+>>>> handle this or revert this change.
+>>>
+>>> Does the patch below work?
+>>>
+>>>
+>>> thanks,
+>>>
+>>> Takashi
+>>>
+>>> -- 8< --
+>>> --- a/include/sound/hdaudio.h
+>>> +++ b/include/sound/hdaudio.h
+>>> @@ -592,8 +592,8 @@ int snd_hdac_get_stream_stripe_ctl(struct hdac_bus *bus,
+>>>    #define snd_hdac_stream_readb(dev, reg) \
+>>>    	snd_hdac_reg_readb((dev)->bus, (dev)->sd_addr + AZX_REG_ ## reg)
+>>>    #define snd_hdac_stream_readb_poll(dev, reg, val, cond, delay_us, timeout_us) \
+>>> -	readb_poll_timeout((dev)->sd_addr + AZX_REG_ ## reg, val, cond, \
+>>> -			   delay_us, timeout_us)
+>>> +	read_poll_timeout(snd_hdac_reg_readb, val, cond, delay_us, timeout_us,\
+>>> +			  false, (dev)->bus, (dev)->sd_addr + AZX_REG_ ## reg)
+>>>    #define snd_hdac_stream_readl_poll(dev, reg, val, cond, delay_us, timeout_us) \
+>>>    	readl_poll_timeout((dev)->sd_addr + AZX_REG_ ## reg, val, cond, \
+>>>    			   delay_us, timeout_us)
+>>
+>>
+>> Amazingly it does not work. I would have thought that would, but it
+>> does not. I am a bit puzzled by that?
+> 
+> Interesting, it must be a subtle difference.
+> What about passing true?  It seems that the original code has the
+> udelay(3) before the loop.
 
-I don=E2=80=99t. In fact it almost certainly won=E2=80=99t make the core =
-enter a low
-power state. It will just help reduce the amount of memory traffic by
-taking a while to execute. I would rather not use div at all.
 
-Jess
+I wondered the same and tried that, but still not working.
 
-> nop (default) -> div/<other instructions> (moved into vendor errata)
-> -> pause (when ZiHintPause feature detected)
->=20
->>=20
->> Jess
->>=20
->>>>=20
->>>> Jess
->>>>=20
->>>>> Thanks for running the experiments.
->>>>>=20
->>>>>> Again, hope that is helpful?
->>>>>> Conor.
->>>>>>=20
->>>>>>>=20
->>>>>>>> Conor.
->>>>>>>>=20
->>>>>>>>> I understand that it is not available in these cores. Just =
-wanted to
->>>>>>>>> understand if microarchitecture
->>>>>>>>> actually takes a while executing the useless encoding as =
-pointed out by Jessica.
->>>>>>>>>=20
->>>>>>>>> If that's the case, we can remove the div instruction =
-altogether.
->>>>>>>>> Otherwise, this patch will cause some performance regression
->>>>>>>>> for existing SoC (HiFive unleashed has the same core. Not sure =
-about
->>>>>>>>> unmatched though).
->>>>>>>>> This needs to be documented at least.
->>>>>>>>>=20
->>>>>>>>>> Hope that's helpful,
->>>>>>>>>> Conor.
->>>>>>>>>>=20
->>>>>>>>>> (I just did a quick check of what pretty much amounted to a =
-bunch of
->>>>>>>>>> div a5,zero,zero in a row versus div a5,a5,a5)
->>>>>>>>>>=20
->>>>>>>>>>>=20
->>>>>>>>>>> (Please add anybody who may have an insight to execution =
-flow on
->>>>>>>>>>> existing Linux capable cores)
->>>>>>>>>>>=20
->>>>>>=20
->>>>>=20
->>>>>=20
->>>>> --
->>>>> Regards,
->>>>> Atish
->>>>=20
->>>=20
->>>=20
->>> --
->>> Best Regards
->>> Guo Ren
->>=20
->=20
->=20
-> --=20
-> Best Regards
-> Guo Ren
+Jon
 
+-- 
+nvpublic
