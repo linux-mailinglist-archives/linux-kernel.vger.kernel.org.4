@@ -2,205 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5D45F5B41
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 22:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 868425F5B43
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 22:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbiJEUz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 16:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45344 "EHLO
+        id S229898AbiJEU41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 16:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiJEUzY (ORCPT
+        with ESMTP id S229644AbiJEU4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 16:55:24 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2CA6919E;
-        Wed,  5 Oct 2022 13:55:23 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 295Kfu9L017131;
-        Wed, 5 Oct 2022 20:55:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=NUQzIl1koD2p/5aypamO918G/LiJKNVmP1A+WyBBvQA=;
- b=ZynAvrYPGKwoqUp6OSc9AcPVSBEWzyuo6yGm6DM/gp2SdBgLLeInKQk4SC4nz19btMfz
- oeZobgc3hwUD4lFaAoRMr3k2gSJc7CRdQd1AWvA1DGD7fJ00uWzDmZKogo/sbR9c/MWf
- LHaRlwt+xE1sm5h7+A2YA3ZrnkkXgpPsXO9KFqbIeyJz6xolEBHaExhnis+NglFkWGTb
- /JCeVMATrJQTsC0gwGUUYIG/bPtD8+0w7PEsuVGSHjZR47os9gEY4vDOehxyls55AZGI
- A6NmNfQAv2XBxL53YN/pXhSlJQO2GQPXTSHwg9TjcB8PSixp01OHJiLnBOzRjuZZX5zX 9g== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k06sjn66b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Oct 2022 20:55:15 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 295KtF0l006104
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 5 Oct 2022 20:55:15 GMT
-Received: from quicinc.com (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 5 Oct 2022
- 13:55:14 -0700
-From:   Jeff Johnson <quic_jjohnson@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Jeff Johnson" <quic_jjohnson@quicinc.com>,
-        Alex Elder <elder@linaro.org>,
-        "Sibi Sankar" <quic_sibis@quicinc.com>
-Subject: [RESEND] soc: qcom: pdr: Make QMI message rules const
-Date:   Wed, 5 Oct 2022 13:54:58 -0700
-Message-ID: <20221005205458.31437-1-quic_jjohnson@quicinc.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220914234705.28405-5-quic_jjohnson@quicinc.com>
-References: <20220914234705.28405-5-quic_jjohnson@quicinc.com>
+        Wed, 5 Oct 2022 16:56:23 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9298A7757D
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 13:56:22 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a26so350564ejc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 13:56:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zfpsNBbNVPzFpz+lF6+ppNQCYSIyAPrPwcUGS4C/qTM=;
+        b=Mf5nuCylf6oEdgUt9A74oPuzITr0D9YIrAijaWEUBhdHOQdttCTl3kdPf9/gN34UMB
+         f4Jw9sNgDqmkiYuAhKBRAUfRw7ovit1aoS6tSbYi/u3KEansVUfvs4aXg9XfyDiDciY+
+         CcUFjq2W3UizHMc58TANb7W4Q0Wb/p7HErqSAACaWlBUQ323wnoYvOybrWNFnYc3CfsR
+         SKoIwLYQpn7qVcryF0xDwkM8AEop/LvohQRx3Du26pCKcUWLzjG4dvwxqBOuctYVUKVP
+         KdzkDEsE8vBW5zwYaMkxXYlgQ0PPW03+8qad68O2P6wl9o0H6C3Xr/+w834WkeITicHM
+         KxUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zfpsNBbNVPzFpz+lF6+ppNQCYSIyAPrPwcUGS4C/qTM=;
+        b=J4NSZAEy+fFHGWFtWIiY3hZF9CsU/pZChaMm0GP4uhCU+9UZmjca8AsS9EZrcAd3g/
+         nD1YOYYE0h+y1ZtV7MvS0lvOPqt38GvbdBPlk75WP6qGV3J9gL2GzyqgGzlBDR5l8Wgj
+         xdZa+SDJleamZNwGKDEIMP4uoc4kmBmkggTSfXooWJziwrrn3TR2V2anInlHSqop2J0q
+         AC+G07ER64pPGTPmGGl4mNkMQC9sV/LvCokb7LwVGx9sa0duxKOWBDW8YeN7LWYPu/7z
+         SRDgCQDUwSvHO+dEryiradiJ/4/slQT18p4MWxOwdxwl5UKey7Wb3SuCbWQ+g9ppxO98
+         QPSw==
+X-Gm-Message-State: ACrzQf0VfugNte0+fjgUIsyqbz3hZtm+A/oMPzOgQ07bopOb00yDXZSY
+        QASt/5h84oQDpaC21A/fk8Z1cl61I2V6Wtktx2noYZYs
+X-Google-Smtp-Source: AMsMyM7arMg3njnjE8r31COnUuj7GFoDNNv8j63P6WC0F1Sdxn2Pw7vfjj13LeCE8eIzls9P4+NNy7g/B19QBlnm4cs=
+X-Received: by 2002:a17:906:9756:b0:78b:8c9b:3b1d with SMTP id
+ o22-20020a170906975600b0078b8c9b3b1dmr1181520ejy.256.1665003380999; Wed, 05
+ Oct 2022 13:56:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 7ciNLxjORYeyBsRCeJr1dVQf_FHvDMG8
-X-Proofpoint-GUID: 7ciNLxjORYeyBsRCeJr1dVQf_FHvDMG8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-05_05,2022-10-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- mlxlogscore=999 impostorscore=0 suspectscore=0 bulkscore=0
- lowpriorityscore=0 priorityscore=1501 malwarescore=0 phishscore=0
- adultscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210050129
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAPM=9tzs4n8dDQ_XVVPS_5jrBgsNkhDQvf-B_XmUg+EG_M2i4Q@mail.gmail.com>
+ <CAHk-=wgJmLVs7MYd=uF4+b32Fwmvgc0MLr4TEUSBEPf5U6=W5g@mail.gmail.com>
+In-Reply-To: <CAHk-=wgJmLVs7MYd=uF4+b32Fwmvgc0MLr4TEUSBEPf5U6=W5g@mail.gmail.com>
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Thu, 6 Oct 2022 06:56:08 +1000
+Message-ID: <CAPM=9tx+qa5aucS7Sa4Lg4SAD7PamCYsPwSupgd1xix1Y9HEkg@mail.gmail.com>
+Subject: Re: [git pull] drm for 6.1-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit ff6d365898d4 ("soc: qcom: qmi: use const for struct
-qmi_elem_info") allows QMI message encoding/decoding rules to be
-const, so do that for QCOM PDR.
+On Thu, 6 Oct 2022 at 04:38, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Tue, Oct 4, 2022 at 8:42 PM Dave Airlie <airlied@gmail.com> wrote:
+> >
+> > This is very conflict heavy, mostly the correct answer is picking
+> > the version from drm-next.
+>
+> Ugh, yes, that was a bit annoying.
+>
+> I get the same end result as you did, but I do wonder if the drm
+> people should try to keep some kind of separate "fixes" branches for
+> things that go both into the development tree and then get sent to me
+> for fixes pulls?
+>
+> Hopefully this "lots of pointless noise" was a one-off, but it might
+> be due to how you guys work..
 
-Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
-Reviewed-by: Alex Elder <elder@linaro.org>
-Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
----
-This patch was last sent as part of the series:
-[PATCH v2 0/4] Make QMI message rules const
-https://lore.kernel.org/linux-arm-msm/20220914234705.28405-1-quic_jjohnson@quicinc.com/
+In this case I think it was a late set of fixes backported for new AMD
+hardware, that had to be redone to fit into the current kernel that
+caused most of it. I haven't seen it this bad in a long while. We also
+maintain a rerere tree ourselves to avoid continuously seeing it.
 
-As
+The problem is a lot of developers don't have the insight that the
+maintainers do into the current state of the tree/pipeline.
 
-[PATCH v2 4/4] soc: qcom: pdr: Make QMI message rules const
-https://lore.kernel.org/linux-arm-msm/20220914234705.28405-5-quic_jjohnson@quicinc.com/
+Stuff goes into next because that is where the patch it fixes
+originally went, and it goes through CI there. Then at some point
+someone else realises the change needs to be in fixes and it gets
+backported.
 
-Since the individual patches in the series will land in separate
-trees, and since there are no dependencies between them, they are
-being resent separately when the following dependent change has landed
-in the destination tree:
+The volume of patches and company signoff processes doesn't make it
+trivial to upfront decide what needs to go in -next or -fixes
+unfortunately.
 
-ff6d365898d4 ("soc: qcom: qmi: use const for struct qmi_elem_info")
-
- drivers/soc/qcom/pdr_internal.h | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/soc/qcom/pdr_internal.h b/drivers/soc/qcom/pdr_internal.h
-index a30422214943..03c282b7f17e 100644
---- a/drivers/soc/qcom/pdr_internal.h
-+++ b/drivers/soc/qcom/pdr_internal.h
-@@ -28,7 +28,7 @@ struct servreg_location_entry {
- 	u32 instance;
- };
- 
--static struct qmi_elem_info servreg_location_entry_ei[] = {
-+static const struct qmi_elem_info servreg_location_entry_ei[] = {
- 	{
- 		.data_type      = QMI_STRING,
- 		.elem_len       = SERVREG_NAME_LENGTH + 1,
-@@ -74,7 +74,7 @@ struct servreg_get_domain_list_req {
- 	u32 domain_offset;
- };
- 
--static struct qmi_elem_info servreg_get_domain_list_req_ei[] = {
-+static const struct qmi_elem_info servreg_get_domain_list_req_ei[] = {
- 	{
- 		.data_type      = QMI_STRING,
- 		.elem_len       = SERVREG_NAME_LENGTH + 1,
-@@ -116,7 +116,7 @@ struct servreg_get_domain_list_resp {
- 	struct servreg_location_entry domain_list[SERVREG_DOMAIN_LIST_LENGTH];
- };
- 
--static struct qmi_elem_info servreg_get_domain_list_resp_ei[] = {
-+static const struct qmi_elem_info servreg_get_domain_list_resp_ei[] = {
- 	{
- 		.data_type      = QMI_STRUCT,
- 		.elem_len       = 1,
-@@ -199,7 +199,7 @@ struct servreg_register_listener_req {
- 	char service_path[SERVREG_NAME_LENGTH + 1];
- };
- 
--static struct qmi_elem_info servreg_register_listener_req_ei[] = {
-+static const struct qmi_elem_info servreg_register_listener_req_ei[] = {
- 	{
- 		.data_type      = QMI_UNSIGNED_1_BYTE,
- 		.elem_len       = 1,
-@@ -227,7 +227,7 @@ struct servreg_register_listener_resp {
- 	enum servreg_service_state curr_state;
- };
- 
--static struct qmi_elem_info servreg_register_listener_resp_ei[] = {
-+static const struct qmi_elem_info servreg_register_listener_resp_ei[] = {
- 	{
- 		.data_type      = QMI_STRUCT,
- 		.elem_len       = 1,
-@@ -263,7 +263,7 @@ struct servreg_restart_pd_req {
- 	char service_path[SERVREG_NAME_LENGTH + 1];
- };
- 
--static struct qmi_elem_info servreg_restart_pd_req_ei[] = {
-+static const struct qmi_elem_info servreg_restart_pd_req_ei[] = {
- 	{
- 		.data_type      = QMI_STRING,
- 		.elem_len       = SERVREG_NAME_LENGTH + 1,
-@@ -280,7 +280,7 @@ struct servreg_restart_pd_resp {
- 	struct qmi_response_type_v01 resp;
- };
- 
--static struct qmi_elem_info servreg_restart_pd_resp_ei[] = {
-+static const struct qmi_elem_info servreg_restart_pd_resp_ei[] = {
- 	{
- 		.data_type      = QMI_STRUCT,
- 		.elem_len       = 1,
-@@ -300,7 +300,7 @@ struct servreg_state_updated_ind {
- 	u16 transaction_id;
- };
- 
--static struct qmi_elem_info servreg_state_updated_ind_ei[] = {
-+static const struct qmi_elem_info servreg_state_updated_ind_ei[] = {
- 	{
- 		.data_type      = QMI_SIGNED_4_BYTE_ENUM,
- 		.elem_len       = 1,
-@@ -336,7 +336,7 @@ struct servreg_set_ack_req {
- 	u16 transaction_id;
- };
- 
--static struct qmi_elem_info servreg_set_ack_req_ei[] = {
-+static const struct qmi_elem_info servreg_set_ack_req_ei[] = {
- 	{
- 		.data_type      = QMI_STRING,
- 		.elem_len       = SERVREG_NAME_LENGTH + 1,
-@@ -362,7 +362,7 @@ struct servreg_set_ack_resp {
- 	struct qmi_response_type_v01 resp;
- };
- 
--static struct qmi_elem_info servreg_set_ack_resp_ei[] = {
-+static const struct qmi_elem_info servreg_set_ack_resp_ei[] = {
- 	{
- 		.data_type      = QMI_STRUCT,
- 		.elem_len       = 1,
--- 
-2.37.3
-
+Dave.
