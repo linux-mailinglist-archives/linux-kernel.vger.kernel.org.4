@@ -2,85 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7165F595F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C5C5F5964
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiJERuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 13:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47780 "EHLO
+        id S230184AbiJERwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 13:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbiJERuO (ORCPT
+        with ESMTP id S229484AbiJERwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 13:50:14 -0400
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F21EE20;
-        Wed,  5 Oct 2022 10:50:13 -0700 (PDT)
-Received: by mail-oo1-f46.google.com with SMTP id k11-20020a4ab28b000000b0047659ccfc28so11326720ooo.8;
-        Wed, 05 Oct 2022 10:50:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lT6lx5ZDRpxgW+xAGllB8Ira6Ynt7/Xp9qu0pEh/gYc=;
-        b=DylDZ6bEfb3HIE11eFU1xtxy57xByujX3fS721pcWxmU1Wxo9hcvuJ01QYy0OU0OCw
-         ORQV5MIySWvb6nCE93Scmt7t3A8ipWk+87kmBLMTSMZSaK2hl4hlYQXNtzXP6h+b7G62
-         Bxrx9rGXaIvJSbleJqhZBTXo6wlBpln3cs5Lg7PgNGjnjcv4/u36aazLFH2sveDceJX4
-         PGAwKhzAAs14yaFmbORrals9mafiWGTvnExMZXLVYKcxWyxUGF5jbkhSC7CDa9pycMyj
-         Mo4ueLGtnD8PiyZXc6a9il35fho1qfOxDRECcIcYY6nEWpO0K0yyM/YN+lS6zYbkfg0X
-         /ZMg==
-X-Gm-Message-State: ACrzQf00lzUZ8TQoLWSN9y8bBFMAbnuWEi0nmnf6gI6tenfndEvccOeI
-        S0nXyLRH3PM4+7jQVG+7avi9yRzsVVapsIcafLP2VZnr
-X-Google-Smtp-Source: AMsMyM4xN9VF9TvWdOefI/ak40ugxy598G2NtbLoEgPQYArnwPKN2STkdSNU+9QCQmReUfS8td8u2eg3ZGo9BLq44kQ=
-X-Received: by 2002:a4a:b4cd:0:b0:476:8f72:5b60 with SMTP id
- g13-20020a4ab4cd000000b004768f725b60mr257862ooo.58.1664992212787; Wed, 05 Oct
- 2022 10:50:12 -0700 (PDT)
+        Wed, 5 Oct 2022 13:52:05 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2ADA277E8B;
+        Wed,  5 Oct 2022 10:52:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8B114106F;
+        Wed,  5 Oct 2022 10:52:10 -0700 (PDT)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DB74A3F67D;
+        Wed,  5 Oct 2022 10:52:02 -0700 (PDT)
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     brendan.higgins@linux.dev, davidgow@google.com,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        mark.rutland@arm.com
+Subject: [PATCH] kunit: log numbers in decimal and hex
+Date:   Wed,  5 Oct 2022 18:51:49 +0100
+Message-Id: <20221005175149.611068-1-mark.rutland@arm.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220920222822.2171056-1-namhyung@kernel.org> <20220920222822.2171056-2-namhyung@kernel.org>
- <YysWn/W3+dXlZnYG@kernel.org> <CAM9d7cjtrVsccWUOCAtz1LbHoYxx7uV4SCaBMLdME-pdZjmjfw@mail.gmail.com>
-In-Reply-To: <CAM9d7cjtrVsccWUOCAtz1LbHoYxx7uV4SCaBMLdME-pdZjmjfw@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 5 Oct 2022 10:50:01 -0700
-Message-ID: <CAM9d7ch1GG2xjOpPwMf0q88CWtX2DdSiRXDJX6vevTk_1g+USw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] perf record: Save DSO build-ID for synthesizing
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnaldo,
+When KUNIT_EXPECT_EQ() or KUNIT_ASSERT_EQ() log a failure, they log the
+two values being compared, with numerical values logged in decimal.
 
-On Wed, Sep 21, 2022 at 10:55 AM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> On Wed, Sep 21, 2022 at 6:50 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > Em Tue, Sep 20, 2022 at 03:28:22PM -0700, Namhyung Kim escreveu:
-> > > When synthesizing MMAP2 with build-id, it'd read the same file repeatedly as
-> > > it has no idea if it's done already.  Maintain a dsos to check that and skip
-> > > the file access if possible.
-> > >
-> > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > > ---
-> > > v2 change)
-> > >  * Remove perf_event__synthesize_{start,stop} and use machine->dsos  (Adrian)
-> >
-> > Will wait till I merge perf/urgent into perf/core so that this applies.
+In some cases, decimal output is painful to consume, and hexadecimal
+output would be more helpful. For example, this is the case for tests
+I'm currently developing for the arm64 insn encoding/decoding code,
+where comparing two 32-bit instruction opcodes results in output such
+as:
 
-I think it's doable now :)
+|  # test_insn_add_shifted_reg: EXPECTATION FAILED at arch/arm64/lib/test_insn.c:2791
+|  Expected obj_insn == gen_insn, but
+|      obj_insn == 2332164128
+|      gen_insn == 1258422304
 
-Thanks,
-Namhyung
+To make this easier to consume, this patch logs the values in both
+decimal and hexadecimal:
+
+|  # test_insn_add_shifted_reg: EXPECTATION FAILED at arch/arm64/lib/test_insn.c:2791
+|  Expected obj_insn == gen_insn, but
+|      obj_insn == 2332164128 (0x8b020020)
+|      gen_insn == 1258422304 (0x4b020020)
+
+As can be seen from the example, having hexadecimal makes it
+significantly easier for a human to spot which specific bits are
+incorrect.
+
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>
+Cc: David Gow <davidgow@google.com>
+Cc: linux-kselftest@vger.kernel.org
+Cc: kunit-dev@googlegroups.com
+---
+ lib/kunit/assert.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+index d00d6d181ee8..24dec5b48722 100644
+--- a/lib/kunit/assert.c
++++ b/lib/kunit/assert.c
+@@ -127,13 +127,15 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
+ 			  binary_assert->text->right_text);
+ 	if (!is_literal(stream->test, binary_assert->text->left_text,
+ 			binary_assert->left_value, stream->gfp))
+-		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld\n",
++		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)\n",
+ 				  binary_assert->text->left_text,
++				  binary_assert->left_value,
+ 				  binary_assert->left_value);
+ 	if (!is_literal(stream->test, binary_assert->text->right_text,
+ 			binary_assert->right_value, stream->gfp))
+-		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld",
++		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)",
+ 				  binary_assert->text->right_text,
++				  binary_assert->right_value,
+ 				  binary_assert->right_value);
+ 	kunit_assert_print_msg(message, stream);
+ }
+-- 
+2.30.2
+
