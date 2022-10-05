@@ -2,170 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E334B5F4FAC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 08:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4BA5F4FB2
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 08:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbiJEGPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 02:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
+        id S229748AbiJEGT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 02:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiJEGPQ (ORCPT
+        with ESMTP id S229445AbiJEGTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 02:15:16 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80059.outbound.protection.outlook.com [40.107.8.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E0363F18;
-        Tue,  4 Oct 2022 23:15:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KXP9lYxsmpdTgO3rr/vm4vGzNyUAddXFrZyUejpfne0Zu8buOZkr5uDg48bt0kfSjTaCazWnBzPd76vjqwoqqD3t5f1coTGmUTuGyJjs13mGNnVA0xjq2jrp7QccKnONhzW9tHlIScy6/JZJ27mr9I68+QXQ3cWrMcVnpfrHeYnJWfzNVvxAEcmJhJpFCPKBmrdQlxhetOcr0LAcrsoXNXTr7l9d5kNET7Yp9cFo/BjJcqjP6Jpqp/WCPucL5MwMXWADkD8sBPv9NMn0BP0rVocjnXj5W7XoEDzPQiOC/WJiAAG3hZYtBDJ3dTkpZLsTIA1MEF7yEpumR09HQPmXog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/SXlFQl4ElpS1x8Q77iosu7H/vrhFX98uDhyfXvAEh8=;
- b=WWpbK2bCGpaPfEQGBL7HZWLEuGr4TgHQG8MVDHUFX6zxJll2wde/Civlb4nQsZ8jd84nSgxnCGxBL4GmoSMB+MZPCrfkRbxIcfRgQPWcFl0KAnuTuHKichJEJZYupTiyWbThjFbdvA6/kkR8Y/ERthXSUHmji6oWe4RlAD9f5/W//P8Xs25CGfQZvTQEMfQ1MjqqLx+yFKc13D4oou4mswhPGSuS4JKSrdFZS3r3h2X2CdDR7Dk60EIKucTqA+Gz7NuvCbjU+sZVPJU4hEhE9M8KZykStRfSzwV9f+aITh+g/r6Ib0vnHK2lW0JSmVYju0EOwb/vJ46Wvg/xcidWmA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/SXlFQl4ElpS1x8Q77iosu7H/vrhFX98uDhyfXvAEh8=;
- b=FaJ3Oqr8E2l3LARB18Kd9WKGRP4bktG83QxCSDe5oM0M3MRRxok8KbIV/KI8CclYO65TNM8X91yxuwTsAR8UBjg7tPrDGoSgvWzSZNNmlBKuNXEYVsbucvF/CjGWVeQvykzALdhJlpmAgGCNy1wBq0RIeapFB1TqmEzH04SPG0uyNzfKzblpcIOzxjWIlsplRjV/kNKO9l3Q5UDidDW52DN48/nWK0YRy3z01GvOKh2+6Z2kamMDrW5HBDTiDXqOBN4zMpfONWrd9b+Fw+fd0Kx9v8D28kuAPcbQVOXMQ0RH4lcjFbOKsWmh5Fy687IezCBYSBPB8urOgu4aGfiRUA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
- by DU0PR04MB9393.eurprd04.prod.outlook.com (2603:10a6:10:358::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.32; Wed, 5 Oct
- 2022 06:15:09 +0000
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::2459:15ae:e6cb:218a]) by VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::2459:15ae:e6cb:218a%7]) with mapi id 15.20.5676.031; Wed, 5 Oct 2022
- 06:15:09 +0000
-Message-ID: <a0dc1158-01b1-4272-b86e-52f4996f0747@suse.com>
-Date:   Wed, 5 Oct 2022 08:15:07 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v4 1/2] Avoid using EFI tables Xen may have clobbered
-Content-Language: en-US
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>
-Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
-        <marmarek@invisiblethingslab.com>, Ard Biesheuvel <ardb@kernel.org>
-References: <cover.1664298147.git.demi@invisiblethingslab.com>
- <f3b624e99adfdbbfc1976a60a73a6b5950e1840d.1664298147.git.demi@invisiblethingslab.com>
- <282a225d-8782-0321-6f0e-19dd4510dc42@suse.com>
- <CAMj1kXFQNqsW5RfHGac-eGbosJHBybu6+-Fap_bi_kVxWNpGeg@mail.gmail.com>
- <YzcjeiOW8+i2Zxsd@itl-email>
- <CAMj1kXHBBbCNV3CLesqZi7ttmmi8y4tZ1KO5vievy_CJrU2o3Q@mail.gmail.com>
- <YzeaKjmls1YI/3ox@itl-email> <01d22092-8292-8ed7-ece7-9ca32d15bbce@suse.com>
- <YzxxXuovwQt3NskE@itl-email>
-From:   Jan Beulich <jbeulich@suse.com>
-In-Reply-To: <YzxxXuovwQt3NskE@itl-email>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM6P192CA0068.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:209:82::45) To VE1PR04MB6560.eurprd04.prod.outlook.com
- (2603:10a6:803:122::25)
+        Wed, 5 Oct 2022 02:19:54 -0400
+Received: from ironport.ite.com.tw (60-251-196-230.hinet-ip.hinet.net [60.251.196.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF3811839;
+        Tue,  4 Oct 2022 23:19:47 -0700 (PDT)
+Received: from unknown (HELO mse.ite.com.tw) ([192.168.35.30])
+  by ironport.ite.com.tw with ESMTP; 05 Oct 2022 14:19:45 +0800
+Received: from CSBMAIL1.internal.ite.com.tw (CSBMAIL1.internal.ite.com.tw [192.168.65.58])
+        by mse.ite.com.tw with ESMTP id 2956Jdg0091479;
+        Wed, 5 Oct 2022 14:19:39 +0800 (GMT-8)
+        (envelope-from allen.chen@ite.com.tw)
+Received: from CSBMAIL1.internal.ite.com.tw (192.168.65.58) by
+ CSBMAIL1.internal.ite.com.tw (192.168.65.58) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.14; Wed, 5 Oct 2022 14:19:39 +0800
+Received: from CSBMAIL1.internal.ite.com.tw ([fe80::dd22:b444:859b:61c7]) by
+ CSBMAIL1.internal.ite.com.tw ([fe80::dd22:b444:859b:61c7%18]) with mapi id
+ 15.01.2176.014; Wed, 5 Oct 2022 14:19:39 +0800
+From:   <allen.chen@ite.com.tw>
+To:     <neil.armstrong@linaro.org>
+CC:     <devicetree@vger.kernel.org>, <Kenneth.Hung@ite.com.tw>,
+        <jernej.skrabec@gmail.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <Jau-Chih.Tseng@ite.com.tw>, <airlied@linux.ie>,
+        <dri-devel@lists.freedesktop.org>, <narmstrong@baylibre.com>,
+        <linux-kernel@vger.kernel.org>, <robert.foss@linaro.org>,
+        <treapking@chromium.org>, <Hermes.Wu@ite.com.tw>,
+        <robh+dt@kernel.org>, <Laurent.pinchart@ideasonboard.com>,
+        <andrzej.hajda@intel.com>, <jonas@kwiboo.se>
+Subject: RE: [PATCH v2 1/2] dt-bindings: it6505: add properties to restrict
+ output bandwidth
+Thread-Topic: [PATCH v2 1/2] dt-bindings: it6505: add properties to restrict
+ output bandwidth
+Thread-Index: AQHY098A6AOALJJYwUiaZi6xSxyCHK3/XJIg
+Date:   Wed, 5 Oct 2022 06:19:39 +0000
+Message-ID: <087811c1bc224a468f117ca4f2fff3cd@ite.com.tw>
+References: <20220929014456.30077-1-allen.chen@ite.com.tw>
+ <20220929014456.30077-2-allen.chen@ite.com.tw>
+ <aaf68eff-17da-3f27-c8dc-48b9659e7b50@linaro.org>
+In-Reply-To: <aaf68eff-17da-3f27-c8dc-48b9659e7b50@linaro.org>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [192.168.70.46]
+x-tm-snts-smtp: 21A87634EBC135BB704063ED5E5DEB282B79D8D6761C00B3F1C596F49CB0AB262002:8
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR04MB6560:EE_|DU0PR04MB9393:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0835cd15-f700-4106-9e1c-08daa698f466
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4vo1HzMyv/qinf7IyNE/3yk9T9AlOH22Rq+caV4MfitWCvdf+WIYxEmLIvB2c1TSwEQhZpyP5T3SM8vHKPZ9nTPfGCGk3qpToWNixO+9cKVwFRCrSsvSZW3Xz1TmV5zZt7IurwGb/qVAS19Qn+y139OhcozyhxKnhyV9lQxTzTyO0n4sbvdSDLcQyYk1Bb9rXbyC7LNx0BCtOq/TGMZT8jCgk2oMHn9mZ0nrOPgy9o8Ai18rojxU29dEh5XjSqBh/M0rf6/UspSVAr2ECWcPCqx8/LkyKchvPFg6hwOqPEtog4qaTgGfRxdXno/JM6LdFCSCT8i3xYjjxurxfdEiZ7sgex4KyIRJLQAr2dmdxaMatoB8uB7/DaUtXX3Ecft07ne4ELZohRQDOwShftO6yDbTPMNyNMZLjI4V7y/d736mZHUQ69Dxj2ybR8ZJy0BtTr7hnelpO+3s801KdjSut2Ekm/5DY4cfKJKfuSW3+dreIHKV/lSIEOdxcgseNpNO91VNiVYAVQ8TvxvMiDN7/0IEtrhtojORhNZ7Jb+UfffApUMQDZiG8ra6TSRSj4M3+2XbZ9qGxZWXvnePm/2Pm2CdecILrIn/YI+WqDdIhVm6CYuZnieAzd4hn2eL8EpCBzcigjjLbWuec50MzRtUzVGEH5iYyPv1Gmr7HA0hAd4h34groecgl6LIdEOw6XUkdUEKYJcKyVMm/nqfHSAeCJOhTQ++VquTn3BO6/zHqiOPcjjO+aJut0Bl3ZTzEEMVBu5to+90XV4IEJZnxcRhpU72suLaHU7w0uyR2xoUgi4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(376002)(366004)(39860400002)(396003)(451199015)(6486002)(66946007)(66556008)(8676002)(66476007)(4326008)(2616005)(38100700002)(2906002)(36756003)(41300700001)(478600001)(186003)(53546011)(6506007)(26005)(6512007)(31696002)(86362001)(316002)(6916009)(54906003)(31686004)(5660300002)(8936002)(7416002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bU9oUktpZFJ4enkvZy96MmZ1ZlBHTE5YYlFWa3l3MXJOb01YdnM0aGFyTE5y?=
- =?utf-8?B?TVhndmlMM3lOK1VqTlBqck1CR2prMkRqRWphU0VWU0c0TU41czlwS1FJV1k2?=
- =?utf-8?B?NUhRMEk0a0czWjJxSWxrTzY2YklKZVJqR0RpMW9iSm9wMmN0NDl6cCt1NHlT?=
- =?utf-8?B?THBqaWRaQnlTUkIyM3VnOE04YndxRVdwekp2Y3Y2aWk0ZGpuQlc5aWJZelZW?=
- =?utf-8?B?eW5EMHFnNmNLSVQwTEtoNXpKR3lQTVFyNzhxa0pDcHppZFZsRjYrTEtMNGl2?=
- =?utf-8?B?QXdFeDRUeHZwd1NLY0R6TmdxdmFFWlllTnhEaVpDZ3JwbHpncGlDWXFUMTlB?=
- =?utf-8?B?SVpVeWlHQlp5SkZXOG9GdTRPakc4YjVGaC9ZdE50T3BmSlRUUUZ4aUdOWXVj?=
- =?utf-8?B?SUJXYnVBTGZwd1U5Y1RiWDBIQkYveWQ0V1h0c055akpxdUJSa2xrdldvV3Qz?=
- =?utf-8?B?YWNXRkZ2WXFtNkhiN3hPazRZaE9uVkFzdFA1VW1sYzNnc3NzdFNEVkV1NWJr?=
- =?utf-8?B?WlBFVlFoaU4zZzdseE9HT0E2MXRTR0UwQ2RTL3FOb2xGTVR2Z214L3ZZRXps?=
- =?utf-8?B?UHhKSHc0b1dXdEZ0bHVsYWNlY0wvWTFtSlB3Q2hlSkRPd3VyYmFKV29iWlFD?=
- =?utf-8?B?RzNoZmp4WEpCTGZjdHFlRkluSkVZYXpxOWZtWjdJenZEL3VJclR6Wk5xbmY5?=
- =?utf-8?B?bkY1T09aZC9rWm0wdk9Nc1BtYnhQcU5xdGdXTzBDRmFvV0RHeVRqeUNrd3BD?=
- =?utf-8?B?bUx4eU9wSUVqZzIwU05HUVBVbExlcVhpU2FGMlBhRUlVTDdoY2ROM2lSWG5H?=
- =?utf-8?B?c2pXcjdnZ1F6K2o3c3djRVpiMHY4dDhYcFlnSW9HUXp5Z1BWV09HRHBEbllk?=
- =?utf-8?B?WklEbDcrN25Zb0E5Y0JhcnZ2SUJEb3k2YnBGRzJUYzhCZkJSeTZSM3o4a3Rx?=
- =?utf-8?B?alZtckVZQ3dBb25VaXNHYXl6blRqS2JBOFVWQ2tDNEh1NGdab243bm9VdENs?=
- =?utf-8?B?WWRkeWd0U2NXT1E5WE41cDZrZ25OWUlvdkRMTFFMTUMvVXdmbWpBdVh5VnVs?=
- =?utf-8?B?OHRxczQvVVFoL1dycTRRcHNqRHpUOVczODBMWHUveXpPSmxycHpYRFNxb1RN?=
- =?utf-8?B?TjBrS1BtUGd5amlFQWtpRERXRGFJdGJEd1dzWEpSZzErSXlCaHBLM2Fqb09J?=
- =?utf-8?B?RVVWU0ZUM3RReXVvb0RnUTUvcGJqaFhNRnJmZHRJNUpWVUFzWUVZZGVRQm1H?=
- =?utf-8?B?ZXBtWElWZ00raEdvdkNJc0tOZzVERm1WdG5oeVRlMU9GZGZmaHJHSlVQNDJO?=
- =?utf-8?B?dHE3RTFNeGV4NkxqWTFpZFU3K0FrSkgyTXVDYkM1eVh3QXJnQmNRTWhyeUtE?=
- =?utf-8?B?RUEzbERndGVtRWNZWGo5WXZiQk1rUjF5ZkJEREdzVnkrWDBXRG1OeGRCMGxp?=
- =?utf-8?B?bWNTa0EzSkVSQXY5VTdtTkU1TFowa2Q2Q2ZzTkhlNVlKVGFTb2YrVzgrK0Ni?=
- =?utf-8?B?ODhsUjBoNlNqclFYajFJL0dGODE0c2Z1ZnR1UTdWVElNMENrTld2Y0NMQWVh?=
- =?utf-8?B?RXBTNFVnY05pRHBXTU9UMXZkZ3FQNVFSWmhoK3hrcUUrZ2ZIMVFRbXAzWmg1?=
- =?utf-8?B?dURHejd5b2xWNGJ0bGNMRXBCcVZMWHVYTHUvLzVvQjlCT2wxWDJwNWZYdUwy?=
- =?utf-8?B?M0Ird29hU3FzNDVpUExHSlk3OWI5VnR5WUFrdjRtbWJhM2JuYmRrZlVucFI1?=
- =?utf-8?B?MGJRSW9DYW1TcFMwaGpITHF5elJWeDNha2ZBTktBMkppVWdPNFdCTGwrUVkw?=
- =?utf-8?B?RlU0VVFWQ0psMGljcW95SVNDN29seXppU0Qxc1VJUlhYc1J5Y0tLTCs4R1dm?=
- =?utf-8?B?ZHBmeEZNQTNKSEpjMmw5MWx5cm9pbHNTczB6R242a0FCMW54YUlxWFd6bXlW?=
- =?utf-8?B?cjZzeG1jeTVDWEoxMWVZa1FrRE81cUtKS2Y4aWpYZEpPbzdXbVE5eDRXMHRK?=
- =?utf-8?B?N3N4SEtmKzQ5ZXo2eWxXQTBTZUVuamxxeUplRXFaSW5mNUxwUE5wWG5IakJ6?=
- =?utf-8?B?VCtvSEE1U1BFV0FRaWVGVHJlV3IzbFNwekVjUVNRV29XMVdDYUtZVjNWQmoy?=
- =?utf-8?Q?lKA8O7K3Kww7ox7bTlQvDh6dS?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0835cd15-f700-4106-9e1c-08daa698f466
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2022 06:15:09.3514
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IycCBMlSWHwIZdo4FkcDpL/9Pn+pIEa2L1+B74Crwop13yJWp4OQ+V/di6mRQGEwyh42oVNZSehp7ln5R+vZng==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9393
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MAIL: mse.ite.com.tw 2956Jdg0091479
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04.10.2022 17:46, Demi Marie Obenour wrote:
-> Linux has a function called efi_mem_reserve() that is used to reserve
-> EfiBootServicesData memory that contains e.g. EFI configuration tables.
-> This function does not work under Xen because Xen could have already
-> clobbered the memory.  efi_mem_reserve() not working is the whole reason
-> for this thread, as it prevents EFI tables that are in
-> EfiBootServicesData from being used under Xen.
-> 
-> A much nicer approach would be for Xen to reserve boot services memory
-> unconditionally, but provide a hypercall that dom0 could used to free
-> the parts of EfiBootServicesData memory that are no longer needed.  This
-> would allow efi_mem_reserve() to work normally.
-
-efi_mem_reserve() actually working would be a layering violation;
-controlling the EFI memory map is entirely Xen's job.
-
-As to the hypercall you suggest - I wouldn't mind its addition, but only
-for the case when -mapbs is used. As I've indicated before, I'm of the
-opinion that default behavior should be matching the intentions of the
-spec, and the intention of EfiBootServices* is for the space to be
-reclaimed. Plus I'm sure you realize there's a caveat with Dom0 using
-that hypercall: It might use it for regions where data lives which it
-wouldn't care about itself, but which an eventual kexec-ed (or alike)
-entity would later want to consume. Code/data potentially usable by
-_anyone_ between two resets of the system cannot legitimately be freed
-(and hence imo is wrong to live in EfiBootServices* regions). In a way
-one could view the Dom0 kernel as an "or alike" entity ...
-
-Jan
+SGkNCg0KZGF0YS1sYW5lcyBpcyBvdXRwdXQgY29uZmlndXJhdGlvbi4gTWF5YmUgaXQgaXMgbm90
+IHN1aXRhYmxlIHRvIHB1dCBkYXRhLWxhbmVzIGluIGlucHV0IGVuZHBvaW50Lg0KZXh0Y29uIGRv
+ZXNuJ3QgaGF2ZSBvdXRwdXQgZW5kcG9pbnQsIHNvIEkgZG9uJ3Qga25vdyB3aGVyZSB0byBwdXQg
+aXMgYmV0dGVyLg0KDQotLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KRnJvbTogTmVpbCBBcm1z
+dHJvbmcgPG5laWwuYXJtc3Ryb25nQGxpbmFyby5vcmc+IA0KU2VudDogVGh1cnNkYXksIFNlcHRl
+bWJlciAyOSwgMjAyMiA0OjQwIFBNDQpUbzogQWxsZW4gQ2hlbiAo6Zmz5p+P5a6HKSA8YWxsZW4u
+Y2hlbkBpdGUuY29tLnR3Pg0KQ2M6IG9wZW4gbGlzdDpPUEVOIEZJUk1XQVJFIEFORCBGTEFUVEVO
+RUQgREVWSUNFIFRSRUUgQklORElOR1MgPGRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnPjsgS2Vu
+bmV0aCBIdW5nICjmtKrlrrblgKspIDxLZW5uZXRoLkh1bmdAaXRlLmNvbS50dz47IEplcm5laiBT
+a3JhYmVjIDxqZXJuZWouc2tyYWJlY0BnbWFpbC5jb20+OyBLcnp5c3p0b2YgS296bG93c2tpIDxr
+cnp5c3p0b2Yua296bG93c2tpK2R0QGxpbmFyby5vcmc+OyBKYXUtQ2hpaCBUc2VuZyAo5pu+5pit
+5pm6KSA8SmF1LUNoaWguVHNlbmdAaXRlLmNvbS50dz47IERhdmlkIEFpcmxpZSA8YWlybGllZEBs
+aW51eC5pZT47IG9wZW4gbGlzdDpEUk0gRFJJVkVSUyA8ZHJpLWRldmVsQGxpc3RzLmZyZWVkZXNr
+dG9wLm9yZz47IE5laWwgQXJtc3Ryb25nIDxuYXJtc3Ryb25nQGJheWxpYnJlLmNvbT47IG9wZW4g
+bGlzdCA8bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZz47IFJvYmVydCBGb3NzIDxyb2JlcnQu
+Zm9zc0BsaW5hcm8ub3JnPjsgUGluLXllbiBMaW4gPHRyZWFwa2luZ0BjaHJvbWl1bS5vcmc+OyBI
+ZXJtZXMgV3UgKOWQs+S9s+WujykgPEhlcm1lcy5XdUBpdGUuY29tLnR3PjsgUm9iIEhlcnJpbmcg
+PHJvYmgrZHRAa2VybmVsLm9yZz47IExhdXJlbnQgUGluY2hhcnQgPExhdXJlbnQucGluY2hhcnRA
+aWRlYXNvbmJvYXJkLmNvbT47IEFuZHJ6ZWogSGFqZGEgPGFuZHJ6ZWouaGFqZGFAaW50ZWwuY29t
+PjsgSm9uYXMgS2FybG1hbiA8am9uYXNAa3dpYm9vLnNlPg0KU3ViamVjdDogUmU6IFtQQVRDSCB2
+MiAxLzJdIGR0LWJpbmRpbmdzOiBpdDY1MDU6IGFkZCBwcm9wZXJ0aWVzIHRvIHJlc3RyaWN0IG91
+dHB1dCBiYW5kd2lkdGgNCg0KSGksDQoNCk9uIDI5LzA5LzIwMjIgMDM6NDQsIGFsbGVuIHdyb3Rl
+Og0KPiBGcm9tOiBhbGxlbiBjaGVuIDxhbGxlbi5jaGVuQGl0ZS5jb20udHc+DQo+IA0KPiBBZGQg
+cHJvcGVydGllcyB0byByZXN0cmljdCBkcCBvdXRwdXQgZGF0YS1sYW5lcyBhbmQgY2xvY2suDQo+
+IA0KPiBTaWduZWQtb2ZmLWJ5OiBQaW4tWWVuIExpbiA8dHJlYXBraW5nQGNocm9taXVtLm9yZz4N
+Cj4gU2lnbmVkLW9mZi1ieTogQWxsZW4gQ2hlbiA8YWxsZW4uY2hlbkBpdGUuY29tLnR3Pg0KPiAt
+LS0NCj4gICAuLi4vZGV2aWNldHJlZS9iaW5kaW5ncy9kaXNwbGF5L2JyaWRnZS9pdGUsaXQ2NTA1
+LnlhbWwgfCAxMCArKysrKysrKysrDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDEwIGluc2VydGlvbnMo
+KykNCj4gDQo+IGRpZmYgLS1naXQgDQo+IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
+bmdzL2Rpc3BsYXkvYnJpZGdlL2l0ZSxpdDY1MDUueWFtbCANCj4gYi9Eb2N1bWVudGF0aW9uL2Rl
+dmljZXRyZWUvYmluZGluZ3MvZGlzcGxheS9icmlkZ2UvaXRlLGl0NjUwNS55YW1sDQo+IGluZGV4
+IDgzM2QxMWIyMzAzYS4uNjJiOWYyMTkyMjAyIDEwMDY0NA0KPiAtLS0gYS9Eb2N1bWVudGF0aW9u
+L2RldmljZXRyZWUvYmluZGluZ3MvZGlzcGxheS9icmlkZ2UvaXRlLGl0NjUwNS55YW1sDQo+ICsr
+KyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9kaXNwbGF5L2JyaWRnZS9pdGUs
+aXQ2NTA1LnlhbWwNCj4gQEAgLTUyLDYgKzUyLDE0IEBAIHByb3BlcnRpZXM6DQo+ICAgICAgIG1h
+eEl0ZW1zOiAxDQo+ICAgICAgIGRlc2NyaXB0aW9uOiBleHRjb24gc3BlY2lmaWVyIGZvciB0aGUg
+UG93ZXIgRGVsaXZlcnkNCj4gICANCj4gKyAgZGF0YS1sYW5lczoNCj4gKyAgICBtYXhJdGVtczog
+MQ0KPiArICAgIGRlc2NyaXB0aW9uOiByZXN0cmljdCB0aGUgZHAgb3V0cHV0IGRhdGEtbGFuZXMg
+d2l0aCB2YWx1ZSBvZiAxLTQNCg0KQ2FuJ3QgeW91IHVzZSB0aGUgZGF0YS1sYW5lcyBwcm9wZXJ0
+eSBpbiB0aGUgZmlyc3QgcG9ydCBlbmRwb2ludCA/DQoNCkxvb2sgYXQgRG9jdW1lbnRhdGlvbi9k
+ZXZpY2V0cmVlL2JpbmRpbmdzL2Rpc3BsYXkvYnJpZGdlL3RpLHNuNjVkc2k4My55YW1sDQoNCj4g
+Kw0KPiArICBtYXgtcGl4ZWwtY2xvY2sta2h6Og0KPiArICAgIG1heEl0ZW1zOiAxDQo+ICsgICAg
+ZGVzY3JpcHRpb246IHJlc3RyaWN0IG1heCBwaXhlbCBjbG9jaw0KDQpOZXcgdmVuZG9yIHNwZWNp
+ZmljIHByb3BlcnRpZXMgc2hvdWxkIGhhdmUgdGhlIGl0ZSwgcHJlZml4Lg0KDQo+ICsNCj4gICAg
+IHBvcnQ6DQo+ICAgICAgICRyZWY6IC9zY2hlbWFzL2dyYXBoLnlhbWwjL3Byb3BlcnRpZXMvcG9y
+dA0KPiAgICAgICBkZXNjcmlwdGlvbjogQSBwb3J0IG5vZGUgcG9pbnRpbmcgdG8gRFBJIGhvc3Qg
+cG9ydCBub2RlIEBAIC04NCw2IA0KPiArOTIsOCBAQCBleGFtcGxlczoNCj4gICAgICAgICAgICAg
+ICBwd3IxOC1zdXBwbHkgPSA8Jml0NjUwNV9wcDE4X3JlZz47DQo+ICAgICAgICAgICAgICAgcmVz
+ZXQtZ3Bpb3MgPSA8JnBpbyAxNzkgMT47DQo+ICAgICAgICAgICAgICAgZXh0Y29uID0gPCZ1c2Jj
+X2V4dGNvbj47DQo+ICsgICAgICAgICAgICBkYXRhLWxhbmVzID0gPDI+Ow0KPiArICAgICAgICAg
+ICAgbWF4LXBpeGVsLWNsb2NrLWtoeiA9IDwxNTAwMDA+Ow0KPiAgIA0KPiAgICAgICAgICAgICAg
+IHBvcnQgew0KPiAgICAgICAgICAgICAgICAgICBpdDY1MDVfaW46IGVuZHBvaW50IHsNCg0KVGhh
+bmtzLA0KTmVpbA0K
