@@ -2,172 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CDCA5F5901
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8505F5903
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbiJERSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 13:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
+        id S229783AbiJERS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 13:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbiJERSm (ORCPT
+        with ESMTP id S230325AbiJERSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 13:18:42 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09BB33841
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 10:18:27 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 97F581F8A3;
-        Wed,  5 Oct 2022 17:18:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664990305; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 5 Oct 2022 13:18:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7606746857
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 10:18:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664990316;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Xd+QmsOjPp7zcrdstQMJ9W3S7p3J/v4GfLmZbr0zjhs=;
-        b=UlfzyTqwEnqmQN2ViJ7cDEoMMkTzGX+HpMaN0BR2W06jjOLdy3LKmHfp2cu+3ZoqjVwZW6
-        +188etKce/t71pYuYqqmbvluSE9MW3XRSARCBbp2eB38/SC/5cCSo1XuS1WhEWT3t0LHRv
-        z41Tr1Pwphgi2EgFRqKXXgsuTKySGrI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664990305;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xd+QmsOjPp7zcrdstQMJ9W3S7p3J/v4GfLmZbr0zjhs=;
-        b=JyQaNL5VoCaiTM5Y+N2aPUkLT9J2gZ211L4mysb2jie8uIqPKE9t3mnbvBJxpmWSJ/TTsX
-        Xx8GF0YZ4cr50TDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 748AB13ABD;
-        Wed,  5 Oct 2022 17:18:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id WoF0G2G8PWPucQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 05 Oct 2022 17:18:25 +0000
-Message-ID: <9fdaaae1-982c-92e1-bc61-a6db3e94ef56@suse.de>
-Date:   Wed, 5 Oct 2022 19:18:25 +0200
+        bh=EQGZeMMosYwUdiU0OrsifprAdKF8zlo/1AkIo/J/cWU=;
+        b=CQC02lrzZJLtnIDXu608v/TiWvqFKwNv+ehEioMnW1D062Tvn8/nJBtuZn/4kf8kjfmG8I
+        Q7loWStUNmk7AGZ+4RnyMJvXTB6vtxSFk9ZmT1n7ZcvV6weGoH2oRmVqQ2vw9afDiwfLQR
+        390VIELFQiwV2btbRQZVFH8cm3+azic=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-607-aqXj4L9DPCKfRxMHuB_WlA-1; Wed, 05 Oct 2022 13:18:35 -0400
+X-MC-Unique: aqXj4L9DPCKfRxMHuB_WlA-1
+Received: by mail-qt1-f198.google.com with SMTP id g6-20020ac84b66000000b0035cf832dec9so11560812qts.6
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 10:18:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=EQGZeMMosYwUdiU0OrsifprAdKF8zlo/1AkIo/J/cWU=;
+        b=trr+MKhfTyIH6y9kiBpfP2VSjibVsyMJ1AjllJ+oj8h/0ofGDpf8t2CTm1UQYfOiCQ
+         YM1iGvYatAL77dnrjbl31d+pW8eNIKVhPkrAD/Hz/j07cChzI6f+6asyxrLX3Gg1YC/V
+         cP0Y6WXHgVyT4gFVHbaMpCnkg0kfogSEXH/BehfQ4Kqq0KQABQa7aYH50rBwTkVMpSJm
+         UvvQ4FpfLSkHQHl9IHB03hGo1BJt9Z6Y8CxssTT9r5q9Es0a3JQP3vS4/O0bMiYEIGxS
+         0ozUtUpsO2fIyPs5dSOZuBr/6ireJ/rwrFjnZhET0lsiZT8HaZM/SRZstjblBgtCkPxu
+         w2fA==
+X-Gm-Message-State: ACrzQf25yIrjdRdrEsOItnmYBlgjl+t2NJMkfXTzF1fi6Szej6aMfI66
+        uO7Ffaz1IlYCes6xq2qQwGZajvGb0iPuBDrhGvVXu0tY4bOGIguAcdPSU+zaqwAdAhkLP9PM1OH
+        XKQ+MNSZZ3cE9e/DSUOAfoXLX
+X-Received: by 2002:a05:620a:2a02:b0:6ce:90fb:51b8 with SMTP id o2-20020a05620a2a0200b006ce90fb51b8mr486804qkp.460.1664990314781;
+        Wed, 05 Oct 2022 10:18:34 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7aP3yRogasFXufFvt47NK7C57mBsP2uou9HRoFvjEEhQfi2tAKg2wbRInBFvXH0icM++ahPA==
+X-Received: by 2002:a05:620a:2a02:b0:6ce:90fb:51b8 with SMTP id o2-20020a05620a2a0200b006ce90fb51b8mr486784qkp.460.1664990314537;
+        Wed, 05 Oct 2022 10:18:34 -0700 (PDT)
+Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
+        by smtp.gmail.com with ESMTPSA id x6-20020a37ae06000000b006b9c9b7db8bsm16665351qke.82.2022.10.05.10.18.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 10:18:34 -0700 (PDT)
+Date:   Wed, 5 Oct 2022 13:18:32 -0400
+From:   Brian Foster <bfoster@redhat.com>
+To:     Chaitanya Kulkarni <kch@nvidia.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        axboe@kernel.dk, damien.lemoal@opensource.wdc.com,
+        johannes.thumshirn@wdc.com, bvanassche@acm.org,
+        ming.lei@redhat.com, shinichiro.kawasaki@wdc.com,
+        vincent.fu@samsung.com, yukuai3@huawei.com
+Subject: Re: [PATCH 2/6] null_blk: allow write zeores on membacked
+Message-ID: <Yz28aEOOUqrCUhe2@bfoster>
+References: <20221005031701.79077-1-kch@nvidia.com>
+ <20221005031701.79077-3-kch@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2] drm/ssd130x: Iterate over damage clips instead of
- using a merged rect
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Jocelyn Falempe <jfalempe@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org
-References: <20220930152944.2584356-1-javierm@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220930152944.2584356-1-javierm@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------lPn3uMH3YT3vN88YQrmoxEKP"
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221005031701.79077-3-kch@nvidia.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------lPn3uMH3YT3vN88YQrmoxEKP
-Content-Type: multipart/mixed; boundary="------------9UU4NfRuPAA6PnBQTNKeM18Q";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: Jocelyn Falempe <jfalempe@redhat.com>, Daniel Vetter <daniel@ffwll.ch>,
- David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
-Message-ID: <9fdaaae1-982c-92e1-bc61-a6db3e94ef56@suse.de>
-Subject: Re: [PATCH v2] drm/ssd130x: Iterate over damage clips instead of
- using a merged rect
-References: <20220930152944.2584356-1-javierm@redhat.com>
-In-Reply-To: <20220930152944.2584356-1-javierm@redhat.com>
+On Tue, Oct 04, 2022 at 08:16:57PM -0700, Chaitanya Kulkarni wrote:
+> Add a helper functions to enable the REQ_OP_WRITE_ZEROES operations
+> when null_blk is configured with the membacked mode.
+> 
+> Since write-zeroes is a non-trivial I/O operation we need this to
+> add a blktest so we can test the non-trivial I/O path from the
+> application to the block layer.
+> 
+> Signed-off-by: Chaitanya Kulkarni <kch@nvidia.com>
+> ---
+>  drivers/block/null_blk/main.c | 46 ++++++++++++++++++++++++++++++++++-
+>  1 file changed, 45 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/block/null_blk/main.c b/drivers/block/null_blk/main.c
+> index fc3e883f7b84..2d592b4eb815 100644
+> --- a/drivers/block/null_blk/main.c
+> +++ b/drivers/block/null_blk/main.c
+...
+> @@ -875,6 +877,24 @@ static void null_free_sector(struct nullb *nullb, sector_t sector,
+>  	}
+>  }
+>  
+> +static void null_zero_sector(struct nullb_device *d, sector_t sect,
+> +			     sector_t nr_sects, bool cache)
+> +{
 
---------------9UU4NfRuPAA6PnBQTNKeM18Q
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Any reason to not just pass the tree root directly here instead of the
+cache boolean? It might make the callers more readable and also
+eliminates the need to pass the nullb_device.
 
-DQoNCkFtIDMwLjA5LjIyIHVtIDE3OjI5IHNjaHJpZWIgSmF2aWVyIE1hcnRpbmV6IENhbmls
-bGFzOg0KPiBUaGUgZHJtX2F0b21pY19oZWxwZXJfZGFtYWdlX21lcmdlZCgpIGhlbHBlciBt
-ZXJnZXMgYWxsIHRoZSBkYW1hZ2UgY2xpcHMNCj4gaW50byBvbmUgcmVjdGFuZ2xlLiBJZiB0
-aGVyZSBhcmUgbXVsdGlwbGUgZGFtYWdlIGNsaXBzIHRoYXQgYXJlbid0IGNsb3NlDQo+IHRv
-IGVhY2ggb3RoZXIsIHRoZSByZXN1bHRpbmcgcmVjdGFuZ2xlIGNvdWxkIGJlIHF1aXRlIGJp
-Zy4NCj4gDQo+IEluc3RlYWQgb2YgdXNpbmcgdGhhdCBmdW5jdGlvbiBoZWxwZXIsIGl0ZXJh
-dGUgb3ZlciBhbGwgdGhlIGRhbWFnZSBjbGlwcw0KPiBhbmQgdXBkYXRlIHRoZW0gb25lIGJ5
-IG9uZS4NCj4gDQo+IFN1Z2dlc3RlZC1ieTogSm9jZWx5biBGYWxlbXBlIDxqZmFsZW1wZUBy
-ZWRoYXQuY29tPg0KPiBTaWduZWQtb2ZmLWJ5OiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMg
-PGphdmllcm1AcmVkaGF0LmNvbT4NCg0KQWNrZWQtYnk6IFRob21hcyBaaW1tZXJtYW5uIDx0
-emltbWVybWFubkBzdXNlLmRlPg0KDQo+IC0tLQ0KPiANCj4gQ2hhbmdlcyBpbiB2MjoNCj4g
-LSBNb3ZlIHRoZSBkc3RfY2xpcCBhc3NpZ25tZW50IGluc2lkZSB0aGUgZHJtX2F0b21pY19m
-b3JfZWFjaF9wbGFuZV9kYW1hZ2UoKQ0KPiAgICBsb29wIChUaG9tYXMgWmltbWVybWFubiku
-DQo+IC0gUGFzcyBkc3RfY2xpcCBpbnN0ZWFkIG9mIGRhbWFnZSBhcmVhIGFzIGFyZ3VtZW50
-IHRvIHNzZDEzMHhfZmJfYmxpdF9yZWN0KCkNCj4gICAgZnVuY3Rpb24gKFRob21hcyBaaW1t
-ZXJtYW5uKQ0KPiANCj4gICBkcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4LmMgfCAx
-OSArKysrKysrKysrKy0tLS0tLS0tDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDExIGluc2VydGlv
-bnMoKyksIDggZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUv
-ZHJtL3NvbG9tb24vc3NkMTMweC5jIGIvZHJpdmVycy9ncHUvZHJtL3NvbG9tb24vc3NkMTMw
-eC5jDQo+IGluZGV4IGJjNDFhNWFlODEwYS4uZjQ1NmIyMzNkMmU3IDEwMDY0NA0KPiAtLS0g
-YS9kcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4LmMNCj4gKysrIGIvZHJpdmVycy9n
-cHUvZHJtL3NvbG9tb24vc3NkMTMweC5jDQo+IEBAIC01NzgsMjEgKzU3OCwyNCBAQCBzdGF0
-aWMgdm9pZCBzc2QxMzB4X3ByaW1hcnlfcGxhbmVfaGVscGVyX2F0b21pY191cGRhdGUoc3Ry
-dWN0IGRybV9wbGFuZSAqcGxhbmUsDQo+ICAgCXN0cnVjdCBkcm1fcGxhbmVfc3RhdGUgKnBs
-YW5lX3N0YXRlID0gZHJtX2F0b21pY19nZXRfbmV3X3BsYW5lX3N0YXRlKHN0YXRlLCBwbGFu
-ZSk7DQo+ICAgCXN0cnVjdCBkcm1fcGxhbmVfc3RhdGUgKm9sZF9wbGFuZV9zdGF0ZSA9IGRy
-bV9hdG9taWNfZ2V0X29sZF9wbGFuZV9zdGF0ZShzdGF0ZSwgcGxhbmUpOw0KPiAgIAlzdHJ1
-Y3QgZHJtX3NoYWRvd19wbGFuZV9zdGF0ZSAqc2hhZG93X3BsYW5lX3N0YXRlID0gdG9fZHJt
-X3NoYWRvd19wbGFuZV9zdGF0ZShwbGFuZV9zdGF0ZSk7DQo+ICsJc3RydWN0IGRybV9hdG9t
-aWNfaGVscGVyX2RhbWFnZV9pdGVyIGl0ZXI7DQo+ICAgCXN0cnVjdCBkcm1fZGV2aWNlICpk
-cm0gPSBwbGFuZS0+ZGV2Ow0KPiAtCXN0cnVjdCBkcm1fcmVjdCBzcmNfY2xpcCwgZHN0X2Ns
-aXA7DQo+ICsJc3RydWN0IGRybV9yZWN0IGRzdF9jbGlwOw0KPiArCXN0cnVjdCBkcm1fcmVj
-dCBkYW1hZ2U7DQo+ICAgCWludCBpZHg7DQo+ICAgDQo+IC0JaWYgKCFkcm1fYXRvbWljX2hl
-bHBlcl9kYW1hZ2VfbWVyZ2VkKG9sZF9wbGFuZV9zdGF0ZSwgcGxhbmVfc3RhdGUsICZzcmNf
-Y2xpcCkpDQo+ICsJaWYgKCFkcm1fZGV2X2VudGVyKGRybSwgJmlkeCkpDQo+ICAgCQlyZXR1
-cm47DQo+ICAgDQo+IC0JZHN0X2NsaXAgPSBwbGFuZV9zdGF0ZS0+ZHN0Ow0KPiAtCWlmICgh
-ZHJtX3JlY3RfaW50ZXJzZWN0KCZkc3RfY2xpcCwgJnNyY19jbGlwKSkNCj4gLQkJcmV0dXJu
-Ow0KPiArCWRybV9hdG9taWNfaGVscGVyX2RhbWFnZV9pdGVyX2luaXQoJml0ZXIsIG9sZF9w
-bGFuZV9zdGF0ZSwgcGxhbmVfc3RhdGUpOw0KPiArCWRybV9hdG9taWNfZm9yX2VhY2hfcGxh
-bmVfZGFtYWdlKCZpdGVyLCAmZGFtYWdlKSB7DQo+ICsJCWRzdF9jbGlwID0gcGxhbmVfc3Rh
-dGUtPmRzdDsNCj4gICANCj4gLQlpZiAoIWRybV9kZXZfZW50ZXIoZHJtLCAmaWR4KSkNCj4g
-LQkJcmV0dXJuOw0KPiArCQlpZiAoIWRybV9yZWN0X2ludGVyc2VjdCgmZHN0X2NsaXAsICZk
-YW1hZ2UpKQ0KPiArCQkJY29udGludWU7DQo+ICAgDQo+IC0Jc3NkMTMweF9mYl9ibGl0X3Jl
-Y3QocGxhbmVfc3RhdGUtPmZiLCAmc2hhZG93X3BsYW5lX3N0YXRlLT5kYXRhWzBdLCAmZHN0
-X2NsaXApOw0KPiArCQlzc2QxMzB4X2ZiX2JsaXRfcmVjdChwbGFuZV9zdGF0ZS0+ZmIsICZz
-aGFkb3dfcGxhbmVfc3RhdGUtPmRhdGFbMF0sICZkc3RfY2xpcCk7DQo+ICsJfQ0KPiAgIA0K
-PiAgIAlkcm1fZGV2X2V4aXQoaWR4KTsNCj4gICB9DQoNCi0tIA0KVGhvbWFzIFppbW1lcm1h
-bm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25z
-IEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55
-DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRv
-dGV2DQo=
+Brian
 
---------------9UU4NfRuPAA6PnBQTNKeM18Q--
+> +	struct radix_tree_root *root = cache ? &d->cache : &d->data;
+> +	struct nullb_page *t_page;
+> +	unsigned int offset;
+> +	void *dest;
+> +
+> +	t_page = radix_tree_lookup(root, sect >> PAGE_SECTORS_SHIFT);
+> +	if (!t_page)
+> +		return;
+> +
+> +	offset = (sect & SECTOR_MASK) << SECTOR_SHIFT;
+> +	dest = kmap_atomic(t_page->page);
+> +	memset(dest + offset, 0, SECTOR_SIZE * nr_sects);
+> +	kunmap_atomic(dest);
+> +}
+> +
+>  static struct nullb_page *null_radix_tree_insert(struct nullb *nullb, u64 idx,
+>  	struct nullb_page *t_page, bool is_cache)
+>  {
+...
 
---------------lPn3uMH3YT3vN88YQrmoxEKP
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmM9vGEFAwAAAAAACgkQlh/E3EQov+A+
-FhAAyVMxqmnZTLzleHBoz44QgfToRsJdRySXMmaaCtGnWlAEmFgdV0Ow3PZvu1EEaUU3OJdtww3L
-fA/gqh4qybYt+tZioh4a9S2cVfSq6L8zpUSO3hghq6izaf7gkZmSpxTXr7UPBz7p3frTPTdJtbEX
-ucusImmWi1OEvQ7hCCKpHGmhg1ggxJrWDVkjFbV6aI1GtqRkemxZUXWTK+QdpHpKOySaQV+pdrXN
-STNRGjPHuqES6wTb877Ze/xuFQrefjA7GvUCI6yYo4wa+KRqdloePMfwPXSWdANIL4WitgAQgR+G
-prURVhyHYWxwA0CCurJOJeYZCyl+oJ1YeRt06JYfo7RfAlUTfd/YkWa0ebwES0sMh7Vc6p6WeSUI
-o5UCzWQ6CnZnOFEVcO4nG7/xCx0Mz5jsRF9q1P3yHDnwABKJgjCu+vWJves7woWgi/UKw42pw1iV
-mKm0Bv6D9fwj5TjvAUO8hlcrqN5YJkZ7gDFsjGo9hBFyINNfwfxVm9yWPVLQy0Ci2ZAayJ3fza39
-TRa8xyKGkI36/NzKyJFD+jepuwp/ifgT4BjRInq2mc1HDGfgNXabV6/g3MYFvtBMVOEseXC1tJJ0
-FV0Dvr/8Uyx6qS6kxjbQu5orv5a986DwXzSQIN4f97h30XoqurQbCD1/X9yoRDQxh71naLn64jVa
-LE0=
-=raad
------END PGP SIGNATURE-----
-
---------------lPn3uMH3YT3vN88YQrmoxEKP--
