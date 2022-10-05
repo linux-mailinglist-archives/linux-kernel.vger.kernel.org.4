@@ -2,89 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C4FC5F55EC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 15:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E61F35F55FC
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 15:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbiJENzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 09:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45684 "EHLO
+        id S229940AbiJEN5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 09:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiJENzi (ORCPT
+        with ESMTP id S229736AbiJEN5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 09:55:38 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A596567C
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 06:55:37 -0700 (PDT)
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 5 Oct 2022 09:57:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952717C1D1;
+        Wed,  5 Oct 2022 06:57:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id B6FB1420E6
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 13:55:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1664978135;
-        bh=RXw6zATnsmcUdNJCBDtKAI7UAvNpEXVIHqhEL/cDEW4=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=Ya9Bxn9LDCiSFgrHNGbAFpRMRMKfLV0ORX48trzqvWSVaaSbgDHx6ZVPP5hyAkG9o
-         TbeCOpDhEnjWKQvZpH+SR8b3hFRblQccyQ4EousekgnqrXi42ZJYi/Sl8feS3IKyBR
-         KgvbvYcxuDhwJgtXPKLvE7+fhB/MUOyQ99ErZY4WCTbiLkBDXP3L2F8V5Hxq60ZALS
-         6eTyvpY5SdeqQ58GvLUDuyhTz3k6LdUoaCIdOb3YGDPQRmXn/2aNgKVhuTtAT5xVpX
-         dRSTV9Wl7hhyTa5g0DH8lX40224hZMI5JyE+Qzp3wypmYR4ghpOsP3ZdYzS2xeNh2r
-         uAGAyErI2pLyA==
-Received: by mail-qt1-f199.google.com with SMTP id fv21-20020a05622a4a1500b0035cc9b4fc20so11286486qtb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 06:55:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=RXw6zATnsmcUdNJCBDtKAI7UAvNpEXVIHqhEL/cDEW4=;
-        b=WTfc0dpkGLnpzKUhbKge5UNkwg6R4hjXp73EmlvpVQks+2uNOcAkZ2RxZtQjrYTcq8
-         UkZ3WDu2ZEvrxEF26TAsd8DAQ04xG2QTT9SjpGwKpexrytf3mgTlKSHVQLq/Yvp5zq3U
-         SlmXsex7gNxf3CNyQaptciiwEhkrEyTuy0Qx5kayjXoXw6b7r1Awz3AqAj8NIgiUI2MJ
-         7XQyBhSLURi6fq14gAo2b5u+51denaIb/5fxyjgmR26YqFOxvcZPqjf4YJ2EuLRchkW2
-         vYUTyUmCKona+dye8n5999B0NXIUSBWet5mDn5bfcD8YUyAb8VAaYghEIPqHbJSq8Kck
-         dfdw==
-X-Gm-Message-State: ACrzQf3aN+NZatiqX3xMl8gwoUuJls/X2ZkOrCnFRNPZfx2/CfNfJviB
-        NPbuC5PYeRjZRZFZmJHNxGEE/KrHQeT1CX6m7sO7ZLrf4Z/jIU0kY8V/fMFzK0wNEwa5SGXDjmY
-        1eDueWs8Xw5EhwkTbu9Y3rjod0fPQIwTHgk6mcHfnG8sa2gJGU9qgIqYU9w==
-X-Received: by 2002:a05:622a:11cc:b0:35c:d955:db23 with SMTP id n12-20020a05622a11cc00b0035cd955db23mr23696229qtk.660.1664978133981;
-        Wed, 05 Oct 2022 06:55:33 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4AMRhiASSdjoJDMzze8anpdlYznAQPZHod0z9/OA6HkFac/FCjPjxB5wWNIURWOMqw/azAM+ZLbmWEUA6xyFQ=
-X-Received: by 2002:a05:622a:11cc:b0:35c:d955:db23 with SMTP id
- n12-20020a05622a11cc00b0035cd955db23mr23696207qtk.660.1664978133742; Wed, 05
- Oct 2022 06:55:33 -0700 (PDT)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01C19B81B58;
+        Wed,  5 Oct 2022 13:57:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B68FCC433D6;
+        Wed,  5 Oct 2022 13:57:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664978256;
+        bh=4o5uAc68TgM91z72jHrenYorQWCxkZ8HM/tP6gKu8c4=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=GOTGptbGKp4Y0qn0o7jHwhi/FMFcBlbxswxoALLA2aFncn3rglq4F7K/9NcKvrI9S
+         vF3o7B0o08Vu04iMuTbHKvRm19NuKLh97jti10YwhQfgZotWK/6Pn/4W9sd5Ww4v6S
+         HOh1WeDZ5caoK9KscHy25ngX4AqNDICiuTujIP32d57F52HVdHlA8QsUUCjrgtJ0Yt
+         mBvKK1EekUa9JvyeIbwxcECynGhiIWrDxz0KUEwsZ6nV+ON19WM0mV5kboZ6oG3T/q
+         XMGbmEyn4dzuFc2VKHoPkLA8zUg/ZuJp3AuFzi4dq8shvzxNVy4YW76fn2jd8uCDKY
+         U0XTZSnt9nWwQ==
+Message-ID: <04663cb6b2fa64d540575302e2e8b74e38c9b726.camel@kernel.org>
+Subject: Re: [PATCH v6 6/9] nfsd: use the getattr operation to fetch
+ i_version
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Trond Myklebust <trondmy@hammerspace.com>,
+        "neilb@suse.de" <neilb@suse.de>
+Cc:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "xiubli@redhat.com" <xiubli@redhat.com>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "bfields@fieldses.org" <bfields@fieldses.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "david@fromorbit.com" <david@fromorbit.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "jack@suse.cz" <jack@suse.cz>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "lczerner@redhat.com" <lczerner@redhat.com>,
+        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
+        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>
+Date:   Wed, 05 Oct 2022 09:57:33 -0400
+In-Reply-To: <cdbd9c6917ab66164596b95dad90625f46221b70.camel@hammerspace.com>
+References: <20220930111840.10695-1-jlayton@kernel.org>
+                 , <20220930111840.10695-7-jlayton@kernel.org>
+         <166484034920.14457.15225090674729127890@noble.neil.brown.name>
+         <13714490816df1ff36ab06bbf32df5440cad7913.camel@kernel.org>
+         <cdbd9c6917ab66164596b95dad90625f46221b70.camel@hammerspace.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
- <20220929143225.17907-6-hal.feng@linux.starfivetech.com> <40d0abb6-88dc-d315-f768-27a623f60986@sifive.com>
- <CAJM55Z-PzvM_-_6jTWX+Jyy2FQ3TJdh4uYj0evpktnEENHL6WA@mail.gmail.com> <4d8a199b-f22a-a421-aae4-64e538cb97f4@codethink.co.uk>
-In-Reply-To: <4d8a199b-f22a-a421-aae4-64e538cb97f4@codethink.co.uk>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Wed, 5 Oct 2022 15:55:17 +0200
-Message-ID: <CAJM55Z8QN1CeknrP9nyh9ei4EFQT_VKfTTi6uH5ssE3rqW5OdA@mail.gmail.com>
-Subject: Re: [PATCH v1 05/30] soc: sifive: l2 cache: Convert to platform driver
-To:     Ben Dooks <ben.dooks@codethink.co.uk>
-Cc:     Ben Dooks <ben.dooks@sifive.com>,
-        Hal Feng <hal.feng@linux.starfivetech.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        linux-kernel@vger.kernel.org, Zong Li <zong.li@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,189 +78,242 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Oct 2022 at 15:48, Ben Dooks <ben.dooks@codethink.co.uk> wrote:
->
-> On 05/10/2022 14:44, Emil Renner Berthing wrote:
-> > On Thu, 29 Sept 2022 at 19:59, Ben Dooks <ben.dooks@sifive.com> wrote:
-> >>
-> >> On 29/09/2022 15:32, Hal Feng wrote:
-> >>> From: Emil Renner Berthing <kernel@esmil.dk>
-> >>>
-> >>> This converts the driver to use the builtin_platform_driver_probe macro
-> >>> to initialize the driver. This macro ends up calling device_initcall as
-> >>> was used previously, but also allocates a platform device which gives us
-> >>> access to much nicer APIs such as platform_ioremap_resource,
-> >>> platform_get_irq and dev_err_probe.
-> >>
-> >> This is useful, but also there are other changes currently being sorted
-> >> out by Zong Li (cc'd into this message) which have already been reviewed
-> >> and are hopefully queued for the next kernel release.
-> >>
-> >>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> >>> Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
-> >
-> > I'm ok with something like this being merged, but please note that if
-> > we ever want to support the JH7100 which uses registers in this
-> > peripheral to flush the cache for its non-coherent DMAs then this
-> > driver needs to be loaded before other peripherals or we will trigger
-> > the 2nd warning in arch/riscv/mm/dma-noncoherent.c. I'm not sure we
-> > can do that when it's a platform driver. See this patch for an
-> > alternative to support the JH71x0s:
-> > https://github.com/esmil/linux/commit/9c5b29da56ae29159c9572c5bb195fe3a1b535c5
-> >
-> > /Emil
->
-> Are you replying to your own patch that does the conversion to
-> platform driver and then saying that it could actually cause
-> issues?
+On Wed, 2022-10-05 at 13:34 +0000, Trond Myklebust wrote:
+> On Wed, 2022-10-05 at 06:06 -0400, Jeff Layton wrote:
+> > On Tue, 2022-10-04 at 10:39 +1100, NeilBrown wrote:
+> > > On Fri, 30 Sep 2022, Jeff Layton wrote:
+> > > > Now that we can call into vfs_getattr to get the i_version field,
+> > > > use
+> > > > that facility to fetch it instead of doing it in
+> > > > nfsd4_change_attribute.
+> > > >=20
+> > > > Neil also pointed out recently that IS_I_VERSION directory
+> > > > operations
+> > > > are always logged, and so we only need to mitigate the rollback
+> > > > problem
+> > > > on regular files. Also, we don't need to factor in the ctime when
+> > > > reexporting NFS or Ceph.
+> > > >=20
+> > > > Set the STATX_VERSION (and BTIME) bits in the request when we're
+> > > > dealing
+> > > > with a v4 request. Then, instead of looking at IS_I_VERSION when
+> > > > generating the change attr, look at the result mask and only use
+> > > > it if
+> > > > STATX_VERSION is set. With this change, we can drop the
+> > > > fetch_iversion
+> > > > export operation as well.
+> > > >=20
+> > > > Move nfsd4_change_attribute into nfsfh.c, and change it to only
+> > > > factor
+> > > > in the ctime if it's a regular file and the fs doesn't advertise
+> > > > STATX_ATTR_VERSION_MONOTONIC.
+> > > >=20
+> > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > > > ---
+> > > > =A0fs/nfs/export.c=A0=A0=A0=A0=A0=A0=A0=A0=A0 |=A0 7 -------
+> > > > =A0fs/nfsd/nfs4xdr.c=A0=A0=A0=A0=A0=A0=A0 |=A0 4 +++-
+> > > > =A0fs/nfsd/nfsfh.c=A0=A0=A0=A0=A0=A0=A0=A0=A0 | 40
+> > > > ++++++++++++++++++++++++++++++++++++++++
+> > > > =A0fs/nfsd/nfsfh.h=A0=A0=A0=A0=A0=A0=A0=A0=A0 | 29 +---------------=
+-------------
+> > > > =A0fs/nfsd/vfs.h=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |=A0 7 ++++++-
+> > > > =A0include/linux/exportfs.h |=A0 1 -
+> > > > =A06 files changed, 50 insertions(+), 38 deletions(-)
+> > > >=20
+> > > > diff --git a/fs/nfs/export.c b/fs/nfs/export.c
+> > > > index 01596f2d0a1e..1a9d5aa51dfb 100644
+> > > > --- a/fs/nfs/export.c
+> > > > +++ b/fs/nfs/export.c
+> > > > @@ -145,17 +145,10 @@ nfs_get_parent(struct dentry *dentry)
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0return parent;
+> > > > =A0}
+> > > > =A0
+> > > > -static u64 nfs_fetch_iversion(struct inode *inode)
+> > > > -{
+> > > > -=A0=A0=A0=A0=A0=A0=A0nfs_revalidate_inode(inode, NFS_INO_INVALID_C=
+HANGE);
+> > > > -=A0=A0=A0=A0=A0=A0=A0return inode_peek_iversion_raw(inode);
+> > > > -}
+> > > > -
+> > > > =A0const struct export_operations nfs_export_ops =3D {
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0.encode_fh =3D nfs_encode_fh,
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0.fh_to_dentry =3D nfs_fh_to_dentry,
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0.get_parent =3D nfs_get_parent,
+> > > > -=A0=A0=A0=A0=A0=A0=A0.fetch_iversion =3D nfs_fetch_iversion,
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0.flags =3D EXPORT_OP_NOWCC|EXPORT_OP_NOSUBT=
+REECHK|
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0EXPORT_OP_CLOSE_BEF=
+ORE_UNLINK|EXPORT_OP_REMOTE_FS
+> > > > >=20
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0EXPORT_OP_NOATOMIC_=
+ATTR,
+> > > > diff --git a/fs/nfsd/nfs4xdr.c b/fs/nfsd/nfs4xdr.c
+> > > > index 1e9690a061ec..779c009314c6 100644
+> > > > --- a/fs/nfsd/nfs4xdr.c
+> > > > +++ b/fs/nfsd/nfs4xdr.c
+> > > > @@ -2869,7 +2869,9 @@ nfsd4_encode_fattr(struct xdr_stream *xdr,
+> > > > struct svc_fh *fhp,
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0goto out;
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0}
+> > > > =A0
+> > > > -=A0=A0=A0=A0=A0=A0=A0err =3D vfs_getattr(&path, &stat, STATX_BASIC=
+_STATS,
+> > > > AT_STATX_SYNC_AS_STAT);
+> > > > +=A0=A0=A0=A0=A0=A0=A0err =3D vfs_getattr(&path, &stat,
+> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0 STATX_BASIC_STATS | STATX_BTIME |
+> > > > STATX_VERSION,
+> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0 AT_STATX_SYNC_AS_STAT);
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0if (err)
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0goto out_nfserr;
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0if (!(stat.result_mask & STATX_BTIME))
+> > > > diff --git a/fs/nfsd/nfsfh.c b/fs/nfsd/nfsfh.c
+> > > > index a5b71526cee0..9168bc657378 100644
+> > > > --- a/fs/nfsd/nfsfh.c
+> > > > +++ b/fs/nfsd/nfsfh.c
+> > > > @@ -634,6 +634,10 @@ void fh_fill_pre_attrs(struct svc_fh *fhp)
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0stat.mtime =3D inod=
+e->i_mtime;
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0stat.ctime =3D inod=
+e->i_ctime;
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0stat.size=A0 =3D in=
+ode->i_size;
+> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0if (v4 && IS_I_VERSIO=
+N(inode)) {
+> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0stat.version =3D
+> > > > inode_query_iversion(inode);
+> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0stat.result_mask |=3D STATX_VERSION;
+> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0}
+> > >=20
+> > > This is increasingly ugly.=A0 I wonder if it is justified at all...
+> > >=20
+> >=20
+> > I'm fine with dropping that. So if the getattrs fail, we should just
+> > not
+> > offer up pre/post attrs?
+> >=20
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0}
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0if (v4)
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0fhp->fh_pre_change =
+=3D
+> > > > nfsd4_change_attribute(&stat, inode);
+> > > > @@ -665,6 +669,8 @@ void fh_fill_post_attrs(struct svc_fh *fhp)
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0if (err) {
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0fhp->fh_post_saved =
+=3D false;
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0fhp->fh_post_attr.c=
+time =3D inode->i_ctime;
+> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0if (v4 && IS_I_VERSIO=
+N(inode))
+> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0fhp->fh_post_attr.version =3D
+> > > > inode_query_iversion(inode);
+> > >=20
+> > > ... ditto ...
+> > >=20
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0} else
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0fhp->fh_post_saved =
+=3D true;
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0if (v4)
+> > > > @@ -754,3 +760,37 @@ enum fsid_source fsid_source(const struct
+> > > > svc_fh *fhp)
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0return FSIDSOURCE_U=
+UID;
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0return FSIDSOURCE_DEV;
+> > > > =A0}
+> > > > +
+> > > > +/*
+> > > > + * We could use i_version alone as the change attribute.=A0
+> > > > However, i_version
+> > > > + * can go backwards on a regular file after an unclean
+> > > > shutdown.=A0 On its own
+> > > > + * that doesn't necessarily cause a problem, but if i_version
+> > > > goes backwards
+> > > > + * and then is incremented again it could reuse a value that was
+> > > > previously
+> > > > + * used before boot, and a client who queried the two values
+> > > > might incorrectly
+> > > > + * assume nothing changed.
+> > > > + *
+> > > > + * By using both ctime and the i_version counter we guarantee
+> > > > that as long as
+> > > > + * time doesn't go backwards we never reuse an old value. If the
+> > > > filesystem
+> > > > + * advertises STATX_ATTR_VERSION_MONOTONIC, then this mitigation
+> > > > is not needed.
+> > > > + *
+> > > > + * We only need to do this for regular files as well. For
+> > > > directories, we
+> > > > + * assume that the new change attr is always logged to stable
+> > > > storage in some
+> > > > + * fashion before the results can be seen.
+> > > > + */
+> > > > +u64 nfsd4_change_attribute(struct kstat *stat, struct inode
+> > > > *inode)
+> > > > +{
+> > > > +=A0=A0=A0=A0=A0=A0=A0u64 chattr;
+> > > > +
+> > > > +=A0=A0=A0=A0=A0=A0=A0if (stat->result_mask & STATX_VERSION) {
+> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0chattr =3D stat->vers=
+ion;
+> > > > +
+> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0if (S_ISREG(inode->i_=
+mode) &&
+> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 !(stat->att=
+ributes &
+> > > > STATX_ATTR_VERSION_MONOTONIC)) {
+> > >=20
+> > > I would really rather that the fs got to make this decision.
+> > > If it can guarantee that the i_version is monotonic even over a
+> > > crash
+> > > (which is probably can for directory, and might need changes to do
+> > > for
+> > > files) then it sets STATX_ATTR_VERSION_MONOTONIC and nfsd trusts it
+> > > completely.
+> > > If it cannot, then it doesn't set the flag.
+> > > i.e. the S_ISREG() test should be in the filesystem, not in nfsd.
+> > >=20
+> >=20
+> > This sounds reasonable, but for one thing.
+> >=20
+> > From RFC 7862:
+> >=20
+> > =A0=A0 While Section 5.4 of [RFC5661] discusses
+> > =A0=A0 per-file system attributes, it is expected that the value of
+> > =A0=A0 change_attr_type will not depend on the value of "homogeneous" a=
+nd
+> > =A0=A0 will only change in the event of a migration.
+> >=20
+> > The change_attr_type4 must be the same for all filehandles under a
+> > particular filesystem.
+> >=20
+> > If we do what you suggest though, then it's easily possible for the
+> > fs
+> > to set STATX_ATTR_VERSION_MONOTONIC on=A0directories but not files. If
+> > we
+> > later want to allow nfsd to advertise a change_attr_type4, we won't
+> > be
+> > able to rely on the STATX_ATTR_VERSION_MONOTONIC to tell us how to
+> > fill
+> > that out.
+>=20
+> That will break clients. So no, that's not acceptable.
+>=20
 
-Yes, I can see it seems odd, but this patch lived for a while in the
-kernel repo for the JH7100 until I rebased on 6.0-rc1 and realized the
-above.
-Hal Feng must have based his patches on a version of the code before
-that when preparing this series.
+Yeah. This is why I mentioned that this flag would have been better
+advertised via fsinfo(), had that been a thing.
 
-> I'm all for dropping this for the moment and keeping the old
-> early init for the ccache.
+One option is to just document that an fs must advertise the same flag
+value for all inodes.
 
-Cool.
-
-/Emil
-
-> >>>    drivers/soc/sifive/sifive_l2_cache.c | 79 ++++++++++++++--------------
-> >>>    1 file changed, 40 insertions(+), 39 deletions(-)
-> >>>
-> >>> diff --git a/drivers/soc/sifive/sifive_l2_cache.c b/drivers/soc/sifive/sifive_l2_cache.c
-> >>> index 59640a1d0b28..010d612f7420 100644
-> >>> --- a/drivers/soc/sifive/sifive_l2_cache.c
-> >>> +++ b/drivers/soc/sifive/sifive_l2_cache.c
-> >>> @@ -7,9 +7,9 @@
-> >>>     */
-> >>>    #include <linux/debugfs.h>
-> >>>    #include <linux/interrupt.h>
-> >>> -#include <linux/of_irq.h>
-> >>> -#include <linux/of_address.h>
-> >>> -#include <linux/device.h>
-> >>> +#include <linux/io.h>
-> >>> +#include <linux/mod_devicetable.h>
-> >>> +#include <linux/platform_device.h>
-> >>>    #include <asm/cacheinfo.h>
-> >>>    #include <soc/sifive/sifive_l2_cache.h>
-> >>>
-> >>> @@ -96,12 +96,6 @@ static void l2_config_read(void)
-> >>>        pr_info("L2CACHE: Index of the largest way enabled: %d\n", regval);
-> >>>    }
-> >>>
-> >>> -static const struct of_device_id sifive_l2_ids[] = {
-> >>> -     { .compatible = "sifive,fu540-c000-ccache" },
-> >>> -     { .compatible = "sifive,fu740-c000-ccache" },
-> >>> -     { /* end of table */ },
-> >>> -};
-> >>> -
-> >>>    static ATOMIC_NOTIFIER_HEAD(l2_err_chain);
-> >>>
-> >>>    int register_sifive_l2_error_notifier(struct notifier_block *nb)
-> >>> @@ -192,36 +186,29 @@ static irqreturn_t l2_int_handler(int irq, void *device)
-> >>>        return IRQ_HANDLED;
-> >>>    }
-> >>>
-> >>> -static int __init sifive_l2_init(void)
-> >>> +static int __init sifive_l2_probe(struct platform_device *pdev)
-> >>>    {
-> >>> -     struct device_node *np;
-> >>> -     struct resource res;
-> >>> -     int i, rc, intr_num;
-> >>> -
-> >>> -     np = of_find_matching_node(NULL, sifive_l2_ids);
-> >>> -     if (!np)
-> >>> -             return -ENODEV;
-> >>> -
-> >>> -     if (of_address_to_resource(np, 0, &res))
-> >>> -             return -ENODEV;
-> >>> -
-> >>> -     l2_base = ioremap(res.start, resource_size(&res));
-> >>> -     if (!l2_base)
-> >>> -             return -ENOMEM;
-> >>> -
-> >>> -     intr_num = of_property_count_u32_elems(np, "interrupts");
-> >>> -     if (!intr_num) {
-> >>> -             pr_err("L2CACHE: no interrupts property\n");
-> >>> -             return -ENODEV;
-> >>> -     }
-> >>> -
-> >>> -     for (i = 0; i < intr_num; i++) {
-> >>> -             g_irq[i] = irq_of_parse_and_map(np, i);
-> >>> -             rc = request_irq(g_irq[i], l2_int_handler, 0, "l2_ecc", NULL);
-> >>> -             if (rc) {
-> >>> -                     pr_err("L2CACHE: Could not request IRQ %d\n", g_irq[i]);
-> >>> -                     return rc;
-> >>> -             }
-> >>> +     struct device *dev = &pdev->dev;
-> >>> +     int nirqs;
-> >>> +     int ret;
-> >>> +     int i;
-> >>> +
-> >>> +     l2_base = devm_platform_ioremap_resource(pdev, 0);
-> >>> +     if (IS_ERR(l2_base))
-> >>> +             return PTR_ERR(l2_base);
-> >>> +
-> >>> +     nirqs = platform_irq_count(pdev);
-> >>> +     if (nirqs <= 0)
-> >>> +             return dev_err_probe(dev, -ENODEV, "no interrupts\n");
-> >>
-> >> I wonder if zero irqs is an actual issue here?
-> >>
-> >>> +     for (i = 0; i < nirqs; i++) {
-> >>> +             g_irq[i] = platform_get_irq(pdev, i);
-> >>
-> >> I wonder if we need to keep g_irq[] around now? Is it going to be useful
-> >> in the future?
-> >>
-> >>> +             if (g_irq[i] < 0)
-> >>> +                     return g_irq[i];
-> >>> +
-> >>> +             ret = devm_request_irq(dev, g_irq[i], l2_int_handler, 0, pdev->name, NULL);
-> >>> +             if (ret)
-> >>> +                     return dev_err_probe(dev, ret, "Could not request IRQ %d\n", g_irq[i]);
-> >>>        }
-> >>>
-> >>>        l2_config_read();
-> >>> @@ -234,4 +221,18 @@ static int __init sifive_l2_init(void)
-> >>>    #endif
-> >>>        return 0;
-> >>>    }
-> >>> -device_initcall(sifive_l2_init);
-> >>> +
-> >>> +static const struct of_device_id sifive_l2_match[] = {
-> >>> +     { .compatible = "sifive,fu540-c000-ccache" },
-> >>> +     { .compatible = "sifive,fu740-c000-ccache" },
-> >>> +     { /* sentinel */ }
-> >>> +};
-> >>> +
-> >>> +static struct platform_driver sifive_l2_driver = {
-> >>> +     .driver = {
-> >>> +             .name = "sifive_l2_cache",
-> >>> +             .of_match_table = sifive_l2_match,
-> >>> +             .suppress_bind_attrs = true,
-> >>> +     },
-> >>> +};
-> >>> +builtin_platform_driver_probe(sifive_l2_driver, sifive_l2_probe);
-> >>
-> >>
-> >> _______________________________________________
-> >> linux-riscv mailing list
-> >> linux-riscv@lists.infradead.org
-> >> http://lists.infradead.org/mailman/listinfo/linux-riscv
-> >
-> > _______________________________________________
-> > linux-riscv mailing list
-> > linux-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-riscv
-> >
->
-> --
-> Ben Dooks                               http://www.codethink.co.uk/
-> Senior Engineer                         Codethink - Providing Genius
->
-> https://www.codethink.co.uk/privacy.html
->
+Alternately, we could allow the fs to set the STATX_ATTR_* flag with
+per-inode granularity, and for nfsd, just add a new change_attr_type()
+op to export_operations. Most filesystems would just have that return a
+hardcoded value, but an nfs reexport could just pass through whatever
+value it got from the server.
+--=20
+Jeff Layton <jlayton@kernel.org>
