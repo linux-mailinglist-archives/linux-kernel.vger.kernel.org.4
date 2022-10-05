@@ -2,161 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE045F553E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 15:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 735465F5542
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 15:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiJENUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 09:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42324 "EHLO
+        id S229687AbiJENYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 09:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiJENU0 (ORCPT
+        with ESMTP id S229639AbiJENYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 09:20:26 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846D9205DB
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 06:20:24 -0700 (PDT)
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4CF0F420E5
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 13:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1664976023;
-        bh=jBaHquY2gPRnyppqdq61kZ2fwJdv7V+rcZ7lwJtbiaA=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=QPuBcoXxKCNE9La7nxehD8hidPF7mJY6FJUWNdO//RQmuvoQOaEeRGpgLVFsIztQS
-         ly3sGy6blFKmN36bb62iu/jtcwrmaoygTFD64bf6C4H8LvRWD9xEFj6/0bRkOQy9WF
-         tHrm7ySi0WAtWg3W4l+Q8R1Gg+z9mP0qnodavXqbJ7Q586+TmX0i4Po7mo5y/0snKE
-         U2OC/EYmlrGJZ9xIZ8e55+PDTM82REPmydLQMTJMoG8dUMgEHHzHI6IhlGVuk5SQ/+
-         Zn3bXdKD9xIVYnIFCEKa1/zD77S9jdKo6UbAXCv3fCoxXhyMGtnGVnSvHBGVrrdWQ8
-         p1hZB2i8RjhNw==
-Received: by mail-qt1-f199.google.com with SMTP id s21-20020a05622a1a9500b0035bb9e79172so11403991qtc.20
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 06:20:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=jBaHquY2gPRnyppqdq61kZ2fwJdv7V+rcZ7lwJtbiaA=;
-        b=z4eOxNmHg6cxsFfZQzxt9RoQcHeDgTJ2wzm+vMWDnEmiHFSNZhS1cnnRSTdEI6RyIv
-         PTeN5FRPzdi6A2rPTuKCYV3z1YiznNAo3tN5GH4MoFW/xW+ujvy5JRnQFGXZcTtbShwq
-         Nu4uhyTINqwD8kjLuD7ORNKbE1aJxzICsus7OwS0Lojy0K02iA/Pd1m9xc1uNk1G9Qpf
-         Vxx3RGKGMpQ4XrJy3ujLZCyQtt9XvqEWtxjlUGItXAURLYuO/0CDxMtX95mt4Lha7krk
-         PEk8s/SclBZCC5OVo9e0aK2qvssazJ+SgNaN1cnXklmHiBSUbXZ1A3MRGN2uQvo7vd2U
-         W6uw==
-X-Gm-Message-State: ACrzQf13ZqIVmyk9bScmLOmWAK5HAGmz/D2MWf1N+w38/YvTdN34bMD6
-        8peDwfS/IrRlSujyTX2zFmXeYSXVIzY+kmUxO0GOg3gQ/akY7EXHI1Vg6JfA9vAf2iwImVYJGIe
-        KzKsuFN5MGDF0zq5++G7HrnFIjpr/PmeYmNTYX9w1sFpKpE7LKWc8LKYBrw==
-X-Received: by 2002:a05:622a:13c6:b0:35b:a742:28ae with SMTP id p6-20020a05622a13c600b0035ba74228aemr23012774qtk.435.1664976022209;
-        Wed, 05 Oct 2022 06:20:22 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7VzygNfGaHRADBYYItL4bS/N9idRpjVZehxb+NwhHmc/VMzKXudAwOZgLbL+u1dtE/kkYiOhO7QFkR6EckAi4=
-X-Received: by 2002:a05:622a:13c6:b0:35b:a742:28ae with SMTP id
- p6-20020a05622a13c600b0035ba74228aemr23012768qtk.435.1664976022002; Wed, 05
- Oct 2022 06:20:22 -0700 (PDT)
+        Wed, 5 Oct 2022 09:24:51 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7ECF81274E
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 06:24:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 681F6113E;
+        Wed,  5 Oct 2022 06:24:53 -0700 (PDT)
+Received: from [10.57.3.4] (unknown [10.57.3.4])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8807E3F792;
+        Wed,  5 Oct 2022 06:24:44 -0700 (PDT)
+Message-ID: <c6f53b27-2762-01e8-4319-560dca1a4925@arm.com>
+Date:   Wed, 5 Oct 2022 14:24:42 +0100
 MIME-Version: 1.0
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
- <20220929143225.17907-10-hal.feng@linux.starfivetech.com> <20220930204905.GA903203-robh@kernel.org>
-In-Reply-To: <20220930204905.GA903203-robh@kernel.org>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Wed, 5 Oct 2022 15:20:06 +0200
-Message-ID: <CAJM55Z8ikNucTv4VjoEHwK5C_-nnvFNtn_2_U2E0QgbJKP97fg@mail.gmail.com>
-Subject: Re: [PATCH v1 09/30] reset: starfive: jh7100: Move necessary
- properties to device tree
-To:     Rob Herring <robh@kernel.org>
-Cc:     Hal Feng <hal.feng@linux.starfivetech.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] coresight: cti: Fix hang in cti_disable_hw()
+Content-Language: en-US
+To:     Mike Leach <mike.leach@linaro.org>
+Cc:     suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
+        mike.leach@linaro.org, leo.yan@linaro.org, Sudeep.Holla@arm.com,
+        Aishwarya TCV <Aishwarya.TCV@arm.com>,
+        Cristian Marussi <Cristian.Marussi@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "coresight@lists.linaro.org" <coresight@lists.linaro.org>
+References: <20221005131452.1506328-1-james.clark@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20221005131452.1506328-1-james.clark@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sept 2022 at 22:51, Rob Herring <robh@kernel.org> wrote:
->
-> On Thu, Sep 29, 2022 at 10:32:04PM +0800, Hal Feng wrote:
-> > Store the necessary properties in device tree instead of .c file,
-> > in order to apply this reset driver to other StarFive SoCs.
-> >
-> > Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
-> > ---
-> >  .../bindings/reset/starfive,jh7100-reset.yaml | 20 ++++++++
-> >  arch/riscv/boot/dts/starfive/jh7100.dtsi      |  3 ++
-> >  drivers/reset/reset-starfive-jh7100.c         | 50 +++++++++++++------
-> >  3 files changed, 57 insertions(+), 16 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml b/Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml
-> > index 300359a5e14b..3eff3f72a1ed 100644
-> > --- a/Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml
-> > +++ b/Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml
-> > @@ -20,19 +20,39 @@ properties:
-> >    "#reset-cells":
-> >      const: 1
-> >
-> > +  starfive,assert-offset:
-> > +    description: Offset of the first ASSERT register
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +
-> > +  starfive,status-offset:
-> > +    description: Offset of the first STATUS register
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +
-> > +  starfive,nr-resets:
-> > +    description: Number of reset signals
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +
-> >  required:
-> >    - compatible
-> >    - reg
-> >    - "#reset-cells"
-> > +  - starfive,assert-offset
-> > +  - starfive,status-offset
-> > +  - starfive,nr-resets
->
-> Adding required properties is a red flag. You can't add required
-> properties to an existing binding. That breaks the ABI unless the OS
-> deals with the properties being absent. If the OS has to do that, then
-> why add them in the first place? All this should be implied by the
-> compatible string.
 
-Indeed. I really don't understand why this is even necessary. As
-mentioned in my reply to the clock driver my original code just had a
-combined driver for the whole CRG (clock and reset generator I
-presume), and then you just need a simple node like this:
 
-syscrg: clock-controller@13020000 {
-    compatible = "starfive,jh7110-syscrg";
-    reg = <0x0 0x13020000 0x0 0x10000>;
-    clocks = <&osc>, <&gmac1_rmii_refin>,
-             <&gmac1_rgmii_rxin>,
-             <&i2stx_bclk_ext>, <&i2stx_lrck_ext>,
-             <&i2srx_bclk_ext>, <&i2srx_lrck_ext>,
-             <&tdm_ext>, <&mclk_ext>;
-    clock-names = "osc", "gmac1_rmii_refin",
-                  "gmac1_rgmii_rxin",
-                  "i2stx_bclk_ext", "i2stx_lrck_ext",
-                  "i2srx_bclk_ext", "i2srx_lrck_ext",
-                  "tdm_ext", "mclk_ext";
-    #clock-cells = <1>;
-    #reset-cells = <1>;
-};
+On 05/10/2022 14:14, James Clark wrote:
+> cti_enable_hw() and cti_disable_hw() are called from an atomic context
+> so shouldn't use runtime PM because it can result in a sleep when
+> communicating with firmware.
 
-/Emil
+Hi Mike,
+
+Are you able to test this on a Dragonboard please? I've only tested on
+Juno so far.
+
+Thanks
+James
+
+> 
+> Since commit 3c6656337852 ("Revert "firmware: arm_scmi: Add clock
+> management to the SCMI power domain""), this causes a hang on Juno when
+> running the Perf Coresight tests or running this command:
+> 
+>   perf record -e cs_etm//u -- ls
+> 
+> This was also missed until the revert commit because pm_runtime_put()
+> was called with the wrong device until commit 692c9a499b28 ("coresight:
+> cti: Correct the parameter for pm_runtime_put")
+> 
+> With lock and scheduler debugging enabled the following is output:
+> 
+>    coresight cti_sys0: cti_enable_hw -- dev:cti_sys0  parent: 20020000.cti
+>    BUG: sleeping function called from invalid context at drivers/base/power/runtime.c:1151
+>    in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 330, name: perf-exec
+>    preempt_count: 2, expected: 0
+>    RCU nest depth: 0, expected: 0
+>    INFO: lockdep is turned off.
+>    irq event stamp: 0
+>    hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+>    hardirqs last disabled at (0): [<ffff80000822b394>] copy_process+0xa0c/0x1948
+>    softirqs last  enabled at (0): [<ffff80000822b394>] copy_process+0xa0c/0x1948
+>    softirqs last disabled at (0): [<0000000000000000>] 0x0
+>    CPU: 3 PID: 330 Comm: perf-exec Not tainted 6.0.0-00053-g042116d99298 #7
+>    Hardware name: ARM LTD ARM Juno Development Platform/ARM Juno Development Platform, BIOS EDK II Sep 13 2022
+>    Call trace:
+>     dump_backtrace+0x134/0x140
+>     show_stack+0x20/0x58
+>     dump_stack_lvl+0x8c/0xb8
+>     dump_stack+0x18/0x34
+>     __might_resched+0x180/0x228
+>     __might_sleep+0x50/0x88
+>     __pm_runtime_resume+0xac/0xb0
+>     cti_enable+0x44/0x120
+>     coresight_control_assoc_ectdev+0xc0/0x150
+>     coresight_enable_path+0xb4/0x288
+>     etm_event_start+0x138/0x170
+>     etm_event_add+0x48/0x70
+>     event_sched_in.isra.122+0xb4/0x280
+>     merge_sched_in+0x1fc/0x3d0
+>     visit_groups_merge.constprop.137+0x16c/0x4b0
+>     ctx_sched_in+0x114/0x1f0
+>     perf_event_sched_in+0x60/0x90
+>     ctx_resched+0x68/0xb0
+>     perf_event_exec+0x138/0x508
+>     begin_new_exec+0x52c/0xd40
+>     load_elf_binary+0x6b8/0x17d0
+>     bprm_execve+0x360/0x7f8
+>     do_execveat_common.isra.47+0x218/0x238
+>     __arm64_sys_execve+0x48/0x60
+>     invoke_syscall+0x4c/0x110
+>     el0_svc_common.constprop.4+0xfc/0x120
+>     do_el0_svc+0x34/0xc0
+>     el0_svc+0x40/0x98
+>     el0t_64_sync_handler+0x98/0xc0
+>     el0t_64_sync+0x170/0x174
+> 
+> Fix the issue by removing the runtime PM calls completely. They are not
+> needed here because it must have already been done when building the
+> path for a trace.
+> 
+> Fixes: 835d722ba10a ("coresight: cti: Initial CoreSight CTI Driver")
+> Reported-by: Aishwarya TCV <Aishwarya.TCV@arm.com>
+> Reported-by: Cristian Marussi <Cristian.Marussi@arm.com>
+> Signed-off-by: Suzuki Poulose <Suzuki.Poulose@arm.com>
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>  drivers/hwtracing/coresight/coresight-cti-core.c | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-cti-core.c b/drivers/hwtracing/coresight/coresight-cti-core.c
+> index 8988b2ed2ea6..c5f7fc4e2552 100644
+> --- a/drivers/hwtracing/coresight/coresight-cti-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-cti-core.c
+> @@ -94,7 +94,6 @@ static int cti_enable_hw(struct cti_drvdata *drvdata)
+>  	unsigned long flags;
+>  	int rc = 0;
+>  
+> -	pm_runtime_get_sync(dev->parent);
+>  	spin_lock_irqsave(&drvdata->spinlock, flags);
+>  
+>  	/* no need to do anything if enabled or unpowered*/
+> @@ -119,7 +118,6 @@ static int cti_enable_hw(struct cti_drvdata *drvdata)
+>  	/* cannot enable due to error */
+>  cti_err_not_enabled:
+>  	spin_unlock_irqrestore(&drvdata->spinlock, flags);
+> -	pm_runtime_put(dev->parent);
+>  	return rc;
+>  }
+>  
+> @@ -175,7 +173,6 @@ static int cti_disable_hw(struct cti_drvdata *drvdata)
+>  	coresight_disclaim_device_unlocked(csdev);
+>  	CS_LOCK(drvdata->base);
+>  	spin_unlock(&drvdata->spinlock);
+> -	pm_runtime_put(dev->parent);
+>  	return 0;
+>  
+>  	/* not disabled this call */
