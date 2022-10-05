@@ -1,78 +1,67 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1634D5F5B23
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 22:41:01 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id ABD1A5F5B25
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 22:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbiJEUkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 16:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
+        id S231149AbiJEUlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 16:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbiJEUki (ORCPT
+        with ESMTP id S231148AbiJEUlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 16:40:38 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090635720C;
-        Wed,  5 Oct 2022 13:40:37 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id x18so10969830qkn.6;
-        Wed, 05 Oct 2022 13:40:36 -0700 (PDT)
+        Wed, 5 Oct 2022 16:41:08 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CACF65674
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 13:41:07 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id u21so129144edi.9
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 13:41:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=G/SJy23pyHdTBOwqTvrrJjRP4JYmINx8osvDYRRfOiA=;
-        b=Gy2RS+n5aXZK/vbHagqSrb642CEVulU2rctaskWTRmnr/sdYVgV4mAbCQqUvBgujAS
-         2B8STm+OdCYJV2Vtpl8N4n/6xG0eHNHV5s4KnDUZpU0MgglzBPD8kTNOlvbb/MFBBBTf
-         0EJZHfN14FTlV8tJ5RlypE3zqGPme/Y6S7Tjy5Wo9OtPIE+4lD9ryV8txeMlKyxs+S+r
-         tuXA+VUKfiEz7gh9D8EF/aJ7zJL3mhFqiZxB6AL2a98l4enLblbZz5oNfJ+yhaPyRCaQ
-         RCSpRA34xniiuaAniw+8di6h6vSqgmzH55DcgCOeyXr30QAYxDnC4soKmqH7LB7+Loa7
-         aD6Q==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wezMY0HcT+UXrF/Kp1mqgrelTmjrv48aVuFmQkT0QkM=;
+        b=pMRkqZuA0XwgD1ltGokKvQ/xSa9jAL8/1q6ZYlVAdIz48r82ogNpa+9g+ARAOTz0xm
+         QVsTbAqCecamtq6Rn1+jQJE8fdQklZzaJOTkX+iMZ0l2y0N5cRRTLNIUlzJU+BjwgRVZ
+         SjKPpaDirLtUtwnJQg/PfqJvzasGa04p8Wcs7WnG3ItKuWX3RA4HkWBlxGBUkCkZok+k
+         ENITADfYS53EvKj3Loc0kSfkkcv8K3YQs8ucD89brYvI0mieIzei8S6fnBBdCbsgmqEi
+         oyrLqPZ0WzOmh0zLajlgbUTVdlV+UHtIPCaNKmtqoz9QFkR55ma6PrmspEgT78kUuhPq
+         y5dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=G/SJy23pyHdTBOwqTvrrJjRP4JYmINx8osvDYRRfOiA=;
-        b=Sqrtco3puHrTX/LDgTm8BFlNIjzAxrmkumJFqLT9hq5AFp+2YUj4iLTVQrhjeeFV7j
-         mQr2Nulfnli1+sdVXK0eTa3h8vZdv+Xc/hqgptPBwQ5jF5L+S74l2VLnPwViBHtFxam6
-         Du/KGopESC6nMshw7y+DmwhJK00+z+j8yCs0eBbzuaCXpFZVHfRmfy8kO/+6qwoejflx
-         zB/fBk+3G5ZZXOBoFDIt6ZqzrxwJKFHUV2Pv9r4cKxUpywfzwoKLdf1kKWd0ef1mNOwH
-         j3U/rkWIjFCbpSP3m1NB5o9vNeLiYcKSrZj1hkkBI0goemZKcHTl3BclUl/U5eWSfqzx
-         83Fg==
-X-Gm-Message-State: ACrzQf12pDR5knt8QWHJy7FBGXNqPAWuY8N9nAgw+wLBhS4Kq0aNqd53
-        4GjcgtQfXD3nKiYcFcoMaxK0M+mE/Hs=
-X-Google-Smtp-Source: AMsMyM7uaIQVk5zGnmo7PkS8GSfpolbEaCPgcEymH0ZgxosWhQ7hqkxd8iG5Aq1/q5kpC4kIC/9AnQ==
-X-Received: by 2002:ae9:f205:0:b0:6bc:2d40:2f3d with SMTP id m5-20020ae9f205000000b006bc2d402f3dmr977651qkg.448.1665002435555;
-        Wed, 05 Oct 2022 13:40:35 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id y20-20020ac87c94000000b0038cdc487886sm3351624qtv.80.2022.10.05.13.40.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 13:40:33 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     stable@vger.kernel.org
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        linux-kernel@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM),
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH RESEND stable 5.4] perf tools: Fixup get_current_dir_name() compilation
-Date:   Wed,  5 Oct 2022 13:40:28 -0700
-Message-Id: <20221005204028.4066674-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=wezMY0HcT+UXrF/Kp1mqgrelTmjrv48aVuFmQkT0QkM=;
+        b=gQaw+QN6CdEOYxUs8J6qNuEM0DV/GT+h7/dDkbd8xZP2yOG0i/qfEDcy5Pk7QDnlsB
+         UlyyQ4eYRuHeQGJL8521+HNIYFYbekVOBzYRcIG9BnW0BserJiJcpxK6fKBAGfKy/lJG
+         dSM83///K55l33e7S0iBR86rSWzG+s+84R/HS5wGfTpkG7ErQp5HE6Hh/azHaYv6tXse
+         yiTjhGbMHBHSXONKppmIIwVhzEJcd0r6DmEIAxgvHGzOPf8t8OHdawEoybobvbHq5BVp
+         yD3z+Z2Mgmgl/kipFP552kz/xGhfiRIqp8yJnbcAEKoqPAyXb5WyanbCGejBZxlk5tsZ
+         vV4g==
+X-Gm-Message-State: ACrzQf1/XRBJkO579Ea2Nxiax4rESed63am/lgMkL2gE9fBErMSmlpXp
+        g4Gfi2H3raiojzj5eYJLnTEb4tKfYbf3y+HpoAx70cPQQzrDkg==
+X-Google-Smtp-Source: AMsMyM5ZqR/Q+hN0/JlujBTlWbuTUIYpAXZac8OwJLMYeXl9GqBRApH2XD/qoCRHNW3cxtqfK2j8RjRm9ES4wJFR788=
+X-Received: by 2002:a05:6402:4310:b0:459:7806:8ee6 with SMTP id
+ m16-20020a056402431000b0045978068ee6mr1504103edc.198.1665002465512; Wed, 05
+ Oct 2022 13:41:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220722171534.3576419-1-dlatypov@google.com> <20220722171534.3576419-5-dlatypov@google.com>
+In-Reply-To: <20220722171534.3576419-5-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 5 Oct 2022 16:40:54 -0400
+Message-ID: <CAFd5g47oBwrxFeKHKrppxaLCAPqLa=r-zNvs0QJEXiqu8ZYhYg@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] kunit: make kunit_kfree(NULL) a no-op to match kfree()
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,46 +69,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexey Dobriyan <adobriyan@gmail.com>
+On Fri, Jul 22, 2022 at 1:15 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> The real kfree() function will silently return when given a NULL.
+> So a user might reasonably think they can write the following code:
+>   char *buffer = NULL;
+>   if (param->use_buffer) buffer = kunit_kzalloc(test, 10, GFP_KERNEL);
+>   ...
+>   kunit_kfree(test, buffer);
+>
+> As-is, kunit_kfree() will mark the test as FAILED when buffer is NULL.
+> (And in earlier times, it would segfault).
+>
+> Let's match the semantics of kfree().
+>
+> Suggested-by: David Gow <davidgow@google.com>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-commit 128dbd78bd673f9edbc4413072b23efb6657feb0 upstream
-
-strdup() prototype doesn't live in stdlib.h .
-
-Add limits.h for PATH_MAX definition as well.
-
-This fixes the build on Android.
-
-Signed-off-by: Alexey Dobriyan (SK hynix) <adobriyan@gmail.com>
-Acked-by: Namhyung Kim <namhyung@kernel.org>
-Link: http://lore.kernel.org/lkml/YRukaQbrgDWhiwGr@localhost.localdomain
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
-
-This patch is necessary to build perf with a musl-libc toolchain, not
-just Android's bionic.
-
-Resending because missed stable the first time
-
- tools/perf/util/get_current_dir_name.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/perf/util/get_current_dir_name.c b/tools/perf/util/get_current_dir_name.c
-index b205d929245f..e68935e9ac8c 100644
---- a/tools/perf/util/get_current_dir_name.c
-+++ b/tools/perf/util/get_current_dir_name.c
-@@ -3,8 +3,9 @@
- //
- #ifndef HAVE_GET_CURRENT_DIR_NAME
- #include "get_current_dir_name.h"
-+#include <limits.h>
-+#include <string.h>
- #include <unistd.h>
--#include <stdlib.h>
- 
- /* Android's 'bionic' library, for one, doesn't have this */
- 
--- 
-2.25.1
-
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
