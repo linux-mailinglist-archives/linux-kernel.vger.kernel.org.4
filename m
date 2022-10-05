@@ -2,114 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 962785F5118
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 10:44:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D30E35F511C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 10:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbiJEIo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 04:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49962 "EHLO
+        id S230131AbiJEIpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 04:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiJEIon (ORCPT
+        with ESMTP id S229907AbiJEIo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 04:44:43 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749BE5F89
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 01:44:41 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id k6-20020a92c246000000b002f80993e780so12837210ilo.13
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 01:44:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=mOh268Wk17ISYAxouxu7muWjraM81l+aStizQFajsq0=;
-        b=iLDB4gUJ/cPCPgn+8C8u8vUfH5TvcEaqiZ/Quf04ttEXWc+sWiL21nevfIScMWI2Vk
-         VLfnnUe0gbwbmcnu0nkO5ZPFWnaRwOoUVXTVMtWkkxQ2B7QaxG5/QdhTjkQdDMxYncYd
-         oRZTD6BP8QCxJ4sSDuPw0VFQUCWMiyVg/v5pIO5AxaDeY6Bm60C91jTE9mnDa72SN+eN
-         UA1W555Fw7RX9/WFYxM5LPiKGrQlP27eMiN5RM84Gay8nSDuyZJHaVHas0d6FW5crSB8
-         y2C4ijeZmBjMr+p3NKe3vAt9I+BpvSDQhyxPQMghKN849oS3ZuJfz4Qyz0EzUPOnoVEx
-         KV9Q==
-X-Gm-Message-State: ACrzQf0YqIsihU0y/4kKfwqXlDrLrAJj2UQ7ewiX7xb6IlvmE6WOyosq
-        oZxBEkJU8VP76IqGm9PaUUxKwZcI79G0qo73tvMb5wwNtZeL
-X-Google-Smtp-Source: AMsMyM5/TfSDT99ZDnmMVQ507JxnFpL0gdqeC06k+60+jf4GW1GIYHmiw2ZUh6hbTge668wki97vz6vy5waiM6mW377SzT/52el/
+        Wed, 5 Oct 2022 04:44:57 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35A21A828;
+        Wed,  5 Oct 2022 01:44:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664959495; x=1696495495;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=elwF0zRXApeooFfPNF0C1cxDBpdF/2kxdpqipgtP+uY=;
+  b=ZabGbvYk4ukm7beiBg1KR7vX02IymTkkrULzf9fVP5DrJp1p9e0JleS5
+   0bsy2tafxzW8jsLXJ1y0lOgWibQPtAN23t5KpEeWlzZIPH/LybU9+0rXV
+   TGdr1QOdNwvAd3AtwLLcXQxzvWjO2ctM1wUD3HvB0Mn9Q1k5yNZMQMl89
+   KDme7Roi5kyQZD64ZpST8KfT1d9Bgumr7VmjDuoonj4JwB14hXFG2gFiv
+   PGOz1PMJV/I5hHA9/uIjol0v9oh5r1vScvl7o4fp24T6Wwk0ScA0WqF4Q
+   4ypre/LSje8/n7j1xyWkvrBwbZoDFoHomzIlTumZZkfbQ+AdzNpJfH/8g
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="367229213"
+X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
+   d="scan'208";a="367229213"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 01:44:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="619404495"
+X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
+   d="scan'208";a="619404495"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 05 Oct 2022 01:44:53 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1og01L-002ZDI-1T;
+        Wed, 05 Oct 2022 11:44:51 +0300
+Date:   Wed, 5 Oct 2022 11:44:51 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ferry Toth <fntoth@gmail.com>
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
+ if extcon is present"
+Message-ID: <Yz1EA5g+2s7Bow3M@smile.fi.intel.com>
+References: <20220927155332.10762-1-andriy.shevchenko@linux.intel.com>
+ <20220927155332.10762-3-andriy.shevchenko@linux.intel.com>
+ <20221003215734.7l3cnb2zy57nrxkk@synopsys.com>
+ <YzvusOI89ju9e5+0@smile.fi.intel.com>
+ <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com>
+ <20221005021212.qwnbmq6p7t26c3a4@synopsys.com>
+ <CAHQ1cqG9-SDM4_zUfCvxP7XD-U+PPOWqWDBFKU73ecomDpt9Jw@mail.gmail.com>
+ <25bc7dbe-f530-298f-f826-087606cf9491@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3724:b0:362:e8cb:755a with SMTP id
- k36-20020a056638372400b00362e8cb755amr7577626jav.226.1664959480676; Wed, 05
- Oct 2022 01:44:40 -0700 (PDT)
-Date:   Wed, 05 Oct 2022 01:44:40 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000694b7b05ea45963e@google.com>
-Subject: [syzbot] memory leak in nilfs_sysfs_create_device_group
-From:   syzbot <syzbot+2e2f697dbd0f429d5dae@syzkaller.appspotmail.com>
-To:     konishi.ryusuke@gmail.com, linux-kernel@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <25bc7dbe-f530-298f-f826-087606cf9491@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Oct 05, 2022 at 10:10:42AM +0200, Ferry Toth wrote:
+> On 05-10-2022 04:39, Andrey Smirnov wrote:
+> > On Tue, Oct 4, 2022 at 7:12 PM Thinh Nguyen<Thinh.Nguyen@synopsys.com>  wrote:
 
-syzbot found the following issue on:
+...
 
-HEAD commit:    a5088ee7251e Merge tag 'thermal-6.1-rc1' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=153f2492880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=21254cf9c7c084e0
-dashboard link: https://syzkaller.appspot.com/bug?extid=2e2f697dbd0f429d5dae
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1556a368880000
+> > FWIW, I just got the same HW Ferry has last week and am planning to
+> > work on this over the weekend.
+> I can help you setup, we have binary images available on github as well as
+> Yocto recipies to build them.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c2d2c6d22fae/disk-a5088ee7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/3c66d2393267/vmlinux-a5088ee7.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/f2050cc3fa6c/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2e2f697dbd0f429d5dae@syzkaller.appspotmail.com
-
-BUG: memory leak
-unreferenced object 0xffff888119526520 (size 32):
-  comm "syz-executor.4", pid 4168, jiffies 4294949450 (age 9.260s)
-  hex dump (first 32 bytes):
-    6c 6f 6f 70 34 00 00 00 00 00 00 00 00 00 00 00  loop4...........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff814c5b86>] kstrdup+0x36/0x70 mm/util.c:61
-    [<ffffffff814c5c13>] kstrdup_const+0x53/0x80 mm/util.c:84
-    [<ffffffff823af0e2>] kvasprintf_const+0xc2/0x110 lib/kasprintf.c:48
-    [<ffffffff824a442b>] kobject_set_name_vargs+0x3b/0xe0 lib/kobject.c:257
-    [<ffffffff824a48ad>] kobject_add_varg lib/kobject.c:352 [inline]
-    [<ffffffff824a48ad>] kobject_init_and_add+0x6d/0xc0 lib/kobject.c:441
-    [<ffffffff81e217ba>] nilfs_sysfs_create_device_group+0x9a/0x3d0 fs/nilfs2/sysfs.c:991
-    [<ffffffff81e0a03c>] init_nilfs+0x51c/0x680 fs/nilfs2/the_nilfs.c:637
-    [<ffffffff81df608b>] nilfs_fill_super fs/nilfs2/super.c:1047 [inline]
-    [<ffffffff81df608b>] nilfs_mount+0x51b/0x890 fs/nilfs2/super.c:1317
-    [<ffffffff8164f4ab>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
-    [<ffffffff815e8c48>] vfs_get_tree+0x28/0x100 fs/super.c:1530
-    [<ffffffff8162cbd7>] do_new_mount fs/namespace.c:3040 [inline]
-    [<ffffffff8162cbd7>] path_mount+0xc37/0x10d0 fs/namespace.c:3370
-    [<ffffffff8162d7be>] do_mount fs/namespace.c:3383 [inline]
-    [<ffffffff8162d7be>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff8162d7be>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff8162d7be>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
-    [<ffffffff845ebbf5>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff845ebbf5>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Also you can build all components (U-Boot, kernel, Buildroot initrd) separately
+as explained here:
+https://edison-fw.github.io/edison-wiki/u-boot-update
+https://edison-fw.github.io/edison-wiki/vanilla
+https://github.com/andy-shev/buildroot/tree/intel/board/intel/common
 
 
+-- 
+With Best Regards,
+Andy Shevchenko
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
