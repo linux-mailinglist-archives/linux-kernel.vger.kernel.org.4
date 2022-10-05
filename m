@@ -2,194 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F475F54FF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 15:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7125B5F5503
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 15:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiJENFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 09:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
+        id S229795AbiJENGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 09:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiJENFv (ORCPT
+        with ESMTP id S229910AbiJENGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 09:05:51 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E868D220E1
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 06:05:47 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20221005130543euoutp02fe92a20496e5525ab521f37e004afcc4~bLhJS0Ysp0623906239euoutp02x
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 13:05:43 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20221005130543euoutp02fe92a20496e5525ab521f37e004afcc4~bLhJS0Ysp0623906239euoutp02x
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1664975143;
-        bh=cShw/3LGlylN+4jJotpQbuNoLk30Zznf4m8prglpDWE=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=S/UHF0e2phRkGiCF0XGwtynhMSI6OuPOWGnyUO31/4azPx9Fd/P482Gl+oVJELhmQ
-         4jSqwCm04jceqZqXx7ZIDlc124H3kU9UGzGKbKQ0r9kZHRmSgCpFwDeWXGZJSZtX8T
-         i62BfLpu0Uya4Uk6HTG2BvfShkSGvcgkGRaYS9oA=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20221005130543eucas1p1aed6763fdecb50ca11125c7eec2cbbf0~bLhI6xuMy3238032380eucas1p14;
-        Wed,  5 Oct 2022 13:05:43 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 1B.A2.29727.6218D336; Wed,  5
-        Oct 2022 14:05:42 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20221005130542eucas1p1a50cb2c3ee56c7c6b3b78f9d4b191abf~bLhIInLdI3061230612eucas1p19;
-        Wed,  5 Oct 2022 13:05:42 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221005130542eusmtrp2fa51b0c29199130127621c85d53fce3c~bLhIHmN630188401884eusmtrp2Y;
-        Wed,  5 Oct 2022 13:05:42 +0000 (GMT)
-X-AuditID: cbfec7f2-205ff7000001741f-4f-633d81261c13
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id BA.2D.10862.6218D336; Wed,  5
-        Oct 2022 14:05:42 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20221005130541eusmtip25243c5df6e3b8a7331bd5ea6df42850f~bLhHDpACD0498804988eusmtip2d;
-        Wed,  5 Oct 2022 13:05:41 +0000 (GMT)
-Message-ID: <207c1979-0da2-b05d-fead-6880ad956b90@samsung.com>
-Date:   Wed, 5 Oct 2022 15:05:41 +0200
+        Wed, 5 Oct 2022 09:06:08 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D887823D
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 06:06:04 -0700 (PDT)
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 59A73413E6
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 13:06:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1664975162;
+        bh=9C5AQMcz5I2MJybWsUEcebrVkQicTSOLQEyAM8DV+Ps=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=oFG4KwqVm+Pf7trEv13mctl0PM+zyUvKOdmDOXixqLu+XUQ/OQFToia0LfkHAacfo
+         xcaHiX/MfmnpdS3foh+gq/DC8aQ8l7ylSkRfGXRjsEekrWOBEM7PeuTBN0oEbZuAqw
+         IGmL308ziMvIwc2xL4lT95Nmm+OftfkwAHYpmF3KplfZidkXjdXgLjGssDMk4QZZyb
+         Ct9Iqqg30xA6VrAxjge42lt8keFF5+iCnPXkFfydNE0FEozTyOsUljKa8cc2bOpzcl
+         QOcNpwot4Ast8U+0v4fkOsQLfKjfvYugYNq1ZAy55M0rp0Z7uS71Vd8Qto3DI59i5F
+         Qip8x6/rDUBTw==
+Received: by mail-qt1-f198.google.com with SMTP id ay22-20020a05622a229600b0035bbb349e79so11281077qtb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 06:06:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=9C5AQMcz5I2MJybWsUEcebrVkQicTSOLQEyAM8DV+Ps=;
+        b=2QIFDautkS2R6lV/sAak19B/81aGHjVE0MvUbYYzBSyfnzVwrmKMxPSSEMgRzGHVyZ
+         vOHiONGph64KQdNAAAfUXZG1bJWslhmb+mwrvbt7mCArPK8fJ9VE4w0M2JE4lC2KguhM
+         aIQbvVdDFC4H8wiYTPO7n3Umq4eE/vyZnLSloEa5tJ8KbpiP35fvj7VKXUVH7rgGIEzt
+         CvvREX+Vh04ykUSUAG6pt0YbkdDN7jrjnBSCTj78uTdYXZxkPZwpftnD9G2+0ia3Dns/
+         HkFJdoqLXTdkKkQxYzpvLcAax2kK2F/0ZxMFoNAugEqamwomRmwfXtapETeyPRHNUjlu
+         Kb9A==
+X-Gm-Message-State: ACrzQf3ggJHtwyogFBXGNyqs5GQaGeIKtvconb0fFpEVfOBBlV6Ak0Wy
+        TXp1tds2EhG9pwUwmBpoFZ+Ac/Vhdcu4o6+sDEOmtzRNdtoD4D2ojQlJmvd2rtDY3ZwGpl9en1Z
+        0bYkhWS5k6d/2f6Zriyvw0Q1FBsBFU0v/AanILxfT6mrVH6db34NtXJvrxA==
+X-Received: by 2002:a05:620a:488a:b0:6ce:5caa:37d1 with SMTP id ea10-20020a05620a488a00b006ce5caa37d1mr19564614qkb.37.1664975161380;
+        Wed, 05 Oct 2022 06:06:01 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7R0EoGHRuXP9h2yu2cjyoEIZCjf+tOtdLdPnVZlTEtkr4PaPwaY8ttRbvYB9Yin/1E8g4yA95xyZbaG8HiEnU=
+X-Received: by 2002:a05:620a:488a:b0:6ce:5caa:37d1 with SMTP id
+ ea10-20020a05620a488a00b006ce5caa37d1mr19564576qkb.37.1664975161052; Wed, 05
+ Oct 2022 06:06:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: [PATCH v8 00/29] Rework the trip points creation
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rui.zhang@intel.com,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-omap@vger.kernel.org, rafael@kernel.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <851008bf-145d-224c-87a8-cb6ec1e9addb@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkk+LIzCtJLcpLzFFi42LZduznOV21Rttkg9/XrS3OPf7NYvFg3jY2
-        i7W9R1ksvm+5zmQx77OsxaqpO1ks9r7eym6x6fE1VouJ+8+yW3T9WslscXnXHDaL2Uv6WSw+
-        9x5htNj68h2TxcTbG9gtZpzfx2TR+WUWm8WxBWIWq/e8YLaY+2Uqs8WTh31sFntbLzI7iHnM
-        un+WzWPFJ32PnbPusnss3vOSyWPTqk42jzvX9rB5bF5S77Hx3Q4mj/6/Bh59W1YxenzeJBfA
-        HcVlk5Kak1mWWqRvl8CVsXLTSraCv/wVFze/YmpgbOPtYuTgkBAwkXg+T7SLkYtDSGAFo8Tz
-        f59ZIZwvjBK7H75lh3A+M0rM2PSBsYuRE6zj4qNHLBCJ5YwSP859Z4ZwPjJKXF6yiR2kilfA
-        TuLn2sdgNouAisSi582MEHFBiZMzn7CA2KICyRI/uw6wgdjCArYS7390gtUzC4hL3HoynwnE
-        FhHQk2h838YEsoBZYAqbxOEVe1lBEmwChhJdb7vAmjmBlh3ZsAiqWV5i+9s5zBCnvuKUODHR
-        FsJ2kZg/6S4ThC0s8er4FnYIW0bi/875YAskBNoZJRb8vg/lTGCUaHh+C+ppa4k7536xgYKM
-        WUBTYv0ufUjoOUrc/+cPYfJJ3HgrCHECn8SkbdOZIcK8Eh1tQhAz1CRmHV8Ht/XghUvMExiV
-        ZiGFyiwk389C8swshLULGFlWMYqnlhbnpqcWG+allusVJ+YWl+al6yXn525iBKbS0/+Of9rB
-        OPfVR71DjEwcjIcYJTiYlUR4eU/aJAvxpiRWVqUW5ccXleakFh9ilOZgURLnZZuhlSwkkJ5Y
-        kpqdmlqQWgSTZeLglGpgas1MywlXW6yRvWzhuUS/oxOTTppaP9/kmKzPFxEUopizT8O0wNm2
-        aX9r6JKILwqnVqyUKhD7WbFlS/i74w+ubdT7fr/52CfZJ5mnd2wwYNVk7GH0/ZY3a8KfW3OU
-        M9uvrT0nzXXI2Mjk7fxDiqLy5TGuC2JO9Zlf/nNecva3A2v9OZPmvLK5cHTdRvF93tXS4uEp
-        fTmngzQ+p/AE6UysU/FdZVpdmm8xOyd1X36Pi8vDSUWR/gblZufs2EVN9Y93hU80fXYyKv+I
-        YVPJ7v7+rcuTiqR2Lj+7Osbr7r6vaa0LS382yZ6Jeu6z5orKgje9XK95hftf1J0oVr5/5kWY
-        NeuH+Km5FlqZKpWvjqxQYinOSDTUYi4qTgQA70iftBQEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMKsWRmVeSWpSXmKPExsVy+t/xe7pqjbbJBttb2SzOPf7NYvFg3jY2
-        i7W9R1ksvm+5zmQx77OsxaqpO1ks9r7eym6x6fE1VouJ+8+yW3T9WslscXnXHDaL2Uv6WSw+
-        9x5htNj68h2TxcTbG9gtZpzfx2TR+WUWm8WxBWIWq/e8YLaY+2Uqs8WTh31sFntbLzI7iHnM
-        un+WzWPFJ32PnbPusnss3vOSyWPTqk42jzvX9rB5bF5S77Hx3Q4mj/6/Bh59W1YxenzeJBfA
-        HaVnU5RfWpKqkJFfXGKrFG1oYaRnaGmhZ2RiqWdobB5rZWSqpG9nk5Kak1mWWqRvl6CXsXLT
-        SraCv/wVFze/YmpgbOPtYuTkkBAwkbj46BFLFyMXh5DAUkaJlytb2CESMhInpzWwQtjCEn+u
-        dbGB2EIC7xklZu8OA7F5Bewkfq59DFbPIqAiseh5MyNEXFDi5MwnLCC2qECyxMs/E8FqhAVs
-        Jd7/6ASzmQXEJW49mc8EYosI6Ek0vm9jgohPY5P4/DkeYtdGJon3W+pBbDYBQ4mutxA3cALt
-        PbJhEdQcM4murV2MELa8xPa3c5gnMArNQnLGLCTrZiFpmYWkZQEjyypGkdTS4tz03GIjveLE
-        3OLSvHS95PzcTYzA1LHt2M8tOxhXvvqod4iRiYPxEKMEB7OSCC/vSZtkId6UxMqq1KL8+KLS
-        nNTiQ4ymwLCYyCwlmpwPTF55JfGGZgamhiZmlgamlmbGSuK8ngUdiUIC6YklqdmpqQWpRTB9
-        TBycUg1M1fHK5u17e/xmPNAx/RH0+cWjBb8WrNXuNq34YHCgtn/5TlP7D3sKTu25XGdRv+Bo
-        oMPkE2zaJ5cdPzpr9inpX/6XOaK26YtPvS8ygaf5seqXe+0nVrnrNpe0+Z9e/SOpau82KdeZ
-        J2Vkru5/EVpp7Cj1wkzmg0iIo6HeXPkwqU0PC9Iap8yJesKwfzqXW6GYzvcLrEL2N40WJrjP
-        3szWtf2Uada+eyXyJi2z9Phn7N6RvLljdZqM9uFwg+K7eW41zayWv3UMdkV+n7np305rbdGb
-        t7tCMuctC7JT2X7EV3mP2PRd+xP61F8/NJB9vf1I0+KwwILXh3j22pbOLnhya8YOsRa7yJzF
-        cj45z6adV2Ipzkg01GIuKk4EAIdUMlKmAwAA
-X-CMS-MailID: 20221005130542eucas1p1a50cb2c3ee56c7c6b3b78f9d4b191abf
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20221003092704eucas1p2875c1f996dfd60a58f06cf986e02e8eb
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20221003092704eucas1p2875c1f996dfd60a58f06cf986e02e8eb
-References: <CGME20221003092704eucas1p2875c1f996dfd60a58f06cf986e02e8eb@eucas1p2.samsung.com>
-        <20221003092602.1323944-1-daniel.lezcano@linaro.org>
-        <8cdd1927-da38-c23e-fa75-384694724b1c@samsung.com>
-        <c3258cb2-9a56-d048-5738-1132331a157d@linaro.org>
-        <851008bf-145d-224c-87a8-cb6ec1e9addb@linaro.org>
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+In-Reply-To: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Wed, 5 Oct 2022 15:05:45 +0200
+Message-ID: <CAJM55Z8zg=-meSGhFnVh4Tb4=5M3sHis1oapzXCEipyDkuyvyg@mail.gmail.com>
+Subject: Re: [PATCH v1 00/30] Basic StarFive JH7110 RISC-V SoC support
+To:     Hal Feng <hal.feng@linux.starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 29 Sept 2022 at 16:34, Hal Feng <hal.feng@linux.starfivetech.com> wrote:
+> This series adds basic support for the StarFive JH7110 RISC-V SoC to
+> boot up and get a serial console. This series includes basic clock,
+> reset, pinctrl and uart drivers, which are necessary for booting.
+> It's should be noted that the reset and clock driver codes of JH7110
+> are partly common with those of JH7100, so the common codes are
+> factored out and can be reused by drivers of JH7110 and other more
+> SoCs from StarFive.
+>
+> The JH7110 is the upgraded version of JH7100 and also the first official
+> released version of JH71XX series SoCs from StarFive Technology Ltd.
+> The VisionFive 2 boards equipped with JH7110 SoCs are launched
+> recently [1]. More information and support can visit RVspace wiki [2].
+>
+> This series is also available at
+> https://github.com/hal-feng/linux/commits/visionfive2-minimal
+>
+> [1] https://www.cnx-software.com/2022/08/23/starfive-visionfive-2-quad-core-risc-v-sbc-linux/
+> [2] https://wiki.rvspace.org/
 
-On 05.10.2022 14:37, Daniel Lezcano wrote:
->
-> Hi Marek,
->
-> On 03/10/2022 23:18, Daniel Lezcano wrote:
->
-> [ ... ]
->
->>> I've tested this v8 patchset after fixing the issue with Exynos TMU 
->>> with
->>> https://lore.kernel.org/all/20221003132943.1383065-1-daniel.lezcano@linaro.org/ 
->>>
->>> patch and I got the following lockdep warning on all Exynos-based 
->>> boards:
->>>
->>>
->>> ======================================================
->>> WARNING: possible circular locking dependency detected
->>> 6.0.0-rc1-00083-ge5c9d117223e #12945 Not tainted
->>> ------------------------------------------------------
->>> swapper/0/1 is trying to acquire lock:
->>> c1ce66b0 (&data->lock#2){+.+.}-{3:3}, at: exynos_get_temp+0x3c/0xc8
->>>
->>> but task is already holding lock:
->>> c2979b94 (&tz->lock){+.+.}-{3:3}, at:
->>> thermal_zone_device_update.part.0+0x3c/0x528
->>>
->>> which lock already depends on the new lock.
->>
->> I'm wondering if the problem is not already there and related to 
->> data->lock ...
->>
->> Doesn't the thermal zone lock already prevent racy access to the data 
->> structure?
->>
->> Another question: if the sensor clock is disabled after reading it, 
->> how does the hardware update the temperature and detect the programed 
->> threshold is crossed?
->
-> just a gentle ping, as the fix will depend on your answer ;)
->
-Sorry, I've been busy with other stuff. I thought I will fix this once I 
-find a bit of spare time.
+Hi Hal,
 
-IMHO the clock management is a bit over-engineered, as there is little 
-(if any) benefit from such fine grade clock management. That clock is 
-needed only for the AHB related part of the TMU (reading/writing the 
-registers). The IRQ generation and temperature measurement is clocked 
-from so called 'sclk' (special clock).
+Firstly thanks for working on this! And sorry about the late reply. On
+the next version could you please cc
+emil.renner.berthing@canonical.com since it seems to handle the
+mailing list a bit better.
 
-I also briefly looked at the code and the internal lock doesn't look to 
-be really necessary assuming that the thermal core already serializes 
-all the calls.
+I see you've changed the clock/reset and pinctrl quite a bit, so I'll
+comment on that separately.
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+/Emil
 
+> Emil Renner Berthing (17):
+>   dt-bindings: riscv: Add StarFive JH7110 bindings
+>   dt-bindings: timer: Add StarFive JH7110 clint
+>   dt-bindings: interrupt-controller: Add StarFive JH7110 plic
+>   dt-bindings: sifive-l2-cache: Support StarFive JH71x0 SoCs
+>   soc: sifive: l2 cache: Convert to platform driver
+>   soc: sifive: l2 cache: Add StarFive JH71x0 support
+>   reset: starfive: jh7100: Use 32bit I/O on 32bit registers
+>   dt-bindings: reset: Add StarFive JH7110 reset definitions
+>   clk: starfive: Factor out common clock driver code
+>   dt-bindings: clock: Add StarFive JH7110 system clock definitions
+>   dt-bindings: clock: Add starfive,jh7110-clkgen-sys bindings
+>   clk: starfive: Add StarFive JH7110 system clock driver
+>   dt-bindings: clock: Add StarFive JH7110 always-on definitions
+>   dt-bindings: clock: Add starfive,jh7110-clkgen-aon bindings
+>   clk: starfive: Add StarFive JH7110 always-on clock driver
+>   RISC-V: Add initial StarFive JH7110 device tree
+>   RISC-V: Add StarFive JH7110 VisionFive2 board device tree
+>
+> Hal Feng (8):
+>   reset: starfive: jh7100: Use regmap APIs to operate registers
+>   reset: starfive: jh7100: Move necessary properties to device tree
+>   reset: starfive: Rename 'reset-starfive-jh7100.c' to
+>     'reset-starfive.c'
+>   dt-bindings: reset: Add starfive,jh7110-reset bindings
+>   reset: starfive: Add StarFive JH7110 SoC support
+>   clk: starfive: Use regmap APIs to operate registers
+>   RISC-V: defconfig: Enable CONFIG_SERIAL_8250_DW
+>   RISC-V: Add StarFive JH7100 and JH7110 SoC Kconfig options
+>
+> Jianlong Huang (5):
+>   pinctrl: Create subdirectory for StarFive drivers
+>   pinctrl: starfive: Rename "pinctrl-starfive" to
+>     "pinctrl-starfive-jh7100"
+>   dt-bindings: pinctrl: Add StarFive JH7110 pinctrl definitions
+>   dt-bindings: pinctrl: Add StarFive JH7110 pinctrl bindings
+>   pinctrl: starfive: Add StarFive JH7110 driver
+>
+>  .../clock/starfive,jh7110-clkgen-aon.yaml     |  62 ++
+>  .../clock/starfive,jh7110-clkgen-sys.yaml     |  69 ++
+>  .../sifive,plic-1.0.0.yaml                    |   1 +
+>  .../pinctrl/starfive,jh7100-pinctrl.yaml      |   2 +-
+>  .../pinctrl/starfive,jh7110-pinctrl.yaml      | 202 ++++
+>  .../bindings/reset/starfive,jh7100-reset.yaml |  20 +
+>  .../bindings/reset/starfive,jh7110-reset.yaml |  54 +
+>  .../bindings/riscv/sifive-l2-cache.yaml       |   4 +
+>  .../devicetree/bindings/riscv/starfive.yaml   |   3 +
+>  .../bindings/timer/sifive,clint.yaml          |   1 +
+>  MAINTAINERS                                   |  27 +-
+>  arch/riscv/Kconfig.socs                       |  28 +-
+>  arch/riscv/boot/dts/starfive/Makefile         |   3 +-
+>  .../dts/starfive/jh7100-beaglev-starlight.dts |   2 +-
+>  arch/riscv/boot/dts/starfive/jh7100.dtsi      |   3 +
+>  .../jh7110-starfive-visionfive-v2.dts         |  91 ++
+>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 449 +++++++++
+>  arch/riscv/configs/defconfig                  |   1 +
+>  drivers/clk/starfive/Kconfig                  |  29 +-
+>  drivers/clk/starfive/Makefile                 |   6 +-
+>  .../clk/starfive/clk-starfive-jh7100-audio.c  | 138 +--
+>  drivers/clk/starfive/clk-starfive-jh7100.c    | 836 +++++-----------
+>  drivers/clk/starfive/clk-starfive-jh7100.h    | 112 ---
+>  .../clk/starfive/clk-starfive-jh7110-aon.c    | 161 +++
+>  .../clk/starfive/clk-starfive-jh7110-sys.c    | 648 ++++++++++++
+>  drivers/clk/starfive/clk-starfive.c           | 349 +++++++
+>  drivers/clk/starfive/clk-starfive.h           | 112 +++
+>  drivers/pinctrl/Kconfig                       |  18 +-
+>  drivers/pinctrl/Makefile                      |   2 +-
+>  drivers/pinctrl/starfive/Kconfig              |  37 +
+>  drivers/pinctrl/starfive/Makefile             |   8 +
+>  drivers/pinctrl/starfive/pinctrl-jh7110-aon.c | 718 ++++++++++++++
+>  drivers/pinctrl/starfive/pinctrl-jh7110-sys.c | 925 +++++++++++++++++
+>  .../pinctrl-starfive-jh7100.c}                |  10 +-
+>  drivers/pinctrl/starfive/pinctrl-starfive.c   | 539 ++++++++++
+>  drivers/pinctrl/starfive/pinctrl-starfive.h   | 131 +++
+>  drivers/reset/Kconfig                         |   7 +-
+>  drivers/reset/Makefile                        |   2 +-
+>  drivers/reset/reset-starfive-jh7100.c         | 173 ----
+>  drivers/reset/reset-starfive.c                | 218 ++++
+>  drivers/soc/Makefile                          |   2 +-
+>  drivers/soc/sifive/Kconfig                    |   2 +-
+>  drivers/soc/sifive/sifive_l2_cache.c          |  86 +-
+>  .../dt-bindings/clock/starfive-jh7110-aon.h   |  26 +
+>  .../dt-bindings/clock/starfive-jh7110-sys.h   | 215 ++++
+>  ...l-starfive.h => pinctrl-starfive-jh7100.h} |   6 +-
+>  .../pinctrl/pinctrl-starfive-jh7110.h         | 931 ++++++++++++++++++
+>  include/dt-bindings/reset/starfive-jh7110.h   | 154 +++
+>  48 files changed, 6604 insertions(+), 1019 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-clkgen-aon.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-clkgen-sys.yaml
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/starfive,jh7110-pinctrl.yaml
+>  create mode 100644 Documentation/devicetree/bindings/reset/starfive,jh7110-reset.yaml
+>  create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
+>  create mode 100644 arch/riscv/boot/dts/starfive/jh7110.dtsi
+>  delete mode 100644 drivers/clk/starfive/clk-starfive-jh7100.h
+>  create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-aon.c
+>  create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-sys.c
+>  create mode 100644 drivers/clk/starfive/clk-starfive.c
+>  create mode 100644 drivers/clk/starfive/clk-starfive.h
+>  create mode 100644 drivers/pinctrl/starfive/Kconfig
+>  create mode 100644 drivers/pinctrl/starfive/Makefile
+>  create mode 100644 drivers/pinctrl/starfive/pinctrl-jh7110-aon.c
+>  create mode 100644 drivers/pinctrl/starfive/pinctrl-jh7110-sys.c
+>  rename drivers/pinctrl/{pinctrl-starfive.c => starfive/pinctrl-starfive-jh7100.c} (99%)
+>  create mode 100644 drivers/pinctrl/starfive/pinctrl-starfive.c
+>  create mode 100644 drivers/pinctrl/starfive/pinctrl-starfive.h
+>  delete mode 100644 drivers/reset/reset-starfive-jh7100.c
+>  create mode 100644 drivers/reset/reset-starfive.c
+>  create mode 100644 include/dt-bindings/clock/starfive-jh7110-aon.h
+>  create mode 100644 include/dt-bindings/clock/starfive-jh7110-sys.h
+>  rename include/dt-bindings/pinctrl/{pinctrl-starfive.h => pinctrl-starfive-jh7100.h} (98%)
+>  create mode 100644 include/dt-bindings/pinctrl/pinctrl-starfive-jh7110.h
+>  create mode 100644 include/dt-bindings/reset/starfive-jh7110.h
+>
+> --
+> 2.17.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
