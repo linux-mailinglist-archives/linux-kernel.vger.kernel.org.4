@@ -2,107 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5A95F56A3
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 16:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4865F56AB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 16:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiJEOoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 10:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55066 "EHLO
+        id S230092AbiJEOr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 10:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiJEOoB (ORCPT
+        with ESMTP id S229815AbiJEOr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 10:44:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861234DF38
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 07:44:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664981039;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0NQQ894rf2uw+GLiaTPriKMLBx+dfQpucYnsDWrJcYY=;
-        b=UniUVd180YKQL2pAIuKUOunEMlBx54rpTteWouSf6SasCyFwpweHkmTmUvCvS3jblkwmow
-        FhwloAfo/3Y8lfiF3QuKh0Hc4Dh88Jyy/WbVxI9pzSTkBTKFY+t7lpsaO1Hwj8e6O3gdlt
-        GAP4dDH6mL9uLsNuEtsksnfbAzi5iMA=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-99-EcBJAY3YP8O-kz3vkvaD3w-1; Wed, 05 Oct 2022 10:43:58 -0400
-X-MC-Unique: EcBJAY3YP8O-kz3vkvaD3w-1
-Received: by mail-qk1-f200.google.com with SMTP id w10-20020a05620a444a00b006ce9917ea1fso14403678qkp.16
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 07:43:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=0NQQ894rf2uw+GLiaTPriKMLBx+dfQpucYnsDWrJcYY=;
-        b=qWPL8WiIYJFCtPSo7dCxPOrMtQ4rwMf6Uaz66A69YvdwsHiJqt23+uzLozNIO6THzI
-         nNq1vaE7/8Q/aSA9Jlt6YLyGJwFmaron20gWQZs0fEEFAoXueFbKb7m/hxXTnCG9Il4C
-         3RbJ0Pec53AfyNCdO87y0anhMsauBCkQK6Z1OxRlmpwGR4ladJPzSdE/2b+bfslr+25b
-         sOuSb/eDZ2cVElJxMvac/h2G7u6Q4NnB7Kpy1VZShiOj9qWdKLBsZxiMpcGBYcl3S9rx
-         cqB9A1g058wduECQ4eX3bNyVaLsM4UvpL93bc4VA9O4wczwaz+99pzqj4YZDaZmDeiFQ
-         uwOA==
-X-Gm-Message-State: ACrzQf0AzMlIEjat93UbJh+lbunVcDk8zBVTKKjgZLMN7ZnTzPKp2wbj
-        tU5YMJUQcmKU4rCnjhkpYpvVR+5iTMAUL1zd66vQp9Fb2JI6nzM/SZlRpH2NZgsRNxDf1QiNMZd
-        VjKnWNf072ExhS53VKX7Pv6dL
-X-Received: by 2002:ac8:5b50:0:b0:35c:eb1f:67d9 with SMTP id n16-20020ac85b50000000b0035ceb1f67d9mr24186292qtw.235.1664981037711;
-        Wed, 05 Oct 2022 07:43:57 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5gBvGqnQ+9ASkMwEbWktnRvo+U9lRBOhofGT3FAWSNEjItybeyyumt+96Ti1ByplluThVc8A==
-X-Received: by 2002:ac8:5b50:0:b0:35c:eb1f:67d9 with SMTP id n16-20020ac85b50000000b0035ceb1f67d9mr24186276qtw.235.1664981037503;
-        Wed, 05 Oct 2022 07:43:57 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id f7-20020a05620a280700b006be8713f742sm17319447qkp.38.2022.10.05.07.43.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 07:43:56 -0700 (PDT)
-Date:   Wed, 5 Oct 2022 10:43:55 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: Re: [PATCH 1/4] selftests/vm: Use memfd for hugetlb tests
-Message-ID: <Yz2YK83Vejc+QIez@x1n>
-References: <20221004214125.120993-1-peterx@redhat.com>
- <20221004214125.120993-2-peterx@redhat.com>
- <CAJHvVchRHhQDug1Zf6ygdnz96Dn4tBkPpB5fO3g2EDpxFcwP+A@mail.gmail.com>
+        Wed, 5 Oct 2022 10:47:27 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553887822A;
+        Wed,  5 Oct 2022 07:47:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664981246; x=1696517246;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dNQBsbtOaMCABt+PbDrwoClydLLiJCNOgq0glzVcLcs=;
+  b=DoWiCKfYJLDo9rOZCVhI8KFcFxjPBx/Pg3wV4eDZcnatebYyKVGYg31w
+   I5PO+3ctrIOFJU/uXubTSBww4MrYpZKCofQ8CVW9Bn5mG1qIl36xh4JCF
+   Cab3TV0Dwj0iZeH/gte0RcQRZATKW8TsP8zN9I0lzHhcK2TpSB7JijK9O
+   NoohXZkAnOC0l3uOBy+LiRP+Jk3p2lsCMrmTYzPaYwFnS8TFFaK1TWbeo
+   PhKOjm578N0KIjIMAJrquYFHQvCLx3Nu49VmLOnd/z/iXNj936mQcKNYJ
+   oS73ut92oA0yxABFpNl+VvnQ7zo05uThL7P7++Y0bEr5A4EQaQoIpPSAw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="282891911"
+X-IronPort-AV: E=Sophos;i="5.95,161,1661842800"; 
+   d="scan'208";a="282891911"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 07:47:26 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="766747457"
+X-IronPort-AV: E=Sophos;i="5.95,161,1661842800"; 
+   d="scan'208";a="766747457"
+Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.241.167]) ([10.99.241.167])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 07:47:23 -0700
+Message-ID: <cd3918c8-64c2-fc8f-c184-3fec3ae01e3c@linux.intel.com>
+Date:   Wed, 5 Oct 2022 16:47:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJHvVchRHhQDug1Zf6ygdnz96Dn4tBkPpB5fO3g2EDpxFcwP+A@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v2 2/4] ALSA: hda: Rework snd_hdac_stream_reset() to use
+ macros
+Content-Language: en-US
+To:     Jon Hunter <jonathanh@nvidia.com>, Takashi Iwai <tiwai@suse.de>
+Cc:     alsa-devel@alsa-project.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Mohan Kumar D <mkumard@nvidia.com>
+References: <20220818141517.109280-1-amadeuszx.slawinski@linux.intel.com>
+ <20220818141517.109280-3-amadeuszx.slawinski@linux.intel.com>
+ <657d2418-0c3e-296f-8f4a-dc10ced2dffe@nvidia.com>
+ <87a66av4gk.wl-tiwai@suse.de>
+ <9677f39a-5297-bb1c-d4e3-62484ec1cf25@nvidia.com>
+ <87lepugy85.wl-tiwai@suse.de>
+ <d2772c7b-bea9-e3bd-3b6b-c657566649d8@nvidia.com>
+From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <d2772c7b-bea9-e3bd-3b6b-c657566649d8@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 03:04:23PM -0700, Axel Rasmussen wrote:
-> We should also update the examples / help text near the top of the
-> file, since we're changing what arguments this accepts.
-
-Definitely, I missed that.
-
+On 10/5/2022 4:26 PM, Jon Hunter wrote:
 > 
-> It might also be better to squash the changes to test arguments in
-> run_vmtests.sh into each patch, so if we're bisecting we'll have a
-> matching / working test + run_vmtests.sh combo at each commit.
-
-I can do that, but may not be required - note that I did the first three
-patches just to make sure they're still compatible with the old cmdlines,
-by ignoring the extra params.
-
-[...]
-
-> This is a nice simplification! Thanks for doing it. Besides the
-> comments above, the rest of the code here looks correct to me. Feel
-> free to take:
 > 
-> Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
+> On 05/10/2022 15:07, Takashi Iwai wrote:
+>> On Wed, 05 Oct 2022 15:52:01 +0200,
+>> Jon Hunter wrote:
+>>>
+>>>
+>>> On 05/10/2022 13:29, Takashi Iwai wrote:
+>>>
+>>> ...
+>>>
+>>>>> HDA playback is failing on -next for various Tegra boards. Bisect is
+>>>>> point to this commit and reverting it fixes the problem. I was a bit
+>>>>> puzzled why this change is causing a problem, but looking closer there
+>>>>> is a difference between the previous code that was calling
+>>>>> snd_hdac_stream_readb() and the new code that is calling
+>>>>> snd_hdac_stream_readb_poll(). The function snd_hdac_stream_readb()
+>>>>> calls snd_hdac_aligned_mmio() is see if the device has an aligned MMIO
+>>>>> which Tegra does and then would call snd_hdac_aligned_read(). However,
+>>>>> now the code always call readb() and this is breaking Tegra.
+>>>>>
+>>>>> So it is either necessary to update snd_hdac_stream_readb_poll() to
+>>>>> handle this or revert this change.
+>>>>
+>>>> Does the patch below work?
+>>>>
+>>>>
+>>>> thanks,
+>>>>
+>>>> Takashi
+>>>>
+>>>> -- 8< --
+>>>> --- a/include/sound/hdaudio.h
+>>>> +++ b/include/sound/hdaudio.h
+>>>> @@ -592,8 +592,8 @@ int snd_hdac_get_stream_stripe_ctl(struct 
+>>>> hdac_bus *bus,
+>>>>    #define snd_hdac_stream_readb(dev, reg) \
+>>>>        snd_hdac_reg_readb((dev)->bus, (dev)->sd_addr + AZX_REG_ ## reg)
+>>>>    #define snd_hdac_stream_readb_poll(dev, reg, val, cond, delay_us, 
+>>>> timeout_us) \
+>>>> -    readb_poll_timeout((dev)->sd_addr + AZX_REG_ ## reg, val, cond, \
+>>>> -               delay_us, timeout_us)
+>>>> +    read_poll_timeout(snd_hdac_reg_readb, val, cond, delay_us, 
+>>>> timeout_us,\
+>>>> +              false, (dev)->bus, (dev)->sd_addr + AZX_REG_ ## reg)
+>>>>    #define snd_hdac_stream_readl_poll(dev, reg, val, cond, delay_us, 
+>>>> timeout_us) \
+>>>>        readl_poll_timeout((dev)->sd_addr + AZX_REG_ ## reg, val, 
+>>>> cond, \
+>>>>                   delay_us, timeout_us)
+>>>
+>>>
+>>> Amazingly it does not work. I would have thought that would, but it
+>>> does not. I am a bit puzzled by that?
+>>
+>> Interesting, it must be a subtle difference.
+>> What about passing true?  It seems that the original code has the
+>> udelay(3) before the loop.
+> 
+> 
+> I wondered the same and tried that, but still not working.
+> 
+> Jon
+> 
 
-Thanks!
+Well in worse case we can revert the patch in question, but I would like 
+to get it working...
 
--- 
-Peter Xu
+Maybe also try to raise timeout to 1000, as what original code called 
+timeout, was actually number of retries? So 300 * udelay(3) which is 
+more or less 900us, so we can round it up for test?
+
+I mean, something like:
+
+--- a/sound/hda/hdac_stream.c
++++ b/sound/hda/hdac_stream.c
+@@ -176,7 +176,7 @@ void snd_hdac_stream_reset(struct hdac_stream *azx_dev)
+         snd_hdac_stream_updateb(azx_dev, SD_CTL, 0, SD_CTL_STREAM_RESET);
+
+         /* wait for hardware to report that the stream entered reset */
+-       snd_hdac_stream_readb_poll(azx_dev, SD_CTL, val, (val & 
+SD_CTL_STREAM_RESET), 3, 300);
++       snd_hdac_stream_readb_poll(azx_dev, SD_CTL, val, (val & 
+SD_CTL_STREAM_RESET), 3, 1000);
+
+         if (azx_dev->bus->dma_stop_delay && dma_run_state)
+                 udelay(azx_dev->bus->dma_stop_delay);
+@@ -184,7 +184,7 @@ void snd_hdac_stream_reset(struct hdac_stream *azx_dev)
+         snd_hdac_stream_updateb(azx_dev, SD_CTL, SD_CTL_STREAM_RESET, 0);
+
+         /* wait for hardware to report that the stream is out of reset */
+-       snd_hdac_stream_readb_poll(azx_dev, SD_CTL, val, !(val & 
+SD_CTL_STREAM_RESET), 3, 300);
++       snd_hdac_stream_readb_poll(azx_dev, SD_CTL, val, !(val & 
+SD_CTL_STREAM_RESET), 3, 1000);
+
+         /* reset first position - may not be synced with hw at this time */
+         if (azx_dev->posbuf)
+
+
+in addition to Takashi suggestion?
 
