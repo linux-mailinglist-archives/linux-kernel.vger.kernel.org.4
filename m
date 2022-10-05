@@ -2,46 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC9575F4F6D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 07:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 378AB5F4F70
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 07:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbiJEFRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 01:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
+        id S229853AbiJEFRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 01:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiJEFRG (ORCPT
+        with ESMTP id S229689AbiJEFRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 01:17:06 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B0B65646;
-        Tue,  4 Oct 2022 22:17:04 -0700 (PDT)
-Date:   Wed, 5 Oct 2022 13:16:40 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1664947022;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HMw2Iw480ZzNMI8qHj9tphsVypzxrxUENeARfx54heE=;
-        b=SqvWc7BZLTD9AzFkq90NZslH1RgeH7bJlK7DDTMJjYMqaI9W48gfgaCpuz/RI2nbjY5W4e
-        4hLdMu06Nv4rTlb7RJBsQU9+HBjj0pAwDWCTpNq8qnluAt32Ih8sLEVgGfQyJs2TI6mPAz
-        FUYAAvQ+p+fbQQfz7C6phW581+hbu4o=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Wu XiangCheng <wu.xiangcheng@linux.dev>
-To:     Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>
-Cc:     Jonathan Corbet <corbet@lwn.net>, chenhuacai@kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] docs/zh_CN: Rewrite the Chinsese translation front page
-Message-ID: <e64d0166c44f7e73e4be214e23b2c3142ae91e38.1664945550.git.bobwxc@email.cn>
-References: <cover.1664945550.git.bobwxc@email.cn>
+        Wed, 5 Oct 2022 01:17:46 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068CC66A68;
+        Tue,  4 Oct 2022 22:17:44 -0700 (PDT)
+Received: from [192.168.10.9] (unknown [39.45.36.108])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4B77B66022AB;
+        Wed,  5 Oct 2022 06:17:41 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1664947063;
+        bh=Addv98tABUtrkD/Cgnp+ahnU5GCS4OSD2Wq6YkM6lXw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=G6yezMwaGIsWK6qDr+RtFaaTZLyc75nn9QOHRd3Yf6pHvsol9rAZcBLfdTpUT82Pv
+         IYY4pfb9a/jAvaBXuY0kGlz49M+Ow0um46SAWm7HZtMEw7EfdJD6qaZMs4RZddO+5R
+         ABCLgqAi7v+awY4eMVzCRBHQb0EV7FYyy8HMbOYt3KGmQv+Lx0aeFswmM4VthwGfcT
+         06wSeYjgIZuKXb+QF0CM2eXhde3QJB995b1Ss/8RxdqZE+bmGA1coQMTeuXLX6npWd
+         bT7I/sHJhj307G5g7ER643GL70sFFwY3lIic5Gwr15vopov22Sz0HoYTVVHaUsg6yi
+         8qA1fNTpyKkpg==
+Message-ID: <1f5c25d6-ca8f-1e6d-b451-9f9074056cb0@collabora.com>
+Date:   Wed, 5 Oct 2022 10:17:36 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1664945550.git.bobwxc@email.cn>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 2/2] cifs: check returned value for error
+Content-Language: en-US
+To:     Paulo Alcantara <pc@cjr.nz>, Steve French <sfrench@samba.org>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>
+Cc:     kernel@collabora.com, kernel-janitors@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-kernel@vger.kernel.org
+References: <20221004062333.416225-1-usama.anjum@collabora.com>
+ <20221004062333.416225-2-usama.anjum@collabora.com> <87lepv4dm3.fsf@cjr.nz>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <87lepv4dm3.fsf@cjr.nz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,250 +61,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wu XiangCheng <bobwxc@email.cn>
+On 10/5/22 12:01 AM, Paulo Alcantara wrote:
+> Muhammad Usama Anjum <usama.anjum@collabora.com> writes:
+> 
+>> smb311_decode_neg_context() can return error. Its return value should be
+>> checked for errors.
+>>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>>   fs/cifs/smb2pdu.c | 7 +++++--
+>>   1 file changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
+>> index 2bf43c892ae6..c6e37352dbe1 100644
+> 
+> This patch doesn't apply in Steve's for-next branch[1].  If it still
+> makes sense, please rebase and resend.
+> 
+> [1] git://git.samba.org/sfrench/cifs-2.6.git
+I've just applied on the latest next next-20221004 tag. This patch 
+doesn't apply. It seems some other patch has merged and this patch isn't 
+needed.
 
-update to commit 0c7b4366f1ab ("docs: Rewrite the front page")
-
-Signed-off-by: Wu XiangCheng <bobwxc@email.cn>
----
- Documentation/translations/zh_CN/index.rst | 169 +++++++--------------
- 1 file changed, 51 insertions(+), 118 deletions(-)
-
-diff --git a/Documentation/translations/zh_CN/index.rst b/Documentation/translations/zh_CN/index.rst
-index 2fc60e60feb4..7be728bed46d 100644
---- a/Documentation/translations/zh_CN/index.rst
-+++ b/Documentation/translations/zh_CN/index.rst
-@@ -26,165 +26,98 @@
- 顺便说下，中文文档也需要遵守内核编码风格，风格中中文和英文的主要不同就是中文
- 的字符标点占用两个英文字符宽度， 所以，当英文要求不要超过每行100个字符时，
- 中文就不要超过50个字符。另外，也要注意'-'，'=' 等符号与相关标题的对齐。在将
--补丁提交到社区之前，一定要进行必要的checkpatch.pl检查和编译测试。
-+补丁提交到社区之前，一定要进行必要的 ``checkpatch.pl`` 检查和编译测试。
- 
--许可证文档
------------
--
--下面的文档介绍了Linux内核源代码的许可证（GPLv2）、如何在源代码树中正确标记
--单个文件的许可证、以及指向完整许可证文本的链接。
-+与Linux 内核社区一起工作
-+------------------------
- 
--* Documentation/translations/zh_CN/process/license-rules.rst
--
--用户文档
----------
--
--下面的手册是为内核用户编写的——即那些试图让它在给定系统上以最佳方式工作的
--用户。
-+与内核开发社区进行协作并将工作推向上游的基本指南。
- 
- .. toctree::
--   :maxdepth: 2
-+   :maxdepth: 1
- 
--   admin-guide/index
--
--TODOList:
--
--* kbuild/index
-+   process/development-process
-+   process/submitting-patches
-+   行为准则 <process/code-of-conduct>
-+   maintainer/index
-+   完整开发流程文档 <process/index>
- 
--固件相关文档
--------------
-+内部API文档
-+-----------
- 
--下列文档描述了内核需要的平台固件相关信息。
-+开发人员使用的内核内部交互接口手册。
- 
- .. toctree::
--   :maxdepth: 2
-+   :maxdepth: 1
- 
--   devicetree/index
-+   core-api/index
-+   driver-api/index
-+   内核中的锁 <locking/index>
- 
- TODOList:
- 
--* firmware-guide/index
--
--应用程序开发人员文档
----------------------
--
--用户空间API手册涵盖了描述应用程序开发人员可见内核接口方面的文档。
--
--TODOlist:
--
--* userspace-api/index
-+* subsystem-apis
- 
--内核开发简介
--------------
-+开发工具和流程
-+--------------
- 
--这些手册包含有关如何开发内核的整体信息。内核社区非常庞大，一年下来有数千名
--开发人员做出贡献。与任何大型社区一样，知道如何完成任务将使得更改合并的过程
--变得更加容易。
-+为所有内核开发人员提供有用信息的各种其他手册。
- 
- .. toctree::
--   :maxdepth: 2
-+   :maxdepth: 1
- 
--   process/index
--   dev-tools/index
-+   process/license-rules
-    doc-guide/index
-+   dev-tools/index
-+   dev-tools/testing-overview
-    kernel-hacking/index
--   maintainer/index
- 
- TODOList:
- 
- * trace/index
- * fault-injection/index
- * livepatch/index
--* rust/index
- 
--内核API文档
-------------
-+面向用户的文档
-+--------------
- 
--以下手册从内核开发人员的角度详细介绍了特定的内核子系统是如何工作的。这里的
--大部分信息都是直接从内核源代码获取的，并根据需要添加补充材料（或者至少是在
--我们设法添加的时候——可能不是所有的都是有需要的）。
-+下列手册针对
-+希望内核在给定系统上以最佳方式工作的*用户*，
-+和查找内核用户空间API信息的程序开发人员。
- 
- .. toctree::
--   :maxdepth: 2
-+   :maxdepth: 1
- 
--   core-api/index
--   driver-api/index
--   locking/index
--   accounting/index
--   cpu-freq/index
--   iio/index
--   infiniband/index
--   power/index
--   virt/index
--   sound/index
--   filesystems/index
--   scheduler/index
--   mm/index
--   peci/index
--   PCI/index
-+   admin-guide/index
-+   admin-guide/reporting-issues.rst
- 
- TODOList:
- 
--* block/index
--* cdrom/index
--* ide/index
--* fb/index
--* fpga/index
--* hid/index
--* i2c/index
--* isdn/index
--* leds/index
--* netlabel/index
--* networking/index
--* pcmcia/index
--* target/index
--* timers/index
--* spi/index
--* w1/index
--* watchdog/index
--* input/index
--* hwmon/index
--* gpu/index
--* security/index
--* crypto/index
--* bpf/index
--* usb/index
--* scsi/index
--* misc-devices/index
--* mhi/index
--
--体系结构无关文档
------------------
--
--TODOList:
-+* 内核构建系统 <kbuild/index>
-+* 用户空间工具 <tools/index>
-+* userspace-api/index
- 
--* asm-annotations
-+固件相关文档
-+------------
- 
--特定体系结构文档
------------------
-+下列文档描述了内核需要的平台固件相关信息。
- 
- .. toctree::
-    :maxdepth: 2
- 
--   mips/index
--   arm64/index
--   riscv/index
--   openrisc/index
--   parisc/index
--   loongarch/index
-+   devicetree/index
- 
- TODOList:
- 
--* arm/index
--* ia64/index
--* m68k/index
--* nios2/index
--* powerpc/index
--* s390/index
--* sh/index
--* sparc/index
--* x86/index
--* xtensa/index
-+* firmware-guide/index
-+
-+体系结构文档
-+------------
-+
-+.. toctree::
-+   :maxdepth: 2
-+
-+   arch
- 
- 其他文档
- --------
-@@ -195,9 +128,9 @@ TODOList:
- TODOList:
- 
- * staging/index
--* watch_queue
- 
--目录和表格
-+
-+索引和表格
- ----------
- 
- * :ref:`genindex`
--- 
-2.30.2
-
-
--- 
-Wu XiangCheng	0x32684A40BCA7AEA7
-
+Can you apply only the first patch "[PATCH 1/2] cifs: remove 
+initialization value" from this series? Or should I send that only as v2?
