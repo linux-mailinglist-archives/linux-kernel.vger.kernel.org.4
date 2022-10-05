@@ -2,72 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F4F5F5CC5
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 00:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 411DC5F5CCE
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 00:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiJEWgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 18:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48240 "EHLO
+        id S229680AbiJEWj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 18:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiJEWgw (ORCPT
+        with ESMTP id S229646AbiJEWj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 18:36:52 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800036068D;
-        Wed,  5 Oct 2022 15:36:51 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id z23so686745ejw.12;
-        Wed, 05 Oct 2022 15:36:51 -0700 (PDT)
+        Wed, 5 Oct 2022 18:39:56 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75AE12D0C
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 15:39:54 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-12c8312131fso321276fac.4
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 15:39:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5IDa4zO8fjCrFtrwiC0X35h30/CNk4qiLrUvMAkxVAs=;
-        b=bm30/cArbm6oXF4zz1/TtHAWlji0iXVLwmqbQ8S+eX+WoOj3CAuuIz6pZTPsG/T+x8
-         tQuWs0gvBC5SG/yfefFxVY2DB4LqAzzAd3/kN3emfJiPT5otMXw6F8Hnsig2FHnJaswi
-         xyU6sVIQ9t48MFF1pB5zpnyNuo7f/Wo9gQ06BgxfSzrZoPS2PIzQIvz5rH2Hj7CZltvw
-         EE1cHiLJW3Nx55kuMDHjzlm9+iSe749VmzE7X20P54yDycBMuaOEnnipVWFVMwzetjq3
-         AKlp0g8DBThkQM/uQSi27PJN7F3IdQi14TUpoO/hPCY/hN+X3QmV/7eRYIMax/s3LrUe
-         Xb2g==
+         :mime-version:from:to:cc:subject:date;
+        bh=7/IEhAoDkrzzX8X0U3ubIc7ql44z59RBqzANu2Z5Uf0=;
+        b=kZ23b8E7E6/0FLR94upG7egESjzi3A1tyWH40/a3UzVA1adzmBn18Dczn8uaxvuKCl
+         Tr/HaGWe+RPW+BXG7sX14nJg/D1KRz0nKztxkwZbiC3RHZlEJa+4QEfA+8Xptm+YcDsb
+         YSPidZ/h7S49vbmAt5BBra97njX2wVHj2jDIXrjIaQExOO3Iii6dQ1B8YYqQiGKKvWWz
+         2T+Zcbdco8UaftMSpx6qbmGvgGxKvU9qApbz0VU52uZg41EzPl4GEnzHOs25lhXI2jn9
+         n+0FsmAm4RIm+Yoa93PmnrUqhXVcrie44VIuZgQIR0RtZ3r81CrDmSvC98bxfjp68XJI
+         Axuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5IDa4zO8fjCrFtrwiC0X35h30/CNk4qiLrUvMAkxVAs=;
-        b=qzuCWCR6ngV6dgCpqns9lefekJxeUGQIBdT9Gi/VYBo99BU26YgGP2yw4y0tSF28H/
-         qpEJpZTv2SibFDKOl2UuJkT6W0ZUd90EcfSIUWjq46tHRglxqxW0fUwtAtolQSZRaiTk
-         zS0MFDpHFcZSvAv8wMPz5voM5q/cA0nFe4Aox2IxiMuqozlhClX01b4tCaGUNxl6yQgD
-         Z7e0gYXFmE58NUkqJ+j4XG+kZtIg47i3wu9+U1BGL2I1d8qCBwZyf8FxVByjThQXBOBn
-         DqmCusMBI1i71HVZK2+PNoNhxK12rtN+g8yaAT2RLuJdEdzIgUE+Rq1cDh95CcR1mdcP
-         sQvg==
-X-Gm-Message-State: ACrzQf1cvl+XHXcTCRxZkkEOhI3oqo8yuWg5mqPOxnh20YK/cGvQGajU
-        n+FZahYFaCa3+Ju89UpEmdcec49QPY7ud9l0HDg=
-X-Google-Smtp-Source: AMsMyM6/ch5wARIR0pg7YHIz3pTGEEc2KZkCtkscs8/h76CNWrKne/Is4+U0XiChE9jAPq+RWQvCYZ3IQuYcLKFMbJI=
-X-Received: by 2002:a17:906:5a4c:b0:78c:c893:74e6 with SMTP id
- my12-20020a1709065a4c00b0078cc89374e6mr1475975ejc.545.1665009409931; Wed, 05
- Oct 2022 15:36:49 -0700 (PDT)
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=7/IEhAoDkrzzX8X0U3ubIc7ql44z59RBqzANu2Z5Uf0=;
+        b=rNgeIJaos09Jadv/3IwJehqKYEZ11y63apDu6EaTEnEKrIZWE7W01E8zEL5idL5hfq
+         MA+Mfgjubn5gd14tyJOhG6vyDSplYzYD8YRfoykW+iU8Rvytl8d9aLZkztS+9DB2/wfJ
+         4lRDNp0aWvAw9eJfjIibV/YtS6yoEixWgA/LnrOET7DN0S2B9ifD3I5sO5iMpxGVRlQL
+         qU2bgnJlUZR2VUzUuqJpdQH6JS1mox9ijk/8NcZdV6szBzcv1l7T7ztxDkiibOeQn5DN
+         nmEj6Th+K5rh4Tf1zgDK/ygT9uf8dEhEQjdS5n9KWCjwDLZOffg/8j6fmf9VMV19XxJP
+         QS9Q==
+X-Gm-Message-State: ACrzQf0VgL+Rrzya8lRr28omW4hoeEKevl6Lh9f2zI3Gx3opcT6rQnpQ
+        CT9/8QgJbGNZU1h1PtA8flM9cwy2jsJz/IOEeakk
+X-Google-Smtp-Source: AMsMyM5AAhn8YgtcxdVMXOFsfKzzHCfetyAskkmbd280FHnRv2Kq5uc0B6aaAvruABfTQT9GgQ8/MZ2CUNz/QhJvBA4=
+X-Received: by 2002:a05:6870:a916:b0:131:9361:116a with SMTP id
+ eq22-20020a056870a91600b001319361116amr1042018oab.172.1665009594158; Wed, 05
+ Oct 2022 15:39:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAM9d7cjQ20a01YoZi=o-_7HT6TzR0TZgtpscKNvRrMq2yqV1Og@mail.gmail.com>
- <20220922041435.709119-1-namhyung@kernel.org> <CAEf4BzZhHYYOmNhLdrpsXSDE5kaXvgSN00X-8aAySDwAKX0RCw@mail.gmail.com>
- <CAM9d7ch8RUgf8V1hi=ccgV84XSfujuWtUKKgre8eQdGmtdiFLA@mail.gmail.com>
-In-Reply-To: <CAM9d7ch8RUgf8V1hi=ccgV84XSfujuWtUKKgre8eQdGmtdiFLA@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 5 Oct 2022 15:36:37 -0700
-Message-ID: <CAEf4Bza0dt6v8YLNvQbANH+O9E5naZZj1cc4H6j=KK9WQcym8w@mail.gmail.com>
-Subject: Re: [PATCH] perf stat: Support old kernels for bperf cgroup counting
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        cgroups <cgroups@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>, bpf <bpf@vger.kernel.org>
+References: <CAHC9VhShpEVTuogj4h74PxbEeTUNn4odo8SE6GBvb6sGUM0LHw@mail.gmail.com>
+ <87sfk3mim9.fsf@email.froward.int.ebiederm.org> <CAHk-=wiCqicQrnQPeHbDF7ECKHk_ceYzZK5dYq7y5nZTZhpB8g@mail.gmail.com>
+ <87r0zmigx6.fsf@email.froward.int.ebiederm.org> <CAHC9VhSK=oYxV=MzT7BLD3TuzQYiX0aY7h1aPb25wuRN=vPyKg@mail.gmail.com>
+ <87a66ae15h.fsf@email.froward.int.ebiederm.org> <CAHC9VhTmfRhYCJibpZ20ibH-JhVMrwbpFdCtKUz5tqFHsjLRiw@mail.gmail.com>
+ <874jwic66q.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <874jwic66q.fsf@email.froward.int.ebiederm.org>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 5 Oct 2022 18:39:43 -0400
+Message-ID: <CAHC9VhQ+WRgtrdzc_WedFM8=LMdApBDLORV56pCk_KSNkH0ugg@mail.gmail.com>
+Subject: Re: [GIT PULL] LSM patches for v6.1
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,90 +69,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 7:31 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> Hello,
->
-> On Fri, Sep 30, 2022 at 3:48 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
+On Wed, Oct 5, 2022 at 5:28 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> Paul Moore <paul@paul-moore.com> writes:
+> > On Wed, Oct 5, 2022 at 11:33 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> >> Paul Moore <paul@paul-moore.com> writes:
+> >> > On Wed, Oct 5, 2022 at 8:39 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> >> >> Linus Torvalds <torvalds@linux-foundation.org> writes:
 > >
-> > On Wed, Sep 21, 2022 at 9:21 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> > >
-> > > The recent change in the cgroup will break the backward compatiblity in
-> > > the BPF program.  It should support both old and new kernels using BPF
-> > > CO-RE technique.
-> > >
-> > > Like the task_struct->__state handling in the offcpu analysis, we can
-> > > check the field name in the cgroup struct.
-> > >
-> > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > > ---
-> > > Arnaldo, I think this should go through the cgroup tree since it depends
-> > > on the earlier change there.  I don't think it'd conflict with other
-> > > perf changes but please let me know if you see any trouble, thanks!
-> > >
-> > >  tools/perf/util/bpf_skel/bperf_cgroup.bpf.c | 29 ++++++++++++++++++++-
-> > >  1 file changed, 28 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > > index 488bd398f01d..4fe61043de04 100644
-> > > --- a/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > > +++ b/tools/perf/util/bpf_skel/bperf_cgroup.bpf.c
-> > > @@ -43,12 +43,39 @@ struct {
-> > >         __uint(value_size, sizeof(struct bpf_perf_event_value));
-> > >  } cgrp_readings SEC(".maps");
-> > >
-> > > +/* new kernel cgroup definition */
-> > > +struct cgroup___new {
-> > > +       int level;
-> > > +       struct cgroup *ancestors[];
-> > > +} __attribute__((preserve_access_index));
-> > > +
-> > > +/* old kernel cgroup definition */
-> > > +struct cgroup___old {
-> > > +       int level;
-> > > +       u64 ancestor_ids[];
-> > > +} __attribute__((preserve_access_index));
-> > > +
-> > >  const volatile __u32 num_events = 1;
-> > >  const volatile __u32 num_cpus = 1;
-> > >
-> > >  int enabled = 0;
-> > >  int use_cgroup_v2 = 0;
-> > >
-> > > +static inline __u64 get_cgroup_v1_ancestor_id(struct cgroup *cgrp, int level)
-> > > +{
-> > > +       /* recast pointer to capture new type for compiler */
-> > > +       struct cgroup___new *cgrp_new = (void *)cgrp;
-> > > +
-> > > +       if (bpf_core_field_exists(cgrp_new->ancestors)) {
-> > > +               return BPF_CORE_READ(cgrp_new, ancestors[level], kn, id);
+> > ...
 > >
-> > have you checked generated BPF code for this ancestors[level] access?
-> > I'd expect CO-RE relocation for finding ancestors offset and then just
-> > normal + level * 8 arithmetic, but would be nice to confirm. Apart
-> > from this, looks good to me:
+> >> >> Effectively he said that where two or more out of tree LSM policies want
+> >> >> something it makes no sense to discussion the actual reasons people want
+> >> >> to use the hook.
+> >> >
+> >> > Runtime kernel configuration is inherently "out of tree", this
+> >> > includes not only loadable LSM security policies (e.g. a SELinux
+> >> > policy), the system's firewall configuration, things like sysctl.conf,
+> >> > and countless others.  Please understand that "out of tree" in this
+> >> > context is not the same as when it is used in the context of kernel
+> >> > code; the former is actually a positive thing ("look we can configure
+> >> > the kernel behavior the way we want!") while the latter is a
+> >> > maintenance and support nightmare.
+> >>
+> >> Paul are you saying my experience with /proc/net pointing incorrectly at
+> >> /proc/self/net instead of /proc/thread-self/net is invalid?
 > >
-> > Acked-by: Andrii Nakryiko <andrii@kernel.org>
->
-> Thanks for your review!
->
-> How can I check the generated code?  Do you have something works with
-> skeletons or do I have to save the BPF object somehow during the build?
->
+> > My comment was that runtime kernel configuration is always going to be
+> > out of tree due to its very nature, and conflating runtime
+> > configuration with kernel code is a mistake.
 
-skeleton is generated from ELF BPF object file. You can do
-llvm-objdump -d <obj.bpf.o> to see instructions. Unfortunately you
-can't see BPF CO-RE relocations this way, you'd have to use something
-like my custom tool ([0]).
+...
 
-But anyways, I checked locally similar code pattern and I think it's
-all good from BPF CO-RE perspective. I see appropriate relocations in
-all the necessary places. So this should work.
+> Given that the logic and it's bugs are going to be out of tree I do not
+> agree that we should only consider what goes into the kernel when
+> looking into that kind of code.  Instead we should treat it will all of
+> the due diligence that we attempt to use when creating a system call.
+> That very much has not happened here.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Eric, I disagree with most of what you said, to the point where we
+could probably go round and round in circles for days on this and not
+be any closer to an agreeable conclusion.  I don't know about you, but
+that is not my idea of time well spent, especially since Linus has
+already voiced his opinion on the matter.  I will end my comments here
+with the hope that someday soon you can at least find the ability to
+respect the consensus decision, even if you can't bring yourself to
+agree with it.
 
-  [0] https://github.com/anakryiko/btfdump
-
-> Thanks,
-> Namhyung
+-- 
+paul-moore.com
