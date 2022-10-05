@@ -2,129 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB7D5F5228
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 12:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 830AA5F5229
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 12:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbiJEKDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 06:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56052 "EHLO
+        id S229838AbiJEKEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 06:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiJEKDG (ORCPT
+        with ESMTP id S229508AbiJEKEH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 06:03:06 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE1E57263
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 03:03:05 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id E1D3D5803A4;
-        Wed,  5 Oct 2022 06:03:04 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Wed, 05 Oct 2022 06:03:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1664964184; x=1664967784; bh=xQyo6nLBko
-        Zet2YLUeDAAXuWflSHesnOexFMEZa12C8=; b=RQwsE8etVHm88Q8bo41BZ8+rk+
-        xdqN6LgVE8AxOc6g/EVWGbRKT7ANjnz+FBEDs10xiloutD4WRPZT6/Gv+VKFb7su
-        7eNO/xp+pw1mnOtLUE7d+Y1C6cuYCaklOfNjJckNiM1BRd+Recb/7kjNqmWdfA+9
-        Fl/tiZT9sA2GNAcFXI73t/A3u8Ci+3DXFkaOXBG20desALdpAzKXljgk0YcOLXRc
-        ZLBe2SE3z2n0ou9QN5SVH3s52Bw8St4gWtlBtOA+yskXxvLmadotBDzH2JcEYq9y
-        QqZPzmbrTsdDk4H92vqrt3o+qQ/ncml+GSBu95JS2ZpOMxOuJAt2foLflUqw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1664964184; x=1664967784; bh=xQyo6nLBkoZet2YLUeDAAXuWflSH
-        esnOexFMEZa12C8=; b=f8uGsh/0Qr3CexhkicxUQWXNOUOcKhj2PsoS85NeRWK8
-        J+At+WjRt9vUpaU0hsPXPrQqhU6NYIEeQfoCTkFU/3l787UVlFwdfhVDrvUMPdtS
-        8C6Zsgzh1O3XP7BFo0EOtQbcDLHFL0wlLWLT5UZN13Uhl+t6j9APyC8QR5BXDtj0
-        SX5XHuOXkUYkUjzomzVZWqBEf/qWQ27a8KYE/MxGrg/jxXoCqohyVvubEaxTxFrv
-        tmxEkbtVSLeGyp0evOwMwoilygrRlDL1GSEY81vb5PmloYzuRt6uZpvVN1Ih+aYt
-        sck6XVh9NL0Lx/cpYtBFcg2o9hgEXhPuPvn2V/gGug==
-X-ME-Sender: <xms:WFY9YwoZckACcG0_tOFdsuGlwiUdYVH484NDGpsF4Be4C6MiS8RTdQ>
-    <xme:WFY9Y2rBQfw1VtoiFBHoQb4iG8kSv4ylD3OqV46cUa82d5Gz9mf7_nW1n-ASuNqby
-    Zx8whEa1bKzUbmx8HU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeifedgvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueelleeifeevffejvdegtdekveffgffhfeejhefhkefhkedtvddvieel
-    jedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhithhhuhgsrdgtohhmpdhgih
-    hthhhusghushgvrhgtohhnthgvnhhtrdgtohhmnecuvehluhhsthgvrhfuihiivgeptden
-    ucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:WFY9Y1Pu3Kw6dKqOh22bFpolOsEFNXPgi_nan_1vNDeXiuyIlg-Bkw>
-    <xmx:WFY9Y353lwudfPbOA4X-dSfDjYnEaS5L6sWpBSPb33u1TlAOFBzozQ>
-    <xmx:WFY9Y_7YRK0p4YJLRlT7rIBYGW9Td5Y8lCjpYWHgdY8L1CK5DFXYLg>
-    <xmx:WFY9Y_HHJvTHXb7FTsKb2zZTOPiQ68e2TBQZSJT3eHEa2eM7_YSf5g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 47E31B60086; Wed,  5 Oct 2022 06:03:04 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
-Mime-Version: 1.0
-Message-Id: <81b789b7-eca3-4d93-bb29-24ebedd9b60b@app.fastmail.com>
-In-Reply-To: <202210051742.p1o10Y5y-lkp@intel.com>
-References: <202210051742.p1o10Y5y-lkp@intel.com>
-Date:   Wed, 05 Oct 2022 12:02:42 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "kernel test robot" <lkp@intel.com>,
-        "Eric Biggers" <ebiggers@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [ebiggers:wip-fsverity 6/8] fs/buffer.c:2280:5: warning: stack frame size
- (2128) exceeds limit (1024) in '__block_read_full_folio'
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 5 Oct 2022 06:04:07 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F9D857263
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 03:04:06 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1FFDE113E;
+        Wed,  5 Oct 2022 03:04:13 -0700 (PDT)
+Received: from wubuntu (unknown [10.57.32.122])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6B1BB3F67D;
+        Wed,  5 Oct 2022 03:04:04 -0700 (PDT)
+Date:   Wed, 5 Oct 2022 11:04:02 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org,
+        Youssef Esmat <youssefesmat@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>, bristot@redhat.com,
+        clark.williams@gmail.com, bigeasy@linutronix.de,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: Sum of weights idea for CFS PI
+Message-ID: <20221005100402.3i46oqx5lxsw2qer@wubuntu>
+References: <cb6c406e-1431-fcfd-ef82-87259760ead9@joelfernandes.org>
+ <20220930134931.mpopdvri4xuponw2@wubuntu>
+ <00140e95-0fe2-1ce4-1433-a3211f9da20c@joelfernandes.org>
+ <20221003161404.kdow5uyj7kvbqyxs@wubuntu>
+ <bb28d85a-c50f-a25f-aeb4-672eecb75b55@joelfernandes.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <bb28d85a-c50f-a25f-aeb4-672eecb75b55@joelfernandes.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 5, 2022, at 11:11 AM, kernel test robot wrote:
-> tree:   
-> https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git 
-> wip-fsverity
-> head:   06702850f2f281bdd6165c4783a0a15685efbcfd
-> commit: dbcfaa162251f84f78105036633f71e91dc3bb8b [6/8] fs/buffer.c: 
-> introduce __block_read_full_folio() for ext4
-> config: hexagon-randconfig-r041-20221003
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 
-> 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-> reproduce (this is a W=1 build):
->         wget 
-> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
-> -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # 
-> https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/commit/?id=dbcfaa162251f84f78105036633f71e91dc3bb8b
->         git remote add ebiggers 
-> https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
->         git fetch --no-tags ebiggers wip-fsverity
->         git checkout dbcfaa162251f84f78105036633f71e91dc3bb8b
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 
-> O=build_dir ARCH=hexagon SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
->>> fs/buffer.c:2280:5: warning: stack frame size (2128) exceeds limit (1024) in '__block_read_full_folio' [-Wframe-larger-than]
->    int __block_read_full_folio(struct folio *folio, loff_t limit,
->        ^
+Hi Joel
 
-IIRC the conclusion we came to when this last showed up was
-that on Hexagon and PowerPC4xx, we want PAGE_SIZE_256KB to
-depend on CONFIG_BLOCK being disabled, in order to completely
-sidestep this issue. Pages this large should be really rare
-anyway, and those platforms tend to run from RAM or MTD flash
-rather than using block based file systems.
+On 10/04/22 16:27, Joel Fernandes wrote:
 
-    Arnd
+[...]
+
+> I am treating the following the same:
+> 
+>  	a.  when A is running, it would be as above.
+>  	b.  but if A was sleeping, B, C, and D would get 1/3.
+> 
+>  similar to
+> 
+>  	a.  when A is running *and blocked on C for all its runtime*
+> 		^^ -- in this case, B and D should not have their distributions
+> 		      changed at all because they are not participating in the
+> 		      lock acquire and release. So they should neither be hurt
+> 		      any more, nor be boosted. They should simply stay same [1]
+> 
+>  	b.  but if A was sleeping, B, C, and D would get 1/3.
+> 
+> 
+> [1] Why? Consider 3 tasks in the all-RT case, A high, B medium and C low prio.
+> 
+> If all are running 100% and A does not block on C, B is blocked by A
+> indefinitely. So the prio of A and B are inverted. We seek to rectify this, that
+> is we need make changes such that, B is returned back to the blocked state. We
+> do this by boosting C.
+> 
+> In other words, the prio inheritance will cause B's distribution to not be
+> changed (it was supposed to be blocked before and it is now going to be blocked
+> state again).
+> 
+> CFS should not behave any differently, B's distribution should not be changed
+> before/after the priority inhertiance of A by C. That's just my opinion - and
+> that's how I calculated to distribution. With that mind, could you go back to
+> seeing if my math was originally correct or did I mess something up?
+
+It's not about the math. But I think the before and after can't be the same for
+C..
+
+> I do think though that Youssef's point of not worrying about being too accurate
+> is reasonable if the critical sections are short lived but I'm not sure.
+
+.. I do agree with that as well. I was just trying to highlight that looking at
+average can be misleading and I don't see C taking too much time.
+
+If any worries I have, it'd be not accounting correctly for the stolen time
+C takes from A. Otherwise A + C share combined would be higher than it should
+be. Which might be the problem you're trying to highlight but I am unable to
+get/see. But this is an implementation detail and an artefact of wrong
+accounting, not how shares are summed.
+
+> > I don't think this is valid. If A is blocked on C for 50% of the time, and
+> > sleeping for 50% of the time, when did it get blocked/unblocked?
+> > 
+> > This will have an impact on the average share for C and skew it, no?
+> > 
+> > Unless I missed something, the average share of C being (3/5 + 1/3) is an
+> > impossible state. You need to consider the portion of time when C runs as 1/5,
+> > when A is actually not blocked on anything, too.
+> > 
+> > Hmm actually I just re-read your statement below and you just say 3/5 (18/30)
+> > is too much. You didn't consider the average. I'll leave the above in hope to
+> > help me understand what am I missing and where I went wrong :-)
+> > 
+> > Generally IMHO looking at the average will not help. I think if the share
+> > values make sense in each state individually (and I believe they are), that
+> > would be enough. AFAICS, B and D are still taking the right amount of time when
+> > C inherits the bandwidth. And C by definition will run longer when A is blocked
+> > on it for the whole duration of this blocked time.
+> 
+> I was degenerating the case where A sleeps (say I/O) vs A blocks, to simplify
+> the math, and then taking average of that. I think that's reasonable?
+
+I'm not sure. This is skewing the results in my view.
+
+I think the comparison should just be:
+
+1) A, B, C, and D are all running and nothing gets blocked at all. Then shares
+   would be:
+
+   2/5, 1/5, 1/5, 1/5
+
+2) A is blocked and C; B, C, D are running with no blocked time. Shares would
+   be:
+
+   - , 1/5, 3/5, 1/5
+
+By definition, we want to treat A in (2) as RUNNING because as soon as
+C unblocks A we should return to (1). From B and D perspective, their share is
+not impacted throughout this transition. Which is AFAIU is what we want to
+achieve.
+
+I think considering the sleeping time and averaging can lead to misleading
+results if care is not taken.
+
+Anyway - just trying to explain how I see it and why C is unlikely to be taking
+too much time. I could be wrong. As Youssef said, I think there's no
+fundamental problem here.
+
+My 2 cents ;-)
+
+
+Thanks!
+
+--
+Qais Yousef
