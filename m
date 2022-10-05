@@ -2,106 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 608C45F51EE
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D7C5F51FB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiJEJpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 05:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
+        id S229746AbiJEJrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 05:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiJEJpk (ORCPT
+        with ESMTP id S229530AbiJEJrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 05:45:40 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214876B158
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 02:45:40 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Wed, 5 Oct 2022 05:47:08 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD016B158;
+        Wed,  5 Oct 2022 02:47:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ez8YlIIFOv1JcrTvLi176ZFPsOijgCCws1rJsbL1NQQ=; b=JdXR/MxGGX4PGx4m2OjRn4X6Po
+        k8QQ0MTutqeLddcZYHIgdjqIu9wSUdXxHn+8RGQveN7mSyXGTreDfHd38Gw/lPegR2qw8mCHy4ZsL
+        5pyF5a39L0ZJAT/P/sa7bC/ID+FrNRIxtlMrTbaSkYR590RYTPXvKsHAKvvzchWyma3uPY25SNlxn
+        aYIOpFS7GLPObpJmlyHGJ/6iWVp+77owL6fwxhkp5OSnITTdngpp7r9fqNWLBuk8E+9MPIfCIUWUK
+        Q8aNxs50K2rezmF5BicrZ9+vDQMClVyFyUndY7gXL30u1u0YnELjRLv4Ofk+7X/8pNYSUrcrYn9K/
+        su9ecpZQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1og0z9-000GTe-JB; Wed, 05 Oct 2022 09:46:39 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BA6B91F74A;
-        Wed,  5 Oct 2022 09:45:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664963138; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rU0w0PCNKN0xXBXplJAZJuCSubVSrIsbg46jxnYU5Ro=;
-        b=PO7heKsi5Ujyvjqb3tStJBoAaD6SptlguubNdL61Q7aEbrlvFhCSoWk+tkMKNWhpiTg4tS
-        g3ks5FHa6652/SI5pWZxO/Og3xyTPfvMg57L8TLvyLGltG8qy+M+4WmH/5I2W5H8HdmPpO
-        TrocfGRE5PrEABJeH0ubf2ZHX4TmaLo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664963138;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rU0w0PCNKN0xXBXplJAZJuCSubVSrIsbg46jxnYU5Ro=;
-        b=PL4zm892o+gVvk86gFP/JfU+yRGr+WLxUCJl4MPQrA2eM3NKILtprURJztcgEGpW8YrJ8d
-        +guh7sMTWYkU3hBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 84D0B13345;
-        Wed,  5 Oct 2022 09:45:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id MLylH0JSPWNCIAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Wed, 05 Oct 2022 09:45:38 +0000
-Date:   Wed, 05 Oct 2022 11:45:37 +0200
-Message-ID: <87ilkyvc1q.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     "Lu, Brent" <brent.lu@intel.com>
-Cc:     "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "Jaroslav Kysela" <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Mohan Kumar <mkumard@nvidia.com>,
-        Ville =?ISO-8859-1?Q?Syrj=E4l=E4?= 
-        <ville.syrjala@linux.intel.com>, "Zhi, Yong" <yong.zhi@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ALSA: hda/hdmi: run eld notify in delay work
-In-Reply-To: <CY5PR11MB62571E282C37DDFBD4058D99975D9@CY5PR11MB6257.namprd11.prod.outlook.com>
-References: <20220927135807.4097052-1-brent.lu@intel.com>
-        <87ill8gb5c.wl-tiwai@suse.de>
-        <CY5PR11MB6257CB33E1EDA90CE2B2F99D97549@CY5PR11MB6257.namprd11.prod.outlook.com>
-        <875yh8ezs9.wl-tiwai@suse.de>
-        <871qrvgbsr.wl-tiwai@suse.de>
-        <87y1u3evy6.wl-tiwai@suse.de>
-        <CY5PR11MB62571E282C37DDFBD4058D99975D9@CY5PR11MB6257.namprd11.prod.outlook.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C917130007E;
+        Wed,  5 Oct 2022 11:46:34 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id AFEC420C3B653; Wed,  5 Oct 2022 11:46:34 +0200 (CEST)
+Date:   Wed, 5 Oct 2022 11:46:34 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
+Message-ID: <Yz1SepywKVcWzV0f@hirez.programming.kicks-ass.net>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-2-rick.p.edgecombe@intel.com>
+ <YzZlT7sO56TzXgNc@debian.me>
+ <87v8p5f0mg.fsf@meer.lwn.net>
+ <0eb358ac-068c-d025-07e3-80a3c51ef39c@gmail.com>
+ <5832fa687e6da50697a7627d53453b728ed1b7b7.camel@intel.com>
+ <Yz1KFj71T4Q4mFrg@hirez.programming.kicks-ass.net>
+ <3f0417cf-a58d-a2bd-7a9a-1d4dabf89970@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3f0417cf-a58d-a2bd-7a9a-1d4dabf89970@gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 05 Oct 2022 10:14:19 +0200,
-Lu, Brent wrote:
-> 
+On Wed, Oct 05, 2022 at 04:25:39PM +0700, Bagas Sanjaya wrote:
+> On 10/5/22 16:10, Peter Zijlstra wrote:
+> > On Mon, Oct 03, 2022 at 04:56:10PM +0000, Edgecombe, Rick P wrote:
+> >> Thanks. Unless anyone has any objections
 > > 
-> > ... and on the further consideration, I believe the best solution is to just get rid of
-> > the whole check.
+> > Well, I'll object. I still feel rst should burn in hell. Plain text FTW.
 > > 
-> > It was introduced by the commit eb399d3c99d8 along with the 8ae743e82f0b
-> > that checks the suspend state.  The latter is still meaningful (we should skip the
-> > bogus notification at suspend).
-> > However, the former -- the code path we're dealing with -- doesn't help much in
-> > the recent code.  That fix was required because the driver probed the ELD bits
-> > via HD-audio verb at the time of the fix commit; that is, the driver had to wake
-> > up the codec for updating the ELD.  OTOH, now ELD is read directly from the
-> > graphics chip without the codec wakeup.  So the skip makes little sense.
-> Hi Takashi,
+> > 
 > 
-> I've got the test result from ODM which is positive. During 60 test runs, the elf notify
-> running in suspend happened 10 times and the audio is normal. The patch is looking
-> good.
+> .txt maybe?
 
-Thanks for confirmation.  The fix will be included in 6.1-rc1.
-
-
-Takashi
+We had that, but some idiots went and converted the lot to .rst :-(
