@@ -2,112 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB80B5F5867
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 18:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C693D5F586B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 18:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbiJEQfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 12:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
+        id S229926AbiJEQi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 12:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiJEQfq (ORCPT
+        with ESMTP id S229689AbiJEQiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 12:35:46 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F05F015
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 09:35:45 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id bp15so12857075lfb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 09:35:45 -0700 (PDT)
+        Wed, 5 Oct 2022 12:38:54 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E785A6DFB1
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 09:38:50 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id g28so1231750pfk.8
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 09:38:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=ArbnXthF17aFuK2Rgr6+egy+HB4WLw6ceMUfORh6l5Y=;
-        b=XvUHOrQG17fhHnlsoCT7GqSjckTrNFw6Vy+GWnTE4oAEokGaLPenF5tQfc3fhpUWo1
-         qKFIPUF79oULb9lmZeVbm4Ukh3AyWcQkeK7IdEJR0M3pItEwdEyJVjZ6oSVH5OjsulVL
-         HZ1HoQL8/yCWzDe5QrL1nFvG8v3C+O8QVE2ePiFpFcWTjGTl2hryRJG8gHO7Cx/+p2RH
-         BdP6uRRj759ACtmumxm/aczNsEEz6BxVzoOJZX83Kx4eZtsdgm4Ujl1CGN2EVOy2KlhY
-         rE/TdxZOHna+0XZkJVRv8dIUKwVvCE5nWCtP6xJH2EdC4wK1DJo3WrZuooZC83oKx6b6
-         NLcA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=oQbM0nVWmaDXyk82cl6r367zDWVYGaPQODZVcdO+QZM=;
+        b=Hvcb5sHqdru0SR4QpRIz/cd5ZjallOVpwA/Xe1rPLCdPvyRIAk3u2ZzmOM+RCSI4jO
+         xwGVJxU60hIgDlibk/ghL6C0nR+WwOg3rwgU9dZ+xS3HmhEdtDucFiWz6Jh47/7Yarn8
+         mYpnPD5igo+2paasd/TO+B/9xkXR9uEHlwTrhKvIrvCTAOf2BXnATMSDQHxI7lKESOQd
+         77fdwtyclHf4iHYpXv1jqvj5lFtaIlvlg6qZrtUyopdTpppjkDJCMdC/xBgcTgbkQwFb
+         /4mq3kG7xMSbvqgwG7o5F4vcnrLKamlu5jbzAh2W1lzrlQTZJ1Kwn8XUra5gHp91EhHi
+         SSsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ArbnXthF17aFuK2Rgr6+egy+HB4WLw6ceMUfORh6l5Y=;
-        b=ziAhysTYgnhmlWBn+vVH801ekFsrAadaiflfzAd+yIAl/JxcbFE64h7/sQ4ZX2XCbk
-         UPOoM8u4tyeE/qcLhdoSxK26DXjwRoVRyQs3o3BhXvTHheYA4AXJc4dx9cLuftye6v72
-         ehDsmkXeb7nyqBPLTtd5uvMqNe4+CyaN3mXJn/zJTnLPrE0EIBpEIvdxKEo963MjXbB4
-         ZVyPKttvhJSaIg6rWP0yDf3pRic2ljrTOJzKMevG8dAIleVGYOteJXGHFTKmpuyHhtl1
-         VbmHDjvAoveQ6I7crWXF+Ru+Gw1wUN++i0n/yzgV0uBHTjK1R1X3H6V+8q5qn4hdc7pW
-         LQ2Q==
-X-Gm-Message-State: ACrzQf1OWx//XqnsV4jivhuFYIV5uX/9Wz0v5jC6Vd9qCRzpOUnuF8Be
-        f324QQR5Ews0tDjjUYhy7I9/pw==
-X-Google-Smtp-Source: AMsMyM5LjKt7QvMVK5nxucMwvVVKZDMB0Zf8Ee6Jfz1lQgOYAmg2F5JK8113gHKmDPb4++HQwSS93g==
-X-Received: by 2002:ac2:4f03:0:b0:495:ec98:bcac with SMTP id k3-20020ac24f03000000b00495ec98bcacmr224149lfr.339.1664987743632;
-        Wed, 05 Oct 2022 09:35:43 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id o20-20020a056512231400b0048a9b197863sm2391823lfu.235.2022.10.05.09.35.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Oct 2022 09:35:43 -0700 (PDT)
-Message-ID: <4e5c0d90-d1ec-15ca-c07a-d43f52d4d69a@linaro.org>
-Date:   Wed, 5 Oct 2022 18:35:42 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=oQbM0nVWmaDXyk82cl6r367zDWVYGaPQODZVcdO+QZM=;
+        b=DQDxhl5DyXkkJJAtSvrpA9DGHjfsKCgeT+k8J00WXipaoqcZ8iOPbWtqWHKfKpbg4a
+         FIl8udgXx1PqVXvsu8T6fDMFUnC/y/rTNuJJBYlDZnL10Qd7AfN5B4COesb+pLzdh8aV
+         5JMaSIBtoBCqh8m1xf61cP7IFSYuigmgYZC01wALE9smVl3T89Y/asd+Hlw1grcjsEMW
+         PpZcbMBCvKL/5cyQrMnpENDNTdWSNK80JbAffXAvCJBNflZmzV6550gOVjwMOebasmwJ
+         md7LCerloL9KsCGl7iEJPJ5XSUR5fttTX23mEK/ycPnEKYQk5zljtKi2StR7GaJY5j2n
+         bttQ==
+X-Gm-Message-State: ACrzQf1YbSx0gXjhm+507SIEs4C+LNQmM4TvF7Cj7DMWuNW+OtU7exrx
+        yrlRlROFWrQEFlJD3YP/J0n4//9s6d10MbwMzjvQRQ==
+X-Google-Smtp-Source: AMsMyM71N9pjV+owSSTwxxr2FguNkvc47wBKX2/glG8mXnLd5jbKpLUAq5gPGDnyOa8pNUB/CiA5HYCdi64kN1H1Gmw=
+X-Received: by 2002:a63:e709:0:b0:438:98e8:d1c with SMTP id
+ b9-20020a63e709000000b0043898e80d1cmr555835pgi.403.1664987930207; Wed, 05 Oct
+ 2022 09:38:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2] dt-bindings: mfd: mt6370: fix the interrupt order of
- the charger in the example
-Content-Language: en-US
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        matthias.bgg@gmail.com, sre@kernel.org, chiaen_wu@richtek.com,
-        cy_huang@richtek.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <9dda705a8d67826306f6c6129722d3ad8edc96fc.1664816175.git.chiaen_wu@richtek.com>
- <CAL_Jsq+YeZRizJFYuU7RPTcFRe1cDjLgsTidisJ_P5PNC4eKiw@mail.gmail.com>
- <CABtFH5Ld91S65RiDu4iSpFhAMiFWaQdj-yDRM79=WUkArpA0JA@mail.gmail.com>
- <9004b427-66b7-f783-9258-4f6b893899ef@linaro.org>
- <CABtFH5LLxjaWHFLRGjVb9x1a_SJoHzD_GsOqn-e9uQAJ6mOocg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CABtFH5LLxjaWHFLRGjVb9x1a_SJoHzD_GsOqn-e9uQAJ6mOocg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Yz1oTvzDpCkOE+fr@debian>
+In-Reply-To: <Yz1oTvzDpCkOE+fr@debian>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 5 Oct 2022 09:38:38 -0700
+Message-ID: <CAKwvOdkRQk+x7CP6p_TsZvoM0pnL1mjEBgyKp+NC-K_cVnDUGA@mail.gmail.com>
+Subject: Re: build failure of next-20221005 due to a3a956c78efa ("fs/ntfs3:
+ Add option "nocase"")
+To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, ntfs3@lists.linux.dev,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        linux-next@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/10/2022 10:59, ChiaEn Wu wrote:
-> On Wed, Oct 5, 2022 at 4:33 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
-> ...
->>
->> Eh, my patch was merged in July... and yours from September still does
->> not use updated multi-led bindings. Was it even tested before sending?
->>
->> Best regards,
->> Krzysztof
->>
-> 
-> Hi Krzysztof,
-> 
-> I must apologize for checking our patches are based on v5.19 (I also
-> forgot to apply your patch before checking patches......), not the
-> v6.0-rc series at that time.
-> I will update the latest code and check my patch again and again
-> before submitting the patch next time.
-> I'm very sorry for this mistake.......
+On Wed, Oct 5, 2022 at 4:19 AM Sudip Mukherjee (Codethink)
+<sudipm.mukherjee@gmail.com> wrote:
+>
+> Hi All,
+>
+> The builds of x86_84 allmodconfig with clang have failed to build
+> next-20221005 with the error:
+>
+> fs/ntfs3/namei.c:445:7: error: variable 'uni1' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+>                 if (toupper(c1) != toupper(c2)) {
+>                     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> ./include/linux/ctype.h:64:20: note: expanded from macro 'toupper'
+> #define toupper(c) __toupper(c)
+>                    ^
+> fs/ntfs3/namei.c:487:12: note: uninitialized use occurs here
+>         __putname(uni1);
+>                   ^~~~
+> ./include/linux/fs.h:2803:65: note: expanded from macro '__putname'
+> #define __putname(name)         kmem_cache_free(names_cachep, (void *)(name))
+>                                                                        ^~~~
+> fs/ntfs3/namei.c:445:3: note: remove the 'if' if its condition is always false
+>                 if (toupper(c1) != toupper(c2)) {
+>                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> fs/ntfs3/namei.c:434:7: error: variable 'uni1' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+>                 if (!lm--) {
+>                     ^~~~~
+> fs/ntfs3/namei.c:487:12: note: uninitialized use occurs here
+>         __putname(uni1);
+>                   ^~~~
+> ./include/linux/fs.h:2803:65: note: expanded from macro '__putname'
+> #define __putname(name)         kmem_cache_free(names_cachep, (void *)(name))
+>                                                                        ^~~~
+> fs/ntfs3/namei.c:434:3: note: remove the 'if' if its condition is always false
+>                 if (!lm--) {
+>                 ^~~~~~~~~~~~
+> fs/ntfs3/namei.c:430:22: note: initialize the variable 'uni1' to silence this warning
+>         struct cpu_str *uni1, *uni2;
+>                             ^
+>                              = NULL
+> 2 errors generated.
+>
+> git bisect pointed to a3a956c78efa ("fs/ntfs3: Add option "nocase"").
+>
+> I will be happy to test any patch or provide any extra log if needed.
 
-Always base your patches on one of: latest mainline kernel, latest
-maintainer's tree or recent linux-next.
+Hi Sudip,
+Thanks for the report.  Please help review+test:
+https://lore.kernel.org/llvm/20221004232359.285685-1-nathan@kernel.org/.
 
-Best regards,
-Krzysztof
+For future reports, please take the time to review:
+1. Our issue tracker. Nathan had a bug filed about this yesterday.
+https://github.com/ClangBuiltLinux/linux/issues/1729
+2. The mailing list archives on lore: https://lore.kernel.org/llvm/ If
+you search for -Wsometimes-uninitialized you'll see Nathan's
+report/patch as well as reports from KernelCI.
 
+I'll take more reports over no reports, but if we already have an open
+report, please take the time to participate in the existing threads
+rather than create new ones.  That way, if an issue needs a discussion
+to resolve, it happens in one thread and not across multiple.
+-- 
+Thanks,
+~Nick Desaulniers
