@@ -2,142 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392865F5891
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 18:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 716B15F5894
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 18:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbiJEQrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 12:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44370 "EHLO
+        id S230281AbiJEQrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 12:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbiJEQrU (ORCPT
+        with ESMTP id S230259AbiJEQrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 12:47:20 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9187E325
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 09:47:18 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id 13so36746952ejn.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 09:47:18 -0700 (PDT)
+        Wed, 5 Oct 2022 12:47:39 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC6A7EFEA;
+        Wed,  5 Oct 2022 09:47:35 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so2312097pjk.2;
+        Wed, 05 Oct 2022 09:47:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4CwWMo2JGRY1sMiWNR7k+Ale2KMVO8Hjg3Kq/pxZMJY=;
-        b=O6/3blg4wsZVwKDgWn9jP7CdlMdOeT7PFyrDnu5lkaB6/VWh3mr+PbMj2x4WjOqZz/
-         DdcJOO95ZVEVZAmGlbkeXkpBV3PJPv+ITijJCcfk0s+IrB/5ZBR2PwPNl0h7vTT5+XEQ
-         9ll+thaq8/DoCwd1CJfKwWOwBvzIE6vpvnGTQ=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ia5DV0kmXQ4W+QZoJTRIPPIOgQcIdbHe/HPFhl2BDnY=;
+        b=ks9cRP9wbCsBLQ96ncXMLBVGQ4M/qtxeyVrB8bpTTHWKQ9HRtbBJyWXEtz6wSqcSs3
+         cSG28f0WA6XQB1HTFnLyKoTwrU5x8E7zQNRqjRxgDKnWnpAdtX9U/Llx1n6T3PrHBE4O
+         QAXOQ+PJJD/4a4vI6OmZFFQDNK24GoWc3xWbHB0eO0vdAJj12UjHfz1rxu6A9DGc1QFM
+         z2b1bZgndjJMspxfyWEXrSI7nE0A4ei6Xjgzjoj2ZSCH+m5CAQUqhSIz7F9gCAQRY1M4
+         xB6/gE+33rH1Uls6YaDyc+YP6nFoEpnTyoFQOoGK1KDEu63LqpFR8KtnGIoL721WQaMW
+         mUmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4CwWMo2JGRY1sMiWNR7k+Ale2KMVO8Hjg3Kq/pxZMJY=;
-        b=Pe17ooCknlkyXPR98LNd5Pe8XZ704a2t4To5kTIq++/TNIBIriDWl5VhWbYsrLFYen
-         n9QzDHs2fJl9/ay/4w0wlIOn7Q511EvsIjF0eYAXkqCiNQEojtrSmF9cQPJyg3005uZi
-         V+/NL0IF1o4BC188NcjIpdTIHxYisvd9nG/grKE2CWzqLdpbQNc8W71MfQtEUZFnxAFV
-         w64Tp8nXxwEYDztSJyBE3+X3gBmtxxI+W/VN8oglSU4UeJpIoIvHzsxaqjTqAIIE/10q
-         X2d+5wtP/MQfcJfooSd/BqPsHRQgQL0dbpZVVY5cXv7Mo44eti+xX1qtDS/awiYJTvRz
-         8x7A==
-X-Gm-Message-State: ACrzQf2zK8VgsFiIolEWt48gwoKr7PtRkXl0Qul91OC+kPmw0jn5wZ2b
-        dGAbZAuOiGgeq3PcxwNix7q/N29ZRLnC9sz7
-X-Google-Smtp-Source: AMsMyM5DWgXHoIs14r4eWzQ8IW0lfH53GbqJuN5/t5U1B0dHmsLddu1H/RaAvPUec7EhYCGT2mse/w==
-X-Received: by 2002:a17:907:2cd3:b0:77c:3e23:7bec with SMTP id hg19-20020a1709072cd300b0077c3e237becmr422485ejc.380.1664988437103;
-        Wed, 05 Oct 2022 09:47:17 -0700 (PDT)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
-        by smtp.gmail.com with ESMTPSA id p14-20020a17090653ce00b00781d411a63csm8850134ejo.151.2022.10.05.09.47.16
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Oct 2022 09:47:16 -0700 (PDT)
-Received: by mail-wm1-f47.google.com with SMTP id l8so11146717wmi.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 09:47:16 -0700 (PDT)
-X-Received: by 2002:a05:600c:19cf:b0:3b4:c8b6:15c6 with SMTP id
- u15-20020a05600c19cf00b003b4c8b615c6mr4040185wmq.85.1664988436259; Wed, 05
- Oct 2022 09:47:16 -0700 (PDT)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ia5DV0kmXQ4W+QZoJTRIPPIOgQcIdbHe/HPFhl2BDnY=;
+        b=lzqGjT67wYtpKauYSrbQedzCiL2acPt9ekIr5e1108zKB0TUUx50qwSjX7FpCKn7dH
+         QM1wiQrEJCD3T521o2KeSoit0i/rX+Zq0t7KFMFNB0fKBXMNgkZ6tbyl59DntNPbccTW
+         txDi8VJVeL4PNvmT3SeS2hbdow1UKThVvQrydU4DaSghw0cgaGeBxZB6sRgNVo+Alc4D
+         jdmS/PUcmLxzQ4l97BW8ZNFJlZ7sW7yZdhpUHkvDsRhmF6/tAGMlppncmIAe9qwqwkTR
+         U/nFy4FXw+jmv150rbz+otw8VEddgMXc97shouGYd1XfdXEm2eq1gcThS9rumyb7SAc0
+         kiqQ==
+X-Gm-Message-State: ACrzQf3a6K/sNSmImDKNhzq3MyWtjC6c9E0LAYO8xDFKZdbZYq1p8AJp
+        iv5HwMPpn6AoU/TnJmQI9c4=
+X-Google-Smtp-Source: AMsMyM6q9Tb6RSG+c7aPNe3N1fOpK/fK3Y24c2BqbUWk0NLGP53xwuK6VBGQX5P2vRn4tk0apyH0Kw==
+X-Received: by 2002:a17:902:da89:b0:17f:8a16:69e2 with SMTP id j9-20020a170902da8900b0017f8a1669e2mr613404plx.82.1664988454232;
+        Wed, 05 Oct 2022 09:47:34 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id c15-20020aa7952f000000b005609d3d3008sm7567399pfp.171.2022.10.05.09.47.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 09:47:33 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 5 Oct 2022 06:47:31 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: Re: [PATCH v2] cgroup: Reorganize css_set_lock and kernfs path
+ processing
+Message-ID: <Yz21I9UpXafWMU0K@slm.duckdns.org>
+References: <20220905170944.23071-1-mkoutny@suse.com>
+ <Yxd/sUQ/NB3NlC6f@slm.duckdns.org>
+ <YzQw/EvH9Sb58Au2@blackbook>
 MIME-Version: 1.0
-References: <20221003102735.39028-1-sheng-liang.pan@quanta.corp-partner.google.com>
- <20221003182637.v6.3.I50d04dcbe735dda69995cf1078824d671501869e@changeid>
-In-Reply-To: <20221003182637.v6.3.I50d04dcbe735dda69995cf1078824d671501869e@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 5 Oct 2022 09:47:04 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VT88P3SbN6GhKE6_RwLM6P9oKh0Mro7P614YfzDoid_w@mail.gmail.com>
-Message-ID: <CAD=FV=VT88P3SbN6GhKE6_RwLM6P9oKh0Mro7P614YfzDoid_w@mail.gmail.com>
-Subject: Re: [PATCH v6 3/3] arm64: dts: qcom: Add touchscreen and touchpad
- support for evoker
-To:     Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YzQw/EvH9Sb58Au2@blackbook>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-On Mon, Oct 3, 2022 at 3:28 AM Sheng-Liang Pan
-<sheng-liang.pan@quanta.corp-partner.google.com> wrote:
->
-> Change touchpad and touchscreen node for evoker
-> Touchpad: SA461D-1011
-> Touchscreen: GT7986U
->
-> Signed-off-by: Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
-> ---
->
-> Changes in v6:
-> - add removed pinctrl and align touchscreen label with herobrine board
->
-> Changes in v5:
-> - Touchscreen / trackpad patch new for v5
->
->  .../boot/dts/qcom/sc7280-herobrine-evoker.dtsi    | 15 +++++++--------
->  1 file changed, 7 insertions(+), 8 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dtsi
-> index e78072159d54b..d1723fbffae67 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dtsi
-> @@ -23,16 +23,15 @@ ap_tp_i2c: &i2c0 {
->         status = "okay";
->         clock-frequency = <400000>;
->
-> -       trackpad: trackpad@2c {
-> -               compatible = "hid-over-i2c";
-> -               reg = <0x2c>;
-> +       trackpad: trackpad@15 {
-> +               compatible = "elan,ekth3000";
-> +               reg = <0x15>;
->                 pinctrl-names = "default";
->                 pinctrl-0 = <&tp_int_odl>;
->
->                 interrupt-parent = <&tlmm>;
->                 interrupts = <7 IRQ_TYPE_EDGE_FALLING>;
->
-> -               hid-descr-addr = <0x20>;
->                 vcc-supply = <&pp3300_z1>;
->
->                 wakeup-source;
-> @@ -43,9 +42,9 @@ ts_i2c: &i2c13 {
->         status = "okay";
->         clock-frequency = <400000>;
->
-> -       ap_ts: touchscreen@10 {
-> -               compatible = "elan,ekth6915";
-> -               reg = <0x10>;
-> +       ap_ts: touchscreen@5d {
-> +               compatible = "goodix,gt7375p";
-> +               reg = <0x5d>;
+On Wed, Sep 28, 2022 at 01:33:16PM +0200, Michal Koutný wrote:
+...
+> I realized the pinning with reference taking won't really work
+> generally. The code would get the reference within RCU read section, so
+> it'd have to be cgroup_get_live() and if that fails there's not much to
+> do.
 
-You silently ignored my feedback here:
+Hmm... isn't current's root cgrp guaranteed to be alive? How would
+cgroup_get_live() fail? Also, shouldn't cgroup_get() enough for path
+walking?
 
-[1] https://lore.kernel.org/r/CAD=FV=XHr9Y6oQR19wVVHC6jzcd82hf1bHNbr62n89vuTbme9Q@mail.gmail.com
+> @@ -6673,8 +6678,8 @@ struct cgroup *cgroup_get_from_path(const char *path)
+>  
+>  	spin_lock_irq(&css_set_lock);
+>  	root_cgrp = current_cgns_cgroup_from_root(&cgrp_dfl_root);
+> -	kn = kernfs_walk_and_get(root_cgrp->kn, path);
+>  	spin_unlock_irq(&css_set_lock);
+> +	kn = kernfs_walk_and_get(root_cgrp->kn, path);
 
-Did you not see it? Did you ignore it for a reason?
+If you really wanna do it this way, can you please add a detailed comment
+here why this is safe? But I'd prefer just doing a strightforward ref
+inc/dec around it.
 
--Doug
+Thanks.
+
+-- 
+tejun
