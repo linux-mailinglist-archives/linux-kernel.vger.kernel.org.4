@@ -2,57 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECEF5F58F2
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDCA5F5901
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbiJERPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 13:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
+        id S230295AbiJERSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 13:18:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbiJEROz (ORCPT
+        with ESMTP id S230351AbiJERSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 13:14:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72065A198;
-        Wed,  5 Oct 2022 10:14:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 5 Oct 2022 13:18:42 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09BB33841
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 10:18:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4479C6156F;
-        Wed,  5 Oct 2022 17:14:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B2B8C433C1;
-        Wed,  5 Oct 2022 17:14:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664990078;
-        bh=wJnnXErmXwIuS63pnOYPIZMoevXGwPTwZXkAnc5SFRg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=argNZOR8Kv0lIi1n4XhQAUao3CpXMOun1Insci6BNIyqTffXlQGyinpCqCnAy9394
-         7CaQg0s5dikONMfgDA4V2YxxotOhWe30fDpm13XfALC8WcgQ127SiT+yPYiGnPc+Tp
-         gDSIpafpUt3bhdTMDX+sqyLgk3N8LGfqxwrukyqf++qF7jNQ1g0yUevKFVZuWk1EqI
-         ozmfLIqE8YETr1PFrWYfnjSAtpYWOkbfHuke9VWmEVYlOm6mO4CarklkKr2JE//er6
-         Sv13IXl1ddjVSVwemC0z8AR8LFx7HC/mCOYtqWF1VnLtu2XYr7CfF5D4U0st0x8FSj
-         giZ5nbM9671oA==
-From:   Conor Dooley <conor@kernel.org>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH 6/6] riscv: stop directly selecting drivers for SOC_CANAAN
-Date:   Wed,  5 Oct 2022 18:13:49 +0100
-Message-Id: <20221005171348.167476-7-conor@kernel.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221005171348.167476-1-conor@kernel.org>
-References: <20221005171348.167476-1-conor@kernel.org>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 97F581F8A3;
+        Wed,  5 Oct 2022 17:18:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664990305; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xd+QmsOjPp7zcrdstQMJ9W3S7p3J/v4GfLmZbr0zjhs=;
+        b=UlfzyTqwEnqmQN2ViJ7cDEoMMkTzGX+HpMaN0BR2W06jjOLdy3LKmHfp2cu+3ZoqjVwZW6
+        +188etKce/t71pYuYqqmbvluSE9MW3XRSARCBbp2eB38/SC/5cCSo1XuS1WhEWT3t0LHRv
+        z41Tr1Pwphgi2EgFRqKXXgsuTKySGrI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664990305;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xd+QmsOjPp7zcrdstQMJ9W3S7p3J/v4GfLmZbr0zjhs=;
+        b=JyQaNL5VoCaiTM5Y+N2aPUkLT9J2gZ211L4mysb2jie8uIqPKE9t3mnbvBJxpmWSJ/TTsX
+        Xx8GF0YZ4cr50TDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 748AB13ABD;
+        Wed,  5 Oct 2022 17:18:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id WoF0G2G8PWPucQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 05 Oct 2022 17:18:25 +0000
+Message-ID: <9fdaaae1-982c-92e1-bc61-a6db3e94ef56@suse.de>
+Date:   Wed, 5 Oct 2022 19:18:25 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2] drm/ssd130x: Iterate over damage clips instead of
+ using a merged rect
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Jocelyn Falempe <jfalempe@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org
+References: <20220930152944.2584356-1-javierm@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220930152944.2584356-1-javierm@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------lPn3uMH3YT3vN88YQrmoxEKP"
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,35 +76,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------lPn3uMH3YT3vN88YQrmoxEKP
+Content-Type: multipart/mixed; boundary="------------9UU4NfRuPAA6PnBQTNKeM18Q";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: Jocelyn Falempe <jfalempe@redhat.com>, Daniel Vetter <daniel@ffwll.ch>,
+ David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
+Message-ID: <9fdaaae1-982c-92e1-bc61-a6db3e94ef56@suse.de>
+Subject: Re: [PATCH v2] drm/ssd130x: Iterate over damage clips instead of
+ using a merged rect
+References: <20220930152944.2584356-1-javierm@redhat.com>
+In-Reply-To: <20220930152944.2584356-1-javierm@redhat.com>
 
-The serial and clock drivers will be enabled by default if the symbol
-itself is enabled, so stop directly selecting the drivers in
-Kconfigs.socs.
+--------------9UU4NfRuPAA6PnBQTNKeM18Q
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- arch/riscv/Kconfig.socs | 3 ---
- 1 file changed, 3 deletions(-)
+DQoNCkFtIDMwLjA5LjIyIHVtIDE3OjI5IHNjaHJpZWIgSmF2aWVyIE1hcnRpbmV6IENhbmls
+bGFzOg0KPiBUaGUgZHJtX2F0b21pY19oZWxwZXJfZGFtYWdlX21lcmdlZCgpIGhlbHBlciBt
+ZXJnZXMgYWxsIHRoZSBkYW1hZ2UgY2xpcHMNCj4gaW50byBvbmUgcmVjdGFuZ2xlLiBJZiB0
+aGVyZSBhcmUgbXVsdGlwbGUgZGFtYWdlIGNsaXBzIHRoYXQgYXJlbid0IGNsb3NlDQo+IHRv
+IGVhY2ggb3RoZXIsIHRoZSByZXN1bHRpbmcgcmVjdGFuZ2xlIGNvdWxkIGJlIHF1aXRlIGJp
+Zy4NCj4gDQo+IEluc3RlYWQgb2YgdXNpbmcgdGhhdCBmdW5jdGlvbiBoZWxwZXIsIGl0ZXJh
+dGUgb3ZlciBhbGwgdGhlIGRhbWFnZSBjbGlwcw0KPiBhbmQgdXBkYXRlIHRoZW0gb25lIGJ5
+IG9uZS4NCj4gDQo+IFN1Z2dlc3RlZC1ieTogSm9jZWx5biBGYWxlbXBlIDxqZmFsZW1wZUBy
+ZWRoYXQuY29tPg0KPiBTaWduZWQtb2ZmLWJ5OiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMg
+PGphdmllcm1AcmVkaGF0LmNvbT4NCg0KQWNrZWQtYnk6IFRob21hcyBaaW1tZXJtYW5uIDx0
+emltbWVybWFubkBzdXNlLmRlPg0KDQo+IC0tLQ0KPiANCj4gQ2hhbmdlcyBpbiB2MjoNCj4g
+LSBNb3ZlIHRoZSBkc3RfY2xpcCBhc3NpZ25tZW50IGluc2lkZSB0aGUgZHJtX2F0b21pY19m
+b3JfZWFjaF9wbGFuZV9kYW1hZ2UoKQ0KPiAgICBsb29wIChUaG9tYXMgWmltbWVybWFubiku
+DQo+IC0gUGFzcyBkc3RfY2xpcCBpbnN0ZWFkIG9mIGRhbWFnZSBhcmVhIGFzIGFyZ3VtZW50
+IHRvIHNzZDEzMHhfZmJfYmxpdF9yZWN0KCkNCj4gICAgZnVuY3Rpb24gKFRob21hcyBaaW1t
+ZXJtYW5uKQ0KPiANCj4gICBkcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4LmMgfCAx
+OSArKysrKysrKysrKy0tLS0tLS0tDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDExIGluc2VydGlv
+bnMoKyksIDggZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUv
+ZHJtL3NvbG9tb24vc3NkMTMweC5jIGIvZHJpdmVycy9ncHUvZHJtL3NvbG9tb24vc3NkMTMw
+eC5jDQo+IGluZGV4IGJjNDFhNWFlODEwYS4uZjQ1NmIyMzNkMmU3IDEwMDY0NA0KPiAtLS0g
+YS9kcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4LmMNCj4gKysrIGIvZHJpdmVycy9n
+cHUvZHJtL3NvbG9tb24vc3NkMTMweC5jDQo+IEBAIC01NzgsMjEgKzU3OCwyNCBAQCBzdGF0
+aWMgdm9pZCBzc2QxMzB4X3ByaW1hcnlfcGxhbmVfaGVscGVyX2F0b21pY191cGRhdGUoc3Ry
+dWN0IGRybV9wbGFuZSAqcGxhbmUsDQo+ICAgCXN0cnVjdCBkcm1fcGxhbmVfc3RhdGUgKnBs
+YW5lX3N0YXRlID0gZHJtX2F0b21pY19nZXRfbmV3X3BsYW5lX3N0YXRlKHN0YXRlLCBwbGFu
+ZSk7DQo+ICAgCXN0cnVjdCBkcm1fcGxhbmVfc3RhdGUgKm9sZF9wbGFuZV9zdGF0ZSA9IGRy
+bV9hdG9taWNfZ2V0X29sZF9wbGFuZV9zdGF0ZShzdGF0ZSwgcGxhbmUpOw0KPiAgIAlzdHJ1
+Y3QgZHJtX3NoYWRvd19wbGFuZV9zdGF0ZSAqc2hhZG93X3BsYW5lX3N0YXRlID0gdG9fZHJt
+X3NoYWRvd19wbGFuZV9zdGF0ZShwbGFuZV9zdGF0ZSk7DQo+ICsJc3RydWN0IGRybV9hdG9t
+aWNfaGVscGVyX2RhbWFnZV9pdGVyIGl0ZXI7DQo+ICAgCXN0cnVjdCBkcm1fZGV2aWNlICpk
+cm0gPSBwbGFuZS0+ZGV2Ow0KPiAtCXN0cnVjdCBkcm1fcmVjdCBzcmNfY2xpcCwgZHN0X2Ns
+aXA7DQo+ICsJc3RydWN0IGRybV9yZWN0IGRzdF9jbGlwOw0KPiArCXN0cnVjdCBkcm1fcmVj
+dCBkYW1hZ2U7DQo+ICAgCWludCBpZHg7DQo+ICAgDQo+IC0JaWYgKCFkcm1fYXRvbWljX2hl
+bHBlcl9kYW1hZ2VfbWVyZ2VkKG9sZF9wbGFuZV9zdGF0ZSwgcGxhbmVfc3RhdGUsICZzcmNf
+Y2xpcCkpDQo+ICsJaWYgKCFkcm1fZGV2X2VudGVyKGRybSwgJmlkeCkpDQo+ICAgCQlyZXR1
+cm47DQo+ICAgDQo+IC0JZHN0X2NsaXAgPSBwbGFuZV9zdGF0ZS0+ZHN0Ow0KPiAtCWlmICgh
+ZHJtX3JlY3RfaW50ZXJzZWN0KCZkc3RfY2xpcCwgJnNyY19jbGlwKSkNCj4gLQkJcmV0dXJu
+Ow0KPiArCWRybV9hdG9taWNfaGVscGVyX2RhbWFnZV9pdGVyX2luaXQoJml0ZXIsIG9sZF9w
+bGFuZV9zdGF0ZSwgcGxhbmVfc3RhdGUpOw0KPiArCWRybV9hdG9taWNfZm9yX2VhY2hfcGxh
+bmVfZGFtYWdlKCZpdGVyLCAmZGFtYWdlKSB7DQo+ICsJCWRzdF9jbGlwID0gcGxhbmVfc3Rh
+dGUtPmRzdDsNCj4gICANCj4gLQlpZiAoIWRybV9kZXZfZW50ZXIoZHJtLCAmaWR4KSkNCj4g
+LQkJcmV0dXJuOw0KPiArCQlpZiAoIWRybV9yZWN0X2ludGVyc2VjdCgmZHN0X2NsaXAsICZk
+YW1hZ2UpKQ0KPiArCQkJY29udGludWU7DQo+ICAgDQo+IC0Jc3NkMTMweF9mYl9ibGl0X3Jl
+Y3QocGxhbmVfc3RhdGUtPmZiLCAmc2hhZG93X3BsYW5lX3N0YXRlLT5kYXRhWzBdLCAmZHN0
+X2NsaXApOw0KPiArCQlzc2QxMzB4X2ZiX2JsaXRfcmVjdChwbGFuZV9zdGF0ZS0+ZmIsICZz
+aGFkb3dfcGxhbmVfc3RhdGUtPmRhdGFbMF0sICZkc3RfY2xpcCk7DQo+ICsJfQ0KPiAgIA0K
+PiAgIAlkcm1fZGV2X2V4aXQoaWR4KTsNCj4gICB9DQoNCi0tIA0KVGhvbWFzIFppbW1lcm1h
+bm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25z
+IEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55
+DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRv
+dGV2DQo=
 
-diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-index b6f4cfad159b..0ddbc9eb7af4 100644
---- a/arch/riscv/Kconfig.socs
-+++ b/arch/riscv/Kconfig.socs
-@@ -40,13 +40,10 @@ config SOC_CANAAN
- 	bool "Canaan Kendryte K210 SoC"
- 	depends on !MMU
- 	select CLINT_TIMER if RISCV_M_MODE
--	select SERIAL_SIFIVE if TTY
--	select SERIAL_SIFIVE_CONSOLE if TTY
- 	select SIFIVE_PLIC
- 	select ARCH_HAS_RESET_CONTROLLER
- 	select PINCTRL
- 	select COMMON_CLK
--	select COMMON_CLK_K210
- 	help
- 	  This enables support for Canaan Kendryte K210 SoC platform hardware.
- 
--- 
-2.37.3
+--------------9UU4NfRuPAA6PnBQTNKeM18Q--
 
+--------------lPn3uMH3YT3vN88YQrmoxEKP
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmM9vGEFAwAAAAAACgkQlh/E3EQov+A+
+FhAAyVMxqmnZTLzleHBoz44QgfToRsJdRySXMmaaCtGnWlAEmFgdV0Ow3PZvu1EEaUU3OJdtww3L
+fA/gqh4qybYt+tZioh4a9S2cVfSq6L8zpUSO3hghq6izaf7gkZmSpxTXr7UPBz7p3frTPTdJtbEX
+ucusImmWi1OEvQ7hCCKpHGmhg1ggxJrWDVkjFbV6aI1GtqRkemxZUXWTK+QdpHpKOySaQV+pdrXN
+STNRGjPHuqES6wTb877Ze/xuFQrefjA7GvUCI6yYo4wa+KRqdloePMfwPXSWdANIL4WitgAQgR+G
+prURVhyHYWxwA0CCurJOJeYZCyl+oJ1YeRt06JYfo7RfAlUTfd/YkWa0ebwES0sMh7Vc6p6WeSUI
+o5UCzWQ6CnZnOFEVcO4nG7/xCx0Mz5jsRF9q1P3yHDnwABKJgjCu+vWJves7woWgi/UKw42pw1iV
+mKm0Bv6D9fwj5TjvAUO8hlcrqN5YJkZ7gDFsjGo9hBFyINNfwfxVm9yWPVLQy0Ci2ZAayJ3fza39
+TRa8xyKGkI36/NzKyJFD+jepuwp/ifgT4BjRInq2mc1HDGfgNXabV6/g3MYFvtBMVOEseXC1tJJ0
+FV0Dvr/8Uyx6qS6kxjbQu5orv5a986DwXzSQIN4f97h30XoqurQbCD1/X9yoRDQxh71naLn64jVa
+LE0=
+=raad
+-----END PGP SIGNATURE-----
+
+--------------lPn3uMH3YT3vN88YQrmoxEKP--
