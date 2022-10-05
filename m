@@ -2,45 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1175F57D6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 17:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C667E5F57E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 17:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbiJEPvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 11:51:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47272 "EHLO
+        id S229843AbiJEPzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 11:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbiJEPvQ (ORCPT
+        with ESMTP id S229696AbiJEPzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 11:51:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1411E459BF
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 08:51:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D187E61756
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 15:51:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EA4FC43144;
-        Wed,  5 Oct 2022 15:51:12 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1og6g0-0028Ip-2H;
-        Wed, 05 Oct 2022 11:51:16 -0400
-Message-ID: <20221005155116.534222311@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Wed, 05 Oct 2022 11:50:35 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>
-Subject: [for-next][PATCH 5/5] tracing/user_events: Move pages/locks into groups to prepare for
- namespaces
-References: <20221005155030.594135087@goodmis.org>
+        Wed, 5 Oct 2022 11:55:12 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D6024BE8;
+        Wed,  5 Oct 2022 08:55:11 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 295EmJGY018962;
+        Wed, 5 Oct 2022 15:55:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=PcX+8XHm3VBlQQzDvifIRNgD0UePIdcWU1z+Fgbz4vI=;
+ b=k02Z1b1oLEj5A2CyPJsViXbkQdiyXkLuYgkSaIaDtI9t9xOp3dGQ1YV13PN6Rx0gRBCV
+ ZZCJYIXfHHNcuI3X2slC6qP2LfakJb78D6RiwKU1j9/Me/w2yGAYmfc8+hd8m4GFA7ni
+ e8YEEG9FzOlHOXFCza+dhz0QtF57wVJ2ub9kVnkzJ0W6MWKu5oYleZ81wEKDrVlN2lUN
+ 9Rixskp6h9aZY/x61gI5yrhq5neXd58Ydn6voAyYBVO03py+YgT+PvBOa63sI1wrhi3y
+ Gx6rvwgI4ib6/Wha0+iJaUEP94juIM4tF2YV71+ZiFhb/CPUo0nYX8rwRYRhWNqyubMa kA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k1c0v28hf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Oct 2022 15:55:01 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 295Emp5g020413;
+        Wed, 5 Oct 2022 15:55:01 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k1c0v28fw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Oct 2022 15:55:01 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 295FpRff002956;
+        Wed, 5 Oct 2022 15:54:58 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03fra.de.ibm.com with ESMTP id 3jxd68v83b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Oct 2022 15:54:58 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 295FstOU50135450
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 5 Oct 2022 15:54:55 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4B39EA4054;
+        Wed,  5 Oct 2022 15:54:55 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 665E8A405B;
+        Wed,  5 Oct 2022 15:54:52 +0000 (GMT)
+Received: from li-7e0de7cc-2d9d-11b2-a85c-de26c016e5ad.ibm.com (unknown [9.171.7.243])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  5 Oct 2022 15:54:52 +0000 (GMT)
+Message-ID: <6e7e5c938e8de8d0314a7009e253cb372adfbe3c.camel@linux.ibm.com>
+Subject: Re: [PATCH v1 1/9] s390/uaccess: Add storage key checked cmpxchg
+ access to user space
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+Date:   Wed, 05 Oct 2022 17:54:51 +0200
+In-Reply-To: <20221005161346.3c735249@p-imbrenda>
+References: <20220930210751.225873-1-scgl@linux.ibm.com>
+         <20220930210751.225873-2-scgl@linux.ibm.com>
+         <20221005161346.3c735249@p-imbrenda>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: nhAHlB3sYFXrcsS3PrSAH4gubSSE9mA_
+X-Proofpoint-GUID: NwtqdOOtV4RPlq_Cp-fqtUWvebzBmgEq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-05_03,2022-10-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 phishscore=0 mlxlogscore=999 mlxscore=0 suspectscore=0
+ adultscore=0 bulkscore=0 malwarescore=0 impostorscore=0 clxscore=1015
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210050097
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,708 +104,309 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Beau Belgrave <beaub@linux.microsoft.com>
+On Wed, 2022-10-05 at 16:13 +0200, Claudio Imbrenda wrote:
+> On Fri, 30 Sep 2022 23:07:43 +0200
+> Janis Schoetterl-Glausch <scgl@linux.ibm.com> wrote:
+> 
+> > Add cmpxchg functionality similar to that in cmpxchg.h except that the
+> > target is a user space address and that the address' storage key is
+> > matched with the access_key argument in order to honor key-controlled
+> > protection.
+> > The access is performed by changing to the secondary-spaces mode and
+> > setting the PSW key for the duration of the compare and swap.
+> 
+> this whole patch is very complex, I think it can be simplified and made
+> more maintainable (see my comments below)
+> 
+> in the end here we need an atomic compare and swap with key checking,
+> if we are doing a syscall for it, we are clearly not looking for
+> performance.
 
-In order to enable namespaces or any sort of isolation within
-user_events the register lock and pages need to be broken up into
-groups. Each event and file now has a group pointer which stores the
-actual pages to map, lookup data and synchronization objects.
+If you only consider this in the context of KVM you are correct, but
+Heiko wanted me not to specialize this for KVM.
 
-This only enables a single group that maps to init_user_ns, as IMA
-namespace has done. This enables user_events to start the work of
-supporting namespaces by walking the namespaces up to the init_user_ns.
-Future patches will address other user namespaces and will align to the
-approaches the IMA namespace uses.
+> > 
+> > Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> > ---
+> > 
+> > 
+> > Possible variations:
+> >   * check the assumptions made in cmpxchg_user_key_size and error out
+> >   * call functions called by copy_to_user
+> >      * access_ok? is a nop
+> >      * should_fail_usercopy?
+> >      * instrument_copy_to_user? doesn't make sense IMO
+> >   * don't be overly strict in cmpxchg_user_key
+> > 
+> > 
+> >  arch/s390/include/asm/uaccess.h | 187 ++++++++++++++++++++++++++++++++
+> >  1 file changed, 187 insertions(+)
+> > 
+> > diff --git a/arch/s390/include/asm/uaccess.h b/arch/s390/include/asm/uaccess.h
+> > index f7038b800cc3..0ce90b7e2b75 100644
+> > --- a/arch/s390/include/asm/uaccess.h
+> > +++ b/arch/s390/include/asm/uaccess.h
+> > @@ -19,6 +19,8 @@
+> >  #include <asm/extable.h>
+> >  #include <asm/facility.h>
+> >  #include <asm-generic/access_ok.h>
+> > +#include <asm/page.h>
+> > +#include <linux/log2.h>
+> >  
+> >  void debug_user_asce(int exit);
+> >  
+> > @@ -390,4 +392,189 @@ do {									\
+> >  		goto err_label;						\
+> >  } while (0)
+> >  
+> > +static __always_inline int __cmpxchg_user_key_small(int size, u64 address,
+> > +						    unsigned __int128 *old_p,
+> > +						    unsigned __int128 new, u8 access_key)
+> > +{
+> 
+> can this whole function be simplified to be a C wrapper for the 4 byte
+> version of compare and swap?
 
-Link: https://lore.kernel.org/linux-kernel/20220915193221.1728029-15-stefanb@linux.ibm.com/#t
-Link: https://lkml.kernel.org/r/20221001001016.2832-2-beaub@linux.microsoft.com
+I think so, but all of this is supposed to mirror
+arch/s390/include/asm/cmpxchg.h, although I did depart from that
+somewhat. For one, I changed the decision for retrying the loop,
+but I'll have to undo that since compilation for older machines
+complains about xrk.
+> 
+> > +	u32 shift, mask, old_word, new_word, align_mask, tmp, diff;
+> > +	u64 aligned;
+> > +	int ret = -EFAULT;
+> > +
+> > +	switch (size) {
+> > +	case 2:
+> > +		align_mask = 2;
+> > +		aligned = (address ^ (address & align_mask));
+> > +		shift = (sizeof(u32) - (address & align_mask) - size) * 8;
+> > +		mask = 0xffff << shift;
+> > +		old_word = ((u16)*old_p) << shift;
+> > +		new_word = ((u16)new) << shift;
+> > +		break;
+> > +	case 1:
+> > +		align_mask = 3;
+> > +		aligned = (address ^ (address & align_mask));
+> > +		shift = (sizeof(u32) - (address & align_mask) - size) * 8;
+> > +		mask = 0xff << shift;
+> > +		old_word = ((u8)*old_p) << shift;
+> > +		new_word = ((u8)new) << shift;
+> > +		break;
+> > +	}
+> > +	asm volatile(
+> > +		       "spka	0(%[access_key])\n"
+> > +		"	sacf	256\n"
+> > +		"0:	l	%[tmp],%[aligned]\n"
+> > +		"1:	nr	%[tmp],%[hole_mask]\n"
+> > +		"	or	%[new_word],%[tmp]\n"
+> > +		"	or	%[old_word],%[tmp]\n"
+> > +		"	lr	%[tmp],%[old_word]\n"
+> > +		"2:	cs	%[tmp],%[new_word],%[aligned]\n"
+> > +		"3:	jnl	4f\n"
+> > +		"	xrk	%[diff],%[tmp],%[old_word]\n"
+> > +		"	nr	%[diff],%[hole_mask]\n"
+> > +		"	xr	%[new_word],%[diff]\n"
+> > +		"	xr	%[old_word],%[diff]\n"
+> > +		"	xrk	%[diff],%[tmp],%[old_word]\n"
+> > +		"	jz	2b\n"
+> > +		"4:	ipm	%[ret]\n"
+> > +		"	srl	%[ret],28\n"
+> > +		"5:	sacf	768\n"
+> > +		"	spka	%[default_key]\n"
+> > +		EX_TABLE(0b, 5b) EX_TABLE(1b, 5b)
+> > +		EX_TABLE(2b, 5b) EX_TABLE(3b, 5b)
+> > +		: [old_word] "+&d" (old_word),
+> > +		  [new_word] "+&d" (new_word),
+> > +		  [tmp] "=&d" (tmp),
+> > +		  [aligned] "+Q" (*(u32 *)aligned),
+> > +		  [diff] "=&d" (diff),
+> > +		  [ret] "+d" (ret)
+> > +		: [access_key] "a" (access_key << 4),
+> > +		  [hole_mask] "d" (~mask),
+> > +		  [default_key] "J" (PAGE_DEFAULT_KEY)
+> > +		: "cc"
+> > +	);
+> > +	*old_p = (tmp & mask) >> shift;
+> > +	return ret;
+> > +}
+> > +
+> > +/**
+> > + * cmpxchg_user_key_size() - cmpxchg with user space target, honoring storage keys
+> > + * @size: Size of the value being cmpxchg'ed, one of 1,2,4,8,16.
+> > + * @address: User space address of value to compare to *@old_p and exchange with
+> > + *           *@new. Must be aligned to @size.
+> > + * @old_p: Pointer to old value. Interpreted as a @size byte integer and compared
+> > + *         to the content pointed to by @address in order to determine if the
+> > + *         exchange occurs. The value read from @address is written back to *@old_p.
+> > + * @new: New value to place at @address, interpreted as a @size byte integer.
+> > + * @access_key: Access key to use for checking storage key protection.
+> > + *
+> > + * Perform a cmpxchg on a user space target, honoring storage key protection.
+> > + * @access_key alone determines how key checking is performed, neither
+> > + * storage-protection-override nor fetch-protection-override apply.
+> > + *
+> > + * Return:	0: successful exchange
+> > + *		1: exchange failed
+> > + *		-EFAULT: @address not accessible or not naturally aligned
+> > + *		-EINVAL: invalid @size
+> > + */
+> > +static __always_inline int cmpxchg_user_key_size(int size, void __user *address,
+> > +						 unsigned __int128 *old_p,
+> > +						 unsigned __int128 new, u8 access_key)
+> > +{
+> > +	union {
+> > +		u32 word;
+> > +		u64 doubleword;
+> > +	} old;
+> > +	int ret = -EFAULT;
+> > +
+> > +	/*
+> > +	 * The following assumes that:
+> > +	 *  * the current psw key is the default key
+> > +	 *  * no storage protection overrides are in effect
+> > +	 */
+> > +	might_fault();
+> > +	switch (size) {
+> > +	case 16:
+> > +		asm volatile(
+> > +			       "spka	0(%[access_key])\n"
+> > +			"	sacf	256\n"
+> > +			"0:	cdsg	%[old],%[new],%[target]\n"
+> > +			"1:	ipm	%[ret]\n"
+> > +			"	srl	%[ret],28\n"
+> > +			"2:	sacf	768\n"
+> > +			"	spka	%[default_key]\n"
+> > +			EX_TABLE(0b, 2b) EX_TABLE(1b, 2b)
+> > +			: [old] "+d" (*old_p),
+> > +			  [target] "+Q" (*(unsigned __int128 __user *)address),
+> > +			  [ret] "+d" (ret)
+> > +			: [access_key] "a" (access_key << 4),
+> > +			  [new] "d" (new),
+> > +			  [default_key] "J" (PAGE_DEFAULT_KEY)
+> > +			: "cc"
+> > +		);
+> > +		return ret;
+> > +	case 8:
+> > +		old.doubleword = *old_p;
+> > +		asm volatile(
+> > +			       "spka	0(%[access_key])\n"
+> > +			"	sacf	256\n"
+> > +			"0:	csg	%[old],%[new],%[target]\n"
+> > +			"1:	ipm	%[ret]\n"
+> > +			"	srl	%[ret],28\n"
+> > +			"2:	sacf	768\n"
+> > +			"	spka	%[default_key]\n"
+> > +			EX_TABLE(0b, 2b) EX_TABLE(1b, 2b)
+> > +			: [old] "+d" (old.doubleword),
+> > +			  [target] "+Q" (*(u64 __user *)address),
+> > +			  [ret] "+d" (ret)
+> > +			: [access_key] "a" (access_key << 4),
+> > +			  [new] "d" ((u64)new),
+> > +			  [default_key] "J" (PAGE_DEFAULT_KEY)
+> > +			: "cc"
+> > +		);
+> > +		*old_p = old.doubleword;
+> > +		return ret;
+> > +	case 4:
+> > +		old.word = *old_p;
+> > +		asm volatile(
+> > +			       "spka	0(%[access_key])\n"
+> > +			"	sacf	256\n"
+> > +			"0:	cs	%[old],%[new],%[target]\n"
+> > +			"1:	ipm	%[ret]\n"
+> > +			"	srl	%[ret],28\n"
+> > +			"2:	sacf	768\n"
+> > +			"	spka	%[default_key]\n"
+> > +			EX_TABLE(0b, 2b) EX_TABLE(1b, 2b)
+> > +			: [old] "+d" (old.word),
+> > +			  [target] "+Q" (*(u32 __user *)address),
+> > +			  [ret] "+d" (ret)
+> > +			: [access_key] "a" (access_key << 4),
+> > +			  [new] "d" ((u32)new),
+> > +			  [default_key] "J" (PAGE_DEFAULT_KEY)
+> > +			: "cc"
+> 
+> this is the same code 3 times with only very minimal changes.
+> can you factor it out in macros?
+> 
+> something like this:
+> 
+> #define DO_COMPARE_AND_SWAP(instr, _old, _addr, _ret, _key, _new) \
+> 	asm volatile(
+> 			"spka	0(%[access_key])\n"
+> 		"	sacf	256\n" 
+> 		"0:	" instr "%[old],%[new],%[target]\n"
+> 		"1:	ipm	%[ret]\n"
+>  		"	srl 	%[ret],28\n"
+> 		"2:	sacf	768\n"
+> 		"	spka	%[default_key]\n"
+> 		EX_TABLE(0b, 2b) EX_TABLE(1b, 2b)
+> 		: [old] "+d"(_old),
+> 		  [target] "+Q" (*(_addr)),
+> 		  [ret] "+d" (_ret)
+> 		: [access_key] "a" ((_key) << 4),
+> 		  [new] "d" (_new),
+> 		  [default_key] "J" (PAGE_DEFAULT_KEY)
+> 		: "cc"
+> 
+> and then in the code:
+> 
+> DO_COMPARE_AND_SWAP("cs", old.word, (u32 __user *)address, ret, access_key, (u32)new)
+> 
+> this way the code is not duplicated
+> 
+> 
+> or have you tried it already and there are issues I didn't think of?
 
-Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- kernel/trace/trace_events_user.c | 346 ++++++++++++++++++++++++-------
- 1 file changed, 274 insertions(+), 72 deletions(-)
+I'd prefer that, but it's different from how cmpxchg.h does it.
+But then that has simpler asm and needs to special case int128 so the
+benefit isn't as great. I guess Heiko should make that call.
+> 
+> > +		);
+> > +		*old_p = old.word;
+> > +		return ret;
+> > +	case 2:
+> > +	case 1:
+> > +		return __cmpxchg_user_key_small(size, (u64)address, old_p, new, access_key);
+> > +	default:
+> > +		return -EINVAL;
+> > +	}
+> > +}
+> > +
+> > +#define cmpxchg_user_key(target_p, old_p, new, access_key)			\
 
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index 2c0a6ec75548..ae78c2d53c8a 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -74,11 +74,25 @@
- #define EVENT_STATUS_PERF BIT(1)
- #define EVENT_STATUS_OTHER BIT(7)
- 
--static char *register_page_data;
-+/*
-+ * Stores the pages, tables, and locks for a group of events.
-+ * Each logical grouping of events has its own group, with a
-+ * matching page for status checks within user programs. This
-+ * allows for isolation of events to user programs by various
-+ * means.
-+ */
-+struct user_event_group {
-+	struct page *pages;
-+	char *register_page_data;
-+	char *system_name;
-+	struct hlist_node node;
-+	struct mutex reg_mutex;
-+	DECLARE_HASHTABLE(register_table, 8);
-+	DECLARE_BITMAP(page_bitmap, MAX_EVENTS);
-+};
- 
--static DEFINE_MUTEX(reg_mutex);
--static DEFINE_HASHTABLE(register_table, 8);
--static DECLARE_BITMAP(page_bitmap, MAX_EVENTS);
-+/* Group for init_user_ns mapping, top-most group */
-+static struct user_event_group *init_group;
- 
- /*
-  * Stores per-event properties, as users register events
-@@ -88,6 +102,7 @@ static DECLARE_BITMAP(page_bitmap, MAX_EVENTS);
-  * refcnt reaches one.
-  */
- struct user_event {
-+	struct user_event_group *group;
- 	struct tracepoint tracepoint;
- 	struct trace_event_call call;
- 	struct trace_event_class class;
-@@ -114,6 +129,11 @@ struct user_event_refs {
- 	struct user_event *events[];
- };
- 
-+struct user_event_file_info {
-+	struct user_event_group *group;
-+	struct user_event_refs *refs;
-+};
-+
- #define VALIDATOR_ENSURE_NULL (1 << 0)
- #define VALIDATOR_REL (1 << 1)
- 
-@@ -126,7 +146,8 @@ struct user_event_validator {
- typedef void (*user_event_func_t) (struct user_event *user, struct iov_iter *i,
- 				   void *tpdata, bool *faulted);
- 
--static int user_event_parse(char *name, char *args, char *flags,
-+static int user_event_parse(struct user_event_group *group, char *name,
-+			    char *args, char *flags,
- 			    struct user_event **newuser);
- 
- static u32 user_event_key(char *name)
-@@ -134,12 +155,128 @@ static u32 user_event_key(char *name)
- 	return jhash(name, strlen(name), 0);
- }
- 
-+static void set_page_reservations(char *pages, bool set)
-+{
-+	int page;
-+
-+	for (page = 0; page < MAX_PAGES; ++page) {
-+		void *addr = pages + (PAGE_SIZE * page);
-+
-+		if (set)
-+			SetPageReserved(virt_to_page(addr));
-+		else
-+			ClearPageReserved(virt_to_page(addr));
-+	}
-+}
-+
-+static void user_event_group_destroy(struct user_event_group *group)
-+{
-+	if (group->register_page_data)
-+		set_page_reservations(group->register_page_data, false);
-+
-+	if (group->pages)
-+		__free_pages(group->pages, MAX_PAGE_ORDER);
-+
-+	kfree(group->system_name);
-+	kfree(group);
-+}
-+
-+static char *user_event_group_system_name(struct user_namespace *user_ns)
-+{
-+	char *system_name;
-+	int len = sizeof(USER_EVENTS_SYSTEM) + 1;
-+
-+	if (user_ns != &init_user_ns) {
-+		/*
-+		 * Unexpected at this point:
-+		 * We only currently support init_user_ns.
-+		 * When we enable more, this will trigger a failure so log.
-+		 */
-+		pr_warn("user_events: Namespace other than init_user_ns!\n");
-+		return NULL;
-+	}
-+
-+	system_name = kmalloc(len, GFP_KERNEL);
-+
-+	if (!system_name)
-+		return NULL;
-+
-+	snprintf(system_name, len, "%s", USER_EVENTS_SYSTEM);
-+
-+	return system_name;
-+}
-+
-+static inline struct user_event_group
-+*user_event_group_from_user_ns(struct user_namespace *user_ns)
-+{
-+	if (user_ns == &init_user_ns)
-+		return init_group;
-+
-+	return NULL;
-+}
-+
-+static struct user_event_group *current_user_event_group(void)
-+{
-+	struct user_namespace *user_ns = current_user_ns();
-+	struct user_event_group *group = NULL;
-+
-+	while (user_ns) {
-+		group = user_event_group_from_user_ns(user_ns);
-+
-+		if (group)
-+			break;
-+
-+		user_ns = user_ns->parent;
-+	}
-+
-+	return group;
-+}
-+
-+static struct user_event_group
-+*user_event_group_create(struct user_namespace *user_ns)
-+{
-+	struct user_event_group *group;
-+
-+	group = kzalloc(sizeof(*group), GFP_KERNEL);
-+
-+	if (!group)
-+		return NULL;
-+
-+	group->system_name = user_event_group_system_name(user_ns);
-+
-+	if (!group->system_name)
-+		goto error;
-+
-+	group->pages = alloc_pages(GFP_KERNEL | __GFP_ZERO, MAX_PAGE_ORDER);
-+
-+	if (!group->pages)
-+		goto error;
-+
-+	group->register_page_data = page_address(group->pages);
-+
-+	set_page_reservations(group->register_page_data, true);
-+
-+	/* Zero all bits beside 0 (which is reserved for failures) */
-+	bitmap_zero(group->page_bitmap, MAX_EVENTS);
-+	set_bit(0, group->page_bitmap);
-+
-+	mutex_init(&group->reg_mutex);
-+	hash_init(group->register_table);
-+
-+	return group;
-+error:
-+	if (group)
-+		user_event_group_destroy(group);
-+
-+	return NULL;
-+};
-+
- static __always_inline
- void user_event_register_set(struct user_event *user)
- {
- 	int i = user->index;
- 
--	register_page_data[MAP_STATUS_BYTE(i)] |= MAP_STATUS_MASK(i);
-+	user->group->register_page_data[MAP_STATUS_BYTE(i)] |= MAP_STATUS_MASK(i);
- }
- 
- static __always_inline
-@@ -147,7 +284,7 @@ void user_event_register_clear(struct user_event *user)
- {
- 	int i = user->index;
- 
--	register_page_data[MAP_STATUS_BYTE(i)] &= ~MAP_STATUS_MASK(i);
-+	user->group->register_page_data[MAP_STATUS_BYTE(i)] &= ~MAP_STATUS_MASK(i);
- }
- 
- static __always_inline __must_check
-@@ -191,7 +328,8 @@ static struct list_head *user_event_get_fields(struct trace_event_call *call)
-  *
-  * Upon success user_event has its ref count increased by 1.
-  */
--static int user_event_parse_cmd(char *raw_command, struct user_event **newuser)
-+static int user_event_parse_cmd(struct user_event_group *group,
-+				char *raw_command, struct user_event **newuser)
- {
- 	char *name = raw_command;
- 	char *args = strpbrk(name, " ");
-@@ -205,7 +343,7 @@ static int user_event_parse_cmd(char *raw_command, struct user_event **newuser)
- 	if (flags)
- 		*flags++ = '\0';
- 
--	return user_event_parse(name, args, flags, newuser);
-+	return user_event_parse(group, name, args, flags, newuser);
- }
- 
- static int user_field_array_size(const char *type)
-@@ -693,7 +831,7 @@ static int destroy_user_event(struct user_event *user)
- 	dyn_event_remove(&user->devent);
- 
- 	user_event_register_clear(user);
--	clear_bit(user->index, page_bitmap);
-+	clear_bit(user->index, user->group->page_bitmap);
- 	hash_del(&user->node);
- 
- 	user_event_destroy_validators(user);
-@@ -704,14 +842,15 @@ static int destroy_user_event(struct user_event *user)
- 	return ret;
- }
- 
--static struct user_event *find_user_event(char *name, u32 *outkey)
-+static struct user_event *find_user_event(struct user_event_group *group,
-+					  char *name, u32 *outkey)
- {
- 	struct user_event *user;
- 	u32 key = user_event_key(name);
- 
- 	*outkey = key;
- 
--	hash_for_each_possible(register_table, user, node, key)
-+	hash_for_each_possible(group->register_table, user, node, key)
- 		if (!strcmp(EVENT_NAME(user), name)) {
- 			refcount_inc(&user->refcnt);
- 			return user;
-@@ -943,6 +1082,7 @@ static int user_event_reg(struct trace_event_call *call,
- 
- static int user_event_create(const char *raw_command)
- {
-+	struct user_event_group *group;
- 	struct user_event *user;
- 	char *name;
- 	int ret;
-@@ -958,14 +1098,19 @@ static int user_event_create(const char *raw_command)
- 	if (!name)
- 		return -ENOMEM;
- 
--	mutex_lock(&reg_mutex);
-+	group = current_user_event_group();
-+
-+	if (!group)
-+		return -ENOENT;
-+
-+	mutex_lock(&group->reg_mutex);
- 
--	ret = user_event_parse_cmd(name, &user);
-+	ret = user_event_parse_cmd(group, name, &user);
- 
- 	if (!ret)
- 		refcount_dec(&user->refcnt);
- 
--	mutex_unlock(&reg_mutex);
-+	mutex_unlock(&group->reg_mutex);
- 
- 	if (ret)
- 		kfree(name);
-@@ -1119,7 +1264,8 @@ static int user_event_trace_register(struct user_event *user)
-  * The name buffer lifetime is owned by this method for success cases only.
-  * Upon success the returned user_event has its ref count increased by 1.
-  */
--static int user_event_parse(char *name, char *args, char *flags,
-+static int user_event_parse(struct user_event_group *group, char *name,
-+			    char *args, char *flags,
- 			    struct user_event **newuser)
- {
- 	int ret;
-@@ -1129,7 +1275,7 @@ static int user_event_parse(char *name, char *args, char *flags,
- 
- 	/* Prevent dyn_event from racing */
- 	mutex_lock(&event_mutex);
--	user = find_user_event(name, &key);
-+	user = find_user_event(group, name, &key);
- 	mutex_unlock(&event_mutex);
- 
- 	if (user) {
-@@ -1142,7 +1288,7 @@ static int user_event_parse(char *name, char *args, char *flags,
- 		return 0;
- 	}
- 
--	index = find_first_zero_bit(page_bitmap, MAX_EVENTS);
-+	index = find_first_zero_bit(group->page_bitmap, MAX_EVENTS);
- 
- 	if (index == MAX_EVENTS)
- 		return -EMFILE;
-@@ -1156,6 +1302,7 @@ static int user_event_parse(char *name, char *args, char *flags,
- 	INIT_LIST_HEAD(&user->fields);
- 	INIT_LIST_HEAD(&user->validators);
- 
-+	user->group = group;
- 	user->tracepoint.name = name;
- 
- 	ret = user_event_parse_fields(user, args);
-@@ -1174,8 +1321,8 @@ static int user_event_parse(char *name, char *args, char *flags,
- 	user->call.flags = TRACE_EVENT_FL_TRACEPOINT;
- 	user->call.tp = &user->tracepoint;
- 	user->call.event.funcs = &user_event_funcs;
-+	user->class.system = group->system_name;
- 
--	user->class.system = USER_EVENTS_SYSTEM;
- 	user->class.fields_array = user_event_fields_array;
- 	user->class.get_fields = user_event_get_fields;
- 	user->class.reg = user_event_reg;
-@@ -1198,8 +1345,8 @@ static int user_event_parse(char *name, char *args, char *flags,
- 
- 	dyn_event_init(&user->devent, &user_event_dops);
- 	dyn_event_add(&user->devent, &user->call);
--	set_bit(user->index, page_bitmap);
--	hash_add(register_table, &user->node, key);
-+	set_bit(user->index, group->page_bitmap);
-+	hash_add(group->register_table, &user->node, key);
- 
- 	mutex_unlock(&event_mutex);
- 
-@@ -1217,10 +1364,10 @@ static int user_event_parse(char *name, char *args, char *flags,
- /*
-  * Deletes a previously created event if it is no longer being used.
-  */
--static int delete_user_event(char *name)
-+static int delete_user_event(struct user_event_group *group, char *name)
- {
- 	u32 key;
--	struct user_event *user = find_user_event(name, &key);
-+	struct user_event *user = find_user_event(group, name, &key);
- 
- 	if (!user)
- 		return -ENOENT;
-@@ -1238,6 +1385,7 @@ static int delete_user_event(char *name)
-  */
- static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
- {
-+	struct user_event_file_info *info = file->private_data;
- 	struct user_event_refs *refs;
- 	struct user_event *user = NULL;
- 	struct tracepoint *tp;
-@@ -1249,7 +1397,7 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
- 
- 	rcu_read_lock_sched();
- 
--	refs = rcu_dereference_sched(file->private_data);
-+	refs = rcu_dereference_sched(info->refs);
- 
- 	/*
- 	 * The refs->events array is protected by RCU, and new items may be
-@@ -1307,6 +1455,28 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
- 	return ret;
- }
- 
-+static int user_events_open(struct inode *node, struct file *file)
-+{
-+	struct user_event_group *group;
-+	struct user_event_file_info *info;
-+
-+	group = current_user_event_group();
-+
-+	if (!group)
-+		return -ENOENT;
-+
-+	info = kzalloc(sizeof(*info), GFP_KERNEL);
-+
-+	if (!info)
-+		return -ENOMEM;
-+
-+	info->group = group;
-+
-+	file->private_data = info;
-+
-+	return 0;
-+}
-+
- static ssize_t user_events_write(struct file *file, const char __user *ubuf,
- 				 size_t count, loff_t *ppos)
- {
-@@ -1328,13 +1498,15 @@ static ssize_t user_events_write_iter(struct kiocb *kp, struct iov_iter *i)
- 	return user_events_write_core(kp->ki_filp, i);
- }
- 
--static int user_events_ref_add(struct file *file, struct user_event *user)
-+static int user_events_ref_add(struct user_event_file_info *info,
-+			       struct user_event *user)
- {
-+	struct user_event_group *group = info->group;
- 	struct user_event_refs *refs, *new_refs;
- 	int i, size, count = 0;
- 
--	refs = rcu_dereference_protected(file->private_data,
--					 lockdep_is_held(&reg_mutex));
-+	refs = rcu_dereference_protected(info->refs,
-+					 lockdep_is_held(&group->reg_mutex));
- 
- 	if (refs) {
- 		count = refs->count;
-@@ -1360,7 +1532,7 @@ static int user_events_ref_add(struct file *file, struct user_event *user)
- 
- 	refcount_inc(&user->refcnt);
- 
--	rcu_assign_pointer(file->private_data, new_refs);
-+	rcu_assign_pointer(info->refs, new_refs);
- 
- 	if (refs)
- 		kfree_rcu(refs, rcu);
-@@ -1397,7 +1569,8 @@ static long user_reg_get(struct user_reg __user *ureg, struct user_reg *kreg)
- /*
-  * Registers a user_event on behalf of a user process.
-  */
--static long user_events_ioctl_reg(struct file *file, unsigned long uarg)
-+static long user_events_ioctl_reg(struct user_event_file_info *info,
-+				  unsigned long uarg)
- {
- 	struct user_reg __user *ureg = (struct user_reg __user *)uarg;
- 	struct user_reg reg;
-@@ -1418,14 +1591,14 @@ static long user_events_ioctl_reg(struct file *file, unsigned long uarg)
- 		return ret;
- 	}
- 
--	ret = user_event_parse_cmd(name, &user);
-+	ret = user_event_parse_cmd(info->group, name, &user);
- 
- 	if (ret) {
- 		kfree(name);
- 		return ret;
- 	}
- 
--	ret = user_events_ref_add(file, user);
-+	ret = user_events_ref_add(info, user);
- 
- 	/* No longer need parse ref, ref_add either worked or not */
- 	refcount_dec(&user->refcnt);
-@@ -1443,7 +1616,8 @@ static long user_events_ioctl_reg(struct file *file, unsigned long uarg)
- /*
-  * Deletes a user_event on behalf of a user process.
-  */
--static long user_events_ioctl_del(struct file *file, unsigned long uarg)
-+static long user_events_ioctl_del(struct user_event_file_info *info,
-+				  unsigned long uarg)
- {
- 	void __user *ubuf = (void __user *)uarg;
- 	char *name;
-@@ -1456,7 +1630,7 @@ static long user_events_ioctl_del(struct file *file, unsigned long uarg)
- 
- 	/* event_mutex prevents dyn_event from racing */
- 	mutex_lock(&event_mutex);
--	ret = delete_user_event(name);
-+	ret = delete_user_event(info->group, name);
- 	mutex_unlock(&event_mutex);
- 
- 	kfree(name);
-@@ -1470,19 +1644,21 @@ static long user_events_ioctl_del(struct file *file, unsigned long uarg)
- static long user_events_ioctl(struct file *file, unsigned int cmd,
- 			      unsigned long uarg)
- {
-+	struct user_event_file_info *info = file->private_data;
-+	struct user_event_group *group = info->group;
- 	long ret = -ENOTTY;
- 
- 	switch (cmd) {
- 	case DIAG_IOCSREG:
--		mutex_lock(&reg_mutex);
--		ret = user_events_ioctl_reg(file, uarg);
--		mutex_unlock(&reg_mutex);
-+		mutex_lock(&group->reg_mutex);
-+		ret = user_events_ioctl_reg(info, uarg);
-+		mutex_unlock(&group->reg_mutex);
- 		break;
- 
- 	case DIAG_IOCSDEL:
--		mutex_lock(&reg_mutex);
--		ret = user_events_ioctl_del(file, uarg);
--		mutex_unlock(&reg_mutex);
-+		mutex_lock(&group->reg_mutex);
-+		ret = user_events_ioctl_del(info, uarg);
-+		mutex_unlock(&group->reg_mutex);
- 		break;
- 	}
- 
-@@ -1494,17 +1670,24 @@ static long user_events_ioctl(struct file *file, unsigned int cmd,
-  */
- static int user_events_release(struct inode *node, struct file *file)
- {
-+	struct user_event_file_info *info = file->private_data;
-+	struct user_event_group *group;
- 	struct user_event_refs *refs;
- 	struct user_event *user;
- 	int i;
- 
-+	if (!info)
-+		return -EINVAL;
-+
-+	group = info->group;
-+
- 	/*
- 	 * Ensure refs cannot change under any situation by taking the
- 	 * register mutex during the final freeing of the references.
- 	 */
--	mutex_lock(&reg_mutex);
-+	mutex_lock(&group->reg_mutex);
- 
--	refs = file->private_data;
-+	refs = info->refs;
- 
- 	if (!refs)
- 		goto out;
-@@ -1523,32 +1706,51 @@ static int user_events_release(struct inode *node, struct file *file)
- out:
- 	file->private_data = NULL;
- 
--	mutex_unlock(&reg_mutex);
-+	mutex_unlock(&group->reg_mutex);
- 
- 	kfree(refs);
-+	kfree(info);
- 
- 	return 0;
- }
- 
- static const struct file_operations user_data_fops = {
-+	.open = user_events_open,
- 	.write = user_events_write,
- 	.write_iter = user_events_write_iter,
- 	.unlocked_ioctl	= user_events_ioctl,
- 	.release = user_events_release,
- };
- 
-+static struct user_event_group *user_status_group(struct file *file)
-+{
-+	struct seq_file *m = file->private_data;
-+
-+	if (!m)
-+		return NULL;
-+
-+	return m->private;
-+}
-+
- /*
-  * Maps the shared page into the user process for checking if event is enabled.
-  */
- static int user_status_mmap(struct file *file, struct vm_area_struct *vma)
- {
-+	char *pages;
-+	struct user_event_group *group = user_status_group(file);
- 	unsigned long size = vma->vm_end - vma->vm_start;
- 
- 	if (size != MAX_BYTES)
- 		return -EINVAL;
- 
-+	if (!group)
-+		return -EINVAL;
-+
-+	pages = group->register_page_data;
-+
- 	return remap_pfn_range(vma, vma->vm_start,
--			       virt_to_phys(register_page_data) >> PAGE_SHIFT,
-+			       virt_to_phys(pages) >> PAGE_SHIFT,
- 			       size, vm_get_page_prot(VM_READ));
- }
- 
-@@ -1572,13 +1774,17 @@ static void user_seq_stop(struct seq_file *m, void *p)
- 
- static int user_seq_show(struct seq_file *m, void *p)
- {
-+	struct user_event_group *group = m->private;
- 	struct user_event *user;
- 	char status;
- 	int i, active = 0, busy = 0, flags;
- 
--	mutex_lock(&reg_mutex);
-+	if (!group)
-+		return -EINVAL;
-+
-+	mutex_lock(&group->reg_mutex);
- 
--	hash_for_each(register_table, i, user, node) {
-+	hash_for_each(group->register_table, i, user, node) {
- 		status = user->status;
- 		flags = user->flags;
- 
-@@ -1602,7 +1808,7 @@ static int user_seq_show(struct seq_file *m, void *p)
- 		active++;
- 	}
- 
--	mutex_unlock(&reg_mutex);
-+	mutex_unlock(&group->reg_mutex);
- 
- 	seq_puts(m, "\n");
- 	seq_printf(m, "Active: %d\n", active);
-@@ -1621,7 +1827,24 @@ static const struct seq_operations user_seq_ops = {
- 
- static int user_status_open(struct inode *node, struct file *file)
- {
--	return seq_open(file, &user_seq_ops);
-+	struct user_event_group *group;
-+	int ret;
-+
-+	group = current_user_event_group();
-+
-+	if (!group)
-+		return -ENOENT;
-+
-+	ret = seq_open(file, &user_seq_ops);
-+
-+	if (!ret) {
-+		/* Chain group to seq_file */
-+		struct seq_file *m = file->private_data;
-+
-+		m->private = group;
-+	}
-+
-+	return ret;
- }
- 
- static const struct file_operations user_status_fops = {
-@@ -1662,42 +1885,21 @@ static int create_user_tracefs(void)
- 	return -ENODEV;
- }
- 
--static void set_page_reservations(bool set)
--{
--	int page;
--
--	for (page = 0; page < MAX_PAGES; ++page) {
--		void *addr = register_page_data + (PAGE_SIZE * page);
--
--		if (set)
--			SetPageReserved(virt_to_page(addr));
--		else
--			ClearPageReserved(virt_to_page(addr));
--	}
--}
--
- static int __init trace_events_user_init(void)
- {
--	struct page *pages;
- 	int ret;
- 
--	/* Zero all bits beside 0 (which is reserved for failures) */
--	bitmap_zero(page_bitmap, MAX_EVENTS);
--	set_bit(0, page_bitmap);
-+	init_group = user_event_group_create(&init_user_ns);
- 
--	pages = alloc_pages(GFP_KERNEL | __GFP_ZERO, MAX_PAGE_ORDER);
--	if (!pages)
-+	if (!init_group)
- 		return -ENOMEM;
--	register_page_data = page_address(pages);
--
--	set_page_reservations(true);
- 
- 	ret = create_user_tracefs();
- 
- 	if (ret) {
- 		pr_warn("user_events could not register with tracefs\n");
--		set_page_reservations(false);
--		__free_pages(pages, MAX_PAGE_ORDER);
-+		user_event_group_destroy(init_group);
-+		init_group = NULL;
- 		return ret;
- 	}
- 
--- 
-2.35.1
+Note that this macro isn't being used because I also deviated from the
+functions in cmpxchg.h here. Since we need to return an error in case
+of a fault the return type cannot be void. So we can also return EINVAL
+in case of an invalid size. Then cmpxchg_user_key_size is perfectly
+fine to call directly, which avoids awkwardness in KVM converting the
+numeric size we got from user space into the right types.
+So this macro only exists for other future possible users of key
+checked cmpxchg where the types are fixed at compile time.
+So with your version cmpxchg_user_key_size should just recurse for the
+small sizes.
+
+> > +({										\
+> > +	__typeof__(old_p) __old_p = (old_p);					\
+> > +	unsigned __int128 __old = *__old_p;					\
+> > +	size_t __size = sizeof(*(target_p));					\
+> > +	int __ret;								\
+> > +										\
+> > +	BUILD_BUG_ON(__size != sizeof(*__old_p));				\
+> > +	BUILD_BUG_ON(__size != sizeof(new));					\
+> > +	BUILD_BUG_ON(__size > 16 || !is_power_of_2(__size));			\
+> 
+> and here an if to see if you need the _small version or the regular
+> one, with the _small version being a wrapper around the regular one
+> 
+> > +	__ret = cmpxchg_user_key_size(__size, (target_p), &__old, (new),	\
+> > +				      (access_key));				\
+> > +	*__old_p = __old;							\
+> > +	__ret;									\
+> > +})
+> > +
+> >  #endif /* __S390_UACCESS_H */
+> 
+
