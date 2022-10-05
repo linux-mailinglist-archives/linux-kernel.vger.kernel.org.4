@@ -2,128 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED1D5F51B8
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C77A75F51BD
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbiJEJZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 05:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33708 "EHLO
+        id S229545AbiJEJae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 05:30:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiJEJZw (ORCPT
+        with ESMTP id S229513AbiJEJac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 05:25:52 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E96558FA;
-        Wed,  5 Oct 2022 02:25:51 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id 67so1094373pfz.12;
-        Wed, 05 Oct 2022 02:25:51 -0700 (PDT)
+        Wed, 5 Oct 2022 05:30:32 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D9E1D31D
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 02:30:27 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id n198so1057584iod.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 02:30:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=izOq3nhW8PlF5udp1yxZvcnLpgOly1zNCF8yx+bEypo=;
-        b=igDoZw39cpPcFKBATmvS0n8RrR+ocDjZAWBIAW5hJ43l4gh2MFwghu5UV+w88CPw0I
-         i7WdzUCsXp4g8I6HY1ld9h2VxkymyQK7u60ZbwIlxHrta5RpdFzwghFKQKOT1Flz/PQ2
-         TqXIUz2totbmPox1N1a8i6Do5Xe6vMwZWkvGWaLTGzcCa5niQA8Ru3fRD6pw5ArrnZMO
-         DIk6tYpylBpPg5AI3/xVOQ3jE38uXDH7qYAiTnrZTY5hQTOIEbTjnZQL1kNU59MCpPFz
-         lZW4qPmdbTTmjdaCj4T0o0XIzVnb4ISx3Wt1D39Bn9sLmGMJqHms2J8pQlg0S2TFNbaj
-         t7Yg==
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date;
+        bh=5N+aMihLorZXBHcklDfHgYNT/W4ZQvt0cLc1vwY1KVE=;
+        b=X7UEsEgJjqoNOvLJY6FO8Tvqtxut8IYL1K1nWtA4Ui76fyc6YdbJ4dnle9IV0O9KA2
+         vNcjVtJDxEAyNrcYdDn4Hh058EhNW+hV35PRDyoVvQhplRT2cxek5UOFLXX8KDVN+e1L
+         wcxI50AMEzfnCxpRPvIcVLWa6rKPNFL/tTjeowkFHNJN6nWe70CusOrgfyRAeNfAi4Ch
+         CNkPMVSxXUIo7GYepknInryuIakQxoXU6vtEfVk3N5ZeT3nFcnr/UzX3hDb8F6KXiAsB
+         heOw8t0vuhx8PLP+/WndBfEYY3BvLw1VBxYvho+kBEt4NkHrdE5edzJBMXB12mxboq/l
+         2y8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=izOq3nhW8PlF5udp1yxZvcnLpgOly1zNCF8yx+bEypo=;
-        b=2YkwO7p7B0J5pRGVs4UtPN0b5AwoTnLuMcbY7/PLSfmqImyLgW5WJcGyrBicQtWe4I
-         GG93iY+oSk9ChZUppJV33nKzJjDPMVF6wwUDq5nCJiZs1e4+md6+BN1PhhR3n7BXIPEV
-         AjsLqVPoLqDX4AE6WFM1b+SomwAMx+qIevB3/ccUwBHsp5SNaL5iPfhfYPusNlzMVz9f
-         pVRT22xIKZ93ip8cXjs8iS68tteGyGJe4hF/OlV6TOpyf81sbpzhgtXuEo4De5EW+jW5
-         8tasc9ZEt16pCllC970nzwI5ZexFoqP++mhz3g+sV4wykWPegieoz0rbdeqbIYV5Elm3
-         IIDg==
-X-Gm-Message-State: ACrzQf082FVDWWkMPxNQNk0lta0w86mIAq/qgfwu/LIya/3MyBsL6RUH
-        0Qe869gwCNNKOh1kbjJNYyU=
-X-Google-Smtp-Source: AMsMyM4nRrzknrIo9rTE2rjnPSrl6+nPOxqW1Ndzb7Lrr/SqGD0sXGDVTPcVTesXGhS6RYukukrLFg==
-X-Received: by 2002:a05:6a00:194a:b0:561:a950:c2e0 with SMTP id s10-20020a056a00194a00b00561a950c2e0mr10448808pfk.10.1664961950569;
-        Wed, 05 Oct 2022 02:25:50 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-92.three.co.id. [180.214.232.92])
-        by smtp.gmail.com with ESMTPSA id n6-20020a170902d2c600b0017f36638010sm5633001plc.276.2022.10.05.02.25.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Oct 2022 02:25:50 -0700 (PDT)
-Message-ID: <3f0417cf-a58d-a2bd-7a9a-1d4dabf89970@gmail.com>
-Date:   Wed, 5 Oct 2022 16:25:39 +0700
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=5N+aMihLorZXBHcklDfHgYNT/W4ZQvt0cLc1vwY1KVE=;
+        b=Tvz33D+2dQ0JzHFblkwvE/WldiD6Rtfs3/TIQ2fcrhflEesSIPm5T0JRDiIh7n2MNL
+         GiawCztGL3PzNBWM8Phr94RfzTp6cCPmoKi/XmLrverRD8q3vqvQ/POnB7FwWmYygBqq
+         0PsRrpUzGjvPfc0H1oIszF7dpXhe2cOqYy27o6Jc26ZTd6rUKmD2PCh3EER8NQva08l2
+         J5gLvm/N6jr/RXQvkYzCBtEj9IvGcAO9J9lAc2gd1hSdSeGXCgfTF31fNpo3GOPhHwyX
+         /Gozo/7jeBjGhGeZ6N6BfRa3gV1XPi5ggHaSm0AaFmANzR4q0tN/uymraIcnxm9FzXyJ
+         qTIQ==
+X-Gm-Message-State: ACrzQf0uh+2d2uqmbW533Fix6N/C1LhivaOStmlCYRPvLezH9N6EfrCd
+        G/aD28yk8+qy+W0evWZe4fMLjtuRFC6LKTRpLds=
+X-Google-Smtp-Source: AMsMyM6p12i9TE1fLu8jd0RqnEy2qUSJ3sW8kJdZfnbWU2aUQgzklK9lcu5J3Qx/PTHy5ExjtF6H4R8icl5tetL/aA4=
+X-Received: by 2002:a05:6638:238a:b0:35a:25b7:a1a7 with SMTP id
+ q10-20020a056638238a00b0035a25b7a1a7mr15697554jat.92.1664962226512; Wed, 05
+ Oct 2022 02:30:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "corbet@lwn.net" <corbet@lwn.net>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-2-rick.p.edgecombe@intel.com>
- <YzZlT7sO56TzXgNc@debian.me> <87v8p5f0mg.fsf@meer.lwn.net>
- <0eb358ac-068c-d025-07e3-80a3c51ef39c@gmail.com>
- <5832fa687e6da50697a7627d53453b728ed1b7b7.camel@intel.com>
- <Yz1KFj71T4Q4mFrg@hirez.programming.kicks-ass.net>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <Yz1KFj71T4Q4mFrg@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6e02:174b:0:0:0:0 with HTTP; Wed, 5 Oct 2022 02:30:26
+ -0700 (PDT)
+Reply-To: jennifermbaya036@gmail.com
+From:   "Mrs.Jennifer Mbaya" <ezechielgnonlonfoun@gmail.com>
+Date:   Wed, 5 Oct 2022 10:30:26 +0100
+Message-ID: <CA+=aNsgDsCCsCaJfm8p1AVDzwM=z4gZxSVrY=VnUkrScNfqoqw@mail.gmail.com>
+Subject: Edunsaaja
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/5/22 16:10, Peter Zijlstra wrote:
-> On Mon, Oct 03, 2022 at 04:56:10PM +0000, Edgecombe, Rick P wrote:
->> Thanks. Unless anyone has any objections
-> 
-> Well, I'll object. I still feel rst should burn in hell. Plain text FTW.
-> 
-> 
+Edunsaaja
 
-.txt maybe?
-
--- 
-An old man doll... just what I always wanted! - Clara
+Nimess=C3=A4si on palkinto Yhdistyneilt=C3=A4 Kansakunnilta ja Maailman
+terveysj=C3=A4rjest=C3=B6lt=C3=A4, joka on osa kansainv=C3=A4list=C3=A4 val=
+uuttarahastoa, johon
+s=C3=A4hk=C3=B6postisi, osoite ja raha on luovutettu meille siirtoa varten,
+vahvista yst=C3=A4v=C3=A4llisesti tietosi siirtoa varten.
+Meit=C3=A4 kehotettiin siirt=C3=A4m=C3=A4=C3=A4n kaikki vireill=C3=A4 oleva=
+t tapahtumat
+seuraavien kahden aikana, mutta jos olet vastaanottanut rahasi, j=C3=A4t=C3=
+=A4
+t=C3=A4m=C3=A4 viesti huomioimatta, jos et toimi heti.
+Tarvitsemme kiireellist=C3=A4 vastausta t=C3=A4h=C3=A4n viestiin, t=C3=A4m=
+=C3=A4 ei ole yksi
+niist=C3=A4 Internet-huijareista, se on pandemiaapu.
+Jennifer
