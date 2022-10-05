@@ -2,159 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F365F54AB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 14:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3FA5F54A9
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 14:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbiJEMj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 08:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
+        id S229927AbiJEMjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 08:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiJEMj0 (ORCPT
+        with ESMTP id S229507AbiJEMjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 08:39:26 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A018440E3F;
-        Wed,  5 Oct 2022 05:39:25 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:53254)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1og3gJ-00BjAv-M8; Wed, 05 Oct 2022 06:39:23 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:50842 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1og3gI-00CVVW-HM; Wed, 05 Oct 2022 06:39:23 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <CAHC9VhShpEVTuogj4h74PxbEeTUNn4odo8SE6GBvb6sGUM0LHw@mail.gmail.com>
-        <87sfk3mim9.fsf@email.froward.int.ebiederm.org>
-        <CAHk-=wiCqicQrnQPeHbDF7ECKHk_ceYzZK5dYq7y5nZTZhpB8g@mail.gmail.com>
-Date:   Wed, 05 Oct 2022 07:38:45 -0500
-In-Reply-To: <CAHk-=wiCqicQrnQPeHbDF7ECKHk_ceYzZK5dYq7y5nZTZhpB8g@mail.gmail.com>
-        (Linus Torvalds's message of "Tue, 4 Oct 2022 13:55:17 -0700")
-Message-ID: <87r0zmigx6.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 5 Oct 2022 08:39:04 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E6615788D
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 05:39:03 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CCCB8113E;
+        Wed,  5 Oct 2022 05:39:09 -0700 (PDT)
+Received: from [10.1.197.78] (unknown [10.1.197.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 271383F792;
+        Wed,  5 Oct 2022 05:39:01 -0700 (PDT)
+Message-ID: <830e8c64-0118-9a2d-5dcf-5cad55425dc2@arm.com>
+Date:   Wed, 5 Oct 2022 13:38:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1og3gI-00CVVW-HM;;;mid=<87r0zmigx6.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX18MKibCyEaL4f/gAWn5QHd12mbofl/2n5I=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [syzbot] KASAN: invalid-access Read in copy_page
+Content-Language: en-GB
+To:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        tongtiangen@huawei.com,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        syzbot <syzbot+c2c79c6d6eddc5262b77@syzkaller.appspotmail.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+References: <0000000000004387dc05e5888ae5@google.com>
+ <CA+fCnZc9u+QrF-JCQSA+uCM9-egh_=9x4hPdJng6T_uh6XWMZQ@mail.gmail.com>
+ <YxdJ684ypgAy8k98@arm.com>
+ <CACT4Y+YOnTpWT5NCNhsPY=kV=2gFfQkY=7xGdU_1k7AdGhQneg@mail.gmail.com>
+ <YxdZXvsWr37RrFRk@arm.com>
+ <CA+fCnZf-GOZpnBRLkRPrL7FUwYrAb-bu=PV0zMfbKOuNYrZ00A@mail.gmail.com>
+ <Yxd0C7ndn+iPAGcj@arm.com>
+ <CA+fCnZcpba7qinx4DmuJPjRQj07uJ5H9Xq9Zhi8v1rw-AW_yWQ@mail.gmail.com>
+From:   James Morse <james.morse@arm.com>
+In-Reply-To: <CA+fCnZcpba7qinx4DmuJPjRQj07uJ5H9Xq9Zhi8v1rw-AW_yWQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Linus Torvalds <torvalds@linux-foundation.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 614 ms - load_scoreonly_sql: 0.02 (0.0%),
-        signal_user_changed: 4.5 (0.7%), b_tie_ro: 3.0 (0.5%), parse: 1.16
-        (0.2%), extract_message_metadata: 15 (2.4%), get_uri_detail_list: 3.3
-        (0.5%), tests_pri_-1000: 11 (1.9%), tests_pri_-950: 0.99 (0.2%),
-        tests_pri_-900: 0.78 (0.1%), tests_pri_-90: 243 (39.6%), check_bayes:
-        231 (37.6%), b_tokenize: 6 (1.0%), b_tok_get_all: 8 (1.3%),
-        b_comp_prob: 2.6 (0.4%), b_tok_touch_all: 211 (34.4%), b_finish: 0.76
-        (0.1%), tests_pri_0: 325 (52.9%), check_dkim_signature: 0.40 (0.1%),
-        check_dkim_adsp: 2.5 (0.4%), poll_dns_idle: 0.82 (0.1%), tests_pri_10:
-        2.6 (0.4%), tests_pri_500: 7 (1.2%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [GIT PULL] LSM patches for v6.1
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> writes:
+Hi guys,
 
-> On Tue, Oct 4, 2022 at 1:37 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+On 27/09/2022 17:55, Andrey Konovalov wrote:
+> On Tue, Sep 6, 2022 at 6:23 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
 >>
->> Please don't pull the user namespace bits of this code.
->
-> Eric, already done.
->
-> And I think you are in denial about how many problems the
-> user-namespace stuff has caused.
->
-> Distros are literally turning it off entirely because the whole "let
-> users create their own namespace" has *NOT* been a great success.
->
-> I personally think it was a mistake. We're stuck with it, but we most
-> definitely need knobs to manage it that isn't just "enable/disable
-> USER_NS" in the kernel config.
->
-> So this whole "don't do this" approach you have is not acceptable.
->
-> 99% of all code does NOT WANT the user namespace thing, and it's been
-> a big new attack surface for the kernel getting things subtly wrong.
+>> On Tue, Sep 06, 2022 at 04:39:57PM +0200, Andrey Konovalov wrote:
+>>> On Tue, Sep 6, 2022 at 4:29 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+>>>>>> Does it take long to reproduce this kasan warning?
+>>>>>
+>>>>> syzbot finds several such cases every day (200 crashes for the past 35 days):
+>>>>> https://syzkaller.appspot.com/bug?extid=c2c79c6d6eddc5262b77
+>>>>> So once it reaches the tested tree, we should have an answer within a day.
+>>>
+>>> To be specific, this syzkaller instance fuzzes the mainline, so the
+>>> patch with the WARN_ON needs to end up there.
+>>>
+>>> If this is unacceptable, perhaps, we could switch the MTE syzkaller
+>>> instance to the arm64 testing tree.
+>>
+>> It needs some more digging first. My first guess was that a PROT_MTE
+>> page was mapped into the user address space and the task repainted it
+>> but I don't think that's the case.
 
-Yes. I know, and I keep saying geez guys isn't this the problem?
-And I get told nope.  That isn't it.
-
-
-> I do not understand your "people need to be able to do this with no
-> controls", when the alternative is to literally turn it off ENTIRELY.
-
-We already have /proc/sys/user/max_user_namespaces.  It is a per userns
-control so you can run it in as fine grain as you like.  A little
-cumbersome perhaps but real.
-
-> I'm not saying that an LSM is the only place to do it, but I don't
-> think there have been any better suggestions either.
-
-I don't know.  I tried to have the conversation and Paul shut it down.
-Effectively he said that where two or more out of tree LSM policies want
-something it makes no sense to discussion the actual reasons people want
-to use the hook.
-
-> Put another way: your "no limits are acceptable" is simply not
-> realistic, and you haven't given any sane alternatives that I am aware
-> of. No way to say "sure, let trusted system apps create their
-> namespaces, but not random things".
-
-That isn't my position at all, that isn't even the case in the current
-code.
-
-In there current code there are two mechanisms that can be used to limit
-things to secure system apps.  There is
-/proc/sys/user/max_user_namespaces, and the security_capable hook in the
-LSM.
-
-I can imagine that /proc/sys/user/max_user_namespaces could be a bit
-awkward to use as things need to be shuffled around a bit to get
-a user namespace in place that you can use to set your number additional
-user namespaces to 0, for the untrusted apps.
-
-I can imagine that security_capable being a little unintuitive to find
-but it has a parameter telling you it wants a capability from a
-non-default user namespace.
-
-It would be the easiest thing in the world in security_capable to
-ask is this a trusted app, if not the answer is no.
+> syzkaller still keeps hitting this issue and I was wondering if you
+> have any ideas of what could be wrong here?
+> 
+>> Since I can't find the kernel boot log for these runs, is there any kind
+>> of swap enabled? I'm trying to narrow down where the problem may be.
+> 
+> I don't think there is.
 
 
+I've reproduced this with the latest qemu and v6.0 kernel using ubuntu 15.04 user-space.
 
-My big objections are: Paul Moore shutdown the entire discussion into
-why this is needed and alternatives, and that the mechanism the hook
-is using silently breaks userspace applications.
+The reproducer is just to log in once its booted. The vm has swap, and I've turned the
+memory down low enough to force it to swap. The round trip time is about 15 minutes.
 
-In particular chrome's sandbox is silently disabled.  So in practice I
-see this change advocating for silently stripping security from
-userspace applications.
+I've not managed to reproduce it without swap, or with more memory. (but it may be a
+timing thing)
 
-There is a security trade-off between attack surface and securing
-applications here that I could never get the conversation around too.
 
-My sense is that Paul figures with the policy in userspace (AKA the code
-that actually uses these hooks), that it is completely out of scope to
-consider what functionality the hooks make available.
+Below is one example of tag corruption that affected page-cache memory that wouldn't be
+swapped:
+-------------------%<-------------------
+[49488.484420] BUG: KASAN: invalid-access in __arch_copy_to_user+0x180/0x240
+[49488.487122] Read at addr f1ff00000ad48000 by task apt-config/5041
+[49488.488614] Pointer tag: [f1], memory tag: [fe]
 
-In short I completely failed to have any reasonable conversations about
-this code or it's implications, and it breaks userspace.
+[49488.490921] CPU: 1 PID: 5041 Comm: apt-config Not tainted 6.0.0 #14546
+[49488.492364] Hardware name: linux,dummy-virt (DT)
+[49488.493790] Call trace:
+[49488.494640]  dump_backtrace.part.0+0xd0/0xe0
+[49488.495811]  show_stack+0x18/0x50
+[49488.496785]  dump_stack_lvl+0x68/0x84
+[49488.497781]  print_report+0x104/0x604
+[49488.498790]  kasan_report+0x8c/0xb0
+[49488.499758]  __do_kernel_fault+0x11c/0x1bc
+[49488.500801]  do_tag_check_fault+0x78/0x90
+[49488.501830]  do_mem_abort+0x44/0x9c
+[49488.502813]  el1_abort+0x40/0x60
+[49488.503839]  el1h_64_sync_handler+0xb0/0xd0
+[49488.504880]  el1h_64_sync+0x64/0x68
+[49488.505847]  __arch_copy_to_user+0x180/0x240
+[49488.506917]  _copy_to_iter+0x68/0x5c0
+[49488.507918]  copy_page_to_iter+0xac/0x33c
+[49488.508943]  filemap_read+0x1b4/0x3b0
+[49488.509936]  generic_file_read_iter+0x108/0x1a0
+[49488.511033]  ext4_file_read_iter+0x58/0x1f0
+[49488.512078]  vfs_read+0x1f8/0x2a0
+[49488.513031]  ksys_read+0x68/0xf4
+[49488.513978]  __arm64_sys_read+0x1c/0x2c
+[49488.514998]  invoke_syscall+0x48/0x114
+[49488.516046]  el0_svc_common.constprop.0+0x44/0xec
+[49488.517153]  do_el0_svc+0x2c/0xc0
+[49488.518120]  el0_svc+0x2c/0xb4
+[49488.519041]  el0t_64_sync_handler+0xb8/0xc0
+[49488.520080]  el0t_64_sync+0x198/0x19c
 
-Eric
+[49488.522268] The buggy address belongs to the physical page:
+[49488.523778] page:00000000db6e19d9 refcount:20 mapcount:18 mapping:0000000052573be9
+index:0x0 pfn:0x4ad48
+[49488.524938] memcg:faff000002c70000
+[49488.525430] aops:ext4_da_aops ino:8061 dentry name:"libc-2.21.so"
+[49488.526289] flags:
+0x1ffc38002020876(referenced|uptodate|lru|active|workingset|arch_1|mappedtodisk|arch_2|node=0|zone=0|lastcpupid=0x7ff|kasantag=0xe)
+CMA
+[49488.527947] raw: 01ffc38002020876 fffffc00002b5248 fffffc00002b51c8 f8ff00000335c760
+[49488.528325] raw: 0000000000000000 0000000000000000 0000001400000011 faff000002c70000
+[49488.528669] page dumped because: kasan: bad access detected
 
+[49488.529615] Memory state around the buggy address:
+[49488.531027]  ffff00000ad47e00: f1 f1 f1 f1 f1 f1 f1 f1 f1 f1 f1 f1 f1 f1 f1 f1
+[49488.532442]  ffff00000ad47f00: f1 f1 f1 f1 f1 f1 f1 f1 f1 f1 f1 f1 f1 f1 f1 f1
+[49488.533922] >ffff00000ad48000: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
+[49488.535259]                    ^
+[49488.536292]  ffff00000ad48100: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
+[49488.537628]  ffff00000ad48200: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
+[49488.539015] ==================================================================
+[49488.603970] Disabling lock debugging due to kernel taint
+-------------------%<-------------------
+
+
+Thanks,
+
+James
