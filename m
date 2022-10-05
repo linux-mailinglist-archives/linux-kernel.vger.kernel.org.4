@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7052D5F5C59
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 00:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C2C5F5C5A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 00:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiJEWEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 18:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
+        id S229899AbiJEWET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 18:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJEWEK (ORCPT
+        with ESMTP id S229693AbiJEWEL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 18:04:10 -0400
+        Wed, 5 Oct 2022 18:04:11 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6F422516
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 15:04:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3673ED41;
+        Wed,  5 Oct 2022 15:04:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665007449; x=1696543449;
+  t=1665007450; x=1696543450;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=2wQU5u0JEJI3UkDRA0Tf2j+yl1WWuKxxoHm3zoZx9Lc=;
-  b=MwxWTWObrQYnNVkoyqUjrkrjtDOJiysh078k0r9h/6TU33F76zQJJn/9
-   lbciOHH9l+6R7zemPDTvLdouZahHtjzqxZO3IBwsC1pxg4isyteJVv6Vn
-   YMps7tB5/FKPaLIADdp4usu+dbDLXcGfr8lQPc2IWKFHWIvxr39Chqilb
-   JSpNGhi3wJjAW+ELqMVvu2yLCEh0K3ptHyhijkDPUEA9h0c4CzsdF/0RL
-   RvBfUr4Kxiy0muXRjrbicS35Zg3vvKUJ6PLRgJ5lgvDoasGtQJQozy07v
-   rLFBYOTdceI3SpFLivut6Sd3h/Tf8+boq6WeNP/4s3086Z+h2mmZ3L2bZ
+  bh=x0W/PWlKVH4Kg6RVdCR6J9PqSt//9vhZDuFOnyIkMK4=;
+  b=Cu95gJoEPxBWNDOsULtMh0WiixtM2ZVIDTUcjLRpC0QvtVH0CtEJuDS+
+   FtQ79PwQ01r+AWR6sE51wUuo6o57XmgCRumfNq6UhjQqfRCzsoSE0pNbr
+   +ItQB1E/qedNWG84p09iAIgR42ExWsKBJsbb1J0sxv/DmpUOeNOuZbVPx
+   fDC92W18IrP3j4TYOngKrv63jLGmGG4XPK2eGePDkc0m2BY1nrt1RMR7s
+   Noq+X1jcHMyxatqaMVUXSBJJGvdGku+gYQwUh9ptFdlwMF+KzPg29M/CK
+   X7/TQrsBajwgm2rpEyvT8svRsprNbLlacAW4AMvcFd19zZUF3d+NDOOAx
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="365218809"
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="365218813"
 X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
-   d="scan'208";a="365218809"
+   d="scan'208";a="365218813"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 15:04:08 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="602193021"
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="602193024"
 X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
-   d="scan'208";a="602193021"
+   d="scan'208";a="602193024"
 Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
-  by orsmga006.jf.intel.com with ESMTP; 05 Oct 2022 15:04:07 -0700
+  by orsmga006.jf.intel.com with ESMTP; 05 Oct 2022 15:04:08 -0700
 From:   "Chang S. Bae" <chang.seok.bae@intel.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@linux.intel.com, hpa@zytor.com, avagin@gmail.com,
-        seanjc@google.com, chang.seok.bae@intel.com
-Subject: [PATCH v3 1/3] x86/fpu: Fix the MXCSR state reshuffling between userspace and kernel buffers
-Date:   Wed,  5 Oct 2022 14:53:55 -0700
-Message-Id: <20221005215357.1808-2-chang.seok.bae@intel.com>
+        seanjc@google.com, chang.seok.bae@intel.com,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 2/3] selftests/x86/mxcsr: Test the MXCSR state write via ptrace
+Date:   Wed,  5 Oct 2022 14:53:56 -0700
+Message-Id: <20221005215357.1808-3-chang.seok.bae@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221005215357.1808-1-chang.seok.bae@intel.com>
 References: <20221005215357.1808-1-chang.seok.bae@intel.com>
@@ -59,172 +60,246 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-== Hardware Background ==
+The ptrace buffer is in the non-compacted format. The MXCSR state should be
+written to the target thread when either SSE or AVX component is enabled.
 
-The MXCSR state, as part of the SSE component, has different treatments
-with XSAVE*/XRSTOR* between the two XSAVE formats:
+Write an MXCSR value to the target and read back. Then it is validated with
+the XRSTOR/XSAVE result on the current.
 
-- When the MXCSR state is XSAVEd in the non-compacted format, the feature
-bit in XSTATE_BV pertains to the XMM registers. XRSTOR restores the MXCSR
-state without referencing XSTATE_BV.
-
-- But, on XSAVE* with the compacted format, the SSE bit is set in XSTATE_BV
-if MXCSR is not in the init state on XSAVE*. Then, on XRSTOR*, the state is
-restored only when the SSE bit is set in XSTATE_BV.
-
-== Regression ==
-
-The XSTATE copy routine between userspace and kernel buffers used to be
-separate for different XSAVE formats. Commit 43be46e89698 ("x86/fpu:
-Sanitize xstateregs_set()") combined them together.
-
-This change appears to be a regression on XSAVES-less systems. But, the
-merged code is based on the original conversion code with commit
-91c3dba7dbc1 ("x86/fpu/xstate: Fix PTRACE frames for XSAVES").
-
-That has such oversight as:
-- Mistreating MXCSR as part of the FP state instead of the SSE component.
-- Taking the SSE bit in XSTATE_BV always for all the SSE states.
-
-== Correction ==
-
-Update the XSTATE conversion code:
-- Refactor the copy routine for legacy states. Treat MXCSR as part of SSE.
-- Copying MXCSR, reference XSTATE_BV only with the compacted format.
-- Also, flip the SSE bit in XSTATE_BV accordingly to the format.
-
-Reported-by: Andrei Vagin <avagin@gmail.com>
-Fixes: 91c3dba7dbc1 ("x86/fpu/xstate: Fix PTRACE frames for XSAVES")
 Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
 Cc: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org
-Link: https://lore.kernel.org/lkml/CANaxB-wkcNKWjyNGFuMn6f6H2DQSGwwQjUgg1eATdUgmM-Kg+A@mail.gmail.com/
+Cc: linux-kselftest@vger.kernel.org
 ---
- arch/x86/kernel/fpu/xstate.c | 70 +++++++++++++++++++++++++-----------
- 1 file changed, 49 insertions(+), 21 deletions(-)
 
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index c8340156bfd2..d7676cfc32eb 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -1064,6 +1064,7 @@ void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
- 			       u32 pkru_val, enum xstate_copy_mode copy_mode)
- {
- 	const unsigned int off_mxcsr = offsetof(struct fxregs_state, mxcsr);
-+	bool compacted = cpu_feature_enabled(X86_FEATURE_XCOMPACTED);
- 	struct xregs_state *xinit = &init_fpstate.regs.xsave;
- 	struct xregs_state *xsave = &fpstate->regs.xsave;
- 	struct xstate_header header;
-@@ -1093,8 +1094,13 @@ void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
- 	copy_feature(header.xfeatures & XFEATURE_MASK_FP, &to, &xsave->i387,
- 		     &xinit->i387, off_mxcsr);
- 
--	/* Copy MXCSR when SSE or YMM are set in the feature mask */
--	copy_feature(header.xfeatures & (XFEATURE_MASK_SSE | XFEATURE_MASK_YMM),
-+	/*
-+	 * Copy MXCSR depending on the XSAVE format. If compacted,
-+	 * reference the feature mask. Otherwise, check if any of related
-+	 * features is valid.
-+	 */
-+	copy_feature(compacted ? header.xfeatures & XFEATURE_MASK_SSE :
-+		     fpstate->user_xfeatures & (XFEATURE_MASK_SSE | XFEATURE_MASK_YMM),
- 		     &to, &xsave->i387.mxcsr, &xinit->i387.mxcsr,
- 		     MXCSR_AND_FLAGS_SIZE);
- 
-@@ -1199,6 +1205,11 @@ static int copy_from_buffer(void *dst, unsigned int offset, unsigned int size,
- static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
- 			       const void __user *ubuf)
- {
-+	const unsigned int off_stspace = offsetof(struct fxregs_state, st_space);
-+	const unsigned int off_xmm = offsetof(struct fxregs_state, xmm_space);
-+	const unsigned int off_mxcsr = offsetof(struct fxregs_state, mxcsr);
-+	bool compacted = cpu_feature_enabled(X86_FEATURE_XCOMPACTED);
-+	struct fxregs_state *fxsave = &fpstate->regs.fxsave;
- 	struct xregs_state *xsave = &fpstate->regs.xsave;
- 	unsigned int offset, size;
- 	struct xstate_header hdr;
-@@ -1212,38 +1223,48 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
- 	if (validate_user_xstate_header(&hdr, fpstate))
- 		return -EINVAL;
- 
--	/* Validate MXCSR when any of the related features is in use */
--	mask = XFEATURE_MASK_FP | XFEATURE_MASK_SSE | XFEATURE_MASK_YMM;
--	if (hdr.xfeatures & mask) {
-+	if (hdr.xfeatures & XFEATURE_MASK_FP) {
-+		if (copy_from_buffer(fxsave, 0, off_mxcsr, kbuf, ubuf))
-+			return -EINVAL;
-+		if (copy_from_buffer(fxsave->st_space, off_stspace, sizeof(fxsave->st_space),
-+				     kbuf, ubuf))
-+			return -EINVAL;
+If this is acceptable, I will also follow up to move some of the helper
+functions to a .h file from this and other test cases because duplicating
+what is shareable should be avoided.
+---
+ tools/testing/selftests/x86/Makefile |   2 +-
+ tools/testing/selftests/x86/mxcsr.c  | 200 +++++++++++++++++++++++++++
+ 2 files changed, 201 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/x86/mxcsr.c
+
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index 0388c4d60af0..621c47960be3 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -13,7 +13,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
+ TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+ 			check_initial_reg_state sigreturn iopl ioperm \
+ 			test_vsyscall mov_ss_trap \
+-			syscall_arg_fault fsgsbase_restore sigaltstack
++			syscall_arg_fault fsgsbase_restore sigaltstack mxcsr
+ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
+ 			test_FCMOV test_FCOMI test_FISTTP \
+ 			vdso_restorer
+diff --git a/tools/testing/selftests/x86/mxcsr.c b/tools/testing/selftests/x86/mxcsr.c
+new file mode 100644
+index 000000000000..7c318c48b4be
+--- /dev/null
++++ b/tools/testing/selftests/x86/mxcsr.c
+@@ -0,0 +1,200 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define _GNU_SOURCE
++#include <err.h>
++#include <elf.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <string.h>
++#include <unistd.h>
++#include <x86intrin.h>
++
++#include <sys/ptrace.h>
++#include <sys/syscall.h>
++#include <sys/wait.h>
++#include <sys/uio.h>
++
++#include "../kselftest.h" /* For __cpuid_count() */
++
++#define LEGACY_STATE_SIZE	24
++#define MXCSR_SIZE		8
++#define STSTATE_SIZE		8*16
++#define XMM_SIZE		16*16
++#define PADDING_SIZE		96
++#define XSAVE_HDR_SIZE		64
++
++struct xsave_buffer {
++	uint8_t		legacy_state[LEGACY_STATE_SIZE];
++	uint8_t		mxcsr[MXCSR_SIZE];
++	uint8_t		st_state[STSTATE_SIZE];
++	uint8_t		xmm_state[XMM_SIZE];
++	uint8_t		padding[PADDING_SIZE];
++	uint8_t		header[XSAVE_HDR_SIZE];
++	uint8_t		extended[0];
++};
++
++#ifdef __x86_64__
++#define REX_PREFIX	"0x48, "
++#else
++#define REX_PREFIX
++#endif
++
++#define XSAVE		".byte " REX_PREFIX "0x0f,0xae,0x27"
++#define XRSTOR		".byte " REX_PREFIX "0x0f,0xae,0x2f"
++
++static inline uint64_t xgetbv(uint32_t index)
++{
++	uint32_t eax, edx;
++
++	asm volatile("xgetbv"
++		     : "=a" (eax), "=d" (edx)
++		     : "c" (index));
++	return eax + ((uint64_t)edx << 32);
++}
++
++static inline void xsave(struct xsave_buffer *xbuf, uint64_t rfbm)
++{
++	uint32_t rfbm_lo = rfbm;
++	uint32_t rfbm_hi = rfbm >> 32;
++
++	asm volatile(XSAVE :: "D" (xbuf), "a" (rfbm_lo), "d" (rfbm_hi) : "memory");
++}
++
++static inline void xrstor(struct xsave_buffer *xbuf, uint64_t rfbm)
++{
++	uint32_t rfbm_lo = rfbm;
++	uint32_t rfbm_hi = rfbm >> 32;
++
++	asm volatile(XRSTOR :: "D" (xbuf), "a" (rfbm_lo), "d" (rfbm_hi));
++}
++
++static inline void clear_xstate_header(struct xsave_buffer *xbuf)
++{
++	memset(&xbuf->header, 0, sizeof(xbuf->header));
++}
++
++static inline uint32_t get_mxcsr(struct xsave_buffer *xbuf)
++{
++	return *((uint32_t *)xbuf->mxcsr);
++}
++
++static inline void set_mxcsr(struct xsave_buffer *xbuf, uint32_t val)
++{
++	*((uint32_t *)xbuf->mxcsr) = val;
++}
++
++#define XFEATURE_MASK_SSE		0x2
++#define XFEATURE_MASK_YMM		0x4
++
++#define CPUID_LEAF1_ECX_XSAVE_MASK	(1 << 26)
++#define CPUID_LEAF1_ECX_OSXSAVE_MASK	(1 << 27)
++#define CPUID_LEAF_XSTATE		0xd
++#define CPUID_SUBLEAF_XSTATE_USER	0x0
++#define CPUID_SUBLEAF_XSTATE_EXT	0x1
++
++static bool xsave_availability(void)
++{
++	uint32_t eax, ebx, ecx, edx;
++
++	__cpuid_count(1, 0, eax, ebx, ecx, edx);
++	if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK))
++		return false;
++	if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK))
++		return false;
++	return true;
++}
++
++static uint32_t get_xbuf_size(void)
++{
++	uint32_t eax, ebx, ecx, edx;
++
++	__cpuid_count(CPUID_LEAF_XSTATE, CPUID_SUBLEAF_XSTATE_USER,
++		      eax, ebx, ecx, edx);
++	return ebx;
++}
++
++static void ptrace_get(pid_t pid, struct iovec *iov)
++{
++	memset(iov->iov_base, 0, iov->iov_len);
++
++	if (ptrace(PTRACE_GETREGSET, pid, (uint32_t)NT_X86_XSTATE, iov))
++		err(1, "TRACE_GETREGSET");
++}
++
++static void ptrace_set(pid_t pid, struct iovec *iov)
++{
++	if (ptrace(PTRACE_SETREGSET, pid, (uint32_t)NT_X86_XSTATE, iov))
++		err(1, "TRACE_SETREGSET");
++}
++
++int main(void)
++{
++	struct xsave_buffer *xbuf;
++	uint32_t xbuf_size;
++	struct iovec iov;
++	uint32_t mxcsr;
++	pid_t child;
++	int status;
++
++	if (!xsave_availability())
++		printf("[SKIP]\tSkip as XSAVE not available.\n");
++
++	xbuf_size = get_xbuf_size();
++	if (!xbuf_size)
++		printf("[SKIP]\tSkip as XSAVE not available.\n");
++
++	if (!(xgetbv(0) & (XFEATURE_MASK_SSE | XFEATURE_MASK_YMM)))
++		printf("[SKIP]\tSkip as SSE state not available.\n");
++
++	xbuf = aligned_alloc(64, xbuf_size);
++	if (!xbuf)
++		err(1, "aligned_alloc()");
++
++	iov.iov_base = xbuf;
++	iov.iov_len = xbuf_size;
++
++	child = fork();
++	if (child < 0) {
++		err(1, "fork()");
++	} else if (!child) {
++		if (ptrace(PTRACE_TRACEME, 0, NULL, NULL))
++			err(1, "PTRACE_TRACEME");
++
++		raise(SIGTRAP);
++		_exit(0);
 +	}
 +
-+	/* Validate MXCSR when any of the related features is valid. */
-+	mask = XFEATURE_MASK_SSE | XFEATURE_MASK_YMM;
-+	if (fpstate->user_xfeatures & mask) {
- 		u32 mxcsr[2];
- 
--		offset = offsetof(struct fxregs_state, mxcsr);
--		if (copy_from_buffer(mxcsr, offset, sizeof(mxcsr), kbuf, ubuf))
-+		if (copy_from_buffer(mxcsr, off_mxcsr, sizeof(mxcsr), kbuf, ubuf))
- 			return -EFAULT;
- 
- 		/* Reserved bits in MXCSR must be zero. */
- 		if (mxcsr[0] & ~mxcsr_feature_mask)
- 			return -EINVAL;
- 
--		/* SSE and YMM require MXCSR even when FP is not in use. */
--		if (!(hdr.xfeatures & XFEATURE_MASK_FP)) {
--			xsave->i387.mxcsr = mxcsr[0];
--			xsave->i387.mxcsr_mask = mxcsr[1];
--		}
-+		/*
-+		 * Copy MXCSR regardless of the feature mask as userspace
-+		 * uses the uncompacted format.
-+		 */
-+		fxsave->mxcsr = mxcsr[0];
-+		fxsave->mxcsr_mask = mxcsr[1];
- 	}
- 
--	for (i = 0; i < XFEATURE_MAX; i++) {
--		mask = BIT_ULL(i);
-+	if (hdr.xfeatures & XFEATURE_MASK_SSE) {
-+		if (copy_from_buffer(fxsave->xmm_space, off_xmm, sizeof(fxsave->xmm_space),
-+				     kbuf, ubuf))
-+			return -EINVAL;
-+	}
- 
--		if (hdr.xfeatures & mask) {
--			void *dst = __raw_xsave_addr(xsave, i);
-+	for_each_extended_xfeature(i, hdr.xfeatures) {
-+		void *dst = __raw_xsave_addr(xsave, i);
- 
--			offset = xstate_offsets[i];
--			size = xstate_sizes[i];
-+		offset = xstate_offsets[i];
-+		size = xstate_sizes[i];
- 
--			if (copy_from_buffer(dst, offset, size, kbuf, ubuf))
--				return -EFAULT;
--		}
-+		if (copy_from_buffer(dst, offset, size, kbuf, ubuf))
-+			return -EFAULT;
- 	}
- 
- 	/*
-@@ -1256,6 +1277,13 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
- 	 * Add back in the features that came in from userspace:
- 	 */
- 	xsave->header.xfeatures |= hdr.xfeatures;
-+	/*
-+	 * Convert the SSE bit in the feature mask as it implies
-+	 * differently between the formats. It indicates the MXCSR state
-+	 * if compacted; otherwise, it pertains to XMM registers.
-+	 */
-+	if (compacted && fxsave->mxcsr != MXCSR_DEFAULT)
-+		xsave->header.xfeatures |= XFEATURE_MASK_SSE;
- 
- 	return 0;
- }
++	wait(&status);
++
++	if (WSTOPSIG(status) != SIGTRAP)
++		err(1, "raise(SIGTRAP)");
++
++	printf("[RUN]\tTest the MXCSR state write via ptrace().\n");
++
++	/* Set a benign value */
++	set_mxcsr(xbuf, 0xabc);
++	/* The MXCSR state should be loaded regardless of XSTATE_BV */
++	clear_xstate_header(xbuf);
++
++	/* Write the MXCSR state both locally and remotely. */
++	xrstor(xbuf, XFEATURE_MASK_SSE);
++	ptrace_set(child, &iov);
++
++	/* Read the MXCSR state back for both */
++	xsave(xbuf, XFEATURE_MASK_SSE);
++	mxcsr = get_mxcsr(xbuf);
++	ptrace_get(child, &iov);
++
++	/* Cross-check with each other */
++	if (mxcsr == get_mxcsr(xbuf))
++		printf("[OK]\tThe written state was read back correctly.\n");
++	else
++		printf("[FAIL]\tThe write (or read) was incorrect.\n");
++
++	ptrace(PTRACE_DETACH, child, NULL, NULL);
++	wait(&status);
++	if (!WIFEXITED(status) || WEXITSTATUS(status))
++		err(1, "PTRACE_DETACH");
++
++	free(xbuf);
++}
 -- 
 2.17.1
 
