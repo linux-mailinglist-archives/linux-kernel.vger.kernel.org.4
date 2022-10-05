@@ -2,137 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1F05F5BC8
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 23:35:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C4C5F5BCB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 23:36:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231260AbiJEVfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 17:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46274 "EHLO
+        id S231238AbiJEVgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 17:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbiJEVf1 (ORCPT
+        with ESMTP id S229507AbiJEVgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 17:35:27 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E439D4F1AB;
-        Wed,  5 Oct 2022 14:35:26 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 295LYxUu017082;
-        Wed, 5 Oct 2022 21:34:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=GrrxmV0a8cb8wxj5wYID3jmmdK+wvVIqBnasA6y8kmU=;
- b=Z0+BbJFk5nmNfScGn3es/jZxH8wldfsYAkCslphRN8PaqI6KiWqt1JeVXPlkPZOcRLG0
- n2Uf7FmbvunuHoPfjJrhdbe/cQPP085W/qKxnRx06hO7BGyjdxxfEK8R+N9NjOJkU1WJ
- 2rlwVhAORdU+2BCi+aTijRW8LoyDx88AQsSBViBmGdpZiSOP++H13D5+BYPFvL1qFEnO
- F1WBAA3czPh3wIFNUpsaomigyZz7LQFDYbMJqjX6ZYSzrCYrYYCmXp/9y1RE7a1r/9xm
- 8SQpZf5IvQswC/OdD6JOz26/5V7M+OdNJqvUUsjlAq7v5ohe6RLga9gvP0jhGQcU+mhI gA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k0syqtfj3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Oct 2022 21:34:59 +0000
-Received: from pps.filterd (NALASPPMTA05.qualcomm.com [127.0.0.1])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 295LYwGM004175;
-        Wed, 5 Oct 2022 21:34:58 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 3k1e1e0ph6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Oct 2022 21:34:58 +0000
-Received: from NALASPPMTA05.qualcomm.com (NALASPPMTA05.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 295LYvIh004170;
-        Wed, 5 Oct 2022 21:34:58 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 295LYv9G004169
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Oct 2022 21:34:57 +0000
-Received: from [10.38.244.136] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 5 Oct 2022
- 14:34:54 -0700
-Message-ID: <ec1a7af7-e9c9-9c62-040a-b12f0095da2b@quicinc.com>
-Date:   Wed, 5 Oct 2022 14:34:53 -0700
+        Wed, 5 Oct 2022 17:36:10 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D6A7F249
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 14:36:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1665005769; x=1696541769;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Ktz8tDfnp0zJ/uEQE1L0r1FZfkFQaxNTK01YLZAUUsg=;
+  b=aOa3wAMzvldn/H7JA2hef2qF7n9P3HFRmXpIPKENhHaJ0R0nz9nIoK/o
+   dbLPWYUFAw9AWmJ1WHuUlRdGRYSSs2YBqYTxlAwBv3NlVce4OxjUnxVRj
+   YZd9+lQ6lnX9wbp+rQvLRq7XUms2z79dh+MTGitIy/+QdJxxhpbu/c3zP
+   YU5/Gw+6a4kv+mztLeRS7OI8OF+YtdgIRv+uRLP2qZtdlkWXkGOFPuLWX
+   OBYtG1wwMgj1JAnwkQlLGS9LUNQZYB6MMILkkoQc2HchDov0UN9k4FKIY
+   5E7Wbx7Ick1qibZyzsojZEiLKHCdTjzU+iGrS9OftIzbJNktIBI0RFBwA
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.95,162,1661788800"; 
+   d="scan'208";a="218256937"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 06 Oct 2022 05:36:08 +0800
+IronPort-SDR: RrScL0xJt5IJUD7HyogZ7Cy7CXtUcPCddQWfaSJTkN6zj07t0KNKpOTDOver6wjMiTbqio/BrU
+ zpRiij/WQpeIzQZM/Ljao0s7qO6Mwgiirg/OC1dT5/8AqxKWDXg3jBB30p8rt8ePJpxwiwjnOo
+ SMP5iXzjuWVYrVBDZsFyx9jioxklBBpSy4KWH33Rjz7+zPE7+ts9qY3NpiJAXojEBnvKpgONyT
+ nGAJd4n3q0IHQPPsR8H8gOW/dukaiA089FcDi9b+eNsTEccl3r7KK7q5YsHgS3l3b8NZioqXBZ
+ BOU2fg3Su0DsWAi58ej7AkgF
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Oct 2022 13:55:55 -0700
+IronPort-SDR: a6l5iyMd0/1yqUNg8TYvNR40GlBSQyjrqeD9cnQZiDobp1uEuvwwDnWzlqkEz4S7KK1/g6IDF6
+ K6IorSbDWeDRYO83XU3Ta5MGcCjQeQSBafXAOpzU18K4BxqngJ+1TZTMSwYQSXUkmoDucmuBYi
+ 6ehgaCXROrT2m5tQDbiCPmVA5iIvDlXIZrihGIq6d4g/LOS8Bal8CAIkOIhtW51tD8RYM7iUlz
+ 0sddEkVz04jKxFJFsdHs98xhl81ivvOlswTPmAutKFVq9S7PzMPoevLqq6U4w6+UMOdwV8kAW8
+ JwY=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Oct 2022 14:36:09 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MjSYh3JbTz1RvTp
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 14:36:08 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1665005767; x=1667597768; bh=Ktz8tDfnp0zJ/uEQE1L0r1FZfkFQaxNTK01
+        YLZAUUsg=; b=ij9uF493PVWY4wLhPyEEdNP9HnayAxUtXUqQr/fy0ENQGC4tCrD
+        QJ3JO960AnKGnl6QUSdUowyUbDy9xKFuhftR0XjNBP9vik5Ad2y366WtNYh9ZBiG
+        nxYvkogJ0Ys6vE+h25r0EW4Q8odrz4ljVNRwQXKFHXlVK0CvsADRj6kN0iLJghcG
+        IyBbGfVf6waJDBudjYK03V2wHRyCuC0NIXRfT4ndcqZ6T7XGHYa2ODYObdulCdYP
+        k3koRXVeSIXkaiC0/vqk8zAfhFyXfhXsG5RXTresp6KNvEmbXBb7YMTAW2CWR2mG
+        f5VnjEoPeBa6I79zg7T9YE9Aq3lMcyD+Yqg==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id eIGqUJZL77Ha for <linux-kernel@vger.kernel.org>;
+        Wed,  5 Oct 2022 14:36:07 -0700 (PDT)
+Received: from [10.225.163.106] (unknown [10.225.163.106])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MjSYf1yWDz1RvLy;
+        Wed,  5 Oct 2022 14:36:06 -0700 (PDT)
+Message-ID: <5db6a7bc-dfeb-76e1-6899-7041daa934cf@opensource.wdc.com>
+Date:   Thu, 6 Oct 2022 06:36:05 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 3/7] drm/msm/dsi: Use DIV_ROUND_UP instead of
- conditional increment on modulo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v5 0/7] libsas and drivers: NCQ error handling
 Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        <phone-devel@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-CC:     <~postmarketos/upstreaming@lists.sr.ht>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>
-References: <20221005181657.784375-1-marijn.suijten@somainline.org>
- <20221005181657.784375-4-marijn.suijten@somainline.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20221005181657.784375-4-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Niklas Cassel <Niklas.Cassel@wdc.com>,
+        John Garry <john.garry@huawei.com>
+Cc:     "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "jinpu.wang@cloud.ionos.com" <jinpu.wang@cloud.ionos.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linuxarm <linuxarm@huawei.com>,
+        yangxingui <yangxingui@huawei.com>,
+        yanaijie <yanaijie@huawei.com>
+References: <1664262298-239952-1-git-send-email-john.garry@huawei.com>
+ <YzwvpUUftX6Ziurt@x1-carbon>
+ <cfa52b91-db81-a179-76c2-8a61266c099d@huawei.com>
+ <27148ec5-d1ae-d9a2-1b00-a4c34d2da198@huawei.com>
+ <Yz33FGwd3YvQUAqT@x1-carbon>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <Yz33FGwd3YvQUAqT@x1-carbon>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: iEuZDNO_JxyVvhOBNmmL1ljlCrXDgmj-
-X-Proofpoint-ORIG-GUID: iEuZDNO_JxyVvhOBNmmL1ljlCrXDgmj-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-05_05,2022-10-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=999 mlxscore=0 phishscore=0 impostorscore=0 suspectscore=0
- adultscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0 priorityscore=1501
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210050132
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10/5/2022 11:16 AM, Marijn Suijten wrote:
-> This exact same math is used to compute bytes_in_slice above in
-> dsi_update_dsc_timing(), also used to fill slice_chunk_size.
+On 10/6/22 06:28, Niklas Cassel wrote:
+> On Wed, Oct 05, 2022 at 09:53:52AM +0100, John Garry wrote:
+>> On 04/10/2022 15:04, John Garry wrote:
+>>
+>> Hi Niklas,
+>>
+>> Could you try a change like this on top:
+>>
+>> void sas_ata_device_link_abort(struct domain_device *device, bool
+>> force_reset)
+>> {
+>> 	struct ata_port *ap = device->sata_dev.ap;
+>> 	struct ata_link *link = &ap->link;
+>>
+>> +	device->sata_dev.fis[2] = ATA_ERR | ATA_DRDY;
+>> +	device->sata_dev.fis[3] = 0x04;
+>>
+>> 	link->eh_info.err_mask |= AC_ERR_DEV;
+>> 	if (force_reset)
+>> 		link->eh_info.action |= ATA_EH_RESET;
+>> 	ata_link_abort(link);
+>> }
+>> EXPORT_SYMBOL_GPL(sas_ata_device_link_abort);
+>>
+>> I tried it myself and it looked to work ok, except I have a problem with my
+>> arm64 system in that the read log ext times-out and all TF show "device
+>> error", like:
 > 
-> Fixes: b9080324d6ca ("drm/msm/dsi: add support for dsc data")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/dsi/dsi_host.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
+> Do you know why it fails to read the log?
+> Can you read the NCQ Command Error log using ATA16 passthrough commands?
 > 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index c746ed5d61f9..48c966375ffa 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -1829,9 +1829,7 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
->   	 * params are calculated
->   	 */
->   	groups_per_line = DIV_ROUND_UP(dsc->slice_width, 3);
-> -	dsc->slice_chunk_size = dsc->slice_width * dsc->bits_per_pixel / 8;
-> -	if ((dsc->slice_width * dsc->bits_per_pixel) % 8)
-> -		dsc->slice_chunk_size++;
-> +	dsc->slice_chunk_size = DIV_ROUND_UP(dsc->slice_width * dsc->bits_per_pixel, 8);
->   
->   	/* rbs-min */
->   	min_rate_buffer_size =  dsc->rc_model_size - dsc->initial_offset +
+> sudo sg_sat_read_gplog -d --log=0x10 /dev/sdc
+> 
+> The first byte is the last NCQ tag (in hex) that failed.
+
+libata issues read log as a non-ncq command under EH. So the NCQ error log
+will not help.
+
+> 
+> 
+> I tried your patch, and it looks good:
+> 
+> [ 6656.228131] ata5.00: exception Emask 0x0 SAct 0x460000 SErr 0x0 action 0x0
+> [ 6656.252759] ata5.00: failed command: WRITE FPDMA QUEUED
+> [ 6656.271554] ata5.00: cmd 61/00:00:00:d8:8a/04:00:ce:03:00/40 tag 17 ncq dma 524288 out
+>                         res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device error)
+> [ 6656.309308] ata5.00: status: { DRDY ERR }
+> [ 6656.316403] ata5.00: error: { ABRT }
+> [ 6656.322300] ata5.00: failed command: WRITE FPDMA QUEUED
+> [ 6656.330871] ata5.00: cmd 61/00:00:00:dc:8a/04:00:ce:03:00/40 tag 18 ncq dma 524288 out
+>                         res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device error)
+> [ 6656.356295] ata5.00: status: { DRDY ERR }
+> [ 6656.362931] ata5.00: error: { ABRT }
+> [ 6656.368897] ata5.00: failed command: WRITE FPDMA QUEUED
+> [ 6656.377471] ata5.00: cmd 61/00:00:00:d4:8a/04:00:ce:03:00/40 tag 22 ncq dma 524288 out
+>                         res 43/04:00:ff:d7:8a/00:00:ce:03:00/40 Emask 0x400 (NCQ error) <F>
+> [ 6656.403149] ata5.00: status: { DRDY SENSE ERR }
+> [ 6656.410624] ata5.00: error: { ABRT }
+> 
+> However, since this is a change from the existing behavior of this driver,
+> this could go as a separate patch, and does not need to delay this series.
+> 
+> 
+> 
+> I also think that we should do a similar patch for sas_ata_task_done():
+> 
+> diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
+> index d35c9296f738..648d0693ceee 100644
+> --- a/drivers/scsi/libsas/sas_ata.c
+> +++ b/drivers/scsi/libsas/sas_ata.c
+> @@ -140,7 +140,7 @@ static void sas_ata_task_done(struct sas_task *task)
+>                         }
+>  
+>                         dev->sata_dev.fis[3] = 0x04; /* status err */
+> -                       dev->sata_dev.fis[2] = ATA_ERR;
+> +                       dev->sata_dev.fis[2] = ATA_ERR | ATA_DRDY;
+>                 }
+>         }
+> 
+> To avoid all SAS errors from being reported as HSM errors.
+> 
+> 
+> Kind regards,
+> Niklas
+
+-- 
+Damien Le Moal
+Western Digital Research
+
