@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B66825F59E4
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 20:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DEA05F59E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 20:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbiJESbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 14:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
+        id S230386AbiJESbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 14:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbiJESay (ORCPT
+        with ESMTP id S229983AbiJESbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 14:30:54 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D5F220D6
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 11:30:53 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id x32-20020a17090a38a300b00209dced49cfso2590211pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 11:30:53 -0700 (PDT)
+        Wed, 5 Oct 2022 14:31:20 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91AB7D1E3;
+        Wed,  5 Oct 2022 11:31:19 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id o9-20020a17090a0a0900b0020ad4e758b3so2563172pjo.4;
+        Wed, 05 Oct 2022 11:31:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=SOulkWlMqD4ikKLjwZwv0QJa8SgXnmDIXhP5lgZ0IBY=;
-        b=QByDXNQ78QE2NihBTtx5VKnZFGZ+NAVpDvuiyAgqDpj/zzIEO46GWQYOiFbYeFBtgK
-         bOX7WQ2q6i5v7LUYgqAv32yYJuZz3Jb7IqRGuwDgCFBg8JJ9v99JmmSjy82nqAULfTZY
-         B5OwiqfAoIKpSqi6vzQzSnLOLjCWH+VpNcjm+qWfe6aDxRE6dulBpS6OY84yHaMkYipt
-         32dkA1P1uX/dKidboCwXgjHsffgnfCO2/9JOw5Kd6RPKautihFPyVvBeSxzfnfcNARkV
-         dtSJ7jCKIpSt9iUiwmTX737ZcaA0ZwDDf3c7ggaPPm70U/v4pFBVNFP4TtY+6gd/LUKh
-         senw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=lncrKYF3dhxHA2yeuvS54Ddh1xazf36FsZjmkMxlg6w=;
+        b=bTTkW0QLjG4FZ6yAyAIASgkGRVrVz/uorbNdxH5GR7Se2mxXDRsHmPul2YVI5CXIzP
+         Wy1cB0KQ0ZSOXZyCHcUq1Y6dwoTB1E0e5P4JtW6W5w95W8vrtPASR2xuNewhKQ2Gv+nA
+         GvPFAK9cmK+0nXavBx3B5qVAU/FTQyypYKoih1od4CpelmKhcxF+OqpLU1Gt64gKJI+s
+         OlwPwko3/XxBBSQTs4nEWammEGWmJ52sOKkWFM1x35mS4vgSgLSwtpwMzEjsD+fSdpGR
+         Rb/lxMReYfeTHyPsG8AD7gy62pNZxAbErIi+bVzilUd7PR6Ytyzm1CYid+arYaULqdMB
+         TfEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=SOulkWlMqD4ikKLjwZwv0QJa8SgXnmDIXhP5lgZ0IBY=;
-        b=P/Pkurz64L6BxB7JhS+8x1FcDXDG9xxjqiewcFSjS5kwtZ4DSrUQYg8Tdr4ws0AM27
-         nIJegZSxKqvFRtpzhes09uTbE7zq254RCJ8LxAYdZ/xyqvOlKfEbzXAWQQ1Ornn93TIp
-         RPZuW7OFkM3CK0H+ZrZdXasbV1senBR9CI4uvgQxci+kR0sMLn4CREdeOm7YBeRg5Pz1
-         E5UsQLSlVoJSrKWCeMdw7IO5ppxwlN3fncf+Mp/zHaEF4oQzT+Qyic5zUmVB8zyrSIz6
-         X+KvpFLCo+GjBN/Di4Aou2FynA23uy7Eg98qnet/BQ6gPy+B2rcBVQrqZAoQ24/Ru1n4
-         DRkA==
-X-Gm-Message-State: ACrzQf21MVmBOc/uJz84NQT6YrPS+v2eqQiJaQdEMU/AIIah48uTe3pO
-        W8hY4wsfiI8hALf/FY1zmbGLook3rXqEavqJk3rCCgpb4G878g==
-X-Google-Smtp-Source: AMsMyM4wM3Z46RY/wp/PyTGKrqPDS01mO+oFFcyGpzZC2bzJko4uH8zMkl79MuwKgItzM8o8+PfYS0qA2j6wk+AKTsE=
-X-Received: by 2002:a17:90b:33c3:b0:20a:ebc3:6514 with SMTP id
- lk3-20020a17090b33c300b0020aebc36514mr4971248pjb.147.1664994652315; Wed, 05
- Oct 2022 11:30:52 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=lncrKYF3dhxHA2yeuvS54Ddh1xazf36FsZjmkMxlg6w=;
+        b=OmqagrAjF7GW8fxhUaTeMCCh/1EM5Y4hT6uXbx4fdpOtn46+ey8Coe/EVt0P9/s/Fu
+         wVXUYuGSLnX50rtNe7YAIepNkpOJ+g0hPtBzqA/ENt7J3aIVLAZrt6xcpwY8yzCqkTlF
+         rDp5LevdDWjdg7qavNooiTTYEi+FPmlp2W1cyjwqavvCKzMFm+AET5jBdKO/sSnDLzVZ
+         3ieePcms9yBohjRfYx3YGS0xQgqCcWnhCh2ZfaeXbzwMW4nQrrDSNhs4+wJN3pZrfnyR
+         URIzjma8B8Wsd1h42SRr0WyLzXDWTWJBOtngkYsgxSV5SvKMD8QrhPVIAJAPGcC3KhBr
+         3+eQ==
+X-Gm-Message-State: ACrzQf1/fjVmjZ/2BNFXRFjMDJaYgx4RXZ1t9judHJF5Rb9s24fyv3sj
+        IQhvY4PrkdYFKo94JyySE9c=
+X-Google-Smtp-Source: AMsMyM6WkxKa3ApjrVvd47ddYhDKX3KPYfV6GCvohPT+LmKBuWgfvnAiG0io+O5JvRvTyVpQ+rWmCw==
+X-Received: by 2002:a17:90a:9408:b0:20a:6d13:2b1d with SMTP id r8-20020a17090a940800b0020a6d132b1dmr6505892pjo.0.1664994678960;
+        Wed, 05 Oct 2022 11:31:18 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y16-20020a17090264d000b001786b712bf7sm10700207pli.151.2022.10.05.11.31.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 11:31:17 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 5 Oct 2022 11:31:16 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (fschmd) Make const arrays static const
+Message-ID: <20221005183116.GA2734583@roeck-us.net>
+References: <20221005152752.318493-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-References: <20220927153338.4177854-1-me@inclyc.cn> <20221005072913.982634-1-me@inclyc.cn>
-In-Reply-To: <20221005072913.982634-1-me@inclyc.cn>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 5 Oct 2022 11:30:40 -0700
-Message-ID: <CAKwvOdm6wSgG-_HrRR_9+mLnksbK4qNA8-F--bAVTjwY1C4brA@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/fpu: use _Alignof to avoid UB in TYPE_ALIGN
-To:     YingChi Long <me@inclyc.cn>
-Cc:     bp@alien8.de, chang.seok.bae@intel.com,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        pbonzini@redhat.com, tglx@linutronix.de, x86@kernel.org,
-        peterz@infradead.org, david.laight@aculab.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221005152752.318493-1-colin.i.king@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,60 +73,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 5, 2022 at 12:29 AM YingChi Long <me@inclyc.cn> wrote:
->
-> Kindly ping :)
+On Wed, Oct 05, 2022 at 04:27:52PM +0100, Colin Ian King wrote:
+> Don't populate the read-only const arrays names and watchdog_minors
+> on the stack but instead make them static const. Also makes the
+> object code a little smaller.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Hi YingChi,
-Sorry for the delay in review.
+Applied to hwmon-next.
 
-I think https://godbolt.org/z/sPs1GEhbT has convinced me that
-TYPE_ALIGN is analogous to _Alignof and not __alignof__; so your patch
-is correct to use _Alignof rather than __alignof__.  I think that test
-case demonstrates this clearer than the other links in the commit
-message.  Please consider replacing the existing godbolt links with
-that one if you agree.
-
-Please reword the paragraphs in the commit message from:
-```
-In PATCH v1 "TYPE_ALIGN" was substituted with "__alignof__" which is a
-GCC extension, which returns the *preferred alignment*, that is
-different from C11 "_Alignof" returning *ABI alignment*. For example, on
-i386 __alignof__(long long) evaluates to 8 but _Alignof(long long)
-evaluates to 4. See godbolt links below.
-
-In this patch, I'd like to use "__alignof__" to "_Alignof" to preserve
-the behavior here.
-```
-to:
-```
-ISO C11 _Alignof is subtly different from the GNU C extension
-__alignof__. _Alignof expressions evaluate to a multiple of the object
-size, while __alignof__ expressions evaluate to the alignment dictated
-by the target machine's ABI.  In the case of long long on i386,
-_Alignof (long long) is 8 while __alignof__ (long long) is 4.
-
-The macro TYPE_ALIGN we're replacing has behavior that matches
-_Alignof rather than __alignof__.
-```
-In particular, I think it's best to avoid language like "returns" in
-favor of "evaluates to" since these are expressions, not function
-calls.  I think it's also good to avoid the term "preferred alignment"
-since that isn't meaningful; it looks like it was pulled from one of
-the GCC bug reports rather than the GCC docs or latest ISO C standard
-(https://www.open-std.org/jtc1/sc22/wg14/www/docs/n3054.pdf).  I'm not
-sure that the links to the GCC bug tracker add anything meaningful
-here; I think those can get dropped, too.  It's also perhaps confusing
-to refer to earlier versions of the patch.  One thing you can do is
-include comments like that "below the fold" in a commit message as a
-meta comment to reviewers.  See
-https://lore.kernel.org/llvm/20220512205545.992288-1-twd2.me@gmail.com/
-as an example of commentary "below the fold" on differences between
-patch versions.  Text in that area is discarded by git when a patch is
-applied.
-
-With those changes to the commit message in a v3, I'd be happy to sign
-off on the change.  Thanks for your work on this!
--- 
 Thanks,
-~Nick Desaulniers
+Guenter
+
+> ---
+>  drivers/hwmon/fschmd.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/fschmd.c b/drivers/hwmon/fschmd.c
+> index 0a77d6161928..e1f426e86f36 100644
+> --- a/drivers/hwmon/fschmd.c
+> +++ b/drivers/hwmon/fschmd.c
+> @@ -1083,9 +1083,9 @@ static int fschmd_detect(struct i2c_client *client,
+>  static int fschmd_probe(struct i2c_client *client)
+>  {
+>  	struct fschmd_data *data;
+> -	const char * const names[7] = { "Poseidon", "Hermes", "Scylla",
+> +	static const char * const names[7] = { "Poseidon", "Hermes", "Scylla",
+>  				"Heracles", "Heimdall", "Hades", "Syleus" };
+> -	const int watchdog_minors[] = { WATCHDOG_MINOR, 212, 213, 214, 215 };
+> +	static const int watchdog_minors[] = { WATCHDOG_MINOR, 212, 213, 214, 215 };
+>  	int i, err;
+>  	enum chips kind = i2c_match_id(fschmd_id, client)->driver_data;
+>  
