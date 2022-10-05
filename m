@@ -2,90 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 440185F5834
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 18:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5AE5F5840
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 18:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbiJEQRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 12:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
+        id S229819AbiJEQ0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 12:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231144AbiJEQQz (ORCPT
+        with ESMTP id S229674AbiJEQ0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 12:16:55 -0400
+        Wed, 5 Oct 2022 12:26:01 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4574C7E002
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 09:16:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D8575FDB;
+        Wed,  5 Oct 2022 09:26:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664986614; x=1696522614;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=rYRwGdwzt3B42VGLzCzhptdfzDfQfwdNQ8dGGnTWNDk=;
-  b=i7l/CvMlS2HBznMhEx5Bvw0dynNy3qf92whNqk2+30pnEncKQYFIyLC9
-   PNTfFYc2oeiwLh49aWViA3ZJ3awC7CLXxf5z2RSkDIbg9IQ+j6xHBHUbb
-   rsX4xWVXkswIzoJVj3snYTJ4uydduEQov2cAk5Zw8rUJAwrpAMR6o39fM
-   6VN8pZ9IKBJDZDvLXsv+bw2h63ZJ6h4qGcI9VivllxBOkaI3S6XXe/D5e
-   JH72AZx3qnnpgsubn9zHBR5Akn6gMUD4x10Ttz60vI75WbU48sFk2930a
-   q9PUYgSjAj4vaNe2RhXCiJ30AFfmuwpHUcLLjSWpqN449NwuiNXsOv9vp
+  t=1664987160; x=1696523160;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=G0QJA+L7g7MsXFOFjec34vb6SoO7o1ppQXbhc16bfV0=;
+  b=graDsFIkzagy7/d6qsxSnr/P0nmSF95aL4WyxEck2z1PTCC55GIILJgi
+   xLCmUiVaeDJ+9NzS/lLJTyqKoUDAfQa276p3yA/Pg54hbvOZg/CtlexKR
+   FJbklup2CPkpgrld/YfZOWNYS/W8wRQ0ccJLNuShz5FwJ+8cpO8M8epav
+   QiseNIb/Xx8nj0FE16YimMmyxZxkGWDPh4ykiEWIMV5fexbXBDeaJkPmM
+   7BzYe+0zrcnuBWJ191tqIxtLCYwHzrDE+JSob8X49QPRlBbUyFOLKFvpa
+   9KgVo7t2LOCMiGjKQqpcvTP6XRNpcg0vWDNdsQOvgFau+XjROM6IHxcYv
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="282914724"
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="282917193"
 X-IronPort-AV: E=Sophos;i="5.95,161,1661842800"; 
-   d="scan'208";a="282914724"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 09:16:53 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="953219597"
+   d="scan'208";a="282917193"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 09:25:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="728715252"
 X-IronPort-AV: E=Sophos;i="5.95,161,1661842800"; 
-   d="scan'208";a="953219597"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 09:16:53 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Tony Luck <tony.luck@intel.com>
-Subject: [PATCH] RAS: Fix the trace_show() function to output trace_count
-Date:   Wed,  5 Oct 2022 09:16:45 -0700
-Message-Id: <20221005161645.309068-1-tony.luck@intel.com>
-X-Mailer: git-send-email 2.37.3
+   d="scan'208";a="728715252"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 05 Oct 2022 09:25:56 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1og7DW-002jhc-2z;
+        Wed, 05 Oct 2022 19:25:54 +0300
+Date:   Wed, 5 Oct 2022 19:25:54 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, kbuild-all@lists.01.org,
+        Qiang Zhao <qiang.zhao@nxp.com>, Li Yang <leoyang.li@nxp.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH v1 1/2] device property: Introduce
+ fwnode_device_is_compatible() helper
+Message-ID: <Yz2wEiOdAs3Xyz3H@smile.fi.intel.com>
+References: <20221005143812.33503-1-andriy.shevchenko@linux.intel.com>
+ <202210052318.prrotB47-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202210052318.prrotB47-lkp@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The /sys/kernel/debug/ras/daemon_active is used to indicate to some
-kernel code whether there is a user mode consumer of RAS trace events
-to decide whether to print to the console.
+On Thu, Oct 06, 2022 at 12:05:43AM +0800, kernel test robot wrote:
+> Hi Andy,
+> 
+> I love your patch! Yet something to improve:
+> 
+> [auto build test ERROR on soc/for-next]
+> [also build test ERROR on linus/master v6.0 next-20221005]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/device-property-Introduce-fwnode_device_is_compatible-helper/20221005-223919
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+> config: powerpc-allnoconfig
+> compiler: powerpc-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/b930d58084d15cbf92f0cd490ad05e843991bd8e
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Andy-Shevchenko/device-property-Introduce-fwnode_device_is_compatible-helper/20221005-223919
+>         git checkout b930d58084d15cbf92f0cd490ad05e843991bd8e
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
 
-The intent was that reading daemon_active would give the same indication
-to users. But the code is broken and does not display anything.
+Thanks, v2, which already had been sent, should fix all these.
 
-Add a seq_printf() to output the current value of the trace_count.
-
-Fixes: d963cd95bea9 ("RAS, debugfs: Add debugfs interface for RAS subsystem")
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
- drivers/ras/debugfs.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/ras/debugfs.c b/drivers/ras/debugfs.c
-index 0d4f985afbf3..d67af5e08caf 100644
---- a/drivers/ras/debugfs.c
-+++ b/drivers/ras/debugfs.c
-@@ -15,7 +15,8 @@ EXPORT_SYMBOL_GPL(ras_userspace_consumers);
- 
- static int trace_show(struct seq_file *m, void *v)
- {
--	return atomic_read(&trace_count);
-+	seq_printf(m, "%d\n", atomic_read(&trace_count));
-+	return 0;
- }
- 
- static int trace_open(struct inode *inode, struct file *file)
 -- 
-2.37.3
+With Best Regards,
+Andy Shevchenko
+
 
