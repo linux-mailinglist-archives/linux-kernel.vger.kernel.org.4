@@ -2,120 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E51C15F51E9
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 608C45F51EE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiJEJoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 05:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
+        id S229724AbiJEJpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 05:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiJEJoL (ORCPT
+        with ESMTP id S229530AbiJEJpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 05:44:11 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0B828E24;
-        Wed,  5 Oct 2022 02:44:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664963050; x=1696499050;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=IG4eeVo0o0ZX8usM5+UZ5ju6UZk+OfIU4VkFCt8UokQ=;
-  b=Qq/nA1bDuL2ewBO9qQYxrMvi1CaD8ISZ2C4p16F73zEQS5Ssz0wEM8cf
-   k++ciVzmIvMoPvaqOJKCa16y/dCf/qPCUZnsdMcOYaZzYz48nI3xzrFgE
-   h0fcm9ed34nET7FqgbedAzO+rijTtTVOZG9a2w7ImipQZ6yTKUl9EJN3l
-   MEXaHjeXNZ3DJcSh17m4plcfR3QYLjsqC3m1SUzwCaMZ68UsgykV8ktER
-   S8xmw9GJzCitArWtQQ2f8LG/RmAlRqL7Dv+fBns0srhz5Chof+lXREPRj
-   adVNLpg6/42cz7BB24EKlNOz41hczCRiFMn577YVvGE0ybdM4TS7D25Ra
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="303097975"
-X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
-   d="scan'208";a="303097975"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 02:44:09 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="624259828"
-X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
-   d="scan'208";a="624259828"
-Received: from mtantera-mobl3.ger.corp.intel.com (HELO refaase-MOBL1.ger.corp.intel.com) ([10.252.39.164])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 02:44:04 -0700
-Date:   Wed, 5 Oct 2022 12:43:44 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Kumaravel.Thiagarajan@microchip.com
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, andy.shevchenko@gmail.com,
-        u.kleine-koenig@pengutronix.de, johan@kernel.org,
-        wander@redhat.com, etremblay@distech-controls.com,
-        macro@orcam.me.uk, geert+renesas@glider.be, jk@ozlabs.org,
-        phil.edworthy@renesas.com, Lukas Wunner <lukas@wunner.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        UNGLinuxDriver@microchip.com
-Subject: RE: [PATCH v2 tty-next 2/3] 8250: microchip: pci1xxxx: Add rs485
- support to quad-uart driver.
-In-Reply-To: <BN8PR11MB3668B169D079C3F9D1C3BB72E95A9@BN8PR11MB3668.namprd11.prod.outlook.com>
-Message-ID: <10e3e06c-10b2-1e65-2f4-32a5f0965c8@linux.intel.com>
-References: <20221001061507.3508603-1-kumaravel.thiagarajan@microchip.com> <20221001061507.3508603-3-kumaravel.thiagarajan@microchip.com> <d184aa6d-23e-edf6-4cee-f5f4ad6bf90@linux.intel.com>
- <BN8PR11MB3668B169D079C3F9D1C3BB72E95A9@BN8PR11MB3668.namprd11.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-2055571603-1664963048=:1580"
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 5 Oct 2022 05:45:40 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214876B158
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 02:45:40 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BA6B91F74A;
+        Wed,  5 Oct 2022 09:45:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664963138; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rU0w0PCNKN0xXBXplJAZJuCSubVSrIsbg46jxnYU5Ro=;
+        b=PO7heKsi5Ujyvjqb3tStJBoAaD6SptlguubNdL61Q7aEbrlvFhCSoWk+tkMKNWhpiTg4tS
+        g3ks5FHa6652/SI5pWZxO/Og3xyTPfvMg57L8TLvyLGltG8qy+M+4WmH/5I2W5H8HdmPpO
+        TrocfGRE5PrEABJeH0ubf2ZHX4TmaLo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664963138;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rU0w0PCNKN0xXBXplJAZJuCSubVSrIsbg46jxnYU5Ro=;
+        b=PL4zm892o+gVvk86gFP/JfU+yRGr+WLxUCJl4MPQrA2eM3NKILtprURJztcgEGpW8YrJ8d
+        +guh7sMTWYkU3hBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 84D0B13345;
+        Wed,  5 Oct 2022 09:45:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id MLylH0JSPWNCIAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 05 Oct 2022 09:45:38 +0000
+Date:   Wed, 05 Oct 2022 11:45:37 +0200
+Message-ID: <87ilkyvc1q.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     "Lu, Brent" <brent.lu@intel.com>
+Cc:     "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "Jaroslav Kysela" <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Mohan Kumar <mkumard@nvidia.com>,
+        Ville =?ISO-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>, "Zhi, Yong" <yong.zhi@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ALSA: hda/hdmi: run eld notify in delay work
+In-Reply-To: <CY5PR11MB62571E282C37DDFBD4058D99975D9@CY5PR11MB6257.namprd11.prod.outlook.com>
+References: <20220927135807.4097052-1-brent.lu@intel.com>
+        <87ill8gb5c.wl-tiwai@suse.de>
+        <CY5PR11MB6257CB33E1EDA90CE2B2F99D97549@CY5PR11MB6257.namprd11.prod.outlook.com>
+        <875yh8ezs9.wl-tiwai@suse.de>
+        <871qrvgbsr.wl-tiwai@suse.de>
+        <87y1u3evy6.wl-tiwai@suse.de>
+        <CY5PR11MB62571E282C37DDFBD4058D99975D9@CY5PR11MB6257.namprd11.prod.outlook.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-2055571603-1664963048=:1580
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-
-On Tue, 4 Oct 2022, Kumaravel.Thiagarajan@microchip.com wrote:
-
-> > -----Original Message-----
-> > From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > Sent: Monday, October 3, 2022 2:51 PM
-> > To: Kumaravel Thiagarajan - I21417 <Kumaravel.Thiagarajan@microchip.com>
-> > Subject: Re: [PATCH v2 tty-next 2/3] 8250: microchip: pci1xxxx: Add rs485
-> > support to quad-uart driver.
+On Wed, 05 Oct 2022 10:14:19 +0200,
+Lu, Brent wrote:
+> 
 > > 
-> > On Sat, 1 Oct 2022, Kumaravel Thiagarajan wrote:
+> > ... and on the further consideration, I believe the best solution is to just get rid of
+> > the whole check.
 > > 
-> > > pci1xxxx uart supports rs485 mode of operation in the hardware with
-> > > auto-direction control with configurable delay for releasing RTS after
-> > > the transmission. This patch adds support for the rs485 mode.
-> > >
-> > > Signed-off-by: Kumaravel Thiagarajan
-> > > <kumaravel.thiagarajan@microchip.com>
-> > > ---
-> > > Changes in v2:
-> > > - move pci1xxxx_rs485_config to a separate patch with
-> > >   pci1xxxx_rs485_supported.
-> > > ---
-> > >  drivers/tty/serial/8250/8250_pci1xxxx.c | 57
-> > > +++++++++++++++++++++++++
-> > >  1 file changed, 57 insertions(+)
-> > >
-> > > diff --git a/drivers/tty/serial/8250/8250_pci1xxxx.c
-> > > b/drivers/tty/serial/8250/8250_pci1xxxx.c
-> > > index 41a4b94f52b4..999e5a284266 100644
-> > > --- a/drivers/tty/serial/8250/8250_pci1xxxx.c
-> > > +++ b/drivers/tty/serial/8250/8250_pci1xxxx.c
-> > > +
-> > > +             if (rs485->delay_rts_after_send) {
-> > > +                     baud_period_in_ns = ((clock_div >> 8) * 16);
-> > 
-> > Is this 16 perhaps UART_BIT_SAMPLE_CNT?
-> Yes. Is there any macro definition for that? I could not find any 
-> definition in the above name. 
+> > It was introduced by the commit eb399d3c99d8 along with the 8ae743e82f0b
+> > that checks the suspend state.  The latter is still meaningful (we should skip the
+> > bogus notification at suspend).
+> > However, the former -- the code path we're dealing with -- doesn't help much in
+> > the recent code.  That fix was required because the driver probed the ELD bits
+> > via HD-audio verb at the time of the fix commit; that is, the driver had to wake
+> > up the codec for updating the ELD.  OTOH, now ELD is read directly from the
+> > graphics chip without the codec wakeup.  So the skip makes little sense.
+> Hi Takashi,
+> 
+> I've got the test result from ODM which is positive. During 60 test runs, the elf notify
+> running in suspend happened 10 times and the audio is normal. The patch is looking
+> good.
 
-You're adding it in your 1/3 patch :-).
+Thanks for confirmation.  The fix will be included in 6.1-rc1.
 
--- 
- i.
 
---8323329-2055571603-1664963048=:1580--
+Takashi
