@@ -2,100 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C115F5973
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6493A5F5978
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 20:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbiJER5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 13:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57350 "EHLO
+        id S230204AbiJESAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 14:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbiJER5s (ORCPT
+        with ESMTP id S230051AbiJER75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 13:57:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5108C78BCD;
-        Wed,  5 Oct 2022 10:57:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7707C6178F;
-        Wed,  5 Oct 2022 17:57:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8553BC433D6;
-        Wed,  5 Oct 2022 17:57:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664992665;
-        bh=hYC0opATC0Nmx1bPQMzQLWCcT3yhZpfxCXEFJN/s3qI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=NONKl8qqujs2rlwAFWW3Swq1nuYiRytwvRiPDf0qjoTgSUOcWmzqDp+MLsJg5zKMR
-         ao3se269USLlTI6/XVXDff8SPS8zOnF2JmHYUzuuKukZ241biXtUnLiTNhOgwWgUmS
-         LP3V1P/ECZSU1XV++t31gXFq2jXt+qJXIbuK4TZDjVs/pB+xwBIDdaEacEsa9RHnCx
-         25Au5tWo4oJs+/ofjj9hcOZjaxU5cQ9wJnNlFQ38nbxVH5+YINEMclONuZFxlA+HWt
-         FbEen/WYSMqoqk9lnobC6x4VPxsCuLiBGPYMR445ZX0AbZQzEpBkRdy2KyFTAHiu19
-         rQT10nG1cE3ig==
-Date:   Wed, 5 Oct 2022 12:57:44 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     linux-pci@vger.kernel.org, Vidya Sagar <vidyas@nvidia.com>,
-        "Saheed O . Bolarinwa" <refactormyself@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rajat Jain <rajatja@google.com>,
-        "Kenneth R . Crudup" <kenny@panix.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Abhishek Sahu <abhsahu@nvidia.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Krishna Thota <kthota@nvidia.com>,
-        Manikanta Maddireddy <mmaddireddy@nvidia.com>,
-        Vidya Sagar <sagar.tv@gmail.com>, sagupta@nvidia.com,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH 0/3] PCI/ASPM: Fix L1SS issues
-Message-ID: <20221005175744.GA2382840@bhelgaas>
+        Wed, 5 Oct 2022 13:59:57 -0400
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA64ADCD
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 10:59:55 -0700 (PDT)
+Received: by mail-oo1-xc2a.google.com with SMTP id k11-20020a4ab28b000000b0047659ccfc28so11343457ooo.8
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 10:59:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rCPnvUAK2fGseNDtkks3wo2hHpqY+s4RG4CRsqPxrT0=;
+        b=g95TZ2i2pYkd5Qu/p+hc9fHuRrFcWvn3DVCOi9Yn1cJmsUq4Vu0438bUna0DmCTFyo
+         Vys+K6Io7NH9g2IS5BMypikjZKSoyE3q45hI8gzj5c3HQgSBAK16WjeQsF0EyK56Rdia
+         GIB4GgLPp1JXgHm5qnNGMqjY+E2kmFApvK2D0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rCPnvUAK2fGseNDtkks3wo2hHpqY+s4RG4CRsqPxrT0=;
+        b=DC13V6nzOchnj5TLgfSQRDoO+MZHb/Kn45kuQe3sQGW24R3WlHC4kcyFROt4TKHO2w
+         0A/1xxXQkoZDWY+7bDWEo9vDIwWX3xsEaBV9BLJ1VPivfDBQ65qiijrAeZ6BIaHpx7W2
+         PDZzOsbSMV+NzArt7EVUdVoXSSJJ+vN+m52mHoSSNRyS/qTQltDtyULmI7fV6kvKTCXo
+         9+sZUN/+cgGlPwkC+i0546b7hgxlLWZsiqYxZeXvPb8sH8DiGSjHi8FNh7+CYwDGyD32
+         HBLC+4ZxyuRgSQFFwqTbt4mVCqxE/Hkjqy+T4jLl+P4iHORuQ1NhVX92Qod8mYQZxVQN
+         NKZw==
+X-Gm-Message-State: ACrzQf0TQsVIGXoGZAmr7Zcki4gxJSKaE1MX/SFBADswA8LvyZuNht7/
+        aWY0JR+MFabujdMKsVJiCa6m0MkWXaRC7A==
+X-Google-Smtp-Source: AMsMyM7mONt+KYwPDJNCR42XwmiG+8tlDPgkfWEIEDBIM1+KLFqkfESJt1SY+/+PyZPe1oIuYF5rZA==
+X-Received: by 2002:a05:6830:2690:b0:659:ee3d:5756 with SMTP id l16-20020a056830269000b00659ee3d5756mr301509otu.117.1664992794144;
+        Wed, 05 Oct 2022 10:59:54 -0700 (PDT)
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com. [209.85.167.176])
+        by smtp.gmail.com with ESMTPSA id 6-20020aca0506000000b003509cc4ad4esm4633872oif.39.2022.10.05.10.59.52
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Oct 2022 10:59:52 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id q10so18453113oib.5
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 10:59:52 -0700 (PDT)
+X-Received: by 2002:a05:6808:2012:b0:34f:ca73:ee55 with SMTP id
+ q18-20020a056808201200b0034fca73ee55mr506789oiw.229.1664992792443; Wed, 05
+ Oct 2022 10:59:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ca836507-50ca-13bc-ef88-7f69b1333c99@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Yz18QA27+gN0oaM3@google.com>
+In-Reply-To: <Yz18QA27+gN0oaM3@google.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 5 Oct 2022 10:59:35 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whK-q1W-X0q0f_nBJ9sKyta-DVJhEAS4BF_oKAVAUQ4Jw@mail.gmail.com>
+Message-ID: <CAHk-=whK-q1W-X0q0f_nBJ9sKyta-DVJhEAS4BF_oKAVAUQ4Jw@mail.gmail.com>
+Subject: Re: [GIT PULL] Backlight for v6.1
+To:     Lee Jones <lee@kernel.org>, Mark Brown <broonie@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 08:28:07PM -0700, Sathyanarayanan Kuppuswamy wrote:
-> On 10/4/22 7:58 PM, Bjorn Helgaas wrote:
-> > From: Bjorn Helgaas <bhelgaas@google.com>
-> > 
-> > This is really late, but I think we have two significant issues with L1SS:
-> > 
-> >   1) pcie_aspm_cap_init() reads from the L1SS capability even when it
-> >   doesn't exist, so it reads PCI_COMMAND and PCI_STATUS instead and treats
-> >   those as an L1SS Capability value.
-> > 
-> >   2) encode_l12_threshold() encodes LTR_L1.2_THRESHOLD as smaller than
-> >   requested, so ports may enter L1.2 when they should not.
-> > 
-> > These patches are intended to fix both issues.
-> 
-> Looks good to me.
-> 
-> Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+On Wed, Oct 5, 2022 at 5:44 AM Lee Jones <lee@kernel.org> wrote:
+>
+>    - Add support for MediaTek MT6370 Backlight
 
-Thanks a lot for taking a look at these!  I put them on pci/aspm for
-v6.1.
+Hmm. This new driver has a
 
-> > Bjorn Helgaas (3):
-> >   PCI/ASPM: Factor out L1 PM Substates configuration
-> >   PCI/ASPM: Ignore L1 PM Substates if device lacks capability
-> >   PCI/ASPM: Correct LTR_L1.2_THRESHOLD computation
-> > 
-> >  drivers/pci/pcie/aspm.c | 155 +++++++++++++++++++++++-----------------
-> >  1 file changed, 90 insertions(+), 65 deletions(-)
-> > 
-> 
-> -- 
-> Sathyanarayanan Kuppuswamy
-> Linux Kernel Developer
+        depends on MFD_MT6370
+
+but there is no such symbol anywhere.
+
+It turns out the same is true of the MT6370 regulator driver that was
+added during the previous merge window.
+
+I do see that MFD_MT6370 in linux-next, but I don't see any pull
+request for this, and now that I started looking I do see that we had
+this already in 6.0.
+
+I do *not* believe that it's ok to randomly take "drivers" that depend
+on functionality that hasn't even been merged yet, and that are
+basically just dead code but hidden away this non-obvious way.
+
+I've pulled this, but I want to just state that this is bad, bad, bad.
+If it has dependencies that aren't met, it damn well shouldn't be sent
+upstream in a form where upstream can't even build test the thing.
+
+                   Linus
