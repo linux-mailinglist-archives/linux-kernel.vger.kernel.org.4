@@ -2,263 +2,646 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C99005F5C71
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 00:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C47B85F5C73
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 00:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229450AbiJEWMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 18:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
+        id S229509AbiJEWMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 18:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiJEWMF (ORCPT
+        with ESMTP id S229496AbiJEWM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 18:12:05 -0400
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC2E8286C;
-        Wed,  5 Oct 2022 15:12:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1665007924; x=1696543924;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=iqbkauKjmQifKVKFNI0aEYhlhw9OZRDoXLYTk3E0aJ4=;
-  b=A/hrn0UZExlsb8Zrgt5nNys9Oh1x8TQaRbyZZrqbG61X4C5PpVX5l+9l
-   Xa0n10aEXQGEvRXRNtfNwlO232LnFzF8FDpgZ+1VjEjGwIbMQT44daJU3
-   S+fIGrvzbTug/X6XE7iKp2quW0q/b+28VWzlxTmqz4RGKbQPXgHL7aMoK
-   Kw+VdDqiQkZLQQAjp7cpQ6bYXOM8DBuc1zmhPxp7YkBSEy8p+C73W6Dqb
-   pFpEX2YMYM1gSfle4Q0ghnX31WsgubyizslV3I4D3ET3vCyoKPjtVkg60
-   GifmG/APpTpddbVw8Lhs16NTDFDwa80RrBINpfdrCWqwu1SbrytOiHL6C
-   g==;
-X-IronPort-AV: E=Sophos;i="5.95,162,1661788800"; 
-   d="scan'208";a="317373000"
-Received: from mail-bn7nam10lp2101.outbound.protection.outlook.com (HELO NAM10-BN7-obe.outbound.protection.outlook.com) ([104.47.70.101])
-  by ob1.hgst.iphmx.com with ESMTP; 06 Oct 2022 06:12:02 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e+0Nc4/7Mo9ZpceKgbhpwhD1Y7X3/hcfswBerwT81VM2KSkCI18hwZgnUtNTH+5tTMKMtqFtvF8bg7aIu6uuTo0d8ixMgjus3iXhmCSxG3RIBqd3sBDMoEI+WGot98BOUzXs9qC2s0faMfnV2YtU6sjlLpWB4tKa0PWXLX163LKM0EBoJydu1KlKHJoX8duYjhboOsuEhC3gUlQahZGkxAdbFmWhXItndjqH4FgfauAAH6WgssmyiHuCEUzRbMeBkhKlqWJnGNMqrWUnJO0aMJyoBq10ksjOu1q+hK52CF0y++VQ3vX+egnZrna0566tbXv7CYtQwyofZdwAEm8mDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aT3QfW1xKB/QjgaL6871r3Hw3E3a/+uYR+oZpKtjpec=;
- b=YpjPqOCVkZyMU+8oCXFTgUWee11VUcoW1ZFlSh31ZTqHBBegfVcL7sWXXCyVUWAJvRGPScjiKXbPMH1m10Iv02RlioX9ZuAJqEn2G2vLtGhBR8/aDqH2udkPmnlVOr8fZfjOTjUaGZzpK4uVeKezbVWFQCmoC8IG08V6pMAssvLRBSGokaYDWrHkby1NFVVyrwAfI+WbY/+4plEnJjm1eT8duQozuo+B3yPLV/W/IgMOeaLy/oO3fzXzGhKszSlI4Dv/0bOSTpbpr0+Yve4eOfcQHBnEBblCd5SoriF5NAbSMWuCEWsyhON1sPiX/vXPCq+S8CntL9TtH1nb5GL6UA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+        Wed, 5 Oct 2022 18:12:26 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9328307D;
+        Wed,  5 Oct 2022 15:12:22 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id 13so698883ejn.3;
+        Wed, 05 Oct 2022 15:12:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aT3QfW1xKB/QjgaL6871r3Hw3E3a/+uYR+oZpKtjpec=;
- b=D84WqdEHuKxGCc9kUkuqMtMsoCl7XoZLXJark9FAT9Mk/hsN9jUUpmmEUAXTIWAvtNx7UuBPFcCuMb7QjVCZHwBrxU8KD4uTbsbBsJ7U2R6+uzyTld17TBrGBFby0Ct7RZCrWT5rnsB2A40GAqXLqiDC/mJuwOYyUW9/qF7W8Xk=
-Received: from MN2PR04MB6272.namprd04.prod.outlook.com (2603:10b6:208:e0::27)
- by DM5PR04MB1146.namprd04.prod.outlook.com (2603:10b6:3:9e::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Wed, 5 Oct
- 2022 22:11:59 +0000
-Received: from MN2PR04MB6272.namprd04.prod.outlook.com
- ([fe80::966:8440:b721:5425]) by MN2PR04MB6272.namprd04.prod.outlook.com
- ([fe80::966:8440:b721:5425%6]) with mapi id 15.20.5676.028; Wed, 5 Oct 2022
- 22:11:59 +0000
-From:   Niklas Cassel <Niklas.Cassel@wdc.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-CC:     John Garry <john.garry@huawei.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "jinpu.wang@cloud.ionos.com" <jinpu.wang@cloud.ionos.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linuxarm <linuxarm@huawei.com>,
-        yangxingui <yangxingui@huawei.com>,
-        yanaijie <yanaijie@huawei.com>
-Subject: Re: [PATCH v5 0/7] libsas and drivers: NCQ error handling
-Thread-Topic: [PATCH v5 0/7] libsas and drivers: NCQ error handling
-Thread-Index: AQHY1/ID0O3xyFitDU+9c+6EHqQqRa3+RKaAgAE7cQCAANLyAIAAAgSAgAAKBoA=
-Date:   Wed, 5 Oct 2022 22:11:59 +0000
-Message-ID: <Yz4BLTPkXqyjW4a4@x1-carbon>
-References: <1664262298-239952-1-git-send-email-john.garry@huawei.com>
- <YzwvpUUftX6Ziurt@x1-carbon>
- <cfa52b91-db81-a179-76c2-8a61266c099d@huawei.com>
- <27148ec5-d1ae-d9a2-1b00-a4c34d2da198@huawei.com>
- <Yz33FGwd3YvQUAqT@x1-carbon>
- <5db6a7bc-dfeb-76e1-6899-7041daa934cf@opensource.wdc.com>
-In-Reply-To: <5db6a7bc-dfeb-76e1-6899-7041daa934cf@opensource.wdc.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN2PR04MB6272:EE_|DM5PR04MB1146:EE_
-x-ms-office365-filtering-correlation-id: 522bd0ee-5360-4609-7881-08daa71e9f77
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: U99EFOOGW6N6LbbmIAv0sIctJtv4ZH6NABR6nEEbW2cGMOMFU+z2+G1gHVp3Vayq6PQWrUv+UsbZrqOX5trEXMegRjGX8pdiyoD0SqLg1jIkkXrCvg/OxRwpvWPGwDeW98iPUzAK9o060NR4MLpdSlma0JWHoqWn6TJE7XjYSmnBCn0KzrV0OQiL9zZd9LVuApbnK1s8b2lh1iGDVCTNzdnMUSipoNUzLzZog0Tg19o3pE6rNrfNepwIpS7JmbIygXDDCgKHffmfU2b7Ob9wNCv0GrX/u/9nPu2zmdmM42BTGmeuOauDCXIUSpRl9aIS7k8IrxJATtXmm3IBKSNI7z5UnDTns+hnwXgqnzKCA1jhBoDnm1PRZkg/9zdOSuz2CPGRFzd4rCjE1XOXxxp/+jZlQnhs+rEW0UPU0ga/Bb7W9w5sBVyCw/3UJKZWOJoZWiNi8ACvx+gGF3K7vqbB+340xk3fkqqaBmUqFAAE9EPQ0Dxi7AVJW4mACkG4DcC9fHCyPBKXmR4/XF7iJ0IpRAyqY0emXzDAHIIRyxNKYoxs9Dq2KkxWS8AE5CymzajIksnfw1bfxd0MB5JZpY3WWATWKZ2eIBN9ZbuyWzkGCWV4wnKIgr94bNZs6N3mzl1EqY8ARlL7i6IP+sDbfOB5/K1UfzQSWlpzjz37oi98BLyT1y+05twrWKNxgjvMnlBJJcBFMFpxQj++MSHYq9KXIAOMnQEurtzAA01WK+vl8Wx6F8W1nszW0kv0xsLQbUZv8d1l5hS7rb3j7WDKOV02188HMaLeDBxLR1y4jyArzgc=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR04MB6272.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(346002)(136003)(376002)(366004)(39860400002)(396003)(451199015)(8676002)(316002)(54906003)(26005)(6506007)(53546011)(966005)(9686003)(6512007)(71200400001)(478600001)(6486002)(86362001)(33716001)(8936002)(41300700001)(66476007)(66556008)(64756008)(6862004)(4326008)(91956017)(66946007)(66446008)(76116006)(2906002)(5660300002)(82960400001)(38100700002)(122000001)(38070700005)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fhktV39ZQHoJ/aQt2cVLdUL/ArpqGDaFndgsBSDJW2I14btADRGy4sbDBawo?=
- =?us-ascii?Q?q+CZa4OCKyoPGA1v/cFmn4ztylyL6syxSdeLZ5b2peg+CHxSjs+ZQtBahRhl?=
- =?us-ascii?Q?EzjrOmeVQyKfMZo1hlC1RrShvgJigtmf5e1jhYYgzmspZMZ59LlJv8HVUM+3?=
- =?us-ascii?Q?FtUNPusmhwyXmDdNVfYQu/LULjv4XesmSqiRpBhbExivbdkBJxSu4qtC4vnR?=
- =?us-ascii?Q?dBYpJNQX84y+4sevsmVdVpnLBS644DtXRGN/cF6+MxARQ5vKcv6LtQ9gVDsm?=
- =?us-ascii?Q?ZxRK8YhIK6Z9AyFlAxO2lUZOg2BqdWxi4OOw1u7EsdyXJY1/24BSIMieEnAO?=
- =?us-ascii?Q?GKT1wvHmZihLA45k31an12PwokjRfcSkSFRsbuF1ZDj1YPjp+rQpxE3EIAMP?=
- =?us-ascii?Q?DwpSqQvMa+sTnhosZgP22aPM/OdvqBTc1tyMaHQrG8KX7I9G7E/OHKyD6zbe?=
- =?us-ascii?Q?AQFSMAkUCgtqGHRQg1sdaTak45V9IB9QAZg6atRCHn8+6eop7V3Ggg/HQAid?=
- =?us-ascii?Q?+ceHHWppCHotBtp0MQO9hnJc2gmNysuQCj4hKOJiWOqo4ZGZ4dkOUq37nzVC?=
- =?us-ascii?Q?cgkiaSwqfkq+99iJKIs/evz1KlA6BDc4ylUKE6mJGSeFdHNla/mETSFvLyI3?=
- =?us-ascii?Q?VGOKtkIFSShFXZIDqw3dEjxEgaCs+faWRc4IAuxFDnDKrI2vpAyYQdrp/Al4?=
- =?us-ascii?Q?Jpv+BLzSnzCcZpMvI+J+GWOqFkWfAJsZb6DzCpuoo8D2I6MP5pzgAAn3LmgT?=
- =?us-ascii?Q?zzUUMvesLuEggV6ZNNvTei2QKocq9L8Fw3IGxJldp4ix0na+MCSWBc+jdOSS?=
- =?us-ascii?Q?fEYfszXBfhe7lHgy6daXYs2/5KnhJAtC0EPJR+gbdAr1Na1ql7cXHnqXaW9X?=
- =?us-ascii?Q?JkizSwO2pSAB2PfPoNlMA/i0Z3Lk2ql4/02Dg/Jc+QbsTt71QXzGSr7sqvp7?=
- =?us-ascii?Q?8bsEOhkWUO5Bx+221Hi7hjU7jcaDGA1njtq3ehhVMU0OV8BXHuS2ve20ki5+?=
- =?us-ascii?Q?FhcWKZHkn6/cEwU89wTHnWwnFR5LWhjaCE22jbmTVUcegvNK0V6xNI6i4DY4?=
- =?us-ascii?Q?c3EJNB1Qe7oikeXQNY82yUxfMei+baX22gRKH4iujjxOfpP776T2qjxRBjyX?=
- =?us-ascii?Q?YC3FWScEtLIrzONquwA1Rhwi3Wp31qL3hslr7EX/RJmNpXs78tatCLtEAFNC?=
- =?us-ascii?Q?wG6R8F4bHRHJxbfumqnjMT+uSaXkkqc8IdRdx0H3ovHqosMO1wUZpKiuaJV+?=
- =?us-ascii?Q?9LP6C9hLHRtAkTF87VDfwTvkp7bNtxd6hQ+d8KBgaE/Nl2hPbTCYpxziX7Gv?=
- =?us-ascii?Q?L6yoYIEgvOZZoKg8wVbYIzkUsgyM3WPfv8gTAQXFnrlG9VadGjFwSRauNG1f?=
- =?us-ascii?Q?Gi9wcHaRtElkiC+SF57cbkRQpEj/wTROrGvRao6h688w8ON27t+sQzHFZV+i?=
- =?us-ascii?Q?W7zb2MzG1S1QkLM7rAcEhDz5YXq+Z8nDUVJXDHHI0zDLoRzJQAHUTbFSfdQT?=
- =?us-ascii?Q?5k5qDzt8+E6LlItQe4PsftlsXtLmkBqMn4uR7e36//46ml+lqeUQ9+Oun9Lg?=
- =?us-ascii?Q?ioQOlBP1fqOs44w6MZd1BYndK/GxBN8ZAE4XZYl7Waq0jq34Z10sAGgEMVwP?=
- =?us-ascii?Q?3w=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3E4CA75C85B2A14889B3E3F4B623C6C2@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aUv12Ps+d8c83bpBxAt8IvYSTG0FAKuKCZixocXljkw=;
+        b=gwlCq7fIpFl3gZiufw2foklvXpOp4nitQSSITSxU5aHImh7tH8HGgldbw6tqX1103W
+         5pX7g5OdZ5PShaCPmwvNZUHP3sWXQsR0OQnUE2BgfBbLU73JIaXfa+5Mdltj8tT2ZcXv
+         MD+xEjEag6noz/UTZJ6F/3lTeZkNpXTVoOTWAZcqswPT5Z8pQbwiiu1h2KbuXX3Ts0Bb
+         PVYziK8Y510fouNp33darZA9gCdCQBmme64It1qvYW7oQ4g7oLrNP7rrcWbuQ9G6KFJ6
+         GL7dUglcEZUCxuxQ/2JlbY00O9cfsET59mp5hmXryFKSpbvaz/vjkqjW6NgLzrBmLdvW
+         lQgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aUv12Ps+d8c83bpBxAt8IvYSTG0FAKuKCZixocXljkw=;
+        b=auuG2D2vcbkGqyUKTwIDLCLrNavC/+KY2YdL+/y9fqDvWlkrIf+WAy9GAlwZV8oRJF
+         P0aAOtmHdCkbRw4v2WDmuDWe6z/6znybAE3HabuqlHZbmAgiQcjqMTOOZmVDtZ/6HgwU
+         AcRaQNtZOcfHyKhHuOe3KTC5As0voB7Ikqse4iGsgRmadxSEupxqXxNdNdemAuIjopbs
+         GujulAQOvRoMAp00FnKTQjJzv0YtO/5aImams1KBCtg0iVsUP9FlMhYCjBJnO1atH174
+         UbTf3hICUbJasIrRuUcOMhkdBJ3erY2Xo0wLypzg8raVdXglPsSzFR+qA3t1Wy9NgC62
+         5UuQ==
+X-Gm-Message-State: ACrzQf03fja+wsrJD2gCpSbIBtlWN1Siq9wx+ChvevVvRvpzE/Ol3xcr
+        eBWhUtLLTatpDIr5ztXmJxQ=
+X-Google-Smtp-Source: AMsMyM6X04bPH4h6VK1Hhb5gbJTdKDMUkgfQIciMWJ+Acmfr6DJarysk2w1c1RW/zJM73ocCbms0kA==
+X-Received: by 2002:a17:907:2d8e:b0:783:8d26:645 with SMTP id gt14-20020a1709072d8e00b007838d260645mr1320362ejc.535.1665007940711;
+        Wed, 05 Oct 2022 15:12:20 -0700 (PDT)
+Received: from krava ([83.240.63.251])
+        by smtp.gmail.com with ESMTPSA id hp20-20020a1709073e1400b0072b33e91f96sm3601477ejc.190.2022.10.05.15.12.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 15:12:20 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Thu, 6 Oct 2022 00:12:17 +0200
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Florent Revest <revest@chromium.org>
+Cc:     Xu Kuohai <xukuohai@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Xu Kuohai <xukuohai@huaweicloud.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Zi Shen Lim <zlim.lnx@gmail.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH bpf-next v2 0/4] Add ftrace direct call for arm64
+Message-ID: <Yz4BQXtYPa/TU652@krava>
+References: <YzG51Jyd5zhvygtK@arm.com>
+ <YzHk1zRf1Dp8YTEe@FVFF77S0Q05N>
+ <970a25e4-9b79-9e0c-b338-ed1a934f2770@huawei.com>
+ <YzR5WSLux4mmFIXg@FVFF77S0Q05N>
+ <2cb606b4-aa8b-e259-cdfd-1bfc61fd7c44@huawei.com>
+ <CABRcYmKPchvtkkgWhOJ6o3pHVqTWeenGawHfZ2ug8Akdh6NfnQ@mail.gmail.com>
+ <7f34d333-3b2a-aea5-f411-d53be2c46eee@huawei.com>
+ <20221005110707.55bd9354@gandalf.local.home>
+ <CABRcYmJGY6fp0CtUBYN8BjEDN=r42BPLSBcrxqu491bTRmfm7g@mail.gmail.com>
+ <20221005113019.18aeda76@gandalf.local.home>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?K1MwXwhE8r47N8dml10qhj48EVnz3MmTZQQYjjDzhLYoOCtRvLceR74GAtPD?=
- =?us-ascii?Q?29iI+xS+bZMS99HK8dAGlw6kg3ppMAYqDF9VoNLyGOCfbj9Lje66kM3ZVMNo?=
- =?us-ascii?Q?3Dwca8C0Z/VRKsRpVL+LbsHj/j48/0D1bobdpPn2UB6Bt6Xs5YefeP5mc2Ku?=
- =?us-ascii?Q?SaD+dfFdhU9Wa7MO23+9HYd12kKO8IgHToT9XOCjR/vTJ6ECsnrNQ6Nz1rXq?=
- =?us-ascii?Q?/8T5UcFpINbjf2cQ9Uop82AYzBnUordSkHDGEFhNRGWH0YYt5nfQzPfxEaUK?=
- =?us-ascii?Q?GWxdX9EbvE/7KuBVFkLV/hHbCvYzeLwRYGD6GaKVuM3pfP69hog4R6MQgkJL?=
- =?us-ascii?Q?3OzfI35Eu6PQaXstzDJWke+e1PdQt7oS8TUxXht00XG7XVxQhKO+r/0sWb7E?=
- =?us-ascii?Q?zgjWUdeyHDf/ihKeukuqJKZ11mKWhg1uFoGPl4eXTKLQBQQN1BR5T5n6mLVS?=
- =?us-ascii?Q?/xM+9JBLbxK2sm29e0PxzsBjtSwESjki80uKRNCjBWhOjj7Sfh1vl4X0+gAY?=
- =?us-ascii?Q?wyzi0BGVsy+cXL9rLmCBFNLhwakPQJK9xEjIA8pyb5ZC0Jn+p9/5VlXNXmOt?=
- =?us-ascii?Q?pGG9LzNU+uRzNmaUfOyUyB//JfAvcLYVxZa9FG7mA9mAYEKUShVjJ++vKTNV?=
- =?us-ascii?Q?G4XwYLEGfo/7J7GvRHsFh1B4ASXjnO4KONBJzqlg/oyn6QvkKegN8k+w3tXk?=
- =?us-ascii?Q?P5Ou1DfNBqMOdjxGmHgkb2xasSJGqjY3d+uNTZv1WrY/cnYYADIIVsV75kmP?=
- =?us-ascii?Q?fZi4Q9F4/tjKJr2pYf9r6O+Ir4h64Zb4EcaOSds2xdZT6xaFSKIkRwVltkD2?=
- =?us-ascii?Q?i6H5b3xI6S+KiDrmssI8IyglPgeHpvgyDgjcyjbETMs0J4Jz0QWUQhkZ/AUJ?=
- =?us-ascii?Q?AOGuFForVqaPviWIBeufKmVBZxj9PbQJbo3BrN1La8aUCH6Vi5QH2HtVVAd1?=
- =?us-ascii?Q?+CAC8jFXZNhNMChXiK0rVFexyFquSiuIr5xoh/t2MReYx5odTZVFf//ezWEC?=
- =?us-ascii?Q?ciieaAMB3ue4fCLsH7Lbv5yZLx7+SEX+RCg9FrG15JrY50s=3D?=
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR04MB6272.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 522bd0ee-5360-4609-7881-08daa71e9f77
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Oct 2022 22:11:59.2142
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: g8CByTnWZaK4raBrH3UeFoprx1pT1Lm3lGiUetinF24+3BzlKodkuqs5nR+Sl03UnMrQwnvAzKgblOiorKMmCA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR04MB1146
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221005113019.18aeda76@gandalf.local.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 06:36:05AM +0900, Damien Le Moal wrote:
-> On 10/6/22 06:28, Niklas Cassel wrote:
-> > On Wed, Oct 05, 2022 at 09:53:52AM +0100, John Garry wrote:
-> >> On 04/10/2022 15:04, John Garry wrote:
-> >>
-> >> Hi Niklas,
-> >>
-> >> Could you try a change like this on top:
-> >>
-> >> void sas_ata_device_link_abort(struct domain_device *device, bool
-> >> force_reset)
-> >> {
-> >> 	struct ata_port *ap =3D device->sata_dev.ap;
-> >> 	struct ata_link *link =3D &ap->link;
-> >>
-> >> +	device->sata_dev.fis[2] =3D ATA_ERR | ATA_DRDY;
-> >> +	device->sata_dev.fis[3] =3D 0x04;
-> >>
-> >> 	link->eh_info.err_mask |=3D AC_ERR_DEV;
-> >> 	if (force_reset)
-> >> 		link->eh_info.action |=3D ATA_EH_RESET;
-> >> 	ata_link_abort(link);
-> >> }
-> >> EXPORT_SYMBOL_GPL(sas_ata_device_link_abort);
-> >>
-> >> I tried it myself and it looked to work ok, except I have a problem wi=
-th my
-> >> arm64 system in that the read log ext times-out and all TF show "devic=
-e
-> >> error", like:
-> >=20
-> > Do you know why it fails to read the log?
-> > Can you read the NCQ Command Error log using ATA16 passthrough commands=
-?
-> >=20
-> > sudo sg_sat_read_gplog -d --log=3D0x10 /dev/sdc
-> >=20
-> > The first byte is the last NCQ tag (in hex) that failed.
->=20
-> libata issues read log as a non-ncq command under EH. So the NCQ error lo=
-g
-> will not help.
+On Wed, Oct 05, 2022 at 11:30:19AM -0400, Steven Rostedt wrote:
+> On Wed, 5 Oct 2022 17:10:33 +0200
+> Florent Revest <revest@chromium.org> wrote:
+> 
+> > On Wed, Oct 5, 2022 at 5:07 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+> > >
+> > > On Wed, 5 Oct 2022 22:54:15 +0800
+> > > Xu Kuohai <xukuohai@huawei.com> wrote:
+> > >  
+> > > > 1.3 attach bpf prog with with direct call, bpftrace -e 'kfunc:vfs_write {}'
+> > > >
+> > > > # dd if=/dev/zero of=/dev/null count=1000000
+> > > > 1000000+0 records in
+> > > > 1000000+0 records out
+> > > > 512000000 bytes (512 MB, 488 MiB) copied, 1.72973 s, 296 MB/s
+> > > >
+> > > >
+> > > > 1.4 attach bpf prog with with indirect call, bpftrace -e 'kfunc:vfs_write {}'
+> > > >
+> > > > # dd if=/dev/zero of=/dev/null count=1000000
+> > > > 1000000+0 records in
+> > > > 1000000+0 records out
+> > > > 512000000 bytes (512 MB, 488 MiB) copied, 1.99179 s, 257 MB/s  
+> > 
+> > Thanks for the measurements Xu!
+> > 
+> > > Can you show the implementation of the indirect call you used?  
+> > 
+> > Xu used my development branch here
+> > https://github.com/FlorentRevest/linux/commits/fprobe-min-args
 
-Hello Damien,
+nice :) I guess you did not try to run it on x86, I had to add some small
+changes and disable HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS to compile it
 
-John explained that he got a timeout from EH when reading the log:
-[  350.281581] ata1: failed to read log page 10h (errno=3D-5)
-[  350.577181] ata1.00: exception Emask 0x1 SAct 0xffffffff SErr 0x0 action=
- 0x6 frozen
+> 
+> That looks like it could be optimized quite a bit too.
+> 
+> Specifically this part:
+> 
+> static bool bpf_fprobe_entry(struct fprobe *fp, unsigned long ip, struct ftrace_regs *regs, void *private)
+> {
+> 	struct bpf_fprobe_call_context *call_ctx = private;
+> 	struct bpf_fprobe_context *fprobe_ctx = fp->ops.private;
+> 	struct bpf_tramp_links *links = fprobe_ctx->links;
+> 	struct bpf_tramp_links *fentry = &links[BPF_TRAMP_FENTRY];
+> 	struct bpf_tramp_links *fmod_ret = &links[BPF_TRAMP_MODIFY_RETURN];
+> 	struct bpf_tramp_links *fexit = &links[BPF_TRAMP_FEXIT];
+> 	int i, ret;
+> 
+> 	memset(&call_ctx->ctx, 0, sizeof(call_ctx->ctx));
+> 	call_ctx->ip = ip;
+> 	for (i = 0; i < fprobe_ctx->nr_args; i++)
+> 		call_ctx->args[i] = ftrace_regs_get_argument(regs, i);
+> 
+> 	for (i = 0; i < fentry->nr_links; i++)
+> 		call_bpf_prog(fentry->links[i], &call_ctx->ctx, call_ctx->args);
+> 
+> 	call_ctx->args[fprobe_ctx->nr_args] = 0;
+> 	for (i = 0; i < fmod_ret->nr_links; i++) {
+> 		ret = call_bpf_prog(fmod_ret->links[i], &call_ctx->ctx,
+> 				      call_ctx->args);
+> 
+> 		if (ret) {
+> 			ftrace_regs_set_return_value(regs, ret);
+> 			ftrace_override_function_with_return(regs);
+> 
+> 			bpf_fprobe_exit(fp, ip, regs, private);
+> 			return false;
+> 		}
+> 	}
+> 
+> 	return fexit->nr_links;
+> }
+> 
+> There's a lot of low hanging fruit to speed up there. I wouldn't be too
+> fast to throw out this solution if it hasn't had the care that direct calls
+> have had to speed that up.
+> 
+> For example, trampolines currently only allow to attach to functions with 6
+> parameters or less (3 on x86_32). You could make 7 specific callbacks, with
+> zero to 6 parameters, and unroll the argument loop.
+> 
+> Would also be interesting to run perf to see where the overhead is. There
+> may be other locations to work on to make it almost as fast as direct
+> callers without the other baggage.
 
-ata_eh_read_log_10h() uses ata_read_log_page(), which will first try to rea=
-d
-the log using READ LOG DMA EXT. If that fails, it will retry using READ LOG=
- EXT.
+I can boot the change and run tests in qemu but for some reason it
+won't boot on hw, so I have just perf report from qemu so far
 
-Therefore, to see if this is a driver specific bug, I suggested to try to r=
-ead
-the NCQ Command Error log using ATA16 passthrough commands:
+there's fprobe/rethook machinery showing out as expected
 
-$ sudo sg_sat_read_gplog -d --log=3D0x10 /dev/sdc
-will read the log using READ LOG DMA EXT.
-
-$ sudo sg_sat_read_gplog --log=3D0x10 /dev/sdc
-will read the log using READ LOG EXT.
-
-Neither of these two suggested commands are NCQ commands.
-(Neither command is encapsulated in a RECEIVE FPDMA QUEUED,
-so I'm not sure what you mean.)
+jirka
 
 
-Garry, I now see that:
-[  350.577181] ata1.00: exception Emask 0x1 SAct 0xffffffff SErr 0x0 action=
- 0x6 frozen
-Your port is frozen.
+---
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 23K of event 'cpu-clock:k'
+# Event count (approx.): 5841250000
+#
+# Overhead  Command  Shared Object                                   Symbol                                            
+# ........  .......  ..............................................  ..................................................
+#
+    18.65%  bench    [kernel.kallsyms]                               [k] syscall_enter_from_user_mode
+            |
+            ---syscall_enter_from_user_mode
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
 
-ata_read_log_page() calls ata_exec_internal() which calls ata_exec_internal=
-_sg(),
-which will simply return an error without sending down the command to the d=
-rive,
-if the port is frozen.
+    13.03%  bench    [kernel.kallsyms]                               [k] seqcount_lockdep_reader_access.constprop.0
+            |
+            ---seqcount_lockdep_reader_access.constprop.0
+               ktime_get_coarse_real_ts64
+               syscall_trace_enter.constprop.0
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
 
-Not sure why your port is frozen, mine is obviously not.
+     9.49%  bench    [kernel.kallsyms]                               [k] rethook_try_get
+            |
+            ---rethook_try_get
+               fprobe_handler
+               ftrace_trampoline
+               __x64_sys_getpgid
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
 
-ata_do_link_abort() calls ata_eh_set_pending() without activating fast drai=
-n:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/dri=
-vers/ata/libata-eh.c?h=3Dv6.0#n989
+     8.71%  bench    [kernel.kallsyms]                               [k] rethook_recycle
+            |
+            ---rethook_recycle
+               fprobe_handler
+               ftrace_trampoline
+               __x64_sys_getpgid
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
 
-So I'm not sure why your port is frozen.
-(The fast drain timer does freeze the port, but it shouldn't be enabled.)
-It might be worthwhile to see who freezes the port in your case.
+     4.31%  bench    [kernel.kallsyms]                               [k] rcu_is_watching
+            |
+            ---rcu_is_watching
+               |          
+               |--1.49%--rethook_try_get
+               |          fprobe_handler
+               |          ftrace_trampoline
+               |          __x64_sys_getpgid
+               |          do_syscall_64
+               |          entry_SYSCALL_64_after_hwframe
+               |          syscall
+               |          
+               |--1.10%--do_getpgid
+               |          __x64_sys_getpgid
+               |          do_syscall_64
+               |          entry_SYSCALL_64_after_hwframe
+               |          syscall
+               |          
+               |--1.02%--__bpf_prog_exit
+               |          call_bpf_prog.isra.0
+               |          bpf_fprobe_entry
+               |          fprobe_handler
+               |          ftrace_trampoline
+               |          __x64_sys_getpgid
+               |          do_syscall_64
+               |          entry_SYSCALL_64_after_hwframe
+               |          syscall
+               |          
+                --0.70%--__bpf_prog_enter
+                          call_bpf_prog.isra.0
+                          bpf_fprobe_entry
+                          fprobe_handler
+                          ftrace_trampoline
+                          __x64_sys_getpgid
+                          do_syscall_64
+                          entry_SYSCALL_64_after_hwframe
+                          syscall
+
+     2.94%  bench    [kernel.kallsyms]                               [k] lock_release
+            |
+            ---lock_release
+               |          
+               |--1.51%--call_bpf_prog.isra.0
+               |          bpf_fprobe_entry
+               |          fprobe_handler
+               |          ftrace_trampoline
+               |          __x64_sys_getpgid
+               |          do_syscall_64
+               |          entry_SYSCALL_64_after_hwframe
+               |          syscall
+               |          
+                --1.43%--do_getpgid
+                          __x64_sys_getpgid
+                          do_syscall_64
+                          entry_SYSCALL_64_after_hwframe
+                          syscall
+
+     2.91%  bench    bpf_prog_21856463590f61f1_bench_trigger_fentry  [k] bpf_prog_21856463590f61f1_bench_trigger_fentry
+            |
+            ---bpf_prog_21856463590f61f1_bench_trigger_fentry
+               |          
+                --2.66%--call_bpf_prog.isra.0
+                          bpf_fprobe_entry
+                          fprobe_handler
+                          ftrace_trampoline
+                          __x64_sys_getpgid
+                          do_syscall_64
+                          entry_SYSCALL_64_after_hwframe
+                          syscall
+
+     2.69%  bench    [kernel.kallsyms]                               [k] bpf_fprobe_entry
+            |
+            ---bpf_fprobe_entry
+               fprobe_handler
+               ftrace_trampoline
+               __x64_sys_getpgid
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
+
+     2.60%  bench    [kernel.kallsyms]                               [k] lock_acquire
+            |
+            ---lock_acquire
+               |          
+               |--1.34%--__bpf_prog_enter
+               |          call_bpf_prog.isra.0
+               |          bpf_fprobe_entry
+               |          fprobe_handler
+               |          ftrace_trampoline
+               |          __x64_sys_getpgid
+               |          do_syscall_64
+               |          entry_SYSCALL_64_after_hwframe
+               |          syscall
+               |          
+                --1.24%--do_getpgid
+                          __x64_sys_getpgid
+                          do_syscall_64
+                          entry_SYSCALL_64_after_hwframe
+                          syscall
+
+     2.42%  bench    [kernel.kallsyms]                               [k] syscall_exit_to_user_mode_prepare
+            |
+            ---syscall_exit_to_user_mode_prepare
+               syscall_exit_to_user_mode
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
+
+     2.37%  bench    [kernel.kallsyms]                               [k] __audit_syscall_entry
+            |
+            ---__audit_syscall_entry
+               syscall_trace_enter.constprop.0
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               |          
+                --2.36%--syscall
+
+     2.35%  bench    [kernel.kallsyms]                               [k] syscall_trace_enter.constprop.0
+            |
+            ---syscall_trace_enter.constprop.0
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
+
+     2.12%  bench    [kernel.kallsyms]                               [k] check_preemption_disabled
+            |
+            ---check_preemption_disabled
+               |          
+                --1.55%--rcu_is_watching
+                          |          
+                           --0.59%--do_getpgid
+                                     __x64_sys_getpgid
+                                     do_syscall_64
+                                     entry_SYSCALL_64_after_hwframe
+                                     syscall
+
+     2.00%  bench    [kernel.kallsyms]                               [k] fprobe_handler
+            |
+            ---fprobe_handler
+               ftrace_trampoline
+               __x64_sys_getpgid
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
+
+     1.94%  bench    [kernel.kallsyms]                               [k] local_irq_disable_exit_to_user
+            |
+            ---local_irq_disable_exit_to_user
+               syscall_exit_to_user_mode
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
+
+     1.84%  bench    [kernel.kallsyms]                               [k] rcu_read_lock_sched_held
+            |
+            ---rcu_read_lock_sched_held
+               |          
+               |--0.93%--lock_acquire
+               |          
+                --0.90%--lock_release
+
+     1.71%  bench    [kernel.kallsyms]                               [k] migrate_enable
+            |
+            ---migrate_enable
+               __bpf_prog_exit
+               call_bpf_prog.isra.0
+               bpf_fprobe_entry
+               fprobe_handler
+               ftrace_trampoline
+               __x64_sys_getpgid
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
+
+     1.66%  bench    [kernel.kallsyms]                               [k] call_bpf_prog.isra.0
+            |
+            ---call_bpf_prog.isra.0
+               bpf_fprobe_entry
+               fprobe_handler
+               ftrace_trampoline
+               __x64_sys_getpgid
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
+
+     1.53%  bench    [kernel.kallsyms]                               [k] __rcu_read_unlock
+            |
+            ---__rcu_read_unlock
+               |          
+               |--0.86%--__bpf_prog_exit
+               |          call_bpf_prog.isra.0
+               |          bpf_fprobe_entry
+               |          fprobe_handler
+               |          ftrace_trampoline
+               |          __x64_sys_getpgid
+               |          do_syscall_64
+               |          entry_SYSCALL_64_after_hwframe
+               |          syscall
+               |          
+                --0.66%--do_getpgid
+                          __x64_sys_getpgid
+                          do_syscall_64
+                          entry_SYSCALL_64_after_hwframe
+                          syscall
+
+     1.31%  bench    [kernel.kallsyms]                               [k] debug_smp_processor_id
+            |
+            ---debug_smp_processor_id
+               |          
+                --0.77%--rcu_is_watching
+
+     1.22%  bench    [kernel.kallsyms]                               [k] migrate_disable
+            |
+            ---migrate_disable
+               __bpf_prog_enter
+               call_bpf_prog.isra.0
+               bpf_fprobe_entry
+               fprobe_handler
+               ftrace_trampoline
+               __x64_sys_getpgid
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
+
+     1.19%  bench    [kernel.kallsyms]                               [k] __bpf_prog_enter
+            |
+            ---__bpf_prog_enter
+               call_bpf_prog.isra.0
+               bpf_fprobe_entry
+               fprobe_handler
+               ftrace_trampoline
+               __x64_sys_getpgid
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
+
+     0.84%  bench    [kernel.kallsyms]                               [k] __radix_tree_lookup
+            |
+            ---__radix_tree_lookup
+               find_task_by_pid_ns
+               do_getpgid
+               __x64_sys_getpgid
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
+
+     0.82%  bench    [kernel.kallsyms]                               [k] do_getpgid
+            |
+            ---do_getpgid
+               __x64_sys_getpgid
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
+
+     0.78%  bench    [kernel.kallsyms]                               [k] debug_lockdep_rcu_enabled
+            |
+            ---debug_lockdep_rcu_enabled
+               |          
+                --0.63%--rcu_read_lock_sched_held
+
+     0.74%  bench    ftrace_trampoline                               [k] ftrace_trampoline
+            |
+            ---ftrace_trampoline
+               __x64_sys_getpgid
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
+
+     0.72%  bench    [kernel.kallsyms]                               [k] preempt_count_add
+            |
+            ---preempt_count_add
+
+     0.71%  bench    [kernel.kallsyms]                               [k] ktime_get_coarse_real_ts64
+            |
+            ---ktime_get_coarse_real_ts64
+               syscall_trace_enter.constprop.0
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
+
+     0.69%  bench    [kernel.kallsyms]                               [k] do_syscall_64
+            |
+            ---do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               |          
+                --0.68%--syscall
+
+     0.60%  bench    [kernel.kallsyms]                               [k] preempt_count_sub
+            |
+            ---preempt_count_sub
+
+     0.59%  bench    [kernel.kallsyms]                               [k] __rcu_read_lock
+            |
+            ---__rcu_read_lock
+
+     0.59%  bench    [kernel.kallsyms]                               [k] __x64_sys_getpgid
+            |
+            ---__x64_sys_getpgid
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
+
+     0.58%  bench    [kernel.kallsyms]                               [k] __audit_syscall_exit
+            |
+            ---__audit_syscall_exit
+               syscall_exit_to_user_mode_prepare
+               syscall_exit_to_user_mode
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
+
+     0.53%  bench    [kernel.kallsyms]                               [k] audit_reset_context
+            |
+            ---audit_reset_context
+               syscall_exit_to_user_mode_prepare
+               syscall_exit_to_user_mode
+               do_syscall_64
+               entry_SYSCALL_64_after_hwframe
+               syscall
+
+     0.45%  bench    [kernel.kallsyms]                               [k] rcu_read_lock_held
+     0.36%  bench    [kernel.kallsyms]                               [k] find_task_by_vpid
+     0.32%  bench    [kernel.kallsyms]                               [k] __bpf_prog_exit
+     0.26%  bench    [kernel.kallsyms]                               [k] syscall_exit_to_user_mode
+     0.20%  bench    [kernel.kallsyms]                               [k] idr_find
+     0.18%  bench    [kernel.kallsyms]                               [k] find_task_by_pid_ns
+     0.17%  bench    [kernel.kallsyms]                               [k] update_prog_stats
+     0.16%  bench    [kernel.kallsyms]                               [k] _raw_spin_unlock_irqrestore
+     0.14%  bench    [kernel.kallsyms]                               [k] pid_task
+     0.04%  bench    [kernel.kallsyms]                               [k] memchr_inv
+     0.04%  bench    [kernel.kallsyms]                               [k] smp_call_function_many_cond
+     0.03%  bench    [kernel.kallsyms]                               [k] do_user_addr_fault
+     0.03%  bench    [kernel.kallsyms]                               [k] kallsyms_expand_symbol.constprop.0
+     0.03%  bench    [kernel.kallsyms]                               [k] native_flush_tlb_global
+     0.03%  bench    [kernel.kallsyms]                               [k] __change_page_attr_set_clr
+     0.02%  bench    [kernel.kallsyms]                               [k] memcpy_erms
+     0.02%  bench    [kernel.kallsyms]                               [k] unwind_next_frame
+     0.02%  bench    [kernel.kallsyms]                               [k] copy_user_enhanced_fast_string
+     0.01%  bench    [kernel.kallsyms]                               [k] __orc_find
+     0.01%  bench    [kernel.kallsyms]                               [k] call_rcu
+     0.01%  bench    [kernel.kallsyms]                               [k] __alloc_pages
+     0.01%  bench    [kernel.kallsyms]                               [k] __purge_vmap_area_lazy
+     0.01%  bench    [kernel.kallsyms]                               [k] __softirqentry_text_start
+     0.01%  bench    [kernel.kallsyms]                               [k] __stack_depot_save
+     0.01%  bench    [kernel.kallsyms]                               [k] __up_read
+     0.01%  bench    [kernel.kallsyms]                               [k] __virt_addr_valid
+     0.01%  bench    [kernel.kallsyms]                               [k] clear_page_erms
+     0.01%  bench    [kernel.kallsyms]                               [k] deactivate_slab
+     0.01%  bench    [kernel.kallsyms]                               [k] do_check_common
+     0.01%  bench    [kernel.kallsyms]                               [k] finish_task_switch.isra.0
+     0.01%  bench    [kernel.kallsyms]                               [k] free_unref_page_list
+     0.01%  bench    [kernel.kallsyms]                               [k] ftrace_rec_iter_next
+     0.01%  bench    [kernel.kallsyms]                               [k] handle_mm_fault
+     0.01%  bench    [kernel.kallsyms]                               [k] orc_find.part.0
+     0.01%  bench    [kernel.kallsyms]                               [k] try_charge_memcg
+     0.00%  bench    [kernel.kallsyms]                               [k] ___slab_alloc
+     0.00%  bench    [kernel.kallsyms]                               [k] __fdget_pos
+     0.00%  bench    [kernel.kallsyms]                               [k] __handle_mm_fault
+     0.00%  bench    [kernel.kallsyms]                               [k] __is_insn_slot_addr
+     0.00%  bench    [kernel.kallsyms]                               [k] __kmalloc
+     0.00%  bench    [kernel.kallsyms]                               [k] __mod_lruvec_page_state
+     0.00%  bench    [kernel.kallsyms]                               [k] __mod_node_page_state
+     0.00%  bench    [kernel.kallsyms]                               [k] __mutex_lock
+     0.00%  bench    [kernel.kallsyms]                               [k] __raw_spin_lock_init
+     0.00%  bench    [kernel.kallsyms]                               [k] alloc_vmap_area
+     0.00%  bench    [kernel.kallsyms]                               [k] allocate_slab
+     0.00%  bench    [kernel.kallsyms]                               [k] audit_get_tty
+     0.00%  bench    [kernel.kallsyms]                               [k] bpf_ksym_find
+     0.00%  bench    [kernel.kallsyms]                               [k] btf_check_all_metas
+     0.00%  bench    [kernel.kallsyms]                               [k] btf_put
+     0.00%  bench    [kernel.kallsyms]                               [k] cmpxchg_double_slab.constprop.0.isra.0
+     0.00%  bench    [kernel.kallsyms]                               [k] do_fault
+     0.00%  bench    [kernel.kallsyms]                               [k] do_raw_spin_trylock
+     0.00%  bench    [kernel.kallsyms]                               [k] find_vma
+     0.00%  bench    [kernel.kallsyms]                               [k] fs_reclaim_release
+     0.00%  bench    [kernel.kallsyms]                               [k] ftrace_check_record
+     0.00%  bench    [kernel.kallsyms]                               [k] ftrace_replace_code
+     0.00%  bench    [kernel.kallsyms]                               [k] get_mem_cgroup_from_mm
+     0.00%  bench    [kernel.kallsyms]                               [k] get_page_from_freelist
+     0.00%  bench    [kernel.kallsyms]                               [k] in_gate_area_no_mm
+     0.00%  bench    [kernel.kallsyms]                               [k] in_task_stack
+     0.00%  bench    [kernel.kallsyms]                               [k] kernel_text_address
+     0.00%  bench    [kernel.kallsyms]                               [k] kernfs_fop_read_iter
+     0.00%  bench    [kernel.kallsyms]                               [k] kernfs_put_active
+     0.00%  bench    [kernel.kallsyms]                               [k] kfree
+     0.00%  bench    [kernel.kallsyms]                               [k] kmem_cache_alloc
+     0.00%  bench    [kernel.kallsyms]                               [k] ksys_read
+     0.00%  bench    [kernel.kallsyms]                               [k] lookup_address_in_pgd
+     0.00%  bench    [kernel.kallsyms]                               [k] mlock_page_drain_local
+     0.00%  bench    [kernel.kallsyms]                               [k] page_remove_rmap
+     0.00%  bench    [kernel.kallsyms]                               [k] post_alloc_hook
+     0.00%  bench    [kernel.kallsyms]                               [k] preempt_schedule_irq
+     0.00%  bench    [kernel.kallsyms]                               [k] queue_work_on
+     0.00%  bench    [kernel.kallsyms]                               [k] stack_trace_save
+     0.00%  bench    [kernel.kallsyms]                               [k] within_error_injection_list
 
 
-Kind regards,
-Niklas=
+#
+# (Tip: To record callchains for each sample: perf record -g)
+#
+
