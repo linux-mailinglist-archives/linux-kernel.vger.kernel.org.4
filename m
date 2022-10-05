@@ -1,192 +1,93 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DFC35F5991
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 20:11:52 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDE95F599B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 20:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbiJESLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 14:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
+        id S230359AbiJESPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 14:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbiJESLq (ORCPT
+        with ESMTP id S229917AbiJESPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 14:11:46 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C0D4AD70;
-        Wed,  5 Oct 2022 11:11:45 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id A648B5C0066;
-        Wed,  5 Oct 2022 14:11:42 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 05 Oct 2022 14:11:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1664993502; x=
-        1665079902; bh=QbCwngRgoYYz/l1YN30XHGdNSPXH235wrNnuhXtSynU=; b=m
-        dofbwBSXXpVc47Gw1UKfW0vy+ZwFa54+XYyP6WxQdDjvqxoBR5y6lizxIKXT9aH9
-        LXYnXvrAx6VCW98nyL8n10sjKJfGEqr77IvgOvTKDTheQGrEKKgC3R05//KhQfpw
-        Vz1iRtp2zR8cdqmLG7/XCXkos1F0cZE8PZKNrd9zP3Nss6GtCSrjUki7twc9To6V
-        EbjrxeR5Cchvk+ZWfjP1ThTbhmm/qTrFM5ACx3CFWnrrHiVZjH26xeGx/kLx5GJT
-        jp/wpXSXOTLtaxT5R07RCVuIZoFw1fsFPT7Nw7LA5buVGvOQIjsYZewAbLP5bZcU
-        AFVX4XSw4JgZLhAr8x1Rg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1664993502; x=1665079902; bh=QbCwngRgoYYz/l1YN30XHGdNSPXH
-        235wrNnuhXtSynU=; b=G340+HVxAL5emcB+vjDp5hw4bDA+v5WG1ZFCwRdgNZGB
-        Is33jyKhwM5ZwlBW244da9wDkRroz1YoMn7kcgRKy5MPeWPQpCCD63CdtOXKBivs
-        3M2bDK4bKjhTN7ajrAFNbjXoAeNxP/RiV321XVsAkTnLEuzFw9qlgZPBO/n2WjJZ
-        OlJQSFxrILKELZy/0icUhenIfwTKegtMGc5XOxHtSPMfN4Tc9w6CJP87zdK11NQw
-        PFHUa2S0M2JXFAPht8QpxDvxaOdbK2sgsNjRLHBzLuHFq97zkuX4cXharEcoVpnB
-        nu5TINRyuxEDXXclOR19n3tvgwZnO9WuOFtuefBk1w==
-X-ME-Sender: <xms:3cg9Y7lqjpZMxu-QxWl1OrPIlI4w-Wb46EPUu26JSfbRb3T1d0ZMPA>
-    <xme:3cg9Y-3CBycGN4IY_3GxzOZEHP7PrmyNgy2APil8kg02MS7gJwtXY4uolb4ZImHCQ
-    vv9b_cydzjV02I>
-X-ME-Received: <xmr:3cg9YxpFS8ffE2bMi3LeAmtxeEKoFts6WEjpuT7dz4A8v_2oqjlurj9KDOb7>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeifedguddvtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeffvghm
-    ihcuofgrrhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinh
-    hgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpeduieelfeeutedvleehueetffej
-    geejgeffkeelveeuleeukeejjeduffetjeekteenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpeguvghmihesihhnvhhishhisghlvghthhhinhhg
-    shhlrggsrdgtohhm
-X-ME-Proxy: <xmx:3cg9Yzk0_f9FDheCCp8-NE0pehcvboQOGQtsBViZGaLkuhmUaluhoQ>
-    <xmx:3cg9Y502ikq_7tu_9kpRVAP2sWh4o9tM1o7HfPlsd_x5YuTLciU7TA>
-    <xmx:3cg9YyvrjOlaQPguFvYnGfddah9HMMSE4vbpOjMgW0XRbo0nT8-U5g>
-    <xmx:3sg9YyuqDzGmeCycYAl5Avr_jWlIbwHesCToCsPRFtkwgIAloXqnRA>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 5 Oct 2022 14:11:40 -0400 (EDT)
-Date:   Wed, 5 Oct 2022 14:11:35 -0400
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Jan Beulich <jbeulich@suse.com>
-Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH v4 1/2] Avoid using EFI tables Xen may have clobbered
-Message-ID: <Yz3I2qwl243h9ZfZ@itl-email>
-References: <cover.1664298147.git.demi@invisiblethingslab.com>
- <f3b624e99adfdbbfc1976a60a73a6b5950e1840d.1664298147.git.demi@invisiblethingslab.com>
- <282a225d-8782-0321-6f0e-19dd4510dc42@suse.com>
- <CAMj1kXFQNqsW5RfHGac-eGbosJHBybu6+-Fap_bi_kVxWNpGeg@mail.gmail.com>
- <YzcjeiOW8+i2Zxsd@itl-email>
- <CAMj1kXHBBbCNV3CLesqZi7ttmmi8y4tZ1KO5vievy_CJrU2o3Q@mail.gmail.com>
- <YzeaKjmls1YI/3ox@itl-email>
- <01d22092-8292-8ed7-ece7-9ca32d15bbce@suse.com>
- <YzxxXuovwQt3NskE@itl-email>
- <a0dc1158-01b1-4272-b86e-52f4996f0747@suse.com>
+        Wed, 5 Oct 2022 14:15:44 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599AC3F1F5;
+        Wed,  5 Oct 2022 11:15:43 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id bk15so27112722wrb.13;
+        Wed, 05 Oct 2022 11:15:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=rnL+He7Da96VSkLj6A5rMl8m0utiApVsa5fPZkDJuiw=;
+        b=jpuPaxVmWU2hTX1DSf9a0qTxSJkwgHxV18f9Nt6qCnt1NVcivoElCuWfD7qDBSeS0V
+         ucGy9rs/b+La54Su9wAHf8cEEWcy5WkWroG834kqF16qIGxYCs5wzmiHKVLekY3Y8mIF
+         r9OgZMctieJyP1/4M6KAYb3fu1HlRUhxICklK4U7gJc6ZKHVVMTJwNn0ntURNVgcEekx
+         7D4f2BucH1pDqoacYNs84UXRTqSAB3ZCIpK/00Wj6UdT+v6+e7zHxE9B77g5ZazBq0wL
+         okwiuaUO/PkKYZfIIVwviaoTBzZShTGRZQnhZMwLGqUZGB6rI4ksAmYt9Y/c0HRMZJR+
+         qBfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=rnL+He7Da96VSkLj6A5rMl8m0utiApVsa5fPZkDJuiw=;
+        b=Csap8CLkVm+tzTHlncmyqjHklzUGEsh34OelteSHjDLsAvtQ1F8Gt8M9eJkKhglqqV
+         jYnrfuK7Ypte4rOSAzEuoTn3eb3dCIFG0NnLoUWZFAeWs3RZULnQinb8miNQL0pYbFti
+         OiBByUTnn2ifGgZAXVMt8ZWO0b2RB4KJejaYMTZW0QbctORNss+EuMyd5eueukauQQ3/
+         doCBAAru8gICfnUj+PsK/26xtCfC54yYxJFetmyR+ixU+seOgx7eXwgMLhN5ARl2m2SO
+         Oy5skV1vtSX/RGayzgB3XKywmSvKrIOcy9s6mrTJzMjwHdkLvAefgYW+WzV0znD3xXeC
+         BDjQ==
+X-Gm-Message-State: ACrzQf1/es5JmG8wDL0nxLkVpCi7ziza6LaXQQ0vvM04X+W9dCI0jO+w
+        GN+93rvzTVjfo+RQzQe6A1aay3gDIRc=
+X-Google-Smtp-Source: AMsMyM7maW1J0vNKWga6/unb3T6JQYwDC2OtpjW+8nCO6rojgO6oco21wKnqls7aXtlXyhV7q9fyJg==
+X-Received: by 2002:adf:f0c1:0:b0:22e:3f43:a5f5 with SMTP id x1-20020adff0c1000000b0022e3f43a5f5mr637561wro.15.1664993741641;
+        Wed, 05 Oct 2022 11:15:41 -0700 (PDT)
+Received: from localhost.localdomain ([46.216.9.29])
+        by smtp.googlemail.com with ESMTPSA id g20-20020a05600c4ed400b003b4ac05a8a4sm4176240wmq.27.2022.10.05.11.15.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 11:15:41 -0700 (PDT)
+From:   Dzmitry Sankouski <dsankouski@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dzmitry Sankouski <dsankouski@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS)
+Subject: [PATCH v6 0/2] add device Xiaomi Mi 6 (codename sagit) and board binding
+Date:   Wed,  5 Oct 2022 21:15:26 +0300
+Message-Id: <20221005181528.1038629-1-dsankouski@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MP5CI1py1S/x6cIa"
-Content-Disposition: inline
-In-Reply-To: <a0dc1158-01b1-4272-b86e-52f4996f0747@suse.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add initial support for Xiaomi Mi 6 phone (codename sagit)
 
---MP5CI1py1S/x6cIa
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 5 Oct 2022 14:11:35 -0400
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
-To: Jan Beulich <jbeulich@suse.com>
-Cc: xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-	linux-efi@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-	Stefano Stabellini <sstabellini@kernel.org>,
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-	Kees Cook <keescook@chromium.org>,
-	Anton Vorontsov <anton@enomsg.org>,
-	Colin Cross <ccross@android.com>, Tony Luck <tony.luck@intel.com>,
-	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>,
-	Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH v4 1/2] Avoid using EFI tables Xen may have clobbered
+Dzmitry Sankouski (2):
+  dt-bindings: arm: add xiaomi,sagit board based on msm8998 chip
+  arm64: dts: qcom: sagit: add initial device tree for sagit
 
-On Wed, Oct 05, 2022 at 08:15:07AM +0200, Jan Beulich wrote:
-> On 04.10.2022 17:46, Demi Marie Obenour wrote:
-> > Linux has a function called efi_mem_reserve() that is used to reserve
-> > EfiBootServicesData memory that contains e.g. EFI configuration tables.
-> > This function does not work under Xen because Xen could have already
-> > clobbered the memory.  efi_mem_reserve() not working is the whole reason
-> > for this thread, as it prevents EFI tables that are in
-> > EfiBootServicesData from being used under Xen.
-> >=20
-> > A much nicer approach would be for Xen to reserve boot services memory
-> > unconditionally, but provide a hypercall that dom0 could used to free
-> > the parts of EfiBootServicesData memory that are no longer needed.  This
-> > would allow efi_mem_reserve() to work normally.
->=20
-> efi_mem_reserve() actually working would be a layering violation;
-> controlling the EFI memory map is entirely Xen's job.
+ .../devicetree/bindings/arm/qcom.yaml         |   1 +
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ .../boot/dts/qcom/msm8998-xiaomi-sagit.dts    | 681 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm8998.dtsi          |   8 +
+ 4 files changed, 691 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dts
 
-Doing this properly would require Xen to understand all of the EFI
-tables that could validly be in EfiBootServices* and which could be of
-interest to dom0.  It might (at least on some very buggy firmware)
-require a partial ACPI and/or SMBIOS implementation too, if the firmware
-decided to put an ACPI or SMBIOS table in EfiBootServices*.
+-- 
+2.30.2
 
-> As to the hypercall you suggest - I wouldn't mind its addition, but only
-> for the case when -mapbs is used. As I've indicated before, I'm of the
-> opinion that default behavior should be matching the intentions of the
-> spec, and the intention of EfiBootServices* is for the space to be
-> reclaimed. Plus I'm sure you realize there's a caveat with Dom0 using
-> that hypercall: It might use it for regions where data lives which it
-> wouldn't care about itself, but which an eventual kexec-ed (or alike)
-> entity would later want to consume. Code/data potentially usable by
-> _anyone_ between two resets of the system cannot legitimately be freed
-> (and hence imo is wrong to live in EfiBootServices* regions).
-
-I agree, but currently some such data *is* in EfiBootServices* regions,
-sadly.  When -mapbs is *not* used, I recommend uninstalling all of the
-configuration tables that point to EfiBootServicesData memory before
-freeing that memory.
-
-> In a way one could view the Dom0 kernel as an "or alike" entity ...
-
-It is indeed such an entity.
---=20
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
-
---MP5CI1py1S/x6cIa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmM9yNoACgkQsoi1X/+c
-IsGIrRAAqlFxw4VhBVBYtbOHJoeLu1cjHKS/FF5d16yMLnb2yCt9fGSDRIb0L8dR
-EG8AmPkMpyXINDJYGR4H4jvLqMF3a51W708ZkLKsT6uEFkVfsjB3VD4BYCzZ5ss7
-O84Lfv4GXaxIQn0oXU+SGM47bgA9ahrhmWeDi2AthvrIkb6+1rd9lrd0oiGwfE90
-IW5ojsRQaQl7sr1gnm97lg5/Pv9zDh4RMsPMqMOuOg9Pq7wkZVCUYmkjdsA4CRnB
-3lNeJdK5IMlL1tmstWZxvWoHrLMWYeGtKslJKYJcWN5CGjgoXs3g8HakbIfOxnif
-D5ikSG1A++CqpHTxieovQ8Q5yIQBFTHNTuncXoZp0iqjq6bMfx9qo2tNJda9Oay8
-TEqzSDiSeruz4bS5iiILCqNME02ZtcQAXizR9PZ/wNmbfb2EEhu9R2L2aPLBrgNp
-hs56nrJ9McRpJXlmqENxwrTgp81rMEgb2cZsxymNqsEzBhRHP/peWjoHby1BVHb0
-Q5oNp+rn1lnPJDV1bGrLlUxDfU/ttucJEsEttGCp42GFgnzNihtni3mMFTCWQG1B
-X335/qvdsVqBkm5775p+u1MoPNdrEtYAID3ubhp1rfhgp9peup1Ua9Fv2oZ5j90G
-T2YYIkuLpo07nXGKRO/JffO0EdLAMvjz0DeSJRQwbQtsGqeLekE=
-=C84z
------END PGP SIGNATURE-----
-
---MP5CI1py1S/x6cIa--
