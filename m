@@ -2,86 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8555F5570
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 15:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 368025F5576
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 15:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbiJENcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 09:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32790 "EHLO
+        id S230006AbiJENdF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Oct 2022 09:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbiJENcV (ORCPT
+        with ESMTP id S229946AbiJENdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 09:32:21 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E2879EFA
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 06:32:20 -0700 (PDT)
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com [209.85.219.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id BE4843F138
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 13:32:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1664976738;
-        bh=6LkuqTP0xa6XajPgZoG/IjY8IZRdyk1AbTrKKTZip3M=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=occGOyRn3hyBeTNlbf+F3KveT9D/456dhK8qTFtBNyFHwtpBtYW44mcTbndHkaET5
-         FfuBAlDY8BVJEZNpme2Y3GTCN+oqPryYN6U6duPhp/ITk394vGRbnfDwntKHWm+R2r
-         t9yiQjR1sQKxRE/PxfxPJJcajl54Lj9XTZMZ0HvNPM3IpKUyuNioDv1bVU8fQ1LJsk
-         UdRgucE6ml4CoC+tbMOCrarO96qE76fsBFQAVDn5IOurTtq3AIaQ43AoE3DoodrrRt
-         0NJDC/UhD6unyjoeUhj6Ka/NhWkQVjPmI2pk4zHmpjn4yOU586Oh4Sci8vZ3eMudp7
-         8RwrjqkclBDzA==
-Received: by mail-qv1-f70.google.com with SMTP id c1-20020a0cfb01000000b00495ad218c74so10543791qvp.20
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 06:32:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=6LkuqTP0xa6XajPgZoG/IjY8IZRdyk1AbTrKKTZip3M=;
-        b=xeNR9Yf2qsxib5MES9yoKYaOTnXMFi/JlYfIo+XQ7lhh9Z1H4y5RBAmKnbppVUXhux
-         /NA2/lhrQP8gLVvKnjt99VZh1JmW7ei0llkX7g62rLWyIhQ7kx6D9Zuo82ebgpiHZR8w
-         BqsjBvp/9okzaKnu3prtNtKpY+IAkHu1K9czbWaMFP0ij4yFg2JIblVUyZMZI2Bl2LGM
-         f4mpn6OQx2n+tKj6NGCEqDvtF9FdIeLWUtaJbXp1wzgQv1Tkmn19apZ2k7IVqLxrolN8
-         iAGnt4lDaabVhtjRKn8qWxCubHkp6/birCj1JrdYdwT8i860iRWCSrDHsn/jTy5F/4Gm
-         JviQ==
-X-Gm-Message-State: ACrzQf0Jnj0D3O4KJpefJ+7slqr5CPGBWaPUBnhscKi1rRAamZ3N4ipK
-        GP6p48+EZ5LmsdYd74zGMO1msT9WIrc3UKM+A67kV6MNGE0UJXFieQsgKb1ibbAf8XSRIKDyjqo
-        uWuyd69U5vMlIckqXoTEqk8sd9MH6vrIJ/hjtA/JRTcisjIwQeie0XohU8A==
-X-Received: by 2002:a05:620a:488a:b0:6ce:5caa:37d1 with SMTP id ea10-20020a05620a488a00b006ce5caa37d1mr19656620qkb.37.1664976735803;
-        Wed, 05 Oct 2022 06:32:15 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6Xl+UsR78BPCM9pC3pjMNNB38LjTXXtDyoeNI34kPvrpVwp+y4DCHK0DykjnJjicQW6z4ascUy+oxEZUfANUw=
-X-Received: by 2002:a05:620a:488a:b0:6ce:5caa:37d1 with SMTP id
- ea10-20020a05620a488a00b006ce5caa37d1mr19656602qkb.37.1664976735563; Wed, 05
- Oct 2022 06:32:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
- <20220930074341.6386-1-hal.feng@linux.starfivetech.com> <CACRpkdYMQ98Q1iXr7-YdUkQrSK8aauZuSFeDp2f7ubNH_W7_HQ@mail.gmail.com>
-In-Reply-To: <CACRpkdYMQ98Q1iXr7-YdUkQrSK8aauZuSFeDp2f7ubNH_W7_HQ@mail.gmail.com>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Wed, 5 Oct 2022 15:31:59 +0200
-Message-ID: <CAJM55Z91TL4eLOjZsRVZuxspcL40gG2MQRZf31h0L2yyaW--Cg@mail.gmail.com>
-Subject: Re: [PATCH v1 26/30] pinctrl: starfive: Add StarFive JH7110 driver
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Hal Feng <hal.feng@linux.starfivetech.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Wed, 5 Oct 2022 09:33:00 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A987A51E
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 06:32:58 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-220-Ey5VsqheNgyO3SFDIVsBNQ-1; Wed, 05 Oct 2022 14:32:55 +0100
+X-MC-Unique: Ey5VsqheNgyO3SFDIVsBNQ-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Wed, 5 Oct
+ 2022 14:32:53 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Wed, 5 Oct 2022 14:32:53 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Kees Cook' <keescook@chromium.org>
+CC:     'Dave Hansen' <dave.hansen@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        Ingo Molnar <mingo@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Eugene Syromiatnikov" <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "joao.moreira@intel.com" <joao.moreira@intel.com>,
+        John Allen <john.allen@amd.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "eranian@google.com" <eranian@google.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: RE: [PATCH v2 24/39] x86/cet/shstk: Add user-mode shadow stack
+ support
+Thread-Topic: [PATCH v2 24/39] x86/cet/shstk: Add user-mode shadow stack
+ support
+Thread-Index: AQHY12Njz3/HZpf9jkaO+WwIiUYgJ63+BXnggACK/wCAAT4eAA==
+Date:   Wed, 5 Oct 2022 13:32:53 +0000
+Message-ID: <b1d59744f54743a4a8131787580d181a@AcuMS.aculab.com>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-25-rick.p.edgecombe@intel.com>
+ <202210031203.EB0DC0B7DD@keescook>
+ <474d3aca-0cf0-8962-432b-77ac914cc563@intel.com>
+ <4b9c6208d1174c27a795cef487eb97b5@AcuMS.aculab.com>
+ <202210041229.99F8CB38B@keescook>
+In-Reply-To: <202210041229.99F8CB38B@keescook>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -90,43 +98,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Oct 2022 at 10:57, Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Fri, Sep 30, 2022 at 9:45 AM Hal Feng
-> <hal.feng@linux.starfivetech.com> wrote:
->
-> > From: Jianlong Huang <jianlong.huang@starfivetech.com>
-> >
-> > Add pinctrl driver for StarFive JH7110 SoC.
-> >
-> > Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-> > Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
->
-> Since Emil submitted the first driver I would really appreciate his review
-> on this version.
+From: Kees Cook
+> Sent: 04 October 2022 20:32
+...
+> Oh, yes! I do this all the time with FORTIFY shenanigans. Right, so,
+> instead of a macro, the "cannot be un-inlined" could be enforced with
+> this (untested):
+> 
+> static __always_inline void set_clr_bits_msrl(u32 msr, u64 set, u64 clear)
+> {
+> 	u64 val, new_val;
+> 
+> 	BUILD_BUG_ON(!__builtin_constant_p(msr) ||
+> 		     !__builtin_constant_p(set) ||
+> 		     !__builtin_constant_p(clear));
 
-I tried really hard to come up with a good way to share code between
-the JH7100 and JH7110 drivers, but so many details different on the
-JH7110 that it's probably best to just have a separate driver, so that
-part is fine.
+You can reduce the amount of text the brain has to parse
+by using:
 
-As mentioned elsewhere this driver certainly shouldn't be accepted
-without following the generic pinctrl and pinmux bindings. You can see
-the driver I wrote here:
-https://github.com/esmil/linux/commit/c2633315385fef1a25aa3711facef07d915820e1
+	BUILD_BUG_ON(!__builtin_constant_p(msr + set + clear));
 
-It is certainly not perfect and far from complete, but at least it
-does follow the generic bindings. Feel free to copy all or parts of
-that.
+Just requires the brain to do a quick 'oh yes'...
 
-/Emil
+	David
 
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
->
-> Yours,
-> Linus Walleij
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
