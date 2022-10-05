@@ -2,77 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510865F5BFC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 23:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C8E5F5C58
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 00:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiJEV4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 17:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
+        id S229633AbiJEWEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 18:04:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiJEV4H (ORCPT
+        with ESMTP id S229489AbiJEWEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 17:56:07 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800B47F09A
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 14:56:06 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id v186so192380pfv.11
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 14:56:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=8Pm7ryG24AwEz26lUQ3ZeFC6zq7cw9NWM/gooLAfALU=;
-        b=AeGTAH1qBklqxpEo2vkcmEcRdYKPcxJMLw1EDD69Voxgucq1qWXkuWtpw0hbFOksBD
-         T2x3k5SN/zcyEoWATrm8D40aJyi6q8dQX7OZiAGgR0C09ypu0qh3/LufYyj8XS2QT6dS
-         kExPzR5TV/VT/yZy+yntCBO4FeNxGBpLoyX9H4AWXJM4fia6VUTK20B8CVFVNtgZ4jUx
-         Byc8ttTJFq4HTvTdNsdeAOqZ3tRaC8Md3meGvUL9dL7ICZUASUVgoW/vaZh9q3zriNdV
-         PytRMfPfXNBNQPkS5cz3jjk7OBBN1JRpG7UcALq+uTnGDrF91HEhorMi+aewRQujzdWc
-         40Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=8Pm7ryG24AwEz26lUQ3ZeFC6zq7cw9NWM/gooLAfALU=;
-        b=ff2rtil0ZbBiYLpWxYhPGuSARSWUYhX96uFbHxEN6jgmMJvoAjXBnXDaFuO4k7uav/
-         juv6D+caKhil7rkBBssE3mFu4Oxfv+dc0ZLOKBpnwZyd3nZq416yTWllUrUJzC6UUroH
-         PQkU4eqdJVAmiiiLwcCH+X0TP5p+CT/EKAC80VdsYilBiZecUJXPwDYLFOWihUIAHB3L
-         8MISxMV8k/dDOV3nkmRTT+KTxCOD9/wYDtrJAZmNlJarHzXZqhHND+SyL3MDQTDP5JRg
-         9Ns0PIv/H5BtCmUsMxfuEMGOz8vLCQRZ5We+f7qDG0Ruc338NQbwEPwqqSCOWiLN8INt
-         I+0g==
-X-Gm-Message-State: ACrzQf0wEdwvT5riTXlrlfvzoFmXY1wvyHeJEtG7xnnQLsleh2AizvTv
-        LNv+cYEYz7yy/3uMhMB5lxS5hNapow1zJ+WnpJ36Qg==
-X-Google-Smtp-Source: AMsMyM72KOFuFLd05ekvHqkC8iQgjYBslmgWI6FetqXQFawTd561WeWnr2R3S8hjrJtx04dmecSswFY8Hu90TDRE2aY=
-X-Received: by 2002:a62:1a97:0:b0:562:5587:12d6 with SMTP id
- a145-20020a621a97000000b00562558712d6mr1824718pfa.37.1665006965827; Wed, 05
- Oct 2022 14:56:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAKwvOdnrHErOK+w878izVauHUKaX3eD-HXgigq2Ogm3iSj-fHA@mail.gmail.com>
- <76CB17D0-5A66-4D49-A389-8F40EC830DC0@sladewatkins.net> <CAP-5=fXVgwMO_CpS-EHN6PFhLB-J5Ft7qHz7oQd-WOMnTj72Cw@mail.gmail.com>
- <CAM9d7chvZjZ4YVc6j3w7OkdHteyJ0GUZboieu9G7jAWBevoZqA@mail.gmail.com> <e553c4f8-ed3d-0755-cc8a-b5ffe43b2c2f@amd.com>
-In-Reply-To: <e553c4f8-ed3d-0755-cc8a-b5ffe43b2c2f@amd.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 5 Oct 2022 14:55:54 -0700
-Message-ID: <CAKwvOdk6TTNhu_+FdONTXPo9Z8u5D4-5kf-rMN8oK4+6fMyc-w@mail.gmail.com>
-Subject: Re: Invalid event (cycles:pp) in per-thread mode, enable system wide
- with '-a'.
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     Slade Watkins <srw@sladewatkins.net>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Namhyung Kim <namhyung@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        Kees Cook <keescook@chromium.org>, sandipan.das@amd.com,
-        Bill Wendling <morbo@google.com>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Yonghong Song <yhs@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        Wed, 5 Oct 2022 18:04:09 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582783DBD8
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 15:04:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665007448; x=1696543448;
+  h=from:to:cc:subject:date:message-id;
+  bh=IXaUDq1PlLmeeP8m+rBRGDksc3nmzhXkP2oohAgQqvk=;
+  b=WbAitGtrNEgohQgzmciqryD8gPHYwJHMS11ztjyYroeMfCJVolDZS5e8
+   UpoAHtkfD3hhMWwp5AgydODFDzrtLGUPrDg3qa+5AbquNsyTup9V2H/PM
+   TUnHzrNtZ+8nNGtFBF1JzsgZjz6GYcy4wOLDP6uGVQ/oIPe+X1TE6M0Fv
+   XYoDdp9j0mk21RW0itDkqx9d8vWXr61iJh7egI070p300mg7aueWenO2R
+   SXTYyD8HnCood9T99JchpKv3bZLXnLZ1nSpqv5VgPY4KdWJCVCFfbASPr
+   WXVjmOlBmH+xTqHAsCjRfeB2pgCN8iBrCdGDWRAj6RlKVjny4XHWVlmDl
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="365218806"
+X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
+   d="scan'208";a="365218806"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 15:04:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="602193018"
+X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
+   d="scan'208";a="602193018"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
+  by orsmga006.jf.intel.com with ESMTP; 05 Oct 2022 15:04:07 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, avagin@gmail.com,
+        seanjc@google.com, chang.seok.bae@intel.com
+Subject: [PATCH v3 0/3] x86/fpu: Fix MXCSR handling and SSE component definition
+Date:   Wed,  5 Oct 2022 14:53:54 -0700
+Message-Id: <20221005215357.1808-1-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.4 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,79 +57,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Stephane, Kees, Sandipan, Bill, ClangBuiltLinux mailing list, Yonghong
-https://www.spinics.net/lists/linux-perf-users/msg23103.html
-starts the thread, for context.
+Hi all,
 
-On Thu, Sep 29, 2022 at 9:32 PM Ravi Bangoria <ravi.bangoria@amd.com> wrote=
-:
->
-> On 30-Sep-22 9:56 AM, Namhyung Kim wrote:
-> > Hello,
-> >
-> > On Thu, Sep 29, 2022 at 8:49 PM Ian Rogers <irogers@google.com> wrote:
-> >>
-> >> On Thu, Sep 29, 2022 at 3:10 PM Slade Watkins <srw@sladewatkins.net> w=
-rote:
-> >>>
-> >>> Hey Nick,
-> >>>
-> >>>> On Sep 29, 2022, at 5:54 PM, Nick Desaulniers <ndesaulniers@google.c=
-om> wrote:
-> >>>>
-> >>>> I remember hearing rumblings about issues with zen 2, LBR, vs zen 3.
-> >>>> Is this a known issue, or am I holding it wrong?
-> >>>
-> >>> Hm=E2=80=A6 I also remember this. I have a Zen 2 based system that I =
-can do testing on, so I will do so when I=E2=80=99m able.
-> >>>
-> >>> If I discover something of note, I=E2=80=99ll get back to you.
-> >>>
-> >>> Cheers,
-> >>> -srw
-> >>>
-> >>
-> >> LBR isn't yet supported for Zen but is coming:
-> >> https://lore.kernel.org/lkml/166155216401.401.5809694678609694438.tip-=
-bot2@tip-bot2/
-> >> I'd recommend frame-pointers.
+Changes from v2 [1]:
+* Drop the changes in fpstate_clear_xstate_component().
+* Massage the WARNING and the comment in xfeature_get_offset().
 
-Having to recompile is less than ideal for my workflow.  I have added a not=
-e to
-https://github.com/ClangBuiltLinux/profiling/tree/main/perf#errors
-Please let me know how I might improve the documentation.
+If the former function is called for any legacy state, the WARNING is
+eventually emitted by the latter function in this call chain:
+  fpstate_clear_xstate_component()
+    -> get_xsave_addr()
+      -> __raw_xsave_addr()
+        -> xfeature_get_offset()
+So, the change in the outer function (the old patch3) was considered as not
+necessary.
 
-> >>
-> >> +Ravi who may be able to say if there are any issues with the precise
-> >> sampling on AMD.
-> >
-> > Afaik cvcles:pp will use IBS but it doesn't support per-task profiling
-> > since it has no task context.  Ravi is working on it..
->
-> Right.
-> https://lore.kernel.org/lkml/20220829113347.295-1-ravi.bangoria@amd.com
+Thanks Sean Christopherson for the feedback.
 
-Cool, thanks for working on this Ravi.
+== Regression ==
 
-I'm not sure yet whether I may replace the kernel on my corporate
-provided workstation, so I'm not sure yet I can help test that patch.
+Recently the XSTATE copy functions were unitized together [2]. At a glance,
+this change appears to relapse the ptrace write on the MXCSR state when
+the non-compacted format is used in the kernel.
 
-Can you confirm that
-$ perf record -e cycles:pp --freq=3D128 --call-graph lbr -- <command to pro=
-file>
+But, this regression appears to root in the XSAVES-enabling code [3] that
+introduced the XSTATE conversion along with the MXCSR mistreatment.
 
-works with just that patch applied? Or is there more work required?
-What is the status of that patch?
+== MXCSR Hindsight ==
 
-For context, we had difficulty upstreaming support for instrumentation
-based profile guided optimizations in the Linux kernel.
-https://lore.kernel.org/lkml/CAHk-=3DwhqCT0BeqBQhW8D-YoLLgp_eFY=3D8Y=3D9ieR=
-EM5xx0ef08w@mail.gmail.com/
-We'd like to be able to use either instrumentation or sampling to
-optimize our builds.  The major barrier to sample based approaches are
-architecture / micro architecture issues with sample based profile
-data collection, and bitrot of data processing utilities.
-https://github.com/google/autofdo/issues/144
---=20
+MXCSR is architecturally part of the SSE component. The MXCSR association
+of XSTATE_BV depends on the XSAVE format.
+
+The change [3], however, presumed MXCSR as part of the X87 component and
+made the kernel referencing XSTATE_BV regardless of the format.
+
+== Patches ==
+
+* Fix the MXCSR conversion code along with adding the test case.
+* The hard-coded legacy state offset and size are adjusted in the end. And
+  add a WARN when they are referenced.
+
+These patches can be also found in this repository:
+  git://github.com/intel/amx-linux.git mxcsr
+
 Thanks,
-~Nick Desaulniers
+Chang
+
+[1] v2: https://lore.kernel.org/lkml/20220922200034.23759-1-chang.seok.bae@intel.com/
+[2] Commit 43be46e89698 ("x86/fpu: Sanitize xstateregs_set()")
+[3] Commit 91c3dba7dbc1 ("x86/fpu/xstate: Fix PTRACE frames for XSAVES")
+
+Chang S. Bae (3):
+  x86/fpu: Fix the MXCSR state reshuffling between userspace and kernel
+    buffers
+  selftests/x86/mxcsr: Test the MXCSR state write via ptrace
+  x86/fpu: Correct the legacy state offset and size information
+
+ arch/x86/kernel/fpu/xstate.c         |  89 ++++++++----
+ tools/testing/selftests/x86/Makefile |   2 +-
+ tools/testing/selftests/x86/mxcsr.c  | 200 +++++++++++++++++++++++++++
+ 3 files changed, 262 insertions(+), 29 deletions(-)
+ create mode 100644 tools/testing/selftests/x86/mxcsr.c
+
+
+base-commit: 03c739a21613a1a85f730dd972ff928e573f7235
+-- 
+2.17.1
+
