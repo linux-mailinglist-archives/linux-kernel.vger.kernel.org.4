@@ -2,101 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5675F56D6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 16:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 953E45F56DB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 16:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiJEO43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 10:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48082 "EHLO
+        id S230159AbiJEO46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 10:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiJEO40 (ORCPT
+        with ESMTP id S230090AbiJEO4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 10:56:26 -0400
-Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF945722C;
-        Wed,  5 Oct 2022 07:56:19 -0700 (PDT)
-X-QQ-mid: bizesmtp74t1664981753tqxqhqzu
-Received: from wuhui-virtual-machine.localdoma ( [58.60.63.196])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 05 Oct 2022 22:55:27 +0800 (CST)
-X-QQ-SSF: 01400000002000F0U000B00A0000000
-X-QQ-FEAT: vLOCICHxEeCEfF/1m3dYxSw0cSBxgr+1eS2IgZovlg8fwaP7DrqvylYTmDYZF
-        byryxOB13Zmze9TU4BH6Xv3gPuZS7ljmVyf6tRQYdTvN81pio7LrpNAq8y2ssjZ0d5ZC30G
-        HPXVJHiBqcT2VPaFEVmWNz+teRmVyUAWN6LzAg6thlNCrYub/vQg2jh/1fK+vS51o4kXB6/
-        Yk/orL6q3G/INVic2hQSPI8xeaYyQwXUdw9rhjhOk5wuyiYqVhCG02FmAZ4VS1hHCstdlZ6
-        q22SYmz64vkEn9UksEU9kQkSnVD+gO90R2FTP0jAcyYiDyZ9Ip/ENqKqlIL+5Bk9FnWQpHg
-        8f3sDFYVzdtymvNuXDo8MFUmveViwGDlousZTIi5RxpG/LdxBzHwMvs1iDAS7uxfn6oQPn+
-        PqN6ptO5bLA=
-X-QQ-GoodBg: 2
-From:   Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
-To:     akpm@linux-foundation.org
-Cc:     akiyks@gmail.com, corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rppt@kernel.org,
-        skhan@linuxfoundation.org, yejiajian2018@email.szu.edu.cn,
-        zhangyinan2019@email.szu.edu.cn,
-        Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
-Subject: [PATCH v4] Documentation/mm/page_owner.rst: delete frequently changing experimental data
-Date:   Wed,  5 Oct 2022 22:55:25 +0800
-Message-Id: <20221005145525.10359-1-caoyixuan2019@email.szu.edu.cn>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <89aed08f-1e0b-258c-516d-97a30fd02840@gmail.com>
-References: <89aed08f-1e0b-258c-516d-97a30fd02840@gmail.com>
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:email.szu.edu.cn:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 5 Oct 2022 10:56:53 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D30644A;
+        Wed,  5 Oct 2022 07:56:52 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id a25so1070752qtw.10;
+        Wed, 05 Oct 2022 07:56:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VL0rszw+X7VH9Vs2enoudeRpBA9RJgrDEJBIgJDq1Ms=;
+        b=BBHGKXQ/s4dOW1mA1++ZBqxzDyAiMLmeKzCtMSr/doDO7E11bceDzRdNLmsi9LE5Oq
+         qwEPuiYF6Mr4AKw18d4eTre2AUrjbToWoT4Q/TG81YvRgKKrclhtkwyAyzRVEnz1HQn0
+         VuRh6OQeauJiB2ZGy9nUMT2ZhLghHTNi+KtWvYkruNPoqnUrkdCZkd4hB4fu6z10ABJe
+         d9Ra7Z6w08KOopAibqTsO7uRjcSb1nqb8CMJc9UjSrV+ODJJ820ElsmOB3PJK2DekGgy
+         l3u1zxgDE26i+GgM5Qt2HMkXJw/BFKCPZQiEMFYnneREGCCGUO6an33YBPMU6NKxgfQX
+         6kGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VL0rszw+X7VH9Vs2enoudeRpBA9RJgrDEJBIgJDq1Ms=;
+        b=z94kpWxItuAEdCteYNRTdLYHZhgRr6v8eG113GjW1DfnhUVRAY5pA8LLntoiiLG0tw
+         32nGEjxfwTnKfj1aGlgfvFqoZI+bxYss6r8SM4H8PwN4bm4rPc0nNjcOeEtJp0SBTJfQ
+         cKKH+CgPZ6AvQB5ZXQMnrQw7xze0jBJ0XqUKmlcQyWbGDLVvbrb8p6CCLkFunoLzW4KG
+         xyRFkyF5RtzFrEYttE1lgIcCZ8RaMoZ9GbTljmyRFSqv/LFuk41yJ35MxX2gXsHDB6jF
+         WRqWrdxihzBBaF/MyKMCFedvvFZi+EZeyok6ppwUbTwkaxrc+v4XYOFoWmNRPMz2Y9mB
+         WZZA==
+X-Gm-Message-State: ACrzQf1tQUOTYcxJAbT0gy8Ej4+rMxqcBXvo3hzUeDbu4U26kEAiYcUq
+        3mDLEAGwhXwtZwdRVI027QdtnVD++GFyCrx5zD4=
+X-Google-Smtp-Source: AMsMyM4vVpwYW06RqZEG0YuRwm5ipuue7su59HIMb3pS7vj47CR5mMNY0KOZKzJlEodWLd10zi+UF1IaVTPJ3uisQlo=
+X-Received: by 2002:ac8:5e07:0:b0:35c:e7fd:1e94 with SMTP id
+ h7-20020ac85e07000000b0035ce7fd1e94mr24098816qtx.384.1664981811333; Wed, 05
+ Oct 2022 07:56:51 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221005133120.50483-1-olivier.moysan@foss.st.com> <20221005133120.50483-4-olivier.moysan@foss.st.com>
+In-Reply-To: <20221005133120.50483-4-olivier.moysan@foss.st.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 5 Oct 2022 17:56:15 +0300
+Message-ID: <CAHp75VffeeP+_nX86faEbnJFH51kGA2fUcJgqp1_U8EsbRrD9w@mail.gmail.com>
+Subject: Re: [PATCH v2 3/8] iio: adc: stm32-adc: add stm32mp13 support
+To:     Olivier Moysan <olivier.moysan@foss.st.com>
+Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        nuno.sa@analog.com, Paul Cercueil <paul@crapouillou.net>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        Yannick Brosseau <yannick.brosseau@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kernel size changes due to many factors, such as compiler
-version, configuration, and the build environment. This makes
-size comparison figures irrelevant to reader's setup.
+On Wed, Oct 5, 2022 at 4:36 PM Olivier Moysan
+<olivier.moysan@foss.st.com> wrote:
+>
+> Add STM32 ADC support for STM32MP13x SOCs family.
+>
+> On STM32MP13x, each ADC peripheral has a single ADC block.
+> These ADC peripherals, ADC1 and ADC2, are fully independent.
+> This introduces changes in common registers handling.
+>
+> Some features such as boost mode, channel preselection and
+> linear calibration are not supported by the STM32MP13x ADC.
+> Add diversity management for these features.
+>
+> The STM32MP13x ADC introduces registers and bitfield variants
+> on existing features such as calibration factors and internal
+> channels. Add register diversity management.
+>
+> Add also support of new internal channels VDDCPU and VDDQ_DDR.
 
-Remove these figures and describe the effects of page owner
-to the kernel size in general instead.
+for new
 
-Thanks for Jonathan Corbet, Bagas Sanjaya and Mike Rapoport's
-constructive suggestions.
+I have a d=C3=A9j=C3=A0-vu that I have pointed out all these...
 
-Signed-off-by: Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
----
- Documentation/mm/page_owner.rst | 20 ++++----------------
- 1 file changed, 4 insertions(+), 16 deletions(-)
+...
 
-diff --git a/Documentation/mm/page_owner.rst b/Documentation/mm/page_owner.rst
-index f18fd8907049..127514955a5e 100644
---- a/Documentation/mm/page_owner.rst
-+++ b/Documentation/mm/page_owner.rst
-@@ -38,22 +38,10 @@ not affect to allocation performance, especially if the static keys jump
- label patching functionality is available. Following is the kernel's code
- size change due to this facility.
- 
--- Without page owner::
--
--   text    data     bss     dec     hex filename
--   48392   2333     644   51369    c8a9 mm/page_alloc.o
--
--- With page owner::
--
--   text    data     bss     dec     hex filename
--   48800   2445     644   51889    cab1 mm/page_alloc.o
--   6662     108      29    6799    1a8f mm/page_owner.o
--   1025       8       8    1041     411 mm/page_ext.o
--
--Although, roughly, 8 KB code is added in total, page_alloc.o increase by
--520 bytes and less than half of it is in hotpath. Building the kernel with
--page owner and turning it on if needed would be great option to debug
--kernel memory problem.
-+Although enabling page owner increases kernel size by several kilobytes,
-+most of this code is outside page allocator and its hot path. Building
-+the kernel with page owner and turning it on if needed would be great
-+option to debug kernel memory problem.
- 
- There is one notice that is caused by implementation detail. page owner
- stores information into the memory from struct page extension. This memory
--- 
-2.17.1
+>         struct stm32_adc *adc =3D iio_priv(indio_dev);
+>         int ret;
+> -       u32 val;
+> +       u32 val, msk =3D STM32H7_ADCALDIF;
 
+It's better to split and reorder like
+
+       struct stm32_adc *adc =3D iio_priv(indio_dev);
+       u32 msk =3D STM32H7_ADCALDIF;
+       u32 val;
+       int ret;
+
+...
+
+>  static const struct of_device_id stm32_adc_of_match[] =3D {
+>         { .compatible =3D "st,stm32f4-adc", .data =3D (void *)&stm32f4_ad=
+c_cfg },
+>         { .compatible =3D "st,stm32h7-adc", .data =3D (void *)&stm32h7_ad=
+c_cfg },
+>         { .compatible =3D "st,stm32mp1-adc", .data =3D (void *)&stm32mp1_=
+adc_cfg },
+
+> +       { .compatible =3D "st,stm32mp13-adc",
+> +         .data =3D (void *)&stm32mp13_adc_cfg },
+
+For the sake of consistent style I would put this on a single line.
+
+>         {},
+>  };
+
+
+--=20
+With Best Regards,
+Andy Shevchenko
