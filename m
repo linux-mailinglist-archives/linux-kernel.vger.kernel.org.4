@@ -2,116 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0535F5183
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C13C55F5186
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbiJEJJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 05:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60650 "EHLO
+        id S230346AbiJEJJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 05:09:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbiJEJIk (ORCPT
+        with ESMTP id S230254AbiJEJIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 05:08:40 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FFE76978;
-        Wed,  5 Oct 2022 02:08:13 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2958upN5021784;
-        Wed, 5 Oct 2022 09:08:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=zOz9DK0Yg3l8J1gu2rZxNW57wndut0TuBanZP/1eDxQ=;
- b=gFloYDbF4iF5l5qYWZrqFTPuuD9JEjrlf/8a3JJjMB3jVSZ1xH/Kfr55WPAQWuc1NqAl
- aabs7b6VEQC2LVdEhsUDLmS5ULytHcovVfcjcmcBtD+vY7Sg2Xv16PttaPQKNYuVVYMF
- qEKn/PwX/I/OktiUTdbjb2Fkp1As0GTwCtcbAOvXHVW//1t1+EwBebHAhgi6kBQKUB78
- 1wJ3sVU8WPX1mzdTg/tX0jV2twVPn3Ww1mtIMO9lI6k8w/6u5z8RU69JT9URsdiona8J
- 2AAnXY0FcIAf4KD6Gt/qjw7G0v+PM6LrizGQSTtKvq5qo4TFadpZbzXASS999BcV8Fm0 IQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k06sjkrkx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Oct 2022 09:08:03 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 295982tX021829
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 5 Oct 2022 09:08:02 GMT
-Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Wed, 5 Oct 2022 02:07:57 -0700
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-To:     freedreno <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Douglas Anderson <dianders@chromium.org>,
-        <krzysztof.kozlowski@linaro.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v7 6/6] arm64: dts: qcom: sc7280: Add Reset support for gpu
-Date:   Wed, 5 Oct 2022 14:37:04 +0530
-Message-ID: <20221005143618.v7.6.I6a1fca5d53c886c05ea3e24cd4282d31c9c0cd0b@changeid>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1664960824-20951-1-git-send-email-quic_akhilpo@quicinc.com>
-References: <1664960824-20951-1-git-send-email-quic_akhilpo@quicinc.com>
+        Wed, 5 Oct 2022 05:08:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04FD476952;
+        Wed,  5 Oct 2022 02:08:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 18FBCB81D48;
+        Wed,  5 Oct 2022 09:08:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79771C433C1;
+        Wed,  5 Oct 2022 09:08:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664960885;
+        bh=omy0/pUp2MMqJkM5U7w06cKtRBXOXZXSECxfXHqI8hY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IEcv7UmkULkSEcY3NjGxTIbXrz9j9oMSYCxDvLPM0OWcFVHTvCwTLyYUYoEW8dH+H
+         Qm/5bgV+pewuSYKKOQQMbHkW3SmQgqL27fPH0PTi9i/6Z7JHL8PIAfblPyaPgCJP81
+         MFXn6KPFfaP50HGI0RSGO+5qxLrvpQ5W6Mui+ELw=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.19.261
+Date:   Wed,  5 Oct 2022 11:08:01 +0200
+Message-Id: <1664960882137215@kroah.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Mav_tV04SwmxJ7L7HRA0Hy4wXhJxxjxB
-X-Proofpoint-GUID: Mav_tV04SwmxJ7L7HRA0Hy4wXhJxxjxB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-04_09,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- mlxlogscore=999 impostorscore=0 suspectscore=0 bulkscore=0
- lowpriorityscore=0 priorityscore=1501 malwarescore=0 phishscore=0
- adultscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210050057
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for Reset using GPUCC driver for GPU. This helps to ensure
-that GPU state is reset by making sure that CX head switch is collapsed.
+I'm announcing the release of the 4.19.261 kernel.
 
-Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
----
+All users of the 4.19 kernel series must upgrade.
 
-(no changes since v1)
+The updated 4.19.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.19.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 3 +++
- 1 file changed, 3 insertions(+)
+thanks,
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 2125803..3e559b3 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2535,6 +2535,9 @@
- 			nvmem-cells = <&gpu_speed_bin>;
- 			nvmem-cell-names = "speed_bin";
- 
-+			resets = <&gpucc GPU_CX_COLLAPSE>;
-+			reset-names = "cx_collapse";
-+
- 			gpu_opp_table: opp-table {
- 				compatible = "operating-points-v2";
- 
--- 
-2.7.4
+greg k-h
+
+------------
+
+ Makefile                                           |    2 
+ arch/arm/boot/dts/integratorap.dts                 |    1 
+ drivers/ata/libata-core.c                          |    4 +
+ drivers/clk/bcm/clk-iproc-pll.c                    |   12 ++-
+ drivers/gpu/drm/bridge/analogix/analogix_dp_core.c |   13 ----
+ drivers/input/touchscreen/melfas_mip4.c            |    2 
+ drivers/mmc/host/moxart-mmc.c                      |   17 -----
+ drivers/net/usb/qmi_wwan.c                         |    1 
+ drivers/net/usb/usbnet.c                           |    7 +-
+ drivers/nvme/host/core.c                           |    9 +-
+ drivers/soc/sunxi/sunxi_sram.c                     |   23 +++----
+ drivers/usb/storage/unusual_uas.h                  |   21 ++++++
+ fs/ntfs/super.c                                    |    3 
+ mm/migrate.c                                       |    5 -
+ mm/page_alloc.c                                    |   65 +++++++++++++++++----
+ security/integrity/ima/ima.h                       |    5 +
+ security/integrity/ima/ima_policy.c                |   24 +++++--
+ tools/testing/selftests/net/reuseport_bpf.c        |    2 
+ 18 files changed, 146 insertions(+), 70 deletions(-)
+
+Alistair Popple (1):
+      mm/migrate_device.c: flush TLB while holding PTL
+
+Brian Norris (1):
+      Revert "drm: bridge: analogix/dp: add panel prepare/unprepare in suspend/resume time"
+
+Chaitanya Kulkarni (1):
+      nvme: add new line after variable declatation
+
+ChenXiaoSong (1):
+      ntfs: fix BUG_ON in ntfs_lookup_inode_by_name()
+
+Florian Fainelli (1):
+      clk: iproc: Do not rely on node name for correct PLL setup
+
+Frank Wunderlich (1):
+      net: usb: qmi_wwan: Add new usb-id for Dell branded EM7455
+
+Greg Kroah-Hartman (1):
+      Linux 4.19.261
+
+Hongling Zeng (3):
+      uas: add no-uas quirk for Hiksemi usb_disk
+      usb-storage: Add Hiksemi USB3-FW to IGNORE_UAS
+      uas: ignore UAS for Thinkplus chips
+
+Linus Walleij (1):
+      ARM: dts: integrator: Tag PCI host with device_type
+
+Maurizio Lombardi (1):
+      mm: prevent page_frag_alloc() from corrupting the memory
+
+Mel Gorman (1):
+      mm/page_alloc: fix race condition between build_all_zonelists and page allocation
+
+Michael Kelley (1):
+      nvme: Fix IOC_PR_CLEAR and IOC_PR_RELEASE ioctls for nvme devices
+
+Niklas Cassel (1):
+      libata: add ATA_HORKAGE_NOLPM for Pioneer BDR-207M and BDR-205
+
+Peilin Ye (1):
+      usbnet: Fix memory leak in usbnet_disconnect()
+
+Samuel Holland (4):
+      soc: sunxi: sram: Actually claim SRAM regions
+      soc: sunxi: sram: Prevent the driver from being unbound
+      soc: sunxi: sram: Fix probe function ordering issues
+      soc: sunxi: sram: Fix debugfs info for A64 SRAM C
+
+Sergei Antonov (1):
+      mmc: moxart: fix 4-bit bus width and remove 8-bit bus width
+
+Tyler Hicks (3):
+      ima: Have the LSM free its audit rule
+      ima: Free the entire rule when deleting a list of rules
+      ima: Free the entire rule if it fails to parse
+
+Wang Yufen (1):
+      selftests: Fix the if conditions of in test_extra_filter()
+
+Yang Yingliang (1):
+      Input: melfas_mip4 - fix return value check in mip4_probe()
 
