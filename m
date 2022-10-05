@@ -2,74 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9725F56FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 16:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 545045F56FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 17:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiJEO7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 10:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
+        id S230345AbiJEPAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 11:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbiJEO6g (ORCPT
+        with ESMTP id S230330AbiJEO7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 10:58:36 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F27644A;
-        Wed,  5 Oct 2022 07:58:09 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id u21so19175300edi.9;
-        Wed, 05 Oct 2022 07:58:08 -0700 (PDT)
+        Wed, 5 Oct 2022 10:59:30 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997607E003;
+        Wed,  5 Oct 2022 07:58:53 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 295E3IPt021627;
+        Wed, 5 Oct 2022 14:58:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=+PbRjPwDCVNTPLqODwPjLlJ96Ed+jy9Rq0oSv7dXyfg=;
+ b=wTpxn/pUQbq9GJ7SDBHqa0IN+PDLtPJ/+MSFiqNLT8RBORQfVogD8IbIoQF7x/wQT9pF
+ Z+QErxOSxahT+J+pQfhnTepMWCwPX7yALh7wPZK7Ff6cfyHQtAlEZ9q1gnhFyoIRhozJ
+ 12kaoYx1xU8NVqRrSeiBN72KMx3svUBrgz2GR2pzIYcWo1MlRy2Ng5psLDb5fps5wBSR
+ +iDa8yuNX9Q76oc9xa1CgQGHfVN5rcp2MGCPJ/I3J5Vxqq0BKbo0sX5wLYVs0V3yPVEo
+ Z8G0YNvQQdZOxbJLPRWmmiKK01DhpXlVT4Cq3bXPSfaCHoGXKdOXB31ptqd5TbewfEkn pw== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jxcb2shh7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 05 Oct 2022 14:58:24 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 295EYcBG005018;
+        Wed, 5 Oct 2022 14:58:23 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2108.outbound.protection.outlook.com [104.47.58.108])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3jxc0b79nd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 05 Oct 2022 14:58:23 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HWLJRz+/RpeDkGXgxb+yIEhxFC6EAFuALkdG4Z8H6U0umQkS3CfupxOTHbtpegMehpsAV5xmt4GJnivewTDzZB0bhIa1mW0IuD8VpmWjLGLACd1oR3RlvEnmr60K5ax1HwArcy5EdeMmLFFtciehr4MXmc1iu0/NRjsu3XgYoDRus7wPzj+ZOzo2DNDgLrvh43x2K2uo8tmu+KE/jQ3J0XvOuNKg7AGxfEIDo7cTy+kQmM0FLuVLA9k/UOqXCMGQgE3j0Op0wAqJq0ahL6gLG6tRMAyhR7opeWlP6/YWRsSYLMYPyl4BtzOZP6kzshLgS+7VibI2fP4B4N+RFlOa4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+PbRjPwDCVNTPLqODwPjLlJ96Ed+jy9Rq0oSv7dXyfg=;
+ b=GFgydf9xAUj4dIgqhXGl/EgpQzkBOj+jmwfAtZpSE0uJSabQ/FVU9PM9qMgPEWEjrsjPYKQvs4A6ri1DKXujwmrfCA8yNxdVu8e3eEpv0X3tXb55RVdUuw9/iaOXbJuAQ8JxiKdlo8ARRJ3OBEWkWbCZ93POdaKHxCLWwff/fIym76GtDMO1zglOvS5YdQ8Kq3QJc30QOEe1OztXZ/Z2i7A5QIbVJ7JLzlyrjOilmnpaeauOuK46oyPivOC85MpiSSAh2kts5K04gjjJmIn9vsrvsdhH+cwIwPe+7sznL7jMmFDK2YP23hdJg8KGU0h0DJL3R5B+luVoy6+OilHXxQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=cz2NKqcOvUsyVj8cGKDamLS3SuGdjUPEtX355TEPN1k=;
-        b=X3rOdxmdmiUYZpe+mBlNzfdQSE86NeC+jDe4l/9zEot1Yre72e8Yn0a/ga1nmRgDih
-         ak75COSLS7Qo0Cksvoj8eieU2wEC4kNdUgffdl+16Xwftu6A2NvQ2lDyKy/rE9sGnMZm
-         K6AtXd4lxb/kHfB2muiqtNUnjNLWu0uAgKxq5BpXIMmxcILBp/GMQ/fx/NtZCfCspv77
-         ZMRd6Td2UZGkpKAwG505+nGq5SSaaXPXL7uAZ8eiNehf3moEzav1FVmVEsOZfXkxmRDa
-         cXF5AockY3+rBRdZVsC1zVRnYOiWES2+0I/EJy85VjVOVbyLV6JLVy2ITUlDg+Q1g7AX
-         WqDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=cz2NKqcOvUsyVj8cGKDamLS3SuGdjUPEtX355TEPN1k=;
-        b=q+U03sfK2/11ZnCiCftJH7LvhcjDXy7wqvN23OinQ/wUrr/13EXSWfZkOp2R+GirZA
-         yUh/XhdqH0fBwv2XOh7rUkys+jM8LpHsFLUxHm4AgAJqnFFkiZhxTlw/KoSQRJcUtcaY
-         DGzt6oLLLRKeqEdyMliAUfJ7NunfF2yUbDKf1H4tGEJfIuE/nEz11xKRwiHr38Nxc61H
-         jf4mJk/tPF/tJX+RlGAMuCnpu4qnZpG6bMK1sho2KJoXAsYk8sz8ptElN8AbErBcdzyA
-         LOfoiiBJF69VTlws0CVMcuEXCiY8MR/IPhswp5vx3/IOj+Iz6O/ureRe76EJoIH9Csdb
-         3B2g==
-X-Gm-Message-State: ACrzQf2yA7i7MawWorxFPToWVQa6PtRTT1I1p2Zd2BmnxcGrFENvwgbU
-        LEAweUeeHi0gcWW0CKQmpc8=
-X-Google-Smtp-Source: AMsMyM6NsazvFVOAPupGuNu7YfrB5l7/4cBdGM8m/PTeKFizIBYnhEDTzSyWNpc1X7pd6kd8cZBLKQ==
-X-Received: by 2002:a05:6402:1a33:b0:458:a00a:80a with SMTP id be19-20020a0564021a3300b00458a00a080amr160740edb.378.1664981887103;
-        Wed, 05 Oct 2022 07:58:07 -0700 (PDT)
-Received: from fedora.local.tbs-biometrics.cz (176-74-132-138.netdatacomm.cz. [176.74.132.138])
-        by smtp.gmail.com with ESMTPSA id m5-20020a50cc05000000b004588ef795easm4023941edi.34.2022.10.05.07.58.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 07:58:06 -0700 (PDT)
-From:   =?UTF-8?q?Martin=20Za=C5=A5ovi=C4=8D?= <m.zatovic1@gmail.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linus.walleij@linaro.org, brgl@bgdev.pl,
-        gregkh@linuxfoundation.org, jeffrey.l.hugo@gmail.com,
-        andersson@kernel.org, Michael.Srba@seznam.cz, saravanak@google.com,
-        mani@kernel.org, hemantk@codeaurora.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Cc:     =?UTF-8?q?Martin=20Za=C5=A5ovi=C4=8D?= <m.zatovic1@gmail.com>
-Subject: [RFCv2 PATCH 4/4] gpio: add Wiegand GPIO driver
-Date:   Wed,  5 Oct 2022 16:57:46 +0200
-Message-Id: <20221005145746.172138-4-m.zatovic1@gmail.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221005145746.172138-1-m.zatovic1@gmail.com>
-References: <20221005145746.172138-1-m.zatovic1@gmail.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+PbRjPwDCVNTPLqODwPjLlJ96Ed+jy9Rq0oSv7dXyfg=;
+ b=Je5ytLM1o9hMylK6n9WR3EIqdMcVnyAVj2Tyc7OAVJrUkKOh7RrbBjvI75yRDaQ7Xf08zY7OfhK7dhlcDLLgPsaO0nr6jAN/dTDKPe4ggCmtrtSV7GWwvCNpHkX/G3J1os2OMaiPqSorfBJ2xcmnjZOBzTPjzNQiUMkWvBw9zC8=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by CH3PR10MB6901.namprd10.prod.outlook.com
+ (2603:10b6:610:14d::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Wed, 5 Oct
+ 2022 14:58:21 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::1b8e:540e:10f0:9aec]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::1b8e:540e:10f0:9aec%4]) with mapi id 15.20.5676.031; Wed, 5 Oct 2022
+ 14:58:21 +0000
+Date:   Wed, 5 Oct 2022 17:58:14 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Enzo Matsumiya <ematsumiya@suse.de>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>, kernel@collabora.com,
+        kernel-janitors@vger.kernel.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] cifs: remove initialization value
+Message-ID: <Yz2bhrotBMO6JwPw@kadam>
+References: <20221004062333.416225-1-usama.anjum@collabora.com>
+ <20221004142306.ysgh45nhgdo4z3ok@suse.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221004142306.ysgh45nhgdo4z3ok@suse.de>
+X-ClientProxiedBy: MR1P264CA0133.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:501:51::18) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2365:EE_|CH3PR10MB6901:EE_
+X-MS-Office365-Filtering-Correlation-Id: 25970d69-533b-4135-7cd6-08daa6e20b2c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lFnmNLagYRrmYP3x2E4aqEoID7UdYENmjZcElz3H+Eg5m5Z5K6XLaMlKXGc1zLfxIm7e7sP5IF+R+uNbBuhCS1uhFtAL5YUFBZRoyrnfGlV9H7/9OKLj694mtLqSl66b5z6bJgkkateypr0HVeewD+8K9u8J6thKDwHG3W2KwsJVbQXTJDj0nYzsJLSLo11svWxc1q3LgTz3estHilmgjYj7q4D+PiTRx8Ctt3GlPUIpiouFSm6JcT1SEBrhQaEOjJp9lppgDVOkzADriZ2HYyCbpodJZuoZVrEPHJ67lDZ50tHTxPxgk3bQYGZxZnqc5+tYbwVFLmWocanQALsq4gdyZC9S9OgwxM7IVZg7gxyg0Qc2WmhD6OKqgUjBPhAYKaGzIQVJwaGsNPVHf2428651kDgIA0Ea/Nhk5rhkomjaDa2cYvX43F7rslUi61tDVUoP55qx0rxvznps1wB4Oa5eMAGDo7OirxoImZfZgDitX25JAXQA8C2h2J+Z0A3S+QIkSrk/C63z29fjMb7/wSXzoyRF5Je+Jw4fkjtZUljHwl8R7bGcrK38wkM9/Zh6GB2hLUITAWll7DCfvGK9F95ZuZT9cyKy6MmvVM6J4Wb/bOKqmIDpGCZr7WH7+rSIlmQZhYxYpbCZNZGvMk9bQg2OQGc9GL7Lr+/e9GIOuIdGV/MvC11V0dTc14CQCrSfNTf0S+tRT9mCIV0gKjPX8A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(39860400002)(366004)(136003)(346002)(376002)(451199015)(6916009)(86362001)(38100700002)(44832011)(8936002)(66946007)(26005)(54906003)(8676002)(66556008)(41300700001)(83380400001)(6666004)(7416002)(66476007)(6506007)(478600001)(5660300002)(9686003)(316002)(6486002)(186003)(6512007)(4326008)(33716001)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PDze+oclWOY2maGM2RIDoDlkysFl4SAnS47lfQsjvmv5P0Hl+nT+xubk9WXS?=
+ =?us-ascii?Q?upmpIlHhSbP70IBhrA/Gk/AT/56RAnl+NgGhmzKD2zxhUrNiXSaDqVGu0kyr?=
+ =?us-ascii?Q?KTjxf+1PU+v/++7XYFr0ztjTBvyLm5Qg8j9pJKPOVP/aJh9FQxJ+fcQsKJUS?=
+ =?us-ascii?Q?Aw9XFhN0uwam04ekN67tsHz8AUShoPq+YKl2j6iPY/XxnL0tb+XHpdAxTIW+?=
+ =?us-ascii?Q?/VRxZYrQoX5nRpkbfwQhpVob3Ai6f94GUGSvbxAJ/HRULmzlMDlU6fAGoeC7?=
+ =?us-ascii?Q?Ieg74P+TSZmljhiSOFjAxaRu31oNlBOSFferhQiHc2YC/hsB939jKdzXokuG?=
+ =?us-ascii?Q?iibmAQFpv6uVtX77riWjT6tOHJSrTXgi6VV1Jcf9piSUO1H37+ELX/GfdzJT?=
+ =?us-ascii?Q?A4T9mte11NK62WFPhvcbVRM5X5H+woIQ3fUoH6P7Q+oQUrtiVjKsC4ci1wZr?=
+ =?us-ascii?Q?PXD8wWLMLg35hZWI31IitubB7hvf/+j3tYR4ZuZkQINCWX79IMiCDAn3GQYd?=
+ =?us-ascii?Q?JFou2dH0RXfOYp4y8EI5pKLe7ROnTCOromS3lvcnMMMDeHKquTAqL1AALGsr?=
+ =?us-ascii?Q?/RO7SvdO1pDMicxh1CSOmQzsIUK5hqVampWnbZcB9pDDfbcG6Z1AaIsVkStw?=
+ =?us-ascii?Q?0m2ZjhafG257mgRTlVHAgtKt8pc+Tw/gvmItO4qDRl2TwQ6BEwQ6dOz9cao7?=
+ =?us-ascii?Q?kI4XHPbabROK7jnME1llncpRbg93XG8b3UaroOKGh16X4k43jfkZUwlKhIka?=
+ =?us-ascii?Q?68OI4L5KCbJ1xc7KhZzkdZPWoWyj5lelnwWB2H/Sr7uWb5CVGIF+SOQ10TqD?=
+ =?us-ascii?Q?tUa4EK1bqhVHAe+unkJECFE3GcXm2AFx+MGbWLtBF1/ySSrMmYiucgOuRNRV?=
+ =?us-ascii?Q?lP1wjEfIuJ3dGlbxe0CDm+yXff7e3MTOo1pEqypYaxNyVxDrPVF8jivnbhFq?=
+ =?us-ascii?Q?QGVNW8+fywoW9eAhuVC9fhg9Ag72ZVurfDr+Mjs3j160vyPzuT4HAy0CHr1f?=
+ =?us-ascii?Q?+7J3uW2P+X4FBHyqpil1Kgabs90EiQTUA8uXT/TFKzuvhZAcC4gsHrP/TfFz?=
+ =?us-ascii?Q?df/+kEHa+X7Iw9ePQrKHM6GL3k7W62I7BHQkZPiPSU6V5NofnhCi2ahm6s2p?=
+ =?us-ascii?Q?g7qza3Y49FhDa5RWgzWSLaMFX1G95Le3rdSqE2Fwsb0bIk39TmCskJLvCYlo?=
+ =?us-ascii?Q?qdD3S/wamqKZoEakKFmt1aZQzAlvusQVpvREh66BUwNKGF4S1AZc/wM6M2vH?=
+ =?us-ascii?Q?ZRlR4aoLwtRN/gzHkF8OvQqrZGqhu0p16wqZDZqUaSM7/d8L6TLJrMrz7cLj?=
+ =?us-ascii?Q?IkcjKsM0Am68HCWca7VdyTrUh2OIN9BERRrhJJEFy7PRFHqlxt8hNVpqTXwY?=
+ =?us-ascii?Q?C64mX6Jlr8eY/s2PXiIPP6FLHBAjpMR39q3P6V63Jdas/RoI7v/tWRhGZN5z?=
+ =?us-ascii?Q?TGO1AEJRu3sWwBBCFWkEa/RIlcDn9FB/BwLHt1Bn3db8efX6sOm6ZRDqdpW4?=
+ =?us-ascii?Q?PKSiWgGw6VeE7FbW6jdPfsXd7HL0GD7xF4Wwn4hjaz5j8rljYZsJwZ+6vdBh?=
+ =?us-ascii?Q?IirrP8eus1yHgZfBT6uYDNbel2J2FeqaIZLvL12qiAAabl+/wm9r3AkQbVpj?=
+ =?us-ascii?Q?nw=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?J7n66R5tkdSQUGWVPNS3thRDBuMDCsRQ8RBPxJNLWJ/1srrAj76zGyBdYKz8?=
+ =?us-ascii?Q?OPnNvSB7AQ7i8B0NLY7/WIYsY8gWqqFO0Vk/A0yRn+2dQ2eZnzWl0e3voxoU?=
+ =?us-ascii?Q?T2APXLlLMyt3P6Xo+AwWxxwKvSMJaC7nzvLS2tBDw4/NjbMlD2ul6kRws1Pa?=
+ =?us-ascii?Q?58SsHRPPBony2mCLwfxWULuLQpbBeMjJ1OFwrUoZ24Cra2eSHFXmbZZ2Kg7o?=
+ =?us-ascii?Q?s8Et5aQ9lWWBV6kKH1gXE1CkAwkUPBZpV7nAwftHjS9tpFd3ap2JQCDakWXY?=
+ =?us-ascii?Q?/TvDl6Guyiax54qtmCgcX+jWkGQh64RX3OfVuDYi9oTjqsU2gPyecNuUTgiD?=
+ =?us-ascii?Q?/6p/cQMNAYw5mD5gZRRX4nA/v7vL+kO22YruPaFdZ7EA6FpA142TsjcfDkG+?=
+ =?us-ascii?Q?i5W1HahML6CMmpAv2tPitRoRNeaqnis2UrnXFUd9OSDhOA53m2NSNPiCRUDW?=
+ =?us-ascii?Q?dRC7KYZVnK3HI7W3yuEatN3kYRcUdBFCc9JS67fojpsfRTIVO3TJG3M01Ujh?=
+ =?us-ascii?Q?8a0j7QG4Lg8mM7cvpDprMfl57dZ0uxgqAc26+vHe4hjlNCX7+w5mq4syPw+1?=
+ =?us-ascii?Q?KXNEZQLkZHkO+HXUBwm3blGBfo9XCcH7mfpdlD0e732SHlPNgjHTV2Cwu6yB?=
+ =?us-ascii?Q?7hzj0HdrLy+ai2NigTHKcsoZCgE83OhTtEVxV5RsN0Dkraw3SreeX+gdwPV4?=
+ =?us-ascii?Q?1QdQYPXC6H/6m+fT1srQwrA2JaZ+3yrgSAemT421HK+PAaRO8dI1UM9sjXj8?=
+ =?us-ascii?Q?1NZDDrNVkJ4F+YypUvqIbTPUwW5gTKtstejJeG6QG4VcxQ29jf7SbuTdt9Vi?=
+ =?us-ascii?Q?gncB/PmnJZVwuYJHFurkBU6sSfhmJ5q0Y8MJSM+osHdnyer0DUFeu4sPh67C?=
+ =?us-ascii?Q?4tRUATc1sxEN63WQ4zk9xY8W0VKgrHLSKbu1tzarkKD56QjuHuRUmfB04bXj?=
+ =?us-ascii?Q?MGYicFYUEpsigqdnhXMhdwA3m0whDbAzQMBViXjjjxjeF+fp8bM1mU49ovRT?=
+ =?us-ascii?Q?QWd655NvfpRJr+0XLw/PZ9tLMKAykguZySK1bXkQN4u0k7ZX+wfIY79GhLlP?=
+ =?us-ascii?Q?AZcrjgl63Xp9PnaTUjNSYPiFwm4ADes347BtaadvAIO+Y8ZQMMcdcb8iVyuR?=
+ =?us-ascii?Q?NN+Vm+3Z4Q2j?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25970d69-533b-4135-7cd6-08daa6e20b2c
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2022 14:58:21.0380
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9L7JWfvz6i0P0kdTXcOXwpV2E5p8HUEg8PaOKTQ1nCJdt2HrhjEWKuiD2uxTE0u4mW+nDQH49Ad7lslPd0p0lGkdlxXmnkCY9yc9PyCi8qw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB6901
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-05_03,2022-10-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 mlxscore=0
+ malwarescore=0 adultscore=0 spamscore=0 mlxlogscore=631 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210050094
+X-Proofpoint-GUID: pALgl_5HWG1F6_quQyksrWfK6dE9fFft
+X-Proofpoint-ORIG-GUID: pALgl_5HWG1F6_quQyksrWfK6dE9fFft
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,614 +171,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wiegand GPIO driver uses GPIO lines defined in the devicetree to
-transmit data following the Wiegand protocol.
+On Tue, Oct 04, 2022 at 11:23:06AM -0300, Enzo Matsumiya wrote:
+> Hi Usama,
+> 
+> On 10/04, Muhammad Usama Anjum wrote:
+> > Don't initialize the rc as its value is being overwritten before its
+> > use.
+> 
+> Being bitten by an unitialized variable bug as recent as 2 days ago, I'd
+> say this is a step backwards from the "best practices" POV.
 
-Signed-off-by: Martin Zaťovič <m.zatovic1@gmail.com>
----
- .../ABI/testing/sysfs-driver-gpio-wiegand     |  40 ++
- MAINTAINERS                                   |   9 +
- drivers/gpio/Kconfig                          |   7 +
- drivers/gpio/Makefile                         |   1 +
- drivers/gpio/gpio-wiegand.c                   | 492 ++++++++++++++++++
- 5 files changed, 549 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-driver-gpio-wiegand
- create mode 100644 drivers/gpio/gpio-wiegand.c
+Zero is a random bogus value.
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-gpio-wiegand b/Documentation/ABI/testing/sysfs-driver-gpio-wiegand
-new file mode 100644
-index 000000000000..efcce06968ef
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-driver-gpio-wiegand
-@@ -0,0 +1,40 @@
-+What:		/sys/devices/platform/.../wiegand-gpio-attributes/format
-+Date:		October 2022
-+Contact:	Martin Zaťovič <m.zatovic1@gmail.com>
-+Description:    Sets a format of Wiegand communication. Currently supported
-+        formats are 26, 36 and 37 bits. These formats automatically add
-+        checksums to the first and last bits of a message. To set a custom
-+        format, 0 needs to be written here. Custom format writes an amount of
-+        bits defined by payload_len(see below) and it does not add checksums so
-+        the user is responsible for that.
-+Users:		any user space application which wants to communicate using Wiegand
-+
-+What:		/sys/devices/platform/.../wiegand-gpio-attributes/payload_len
-+Date:		October 2022
-+Contact:	Martin Zaťovič <sampaio.ime@gmail.com>
-+Description:    Depends on format attribute - using one of the standard formats
-+        the payload_len attribute file becomes read-only and it contains the
-+        number of bits of a message without the checksum bits(e.g. 24 for
-+        26-bit format). Using a custom format makes this file writable for
-+        configuring the Wiegand message length in bits.
-+Users:		any user space application which wants to communicate using Wiegand
-+
-+What: /sys/devices/platform/.../wiegand-gpio-attributes/pulse_len
-+Date:       October 2022
-+Contact:    Martin Zaťovič
-+Description:    Length of the low pulse in usecs; defaults to 50us.
-+Users:		any user space application which wants to communicate using Wiegand
-+
-+What: /sys/devices/platform/.../wiegand-gpio-attributes/interval_len
-+Date:       October 2022
-+Contact:    Martin Zaťovič
-+Description:    Length of the whole bit(both the pulse and the high phase) in
-+        usecs; defaults to 2000us
-+Users:		any user space application which wants to communicate using Wiegand
-+
-+What: /sys/devices/platform/.../wiegand-gpio-attributes/frame_gap
-+Date:       October 2022
-+Contact:    Martin Zaťovič
-+Description:    Length of the last bit of a frame(both the pulse and the high
-+        phase) in usecs; defaults to interval_len
-+Users:		any user space application which wants to communicate using Wiegand
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8656ab794786..43b21bd5333a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21960,6 +21960,15 @@ L:	linux-input@vger.kernel.org
- S:	Maintained
- F:	drivers/hid/hid-wiimote*
- 
-+WIEGAND DRIVER
-+M:	Martin Zaťovič <m.zatovic1@gmail.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/bus/wiegand.yaml
-+F:	Documentation/devicetree/bindings/gpio/gpio-wiegand.yaml
-+F:	drivers/bus/wiegand.c
-+F:	drivers/gpio/gpio-wiegand.c
-+F:	include/linux/wiegand.h
-+
- WILOCITY WIL6210 WIRELESS DRIVER
- L:	linux-wireless@vger.kernel.org
- S:	Orphan
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index 0642f579196f..3cd57e28df19 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -703,6 +703,13 @@ config GPIO_VX855
- 	  Additional drivers must be enabled in order to use the
- 	  functionality of the device.
- 
-+config GPIO_WIEGAND
-+    tristate "Wiegand GPIO support"
-+    depends on WIEGAND
-+    help
-+      This enables the GPIO module for Wiegand protocol communication.
-+      The Wiegand bus driver has to be enabled first.
-+
- config GPIO_WCD934X
- 	tristate "Qualcomm Technologies Inc WCD9340/WCD9341 GPIO controller driver"
- 	depends on MFD_WCD934X && OF_GPIO
-diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-index a0985d30f51b..09024e291cc4 100644
---- a/drivers/gpio/Makefile
-+++ b/drivers/gpio/Makefile
-@@ -173,6 +173,7 @@ obj-$(CONFIG_GPIO_VISCONTI)		+= gpio-visconti.o
- obj-$(CONFIG_GPIO_VX855)		+= gpio-vx855.o
- obj-$(CONFIG_GPIO_WCD934X)		+= gpio-wcd934x.o
- obj-$(CONFIG_GPIO_WHISKEY_COVE)		+= gpio-wcove.o
-+obj-$(CONFIG_GPIO_WIEGAND)		+= gpio-wiegand.o
- obj-$(CONFIG_GPIO_WINBOND)		+= gpio-winbond.o
- obj-$(CONFIG_GPIO_WM831X)		+= gpio-wm831x.o
- obj-$(CONFIG_GPIO_WM8350)		+= gpio-wm8350.o
-diff --git a/drivers/gpio/gpio-wiegand.c b/drivers/gpio/gpio-wiegand.c
-new file mode 100644
-index 000000000000..b45e39010fd6
---- /dev/null
-+++ b/drivers/gpio/gpio-wiegand.c
-@@ -0,0 +1,492 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <linux/delay.h>
-+#include <linux/module.h>
-+#include <linux/slab.h>
-+#include <linux/poll.h>
-+#include <linux/miscdevice.h>
-+#include <linux/of.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/wiegand.h>
-+
-+struct wiegand_gpio_device *wiegand_gpio_glob;
-+
-+struct wiegand_gpio_device {
-+	struct device *dev;
-+	struct miscdevice *misc_dev;
-+	struct mutex mutex;
-+	struct gpio_desc *gpio_data_hi;
-+	struct gpio_desc *gpio_data_lo;
-+	struct wiegand_setup setup;
-+	u8 data[WIEGAND_MAX_PAYLEN_BYTES];
-+};
-+
-+struct wiegand_gpio_instance {
-+	struct wiegand_gpio_device *dev;
-+	unsigned long flags;
-+};
-+
-+static const struct wiegand_setup WIEGAND_SETUP = {
-+	.pulse_len	= 50,
-+	.interval_len	= 2000,
-+	.frame_gap	= 2000,
-+	.format		= WIEGAND_V26,
-+	.payload_len	= 24,
-+};
-+
-+/*
-+ * To send a bit of value 1 following the wiegand protocol, one must set
-+ * the wiegand_data_hi to low for the duration of pulse. Similarly to send
-+ * a bit of value 0, the wiegand_data_lo is set to low for pulse duration.
-+ * This way the two lines are never low ar the same time.
-+ */
-+void wiegand_gpio_send_bit(struct wiegand_gpio_device *wiegand_gpio,
-+				bool value, bool last)
-+{
-+	struct wiegand_setup *setup = &wiegand_gpio->setup;
-+	struct gpio_desc *gpio = value ? wiegand_gpio->gpio_data_hi
-+				: wiegand_gpio->gpio_data_lo;
-+
-+	gpiod_set_value_cansleep(gpio, 0);
-+	udelay(setup->pulse_len);
-+	gpiod_set_value_cansleep(gpio, 1);
-+
-+	if (last)
-+		udelay(setup->frame_gap - setup->pulse_len);
-+	else
-+		udelay(setup->interval_len - setup->pulse_len);
-+}
-+
-+/* This function is used for custom format */
-+static int wiegand_gpio_write_by_bits(struct wiegand_gpio_device *wiegand_gpio,
-+				size_t len)
-+{
-+	size_t i, bitlen;
-+	bool bit_value, is_last_bit;
-+	struct wiegand_setup *setup = &wiegand_gpio->setup;
-+
-+	bitlen = setup->format ? setup->payload_len + 2 : setup->payload_len;
-+
-+	for (i = 0; i < bitlen; i++) {
-+		bit_value = ((wiegand_gpio->data[i / 8] >> (7 - (i % 8)))
-+									& 0x01);
-+		is_last_bit = (i + 1) == bitlen;
-+
-+		wiegand_gpio_send_bit(wiegand_gpio, (bool)bit_value,
-+				is_last_bit);
-+	}
-+
-+	return 0;
-+}
-+
-+static unsigned int wiegand_gpio_calc_bytes(unsigned int bits)
-+{
-+	if (bits % 8 != 0)
-+		return (bits / 8) + 1;
-+	else
-+		return bits / 8;
-+}
-+
-+static unsigned int wiegand_gpio_get_payload_size(
-+						unsigned long payload_len_bits,
-+						enum wiegand_format fmt)
-+{
-+	unsigned int ret;
-+
-+	if (fmt == WIEGAND_CUSTOM)
-+		ret = wiegand_gpio_calc_bytes(payload_len_bits);
-+	else
-+		/* add 2 for parity bits */
-+		ret = wiegand_gpio_calc_bytes(payload_len_bits + 2);
-+
-+	return ret;
-+}
-+
-+static ssize_t wiegand_gpio_get_user_data(
-+				struct wiegand_gpio_device *wiegand_gpio,
-+				char __user const *buf, size_t len)
-+{
-+	size_t rc;
-+	size_t num_copy;
-+	unsigned char tmp[WIEGAND_MAX_PAYLEN_BYTES];
-+	struct wiegand_setup *setup = &wiegand_gpio->setup;
-+
-+	num_copy = wiegand_gpio_get_payload_size(setup->payload_len,
-+								setup->format);
-+
-+	if (setup->format == WIEGAND_CUSTOM) {
-+		rc = copy_from_user(&wiegand_gpio->data[0], buf, num_copy);
-+		if (rc < 0)
-+			return rc;
-+	} else {
-+		rc = copy_from_user(tmp, buf, num_copy);
-+		if (rc < 0)
-+			return rc;
-+		wiegand_gpio_add_parity_to_data(tmp, wiegand_gpio->data,
-+								setup->format);
-+	}
-+	return num_copy;
-+}
-+
-+static int wiegand_gpio_release(struct inode *ino, struct file *filp)
-+{
-+	struct wiegand_gpio_instance *info = filp->private_data;
-+	struct wiegand_gpio_device *wiegand_gpio = info->dev;
-+
-+	mutex_lock(&wiegand_gpio->mutex);
-+	mutex_unlock(&wiegand_gpio->mutex);
-+
-+	kfree(info);
-+
-+	return 0;
-+}
-+
-+static ssize_t wiegand_gpio_write(struct file *filp,
-+		char __user const *buf, size_t len, loff_t *offset)
-+{
-+	struct wiegand_gpio_instance *info = filp->private_data;
-+	struct wiegand_gpio_device *wiegand_gpio = info->dev;
-+	int rc;
-+
-+	if (len * 8 < wiegand_gpio->setup.payload_len)
-+		return -EBADMSG;
-+	if (buf == NULL || len == 0)
-+		return -EINVAL;
-+
-+	wiegand_gpio_get_user_data(wiegand_gpio, buf, len);
-+	rc = wiegand_gpio_write_by_bits(wiegand_gpio, len);
-+
-+	return len;
-+}
-+
-+static int wiegand_gpio_open(struct inode *ino, struct file *filp)
-+{
-+	struct wiegand_gpio_device *wiegand_gpio;
-+	struct wiegand_gpio_instance *info;
-+	int rc;
-+
-+	wiegand_gpio = wiegand_gpio_glob;
-+
-+	mutex_lock(&wiegand_gpio->mutex);
-+
-+	if ((filp->f_flags & O_ACCMODE) == O_RDONLY ||
-+		(filp->f_flags & O_ACCMODE) == O_RDWR) {
-+		dev_err(wiegand_gpio->dev, "Device is write only\n");
-+		rc = -EIO;
-+		goto err;
-+	}
-+
-+	info = kzalloc(sizeof(*info), GFP_KERNEL);
-+	if (!info) {
-+		rc = -ENOMEM;
-+		goto err;
-+	}
-+
-+	gpiod_direction_output(wiegand_gpio->gpio_data_hi, 1);
-+	gpiod_direction_output(wiegand_gpio->gpio_data_lo, 1);
-+
-+	info->dev = wiegand_gpio;
-+	info->flags = filp->f_flags;
-+
-+	mutex_unlock(&wiegand_gpio->mutex);
-+
-+	filp->private_data = info;
-+
-+	return 0;
-+err:
-+	mutex_unlock(&wiegand_gpio->mutex);
-+
-+	return rc;
-+}
-+
-+const struct file_operations wiegand_gpio_fops = {
-+	.owner		= THIS_MODULE,
-+	.open		= wiegand_gpio_open,
-+	.release	= wiegand_gpio_release,
-+	.write		= wiegand_gpio_write,
-+};
-+
-+static struct miscdevice wiegand_misc_device = {
-+	.minor = MISC_DYNAMIC_MINOR,
-+	.name = "wiegand-gpio",
-+	.fops = &wiegand_gpio_fops,
-+};
-+
-+static ssize_t store_ulong(unsigned long *val, const char *buf,
-+				size_t size, unsigned long max)
-+{
-+	int ret;
-+	unsigned long new;
-+
-+	ret = kstrtoul(buf, 0, &new);
-+	if (ret)
-+		return ret;
-+	if (max != 0 && new > max)
-+		return -EINVAL;
-+
-+	*val = new;
-+	return size;
-+}
-+
-+ssize_t pulse_len_show(struct device *dev, struct device_attribute *attr,
-+		char *buf)
-+{
-+	struct wiegand_gpio_device *device = dev_get_drvdata(dev);
-+
-+	if (!device)
-+		return -ENODEV;
-+
-+	return sysfs_emit(buf, "%lu\n", device->setup.pulse_len);
-+}
-+
-+ssize_t pulse_len_store(struct device *dev, struct device_attribute *attr,
-+		const char *buf, size_t count)
-+{
-+	struct wiegand_gpio_device *device = dev_get_drvdata(dev);
-+
-+	if (!device)
-+		return -ENODEV;
-+
-+	return store_ulong(&(device->setup.pulse_len), buf, count, 0);
-+}
-+
-+ssize_t interval_len_show(struct device *dev, struct device_attribute *attr,
-+		char *buf)
-+{
-+	struct wiegand_gpio_device *device = dev_get_drvdata(dev);
-+
-+	if (!device)
-+		return -ENODEV;
-+
-+	return sysfs_emit(buf, "%lu\n", device->setup.pulse_len);
-+}
-+
-+ssize_t interval_len_store(struct device *dev, struct device_attribute *attr,
-+		const char *buf, size_t count)
-+{
-+	struct wiegand_gpio_device *device = dev_get_drvdata(dev);
-+
-+	if (!device)
-+		return -ENODEV;
-+
-+	return store_ulong(&(device->setup.interval_len), buf, count, 0);
-+}
-+
-+ssize_t frame_gap_show(struct device *dev, struct device_attribute *attr,
-+		char *buf)
-+{
-+	struct wiegand_gpio_device *device = dev_get_drvdata(dev);
-+
-+	if (!device)
-+		return -ENODEV;
-+
-+	return sysfs_emit(buf, "%lu\n", device->setup.frame_gap);
-+}
-+
-+ssize_t frame_gap_store(struct device *dev, struct device_attribute *attr,
-+		const char *buf, size_t count)
-+{
-+	struct wiegand_gpio_device *device = dev_get_drvdata(dev);
-+
-+	if (!device)
-+		return -ENODEV;
-+
-+	return store_ulong(&(device->setup.frame_gap), buf, count, 0);
-+}
-+
-+ssize_t format_show(struct device *dev, struct device_attribute *attr,
-+		char *buf)
-+{
-+	struct wiegand_gpio_device *device = dev_get_drvdata(dev);
-+
-+	if (!device)
-+		return -ENODEV;
-+
-+	return sysfs_emit(buf, "%u\n", device->setup.format);
-+}
-+
-+/*
-+ * To set a particular format, the number of bits the driver is supposed to
-+ * transmit is written to the format sysfs file. For standard formats, the
-+ * allowed inputs are 26, 36 and 37. To set a custom format, 0 is passed.
-+ */
-+ssize_t format_store(struct device *dev, struct device_attribute *attr,
-+		const char *buf, size_t count)
-+{
-+	int ret;
-+	unsigned long new;
-+	enum wiegand_format *val;
-+	struct wiegand_gpio_device *device = dev_get_drvdata(dev);
-+
-+	if (!device)
-+		return -ENODEV;
-+
-+	val = &(device->setup.format);
-+
-+	ret = kstrtoul(buf, 0, &new);
-+	if (ret)
-+		return ret;
-+
-+	switch (new) {
-+	case 0:
-+		*val = WIEGAND_CUSTOM;
-+		break;
-+	case 26:
-+		*val = WIEGAND_V26;
-+		device->setup.payload_len = WIEGAND_V26_PAYLEN;
-+		break;
-+	case 36:
-+		*val = WIEGAND_V36;
-+		device->setup.payload_len = WIEGAND_V36_PAYLEN;
-+		break;
-+	case 37:
-+		*val = WIEGAND_V37;
-+		device->setup.payload_len = WIEGAND_V37_PAYLEN;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return count;
-+}
-+
-+/*
-+ * Using a custom format, the payload_len sysfs file configures the size of
-+ * messages payload in bits. When one of the standard formats is used, this
-+ * file is read-only and contains the size of the message in bits without the
-+ * parity bits.
-+ */
-+ssize_t payload_len_show(struct device *dev,
-+		struct device_attribute *attr, char *buf)
-+{
-+	struct wiegand_gpio_device *device = dev_get_drvdata(dev);
-+
-+	if (!device)
-+		return -ENODEV;
-+
-+	return sysfs_emit(buf, "%lu\n", device->setup.pulse_len);
-+}
-+
-+ssize_t payload_len_store(struct device *dev,
-+		struct device_attribute *attr, const char *buf, size_t count)
-+{
-+	struct wiegand_gpio_device *device = dev_get_drvdata(dev);
-+
-+	if (!device)
-+		return -ENODEV;
-+
-+	/* standard formats use fixed payload size */
-+	if (device->setup.format != WIEGAND_CUSTOM)
-+		return -EPERM;
-+
-+	return store_ulong(&(device->setup.payload_len), buf, count,
-+					WIEGAND_MAX_PAYLEN_BYTES * 8);
-+}
-+
-+DEVICE_ATTR_RW(pulse_len);
-+DEVICE_ATTR_RW(interval_len);
-+DEVICE_ATTR_RW(frame_gap);
-+DEVICE_ATTR_RW(format);
-+DEVICE_ATTR_RW(payload_len);
-+
-+static struct attribute *wiegand_attrs[] = {
-+	&dev_attr_pulse_len.attr,
-+	&dev_attr_interval_len.attr,
-+	&dev_attr_frame_gap.attr,
-+	&dev_attr_format.attr,
-+	&dev_attr_payload_len.attr,
-+	NULL,
-+};
-+
-+static struct attribute_group wiegand_group = {
-+	.name = "wiegand-gpio-attributes",
-+	.attrs = wiegand_attrs,
-+};
-+
-+static int wiegand_gpio_dev_probe(struct device *device)
-+{
-+	int rc;
-+	struct wiegand_gpio_device *wiegand_gpio;
-+
-+	wiegand_gpio = devm_kzalloc(device, sizeof(*wiegand_gpio), GFP_KERNEL);
-+	if (!wiegand_gpio)
-+		return -ENOMEM;
-+
-+	wiegand_gpio->dev = device;
-+	wiegand_gpio->misc_dev = &wiegand_misc_device;
-+
-+	wiegand_gpio_glob = wiegand_gpio;
-+
-+	/* Get GPIO lines using device tree bindings. */
-+	wiegand_gpio->gpio_data_lo = devm_gpiod_get(wiegand_gpio->dev,
-+			"data-lo", GPIOD_OUT_HIGH);
-+	if (IS_ERR(wiegand_gpio->gpio_data_lo)) {
-+		return dev_err_probe(wiegand_gpio->dev,
-+				PTR_ERR(wiegand_gpio->gpio_data_lo),
-+				"Can't get data-lo line.");
-+	}
-+	wiegand_gpio->gpio_data_hi = devm_gpiod_get(wiegand_gpio->dev,
-+			"data-hi", GPIOD_OUT_HIGH);
-+	if (IS_ERR(wiegand_gpio->gpio_data_hi)) {
-+		return dev_err_probe(wiegand_gpio->dev,
-+				PTR_ERR(wiegand_gpio->gpio_data_hi),
-+				"Can't get data-hi line.");
-+	}
-+
-+	rc = sysfs_create_group(&wiegand_gpio->dev->kobj, &wiegand_group);
-+	if (rc < 0) {
-+		dev_err(wiegand_gpio->dev, "Couldn't register sysfs group\n");
-+		return rc;
-+	}
-+
-+	mutex_init(&wiegand_gpio->mutex);
-+
-+	misc_register(wiegand_gpio->misc_dev);
-+	wiegand_gpio->misc_dev->parent = wiegand_gpio->dev;
-+
-+	memcpy(&wiegand_gpio->setup, &WIEGAND_SETUP,
-+			sizeof(struct wiegand_setup));
-+
-+	dev_set_drvdata(device, wiegand_gpio);
-+
-+	return 0;
-+}
-+
-+static int wiegand_gpio_dev_remove(struct device *device)
-+{
-+	struct wiegand_gpio_device *wiegand_gpio = dev_get_drvdata(device);
-+
-+	sysfs_remove_group(&wiegand_gpio->dev->kobj, &wiegand_group);
-+
-+	misc_deregister(&wiegand_misc_device);
-+	kfree(wiegand_gpio);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id wiegand_gpio_dt_idtable[] = {
-+	{ .compatible = "wiegand,wiegand-gpio", },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, wiegand_gpio_dt_idtable);
-+
-+static const enum wiegand_module_id wiegand_gpio_module_table[] = {
-+	WIEGAND_MODULE_GPIO,
-+	0,
-+};
-+
-+static struct wiegand_driver wiegand_gpio_driver = {
-+	.driver = {
-+		.name	= "wiegand-gpio",
-+		.probe		= wiegand_gpio_dev_probe,
-+		.remove		= wiegand_gpio_dev_remove,
-+		.of_match_table = wiegand_gpio_dt_idtable,
-+	},
-+	.id_table = wiegand_gpio_module_table,
-+};
-+
-+module_wiegand_driver(wiegand_gpio_driver);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Wiegand write-only driver realized by GPIOs");
-+MODULE_AUTHOR("Martin Zaťovič <m.zatovic1@gmail.com>");
--- 
-2.37.3
+How likely is it that zero is the correct value or a negative error code
+is correct?  There are probably a four to one ratio of error paths to
+success paths in the kernel (100% made up statistic).  But mostly
+success paths end in "return 0;".  So when you see a "return rc;" there
+is probably less than one in ten chance that rc is potentially zero.  So
+there is an over 90% chance that zero is the wrong initializer to use.
+
+Meanwhile what initializing things to bogus values does is it disables
+static analysis checking for uninitialized value bugs.  So it hides bugs
+until the user hits them.
+
+Disabling static analysis can make sense for a very complicated function
+but it's not best practice in general.
+
+On the other hand uninitialized memory is a source of security bugs.
+There are two ways to prevent this:  1)  Use static analysis.  Currently
+the GCC uninitialized variable warning is disabled because it is kind
+of rubbish but there are other static analysis tools out there.  2)  Use
+the GCC extension to automatically initialize stack data to zero.
+
+regards,
+dan carpenter
 
