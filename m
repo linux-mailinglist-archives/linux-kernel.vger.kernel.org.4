@@ -2,146 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0814D5F5C63
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 00:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7735F5C65
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 00:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiJEWGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 18:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58598 "EHLO
+        id S229551AbiJEWId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 18:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiJEWGH (ORCPT
+        with ESMTP id S229468AbiJEWI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 18:06:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79CDF558FE;
-        Wed,  5 Oct 2022 15:06:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 249DAB81F47;
-        Wed,  5 Oct 2022 22:06:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62B71C433C1;
-        Wed,  5 Oct 2022 22:06:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665007561;
-        bh=FZGWwvWcMPwpxhSCd2CpWK7kBaSufMBeg2cE71W2BOY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kdwp8mBwA4DxgGXMH8RNJfp6niTBmA+A9hvnQifpjbB/DwhTINU4J92nzxhIihcHU
-         3HR6iqLo8aUthnB8oK7k1r0em3qa9j73goc4WNh/TYrAcrV/j62fbfBQtjg7XtfHWo
-         qCO/KBvOtXmtDmsgBesgS10c3dnJ6gGWsOHMnVypAyumop+29fsWTApZgz7r0wS7/X
-         6z0++64qq/oG9Y0sPvjb+ba5dE+/RUzUVbhDILKLMRTsU88wTBvOOBUUs6KszlPfrC
-         f5joADFiEGvpbEDfO8T7W7oqNqs7Hg84FMWv/ZXI4zp9NyZbNLqY+wby7ze6dNi6ti
-         3a8z6u/Jb6R5g==
-Date:   Thu, 6 Oct 2022 01:05:57 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v8 2/8] KVM: Extend the memslot to support fd-based
- private memory
-Message-ID: <Yz3/xWWaIRr6k1d3@kernel.org>
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-3-chao.p.peng@linux.intel.com>
- <Yz2AwVjymt7xb1sL@kernel.org>
+        Wed, 5 Oct 2022 18:08:29 -0400
+Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFF97D1FE;
+        Wed,  5 Oct 2022 15:08:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
+        t=1665007693; bh=EP5w5Py7qGU7eoaC5DXCRrO4upQ0zZ+os7jFdVOEkcs=;
+        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
+        b=IxhbghS/hDMmdHfbFKipfT50NOyN3+cVahpj9PNPU3nbleQgHPivvcZFxWRJpWfXC
+         eOj21VMVC+q9mq/Jfp/D3Zdou4de5FriM4z+O1JyW4JlXIEb/GVKfdHnBx7FLMk9pn
+         Dmzf92I2fqt8WFxdX/cSQkjQslgNCSOqfxo3lGAI=
+Date:   Thu, 6 Oct 2022 00:08:12 +0200
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     linux-rockchip@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+        Johan Jonker <jbx6244@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Rockchip SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] arm64: dts: rockchip: rk356x: Fix PCIe register map
+ and ranges
+Message-ID: <20221005220812.4psu6kckej63yo2z@core>
+Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
+        Peter Geis <pgwipeout@gmail.com>,
+        linux-rockchip@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+        Johan Jonker <jbx6244@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Rockchip SoC support" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
+References: <20221005085439.740992-1-megi@xff.cz>
+ <CAMdYzYrEXEqOmMeozGBbAAvrujZcOxLh4VYOmu5DSjPWTS-5zQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yz2AwVjymt7xb1sL@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMdYzYrEXEqOmMeozGBbAAvrujZcOxLh4VYOmu5DSjPWTS-5zQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_PASS,T_SPF_HELO_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 05, 2022 at 04:04:05PM +0300, Jarkko Sakkinen wrote:
-> On Thu, Sep 15, 2022 at 10:29:07PM +0800, Chao Peng wrote:
-> > In memory encryption usage, guest memory may be encrypted with special
-> > key and can be accessed only by the VM itself. We call such memory
-> > private memory. It's valueless and sometimes can cause problem to allow
-> > userspace to access guest private memory. This patch extends the KVM
-> > memslot definition so that guest private memory can be provided though
-> > an inaccessible_notifier enlightened file descriptor (fd), without being
-> > mmaped into userspace.
-> > 
-> > This new extension, indicated by the new flag KVM_MEM_PRIVATE, adds two
-> > additional KVM memslot fields private_fd/private_offset to allow
-> > userspace to specify that guest private memory provided from the
-> > private_fd and guest_phys_addr mapped at the private_offset of the
-> > private_fd, spanning a range of memory_size.
-> > 
-> > The extended memslot can still have the userspace_addr(hva). When use, a
-> > single memslot can maintain both private memory through private
-> > fd(private_fd/private_offset) and shared memory through
-> > hva(userspace_addr). Whether the private or shared part is visible to
-> > guest is maintained by other KVM code.
-> > 
-> > Since there is no userspace mapping for private fd so we cannot
-> > get_user_pages() to get the pfn in KVM, instead we add a new
-> > inaccessible_notifier in the internal memslot structure and rely on it
-> > to get pfn by interacting with the memory file systems.
-> > 
-> > Together with the change, a new config HAVE_KVM_PRIVATE_MEM is added and
-> > right now it is selected on X86_64 for Intel TDX usage.
-> > 
-> > To make code maintenance easy, internally we use a binary compatible
-> > alias struct kvm_user_mem_region to handle both the normal and the
-> > '_ext' variants.
-> > 
-> > Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+On Wed, Oct 05, 2022 at 07:42:54AM -0400, Peter Geis wrote:
+> On Wed, Oct 5, 2022 at 4:54 AM Ondrej Jirman <megi@xff.cz> wrote:
+> >
 > 
-> What if userspace_addr would contain address of an extension structure,
-> if the flag is set, instead of shared address? I.e. interpret that field
-> differently (could be turned into union too ofc).
+> Good Morning,
 > 
-> That idea could be at least re-used, if there's ever any new KVM_MEM_*
-> flags that would need an extension.
+> > I have two Realtek PCIe wifi cards connected over the 4 port PCIe swtich
+> > to Quartz64-A. The cards fail to work, when nvme SSD is connected at the
+> > same time to the bridge. Without nvme connected, cards work fine. The
+> > issue seems to be related to mixed use of devices which make use of I/O
+> > ranges and memory ranges.
+> >
+> > This patch changes I/O, MEM and config mappings so that config and I/O
+> > mappings use the 0xf4000000 outbound address space, and MEM range uses
+> > the whole 0x300000000 outbound space.
+> >
+> > This is simialar to how BSP does the mappings.
 > 
-> E.g. have struct kvm_userspace_memory_private, which contains shared
-> address, fd and the offset.
+> This change was very recent in the BSP stuff (Jan 2022):
+> https://github.com/rockchip-linux/kernel/commit/cfab7abefc4093daa379fbd90a1e7ac1a484332b
+> A few other interesting changes there as well. They added a 32 bit
+> window in the lower range and made the entire upper range a 64 bit
+> relocatable (why?) and prefetchable window. They also set the viewport
+> number to 8. The dt-binding says this is autodetected, but I wonder if
+> the value is being detected correctly.
+> 
+> It looks like it is dependent in BSP on a backported change from mainline:
+> https://github.com/rockchip-linux/kernel/commit/50a01d3c10a6212f66364575a3c8f66c07f41591
+> 
+> Can someone weigh in why the dw core has config in the reg node
+> instead of ranges?
+> 
+> >
+> > I changed num-ob-windows to value detected by the kernel so if for whatever
+> > reason the kernel ever starts respecting this DT property, it would not
+> > switch to sharing I/O and CFG spaces via a single iATU mapping for
+> > no reason.
+> 
+> This worries me that this value may be being detected incorrectly,
+> they set it to this for a reason. It's not unheard of for Rockchip to
+> need to override what they encode in the silicon.
 
-Or add a new ioctl number instead of messing with the existing
-parameter structure, e.g. KVM_SET_USER_MEMORY_REGION_PRIVATE.
+I just noticed that you may be thinking that BSP does some detection. It does
+not. It just uses either value from DT or hardcoded value 2 in the code.
 
-With this alternative and the current approach in the patch,
-it would be better just to redefine the struct fields that are
-common.
+https://github.com/rockchip-linux/kernel/blob/develop-4.19/drivers/pci/controller/dwc/pcie-designware-host.c#L450
 
-It actually would reduce redundancy because then there is no
-need to create that somewhat confusing kernel version of the
-same struct, right? You don't save any redundancy with this
-"embedded struct" approach.
+regards,
+	o.
 
-BR, Jarkko
+> Very Respectfully,
+> Peter Geis
+> 
+> >
+> > This change to the regs/ranges makes the issue go away and both nvme and
+> > wifi cards work when connected at the same time to the bridge. I tested
+> > the nvme with large amount of reads/writes, both behind the PCIe bridge
+> > and when directly connected to Quartz64-A board.
+> >
+> > Signed-off-by: Ondrej Jirman <megi@xff.cz>
+> > ---
+> > BSP for reference: https://github.com/rockchip-linux/kernel/blob/develop-4.19/arch/arm64/boot/dts/rockchip/rk3568.dtsi#L2370
+> >
+> > v2:
+> > - change ranges to use 0x300000000 fully for MEM and make use of
+> >   the 0xf4000000 outbound range for IO and config
+> > - full retest with/without the switch
+> > - if lscpi/dmesg is useful in the future for comparison, see:
+> >   https://xff.cz/kernels/random/quartz64a-pcie/
+> >
+> > I used this script for the tests:
+> >
+> > #!/bin/bash
+> >
+> > OUT=/mnt/data
+> > n=8
+> >
+> > test -f /tmp/test.dat || \
+> >     dd if=/dev/urandom of=/tmp/test.dat bs=1M count=1024
+> > md5sum /tmp/test.dat
+> >
+> > i=0
+> > while test $i -lt $n
+> > do
+> >     dd if=/tmp/test.dat of=$OUT/test$i.dat bs=4M oflag=direct
+> >
+> >     i=$(($i+1))
+> > done
+> >
+> > i=0
+> > while test $i -lt $n
+> > do
+> >     dd if=$OUT/test$i.dat bs=4M iflag=direct | md5sum
+> >
+> >     i=$(($i+1))
+> > done
+> >
+> >
+> >  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 9 +++++----
+> >  1 file changed, 5 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> > index 319981c3e9f7..99fd9543fc6f 100644
+> > --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> > +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> > @@ -855,7 +855,8 @@ pcie2x1: pcie@fe260000 {
+> >                 compatible = "rockchip,rk3568-pcie";
+> >                 reg = <0x3 0xc0000000 0x0 0x00400000>,
+> >                       <0x0 0xfe260000 0x0 0x00010000>,
+> > -                     <0x3 0x3f000000 0x0 0x01000000>;
+> > +                     <0x0 0xf4000000 0x0 0x01f00000>;
+> > +
+> >                 reg-names = "dbi", "apb", "config";
+> >                 interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>,
+> >                              <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>,
+> > @@ -877,15 +878,15 @@ pcie2x1: pcie@fe260000 {
+> >                                 <0 0 0 4 &pcie_intc 3>;
+> >                 linux,pci-domain = <0>;
+> >                 num-ib-windows = <6>;
+> > -               num-ob-windows = <2>;
+> > +               num-ob-windows = <8>;
+> >                 max-link-speed = <2>;
+> >                 msi-map = <0x0 &gic 0x0 0x1000>;
+> >                 num-lanes = <1>;
+> >                 phys = <&combphy2 PHY_TYPE_PCIE>;
+> >                 phy-names = "pcie-phy";
+> >                 power-domains = <&power RK3568_PD_PIPE>;
+> > -               ranges = <0x01000000 0x0 0x3ef00000 0x3 0x3ef00000 0x0 0x00100000
+> > -                         0x02000000 0x0 0x00000000 0x3 0x00000000 0x0 0x3ef00000>;
+> > +               ranges = <0x01000000 0x0 0x00000000 0x0 0xf5f00000 0x0 0x00100000
+> > +                         0x02000000 0x0 0x40000000 0x3 0x00000000 0x0 0x40000000>;
+> >                 resets = <&cru SRST_PCIE20_POWERUP>;
+> >                 reset-names = "pipe";
+> >                 #address-cells = <3>;
+> > --
+> > 2.37.3
+> >
