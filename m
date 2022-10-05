@@ -2,145 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 821ED5F51C0
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA9405F51C4
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiJEJbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 05:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40478 "EHLO
+        id S229613AbiJEJcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 05:32:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiJEJbg (ORCPT
+        with ESMTP id S229573AbiJEJca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 05:31:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78D901FCF2
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 02:31:35 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F168E113E;
-        Wed,  5 Oct 2022 02:31:41 -0700 (PDT)
-Received: from wubuntu (unknown [10.57.32.122])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6122F3F67D;
-        Wed,  5 Oct 2022 02:31:33 -0700 (PDT)
-Date:   Wed, 5 Oct 2022 10:31:31 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org,
-        Youssef Esmat <youssefesmat@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>, bristot@redhat.com,
-        clark.williams@gmail.com, bigeasy@linutronix.de,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: Sum of weights idea for CFS PI
-Message-ID: <20221005093131.onth46ngd5bz6y3f@wubuntu>
-References: <cb6c406e-1431-fcfd-ef82-87259760ead9@joelfernandes.org>
- <20220930134931.mpopdvri4xuponw2@wubuntu>
- <00140e95-0fe2-1ce4-1433-a3211f9da20c@joelfernandes.org>
- <20221003161404.kdow5uyj7kvbqyxs@wubuntu>
- <160a2ded-b8e0-acf0-a8b6-df1b0f2c0fa8@joelfernandes.org>
- <20221004163039.vv3byszpg5dqjhy5@wubuntu>
- <0773b853-afdf-4368-3494-a5bd1cf01893@joelfernandes.org>
+        Wed, 5 Oct 2022 05:32:30 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F353C20F65;
+        Wed,  5 Oct 2022 02:32:28 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id v10-20020a17090a634a00b00205e48cf845so1098216pjs.4;
+        Wed, 05 Oct 2022 02:32:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XFZOsSDMe9wHpf/WB3nFd5N02lf7I387XsFoFJlnTns=;
+        b=klGF7pv1XRZVgFwOmBv+ahBiXI1LTGHclx5jplkLeTjSxOHbqEdINsHuhhklLX2rCB
+         S8ab0ifTW/sGYC34/+c2o6fDUb2hniG+I9+u7YgIvtBp9LEYwt3MbjHABc8aXiPpxtd5
+         yzN2sURtlRuP8/UJ0KtmJ6VygaJsErCjM2L4IYyWI+yONRwhRu9DUbfw7qE2t5MPAl0Q
+         eNzfmFuMRwH08yqSNBBXwyzAarfUJALi2lDFwMqq4dn0MJs1XiHkPVfz34KZHr56dWlV
+         zrzM/A64AUqFMociLg6uHDlFInsduh+zhzBohJKBd85Ti9Qr3hfOOM8VS9PAtVXHof5J
+         C4iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XFZOsSDMe9wHpf/WB3nFd5N02lf7I387XsFoFJlnTns=;
+        b=glmi+zoZWi01AnH9rjVqFmYCihWi8xtTMl7QPvhdLeR6GMGlZ8Ur4LFEhoGOydsppL
+         Fm+RdpAvwfXWA8z2LzZgF8FDpMMVykhm5iYqEA57O3Ox1wUkpJtlMdvhqvrIEX75md6T
+         EJn+U37/iMcri3NlecMyUrhdNhtsN+dEpd7VkV1TZ8zllwvOGkyCXkU/gZy/bfdT1QcS
+         Wj1Ir3vM+HiYpF6eAq52MusF9T0KXJB2pGB0wsY3R79hMWO/RVDq98hA2S/wZC/Bm1io
+         czdYeQDJ5OYjymYb6f0VoPPNRSO6d7yik9elj4ZaKl1PPzmd+T5AC8W9/EQhf/R7TAzV
+         y1HA==
+X-Gm-Message-State: ACrzQf0LprNzo1oKXSUmwT+jgPmtm8gLsYPmi7VyBoDrx4Q16HLp16yR
+        QtaMsqf/ugFXDoMU4m/DN40j0OkL300xBw==
+X-Google-Smtp-Source: AMsMyM7M6ocj2ZoxY+cro+bRw2jL0ELYSY53RCK6jy0sBZZrPet3k3NLv00w4N3LcVc1hvbBI3igMA==
+X-Received: by 2002:a17:90a:d48b:b0:20a:97fb:3eb with SMTP id s11-20020a17090ad48b00b0020a97fb03ebmr4041147pju.189.1664962348409;
+        Wed, 05 Oct 2022 02:32:28 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-92.three.co.id. [180.214.232.92])
+        by smtp.gmail.com with ESMTPSA id x4-20020a626304000000b00562019b961asm1206936pfb.188.2022.10.05.02.32.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Oct 2022 02:32:27 -0700 (PDT)
+Message-ID: <89aed08f-1e0b-258c-516d-97a30fd02840@gmail.com>
+Date:   Wed, 5 Oct 2022 16:32:23 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0773b853-afdf-4368-3494-a5bd1cf01893@joelfernandes.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v2] Documentation/mm/page_owner.rst: delete frequently
+ changing experimental data
+Content-Language: en-US
+To:     Yixuan Cao <caoyixuan2019@email.szu.edu.cn>, rppt@kernel.org
+Cc:     akiyks@gmail.com, akpm@linux-foundation.org, corbet@lwn.net,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        skhan@linuxfoundation.org, yejiajian2018@email.szu.edu.cn,
+        zhangyinan2019@email.szu.edu.cn
+References: <YwhJDJQkymdN0E2N@kernel.org>
+ <20221005091052.6631-1-caoyixuan2019@email.szu.edu.cn>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20221005091052.6631-1-caoyixuan2019@email.szu.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/04/22 15:48, Joel Fernandes wrote:
+On 10/5/22 16:10, Yixuan Cao wrote:
+> Thanks for Jonathan Corbet, Bagas Sanjaya and Mike Rapoport's
+> constructive suggestions. Notice that the size(1) output is
+> changing frequently, I remove the two tables and describe them
+> in a general way. Doing so avoids having to repeatedly maintain
+> the two tables due to kernel changes.
 > 
+
+For the patch description, better write:
+
+"The kernel size changes due to many factors, such as compiler
+ version, configuration, and the build environment. This makes
+ size comparison figures irrelevant to reader's setup.
+
+ Remove these figures and describe the effects of page owner
+ to the kernel size in general instead."
+
+> Signed-off-by: Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
+> ---
+>  Documentation/mm/page_owner.rst | 20 ++++----------------
+>  1 file changed, 4 insertions(+), 16 deletions(-)
 > 
-> On 10/4/2022 12:30 PM, Qais Yousef wrote:
-> > On 10/03/22 12:27, Joel Fernandes wrote:
-> >> There's a lot to unwind so I will reply in pieces after spending some time
-> >> thinking about it, but just for this part:
-> >>
-> >> On 10/3/2022 12:14 PM, Qais Yousef wrote:
-> >>>> In this case, there is no lock involved yet you have a dependency. But I don't
-> >>>> mean to sound depressing, and just because there are cases like this does not
-> >>>> mean we should not solve the lock-based ones. When I looked at Android, I saw
-> >>>> that it uses futex directly from Android Runtime code instead of using pthread.
-> >>>> So perhaps this can be trivially converted to FUTEX_LOCK_PI and then what we do
-> >>>> in the kernel will JustWork(Tm) ?
-> >>> I guess it will depend on individual libc implementation, but I thought all of
-> >>> them use FUTEX under the hood for pthreads mutexes.
-> >>>
-> >>> Maybe we can add a bootparam to force all futexes to be FUTEX_LOCK_PI?
-> >>>
-> >>
-> >> In the case of FUTEX_LOCK_PI, you have to store the TID of the 'lock owner' in
-> >> the futex word to signify that lock is held.
-> > 
-> > Right. So userspace has to opt-in.
-> > 
-> >> That wont work for the case above, Producer/Consumer signalling each other on a
-> >> bounded-buffer, right? That's not locking even though it is acquiring and
-> >> release of a limited resource.
-> > 
-> > Yes but as I tried to point out I don't think proxy-execution handles this case
-> > where you don't hold a lock explicitly. But I could be wrong.
-> 
-> I don't disagree. Proxy execution is an implementation detail, without more
-> information from userspace, any implementation cannot help. I was just
-> responding to your point about converting all futexes which you cannot do
-> without knowing what the futex is used for.
+> diff --git a/Documentation/mm/page_owner.rst b/Documentation/mm/page_owner.rst
+> index f18fd8907049..1b661ad85647 100644
+> --- a/Documentation/mm/page_owner.rst
+> +++ b/Documentation/mm/page_owner.rst
+> @@ -38,22 +38,10 @@ not affect to allocation performance, especially if the static keys jump
+>  label patching functionality is available. Following is the kernel's code
+>  size change due to this facility.
+>  
+> -- Without page owner::
+> -
+> -   text    data     bss     dec     hex filename
+> -   48392   2333     644   51369    c8a9 mm/page_alloc.o
+> -
+> -- With page owner::
+> -
+> -   text    data     bss     dec     hex filename
+> -   48800   2445     644   51889    cab1 mm/page_alloc.o
+> -   6662     108      29    6799    1a8f mm/page_owner.o
+> -   1025       8       8    1041     411 mm/page_ext.o
+> -
+> -Although, roughly, 8 KB code is added in total, page_alloc.o increase by
+> -520 bytes and less than half of it is in hotpath. Building the kernel with
+> -page owner and turning it on if needed would be great option to debug
+> -kernel memory problem.
+> +Although, enabling page owner increases kernel size by several kilobytes,
+> +most of this code is outside page allocator and its hot path. Building 
+> +the kernel with page owner and turning it on if needed would be great
+> +option to debug kernel memory problem.
+>  
 
-+1
+s/Although,/Although/
 
-I don't think I read much on literature on priority inversion caused by waiting
-on signals. I need to research that.
+Thanks for reviewing.
 
-I think it is considered a voluntary sleep and sane system design should ensure
-both of these tasks priorities don't lead to starvation based on expected rate
-of producer/consumer.
-
-It doesn't seem to be a problem for PREEMPT_RT since no body has done anything
-about it AFAICT?
-
-It could be the fact that in CFS priority is weights (or bandwidth) and this
-introduces this new class of problems. I think we should still ask the question
-if the priority assignment is wrong when this happens. If there's a clear
-relationship between producer/consumer, should they have the same priority if
-they do equal amount of work?
-
-> 
-> But I am thinking of messing around with rt_mutex_setprio() and some userspace
-> tests to see if I can make the sum of weights thing work for the *userspace
-> locking* usecases (FUTEX_LOCK_PI). Then run some tests and collect some traces.
-> Perhaps you can do that on the Android side as well.
-
-I'd be happy to help, yes :)
-
-In my view, the trickiest part would be is how to account for the stolen time.
-If C gets 3/5 share and runs for 2/5 before releasing the lock, then when
-A wakes up, it should perceive that it ran for 1/5 (time C stole from A while
-holding the lock) and run only for 1/5 before getting preempted. To preserve
-its 2/5 share. That is IF we want to be very accurate.
-
-If the 2 tasks are not on the same rq, I think that will not change how things
-are done a lot..
-
-> 
-> > IIUC Sebastian's
-> > understanding is similar to mine. Only 'locks' (FUTEX_LOCK_PI which ends up
-> > using rt-mutex) do PI inheritance.
-> > 
-> > So this signaling scenario is a new class of problems that wasn't handled
-> > before; to my understanding.
-> Most certainly, agreed.
-
-
-Sorry I am thinking out loud for most/all part of my reply :)
-
-
-Thanks!
-
---
-Qais Yousef
+-- 
+An old man doll... just what I always wanted! - Clara
