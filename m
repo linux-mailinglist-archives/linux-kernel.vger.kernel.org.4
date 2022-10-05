@@ -2,290 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA075F4DBF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 04:35:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 854695F4DCE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 04:39:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbiJECfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 22:35:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
+        id S229583AbiJECjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 22:39:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiJECfs (ORCPT
+        with ESMTP id S229462AbiJECjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 22:35:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8793315FEB;
-        Tue,  4 Oct 2022 19:35:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 31EC0B81BEF;
-        Wed,  5 Oct 2022 02:35:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1832C433C1;
-        Wed,  5 Oct 2022 02:35:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664937343;
-        bh=nWD4G4yTpfbFxxUWy4D29Qa7I+4ZXc2ps+gnDX/wDbA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=dA6KCfAypwa4v41fQfvgOc+eVNWZBZIZT3sj9wnfSi0LQKLjNWVXIoiMkyCbSj+Ia
-         fSQL44jWULNOjFa8T0XEMEvuOypMCRkyYd9cLuCmY6Pkw6b4guDUN71ninvdeTZSdC
-         MPQsof1zOTa/cWa8acQxsbeyl3gIoe1IZTfYqZAyvJPy2z9F0y22strZrrIGAKsTu1
-         1Z9WH7yma4dKTt+5DQMKLSW2NGTJ+DnPuK4FV0M2nD/5lFqWbWZxUjZ9sLXMX2b6T3
-         k5g0lVxzOO6JDELQ+lJcnna0TZ8bgKGl6/603CgYeIxFBIBWWw15yaYBS+JZgpWIc9
-         zUOaF0fNlh6vw==
-Date:   Tue, 4 Oct 2022 21:35:42 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     bhelgaas@google.com, lorenzo.pieralisi@arm.com,
-        refactormyself@gmail.com, kw@linux.com, rajatja@google.com,
-        kenny@panix.com, kai.heng.feng@canonical.com, abhsahu@nvidia.com,
-        sagupta@nvidia.com, treding@nvidia.com, jonathanh@nvidia.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com,
-        Krishna chaitanya chundru <quic_krichai@quicinc.com>
-Subject: Re: [PATCH V4 1/2] PCI/ASPM: Refactor ASPM L1SS control register
- programming
-Message-ID: <20221005023542.GA2190062@bhelgaas>
+        Tue, 4 Oct 2022 22:39:33 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35CB5725F;
+        Tue,  4 Oct 2022 19:39:28 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id e18so21198935edj.3;
+        Tue, 04 Oct 2022 19:39:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=D0ZIJOYUZpFYaYhZHcteg3Q0SZxAR5z+5PYYUc0zJ8g=;
+        b=SCBf8R/APnOyLchJYY7c4h8IB2yAIrejSu4nhioc3EZMKLQzmO2NxNUO41MOEQAHDa
+         q/dS1HAJfGYRwxMXTPVKbtEoXxsTXWRLcGswjY5yTIsVtGn9wLEehvWdCbUYoeHq+dJD
+         yto0NxB0KS60t4C2pxvn4PhN9AGiiF3FQYtY724azB5vHRcc6cZcTua5sLVqA2/ofkJR
+         ATPKW3uDHdLii8htcMmaB/DnKkGfxCBzUv8xl7v0M1UAdqVtoIfq7oIANkv4MUcRdeDH
+         SF1bSwLZIyUmNjzSkOEW27aQ5M2mKf2dSpYgZgxat8nNCg+kWmN+QxovbnnAMIq1X+n/
+         Cs8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=D0ZIJOYUZpFYaYhZHcteg3Q0SZxAR5z+5PYYUc0zJ8g=;
+        b=OjKvAFZRDmNN8KvS5TDkM8MFTeCaUzs25PPPsi0GprjAVi/B4nXz5i6N+yw2IJMJ5m
+         o/Ix+cdTRHQphEYbzHeWNvgL3kUc1ll5W81sHOuNwpdnInTNzUz1hzr2SRESa+1h0fuD
+         H3BGyT0GkD3zpllRXHeJVmGrUZDoH2hqVQUNUats5cOut0oKKVM/z4ZAP1g/htfIoafQ
+         b8uTpkUpYZlX63YA4z39X/LwZi/CT+f1biQtuxuZzKy3Jk8AjVVITBAG92AMNvxn6FNA
+         NVfkNB6PUdCzjD9VNK/ZdKzX5GIjA6DIYF/H7MViuyDzRi5O6uXE7zcg59ztHy6RlKPg
+         HxvA==
+X-Gm-Message-State: ACrzQf2ttabRc1ViT0hdgg/jxiZ3NdlST74okJjxXeqc0KKl/zoiVBnu
+        g/t8f+F+/qTCg0CQQmHs+DWYzLV9Shw5rIIXgTE=
+X-Google-Smtp-Source: AMsMyM5xS/HHP61aEUO1qhjdYAJGqXhVpjj9VJvRigByguUTYDTCeaB6tofMSf1TIOoDLwSqEvmD6mdcT2VToYjrbf8=
+X-Received: by 2002:a05:6402:27ca:b0:451:7b58:1b01 with SMTP id
+ c10-20020a05640227ca00b004517b581b01mr27276721ede.61.1664937567125; Tue, 04
+ Oct 2022 19:39:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <36fa13c5-e0f8-022f-77f7-7908e4df98b8@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220927155332.10762-1-andriy.shevchenko@linux.intel.com>
+ <20220927155332.10762-3-andriy.shevchenko@linux.intel.com>
+ <20221003215734.7l3cnb2zy57nrxkk@synopsys.com> <YzvusOI89ju9e5+0@smile.fi.intel.com>
+ <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com> <20221005021212.qwnbmq6p7t26c3a4@synopsys.com>
+In-Reply-To: <20221005021212.qwnbmq6p7t26c3a4@synopsys.com>
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+Date:   Tue, 4 Oct 2022 19:39:14 -0700
+Message-ID: <CAHQ1cqG9-SDM4_zUfCvxP7XD-U+PPOWqWDBFKU73ecomDpt9Jw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
+ if extcon is present"
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Ferry Toth <fntoth@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 12:12:22PM +0530, Vidya Sagar wrote:
-> On 9/30/2022 3:30 AM, Bjorn Helgaas wrote:
-> > On Tue, Sep 13, 2022 at 06:48:21PM +0530, Vidya Sagar wrote:
-> > > Refactor the code to extract the command code out to program
-> > > Control Registers-1 & 2 of L1 Sub-States capability to a new function
-> > > aspm_program_l1ss() and call it for both parent and child devices.
-> > > 
-> > > Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> > > ---
-> > > V4:
-> > > * New patch in this series
-> > > 
-> > >   drivers/pci/pcie/aspm.c | 63 +++++++++++++++++++----------------------
-> > >   1 file changed, 29 insertions(+), 34 deletions(-)
-> > > 
-> > > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> > > index a8aec190986c..ecbe3af4188d 100644
-> > > --- a/drivers/pci/pcie/aspm.c
-> > > +++ b/drivers/pci/pcie/aspm.c
-> > > @@ -455,6 +455,31 @@ static void pci_clear_and_set_dword(struct pci_dev *pdev, int pos,
-> > >        pci_write_config_dword(pdev, pos, val);
-> > >   }
-> > > 
-> > > +static void aspm_program_l1ss(struct pci_dev *dev, u32 ctl1, u32 ctl2)
-> > > +{
-> > > +     u16 l1ss = dev->l1ss;
-> > > +     u32 l1_2_enable;
-> > > +
-> > > +     /*
-> > > +      * Per PCIe r6.0, sec 5.5.4, T_POWER_ON in PCI_L1SS_CTL2 must be
-> > > +      * programmed prior to setting the L1.2 enable bits in PCI_L1SS_CTL1.
-> > > +      */
-> > > +     pci_write_config_dword(dev, l1ss + PCI_L1SS_CTL2, ctl2);
-> > > +
-> > > +     /*
-> > > +      * In addition, Common_Mode_Restore_Time and LTR_L1.2_THRESHOLD in
-> > > +      * PCI_L1SS_CTL1 must be programmed *before* setting the L1.2
-> > > +      * enable bits, even though they're all in PCI_L1SS_CTL1.
-> > > +      */
-> > > +     l1_2_enable = ctl1 & PCI_L1SS_CTL1_L1_2_MASK;
-> > > +     ctl1 &= ~PCI_L1SS_CTL1_L1_2_MASK;
-> > > +
-> > > +     pci_write_config_dword(dev, l1ss + PCI_L1SS_CTL1, ctl1);
-> > > +     if (l1_2_enable)
-> > > +             pci_write_config_dword(dev, l1ss + PCI_L1SS_CTL1,
-> > > +                                    ctl1 | l1_2_enable);
-> > > +}
-> > > +
-> > >   /* Calculate L1.2 PM substate timing parameters */
-> > >   static void aspm_calc_l1ss_info(struct pcie_link_state *link,
-> > >                                u32 parent_l1ss_cap, u32 child_l1ss_cap)
-> > > @@ -464,7 +489,6 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
-> > >        u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
-> > >        u32 ctl1 = 0, ctl2 = 0;
-> > >        u32 pctl1, pctl2, cctl1, cctl2;
-> > > -     u32 pl1_2_enables, cl1_2_enables;
-> > > 
-> > >        if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
-> > >                return;
-> > > @@ -513,39 +537,10 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
-> > >            ctl2 == pctl2 && ctl2 == cctl2)
-> > >                return;
-> > > 
-> > > -     /* Disable L1.2 while updating.  See PCIe r5.0, sec 5.5.4, 7.8.3.3 */
-> > > -     pl1_2_enables = pctl1 & PCI_L1SS_CTL1_L1_2_MASK;
-> > > -     cl1_2_enables = cctl1 & PCI_L1SS_CTL1_L1_2_MASK;
-> > > -
-> > > -     if (pl1_2_enables || cl1_2_enables) {
-> > > -             pci_clear_and_set_dword(child, child->l1ss + PCI_L1SS_CTL1,
-> > > -                                     PCI_L1SS_CTL1_L1_2_MASK, 0);
-> > > -             pci_clear_and_set_dword(parent, parent->l1ss + PCI_L1SS_CTL1,
-> > > -                                     PCI_L1SS_CTL1_L1_2_MASK, 0);
-> > > -     }
-> > > -
-> > > -     /* Program T_POWER_ON times in both ports */
-> > > -     pci_write_config_dword(parent, parent->l1ss + PCI_L1SS_CTL2, ctl2);
-> > > -     pci_write_config_dword(child, child->l1ss + PCI_L1SS_CTL2, ctl2);
-> > > -
-> > > -     /* Program Common_Mode_Restore_Time in upstream device */
-> > > -     pci_clear_and_set_dword(parent, parent->l1ss + PCI_L1SS_CTL1,
-> > > -                             PCI_L1SS_CTL1_CM_RESTORE_TIME, ctl1);
-> > > -
-> > > -     /* Program LTR_L1.2_THRESHOLD time in both ports */
-> > > -     pci_clear_and_set_dword(parent, parent->l1ss + PCI_L1SS_CTL1,
-> > > -                             PCI_L1SS_CTL1_LTR_L12_TH_VALUE |
-> > > -                             PCI_L1SS_CTL1_LTR_L12_TH_SCALE, ctl1);
-> > > -     pci_clear_and_set_dword(child, child->l1ss + PCI_L1SS_CTL1,
-> > > -                             PCI_L1SS_CTL1_LTR_L12_TH_VALUE |
-> > > -                             PCI_L1SS_CTL1_LTR_L12_TH_SCALE, ctl1);
-> > > -
-> > > -     if (pl1_2_enables || cl1_2_enables) {
-> > > -             pci_clear_and_set_dword(parent, parent->l1ss + PCI_L1SS_CTL1, 0,
-> > > -                                     pl1_2_enables);
-> > > -             pci_clear_and_set_dword(child, child->l1ss + PCI_L1SS_CTL1, 0,
-> > > -                                     cl1_2_enables);
-> > > -     }
-> > > +     aspm_program_l1ss(parent,
-> > > +                       ctl1 | (pctl1 & PCI_L1SS_CTL1_L1_2_MASK), ctl2);
-> > > +     aspm_program_l1ss(child,
-> > > +                       ctl1 | (cctl1 & PCI_L1SS_CTL1_L1_2_MASK), ctl2);
-> > 
-> > This doesn't seem right to me.  I think the intent is to update
-> > LTR_L1.2_THRESHOLD and Common_Mode_Restore_Time, which are encoded in
-> > "ctl1".  It does do that, but it looks like it *also* clears
-> > everything except PCI_L1SS_CTL1_L1_2_MASK, i.e., the L1.1 Enable bits,
-> > the Link Activation bits, and the RsvdP bits, which I don't think we
-> > should be clearing.  Am I missing something?
-> 
-> Agree. Instead of updating some of the register fields with new values while
-> keeping other fields intact, this code programs the register fields with
-> only new values and also programming all other fields to zero which is
-> wrong.
-> Thanks for catching this. I missed it as the card with which I had tested
-> didn't have L1.1 support.
+On Tue, Oct 4, 2022 at 7:12 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+>
+> On Tue, Oct 04, 2022, Ferry Toth wrote:
+> > Hi
+> >
+> > Op 04-10-2022 om 10:28 schreef Andy Shevchenko:
+> > > On Mon, Oct 03, 2022 at 09:57:35PM +0000, Thinh Nguyen wrote:
+> > > > On Tue, Sep 27, 2022, Andy Shevchenko wrote:
+> > > > > This reverts commit 0f01017191384e3962fa31520a9fd9846c3d352f.
+> > > > >
+> > > > > As pointed out by Ferry this breaks Dual Role support on
+> > > > > Intel Merrifield platforms.
+> > > > Can you provide more info than this (any debug info/description)? It
+> > > > will be difficult to come back to fix with just this to go on. The
+> > > > reverted patch was needed to fix a different issue.
+> >
+> > On Merrifield we have a switch with extcon driver to switch between host and
+> > device mode. Now with commit 0f01017, device mode works. In host mode the
+> > root hub appears, but no devices appear. In the logs there are no messages
+> > from tusb1210, but there should be because lately there normally are
+> > (harmless) error messages. Nothing in the logs point in the direction of
+> > tusb1210 not being probed.
+> >
+> > The discussion is here: https://urldefense.com/v3/__https://lkml.org/lkml/2022/9/24/237__;!!A4F2R9G_pg!avfDjiGwi8xu0grHYrQQTZEEUnmaKu82xxdty0ZltxyU8BkoFD6AMq4a-7STYiKxNQpdYXgP1QG_IZbroEM$
+> >
+> > I tried moving some code as suggested without result: https://urldefense.com/v3/__https://lkml.org/lkml/2022/9/24/434__;!!A4F2R9G_pg!avfDjiGwi8xu0grHYrQQTZEEUnmaKu82xxdty0ZltxyU8BkoFD6AMq4a-7STYiKxNQpdYXgP1QG_boaK8Qw$
+> >
+> > And with success: https://urldefense.com/v3/__https://lkml.org/lkml/2022/9/25/285__;!!A4F2R9G_pg!avfDjiGwi8xu0grHYrQQTZEEUnmaKu82xxdty0ZltxyU8BkoFD6AMq4a-7STYiKxNQpdYXgP1QG_MbbbZII$
+> >
+> > So, as Andrey Smirnov writes "I think we'd want to figure out why the
+> > ordering is important if we want to justify the above fix."
+> >
+> > > It's already applied, but Ferry probably can provide more info if you describe
+> > > step-by-step instructions. (I'm still unable to test this particular type of
+> > > features since remove access is always in host mode.)
+> > >
+> > I'd be happy to test.
+>
+> Thanks!
+>
+> Does the failure only happen the first time host is initialized? Or can
+> it recover after switching to device then back to host mode?
+>
+> Probably the failure happens if some step(s) in dwc3_core_init() hasn't
+> completed.
+>
+> tusb1210 is a phy driver right? The issue is probably because we didn't
+> initialize the phy yet. So, I suspect placing dwc3_get_extcon() after
+> initializing the phy will probably solve the dependency problem.
+>
+> You can try something for yourself or I can provide something to test
+> later if you don't mind (maybe next week if it's ok).
 
-> I think the following modification should fix this issue.
-> 
-> 
-> @@ -537,10 +537,23 @@ static void aspm_calc_l1ss_info(struct pcie_link_state
-> *link,
->             ctl2 == pctl2 && ctl2 == cctl2)
->                 return;
-> 
-> -       aspm_program_l1ss(parent,
-> -                         ctl1 | (pctl1 & PCI_L1SS_CTL1_L1_2_MASK), ctl2);
-> -       aspm_program_l1ss(child,
-> -                         ctl1 | (cctl1 & PCI_L1SS_CTL1_L1_2_MASK), ctl2);
-> +       pctl1 &= ~(PCI_L1SS_CTL1_CM_RESTORE_TIME |
-> +                  PCI_L1SS_CTL1_LTR_L12_TH_VALUE |
-> +                  PCI_L1SS_CTL1_LTR_L12_TH_SCALE);
-> +       pctl1 |= (ctl1 & (PCI_L1SS_CTL1_CM_RESTORE_TIME |
-> +                         PCI_L1SS_CTL1_LTR_L12_TH_VALUE |
-> +                         PCI_L1SS_CTL1_LTR_L12_TH_SCALE)
-> +                );
-> +       aspm_program_l1ss(parent, pctl1, ctl2);
-> +
-> +       cctl1 &= ~(PCI_L1SS_CTL1_CM_RESTORE_TIME |
-> +                  PCI_L1SS_CTL1_LTR_L12_TH_VALUE |
-> +                  PCI_L1SS_CTL1_LTR_L12_TH_SCALE);
-> +       cctl1 |= (ctl1 & (PCI_L1SS_CTL1_CM_RESTORE_TIME |
-> +                         PCI_L1SS_CTL1_LTR_L12_TH_VALUE |
-> +                         PCI_L1SS_CTL1_LTR_L12_TH_SCALE)
-> +                );
-> +       aspm_program_l1ss(child, cctl1, ctl2);
->  }
-> 
->  static void pcie_aspm_cap_init(struct pcie_link_state *link, int blacklist)
-> 
-> But, given that you mentioned we shouldn't be touching Rsvd also, I'm
-> wondering if the following can cause any issue?
-> With the top of the tree code, the CMRT in ctrl1 register is updated only
-> for the upstream device whereas with my change, it gets updated even for the
-> downstream device. Although spec says that it is Rsvd for a downstream
-> device (i.e. upstream port), I'm wondering if we should really avoid
-> touching it?
-
-I'm not sure it's worth bothering about at this point.  It feels a
-little OCD right now.
-
-> If the answer is yes, I think it is better to drop the modifications done to
-> aspm_calc_l1ss_info() function and just proceed with rest of the
-> modifications given the way it is differentiating between upstream and
-> downstream devices while updating the registers.
-> What are your comments on this?
-
-I thought we had some indication that Common_Mode_Restore_Time and
-LTR_L1.2_THRESHOLD should be programmed *before* setting the L1.2
-enable bits, even though they're all in PCI_L1SS_CTL1.
-
-The first place that comment appears is
-https://lore.kernel.org/linux-pci/20220907210540.GA140988@bhelgaas/,
-but I can't remember if it actually solved a problem or if it was just
-more OCD reading of the spec, which says "This field must only be
-modified when the ASPM L1.2 Enable bit is Clear".
-
-I'm inclined to keep the aspm_program_l1ss() changes unless we think
-they're risky, because I think it is a small step forward, at least in
-terms of reducing the number of config accesses.
-
-On pci/aspm, I currently have your v4 patches plus these tweaks:
-
-diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-index dc2e21c7a9d4..016d222b07c7 100644
---- a/drivers/pci/pcie/aspm.c
-+++ b/drivers/pci/pcie/aspm.c
-@@ -537,10 +537,21 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
- 	    ctl2 == pctl2 && ctl2 == cctl2)
- 		return;
- 
--	aspm_program_l1ss(parent,
--			  ctl1 | (pctl1 & PCI_L1SS_CTL1_L1_2_MASK), ctl2);
--	aspm_program_l1ss(child,
--			  ctl1 | (cctl1 & PCI_L1SS_CTL1_L1_2_MASK), ctl2);
-+	pctl1 &= ~(PCI_L1SS_CTL1_CM_RESTORE_TIME |
-+		   PCI_L1SS_CTL1_LTR_L12_TH_VALUE |
-+		   PCI_L1SS_CTL1_LTR_L12_TH_SCALE);
-+	pctl1 |= (ctl1 & (PCI_L1SS_CTL1_CM_RESTORE_TIME |
-+			  PCI_L1SS_CTL1_LTR_L12_TH_VALUE |
-+			  PCI_L1SS_CTL1_LTR_L12_TH_SCALE));
-+	aspm_program_l1ss(parent, pctl1, ctl2);
-+
-+	cctl1 &= ~(PCI_L1SS_CTL1_CM_RESTORE_TIME |
-+		   PCI_L1SS_CTL1_LTR_L12_TH_VALUE |
-+		   PCI_L1SS_CTL1_LTR_L12_TH_SCALE);
-+	cctl1 |= (ctl1 & (PCI_L1SS_CTL1_CM_RESTORE_TIME |
-+			  PCI_L1SS_CTL1_LTR_L12_TH_VALUE |
-+			  PCI_L1SS_CTL1_LTR_L12_TH_SCALE));
-+	aspm_program_l1ss(child, cctl1, ctl2);
- }
- 
- static void pcie_aspm_cap_init(struct pcie_link_state *link, int blacklist)
-@@ -727,9 +738,6 @@ void pci_save_aspm_l1ss_state(struct pci_dev *dev)
- 	u16 l1ss = dev->l1ss;
- 	u32 *cap;
- 
--	if (!pci_is_pcie(dev))
--		return;
--
- 	if (!l1ss)
- 		return;
- 
-@@ -748,9 +756,6 @@ void pci_restore_aspm_l1ss_state(struct pci_dev *dev)
- 	u32 *cap, ctl1, ctl2;
- 	u16 l1ss = dev->l1ss;
- 
--	if (!pci_is_pcie(dev))
--		return;
--
- 	if (!l1ss)
- 		return;
- 
+FWIW, I just got the same HW Ferry has last week and am planning to
+work on this over the weekend.
