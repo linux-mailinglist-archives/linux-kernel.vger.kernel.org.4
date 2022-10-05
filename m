@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3949C5F58EF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ECEF5F58F2
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbiJERPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 13:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
+        id S230370AbiJERPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 13:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbiJEROu (ORCPT
+        with ESMTP id S230363AbiJEROz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 13:14:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A461E62E8;
-        Wed,  5 Oct 2022 10:14:38 -0700 (PDT)
+        Wed, 5 Oct 2022 13:14:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72065A198;
+        Wed,  5 Oct 2022 10:14:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1DA47B81EC0;
-        Wed,  5 Oct 2022 17:14:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 719EFC4314D;
-        Wed,  5 Oct 2022 17:14:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4479C6156F;
+        Wed,  5 Oct 2022 17:14:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B2B8C433C1;
+        Wed,  5 Oct 2022 17:14:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664990075;
-        bh=C2ehtRTdCg39q9bItLZO3vn1F8+p+kdTKZzHvn9xQoM=;
+        s=k20201202; t=1664990078;
+        bh=wJnnXErmXwIuS63pnOYPIZMoevXGwPTwZXkAnc5SFRg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eHj9/vi3k9+ujlImWfuzvR5rivHk5YiEX2LRRnKzyUWhkjw2Vp83PAWPNp3i2mqp3
-         cHQ/hwv+Cfpt5N6XjC79y/HgcwRMp/QK9L++iu8pBH2aQa3OZtwF13siUAuVx3COvz
-         lCv3Mu+1oxFw3zPZ+2CCXbzeksH9JpaJZL8syYLmp/nXs5YdzbDEdbdtkbHBuzK49z
-         FN4gWnfCdRru7PpZv6/n+/a8I+WF6JDbjROn5uwWXzlnZF+L3KKC8LtsrLOYaMN7Km
-         w6UWJPtlqlFEaBnRtKJatFDQF59tsaUsztpSl1BBYdJDMX+jBH8DFKdYZk2j0bH9vj
-         DkbYCTRO8QHdg==
+        b=argNZOR8Kv0lIi1n4XhQAUao3CpXMOun1Insci6BNIyqTffXlQGyinpCqCnAy9394
+         7CaQg0s5dikONMfgDA4V2YxxotOhWe30fDpm13XfALC8WcgQ127SiT+yPYiGnPc+Tp
+         gDSIpafpUt3bhdTMDX+sqyLgk3N8LGfqxwrukyqf++qF7jNQ1g0yUevKFVZuWk1EqI
+         ozmfLIqE8YETr1PFrWYfnjSAtpYWOkbfHuke9VWmEVYlOm6mO4CarklkKr2JE//er6
+         Sv13IXl1ddjVSVwemC0z8AR8LFx7HC/mCOYtqWF1VnLtu2XYr7CfF5D4U0st0x8FSj
+         giZ5nbM9671oA==
 From:   Conor Dooley <conor@kernel.org>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -43,9 +43,9 @@ To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Conor Dooley <conor.dooley@microchip.com>
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH 5/6] riscv: stop selecting SiFive clock and serial drivers directly
-Date:   Wed,  5 Oct 2022 18:13:48 +0100
-Message-Id: <20221005171348.167476-6-conor@kernel.org>
+Subject: [PATCH 6/6] riscv: stop directly selecting drivers for SOC_CANAAN
+Date:   Wed,  5 Oct 2022 18:13:49 +0100
+Message-Id: <20221005171348.167476-7-conor@kernel.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221005171348.167476-1-conor@kernel.org>
 References: <20221005171348.167476-1-conor@kernel.org>
@@ -62,30 +62,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-The SiFive clock and serial drivers will now default to the value of
-SOC_SIFIVE so there is no need to directly select their symbols
-anymore.
+The serial and clock drivers will be enabled by default if the symbol
+itself is enabled, so stop directly selecting the drivers in
+Kconfigs.socs.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- arch/riscv/Kconfig.socs | 4 ----
- 1 file changed, 4 deletions(-)
+ arch/riscv/Kconfig.socs | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-index 83f14afd4086..b6f4cfad159b 100644
+index b6f4cfad159b..0ddbc9eb7af4 100644
 --- a/arch/riscv/Kconfig.socs
 +++ b/arch/riscv/Kconfig.socs
-@@ -8,10 +8,6 @@ config SOC_MICROCHIP_POLARFIRE
- 
- config SOC_SIFIVE
- 	bool "SiFive SoCs"
+@@ -40,13 +40,10 @@ config SOC_CANAAN
+ 	bool "Canaan Kendryte K210 SoC"
+ 	depends on !MMU
+ 	select CLINT_TIMER if RISCV_M_MODE
 -	select SERIAL_SIFIVE if TTY
 -	select SERIAL_SIFIVE_CONSOLE if TTY
--	select CLK_SIFIVE
--	select CLK_SIFIVE_PRCI
  	select SIFIVE_PLIC
- 	select ERRATA_SIFIVE if !XIP_KERNEL
+ 	select ARCH_HAS_RESET_CONTROLLER
+ 	select PINCTRL
+ 	select COMMON_CLK
+-	select COMMON_CLK_K210
  	help
+ 	  This enables support for Canaan Kendryte K210 SoC platform hardware.
+ 
 -- 
 2.37.3
 
