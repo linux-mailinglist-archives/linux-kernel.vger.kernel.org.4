@@ -2,198 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C4C5F5BCB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 23:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B40F65F5BCD
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 23:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231238AbiJEVgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 17:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47812 "EHLO
+        id S231261AbiJEVg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 17:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiJEVgK (ORCPT
+        with ESMTP id S229507AbiJEVgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 17:36:10 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D6A7F249
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 14:36:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1665005769; x=1696541769;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Ktz8tDfnp0zJ/uEQE1L0r1FZfkFQaxNTK01YLZAUUsg=;
-  b=aOa3wAMzvldn/H7JA2hef2qF7n9P3HFRmXpIPKENhHaJ0R0nz9nIoK/o
-   dbLPWYUFAw9AWmJ1WHuUlRdGRYSSs2YBqYTxlAwBv3NlVce4OxjUnxVRj
-   YZd9+lQ6lnX9wbp+rQvLRq7XUms2z79dh+MTGitIy/+QdJxxhpbu/c3zP
-   YU5/Gw+6a4kv+mztLeRS7OI8OF+YtdgIRv+uRLP2qZtdlkWXkGOFPuLWX
-   OBYtG1wwMgj1JAnwkQlLGS9LUNQZYB6MMILkkoQc2HchDov0UN9k4FKIY
-   5E7Wbx7Ick1qibZyzsojZEiLKHCdTjzU+iGrS9OftIzbJNktIBI0RFBwA
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.95,162,1661788800"; 
-   d="scan'208";a="218256937"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 06 Oct 2022 05:36:08 +0800
-IronPort-SDR: RrScL0xJt5IJUD7HyogZ7Cy7CXtUcPCddQWfaSJTkN6zj07t0KNKpOTDOver6wjMiTbqio/BrU
- zpRiij/WQpeIzQZM/Ljao0s7qO6Mwgiirg/OC1dT5/8AqxKWDXg3jBB30p8rt8ePJpxwiwjnOo
- SMP5iXzjuWVYrVBDZsFyx9jioxklBBpSy4KWH33Rjz7+zPE7+ts9qY3NpiJAXojEBnvKpgONyT
- nGAJd4n3q0IHQPPsR8H8gOW/dukaiA089FcDi9b+eNsTEccl3r7KK7q5YsHgS3l3b8NZioqXBZ
- BOU2fg3Su0DsWAi58ej7AkgF
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Oct 2022 13:55:55 -0700
-IronPort-SDR: a6l5iyMd0/1yqUNg8TYvNR40GlBSQyjrqeD9cnQZiDobp1uEuvwwDnWzlqkEz4S7KK1/g6IDF6
- K6IorSbDWeDRYO83XU3Ta5MGcCjQeQSBafXAOpzU18K4BxqngJ+1TZTMSwYQSXUkmoDucmuBYi
- 6ehgaCXROrT2m5tQDbiCPmVA5iIvDlXIZrihGIq6d4g/LOS8Bal8CAIkOIhtW51tD8RYM7iUlz
- 0sddEkVz04jKxFJFsdHs98xhl81ivvOlswTPmAutKFVq9S7PzMPoevLqq6U4w6+UMOdwV8kAW8
- JwY=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Oct 2022 14:36:09 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MjSYh3JbTz1RvTp
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 14:36:08 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1665005767; x=1667597768; bh=Ktz8tDfnp0zJ/uEQE1L0r1FZfkFQaxNTK01
-        YLZAUUsg=; b=ij9uF493PVWY4wLhPyEEdNP9HnayAxUtXUqQr/fy0ENQGC4tCrD
-        QJ3JO960AnKGnl6QUSdUowyUbDy9xKFuhftR0XjNBP9vik5Ad2y366WtNYh9ZBiG
-        nxYvkogJ0Ys6vE+h25r0EW4Q8odrz4ljVNRwQXKFHXlVK0CvsADRj6kN0iLJghcG
-        IyBbGfVf6waJDBudjYK03V2wHRyCuC0NIXRfT4ndcqZ6T7XGHYa2ODYObdulCdYP
-        k3koRXVeSIXkaiC0/vqk8zAfhFyXfhXsG5RXTresp6KNvEmbXBb7YMTAW2CWR2mG
-        f5VnjEoPeBa6I79zg7T9YE9Aq3lMcyD+Yqg==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id eIGqUJZL77Ha for <linux-kernel@vger.kernel.org>;
-        Wed,  5 Oct 2022 14:36:07 -0700 (PDT)
-Received: from [10.225.163.106] (unknown [10.225.163.106])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MjSYf1yWDz1RvLy;
-        Wed,  5 Oct 2022 14:36:06 -0700 (PDT)
-Message-ID: <5db6a7bc-dfeb-76e1-6899-7041daa934cf@opensource.wdc.com>
-Date:   Thu, 6 Oct 2022 06:36:05 +0900
+        Wed, 5 Oct 2022 17:36:55 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E2950181
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 14:36:51 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id c7so2582pgt.11
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 14:36:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TF3OC6aX+P0/YGKKHwRrwWdaAzeL9LkSBSOfZoSBAC0=;
+        b=oeejbn6VwmiIux3gXlUR/HrhVit694CVIpMXFHW/7M2iid6Nz9adUdP4w0897QPQ0f
+         AlJznMc+jQne3Qz8i6BgYiSXZty5gu9EXjPSpQYxSSATmn3Pd88oaHduVXIAdfWE6SJ6
+         ZZO2HW5rYuY5mMtCLl/6EurwmV0yJtwwycNhoa9mf0IhLVizyTL6BdnuWuW0putAV9pe
+         tgPiNNbPXsManepXj/iz5z672ElsIuazoSEeJ565vbD1tdAUijWzd9gWF8JnDN11hMOl
+         10zrZt7cdHKqyBZSCk2jkEVScs3CU+rb+Lqr2eDtzgsYgvIlcrusgM1T4csNDKZ1Hjxx
+         hRMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TF3OC6aX+P0/YGKKHwRrwWdaAzeL9LkSBSOfZoSBAC0=;
+        b=wCVjqr14b3buVhLL8xuIe4p4rHkA4lxHAElbgT/aq/bDko03o036YmzTxrjGbely1L
+         zVi3/javK2pjdu+qYITO1wMHww4WbYoHyiyb4QddumiAMBYNXcUkeuwl/dkVbMFnQuja
+         UnUijTJ35ztEQU9KkKUXM/CHOhiUllGY+beFZTcGJdcFwSroFRrmJpTNH4QALWB6gGj7
+         IBPPSBPoiteUhlj8UopVw4i41/gT2rJddqORU8A4qUxl4NEo3f/uRteH9KTvfn4Ui8cY
+         BvhXtSjLEhpkbdrzuDNXwc6mYH2ZL6SImVL/yYkRIF/JLXl18+eR2mreWAImi3yIeMhm
+         S0DQ==
+X-Gm-Message-State: ACrzQf3L+5nEKms9ifqbMYS8P6nA/Vgw9BCuLK1roChIR600K3JSm05p
+        CYqrP4AoO3XuqT8JzT9o6DLSXEd8NkUMUQ==
+X-Google-Smtp-Source: AMsMyM7pUTMk5eCHcXlGZORW0DhE5abW+CoB8j2tBSPQbCQ4DzM8g39OrVpf+ZCjY0PIkbZ/jwzssg==
+X-Received: by 2002:a63:d843:0:b0:43c:8ce9:2aab with SMTP id k3-20020a63d843000000b0043c8ce92aabmr1576780pgj.556.1665005810643;
+        Wed, 05 Oct 2022 14:36:50 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id z1-20020a170903018100b0016c9e5f290esm10956410plg.10.2022.10.05.14.36.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 14:36:50 -0700 (PDT)
+Date:   Wed, 5 Oct 2022 21:36:46 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sandipan Das <sandipan.das@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [kvm-unit-tests PATCH 1/2] x86/pmu: Update rdpmc testcase to
+ cover #GP and emulation path
+Message-ID: <Yz347iKzq7cbjMdw@google.com>
+References: <20220905123946.95223-1-likexu@tencent.com>
+ <20220905123946.95223-6-likexu@tencent.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v5 0/7] libsas and drivers: NCQ error handling
-Content-Language: en-US
-To:     Niklas Cassel <Niklas.Cassel@wdc.com>,
-        John Garry <john.garry@huawei.com>
-Cc:     "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "jinpu.wang@cloud.ionos.com" <jinpu.wang@cloud.ionos.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linuxarm <linuxarm@huawei.com>,
-        yangxingui <yangxingui@huawei.com>,
-        yanaijie <yanaijie@huawei.com>
-References: <1664262298-239952-1-git-send-email-john.garry@huawei.com>
- <YzwvpUUftX6Ziurt@x1-carbon>
- <cfa52b91-db81-a179-76c2-8a61266c099d@huawei.com>
- <27148ec5-d1ae-d9a2-1b00-a4c34d2da198@huawei.com>
- <Yz33FGwd3YvQUAqT@x1-carbon>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <Yz33FGwd3YvQUAqT@x1-carbon>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220905123946.95223-6-likexu@tencent.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/6/22 06:28, Niklas Cassel wrote:
-> On Wed, Oct 05, 2022 at 09:53:52AM +0100, John Garry wrote:
->> On 04/10/2022 15:04, John Garry wrote:
->>
->> Hi Niklas,
->>
->> Could you try a change like this on top:
->>
->> void sas_ata_device_link_abort(struct domain_device *device, bool
->> force_reset)
->> {
->> 	struct ata_port *ap = device->sata_dev.ap;
->> 	struct ata_link *link = &ap->link;
->>
->> +	device->sata_dev.fis[2] = ATA_ERR | ATA_DRDY;
->> +	device->sata_dev.fis[3] = 0x04;
->>
->> 	link->eh_info.err_mask |= AC_ERR_DEV;
->> 	if (force_reset)
->> 		link->eh_info.action |= ATA_EH_RESET;
->> 	ata_link_abort(link);
->> }
->> EXPORT_SYMBOL_GPL(sas_ata_device_link_abort);
->>
->> I tried it myself and it looked to work ok, except I have a problem with my
->> arm64 system in that the read log ext times-out and all TF show "device
->> error", like:
+On Mon, Sep 05, 2022, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
 > 
-> Do you know why it fails to read the log?
-> Can you read the NCQ Command Error log using ATA16 passthrough commands?
+> Specifying an unsupported PMC encoding will cause a #GP(0).
+> All testcases should be passed when the KVM_FEP prefix is added.
 > 
-> sudo sg_sat_read_gplog -d --log=0x10 /dev/sdc
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
+>  lib/x86/processor.h |  5 ++++-
+>  x86/pmu.c           | 13 +++++++++++++
+>  2 files changed, 17 insertions(+), 1 deletion(-)
 > 
-> The first byte is the last NCQ tag (in hex) that failed.
+> diff --git a/lib/x86/processor.h b/lib/x86/processor.h
+> index 10bca27..9c490d9 100644
+> --- a/lib/x86/processor.h
+> +++ b/lib/x86/processor.h
+> @@ -441,7 +441,10 @@ static inline int wrmsr_safe(u32 index, u64 val)
+>  static inline uint64_t rdpmc(uint32_t index)
+>  {
+>  	uint32_t a, d;
+> -	asm volatile ("rdpmc" : "=a"(a), "=d"(d) : "c"(index));
+> +	if (is_fep_available())
+> +		asm volatile (KVM_FEP "rdpmc" : "=a"(a), "=d"(d) : "c"(index));
+> +	else
+> +		asm volatile ("rdpmc" : "=a"(a), "=d"(d) : "c"(index));
 
-libata issues read log as a non-ncq command under EH. So the NCQ error log
-will not help.
+Hmm, not sure how I feel about the idea of always use FEP in a common helper when
+it's available.  Part of me likes the idea, but part of me is worried that it
+will cause confusion due to not being explicit.
 
-> 
-> 
-> I tried your patch, and it looks good:
-> 
-> [ 6656.228131] ata5.00: exception Emask 0x0 SAct 0x460000 SErr 0x0 action 0x0
-> [ 6656.252759] ata5.00: failed command: WRITE FPDMA QUEUED
-> [ 6656.271554] ata5.00: cmd 61/00:00:00:d8:8a/04:00:ce:03:00/40 tag 17 ncq dma 524288 out
->                         res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device error)
-> [ 6656.309308] ata5.00: status: { DRDY ERR }
-> [ 6656.316403] ata5.00: error: { ABRT }
-> [ 6656.322300] ata5.00: failed command: WRITE FPDMA QUEUED
-> [ 6656.330871] ata5.00: cmd 61/00:00:00:dc:8a/04:00:ce:03:00/40 tag 18 ncq dma 524288 out
->                         res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device error)
-> [ 6656.356295] ata5.00: status: { DRDY ERR }
-> [ 6656.362931] ata5.00: error: { ABRT }
-> [ 6656.368897] ata5.00: failed command: WRITE FPDMA QUEUED
-> [ 6656.377471] ata5.00: cmd 61/00:00:00:d4:8a/04:00:ce:03:00/40 tag 22 ncq dma 524288 out
->                         res 43/04:00:ff:d7:8a/00:00:ce:03:00/40 Emask 0x400 (NCQ error) <F>
-> [ 6656.403149] ata5.00: status: { DRDY SENSE ERR }
-> [ 6656.410624] ata5.00: error: { ABRT }
-> 
-> However, since this is a change from the existing behavior of this driver,
-> this could go as a separate patch, and does not need to delay this series.
-> 
-> 
-> 
-> I also think that we should do a similar patch for sas_ata_task_done():
-> 
-> diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
-> index d35c9296f738..648d0693ceee 100644
-> --- a/drivers/scsi/libsas/sas_ata.c
-> +++ b/drivers/scsi/libsas/sas_ata.c
-> @@ -140,7 +140,7 @@ static void sas_ata_task_done(struct sas_task *task)
->                         }
+Unless there's a pressing need to force emulation, let's punt the FEP stuff for
+now.  More below.
+
+>  	return a | ((uint64_t)d << 32);
+>  }
 >  
->                         dev->sata_dev.fis[3] = 0x04; /* status err */
-> -                       dev->sata_dev.fis[2] = ATA_ERR;
-> +                       dev->sata_dev.fis[2] = ATA_ERR | ATA_DRDY;
->                 }
->         }
-> 
-> To avoid all SAS errors from being reported as HSM errors.
-> 
-> 
-> Kind regards,
-> Niklas
+> diff --git a/x86/pmu.c b/x86/pmu.c
+> index 203a9d4..11607c0 100644
+> --- a/x86/pmu.c
+> +++ b/x86/pmu.c
+> @@ -758,12 +758,25 @@ static bool pmu_is_detected(void)
+>  	return detect_intel_pmu();
+>  }
+>  
+> +static void rdpmc_unsupported_counter(void *data)
+> +{
+> +	rdpmc(64);
+> +}
+> +
+> +static void check_rdpmc_cause_gp(void)
 
--- 
-Damien Le Moal
-Western Digital Research
+Maybe check_invalid_rdpmc_gp()?  There are multiple reasons RDPMC can #GP, the
+one that is being relied on to guarantee #GP is specifically that the PMC is
+invalid.
+dd
 
+> +{
+> +	report(test_for_exception(GP_VECTOR, rdpmc_unsupported_counter, NULL),
+
+I'd really like to move away from test_for_exception() and use ASM_TRY().  Ignoring
+FEP for the moment, the most extensible solution is to provide a safe variant:
+
+static inline int rdpmc_safe(u32 index, uint64_t *val)
+{
+	uint32_t a, d;
+
+	asm volatile (ASM_TRY("1f")
+		      "rdpmc"
+		      : "=a"(a), "=d"(d) : "c"(index));
+	*val = (uint64_t)a | ((uint64_t)d << 32);
+	return exception_vector();
+}
+
+static inline uint64_t rdpmc(uint32_t index)
+{
+	uint64_t val;
+	int vector = rdpmc_safe(index, &val);
+
+	assert_msg(!vector, "Unexpected %s on RDPMC(%d)",
+		   exception_mnemonic(vector), index);
+	return val;
+}
+
+
+For long-term emulation validation, the best idea I have at this point is to do
+add a config knob to opt-in to using FEP in _all_ common helpers (where "all"
+means everything KVM actually emulates).  It'd take some macro magic, but it'd
+be easier to maintain (no need to have two paths in every helper) and would be
+controllable.
+
+> +		"rdpmc with invalid PMC index raises #GP");
+> +}
+> +
+>  int main(int ac, char **av)
+>  {
+>  	setup_vm();
+>  	handle_irq(PC_VECTOR, cnt_overflow);
+>  	buf = malloc(N*64);
+>  
+> +	check_rdpmc_cause_gp();
+> +
+>  	if (!pmu_is_detected())
+>  		return report_summary();
+>  
+> -- 
+> 2.37.3
+> 
