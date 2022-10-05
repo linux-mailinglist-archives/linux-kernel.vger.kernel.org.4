@@ -2,96 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 892235F5222
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB7D5F5228
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 12:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiJEJ63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 05:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49920 "EHLO
+        id S229808AbiJEKDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 06:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiJEJ6Y (ORCPT
+        with ESMTP id S229508AbiJEKDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 05:58:24 -0400
+        Wed, 5 Oct 2022 06:03:06 -0400
 Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71336EF34;
-        Wed,  5 Oct 2022 02:58:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE1E57263
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 03:03:05 -0700 (PDT)
 Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id B466F580390;
-        Wed,  5 Oct 2022 05:58:20 -0400 (EDT)
+        by mailnew.nyi.internal (Postfix) with ESMTP id E1D3D5803A4;
+        Wed,  5 Oct 2022 06:03:04 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Wed, 05 Oct 2022 05:58:20 -0400
+  by compute3.internal (MEProxy); Wed, 05 Oct 2022 06:03:04 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
         :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1664963900; x=1664967500; bh=MxxMRDfEHO
-        Qi5+nDumNVbTgRThG0gUKh/x3oMnocNco=; b=mG+OYpQFz6324WqipXqg6d0xeZ
-        sOq4/cKAkQH8uMWu7ERXlX8iP1Ccrr/uOmLRnO4STFcbI8UOsVMmKR+Mlq6PVMDb
-        7jV0TmdAG060BvIT2ovC/7OJqIi1T25dGQ0poIeHjAHC3gf+CJgtfYHhDVveNWbB
-        DNSnTXnQcBS5x2UWo4L43Emmx9bq2PDeyaj6fh+izC0Rj0Z0ms7HGEedp9xFRJRT
-        IdleXCv/KYBMWtSLdzVZqmI6UqC3Am1OdlEB6c0ShG0ZPd6l0oSoq3MYdxL8bF0M
-        Ov+gd2C+VGRFCfGX579aS1NNGEYeMepl06UpC2pdW3NSJoAMVSxSfwjINqNw==
+        :subject:to:to; s=fm2; t=1664964184; x=1664967784; bh=xQyo6nLBko
+        Zet2YLUeDAAXuWflSHesnOexFMEZa12C8=; b=RQwsE8etVHm88Q8bo41BZ8+rk+
+        xdqN6LgVE8AxOc6g/EVWGbRKT7ANjnz+FBEDs10xiloutD4WRPZT6/Gv+VKFb7su
+        7eNO/xp+pw1mnOtLUE7d+Y1C6cuYCaklOfNjJckNiM1BRd+Recb/7kjNqmWdfA+9
+        Fl/tiZT9sA2GNAcFXI73t/A3u8Ci+3DXFkaOXBG20desALdpAzKXljgk0YcOLXRc
+        ZLBe2SE3z2n0ou9QN5SVH3s52Bw8St4gWtlBtOA+yskXxvLmadotBDzH2JcEYq9y
+        QqZPzmbrTsdDk4H92vqrt3o+qQ/ncml+GSBu95JS2ZpOMxOuJAt2foLflUqw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
         :feedback-id:from:from:in-reply-to:in-reply-to:message-id
         :mime-version:references:reply-to:sender:subject:subject:to:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1664963900; x=1664967500; bh=MxxMRDfEHOQi5+nDumNVbTgRThG0
-        gUKh/x3oMnocNco=; b=k/LgWYEQ4plZKY81euqM1y9WWeZpyTgDh+Utx34fiWcH
-        tueYqOx5ygZOjcRzXtNynTSKRum33aGLXXYtpWzAsiyR4KG0rClWluF7MG3i4CTc
-        pwANzyzUR1uO0zMrqE6l78D8A7QLD8ylv7V1vzM1SdapxxFE/qsqdWgWUvvoX1t4
-        UOvy4qeEWoYZkjxQTfhuJ/Fshddg2fA9iCKgLsAFgDTLXoBeH2noSZ8ALEQDtLtP
-        26DvVFoQ7dHTRuL3yNpBlN69M0gTX8IxnGvy9JZg0YWD4LM2iHIXNES/XOPVQKrt
-        VF6PMWY1KO8yK3qVWtvxh4+Ywj1IyxC0PTBNsbKIig==
-X-ME-Sender: <xms:OlU9Y3Xkyc3wvk78mSeW9XNVvuoQcdHfEvKVorRz4Q5Dk2Odmx69Zw>
-    <xme:OlU9Y_l_CVx44Emjsgq-GpNd4pueoGuCVgOPZHzAl8jSQQjOD4rz101njXovurXoG
-    1PqJ-Tqr77G6BuWLBs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeifedgvdduucetufdoteggodetrfdotf
+        fm2; t=1664964184; x=1664967784; bh=xQyo6nLBkoZet2YLUeDAAXuWflSH
+        esnOexFMEZa12C8=; b=f8uGsh/0Qr3CexhkicxUQWXNOUOcKhj2PsoS85NeRWK8
+        J+At+WjRt9vUpaU0hsPXPrQqhU6NYIEeQfoCTkFU/3l787UVlFwdfhVDrvUMPdtS
+        8C6Zsgzh1O3XP7BFo0EOtQbcDLHFL0wlLWLT5UZN13Uhl+t6j9APyC8QR5BXDtj0
+        SX5XHuOXkUYkUjzomzVZWqBEf/qWQ27a8KYE/MxGrg/jxXoCqohyVvubEaxTxFrv
+        tmxEkbtVSLeGyp0evOwMwoilygrRlDL1GSEY81vb5PmloYzuRt6uZpvVN1Ih+aYt
+        sck6XVh9NL0Lx/cpYtBFcg2o9hgEXhPuPvn2V/gGug==
+X-ME-Sender: <xms:WFY9YwoZckACcG0_tOFdsuGlwiUdYVH484NDGpsF4Be4C6MiS8RTdQ>
+    <xme:WFY9Y2rBQfw1VtoiFBHoQb4iG8kSv4ylD3OqV46cUa82d5Gz9mf7_nW1n-ASuNqby
+    Zx8whEa1bKzUbmx8HU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeifedgvddvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
     nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:OlU9YzaL8Zdmnb1Ruh3YAWIBoX_Q0Bhd0axAZaSORn9lTQyhVIQ4TQ>
-    <xmx:OlU9YyU2liM2dW_2DzP4U8zRZpFu7pQVHWixgZAWihjjnIyriFRBCA>
-    <xmx:OlU9YxkQ-lf95koBJOcUhrGcT9MizbuYjlhynvsa0ZS3T-2ZxAk1Xg>
-    <xmx:PFU9Y7pUafo5ZcQnzVLJou_wEcv5ZuS6vKgr_fOghsMP70Ldtpt4XQ>
+    htvghrnhepffehueelleeifeevffejvdegtdekveffgffhfeejhefhkefhkedtvddvieel
+    jedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhithhhuhgsrdgtohhmpdhgih
+    hthhhusghushgvrhgtohhnthgvnhhtrdgtohhmnecuvehluhhsthgvrhfuihiivgeptden
+    ucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:WFY9Y1Pu3Kw6dKqOh22bFpolOsEFNXPgi_nan_1vNDeXiuyIlg-Bkw>
+    <xmx:WFY9Y353lwudfPbOA4X-dSfDjYnEaS5L6sWpBSPb33u1TlAOFBzozQ>
+    <xmx:WFY9Y_7YRK0p4YJLRlT7rIBYGW9Td5Y8lCjpYWHgdY8L1CK5DFXYLg>
+    <xmx:WFY9Y_HHJvTHXb7FTsKb2zZTOPiQ68e2TBQZSJT3eHEa2eM7_YSf5g>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D5467B60086; Wed,  5 Oct 2022 05:58:18 -0400 (EDT)
+        id 47E31B60086; Wed,  5 Oct 2022 06:03:04 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
 Mime-Version: 1.0
-Message-Id: <e7340230-9a5b-4caf-a7b0-d048cc335994@app.fastmail.com>
-In-Reply-To: <YzxwoELNBctbhjJb@spud>
-References: <20221003223222.448551-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221003223222.448551-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <YzxwoELNBctbhjJb@spud>
-Date:   Wed, 05 Oct 2022 11:57:58 +0200
+Message-Id: <81b789b7-eca3-4d93-bb29-24ebedd9b60b@app.fastmail.com>
+In-Reply-To: <202210051742.p1o10Y5y-lkp@intel.com>
+References: <202210051742.p1o10Y5y-lkp@intel.com>
+Date:   Wed, 05 Oct 2022 12:02:42 +0200
 From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Conor Dooley" <conor@kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Magnus Damm" <magnus.damm@gmail.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        guoren <guoren@kernel.org>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        "Philipp Tomsich" <philipp.tomsich@vrull.eu>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        "Atish Patra" <atishp@rivosinc.com>,
-        "Anup Patel" <apatel@ventanamicro.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        "Biju Das" <biju.das.jz@bp.renesas.com>,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [RFC PATCH v2 2/2] soc: renesas: Add L2 cache management for RZ/Five SoC
+To:     "kernel test robot" <lkp@intel.com>,
+        "Eric Biggers" <ebiggers@google.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [ebiggers:wip-fsverity 6/8] fs/buffer.c:2280:5: warning: stack frame size
+ (2128) exceeds limit (1024) in '__block_read_full_folio'
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
@@ -102,29 +85,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 4, 2022, at 7:42 PM, Conor Dooley wrote:
-> On Mon, Oct 03, 2022 at 11:32:22PM +0100, Prabhakar wrote:
->> 
->> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->> ---
->>  arch/riscv/include/asm/cacheflush.h    |   8 +
->>  arch/riscv/include/asm/errata_list.h   |   2 +
->>  arch/riscv/include/asm/sbi.h           |   1 +
->>  arch/riscv/mm/dma-noncoherent.c        |  20 ++
+On Wed, Oct 5, 2022, at 11:11 AM, kernel test robot wrote:
+> tree:   
+> https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git 
+> wip-fsverity
+> head:   06702850f2f281bdd6165c4783a0a15685efbcfd
+> commit: dbcfaa162251f84f78105036633f71e91dc3bb8b [6/8] fs/buffer.c: 
+> introduce __block_read_full_folio() for ext4
+> config: hexagon-randconfig-r041-20221003
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 
+> 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+> reproduce (this is a W=1 build):
+>         wget 
+> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
+> -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # 
+> https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/commit/?id=dbcfaa162251f84f78105036633f71e91dc3bb8b
+>         git remote add ebiggers 
+> https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
+>         git fetch --no-tags ebiggers wip-fsverity
+>         git checkout dbcfaa162251f84f78105036633f71e91dc3bb8b
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 
+> O=build_dir ARCH=hexagon SHELL=/bin/bash
 >
-> Stupid question maybe, but I assume you mixed the driver addition and
-> the changes to arch/riscv for the sake of easily creating the RFC?
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
 >
->>  drivers/soc/renesas/Makefile           |   4 +
->>  drivers/soc/renesas/rzf/Makefile       |   3 +
->>  drivers/soc/renesas/rzf/ax45mp_cache.c | 365 +++++++++++++++++++++++++
->>  drivers/soc/renesas/rzf/rzf_sbi.h      |  27 ++
+> All warnings (new ones prefixed by >>):
+>
+>>> fs/buffer.c:2280:5: warning: stack frame size (2128) exceeds limit (1024) in '__block_read_full_folio' [-Wframe-larger-than]
+>    int __block_read_full_folio(struct folio *folio, loff_t limit,
+>        ^
 
-My feeling is that L2 cache behavior should live in arch/riscv
-rather than drivers/soc/, since this is not specific to a SoC
-family but rather the CPU core. I would also expect that the
-actual implementation and DT binding can be shared with
-non-renesas SoCs using the same CPU core.
-
+IIRC the conclusion we came to when this last showed up was
+that on Hexagon and PowerPC4xx, we want PAGE_SIZE_256KB to
+depend on CONFIG_BLOCK being disabled, in order to completely
+sidestep this issue. Pages this large should be really rare
+anyway, and those platforms tend to run from RAM or MTD flash
+rather than using block based file systems.
 
     Arnd
