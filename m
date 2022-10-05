@@ -2,146 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C48C05F51FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48DDD5F520D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:50:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiJEJrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 05:47:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34610 "EHLO
+        id S229679AbiJEJu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 05:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiJEJru (ORCPT
+        with ESMTP id S229672AbiJEJuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 05:47:50 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDBA6B158;
-        Wed,  5 Oct 2022 02:47:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664963269; x=1696499269;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=SzOBLgxHKniFgGvjcnsU55f0FumWPhC2D5ITWHrm9t4=;
-  b=U4XxL666HYOAZhQiYwgeN0pYswvmvMXvtcwdQwjLyeXYORI5RZSMY6l1
-   f1rJmAxsfnJv/YOdXfmS2CTs6Zz8hsjEz2ZBMTCyEev35aH8q5IcMb89u
-   i3byXXtKmpRd8tT5y3lAnADbDn/BzQSLPQpc3j9HRQQMSxSEpubEyY1aH
-   reBt36D7C4Xl+Pob9dWI+4Tgp3SXCRMQpIGHMmgikHAgDF78uN3bxaYo0
-   MtSYOIo5AsuhxUmy6O/1ipWvGK20B4dnwU2GUxPANKpsWwZjMNPrvzqlC
-   7IC9T7Q67G+2XDrSKQC1pCL13oEiOdPvvs+udzHb5H4eRV/pu4kpUSGjh
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="329533895"
-X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
-   d="scan'208";a="329533895"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 02:47:48 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="749699117"
-X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
-   d="scan'208";a="749699117"
-Received: from mtantera-mobl3.ger.corp.intel.com (HELO refaase-MOBL1.ger.corp.intel.com) ([10.252.39.164])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 02:47:45 -0700
-Date:   Wed, 5 Oct 2022 12:47:42 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Lizhi Hou <lizhi.hou@amd.com>
-cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, trix@redhat.com,
-        tumic@gpxsee.org, max.zhen@amd.com, sonal.santan@amd.com,
-        larry.liu@amd.com, brian.xu@amd.com
-Subject: Re: [PATCH V5 XDMA 1/2] dmaengine: xilinx: xdma: Add xilinx xdma
- driver
-In-Reply-To: <a0ab26b3-be2d-c1d6-e8ea-3ab9ad57962b@amd.com>
-Message-ID: <ad41afcb-a7b1-bfd9-56af-6f5b7875de8d@linux.intel.com>
-References: <1664409507-64079-1-git-send-email-lizhi.hou@amd.com> <1664409507-64079-2-git-send-email-lizhi.hou@amd.com> <6ba2221c-bbc9-a33c-7e62-85c2d87ceeed@linux.intel.com> <56f971da-5116-58dc-2df6-53ed465c8ec4@amd.com> <c86fb070-9d46-9558-f7ee-216fc657cf1a@linux.intel.com>
- <a0ab26b3-be2d-c1d6-e8ea-3ab9ad57962b@amd.com>
+        Wed, 5 Oct 2022 05:50:22 -0400
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553E42BE39;
+        Wed,  5 Oct 2022 02:50:21 -0700 (PDT)
+Received: by mail-ua1-x92f.google.com with SMTP id e22so6206720uar.5;
+        Wed, 05 Oct 2022 02:50:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=l6wViLeXoikJV51BSLR9er0g/1rUfL2AfJWPWHQaBO4=;
+        b=RIZIhTf/zVnc34GbvTapKLkIm2Qt3SPXumJKjNedPb/RsOlEZPgk6xr+Uu6sh/fXA/
+         a3aamm5MftGn6eLErbCFlCy9erPyV3qTupxYiKjhbG8QbgfkrDajd2soKx8U0YaP5Hdu
+         RSMHgxrq6jkuPojH9PDqvy6gwyWqbdyzMg3kloYFw+1eR2pasOetyslwUngHQoor3Gnt
+         76xoWsQ+QR6++OaAB8MFNVvuSk1Z71cmDO+lu0yKtTe8T+IBgCa6AThejgP32xDoFsBY
+         /vet0ZEAslTlTaOS0bYV6JqCunSbe9FFjQ6sLzVb9p47H+xs++yhcB3cNyAq2J408n5t
+         aNLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l6wViLeXoikJV51BSLR9er0g/1rUfL2AfJWPWHQaBO4=;
+        b=V8wj5UbJGM8F4z3d0AxbgFRm1VNxX4mZoVPLY5fPZ0ZSmELhQvqHUBxUMbr8LyOajg
+         GcGhU0x9SnlKdxwB4KxnN1P6L1lXlSueBgEDSDImtQTMB36W68yCx0kFbtQrXCBvIcrN
+         Km/rkcx7Y+92AlxAGNZvwmFTUOkNWjJ2AiCes9s1NCR39f6iWsfpzIwyXPWEQ8J+Vmgf
+         JXEe56Y1wYn0a9Uhv+0w7Y4IycM9iwfTkb6eSsmLK+oMAv0u0o1FfxrX/nceRHLpvYdk
+         udIZg1q5ea3mD+dpQUL1ypApCNNxcRfIbUBDjqQyiRADrp7ibZKC3qJqKNHkW0v8zxKc
+         SxYQ==
+X-Gm-Message-State: ACrzQf32+wrxYGPlJ2EPm4jkiNR+OK04F8atoKkxK7T6a6ZFwrqMP3Kp
+        zLDp+OZ+1fHm6F8+V33FexZmuY3cAPiRfuSLEcVNeIB0P+o=
+X-Google-Smtp-Source: AMsMyM6WfGhCJxLY6ANRM8y0SC9ko6T+AcW1yv2D3PCF2210KvNf8WkEayrKMhQLhObv4beXbQJybZ7/p5xhMMwAk9s=
+X-Received: by 2002:ab0:70c8:0:b0:39f:7528:6289 with SMTP id
+ r8-20020ab070c8000000b0039f75286289mr13560678ual.36.1664963420215; Wed, 05
+ Oct 2022 02:50:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-886140070-1664963268=:1580"
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000694b7b05ea45963e@google.com>
+In-Reply-To: <000000000000694b7b05ea45963e@google.com>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Wed, 5 Oct 2022 18:50:03 +0900
+Message-ID: <CAKFNMonJBZpSC3GRLKcbG8NSrTKyR8EG2PN_4zeVkH5yM3fbVw@mail.gmail.com>
+Subject: Re: [syzbot] memory leak in nilfs_sysfs_create_device_group
+To:     syzbot <syzbot+2e2f697dbd0f429d5dae@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-nilfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Wed, Oct 5, 2022 at 5:44 PM syzbot wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    a5088ee7251e Merge tag 'thermal-6.1-rc1' of git://git.kern..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=153f2492880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=21254cf9c7c084e0
+> dashboard link: https://syzkaller.appspot.com/bug?extid=2e2f697dbd0f429d5dae
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1556a368880000
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/c2d2c6d22fae/disk-a5088ee7.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/3c66d2393267/vmlinux-a5088ee7.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/f2050cc3fa6c/mount_0.gz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+2e2f697dbd0f429d5dae@syzkaller.appspotmail.com
+>
+> BUG: memory leak
+> unreferenced object 0xffff888119526520 (size 32):
+>   comm "syz-executor.4", pid 4168, jiffies 4294949450 (age 9.260s)
+>   hex dump (first 32 bytes):
+>     6c 6f 6f 70 34 00 00 00 00 00 00 00 00 00 00 00  loop4...........
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff814c5b86>] kstrdup+0x36/0x70 mm/util.c:61
+>     [<ffffffff814c5c13>] kstrdup_const+0x53/0x80 mm/util.c:84
+>     [<ffffffff823af0e2>] kvasprintf_const+0xc2/0x110 lib/kasprintf.c:48
+>     [<ffffffff824a442b>] kobject_set_name_vargs+0x3b/0xe0 lib/kobject.c:257
+>     [<ffffffff824a48ad>] kobject_add_varg lib/kobject.c:352 [inline]
+>     [<ffffffff824a48ad>] kobject_init_and_add+0x6d/0xc0 lib/kobject.c:441
+>     [<ffffffff81e217ba>] nilfs_sysfs_create_device_group+0x9a/0x3d0 fs/nilfs2/sysfs.c:991
+>     [<ffffffff81e0a03c>] init_nilfs+0x51c/0x680 fs/nilfs2/the_nilfs.c:637
+>     [<ffffffff81df608b>] nilfs_fill_super fs/nilfs2/super.c:1047 [inline]
+>     [<ffffffff81df608b>] nilfs_mount+0x51b/0x890 fs/nilfs2/super.c:1317
+>     [<ffffffff8164f4ab>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
+>     [<ffffffff815e8c48>] vfs_get_tree+0x28/0x100 fs/super.c:1530
+>     [<ffffffff8162cbd7>] do_new_mount fs/namespace.c:3040 [inline]
+>     [<ffffffff8162cbd7>] path_mount+0xc37/0x10d0 fs/namespace.c:3370
+>     [<ffffffff8162d7be>] do_mount fs/namespace.c:3383 [inline]
+>     [<ffffffff8162d7be>] __do_sys_mount fs/namespace.c:3591 [inline]
+>     [<ffffffff8162d7be>] __se_sys_mount fs/namespace.c:3568 [inline]
+>     [<ffffffff8162d7be>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
+>     [<ffffffff845ebbf5>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff845ebbf5>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
 
---8323329-886140070-1664963268=:1580
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+#syz dup: memory leak in kobject_set_name_vargs (5)
 
-On Tue, 4 Oct 2022, Lizhi Hou wrote:
+Looks like the same issue as above.  I'm now digging into it.
 
-> 
-> On 10/4/22 09:43, Ilpo Järvinen wrote:
-> > On Tue, 4 Oct 2022, Lizhi Hou wrote:
-> > 
-> > > On 10/4/22 01:18, Ilpo Järvinen wrote:
-> > > > On Wed, 28 Sep 2022, Lizhi Hou wrote:
-> > > > 
-> > > > > Add driver to enable PCIe board which uses XDMA (the DMA/Bridge
-> > > > > Subsystem
-> > > > > for PCI Express). For example, Xilinx Alveo PCIe devices.
-> > > > >       https://www.xilinx.com/products/boards-and-kits/alveo.html
-> > > > > 
-> > > > > The XDMA engine support up to 4 Host to Card (H2C) and 4 Card to Host
-> > > > > (C2H)
-> > > > > channels. Memory transfers are specified on a per-channel basis in
-> > > > > descriptor linked lists, which the DMA fetches from host memory and
-> > > > > processes. Events such as descriptor completion and errors are
-> > > > > signaled
-> > > > > using interrupts. The hardware detail is provided by
-> > > > >       https://docs.xilinx.com/r/en-US/pg195-pcie-dma/Introduction
-> > > > > 
-> > > > > This driver implements dmaengine APIs.
-> > > > >       - probe the available DMA channels
-> > > > >       - use dma_slave_map for channel lookup
-> > > > >       - use virtual channel to manage dmaengine tx descriptors
-> > > > >       - implement device_prep_slave_sg callback to handle host scatter
-> > > > > gather
-> > > > >         list
-> > > > >       - implement device_config to config device address for DMA
-> > > > > transfer
-> > > > > 
-> > > > > Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
-> > > > > Signed-off-by: Sonal Santan <sonal.santan@amd.com>
-> > > > > Signed-off-by: Max Zhen <max.zhen@amd.com>
-> > > > > Signed-off-by: Brian Xu <brian.xu@amd.com>
-> > > > > ---
-> > > > > +	*chans = devm_kzalloc(&xdev->pdev->dev, sizeof(**chans) *
-> > > > > (*chan_num),
-> > > > > +			      GFP_KERNEL);
-> > > > > +	if (!*chans)
-> > > > > +		return -ENOMEM;
-> > > > > +
-> > > > > +	for (i = 0, j = 0; i < pdata->max_dma_channels; i++) {
-> > > > > +		ret = xdma_read_reg(xdev, base + i * XDMA_CHAN_STRIDE,
-> > > > > +				    XDMA_CHAN_IDENTIFIER,
-> > > > > &identifier);
-> > > > > +		if (ret) {
-> > > > > +			xdma_err(xdev, "failed to read channel id:
-> > > > > %d", ret);
-> > > > > +			return ret;
-> > > > > +		}
-> > > > Is it ok to not rollback the allocation in case of an error occurs?
-> > > In this loop, the failures are returned by read/write registers. The
-> > > read/write register failure indicates serious hardware issue and the
-> > > hardware
-> > > may not be rollback in this situation.
-> > What I meant is that you allocated memory above (to *chans, see above).
-> > Shouldn't that memory be free in case the hw is not working before you
-> > return the error from this function?
-> > 
-> > Check also the other returns below for the same problemx.
-> 
-> The memory does not need to be freed immediately. And it should not be memory
-> leak because devm_* is used.
-
-Ah, sorry. I think I checked exactly that there wasn't m in it but 
-clearly there is now that I recheck.
-
-
--- 
- i.
-
---8323329-886140070-1664963268=:1580--
+Ryusuke Konishi
