@@ -2,105 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 333965F592B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B0A5F592E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiJERjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 13:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56000 "EHLO
+        id S230381AbiJERlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 13:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiJERjD (ORCPT
+        with ESMTP id S230360AbiJERlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 13:39:03 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6932B75480
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 10:39:02 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id o21so692594ejm.11
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 10:39:02 -0700 (PDT)
+        Wed, 5 Oct 2022 13:41:08 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892253A483
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 10:41:06 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-131dda37dddso19717794fac.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 10:41:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=GEEqv6JUw04KMv9WcWH7KJHOv/rriPAH+GJIx70ffZk=;
-        b=VJHkutAH6JmqngkefDS4W1u9yXaZmybou+ReWLPQlhc8KLxKuD+SRbbT2WJ/14Moq4
-         vrhDuP5ok6Q89f027q4cD0Eyht3Cd5GqWnpSoTbOJ5VmDahDurYei5TtLFFTFTnURtoO
-         gLJ7DYE14hOIkoASC0fk+6Sc6K68Wx3biqMnMXfWI+TqOvYh3oivYbHvpC7prVAd8a9A
-         mCgleJ/BJQEp9iMHUfE+2fXLJGlyVr+g/tDgzBMz1IUx/yvXwEDyFMtQattzLD5j2NS1
-         mUAGbDleHkHEy+2DFRTL9JGLIozImOudD+c5MNtHUwtxnWSk2L67CNmgactPseB8MEXC
-         Mm1g==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9ET0IoJ6rEVtbRVeWGB0pVw9IcwTsGPczYsuOM1U4f0=;
+        b=EJ6WcTBoO6oU/ezXuBkBYjEbQ7S8KRcou3xsWIrbiRwE9EOHqoC6FTsAgwu07Mfe6Z
+         0beVDIN9DJs7HZ9oYRIYFeffRZ+wggTvShNIAeZ04kK/I7kiVn2nPmIYDHSxv9mrcTmq
+         8i+3y+6uRFx9mVL0EBCbpPWxMRHMnS1wVblHM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=GEEqv6JUw04KMv9WcWH7KJHOv/rriPAH+GJIx70ffZk=;
-        b=qQkye68Zi9sotDq8uRvNPp9Vly071Jej8UKAK8CBEhYT3EuDhKCKtMBR9i6mQ6VmAV
-         1NJiGwWZhjTOTj+EOox1A9IK60vf3luWn7GoGkX4hWZZ/t0/ZctQW0/Q7tGYjnYcDUW2
-         EPlThjbcAWeIgQEqC3OqmIfR9qUJKMihhzyi2hGc1CRVQ+VASQZeDFNiQK61lfDXsT/G
-         /8apM7pdHqauqrMlg9Q3RmBFPHtBHLb2574fF/JeMo0Lp8jS3hwHL+ET0a9twmpl77tk
-         mzADJqdkQRhxfRohJQ6omfGyxe7BxRgL5JFkMAjoj+GYDM6o76xu1uCRhK9uAR9hOAST
-         PBig==
-X-Gm-Message-State: ACrzQf2pH3bWTgmEfa+Y37YnuhP+zjSH0AofmsWni0MqYmYCD0pTgBm+
-        6mtbc1EdzAlC0B/x3Mpx8Id+/A==
-X-Google-Smtp-Source: AMsMyM7WyYk0PAsuFDiEHWqpCGiTfNFke7pJfBsSDMFkAL8sbci2aWR5Ojdt0qDVNNr1SysWBO9XAA==
-X-Received: by 2002:a17:907:da6:b0:787:baf3:1c79 with SMTP id go38-20020a1709070da600b00787baf31c79mr583903ejc.458.1664991540956;
-        Wed, 05 Oct 2022 10:39:00 -0700 (PDT)
-Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
-        by smtp.gmail.com with ESMTPSA id kv3-20020a17090778c300b0074a82932e3bsm5552301ejc.77.2022.10.05.10.39.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 10:39:00 -0700 (PDT)
-Date:   Wed, 5 Oct 2022 19:38:59 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     atishp@atishpatra.org, anup@brainfault.org, will@kernel.org,
-        mark.rutland@arm.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Conor.Dooley@microchip.com,
-        cmuellner@linux.com, samuel@sholland.org
-Subject: Re: [PATCH 2/2] drivers/perf: riscv_pmu_sbi: add support for PMU
- variant on T-Head C9xx cores
-Message-ID: <20221005173859.apuj4a6iq7fxbffp@kamzik>
-References: <20221004203724.1459763-1-heiko@sntech.de>
- <20221004203724.1459763-3-heiko@sntech.de>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9ET0IoJ6rEVtbRVeWGB0pVw9IcwTsGPczYsuOM1U4f0=;
+        b=NrQAHWO8x0U9o56GNzKa2fhAKTUhEJqstgNuK3a4pkwJdBHy9F9lbj5byG8nX0W566
+         4nIeU5HYGtvdfnNA+cXc1dj67gQOYUgAtGUYOPEhFQRrwHo921xr1oBIDoCi2F0Siyec
+         wdbE4BOu2mvFTpmlsghYFIVVLbEm3Ih+DqcSIa+HQ+mQ2erfC91EJtZ3E+nU1kIYS9+7
+         W8BUrUXYr7/Xp1b/dmRsbK4yJjLJs/KYDnkKIPlTAWZf6HbeUmGCZQkjJh5bR1d6KM5v
+         qJ8/3XW3zqQtmgohLpf1hsn2JCXClCghkV8qJBvzjgZM3x7lk98VzZ7V/S+WvnhRtHFW
+         ZA7A==
+X-Gm-Message-State: ACrzQf1PQIJ33p7v+qnPfwZBDp8xT+3lLiyYyyKatnaQD4TgE9GA+Xy0
+        6Bzc+xrBbKHiaI3pPGou5uXHkK+G2E0lXw==
+X-Google-Smtp-Source: AMsMyM5NnD+XY6mpzRlaNJfDrO5aUNP9TeEv5YFq/zLWWBGq32+tq14xzplRVwew71nuJF/UBEOD2w==
+X-Received: by 2002:a05:6870:618e:b0:130:9e9d:650d with SMTP id a14-20020a056870618e00b001309e9d650dmr396897oah.109.1664991664856;
+        Wed, 05 Oct 2022 10:41:04 -0700 (PDT)
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com. [209.85.167.181])
+        by smtp.gmail.com with ESMTPSA id 7-20020a4a1507000000b004767df8f231sm3641525oon.39.2022.10.05.10.41.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Oct 2022 10:41:03 -0700 (PDT)
+Received: by mail-oi1-f181.google.com with SMTP id q10so18397857oib.5
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 10:41:03 -0700 (PDT)
+X-Received: by 2002:aca:b957:0:b0:351:4ecf:477d with SMTP id
+ j84-20020acab957000000b003514ecf477dmr465391oif.126.1664991663308; Wed, 05
+ Oct 2022 10:41:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221004203724.1459763-3-heiko@sntech.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <b23c765b-4999-17a4-d89a-55d6ba72f68d@redhat.com>
+In-Reply-To: <b23c765b-4999-17a4-d89a-55d6ba72f68d@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 5 Oct 2022 10:40:45 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whDpj0wAwFK8tDjVUkRoT06ZD-d+OQpojodPPqE_eEcHg@mail.gmail.com>
+Message-ID: <CAHk-=whDpj0wAwFK8tDjVUkRoT06ZD-d+OQpojodPPqE_eEcHg@mail.gmail.com>
+Subject: Re: [GIT PULL] platform-drivers-x86 for 6.1-1
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Andy Shevchenko <andy@infradead.org>,
+        Mark Gross <mark.gross@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        linux-acpi <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 10:37:24PM +0200, Heiko Stuebner wrote:
-> With the T-HEAD C9XX cores being designed before or during the ratification
-> to the SSCOFPMF extension, it implements functionality very similar but
-> not equal to it.
-> 
-> It implements overflow handling and also some privilege-mode filtering.
-> While SSCOFPMF supports this for all modes, the C9XX only implements the
-> filtering for M-mode and S-mode but not user-mode.
-> 
-> So add some adaptions to allow the C9XX to still handle
-> its PMU through the regular SBI PMU interface instead of defining new
-> interfaces or drivers.
-> 
-> To work properly, this requires a matching change in SBI, though the actual
-> interface between kernel and SBI does not change.
-> 
-> The main differences are a the overflow CSR and irq number.
-> 
-> As the reading of the overflow-csr is in the hot-path during irq handling,
-> use an errata and alternatives to not introduce new conditionals there.
-> 
-> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> ---
->  arch/riscv/Kconfig.erratas           | 13 +++++++++++
->  arch/riscv/errata/thead/errata.c     | 18 +++++++++++++++
->  arch/riscv/include/asm/errata_list.h | 16 +++++++++++++-
->  drivers/perf/riscv_pmu_sbi.c         | 33 +++++++++++++++++++---------
->  4 files changed, 69 insertions(+), 11 deletions(-)
+On Wed, Oct 5, 2022 at 5:46 AM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> There also is a small conflict in drivers/platform/mellanox/mlxreg-lc.c
+> due to a locking fix which landed mid 6.0 mixing unlock + return with
+> goto style exits in error paths. My tree has a fix on top to consistently
+> use the goto style. Here you can just take the version from me tree.
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Ugh.
+
+Why use goto when a simple 'break' would work for all but the first case?
+
+I took your side rather than clean things up and not being able to
+test the end result, but it does seem pointlessly complicated.
+
+              Linus
