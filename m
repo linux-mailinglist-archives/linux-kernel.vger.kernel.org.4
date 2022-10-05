@@ -2,116 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4BDA5F591E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A16C85F5920
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbiJER2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 13:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
+        id S230353AbiJERdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 13:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiJER2U (ORCPT
+        with ESMTP id S229593AbiJERdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 13:28:20 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690D67E032;
-        Wed,  5 Oct 2022 10:28:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664990899; x=1696526899;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=J0ixBjZgHg9dB/N4umo0rSQEKiaexvmJgnC4Ny9BMbc=;
-  b=i5QePl049uDvhO+WYGbS60Rj+/B0N7MDREoCdMdZKMZGMYjvlV7BVJmT
-   0TJBV1DWrBY6YSn8+gw4YM5QrxiC/qp7VRmEcaV3LG4YE620gfe6dGhoQ
-   2IkvXs538rAgNG2VE3Zl3r1SFlqc5NE4d4CYM1ZJmTIX/jq2MWga4QNZv
-   keJNEG831suP9aQbvcGgs1ELNs+HZQsQiR2d5XgmyExJhBhOtQpY7Qn7i
-   WP46dLIBrxYpqPbNrIXViDE6f4EpsuEVZYDbDlEgF4KdEJWrZfjeaelF5
-   b+xI7slZzfdS/dC0b476/SPxrqB13QFvaaQEfoVTmg6/uA2UYKSW3rQ4P
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="282934345"
-X-IronPort-AV: E=Sophos;i="5.95,161,1661842800"; 
-   d="scan'208";a="282934345"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 10:28:17 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="602088845"
-X-IronPort-AV: E=Sophos;i="5.95,161,1661842800"; 
-   d="scan'208";a="602088845"
-Received: from gionescu-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.39.173])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 10:28:15 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH 2/5] docs: tweak some Alabaster style parameters
-In-Reply-To: <20221004201222.281845-3-corbet@lwn.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20221004201222.281845-1-corbet@lwn.net>
- <20221004201222.281845-3-corbet@lwn.net>
-Date:   Wed, 05 Oct 2022 20:28:13 +0300
-Message-ID: <87lepuqixe.fsf@intel.com>
+        Wed, 5 Oct 2022 13:33:05 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16BEC6DF8F
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 10:33:04 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id bs18so17912420ljb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 10:33:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zF8ApOxTSxGt6c09yLSFGtRLqEmB/dPLWQduCaYYtw8=;
+        b=evq0KrIxDPo8NwkEl8xTIcAGxRhwLUGvnQcNERuM6PX+rf3Q40SvNGxSvBpXhTL+QM
+         Syv8vm1KgNE40cCsBB4Xa3fUrZSsQ2CMPD1f8Fy4FWFJizY4zDYwDj+anvXjpbaeDL+T
+         H5HM66JWD+V9cgRK2j9fGPcUtEJKVJY6PPvXOYfEDDUQUAyOiIiWM9EATrkwAjnebYWk
+         lw78+b56KNzyq9ClmThD2Cx9wgVY0GGS8NC/VdlUmqE9yQHQxaeRHNWNrAFQTy+QYUNe
+         S23I1FYxXfVewDWXKPkpam/syFwFl9H1Swbse+aP02S/9NuGy/1TLvIg//qcyjwFDy1G
+         RB1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zF8ApOxTSxGt6c09yLSFGtRLqEmB/dPLWQduCaYYtw8=;
+        b=DzT+bf/t/hatCskk4TilZMWAv/lENl5TO/Ao5lqubkC8wVIUYxwNg8ZpIPYMYfRWVb
+         1MDhpoq1ArHeAUM83VRSJl3lJhjq0vr8wC+5dqMLqKot1HBxdjDVQbyXPYxB88ew3GJf
+         40Bup9e+kFvgVTzZ2iSJ0MRviYxcLG3J7Z/bJlsJmPnZYrux0EI8ER7/kh6zpTe90R43
+         cusUpQplr6UFZYFs474P6iamte3pQdkcMbCv0wMxwDfmYgzsZkoQFEnslhEKciVRVGj2
+         aHm+LE345juLv456ietErfSjqvnoCmJ+8ANqrhmeAdS+YFS+qYesuB8DD4ddRS+0ZqpC
+         eZxw==
+X-Gm-Message-State: ACrzQf3FxImbOM7/nKyTionTXMHrLn9Pnmmg7LhhXVbn6bCI9zee1VDa
+        FpUMhl8BXwwFUayHHAnSV8+Ol3+qdMPZuPszwoYQMu0GNaQ=
+X-Google-Smtp-Source: AMsMyM7OAFeL/ZAlYBOIc4JpSBfZ6QMJZquGE48eaDQsMjnAOqI2aWL8JxgUlyfgLW4mWzc5HU2BSjJO3nFDz+b7gkI=
+X-Received: by 2002:a2e:bd0b:0:b0:26d:ffdc:120f with SMTP id
+ n11-20020a2ebd0b000000b0026dffdc120fmr261097ljq.526.1664991182182; Wed, 05
+ Oct 2022 10:33:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221004214125.120993-1-peterx@redhat.com> <20221004214125.120993-2-peterx@redhat.com>
+ <CAJHvVchRHhQDug1Zf6ygdnz96Dn4tBkPpB5fO3g2EDpxFcwP+A@mail.gmail.com> <Yz2YK83Vejc+QIez@x1n>
+In-Reply-To: <Yz2YK83Vejc+QIez@x1n>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Wed, 5 Oct 2022 10:32:25 -0700
+Message-ID: <CAJHvVcjwjv4-B=JTSgxxSBMGp6-fZiefqeR27nVPLjB-Nh1wnw@mail.gmail.com>
+Subject: Re: [PATCH 1/4] selftests/vm: Use memfd for hugetlb tests
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 04 Oct 2022, Jonathan Corbet <corbet@lwn.net> wrote:
-> This is just the beginning: tighten up the layout a bit to improve the
-> information density in the browser.  To that end, add a custom.css file to
-> tweak Alabaster CSS settings.
+On Wed, Oct 5, 2022 at 7:44 AM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Tue, Oct 04, 2022 at 03:04:23PM -0700, Axel Rasmussen wrote:
+> > We should also update the examples / help text near the top of the
+> > file, since we're changing what arguments this accepts.
+>
+> Definitely, I missed that.
+>
+> >
+> > It might also be better to squash the changes to test arguments in
+> > run_vmtests.sh into each patch, so if we're bisecting we'll have a
+> > matching / working test + run_vmtests.sh combo at each commit.
+>
+> I can do that, but may not be required - note that I did the first three
+> patches just to make sure they're still compatible with the old cmdlines,
+> by ignoring the extra params.
 
-Maybe it's just me, but on the wide 4K screen I have the page_width =
-940px default is silly narrow.
-
-BR,
-Jani.
-
-
+Ah! In that case, forget it. :)
 
 >
-> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
-> ---
->  Documentation/conf.py                  |  1 +
->  Documentation/sphinx-static/custom.css | 12 ++++++++++++
->  2 files changed, 13 insertions(+)
->  create mode 100644 Documentation/sphinx-static/custom.css
+> [...]
 >
-> diff --git a/Documentation/conf.py b/Documentation/conf.py
-> index 629f4afeb0eb..b924b266a70f 100644
-> --- a/Documentation/conf.py
-> +++ b/Documentation/conf.py
-> @@ -345,6 +345,7 @@ if  html_theme == 'classic':
->  else:
->      html_theme_options = {
->          'description': get_cline_version(),
-> +        'font_size': '14px',
->      }
->  
->  sys.stderr.write("Using %s theme\n" % html_theme)
-> diff --git a/Documentation/sphinx-static/custom.css b/Documentation/sphinx-static/custom.css
-> new file mode 100644
-> index 000000000000..c465251e840a
-> --- /dev/null
-> +++ b/Documentation/sphinx-static/custom.css
-> @@ -0,0 +1,12 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * CSS tweaks for the Alabaster theme
-> + */
-> +
-> +/* Shrink the headers a bit */
-> +div.body h1 { font-size: 180%; }
-> +div.body h2 { font-size: 150%; }
-> +div.body h3 { font-size: 130%; }
-> +
-> +/* Tighten up the layout slightly */
-> +div.body { padding: 0 15px 0 10px; }
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
+> > This is a nice simplification! Thanks for doing it. Besides the
+> > comments above, the rest of the code here looks correct to me. Feel
+> > free to take:
+> >
+> > Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
+>
+> Thanks!
+>
+> --
+> Peter Xu
+>
