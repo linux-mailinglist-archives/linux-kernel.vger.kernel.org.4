@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 213765F514E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D23D5F5149
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbiJEJEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 05:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51750 "EHLO
+        id S229953AbiJEJDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 05:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiJEJEC (ORCPT
+        with ESMTP id S229806AbiJEJD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 05:04:02 -0400
+        Wed, 5 Oct 2022 05:03:28 -0400
 Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382C57644D
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 02:03:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B243A5D132;
+        Wed,  5 Oct 2022 02:03:27 -0700 (PDT)
 Received: from dev011.ch-qa.sw.ru ([172.29.1.16])
         by relay.virtuozzo.com with esmtp (Exim 4.95)
         (envelope-from <alexander.atanasov@virtuozzo.com>)
-        id 1og0GQ-007ckN-Ue;
-        Wed, 05 Oct 2022 11:02:51 +0200
+        id 1og0GS-007ckN-ED;
+        Wed, 05 Oct 2022 11:02:53 +0200
 From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-To:     Nadav Amit <namit@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>
 Cc:     kernel@openvz.org,
         Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 6/7] drivers: vmware: balloon - report inflated memory
-Date:   Wed,  5 Oct 2022 12:01:56 +0300
-Message-Id: <20221005090158.2801592-7-alexander.atanasov@virtuozzo.com>
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 7/7] drivers: hyperv: balloon - report inflated memory
+Date:   Wed,  5 Oct 2022 12:01:57 +0300
+Message-Id: <20221005090158.2801592-8-alexander.atanasov@virtuozzo.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221005090158.2801592-1-alexander.atanasov@virtuozzo.com>
 References: <20221005090158.2801592-1-alexander.atanasov@virtuozzo.com>
@@ -48,31 +48,53 @@ Propagate inflated memory changes to mm.
 
 Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
 ---
- drivers/misc/vmw_balloon.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/hv/hv_balloon.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/misc/vmw_balloon.c b/drivers/misc/vmw_balloon.c
-index 91d4d2a285c5..ce581e3d101c 100644
---- a/drivers/misc/vmw_balloon.c
-+++ b/drivers/misc/vmw_balloon.c
-@@ -1161,6 +1161,8 @@ static void vmballoon_inflate(struct vmballoon *b)
+diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
+index fdf6decacf06..b4c828c462a4 100644
+--- a/drivers/hv/hv_balloon.c
++++ b/drivers/hv/hv_balloon.c
+@@ -24,6 +24,7 @@
+ #include <linux/notifier.h>
+ #include <linux/percpu_counter.h>
+ #include <linux/page_reporting.h>
++#include <linux/balloon.h>
  
- 		cond_resched();
- 	}
-+	/* Update core after inflation is done - send a single notification */
-+	balloon_set_inflated_free(atomic64_read(&b->size) << 2);
- 
- 	/*
- 	 * Release pages that were allocated while attempting to inflate the
-@@ -1285,6 +1287,8 @@ static unsigned long vmballoon_deflate(struct vmballoon *b, uint64_t n_frames,
- 
- 		cond_resched();
- 	}
-+	/* Update core after deflation is done - send a single notification */
-+	balloon_set_inflated_free(atomic64_read(&b->size) << 2);
- 
- 	return deflated_frames;
+ #include <linux/hyperv.h>
+ #include <asm/hyperv-tlfs.h>
+@@ -1280,6 +1281,13 @@ static unsigned int alloc_balloon_pages(struct hv_dynmem_device *dm,
+ 	return i * alloc_unit;
  }
+ 
++static void report_ballooned_pages(struct hv_dynmem_device *dm)
++{
++	u32 actual = dm->num_pages_ballooned;
++	long inflated_kb = actual << (HV_HYP_PAGE_SHIFT - 10);
++
++	balloon_set_inflated_total(inflated_kb);
++}
++
+ static void balloon_up(struct work_struct *dummy)
+ {
+ 	unsigned int num_pages = dm_device.balloon_wrk.num_pages;
+@@ -1368,6 +1376,7 @@ static void balloon_up(struct work_struct *dummy)
+ 		}
+ 	}
+ 
++	report_ballooned_pages(&dm_device);
+ }
+ 
+ static void balloon_down(struct hv_dynmem_device *dm,
+@@ -1387,6 +1396,8 @@ static void balloon_down(struct hv_dynmem_device *dm,
+ 	pr_debug("Freed %u ballooned pages.\n",
+ 		prev_pages_ballooned - dm->num_pages_ballooned);
+ 
++	report_ballooned_pages(dm);
++
+ 	if (req->more_pages == 1)
+ 		return;
+ 
 -- 
 2.31.1
 
