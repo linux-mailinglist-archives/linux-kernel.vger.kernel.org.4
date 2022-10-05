@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3E25F542D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 14:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D255F542E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 14:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbiJEMFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 08:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51178 "EHLO
+        id S230103AbiJEMF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 08:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiJEMFM (ORCPT
+        with ESMTP id S229948AbiJEMFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 5 Oct 2022 08:05:12 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAB5286DD
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC79329347
         for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 05:05:11 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id r128-20020a1c4486000000b003bd44dc526fso857888wma.3
+Received: by mail-wm1-x333.google.com with SMTP id v130-20020a1cac88000000b003bcde03bd44so907002wme.5
         for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 05:05:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Azv6wQXNpWBikFZ7YedVEP87aeuLGrZzJ94JVNBlROE=;
-        b=f90XW/FBL9NtLBkODgOXxXHX4h9e4N/xXi1axs9BvYKOZhD/z6FKv0bAAl6gnA/jW5
-         v5iQoxypoqOwNC9M6UIvrxKOhLOdYI/a51iuFvK6Z0F0ilyTtjlHduHjFhnV5fKz03gk
-         d1TPTZfc56xoioo1jRYZN1Acd3/toSPreMfURAzVaqk/GroerPdop4zSDPVdbfploZFw
-         hT2MZktT7EWYkjpqaZhaJqZ46Zy49aDPctTyK2CAwUeLvn10aaoOYYws2ZIMWQA/mbev
-         4nROOv0yUvjPe90el/OfGjniLFG9PZdMf8Cl62cqUNFNZG/zLXC8xmMxG/twuZ7t2wXk
-         MHyw==
+        bh=LRX7GpLdgFvRfe1C5DKcxd/ZrRqJlQC6DhuQ385RIqQ=;
+        b=wY/qUjaA3apGo0Gn3YoQSlP+i/rJrR6NFQzrjw3Ks9dgh1lZdAbtAA02eY3deSRwJu
+         YwX3UF9uJO+wgUbNA/sCaSgvKK1/8+rkenZVDL/cSEtKA9loqiZ8YM8qUm4p7Y1Jst7K
+         mhw/UWardrSVYcqSH5GO2QtYAsEKAmcHgiaZ05pGz0vclD0jBFb/svUHz3Yc1SSUYJVt
+         Q8iQjM4gmHtH72gcm4ukqE5qjDpBHpF1NUK3xlW0QddylLtLK13WG/BB/fjJZOXYfuFr
+         rknTWHsL7IpSCfhU+IadnVmo0CAecCa2pXlSHqQxXeqJIZBdGgvODgxR97aXBxJsQjhM
+         kHDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=Azv6wQXNpWBikFZ7YedVEP87aeuLGrZzJ94JVNBlROE=;
-        b=MKFKrpilv29Z/TXBd20+ZVl4Ns6QsEmfFc6BDnxCKU8aKOTrB00me8tAPhWwE0ERvw
-         Bga/caCxobPGRAhY9Hpe3yNv+eX63TNue8BTN+r6mBeOqmLCKOfzATXLgq1x4Ha2q7SI
-         ASTN7CT073soIUeeLx/iLNPtRHVvy/wYNCpKUqmwElEELbEN8MxN+FFBB0Ys0/t0/LTv
-         szgBCXElSglXPVu2wJs67Ej40DMKJdkgJK8fz3wlquRUvI3imRPn6u3a1PByd+wvWQbw
-         0YZz6rNa0eYkEfS34o0ZXu0hdAL1OjXUA2Lr6ICj3BXb37MmNXeAeJZJLNgjkPq9mK24
-         Ql+g==
-X-Gm-Message-State: ACrzQf0rpmgoQY6xFbNMdTfFeOHROtejgpFnRXnk6uH9qvFi6Er13hhW
-        hKFHGBATVr0S/q7UCJspOB+H1A==
-X-Google-Smtp-Source: AMsMyM4s7dO6DMyD3zAQ4zh4Dxzr3zHUcwFyK/2oKhuJWIrnJOJH/wvIkKi/wYe4u1xxGdDO0fhyBg==
-X-Received: by 2002:a7b:c4c2:0:b0:3b4:fdc4:6df9 with SMTP id g2-20020a7bc4c2000000b003b4fdc46df9mr3012311wmk.123.1664971509676;
-        Wed, 05 Oct 2022 05:05:09 -0700 (PDT)
+        bh=LRX7GpLdgFvRfe1C5DKcxd/ZrRqJlQC6DhuQ385RIqQ=;
+        b=BRPeVd1LXIYaI5C0vzvLH+OkNWeiRI9qb5lL1cA2gZViX5NXlI3twpncwtXbM9ezmA
+         4sfpVEe6oeFt4NUUDaztncLU9H+1hnKacdTBLnRn/rGsnihR55Qh5bOFoaPNxoij/DXX
+         Uy3WTg9vvV+TSz+ZFmxUWqXq7ZP5+jVtCHFiaE7ovnqhIDSZ/HkD++riwAKoBU5Eunbj
+         Mq+8ezFmPhh4EdNvQuUcEf4nat5cOMcmLf82lgLl9Wt2YfpvONNmHnVtCd5h8VB0GRPv
+         JgmMQBVJUuph9wSQvUhJCe+7qXbl4mHJGx93doSi93FDVbNrcj7wrRotKhm2s/5s8AtZ
+         5RXQ==
+X-Gm-Message-State: ACrzQf26sMN5kptMx37vJlb1quSfTe/X5WJFNZz6yEu75duYjPvgEu22
+        ycBa43Rc9o9Tjz69soyvyMYY7w==
+X-Google-Smtp-Source: AMsMyM7Yk3vdlh17NVAK2oPOvU3tuGQHb5qFBVbuApIzXz+EL8rx7HRn0PP3bIYV5aleBURRZ57r2Q==
+X-Received: by 2002:a05:600c:1c19:b0:3b4:c1cb:d46d with SMTP id j25-20020a05600c1c1900b003b4c1cbd46dmr3055730wms.172.1664971510379;
+        Wed, 05 Oct 2022 05:05:10 -0700 (PDT)
 Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id v16-20020a5d6790000000b0022e3e7813f0sm7799583wru.107.2022.10.05.05.05.08
+        by smtp.googlemail.com with ESMTPSA id v16-20020a5d6790000000b0022e3e7813f0sm7799583wru.107.2022.10.05.05.05.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 05:05:09 -0700 (PDT)
+        Wed, 05 Oct 2022 05:05:10 -0700 (PDT)
 From:   Corentin Labbe <clabbe@baylibre.com>
 To:     davem@davemloft.net, edumazet@google.com, khalasa@piap.pl,
         kuba@kernel.org, pabeni@redhat.com
 Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH 3/4] net: ethernet: xscale: remove assignment in if condition
-Date:   Wed,  5 Oct 2022 12:05:00 +0000
-Message-Id: <20221005120501.3527435-3-clabbe@baylibre.com>
+Subject: [PATCH 4/4] net: ethernet: xscale: fix easy remaining style issues
+Date:   Wed,  5 Oct 2022 12:05:01 +0000
+Message-Id: <20221005120501.3527435-4-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221005120501.3527435-1-clabbe@baylibre.com>
 References: <20221005120501.3527435-1-clabbe@baylibre.com>
@@ -71,128 +71,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix checkpatch error about "do not use assignment in if condition";
+Fix all easy remaining styles issues.
 
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- drivers/net/ethernet/xscale/ixp4xx_eth.c | 36 ++++++++++++++++--------
- 1 file changed, 24 insertions(+), 12 deletions(-)
+ drivers/net/ethernet/xscale/ixp4xx_eth.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/net/ethernet/xscale/ixp4xx_eth.c b/drivers/net/ethernet/xscale/ixp4xx_eth.c
-index b4539dd2cfe4..11e5c00f638d 100644
+index 11e5c00f638d..f3732b67cc44 100644
 --- a/drivers/net/ethernet/xscale/ixp4xx_eth.c
 +++ b/drivers/net/ethernet/xscale/ixp4xx_eth.c
-@@ -540,7 +540,8 @@ static int ixp4xx_mdio_register(struct eth_regs __iomem *regs)
- {
- 	int err;
+@@ -356,8 +356,7 @@ static void ixp_tx_timestamp(struct port *port, struct sk_buff *skb)
  
--	if (!(mdio_bus = mdiobus_alloc()))
-+	mdio_bus = mdiobus_alloc();
-+	if (!mdio_bus)
- 		return -ENOMEM;
+ 	regs = port->timesync_regs;
  
- 	mdio_regs = regs;
-@@ -631,7 +632,8 @@ static inline int queue_get_desc(unsigned int queue, struct port *port,
- 	u32 phys, tab_phys, n_desc;
- 	struct desc *tab;
+-	/*
+-	 * This really stinks, but we have to poll for the Tx time stamp.
++	/* This really stinks, but we have to poll for the Tx time stamp.
+ 	 * Usually, the time stamp is ready after 4 to 6 microseconds.
+ 	 */
+ 	for (cnt = 0; cnt < 100; cnt++) {
+@@ -653,7 +652,8 @@ static inline void queue_put_desc(unsigned int queue, u32 phys,
+ 	BUG_ON(phys & 0x1F);
+ 	qmgr_put_entry(queue, phys);
+ 	/* Don't check for queue overflow here, we've allocated sufficient
+-	   length and queues >= 32 don't support this check anyway. */
++	 * length and queues >= 32 don't support this check anyway.
++	 */
+ }
  
--	if (!(phys = qmgr_get_entry(queue)))
-+	phys = qmgr_get_entry(queue);
-+	if (!phys)
- 		return -1;
- 
- 	phys &= ~0x1F; /* mask out non-address bits */
-@@ -698,7 +700,8 @@ static int eth_poll(struct napi_struct *napi, int budget)
- 		u32 phys;
+ static inline void dma_unmap_tx(struct port *port, struct desc *desc)
+@@ -893,7 +893,8 @@ static netdev_tx_t eth_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	port->tx_buff_tab[n] = mem;
  #endif
+ 	desc->data = phys + offset;
+-	desc->buf_len = desc->pkt_len = len;
++	desc->buf_len = len;
++	desc->pkt_len = len;
  
--		if ((n = queue_get_desc(rxq, port, 0)) < 0) {
-+		n = queue_get_desc(rxq, port, 0);
-+		if (n < 0) {
- #if DEBUG_RX
- 			netdev_dbg(dev, "%s napi_complete\n", __func__);
- #endif
-@@ -722,7 +725,8 @@ static int eth_poll(struct napi_struct *napi, int budget)
- 		desc = rx_desc_ptr(port, n);
+ 	/* NPE firmware pads short frames with zeros internally */
+ 	wmb();
+@@ -941,7 +942,7 @@ static void eth_set_mcast_list(struct net_device *dev)
+ 			__raw_writel(allmulti[i], &port->regs->mcast_mask[i]);
+ 		}
+ 		__raw_writel(DEFAULT_RX_CNTRL0 | RX_CNTRL0_ADDR_FLTR_EN,
+-			&port->regs->rx_control[0]);
++			     &port->regs->rx_control[0]);
+ 		return;
+ 	}
  
- #ifdef __ARMEB__
--		if ((skb = netdev_alloc_skb(dev, RX_BUFF_SIZE))) {
-+		skb = netdev_alloc_skb(dev, RX_BUFF_SIZE);
-+		if (skb) {
- 			phys = dma_map_single(&dev->dev, skb->data,
- 					      RX_BUFF_SIZE, DMA_FROM_DEVICE);
- 			if (dma_mapping_error(&dev->dev, phys)) {
-@@ -860,7 +864,8 @@ static netdev_tx_t eth_xmit(struct sk_buff *skb, struct net_device *dev)
- #else
- 	offset = (uintptr_t)skb->data & 3; /* keep 32-bit alignment */
- 	bytes = ALIGN(offset + len, 4);
--	if (!(mem = kmalloc(bytes, GFP_ATOMIC))) {
-+	mem = kmalloc(bytes, GFP_ATOMIC); {
-+	if (!mem) {
- 		dev_kfree_skb(skb);
- 		dev->stats.tx_dropped++;
- 		return NETDEV_TX_OK;
-@@ -1113,11 +1118,13 @@ static int init_queues(struct port *port)
- 		buffer_t *buff; /* skb or kmalloc()ated memory */
- 		void *data;
- #ifdef __ARMEB__
--		if (!(buff = netdev_alloc_skb(port->netdev, RX_BUFF_SIZE)))
-+		buff = netdev_alloc_skb(port->netdev, RX_BUFF_SIZE);
-+		if (!buff)
- 			return -ENOMEM;
- 		data = buff->data;
- #else
--		if (!(buff = kmalloc(RX_BUFF_SIZE, GFP_KERNEL)))
-+		buff = kmalloc(RX_BUFF_SIZE, GFP_KERNEL);
-+		if (!buff)
- 			return -ENOMEM;
- 		data = buff;
- #endif
-@@ -1220,10 +1227,12 @@ static int eth_open(struct net_device *dev)
- 	if (npe_send_recv_message(port->npe, &msg, "ETH_SET_FIREWALL_MODE"))
- 		return -EIO;
- 
--	if ((err = request_queues(port)) != 0)
-+	err = request_queues(port);
-+	if (err != 0)
- 		return err;
- 
--	if ((err = init_queues(port)) != 0) {
-+	err = init_queues(port);
-+	if (err != 0) {
- 		destroy_queues(port);
- 		release_queues(port);
- 		return err;
-@@ -1442,7 +1451,8 @@ static int ixp4xx_eth_probe(struct platform_device *pdev)
- 	if (!plat)
- 		return -ENODEV;
- 
--	if (!(ndev = devm_alloc_etherdev(dev, sizeof(struct port))))
-+	ndev = devm_alloc_etherdev(dev, sizeof(struct port));
-+	if (!ndev)
- 		return -ENOMEM;
- 
- 	SET_NETDEV_DEV(ndev, dev);
-@@ -1479,7 +1489,8 @@ static int ixp4xx_eth_probe(struct platform_device *pdev)
- 
- 	netif_napi_add_weight(ndev, &port->napi, eth_poll, NAPI_WEIGHT);
- 
--	if (!(port->npe = npe_request(NPE_ID(port->id))))
-+	port->npe = npe_request(NPE_ID(port->id));
-+	if (!port->npe)
- 		return -EIO;
- 
- 	port->plat = plat;
-@@ -1506,7 +1517,8 @@ static int ixp4xx_eth_probe(struct platform_device *pdev)
- 
- 	phydev->irq = PHY_POLL;
- 
--	if ((err = register_netdev(ndev)))
-+	err = register_netdev(ndev);
-+	if (err)
- 		goto err_phy_dis;
- 
- 	netdev_info(ndev, "%s: MII PHY %i on %s\n", ndev->name, plat->phy,
+@@ -1321,7 +1322,8 @@ static int eth_close(struct net_device *dev)
+ 			BUG_ON(n < 0);
+ 			desc = tx_desc_ptr(port, n);
+ 			phys = tx_desc_phys(port, n);
+-			desc->buf_len = desc->pkt_len = 1;
++			desc->buf_len = 1;
++			desc->pkt_len = 1;
+ 			wmb();
+ 			queue_put_desc(TX_QUEUE(port->id), phys, desc);
+ 		}
 -- 
 2.35.1
 
