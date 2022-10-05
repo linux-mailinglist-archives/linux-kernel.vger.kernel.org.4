@@ -2,121 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A48645F5158
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E04BA5F5167
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 11:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbiJEJGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 05:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
+        id S229900AbiJEJH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 05:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiJEJGi (ORCPT
+        with ESMTP id S229446AbiJEJHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 05:06:38 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5CE619020
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 02:06:37 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id d24-20020a05660225d800b006a466ec7746so10651416iop.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 02:06:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=iF+5J3FjR+ovq4BjVljFTsTmBLDfLUYAsyCh3rezwNE=;
-        b=4p33szn0XQdvBgB/gJuZoY8xFnQXKmDjfCGFqbUeT8MvFdStd0LygsVJNEZru6RPJE
-         HCq7NT5nwP1vkxN0DK0PGbPo0BlEZ6BxN/tHc5AjBLScntlcHKT0d8w06ZCFIaDBdIP3
-         cL5Ae036Bz34arC1Wz+C1jElNFknQfzubC2XINv+NxFGslOeEDn2b/j2juXiQ1q5ItPT
-         h39DakadnZfJRGtpIWl9ar04vPxcsdJ4JA0iBkVV7FiJXAIPoOnIvVNkvwY52usofzxX
-         DHKHWqKBp8Qeq4f3wxDsapC1K6PiROTYaIiieiTHxoJP688opheqsAoDoIPwWNH1NcKt
-         bDYw==
-X-Gm-Message-State: ACrzQf2JBxur8OKOIN3aSqWJtag/WSp9PLCPVIuk9epWvsfe9X0ZaA8F
-        HbnhS3Pz9lVjH4wHj+FKxZy6EjkU/hsKBdgZrR+FUOLTbg9p
-X-Google-Smtp-Source: AMsMyM6cdJeEFqtU+wWYdq7DvQIBFFro05X7K993gQKLKIF1oQizWhIaotrLbIaZA9pwnMx3Lfun1A6GW82a6/0/Y6WZhgrvPU0U
+        Wed, 5 Oct 2022 05:07:52 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A203D67456;
+        Wed,  5 Oct 2022 02:07:50 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2958c0Io013174;
+        Wed, 5 Oct 2022 09:07:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=WKK193DeUkzacHgCqgZn1fZGpo8hFFg5A/8xRrv1rG4=;
+ b=cgOcvuAM35g3fzQEcx/OGnUqh4fHQ/taoqkWOP91puxa6UGZrW/lU9XN5otqo7ExBkOz
+ ge2ovWlrQSGyZJloZ3FBnjcsJGleEpV0PYO+Nu5Cl8apknkyznSpXS7NMpndAhA0sbKk
+ H8AAluc6BQXmKOn+2NHJI3MOY6TaRnIbvo1EroKyYRUXNLK74tlGwq4RBws4qvWm4Z/c
+ Ot5jGxRlp59+kzpgN/ukoVwkS7mzyhEH6hutG7ihGYUgO4K3stFd+PVmfWSqiqIAyIIP
+ SOSiTk3tbqmt62HoUQHEB99XkCKLXvjFVzbhYXveBfs32LjyFCllnhxHOQkqjBe0eRdo 4A== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k0sq5s8vy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Oct 2022 09:07:29 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29597SZj009299
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 5 Oct 2022 09:07:28 GMT
+Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Wed, 5 Oct 2022 02:07:21 -0700
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+To:     freedreno <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Douglas Anderson <dianders@chromium.org>,
+        <krzysztof.kozlowski@linaro.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "Konrad Dybcio" <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <sboyd@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v7 0/6] clk/qcom: Support gdsc collapse polling using 'reset' interface
+Date:   Wed, 5 Oct 2022 14:36:58 +0530
+Message-ID: <1664960824-20951-1-git-send-email-quic_akhilpo@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-Received: by 2002:a92:c247:0:b0:2fa:16d1:9cc0 with SMTP id
- k7-20020a92c247000000b002fa16d19cc0mr4251404ilo.293.1664960797242; Wed, 05
- Oct 2022 02:06:37 -0700 (PDT)
-Date:   Wed, 05 Oct 2022 02:06:37 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e27a4205ea45e4d8@google.com>
-Subject: [syzbot] kernel panic: stack is corrupted in __might_resched
-From:   syzbot <syzbot+34cc87acc93740589aa6@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        nathan@kernel.org, ndesaulniers@google.com, ntfs3@lists.linux.dev,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: M1iZJKbT-CIlpy9m8o03DwIVJZRFH-FI
+X-Proofpoint-GUID: M1iZJKbT-CIlpy9m8o03DwIVJZRFH-FI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-04_09,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
+ mlxlogscore=999 phishscore=0 spamscore=0 malwarescore=0 impostorscore=0
+ mlxscore=0 bulkscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210050057
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+Some clients like adreno gpu driver would like to ensure that its gdsc
+is collapsed at hardware during a gpu reset sequence. This is because it
+has a votable gdsc which could be ON due to a vote from another subsystem
+like tz, hyp etc or due to an internal hardware signal. To allow
+this, gpucc driver can expose an interface to the client driver using
+reset framework. Using this the client driver can trigger a polling within
+the gdsc driver.
 
-HEAD commit:    0326074ff465 Merge tag 'net-next-6.1' of git://git.kernel...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10910bbc880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d323d85b1f8a4ed7
-dashboard link: https://syzkaller.appspot.com/bug?extid=34cc87acc93740589aa6
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+This series is rebased on top of qcom/linux:for-next branch.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Related discussion: https://patchwork.freedesktop.org/patch/493144/
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c40d70ae7512/disk-0326074f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/3603ce065271/vmlinux-0326074f.xz
+Changes in v7:
+- Update commit message (Bjorn)
+- Rebased on top of qcom/linux:for-next branch.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+34cc87acc93740589aa6@syzkaller.appspotmail.com
+Changes in v6:
+- No code changes in this version. Just captured the Acked-by tags
 
-ntfs3: loop4: Different NTFS' sector size (1024) and media sector size (512)
-Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: __might_resched+0x6a6/0x6b0
-CPU: 1 PID: 16328 Comm: syz-executor.4 Not tainted 6.0.0-syzkaller-02734-g0326074ff465 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- panic+0x2d6/0x715 kernel/panic.c:274
- __stack_chk_fail+0x12/0x20 kernel/panic.c:706
- __might_resched+0x6a6/0x6b0
- write_inode_now+0x1bb/0x260 fs/fs-writeback.c:2722
- iput_final fs/inode.c:1735 [inline]
- iput+0x3e6/0x760 fs/inode.c:1774
- ntfs_fill_super+0x3af3/0x42a0 fs/ntfs3/super.c:1190
- get_tree_bdev+0x400/0x620 fs/super.c:1323
- vfs_get_tree+0x88/0x270 fs/super.c:1530
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0875e8bada
-Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f0876f3df88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f0875e8bada
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f0876f3dfe0
-RBP: 00007f0876f3e020 R08: 00007f0876f3e020 R09: 0000000020000000
-R10: 0000000000000000 R11: 0000000000000202 R12: 0000000020000000
-R13: 0000000020000100 R14: 00007f0876f3dfe0 R15: 0000000020002900
- </TASK>
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+Changes in v5:
+- Nit: Remove a duplicate blank line (Krzysztof)
 
+Changes in v4:
+- Update gpu dt-binding schema
+- Typo fix in commit text
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Changes in v3:
+- Use pointer to const for "struct qcom_reset_ops" in qcom_reset_map (Krzysztof)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Changes in v2:
+- Return error when a particular custom reset op is not implemented. (Dmitry)
+
+Akhil P Oommen (6):
+  dt-bindings: clk: qcom: Support gpu cx gdsc reset
+  clk: qcom: Allow custom reset ops
+  clk: qcom: gdsc: Add a reset op to poll gdsc collapse
+  clk: qcom: gpucc-sc7280: Add cx collapse reset support
+  dt-bindings: drm/msm/gpu: Add optional resets
+  arm64: dts: qcom: sc7280: Add Reset support for gpu
+
+ .../devicetree/bindings/display/msm/gpu.yaml       |  6 +++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |  3 +++
+ drivers/clk/qcom/gdsc.c                            | 23 ++++++++++++++----
+ drivers/clk/qcom/gdsc.h                            |  7 ++++++
+ drivers/clk/qcom/gpucc-sc7280.c                    | 10 ++++++++
+ drivers/clk/qcom/reset.c                           | 27 +++++++++++++++++++++-
+ drivers/clk/qcom/reset.h                           |  8 +++++++
+ include/dt-bindings/clock/qcom,gpucc-sc7280.h      |  3 +++
+ 8 files changed, 82 insertions(+), 5 deletions(-)
+
+-- 
+2.7.4
+
