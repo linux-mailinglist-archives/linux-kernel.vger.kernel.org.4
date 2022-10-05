@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A32535F5932
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 485E15F5935
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 19:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbiJERoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 13:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33820 "EHLO
+        id S230413AbiJERoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 13:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbiJERoQ (ORCPT
+        with ESMTP id S230209AbiJERoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 13:44:16 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889E575CC5;
-        Wed,  5 Oct 2022 10:44:15 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id bk15so27002586wrb.13;
-        Wed, 05 Oct 2022 10:44:15 -0700 (PDT)
+        Wed, 5 Oct 2022 13:44:18 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8783A483;
+        Wed,  5 Oct 2022 10:44:17 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id j16so15065469wrh.5;
+        Wed, 05 Oct 2022 10:44:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=GOiHBfmaA8z/8lz5HmFRwUhuxBOZwEnbSHtvAmKlLks=;
-        b=f41LOjaowwAFIOKK1Wtv2Lc0LAIPKpAIhKiF6Vssrb6pni0YVqAU0fw+N0lvbGDTcs
-         MT8Kh6FYoKq77cx5YjBl4tcSiNjSDLoDwD22O73C4mmwzzVYxPzLApO4TnUm5sJg2clk
-         4SwYXCdbBiUgxLg8W3Z8lA1/S5iMk6/iXjm1WJuv42mjnFQGNnyqLqMrPIOK+KJm2b3a
-         WIlnX4YcpyW/bk0Tiv396NcEgjNMJy5enbP8zrjab43rxe9KvhHyBexwBN8QGV3AL6t3
-         WhjjUtPOV0WU+bcnKg593+K7qi/eST9i4G+vZvuq01z8CHiu63EWS+lSNPCQYBUXsXZQ
-         laYQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=J6AdrG61fFuk3qFrjsmnmW/v2lHEYSKDOmlc3Uttj2I=;
+        b=jiMuHvxyLhrd3kGwgfpUsnOt7hf+tBiYex6HV/Mo3+9CfzkqQDf6kj0FOvI6w7IOgx
+         8rOazqdOFH/IK4kOu/nGAE0Gwd6tz9zqFRiK5SfaUIJXNPBb+cLIiRxK/dzP8zBDbTh0
+         bmJ+RXjS9uoWTvXUf6lO8s7sgUeuSv5Q/CzCWgz4PuqV+33o4K14FqNUgpr5tuaGFjwD
+         9rRwMirpE+krkiGstEYsvIXsCx1PSUOdPjdDtnA1aNLOvgETT45mqxJRkjIucnOTEr7r
+         HS1oYEmDw5gNgzR4CYmaL+LIiOyijjWsOWxkmgiROpWTPe/B7erVlKS7bcDDlOvOR1Yh
+         +pww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=GOiHBfmaA8z/8lz5HmFRwUhuxBOZwEnbSHtvAmKlLks=;
-        b=lHGRc59A1kyL5ugiTemD+1o+VIO0NjLDKPM64ARJk+O2DnMvwDYNZet6WBlcrd77Jx
-         REdoojNZO7K9tYjQYnTaryHpv+YQI/DWXQd5DB+E8TOuz0B0qKkKLNLCGpPVi2X1m2P6
-         fkE6GEY0FQOKzDuHmK9SJj1H3PvQFVp2CWTDrwQDRQKuD6VRMurda9a3soio5CkgNE5I
-         lC2Ub0S8pH85o53e/uKnYi0JTf48n8nlOAoqJ24duz66BOsm5PFrqkXE6e8jtn6ISwz4
-         dMNTOafDSyOFIQTHQGJ6nj17T/KXUZAoN4PE0VuqfN5rscDE82BBFp63VmBtGkDtMWcF
-         2JOw==
-X-Gm-Message-State: ACrzQf2ttPS240YVxoEcDOsGoHxoAHwqD9VAV/pRlX47Jrxd54tewtxt
-        nRgRa/QIDDPJ4YEq0R2NJ4yryoxgRqI7UA==
-X-Google-Smtp-Source: AMsMyM5bTE3xFGk/IM9bs4NZT8IrIpQ2ces6QmIwgSu4k1Rv98OaCFr32CXpgGtu2UAnI/s2XX0Jsw==
-X-Received: by 2002:adf:d1e3:0:b0:22a:b9e2:8841 with SMTP id g3-20020adfd1e3000000b0022ab9e28841mr549084wrd.184.1664991853975;
-        Wed, 05 Oct 2022 10:44:13 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=J6AdrG61fFuk3qFrjsmnmW/v2lHEYSKDOmlc3Uttj2I=;
+        b=SdGY6ItuTb3cbmrXmLER4fxNqFXjSyexZzTC7ISTP0htYFRrCQZdx5YRMh81oNJE9t
+         Pk2o4kCBVdKZFcH5NkjoW+DdtgiBJF4zAyZrAKlZshLf6b8SYJ9C6JJm6fXFbeLBTfMZ
+         C+y+x/GsrYLuu6G3oHEV2EQTq3bVUiXWoSZ5ius8NKSCca/8Sx9arOOze9t1JKIQ5OF4
+         3h2i0sYWOOqSCz3W5K9ZcleqhmjHIyQeW9qJG7m0TRziRDSRjHY/Kry6S4bklzSKUa3q
+         j1ipanYpncy9+uA9qsjGPs74bKCnNCq/UBOelVWOjC7XZvoASwaBlaLGC8/HV+6cPl+/
+         Yj+A==
+X-Gm-Message-State: ACrzQf19mWLi97x56udYj+7wctpu0hJnE3jqVVzlL98MSmh3u+DoY4Kk
+        dAU4TQ5OgCjcIO7NGK5+N/A=
+X-Google-Smtp-Source: AMsMyM7LORL+FOnuDtH5sB3TJMSNlDx7UAQ83NOa0L/mNBleJUp+Cs/QLwJCYNTum2QiG1rzKE0y+A==
+X-Received: by 2002:a5d:474b:0:b0:22e:3180:f748 with SMTP id o11-20020a5d474b000000b0022e3180f748mr520389wrs.504.1664991856242;
+        Wed, 05 Oct 2022 10:44:16 -0700 (PDT)
 Received: from localhost.localdomain ([95.183.227.98])
-        by smtp.gmail.com with ESMTPSA id c6-20020a5d4146000000b0022a403954c3sm16075491wrq.42.2022.10.05.10.44.11
+        by smtp.gmail.com with ESMTPSA id c6-20020a5d4146000000b0022a403954c3sm16075491wrq.42.2022.10.05.10.44.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 10:44:13 -0700 (PDT)
+        Wed, 05 Oct 2022 10:44:15 -0700 (PDT)
 From:   Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
 To:     Linus Walleij <linus.walleij@linaro.org>,
@@ -63,10 +64,12 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 00/10] MediaTek pinctrl DT binding cleanup and MT6735 pinctrl support
-Date:   Wed,  5 Oct 2022 20:43:33 +0300
-Message-Id: <20221005174343.24240-1-y.oudjana@protonmail.com>
+Subject: [PATCH v2 01/10] arm64: dts: mediatek: mt6779: Remove syscon compatible from pin controller
+Date:   Wed,  5 Oct 2022 20:43:34 +0300
+Message-Id: <20221005174343.24240-2-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.38.0
+In-Reply-To: <20221005174343.24240-1-y.oudjana@protonmail.com>
+References: <20221005174343.24240-1-y.oudjana@protonmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,54 +84,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-This series adds a driver for the pin controller found on the MediaTek MT6735
-and MT6735M SoCs. The two differ in the last 6 physical pins, which are used
-for MSDC2 on MT6735 but don't exist on MT6735M (since MSDC2 doesn't exist on it
-to begin with). In preparation to document DT bindings for this pin controller,
-the existing documents for MT67xx SoCs are combined into one in order to
-eliminate duplicate property definitions and standardize pin configuration node
-names. Necessary cleanup is done along the way.
+Remove syscon compatible string from pin controller to follow
+DT bindings and pass checks. Adding the syscon compatible to
+the DT bindings documentation instead causes a different check
+error due to the syscon document specifying a maximum of 1 item
+in the reg property, while this has 9. Nothing is using the pin
+controller as a syscon at the moment so it should be a safe
+thing to do.
 
-Changes since v1:
- - Combine other documents into existing mediatek,mt6779-pinctrl.yaml
-   instead of creating a new document with wild card in its name.
- - Split first patch into smaller patches focused on specific changes.
- - Remove syscon compatible from MT6779 DT to avoid a check error.
- - Fix interrupt count for MT6795.
+Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+---
+ arch/arm64/boot/dts/mediatek/mt6779.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yassine Oudjana (10):
-  arm64: dts: mediatek: mt6779: Remove syscon compatible from pin
-    controller
-  dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Improve description
-  dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Make gpio-ranges
-    optional
-  dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Add MT6797
-  dt-bindings: pinctrl: mediatek,pinctrl-mt6795: Fix interrupt count
-  dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Add MT6795
-  arm64: dts: mediatek: mt6797: Make pin configuration nodes follow DT
-    bindings
-  dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Document MT6765 pin
-    controller
-  dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Document MT6735 pin
-    controller bindings
-  pinctrl: mediatek: Add MT6735 pinctrl driver
-
- .../pinctrl/mediatek,mt6779-pinctrl.yaml      |  247 +-
- .../pinctrl/mediatek,mt6797-pinctrl.yaml      |  176 -
- .../pinctrl/mediatek,pinctrl-mt6795.yaml      |  224 -
- MAINTAINERS                                   |   10 +-
- arch/arm64/boot/dts/mediatek/mt6779.dtsi      |    2 +-
- arch/arm64/boot/dts/mediatek/mt6797.dtsi      |   20 +-
- drivers/pinctrl/mediatek/Kconfig              |    6 +
- drivers/pinctrl/mediatek/Makefile             |    1 +
- drivers/pinctrl/mediatek/pinctrl-mt6735.c     |  584 +++
- drivers/pinctrl/mediatek/pinctrl-mtk-mt6735.h | 3993 +++++++++++++++++
- 10 files changed, 4809 insertions(+), 454 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,mt6797-pinctrl.yaml
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
- create mode 100644 drivers/pinctrl/mediatek/pinctrl-mt6735.c
- create mode 100644 drivers/pinctrl/mediatek/pinctrl-mtk-mt6735.h
-
+diff --git a/arch/arm64/boot/dts/mediatek/mt6779.dtsi b/arch/arm64/boot/dts/mediatek/mt6779.dtsi
+index 9bdf5145966c..a6fa5212da4e 100644
+--- a/arch/arm64/boot/dts/mediatek/mt6779.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt6779.dtsi
+@@ -160,7 +160,7 @@ infracfg_ao: clock-controller@10001000 {
+ 		};
+ 
+ 		pio: pinctrl@10005000 {
+-			compatible = "mediatek,mt6779-pinctrl", "syscon";
++			compatible = "mediatek,mt6779-pinctrl";
+ 			reg = <0 0x10005000 0 0x1000>,
+ 			      <0 0x11c20000 0 0x1000>,
+ 			      <0 0x11d10000 0 0x1000>,
 -- 
 2.38.0
 
