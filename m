@@ -2,70 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B04955F5CB1
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 00:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0497B5F5CC1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 00:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiJEW33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 18:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37464 "EHLO
+        id S229581AbiJEWdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 18:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiJEW30 (ORCPT
+        with ESMTP id S229492AbiJEWdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 18:29:26 -0400
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9431816B4
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 15:29:25 -0700 (PDT)
-Received: by mail-oo1-xc36.google.com with SMTP id g15-20020a4a894f000000b0047f8e899623so250116ooi.5
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 15:29:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=IdkuvjBUbeHkaiG0+XBbrzXdoM1HyeZk+D9Bg+bbKPc=;
-        b=JNMgFT3KrKKXzs2XiDGSfxRJzMq0LNHvNCk+JsXvVYgydj3yK6myFJ1ZI6Gr3w47er
-         DJacrYPYvuxZxs2ApPWYfVhMcAVLIGz28lgKLF4O+jjtQ1ym7WH1z220irgY+Dif6vt7
-         t3DXXZCin/snhZQR26QjR3GyxT7xjmOSU5emxzq4Y2EUwcYasYGfnQ1112ZEQcv9eJVI
-         v9CdynC1A0mnR62VSn2JD0WlJPXXz8Q6joU/XTPFSbv3u4sBZXBmV3+OzQdMQDKJOje5
-         9OwH6uopFLYZy4NLWwF71oJDyef5foghto+wCgDDoazJP4GAnt2vzSC+hxCYyYXGNvBa
-         fmIg==
+        Wed, 5 Oct 2022 18:33:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E56844C7
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 15:33:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665009198;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+vUhq4r4XyBFUdHgKqV0dej+dlEeKdamNVi2/y0KE7I=;
+        b=cQ2OV+VifNqb9/MvDG1jk1Ni6briovFXOqWqDFEYeXqIp3y8AY4XcUWNkU5Sreh65kIoj9
+        6HsyK4H7co52uCjIb2Tf4JnbrZmMjaVuv5/FkGSdHt5EnF1lMomzWLojWg0dQh/ulhYlRy
+        yKjo0zzNF94ImrOiGkdNPqyZS9SsrIk=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-425-RpUwKx6iOKez4JzhkLcN3w-1; Wed, 05 Oct 2022 18:33:09 -0400
+X-MC-Unique: RpUwKx6iOKez4JzhkLcN3w-1
+Received: by mail-il1-f198.google.com with SMTP id h8-20020a056e021b8800b002f9c2e31750so278662ili.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 15:33:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IdkuvjBUbeHkaiG0+XBbrzXdoM1HyeZk+D9Bg+bbKPc=;
-        b=G6vL7+cFYbACEXSWLDSUBbwgnIChmcEO8kAxDXARKM4ysHngyZz65DuvNkwU7d4C15
-         Tq8wL8PuDfz0O5ProeLegSfkU4PIGuACLVBqXlxvH+u2eQKlUDEaVz/C6q4LT0P0yYY7
-         pENtJMqOoevsqM1e6K/ZgR0nKNepcDkgedDYe4n/W5LDO6IaZs47odjE/LqP/DZNtfKI
-         ZGX3CJGdZOIvWkzOOChVjclfNKgz6iwL9LmOk3aI7B2RRK81qUPge2AudZ7oTuE2gIc3
-         /r5oHAPkTu61MPumtra4HzVn/n5DYR7JbUEYaYz45sWUF5+gTNbSY1bOUNKBekcCu+4G
-         fRdA==
-X-Gm-Message-State: ACrzQf1g9SW9uM5c5Rq1XoF46bBsmz9rv9K7Fz3FMgdJbDbx/mO8KzMR
-        MmkdwVhSlfkK/1nEJMRsOFL8onSh+YibduTTIeaoSg==
-X-Google-Smtp-Source: AMsMyM4NYYmVUqY0Yw6YDhzHckTU04BAKE6QDHYrnmq/ZMZz9nvrSDz8kSstf/sMpvSoYhASP5wOXwV9Tn1QOXaYBlA=
-X-Received: by 2002:a9d:6296:0:b0:656:761:28bc with SMTP id
- x22-20020a9d6296000000b00656076128bcmr705288otk.14.1665008964643; Wed, 05 Oct
- 2022 15:29:24 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=+vUhq4r4XyBFUdHgKqV0dej+dlEeKdamNVi2/y0KE7I=;
+        b=FHaqDB6ZCvW8fvAuihIjexlDPG+6b1AivFV0iXNOGQiQeMoyXv9+QyoQWMxLlaQoTp
+         dhIaiXu1cNEQWW1SDsc6Rg+ilQdDY7M2ySKQe9FP+Gju0mmjB5dorjT3RCnvD0qjEJN/
+         XYIhO/zjhiDekVieZTkZ3ZzCApX8kyuL8w6fA1CdCd8fYDD2HZXMkijNb+QWqi8dcW2B
+         YjtmqXDYIdQ6FIlqoKphm1GpFJIgdGYMAgMAHgab3tqtsV3Yku0vGGERAAOmJYZHxCtr
+         1NOe0hZN0Btn8Um9mud3yKxVvLJHW2OBlIxNqibkYwranm313XLosJIXc/b81z6/NkeT
+         pMLA==
+X-Gm-Message-State: ACrzQf2fEznbYvgXZSSwLKbMwvKtgi6NgK6tWMNaVr/cGtVj6BHWsSua
+        U+MAtCHMU7iZcy275h8vi77HM4b8OTgQHPVAPmaGNvaT6GEWCoH29FKuJt9LsYQP2C8XJFH+y+T
+        AstVwX128poCiWI3yhYAE77ea
+X-Received: by 2002:a05:6e02:160a:b0:2f9:8a30:c3af with SMTP id t10-20020a056e02160a00b002f98a30c3afmr905817ilu.11.1665009187044;
+        Wed, 05 Oct 2022 15:33:07 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7THQAbirZ49N9OGGm9eNgjnxvJVm0Nb3tua0eaaJweHQHZSL7JgG8M5d6J6W+IqmROYUkcMQ==
+X-Received: by 2002:a05:6e02:160a:b0:2f9:8a30:c3af with SMTP id t10-20020a056e02160a00b002f98a30c3afmr905808ilu.11.1665009186828;
+        Wed, 05 Oct 2022 15:33:06 -0700 (PDT)
+Received: from [10.56.18.1] ([140.209.96.154])
+        by smtp.gmail.com with ESMTPSA id o2-20020a05660213c200b006814fd71117sm7166075iov.12.2022.10.05.15.33.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Oct 2022 15:33:06 -0700 (PDT)
+Message-ID: <be0b278f-0c28-fe5b-5179-50c126d52996@redhat.com>
+Date:   Thu, 6 Oct 2022 00:33:04 +0200
 MIME-Version: 1.0
-References: <20221005220227.1959-1-surajjs@amazon.com>
-In-Reply-To: <20221005220227.1959-1-surajjs@amazon.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 5 Oct 2022 15:29:13 -0700
-Message-ID: <CALMp9eTy2w_ZbkVSVvTwOW3wYH6vnn5waEWc0BesXL-kYRFy4g@mail.gmail.com>
-Subject: Re: [PATCH] x86/speculation: Mitigate eIBRS PBRSB predictions with WRMSR
-To:     Suraj Jitindar Singh <surajjs@amazon.com>
-Cc:     kvm@vger.kernel.org, sjitindarsingh@gmail.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@suse.de, dave.hansen@linux.intel.com,
-        seanjc@google.com, pbonzini@redhat.com, peterz@infradead.org,
-        jpoimboe@kernel.org, daniel.sneddon@linux.intel.com,
-        pawan.kumar.gupta@linux.intel.com, benh@kernel.crashing.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v2] drm/ssd130x: Iterate over damage clips instead of
+ using a merged rect
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org
+Cc:     Jocelyn Falempe <jfalempe@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org
+References: <20220930152944.2584356-1-javierm@redhat.com>
+ <9fdaaae1-982c-92e1-bc61-a6db3e94ef56@suse.de>
+Content-Language: en-US
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <9fdaaae1-982c-92e1-bc61-a6db3e94ef56@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,64 +86,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 5, 2022 at 3:03 PM Suraj Jitindar Singh <surajjs@amazon.com> wrote:
->
-> tl;dr: The existing mitigation for eIBRS PBRSB predictions uses an INT3 to
-> ensure a call instruction retires before a following unbalanced RET. Replace
-> this with a WRMSR serialising instruction which has a lower performance
-> penalty.
+On 10/5/22 19:18, Thomas Zimmermann wrote:
+> 
+> 
+> Am 30.09.22 um 17:29 schrieb Javier Martinez Canillas:
+>> The drm_atomic_helper_damage_merged() helper merges all the damage clips
+>> into one rectangle. If there are multiple damage clips that aren't close
+>> to each other, the resulting rectangle could be quite big.
+>>
+>> Instead of using that function helper, iterate over all the damage clips
+>> and update them one by one.
+>>
+>> Suggested-by: Jocelyn Falempe <jfalempe@redhat.com>
+>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> 
+> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+> 
 
-The INT3 is only on a speculative path and should not impact performance.
+Pushed this to drm-misc (drm-misc-next) now. Thanks!
 
-> == Background ==
->
-> eIBRS (enhanced indirect branch restricted speculation) is used to prevent
-> predictor addresses from one privilege domain from being used for prediction
-> in a higher privilege domain.
->
-> == Problem ==
->
-> On processors with eIBRS protections there can be a case where upon VM exit
-> a guest address may be used as an RSB prediction for an unbalanced RET if a
-> CALL instruction hasn't yet been retired. This is termed PBRSB (Post-Barrier
-> Return Stack Buffer).
->
-> A mitigation for this was introduced in:
-> (2b1299322016731d56807aa49254a5ea3080b6b3 x86/speculation: Add RSB VM Exit protections)
->
-> This mitigation [1] has a ~1% performance impact on VM exit compared to without
-> it [2].
->
-> == Solution ==
->
-> The WRMSR instruction can be used as a speculation barrier and a serialising
-> instruction. Use this on the VM exit path instead to ensure that a CALL
-> instruction (in this case the call to vmx_spec_ctrl_restore_host) has retired
-> before the prediction of a following unbalanced RET.
+-- 
+Best regards,
 
-I don't buy this solution. According to
-https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/advisory-guidance/post-barrier-return-stack-buffer-predictions.html:
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
-"Note that a WRMSR instruction (used to set IBRS, for example), could
-also serve as a speculation barrier for such a sequence in place of
-LFENCE."
-
-This says only that you can replace the LFENCE with a WRMSR. It
-doesn't say that you can drop the rest of the sequence.
-
-> This mitigation [3] has a negligible performance impact.
->
-> == Testing ==
->
-> Run the outl_to_kernel kvm-unit-tests test 200 times per configuration which
-> counts the cycles for an exit to kernel mode.
->
-> [1] With existing mitigation:
-> Average: 2026 cycles
-> [2] With no mitigation:
-> Average: 2008 cycles
-> [3] With proposed mitigation:
-> Average: 2008 cycles
-
-What testing did you do to see that this is an effective mitigation?
-Improved timings are irrelevant if it doesn't work.
