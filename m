@@ -2,131 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EEAE5F4F52
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 07:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E25FA5F4F58
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 07:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbiJEFJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 01:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
+        id S229563AbiJEFL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 01:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiJEFIX (ORCPT
+        with ESMTP id S230036AbiJEFLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 01:08:23 -0400
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1B674E05
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 22:06:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1664946393; x=1696482393;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=EeFB7dhZIp+jQGWS+hX5NNzke0u6/fjW43g1++marZU=;
-  b=ddFPBeTaBqY+YVfWZrtqTb0sTNEeZXrgZt/1dAjzfjnqxeflSZyOWabZ
-   CoUiFbZOxT/tkuZbLNut/kBRzNTaoL28NdrUfbAWA1jo8bCI+KDfhzd2i
-   Ddqy//f7v9iHUUwYdr9+T+rVBvGHFH2O+iKEdfcpeT/2DFdN9RnVlCD6i
-   2h9fBCXDQEPLKWLv0W295MFTw1Mo8UqT2vsTfisp0GuDjbZPOFPdIfJjP
-   337r/Qzb4fL5TCr3CqVTohn0fZ7SDePeqtOkCoTZjgsrdtnAet/NSm6zT
-   JNJPKKFMIztlPkAUttNdOKzqSoheCH3hHnPrBqoWPlUGvpvjnCxSpQn/h
-   A==;
-X-IronPort-AV: E=Sophos;i="5.95,159,1661788800"; 
-   d="scan'208";a="213419525"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 05 Oct 2022 13:06:23 +0800
-IronPort-SDR: sglQV96LWFbKqKQeX/ILBh6o99XHiuY+YkPItnAFacEh0axXZzpztzG5Gd2/BMRkg3w8UaeyV6
- Hyb68KYjwoYVkzV7GDCC6cxGF1aU+Ke49wxK/73QbWGWd2aHpLRKSXb8LTblegqYLPknN0Y4HA
- Jl/DcdXRh1vI+RfDsfKHreQVAvdUZ42SbKRfIBMHDSCOkBIe/HvFfx+iWA/XZVIqZjNDVU63ht
- 0onmKYDK/W05gSHZXQ0OOVF+Lmq47Juipt6TvheCJrvWQO7aLFGE/0jMlhWmq7zcEHwmq2VHGI
- 992gHEOAAVQGVZCNDHz9zyB/
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Oct 2022 21:20:36 -0700
-IronPort-SDR: hWbNISSjXmZ/mCdiGLKdjyz1gvujTwULauL6SzAVr4xGoIXsvZQ4gEngqKpSBRL/6EL/4fEBLZ
- vC1tSbaZh1NuC/MvlH9qsl44NyqIzNEXMxSlvFcrUduIt+MWvBRmH+A4kTzBxxUwxZf3dF4W3F
- okonslHYZWb8b2Vb5DAtrdZIuKGyNPG7RQuNNH6IIXWJja2js/Ss+nZt5ToZIMZZw4KCh9dZKv
- dSBnzMbprwn53Txw5COROFA8yXobtphM46wjJJyxdYOXllvsA1xCR2Q6QE9DqY7U87EVOcL+uC
- Koo=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Oct 2022 22:06:24 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Mj2bg1gSFz1RvLy
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Oct 2022 22:06:23 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1664946382; x=1667538383; bh=EeFB7dhZIp+jQGWS+hX5NNzke0u6/fjW43g
-        1++marZU=; b=YKAozr7TbiFanSOWsaUl7LJWKepls26WHxlHBneEkUVarAlnlVw
-        KdRlJzj29gFBzcri5pAhPDm0g0wvlhYDpHlNqwqe7PBahW3142oAMpRv5wQUtv63
-        cj0SidiuVcbfsIYKM596fyELPnorTLHE26JraNHoJ0hhi1/yASSj5twPkCqcZYbF
-        WBlplZslJLaxeDzYRBzu7uvYv/xRaZedREOni9O81T9dNO5hWf8Hqg1b8EUhi5oD
-        WRYAoEmG4Pf/vF0eruPwelrZ0JobZPRJLt8Ag3xjnaoiErqlaZG+KFGa1VikTyYi
-        UL5+rb19S0WljvNAYEMlxFCncqSlX8IfYBw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id PWdcseyF585m for <linux-kernel@vger.kernel.org>;
-        Tue,  4 Oct 2022 22:06:22 -0700 (PDT)
-Received: from [10.225.163.106] (unknown [10.225.163.106])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Mj2bd0nCjz1RvTp;
-        Tue,  4 Oct 2022 22:06:20 -0700 (PDT)
-Message-ID: <ea505961-758e-01ab-6ce9-775f170c3979@opensource.wdc.com>
-Date:   Wed, 5 Oct 2022 14:06:20 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 6/6] null_blk: remove extra space in switch condition
-Content-Language: en-US
-To:     Chaitanya Kulkarni <kch@nvidia.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     axboe@kernel.dk, johannes.thumshirn@wdc.com, bvanassche@acm.org,
-        ming.lei@redhat.com, shinichiro.kawasaki@wdc.com,
-        vincent.fu@samsung.com, yukuai3@huawei.com
+        Wed, 5 Oct 2022 01:11:04 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2077.outbound.protection.outlook.com [40.107.101.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E41D262A;
+        Tue,  4 Oct 2022 22:10:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RBNYBBy2dh5LYR18cuA4zKzhM71NHfxC9o2wvqTMY+DzvAAhdekc81R1WhQXtN1WfsYVtraZDnwL0lebhtYmZk02bYVczv5YY/ViwML9fmUAFGcVKAlM2CJi299A5Bp6Y9JlnXicNeWkCkaslRMestXpPN2myoi3TpiAKKGH3jiQISRTGQmsPVhxQiSvSrgwwhYs7JTe1v5rPe0sadMXLDr4COqGagKnVJjlOK+/gmNWrSWG6DyhyuS0rqYsY2myEwIzh59oIZM9jhwOv/uR0plol+oQKOyvlEOEEyUh2OcYhp+RyW+/N2AGQeA8pSjrm0vuPp5D1nswyTaN1G81og==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PrcfHiHnLjR2v/Jos4A0i9MSyePBWdlnfLg6dm2HIXg=;
+ b=kdDQpg7MI1iYAY0TdEy9FuFRZwlKNPThESoooHpfK1gJzQTW0aNVb/dWgcqGY5qSBrhcbU5wi7txtshVke82qw9X4b4UffjPq9h+HymSS2gGNN1Es9H4mGF2+xGI//1qA3PMY8F3Ka0EC4dfXbcSBZunsMYhfBCrvwal/qTNlcuLDBM+b9H+7G2jadCBGsCYS90igmzCSszKHCwqUyFiCCrGFVDEJEZnf3HtxdwBPoJIdUZmVDOdTedTaCVAbWaZL1WhuIbsoDATByQFRhCOEe2zvZ2YET4BIkJIQsx3OZGAerJUQwVC1PznX9zJu+bqEUZIYUlb2G8pBGY5S4tGRA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PrcfHiHnLjR2v/Jos4A0i9MSyePBWdlnfLg6dm2HIXg=;
+ b=ql7NuLmpT/dFlA4uZG+/T3C2N/1z/2AmESXKP+Zm5wSu/kzq+xaYMrJP71oPHmlrBzn9r2C1A5ujDZ10klQSud3250djK0GJ77qSA5qJIgmsA0m+Bt9b22NqxoIOB9G5CTo7kygOCGNpywGkt+rNl0Nv+2LAk4tq0bqRzlCp/R/2RZCGv7NOnxNMx0ziEYo0thNK8ECAUcMiUDDEXOXip93qymkL+bu5eIGk06x/QBfU19ZG7o7nI5HJ7X0vUCch0xpEYAgtur+ODZzzi0BI7uqaSoLy8k3zBkaHt4q1FhNyuORIYr1CRRp7ye5ZeYvbEmT9dE9qZLXaCFPw2MVaRg==
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
+ by DM4PR12MB6614.namprd12.prod.outlook.com (2603:10b6:8:bb::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.30; Wed, 5 Oct
+ 2022 05:10:31 +0000
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::3d10:f869:d83:c266]) by MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::3d10:f869:d83:c266%4]) with mapi id 15.20.5676.028; Wed, 5 Oct 2022
+ 05:10:31 +0000
+From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
+        "johannes.thumshirn@wdc.com" <johannes.thumshirn@wdc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "ming.lei@redhat.com" <ming.lei@redhat.com>,
+        "shinichiro.kawasaki@wdc.com" <shinichiro.kawasaki@wdc.com>,
+        "vincent.fu@samsung.com" <vincent.fu@samsung.com>,
+        "yukuai3@huawei.com" <yukuai3@huawei.com>
+Subject: Re: [PATCH 2/6] null_blk: allow write zeores on membacked
+Thread-Topic: [PATCH 2/6] null_blk: allow write zeores on membacked
+Thread-Index: AQHY2GkFovuCv41QBkqHDwUISksJwK3/PSqAgAADmIA=
+Date:   Wed, 5 Oct 2022 05:10:31 +0000
+Message-ID: <a3fc1d06-7624-3283-ea6e-40a7a0b0fb39@nvidia.com>
 References: <20221005031701.79077-1-kch@nvidia.com>
- <20221005031701.79077-7-kch@nvidia.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20221005031701.79077-7-kch@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <20221005031701.79077-3-kch@nvidia.com>
+ <89b93617-2fb1-3757-9f80-ddc06f02683f@opensource.wdc.com>
+In-Reply-To: <89b93617-2fb1-3757-9f80-ddc06f02683f@opensource.wdc.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW2PR12MB4667:EE_|DM4PR12MB6614:EE_
+x-ms-office365-filtering-correlation-id: f4f2ea1c-ddbc-40d9-6c73-08daa68fed21
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 69uU3f2MmtTZsgC5JF1uWGdjt9z3OFbSz7vFOpNRLbfca4QnWpWVef/X/lCs/ucjJJUAj6WuaMImX2iUXH+GyWIYisjmlx9v+2bZsr0vSdfAP+HR/pbTB9oT2YAiREXHDurqAHkVVAOG6kndvpZMd1aBI3llbkOgW1a49oSQr+5GNZLvdPGbl4DPpO1wmV1rWMAe7ysnIONTABzjSyKG4JsLw7ftO5s7ESWWBfIisRD8yioJaN1R7UD410hAbS7farpYIQVE+B5z7mLEJZjMsmN56jvL4XMkc6E1EbQ9jW7qYN/hDxGr5loj7FyaFv/HJTcmLni5cX4yH/Mcznj54k7GPn0FM+jrjfEjjfkbertNvWd/KT3PcOijnEAQ4MLyHXWpaMUZUIr1QTeOfzsaiFtCSAd52t19MvNOCnRvtHyNxHV1SoA2UUdPlMvnEODCvdRMo1Y6LKpxs6dC09uz2hn2ppNGglEdxKgUdQveSsDnR+9Uwnguj+fF0vZzBnotCgvdUgBJDIz1rDXTAsQMG1XqVrWO8kkNerxSfxQTrgltJ4BHmnWi0TE0rItzPgoPo1GvMHmTR8ttUIgYW5BATz434RK8jpKOGz0aivMl/R4Aa5kwWlWHctj1nDI0mCryG0Uk2G+4U1tz/XZ6kCnicEg6COfDVa98qrSk8rQgT5NnZalZyAvDKE/45bmvtviHKD3nmoq1XNrvvOJZi5bZ8ZDj02OC71K9C6UvFSiGZRrvm6v2CjUdulpkq6KncrQsNbtcZvwqTyenlr7Ch3QSRV8xjfHFzlSmmN/yVC9eKo0g7Rjz/TUO9oDy/yHqYERwXK6G8beuEhXfFNJfKao6Dw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(376002)(136003)(366004)(396003)(451199015)(83380400001)(86362001)(7416002)(31686004)(5660300002)(6512007)(2616005)(41300700001)(36756003)(71200400001)(6486002)(53546011)(54906003)(6506007)(316002)(8936002)(4326008)(186003)(8676002)(76116006)(66946007)(4744005)(31696002)(66556008)(64756008)(66476007)(38070700005)(66446008)(38100700002)(122000001)(2906002)(110136005)(91956017)(478600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RW1OUm14QXpVQ25JdmN0MTQ2WWcwUm9MRDNodlRpazZjeUhyRGp3WU5lUjVo?=
+ =?utf-8?B?OXZQK24zN0xMUCtuSjI0Nm02bEVlKzd1eDgxN01TQnFXMGhMaEVUVUNXL2xI?=
+ =?utf-8?B?cnJ6T1hMRmpmKzAxSE5aMTlMMDE5dmEyR01senpZMUN1MWpVTWp6ZUIvWFJ6?=
+ =?utf-8?B?SS9aZkI0c0FLcVJxZVBWRHFvbGxlcXN0blIxZ1Jqbi93ZFBwb1hOakxGcEZq?=
+ =?utf-8?B?dXJtRHA2Nm9UL1ZmdVRPOSsyRXNBVXplRGd3NHU0d1kxUTYrY3A3L0hwekh2?=
+ =?utf-8?B?R2tDVnBWVldCdHd3KzRHQUpOTk4rYUNUSlpzRWNTeFdnenhubXRsNC9TZkFt?=
+ =?utf-8?B?VFpvK2VEdDFtR3ZyWDVTVEpaREdBcUVjbnBwb3pndGZiY2xweCtTYVp4RFR0?=
+ =?utf-8?B?UEM5SUtRbzEvOHBnOG5XK3U2S0hqLzRsWXBwQXRqamticDk5R3huQ3pjakpo?=
+ =?utf-8?B?YVhURFI5TnNMSHBYZSszaTdKQWZuZVB2UlMvWlhJQ2FTQ0l3SlJjUTMvNERN?=
+ =?utf-8?B?eDhHQ3dJa2M0d09zTlQ4RFRoQklLMENkWDhCckRvak1vQUZ2a0VnSmlsNW9S?=
+ =?utf-8?B?QnFGU1NpaXJQYkpIZkhLaTA2S2VsMTBZY1JzVXoyRi9oY3JBVW1kY3BPL0ZX?=
+ =?utf-8?B?MUZUSW1GbjhPa21wMDQ5Z0F1S21TV0JhUjZ1RFp2N2VxSW1BQWdVRFV5elRL?=
+ =?utf-8?B?eTQ5anRKOW42MTJDZFJBNnRVOERJUStMYUtKc0hvbGUyQnBoMHlZdFFjVytk?=
+ =?utf-8?B?Uld1Sm9kVnc5OXlXendCc0lsZStNYWJaRHIvZXArS3VCSmNOV3JWU1RuOWFh?=
+ =?utf-8?B?ZWVuenFkUHN2cjBSek1CYVlqSkRjeUN2S2N2VXBSL0pLNmwzT25MczFEUGV1?=
+ =?utf-8?B?QVUvamlZUkZZQ3ZVWTI2WFJyakRhZW9nSXlEb0lwNmJaL1JpdXYwRkgxYU5H?=
+ =?utf-8?B?Z05ZRWUyQ1NQSlJQV3I1WFZvNEk4SEk4UTBOcHlPUmFpcnFEZlpxTjJOYVhD?=
+ =?utf-8?B?WE1CQ1hMbUdqVU1JTVRvL2Rwazd5T3JFTnFZcW9HU1psNk0xbXdRSXJLZ0lO?=
+ =?utf-8?B?QnpIc091Yk5UOHo0NFpINnd2cXo2S0ttaVRWSzM1MCs5aG9McFdvMEdSL1ps?=
+ =?utf-8?B?N2VOeVpneGw3VGJaZlNoRHp1TEtibDVzRWJhZ3Y0MHlkWFUvaEtReFgzQ2gz?=
+ =?utf-8?B?VGRMeHM5MnFZU2tLNEQ2R2JLdkQyeU10ZFUxY2hOV1VkT1BZY3VHd1d6ODI4?=
+ =?utf-8?B?a0g3WjZ3VVVJdUFXZzl4aTk3L0xrYm5wUnhWem5iNi9tckk1NzBMeG1aM3I2?=
+ =?utf-8?B?U202WG9CeUJKWHc0RTYzSkYvWnA0TlZyOUxIaU5KYW1ySllMQnVoS0pDZGo2?=
+ =?utf-8?B?SGF5ejFlVEpvckNZL25mWnA5ZmNmVDBTNGsvcUpVLzJoM2o3Qm1mWjNURlBK?=
+ =?utf-8?B?RS9pQklIa3FiQ2ltbU1oVzdLSlBwQUNpamFpYlY2NHBDRkFSMGRuKzVWM0pJ?=
+ =?utf-8?B?bklZWGRML3V6cXNjK1YxWUlZWXBlYktUNEkxVzZ6ZkJBTEcrRkxTSzlQbU11?=
+ =?utf-8?B?eUxmME8yNXJWME1ETkhGb3pVU1A3VmtlVkpFclI3N01NVWdraUpaMmxNVDBY?=
+ =?utf-8?B?TlEwZEVMUEZOY3FBSmZzVzJudHkyb0Y5NlI3Z0xpRTMrQ3lJWXJuUUV0SUhk?=
+ =?utf-8?B?VDVKWmcvYkptaVNnZHBrUzRRM2t5cTRTODVzY25hVGtOUUw0dkptWFY3Y1Jo?=
+ =?utf-8?B?TlllV2J6NzNXdjhsc3JKMVpjY1dwZ3ZRcVhCekE3K1hZUnZNNnYvWklQTU1Q?=
+ =?utf-8?B?RUdOREZyOGZRNVFrVWM0RThzWlkrNGJYd1lveUovdnpxNUVGbnVRTlNwaWF1?=
+ =?utf-8?B?MUgweU5LemRsTXdSdExCbnZ6RmR2NFJjYUg1eFpwMXR3dHl0bFpndnc5ajNR?=
+ =?utf-8?B?Ym5ycDk0Rk4vd2ZvaGRKSGZVcTk0YWZrdkk2WkVzN09waCsweFM3eFpMbTlW?=
+ =?utf-8?B?cW9kanY5OWs4VW1ybWlSLzFCYmJhMDI4aVNNc3JQeHFEZXdUMllrNkRtYXlH?=
+ =?utf-8?B?K2hIZVpqQy9WdklSdG5sSldEOWp3OFFhc3BYK2dGSXZYT1pIRVJZU09XZWlk?=
+ =?utf-8?B?R1FVTHVkZFpNSy91THlCU1RVMWUrNk9uSWpqTlFidHJOZ2RSQVFubGpnKytH?=
+ =?utf-8?Q?8KUL1g+mYKXphhcTgVpuw4eBAzTDJ0itlWNMWyHGvAtP?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <46434C304727E147BD547322FFA6837A@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f4f2ea1c-ddbc-40d9-6c73-08daa68fed21
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Oct 2022 05:10:31.4646
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: byOVbpY0+OUUfxbFnkKfgp1Zxea96aHfbaFnhKTbzga/CscKwuShNdE6vdjxYfVzNg1Rcgz3W5v3K32LRYmQrA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6614
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/5/22 12:17, Chaitanya Kulkarni wrote:
-> The extra space in after switch condition does not follow kernel coding
-> standards, remove extra space in switch condition end_cmd().
-> 
-> Signed-off-by: Chaitanya Kulkarni <kch@nvidia.com>
-
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-
-> ---
->  drivers/block/null_blk/main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/block/null_blk/main.c b/drivers/block/null_blk/main.c
-> index eda5050d6dee..e030f87d0208 100644
-> --- a/drivers/block/null_blk/main.c
-> +++ b/drivers/block/null_blk/main.c
-> @@ -789,7 +789,7 @@ static void end_cmd(struct nullb_cmd *cmd)
->  {
->  	int queue_mode = cmd->nq->dev->queue_mode;
->  
-> -	switch (queue_mode)  {
-> +	switch (queue_mode) {
->  	case NULL_Q_MQ:
->  		blk_mq_end_request(cmd->rq, cmd->error);
->  		return;
-
--- 
-Damien Le Moal
-Western Digital Research
-
+T24gMTAvNC8yMiAyMTo1NywgRGFtaWVuIExlIE1vYWwgd3JvdGU6DQo+IE9uIDEwLzUvMjIgMTI6
+MTYsIENoYWl0YW55YSBLdWxrYXJuaSB3cm90ZToNCj4+IEFkZCBhIGhlbHBlciBmdW5jdGlvbnMg
+dG8gZW5hYmxlIHRoZSBSRVFfT1BfV1JJVEVfWkVST0VTIG9wZXJhdGlvbnMNCj4+IHdoZW4gbnVs
+bF9ibGsgaXMgY29uZmlndXJlZCB3aXRoIHRoZSBtZW1iYWNrZWQgbW9kZS4NCj4+DQo+PiBTaW5j
+ZSB3cml0ZS16ZXJvZXMgaXMgYSBub24tdHJpdmlhbCBJL08gb3BlcmF0aW9uIHdlIG5lZWQgdGhp
+cyB0bw0KPj4gYWRkIGEgYmxrdGVzdCBzbyB3ZSBjYW4gdGVzdCB0aGUgbm9uLXRyaXZpYWwgSS9P
+IHBhdGggZnJvbSB0aGUNCj4+IGFwcGxpY2F0aW9uIHRvIHRoZSBibG9jayBsYXllci4NCj4gDQo+
+IFdoeSBhIHNlcGFyYXRlIHBhdGNoIGZvciB0aGlzID8gSW50cm9kdWNpbmcgdGhlIG1vZHVsZSBh
+cmd1bWVudCBhbmQNCj4gY29uZmlnZnMgZXF1aXZhbGVudCBzZXBhcmF0ZWx5IGluIDIgZGlmZmVy
+ZW50IHBhdGNoZXMgaXMgc3RyYW5nZSBhbmQgZG9lcw0KPiBub3QgZmFjaWxpdGF0ZSByZXZpZXcu
+DQo+IA0KPiBUaGlzIHBhdGNoIHNob3VsZCBiZSBtZXJnZWQgd2l0aCBwYXRjaCAxLg0KPiANCg0K
+U291bmRzIGdvb2Qgd2lsbCBtZXJnZSBpdC4NCg0KLWNrDQoNCg0K
