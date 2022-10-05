@@ -2,285 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 657F85F5B8D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 23:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D0A5F5BAC
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 23:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbiJEVOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 17:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42254 "EHLO
+        id S230349AbiJEV0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 17:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbiJEVOa (ORCPT
+        with ESMTP id S229681AbiJEV0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 17:14:30 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361097539B;
-        Wed,  5 Oct 2022 14:14:27 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5DB522191A;
-        Wed,  5 Oct 2022 21:14:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1665004466; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=01sgoEm54YTMwT5GObElbBalf5G3CbGpxBxdCVhq1Pw=;
-        b=HOBDxms5f1DZa0kq0S2PE0X76B3PZFp3+ZcEUrQ7ufALeM+9RutSRpx/kWEF+GgrWgmgoE
-        +UJNyRWei/WMNITz7p5p83jv1Iy6Vz0CYmLw8+EgT6wsgKt5m3j+hgIbO86GKRRo2BOqvf
-        XnCLX0npbTInOVFKucSlWG5xGo7Kckc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1665004466;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=01sgoEm54YTMwT5GObElbBalf5G3CbGpxBxdCVhq1Pw=;
-        b=UwVsJ+/pT0W4J4hWxz0reUKGR1ZbPK98QiHRwgavUFkUb2vzYAePozrBGR6uJaWA4wXdm9
-        RAryWAN1Pr6EajBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3152B13345;
-        Wed,  5 Oct 2022 21:14:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id nmkHNqrzPWNYRQAAMHmgww
-        (envelope-from <neilb@suse.de>); Wed, 05 Oct 2022 21:14:18 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 5 Oct 2022 17:26:42 -0400
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E2B6292C;
+        Wed,  5 Oct 2022 14:26:41 -0700 (PDT)
+Received: by mail-oi1-f171.google.com with SMTP id w70so4872852oie.2;
+        Wed, 05 Oct 2022 14:26:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9xTAUGvQFV5dOfW+1G7/dUfNq1caWoLnlGaJPpXqOts=;
+        b=mOOhvvOAqkWr2ul3bUmesXcHBH761tLVLz/Q4dE5WH4THtvJ/97V+nq+79uP0/lGrP
+         mOwrzGJlTeUeBRbueQF32x/XSHaFvDyHtFQX9FEBZuIe9IwaurZHWxXG20OJeh/jjSJm
+         OagfjfF/WDnd5VRSS2n25kWKnbyNaewfyKiQyrnpVHDfc2WcbNWe1qWKJjpUYwPL1/8T
+         0lrBmq4KDR/NGoAcdywxKTTlgAjs7O5YgulVmukLZ4P6A9yCtCK95L7UQvE2FbV+LOjA
+         yVSVopmgIeZ848U8b99KIk3xL2uVCX9E/v5SvwY0s6LyW2mZokt5VDX5KOlS7f7fKeQD
+         +nnw==
+X-Gm-Message-State: ACrzQf3XbTWo2MScYJUVrUkEdQM+ziUmQ/spCTxsZWgMI2353o5Hxz9k
+        IY0Gm2/67iZh2tw1BUuGFw==
+X-Google-Smtp-Source: AMsMyM7DsNQswsQGbYuUgMMC4zg/a9tHbi3BPyQPXvPExzfujz79SgKUqYx5TQQdTKa89CvFT0Oa1w==
+X-Received: by 2002:a05:6808:190e:b0:350:4905:734c with SMTP id bf14-20020a056808190e00b003504905734cmr3414960oib.158.1665005200902;
+        Wed, 05 Oct 2022 14:26:40 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i205-20020acaead6000000b00353ef11d6c9sm1815744oih.19.2022.10.05.14.26.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 14:26:39 -0700 (PDT)
+Received: (nullmailer pid 122305 invoked by uid 1000);
+        Wed, 05 Oct 2022 21:26:39 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: misc: Convert IDT 89HPESx to DT schema
+Date:   Wed,  5 Oct 2022 16:26:31 -0500
+Message-Id: <20221005212631.122145-1-robh@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Jeff Layton" <jlayton@kernel.org>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
-        david@fromorbit.com, trondmy@hammerspace.com,
-        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
-        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
-        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org
-Subject: Re: [PATCH v6 6/9] nfsd: use the getattr operation to fetch i_version
-In-reply-to: <13714490816df1ff36ab06bbf32df5440cad7913.camel@kernel.org>
-References: <20220930111840.10695-1-jlayton@kernel.org>,
- <20220930111840.10695-7-jlayton@kernel.org>,
- <166484034920.14457.15225090674729127890@noble.neil.brown.name>,
- <13714490816df1ff36ab06bbf32df5440cad7913.camel@kernel.org>
-Date:   Thu, 06 Oct 2022 08:14:04 +1100
-Message-id: <166500444418.16615.7547789313879225413@noble.neil.brown.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 05 Oct 2022, Jeff Layton wrote:
-> On Tue, 2022-10-04 at 10:39 +1100, NeilBrown wrote:
-> > On Fri, 30 Sep 2022, Jeff Layton wrote:
-> > > Now that we can call into vfs_getattr to get the i_version field, use
-> > > that facility to fetch it instead of doing it in nfsd4_change_attribute.
-> > >=20
-> > > Neil also pointed out recently that IS_I_VERSION directory operations
-> > > are always logged, and so we only need to mitigate the rollback problem
-> > > on regular files. Also, we don't need to factor in the ctime when
-> > > reexporting NFS or Ceph.
-> > >=20
-> > > Set the STATX_VERSION (and BTIME) bits in the request when we're dealing
-> > > with a v4 request. Then, instead of looking at IS_I_VERSION when
-> > > generating the change attr, look at the result mask and only use it if
-> > > STATX_VERSION is set. With this change, we can drop the fetch_iversion
-> > > export operation as well.
-> > >=20
-> > > Move nfsd4_change_attribute into nfsfh.c, and change it to only factor
-> > > in the ctime if it's a regular file and the fs doesn't advertise
-> > > STATX_ATTR_VERSION_MONOTONIC.
-> > >=20
-> > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > > ---
-> > >  fs/nfs/export.c          |  7 -------
-> > >  fs/nfsd/nfs4xdr.c        |  4 +++-
-> > >  fs/nfsd/nfsfh.c          | 40 ++++++++++++++++++++++++++++++++++++++++
-> > >  fs/nfsd/nfsfh.h          | 29 +----------------------------
-> > >  fs/nfsd/vfs.h            |  7 ++++++-
-> > >  include/linux/exportfs.h |  1 -
-> > >  6 files changed, 50 insertions(+), 38 deletions(-)
-> > >=20
-> > > diff --git a/fs/nfs/export.c b/fs/nfs/export.c
-> > > index 01596f2d0a1e..1a9d5aa51dfb 100644
-> > > --- a/fs/nfs/export.c
-> > > +++ b/fs/nfs/export.c
-> > > @@ -145,17 +145,10 @@ nfs_get_parent(struct dentry *dentry)
-> > >  	return parent;
-> > >  }
-> > > =20
-> > > -static u64 nfs_fetch_iversion(struct inode *inode)
-> > > -{
-> > > -	nfs_revalidate_inode(inode, NFS_INO_INVALID_CHANGE);
-> > > -	return inode_peek_iversion_raw(inode);
-> > > -}
-> > > -
-> > >  const struct export_operations nfs_export_ops =3D {
-> > >  	.encode_fh =3D nfs_encode_fh,
-> > >  	.fh_to_dentry =3D nfs_fh_to_dentry,
-> > >  	.get_parent =3D nfs_get_parent,
-> > > -	.fetch_iversion =3D nfs_fetch_iversion,
-> > >  	.flags =3D EXPORT_OP_NOWCC|EXPORT_OP_NOSUBTREECHK|
-> > >  		EXPORT_OP_CLOSE_BEFORE_UNLINK|EXPORT_OP_REMOTE_FS|
-> > >  		EXPORT_OP_NOATOMIC_ATTR,
-> > > diff --git a/fs/nfsd/nfs4xdr.c b/fs/nfsd/nfs4xdr.c
-> > > index 1e9690a061ec..779c009314c6 100644
-> > > --- a/fs/nfsd/nfs4xdr.c
-> > > +++ b/fs/nfsd/nfs4xdr.c
-> > > @@ -2869,7 +2869,9 @@ nfsd4_encode_fattr(struct xdr_stream *xdr, struct=
- svc_fh *fhp,
-> > >  			goto out;
-> > >  	}
-> > > =20
-> > > -	err =3D vfs_getattr(&path, &stat, STATX_BASIC_STATS, AT_STATX_SYNC_AS=
-_STAT);
-> > > +	err =3D vfs_getattr(&path, &stat,
-> > > +			  STATX_BASIC_STATS | STATX_BTIME | STATX_VERSION,
-> > > +			  AT_STATX_SYNC_AS_STAT);
-> > >  	if (err)
-> > >  		goto out_nfserr;
-> > >  	if (!(stat.result_mask & STATX_BTIME))
-> > > diff --git a/fs/nfsd/nfsfh.c b/fs/nfsd/nfsfh.c
-> > > index a5b71526cee0..9168bc657378 100644
-> > > --- a/fs/nfsd/nfsfh.c
-> > > +++ b/fs/nfsd/nfsfh.c
-> > > @@ -634,6 +634,10 @@ void fh_fill_pre_attrs(struct svc_fh *fhp)
-> > >  		stat.mtime =3D inode->i_mtime;
-> > >  		stat.ctime =3D inode->i_ctime;
-> > >  		stat.size  =3D inode->i_size;
-> > > +		if (v4 && IS_I_VERSION(inode)) {
-> > > +			stat.version =3D inode_query_iversion(inode);
-> > > +			stat.result_mask |=3D STATX_VERSION;
-> > > +		}
-> >=20
-> > This is increasingly ugly.  I wonder if it is justified at all...
-> >=20
->=20
-> I'm fine with dropping that. So if the getattrs fail, we should just not
-> offer up pre/post attrs?
->=20
-> > >  	}
-> > >  	if (v4)
-> > >  		fhp->fh_pre_change =3D nfsd4_change_attribute(&stat, inode);
-> > > @@ -665,6 +669,8 @@ void fh_fill_post_attrs(struct svc_fh *fhp)
-> > >  	if (err) {
-> > >  		fhp->fh_post_saved =3D false;
-> > >  		fhp->fh_post_attr.ctime =3D inode->i_ctime;
-> > > +		if (v4 && IS_I_VERSION(inode))
-> > > +			fhp->fh_post_attr.version =3D inode_query_iversion(inode);
-> >=20
-> > ... ditto ...
-> >=20
-> > >  	} else
-> > >  		fhp->fh_post_saved =3D true;
-> > >  	if (v4)
-> > > @@ -754,3 +760,37 @@ enum fsid_source fsid_source(const struct svc_fh *=
-fhp)
-> > >  		return FSIDSOURCE_UUID;
-> > >  	return FSIDSOURCE_DEV;
-> > >  }
-> > > +
-> > > +/*
-> > > + * We could use i_version alone as the change attribute.  However, i_v=
-ersion
-> > > + * can go backwards on a regular file after an unclean shutdown.  On i=
-ts own
-> > > + * that doesn't necessarily cause a problem, but if i_version goes bac=
-kwards
-> > > + * and then is incremented again it could reuse a value that was previ=
-ously
-> > > + * used before boot, and a client who queried the two values might inc=
-orrectly
-> > > + * assume nothing changed.
-> > > + *
-> > > + * By using both ctime and the i_version counter we guarantee that as =
-long as
-> > > + * time doesn't go backwards we never reuse an old value. If the files=
-ystem
-> > > + * advertises STATX_ATTR_VERSION_MONOTONIC, then this mitigation is no=
-t needed.
-> > > + *
-> > > + * We only need to do this for regular files as well. For directories,=
- we
-> > > + * assume that the new change attr is always logged to stable storage =
-in some
-> > > + * fashion before the results can be seen.
-> > > + */
-> > > +u64 nfsd4_change_attribute(struct kstat *stat, struct inode *inode)
-> > > +{
-> > > +	u64 chattr;
-> > > +
-> > > +	if (stat->result_mask & STATX_VERSION) {
-> > > +		chattr =3D stat->version;
-> > > +
-> > > +		if (S_ISREG(inode->i_mode) &&
-> > > +		    !(stat->attributes & STATX_ATTR_VERSION_MONOTONIC)) {
-> >=20
-> > I would really rather that the fs got to make this decision.
-> > If it can guarantee that the i_version is monotonic even over a crash
-> > (which is probably can for directory, and might need changes to do for
-> > files) then it sets STATX_ATTR_VERSION_MONOTONIC and nfsd trusts it
-> > completely.
-> > If it cannot, then it doesn't set the flag.
-> > i.e. the S_ISREG() test should be in the filesystem, not in nfsd.
-> >=20
->=20
-> This sounds reasonable, but for one thing.
->=20
-> From RFC 7862:
->=20
->    While Section 5.4 of [RFC5661] discusses
->    per-file system attributes, it is expected that the value of
->    change_attr_type will not depend on the value of "homogeneous" and
->    will only change in the event of a migration.
->=20
-> The change_attr_type4 must be the same for all filehandles under a
-> particular filesystem.
->=20
-> If we do what you suggest though, then it's easily possible for the fs
-> to set STATX_ATTR_VERSION_MONOTONIC on=C2=A0directories but not files. If we
-> later want to allow nfsd to advertise a change_attr_type4, we won't be
-> able to rely on the STATX_ATTR_VERSION_MONOTONIC to tell us how to fill
-> that out.
->=20
-> Maybe that's ok. I suppose we could add a new field to the export
-> options that filesystems can set to advertise what sort of change attr
-> they offer?
->=20
+Convert the IDT 89HPESx device binding to DT schema format.
 
-There are 3 cases:
-1/ a file/dir which advertises MONOTONIC is easy to handle.
-2/ an IS_I_VERSION file/dir that does not advertise MONOTONIC will only fail
-   to be MONOTONIC across unclean restart (correct?).  nfsd can
-   compensate using an xattr on the root to count crashes, or just adding cti=
-me.
-3/ a non-IS_I_VERSION fs that does not advertise MONOTONIC cannot
-   be compensated for by nfsd.
+"onsemi,24c64" was not a documented compatible string, so update the
+example to "atmel,24c64". It's not clear what's in use here as no
+upstream dts files have the eeprom child node.
 
-If we ever want nfsd to advertise MONOTONIC, then we must be able to
-reject non-IS_I_VERSION filesystems that don't advertise MONOTONIC on
-all files.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+Serge, Okay with dual licensing?
+---
+ .../devicetree/bindings/misc/idt,89hpesx.yaml | 72 +++++++++++++++++++
+ .../devicetree/bindings/misc/idt_89hpesx.txt  | 44 ------------
+ 2 files changed, 72 insertions(+), 44 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/misc/idt,89hpesx.yaml
+ delete mode 100644 Documentation/devicetree/bindings/misc/idt_89hpesx.txt
 
-Maybe we need a global nfsd option which defaults to "monotoric" and
-causes those files to be rejected, but can be set to "non-monotonic" and
-then allows all files to be exported.
+diff --git a/Documentation/devicetree/bindings/misc/idt,89hpesx.yaml b/Documentation/devicetree/bindings/misc/idt,89hpesx.yaml
+new file mode 100644
+index 000000000000..452236e79354
+--- /dev/null
++++ b/Documentation/devicetree/bindings/misc/idt,89hpesx.yaml
+@@ -0,0 +1,72 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/misc/idt,89hpesx.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: EEPROM / CSR SMBus-slave interface of IDT 89HPESx devices
++
++maintainers:
++  - Serge Semin <fancer.lancer@gmail.com>
++
++select:
++  properties:
++    compatible:
++      contains:
++        pattern: '^idt,89hpes'
++  required:
++    - compatible
++
++properties:
++  compatible:
++    oneOf:
++      - pattern: '^idt,89hpes(8nt2|12nt3|12n3a?|24n3a?|(12|24)t3g2|4t4g2|10t4g2|[56]t5|8t5a?)$'
++      - pattern: '^idt,89hpes(6t6g2|16t7|(24t6|32t8|48t12|16t4a?)(g2)?)$'
++      - pattern: '^idt,89hpes(24nt6a|32nt8[ab]|12nt12|16nt16|24nt24|32nt24[ab])g2$'
++      - pattern: '^idt,89hpes((32h8|48h12a?|22h16|34h16|64h16a?)(g2)?|16h16)$'
++
++  reg:
++    maxItems: 1
++
++  '#address-cells':
++    const: 1
++  
++  '#size-cells':
++    const: 0
++
++patternProperties:
++  '^eeprom@':
++    $ref: /schemas/eeprom/at24.yaml#
++    unevaluatedProperties: false
++
++    properties:
++      compatible:
++        description: Only a subset of devices are supported
++        pattern: ',24c(32|64|128|256|512)$'
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        idt@74 {
++            compatible = "idt,89hpes32nt8ag2";
++            reg = <0x74>;
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            eeprom@50 {
++                compatible = "atmel,24c64";
++                reg = <0x50>;
++                read-only;
++            };
++        };
++    };
++...
+diff --git a/Documentation/devicetree/bindings/misc/idt_89hpesx.txt b/Documentation/devicetree/bindings/misc/idt_89hpesx.txt
+deleted file mode 100644
+index b9093b79ab7d..000000000000
+--- a/Documentation/devicetree/bindings/misc/idt_89hpesx.txt
++++ /dev/null
+@@ -1,44 +0,0 @@
+-EEPROM / CSR SMBus-slave interface of IDT 89HPESx devices
+-
+-Required properties:
+-  - compatible : should be "<manufacturer>,<type>"
+-		 Basically there is only one manufacturer: idt, but some
+-		 compatible devices may be produced in future. Following devices
+-		 are supported: 89hpes8nt2, 89hpes12nt3, 89hpes24nt6ag2,
+-		 89hpes32nt8ag2, 89hpes32nt8bg2, 89hpes12nt12g2, 89hpes16nt16g2,
+-		 89hpes24nt24g2, 89hpes32nt24ag2, 89hpes32nt24bg2;
+-		 89hpes12n3, 89hpes12n3a, 89hpes24n3, 89hpes24n3a;
+-		 89hpes32h8, 89hpes32h8g2, 89hpes48h12, 89hpes48h12g2,
+-		 89hpes48h12ag2, 89hpes16h16, 89hpes22h16, 89hpes22h16g2,
+-		 89hpes34h16, 89hpes34h16g2, 89hpes64h16, 89hpes64h16g2,
+-		 89hpes64h16ag2;
+-		 89hpes12t3g2, 89hpes24t3g2, 89hpes16t4, 89hpes4t4g2,
+-		 89hpes10t4g2, 89hpes16t4g2, 89hpes16t4ag2, 89hpes5t5,
+-		 89hpes6t5, 89hpes8t5, 89hpes8t5a, 89hpes24t6, 89hpes6t6g2,
+-		 89hpes24t6g2, 89hpes16t7, 89hpes32t8, 89hpes32t8g2,
+-		 89hpes48t12, 89hpes48t12g2.
+-  - reg :	 I2C address of the IDT 89HPESx device.
+-
+-Optionally there can be EEPROM-compatible subnode:
+-  - compatible:  There are five EEPROM devices supported: 24c32, 24c64, 24c128,
+-		 24c256 and 24c512 differed by size.
+-  - reg:         Custom address of EEPROM device (If not specified IDT 89HPESx
+-    (optional)	 device will try to communicate with EEPROM sited by default
+-		 address - 0x50)
+-  - read-only :	 Parameterless property disables writes to the EEPROM
+-    (optional)
+-
+-Example:
+-	idt@60 {
+-		compatible = "idt,89hpes32nt8ag2";
+-		reg = <0x74>;
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-
+-		eeprom@50 {
+-			compatible = "onsemi,24c64";
+-			reg = <0x50>;
+-			read-only;
+-		};
+-	};
+-
+-- 
+2.35.1
 
-It would be nice to make it easy to run multiple nfsd instances each on a
-different IP address.  Each can then have different options.  This could
-also be used to reexport an NFS mount using unmodified filehandles.
-
-Currently you need a network namespace to create a new nfsd.  I wonder
-if that is a little too much of a barrier.  But maybe we could automate
-the creation of working network namespaces for nfsd....
-
-NeilBrown
