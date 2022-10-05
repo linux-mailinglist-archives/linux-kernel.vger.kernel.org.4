@@ -2,145 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97BD05F5B0E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 22:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 920F15F5B10
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 22:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbiJEUfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 16:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47566 "EHLO
+        id S230516AbiJEUfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 16:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbiJEUfM (ORCPT
+        with ESMTP id S230037AbiJEUfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 16:35:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C645A1A830
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 13:35:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665002111;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Spyd4QK8zfzxDBXuoxBL/PDaUjw/dZKhbr0mZm9nT1c=;
-        b=J2AkCIOEgNto0KicFy4SuVv5o/Kd6AqLuXUdnuUcOgMPNcMv0vJZ0qeJLi4RxcZQT04SDu
-        5zE4jRMITT2bz8TtXrJ6qFqpIcBoVTqjA8EF6Gt/XMySnbqX9PbXn4/q9En9nfqmFN2jJQ
-        u0k0qp7pdzlJL6meP0ybIJOf6Snfys0=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-398-rF-T5CvSO7OCPsbjJVGuQw-1; Wed, 05 Oct 2022 16:35:10 -0400
-X-MC-Unique: rF-T5CvSO7OCPsbjJVGuQw-1
-Received: by mail-qk1-f200.google.com with SMTP id m16-20020a05620a291000b006e2b66fd93fso2235485qkp.12
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 13:35:09 -0700 (PDT)
+        Wed, 5 Oct 2022 16:35:50 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F85D39BB9;
+        Wed,  5 Oct 2022 13:35:49 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id 27so2945596qkc.8;
+        Wed, 05 Oct 2022 13:35:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=c2sIbsiDjA2SMjGMWD+26Laqk16I6ZwxVSuTAC9N2/A=;
+        b=SAYe0EeTRn5ySNJLY9UgTUSOJ0t/cmdVcBr2P+xRdmkEDDPfVpLmgAwuTc95MdWDN7
+         /CU77OoiTEujAbW8ivDREtCmnUIE9Ibw0EbdTC2nR4j29NYcJ9bE+9M+hJVYnmahxx0k
+         UP+j3TvVS6H4rWhBfnim5Wr3hatctVRYdUigtJP0/0ue5RXj/1ungu0mL7HFACWRFM7s
+         Sm+ZkDbOoaLf5+0hJYojFXo9HsUJsy/05b+m2r5+Fbt7T2KLFPHflcl46XnN7xr97BTQ
+         Tm/cZExsV8/Ol92PaXx0no3QnYF20roCCtrNc0Bzc7l9bC5bqKr4VRU6Twkv4W3DioiJ
+         7+qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Spyd4QK8zfzxDBXuoxBL/PDaUjw/dZKhbr0mZm9nT1c=;
-        b=TZd8nR0QQF7zYnF5+D9DJ6YVVU8djLom21XKiEkkZlclqpRNuz/N1pJ/8fUD9b26Dq
-         3qhkXSHTYW9fk4LSF+OVTyS3nyNuf7iHUoj68UZxuUgCbk5KXEbFEGdYpkh7JYgfPzix
-         J9EPpMyzJOKEcgP1JLpWHF77bTC0ned8jg4Fx2s6li+5TmKAiiO5/rpcWjJ6jhGgV16s
-         eLBxeqok6aMLWj3Joc18tt7Pg0U3lUu2WoxMUd3/kQ8/7aU8hqqp1emB9UvzAFYQDFV2
-         NxppRB4WLaKykaXk+aPgwH/RkwFMVBel/7S17O3wuA9XG0qmEy2R6ls/wkWi9e2RfdwJ
-         VbRw==
-X-Gm-Message-State: ACrzQf0ZAggkuC/gOS+b4tG1mPdAy1Vtwf2EEWGrjsXD/dOTxmEQGIvk
-        gFtahcel3vi3KiNxaKNr64MsQ1hz6Tee2zmpV+iw8ytDpVIUuOos/f5PgbY6mKCrbjtGPqvFjLQ
-        0TEpvsyQsHt0oJvgNima9tbpI
-X-Received: by 2002:ae9:e70a:0:b0:6ce:bfc0:f98b with SMTP id m10-20020ae9e70a000000b006cebfc0f98bmr935028qka.381.1665002108326;
-        Wed, 05 Oct 2022 13:35:08 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4XAXGxI08IXKU2+P8nxYIGcJ4Cjc/Q8ZELN25KxB1W3P8p9sLvCKgIKsx7ZggEAFUf6g9lCw==
-X-Received: by 2002:ae9:e70a:0:b0:6ce:bfc0:f98b with SMTP id m10-20020ae9e70a000000b006cebfc0f98bmr935012qka.381.1665002108085;
-        Wed, 05 Oct 2022 13:35:08 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id h8-20020a05620a400800b006bb9e4b96e6sm18233280qko.24.2022.10.05.13.35.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 13:35:07 -0700 (PDT)
-Date:   Wed, 5 Oct 2022 16:35:06 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH v1 4/7] mm/ksm: fix KSM COW breaking with userfaultfd-wp
- via FAULT_FLAG_UNSHARE
-Message-ID: <Yz3qekna97ndP4FK@x1n>
-References: <20220930141931.174362-1-david@redhat.com>
- <20220930141931.174362-5-david@redhat.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c2sIbsiDjA2SMjGMWD+26Laqk16I6ZwxVSuTAC9N2/A=;
+        b=bZsgkVXPlL0b+h+zkwQxyIEYy5S2Cl+q7VrNmKEqkWXWpfHDqDxFU3maDvGSBuNBah
+         fqArgtheNQVeumBFJ9nd4T2kRV2jpxdWJYkzzxjAFu0qCQ4UyGDVbW3rk4CD/LUbF+s7
+         O/+1i3GqswmduTs89/mH1WkZpx/2xKxCO0AciXNDrJ+3zUOWYR293gjt1f28dp3/pPcw
+         jMY1wOnyI5zCtLYdB06s71F2gAM61JeuqN9Q1ScQisKT9BUP68OV+Z3+KIgsTlXKLxDx
+         IH8l2j4QELu1vIFbaT+JfY5mFvhFMOVHT3T2mHew76D8Ocq0mRe/Ru3NwaYFXc1Bksp5
+         SzJQ==
+X-Gm-Message-State: ACrzQf16ntpmx9eYTU3v/wSFNHTGh0/RIkkGPX/x0d4ZfJTbayUPuCs9
+        46d2qD0tzoPhdwV6ah7+cio=
+X-Google-Smtp-Source: AMsMyM6CrC9+UVRmv8m9FFzFc/aplhzAFhIJWzXVFjGUi5tvtuzP5ttoNttmGvdGNAehNN8bcir2sg==
+X-Received: by 2002:a37:e116:0:b0:6cf:4dbd:18f1 with SMTP id c22-20020a37e116000000b006cf4dbd18f1mr994643qkm.120.1665002148299;
+        Wed, 05 Oct 2022 13:35:48 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id f1-20020ac81341000000b00339b8a5639csm14623547qtj.95.2022.10.05.13.35.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Oct 2022 13:35:47 -0700 (PDT)
+Message-ID: <33f5b1d2-7d31-de19-c47e-1fc53ce958e3@gmail.com>
+Date:   Wed, 5 Oct 2022 13:35:41 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220930141931.174362-5-david@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] usb: bdc: change state when port disconnected
+Content-Language: en-US
+To:     justinpopo6@gmail.com, alcooperx@gmail.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     bcm-kernel-feedback-list@broadcom.com, justin.chen@broadcom.com
+References: <1664997235-18198-1-git-send-email-justinpopo6@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <1664997235-18198-1-git-send-email-justinpopo6@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 04:19:28PM +0200, David Hildenbrand wrote:
-> Let's stop breaking COW via a fake write fault and let's use
-> FAULT_FLAG_UNSHARE instead. This avoids any wrong side effects of the fake
-> write fault, such as mapping the PTE writable and marking the pte
-> dirty/softdirty.
+On 10/5/22 12:13, justinpopo6@gmail.com wrote:
+> From: Justin Chen <justinpopo6@gmail.com>
 > 
-> Also, this fixes KSM interaction with userfaultfd-wp: when we have a KSM
-> page that's write-protected by userfaultfd, break_ksm()->handle_mm_fault()
-> will fail with VM_FAULT_SIGBUS and will simpy return in break_ksm() with 0.
-> The warning in dmesg indicates this wrong handling:
+> When port is connected and then disconnected, the state stays as
+> configured. Which is incorrect as the port is no longer configured,
+> but in a not attached state.
 > 
-> [  230.096368] FAULT_FLAG_ALLOW_RETRY missing 881
-> [  230.100822] CPU: 1 PID: 1643 Comm: ksm-uffd-wp [...]
-> [  230.110124] Hardware name: [...]
-> [  230.117775] Call Trace:
-> [  230.120227]  <TASK>
-> [  230.122334]  dump_stack_lvl+0x44/0x5c
-> [  230.126010]  handle_userfault.cold+0x14/0x19
-> [  230.130281]  ? tlb_finish_mmu+0x65/0x170
-> [  230.134207]  ? uffd_wp_range+0x65/0xa0
-> [  230.137959]  ? _raw_spin_unlock+0x15/0x30
-> [  230.141972]  ? do_wp_page+0x50/0x590
-> [  230.145551]  __handle_mm_fault+0x9f5/0xf50
-> [  230.149652]  ? mmput+0x1f/0x40
-> [  230.152712]  handle_mm_fault+0xb9/0x2a0
-> [  230.156550]  break_ksm+0x141/0x180
-> [  230.159964]  unmerge_ksm_pages+0x60/0x90
-> [  230.163890]  ksm_madvise+0x3c/0xb0
-> [  230.167295]  do_madvise.part.0+0x10c/0xeb0
-> [  230.171396]  ? do_syscall_64+0x67/0x80
-> [  230.175157]  __x64_sys_madvise+0x5a/0x70
-> [  230.179082]  do_syscall_64+0x58/0x80
-> [  230.182661]  ? do_syscall_64+0x67/0x80
-> [  230.186413]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> Signed-off-by: Justin Chen <justinpopo6@gmail.com>
 
-Since it's already there, worth adding the test into ksm_test.c?
-
-> 
-> Consequently, we will no longer trigger a fake write fault and break COW
-> without any such side-effects.
-> 
-> This is primarily a fix for KSM+userfaultfd-wp, however, the fake write
-> fault was always questionable. As this fix is not easy to backport and it's
-> not very critical, let's not cc stable.
-
-A patch to cc most of the stable would probably need to still go with the
-old write approach but attaching ALLOW_RETRY.  But I agree maybe that may
-not need to bother, or a report should have arrived earlier..  The unshare
-approach looks much cleaner indeed.
-
-> 
-> Fixes: 529b930b87d9 ("userfaultfd: wp: hook userfault handler to write protection fault")
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-
-Acked-by: Peter Xu <peterx@redhat.com>
-
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Peter Xu
-
+Florian
