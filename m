@@ -2,55 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E79B5F5B6A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 23:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4011D5F5B6E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 23:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbiJEVHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 17:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
+        id S230236AbiJEVIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 17:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbiJEVHn (ORCPT
+        with ESMTP id S230358AbiJEVIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 17:07:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1613696FD;
-        Wed,  5 Oct 2022 14:07:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3B6A61755;
-        Wed,  5 Oct 2022 21:07:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B97FC433D6;
-        Wed,  5 Oct 2022 21:07:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665004060;
-        bh=o+JFjGfmGHxvtniPCHVArgFUusf7mfq6V3+g8hM52Bg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TzkDU6Gz53krWick2tUSigiRx+pTsOKCEIa2kG1t874l4+wFrV9VKtb+G2L7A+84T
-         ziFgKkYLCDQMWDvlamT+bvgvoCkJymZG/DXXZPfQyVXB/S4mI+QZYma4/d0sodx9rn
-         +jdG9svsP07uSuLLNwLYuQJ/o8vzsG/pTlJgUYPw47BmHzE9lrUwBgH+SFdUflvRzu
-         P+wkThklRSRX4LrZNFS/Sc1emv4s+xPNF7nxYwPj9TJLySj96rBULCOGUrSIME30Uz
-         ZhrcjL914QqyWccBWbls+94h6h2jUE5HLxe3zgdhSlLvaZGrw5vTDNadoE0euj2MRb
-         IfAVgTs35C6Mw==
-Date:   Thu, 6 Oct 2022 00:07:35 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Morten Linderud <morten@linderud.pw>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Oleksandr Natalenko <oleksandr@natalenko.name>
-Subject: Re: [PATCH] tpm/eventlog: Don't abort tpm_read_log on faulty ACPI
- config
-Message-ID: <Yz3yFxZ+qj2Qz4az@kernel.org>
-References: <20210920203447.4124005-1-morten@linderud.pw>
- <Yzy2STXGSBmSLhmA@kernel.org>
- <20221005093128.nsudft5yl32xj2gg@framework>
+        Wed, 5 Oct 2022 17:08:07 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 896F069F56;
+        Wed,  5 Oct 2022 14:08:06 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 295KUeHI029945;
+        Wed, 5 Oct 2022 21:08:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=i5CppKjYTcL74zoSy5XGrDawTtB6iQImvmz8wUI5z/Q=;
+ b=ehIULqob604XAN0nJg4FNIxo0HjYEdHkOwfA6CIxUvC3xSHxqQd9cnNMrwcvQb/KhSU6
+ QXqOVLEQgJWOEIpQxAU7Al6IcBkj6b5N25SKFAaHbygQRh2Gb4jTvn2H9Hh+EEJA6KLs
+ DUdPdcOb+tvlKZOy2Uz0bBhzQnpHeZYs3RwnZ+egq9P01NXt0PsI7k6+7eORwwXdGx8A
+ Zy7G4py2AXfl7TYe0dAV+0QgddGBoae4wPG96io20ROKbYAGuNyF2JnxXT4zrwlYgMPB
+ AFQ8FkZjC+jblqFQAGxqixGcPr6f1RmQRC+j28yLszWkFijTWPF3Jv6qkfinfwJI7aqr NQ== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k0escva05-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Oct 2022 21:08:03 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 295L82cQ009133
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 5 Oct 2022 21:08:02 GMT
+Received: from [10.110.81.239] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 5 Oct 2022
+ 14:08:01 -0700
+Message-ID: <33da6d3b-29fb-7f26-0667-419b317d8e11@quicinc.com>
+Date:   Wed, 5 Oct 2022 14:08:01 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221005093128.nsudft5yl32xj2gg@framework>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 1/5] dt-bindings: firmware: scm: Add QDU1000/QRU1000
+ compatibles
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Melody Olvera <quic_molvera@quicinc.com>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221001030641.29354-1-quic_molvera@quicinc.com>
+ <20221001030641.29354-2-quic_molvera@quicinc.com>
+ <09f5d364-320e-9ecc-2c2b-68066c61f802@linaro.org>
+ <e9c44e3b-b29f-0f47-b822-da0f4f2264cc@quicinc.com>
+ <CAA8EJprE-mOOH8VF3m8TRb+0q=3_8NpvzdEAugabDaDbq6FMVQ@mail.gmail.com>
+ <9664a623-3c58-49e8-1b9a-69335d844448@linaro.org>
+ <CAA8EJprQoCQzr2x0JA9_b3MDE=oOTODyHD23debEL1MCE1mWBA@mail.gmail.com>
+ <095742cb-61cc-af5d-848c-48b2ea5528ea@quicinc.com>
+ <CAA8EJpoqKCj4tyX-617YJH5zqkR_C=1LVMeLXcCxZFgOPjRZ=g@mail.gmail.com>
+ <14872934-93f1-baab-7f1a-cfc55ffd0531@linaro.org>
+From:   Trilok Soni <quic_tsoni@quicinc.com>
+In-Reply-To: <14872934-93f1-baab-7f1a-cfc55ffd0531@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: a2_cbYPcYzhRJCTNqio6GYmp56K963Yy
+X-Proofpoint-ORIG-GUID: a2_cbYPcYzhRJCTNqio6GYmp56K963Yy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-05_05,2022-10-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 adultscore=0 mlxlogscore=999
+ phishscore=0 bulkscore=0 clxscore=1011 impostorscore=0 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210050130
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,57 +97,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 05, 2022 at 11:31:28AM +0200, Morten Linderud wrote:
-> On Wed, Oct 05, 2022 at 01:40:09AM +0300, Jarkko Sakkinen wrote:
-> > On Mon, Sep 20, 2021 at 10:34:47PM +0200, Morten Linderud wrote:
-> > > Some vendors report faulty values in the acpi TPM2 table. This causes
-> > 
-> > s/acpi/ACPI/
-> > 
-> > > the function to abort with EIO and essentially short circuits the
-> > 
-> > s/the function/tpm_read_log()/
-> > 
-> > > tpm_read_log function as we never even attempt to read the EFI
-> > > configuration table for a log.
-> > 
-> > > 
-> > > This changes the condition to only look for a positive return value,
-> > > else hands over the eventlog discovery to the EFI configuration table
-> > > which should hopefully work better.
-> > 
-> > Please, write in imperative ("Change...").
-> > 
-> > Also exlicitly state how are you changing the check for
-> > tpm_read_log_acpi() in tpm_read_log().
-> > 
-> > You could *even* have a snippet how the checks change
-> > here for clarity.
-> > 
-> > > It's unclear to me if there is a better solution to this then just
-> > > failing. However, I do not see any clear reason why we can't properly
-> > > fallback to the EFI configuration table.
-> > 
-> > This paragraph should not be part of the commit message.
-> > 
-> > Rest of the commit message made sense can you add also fixes tag
-> > as this is clearly a bug fix?
-> > 
-> > Also, please remove the two spurious diff's from the commit that
-> > are not relevant for a stable bug fix (pr_warn() and comment
-> > removal).
+On 10/5/2022 1:27 AM, Krzysztof Kozlowski wrote:
+> On 04/10/2022 23:05, Dmitry Baryshkov wrote:
+>> On Tue, 4 Oct 2022 at 18:52, Melody Olvera <quic_molvera@quicinc.com> wrote:
+>>>
+>>>
+>>> On 10/4/2022 2:36 AM, Dmitry Baryshkov wrote:
+>>>> On Tue, 4 Oct 2022 at 09:53, Krzysztof Kozlowski
+>>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>>> On 04/10/2022 00:14, Dmitry Baryshkov wrote:
+>>>>>> On Tue, 4 Oct 2022 at 01:02, Melody Olvera <quic_molvera@quicinc.com> wrote:
+>>>>>>>
+>>>>>>> On 10/1/2022 4:25 AM, Krzysztof Kozlowski wrote:
+>>>>>>>> On 01/10/2022 05:06, Melody Olvera wrote:
+>>>>>>>>> Add compatibles for scm driver for QDU1000 and QRU1000 platforms.
+>>>>>>>>>
+>>>>>>>>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+>>>>>>>>> ---
+>>>>>>>>>   Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 2 ++
+>>>>>>>>>   1 file changed, 2 insertions(+)
+>>>>>>>>>
+>>>>>>>>> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>>>>>>>>> index c5b76c9f7ad0..b47a5dda3c3e 100644
+>>>>>>>>> --- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>>>>>>>>> +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>>>>>>>>> @@ -51,6 +51,8 @@ properties:
+>>>>>>>>>             - qcom,scm-sm8250
+>>>>>>>>>             - qcom,scm-sm8350
+>>>>>>>>>             - qcom,scm-sm8450
+>>>>>>>>> +          - qcom,scm-qdu1000
+>>>>>>>>> +          - qcom,scm-qru1000
+>>>>>> I think after seeing all the patchsets it's time to ask the following
+>>>>>> question. Do we really need a duplicate compatibility families:
+>>>>>> qdu1000 vs qru1000? I'd suggest using a single set of compatibile
+>>>>>> strings in most of the cases.
+>>>>>> Settle down onto a single name (qdu,qru, qdru, whatever) and define
+>>>>>> distinct compat strings only when there is an actual difference?
+>>>>>>
+>>>>>> E.g .we don't have separate compatible strings for all the sda660,
+>>>>>> apq8096, etc. unless this is required by the corresponding hardware
+>>>>>> block not being compatible with corresponding sdm or msm counterpart.
+>>>>>>
+>>>>> I am not that fluent in Qualcomm naming, so let me ask - what are the
+>>>>> differences between QDU and QRU?
+>>>>>
+>>>>> For compatible (and/or similar) devices the general recommendation is to
+>>>>> have specific compatibles followed by fallback. Even if devices are
+>>>>> very, very, very similar, usually the recommendation still stays.
+>>>> Well, true. But in some cases we handle this by using a single set of
+>>>> compatibles. Consider e.g. sa8155 vs sm8150 (sa8155 overrides just few
+>>>> compats that differ). Or qrb5165 vs sm8250 (there is no separate
+>>>> qrb5165.dtsi). APQ8096 (#include "msm8996.dtsi"). Etc.
+>>>>
+>>>> I'd say this really depends on the actual difference between qru and qdu.
+>>>
+>>> To add some clarification, there's pretty little functional difference between the QDU (Distributed Unit) and the QRU (Radio Unit); they're largely the same SoC from the kernel's standpoint. I wasn't sure if it made more sense to separate the compat strings or mash them together (using qdru to specify that it applies to both), so I kept separate compat strings in case there was a separate RU/DU use case down the line and also to avoid some confusion (I guess that didn't work though). It makes the most sense in my mind to just use the qdru compat string for the things that apply to both SoCs (which is most of what's submitted currently) and then we can do qdu/qru specific override strings for more specific drivers.
+>>
+>> Unless Krzysztof or Bjorn have other opinion, I'd suggest adding a
+>> single compat string, It might be qcom,qdru1000-foo or just
+>> qcom,qdu1000-foo (with having a separate qcom,qru1000-foo where
+>> applicable). But the final decision is from Rob, Krzysztof and Bjorn.
 > 
-> Yo,
-> 
-> This is the v1 of the patch which you reviewed a year ago.
-> https://marc.info/?l=linux-integrity&m=163225066613340&w=2
-> 
-> V2 mostly fixed the commit message, but there where some more pointers. I'm
-> happy to submit a V3 if we can agree on all the details.
-> 
-> V2 review is here:
-> https://marc.info/?l=linux-integrity&m=165475008823837&w=2
+> If qdru1000 is a real SoC name, then it is fine. But it seems it is
+> rather a wildcard, which in general is discouraged. Go with qdu1000 and
+> optionally prepended with qru1000.
 
-Send v3 with fixes tag and it is fine.
+qdru1000 is not a real SOC, so let's not use that. Prefer to use qdu1000 
+and qru1000 with whatever approach we decide.
 
-BR, Jarkko
+---Trilok Soni
