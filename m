@@ -2,189 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0545F56C6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 16:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E15A5F56CA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 16:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbiJEOx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 10:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42180 "EHLO
+        id S230128AbiJEOy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 10:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbiJEOxy (ORCPT
+        with ESMTP id S230090AbiJEOyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 10:53:54 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440EA7C1D0
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 07:53:53 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id x40so8338822ljq.9
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 07:53:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=gRO3O8xi78oTZptPglDpaTcSvMIXolMC3hbGjTWLEkE=;
-        b=rkd0hforclQhcWpTHlD5y8YCglbsV1/nuc3zv9uCelABf1vBJ1LqFZ4I+qy4C98y/D
-         wYR5H7xXkWZjWIZFtIW0tlS0NDcrkm2c3kuUcNg0JXqBsjJ4CSDL8WijhX1lDrseh8i/
-         W9fWE4EsOuWnLondke0Ky8FJZCOoFu7LZCM7otnHxNRafjATWM8gGK4mqhPVuQoZnvgs
-         mq2nbNDqwHfdSaakOwFlKOdhqNx0X+4JzmoAeBZjE7fb0oITN3Z+TPhnozzalJTjHvYF
-         7qKGHcFjEAWhz3zaO2h80PDy4pTX1QoXrQdUodADI4fo0/KCLiHAybrIX10rDpQERn52
-         GGGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=gRO3O8xi78oTZptPglDpaTcSvMIXolMC3hbGjTWLEkE=;
-        b=lCVJZA24VIntx0fI6rMDM9vqJ2JgNhRgWgvh4J/ZSw3R87cj3h/wfvgY3EiL69UhA6
-         mjdH56L1KwqgMKOJa0qUBP8rR+Bs/9zW1PBdYpZ+DqRXUOC4c6nVeLKo2bMa14TkfleM
-         C56DcznzYmrSNCz23GNlGuWxI5jMzLnq9flLsXQ41yxR0avjCYV/mjhxmqU9jTjfVKxj
-         ubODMieIPoXpIOm5M0iIqwf8c5aZMlW4H/7UIUvLX7/neOjn1oprgiBgm+8AB3rJCB1M
-         TrE8qvWxPBcZWp5Ec1zcuBykJDYsnmeP+hg2LVHwEKchYkOBdr431GFq7rFCXfO8ouLv
-         TsAg==
-X-Gm-Message-State: ACrzQf3TfuTCOhk8GK92hyzcRMxrLkuxBmII1+jPCAchRiOoRY1M4YQT
-        8VuhWCLV1A7K1piRf+MKpf1UxnAcNiNPRQ==
-X-Google-Smtp-Source: AMsMyM60sctRdKk2qXd9pHiqWJZhc+vjTpzAps80DCC6YisbGJKbNLJWVROzlZaDH/ZO0THjDUZAjQ==
-X-Received: by 2002:a2e:9649:0:b0:26d:e740:ea5 with SMTP id z9-20020a2e9649000000b0026de7400ea5mr5117ljh.363.1664981631600;
-        Wed, 05 Oct 2022 07:53:51 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id b24-20020a05651c033800b0026dce0a5ca9sm1333111ljp.70.2022.10.05.07.53.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Oct 2022 07:53:51 -0700 (PDT)
-Message-ID: <b628a3de-98a0-fa55-57d1-cd375fc8d4e4@linaro.org>
-Date:   Wed, 5 Oct 2022 16:53:50 +0200
+        Wed, 5 Oct 2022 10:54:25 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26BE7CB46;
+        Wed,  5 Oct 2022 07:54:21 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MjHXv1LldzlVjH;
+        Wed,  5 Oct 2022 22:49:51 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 5 Oct 2022 22:54:16 +0800
+Message-ID: <7f34d333-3b2a-aea5-f411-d53be2c46eee@huawei.com>
+Date:   Wed, 5 Oct 2022 22:54:15 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v1 17/17] drm/mediatek: Add mt8195-dpi support to drm_drv
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf-next v2 0/4] Add ftrace direct call for arm64
 Content-Language: en-US
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-References: <20220919-v1-0-4844816c9808@baylibre.com>
- <20220919-v1-17-4844816c9808@baylibre.com>
- <a0a3c427-c851-ae5d-4010-e94740bf9f6e@linaro.org>
- <CABnWg9s3N_Ua9g0S3x0uj8PN4FtOX6DO+zQcBzGFqoLTL1J24A@mail.gmail.com>
- <bc64b69d-3d65-f5ca-a688-2ad1a055ba4b@linaro.org>
- <CABnWg9sJFBAXi1bu_yHDppFOmg=H=G7QTn9Bzqkr-t7qm5vUFw@mail.gmail.com>
- <db1abf9d-ba40-f71c-0d37-c3912ac1bd8e@linaro.org>
- <CABnWg9vOHWpdLPAFdXAG3GNgsxpbzgh2gTq_tm72Tk2uR54LaQ@mail.gmail.com>
- <49daae86-e922-9a17-ebed-2a33a5eeb18e@linaro.org>
- <CABnWg9sPuJQQOmLGDSgE86NCRh_3GqWZ0dFAs_J2PO9HCVbExQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CABnWg9sPuJQQOmLGDSgE86NCRh_3GqWZ0dFAs_J2PO9HCVbExQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Florent Revest <revest@chromium.org>
+CC:     Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Xu Kuohai <xukuohai@huaweicloud.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+References: <20220913162732.163631-1-xukuohai@huaweicloud.com>
+ <f1e14934-dc54-9bf7-501a-89affdb7371e@iogearbox.net>
+ <YzG51Jyd5zhvygtK@arm.com> <YzHk1zRf1Dp8YTEe@FVFF77S0Q05N>
+ <970a25e4-9b79-9e0c-b338-ed1a934f2770@huawei.com>
+ <YzR5WSLux4mmFIXg@FVFF77S0Q05N>
+ <2cb606b4-aa8b-e259-cdfd-1bfc61fd7c44@huawei.com>
+ <CABRcYmKPchvtkkgWhOJ6o3pHVqTWeenGawHfZ2ug8Akdh6NfnQ@mail.gmail.com>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <CABRcYmKPchvtkkgWhOJ6o3pHVqTWeenGawHfZ2ug8Akdh6NfnQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/10/2022 11:34, Guillaume Ranquet wrote:
-> On Tue, 04 Oct 2022 17:05, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->> On 04/10/2022 13:55, Guillaume Ranquet wrote:
->>>> No. You said what the code is doing. I think I understand this. You
->>>> still do not need more compatibles. Your sentence did not clarify it
->>>> because it did not answer at all to question "why". Why do you need it?
+On 10/5/2022 12:06 AM, Florent Revest wrote:
+> On Fri, Sep 30, 2022 at 6:07 AM Xu Kuohai <xukuohai@huawei.com> wrote:
+>>
+>> On 9/29/2022 12:42 AM, Mark Rutland wrote:
+>>> On Tue, Sep 27, 2022 at 12:49:58PM +0800, Xu Kuohai wrote:
+>>>> On 9/27/2022 1:43 AM, Mark Rutland wrote:
+>>>>> On Mon, Sep 26, 2022 at 03:40:20PM +0100, Catalin Marinas wrote:
+>>>>>> On Thu, Sep 22, 2022 at 08:01:16PM +0200, Daniel Borkmann wrote:
+>>>>>>> On 9/13/22 6:27 PM, Xu Kuohai wrote:
+>>>>>>>> This series adds ftrace direct call for arm64, which is required to attach
+>>>>>>>> bpf trampoline to fentry.
+>>>>>>>>
+>>>>>>>> Although there is no agreement on how to support ftrace direct call on arm64,
+>>>>>>>> no patch has been posted except the one I posted in [1], so this series
+> 
+> Hey Xu :) Sorry I wasn't more pro-active about communicating what i
+> was experimenting with! A lot of conversations happened off-the-list
+> at LPC and LSS so I was playing on the side with the ideas that got
+> suggested to me. I start to have a little something to share.
+> Hopefully if we work closer together now we can get quicker results.
+> 
+>>>>>>>> continues the work of [1] with the addition of long jump support. Now ftrace
+>>>>>>>> direct call works regardless of the distance between the callsite and custom
+>>>>>>>> trampoline.
+>>>>>>>>
+>>>>>>>> [1] https://lore.kernel.org/bpf/20220518131638.3401509-2-xukuohai@huawei.com/
+>>>>>>>>
+>>>>>>>> v2:
+>>>>>>>> - Fix compile and runtime errors caused by ftrace_rec_arch_init
+>>>>>>>>
+>>>>>>>> v1: https://lore.kernel.org/bpf/20220913063146.74750-1-xukuohai@huaweicloud.com/
+>>>>>>>>
+>>>>>>>> Xu Kuohai (4):
+>>>>>>>>       ftrace: Allow users to disable ftrace direct call
+>>>>>>>>       arm64: ftrace: Support long jump for ftrace direct call
+>>>>>>>>       arm64: ftrace: Add ftrace direct call support
+>>>>>>>>       ftrace: Fix dead loop caused by direct call in ftrace selftest
+>>>>>>>
+>>>>>>> Given there's just a tiny fraction touching BPF JIT and most are around core arm64,
+>>>>>>> it probably makes sense that this series goes via Catalin/Will through arm64 tree
+>>>>>>> instead of bpf-next if it looks good to them. Catalin/Will, thoughts (Ack + bpf-next
+>>>>>>> could work too, but I'd presume this just results in merge conflicts)?
+>>>>>>
+>>>>>> I think it makes sense for the series to go via the arm64 tree but I'd
+>>>>>> like Mark to have a look at the ftrace changes first.
+>>>>>
+>>>>>>   From a quick scan, I still don't think this is quite right, and as it stands I
+>>>>> believe this will break backtracing (as the instructions before the function
+>>>>> entry point will not be symbolized correctly, getting in the way of
+>>>>> RELIABLE_STACKTRACE). I think I was insufficiently clear with my earlier
+>>>>> feedback there, as I have a mechanism in mind that wa a little simpler.
 >>>>
->>>> Sorry, the change looks not correct.
+>>>> Thanks for the review. I have some thoughts about reliable stacktrace.
 >>>>
->>>> Best regards,
->>>> Krzysztof
+>>>> If PC is not in the range of literal_call, stacktrace works as before without
+>>>> changes.
 >>>>
+>>>> If PC is in the range of literal_call, for example, interrupted by an
+>>>> irq, I think there are 2 problems:
+>>>>
+>>>> 1. Caller LR is not pushed to the stack yet, so caller's address and name
+>>>>      will be missing from the backtrace.
+>>>>
+>>>> 2. Since PC is not in func's address range, no symbol name will be found, so
+>>>>      func name is also missing.
+>>>>
+>>>> Problem 1 is not introduced by this patchset, but the occurring probability
+>>>> may be increased by this patchset. I think this problem should be addressed by
+>>>> a reliable stacktrace scheme, such as ORC on x86.
 >>>
->>> I need a new compatible to adress the specifics of mt8195 in the mtk_dpi driver,
->>> the change is in this series with:
->>> [PATCH v1 16/17] drm/mediatek: dpi: Add mt8195 hdmi to DPI driver [1]
->>
->> But you do not have specifics of mt8195. I wrote it in the beginning.
->>
+>>> I agree problem 1 is not introduced by this patch set; I have plans fo how to
+>>> address that for reliable stacktrace based on identifying the ftrace
+>>> trampoline. This is one of the reasons I do not want direct calls, as
+>>> identifying all direct call trampolines is going to be very painful and slow,
+>>> whereas identifying a statically allocated ftrace trampoline is far simpler.
 >>>
->>> I then need to add that compatible to the "list" here in mtk_drm_drv.
->>
->> No, you do not... I checked the driver and there is no single need... or
->> convince me you need.
->>
->>> I don't see a way around this unless I rewrite the way mtk_drm_drv works?
->>
->> Why rewrite? You have all compatibles in place.
->>
+>>>> Problem 2 is indeed introduced by this patchset. I think there are at least 3
+>>>> ways to deal with it:
 >>>
->>> Maybe if I declare a new compatible that is generic to all mediatek
->>> dpi variants?
->>
->> You were asked to use fallback. Don't create some fake fallbacks. Use
->> existing ones.
->>
->>> and have all the dts specify the node with both the generic dpi and
->>> the specific compatible?
+>>> What I would like to do here, as mentioned previously in other threads, is to
+>>> avoid direct calls, and implement "FTRACE_WITH_OPS", where we can associate
+>>> each patch-site with a specific set of ops, and invoke that directly from the
+>>> regular ftrace trampoline.
 >>>
->>> dpi@xxx {
->>> 	compatible = "mediatek,dpi", "mediatek,mt8195-dpi";
->>
->> I don't know what's this but certainly looks odd. Some wild-card
->> compatible in front (not fallback) and none are documented.
->>
->>> 	...
->>> }
+>>> With that, the patch site would look like:
 >>>
->>> Then I can "collapse" all the dpi related nodes in mtk_drm_drv under
->>> "mediatek,dpi" ?
+>>>        pre_func_literal:
+>>>                NOP             // Patched to a pointer to
+>>>                NOP             // ftrace_ops
+>>>        func:
+>>>                < optional BTI here >
+>>>                NOP             // Patched to MOV X9, LR
+>>>                NOP             // Patched to a BL to the ftrace trampoline
 >>>
->>> I guess would have to do the change for all other components that are needed in
->>> mtk_drm_drv (mmsys, aal, ccor, color, dither, dsc, gamma, mutex...).
+>>> ... then in the ftrace trampoline we can recover the ops pointer at a negative
+>>> offset from the LR based on the LR, and invoke the ops from there (passing a
+>>> struct ftrace_regs with the saved regs).
 >>>
->>> That's the only trivial way I can think of implementing this with the
->>> current status
->>> of the mtk_drm stack.
+>>> That way the patch-site is less significantly affected, and there's no impact
+>>> to backtracing. That gets most of the benefit of the direct calls avoiding the
+>>> ftrace ops list traversal, without having to do anything special at all. That
+>>> should be much easier to maintain, too.
 >>>
->>> Do you have any other ideas in mind?
+>>> I started implementing that before LPC (and you can find some branches on my
+>>> kernel.org repo), but I haven't yet had the time to rebase those and sort out
+>>> the remaining issues:
+>>>
+>>>     https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/ftrace/per-callsite-ops
+>>>
 >>
->> Use fallback of compatible device. That's the common pattern.
->> Everywhere, Mediatek as well.
->>
+>> I've read this code before, but it doesn't run and since you haven't updated
 > 
-> I'm unsure about what a "fallback of compatible device" is.
-> But from what I can gather, you'd have me write the dts as:
+> I also tried to use this but indeed the "TODO: mess with protection to
+> set this" in  5437aa788d needs to be addressed before we can use it.
 > 
-> dpi@xxx {
-> 	compatible = "mediatek,mt8195-dpi", "mediatek,mt2701-dpi";
-> 	...
-> }
-
-Sounds reasonable. Just someone should check whether devices are
-actually compatible, because driver is just a hint.
-
+>> it, I assumed you dropped it :(
+>>
+>> This approach seems appropriate for dynamic ftrace trampolines, but I think
+>> there are two more issues for bpf.
+>>
+>> 1. bpf trampoline was designed to be called directly from fentry (located in
+>>      kernel function or bpf prog). So to make it work as ftrace_op, we may end
+>>      up with two different bpf trampoline types on arm64, one for bpf prog and
+>>      the other for ftrace.
+>>
+>> 2. Performance overhead, as we always jump to a static ftrace trampoline to
+>>      construct execution environment for bpf trampoline, then jump to the bpf
+>>      trampoline to construct execution environment for bpf prog, then jump to
+>>      the bpf prog, so for some small bpf progs or hot functions, the calling
+>>      overhead may be unacceptable.
 > 
-> so that the mtk_dpi driver will use the specific mt8195 dpi config and
-> the mtk_drm driver will fallback to mt2701 to find the compatible it needs.
+>>From the conversations I've had at LPC, Steven, Mark, Jiri and Masami
+> (all in CC) would like to see an ftrace ops based solution (or rather,
+> something that doesn't require direct calls) for invoking BPF tracing
+> programs. I figured that the best way to move forward on the question
+> of whether the performance impact of that would be acceptable or not
+> is to just build it and measure it. I understand you're testing your
+> work on real hardware (I work on an emulator at the moment) , would
+> you be able to compare the impact of my proof of concept branch with
+> your direct call based approach ?
 > 
-> Would you like me to use this pattern for all the other compatibles declared
-> in the mtk_ddp_comp_ids array in separate patches?
+> https://github.com/FlorentRevest/linux/commits/fprobe-min-args
+>
 
-Could be for consistency, but it is up to you.
+Tested on my pi4, here is the result.
 
-Best regards,
-Krzysztof
+1. test with dd
+
+1.1 when no bpf prog attached to vfs_write
+
+# dd if=/dev/zero of=/dev/null count=1000000
+1000000+0 records in
+1000000+0 records out
+512000000 bytes (512 MB, 488 MiB) copied, 1.56858 s, 326 MB/s
+
+
+1.2 attach bpf prog with kprobe, bpftrace -e 'kprobe:vfs_write {}'
+
+# dd if=/dev/zero of=/dev/null count=1000000
+1000000+0 records in
+1000000+0 records out
+512000000 bytes (512 MB, 488 MiB) copied, 2.33439 s, 219 MB/s
+
+
+1.3 attach bpf prog with with direct call, bpftrace -e 'kfunc:vfs_write {}'
+
+# dd if=/dev/zero of=/dev/null count=1000000
+1000000+0 records in
+1000000+0 records out
+512000000 bytes (512 MB, 488 MiB) copied, 1.72973 s, 296 MB/s
+
+
+1.4 attach bpf prog with with indirect call, bpftrace -e 'kfunc:vfs_write {}'
+
+# dd if=/dev/zero of=/dev/null count=1000000
+1000000+0 records in
+1000000+0 records out
+512000000 bytes (512 MB, 488 MiB) copied, 1.99179 s, 257 MB/s
+
+
+2. test with bpf/bench
+
+2.1 bench trig-base
+Iter   0 ( 65.259us): hits    1.774M/s (  1.774M/prod), drops    0.000M/s, total operations    1.774M/s
+Iter   1 (-17.075us): hits    1.790M/s (  1.790M/prod), drops    0.000M/s, total operations    1.790M/s
+Iter   2 (  0.388us): hits    1.790M/s (  1.790M/prod), drops    0.000M/s, total operations    1.790M/s
+Iter   3 ( -1.759us): hits    1.790M/s (  1.790M/prod), drops    0.000M/s, total operations    1.790M/s
+Iter   4 (  1.980us): hits    1.790M/s (  1.790M/prod), drops    0.000M/s, total operations    1.790M/s
+Iter   5 ( -2.222us): hits    1.790M/s (  1.790M/prod), drops    0.000M/s, total operations    1.790M/s
+Iter   6 (  0.869us): hits    1.790M/s (  1.790M/prod), drops    0.000M/s, total operations    1.790M/s
+Summary: hits    1.790 ± 0.000M/s (  1.790M/prod), drops    0.000 ± 0.000M/s, total operations    1.790 ± 0.000M/s
+
+2.2 bench trig-kprobe
+Iter   0 ( 50.703us): hits    0.765M/s (  0.765M/prod), drops    0.000M/s, total operations    0.765M/s
+Iter   1 (-15.056us): hits    0.771M/s (  0.771M/prod), drops    0.000M/s, total operations    0.771M/s
+Iter   2 (  2.981us): hits    0.771M/s (  0.771M/prod), drops    0.000M/s, total operations    0.771M/s
+Iter   3 ( -3.834us): hits    0.771M/s (  0.771M/prod), drops    0.000M/s, total operations    0.771M/s
+Iter   4 ( -1.964us): hits    0.771M/s (  0.771M/prod), drops    0.000M/s, total operations    0.771M/s
+Iter   5 (  0.426us): hits    0.770M/s (  0.770M/prod), drops    0.000M/s, total operations    0.770M/s
+Iter   6 ( -1.297us): hits    0.771M/s (  0.771M/prod), drops    0.000M/s, total operations    0.771M/s
+Summary: hits    0.771 ± 0.000M/s (  0.771M/prod), drops    0.000 ± 0.000M/s, total operations    0.771 ± 0.000M/s
+
+2.2 bench trig-fentry, with direct call
+Iter   0 ( 49.981us): hits    1.357M/s (  1.357M/prod), drops    0.000M/s, total operations    1.357M/s
+Iter   1 (  2.184us): hits    1.363M/s (  1.363M/prod), drops    0.000M/s, total operations    1.363M/s
+Iter   2 (-14.167us): hits    1.358M/s (  1.358M/prod), drops    0.000M/s, total operations    1.358M/s
+Iter   3 ( -4.890us): hits    1.362M/s (  1.362M/prod), drops    0.000M/s, total operations    1.362M/s
+Iter   4 (  5.759us): hits    1.362M/s (  1.362M/prod), drops    0.000M/s, total operations    1.362M/s
+Iter   5 ( -4.389us): hits    1.362M/s (  1.362M/prod), drops    0.000M/s, total operations    1.362M/s
+Iter   6 ( -0.594us): hits    1.364M/s (  1.364M/prod), drops    0.000M/s, total operations    1.364M/s
+Summary: hits    1.362 ± 0.002M/s (  1.362M/prod), drops    0.000 ± 0.000M/s, total operations    1.362 ± 0.002M/s
+
+2.3 bench trig-fentry, with indirect call
+Iter   0 ( 49.148us): hits    1.014M/s (  1.014M/prod), drops    0.000M/s, total operations    1.014M/s
+Iter   1 (-13.816us): hits    1.021M/s (  1.021M/prod), drops    0.000M/s, total operations    1.021M/s
+Iter   2 (  0.648us): hits    1.021M/s (  1.021M/prod), drops    0.000M/s, total operations    1.021M/s
+Iter   3 (  3.370us): hits    1.021M/s (  1.021M/prod), drops    0.000M/s, total operations    1.021M/s
+Iter   4 ( 11.388us): hits    1.021M/s (  1.021M/prod), drops    0.000M/s, total operations    1.021M/s
+Iter   5 (-17.242us): hits    1.022M/s (  1.022M/prod), drops    0.000M/s, total operations    1.022M/s
+Iter   6 (  1.815us): hits    1.021M/s (  1.021M/prod), drops    0.000M/s, total operations    1.021M/s
+Summary: hits    1.021 ± 0.000M/s (  1.021M/prod), drops    0.000 ± 0.000M/s, total operations    1.021 ± 0.000M/s
+
+> I first tried to implement this as an ftrace op myself but realized I
+> was re-implementing a lot of the function graph tracer. So I then
+> tried to use the function graph tracer API but realized I was missing
+> some features which Steven had addressed in an RFC few years back. So
+> I rebuilt on that until I realized Masami has been upstreaming the
+> fprobe and rethook APIs as spiritual successors of Steven's RFC... So
+> I've now rebuilt yet another proof of concept based on fprobe and
+> rethook.
+> 
+> That branch is still very much WIP and there are a few things I'd like
+> to address before sending even an RFC (when kretprobe is built on
+> rethook for example, I construct pt_regs on the stack in which I copy
+> the content of ftrace_regs... or program linking/unlinking is racy
+> right now) but I think it's good enough for performance measurements
+> already. (fentry_fexit and lsm tests pass)
+> 
+>>> Note that as a prerequisite for that I also want to reduce the set of registers
+>>> we save/restore down to the set required by our calling convention, as the
+>>> existing pt_regs is both large and generally unsound (since we can not and do
+>>> not fill in many of the fields we only acquire at an exception boundary).
+>>> That'll further reduce the ftrace overhead generally, and remove the needs for
+>>> the two trampolines we currently have. I have a WIP at:
+>>>
+>>>     https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/ftrace/minimal-regs
+> 
+> Note that I integrated this work to my branch too. I extended it to
+> also have fprobe and rethook save and pass ftrace_regs structures to
+> their callbacks. Most performance improvements would come from your
+> arm64/ftrace/per-callsite-ops branch but we'd need to fix the above
+> TODO for it to work.
+> 
+>>> I intend to get back to both of those shortly (along with some related bits for
+>>> kretprobes and stacktracing); I just haven't had much time recently due to
+>>> other work and illness.
+>>>
+>>
+>> Sorry for that, hope you getting better soon.
+> 
+> Oh, that sucks. Get better Mark!
+> .
 
