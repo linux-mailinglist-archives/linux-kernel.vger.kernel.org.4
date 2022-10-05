@@ -1,109 +1,77 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C475F5644
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 16:20:00 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 99D2B5F5652
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 16:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbiJEOTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 10:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
+        id S229977AbiJEOXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 10:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJEOTn (ORCPT
+        with ESMTP id S229929AbiJEOXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 10:19:43 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0731AD9E;
-        Wed,  5 Oct 2022 07:19:30 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 295EJHIL022889;
-        Wed, 5 Oct 2022 14:19:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=lOKUdL4SfmoA4A/iH/3PevuocbiAUEp6EmppSdK48jc=;
- b=XKLXoQM5btz9Gums2sa3wp0H7zSpVg9qp9Od6Kdba1Ozp3iiMn+4G/wJ8sZcuQ7xV7Mc
- hlBdLT+GQJ0YpOjIH9vRq3Lqy5Aw8LAFpi2M6m6HjhibfvZrNB3fNdHnPfSFvQDAeNWZ
- HgoEaG4VhGiHaOd+y5ZdyUxOz9K0xpPKGnCi/rwaFN0Wnz4mgl1Yo7BBo5wWL4wt4YD1
- DVTM0i3oI0+bUcSey5kvth3nXIUWIlS/ydZVOEg6MBiG9Ms/q1B31zBGZinJZ9j8bYmV
- KOkisajbZqZsDyggodwo6xWViTyOl1KhgbqeEhsZiuNssMWCkDRROOFkfS7gCW4J7yR9 OA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k15shggwe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Oct 2022 14:19:17 +0000
-Received: from pps.filterd (NALASPPMTA05.qualcomm.com [127.0.0.1])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 295EEN17027124;
-        Wed, 5 Oct 2022 14:19:16 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 3jxemkxjsu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Oct 2022 14:19:16 +0000
-Received: from NALASPPMTA05.qualcomm.com (NALASPPMTA05.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 295EGhcA029167;
-        Wed, 5 Oct 2022 14:19:15 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 295EJFLW031723
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Oct 2022 14:19:15 +0000
-Received: from [10.38.242.178] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 5 Oct 2022
- 07:19:13 -0700
-Message-ID: <3bf05883-e8dc-5e11-ed83-7f8f7b801737@quicinc.com>
-Date:   Wed, 5 Oct 2022 07:19:11 -0700
+        Wed, 5 Oct 2022 10:23:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC83786FA;
+        Wed,  5 Oct 2022 07:23:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 97B68B81BEF;
+        Wed,  5 Oct 2022 14:23:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AB7EC433C1;
+        Wed,  5 Oct 2022 14:23:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664979814;
+        bh=WFaYi+X3bwztuZypZNGHha7U7CNiw0AMJpnPHzXpFJ0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=X6P1+ilsTVaYaESYTCbKcfVD/ZBr0JiVSV8A0kBpux8OIUbZhcCbAC3XttnPwEGYr
+         sIGNEHtLbjjMRj9DDqY7PEF4nKOuHdq7kyxfjo/xsInvA+HUdZHe3FMTsHROVFWKms
+         fbAfere5gNLL1ACirQm9YDHA4bRw3+SHp/Mkapf/6f7V8sAuHL7oDNEaEkB6qul/pT
+         Cx/jFckJB3rTnRysbcdiGfUvja32NB1ccF7OJNyzyAAKRogcpsWKiEedx9mBTy8d0W
+         Id0x4lMOhleqENi5HN2sxqI4nOqKczbJP3vYAyVFs7bvhDIzYaWXJayGf3BHVTlTSB
+         dQ6dzWj6vDyyA==
+Received: by mail-oi1-f178.google.com with SMTP id w127so3159299oiw.8;
+        Wed, 05 Oct 2022 07:23:34 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2D9WEQyxTtYvIbApEewngZ5B9KtXWjBqXMjk/SzVqRfFS5mozP
+        7xJqPcRtJ9D+2qpckOmIAVdnavOefV2uFttxxGo=
+X-Google-Smtp-Source: AMsMyM5V+IXDM3tjlKjKLDlYZALnWctuGFs1B162NHLsEjt/VmV8U+oCRfhZJoy8o8aONZZ/gJ6Z967ZWbeH+tGHt08=
+X-Received: by 2002:aca:6155:0:b0:353:e740:ce01 with SMTP id
+ v82-20020aca6155000000b00353e740ce01mr2320511oib.19.1664979813453; Wed, 05
+ Oct 2022 07:23:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 4/5] drm/msm/dpu1: Account for DSC's bits_per_pixel having
- 4 fractional bits
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        <phone-devel@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        <freedreno@lists.freedesktop.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        <dri-devel@lists.freedesktop.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Martin Botka <martin.botka@somainline.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sean Paul <sean@poorly.run>, <linux-kernel@vger.kernel.org>
-References: <20221001190807.358691-1-marijn.suijten@somainline.org>
- <20221001190807.358691-5-marijn.suijten@somainline.org>
- <7f7a5d78-e50f-b6af-bb3e-bbfbc7fa5f75@quicinc.com>
- <20221004221134.roino4u2waawgh6u@SoMainline.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20221004221134.roino4u2waawgh6u@SoMainline.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: eawUBwmjs2ZNif2dVeoV7CCQHHci12b7
-X-Proofpoint-ORIG-GUID: eawUBwmjs2ZNif2dVeoV7CCQHHci12b7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-05_03,2022-10-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
- impostorscore=0 lowpriorityscore=0 mlxlogscore=999 spamscore=0 mlxscore=0
- phishscore=0 priorityscore=1501 suspectscore=0 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210050090
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+References: <20221003223222.448551-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221003223222.448551-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAJF2gTQuSX9idEyNmGRwpAsSP8V=+QKQ7UAp28T-seM8rbkwOA@mail.gmail.com> <CA+V-a8smkDmQbz76sTA5XfUm7bkY4Ee-L5xYW+-xRWkE1TYiAw@mail.gmail.com>
+In-Reply-To: <CA+V-a8smkDmQbz76sTA5XfUm7bkY4Ee-L5xYW+-xRWkE1TYiAw@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 5 Oct 2022 22:23:21 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQ4G-j3p_pHvVQ82R2DFQZq70xgE3ZhoRkxiSzrHnU2og@mail.gmail.com>
+Message-ID: <CAJF2gTQ4G-j3p_pHvVQ82R2DFQZq70xgE3ZhoRkxiSzrHnU2og@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 2/2] soc: renesas: Add L2 cache management for
+ RZ/Five SoC
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,81 +79,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Oct 5, 2022 at 8:54 PM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+>
+> Hi Guo,
+>
+> On Wed, Oct 5, 2022 at 2:29 AM Guo Ren <guoren@kernel.org> wrote:
+> >
+> > On Tue, Oct 4, 2022 at 6:32 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > >
+> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > >
+> > > On the AX45MP core, cache coherency is a specification option so it may
+> > > not be supported. In this case DMA will fail. As a workaround, firstly we
+> > > allocate a global dma coherent pool from which DMA allocations are taken
+> > > and marked as non-cacheable + bufferable using the PMA region as specified
+> > > in the device tree. Synchronization callbacks are implemented to
+> > > synchronize when doing DMA transactions.
+> > >
+> > > The Andes AX45MP core has a Programmable Physical Memory Attributes (PMA)
+> > > block that allows dynamic adjustment of memory attributes in the runtime.
+> > > It contains a configurable amount of PMA entries implemented as CSR
+> > > registers to control the attributes of memory locations in interest.
+> > >
+> > > Below are the memory attributes supported:
+> > > * Device, Non-bufferable
+> > > * Device, bufferable
+> > > * Memory, Non-cacheable, Non-bufferable
+> > > * Memory, Non-cacheable, Bufferable
+> > > * Memory, Write-back, No-allocate
+> > > * Memory, Write-back, Read-allocate
+> > > * Memory, Write-back, Write-allocate
+> > > * Memory, Write-back, Read and Write-allocate
+> > Seems Svpbmt's PMA, IO, and NC wouldn't fit your requirements, could
+> > give a map list of the types of Svpbmt? And give out what you needed,
+> > but Svpbmt can't.
+> >
+> Sorry I didn't get what you meant here, could you please elaborate.
+I know there is no pbmt in AX45MP, I am just curious how many physical
+memory attributes you would use in linux? It seems only one type used
+in the series:
+cpu_nocache_area_set -> sbi_ecall(SBI_EXT_ANDES,
+SBI_EXT_ANDES_SET_PMA, offset, vaddr, size, entry_id, 0, 0);
+
+I'm not sure how you make emmc/usb/gmac's dma ctrl desc work around
+without pbmt when they don't have cache coherency protocol. Do you
+need to inject dma_sync for desc synchronization? What's the effect of
+dynamic PMA in the patch series?
+
+Thx.
+
+>
+> > Here is the Linux dma type to Svpbmt map:
+> > PMA -> Normal
+> > IO -> ioremap, pgprot_noncached
+> > NC -> pgprot_writecombine
+> >
+> > How about AX45MP?
+> >
+> Svpbmt extension is not supported on AX45MP (reported by
+> riscv_isa_extension_available())
+>
+> Cheers,
+> Prabhakar
 
 
-On 10/4/2022 3:11 PM, Marijn Suijten wrote:
-> On 2022-10-04 10:03:07, Abhinav Kumar wrote:
->>
->>
->> On 10/1/2022 12:08 PM, Marijn Suijten wrote:
->>> According to the comment this DPU register contains the bits per pixel
->>> as a 6.4 fractional value, conveniently matching the contents of
->>> bits_per_pixel in struct drm_dsc_config which also uses 4 fractional
->>> bits.  However, the downstream source this implementation was
->>> copy-pasted from has its bpp field stored _without_ fractional part.
->>>
->>> This makes the entire convoluted math obsolete as it is impossible to
->>> pull those 4 fractional bits out of thin air, by somehow trying to reuse
->>> the lowest 2 bits of a non-fractional bpp (lsb = bpp % 4??).
->>>
->>> The rest of the code merely attempts to keep the integer part a multiple
->>> of 4, which is rendered useless thanks to data |= dsc->bits_per_pixel <<
->>> 12; already filling up those bits anyway (but not on downstream).
->>>
->>> Fixes: c110cfd1753e ("drm/msm/disp/dpu1: Add support for DSC")
->>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
->>
->> Many of this bugs are because the downstream code from which this
->> implementation was derived wasnt the latest perhaps?
-> 
-> Perhaps, this code is "identical" to what I'm looking at in some
-> downstream 4.14 / 4.19, where the upstream struct for DSC either wasn't
-> there or wasn't used.  We have to find and address these bugs one by one
-> to make our panels work, and this series gets one platform (sdm845) down
-> but has more work pending for others (sm8250 has my current focus).
-> 
-> Or are you suggesting to "redo" the DSC integration work based on a
-> (much) newer display techpack (SDE driver)?
 
-There is no need to redo the DSC integration now.
-
-The code I am referring to is here :
-
-https://git.codelinaro.org/clo/la/platform/vendor/opensource/display-drivers/-/blob/DISPLAY.LA.2.0.r1-08000-WAIPIO.0/msm/sde_dsc_helper.c#L240
-
-So with respect to the redundant math in patches 1/3/4/5 of this series, 
-I dont see all the redundant math anymore in this calculation.
-
-This is what i meant by my comment.
-
-When DSC changes were pushed, they were indeed validated on sdm845 
-devices by Vinod so there was a certain level of confidence on those 
-changes.
-
-At this point, we should just consider these as bug-fixes for upstream 
-and keep going. A full redo is not required.
-
-At some point in the next couple of months, we plan to add DSC 1.2 
-support to MSM.
-
-We will check for any missing changes (if any after this series of 
-yours) and push those as part of that.
-
-> 
->> Earlier, downstream had its own DSC struct maybe leading to this
->> redundant math but now we have migrated over to use the upstream struct
->> drm_dsc_config.
-> 
-> Found the 3-year-old `disp: msm: use upstream dsc config data` commit
-> that makes this change.  It carries a similar comment:
-> 
->      /* integer bpp support only */
-> 
-> The superfluous math was howerver removed earlier, in:
-> 
->      disp: msm: fix dsc parameters related to 10 bpc 10 bpp
-> 
-> - Marijn
-> 
->> That being said, this patch LGTM
->> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+-- 
+Best Regards
+ Guo Ren
