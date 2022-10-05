@@ -2,139 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 555575F4FA2
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 07:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD115F4FA5
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 08:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiJEF7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 01:59:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
+        id S229873AbiJEGDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 02:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiJEF7V (ORCPT
+        with ESMTP id S229530AbiJEGDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 01:59:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE3D726B2;
-        Tue,  4 Oct 2022 22:59:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1AF35B81C99;
-        Wed,  5 Oct 2022 05:59:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 596D8C433C1;
-        Wed,  5 Oct 2022 05:59:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664949555;
-        bh=rdcGeYveXrfLSgxC/Q9etaEDZo7DlwNvqTXa8Mdp5Tw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=N8Q21cLqtl3BSjRJsjsAbi0DBOCH18PFtSTPAlNC8N8YX2EyWuwE/u01rSlwThXmg
-         DERA0yS/y14H+ABW/wGhVDW84tAY2u+jflE7QPplqc0DsrOlDLUgB8JsPpeiw/7CE8
-         Ey7nyuNUGKm8Yu4tso2is38ZBopPTpPam7TAeg34raw7hkTa7+QpKqKVfSk7/fy5iU
-         aIttJGBxomJ+Cn2F6pyoSJSKXJW7JRCU4ZcymAUrm1mw4B1ryq39CrpSli78dMvEpV
-         0Mx23guKY7RjvP9pZAzNpbYFqaktYtJMYaWvYr3JJWHf0DESPczs7rVpbao9D13CYY
-         /Fx7Q8KdxHKMg==
-Date:   Wed, 5 Oct 2022 06:59:09 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Subject: Re: [PATCH 5/5] docs: improve the HTML formatting of kerneldoc
- comments
-Message-ID: <20221005065909.33ba2523@sal.lan>
-In-Reply-To: <20221004201222.281845-6-corbet@lwn.net>
-References: <20221004201222.281845-1-corbet@lwn.net>
-        <20221004201222.281845-6-corbet@lwn.net>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Wed, 5 Oct 2022 02:03:05 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B3325EB3;
+        Tue,  4 Oct 2022 23:03:04 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id l8so10126734wmi.2;
+        Tue, 04 Oct 2022 23:03:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=XfuxcPrid/1Sd5yZYeCEG8zmqxixUVmuQ/H/2tn2BcI=;
+        b=k/klt2/b89hFNe78TQbXNeja/IdMpcZiYrjnKfvP2z+814E+oizkM/8ElFrkUb/05R
+         YidX2Si8BVq0VWVPoWBvWve7ZSUQANllVUqjY5eLPbGIQBzi4mw88JovZ1v3WP94q6w7
+         Zpw1iNmnnU24C23jT0+++yDCG6xP33OHLtCXg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=XfuxcPrid/1Sd5yZYeCEG8zmqxixUVmuQ/H/2tn2BcI=;
+        b=SGKLu0KfCIxp242tn8VAK6FstKZGgi0Wfv5alwlnjHYzF1aHWXR+0MYQCFpMmwNhmP
+         gAh640dr0IuaJTIHA0V5cP9heDACaiuFKOKGR/Cz0S97v5G/OkmY1zSOjDHdX+ukjwt/
+         gnRLhML7LY/NFtx8t+OWsYO3m15PaoFEULZhOpnKQKD+DMsBUxVdTVnH4Qb5ZYRagE65
+         fkZjxUPfgQxNzMP/6Xc8eCodXnrNS6gI7ktVAcY530HiGQBY3WW6UgsVVUQmkmsyq9dS
+         dmlrVts3xNeGgeDwkBUNHvfflPULgDDAR599ejcpfvgGpL9Xr7USvKGQhQItQuXjxaoW
+         DQxQ==
+X-Gm-Message-State: ACrzQf1N9S6UxBi2wuSRGZ1NvHYqfacWeCKUgoSeaj0JursKCOkr7N6d
+        dJyRqtAUE8m1WSIHi6czhz0G1C0x4Iqvt0sRi7M=
+X-Google-Smtp-Source: AMsMyM4NbL/FH0L/HZzNVSH872uO46cq4sujSzw/KArLDXyK3aSWFIteAMEN5sWrZHSYS5Cm7JOPuWE+QMKgjyP0yhg=
+X-Received: by 2002:a05:600c:1906:b0:3b4:c979:e639 with SMTP id
+ j6-20020a05600c190600b003b4c979e639mr2079663wmq.10.1664949782844; Tue, 04 Oct
+ 2022 23:03:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220725095913.31e859ec@canb.auug.org.au> <df8f4765-a804-cb50-bbb5-475925ba2036@milecki.pl>
+ <20220815105419.4df1005b@canb.auug.org.au> <20220831091654.45d5ed41@canb.auug.org.au>
+ <20221005114841.4540d325@canb.auug.org.au> <abbe10d1-4c2a-5fad-3f92-e55c514d3ce2@gmail.com>
+In-Reply-To: <abbe10d1-4c2a-5fad-3f92-e55c514d3ce2@gmail.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 5 Oct 2022 06:02:50 +0000
+Message-ID: <CACPK8Xecn8ZREAqcLcuZHjA=NhaanRMKu4W39okAkBFX4aaOnw@mail.gmail.com>
+Subject: Re: linux-next: build warnings after merge of the broadcom tree
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue,  4 Oct 2022 14:12:22 -0600
-Jonathan Corbet <corbet@lwn.net> escreveu:
+On Wed, 5 Oct 2022 at 03:01, Florian Fainelli <f.fainelli@gmail.com> wrote:
+> >> I am still seeing these warnings.
+> >>
+> >> The above commit is now
+> >>
+> >>    61dc1e3850a6 ("ARM: dts: BCM5301X: Add basic PCI controller properties")
+> >
+> > Has any progress been made with this?  This commit is now in the
+> > arm-soc tree.
+>
+> Yes, I was hoping to get some feedback on this patch:
+>
+> https://lore.kernel.org/all/20220920210213.3268525-1-f.fainelli@gmail.com/
+>
+> but I suppose being the ARM SoC maintainer I can just go ahead and push it.
 
-> Make a few changes to cause functions documented by kerneldoc to stand out
-> better in the rendered documentation.  Specifically, change kernel-doc to
-> put the description section into a ".. container::" section, then add a bit
-> of CSS to indent that section relative to the function prototype (or struct
-> or enum definition).  Tweak a few other CSS parameters while in the
-> neighborhood to improve the formatting.
-> 
-> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
-> ---
->  Documentation/sphinx-static/custom.css | 13 +++++++
->  scripts/kernel-doc                     | 52 ++++++++++++++++----------
->  2 files changed, 45 insertions(+), 20 deletions(-)
-> 
-> diff --git a/Documentation/sphinx-static/custom.css b/Documentation/sphinx-static/custom.css
-> index c465251e840a..d8823fbbd27b 100644
-> --- a/Documentation/sphinx-static/custom.css
-> +++ b/Documentation/sphinx-static/custom.css
-> @@ -10,3 +10,16 @@ div.body h3 { font-size: 130%; }
->  
->  /* Tighten up the layout slightly */
->  div.body { padding: 0 15px 0 10px; }
-> +
-> +/* Don't force the document width */
-> +div.document { width: auto; max-width: 60em; }
-> +
-> +/*
-> + * Parameters for the display of function prototypes and such included
-> + * from C source files.
-> + */
-> +dl.function, dl.struct, dl.enum { margin-top: 2em; background-color: #ecf0f3; }
-> +/* indent lines 2+ of multi-line function prototypes */
-> +dl.function dt { margin-left: 10em; text-indent: -10em; }
-> +dt.sig-object { font-size: larger; }
-> +div.kernelindent { margin-left: 2em; margin-right: 4em; }
-> diff --git a/scripts/kernel-doc b/scripts/kernel-doc
-> index aea04365bc69..13d42857bce2 100755
-> --- a/scripts/kernel-doc
-> +++ b/scripts/kernel-doc
-> @@ -866,48 +866,53 @@ sub output_function_rst(%) {
->  	print "\n";
->      }
->  
-> -    print "**Parameters**\n\n";
-> +    #
-> +    # Put our descriptive text into a container (thus an HTML <div> to help
-> +    # set the function prototypes apart.
+I'd send a revert of the change. Rafal can then re-submit a series
+that fixes the dtc warnings as well as the yaml warning once they have
+been tested and reviewed.
 
-Nitpick: you forgot to close the parenthesis on your comment ;-)
+The yaml warnings aren't seen by other developers, as they require the
+tools to be installed, but those from dtc are.
 
-> +    #
-> +    print ".. container:: kernelindent\n\n";
+Cheers,
 
-I liked the new alignment: it makes easier to identify what belongs
-to each definition block.
-
-As I didn't test the patches, it sounds worth mentioning that it makes
-sense to check if this won't badly affect epub and/or LaTeX/PDF outputs.
-
-The LaTeX output generator in particular has a problem with long
-lines with fixed-width lines: if the text doesn't fit into one line, it
-either truncates it or makes the text go outside the margins.
-
-If the container affects the PDF outputs, we need to double-check if
-this would break its output.
-
-Also, when the container directive was introduced? Does it affect
-the minimal Sphinx version we support? It seems that this was old
-enough to not require any changes at the minimal version, but,
-from https://www.sphinx-doc.org/en/master/changes.html, it seems
-that LaTeX support for it was added only at Sphinx v4.1 on this PR:
-
-	https://github.com/sphinx-doc/sphinx/pull/9166
-
-So, we need to double-check if are there any changes before and after
-such version at the places container is used - or change the kerneldoc
-to only emit such tags on PDF depending on the Sphinx version.
-
-Regards,
-Mauro
+Joel
