@@ -2,219 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B4EB5F580B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 18:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4C45F580C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 18:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbiJEQKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 12:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
+        id S230128AbiJEQLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 12:11:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbiJEQKN (ORCPT
+        with ESMTP id S229999AbiJEQKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 12:10:13 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F5020F70
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 09:10:02 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id o7so18962703lfk.7
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 09:10:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=2w6hGoXebPoIegDYARuqnK05b0IdR9ODgaAioly0Ktc=;
-        b=C9uRIYGiPgNOdG/lUp4vq9QDJVOR4kpvX5aDKIQVnibFvliDEOJ4KnLvGOG1m9bJYd
-         0szSjcSBVI4G+rgLO1FFdzSLowVVZtXR960+drzUJqa9+vAwqZlbnxC+oFmReNECrr87
-         LoOeSge12tNaO03Wjm1SSAd3Oz7S0bKmIEPZC1UsP029lbz9Mgjl6nkwk34tyepS5+Ig
-         h46D9gElGJJXVxVROr2DPet/isIlK9P4qbulcMZzW3U7TdrOWC96wjvhCPa3uBf6cgUp
-         EP3NirBLBATvOdFwT92cyKhafVRoVvatZebvZAeOW8UzUGMWJUnn+mg1E9SKUE9cJHw2
-         CTDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=2w6hGoXebPoIegDYARuqnK05b0IdR9ODgaAioly0Ktc=;
-        b=yL8CdjbV68ARD7L1hceL1IIaRQJDvycUFB0pAcMqo7R3Zub3vrVNl53+feTikoi9/p
-         XMAQRyO8W59z4Cc0mvVnDt5Gc+2krxNVNkv2DA04pi83nbgyquMwU/zUn5yTLvBvxkcT
-         W6e8AlqqwOh8INJZGv5aexM6o1rhj0m2rji/ZDkmJZJf/X895BGJYMak7eqWRC2qvqVE
-         AtzbqureoEzhJnM0NAEtaU9DiY46wzUr0oe72jTK5ysn2rrC0rUABYOnCcIJI9RZhx8x
-         iKfbeuxLWTLmLFt9oOPqY1z/1DwVGuNctti5nJEb7rO8e7je3RDjc//cO3wgetVePZH+
-         GxcQ==
-X-Gm-Message-State: ACrzQf38gO2A7z+uNLbRvb+Mw90mFDN1/zTJ+l/y/h4kg7Lxnfc7QjVg
-        tAPTSiNowOPm9Xo58aJe9TA10g==
-X-Google-Smtp-Source: AMsMyM6u9Jcg5Bpj/vRbbdNruCLC22wal80+Yi7bGV9KAIQkiRtpJtngykChcOEuUs9jCtHFLrP4tA==
-X-Received: by 2002:a19:3849:0:b0:49e:e07:5e7c with SMTP id d9-20020a193849000000b0049e0e075e7cmr198445lfj.357.1664986200532;
-        Wed, 05 Oct 2022 09:10:00 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id y1-20020a2e4b01000000b0026bfadf87e3sm601871lja.20.2022.10.05.09.09.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Oct 2022 09:10:00 -0700 (PDT)
-Message-ID: <28b4d9f9-f41a-deca-aa61-26fb65dcc873@linaro.org>
-Date:   Wed, 5 Oct 2022 18:09:59 +0200
+        Wed, 5 Oct 2022 12:10:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A647CB40
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 09:10:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9FE79B81E73
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 16:10:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 508C9C433D7
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 16:10:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664986245;
+        bh=2kAcxYh/aDNzXrxp4mtWajIo28uI6uHs4/Lk0YeAACs=;
+        h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc:From;
+        b=oATKaZ93ZEoYuSpBeoQ4oPNBMYIVBiss066ImimQvT2C3chmDp1w8+KMhcesaONbF
+         nsFGIxkTqHzGT3EsZTtwMg8DUnch7YUdgoOPYK/qj/+1qsj7IZg5JupsHJiXxJA5GK
+         D+gyKwwFd5qKjVYoavo4bZz/IKHyTBXBNUfTQDvY0b9Om8JwFFf25OJmERaBk1jMXF
+         gD5oacXpyogd0H8hyHKyMpbrpkA2QuQT1zSKW8jIocKLkImLkkpgedN7QwJ+yLsfOy
+         KhpIWhssaQ/NCeiuQVpolxTvuUW9p8oGpSQ3+Vo982Mxm15wboxXO6h3da+i7wc2fW
+         xmcAB1q5qDDHg==
+Received: by mail-wr1-f41.google.com with SMTP id b4so19720778wrs.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 09:10:45 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3vA9ekNtqaSUfub1aA3jHBQHi+qF+rMQAOBoAw7IHiMqzSIL94
+        ZD1c01/nuciam0F+/+XORn/h0sYkE8bwN0HZjcM=
+X-Google-Smtp-Source: AMsMyM7uvd/Y7yJn8mca9vBdHt6k+1Qqil9T1D/MPy/es5QUUYqMnoFlEATJ/1BSFU9T8qfAdzLVLvWKR+5I+O6j2I8=
+X-Received: by 2002:a5d:59af:0:b0:22e:32be:60f1 with SMTP id
+ p15-20020a5d59af000000b0022e32be60f1mr310576wrr.81.1664986243596; Wed, 05 Oct
+ 2022 09:10:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v3 net-next 12/14] dt-bindings: net: dsa: ocelot: add
- ocelot-ext documentation
-Content-Language: en-US
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-References: <20220926002928.2744638-1-colin.foster@in-advantage.com>
- <20220926002928.2744638-13-colin.foster@in-advantage.com>
- <ec63b5aa-3dec-3c27-e987-25e36b1632ba@linaro.org>
- <YzzLCYHmTcrHbZcH@colin-ia-desktop>
- <455e31be-dc87-39b3-c7fe-22384959c556@linaro.org>
- <Yz2mSOXf68S16Xg/@colin-ia-desktop>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Yz2mSOXf68S16Xg/@colin-ia-desktop>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220902184543.1234835-1-pgwipeout@gmail.com> <YxTDBpkllQjf0nIW@matsya>
+In-Reply-To: <YxTDBpkllQjf0nIW@matsya>
+Reply-To: wens@kernel.org
+From:   Chen-Yu Tsai <wens@kernel.org>
+Date:   Thu, 6 Oct 2022 00:10:31 +0800
+X-Gmail-Original-Message-ID: <CAGb2v664UnNC_UP-yFFLD9gCLnc989VAvUw1BghrctxdmLfVDA@mail.gmail.com>
+Message-ID: <CAGb2v664UnNC_UP-yFFLD9gCLnc989VAvUw1BghrctxdmLfVDA@mail.gmail.com>
+Subject: Re: [PATCH v4] phy: rockchip-inno-usb2: Return zero after otg sync
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Peter Geis <pgwipeout@gmail.com>, Heiko Stuebner <heiko@sntech.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Markus Reichl <m.reichl@fivetechno.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/10/2022 17:44, Colin Foster wrote:
-> On Wed, Oct 05, 2022 at 10:03:04AM +0200, Krzysztof Kozlowski wrote:
->> On 05/10/2022 02:08, Colin Foster wrote:
->>> Hi Krzysztof,
->>>
->>> On Tue, Oct 04, 2022 at 01:19:33PM +0200, Krzysztof Kozlowski wrote:
->>>> On 26/09/2022 02:29, Colin Foster wrote:
->>>>> The ocelot-ext driver is another sub-device of the Ocelot / Felix driver
->>>>> system, which currently supports the four internal copper phys.
->>>>>
->>>>> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
->>> ...
->>>>> +  # Ocelot-ext VSC7512
->>>>> +  - |
->>>>> +    spi {
->>>>> +        soc@0 {
->>>>
->>>> soc in spi is a bit confusing.
->>>>
->>>> Does it even pass the tests? You have unit address but no reg.
->>>
->>> I omitted those from the documentation. Rob's bot is usually quick to
->>> alert me when I forgot to run dt_binding_check and something fails
->>> though. I'll double check, but I thought everything passed.
->>>
->>>>
->>>>> +            compatible = "mscc,vsc7512";
->>>>
->>>>
->>>>> +            #address-cells = <1>;
->>>>> +            #size-cells = <1>;
->>>>> +
->>>>> +            ethernet-switch@0 {
->>>>> +                compatible = "mscc,vsc7512-switch";
->>>>> +                reg = <0 0>;
->>>>
->>>> 0 is the address on which soc bus?
->>>
->>> This one Vladimir brought up as well. The MIPS cousin of this chip
->>> is the VSC7514. They have exactly (or almost exactly) the same hardware,
->>> except the 7514 has an internal MIPS while the 7512 has an 8051.
->>>
->>> Both chips can be controlled externally via SPI or PCIe. This is adding
->>> control for the chip via SPI.
->>>
->>> For the 7514, you can see there's an array of 20 register ranges that
->>> all get mmap'd to 20 different regmaps.
->>>
->>> (Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml)
->>>
->>>     switch@1010000 {
->>>       compatible = "mscc,vsc7514-switch";
->>>       reg = <0x1010000 0x10000>,
->>>             <0x1030000 0x10000>,
->>>             <0x1080000 0x100>,
->>>             <0x10e0000 0x10000>,
->>>             <0x11e0000 0x100>,
->>>             <0x11f0000 0x100>,
->>>             <0x1200000 0x100>,
->>>             <0x1210000 0x100>,
->>>             <0x1220000 0x100>,
->>>             <0x1230000 0x100>,
->>>             <0x1240000 0x100>,
->>>             <0x1250000 0x100>,
->>>             <0x1260000 0x100>,
->>>             <0x1270000 0x100>,
->>>             <0x1280000 0x100>,
->>>             <0x1800000 0x80000>,
->>>             <0x1880000 0x10000>,
->>>             <0x1040000 0x10000>,
->>>             <0x1050000 0x10000>,
->>>             <0x1060000 0x10000>,
->>>             <0x1a0 0x1c4>;
->>>       reg-names = "sys", "rew", "qs", "ptp", "port0", "port1",
->>>             "port2", "port3", "port4", "port5", "port6",
->>>             "port7", "port8", "port9", "port10", "qsys",
->>>             "ana", "s0", "s1", "s2", "fdma";
->>>
->>>
->>> The suggestion was to keep the device trees of the 7512 and 7514 as
->>> similar as possible, so this will essentially become:
->>>     switch@71010000 {
->>>       compatible = "mscc,vsc7512-switch";
->>>       reg = <0x71010000 0x10000>,
->>>             <0x71030000 0x10000>,
->>>       ...
->>
->> I don't understand how your answer relates to "reg=<0 0>;". How is it
->> going to become 0x71010000 if there is no other reg/ranges set in parent
->> nodes. The node has only one IO address, but you say the switch has 20
->> addresses...
->>
->> Are we talking about same hardware?
-> 
-> Yes. The switch driver for both the VSC7512 and VSC7514 use up to ~20 regmaps
-> depending on what capabilities it is to have. In the 7514 they are all
-> memory-mapped from the device tree. While the 7512 does need these
-> regmaps, they are managed by the MFD, not the device tree. So there
-> isn't a _need_ for them to be here, since at the end of the day they're
-> ignored.
-> 
-> The "reg=<0 0>;" was my attempt to indicate that they are ignored, but I
-> understand that isn't desired. So moving forward I'll add all the
-> regmaps back into the device tree.
+On Sun, Sep 4, 2022 at 11:24 PM Vinod Koul <vkoul@kernel.org> wrote:
+>
+> On 02-09-22, 14:45, Peter Geis wrote:
+> > The otg sync state patch reuses the ret variable, but fails to set it to
+> > zero after use. This leads to a situation when the otg port is in
+> > peripheral mode where the otg phy aborts halfway through setup.  It also
+> > fails to account for a failure to register the extcon notifier. Fix this
+> > by using our own variable and skipping otg sync in case of failure.
+>
+> Applied, thanks
 
-You need to describe the hardware. If hardware has IO address space, how
-does it matter that some driver needs or needs not something?
+This should have been applied for v6.0-rc, not -next.
+We now have a v6.0 release that doesn't boot properly on RK3399.
 
-You mentioned that address space is mapped to regmaps. Regmap is Linux
-specific implementation detail, so this does not answer at all about
-hardware.
-
-On the other hand, if your DTS design requires this is a child of
-something else and by itself it does not have address space, it would be
-understandable to skip unit address entirely... but so far it is still
-confusing, especially that you use arguments related to implementation
-to justify the DTS.
-
-Best regards,
-Krzysztof
-
+ChenYu
