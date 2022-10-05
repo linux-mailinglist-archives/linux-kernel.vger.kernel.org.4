@@ -2,55 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D3435F5A6E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 21:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9DDD5F5A6D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 21:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbiJETM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 15:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57320 "EHLO
+        id S230141AbiJETMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 15:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiJETMv (ORCPT
+        with ESMTP id S230040AbiJETMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 15:12:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73D678BE6;
-        Wed,  5 Oct 2022 12:12:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D6856179A;
-        Wed,  5 Oct 2022 19:12:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17E32C433C1;
-        Wed,  5 Oct 2022 19:12:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664997169;
-        bh=PR3DOCGAQmH7Ik2IIOwQtDvkXHJGl2WZRuUIJDm2OHQ=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=HFgkJMR2u3TgfZMphtRp6z20zGUdeI/gaETbIno7eQ9tOBdZsu/kS488YIFaXriui
-         0OP+vh/FC2qRIRrbIwJvNDNBtcn8z2rhjV964cxCXUn97qv+B3Uj+LSFFEO6Doil6A
-         /fIwEIbOUBEnV0Uhyo6wcKdtMnxcgANt5dXNpO8jHnrjByOiRGGKDbUq+5iaHxalIN
-         KYIxbQns1wzL0ialpoc6+vLlWFmLLn2OiX+eCoA8avZGTu2wZwM9TnmgjYGOkw16SH
-         VLViweszybTzwhgbb+s4fy/sMPXLruuQhLCZuVTrpgffW5OOKfMpUw8kEc7z0VI+t8
-         TlAcGfQhhJgSw==
-Date:   Wed, 5 Oct 2022 21:12:45 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Weilong Chen <chenweilong@huawei.com>, yangyicong@hisilicon.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH next v4] i2c: hisi: Add support to get clock frequency
- from clock property
-Message-ID: <Yz3XLfHGzrPcOEpn@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Weilong Chen <chenweilong@huawei.com>, yangyicong@hisilicon.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220929071547.135913-1-chenweilong@huawei.com>
- <Yz3WgHgv/O/0o5fZ@shikoro>
+        Wed, 5 Oct 2022 15:12:50 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D566BCDE
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 12:12:49 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id w70so4497787oie.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 12:12:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=8yzJCOiuBQr6qPJK27nOxrQWc7RyIwKbFwaCPfSVX1g=;
+        b=KpX99vHMNvv+2y97mPfDoAfU6EDzBYvnAxBjoIplto7XF/OlfLNztSeLbLNdzVhJHF
+         bQy5kJMahbn6VT/HBPGu1SrtLdIwEsb7p8QajNAIXHCa0ELZ8fRL/CCLcgtRy5UdGTsp
+         0sOLUCoeuExSKRSRvvDwJzauueWvwv7wQKickcLqYIVZhw/WDSUllMwi500muCZKT2ue
+         kUwiPPJq1TKP22edBomrWYwbrJZdjRLLlV//+Bd6fxg1QGVT6QMMTqVsu5EVZYbkn8AA
+         ek5nh3zgs6WH0psI/4xKoQSRHmvcyd8mEUKy2PjXHpvTOzPokOHHtyJ3gJ9jbrKPLTCw
+         RREw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=8yzJCOiuBQr6qPJK27nOxrQWc7RyIwKbFwaCPfSVX1g=;
+        b=4Mj/vfghEAtiacUts8bd6j0WLFszZ4g1PjkFv0IT5mHDi5uHl505XrUy7RtLsrQKQX
+         mFD3RrkZfCxZcdcv23J3KFbv5Y1CI4F/gY7mZJF3tR/JpPC5rzNJk4WqRXJkqcQk1IoM
+         LXNkXtdUlBmz2BuaL/ppDXExi1a8Lmp8zcXpFlV8f6AbGLAvuTGHC7S5FxiXddc3/Pkr
+         3pZqRw4NFNq1fMvWz07vMHv7y+bzy7BIIXfU2R/3uU83xtMCERg4YEi6o/YdEtvdImGw
+         +LXonj5BYQvladLAsmzdWmbwYQKKmxNjEy86H5FdCox+aVo7m7JhXEEunuwsEr/swfGH
+         unOA==
+X-Gm-Message-State: ACrzQf1yWNXeyPKtoCBjg785qAd4Sl58SeE714DpDWCYWi1eCWgtHaXn
+        EVDkUQayxiyfRfTm5LgUZOYCug==
+X-Google-Smtp-Source: AMsMyM69oILYQ9vKjMyluRyh34qaFXApodSp7NFNsmH4j7tmbXRsL89YxOnzwMTgeF5OP7v7qKfMDg==
+X-Received: by 2002:a05:6808:1189:b0:353:f1e2:9afa with SMTP id j9-20020a056808118900b00353f1e29afamr3104121oil.287.1664997168357;
+        Wed, 05 Oct 2022 12:12:48 -0700 (PDT)
+Received: from [192.168.17.16] ([189.219.72.83])
+        by smtp.gmail.com with ESMTPSA id c36-20020a05687047a400b0011dca1bd2cdsm5698609oaq.0.2022.10.05.12.12.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Oct 2022 12:12:47 -0700 (PDT)
+Message-ID: <68134b95-ea83-cb02-0ded-fd147b117820@linaro.org>
+Date:   Wed, 5 Oct 2022 14:12:46 -0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jlIGoITplnZaBt7y"
-Content-Disposition: inline
-In-Reply-To: <Yz3WgHgv/O/0o5fZ@shikoro>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 5.4 00/51] 5.4.217-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+References: <20221005113210.255710920@linuxfoundation.org>
+From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+In-Reply-To: <20221005113210.255710920@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,48 +78,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello!
 
---jlIGoITplnZaBt7y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 05/10/22 06:31, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.217 release.
+> There are 51 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 07 Oct 2022 11:31:56 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.217-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-On Wed, Oct 05, 2022 at 09:09:52PM +0200, Wolfram Sang wrote:
-> On Thu, Sep 29, 2022 at 03:15:47PM +0800, Weilong Chen wrote:
-> > The clk_rate attribute is not generic device tree bindings for I2C
-> > busses described in Documentation/devicetree/bindings/i2c/i2c.txt.
-> > It can be managed by clock binding.
-> >=20
-> > Support the driver to obtain clock information by clk_rate or
-> > clock property. Find clock first, if not, fall back to clk_rate.
-> >=20
-> > Signed-off-by: Weilong Chen <chenweilong@huawei.com>
-> > Acked-by: Yicong Yang <yangyicong@hisilicon.com>
->=20
-> Applied to for-current, thanks!
+We are seeing a new warning on x86_64:
 
-Ah, sorry, wrong branch. Not applied because the dependency "i2c: hisi:
-Add initial device tree support" is not applied yet (needs changes)
+   /builds/linux/arch/x86/entry/entry_64.S: Assembler messages:
+   /builds/linux/arch/x86/entry/entry_64.S:1756: Warning: no instruction mnemonic suffix given and no register operands; using default for `sysret'
+   arch/x86/entry/entry_64.o: warning: objtool: .entry.text+0x151: unsupported intra-function call
+   x86_64-linux-gnu-ld: arch/x86/boot/compressed/head_64.o: warning: relocation in read-only section `.head.text'
+   x86_64-linux-gnu-ld: warning: creating DT_TEXTREL in a PIE
+
+This started happening after 984b78c4ecea49b0b4b5729a502b689a623fde27 ("x86/speculation: Fix RSB filling with CONFIG_RETPOLINE=n").
+
+The following configurations are affected:
+
+* x86_64, build
+   - gcc-8-allnoconfig-warnings
+   - gcc-8-tinyconfig-warnings
+   - gcc-8-x86_64_defconfig-warnings
+   - gcc-9-allnoconfig-warnings
+   - gcc-9-tinyconfig-warnings
+   - gcc-9-x86_64_defconfig-warnings
+   - gcc-10-allnoconfig-warnings
+   - gcc-10-defconfig-warnings
+   - gcc-10-tinyconfig-warnings
+   - gcc-11-allnoconfig-warnings
+   - gcc-11-defconfig-warnings
+   - gcc-11-lkftconfig-debug-kmemleak-warnings
+   - gcc-11-lkftconfig-debug-warnings
+   - gcc-11-lkftconfig-kasan-warnings
+   - gcc-11-lkftconfig-kselftest-kernel-warnings
+   - gcc-11-lkftconfig-kselftest-warnings
+   - gcc-11-lkftconfig-kunit-warnings
+   - gcc-11-lkftconfig-libgpiod-warnings
+   - gcc-11-lkftconfig-perf-warnings
+   - gcc-11-lkftconfig-rcutorture-warnings
+   - gcc-11-lkftconfig-warnings
+   - gcc-11-tinyconfig-warnings
+   - gcc-12-allnoconfig-warnings
+   - gcc-12-defconfig-warnings
+   - gcc-12-tinyconfig-warnings
+   - clang-11-allnoconfig-warnings
+   - clang-11-tinyconfig-warnings
+   - clang-11-x86_64_defconfig-warnings
+   - clang-12-allnoconfig-warnings
+   - clang-12-lkftconfig-warnings
+   - clang-12-tinyconfig-warnings
+   - clang-12-x86_64_defconfig-warnings
+   - clang-13-allnoconfig-warnings
+   - clang-13-lkftconfig-warnings
+   - clang-13-tinyconfig-warnings
+   - clang-13-x86_64_defconfig-warnings
+   - clang-14-allnoconfig-warnings
+   - clang-14-lkftconfig-kcsan-warnings
+   - clang-14-lkftconfig-warnings
+   - clang-14-tinyconfig-warnings
+   - clang-14-x86_64_defconfig-warnings
+   - clang-nightly-lkftconfig-warnings
+   - clang-nightly-tinyconfig-warnings
+   - clang-nightly-x86_64_defconfig-warnings
 
 
---jlIGoITplnZaBt7y
-Content-Type: application/pgp-signature; name="signature.asc"
+Greetings!
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmM91y0ACgkQFA3kzBSg
-KbaNChAAq2Doxkn2/Qjc3rk3EDUtk3xNaaSPVFERjOpO7CIEQbZa3n+yg7QNnJZV
-YSxp259sqjvKapV7HTbviMT5wh6WsdfIWLLbe6q8T0Tutst/GfHyR56gTGuQ8wiC
-lcKnAH/b3bZ9mPid15Yh5cTpB8Iqb24xHsNZu7iStLQrhcr4oiSmhOFQfuKx4+ce
-cMZrYaNWszex89z3+HFD+qvUG37SI4lHwZfN4bVrOTWsKl9lzSJYUHA6NpcAwV0U
-AuK8iEdtJT1AHZ9NlMohNKbrTpGTmrVITAf7BWW6IYUu0Kb0BAhMr1gkcOgE+lcC
-FfLBsKP/UdUyXbnvuWh22aIVSFlvdKgNLm13UX+2QSvRhFlGXhDu82L6KBrClJtJ
-AlOQlea0ksuOVjv+BYo8Kl9kBh594FQAZUc+xKvYbMdzYjAiM2cVfn3Wgrh/qSIM
-PUVGpthXyvzwaIPapxpUbpe/vHXjiAHT23dlO7d/yUcvNqPTXWPVsZSixgL4M3hL
-KQgopSk9Azqi+HEKhJAC/hiRuhfcRLuqNh1LvooRFicgZx1YLzh6b26r0aZINwzA
-27YHe0tpKAHy9jESo/DOanKGr38FmP7ftI7JYrbBXe3uSr5zghWFccZei2MTq91Q
-lAhAMxEpYpIDpEGLpwzrguFAcWadhjDsWxsrIV34CvwY1S6qvw0=
-=yHjt
------END PGP SIGNATURE-----
-
---jlIGoITplnZaBt7y--
+Daniel Díaz
+daniel.diaz@linaro.org
