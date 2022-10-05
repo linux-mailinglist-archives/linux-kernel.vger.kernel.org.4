@@ -2,138 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97DCC5F54BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 14:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE015F54BE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 14:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbiJEMrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 08:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
+        id S230006AbiJEMtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 08:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiJEMr1 (ORCPT
+        with ESMTP id S229830AbiJEMtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 08:47:27 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FFB6AEAD;
-        Wed,  5 Oct 2022 05:47:24 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1326637be6eso10021715fac.13;
-        Wed, 05 Oct 2022 05:47:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QQwVjfadNqZW8ikL3wi9R3vG+Nc3CEgj6ovjb2hCVtU=;
-        b=fo16wAqq2hy/DhK2W/CRuW3tjyWARX5sJyYBlhNTKSRVo1KqiaBRXFnATX3rGwSdDO
-         BOuLqi6jWC16tS1ZJknhTbXvqVKaQ7UUnw8mv5GEXalDhde+rJBVPEhg0mjaPVT996Zm
-         XUMyOBQCr3WSugwOUOuhZoP/BPKLf2f25CHsQPKey9t3yNjuWcmpISJTGgOdvlmVB3Wd
-         OuKLIjzv/Ai2i8yNfGjDIha9YmyNoAUIEMzT4VPM6DdqgIUCpYLrfh4bnvGR65prqEUX
-         9pCVH2XlFWwHyPUhP/CLghtILOgdSZNVbTBezScpLST2ONb+dKMNnCdEo/GtGfbV0xji
-         HlGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QQwVjfadNqZW8ikL3wi9R3vG+Nc3CEgj6ovjb2hCVtU=;
-        b=50GawyQC+AS2dIxSkadEQOyl/rGWEXAWEEj7kv44DvdkWpW9dHtyvRrKzVjysVtSPJ
-         RiQUdfsQ+CmtrAQIn3Kbk/nvD0IRE9Fmb7HfGpazJzLuhfrb4P/EV/OBSZmvAJPP4vDs
-         Lkqm0JUpe0H/OGVwvVTC9W0dTxE0aY8S5FXjfVtQhHAHBRC9L/pPg8C6nzNdJPWUY8eE
-         nHf8wsBJ3x10yezJNgv0DZiNWzPSz/fmLDVW7Et2WpIY7X2c+eaoQNVPWh2nMQxUbRvX
-         2DW58CaY+7cVcaWlg/jDrjWmRkz7JVKtqK0/dVr7kgLNdzQAnEGJ23J1bdZzX6RKtNA1
-         Iu6g==
-X-Gm-Message-State: ACrzQf2jgXl1UULjPmKj9BOCZ+WZ1DEeohNEy9wUdfdq+ZEhOvaUgG3s
-        DNsXd/LX1HdkRSbUflmhQ7g=
-X-Google-Smtp-Source: AMsMyM6KFer6Ik+jAAU3lQ1mgaudElUCRCqCnxgx+YG6dwCfw/ha4tA5vfBQgEF5HrwwL1V4+4AjDA==
-X-Received: by 2002:a05:6870:c689:b0:132:f58f:60d7 with SMTP id cv9-20020a056870c68900b00132f58f60d7mr29517oab.166.1664974044079;
-        Wed, 05 Oct 2022 05:47:24 -0700 (PDT)
-Received: from localhost.localdomain ([177.222.37.214])
-        by smtp.googlemail.com with ESMTPSA id p189-20020acabfc6000000b00350f17527fesm4139824oif.28.2022.10.05.05.47.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 05:47:23 -0700 (PDT)
-From:   Henry Castro <hcvcastro@gmail.com>
-To:     namhyung@kernel.org
-Cc:     Henry Castro <hcvcastro@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] perf: fix the probe finder location (.dwo files)
-Date:   Wed,  5 Oct 2022 08:47:02 -0400
-Message-Id: <20221005124710.30296-1-hcvcastro@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <CAM9d7cgMjZPa9qwuzpG3usGJvKiAQCOvN8_W0RuakNqcZ2t8-g@mail.gmail.com>
-References: <CAM9d7cgMjZPa9qwuzpG3usGJvKiAQCOvN8_W0RuakNqcZ2t8-g@mail.gmail.com>
+        Wed, 5 Oct 2022 08:49:06 -0400
+Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD5C6A489;
+        Wed,  5 Oct 2022 05:49:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
+        t=1664974140; bh=xOLzlsbhoUwuP51oM+e6pJyl+G0gLf7qASwB3qWSqK8=;
+        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
+        b=SwkinqedY/1RYXhfbIYOLoKqTyexnCtOJI7PuEVUThGfTFzaXRCiMchVZmCH5pNvO
+         1IMY4LQxkRrVuR+hqagiTFdqBm2OzYJYvP6twhPrnilQ4r1cfL386DUnb2XaNRUxOn
+         Lu1UWvs0XJFmRbgnJTsRr8uXf4v7vDQB/+s0iM8s=
+Date:   Wed, 5 Oct 2022 14:49:00 +0200
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     linux-rockchip@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+        Johan Jonker <jbx6244@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Rockchip SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] arm64: dts: rockchip: rk356x: Fix PCIe register map
+ and ranges
+Message-ID: <20221005124900.o2bghrdtkdrajb4t@core>
+Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
+        Peter Geis <pgwipeout@gmail.com>,
+        linux-rockchip@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+        Johan Jonker <jbx6244@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Rockchip SoC support" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
+References: <20221005085439.740992-1-megi@xff.cz>
+ <CAMdYzYrEXEqOmMeozGBbAAvrujZcOxLh4VYOmu5DSjPWTS-5zQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMdYzYrEXEqOmMeozGBbAAvrujZcOxLh4VYOmu5DSjPWTS-5zQ@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the file object is compiled using -gsplit-dwarf,
-the probe finder location will fail.
+Hi,
 
-Signed-off-by: Henry Castro <hcvcastro@gmail.com>
----
+On Wed, Oct 05, 2022 at 07:42:54AM -0400, Peter Geis wrote:
+> On Wed, Oct 5, 2022 at 4:54 AM Ondrej Jirman <megi@xff.cz> wrote:
+> >
+> 
+> Good Morning,
+> 
+> > I have two Realtek PCIe wifi cards connected over the 4 port PCIe swtich
+> > to Quartz64-A. The cards fail to work, when nvme SSD is connected at the
+> > same time to the bridge. Without nvme connected, cards work fine. The
+> > issue seems to be related to mixed use of devices which make use of I/O
+> > ranges and memory ranges.
+> >
+> > This patch changes I/O, MEM and config mappings so that config and I/O
+> > mappings use the 0xf4000000 outbound address space, and MEM range uses
+> > the whole 0x300000000 outbound space.
+> >
+> > This is simialar to how BSP does the mappings.
+> 
+> This change was very recent in the BSP stuff (Jan 2022):
+> https://github.com/rockchip-linux/kernel/commit/cfab7abefc4093daa379fbd90a1e7ac1a484332b
+> A few other interesting changes there as well. They added a 32 bit
+> window in the lower range and made the entire upper range a 64 bit
+> relocatable (why?) and prefetchable window. They also set the viewport
+> number to 8. The dt-binding says this is autodetected, but I wonder if
+> the value is being detected correctly.
 
-> Nit, I think we use _ELFUTILS_PREREQ(0, 171).
-Thank you
+That number in BSP is equivalent in meaning to num-ob-windows in mainline. At
+least it's used in identical manner in the code.
 
-> How about making it a separate function with 2 versions
-> depending on the elfutils?  Then you can have the variables
-> only if they are used.
+> It looks like it is dependent in BSP on a backported change from mainline:
+> https://github.com/rockchip-linux/kernel/commit/50a01d3c10a6212f66364575a3c8f66c07f41591
+> 
+> Can someone weigh in why the dw core has config in the reg node
+> instead of ranges?
+> 
+> >
+> > I changed num-ob-windows to value detected by the kernel so if for whatever
+> > reason the kernel ever starts respecting this DT property, it would not
+> > switch to sharing I/O and CFG spaces via a single iATU mapping for
+> > no reason.
+> 
+> This worries me that this value may be being detected incorrectly,
+> they set it to this for a reason. It's not unheard of for Rockchip to
+> need to override what they encode in the silicon.
 
-> Something like get_source_from_debuginfod() in the same
-> file.
+num-ob-windows mainline == viewport-num in BSP for whatever reason. (it's used
+to decide whether there are enough windows to share config with I/O or not) So
+it's identical to BSP.
 
-Sounds good, but I prefer simplicity in the patch =),
-what do you think about
-{
-	Dwarf_Die cudie, subdie;
-	if (dwarf_cu_info() ..)
-	..
-}
+kind regards,
+	o.
 
-to resolve unused variable?
-}
-
-
- tools/perf/util/probe-finder.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
-
-diff --git a/tools/perf/util/probe-finder.c b/tools/perf/util/probe-finder.c
-index 50d861a80f57..5f6781e712db 100644
---- a/tools/perf/util/probe-finder.c
-+++ b/tools/perf/util/probe-finder.c
-@@ -1200,6 +1200,20 @@ static int debuginfo__find_probe_location(struct debuginfo *dbg,
- 			continue;
- 		}
-
-+#if _ELFUTILS_PREREQ(0, 171)
-+		{
-+			uint8_t unit_type;
-+			Dwarf_Die cudie, subdie;
-+
-+			/* Check separate debug information file. */
-+			if (dwarf_cu_info(pf->cu_die.cu, NULL,
-+					  &unit_type, &cudie,
-+					  &subdie, NULL,
-+					  NULL, NULL) == 0
-+			    && unit_type == DW_UT_skeleton)
-+				pf->cu_die = subdie;
-+		}
-+#endif
- 		/* Check if target file is included. */
- 		if (pp->file)
- 			pf->fname = cu_find_realpath(&pf->cu_die, pp->file);
---
-2.20.1
-
+> Very Respectfully,
+> Peter Geis
+> 
+> >
+> > This change to the regs/ranges makes the issue go away and both nvme and
+> > wifi cards work when connected at the same time to the bridge. I tested
+> > the nvme with large amount of reads/writes, both behind the PCIe bridge
+> > and when directly connected to Quartz64-A board.
+> >
+> > Signed-off-by: Ondrej Jirman <megi@xff.cz>
+> > ---
+> > BSP for reference: https://github.com/rockchip-linux/kernel/blob/develop-4.19/arch/arm64/boot/dts/rockchip/rk3568.dtsi#L2370
+> >
+> > v2:
+> > - change ranges to use 0x300000000 fully for MEM and make use of
+> >   the 0xf4000000 outbound range for IO and config
+> > - full retest with/without the switch
+> > - if lscpi/dmesg is useful in the future for comparison, see:
+> >   https://xff.cz/kernels/random/quartz64a-pcie/
+> >
+> > I used this script for the tests:
+> >
+> > #!/bin/bash
+> >
+> > OUT=/mnt/data
+> > n=8
+> >
+> > test -f /tmp/test.dat || \
+> >     dd if=/dev/urandom of=/tmp/test.dat bs=1M count=1024
+> > md5sum /tmp/test.dat
+> >
+> > i=0
+> > while test $i -lt $n
+> > do
+> >     dd if=/tmp/test.dat of=$OUT/test$i.dat bs=4M oflag=direct
+> >
+> >     i=$(($i+1))
+> > done
+> >
+> > i=0
+> > while test $i -lt $n
+> > do
+> >     dd if=$OUT/test$i.dat bs=4M iflag=direct | md5sum
+> >
+> >     i=$(($i+1))
+> > done
+> >
+> >
+> >  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 9 +++++----
+> >  1 file changed, 5 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> > index 319981c3e9f7..99fd9543fc6f 100644
+> > --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> > +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> > @@ -855,7 +855,8 @@ pcie2x1: pcie@fe260000 {
+> >                 compatible = "rockchip,rk3568-pcie";
+> >                 reg = <0x3 0xc0000000 0x0 0x00400000>,
+> >                       <0x0 0xfe260000 0x0 0x00010000>,
+> > -                     <0x3 0x3f000000 0x0 0x01000000>;
+> > +                     <0x0 0xf4000000 0x0 0x01f00000>;
+> > +
+> >                 reg-names = "dbi", "apb", "config";
+> >                 interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>,
+> >                              <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>,
+> > @@ -877,15 +878,15 @@ pcie2x1: pcie@fe260000 {
+> >                                 <0 0 0 4 &pcie_intc 3>;
+> >                 linux,pci-domain = <0>;
+> >                 num-ib-windows = <6>;
+> > -               num-ob-windows = <2>;
+> > +               num-ob-windows = <8>;
+> >                 max-link-speed = <2>;
+> >                 msi-map = <0x0 &gic 0x0 0x1000>;
+> >                 num-lanes = <1>;
+> >                 phys = <&combphy2 PHY_TYPE_PCIE>;
+> >                 phy-names = "pcie-phy";
+> >                 power-domains = <&power RK3568_PD_PIPE>;
+> > -               ranges = <0x01000000 0x0 0x3ef00000 0x3 0x3ef00000 0x0 0x00100000
+> > -                         0x02000000 0x0 0x00000000 0x3 0x00000000 0x0 0x3ef00000>;
+> > +               ranges = <0x01000000 0x0 0x00000000 0x0 0xf5f00000 0x0 0x00100000
+> > +                         0x02000000 0x0 0x40000000 0x3 0x00000000 0x0 0x40000000>;
+> >                 resets = <&cru SRST_PCIE20_POWERUP>;
+> >                 reset-names = "pipe";
+> >                 #address-cells = <3>;
+> > --
+> > 2.37.3
+> >
