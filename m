@@ -2,51 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 249C65F4CFD
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 02:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CDD5F4CFF
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 02:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbiJEASp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Oct 2022 20:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
+        id S229565AbiJEAWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Oct 2022 20:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJEASm (ORCPT
+        with ESMTP id S229459AbiJEAWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Oct 2022 20:18:42 -0400
+        Tue, 4 Oct 2022 20:22:12 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC736F249;
-        Tue,  4 Oct 2022 17:18:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF0C56032;
+        Tue,  4 Oct 2022 17:22:10 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhwCf1zggz4x1D;
-        Wed,  5 Oct 2022 11:18:38 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MhwHg6TT0z4wgv;
+        Wed,  5 Oct 2022 11:22:07 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1664929119;
-        bh=7f1AXE1iUXy2l6gsLJ4y4MkrI3wQwUDAHctr6YT3VpM=;
+        s=201702; t=1664929328;
+        bh=yLtOUsfBar2oPaHNfrjTpcB5fZUSsPBErmNnrTCd0+c=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=iLBNvDjpDBHFDY5CHOIvUe58ruf7yvulDeGzaY6dOpY/Z5nid9r6tz/Se9MrYvxmQ
-         T4bGEkD1nkMshjwOrr3QiSqlBao5LzlSulPgIBxtEHicP/UZp1kXJcRiGOyh5xwXvA
-         8ZpJyiY3OtlhRU0uGdy+iR8aBrUUw/R77rRY62mlOfqlBn0uS3I1/qeX6DICvnz7DB
-         YTqPAH0bgS/B4zZ5IvkdGsj5eyUNumnS2eLSxac3IMfpK4KDNdid/CP2urgnWw63ya
-         +GmJepq1RnO8WQftgoyIL8qwF5+Rct9qHItWb1LnVbpeWWsDkbGcK8J5QbOifZ4AC+
-         qauxhbEIa6rDA==
-Date:   Wed, 5 Oct 2022 11:18:36 +1100
+        b=hoaPn45c1Iap2YdXM+GccC5fQDXtiWg/8K72d62sQ81sAya9yq0Dcytjl8Df+yf6g
+         Xa272b3Az1dLTSKFrHD4Y6YxpdvbtyJ5v59/AbaEDz7R7gi6SouD+EywBWUyKtuZ6K
+         rYioSOCRTvxZcon7iOjK8q5cx5VHq/Dkh3z7z1juji82pD+6aPjPj8xzg6Fk25xuvF
+         z1aqB5bgnW1AI2UJhwtUgx0aXeO6FAf/1yxI5wah95crlYcn76rQfdjEuPcaI8Q9yP
+         narx57OnDcE7ZhSxL+Dl04jgooni2M3GNAVitjLtV+xJ8CKD8h30khaQhLhkL+QRQm
+         jmOy+PEbvcLmA==
+Date:   Wed, 5 Oct 2022 11:22:06 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     broonie@kernel.org, "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Scally <djrscally@gmail.com>,
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     broonie@kernel.org, Kees Cook <keescook@chromium.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: Re: linux-next: manual merge of the pm tree with the i2c tree
-Message-ID: <20221005111836.1d43b228@canb.auug.org.au>
-In-Reply-To: <20220929121853.100271-1-broonie@kernel.org>
-References: <20220929121853.100271-1-broonie@kernel.org>
+        Mark Rutland <mark.rutland@arm.com>,
+        Sami Tolvanen <samitolvanen@google.com>
+Subject: Re: linux-next: manual merge of the kspp tree with the arm64 tree
+Message-ID: <20221005112206.09278b2f@canb.auug.org.au>
+In-Reply-To: <20220927185911.512737-1-broonie@kernel.org>
+References: <20220927185911.512737-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/CLTNpKS0jBQ_rQVV2IB/Hax";
+Content-Type: multipart/signed; boundary="Sig_/jGMgEiQh_H21JiOUzJUoqXD";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
@@ -57,28 +55,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/CLTNpKS0jBQ_rQVV2IB/Hax
+--Sig_/jGMgEiQh_H21JiOUzJUoqXD
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 29 Sep 2022 13:18:53 +0100 broonie@kernel.org wrote:
->
-> Today's linux-next merge of the pm tree got a conflict in:
+On Tue, 27 Sep 2022 19:59:11 +0100 broonie@kernel.org wrote:
 >=20
->   drivers/platform/x86/intel/int3472/tps68470.c
+> Today's linux-next merge of the kspp tree got a conflict in:
+>=20
+>   arch/arm64/kernel/alternative.c
 >=20
 > between commit:
 >=20
->   ed5c2f5fd10dd ("i2c: Make remove callback return void")
+>   b723edf3a12a2 ("arm64: alternatives: make alt_region const")
 >=20
-> from the i2c tree and commit:
+> from the arm64 tree and commit:
 >=20
->   06a659d1f0a0a ("platform/x86: int3472: Support multiple gpio lookups in=
- board data")
+>   5f20997c194e8 ("arm64: Drop unneeded __nocfi attributes")
 >=20
-> from the pm tree.
+> from the kspp tree.
 >=20
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
@@ -87,54 +84,47 @@ On Thu, 29 Sep 2022 13:18:53 +0100 broonie@kernel.org wrote:
 > with the maintainer of the conflicting tree to minimise any particularly
 > complex conflicts.
 >=20
-> diff --cc drivers/platform/x86/intel/int3472/tps68470.c
-> index 5dd81bb05255b,49fc379fe680a..0000000000000
-> --- a/drivers/platform/x86/intel/int3472/tps68470.c
-> +++ b/drivers/platform/x86/intel/int3472/tps68470.c
-> @@@ -178,13 -227,18 +227,16 @@@ static int skl_int3472_tps68470_probe(s
->   	return ret;
+> diff --cc arch/arm64/kernel/alternative.c
+> index 64045e3ef03a9,d2c66507398d7..0000000000000
+> --- a/arch/arm64/kernel/alternative.c
+> +++ b/arch/arm64/kernel/alternative.c
+> @@@ -139,9 -133,8 +139,9 @@@ static void clean_dcache_range_nopatch(
+>   	} while (cur +=3D d_size, cur < end);
 >   }
 >  =20
->  -static int skl_int3472_tps68470_remove(struct i2c_client *client)
->  +static void skl_int3472_tps68470_remove(struct i2c_client *client)
+> - static void __nocfi __apply_alternatives(const struct alt_region *regio=
+n,
+> - 					 bool is_module,
+> - 					 unsigned long *feature_mask)
+>  -static void __apply_alternatives(struct alt_region *region, bool is_mod=
+ule,
+> ++static void __apply_alternatives(const struct alt_region *region,
+> ++				 bool is_module,
+> + 				 unsigned long *feature_mask)
 >   {
->   	const struct int3472_tps68470_board_data *board_data;
-> + 	int i;
->  =20
->   	board_data =3D int3472_tps68470_get_board_data(dev_name(&client->dev));
-> - 	if (board_data)
-> - 		gpiod_remove_lookup_table(board_data->tps68470_gpio_lookup_table);
-> + 	if (board_data) {
-> + 		for (i =3D 0; i < board_data->n_gpiod_lookups; i++)
-> + 			gpiod_remove_lookup_table(board_data->tps68470_gpio_lookup_tables[i]=
-);
-> + 	}
->  -
->  -	return 0;
->   }
->  =20
->   static const struct acpi_device_id int3472_device_id[] =3D {
+>   	struct alt_instr *alt;
+>   	__le32 *origptr, *updptr;
 
-This is now a conflict between the i2c tree and Linus' tree.
+This is now a conflict between the arm64 tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/CLTNpKS0jBQ_rQVV2IB/Hax
+--Sig_/jGMgEiQh_H21JiOUzJUoqXD
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM8zVwACgkQAVBC80lX
-0GwQngf/WF8wXmsfi5kUfnXMK94ra2tDNX5ggeeBNpWXltiuOa9/lWZ6SFdHSYI9
-oCQHBgUWd/is0mxr4l0+lHFyu0RDUFOeYXWyXKb3RW+fbHiHiAtfG3PZMV2fDLaK
-RDXY0f5GfgwHYKeWOlRs/qwOpfwEBOswE2RG+dWQi5Sq7Rk1SRnWTtBq2OXXLHj9
-pBWaDyqyUjSRdoPPo+Vk+MBfvefXgYWCDGKH3vYN1lrWTkyILOdJprEiI57Wtixj
-aUaBkuGeygKvSkTw0W/8yYLIF2uE4h27Ln58CVhcy6gMdXbfz6iKfX9U87U4tboT
-/oY1jKfnn6QoHEUfVe2B4HkQp4QeoA==
-=WEGa
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM8zi4ACgkQAVBC80lX
+0GzsiQgAnpGvw88K5JmTGXQUv/1YBcKCO43RdhTTDqYBfGFN9c+NZiynnUMczE4A
+08PWx3/layXa0Xa/1d6GZnehKdhDNnjg8Zykk13Bh+V2qP1uvm1Xj/G8DLzrVQaE
+q3W9R4d206DyADPaqwzaeY5rOkJ+oVn4q6DuWYpV3b5QiKlSPSeO7PhNpqZVYDIx
+l1TXNp9+XHlp0/TiRVFP4uJndoWalrYeN26z+oQCYspuCzUTc+f+J6P+d4sgJNiM
+1XELn9R205bN9k/PXOD5z2deiVFljWGu2NrQDSaXeLG/Rnap+1jWeH0BryESIFfW
+R4ObP6pXmI9/ZkRjtM/Har0yk9E8xQ==
+=jqr6
 -----END PGP SIGNATURE-----
 
---Sig_/CLTNpKS0jBQ_rQVV2IB/Hax--
+--Sig_/jGMgEiQh_H21JiOUzJUoqXD--
