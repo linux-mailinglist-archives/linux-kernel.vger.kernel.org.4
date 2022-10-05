@@ -2,93 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D722F5F5319
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 13:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C015F531F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 13:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiJELEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 07:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50840 "EHLO
+        id S229538AbiJELFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 07:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiJELD7 (ORCPT
+        with ESMTP id S229569AbiJELFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 07:03:59 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE9E77E9B;
-        Wed,  5 Oct 2022 04:03:50 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2958qPcR020832;
-        Wed, 5 Oct 2022 11:03:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=+mYGFIRKQdUCBWFR+Fyy7VoH7jwpQQOKiTdQo2jNTxI=;
- b=FvH87cl2h0l5HLCRhoMnsat267RpZim8om4EXdEFTiTr9BO0Lb0Gii3Pb3GTl+S+/jCM
- QGlA/IqXhJAQ4/pwVe+oB3aGjad+8z610kTQ8DY7bWtZHfg3swJFFzJgJx8A+TwILbtx
- g4HifRZ+lI2oq7WtNXWMZmthmQ6EloOAkFjU+lxHj6C3jZILLBjJzIvLzmLEAMiz8P6Z
- puqTksSsPtpWtH0mY4XRlRytt6m7cNQ0e97akEiewx63Vte96ZtGKjH3h9ZgHKoUrkQT
- Vi+Xur1OyPdvevjg8x+CvqkjGnaMQ/dV3hc24FowQZvT70MeRrDZbKQ3gXaESxGCeRcD /Q== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k14et6sj6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Oct 2022 11:03:37 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 295AoFZF024397;
-        Wed, 5 Oct 2022 11:03:35 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3jxd695f8h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Oct 2022 11:03:35 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 295B42cM52101496
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 5 Oct 2022 11:04:02 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8ADF1A405B;
-        Wed,  5 Oct 2022 11:03:32 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1E7B1A4059;
-        Wed,  5 Oct 2022 11:03:32 +0000 (GMT)
-Received: from oc-nschnelle.boeblingen.de.ibm.com (unknown [9.155.199.46])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  5 Oct 2022 11:03:32 +0000 (GMT)
-Message-ID: <a9994ee0e97457965a2dd2b5e9795f0fde5bc466.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 5/5] iommu/s390: Fix incorrect pgsize_bitmap
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev
-Cc:     linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
-        jgg@nvidia.com, linux-kernel@vger.kernel.org
-Date:   Wed, 05 Oct 2022 13:03:31 +0200
-In-Reply-To: <ce73a798-c2e4-7d2f-1c2e-854170ea0b59@arm.com>
-References: <20221004120706.2957492-1-schnelle@linux.ibm.com>
-         <20221004120706.2957492-6-schnelle@linux.ibm.com>
-         <eb1955e4-a618-ebf0-562d-17f9dd58b0da@arm.com>
-         <b3c6fd2b-74d4-91d7-dc53-ba526c41b067@linux.ibm.com>
-         <a02a3cee-773a-da00-616f-04652c0905ce@arm.com>
-         <0da03411190c004e85cc856965b0aca901fd78fb.camel@linux.ibm.com>
-         <ce73a798-c2e4-7d2f-1c2e-854170ea0b59@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: zsg0W-JMzeP-X056nGTdArOUhGxjiy43
-X-Proofpoint-ORIG-GUID: zsg0W-JMzeP-X056nGTdArOUhGxjiy43
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 5 Oct 2022 07:05:31 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1200E66139;
+        Wed,  5 Oct 2022 04:05:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664967928; x=1696503928;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=jKSBPWh8pDyMYM2pEyLTogv+ZtNNMjV8Mb81U4T14t8=;
+  b=C1TF3srpa5jdAKggnekERRZ7ARNPYPOcP+s8SajzrU4wQyz8ze+tlvWC
+   1OijtlJypxTCjz1Fx+6Z67WRJixGIR3p1OxZmuox4/zcbH6LH39BL/htH
+   OmujMRFj4EL9/YEZeeYLH0crTrGsNHmQewryBZQqEC9saNk0WC7W3iP2D
+   3sOLTJhNtq/8EtoWcbOUpdfPtSOFU07LTBix/ZKROyKk4aZ3Rvk2XY7/9
+   696zqR5tVAEWqjLZncrvj+ZsPEcC1BK6/gWBJlAuN9f/OnGjbc1ZIDtUH
+   dFiBk6OmK7Avi5j45gjdOKP/fAycosZFo0JkhWYUyfsvohJ7RnBRoSg5b
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="286345408"
+X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
+   d="scan'208";a="286345408"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 04:05:26 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="575372394"
+X-IronPort-AV: E=Sophos;i="5.95,159,1661842800"; 
+   d="scan'208";a="575372394"
+Received: from refaase-mobl1.ger.corp.intel.com ([10.252.39.164])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 04:05:19 -0700
+Date:   Wed, 5 Oct 2022 14:05:16 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
+cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH v3 1/4] Documentation: fpga: dfl: Add documentation for
+ DFHv1
+In-Reply-To: <20221004143718.1076710-2-matthew.gerlach@linux.intel.com>
+Message-ID: <7ad7491d-4d7f-986b-5d9d-1cfdeabe23c5@linux.intel.com>
+References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com> <20221004143718.1076710-2-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-05_01,2022-10-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- priorityscore=1501 mlxscore=0 adultscore=0 lowpriorityscore=0
- impostorscore=0 clxscore=1015 suspectscore=0 spamscore=0 malwarescore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210050070
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,67 +68,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-10-05 at 10:53 +0100, Robin Murphy wrote:
-> On 2022-10-04 17:13, Niklas Schnelle wrote:
-> > On Tue, 2022-10-04 at 16:31 +0100, Robin Murphy wrote:
-> > > On 2022-10-04 16:12, Matthew Rosato wrote:
-> > > > On 10/4/22 11:02 AM, Robin Murphy wrote:
-> > > > > On 2022-10-04 13:07, Niklas Schnelle wrote:
-> > > > > > The .pgsize_bitmap property of struct iommu_ops is not a page mask but
-> > > > > > rather has a bit set for each size of pages the IOMMU supports. As the
-> > > > > > comment correctly pointed out at this moment the code only support 4K
-> > > > > > pages so simply use SZ_4K here.
-> > > > > 
-> > > > > Unless it's already been done somewhere else, you'll want to switch over to the {map,unmap}_pages() interfaces as well to avoid taking a hit on efficiency here. The "page mask" thing was an old hack to trick the core API into making fewer map/unmap calls where the driver could map arbitrary numbers of pages at once anyway. The multi-page interfaces now do that more honestly and generally better (since they work for non-power-of-two sizes as well).
-> > > > 
-> > > > Thanks for the heads up -- Niklas has some additional series coming soon as described here:
-> > > > 
-> > > > https://lore.kernel.org/linux-iommu/a10424adbe01a0fd40372cbd0736d11e517951a1.camel@linux.ibm.com/
-> > > > 
-> > > > So implementing the _pages() interfaces is soon up on the roadmap.  But given what you say I wonder if this patch should just wait until the series that implements {map,unmap}_pages().
-> > > 
-> > > Perhaps, although the full change should be trivial enough that there's
-> > > probably just as much argument for doing the whole thing in its own
-> > > right for the sake of this cleanup. The main point is that
-> > > S390_IOMMU_PGSIZES is not incorrect as such, it's just not spelling out
-> > > the deliberate trick that it's achieving - everyone copied it from
-> > > intel-iommu, but since that got converted to the new interfaces the
-> > > original explanation is now gone. The only effect of "fixing" it in
-> > > isolation right now will be to make large VFIO mappings slower.
-> > > 
-> > > Robin.
-> > 
-> > The patch changing to map_pages()/unmap_pages() is currently part of a
-> > larger series of improvements, some of which are less trivial. So I'm
-> > planning to send those as RFC first. Those include changing the
-> > spin_lock protected list to RCU so the map/unmap can paralellize
-> > better. Another one is atomic updates to the IOMMU tables to do away
-> > with locks in map/unmap. So I think pulling that whole
-> > series into this one isn't ideal. I could pull just the
-> > map_pages()/unmap_pages() change though.
-> 
-> Yeah, literally just updating the s390_iommu_{map,unmap} function 
-> prototypes and replacing "size" with "pgsize * count" within is all 
-> that's needed to clean up this hack properly. That can (and probably 
-> should) be completely independent of other improvements deeper down.
-> 
-> Thanks,
-> Robin.
-> 
+On Tue, 4 Oct 2022, matthew.gerlach@linux.intel.com wrote:
 
-Pretty much, it's a bit cleaner to slightly change
-s390_iommu_update_trans() to take pgcount as argument since that
-currently calculates the pgcount from the size anyway which is
-redundant if we have a pgcount already but that's redudant if we have
-the pgcount already. But yes it's all pretty simple and I reordered
-things for v5 already.
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> 
+> Add documentation describing the extensions provided by Version
+> 1 of the Device Feature Header (DFHv1).
+> 
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> ---
+> v3: no change
+> 
+> v2: s/GUILD/GUID/
+>     add picture
+> ---
+>  Documentation/fpga/dfl.rst | 49 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+> 
+> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+> index 15b670926084..7c786b75b498 100644
+> --- a/Documentation/fpga/dfl.rst
+> +++ b/Documentation/fpga/dfl.rst
+> @@ -561,6 +561,55 @@ new DFL feature via UIO direct access, its feature id should be added to the
+>  driver's id_table.
+>  
+>  
+> +Extending the Device Feature Header - DFHv1
+> +===========================================
+> +The current 8 bytes of the Device Feature Header, hereafter referred to as
+> +to DFHv0, provide very little opportunity for the hardware to describe itself
+> +to software. Version 1 of the Device Feature Header (DFHv1) is being introduced
+> +to provide increased flexibility and extensibility to hardware designs using
+> +Device Feature Lists.  The list below describes some of the goals behind the
+> +changes in DFHv1:
+> +
+> +* Provide a standardized mechanism for features to describe
+> +  parameters/capabilities to software.
+> +* Standardize the use of a GUID for all DFHv1 types.
+> +* Decouple the location of the DFH from the register space of the feature itself.
+> +
+> +Modeled after PCI Capabilities, DFHv1 Parameters provide a mechanism to associate
+> +a list of parameter values to a particular feature.
+> +
+> +With DFHv0, not all features types contained a GUID.  DFHv1 makes the GUID standard
+> +across all types.
+> +
+> +With DFHv0, the register map of a given feature is located immediately following
+> +the DFHv0 in the memory space.  With DFHv1, the location of the feature register
+> +map can be specified as an offset to the DFHv1 or as an absolute address.  The DFHv1
+> +structure is shown below:
 
-Speaking of v5, if that were the final form, what do you think would be
-the best tree to take it? Except for patch 1 they depend on the removal
-of the bus_next field in struct zpci_dev. That commit is not yet in
-Linus' tree but already in the s390 feature branch on git.kernel.org so
-if these changes were to go via the s390 tree that would be taken care
-of. Otherwise one would have to merge that tree first. Or as an
-alternative I also have a kernel.org account and can provide this
-series as a GPG signed branch based on the s390 tree.
+I think this is not a good place for be some kind of v1 marketing speak 
+(that said, I think it's fine to include those goals you have there).
+
+I'd restructure this so that this section only talks about DFHv1 w/o 
+any comparing how v1 is better than v0. Don't base the description on 
+how things changed from v0 but just describe v1, that is, like v1 is 
+already there, not only being introduced to supercede/extend v0.
+
+And then create v0 section after this section which focuses solely on v0.
+
+-- 
+ i.
+
+> +    +-----------------------------------------------------------------------+
+> +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 ID 0|
+> +    +-----------------------------------------------------------------------+
+> +    |63                                 GUID_L                             0|
+> +    +-----------------------------------------------------------------------+
+> +    |63                                 GUID_H                             0|
+> +    +-----------------------------------------------------------------------+
+> +    |63                 Address/Offset                            1|  Rel  0|
+> +    +-----------------------------------------------------------------------+
+> +    |63 Size of register set  32|Params 31|30 Group    16|15 Instance      0|
+> +    +-----------------------------------------------------------------------+
+> +    |63 Next parameter offset 32|31 Param Version 16|15 Param ID           0|
+> +    +-----------------------------------------------------------------------+
+> +    |63                 Parameter Data                                     0|
+> +    +-----------------------------------------------------------------------+
+> +
+> +                                  ...
+> +
+> +    +-----------------------------------------------------------------------+
+> +    |63 Next parameter offset 32|31 Param Version 16|15 Param ID           0|
+> +    +-----------------------------------------------------------------------+
+> +    |63                 Parameter Data                                     0|
+> +    +-----------------------------------------------------------------------+
+> +
+>  Open discussion
+>  ===============
+>  FME driver exports one ioctl (DFL_FPGA_FME_PORT_PR) for partial reconfiguration
+> 
 
