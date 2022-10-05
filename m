@@ -2,122 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4BA5F4FB2
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 08:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6684C5F4FB7
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 08:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbiJEGT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 02:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
+        id S229716AbiJEGVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 02:21:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiJEGTy (ORCPT
+        with ESMTP id S229445AbiJEGVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 02:19:54 -0400
-Received: from ironport.ite.com.tw (60-251-196-230.hinet-ip.hinet.net [60.251.196.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF3811839;
-        Tue,  4 Oct 2022 23:19:47 -0700 (PDT)
-Received: from unknown (HELO mse.ite.com.tw) ([192.168.35.30])
-  by ironport.ite.com.tw with ESMTP; 05 Oct 2022 14:19:45 +0800
-Received: from CSBMAIL1.internal.ite.com.tw (CSBMAIL1.internal.ite.com.tw [192.168.65.58])
-        by mse.ite.com.tw with ESMTP id 2956Jdg0091479;
-        Wed, 5 Oct 2022 14:19:39 +0800 (GMT-8)
-        (envelope-from allen.chen@ite.com.tw)
-Received: from CSBMAIL1.internal.ite.com.tw (192.168.65.58) by
- CSBMAIL1.internal.ite.com.tw (192.168.65.58) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.14; Wed, 5 Oct 2022 14:19:39 +0800
-Received: from CSBMAIL1.internal.ite.com.tw ([fe80::dd22:b444:859b:61c7]) by
- CSBMAIL1.internal.ite.com.tw ([fe80::dd22:b444:859b:61c7%18]) with mapi id
- 15.01.2176.014; Wed, 5 Oct 2022 14:19:39 +0800
-From:   <allen.chen@ite.com.tw>
-To:     <neil.armstrong@linaro.org>
-CC:     <devicetree@vger.kernel.org>, <Kenneth.Hung@ite.com.tw>,
-        <jernej.skrabec@gmail.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <Jau-Chih.Tseng@ite.com.tw>, <airlied@linux.ie>,
-        <dri-devel@lists.freedesktop.org>, <narmstrong@baylibre.com>,
-        <linux-kernel@vger.kernel.org>, <robert.foss@linaro.org>,
-        <treapking@chromium.org>, <Hermes.Wu@ite.com.tw>,
-        <robh+dt@kernel.org>, <Laurent.pinchart@ideasonboard.com>,
-        <andrzej.hajda@intel.com>, <jonas@kwiboo.se>
-Subject: RE: [PATCH v2 1/2] dt-bindings: it6505: add properties to restrict
- output bandwidth
-Thread-Topic: [PATCH v2 1/2] dt-bindings: it6505: add properties to restrict
- output bandwidth
-Thread-Index: AQHY098A6AOALJJYwUiaZi6xSxyCHK3/XJIg
-Date:   Wed, 5 Oct 2022 06:19:39 +0000
-Message-ID: <087811c1bc224a468f117ca4f2fff3cd@ite.com.tw>
-References: <20220929014456.30077-1-allen.chen@ite.com.tw>
- <20220929014456.30077-2-allen.chen@ite.com.tw>
- <aaf68eff-17da-3f27-c8dc-48b9659e7b50@linaro.org>
-In-Reply-To: <aaf68eff-17da-3f27-c8dc-48b9659e7b50@linaro.org>
-Accept-Language: en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [192.168.70.46]
-x-tm-snts-smtp: 21A87634EBC135BB704063ED5E5DEB282B79D8D6761C00B3F1C596F49CB0AB262002:8
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 5 Oct 2022 02:21:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA7E53D30;
+        Tue,  4 Oct 2022 23:21:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90761B81C77;
+        Wed,  5 Oct 2022 06:21:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3169C433D6;
+        Wed,  5 Oct 2022 06:21:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664950875;
+        bh=Kq4gcz5R4LOlRKyPItd/K64WIZHUieGWE3R5FkDlrGg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=og9RHtmP5t3S1cEYgFdc1xyqBNaV93o+0U+YJvmhFVZ1ogFpv5WIotSMFPI2uqkcg
+         zFdUD6fNJ/FLRDM7XsFAfPn2SJczVszTDdl0BHGZ21VObYguokTEx9Mm2cv93cMGim
+         8BCE9bImULVzqHLV0+5ad/lH7tHBvwxVJ4YZ9LQo=
+Date:   Wed, 5 Oct 2022 08:21:55 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Elliot Berman <quic_eberman@quicinc.com>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 13/14] gunyah: rsc_mgr: Add auxiliary devices for
+ console
+Message-ID: <Yz0ig/Dnp4ovHjeN@kroah.com>
+References: <20220928195633.2348848-1-quic_eberman@quicinc.com>
+ <20220928195633.2348848-14-quic_eberman@quicinc.com>
+ <Yzbev2mZodsZhFY3@kroah.com>
+ <1db27cda-356e-bae2-3c6a-b7916123a269@quicinc.com>
 MIME-Version: 1.0
-X-MAIL: mse.ite.com.tw 2956Jdg0091479
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1db27cda-356e-bae2-3c6a-b7916123a269@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkNCg0KZGF0YS1sYW5lcyBpcyBvdXRwdXQgY29uZmlndXJhdGlvbi4gTWF5YmUgaXQgaXMgbm90
-IHN1aXRhYmxlIHRvIHB1dCBkYXRhLWxhbmVzIGluIGlucHV0IGVuZHBvaW50Lg0KZXh0Y29uIGRv
-ZXNuJ3QgaGF2ZSBvdXRwdXQgZW5kcG9pbnQsIHNvIEkgZG9uJ3Qga25vdyB3aGVyZSB0byBwdXQg
-aXMgYmV0dGVyLg0KDQotLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KRnJvbTogTmVpbCBBcm1z
-dHJvbmcgPG5laWwuYXJtc3Ryb25nQGxpbmFyby5vcmc+IA0KU2VudDogVGh1cnNkYXksIFNlcHRl
-bWJlciAyOSwgMjAyMiA0OjQwIFBNDQpUbzogQWxsZW4gQ2hlbiAo6Zmz5p+P5a6HKSA8YWxsZW4u
-Y2hlbkBpdGUuY29tLnR3Pg0KQ2M6IG9wZW4gbGlzdDpPUEVOIEZJUk1XQVJFIEFORCBGTEFUVEVO
-RUQgREVWSUNFIFRSRUUgQklORElOR1MgPGRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnPjsgS2Vu
-bmV0aCBIdW5nICjmtKrlrrblgKspIDxLZW5uZXRoLkh1bmdAaXRlLmNvbS50dz47IEplcm5laiBT
-a3JhYmVjIDxqZXJuZWouc2tyYWJlY0BnbWFpbC5jb20+OyBLcnp5c3p0b2YgS296bG93c2tpIDxr
-cnp5c3p0b2Yua296bG93c2tpK2R0QGxpbmFyby5vcmc+OyBKYXUtQ2hpaCBUc2VuZyAo5pu+5pit
-5pm6KSA8SmF1LUNoaWguVHNlbmdAaXRlLmNvbS50dz47IERhdmlkIEFpcmxpZSA8YWlybGllZEBs
-aW51eC5pZT47IG9wZW4gbGlzdDpEUk0gRFJJVkVSUyA8ZHJpLWRldmVsQGxpc3RzLmZyZWVkZXNr
-dG9wLm9yZz47IE5laWwgQXJtc3Ryb25nIDxuYXJtc3Ryb25nQGJheWxpYnJlLmNvbT47IG9wZW4g
-bGlzdCA8bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZz47IFJvYmVydCBGb3NzIDxyb2JlcnQu
-Zm9zc0BsaW5hcm8ub3JnPjsgUGluLXllbiBMaW4gPHRyZWFwa2luZ0BjaHJvbWl1bS5vcmc+OyBI
-ZXJtZXMgV3UgKOWQs+S9s+WujykgPEhlcm1lcy5XdUBpdGUuY29tLnR3PjsgUm9iIEhlcnJpbmcg
-PHJvYmgrZHRAa2VybmVsLm9yZz47IExhdXJlbnQgUGluY2hhcnQgPExhdXJlbnQucGluY2hhcnRA
-aWRlYXNvbmJvYXJkLmNvbT47IEFuZHJ6ZWogSGFqZGEgPGFuZHJ6ZWouaGFqZGFAaW50ZWwuY29t
-PjsgSm9uYXMgS2FybG1hbiA8am9uYXNAa3dpYm9vLnNlPg0KU3ViamVjdDogUmU6IFtQQVRDSCB2
-MiAxLzJdIGR0LWJpbmRpbmdzOiBpdDY1MDU6IGFkZCBwcm9wZXJ0aWVzIHRvIHJlc3RyaWN0IG91
-dHB1dCBiYW5kd2lkdGgNCg0KSGksDQoNCk9uIDI5LzA5LzIwMjIgMDM6NDQsIGFsbGVuIHdyb3Rl
-Og0KPiBGcm9tOiBhbGxlbiBjaGVuIDxhbGxlbi5jaGVuQGl0ZS5jb20udHc+DQo+IA0KPiBBZGQg
-cHJvcGVydGllcyB0byByZXN0cmljdCBkcCBvdXRwdXQgZGF0YS1sYW5lcyBhbmQgY2xvY2suDQo+
-IA0KPiBTaWduZWQtb2ZmLWJ5OiBQaW4tWWVuIExpbiA8dHJlYXBraW5nQGNocm9taXVtLm9yZz4N
-Cj4gU2lnbmVkLW9mZi1ieTogQWxsZW4gQ2hlbiA8YWxsZW4uY2hlbkBpdGUuY29tLnR3Pg0KPiAt
-LS0NCj4gICAuLi4vZGV2aWNldHJlZS9iaW5kaW5ncy9kaXNwbGF5L2JyaWRnZS9pdGUsaXQ2NTA1
-LnlhbWwgfCAxMCArKysrKysrKysrDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDEwIGluc2VydGlvbnMo
-KykNCj4gDQo+IGRpZmYgLS1naXQgDQo+IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
-bmdzL2Rpc3BsYXkvYnJpZGdlL2l0ZSxpdDY1MDUueWFtbCANCj4gYi9Eb2N1bWVudGF0aW9uL2Rl
-dmljZXRyZWUvYmluZGluZ3MvZGlzcGxheS9icmlkZ2UvaXRlLGl0NjUwNS55YW1sDQo+IGluZGV4
-IDgzM2QxMWIyMzAzYS4uNjJiOWYyMTkyMjAyIDEwMDY0NA0KPiAtLS0gYS9Eb2N1bWVudGF0aW9u
-L2RldmljZXRyZWUvYmluZGluZ3MvZGlzcGxheS9icmlkZ2UvaXRlLGl0NjUwNS55YW1sDQo+ICsr
-KyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9kaXNwbGF5L2JyaWRnZS9pdGUs
-aXQ2NTA1LnlhbWwNCj4gQEAgLTUyLDYgKzUyLDE0IEBAIHByb3BlcnRpZXM6DQo+ICAgICAgIG1h
-eEl0ZW1zOiAxDQo+ICAgICAgIGRlc2NyaXB0aW9uOiBleHRjb24gc3BlY2lmaWVyIGZvciB0aGUg
-UG93ZXIgRGVsaXZlcnkNCj4gICANCj4gKyAgZGF0YS1sYW5lczoNCj4gKyAgICBtYXhJdGVtczog
-MQ0KPiArICAgIGRlc2NyaXB0aW9uOiByZXN0cmljdCB0aGUgZHAgb3V0cHV0IGRhdGEtbGFuZXMg
-d2l0aCB2YWx1ZSBvZiAxLTQNCg0KQ2FuJ3QgeW91IHVzZSB0aGUgZGF0YS1sYW5lcyBwcm9wZXJ0
-eSBpbiB0aGUgZmlyc3QgcG9ydCBlbmRwb2ludCA/DQoNCkxvb2sgYXQgRG9jdW1lbnRhdGlvbi9k
-ZXZpY2V0cmVlL2JpbmRpbmdzL2Rpc3BsYXkvYnJpZGdlL3RpLHNuNjVkc2k4My55YW1sDQoNCj4g
-Kw0KPiArICBtYXgtcGl4ZWwtY2xvY2sta2h6Og0KPiArICAgIG1heEl0ZW1zOiAxDQo+ICsgICAg
-ZGVzY3JpcHRpb246IHJlc3RyaWN0IG1heCBwaXhlbCBjbG9jaw0KDQpOZXcgdmVuZG9yIHNwZWNp
-ZmljIHByb3BlcnRpZXMgc2hvdWxkIGhhdmUgdGhlIGl0ZSwgcHJlZml4Lg0KDQo+ICsNCj4gICAg
-IHBvcnQ6DQo+ICAgICAgICRyZWY6IC9zY2hlbWFzL2dyYXBoLnlhbWwjL3Byb3BlcnRpZXMvcG9y
-dA0KPiAgICAgICBkZXNjcmlwdGlvbjogQSBwb3J0IG5vZGUgcG9pbnRpbmcgdG8gRFBJIGhvc3Qg
-cG9ydCBub2RlIEBAIC04NCw2IA0KPiArOTIsOCBAQCBleGFtcGxlczoNCj4gICAgICAgICAgICAg
-ICBwd3IxOC1zdXBwbHkgPSA8Jml0NjUwNV9wcDE4X3JlZz47DQo+ICAgICAgICAgICAgICAgcmVz
-ZXQtZ3Bpb3MgPSA8JnBpbyAxNzkgMT47DQo+ICAgICAgICAgICAgICAgZXh0Y29uID0gPCZ1c2Jj
-X2V4dGNvbj47DQo+ICsgICAgICAgICAgICBkYXRhLWxhbmVzID0gPDI+Ow0KPiArICAgICAgICAg
-ICAgbWF4LXBpeGVsLWNsb2NrLWtoeiA9IDwxNTAwMDA+Ow0KPiAgIA0KPiAgICAgICAgICAgICAg
-IHBvcnQgew0KPiAgICAgICAgICAgICAgICAgICBpdDY1MDVfaW46IGVuZHBvaW50IHsNCg0KVGhh
-bmtzLA0KTmVpbA0K
+On Tue, Oct 04, 2022 at 04:49:27PM -0700, Elliot Berman wrote:
+> On 9/30/2022 5:19 AM, Greg Kroah-Hartman wrote:
+> > On Wed, Sep 28, 2022 at 12:56:32PM -0700, Elliot Berman wrote:
+> > > Gunyah resource manager exposes a concrete functionalities which
+> > > complicate a single resource manager driver.
+> > 
+> > I am sorry, but I do not understand this sentance.  What is so
+> > complicated about individual devices being created?  Where are they
+> > created?  What bus?
+> 
+> There's no complexity here with using individual devices, that's why I
+> wanted to create secondary (auxiliary devices).
+> 
+> IOW -- "I have a platform device that does a lot of different things. Split
+> up the different functionalities of that device into sub devices using the
+> auxiliary bus."
+
+Why not just have multiple platform devices?  You control them, don't
+make it more complex than it should be.
+
+And why are these platform devices at all?
+
+As you say:
+
+> A key requirement for utilizing the auxiliary bus is that there is no
+> dependency on a physical bus, device, register accesses or regmap support.
+> These individual devices split from the core cannot live on the platform bus
+> as they are not physical devices that are controlled by DT/ACPI.
+
+These are not in the DT.  So just make your own bus for them instead of
+using a platform device.  Don't abuse a platform device please.
+
+thanks,
+
+greg k-h
