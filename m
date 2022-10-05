@@ -2,71 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACFD55F5D68
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 01:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58E645F5D6A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 01:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiJEX5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 19:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37976 "EHLO
+        id S229707AbiJEX7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 19:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJEX5r (ORCPT
+        with ESMTP id S229484AbiJEX7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 19:57:47 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC71D13F
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 16:57:46 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id x59so605525ede.7
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 16:57:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=aEfEliKsuauHqKdKxHLW94n4jylnSfwinxLKm0znj80=;
-        b=eZHoNR9QM8zqCFZEkkIK6CEYP3UvO4RG4LCukozoU4VwLH4Ur2Mt3UHVTW9u9RsiUH
-         UUyC2SRPvE4oekShfuFO0KEr7p+6Eq0+PFf/gdD3j2H/OYzRwYAlqlqYLX6h4iBGhvZI
-         uld/HMXHvk7zAi9IHfZZWZYcBw87folqCnP4OQmrbiFt/iEMZAQoy8rPQY1lCQcRbiJ2
-         bZDKJhAsJyG0oRNl1yKtFzHs6/9/1l17DOw8eGYWGFp7/5i+nLGjF+/WCM0JQgh4jCVe
-         4mVkTRwIyotUNaFV214rYRNMmrfRA/D8cRvt8dEni8gobB00Y96HflLssHhEEQZcMX5r
-         pzIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=aEfEliKsuauHqKdKxHLW94n4jylnSfwinxLKm0znj80=;
-        b=fQ1NYBlKL/rimnCnh2208Ck8K87SbYvZeQs3ykwhoWFFVsFzv/QrwOLoSjPCByQ8xG
-         7R/uhqi9F27N4W0nsTJc2TyOSBDv4jdDaqDof0fiJbVxkM1N4UJ1AOZVQFGGC2nXlYeV
-         yeaHsQwz+ex8cf2qaoQ4Lyxlx7Ao0n+DKrwvL3CyMOVFaD/beQllD8aL6XWLUgJM2Gpm
-         Y/y/8gyDD9kF/X0sfZyBtr1H+aJYwubj1sz5DkfwlKXwJ3cSV45UrNCeonb26mgxDsMf
-         kMDUYf0Y8FTBICR1xNW4GCgIUyrICql/cK+kpibL1RWR/vc1v2rc69Fwhw9pYgIMuxj1
-         96bw==
-X-Gm-Message-State: ACrzQf1cP9acopb1upbdFqMswoE6QB6iNCJG/TdYNK7kI+ldcunKRplK
-        Vrqbs3kOyzCxaKVUmqs8NW4=
-X-Google-Smtp-Source: AMsMyM59fRhAVfuLlqqfBsq+sSCqEj3R7DAkNeGkv5SxOuS3qiZQj6bSfe90oMKmAJ9iidqs4rZEqg==
-X-Received: by 2002:a05:6402:40cf:b0:459:d7de:d5 with SMTP id z15-20020a05640240cf00b00459d7de00d5mr600496edb.288.1665014265007;
-        Wed, 05 Oct 2022 16:57:45 -0700 (PDT)
-Received: from nam-dell (ip-217-105-46-158.ip.prioritytelecom.net. [217.105.46.158])
-        by smtp.gmail.com with ESMTPSA id r2-20020a17090609c200b00730b3bdd8d7sm9463175eje.179.2022.10.05.16.57.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 16:57:44 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 01:57:28 +0200
-From:   Nam Cao <namcaov@gmail.com>
-To:     Brent Pappas <pappasbrent@Knights.ucf.edu>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "cai.huoqing@linux.dev" <cai.huoqing@linux.dev>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] staging: most: net: Replace macros HB and LB with static
- inline functions
-Message-ID: <20221005235728.GA118549@nam-dell>
-References: <BN7PR07MB419563C5B405ED4082D7841DF65D9@BN7PR07MB4195.namprd07.prod.outlook.com>
+        Wed, 5 Oct 2022 19:59:19 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691BBD13F;
+        Wed,  5 Oct 2022 16:59:17 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MjWkq57tCz4xGR;
+        Thu,  6 Oct 2022 10:59:15 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1665014355;
+        bh=ZiP+7X6vJOlOtas5bfBwJ9czNkaHQb78pfGJ/b1jMhc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=SC3qBkpUrpbdb3wr50Ir7Ci2d8BnRrj7DuceHnAnVzgtETVEMpwl04WjUroruq83c
+         mfqAhbdcmePZH18mwuLNGm56ivG6HohNQlJdpkbyFv0NHfF896Q5eBDPp6Sbp/tvg+
+         Si5EG7OGZyv625XcSZtb/zDOc7RIWC9gjGhFGULcJYTvJ/PX/yBGluJnKcPrQCP6xz
+         Fu4jcyQwsrPzn1u6N5xCeA6pdVmnZ70O3BoADGyI99y3uO1z9mdNyPU4SmrAoorG9S
+         SdZ5baQ8O2kNByk+5NomyXtyELTM4Rx76HQO3zcmWRMlcqH4m7hW3e566TWZdgIun9
+         w3lAAFbW3Gt+w==
+Date:   Thu, 6 Oct 2022 10:59:13 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Al Viro <viro@ZenIV.linux.org.uk>,
+        Steve French <smfrench@gmail.com>
+Cc:     Atte =?UTF-8?B?SGVpa2tpbMOk?= <atteh.mailbox@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Steve French <stfrench@microsoft.com>
+Subject: linux-next: manual merge of the vfs tree with the ksmbd tree
+Message-ID: <20221006105913.5be8a631@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN7PR07MB419563C5B405ED4082D7841DF65D9@BN7PR07MB4195.namprd07.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/mAqK48flFuwYx5jEjaycAW4";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,33 +53,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 05, 2022 at 04:10:44PM +0000, Brent Pappas wrote:
-> Replace function-like macros "HB" and "LB" with static inline functions
-> to comply with preferred Linux coding style standards.
-> 
-> Signed-off-by: Brent Pappas <pappasbrent@knights.ucf.edu>
-> ---
-> diff --git a/drivers/staging/most/net/net.c b/drivers/staging/most/net/net.c
-> index 1d1fe8bff7ee..8a8fbc274b73 100644
-> --- a/drivers/staging/most/net/net.c
-> +++ b/drivers/staging/most/net/net.c
-> @@ -36,8 +36,8 @@
->  #define PMS_TELID_MASK         0x0F
->  #define PMS_TELID_SHIFT                4
->  
-> -#define HB(value)              ((u8)((u16)(value) >> 8))
-> -#define LB(value)              ((u8)(value))
-> +static inline u8 HB(unsigned int value)                { return ((u8)((u16)(value) >> 8)); }
-> +static inline u8 LB(unsigned int value)                { return ((u8)(value)); }
->  
->  #define EXTRACT_BIT_SET(bitset_name, value) \
->         (((value) >> bitset_name##_SHIFT) & bitset_name##_MASK)
+--Sig_/mAqK48flFuwYx5jEjaycAW4
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I cannot apply your patch. I think your email client modified some
-whitespace characters.
+Hi all,
 
-Check this for more information:
-https://www.kernel.org/doc/html/v4.10/process/email-clients.html
+Today's linux-next merge of the vfs tree got a conflict in:
 
-Best regards,
-Nam
+  fs/ksmbd/vfs.c
+
+between commit:
+
+  dbab80e2071a ("ksmbd: make utf-8 file name comparison work in __caseless_=
+lookup()")
+
+from the ksmbd tree and commit:
+
+  25885a35a720 ("Change calling conventions for filldir_t")
+
+from the vfs tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/ksmbd/vfs.c
+index 8d8af724df70,48b2b901f6e5..000000000000
+--- a/fs/ksmbd/vfs.c
++++ b/fs/ksmbd/vfs.c
+@@@ -1150,23 -1149,13 +1148,23 @@@ static bool __caseless_lookup(struct di
+  	buf =3D container_of(ctx, struct ksmbd_readdir_data, ctx);
+ =20
+  	if (buf->used !=3D namlen)
+- 		return 0;
++ 		return true;
+ -	if (!strncasecmp((char *)buf->private, name, namlen)) {
+ +	if (IS_ENABLED(CONFIG_UNICODE) && buf->um) {
+ +		const struct qstr q_buf =3D {.name =3D buf->private,
+ +					   .len =3D buf->used};
+ +		const struct qstr q_name =3D {.name =3D name,
+ +					    .len =3D namlen};
+ +
+ +		cmp =3D utf8_strncasecmp(buf->um, &q_buf, &q_name);
+ +	}
+ +	if (cmp < 0)
+ +		cmp =3D strncasecmp((char *)buf->private, name, namlen);
+ +	if (!cmp) {
+  		memcpy((char *)buf->private, name, namlen);
+  		buf->dirent_count =3D 1;
+- 		return -EEXIST;
++ 		return false;
+  	}
+- 	return 0;
++ 	return true;
+  }
+ =20
+  /**
+
+--Sig_/mAqK48flFuwYx5jEjaycAW4
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM+GlEACgkQAVBC80lX
+0Gwp4ggAhhaWNI6+8iGakKPf3dwk7a9OHhr+symb2j79dlZxdKsAoBd+yAzVsSu4
+QnBfXN9HjbObQbNRzmHcgW29P7zAO5niv31PTn2tdo5H23C2FTDMAa7OmWBgMiw8
+fUnC3v3VGZ/dFTk+tS5i3C7qvuDo6FOWx0z+mBkTJpmprcG5jB8zuOnXAMLp54o3
+tJVmZWmG3DVa03UJHPRqs441LF28K8/QsF+nVAKFp9KFDE+nQSxNNTgFZPaLKGl7
+js8hXFsj6U7SbQ39sg+FVYhIw9c27qCAYYr3ZCOd62WSHa+5cMylzKlZQuN+29zq
+rMJ1h4jVJ4hk1FjwESZkpKf6iM5cJA==
+=K+4k
+-----END PGP SIGNATURE-----
+
+--Sig_/mAqK48flFuwYx5jEjaycAW4--
