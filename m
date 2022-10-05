@@ -1,67 +1,78 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18BC55F5B1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 22:39:34 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 1634D5F5B23
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 22:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbiJEUjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 16:39:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
+        id S231147AbiJEUkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 16:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbiJEUj2 (ORCPT
+        with ESMTP id S231137AbiJEUki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 16:39:28 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172434A11F
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 13:39:27 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id nb11so256998ejc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 13:39:27 -0700 (PDT)
+        Wed, 5 Oct 2022 16:40:38 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090635720C;
+        Wed,  5 Oct 2022 13:40:37 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id x18so10969830qkn.6;
+        Wed, 05 Oct 2022 13:40:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=g6s7DJKavkP6Wy2PCKjnIW2IKB4P0bWvffwW3eMp+yI=;
-        b=DBO3i9LoxZwL9VONd/WY01Ix6CFiUp0JklwT3uV0W6Zbp1Gqi9bQH4adXbZqV2I3eq
-         7ZdyJCgkzFThHHUEocvVBJ1ZSUKnjCZ85Rl7tbWysqMnXNzJwAugLi6JVEcpFTN0Spb8
-         /RP0sQgCNYQmKaMMSZyU4HIgAyeIbf73CEFFMh2C7q8e0p4aCW7sDlF5BwTijKZgCEN5
-         HoDYOmZrPJjk+PH3bCd12Dv4bNWNy0JdvlAufb3BEFe1Osiylv4QDq81pxncn6wHfmOB
-         iFnatp9zkEo/wqVJGds9FBHl/8FgpGS0iPdkzF24tpp/c1vckPparQvMDFBGnKBAsQ55
-         GIIA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=G/SJy23pyHdTBOwqTvrrJjRP4JYmINx8osvDYRRfOiA=;
+        b=Gy2RS+n5aXZK/vbHagqSrb642CEVulU2rctaskWTRmnr/sdYVgV4mAbCQqUvBgujAS
+         2B8STm+OdCYJV2Vtpl8N4n/6xG0eHNHV5s4KnDUZpU0MgglzBPD8kTNOlvbb/MFBBBTf
+         0EJZHfN14FTlV8tJ5RlypE3zqGPme/Y6S7Tjy5Wo9OtPIE+4lD9ryV8txeMlKyxs+S+r
+         tuXA+VUKfiEz7gh9D8EF/aJ7zJL3mhFqiZxB6AL2a98l4enLblbZz5oNfJ+yhaPyRCaQ
+         RCSpRA34xniiuaAniw+8di6h6vSqgmzH55DcgCOeyXr30QAYxDnC4soKmqH7LB7+Loa7
+         aD6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=g6s7DJKavkP6Wy2PCKjnIW2IKB4P0bWvffwW3eMp+yI=;
-        b=vYGCgwf6pgmxdWMN+AdL0wgI5b8q4KnEXez5uRJSFuumEEdwQ1EIFt/KIQF0u4xCDr
-         9m0c4+g0saK0RC2clwwNEFciW2FdUV75b9IOO5PL1coDWTGqVsaVx2ZML4tSTvQ/nFQW
-         MMmxy8P0MEGyCAyOOgTbdCv5qJ9OVG2yUJQjAtC43Q8x6LgKyBt3GRvBrz63nknSUk5V
-         +i0aXShGa5TBWhqW2atuUdFxTAum0GGWPaeDogdQmkuWPuQKd85+mt+mWTCsNnOstKtv
-         V8wbTF0S+JO8QuSy0vV3U0fIML1qpRyCRG+5lyK46TRajJqrJalKT75SSZbgmEOKKV4O
-         iqtQ==
-X-Gm-Message-State: ACrzQf0OcMx7+BoXtccUeORfhPfpUP+xO215NmuoAGA8ENifJTP26a2b
-        1o+6wYLcNx295hLmJ2e+sI3rKlPvUhWusvyebiKN+Q==
-X-Google-Smtp-Source: AMsMyM46SP4qUvEeA8KOjyNhY32AbAj+OwOgWsw5GUBSdT76g50q1ZBZGMW18xC4yRrG4qFyC3mq/IM7gF91OyOBXLs=
-X-Received: by 2002:a17:906:6791:b0:78d:4051:969f with SMTP id
- q17-20020a170906679100b0078d4051969fmr338628ejp.171.1665002365425; Wed, 05
- Oct 2022 13:39:25 -0700 (PDT)
+        bh=G/SJy23pyHdTBOwqTvrrJjRP4JYmINx8osvDYRRfOiA=;
+        b=Sqrtco3puHrTX/LDgTm8BFlNIjzAxrmkumJFqLT9hq5AFp+2YUj4iLTVQrhjeeFV7j
+         mQr2Nulfnli1+sdVXK0eTa3h8vZdv+Xc/hqgptPBwQ5jF5L+S74l2VLnPwViBHtFxam6
+         Du/KGopESC6nMshw7y+DmwhJK00+z+j8yCs0eBbzuaCXpFZVHfRmfy8kO/+6qwoejflx
+         zB/fBk+3G5ZZXOBoFDIt6ZqzrxwJKFHUV2Pv9r4cKxUpywfzwoKLdf1kKWd0ef1mNOwH
+         j3U/rkWIjFCbpSP3m1NB5o9vNeLiYcKSrZj1hkkBI0goemZKcHTl3BclUl/U5eWSfqzx
+         83Fg==
+X-Gm-Message-State: ACrzQf12pDR5knt8QWHJy7FBGXNqPAWuY8N9nAgw+wLBhS4Kq0aNqd53
+        4GjcgtQfXD3nKiYcFcoMaxK0M+mE/Hs=
+X-Google-Smtp-Source: AMsMyM7uaIQVk5zGnmo7PkS8GSfpolbEaCPgcEymH0ZgxosWhQ7hqkxd8iG5Aq1/q5kpC4kIC/9AnQ==
+X-Received: by 2002:ae9:f205:0:b0:6bc:2d40:2f3d with SMTP id m5-20020ae9f205000000b006bc2d402f3dmr977651qkg.448.1665002435555;
+        Wed, 05 Oct 2022 13:40:35 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id y20-20020ac87c94000000b0038cdc487886sm3351624qtv.80.2022.10.05.13.40.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 13:40:33 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     stable@vger.kernel.org
+Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        linux-kernel@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM),
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH RESEND stable 5.4] perf tools: Fixup get_current_dir_name() compilation
+Date:   Wed,  5 Oct 2022 13:40:28 -0700
+Message-Id: <20221005204028.4066674-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220722171534.3576419-1-dlatypov@google.com> <20220722171534.3576419-4-dlatypov@google.com>
-In-Reply-To: <20220722171534.3576419-4-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 5 Oct 2022 16:39:14 -0400
-Message-ID: <CAFd5g47-EqGY4ZwaH_btjhweFSqjLZ=3cq8M26pvf8yuwL3Qhg@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] kunit: make kunit_kfree() not segfault on invalid inputs
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,33 +80,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 1:15 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> kunit_kfree() can only work on data ("resources") allocated by KUnit.
->
-> Currently for code like this,
-> > void *ptr = kmalloc(4, GFP_KERNEL);
-> > kunit_kfree(test, ptr);
-> kunit_kfree() will segfault.
->
-> It'll try and look up the kunit_resource associated with `ptr` and get a
-> NULL back, but it won't check for this. This means we also segfault if
-> you double-free.
->
-> Change kunit_kfree() so it'll notice these invalid pointers and respond
-> by failing the test.
->
-> Implementation: kunit_destroy_resource() does what kunit_kfree() does,
-> but is more generic and returns -ENOENT when it can't find the resource.
-> Sadly, unlike just letting it crash, this means we don't get a stack
-> trace. But kunit_kfree() is so infrequently used it shouldn't be hard to
-> track down the bad callsite anyways.
->
-> After this change, the above code gives:
-> > # example_simple_test: EXPECTATION FAILED at lib/kunit/test.c:702
-> > kunit_kfree: 00000000626ec200 already freed or not allocated by kunit
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
+From: Alexey Dobriyan <adobriyan@gmail.com>
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+commit 128dbd78bd673f9edbc4413072b23efb6657feb0 upstream
+
+strdup() prototype doesn't live in stdlib.h .
+
+Add limits.h for PATH_MAX definition as well.
+
+This fixes the build on Android.
+
+Signed-off-by: Alexey Dobriyan (SK hynix) <adobriyan@gmail.com>
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+Link: http://lore.kernel.org/lkml/YRukaQbrgDWhiwGr@localhost.localdomain
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+
+This patch is necessary to build perf with a musl-libc toolchain, not
+just Android's bionic.
+
+Resending because missed stable the first time
+
+ tools/perf/util/get_current_dir_name.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tools/perf/util/get_current_dir_name.c b/tools/perf/util/get_current_dir_name.c
+index b205d929245f..e68935e9ac8c 100644
+--- a/tools/perf/util/get_current_dir_name.c
++++ b/tools/perf/util/get_current_dir_name.c
+@@ -3,8 +3,9 @@
+ //
+ #ifndef HAVE_GET_CURRENT_DIR_NAME
+ #include "get_current_dir_name.h"
++#include <limits.h>
++#include <string.h>
+ #include <unistd.h>
+-#include <stdlib.h>
+ 
+ /* Android's 'bionic' library, for one, doesn't have this */
+ 
+-- 
+2.25.1
+
