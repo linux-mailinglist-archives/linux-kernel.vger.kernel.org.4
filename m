@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB605F581F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 18:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8485E5F5821
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 18:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbiJEQP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 12:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
+        id S230400AbiJEQPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 12:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiJEQPX (ORCPT
+        with ESMTP id S230321AbiJEQPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 5 Oct 2022 12:15:23 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597EB3BC5D;
-        Wed,  5 Oct 2022 09:15:19 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 295C19xd004643;
-        Wed, 5 Oct 2022 18:14:48 +0200
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C8B3F1D4;
+        Wed,  5 Oct 2022 09:15:21 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 295CkD8U028369;
+        Wed, 5 Oct 2022 18:14:49 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=selector1;
- bh=TaWebwaZTPXBsGFZGjCec27i6YbGFvojp105icGATgA=;
- b=8Uj7UhktbOmuMf79opOV/xYhqzCcbWq45+ieN084Q/YTLkEG9TaTMgzgnz6/E0Yhwfg0
- 9rkGbKD29DrssyrMNowh4lR0aEGo3PJV/SiUNZHyMLq7bH2uCdWpbpKWuTbzosWP5Rn6
- rLW6prHRp56kvehv/l6CUbRORNPK9Ny7ks0YjwjenIzk7Nsr72LrfujjUAZvEF4hnw66
- HSO8GQTBj5vST0F+e4hPckpTEXXqoopEScPImI7h2aHx/6VyfqsJ92nzzww5Tpgi5DX8
- lQcAFDqefT0DNjJ3ZJrfgfPfoEKaJDATEdvQNMq9wiDTzvSgaNcmt6ASWeNlPZg7B/I0 qQ== 
+ bh=TWtwkhpFfFIsRQnbF1+FDZ/TyYsZdJ0xXvFMnYZtWh4=;
+ b=vmPeMgm519h6h8Lwo/op17zA4JZYQ0jkHQq5SWMf324GiatmSN5TeIoFgSTI8/I/WT7l
+ j/0qr+WbW+Iwz+6vCQXWQDaoP+Fu9fD0nccDEHqa5UUPZDK0ce2pyp5KAKs4KHSnf45h
+ ZnnAwunp+zq8Zi6vMpcav5KOAgMuKf+Zsfh8yS5vVyKU5KO4uxawStJvYlcZeymL595c
+ GSYUoYLvkxV7uJPkF6fUJJ1kiaoJpq+s80Mghd5P/fYzla1W4u0N0KqO80xflwdqFqqd
+ 2dWzWazbkw9w3kgnd6ZaQLcOkLK9O0gbQwfBof8h7U4eaVj8PqMtH2QeA/u3yvpKr0kF uQ== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jxaym8q3h-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jxapc8puv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Oct 2022 18:14:48 +0200
+        Wed, 05 Oct 2022 18:14:49 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6759810002A;
-        Wed,  5 Oct 2022 18:14:43 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0623C100039;
+        Wed,  5 Oct 2022 18:14:44 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 61BCF235F12;
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F2D7E235F13;
         Wed,  5 Oct 2022 18:14:43 +0200 (CEST)
-Received: from localhost (10.75.127.116) by SHFDAG1NODE1.st.com (10.75.129.69)
+Received: from localhost (10.75.127.45) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Wed, 5 Oct
  2022 18:14:43 +0200
@@ -56,17 +56,17 @@ To:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [PATCH v3 1/8] iio: adc: stm32-adc: fix channel sampling time init
-Date:   Wed, 5 Oct 2022 18:14:17 +0200
-Message-ID: <20221005161424.4537-2-olivier.moysan@foss.st.com>
+Subject: [PATCH v3 2/8] dt-bindings: iio: adc: stm32-adc: add stm32mp13 compatibles
+Date:   Wed, 5 Oct 2022 18:14:18 +0200
+Message-ID: <20221005161424.4537-3-olivier.moysan@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221005161424.4537-1-olivier.moysan@foss.st.com>
 References: <20221005161424.4537-1-olivier.moysan@foss.st.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.75.127.116]
-X-ClientProxiedBy: GPXDAG2NODE5.st.com (10.75.127.69) To SHFDAG1NODE1.st.com
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
  (10.75.129.69)
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
@@ -80,51 +80,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix channel init for ADC generic channel bindings.
-In generic channel initialization, stm32_adc_smpr_init() is called
-to initialize channel sampling time. The "st,min-sample-time-ns"
-property is an optional property. If it is not defined,
-stm32_adc_smpr_init() is currently skipped.
-However stm32_adc_smpr_init() must always be called,
-to force a minimum sampling time for the internal channels,
-as the minimum sampling time is known.
-Make stm32_adc_smpr_init() call unconditional.
+Add st,stm32mp13-adc-core and st,stm32mp13-adc compatibles
+to support STM32MPU13 SoC.
 
-Fixes: 796e5d0b1e9b ("iio: adc: stm32-adc: use generic binding for sample-time")
+On STM32MP13x, each ADC peripheral has a single ADC block.
+These ADC peripherals, ADC1 and ADC2, are fully independent.
+
+Main characteristics of STM32MP13x ADC:
+- One interrupt line per ADC
+- 6 to 12 bits resolution
+- 19 channels
+
+ADC2 instance supports two extra internal channels VDDCPU and VDDQ_DDR.
+Add "vddcpu" and "vddq_ddr" internal channels names to the reserved
+labels list.
+
 Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
 ---
- drivers/iio/adc/stm32-adc.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ .../bindings/iio/adc/st,stm32-adc.yaml        | 68 ++++++++++++++++++-
+ 1 file changed, 65 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
-index 6256977eb7f7..3cda529f081d 100644
---- a/drivers/iio/adc/stm32-adc.c
-+++ b/drivers/iio/adc/stm32-adc.c
-@@ -2086,18 +2086,19 @@ static int stm32_adc_generic_chan_init(struct iio_dev *indio_dev,
- 		stm32_adc_chan_init_one(indio_dev, &channels[scan_index], val,
- 					vin[1], scan_index, differential);
+diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
+index fa8da42cb1e6..05265f381fde 100644
+--- a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
+@@ -27,6 +27,7 @@ properties:
+       - st,stm32f4-adc-core
+       - st,stm32h7-adc-core
+       - st,stm32mp1-adc-core
++      - st,stm32mp13-adc-core
  
-+		val = 0;
- 		ret = fwnode_property_read_u32(child, "st,min-sample-time-ns", &val);
- 		/* st,min-sample-time-ns is optional */
--		if (!ret) {
--			stm32_adc_smpr_init(adc, channels[scan_index].channel, val);
--			if (differential)
--				stm32_adc_smpr_init(adc, vin[1], val);
--		} else if (ret != -EINVAL) {
-+		if (ret && ret != -EINVAL) {
- 			dev_err(&indio_dev->dev, "Invalid st,min-sample-time-ns property %d\n",
- 				ret);
- 			goto err;
- 		}
+   reg:
+     maxItems: 1
+@@ -37,6 +38,7 @@ properties:
+         - stm32f4 and stm32h7 share a common ADC interrupt line.
+         - stm32mp1 has two separate interrupt lines, one for each ADC within
+           ADC block.
++        - stm32mp13 has an interrupt line per ADC block.
+     minItems: 1
+     maxItems: 2
  
-+		stm32_adc_smpr_init(adc, channels[scan_index].channel, val);
-+		if (differential)
-+			stm32_adc_smpr_init(adc, vin[1], val);
+@@ -180,6 +182,33 @@ allOf:
+           maximum: 36000000
+           default: 36000000
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: st,stm32mp13-adc-core
 +
- 		scan_index++;
- 	}
++    then:
++      properties:
++        clocks:
++          minItems: 1
++          maxItems: 2
++
++        clock-names:
++          items:
++            - const: bus
++            - const: adc
++          minItems: 1
++
++        interrupts:
++          items:
++            - description: ADC interrupt line
++
++        st,max-clk-rate-hz:
++          minimum: 150000
++          maximum: 75000000
++          default: 75000000
++
+ additionalProperties: false
  
+ required:
+@@ -208,6 +237,7 @@ patternProperties:
+           - st,stm32f4-adc
+           - st,stm32h7-adc
+           - st,stm32mp1-adc
++          - st,stm32mp13-adc
+ 
+       reg:
+         description: |
+@@ -229,7 +259,7 @@ patternProperties:
+       interrupts:
+         description: |
+           IRQ Line for the ADC instance. Valid values are:
+-            - 0 for adc@0
++            - 0 for adc@0 (single adc for stm32mp13)
+             - 1 for adc@100
+             - 2 for adc@200 (stm32f4 only)
+         maxItems: 1
+@@ -250,13 +280,14 @@ patternProperties:
+       assigned-resolution-bits:
+         description: |
+           Resolution (bits) to use for conversions:
+-            - can be 6, 8, 10 or 12 on stm32f4
++            - can be 6, 8, 10 or 12 on stm32f4 and stm32mp13
+             - can be 8, 10, 12, 14 or 16 on stm32h7 and stm32mp1
+ 
+       st,adc-channels:
+         description: |
+           List of single-ended channels muxed for this ADC. It can have up to:
+             - 16 channels, numbered from 0 to 15 (for in0..in15) on stm32f4
++            - 19 channels, numbered from 0 to 18 (for in0..in18) on stm32mp13.
+             - 20 channels, numbered from 0 to 19 (for in0..in19) on stm32h7 and
+               stm32mp1.
+         $ref: /schemas/types.yaml#/definitions/uint32-array
+@@ -322,7 +353,7 @@ patternProperties:
+           label:
+             description: |
+               Unique name to identify which channel this is.
+-              Reserved label names "vddcore", "vrefint" and "vbat"
++              Reserved label names "vddcore", "vddcpu", "vddq_ddr", "vrefint" and "vbat"
+               are used to identify internal channels with matching names.
+ 
+           diff-channels:
+@@ -419,6 +450,37 @@ patternProperties:
+               items:
+                 minimum: 40
+ 
++
++      - if:
++          properties:
++            compatible:
++              contains:
++                const: st,stm32mp13-adc
++
++        then:
++          properties:
++            reg:
++              const: 0x0
++
++            interrupts:
++              const: 0
++
++            assigned-resolution-bits:
++              enum: [6, 8, 10, 12]
++              default: 12
++
++            st,adc-channels:
++              minItems: 1
++              maxItems: 19
++              items:
++                minimum: 0
++                maximum: 18
++
++            st,min-sample-time-nsecs:
++              minItems: 1
++              maxItems: 19
++              items:
++                minimum: 40
+     additionalProperties: false
+ 
+     required:
 -- 
 2.25.1
 
