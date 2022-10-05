@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5928E5F5D26
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 01:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3BC5F5D2A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 01:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiJEXOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 19:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40296 "EHLO
+        id S229708AbiJEXRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 19:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiJEXO1 (ORCPT
+        with ESMTP id S229496AbiJEXRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 19:14:27 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E23E85A8F;
-        Wed,  5 Oct 2022 16:14:25 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id e62so358169yba.6;
-        Wed, 05 Oct 2022 16:14:25 -0700 (PDT)
+        Wed, 5 Oct 2022 19:17:39 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FDE857F8
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 16:17:36 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id p3-20020a17090a284300b0020a85fa3ffcso2745056pjf.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 16:17:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=70/0VDagsCspULHomdUzncRjIyjSrHpZkWTpvU+Mdnc=;
-        b=Ui9PfNfdZTtU6jOx6m29Brzt8qaGM1rmvPM64cfvS2965Q/AHw9kio3RsCdwhBE4lC
-         SdnMGpgwu7DK3fS1TdSxR0n4AgYpaWu5oClNpUoIqAq++IUqYCRrrfFTnEDO7paRM2ot
-         22yLQxTvSE7WVpkmgLiTda1RcywO8twpU/WeErxbh7A2WP2llw7oTFpNQHWXlqpevUP+
-         FpDUipPw5dAMuqT9pwKB8aAgM7HD2+K86YHYvfTie+uf93e45G3EFMu9U8J6gUOaF+d/
-         Aj2kaff5fDGPSZd28AjteAChmma/tGu1cSr36yuvfFpoHkki6JtXYJVLdy0GQlsELyVe
-         f2ow==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=P75Ww099jv9Om8MvN0r9mkkJ/YLMTXxMDNssXHfPeTs=;
+        b=Ybuf2pqfOwKO8dsPs7+4fy9VtKnrA5sy7q6SMqwQY7JSoYV3nH38VyFBbXxzP1lIjZ
+         N1Ug5aKLpaeYKGNe/ccQ/LiJL22vvFff83/VnHK7lREOW7WodXTSjEIiE4FWjwsBSjf5
+         LiCAhVGnPvxey8DWHe9voGZ2E0bBxmqHASAafOgURFunJlOxtKERdBzVIbDVEVhYXRLi
+         sFpnsVaFOqP5FiD9ki8kjBhaxGah1iCz87cjzfaMeHDBYlFIaK/GD9HtvFVlDgRygkUj
+         h19gRSXN2KX4veb+lB4qS3H4eMd65GwaQtDWH5dTcdUsO3kBEt/Q5GWZaO2oUFFqh+bL
+         n81g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=70/0VDagsCspULHomdUzncRjIyjSrHpZkWTpvU+Mdnc=;
-        b=Q1qcvsIyLwO/Z7sMk11VyRwP6hh/1t4bGuRSp8wnmwOzDGGlF5Cpjl8EdKJwL1Z3WV
-         pFWXWHsjBQ2zW4ORFq+WNDkV72IaZ7ZctE5SQXZvkN10yKMTCNEUCsyLsxVA0O03o3XI
-         TYFHPrynZkuFSRC794d2084CCXJVI03GQdiCuEWJZlsg9YlfgiPuhV+ErhEBHDC4f0xB
-         PzxQsERGClu0eoH8TZo4OsAySBHLDQEAGvrOSamWnatqQvTDdhS2X3cuI+Vm0Piwp4mR
-         NRJOjRgUUplQ4P66fOB2OFBMr9uNHeVlRI6wfVJCDja/rHjs51oc1WoVyBc8OfS+sY8X
-         0KUA==
-X-Gm-Message-State: ACrzQf3jgKAW382BY9wQt/h6q1VmiaC7qAp7suRX4GgtrY4EjZgBUKKA
-        geC2S6L1sqgd2XrHiaulQ1FGydkQHjbnYwAAUnI=
-X-Google-Smtp-Source: AMsMyM6I4s6UccUK4U+1a85yiHlmz50OFgQOtvzM1LTxzYeZI2wkrMEJsvjEnlINVZWw4sqPNxThXaEVdei6cZniuRg=
-X-Received: by 2002:a25:9e85:0:b0:6be:1725:91a8 with SMTP id
- p5-20020a259e85000000b006be172591a8mr2353790ybq.86.1665011664245; Wed, 05 Oct
- 2022 16:14:24 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P75Ww099jv9Om8MvN0r9mkkJ/YLMTXxMDNssXHfPeTs=;
+        b=O9zoucWLUb5VDdzBBQJv5mS1UhCu3bjSQDdcdS5Muv+R2AG00kqY1xtz4mVkHMCSvY
+         /J8/5hT25QDes8lwYSfywmqA3r44BSs/fuxlGr4s1AvEiAwo8jiXZudH9G+kJp+8i80a
+         e8qkthFdGI6Go/AAMuaPYCsUcLr2KGghWadqvItBokfu/YiII+hdcYDXkde5zYr1Gs2x
+         Lso9foQFVoYHlbrVZiFqai6iekxcN4tO1RmRao0XONXG+0xgy+ThF3rAvyv7UXL5bp+J
+         iFphLTJxLRqpzE+Hox0qZfKlsm8bfcIdsMtKyrvR1fXJG+WZil5RPVvQfZqcH/rdGIIQ
+         JVMA==
+X-Gm-Message-State: ACrzQf3bzPxMgnrKCKuyVIwZqAVCioBxx+vZvbpmVxrrS9xDIEUKL0hK
+        m3BJ/KnlD/v6JLAWQHDM3P/PzA==
+X-Google-Smtp-Source: AMsMyM5nR/ndnwW6VOCqawZxdmxfVnDGGFFfLAOceafLdHT1ZLCZNC3bCof7tEuiKgWHNYFSvr68wg==
+X-Received: by 2002:a17:902:834a:b0:17f:8514:ceec with SMTP id z10-20020a170902834a00b0017f8514ceecmr1590640pln.81.1665011856070;
+        Wed, 05 Oct 2022 16:17:36 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id s14-20020a17090302ce00b0017a09ebd1e2sm10926068plk.237.2022.10.05.16.17.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 16:17:35 -0700 (PDT)
+Date:   Wed, 5 Oct 2022 23:17:31 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     pbonzini@redhat.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86/mmu: use helper macro SPTE_ENT_PER_PAGE
+Message-ID: <Yz4Qi7cn7TWTWQjj@google.com>
+References: <20220913085452.25561-1-linmiaohe@huawei.com>
 MIME-Version: 1.0
-References: <20221004131750.2306251-1-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20221004131750.2306251-1-roberto.sassu@huaweicloud.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 5 Oct 2022 16:14:11 -0700
-Message-ID: <CAEf4BzYba-4gG8HRiAfrWTO9wo9tmB-5fB03zxOV=SCEqc800A@mail.gmail.com>
-Subject: Re: [RESEND][PATCH 0/6] Add _opts variant for bpf_*_get_fd_by_id()
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        shuah@kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913085452.25561-1-linmiaohe@huawei.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,51 +73,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 4, 2022 at 6:18 AM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> NOTE: resending with libbpf_get_fd_opts test added to deny list for s390x.
+On Tue, Sep 13, 2022, Miaohe Lin wrote:
+> Use helper macro SPTE_ENT_PER_PAGE to get the number of spte entries
+> per page. Minor readability improvement.
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
 
-it's not a resend if you change something in patches, it's a new
-version, please mark it appropriately with v2 instead of [RESEND]
+Reviewed-by: Sean Christopherson <seanjc@google.com>
 
->
-> Add the _opts variant for bpf_*_get_fd_by_id() functions, to be able to
-> pass to the kernel more options, when requesting a fd of an eBPF object to
-> the kernel.
->
-> Pass the options through a newly introduced structure, bpf_get_fd_opts,
-> which currently contains open_flags (the other two members are for
-> compatibility and for padding).
->
-> open_flags allows the caller to request specific permissions to access a
-> map (e.g. read-only). This is useful for example in the situation where a
-> map is write-protected.
->
-> Besides patches 2-6, which introduce the new variants and the data
-> structure, patch 1 fixes the LIBBPF_1.0.0 declaration in libbpf.map.
->
-> Roberto Sassu (6):
->   libbpf: Fix LIBBPF_1.0.0 declaration in libbpf.map
->   libbpf: Define bpf_get_fd_opts and introduce
->     bpf_map_get_fd_by_id_opts()
->   libbpf: Introduce bpf_prog_get_fd_by_id_opts()
->   libbpf: Introduce bpf_btf_get_fd_by_id_opts()
->   libbpf: Introduce bpf_link_get_fd_by_id_opts()
->   selftests/bpf: Add tests for _opts variants of bpf_*_get_fd_by_id()
->
->  tools/lib/bpf/bpf.c                           | 47 +++++++++-
->  tools/lib/bpf/bpf.h                           | 16 ++++
->  tools/lib/bpf/libbpf.map                      |  6 +-
->  tools/testing/selftests/bpf/DENYLIST.s390x    |  1 +
->  .../bpf/prog_tests/libbpf_get_fd_opts.c       | 88 +++++++++++++++++++
->  .../bpf/progs/test_libbpf_get_fd_opts.c       | 36 ++++++++
->  6 files changed, 189 insertions(+), 5 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_opts.c
->  create mode 100644 tools/testing/selftests/bpf/progs/test_libbpf_get_fd_opts.c
->
-> --
-> 2.25.1
->
+>  arch/x86/kvm/mmu/mmu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 858bc53cfab4..45c532d00f78 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -1645,7 +1645,7 @@ static int is_empty_shadow_page(u64 *spt)
+>  	u64 *pos;
+>  	u64 *end;
+>  
+> -	for (pos = spt, end = pos + PAGE_SIZE / sizeof(u64); pos != end; pos++)
+> +	for (pos = spt, end = pos + SPTE_ENT_PER_PAGE; pos != end; pos++)
+
+This is buried under MMU_DEBUG, and turning that on to compile test, which requires
+manually changing kernel code to enable, results in some minor warnings.  Given the
+existence of CONFIG_KVM_WERROR=y, I think it's safe to say this code hasn't been
+exercised in a very long time.  E.g. this is literally the first time I've actually
+enabled MMU_DEBUG.
+
+This particular check seems like it would be quite useful, but the pgprintk() and
+rmap_printk() hooks, not so much.  E.g. the knob is too coarse grained, and many
+of the prints now have tracepoints.
+
+So, unless someone actually actively uses MMU_DEBUG+dbg, I'm inclined to just delete
+pgprintk() and rmap_printk(), and then rename MMU_WARN_ON => KVM_MMU_WARN_ON and
+add a Kconfig for that, e.g. CONFIG_KVM_PROVE_MMU.
+
+Hmm, and maybe clean up this helper too, e.g. get rid of the pointer arithmetic,
+and take the full kvm_mmu_page so that the error message can print out things like
+the gfn (a host kernel pointer is going to be useless for debug).
+
+Thoughts?  Objections?
