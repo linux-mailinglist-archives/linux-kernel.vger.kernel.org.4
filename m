@@ -2,82 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F5C5F55B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 15:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32CD15F55B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Oct 2022 15:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbiJENjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 09:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
+        id S230215AbiJENkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 09:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbiJENj1 (ORCPT
+        with ESMTP id S229592AbiJENjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 09:39:27 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEF67B78F;
-        Wed,  5 Oct 2022 06:39:21 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-127dca21a7dso19857851fac.12;
-        Wed, 05 Oct 2022 06:39:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qh5g/jeg4IcMVIdYOAqzKtEWeQUG7j9eLKz+CVBRSTY=;
-        b=G0Yqom4ySGy0L7pQ4uB2OaPDOh36Gx8507Aqk1HMl04B6pAfKS8EYZQmbCcdW8BF6k
-         o+nhAPWslSfDrLIOXjDg+f7C9e6fWTiqaZpTD1qDvlY7E9JcapFTeol5jVLw+zeT5PDP
-         xqw7a7Nbae+ZkEZVB5p03CLv2Df112oWKCbXQioz2TKL0kg9RqKh/ILJ6SN3a4u3gSa8
-         uwKGkcvjOQorbr1meKJ9WKt7OgDPg7/j/CadT3A5PPE3GSoBnTPo79EOA6Gu3QZkhZnS
-         m7ofrszpVmCcBnMvo8dKhGINYtd6y0e+boF6B8J3DfD4+XLDgDDxlbeVCtEmbai7p1np
-         aCyQ==
-X-Gm-Message-State: ACrzQf2bkGbIngf3MikzKIx2WgDqahVgm3oA3/eT9SVj+pOrJzbucGGG
-        jaZ811/LQwFBJhy5cqaemy2e55686w==
-X-Google-Smtp-Source: AMsMyM5C6tFxD3JDoJ5tDFss5UAJmxP132Evy2zUMEZix7Ezd7j3BSP+YJYi8vnsTcxuy2maFgcD9g==
-X-Received: by 2002:a05:6870:f588:b0:131:3f4c:572c with SMTP id eh8-20020a056870f58800b001313f4c572cmr2638570oab.210.1664977160358;
-        Wed, 05 Oct 2022 06:39:20 -0700 (PDT)
-Received: from robh_at_kernel.org ([2607:fb90:5fee:ea3a:4239:ad4:650a:6e66])
-        by smtp.gmail.com with ESMTPSA id q123-20020a4a4b81000000b004763bad30f1sm3422743ooa.11.2022.10.05.06.39.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 06:39:20 -0700 (PDT)
-Received: (nullmailer pid 3284822 invoked by uid 1000);
-        Wed, 05 Oct 2022 13:39:18 -0000
-Date:   Wed, 5 Oct 2022 08:39:18 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        tinghan.shen@mediatek.com, linux@roeck-us.net,
-        linux-mediatek@lists.infradead.org, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, matthias.bgg@gmail.com,
-        wim@linux-watchdog.org, allen-kh.cheng@mediatek.com,
-        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
-        seiya.wang@mediatek.com
-Subject: Re: [PATCH 4/5] dt-bindings: watchdog: mediatek,mtk-wdt: Add
- compatible for MT6795
-Message-ID: <166497715817.3284769.9012408776318065890.robh@kernel.org>
-References: <20221005113517.70628-1-angelogioacchino.delregno@collabora.com>
- <20221005113517.70628-5-angelogioacchino.delregno@collabora.com>
+        Wed, 5 Oct 2022 09:39:49 -0400
+Received: from smtp-190b.mail.infomaniak.ch (smtp-190b.mail.infomaniak.ch [IPv6:2001:1600:3:17::190b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2496170
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 06:39:40 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MjFzt0tCWzMpnRs;
+        Wed,  5 Oct 2022 15:39:38 +0200 (CEST)
+Received: from philippe-pc.toradex.int (unknown [31.10.206.125])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4MjFzq6jXRzMpnPg;
+        Wed,  5 Oct 2022 15:39:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pschenker.ch;
+        s=20220412; t=1664977178;
+        bh=QMQX0DS3WXjc8rDGJOqWledK9ARkl+Fl6HYi6388JDg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UR1DmoFV0iZWJkSJz0DWIS3k+3ROZ0HG7fwjxPzF6DOHXf8DHw6oEKUlvGxF9b6Gn
+         /ixjLGqB8t5mLEaxy0fJIHTbxpNhbXByQkvQNzoBWL7Pfjj95GDAij6QC9AgDWOSKf
+         O3J09AfXG2p7aqh5TAR7o82YyHDxuxHkVbbwDn2I=
+From:   Philippe Schenker <dev@pschenker.ch>
+To:     devicetree@vger.kernel.org
+Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] arm: dts: colibri-imx6ull: keep peripherals disabled
+Date:   Wed,  5 Oct 2022 15:39:26 +0200
+Message-Id: <20221005133929.1243443-1-dev@pschenker.ch>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221005113517.70628-5-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 05 Oct 2022 13:35:16 +0200, AngeloGioacchino Del Regno wrote:
-> Add the mediatek,mt6795-wdt compatible.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+From: Philippe Schenker <philippe.schenker@toradex.com>
 
-Acked-by: Rob Herring <robh@kernel.org>
+Toradex does provide device-tree overlays to enable certain evaluation
+hardware. Keep the buses disabled by default to be enabled again with
+overlays.
+
+For customers including this device-tree this has also the advantage
+that the hardware we want by default running does not automatically
+enable signals on their end.
+
+Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
+---
+
+ arch/arm/boot/dts/imx6ull-colibri.dtsi | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6ull-colibri.dtsi b/arch/arm/boot/dts/imx6ull-colibri.dtsi
+index 577a424b0e1d..a4429ba1f2ae 100644
+--- a/arch/arm/boot/dts/imx6ull-colibri.dtsi
++++ b/arch/arm/boot/dts/imx6ull-colibri.dtsi
+@@ -21,7 +21,7 @@ backlight: backlight {
+ 		pinctrl-0 = <&pinctrl_gpio_bl_on>;
+ 		power-supply = <&reg_3v3>;
+ 		pwms = <&pwm4 0 5000000 1>;
+-		status = "okay";
++		status = "disabled";
+ 	};
+ 
+ 	gpio-keys {
+@@ -42,7 +42,7 @@ panel_dpi: panel-dpi {
+ 		compatible = "edt,et057090dhu";
+ 		backlight = <&backlight>;
+ 		power-supply = <&reg_3v3>;
+-		status = "okay";
++		status = "disabled";
+ 
+ 		port {
+ 			lcd_panel_in: endpoint {
+@@ -159,7 +159,7 @@ &i2c1 {
+ 	pinctrl-1 = <&pinctrl_i2c1_gpio>;
+ 	sda-gpios = <&gpio1 29 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+ 	scl-gpios = <&gpio1 28 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+-	status = "okay";
++	status = "disabled";
+ 
+ 	/* Atmel maxtouch controller */
+ 	atmel_mxt_ts: touchscreen@4a {
+@@ -202,6 +202,7 @@ ad7879_ts: touchscreen@2c {
+ 		adi,median-filter-size = /bits/ 8 <2>;
+ 		adi,averaging = /bits/ 8 <1>;
+ 		adi,conversion-interval = /bits/ 8 <255>;
++		status = "disabled";
+ 	};
+ };
+ 
+@@ -209,6 +210,7 @@ &lcdif {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_lcdif_dat
+ 		     &pinctrl_lcdif_ctrl>;
++	status = "disabled";
+ 
+ 	port {
+ 		lcdif_out: endpoint {
+-- 
+2.37.3
+
