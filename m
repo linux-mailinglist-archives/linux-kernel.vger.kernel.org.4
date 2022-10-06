@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D03C5F717D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 01:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 747A15F717F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 01:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbiJFXBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 19:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
+        id S232381AbiJFXBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 19:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbiJFXBQ (ORCPT
+        with ESMTP id S231803AbiJFXBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 19:01:16 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D1EFF8F9
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 16:01:15 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id o9-20020a17090a0a0900b0020ad4e758b3so3140495pjo.4
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 16:01:15 -0700 (PDT)
+        Thu, 6 Oct 2022 19:01:19 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD25AC4C03
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 16:01:16 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id w191so3395153pfc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 16:01:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cGJ0aXb4+6SLJXuBysL8NC2xxbfShZ/UoZmW53mcBQY=;
-        b=3OwzcldRJKjmccwp3k4qQk2ikxSeiRctYo/pRTDlhgsDnHVGqDF8Bdp3LBLimlB5Cu
-         SXyWm4Dxd0j/A+6YvO92wRVh779SFZbYurko2j7d2VSL1gqCDwXOVXltm6d+SBChEDlC
-         eEzyhZoVLVc5+461nJUPHG46ZUr+x/ux0uwShYT+WyOoOrrSo+jUwEt1ZvGWLs4dRQAH
-         dLOSwn7VnLgCzzamyccn3c31j7TAh++h5Uoc4z9/AjlUvY/EOo9lLYXTQfImumIdid3N
-         G74TuIat5Sun9TQmXRiZQ5chGFj+FEf9raiVQOH27Lvq2hZkCUEj5LNjN5zlcvRxZKFJ
-         UYJw==
+        bh=JN4miwGrMwTAr8vuA+CxQiPVjqHRbd4U4l+JJ7oe008=;
+        b=bcrYRt7ENzyQqEqdkeEh2jVNgPT+HtOKFNjyVDpQCOaxka2rLAZA0mYFCt8jEVsP9q
+         xb7HEqJtXIQHTfbG1BwA8rq1AzJyXInYHWwbuBrMxu4ZsgmSIyYgryLuSBLUfS3ItsOH
+         Copz/bAl6DO7fZnF9mZ19kUlHCQm0Z7zBzArKAiZzhJdWHhdgQ25gMi/JezS2AqvaPd6
+         eBJ7ZJXw9GgxciSIsDgPEnWE790GHED+KsDd/RiaXKNh7VTOnXB+HyEVz5IFemPh0ifU
+         DGmlOR09IQa6oXW+mlb1B7RavL3bTzsQFZPYvvw/EGfvXLF+5u0+gKE/gwgH4CardeGY
+         zUhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cGJ0aXb4+6SLJXuBysL8NC2xxbfShZ/UoZmW53mcBQY=;
-        b=0T4XmKtxIQRNF41v+wDG6q0u/vlwmoMidDVmtgtIDAf5ObqqTza79yzzVNSkf4AcHb
-         vJEuPicB2H48jh6ZH0wPM6zQAIAturYgKqwbpYpUZrhFr1c8m+CQJc6Mc9nE70Z9SwKd
-         0ZF8rmiwm2AJ4YtFjUSfjBpVhD1KMveBktqGNIT7mqX3NKa+j5N/c5zJs7asnavgaRBz
-         7PRVx5+T+TrErq3rMYXXTBpBleqpsJcozTPQGisA+sjarnQPSFd4UNVD7+xIhcVqAScf
-         5ooL5hDt0EG87VCx/O7hX7vUjmlFC5rlx22+k8p8q1Tn404CIhrlhS4XGxE9J/qeNE3e
-         Y/KA==
-X-Gm-Message-State: ACrzQf2XYsot6Ac+FxxzLiZG8S6t30D49CQyhMWFfeun+QmS7gpal4JI
-        KnBIn9VmIgTjUKWSLmqseTL2a7GAzOxDJA==
-X-Google-Smtp-Source: AMsMyM4V+aOL609DtBHKVFtR70u5RAzhg1viS1+xBjDUxh36dGV/8dI0hx2MEhKQvzg73DEfruHB2g==
-X-Received: by 2002:a17:90b:314b:b0:203:41c:2dbb with SMTP id ip11-20020a17090b314b00b00203041c2dbbmr2027298pjb.18.1665097275204;
-        Thu, 06 Oct 2022 16:01:15 -0700 (PDT)
+        bh=JN4miwGrMwTAr8vuA+CxQiPVjqHRbd4U4l+JJ7oe008=;
+        b=OGNd0d126EB9F8s2C75NaahbtILQsn+HsO8m/7SVRcCXwdjfyTEhALcnWrbJI4Xngq
+         SnB9ih8DeBWFKQ2zXGF5JFoeCDD+gg72AkfsfSQp6D/MLW1T/8ZGOTJzPMWpo5hY1qDu
+         av7IV0Yz5dp7YRDItGHVZnWGier17l0NCH5agfftEnsMNJKMsiGtLKguOMMwXU1U/Ol5
+         qEtN5hOHwYb7gQsBWJYRDSbodcPzEZirvVxyVlDZ5UY2WfNmnnosAVLvy+dKj4f0zpLu
+         fIBKja0OKSlj57Se/hsq44EqT8R6oiLB7aMJA3NTC0ktUo41MiicXIOEsdjsEXav7De3
+         5kHA==
+X-Gm-Message-State: ACrzQf3zMf86H027Y9R8Z9kWSJsT6kQb45kxA3/ROY090gSWHFQxYdem
+        Zgt4TyqRIWgA+jKclYgc9qOwE+pUcxHpoA==
+X-Google-Smtp-Source: AMsMyM5DjP+jdcNi/KFvE4nLeDxqjHarAcBvmSkPlN2JDkfqCSnbNKdupLT7X+Z2aYKvCxzcXxb/Yg==
+X-Received: by 2002:a63:5658:0:b0:43c:dac:9e24 with SMTP id g24-20020a635658000000b0043c0dac9e24mr1814480pgm.562.1665097276014;
+        Thu, 06 Oct 2022 16:01:16 -0700 (PDT)
 Received: from atishp.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id bc8-20020a656d88000000b0043a1c0a0ab1sm257309pgb.83.2022.10.06.16.01.14
+        by smtp.gmail.com with ESMTPSA id bc8-20020a656d88000000b0043a1c0a0ab1sm257309pgb.83.2022.10.06.16.01.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 16:01:14 -0700 (PDT)
+        Thu, 06 Oct 2022 16:01:15 -0700 (PDT)
 From:   Atish Patra <atishp@rivosinc.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Atish Patra <atishp@rivosinc.com>,
@@ -62,9 +62,9 @@ Cc:     Atish Patra <atishp@rivosinc.com>,
         Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
         Julian Andres Klode <julian.klode@canonical.com>,
         Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Subject: [v4 PATCH 2/3] RISC-V: Update image header
-Date:   Thu,  6 Oct 2022 16:00:50 -0700
-Message-Id: <20221006230051.185850-3-atishp@rivosinc.com>
+Subject: [v4 PATCH 3/3] RISC-V: Use common linux loader
+Date:   Thu,  6 Oct 2022 16:00:51 -0700
+Message-Id: <20221006230051.185850-4-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221006230051.185850-1-atishp@rivosinc.com>
 References: <20221006230051.185850-1-atishp@rivosinc.com>
@@ -79,93 +79,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the RISC-V Linux kernel image headers as per the current header.
-
-Reference:
-<Linux kernel source>/Documentation/riscv/boot-image-header.rst
-
-474efecb65dc: ("riscv: modify the Image header to improve compatibility with the ARM64 header")
+RISC-V doesn't have to do anything very different from other architectures
+to loader EFI stub linux kernel. As a result, just use the common linux
+loader instead of defining a RISC-V specific linux loader.
 
 Signed-off-by: Atish Patra <atishp@rivosinc.com>
 ---
- include/grub/riscv32/linux.h | 15 ++++++++-------
- include/grub/riscv64/linux.h | 21 +++++++++++++--------
- 2 files changed, 21 insertions(+), 15 deletions(-)
+ grub-core/Makefile.core.def    |  4 +--
+ grub-core/loader/riscv/linux.c | 59 ----------------------------------
+ 2 files changed, 2 insertions(+), 61 deletions(-)
+ delete mode 100644 grub-core/loader/riscv/linux.c
 
-diff --git a/include/grub/riscv32/linux.h b/include/grub/riscv32/linux.h
-index 512b777c8a41..de0dbdcd1be5 100644
---- a/include/grub/riscv32/linux.h
-+++ b/include/grub/riscv32/linux.h
-@@ -19,20 +19,21 @@
- #ifndef GRUB_RISCV32_LINUX_HEADER
- #define GRUB_RISCV32_LINUX_HEADER 1
- 
--#define GRUB_LINUX_RISCV_MAGIC_SIGNATURE 0x52534356 /* 'RSCV' */
-+#define GRUB_LINUX_RISCV_MAGIC_SIGNATURE 0x05435352 /* 'RSC\0x5' */
- 
--/* From linux/Documentation/riscv/booting.txt */
-+/* From linux/Documentation/riscv/boot-image-header.rst */
- struct linux_riscv_kernel_header
- {
-   grub_uint32_t code0;		/* Executable code */
-   grub_uint32_t code1;		/* Executable code */
--  grub_uint64_t text_offset;	/* Image load offset */
--  grub_uint64_t res0;		/* reserved */
--  grub_uint64_t res1;		/* reserved */
-+  grub_uint64_t text_offset;	/* Image load offset, little endian */
-+  grub_uint64_t image_size;	/* Effective Image size, little endian */
-+  grub_uint64_t flags;		/* kernel flags, little endian */
-+  grub_uint32_t version;	/* Version of this header */
-+  grub_uint32_t res1;		/* reserved */
-   grub_uint64_t res2;		/* reserved */
-   grub_uint64_t res3;		/* reserved */
--  grub_uint64_t res4;		/* reserved */
--  grub_uint32_t magic;		/* Magic number, little endian, "RSCV" */
-+  grub_uint32_t magic;		/* Magic number, little endian, "RSC\x05" */
-   grub_uint32_t hdr_offset;	/* Offset of PE/COFF header */
- };
- 
-diff --git a/include/grub/riscv64/linux.h b/include/grub/riscv64/linux.h
-index 3630c30fbf1a..ea77f8718222 100644
---- a/include/grub/riscv64/linux.h
-+++ b/include/grub/riscv64/linux.h
-@@ -19,23 +19,28 @@
- #ifndef GRUB_RISCV64_LINUX_HEADER
- #define GRUB_RISCV64_LINUX_HEADER 1
- 
--#define GRUB_LINUX_RISCV_MAGIC_SIGNATURE 0x52534356 /* 'RSCV' */
-+#include <grub/efi/pe32.h>
-+
-+#define GRUB_LINUX_RISCV_MAGIC_SIGNATURE 0x05435352 /* 'RSC\0x5' */
- 
- #define GRUB_EFI_PE_MAGIC	0x5A4D
- 
--/* From linux/Documentation/riscv/booting.txt */
-+/* From linux/Documentation/riscv/boot-image-header.rst */
- struct linux_riscv_kernel_header
- {
-   grub_uint32_t code0;		/* Executable code */
-   grub_uint32_t code1;		/* Executable code */
--  grub_uint64_t text_offset;	/* Image load offset */
--  grub_uint64_t res0;		/* reserved */
--  grub_uint64_t res1;		/* reserved */
-+  grub_uint64_t text_offset;	/* Image load offset, little endian */
-+  grub_uint64_t image_size;	/* Effective Image size, little endian */
-+  grub_uint64_t flags;		/* kernel flags, little endian */
-+  grub_uint32_t version;	/* Version of this header */
-+  grub_uint32_t res1;		/* reserved */
-   grub_uint64_t res2;		/* reserved */
--  grub_uint64_t res3;		/* reserved */
--  grub_uint64_t res4;		/* reserved */
--  grub_uint32_t magic;		/* Magic number, little endian, "RSCV" */
-+  grub_uint64_t magic;		/* magic (RISC-V specifc, deprecated)*/
-+  grub_uint32_t magic2;		/* Magic number 2 (to match the ARM64 'magic' field pos) */
-   grub_uint32_t hdr_offset;	/* Offset of PE/COFF header */
-+
-+  struct grub_coff_image_header coff_image_header;
- };
- 
- #define linux_arch_kernel_header linux_riscv_kernel_header
+diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
+index ce95c76eaffa..d6cb8a673e1b 100644
+--- a/grub-core/Makefile.core.def
++++ b/grub-core/Makefile.core.def
+@@ -1820,8 +1820,8 @@ module = {
+   arm_efi = loader/efi/linux.c;
+   arm_uboot = loader/arm/linux.c;
+   arm64 = loader/efi/linux.c;
+-  riscv32 = loader/riscv/linux.c;
+-  riscv64 = loader/riscv/linux.c;
++  riscv32 = loader/efi/linux.c;
++  riscv64 = loader/efi/linux.c;
+   common = loader/linux.c;
+   common = lib/cmdline.c;
+   enable = noemu;
+diff --git a/grub-core/loader/riscv/linux.c b/grub-core/loader/riscv/linux.c
+deleted file mode 100644
+index d17c488e118d..000000000000
+--- a/grub-core/loader/riscv/linux.c
++++ /dev/null
+@@ -1,59 +0,0 @@
+-/*
+- *  GRUB  --  GRand Unified Bootloader
+- *  Copyright (C) 2018  Free Software Foundation, Inc.
+- *
+- *  GRUB is free software: you can redistribute it and/or modify
+- *  it under the terms of the GNU General Public License as published by
+- *  the Free Software Foundation, either version 3 of the License, or
+- *  (at your option) any later version.
+- *
+- *  GRUB is distributed in the hope that it will be useful,
+- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- *  GNU General Public License for more details.
+- *
+- *  You should have received a copy of the GNU General Public License
+- *  along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
+- */
+-
+-#include <grub/command.h>
+-#include <grub/dl.h>
+-#include <grub/lib/cmdline.h>
+-
+-GRUB_MOD_LICENSE ("GPLv3+");
+-
+-static grub_err_t
+-grub_cmd_initrd (grub_command_t cmd __attribute__ ((unused)),
+-		 int argc __attribute__ ((unused)),
+-		 char *argv[] __attribute__ ((unused)))
+-{
+-  grub_error (GRUB_ERR_NOT_IMPLEMENTED_YET, N_("Linux not supported yet"));
+-
+-  return grub_errno;
+-}
+-
+-static grub_err_t
+-grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+-		int argc __attribute__ ((unused)),
+-		char *argv[] __attribute__ ((unused)))
+-{
+-  grub_error (GRUB_ERR_NOT_IMPLEMENTED_YET, N_("Linux not supported yet"));
+-
+-  return grub_errno;
+-}
+-
+-static grub_command_t cmd_linux, cmd_initrd;
+-
+-GRUB_MOD_INIT (linux)
+-{
+-  cmd_linux = grub_register_command ("linux", grub_cmd_linux, 0,
+-				     N_("Load Linux."));
+-  cmd_initrd = grub_register_command ("initrd", grub_cmd_initrd, 0,
+-				      N_("Load initrd."));
+-}
+-
+-GRUB_MOD_FINI (linux)
+-{
+-  grub_unregister_command (cmd_linux);
+-  grub_unregister_command (cmd_initrd);
+-}
 -- 
 2.25.1
 
