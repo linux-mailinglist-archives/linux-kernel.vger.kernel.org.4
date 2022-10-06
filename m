@@ -2,115 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30875F6975
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D01E45F6977
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbiJFOSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 10:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56096 "EHLO
+        id S229453AbiJFOTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 10:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231735AbiJFORa (ORCPT
+        with ESMTP id S232093AbiJFOSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 10:17:30 -0400
-Received: from mail-m118206.qiye.163.com (mail-m118206.qiye.163.com [115.236.118.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC8CC57241
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 07:15:02 -0700 (PDT)
-Received: from lyc-workstation.. (unknown [221.212.176.62])
-        by mail-m118206.qiye.163.com (HMail) with ESMTPA id 38763BE0B01;
-        Thu,  6 Oct 2022 22:14:58 +0800 (CST)
-From:   YingChi Long <me@inclyc.cn>
-To:     me@inclyc.cn
-Cc:     bp@alien8.de, chang.seok.bae@intel.com,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        ndesaulniers@google.com, pbonzini@redhat.com, tglx@linutronix.de,
-        x86@kernel.org, david.laight@aculab.com
-Subject: [PATCH v3] x86/fpu: use _Alignof to avoid UB in TYPE_ALIGN
-Date:   Thu,  6 Oct 2022 22:14:42 +0800
-Message-Id: <20221006141442.2475978-1-me@inclyc.cn>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220925153151.2467884-1-me@inclyc.cn>
-References: <20220925153151.2467884-1-me@inclyc.cn>
+        Thu, 6 Oct 2022 10:18:45 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3212A730;
+        Thu,  6 Oct 2022 07:16:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665065801; x=1696601801;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SRSJhz55xV1+L4C9oLmiiuZ+SV179r52gAePvbndvXk=;
+  b=UjJ4Ckpc5bfuOulutuTUrw7S8ch8oFSiCEDcQHYlUDJp0oqX28fhN017
+   7beKBzh0A8B6tBcb0efaOxLpoFhCPqilR1AZvifTdVAAmZTiRW0Lz0uDu
+   tE0ar8VNcqAH6+Rtkqbpu87wQXD2ZbPC5/zkAECFN0biHFIl/oIAuPN6d
+   FjawZ0c9aY6V48wd1dvGO8/kwrcGh5BpfshLIJ6cT4ibIXCqz9pBTEz8Z
+   d49/WuHzEwcvCr/2h9KPfoIX31gipEWI/RPLgXzr81ddVyowMxQGdJ9Lu
+   rh0y1f3n0D7njCiJ8xCEOP8AySjPu7I4O0CbkLlSzCwkqrlRQa6hzcs7Q
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="365393186"
+X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
+   d="scan'208";a="365393186"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 07:16:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="953633327"
+X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
+   d="scan'208";a="953633327"
+Received: from liuzhao-optiplex-7080.sh.intel.com (HELO localhost) ([10.239.160.132])
+  by fmsmga005.fm.intel.com with ESMTP; 06 Oct 2022 07:16:14 -0700
+Date:   Thu, 6 Oct 2022 22:21:43 +0800
+From:   Zhao Liu <zhao1.liu@linux.intel.com>
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
+        "K . Y . Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Zhenyu Wang <zhenyu.z.wang@intel.com>,
+        Zhao Liu <zhao1.liu@intel.com>
+Subject: Re: [PATCH] x86/hyperv: Replace kmap() with kmap_local_page()
+Message-ID: <Yz7kd9oTs2Zn4YD3@liuzhao-OptiPlex-7080>
+References: <20220928095640.626350-1-zhao1.liu@linux.intel.com>
+ <YzRVaJA0EyfcVisW@liuwe-devbox-debian-v2>
+ <YzqiSK/s/oExlSrb@liuwe-devbox-debian-v2>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFPN1dZLVlBSVdZDwkaFQgSH1lBWUJOGkpWQktITU1PHhgYQxlJVQIWExYaEhckFA4PWV
-        dZGBILWUFZSUlKVUlKSVVKTE1VTUlZV1kWGg8SFR0UWUFZT0tIVUpJS0NOTVVKS0tVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MD46Fgw6TjlOATYuM09POSxN
-        DghPFDpVSlVKTU1OS01OTUJCSk1CVTMWGhIXVRYeOxIVGBcCGFUYFUVZV1kSC1lBWUlJSlVJSklV
-        SkxNVU1JWVdZCAFZQUhOSU03Bg++
-X-HM-Tid: 0a83ada645d02d28kusn38763be0b01
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzqiSK/s/oExlSrb@liuwe-devbox-debian-v2>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-WG14 N2350 made very clear that it is an UB having type definitions with
-in "offsetof". This patch change the implementation of macro
-"TYPE_ALIGN" to builtin "_Alignof" to avoid undefined behavior.
+On Mon, Oct 03, 2022 at 08:50:16AM +0000, Wei Liu wrote:
+> Date: Mon, 3 Oct 2022 08:50:16 +0000
+> From: Wei Liu <wei.liu@kernel.org>
+> Subject: Re: [PATCH] x86/hyperv: Replace kmap() with kmap_local_page()
+> 
+> On Wed, Sep 28, 2022 at 02:08:40PM +0000, Wei Liu wrote:
+> > On Wed, Sep 28, 2022 at 05:56:40PM +0800, Zhao Liu wrote:
+> > > From: Zhao Liu <zhao1.liu@intel.com>
+> > > 
+> > > kmap() is being deprecated in favor of kmap_local_page()[1].
+> > > 
+> > > There are two main problems with kmap(): (1) It comes with an overhead as
+> > > mapping space is restricted and protected by a global lock for
+> > > synchronization and (2) it also requires global TLB invalidation when the
+> > > kmap's pool wraps and it might block when the mapping space is fully
+> > > utilized until a slot becomes available.
+> > > 
+> > > With kmap_local_page() the mappings are per thread, CPU local, can take
+> > > page faults, and can be called from any context (including interrupts).
+> > > It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+> > > the tasks can be preempted and, when they are scheduled to run again, the
+> > > kernel virtual addresses are restored and are still valid.
+> > > 
+> > > In the fuction hyperv_init() of hyperv/hv_init.c, the mapping is used in a
+> > > single thread and is short live. So, in this case, it's safe to simply use
+> > > kmap_local_page() to create mapping, and this avoids the wasted cost of
+> > > kmap() for global synchronization.
+> > > 
+> > 
+> > The kmap call in that function is not performance critical in any way,
+> > and at this point in the initialization process I don't expect there to
+> > be any contention, so the downside of kmap is not really a concern here.
+> > 
+> > That being said, kmap getting deprecated is a good enough reason to
+> > switch to kmap_local_page. And I appreciate this well-written,
+> > well-reasoned commit message.
+> > 
+> > I will apply it to hyperv-next later -- I doubt people will object to
+> > this change, but just in case.
+> 
+> Applied to hyperv-next. Thanks.
 
-I've grepped all source files to find any type definitions within
-"offsetof".
+Sorry Wei, based on Ira and Fabio's comments, do you agree me to send a
+follow on patch to remove that BUG_ON()? Or send the v2 patch?
 
-    offsetof\(struct .*\{ .*,
-
-This implementation of macro "TYPE_ALIGN" seemes to be the only case of
-type definitions within offsetof in the kernel codebase.
-
-I've made a clang patch that rejects any definitions within
-__builtin_offsetof (usually #defined with "offsetof"), and tested
-compiling with this patch, there are no error if this patch applied.
-
-ISO C11 _Alignof is subtly different from the GNU C extension
-__alignof__. __alignof__ is the preferred alignment and _Alignof the
-minimal alignment. For 'long long' on x86 these are 8 and 4
-respectively.
-
-The macro TYPE_ALIGN we're replacing has behavior that matches
-_Alignof rather than __alignof__.
-
-Signed-off-by: YingChi Long <me@inclyc.cn>
-Link: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2350.htm
-Link: https://godbolt.org/z/sPs1GEhbT
-Link: https://gcc.gnu.org/onlinedocs/gcc/Alignment.html
-Link: https://reviews.llvm.org/D133574
----
-v3:
-- commit message changes suggested by Nick and David
-
-v2: https://lore.kernel.org/all/20220927153338.4177854-1-me@inclyc.cn/
----
- arch/x86/kernel/fpu/init.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/kernel/fpu/init.c b/arch/x86/kernel/fpu/init.c
-index 621f4b6cac4a..de96c11e1fe9 100644
---- a/arch/x86/kernel/fpu/init.c
-+++ b/arch/x86/kernel/fpu/init.c
-@@ -133,9 +133,6 @@ static void __init fpu__init_system_generic(void)
- 	fpu__init_system_mxcsr();
- }
-
--/* Get alignment of the TYPE. */
--#define TYPE_ALIGN(TYPE) offsetof(struct { char x; TYPE test; }, test)
--
- /*
-  * Enforce that 'MEMBER' is the last field of 'TYPE'.
-  *
-@@ -143,8 +140,8 @@ static void __init fpu__init_system_generic(void)
-  * because that's how C aligns structs.
-  */
- #define CHECK_MEMBER_AT_END_OF(TYPE, MEMBER) \
--	BUILD_BUG_ON(sizeof(TYPE) != ALIGN(offsetofend(TYPE, MEMBER), \
--					   TYPE_ALIGN(TYPE)))
-+	BUILD_BUG_ON(sizeof(TYPE) !=         \
-+		     ALIGN(offsetofend(TYPE, MEMBER), _Alignof(TYPE)))
-
- /*
-  * We append the 'struct fpu' to the task_struct:
---
-2.35.1
-
+Thanks,
+Zhao
