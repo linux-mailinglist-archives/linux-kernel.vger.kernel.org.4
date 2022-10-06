@@ -2,128 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960F85F626B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B255F626D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:18:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbiJFISH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 04:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
+        id S230340AbiJFISl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 04:18:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbiJFISE (ORCPT
+        with ESMTP id S230520AbiJFISc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 04:18:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E6A77543
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 01:18:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A1F3B82037
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 08:17:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1B29C43140
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 08:17:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665044277;
-        bh=sPYhHQSN08fPJZJXmiJjpYtAxcNKjsgm0ubxG7uLtzk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tI0J0WnfQHk3JuV8Eq24CSgeSDYJv+GEEjqpHDqS4KWNOPgl6e37MMRL1dHqRmAmv
-         IF8oLcgN4nQITykoZuxmIqUEsSouqVUbgoqYcOUQSVeY5K2swQPOlmVZ4la4BYmyA1
-         DhmuSda7I+L4XV72hbwXnD6I5na8Jba6TLAFtgYnNnth0f8bHtc/LNu1aRB6FVqmKo
-         C0HRW/As50FLmKhowOAzu4lF7+AWM1JBL4UKgSXucMKN8tLa3Ivosfw7k08ORsxIQE
-         tJv2PedMdp5K/Tb2KECjkh6gDp2FO/Smaw3O35V9BHAKhSYYh1hfgZeIRHjXI9urIa
-         it1EW5pIBIUEg==
-Received: by mail-lj1-f181.google.com with SMTP id s10so1352323ljp.5
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 01:17:57 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3Woo+d+fkrVa7SXYBjVbrtVQe7n497WET+bHldjYPPqcOZTYtW
-        9BHIwlCVQE/N40q1jh9aLMw0LJ8qzPnf7W0CCl0=
-X-Google-Smtp-Source: AMsMyM62fsqxdMGVPNXQrsbsP3/xEv3hgBZrQ63BQpH7bLk3B3O1gEJGiImPdYuXk2ns+3ueyE95/quvsAAb50VuxKw=
-X-Received: by 2002:a2e:b7d5:0:b0:26d:e725:bd35 with SMTP id
- p21-20020a2eb7d5000000b0026de725bd35mr1193586ljo.69.1665044275730; Thu, 06
- Oct 2022 01:17:55 -0700 (PDT)
+        Thu, 6 Oct 2022 04:18:32 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF7577543
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 01:18:31 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ogM4x-0002S2-VO; Thu, 06 Oct 2022 10:18:04 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 7C604F5F5E;
+        Thu,  6 Oct 2022 08:18:02 +0000 (UTC)
+Date:   Thu, 6 Oct 2022 10:18:01 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, dg@emlix.com, j.zink@pengutronix.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, system@metrotek.ru,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH v14 1/2] fpga: lattice-sysconfig-spi: add Lattice
+ sysCONFIG FPGA manager
+Message-ID: <20221006081801.xqnnvn6k7rmjokvt@pengutronix.de>
+References: <20221006074449.24082-1-i.bornyakov@metrotek.ru>
+ <20221006074449.24082-2-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-References: <20221006075542.2658-1-jszhang@kernel.org> <20221006075542.2658-2-jszhang@kernel.org>
-In-Reply-To: <20221006075542.2658-2-jszhang@kernel.org>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 6 Oct 2022 10:17:44 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEWm9WuvxYN8ks09m3Rv+pt1Hd7=DcXuTwm+Etw2Y-KOQ@mail.gmail.com>
-Message-ID: <CAMj1kXEWm9WuvxYN8ks09m3Rv+pt1Hd7=DcXuTwm+Etw2Y-KOQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] arm64: jump_label: mark arguments as const to satisfy
- asm constraints
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cstclkxk6l4zuxkt"
+Content-Disposition: inline
+In-Reply-To: <20221006074449.24082-2-i.bornyakov@metrotek.ru>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Oct 2022 at 10:05, Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> Inspired by x86 commit 864b435514b2("x86/jump_label: Mark arguments as
-> const to satisfy asm constraints"), mark arch_static_branch()'s and
-> arch_static_branch_jump()'s arguments as const to satisfy asm
-> constraints. And Steven in [1] also pointed out that "The "i"
-> constraint needs to be a constant."
->
-> Tested with building a simple external kernel module with "O0".
->
-> [1]https://lore.kernel.org/all/20210212094059.5f8d05e8@gandalf.local.home/
->
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+
+--cstclkxk6l4zuxkt
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 06.10.2022 10:44:48, Ivan Bornyakov wrote:
+> Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+> slave SPI sysCONFIG interface.
+>=20
+> sysCONFIG interface core functionality is separate from both ECP5 and
+> SPI specifics, so support for other FPGAs with different port types can
+> be added in the future.
+>=20
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
 > ---
->  arch/arm64/include/asm/jump_label.h | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/arm64/include/asm/jump_label.h b/arch/arm64/include/asm/jump_label.h
-> index cea441b6aa5d..48ddc0f45d22 100644
-> --- a/arch/arm64/include/asm/jump_label.h
-> +++ b/arch/arm64/include/asm/jump_label.h
-> @@ -15,8 +15,8 @@
->
->  #define JUMP_LABEL_NOP_SIZE            AARCH64_INSN_SIZE
->
-> -static __always_inline bool arch_static_branch(struct static_key *key,
-> -                                              bool branch)
-> +static __always_inline bool arch_static_branch(struct static_key * const key,
-> +                                              const bool branch)
->  {
->         asm_volatile_goto(
->                 "1:     nop                                     \n\t"
 
-Is this still necessary if we specify the constraints in a more
-reasonable manner:
+[...]
 
- "      .quad           %c0 - . + %1            \n\t"
- :  :  "i"(key), "i"(branch) :  : l_yes);
+> +static int sysconfig_spi_bitstream_burst_init(struct sysconfig_priv *pri=
+v)
+> +{
+> +	const u8 lsc_bitstream_burst[] =3D SYSCONFIG_LSC_BITSTREAM_BURST;
 
-instead of the horrid hack with the char* cast and using a bool as an
-array index?
+I think you're not allowed to use stack memory for SPI transfers. Better
+clarify this with the SPI people.
 
+> +	struct spi_device *spi =3D to_spi_device(priv->dev);
+> +	struct spi_transfer xfer =3D {
+> +		.tx_buf =3D lsc_bitstream_burst,
+> +		.len =3D sizeof(lsc_bitstream_burst),
+> +		.cs_change =3D 1,
+> +	};
+> +	struct spi_message msg;
+> +	int ret;
+> +
+> +	spi_message_init_with_transfers(&msg, &xfer, 1);
+> +
+> +	/*
+> +	 * Lock SPI bus for exclusive usage until FPGA programming is done.
+> +	 * SPI bus will be released in sysconfig_spi_bitstream_burst_complete().
+> +	 */
+> +	spi_bus_lock(spi->controller);
+> +
+> +	ret =3D spi_sync_locked(spi, &msg);
+> +	if (ret)
+> +		spi_bus_unlock(spi->controller);
+> +
+> +	return ret;
+> +}
 
+regards,
+Marc
 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-> @@ -32,8 +32,8 @@ static __always_inline bool arch_static_branch(struct static_key *key,
->         return true;
->  }
->
-> -static __always_inline bool arch_static_branch_jump(struct static_key *key,
-> -                                                   bool branch)
-> +static __always_inline bool arch_static_branch_jump(struct static_key * const key,
-> +                                                   const bool branch)
->  {
->         asm_volatile_goto(
->                 "1:     b               %l[l_yes]               \n\t"
-> --
-> 2.37.2
->
+--cstclkxk6l4zuxkt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmM+jzYACgkQrX5LkNig
+013jTQf/W1QkhJsjQBwilMHgV5rq0CQ0bnolb+yuXRoE9sEDr34/oExbkJJ/PKbz
+FTDUXsv05ZZIdSDuLKmLCwRypTW2vJXQT5fTUNUIAs/DBZZZBJYrROXyeGbauhW3
+Ph67IMnJM7D45cCX2Q8r5yA0OkFIqm2s/jkIQvfG9GAtU5if6CHnSqXyhqBfrl90
+33EOOFjdP8P5Vxq13z2B9fH81PcaEUVrsvGIYS+hrnnTSQ3BQPkjDjJzukucSxIw
+480927VcumzgUfSuUVNZWme/qPnlQoaKaUCTQJxyuZgPoX3MomsWybzFRCLrjYxp
+ScEO6jcg2J/euusBd31G8wumdmLYlA==
+=XPet
+-----END PGP SIGNATURE-----
+
+--cstclkxk6l4zuxkt--
