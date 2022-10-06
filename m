@@ -2,237 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1415F5D88
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 02:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E527D5F5D8D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 02:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiJFALf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 20:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60492 "EHLO
+        id S229517AbiJFAO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 20:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiJFALb (ORCPT
+        with ESMTP id S229722AbiJFAOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 20:11:31 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E612232072;
-        Wed,  5 Oct 2022 17:11:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665015090; x=1696551090;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=QfbB1xck2NZlRA+BREh90ksDTDh4H6hsxrQLHLKAXwM=;
-  b=UplKDUe51F5lIhaVN0c86cqnee1ohEc7CJ+QGa6ejBpKjDiyEmUzhUbR
-   Cv9lkEpyEaO7L8SRpBgwWKDB6N+dtpas5t0LATxP8Zy1yLwvVMW1Ym9r3
-   MAQWcJ9FQXZUlZJ5Mh/9d2CI2QSan0g4b5xEPX+U7RxCOllaKdY6SIwFa
-   bfAs0OgH7MLrwGoeO7RpZ7cV17g8WXuPqe2vEIwofAA3xRnbwUKAUizte
-   73rYxuyzQv1WEA0hsreNB0ao4x7A3mnaZVfIm74nGXxRELtNf+QiT774u
-   PObXYZglkcNOQMNxznRj2GtBzD4EWhNFaKHknVR4KlwKyKXFNZZeBzP4W
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="303280938"
-X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
-   d="scan'208";a="303280938"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 17:11:30 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="766941964"
-X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
-   d="scan'208";a="766941964"
-Received: from vcostago-desk1.jf.intel.com (HELO vcostago-desk1) ([10.54.70.10])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 17:11:30 -0700
-From:   Vinicius Costa Gomes <vinicius.gomes@intel.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>
-Subject: Re: [PATCH net] Revert "net/sched: taprio: make qdisc_leaf() see
- the per-netdev-queue pfifo child qdiscs"
-In-Reply-To: <20221004220100.1650558-1-vladimir.oltean@nxp.com>
-References: <20221004220100.1650558-1-vladimir.oltean@nxp.com>
-Date:   Wed, 05 Oct 2022 17:11:30 -0700
-Message-ID: <87zge9olot.fsf@intel.com>
+        Wed, 5 Oct 2022 20:14:23 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC0D3678D
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 17:14:22 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id t12-20020a17090a3b4c00b0020b04251529so186773pjf.5
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 17:14:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NPRVzBaVZ9YyNu6FLenRmgIhaa2hp6qDkfP+CaVAIGk=;
+        b=mXMNHH5XOl9a3BpyRf0OW6UGuW1+o3c6nzSKeK5JBv9QS9paVtX4nkcuw6ilwpO8M9
+         pTD6cSMXs+0UvLHDnlJ4F4/rsxZfru1+vLHH/UfKYRY2y1BXCwsA4cs2LCOCcLGbJ48t
+         9Dc0pS8GCk+589pZrnZCC4pCk77x7UkKvxioO7XEHs1YTrBJLoT2dwArISPIUhXvM3yY
+         /ZF6wWLK/ghCYPh397SdcvDfclw+HCck00Nhaf5skY2HA/6pCZvNqKc8cj/29lGeZaGw
+         JepT+QwpU9qas/Rpba6GzdH4qUD/MJSh/l10+RskCMaNwY0GqnMejOC32nh0dn/mtALK
+         VWpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NPRVzBaVZ9YyNu6FLenRmgIhaa2hp6qDkfP+CaVAIGk=;
+        b=UXJKnMYSk14EANtjzF/0Dl0XfSVAahnnMfAEXIFsXdb1OrP2msablRRH8fPbUmzH7L
+         M6Y/tRbKytkglHiBGLlrykkC9EkevztvXao4Nl3xNX4L8OKrESNjrmZp4QdYm/tYAuvW
+         j7ylvXTsIn3xc79eFKcUo8VLsoSAZBqt1UsRpWQYHKJnek1IgGq0s8JndVaAgVQ52w3p
+         D6kiXIeQvRQ15hIglC/CEBtQAOo15Bt7JgZF06Jn0VM6MUjqT8bKfWRsHzslP50t8jI9
+         abNjV13MPftBBs9WW07f+ORsnIa81q0qD9tY8V6B5OYCdKeAyrCs4fQ/ZtYB74TaiuN1
+         5e9A==
+X-Gm-Message-State: ACrzQf0o3RWpJdbAw5eScascRcXzHyEZUQouvPs0y/rZNRT6N1r/We6a
+        uEWIFyjhmI4s4SL6KjpS1pAZQw==
+X-Google-Smtp-Source: AMsMyM4gI1s6pO1AYZYByn4NE7gj7vhUN+L+WWuO0l2WGy1l8zPvW7d9eNAjW0MNj62V9rNRPtdzlw==
+X-Received: by 2002:a17:902:bd05:b0:179:bbad:acff with SMTP id p5-20020a170902bd0500b00179bbadacffmr1771135pls.170.1665015261532;
+        Wed, 05 Oct 2022 17:14:21 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id t24-20020a17090a449800b001f8c532b93dsm1691353pjg.15.2022.10.05.17.14.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 17:14:21 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 00:14:17 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zhao Liu <zhao1.liu@linux.intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
+        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
+        Zhenyu Wang <zhenyu.z.wang@intel.com>,
+        Zhao Liu <zhao1.liu@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH v2] KVM: SVM: Replace kmap_atomic() with kmap_local_page()
+Message-ID: <Yz4d2cXYi91UQT0Y@google.com>
+References: <20220928092748.463631-1-zhao1.liu@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220928092748.463631-1-zhao1.liu@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vladimir Oltean <vladimir.oltean@nxp.com> writes:
+On Wed, Sep 28, 2022, Zhao Liu wrote:
+> From: Zhao Liu <zhao1.liu@intel.com>
+> 
+> The use of kmap_atomic() is being deprecated in favor of
+> kmap_local_page()[1].
+> 
+> The main difference between kmap_atomic() and kmap_local_page() is the
+> latter allows pagefaults and preemption.
 
-> taprio_attach() has this logic at the end, which should have been
-> removed with the blamed patch (which is now being reverted):
->
-> 	/* access to the child qdiscs is not needed in offload mode */
-> 	if (FULL_OFFLOAD_IS_ENABLED(q->flags)) {
-> 		kfree(q->qdiscs);
-> 		q->qdiscs = NULL;
-> 	}
->
-> because otherwise, we make use of q->qdiscs[] even after this array was
-> deallocated, namely in taprio_leaf(). Therefore, whenever one would try
-> to attach a valid child qdisc to a fully offloaded taprio root, one
-> would immediately dereference a NULL pointer.
->
-> $ tc qdisc replace dev eno0 handle 8001: parent root taprio \
-> 	num_tc 8 \
-> 	map 0 1 2 3 4 5 6 7 \
-> 	queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 \
-> 	max-sdu 0 0 0 0 0 200 0 0 \
-> 	base-time 200 \
-> 	sched-entry S 80 20000 \
-> 	sched-entry S a0 20000 \
-> 	sched-entry S 5f 60000 \
-> 	flags 2
-> $ max_frame_size=1500
-> $ data_rate_kbps=20000
-> $ port_transmit_rate_kbps=1000000
-> $ idleslope=$data_rate_kbps
-> $ sendslope=$(($idleslope - $port_transmit_rate_kbps))
-> $ locredit=$(($max_frame_size * $sendslope / $port_transmit_rate_kbps))
-> $ hicredit=$(($max_frame_size * $idleslope / $port_transmit_rate_kbps))
-> $ tc qdisc replace dev eno0 parent 8001:7 cbs \
-> 	idleslope $idleslope \
-> 	sendslope $sendslope \
-> 	hicredit $hicredit \
-> 	locredit $locredit \
-> 	offload 0
->
-> Unable to handle kernel NULL pointer dereference at virtual address 0000000000000030
-> pc : taprio_leaf+0x28/0x40
-> lr : qdisc_leaf+0x3c/0x60
-> Call trace:
->  taprio_leaf+0x28/0x40
->  tc_modify_qdisc+0xf0/0x72c
->  rtnetlink_rcv_msg+0x12c/0x390
->  netlink_rcv_skb+0x5c/0x130
->  rtnetlink_rcv+0x1c/0x2c
->
-> The solution is not as obvious as the problem. The code which deallocates
-> q->qdiscs[] is in fact copied and pasted from mqprio, which also
-> deallocates the array in mqprio_attach() and never uses it afterwards.
->
-> Therefore, the identical cleanup logic of priv->qdiscs[] that
-> mqprio_destroy() has is deceptive because it will never take place at
-> qdisc_destroy() time, but just at raw ops->destroy() time (otherwise
-> said, priv->qdiscs[] do not last for the entire lifetime of the mqprio
-> root), but rather, this is just the twisted way in which the Qdisc API
-> understands error path cleanup should be done (Qdisc_ops :: destroy() is
-> called even when Qdisc_ops :: init() never succeeded).
->
-> Side note, in fact this is also what the comment in mqprio_init() says:
->
-> 	/* pre-allocate qdisc, attachment can't fail */
->
-> Or reworded, mqprio's priv->qdiscs[] scheme is only meant to serve as
-> data passing between Qdisc_ops :: init() and Qdisc_ops :: attach().
->
-> [ this comment was also copied and pasted into the initial taprio
->   commit, even though taprio_attach() came way later ]
->
-> The problem is that taprio also makes extensive use of the q->qdiscs[]
-> array in the software fast path (taprio_enqueue() and taprio_dequeue()),
-> but it does not keep a reference of its own on q->qdiscs[i] (you'd think
-> that since it creates these Qdiscs, it holds the reference, but nope,
-> this is not completely true).
->
-> To understand the difference between taprio_destroy() and mqprio_destroy()
-> one must look before commit 13511704f8d7 ("net: taprio offload: enforce
-> qdisc to netdev queue mapping"), because that just muddied the waters.
->
-> In the "original" taprio design, taprio always attached itself (the root
-> Qdisc) to all netdev TX queues, so that dev_qdisc_enqueue() would go
-> through taprio_enqueue().
->
-> It also called qdisc_refcount_inc() on itself for as many times as there
-> were netdev TX queues, in order to counter-balance what tc_get_qdisc()
-> does when destroying a Qdisc (simplified for brevity below):
->
-> 	if (n->nlmsg_type == RTM_DELQDISC)
-> 		err = qdisc_graft(dev, parent=NULL, new=NULL, q, extack);
->
-> qdisc_graft(where "new" is NULL so this deletes the Qdisc):
->
-> 	for (i = 0; i < num_q; i++) {
-> 		struct netdev_queue *dev_queue;
->
-> 		dev_queue = netdev_get_tx_queue(dev, i);
->
-> 		old = dev_graft_qdisc(dev_queue, new);
-> 		if (new && i > 0)
-> 			qdisc_refcount_inc(new);
->
-> 		qdisc_put(old);
-> 		~~~~~~~~~~~~~~
-> 		this decrements taprio's refcount once for each TX queue
-> 	}
->
-> 	notify_and_destroy(net, skb, n, classid,
-> 			   rtnl_dereference(dev->qdisc), new);
-> 			   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 			   and this finally decrements it to zero,
-> 			   making qdisc_put() call qdisc_destroy()
->
-> The q->qdiscs[] created using qdisc_create_dflt() (or their
-> replacements, if taprio_graft() was ever to get called) were then
-> privately freed by taprio_destroy().
->
-> This is still what is happening after commit 13511704f8d7 ("net: taprio
-> offload: enforce qdisc to netdev queue mapping"), but only for software
-> mode.
->
-> In full offload mode, the per-txq "qdisc_put(old)" calls from
-> qdisc_graft() now deallocate the child Qdiscs rather than decrement
-> taprio's refcount. So when notify_and_destroy(taprio) finally calls
-> taprio_destroy(), the difference is that the child Qdiscs were already
-> deallocated.
->
-> And this is exactly why the taprio_attach() comment "access to the child
-> qdiscs is not needed in offload mode" is deceptive too. Not only the
-> q->qdiscs[] array is not needed, but it is also necessary to get rid of
-> it as soon as possible, because otherwise, we will also call qdisc_put()
-> on the child Qdiscs in qdisc_destroy() -> taprio_destroy(), and this
-> will cause a nasty use-after-free/refcount-saturate/whatever.
->
-> In short, the problem is that since the blamed commit, taprio_leaf()
-> needs q->qdiscs[] to not be freed by taprio_attach(), while qdisc_destroy()
-> -> taprio_destroy() does need q->qdiscs[] to be freed by taprio_attach()
-> for full offload. Fixing one problem triggers the other.
->
-> All of this can be solved by making taprio keep its q->qdiscs[i] with a
-> refcount elevated at 2 (in offloaded mode where they are attached to the
-> netdev TX queues), both in taprio_attach() and in taprio_graft(). The
-> generic qdisc_graft() would just decrement the child qdiscs' refcounts
-> to 1, and taprio_destroy() would give them the final coup de grace.
->
-> However the rabbit hole of changes is getting quite deep, and the
-> complexity increases. The blamed commit was supposed to be a bug fix in
-> the first place, and the bug it addressed is not so significant so as to
-> justify further rework in stable trees. So I'd rather just revert it.
-> I don't know enough about multi-queue Qdisc design to make a proper
-> judgement right now regarding what is/isn't idiomatic use of Qdisc
-> concepts in taprio. I will try to study the problem more and come with a
-> different solution in net-next.
->
-> Fixes: 1461d212ab27 ("net/sched: taprio: make qdisc_leaf() see the per-netdev-queue pfifo child qdiscs")
-> Reported-by: Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>
-> Reported-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Uber nit, I would phrase this as saying that local mappings don't disable
+page faults and preemption, which is slightly different than stating that they
+allow pagefaults/preemption.  E.g. if preemption is already disabled.
+
+> There're 2 reasons we can use kmap_local_page() here:
+> 1. SEV is 64-bit only and kmap_locla_page() doesn't disable migration in
+
+Nit, s/kmap_locla_page/kmap_local_page
+
+For future reference, even better would be to use human language after "introducing"
+the functions, e.g.
+
+  The main difference between atomic and local mappings is that local
+  mappings don't disable page faults or preemption.
+
+Obviously that doesn't magically prevent typos, but it does make the changelog
+easier to read (IMO).
+
+> this case, but here the function clflush_cache_range() uses CLFLUSHOPT
+> instruction to flush, and on x86 CLFLUSHOPT is not CPU-local and flushes
+> the page out of the entire cache hierarchy on all CPUs (APM volume 3,
+> chapter 3, CLFLUSHOPT). So there's no need to disable preemption to ensure
+> CPU-local.
+> 2. clflush_cache_range() doesn't need to disable pagefault and the mapping
+> is still valid even if sleeps. This is also true for sched out/in when
+> preempted.
+> 
+> In addition, though kmap_local_page() is a thin wrapper around
+> page_address() on 64-bit, kmap_local_page() should still be used here in
+> preference to page_address() since page_address() isn't suitable to be used
+> in a generic function (like sev_clflush_pages()) where the page passed in
+> is not easy to determine the source of allocation. Keeping the kmap* API in
+> place means it can be used for things other than highmem mappings[2].
+> 
+> Therefore, sev_clflush_pages() is a function that should use
+> kmap_local_page() in place of kmap_atomic().
+> 
+> Convert the calls of kmap_atomic() / kunmap_atomic() to kmap_local_page() /
+> kunmap_local().
+> 
+> [1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com
+> [2]: https://lore.kernel.org/lkml/5d667258-b58b-3d28-3609-e7914c99b31b@intel.com/
+> 
+> Suggested-by: Dave Hansen <dave.hansen@intel.com>
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
 > ---
 
-Reviewed-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+No need to send a v3, the above are all the nittiest of nits.
 
-
-Cheers,
--- 
-Vinicius
+Reviewed-by: Sean Christopherson <seanjc@google.com>
