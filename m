@@ -2,118 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC27E5F6483
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 12:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2E35F6496
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 12:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbiJFKst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 06:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        id S231358AbiJFKwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 06:52:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbiJFKsp (ORCPT
+        with ESMTP id S230512AbiJFKww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 06:48:45 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AE098CA9
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 03:48:42 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-405-DgXWoVwcNIW55WKjoHfY8Q-1; Thu, 06 Oct 2022 11:48:39 +0100
-X-MC-Unique: DgXWoVwcNIW55WKjoHfY8Q-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Thu, 6 Oct
- 2022 11:48:37 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Thu, 6 Oct 2022 11:48:37 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christian Brauner' <brauner@kernel.org>,
-        Kees Cook <keescook@chromium.org>
-CC:     Eric Biederman <ebiederm@xmission.com>,
-        Jorge Merlino <jorge.merlino@canonical.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "John Johansen" <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Todd Kjos <tkjos@google.com>,
-        "Ondrej Mosnacek" <omosnace@redhat.com>,
-        Prashanth Prahlad <pprahlad@redhat.com>,
-        Micah Morton <mortonm@chromium.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "apparmor@lists.ubuntu.com" <apparmor@lists.ubuntu.com>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: RE: [PATCH 1/2] fs/exec: Explicitly unshare fs_struct on exec
-Thread-Topic: [PATCH 1/2] fs/exec: Explicitly unshare fs_struct on exec
-Thread-Index: AQHY2WLGFfe2CPUaDEa6axdLVGgCBq4BLZlw
-Date:   Thu, 6 Oct 2022 10:48:36 +0000
-Message-ID: <cd4c600f91404387bb7be0d727c3c337@AcuMS.aculab.com>
-References: <20221006082735.1321612-1-keescook@chromium.org>
- <20221006082735.1321612-2-keescook@chromium.org>
- <20221006090506.paqjf537cox7lqrq@wittgenstein>
-In-Reply-To: <20221006090506.paqjf537cox7lqrq@wittgenstein>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 6 Oct 2022 06:52:52 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7140C98C81;
+        Thu,  6 Oct 2022 03:52:51 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id m3so2182054eda.12;
+        Thu, 06 Oct 2022 03:52:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=t8o+pyb3f/qVg1V7tg8SlbaPQuVD9Bud8eOgYKBOp4E=;
+        b=PU4TSIObQFqDgBqfJKx3R+EN14v0wZRDC18pHhIxXNyT5jZM9YKoz/EMDN4L/8WWWm
+         nsi9XARo88knP8q83F2/170w+J81+GeGO7Cbaq9bpJEAFRlKGdQQ++WbmGXSp00xqE/w
+         I/SKa0fr6nPKzN0n93r/QbniURE7kyiO2t/GCPPmbGor7pgEVTVogaBX3zj0izW5SF3C
+         WjH+ZpJZTfPWL/ReGKyWZT3PZeYXmFgtxKtYUuJisbZvtO5crJeMptWZvQar+ZZAruRm
+         19kjpTPDvEEJ6eBzeoKoHo/DJVxxwgYtP3v8JcaVjAJxfNy2zZIjeWyLine0SmM8+drn
+         ejeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=t8o+pyb3f/qVg1V7tg8SlbaPQuVD9Bud8eOgYKBOp4E=;
+        b=4tGG3y+cQcLw+ApnpNE9T0fLMj6wmt1x00tQ6hjd1PKI6E83Hj43xzejQi1GcjgZZ8
+         2QQjZGkXvRQBbf8wneQJUh2qDsfjH2sx+XbJEq9TRp0qvYi2JuXvcKtCvaJJ/b4Iil8m
+         t3OJQdZ/5SI6NGiaIYWwbTGRsS+DlUTmMsBKT0CySQSlXeMhFIL0V35H7dKlz4e9Bm09
+         qCFcYXxyVnegpi0tGV45fO4XMAcV6oqMFzC800/iogyKBy2yAQ35BhKv2Z0zV5a81C2n
+         FFUgi2WYzgqu8OIQT7Kc5fxhLYsyishZEnGEqHHJDF9aj8jqHEMvqqremfYw1LBpeW39
+         AXnA==
+X-Gm-Message-State: ACrzQf1MUrr4mbnCdqfPIowfALps/OW8/RT5vI+Cb+Lj3gjSSWGc30lQ
+        siXssSN/dCGh833tFnAaTXQ=
+X-Google-Smtp-Source: AMsMyM77X4RBaOSUIWqFPbX5N1+nuYY8E3lKPOxSOVSjz5WtuDU/HxX572kvNnKY7tGQNBY1TGeiBQ==
+X-Received: by 2002:a05:6402:34cf:b0:459:f9c5:7795 with SMTP id w15-20020a05640234cf00b00459f9c57795mr624566edc.160.1665053569839;
+        Thu, 06 Oct 2022 03:52:49 -0700 (PDT)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id o25-20020a170906769900b007829fb46a0esm10243994ejm.142.2022.10.06.03.52.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 03:52:48 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 12:52:46 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Prathamesh Shete <pshete@nvidia.com>
+Cc:     ulf.hansson@linaro.org, jonathanh@nvidia.com,
+        p.zabel@pengutronix.de, linux-mmc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        anrao@nvidia.com, smangipudi@nvidia.com, kyarlagadda@nvidia.com
+Subject: Re: [PATCH v6 2/4] mmc: sdhci-tegra: Add support to program MC
+ stream ID
+Message-ID: <Yz6zfrVq9cP/wrJb@orome>
+References: <a5c231e8-f28a-e692-5961-58e6838711ed@intel.com>
+ <20220928125648.19636-1-pshete@nvidia.com>
+ <20220928125648.19636-2-pshete@nvidia.com>
+ <34f002a4-b811-106b-52b5-6041674b15e9@intel.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="GYjMp6IFoAg2M0P0"
+Content-Disposition: inline
+In-Reply-To: <34f002a4-b811-106b-52b5-6041674b15e9@intel.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQ2hyaXN0aWFuIEJyYXVuZXINCj4gU2VudDogMDYgT2N0b2JlciAyMDIyIDEwOjA1DQo+
-IA0KPiBPbiBUaHUsIE9jdCAwNiwgMjAyMiBhdCAwMToyNzozNEFNIC0wNzAwLCBLZWVzIENvb2sg
-d3JvdGU6DQo+ID4gVGhlIGNoZWNrX3Vuc2FmZV9leGVjKCkgY291bnRpbmcgb2Ygbl9mcyB3b3Vs
-ZCBub3QgYWRkIHVwIHVuZGVyIGEgaGVhdmlseQ0KPiA+IHRocmVhZGVkIHByb2Nlc3MgdHJ5aW5n
-IHRvIHBlcmZvcm0gYSBzdWlkIGV4ZWMsIGNhdXNpbmcgdGhlIHN1aWQgcG9ydGlvbg0KPiA+IHRv
-IGZhaWwuIFRoaXMgY291bnRpbmcgZXJyb3IgYXBwZWFycyB0byBiZSB1bm5lZWRlZCwgYnV0IHRv
-IGNhdGNoIGFueQ0KPiA+IHBvc3NpYmxlIGNvbmRpdGlvbnMsIGV4cGxpY2l0bHkgdW5zaGFyZSBm
-c19zdHJ1Y3Qgb24gZXhlYywgaWYgaXQgZW5kcyB1cA0KPiANCj4gSXNuJ3QgdGhpcyBhIHBvdGVu
-dGlhbCB1YXBpIGJyZWFrPyBBZmFpY3QsIGJlZm9yZSB0aGlzIGNoYW5nZSBhIGNhbGwgdG8NCj4g
-Y2xvbmV7M30oQ0xPTkVfRlMpIGZvbGxvd2VkIGJ5IGFuIGV4ZWMgaW4gdGhlIGNoaWxkIHdvdWxk
-IGhhdmUgdGhlDQo+IHBhcmVudCBhbmQgY2hpbGQgc2hhcmUgZnMgaW5mb3JtYXRpb24uIFNvIGlm
-IHRoZSBjaGlsZCBlLmcuLCBjaGFuZ2VzIHRoZQ0KPiB3b3JraW5nIGRpcmVjdG9yeSBwb3N0IGV4
-ZWMgaXQgd291bGQgYWxzbyBhZmZlY3QgdGhlIHBhcmVudC4gQnV0IGFmdGVyDQo+IHRoaXMgY2hh
-bmdlIGhlcmUgdGhpcyB3b3VsZCBubyBsb25nZXIgYmUgdHJ1ZS4gU28gYSBjaGlsZCBjaGFuZ2lu
-ZyBhDQo+IHdvcmtkaW5nIGRpcmVjdG9ybyB3b3VsZCBub3QgYWZmZWN0IHRoZSBwYXJlbnQgYW55
-bW9yZS4gSU9XLCBhbiBleGVjIGlzDQo+IGFjY29tcGFuaWVkIGJ5IGFuIHVuc2hhcmUoQ0xPTkVf
-RlMpLiBNaWdodCBzdGlsbCBiZSB3b3J0aCB0cnlpbmcgb2ZjIGJ1dA0KPiBpdCBzZWVtcyBsaWtl
-IGEgbm9uLXRyaXZpYWwgdWFwaSBjaGFuZ2UgYnV0IHRoZXJlIG1pZ2h0IGJlIGZldyB1c2Vycw0K
-PiB0aGF0IGRvIGNsb25lezN9KENMT05FX0ZTKSBmb2xsb3dlZCBieSBhbiBleGVjLg0KDQpUaGUg
-dGhvdWdodCBvZiB0aGF0IGlzIGVudGlyZWx5IGhvcnJpZC4uLg0KDQpJIHByZXN1bWUgYSBzdWlk
-IGV4ZWMgd2lsbCBmYWlsIGluIHRoYXQgY2FzZT8NCg0KSWYgdGhlIG9sZCBjb2RlIGlzIHRyeWlu
-ZyB0byBjb21wYXJlIHRoZSBudW1iZXIgb2YgdGhyZWFkcw0Kd2l0aCB0aGUgbnVtYmVyIG9mIHVz
-ZXJzIG9mIHRoZSBmcyB0YWJsZSBpc24ndCBpcyBqdXN0IGJ1Z2d5Pw0KSWYgYSB0aHJlYWQgdW5z
-aGFyZXMgdGhlIGZzIHRhYmxlIHRoZXJlIGNhbiBiZSBhbm90aGVyDQpyZWZlcmVuY2Ugc29tZXdo
-ZXJlIGVsc2UgLSB3aGljaCBpcyB3aGF0IChJIHByZXN1bWUpIGlzIGJlaW5nDQp0ZXN0ZWQgZm9y
-Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJv
-YWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24g
-Tm86IDEzOTczODYgKFdhbGVzKQ0K
 
+--GYjMp6IFoAg2M0P0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Sep 28, 2022 at 05:18:19PM +0300, Adrian Hunter wrote:
+> On 28/09/22 15:56, Prathamesh Shete wrote:
+> > SMMU clients are supposed to program stream ID from
+> > their respective address spaces instead of MC override.
+> > Define NVQUIRK_PROGRAM_STREAMID and use it to program
+> > SMMU stream ID from the SDMMC client address space.
+> >=20
+> > Signed-off-by: Aniruddha TVS Rao <anrao@nvidia.com>
+> > Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
+>=20
+> One observation below.
+>=20
+> Nevertheless:
+>=20
+> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+>=20
+> > ---
+> >  drivers/mmc/host/sdhci-tegra.c | 44 ++++++++++++++++++++++++++++++++++
+> >  1 file changed, 44 insertions(+)
+> >=20
+> > diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-te=
+gra.c
+> > index a6c5bbae77b4..60ce3e80f248 100644
+> > --- a/drivers/mmc/host/sdhci-tegra.c
+> > +++ b/drivers/mmc/host/sdhci-tegra.c
+> > @@ -25,6 +25,10 @@
+> >  #include <linux/mmc/slot-gpio.h>
+> >  #include <linux/gpio/consumer.h>
+> >  #include <linux/ktime.h>
+> > +#ifdef CONFIG_IOMMU_API
+> > +#include <linux/iommu.h>
+> > +#include <linux/bitops.h>
+> > +#endif
+> > =20
+> >  #include <soc/tegra/common.h>
+> > =20
+> > @@ -94,6 +98,8 @@
+> >  #define SDHCI_TEGRA_AUTO_CAL_STATUS			0x1ec
+> >  #define SDHCI_TEGRA_AUTO_CAL_ACTIVE			BIT(31)
+> > =20
+> > +#define SDHCI_TEGRA_CIF2AXI_CTRL_0			0x1fc
+> > +
+> >  #define NVQUIRK_FORCE_SDHCI_SPEC_200			BIT(0)
+> >  #define NVQUIRK_ENABLE_BLOCK_GAP_DET			BIT(1)
+> >  #define NVQUIRK_ENABLE_SDHCI_SPEC_300			BIT(2)
+> > @@ -121,6 +127,7 @@
+> >  #define NVQUIRK_HAS_TMCLK				BIT(10)
+> > =20
+> >  #define NVQUIRK_HAS_ANDROID_GPT_SECTOR			BIT(11)
+> > +#define NVQUIRK_PROGRAM_STREAMID			BIT(12)
+> > =20
+> >  /* SDMMC CQE Base Address for Tegra Host Ver 4.1 and Higher */
+> >  #define SDHCI_TEGRA_CQE_BASE_ADDR			0xF000
+> > @@ -177,6 +184,9 @@ struct sdhci_tegra {
+> >  	bool enable_hwcq;
+> >  	unsigned long curr_clk_rate;
+> >  	u8 tuned_tap_delay;
+> > +#ifdef CONFIG_IOMMU_API
+> > +	u32 streamid;
+> > +#endif
+> >  };
+> > =20
+> >  static u16 tegra_sdhci_readw(struct sdhci_host *host, int reg)
+> > @@ -1564,6 +1574,7 @@ static const struct sdhci_tegra_soc_data soc_data=
+_tegra234 =3D {
+> >  		    NVQUIRK_DIS_CARD_CLK_CONFIG_TAP |
+> >  		    NVQUIRK_ENABLE_SDR50 |
+> >  		    NVQUIRK_ENABLE_SDR104 |
+> > +		    NVQUIRK_PROGRAM_STREAMID |
+> >  		    NVQUIRK_HAS_TMCLK,
+> >  	.min_tap_delay =3D 95,
+> >  	.max_tap_delay =3D 111,
+> > @@ -1775,6 +1786,25 @@ static int sdhci_tegra_probe(struct platform_dev=
+ice *pdev)
+> >  	if (rc)
+> >  		goto err_add_host;
+> > =20
+> > +	/* Program MC streamID for DMA transfers */
+> > +#ifdef CONFIG_IOMMU_API
+> > +	if (soc_data->nvquirks & NVQUIRK_PROGRAM_STREAMID) {
+> > +		struct iommu_fwspec *fwspec;
+> > +
+> > +		fwspec =3D dev_iommu_fwspec_get(&pdev->dev);
+> > +		if (fwspec =3D=3D NULL) {
+> > +			dev_warn(mmc_dev(host->mmc),
+> > +				"iommu fwspec is NULL, continue without stream ID\n");
+>=20
+> It will still program a zero streamid upon resume.
+
+This was confusing to me, but I think what you mean is that the check
+for fwspec =3D=3D NULL should also be done in sdhci_tegra_resume().
+
+>=20
+> > +		} else {
+> > +			tegra_host->streamid =3D fwspec->ids[0] & 0xff;
+> > +			tegra_sdhci_writel(host, tegra_host->streamid |
+> > +						FIELD_PREP(GENMASK(15, 8),
+> > +						tegra_host->streamid),
+> > +						SDHCI_TEGRA_CIF2AXI_CTRL_0);
+> > +		}
+> > +	}
+> > +#endif
+> > +
+> >  	return 0;
+> > =20
+> >  err_add_host:
+> > @@ -1861,6 +1891,10 @@ static int sdhci_tegra_suspend(struct device *de=
+v)
+> >  static int sdhci_tegra_resume(struct device *dev)
+> >  {
+> >  	struct sdhci_host *host =3D dev_get_drvdata(dev);
+> > +#ifdef CONFIG_IOMMU_API
+> > +	struct sdhci_pltfm_host *pltfm_host =3D sdhci_priv(host);
+> > +	struct sdhci_tegra *tegra_host =3D sdhci_pltfm_priv(pltfm_host);
+> > +#endif
+> >  	int ret;
+> > =20
+> >  	ret =3D mmc_gpio_set_cd_wake(host->mmc, false);
+> > @@ -1871,6 +1905,16 @@ static int sdhci_tegra_resume(struct device *dev)
+> >  	if (ret)
+> >  		return ret;
+> > =20
+> > +	/* Re-program MC streamID for DMA transfers */
+> > +#ifdef CONFIG_IOMMU_API
+> > +	if (tegra_host->soc_data->nvquirks & NVQUIRK_PROGRAM_STREAMID) {
+> > +		tegra_sdhci_writel(host, tegra_host->streamid |
+> > +					FIELD_PREP(GENMASK(15, 8),
+> > +					tegra_host->streamid),
+> > +					SDHCI_TEGRA_CIF2AXI_CTRL_0);
+> > +	}
+> > +#endif
+
+So this here should be exactly the same as in sdhci_tegra_probe(). Which
+would be an argument for putting this into a separate function.
+
+That said, I'm not sure if this matters at all. If fwspec =3D=3D NULL, that
+implies that device tree didn't have an "iommus" property, which also
+implies that SMMU translations for this device will not be enabled at
+all, if I recall correctly, so whether this CIF2AXI_CTRL register is
+programmed or not in that case should be irrelevant.
+
+Still, might be good to keep this the same in both sdhci_tegra_probe()
+and sdhci_tegra_resume() for consistency.
+
+With that fixed, the series:
+
+Acked-by: Thierry Reding <treding@nvidia.com>
+
+--GYjMp6IFoAg2M0P0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmM+s3wACgkQ3SOs138+
+s6EQeg//bDHPfg9KdsFStVnvP7sP/AtLWVOwl08YsFNGLAb1U6hT+lLyVkXPBw/K
+zfWcP6Mg2r3mlpqRCN2rlA2B1XYPg9OIkVetZ89rOyIeOV/n/9oRbjlzqYSPqwL4
+e0SNOIwGWPI84LYgSkHXi1f+wa8/XkVM2WZx/YNJR7RXVwHpourFog/va+0cq6wX
+dfU6YAU6ragHdu83sJxc72VFnDLqRRmFhu3lnisO3vkWwWR2mBubj7a5Liha7Jkc
+Uu9JPRtcS40BX7mlZFGA1M0ZltCB24cLCNkoLUlzlSzkLAXURvsBtZMdJwQzAj9N
+t/QibHe4096yB+rP5V5O5sZzM9aTjD5KRpqbiQM/EOi/Y0orQUM6y0UhEWJF4s6V
+n7fLxV/Ww9SzDSwwfPoPQylY40Adb69vDhzDxCvCa9lBjotf0iz1oiJGFZmAG41U
+vD2NzIdcLX+oVx1uVfv+ZmytaKCFFtwrLmu7bsH3bNr3RoIPrWXO5vVnmvKQmyJy
+IaygKAsXWac+gRvlX3yE4svgrOQ4b4XD47w4Mf6mZBzAgzpzSVVgJ3AOpxqNQw5o
+ftCShW+l6mkp8NlgzEKzx2+XN/G7pPV3LFvTAbqIZWukBoSqOT5S4Egly+7ZEB39
+gHgeka78NJPf2jIij0yclTiCMxT6xkEbZzGS+fnbmetvduNwMh4=
+=p3hS
+-----END PGP SIGNATURE-----
+
+--GYjMp6IFoAg2M0P0--
