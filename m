@@ -2,61 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4D55F63AC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAFE55F63B0
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbiJFJbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 05:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
+        id S230115AbiJFJcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 05:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231447AbiJFJb0 (ORCPT
+        with ESMTP id S231410AbiJFJcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 05:31:26 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3C19AF9D
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 02:31:23 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 788ED6601595;
-        Thu,  6 Oct 2022 10:31:21 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1665048682;
-        bh=Xngz+DX9nQSm2osEDMhxbzEfyfWhmzAaDK4n91qLoMo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nQHG99mmo5EepGe9L8B0xIz3gEN6yWZ2o5lxhbMGbYANtzFA2SLU1l9H8pzYP3q8a
-         404havFKDKHFKWi8n+TrYQOsrzXCou6/4xabAdCw4mNr/5k88VuFWEYLOR6SrJgeg1
-         WQOjk/Em2YXdn8jBk3s7toj2DW/8ibwAC3o7FB9gvz4jLFRk5BqU1t9z9vdPGZ4i+T
-         QDPkvKuHqxmDr9JCqYTpa6jjnjDiETXPVfd1BRQtOwMms8xOuGuuDm4ccfFLpSXMl1
-         pxT2zUZNekfKffcUBevCOgM9dfEegZFOjWlEMPN8/KIx/iI7nz+AbFtGRuGhFqoWt7
-         ZRGrPK4l1TX4Q==
-Message-ID: <97f78c42-d699-8b01-4db8-8887d519c8f8@collabora.com>
-Date:   Thu, 6 Oct 2022 11:31:18 +0200
+        Thu, 6 Oct 2022 05:32:12 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC6D9AFAE
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 02:32:11 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A2A80C000F;
+        Thu,  6 Oct 2022 09:32:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1665048729;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FjHVL/38CXAeYxrAeQ9axWybfLmZxCn1wRHKQgSsmsk=;
+        b=nByDzAF7vFUEJOyiTSNV4fyHY8MRgDpGnmYUwpsKCMxpcQza7EuAE7OSZ5qTskkdl6gwJC
+        Ku5ljEg1RbOHaPIZUuiKd2FMYe29TBXh1WEH9cgmRTQ8i8HjPGIjSPk+tZXXcYiwCuptWF
+        Vk/ndBRgAVJBbKIfOd2wzeXtOYL6dNi/WeOMPtSgcw+NdIC9ZOhwDcVkJazCH9835dFOgx
+        ffCycH+eGS76IlI12KAuPkZqNDm8Wga5Vjqhd5KsDerBY1C04hWW9BUfhc6vgyRKY4YCh7
+        XlCvG4Vb2WS/ZaAOhjaDixnsxl/pv5zUq0tEL+8pik/YkqmeLIRuQEXUQ2fBeQ==
+Date:   Thu, 6 Oct 2022 11:32:07 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Frieder Schrempf <frieder.schrempf@kontron.de>
+Cc:     mikhail.kshevetskiy@iopsys.eu, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: Re: [PATCH] spi-nand: add Winbond W25N02KV flash support, fix
+ Winbond flashes identifications
+Message-ID: <20221006113207.7b81d45b@xps-13>
+In-Reply-To: <d55465ac-fe0b-130c-31ae-0ce62af3eb5f@kontron.de>
+References: <20221006033256.111664-1-mikhail.kshevetskiy@iopsys.eu>
+        <d55465ac-fe0b-130c-31ae-0ce62af3eb5f@kontron.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v9, 4/4] mailbox: mtk-cmdq: add MT8186 support
-Content-Language: en-US
-To:     Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-References: <20221006043456.8754-1-yongqiang.niu@mediatek.com>
- <20221006043456.8754-5-yongqiang.niu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221006043456.8754-5-yongqiang.niu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,11 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 06/10/22 06:34, Yongqiang Niu ha scritto:
-> add MT8186 cmdq support
-> 
-> Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
+Hi Frieder,
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+frieder.schrempf@kontron.de wrote on Thu, 6 Oct 2022 11:26:45 +0200:
 
+> Am 06.10.22 um 05:32 schrieb mikhail.kshevetskiy@iopsys.eu:
+> >=20
+> > From: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
+> >=20
+> > Winbond uses 3 bytes to identify flash: vendor_id, dev_id_0, dev_id_1,
+> > but current driver uses only first 2 bytes of it for devices
+> > idenfification. As result Winbond W25N02KV flash (id_bytes: EF, AA, 22)
+> > is identified as W25N01GV (id_bytes: EF, AA, 21).
+> >=20
+> > Fix this and add W25N02KV flash support.
+> >=20
+> > Signed-off-by: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu> =20
+>=20
+> Thanks for the patch. We have a similar change in our downstream kernel,
+> that I failed to push upstream so far. But your version looks even better.
+>=20
+> Can you change the subject prefix to "mtd: spinand: winbond:", please?
+>=20
+> And I also would like to ask you to split this into two patches. The
+> first one to add the third byte in the ids of the existing devices and
+> the second one to add support for the new device.
 
+Agreed on both comments, thanks Frieder!
+
+> With these two changes you can add:
+>=20
+> Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+
+Cheers,
+Miqu=C3=A8l
