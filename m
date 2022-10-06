@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 919655F665F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4BCD5F666B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbiJFMrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 08:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
+        id S230305AbiJFMrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 08:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiJFMrF (ORCPT
+        with ESMTP id S230073AbiJFMrG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 08:47:05 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C683BA2846
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 05:47:03 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id b2so2527734lfp.6
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 05:47:03 -0700 (PDT)
+        Thu, 6 Oct 2022 08:47:06 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89EDA2847
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 05:47:04 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id p5so2064267ljc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 05:47:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=AOO6GYk3DX7qTzUnwkLMT8us6fRJlkOK0kAXoivsFXI=;
-        b=rHG0eJgyM1OzClUuLqKyKMCZUj2QIwQ3sseD/i/bNJVIn5BqTP2LMUsAz8Q/TQdlHW
-         yUCcnYmTOBTAMeqiBEEyu+aL884MgOLoOvF0j74A2k0pkGSZj6v/SQHohtMjW2BAK04v
-         vZ9pF0qmvEjf7DSJhkYFd0SzLPq+AF3aidpUFgkrJj6CgA4YXmDjLkZ17JFcUm18J1g8
-         tDkozKRubtnJHClFs7uaICkKQAwl2x04G95UdJSSLZamIlc0CkWCLrV5trcFH32Z/Ofl
-         55iSnw1xREjgokHCnftaQhxBwnNJNNVm1Jz52VN0He6lc3otF8CQ+0TheQkKc8a3VH+T
-         nwbw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=JHCjDmNzA6ce+e/MAOdHluOTeKhVdn9kfCUAVEme8Xs=;
+        b=rZZjn2LLklOJzInY2fY7K9Y5TRUQV4ErXbOtBoCKWOYk2xCQX5+Y8DzpK2ebcbD+mr
+         fR8VrP/qe0/6C2Nnyzes4jXslE8xZ82BuAeO+sQVAR/bMbCmlBGIaAK8ptpGAMcKp4xy
+         DExRVAz6RbUZ4ADEF7/JhTDYKDHsHm+hNtupd04iD1Aav86m9yUMbxoHdmRECbGrdxKd
+         jsVTPSanBCRaLEL8z6mPrMe2P5oIeVa6YBWgpkAm0+TRuvA+D1h+JWf5pMSyJ9Cj7Wxh
+         KGMakFNHTzgVModnZJYcvDi43WC2/4Pwe5EhumIyeG1NXCYxvHR/s1Sj+pnaVaEscFpX
+         FwOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=AOO6GYk3DX7qTzUnwkLMT8us6fRJlkOK0kAXoivsFXI=;
-        b=38xkx00QNZGciGsraZbuidYocC2IleMxF4q6jWfv0aukFj3J0u/4KKidxfZsDlVpYS
-         mmayBpWXCzJiT4B7lD5EEX5dP4R+ZWUoeIRo/jgLs6sfNF/VhIW43JRQ52TOmzCf6uUP
-         NrMOS/SGrz7UFD84rvzdGWT2ndod/yuVzRJ6Q1ro7FwCiFgFGYodj4xfFD3Obf8q6oVd
-         vUrQ3w5ehhUqTeDC5Bv9rtHMxWjiohMVHsVYZlxj8/QCjYqTYM8t/ylH5HoFKFew/gNb
-         iphmSw/Bq5U6/GGUSr+O5bmUYyxGd+fD0jFohnE2Gl5as7nFufeulZKZmXjA4qIXC73a
-         sDhw==
-X-Gm-Message-State: ACrzQf0UWY/y9oGGwntIWyUQyY60Rq7XTLPookTTOe5C/sbs7F6iPISd
-        qke/leoU9bsii9lX8BI7/f8v8A==
-X-Google-Smtp-Source: AMsMyM42mVXhCBo/Hg17pPXtXjcxlvnOO7hiRbUw0wmxXnDWgMtyqLCUeJTwq/oQldfdnhcKbgMRVQ==
-X-Received: by 2002:a05:6512:3f8c:b0:4a1:8d5:d75b with SMTP id x12-20020a0565123f8c00b004a108d5d75bmr1933372lfa.670.1665060422022;
-        Thu, 06 Oct 2022 05:47:02 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=JHCjDmNzA6ce+e/MAOdHluOTeKhVdn9kfCUAVEme8Xs=;
+        b=2ESWcDhM+wIHi553lOQ+6OsxomGLIfC2Zuwhm+qD3p4M8cBDKhMG+HmMk0l6HrNmdw
+         XWfVQAiICXAAcD0EE7heVFygwyeQueKvuTF1E03hYJjTLRtXhfbqyVzfiAPXd8OVGtvn
+         /7wLYPKy2U9IbrpLhoXhpXWkl7hn0je4r2MirK6+kjATiUjBKKUYtKTGLFe4EpLLTuMl
+         HdtHghycSJWx9A1wxlJDxzqtDfbUnGBeO51CQg/ZVgYTE4XKyDWmgJNvjrOLuJATi5Q9
+         mcZQed3F3ITXGJqdszmhIzApNSkJrEh8HlvRWX4vhbBwbMu60lAKAwYTcY6IHOvkWi1x
+         FHuA==
+X-Gm-Message-State: ACrzQf2jN1ep/DzBgnn4RzNNGfT8hbEPBFBSb92tWo7RNLDmzZhuAKUm
+        ptobBcCA4Mx/SxOYeXDfSKal7w==
+X-Google-Smtp-Source: AMsMyM70LtYY9WrgWr/OZ2WL2HRIwFM68jsltmemnMs5nGkVeMJN1tCzGgPEW4QVR2/dlX250zahdQ==
+X-Received: by 2002:a2e:a7cc:0:b0:26c:ea51:1448 with SMTP id x12-20020a2ea7cc000000b0026cea511448mr1736329ljp.47.1665060423109;
+        Thu, 06 Oct 2022 05:47:03 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id br32-20020a056512402000b00497a3e2a191sm2687659lfb.112.2022.10.06.05.47.00
+        by smtp.gmail.com with ESMTPSA id br32-20020a056512402000b00497a3e2a191sm2687659lfb.112.2022.10.06.05.47.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 05:47:01 -0700 (PDT)
+        Thu, 06 Oct 2022 05:47:02 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -63,124 +64,54 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v4 00/34] pinctrl/arm64: qcom: continued - fix Qualcomm TLMM pinctrl schema warnings (third set)
-Date:   Thu,  6 Oct 2022 14:46:25 +0200
-Message-Id: <20221006124659.217540-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 01/34] arm64: dts: qcom: ipq6018-cp01-c1: use BLSPI1 pins
+Date:   Thu,  6 Oct 2022 14:46:26 +0200
+Message-Id: <20221006124659.217540-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221006124659.217540-1-krzysztof.kozlowski@linaro.org>
+References: <20221006124659.217540-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+When BLSPI1 (originally SPI0, later renamed in commit f82c48d46852
+("arm64: dts: qcom: ipq6018: correct QUP peripheral labels")) was added,
+the device node lacked respective pin configuration assignment.
 
-Changes since v3
-================
-1. All patches with subject: "use common TLMM schema":
-   Drop properties and required items which are already provided by common TLMM
-   schema.
-   The change against v3 is non-trivial, however I retained reviewed-by tags.
-2. Add Rb tags.
+Fixes: 5bf635621245 ("arm64: dts: ipq6018: Add a few device nodes")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
-Changes since v2
-================
-1. ipq6018-cp01-c1: do not switch to blsp1 (Robert).
-2. pinctrl: qcom,ipq6018: correct BLSP6->BLSP0 functions: new patch.
-3. Drop quotes from $ref when not needed (Rob).
-4. Add Rb tags. Few patches from v1 got review from Rob, but I changed them in
-   v2 significantly, so I did not keep these Rb tags.
+---
 
-Changes since v1
-================
-v1: https://lore.kernel.org/linux-devicetree/20220924080459.13084-1-krzysztof.kozlowski@linaro.org/T/#t
-1. As Stephan suggested, move check for function on non-GPIO pins to common
-   TLMM schema.  This affects few commits in the set named:
-   "use common TLMM schema"
-   "do not require function on non-GPIOs"
+Changes since v2:
+1. Do not switch to blsp1 (Robert)
+---
+ arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dts | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Overview
-========
-This is the third, independent patchset around Qualcomm pinctrl in recent days:
-1. First round of TLMM fixes: merged
-2. LPASS fixes:
-   https://lore.kernel.org/linux-devicetree/20220927153429.55365-1-krzysztof.kozlowski@linaro.org/T/#t
-3. ARMv7 TLMM fixes: *THIS PATCHSET*
-4. ARMv8 remaining TLMM fixes: v2 send:
-   https://lore.kernel.org/linux-devicetree/20220930192954.242546-1-krzysztof.kozlowski@linaro.org/
-
-Dependencies
-============
-1. No dependencies.
-2. dt-bindings are independent of DTS patches.
-
-Best regards,
-Krzysztof
-
-Krzysztof Kozlowski (34):
-  arm64: dts: qcom: ipq6018-cp01-c1: use BLSPI1 pins
-  arm64: dts: qcom: ipq6018: align TLMM pin configuration with DT schema
-  ARM: dts: qcom: sdx55: add gpio-ranges to TLMM pinctrl
-  ARM: dts: qcom: sdx55: align TLMM pin configuration with DT schema
-  ARM: dts: qcom: msm8226: align TLMM pin configuration with DT schema
-  ARM: dts: qcom: msm8974: align TLMM pin configuration with DT schema
-  dt-bindings: pinctrl: qcom,tlmm-common: add common check for function
-  dt-bindings: pinctrl: qcom,ipq6018: add qpic_pad function
-  dt-bindings: pinctrl: qcom,ipq6018: correct BLSP6->BLSP0 functions
-  dt-bindings: pinctrl: qcom,ipq6018: increase number of pins in pinmux
-  dt-bindings: pinctrl: qcom,ipq6018: fix matching pin config
-  dt-bindings: pinctrl: qcom,ipq6018: use common TLMM schema
-  dt-bindings: pinctrl: qcom,ipq6018: fix indentation in example
-  dt-bindings: pinctrl: qcom,msm8226: fix matching pin config
-  dt-bindings: pinctrl: qcom,msm8226: use common TLMM schema
-  dt-bindings: pinctrl: qcom,msm8226: add functions and input-enable
-  dt-bindings: pinctrl: qcom,msm8226: fix indentation in example
-  dt-bindings: pinctrl: qcom,msm8909-tlmm: fix matching pin config
-  dt-bindings: pinctrl: qcom,msm8909-tlmm: do not require function on
-    non-GPIOs
-  dt-bindings: pinctrl: qcom,msm8909-tlmm: fix indentation in example
-  dt-bindings: pinctrl: qcom,msm8953: fix matching pin config
-  dt-bindings: pinctrl: qcom,msm8953: use common TLMM schema
-  dt-bindings: pinctrl: qcom,msm8953: fix indentation in example
-  dt-bindings: pinctrl: qcom,mdm9607: do not require function on
-    non-GPIOs
-  dt-bindings: pinctrl: qcom,mdm9607: fix indentation in example
-  dt-bindings: pinctrl: qcom,qcm2290: fix matching pin config
-  dt-bindings: pinctrl: qcom,qcm2290: use common TLMM schema
-  dt-bindings: pinctrl: qcom,sdx55: fix matching pin config
-  dt-bindings: pinctrl: qcom,sdx55: use common TLMM schema
-  dt-bindings: pinctrl: qcom,sdx55: fix indentation in example
-  dt-bindings: pinctrl: qcom,sdx65: fix matching pin config
-  dt-bindings: pinctrl: qcom,sdx65: use common TLMM schema
-  dt-bindings: pinctrl: qcom,sc7280: fix matching pin config
-  dt-bindings: pinctrl: qcom,sc8280xp: fix indentation in example
-    (remaining piece)
-
- .../pinctrl/qcom,ipq6018-pinctrl.yaml         | 95 ++++++++-----------
- .../pinctrl/qcom,mdm9607-pinctrl.yaml         | 23 +++--
- .../pinctrl/qcom,msm8226-pinctrl.yaml         | 91 ++++++++----------
- .../bindings/pinctrl/qcom,msm8909-tlmm.yaml   | 64 ++++++-------
- .../pinctrl/qcom,msm8953-pinctrl.yaml         | 81 +++++++---------
- .../pinctrl/qcom,qcm2290-pinctrl.yaml         | 41 ++------
- .../bindings/pinctrl/qcom,sc7280-pinctrl.yaml | 14 ++-
- .../pinctrl/qcom,sc8280xp-pinctrl.yaml        |  4 +-
- .../bindings/pinctrl/qcom,sdx55-pinctrl.yaml  | 79 +++++++--------
- .../bindings/pinctrl/qcom,sdx65-pinctrl.yaml  | 39 +++-----
- .../bindings/pinctrl/qcom,tlmm-common.yaml    | 20 +++-
- arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts   |  6 +-
- arch/arm/boot/dts/qcom-msm8226.dtsi           | 24 ++---
- .../qcom-msm8974-lge-nexus5-hammerhead.dts    | 30 +++---
- .../boot/dts/qcom-sdx55-telit-fn980-tlb.dts   | 45 +++------
- arch/arm/boot/dts/qcom-sdx55.dtsi             |  1 +
- arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dts  |  6 +-
- arch/arm64/boot/dts/qcom/ipq6018.dtsi         |  4 +-
- 18 files changed, 290 insertions(+), 377 deletions(-)
-
+diff --git a/arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dts b/arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dts
+index 1ba2eca33c7b..6a716c83e5f1 100644
+--- a/arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dts
++++ b/arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dts
+@@ -37,6 +37,8 @@ &blsp1_i2c3 {
+ 
+ &blsp1_spi1 {
+ 	cs-select = <0>;
++	pinctrl-0 = <&spi_0_pins>;
++	pinctrl-names = "default";
+ 	status = "okay";
+ 
+ 	flash@0 {
 -- 
 2.34.1
 
