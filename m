@@ -2,129 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 098645F62DC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B99955F62DE
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbiJFIhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 04:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58268 "EHLO
+        id S231151AbiJFIhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 04:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbiJFIhM (ORCPT
+        with ESMTP id S230280AbiJFIhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 04:37:12 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9EC95AD5;
-        Thu,  6 Oct 2022 01:37:09 -0700 (PDT)
-Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MjlBk1khBz6H73T;
-        Thu,  6 Oct 2022 16:35:42 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.31; Thu, 6 Oct 2022 10:37:07 +0200
-Received: from [10.126.169.169] (10.126.169.169) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 6 Oct 2022 09:37:06 +0100
-Message-ID: <9cc48b3f-5dbe-665e-d125-dffd53e930fb@huawei.com>
-Date:   Thu, 6 Oct 2022 09:37:06 +0100
+        Thu, 6 Oct 2022 04:37:31 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608BF95ACA;
+        Thu,  6 Oct 2022 01:37:27 -0700 (PDT)
+Received: from [192.168.1.103] (178.176.76.174) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Thu, 6 Oct 2022
+ 11:37:17 +0300
+Subject: Re: [PATCH] ata: pata_mpc52xx: Replace NO_IRQ by 0
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-ide@vger.kernel.org>
+References: <a8c87c6d8dd6d9e57c515036a333ff89fc56bcbf.1665033366.git.christophe.leroy@csgroup.eu>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <3a89c963-df7c-8fac-7213-d37c1b04f864@omp.ru>
+Date:   Thu, 6 Oct 2022 11:37:17 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v5 0/7] libsas and drivers: NCQ error handling
-To:     Niklas Cassel <Niklas.Cassel@wdc.com>
-CC:     "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "jinpu.wang@cloud.ionos.com" <jinpu.wang@cloud.ionos.com>,
-        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linuxarm <linuxarm@huawei.com>,
-        yangxingui <yangxingui@huawei.com>,
-        yanaijie <yanaijie@huawei.com>
-References: <1664262298-239952-1-git-send-email-john.garry@huawei.com>
- <YzwvpUUftX6Ziurt@x1-carbon>
- <cfa52b91-db81-a179-76c2-8a61266c099d@huawei.com>
- <27148ec5-d1ae-d9a2-1b00-a4c34d2da198@huawei.com>
- <Yz33FGwd3YvQUAqT@x1-carbon>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <Yz33FGwd3YvQUAqT@x1-carbon>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+In-Reply-To: <a8c87c6d8dd6d9e57c515036a333ff89fc56bcbf.1665033366.git.christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.169.169]
-X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [178.176.76.174]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 10/06/2022 08:14:42
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 173063 [Oct 05 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 500 500 6cc86d8f5638d79810308830d98d6b6279998c49
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.76.174 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.76.174 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: 178.176.76.174:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;omp.ru:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.76.174
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 10/06/2022 08:18:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 10/6/2022 6:00:00 AM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/10/2022 22:28, Niklas Cassel wrote:
-> Do you know why it fails to read the log?
-> Can you read the NCQ Command Error log using ATA16 passthrough commands?
-> 
-> sudo sg_sat_read_gplog -d --log=0x10 /dev/sdc
-> 
-> The first byte is the last NCQ tag (in hex) that failed.
+Hello!
 
-Please see other reply.
+   Perhaps s/by/with/ in the subject?
 
-> 
-> 
-> I tried your patch, and it looks good:
+On 10/6/22 8:17 AM, Christophe Leroy wrote:
 
-Thanks, good to know.
+> NO_IRQ is used to check the return of irq_of_parse_and_map().
+> 
+> On some architecture NO_IRQ is 0, on other architectures it is -1.
+> 
+> irq_of_parse_and_map() returns 0 on error, independent of NO_IRQ.
+> 
+> So use 0 instead of using NO_IRQ.
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-> 
-> [ 6656.228131] ata5.00: exception Emask 0x0 SAct 0x460000 SErr 0x0 action 0x0
-> [ 6656.252759] ata5.00: failed command: WRITE FPDMA QUEUED
-> [ 6656.271554] ata5.00: cmd 61/00:00:00:d8:8a/04:00:ce:03:00/40 tag 17 ncq dma 524288 out
->                          res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device error)
-> [ 6656.309308] ata5.00: status: { DRDY ERR }
-> [ 6656.316403] ata5.00: error: { ABRT }
-> [ 6656.322300] ata5.00: failed command: WRITE FPDMA QUEUED
-> [ 6656.330871] ata5.00: cmd 61/00:00:00:dc:8a/04:00:ce:03:00/40 tag 18 ncq dma 524288 out
->                          res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device error)
-> [ 6656.356295] ata5.00: status: { DRDY ERR }
-> [ 6656.362931] ata5.00: error: { ABRT }
-> [ 6656.368897] ata5.00: failed command: WRITE FPDMA QUEUED
-> [ 6656.377471] ata5.00: cmd 61/00:00:00:d4:8a/04:00:ce:03:00/40 tag 22 ncq dma 524288 out
->                          res 43/04:00:ff:d7:8a/00:00:ce:03:00/40 Emask 0x400 (NCQ error) <F>
-> [ 6656.403149] ata5.00: status: { DRDY SENSE ERR }
-> [ 6656.410624] ata5.00: error: { ABRT }
-> 
-> However, since this is a change from the existing behavior of this driver,
-> this could go as a separate patch, and does not need to delay this series.
-> 
-> 
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-ok, but I am not sure about this series for 6.1 since it's now, so I 
-will just wait.
+[...]
 
-> 
-> I also think that we should do a similar patch for sas_ata_task_done():
-> 
-> diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
-> index d35c9296f738..648d0693ceee 100644
-> --- a/drivers/scsi/libsas/sas_ata.c
-> +++ b/drivers/scsi/libsas/sas_ata.c
-> @@ -140,7 +140,7 @@ static void sas_ata_task_done(struct sas_task *task)
->                          }
->   
->                          dev->sata_dev.fis[3] = 0x04; /* status err */
-> -                       dev->sata_dev.fis[2] = ATA_ERR;
-> +                       dev->sata_dev.fis[2] = ATA_ERR | ATA_DRDY;
->                  }
->          }
-> 
-> To avoid all SAS errors from being reported as HSM errors.
-
-Yeah, I tend to agree. I can put that change in another patch.
-
-Thanks,
-John
+MBR, Sergey
