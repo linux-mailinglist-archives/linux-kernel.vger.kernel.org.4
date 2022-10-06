@@ -2,119 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FD75F6EBF
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF075F6EC7
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbiJFUPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 16:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
+        id S231382AbiJFURt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 16:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbiJFUPa (ORCPT
+        with ESMTP id S230189AbiJFURp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 16:15:30 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B084AA02DF
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 13:15:27 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1665087325;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nwpPOlYCS85qc1YpNruI7rje5teNtWicQtAVcUz+CVw=;
-        b=JeKOMg/L46on+VSwXNzEiu1BCdZ5KEPWcMKOcwF1JwwznwnuldL6K7BGEEgiohDIMzG3ik
-        4mUtkVzcSOHl2cJlfozZ9gYpSf1K7wSJlcT19ppzXYj4q7i78J/2GQssduSsaRDi9D1qJ4
-        XfEEGAZHGZgfOBbz6dwpid13heOHRir5E11uzYcI/ZBlwjq5V6zzYqKOhY5s/po564zjZJ
-        8POH9MdvKUui+vNYflMjbNZQwdr7o4ufd/L4D0PnrQOIxiH+t2RMB8jTEE7VTwNolSHxjm
-        lA1MqLu784QMUmvQmChBlS/Ty3rp4oAN9Pb32ENoj74tKnKTQjCifubQOOB96w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1665087325;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nwpPOlYCS85qc1YpNruI7rje5teNtWicQtAVcUz+CVw=;
-        b=tF28kg7R0TjGfYFr0uSV3c561CfnrmZMMvAAeqRecmU/d9jVo/Rc0FAmJ+PBYDs3Ut3dhD
-        eM/D+6bcKqoOmZBw==
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Cc:     "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Joshua Ashton <joshua@froggi.es>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Pavel Machek <pavel@denx.de>,
-        Pierre-Loup Griffais <pgriffais@valvesoftware.com>,
-        Melissa Wen <mwen@igalia.com>
-Subject: Re: [PATCH] x86/split_lock: Restore warn mode (and add a new one)
- to avoid userspace regression
-In-Reply-To: <9d9d2d5c-1b7a-721b-f0e2-f591bb170723@igalia.com>
-References: <20220928142109.150263-1-gpiccoli@igalia.com>
- <SJ1PR11MB6083113884DD0B3031FE372CFC549@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <9d9d2d5c-1b7a-721b-f0e2-f591bb170723@igalia.com>
-Date:   Thu, 06 Oct 2022 22:15:24 +0200
-Message-ID: <87pmf4bter.ffs@tglx>
+        Thu, 6 Oct 2022 16:17:45 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A53C7079
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 13:17:43 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id bh13so2824995pgb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 13:17:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=U4JyhrxAAyOLHmX7A4rrmrzCmFrvZfPiR/hVbSm/Hi8=;
+        b=sk5ghBFSrEMOGUq9xNbnQb19kovevNTHzsBOVAU8bqxYIVO3n9h9AE57v3UX0k9qjL
+         JUrZJs/USc1xn7/2n8RmxNi1+to+u6eugnEdQslIpkUyb7q7BaWNE6AnnwZuOg/K3MQC
+         HUJdmpy+Ggr8aY2+DDwEgoqGph4Fe+BeCayAhXfCVoB8UmvmT9eWFLjMCkqNQiraOrse
+         10T1vUVv+rfvPh0ayr95koZ7hK/UliSGAWvsqSNOjosXfx0eDHja3bWIES6OmfGOA/Yv
+         e5pEDWhVCziHJF3kStYJ5xXGXGjhIjwO/uMtksdmBdYQo/bjsCQGL+mm7vncIzDJxsIo
+         wAtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U4JyhrxAAyOLHmX7A4rrmrzCmFrvZfPiR/hVbSm/Hi8=;
+        b=jYTZk4yHkyN9gpVrfiNaVnnqw3v5YKK9Wx9p7+uHO3SmJZe6kwWIx3svf/5de5Ix+K
+         Oo8pgrmxJ1s/7Tt5EvZ/ihjzEG2UmsxtGQQeX3mQWoA/HEFWHe2hZt84jlQiulgUeg+4
+         iT1D28SknNwy7ICyWJHcAy2fuY13XvD7vBVVtlqr0zoDU6GgoqWwP+TLMKhZGq3AZIrW
+         7tmpUhlDYk9mnAnqZ9YXYG4nHwMwFm4OIAjjVJ2IhPPWBu5+DFMNhYSf5MGikmKTfqnA
+         rERB81Ecco7//TDZCPT4fE1+Mp0gG5Md8XyK0MzYaA8pghebZuswPpciKmaMjjSEBPKF
+         cDFw==
+X-Gm-Message-State: ACrzQf29MA4st/l+10f107OXRH7Df5UNFfX9em6AQqSK2k5dMtCdJENS
+        AijL+Cl/pR+z+wOJI0BJae31/A==
+X-Google-Smtp-Source: AMsMyM471piwxOjkMBhX2gPsi6zT6/trUG/bsCNxkCSKPBKjsH1VR2Ke++mFLj7SWCNZW3cWXM6HPQ==
+X-Received: by 2002:a63:6b88:0:b0:453:3f5e:67d7 with SMTP id g130-20020a636b88000000b004533f5e67d7mr1370342pgc.253.1665087463140;
+        Thu, 06 Oct 2022 13:17:43 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id p20-20020a1709028a9400b00179f442519csm38967plo.40.2022.10.06.13.17.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 13:17:42 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 20:17:38 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, drjones@redhat.com,
+        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
+        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
+        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
+        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
+        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
+        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
+        diviness@google.com, maz@kernel.org, dmatlack@google.com,
+        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
+        mizhang@google.com, bgardon@google.com
+Subject: Re: [RFC V3 PATCH 5/6] selftests: kvm: x86: Execute VMs with private
+ memory
+Message-ID: <Yz834mGQDtkdwn7q@google.com>
+References: <20220819174659.2427983-1-vannapurve@google.com>
+ <20220819174659.2427983-6-vannapurve@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819174659.2427983-6-vannapurve@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28 2022 at 17:56, Guilherme G. Piccoli wrote:
-> On 28/09/2022 17:24, Luck, Tony wrote:
->> [...] 
->> Why not just use the workaround suggested in that bug report:
->> 
->>    "so manual switching from default setting to split_lock_detect=off helps as workaround here"
->> 
->> If you add this extra mode, I'm going to argue that the kernel default
->> should be "seq" rather than "warn". So these game players will need
->> to add a split_lock_detect=off (or warn) option.
->> 
->
-> Hi Tony, thanks for your response. The workaround is the way to
-> circumvent the issue for now, but not all users want (or know how) to
-> deal with the kernel parameters. If a distro wants to default to show a
-> warning only, but don't break performance so hard, this would be
-> currently impossible.
+On Fri, Aug 19, 2022, Vishal Annapurve wrote:
+> +/*
+> + * Execute KVM hypercall to change memory access type for a given gpa range.
+> + *
+> + * Input Args:
+> + *   type - memory conversion type TO_SHARED/TO_PRIVATE
+> + *   gpa - starting gpa address
+> + *   size - size of the range starting from gpa for which memory access needs
+> + *     to be changed
+> + *
+> + * Output Args: None
+> + *
+> + * Return: None
+> + *
+> + * Function called by guest logic in selftests to update the memory access type
+> + * for a given gpa range. This API is useful in exercising implicit conversion
+> + * path.
+> + */
+> +void guest_update_mem_access(enum mem_conversion_type type, uint64_t gpa,
+> +	uint64_t size)
 
-That Kconfig knob is patently bad. The only sane choice for a generic
-distro kernel is to slow down the offenders simply because split lock is
-a trivial unpriviledged DoS. Run a split locker in a tight loop and
-watch your shiny new multicore system degrading into a machine from the
-80s. So unless the distro provides a "special broken games" kernel the
-users will still need to fiddle with the command line.
+Provide wrappers to self-document what's going on, then the massive block comments
+go away.  And the guts of this and guest_update_mem_map() are nearly identical.
 
-Attack vector prevention has precedence over broken applications. That's what
-command line options or sysctls are for.
+Hmm, and we probably want to make it possible to do negative testing.
 
-> The main/big issues here are two: defaulting to the disruptive behavior
-> (with no way of building a kernel not defaulting to that without
-> patching), and not having a way to warn about split locking without
-> breaking the performance, hence the new mode "seq".
+Then the one-off enums for TO_PRIVATE and whatnot go way too.
 
-Which is a misnomer and tells absolutely nothing. If we add a new
-parameter then we name it something like "mitigate" and make it the
-default.
+> +{
+> +	int ret = kvm_hypercall(KVM_HC_MAP_GPA_RANGE, gpa, size >> MIN_PAGE_SHIFT,
 
-But a way better solution is to add a sysctl knob which allows to
-disable the slowdown mechanics and that allows distros to give the user
-an trivial knob in the GUI to switch to "I don't care. My broken game is
-more important!" mode, while still maintaining the only sensible default
-of preventing damage for the general use case of the generic distro
-kernel.
+Needs an assert that @size is page aligned.  And since these are x86-64 specific,
+just use PAGE_SHIFT.  Huh, IS_ALIGNED() doesn't exist in selftests.  That should
+be added, either by pulling in align.h or by adding the generic macros to
+kvm_util_base.h.
 
-Thanks,
+And then x86-64's processor.h can defined IS_PAGE_ALIGNED().
 
-        tglx
+E.g.
+
+static inline void __kvm_hypercall_map_gpa_range(uint64_t gpa, uint64_t size,
+						 uint64_t flags)
+{
+	return = kvm_hypercall(KVM_HC_MAP_GPA_RANGE, gpa, size >> PAGE_SHIFT, flags, 0);
+}
+
+static inline void kvm_hypercall_map_gpa_range(uint64_t gpa, uint64_t size,
+					       uint64_t flags)
+{
+	int ret;
+
+	GUEST_ASSERT_2(IS_PAGE_ALIGNED(gpa) && IS_PAGE_ALIGNED(size), gpa, size);
+
+	ret = __kvm_hypercall_map_gpa_range(gpa, size, flags);
+	GUEST_ASSERT_1(!ret, ret);
+}
+
+static inline kvm_hypercall_map_shared(uint64_t gpa, uint64_t size)
+{
+	kvm_hypercall_map_gpa_range(gpa, size, KVM_CLR_GPA_RANGE_ENC_ACCESS);
+}
+
+static inline kvm_hypercall_map_private(uint64_t gpa, uint64_t size)
+{
+	kvm_hypercall_map_gpa_range(gpa, size, KVM_MARK_GPA_RANGE_ENC_ACCESS);
+}
+
+> +static void handle_vm_exit_map_gpa_hypercall(struct kvm_vm *vm,
+> +				volatile struct kvm_run *run)
+
+Pass in @vcpu, not a vm+run.
+
+> +{
+> +	uint64_t gpa, npages, attrs, size;
+> +
+> +	TEST_ASSERT(run->hypercall.nr == KVM_HC_MAP_GPA_RANGE,
+> +		"Unhandled Hypercall %lld\n", run->hypercall.nr);
+> +	gpa = run->hypercall.args[0];
+> +	npages = run->hypercall.args[1];
+> +	size = npages << MIN_PAGE_SHIFT;
+> +	attrs = run->hypercall.args[2];
+> +	pr_info("Explicit conversion off 0x%lx size 0x%lx to %s\n", gpa, size,
+> +		(attrs & KVM_MAP_GPA_RANGE_ENCRYPTED) ? "private" : "shared");
+> +
+> +	if (attrs & KVM_MAP_GPA_RANGE_ENCRYPTED)
+> +		vm_update_private_mem(vm, gpa, size, ALLOCATE_MEM);
+> +	else
+> +		vm_update_private_mem(vm, gpa, size, UNBACK_MEM);
+> +
+> +	run->hypercall.ret = 0;
+> +}
+> +
+> +static void handle_vm_exit_memory_error(struct kvm_vm *vm, volatile struct kvm_run *run)
+
+Same  here, take a @vcpu.
