@@ -2,109 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1DD5F69E6
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02AC35F69E4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbiJFOop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 10:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
+        id S229665AbiJFOoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 10:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231695AbiJFOoi (ORCPT
+        with ESMTP id S231749AbiJFOoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 10:44:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24ECC29
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 07:44:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CCD6619F1
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 14:44:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B18BC433B5;
-        Thu,  6 Oct 2022 14:44:33 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1ogS75-002jsv-21;
-        Thu, 06 Oct 2022 10:44:39 -0400
-Message-ID: <20221006144439.459272364@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Thu, 06 Oct 2022 10:43:48 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: [PATCH 2/2] ftrace: Create separate entry in MAINTAINERS for function hooks
-References: <20221006144346.554825677@goodmis.org>
+        Thu, 6 Oct 2022 10:44:04 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3A2AE20F
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 07:44:02 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id 13so5110561ejn.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 07:44:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OyDpyBgQV47YB+266Ki7DI96CjddGq1pfZPclx12xOw=;
+        b=aKf7WhdU+FEtwlX5DJmHKTimmxWRzabCaDnXalwl281hYJgcc09YH0IzOwSHp2/Zs7
+         RtdxuTRudXaZueoK2fYmS5Hv/CqTw73NioV/pU1PDRdLJqB5SMtbElLp/lQAR56AIm/+
+         6lrslo+hGCzqeNqlHU3cTyU5tZ+E0mGS3BhAVXReKEt8dVJJZ6Us6VO8byQesuChs8/q
+         6Oa29HAjUG/75Ok/Xrqj8bOB2ejTpRq5og7ye/gu23X7XCV5FtMtcl2gmESt0Tdj3LVV
+         0Xz8X+c+p90d/bZQnz/DyvJmvfBIWuDfDD7EQ9JpYDJYa03K8CdpukywAtArm6oo2rt8
+         5kLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OyDpyBgQV47YB+266Ki7DI96CjddGq1pfZPclx12xOw=;
+        b=TFnkDvM22HlmVnqIElwXwBcVi/TwIxZ1/Fmn3LAvuLFrGMm3sYcke71gx0nS5R6F1R
+         Yn9zi1quqT9lRl42MY/OsQsmRCAg2Z4agD9caiAywcwkDk+VETbvYyiiVB3NvwLzLHM3
+         iwKEK6KJsjcN19aqMxhLTFtP9W3VKa/g5SO5qbKiDjQPTWhiKZS1LhxJB/cbvDu89YdV
+         GX6syUVRfGCNDsFqnJKa6ttV20TV/3gts+/JLX6tbjpxnKiK4ko0H8cpyo+ejAFwt0mg
+         VjNZbX4Fd54TjBnFDIOukJ61HvMFYU7RJxC68c+2wAp4a4+7RizqvdvbzEzbcLdHSOrh
+         YNIg==
+X-Gm-Message-State: ACrzQf2MODxsGR3F8K09f0UiPXzjdFrsMIrfs7IJ/8V61nwXI24ahqYi
+        mQwE8QZoWDbk67HV0wyZfFsY3ipFDI0M07PUvMA004eK
+X-Google-Smtp-Source: AMsMyM5Y7NcUG/exewc3InWkGudL7EukyL+tDPK9wIGRuqO+9a91trYlsZUK2u+iC5VwGaD2DkjO20ddrC30cYOTWbI=
+X-Received: by 2002:a17:906:6a13:b0:78c:71c0:e615 with SMTP id
+ qw19-20020a1709066a1300b0078c71c0e615mr127498ejc.363.1665067441137; Thu, 06
+ Oct 2022 07:44:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220919030136.1055409-1-peng.fan@oss.nxp.com> <DU0PR04MB9417E587ED9439309510B34A885C9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+In-Reply-To: <DU0PR04MB9417E587ED9439309510B34A885C9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+From:   Jassi Brar <jassisinghbrar@gmail.com>
+Date:   Thu, 6 Oct 2022 09:43:49 -0500
+Message-ID: <CABb+yY2umT5J_saASjXEnE9y56=XDHhfGARCwboiKK35pNZbfg@mail.gmail.com>
+Subject: Re: [PATCH V2] mailbox: imx: fix RST channel support
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Ying Liu <victor.liu@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Thu, Oct 6, 2022 at 5:44 AM Peng Fan <peng.fan@nxp.com> wrote:
+>
+> Hi Jassi,
+>
+> > Subject: [PATCH V2] mailbox: imx: fix RST channel support
+>
+> Would you pick this patch?
+>
+Already queued yesterday.
 
-The function hooks (ftrace) is a completely different subsystem from the
-general tracing. It manages how to attach callbacks to most functions in
-the kernel. It is also used by live kernel patching. It really is not part
-of tracing, although tracing uses it.
-
-Create a separate entry for FUNCTION HOOKS (FTRACE) to be separate from
-tracing itself in the MAINTAINERS file.
-
-Perhaps it shouldbe moved out of the kernel/trace directory, but that's
-for another time.
-
-Cc: Mark Rutland <mark.rutland@arm.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- MAINTAINERS | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 86b8aa4c11cb..d95f5d3b4d37 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8411,6 +8411,19 @@ L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- F:	drivers/platform/x86/fujitsu-tablet.c
- 
-+FUNCTION HOOKS (FTRACE)
-+M:	Steven Rostedt <rostedt@goodmis.org>
-+M:	Masami Hiramatsu <mhiramat@kernel.org>
-+R:	Mark Rutland <mark.rutland@arm.com>
-+S:	Maintained
-+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-+F:	Documentation/trace/ftrace*
-+F:	kernel/trace/ftrace*
-+F:	kernel/trace/fgraph.c
-+F:	arch/*/*/*/*ftrace*
-+F:	arch/*/*/*ftrace*
-+F:	include/*/ftrace.h
-+
- FUNGIBLE ETHERNET DRIVERS
- M:	Dimitris Michailidis <dmichail@fungible.com>
- L:	netdev@vger.kernel.org
-@@ -20615,14 +20628,10 @@ F:	drivers/char/tpm/
- TRACING
- M:	Steven Rostedt <rostedt@goodmis.org>
- M:	Masami Hiramatsu <mhiramat@kernel.org>
--R:	Mark Rutland <mark.rutland@arm.com>
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
--F:	Documentation/trace/ftrace.rst
--F:	arch/*/*/*/*ftrace*
--F:	arch/*/*/*ftrace*
-+F:	Documentation/trace/*
- F:	fs/tracefs/
--F:	include/*/ftrace.h
- F:	include/linux/trace*.h
- F:	include/trace/
- F:	kernel/trace/
--- 
-2.35.1
+cheers.
