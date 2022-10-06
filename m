@@ -2,73 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D470D5F6E3A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 21:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7EC95F6E3F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 21:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbiJFT3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 15:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
+        id S231445AbiJFTaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 15:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231801AbiJFT2y (ORCPT
+        with ESMTP id S231924AbiJFT37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 15:28:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0ED3C2CA6;
-        Thu,  6 Oct 2022 12:28:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1564CB8210B;
-        Thu,  6 Oct 2022 19:28:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57DD3C433D6;
-        Thu,  6 Oct 2022 19:28:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665084524;
-        bh=sRSk/H4zHpiuPMci286gZ86F9BQptTnmXwVSsHyJy7A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uklQVp6T7OunVZ9cRlSqPHBx1K5FHD+0Ka859t/bAJllpIUF/vQ5/uNZQ2KQjhHJF
-         SNLcqvZY5bCZIFrvJ8O4Hzwsn3/L9SUTKsZ4FbI7p2G630OT/114+5kADMqaxzANYZ
-         9MbckqWr0gh+vhv6WvaR4yExH0HgfjCtoEo2KKFQ=
-Date:   Thu, 6 Oct 2022 21:29:25 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Artem S. Tashkinov" <aros@gmx.com>
-Cc:     workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-Message-ID: <Yz8slRMm3QBE0LNL@kroah.com>
-References: <20221002141321.394de676@rorschach.local.home>
- <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
- <20221002180844.2e91b1f1@rorschach.local.home>
- <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com>
- <YzoY+dxLuCfOp0sL@ZenIV>
- <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com>
- <YzqjfU66alRlGk5y@kernel.org>
- <251201be-9552-3a51-749c-3daf4d181250@gmx.com>
- <20221003142240.hu5gj7fms5wdoujk@meerkat.local>
- <6363db78-f676-427d-b479-7065091f3f59@gmx.com>
+        Thu, 6 Oct 2022 15:29:59 -0400
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4E72CDE8;
+        Thu,  6 Oct 2022 12:29:57 -0700 (PDT)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-131ea99262dso3335005fac.9;
+        Thu, 06 Oct 2022 12:29:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ySIVfsaxNA1ijAI7bATHRfKRS7AcLI7DST7iNvCc2ro=;
+        b=6WAkoBbyxj1zlTJCBxNdjgCJUyvcm3v6WZokS4X1B2yXH+ESQxBt+lOS8xQoVvtZrI
+         dEQmLKlRXp4Te776ooL8pk+XDtMZbzFVCsmis2qaIAVinn0vEP1Vmm/Mry6Ie3D4HVCL
+         3ekTnj5VU3JdIgcvIEfJi6gVwgyXf/q1NbnR/vloSq3y2bIREOBOwE17cL9i9t50vZqZ
+         IfjJN1UJ48wpbWRQognXFTvmtNlUtVi8i2ua2USzsbpjw++6AMwc3CKKlAuu7tMStxIV
+         rlpA3QB4C0YdVdIxxGL/QJdP1kOhSuOH66PT93eUW2MLz/LxDw0serrSVMSTO0YV/BuS
+         t1uA==
+X-Gm-Message-State: ACrzQf0ZmsIppFtUNxUhR2cn8s3FHTcxxKp5ehf9b2gdyTFRSc2pP20K
+        +dnGGR5rpO2rzMS2/5mBBg==
+X-Google-Smtp-Source: AMsMyM4/iv7myuy0Nn8kCe3Et5vu7Cu1CfGYnJEilG1xPRLoHrvgqYBZoN4qRCc43LPwkI6oA1Oltg==
+X-Received: by 2002:a05:6870:b422:b0:131:d458:2d21 with SMTP id x34-20020a056870b42200b00131d4582d21mr756756oap.24.1665084596364;
+        Thu, 06 Oct 2022 12:29:56 -0700 (PDT)
+Received: from robh_at_kernel.org ([2607:fb90:8a65:c536:245:842:a3a4:9017])
+        by smtp.gmail.com with ESMTPSA id q65-20020acac044000000b00342fc99c5cbsm6147248oif.54.2022.10.06.12.29.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 12:29:55 -0700 (PDT)
+Received: (nullmailer pid 58541 invoked by uid 1000);
+        Thu, 06 Oct 2022 19:29:53 -0000
+Date:   Thu, 6 Oct 2022 14:29:53 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sean Wang <sean.wang@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, Andy Teng <andy.teng@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2 08/10] dt-bindings: pinctrl: mediatek,mt6779-pinctrl:
+ Document MT6765 pin controller
+Message-ID: <166508455748.57937.1260917394101293139.robh@kernel.org>
+References: <20221005174343.24240-1-y.oudjana@protonmail.com>
+ <20221005174343.24240-9-y.oudjana@protonmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6363db78-f676-427d-b479-7065091f3f59@gmx.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221005174343.24240-9-y.oudjana@protonmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 10:46:29AM +0000, Artem S. Tashkinov wrote:
-> Lastly I've had a crazy idea for a second of maybe migrating the kernel
-> bugzilla over to RedHat/IBM (by asking them whether they are willing to
-> help) but on a second thought it's really really bad as the company is
-> very large and there's a ton of bureaucracy, so managing it would become
-> quite a hassle. Also, I wouldn't want the LF to hand control over it to
-> RedHat.
+On Wed, 05 Oct 2022 20:43:41 +0300, Yassine Oudjana wrote:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
+> 
+> The MT6765 pin controller has had a driver for a while, but DT
+> bindings were never documented for it.
+> 
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> ---
+>  .../pinctrl/mediatek,mt6779-pinctrl.yaml      | 23 +++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+> 
 
-bugzilla.kernel.org was originally created by IBM way back in the 2.5
-kernel days (by people at IBM at the time), and then the passed it off
-to the kernel.org admins.  I doubt they want it back :)
-
+Reviewed-by: Rob Herring <robh@kernel.org>
