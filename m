@@ -2,256 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F25B5F688B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5AD5F6894
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbiJFNun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 09:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50384 "EHLO
+        id S229513AbiJFNwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 09:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231734AbiJFNuW (ORCPT
+        with ESMTP id S230453AbiJFNwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 09:50:22 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A77804B6
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 06:50:04 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id f193so2000737pgc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 06:50:04 -0700 (PDT)
+        Thu, 6 Oct 2022 09:52:16 -0400
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE049FFC;
+        Thu,  6 Oct 2022 06:52:14 -0700 (PDT)
+Received: by mail-oo1-xc36.google.com with SMTP id d22-20020a4a5216000000b0047f740d5847so1416399oob.13;
+        Thu, 06 Oct 2022 06:52:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Y0MJ+CUZZvqiC06rOGoANeiEeLDH+rfWRVr8HGOI0zE=;
-        b=m+gzwteEDOkMfL/WFoicBOTuBgNGNC5upbaRmlPnAq2+eHEimZ0IGhaNNfATO+I1td
-         Fn3w+pSkPbAUQQa+rkRijGa3SOLJqJYtHJTyXKs4hyB72V3W7V/U2Ju2JTuaz3TPRuy8
-         B/lfYiInVeMGS/AEKNlIqfgp3kvP4FqNs6b4T5RIYUSZEwPbWY23T9iBKt9q1M12iay+
-         nfyyiG3eZdJgU1qkdUtEveHSxNp3sEcXFQi/6ptvJGqyVM2PmZpcQ9QSw6PPFtIX/AUV
-         wtSMKYDrziZaMG9NJ2K/LQ0SJ7TTIdKtukh7jaIuLOjvubG3sGCpuwKnzJP74uvJKdKO
-         aobQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3w1N6cAYXcTYVDEoqLPleQfVTM3iy8dzcjzK6Lzia68=;
+        b=PzkZ37yLE12Q6hbAvKYJ5ajfKdV8BPY9I0+haNFdbo/8aUbSry4iynrmovbQeLJsKb
+         /+vOdlsI5pFcJgnC3fcL3XTS0SH38Uke8wmsDS89+MDByaPmykN3Fb/TMslv16vcZT+y
+         lKbpaEGMuyBPsdLcT1gGKltpDPZHHnj2E03285P95eY8QkLAcEShvW9XwODnWsIjKOGu
+         qhRsY2wHWIcCSVuGgzFspXAYMEFPdETb4g9sR1Sy3Zt5p2wtsBV04Yl2uA1iy0JN/9ir
+         ZARWzyZ8o+EIamH0C/VEoou+yLPT7QWYg1ZsTwo9b/hMpASfq7gm74mqo/fj6TWWy26d
+         SrEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=Y0MJ+CUZZvqiC06rOGoANeiEeLDH+rfWRVr8HGOI0zE=;
-        b=cyImq7P89Cp7+ZD36cQ5vReWr6kEp+wclhKdUV2/PlccjA71kLpLxPFOTxECur1LHa
-         HtOMlY+MtxWJ/xJtbfAI9y2W0VX+J5gjroV9i10gHsi8qfv8U5/7N6AJ+F1ut1NG8jKN
-         wjuaIBSnUTNurJCOHB6HdOQrLuxLk6WLPGty/zsEKjJxPBnBEH8Tn0GmXHgreOWSSDVw
-         83M8T2HiqhKrbYtNgtPob6i/YpXv2MNCNnJKam3GjfCFosmzP3cQHUaUwlnjHDvbflXX
-         1sXYeLCyQ98njSRYjvhtLBdvHtlnUI2yH7OQWxzHcoZWeYwrHufDX4D45id4beMRZPnp
-         mYKw==
-X-Gm-Message-State: ACrzQf1nEqDeL8PSzdduzdmv8dwJbvukum8Iflcb42l2qzDwjK08kNdm
-        e5cr3RlPFr6h0EsUX0HYI6Go
-X-Google-Smtp-Source: AMsMyM7gSbJZ96bcqtZTdVs4/z84De0pFcLRe4b2AbJgXTAHQk0JwrMBVcmscWQYl5xaVRo5E2YdJQ==
-X-Received: by 2002:a63:b545:0:b0:43c:2ad9:b00 with SMTP id u5-20020a63b545000000b0043c2ad90b00mr1456pgo.535.1665064203337;
-        Thu, 06 Oct 2022 06:50:03 -0700 (PDT)
-Received: from localhost.localdomain ([220.158.158.220])
-        by smtp.gmail.com with ESMTPSA id k25-20020a635a59000000b00434760ee36asm1874053pgm.16.2022.10.06.06.49.59
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3w1N6cAYXcTYVDEoqLPleQfVTM3iy8dzcjzK6Lzia68=;
+        b=YaurmCcX3T4Y32U23aPVJt0RLIfiEFwNyF7zRQyLXV3LyBV3Nq7x7eNSNHRLIQlRAj
+         fjMLKikaIdlelNjDCL9nVMRSxIwBQxD739UddmKdF86FfuxCJXE8JXKRJM2s3HyBA+Iq
+         mNBc4MQuTYUgoUdnkYxfZDJbwbtUQpRGXKIdR86xz9W0McHFeUAlY4YiWVKqsOTIuExy
+         PiG1nkD4/uPOfODr9kSD+L/fayPwXORAuDauj8P45LW8cTJMwY4yZXm2lr4IZtdmJi+o
+         h6UEa6oVFs7tUAPza8y2gJATFmNEpjeFeXsqjrAfAwceqXdxxO61WckScjUHUDXzr3wl
+         VraQ==
+X-Gm-Message-State: ACrzQf2fTwGhut++rKz6C0W5ykKKlIrOTzyLR+P8DqBUopA4rtnpg4VU
+        /HaDTnz4wctgJafi+gRkJ/Ri0kATD3Y=
+X-Google-Smtp-Source: AMsMyM6zWqHd198tfHrixIxFqyGVKtlilHGal/7xFotzYoXGFZzqMUbEeMvNuavt+TknZbbChhTm1g==
+X-Received: by 2002:a9d:4b11:0:b0:655:f017:962c with SMTP id q17-20020a9d4b11000000b00655f017962cmr1960106otf.322.1665064333727;
+        Thu, 06 Oct 2022 06:52:13 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id bq13-20020a05680823cd00b00353f41440dasm2433469oib.56.2022.10.06.06.52.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 06:50:02 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     kishon@kernel.org, lpieralisi@kernel.org, bhelgaas@google.com
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kw@linux.com, robh@kernel.org, vidyas@nvidia.com, vigneshr@ti.com,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v3 5/5] PCI: endpoint: Use link_up() callback in place of LINK_UP notifier
-Date:   Thu,  6 Oct 2022 19:19:27 +0530
-Message-Id: <20221006134927.41437-6-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221006134927.41437-1-manivannan.sadhasivam@linaro.org>
-References: <20221006134927.41437-1-manivannan.sadhasivam@linaro.org>
+        Thu, 06 Oct 2022 06:52:13 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 06:50:03 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [RFC PATCH bitmap-for-next 4/4] blk_mq: Fix cpumask_check()
+ warning in blk_mq_hctx_next_cpu()
+Message-ID: <Yz7dC4zxby1CZphE@yury-laptop>
+References: <20221006122112.663119-1-vschneid@redhat.com>
+ <20221006122112.663119-5-vschneid@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221006122112.663119-5-vschneid@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As a part of the transition towards callback mechanism for signalling the
-events from EPC to EPF, let's use the link_up() callback in the place of
-the LINK_UP notifier. This also removes the notifier support completely
-from the PCI endpoint framework.
+On Thu, Oct 06, 2022 at 01:21:12PM +0100, Valentin Schneider wrote:
+> blk_mq_hctx_next_cpu() implements a form of cpumask_next_and_wrap() using
+> cpumask_next_and_cpu() and blk_mq_first_mapped_cpu():
+> 
+> [    5.398453] WARNING: CPU: 3 PID: 162 at include/linux/cpumask.h:110 __blk_mq_delay_run_hw_queue+0x16b/0x180
+> [    5.399317] Modules linked in:
+> [    5.399646] CPU: 3 PID: 162 Comm: ssh-keygen Tainted: G                 N 6.0.0-rc4-00004-g93003cb24006 #55
+> [    5.400135] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+> [    5.405430] Call Trace:
+> [    5.406152]  <TASK>
+> [    5.406452]  blk_mq_sched_insert_requests+0x67/0x150
+> [    5.406759]  blk_mq_flush_plug_list+0xd0/0x280
+> [    5.406987]  ? bit_wait+0x60/0x60
+> [    5.407317]  __blk_flush_plug+0xdb/0x120
+> [    5.407561]  ? bit_wait+0x60/0x60
+> [    5.407765]  io_schedule_prepare+0x38/0x40
+> [...]
+> 
+> This triggers a warning when next_cpu == nr_cpu_ids - 1, so rewrite it
+> using cpumask_next_and_wrap() directly. The backwards-going goto can be
+> removed, as the cpumask_next*() operation already ANDs hctx->cpumask and
+> cpu_online_mask, which implies checking for an online CPU.
+> 
+> No change in behaviour intended.
+> 
+> Suggested-by: Yury Norov <yury.norov@gmail.com>
+> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+> ---
+>  block/blk-mq.c | 39 +++++++++++++--------------------------
+>  1 file changed, 13 insertions(+), 26 deletions(-)
+> 
+> diff --git a/block/blk-mq.c b/block/blk-mq.c
+> index c96c8c4f751b..1520794dd9ea 100644
+> --- a/block/blk-mq.c
+> +++ b/block/blk-mq.c
+> @@ -2038,42 +2038,29 @@ static inline int blk_mq_first_mapped_cpu(struct blk_mq_hw_ctx *hctx)
+>   */
+>  static int blk_mq_hctx_next_cpu(struct blk_mq_hw_ctx *hctx)
+>  {
+> -	bool tried = false;
+>  	int next_cpu = hctx->next_cpu;
+>  
+>  	if (hctx->queue->nr_hw_queues == 1)
+>  		return WORK_CPU_UNBOUND;
+>  
+> -	if (--hctx->next_cpu_batch <= 0) {
+> -select_cpu:
+> -		next_cpu = cpumask_next_and(next_cpu, hctx->cpumask,
+> -				cpu_online_mask);
+> -		if (next_cpu >= nr_cpu_ids)
+> -			next_cpu = blk_mq_first_mapped_cpu(hctx);
+> +	if (--hctx->next_cpu_batch > 0 && cpu_online(next_cpu))
+> +		return next_cpu;
+> +
+> +	next_cpu = cpumask_next_and_wrap(next_cpu, hctx->cpumask, cpu_online_mask, next_cpu, false);
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/pci/endpoint/functions/pci-epf-test.c | 33 ++++++-------------
- drivers/pci/endpoint/pci-epc-core.c           | 12 +++++--
- include/linux/pci-epc.h                       |  8 -----
- include/linux/pci-epf.h                       |  8 ++---
- 4 files changed, 22 insertions(+), 39 deletions(-)
+Last two parameters are simply useless. In fact, in many cases they
+are useless for cpumask_next_wrap(). I'm working on simplifying the
+cpumask_next_wrap() so that it would take just 2 parameters - pivot
+point and cpumask.
 
-diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-index 868de17e1ad2..f75045f2dee3 100644
---- a/drivers/pci/endpoint/functions/pci-epf-test.c
-+++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-@@ -826,30 +826,21 @@ static int pci_epf_test_core_init(struct pci_epf *epf)
- 	return 0;
- }
- 
--static const struct pci_epc_event_ops pci_epf_test_event_ops = {
--	.core_init = pci_epf_test_core_init,
--};
--
--static int pci_epf_test_notifier(struct notifier_block *nb, unsigned long val,
--				 void *data)
-+int pci_epf_test_link_up(struct pci_epf *epf)
- {
--	struct pci_epf *epf = container_of(nb, struct pci_epf, nb);
- 	struct pci_epf_test *epf_test = epf_get_drvdata(epf);
- 
--	switch (val) {
--	case LINK_UP:
--		queue_delayed_work(kpcitest_workqueue, &epf_test->cmd_handler,
--				   msecs_to_jiffies(1));
--		break;
--
--	default:
--		dev_err(&epf->dev, "Invalid EPF test notifier event\n");
--		return NOTIFY_BAD;
--	}
-+	queue_delayed_work(kpcitest_workqueue, &epf_test->cmd_handler,
-+			   msecs_to_jiffies(1));
- 
--	return NOTIFY_OK;
-+	return 0;
- }
- 
-+static const struct pci_epc_event_ops pci_epf_test_event_ops = {
-+	.core_init = pci_epf_test_core_init,
-+	.link_up = pci_epf_test_link_up,
-+};
-+
- static int pci_epf_test_alloc_space(struct pci_epf *epf)
- {
- 	struct pci_epf_test *epf_test = epf_get_drvdata(epf);
-@@ -976,12 +967,8 @@ static int pci_epf_test_bind(struct pci_epf *epf)
- 	if (ret)
- 		epf_test->dma_supported = false;
- 
--	if (linkup_notifier || core_init_notifier) {
--		epf->nb.notifier_call = pci_epf_test_notifier;
--		pci_epc_register_notifier(epc, &epf->nb);
--	} else {
-+	if (!linkup_notifier && !core_init_notifier)
- 		queue_work(kpcitest_workqueue, &epf_test->cmd_handler.work);
--	}
- 
- 	return 0;
- }
-diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
-index ba54f17ae06f..5dac1496cf16 100644
---- a/drivers/pci/endpoint/pci-epc-core.c
-+++ b/drivers/pci/endpoint/pci-epc-core.c
-@@ -690,10 +690,19 @@ EXPORT_SYMBOL_GPL(pci_epc_remove_epf);
-  */
- void pci_epc_linkup(struct pci_epc *epc)
- {
-+	struct pci_epf *epf;
-+
- 	if (!epc || IS_ERR(epc))
- 		return;
- 
--	atomic_notifier_call_chain(&epc->notifier, LINK_UP, NULL);
-+	mutex_lock(&epc->list_lock);
-+	list_for_each_entry(epf, &epc->pci_epf, list) {
-+		mutex_lock(&epf->lock);
-+		if (epf->event_ops->link_up)
-+			epf->event_ops->link_up(epf);
-+		mutex_unlock(&epf->lock);
-+	}
-+	mutex_unlock(&epc->list_lock);
- }
- EXPORT_SYMBOL_GPL(pci_epc_linkup);
- 
-@@ -784,7 +793,6 @@ __pci_epc_create(struct device *dev, const struct pci_epc_ops *ops,
- 	mutex_init(&epc->lock);
- 	mutex_init(&epc->list_lock);
- 	INIT_LIST_HEAD(&epc->pci_epf);
--	ATOMIC_INIT_NOTIFIER_HEAD(&epc->notifier);
- 
- 	device_initialize(&epc->dev);
- 	epc->dev.class = pci_epc_class;
-diff --git a/include/linux/pci-epc.h b/include/linux/pci-epc.h
-index fe729dfe509b..301bb0e53707 100644
---- a/include/linux/pci-epc.h
-+++ b/include/linux/pci-epc.h
-@@ -135,7 +135,6 @@ struct pci_epc_mem {
-  * @group: configfs group representing the PCI EPC device
-  * @lock: mutex to protect pci_epc ops
-  * @function_num_map: bitmap to manage physical function number
-- * @notifier: used to notify EPF of any EPC events (like linkup)
-  */
- struct pci_epc {
- 	struct device			dev;
-@@ -151,7 +150,6 @@ struct pci_epc {
- 	/* mutex to protect against concurrent access of EP controller */
- 	struct mutex			lock;
- 	unsigned long			function_num_map;
--	struct atomic_notifier_head	notifier;
- };
- 
- /**
-@@ -194,12 +192,6 @@ static inline void *epc_get_drvdata(struct pci_epc *epc)
- 	return dev_get_drvdata(&epc->dev);
- }
- 
--static inline int
--pci_epc_register_notifier(struct pci_epc *epc, struct notifier_block *nb)
--{
--	return atomic_notifier_chain_register(&epc->notifier, nb);
--}
--
- struct pci_epc *
- __devm_pci_epc_create(struct device *dev, const struct pci_epc_ops *ops,
- 		      struct module *owner);
-diff --git a/include/linux/pci-epf.h b/include/linux/pci-epf.h
-index a06f3b4c8bee..bc613f0df7e3 100644
---- a/include/linux/pci-epf.h
-+++ b/include/linux/pci-epf.h
-@@ -17,10 +17,6 @@
- struct pci_epf;
- enum pci_epc_interface_type;
- 
--enum pci_notify_event {
--	LINK_UP,
--};
--
- enum pci_barno {
- 	NO_BAR = -1,
- 	BAR_0,
-@@ -74,9 +70,11 @@ struct pci_epf_ops {
- /**
-  * struct pci_epf_event_ops - Callbacks for capturing the EPC events
-  * @core_init: Callback for the EPC initialization complete event
-+ * @link_up: Callback for the EPC link up event
-  */
- struct pci_epc_event_ops {
- 	int (*core_init)(struct pci_epf *epf);
-+	int (*link_up)(struct pci_epf *epf);
- };
- 
- /**
-@@ -135,7 +133,6 @@ struct pci_epf_bar {
-  * @driver: the EPF driver to which this EPF device is bound
-  * @id: Pointer to the EPF device ID
-  * @list: to add pci_epf as a list of PCI endpoint functions to pci_epc
-- * @nb: notifier block to notify EPF of any EPC events (like linkup)
-  * @lock: mutex to protect pci_epf_ops
-  * @sec_epc: the secondary EPC device to which this EPF device is bound
-  * @sec_epc_list: to add pci_epf as list of PCI endpoint functions to secondary
-@@ -164,7 +161,6 @@ struct pci_epf {
- 	struct pci_epf_driver	*driver;
- 	const struct pci_epf_device_id *id;
- 	struct list_head	list;
--	struct notifier_block   nb;
- 	/* mutex to protect against concurrent access of pci_epf_ops */
- 	struct mutex		lock;
- 
--- 
-2.25.1
+Regarding 'next' version - we already have find_next_and_bit_wrap(),
+and I think cpumask_next_and_wrap() should use it.
 
+For the context: those last parameters are needed to exclude part of
+cpumask from traversing, and to implement for-loop. Now that we have
+for_each_cpu_wrap() based on for_each_set_bit_wrap(), it's possible
+to remove them. I'm working on it.
+
+> +	if (next_cpu < nr_cpu_ids) {
+>  		hctx->next_cpu_batch = BLK_MQ_CPU_WORK_BATCH;
+> +		hctx->next_cpu = next_cpu;
+> +		return next_cpu;
+>  	}
+>  
+>  	/*
+> -	 * Do unbound schedule if we can't find a online CPU for this hctx,
+> -	 * and it should only happen in the path of handling CPU DEAD.
+> +	 * No other online CPU in hctx->cpumask.
+> +	 *
+> +	 * Make sure to re-select CPU next time once after CPUs
+> +	 * in hctx->cpumask become online again.
+>  	 */
+> -	if (!cpu_online(next_cpu)) {
+> -		if (!tried) {
+> -			tried = true;
+> -			goto select_cpu;
+> -		}
+> -
+> -		/*
+> -		 * Make sure to re-select CPU next time once after CPUs
+> -		 * in hctx->cpumask become online again.
+> -		 */
+> -		hctx->next_cpu = next_cpu;
+> -		hctx->next_cpu_batch = 1;
+> -		return WORK_CPU_UNBOUND;
+> -	}
+> -
+> -	hctx->next_cpu = next_cpu;
+> -	return next_cpu;
+> +	hctx->next_cpu_batch = 1;
+> +	return WORK_CPU_UNBOUND;
+>  }
+>  
+>  /**
+> -- 
+> 2.31.1
