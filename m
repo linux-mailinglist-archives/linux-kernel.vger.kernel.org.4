@@ -2,166 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52CE45F6100
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 08:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A15F65F6103
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 08:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiJFGVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 02:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
+        id S230169AbiJFGYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 02:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiJFGVH (ORCPT
+        with ESMTP id S229545AbiJFGYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 02:21:07 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1098A1E7
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 23:21:04 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id e11-20020a17090a77cb00b00205edbfd646so3466332pjs.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 23:21:04 -0700 (PDT)
+        Thu, 6 Oct 2022 02:24:10 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3DB89AEC
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 23:24:08 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id w10so1380337edd.4
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 23:24:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=DNCHcypAqACyuqWx+p7IPwXAi8YgHbhoRcWSFbyaQks=;
-        b=ZEpegq5D07sSgQNEZyxGsXiMR57KikRoeFDL1sOXN3CbkKPCi6sI4u9gbG4bL/Hl2F
-         UTgcpmqU7XbCrAyR2WfDDdtcgsqIeLaSac7XV272DQXP4hLDjCizRoTsZH600bu4pCQk
-         rKd4DNrlMueGNq9OwAXpLiYWENn00op+fsKtk9L9wQof+mRmo/InZ5kDNxGdbHAkQHhs
-         Jhb5c1QH8CVE0lYM3wbSuxyI7uMFhh+lRRJdM+hhTJXGfGnArGi7WcssLfrczZfD3HE2
-         vjJ8ix/gt/7oZcQwkP2qSOKN/MpoUp1T9Ws7AoVBB0v9K+FTKqnDqCyUr2aEP06a9rva
-         hvzA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=hcwsr+gxsxYhjpD2bB7DUVncJgwA9R5/DlEljscp2s0=;
+        b=NJri+RJsCQX1v6PEjp7l9HpnrU7itfxe3i3yU/37dNWDDBhMgv6eSv9aaKcC/efLqJ
+         aeJbPSl5Bby1+28sixlaa+qCs6LYgYw/8L+LyPgleIQDG2xH9hKayZe2nZr03G6UQ60U
+         Kd6Bsitsbk71avsoS8gmrNpfQGKGnX8PjQWra1hlR+9MqurTuTiKve6So6Yauy6ne5ld
+         g8ogpv6fx1mVWtxpIZKWec/4nvRtWcY6I81kXqDehFrTZeouiMNGPh2vOYYoRbK5CKtz
+         b7cOcqQXFIh2mPH+OgF+AtNtLT4aOv3XKHnZMQwR7YKMmrf1Bw1NOpvAfIDH/mX8iCsY
+         vaQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=DNCHcypAqACyuqWx+p7IPwXAi8YgHbhoRcWSFbyaQks=;
-        b=cT8Dd7EMX7/Lr8nYEsOhbZZdCtrTsAtgvUzF+gU47qivROOdRo38pUmHgqgfqcsCfP
-         6pYl+emNsRfxSVPmUoXW+FiP5BV6WuNQo7wZKSVV1WbehkRxLrqgyc6C2ryny4ja64ju
-         Z4tXFEGhcuMQUjBme9MraoimGvGnuvwUdYme7MQdrdCJoLIRdvf/7gDtACDyUvsZ4j3U
-         kn718f7yAQL7oYCRA4WzPvkZ7izL/6kYXz0e10N3QNcciQ/Kckex8VnZNL3ZrfI4jaHb
-         MtrCW8bwv/LZyYclaZMb8qgi8AvNA2sAF3XruTfH7/4wPbHNM1K18CdjiB0hNGzsnaIe
-         g4nw==
-X-Gm-Message-State: ACrzQf0oHDxhOP5wAXSTozA21dtqMMI5mjMFkLdmmwMLDGzbRVy+KAbv
-        U+0VKf/QWQveI0vBfJU4/H0=
-X-Google-Smtp-Source: AMsMyM7of5BeQtui09w593FobXfInNH4J8ZMlYDsuKxXQ1hfC9UspE+10JpDFYTxfiMVag84FGI8rg==
-X-Received: by 2002:a17:90a:ce82:b0:20a:b20f:6d0e with SMTP id g2-20020a17090ace8200b0020ab20f6d0emr8866340pju.125.1665037264223;
-        Wed, 05 Oct 2022 23:21:04 -0700 (PDT)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id s13-20020a17090302cd00b00172dc6e1916sm11436708plk.220.2022.10.05.23.21.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 23:21:03 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 15:20:57 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: slub: remove dead and buggy code from
- sysfs_slab_add()
-Message-ID: <Yz5zyRK1XfKfFITD@hyeyoo>
-References: <20220930084742.771804-1-linux@rasmusvillemoes.dk>
- <YzqJFnCA1bfYqJ5x@hyeyoo>
- <dfa55d7d-4063-c249-f6b8-e7b7d2efc8cc@rasmusvillemoes.dk>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=hcwsr+gxsxYhjpD2bB7DUVncJgwA9R5/DlEljscp2s0=;
+        b=t9gcSsGOMFnL6WthBhUtxwv9j24h3nl4aMrCVr6gWYVQxc+imkezDUx1mTPQdt964i
+         EP0b1KxQMz3bXqGfnGbAAqSrTCAWVQ2Y1CQ1PBMaPeAKsvoj1cPMAMHidJ22gV44DeRP
+         6kTvuj92UnqtZGfVWWgqTaXkb+l9DhRZInDw4/zytD0+1vgXpsZH7Tp14240aC332L9R
+         FFRlpXPltVGg+kqYAWXgmlYwTzTEk7NQSOWl56F4G+2IqKFexjkKZL6zW7YrruA0WmU5
+         OnK1jaw9SQjUzZMIf9TiTvH/NWFv7/TPNftpyBVSKirtaMHLCTcjOyBq+JMXDDTlXvp1
+         aJ1w==
+X-Gm-Message-State: ACrzQf1XjGAqdCFAoPdi6tgnB61hxmVxfivhXatTjHtX31rdUdkcgBv6
+        RE9P3CAswo+VMvlUcnukc3OI1iRDrCqF9eAAuFeg/A==
+X-Google-Smtp-Source: AMsMyM45Fo5EqDCOTvGzAIiJi6QN5VCakFhFt5Khq+dHMnxFOxnAznWVaQOOFUO5stJANfFH4Rz6OIlSSFIqJiIJ/Dc=
+X-Received: by 2002:a05:6402:1856:b0:458:db1e:20ec with SMTP id
+ v22-20020a056402185600b00458db1e20ecmr3214007edy.14.1665037447118; Wed, 05
+ Oct 2022 23:24:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dfa55d7d-4063-c249-f6b8-e7b7d2efc8cc@rasmusvillemoes.dk>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20221002002326.946620-1-ira.weiny@intel.com> <20221002002326.946620-3-ira.weiny@intel.com>
+ <CAFA6WYOGT1sJLA4c_B88NaXgxv4fm-idi5QMYvXdXB0acCF3sw@mail.gmail.com> <TYZPR03MB65279558CC22F5130B710EA8FB5D9@TYZPR03MB6527.apcprd03.prod.outlook.com>
+In-Reply-To: <TYZPR03MB65279558CC22F5130B710EA8FB5D9@TYZPR03MB6527.apcprd03.prod.outlook.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Thu, 6 Oct 2022 11:53:55 +0530
+Message-ID: <CAFA6WYMT9S1Di6DN_UXc823f0ZTkqerE1PB=oG6wmfx28vEbDg@mail.gmail.com>
+Subject: Re: [PATCH 2/4] tee: Remove vmalloc page support
+To:     =?UTF-8?B?UGhpbCBDaGFuZyAo5by15LiW5YuzKQ==?= 
+        <Phil.Chang@mediatek.com>
+Cc:     "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 11:38:30AM +0200, Rasmus Villemoes wrote:
-> On 03/10/2022 09.02, Hyeonggon Yoo wrote:
-> > On Fri, Sep 30, 2022 at 10:47:42AM +0200, Rasmus Villemoes wrote:
-> >> The function sysfs_slab_add() has two callers:
-> >>
-> >> One is slab_sysfs_init(), which first initializes slab_kset, and only
-> >> when that succeeds sets slab_state to FULL, and then proceeds to call
-> >> sysfs_slab_add() for all previously created slabs.
-> >>
-> >> The other is __kmem_cache_create(), but only after a
-> >>
-> >> 	if (slab_state <= UP)
-> >> 		return 0;
-> >>
-> >> check.
-> >>
-> >> So in other words, sysfs_slab_add() is never called without
-> >> slab_kset (aka the return value of cache_kset()) being non-NULL.
-> >>
-> >> And this is just as well, because if we ever did take this path and
-> >> called kobject_init(&s->kobj), and then later when called again from
-> >> slab_sysfs_init() would end up calling kobject_init_and_add(), we
-> >> would hit
-> >>
-> >> 	if (kobj->state_initialized) {
-> >> 		/* do not error out as sometimes we can recover */
-> >> 		pr_err("kobject (%p): tried to init an initialized object, something is seriously wrong.\n",
-> >> 		dump_stack();
-> >> 	}
-> >>
-> >> in kobject.c.
-> >>
-> >> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> >> ---
-> >>  mm/slub.c | 5 -----
-> >>  1 file changed, 5 deletions(-)
-> >>
-> >> diff --git a/mm/slub.c b/mm/slub.c
-> >> index 4b98dff9be8e..04a7f75a7b1f 100644
-> >> --- a/mm/slub.c
-> >> +++ b/mm/slub.c
-> >> @@ -5937,11 +5937,6 @@ static int sysfs_slab_add(struct kmem_cache *s)
-> >>  	struct kset *kset = cache_kset(s);
-> >>  	int unmergeable = slab_unmergeable(s);
-> >>  
-> >> -	if (!kset) {
-> >> -		kobject_init(&s->kobj, &slab_ktype);
-> >> -		return 0;
-> >> -	}
-> >> -
-> >>  	if (!unmergeable && disable_higher_order_debug &&
-> >>  			(slub_debug & DEBUG_METADATA_FLAGS))
-> >>  		unmergeable = 1;
-> >> -- 
-> >> 2.37.2
-> > 
-> > I assumed that it's hit when SLUB failed to initialize slab_kset in
-> > slab_sysfs_init(). (Yeah, it is too unlikely, though....)
-> 
-> No, it is not, because if the creation of slab_kset fails,
-> slab_sysfs_init() returns early, and hence slab_state never transitions
-> to FULL.
+Hi Phil,
 
-Yeah, you are right ;-) I misread that.
+Please don't top-post in the OSS mailing list.
 
-> I don't see anywhere else where slab_state could become FULL
-> (of course in slab.c and slob.c, but those are not built when slub.c
-> is), so I do believe my analysis in the commit log is correct.
+On Wed, 5 Oct 2022 at 08:59, Phil Chang (=E5=BC=B5=E4=B8=96=E5=8B=B3) <Phil=
+.Chang@mediatek.com> wrote:
+>
+> Hi Sumit
+>
+> Thanks for mentioning that, in fact, our product is low memory devices, a=
+nd continuous pages are extremely valuable.
+> Although our driver is not upstream yet but highly dependent on tee shm v=
+malloc support,
 
-Right.
+Sorry but you need to get your driver mainline in order to support
+vmalloc interface. As otherwise it's a maintenance nightmare to
+support interfaces in the mainline for out-of-tree drivers.
 
-> > And obviously it's a bug if sysfs_slab_add() is called early than
-> > slab_sysfs_init().
-> 
-> Yes, and that's already what the existing slab_state check guards.
-> 
-> Rasmus
+-Sumit
 
-Looks good to me,
-Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-
-Thanks!
-
--- 
-Thanks,
-Hyeonggon
+> some scenarios are driver alloc high order pages but system memory is fra=
+gmentation so that alloc failed.
+> In this situation, vmalloc support is important and gives flexible usage =
+to user.
+>
+>
+> -----Original Message-----
+> From: Sumit Garg <sumit.garg@linaro.org>
+> Sent: Monday, October 3, 2022 2:57 PM
+> To: ira.weiny@intel.com
+> Cc: Jens Wiklander <jens.wiklander@linaro.org>; Andrew Morton <akpm@linux=
+-foundation.org>; Al Viro <viro@zeniv.linux.org.uk>; Fabio M. De Francesco =
+<fmdefrancesco@gmail.com>; Christoph Hellwig <hch@lst.de>; Linus Torvalds <=
+torvalds@linux-foundation.org>; op-tee@lists.trustedfirmware.org; linux-ker=
+nel@vger.kernel.org; linux-mm@kvack.org; Phil Chang (=E5=BC=B5=E4=B8=96=E5=
+=8B=B3) <Phil.Chang@mediatek.com>
+> Subject: Re: [PATCH 2/4] tee: Remove vmalloc page support
+>
+> + Phil
+>
+> Hi Ira,
+>
+> On Sun, 2 Oct 2022 at 05:53, <ira.weiny@intel.com> wrote:
+> >
+> > From: Ira Weiny <ira.weiny@intel.com>
+> >
+> > The kernel pages used by shm_get_kernel_pages() are allocated using
+> > GFP_KERNEL through the following call stack:
+> >
+> > trusted_instantiate()
+> >         trusted_payload_alloc() -> GFP_KERNEL
+> >         <trusted key op>
+> >                 tee_shm_register_kernel_buf()
+> >                         register_shm_helper()
+> >                                 shm_get_kernel_pages()
+> >
+> > Where <trusted key op> is one of:
+> >
+> >         trusted_key_unseal()
+> >         trusted_key_get_random()
+> >         trusted_key_seal()
+> >
+> > Remove the vmalloc page support from shm_get_kernel_pages().  Replace
+> > with a warn on once.
+> >
+> > Cc: Jens Wiklander <jens.wiklander@linaro.org>
+> > Cc: Al Viro <viro@zeniv.linux.org.uk>
+> > Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+> > Cc: Christoph Hellwig <hch@lst.de>
+> > Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> >
+> > ---
+> > Jens I went with the suggestion from Linus and Christoph and rejected
+> > vmalloc addresses.  I did not hear back from you regarding Linus'
+> > question if the vmalloc page support was required by an up coming
+> > patch set or not.  So I assumed it was something out of tree.
+>
+> It looks like I wasn't CC'd to that conversation. IIRC, support for vmall=
+oc addresses was added recently by Phil here [1]. So I would like to give h=
+im a chance if he is planning to post a corresponding kernel driver upstrea=
+m.
+>
+> [1] https://urldefense.com/v3/__https://lists.trustedfirmware.org/archive=
+s/list/op-tee@lists.trustedfirmware.org/thread/M7HI3P2M66V27SK35CGQRICZ7DJZ=
+5J2W/__;!!CTRNKA9wMg0ARbw!wGOKR9k3khZJlPt1K_xBCXX4EBM5ZCfWKuruFgSP45H8wTvJr=
+x4_St3Fb5ZrljD5QQ$
+>
+> -Sumit
+>
+> > ---
+> >  drivers/tee/tee_shm.c | 36 ++++++++++++------------------------
+> >  1 file changed, 12 insertions(+), 24 deletions(-)
+> >
+> > diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c index
+> > 27295bda3e0b..527a6eabc03e 100644
+> > --- a/drivers/tee/tee_shm.c
+> > +++ b/drivers/tee/tee_shm.c
+> > @@ -24,37 +24,25 @@ static void shm_put_kernel_pages(struct page
+> > **pages, size_t page_count)  static int shm_get_kernel_pages(unsigned l=
+ong start, size_t page_count,
+> >                                 struct page **pages)  {
+> > +       struct kvec *kiov;
+> >         size_t n;
+> >         int rc;
+> >
+> > -       if (is_vmalloc_addr((void *)start)) {
+> > -               struct page *page;
+> > -
+> > -               for (n =3D 0; n < page_count; n++) {
+> > -                       page =3D vmalloc_to_page((void *)(start + PAGE_=
+SIZE * n));
+> > -                       if (!page)
+> > -                               return -ENOMEM;
+> > -
+> > -                       get_page(page);
+> > -                       pages[n] =3D page;
+> > -               }
+> > -               rc =3D page_count;
+> > -       } else {
+> > -               struct kvec *kiov;
+> > -
+> > -               kiov =3D kcalloc(page_count, sizeof(*kiov), GFP_KERNEL)=
+;
+> > -               if (!kiov)
+> > -                       return -ENOMEM;
+> > +       if (WARN_ON_ONCE(is_vmalloc_addr((void *)start)))
+> > +               return -EINVAL;
+> >
+> > -               for (n =3D 0; n < page_count; n++) {
+> > -                       kiov[n].iov_base =3D (void *)(start + n * PAGE_=
+SIZE);
+> > -                       kiov[n].iov_len =3D PAGE_SIZE;
+> > -               }
+> > +       kiov =3D kcalloc(page_count, sizeof(*kiov), GFP_KERNEL);
+> > +       if (!kiov)
+> > +               return -ENOMEM;
+> >
+> > -               rc =3D get_kernel_pages(kiov, page_count, 0, pages);
+> > -               kfree(kiov);
+> > +       for (n =3D 0; n < page_count; n++) {
+> > +               kiov[n].iov_base =3D (void *)(start + n * PAGE_SIZE);
+> > +               kiov[n].iov_len =3D PAGE_SIZE;
+> >         }
+> >
+> > +       rc =3D get_kernel_pages(kiov, page_count, 0, pages);
+> > +       kfree(kiov);
+> > +
+> >         return rc;
+> >  }
+> >
+> > --
+> > 2.37.2
+> >
