@@ -2,123 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC6C5F61B4
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 09:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9745F61B6
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 09:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbiJFHfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 03:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
+        id S230344AbiJFHfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 03:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbiJFHfa (ORCPT
+        with ESMTP id S230346AbiJFHfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 03:35:30 -0400
-Received: from EUR02-VE1-obe.outbound.protection.outlook.com (mail-eopbgr20068.outbound.protection.outlook.com [40.107.2.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5574280BF3
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 00:35:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hWIhAcCg42l+TnQQXSSCUc+O8M20m5UfL/dASuDLYsiDxG3r+MfHFAHGl5kYcMv3b5+3UAWvy1F76mXh5PUHO2hjIxqgY7R+4J42MXIDpuGa5vSttSMEA2biIdQgSOfnkukHhMMSj8KOzBstOwQErnnD1lhyvEANrGe950l1XoeSCgDawJaNON+DFycAarhbQJEyyiOXmj1W5DsRizhxGT9geuihiwiJ9Rtl6oz8vyC92kUdu5g36QCqOEMMMOjLfY4xm5bCAlxIICELAvdimmkKFfplX2EAzZWVnDKsgxDR8+aDf5aW44j1KZKdZNm7kYrSIltSvXpqq06vlTS6hg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pJ1rnAn5SYNs2o4bleD20RwDLuDlxb9eiqL3WKwG5Ko=;
- b=hYVd+kjBxyPp8oDAeHTTQDWcYYVHtb/OZ9FXIwDcuWkr1BBPtPeZGVZn/O5BFr5YQU7n1fXTx/23iZkNoFE/0A7UgvxM4uHLd0hmV7Ly0BlEjf9zQdD963dkApWrrDptpQ1sYnz9dczWipvZK/Eou7zHIhzhEY/dHQtpX3fLoyIqZZDb0li09+gfDLB2e4JKU5KvGBR9aDsfkH2rk+iPxhkLv2xUgWiom6X7ZUgIMdlFFSRLH1SP5KfL/gXWGJJcggzitBqRjJc/CJo9fbJuvV3OZdFAF8sPkThxGnYsYtsOrRN+wNtULa5PaSuB75PtW4OibD456M1bHMgATiQYhQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pJ1rnAn5SYNs2o4bleD20RwDLuDlxb9eiqL3WKwG5Ko=;
- b=e6Ny0THxjvojVdbySKq6M6aoLz6FwmoUBphZVlsqZ3CbItr9dpe3v2dqVRvuOj1qlRFvR91/cO8mYmHFaZX2Ewc1AEQgVKCc/1J6M3BQKAYpCeRx/COk39kU7YCeovyxDu6cIEdZwaovIqX17E0zi78fZLK5mBW2ccuvF5+A5j0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR0402MB3405.eurprd04.prod.outlook.com (2603:10a6:803:3::26)
- by PAXPR04MB8207.eurprd04.prod.outlook.com (2603:10a6:102:1cd::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.34; Thu, 6 Oct
- 2022 07:35:16 +0000
-Received: from VI1PR0402MB3405.eurprd04.prod.outlook.com
- ([fe80::8959:a7f8:9e94:355c]) by VI1PR0402MB3405.eurprd04.prod.outlook.com
- ([fe80::8959:a7f8:9e94:355c%4]) with mapi id 15.20.5676.032; Thu, 6 Oct 2022
- 07:35:16 +0000
-Message-ID: <f49ba8f7-8968-fc2b-3cab-6c41168b0b89@nxp.com>
-Date:   Thu, 6 Oct 2022 10:35:10 +0300
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] tty: evh_bytechan: Replace NO_IRQ by 0
-Content-Language: en-CA
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <23f608ca57e7e19bc7060d3e563de383e0b2b337.1665033575.git.christophe.leroy@csgroup.eu>
-From:   Laurentiu Tudor <laurentiu.tudor@nxp.com>
-In-Reply-To: <23f608ca57e7e19bc7060d3e563de383e0b2b337.1665033575.git.christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM0PR04CA0090.eurprd04.prod.outlook.com
- (2603:10a6:208:be::31) To VI1PR0402MB3405.eurprd04.prod.outlook.com
- (2603:10a6:803:3::26)
+        Thu, 6 Oct 2022 03:35:38 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B6F80EBE
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 00:35:32 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id p5so1208283ljc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 00:35:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BUgO7Gn6HVGXmIvVSi76EssaR+MnNtPNxr+txyIXJQI=;
+        b=ccopRKBGo9bGpf/7iufPjWYVdlsKtPQ7zcUNqcMpcos9T5NHbPlWq8so7iDOTjaNOc
+         gIaSTFP7h/69QrayDSV8SFeydowsRoHjIo92O6VRdL1KCLojN23RefRvJ6LqtzWf+dCj
+         RFM8EU5FcEMdVgLsa34eD82/KqEoVY3cV8njtGdLuP4cnbsvtLUGbWkj4Ecvk+KldZ/k
+         PgS6H8NeJRI1iP4BzXvsCzRLLxTlzvTJWpemhVHZSIo2l7VB1ZBZ1xoFxa3eXQmcYgeD
+         zXukIzPEmyNz2IwFjjcrxB1TdCdtrjFWPUlZzy38nUj/vwxj3DUotH1vHRbgF5AV3Lly
+         lPig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BUgO7Gn6HVGXmIvVSi76EssaR+MnNtPNxr+txyIXJQI=;
+        b=2X9lFPhOsOemcWYZuagRbXA+Y4VJS3yY54DJM08YSQVnuBBrbeWZRFvCitRlDkH9+V
+         hbNbT8kS+7FcoryuNYOk1b3e655uG3lmTu/+OtfrSgqx+DlZEaEA8OBPtiaNhldZnz2k
+         RXP1Y/emIXM2B8X1WMWbsZGKb+wcj3zrva6RyTphuT1gv1GcPEo08Mg6gFC4SG5kgT1O
+         6VhGrmmC2lUt6BoH/2OLZR7cDuz5WZ4r+Gs1kWiIvVk9x3l9bpvPrVu40pjZuOmUXwXM
+         mSr2F+Kbzt8oDBzDf9Z3+usHJr6gmdrTRzcuwn3ubwdBrWmoURIx+1/bYEOrZK6gMqEU
+         zW3g==
+X-Gm-Message-State: ACrzQf1YMJyjna7UsAxvZPbUWFkmdhul1sq2jsWQ/jt++GDJiQYwnJMS
+        8DhnoQoM80/3ODs8bnGbwG/GDE3ekuhiVPxzuifXkg==
+X-Google-Smtp-Source: AMsMyM4hW2xJKBoRlc2CjuPTMUiKPvR3WrNG+dw1Puc4847yKNeOsQ4MiYWzDDCtoRb1aZSdVlc5KSjaHClf3nk+AJk=
+X-Received: by 2002:a2e:b0e6:0:b0:26e:4dd:16f5 with SMTP id
+ h6-20020a2eb0e6000000b0026e04dd16f5mr157970ljl.268.1665041731050; Thu, 06 Oct
+ 2022 00:35:31 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR0402MB3405:EE_|PAXPR04MB8207:EE_
-X-MS-Office365-Filtering-Correlation-Id: 346f9f50-1fec-4941-2d79-08daa76d4fe0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bZo9DyQDuZURb8Qdhb7uP6v+dmWnNRe9u5IB3C9GQgISb/+B3E8Xz+fKw4qzx/U26pTb8VzL2OM6SVOxaadX/HJsBtL7etKnYUVwHqCV5Fvo3HYZqqO+NNTIuzmrYi51iRwB2NZNmTDcBf1Cc+HNi3cH0yhAKUuIWkAUeQvVjop0fjcyANbJsOI+jmX70qa2Fi6EuQMoaxNWkfx69w2ZT39dfmnfNLxFgq4y0JvklhRXoXQn7eHQXI+U4RDaidEj/Ly2SO1tRiFu22XKkqOp1MjZIs7hbK3VWm2UEhThTFAv0K8WGp9cCXtHmJVe59fCRQYQeGr2R4Awe9CGy2nWwvOZB274pdF//YvL8TSDT6lSLFqAoKcliFKQtl90BsqLtU6NSWvrmSpA+KUCCLdpRsLuqau04T2jV95p58JCPr/DbaONuKIWlcn1j/59brnjuSfLwlm/skf4TFBl3fJn9eeEzD28mgo89sV2ZBnXvoRKAln3+mxuofJvExnWUmSZyo9yB27DICR0rEmywnfH77go6BuCeKE0fCxjjo7vxBSncAF9Obtg55fcHuXkF5uxXbthMP1UU9U/9oLWqC0S3hqcKxqgdiu/eG6/paRsYZxKsyniGsaXEYQAk4yM+WzJP18wLK4qpSgqgDDEzVhSZ5XdxsHfpEUzWckwIVWO2H6iZ4w0Dr8me9hkoUFbhxsKg1IKyt8UL47+BBZ5MxeVw73MD9Y0aPainRUacjBsW0sLuq+K7nevWho3n4daSX4tFROjz2dRqUWnRDRFSeBghc6oQC6QzoC9aYgi5Y9otFhFwYgruGZ9dCh27gaOtrWVJLKYsKFisPhFrDGCF6L+HQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3405.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(376002)(346002)(366004)(136003)(451199015)(31686004)(66946007)(8936002)(316002)(5660300002)(36756003)(44832011)(66476007)(66556008)(8676002)(4326008)(478600001)(6486002)(110136005)(41300700001)(38350700002)(38100700002)(2906002)(31696002)(6666004)(52116002)(53546011)(2616005)(86362001)(186003)(83380400001)(6506007)(26005)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZTdJTHhZOG1ZYk9wbHJDTEU2U2p2RDlDeUhLcXFSeXhQQ0J0MlNjbVdEN1c1?=
- =?utf-8?B?RzBpUXRZTmlUMStyLzEvejhCb2JGbXY4cFU3UXRZMm9uRUpVdTlVT2lYTEZQ?=
- =?utf-8?B?M0c1SzdrSUFqNFRpamVETDNlMkh4WXVQQkZjNkd6QmdXcUtyTEVmTTBJUGdK?=
- =?utf-8?B?d2NpL2dyU2xFSkZFQTMvU2k3dGtOZTFSSXl3MWtvWXRYaDYrQTVQbzBFV3c5?=
- =?utf-8?B?cE91bjVINGxBaitPa1dra0dyMjg2WWl6d0JVYW9zbGJlcHRFYy9KWUZhWjIw?=
- =?utf-8?B?ZG1mYUZJLy94QWtycDIrSUhsdUlqQTlhL3UwdEFibHQ1ZmNtZnFsamZRYUN1?=
- =?utf-8?B?T3hUS0lHbERhcDNic3dXbTRIUEt6ZnVLTFd4bDc4bXl4ZzJPS0IwSy9lMGN5?=
- =?utf-8?B?VmpZVUtoUlY4YTM0dVVhUzMzWUJRclhWdjdIU1F0YllrL0ptaHlvV2puZTdM?=
- =?utf-8?B?ZGlwaXB0QmoyclJaaEhTMjRRMXlwV0IwMFdENUNYanpXTklPMGkvcDViUVVD?=
- =?utf-8?B?ZFhJY25XM0JwdjR6L0M2dDlXd0l6U1VsS1M1blFXMGtFWno4a3lqM1Y0VGFZ?=
- =?utf-8?B?MUY2M1JjQnFkaG5VTVRDSkFUcCtTRVRnVEs4VEx0YWZsNjJDQ0l5aHZmSGtV?=
- =?utf-8?B?a1NxUHFNcUdrMXNPWTZUTUZIWjJTZUJtMlA3NXVXeWFpNVVGV2pTazZzbWZI?=
- =?utf-8?B?QkthZ3N3SHhWRU5jdUw1T1BqWko1NXVlY00yNVBtSGRQSVRUN0NlRVQycUlE?=
- =?utf-8?B?SWo3ejVuSTA5cXdsZ1FtRFdjQmZvY0d0MHpKNE1oTW56cjVJMWFMWjNXMjhK?=
- =?utf-8?B?RzBWdzh2R1V0UzBrVUNyclQvVFhEVkQvWWIrSmxteDJ6NjRrK3k0Rkwzb0l3?=
- =?utf-8?B?SkpJc0VnZmZDSXltVlo0SnpOVVVuaTRwOEd5WnhTNzd0U3A3dGxicFRRcWdi?=
- =?utf-8?B?WHFJODcxbHJPNzFSYkdVbEEyQlltdDJXVHJEczJCNmVsMHhkMEo0UVFIVEt6?=
- =?utf-8?B?T0xTOUVvTU8yWU1XQllLTVpnc2JPOU1HRzNvZXZrREh3ZHlZUXh1MzNvQm1Y?=
- =?utf-8?B?YVFMMjkxWEtGL2djU01MT3did3BNcWVRTWNIYWJsSS9VS1lrU1NvSkZpT2g5?=
- =?utf-8?B?NHl0WXFhUC8wQTRYdXByN0h1dUthTHB3TDlYSk1iTE03WXRONGtnYkJiQzRB?=
- =?utf-8?B?VHp3NGthQlhpQnNodHdIdEZCenQ5cW1NcVE3Y1BjWXJJOU1BSUQ0NWtHdkJv?=
- =?utf-8?B?Zm96bVlucFowald5dVY2MTE3SEJXTXFpdVZOcWpPd3N1RGt3Nzd0YnRuVVcw?=
- =?utf-8?B?Nk5McTBCdDBrWU55MUtMN3BhYTQzR0M5cTlIclFZbmFLZ0d5bCtOUTIycWd6?=
- =?utf-8?B?NXNiNCt6MGhtVkx4WVFIQXpURk1yeHp4RkVJM3B3NEtabXZldlVCbENweUhz?=
- =?utf-8?B?OWdOT2I5VG1Vbjd5UFY0cmV4UkVwMGF3NTRWSmZWV2FhWnAwNVZPZXdPTGtX?=
- =?utf-8?B?dUkxNzJ3VkkxWURrWFpacFRkRC9ab3Ayam5uZURMaExJSkwxZ1l4Q0s4MlBs?=
- =?utf-8?B?cFowd2s3SU90d3AyVHlsaU4rMXd6NEJvcUh3MVhKTSt5S3Z4R045cjZ6cEdH?=
- =?utf-8?B?OGNOTHR3eG0xeWVKL3Vqb3NLVTdWY0pXUms4aW92bko5VFZOR3RBbUxVSWlZ?=
- =?utf-8?B?ZGRlK3pjMldmNW1KUDlFSDVxSjZXLytwTTdldEU4d0EzU0JqQ3dPSHZWWHFo?=
- =?utf-8?B?bTA1bFZtUVZQYmpBdGhsQm5HeExHdFB2amlDekQ2ZU56aGhUL2tjQWpZK1ZJ?=
- =?utf-8?B?MG1EZXFLenMrUVRRclF4K2FoTGI0TEJVMHptWjcySGhzcG5WL2hYN1ZBNTN0?=
- =?utf-8?B?SlRCcUF0MXNZMk92NlZycklaQnFMeVJSVFBCam9uM1ROK2hCL1R4cEhYZnZH?=
- =?utf-8?B?aGY0Sy91SXoydFhjOUcxamRKcTlJelRNRWdpQmdBVzBQNnV1ZWN6ZmloaWtZ?=
- =?utf-8?B?enF2dkUrWnlCZW9DakxMZTkyb3dqZ3B6MmJ4eExYUDRRakxKSGh6VWRKM0dk?=
- =?utf-8?B?SzZ2NVRFa2UyT0xIMmRPOC92RDB6SDJlcFBGRXBMZFFhYkNKRnE5dzBwR1B5?=
- =?utf-8?B?UFlCS0F0UzB0ZkhWa2Q1ZTMvQmp0T3R3cWtPZ2FleDAxMXRvaDZFSExrTVFU?=
- =?utf-8?B?RWc9PQ==?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 346f9f50-1fec-4941-2d79-08daa76d4fe0
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3405.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2022 07:35:16.1899
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YMERTfOdkPlSz13WzbfeceY7O0cwDFP/axil+EbA3yIcGkbA6Lkj4fe+kEKW5V9adWRJLZs8YRljyZWvbLMocg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8207
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <000000000000f2b07b05d5dc87cc@google.com> <00000000000093aefb05e9b93343@google.com>
+ <CAD-N9QWpDpP5YGwq363Z1jDOeEK+S1JjNGmiZsD4KimZSkowgw@mail.gmail.com>
+In-Reply-To: <CAD-N9QWpDpP5YGwq363Z1jDOeEK+S1JjNGmiZsD4KimZSkowgw@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 6 Oct 2022 09:35:19 +0200
+Message-ID: <CACT4Y+ZYSO4u2VteN0C83AnyFyvD2afL7wyk2K_Ps9hhLtq38w@mail.gmail.com>
+Subject: Re: [syzbot] general protection fault in fscache_free_cookie
+To:     Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     syzbot <syzbot+5b129e8586277719bab3@syzkaller.appspotmail.com>,
+        dhowells@redhat.com, linux-cachefs-bounces@redhat.com,
+        linux-cachefs-owner@redhat.com, linux-cachefs@redhat.com,
+        linux-kernel@vger.kernel.org, nogikh@google.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -126,44 +72,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 28 Sept 2022 at 11:23, Dongliang Mu <mudongliangabcd@gmail.com> wrote:
+>
+> On Wed, Sep 28, 2022 at 5:15 PM syzbot
+> <syzbot+5b129e8586277719bab3@syzkaller.appspotmail.com> wrote:
+> >
+> > This bug is marked as fixed by commit:
+> > fscache: fix GPF in fscache_free_cookie
+> > But I can't find it in any tested tree for more than 90 days.
+> > Is it a correct commit? Please update it by replying:
+> > #syz fix: exact-commit-title
+> > Until then the bug is still considered open and
+> > new crashes with the same signature are ignored.
+>
+> @Dmitry Vyukov Why syzbot continuously complains about this bug
+> report? The fix commit looks correct.
 
 
-On 10/6/2022 8:20 AM, Christophe Leroy wrote:
-> NO_IRQ is used to check the return of irq_of_parse_and_map().
-> 
-> On some architecture NO_IRQ is 0, on other architectures it is -1.
-> 
-> irq_of_parse_and_map() returns 0 on error, independent of NO_IRQ.
-> 
-> So use 0 instead of using NO_IRQ.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+git log --grep "fscache: fix GPF in fscache_free_cookie"
+on the latest upstream tree gives me nothing.
 
-Acked-by: Laurentiu Tudor <laurentiu.tudor@nxp.com>
-
-> ---
->   drivers/tty/ehv_bytechan.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/ehv_bytechan.c b/drivers/tty/ehv_bytechan.c
-> index 19d32cb6af84..8595483f4697 100644
-> --- a/drivers/tty/ehv_bytechan.c
-> +++ b/drivers/tty/ehv_bytechan.c
-> @@ -118,7 +118,7 @@ static int find_console_handle(void)
->   		return 0;
->   
->   	stdout_irq = irq_of_parse_and_map(np, 0);
-> -	if (stdout_irq == NO_IRQ) {
-> +	if (!stdout_irq) {
->   		pr_err("ehv-bc: no 'interrupts' property in %pOF node\n", np);
->   		return 0;
->   	}
-> @@ -696,7 +696,7 @@ static int ehv_bc_tty_probe(struct platform_device *pdev)
->   
->   	bc->rx_irq = irq_of_parse_and_map(np, 0);
->   	bc->tx_irq = irq_of_parse_and_map(np, 1);
-> -	if ((bc->rx_irq == NO_IRQ) || (bc->tx_irq == NO_IRQ)) {
-> +	if (!bc->rx_irq || !bc->tx_irq) {
->   		dev_err(&pdev->dev, "no 'interrupts' property in %pOFn node\n",
->   			np);
->   		ret = -ENODEV;
+Where is this commit present? What's the git tree and commit hash?
