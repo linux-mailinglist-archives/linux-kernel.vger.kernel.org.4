@@ -2,118 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC4B5F647D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 12:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95DC25F647F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 12:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbiJFKqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 06:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58636 "EHLO
+        id S231322AbiJFKqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 06:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbiJFKqi (ORCPT
+        with ESMTP id S231309AbiJFKqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 06:46:38 -0400
-Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7522A98345;
-        Thu,  6 Oct 2022 03:46:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1665053190;
-        bh=CVAJNVccyTnvqFUKt2qhoZ3SSQTQEZAtvmO3iOKMZls=;
-        h=X-UI-Sender-Class:Date:From:Subject:Cc:References:In-Reply-To;
-        b=V5M1qQCo9OdHL8ak7bbmn4YXkX/f2K9NsVs+y+x3UgD62DLdN6AYxMz93DU8gJI7W
-         MhkV3NeaJvaHj9qlbBmFjld0Figd9q1iVJ7cespd/EpIM7/GyWlF1FMLCfUTXyT7sG
-         PyrwHORzRwTlCJZLHwUmNNMIKyaOEGV6oXL8ChQU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [10.24.110.15] ([143.244.37.25]) by mail.gmx.net (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MeU0q-1pEMEc2I9U-00aV83; Thu, 06
- Oct 2022 12:46:30 +0200
-Message-ID: <6363db78-f676-427d-b479-7065091f3f59@gmx.com>
-Date:   Thu, 6 Oct 2022 10:46:29 +0000
+        Thu, 6 Oct 2022 06:46:46 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77FFB98359;
+        Thu,  6 Oct 2022 03:46:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7831ED6E;
+        Thu,  6 Oct 2022 03:46:51 -0700 (PDT)
+Received: from [10.57.65.170] (unknown [10.57.65.170])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E771C3F73B;
+        Thu,  6 Oct 2022 03:46:42 -0700 (PDT)
+Message-ID: <86084a28-be55-1c58-eace-1d73868c33dc@arm.com>
+Date:   Thu, 6 Oct 2022 11:46:38 +0100
 MIME-Version: 1.0
-From:   "Artem S. Tashkinov" <aros@gmx.com>
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-Cc:     workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <YzmBjgXq9geMnL1B@mit.edu>
- <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
- <20221002141321.394de676@rorschach.local.home>
- <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
- <20221002180844.2e91b1f1@rorschach.local.home>
- <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com> <YzoY+dxLuCfOp0sL@ZenIV>
- <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com> <YzqjfU66alRlGk5y@kernel.org>
- <251201be-9552-3a51-749c-3daf4d181250@gmx.com>
- <20221003142240.hu5gj7fms5wdoujk@meerkat.local>
-In-Reply-To: <20221003142240.hu5gj7fms5wdoujk@meerkat.local>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2 2/3] iommu/mediatek: add support for 6-bit encoded port
+ IDs
+Content-Language: en-GB
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Yong Wu <yong.wu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Will Deacon <will@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Fabien Parent <fparent@baylibre.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        devicetree@vger.kernel.org, iommu@lists.linux.dev
+References: <20221001-iommu-support-v2-0-dbfef2eeebc9@baylibre.com>
+ <20221001-iommu-support-v2-2-dbfef2eeebc9@baylibre.com>
+ <7d37e6ae-0dca-e0ef-2841-298c1ba9784f@collabora.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <7d37e6ae-0dca-e0ef-2841-298c1ba9784f@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:/T9qNnatvq6JAullCLcdS33+cIlq9WfwvAi1kVZ3kQ5n3x+m+fF
- 4xpYW0LIkYE+oUf1WqHc2eTjn5PjevFKCr645WjI/WdsnAJmNBrqIJVJVw6B4iZqIuFoSme
- 5pRpvpuBZ50cPcBFwwZXEqkXNW5iKlT2ikehn419q4seKiPRMA252Q3BvTtA/kkEmuFQQgQ
- YTDX1pfAXNjtiYcT4nLJA==
-X-UI-Out-Filterresults: junk:10;V03:K0:3sij++BXOwQ=:gAN+cI7T6MUJ63MzWulkflwB
- e4jrmNcpwvcohQvEKcJTYbJxq9/HjJNGzCDXL+rTj1v7HFSFScqjcDoCqg32vdl8UkeoDRm6i
- ziTosPjXnATs9SUZX9TtyG4P7tzQ4SKM3WcDKaYsWH8E0YRgqhwG+AMynrGno5pK3vVxhLaku
- ROUUJPPsLtp6cQ4eg34KfBBEsPfsOpmR0hczj8b6GhxHw2+6ZRZsr50OT9ddvLbZDBQDPaZtp
- ymBgzdMCkWZw0g1Y3/UZk3R2f91y3OOiCrId1E9o1eqxCgCN6zDfRPcgB1AR9AW+DKUqaQqBz
- 6oJ31rrduemFVK8KfgOMsUwU6KKvm0cv2Cv6QhZZLBhgl8kfALxHHgog9NoYSB6Iu0aHOzKDe
- FTri8erpMp6ZFcLcvIzu85QiZBS71cgofYM+uHRaZRfQgnRyMB0pyCXiHMvTxugUOpeRJ7B/K
- hzLu8qKj0f6MAlaWzfZV79zA8b7YxSyZ8ox+rokq6WG/Qe3nBcS+eP1/NW/TOqT8Fo08YeYJx
- 2nWQuVF11CsOOyUpEgHodfPWLr1DPJ7KxQb6COA11sr9JYK1oqjU5fA5spkLlBKtT//65tV9l
- tejVqFobGVJj2lu8z3STcGSs4TJLYZx6qApgWgjriBe9L1hKoth5MFXzPZBz8kqBx0c81CtG+
- Syxy3N9gIMJi4+r3KGbA9nwWP6yu4kUlmTfLTbS/sTr0nZRnnimcNXJ2QUqHQkz789RhNvVqb
- 7al6PA7r333z8RgpDpxsRGvI3gReOhUW/yKIKSBTFsL5Q7PKJHSPFj9OvE5WEwObUvvdMwYXM
- 2dfEnINY4/CnVNKYtCGuyfmnG/lPujO9CRHzjMZBZnUVWAsHJB6NR5BR+Uad0h+Om/awfwJwQ
- AcElHBU4J+4s7jDGHdCMwV0lpZa7qHCIZgN+VcC7J9y+4sHifkPb5IQp1OPdGst6JEe52YZWP
- 8xl3cKJSzI8PYlDNYHrax1ijFvZt05j41HZDVpep2lonAtDQG+Gq20weiTLYXDIxSBVvJif5K
- iWeyEnq3x+6zxCc0BjW8DqIqjIo6qXzvSaOHOZiOQ+mBXougs+EqjjiStB0WWvLG0YNcY7v3n
- Dat3H9abAyX+3DbHoG//wJJLoMMXXTLKAujwM28/myAqGavlB1e7yLB2o/++W0TKkFk+DYY8X
- Zp37NHIVsxwFBjVLPhamgM0i1mVaUg7J37y1Z+etO/HV0g==
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,MISSING_HEADERS,RCVD_IN_MSPIKE_H2,RCVD_IN_SBL,
-        SPF_HELO_NONE,SPF_PASS,TVD_PH_BODY_ACCOUNTS_PRE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-10-04 12:59, AngeloGioacchino Del Regno wrote:
+> Il 04/10/22 12:01, Alexandre Mergnat ha scritto:
+>> From: Fabien Parent <fparent@baylibre.com>
+>>
+>> Until now the port ID was always encoded as a 5-bit data. On MT8365,
+>> the port ID is encoded as a 6-bit data. This requires to rework the
+>> macros F_MMU_INT_ID_LARB_ID, and F_MMU_INT_ID_PORT_ID in order
+>> to support 5-bit and 6-bit encoded port IDs.
+>>
+>> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+>> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+>> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+>> ---
+>>   drivers/iommu/mtk_iommu.c | 24 ++++++++++++++++++++----
+>>   1 file changed, 20 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+>> index 5a4e00e4bbbc..a57ce509c8b5 100644
+>> --- a/drivers/iommu/mtk_iommu.c
+>> +++ b/drivers/iommu/mtk_iommu.c
+>> @@ -108,8 +108,10 @@
+>>   #define F_MMU_INT_ID_SUB_COMM_ID(a)        (((a) >> 7) & 0x3)
+>>   #define F_MMU_INT_ID_COMM_ID_EXT(a)        (((a) >> 10) & 0x7)
+>>   #define F_MMU_INT_ID_SUB_COMM_ID_EXT(a)        (((a) >> 7) & 0x7)
+>> -#define F_MMU_INT_ID_LARB_ID(a)            (((a) >> 7) & 0x7)
+>> -#define F_MMU_INT_ID_PORT_ID(a)            (((a) >> 2) & 0x1f)
+>> +#define F_MMU_INT_ID_LARB_ID(a, int_id_port_width)    \
+>> +                ((a) >> (((int_id_port_width) + 2) & 0x7))
+>> +#define F_MMU_INT_ID_PORT_ID(a, int_id_port_width)    \
+>> +                (((a) >> 2) & GENMASK((int_id_port_width) - 1, 0))
+> 
+> I can't think about any cleaner way than this one, but that's decreasing 
+> human
+> readability by "quite a bit".
 
+In terms of readability, the best thing to do would be define separate 
+macros for each register format and make the choice at the (single) 
+callsite rather than hiding it in the macro. In fact we're already doing 
+exactly that with the HAS_SUB_COMM_2BITS and HAS_SUB_COMM_3BITS flags 
+right at the same point, so please follow that same pattern for consistency.
 
-On 10/3/22 14:22, Konstantin Ryabitsev wrote:
-> On Mon, Oct 03, 2022 at 09:16:06AM +0000, Artem S. Tashkinov wrote:
->> The initial conversation started with the fact that Bugzilla is old,
->> semi-deprecated, requires MySQL [no idea what's bad about it, Bugzilla
->> can work with MariaDB and Percona as well]
->
-> It can't, actually. It only works with MySQL 5.7 or an equally ancient M=
-ariaDB.
-> No, there is no official fix (because nobody is working on bugzilla).
-> https://bugzilla.mozilla.org/show_bug.cgi?id=3D1592129
->
-
-(I wanted to send this message two days ago but my email account was
-suspended at the time - I'm still sending it though it feels like it's
-no longer relevant).
-
-Speaking of Bugzilla Harmony:
-
-* KDE already uses it:
-https://invent.kde.org/websites/bugs-kde-org/-/merge_requests/1
-* Mozilla has been using it for quite time already
-* It has a docker container/image, so it's a breeze to install
-
-I've dealt with a dozen other bug trackers and to me Bugzilla remains
-the most powerful and featureful, while not being too complicated to set
-up and use.
-
-Lastly I've had a crazy idea for a second of maybe migrating the kernel
-bugzilla over to RedHat/IBM (by asking them whether they are willing to
-help) but on a second thought it's really really bad as the company is
-very large and there's a ton of bureaucracy, so managing it would become
-quite a hassle. Also, I wouldn't want the LF to hand control over it to
-RedHat.
-
-Best regards,
-Artem
+Thanks,
+Robin.
