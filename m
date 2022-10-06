@@ -2,137 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61435F6023
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 06:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F645F6025
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 06:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiJFEeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 00:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51824 "EHLO
+        id S229969AbiJFEfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 00:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiJFEe2 (ORCPT
+        with ESMTP id S229805AbiJFEfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 00:34:28 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6808981D
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 21:34:26 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id j7so804196wrr.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 21:34:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=2+q4B77y4492OMsLSwltTjFCfBaNdGlc5g1vRjEyo3g=;
-        b=2wFJjHlwVyr1e0k1AXHQd1abfAAdqyKs3yxiEy2rMVLvl00/Z2ER9PrhBplnR4VAMc
-         a0UQPjzaqILUbow5I4EUnT5BPmVCno5ncMVszIlEFCCATeFYaClwMum+A6Ze12PiT4Fj
-         5bxRjAbbdMDgUBnzhJyk9b2nSC/ovqtWaJs0C5Qaee5eszNy4VHLlJtkN2L2w83hxxri
-         Gz063zBGv2XcPwUlxltNG2JIiIe6J8wyYwTtz2Qe6YzQScaz6uHChNxsJ+Q7QKWNKR8C
-         hbKwMGexOIvw918S8S2kvkkmEz0EgXXQ9GHm7UMB64WhYL0GwVlv4AGwXDPg9tZOzOg+
-         qqBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=2+q4B77y4492OMsLSwltTjFCfBaNdGlc5g1vRjEyo3g=;
-        b=CHXe2Za6bklzzq7ePaPjyYLsOwlRfnob/PHeYtkq2DHsjSGST0w7S6Kr4VThRpxSGf
-         iVuKWGe+1c/9Nftqu0yoJ9kr/vA5XhhPV+vXXsqAKsMlvd2jhDjqull26uik6FRS83Bu
-         dJM1JAHFdCLLpJxpKT25CuXMrrPngt44r0wtbdQQBXpryu2zETsSAlAfc9Itq0ZubNNl
-         u6lR+Ud/LOr9Y1Hm/Uei4Gzyv0e8e5XN8EaSmXBTdZngl1jL+UsLG51IUmrgoduUBbYN
-         0MLY31oMe2/iUiGvo1qrcH7NEIlVZ2GSjchplzC3vXrMKp8NsIYoMmoO7G3hjNK80Jar
-         AxNg==
-X-Gm-Message-State: ACrzQf3OBq8uKtWYaBSrJaOthG0+0GLxSXrU3yF4HJKLLbgHfM8NXp0T
-        CscQPWYns6weJiqaaPbrs/1mKA==
-X-Google-Smtp-Source: AMsMyM68fvNTKc7Kj9S8HiFOC1YknIuea7TFI8ga2VspcWpmb3pOpp/8tJGMH9bSF5nT9gyfGZ3QEA==
-X-Received: by 2002:a5d:4a41:0:b0:228:48c6:7386 with SMTP id v1-20020a5d4a41000000b0022848c67386mr1630387wrs.649.1665030864572;
-        Wed, 05 Oct 2022 21:34:24 -0700 (PDT)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id p3-20020a5d4e03000000b002238ea5750csm19627163wrt.72.2022.10.05.21.34.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 21:34:24 -0700 (PDT)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     davem@davemloft.net, eike-kernel@sf-tec.de,
-        herbert@gondor.apana.org.au
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Corentin Labbe <clabbe@baylibre.com>, stable@kernel.org
-Subject: [PATCH] crypto: n2: add missing hash statesize
-Date:   Thu,  6 Oct 2022 04:34:19 +0000
-Message-Id: <20221006043419.3892520-1-clabbe@baylibre.com>
+        Thu, 6 Oct 2022 00:35:14 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F2A37184
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 21:35:07 -0700 (PDT)
+X-UUID: 74a38bc7ba73496c839b6c3651493fa4-20221006
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=WN5HrWAsPKulMaT697T87yfqxj6TGX8DCcsBqqWfiB4=;
+        b=kfEBBN0y9n0bag4NmYhn2kiU09LX2vH+tjT2wjgS4qEj5VIQI6oIGbIOh6iSXKFNkreDf0bm5u7X5+RRXiPlSO/vyl9ZW74LKbwB58Upc5VnJXXl2Z0vuHJGt3fQnl5TKbnicUy8PV7azS8Ue0AygHAL5Jy1pNy6nWMLFkNYWSM=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:98289bc5-989a-406f-b8f2-fafac54b7985,IP:0,U
+        RL:0,TC:0,Content:51,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:51
+X-CID-META: VersionHash:39a5ff1,CLOUDID:918265fe-ee8c-4ff7-afe9-644435e96625,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:801|102,TC:nil,Content:3,EDM:-3,IP:n
+        il,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 74a38bc7ba73496c839b6c3651493fa4-20221006
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <yongqiang.niu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1626822091; Thu, 06 Oct 2022 12:34:59 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 6 Oct 2022 12:34:58 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Thu, 6 Oct 2022 12:34:58 +0800
+From:   Yongqiang Niu <yongqiang.niu@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Yongqiang Niu <yongqiang.niu@mediatek.com>
+Subject: [PATCH v9, 0/4] mailbox: mtk-cmdq: add MT8186 support
+Date:   Thu, 6 Oct 2022 12:34:52 +0800
+Message-ID: <20221006043456.8754-1-yongqiang.niu@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing statesize to hash templates.
-This is mandatory otherwise no algorithms can be registered as the core
-requires statesize to be set.
+base linux-next/master
 
-CC: stable@kernel.org # 4.3+
-Reported-by: Rolf Eike Beer <eike-kernel@sf-tec.de>
-Tested-by: Rolf Eike Beer <eike-kernel@sf-tec.de>
-Fixes: 0a625fd2abaa ("crypto: n2 - Add Niagara2 crypto driver")
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
- drivers/crypto/n2_core.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+change since v8:
+1. move GCE_CTRL_BY_SW modification to the 1st patch
+2. add commit message for patch 2 and patch 3
 
-diff --git a/drivers/crypto/n2_core.c b/drivers/crypto/n2_core.c
-index 31e24df18877..20d0dcd50344 100644
---- a/drivers/crypto/n2_core.c
-+++ b/drivers/crypto/n2_core.c
-@@ -1229,6 +1229,7 @@ struct n2_hash_tmpl {
- 	const u8	*hash_init;
- 	u8		hw_op_hashsz;
- 	u8		digest_size;
-+	u8		statesize;
- 	u8		block_size;
- 	u8		auth_type;
- 	u8		hmac_type;
-@@ -1260,6 +1261,7 @@ static const struct n2_hash_tmpl hash_tmpls[] = {
- 	  .hmac_type	= AUTH_TYPE_HMAC_MD5,
- 	  .hw_op_hashsz	= MD5_DIGEST_SIZE,
- 	  .digest_size	= MD5_DIGEST_SIZE,
-+	  .statesize	= sizeof(struct md5_state),
- 	  .block_size	= MD5_HMAC_BLOCK_SIZE },
- 	{ .name		= "sha1",
- 	  .hash_zero	= sha1_zero_message_hash,
-@@ -1268,6 +1270,7 @@ static const struct n2_hash_tmpl hash_tmpls[] = {
- 	  .hmac_type	= AUTH_TYPE_HMAC_SHA1,
- 	  .hw_op_hashsz	= SHA1_DIGEST_SIZE,
- 	  .digest_size	= SHA1_DIGEST_SIZE,
-+	  .statesize	= sizeof(struct sha1_state),
- 	  .block_size	= SHA1_BLOCK_SIZE },
- 	{ .name		= "sha256",
- 	  .hash_zero	= sha256_zero_message_hash,
-@@ -1276,6 +1279,7 @@ static const struct n2_hash_tmpl hash_tmpls[] = {
- 	  .hmac_type	= AUTH_TYPE_HMAC_SHA256,
- 	  .hw_op_hashsz	= SHA256_DIGEST_SIZE,
- 	  .digest_size	= SHA256_DIGEST_SIZE,
-+	  .statesize	= sizeof(struct sha256_state),
- 	  .block_size	= SHA256_BLOCK_SIZE },
- 	{ .name		= "sha224",
- 	  .hash_zero	= sha224_zero_message_hash,
-@@ -1284,6 +1288,7 @@ static const struct n2_hash_tmpl hash_tmpls[] = {
- 	  .hmac_type	= AUTH_TYPE_RESERVED,
- 	  .hw_op_hashsz	= SHA256_DIGEST_SIZE,
- 	  .digest_size	= SHA224_DIGEST_SIZE,
-+	  .statesize	= sizeof(struct sha256_state),
- 	  .block_size	= SHA224_BLOCK_SIZE },
- };
- #define NUM_HASH_TMPLS ARRAY_SIZE(hash_tmpls)
-@@ -1424,6 +1429,7 @@ static int __n2_register_one_ahash(const struct n2_hash_tmpl *tmpl)
- 
- 	halg = &ahash->halg;
- 	halg->digestsize = tmpl->digest_size;
-+	halg->statesize = tmpl->statesize;
- 
- 	base = &halg->base;
- 	snprintf(base->cra_name, CRYPTO_MAX_ALG_NAME, "%s", tmpl->name);
+Yongqiang Niu (4):
+  mailbox: mtk-cmdq: Use GCE_CTRL_BY_SW definition instead of number
+  mailbox: mtk-cmdq: add gce software ddr enable private data
+  mailbox: mtk-cmdq: add gce ddr enable support flow
+  mailbox: mtk-cmdq: add MT8186 support
+
+ drivers/mailbox/mtk-cmdq-mailbox.c | 42 +++++++++++++++++++++++++++++-
+ 1 file changed, 41 insertions(+), 1 deletion(-)
+
 -- 
-2.35.1
+2.25.1
 
