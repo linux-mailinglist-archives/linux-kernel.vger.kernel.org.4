@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8BC5F5E66
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 03:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE165F5E67
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 03:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229379AbiJFB20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 21:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
+        id S229902AbiJFB2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 21:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiJFB2X (ORCPT
+        with ESMTP id S229905AbiJFB2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 21:28:23 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D217A5809F
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 18:28:21 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-132fb4fd495so618975fac.12
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 18:28:21 -0700 (PDT)
+        Wed, 5 Oct 2022 21:28:32 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D872E5A81F
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 18:28:31 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a26so1382028ejc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 18:28:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pqXx66Ksh1NF1TcKZ27pwFtk7SoBoxPosiYEwFzKXW8=;
-        b=Xc5Tc6UKAhhi67OFF1BPuuO5IO2gDSKBjJx/Z03c7KeQX2vaOUB+22Xe/LkpEpF1uu
-         71OnA+X2I5Ogl7dZtss1zKRD+L+W6Az8mzArG7/2F4HDna5EidmpsYCi7uJ8azlWLjOf
-         S6ijA9l3oU6iLVGGRpdg03YWylfiX265APqpMDYEyxLT8RZLrkibNzDUP1AqWJdQHf9L
-         X1VLhmCQ5YyXPWpUqeTgpZW/knqla5OUMxIwJAQZbcX10D5G944vzQMeQIl/v29OTbl1
-         /GIjdiZa38OX0Je1AwcFV3673VrtztS0b9g3PvFGoI0gN+E6jR1dn9RRIngODUtDVweM
-         BFtQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=+jrS/QGH/pUVD9k6D6POGlMEiPy+3PwsTWkAJC84zJc=;
+        b=YnmENS4blqGG1H+IVlsRScbhASYZ8vpVFvHhzhSuZkfd4YHTmCSxcV0O+Seik0uEzY
+         GFxsnVJ/aLD6O5dA46HLCraVIJlq+Taq/SJOb0D+9fqgstEqKQ0ZcZYrf7lZABroHc6j
+         tXUfBrfOwHMnxO4g4h/9SZv7WoucjxSjXhekU6q/lf0l0VISdj+KQJH7RwXlurxhMmiC
+         jF+6hL4mI7URFHZjBRZjq97vFs3ovzqbg5oE0OiFG8AHpOvRhDKzcS8unDXptdYLWe07
+         4MZGLy1uWvOQSX1tb1hINve1CKkdUXProaEw1WCwohpn+240rN38lEYpODiVxBohleVQ
+         Js6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pqXx66Ksh1NF1TcKZ27pwFtk7SoBoxPosiYEwFzKXW8=;
-        b=fnlfqHvb922XupQXir055htKlRSyViKWGH/XtZh6UC5c6Rnz7i2+ZcKkBKbaxv+DXa
-         UZ7kOFnZwiQVXD4J6/lkB2cK7KMEkYLPqO5lpTHYThYny47cPyaGn9lo758eAJWjSUqY
-         s+C/rYBjJ/0mwVrUt0L6DsbeasJIMmj1+7MgB43Oo5U+3Wouxd4W88d59HJwPbuMqdpq
-         I+PsX+T9QQTbuONCbN3WVFyb+mIGDzPx2vPhZ+jxdf7tPpNLbtpi3xJtmglGZWYcVLZ2
-         /S2Bz9lC1H/39erH3vHVxqoVFzvNWJrwe8XGe/why43kUI6PSmIvv+G7rc3M3cObuFZ5
-         wPJA==
-X-Gm-Message-State: ACrzQf3o6cT9NCrdCf20zu6PngvwjChFn9Uo4CvTWSjPF1EsVwriqP9Y
-        tGK7cN2mBJ0vc71tHp281ZqCbTu1+icZYhNFUVq3BQ==
-X-Google-Smtp-Source: AMsMyM4nyL+U33H+Ebr/c0m8c9wJt5c/0lEa5I7ur5JHEH6J0GWXNrDInKp4d816Br/PvUQ+IqEKtSFSGL9TpGDJdoQ=
-X-Received: by 2002:a05:6870:580c:b0:12a:f136:a8f5 with SMTP id
- r12-20020a056870580c00b0012af136a8f5mr3907624oap.269.1665019700821; Wed, 05
- Oct 2022 18:28:20 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=+jrS/QGH/pUVD9k6D6POGlMEiPy+3PwsTWkAJC84zJc=;
+        b=e/4c9/Qm7Om2mMZBGbj7EcxdYxzsW3SLZHakm3fFCXhPICoXAQTPSCKYZVmAtZkxN9
+         u6riWba1uqC51l86rsJMk3ArEiTKPF2jfXgh6kxg/T0Yx8v5IW7HhD75wMMbPA3ggUkd
+         hf5iW5GEMwy79SVf/c6/ngBejuP6C9B26bDQv84YVS5xrKlOLlBpSh50cHlHwx/31DtN
+         j7qQ1ohRjGtBR+m7SjtqKUIiY1+hjTVp+ODDEK8B33wESTQq5jiculOSx0XAbjMYvU7M
+         aQb5tX1kD3/LgoZ8EFAo+1AdmSQEdI/HArUgDKDALdV2+qEtIhIHX/l3UDnUyXxtWh6R
+         AiXw==
+X-Gm-Message-State: ACrzQf0q0/p6dSzScj7TNcn+C/gDonG/Pvnph++3wtv/L233FQ9xojy3
+        2lR3vUJtO7l0zmbHZiPwxhpWAHlsy7yDyA==
+X-Google-Smtp-Source: AMsMyM4rd6yzHhcY2DSt1VxrZbYMurpraVq0PQYgpYGGyPpsiY4FCfhY9qGRuH9z8n8JQqvPXkX0Ag==
+X-Received: by 2002:a17:907:9727:b0:78a:e09c:f2f9 with SMTP id jg39-20020a170907972700b0078ae09cf2f9mr1890447ejc.455.1665019710164;
+        Wed, 05 Oct 2022 18:28:30 -0700 (PDT)
+Received: from mypc.localnet (host-79-17-38-224.retail.telecomitalia.it. [79.17.38.224])
+        by smtp.gmail.com with ESMTPSA id b15-20020a17090630cf00b0078d01a38cc8sm3926557ejb.35.2022.10.05.18.28.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 18:28:29 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Cc:     syzbot <syzbot+389b82b29093b3e2640a@syzkaller.appspotmail.com>
+Subject: Re: [syzbot] memory leak in __get_metapage
+Date:   Thu, 06 Oct 2022 03:28:29 +0200
+Message-ID: <2217443.iZASKD2KPV@mypc>
+In-Reply-To: <0000000000008a5a2e05ea318aa9@google.com>
+References: <0000000000008a5a2e05ea318aa9@google.com>
 MIME-Version: 1.0
-References: <20221005220227.1959-1-surajjs@amazon.com> <CALMp9eThzv+5UBPtm77nvD_b48hHD7O1QLni7a+x9zAPicFk4Q@mail.gmail.com>
- <684c8ef6-bf69-e31e-fb3e-d3beca52fd15@linux.intel.com>
-In-Reply-To: <684c8ef6-bf69-e31e-fb3e-d3beca52fd15@linux.intel.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 5 Oct 2022 18:28:09 -0700
-Message-ID: <CALMp9eSM7zdQmXm=YrNg5MQoqWXvwKk8XvJNqj0cukBifyiXTw@mail.gmail.com>
-Subject: Re: [PATCH] x86/speculation: Mitigate eIBRS PBRSB predictions with WRMSR
-To:     Daniel Sneddon <daniel.sneddon@linux.intel.com>
-Cc:     Suraj Jitindar Singh <surajjs@amazon.com>, kvm@vger.kernel.org,
-        sjitindarsingh@gmail.com, linux-kernel@vger.kernel.org,
-        x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@suse.de,
-        dave.hansen@linux.intel.com, seanjc@google.com,
-        pbonzini@redhat.com, peterz@infradead.org, jpoimboe@kernel.org,
-        pawan.kumar.gupta@linux.intel.com, benh@kernel.crashing.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: multipart/mixed; boundary="nextPart1925904.PYKUYFuaPT"
+Content-Transfer-Encoding: 7Bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,136 +71,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 5, 2022 at 5:26 PM Daniel Sneddon
-<daniel.sneddon@linux.intel.com> wrote:
->
-> On 10/5/22 16:46, Jim Mattson wrote:
-> > On Wed, Oct 5, 2022 at 3:03 PM Suraj Jitindar Singh <surajjs@amazon.com> wrote:
-> >>
-> >> tl;dr: The existing mitigation for eIBRS PBRSB predictions uses an INT3 to
-> >> ensure a call instruction retires before a following unbalanced RET. Replace
-> >> this with a WRMSR serialising instruction which has a lower performance
-> >> penalty.
-> >>
-> >> == Background ==
-> >>
-> >> eIBRS (enhanced indirect branch restricted speculation) is used to prevent
-> >> predictor addresses from one privilege domain from being used for prediction
-> >> in a higher privilege domain.
-> >>
-> >> == Problem ==
-> >>
-> >> On processors with eIBRS protections there can be a case where upon VM exit
-> >> a guest address may be used as an RSB prediction for an unbalanced RET if a
-> >> CALL instruction hasn't yet been retired. This is termed PBRSB (Post-Barrier
-> >> Return Stack Buffer).
-> >>
-> >> A mitigation for this was introduced in:
-> >> (2b1299322016731d56807aa49254a5ea3080b6b3 x86/speculation: Add RSB VM Exit protections)
-> >>
-> >> This mitigation [1] has a ~1% performance impact on VM exit compared to without
-> >> it [2].
-> >>
-> >> == Solution ==
-> >>
-> >> The WRMSR instruction can be used as a speculation barrier and a serialising
-> >> instruction. Use this on the VM exit path instead to ensure that a CALL
-> >> instruction (in this case the call to vmx_spec_ctrl_restore_host) has retired
-> >> before the prediction of a following unbalanced RET.
-> >>
-> >> This mitigation [3] has a negligible performance impact.
-> >>
-> >> == Testing ==
-> >>
-> >> Run the outl_to_kernel kvm-unit-tests test 200 times per configuration which
-> >> counts the cycles for an exit to kernel mode.
-> >>
-> >> [1] With existing mitigation:
-> >> Average: 2026 cycles
-> >> [2] With no mitigation:
-> >> Average: 2008 cycles
-> >> [3] With proposed mitigation:
-> >> Average: 2008 cycles
-> >>
-> >> Signed-off-by: Suraj Jitindar Singh <surajjs@amazon.com>
-> >> Cc: stable@vger.kernel.org
-> >> ---
-> >>  arch/x86/include/asm/nospec-branch.h | 7 +++----
-> >>  arch/x86/kvm/vmx/vmenter.S           | 3 +--
-> >>  arch/x86/kvm/vmx/vmx.c               | 5 +++++
-> >>  3 files changed, 9 insertions(+), 6 deletions(-)
-> >>
-> >> diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
-> >> index c936ce9f0c47..e5723e024b47 100644
-> >> --- a/arch/x86/include/asm/nospec-branch.h
-> >> +++ b/arch/x86/include/asm/nospec-branch.h
-> >> @@ -159,10 +159,9 @@
-> >>    * A simpler FILL_RETURN_BUFFER macro. Don't make people use the CPP
-> >>    * monstrosity above, manually.
-> >>    */
-> >> -.macro FILL_RETURN_BUFFER reg:req nr:req ftr:req ftr2=ALT_NOT(X86_FEATURE_ALWAYS)
-> >> -       ALTERNATIVE_2 "jmp .Lskip_rsb_\@", \
-> >> -               __stringify(__FILL_RETURN_BUFFER(\reg,\nr)), \ftr, \
-> >> -               __stringify(__FILL_ONE_RETURN), \ftr2
-> >> +.macro FILL_RETURN_BUFFER reg:req nr:req ftr:req
-> >> +       ALTERNATIVE "jmp .Lskip_rsb_\@", \
-> >> +               __stringify(__FILL_RETURN_BUFFER(\reg,\nr)), \ftr
-> >>
-> >>  .Lskip_rsb_\@:
-> >>  .endm
-> >> diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
-> >> index 6de96b943804..eb82797bd7bf 100644
-> >> --- a/arch/x86/kvm/vmx/vmenter.S
-> >> +++ b/arch/x86/kvm/vmx/vmenter.S
-> >> @@ -231,8 +231,7 @@ SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
-> >>          * single call to retire, before the first unbalanced RET.
-> >>           */
-> >>
-> >> -       FILL_RETURN_BUFFER %_ASM_CX, RSB_CLEAR_LOOPS, X86_FEATURE_RSB_VMEXIT,\
-> >> -                          X86_FEATURE_RSB_VMEXIT_LITE
-> >> +       FILL_RETURN_BUFFER %_ASM_CX, RSB_CLEAR_LOOPS, X86_FEATURE_RSB_VMEXIT
-> >>
-> >>
-> >>         pop %_ASM_ARG2  /* @flags */
-> >> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> >> index c9b49a09e6b5..fdcd8e10c2ab 100644
-> >> --- a/arch/x86/kvm/vmx/vmx.c
-> >> +++ b/arch/x86/kvm/vmx/vmx.c
-> >> @@ -7049,8 +7049,13 @@ void noinstr vmx_spec_ctrl_restore_host(struct vcpu_vmx *vmx,
-> >>          * For legacy IBRS, the IBRS bit always needs to be written after
-> >>          * transitioning from a less privileged predictor mode, regardless of
-> >>          * whether the guest/host values differ.
-> >> +        *
-> >> +        * For eIBRS affected by Post Barrier RSB Predictions a serialising
-> >> +        * instruction (wrmsr) must be executed to ensure a call instruction has
-> >> +        * retired before the prediction of a following unbalanced ret.
-> >>          */
-> >>         if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS) ||
-> >> +           cpu_feature_enabled(X86_FEATURE_RSB_VMEXIT_LITE) ||
-> >>             vmx->spec_ctrl != hostval)
-> >>                 native_wrmsrl(MSR_IA32_SPEC_CTRL, hostval);
-> >
-> > Better, I think, would be to leave the condition alone and put an
-> > LFENCE on the 'else' path:
-> >
-> >          if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS) ||
-> >              vmx->spec_ctrl != hostval)
-> >                  native_wrmsrl(MSR_IA32_SPEC_CTRL, hostval);
-> >         else
-> >                 rmb();
-> >
-> > When the guest and host have different IA32_SPEC_CTRL values, you get
-> > the serialization from the WRMSR. Otherwise, you get it from the
-> > cheaper LFENCE.
-> In this case systems that don't suffer from PBRSB (i.e. don've have
-> X86_FEATURE_RSB_VMEXIT_LITE set) would be doing a barrier for no reason.  We're
-> just trading performance on vulnerable systems for a performance hit on systems
-> that aren't vulnerable.
+This is a multi-part message in MIME format.
 
-The lfence could be buried in an ALTERNATIVE keyed to
-X86_FEATURE_RSB_VMEXIT_LITE.
+--nextPart1925904.PYKUYFuaPT
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
 
-> > This is still more convoluted than having the mitigation in one place.
-> Agreed.
+On Tuesday, October 4, 2022 10:49:42 AM CEST syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    4fe89d07dcc2 Linux 6.0
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=169a7924880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=21254cf9c7c084e0
+> dashboard link: https://syzkaller.appspot.com/bug?extid=389b82b29093b3e2640a
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils 
+for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10bdd7ec880000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/651a252f7035/
+disk-4fe89d07.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/776feb8e0e5b/
+vmlinux-4fe89d07.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+389b82b29093b3e2640a@syzkaller.appspotmail.com
+> 
+> BUG: memory leak
+> unreferenced object 0xffff888114339e80 (size 128):
+>   comm "syz-executor.0", pid 3673, jiffies 4295017005 (age 12.610s)
+>   hex dump (first 32 bytes):
+>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
+>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
+>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
+>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
+>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
+>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
+>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> BUG: memory leak
+> unreferenced object 0xffff888114339e00 (size 128):
+>   comm "syz-executor.0", pid 3673, jiffies 4295017005 (age 12.610s)
+>   hex dump (first 32 bytes):
+>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
+>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
+>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
+>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
+>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
+>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
+>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> BUG: memory leak
+> unreferenced object 0xffff888114339d80 (size 128):
+>   comm "syz-executor.0", pid 3673, jiffies 4295017005 (age 12.610s)
+>   hex dump (first 32 bytes):
+>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
+>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
+>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
+>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
+>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
+>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
+>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> BUG: memory leak
+> unreferenced object 0xffff8881142f0300 (size 128):
+>   comm "syz-executor.0", pid 3676, jiffies 4295017533 (age 7.330s)
+>   hex dump (first 32 bytes):
+>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
+>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
+>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
+>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
+>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
+>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
+>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+#syz test git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 6.0
 
-For a mere 18 cycles, it doesn't really seem worth the obfuscation.
+--nextPart1925904.PYKUYFuaPT
+Content-Disposition: attachment; filename="jfs.diff"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/x-patch; charset="UTF-8"; name="jfs.diff"
+
+diff --git a/fs/jfs/jfs_metapage.c b/fs/jfs/jfs_metapage.c
+index 2e8461ce74de..b3ba1cefc230 100644
+--- a/fs/jfs/jfs_metapage.c
++++ b/fs/jfs/jfs_metapage.c
+@@ -678,6 +678,7 @@ struct metapage *__get_metapage(struct inode *inode, unsigned long lblock,
+ 
+ unlock:
+ 	unlock_page(page);
++	put_page(page);
+ 	return NULL;
+ }
+ 
+
+--nextPart1925904.PYKUYFuaPT--
+
+
+
