@@ -2,217 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3AA95F6383
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9825F6388
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbiJFJWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 05:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
+        id S231378AbiJFJWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 05:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbiJFJWH (ORCPT
+        with ESMTP id S230289AbiJFJWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 05:22:07 -0400
-Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10077.outbound.protection.outlook.com [40.107.1.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7179F24089;
-        Thu,  6 Oct 2022 02:22:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cCKNTWx7A7Pk/PnJNvTbQj6zeHlWJXcxO+jzO4eisAual3gLFa4B5cA257xG4NqZP9g0lVy5UDfBnqWOQG+xG5rPKAsuxcZkiGZQ5wpbWhWAaYpaFxsok0Z0PFfctZnzphmyya1LkWbU5GEt8CpBItCLZt6ivhi/XOG11O/CrYk/1PB3g5yqJ84cTz2jNzU7Xmf32/ey1Af9fUNY0ydNj3ToYPhk5PmOKwbmzNA/eajru5J5h2iplz6OC0j8YEI/u8wLd7DVwIjfXl3fZr8PLbaPcN7y1Omk7eF66b3WK0YDSfRCCbmUgyy2kmdAtkWdXHZ9fs2TSNSkg08NnpqaOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0OZkKAHORdzT1HwfMcAmHm7TE/vpkKv9U2RN4iYwsD8=;
- b=ZNzcHalwIWnKcl55n4lzK+n4OfcCPUacCDgcXoTMIZlTJAzxbZZ7EINHSgI/e6/4LU2DMV0asnM0iGnp7bn/97Vy+tAU0fjhkjXDJPEtnREQSY7GtB7QuTAsw5+CSC3ItNxZAlcJll99b50xQW1oh26V3Uyp/J0ZMOE8zE8teROAagaOSOgGDppYWH4kyUeG6l4X/f0epLoHvke99mw9MGSY3QcXzY45P1PgHth5pbi0flGqmJ2+e7FyHNlXnJJ0ZpKP+Jluh9v0arJYE0ej7Vr1ujdfMN68WlZRBfAgacbcRpg8n4ZI+DSx7fn9gmDxYvucl37Y7ClEkOJHWPlbrg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0OZkKAHORdzT1HwfMcAmHm7TE/vpkKv9U2RN4iYwsD8=;
- b=2JPybmyPuaR/MzhOA0fqc7FGtBu43zazD1RBVrGLiQPvXPUnYVN4HQKGBgUJoZPjUtt1MDzlgsL9dM8a1nijUiSV1imsAjMbP/jmcXqlz1InIy21S5UoA2isD35sMjBRcLSuw1/3nVUIgDGLZACjGx4knF+ANiWlECq9bW1q/7QotkzPXat1fj4jRpTLozBd1fKoUo5frJZTsy4MEfOT9TJrTGjVucMvvL8w4/JBTnIFnuP25bYNyOcmNvs3MlIwOpmH3b0IddDC/tpBwfCBK2slKKhEqe2ykC9Mrk4ZYB64G9F+Mfwlsamf/CdfHmXFDbYNYGZU59zKj7yJxezr6A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
- by AM7PR04MB7143.eurprd04.prod.outlook.com (2603:10a6:20b:112::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.34; Thu, 6 Oct
- 2022 09:22:03 +0000
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::2459:15ae:e6cb:218a]) by VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::2459:15ae:e6cb:218a%7]) with mapi id 15.20.5676.034; Thu, 6 Oct 2022
- 09:22:03 +0000
-Message-ID: <ba28a45c-166e-7b9a-3af9-40d249d7cf0e@suse.com>
-Date:   Thu, 6 Oct 2022 11:22:01 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v4 1/2] Avoid using EFI tables Xen may have clobbered
-Content-Language: en-US
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>
-Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
-        <marmarek@invisiblethingslab.com>, Ard Biesheuvel <ardb@kernel.org>
-References: <cover.1664298147.git.demi@invisiblethingslab.com>
- <f3b624e99adfdbbfc1976a60a73a6b5950e1840d.1664298147.git.demi@invisiblethingslab.com>
- <282a225d-8782-0321-6f0e-19dd4510dc42@suse.com>
- <CAMj1kXFQNqsW5RfHGac-eGbosJHBybu6+-Fap_bi_kVxWNpGeg@mail.gmail.com>
- <YzcjeiOW8+i2Zxsd@itl-email>
- <CAMj1kXHBBbCNV3CLesqZi7ttmmi8y4tZ1KO5vievy_CJrU2o3Q@mail.gmail.com>
- <YzeaKjmls1YI/3ox@itl-email> <01d22092-8292-8ed7-ece7-9ca32d15bbce@suse.com>
- <YzxxXuovwQt3NskE@itl-email> <a0dc1158-01b1-4272-b86e-52f4996f0747@suse.com>
- <Yz3I2qwl243h9ZfZ@itl-email>
-From:   Jan Beulich <jbeulich@suse.com>
-In-Reply-To: <Yz3I2qwl243h9ZfZ@itl-email>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0145.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:96::18) To VE1PR04MB6560.eurprd04.prod.outlook.com
- (2603:10a6:803:122::25)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR04MB6560:EE_|AM7PR04MB7143:EE_
-X-MS-Office365-Filtering-Correlation-Id: e0ba2ea8-3ae7-49c5-b379-08daa77c3af2
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gjYiv1uPP8KiNLv3qJ/fFlyCpRYPagm+iGa4e/cRpDuQS+yQ22lWOw5lOEk64FDbiImtY6gh/EhCSxS11rO1ywc459Ub+C3NSf5qeblLJin+VCI3SGDvjqw/cPXwxfmLjJrwtnRnTjpVgMwp1et9ygWxBUOpUrPglI9JSqL/c6sJ/d1SElyMPzEY1y3a3jikgWHC+pEqduXJDTRjqbaK+V2J+1f4JMHT/vp654ZmdqFziUDxOTvZnS6kByc+Ee7wUMHghvZD+21GXy1IzqzHDtsre46dIRgpY4xCSDAbgacY3J+6s1LqtO4TK9zZLbk+itpLCxfqMJgcCRytuSauXs55+3YpnMgdaj3waTR5LH8I5QxbuYCsaXvJCtvO1wzeQCM8UOJaszSRs3x1OLbfYwVqQk7tNoQs1yKfLpRiO0P0HHSPPpc65IR3ZRj8omQDSAHmx+AqA6rmJ42UL12Rd03J3aHEqbfJKAB8vCL2azsTmwtPDHyxLz4hoxL4w6T6TYRmEmBd7hSNXcrrMWL0WZyhVweIsKvEy8aNwA/zL+EYkWywppqOwXKIXqJKE5t+k/vFQgSgKFpLWggLPCe8DBFNGr2yifxzB5HQaqdqTeQhayxgm3388QBbNragWckdHsng6K7/4YN23uqxM1KKhTuothzcnWiYm+5GO/ZmzPGISeT8zI3LnHFGt+u4C29XgFB8iwavPh7aZpw38LIP9mhhZdjkLyh5m/RM4FbI7ehwVCLwG7I3ibkbDjNgHzPNtxr8fiiil5rDp0gZvyjLc9Kh3mLWy7Sdj7V+x6VNSF8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(346002)(39850400004)(136003)(396003)(376002)(451199015)(7416002)(6512007)(8936002)(26005)(36756003)(5660300002)(316002)(6506007)(53546011)(186003)(41300700001)(2616005)(83380400001)(2906002)(8676002)(66556008)(66946007)(4326008)(66476007)(31686004)(478600001)(38100700002)(6916009)(86362001)(31696002)(54906003)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TWNMSjZxVVVZaktMKzlBU3JGa1lLaE8vTkpHcDBReUlFeExmYkhueXV2UEc5?=
- =?utf-8?B?TktDRE9tdE5YNkZpUVYvZlFma2RmZ29vRWlESldMdzRIZ1JLV2V3ZXQrbmRX?=
- =?utf-8?B?UjAxWGpoekhQcmNhWVh1UWRNUXFPOVk0MDNmZWRKejZpZjJzK1lWNzV3TStM?=
- =?utf-8?B?Qlg2NWdxaVVaTlcyZ1g1TFhJNjlQYU1ITFdOMjJLT1hSQ2E4NWRkUjMyOHor?=
- =?utf-8?B?eUVnSVFCbzZWajdVaFNBQ3JiMWV2VUV3bUVEb2wvSnJRUlN1S2FObnpZRTMy?=
- =?utf-8?B?Nm1FRkZQMkxsLzNIWWZJWU9OOGRLQ3RIMkdvQkljYTc1bm1SOURlM2EzRWpR?=
- =?utf-8?B?NGhlQVJwOUR4S04wVDJ0dkloTGRoWWdWWFp0UXAveXZ0Wk5BbkQxL20zOFV5?=
- =?utf-8?B?dWZqMFBJS1ROd3VrcmpidGpOeHdmU2d6cGFuNGY3TVRSTk1rcTBEQno3MGsx?=
- =?utf-8?B?Mzd0WVovcWRnUVo0RXNsNnBLS0ZkcTNjZUVWdDk5bTl6ZkN4aG5GMXROUHBy?=
- =?utf-8?B?SkZEbXFybHJRbkR6ZStvNWNrSyt3dkNQREZwckxndElDdVdTOEh3OXowbzNa?=
- =?utf-8?B?SWRGRUQ3NmtZZWdEZnNOQzY4RXFOVXpHWDFiZHpKZ09JNjZ4YVJsOW5nWERm?=
- =?utf-8?B?WkxwaGtmYjFkL1krWkdvcTk2VkMyS1g4VFkyWVZkakI2dVhyVXV5cng1YnBz?=
- =?utf-8?B?TmJRV2pEUjdmM3hZTjR0KzBydk9xbmNZQzRTYjB2MnZvYllWQTFib0RmQkg5?=
- =?utf-8?B?a1F0eU56ellWcHlRVDFQdWlUMmY3bWd2c094TjdBbFhXYWdoeHpKR1hEUXZM?=
- =?utf-8?B?T1hLcGlvWUNSblhOeWM5VHRlbHowYUxyM0NBN29nVDlneEp4UGlmM0NDeTFp?=
- =?utf-8?B?TVR2TWhrZ3pQK3N1TnlCT3BZTkFLQ04xSEQ5REo0MGJDZVdWVXpzRms4YUJl?=
- =?utf-8?B?RlRqdGYzclo4azhtSUVkSTZXa1E2TjVFelJoQURkeVFxaVhJYkdONEtwUFR6?=
- =?utf-8?B?UE91cytNNHl4b0NkaUhxMHhhZUpyRldtRnJkOEtLdHQyT1JNUHRudFhOVUJi?=
- =?utf-8?B?OS9iVGpJSW5LWkN3NFZzTjA2WmJnNWZXZlduNGFlVkd6S3Bob0FxdXBNU29P?=
- =?utf-8?B?YnkrYVRmeFpBRTlZUVF1OVhJRFUxeHUzYjRlamdXR2NYZjBYdFpaajZYSWFz?=
- =?utf-8?B?T0xsVTYzQnZ4Tk1hYXJadWtyK01BRiswQW93K3ZtalFVTzJuRFhkc25BVUdP?=
- =?utf-8?B?TFhKRDVrT3dhZTUrWDMvazhNa1NmekpFaUNzeHMvVXU1UEZnYThXVnNlWEFy?=
- =?utf-8?B?RWdZL2dwQTRIejFBb2NzMFR2dk5LaEx4YWxET25vWWlSVjhlNzVWS0VFU2VM?=
- =?utf-8?B?S0E0eEUrK1d1RWpmZVljdXNWaStMekVpTXZQM3JFR25zM0JjRW5lR2Q5b0dk?=
- =?utf-8?B?WGFwcGU4cjByWHRjd09SWld4TFNJR3M5bjFQd3ViL3I4aEpxK0dSSHNxb3Fp?=
- =?utf-8?B?NS8vcEJTUmlka3IxU1lwZm95c0xzR2FTVjZqTVhnbW5BWjBsMjBtNzRpc0cy?=
- =?utf-8?B?Y3gwRURUVGkxQzdkbTc5d05iaDZGbDRLeTVnekM3L2ZtMDI4Y20xaGZETjFM?=
- =?utf-8?B?akdtNkQvdFNHeldHOGJ6bzRNU2l1YW9WNHNLT3g4R0tYOFl4elNmd21kdTlQ?=
- =?utf-8?B?dmc0cFJTc1BtOFVGQ3ZtSU5uMXY0VENaVlEzZU5XVUROMyszSjQvUVFNWXVp?=
- =?utf-8?B?ZzZJaEpRQmdMUzRMWVN5ODJlL1BzNjhRRzZHajh5TW13a1FwcjBiTVhvWXFa?=
- =?utf-8?B?aUNEa21hSENJMGhXeFRyeXM1Q0dJeXlSUEE1ejViL3p1c3VUYlVYTUQ0QjF0?=
- =?utf-8?B?aWtOZU9yalVTWnNMSXdBWHI3RjBOcllNTG1jcUU5TlhUalp6b0ltU3FLbUF0?=
- =?utf-8?B?T3NSd0p0bUJ5SmtiSEZMT2hsalE4eUFDNnVFaVU0MUxKUGM1MEFObFNUNDda?=
- =?utf-8?B?RDFEK0VMaWVkTUx2RlBGQ29mYm5SM0V5NkJBbFZ6ejFLUE9ud1JoYmlaMzFL?=
- =?utf-8?B?ZHlDMnpXR0t5dm1CVnQ5dldiQXF6cENQNHZmc0x1TDY3YW1BT0lkZzlqeTE2?=
- =?utf-8?Q?DP74yOdibiaeoIzpA/YuIEAGY?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e0ba2ea8-3ae7-49c5-b379-08daa77c3af2
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2022 09:22:03.4363
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: d9+cBNaUxOzRPBQQIh9I5hGkO+iPB5ie28Ar6A/OoH45NNsQlnj+/UBEBXTt44VFIPirQZxQodvQoDAMu3YWFw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7143
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 6 Oct 2022 05:22:35 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7155498CB2
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 02:22:28 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 7A0385809F4;
+        Thu,  6 Oct 2022 05:22:24 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 06 Oct 2022 05:22:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1665048144; x=1665051744; bh=29UDqV5vYg
+        sI+WWZHeC9KRtscHTUXdUaQr8Wyq+BuTM=; b=jFmHrol8f3LoVS64fTQrjxd6eR
+        QF73JAg12vaOCVsxcJ4d654MaJJ7gQZTr67xxvzuBMNXO+4ZE3UUbDYRbfJ5C2EH
+        ihg2ZYs+fnZj9ZMkQIStbRuXdGSeloLuDN9fzss+JxYJVl1bUD4VdUCt3OTCodvY
+        5o3HfZTyuxnoaFCVbiY2dVD4PeSgCIB4vqLnVxpaDontY2o6v7bp/xcaHzAte5ar
+        b8Xd5o8chPVRA3ES/kMSu1pz3pyJd3mRnnrGToBKQ6ZbdqWwe0b/YlYIw0fVbII6
+        zGdTjXfwYHQ6FCiyz5NJX/xVuggUUnn/mXYA6k77bOMfN82z6VzOO/Pwto+g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1665048144; x=1665051744; bh=29UDqV5vYgsI+
+        WWZHeC9KRtscHTUXdUaQr8Wyq+BuTM=; b=slX5ZrTQyCd4D8HDiMtoqP52saxn2
+        FaP1AXtoyKoquTXQXwiaRgipc1Ic0TQQVE4oO7BXHNYznxgo78mbQA/vZQyAwDwV
+        BhjQF0MKXVFTOLL6VXiqivjRixVC+xUPsLxifjnvZ68wUuj6zDMSqbe8bMpNeauG
+        LeCM+FWJeZxdmO/uFnj7KsKHZOK1FBfukbvnUAZlyqMyyzRRw4sIge9/vkn5Aev+
+        E/0OzjcsUKx8p37jey48WOyYOiqQtuPSr+YI5sOVGs+dKyViGgRtddgFOLf+Q76Q
+        BINhLwAkvN+P2vFt8+TxGdTy+cdBFSEJI8iecm6rL5af35JaFEgk5e/3w==
+X-ME-Sender: <xms:UJ4-Yx98En902q9MUo2TFJUpZHRJxQwHkoTQoeSZZdgXM-hUWm2ISg>
+    <xme:UJ4-Y1vP7Ewds0xcWuNl8BxOCpzQLGULTHr03-F2V62Uvf6JH53i_0NhBEtdAIQqZ
+    hFKINnZOTaWZMy2nwY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeihedgudegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkfffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeefheelfeetheelvdeiieeffeethfekvdehheduleetveeikeehhfeghfevkeff
+    ueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:UJ4-Y_BjZIynMiDN274RApzIqpkY0k-x8qRQHvNWNgmIR-4tGW187A>
+    <xmx:UJ4-Y1eZq37Djk8wKbYkOdmGdfAbD-AG0-yNVcf-Tc0FUgH66vjRGw>
+    <xmx:UJ4-Y2M4TCXhnBcchGCJNhSk_k7Aosh3PoEsF3oXtgxuwg8lHitZYQ>
+    <xmx:UJ4-Y43YRTbjKRImF0fz6QSLilAZaKRP5UoSa5p1NHdahUNTl1-xQA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 33BC2B60086; Thu,  6 Oct 2022 05:22:24 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
+Mime-Version: 1.0
+Message-Id: <70d8e5d8-6fa4-496d-88d6-2604d0c3e982@app.fastmail.com>
+Date:   Thu, 06 Oct 2022 11:22:03 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL 0/4] ARM SoC updates for 6.1
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.10.2022 20:11, Demi Marie Obenour wrote:
-> On Wed, Oct 05, 2022 at 08:15:07AM +0200, Jan Beulich wrote:
->> On 04.10.2022 17:46, Demi Marie Obenour wrote:
->>> Linux has a function called efi_mem_reserve() that is used to reserve
->>> EfiBootServicesData memory that contains e.g. EFI configuration tables.
->>> This function does not work under Xen because Xen could have already
->>> clobbered the memory.  efi_mem_reserve() not working is the whole reason
->>> for this thread, as it prevents EFI tables that are in
->>> EfiBootServicesData from being used under Xen.
->>>
->>> A much nicer approach would be for Xen to reserve boot services memory
->>> unconditionally, but provide a hypercall that dom0 could used to free
->>> the parts of EfiBootServicesData memory that are no longer needed.  This
->>> would allow efi_mem_reserve() to work normally.
->>
->> efi_mem_reserve() actually working would be a layering violation;
->> controlling the EFI memory map is entirely Xen's job.
-> 
-> Doing this properly would require Xen to understand all of the EFI
-> tables that could validly be in EfiBootServices* and which could be of
-> interest to dom0.
+Hi Linus,
 
-We don't need to understand the tables as long as none crosses memory
-map descriptor boundaries, and as long as they don't contain further
-pointers.
+This merge window is a again a little quieter for us, with 838 non-merge
+changesets including fewer noteworthy updates in the devicetree files, b=
+ut a
+little more activity in SoC specific drivers than usual. The interesting
+changes are back to overwhelmingly for 64-bit platforms, which is of
+course the expected trend.
 
->  It might (at least on some very buggy firmware)
-> require a partial ACPI and/or SMBIOS implementation too, if the firmware
-> decided to put an ACPI or SMBIOS table in EfiBootServices*.
+The top contributors by number of patches this time are:
+     88 Krzysztof Kozlowski
+     37 Peng Fan
+     30 Arnd Bergmann
+     27 Geert Uytterhoeven
+     20 Dmitry Baryshkov
+     19 Kunihiko Hayashi
+     18 Marcel Ziswiler
+     16 Pali Roh=C3=A1r
+     16 AngeloGioacchino Del Regno
+     15 Lad Prabhakar
+     14 Johan Hovold
+     13 Tinghan Shen
+     13 Joel Stanley
+     12 Srinivasa Rao Mandadapu
+     12 Li Yang
+     11 Wolfram Sang
+     11 Sudeep Holla
+     11 Jagan Teki
+     11 Frieder Schrempf
+     10 Tim Harvey
+     10 Robert Marko
 
-I hope we won't need to go that far; on such systems -mapbs will continue
-to be needed.
-
->> As to the hypercall you suggest - I wouldn't mind its addition, but only
->> for the case when -mapbs is used. As I've indicated before, I'm of the
->> opinion that default behavior should be matching the intentions of the
->> spec, and the intention of EfiBootServices* is for the space to be
->> reclaimed. Plus I'm sure you realize there's a caveat with Dom0 using
->> that hypercall: It might use it for regions where data lives which it
->> wouldn't care about itself, but which an eventual kexec-ed (or alike)
->> entity would later want to consume. Code/data potentially usable by
->> _anyone_ between two resets of the system cannot legitimately be freed
->> (and hence imo is wrong to live in EfiBootServices* regions).
-> 
-> I agree, but currently some such data *is* in EfiBootServices* regions,
-> sadly.  When -mapbs is *not* used, I recommend uninstalling all of the
-> configuration tables that point to EfiBootServicesData memory before
-> freeing that memory.
-
-Hmm, uninstalling isn't nice, as it may limit functionality. Instead we
-might go through all tables and fiddle with memap descriptors in case
-a pointer references an EfiBootServices* region (regardless of size, as
-per the first restriction mentioned above). (A more brute force approach
-might be to simply behave as if -mapbs was specified in such a case,
-provided we can reliably determine this early enough, i.e. before first
-checking the "map_bs" variable.) Tables actually known to us could also
-be relocated (like you've done for ESRT).
-
-Such checking could be extended to the runtime services function
-pointers. While that wouldn't cover cases where a function entry point
-is in runtime services space but the function then wrongly calls into
-or references boot services space, it would cover a few more (broken)
-systems.
-
-This, unlike behaving by default as if -mapbs was given, would be a
-workaround I'd accept to be enabled unconditionally, as it wouldn't
-affect well behaved systems (beyond the time it takes to carry out the
-checks, and provided the checking logic isn't buggy).
-
-There's one further caveat towards uninstalling (in a way also for your
-ESRT relocation code): The final memory map is known to us only when we
-can't call boot services functions anymore (i.e. in particular
-InstallConfigurationTable()).
-
-Jan
+The overall dirstat looks like
+   0.9% Documentation/devicetree/bindings/arm/
+   0.3% Documentation/devicetree/bindings/clock/
+   0.4% Documentation/devicetree/bindings/firmware/
+   0.3% Documentation/devicetree/bindings/media/
+   0.7% Documentation/devicetree/bindings/memory-controllers/
+   0.3% Documentation/devicetree/bindings/net/
+   0.5% Documentation/devicetree/bindings/power/
+   0.6% Documentation/devicetree/bindings/soc/imx/
+   0.3% Documentation/devicetree/bindings/sram/
+   0.2% Documentation/
+  14.4% arch/arm/boot/dts/
+   0.3% arch/arm/configs/
+   0.8% arch/arm/mach-footbridge/
+   2.0% arch/arm/
+   0.3% arch/arm64/boot/dts/allwinner/
+   1.6% arch/arm64/boot/dts/amlogic/
+   0.3% arch/arm64/boot/dts/broadcom/bcmbca/
+   0.2% arch/arm64/boot/dts/exynos/
+  11.5% arch/arm64/boot/dts/freescale/
+   0.6% arch/arm64/boot/dts/marvell/
+   7.2% arch/arm64/boot/dts/mediatek/
+   3.9% arch/arm64/boot/dts/nvidia/
+  10.4% arch/arm64/boot/dts/qcom/
+   5.1% arch/arm64/boot/dts/renesas/
+   8.1% arch/arm64/boot/dts/rockchip/
+   1.0% arch/arm64/boot/dts/socionext/
+   2.7% arch/arm64/boot/dts/ti/
+   0.2% drivers/bus/
+   0.3% drivers/firmware/arm_ffa/
+   0.3% drivers/firmware/psci/
+   1.3% drivers/memory/
+   1.9% drivers/soc/imx/
+   1.1% drivers/soc/mediatek/
+   2.4% drivers/soc/qcom/
+   0.6% drivers/soc/rockchip/
+  12.0% drivers/soc/tegra/cbb/
+   0.2% drivers/soc/tegra/
+   0.3% drivers/soc/
+   0.3% drivers/
+   0.8% include/dt-bindings/clock/
+   0.2% include/dt-bindings/power/
+   0.2% include/linux/soc/
+   0.4% include/
+ 798 files changed, 36028 insertions(+), 6182 deletions(-)
