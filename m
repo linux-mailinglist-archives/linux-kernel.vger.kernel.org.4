@@ -2,260 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 189315F6877
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE8D5F687B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231271AbiJFNrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 09:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45836 "EHLO
+        id S230263AbiJFNtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 09:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiJFNrd (ORCPT
+        with ESMTP id S231334AbiJFNtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 09:47:33 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110399E6A3
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 06:47:32 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id b15so1815731pje.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 06:47:32 -0700 (PDT)
+        Thu, 6 Oct 2022 09:49:43 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B93B616F
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 06:49:41 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id x6so1744548pll.11
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 06:49:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=0qrBCsffF+OzBtil4CiWgpjzAyR5Sm/F+e7aMlo+drk=;
-        b=bcYNj7otG27a4HRY7t4puzZK/eY+V2ARox3OEhymv6DGtAtqCKglefyozcmY78vev4
-         EJO4jIcQxPW3q95dWYR/7/6RcUrgHZyCF+FL6aR1ggPYUnJzqR9DSW2K/eY07l7lBTNu
-         fYLlAi504D9YVqaZvqRjP+sQzanWx6h2ns4dSbdIgYz0WbUEyI+sKM+bugHupvVHapDU
-         N3+TOsjHxSzMQIKOApA7r+PUjEvuD+M9hmKU0EASqHvGh8IrSXkfNB6pWqCoepFqIkYr
-         myGtjdCIopvzGh5nuX4nHsxCCPoEAbSkLWpdh0ri5oHHyuBocorKM6wu5K/Yd+9k68AM
-         YNDA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=U+uptFLX/Zxx/MvN0q/9ClLT1ERUiDfb4vm7Q2Pz9Fw=;
+        b=wzkljOut3o85PeRq6BvnlyCZTT53Euh29aXc2QjoXL3Z6TxxYAjyBj180oPx02qKaO
+         el/V3Pdu4LeJAffz8LRHmAPq+WCcXfxzb0j5V0pFaRdzgR/QxcyGbD2kejPl4+cd5+3J
+         loGfvLUpxelWEPVrsLjQBMMZNW7AwTJts+OQ89KyeHXHJHq1jn5jltI1wCqg2A+ao9tE
+         jcesnIYrbnG9UuoeQ7S5S1UKObUeSAp30DnPpq0iRwJCiX8YYCiQf3ksL4FT7FOwXcME
+         MUqCnDwFmmBgN31+MpYY7kLQpi10qM7zBfcMpKEYD8WyEshkMNcuOKuCa9uNFzK35DSu
+         PMug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=0qrBCsffF+OzBtil4CiWgpjzAyR5Sm/F+e7aMlo+drk=;
-        b=J1a+tb6BYICjl23texF/W9VEyKeF8AsLrJedzn9S3ACUrw7pVOZnbKvL16AeGixJb/
-         Mo8jS1kMlZ9LTRqPLHukd/7uawo6jgM580RSv8xrTt4osS8gJ3wZVV+7ml/IoK0PD/k/
-         YLZ9x5P9vkHip1ZWbbK4gcvt7iyz/CPDyOS9wrQtmduOHW7+drMBfSnBsamfoD5LXYBU
-         M7coxR0AHDgl0FN7a3wmJX28s1bR2H9N4dYo24u69fREf2go0J88UQjGOqv3OyA3fP4X
-         Fvv/sOP+7DdT1W6iTcXZbczQFr7+B/eKmyLEBgk2aKUquQTSxt92aRr4jZhuUuJl2Exk
-         xTAQ==
-X-Gm-Message-State: ACrzQf3YxO27f0RGrSq6twKHPari4xcakN8+h/9QXbm6pD6mOhuXT2Sd
-        KiwvaNfF9M6tgPkHRbjVlCkRhXWj6/oai6xMouKNbw==
-X-Google-Smtp-Source: AMsMyM4HBAe/Xqk1952wcPOElQxiQ4SQ1Lc696OuiOFggPiV/ZXqPqSH0CIuc/QdK2o2sbnwONphEJ+1RzUU6KubM10=
-X-Received: by 2002:a17:902:dac4:b0:178:3037:680a with SMTP id
- q4-20020a170902dac400b001783037680amr4938961plx.37.1665064051364; Thu, 06 Oct
- 2022 06:47:31 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=U+uptFLX/Zxx/MvN0q/9ClLT1ERUiDfb4vm7Q2Pz9Fw=;
+        b=rumaJf54oMUTXuQm29CUAWIMTSPiTS2j4BY6VRIRxXBrBwf1lugyv9/hOp8jXZhRto
+         nOmUItwkwLH3zUv7FCWwMHsRxTmWrMcTkJxURL4aGB0yMZ82Hi7xTNlbJuzz+noJQsYx
+         xjMdS2EKojvJ4VnsG9x6gcesDvbwn/FslXdR1vlXc0i9kGVQXdLgSXlH8dgbhpPSNDWx
+         8Ttab0fG2/j/xywrEmtCdSYX8mif3PQUlV5ntM0xG4MGRLNU8/fa0RQdo4cTqc9bzE8e
+         1OF18Wi/XPow2Yja4cDZJcXqS/uCEojIvEQzxotRT8AC4Gc8HM638MV23HeBP8MkWKkB
+         NkYA==
+X-Gm-Message-State: ACrzQf3ICctVNYqcsutWKqN85n5FnUq2wuP6TbrDIun5a6HgkKFQMjfu
+        zdkIXHMBb5t6ljFdCuvn/alb
+X-Google-Smtp-Source: AMsMyM6oyKJ2214jUuxvdHBTmsVFEOGtPiDVhtSToZrXTpOE2I/0wIt6ljlyiispGmrOkwNXWWDPoA==
+X-Received: by 2002:a17:90a:4ec6:b0:20a:96cd:2a46 with SMTP id v6-20020a17090a4ec600b0020a96cd2a46mr5516758pjl.171.1665064180930;
+        Thu, 06 Oct 2022 06:49:40 -0700 (PDT)
+Received: from localhost.localdomain ([220.158.158.220])
+        by smtp.gmail.com with ESMTPSA id k25-20020a635a59000000b00434760ee36asm1874053pgm.16.2022.10.06.06.49.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 06:49:39 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     kishon@kernel.org, lpieralisi@kernel.org, bhelgaas@google.com
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kw@linux.com, robh@kernel.org, vidyas@nvidia.com, vigneshr@ti.com,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v3 0/5] PCI: endpoint: Rework the EPC to EPF notification
+Date:   Thu,  6 Oct 2022 19:19:22 +0530
+Message-Id: <20221006134927.41437-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220809223401.24599-1-mike.leach@linaro.org> <20220809223401.24599-5-mike.leach@linaro.org>
- <01570ba2-81c9-e4b5-6669-0e4087a4bd1f@arm.com> <8f865045-aa95-46b6-a455-c3d9c6d26494@arm.com>
-In-Reply-To: <8f865045-aa95-46b6-a455-c3d9c6d26494@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Thu, 6 Oct 2022 14:47:19 +0100
-Message-ID: <CAJ9a7VhhmcbyrLZocqXHYXwWbbM_QAAd-zzLQ5_wOEzGAG2UoA@mail.gmail.com>
-Subject: Re: [PATCH v3 04/13] coresight: etm4x: Update ETM4 driver to use
- Trace ID API
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, mathieu.poirier@linaro.org,
-        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        linux-perf-users@vger.kernel.org, leo.yan@linaro.org,
-        quic_jinlmao@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Suzuki,
+Hello,
 
-On Mon, 3 Oct 2022 at 10:37, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
->
-> On 03/10/2022 10:31, Suzuki K Poulose wrote:
-> > On 09/08/2022 23:33, Mike Leach wrote:
-> >> The trace ID API is now used to allocate trace IDs for ETM4.x / ETE
-> >> devices.
-> >>
-> >> For perf sessions, these will be allocated on enable, and released on
-> >> disable.
-> >>
-> >> For sysfs sessions, these will be allocated on enable, but only released
-> >> on reset. This allows the sysfs session to interrogate the Trace ID used
-> >> after the session is over - maintaining functional consistency with the
-> >> previous allocation scheme.
-> >>
-> >> The trace ID will also be allocated on read of the mgmt/trctraceid file.
-> >> This ensures that if perf or sysfs read this before enabling trace, the
-> >> value will be the one used for the trace session.
-> >>
-> >> Trace ID initialisation is removed from the _probe() function.
-> >>
-> >> Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> >> ---
-> >>   .../coresight/coresight-etm4x-core.c          | 79 +++++++++++++++++--
-> >>   .../coresight/coresight-etm4x-sysfs.c         | 27 ++++++-
-> >>   drivers/hwtracing/coresight/coresight-etm4x.h |  3 +
-> >>   3 files changed, 100 insertions(+), 9 deletions(-)
-> >>
-> >> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> >> b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> >> index cf249ecad5a5..b4fb28ce89fd 100644
-> >> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> >> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> >> @@ -42,6 +42,7 @@
-> >>   #include "coresight-etm4x-cfg.h"
-> >>   #include "coresight-self-hosted-trace.h"
-> >>   #include "coresight-syscfg.h"
-> >> +#include "coresight-trace-id.h"
-> >>   static int boot_enable;
-> >>   module_param(boot_enable, int, 0444);
-> >> @@ -234,6 +235,50 @@ static int etm4_trace_id(struct coresight_device
-> >> *csdev)
-> >>       return drvdata->trcid;
-> >>   }
-> >> +int etm4_read_alloc_trace_id(struct etmv4_drvdata *drvdata)
-> >> +{
-> >> +    int trace_id;
-> >> +
-> >> +    /*
-> >> +     * This will allocate a trace ID to the cpu,
-> >> +     * or return the one currently allocated.
-> >> +     */
-> >> +    /* trace id function has its own lock */
-> >> +    trace_id = coresight_trace_id_get_cpu_id(drvdata->cpu);
-> >> +    if (IS_VALID_ID(trace_id))
-> >> +        drvdata->trcid = (u8)trace_id;
-> >> +    else
-> >> +        dev_err(&drvdata->csdev->dev,
-> >> +            "Failed to allocate trace ID for %s on CPU%d\n",
-> >> +            dev_name(&drvdata->csdev->dev), drvdata->cpu);
-> >> +    return trace_id;
-> >> +}
-> >> +
-> >> +static int etm4_set_current_trace_id(struct etmv4_drvdata *drvdata)
-> >> +{
-> >> +    int trace_id;
-> >> +
-> >> +    /*
-> >> +     * Set the currently allocated trace ID - perf allocates IDs
-> >> +     * as part of setup_aux for all CPUs it may use.
-> >> +     */
-> >> +    trace_id = coresight_trace_id_read_cpu_id(drvdata->cpu);
-> >> +    if (IS_VALID_ID(trace_id)) {
-> >> +        drvdata->trcid = (u8)trace_id;
-> >> +        return 0;
-> >> +    }
-> >> +
-> >> +    dev_err(&drvdata->csdev->dev, "Failed to set trace ID for %s on
-> >> CPU%d\n",
-> >> +        dev_name(&drvdata->csdev->dev), drvdata->cpu);
-> >> +
-> >> +    return -EINVAL;
-> >> +}
-> >
-> >
-> >> +
-> >> +void etm4_release_trace_id(struct etmv4_drvdata *drvdata)
-> >> +{
-> >> +    coresight_trace_id_put_cpu_id(drvdata->cpu);
-> >> +}
-> >> +
-> >>   struct etm4_enable_arg {
-> >>       struct etmv4_drvdata *drvdata;
-> >>       int rc;
-> >> @@ -729,6 +774,15 @@ static int etm4_enable_perf(struct
-> >> coresight_device *csdev,
-> >>       ret = etm4_parse_event_config(csdev, event);
-> >>       if (ret)
-> >>           goto out;
-> >> +
-> >> +    /*
-> >> +     * perf allocates cpu ids as part of setup - device needs to use
-> >> +     * the allocated ID.
-> >> +     */
-> >> +    ret = etm4_set_current_trace_id(drvdata);
-> >
-> > So, when do we allocate an id in perf mode ? As far as I can see, this
-> > should be the same as etm4_read_alloc_trace_id() ? Why are they any
-> > different ?
-> >
+During the review of the patch that fixes DBI access in PCI EP, Rob
+suggested [1] using a fixed interface for passing the events from EPC to
+EPF instead of the in-kernel notifiers.
 
-Trace IDs are allocated in etm_setup_aux(), then released in free_event_data().
-This way the value are guaranteed to remain constant for the entire
-session,. We cannot release an ID when a given ETM stops tracing, as
-it may restart later for the same perf session.
-In between these two events perf takes its own locks - for whatever
-reason. If we use read_alloc trace id - which takes that allocation /
-release lock in the ID system then we see at lot of
-LOCKDEP issues at this point.
+This series introduces a simple callback based mechanism for passing the
+events from EPC to EPF. This interface is chosen for satisfying the below
+requirements:
 
-Hence we do a safe unlocked read of the value - perf will never
-release the value till after the session is completed and the event is
-released.
+1. The notification has to reach the EPF drivers without any additional
+latency.
+2. The context of the caller (EPC) needs to be preserved while passing the
+notifications.
 
-> >> +    if (ret < 0)
-> >> +        goto out;
-> >> +
-> >>       /* And enable it */
-> >>       ret = etm4_enable_hw(drvdata);
-> >> @@ -753,6 +807,11 @@ static int etm4_enable_sysfs(struct
-> >> coresight_device *csdev)
-> >>       spin_lock(&drvdata->spinlock);
-> >> +    /* sysfs needs to read and allocate a trace ID */
-> >> +    ret = etm4_read_alloc_trace_id(drvdata);
-> >> +    if (ret < 0)
-> >> +        goto unlock_sysfs_enable;
-> >> +
-> >>       /*
-> >>        * Executing etm4_enable_hw on the cpu whose ETM is being enabled
-> >>        * ensures that register writes occur when cpu is powered.
-> >> @@ -764,6 +823,11 @@ static int etm4_enable_sysfs(struct
-> >> coresight_device *csdev)
-> >>           ret = arg.rc;
-> >>       if (!ret)
-> >>           drvdata->sticky_enable = true;
-> >> +
-> >> +    if (ret)
-> >> +        etm4_release_trace_id(drvdata);
-> >> +
-> >> +unlock_sysfs_enable:
-> >>       spin_unlock(&drvdata->spinlock);
-> >>       if (!ret)
-> >> @@ -895,6 +959,8 @@ static int etm4_disable_perf(struct
-> >> coresight_device *csdev,
-> >>       /* TRCVICTLR::SSSTATUS, bit[9] */
-> >>       filters->ssstatus = (control & BIT(9));
-> >> +    /* The perf event will release trace ids when it is destroyed */
-> >> +
-> >
-> > At this patch level, there is no release of trace id ? Is that missed in
-> > this patch ? Or am I missing something ?
->
+With the existing notifier mechanism, the 1st case can be satisfied since
+notifiers aren't adding any huge overhead. But the 2nd case is clearly not
+satisfied, because the current atomic notifiers forces the EPF
+notification context to be atomic even though the caller (EPC) may not be
+in atomic context. In the notification function, the EPF drivers are
+required to call several EPC APIs that might sleep and this triggers a
+sleeping in atomic bug during runtime.
 
-See above  - perf allocation is handled in coresight-etm-perf.c.
+The above issue could be fixed by using a blocking notifier instead of
+atomic, but that proposal was not accepted either [2].
 
+So instead of working around the issues within the notifiers, let's get rid
+of it and use the callback mechanism.
 
-> I think the above change only comes in PATCH 7. May be that patch needs
-> to be rearranged in order ? Otherwise git-bisect can break running a
-> perf session on cs_etm, with missing traceid.
->
+NOTE: DRA7xx and TEGRA194 drivers are only compile tested. Testing this series
+on the real platforms is greatly appreciated.
 
-This is probably true - we can move the perf allocation to before the
-ETM changes as the extended backward compatibility introduced this set
-should permit it.
+Thanks,
+Mani
 
+[1] https://lore.kernel.org/all/20220802072426.GA2494@thinkpad/T/#mfa3a5b3a9694798a562c36b228f595b6a571477d
+[2] https://lore.kernel.org/all/20220228055240.24774-1-manivannan.sadhasivam@linaro.org
 
-> Suzuki
+Changes in v3:
 
-Thanks for the review
+* As Kishon spotted, fixed the DRA7xx driver and also the TEGRA194 driver to
+  call the LINK_UP callback in threaded IRQ handler.
 
-Mike
+Changes in v2:
+
+* Introduced a new "list_lock" for protecting the epc->pci_epf list and
+  used it in the callback mechanism.
+
+Manivannan Sadhasivam (5):
+  PCI: dra7xx: Use threaded IRQ handler for "dra7xx-pcie-main" IRQ
+  PCI: tegra194: Move dw_pcie_ep_linkup() to threaded IRQ handler
+  PCI: endpoint: Use a separate lock for protecting epc->pci_epf list
+  PCI: endpoint: Use callback mechanism for passing events from EPC to
+    EPF
+  PCI: endpoint: Use link_up() callback in place of LINK_UP notifier
+
+ drivers/pci/controller/dwc/pci-dra7xx.c       |  2 +-
+ drivers/pci/controller/dwc/pcie-tegra194.c    |  8 +++-
+ drivers/pci/endpoint/functions/pci-epf-test.c | 38 ++++++-------------
+ drivers/pci/endpoint/pci-epc-core.c           | 32 ++++++++++++----
+ include/linux/pci-epc.h                       | 10 +----
+ include/linux/pci-epf.h                       | 19 ++++++----
+ 6 files changed, 58 insertions(+), 51 deletions(-)
 
 -- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+2.25.1
+
