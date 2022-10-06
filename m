@@ -2,133 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C0D5F6D27
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 19:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56CFE5F6D28
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 19:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbiJFRnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 13:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43752 "EHLO
+        id S231814AbiJFRnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 13:43:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbiJFRnD (ORCPT
+        with ESMTP id S231600AbiJFRnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 13:43:03 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E72B40E8;
-        Thu,  6 Oct 2022 10:43:01 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4MjzLB6Ky2z9t0M;
-        Thu,  6 Oct 2022 19:42:58 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Fq7hDkCWiCvc; Thu,  6 Oct 2022 19:42:58 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4MjzLB4vNFz9syB;
-        Thu,  6 Oct 2022 19:42:58 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 84B508B78B;
-        Thu,  6 Oct 2022 19:42:58 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id mbcF0I0xUYNn; Thu,  6 Oct 2022 19:42:58 +0200 (CEST)
-Received: from [192.168.233.27] (po19210.idsi0.si.c-s.fr [192.168.233.27])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4E53E8B77D;
-        Thu,  6 Oct 2022 19:42:56 +0200 (CEST)
-Message-ID: <6396875c-146a-acf5-dd9e-7f93ba1b4bc3@csgroup.eu>
-Date:   Thu, 6 Oct 2022 19:42:55 +0200
+        Thu, 6 Oct 2022 13:43:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A76B40E8;
+        Thu,  6 Oct 2022 10:43:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 92CCAB82126;
+        Thu,  6 Oct 2022 17:43:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0459C433C1;
+        Thu,  6 Oct 2022 17:43:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665078181;
+        bh=8L4ETKVrJv6anS4RBzHd/U96VBFqskwrKbkT5eLy2Lg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LwpzeQQzjm9tuiUHEQXke23UfORLgjnFJs5mYsTMrDIfxJFnOcZqV/iyk6DGjwSJ5
+         cG+niFpHlrmX8g+T93ukA1wJAzBlJAPQu0YJ6rcRtu1t78gHvC4/dBifVpA+9zy5Ke
+         GhigiDZFhyOLEH41El9uQQE7dl+PEOmbyF3QsPwqMPghYS2wUZG64TF0SpYTILd3Mv
+         4/IzLrH4zlLacwnMtFqAf2Xa9Gvm/K+r7xEfcOGmeivxXGQtGBXGR07qc3YPXcHeyI
+         naFMeV1nfDMLfDfCy48/xYIYFCZl2HLSfrHTSpEFbcMg6aoJ82Sv3kPlwbCzocA0Op
+         6SCn53nbnlK2w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 7C9234062C; Thu,  6 Oct 2022 14:42:58 -0300 (-03)
+Date:   Thu, 6 Oct 2022 14:42:58 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     carsten.haitzler@foss.arm.com, Jiri Slaby <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
+        mike.leach@linaro.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v9 02/13] perf test: Add build infra for perf test tools
+ for CoreSight tests
+Message-ID: <Yz8TojIibofTn8Rp@kernel.org>
+References: <20220909152803.2317006-1-carsten.haitzler@foss.arm.com>
+ <20220909152803.2317006-3-carsten.haitzler@foss.arm.com>
+ <Yz67SHpIN5NggKEk@kernel.org>
+ <Yz6/zlchVnNsVlzJ@kernel.org>
+ <Yz7RAgMN6WGnD3OZ@leoy-yangtze.lan>
+ <Yz7klV3h+JJ+ilAp@kernel.org>
+ <Yz7vJ9Wy0zCTwp1t@leoy-yangtze.lan>
+ <Yz8Ma75+RgGVYqBN@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v3 3/5] treewide: use get_random_u32() when possible
-Content-Language: fr-FR
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        =?UTF-8?Q?Christoph_B=c3=b6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Dave Airlie <airlied@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Westphal <fw@strlen.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Graf <tgraf@suug.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgens?= =?UTF-8?Q?en?= 
-        <toke@toke.dk>, Chuck Lever <chuck.lever@oracle.com>,
-        Jan Kara <jack@suse.cz>
-References: <20221006165346.73159-1-Jason@zx2c4.com>
- <20221006165346.73159-4-Jason@zx2c4.com>
- <848ed24c-13ef-6c38-fd13-639b33809194@csgroup.eu>
- <CAHmME9raQ4E00r9r8NyWJ17iSXE_KniTG0onCNAfMmfcGar1eg@mail.gmail.com>
- <f10fcfbf-2da6-cf2d-6027-fbf8b52803e9@csgroup.eu>
-In-Reply-To: <f10fcfbf-2da6-cf2d-6027-fbf8b52803e9@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+In-Reply-To: <Yz8Ma75+RgGVYqBN@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -136,76 +67,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Le 06/10/2022 à 19:31, Christophe Leroy a écrit :
+Em Thu, Oct 06, 2022 at 02:12:11PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Thu, Oct 06, 2022 at 11:07:19PM +0800, Leo Yan escreveu:
+> > On Thu, Oct 06, 2022 at 11:22:13AM -0300, Arnaldo Carvalho de Melo wrote:
+> > 
+> > [...]
+> > 
+> > > > @@ -1006,7 +1014,10 @@ install-tests: all install-gtk
+> > > >                 $(INSTALL) tests/shell/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell'; \
+> > > >                 $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
+> > > >                 $(INSTALL) tests/shell/lib/*.sh -m 644 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
+> > > > -               $(INSTALL) tests/shell/lib/*.py -m 644 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'
+> > > > +               $(INSTALL) tests/shell/lib/*.py -m 644 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
+> > > > +               $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/coresight'; \
+> > > > +               $(INSTALL) tests/shell/coresight/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/coresight'
+> > > > +       $(Q)$(MAKE) -C tests/shell/coresight install-tests
+> > > > 
+> > > > It's deliberately to not add '-m 644' when install coresight test
+> > > > shell scripts under the folder tests/shell/coresight/ so that we can
+> > > > keep the executable permission for these scripts.  On the other flip,
+> > > > we set 644 mode for the scripts under tests/shell/lib/ so these
+> > > > scripts will not be executed directly by perf test framework.
+> > > > 
+> > > > @Carsten, if have chance could you confirm for above change?
+> > > 
+> > > If you need for some .sh, coresight test's to have x set while all of
+> > > the others don't have, and you have a good reason for that, ok, we just
+> > > add a comment.
+> > 
+> > Simply to say, all lib scripts are not needed for execute permission.
+> > Yes, it's good to add a comment for the installation steps.
+> > 
+> > > > >   DESCEND plugins
+> > > > >   GEN     /tmp/build/perf/python/perf.so
+> > > > >   INSTALL trace_plugins
+> > > > >   INSTALL binaries
+> > > > >   INSTALL tests
+> > > > > install: cannot stat 'tests/shell/coresight/*.sh': No such file or directory
+> > > > > make[2]: *** [Makefile.perf:1007: install-tests] Error 1
+> > > > > make[2]: *** Waiting for unfinished jobs....
+> > > > > 
+> > > > > I'll add it back when the first .sh gets added to tests/shell/coresight/
+> > > > 
+> > > > Sorry for introducing extra efforts for you and thanks!
+> > > 
+> > > This also has to go, I'll check and fix this loop that doesn't follow
+> > > the existing output style, happens with ´make install', etc too:
+> > > 
+> > > ⬢[acme@toolbox perf]$ make -C tools/perf clean
+> > > make: Entering directory '/var/home/acme/git/perf/tools/perf'
+> > >   CLEAN   x86
+> > >   CLEAN   libtraceevent
+> > >   CLEAN   libapi
+> > >   CLEAN   libbpf
+> > >   CLEAN   libsubcmd
+> > >   CLEAN   libperf
+> > >   CLEAN   fixdep
+> > >   CLEAN   feature-detect
+> > >   CLEAN   python
+> > >   CLEAN   bpf-skel
+> > > make -C asm_pure_loop clean >/dev/null        <-------------------
+> > > make -C memcpy_thread clean >/dev/null        <-------------------
+> > > make -C thread_loop clean >/dev/null          <-------------------
+> > > make -C unroll_loop_thread clean >/dev/null   <-------------------
+> > 
+> > Ouch, if we can update the file tests/shell/coresight/Makefile as below:
+> > 
+> > $(CLEANDIRS):
+> >         $(call QUIET_CLEAN, test-$(@:clean-%=%)) $(Q)$(MAKE) -C $(@:clean-%=%) clean >/dev/null
 > 
+> I had to do it, so far, at the time that the above line is first added
+> as:
 > 
-> Le 06/10/2022 à 19:24, Jason A. Donenfeld a écrit :
->> Hi Christophe,
->>
->> On Thu, Oct 6, 2022 at 11:21 AM Christophe Leroy
->> <christophe.leroy@csgroup.eu> wrote:
->>> Le 06/10/2022 à 18:53, Jason A. Donenfeld a écrit :
->>>> The prandom_u32() function has been a deprecated inline wrapper around
->>>> get_random_u32() for several releases now, and compiles down to the
->>>> exact same code. Replace the deprecated wrapper with a direct call to
->>>> the real function. The same also applies to get_random_int(), which is
->>>> just a wrapper around get_random_u32().
->>>>
->>>> Reviewed-by: Kees Cook <keescook@chromium.org>
->>>> Acked-by: Toke Høiland-Jørgensen <toke@toke.dk> # for sch_cake
->>>> Acked-by: Chuck Lever <chuck.lever@oracle.com> # for nfsd
->>>> Reviewed-by: Jan Kara <jack@suse.cz> # for ext4
->>>> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
->>>> ---
->>>
->>>> diff --git a/arch/powerpc/kernel/process.c 
->>>> b/arch/powerpc/kernel/process.c
->>>> index 0fbda89cd1bb..9c4c15afbbe8 100644
->>>> --- a/arch/powerpc/kernel/process.c
->>>> +++ b/arch/powerpc/kernel/process.c
->>>> @@ -2308,6 +2308,6 @@ void notrace __ppc64_runlatch_off(void)
->>>>    unsigned long arch_align_stack(unsigned long sp)
->>>>    {
->>>>        if (!(current->personality & ADDR_NO_RANDOMIZE) && 
->>>> randomize_va_space)
->>>> -             sp -= get_random_int() & ~PAGE_MASK;
->>>> +             sp -= get_random_u32() & ~PAGE_MASK;
->>>>        return sp & ~0xf;
->>>
->>> Isn't that a candidate for prandom_u32_max() ?
->>>
->>> Note that sp is deemed to be 16 bytes aligned at all time.
->>
->> Yes, probably. It seemed non-trivial to think about, so I didn't. But
->> let's see here... maybe it's not too bad:
->>
->> If PAGE_MASK is always ~(PAGE_SIZE-1), then ~PAGE_MASK is
->> (PAGE_SIZE-1), so prandom_u32_max(PAGE_SIZE) should yield the same
->> thing? Is that accurate? And holds across platforms (this comes up a
->> few places)? If so, I'll do that for a v4.
->>
-> 
-> On powerpc it is always (from arch/powerpc/include/asm/page.h) :
-> 
-> /*
->   * Subtle: (1 << PAGE_SHIFT) is an int, not an unsigned long. So if we
->   * assign PAGE_MASK to a larger type it gets extended the way we want
->   * (i.e. with 1s in the high bits)
->   */
-> #define PAGE_MASK      (~((1 << PAGE_SHIFT) - 1))
-> 
-> #define PAGE_SIZE        (1UL << PAGE_SHIFT)
-> 
-> 
-> So it would work I guess.
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index a20b4adb5e3451f1..194e582e70c2c766 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -635,7 +635,8 @@ tests-coresight-targets: FORCE
+>  	$(Q)$(MAKE) -C $(TESTS_CORESIGHT_DIR)
+>  
+>  tests-coresight-targets-clean:
+> -	$(Q)$(MAKE) -C $(TESTS_CORESIGHT_DIR) clean
+> +	$(call QUIET_CLEAN, coresight)
+> +	$(Q)$(MAKE) -C $(TESTS_CORESIGHT_DIR) O=$(OUTPUT) clean >/dev/null
+>  
+>  all: shell_compatibility_test $(ALL_PROGRAMS) $(LANG_BINDINGS) $(OTHER_PROGRAMS) tests-coresight-targets
+>  
+> diff --git a/tools/perf/tests/shell/coresight/Makefile b/tools/perf/tests/shell/coresight/Makefile
+> index 3fee05cfcb0e73f6..6baab5cbaa9aa3b1 100644
+> --- a/tools/perf/tests/shell/coresight/Makefile
+> +++ b/tools/perf/tests/shell/coresight/Makefile
+> @@ -20,6 +20,6 @@ CLEANDIRS = $(SUBDIRS:%=clean-%)
+>  
+>  clean: $(CLEANDIRS)
+>  $(CLEANDIRS):
+> -	$(Q)$(MAKE) -C $(@:clean-%=%) clean >/dev/null
+> +	$(call QUIET_CLEAN, test-$(@:clean-%=%)) $(Q)$(MAKE) -C $(@:clean-%=%) clean >/dev/null
+>  
+>  .PHONY: all clean $(SUBDIRS) $(CLEANDIRS) $(INSTALLDIRS)
 
-But taking into account that sp must remain 16 bytes aligned, would it 
-be better to do something like ?
+And for the normal build and install, somehow that $(Q) is not being
+obeyed there, so I'm using straight @ for now so that we have a clean
+output, someone more knowledgeable in the Makefile voodoo can then fix
+it.
 
-	sp -= prandom_u32_max(PAGE_SIZE >> 4) << 4;
+⬢[acme@toolbox perf]$ git log --oneline -1
+e1700b67a41092a5 (HEAD) perf test: Add build infra for perf test tools for ARM CoreSight tests
+⬢[acme@toolbox perf]$ git diff
+diff --git a/tools/perf/tests/shell/coresight/Makefile b/tools/perf/tests/shell/coresight/Makefile
+index 6baab5cbaa9aa3b1..6f3b3f07049c2d53 100644
+--- a/tools/perf/tests/shell/coresight/Makefile
++++ b/tools/perf/tests/shell/coresight/Makefile
+@@ -8,13 +8,13 @@ SUBDIRS =
 
-	return sp;
+ all: $(SUBDIRS)
+ $(SUBDIRS):
+-       $(Q)$(MAKE) -C $@
++       @$(MAKE) -C $@
 
+ INSTALLDIRS = $(SUBDIRS:%=install-%)
 
+ install-tests: $(INSTALLDIRS)
+ $(INSTALLDIRS):
+-       $(Q)$(MAKE) -C $(@:install-%=%) install-tests
++       @$(MAKE) -C $(@:install-%=%) install-tests >/dev/null
+
+ CLEANDIRS = $(SUBDIRS:%=clean-%)
+
+⬢[acme@toolbox perf]$
