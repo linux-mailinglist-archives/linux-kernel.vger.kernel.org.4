@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23455F71BD
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 01:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AE15F71BF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 01:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiJFX0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 19:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
+        id S231510AbiJFX0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 19:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbiJFX0K (ORCPT
+        with ESMTP id S231232AbiJFX0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 19:26:10 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5082BBE38
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 16:26:09 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id f9so3890948ljk.12
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 16:26:09 -0700 (PDT)
+        Thu, 6 Oct 2022 19:26:45 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D257EB7C7
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 16:26:42 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a26so7874697ejc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 16:26:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mV9Q8TxTnZx5YN34R7SUXMVFq34AMSjPHpiLz7F3AAE=;
-        b=Jof8LQIU/LTuSSP8IlLOJPBNTJHtoMtM4OCWw8V1VoKbuCusd4xVtpujTiPT8afnee
-         nTlskKM4P3VaniKgPk3WpNFloS+8fkySpc1bOdHqtcMd1dW830VlZuNe4woPoTqywiSA
-         bb/yVRjeb9lzQvfm/xJBL4vwjZy8/MOQI1GaoUUlj9k8SAo3Hc8qyxuxH0n6381BKmVt
-         07mG4mibyTyFYEul/6qXEW+rwhVKVJor7+IjQq/ae7H/83nbYl33YedC0Lka1M91VddC
-         qGdaJ519jZLxMn/yBCCclfxMc6aBkqK142cDYorwp+Y/39aFGbaK+5xC02QZCkdofsLR
-         jVMQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=7D8QgEofMj2OjunkWtdlnIwE468nRY6vum59Ytv9TME=;
+        b=iOM9RdZMPhkEE/aOJbZvxM9cJarrCNE6IgIBf1wTC98XmC9IQG+gkgukHMdL90vWYt
+         8qWU8JUUTx3do3MzpsVG962AAWziCQ4x1nxi01QIJnkFe7AnqnYgoG22N4qMOjGeZwan
+         eSmC/H7byn6wfm6JYsCnc7wXhHshKiU4eoElLgVQ+5xfAU/qm7dyDVEkupcOi6fG3EeD
+         +quryQGMDi+Q3Dla2oeHOAzVFk9uLUBzgAGKjrFabTdaP7eWoy9tO+u6i8COrCMm6gO7
+         k0dG9UFd+omGwiIhpyaq/saVf4XeDlaInR2nlKNLOChjTKCtbd2m7C6ADSvip7aXRM/Y
+         CSvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mV9Q8TxTnZx5YN34R7SUXMVFq34AMSjPHpiLz7F3AAE=;
-        b=CUxYGAvcGRJFz/ImDp9yDIETdoBSv9U5KlmBbLXjBRPoUcenYrqRM/5HqgQN4WnSom
-         6TVLojqT7QxGOnkW1fwhh/y+h01ZIu2SST9d1pSoSsppfiQ+BbaOc041GR3cRu3Q/q9B
-         iIcPPS8miudZla8HfscYuBywRQnEsA4TADbYIxHCnhIa36NEgDhPkh6l+WNuuBN7SHK3
-         K/86jExJTrDRizu2Nj7jHYkcpH/79zQgqDagX6/04hh8HVofOjpLRffQytmpV1oeiOHd
-         hJ7B0N4lLXjIhnsnwBqkyPN6J8W8pjaug3zrs/TSuu86UBT7UjrBoQCJvgrSwiLKiHOV
-         t3fQ==
-X-Gm-Message-State: ACrzQf1LBle3533Zu7VKvU7LfWFinJzGDf1YduJrCTPb0XxTx3rif4Gh
-        o32Hfbkfrmdk5XY9WGI6wBd3NBGevZvOqM7CK313fg==
-X-Google-Smtp-Source: AMsMyM4Bsu70blXGXiZx0d4DQ3MtJDtM6pfc4RygLl3vlfkNLKFvVBBszLm918fiUVz4Nmnpp8s3Ox0KB5jtzGZLrXI=
-X-Received: by 2002:a2e:aa20:0:b0:26e:609:cf08 with SMTP id
- bf32-20020a2eaa20000000b0026e0609cf08mr669552ljb.422.1665098767843; Thu, 06
- Oct 2022 16:26:07 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=7D8QgEofMj2OjunkWtdlnIwE468nRY6vum59Ytv9TME=;
+        b=UIXThYqdvurWngnho0phnqmGOtg9B7xVDhM/i6mGhFR0t4gctD4tbEfTTu8soJsN3F
+         Z23BdKu5POycb94Stnhqs+dSDswAY89qbu7tLEe/SY+YIQSZklukWL6uDuZ3FLyDaHOr
+         owL7uyCDrXl44T5WjDuI+SIt33Y50sLOMfkVFhjwdI1K3igOfBn045X2iFJC2++17cEy
+         55z6icX9CuWGU7zj2Qmtvli0XoEhUY5qTBjMNqd6UOU4yWtxmWnWC3g/gWYJyAqz98Gq
+         CzkiDaANK1YKpeQQtFtPWuLhIbfANI0S0cYeZle1Tjghn/QbjwsjR8HAlb6KoD+t6NdM
+         AE6w==
+X-Gm-Message-State: ACrzQf2BYuR0CvjfCK4LkDY0JOkQqm5mHKTy9XNWYE+E5D9/6IEBmUSf
+        CUN8Ym3CB5gpoJdwQ/MevR8=
+X-Google-Smtp-Source: AMsMyM6WO0uZEQ04lSneiEz2Dils+6r7lWyd5w03swLpMxe72l4vHabEpasRZJkzmHjlqYd20bbj5A==
+X-Received: by 2002:a17:906:eeca:b0:730:6880:c397 with SMTP id wu10-20020a170906eeca00b007306880c397mr1785207ejb.593.1665098800620;
+        Thu, 06 Oct 2022 16:26:40 -0700 (PDT)
+Received: from mypc.localnet (host-95-248-187-1.retail.telecomitalia.it. [95.248.187.1])
+        by smtp.gmail.com with ESMTPSA id p26-20020a17090653da00b0078d38cda2b1sm291097ejo.202.2022.10.06.16.26.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 16:26:39 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Cc:     syzbot <syzbot+389b82b29093b3e2640a@syzkaller.appspotmail.com>
+Subject: Re: [syzbot] memory leak in __get_metapage
+Date:   Fri, 07 Oct 2022 01:26:41 +0200
+Message-ID: <2387955.jE0xQCEvom@mypc>
+In-Reply-To: <0000000000008a5a2e05ea318aa9@google.com>
+References: <0000000000008a5a2e05ea318aa9@google.com>
 MIME-Version: 1.0
-References: <20221006171133.372359-1-vipinsh@google.com> <20221006171133.372359-5-vipinsh@google.com>
- <Yz8xdJEMjcfdrcWC@google.com>
-In-Reply-To: <Yz8xdJEMjcfdrcWC@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Thu, 6 Oct 2022 16:25:31 -0700
-Message-ID: <CAHVum0e4fiaB7hGSA6z1SaiZ1632f9Md2p0Nw6G=5wqhHYvdJg@mail.gmail.com>
-Subject: Re: [PATCH v4 4/4] KVM: selftests: Run dirty_log_perf_test on
- specific CPUs
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     pbonzini@redhat.com, dmatlack@google.com, andrew.jones@linux.dev,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,121 +71,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 6, 2022 at 12:50 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Thu, Oct 06, 2022, Vipin Sharma wrote:
-> ...
->
-> > +static void pin_me_to_pcpu
->
-> Maybe s/me/this_task ?
+On Tuesday, October 4, 2022 10:49:42 AM CEST syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    4fe89d07dcc2 Linux 6.0
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=169a7924880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=21254cf9c7c084e0
+> dashboard link: https://syzkaller.appspot.com/bug?extid=389b82b29093b3e2640a
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils 
+for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10bdd7ec880000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/651a252f7035/
+disk-4fe89d07.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/776feb8e0e5b/
+vmlinux-4fe89d07.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+389b82b29093b3e2640a@syzkaller.appspotmail.com
+> 
+> BUG: memory leak
+> unreferenced object 0xffff888114339e80 (size 128):
+>   comm "syz-executor.0", pid 3673, jiffies 4295017005 (age 12.610s)
+>   hex dump (first 32 bytes):
+>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
+>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
+>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
+>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
+>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
+>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
+>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> BUG: memory leak
+> unreferenced object 0xffff888114339e00 (size 128):
+>   comm "syz-executor.0", pid 3673, jiffies 4295017005 (age 12.610s)
+>   hex dump (first 32 bytes):
+>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
+>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
+>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
+>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
+>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
+>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
+>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> BUG: memory leak
+> unreferenced object 0xffff888114339d80 (size 128):
+>   comm "syz-executor.0", pid 3673, jiffies 4295017005 (age 12.610s)
+>   hex dump (first 32 bytes):
+>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
+>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
+>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
+>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
+>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
+>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
+>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> BUG: memory leak
+> unreferenced object 0xffff8881142f0300 (size 128):
+>   comm "syz-executor.0", pid 3676, jiffies 4295017533 (age 7.330s)
+>   hex dump (first 32 bytes):
+>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
+>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
+>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
+>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
+>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
+>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
+>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 
+master
 
-Sure.
 
->
-> > (int pcpu)
->
-> Unless we're using -1 as "don't pin" or "invalid", this should be an unsigned value.
->
-> > +{
-> > +     cpu_set_t cpuset;
-> > +     int err;
-> > +
-> > +     CPU_ZERO(&cpuset);
-> > +     CPU_SET(pcpu, &cpuset);
->
-> To save user pain:
->
->         r = sched_getaffinity(0, sizeof(allowed_mask), &allowed_mask);
->         TEST_ASSERT(!r, "sched_getaffinity failed, errno = %d (%s)", errno,
->                     strerror(errno));
->
->         TEST_ASSERT(CPU_ISSET(pcpu, &allowed_mask),
->                     "Task '%d' not allowed to run on pCPU '%d'\n");
->
->         CPU_ZERO(&allowed_mask);
->         CPU_SET(cpu, &allowed_mask);
->
-> that way the user will get an explicit error message if they try to pin a vCPU/task
-> that has already been affined by something else.  And then, in theory,
-> sched_setaffinity() should never fail.
->
-> Or you could have two cpu_set_t objects and use CPU_AND(), but that seems
-> unnecessarily complex.
->
 
-sched_setaffinity() doesn't fail when we assign more than one task to
-the pCPU, it allows multiple tasks to be on the same pCPU. One of the
-reasons it fails is if it is provided a cpu number which is bigger
-than what is actually available on the host.
 
-I am not convinced that pinning vCPUs to the same pCPU should throw an
-error. We should allow if someone wants to try and compare performance
-by over subscribing or any valid combination they want to test.
-
-...
-
-> > +static int pcpu_num(const char *cpu_str)
-> > +{
-> > +     int pcpu = atoi_paranoid(cpu_str);
->
-> newline after declaration.  Though maybe just omit this helper entirely?  As a
-> somewhat belated thought, it's trivial to let "-1" mean "don't pin this vCPU".
-> No idea if there's a use case for that, but it's not any more work to support.
->
-> Even if <0 is invalid, what about just having pin_task_to_pcu() do all the
-> sanity checking?  That way it's more obvious that that helper isn't failing to
-> sanity check the incoming value.
->
-
-This will go away with atoi_non_negative() API I will write in v5. I
-won't even need this function then.
-
-...
-
-> > +     while (cpu && i < nr_vcpus) {
-> > +             perf_test_args.vcpu_args[i++].pcpu = pcpu_num(cpu);
-> > +             cpu = strtok(NULL, delim);
-> > +     }
-> > +
-> > +     TEST_ASSERT(i == nr_vcpus,
-> > +                 "Number of pcpus (%d) not sufficient for the number of vcpus (%d).",
-> > +                 i, nr_vcpus);
->
-> Rather than assert after the fact, use a for-loop:
->
->         for (i = 0; i < nr_vcpus; i++ {
->                 TEST_ASSERT(cpu, "pCPU not provided for vCPU%d\n", i);
->                 perf_test_args.vcpu_args[i++].pcpu = atoi_paranoid(cpu);
->                 cpu = strtok(NULL, delim);
->         }
->
-> so as to avoid having to consume the loop control variable before and after the
-> loop.  Or even
->
->         for (i = 0, cpu = strtok(cpu_list, delim);
->              i < nr_vcpus;
->              i++, cpu = strtok(NULL, delim)) {
->                 TEST_ASSERT(cpu, "pCPU not provided for vCPU%d\n", i);
->                 perf_test_args.vcpu_args[i++].pcpu = atoi_paranoid(cpu);
->         }
->
-> Though IMO the latter is gratuitous and hard to read.
->
-
-I will use the former one.
-
-> > +
-> > +     perf_test_args.pin_vcpus = true;
-> > +
-> > +     // 2. Check if main worker is provided
-> > +     if (cpu)
-> > +             pin_me_to_pcpu(pcpu_num(cpu));
->
-> Verify the string is now empty?  I.e. that there isn't trailing garbage.
->
-
-Okay, I will add the verification.
-
-All other suggestions to which I haven't responded, I agree with them
-and will make the changes in v5.
