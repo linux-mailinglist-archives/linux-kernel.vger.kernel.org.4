@@ -2,77 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 312A75F63AB
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2A45F63A9
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231469AbiJFJbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 05:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
+        id S231450AbiJFJaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 05:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231447AbiJFJbP (ORCPT
+        with ESMTP id S231370AbiJFJaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 05:31:15 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1256171A;
-        Thu,  6 Oct 2022 02:31:14 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id ED8A7580420;
-        Thu,  6 Oct 2022 05:31:13 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 06 Oct 2022 05:31:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1665048673; x=1665052273; bh=fyun8m++OCXQaSzrMWRm/s4+lmV+aUX5yLj
-        qKG/xgY8=; b=vuJSqGHrU/yyR5YCgbXwOv+J4DvFookOIeodLLhOjW+m/5FDrKi
-        5IEYVbn0oVMcet1C6FBAEjuu6TGz5Iw2IrjWQCA3+RNHPYIrPl8OvNbPvXCJ3C8A
-        3Wu1uxLznmLilePKxNFMVgWItZXnxKqzNN+rxbyl2WpI4a8AS+rI66pfCGNHUIn6
-        iRVSmqYKMuv1nXOcdxDD77Rw0/CbVLuc4cCkpj6tEzUMexOUvUFj8MZV5z/73isA
-        tbgDmg9be21TS05Re896BLn/bwG57BxXu9DGNCPNLPv8NMOmMd451ewqTLd/pA+i
-        u6A8WQL9t9fMICQsWkSTxNfxhHDQKK6rBWw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:message-id:mime-version
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1665048673; x=
-        1665052273; bh=fyun8m++OCXQaSzrMWRm/s4+lmV+aUX5yLjqKG/xgY8=; b=D
-        29u2egZPzdgQwDiA0GEWSq5TR4F1bxUUtqyxImUaz6SOxVTKUFHPHAW0HGEQGM2l
-        dGamWgTwuZMkMLn3Aubmd/GmKKoF+ngDLVY0OyKB+JW1U7YTrZPYIx7zJmW3cvtp
-        mEcjwLbLj33vPH240ktkyZ+X5Rtuq3eQd/KGyK9sMONWVI+NRV3kCWbpLQtaiL62
-        arpA/7sRDKpH7BwEEGrR3Gxygr6rQ0XqeGLmrSHdajUtyWNB4dc5r3qKfubAQhu9
-        D0iXxdggaWVAPL1rZrn+7R3Wx0oaJzWengim91P0RlL2lZ0QHHB7Y7si/VQK8q7y
-        AkXJP6OsdtFaT31P+4K+A==
-X-ME-Sender: <xms:YaA-Y3vgfDvBONVNg63le4yi6XwNeErtPyf54WcphtCdDLhYe8iLwQ>
-    <xme:YaA-Y4cyNGkfPovEZx5x1ix1nv3jlXU_7tjn0dXMasvpDFK1zSazY9eqZbqLNuvBd
-    G3lWkl0XibAZcftj30>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeihedgudeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepfeefuefhkeejvedtvddtleeltddttdejgedvhfdtuddvhfeukeduiefhjeetgfei
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:YaA-Y6wlc07QnDJPDUIvwT1AZZxsETF5f6nxd3ACad_k9t60dmiCWw>
-    <xmx:YaA-Y2P-UgKVqZrVlUxk5Iad7afcTPwvzrUwwAbGcETEZFSIX7IZow>
-    <xmx:YaA-Y38GaydwfrOG-FlFF9-jUH_jNwGOY_HhNWqAzxtFp0qoFmXIeQ>
-    <xmx:YaA-Y0HMZg9DWC007Wi2TB0cDoxWSsb7NqAbx6wAZP3oGkgm1AVNXg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id A25DDB60086; Thu,  6 Oct 2022 05:31:13 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
-Mime-Version: 1.0
-Message-Id: <5c3aa67f-bc78-4abe-aba2-e5679cb66994@app.fastmail.com>
-Date:   Thu, 06 Oct 2022 11:30:38 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] asm-generic updates for 6.1
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        Thu, 6 Oct 2022 05:30:52 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8B1B85A
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 02:30:51 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AE2086601595;
+        Thu,  6 Oct 2022 10:30:49 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1665048650;
+        bh=DZafEcdio5imhGIlFetdrZR2SPXKufatKggl05kVwN8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=T3TXFlla5OAqLTidG45otxzLLgFgUL7vK2o1YNvBgcn6GZ6qZ7qZSUWvxHk/5ec58
+         CzznJ9DXUzmbFafqfvVOeriSGvfaI8u3cHbj2EIxL4SSzXh6WU4GavD/2jWTVQ5g8c
+         V1srnsG9PCBlbU4c8RsPtqxeq6Fli38wH6gvbEUtzq3eQSnSMudB1RZBS/hLnKHYhF
+         BZRs84tP5p29RH/FsD+3/BSzPCU94nc8r7LzkkyR2jt8LxUl/kcFmWo1dg5R6QBFiz
+         UWNb9Kpr0BeHfcA0PrqPyuT9SA1m6DepfrlqMb5GXvAKKgM3pk4W5iEC7Ja6Yda5zN
+         IJWSYjjYlvN6w==
+Message-ID: <294fa048-1dc0-ea52-d65b-2c6c0c48bafc@collabora.com>
+Date:   Thu, 6 Oct 2022 11:30:47 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v9, 3/4] mailbox: mtk-cmdq: add gce ddr enable support
+ flow
+Content-Language: en-US
+To:     Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Hsin-Yi Wang <hsinyi@chromium.org>
+References: <20221006043456.8754-1-yongqiang.niu@mediatek.com>
+ <20221006043456.8754-4-yongqiang.niu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221006043456.8754-4-yongqiang.niu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,66 +65,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 7e18e42e4b280c85b76967a9106a13ca61c16179:
+Il 06/10/22 06:34, Yongqiang Niu ha scritto:
+> add gce ddr enable control flow when gce suspend/resume
+> 
+> when all cmdq instruction task has been processed done,
+> we need set this gce ddr enable to disable status to tell
+> cmdq hardware gce there is none task need process, and the hardware
+> can go into idle mode and no access ddr anymore, then the spm can go
+> into suspend.
+> 
+> the original issue is gce still access ddr when cmdq suspend function
+> call, but there is no task run.
+> so, we need control gce access ddr with this flow.
+> when cmdq suspend function, there is no task need process, we can
+> disable gce access ddr, to make sure system go into suspend success.
+> 
+> Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
 
-  Linux 6.0-rc4 (2022-09-04 13:10:01 -0700)
 
-are available in the Git repository at:
+I already gave you my Reviewed-by tag for this patch and here nothing has
+changed from v8 to v9. Please retain tags that were given to you in these cases.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-6.1
-
-for you to fetch changes up to e19d4ebc536dadb607fe305fdaf48218d3e32d7c:
-
-  alpha: add full ioread64/iowrite64 implementation (2022-10-04 11:23:29 +0200)
-
-----------------------------------------------------------------
-asm-generic updates for v6.1
-
-This contains a series from Linus Walleij to unify the linux/io.h
-interface by making the ia64, alpha, parisc and sparc include
-asm-generic/io.h. All functions provided by the generic header are
-now available to all drivers, but the architectures can still override
-this. For the moment, mips and sh still don't include asm-generic/io.h
-but provide a full set of functions themselves.
-
-There are also a few minor cleanups unrelated to this.
-
-----------------------------------------------------------------
-Arnd Bergmann (2):
-      parisc: hide ioread64 declaration on 32-bit
-      alpha: add full ioread64/iowrite64 implementation
-
-Christophe Leroy (1):
-      asm-generic: Remove empty #ifdef SA_RESTORER
-
-Linus Walleij (5):
-      alpha: Use generic <asm-generic/io.h>
-      sparc: Fix the generic IO helpers
-      parisc: Remove 64bit access on 32bit machines
-      parisc: Use the generic IO helpers
-      parisc: Drop homebrewn io[read|write]64_[lo_hi|hi_lo]
-
-Randy Dunlap (1):
-      ia64: export memory_add_physaddr_to_nid to fix cxl build error
-
- arch/alpha/include/asm/core_apecs.h  |  22 +++++-
- arch/alpha/include/asm/core_cia.h    |  22 +++++-
- arch/alpha/include/asm/core_lca.h    |  22 +++++-
- arch/alpha/include/asm/core_marvel.h |   4 +-
- arch/alpha/include/asm/core_mcpcia.h |  28 +++++++-
- arch/alpha/include/asm/core_t2.h     |  16 ++++-
- arch/alpha/include/asm/io.h          |  97 ++++++++++++++++++++++---
- arch/alpha/include/asm/io_trivial.h  |  18 ++++-
- arch/alpha/include/asm/jensen.h      |  18 ++++-
- arch/alpha/include/asm/machvec.h     |   8 ++-
- arch/alpha/kernel/core_marvel.c      |   2 +-
- arch/alpha/kernel/io.c               |  17 +++++
- arch/alpha/kernel/machvec_impl.h     |   2 +
- arch/ia64/mm/numa.c                  |   1 +
- arch/parisc/include/asm/io.h         | 134 ++++++++++++-----------------------
- arch/parisc/lib/iomap.c              |  60 ++++++----------
- arch/sparc/include/asm/io.h          |   2 +
- arch/sparc/include/asm/io_64.h       |  22 ++++++
- drivers/parisc/sba_iommu.c           |   6 ++
- include/asm-generic/signal.h         |   2 -
- 20 files changed, 341 insertions(+), 162 deletions(-)
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
