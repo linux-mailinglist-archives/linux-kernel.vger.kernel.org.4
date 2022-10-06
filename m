@@ -2,129 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8AD5F6A75
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 17:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A11985F6A79
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 17:23:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbiJFPWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 11:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
+        id S231352AbiJFPXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 11:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230386AbiJFPWQ (ORCPT
+        with ESMTP id S231386AbiJFPXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 11:22:16 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D16CB514B;
-        Thu,  6 Oct 2022 08:22:15 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 296FFOXJ028174;
-        Thu, 6 Oct 2022 15:22:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=fdvKRZW+6B4bc/tizp2EF3gOSKbpufdFOY0utqO1Gp8=;
- b=cY587duxvs+hNdora+fHf1J8osepd9fY+jG152jJtfcmYBSh8q2ROB9JZi99vzoMWI1G
- M4IpJwLws43mO/hJYGNK+NxWH3wv9/SED5RnGvDFiuN895NV1vK0mWK+QXlh+g2wNcIn
- ulSrGj//84zJk3aKXVy4wGodWY5ba3eBvM7G9P/cpto3TllswUVx36SaEWAEarj8ac6t
- lvX+q9z3znc3N4bF5PvHA1Z3+EK+wq7pop6QoZY25keOGWkkBYnIhxV9a6XAUxCxnr/M
- KFXtsCJ3V5L+EEKBmJOllsPqyAvGmj3t5nadLu1qjP+4l6nSkxfRuo7MrK5BSc2WIBA+ Ig== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k20p8247n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Oct 2022 15:22:03 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 296FB84c017152;
-        Thu, 6 Oct 2022 15:22:01 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma05fra.de.ibm.com with ESMTP id 3jxd68wcfm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Oct 2022 15:22:01 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 296FLvr28127070
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 6 Oct 2022 15:21:58 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DFFA052051;
-        Thu,  6 Oct 2022 15:21:57 +0000 (GMT)
-Received: from sig-9-145-19-232.uk.ibm.com (unknown [9.145.19.232])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 275545204F;
-        Thu,  6 Oct 2022 15:21:57 +0000 (GMT)
-Message-ID: <ed96bbb5b2af7cbf8e41f5aa36d31d3f5aae50d5.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 3/6] iommu/s390: Fix potential s390_domain aperture
- shrinking
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev
-Cc:     linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
-        robin.murphy@arm.com, jgg@nvidia.com, linux-kernel@vger.kernel.org
-Date:   Thu, 06 Oct 2022 17:21:56 +0200
-In-Reply-To: <20221006144700.3380098-4-schnelle@linux.ibm.com>
-References: <20221006144700.3380098-1-schnelle@linux.ibm.com>
-         <20221006144700.3380098-4-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Thu, 6 Oct 2022 11:23:10 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BFEB517C
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 08:23:08 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id bn8so2619796ljb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 08:23:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=v5igb7gwPlo9b9xJTbh+HYwPUReqdxp8k/iwdLyM9EU=;
+        b=eYmYAeveDQX8Z1ffiggnnncFTrH0EMubH0QAEpO8D/gyMnPafpdvTGP9eXlvnw3D9J
+         w+oQ2nUztfJsZGp2tcgdPc/p+J75svQrhKVDOc+Td3WCwhHTA2drZVu8In+81LMjzjbq
+         uySqjkaH9Z/0S5D54Q9qyt0EsT7YB6Ghb5fMGYczJaW7V6mrDmBZkeQRN4dKFkrD4BrL
+         OPMavks5I21EWR+f+6gcCGPdddaaZLaXEekgD5ZEbyFW+HdX44SANbqIvAazGzk3mLYc
+         /fuZ8o04YBbHa7SqE4pX9unLbv3WT3a96qfGd95H+iUqNXNozqHBKrpt794HpBHjJ0Ts
+         U09g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=v5igb7gwPlo9b9xJTbh+HYwPUReqdxp8k/iwdLyM9EU=;
+        b=rXYn1fT8SSdplhAoKda5IcGfGcc4fFo0aCTlZW/jjXBb5iWWNryXZ7O3FwSAYfhkaE
+         4ZFYPzE04U3Ko/STC7lD4SdDLgLxkjy84vIFCGQvWyk2CxwV6TS01Ck9E3RPdfu2zu/5
+         XGCZXhwAHEVTE8zhNL7lcw7hN5sAvFXN+reVe2MSbv/YTzK5I4uUzQTrFnkjwoCnTuUq
+         pEqdGxENxF1nMbkJeIf5TKPlzavfWJawq6QCWNmymOgPqtsdEpdBA7ngQVjrWJ5FRlM2
+         2VS/e8MkDn3erL9+NoS2OhKlu80x6+CPXIoepZ3Kmm/Hx5dw28kGhVY4sHHuSi5RwWZD
+         S4uQ==
+X-Gm-Message-State: ACrzQf3hvX+baMcmL9SI7ElgQOgtOQDlx8n6/+M3urFthd2NTXLUOvE6
+        aiSZodQSQo4NrZAVwHUbDG/v7Q==
+X-Google-Smtp-Source: AMsMyM4KRHyhdJ+ushWbyAxsX2Gt18Zz+oPfj/QUFJpmQFKOOZ3Ubpx37LQSn2biWbCb1WfiIh0y3w==
+X-Received: by 2002:a05:651c:1509:b0:26c:6194:9c03 with SMTP id e9-20020a05651c150900b0026c61949c03mr74583ljf.314.1665069786936;
+        Thu, 06 Oct 2022 08:23:06 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id w20-20020a05651c119400b0026ab83298d6sm1910856ljo.77.2022.10.06.08.23.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Oct 2022 08:23:06 -0700 (PDT)
+Message-ID: <fc7c064f-074a-e66a-07b3-541f2ad56804@linaro.org>
+Date:   Thu, 6 Oct 2022 17:23:05 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [RFC PATCH v2 3/5] dt-bindings: iio: Add KX022A accelerometer
+Content-Language: en-US
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jagath Jog J <jagathjog1996@gmail.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1665066397.git.mazziesaccount@gmail.com>
+ <80fa42040f385eb47f4f3c71b9b02f643a643e38.1665066397.git.mazziesaccount@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <80fa42040f385eb47f4f3c71b9b02f643a643e38.1665066397.git.mazziesaccount@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: iZCr9ndK0jR3uH7V9SvHBl0MnjzGGL4P
-X-Proofpoint-ORIG-GUID: iZCr9ndK0jR3uH7V9SvHBl0MnjzGGL4P
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-06_02,2022-10-06_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 clxscore=1015 priorityscore=1501 bulkscore=0 phishscore=0
- suspectscore=0 malwarescore=0 mlxlogscore=999 impostorscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210060087
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-10-06 at 16:46 +0200, Niklas Schnelle wrote:
-> The s390 IOMMU driver currently sets the IOMMU domain's aperture to
-> match the device specific DMA address range of the device that is first
-> attached. This is not ideal. For one if the domain has no device
-> attached in the meantime the aperture could be shrunk allowing
-> translations outside the aperture to exist in the translation tables.
-> Also this is a bit of a misuse of the aperture which really should
-> describe what addresses can be translated and not some device specific
-> limitations.
+On 06/10/2022 16:37, Matti Vaittinen wrote:
+> KX022A is a 3-axis Accelerometer from ROHM/Kionix. The sensor features
+> include variable ODRs, I2C and SPI control, FIFO/LIFO with watermark IRQ,
+> tap/motion detection, wake-up & back-to-sleep events, four acceleration
+> ranges (2, 4, 8 and 16g) and probably some other cool features.
 > 
-> Instead of misusing the aperture like this we can instead create
-> reserved ranges for the ranges inaccessible to the attached devices
-> allowing devices with overlapping ranges to still share an IOMMU domain.
-> This also significantly simplifies s390_iommu_attach_device() allowing
-> us to move the aperture check to the beginning of the function and
-> removing the need to hold the device list's lock to check the aperture.
-> 
-> As we then use the same aperture for all domains and it only depends on
-> the table properties we can already check zdev->start_dma/end_dma at
-> probe time and turn the check on attach into a WARN_ON().
-> 
-> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-@Matt, @Jason I did drop the R-b's here because the change Jason
-suggested of changing the aperture check on attach to a WARN_ON() and
-checking zdev->start_dma/end_dma on probe is a behavioral change.
+Thank you for your patch. There is something to discuss/improve.
 
-> ---
-> v4->v5:
-> - Make aperture check in attach a WARN_ON() and fail in probe if
->   zdev->start_dma/end_dma doesn't git in aperture  (Jason)
-> 
->  drivers/iommu/s390-iommu.c | 65 +++++++++++++++++++++++++-------------
->  1 file changed, 43 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
-> index 9b3ae4b14636..1f6c9bee9a80 100644
-> --- a/drivers/iommu/s390-iommu.c
----8<---
+> +
+> +properties:
+> +  compatible:
+> +    const: kionix,kx022a
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  interrupt-names:
+> +    minItems: 1
+> +    maxItems: 2
+> +    items:
+> +      enum:
+> +        - INT1
+> +        - INT2
+
+This allows any order, which I assume was your intention. However maybe
+at least fix it a bit like:
+minItems: 1
+items:
+  - enum: [ int1, int2]
+  - const: int2
+
+OTOH, the names are not really descriptive. Do they match pin names?
+
+
+Best regards,
+Krzysztof
 
