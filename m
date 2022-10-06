@@ -2,131 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEB05F6266
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8925F626A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbiJFIQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 04:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42916 "EHLO
+        id S230513AbiJFIRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 04:17:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230360AbiJFIQE (ORCPT
+        with ESMTP id S229633AbiJFIRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 04:16:04 -0400
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E60F7539B;
-        Thu,  6 Oct 2022 01:16:02 -0700 (PDT)
-Received: by mail-qk1-f182.google.com with SMTP id i3so578655qkl.3;
-        Thu, 06 Oct 2022 01:16:02 -0700 (PDT)
+        Thu, 6 Oct 2022 04:17:00 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A716A77543
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 01:16:58 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id m19so220314lfq.9
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 01:16:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=FfDc+hEkZ6RwsaJ4+0A43rieR6v2jH+WTZvfAnZBz1Y=;
+        b=VY5EY1z4bbWvQXGas+BbfF2JQm5bmRSHtb1XKkt64fbrhSp6hulWrZnHh/r7teY+p9
+         +G5qYPBCmVMc5i6u1kHpqWaGS4CRnjO/7YXZ1fjDK4pjhCNzONFh8nOwmARzSFNKVfeg
+         iUCW6RMzluXWlsBIkkFMXJZ1xBf2ixJLbak9i5qGWXuHR1vwA22EoeyEkQB8lllCQFI3
+         K41PIq3ivmz3jf/QLe63dTa7awGdMJ61F8hKfQ9C63xF8QxgqsjTYAAGCpt6PcNTyfjz
+         xBuRYy4US5IpZsdC/1rb/QQDyDi7MII3DTx00pfjYu8N+PC3hHt/paXZWqNOnqnZNgUW
+         eeVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=R5B71qPqaTjwjXY7p5kJrtkSEz4tsM7zjyMB/6HdHbo=;
-        b=nPmlVO+hZE7OOuT0AM0usRmfUQRHMSc3wzVuV8N7GZ9+Z/vtraSH4BgwO+JGv5zR9V
-         sagAUiY1FYDikkYLuEPf9VuJmq9KVLOh4XWBhh0JGcDh+eB2sTh8Z0QncUnqbaZIm4us
-         RsULE3/eKroR8/JbGfkuyPrQoqB22v1yvZgMNeQjC3OgqKQG3GdxiVzEDHAyaRDfw58y
-         zHMWK5C2uL370nAQGA4obs4Sww06bNj2WwA3ejxdBCZO7M7V65YnJZOl6vQkjXq+wwCB
-         7VHT+pePeoF3yFNkW9BJ/00WmynaGBv5Q6vjn5Oh0eTwb50qomafowtY74D8Sw6ZoLHv
-         PJSg==
-X-Gm-Message-State: ACrzQf1Ji4fb0RKtOuzP0Iyyy03O0AG6P3gOBiqAQf7Mp5E5BvVh0Xpc
-        Tkj1Qfj5PIHExNshQ0xF9biniGOD1pllkQ==
-X-Google-Smtp-Source: AMsMyM56fI3hb2c+GtnH2R7j8bZsHFw0XqP+rtSRsKTsv+A1uMTd05vV2pDEIAlk8/g9g8JAJPjfnw==
-X-Received: by 2002:a37:9144:0:b0:6cf:5dc3:417c with SMTP id t65-20020a379144000000b006cf5dc3417cmr2240451qkd.213.1665044161354;
-        Thu, 06 Oct 2022 01:16:01 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id v1-20020a05620a0f0100b006bb8b5b79efsm20822915qkl.129.2022.10.06.01.16.00
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=FfDc+hEkZ6RwsaJ4+0A43rieR6v2jH+WTZvfAnZBz1Y=;
+        b=2JtCbNkVR32lEW8OacGbK9cVV3r1BJzO1+3/bKnOsSUVKUkrrv8Uo1OpF8ST0t99LE
+         UQy7D82YMIWLRFOk+VmWXG7pZcLOY6kBHizYjAdbQF87G7Iq/wf7nuE51HZLlQ0r8p7Y
+         bHX5of2VpYK0ngjOWzywVhuzGlihXV15Ce9FoGfPxKPcqbau4+0wsgIasbYNsdWsWTZV
+         O7pAOrB6WycLGuht4756/yzRFMVwdkSog++EIN8iBWJ5geBYd13Vp+i6QJgpsDT4wSoX
+         OyuddjicUhPMy6lSIvUl2UpVYEeKv0XKta3YbjK1MwO/mCzvG8ogpr7kdvMIKErFqBMc
+         URKg==
+X-Gm-Message-State: ACrzQf0KJdaa8tvsDijsnh0y2XKy4OgWlGr2Dtk050ez4+Im7IqFZ3W5
+        zbl2jc/k23aOLCB4b+9QNT920g==
+X-Google-Smtp-Source: AMsMyM7GpuGlUY84ykYp+oEDm2ZghpfDWhH+LgsZpb9xJ2vsDcx500yy62Ye1D2zhYbdCgSKUMhbJA==
+X-Received: by 2002:ac2:4c8d:0:b0:4a0:559c:d40e with SMTP id d13-20020ac24c8d000000b004a0559cd40emr1340565lfl.508.1665044216972;
+        Thu, 06 Oct 2022 01:16:56 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id y13-20020a19750d000000b00497a1f92a72sm2617457lfe.221.2022.10.06.01.16.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Oct 2022 01:16:00 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id 207so1398141ybn.1;
-        Thu, 06 Oct 2022 01:16:00 -0700 (PDT)
-X-Received: by 2002:a05:6902:45:b0:6ae:ce15:a08d with SMTP id
- m5-20020a056902004500b006aece15a08dmr3586685ybh.380.1665044159991; Thu, 06
- Oct 2022 01:15:59 -0700 (PDT)
+        Thu, 06 Oct 2022 01:16:56 -0700 (PDT)
+Message-ID: <94c660bc-b7eb-1aea-8ae2-0ee7993091fd@linaro.org>
+Date:   Thu, 6 Oct 2022 10:16:55 +0200
 MIME-Version: 1.0
-References: <20220919133122.167794-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <OS0PR01MB5922E64DD745E4F8A5FEFCD5864D9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CA+V-a8vAjO9H9BdgNOVXkjWR9zpD+73P_KLo0683xp1nBgVViQ@mail.gmail.com>
- <OS0PR01MB59227B5F87C7FC3CEC271B0A864D9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CA+V-a8utdkb61v_1=G85O6OCtQDv-+5YuyFy4r7BW+fR2E=WkQ@mail.gmail.com>
- <OS0PR01MB592278FB3E443C84130FCA7D864D9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <OS0PR01MB5922DAA91FFD18FD52FEC916865D9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CA+V-a8uNhM92ezEX3iCcP2zp3Er9EPDy1Z-4L3gQfe=xU8O1bw@mail.gmail.com>
-In-Reply-To: <CA+V-a8uNhM92ezEX3iCcP2zp3Er9EPDy1Z-4L3gQfe=xU8O1bw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 6 Oct 2022 10:15:48 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU0BSByCZynkdhDQNcQ+7UT=YgZLe_YNVR4d=dS=2mX=g@mail.gmail.com>
-Message-ID: <CAMuHMdU0BSByCZynkdhDQNcQ+7UT=YgZLe_YNVR4d=dS=2mX=g@mail.gmail.com>
-Subject: Re: [PATCH] clk: renesas: r9a07g044: Add WDT2 clocks to critical list
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v3 1/2] dt-bindings: it6505: add properties to restrict
+ output bandwidth
+Content-Language: en-US
+To:     allen <allen.chen@ite.com.tw>
+Cc:     Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
+        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
+        Hermes Wu <Hermes.Wu@ite.com.tw>,
+        Pin-yen Lin <treapking@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221006020444.15823-1-allen.chen@ite.com.tw>
+ <20221006020444.15823-2-allen.chen@ite.com.tw>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221006020444.15823-2-allen.chen@ite.com.tw>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar, Biju,
+On 06/10/2022 04:04, allen wrote:
+> From: allen chen <allen.chen@ite.com.tw>
+> 
+> Add properties to restrict dp output data-lanes and clock.
+> 
+> Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
+> Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
+> ---
+>  .../bindings/display/bridge/ite,it6505.yaml          | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+> index 833d11b2303a..f5482a614d05 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+> @@ -52,6 +52,16 @@ properties:
+>      maxItems: 1
+>      description: extcon specifier for the Power Delivery
+>  
+> +  ite,dp-output-data-lane-count:
+> +    description: restrict the dp output data-lanes with value of 1-4
 
-On Wed, Oct 5, 2022 at 2:56 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Wed, Oct 5, 2022 at 9:27 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > > > On Mon, Sep 19, 2022 at 2:52 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > > > > > On Mon, Sep 19, 2022 at 2:35 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > > > > > > > From: Lad Prabhakar <prabhakar.mahadev-
-> > > lad.rj@bp.renesas.com>
-> > > > > > > > Add the WDT2 clocks to r9a07g044_crit_mod_clks[] list as WDT CH2 is
-> > > > > > > > specifically to check the operation of Cortex-M33 CPU on the
-> > > > > > > > RZ/{G2L, G2LC, V2L} SoCs and we dont want to turn off the clocks of
-> > > > > > > > WDT2 if it isn't enabled by Cortex-A55.
-> > > > > > > >
-> > > > > > > > This patch is in preparation to disable WDT CH2 from the RZ/G2L
-> > > > > > > > (alike
-> > > > > > > > SoCs) DTS/I by default.
-> > > > > > > >
-> > > > > > > > Reported-by: Biju Das <biju.das.jz@bp.renesas.com>
-> > > > > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > I got confirmation that that using WDT2 from CA55 is prohibited.
-> > WDT2 is only for CM33.
-> >
-> > With CPG register, we can select whether CM33 to trigger CM33 cpu reset, or trigger system reset
-> > when WDT2 overflows.
-> >
-> > If WDT2 is used by CA55, it may result in unexpected behaviour.
-> >
-> Thanks.
->
-> > So we may need to take WDT2 entries from binding + dtsi + clock table??
-> >
-> > Or
-> >
-> > Added it to critical clock list, to avoid changes in binding + dtsi + clock table
-> > at the expense of turning on the WDT2 clk unnecessarily.
+Drop "with value of 1-4" because it is redundant, but instead explain
+what this property is about. "Restrict output" is not yet enough.
+Restrict the number? Or choose specific lanes? Why it cannot be
+data-lanes from video-interfaces?
 
-... plus still risking to interfere with the CM33.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [ 1, 2, 4 ]
+> +
+> +  ite,dp-output-max-pixel-clock-mhz:
 
-> I'm in favour of option#1 except that we keep WDT2 entries in binding.
+Test your patches before sending.
 
-Agreed (bindings are append-only).
+Best regards,
+Krzysztof
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
