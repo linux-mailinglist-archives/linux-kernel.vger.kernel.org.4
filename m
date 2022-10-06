@@ -2,107 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9593D5F6314
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F755F6316
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbiJFIvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 04:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53322 "EHLO
+        id S231249AbiJFIwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 04:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbiJFIvM (ORCPT
+        with ESMTP id S230487AbiJFIwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 04:51:12 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5366DAC2
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 01:51:09 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id n12so1585320wrp.10
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 01:51:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aIf8xFSpdZbA1GQzuqts7ymYscMRXeakvYyTWUDLadI=;
-        b=G2GZPFQtAV+fYMiWZUUw9Ycw4NyH/47he9vDSPotO9NB+kd/J+ZTdp4QRwxs3nUmel
-         HsE6XDKEW5sgrt/QH6ElbgDbCHmOcxh+iT0NqyFTt3vJCqNtDZ7xBXJUf2RQDiFIZTFO
-         BVmPbl+qzzABOI+E2a3Ou4i+0l7AqwQhJlxrFI10eOvuLOOv39p2bgFOjVUq3IzTNgdm
-         imCSquDjoB7r8VPw0135RDuR5doUnprvSetHHzy/LNFGfEJ/YtD0Ir9yiut3enBuyACk
-         uQoH3GbZCQR93o/HCw39kkDnAKJWHAGH1wnBO/YrX9FY3UIYazs78CpMd5gNZhMYqaud
-         BKEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aIf8xFSpdZbA1GQzuqts7ymYscMRXeakvYyTWUDLadI=;
-        b=ogE+tLoW4fdyyjLy4L+nEXPEQUNke4sDIBxJpWm1LUYyGAXjxtlOM3yzK5VHyJH+xt
-         bTBgw8L76RHbcqfaHqu063nOMIUZkvcfs+fFuvMXMQiltkvHcMabtNnFariY5e19jqXD
-         PZDVR9Pm5DTLhc7LEL3uKrhnsqovLhta6StmgK69xr7/nAqo2ZH4L7MmWZhwXs4PS71z
-         EzXN5inc/oE8a+z0j7udTy3U0IMJoeFO6VDuJBe8GYTqQq89Ix3h3oXFFZDsgXgBKXe1
-         Jf/5pC3eB2iua0DOhtXlDCtFXxQxLoYQczcCuFgtbghxj1G+vm/BA3ae8aSqeUvLIJPz
-         6+eQ==
-X-Gm-Message-State: ACrzQf2H+bZBEK/OxmC2PSBrx+fEr0Ju+J+ZIR/y1+f1YkQBNteKUBSo
-        a0Kc/IhZX8lKcjamyBn/ONyoBmQyKAI=
-X-Google-Smtp-Source: AMsMyM5MMGYHRauq4eVLkpLLZvw2RTDbvRrV8/jSalu4l28kT8hstXJuRFCaWh2Nh/nRrelPatgN7w==
-X-Received: by 2002:adf:ef43:0:b0:22d:c507:dd48 with SMTP id c3-20020adfef43000000b0022dc507dd48mr2337256wrp.416.1665046268371;
-        Thu, 06 Oct 2022 01:51:08 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id m7-20020a05600c3b0700b003a1980d55c4sm4886918wms.47.2022.10.06.01.51.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 01:51:08 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 09:51:06 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: mainline build failure due to 5d8c3e836fc2 ("drm/amd/display: fix
- array-bounds error in dc_stream_remove_writeback()")
-Message-ID: <Yz6W+j+l0cJbr5dX@debian>
+        Thu, 6 Oct 2022 04:52:41 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCA06D9CB
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 01:52:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=udkEFmCXVqapQ+97j25lRFC1Dm0RkLMeqKyy1j0mF+U=; b=KrvcRa1UoK/fkRb9mijyQM4ZG7
+        voy75DPSzDG7BwFP2yVnlenEepuvK8qIBfgVlFEKX2BNZBBYNkFvs+r54G46v7RL3WzNGmMJCzohn
+        M3xz71XhAZX0SEFt8GfdIUaLcnV5f9mpHn03IZk1DhZKPlvevl01Gnwz3MKx1vOVBG79hcG3REd1B
+        2zzkz+N98VhvGmWL17ATnQ9UMop4ORcLHYIJGMtdoGE8z0cl7SvIpQ6ITLlWm+nU3MqgK8fLpGzgU
+        o1hQkyys6qEmtD0hZCX4rMvmQzODbbr2U5b9tDl9QZYeBkEFu65HVKIHAE/QGMleClA4SX/arwhxn
+        1gYR9y/w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ogMc6-001CPG-Ec; Thu, 06 Oct 2022 08:52:18 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0944E30007E;
+        Thu,  6 Oct 2022 10:52:16 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B84A7201FC2CE; Thu,  6 Oct 2022 10:52:16 +0200 (CEST)
+Date:   Thu, 6 Oct 2022 10:52:16 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [RFC PATCH 15/23] thermal: intel: hfi: Report per-cpu
+ class-specific performance scores
+Message-ID: <Yz6XQHafjIpfkyyY@hirez.programming.kicks-ass.net>
+References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
+ <20220909231205.14009-16-ricardo.neri-calderon@linux.intel.com>
+ <YzLlk8NL5qkOOxzX@hirez.programming.kicks-ass.net>
+ <20221005235959.GB29251@ranerica-svr.sc.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221005235959.GB29251@ranerica-svr.sc.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+On Wed, Oct 05, 2022 at 04:59:59PM -0700, Ricardo Neri wrote:
+> On Tue, Sep 27, 2022 at 01:59:15PM +0200, Peter Zijlstra wrote:
+> > On Fri, Sep 09, 2022 at 04:11:57PM -0700, Ricardo Neri wrote:
+> > > Support the arch_get_task_class_score() interface of the scheduler. Use the
+> > > data that Intel Thread Director provides to inform the scheduler the
+> > > performance of a class of tasks when placed on a given CPU.
+> > > 
+> > 
+> > > +static void get_one_hfi_cap(struct hfi_instance *hfi_instance, s16 index,
+> > > +			    struct hfi_cpu_data *hfi_caps, int class)
+> > > +{
+> > > +	struct hfi_cpu_data *caps;
+> > > +
+> > > +	/* Find the capabilities of @cpu */
+> > > +	caps = hfi_instance->data + index * hfi_features.cpu_stride +
+> > > +	       class * hfi_features.class_stride;
+> > > +	memcpy(hfi_caps, caps, sizeof(*hfi_caps));
+> > > +}
+> > > +
+> > > +int intel_hfi_get_task_class_score(int class, int cpu)
+> > > +{
+> > > +	struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, cpu);
+> > > +	struct hfi_instance *instance;
+> > > +	struct hfi_cpu_data caps;
+> > > +	unsigned long flags;
+> > > +	int cap;
+> > > +
+> > > +	if (cpu < 0 || cpu >= nr_cpu_ids)
+> > > +		return -EINVAL;
+> > > +
+> > > +	if (class == TASK_CLASS_UNCLASSIFIED)
+> > > +		return -EINVAL;
+> > > +
+> > > +	if (class >= (int)hfi_features.nr_classes)
+> > > +		return -EINVAL;
+> > > +
+> > > +	instance = info->hfi_instance;
+> > > +	if (!instance)
+> > > +		return -ENOENT;
+> > > +
+> > > +	raw_spin_lock_irqsave(&instance->table_lock, flags);
+> > > +	get_one_hfi_cap(instance, info->index, &caps, class);
+> > > +	cap = caps.perf_cap;
+> > > +	raw_spin_unlock_irqrestore(&instance->table_lock, flags);
+> > > +
+> > > +	return cap;
+> > > +}
+> > 
+> > Does any of that data actually ever change? Isn't the class score fixed
+> > per CPU type?
+> 
+> Yes, data can change. The Intel SDM Vol 3 Section 14.6.7 states that the
+> table can be updated during runtime.
 
-The latest mainline kernel branch fails to build allmodconfig for every
-ARCH with gcc-11 with the error:
+I find the SDM is often unreadable gibberish, this part doesn't dissapoint.
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c: In function 'dc_stream_remove_writeback':
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c:527:83: error: array subscript [0, 0] is outside array bounds of 'struct dc_writeback_info[1]' [-Werror=array-bounds]
-  527 |                                 stream->writeback_info[j] = stream->writeback_info[i];
-      |                                                             ~~~~~~~~~~~~~~~~~~~~~~^~~
-In file included from ./drivers/gpu/drm/amd/amdgpu/../display/dc/dc.h:1269,
-                 from ./drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:29,
-                 from ./drivers/gpu/drm/amd/amdgpu/../display/dc/basics/dc_common.h:29,
-                 from drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c:27:
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dc_stream.h:241:34: note: while referencing 'writeback_info'
-  241 |         struct dc_writeback_info writeback_info[MAX_DWB_PIPES];
-      |                                  ^~~~~~~~~~~~~~
+There's a ton of might and maybe there; what does it actually do and how
+often does it do it? Given the thermal interrupt is such a shitshow, we
+really, as in *REALLY* don't want this to happen at any frequency at
+all.
 
-
-git bisect pointed to 5d8c3e836fc2 ("drm/amd/display: fix array-bounds error in dc_stream_remove_writeback()")
-
-I will be happy to test any patch or provide any extra log if needed.
-
-Note:
-This is only seen with gcc-11, gcc-12 builds are ok.
-
-
--- 
-Regards
-Sudip
+And if it barely happens, why do we care if it happens at all?
