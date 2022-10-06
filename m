@@ -2,125 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED385F619E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 09:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED335F61A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 09:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbiJFH1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 03:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
+        id S229801AbiJFH27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 03:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbiJFH1N (ORCPT
+        with ESMTP id S229665AbiJFH24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 03:27:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F3C8993C
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 00:27:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665041229;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rBenCr/sddYb9hESJpfA+ABk7j5KAPKQpHD+BrNJZy8=;
-        b=ZkdgVneihp+d6kHeOL92tTV1I2VFvA+4gdFq7EvhyvXNcClHMgUXpZB3tOZgzaU/Eme/V9
-        xP2iq0mWix2kpTOQI7vWoEttI0gwyrPUj78W1ihx/6eydSzOjaaMRcSwnYmwqIFLt9E1yN
-        mgb/Q2JrYah/iHmDUTWYxPSyHiK37Cw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-269-wYbxRUKcMDGrqZYky-yHUw-1; Thu, 06 Oct 2022 03:27:05 -0400
-X-MC-Unique: wYbxRUKcMDGrqZYky-yHUw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E9AC7862FDC;
-        Thu,  6 Oct 2022 07:27:04 +0000 (UTC)
-Received: from samus.usersys.redhat.com (unknown [10.43.17.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A936239DB3;
-        Thu,  6 Oct 2022 07:27:03 +0000 (UTC)
-Date:   Thu, 6 Oct 2022 09:27:01 +0200
-From:   Artem Savkov <asavkov@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jbenc@redhat.com
-Subject: Re: [PATCH bpf-next] selftests/bpf: make libbpf_probe_prog_types
- testcase aware of kernel configuration
-Message-ID: <Yz6DRTvnblwUR7dV@samus.usersys.redhat.com>
-Mail-Followup-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jbenc@redhat.com
-References: <20220930110900.75492-1-asavkov@redhat.com>
- <CAEf4BzZpkgXi9Y6x-_-6mDDW12GvTj0Y_e7cpQMqF3dtiBBhpA@mail.gmail.com>
- <YzqHmHRjxAc4Nndc@samus.usersys.redhat.com>
- <CAEf4BzZaGvXM7Vquc=SEM3-cD=s_gfX1jadm4TsGxHnsLG4daw@mail.gmail.com>
+        Thu, 6 Oct 2022 03:28:56 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8077F111
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 00:28:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665041336; x=1696577336;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0hHB0HurPLCsv05+ws89CRXb9GtCxT7+4TZpgH3fRR8=;
+  b=cNJ9poIcco4B0vGWHD3RDSFHxTvk98nRZgGLwMgQ7ql5K9iUjWir/tON
+   gftC4vC+A6StyN7n6/GfLSGGNbQLENPcCtHH8shRLiyGyQhDlUarIDqvd
+   2SOklSsKGkZgnVa0JbqiN+k2Axcx5g3H6YLL/LfPcE2AhPWMU8HCQJUtY
+   QVD4bwbTgZWNLwt2HYI5ZPZ0SWLlhc+dYek4fIO+cMjqVQi1ldygM30Jf
+   jU6Eauo3xVP8Yz3LzU7WH6sZazHMqqrRXFfd5lbvBzPv6zU4T7Uy948on
+   VP66R0ntysOdWV1hrlEuqvdodBoRID7ofY2TCD40xPNZb9tab3g/r4Io/
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="283088341"
+X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
+   d="scan'208";a="283088341"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 00:28:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="953513215"
+X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
+   d="scan'208";a="953513215"
+Received: from lkp-server01.sh.intel.com (HELO d4f44333118a) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 06 Oct 2022 00:28:54 -0700
+Received: from kbuild by d4f44333118a with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ogLJO-00024L-0j;
+        Thu, 06 Oct 2022 07:28:54 +0000
+Date:   Thu, 06 Oct 2022 15:28:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2022.10.03a] BUILD SUCCESS
+ fece0fa66ffa3c22dcc8845d0081b2849c1d4295
+Message-ID: <633e8398.2wKda/Mx7WYnDWZg%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZaGvXM7Vquc=SEM3-cD=s_gfX1jadm4TsGxHnsLG4daw@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 05:03:18PM -0700, Andrii Nakryiko wrote:
-> On Sun, Oct 2, 2022 at 11:56 PM Artem Savkov <asavkov@redhat.com> wrote:
-> >
-> > On Fri, Sep 30, 2022 at 04:06:41PM -0700, Andrii Nakryiko wrote:
-> > > On Fri, Sep 30, 2022 at 4:09 AM Artem Savkov <asavkov@redhat.com> wrote:
-> > > >
-> > > > At the moment libbpf_probe_prog_types test iterates over all available
-> > > > BPF_PROG_TYPE regardless of kernel configuration which can exclude some
-> > > > of those. Unfortunately there is no direct way to tell which types are
-> > > > available, but we can look at struct bpf_ctx_onvert to tell which ones
-> > > > are available.
-> > > >
-> > > > Signed-off-by: Artem Savkov <asavkov@redhat.com>
-> > > > ---
-> > >
-> > > Many selftests assume correct kernel configuration which is encoded in
-> > > config and config.<arch> files. So it seems fair to assume that all
-> > > defined program types are available on kernel-under-test.
-> >
-> > Ok. Wasn't sure if this is the assumption being made.
-> >
-> > > If someone is running selftests under custom more minimal kernel they
-> > > can use denylist to ignore specific prog type subtests?
-> >
-> > Thanks for the suggestion. Denylist is a bit too broad in this case as
-> > it means we'll be disabling the whole libbpf_probe_prog_types test while
-> > only a single type is a problem. Looks like we'll have to live with a
-> > downstream-only patch in this case.
-> 
-> Allow/deny lists allow to specify subtests as well, so you can have
-> very granular control. E.g.,
-> 
-> [vmuser@archvm bpf]$ sudo ./test_progs -a 'libbpf_probe_prog_types/*SK*'
-> Failed to load bpf_testmod.ko into the kernel: -22
-> WARNING! Selftests relying on bpf_testmod.ko will be skipped.
-> #96/8    libbpf_probe_prog_types/BPF_PROG_TYPE_CGROUP_SKB:OK
-> #96/14   libbpf_probe_prog_types/BPF_PROG_TYPE_SK_SKB:OK
-> #96/16   libbpf_probe_prog_types/BPF_PROG_TYPE_SK_MSG:OK
-> #96/21   libbpf_probe_prog_types/BPF_PROG_TYPE_SK_REUSEPORT:OK
-> #96/30   libbpf_probe_prog_types/BPF_PROG_TYPE_SK_LOOKUP:OK
-> #96      libbpf_probe_prog_types:OK
-> Summary: 1/5 PASSED, 0 SKIPPED, 0 FAILED
-> 
-> 
-> As you can see each program type is a subtest, so you can pick and
-> choose which ones to run.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.10.03a
+branch HEAD: fece0fa66ffa3c22dcc8845d0081b2849c1d4295  clocksource: Reject bogus watchdog clocksource measurements
 
-Right, didn't know it can do that. Thanks for the pointer.
+elapsed time: 797m
+
+configs tested: 63
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+alpha                               defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+powerpc                           allnoconfig
+x86_64                          rhel-8.3-func
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+s390                                defconfig
+sh                               allmodconfig
+x86_64                           rhel-8.3-kvm
+s390                             allmodconfig
+i386                                defconfig
+i386                 randconfig-a011-20221003
+powerpc                          allmodconfig
+m68k                             allyesconfig
+mips                             allyesconfig
+i386                 randconfig-a012-20221003
+m68k                             allmodconfig
+i386                 randconfig-a013-20221003
+arc                              allyesconfig
+i386                 randconfig-a015-20221003
+alpha                            allyesconfig
+i386                 randconfig-a016-20221003
+i386                 randconfig-a014-20221003
+s390                             allyesconfig
+i386                             allyesconfig
+arm                                 defconfig
+arc                  randconfig-r043-20221003
+arc                  randconfig-r043-20221002
+s390                 randconfig-r044-20221003
+riscv                randconfig-r042-20221003
+x86_64               randconfig-a011-20221003
+x86_64               randconfig-a012-20221003
+ia64                             allmodconfig
+arm64                            allyesconfig
+x86_64               randconfig-a013-20221003
+arm                              allyesconfig
+x86_64               randconfig-a014-20221003
+x86_64               randconfig-a016-20221003
+x86_64               randconfig-a015-20221003
+
+clang tested configs:
+i386                 randconfig-a003-20221003
+i386                 randconfig-a002-20221003
+i386                 randconfig-a001-20221003
+i386                 randconfig-a004-20221003
+hexagon              randconfig-r041-20221003
+hexagon              randconfig-r041-20221002
+i386                 randconfig-a005-20221003
+hexagon              randconfig-r045-20221002
+i386                 randconfig-a006-20221003
+hexagon              randconfig-r045-20221003
+riscv                randconfig-r042-20221002
+s390                 randconfig-r044-20221002
+x86_64               randconfig-a005-20221003
+x86_64               randconfig-a002-20221003
+x86_64               randconfig-a001-20221003
+x86_64               randconfig-a004-20221003
+x86_64               randconfig-a006-20221003
+x86_64               randconfig-a003-20221003
 
 -- 
- Artem
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
