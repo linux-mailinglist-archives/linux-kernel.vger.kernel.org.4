@@ -2,94 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2B75F6087
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 07:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 417A75F6089
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 07:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbiJFFRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 01:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50226 "EHLO
+        id S229700AbiJFFSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 01:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiJFFRe (ORCPT
+        with ESMTP id S229966AbiJFFR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 01:17:34 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BBD88A0A;
-        Wed,  5 Oct 2022 22:17:32 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4Mjfp34SxPz9srK;
-        Thu,  6 Oct 2022 07:17:31 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 35z_hFdGZ6st; Thu,  6 Oct 2022 07:17:31 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4Mjfp33ghWz9srH;
-        Thu,  6 Oct 2022 07:17:31 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6EC998B765;
-        Thu,  6 Oct 2022 07:17:31 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id tM3nXJFrz1BF; Thu,  6 Oct 2022 07:17:31 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.234])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 506578B763;
-        Thu,  6 Oct 2022 07:17:31 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2965HHaa210071
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Thu, 6 Oct 2022 07:17:17 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2965HG2H210069;
-        Thu, 6 Oct 2022 07:17:16 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org
-Subject: [PATCH] ata: pata_mpc52xx: Replace NO_IRQ by 0
-Date:   Thu,  6 Oct 2022 07:17:07 +0200
-Message-Id: <a8c87c6d8dd6d9e57c515036a333ff89fc56bcbf.1665033366.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.37.1
+        Thu, 6 Oct 2022 01:17:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B51B870A7;
+        Wed,  5 Oct 2022 22:17:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D450761825;
+        Thu,  6 Oct 2022 05:17:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAAFEC433D6;
+        Thu,  6 Oct 2022 05:17:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665033476;
+        bh=Ro9XHlh3/2Vqmy9HNWZSW+8vT6ftNGso62VAtEUozhc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SzkSZIC5HcrTlEdoafqFJ+fiy5xPjY3VHjS7AUAL/4zpMfnEsLtM0iaQJxWwdJi9u
+         GuGll/Wer4VwgcYF2Ah2I8pOzPv09tFaGpqCmVl8/25LvQ5a/mqkI7MzjGFaCR9EFx
+         Nv2DF+uj9wbT6SySAYvIUaIZYdDrZrSWKLYTRI0TOWteiOaApRnXerGrUWdpesdNel
+         bUTUwTkM2tfIITXiv/Mup5GpqsPGf49exc/X2IL6RyS/YVPDpJSI5nEAnLKz6r2edt
+         0LfMsD8dl5ZTDfGeI3fWBw70fx8clb6l6xYtAoFJKZxzVewkzXqNwmMV8QGJXMHJX4
+         jtVoJnFW1YV+A==
+Date:   Thu, 6 Oct 2022 06:17:49 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>
+Subject: Re: [PATCH 1/5] docs: Switch the default HTML theme to alabaster
+Message-ID: <20221006061749.18a68d08@sal.lan>
+In-Reply-To: <20221004201222.281845-2-corbet@lwn.net>
+References: <20221004201222.281845-1-corbet@lwn.net>
+        <20221004201222.281845-2-corbet@lwn.net>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1665033426; l=895; s=20211009; h=from:subject:message-id; bh=12wU9FoTfggJEdGbqUEhqgMOQ937NfkOCDFusslB8vk=; b=sHvicbe3G9JCIEgxLe1W1xkR+/F5vjnpanwQ7bUrnQ1b4HBSi5gcnwJXaN1mZZayL9tmhCRTTh2X yk9BhRD/DngrVtTfS7fawOKhq+OtJoRgMlYI9zhNDK3tRhwk9bDW
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NO_IRQ is used to check the return of irq_of_parse_and_map().
+Em Tue,  4 Oct 2022 14:12:18 -0600
+Jonathan Corbet <corbet@lwn.net> escreveu:
 
-On some architecture NO_IRQ is 0, on other architectures it is -1.
+> The read-the-docs theme is not entirely attractive and doesn't give us
+> control over the left column.  "Alabaster" is deemed the default Sphinx
+> theme, it is currently maintained and shipped bundled with Sphinx itself,
+> so there is no need to install it separately.  Switch over to this theme as
+> the default for building kernel documentation; the DOCS_THEME environment
+> variable can still be used to select a different theme.
+> 
+> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+> ---
+>  Documentation/conf.py | 26 ++++++++++++++++++++++++--
+>  1 file changed, 24 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/conf.py b/Documentation/conf.py
+> index 22c9d4df1967..629f4afeb0eb 100644
+> --- a/Documentation/conf.py
+> +++ b/Documentation/conf.py
+> @@ -194,6 +194,24 @@ finally:
+>      else:
+>          version = release = "unknown version"
+>  
+> +#
+> +# HACK: there seems to be no easy way for us to get at the version and
+> +# release information passed in from the makefile...so go pawing through the
+> +# command-line options and find it for ourselves.
+> +#
+> +def get_cline_version():
+> +    c_version = c_release = ''
+> +    for arg in sys.argv:
+> +        if arg.startswith('version='):
+> +            c_version = arg[8:]
+> +        elif arg.startswith('release='):
+> +            c_release = arg[8:]
+> +    if c_version:
+> +        if c_release:
+> +            return c_version + '-' + c_release
+> +        return c_version
+> +    return version # Whatever we came up with before
+> +
+>  # The language for content autogenerated by Sphinx. Refer to documentation
+>  # for a list of supported languages.
+>  #
+> @@ -247,7 +265,7 @@ highlight_language = 'none'
+>  # a list of builtin themes.
+>  
+>  # Default theme
+> -html_theme = 'sphinx_rtd_theme'
+> +html_theme = 'alabaster'
+>  html_css_files = []
 
-irq_of_parse_and_map() returns 0 on error, independent of NO_IRQ.
+You should probably touch other parts of conf.py as well, folding your
+patch 1 with the enclosed diff - or some variant of it.
 
-So use 0 instead of using NO_IRQ.
+Basically, the current logic is to try RTD. If not found, fall back to
+classic (which is also a native theme), customizing it a little bit to
+look closer to the way RTD outputs the sidebars, and adjusting some colors
+to make it look nicer.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- drivers/ata/pata_mpc52xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Regards,
+Mauro
 
-diff --git a/drivers/ata/pata_mpc52xx.c b/drivers/ata/pata_mpc52xx.c
-index 6559b606736d..3ebd6522a1fd 100644
---- a/drivers/ata/pata_mpc52xx.c
-+++ b/drivers/ata/pata_mpc52xx.c
-@@ -731,7 +731,7 @@ static int mpc52xx_ata_probe(struct platform_device *op)
- 		udma_mask = ATA_UDMA2 & ((1 << (*prop + 1)) - 1);
+diff --git a/Documentation/conf.py b/Documentation/conf.py
+index 934727e23e0e..87f821287908 100644
+--- a/Documentation/conf.py
++++ b/Documentation/conf.py
+@@ -241,7 +241,7 @@ if html_theme == 'sphinx_rtd_theme' or html_theme == 'sphinx_rtd_dark_mode':
+                 html_css_files.append('theme_rtd_colors.css')
  
- 	ata_irq = irq_of_parse_and_map(op->dev.of_node, 0);
--	if (ata_irq == NO_IRQ) {
-+	if (!ata_irq) {
- 		dev_err(&op->dev, "error mapping irq\n");
- 		return -EINVAL;
- 	}
--- 
-2.37.1
+     except ImportError:
+-        html_theme = 'classic'
++        html_theme = 'alabaster'
+ 
+ if "DOCS_CSS" in os.environ:
+     css = os.environ["DOCS_CSS"].split(" ")
+@@ -257,36 +257,6 @@ if major <= 1 and minor < 8:
+     for l in html_css_files:
+         html_context['css_files'].append('_static/' + l)
+ 
+-if  html_theme == 'classic':
+-    html_theme_options = {
+-        'rightsidebar':        False,
+-        'stickysidebar':       True,
+-        'collapsiblesidebar':  True,
+-        'externalrefs':        False,
+-
+-        'footerbgcolor':       "white",
+-        'footertextcolor':     "white",
+-        'sidebarbgcolor':      "white",
+-        'sidebarbtncolor':     "black",
+-        'sidebartextcolor':    "black",
+-        'sidebarlinkcolor':    "#686bff",
+-        'relbarbgcolor':       "#133f52",
+-        'relbartextcolor':     "white",
+-        'relbarlinkcolor':     "white",
+-        'bgcolor':             "white",
+-        'textcolor':           "black",
+-        'headbgcolor':         "#f2f2f2",
+-        'headtextcolor':       "#20435c",
+-        'headlinkcolor':       "#c60f0f",
+-        'linkcolor':           "#355f7c",
+-        'visitedlinkcolor':    "#355f7c",
+-        'codebgcolor':         "#3f3f3f",
+-        'codetextcolor':       "white",
+-
+-        'bodyfont':            "serif",
+-        'headfont':            "sans-serif",
+-    }
+-
+ sys.stderr.write("Using %s theme\n" % html_theme)
+ 
+ # Theme options are theme-specific and customize the look and feel of a theme
 
