@@ -2,306 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B57F65F68B3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7A75F68B6
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiJFOAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 10:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41256 "EHLO
+        id S230061AbiJFOBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 10:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231552AbiJFOAH (ORCPT
+        with ESMTP id S229453AbiJFOBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 10:00:07 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C3229802
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 07:00:05 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id a13so3004552edj.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 07:00:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E3VUvRlbpuvf0sSI/tMS6r4LiVAE0zxyqHrBnHrDjVs=;
-        b=gqWZo0POJFIpXr6KC2pBuLd9vp3XUt7rv5cfK/YRtT8dWF7zknLkup9KyDu6I3ZO5C
-         NSxgqn/8zdG+o+eQp9iu2PS03+ULrVn5n2wYa/nzEHdc1d4fGTYghzmRDt/H069GSYac
-         7HUihpidwUaizW8onUuV2B+TdjUPeDd2Xr6f+UZ485VyIttUjGUehJbEV4n3FjzzEAf+
-         223OZ02LAPr/+yJ7/0bjwfCEz+jhJ2O6whEx0pks8Xu2pDD1Q0v/QejRVE4J7bN2RtAU
-         PxklD38eAETKbfvvkgXI/Zk7lNDWiwv1FGOp18brdxxRQf8ntv6ZDWopr/u1OUzmqgMR
-         ctKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E3VUvRlbpuvf0sSI/tMS6r4LiVAE0zxyqHrBnHrDjVs=;
-        b=nnvrZa10T6EmBCBnZ1/Kfjykzpw2qljsFCqbzV37Nf+gvmx4NoXAq7rx0SzL2DsZPk
-         AHzk6rkV3gpE2mzbfmMhB5/OVhki/G4cdrx9heikpXq/K/6O2wzZRS1HOeKeWP91Qtt5
-         er8WmyTI5ORK6HXtS8d5G8Lln9gO+qkDqTzuaRoIZTy2va0OT7sHUYZ8Y/j+XJwsGrCH
-         3SMz4UKItXcdrbLA7No598MMJUXsE2Nbu1JFQ5epEukyhDZB+6ZTNYy4MggEmcBOEg1n
-         J2qflILwVEFlQEizNRp88xIAxjgaIOOwXSMARrzlArMg2Z30AtjEipkvWb9ZawtEalF0
-         heGQ==
-X-Gm-Message-State: ACrzQf3Yjh9qMttWdclJbmeKHmtPCvMBLS7HIEm9+MVP4l4cAto2OJxx
-        6Qbj0zw2lvHTGtQlDhHu8k1mkA==
-X-Google-Smtp-Source: AMsMyM6U8geCMz0HfEPcxRTfzYl8glFCMpBQGQRDMLam2KLlSCcpSglOCh36sG+3x+wK4VMIOQoBhQ==
-X-Received: by 2002:a05:6402:156:b0:440:b458:93df with SMTP id s22-20020a056402015600b00440b45893dfmr4982111edu.337.1665064803139;
-        Thu, 06 Oct 2022 07:00:03 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:9c:201:504b:a880:4e60:e32d])
-        by smtp.gmail.com with ESMTPSA id er6-20020a056402448600b004580b26e32esm5812366edb.81.2022.10.06.07.00.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 07:00:02 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 15:59:55 +0200
-From:   Marco Elver <elver@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, Dmitry Vyukov <dvyukov@google.com>
-Subject: Re: [PATCH] perf: Fix missing SIGTRAPs
-Message-ID: <Yz7fWw8duIOezSW1@elver.google.com>
-References: <20220927121322.1236730-1-elver@google.com>
- <Yz7ZLaT4jW3Y9EYS@hirez.programming.kicks-ass.net>
+        Thu, 6 Oct 2022 10:01:01 -0400
+Received: from mail4.swissbit.com (mail4.swissbit.com [176.95.1.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25337A5982;
+        Thu,  6 Oct 2022 07:00:59 -0700 (PDT)
+Received: from mail4.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id AF26D123234;
+        Thu,  6 Oct 2022 16:00:57 +0200 (CEST)
+Received: from mail4.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 9D5B3123027;
+        Thu,  6 Oct 2022 16:00:57 +0200 (CEST)
+X-TM-AS-ERS: 10.149.2.42-127.5.254.253
+X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
+X-DDEI-TLS-USAGE: Used
+Received: from ex.swissbit.com (unknown [10.149.2.42])
+        by mail4.swissbit.com (Postfix) with ESMTPS;
+        Thu,  6 Oct 2022 16:00:57 +0200 (CEST)
+Received: from sbdeex04.sbitdom.lan (10.149.2.42) by sbdeex04.sbitdom.lan
+ (10.149.2.42) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Thu, 6 Oct 2022
+ 16:00:57 +0200
+Received: from sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818]) by
+ sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818%9]) with mapi id
+ 15.02.1118.009; Thu, 6 Oct 2022 16:00:57 +0200
+From:   =?utf-8?B?Q2hyaXN0aWFuIEzDtmhsZQ==?= <CLoehle@hyperstone.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Avri Altman <Avri.Altman@wdc.com>
+Subject: RE: [PATCHv2] mmc: core: fix race of queue reset and card removal
+Thread-Topic: [PATCHv2] mmc: core: fix race of queue reset and card removal
+Thread-Index: AdjX8vnmWSO+H9o1T5SYJhJVtR/27gAvHgOAADcZyoA=
+Date:   Thu, 6 Oct 2022 14:00:56 +0000
+Message-ID: <12e0a733701f419dbcbed01f0902da51@hyperstone.com>
+References: <1a5810475d7a475db5e4e5130b8f455c@hyperstone.com>
+ <d301cdf7-a7cd-a4b1-83e6-51769b6bccd0@intel.com>
+In-Reply-To: <d301cdf7-a7cd-a4b1-83e6-51769b6bccd0@intel.com>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.153.3.46]
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yz7ZLaT4jW3Y9EYS@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-TMASE-Version: DDEI-5.1-9.0.1002-27184.007
+X-TMASE-Result: 10--18.054400-10.000000
+X-TMASE-MatchedRID: nQsCAlAhJHbUL3YCMmnG4o61Z+HJnvsO1KDIlODIu+UadFN+Lxv9xzcp
+        XpPCV0E3OuzeNmOGKnMdXvAkWdRIlTmpL9mXE1+sHmtCXih7f9P2aiNJz83dB6JQ/kX2wIQwbyq
+        cWT4FZRdqptNg8OUfDgVCnEzTGyEd/6VeF+1cPStKzjuZtPtIBODTYjejIZTwYgJpgK8zJqAWFL
+        7w0dNaom/sggtcoFm4h/iXxkrRM0kKOpSDSbToy4anR/CvYO8Xp0c5ayOm8oPiFxcREnURUhiQn
+        63S7zCUb7vhAFDgsdOqIzDM5PcaqCB0OrJlTevjuce7gFxhKa3BOVz0Jwcxl6vCrG0TnfVUgK6q
+        CGa1Z9ceFlUujcltcIyivp6Zag4oL3X03fxuTKUdZEkR8Y/medjRSEbB5dRK1YzbHoRn9L2AI+p
+        Lfk3sB0q6g2mxLy1xD5rpUQLVm0HWzUAcn0Tx4PZOZ2c2VQUg06KZJRgAyVlooy/QGYEKTF721f
+        1Z1L9KrqM/VRr+zhYV13ywgHqv/ZH0YXYnbGoz0gVVXNgaM0pZDL1gLmoa/MpTVxbIjeBartjOu
+        TOmUaMLbigRnpKlKSBuGJWwgxAr0t0ccteCeDfn3d8WKSnlF3xvw1PfRySKc99NZL09Nqm+g1Sd
+        AULhTMWFcyN1Agmm
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: e807512a-ecf6-489e-ad25-aa7ff8924c74-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 03:33PM +0200, Peter Zijlstra wrote:
-> 
-> OK, so the below seems to pass the concurrent sigtrap_threads test for
-> me and doesn't have that horrible irq_work_sync hackery.
-> 
-> Does it work for you too?
+VGhhbmtzIEFkcmlhbiBmb3IgdGhlIGNvbW1lbnRzIGFuZCBoaW50cywgaW1wbGVtZW50ZWQgYW5k
+IHN1Ym1pdHRlZC4NClRoZXkgYWxzbyBmaXggYm90aCBpc3N1ZXMuDQoNCi0tLS0tT3JpZ2luYWwg
+TWVzc2FnZS0tLS0tDQpGcm9tOiBBZHJpYW4gSHVudGVyIDxhZHJpYW4uaHVudGVyQGludGVsLmNv
+bT4gDQpTZW50OiBNaXR0d29jaCwgNS4gT2t0b2JlciAyMDIyIDE1OjQyDQpUbzogQ2hyaXN0aWFu
+IEzDtmhsZSA8Q0xvZWhsZUBoeXBlcnN0b25lLmNvbT47IHVsZi5oYW5zc29uQGxpbmFyby5vcmc7
+IExpbnV4IE1NQyBMaXN0IDxsaW51eC1tbWNAdmdlci5rZXJuZWwub3JnPjsgbGludXgta2VybmVs
+QHZnZXIua2VybmVsLm9yZw0KQ2M6IEF2cmkgQWx0bWFuIDxBdnJpLkFsdG1hbkB3ZGMuY29tPg0K
+U3ViamVjdDogUmU6IFtQQVRDSHYyXSBtbWM6IGNvcmU6IGZpeCByYWNlIG9mIHF1ZXVlIHJlc2V0
+IGFuZCBjYXJkIHJlbW92YWwNCg0KT24gNC8xMC8yMiAxNjoxMywgQ2hyaXN0aWFuIEzDtmhsZSB3
+cm90ZToNCj4gSWYgYSByZWNvdmVyeSBpcyBhY3RpdmUgYW5kIHRoZSBjYXJkIGlzIHJlbW92ZWQg
+ZG8gbm90IHRyeSB0byBzd2l0Y2ggDQo+IGJhY2sgcGFydGl0aW9ucy4gRnVydGhlcm1vcmUgZG8g
+bm90IHJlZmVyZW5jZQ0KPiBtcS0+Y2FyZCB3aGljaCBtaWdodCBiZSBOVUxMZWQgaW4gdGhlIG1l
+YW50aW1lLg0KPiANCj4gVGhpcyBoYXMgYmVlbiBvYnNlcnZlZCB3aXRoIHJlY292ZXJ5IGFjdGl2
+ZSB3aXRoIENRRS4NCj4gWyAxMDgzLjUxMDU3OF0gVW5hYmxlIHRvIGhhbmRsZSBrZXJuZWwgTlVM
+TCBwb2ludGVyIGRlcmVmZXJlbmNlIGF0IA0KPiB2aXJ0dWFsIGFkZHJlc3MgMDAwMDAwMDAwMDAw
+MDM4YyBbIDEwODMuNTExMzYyXSBNZW0gYWJvcnQgaW5mbzoNCj4gWyAxMDgzLjUxMTYyNl0gICBF
+U1IgPSAweDk2MDAwMDA0DQo+IFsgMTA4My41MTE5MTJdICAgRUMgPSAweDI1OiBEQUJUIChjdXJy
+ZW50IEVMKSwgSUwgPSAzMiBiaXRzDQo+IFsgMTA4My41MTIzOTVdICAgU0VUID0gMCwgRm5WID0g
+MA0KPiBbIDEwODMuNTEyNjgxXSAgIEVBID0gMCwgUzFQVFcgPSAwDQo+IFsgMTA4My41MTI5NzNd
+ICAgRlNDID0gMHgwNDogbGV2ZWwgMCB0cmFuc2xhdGlvbiBmYXVsdA0KPiBbIDEwODMuNTEzNDE3
+XSBEYXRhIGFib3J0IGluZm86DQo+IFsgMTA4My41MTM2ODZdICAgSVNWID0gMCwgSVNTID0gMHgw
+MDAwMDAwNA0KPiBbIDEwODMuNTE0MDM5XSAgIENNID0gMCwgV25SID0gMA0KPiBbIDEwODMuNTE0
+MzE4XSB1c2VyIHBndGFibGU6IDRrIHBhZ2VzLCA0OC1iaXQgVkFzLCANCj4gcGdkcD0wMDAwMDAw
+MDBhNGMzMDAwIFsgMTA4My41MTQ4OTldIFswMDAwMDAwMDAwMDAwMzhjXSANCj4gcGdkPTAwMDAw
+MDAwMDAwMDAwMDAsIHA0ZD0wMDAwMDAwMDAwMDAwMDAwIFsgMTA4My41MTU4NTRdIEludGVybmFs
+IGVycm9yOiBPb3BzOiA5NjAwMDAwNCBbIzFdIFNNUA0KPiBbIDEwODMuNTE2Mjk1XSBDUFU6IDAg
+UElEOiAxNTMgQ29tbToga3dvcmtlci8wOjIgVGFpbnRlZDogRyAgICAgICAgVyAgICAgICAgIDUu
+MTguMTItZzkyNWZmMWQxMGM5OS1kaXJ0eSAjNw0KPiBbIDEwODMuNTE3MTI3XSBIYXJkd2FyZSBu
+YW1lOiBQaW5lNjQgUm9ja1BybzY0IHYyLjEgKERUKSBbIA0KPiAxMDgzLjUxNzU3NF0gV29ya3F1
+ZXVlOiBldmVudHMgbW1jX21xX3JlY292ZXJ5X2hhbmRsZXIgWyAxMDgzLjUxODAzMl0gDQo+IHBz
+dGF0ZTogNjAwMDAwMDUgKG5aQ3YgZGFpZiAtUEFOIC1VQU8gLVRDTyAtRElUIC1TU0JTIEJUWVBF
+PS0tKSBbIA0KPiAxMDgzLjUxODY0NV0gcGMgOiBtbWNfYmxrX3Jlc2V0KzB4NjAvMHgxYWMgWyAx
+MDgzLjUxOTAwNF0gbHIgOiANCj4gbW1jX2Jsa19yZXNldCsweDM4LzB4MWFjIFsgMTA4My41MTkz
+NjFdIHNwIDogZmZmZjgwMDAxMDBiM2NkMCBbIA0KPiAxMDgzLjUxOTY1NF0geDI5OiBmZmZmODAw
+MDEwMGIzY2QwIHgyODogMDAwMDAwMDAwMDAwMDAwMCB4Mjc6IA0KPiAwMDAwMDAwMDAwMDAwMDAw
+IFsgMTA4My41MjAyODhdIHgyNjogZmZmZjgwMDAwYjBiYTAwMCB4MjU6IA0KPiBmZmZmMDAwMGY2
+ZTc0ODA1IHgyNDogZmZmZjAwMDAwNGMyZmRjMCBbIDEwODMuNTIwOTIyXSB4MjM6IA0KPiBmZmZm
+MDAwMDE0OTUwMDAwIHgyMjogZmZmZjAwMDAwNGMyZmMxOCB4MjE6IGZmZmYwMDAwMGEzM2MwMDAg
+WyANCj4gMTA4My41MjE1NTZdIHgyMDogMDAwMDAwMDBmZmZmZmY4NSB4MTk6IGZmZmYwMDAwMDRj
+MmZjMDAgeDE4OiANCj4gZmZmZmZmZmZmZmZmZmZmZiBbIDEwODMuNTIyMTg5XSB4MTc6IGZmZmY4
+MDAwMGNkOWIyMDAgeDE2OiANCj4gZmZmZjgwMDAwY2Q5YjE5MCB4MTU6IDAwMDAwMDAwMDAwMDAw
+MDYgWyAxMDgzLjUyMjgyM10geDE0OiANCj4gMDAwMDAwMDAwMDAwMDAwMCB4MTM6IGZmZmY4MDAw
+MGIwYzI4ZjAgeDEyOiAwMDAwMDAwMDAwMDAxNzA3IFsgDQo+IDEwODMuNTIzNDU3XSB4MTE6IDAw
+MDAwMDAwMDAwMDA3YWQgeDEwOiBmZmZmODAwMDBjNmMyOGYwIHg5IDogDQo+IGZmZmY4MDAwMGIw
+YzI4ZjAgWyAxMDgzLjUyNDA5MF0geDggOiAwMDAwMDAwMGZmZmJmZmZmIHg3IDogDQo+IDAwMDAw
+MDAwMDAwMDAwMDEgeDYgOiAwMDAwMDAwMDAwMDAwMDAwIFsgMTA4My41MjQ3MjNdIHg1IDogMDAw
+MDAwMDAwMDAwMDAwMCB4NCA6IGZmZmYwMDAwZjZlNjJkMzAgeDMgOiAwMDAwMDAwMDAwMDAwMDAw
+IFsgMTA4My41MjUzNTddIHgyIDogMDAwMDAwMDAwMDAwMDAwMCB4MSA6IGZmZmYwMDAwMGI2ZTAw
+MDAgeDAgOiAwMDAwMDAwMDAwMDAwMDAwIFsgMTA4My41MjU5OTBdIENhbGwgdHJhY2U6DQo+IFsg
+MTA4My41MjYyMDldICBtbWNfYmxrX3Jlc2V0KzB4NjAvMHgxYWMgWyAxMDgzLjUyNjUzNl0gIA0K
+PiBtbWNfYmxrX2NxZV9yZWNvdmVyeSsweDhjLzB4ZDAgWyAxMDgzLjUyNjkwOF0gIA0KPiBtbWNf
+bXFfcmVjb3ZlcnlfaGFuZGxlcisweGM0LzB4ZDAgWyAxMDgzLjUyNzMwM10gIA0KPiBwcm9jZXNz
+X29uZV93b3JrKzB4MjNjLzB4M2ZjIFsgMTA4My41Mjc2NjNdICB3b3JrZXJfdGhyZWFkKzB4NzQv
+MHg0MjAgDQo+IFsgMTA4My41Mjc5OTBdICBrdGhyZWFkKzB4ZWMvMHhmMCBbIDEwODMuNTI4MjY0
+XSAgDQo+IHJldF9mcm9tX2ZvcmsrMHgxMC8weDIwIFsgMTA4My41Mjg1ODddIENvZGU6IGQ1MDMy
+M2JmIGQ2NWYwM2MwIA0KPiBmOTQzNTJhMCBmOTQwNDAwMCAoYjk0MzhjMDEpIFsgMTA4My41Mjkx
+MjZdIC0tLVsgZW5kIHRyYWNlIA0KPiAwMDAwMDAwMDAwMDAwMDAwIF0tLS0NCj4gDQo+IFsgMTQz
+MS42Nzc5NzBdIFVuYWJsZSB0byBoYW5kbGUga2VybmVsIE5VTEwgcG9pbnRlciBkZXJlZmVyZW5j
+ZSBhdCANCj4gdmlydHVhbCBhZGRyZXNzIDAwMDAwMDAwMDAwMDAwMDAgWyAxNDMxLjY3ODc1M10g
+TWVtIGFib3J0IGluZm86DQo+IFsgMTQzMS42NzkwMTddICAgRVNSID0gMHg5NjAwMDAwNA0KPiBb
+IDE0MzEuNjc5MzAzXSAgIEVDID0gMHgyNTogREFCVCAoY3VycmVudCBFTCksIElMID0gMzIgYml0
+cw0KPiBbIDE0MzEuNjc5Nzg2XSAgIFNFVCA9IDAsIEZuViA9IDANCj4gWyAxNDMxLjY4MDA3Ml0g
+ICBFQSA9IDAsIFMxUFRXID0gMA0KPiBbIDE0MzEuNjgwMzY2XSAgIEZTQyA9IDB4MDQ6IGxldmVs
+IDAgdHJhbnNsYXRpb24gZmF1bHQNCj4gWyAxNDMxLjY4MDgxMF0gRGF0YSBhYm9ydCBpbmZvOg0K
+PiBbIDE0MzEuNjgxMDgwXSAgIElTViA9IDAsIElTUyA9IDB4MDAwMDAwMDQNCj4gWyAxNDMxLjY4
+MTQzMl0gICBDTSA9IDAsIFduUiA9IDANCj4gWyAxNDMxLjY4MTcxMl0gdXNlciBwZ3RhYmxlOiA0
+ayBwYWdlcywgNDgtYml0IFZBcywgDQo+IHBnZHA9MDAwMDAwMDAwYmI5ODAwMCBbIDE0MzEuNjgy
+MzkwXSBbMDAwMDAwMDAwMDAwMDAwMF0gDQo+IHBnZD0wMDAwMDAwMDAwMDAwMDAwLCBwNGQ9MDAw
+MDAwMDAwMDAwMDAwMCBbIDE0MzEuNjgzMzkzXSBJbnRlcm5hbCANCj4gZXJyb3I6IE9vcHM6IDk2
+MDAwMDA0IFsjMV0gU01QIFsgMTQzMS42ODM4NDFdIENQVTogMCBQSUQ6IDE5OTQ4IENvbW06IA0K
+PiBrd29ya2VyLzA6MiBOb3QgdGFpbnRlZCA1LjE4LjEyLWdmNjU1MzI1NzhmMzItZGlydHkgIzE2
+IFsgMTQzMS42ODQ1NzZdIA0KPiBIYXJkd2FyZSBuYW1lOiBQaW5lNjQgUm9ja1BybzY0IHYyLjEg
+KERUKSBbIDE0MzEuNjg1MDI0XSBXb3JrcXVldWU6IA0KPiBldmVudHMgbW1jX21xX3JlY292ZXJ5
+X2hhbmRsZXIgWyAxNDMxLjY4NTQ4N10gcHN0YXRlOiA2MDAwMDAwNSAoblpDdiANCj4gZGFpZiAt
+UEFOIC1VQU8gLVRDTyAtRElUIC1TU0JTIEJUWVBFPS0tKSBbIDE0MzEuNjg2MTAwXSBwYyA6IA0K
+PiBtbWNfcHV0X2NhcmQrMHgzOC8weDExMCBbIDE0MzEuNjg2NDUzXSBsciA6IA0KPiBtbWNfbXFf
+cmVjb3ZlcnlfaGFuZGxlcisweDk4LzB4ZDAgWyAxNDMxLjY4Njg3OV0gc3AgOiBmZmZmODAwMDE1
+ODEzY2YwIA0KPiBbIDE0MzEuNjg3MTczXSB4Mjk6IGZmZmY4MDAwMTU4MTNjZjAgeDI4OiAwMDAw
+MDAwMDAwMDAwMDAwIHgyNzogDQo+IDAwMDAwMDAwMDAwMDAwMDAgWyAxNDMxLjY4NzgwN10geDI2
+OiBmZmZmODAwMDBiMGJhMDAwIHgyNTogDQo+IGZmZmYwMDAwZjZlNzQ4MDUgeDI0OiBmZmZmMDAw
+MDEzYmQ2NWMwIFsgMTQzMS42ODg0NDFdIHgyMzogDQo+IGZmZmYwMDAwMTNiOTYxMjAgeDIyOiBm
+ZmZmMDAwMDEzYmQ2NDE4IHgyMTogMDAwMDAwMDAwMDAwMDAwMCBbIA0KPiAxNDMxLjY4OTA3NV0g
+eDIwOiBmZmZmODAwMDA4ZWQxYzcwIHgxOTogZmZmZjgwMDAwOTE3NjdkOCB4MTg6IA0KPiBmZmZm
+ZmZmZmZmZmZmZmZmIFsgMTQzMS42ODk3MDldIHgxNzogMzEzMzViMWI2ZDM3NWIxYiB4MTY6IA0K
+PiA2ZDMwNWIxYjQ3NTU0MjQ1IHgxNTogMDAwMDAwMDAwMDAwMDAwNiBbIDE0MzEuNjkwMzQzXSB4
+MTQ6IA0KPiAwMDAwMDAwMDAwMDAwMDAwIHgxMzogMDAwMDAwMDAwMDAwMDAwMCB4MTI6IDAwMDAw
+MDAwMDAwMDAwMDAgWyANCj4gMTQzMS42OTA5NzZdIHgxMTogZmZmZjAwMDAxM2JkNjU3MCB4MTA6
+IDAwMDAwMDAwMDAwMDAwMDEgeDkgOiANCj4gZmZmZjgwMDAwZWE2OTIyOCBbIDE0MzEuNjkxNjEx
+XSB4OCA6IGZmZmY4MDAwMGRmODkyYzggeDcgOiANCj4gMDAwMDAwMDAwMDAwMDAwMCB4NiA6IDAw
+MDAwMDAwMDAwMDAwMDEgWyAxNDMxLjY5MjI0NV0geDUgOiAwMDAwMDAwMDAwMDAwMDAxIHg0IDog
+MDAwMDAwMDAwMDAwMDAwMiB4MyA6IGZmZmY4MDAwMGU2ZmVhYzggWyAxNDMxLjY5Mjg3OV0geDIg
+OiAwMDAwMDAwMDAwMDAwMzZlIHgxIDogZmZmZjgwMDAwOGVkMWM3MCB4MCA6IDAwMDAwMDAwMDAw
+MDAwMDAgWyAxNDMxLjY5MzUxM10gQ2FsbCB0cmFjZToNCj4gWyAxNDMxLjY5MzczMl0gIG1tY19w
+dXRfY2FyZCsweDM4LzB4MTEwIFsgMTQzMS42OTQwNTVdICANCj4gbW1jX21xX3JlY292ZXJ5X2hh
+bmRsZXIrMHg5OC8weGQwIFsgMTQzMS42OTQ0NTJdICANCj4gcHJvY2Vzc19vbmVfd29yaysweDIz
+Yy8weDNmYyBbIDE0MzEuNjk0ODEyXSAgd29ya2VyX3RocmVhZCsweDc0LzB4NDIwIA0KPiBbIDE0
+MzEuNjk1MTM5XSAga3RocmVhZCsweGVjLzB4ZjAgWyAxNDMxLjY5NTQxNF0gIA0KPiByZXRfZnJv
+bV9mb3JrKzB4MTAvMHgyMCBbIDE0MzEuNjk1NzM4XSBDb2RlOiBmOTAwMWJmNyBhYTAxMDNmNiAN
+Cj4gYWEwMDAzZjUgYWExNDAzZTEgKGY5NDAwMDE3KSBbIDE0MzEuNjk2Mjc4XSAtLS1bIGVuZCB0
+cmFjZSANCj4gMDAwMDAwMDAwMDAwMDAwMCBdLS0tDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBDaHJp
+c3RpYW4gTG9laGxlIDxjbG9laGxlQGh5cGVyc3RvbmUuY29tPg0KDQpUaGFua3MgZm9yIGZpbmRp
+bmcgdGhlc2UgaXNzdWVzLiBBIGNvdXBsZSBvZiBjb21tZW50cyBiZWxvdy4NCg0KPiAtLS0NCj4g
+IGRyaXZlcnMvbW1jL2NvcmUvYmxvY2suYyB8IDQgKystLQ0KPiAgZHJpdmVycy9tbWMvY29yZS9x
+dWV1ZS5jIHwgNSArKystLQ0KPiAgMiBmaWxlcyBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDQg
+ZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9tbWMvY29yZS9ibG9jay5j
+IGIvZHJpdmVycy9tbWMvY29yZS9ibG9jay5jIGluZGV4IA0KPiBjZTg5NjExYTEzNmUuLjBjZDNh
+NzA2NTYyOSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9tbWMvY29yZS9ibG9jay5jDQo+ICsrKyBi
+L2RyaXZlcnMvbW1jL2NvcmUvYmxvY2suYw0KPiBAQCAtOTk3LDggKzk5Nyw4IEBAIHN0YXRpYyBp
+bnQgbW1jX2Jsa19yZXNldChzdHJ1Y3QgbW1jX2Jsa19kYXRhICptZCwgDQo+IHN0cnVjdCBtbWNf
+aG9zdCAqaG9zdCwNCj4gIA0KPiAgCW1kLT5yZXNldF9kb25lIHw9IHR5cGU7DQo+ICAJZXJyID0g
+bW1jX2h3X3Jlc2V0KGhvc3QtPmNhcmQpOw0KPiAtCS8qIEVuc3VyZSB3ZSBzd2l0Y2ggYmFjayB0
+byB0aGUgY29ycmVjdCBwYXJ0aXRpb24gKi8NCj4gLQlpZiAoZXJyKSB7DQo+ICsJLyogRW5zdXJl
+IHdlIHN3aXRjaCBiYWNrIHRvIHRoZSBjb3JyZWN0IHBhcnRpdGlvbiBvbiBzdWNjZXNzZnVsIHJl
+c2V0ICovDQo+ICsJaWYgKCFlcnIpIHsNCg0KVGhpcyBpc24ndCBxdWl0ZSByaWdodC4gIE9yaWdp
+bmFsbHksIHRoaXMgd2FzIGVyciAhPSAtRU9QTk9UU1VQUCBzbyAiYWx3YXlzIiB1bmxlc3MgdGhl
+IHJlc2V0IHdhcyBub3QgYXR0ZW1wdGVkIGF0IGFsbC4gIFdoZW4gdGhlIC1FT1BOT1RTVVBQIHJl
+dHVybiB2YWx1ZSB3ZW50IGF3YXksIHRoaXMgc2hvdWxkIGhhdmUgYmVjb21lIHVuY29uZGl0aW9u
+YWwuDQoNCkFsc28gdGhpcyBjaGFuZ2Ugc2hvdWxkIGJlIGEgc2VwYXJhdGUgcGF0Y2gsIGFuZCBo
+YXZlIGEgZml4ZXMgdGFnIGkuZS4NCg0KRml4ZXM6IGZlZmRkM2M5MWUwYSAoIm1tYzogY29yZTog
+RHJvcCBzdXBlcmZsdW91cyB2YWxpZGF0aW9ucyBpbiBtbWNfaHd8c3dfcmVzZXQoKSIpDQoNCj4g
+IAkJc3RydWN0IG1tY19ibGtfZGF0YSAqbWFpbl9tZCA9DQo+ICAJCQlkZXZfZ2V0X2RydmRhdGEo
+Jmhvc3QtPmNhcmQtPmRldik7DQo+ICAJCWludCBwYXJ0X2VycjsNCj4gZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvbW1jL2NvcmUvcXVldWUuYyBiL2RyaXZlcnMvbW1jL2NvcmUvcXVldWUuYyBpbmRleCAN
+Cj4gZmVmYWE5MDFiNTBmLi42OTMxZmEwODJlYTcgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvbW1j
+L2NvcmUvcXVldWUuYw0KPiArKysgYi9kcml2ZXJzL21tYy9jb3JlL3F1ZXVlLmMNCj4gQEAgLTEz
+Nyw5ICsxMzcsMTAgQEAgc3RhdGljIHZvaWQgbW1jX21xX3JlY292ZXJ5X2hhbmRsZXIoc3RydWN0
+IHdvcmtfc3RydWN0ICp3b3JrKQ0KPiAgCXN0cnVjdCBtbWNfcXVldWUgKm1xID0gY29udGFpbmVy
+X29mKHdvcmssIHN0cnVjdCBtbWNfcXVldWUsDQo+ICAJCQkJCSAgICByZWNvdmVyeV93b3JrKTsN
+Cj4gIAlzdHJ1Y3QgcmVxdWVzdF9xdWV1ZSAqcSA9IG1xLT5xdWV1ZTsNCj4gKwlzdHJ1Y3QgbW1j
+X2NhcmQgKmNhcmQgPSBtcS0+Y2FyZDsNCj4gIAlzdHJ1Y3QgbW1jX2hvc3QgKmhvc3QgPSBtcS0+
+Y2FyZC0+aG9zdDsNCj4gIA0KPiAtCW1tY19nZXRfY2FyZChtcS0+Y2FyZCwgJm1xLT5jdHgpOw0K
+PiArCW1tY19nZXRfY2FyZChjYXJkLCAmbXEtPmN0eCk7DQo+ICANCj4gIAltcS0+aW5fcmVjb3Zl
+cnkgPSB0cnVlOw0KPiAgDQo+IEBAIC0xNTcsNyArMTU4LDcgQEAgc3RhdGljIHZvaWQgbW1jX21x
+X3JlY292ZXJ5X2hhbmRsZXIoc3RydWN0IHdvcmtfc3RydWN0ICp3b3JrKQ0KPiAgCWlmIChob3N0
+LT5oc3FfZW5hYmxlZCkNCj4gIAkJaG9zdC0+Y3FlX29wcy0+Y3FlX3JlY292ZXJ5X2ZpbmlzaCho
+b3N0KTsNCj4gIA0KPiAtCW1tY19wdXRfY2FyZChtcS0+Y2FyZCwgJm1xLT5jdHgpOw0KPiArCW1t
+Y19wdXRfY2FyZChjYXJkLCAmbXEtPmN0eCk7DQo+ICANCj4gIAlibGtfbXFfcnVuX2h3X3F1ZXVl
+cyhxLCB0cnVlKTsNCj4gIH0NCg0KUGxlYXNlIHRyeSB0aGlzIGluc3RlYWQ6DQoNCmRpZmYgLS1n
+aXQgYS9kcml2ZXJzL21tYy9jb3JlL3F1ZXVlLmMgYi9kcml2ZXJzL21tYy9jb3JlL3F1ZXVlLmMg
+aW5kZXggNjkzMWZhMDgyZWE3Li5kOGQ5MTE1YzUxZjYgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL21t
+Yy9jb3JlL3F1ZXVlLmMNCisrKyBiL2RyaXZlcnMvbW1jL2NvcmUvcXVldWUuYw0KQEAgLTQ5NCw2
+ICs0OTQsMTMgQEAgdm9pZCBtbWNfY2xlYW51cF9xdWV1ZShzdHJ1Y3QgbW1jX3F1ZXVlICptcSkN
+CiAJaWYgKGJsa19xdWV1ZV9xdWllc2NlZChxKSkNCiAJCWJsa19tcV91bnF1aWVzY2VfcXVldWUo
+cSk7DQogDQorCS8qDQorCSAqIElmIHRoZSByZWNvdmVyeSBjb21wbGV0ZXMgdGhlIGxhc3QgKGFu
+ZCBvbmx5IHJlbWFpbmluZykgcmVxdWVzdCBpbg0KKwkgKiB0aGUgcXVldWUsIGFuZCB0aGUgY2Fy
+ZCBoYXMgYmVlbiByZW1vdmVkLCB3ZSBjb3VsZCBlbmQgdXAgaGVyZSB3aXRoDQorCSAqIHRoZSBy
+ZWNvdmVyeSBub3QgcXVpdGUgZmluaXNoZWQgeWV0LCBzbyBmbHVzaCBpdC4NCisJICovDQorCWZs
+dXNoX3dvcmsoJm1xLT5yZWNvdmVyeV93b3JrKTsNCisNCiAJYmxrX21xX2ZyZWVfdGFnX3NldCgm
+bXEtPnRhZ19zZXQpOw0KIA0KIAkvKg0KDQoNCkh5cGVyc3RvbmUgR21iSCB8IFJlaWNoZW5hdXN0
+ci4gMzlhICB8IDc4NDY3IEtvbnN0YW56Ck1hbmFnaW5nIERpcmVjdG9yOiBEci4gSmFuIFBldGVy
+IEJlcm5zLgpDb21tZXJjaWFsIHJlZ2lzdGVyIG9mIGxvY2FsIGNvdXJ0czogRnJlaWJ1cmcgSFJC
+MzgxNzgy
 
-I'm getting this (courtesy of syzkaller):
-
- |  BUG: using smp_processor_id() in preemptible [00000000] code: syz-executor.8/22848
- |  caller is perf_swevent_get_recursion_context+0x13/0x80
- |  CPU: 0 PID: 22860 Comm: syz-executor.6 Not tainted 6.0.0-rc3-00017-g1472d7e42f41 #64
- |  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
- |  Call Trace:
- |   <TASK>
- |   dump_stack_lvl+0x6a/0x86
- |   check_preemption_disabled+0xdf/0xf0
- |   perf_swevent_get_recursion_context+0x13/0x80
- |   perf_pending_task+0xf/0x80
- |   task_work_run+0x73/0xc0
- |   do_exit+0x459/0xf20
- |   do_group_exit+0x3f/0xe0
- |   get_signal+0xe04/0xe60
- |   arch_do_signal_or_restart+0x3f/0x780
- |   exit_to_user_mode_prepare+0x135/0x1a0
- |   irqentry_exit_to_user_mode+0x6/0x30
- |   asm_sysvec_irq_work+0x16/0x20
-
-That one I could fix up with:
-
- | diff --git a/kernel/events/core.c b/kernel/events/core.c
- | index 9319af6013f1..2f1d51b50be7 100644
- | --- a/kernel/events/core.c
- | +++ b/kernel/events/core.c
- | @@ -6563,6 +6563,7 @@ static void perf_pending_task(struct callback_head *head)
- |  	 * If we 'fail' here, that's OK, it means recursion is already disabled
- |  	 * and we won't recurse 'further'.
- |  	 */
- | +	preempt_disable_notrace();
- |  	rctx = perf_swevent_get_recursion_context();
- |  
- |  	if (event->pending_work) {
- | @@ -6573,6 +6574,7 @@ static void perf_pending_task(struct callback_head *head)
- |  
- |  	if (rctx >= 0)
- |  		perf_swevent_put_recursion_context(rctx);
- | +	preempt_enable_notrace();
- |  }
- |  
- |  #ifdef CONFIG_GUEST_PERF_EVENTS
-
-But following that, I get:
-
- | ======================================================
- | WARNING: possible circular locking dependency detected
- | 6.0.0-rc3-00017-g1472d7e42f41-dirty #65 Not tainted
- | ------------------------------------------------------
- | syz-executor.11/13018 is trying to acquire lock:
- | ffffffffbb754a18 ((console_sem).lock){-.-.}-{2:2}, at: down_trylock+0xa/0x30 kernel/locking/semaphore.c:139
- | 
- | but task is already holding lock:
- | ffff8ea992e00e20 (&ctx->lock){-.-.}-{2:2}, at: perf_event_context_sched_out kernel/events/core.c:3499 [inline]
- | ffff8ea992e00e20 (&ctx->lock){-.-.}-{2:2}, at: __perf_event_task_sched_out+0x29e/0xb50 kernel/events/core.c:3608
- | 
- | which lock already depends on the new lock.
- | 
- |  << snip ... lockdep unhappy we're trying to WARN >>
- | 
- | WARNING: CPU: 3 PID: 13018 at kernel/events/core.c:2288 event_sched_out+0x3f2/0x410 kernel/events/core.c:2288
- | Modules linked in:
- | CPU: 3 PID: 13018 Comm: syz-executor.11 Not tainted 6.0.0-rc3-00017-g1472d7e42f41-dirty #65
- | Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
- | RIP: 0010:event_sched_out+0x3f2/0x410 kernel/events/core.c:2288
- | Code: ff ff e8 21 b2 f9 ff 65 8b 05 76 67 7f 46 85 c0 0f 84 0f ff ff ff e8 0d b2 f9 ff 90 0f 0b 90 e9 01 ff ff ff e8 ff b1 f9 ff 90 <0f> 0b 90 e9 3b fe ff ff e8 f1 b1 f9 ff 90 0f 0b 90 e9 01 ff ff ff
- | RSP: 0018:ffffa69c8931f9a8 EFLAGS: 00010012
- | RAX: 0000000040000000 RBX: ffff8ea99526f1c8 RCX: ffffffffb9824d01
- | RDX: ffff8ea9934a0040 RSI: 0000000000000000 RDI: ffff8ea99526f1c8
- | RBP: ffff8ea992e00e00 R08: 0000000000000000 R09: 0000000000000000
- | R10: 00000000820822cd R11: 00000000d820822c R12: ffff8eacafcf2e50
- | R13: ffff8eacafcf2e58 R14: ffffffffbb62e9a0 R15: ffff8ea992e00ef8
- | FS:  00007fdcddbb6640(0000) GS:ffff8eacafcc0000(0000) knlGS:0000000000000000
- | CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- | CR2: 00007fdcddbb5fa8 CR3: 0000000112846004 CR4: 0000000000770ee0
- | DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
- | DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000600
- | PKRU: 55555554
- | Call Trace:
- |  <TASK>
- |  group_sched_out.part.0+0x5c/0xe0 kernel/events/core.c:2320
- |  group_sched_out kernel/events/core.c:2315 [inline]
- |  ctx_sched_out+0x35d/0x3c0 kernel/events/core.c:3288
- |  task_ctx_sched_out+0x3d/0x60 kernel/events/core.c:2657
- |  perf_event_context_sched_out kernel/events/core.c:3505 [inline]
- |  __perf_event_task_sched_out+0x31b/0xb50 kernel/events/core.c:3608
- |  perf_event_task_sched_out include/linux/perf_event.h:1266 [inline]
- |  prepare_task_switch kernel/sched/core.c:4992 [inline]
- |  context_switch kernel/sched/core.c:5134 [inline]
- |  __schedule+0x4f8/0xb20 kernel/sched/core.c:6494
- |  preempt_schedule_irq+0x39/0x70 kernel/sched/core.c:6806
- |  irqentry_exit+0x32/0x90 kernel/entry/common.c:428
- |  asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
- | RIP: 0010:try_to_freeze include/linux/freezer.h:66 [inline]
- | RIP: 0010:freezer_count include/linux/freezer.h:128 [inline]
- | RIP: 0010:coredump_wait fs/coredump.c:407 [inline]
- | RIP: 0010:do_coredump+0x1193/0x1b60 fs/coredump.c:563
- | Code: d3 25 df ff 83 e3 08 0f 84 f0 03 00 00 e8 c5 25 df ff 48 f7 85 88 fe ff ff 00 01 00 00 0f 85 7e fc ff ff 31 db e9 83 fc ff ff <e8> a8 25 df ff e8 63 43 d3 ff e9 d2 f1 ff ff e8 99 25 df ff 48 85
- | RSP: 0018:ffffa69c8931fc30 EFLAGS: 00000246
- | RAX: 7fffffffffffffff RBX: ffff8ea9934a0040 RCX: 0000000000000000
- | RDX: 0000000000000001 RSI: ffffffffbb4ab491 RDI: 00000000ffffffff
- | RBP: ffffa69c8931fdc0 R08: 0000000000000001 R09: 0000000000000001
- | R10: 00000000ffffffff R11: 00000000ffffffff R12: ffff8ea9934a0040
- | R13: ffffffffbb792620 R14: 0000000000000108 R15: 0000000000000001
- |  get_signal+0xe56/0xe60 kernel/signal.c:2843
- |  arch_do_signal_or_restart+0x3f/0x780 arch/x86/kernel/signal.c:869
- |  exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
- |  exit_to_user_mode_prepare+0x135/0x1a0 kernel/entry/common.c:201
- |  __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- |  syscall_exit_to_user_mode+0x1a/0x50 kernel/entry/common.c:294
- |  do_syscall_64+0x48/0x90 arch/x86/entry/common.c:86
- |  entry_SYSCALL_64_after_hwframe+0x64/0xce
- | RIP: 0033:0x7fdcddc48549
- | Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
- | RSP: 002b:00007fdcddbb60f8 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
- | RAX: 0000000000000001 RBX: 00007fdcddd62f88 RCX: 00007fdcddc48549
- | RDX: 00000000000f4240 RSI: 0000000000000081 RDI: 00007fdcddd62f8c
- | RBP: 00007fdcddd62f80 R08: 000000000000001e R09: 0000000000000000
- | R10: 0000000000000003 R11: 0000000000000246 R12: 00007fdcddd62f8c
- | R13: 00007ffc4136118f R14: 0000000000000000 R15: 00007fdcddbb6640
- |  </TASK>
- | irq event stamp: 128
- | hardirqs last  enabled at (127): [<ffffffffba9f7237>] irqentry_exit+0x37/0x90 kernel/entry/common.c:431
- | hardirqs last disabled at (128): [<ffffffffba9faa5b>] __schedule+0x6cb/0xb20 kernel/sched/core.c:6393
- | softirqs last  enabled at (106): [<ffffffffbae0034f>] softirq_handle_end kernel/softirq.c:414 [inline]
- | softirqs last  enabled at (106): [<ffffffffbae0034f>] __do_softirq+0x34f/0x4d5 kernel/softirq.c:600
- | softirqs last disabled at (99): [<ffffffffb9693821>] invoke_softirq kernel/softirq.c:445 [inline]
- | softirqs last disabled at (99): [<ffffffffb9693821>] __irq_exit_rcu+0xb1/0x120 kernel/softirq.c:650
- | ---[ end trace 0000000000000000 ]---
- | BUG: kernel NULL pointer dereference, address: 0000000000000000
- | #PF: supervisor instruction fetch in kernel mode
- | #PF: error_code(0x0010) - not-present page
- | PGD 8000000112e91067 P4D 8000000112e91067 PUD 114481067 PMD 0 
- | Oops: 0010 [#1] PREEMPT SMP PTI
- | CPU: 1 PID: 13018 Comm: syz-executor.11 Tainted: G        W          6.0.0-rc3-00017-g1472d7e42f41-dirty #65
- | Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
- | RIP: 0010:0x0
- | Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
- | RSP: 0018:ffffa69c8931fd18 EFLAGS: 00010293
- | RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffffffb96be917
- | RDX: ffff8ea9934a0040 RSI: 0000000000000000 RDI: ffff8ea99526f620
- | RBP: ffff8ea9934a0040 R08: 0000000000000000 R09: 0000000000000000
- | R10: 0000000000000001 R11: ffffffffb9cb7eaf R12: ffff8ea9934a08f0
- | R13: ffff8ea992fc9cf8 R14: ffff8ea98c65dec0 R15: ffff8ea9934a0828
- | FS:  0000000000000000(0000) GS:ffff8eacafc40000(0000) knlGS:0000000000000000
- | CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- | CR2: ffffffffffffffd6 CR3: 000000011343a003 CR4: 0000000000770ee0
- | DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
- | DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000600
- | PKRU: 55555554
- | Call Trace:
- |  <TASK>
- |  task_work_run+0x73/0xc0 kernel/task_work.c:177
- |  exit_task_work include/linux/task_work.h:38 [inline]
- |  do_exit+0x459/0xf20 kernel/exit.c:795
- |  do_group_exit+0x3f/0xe0 kernel/exit.c:925
- |  get_signal+0xe04/0xe60 kernel/signal.c:2857
- |  arch_do_signal_or_restart+0x3f/0x780 arch/x86/kernel/signal.c:869
- |  exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
- |  exit_to_user_mode_prepare+0x135/0x1a0 kernel/entry/common.c:201
- |  __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- |  syscall_exit_to_user_mode+0x1a/0x50 kernel/entry/common.c:294
- |  do_syscall_64+0x48/0x90 arch/x86/entry/common.c:86
- |  entry_SYSCALL_64_after_hwframe+0x64/0xce
- | RIP: 0033:0x7fdcddc48549
- | Code: Unable to access opcode bytes at RIP 0x7fdcddc4851f.
- | RSP: 002b:00007fdcddbb60f8 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
- | RAX: 0000000000000001 RBX: 00007fdcddd62f88 RCX: 00007fdcddc48549
- | RDX: 00000000000f4240 RSI: 0000000000000081 RDI: 00007fdcddd62f8c
- | RBP: 00007fdcddd62f80 R08: 000000000000001e R09: 0000000000000000
- | R10: 0000000000000003 R11: 0000000000000246 R12: 00007fdcddd62f8c
- | R13: 00007ffc4136118f R14: 0000000000000000 R15: 00007fdcddbb6640
- |  </TASK>
- | Modules linked in:
- | CR2: 0000000000000000
- | ---[ end trace 0000000000000000 ]---
- | RIP: 0010:0x0
- | Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
- | RSP: 0018:ffffa69c8931fd18 EFLAGS: 00010293
- | RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffffffb96be917
- | RDX: ffff8ea9934a0040 RSI: 0000000000000000 RDI: ffff8ea99526f620
- | RBP: ffff8ea9934a0040 R08: 0000000000000000 R09: 0000000000000000
- | R10: 0000000000000001 R11: ffffffffb9cb7eaf R12: ffff8ea9934a08f0
- | R13: ffff8ea992fc9cf8 R14: ffff8ea98c65dec0 R15: ffff8ea9934a0828
- | FS:  0000000000000000(0000) GS:ffff8eacafc40000(0000) knlGS:0000000000000000
- | CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- | CR2: ffffffffffffffd6 CR3: 000000011343a003 CR4: 0000000000770ee0
- | DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
- | DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000600
- | PKRU: 55555554
- | ----------------
- | Code disassembly (best guess):
- |    0:	d3 25 df ff 83 e3    	shll   %cl,-0x1c7c0021(%rip)        # 0xe383ffe5
- |    6:	08 0f                	or     %cl,(%rdi)
- |    8:	84 f0                	test   %dh,%al
- |    a:	03 00                	add    (%rax),%eax
- |    c:	00 e8                	add    %ch,%al
- |    e:	c5 25 df ff          	vpandn %ymm7,%ymm11,%ymm15
- |   12:	48 f7 85 88 fe ff ff 	testq  $0x100,-0x178(%rbp)
- |   19:	00 01 00 00
- |   1d:	0f 85 7e fc ff ff    	jne    0xfffffca1
- |   23:	31 db                	xor    %ebx,%ebx
- |   25:	e9 83 fc ff ff       	jmp    0xfffffcad
- | * 2a:	e8 a8 25 df ff       	call   0xffdf25d7 <-- trapping instruction
- |   2f:	e8 63 43 d3 ff       	call   0xffd34397
- |   34:	e9 d2 f1 ff ff       	jmp    0xfffff20b
- |   39:	e8 99 25 df ff       	call   0xffdf25d7
- |   3e:	48                   	rex.W
- |   3f:	85                   	.byte 0x85
-
-
-So something isn't quite right yet. Unfortunately I don't have a good
-reproducer. :-/
-
-Thanks,
--- Marco
