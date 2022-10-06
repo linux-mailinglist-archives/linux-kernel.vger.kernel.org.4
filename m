@@ -2,106 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DD05F6D15
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 19:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C0D5F6D27
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 19:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbiJFRmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 13:42:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43440 "EHLO
+        id S231790AbiJFRnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 13:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbiJFRmw (ORCPT
+        with ESMTP id S230039AbiJFRnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 13:42:52 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2064.outbound.protection.outlook.com [40.107.244.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DCFB274D;
-        Thu,  6 Oct 2022 10:42:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Yk1fTCQPoaqFLV7sYupu9IUv/KgCFuXI+snEH7RCZGo/hC3WD+u0BfkGjySbHL5mzFait2kkm6j0P8YiIq5hD4K97dRzS4tkhPQ5U4qc0X3SZa9sSRLZQbwQ9UuiQdXtWMf9TFs7LJa/QOtc6pP9UqwwlL9F8lAotbsMHAPcNLvvV+pmzQ+wVRojmFM5DJKEWeVKHi6sbnfFAMsBba8R0LqPyPLiIxcqZc6gMx09/m4Mpuqlo90e2hTObZbDuLxKU2yEwW5t8rGjHT8+hrcRARzswBZvGz+3KxSdJVe26PcdUx45FC+WVLKT0coL/Hu0RR2G3B0nCJXFlpOsQG6F1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GugUSR1Ts6HanG2FbAOsl1KwBKQKRMvFtMSkHG4Au4Y=;
- b=kisRH8T2lLS6AzZ+rik9Vw9LkBoffrQL/xWkLr3wnAM0WcFgWACbyk52Saxh8T8F7caF1CEhR/jVVf1haLVvyPBZKt8xkCOCyb4C7DuH3+PKT4vpvIlL+aBqYpej2uDvHp4vXVT9eg1ZaMdRvMv99OnmuG0gzUmQKNwPA5IGaVb487nKj3D0+dAcYQB1K3pKEBFFe8W1sXFHTX1lmXk4C2bwousearC2yobw7prmQnF4pObUB6YhllZPZvNmCMH0yvbG9O6f70k5w2aYQToXbYuU9ahjQCMi4yE8PtYiutFw0g6gysB16dN/c1oxkrlm79njAFROyRddfsFqAJX/nA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gpxsee.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GugUSR1Ts6HanG2FbAOsl1KwBKQKRMvFtMSkHG4Au4Y=;
- b=nFyXH6bCrW4WWd3sNDaGBy8a6KC+iY97NrVbSpqcEjGA+xlvY4GjmVp4/mOuHZ3lZW+xsMavYzXnkr7FOcW/zbGF5PvMejgcxTRjfJeDtMPUGVEpG8WLEqNuDerpf29e565F5aU+XohgfXwah6kJ7mdsSpKalybxYuZxwfVqkuA=
-Received: from BN9PR03CA0902.namprd03.prod.outlook.com (2603:10b6:408:107::7)
- by IA0PR12MB7602.namprd12.prod.outlook.com (2603:10b6:208:43a::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Thu, 6 Oct
- 2022 17:42:47 +0000
-Received: from BN8NAM11FT034.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:107:cafe::a6) by BN9PR03CA0902.outlook.office365.com
- (2603:10b6:408:107::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23 via Frontend
- Transport; Thu, 6 Oct 2022 17:42:46 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT034.mail.protection.outlook.com (10.13.176.139) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5709.10 via Frontend Transport; Thu, 6 Oct 2022 17:42:46 +0000
-Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 6 Oct
- 2022 12:42:45 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB07.amd.com
- (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 6 Oct
- 2022 10:42:45 -0700
-Received: from [172.19.74.144] (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
- Transport; Thu, 6 Oct 2022 12:42:44 -0500
-Message-ID: <e04c498e-c3f5-9b0f-14cf-56057dd77d4e@amd.com>
-Date:   Thu, 6 Oct 2022 10:42:44 -0700
+        Thu, 6 Oct 2022 13:43:03 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E72B40E8;
+        Thu,  6 Oct 2022 10:43:01 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4MjzLB6Ky2z9t0M;
+        Thu,  6 Oct 2022 19:42:58 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Fq7hDkCWiCvc; Thu,  6 Oct 2022 19:42:58 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4MjzLB4vNFz9syB;
+        Thu,  6 Oct 2022 19:42:58 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 84B508B78B;
+        Thu,  6 Oct 2022 19:42:58 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id mbcF0I0xUYNn; Thu,  6 Oct 2022 19:42:58 +0200 (CEST)
+Received: from [192.168.233.27] (po19210.idsi0.si.c-s.fr [192.168.233.27])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4E53E8B77D;
+        Thu,  6 Oct 2022 19:42:56 +0200 (CEST)
+Message-ID: <6396875c-146a-acf5-dd9e-7f93ba1b4bc3@csgroup.eu>
+Date:   Thu, 6 Oct 2022 19:42:55 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V6 XDMA 0/2] xilinx XDMA driver
-Content-Language: en-US
-To:     =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>,
-        <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <trix@redhat.com>
-CC:     <max.zhen@amd.com>, <sonal.santan@amd.com>, <larry.liu@amd.com>,
-        <brian.xu@amd.com>
-References: <1664919839-27149-1-git-send-email-lizhi.hou@amd.com>
- <4e4481e9-0eb9-ac28-b9ff-348adb4dc866@gpxsee.org>
-From:   Lizhi Hou <lizhi.hou@amd.com>
-In-Reply-To: <4e4481e9-0eb9-ac28-b9ff-348adb4dc866@gpxsee.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v3 3/5] treewide: use get_random_u32() when possible
+Content-Language: fr-FR
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        =?UTF-8?Q?Christoph_B=c3=b6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dave Airlie <airlied@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Graf <tgraf@suug.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgens?= =?UTF-8?Q?en?= 
+        <toke@toke.dk>, Chuck Lever <chuck.lever@oracle.com>,
+        Jan Kara <jack@suse.cz>
+References: <20221006165346.73159-1-Jason@zx2c4.com>
+ <20221006165346.73159-4-Jason@zx2c4.com>
+ <848ed24c-13ef-6c38-fd13-639b33809194@csgroup.eu>
+ <CAHmME9raQ4E00r9r8NyWJ17iSXE_KniTG0onCNAfMmfcGar1eg@mail.gmail.com>
+ <f10fcfbf-2da6-cf2d-6027-fbf8b52803e9@csgroup.eu>
+In-Reply-To: <f10fcfbf-2da6-cf2d-6027-fbf8b52803e9@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT034:EE_|IA0PR12MB7602:EE_
-X-MS-Office365-Filtering-Correlation-Id: eb2a5daa-24f1-4e8b-eca6-08daa7c22dea
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: grSX+Lgdfp7hlwysN6GjtDdisJvUyFYC0r+3vwAtUymOQTAQ6UE49j/9GOi2Jtlp+NxmtC9OspUSxeTZ4FPrPDmr0r32n9XY4XaxCUK70HKUGWFJzLonjCB6kL+VMB7bs4DNcn38/hsmGunu6TfdAe/I1G+ZmY5+pW+DOXki/qLosAk3azOTvc8hm1XLzSMDZvyBQo7nrEtrHWO69q5OJ57DvqsjdnTdyi6xucdvIwJBUFmV8oV8/Xizl18MX/MLUQtbBxWi93uZCsZd8lOVZSlhDY8NdoRkEYDhhFW3U1zZthYvNsiJfXXnyuxr2OLnEmWG14lVmzmLfABl2TQKdL6X/lUIszj7W1qG785eKi9TX4JGJwo/ihRtRVPnzATyWHgkR5jjpyehyIJUpyIXSRFPCeROj+7XnlWoBfG1EsmlYssnb02AY5oI9A89Xe+qZ3bKAgykK/76WHST2kbUJs8HyqAaikp+F0eZcBiLF5jnEicxnwVahyTdsze0jSzthbCUyl/HTuGd6NpHd+JzBxSFcU1kSD352q8mnDH6Dzn47vA/Mc5AeB07Flhc0QA7XCX3CIrPT9uj3KvC1hj5TC1eVpS4R3m5r+pQwsFK3aSroD+SN/BAAo28rJ3epLQ0N/5BzisqZOcBG9VMiP6gjOvLNtjevXEbnceDOLLUxgHu/NxV9rQgG/CvPtrwSe+51QhD5eyWjZ0TMB6bwbrFeBqm/HukegMzeMgcn1yVshNW4H87f9hR6iPRqpjZ5zG08i7ijM/Z+r+eQi8N/Jwc5umW9NYli2oPf0jcingod8xMOiOzUSOC44aL2aGw/eCNMJIf2XeHM99UcKfmP8w7T+DZ1I74/fE9vEenocBa94Gg89oEO6gTKYRxCA7RB/EqeNbtNwq+MC9FLZjwPB4MMw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(136003)(39860400002)(396003)(451199015)(36840700001)(46966006)(40470700004)(40460700003)(16576012)(336012)(5660300002)(110136005)(36756003)(8936002)(2616005)(53546011)(83380400001)(31696002)(966005)(54906003)(36860700001)(82310400005)(426003)(70206006)(66574015)(478600001)(81166007)(356005)(82740400003)(40480700001)(47076005)(86362001)(41300700001)(4326008)(186003)(70586007)(8676002)(44832011)(2906002)(316002)(31686004)(26005)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2022 17:42:46.1586
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: eb2a5daa-24f1-4e8b-eca6-08daa7c22dea
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT034.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7602
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -109,109 +137,75 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 10/6/22 09:37, Martin Tůma wrote:
-> On 04. 10. 22 23:43, Lizhi Hou wrote:
->> Hello,
->>
->> This V6 of patch series is to provide the platform driver to support the
->> Xilinx XDMA subsystem. The XDMA subsystem is used in conjunction with 
->> the
->> PCI Express IP block to provide high performance data transfer 
->> between host
->> memory and the card's DMA subsystem. It also provides up to 16 user
->> interrupt wires to user logic that generate interrupts to the host.
->>
->>              +-------+       +-------+       +-----------+
->>     PCIe     |       |       |       |       |           |
->>     Tx/Rx    |       |       |       |  AXI  |           |
->>   <=======>  | PCIE  | <===> | XDMA  | <====>| User Logic|
->>              |       |       |       |       |           |
->>              +-------+       +-------+       +-----------+
->>
->> The XDMA has been used for Xilinx Alveo PCIe devices.
->> And it is also integrated into Versal ACAP DMA and Bridge Subsystem.
->>      https://www.xilinx.com/products/boards-and-kits/alveo.html
->> https://docs.xilinx.com/r/en-US/pg344-pcie-dma-versal/Introduction-to-the-DMA-and-Bridge-Subsystems
->>
->> The device driver for any FPGA based PCIe device which leverages XDMA 
->> can
->> call the standard dmaengine APIs to discover and use the XDMA subsystem
->> without duplicating the XDMA driver code in its own driver.
->>
->> Changes since v5:
->> - Modified user logic interrupt APIs to handle user logic IP which 
->> does not
->>    have its own register to enable/disable interrupt.
->> - Clean up code based on review comments.
->>
->> Changes since v4:
->> - Modified user logic interrupt APIs.
->>
->> Changes since v3:
->> - Added one patch to support user logic interrupt.
->>
->> Changes since v2:
->> - Removed tasklet.
->> - Fixed regression bug introduced to V2.
->> - Test Robot warning.
->>
->> Changes since v1:
->> - Moved filling hardware descriptor to xdma_prep_device_sg().
->> - Changed hardware descriptor enum to "struct xdma_hw_desc".
->> - Minor changes from code review comments.
->>
->> Lizhi Hou (2):
->>    dmaengine: xilinx: xdma: Add xilinx xdma driver
->>    dmaengine: xilinx: xdma: Add user logic interrupt support
->>
->>   MAINTAINERS                            |   11 +
->>   drivers/dma/Kconfig                    |   13 +
->>   drivers/dma/xilinx/Makefile            |    1 +
->>   drivers/dma/xilinx/xdma-regs.h         |  171 ++++
->>   drivers/dma/xilinx/xdma.c              | 1034 ++++++++++++++++++++++++
->>   include/linux/dma/amd_xdma.h           |   16 +
->>   include/linux/platform_data/amd_xdma.h |   34 +
->>   7 files changed, 1280 insertions(+)
->>   create mode 100644 drivers/dma/xilinx/xdma-regs.h
->>   create mode 100644 drivers/dma/xilinx/xdma.c
->>   create mode 100644 include/linux/dma/amd_xdma.h
->>   create mode 100644 include/linux/platform_data/amd_xdma.h
->>
->
-> Hi,
-> I have rewritten our V4L2 driver to use this new XDMA driver, but it 
-> does not work on our HW (where the previous Xilinx XDMA driver derived 
-> from the Xilinx sample code worked fine). The driver is sucessfully 
-> loaded and 4(2+2) DMA channels are successfully created. But when a 
-> DMA transfer is initiated, I get an error from my PC's DMA chip:
->
-> AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x000a address=0x36a00000 
-> flags=0x0000]
->
-> and no error from XDMA.
->
-> Does the driver expect some special FPGA IP core configuration? Or is 
-> there something else I'm missing? My code is quiet similar to what you 
-> use in your XRT repo on GitHub (there is btw. a bug in the XRT code - 
-> you do not clear the dma_slave_config struct before using) but in my 
-> case the DMA transfer triggers the AMD-Vi error and timeouts.
->
-> The code of our driver is attached, the relevant parts are in mgb4_dma.c
-> and mgb4_core.c.
->
-> M.
 
-Hi Martin,
+Le 06/10/2022 à 19:31, Christophe Leroy a écrit :
+> 
+> 
+> Le 06/10/2022 à 19:24, Jason A. Donenfeld a écrit :
+>> Hi Christophe,
+>>
+>> On Thu, Oct 6, 2022 at 11:21 AM Christophe Leroy
+>> <christophe.leroy@csgroup.eu> wrote:
+>>> Le 06/10/2022 à 18:53, Jason A. Donenfeld a écrit :
+>>>> The prandom_u32() function has been a deprecated inline wrapper around
+>>>> get_random_u32() for several releases now, and compiles down to the
+>>>> exact same code. Replace the deprecated wrapper with a direct call to
+>>>> the real function. The same also applies to get_random_int(), which is
+>>>> just a wrapper around get_random_u32().
+>>>>
+>>>> Reviewed-by: Kees Cook <keescook@chromium.org>
+>>>> Acked-by: Toke Høiland-Jørgensen <toke@toke.dk> # for sch_cake
+>>>> Acked-by: Chuck Lever <chuck.lever@oracle.com> # for nfsd
+>>>> Reviewed-by: Jan Kara <jack@suse.cz> # for ext4
+>>>> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+>>>> ---
+>>>
+>>>> diff --git a/arch/powerpc/kernel/process.c 
+>>>> b/arch/powerpc/kernel/process.c
+>>>> index 0fbda89cd1bb..9c4c15afbbe8 100644
+>>>> --- a/arch/powerpc/kernel/process.c
+>>>> +++ b/arch/powerpc/kernel/process.c
+>>>> @@ -2308,6 +2308,6 @@ void notrace __ppc64_runlatch_off(void)
+>>>>    unsigned long arch_align_stack(unsigned long sp)
+>>>>    {
+>>>>        if (!(current->personality & ADDR_NO_RANDOMIZE) && 
+>>>> randomize_va_space)
+>>>> -             sp -= get_random_int() & ~PAGE_MASK;
+>>>> +             sp -= get_random_u32() & ~PAGE_MASK;
+>>>>        return sp & ~0xf;
+>>>
+>>> Isn't that a candidate for prandom_u32_max() ?
+>>>
+>>> Note that sp is deemed to be 16 bytes aligned at all time.
+>>
+>> Yes, probably. It seemed non-trivial to think about, so I didn't. But
+>> let's see here... maybe it's not too bad:
+>>
+>> If PAGE_MASK is always ~(PAGE_SIZE-1), then ~PAGE_MASK is
+>> (PAGE_SIZE-1), so prandom_u32_max(PAGE_SIZE) should yield the same
+>> thing? Is that accurate? And holds across platforms (this comes up a
+>> few places)? If so, I'll do that for a v4.
+>>
+> 
+> On powerpc it is always (from arch/powerpc/include/asm/page.h) :
+> 
+> /*
+>   * Subtle: (1 << PAGE_SHIFT) is an int, not an unsigned long. So if we
+>   * assign PAGE_MASK to a larger type it gets extended the way we want
+>   * (i.e. with 1s in the high bits)
+>   */
+> #define PAGE_MASK      (~((1 << PAGE_SHIFT) - 1))
+> 
+> #define PAGE_SIZE        (1UL << PAGE_SHIFT)
+> 
+> 
+> So it would work I guess.
 
-Thanks for trying this and got a lot thing works. I have read your 
-driver. Could you call pci_map_sg() before calling prep_sg()? (and 
-pci_unmap_sg()) after transfer complete?
+But taking into account that sp must remain 16 bytes aligned, would it 
+be better to do something like ?
 
-example: 
-https://github.com/houlz0507/XRT-1/blob/xdma_v4_usage/src/runtime_src/core/pcie/driver/linux/xocl/subdev/xdma.c#L103
+	sp -= prandom_u32_max(PAGE_SIZE >> 4) << 4;
 
+	return sp;
 
-Thanks,
-
-Lizhi
 
