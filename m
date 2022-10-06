@@ -2,134 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 854095F6551
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 13:42:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAEE35F6553
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 13:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiJFLmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 07:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
+        id S230033AbiJFLnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 07:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiJFLmr (ORCPT
+        with ESMTP id S229723AbiJFLnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 07:42:47 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3DF8321B;
-        Thu,  6 Oct 2022 04:42:46 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 296Ae425011367;
-        Thu, 6 Oct 2022 11:42:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=bTRBm93w0F2WaBTEd/U8k3M7to/YHtOOTs0ZEXznUI4=;
- b=CQCw/wp1Hdd0xOxO9lcHPvYtjHfPs7+yNsmL+G+XCTWZWy6rmxdIhAZt9uhNfkr7gj5p
- AYm9UVN113Mf5YQpIQH/sV/ldFWFuEwPtVYceNuThlD1goHpPZnA37pZq/ONigPSmfdp
- 4fT3e77zI8XDJxalhAeSt2wcUhyRFpNDiNl3OP862VQnhk7YEZNAthbEgBVWkZaghE0l
- 9z8uLDc9LBomKpBHxd2Mn9RxBM2zazCPcaFW26MmWC4cq2JnNybH56ncrjPNOjF3ZnvH
- SjSYGnen83aEqamZFYDO2B1ltEY2/862lfBAxYjpp4dVN37z1Nl3+FZDO+edMLIYt6eU 3A== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k1vm4jvt1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Oct 2022 11:42:36 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 296Bb1o1028812;
-        Thu, 6 Oct 2022 11:42:34 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06fra.de.ibm.com with ESMTP id 3jxcthw4f8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Oct 2022 11:42:34 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 296BgUpv1507978
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 6 Oct 2022 11:42:30 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A2A1DA405B;
-        Thu,  6 Oct 2022 11:42:30 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 30661A4054;
-        Thu,  6 Oct 2022 11:42:28 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.43.29.124])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  6 Oct 2022 11:42:27 +0000 (GMT)
-From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-To:     acme@kernel.org, jolsa@kernel.org, mpe@ellerman.id.au
-Cc:     linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, maddy@linux.vnet.ibm.com,
-        rnsastry@linux.ibm.com, kjain@linux.ibm.com,
-        disgoel@linux.vnet.ibm.com
-Subject: [PATCH] tools/perf: Fix cpu check to use id.cpu.cpu in aggr_printout
-Date:   Thu,  6 Oct 2022 17:12:25 +0530
-Message-Id: <20221006114225.66303-1-atrajeev@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.35.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: lSogSH7B4kP3K5tI7OGmOZ4kMcZqpUBm
-X-Proofpoint-GUID: lSogSH7B4kP3K5tI7OGmOZ4kMcZqpUBm
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 6 Oct 2022 07:43:18 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878128C007
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 04:43:15 -0700 (PDT)
+X-UUID: c669603c7add463b93614767e238f2d7-20221006
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=6wRO0Ski3oiIKQo95bwnitVyc5U6gggiNVVs48nENCY=;
+        b=EjtVCQVYf2doyl76KIN9MJg6E0Pax5ORPmseaUWcHAvgzsVZ4vRqAaTnKWq3MDjAOtLz9i0OLkFP66CrlhiYLbaGJRfVNc0QkpIwqkE73H3Jskmn1nCmWjVo4wzn0yRgPmIqcRpmJFgxpdHeP0flNf5US/TMD4TxcLeWPgAttVo=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:58e8d445-108c-464f-8155-40a054c68a79,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:7dba1be1-2948-402a-a6e4-b5d31fe11eb7,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: c669603c7add463b93614767e238f2d7-20221006
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 354310893; Thu, 06 Oct 2022 19:43:11 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 6 Oct 2022 19:43:10 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs13n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Thu, 6 Oct 2022 19:43:10 +0800
+Message-ID: <3540598ae0383394e0ebdc684a048fdfb94d2810.camel@mediatek.com>
+Subject: Re: [PATCH 4/8] soc: mediatek: mtk-svs: delete superfluous platform
+ data entries
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     <matthias.bgg@kernel.org>, <jia-wei.chang@mediatek.com>
+CC:     <nfraprado@collabora.com>, <khilman@baylibre.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Date:   Thu, 6 Oct 2022 19:43:10 +0800
+In-Reply-To: <20220928155519.31977-5-matthias.bgg@kernel.org>
+References: <20220928155519.31977-1-matthias.bgg@kernel.org>
+         <20220928155519.31977-5-matthias.bgg@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-05_05,2022-10-06_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- spamscore=0 malwarescore=0 adultscore=0 lowpriorityscore=0 impostorscore=0
- clxscore=1011 phishscore=0 suspectscore=0 priorityscore=1501
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210060069
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-perf stat has options to aggregate the counts in different
-modes like per socket, per core etc. The function "aggr_printout"
-in util/stat-display.c which is used to print the aggregates,
-has a check for cpu in case of AGGR_NONE. This check was
-originally using condition : "if (id.cpu.cpu > -1)". But
-this got changed after commit df936cadfb58 ("perf stat: Add
-JSON output option"), which added option to output json format
-for different aggregation modes. After this commit, the
-check in "aggr_printout" is using "if (id.core > -1)".
+Hi Matthias Sir,
 
-The old code was using "id.cpu.cpu > -1" while the new code
-is using "id.core > -1". But since the value printed is
-id.cpu.cpu, fix this check to use cpu and not core.
+On Wed, 2022-09-28 at 17:55 +0200, matthias.bgg@kernel.org wrote:
+> From: Matthias Brugger <matthias.bgg@gmail.com>
+> 
+> The platform name and efuse parsing function pointer are only used while
+> probing the device. Use them from the svs_platform_data struct instead.
+> 
+> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+> ---
+> 
+>  drivers/soc/mediatek/mtk-svs.c | 22 ++++++++++++----------
+>  1 file changed, 12 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+> index 8342627f8dea..482cc8d7e7cf 100644
+> --- a/drivers/soc/mediatek/mtk-svs.c
+> +++ b/drivers/soc/mediatek/mtk-svs.c
+> @@ -311,14 +311,12 @@ static const u32 svs_regs_v2[] = {
+>  
+>  /**
+>   * struct svs_platform - svs platform control
+> - * @name: svs platform name
+>   * @base: svs platform register base
+>   * @dev: svs platform device
+>   * @main_clk: main clock for svs bank
+>   * @pbank: svs bank pointer needing to be protected by spin_lock section
+>   * @banks: svs banks that svs platform supports
+>   * @rst: svs platform reset control
+> - * @efuse_parsing: svs platform efuse parsing function pointer
+>   * @efuse_max: total number of svs efuse
+>   * @tefuse_max: total number of thermal efuse
+>   * @regs: svs platform registers map
+> @@ -327,14 +325,12 @@ static const u32 svs_regs_v2[] = {
+>   * @tefuse: thermal efuse data received from NVMEM framework
+>   */
+>  struct svs_platform {
+> -	char *name;
+>  	void __iomem *base;
+>  	struct device *dev;
+>  	struct clk *main_clk;
+>  	struct svs_bank *pbank;
+>  	struct svs_bank *banks;
+>  	struct reset_control *rst;
+> -	bool (*efuse_parsing)(struct svs_platform *svsp);
+>  	size_t efuse_max;
+>  	size_t tefuse_max;
+>  	const u32 *regs;
+> @@ -2009,7 +2005,7 @@ static bool svs_is_efuse_data_correct(struct
+> svs_platform *svsp)
+>  	svsp->efuse_max /= sizeof(u32);
+>  	nvmem_cell_put(cell);
+>  
+> -	return svsp->efuse_parsing(svsp);
+> +	return true;
+>  }
 
-Suggested-by: James Clark <james.clark@arm.com>
-Suggested-by: Ian Rogers <irogers@google.com>
-Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Tested-by: Ian Rogers <irogers@google.com>
----
-Note: Details for discussion on this logic:
-https://www.spinics.net/lists/linux-perf-users/msg22473.html
+Based on the current coding design, I think this function can be removed. We can
+rename/refactor `svs_thermal_efuse_get_data()` to `svs_get_efuse_data()` as
+below. Is this acceptable? Thanks.
 
- tools/perf/util/stat-display.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+int svs_get_efuse_data(struct svs_platform *svsp, const char *nvmem_cell_name)
+{
+        struct nvmem_cell *cell;
 
-diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-index b82844cb0ce7..cf28020798ec 100644
---- a/tools/perf/util/stat-display.c
-+++ b/tools/perf/util/stat-display.c
-@@ -168,7 +168,7 @@ static void aggr_printout(struct perf_stat_config *config,
- 					id.socket,
- 					id.die,
- 					id.core);
--			} else if (id.core > -1) {
-+			} else if (id.cpu.cpu > -1) {
- 				fprintf(config->output, "\"cpu\" : \"%d\", ",
- 					id.cpu.cpu);
- 			}
-@@ -179,7 +179,7 @@ static void aggr_printout(struct perf_stat_config *config,
- 					id.die,
- 					config->csv_output ? 0 : -3,
- 					id.core, config->csv_sep);
--			} else if (id.core > -1) {
-+			} else if (id.cpu.cpu > -1) {
- 				fprintf(config->output, "CPU%*d%s",
- 					config->csv_output ? 0 : -7,
- 					id.cpu.cpu, config->csv_sep);
--- 
-2.31.1
+        /* Thermal efuse parsing */
+        cell = nvmem_cell_get(svsp->dev, nvmem_cell_name);
+        if (IS_ERR_OR_NULL(cell)) {
+                dev_err(svsp->dev, "no \"%s\"? %ld\n", nvmem_cell_name,
+PTR_ERR(cell));
+                return PTR_ERR(cell);
+        }
+
+        svsp->tefuse = nvmem_cell_read(cell, &svsp->tefuse_max);
+        if (IS_ERR(svsp->tefuse)) {
+                dev_err(svsp->dev, "cannot read thermal efuse: %ld\n",
+                        PTR_ERR(svsp->tefuse));
+                nvmem_cell_put(cell);
+                return PTR_ERR(svsp->tefuse);
+        }
+
+        svsp->tefuse_max /= sizeof(u32);
+        nvmem_cell_put(cell);
+
+        return 0;
+}
+
+>  
+>  static struct device *svs_get_subsys_device(struct svs_platform *svsp,
+> @@ -2338,9 +2334,7 @@ static int svs_probe(struct platform_device *pdev)
+>  		return -ENOMEM;
+>  
+>  	svsp->dev = &pdev->dev;
+> -	svsp->name = svsp_data->name;
+>  	svsp->banks = svsp_data->banks;
+> -	svsp->efuse_parsing = svsp_data->efuse_parsing;
+>  	svsp->regs = svsp_data->regs;
+>  	svsp->bank_max = svsp_data->bank_max;
+>  
+> @@ -2351,6 +2345,12 @@ static int svs_probe(struct platform_device *pdev)
+>  	if (!svs_is_efuse_data_correct(svsp)) {
+>  		dev_notice(svsp->dev, "efuse data isn't correct\n");
+>  		ret = -EPERM;
+> +		goto svs_probe_free_efuse;
+> +	}
+> +
+
+Remove `svs_is_efuse_data_correct()` and add below get-efuse-data function.
+
+	ret = svs_get_efuse_data(svsp, "svs-calibration-data");
+	if (ret)
+		goto svs_probe_free_efuse;
+
+> +	if (!svsp_data->efuse_parsing(svsp)) {
+> +		dev_notice(svsp->dev, "efuse data parsing failed\n");
+> +		ret = -EPERM;
+>  		goto svs_probe_free_resource;
+>  	}
+>  
+> @@ -2367,7 +2367,7 @@ static int svs_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	ret = devm_request_threaded_irq(svsp->dev, svsp_irq, NULL, svs_isr,
+> -					IRQF_ONESHOT, svsp->name, svsp);
+> +					IRQF_ONESHOT, svsp_data->name, svsp);
+>  	if (ret) {
+>  		dev_err(svsp->dev, "register irq(%d) failed: %d\n",
+>  			svsp_irq, ret);
+> @@ -2416,11 +2416,13 @@ static int svs_probe(struct platform_device *pdev)
+>  	clk_disable_unprepare(svsp->main_clk);
+>  
+>  svs_probe_free_resource:
+
+For current coding design, I suggest we rename the goto-label to
+`svs_probe_free_tefuse` to identify the resource we free.
+
+> -	if (!IS_ERR_OR_NULL(svsp->efuse))
+> -		kfree(svsp->efuse);
+>  	if (!IS_ERR_OR_NULL(svsp->tefuse))
+>  		kfree(svsp->tefuse);
+>  
+> +svs_probe_free_efuse:
+> +	if (!IS_ERR_OR_NULL(svsp->efuse))
+> +		kfree(svsp->efuse);
+> +
+>  	return ret;
+>  }
+>  
+
+Sincerely,
+Roger Lu.
 
