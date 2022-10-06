@@ -2,571 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192C65F69E3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9782C5F69E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbiJFOoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 10:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44676 "EHLO
+        id S231745AbiJFOn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 10:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231675AbiJFOoB (ORCPT
+        with ESMTP id S231495AbiJFOnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 10:44:01 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC71AE841
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 07:43:59 -0700 (PDT)
-X-UUID: 7a3561f4905f4c0e816ddca275fccd24-20221006
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=M4cFnQsOUE50z1rkShmdIOYQvG3w/5mCx097ILZ15fU=;
-        b=f7uY1Zx0yFXJAI2K0TeqDn8g/E+b+O5HflLXVF0m7vkvAXyGwd1fcULojFsMAt5DtOACSnpaZz1Qi4CG01qfyCw9847BzE9Gr0YXZ1NJtCe+qbUW/BZ0OMS15EMSIcyS0+IyPbRFm9MA8fH9Lo/wmz+1HCZtbV3/dORFwbugkSo=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:2caf9f76-6504-47cd-932e-f840f43f2b41,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:39a5ff1,CLOUDID:5e7875fe-ee8c-4ff7-afe9-644435e96625,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 7a3561f4905f4c0e816ddca275fccd24-20221006
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 803962177; Thu, 06 Oct 2022 22:43:55 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 6 Oct 2022 22:43:53 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Thu, 6 Oct 2022 22:43:52 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v3 2/2] phy: mediatek: tphy: add debugfs files
-Date:   Thu, 6 Oct 2022 22:43:31 +0800
-Message-ID: <20221006144331.12526-2-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221006144331.12526-1-chunfeng.yun@mediatek.com>
-References: <20221006144331.12526-1-chunfeng.yun@mediatek.com>
+        Thu, 6 Oct 2022 10:43:53 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C26AA3DA;
+        Thu,  6 Oct 2022 07:43:53 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 965935C0159;
+        Thu,  6 Oct 2022 10:43:50 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 06 Oct 2022 10:43:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1665067430; x=
+        1665153830; bh=RIza5YEVq9kGHVwK/oXAKTC2G5qfFHbR5jwJnE/LvGw=; b=C
+        jpqpAwYRLFwlef2LBQuo3eS2s8bXcvx+1/IziZsuDx8Vl8op9+rskQHaEc51kOqW
+        Tq4M1/kHTCZJx3GLXcxnaP4VwiD7ZADzZwPT2AXOAh2ZfID+tgpSGaxu41k1PgNE
+        zl8+gz42Xm1du7ERR3/i3/ch0tLQbt5kLQ/TsVl3o9woTUuLs8uPEk5Meob5gPIk
+        oDMjnZd3F0BwwFMoXleO/s8AxS7c+DdH7oMWM437m6zipP0JLpg6+BvUQ6O/bs6s
+        M+PBj4wC3dIBcsjuKafzNHK3Fx1+rDOQP/YGCfh8QI+eG7EAQFafXaL2tlbq8cmP
+        d5bQYgE1CzCwDQintM7hA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1665067430; x=1665153830; bh=RIza5YEVq9kGHVwK/oXAKTC2G5qf
+        FHbR5jwJnE/LvGw=; b=0hXUyPVrVcGDGumEK8ou1p8RxJdVW1wBRrK6sht0NZfQ
+        51CbSsYGroAOJzC9yqc6BUNzvz7mpp9SiggJ81smG0DtjJ3YAYItkFQqDe1nUltW
+        /EyWb5Zw3H+H3K7eso0EvyH9xhMCisGekBNZq9G7Qmx2BBiP4XStoBFzRRHhzlv2
+        EMP1RytYurSl2MM29PFuTZZfzYN6V9BTfLSQv8rbAMKb5b7DeYEbDSMZJ96yCjPl
+        ICjMPbLbZhn9sbgzE0s5xKCaK5kk1oWEcSMAkG6cP2E4blMToxbwwT3Xz30ZyAcy
+        MKiEFMhmgTruOxBaKvBvOAzbMHs4tCHiDVrCTcI6ag==
+X-ME-Sender: <xms:pOk-Y0KDgcCf_xmLcbk33w22a6ontLsPrexU2Z97eQx5DYVjvidhqw>
+    <xme:pOk-Y0JL4NdbCAlqtMHoKcWNcYb-_qGp3yLqb7K7-vTx-aor0BlV2r5ANNQEuVisK
+    7FPt6glt8IxpnU>
+X-ME-Received: <xmr:pOk-Y0uvVQK_1fMoj3OStxcoSj7oZyjf_ZLPyWHFUZhMj55F7GNFDegVr3SP>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeihedgkedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepffgvmhhi
+    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
+    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepudeileefueetvdelheeuteffjeeg
+    jeegffekleevueelueekjeejudffteejkeetnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
+    lhgrsgdrtghomh
+X-ME-Proxy: <xmx:pOk-YxZxAOLfRVAzEhzErTSRJBaCCqz-UkN2U8gXfW_4lbPsW2kw1w>
+    <xmx:pOk-Y7auVTCZKDo5JRGnyH6DsT0TFs22rQWy3f44_7dbiVNPGBZi-Q>
+    <xmx:pOk-Y9CDIfRzzTVt_AVgsviDafU2t2am1fmB85s4cXXWlKUdprMpZg>
+    <xmx:puk-Y4Ra_esZgB9IXtDuUP47nhTJ8FmUXQeEIGWodj9aTzw2Hz2u2w>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 6 Oct 2022 10:43:47 -0400 (EDT)
+Date:   Thu, 6 Oct 2022 10:43:43 -0400
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Jan Beulich <jbeulich@suse.com>, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+Subject: Re: [PATCH v4 1/2] Avoid using EFI tables Xen may have clobbered
+Message-ID: <Yz7polT2R2OlT1aT@itl-email>
+References: <YzcjeiOW8+i2Zxsd@itl-email>
+ <CAMj1kXHBBbCNV3CLesqZi7ttmmi8y4tZ1KO5vievy_CJrU2o3Q@mail.gmail.com>
+ <YzeaKjmls1YI/3ox@itl-email>
+ <01d22092-8292-8ed7-ece7-9ca32d15bbce@suse.com>
+ <YzxxXuovwQt3NskE@itl-email>
+ <a0dc1158-01b1-4272-b86e-52f4996f0747@suse.com>
+ <Yz3I2qwl243h9ZfZ@itl-email>
+ <CAMj1kXHFi71SKQAQHEjZTLyp-YooRTYZ2-nqydRZA5hys7tkKw@mail.gmail.com>
+ <Yz4yLyvX6un1rrqC@itl-email>
+ <CAMj1kXFO9_yMw=_Fn2DBGgdYXgiK_OqafG5+TbJv1UKO1uQiJQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ZVyM5aEaeTsHYcp0"
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXFO9_yMw=_Fn2DBGgdYXgiK_OqafG5+TbJv1UKO1uQiJQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These debugfs files are mainly used to make eye diagram test easier,
-especially helpful to do HQA test for a new IC without efuse enabled.
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v3: fix typo of "debugfs" suggested by AngeloGioacchino
+--ZVyM5aEaeTsHYcp0
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 6 Oct 2022 10:43:43 -0400
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Jan Beulich <jbeulich@suse.com>, xen-devel@lists.xenproject.org,
+	linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+	Juergen Gross <jgross@suse.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+	Kees Cook <keescook@chromium.org>,
+	Anton Vorontsov <anton@enomsg.org>,
+	Colin Cross <ccross@android.com>, Tony Luck <tony.luck@intel.com>,
+	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
+Subject: Re: [PATCH v4 1/2] Avoid using EFI tables Xen may have clobbered
 
-v2: add CONFIG_PHY_MTK_TPHY_DEBUGFS suggested by AngeloGioacchino
----
- drivers/phy/mediatek/Kconfig        |   5 +
- drivers/phy/mediatek/phy-mtk-tphy.c | 403 +++++++++++++++++++++++++++-
- 2 files changed, 407 insertions(+), 1 deletion(-)
+On Thu, Oct 06, 2022 at 09:31:47AM +0200, Ard Biesheuvel wrote:
+> On Thu, 6 Oct 2022 at 03:41, Demi Marie Obenour
+> <demi@invisiblethingslab.com> wrote:
+> >
+> > On Wed, Oct 05, 2022 at 11:28:29PM +0200, Ard Biesheuvel wrote:
+> > > On Wed, 5 Oct 2022 at 20:11, Demi Marie Obenour
+> > > <demi@invisiblethingslab.com> wrote:
+> > > >
+> > > > On Wed, Oct 05, 2022 at 08:15:07AM +0200, Jan Beulich wrote:
+> > > > > On 04.10.2022 17:46, Demi Marie Obenour wrote:
+> > > > > > Linux has a function called efi_mem_reserve() that is used to r=
+eserve
+> > > > > > EfiBootServicesData memory that contains e.g. EFI configuration=
+ tables.
+> > > > > > This function does not work under Xen because Xen could have al=
+ready
+> > > > > > clobbered the memory.  efi_mem_reserve() not working is the who=
+le reason
+> > > > > > for this thread, as it prevents EFI tables that are in
+> > > > > > EfiBootServicesData from being used under Xen.
+> > > > > >
+> > > > > > A much nicer approach would be for Xen to reserve boot services=
+ memory
+> > > > > > unconditionally, but provide a hypercall that dom0 could used t=
+o free
+> > > > > > the parts of EfiBootServicesData memory that are no longer need=
+ed.  This
+> > > > > > would allow efi_mem_reserve() to work normally.
+> > > > >
+> > > > > efi_mem_reserve() actually working would be a layering violation;
+> > > > > controlling the EFI memory map is entirely Xen's job.
+> > > >
+> > > > Doing this properly would require Xen to understand all of the EFI
+> > > > tables that could validly be in EfiBootServices* and which could be=
+ of
+> > > > interest to dom0.  It might (at least on some very buggy firmware)
+> > > > require a partial ACPI and/or SMBIOS implementation too, if the fir=
+mware
+> > > > decided to put an ACPI or SMBIOS table in EfiBootServices*.
+> > > >
+> > > > > As to the hypercall you suggest - I wouldn't mind its addition, b=
+ut only
+> > > > > for the case when -mapbs is used. As I've indicated before, I'm o=
+f the
+> > > > > opinion that default behavior should be matching the intentions o=
+f the
+> > > > > spec, and the intention of EfiBootServices* is for the space to be
+> > > > > reclaimed. Plus I'm sure you realize there's a caveat with Dom0 u=
+sing
+> > > > > that hypercall: It might use it for regions where data lives whic=
+h it
+> > > > > wouldn't care about itself, but which an eventual kexec-ed (or al=
+ike)
+> > > > > entity would later want to consume. Code/data potentially usable =
+by
+> > > > > _anyone_ between two resets of the system cannot legitimately be =
+freed
+> > > > > (and hence imo is wrong to live in EfiBootServices* regions).
+> > > >
+> > > > I agree, but currently some such data *is* in EfiBootServices* regi=
+ons,
+> > > > sadly.  When -mapbs is *not* used, I recommend uninstalling all of =
+the
+> > > > configuration tables that point to EfiBootServicesData memory before
+> > > > freeing that memory.
+> > > >
+> > >
+> > > That seems like a reasonable approach to me. Tables like MEMATTR or
+> > > RT_PROP are mostly relevant for bare metal where the host kernel maps
+> > > the runtime services, and in general, passing on these tables without
+> > > knowing what they do is kind of fishy anyway. You might even argue
+> > > that only known table types should be forwarded in the first place,
+> > > regardless of the memory type.
+> >
+> > Which tables are worth handling in Xen?  I know about ACPI, SMBIOS, and
+> > ESRT, but I am curious which others Xen should preserve.  Currently, Xen
+> > does not know about RT_PROP or MEMATTR; could this be a cause of
+> > problems?
+>=20
+> dom0 only has access to paravirtualized EFI runtime services, so
+> consuming RT_PROP or MEMATTR should be up to Xen (they describe which
+> runtime services remain available at runtime, and which permission
+> attributes to use for the runtime services memory regions,
+> respectively)
 
-diff --git a/drivers/phy/mediatek/Kconfig b/drivers/phy/mediatek/Kconfig
-index 3125ecb5d119..e9fdfe9f519f 100644
---- a/drivers/phy/mediatek/Kconfig
-+++ b/drivers/phy/mediatek/Kconfig
-@@ -27,6 +27,11 @@ config PHY_MTK_TPHY
- 	  multi-ports is first version, otherwise is second version,
- 	  so you can easily distinguish them by banks layout.
- 
-+config PHY_MTK_TPHY_DEBUGFS
-+	bool "Add T-PHY Debugfs Files"
-+	help
-+	  Say Y here to add debugfs files mainly for T-PHY HQA test.
-+
- config PHY_MTK_UFS
- 	tristate "MediaTek UFS M-PHY driver"
- 	depends on ARCH_MEDIATEK || COMPILE_TEST
-diff --git a/drivers/phy/mediatek/phy-mtk-tphy.c b/drivers/phy/mediatek/phy-mtk-tphy.c
-index e906a82791bd..99677665a9c4 100644
---- a/drivers/phy/mediatek/phy-mtk-tphy.c
-+++ b/drivers/phy/mediatek/phy-mtk-tphy.c
-@@ -7,6 +7,7 @@
- 
- #include <dt-bindings/phy/phy.h>
- #include <linux/clk.h>
-+#include <linux/debugfs.h>
- #include <linux/delay.h>
- #include <linux/iopoll.h>
- #include <linux/mfd/syscon.h>
-@@ -264,6 +265,8 @@
- 
- #define TPHY_CLKS_CNT	2
- 
-+#define USER_BUF_LEN(count) min_t(size_t, 8, (count))
-+
- enum mtk_phy_version {
- 	MTK_PHY_V1 = 1,
- 	MTK_PHY_V2,
-@@ -310,6 +313,7 @@ struct mtk_phy_instance {
- 	struct clk_bulk_data clks[TPHY_CLKS_CNT];
- 	u32 index;
- 	u32 type;
-+	struct dentry *dbgfs;
- 	struct regmap *type_sw;
- 	u32 type_sw_reg;
- 	u32 type_sw_index;
-@@ -332,10 +336,389 @@ struct mtk_tphy {
- 	const struct mtk_phy_pdata *pdata;
- 	struct mtk_phy_instance **phys;
- 	int nphys;
-+	struct dentry *dbgfs_root;
- 	int src_ref_clk; /* MHZ, reference clock for slew rate calibrate */
- 	int src_coef; /* coefficient for slew rate calibrate */
- };
- 
-+#if IS_ENABLED(CONFIG_PHY_MTK_TPHY_DEBUGFS)
-+
-+enum u2_phy_params {
-+	U2P_EYE_VRT = 0,
-+	U2P_EYE_TERM,
-+	U2P_EFUSE_EN,
-+	U2P_EFUSE_INTR,
-+	U2P_DISCTH,
-+	U2P_PRE_EMPHASIS,
-+};
-+
-+enum u3_phy_params {
-+	U3P_EFUSE_EN = 0,
-+	U3P_EFUSE_INTR,
-+	U3P_EFUSE_TX_IMP,
-+	U3P_EFUSE_RX_IMP,
-+};
-+
-+static const char *const u2_phy_files[] = {
-+	[U2P_EYE_VRT] = "vrt",
-+	[U2P_EYE_TERM] = "term",
-+	[U2P_EFUSE_EN] = "efuse",
-+	[U2P_EFUSE_INTR] = "intr",
-+	[U2P_DISCTH] = "discth",
-+	[U2P_PRE_EMPHASIS] = "preemph",
-+};
-+
-+static const char *const u3_phy_files[] = {
-+	[U3P_EFUSE_EN] = "efuse",
-+	[U3P_EFUSE_INTR] = "intr",
-+	[U3P_EFUSE_TX_IMP] = "tx-imp",
-+	[U3P_EFUSE_RX_IMP] = "rx-imp",
-+};
-+
-+static int u2_phy_params_show(struct seq_file *sf, void *unused)
-+{
-+	struct mtk_phy_instance *inst = sf->private;
-+	const char *fname = file_dentry(sf->file)->d_iname;
-+	struct u2phy_banks *u2_banks = &inst->u2_banks;
-+	void __iomem *com = u2_banks->com;
-+	u32 max = 0;
-+	u32 tmp = 0;
-+	u32 val = 0;
-+	int ret;
-+
-+	ret = match_string(u2_phy_files, ARRAY_SIZE(u2_phy_files), fname);
-+	if (ret < 0)
-+		return ret;
-+
-+	switch (ret) {
-+	case U2P_EYE_VRT:
-+		tmp = readl(com + U3P_USBPHYACR1);
-+		val = FIELD_GET(PA1_RG_VRT_SEL, tmp);
-+		max = FIELD_MAX(PA1_RG_VRT_SEL);
-+		break;
-+
-+	case U2P_EYE_TERM:
-+		tmp = readl(com + U3P_USBPHYACR1);
-+		val = FIELD_GET(PA1_RG_TERM_SEL, tmp);
-+		max = FIELD_MAX(PA1_RG_TERM_SEL);
-+		break;
-+
-+	case U2P_EFUSE_EN:
-+		if (u2_banks->misc) {
-+			tmp = readl(u2_banks->misc + U3P_MISC_REG1);
-+			max = 1;
-+		}
-+
-+		val = !!(tmp & MR1_EFUSE_AUTO_LOAD_DIS);
-+		break;
-+
-+	case U2P_EFUSE_INTR:
-+		tmp = readl(com + U3P_USBPHYACR1);
-+		val = FIELD_GET(PA1_RG_INTR_CAL, tmp);
-+		max = FIELD_MAX(PA1_RG_INTR_CAL);
-+		break;
-+
-+	case U2P_DISCTH:
-+		tmp = readl(com + U3P_USBPHYACR6);
-+		val = FIELD_GET(PA6_RG_U2_DISCTH, tmp);
-+		max = FIELD_MAX(PA6_RG_U2_DISCTH);
-+		break;
-+
-+	case U2P_PRE_EMPHASIS:
-+		tmp = readl(com + U3P_USBPHYACR6);
-+		val = FIELD_GET(PA6_RG_U2_PRE_EMP, tmp);
-+		max = FIELD_MAX(PA6_RG_U2_PRE_EMP);
-+		break;
-+
-+	default:
-+		seq_printf(sf, "invalid, %d\n", ret);
-+		break;
-+	}
-+
-+	seq_printf(sf, "%s : %d [0, %d]\n", fname, val, max);
-+
-+	return 0;
-+}
-+
-+static int u2_phy_params_open(struct inode *inode, struct file *file)
-+{
-+	return single_open(file, u2_phy_params_show, inode->i_private);
-+}
-+
-+static ssize_t u2_phy_params_write(struct file *file, const char __user *ubuf,
-+				   size_t count, loff_t *ppos)
-+{
-+	const char *fname = file_dentry(file)->d_iname;
-+	struct seq_file *sf = file->private_data;
-+	struct mtk_phy_instance *inst = sf->private;
-+	struct u2phy_banks *u2_banks = &inst->u2_banks;
-+	void __iomem *com = u2_banks->com;
-+	ssize_t rc;
-+	u32 val;
-+	int ret;
-+
-+	rc = kstrtouint_from_user(ubuf, USER_BUF_LEN(count), 0, &val);
-+	if (rc)
-+		return rc;
-+
-+	ret = match_string(u2_phy_files, ARRAY_SIZE(u2_phy_files), fname);
-+	if (ret < 0)
-+		return (ssize_t)ret;
-+
-+	switch (ret) {
-+	case U2P_EYE_VRT:
-+		mtk_phy_update_field(com + U3P_USBPHYACR1, PA1_RG_VRT_SEL, val);
-+		break;
-+
-+	case U2P_EYE_TERM:
-+		mtk_phy_update_field(com + U3P_USBPHYACR1, PA1_RG_TERM_SEL, val);
-+		break;
-+
-+	case U2P_EFUSE_EN:
-+		if (u2_banks->misc)
-+			mtk_phy_update_field(u2_banks->misc + U3P_MISC_REG1,
-+					     MR1_EFUSE_AUTO_LOAD_DIS, !!val);
-+		break;
-+
-+	case U2P_EFUSE_INTR:
-+		mtk_phy_update_field(com + U3P_USBPHYACR1, PA1_RG_INTR_CAL, val);
-+		break;
-+
-+	case U2P_DISCTH:
-+		mtk_phy_update_field(com + U3P_USBPHYACR6, PA6_RG_U2_DISCTH, val);
-+		break;
-+
-+	case U2P_PRE_EMPHASIS:
-+		mtk_phy_update_field(com + U3P_USBPHYACR6, PA6_RG_U2_PRE_EMP, val);
-+		break;
-+
-+	default:
-+		break;
-+	}
-+
-+	return count;
-+}
-+
-+static const struct file_operations u2_phy_fops = {
-+	.open = u2_phy_params_open,
-+	.write = u2_phy_params_write,
-+	.read = seq_read,
-+	.llseek = seq_lseek,
-+	.release = single_release,
-+};
-+
-+static void u2_phy_dbgfs_files_create(struct mtk_phy_instance *inst)
-+{
-+	u32 count = ARRAY_SIZE(u2_phy_files);
-+	int i;
-+
-+	for (i = 0; i < count; i++)
-+		debugfs_create_file(u2_phy_files[i], 0644, inst->dbgfs, inst, &u2_phy_fops);
-+}
-+
-+static int u3_phy_params_show(struct seq_file *sf, void *unused)
-+{
-+	struct mtk_phy_instance *inst = sf->private;
-+	const char *fname = file_dentry(sf->file)->d_iname;
-+	struct u3phy_banks *u3_banks = &inst->u3_banks;
-+	u32 val, tmp, max;
-+	int ret;
-+
-+	ret = match_string(u3_phy_files, ARRAY_SIZE(u3_phy_files), fname);
-+	if (ret < 0)
-+		return ret;
-+
-+	switch (ret) {
-+	case U3P_EFUSE_EN:
-+		tmp = readl(u3_banks->phyd + U3P_U3_PHYD_RSV);
-+		val = !!(tmp & P3D_RG_EFUSE_AUTO_LOAD_DIS);
-+		max = 1;
-+		break;
-+
-+	case U3P_EFUSE_INTR:
-+		tmp = readl(u3_banks->phya + U3P_U3_PHYA_REG0);
-+		val = FIELD_GET(P3A_RG_IEXT_INTR, tmp);
-+		max = FIELD_MAX(P3A_RG_IEXT_INTR);
-+		break;
-+
-+	case U3P_EFUSE_TX_IMP:
-+		tmp = readl(u3_banks->phyd + U3P_U3_PHYD_IMPCAL0);
-+		val = FIELD_GET(P3D_RG_TX_IMPEL, tmp);
-+		max = FIELD_MAX(P3D_RG_TX_IMPEL);
-+		break;
-+
-+	case U3P_EFUSE_RX_IMP:
-+		tmp = readl(u3_banks->phyd + U3P_U3_PHYD_IMPCAL1);
-+		val = FIELD_GET(P3D_RG_RX_IMPEL, tmp);
-+		max = FIELD_MAX(P3D_RG_RX_IMPEL);
-+		break;
-+
-+	default:
-+		seq_printf(sf, "invalid, %d\n", ret);
-+		break;
-+	}
-+
-+	seq_printf(sf, "%s : %d [0, %d]\n", fname, val, max);
-+
-+	return 0;
-+}
-+
-+static int u3_phy_params_open(struct inode *inode, struct file *file)
-+{
-+	return single_open(file, u3_phy_params_show, inode->i_private);
-+}
-+
-+static ssize_t u3_phy_params_write(struct file *file, const char __user *ubuf,
-+				   size_t count, loff_t *ppos)
-+{
-+	const char *fname = file_dentry(file)->d_iname;
-+	struct seq_file *sf = file->private_data;
-+	struct mtk_phy_instance *inst = sf->private;
-+	struct u3phy_banks *u3_banks = &inst->u3_banks;
-+	void __iomem *phyd = u3_banks->phyd;
-+	ssize_t rc;
-+	u32 val;
-+	int ret;
-+
-+	rc = kstrtouint_from_user(ubuf, USER_BUF_LEN(count), 0, &val);
-+	if (rc)
-+		return rc;
-+
-+	ret = match_string(u3_phy_files, ARRAY_SIZE(u3_phy_files), fname);
-+	if (ret < 0)
-+		return (ssize_t)ret;
-+
-+	switch (ret) {
-+	case U3P_EFUSE_EN:
-+		mtk_phy_update_field(phyd + U3P_U3_PHYD_RSV,
-+				     P3D_RG_EFUSE_AUTO_LOAD_DIS, !!val);
-+		break;
-+
-+	case U3P_EFUSE_INTR:
-+		mtk_phy_update_field(u3_banks->phya + U3P_U3_PHYA_REG0, P3A_RG_IEXT_INTR, val);
-+		break;
-+
-+	case U3P_EFUSE_TX_IMP:
-+		mtk_phy_update_field(phyd + U3P_U3_PHYD_IMPCAL0, P3D_RG_TX_IMPEL, val);
-+		mtk_phy_set_bits(phyd + U3P_U3_PHYD_IMPCAL0, P3D_RG_FORCE_TX_IMPEL);
-+		break;
-+
-+	case U3P_EFUSE_RX_IMP:
-+		mtk_phy_update_field(phyd + U3P_U3_PHYD_IMPCAL1, P3D_RG_RX_IMPEL, val);
-+		mtk_phy_set_bits(phyd + U3P_U3_PHYD_IMPCAL1, P3D_RG_FORCE_RX_IMPEL);
-+		break;
-+
-+	default:
-+		break;
-+	}
-+
-+	return count;
-+}
-+
-+static const struct file_operations u3_phy_fops = {
-+	.open = u3_phy_params_open,
-+	.write = u3_phy_params_write,
-+	.read = seq_read,
-+	.llseek = seq_lseek,
-+	.release = single_release,
-+};
-+
-+static void u3_phy_dbgfs_files_create(struct mtk_phy_instance *inst)
-+{
-+	u32 count = ARRAY_SIZE(u3_phy_files);
-+	int i;
-+
-+	for (i = 0; i < count; i++)
-+		debugfs_create_file(u3_phy_files[i], 0644, inst->dbgfs, inst, &u3_phy_fops);
-+}
-+
-+static int tphy_type_show(struct seq_file *sf, void *unused)
-+{
-+	struct mtk_phy_instance *inst = sf->private;
-+	const char *type;
-+
-+	switch (inst->type) {
-+	case PHY_TYPE_USB2:
-+		type = "USB2";
-+		break;
-+	case PHY_TYPE_USB3:
-+		type = "USB3";
-+		break;
-+	case PHY_TYPE_PCIE:
-+		type = "PCIe";
-+		break;
-+	case PHY_TYPE_SGMII:
-+		type = "SGMII";
-+		break;
-+	case PHY_TYPE_SATA:
-+		type = "SATA";
-+		break;
-+	default:
-+		type = "";
-+	}
-+
-+	seq_printf(sf, "%s\n", type);
-+
-+	return 0;
-+}
-+
-+DEFINE_SHOW_ATTRIBUTE(tphy_type);
-+
-+static void tphy_debugfs_init(struct mtk_tphy *tphy, struct mtk_phy_instance *inst)
-+{
-+	char name[16];
-+
-+	snprintf(name, sizeof(name) - 1, "phy.%d", inst->index);
-+	inst->dbgfs = debugfs_create_dir(name, tphy->dbgfs_root);
-+
-+	debugfs_create_file("type", 0444, inst->dbgfs, inst, &tphy_type_fops);
-+
-+	switch (inst->type) {
-+	case PHY_TYPE_USB2:
-+		u2_phy_dbgfs_files_create(inst);
-+		break;
-+	case PHY_TYPE_USB3:
-+	case PHY_TYPE_PCIE:
-+		u3_phy_dbgfs_files_create(inst);
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+static void tphy_debugfs_exit(struct mtk_phy_instance *inst)
-+{
-+	debugfs_remove_recursive(inst->dbgfs);
-+	inst->dbgfs = NULL;
-+}
-+
-+static void tphy_debugfs_root_create(struct mtk_tphy *tphy)
-+{
-+	tphy->dbgfs_root = debugfs_create_dir(dev_name(tphy->dev), phy_debug_root);
-+}
-+
-+static void tphy_debugfs_root_remove(struct mtk_tphy *tphy)
-+{
-+	debugfs_remove_recursive(tphy->dbgfs_root);
-+	tphy->dbgfs_root = NULL;
-+}
-+
-+#else
-+
-+static void tphy_debugfs_init(struct mtk_tphy *tphy, struct mtk_phy_instance *inst)
-+{}
-+
-+static void tphy_debugfs_exit(struct mtk_phy_instance *inst)
-+{}
-+
-+static void tphy_debugfs_root_create(struct mtk_tphy *tphy)
-+{}
-+
-+static void tphy_debugfs_root_remove(struct mtk_tphy *tphy)
-+{}
-+
-+#endif
-+
- static void hs_slew_rate_calibrate(struct mtk_tphy *tphy,
- 	struct mtk_phy_instance *instance)
- {
-@@ -1032,6 +1415,8 @@ static int mtk_phy_init(struct phy *phy)
- 		return -EINVAL;
- 	}
- 
-+	tphy_debugfs_init(tphy, instance);
-+
- 	return 0;
- }
- 
-@@ -1068,6 +1453,8 @@ static int mtk_phy_exit(struct phy *phy)
- 	struct mtk_phy_instance *instance = phy_get_drvdata(phy);
- 	struct mtk_tphy *tphy = dev_get_drvdata(phy->dev.parent);
- 
-+	tphy_debugfs_exit(instance);
-+
- 	if (instance->type == PHY_TYPE_USB2)
- 		u2_phy_instance_exit(tphy, instance);
- 
-@@ -1295,15 +1682,29 @@ static int mtk_tphy_probe(struct platform_device *pdev)
- 	}
- 
- 	provider = devm_of_phy_provider_register(dev, mtk_phy_xlate);
-+	if (IS_ERR(provider))
-+		return dev_err_probe(dev, PTR_ERR(provider), "probe failed\n");
-+
-+	tphy_debugfs_root_create(tphy);
-+	return 0;
- 
--	return PTR_ERR_OR_ZERO(provider);
- put_child:
- 	of_node_put(child_np);
- 	return retval;
- }
- 
-+static int mtk_tphy_remove(struct platform_device *pdev)
-+{
-+	struct mtk_tphy *tphy;
-+
-+	tphy = platform_get_drvdata(pdev);
-+	tphy_debugfs_root_remove(tphy);
-+	return 0;
-+}
-+
- static struct platform_driver mtk_tphy_driver = {
- 	.probe		= mtk_tphy_probe,
-+	.remove		= mtk_tphy_remove,
- 	.driver		= {
- 		.name	= "mtk-tphy",
- 		.of_match_table = mtk_tphy_id_table,
--- 
-2.18.0
+Xen does not do this right now.  I wonder if this could be the cause of
+compatibility issues with various firmware implementations.
 
+> Looking through the kernel code, I don't think there are any that dom0
+> should care about beyond ACPI, SMBIOS and ESRT. But as you suggest,
+> that means Xen should just mask them in the view of the EFI system
+> table it exposes so dom0. Otherwise, the kernel may still try to map
+> and parse them.
+
+What about the BGRT and MOKvar?  I agree that Xen should not expose the
+others.  Should it just hide the tables, or should it actually uninstall
+them?  My intuition is that the second would be technically more
+correct, but also more likely to trigger bugs in various firmware
+implementations.
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
+
+--ZVyM5aEaeTsHYcp0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmM+6aIACgkQsoi1X/+c
+IsFo8RAAgjtyIjW/PLv2jyj2EWtPqAVxnZFx2DTiTcEkOF2+OIcp6PR0K8iOiy7z
+017KND97RHNpvCFF1/4smfeo8GW7cx/8H6M+Bk7ZqjyKLb/lJfw66FkNFCF1xER9
+ZI6vTxKEfr64htLd4KKNl3isP5DHXFV2ydOW56C+Ztv7TlbvTiO/ZrsnZQFTvTpj
+YafEHAmdIUveoL6/rg6at0bjhqrDYwbeAIAN/6l/ZDDTuLyn3cV6nhUg3norGohg
+1rsYs7mDWUM/m/1bDhSGN/AYGA39K9cMwTWcw5zEOPxHflvpA2SYWOymnZQYO0ot
+cD3/WIkNKk2l5hwNfOSkfzlPrukJg4XBjyWCNSppwlyUAQBcoecypZe8RjR6Ba24
+qmzbYk9KqnUWiS/BUthQhvDI5YfcaWu5wxXoGH3pbPtPwelF1sUZQ8Bx37rh97bv
+XCPOu6dpuk9OQ/FRM01qI3u5QbiAJsl7Pzd1vHMNeYI2h4KgVhKnb3vkOdlcIX7P
+r8Ig9cRUB9YJVFr7T3R4DRNY7+hZLxSG74WUZx8f4IM5pnLO/oMNyQzVYtleqlYf
+ZN4sdRDA81V3khHPHwKI1F5sNyWDu94+56e8Qq279hKnZkt4QNp0MgzTNWjTaB/3
+bN2EGes0RD22Vt6Bhji1Bk8GnEHdHoYvgwhu0PEhK3BSJaSWh90=
+=RkJ/
+-----END PGP SIGNATURE-----
+
+--ZVyM5aEaeTsHYcp0--
