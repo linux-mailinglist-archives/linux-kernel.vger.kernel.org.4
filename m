@@ -2,190 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C655F5E5F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 03:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1595F5E61
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 03:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbiJFBXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 21:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
+        id S229719AbiJFB0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 21:26:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiJFBXg (ORCPT
+        with ESMTP id S229506AbiJFB0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 21:23:36 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA602AC43
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 18:23:35 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id z4-20020a921a44000000b002f8da436b83so461998ill.19
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 18:23:35 -0700 (PDT)
+        Wed, 5 Oct 2022 21:26:49 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0662F564E0
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 18:26:49 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id r18so497528pgr.12
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 18:26:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=7K6g8wc+JL8tVoIXAnSDzXXNDF+K2QKgVxA1GlSH5So=;
+        b=KDHyoudEb8cv3WCQfSnb7W5upFYOwYsHEcoCztQcI1xhy9PuaguBbF5scSWWyGnWNr
+         Z501oJNFZiNpzFQ+zE0f+JPKpdG/DXFem13TJfazmp9LMY3XLTlnbt2z5woAN7jjb9J7
+         4kcjEkIVQ5G26A4eJJJE6OI5PvWUgU1dbZ06gHZsVBO+lgjxSNPa8JZ0+3CP61Glhijb
+         LEGyIxsLD8L41pmINq1LZMysyqC+Z/MQl9hemU1lnqPiXsSqUQv/aMKcDBi/jT77KIMT
+         Ri8pvNUMM5fm37PD7329rFbVm1XToXzv11LhqLXHCrjIdlrBq7yvgl8BQ53Psm1G3Tm7
+         y6aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wiiXurAviyrzL9sT7OZ8NDEOBWPoTXkeASlEMNAqGmk=;
-        b=0Zu40xSA0uny/pC4AqnUHFuK9euMAKMbthPuuOMf0y1hlXBPpEYadlI/f0uX7mEn6Q
-         CZRSD7shFJCRo30dS5Cplt5lFVKZ0pnnfbb/f28A/gaUQ+uzqjBj/pKgv3glleyHKsN9
-         cyK12QBvrtzo7v9nwNnFyUv4BLlzre1pUWn/zHzEsfiIWMkkeXx57JhuQg2wdi4enlly
-         Z/TcCtuutq8U1YVfVf/dJ9/JOPP75R/GjN6tBOizHXcP1myg6qq1yBStBxiM9BJ/uUKh
-         WgUaABgUyRrxf3pK783/18CNevsnTYP5ppQVl8IHIZTX1gt1F6WqYYsT7oGnN+QO7otM
-         EzMw==
-X-Gm-Message-State: ACrzQf3/fmKyodDEoayuITqQMVOrkfX4liypkJnrHSow3LrRdHGp5jT6
-        Fm8s5PYWRK3TW5dg29RDlkiJv4CHpFuPbZQE3+bY+SDYP4aQ
-X-Google-Smtp-Source: AMsMyM6/tLVj3W3198ggSkOt5sGKksOdW9LA8vu5C8EiRiRqaC1/KiOkpLggpY2i2ZsvBw82cx5L5jDlU9JIN0rqVF0hsA6KeHDG
+        h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7K6g8wc+JL8tVoIXAnSDzXXNDF+K2QKgVxA1GlSH5So=;
+        b=C6cZmOzwGdTlN9iEO+ekN011ekXex4cx0qEfea1nFvYet7JqUvd63u/VbZ1mFmfaMr
+         ReqEoSV/MvM6l1AlcweBl6htW8Eh7xbzeXa1/lqHiYog4hF/N8EmCtuvU8DC58RSaA5h
+         UpaRNQvvxQK98641f7GseUzppvml2LcMUUtdaaeUVnoC1AVxo1FXZZqEsWEcV4A6NUaH
+         tRW/7iXM07FQKPrezHsUpcgXq/BQRmIuzcMXmCuDM8GEkZHTxxT03m9WnBnTXdZ9+e1G
+         LgwoAjEyYFzHp7ZfQ1vNBuSQ0UegjvJunnFUwhjIeKK0GhrQnr9f7WcGoIP8l3XhbvML
+         uQPw==
+X-Gm-Message-State: ACrzQf36AmjA5ZUizu/bf7bVN26QC+mvGzQbgE0ny4TLEBuM/xo+FpVu
+        S4Mba2ty4/26fR2ILgcrEkEYdg==
+X-Google-Smtp-Source: AMsMyM7cxdeo1JmQob/bXBNlxz1yXDMTgCHS1UuV0kjxKuERy9JYAPsyQVs9A7XLozQ6qQM4xG5fiA==
+X-Received: by 2002:a62:1684:0:b0:554:cade:6970 with SMTP id 126-20020a621684000000b00554cade6970mr2579969pfw.11.1665019608451;
+        Wed, 05 Oct 2022 18:26:48 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id w62-20020a17090a6bc400b00205fafa6768sm1764507pjj.6.2022.10.05.18.26.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 18:26:48 -0700 (PDT)
+Subject: [PATCH] ptrace: Mark PTRACE_{PEEK,POKE}USR as deprecated for new ports
+Date:   Wed,  5 Oct 2022 18:24:32 -0700
+Message-Id: <20221006012432.19008-1-palmer@rivosinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Received: by 2002:a6b:8d0a:0:b0:6b7:6cd7:78e5 with SMTP id
- p10-20020a6b8d0a000000b006b76cd778e5mr1152808iod.47.1665019414845; Wed, 05
- Oct 2022 18:23:34 -0700 (PDT)
-Date:   Wed, 05 Oct 2022 18:23:34 -0700
-In-Reply-To: <2867034.e9J7NaK4W3@mypc>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c4204105ea538a8a@google.com>
-Subject: Re: [syzbot] memory leak in __get_metapage
-From:   syzbot <syzbot+389b82b29093b3e2640a@syzkaller.appspotmail.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     akpm@linux-foundation.org, fmdefrancesco@gmail.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Cc:     oleg@redhat.com, linux-kernel@vger.kernel.org, linux@rivosinc.com,
+        Palmer Dabbelt <palmer@rivosinc.com>
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Tuesday, October 4, 2022 10:49:42 AM CEST syzbot wrote:
->> Hello,
->> 
->> syzbot found the following issue on:
->> 
->> HEAD commit:    4fe89d07dcc2 Linux 6.0
->> git tree:       upstream
->> console output: https://syzkaller.appspot.com/x/log.txt?x=169a7924880000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=21254cf9c7c084e0
->> dashboard link: https://syzkaller.appspot.com/bug?extid=389b82b29093b3e2640a
->> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils 
-> for Debian) 2.35.2
->> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10bdd7ec880000
->> 
->> Downloadable assets:
->> disk image: https://storage.googleapis.com/syzbot-assets/651a252f7035/
-> disk-4fe89d07.raw.xz
->> vmlinux: https://storage.googleapis.com/syzbot-assets/776feb8e0e5b/
-> vmlinux-4fe89d07.xz
->> 
->> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->> Reported-by: syzbot+389b82b29093b3e2640a@syzkaller.appspotmail.com
->> 
->> BUG: memory leak
->> unreferenced object 0xffff888114339e80 (size 128):
->>   comm "syz-executor.0", pid 3673, jiffies 4295017005 (age 12.610s)
->>   hex dump (first 32 bytes):
->>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>   backtrace:
->>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
->>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
->>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
->>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
->>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
->>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
->>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
->>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
->>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
->>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
->>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
->>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
->>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
->>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
->>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> 
->> BUG: memory leak
->> unreferenced object 0xffff888114339e00 (size 128):
->>   comm "syz-executor.0", pid 3673, jiffies 4295017005 (age 12.610s)
->>   hex dump (first 32 bytes):
->>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>   backtrace:
->>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
->>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
->>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
->>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
->>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
->>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
->>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
->>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
->>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
->>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
->>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
->>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
->>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
->>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
->>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> 
->> BUG: memory leak
->> unreferenced object 0xffff888114339d80 (size 128):
->>   comm "syz-executor.0", pid 3673, jiffies 4295017005 (age 12.610s)
->>   hex dump (first 32 bytes):
->>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>   backtrace:
->>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
->>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
->>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
->>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
->>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
->>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
->>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
->>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
->>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
->>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
->>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
->>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
->>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
->>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
->>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> 
->> BUG: memory leak
->> unreferenced object 0xffff8881142f0300 (size 128):
->>   comm "syz-executor.0", pid 3676, jiffies 4295017533 (age 7.330s)
->>   hex dump (first 32 bytes):
->>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>   backtrace:
->>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
->>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
->>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
->>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
->>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
->>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
->>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
->>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
->>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
->>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
->>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
->>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
->>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
->>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
->>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> 
->
-> #syz test git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 
+From: Palmer Dabbelt <palmer@rivosinc.com>
 
-want 2 args (repo, branch), got 3
+Folks keep submitting implementations of these for RISC-V.  As far as I
+understand they're not meant to be implemented in new ports, this adds a
+comment to make that more explicit.
 
-> Linux 6.0
->
->
->
->
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+---
+ include/uapi/linux/ptrace.h | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/include/uapi/linux/ptrace.h b/include/uapi/linux/ptrace.h
+index 195ae64a8c87..38201ebec276 100644
+--- a/include/uapi/linux/ptrace.h
++++ b/include/uapi/linux/ptrace.h
+@@ -11,14 +11,19 @@
+ #define PTRACE_TRACEME		   0
+ #define PTRACE_PEEKTEXT		   1
+ #define PTRACE_PEEKDATA		   2
+-#define PTRACE_PEEKUSR		   3
+ #define PTRACE_POKETEXT		   4
+ #define PTRACE_POKEDATA		   5
+-#define PTRACE_POKEUSR		   6
+ #define PTRACE_CONT		   7
+ #define PTRACE_KILL		   8
+ #define PTRACE_SINGLESTEP	   9
+ 
++/*
++ * These are deprecated for new ports in favor of PTRACE_{GET,SET}REGSET, which
++ * support accessing multiple CPU registers in a single syscall.
++ */
++#define PTRACE_PEEKUSR		   3
++#define PTRACE_POKEUSR		   6
++
+ #define PTRACE_ATTACH		  16
+ #define PTRACE_DETACH		  17
+ 
+-- 
+2.34.1
+
