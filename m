@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17DFD5F6027
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 06:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA105F6026
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 06:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbiJFEfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 00:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55494 "EHLO
+        id S229805AbiJFEf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 00:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbiJFEfO (ORCPT
+        with ESMTP id S229565AbiJFEfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 6 Oct 2022 00:35:14 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A881B3DF35
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 21:35:08 -0700 (PDT)
-X-UUID: 33843c57057141f381755673ef51d9ee-20221006
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCF733E1D
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 21:35:05 -0700 (PDT)
+X-UUID: 66c3dbb9af434f24ae32bfb86ecd6600-20221006
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=PZSUDXKuBX55AkLTuJcDPMFfjbZLwqwhmdsquhnUJDU=;
-        b=D4dvNb3iPfD9WAkk5CncZKibjCFpC5u53BQA4mNaywv+naaOw3oGdsNzXVKY8unJHCDHBAc8rPv4/+N0EIt3jgsae2EzWNriV5Rhj3hQQ+4UsZgbkPpQB3ceQNjJ0oxzh6utFZDe/iVBPjDi2Edbkbfxr5zdsEZIqZvjnR8Or8Y=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=U/TQbV5m104HfRcT9S9HCCZ0p5prmyu9kaPPLbaRReM=;
+        b=ORKzjQc3lUBmt1dwt0lVvyeLPzGA83TML3T762iU+iGFMiQZWmhNTdgaJ9O4+H2QY7AQE6P2hk/Zh8sLAYYAq8RbLGXnwZIinJvOPKmhN2zFOIJTQEpUTuHbiHqgg4xnttVxj3aMNjTkbVSV2SXVt2nEmtgPGDfjqY6YeH4BSKI=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:1cbe79aa-3d30-4794-acb3-f7f79e1c895c,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:100
-X-CID-INFO: VERSION:1.1.11,REQID:1cbe79aa-3d30-4794-acb3-f7f79e1c895c,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:100
-X-CID-META: VersionHash:39a5ff1,CLOUDID:ffe0ab85-5312-4339-9a65-dc27c4b243b8,B
-        ulkID:2210061235023TDK31LU,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48|823|
-        824,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,
-        COL:0
-X-UUID: 33843c57057141f381755673ef51d9ee-20221006
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+X-CID-O-INFO: VERSION:1.1.11,REQID:1f5adf4c-3bd9-4e16-abf5-18289f5e42a0,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:65e1ab85-5312-4339-9a65-dc27c4b243b8,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 66c3dbb9af434f24ae32bfb86ecd6600-20221006
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
         (envelope-from <yongqiang.niu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 852628176; Thu, 06 Oct 2022 12:35:00 +0800
+        with ESMTP id 184232541; Thu, 06 Oct 2022 12:35:02 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
  mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 6 Oct 2022 12:34:59 +0800
+ Thu, 6 Oct 2022 12:35:00 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Thu, 6 Oct 2022 12:34:59 +0800
+ Transport; Thu, 6 Oct 2022 12:35:00 +0800
 From:   Yongqiang Niu <yongqiang.niu@mediatek.com>
 To:     CK Hu <ck.hu@mediatek.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>
 CC:     Jassi Brar <jassisinghbrar@gmail.com>,
@@ -52,9 +48,9 @@ CC:     Jassi Brar <jassisinghbrar@gmail.com>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Hsin-Yi Wang <hsinyi@chromium.org>,
         Yongqiang Niu <yongqiang.niu@mediatek.com>
-Subject: [PATCH v9, 2/4] mailbox: mtk-cmdq: add gce software ddr enable private data
-Date:   Thu, 6 Oct 2022 12:34:54 +0800
-Message-ID: <20221006043456.8754-3-yongqiang.niu@mediatek.com>
+Subject: [PATCH v9, 3/4] mailbox: mtk-cmdq: add gce ddr enable support flow
+Date:   Thu, 6 Oct 2022 12:34:55 +0800
+Message-ID: <20221006043456.8754-4-yongqiang.niu@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221006043456.8754-1-yongqiang.niu@mediatek.com>
 References: <20221006043456.8754-1-yongqiang.niu@mediatek.com>
@@ -62,83 +58,88 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-if gce work control by software, we need set software enable
-for MT8186 Soc
+add gce ddr enable control flow when gce suspend/resume
 
-there is a handshake flow between gce and ddr hardware,
-if not set ddr enable flag of gce, ddr will fall into idle
-mode, then gce instructions will not process done.
-we need set this flag of gce to tell ddr when gce is idle or busy
-controlled by software flow.
+when all cmdq instruction task has been processed done,
+we need set this gce ddr enable to disable status to tell
+cmdq hardware gce there is none task need process, and the hardware
+can go into idle mode and no access ddr anymore, then the spm can go
+into suspend.
 
-0x48[2:0] means control by software
-0x48[18:16] means ddr enable
-0x48[2:0] is pre-condition of 0x48[18:16].
-if we want set 0x48[18:16] ddr enable, 0x48[2:0] must be set at same
-time.
-and only these bits is useful, other bits is useless bits
+the original issue is gce still access ddr when cmdq suspend function
+call, but there is no task run.
+so, we need control gce access ddr with this flow.
+when cmdq suspend function, there is no task need process, we can
+disable gce access ddr, to make sure system go into suspend success.
 
 Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
 ---
- drivers/mailbox/mtk-cmdq-mailbox.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/mailbox/mtk-cmdq-mailbox.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
 diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
-index c3cb24f51699..04eb44d89119 100644
+index 04eb44d89119..2db82ff838ed 100644
 --- a/drivers/mailbox/mtk-cmdq-mailbox.c
 +++ b/drivers/mailbox/mtk-cmdq-mailbox.c
-@@ -39,6 +39,7 @@
- 
- #define GCE_GCTL_VALUE			0x48
- #define GCE_CTRL_BY_SW				GENMASK(2, 0)
-+#define GCE_DDR_EN				GENMASK(18, 16)
- 
- #define CMDQ_THR_ACTIVE_SLOT_CYCLES	0x3200
- #define CMDQ_THR_ENABLED		0x1
-@@ -81,6 +82,7 @@ struct cmdq {
- 	bool			suspended;
- 	u8			shift_pa;
- 	bool			control_by_sw;
-+	bool			sw_ddr_en;
- 	u32			gce_num;
- };
- 
-@@ -88,6 +90,7 @@ struct gce_plat {
- 	u32 thread_nr;
- 	u8 shift;
- 	bool control_by_sw;
-+	bool sw_ddr_en;
+@@ -94,6 +94,18 @@ struct gce_plat {
  	u32 gce_num;
  };
  
-@@ -132,6 +135,9 @@ static void cmdq_init(struct cmdq *cmdq)
- 	if (cmdq->control_by_sw)
- 		writel(GCE_CTRL_BY_SW, cmdq->base + GCE_GCTL_VALUE);
++static void cmdq_sw_ddr_enable(struct cmdq *cmdq, bool enable)
++{
++	WARN_ON(clk_bulk_enable(cmdq->gce_num, cmdq->clocks));
++
++	if (enable)
++		writel(GCE_DDR_EN | GCE_CTRL_BY_SW, cmdq->base + GCE_GCTL_VALUE);
++	else
++		writel(GCE_CTRL_BY_SW, cmdq->base + GCE_GCTL_VALUE);
++
++	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
++}
++
+ u8 cmdq_get_shift_pa(struct mbox_chan *chan)
+ {
+ 	struct cmdq *cmdq = container_of(chan->mbox, struct cmdq, mbox);
+@@ -319,6 +331,9 @@ static int cmdq_suspend(struct device *dev)
+ 	if (task_running)
+ 		dev_warn(dev, "exist running task(s) in suspend\n");
  
 +	if (cmdq->sw_ddr_en)
-+		writel(GCE_DDR_EN | GCE_CTRL_BY_SW, cmdq->base + GCE_GCTL_VALUE);
++		cmdq_sw_ddr_enable(cmdq, false);
 +
- 	writel(CMDQ_THR_ACTIVE_SLOT_CYCLES, cmdq->base + CMDQ_THR_SLOT_CYCLES);
- 	for (i = 0; i <= CMDQ_MAX_EVENT; i++)
- 		writel(i, cmdq->base + CMDQ_SYNC_TOKEN_UPDATE);
-@@ -545,6 +551,7 @@ static int cmdq_probe(struct platform_device *pdev)
- 	cmdq->thread_nr = plat_data->thread_nr;
- 	cmdq->shift_pa = plat_data->shift;
- 	cmdq->control_by_sw = plat_data->control_by_sw;
-+	cmdq->sw_ddr_en = plat_data->sw_ddr_en;
- 	cmdq->gce_num = plat_data->gce_num;
- 	cmdq->irq_mask = GENMASK(cmdq->thread_nr - 1, 0);
- 	err = devm_request_irq(dev, cmdq->irq, cmdq_irq_handler, IRQF_SHARED,
+ 	clk_bulk_unprepare(cmdq->gce_num, cmdq->clocks);
+ 
+ 	return 0;
+@@ -330,6 +345,10 @@ static int cmdq_resume(struct device *dev)
+ 
+ 	WARN_ON(clk_bulk_prepare(cmdq->gce_num, cmdq->clocks));
+ 	cmdq->suspended = false;
++
++	if (cmdq->sw_ddr_en)
++		cmdq_sw_ddr_enable(cmdq, true);
++
+ 	return 0;
+ }
+ 
+@@ -337,6 +356,9 @@ static int cmdq_remove(struct platform_device *pdev)
+ {
+ 	struct cmdq *cmdq = platform_get_drvdata(pdev);
+ 
++	if (cmdq->sw_ddr_en)
++		cmdq_sw_ddr_enable(cmdq, false);
++
+ 	clk_bulk_unprepare(cmdq->gce_num, cmdq->clocks);
+ 	return 0;
+ }
 -- 
 2.25.1
 
