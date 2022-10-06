@@ -2,136 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F755F6316
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:52:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E0C5F633D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbiJFIwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 04:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54202 "EHLO
+        id S231311AbiJFJEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 05:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbiJFIwl (ORCPT
+        with ESMTP id S231313AbiJFJEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 04:52:41 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCA06D9CB
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 01:52:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=udkEFmCXVqapQ+97j25lRFC1Dm0RkLMeqKyy1j0mF+U=; b=KrvcRa1UoK/fkRb9mijyQM4ZG7
-        voy75DPSzDG7BwFP2yVnlenEepuvK8qIBfgVlFEKX2BNZBBYNkFvs+r54G46v7RL3WzNGmMJCzohn
-        M3xz71XhAZX0SEFt8GfdIUaLcnV5f9mpHn03IZk1DhZKPlvevl01Gnwz3MKx1vOVBG79hcG3REd1B
-        2zzkz+N98VhvGmWL17ATnQ9UMop4ORcLHYIJGMtdoGE8z0cl7SvIpQ6ITLlWm+nU3MqgK8fLpGzgU
-        o1hQkyys6qEmtD0hZCX4rMvmQzODbbr2U5b9tDl9QZYeBkEFu65HVKIHAE/QGMleClA4SX/arwhxn
-        1gYR9y/w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ogMc6-001CPG-Ec; Thu, 06 Oct 2022 08:52:18 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0944E30007E;
-        Thu,  6 Oct 2022 10:52:16 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B84A7201FC2CE; Thu,  6 Oct 2022 10:52:16 +0200 (CEST)
-Date:   Thu, 6 Oct 2022 10:52:16 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Thu, 6 Oct 2022 05:04:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2404BF0F
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 02:04:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85DA5618CA
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 09:04:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFA41C433C1;
+        Thu,  6 Oct 2022 09:04:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665047073;
+        bh=8/95+/6ABMJ/uxjvKl5XAk6L3AoFggCK8OTm2MLfJOY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jPS6CXjXu+VZbqVhmUXZ3W/fC74AHDAGMkY7HZugiuNzC97RxxchswmcpvZrOQsY7
+         mt3zOUTGd2j5jUmTyYkhi1U6+Vhv8yP20TEwxbsQ2E9bJsSEyzf7Gk8inaHJX2TrSq
+         BxRkSLnNnG9ErRRqxzM2G7VsYv3WKfASJEFDB0vRJNGvKtE2gijFuhWXS22e+5PRv6
+         OhM19Zkjl/RGIzQOFHTEMvx8YPzRB8K6mCR58/3KNIaynjDEWxBL9TMF5iNSnxIIuD
+         ZRYi37haZsHhbldTUmMKeN+xDxrLj8HkzSGlSHcUzOiB0TjkqkTz5vXQ/+C6WLrPzz
+         XaCUb5HFopjEw==
+Date:   Thu, 6 Oct 2022 16:55:00 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [RFC PATCH 15/23] thermal: intel: hfi: Report per-cpu
- class-specific performance scores
-Message-ID: <Yz6XQHafjIpfkyyY@hirez.programming.kicks-ass.net>
-References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
- <20220909231205.14009-16-ricardo.neri-calderon@linux.intel.com>
- <YzLlk8NL5qkOOxzX@hirez.programming.kicks-ass.net>
- <20221005235959.GB29251@ranerica-svr.sc.intel.com>
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] arm64: jump_label: mark arguments as const to
+ satisfy asm constraints
+Message-ID: <Yz6X5Ilriz54xcWt@xhacker>
+References: <20221006075542.2658-1-jszhang@kernel.org>
+ <20221006075542.2658-2-jszhang@kernel.org>
+ <CAMj1kXEWm9WuvxYN8ks09m3Rv+pt1Hd7=DcXuTwm+Etw2Y-KOQ@mail.gmail.com>
+ <Yz6V2Ffm5jSJJa1V@xhacker>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221005235959.GB29251@ranerica-svr.sc.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yz6V2Ffm5jSJJa1V@xhacker>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 05, 2022 at 04:59:59PM -0700, Ricardo Neri wrote:
-> On Tue, Sep 27, 2022 at 01:59:15PM +0200, Peter Zijlstra wrote:
-> > On Fri, Sep 09, 2022 at 04:11:57PM -0700, Ricardo Neri wrote:
-> > > Support the arch_get_task_class_score() interface of the scheduler. Use the
-> > > data that Intel Thread Director provides to inform the scheduler the
-> > > performance of a class of tasks when placed on a given CPU.
-> > > 
+On Thu, Oct 06, 2022 at 04:46:21PM +0800, Jisheng Zhang wrote:
+> On Thu, Oct 06, 2022 at 10:17:44AM +0200, Ard Biesheuvel wrote:
+> > On Thu, 6 Oct 2022 at 10:05, Jisheng Zhang <jszhang@kernel.org> wrote:
+> > >
+> > > Inspired by x86 commit 864b435514b2("x86/jump_label: Mark arguments as
+> > > const to satisfy asm constraints"), mark arch_static_branch()'s and
+> > > arch_static_branch_jump()'s arguments as const to satisfy asm
+> > > constraints. And Steven in [1] also pointed out that "The "i"
+> > > constraint needs to be a constant."
+> > >
+> > > Tested with building a simple external kernel module with "O0".
+> > >
+> > > [1]https://lore.kernel.org/all/20210212094059.5f8d05e8@gandalf.local.home/
+> > >
+> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > > ---
+> > >  arch/arm64/include/asm/jump_label.h | 8 ++++----
+> > >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/arch/arm64/include/asm/jump_label.h b/arch/arm64/include/asm/jump_label.h
+> > > index cea441b6aa5d..48ddc0f45d22 100644
+> > > --- a/arch/arm64/include/asm/jump_label.h
+> > > +++ b/arch/arm64/include/asm/jump_label.h
+> > > @@ -15,8 +15,8 @@
+> > >
+> > >  #define JUMP_LABEL_NOP_SIZE            AARCH64_INSN_SIZE
+> > >
+> > > -static __always_inline bool arch_static_branch(struct static_key *key,
+> > > -                                              bool branch)
+> > > +static __always_inline bool arch_static_branch(struct static_key * const key,
+> > > +                                              const bool branch)
+> > >  {
+> > >         asm_volatile_goto(
+> > >                 "1:     nop                                     \n\t"
 > > 
-> > > +static void get_one_hfi_cap(struct hfi_instance *hfi_instance, s16 index,
-> > > +			    struct hfi_cpu_data *hfi_caps, int class)
-> > > +{
-> > > +	struct hfi_cpu_data *caps;
-> > > +
-> > > +	/* Find the capabilities of @cpu */
-> > > +	caps = hfi_instance->data + index * hfi_features.cpu_stride +
-> > > +	       class * hfi_features.class_stride;
-> > > +	memcpy(hfi_caps, caps, sizeof(*hfi_caps));
-> > > +}
-> > > +
-> > > +int intel_hfi_get_task_class_score(int class, int cpu)
-> > > +{
-> > > +	struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, cpu);
-> > > +	struct hfi_instance *instance;
-> > > +	struct hfi_cpu_data caps;
-> > > +	unsigned long flags;
-> > > +	int cap;
-> > > +
-> > > +	if (cpu < 0 || cpu >= nr_cpu_ids)
-> > > +		return -EINVAL;
-> > > +
-> > > +	if (class == TASK_CLASS_UNCLASSIFIED)
-> > > +		return -EINVAL;
-> > > +
-> > > +	if (class >= (int)hfi_features.nr_classes)
-> > > +		return -EINVAL;
-> > > +
-> > > +	instance = info->hfi_instance;
-> > > +	if (!instance)
-> > > +		return -ENOENT;
-> > > +
-> > > +	raw_spin_lock_irqsave(&instance->table_lock, flags);
-> > > +	get_one_hfi_cap(instance, info->index, &caps, class);
-> > > +	cap = caps.perf_cap;
-> > > +	raw_spin_unlock_irqrestore(&instance->table_lock, flags);
-> > > +
-> > > +	return cap;
-> > > +}
+> > Is this still necessary if we specify the constraints in a more
+> > reasonable manner:
 > > 
-> > Does any of that data actually ever change? Isn't the class score fixed
-> > per CPU type?
+> >  "      .quad           %c0 - . + %1            \n\t"
+> >  :  :  "i"(key), "i"(branch) :  : l_yes);
 > 
-> Yes, data can change. The Intel SDM Vol 3 Section 14.6.7 states that the
-> table can be updated during runtime.
+> Just tried this locally with the simple external kernel module, the
+> asm operand 0 probably does not match constraints can still be
+> reproduced with "O0".
 
-I find the SDM is often unreadable gibberish, this part doesn't dissapoint.
+I mean the "asm operand 0 probably does not match constraints" warning
+and related error can still be reproduced with "-O0" w/o the series.
+While after applying the series, I can't reproduce the build warning
+any more w/ and w/o the above modifications.
 
-There's a ton of might and maybe there; what does it actually do and how
-often does it do it? Given the thermal interrupt is such a shitshow, we
-really, as in *REALLY* don't want this to happen at any frequency at
-all.
-
-And if it barely happens, why do we care if it happens at all?
+> 
+> Thanks
+> 
+> > 
+> > instead of the horrid hack with the char* cast and using a bool as an
+> > array index?
+> > 
+> > 
+> > 
+> > 
+> > > @@ -32,8 +32,8 @@ static __always_inline bool arch_static_branch(struct static_key *key,
+> > >         return true;
+> > >  }
+> > >
+> > > -static __always_inline bool arch_static_branch_jump(struct static_key *key,
+> > > -                                                   bool branch)
+> > > +static __always_inline bool arch_static_branch_jump(struct static_key * const key,
+> > > +                                                   const bool branch)
+> > >  {
+> > >         asm_volatile_goto(
+> > >                 "1:     b               %l[l_yes]               \n\t"
+> > > --
+> > > 2.37.2
+> > >
