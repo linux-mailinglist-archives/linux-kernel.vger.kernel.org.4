@@ -2,134 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99D45F6B24
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 18:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F995F6B25
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 18:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231992AbiJFQDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 12:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
+        id S231986AbiJFQDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 12:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231976AbiJFQDM (ORCPT
+        with ESMTP id S231994AbiJFQDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 12:03:12 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FECABD47;
-        Thu,  6 Oct 2022 09:03:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=zm6xeXW0jCLbsA/duPDusxJlDbKzTuDSlIfxsNlzugc=; b=EOo9MOrsq5fgau58Ph4wmN1PWq
-        EknZ/8ivg7z3KXTpTrUHcnXW1aesXrgbIaX/FdJ/lwZ09KgrTtclp0/94wy0cAgW4kweUSnA1KnW8
-        Rt+iVdFAvqrmOvytcaJlHMZZxx0E0ZE3XpVniOakbvavlXnGtDbH/zk9YXb4SnGEcjm8T336dMX/1
-        h0sOmbnodCnBN4Uqq3h2d3+R5UA+/Aqxip+uLPzNO5FseocDzSAUKAnnQKQkqP24xevppN6NSL01b
-        OYNjabvOxm+jsjaJp4FUfzCDlPG+XXHGNvTQcSQMrcbTF2P3rrVXb8YL7ZyUsIH9KB5hTbTaQvLvI
-        5bFwx8cw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ogTKs-001GSf-9e; Thu, 06 Oct 2022 16:02:58 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 47397300137;
-        Thu,  6 Oct 2022 18:02:57 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0995220ACE696; Thu,  6 Oct 2022 18:02:57 +0200 (CEST)
-Date:   Thu, 6 Oct 2022 18:02:56 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, Dmitry Vyukov <dvyukov@google.com>
-Subject: Re: [PATCH] perf: Fix missing SIGTRAPs
-Message-ID: <Yz78MMMJ74tBw0gu@hirez.programming.kicks-ass.net>
-References: <20220927121322.1236730-1-elver@google.com>
- <Yz7ZLaT4jW3Y9EYS@hirez.programming.kicks-ass.net>
- <Yz7fWw8duIOezSW1@elver.google.com>
+        Thu, 6 Oct 2022 12:03:35 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487AFABD5D
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 09:03:34 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id f9so2718706ljk.12
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 09:03:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EY4qOPHf7RYg8ix6/iJMuNMtc57OSN/VOcyt7Dw0D/k=;
+        b=kaxURPByARym3j88S7RbGuOMWrlSqzR58TwszHEpHAnJlAgYKbRC0DDDufkNxdX+ip
+         g0Bn2jTjA//Zw6KVGy/Fru0V2hfnlHjPh9mCHD+Ooq8UFFIPvZpMNvxeQ0IY5sSf9Vv0
+         YAOBuXVh9gg6y6xsLophUOqjAbMRWC+SnvILc1I2yzjLvZrQ7ks7j56occet9/s0Phrn
+         A8SxcHGmJl9lgJ1F4dLXqP88l3g26/Dt8MIvYC/tOxOEG5iR283wUof6tBe6hIwmxjtO
+         OdG/fXfqV2vmMm3Y12MqD6+tvGbXkVN/I8+dL1mcqjM/+U6T6Pru6yqslZM2yNAwWMez
+         r+gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EY4qOPHf7RYg8ix6/iJMuNMtc57OSN/VOcyt7Dw0D/k=;
+        b=YrGRgA10gGADD/f7CuE2SyhvkiA8DJLK1bQrA2CJBrYMa8gOpJ4x0+x6Bd8kYIbczH
+         Da9vs89ALRDWyLZq25fLoeZCFrCn1tGitithFI+1bGcN7YBg0mbRuenkAucftWtNpJt9
+         fkMo232Atd3C0PYwsmWxf4A5xADoGDL+kpPVw3p+sngPrN2I3PxmT3kBhNDMAfY2jlds
+         4+fK0/xaE87em1yvl5lg6R+iYeEsYwVtTnJ4YyP+TFNBpGB1hcgZzK/M48IsI+1SKWTE
+         EL6NYYhoz5TX2o1e2GQUJDIPEqBSo9UjD0n5wbxViB/boLyf+VDkDH00YNccNqcp7Fkk
+         cRtw==
+X-Gm-Message-State: ACrzQf18L2UPCP+xywa7bpitENUJcbMyeihOhY+9qTJlTXjGZNe1HiAV
+        /swZVzazS/KAu8e1Y2SxQj467kqeDg80pj6xcFs=
+X-Google-Smtp-Source: AMsMyM7y7AN3D05bm9rhh4WAoXxmX9j/ycW3uM9Paggd9p2eBELuYB6uvwdk6XSsCa4RvcgjGXNcEqNS10gXfC4woBE=
+X-Received: by 2002:a2e:2d0a:0:b0:26c:a1c:cdf with SMTP id t10-20020a2e2d0a000000b0026c0a1c0cdfmr145675ljt.352.1665072212496;
+ Thu, 06 Oct 2022 09:03:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yz7fWw8duIOezSW1@elver.google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ac2:59ca:0:0:0:0:0 with HTTP; Thu, 6 Oct 2022 09:03:31 -0700 (PDT)
+Reply-To: financialdepartment094@gmail.com
+From:   "Financial Department U.S" <graciang96@gmail.com>
+Date:   Thu, 6 Oct 2022 17:03:31 +0100
+Message-ID: <CAJ3nXd3NxVduP3dOMifEvyGknoZhwBxzJyCsmH_-zAJXDM-A0w@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:244 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5001]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [graciang96[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [graciang96[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [financialdepartment094[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 03:59:55PM +0200, Marco Elver wrote:
+-- 
+Dear friend,
 
-> That one I could fix up with:
-> 
->  | diff --git a/kernel/events/core.c b/kernel/events/core.c
->  | index 9319af6013f1..2f1d51b50be7 100644
->  | --- a/kernel/events/core.c
->  | +++ b/kernel/events/core.c
->  | @@ -6563,6 +6563,7 @@ static void perf_pending_task(struct callback_head *head)
->  |  	 * If we 'fail' here, that's OK, it means recursion is already disabled
->  |  	 * and we won't recurse 'further'.
->  |  	 */
->  | +	preempt_disable_notrace();
->  |  	rctx = perf_swevent_get_recursion_context();
->  |  
->  |  	if (event->pending_work) {
->  | @@ -6573,6 +6574,7 @@ static void perf_pending_task(struct callback_head *head)
->  |  
->  |  	if (rctx >= 0)
->  |  		perf_swevent_put_recursion_context(rctx);
->  | +	preempt_enable_notrace();
->  |  }
->  |  
->  |  #ifdef CONFIG_GUEST_PERF_EVENTS
+I have an important just get back for more details .
 
-Right, thanks! It appears I only have lockdep enabled but not the
-preempt warning :/
+Sincerely,
 
-> But following that, I get:
-> 
+Mr Jones Moore
 
->  | WARNING: CPU: 3 PID: 13018 at kernel/events/core.c:2288 event_sched_out+0x3f2/0x410 kernel/events/core.c:2288
+Deputy department of the tresury
 
-I'm taking this is (my line numbers are slightly different):
-
-	WARN_ON_ONCE(event->pending_work);
-
-
-
-> So something isn't quite right yet. Unfortunately I don't have a good
-> reproducer. :-/
-
-This can happen if we get two consecutive event_sched_out() and both
-instances will have pending_sigtrap set. This can happen when the event
-that has sigtrap set also triggers in kernel space.
-
-You then get task_work list corruption and *boom*.
-
-I'm thinking the below might be the simplest solution; we can only send
-a single signal after all.
-
-
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -2293,9 +2293,10 @@ event_sched_out(struct perf_event *event
- 			 */
- 			local_dec(&event->ctx->nr_pending);
- 		} else {
--			WARN_ON_ONCE(event->pending_work);
--			event->pending_work = 1;
--			task_work_add(current, &event->pending_task, TWA_RESUME);
-+			if (!event->pending_work) {
-+				event->pending_work = 1;
-+				task_work_add(current, &event->pending_task, TWA_RESUME);
-+			}
- 		}
- 	}
- 
+United States.
