@@ -2,92 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D125F6ABE
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 17:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A2C5F6AC3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 17:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbiJFPgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 11:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
+        id S231718AbiJFPgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 11:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbiJFPgQ (ORCPT
+        with ESMTP id S231869AbiJFPgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 11:36:16 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7F4BD042
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 08:36:14 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id u10so1176102ilm.5
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 08:36:14 -0700 (PDT)
+        Thu, 6 Oct 2022 11:36:43 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A363BD070;
+        Thu,  6 Oct 2022 08:36:42 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id z97so3366499ede.8;
+        Thu, 06 Oct 2022 08:36:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kBsN+WV474YxARCF7+nqmiK1jJMhN3dpQirfp2PoxlI=;
-        b=JjMbJ/6iXZaadLFSJQk/HRtX7HrZ/RZDwb2mntZuqfcRGukztaLnaRtozSNqvZ38A4
-         YIoQ/S3pghhDMLpw8KTrVksZJi+qZfmtmFFtL6r+hlek1RDiFjHhO28+25YkHLvlCc/G
-         2ton1aYig3VnJwiK390amDUqhjkwHT2v8cCIJriuz9pU8Vq1hyKD89eS6KbebFUKLB7f
-         StxxrRJteAZtp0mitV1ByWgBDUKx7ejR8uKWfR+ZopLjyxWlWBgzgq30TO7uWMlo0TOX
-         Ot9J/qTOjnGajAnOuylFkpSg9k4OtDzH80hAqWJVInjfgYhV53xWDOLUG2oWhzMmJmJ7
-         oo0g==
+        bh=Z7ij1WCCQpUXsYyNo/gTLQBKpLKbs/NInCL3omH6TN4=;
+        b=AStxJReJKtGbdpM90DVM42z0eLLfuuX7blK4mw4EnrdDFcMT9ziUm2VI0+wX378pyW
+         ldvnt2pydPwb7wmOXPwXDBobo/LRf995REJIAsJ2F7UvaGkX4GMb0ot2haHf/72p9xOL
+         aNpwb+diWIOqsq+lauBoLFFCyupPgr9DWBcc+SkoKCAApio2YYeRP/wB2J1pjmNmIOIP
+         1DTasSZZe9lRwshX3Xbj/TkkLicRnAIi73bplCskDnaIPKBqKsW2GAWntdI0BftBnUZd
+         ODKN6oU2PPx+0HniRolS49tAm3ABQPBAnvc3EfVe+N+icqh5/TFYLwTlovQ6VGMyIRpX
+         krHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kBsN+WV474YxARCF7+nqmiK1jJMhN3dpQirfp2PoxlI=;
-        b=7nuD2xS0v9YGkfBmWqmMiU3cUi8dbGI5ejUaPkCcuXdREKnJisvhNM4Xte39WBSDnr
-         VyYmDp1w7GZoZ/OEFy8KH9vGUc/2vsJtoyp7z4ZiQNYL6+3QAl7UQAkuZDW/MG4zRkw3
-         taW/39s5L3Pkb+H4XI9NQFPqPm9Z+5tEBHyEiwz9648CBmSSw3qS6KiANxwv+k59jh78
-         S5fsWnSvEw5g9rYaCJRgIFKKKTASO2hlIQV9C7HCq+Vca1j8CwKMZ+QePZr0xIHNcYVP
-         UP5l7GihHo9Uc/g7LhxyVFNyspoLoQNqd42jZfm0DNOn8qC+ZaALJcNuscmohuCfGpDe
-         UW4Q==
-X-Gm-Message-State: ACrzQf16Jcr1hiPtiIcu3DGifMXJ2ltHwbeoL8t1WmPrAuRVJvW92kET
-        MW8LKNI/GUczO/dQa/k2t/o+HSOPdG/aPgogQq6yTA==
-X-Google-Smtp-Source: AMsMyM4b3/P730KDfkxwcyTWlRlnjgpSRQAwOlc/NfsO6cxtR79rz7+RL4b861zTtxfuwZkTO8fgQgVJ7C0o9SGCGVA=
-X-Received: by 2002:a05:6e02:1989:b0:2f6:45ca:410d with SMTP id
- g9-20020a056e02198900b002f645ca410dmr99039ilf.187.1665070573386; Thu, 06 Oct
- 2022 08:36:13 -0700 (PDT)
+        bh=Z7ij1WCCQpUXsYyNo/gTLQBKpLKbs/NInCL3omH6TN4=;
+        b=qsJBNw9oTbLKamg2YJNEWgFt8pmcr+fQcirsfeJPL1Qw2aZmA0iiePRXJ8+eW+f/P2
+         OhdnsuH8NMoepCtjxS99SgbTRHwYlTK0OQzM/hi2sNsQPrlYC9X7LO23bq+gOwfk3CUF
+         DSv3oWz5EWjRYzBPXugicSzeNe1RYgjjklleTDGZV+kFieVE6nylaCU4qsdzVPZhPs4R
+         seRH9prUz8zNe4xpimvzccL3vbo8nXQ5aa6t5UXdB8kMj2bR4ndxKy4f7PU4eBnn767s
+         kCBQLHtHfqwP2Mn/Aeo7f8hcBF5Jmb07TUratt35Mgqh5I9IOzWLWXi4ZUtmNkAbaitT
+         Y1gg==
+X-Gm-Message-State: ACrzQf0hUZObMAEJoM9qplzwHnHHi3GHAEczZyCstB2MLgseleGa1jKJ
+        FbGX7kMjswaMQiIRPav4Z2TV2j5L3ejzs365q8M=
+X-Google-Smtp-Source: AMsMyM6nwSRtM/GPtt2WfVe9TT44svJOiDeg4zjZ+walRYPeKF+lutMI1v54pi0t2OL6pe0WhWva5s4c2rIl5KM3SdU=
+X-Received: by 2002:a05:6402:5485:b0:459:147a:d902 with SMTP id
+ fg5-20020a056402548500b00459147ad902mr329788edb.263.1665070601076; Thu, 06
+ Oct 2022 08:36:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221006082735.1321612-1-keescook@chromium.org>
- <20221006082735.1321612-2-keescook@chromium.org> <20221006090506.paqjf537cox7lqrq@wittgenstein>
- <CAG48ez0sEkmaez9tYqgMXrkREmXZgxC9fdQD3mzF9cGo_=Tfyg@mail.gmail.com> <86CE201B-5632-4BB7-BCF6-7CB2C2895409@chromium.org>
-In-Reply-To: <86CE201B-5632-4BB7-BCF6-7CB2C2895409@chromium.org>
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 6 Oct 2022 17:35:37 +0200
-Message-ID: <CAG48ez2h29CschY7GPiyg7eZT9B4UnBeKtS6AksyD8iDqs25Bg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] fs/exec: Explicitly unshare fs_struct on exec
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Jorge Merlino <jorge.merlino@canonical.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org,
-        John Johansen <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Todd Kjos <tkjos@google.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        Prashanth Prahlad <pprahlad@redhat.com>,
-        Micah Morton <mortonm@chromium.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>, linux-kernel@vger.kernel.org,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20221003223222.448551-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221003223222.448551-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAJF2gTQuSX9idEyNmGRwpAsSP8V=+QKQ7UAp28T-seM8rbkwOA@mail.gmail.com>
+ <CA+V-a8smkDmQbz76sTA5XfUm7bkY4Ee-L5xYW+-xRWkE1TYiAw@mail.gmail.com>
+ <CAJF2gTQ4G-j3p_pHvVQ82R2DFQZq70xgE3ZhoRkxiSzrHnU2og@mail.gmail.com>
+ <CA+V-a8tLYT0541FNo_o-sTsV7ywwnGTRtv6ropVu+0Wd-PsM6A@mail.gmail.com> <CAJF2gTQ9N5tyYB46eaMJ=Z0V7pm9TxFAXQ1qxLXLqj2C9zP2Ng@mail.gmail.com>
+In-Reply-To: <CAJF2gTQ9N5tyYB46eaMJ=Z0V7pm9TxFAXQ1qxLXLqj2C9zP2Ng@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 6 Oct 2022 16:36:14 +0100
+Message-ID: <CA+V-a8uThK9a9Y55FDS98PzWes-3=opwBtBe9Mi0aedbRGeYqw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 2/2] soc: renesas: Add L2 cache management for
+ RZ/Five SoC
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,48 +88,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 6, 2022 at 5:25 PM Kees Cook <keescook@chromium.org> wrote:
-> On October 6, 2022 7:13:37 AM PDT, Jann Horn <jannh@google.com> wrote:
-> >On Thu, Oct 6, 2022 at 11:05 AM Christian Brauner <brauner@kernel.org> wrote:
-> >> On Thu, Oct 06, 2022 at 01:27:34AM -0700, Kees Cook wrote:
-> >> > The check_unsafe_exec() counting of n_fs would not add up under a heavily
-> >> > threaded process trying to perform a suid exec, causing the suid portion
-> >> > to fail. This counting error appears to be unneeded, but to catch any
-> >> > possible conditions, explicitly unshare fs_struct on exec, if it ends up
-> >>
-> >> Isn't this a potential uapi break? Afaict, before this change a call to
-> >> clone{3}(CLONE_FS) followed by an exec in the child would have the
-> >> parent and child share fs information. So if the child e.g., changes the
-> >> working directory post exec it would also affect the parent. But after
-> >> this change here this would no longer be true. So a child changing a
-> >> workding directoro would not affect the parent anymore. IOW, an exec is
-> >> accompanied by an unshare(CLONE_FS). Might still be worth trying ofc but
-> >> it seems like a non-trivial uapi change but there might be few users
-> >> that do clone{3}(CLONE_FS) followed by an exec.
-> >
-> >I believe the following code in Chromium explicitly relies on this
-> >behavior, but I'm not sure whether this code is in active use anymore:
-> >
-> >https://source.chromium.org/chromium/chromium/src/+/main:sandbox/linux/suid/sandbox.c;l=101?q=CLONE_FS&sq=&ss=chromium
+Hi Guo,
+
+On Thu, Oct 6, 2022 at 1:59 AM Guo Ren <guoren@kernel.org> wrote:
 >
-> Oh yes. I think I had tried to forget this existed. Ugh. Okay, so back to the drawing board, I guess. The counting will need to be fixed...
+> On Wed, Oct 5, 2022 at 11:03 PM Lad, Prabhakar
+> <prabhakar.csengg@gmail.com> wrote:
+> >
+> > Hi Guo,
+> >
+> > On Wed, Oct 5, 2022 at 3:23 PM Guo Ren <guoren@kernel.org> wrote:
+> > >
+> > > On Wed, Oct 5, 2022 at 8:54 PM Lad, Prabhakar
+> > > <prabhakar.csengg@gmail.com> wrote:
+> > > >
+> > > > Hi Guo,
+> > > >
+> > > > On Wed, Oct 5, 2022 at 2:29 AM Guo Ren <guoren@kernel.org> wrote:
+> > > > >
+> > > > > On Tue, Oct 4, 2022 at 6:32 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > > > > >
+> > > > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > > >
+> > > > > > On the AX45MP core, cache coherency is a specification option so it may
+> > > > > > not be supported. In this case DMA will fail. As a workaround, firstly we
+> > > > > > allocate a global dma coherent pool from which DMA allocations are taken
+> > > > > > and marked as non-cacheable + bufferable using the PMA region as specified
+> > > > > > in the device tree. Synchronization callbacks are implemented to
+> > > > > > synchronize when doing DMA transactions.
+> > > > > >
+> > > > > > The Andes AX45MP core has a Programmable Physical Memory Attributes (PMA)
+> > > > > > block that allows dynamic adjustment of memory attributes in the runtime.
+> > > > > > It contains a configurable amount of PMA entries implemented as CSR
+> > > > > > registers to control the attributes of memory locations in interest.
+> > > > > >
+> > > > > > Below are the memory attributes supported:
+> > > > > > * Device, Non-bufferable
+> > > > > > * Device, bufferable
+> > > > > > * Memory, Non-cacheable, Non-bufferable
+> > > > > > * Memory, Non-cacheable, Bufferable
+> > > > > > * Memory, Write-back, No-allocate
+> > > > > > * Memory, Write-back, Read-allocate
+> > > > > > * Memory, Write-back, Write-allocate
+> > > > > > * Memory, Write-back, Read and Write-allocate
+> > > > > Seems Svpbmt's PMA, IO, and NC wouldn't fit your requirements, could
+> > > > > give a map list of the types of Svpbmt? And give out what you needed,
+> > > > > but Svpbmt can't.
+> > > > >
+> > > > Sorry I didn't get what you meant here, could you please elaborate.
+> > > I know there is no pbmt in AX45MP, I am just curious how many physical
+> > > memory attributes you would use in linux? It seems only one type used
+> > > in the series:
+> > > cpu_nocache_area_set -> sbi_ecall(SBI_EXT_ANDES,
+> > > SBI_EXT_ANDES_SET_PMA, offset, vaddr, size, entry_id, 0, 0);
+> > >
+> > Yes, currently we only use "Memory, Non-cacheable, Bufferable". I was
+> > wondering if we could send these options as flags from DT something
+> > like below so that it's not hard coded in the code.
+> >
+> > /* PMA config */
+> > #define AX45MP_PMACFG_ETYP                GENMASK(1, 0)
+> > /* OFF: PMA entry is disabled */
+> > #define AX45MP_PMACFG_ETYP_DISABLED            0
+> > /* Naturally aligned power of 2 region */
+> > #define AX45MP_PMACFG_ETYP_NAPOT            3
+> >
+> > #define AX45MP_PMACFG_MTYP                GENMASK(5, 2)
+> > /* Device, Non-bufferable */
+> > #define AX45MP_PMACFG_MTYP_DEV_NON_BUF            (0 << 2)
+> > /* Device, bufferable */
+> > #define AX45MP_PMACFG_MTYP_DEV_BUF            (1 << 2)
+> > /* Memory, Non-cacheable, Non-bufferable */
+> > #define AX45MP_PMACFG_MTYP_MEM_NON_CACHE_NON_BUF    (2 << 2)
+> > /* Memory, Non-cacheable, Bufferable */
+> > #define AX45MP_PMACFG_MTYP_MEM_NON_CACHE_BUF        (3 << 2)
+> > /* Memory, Write-back, No-allocate */
+> > #define AX45MP_PMACFG_MTYP_MEM_WB_NA            (8 << 2)
+> > /* Memory, Write-back, Read-allocate */
+> > #define AX45MP_PMACFG_MTYP_MEM_WB_RA            (9 << 2)
+> > /* Memory, Write-back, Write-allocate */
+> > #define AX45MP_PMACFG_MTYP_MEM_WB_WA            (10 << 2)
+> > /* Memory, Write-back, Read and Write-allocate */
+> > #define AX45MP_PMACFG_MTYP_MEM_WB_R_WA            (11 << 2)
+> >
+> > /* AMO instructions are supported */
+> > #define AX45MP_PMACFG_NAMO_AMO_SUPPORT            (0 << 6)
+> > /* AMO instructions are not supported */
+> > #define AX45MP_PMACFG_NAMO_AMO_NO_SUPPORT        (1 << 6)
+> >
+> >
+> >                 pma-regions = <0x0 0x00000000 0x0 0x10000000 0x0
+> > AX45MP_PMACFG_ETYP_NAPOT |  AX45MP_PMACFG_MTYP_MEM_NON_CACHE_BUF |
+> > AX45MP_PMACFG_NAMO_AMO_SUPPORT>,
+> >                               <0x0 0x10000000 0x0 0x04000000 0x0
+> > AX45MP_PMACFG_ETYP_NAPOT |  AX45MP_PMACFG_MTYP_MEM_NON_CACHE_BUF |
+> > AX45MP_PMACFG_NAMO_AMO_SUPPORT >,
+> >                               <0x0 0x20000000 0x0 0x10000000 0x0
+> > AX45MP_PMACFG_ETYP_NAPOT |  AX45MP_PMACFG_MTYP_MEM_NON_CACHE_BUF |
+> > AX45MP_PMACFG_NAMO_AMO_SUPPORT>,
+> >                               <0x0 0x58000000 0x0 0x08000000 0x0
+> > AX45MP_PMACFG_ETYP_NAPOT |  AX45MP_PMACFG_MTYP_MEM_NON_CACHE_BUF |
+> > AX45MP_PMACFG_NAMO_AMO_SUPPORT>;
+> >
+> > Does the above sound good?
+> I've no idea. But for working around, I would give Acked-by.
 >
-> It's possible we can move the counting after dethread -- it seems the early count was just to avoid setting flags after the point of no return, but it's not an error condition...
+> >
+> > > I'm not sure how you make emmc/usb/gmac's dma ctrl desc work around
+> > > without pbmt when they don't have cache coherency protocol. Do you
+> > > need to inject dma_sync for desc synchronization? What's the effect of
+> > > dynamic PMA in the patch series?
+> > >
+> > Currently we have setup the pma regions as below:
+> >
+> > l2cache: cache-controller@13400000 {
+> >                 compatible = "andestech,ax45mp-cache", "cache";
+> >                 cache-size = <0x40000>;
+> >                 cache-line-size = <64>;
+> >                 cache-sets = <1024>;
+> >                 cache-unified;
+> >                 reg = <0x0 0x13400000 0x0 0x100000>;
+> >                 pma-regions = <0x0 0x00000000 0x0 0x10000000 0x0 0xf>,
+> >                               <0x0 0x10000000 0x0 0x04000000 0x0 0xf>,
+> >                               <0x0 0x20000000 0x0 0x10000000 0x0 0xf>,
+> >                               <0x0 0x58000000 0x0 0x08000000 0x0 0xf>;
+> >                 interrupts = <SOC_PERIPHERAL_IRQ(476, IRQ_TYPE_LEVEL_HIGH)>;
+> >         };
+> >
+> > The last pma-regions entry 0x58000000 is a DDR location this memory
+> > locations is marked as shared DMA pool with below in DT,
+> >
+> >     reserved-memory {
+> >         #address-cells = <2>;
+> >         #size-cells = <2>;
+> >         ranges;
+> >
+> >         reserved: linux,cma@58000000 {
+> >             compatible = "shared-dma-pool";
+> >             no-map;
+> >             linux,dma-default;
+> >             reg = <0x0 0x58000000 0x0 0x08000000>;
+> >         };
+> >     };
+> >
+> > And for ARCH_R9A07G043 we automatically select DMA_GLOBAL_POOL, so the
+> > IP blocks (emmc/usb/gmac's) requesting DMA'able memory will
+> > automatically fall into this region which is non-cacheable but
+> > bufferable (set in PMA) and rest everything is taken care by clean and
+> > flush callbacks. We dont have  inject dma_sync for desc
+> > synchronization for existing drivers (which are shared with Renesas
+> > RZ/G2L family)
+> Better than I thought :). The "non-cacheable but bufferable" is "weak
+> order," also raising the bufferable signal of AXI transactions. Right?
+I've asked the HW team regarding this to confirm.
 
-Random idea that I haven't thought about a lot:
+> But some drivers think ctrl desc is strong order without bufferable
+> and don't put any mb() before/after IO control operations.
+>
+So far with current testing of suffering block (dmac/emmc/usb/eth)
+drivers we have not seen any issues so far.
 
-One approach might be to not do it by counting, but instead have a
-flag on the fs_struct that we set when someone does a clone() with
-CLONE_FS but without CLONE_THREAD? Then we'd end up with the following
-possible states for fs_struct:
-
- - single-process, normal
- - single-process, pending execve past check_unsafe_exec() (prevent
-concurrent CLONE_FS)
- - shared between processes
-
-The slight difference from the old semantics would be that once you've
-used CLONE_FS without CLONE_THREAD, you can never do setuid execve()
-from your current process again (without calling unshare()), even if
-the child disappears in the meantime. I think that might be an
-acceptably small UAPI break.
+Cheers,
+Prabhakar
