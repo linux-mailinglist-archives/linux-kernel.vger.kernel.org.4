@@ -2,67 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 123045F6D3C
+	by mail.lfdr.de (Postfix) with ESMTP id 688BF5F6D3D
 	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 19:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231161AbiJFRsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 13:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
+        id S229636AbiJFRsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 13:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiJFRse (ORCPT
+        with ESMTP id S229614AbiJFRse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 6 Oct 2022 13:48:34 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE4AC1D94
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 10:48:30 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id r17so6220188eja.7
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 10:48:30 -0700 (PDT)
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39FAC1D90
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 10:48:29 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id v186so2686465pfv.11
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 10:48:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qCbcp558dSRzPWqfkd7610ukm4C9UgSFZEwAJSe+6ac=;
-        b=PlGVFo1Bs1Xp0DNjnMDiKkz3PaSM8Z2sCoJynZKxhmHnzBAuL1n/pUlp/nneWY4zgo
-         Y1ZHktK50+KOuBsev48HUYbK6+zLxV+mgndjbbiMPrUEADty8TuvnUPPYS03jC/h+hka
-         9D821vE5hiB9bm65E/ugB+ZXexk0FuSAwX9zxdcqMkwVjkvVgnWlheb6V+m79eCodjWf
-         QfATw2zBgP9cSXL1BAX0hdkZHkvsqvTqw6ifAhniKu5d98CxiOitg8qb1Bb57U7aq+1r
-         ou36BUsFr0kSGxI5bvLqudv26uqWCD0Xcf44R+H3Ao6N3rTi9R/5TAUJxW8UJwv3bxky
-         kEUA==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=c4h/StqWma673GjgxtCmSoM47qdbFDg3VL6SuKsQ6BE=;
+        b=nhO2hUX/eRPyjJJ2HXBkgKUYrt6o8hp+EfcVVdgjDno+AFQlY0DoDARKO+EYWmX+7k
+         A0V79SZNf8sMdBjzEeWEhkK9RRiKP+Ub1EFL/3Un4kQ3esMq5O6uRjdbUspq553SCzH0
+         IfJ1xU4nLfWm3I6t2YfB8wxRqXQ8Hld5eCSxGTnV/SrKEyACusLCZMc1YiUD007zKFvn
+         wQY0YDs/y9rLegtmjM22+P5DpoxzEBRfX+1Zme/qPfe4lXcREKflD1Kc2FitCHX5SX1Q
+         djSFwKVst7GBDcDl4jX35En0B+k3GyF9OzrEVDqXo5c44SXGpvK+RUPfTBMSRnx/rje5
+         KWtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qCbcp558dSRzPWqfkd7610ukm4C9UgSFZEwAJSe+6ac=;
-        b=GRWuEkXOdC7Tzx68KYMHCPIfdn4QtHlg7wxG9zVfLdUjnHFsmbAjk3Y8c3LT5r3n8V
-         ZW7WViBGrjqojM1yERhbWbMY12wMasG4IcTgOWX4bANQxB3q+Gbk4/8Vyot4kx778M8A
-         Kh3HeUtmucafRK6an5RUf7VbxhYji26pDaEvfT76SsHZXUvHGPdp6u6KNXgsvkypbvfv
-         E1J9aa2s6S1mslk8WZ4t3A9fCbH/TeOrIeS0bgAYmozZkrplwEwtQYItv6w/b8NJR/qJ
-         wIsxD5EPNbd1cGwHAg5p9EmQ3jMCJzhnOY3mRn4CTKvV0YRXto3JD1VtNz0fdJA9412j
-         X5/w==
-X-Gm-Message-State: ACrzQf1cVHHMjHKZk3ZN8uGM21Vu/D/AgjOgB0f5EqhGmgA7Aqp3CruW
-        rf7lS15jsVLUulCC9+iFt5sRF7blHKs=
-X-Google-Smtp-Source: AMsMyM5F06M8lOlSxwL1OrbBJ3wulHy+f3oIidmjgUWRbsgE9MfznLbymc6xLP0QaotXghpgfzmwyw==
-X-Received: by 2002:a17:907:2672:b0:781:dc01:6c5a with SMTP id ci18-20020a170907267200b00781dc016c5amr883058ejc.191.1665078508746;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c4h/StqWma673GjgxtCmSoM47qdbFDg3VL6SuKsQ6BE=;
+        b=hpkX7K1c/sleyfRITQ5mPzfVPcRk8jEhqWqHEdDY0LpmTJfCRQc1AYMvrMEJP7LmFk
+         mguoUZ31tvS5XTYKrM7KdyOuQm7OHQRtcXvBqtbIGUiP3eFJfb0xUKXXw/m8yZGS68Jm
+         /WJGcpnjYAXPxJ984Nc8NL0JAnQEGfXHQ2V3RGg4xRGHR3biTtJ8NgIyK4zx1kdeMEQt
+         2434NIB49YqqdyMuM1cdh3prkZVxLTEmFwZjZ+EqxCL47vBMWPMFsaI+eiVzBMt7S0Dl
+         S4OvTG+W9Nw9CzFmGaUo58FXPkMhhoepmMs9ZryYMKXwKPGB5p5/Teb47XNivseCrgLa
+         OImw==
+X-Gm-Message-State: ACrzQf1MNesmjcLmQNWRGKSCrdeALKzYf4e7vNKumAovht8tcsgA24qR
+        FsV50wGKKxiHTOm4iyqVmtqStg==
+X-Google-Smtp-Source: AMsMyM53eLmj+ROQjPtJ1EtlC79usM+RuinHeOPjwZwNnkfUpb5jNbiPyOkiT+PAqZgAlopX3E+ewA==
+X-Received: by 2002:a05:6a00:1884:b0:562:6536:4844 with SMTP id x4-20020a056a00188400b0056265364844mr844500pfh.2.1665078508939;
         Thu, 06 Oct 2022 10:48:28 -0700 (PDT)
-Received: from otyshchenko.router ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id r9-20020a1709061ba900b00782cd82db09sm6083ejg.106.2022.10.06.10.48.27
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id y37-20020a634965000000b0041c30def5e8sm28635pgk.33.2022.10.06.10.48.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 10:48:27 -0700 (PDT)
-From:   Oleksandr Tyshchenko <olekstysh@gmail.com>
-To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Juergen Gross <jgross@suse.com>
-Subject: [PATCH] xen/virtio: Handle PCI devices which Host controller is described in DT
-Date:   Thu,  6 Oct 2022 20:48:04 +0300
-Message-Id: <20221006174804.2003029-1-olekstysh@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 06 Oct 2022 10:48:18 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 17:48:10 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Gonda <pgonda@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        marcorr@google.com, michael.roth@amd.com, thomas.lendacky@amd.com,
+        joro@8bytes.org, mizhang@google.com, pbonzini@redhat.com,
+        andrew.jones@linux.dev
+Subject: Re: [V4 3/8] KVM: selftests: add hooks for managing encrypted guest
+ memory
+Message-ID: <Yz8U2k7Tu8QQNhhq@google.com>
+References: <20220829171021.701198-1-pgonda@google.com>
+ <20220829171021.701198-4-pgonda@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220829171021.701198-4-pgonda@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,137 +76,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+On Mon, Aug 29, 2022, Peter Gonda wrote:
+> +static vm_paddr_t
+> +_vm_phy_pages_alloc(struct kvm_vm *vm, size_t num, vm_paddr_t paddr_min,
 
-Use the same "xen-grant-dma" device concept (based on generic IOMMU
-device-tree bindings) for the PCI devices behind device-tree based
-PCI Host controller.
+Do not wrap before the function name.  Linus has a nice explanation/rant on this[*].
+Note to self, add a Vim macro for this...
 
-Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
----
-Slightly RFC. This is needed to support Xen grant mappings for virtio-pci devices
-on Arm at some point in the future. The Xen toolstack side is not published yet.
-Here, for PCI devices we use the same way to pass backend domid to the guest as for
-platform devices.
+[*] https://lore.kernel.org/all/CAHk-=wjoLAYG446ZNHfg=GhjSY6nFmuB_wA8fYd5iLBNXjo9Bw@mail.gmail.com
 
-Depends on Juergen's series:
-https://lore.kernel.org/xen-devel/20221006071500.15689-1-jgross@suse.com/
----
- drivers/xen/grant-dma-ops.c | 51 +++++++++++++++++++++++++++++--------
- 1 file changed, 41 insertions(+), 10 deletions(-)
+> +		    uint32_t memslot, bool encrypt)
+>  {
+>  	struct userspace_mem_region *region;
+>  	sparsebit_idx_t pg, base;
+> @@ -1152,12 +1156,22 @@ vm_paddr_t vm_phy_pages_alloc(struct kvm_vm *vm, size_t num,
+>  		abort();
+>  	}
+>  
+> -	for (pg = base; pg < base + num; ++pg)
+> +	for (pg = base; pg < base + num; ++pg) {
+>  		sparsebit_clear(region->unused_phy_pages, pg);
+> +		if (encrypt)
 
-diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-index ff9be3aff87e..79d13122ec08 100644
---- a/drivers/xen/grant-dma-ops.c
-+++ b/drivers/xen/grant-dma-ops.c
-@@ -10,6 +10,7 @@
- #include <linux/module.h>
- #include <linux/dma-map-ops.h>
- #include <linux/of.h>
-+#include <linux/pci.h>
- #include <linux/pfn.h>
- #include <linux/xarray.h>
- #include <linux/virtio_anchor.h>
-@@ -273,12 +274,28 @@ static const struct dma_map_ops xen_grant_dma_ops = {
- 	.dma_supported = xen_grant_dma_supported,
- };
- 
--static bool xen_is_dt_grant_dma_device(struct device *dev)
-+static struct device_node *xen_dt_get_node(struct device *dev)
-+{
-+	if (dev_is_pci(dev)) {
-+		struct pci_dev *pdev = to_pci_dev(dev);
-+		struct pci_bus *bus = pdev->bus;
-+
-+		/* Walk up to the root bus to look for PCI Host controller */
-+		while (!pci_is_root_bus(bus))
-+			bus = bus->parent;
-+
-+		return of_node_get(bus->bridge->parent->of_node);
-+	}
-+
-+	return of_node_get(dev->of_node);
-+}
-+
-+static bool xen_is_dt_grant_dma_device(struct device_node *np)
- {
- 	struct device_node *iommu_np;
- 	bool has_iommu;
- 
--	iommu_np = of_parse_phandle(dev->of_node, "iommus", 0);
-+	iommu_np = of_parse_phandle(np, "iommus", 0);
- 	has_iommu = iommu_np &&
- 		    of_device_is_compatible(iommu_np, "xen,grant-dma");
- 	of_node_put(iommu_np);
-@@ -288,9 +305,17 @@ static bool xen_is_dt_grant_dma_device(struct device *dev)
- 
- bool xen_is_grant_dma_device(struct device *dev)
- {
-+	struct device_node *np;
-+
- 	/* XXX Handle only DT devices for now */
--	if (dev->of_node)
--		return xen_is_dt_grant_dma_device(dev);
-+	np = xen_dt_get_node(dev);
-+	if (np) {
-+		bool ret;
-+
-+		ret = xen_is_dt_grant_dma_device(np);
-+		of_node_put(np);
-+		return ret;
-+	}
- 
- 	return false;
- }
-@@ -303,20 +328,20 @@ bool xen_virtio_mem_acc(struct virtio_device *dev)
- 	return xen_is_grant_dma_device(dev->dev.parent);
- }
- 
--static int xen_dt_grant_setup_dma_ops(struct device *dev,
-+static int xen_dt_grant_setup_dma_ops(struct device_node *np,
- 				       struct xen_grant_dma_data *data)
- {
- 	struct of_phandle_args iommu_spec;
- 
--	if (of_parse_phandle_with_args(dev->of_node, "iommus", "#iommu-cells",
-+	if (of_parse_phandle_with_args(np, "iommus", "#iommu-cells",
- 			0, &iommu_spec)) {
--		dev_err(dev, "Cannot parse iommus property\n");
-+		pr_err("%s: Cannot parse iommus property\n", np->name);
- 		return -ESRCH;
- 	}
- 
- 	if (!of_device_is_compatible(iommu_spec.np, "xen,grant-dma") ||
- 			iommu_spec.args_count != 1) {
--		dev_err(dev, "Incompatible IOMMU node\n");
-+		pr_err("%s: Incompatible IOMMU node\n", iommu_spec.np->name);
- 		of_node_put(iommu_spec.np);
- 		return -ESRCH;
- 	}
-@@ -335,6 +360,7 @@ static int xen_dt_grant_setup_dma_ops(struct device *dev,
- void xen_grant_setup_dma_ops(struct device *dev)
- {
- 	struct xen_grant_dma_data *data;
-+	struct device_node *np;
- 
- 	data = find_xen_grant_dma_data(dev);
- 	if (data) {
-@@ -346,8 +372,13 @@ void xen_grant_setup_dma_ops(struct device *dev)
- 	if (!data)
- 		goto err;
- 
--	if (dev->of_node) {
--		if (xen_dt_grant_setup_dma_ops(dev, data))
-+	np = xen_dt_get_node(dev);
-+	if (np) {
-+		int ret;
-+
-+		ret = xen_dt_grant_setup_dma_ops(np, data);
-+		of_node_put(np);
-+		if (ret)
- 			goto err;
- 	} else if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT)) {
- 		dev_info(dev, "Using dom0 as backend\n");
--- 
-2.25.1
+prefer s/encrypt/private, and s/encrypted_phy_pages/private_phy_pages.  pKVM
+doesn't rely on encryption, and it's not impossible that x86 will someday gain
+similar functionality.  And "encrypted" is also technically wrong for SEV and TDX,
+as shared memory can also be encrypted with a common key.
 
+> +			sparsebit_set(region->encrypted_phy_pages, pg);
+> +	}
+>  
+>  	return base * vm->page_size;
+>  }
+>  
+> +vm_paddr_t vm_phy_pages_alloc(struct kvm_vm *vm, size_t num,
+> +			      vm_paddr_t paddr_min, uint32_t memslot)
+> +{
+> +	return _vm_phy_pages_alloc(vm, num, paddr_min, memslot,
+> +				   vm->memcrypt.enc_by_default);
+
+enc_by_default yields a bizarre API.  The behavior depends on whether or not the
+VM is protected, and whether or not the VM wants to protect memory by default.
+
+For simplicity, IMO vm_phy_pages_alloc() should allocate memory as private if the
+VM supports protected memory, i.e. just have vm->protected or whatever and use
+that here.
+
+> +}
+> +
+>  vm_paddr_t vm_phy_page_alloc(struct kvm_vm *vm, vm_paddr_t paddr_min,
+>  			     uint32_t memslot)
+>  {
+> @@ -1741,6 +1755,10 @@ void vm_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent)
+>  			region->host_mem);
+>  		fprintf(stream, "%*sunused_phy_pages: ", indent + 2, "");
+>  		sparsebit_dump(stream, region->unused_phy_pages, 0);
+> +		if (vm->memcrypt.enabled) {
+
+vm->protected
+
+> +			fprintf(stream, "%*sencrypted_phy_pages: ", indent + 2, "");
+> +			sparsebit_dump(stream, region->encrypted_phy_pages, 0);
+> +		}
+>  	}
+>  	fprintf(stream, "%*sMapped Virtual Pages:\n", indent, "");
+>  	sparsebit_dump(stream, vm->vpages_mapped, indent + 2);
+> @@ -1989,3 +2007,31 @@ void __vm_get_stat(struct kvm_vm *vm, const char *stat_name, uint64_t *data,
+>  		break;
+>  	}
+>  }
+> +
+> +void vm_set_memory_encryption(struct kvm_vm *vm, bool enc_by_default, bool has_enc_bit,
+> +			      uint8_t enc_bit)
+> +{
+> +	vm->memcrypt.enabled = true;
+> +	vm->memcrypt.enc_by_default = enc_by_default;
+> +	vm->memcrypt.has_enc_bit = has_enc_bit;
+> +	vm->memcrypt.enc_bit = enc_bit;
+> +}
+> +
+> +const struct sparsebit *
+> +vm_get_encrypted_phy_pages(struct kvm_vm *vm, int slot, vm_paddr_t *gpa_start,
+> +			   uint64_t *size)
+
+Bad wrap.
+
+> +{
+> +	struct userspace_mem_region *region;
+> +
+> +	if (!vm->memcrypt.enabled)
+
+This seems rather silly, why not TEST_ASSERT()?
+
+> +		return NULL;
+> +
+> +	region = memslot2region(vm, slot);
+> +	if (!region)
+
+Same here, TEST_ASSERT() seems more appropriate.
+
+Actually, I can't envision a use outside of SEV.  AFAIK, no other architecture
+does the whole "launch update" thing.  I.e. just open code this in sev_encrypt().
+The more generic API that will be useful for other VM types will be to query if a
+specific GPA is private vs. shared.
+
+> +		return NULL;
+> +
+> +	*size = region->region.memory_size;
+> +	*gpa_start = region->region.guest_phys_addr;
+> +
+> +	return region->encrypted_phy_pages;
+> +}
+> -- 
+> 2.37.2.672.g94769d06f0-goog
+> 
