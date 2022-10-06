@@ -2,341 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C185F5F56
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 05:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5B05F5F46
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 05:06:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiJFDM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 23:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36032 "EHLO
+        id S230011AbiJFDG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 23:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbiJFDMo (ORCPT
+        with ESMTP id S229777AbiJFDGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 23:12:44 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42634895F2;
-        Wed,  5 Oct 2022 20:12:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665025959; x=1696561959;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gh5OVqF15e9clx6zOacfWTHXWSaHJb/fk8tuPk8eGYY=;
-  b=aIPXZ3QTv8MGKmdAIyGMcs2GyjPXSbCqaJW/47oV/81FAJI9JNylwtbi
-   wk1/AGyuJk4e6jVAgQHuMxU4xMJwJ85EWkatpTWUtT20AoqDeQ6VbckO4
-   /kE3hEpF1kkKo3yAgQEIifGEwMk/gmgEhAJIhwIQqY4eYjaEEigDF8+wP
-   8kUQvlC3O6oKSer/wZLCwHa/z738sY9qylVRfd9lguRp/e5Dw0kOchO6s
-   mf+18w0JtU/4v1NkTfgdcIeRqDzN4uxUqDSAzgLI3eRzqye4NPMISIHcJ
-   SPDuucUkdFckEJw2qlj8y9ZWMQR/TvHNx03zpOZsJ+xkLnEmQ/ee9+jHZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="303307618"
-X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
-   d="scan'208";a="303307618"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 20:12:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="953444525"
-X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
-   d="scan'208";a="953444525"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga005.fm.intel.com with ESMTP; 05 Oct 2022 20:12:35 -0700
-Date:   Thu, 6 Oct 2022 11:03:39 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, dg@emlix.com,
-        j.zink@pengutronix.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, system@metrotek.ru
-Subject: Re: [PATCH v13 1/2] fpga: lattice-sysconfig-spi: add Lattice
- sysCONFIG FPGA manager
-Message-ID: <Yz5Fi3lBrzV8LMm7@yilunxu-OptiPlex-7050>
-References: <20220926143924.11367-1-i.bornyakov@metrotek.ru>
- <20220926143924.11367-2-i.bornyakov@metrotek.ru>
+        Wed, 5 Oct 2022 23:06:20 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C37680EB9
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 20:06:18 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so517160pjk.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 20:06:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=KDORDmVJlGAH+2VDPr5/x8Jt3M8M+5CLZ86WDuJmMtQ=;
+        b=XRNtI0RKOybw0AZPuMgzHQ6nwXZmdMO+fdjLU0CJID/MEsvN4UN4GSWoQ19kIarRJ0
+         OoFyZcjmJ8vff47NqmfklVugFf5abRbNno1bVwJ3LHSCq67q3jKj0ksZNE9mfd1YVbbl
+         b6hQzCEvEKfG1yI/i1Ynw1SIWxy/MjuCItrNo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=KDORDmVJlGAH+2VDPr5/x8Jt3M8M+5CLZ86WDuJmMtQ=;
+        b=DCl4o+OXYC2Cy4VsA2wSvhDNHHFDUTAk6NPL/7fD4xCxeMMsp4YNnP00qbk8aTJWxh
+         rp7UpEyO13Cl2CC9j5zBOm6TqYN+m4llBnt4h/G9naYcuT5SQMiuDoD+Q+QHVum4elrT
+         gp9GXSducfFpCx6Txe6G145JP0ukkQE2Zx4lbANMaZeCwba4JEQrMwJdoinsPjrdkPL1
+         1547MkfM5XW+3esHBBUqzu2wcaeMhsro7yaq0fk8DHs+pBKg08wM5xotU1SXLFHy1QYm
+         eFNbLIwO5g0QS52lFMJ2bSVxaapObadmDxpVpfXhMiD7ibQB9W0g+Qky2pLR4/NIDXfl
+         9tTw==
+X-Gm-Message-State: ACrzQf0B0B4ToxihHV0XfZml4FckwJ3mdAi/6mWAr8beJTxsr60KPSWG
+        j8jmtLDcTHUvciDTyHTdGYwL9A==
+X-Google-Smtp-Source: AMsMyM5pnDxtwM6bse0TAOUDjZ+WVFmurkxinUugzQUbn4YATg0uA0iXtH3Qn1ciOgVXjm8wi4zVNQ==
+X-Received: by 2002:a17:902:6bc7:b0:178:8305:392a with SMTP id m7-20020a1709026bc700b001788305392amr2409484plt.39.1665025577628;
+        Wed, 05 Oct 2022 20:06:17 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v126-20020a622f84000000b00550724f8ea0sm11590896pfv.128.2022.10.05.20.06.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 20:06:16 -0700 (PDT)
+Date:   Wed, 5 Oct 2022 20:06:15 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Jorge Merlino <jorge.merlino@canonical.com>,
+        David Howells <dhowells@redhat.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Fix race condition when exec'ing setuid files
+Message-ID: <202210051950.CAF8CDBF@keescook>
+References: <20220910211215.140270-1-jorge.merlino@canonical.com>
+ <202209131456.76A13BC5E4@keescook>
+ <c9ca551b-070b-dcee-b4b4-b7fbfc33ab5d@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220926143924.11367-2-i.bornyakov@metrotek.ru>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c9ca551b-070b-dcee-b4b4-b7fbfc33ab5d@canonical.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-26 at 17:39:23 +0300, Ivan Bornyakov wrote:
-> Add support to the FPGA manager for programming Lattice ECP5 FPGA over
-> slave SPI sysCONFIG interface.
+On Wed, Oct 05, 2022 at 01:09:36PM -0300, Jorge Merlino wrote:
+> On 13/9/22 19:03, Kees Cook wrote:
+> > I'll want to spend some more time studying this race, but yes, it looks
+> > like it should get fixed. I'm curious, though, how did you find this
+> > problem? It seems quite unusual to have a high-load heavily threaded
+> > process decide to exec.
 > 
-> sysCONFIG interface core functionality is separate from both ECP5 and
-> SPI specifics, so support for other FPGAs with different port types can
-> be added in the future.
-> 
-> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> ---
->  drivers/fpga/Kconfig                 |  11 +
->  drivers/fpga/Makefile                |   2 +
->  drivers/fpga/lattice-sysconfig-spi.c | 151 ++++++++++
->  drivers/fpga/lattice-sysconfig.c     | 428 +++++++++++++++++++++++++++
->  drivers/fpga/lattice-sysconfig.h     |  41 +++
->  5 files changed, 633 insertions(+)
->  create mode 100644 drivers/fpga/lattice-sysconfig-spi.c
->  create mode 100644 drivers/fpga/lattice-sysconfig.c
->  create mode 100644 drivers/fpga/lattice-sysconfig.h
-> 
-> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> index 6c416955da53..d1a8107fdcb3 100644
-> --- a/drivers/fpga/Kconfig
-> +++ b/drivers/fpga/Kconfig
-> @@ -263,4 +263,15 @@ config FPGA_MGR_MICROCHIP_SPI
->  	  programming over slave SPI interface with .dat formatted
->  	  bitstream image.
->  
-> +config FPGA_MGR_LATTICE_SYSCONFIG
-> +	tristate
-> +
-> +config FPGA_MGR_LATTICE_SYSCONFIG_SPI
-> +	tristate "Lattice sysCONFIG SPI FPGA manager"
-> +	depends on SPI
-> +	select FPGA_MGR_LATTICE_SYSCONFIG
-> +	help
-> +	  FPGA manager driver support for Lattice FPGAs programming over slave
-> +	  SPI sysCONFIG interface.
-> +
->  endif # FPGA
-> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-> index 42ae8b58abce..72e554b4d2f7 100644
-> --- a/drivers/fpga/Makefile
-> +++ b/drivers/fpga/Makefile
-> @@ -20,6 +20,8 @@ obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
->  obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
->  obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)	+= versal-fpga.o
->  obj-$(CONFIG_FPGA_MGR_MICROCHIP_SPI)	+= microchip-spi.o
-> +obj-$(CONFIG_FPGA_MGR_LATTICE_SYSCONFIG)	+= lattice-sysconfig.o
-> +obj-$(CONFIG_FPGA_MGR_LATTICE_SYSCONFIG_SPI)	+= lattice-sysconfig-spi.o
->  obj-$(CONFIG_ALTERA_PR_IP_CORE)		+= altera-pr-ip-core.o
->  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)	+= altera-pr-ip-core-plat.o
->  
-> diff --git a/drivers/fpga/lattice-sysconfig-spi.c b/drivers/fpga/lattice-sysconfig-spi.c
-> new file mode 100644
-> index 000000000000..1428705ae7d1
-> --- /dev/null
-> +++ b/drivers/fpga/lattice-sysconfig-spi.c
-> @@ -0,0 +1,151 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Lattice FPGA programming over slave SPI sysCONFIG interface.
-> + */
-> +
-> +#include <linux/spi/spi.h>
-> +
-> +#include "lattice-sysconfig.h"
-> +
-> +static const u32 ecp5_spi_max_speed_hz = 60000000;
-> +
-> +static int sysconfig_spi_cmd_write(struct sysconfig_priv *priv,
-> +				   const void *tx_buf, size_t tx_len)
-> +{
-> +	struct spi_device *spi = to_spi_device(priv->dev);
-> +
-> +	return spi_write(spi, tx_buf, tx_len);
-> +}
-> +
-> +static int sysconfig_spi_cmd_read(struct sysconfig_priv *priv,
-> +				  const void *tx_buf, size_t tx_len,
-> +				  void *rx_buf, size_t rx_len)
-> +{
-> +	struct spi_device *spi = to_spi_device(priv->dev);
-> +
-> +	return spi_write_then_read(spi, tx_buf, tx_len, rx_buf, rx_len);
-> +}
-> +
-> +static int sysconfig_spi_bitstream_burst_init(struct sysconfig_priv *priv)
-> +{
-> +	const u8 lsc_bitstream_burst[] = SYSCONFIG_LSC_BITSTREAM_BURST;
-> +	struct spi_device *spi = to_spi_device(priv->dev);
-> +	struct spi_transfer xfer = {
-> +		.tx_buf = lsc_bitstream_burst,
-> +		.len = sizeof(lsc_bitstream_burst),
-> +		.cs_change = 1,
-> +	};
-> +	struct spi_message msg;
-> +	int ret;
-> +
-> +	spi_message_init_with_transfers(&msg, &xfer, 1);
-> +
-> +	/*
-> +	 * Lock SPI bus for exclusive usage until FPGA programming is done.
-> +	 * SPI bus will be released in sysconfig_spi_bitstream_burst_complete().
-> +	 */
-> +	spi_bus_lock(spi->controller);
-> +
-> +	ret = spi_sync_locked(spi, &msg);
-> +	if (ret)
-> +		spi_bus_unlock(spi->controller);
-> +
-> +	return ret;
-> +}
-> +
-> +static int sysconfig_spi_bitstream_burst_write(struct sysconfig_priv *priv,
-> +					       const char *buf, size_t len)
-> +{
-> +	struct spi_device *spi = to_spi_device(priv->dev);
-> +	struct spi_transfer xfer = {
-> +		.tx_buf = buf,
-> +		.len = len,
-> +		.cs_change = 1,
-> +	};
-> +	struct spi_message msg;
-> +
-> +	spi_message_init_with_transfers(&msg, &xfer, 1);
-> +
-> +	return spi_sync_locked(spi, &msg);
-> +}
-> +
-> +static int sysconfig_spi_bitstream_burst_complete(struct sysconfig_priv *priv)
-> +{
-> +	struct spi_device *spi = to_spi_device(priv->dev);
-> +
-> +	/* Bitstream burst write is done, release SPI bus */
-> +	spi_bus_unlock(spi->controller);
-> +
-> +	/* Toggle CS to finish bitstream write */
-> +	return spi_write(spi, NULL, 0);
-> +}
-> +
-> +static int sysconfig_spi_probe(struct spi_device *spi)
-> +{
-> +	const struct spi_device_id *dev_id;
-> +	struct device *dev = &spi->dev;
-> +	struct sysconfig_priv *priv;
-> +	const u32 *spi_max_speed;
-> +
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	spi_max_speed = device_get_match_data(dev);
-> +	if (!spi_max_speed) {
-> +		dev_id = spi_get_device_id(spi);
-> +		if (!dev_id)
-> +			return -ENODEV;
-> +
-> +		spi_max_speed = (const u32 *)dev_id->driver_data;
-> +	}
-> +
-> +	if (!spi_max_speed)
-> +		return -EINVAL;
-> +
-> +	if (spi->max_speed_hz > *spi_max_speed) {
-> +		dev_err(dev, "SPI speed %u is too high, maximum speed is %u\n",
-> +			spi->max_speed_hz, *spi_max_speed);
-> +		return -EINVAL;
-> +	}
-> +
-> +	priv->dev = dev;
-> +	priv->command_write = sysconfig_spi_cmd_write;
-> +	priv->command_read = sysconfig_spi_cmd_read;
-> +	priv->bitstream_burst_write_init = sysconfig_spi_bitstream_burst_init;
-> +	priv->bitstream_burst_write = sysconfig_spi_bitstream_burst_write;
-> +	priv->bitstream_burst_write_complete = sysconfig_spi_bitstream_burst_complete;
-> +
-> +	return sysconfig_probe(priv);
-> +}
-> +
-> +static const struct spi_device_id sysconfig_spi_ids[] = {
-> +	{
-> +		.name = "sysconfig-ecp5",
-> +		.driver_data = (kernel_ulong_t)&ecp5_spi_max_speed_hz,
-> +	}, {},
-> +};
-> +MODULE_DEVICE_TABLE(spi, sysconfig_spi_ids);
-> +
-> +#if IS_ENABLED(CONFIG_OF)
-> +static const struct of_device_id sysconfig_of_ids[] = {
-> +	{
-> +		.compatible = "lattice,sysconfig-ecp5",
-> +		.data = &ecp5_spi_max_speed_hz,
-> +	}, {},
-> +};
-> +MODULE_DEVICE_TABLE(of, sysconfig_of_ids);
-> +#endif /* IS_ENABLED(CONFIG_OF) */
-> +
-> +static struct spi_driver lattice_sysconfig_driver = {
-> +	.probe = sysconfig_spi_probe,
-> +	.id_table = sysconfig_spi_ids,
-> +	.driver = {
-> +		.name = "lattice_sysconfig_spi_fpga_mgr",
-> +		.of_match_table = of_match_ptr(sysconfig_of_ids),
-> +	},
-> +};
-> +module_spi_driver(lattice_sysconfig_driver);
-> +
-> +MODULE_DESCRIPTION("Lattice sysCONFIG Slave SPI FPGA Manager");
-> +MODULE_LICENSE("GPL");
-> diff --git a/drivers/fpga/lattice-sysconfig.c b/drivers/fpga/lattice-sysconfig.c
-> new file mode 100644
-> index 000000000000..f9acff1ab122
-> --- /dev/null
-> +++ b/drivers/fpga/lattice-sysconfig.c
-> @@ -0,0 +1,428 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Lattice FPGA sysCONFIG interface functions independent of port type.
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/fpga/fpga-mgr.h>
-> +#include <linux/gpio/consumer.h>
-> +
-> +#include "lattice-sysconfig.h"
-> +
-> +static int sysconfig_cmd_write(struct sysconfig_priv *priv, const void *buf,
-> +			       size_t buf_len)
-> +{
-> +	return priv->command_write(priv, buf, buf_len);
-> +}
-> +
-> +static int sysconfig_cmd_read(struct sysconfig_priv *priv, const void *tx_buf,
-> +			      size_t tx_len, void *rx_buf, size_t rx_len)
-> +{
-> +	return priv->command_read(priv, tx_buf, tx_len, rx_buf, rx_len);
-> +}
-> +
-> +static int sysconfig_read_busy(struct sysconfig_priv *priv)
-> +{
-> +	const u8 lsc_check_busy[] = SYSCONFIG_LSC_CHECK_BUSY;
-> +	u8 busy;
-> +	int ret;
-> +
-> +	ret = sysconfig_cmd_read(priv, lsc_check_busy, sizeof(lsc_check_busy),
-> +				 &busy, sizeof(busy));
-> +
-> +	return ret ? : busy;
-> +}
-> +
-> +static int sysconfig_poll_busy(struct sysconfig_priv *priv)
-> +{
-> +	unsigned long timeout;
-> +	int ret;
-> +
-> +	timeout = jiffies + msecs_to_jiffies(SYSCONFIG_POLL_BUSY_TIMEOUT_MS);
-> +
-> +	while (time_before(jiffies, timeout)) {
-> +		ret = sysconfig_read_busy(priv);
-> +		if (ret <= 0)
-> +			return ret;
-> +
-> +		usleep_range(SYSCONFIG_POLL_INTERVAL_US,
-> +			     SYSCONFIG_POLL_INTERVAL_US * 2);
-> +	}
-> +
-> +	return -EBUSY;
+> I just got a response from our customer regarding the situation where this
+> race condition occurs:
 
-return -ETIMEDOUT? To be aligned with sysconfig_poll_gpio.
+Thanks for getting back details!
 
-Others look good to me.
+> Our application is a Rust-based CLI tool that acts as a frontend to
+> cloud-based testing infrastructure. In one mode of operation it uploads a
+> large number of test artifacts to cloud storage, spawns compute instances,
+> and then starts a VPN connection to those instances. The application creates
+> the VPN connection by executing another setuid-root tool as a subprocess. We
+> see that this subprocess sometimes fails to setuid. The "high-load heavily
+> threaded" aspect comes from the fact that we're using the Tokio runtime.
+> Each upload to cloud storage is a separate Tokio task (i.e. "green thread")
+> and these are scheduled onto "N" OS-level threads, where N = nproc. In a
+> large run we may upload a couple thousand artifacts but limit to 50
+> concurrent uploads. Once these artifact uploads complete, we typically spawn
+> the setuid subprocess within 1-2 seconds.
 
-Thanks,
-Yilun
+Interesting. Seems like the execve might be racing all the threads
+exiting?
+
+> Have you been able to look at this issue?
+
+I'll continue looking at this.
+
+Dave, this tracks back to commit a6f76f23d297 ("CRED: Make execve() take
+advantage of copy-on-write credentials") ... any ideas what's happening
+here?
+
+-- 
+Kees Cook
