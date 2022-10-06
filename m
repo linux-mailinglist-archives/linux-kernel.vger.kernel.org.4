@@ -2,91 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F805F6609
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C5E5F6600
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231351AbiJFM2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 08:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52758 "EHLO
+        id S231184AbiJFM2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 08:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiJFM2C (ORCPT
+        with ESMTP id S229528AbiJFM15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 08:28:02 -0400
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8679B85E;
-        Thu,  6 Oct 2022 05:28:01 -0700 (PDT)
-Received: by mail-oo1-f42.google.com with SMTP id u19-20020a4a9e93000000b004757198549cso1317824ook.0;
-        Thu, 06 Oct 2022 05:28:01 -0700 (PDT)
+        Thu, 6 Oct 2022 08:27:57 -0400
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247AAB85E;
+        Thu,  6 Oct 2022 05:27:57 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id s192so1832972oie.3;
+        Thu, 06 Oct 2022 05:27:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LD+/bVMKWMVi1TdoFb/7Rk7QFNHmQh7iMpdXxnsmZnM=;
-        b=BbWQuCJvv4WEhStyPG8W5AL4pv6qujtjfc88fW8X0KoCethazL9IstDRWgJKkZaPFa
-         WVZoVg8EkcDVBrt64+4oCcEz4IK9ThwFOtmxiR/9rn1H7OSV2DlJ8C53FFDCNIJb5Fl5
-         VFmhBbXgL0a7bpaazIKR9IkcBPXfHcwA7NcI+v5qsp9+LZN1nwLPC0QHKdKsvm1frfXl
-         uKGUfn2J2lhebiKE9MOUHVY5eA0fJFfSfVZCeCdZvHjhXoVteGW9eHblbxCVLJCo5mry
-         JP3t22MZfjL6hrZ3SbJTaFcoYYDlvTcS/2oS+CYnVgZhb44RRQasKkGke3GRk3CzG/Jd
-         nAfA==
-X-Gm-Message-State: ACrzQf3W5BpkJ8fRJlg99xkHKLcbDLN5r6HlFbhaO4Wpho5VfSrtpEA2
-        21gkjrq7yuz9XMLf1MJCQxLlrS02aw==
-X-Google-Smtp-Source: AMsMyM6vEm0NpFozxeOWrt/cdZf0yoOiGMfTBbW4yKmcM3Yv5D2tCZ+gIN1JXJoyWpdYFDibLQL2yg==
-X-Received: by 2002:a05:6830:650a:b0:655:e38b:dcd4 with SMTP id cm10-20020a056830650a00b00655e38bdcd4mr1730591otb.189.1665059280885;
-        Thu, 06 Oct 2022 05:28:00 -0700 (PDT)
+        bh=IivXsPp5lB5UeXK+nUb21Vu9wuwXJqHD7QS9qHFH17M=;
+        b=c/MbcbpS33CpNHuGjD7Os9bjbk4Y8TctPJU/nW5teyWnR0fz3uYYpeEMVkTRATn7nn
+         J3sif4eNc803gUzTO7zQJcfHhK8k2Myg4uI4uOmfR3Mda8Tj6XEMExglAiM1k2hmdchD
+         s+sqDcBC7PF/YRN5HT2v80bQWuvqngqkFYoMXMnvZTgX0ATMk7s0Zou2orggFKpzrhAy
+         XoiVIckRhlE2LUqEbb2CsKoBJ5ESstGBy+xzt3D6rx9FNJaBInvXnlhL12tILec2c/FA
+         utmA3Zdt30PpTskTtMFL289+/cXlF1/NT3yUpyGQaT3wZztg5FDY75tPbaWQyBFjMNQw
+         GjZw==
+X-Gm-Message-State: ACrzQf2KV1oNRrjWWlaCyQnE7DGlg5TBeUk0JjSptja8BEFNzY9cN6tf
+        0ObGG6jItMvc62zn/M6T9w==
+X-Google-Smtp-Source: AMsMyM6v4daLPkZQEVW4dBm3lahUxfM8urW8wX2Qa4pW/2l5uyythd5T/wl5E/sb0t6hvvgholskYA==
+X-Received: by 2002:a54:4485:0:b0:34f:b741:9932 with SMTP id v5-20020a544485000000b0034fb7419932mr2235426oiv.42.1665059276383;
+        Thu, 06 Oct 2022 05:27:56 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o64-20020aca4143000000b00342ded07a75sm5652474oia.18.2022.10.06.05.27.59
+        by smtp.gmail.com with ESMTPSA id d15-20020a056870d28f00b00132218cb7afsm5706785oae.42.2022.10.06.05.27.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 05:27:59 -0700 (PDT)
-Received: (nullmailer pid 1613451 invoked by uid 1000);
+        Thu, 06 Oct 2022 05:27:55 -0700 (PDT)
+Received: (nullmailer pid 1613448 invoked by uid 1000);
         Thu, 06 Oct 2022 12:27:55 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Lee Jones <lee@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
+To:     allen <allen.chen@ite.com.tw>
+Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Pin-yen Lin <treapking@chromium.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-gpio@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20221005-mdm9615-pinctrl-yaml-v1-1-0cbc006e2a30@linaro.org>
-References: <20221005-mdm9615-pinctrl-yaml-v1-0-0cbc006e2a30@linaro.org> <20221005-mdm9615-pinctrl-yaml-v1-1-0cbc006e2a30@linaro.org>
-Message-Id: <166505882828.1602503.18185089088624527425.robh@kernel.org>
-Subject: Re: [PATCH 1/6] dt-bindings: pinctrl: convert qcom,mdm9615-pinctrl.txt to dt-schema
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Robert Foss <robert.foss@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Hermes Wu <Hermes.Wu@ite.com.tw>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>
+In-Reply-To: <20221006020444.15823-2-allen.chen@ite.com.tw>
+References: <20221006020444.15823-1-allen.chen@ite.com.tw> <20221006020444.15823-2-allen.chen@ite.com.tw>
+Message-Id: <166505880800.1601475.16626115923147161854.robh@kernel.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: it6505: add properties to restrict output bandwidth
 Date:   Thu, 06 Oct 2022 07:27:55 -0500
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Oct 2022 09:57:58 +0000, Neil Armstrong wrote:
-> Convert the MDM9515 pinctrl bindings to dt-schema.
+On Thu, 06 Oct 2022 10:04:43 +0800, allen wrote:
+> From: allen chen <allen.chen@ite.com.tw>
 > 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Add properties to restrict dp output data-lanes and clock.
+> 
+> Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
+> Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
 > ---
->  .../bindings/pinctrl/qcom,mdm9615-pinctrl.txt      | 161 ---------------------
->  .../bindings/pinctrl/qcom,mdm9615-pinctrl.yaml     | 101 +++++++++++++
->  2 files changed, 101 insertions(+), 161 deletions(-)
+>  .../bindings/display/bridge/ite,it6505.yaml          | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+yamllint warnings/errors:
 
-Full log is available here: https://patchwork.ozlabs.org/patch/
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml: properties:ite,dp-output-max-pixel-clock-mhz: '$ref' should not be valid under {'const': '$ref'}
+	hint: Standard unit suffix properties don't need a type $ref
+	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
 
+doc reference errors (make refcheckdocs):
 
-pinctrl@800000: 'gpioext1_pins', 'gsbi3_pins', 'gsbi4_pins', 'gsbi5_i2c_pins', 'gsbi5_uart_pins', 'reset_out_pins', 'sdc_cd_pins' do not match any of the regexes: '-state$', 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dtb
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
