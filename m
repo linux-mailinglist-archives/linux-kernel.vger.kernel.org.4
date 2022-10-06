@@ -2,88 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86FB65F6DBC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 20:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E02185F6DC0
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 20:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbiJFSxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 14:53:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33542 "EHLO
+        id S231614AbiJFSyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 14:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiJFSxQ (ORCPT
+        with ESMTP id S229666AbiJFSya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 14:53:16 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834A9C6941;
-        Thu,  6 Oct 2022 11:53:12 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-132e9bc5ff4so3217266fac.7;
-        Thu, 06 Oct 2022 11:53:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yeee9Rr7jOAcATV5bBfTzwtN4fPcyxHttU5yk2BU/SY=;
-        b=PD6+YhNBFjFKDvDWHgARwtS7R0mI7jMoe9d3LNgl9Fjv+NbjW+K1Ep+4M8qH7+KFIT
-         fHsK+8/6Qk9RM0skiCP0k8uM0pmO/JpeVFwRoJs35APl4HysjGOIvwCNbyPFk3I2RSGB
-         2Ts5v6Aj8gGLmlIIyNLr6FdzAOf7LA9AWfFTPLiGnxvYG5fBX2UMHe0fJsRWeCRgT8Lv
-         gq9a8wolr9PX8IY9R+j1s1XZKV7KKtk4Vw5vAVnD8zgAatABtjqgobvqYB+GDc+l1swo
-         miHzVLZstl9PNqZtlAYsOuptFY3M7VyEBnR+CY8ZNrg6g8UMIO7Ms5tgcwbZ4bmjNUy3
-         +h7w==
-X-Gm-Message-State: ACrzQf0djaroc2U/a7EMhZZRC4fV2pGEWHuUSLP9xPDmnv/mxouTS1kj
-        wpFuxo6/Fic++xbGmXYrxA==
-X-Google-Smtp-Source: AMsMyM7vENBvoax0UUACSUWvm/Yhjv+8TS5Ns+hZv0leddoiFQ0qcEP9taDDKRVnqrRT53lnby1d/w==
-X-Received: by 2002:a05:6870:b01c:b0:133:3666:1ecc with SMTP id y28-20020a056870b01c00b0013336661eccmr522250oae.45.1665082391128;
-        Thu, 06 Oct 2022 11:53:11 -0700 (PDT)
-Received: from robh_at_kernel.org ([2607:fb90:8a65:c536:245:842:a3a4:9017])
-        by smtp.gmail.com with ESMTPSA id o6-20020a056870524600b0012d939eb0bfsm209379oai.34.2022.10.06.11.53.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 11:53:10 -0700 (PDT)
-Received: (nullmailer pid 27055 invoked by uid 1000);
-        Thu, 06 Oct 2022 18:53:09 -0000
-Date:   Thu, 6 Oct 2022 13:53:09 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH v4 2/2] dt-bindings: gpio: Add gpio-latch binding document
-Message-ID: <166508237779.26843.14601884317777687978.robh@kernel.org>
-References: <20221006083031.2259006-1-s.hauer@pengutronix.de>
- <20221006083031.2259006-3-s.hauer@pengutronix.de>
+        Thu, 6 Oct 2022 14:54:30 -0400
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471DDC6940;
+        Thu,  6 Oct 2022 11:54:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1665082470; x=1696618470;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=O+rxa/5K9etOxsM0rDLKBB+YkC59TxU0x7Pj+sq5/H0=;
+  b=C+GHVJdAmaCExcH9tioAod+WAsWe9JsHfqyf4yyyanBH2sA+0OtQByMQ
+   f1lqXEhLwwLv4bMv/Lsc7wIvJFJ2gin4eN9w6WOGHgLuWmGTkHuaHXRL6
+   J77YXB7aEJAufKAqTQjSkXtlHsPUyxJJiCMUa8OWAfaksEwiySYQ+UKil
+   U=;
+X-IronPort-AV: E=Sophos;i="5.95,164,1661817600"; 
+   d="scan'208";a="231288507"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-e823fbde.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 18:54:12 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1a-e823fbde.us-east-1.amazon.com (Postfix) with ESMTPS id B29CCC08DE;
+        Thu,  6 Oct 2022 18:54:08 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Thu, 6 Oct 2022 18:54:07 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.161.176) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Thu, 6 Oct 2022 18:54:02 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+CC:     Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Kuniyuki Iwashima <kuni1840@gmail.com>,
+        <netdev@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5 net 0/5] tcp/udp: Fix memory leaks and data races around IPV6_ADDRFORM.
+Date:   Thu, 6 Oct 2022 11:53:44 -0700
+Message-ID: <20221006185349.74777-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221006083031.2259006-3-s.hauer@pengutronix.de>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.161.176]
+X-ClientProxiedBy: EX13D18UWA003.ant.amazon.com (10.43.160.238) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Oct 2022 10:30:31 +0200, Sascha Hauer wrote:
-> This adds a binding for a GPIO multiplexer driver based on latches
-> connected to other GPIOs.
-> 
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> ---
-> 
-> Notes:
->     Changes since v3:
->     - Introduce delays between GPIO toggles as suggested by Serge Semin
-> 
->     Changes since v1:
->     - Add license to binding file
-> 
->  .../devicetree/bindings/gpio/gpio-latch.yaml  | 94 +++++++++++++++++++
->  1 file changed, 94 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gpio/gpio-latch.yaml
-> 
+This series fixes some memory leaks and data races caused in the
+same scenario where one thread converts an IPv6 socket into IPv4
+with IPV6_ADDRFORM and another accesses the socket concurrently.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+
+Changes:
+  v5:
+    * Patch 1 & 5
+      * Rebase and resolve conflicts with 24426654ed3a and 34704ef024ae
+
+    * Patch 3:
+      * Remove 'inline' from udplite_sk_init()
+      * Remove EXPORT_SYMBOL_GPL(inet6_sock_destruct)
+
+  v4: https://lore.kernel.org/netdev/20221004171802.40968-1-kuniyu@amazon.com/
+    * Patch 3:
+      * Change UDPv6 Lite's sk->sk_prot->init() and sk->destruct() as well.
+      * Move udplite_sk_init() from udplite.h to udplite.c.
+
+  v3 (Resend): https://lore.kernel.org/netdev/20221003154425.49458-1-kuniyu@amazon.com/
+    * CC blamed commits' EHOSTUNREACH authors to make patchwork happy
+
+  v3: https://lore.kernel.org/netdev/20220929012542.55424-1-kuniyu@amazon.com/
+    * Patch 2:
+      * Add comment for np->rxopt.all = 0
+      * Add inet6_cleanup_sock()
+    * Patch 3:
+      * Call inet6_cleanup_sock() instead of inet6_destroy_sock()
+
+  v2: https://lore.kernel.org/netdev/20220928002741.64237-1-kuniyu@amazon.com/
+    * Patch 3:
+      * Move inet6_destroy_sock() from sk_prot->destroy()
+        to sk->sk_destruct() and fix CONFIG_IPV6=m build failure
+    * Patch 5:
+      * Add WRITE_ONCE()s in tcp_v6_connect()
+      * Add Reported-by tags and KCSAN log in changelog
+
+  v1: https://lore.kernel.org/netdev/20220927161209.32939-1-kuniyu@amazon.com/
+
+
+Kuniyuki Iwashima (5):
+  tcp/udp: Fix memory leak in ipv6_renew_options().
+  udp: Call inet6_destroy_sock() in setsockopt(IPV6_ADDRFORM).
+  tcp/udp: Call inet6_destroy_sock() in IPv6 sk->sk_destruct().
+  ipv6: Fix data races around sk->sk_prot.
+  tcp: Fix data races around icsk->icsk_af_ops.
+
+ include/net/ipv6.h       |  2 ++
+ include/net/udp.h        |  2 +-
+ include/net/udplite.h    |  8 --------
+ net/core/sock.c          |  6 ++++--
+ net/ipv4/af_inet.c       | 23 ++++++++++++++++-------
+ net/ipv4/tcp.c           | 10 ++++++----
+ net/ipv4/udp.c           |  9 ++++++---
+ net/ipv4/udplite.c       |  8 ++++++++
+ net/ipv6/af_inet6.c      | 14 +++++++++++++-
+ net/ipv6/ipv6_sockglue.c | 34 +++++++++++++++++++---------------
+ net/ipv6/tcp_ipv6.c      |  6 ++++--
+ net/ipv6/udp.c           | 15 ++++++++++++++-
+ net/ipv6/udp_impl.h      |  1 +
+ net/ipv6/udplite.c       |  9 ++++++++-
+ 14 files changed, 102 insertions(+), 45 deletions(-)
+
+-- 
+2.30.2
+
