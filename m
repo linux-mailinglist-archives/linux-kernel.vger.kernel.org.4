@@ -2,52 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458CC5F6C73
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 19:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69FCD5F6C70
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 19:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbiJFRBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 13:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33356 "EHLO
+        id S230098AbiJFRAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 13:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbiJFRBG (ORCPT
+        with ESMTP id S229815AbiJFRAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 13:01:06 -0400
-Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E24EB94113
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 10:00:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=P36UR
-        nJL820ycRfoyiCP6wRhwOEFM7keKtxcCy0do6Y=; b=k1r//rUT0jPaTi4Zb6m4l
-        gF/gDqEbUjlP7rTKA6nHge1W794HsPuoV5GntaM0CDWf6d9xhkLaqFaHELRhK62/
-        IhJ/bH6nCNCby408gobEyoU/WmpLFFKqM8Lahgj8pthY70XaT3pEPwrqwPQuqoX5
-        0lZv2y2nGILIFGg6DHMGhA=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by smtp1 (Coremail) with SMTP id GdxpCgA3n2dGCT9jRdswiQ--.20016S2;
-        Fri, 07 Oct 2022 00:58:46 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     zyytlz.wz@163.com
-Cc:     1002992920@qq.com, airlied@linux.ie, alex000young@gmail.com,
-        dri-devel@lists.freedesktop.org, gregkh@linuxfoundation.org,
-        hackerzheng666@gmail.com, intel-gfx@lists.freedesktop.org,
-        jani.nikula@linux.intel.com, linux-kernel@vger.kernel.org,
-        security@kernel.org, tvrtko.ursulin@linux.intel.com
-Subject: [PATCH v2] drm/i915/gvt: fix double free bug in split_2MB_gtt_entry
-Date:   Fri,  7 Oct 2022 00:58:45 +0800
-Message-Id: <20221006165845.1735393-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220928033340.1063949-1-zyytlz.wz@163.com>
-References: <20220928033340.1063949-1-zyytlz.wz@163.com>
+        Thu, 6 Oct 2022 13:00:45 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F42186450
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 10:00:24 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1ogUCt-0007k3-Pj; Thu, 06 Oct 2022 18:58:47 +0200
+Message-ID: <6ba15505-1c04-df2b-237f-b3060f26d2e6@leemhuis.info>
+Date:   Thu, 6 Oct 2022 18:58:47 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GdxpCgA3n2dGCT9jRdswiQ--.20016S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxAr1UKr1xtFW3GFWDAr18Xwb_yoW5ur18pF
-        W5XFZ0yFs8Aw4Ivr4xCw1kZF15JF1fWry8GrZ3K3ZYyF1DtF1kKFZ3ZrW7Jr9agrZ7Gr1f
-        Ar4UtF4UCa47XaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRH5lnUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiQgaSU1aEDIPvewAAsM
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: 6.0.0-RC kernels trigger Firefox snap bug with 6.0.0-rc3 through
+ 6.0.0-rc7
+Content-Language: en-US, de-DE
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        linux-kernel@vger.kernel.org
+Cc:     Marc Miltenberger <marcmiltenberger@gmail.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <b0c258c3-6dcf-aade-efc4-d62a8b3a1ce2@alu.unizg.hr>
+ <5bb75cbc-a0db-537b-12d0-889230c865d8@leemhuis.info>
+ <0fb2a9ff-df76-8af9-e54a-c2dc6bfd9478@leemhuis.info>
+ <bdab45d3-c893-42ff-dbb9-5fa93d0dff55@alu.unizg.hr>
+ <dd62210d-d095-f971-2b7b-0ec54fd189a9@leemhuis.info>
+ <c05134cc-92fa-dac2-e738-cf6fae194521@alu.unizg.hr>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <c05134cc-92fa-dac2-e738-cf6fae194521@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1665075625;3f7dd9c3;
+X-HE-SMSGID: 1ogUCt-0007k3-Pj
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,101 +51,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If intel_gvt_dma_map_guest_page failed, it will call
-ppgtt_invalidate_spt, which will finally free the spt.
-But the caller does not notice that, it will free spt again in error path.
 
-Fix this by spliting invalidate and free in ppgtt_invalidate_spt.
-Only free spt when in good case.
 
-Reported-by: Zheng Wang <hackerzheng666@gmail.com>
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
-v2:
-- split initial function into two api function suggested by Greg
+On 06.10.22 18:43, Mirsad Goran Todorovac wrote:
+> Hey Thorsten,
+> 
+> On 06. 10. 2022. 15:23, Thorsten Leemhuis wrote:
+>> On 06.10.22 14:43, Mirsad Todorovac wrote:
+>>> On 10/6/22 14:25, Thorsten Leemhuis wrote:
+>>>
+>>>> One more question:
+>>>>
+>>>> On 06.10.22 14:00, Thorsten Leemhuis wrote:
+>>>> Were those two vanilla kernels? I asked in #snappy on IRC and was told
+>>>> that "snapd simply expects some ubuntu bit in patched into the kernel if
+>>>> it detects that it runs on an official ubuntu install...". This was also
+>>>> suggested "it probably makes sense to file a but in LP to make the
+>>>> kernel team aware".
+>>>>
+>>> Yes, last time I tried it with git clone from linux_stable on kernel.org
+>>> and
+>>> config-6.0.0-060000-generic from the official Ubuntu mainline build
+>> You don't want to do that. Better take the config used to build a
+>> working kernel (say 5.19.y) and then build 6.0 with it (after running
+>> "make olddefconfig"), because it might be a new kernel option (say for a
+>> new security technique) that might cause the problem, as explained here:
+>> https://docs.kernel.org/admin-guide/reporting-regressions.html
+> If I understood well, that would mean building www.kernel.org git
+> linux_stable
+> source with Ubuntu's config-5.9.13-051903?
 
-v1: https://lore.kernel.org/all/20220928033340.1063949-1-zyytlz.wz@163.com/
----
- drivers/gpu/drm/i915/gvt/gtt.c | 31 +++++++++++++++++++++----------
- 1 file changed, 21 insertions(+), 10 deletions(-)
+I meant "please download Linux 6.0 (ideally through git, that you have
+everything to perform a bisection), add the config from a working kernel
+(if config-5.9.13-051903 is one, yeah, then take that) as .config and
+then run "make olddefconfig" before compiling and installing the kernel
+to see if 6.0 fails with that config that was working.
 
-diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/gtt.c
-index ce0eb03709c3..55d8e1419302 100644
---- a/drivers/gpu/drm/i915/gvt/gtt.c
-+++ b/drivers/gpu/drm/i915/gvt/gtt.c
-@@ -959,6 +959,7 @@ static inline int ppgtt_put_spt(struct intel_vgpu_ppgtt_spt *spt)
- 	return atomic_dec_return(&spt->refcount);
- }
- 
-+static int  ppgtt_invalidate_and_free_spt(struct intel_vgpu_ppgtt_spt *spt);
- static int ppgtt_invalidate_spt(struct intel_vgpu_ppgtt_spt *spt);
- 
- static int ppgtt_invalidate_spt_by_shadow_entry(struct intel_vgpu *vgpu,
-@@ -995,7 +996,7 @@ static int ppgtt_invalidate_spt_by_shadow_entry(struct intel_vgpu *vgpu,
- 				ops->get_pfn(e));
- 		return -ENXIO;
- 	}
--	return ppgtt_invalidate_spt(s);
-+	return ppgtt_invalidate_and_free_spt(s);
- }
- 
- static inline void ppgtt_invalidate_pte(struct intel_vgpu_ppgtt_spt *spt,
-@@ -1016,18 +1017,31 @@ static inline void ppgtt_invalidate_pte(struct intel_vgpu_ppgtt_spt *spt,
- 	intel_gvt_dma_unmap_guest_page(vgpu, pfn << PAGE_SHIFT);
- }
- 
--static int ppgtt_invalidate_spt(struct intel_vgpu_ppgtt_spt *spt)
-+static int  ppgtt_invalidate_and_free_spt(struct intel_vgpu_ppgtt_spt *spt)
- {
- 	struct intel_vgpu *vgpu = spt->vgpu;
--	struct intel_gvt_gtt_entry e;
--	unsigned long index;
- 	int ret;
- 
- 	trace_spt_change(spt->vgpu->id, "die", spt,
--			spt->guest_page.gfn, spt->shadow_page.type);
--
-+		spt->guest_page.gfn, spt->shadow_page.type);
- 	if (ppgtt_put_spt(spt) > 0)
- 		return 0;
-+	ret = ppgtt_invalidate_spt(spt);
-+	if (!ret) {
-+		trace_spt_change(spt->vgpu->id, "release", spt,
-+			 spt->guest_page.gfn, spt->shadow_page.type);
-+		ppgtt_free_spt(spt);
-+	}
-+
-+	return ret;
-+}
-+
-+static int ppgtt_invalidate_spt(struct intel_vgpu_ppgtt_spt *spt)
-+{
-+	struct intel_vgpu *vgpu = spt->vgpu;
-+	struct intel_gvt_gtt_entry e;
-+	unsigned long index;
-+	int ret;
- 
- 	for_each_present_shadow_entry(spt, &e, index) {
- 		switch (e.type) {
-@@ -1059,9 +1073,6 @@ static int ppgtt_invalidate_spt(struct intel_vgpu_ppgtt_spt *spt)
- 		}
- 	}
- 
--	trace_spt_change(spt->vgpu->id, "release", spt,
--			 spt->guest_page.gfn, spt->shadow_page.type);
--	ppgtt_free_spt(spt);
- 	return 0;
- fail:
- 	gvt_vgpu_err("fail: shadow page %p shadow entry 0x%llx type %d\n",
-@@ -1393,7 +1404,7 @@ static int ppgtt_handle_guest_entry_removal(struct intel_vgpu_ppgtt_spt *spt,
- 			ret = -ENXIO;
- 			goto fail;
- 		}
--		ret = ppgtt_invalidate_spt(s);
-+		ret = ppgtt_invalidate_and_free_spt(s);
- 		if (ret)
- 			goto fail;
- 	} else {
--- 
-2.25.1
-
+Ciao, Thorsten
