@@ -2,155 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A725F6A66
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 17:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E12E5F6A70
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 17:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbiJFPRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 11:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
+        id S231146AbiJFPUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 11:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbiJFPR3 (ORCPT
+        with ESMTP id S229906AbiJFPUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 11:17:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC7CA6C17
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 08:17:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665069447;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LaNanz1TbIo0L9kCY4HbAhnT0dLLrBmpJdnr9yzBj4w=;
-        b=ZmelMw4arN0l4GF6tLPnDVY1lJbC/n18Ne9VvfedFedINLCHdDKNfkJEQffc8XEGJhL3G5
-        glMM308icyS2EO2SJsqCutMsGGjLwxDjHDb0D0JpG0ivHnqka/WD7yh96IfQSWlQhQ/Ujm
-        R2o6LqpI0G9FuYXhAObIQRgBIGU4Upk=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-70-KLNZrYc-M6ipNcz4hfA27Q-1; Thu, 06 Oct 2022 11:17:26 -0400
-X-MC-Unique: KLNZrYc-M6ipNcz4hfA27Q-1
-Received: by mail-wr1-f70.google.com with SMTP id d22-20020adfa356000000b0022e224b21c0so641523wrb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 08:17:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LaNanz1TbIo0L9kCY4HbAhnT0dLLrBmpJdnr9yzBj4w=;
-        b=yVj+qL4FFIzqj87pwxYRv/jHHTDsrVIJEk7q6nmvYCjSpblPEI8/RDnl+NtQkT6VXw
-         TxQFdLiczIRUTprodH46OrmWBwVfelW0onC/dKHO4WMJ4qIOmF5ZFwE2bBG0x/IqvsCu
-         CjYMX2B4CpoF8aTa8Dh7H85lvvstikduQezkO6/TT7GLj6Dgk8kMmJJlQHqB0RIDIT7P
-         g844+Fc0bJpSxvhaueOx7lImitHiokJ0Qkk2OBocCOKn7J7ozMFucY9hYUa811Q4X1CL
-         oEtei6OchdrS+Q+xmHV0qWEbU/w7zwCtrVgDE3Gt4mvphtBCe/33BBTCf7AsqjbZtOhL
-         byRQ==
-X-Gm-Message-State: ACrzQf2mex+q3iKxDzHVzHX8DvGMRk68PQ+JHEwKtIzcNtqgDn/xw0lD
-        jUDW7MuLGS/GYnqVqP/ccTEOKAL1bgVkrq0lRqnw/WdE0JQ51VAZMGj/LCCXAHEwh3PKuM1/H6Y
-        sYcpf/6v8a2DONELNgao4ffZA
-X-Received: by 2002:a05:600c:4254:b0:3bd:c9c9:92cc with SMTP id r20-20020a05600c425400b003bdc9c992ccmr7609145wmm.151.1665069443638;
-        Thu, 06 Oct 2022 08:17:23 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5xBGuQWsrC6rFfTPmTdLaQ20XGGEkPMobtqTJ6wfL4EKokOUZjDvFcpkEkxoCTA0HgUj6O1Q==
-X-Received: by 2002:a05:600c:4254:b0:3bd:c9c9:92cc with SMTP id r20-20020a05600c425400b003bdc9c992ccmr7609126wmm.151.1665069443377;
-        Thu, 06 Oct 2022 08:17:23 -0700 (PDT)
-Received: from vschneid.remote.csb ([149.71.65.94])
-        by smtp.gmail.com with ESMTPSA id p3-20020a5d4e03000000b002238ea5750csm21354407wrt.72.2022.10.06.08.17.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 08:17:22 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [RFC PATCH bitmap-for-next 4/4] blk_mq: Fix cpumask_check()
- warning in blk_mq_hctx_next_cpu()
-In-Reply-To: <Yz7dC4zxby1CZphE@yury-laptop>
-References: <20221006122112.663119-1-vschneid@redhat.com>
- <20221006122112.663119-5-vschneid@redhat.com>
- <Yz7dC4zxby1CZphE@yury-laptop>
-Date:   Thu, 06 Oct 2022 16:17:21 +0100
-Message-ID: <xhsmhy1ttf0ce.mognet@vschneid.remote.csb>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 6 Oct 2022 11:20:07 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A532E680;
+        Thu,  6 Oct 2022 08:20:06 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 296FBflA027896;
+        Thu, 6 Oct 2022 15:19:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=eZiA54aRlMbtpv8H5Z5wcgdJ2SL/z+gGK6ArGLwXWt4=;
+ b=JAXGUNOQZlIOC+wm8afsn4zTRut2LyptMaNYFvtja9Q2urElyyIA2IgsLnJBRLuZdhrh
+ C4OU2vEsIY0fFaETI2wqCTtp/jLaqj1TFlCWtes6mzRWD9ASzlzTZa1Su7qGZMQtuEex
+ /GABzmWGVJdRPtW4fvpF2c7SkTrkPdvu9VkqfZLFqpUJfXAcTGTDqqdC5v2cmbeQo0mZ
+ N/x8S/f362AjcLwMTDv4swQLGaz17Fhft80dwZ/8LLUozFct/4+VRriBrDb8no4n7Ntu
+ R1MYvI/JFkUjM3s/cgA/R4IPRdTO4DgcV4h2m0MobyFE2UNWoBR4oLFcN5DjJ8zWkDVK cQ== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k20p8210x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Oct 2022 15:19:51 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 296FBZ84016601;
+        Thu, 6 Oct 2022 15:19:49 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03fra.de.ibm.com with ESMTP id 3jxd68wcfg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Oct 2022 15:19:49 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 296FJkeu36241828
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 6 Oct 2022 15:19:46 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1F4B2AE051;
+        Thu,  6 Oct 2022 15:19:46 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4AFBBAE055;
+        Thu,  6 Oct 2022 15:19:45 +0000 (GMT)
+Received: from sig-9-145-19-232.uk.ibm.com (unknown [9.145.19.232])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  6 Oct 2022 15:19:45 +0000 (GMT)
+Message-ID: <77295c8fea08907d82363dedc9ba01b79ac702a2.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 2/6] iommu/s390: Get rid of s390_domain_device
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev
+Cc:     linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
+        robin.murphy@arm.com, jgg@nvidia.com, linux-kernel@vger.kernel.org
+Date:   Thu, 06 Oct 2022 17:19:44 +0200
+In-Reply-To: <20221006144700.3380098-3-schnelle@linux.ibm.com>
+References: <20221006144700.3380098-1-schnelle@linux.ibm.com>
+         <20221006144700.3380098-3-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: oiOoXyHRlWU-P_NOGXLM3Q9pbpXGHmIo
+X-Proofpoint-ORIG-GUID: oiOoXyHRlWU-P_NOGXLM3Q9pbpXGHmIo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-06_02,2022-10-06_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 clxscore=1015 priorityscore=1501 bulkscore=0 phishscore=0
+ suspectscore=0 malwarescore=0 mlxlogscore=698 impostorscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210060087
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/10/22 06:50, Yury Norov wrote:
-> On Thu, Oct 06, 2022 at 01:21:12PM +0100, Valentin Schneider wrote:
->> blk_mq_hctx_next_cpu() implements a form of cpumask_next_and_wrap() using
->> cpumask_next_and_cpu() and blk_mq_first_mapped_cpu():
->>
->> [    5.398453] WARNING: CPU: 3 PID: 162 at include/linux/cpumask.h:110 __blk_mq_delay_run_hw_queue+0x16b/0x180
->> [    5.399317] Modules linked in:
->> [    5.399646] CPU: 3 PID: 162 Comm: ssh-keygen Tainted: G                 N 6.0.0-rc4-00004-g93003cb24006 #55
->> [    5.400135] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
->> [    5.405430] Call Trace:
->> [    5.406152]  <TASK>
->> [    5.406452]  blk_mq_sched_insert_requests+0x67/0x150
->> [    5.406759]  blk_mq_flush_plug_list+0xd0/0x280
->> [    5.406987]  ? bit_wait+0x60/0x60
->> [    5.407317]  __blk_flush_plug+0xdb/0x120
->> [    5.407561]  ? bit_wait+0x60/0x60
->> [    5.407765]  io_schedule_prepare+0x38/0x40
->> [...]
->>
->> This triggers a warning when next_cpu == nr_cpu_ids - 1, so rewrite it
->> using cpumask_next_and_wrap() directly. The backwards-going goto can be
->> removed, as the cpumask_next*() operation already ANDs hctx->cpumask and
->> cpu_online_mask, which implies checking for an online CPU.
->>
->> No change in behaviour intended.
->>
->> Suggested-by: Yury Norov <yury.norov@gmail.com>
->> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
->> ---
->>  block/blk-mq.c | 39 +++++++++++++--------------------------
->>  1 file changed, 13 insertions(+), 26 deletions(-)
->>
->> diff --git a/block/blk-mq.c b/block/blk-mq.c
->> index c96c8c4f751b..1520794dd9ea 100644
->> --- a/block/blk-mq.c
->> +++ b/block/blk-mq.c
->> @@ -2038,42 +2038,29 @@ static inline int blk_mq_first_mapped_cpu(struct blk_mq_hw_ctx *hctx)
->>   */
->>  static int blk_mq_hctx_next_cpu(struct blk_mq_hw_ctx *hctx)
->>  {
->> -	bool tried = false;
->>      int next_cpu = hctx->next_cpu;
->>
->>      if (hctx->queue->nr_hw_queues == 1)
->>              return WORK_CPU_UNBOUND;
->>
->> -	if (--hctx->next_cpu_batch <= 0) {
->> -select_cpu:
->> -		next_cpu = cpumask_next_and(next_cpu, hctx->cpumask,
->> -				cpu_online_mask);
->> -		if (next_cpu >= nr_cpu_ids)
->> -			next_cpu = blk_mq_first_mapped_cpu(hctx);
->> +	if (--hctx->next_cpu_batch > 0 && cpu_online(next_cpu))
->> +		return next_cpu;
->> +
->> +	next_cpu = cpumask_next_and_wrap(next_cpu, hctx->cpumask, cpu_online_mask, next_cpu, false);
->
-> Last two parameters are simply useless. In fact, in many cases they
-> are useless for cpumask_next_wrap(). I'm working on simplifying the
-> cpumask_next_wrap() so that it would take just 2 parameters - pivot
-> point and cpumask.
->
-> Regarding 'next' version - we already have find_next_and_bit_wrap(),
-> and I think cpumask_next_and_wrap() should use it.
->
+On Thu, 2022-10-06 at 16:46 +0200, Niklas Schnelle wrote:
+> The struct s390_domain_device serves the sole purpose as list entry for
+> the devices list of a struct s390_domain. As it contains no additional
+> information besides a list_head and a pointer to the struct zpci_dev we
+> can simplify things and just thread the device list through struct
+> zpci_dev directly. This removes the need to allocate during domain
+> attach and gets rid of one level of indirection during mapping
+> operations.
+> 
+> Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-Oh, I had missed those, that makes more sense indeed.
+@Jason, on second thought not sure if your R-b still holds as you only
+implied that the zpci_unregister_ioat(), zdev->dma_table = NULL is okay
+with the plan of ignoring zpci_register_ioat() fail on error in the
+future (already have the patch).
 
-> For the context: those last parameters are needed to exclude part of
-> cpumask from traversing, and to implement for-loop. Now that we have
-> for_each_cpu_wrap() based on for_each_set_bit_wrap(), it's possible
-> to remove them. I'm working on it.
-
-Sounds good.
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+>  arch/s390/include/asm/pci.h |  1 +
+>  drivers/iommu/s390-iommu.c  | 37 +++++++------------------------------
+>  2 files changed, 8 insertions(+), 30 deletions(-)
+---8<---
 
