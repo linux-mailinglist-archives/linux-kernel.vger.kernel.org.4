@@ -2,118 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCC55F6F3E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3DF75F6F41
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232137AbiJFUfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 16:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51316 "EHLO
+        id S231996AbiJFUhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 16:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231577AbiJFUfU (ORCPT
+        with ESMTP id S230416AbiJFUhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 16:35:20 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF939AFCF
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 13:35:16 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id n7so2769651plp.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 13:35:16 -0700 (PDT)
+        Thu, 6 Oct 2022 16:37:19 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50104BEFB9
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 13:37:18 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 2so2849200pgl.7
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 13:37:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=YrAC23faud15zS6eHd6bC3i2jrrjB6ysFBkxCYV0DUg=;
-        b=VnvmXZkP0hhSETFJ7/rWObNvgVlwQNsO9Q6Wr+CY5AhJLWqAxw5ymAu+d5E1rrq4qi
-         xtkMwQ6YDrHzIZayo7ZRhSzrDOrrFPnJhOXk4o7evz5s7x30Hn8I9naaZ0i069dQB/ph
-         cnMQ55FQ011gtIYFCTqyzmJZqzabfBru2us/cJbxwS7Jb7TSyZcJOK7aqO0uOmoTQAcH
-         GYFiGgWnKQU+ZbebJkkLcDLzUIDh8oQka9cmqiqC2XG21Fq/3L0j06kv3/yXoiZzN3Dc
-         NqeD9ebVrKYIEEnneSVmz+ISDsgVMRU1uRoqaUUyEVUz6KnTZG9lz9xnlm/sH0mgGJ4X
-         k7xg==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=vUTyG6Np/u72Dz/dgBQ4qw28uB5CVEnf9ne0MjdRNXQ=;
+        b=l4pzgbjCLfunsDmBM/oJsQgA/6oc2FTqn96xT9kDUHrLVbLcZSnT2054BUsF9BaE4N
+         Vp2VyRDx9wEPFP/en9z5piVn4kS17i1eno1WqQYJzbR+iRHgHHWY82eSHog5/x3sSfDw
+         wv2xe97OHgpkWIoe8EIm7Z+bM7mahJL49i8ys=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=YrAC23faud15zS6eHd6bC3i2jrrjB6ysFBkxCYV0DUg=;
-        b=N+Z9gD/ReFn5wECAU06C+6jBBhMmK4hAExoav8EgFKWZ9pO59c9l1yajD5q6MNb76J
-         G8TiUIslimqtDYCXxUsthDZkn7lGY+2JMrRBpFt7p9k57WNynAwEgtbm2dA5o9e7jAE+
-         EeYnC039b3eEMbnxhuiFGPhktc7jtMX3Hh+OQT4799rKkP27DmS4fx9bQHQvwunzTBEZ
-         lXkFwkr4+ifWX2xvkiyHPWbC/tDgnMaLZQa8iqTQ2gVyF8SYb8cooTS3lx/hZtHA2Lar
-         xe2gvmubnfA2BxAIRTIRmrDw8qn+qdFyygXzp4Hg2vGNWpkEwHlLQp3EtU+FQI43YWXs
-         DsSQ==
-X-Gm-Message-State: ACrzQf1vSHdTHHh7ObNyl2X9ckHg7UZMqkey8hB20In69fQzVWJgbl25
-        xk1rXMh3dLeLy0xzudLpkGNFgNjxdMzMAONI63YLaQ==
-X-Google-Smtp-Source: AMsMyM4v3+jebTsx8rta3oTKTPbj+0QFRpgOMqqHaIV7tcXGfBpXOUbUwwIMLxbH/aI5igVtVyqUZJViZkQhI48Gf94=
-X-Received: by 2002:a17:902:7404:b0:17f:7fe6:7197 with SMTP id
- g4-20020a170902740400b0017f7fe67197mr1565798pll.94.1665088515406; Thu, 06 Oct
- 2022 13:35:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <202209291607.0MlscIht-lkp@intel.com> <20220930211505.209939-1-ndesaulniers@google.com>
-In-Reply-To: <20220930211505.209939-1-ndesaulniers@google.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 6 Oct 2022 13:35:03 -0700
-Message-ID: <CAKwvOd=0p31f-Yya6S-9xKEv6CtUWpOCRxHO=jG2uk-hZgZ1bQ@mail.gmail.com>
-Subject: Re: [PATCH v3] ARM: kprobes: move __kretprobe_trampoline to out of
- line assembler
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=vUTyG6Np/u72Dz/dgBQ4qw28uB5CVEnf9ne0MjdRNXQ=;
+        b=N8/O4w7nV8E1ZRl/J9l8TU6NQuu9NuvB999LCGavRhNgpTu7Uc1ANmoe4UA6kko6TB
+         2vjJdC4vC6oJ0GGymwik3oLQ2BI81pHd7pTXoYkDYF9qSYuLzNRDW3Bxed8WFmCslYGw
+         oftLL0Zy4/t46v3nzlntfAyACmHyAQ0k4KOz253xwTKnENsgYFHe83xUUiWslyGUmib+
+         fTpw2vh3qh1XEmkIeerM7enOHaxbOoanj5u0HgfLUgRj7fD4M1SkOd2RbBnC/WQFb5p3
+         KXxigxBLEtvuV7LlVGxx+2GGrTSW1ep2gdNu6gdCkmBmJc/FWH+3lQ+UhPDZRlK6NLMp
+         x6Tw==
+X-Gm-Message-State: ACrzQf11sIPLKtujesUCggLplem55e0Z3yqKiz/YRHkwT+LAXDdhoR+4
+        QvIUPznsB+IPLFA3ELqx2v9TMg==
+X-Google-Smtp-Source: AMsMyM6tUrflXlcmIduh6tv4hATbfSVnVFeSJd3pPCVGqgQFpNV5ZCLn3XXM8SrarBxmq5FPsdAdow==
+X-Received: by 2002:a05:6a00:230d:b0:53d:c198:6ad7 with SMTP id h13-20020a056a00230d00b0053dc1986ad7mr1277124pfh.67.1665088637855;
+        Thu, 06 Oct 2022 13:37:17 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f33-20020a17090a702400b0020647f279fbsm3284227pjk.29.2022.10.06.13.37.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 13:37:17 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 13:37:15 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
         Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        sparkhuang <huangshaobo6@huawei.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Logan Chien <loganchien@google.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: mainline build failure due to 5d8c3e836fc2 ("drm/amd/display:
+ fix array-bounds error in dc_stream_remove_writeback()")
+Message-ID: <202210061328.37FCC30@keescook>
+References: <Yz6W+j+l0cJbr5dX@debian>
+ <CAHk-=whR8T1x6DRnOMJsorajT3A-y9+j5Mpeh0zcUXcJiJWheg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whR8T1x6DRnOMJsorajT3A-y9+j5Mpeh0zcUXcJiJWheg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 2:15 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> commit 1069c1dd20a3 ("ARM: 9231/1: Recover kretprobes return address for
-> EABI stack unwinder")
-> tickled a bug in clang's integrated assembler where the .save and .pad
-> directives must have corresponding .fnstart directives. The integrated
-> assembler is unaware that the compiler will be generating the .fnstart
-> directive.
->
->   arch/arm/probes/kprobes/core.c:409:30: error: .fnstart must precede
->   .save or .vsave directives
->   <inline asm>:3:2: note: instantiated into assembly here
->   .save   {sp, lr, pc}
->   ^
->   arch/arm/probes/kprobes/core.c:412:29: error: .fnstart must precede
->   .pad directive
->   <inline asm>:6:2: note: instantiated into assembly here
->   .pad    #52
->   ^
->
+On Thu, Oct 06, 2022 at 12:39:40PM -0700, Linus Torvalds wrote:
+> What confuses me is that error message ("array subscript [0, 0] is
+> outside array bounds of 'struct dc_writeback_info[1]') which seems to
+> be aware that the value is actually 0.
 
-Chen, I noticed that your patch was discarded; it's not in linux-next today.
-https://lore.kernel.org/linux-arm-kernel/YzHPGvhLkdQcDYzx@shell.armlinux.org.uk/
-https://www.arm.linux.org.uk/developer/patches/viewpatch.php?id=9231/1
-How would you like to proceed here?
+I've seen bugs in the tracker where the reporting is broken but the
+range checker is working "correctly", which seems to be the case here.
 
-I think moving this out of line, incorporating Ard's feedback, then
-putting the UNWIND directives on top might be the way to go. What do
-you think?
+> If somebody cannot come up with a fix, I suspect the solution is "gcc
+> array bounds analysis is terminally buggy" and we just need to disable
+> it for gcc-11 too.
+
+It does continue to find bugs, so I'd rather keep it on. GCC has fixed
+all the issues we've run into so far (though not all have been back
+ported to GCC 12 yet, so yes, let's keep -Warray-bounds disabled there).
+
+Specifically, I've been tracking:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105679	Fixed 13+
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99578	Fixed 12+, 11.3
+
+And it looks like Sudip's proposed fix for this particular code is
+additionally fixing unsigned vs signed as well. I think -Warray-bounds
+did its job (though, with quite a confusing index range in the report).
+
+-Kees
+
 -- 
-Thanks,
-~Nick Desaulniers
+Kees Cook
