@@ -2,74 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46DE75F6D9B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 20:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 529D65F6DA2
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 20:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbiJFSkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 14:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
+        id S230386AbiJFSnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 14:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJFSkj (ORCPT
+        with ESMTP id S229511AbiJFSnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 14:40:39 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9B758B7C
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 11:40:38 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id h13so1413071pfr.7
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 11:40:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OwuwNCcudFZKvWIMInGdJ6VUhKf8xEQfCNCnX/nvy00=;
-        b=dNPxFTIsfmFippclL6a+agEmeFPYHmDbHzLqSpwdwBENXUwEm5bw0G7eh6zqSKEt7I
-         pgKMLnHcLZhDaANzAuCBQisU+WatxB1vZBsVRSqlV/VXLdaCZh1yxwIvwdAP76z+apPB
-         1sutKYzMneuT8OOJpp46D7lh+WdugURAKQeqMvC3PR4ypIJzP+JLKIvNCeoSUZk6epgi
-         b9z/sIoUZCLk0vFSaWCTzV7Pfco31lSvX22wCGziDVDEQV/COMdDj9g0RoxTi/9RoGuz
-         Rz9Q3s05hUnJNMeQj3sYZzdrPpXkrdDe/lef0EZLvCWA2HodQ87LCqnvjM8OxkbwbCE3
-         j03A==
+        Thu, 6 Oct 2022 14:43:05 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386F6C5111;
+        Thu,  6 Oct 2022 11:43:04 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1326637be6eso3173726fac.13;
+        Thu, 06 Oct 2022 11:43:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OwuwNCcudFZKvWIMInGdJ6VUhKf8xEQfCNCnX/nvy00=;
-        b=5WVc6pF/wxob9iE+CnQ3hQ4nuJfgUbbIDUm7lkM0hBnMmgedh1Uo/oYcscNB0sSyCG
-         il+ol5MmNDEv4hhkGwb7hIwX3Ngasgg5+IY470w2sYTtxKd0i3mgyD9/UiGCUReKH9VP
-         /CC5fqxURKy9fNDkX6HUnVhIiEGwWjE5BZ3C+InKilVhn0ax091xxdQs3ZhX73Dh6J/j
-         Lb4yxmjHY0CIuHaXksvfnWxQEq3LIVAlx8YpCS3vCfHefd4santuVmudUD0Ixlv1FrnJ
-         5TZzaxYEcwOXKkJWNwfHyVsOqpZkfpm/bDmheWA2o0pi+JpSj7Jmz68WOQGAnDiKmFZd
-         8e8A==
-X-Gm-Message-State: ACrzQf3B70iHP89IADG79XFiG+wwOeSBDkNE2kyHOBYetHnFvxpaRDfv
-        q7Zg9q/dR4dwpzfUHtiGi0Nr9Q==
-X-Google-Smtp-Source: AMsMyM4kBYYreOzTG1ll/1RbIjyqSM+SKO0yQvI1LfhKDALqAIEy+Rp5eXhfbc6lLUNt4daatwmhnw==
-X-Received: by 2002:a63:fd41:0:b0:438:7670:589a with SMTP id m1-20020a63fd41000000b004387670589amr1037333pgj.148.1665081637959;
-        Thu, 06 Oct 2022 11:40:37 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id w11-20020a170902e88b00b00176b3d7db49sm1718233plg.0.2022.10.06.11.40.37
+        bh=gdAt9/qLW5IR5INzlShOk7D7K7dX/WFEcR7pwh4Zg64=;
+        b=aqMOkOcMQWaSPHP1Re52Tdk67xLRkyKz3d26Gr2uRJVtGyMWlrScmhaS/ukwLLaAjv
+         Z4cgrd9FgURSJcud5HV0v3OT6z+JntQP1o/+UfVabD2nL7e5m29Cu2tmPPCuvnaw7y34
+         77Obe36PMr6UMak7y/ho+p1KhlAs+W+l7RYu++5CDTG/40r+c+oSlecMWQgdeC5L4y/6
+         jhTFcFD4xP/Pbfbp7aGKuhoxZhB26W4WrG3fNcd/NdrQJ1lxDiAb5Xifr5iGBBfmhT52
+         90bh8MYL9er74DR6cPVuHdOLJ+7I8/ueGEHXP3Dn39qtYvEPTWvgEQdOlui/jNEvN9Gf
+         gU4w==
+X-Gm-Message-State: ACrzQf08nT5+bil/MO+uKWul/oZLXGbYJtttrb3aOVCuOpeXPeRSh14W
+        d/RgOLtUgfb9VrNZquJbSQ==
+X-Google-Smtp-Source: AMsMyM55YDTxBklF/F1OYqyNGI1pGr12gI6xwgyldyXHl8kwNwKlvT/IyxyprHweGspqsaAZBnXH/A==
+X-Received: by 2002:a05:6870:178e:b0:126:7055:fc78 with SMTP id r14-20020a056870178e00b001267055fc78mr661154oae.58.1665081783067;
+        Thu, 06 Oct 2022 11:43:03 -0700 (PDT)
+Received: from robh_at_kernel.org ([2607:fb90:8a65:c536:245:842:a3a4:9017])
+        by smtp.gmail.com with ESMTPSA id t188-20020aca5fc5000000b0034fbbce2932sm6078021oib.42.2022.10.06.11.43.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 11:40:37 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 18:40:33 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Santosh Shukla <santosh.shukla@amd.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mlevitsk@redhat.com,
-        mail@maciej.szmigiero.name
-Subject: Re: [PATCHv4 0/8] Virtual NMI feature
-Message-ID: <Yz8hIY9XdlycXE+N@google.com>
-References: <20220829100850.1474-1-santosh.shukla@amd.com>
+        Thu, 06 Oct 2022 11:43:02 -0700 (PDT)
+Received: (nullmailer pid 16909 invoked by uid 1000);
+        Thu, 06 Oct 2022 18:42:59 -0000
+Date:   Thu, 6 Oct 2022 13:42:59 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, matthias.bgg@gmail.com,
+        chiaen_wu@richtek.com, pavel@ucw.cz, cy_huang@richtek.com,
+        linux-mediatek@lists.infradead.org, robh+dt@kernel.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: leds: mt6370: Fix MT6370 LED indicator DT
+ warning
+Message-ID: <166508150927.12105.8845851165188366469.robh@kernel.org>
+References: <435f6888ebc20c5abae63eb9cb3a055b60db2ed1.1665050503.git.chiaen_wu@richtek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220829100850.1474-1-santosh.shukla@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <435f6888ebc20c5abae63eb9cb3a055b60db2ed1.1665050503.git.chiaen_wu@richtek.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,22 +68,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022, Santosh Shukla wrote:
-> If NMI virtualization enabled and NMI_INTERCEPT bit is unset
-> then HW will exit with #INVALID exit reason.
+On Thu, 06 Oct 2022 11:16:13 +0800, ChiaEn Wu wrote:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
 > 
-> To enable the VNMI capability, Hypervisor need to program
-> V_NMI_ENABLE bit 1.
+> Add '$ref' and 'unevaluatedProperties: false' in 'multi-led', and remove
+> unused 'allOf' property.
 > 
-> The presence of this feature is indicated via the CPUID function
-> 0x8000000A_EDX[25].
+> Fixes: 440c57dabb45 ("dt-bindings: leds: mt6370: Add MediaTek MT6370 current sink type LED indicator")
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
+>  .../devicetree/bindings/leds/mediatek,mt6370-indicator.yaml          | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
 
-Until there is publicly available documentation, I am not going to review this
-any further.  This goes for all new features, e.g. PerfMonv2[*].  I understand
-the need and desire to get code merged far in advance of hardware being available,
-but y'all clearly have specs, i.e. this is a very solvable problem.  Throw all the
-disclaimers you want on the specs to make it abundantly clear that they are for
-preview purposes or whatever, but reviewing KVM code without a spec just doesn't
-work for me.
-
-[*] https://lore.kernel.org/all/20220919093453.71737-1-likexu@tencent.com
+Applied, thanks!
