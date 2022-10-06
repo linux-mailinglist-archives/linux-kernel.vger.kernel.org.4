@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3DC5F6402
+	by mail.lfdr.de (Postfix) with ESMTP id 22BAD5F6401
 	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbiJFJ6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 05:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
+        id S231536AbiJFJ6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 05:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231527AbiJFJ6I (ORCPT
+        with ESMTP id S231534AbiJFJ6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 6 Oct 2022 05:58:08 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053C889821
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 02:58:03 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id c3-20020a1c3503000000b003bd21e3dd7aso2482929wma.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 02:58:02 -0700 (PDT)
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D8384E46
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 02:58:04 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 130-20020a1c0288000000b003b494ffc00bso2499786wmc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 02:58:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date;
-        bh=aYkfRfGGG33NVlFWLnEwqVw3+p9JgyEArCSm1tnJcu4=;
-        b=ra++jUyBiLyiJTtqLECW8xOyUdOgbQZvfjZlbSDvGGTISwHuU+dBg1ETnyhRQZHqNh
-         5W1lUbgJffPw0xIPvATxsEETu5EllRTwIcvgnAzAaRMqBCASrTRheDfhtQ5W2+1RbU3G
-         F6hSl1cgwlMK5Sqib4GD+yH10l8hwaOQnli7cqbBfoKs0vOVuEETQwQtVaw5mTtpuJGT
-         Wq4B1J/JbYSmywuo3LPXNhjdSKsT3pCG9k2WzJ3liRK2yKJYkI1nVp9Z22Ya+T77rMeH
-         wCMW3T381gzYn4TgvNgyd6umDYFbPEPGKvofFKXfoeh6pfF0135CFYKfXUGBaPsbOAbF
-         84XA==
+        bh=BpfK+aYBbv4gDS/7Ac2bO0jkqdp5ST+NBdNkX62pzaE=;
+        b=PrIsSIcUz1mU0b7hDwQittYp6HOD6E4MFbijdMnQLur8hhc2e4k8wMhR9c+t8taLdz
+         hrlhqyPPVLR+bhYnTfgN3aqBt4qFAWT957cLpT8otV0uXaXlUv3SmvONuIvmRb8+j/46
+         zeM80V4QPqHyrKVFioK6QrD+Z97DefkEHeJ1VnU87kMavS/BFjHOmO8uljJ3RvroEmZQ
+         TyRY/ejBAlsJKuroTJYLSU1WZE1oLg2GmxiW5WJh3GQXNlHNKOfmKbZyaZZOQnlHFpfz
+         hb3KzyI7ZcukkryrW0a8hK4k0QIqTnRht11yIJk41DTavs4gquT6PFcuEdDlN6A/A0OT
+         3oGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=aYkfRfGGG33NVlFWLnEwqVw3+p9JgyEArCSm1tnJcu4=;
-        b=rV3JuEDGCHag68ABErJg60W+OVSnUL33EW5iJnuc0qGUE2b/Omo9KLak9z7xQZZbIJ
-         iSe2IQvgZTZfjgtPcDB9ue9HaRMk1Jc7qUAq9D4sn6mXErkakOQ6e/YKtELQORXlqnn0
-         rxv5ylwrH+mwVctuRRnkmn5ngnqOcxdAjfhmCaBFzWTykt+WKliDCH6VOfjuWeiHKNxy
-         NlZ7gb2nIlXso/6BTELBW6fy+wSeZM1BBKHxDOphZojvbOVye4oF0R46dgrEAwPKnhkl
-         zP3TJ3cgsjqYXR01IddybsW/H3YrYSq7dEohZJEzAEKhWe+zB3F9r01Tz2aUUHJtb6Qi
-         LYYA==
-X-Gm-Message-State: ACrzQf3lxxQGzUwjN6Yk8dXPy7h+S001eagFnGUDjChC80+3JusnAxZ+
-        pJSIVlCpGqbybp34NK4fLdskmQ==
-X-Google-Smtp-Source: AMsMyM5ZUjwMExsCBFvRLtOpcK6fRw2Am1EccgV7JlH9hWAgoX+9rIGoGBTui6iHlt9jnOe4Mh2MOw==
-X-Received: by 2002:a05:600c:3843:b0:3b4:f86b:e0a4 with SMTP id s3-20020a05600c384300b003b4f86be0a4mr2477743wmr.195.1665050281431;
-        Thu, 06 Oct 2022 02:58:01 -0700 (PDT)
+        bh=BpfK+aYBbv4gDS/7Ac2bO0jkqdp5ST+NBdNkX62pzaE=;
+        b=pniSm1XWZYDO+ZbrRuW6hv+VzYl7LNJJ24VVJenF0U7dnaJS4FhYuK3IfEgtOZq5PA
+         zSrtpl1nCgpoXuR9aTI8UuTMWhMZZES+pNkXQubWovuH4fQkGvW4N49+wc+TlEHCrfra
+         ZZmCrLUNMHO1Dz+s8XXr9x5LdUPClPfV6a9mbgI1R/TMPqbjg6FxxMVF0n294lkn5m9V
+         CSNsMYcIypGinvqw4OpAiRBsh3z3gAg0vAzFjs6L3kjCgP0az8FnZlvKpPIEZjZ+wGLD
+         D4hSOJ9DTQHtQtlj/qsZqx3AO18idMm5jAYUHwNpmBdUzP6e+SV2iDPd5fgHNv0F66i7
+         EZbg==
+X-Gm-Message-State: ACrzQf0AyoJ3EE4zff58rQj+/0KSdEi+wEmNgf4yWtG1rM+u7MVmOiYt
+        O2USSaofq7HL83VcIoaEOITUGg==
+X-Google-Smtp-Source: AMsMyM5RTjsigY8+7Yv5tBXsb6CROwlImdqSBT1Tf+5wQ/FqAqU6HDjTBorUW8x8Vq7rRLfRkSJfHw==
+X-Received: by 2002:a7b:c858:0:b0:3b5:7315:3c0d with SMTP id c24-20020a7bc858000000b003b573153c0dmr2596062wml.38.1665050282477;
+        Thu, 06 Oct 2022 02:58:02 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id q11-20020adf9dcb000000b0022ac672654dsm17935603wre.58.2022.10.06.02.58.00
+        by smtp.gmail.com with ESMTPSA id q11-20020adf9dcb000000b0022ac672654dsm17935603wre.58.2022.10.06.02.58.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 02:58:00 -0700 (PDT)
+        Thu, 06 Oct 2022 02:58:01 -0700 (PDT)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Thu, 06 Oct 2022 09:57:58 +0000
-Subject: [PATCH 1/6] dt-bindings: pinctrl: convert qcom,mdm9615-pinctrl.txt to
- dt-schema
+Date:   Thu, 06 Oct 2022 09:57:59 +0000
+Subject: [PATCH 2/6] arm: dts: qcom: mdm9615: fix pinctrl subnodes
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20221005-mdm9615-pinctrl-yaml-v1-1-0cbc006e2a30@linaro.org>
+Message-Id: <20221005-mdm9615-pinctrl-yaml-v1-2-0cbc006e2a30@linaro.org>
 References: <20221005-mdm9615-pinctrl-yaml-v1-0-0cbc006e2a30@linaro.org>
 In-Reply-To: <20221005-mdm9615-pinctrl-yaml-v1-0-0cbc006e2a30@linaro.org>
 To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
@@ -82,288 +81,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the MDM9515 pinctrl bindings to dt-schema.
+Fix the MDM9615 DT to the expected subnodes namings.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- .../bindings/pinctrl/qcom,mdm9615-pinctrl.txt      | 161 ---------------------
- .../bindings/pinctrl/qcom,mdm9615-pinctrl.yaml     | 101 +++++++++++++
- 2 files changed, 101 insertions(+), 161 deletions(-)
+ .../boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts  |  8 ++++----
+ arch/arm/boot/dts/qcom-mdm9615-wp8548.dtsi         | 22 +++++++++++-----------
+ 2 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,mdm9615-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/qcom,mdm9615-pinctrl.txt
-deleted file mode 100644
-index d46973968873..000000000000
---- a/Documentation/devicetree/bindings/pinctrl/qcom,mdm9615-pinctrl.txt
-+++ /dev/null
-@@ -1,161 +0,0 @@
--Qualcomm MDM9615 TLMM block
--
--This binding describes the Top Level Mode Multiplexer block found in the
--MDM9615 platform.
--
--- compatible:
--	Usage: required
--	Value type: <string>
--	Definition: must be "qcom,mdm9615-pinctrl"
--
--- reg:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: the base address and size of the TLMM register space.
--
--- interrupts:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: should specify the TLMM summary IRQ.
--
--- interrupt-controller:
--	Usage: required
--	Value type: <none>
--	Definition: identifies this node as an interrupt controller
--
--- #interrupt-cells:
--	Usage: required
--	Value type: <u32>
--	Definition: must be 2. Specifying the pin number and flags, as defined
--		    in <dt-bindings/interrupt-controller/irq.h>
--
--- gpio-controller:
--	Usage: required
--	Value type: <none>
--	Definition: identifies this node as a gpio controller
--
--- #gpio-cells:
--	Usage: required
--	Value type: <u32>
--	Definition: must be 2. Specifying the pin number and flags, as defined
--		    in <dt-bindings/gpio/gpio.h>
--
--- gpio-ranges:
--	Usage: required
--	Definition:  see ../gpio/gpio.txt
--
--- gpio-reserved-ranges:
--	Usage: optional
--	Definition: see ../gpio/gpio.txt
--
--Please refer to ../gpio/gpio.txt and ../interrupt-controller/interrupts.txt for
--a general description of GPIO and interrupt bindings.
--
--Please refer to pinctrl-bindings.txt in this directory for details of the
--common pinctrl bindings used by client devices, including the meaning of the
--phrase "pin configuration node".
--
--The pin configuration nodes act as a container for an arbitrary number of
--subnodes. Each of these subnodes represents some desired configuration for a
--pin, a group, or a list of pins or groups. This configuration can include the
--mux function to select on those pin(s)/group(s), and various pin configuration
--parameters, such as pull-up, drive strength, etc.
--
--
--PIN CONFIGURATION NODES:
--
--The name of each subnode is not important; all subnodes should be enumerated
--and processed purely based on their content.
--
--Each subnode only affects those parameters that are explicitly listed. In
--other words, a subnode that lists a mux function but no pin configuration
--parameters implies no information about any pin configuration parameters.
--Similarly, a pin subnode that describes a pullup parameter implies no
--information about e.g. the mux function.
--
--
--The following generic properties as defined in pinctrl-bindings.txt are valid
--to specify in a pin configuration subnode:
--
--- pins:
--	Usage: required
--	Value type: <string-array>
--	Definition: List of gpio pins affected by the properties specified in
--		    this subnode.  Valid pins are:
--		    gpio0-gpio87
--
--- function:
--	Usage: required
--	Value type: <string>
--	Definition: Specify the alternative function to be configured for the
--		    specified pins.
--		    Valid values are:
--		    gpio, gsbi2_i2c, gsbi3, gsbi4, gsbi5_i2c, gsbi5_uart,
--		    sdc2, ebi2_lcdc, ps_hold, prim_audio, sec_audio,
--		    cdc_mclk
--
--- bias-disable:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins should be configured as no pull.
--
--- bias-pull-down:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins should be configured as pull down.
--
--- bias-pull-up:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins should be configured as pull up.
--
--- output-high:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins are configured in output mode, driven
--		    high.
--
--- output-low:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins are configured in output mode, driven
--		    low.
--
--- drive-strength:
--	Usage: optional
--	Value type: <u32>
--	Definition: Selects the drive strength for the specified pins, in mA.
--		    Valid values are: 2, 4, 6, 8, 10, 12, 14 and 16
--
--Example:
--
--	msmgpio: pinctrl@800000 {
--		compatible = "qcom,mdm9615-pinctrl";
--		reg = <0x800000 0x4000>;
--
--		gpio-controller;
--		#gpio-cells = <2>;
--		gpio-ranges = <&msmgpio 0 0 88>;
--		interrupt-controller;
--		#interrupt-cells = <2>;
--		interrupts = <0 16 0x4>;
--
--		gsbi8_uart: gsbi8-uart {
--			mux {
--				pins = "gpio34", "gpio35";
--				function = "gsbi8";
--			};
--
--			tx {
--				pins = "gpio34";
--				drive-strength = <4>;
--				bias-disable;
--			};
--
--			rx {
--				pins = "gpio35";
--				drive-strength = <2>;
--				bias-pull-up;
--			};
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,mdm9615-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,mdm9615-pinctrl.yaml
-new file mode 100644
-index 000000000000..6a5966fc0098
---- /dev/null
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,mdm9615-pinctrl.yaml
-@@ -0,0 +1,101 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/pinctrl/qcom,mdm9615-pinctrl.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm Technologies, Inc. MDM9615 TLMM block
-+
-+maintainers:
-+  - Bjorn Andersson <andersson@kernel.org>
-+
-+description: |
-+  This binding describes the Top Level Mode Multiplexer block found in the
-+  MDM9615 platform.
-+
-+allOf:
-+  - $ref: "pinctrl.yaml#"
-+  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
-+
-+properties:
-+  compatible:
-+    const: qcom,mdm9615-pinctrl
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts: true
-+  interrupt-controller: true
-+  '#interrupt-cells': true
-+  gpio-controller: true
-+  '#gpio-cells': true
-+  gpio-ranges: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+patternProperties:
-+  '-state$':
-+    oneOf:
-+      - $ref: "#/$defs/qcom-mdm9615-pinctrl-state"
-+      - patternProperties:
-+          "-pins$":
-+            $ref: "#/$defs/qcom-mdm9615-pinctrl-state"
-+
-+'$defs':
-+  qcom-mdm9615-pinctrl-state:
-+    type: object
-+    description:
-+      Pinctrl node's client devices use subnodes for desired pin configuration.
-+      Client device subnodes use below standard properties.
-+    $ref: "qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state"
-+
-+    properties:
-+      pins:
-+        description:
-+          List of gpio pins affected by the properties specified in this
-+          subnode.
-+        items:
-+          oneOf:
-+            - pattern: "^gpio([0-9]|[1-7][0-9]|8[0-7])$"
-+        minItems: 1
-+        maxItems: 16
-+
-+      function:
-+        description:
-+          Specify the alternative function to be configured for the specified
-+          pins.
-+
-+        enum: [ gpio, gsbi2_i2c, gsbi3, gsbi4, gsbi5_i2c, gsbi5_uart,
-+                sdc2, ebi2_lcdc, ps_hold, prim_audio, sec_audio, cdc_mclk, ]
-+
-+      bias-disable: true
-+      bias-pull-down: true
-+      bias-pull-up: true
-+      drive-strength: true
-+      output-high: true
-+      output-low: true
-+      input-enable: true
-+
-+    required:
-+      - pins
-+      - function
-+
-+    additionalProperties: false
-+
-+examples:
-+  - |
-+        #include <dt-bindings/interrupt-controller/arm-gic.h>
-+        tlmm: pinctrl@1000000 {
-+          compatible = "qcom,mdm9615-pinctrl";
-+          reg = <0x01000000 0x300000>;
-+          interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
-+          gpio-controller;
-+          gpio-ranges = <&msmgpio 0 0 88>;
-+          #gpio-cells = <2>;
-+          interrupt-controller;
-+          #interrupt-cells = <2>;
-+        };
+diff --git a/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts b/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts
+index 4e53b3d70195..30a110984597 100644
+--- a/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts
++++ b/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts
+@@ -45,8 +45,8 @@ &msmgpio {
+ 	 * - 42: IOT0_GPIO1 and SD Card Detect
+ 	 */
+ 
+-	gpioext1_pins: gpioext1_pins {
+-		pins {
++	gpioext1_pins: gpioext1-state {
++		gpioext1-pins {
+ 			pins = "gpio2";
+ 			function = "gpio";
+ 			input-enable;
+@@ -54,8 +54,8 @@ pins {
+ 		};
+ 	};
+ 
+-	sdc_cd_pins: sdc_cd_pins {
+-		pins {
++	sdc_cd_pins: sdc-cd-state {
++		sdc-cd-pins {
+ 			pins = "gpio42";
+ 			function = "gpio";
+ 			drive-strength = <2>;
+diff --git a/arch/arm/boot/dts/qcom-mdm9615-wp8548.dtsi b/arch/arm/boot/dts/qcom-mdm9615-wp8548.dtsi
+index 2fe8693dc3cd..92c8003dac25 100644
+--- a/arch/arm/boot/dts/qcom-mdm9615-wp8548.dtsi
++++ b/arch/arm/boot/dts/qcom-mdm9615-wp8548.dtsi
+@@ -22,8 +22,8 @@ &msmgpio {
+ 	pinctrl-0 = <&reset_out_pins>;
+ 	pinctrl-names = "default";
+ 
+-	gsbi3_pins: gsbi3_pins {
+-		mux {
++	gsbi3_pins: gsbi3-state {
++		gsbi3-pins {
+ 			pins = "gpio8", "gpio9", "gpio10", "gpio11";
+ 			function = "gsbi3";
+ 			drive-strength = <8>;
+@@ -31,8 +31,8 @@ mux {
+ 		};
+ 	};
+ 
+-	gsbi4_pins: gsbi4_pins {
+-		mux {
++	gsbi4_pins: gsbi4-state {
++		gsbi4-pins {
+ 			pins = "gpio12", "gpio13", "gpio14", "gpio15";
+ 			function = "gsbi4";
+ 			drive-strength = <8>;
+@@ -40,15 +40,15 @@ mux {
+ 		};
+ 	};
+ 
+-	gsbi5_i2c_pins: gsbi5_i2c_pins {
+-		pin16 {
++	gsbi5_i2c_pins: gsbi5-i2c-state {
++		sda-pins {
+ 			pins = "gpio16";
+ 			function = "gsbi5_i2c";
+ 			drive-strength = <8>;
+ 			bias-disable;
+ 		};
+ 
+-		pin17 {
++		scl-pins {
+ 			pins = "gpio17";
+ 			function = "gsbi5_i2c";
+ 			drive-strength = <2>;
+@@ -56,8 +56,8 @@ pin17 {
+ 		};
+ 	};
+ 
+-	gsbi5_uart_pins: gsbi5_uart_pins {
+-		mux {
++	gsbi5_uart_pins: gsbi5-uart-state {
++		gsbi5-uart-pins {
+ 			pins = "gpio18", "gpio19";
+ 			function = "gsbi5_uart";
+ 			drive-strength = <8>;
+@@ -65,8 +65,8 @@ mux {
+ 		};
+ 	};
+ 
+-	reset_out_pins: reset_out_pins {
+-		pins {
++	reset_out_pins: reset-out-state {
++		reset-out-pins {
+ 			pins = "gpio66";
+ 			function = "gpio";
+ 			drive-strength = <2>;
 
 -- 
 b4 0.10.1
