@@ -2,75 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFDAC5F65F7
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 586A45F660C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231326AbiJFM1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 08:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
+        id S231524AbiJFM2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 08:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231307AbiJFM1N (ORCPT
+        with ESMTP id S231329AbiJFM2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 08:27:13 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974CFA0265;
-        Thu,  6 Oct 2022 05:27:09 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Thu, 6 Oct 2022 08:28:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C01DA0260;
+        Thu,  6 Oct 2022 05:28:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9B15C66022F9;
-        Thu,  6 Oct 2022 13:27:07 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1665059228;
-        bh=pTOa17syGcTn7Q5FCCjR0Pa3bJOxI8Q4e+HnhGoAweE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YdIrTuAxmzDH2b7YZLpYY6X1p8sDLthcurc7lFHuFEy7CyZbFwu3ScotyVB0a/HS+
-         f0SW9sbdozdxyP7ehABQIZ95Dy1SRmaP6urQoWKcbCA/BpY49seCbCxTtFFJA9g1NK
-         VMNWzXta91z8zWy6TLeh8yKZjRvYFzStULajVDjWGAHkqNz+zPEsBWQTdOz6w+BQYi
-         R0hqSRQAlpNAafFp3sCn3uVCIS0nnaT6m/2CATMBzZjJXDE5ZfMvJBfolo57Fmnegv
-         1MNpDdi29HqiiT1f7ddnwEwBM6XgsGrVCCyEBYZpQh7YYr0G0xoQKFIW/s/BpVeba2
-         fcPo4eAUVTJaw==
-Message-ID: <bd9e6cc6-6ca1-ff7d-55e8-b78bac2401b5@collabora.com>
-Date:   Thu, 6 Oct 2022 14:27:05 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88EE461923;
+        Thu,  6 Oct 2022 12:28:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA237C433C1;
+        Thu,  6 Oct 2022 12:28:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665059287;
+        bh=urtUav8EHxk8QIZbs99s2vaaP7fgK18dDTxYek/PK/4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=MGd/f6SC2hJdz2DUtXTC8bCTjgoDbo1mPp+A+6rv6qTz1pYyBGtslNhLtVkgdjKoB
+         zvA3W/OTOixUb4SZdAE0/lBfXxyG2+JlhBHBqSSPDKQ2wupXyotgDcUAyeiCeyOqpu
+         FRI6VOd5pvGYnjuFE0aLvQaHKSUMyaDgW3cInIzC4voOM2VNOcEPAOgM1Vsp4DSBrz
+         IQoInj4w5HWPwtaiLnJdV9Ibjf5eJh+R77JhQTMzFCsAFmxb7QEmSpmWp7WnZ2YWAC
+         H8+osg39yty0DNTDTX+1Tc6cQ6xwkzEzIH/4AubxGjlfvX5EHvQEkX3FyPU+kdIVQ1
+         /6H/T9jOSsuCA==
+Received: by mail-lf1-f46.google.com with SMTP id s20so2430027lfi.11;
+        Thu, 06 Oct 2022 05:28:07 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0Gi2F9OFMwqFrbvifBQcUWxC3uyMbiamamvuYebLtIh3RfQhRb
+        /8RwBvSIkH2Q6lN2SxVSmVWWwodeIZRjyaEZLIw=
+X-Google-Smtp-Source: AMsMyM7FAlX2JWCm+WLZcvulAY1vV5cAzgFbZmJKJHjIuB1KuNERAiyFQrMP1Y94GY3DmoLHqI+07sMZuC/Q/x9FSPw=
+X-Received: by 2002:a05:6512:2026:b0:4a2:3bb6:302 with SMTP id
+ s6-20020a056512202600b004a23bb60302mr1752074lfs.539.1665059285847; Thu, 06
+ Oct 2022 05:28:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 8/8] dt-bindings: watchdog: mediatek,mtk-wdt: Add
- compatible for MT8173
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, nfraprado@collabora.com
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20221006120715.24815-1-allen-kh.cheng@mediatek.com>
- <20221006120715.24815-9-allen-kh.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221006120715.24815-9-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220921145422.437618-1-ardb@kernel.org> <20220921145422.437618-3-ardb@kernel.org>
+ <Yz6xBROUBPyaUSoB@zn.tnic> <CAMj1kXGCWmay_=cncZpZwXoyLgzt7=2dVuXHaaQU=K6NEXrezQ@mail.gmail.com>
+ <Yz64aMVo4W+D70Fz@zn.tnic> <CAMj1kXHi4TgGd=vicfxVOUnzDrhSfsiR=572L6cEwi47JO17jw@mail.gmail.com>
+In-Reply-To: <CAMj1kXHi4TgGd=vicfxVOUnzDrhSfsiR=572L6cEwi47JO17jw@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 6 Oct 2022 14:27:54 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEkX=dZ0uUAdXoe5JC_Zv2+ndTMYwDiixYmWT-ip8OOOg@mail.gmail.com>
+Message-ID: <CAMj1kXEkX=dZ0uUAdXoe5JC_Zv2+ndTMYwDiixYmWT-ip8OOOg@mail.gmail.com>
+Subject: Re: [PATCH v2 02/16] x86/compressed: efi-mixed: move 32-bit
+ entrypoint code into .text section
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Michael Roth <michael.roth@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 06/10/22 14:07, Allen-KH Cheng ha scritto:
-> Add the mediatek,mt8173-wdt compatible using mediatek,mt6589-wdt as
-> fallback.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+On Thu, 6 Oct 2022 at 13:19, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Thu, 6 Oct 2022 at 13:13, Borislav Petkov <bp@alien8.de> wrote:
+> >
+> > On Thu, Oct 06, 2022 at 12:56:09PM +0200, Ard Biesheuvel wrote:
+> > > efi32_pe_entry() preserves and restores the caller's value of %ebx,
+> > > because from there, we might actually return control to the firmware.
+> > > The value it keeps in %ebx itself is not live when it jumps to
+> > > efi32_entry - it stores its value into image_offset, which is reloaded
+> > > from memory at a later point.
+> >
+> > Hmm, might be prudent to have a comment there because it is using %ebx a
+> > couple of insns before the JMP:
+> >
+> >         subl    %esi, %ebx
+> >                       ^^^^
+> >         movl    %ebx, rva(image_offset)(%ebp)   // save image_offset
+> >
+> > <--- I think you mean that after this, %ebx is not needed anymore?
+> >
+>
+> Exactly.
+>
+> >         xorl    %esi, %esi
+> >         jmp     efi32_entry
+> >
+> > 2:      popl    %edi                            // restore callee-save registers
+> >         popl    %ebx
+> >
+> > and this restores its original value ofc.
+> >
+> > > efi32_stub_entry() is the 'EFI handover protocol' entry point, which
+> > > cannot return to the firmware (and we discard the return address
+> > > already) so %ebx can be clobbered.
+> >
+> > That info would be good to have in a comment above it.
+> >
+>
+> Fair enough.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+I'll add the below in the next revision
 
+--- a/arch/x86/boot/compressed/head_64.S
++++ b/arch/x86/boot/compressed/head_64.S
+@@ -307,6 +307,19 @@ SYM_FUNC_START(efi32_stub_entry)
+ SYM_FUNC_END(efi32_stub_entry)
 
+        .text
++/*
++ * This is the common EFI stub entry point for mixed mode.
++ *
++ * Arguments:  %ecx    image handle
++ *             %edx    EFI system table pointer
++ *             %esi    struct bootparams pointer (or NULL when not using
++ *                     the EFI handover protocol)
++ *
++ * Since this is the point of no return for ordinary execution, no registers
++ * are considered live except for the function parameters. [Note that the EFI
++ * stub may still exit and return to the firmware using the Exit() EFI boot
++ * service.]
++ */
+ SYM_FUNC_START_LOCAL(efi32_entry)
+        call    1f
+ 1:     pop     %ebx
+@@ -837,7 +850,8 @@ SYM_FUNC_START(efi32_pe_entry)
+        subl    %esi, %ebx
+        movl    %ebx, rva(image_offset)(%ebp)   // save image_offset
+        xorl    %esi, %esi
+-       jmp     efi32_entry
++       jmp     efi32_entry                     // pass %ecx, %edx, %esi
++                                               // no other registers
+remain live
+
+ 2:     popl    %edi                            // restore callee-save registers
+        popl    %ebx
