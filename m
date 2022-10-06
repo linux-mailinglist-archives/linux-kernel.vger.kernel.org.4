@@ -2,184 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326215F6899
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DE1B5F689F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbiJFNzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 09:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
+        id S231425AbiJFN4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 09:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbiJFNzE (ORCPT
+        with ESMTP id S230339AbiJFN4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 09:55:04 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A022124C
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 06:55:02 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id t12-20020a17090a3b4c00b0020b04251529so1774882pjf.5
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 06:55:02 -0700 (PDT)
+        Thu, 6 Oct 2022 09:56:48 -0400
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C4DAC3BB;
+        Thu,  6 Oct 2022 06:56:45 -0700 (PDT)
+Received: by mail-oo1-xc2e.google.com with SMTP id d22-20020a4a5216000000b0047f740d5847so1424897oob.13;
+        Thu, 06 Oct 2022 06:56:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=GNscnZawRSDQzcarRuJ7ggWN/Upkivk6LJB9jm7BUAk=;
-        b=BESDIcpUHn+E7ivOxrUkidOviXvpwCq2MRue2gIuswNndgRPzvFaivL7Nd/p1iV567
-         GGf+EpEIp2KMxGEW8fruwQ5jFG4mI6Ft4KsjARUxSyClS/fQ5tpsSyS2jQu4twNEtGj4
-         f5cMJJjiuan4QmcrS0jyt8ImhHWj2q1DeED+5wyeDI/23l/hmv9mUQTkC99Afu8Jzw0j
-         No8dK2IvE+tfUf69ikOdnNMPU5mVzos+Jubf1afaQynbFwOMlGK8MAetpYMaC5CZpscb
-         ywjTc613OjeDjt07y9JvAz6R7QfECG5j8qGLy1E11EiT70KDdHpzQg4I7TZqAT1wO+4w
-         k34w==
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/tGLue9QFBddVGPG1fUu/Vm6K4t9pa+6ym9D6yr+ZRI=;
+        b=CJxfJ6xRFvFe0xRGHXb7hO+RqzLhVdFEA3eJcGFTiAeLFAGNotEztpUo78DXDaglEU
+         iTwHL2Vj4qZZhRBZ/4fip4PYYNzGxdn5MF5FXTJ2zoOwF2DT4G4xiAYC8d+gGWMwnff5
+         0+FV+xCihxnquE3kJZbBcPZLSWgxyPxHg1DoSRDWo/L2JCexXjSpeJ5SmBr0M1h0wC8z
+         SoIhDyv6A7R45rCVGfOYcN3fcNHqaSuEeb7C8ALy30+aVVNwgjiqkLQhDJTaPZw0Nmaj
+         cqJyZ1cRljeRrAy7ayEZNV/GZ2OW/wJ7WmwSuvtY7D1wj8BgSwqc2pC/+6vzJGKaHV1s
+         YprA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=GNscnZawRSDQzcarRuJ7ggWN/Upkivk6LJB9jm7BUAk=;
-        b=vNoSHMj5jAN2fDGJtqnTwpnw8IaRqawTgTQv6aOh0wJkhIwx1niwHvR2kwho0+ctsz
-         i2i13RvQuw8wKA7HKn4Gar2baSF2S4wAm0YXll91EQBtlFGKu9DM1csoRdTNsUZ86zmr
-         f/eIgxYJAhM+utpP8Ptzz0KaKmHo0nouhJzJ8GbukWjH3B0eylAmlVfmgqNxmmXm3oZZ
-         2xMBGt5p6d8iAlOf2wDly4Qk+AB4JEmiRO0i+ZEOQG7DqoSi7WWLzcAqHKxHwJoePT0w
-         W0Xnyggwm3+YmB9f+xN4GaWFA6WTElhtzl7hjXFaTdaZLgFLC2b7tqZAY0lmzCY65aGK
-         xeAw==
-X-Gm-Message-State: ACrzQf3E4JPomemAnEzDO0dtXHaW5OnmDgvwJekcLKwjVh5WMEb5RN3T
-        Ll1QABMn/PHqAqp0h7TO4YjJVXmwoKyC/0gcrKUrGw==
-X-Google-Smtp-Source: AMsMyM7w4WLaVjg1vKq7SIEJAdDjx6f75uDM8/Fw5Cc0L0xz/tWLHg/d+3Q1BFthTdn8Fc8zlzyJHq4Chz0n4BUZ7zY=
-X-Received: by 2002:a17:902:6b04:b0:17a:15a:1229 with SMTP id
- o4-20020a1709026b0400b0017a015a1229mr4651252plk.24.1665064502039; Thu, 06 Oct
- 2022 06:55:02 -0700 (PDT)
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/tGLue9QFBddVGPG1fUu/Vm6K4t9pa+6ym9D6yr+ZRI=;
+        b=pq5KXlR8JOjMMLCzNLlnXp6BKyePMlSEdMvRoXfERWUzKSY/D5D2VtpjaTKvnpq8pT
+         9KYmFUW/U2io77SCT/wFR2gBlUfMGHnSKV1a3VF39yUtEFZLRdLBkkS3wKXcczATAL/A
+         EJGUUqr/S7bKBj+hHPSh6gMUfpsGkEj25k1+lqKNGHlMGXlnjziOC8kA4vWI3beK3LBo
+         Z0JdZaeP4hNjB5IkRe7J0949wPzVcBtwOxu3qry0to+nEfbLkTYGgbEJYPkaxKSB+vK7
+         L8dZLc07V/5C1OcfviImhiL6lC+hBV3v7Xt37QDcfpGrzIdLQ9hOje8qoAna97pnAtJ7
+         TQvQ==
+X-Gm-Message-State: ACrzQf2kwldLtZy0k+aaAE37mVip85Gz0ItWOiqFF4wHLxtDditoCbNo
+        dKmifKETSuoo4N6QDQMK+L5ZX6QW+xHr0Mix7sE=
+X-Google-Smtp-Source: AMsMyM7JEhRZLznaTVpUQ/ANn7XeGLOBPX/p97js8u3mIR8qd0bxqegHsBBzxRIQ4nttfAXKtUHNfSMd4v28DjD5t5U=
+X-Received: by 2002:a9d:6215:0:b0:660:f41e:513a with SMTP id
+ g21-20020a9d6215000000b00660f41e513amr1490380otj.123.1665064603933; Thu, 06
+ Oct 2022 06:56:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220809223401.24599-1-mike.leach@linaro.org> <20220809223401.24599-4-mike.leach@linaro.org>
- <65e70db9-9f85-7285-0602-f2d29887550a@arm.com>
-In-Reply-To: <65e70db9-9f85-7285-0602-f2d29887550a@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Thu, 6 Oct 2022 14:54:50 +0100
-Message-ID: <CAJ9a7Vgz+0xEQO-MvGUzbsr_LBh4pDep7JJtFoA+cAeiAERJFw@mail.gmail.com>
-Subject: Re: [PATCH v3 03/13] coresight: stm: Update STM driver to use Trace
- ID API
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, mathieu.poirier@linaro.org,
-        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        linux-perf-users@vger.kernel.org, leo.yan@linaro.org,
-        quic_jinlmao@quicinc.com
+References: <20220930105434.111407-1-broonie@kernel.org> <20221004132047.435d42db@canb.auug.org.au>
+ <CAMwc25oshRcJBoCT70B+b42bh5sPqgyoHuBx6K6ZLrwBMHnJzw@mail.gmail.com>
+ <20221004140558.64f59f2c@canb.auug.org.au> <YzwbW4YQwQPsRPYw@sirena.org.uk>
+ <CADnq5_PbPQPui1tOdUMB+OYbz6UBMKCgtwvE95oA+SfcN0RzNg@mail.gmail.com>
+ <09cd11c5-2a15-3653-957c-88c751fa9029@amd.com> <20221006092810.0c3a2238@canb.auug.org.au>
+ <20221006191245.11bb0e2c@canb.auug.org.au>
+In-Reply-To: <20221006191245.11bb0e2c@canb.auug.org.au>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 6 Oct 2022 09:56:32 -0400
+Message-ID: <CADnq5_N1cZiG39KzUzdHCtLRRCipMMNXjaNuAvoQs8=VTjtGCA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the drm tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Airlie <airlied@redhat.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Suzuki,
+This looks good to me.  Care to add you s-o-b?
 
-On Mon, 3 Oct 2022 at 10:04, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+Alex
+
+On Thu, Oct 6, 2022 at 4:12 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> On 09/08/2022 23:33, Mike Leach wrote:
-> > Updates the STM driver to use the trace ID allocation API.
-> > This uses the _system_id calls to allocate an ID on device poll,
-> > and release on device remove.
+> Hi all,
+>
+> On Thu, 6 Oct 2022 09:28:10 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > >
-> > The sysfs access to the STMTRACEIDR register has been changed from RW
-> > to RO. Having this value as writable is not appropriate for the new
-> > Trace ID scheme - and had potential to cause errors in the previous
-> > scheme if values clashed with other sources.
+> > I have applied the following hack for today:
 > >
-> > Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> > Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Thu, 6 Oct 2022 09:14:26 +1100
+> > Subject: [PATCH] fix up for drivers/gpu/drm/amd/display/dc/core/dc_stream.c
+> >
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 > > ---
-> >   drivers/hwtracing/coresight/coresight-stm.c | 41 +++++++--------------
-> >   1 file changed, 14 insertions(+), 27 deletions(-)
+> >  drivers/gpu/drm/amd/display/dc/core/dc_stream.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
 > >
-> > diff --git a/drivers/hwtracing/coresight/coresight-stm.c b/drivers/hwtracing/coresight/coresight-stm.c
-> > index bb14a3a8a921..9ef3e923a930 100644
-> > --- a/drivers/hwtracing/coresight/coresight-stm.c
-> > +++ b/drivers/hwtracing/coresight/coresight-stm.c
-> > @@ -31,6 +31,7 @@
-> >   #include <linux/stm.h>
-> >
-> >   #include "coresight-priv.h"
-> > +#include "coresight-trace-id.h"
-> >
-> >   #define STMDMASTARTR                        0xc04
-> >   #define STMDMASTOPR                 0xc08
-> > @@ -615,24 +616,7 @@ static ssize_t traceid_show(struct device *dev,
-> >       val = drvdata->traceid;
-> >       return sprintf(buf, "%#lx\n", val);
-> >   }
-> > -
-> > -static ssize_t traceid_store(struct device *dev,
-> > -                          struct device_attribute *attr,
-> > -                          const char *buf, size_t size)
-> > -{
-> > -     int ret;
-> > -     unsigned long val;
-> > -     struct stm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> > -
-> > -     ret = kstrtoul(buf, 16, &val);
-> > -     if (ret)
-> > -             return ret;
-> > -
-> > -     /* traceid field is 7bit wide on STM32 */
-> > -     drvdata->traceid = val & 0x7f;
-> > -     return size;
-> > -}
-> > -static DEVICE_ATTR_RW(traceid);
-> > +static DEVICE_ATTR_RO(traceid);
-> >
-> >   #define coresight_stm_reg(name, offset)     \
-> >       coresight_simple_reg32(struct stm_drvdata, name, offset)
-> > @@ -819,14 +803,6 @@ static void stm_init_default_data(struct stm_drvdata *drvdata)
-> >        */
-> >       drvdata->stmsper = ~0x0;
-> >
-> > -     /*
-> > -      * The trace ID value for *ETM* tracers start at CPU_ID * 2 + 0x10 and
-> > -      * anything equal to or higher than 0x70 is reserved.  Since 0x00 is
-> > -      * also reserved the STM trace ID needs to be higher than 0x00 and
-> > -      * lowner than 0x10.
-> > -      */
-> > -     drvdata->traceid = 0x1;
-> > -
-> >       /* Set invariant transaction timing on all channels */
-> >       bitmap_clear(drvdata->chs.guaranteed, 0, drvdata->numsp);
-> >   }
-> > @@ -854,7 +830,7 @@ static void stm_init_generic_data(struct stm_drvdata *drvdata,
-> >
-> >   static int stm_probe(struct amba_device *adev, const struct amba_id *id)
-> >   {
-> > -     int ret;
-> > +     int ret, trace_id;
-> >       void __iomem *base;
-> >       struct device *dev = &adev->dev;
-> >       struct coresight_platform_data *pdata = NULL;
-> > @@ -938,12 +914,22 @@ static int stm_probe(struct amba_device *adev, const struct amba_id *id)
-> >               goto stm_unregister;
+> > diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
+> > index ae13887756bf..a5da787b7876 100644
+> > --- a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
+> > +++ b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
+> > @@ -520,9 +520,9 @@ bool dc_stream_remove_writeback(struct dc *dc,
 > >       }
 > >
-> > +     trace_id = coresight_trace_id_get_system_id();
-> > +     if (trace_id < 0) {
+> >       /* remove writeback info for disabled writeback pipes from stream */
+> > -     for (i = 0, j = 0; i < stream->num_wb_info && j < MAX_DWB_PIPES; i++) {
+> > +     for (i = 0, j = 0; i < stream->num_wb_info && i < MAX_DWB_PIPES; i++) {
+> >               if (stream->writeback_info[i].wb_enabled) {
+> > -                     if (i != j)
+> > +                     if ((j >= 0) && (j < i))
+> >                               /* trim the array */
+> >                               stream->writeback_info[j] = stream->writeback_info[i];
+> >                       j++;
 >
-> The above API returns "INVALID_ID" and not a negative error status.
-> I think it is better to fix the API to return:
+> This works as well, and (in my opinion) is better:
 >
->    ret < 0  - If there is any error
->             - Otherwise a positive integer
-> And the users should be kept unaware of which ID is valid or invalid.
+> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
+> index ae13887756bf..fb6222d4c430 100644
+> --- a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
+> +++ b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
+> @@ -499,7 +499,7 @@ bool dc_stream_remove_writeback(struct dc *dc,
+>                 struct dc_stream_state *stream,
+>                 uint32_t dwb_pipe_inst)
+>  {
+> -       int i = 0, j = 0;
+> +       unsigned int i, j;
+>         if (stream == NULL) {
+>                 dm_error("DC: dc_stream is NULL!\n");
+>                 return false;
+> @@ -520,9 +520,9 @@ bool dc_stream_remove_writeback(struct dc *dc,
+>         }
 >
-
-coresight_trace_id_get_system_id() returns the ID if one can be
-allocated or -EINVAL if not.
-
-Not sure what you are looking at here.
-
-Mike
-
-
-> Suzuki
-
-
-
--- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+>         /* remove writeback info for disabled writeback pipes from stream */
+> -       for (i = 0, j = 0; i < stream->num_wb_info && j < MAX_DWB_PIPES; i++) {
+> +       for (i = 0, j = 0; i < stream->num_wb_info; i++) {
+>                 if (stream->writeback_info[i].wb_enabled) {
+> -                       if (i != j)
+> +                       if (j < i)
+>                                 /* trim the array */
+>                                 stream->writeback_info[j] = stream->writeback_info[i];
+>                         j++;
+>
+> --
+> Cheers,
+> Stephen Rothwell
