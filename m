@@ -2,62 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F03485F6D4F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 20:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3535F6D51
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 20:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiJFSCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 14:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
+        id S231407AbiJFSH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 14:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbiJFSCb (ORCPT
+        with ESMTP id S230503AbiJFSHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 14:02:31 -0400
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18501BD061;
-        Thu,  6 Oct 2022 11:02:30 -0700 (PDT)
-Date:   Thu, 06 Oct 2022 18:02:14 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1665079346; x=1665338546;
-        bh=vg0I80ZZ/aeSUoxTv9FSi8jw1ZLp13nSPNGlcvz8ix0=;
-        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID;
-        b=V4slbBRImaekHPUJeLcN0VZFAGLNq2qjcYafCifNX3xQayi87Y33+7sXE76QyAKFq
-         0a+jp8tUekW7jcCOOBgSmVoY+QgE/3Zj2RV1pDm3f8VDKDC+d+NCctotJej2GT5zof
-         Tc4FksrjH4kSHyjjNE77hCOcILhMy3lbsPKyZtcIPYQZWtYa/IlDv3F/kl6Sk/POPX
-         W/MOUk/bFnrRijrJGA6/FoyAZwovu3Ghb1MibkpP9SBdGkNW8jrhVMtnpDtsyixM/F
-         1QQ8RQNKFxU3LgTEF89Pc+h3ykkHeMktx6CGRYAScR2q9VHPMujhiqc8DljoJfDEPn
-         1hf8HGIFIWSTQ==
-To:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>
-From:   Jari Ruusu <jariruusu@protonmail.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Announce loop-AES-v3.7y file/swap crypto package
-Message-ID: <6gzebvo82qyS8fwpW22mKEJNvBMnI6juOKE_n7x5Zxq1_ceighRjYoZiNbed5TmI7scxDhgSuFBN7K8W-CDPyRw8WLVJzXFLEl7qGxdPwF4=@protonmail.com>
-Feedback-ID: 22639318:user:proton
+        Thu, 6 Oct 2022 14:07:23 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F68CFF235
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 11:07:20 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1ogVH2-0001pm-1s; Thu, 06 Oct 2022 20:07:08 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Conor Dooley <conor@kernel.org>
+Cc:     Tom Rix <trix@redhat.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Dao Lu <daolu@rivosinc.com>, Guo Ren <guoren@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH 2/2] riscv: fix detection of toolchain Zihintpause support
+Date:   Thu, 06 Oct 2022 20:07:07 +0200
+Message-ID: <2599561.BddDVKsqQX@diego>
+In-Reply-To: <20221006173520.1785507-3-conor@kernel.org>
+References: <20221006173520.1785507-1-conor@kernel.org> <20221006173520.1785507-3-conor@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-loop-AES changes since previous release:
-- Fixed possible use-after-free bug in module removal code.
-- Worked around kernel interface changes on 5.19.12+ and 6.x kernels.
-- Some #ifdef spaghetti removed for 6.x kernels.
+Am Donnerstag, 6. Oktober 2022, 19:35:21 CEST schrieb Conor Dooley:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> It is not sufficient to check if a toolchain supports a particular
+> extension without checking if the linker supports that extension
+> too. For example, Clang 15 supports Zihintpause but GNU bintutils
+> 2.35.2 does not, leading build errors like so:
+> 
+> riscv64-linux-gnu-ld: -march=rv64i2p0_m2p0_a2p0_c2p0_zihintpause2p0: Invalid or unknown z ISA extension: 'zihintpause'
+> 
+> Add a TOOLCHAIN_HAS_ZIHINTPAUSE which checks if each of the compiler,
+> assembler and linker support the extension. Replace the ifdef in the
+> vdso with one depending on this new symbol.
+> 
+> Fixes: 8eb060e10185 ("arch/riscv: add Zihintpause support")
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-bzip2 compressed tarball is here:
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 
-    http://loop-aes.sourceforge.net/loop-AES/loop-AES-v3.7y.tar.bz2
-    md5sum 87b58c0c4ef53da59fb7e853702b594d
-
-    http://loop-aes.sourceforge.net/loop-AES/loop-AES-v3.7y.tar.bz2.sign
-
---
-Jari Ruusu=C2=A0 4096R/8132F189 12D6 4C3A DCDA 0AA4 27BD=C2=A0 ACDF F073 3C=
-80 8132 F189
 
