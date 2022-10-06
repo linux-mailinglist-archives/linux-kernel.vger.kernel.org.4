@@ -2,89 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8BAE5F6F34
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F4B5F6F39
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbiJFUdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 16:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
+        id S232139AbiJFUds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 16:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbiJFUc5 (ORCPT
+        with ESMTP id S230227AbiJFUde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 16:32:57 -0400
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD50BBEAC7;
-        Thu,  6 Oct 2022 13:32:56 -0700 (PDT)
-Received: by mail-oo1-f49.google.com with SMTP id h1-20020a4aa741000000b004756c611188so2222493oom.4;
-        Thu, 06 Oct 2022 13:32:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LcOyRcRSx0+Y9wlXvIvsToGECYGmWrmaG0LazNTO+Zk=;
-        b=WnQGJ+9jjMnUpUfLrLb5mFXhSuF0ssHGgTlDuMAexmEOKFckRcpqYNKruXc5q91r4B
-         cqjaFDxHwS46V4XIrFamCKsCccNnv0Xf6bSgxMI7FfMGc2eBH6diqFhdg79URuKlE1UU
-         dBPffTv7QWV+XLk3KbxUJuycC2C4QETZ9WusXz6cxVY1ASkFh8FALMpbOCj3hkkje5ca
-         JB/PKce5yly+E+n2EZnOI+5mCuJpVFh/keY22VSNqERFS9cZg8lsMffKvNOg+2pyFbro
-         r2VDCs3DcL+GHNQ8KW1uCYqpWC2hwTRoKlfUmtcshDJ232ujUmhnsxtL1UVO8jXFCjxG
-         LJLg==
-X-Gm-Message-State: ACrzQf1rtFxWpJa345WjQ70o9lsrM6jynUKKBbDII7sVqfIvMmuBND3v
-        7eassPg9zzyokBWYEE6GFQ==
-X-Google-Smtp-Source: AMsMyM4KBH5UCLaQijb729zMpfbHKEq4T/nNQDoXT7CCYZykGTol9PlzV+Kz1mpqPA3u2wZkcnluBw==
-X-Received: by 2002:a05:6830:1e14:b0:65c:5217:ca02 with SMTP id s20-20020a0568301e1400b0065c5217ca02mr707678otr.203.1665088375969;
-        Thu, 06 Oct 2022 13:32:55 -0700 (PDT)
-Received: from robh_at_kernel.org ([2607:fb90:8a65:c536:245:842:a3a4:9017])
-        by smtp.gmail.com with ESMTPSA id cm21-20020a056830651500b00660d73c8bdesm274750otb.50.2022.10.06.13.32.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 13:32:55 -0700 (PDT)
-Received: (nullmailer pid 111642 invoked by uid 1000);
-        Thu, 06 Oct 2022 20:32:53 -0000
-Date:   Thu, 6 Oct 2022 15:32:53 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Iskren Chernev <iskren.chernev@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        krishna Lanka <quic_vamslank@quicinc.com>
-Subject: Re: [PATCH 16/34] dt-bindings: pinctrl: qcom,sm8450: drop checks
- used in common TLMM
-Message-ID: <166508837168.111515.15485282892901000258.robh@kernel.org>
-References: <20221006140637.246665-1-krzysztof.kozlowski@linaro.org>
- <20221006140637.246665-17-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221006140637.246665-17-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Thu, 6 Oct 2022 16:33:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E087BB06D
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 13:33:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09EFA61AD1
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 20:33:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19E44C433C1;
+        Thu,  6 Oct 2022 20:33:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1665088412;
+        bh=dZZ9imJ1cDp8lJ48SMN+iYyF9XUEQ3s5LkCT1Jrg6Kc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=yuNoVAdxTDyNOu7Ww1D1JTc/yiTXv0IPOEi7FNbJZYvpD61D/mH59aUQYwIuY6FE2
+         NXLa6q+kcyhkcH/GZh6ZxaS7KDkrHhcBzfEv4UgirfWyPBNU1bdjT1zlqvNw+c8eN2
+         /u1insyoLGQ+qyrq7O/iN3teAa72t1uTi0Ap5yYE=
+Date:   Thu, 6 Oct 2022 13:33:31 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     ira.weiny@intel.com
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Christoph Hellwig <hch@lst.de>,
+        kernel test robot <lkp@intel.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] highmem: Fix kmap_to_page() for kmap_local_page()
+ addresses
+Message-Id: <20221006133331.dabd345508f7d62a887dfb4d@linux-foundation.org>
+In-Reply-To: <20221006040555.1502679-1-ira.weiny@intel.com>
+References: <20221006040555.1502679-1-ira.weiny@intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Oct 2022 16:06:19 +0200, Krzysztof Kozlowski wrote:
-> The common Qualcomm TLMM pin controller schema already brings
-> requirement of function for GPIO pins.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/pinctrl/qcom,sm8450-pinctrl.yaml         | 11 +----------
->  1 file changed, 1 insertion(+), 10 deletions(-)
-> 
+On Wed,  5 Oct 2022 21:05:55 -0700 ira.weiny@intel.com wrote:
 
-Acked-by: Rob Herring <robh@kernel.org>
+> kmap_to_page() is used to get the page for a virtual address which may
+> be kmap'ed.  Unfortunately, kmap_local_page() stores mappings in a
+> thread local array separate from kmap().  These mappings were not
+> checked by the call.
+> 
+> Check the kmap_local_page() mappings and return the page if found.
+> 
+> Because it is intended to remove kmap_to_page() add a warn on once to
+> the kmap checks to flag potential issues early.
+
+What were the user-visible runtime effects of this?
+
+Are we able to identify a Fixes:?
+
+Thanks.
+
