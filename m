@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1237A5F68BC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DED765F68BF
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231504AbiJFOCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 10:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45302 "EHLO
+        id S229786AbiJFOEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 10:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbiJFOCO (ORCPT
+        with ESMTP id S230465AbiJFOEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 10:02:14 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EA8AA3DB;
-        Thu,  6 Oct 2022 07:02:09 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 207so2364954ybn.1;
-        Thu, 06 Oct 2022 07:02:09 -0700 (PDT)
+        Thu, 6 Oct 2022 10:04:04 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A47CA6C03;
+        Thu,  6 Oct 2022 07:04:03 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-349c4310cf7so18641837b3.3;
+        Thu, 06 Oct 2022 07:04:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ItWFOLvZ7RFflQ0r1IJBOW8mA5I5+0QaLapZDNLKRhE=;
-        b=oBOCdlgXZ+gUdiAGOyJsqVoyjgq6eHLXeCRDoVkCtiyYLLgR7+NMgu5YNNcNw/bCth
-         QHycWXAuQdhfAQ76ghOl/v4DKvBGckJMxx6Xp8tqOuyKiXgQqNNr01kFXjPVFEoNeuXz
-         lPmJYfoh0uwYkFMpC6fWXDObwUBgLMLQLEdXD1G6QiKqeq7NAtAjzmpIfObcHtZOvP6T
-         2lzLEnw5RyLLUvilQM7Kmc/nOs4RQYQCyqMLKhylJ2tdq0r9Ovx7qBnBsBwDz+tRXApB
-         OMwd3sqZa6AbIF3wyO1tibMTVOzAk3oq06VbzvfgSz5GrmvEaAq3eTCZ4LmF2MYxTZDT
-         UDSQ==
+        bh=15EqTCKT5KNw2vxyM6AXOBbnGd1gw8GuxW5sxffr7+4=;
+        b=buofUxG7S2UPHewCG7Tc/witmJNpQEoZV14aKl0Hv2SqnRyJ4/Yw2PgdAE7g3hpfpX
+         XxAJxv6Rt2ByAQn502BhxVm4f6pCsg+h/73OXz34902TOGzWqotmBxcSTg+tRiEVZUUB
+         /Pp0RHaB0LKk0oIz/45ux4X+T0uJ7Jxb84daISQVSoZzB/lEVIZ9TufEtXBnjWM+pVxh
+         1MyKpNuPj03TIRk/k4EKEZfvTv4aHiLdKriM0hhtOO7xptEKzsdFmlqBVN+uS/ExGTwI
+         0yJIs9t7tgPej3jZDujztVVJnoNJtAaKKPm7VIHVcz1dIdLkdxpqFiizOhXC+p1BSo2A
+         hWgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ItWFOLvZ7RFflQ0r1IJBOW8mA5I5+0QaLapZDNLKRhE=;
-        b=zY69MuUjeSdmm818Oise4Bx4d5ENoD5Ku9amE/p6QgLh5LS9JrvIw2ODZap32J9SCR
-         I+yoPHZVEBPfwqE4JXxayzIRi/fvzan0lD+owJ4nMwCvfPZAwyKt4Lxj40o/5F7NU5KM
-         DGRtECCp5k6VYpgmITtTqqTPhgzBg59G0ICY0b4Ld0/Afe6XpcS+0S9A6CXXHfS7mVfN
-         PcKvddbybmEi1gPQFc2B4nJ/Sm0R8vL6yiGuoGB4FrIPdIuJ0HV0LrItvPFx8s/K1gaK
-         8DlenrluRv93g2ZCnLvwdx7UEOi3Q+4YKGCJiaXwrBjABvCO/zTVNtLzP7RB1YgUqLj4
-         YyrQ==
-X-Gm-Message-State: ACrzQf3wwbEQMllfQG5Jvbhu80myEX4QTll6QHRUm3ldnjNyHex1aven
-        AuPYh7beGJU9cllntNpGnFclRm3Rb8DMaDIqozU=
-X-Google-Smtp-Source: AMsMyM56mR1HqiiPqGdZ0c1dRHFoDsqqTGpmBS5/fAbT67ZCeAs5xE/XFyi7Yc/9Hm2awykkfyphOLhb6NpCOUfcfz4=
-X-Received: by 2002:a25:3ac1:0:b0:6bc:d21:a35 with SMTP id h184-20020a253ac1000000b006bc0d210a35mr4487401yba.526.1665064928544;
- Thu, 06 Oct 2022 07:02:08 -0700 (PDT)
+        bh=15EqTCKT5KNw2vxyM6AXOBbnGd1gw8GuxW5sxffr7+4=;
+        b=FIpSS7ozOJMB2TWYYfhCUjZIrj9t507YTyUkEbymSh3IwaFkwPhB2KGjEwf2Euztgb
+         FddISH5l4Ql4A7KsqBPDmt/NLqOAVic8DV0XGbCHIWQe48u6Lce3MoGnDmT0icBWDMG6
+         awcCxxzL+G8uCf9apOrkt/OvJvrq/TWQmAfytZkQ2pwarCAaQv2G+8R7lYAWRoqSX00e
+         W5ztZ+A2CNSrhIpFpx61fNT/Yfnk7VJhT48Akbqr2VgEB52dcxMbrFB78vyInNamM2Po
+         1rPfzSDTKt9TzGBlVF/FVofAAUGm1WmZnxfbqqeiiU+BB6ip42ZuLduaAcYtS0mssUYo
+         gmvg==
+X-Gm-Message-State: ACrzQf1navGko17hX8DZpDWn7VqNFLLJsQCtxmoaOa0QSZRNT3AlgbKh
+        cpRlDgqxTDSXaD0TK2her2agSjbzxAACQz3KA3W4ADcn
+X-Google-Smtp-Source: AMsMyM7a0pHKm+WJ1OPiSP54eW5dWK0PjJQ+JOYJQHA32chVqp1eXglFsd2lJAwGTmLT5QeDRhkWQrvw7XXmsJP5r4w=
+X-Received: by 2002:a0d:fdc1:0:b0:349:c82b:b142 with SMTP id
+ n184-20020a0dfdc1000000b00349c82bb142mr4432266ywf.431.1665065042348; Thu, 06
+ Oct 2022 07:04:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAEc3jaBiN_b_AJGugkYSwxF-ZWHzD6ib4r99tm9Z4RwN2=bgzw@mail.gmail.com>
- <20221006132240.3706-1-hcvcastro@gmail.com>
-In-Reply-To: <20221006132240.3706-1-hcvcastro@gmail.com>
+References: <CAEc3jaDLE1_+cCdL0nwUq-TPzBhoPmukGs527TokNN=iwqO5Hw@mail.gmail.com>
+ <20221006133609.3839-1-hcvcastro@gmail.com>
+In-Reply-To: <20221006133609.3839-1-hcvcastro@gmail.com>
 From:   Roderick Colenbrander <thunderbird2k@gmail.com>
-Date:   Thu, 6 Oct 2022 07:01:57 -0700
-Message-ID: <CAEc3jaCgEB5=3ATdaRXozMT3HrC1JeQVsY_HVF2VgY2oajzyow@mail.gmail.com>
-Subject: Re: [PATCH 2/2] drivers: hid: warn feature report 0x81
+Date:   Thu, 6 Oct 2022 07:03:51 -0700
+Message-ID: <CAEc3jaALWiuHTxNz21k3d7f0BMYxCdK0qWmng=tu6w-prej7Jw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] drivers: hid: adjust gyro calibration data
 To:     Henry Castro <hcvcastro@gmail.com>
 Cc:     Jiri Kosina <jikos@kernel.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
@@ -68,51 +69,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 6, 2022 at 6:22 AM Henry Castro <hcvcastro@gmail.com> wrote:
+On Thu, Oct 6, 2022 at 6:36 AM Henry Castro <hcvcastro@gmail.com> wrote:
 >
-> Unfortunately, my PS DualShock 4, does not support
-> the feature 0x81 to get the MAC address. Instead,
-> use a unique hash to fake a MAC address, so I can
-> use DS4 to play Retroarch :)
+> For some reason my DualShock 4 get the calibration
+> data values equal:
+>
+>         gyro_pitch_plus == gyro_pitch_minus
+>
+> Probably due to some defect in the DS4 hardware, and cause
+> a CPU division exception to crash the linux kernel.
+>
+> At least with the patch, I can continue play Retroarch
+> without using the Gyroscope :)
 >
 > Signed-off-by: Henry Castro <hcvcastro@gmail.com>
 > ---
 >
-> >> I see in the other email. If it doesn't support this request, it is
-> >> likely a clone device. We are about to submit a brand new DS4 driver
-> >> (for hid-playstation). It will use a different report (0x12) if I
-> >> recall which does the same thing. That's the more mainstream one we
-> >> use.
+> >> Hm, I'm not the biggest fan. Is this an official DS4 or a clone
+> >> device? It sounds like it is some type of clone (some look real).
 >
-> I have 2 DualShock 4, I did not notice but I have one DS4 compatible
-> (clone, I guess).
+> Sorry it happens in my DS4 clone:
 >
-> The DS4 Sony -> returns -ETIMEDOUT
-> The DS4 clone -> returns -EPIPE
+> I have the log values:
 >
-> Look great the new DS4 driver :)
+> gyro_pitch_plus = 8704
+> giro_pitch_minus = 8704
+>
+> Then the division exception:
+>
+> mult_frac(x, y, 0)
 >
 
-Just for reference if you want to try out if 0x12 works, you can try
-this code. This is from the new driver (ps_get_report is from
-hid-playstation, but you can just use one of the existing hid calls)
-if you wanted to try.
+Are it only these which are equal or are there are other funky ones?
+Are all constants in general the same? I'm just trying to figure out
+if some of this device would even need calibration.
 
-#define DS4_FEATURE_REPORT_PAIRING_INFO        0x12
-#define DS4_FEATURE_REPORT_PAIRING_INFO_SIZE    16
-
-    if (hdev->bus == BUS_USB) {
-        buf = kzalloc(DS4_FEATURE_REPORT_PAIRING_INFO_SIZE, GFP_KERNEL);
-        if (!buf)
-            return -ENOMEM;
-
-        ret = ps_get_report(hdev, DS4_FEATURE_REPORT_PAIRING_INFO, buf,
-                DS4_FEATURE_REPORT_PAIRING_INFO_SIZE, false);
-        if (ret) {
-            hid_err(hdev, "Failed to retrieve DualShock4 pairing info:
-%d\n", ret);
-            goto err_free;
-        }
-
-        memcpy(ds4->base.mac_address, &buf[1], sizeof(ds4->base.mac_address));
-    } else {
+Thanks,
+Roderick
