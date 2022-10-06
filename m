@@ -2,161 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F16515F6144
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 08:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B8D75F6140
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 08:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbiJFGzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 02:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
+        id S229646AbiJFGzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 02:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiJFGzc (ORCPT
+        with ESMTP id S229596AbiJFGzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 02:55:32 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422A14C620;
-        Wed,  5 Oct 2022 23:55:28 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2966mJNR029984;
-        Thu, 6 Oct 2022 06:55:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=LK4wddnx9ZBpFC32BkC9Gm2nZqLG6Abi1YuiNhae6Nw=;
- b=HRSQrEck+56L3f9JoSQuIs+QAhipxV5BQiP4uO0Jge21w11E7Fe2+B73eNsCLBrGTbJX
- uFVofnLwMOGJwA9XD0hx68gyqIL4oi9sJRi8ko/EEzBWZNnvTlCTvDoPTaZTCdeB3QHh
- ZMu2qE959Yh8YAUt4w595INiz+oBGOlo7I0q+2MF0jlp5kSJO0AeJWjL/xKEMITR3ZHA
- leTub1V8/S4PSgZxFkOquddAUD5zNn1md/D4Ev7SKiMX/527KritbcvUjeVM58bYCOaD
- GOPlbefNlLGVVnRDcWLfEnb+DDTwNyiZc2StDB+CkLJ1iuyH3q80CvtEJEpyt4/+z2Jx xg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k1t2vg4ft-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Oct 2022 06:55:21 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2966mnpF030975;
-        Thu, 6 Oct 2022 06:55:21 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k1t2vg4ac-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Oct 2022 06:55:10 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2966oETV030576;
-        Thu, 6 Oct 2022 06:55:08 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3jxd696k2p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Oct 2022 06:55:08 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2966t6aZ59703742
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 6 Oct 2022 06:55:06 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 457694C044;
-        Thu,  6 Oct 2022 06:55:06 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C861A4C040;
-        Thu,  6 Oct 2022 06:55:03 +0000 (GMT)
-Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.110.181])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu,  6 Oct 2022 06:55:03 +0000 (GMT)
-Date:   Thu, 6 Oct 2022 12:25:00 +0530
-From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
-To:     Jan Kara <jack@suse.cz>
-Cc:     linux-ext4@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        rookxu <brookxu.cn@gmail.com>,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Subject: Re: [RFC v3 8/8] ext4: Remove the logic to trim inode PAs
-Message-ID: <Yz57xJSoksI5rHwL@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-References: <cover.1664269665.git.ojaswin@linux.ibm.com>
- <a26fdd12f4f60cf506a42b6a95e8014e5f380b05.1664269665.git.ojaswin@linux.ibm.com>
- <20220929125311.bmkta7gp4a2hmcny@quack3>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929125311.bmkta7gp4a2hmcny@quack3>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: tSyBPJVk9wHcWcVc4GyPA8hL9UkB7Zs2
-X-Proofpoint-ORIG-GUID: R9VrF9AND9D9F820vx1-Zxp9PAQEjzcG
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 6 Oct 2022 02:55:16 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCD42F3BB
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 23:55:14 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id f11so1157351wrm.6
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 23:55:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mpnbl0sOHmjZXpRaPHZuxhEh+P6N/msQTLYNVhfBBe8=;
+        b=MiPZCFMrd8ZJnITo2QNV97U1PS/R+5ZaOpCPg1dg0ozuIl6v8QxOhznFxmMRbJFt61
+         +KQ26aFgOClHddDkzpBN5Ti5bjTzZazFn9IOccCqYNGZm83luL0MAi2ZIMoiLBhbdpI9
+         ErI4nhBYVAiDsh8U0oXUCxVcV8bop7IuJT7Ik70JSybZ18r2+2UEeGXI8zLnhalxuyPK
+         D72/xbL0hdoGvzz5uUDTnekoAkjXs/FrL4Ugud+EDDTaZGiQrY2Xuz1ety4QCzOavUyl
+         +n3MfQtsIn5LI92EpTTgt2DO7DNNtKRNghaJz8p+7n59IVXb/QZmDJ0puWLNYB+9gbop
+         agyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mpnbl0sOHmjZXpRaPHZuxhEh+P6N/msQTLYNVhfBBe8=;
+        b=B5B0q2Py3j84uP2LkWDNK3Crc74IHu4vZiKbMnNFJ9+VfyeYrN7nDSwi2uYy7Zdx++
+         DVj9uO5cBqZnD+CoXKIt6z+dnuGUK2zoffmh6ga7MtxsokF49Z7DokSQRLwL/hKSDC3c
+         h2A3eXrRj79R2a4ImvXHjQ5PteiGJdYm4Mq2M2+1eU5uxoRVSk6+3KI0FWRRlATbuBeN
+         p8A2bJBlpRSvxpWitpibZ3cq4VjMMgj5CZUeJSfZJvMhB3fGym4Ewy6Thrh1Hj1o5E9n
+         /cZGGgPaboctZyg45IsFmmw5clOEfi1wFaz27itH6KV6RHImapD98vdvnRSwdET4dLnC
+         Tm3g==
+X-Gm-Message-State: ACrzQf3tXYbYe0pMCt+epmYUBKyHKFmN82eYk6lOELisv0dpXoyFQfcw
+        1o1uhLcXjb1aUwIXvof5QB5NAg==
+X-Google-Smtp-Source: AMsMyM4tUv+yoGLPcmLIx0TCLkILd2ZuyZqPgL+k6wTXzf/o8aVrTs7qe5sYTzmE/qACZEBJdXpwZw==
+X-Received: by 2002:a05:6000:806:b0:22a:36df:2663 with SMTP id bt6-20020a056000080600b0022a36df2663mr1873670wrb.423.1665039312765;
+        Wed, 05 Oct 2022 23:55:12 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:86cc:fff3:d44b:9793? ([2a05:6e02:1041:c10:86cc:fff3:d44b:9793])
+        by smtp.googlemail.com with ESMTPSA id a5-20020adfeec5000000b0022e2c38f8basm14459474wrp.14.2022.10.05.23.55.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Oct 2022 23:55:12 -0700 (PDT)
+Message-ID: <97201878-3bb8-eac5-7fac-a690322ac43a@linaro.org>
+Date:   Thu, 6 Oct 2022 08:55:10 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-05_05,2022-10-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- mlxlogscore=681 lowpriorityscore=0 clxscore=1015 bulkscore=0 adultscore=0
- priorityscore=1501 spamscore=0 impostorscore=0 malwarescore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210060038
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v8 00/29] Rework the trip points creation
+Content-Language: en-US
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rui.zhang@intel.com,
+        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>, netdev@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-omap@vger.kernel.org, rafael@kernel.org
+References: <CGME20221003092704eucas1p2875c1f996dfd60a58f06cf986e02e8eb@eucas1p2.samsung.com>
+ <20221003092602.1323944-1-daniel.lezcano@linaro.org>
+ <8cdd1927-da38-c23e-fa75-384694724b1c@samsung.com>
+ <c3258cb2-9a56-d048-5738-1132331a157d@linaro.org>
+ <851008bf-145d-224c-87a8-cb6ec1e9addb@linaro.org>
+ <207c1979-0da2-b05d-fead-6880ad956b90@samsung.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <207c1979-0da2-b05d-fead-6880ad956b90@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 02:53:11PM +0200, Jan Kara wrote:
-> On Tue 27-09-22 14:46:48, Ojaswin Mujoo wrote:
-> > Earlier, inode PAs were stored in a linked list. This caused a need to
-> > periodically trim the list down inorder to avoid growing it to a very
-> > large size, as this would severly affect performance during list
-> > iteration.
-> > 
-> > Recent patches changed this list to an rbtree, and since the tree scales
-> > up much better, we no longer need to have the trim functionality, hence
-> > remove it.
-> > 
-> > Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-> > Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+
+Hi Marek,
+
+On 05/10/2022 15:05, Marek Szyprowski wrote:
 > 
-> I'm kind of wondering: Now there won't be performance issues with much
-> more inode PAs but probably we don't want to let them grow completely out
-> of control? E.g. I can imagine that if we'd have 1 billion of inode PAs
-> attached to an inode, things would get wonky both in terms of memory
-> consumption and also in terms of CPU time spent for the cases where we
-> still do iterate all of the PAs... Is there anything which keeps inode PAs
-> reasonably bounded?
+> On 05.10.2022 14:37, Daniel Lezcano wrote:
+>>
+>> Hi Marek,
+>>
+>> On 03/10/2022 23:18, Daniel Lezcano wrote:
+>>
+>> [ ... ]
+>>
+>>>> I've tested this v8 patchset after fixing the issue with Exynos TMU
+>>>> with
+>>>> https://lore.kernel.org/all/20221003132943.1383065-1-daniel.lezcano@linaro.org/
+>>>>
+>>>> patch and I got the following lockdep warning on all Exynos-based
+>>>> boards:
+>>>>
+>>>>
+>>>> ======================================================
+>>>> WARNING: possible circular locking dependency detected
+>>>> 6.0.0-rc1-00083-ge5c9d117223e #12945 Not tainted
+>>>> ------------------------------------------------------
+>>>> swapper/0/1 is trying to acquire lock:
+>>>> c1ce66b0 (&data->lock#2){+.+.}-{3:3}, at: exynos_get_temp+0x3c/0xc8
+>>>>
+>>>> but task is already holding lock:
+>>>> c2979b94 (&tz->lock){+.+.}-{3:3}, at:
+>>>> thermal_zone_device_update.part.0+0x3c/0x528
+>>>>
+>>>> which lock already depends on the new lock.
+>>>
+>>> I'm wondering if the problem is not already there and related to
+>>> data->lock ...
+>>>
+>>> Doesn't the thermal zone lock already prevent racy access to the data
+>>> structure?
+>>>
+>>> Another question: if the sensor clock is disabled after reading it,
+>>> how does the hardware update the temperature and detect the programed
+>>> threshold is crossed?
+>>
+>> just a gentle ping, as the fix will depend on your answer ;)
+>>
+> Sorry, I've been busy with other stuff. I thought I will fix this once I
+> find a bit of spare time.
+
+Ok, that is great if you can find time to fix it up because I've other 
+drivers to convert to the generic thermal trips.
+
+
+> IMHO the clock management is a bit over-engineered, as there is little
+> (if any) benefit from such fine grade clock management. That clock is
+> needed only for the AHB related part of the TMU (reading/writing the
+> registers). The IRQ generation and temperature measurement is clocked
+> from so called 'sclk' (special clock).
 > 
-> 								Honza
-> 
-Hi Jan,
+> I also briefly looked at the code and the internal lock doesn't look to
+> be really necessary assuming that the thermal core already serializes
+> all the calls.
 
-Sorry for the delay in response, I was on leave for the last few days.
+I looked at the code and I think the driver can be simplified (fixed?) 
+even more.
 
-So as per my understanding, after this patch, the only path where we
-would need to traverse all the PAs is the ext4_discard_preallocations()
-call where we discard all the PAs of an inode one by one (eg when
-closing the file etc).  Such a discard is a colder path as we don't
-usually expect to do it as often as say allocating blocks to an inode.
+IIUC, the sensor has multiple trip point interrupts, so if the device 
+tree is describing more trip points than the sensor supports, there is a 
+warning and the number of trip point is capped.
 
-Originally, the limit was added in this patch [1] because of the time
-lost in O(N) traversal in the allocation path (ext4_mb_use_preallocated
-and ext4_mb_normalize_request). Since the rbtree addressed this
-scalability issue we had decided to remove the trim logic in this
-patchset.
+IMO that can be simplified by using two trip point interrupt because the 
+thermal_zone_device_update() will call the set_trips callback with the 
+new boundaries. IOW, the thermal framework sets a new trip point 
+interrupt when one is crossed.
 
-[1]
-https://lore.kernel.org/all/d7a98178-056b-6db5-6bce-4ead23f4a257@gmail.com/
+That should result in the simplification of the tmu_control as well as 
+the tmu_probe function. As well as removing the limitation of the number 
+of trip points.
 
-That being said, I do agree that there should be some way to limit the
-PAs from taking up an unreasonable amount of buddy space, memory and CPU
-cycles in use cases like database files and disk files of long running
-VMs. Previously the limit was 512 PAs per inode and trim was happening
-in an LRU fashion, which is not very straightforward to implement in
-trees. 
+In order to have that correctly working, the 'set_trips' ops must be 
+used to call the tmu_control callback instead of calling it in tmu_probe.
 
-Another approach is rather than having a hard limit, we can throttle the
-PAs based on some parameter like total active PAs in FS or FSUtil% of
-the PAs but we might need to take care of fairness so one inode is not
-holding all the PAs while others get throttled.
+The intialization workflow should be:
 
-Anyways, I think the trimming part would need some brainstorming to get
-right so just wondering if we could keep that as part of a separate
-patchset and remove the trimming logic for now since rbtree has
-addressed the scalability concerns in allocation path.
+probe->...
+  ->thermal_zone_device_register()
+   ->thermal_zone_device_update()
+    ->update_trip_points()
+     ->ops->set_trips()
+       ->tmu_control()
 
-Do let me know your thoughts on this.
+Also, replace the workqueue by a threaded interrupt.
 
-Regards,
-Ojaswin
+Does it make sense?
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
