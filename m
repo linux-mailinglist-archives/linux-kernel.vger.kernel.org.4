@@ -2,123 +2,396 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95CC35F6166
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 09:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C42585F616B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 09:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbiJFHJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 03:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
+        id S230159AbiJFHKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 03:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbiJFHJJ (ORCPT
+        with ESMTP id S230061AbiJFHK1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 03:09:09 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2046.outbound.protection.outlook.com [40.107.255.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9C68D0E9
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 00:08:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ecczGMTio7CZQKk9fQVPyFsjhaWrNlKJe7Eug7vxFTGhMptOdSzeuVj5ID+ATfH2GDVC6GWZlE5BMmEW723OkFuYRxrveyAuzrouy9q5iLiAF6t0x34Ca6AWSGI3ufFiUgt6TAN9J7r3oiW5Fc90sWIQmVmtGWCIaJvmrVrMtIxe13QMdZrYZOKmKoMpuCrRKdG74Vs6j7sWDtg7peMtrE2YbrMxB6cVDHsCNpnIOKK44C2GlYWcD1JSGe2KDvQpXEjcJl5s9is8Ur+QtBvwA3k7EeF2eJS9ootDm5Otv9zgBVoItNfM8UEFYwirRzkEtMyQtqw5g2el0xxGh/4a+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oEhfys8WyLik2IG5wuweP4+UICMjWC7PBzvNuxx5xsU=;
- b=Z3aQD3JwQcNRzzA1SqsxdHMjr3xn9Dry6KPdLEa83uRC7l+c+EpmWnnj/duOXwZSLXIYrgLarLAvvoJzo9aJ1EVmukSj/x6Bko42F48fNnAEXvAtlRSfQ+qnbGbhz4ia5UHnStiruQPAdMnsaoSujzj6xml1a+aScvsWpg3OeVNfKeS3dGEhIVStoJG8ipiPxXxnMcuA87MrB0dpT/inSP7bO3xVXMQuFLfYUvnUc6mLydUYGTt1TVrvGRhRneJMOSV1j6pVviENWjsmXTh1ij3szarwrUlsaOIV++yT1LGyIrdhCYwc+GIEjxfv7j44ymXEojy8YOSqGiAfg/Sp9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 211.20.1.79) smtp.rcpttodomain=lists.sr.ht smtp.mailfrom=wiwynn.com;
- dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=wiwynn.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oEhfys8WyLik2IG5wuweP4+UICMjWC7PBzvNuxx5xsU=;
- b=nhdMcRTA8s7HmsBm/u1j5jeo7vxUAVcuRlTK5emtMR/81BhGLwcwkIn7ijriVXWBcWMHzE/L4FcW6VL29qdStOvqfIPxNav2/wxyj12QroO28CTQkUZz8Gcj9P3WKAI1pbDdr+ahECXmPG5um7Z2VYIg9Es9XibtB4Qe2zhtlM/QFfmtp7furLfoA9+oDHYQ/6KuYS9Y7g9qsByv+Z3cZTUxtLiTCK5oNC78aR1v0lERwf4XS1Q+GJkenUKlX6I2SQjzkd/g6UYu/mh9bBEEy0aWtlwp8GchTaN0m1AT0OiPCghscP6k5RMDitY4U+PM6T4losj73NbdNScHLgIgbQ==
-Received: from TYAPR01CA0219.jpnprd01.prod.outlook.com (2603:1096:404:11e::15)
- by SEZPR04MB6825.apcprd04.prod.outlook.com (2603:1096:101:eb::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.34; Thu, 6 Oct
- 2022 07:08:50 +0000
-Received: from TYZAPC01FT030.eop-APC01.prod.protection.outlook.com
- (2603:1096:404:11e:cafe::5e) by TYAPR01CA0219.outlook.office365.com
- (2603:1096:404:11e::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.32 via Frontend
- Transport; Thu, 6 Oct 2022 07:08:49 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
- smtp.mailfrom=Wiwynn.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=Wiwynn.com;
-Received-SPF: Fail (protection.outlook.com: domain of Wiwynn.com does not
- designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
- client-ip=211.20.1.79; helo=localhost.localdomain;
-Received: from localhost.localdomain (211.20.1.79) by
- TYZAPC01FT030.mail.protection.outlook.com (10.118.152.138) with Microsoft
- SMTP Server id 15.20.5709.10 via Frontend Transport; Thu, 6 Oct 2022 07:08:48
- +0000
-From:   Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-To:     ~sircmpwn/email-test-drive@lists.sr.ht
-Cc:     patrick@stwcx.xyz, garnermic@fb.com,
-        Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mtd: spi-nor: winbond: add support for w25q01jv-im
-Date:   Thu,  6 Oct 2022 15:08:40 +0800
-Message-Id: <20221006070841.2106194-1-Delphine_CC_Chiu@Wiwynn.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 6 Oct 2022 03:10:27 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFCC42AFB
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 00:10:25 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id by36so1186330ljb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 00:10:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=2I/1QzQAyhs03U6EUbvdD9mrpDPgHGLdtO/kjkRzvpE=;
+        b=PMmRUTc4YkNKV0tKu19tFM5wTJveTHPgqco/cfnP78Q1gRa5s/fGleDx+6TmialXfe
+         AqEBUqEmNp2wZoGoZL9spUrszdbqPhgQVt0bn+tsNHtszuBW5cVNyk+LHXs6pHSFhCak
+         56zoya76Gx8eDzbgSKEfldJiRyzHFyqpU8llVFy0WQjMXo858HCHwbnqASR8vPndWT8W
+         iXnqcgRoMK12cGQgFRZbOjdyyFLuZbvP8BU+1Fmpk9NPGVthn00q9vtG5EQ54E0H2ujd
+         5w+d/Hg7m/FsLITyoDvFvKxBqwK5cC1d6uNJMiNuFOR9tGA+iXhUaM8DjvkytS9q9W99
+         Sz8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=2I/1QzQAyhs03U6EUbvdD9mrpDPgHGLdtO/kjkRzvpE=;
+        b=K//m979uDJ5Pyl8XabL21+0LKi4eeDDTIonEZTlnfnfIXr5z5kph/E0TZ5gPIC9B6I
+         R1+u1UId9dxRVnoak9fm8Y11reFhfKdrAKK2y4CnpMtGdF9RiyZWzv923mZ+gJt/EAiu
+         0iwPAKL+oBLG57uUApF++97azsT09KuHYEo/WgxQ4g7aVjBii0YgnZmFGacXJBWTmNph
+         6vj6gbaQogLsWT/9NsCE0TvrB8D1qk+0NRXKwiIzi9F9EaY4e5poqFjdjyH9pMi91lsS
+         mRBt73kVC4+o7kWd/wHP148tzpOS5/GAJBc3tpyYamI6lZYXaZbAMOp3zRkSKABrji23
+         OTCg==
+X-Gm-Message-State: ACrzQf2Mkq9RmcWzG2HWZrnVmGUIPE14jd2KFgPEGWQrJ9zl28BI/jr7
+        PpB6kkcyMe2C57mYTZ+eJLrOxAUug8pDMw==
+X-Google-Smtp-Source: AMsMyM7t0L4tSiNO8/WleoyInpCKagr+hmERnfJ+UdQDQjy3KxVKaSqD+N7nG5HG3VYX5V/Ybo67vw==
+X-Received: by 2002:a2e:be9e:0:b0:26c:2d48:5c98 with SMTP id a30-20020a2ebe9e000000b0026c2d485c98mr1226092ljr.395.1665040223888;
+        Thu, 06 Oct 2022 00:10:23 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id x6-20020ac24886000000b00498f570aef2sm2604118lfc.209.2022.10.06.00.10.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Oct 2022 00:10:23 -0700 (PDT)
+Message-ID: <a8854c8e-8868-461d-9f7b-d5b44f7288c7@linaro.org>
+Date:   Thu, 6 Oct 2022 09:10:22 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZAPC01FT030:EE_|SEZPR04MB6825:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 81783988-8a25-44a8-bc2a-08daa7699e0e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jQ2CJggutL6XXj0NglqU+m+a1wKjJI0MR1e7TWm3f9gp8y1YmFgmU7t7FbGJaiNV8vNM/NEsYQIwwWez7A11DmWmZ+YXC4lTytz4Kx/21BxKZ+LWT8Er3n7vPHieNbtQyUzbHeeMYLzJCM0p7WMP+H1p260vGXgx2ag8s2N/10m605aMcBQqy3XOgGSOBKvG1UERo/0fnC1xan+CzQN44EYF3U1BqE68x3jrEcXmKO2RYLKOF/ACmvJhJ7m2f8LO1w2ukQodtK6XrKQqhmSW25+OJw3DQSjm/G85huQ8mEUtc/VJRxzFxWAQY4Xa4JNfZJjKBzy9xW/cXWDamCf5c4pXxBk2g0Amr+tlATO8cyHDedsAAm1HAv/8MY7ly46hNK9gjwyy6KOqkZ3esB8Byd7fyCRVPwsnT4jqRbZMuomndZPcZ+vZ2XUhheIuTO2Eok3ATfWvI9zCBC/qiA0+YyDnSFp+3KjBTYcTucqqiqbDLWc2o187ZTsw8iGcCp2x6hMIw++3LVcWcqUCJWwQ/hnOUsOHDdL+nl0Dbcrx84rP3wSfOtZZ6xX1Yr+W/o18OjVc9zZR0p7Baf001nAc0FakauEFQ/4Nn89XwZlWmdr4bRXCjCX45shyP1sOsyD2rOQawABRn5gxnrBoeGgXx5WSl+8GFyzSiCTDDIxlMe4ULDu0QSPAWn6fgSSDfc4GmVXZn06uvkOGut5T+/a8snw7ig5740iuN185QF/LmyY=
-X-Forefront-Antispam-Report: CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230022)(6069001)(4636009)(136003)(346002)(396003)(39860400002)(376002)(451199015)(46966006)(36840700001)(956004)(2616005)(336012)(1076003)(186003)(47076005)(8676002)(4744005)(5660300002)(41300700001)(7416002)(8936002)(70206006)(4326008)(70586007)(6512007)(82310400005)(6666004)(2906002)(9316004)(26005)(36756003)(6506007)(40480700001)(316002)(54906003)(36736006)(478600001)(6486002)(36906005)(86362001)(82740400003)(356005)(81166007)(36860700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: wiwynn.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2022 07:08:48.6830
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 81783988-8a25-44a8-bc2a-08daa7699e0e
-X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
-X-MS-Exchange-CrossTenant-AuthSource: TYZAPC01FT030.eop-APC01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR04MB6825
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SCC_THREE_WORD_MONTY,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v1 2/2] greatlakes: dts: Add Facebook greatlakes (AST2600)
+ BMC
+Content-Language: en-US
+To:     Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
+        krzysztof.kozlowski@linaro.or
+Cc:     patrick@stwcx.xyz, garnermic@fb.com, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org
+References: <20221006063527.2007802-1-Delphine_CC_Chiu@Wiwynn.com>
+ <20221006063527.2007802-2-Delphine_CC_Chiu@Wiwynn.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221006063527.2007802-2-Delphine_CC_Chiu@Wiwynn.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for winbond w25q01jv-im chip.
+On 06/10/2022 08:35, Delphine CC Chiu wrote:
+> Add linux device tree entry related to
+> greatlakes specific devices connected to BMC SoC.
+> 
+> ---
+> --- v1 - Add documentation of board compatible (bindings)
+> ---    - Add board compatible
+> ---    - Remove the bootargs
+> ---    - Revise the DTS node name
+> ---
 
-Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
----
- drivers/mtd/spi-nor/winbond.c | 3 +++
- 1 file changed, 3 insertions(+)
+This is v3, not v1, because you resent first patch twice Changelog does
+not go above SoB. You can see the problem easily - save your patch, git
+am xxx.mbox, git show
 
-diff --git a/drivers/mtd/spi-nor/winbond.c b/drivers/mtd/spi-nor/winbond.c
-index ffaa24055259..2b02b05ceb0a 100644
---- a/drivers/mtd/spi-nor/winbond.c
-+++ b/drivers/mtd/spi-nor/winbond.c
-@@ -139,6 +139,9 @@ static const struct flash_info winbond_nor_parts[] = {
- 	{ "w25q512jvq", INFO(0xef4020, 0, 64 * 1024, 1024)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
- 			      SPI_NOR_QUAD_READ) },
-+	{ "w25q01jv-im", INFO(0xef7021, 0, 64 * 1024, 2048)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
-+			      SPI_NOR_QUAD_READ) },
- };
- 
- /**
--- 
-2.25.1
+Subject is wrong. Use subject prefixes matching the subsystem (git log
+--oneline -- ...).
+
+
+> 
+> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+> ---
+>  arch/arm/boot/dts/Makefile                    |   1 +
+>  .../dts/aspeed-bmc-facebook-greatlakes.dts    | 243 ++++++++++++++++++
+>  2 files changed, 244 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
+> 
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 05d8aef6e5d2..d9f417f2d7df 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -1586,6 +1586,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+>  	aspeed-bmc-facebook-elbert.dtb \
+>  	aspeed-bmc-facebook-fuji.dtb \
+>  	aspeed-bmc-facebook-galaxy100.dtb \
+> +	aspeed-bmc-facebook-greatlakes.dtb \
+>  	aspeed-bmc-facebook-minipack.dtb \
+>  	aspeed-bmc-facebook-tiogapass.dtb \
+>  	aspeed-bmc-facebook-wedge40.dtb \
+> diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
+> new file mode 100644
+> index 000000000000..29c46d0e003e
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
+> @@ -0,0 +1,243 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +// Copyright 2022 Facebook Inc.
+> +
+> +/dts-v1/;
+> +#include "aspeed-g6.dtsi"
+> +#include <dt-bindings/gpio/aspeed-gpio.h>
+> +#include <dt-bindings/leds/leds-pca955x.h>
+> +#include <dt-bindings/i2c/i2c.h>
+> +
+> +/ {
+> +	model = "Facebook Greatlakes BMC";
+> +	compatible = "facebook,greatlakes-bmc", "aspeed,ast2600";
+> +
+> +	aliases {
+> +		serial4 = &uart5;
+> +	};
+> +
+> +	memory@80000000 {
+> +		device_type = "memory";
+> +		reg = <0x80000000 0x80000000>;
+> +	};
+> +
+> +	iio-hwmon {
+> +		compatible = "iio-hwmon";
+> +		io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
+> +				<&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
+> +				<&adc1 0>, <&adc1 2>, <&adc1 3>, <&adc1 4>,
+> +				<&adc1 5>, <&adc1 6>;
+> +	};
+> +};
+> +
+> +&uart1 {
+> +	status = "okay";
+> +};
+> +
+> +&uart2 {
+> +	status = "okay";
+> +};
+> +
+> +&uart3 {
+> +	status = "okay";
+> +};
+> +
+> +&uart4 {
+> +	status = "okay";
+> +};
+> +
+> +&uart5 {
+> +	status = "okay";
+> +};
+> +
+> +&wdt1 {
+> +	status = "okay";
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_wdtrst1_default>;
+> +	aspeed,reset-type = "soc";
+> +	aspeed,external-signal;
+> +	aspeed,ext-push-pull;
+> +	aspeed,ext-active-high;
+> +	aspeed,ext-pulse-duration = <256>;
+> +};
+> +
+> +&mac3 {
+> +	status = "okay";
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_rmii4_default>;
+> +	no-hw-checksum;
+> +	use-ncsi;
+> +	mlx,multi-host;
+> +	ncsi-ctrl,start-redo-probe;
+> +	ncsi-ctrl,no-channel-monitor;
+> +	ncsi-package = <1>;
+> +	ncsi-channel = <1>;
+> +	ncsi-rexmit = <1>;
+> +	ncsi-timeout = <2>;
+> +};
+> +
+> +&rtc {
+> +	status = "okay";
+> +};
+> +
+> +&fmc {
+> +	status = "okay";
+> +	flash@0 {
+> +		status = "okay";
+> +		m25p,fast-read;
+> +		label = "bmc";
+> +		spi-rx-bus-width = <4>;
+> +		spi-max-frequency = <50000000>;
+> +#include "openbmc-flash-layout-64.dtsi"
+> +	};
+> +	flash@1 {
+> +		status = "okay";
+> +		m25p,fast-read;
+> +		label = "bmc2";
+> +		spi-rx-bus-width = <4>;
+> +		spi-max-frequency = <50000000>;
+> +	};
+> +};
+> +
+> +&i2c0 {
+> +	status = "okay";
+> +	multi-master;
+> +	ipmb0@10 {
+
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+Therefore: ipmb@10
+
+> +		compatible = "ipmb-dev";
+> +		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+> +		i2c-protocol;
+> +	};
+> +};
+> +
+> +&i2c1 {
+> +	status = "okay";
+> +	multi-master;
+> +	ipmb1@10 {
+
+ipmb@10
+
+> +		compatible = "ipmb-dev";
+> +		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+> +		i2c-protocol;
+> +	};
+> +};
+> +
+> +&i2c2 {
+> +	status = "okay";
+> +	multi-master;
+> +	ipmb2@10 {
+
+ipmb@10
+
+> +		compatible = "ipmb-dev";
+> +		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+> +		i2c-protocol;
+> +	};
+> +};
+> +
+> +&i2c3 {
+> +	status = "okay";
+> +	multi-master;
+> +	ipmb3@10 {
+
+ipmb@10
+
+> +		compatible = "ipmb-dev";
+> +		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+> +		i2c-protocol;
+> +	};
+> +};
+> +
+> +&i2c4 {
+> +	status = "okay";
+> +};
+> +
+> +&i2c5 {
+> +	status = "okay";
+> +};
+> +
+> +&i2c6 {
+> +	status = "okay";
+> +};
+> +
+> +&i2c7 {
+> +	status = "okay";
+> +};
+> +
+> +&i2c8 {
+> +	status = "okay";
+> +	temperature-sensor@1f {
+> +		compatible = "ti,tmp421";
+> +		reg = <0x1f>;
+> +	};
+> +	// NIC EEPROM
+> +	eeprom@50 {
+> +		compatible = "st,24c32";
+> +		reg = <0x50>;
+> +	};
+> +};
+> +
+> +&i2c9 {
+> +	status = "okay";
+> +	multi-master;
+> +	ipmb9@10 {
+
+ipmb@10
+
+> +		compatible = "ipmb-dev";
+> +		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+> +		i2c-protocol;
+> +	};
+> +};
+> +
+> +&i2c10 {
+> +	status = "okay";
+> +};
+> +
+> +&i2c11 {
+> +	status = "okay";
+> +	eeprom@51 {
+> +		compatible = "atmel,24c128";
+> +		reg = <0x51>;
+> +	};
+> +	eeprom@54 {
+> +		compatible = "atmel,24c128";
+> +		reg = <0x54>;
+> +	};
+> +};
+> +
+> +&i2c12 {
+> +	status = "okay";
+> +	temperature-sensor@4f {
+> +		compatible = "lm75";
+> +		reg = <0x4f>;
+> +	};
+> +};
+> +
+> +&i2c13 {
+> +	status = "okay";
+> +};
+> +
+> +&adc0 {
+> +	ref_voltage = <2500>;
+> +	status = "okay";
+> +	pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
+> +			&pinctrl_adc2_default &pinctrl_adc3_default
+> +			&pinctrl_adc4_default &pinctrl_adc5_default
+> +			&pinctrl_adc6_default &pinctrl_adc7_default>;
+> +};
+> +
+> +&adc1 {
+> +	ref_voltage = <2500>;
+> +	status = "okay";
+> +	pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc10_default
+> +			&pinctrl_adc11_default &pinctrl_adc12_default
+> +			&pinctrl_adc13_default &pinctrl_adc14_default>;
+> +};
+> +
+> +
+> +&ehci0 {
+> +	status = "okay";
+> +};
+> +
+> +&ehci1 {
+> +	status = "okay";
+> +};
+> +
+> +&uhci {
+> +	status = "okay";
+> +};
+> +
+> +&gpio0 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_gpiu1_default &pinctrl_gpiu7_default>;
+> +};
+> +
+> +
+
+No need for two blank lines at the end. Drop both.
+
+Best regards,
+Krzysztof
 
