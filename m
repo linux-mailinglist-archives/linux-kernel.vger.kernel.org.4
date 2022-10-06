@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6845F69B9
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0AF5F69BF
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbiJFOh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 10:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
+        id S231563AbiJFOhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 10:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiJFOhX (ORCPT
+        with ESMTP id S229755AbiJFOht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 10:37:23 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C79983F19;
-        Thu,  6 Oct 2022 07:37:22 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id f37so2993362lfv.8;
-        Thu, 06 Oct 2022 07:37:22 -0700 (PDT)
+        Thu, 6 Oct 2022 10:37:49 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41B2A7AAB;
+        Thu,  6 Oct 2022 07:37:48 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id b2so3007870lfp.6;
+        Thu, 06 Oct 2022 07:37:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=TIOQsYCwUfvmYBpnckXs7J461Nfe7jNypQ8rjuxui5M=;
-        b=UoOejhVb8uhTDW4mIIC6+sC9g9rgk8Ejo2ExD/mTw8tLBlk0QwgT7FkBe0F2W1Nu6P
-         RuCkElQO/d1dBdWp13c3VtBT0kcLkWysZjhSUgcSUh54uV2ODwPvWWbFDnN3lP34BN33
-         9pFrTQ50vxXqozR9T2K7SwEnNHDY0Vul5kgWiUs5yALvYDL+PJKF8SjOaRmeCHhzJZlJ
-         BIwUfel++pEr1+2+YpbVvJlChpmcpruT+18cdtkAujjH9rrZ/+NpqUuc20s7WK5Iklbg
-         SIXUAZdjLSfkTFgQduy46dB/AHVdRGFHmHIc+8AgSJ6HzhYEPxCvpa4uGyRlhHdejOgA
-         RrhA==
+        bh=nSpHlKnMonBGCDJ4nQk2Ue66OCa5K5+vPeWv3/hFJOE=;
+        b=IXpggGVZYtF/+damtbWsP1tHFm88rn7TRHulZROeeO126QYxYrSpVxYfP5Xk0t9vg8
+         hlxOdp1w85VXaT5Z93hs7p8IuHZDsr5oapeSmWB8p+ZerkI3wgO1Niyqxldqgcdpt1nL
+         4/fSwClk5SdJsdE9xar3jCf0QhsDbgqknVKjh1y29PQZZb/KjQRUFaTuAflodbSB2n+o
+         SOH4ah8qAUgqmOsLgvkPJfeP8JStelWxG2g80XN/bJg/ynKvV8hdU9Ohn6AlGCuXLsbA
+         FA46pzNKSaMvAzW2F/XJoLcUkZwhQVjNei0xLc9dGp09rdqE83gbG2525zpUSghPKBMV
+         JW3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=TIOQsYCwUfvmYBpnckXs7J461Nfe7jNypQ8rjuxui5M=;
-        b=Dzxavq1WSnYPy87ocf14AT+P0zHp4N7LpWGryPyTtGQ4m4rf5OC67Z7yOCNqvAz0wd
-         GVHcJH8z00WFxSaHxPehJxARmDnObWfEdNv0MORMeJzLyA+uyzv7s6+EGHaWJ18CQmyx
-         xzohrPcOUYQV1CAZyBgk8MDVAJQjFSssTSsav5xhaoxYQiaBxgZtaKik2R+WIDqkz8wa
-         za3f4PjegZWVKE2jIUBx7Y27q2PUameYZeF/WMWEw2dDmtSa8xunJT4EUILG7af9cH4z
-         z813zheiet29B8F0WK9V8OYc6A7b+Mt5cZDuHRlGLM2mJ5p+tKV44V6gPmM5LEbA40TK
-         AkZw==
-X-Gm-Message-State: ACrzQf14+2zGmVh9cdC2XpJTtFElILJKOKfjbclzcjrKGSAKWaQHoMOD
-        027z1dChz7dul4OJ7z04sHQ=
-X-Google-Smtp-Source: AMsMyM68nVJo1+16nF5jOCHFbbaBlMhSus02odyFoAUULTd4wWsn3gXhAfBwB1ceKOQnEsd60Q513A==
-X-Received: by 2002:ac2:4acf:0:b0:4a2:6c60:935 with SMTP id m15-20020ac24acf000000b004a26c600935mr91402lfp.397.1665067040824;
-        Thu, 06 Oct 2022 07:37:20 -0700 (PDT)
+        bh=nSpHlKnMonBGCDJ4nQk2Ue66OCa5K5+vPeWv3/hFJOE=;
+        b=H/HwZ4I32zwKUb61chg7Jxm2nbdDgSpTOhzEmFARuldNPSca4GAJ2VorwtnKyJnlJu
+         OrRI25Z36yEMKLqt3x/LJZYCZDkhk5bLCTHg70S4v7AFY9Cu3YIGGV3GHAGdu65sd22a
+         fQjLx0Xx6RpYM6vmPz/QDn6O4ccdSaaR9CNPJge41jIaWoeD7lxGCGJooBj3K2YD1DIp
+         pXkbn+osRgsul/vZt1qFGd4W/mhY20e/rY1qby9gVUKrxy7lQOR1JfDtLbIvI18QhreV
+         g6vvUShz+1nVuJWmO3NkJKnu//7n9clIsnYQ14TbwNulbIBTh4600ZnIXBI/6ED5strK
+         4+Rg==
+X-Gm-Message-State: ACrzQf3HRIXh1ibaKdwkMixjq/dkZTW90B/89CcTo6SX7htY1Xg8rL1M
+        xvk/LPZ9DUOpmHveNMoYRhY=
+X-Google-Smtp-Source: AMsMyM7kX49lKVt1xUXI2pYaAZ5BxYNYmf78+4OvUymQl4C3q2pE9zJ73jw/SIe98bBUePxmcVVEnQ==
+X-Received: by 2002:a05:6512:32ab:b0:4a2:2e49:94c with SMTP id q11-20020a05651232ab00b004a22e49094cmr97808lfe.351.1665067066826;
+        Thu, 06 Oct 2022 07:37:46 -0700 (PDT)
 Received: from dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id o20-20020a056512231400b0049f9c732858sm2713975lfu.254.2022.10.06.07.37.19
+        by smtp.gmail.com with ESMTPSA id v11-20020a2ea60b000000b0026c36023a9asm1195007ljp.131.2022.10.06.07.37.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 07:37:20 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 17:37:14 +0300
+        Thu, 06 Oct 2022 07:37:45 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 17:37:39 +0300
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
@@ -63,12 +63,12 @@ Cc:     Jonathan Cameron <jic23@kernel.org>,
         Cosmin Tanislav <demonsingur@gmail.com>,
         linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v2 2/5] regulator: Add devm helpers for get and enable
-Message-ID: <a80bd095506411dae86760f307725b9ecddd9426.1665066397.git.mazziesaccount@gmail.com>
+Subject: [RFC PATCH v2 3/5] dt-bindings: iio: Add KX022A accelerometer
+Message-ID: <80fa42040f385eb47f4f3c71b9b02f643a643e38.1665066397.git.mazziesaccount@gmail.com>
 References: <cover.1665066397.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Epbr6MBHrwzV0do7"
+        protocol="application/pgp-signature"; boundary="CWY5zw2XSqCeWUI7"
 Content-Disposition: inline
 In-Reply-To: <cover.1665066397.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,201 +82,114 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---Epbr6MBHrwzV0do7
+--CWY5zw2XSqCeWUI7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-A few regulator consumer drivers seem to be just getting a regulator,
-enabling it and registering a devm-action to disable the regulator at
-the driver detach and then forget about it.
+KX022A is a 3-axis Accelerometer from ROHM/Kionix. The sensor features
+include variable ODRs, I2C and SPI control, FIFO/LIFO with watermark IRQ,
+tap/motion detection, wake-up & back-to-sleep events, four acceleration
+ranges (2, 4, 8 and 16g) and probably some other cool features.
 
-We can simplify this a bit by adding a devm-helper for this pattern.
-Add devm_regulator_get_enable() and devm_regulator_get_enable_optional()
+Add the basic device tree description for the accelerometer. Only basic
+accelerometer features are considered as of now - new properties may or
+may not be needed in the future when rest of the features are supported.
 
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Link: https://lore.kernel.org/r/ed7b8841193bb9749d426f3cb3b199c9460794cd.16=
-60292316.git.mazziesaccount@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
 
 ---
-Already in Mark's regulator tree. Not to be merged. Included just for
-the sake of the completeness. Will be dropped when series is rebased on
-top of the 6.1-rc1
+RFCv1 =3D> v2:
+Based on a review by Krzysztof:
+- fix a typo from commit message
+- const compatible
+- drop unnecessary descriptions/words
+- io_vdd-supply =3D> io-vdd-supply
+- fix the binding example indentiation
+Also,
+- change my email address
+- support both INT pins
 ---
- drivers/regulator/devres.c         | 105 +++++++++++++++++++++++++++++
- include/linux/regulator/consumer.h |  14 ++++
- 2 files changed, 119 insertions(+)
+ .../bindings/iio/accel/kionix,kx022a.yaml     | 67 +++++++++++++++++++
+ 1 file changed, 67 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/accel/kionix,kx02=
+2a.yaml
 
-diff --git a/drivers/regulator/devres.c b/drivers/regulator/devres.c
-index 3cb3eb49ad8a..3265e75e97ab 100644
---- a/drivers/regulator/devres.c
-+++ b/drivers/regulator/devres.c
-@@ -253,6 +253,111 @@ int devm_regulator_bulk_get_const(struct device *dev,=
- int num_consumers,
- }
- EXPORT_SYMBOL_GPL(devm_regulator_bulk_get_const);
-=20
-+static int devm_regulator_bulk_match(struct device *dev, void *res,
-+				     void *data)
-+{
-+	struct regulator_bulk_devres *match =3D res;
-+	struct regulator_bulk_data *target =3D data;
+diff --git a/Documentation/devicetree/bindings/iio/accel/kionix,kx022a.yaml=
+ b/Documentation/devicetree/bindings/iio/accel/kionix,kx022a.yaml
+new file mode 100644
+index 000000000000..2919c436e46f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/accel/kionix,kx022a.yaml
+@@ -0,0 +1,67 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/accel/kionix,kx022a.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	/*
-+	 * We check the put uses same consumer list as the get did.
-+	 * We _could_ scan all entries in consumer array and check the
-+	 * regulators match but ATM I don't see the need. We can change this
-+	 * later if needed.
-+	 */
-+	return match->consumers =3D=3D target;
-+}
++title: ROHM/Kionix KX022A Accelerometer
 +
-+/**
-+ * devm_regulator_bulk_put - Resource managed regulator_bulk_put()
-+ * @consumers: consumers to free
-+ *
-+ * Deallocate regulators allocated with devm_regulator_bulk_get(). Normally
-+ * this function will not need to be called and the resource management
-+ * code will ensure that the resource is freed.
-+ */
-+void devm_regulator_bulk_put(struct regulator_bulk_data *consumers)
-+{
-+	int rc;
-+	struct regulator *regulator =3D consumers[0].consumer;
++maintainers:
++  - Matti Vaittinen <mazziesaccount@gmail.com>
 +
-+	rc =3D devres_release(regulator->dev, devm_regulator_bulk_release,
-+			    devm_regulator_bulk_match, consumers);
-+	if (rc !=3D 0)
-+		WARN_ON(rc);
-+}
-+EXPORT_SYMBOL_GPL(devm_regulator_bulk_put);
++description: |
++  KX022A is a 3-axis accelerometer supporting +/- 2G, 4G, 8G and 16G range=
+s,
++  output data-rates from 0.78Hz to 1600Hz and a hardware-fifo buffering.
++  KX022A can be accessed either via I2C or SPI.
 +
-+static void devm_regulator_bulk_disable(void *res)
-+{
-+	struct regulator_bulk_devres *devres =3D res;
-+	int i;
++properties:
++  compatible:
++    const: kionix,kx022a
 +
-+	for (i =3D 0; i < devres->num_consumers; i++)
-+		regulator_disable(devres->consumers[i].consumer);
-+}
++  reg:
++    maxItems: 1
 +
-+/**
-+ * devm_regulator_bulk_get_enable - managed get'n enable multiple regulato=
-rs
-+ *
-+ * @dev:           device to supply
-+ * @num_consumers: number of consumers to register
-+ * @id:            list of supply names or regulator IDs
-+ *
-+ * @return 0 on success, an errno on failure.
-+ *
-+ * This helper function allows drivers to get several regulator
-+ * consumers in one operation with management, the regulators will
-+ * automatically be freed when the device is unbound.  If any of the
-+ * regulators cannot be acquired then any regulators that were
-+ * allocated will be freed before returning to the caller.
-+ */
-+int devm_regulator_bulk_get_enable(struct device *dev, int num_consumers,
-+				   const char * const *id)
-+{
-+	struct regulator_bulk_devres *devres;
-+	struct regulator_bulk_data *consumers;
-+	int i, ret;
++  interrupts:
++    minItems: 1
++    maxItems: 2
 +
-+	devres =3D devm_kmalloc(dev, sizeof(*devres), GFP_KERNEL);
-+	if (!devres)
-+		return -ENOMEM;
++  interrupt-names:
++    minItems: 1
++    maxItems: 2
++    items:
++      enum:
++        - INT1
++        - INT2
 +
-+	devres->consumers =3D devm_kcalloc(dev, num_consumers, sizeof(*consumers),
-+					 GFP_KERNEL);
-+	consumers =3D devres->consumers;
-+	if (!consumers)
-+		return -ENOMEM;
++  vdd-supply: true
++  io-vdd-supply: true
 +
-+	devres->num_consumers =3D num_consumers;
++  mount-matrix:
++    description: |
++      an optional 3x3 mounting rotation matrix.
 +
-+	for (i =3D 0; i < num_consumers; i++)
-+		consumers[i].supply =3D id[i];
++required:
++  - compatible
++  - reg
++  - interrupts
 +
-+	ret =3D devm_regulator_bulk_get(dev, num_consumers, consumers);
-+	if (ret)
-+		return ret;
++additionalProperties: false
 +
-+	for (i =3D 0; i < num_consumers; i++) {
-+		ret =3D regulator_enable(consumers[i].consumer);
-+		if (ret)
-+			goto unwind;
-+	}
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++        #address-cells =3D <1>;
++        #size-cells =3D <0>;
++        accel@1f {
++            compatible =3D "kionix,kx022a";
++            reg =3D <0x1f>;
 +
-+	ret =3D devm_add_action(dev, devm_regulator_bulk_disable, devres);
-+	if (!ret)
-+		return 0;
++            interrupt-parent =3D <&gpio1>;
++            interrupts =3D <29 IRQ_TYPE_LEVEL_LOW>;
++            interrupt-names =3D "INT1";
 +
-+unwind:
-+	while (--i >=3D 0)
-+		regulator_disable(consumers[i].consumer);
-+
-+	devm_regulator_bulk_put(consumers);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(devm_regulator_bulk_get_enable);
-+
- static void devm_rdev_release(struct device *dev, void *res)
- {
- 	regulator_unregister(*(struct regulator_dev **)res);
-diff --git a/include/linux/regulator/consumer.h b/include/linux/regulator/c=
-onsumer.h
-index 8e6cf65851b0..ee3b4a014611 100644
---- a/include/linux/regulator/consumer.h
-+++ b/include/linux/regulator/consumer.h
-@@ -246,12 +246,15 @@ int __must_check regulator_bulk_get(struct device *de=
-v, int num_consumers,
- 				    struct regulator_bulk_data *consumers);
- int __must_check devm_regulator_bulk_get(struct device *dev, int num_consu=
-mers,
- 					 struct regulator_bulk_data *consumers);
-+void devm_regulator_bulk_put(struct regulator_bulk_data *consumers);
- int __must_check devm_regulator_bulk_get_const(
- 	struct device *dev, int num_consumers,
- 	const struct regulator_bulk_data *in_consumers,
- 	struct regulator_bulk_data **out_consumers);
- int __must_check regulator_bulk_enable(int num_consumers,
- 				       struct regulator_bulk_data *consumers);
-+int devm_regulator_bulk_get_enable(struct device *dev, int num_consumers,
-+				   const char * const *id);
- int regulator_bulk_disable(int num_consumers,
- 			   struct regulator_bulk_data *consumers);
- int regulator_bulk_force_disable(int num_consumers,
-@@ -388,6 +391,10 @@ static inline void devm_regulator_put(struct regulator=
- *regulator)
- {
- }
-=20
-+static inline void devm_regulator_bulk_put(struct regulator_bulk_data *con=
-sumers)
-+{
-+}
-+
- static inline int regulator_register_supply_alias(struct device *dev,
- 						  const char *id,
- 						  struct device *alias_dev,
-@@ -478,6 +485,13 @@ static inline int regulator_bulk_enable(int num_consum=
-ers,
- 	return 0;
- }
-=20
-+static inline int devm_regulator_bulk_get_enable(struct device *dev,
-+						 int num_consumers,
-+						 const char * const *id)
-+{
-+	return 0;
-+}
-+
- static inline int regulator_bulk_disable(int num_consumers,
- 					 struct regulator_bulk_data *consumers)
- {
++            io-vdd-supply =3D <&iovdd>;
++            vdd-supply =3D <&vdd>;
++        };
++    };
 --=20
 2.37.3
 
@@ -293,19 +206,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---Epbr6MBHrwzV0do7
+--CWY5zw2XSqCeWUI7
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmM+6BoACgkQeFA3/03a
-ocWYzgf/dGa7CvdE9jSXZIvYxGfPY+lUorBXYaygwOAayKb23L9nDPl9rc83oGur
-8cPl6uZFKAnQ34NLwV89w336Vd+ONvdc31QD0fUJ9gzKCyjOVUGugQF8G8arTTbM
-RXtsOZqN27W+j+u5RPX/AWoHp+/LfN7Snkr4q15RfHM3lYWBwKVAQ2dncGyVsELu
-Kdb+CvVSABZOZ4CqI+i4Q1lIlLSoC11MisxKMCjm27Is+3O9iOucJgGcn00xPu1i
-JrWfwxPYjpg1sjWPlDNPwTO4CznEU4gjR/DfTvZ4er0DrMO2KwQhvJLeoSQXbD1E
-QNsZ/Qvkzpd1lIxJn8u8to/+FtdlHQ==
-=QLwe
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmM+6DMACgkQeFA3/03a
+ocWRVwf8DNKB4bqBpETH0MNjmGKJ4869T8YSm8ERJ7lPTheLtM/xsoSPTDVFzvqW
+Ie27FkJj5rDxinNZuv/lW0Xp8o4rUtJv0yInoUV8a/mYiAdSGclDZu43n/0hhHEU
+LH3xbdRATQGOk9zLBuzAkWAyDWU9RBBgvJbmuAoDZT2RL7BZ7anepr40g+xRph3E
+MYNj2fKmLHDuTPa07IjmBb/Y1DJo4XmngmJIH1Z34y08x6nqd3EPukRe9TZIiBT0
+w+Z1RVL9Oe/BKDB+EQOsOyVPzi02Z8MYSt1OonZa2FqJKLhUl5YiEfxR9fHeKMqZ
+FKxbOpOoLKaTkoNeLaOKcGSt2lYl2Q==
+=adws
 -----END PGP SIGNATURE-----
 
---Epbr6MBHrwzV0do7--
+--CWY5zw2XSqCeWUI7--
