@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 581105F6AE3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 17:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5635F6AE4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 17:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbiJFPnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 11:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
+        id S231578AbiJFPoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 11:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231702AbiJFPne (ORCPT
+        with ESMTP id S230285AbiJFPoW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 11:43:34 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2076.outbound.protection.outlook.com [40.107.243.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B770C1496;
-        Thu,  6 Oct 2022 08:43:30 -0700 (PDT)
+        Thu, 6 Oct 2022 11:44:22 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2077.outbound.protection.outlook.com [40.107.92.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F35576973;
+        Thu,  6 Oct 2022 08:44:22 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Wx7nX4SwaSeI85kM1SDO3zMjpgU0mh1BdyJkt3FVXxKYbo9T+oK+hLYNBjxz1sQvHHxg4DIh3W3+nwCUy219Vwk/lu5sFGcyyp63re9RmYXlzzlQaTLC6xVipMVcFJcXw1yBlYyL/pR45JID5RBHB+q3kibRLBImElsAJORAbIxqld+G1YrPJkybvvGmVnZ9bVYv82gt6lNssS4Rq4WDhjmEXhmqsnHpfg6hUWnoHG3CQ+6k0PtgXgX3/dqeKbwad6QejM6u0hGdEmSFMGEaDiBsyDbHu0FuqMcrUP348/bMefPEq0kZNp1OEszfkZgikSiV3Bmhv0T7BWZt9fl98Q==
+ b=YHtl3a1M29D6KU5sYCUeT0AfWuvXrdnaMsjPY9gE+dXwW+AkvXqxT6jeNo7PuKwRLrEeTShQSPMJJk48wqB4EvxfbR5ugiCmclNekXtiWMZOB+zZkmjfMB9pLDN6AZdQYpWDYO7uDUP9Q7fVfXHs0RKd8xzwisOTu7phGg8UfTGJ0DFaLFyKP/+ujIi94phiGFqTID/0MRf0FswaRIxLDSccawGAiKXBFglAjPLD1YreB6haU8XHwRvnL22NwuxY3Uh4CEhYRnvjCTE5mn0uoqbay948dFosyWOfaIQq92WiETLNM1I5atqqWGoCd8dWd6vCYvKuxXAG2F8HLJLG/w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B6aJFFjeWm9c2Dov9na4r1H9gHhNI9XdZez3t2qSvGQ=;
- b=Lfg3GiwY61+DvkZIM/VtirAgXB8/o7n0g34ySAX3/o2FIiT9y3YJYhpOUqx/OcdasSdh5fyM33oDKR7vNlYOYfnzpkr3DToE1Uh7xdOXz8Xj3mBO5MaaQ5KbB7rJqs2RaQ6ihDbn01wRChyTRoqScEZpQO7gZb6pLAGBEgFqe89Xq21+fadnCAnUZ28XNMne8hOGM0cCraWuv3vM2GFReR0XqnALPoMIhU4wxTLBZMW/8PpYCB7buVolZ+F2GG6iwRV/wOFn8YaUEl8HiYnGjHEeVec5qKsoRpzbUbCodxIxoLq/uLkZBC6XVBGBidohv5HkCPaI6u+YOA/99W7tIA==
+ bh=GZTAEIfqigTN//6pLLkeRZJ+V5NyiSbkpjpzIgUChOI=;
+ b=WG1z62iv6rfEzwz/LKMXCbnzq9HzwvUAby4Mido0NC2A3ViXGmGXue9yc7FKFVsaea/nz2BCUTzjed1ieppSDqTbQihQk379rJKH37EBOlFra+BLFzWQfmuIDBLuGjOF7YqP0s+9u7MLRDnTYAiPyw30UWMOXeDebZqkxU4mL352yD8jDzXmkchZ0AZKPGZv6GBb9YIBAzfHyQ7RUU3rsBvE6vBbJV5PoRlHb2+vN7dp6nFitNvIAVfEVeFhO4ghE4e/iyrqA23ueh2kJ+x8nfi2lzOlOX2zpEZRKTxoI/92G8bBknDC3XZ+ToUAtzlif+eqCz9oI8A+HVU4edReJg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B6aJFFjeWm9c2Dov9na4r1H9gHhNI9XdZez3t2qSvGQ=;
- b=BkOwvYTVrzS2uSmlEzmUSpnOas23rcwAFss/gy+aO8OUoeSy9MnBvm0ap12GMPXUG5Wo+wrmxCYsnxaPLkA8Gkd/edMKCVm3txG04Lc2sDymLWH4hkxlLnRtnS63aGzw6xQsBuD30+cLx81S12OhyDhXdlqgk5ITpL3QhXWmsT0=
-Received: from MW4PR04CA0329.namprd04.prod.outlook.com (2603:10b6:303:82::34)
- by SN7PR12MB7201.namprd12.prod.outlook.com (2603:10b6:806:2a8::22) with
+ bh=GZTAEIfqigTN//6pLLkeRZJ+V5NyiSbkpjpzIgUChOI=;
+ b=Qpxtum2KZP8xuyC+Zklm4zAGV37LOosSdKEOEFZ1R/2uzHQtI/DInKq34hRA6PI2Ge/hrSEWTCCh5zhEka2JGz8cyDWTNXfTPTBEPBbdvP0CCYd/bvVSAk8uEjj/W5n5Jd6/pRg6D86wIJNNToNcKlQTf+foeudURYeOWj+6B1g=
+Received: from MW4PR04CA0220.namprd04.prod.outlook.com (2603:10b6:303:87::15)
+ by MN2PR12MB4126.namprd12.prod.outlook.com (2603:10b6:208:199::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Thu, 6 Oct
- 2022 15:43:28 +0000
-Received: from CO1NAM11FT015.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:82:cafe::4f) by MW4PR04CA0329.outlook.office365.com
- (2603:10b6:303:82::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Thu, 6 Oct
+ 2022 15:44:20 +0000
+Received: from CO1NAM11FT084.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:87:cafe::58) by MW4PR04CA0220.outlook.office365.com
+ (2603:10b6:303:87::15) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28 via Frontend
- Transport; Thu, 6 Oct 2022 15:43:27 +0000
+ Transport; Thu, 6 Oct 2022 15:44:19 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT015.mail.protection.outlook.com (10.13.175.130) with Microsoft SMTP
+ CO1NAM11FT084.mail.protection.outlook.com (10.13.174.194) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5709.10 via Frontend Transport; Thu, 6 Oct 2022 15:43:27 +0000
+ 15.20.5709.10 via Frontend Transport; Thu, 6 Oct 2022 15:44:19 +0000
 Received: from BLR-5CG113396H.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 6 Oct
- 2022 10:43:19 -0500
+ 2022 10:43:26 -0500
 From:   Ravi Bangoria <ravi.bangoria@amd.com>
 To:     <acme@kernel.org>, <peterz@infradead.org>
 CC:     <ravi.bangoria@amd.com>, <jolsa@kernel.org>, <namhyung@kernel.org>,
@@ -66,9 +66,9 @@ CC:     <ravi.bangoria@amd.com>, <jolsa@kernel.org>, <namhyung@kernel.org>,
         <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <sandipan.das@amd.com>, <ananth.narayan@amd.com>,
         <kim.phillips@amd.com>, <santosh.shukla@amd.com>
-Subject: [PATCH v4 2/8] perf tool: Sync arch/x86/include/asm/amd-ibs.h header
-Date:   Thu, 6 Oct 2022 21:09:40 +0530
-Message-ID: <20221006153946.7816-3-ravi.bangoria@amd.com>
+Subject: [PATCH v4 3/8] perf mem: Add support for printing PERF_MEM_LVLNUM_{CXL|IO}
+Date:   Thu, 6 Oct 2022 21:09:41 +0530
+Message-ID: <20221006153946.7816-4-ravi.bangoria@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221006153946.7816-1-ravi.bangoria@amd.com>
 References: <20221006153946.7816-1-ravi.bangoria@amd.com>
@@ -80,23 +80,23 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT015:EE_|SN7PR12MB7201:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0d88d869-f7b0-41a1-84e1-08daa7b18307
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT084:EE_|MN2PR12MB4126:EE_
+X-MS-Office365-Filtering-Correlation-Id: c677ab71-d3e2-4df0-5302-08daa7b1a1eb
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: btcKlduWjXFY/hQqu1hxOueyN2eaHiw9QvGJeLrSaGZKCcZbhGtXmWkNyhpSZMpXeghvc0M+Yin5tIsfXJ+bjVSFlawAP597xGP9yXrzHEVR8WcIPHOjdrO2xKUGjH3fIbmb/CLfESBCM48WYM6yer+N3Z6U5hIdd1TE5TMslKF39h/nYN9OPNTCOHO05c0E4ftQjKyjJUi0BA2K5hheOCazElMy6HuT/T3zr2GtsHxxLaWX7aGeoqTPVIQ6PoLdpG05F2xX9Ucuec0TFmfj4tsNuhua0ugyF9erdA1qfxHxcELmbUirL2H775Q5JK5q5uYRwELG65QchtKKPWl2tKXj6zrWmtJHL4c1nHXHHNbEn6PDCXv777PnLJIk5bLImrmTegAtT3kghN1V9cu017AF7xwB4tkyl3pO+dZi3IN5NaZfHGcU2poYzZ0mK46IQv22sX3IakLFYHmmCccQgz3CJy69/9FNXG/HIBH0VhPqeHgdShFsJzHl/0JxeM1knDZsgdtdK1WVhuVjREkd8qan8jcwTYQO8mvis9kmQE8mDPcfGf+E4ytOon/tK1MgOWwWJGGDIOvDB3m8dH4FHkySZa6yfI7cbqWSXZi8/UBSmqWXXe/vyL0eDcZR3jpk2ZbtNnHzR9oJ4aKko+t+D0PfQ9yjYugVA1iIQRmYSDqDmfYyDYR1fRDWjKhMRAXU7BzaOSDo+av642qVpDHdlD30nF0y1m2Jz4c7/mqNFbftBhX4N8id9xwDrS4o6xd4svAQ+Zumm139XbJsdT8JY7Sa15Sh6lvHeViwfADJw+eC0jEqCtXTcnvCKSfWlTy1
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(39860400002)(396003)(451199015)(36840700001)(40470700004)(46966006)(26005)(5660300002)(426003)(336012)(2616005)(1076003)(40480700001)(47076005)(86362001)(186003)(36860700001)(7416002)(356005)(82740400003)(40460700003)(44832011)(41300700001)(82310400005)(7696005)(8936002)(6666004)(70206006)(478600001)(16526019)(2906002)(70586007)(8676002)(316002)(36756003)(4326008)(54906003)(110136005)(81166007)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: IzUYuqgkP0tfiT11+98YWrWPTLPjKawKjjbZTc1Ba6dTQFgg2i0SPEW7HIhRgym73ZeZS7wQ9KHsVzMgcIpdfptfSm/tIJ03iy7PdTIQJAyZMwAFlZp7c/HE9SgkvAQYissww5edNJe8b1SplEPIfURprg6nralvOqs+2WMuzkBKPWhRTEBteRSjE/z27JLRLj4b3qrfq4e7eoFgfzx9HhynbpzPgAdGulQakE3i37Stne/Q+SbeSi6Ccyx6rynZgRlUXFHdOYO7j/YXGbloY7Zx10bChACbPK9pteN+uPhsWjeofqTlpS9GgA2CuLqxHAxOSuJYtByOKHh7kVvUWe7G8gj/y0Pg7BLD4A5tmotVrg6KDUQkhBz+ocB7Au7+6t6b3jeoCi+6FM8rUyngu8JWrDcYl5ZrcSvl5ONf2X0Pt6Ima8G9IqfFjrXdMKLZwdiizKn6090/OdFivlzawv7qpPstVR6riLRFMM0yzKK3H+2iOEHZoMn7Rm3ehGD4QLM6g7TIayZrF2rihmm26njZSu8C0/Dl6kr/j1z7Gng5k0JhlRpWGa83FsRUttn1V3tYggZ+3/QHrDO+Tmftyom59jGoy/ktROPyP5EBQTm8l8qJ17KYHNrKiPap3+/QrclO5ZQiy/wUV3sWhMfp94WvuaPySV27qiDe2NzoJeWQLWrqVeiuDaJzjd7Faj/1yON7iib7yd+IhLfStztzUUUAAgfyKzptCFKfB59EahsRcoH6tqPG4WKwJsKg9iRJm4KWPiaNQIxXGbAJyqI/wBk7oH7M8yOEgPjoBuYrXxdIYdIGR2KG8TpMthAjROpZfgJ+cjMB10yizH7/13zMtQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(376002)(136003)(396003)(451199015)(40470700004)(46966006)(36840700001)(70206006)(36756003)(8676002)(4326008)(70586007)(186003)(36860700001)(41300700001)(5660300002)(7416002)(356005)(82740400003)(8936002)(40460700003)(40480700001)(1076003)(86362001)(26005)(316002)(16526019)(6666004)(426003)(2616005)(47076005)(336012)(110136005)(7696005)(82310400005)(54906003)(478600001)(2906002)(81166007)(44832011)(4744005)(83133001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2022 15:43:27.3829
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2022 15:44:19.2075
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0d88d869-f7b0-41a1-84e1-08daa7b18307
+X-MS-Exchange-CrossTenant-Network-Message-Id: c677ab71-d3e2-4df0-5302-08daa7b1a1eb
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT015.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT084.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7201
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4126
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -107,42 +107,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Although new details added into this header is currently used by
-kernel only, tools copy needs to be in sync with kernel file.
+Add support for printing these new fields in perf mem report.
 
 Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
 Acked-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/arch/x86/include/asm/amd-ibs.h | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ tools/perf/util/mem-events.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/arch/x86/include/asm/amd-ibs.h b/tools/arch/x86/include/asm/amd-ibs.h
-index 9a3312e12e2e..93807b437e4d 100644
---- a/tools/arch/x86/include/asm/amd-ibs.h
-+++ b/tools/arch/x86/include/asm/amd-ibs.h
-@@ -6,6 +6,22 @@
+diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
+index 764883183519..8909dc7b14a7 100644
+--- a/tools/perf/util/mem-events.c
++++ b/tools/perf/util/mem-events.c
+@@ -294,6 +294,8 @@ static const char * const mem_lvl[] = {
+ };
  
- #include "msr-index.h"
- 
-+/* IBS_OP_DATA2 DataSrc */
-+#define IBS_DATA_SRC_LOC_CACHE			 2
-+#define IBS_DATA_SRC_DRAM			 3
-+#define IBS_DATA_SRC_REM_CACHE			 4
-+#define IBS_DATA_SRC_IO				 7
-+
-+/* IBS_OP_DATA2 DataSrc Extension */
-+#define IBS_DATA_SRC_EXT_LOC_CACHE		 1
-+#define IBS_DATA_SRC_EXT_NEAR_CCX_CACHE		 2
-+#define IBS_DATA_SRC_EXT_DRAM			 3
-+#define IBS_DATA_SRC_EXT_FAR_CCX_CACHE		 5
-+#define IBS_DATA_SRC_EXT_PMEM			 6
-+#define IBS_DATA_SRC_EXT_IO			 7
-+#define IBS_DATA_SRC_EXT_EXT_MEM		 8
-+#define IBS_DATA_SRC_EXT_PEER_AGENT_MEM		12
-+
- /*
-  * IBS Hardware MSRs
-  */
+ static const char * const mem_lvlnum[] = {
++	[PERF_MEM_LVLNUM_CXL] = "CXL",
++	[PERF_MEM_LVLNUM_IO] = "I/O",
+ 	[PERF_MEM_LVLNUM_ANY_CACHE] = "Any cache",
+ 	[PERF_MEM_LVLNUM_LFB] = "LFB",
+ 	[PERF_MEM_LVLNUM_RAM] = "RAM",
 -- 
 2.37.3
 
