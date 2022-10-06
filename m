@@ -2,81 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5AC5F6879
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D335F6888
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbiJFNta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 09:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46278 "EHLO
+        id S231608AbiJFNu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 09:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiJFNt2 (ORCPT
+        with ESMTP id S231712AbiJFNuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 09:49:28 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2737754B8;
-        Thu,  6 Oct 2022 06:49:27 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 343975BF;
-        Thu,  6 Oct 2022 13:49:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 343975BF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1665064167; bh=3yOrPKvm0I0vrMoU1xDUguybCRr2Y2rZ9sRGcj/GPVk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=M15Npdr5zFEbg/WWNkF8N2xj7UcbZfJnAEJLjSocyILQCMySxGl730RpoCX/REsgK
-         DWpc8fliCdPbtMTvdl/kMbn1XdjOLDUcmqMh9TO3MYNPx7utf7fL6qKrLMJv8tKzZS
-         MpRhh5h9cCyJdVoAxix2R0clJgwQ/DaJU5xIme1E6X4S/am00CgjQBB6BZJTH6ovNF
-         WF8dgpZ3GpVo9N8UZURMPazjRZKC/oKz3MNNwAIOh6fo6+k9Aw6+eOHSUMSOYYlFU2
-         XLHH/KOypBOs42hjGNQayoDbLXxU4uTChRNs3QNW4rebEHbwDbYR5ajQlhIID6XzDb
-         oB7/IBuoH8sTg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: [PATCH RFC 0/5] docs: Improvements to our HTML output
-In-Reply-To: <87tu4hp5pg.fsf@intel.com>
-References: <20221004201222.281845-1-corbet@lwn.net> <87tu4hp5pg.fsf@intel.com>
-Date:   Thu, 06 Oct 2022 07:49:26 -0600
-Message-ID: <87k05d83kp.fsf@meer.lwn.net>
+        Thu, 6 Oct 2022 09:50:12 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9C75601C
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 06:50:01 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id x6so1745309pll.11
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 06:50:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=b98/tdiTwcvqr19Hh3b2b2FTs+schd1Q4q9W1vv+i7w=;
+        b=f3lE3n1jFX5eANT3457wStFC3x8NgEWMerXa7SYsS4AMyPnchWeOmot0g5vwPiv7L4
+         fW/GZheMjMzyAB2CJjKXehrMRRdBFEpBpHdgWpWcfK9aKcLCTrXWFA3vCvShmnv1mLwD
+         MjPE5DlX+qXwxPMjeOe4iEw6zecAQlA9csayKh8ddVPAXmVrKyCNxqPPP+h21TRSJQj1
+         OBWFt3BUrldpwTkbV8S87/iPicmgvPcnhCU7V+nWUFLHxfiA0obg2DyU9c3Y/uSONYRT
+         j5HwA0BPZ7qYXgdzqdZW9NFCvTD+W0cWNuSQ+bfCFM/Vv59+yluuLCJTjtZafKpqTx4L
+         iFFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=b98/tdiTwcvqr19Hh3b2b2FTs+schd1Q4q9W1vv+i7w=;
+        b=GgDhaN3jwcVoGfqXwSH8X1D0f6Bg/JDKkN9mOiS5eHFgm7DjfHVvrNPaGw4JsIJVi7
+         C8t2OVvepiwIPfjbU1k2KlVtkRjJxW0M26VwpJjEBIxvcREZCavQNR5zioKY6G7CVYuR
+         WulIV+Or5YAuHUE8nK0LMpmdBLZ+44/OVOB+hz7wUpRlGxQO6EcHubFtZMFUB9DyWZp7
+         XkK3nsbKrlXjjARcP+tMKz4ZkXhG+mHH++ejTl+yrRo6Ump5hRHKw3fC5QNrDLklZ8se
+         XqG5QaUIrjEplaB5h2XLDwZaXnaRJjwh3FfkQfD5updPygyHbnMhQ93af7cOfNbUbbqN
+         /5GQ==
+X-Gm-Message-State: ACrzQf1xikvH5FGvbq/PCkw5dLqjn6soj+KX06J8O1xA1ZmWYUaZghy/
+        Md6flgB2VVl5WmJ+caPBdTg0
+X-Google-Smtp-Source: AMsMyM4P7ZuRzbrkXhZRWHNPuzPp2qehAKeCoVS8zM5dgefeOtWm2noYpuK7VzCYrXRQHqTic/7a8Q==
+X-Received: by 2002:a17:90a:cd02:b0:205:efbd:6f60 with SMTP id d2-20020a17090acd0200b00205efbd6f60mr10800376pju.111.1665064199534;
+        Thu, 06 Oct 2022 06:49:59 -0700 (PDT)
+Received: from localhost.localdomain ([220.158.158.220])
+        by smtp.gmail.com with ESMTPSA id k25-20020a635a59000000b00434760ee36asm1874053pgm.16.2022.10.06.06.49.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 06:49:58 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     kishon@kernel.org, lpieralisi@kernel.org, bhelgaas@google.com
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kw@linux.com, robh@kernel.org, vidyas@nvidia.com, vigneshr@ti.com,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v3 4/5] PCI: endpoint: Use callback mechanism for passing events from EPC to EPF
+Date:   Thu,  6 Oct 2022 19:19:26 +0530
+Message-Id: <20221006134927.41437-5-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221006134927.41437-1-manivannan.sadhasivam@linaro.org>
+References: <20221006134927.41437-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jani Nikula <jani.nikula@linux.intel.com> writes:
+Instead of using the notifiers for passing the events from EPC to EPF,
+let's introduce a callback based mechanism where the EPF drivers can
+populate relevant callbacks for EPC events they want to subscribe.
 
-> I admit my wish-list replies to this thread may seem a bit obnoxious,
-> when I'm not prepared to contribute. Sorry about that. My intention was
-> not to block any of this, rather muse about what the future direction
-> might be.
+The use of notifiers in kernel is not recommended if there is a real link
+between the sender and receiver, like in this case. Also, the existing
+atomic notifier forces the notification functions to be in atomic context
+while the caller may be in non-atomic context. For instance, the two
+in-kernel users of the notifiers, pcie-qcom and pcie-tegra194, both are
+calling the notifier functions in non-atomic context (from threaded IRQ
+handlers). This creates a sleeping in atomic context issue with the
+existing EPF_TEST driver that calls the EPC APIs that may sleep.
 
-Wish lists are good.  As noted before, if we're depending on me to come
-up with the web design, we're in trouble...
+For all these reasons, let's get rid of the notifier chains and use the
+simple callback mechanism for signalling the events from EPC to EPF
+drivers. This preserves the context of the caller and avoids the latency
+of going through a separate interface for triggering the notifications.
 
-> Overall I think this is an improvement.
->
-> There's only two things that I'd like to get addressed, not necessarily
-> now, but eventually:
->
-> - As mentioned, the main div width as pixels in the alabaster
->   theme. It's really crappy on wide 4K displays. Only a quarter of the
->   full screen width is used.
->
-> - The function/struct/etc. main descriptions are now displayed in the
->   gray background, along with the "declaration", instead of white
->   background. Is that an intenational alabaster feature, or is it
->   something we do to cause that? Seems like the description gets a bit
->   hidden there.
+As a first step of the transition, the core_init() callback is introduced
+in this commit, that'll replace the existing CORE_INIT notifier used for
+signalling the init complete event from EPC.
 
-Both of these should be relatively easily done with CSS overrides, I'll
-look into it.
+During the occurrence of the event, EPC will go over the list of EPF
+drivers attached to it and will call the core_init() callback if available.
 
-jon
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ drivers/pci/endpoint/functions/pci-epf-test.c | 13 ++++++-------
+ drivers/pci/endpoint/pci-epc-core.c           | 11 ++++++++++-
+ include/linux/pci-epf.h                       | 11 ++++++++++-
+ 3 files changed, 26 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
+index a6f906a96669..868de17e1ad2 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-test.c
++++ b/drivers/pci/endpoint/functions/pci-epf-test.c
+@@ -826,20 +826,17 @@ static int pci_epf_test_core_init(struct pci_epf *epf)
+ 	return 0;
+ }
+ 
++static const struct pci_epc_event_ops pci_epf_test_event_ops = {
++	.core_init = pci_epf_test_core_init,
++};
++
+ static int pci_epf_test_notifier(struct notifier_block *nb, unsigned long val,
+ 				 void *data)
+ {
+ 	struct pci_epf *epf = container_of(nb, struct pci_epf, nb);
+ 	struct pci_epf_test *epf_test = epf_get_drvdata(epf);
+-	int ret;
+ 
+ 	switch (val) {
+-	case CORE_INIT:
+-		ret = pci_epf_test_core_init(epf);
+-		if (ret)
+-			return NOTIFY_BAD;
+-		break;
+-
+ 	case LINK_UP:
+ 		queue_delayed_work(kpcitest_workqueue, &epf_test->cmd_handler,
+ 				   msecs_to_jiffies(1));
+@@ -1010,6 +1007,8 @@ static int pci_epf_test_probe(struct pci_epf *epf, const struct pci_epf_device_i
+ 
+ 	INIT_DELAYED_WORK(&epf_test->cmd_handler, pci_epf_test_cmd_handler);
+ 
++	epf->event_ops = &pci_epf_test_event_ops;
++
+ 	epf_set_drvdata(epf, epf_test);
+ 	return 0;
+ }
+diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
+index 6cce430d431b..ba54f17ae06f 100644
+--- a/drivers/pci/endpoint/pci-epc-core.c
++++ b/drivers/pci/endpoint/pci-epc-core.c
+@@ -707,10 +707,19 @@ EXPORT_SYMBOL_GPL(pci_epc_linkup);
+  */
+ void pci_epc_init_notify(struct pci_epc *epc)
+ {
++	struct pci_epf *epf;
++
+ 	if (!epc || IS_ERR(epc))
+ 		return;
+ 
+-	atomic_notifier_call_chain(&epc->notifier, CORE_INIT, NULL);
++	mutex_lock(&epc->list_lock);
++	list_for_each_entry(epf, &epc->pci_epf, list) {
++		mutex_lock(&epf->lock);
++		if (epf->event_ops->core_init)
++			epf->event_ops->core_init(epf);
++		mutex_unlock(&epf->lock);
++	}
++	mutex_unlock(&epc->list_lock);
+ }
+ EXPORT_SYMBOL_GPL(pci_epc_init_notify);
+ 
+diff --git a/include/linux/pci-epf.h b/include/linux/pci-epf.h
+index 0c94cc1513bc..a06f3b4c8bee 100644
+--- a/include/linux/pci-epf.h
++++ b/include/linux/pci-epf.h
+@@ -18,7 +18,6 @@ struct pci_epf;
+ enum pci_epc_interface_type;
+ 
+ enum pci_notify_event {
+-	CORE_INIT,
+ 	LINK_UP,
+ };
+ 
+@@ -72,6 +71,14 @@ struct pci_epf_ops {
+ 					struct config_group *group);
+ };
+ 
++/**
++ * struct pci_epf_event_ops - Callbacks for capturing the EPC events
++ * @core_init: Callback for the EPC initialization complete event
++ */
++struct pci_epc_event_ops {
++	int (*core_init)(struct pci_epf *epf);
++};
++
+ /**
+  * struct pci_epf_driver - represents the PCI EPF driver
+  * @probe: ops to perform when a new EPF device has been bound to the EPF driver
+@@ -140,6 +147,7 @@ struct pci_epf_bar {
+  * @is_vf: true - virtual function, false - physical function
+  * @vfunction_num_map: bitmap to manage virtual function number
+  * @pci_vepf: list of virtual endpoint functions associated with this function
++ * @event_ops: Callbacks for capturing the EPC events
+  */
+ struct pci_epf {
+ 	struct device		dev;
+@@ -170,6 +178,7 @@ struct pci_epf {
+ 	unsigned int		is_vf;
+ 	unsigned long		vfunction_num_map;
+ 	struct list_head	pci_vepf;
++	const struct pci_epc_event_ops *event_ops;
+ };
+ 
+ /**
+-- 
+2.25.1
+
