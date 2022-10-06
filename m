@@ -2,65 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFB55F639F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B055F63A4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbiJFJ3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 05:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58816 "EHLO
+        id S231463AbiJFJ3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 05:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiJFJ3b (ORCPT
+        with ESMTP id S230216AbiJFJ3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 05:29:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CD89A9C5
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 02:29:29 -0700 (PDT)
+        Thu, 6 Oct 2022 05:29:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDAA130F
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 02:29:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665048568;
+        s=mimecast20190719; t=1665048573;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=94otJVoB9xy0ViFJOwAvWjX8yRWjZFY1HE2P23+kfyU=;
-        b=H5CyvUu/+0jMbwiWPNYeFYJM3RooV5Vm4lr36IN4lFW0by+GjAnvmV9jmuZwWNJwf4fXjT
-        rBFZaZPcTO5dzC64+y61DjJ89jn2InlNQfmscNczSsVhft8A4ZtYaiPll26tAMM0+/tcJa
-        NcLFR9v7rmtoScstN1MoPVcrYf5UHzw=
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
- [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+smpxbXq4s4VZXWHyY6FHA0tm1OoQPC2gTDZdrKKgFc=;
+        b=RJcMkKK0/m6NiSBWK7hlzuphaSrswJFqSKiMM4J+qiMi5fdOvEQfjI7kj4wSmVZQhAfyls
+        gwJUkoanXivbyezJTe6hWxbf//IXp5NFjxJ4IhXVrOYwQ9dVdra4ZnqjGslcBwVhbs1DaO
+        jDJkrKgHPxjiohhKWGlhcFLvXTupaWU=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-153-We8hxxVFM1G4_84TWAvqOQ-1; Thu, 06 Oct 2022 05:29:27 -0400
-X-MC-Unique: We8hxxVFM1G4_84TWAvqOQ-1
-Received: by mail-lj1-f198.google.com with SMTP id h23-20020a05651c125700b0026e01b79d34so505579ljh.13
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 02:29:27 -0700 (PDT)
+ us-mta-358-dBOD3VBQOf-wMlbgS8tp-g-1; Thu, 06 Oct 2022 05:29:32 -0400
+X-MC-Unique: dBOD3VBQOf-wMlbgS8tp-g-1
+Received: by mail-wm1-f70.google.com with SMTP id 18-20020a05600c229200b003c1cb5820bbso367423wmf.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 02:29:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=94otJVoB9xy0ViFJOwAvWjX8yRWjZFY1HE2P23+kfyU=;
-        b=OEpZxt9Mb8EXzI7/aVCg+hwNfF5Z5Kxg2/Fu+No30rVwKuia0AqK+Wb5FWJOPAy5Yx
-         jpPTY4flNNQ6ad+rBlSEX3y76TeJRG4oSj3QcBbqgRDOGoN10/vFMWwqjzMBTb96ErL4
-         kjNa94BpKSig1SNHNO5jHNjKk7gHegcU+Gyw0wrPzJIkp9NqD90jlrLIduc6lWOdYNHN
-         mMQpVefACEpDLUqokWrv0b1G+1Ochz688CPs7ODp1Lat4TXT3/5oZBLRay46566CNgkK
-         F3XmvZ1w5sAJolzbdkMp0A4pCXk+iKuJgAvDChPMaeVENna+uKcsXFeLMCUoF0f45PKt
-         AD0A==
-X-Gm-Message-State: ACrzQf1p2IzGVhJmdcSj9LHHjyNYDykHYkCzxhrXxQNUsRRFWnzd93x1
-        OzZI4canQt4MUa5+Y6OF40pJAEPbLSgg1txICPmlAFY37Bk22fth8nDQmpemKAhwuo/vdUeRukP
-        jztF4YJVat4VQ07z2x/ROM0MAsKv5669+InO0w1wC
-X-Received: by 2002:a05:651c:1112:b0:26c:7323:3f2c with SMTP id e18-20020a05651c111200b0026c73233f2cmr1477861ljo.4.1665048565321;
-        Thu, 06 Oct 2022 02:29:25 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6UJoKc02XtNecUPnA7hwOr88uQMBmFJGuPCSEx8nxrMg0anBOQcN6FiLNMw6zcXxWnx3GOjnt7dRn6tBrjbYU=
-X-Received: by 2002:a05:651c:1112:b0:26c:7323:3f2c with SMTP id
- e18-20020a05651c111200b0026c73233f2cmr1477852ljo.4.1665048565071; Thu, 06 Oct
- 2022 02:29:25 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=+smpxbXq4s4VZXWHyY6FHA0tm1OoQPC2gTDZdrKKgFc=;
+        b=DH7f0DXRD0H08RNm/vTsStcFdPgLQPVUL6P0DMhYUPhyrf5vJVuqcwjgycVB9LQmOb
+         DgstM/mZNE2oWoAJV32OlnutCaBXd2JDW8ecE+asJJfib5Us5Pm1xPAhV+wcUM60isqQ
+         3yKE6rqwYwEjvxuDJg/6kjwXK5CE7PslAbq6aqnvBaQ4rY40VStEddACy00y5C78rbhm
+         zGItFbMBLCB6xrHXQ+f6+V6+bXIs3GU+dg1sEhK3Dm/6s0Pz1M30pqM2d0ghO+OlPapa
+         jSsDxCkxHQqujD3UUO4p6nZqFIaQWkgGeeYqa8xc2pgEuWdoY8LVY35Y0pSSxYLp52ZY
+         +gOA==
+X-Gm-Message-State: ACrzQf3vQqsXFk8ZGvqdG+pJ4aZycTIIvfS4R5PnxmTnqVZr3SwzpvQ/
+        tgGhveTmQ3bh5ARFbGcmIeklyGZYFefRo7B9BwFBa3jPMjRicM6g/QV/sLQoquG4Q2hzvKe53k/
+        EmjTEB24zH01x0h/OW3DusnDj
+X-Received: by 2002:a5d:51c2:0:b0:22e:3c45:9eff with SMTP id n2-20020a5d51c2000000b0022e3c459effmr2417256wrv.118.1665048571476;
+        Thu, 06 Oct 2022 02:29:31 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4sLsL83Bl3DnANSzkrKeNP7L6BNgjr9mJL7tkJpTRVq2QeiBP58gaQpBqj4Eq8uMYVJLrszg==
+X-Received: by 2002:a5d:51c2:0:b0:22e:3c45:9eff with SMTP id n2-20020a5d51c2000000b0022e3c459effmr2417236wrv.118.1665048571137;
+        Thu, 06 Oct 2022 02:29:31 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:3700:aed2:a0f8:c270:7f30? (p200300cbc7053700aed2a0f8c2707f30.dip0.t-ipconnect.de. [2003:cb:c705:3700:aed2:a0f8:c270:7f30])
+        by smtp.gmail.com with ESMTPSA id k16-20020adfd850000000b0022e3538d305sm14750024wrl.117.2022.10.06.02.29.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Oct 2022 02:29:30 -0700 (PDT)
+Message-ID: <bdddfd01-bc7e-2f99-21b9-2762a7041096@redhat.com>
+Date:   Thu, 6 Oct 2022 11:29:29 +0200
 MIME-Version: 1.0
-From:   Bruno Goncalves <bgoncalv@redhat.com>
-Date:   Thu, 6 Oct 2022 11:29:13 +0200
-Message-ID: <CA+QYu4pFecWRuGSsvNLq3YANPzO2Dz09X86WivbuzXfSNKTPuw@mail.gmail.com>
-Subject: [aarch64] [ampere] [6.0.0] pc : kset_find_obj+0x38/0xb0 lr : kset_find_obj+0x48/0xb0
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     CKI Project <cki-project@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>
+References: <20220930141931.174362-1-david@redhat.com>
+ <20220930141931.174362-5-david@redhat.com> <Yz3qekna97ndP4FK@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1 4/7] mm/ksm: fix KSM COW breaking with userfaultfd-wp
+ via FAULT_FLAG_UNSHARE
+In-Reply-To: <Yz3qekna97ndP4FK@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,88 +90,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 05.10.22 22:35, Peter Xu wrote:
+> On Fri, Sep 30, 2022 at 04:19:28PM +0200, David Hildenbrand wrote:
+>> Let's stop breaking COW via a fake write fault and let's use
+>> FAULT_FLAG_UNSHARE instead. This avoids any wrong side effects of the fake
+>> write fault, such as mapping the PTE writable and marking the pte
+>> dirty/softdirty.
+>>
+>> Also, this fixes KSM interaction with userfaultfd-wp: when we have a KSM
+>> page that's write-protected by userfaultfd, break_ksm()->handle_mm_fault()
+>> will fail with VM_FAULT_SIGBUS and will simpy return in break_ksm() with 0.
+>> The warning in dmesg indicates this wrong handling:
+>>
+>> [  230.096368] FAULT_FLAG_ALLOW_RETRY missing 881
+>> [  230.100822] CPU: 1 PID: 1643 Comm: ksm-uffd-wp [...]
+>> [  230.110124] Hardware name: [...]
+>> [  230.117775] Call Trace:
+>> [  230.120227]  <TASK>
+>> [  230.122334]  dump_stack_lvl+0x44/0x5c
+>> [  230.126010]  handle_userfault.cold+0x14/0x19
+>> [  230.130281]  ? tlb_finish_mmu+0x65/0x170
+>> [  230.134207]  ? uffd_wp_range+0x65/0xa0
+>> [  230.137959]  ? _raw_spin_unlock+0x15/0x30
+>> [  230.141972]  ? do_wp_page+0x50/0x590
+>> [  230.145551]  __handle_mm_fault+0x9f5/0xf50
+>> [  230.149652]  ? mmput+0x1f/0x40
+>> [  230.152712]  handle_mm_fault+0xb9/0x2a0
+>> [  230.156550]  break_ksm+0x141/0x180
+>> [  230.159964]  unmerge_ksm_pages+0x60/0x90
+>> [  230.163890]  ksm_madvise+0x3c/0xb0
+>> [  230.167295]  do_madvise.part.0+0x10c/0xeb0
+>> [  230.171396]  ? do_syscall_64+0x67/0x80
+>> [  230.175157]  __x64_sys_madvise+0x5a/0x70
+>> [  230.179082]  do_syscall_64+0x58/0x80
+>> [  230.182661]  ? do_syscall_64+0x67/0x80
+>> [  230.186413]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> Since it's already there, worth adding the test into ksm_test.c?
 
-We are hitting a panic when booting on ampere, more specifically on
-hr330a and hr350a machines.
+Yes, I can give it a try. What I dislike about ksm_test is that it's a 
+mixture of benchmarks and test cases that have to explicitly triggered 
+by parameters. It's not a simple "run all available test cases" tests as 
+we know it. So maybe something separate (or having it as part of the 
+uffd tests) makes more sense.
 
-[    3.803924] xor: measuring software checksum speed
-[    3.809489]    8regs           : 12524 MB/sec
-[    3.814622]    32regs          : 12512 MB/sec
-[    3.820179]    arm64_neon      :  8109 MB/sec
-[    3.824525] xor: using function: 8regs (12524 MB/sec)
-[    3.829565] Key type asymmetric registered
-[    3.833655] Asymmetric key parser 'x509' registered
-[    4.072910] Freeing initrd memory: 20772K
-[    4.083936] alg: self-tests for CTR-KDF (hmac(sha256)) passed
-[    4.089699] Block layer SCSI generic (bsg) driver version 0.4
-loaded (major 244)
-[    4.097203] io scheduler mq-deadline registered
-[    4.101732] io scheduler kyber registered
-[    4.105809] io scheduler bfq registered
-[    4.112468] atomic64_test: passed
-[    4.117903] Unable to handle kernel paging request at virtual
-address fffffffffffffff8
-[    4.125820] Mem abort info:
-[    4.128600]   ESR = 0x0000000096000004
-[    4.132339]   EC = 0x25: DABT (current EL), IL = 32 bits
-[    4.137638]   SET = 0, FnV = 0
-[    4.140680]   EA = 0, S1PTW = 0
-[    4.143810]   FSC = 0x04: level 0 translation fault
-[    4.148674] Data abort info:
-[    4.151546]   ISV = 0, ISS = 0x00000004
-[    4.155369]   CM = 0, WnR = 0
-[    4.158324] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000009f81788000
-[    4.165014] [fffffffffffffff8] pgd=0000000000000000, p4d=0000000000000000
-[    4.171795] Internal error: Oops: 96000004 [#1] SMP
-[    4.176661] Modules linked in:
-[    4.179704] CPU: 2 PID: 1 Comm: swapper/0 Not tainted 6.0.0 #1
-[    4.185524] Hardware name: Lenovo HR330A            7X33CTO1WW
-/FALCON     , BIOS hve104r-1.15 02/26/2021
-[    4.195336] pstate: a0400005 (NzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    4.202285] pc : kset_find_obj+0x38/0xb0
-[    4.206200] lr : kset_find_obj+0x48/0xb0
-[    4.210110] sp : ffff80000b80bcf0
-[    4.213412] x29: ffff80000b80bcf0 x28: 0000000000000000 x27: ffff800009f9044c
-[    4.220536] x26: ffff80000a046960 x25: 0000000000000006 x24: ffff80000a14520c
-[    4.227660] x23: ffff8000099a3370 x22: ffff000801230d90 x21: ffff8000097bb348
-[    4.234783] x20: ffff000801230d80 x19: fffffffffffffff8 x18: ffffffffffffffff
-[    4.241907] x17: 0000000054138b3b x16: 00000000ba80c402 x15: ffff80000b80bb48
-[    4.249030] x14: ffff000806403a1c x13: ffff000806403262 x12: 0000000000000001
-[    4.256154] x11: 000000003985e44f x10: 0000000000011078 x9 : 0000000000000003
-[    4.263277] x8 : 0101010101010101 x7 : 0000000000000000 x6 : 101100461d194e01
-[    4.270401] x5 : 014e191d46001110 x4 : 0000000000000000 x3 : 1b2373996b831b48
-[    4.277525] x2 : 0000000000000000 x1 : ffff8000097bb348 x0 : 0000000000000000
-[    4.284648] Call trace:
-[    4.287081]  kset_find_obj+0x38/0xb0
-[    4.290645]  driver_register+0x64/0x13c
-[    4.294471]  __platform_driver_register+0x30/0x3c
-[    4.299162]  cdns_plat_pcie_driver_init+0x24/0x30
-[    4.303856]  do_one_initcall+0x50/0x28c
-[    4.307681]  do_initcalls+0x104/0x144
-[    4.311332]  kernel_init_freeable+0x16c/0x1b8
-[    4.315676]  kernel_init+0x2c/0x150
-[    4.319154]  ret_from_fork+0x10/0x20
-[    4.322719] Code: f9400280 eb00029f 54000160 d1002013 (f9400260)
-[    4.328799] ---[ end trace 0000000000000000 ]---
-[    4.333403] Kernel panic - not syncing: Oops: Fatal exception
-[    4.339136] SMP: stopping secondary CPUs
-[    4.343054] Kernel Offset: 0x40000 from 0xffff800008000000
-[    4.348525] PHYS_OFFSET: 0x80000000
-[    4.352000] CPU features: 0x0000,00045021,00001086
-[    4.356778] Memory Limit: none
-[    4.359820] ---[ end Kernel panic - not syncing: Oops: Fatal exception ]---
+> 
+>>
+>> Consequently, we will no longer trigger a fake write fault and break COW
+>> without any such side-effects.
+>>
+>> This is primarily a fix for KSM+userfaultfd-wp, however, the fake write
+>> fault was always questionable. As this fix is not easy to backport and it's
+>> not very critical, let's not cc stable.
+> 
+> A patch to cc most of the stable would probably need to still go with the
+> old write approach but attaching ALLOW_RETRY.  But I agree maybe that may
+> not need to bother, or a report should have arrived earlier..  The unshare
+> approach looks much cleaner indeed.
 
-full console log:
-https://s3.us-east-1.amazonaws.com/arr-cki-prod-datawarehouse-public/datawarehouse-public/2022/10/05/redhat:659318872/build_aarch64_redhat:659318872_aarch64/tests/3/results_0001/console.log/console.log
+A fix without FAULT_FLAG_UNSHARE is not straight forward. We really 
+don't want to notify user space about write events here (because there 
+is none). And there is no way around the uffd handling in WP code 
+without that.
 
-more logs:https://datawarehouse.cki-project.org/kcidb/tests/5390369
-cki issue tracker: https://datawarehouse.cki-project.org/issue/1637
+FAULT_FLAG_ALLOW_RETRY would rely on userfaultfd triggering and having 
+to resolve the WP event.
 
-kernel config: https://s3.amazonaws.com/arr-cki-prod-trusted-artifacts/trusted-artifacts/659318872/build%20aarch64/3132390378/artifacts/kernel-mainline.kernel.org-redhat_659318872_aarch64.config
-kernel tarball:
-https://s3.amazonaws.com/arr-cki-prod-trusted-artifacts/trusted-artifacts/659318872/publish%20aarch64/3132390386/artifacts/kernel-mainline.kernel.org-redhat_659318872_aarch64.tar.gz
+> 
+>>
+>> Fixes: 529b930b87d9 ("userfaultfd: wp: hook userfault handler to write protection fault")
+>> Signed-off-by: David Hildenbrand <david@redhat.com>
+> 
+> Acked-by: Peter Xu <peterx@redhat.com>
+> 
 
+Thanks!
+
+-- 
 Thanks,
-Bruno
+
+David / dhildenb
 
