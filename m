@@ -2,211 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C905F5E6C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 03:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C455F5E71
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 03:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbiJFBlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 21:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
+        id S229836AbiJFBqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 21:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiJFBlK (ORCPT
+        with ESMTP id S229608AbiJFBqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 21:41:10 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC45922BDC;
-        Wed,  5 Oct 2022 18:41:09 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id B1BC35C0078;
-        Wed,  5 Oct 2022 21:41:06 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 05 Oct 2022 21:41:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1665020466; x=
-        1665106866; bh=5JWGlL6qjpOxQyyZ9FB1dSYfeN4n/a+nsPGWR+zeiYc=; b=M
-        6og2O85RYor/MEkEK9NUu3wiW+BhmIu4XsJu4ZWKsQ32+PtEx3auXlLV1Vxy7xCx
-        SuI29dbENT/pW51oqx/kKeS6rYWGQwO2yuV9nwxF4IQXSPo69Mu4lgacDtNbCOYp
-        bHksDrcsO7vbcW+uZ1/Wf70s/W4ScBIsqxe51/dUt0D+yD3h7t+H8qxRp7GF3K5E
-        /4VgeIWd24J9IPhs25G7EMJNO8dRhNtn5Aw4zxmYm7gi0oUYz6pACaojGon7jAxF
-        +2YE+Es//c6MkE71uARRgLeLOlBu5qv7NvSw5PXWeLh5vVEwKo8aaqVJknV37n4d
-        cD2ft0lwigYokY8F72dQA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1665020466; x=1665106866; bh=5JWGlL6qjpOxQyyZ9FB1dSYfeN4n
-        /a+nsPGWR+zeiYc=; b=IapvrxS+eu9CRM2Y2xpRmwAEBSC07HId3PKvuDlordFq
-        FQn0PYGstKTIn1EWy6IVXIsBiQnr5wyq1G0GIAsX3XAUrn0lIOCLn2IK4K2n5OTC
-        ELdOXmbc9wR+smndYtDC4+ix/FHk0EvYSjGccIhTRcKnP6o5EZkejB6+fuoIjyF4
-        cviqYKjPJwuw3acPHvb+8nrJUcZxsPkMwg2mKliK9ztNYB7lKg405v7U8rqyLOmM
-        ynm6gc+s3YcVooFIZYt+T9Rjf1Lrk3t8Txnc3y3JjHGhgJtSjXPA4r1wWPQqMxQm
-        QgQXgsN2cI0VH/YhaXOP0pSdMkYwfIVVADA2+5TjWA==
-X-ME-Sender: <xms:MjI-Y0MK-kjrVZXrycLY6OoQgV_MAbR9y9PIHIxuls04COsCSIiFmA>
-    <xme:MjI-Y6-saI900FsdoMpNk91DHjxo-wuJSng511L3OZ9yMKioyJL633KFRTdz8nYqY
-    kAuJNXUWhsQpHE>
-X-ME-Received: <xmr:MjI-Y7QYawW0W1P_KkiHSTjB7-0xTVDxzwjuqk3SVwhvCxJ3epBqnVYRHCS4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeigedghedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepffgvmhhi
-    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
-    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepudeileefueetvdelheeuteffjeeg
-    jeegffekleevueelueekjeejudffteejkeetnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
-    lhgrsgdrtghomh
-X-ME-Proxy: <xmx:MjI-Y8uonqngOyQ1TDOcwx7-ZJi0gr1uWyVsWeVAwYOcNsdoEWXjlQ>
-    <xmx:MjI-Y8cEnKUQHfG8rFoPIKgLBC-vABsCntJtptGD09gTSlEmvwrKoA>
-    <xmx:MjI-Yw1vEyoZd-y5Ech6-96fX-3e4uyELk8VRXQSRiE1sCau-rYNJA>
-    <xmx:MjI-Y9VWOZ-b012cWbwraT3IrzSYRvS_471wcRHzbXVqAH4KpMJ2xg>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 5 Oct 2022 21:41:05 -0400 (EDT)
-Date:   Wed, 5 Oct 2022 21:40:58 -0400
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Jan Beulich <jbeulich@suse.com>, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-Subject: Re: [PATCH v4 1/2] Avoid using EFI tables Xen may have clobbered
-Message-ID: <Yz4yLyvX6un1rrqC@itl-email>
-References: <282a225d-8782-0321-6f0e-19dd4510dc42@suse.com>
- <CAMj1kXFQNqsW5RfHGac-eGbosJHBybu6+-Fap_bi_kVxWNpGeg@mail.gmail.com>
- <YzcjeiOW8+i2Zxsd@itl-email>
- <CAMj1kXHBBbCNV3CLesqZi7ttmmi8y4tZ1KO5vievy_CJrU2o3Q@mail.gmail.com>
- <YzeaKjmls1YI/3ox@itl-email>
- <01d22092-8292-8ed7-ece7-9ca32d15bbce@suse.com>
- <YzxxXuovwQt3NskE@itl-email>
- <a0dc1158-01b1-4272-b86e-52f4996f0747@suse.com>
- <Yz3I2qwl243h9ZfZ@itl-email>
- <CAMj1kXHFi71SKQAQHEjZTLyp-YooRTYZ2-nqydRZA5hys7tkKw@mail.gmail.com>
+        Wed, 5 Oct 2022 21:46:33 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8223F870AA;
+        Wed,  5 Oct 2022 18:46:30 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id w191so728677pfc.5;
+        Wed, 05 Oct 2022 18:46:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z1dt20zh03AGkz8Ph70h7KsfwufXO8h3JEFDf/Kqs10=;
+        b=iL2nS/EqkduortlDO+6Qdv/SP3d4OWAcLABAXf2GCf+AX7HCP6vzu17/wzQDuiRJmb
+         ZUITwoAH1gy7dYEZqSz2t4Ud/d48YHn8/4wFXhlui7RRHZbLBvhHKUmO8flwMHlRnphw
+         1wBODHeMoQeuS4YACAV4ym+xcLLk80ZGBf/gPBc5b0nqFnLc3SbBZIGn8Zy+qcRl/tkH
+         R5dTK7GY+vvAxWi/q9GxV5nEkSTqlvISKcNiVYJJiI+K73PZF0hNa94q+OGrz02fXpuh
+         XKGF9NmoViZehmJFRd8uPEDCqAjs1WHBTV7/BjRvwFn1MR/V8ROgaVWsJeJmKmIQ1KRe
+         Ct0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z1dt20zh03AGkz8Ph70h7KsfwufXO8h3JEFDf/Kqs10=;
+        b=GWgq6T2kt0CJI8Q7mBFc4WckZFhsk0hwLrQ4vP38G5y4ilqrX+uGGG+fWpG9vAl7cM
+         EV1kjwFKO2quV8r38rYPsdn0jfn2Vqb/py6xN2UrvXqJbUliMdbyW9OD0COxxlFWQVen
+         sxfLB1i1o4VhPficUeThn6AbtSFAKK/3hFT8OkEL/ZvQlVKePUH0ZBWo6v8TUz6aCgPM
+         ylC27A4fIroEyG6lK2ARuaFOPGaPtVufoa7Ya+KpXWz7BEF4cwu0PgThUWASZ55gIcdM
+         4f8E01OVRRJsSPn7U5HlgdF8UuizoUSf2QxOFwYMHuoQhVFl4jO/1HuaG8JR+3fCz3m6
+         pP6w==
+X-Gm-Message-State: ACrzQf24QYcQEtDC3sUMd9WERp6nMn52xBdOg0R3wEy1fdOV8KIo5/KQ
+        aCe66KgYbQ9L4Io1XDnrIfmbQf26As6NsA==
+X-Google-Smtp-Source: AMsMyM6Z1WtaY3aQdyCmGevC34e/UWXrZtye/znSS87qvHSoGQUNyqK0shNDULW1WzkfcLwaAaLlMw==
+X-Received: by 2002:a05:6a00:198e:b0:541:f85a:6c27 with SMTP id d14-20020a056a00198e00b00541f85a6c27mr2261190pfl.81.1665020789946;
+        Wed, 05 Oct 2022 18:46:29 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-20.three.co.id. [180.214.232.20])
+        by smtp.gmail.com with ESMTPSA id c8-20020a630d08000000b0044a4025cea1sm401964pgl.90.2022.10.05.18.46.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Oct 2022 18:46:29 -0700 (PDT)
+Message-ID: <bf4b507a-f996-6aef-71e6-d73fcddc6163@gmail.com>
+Date:   Thu, 6 Oct 2022 08:46:23 +0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="O1bm1sqCXF+z9Gl5"
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXHFi71SKQAQHEjZTLyp-YooRTYZ2-nqydRZA5hys7tkKw@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v4] Documentation/mm/page_owner.rst: delete frequently
+ changing experimental data
+Content-Language: en-US
+To:     Yixuan Cao <caoyixuan2019@email.szu.edu.cn>,
+        akpm@linux-foundation.org
+Cc:     akiyks@gmail.com, corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rppt@kernel.org,
+        skhan@linuxfoundation.org, yejiajian2018@email.szu.edu.cn,
+        zhangyinan2019@email.szu.edu.cn
+References: <89aed08f-1e0b-258c-516d-97a30fd02840@gmail.com>
+ <20221005145525.10359-1-caoyixuan2019@email.szu.edu.cn>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20221005145525.10359-1-caoyixuan2019@email.szu.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/5/22 21:55, Yixuan Cao wrote:
+> The kernel size changes due to many factors, such as compiler
+> version, configuration, and the build environment. This makes
+> size comparison figures irrelevant to reader's setup.
+> 
+> Remove these figures and describe the effects of page owner
+> to the kernel size in general instead.
+> 
+> Thanks for Jonathan Corbet, Bagas Sanjaya and Mike Rapoport's
+> constructive suggestions.
+> 
 
---O1bm1sqCXF+z9Gl5
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 5 Oct 2022 21:40:58 -0400
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Jan Beulich <jbeulich@suse.com>, xen-devel@lists.xenproject.org,
-	linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-	Juergen Gross <jgross@suse.com>,
-	Stefano Stabellini <sstabellini@kernel.org>,
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-	Kees Cook <keescook@chromium.org>,
-	Anton Vorontsov <anton@enomsg.org>,
-	Colin Cross <ccross@android.com>, Tony Luck <tony.luck@intel.com>,
-	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
-Subject: Re: [PATCH v4 1/2] Avoid using EFI tables Xen may have clobbered
+The credits paragraph above can be removed (should be between
+dash line and diffstat).
 
-On Wed, Oct 05, 2022 at 11:28:29PM +0200, Ard Biesheuvel wrote:
-> On Wed, 5 Oct 2022 at 20:11, Demi Marie Obenour
-> <demi@invisiblethingslab.com> wrote:
-> >
-> > On Wed, Oct 05, 2022 at 08:15:07AM +0200, Jan Beulich wrote:
-> > > On 04.10.2022 17:46, Demi Marie Obenour wrote:
-> > > > Linux has a function called efi_mem_reserve() that is used to reser=
-ve
-> > > > EfiBootServicesData memory that contains e.g. EFI configuration tab=
-les.
-> > > > This function does not work under Xen because Xen could have already
-> > > > clobbered the memory.  efi_mem_reserve() not working is the whole r=
-eason
-> > > > for this thread, as it prevents EFI tables that are in
-> > > > EfiBootServicesData from being used under Xen.
-> > > >
-> > > > A much nicer approach would be for Xen to reserve boot services mem=
-ory
-> > > > unconditionally, but provide a hypercall that dom0 could used to fr=
-ee
-> > > > the parts of EfiBootServicesData memory that are no longer needed. =
- This
-> > > > would allow efi_mem_reserve() to work normally.
-> > >
-> > > efi_mem_reserve() actually working would be a layering violation;
-> > > controlling the EFI memory map is entirely Xen's job.
-> >
-> > Doing this properly would require Xen to understand all of the EFI
-> > tables that could validly be in EfiBootServices* and which could be of
-> > interest to dom0.  It might (at least on some very buggy firmware)
-> > require a partial ACPI and/or SMBIOS implementation too, if the firmware
-> > decided to put an ACPI or SMBIOS table in EfiBootServices*.
-> >
-> > > As to the hypercall you suggest - I wouldn't mind its addition, but o=
-nly
-> > > for the case when -mapbs is used. As I've indicated before, I'm of the
-> > > opinion that default behavior should be matching the intentions of the
-> > > spec, and the intention of EfiBootServices* is for the space to be
-> > > reclaimed. Plus I'm sure you realize there's a caveat with Dom0 using
-> > > that hypercall: It might use it for regions where data lives which it
-> > > wouldn't care about itself, but which an eventual kexec-ed (or alike)
-> > > entity would later want to consume. Code/data potentially usable by
-> > > _anyone_ between two resets of the system cannot legitimately be freed
-> > > (and hence imo is wrong to live in EfiBootServices* regions).
-> >
-> > I agree, but currently some such data *is* in EfiBootServices* regions,
-> > sadly.  When -mapbs is *not* used, I recommend uninstalling all of the
-> > configuration tables that point to EfiBootServicesData memory before
-> > freeing that memory.
-> >
->=20
-> That seems like a reasonable approach to me. Tables like MEMATTR or
-> RT_PROP are mostly relevant for bare metal where the host kernel maps
-> the runtime services, and in general, passing on these tables without
-> knowing what they do is kind of fishy anyway. You might even argue
-> that only known table types should be forwarded in the first place,
-> regardless of the memory type.
+Otherwise LGTM.
 
-Which tables are worth handling in Xen?  I know about ACPI, SMBIOS, and
-ESRT, but I am curious which others Xen should preserve.  Currently, Xen
-does not know about RT_PROP or MEMATTR; could this be a cause of
-problems?
---=20
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
---O1bm1sqCXF+z9Gl5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmM+Mi8ACgkQsoi1X/+c
-IsFC3Q/+LInS5fyLV5q0WDsphEUWJpSm3d2wDWvD98SyzEt/5YAunxvLkGFXYcLS
-P8Q2FOVyDqmBG457YSSZSS8Qt0EPxbntfAIgJT6c81xrAYpAFFHfblt1uHnrnzBJ
-5iGIkr1j184qHSf/iK8xlaxFe2eZDjZM3Y0RFGeII6+RdqmF8Wm1yd2+JlVEqGgO
-GSHwnQtt+Ut5ahm7+XKh6CdyMOeP7A7Z8+AVk74mFvWrCrJQgDPvXCAxQYX2EXCw
-TrMvLfhv4RBOOaMmCcLevbEs+3MbQ7owXtiMS0uydsezCedtWoyS9tcQdFzuJHfX
-h68Aj+kiVe07m/9Gpx43Ed+C+k4aNXqja9skqUhqStUigzOzX0Q/tNsSZV7nlyhL
-xYmlU+pdkPSNK8cXngU/OK1GjZLoNs5oc+pGT6oIq5ipWaZpO4eLriu1lMBWSS6s
-iExS7Awf7owOnc6AjaaiIRIN0W7NJ7auK10lCXX9IjzlOp9WCfA9xNLXuMQHNxCr
-gj0r+7UbcQAQP7bDRYIS/lddXF3jiubTiYeuQIdG2Y/+mIg1x1EZcNApa3rVsrSN
-xM9ex0yrDJxj9EODFHvIF9K8meqbQKTbBKtLE86Kmz6LzU4B0qwq1eQHc1M/Mo/L
-glmKRPDzx+ys9qrdIVnBCoMRNFpqK8+ybCzZ4TFHDLhht4N6iBE=
-=+br+
------END PGP SIGNATURE-----
-
---O1bm1sqCXF+z9Gl5--
+-- 
+An old man doll... just what I always wanted! - Clara
