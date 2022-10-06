@@ -2,65 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C765F6A0D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8936B5F6A10
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbiJFOxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 10:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
+        id S231440AbiJFOzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 10:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230459AbiJFOxb (ORCPT
+        with ESMTP id S231146AbiJFOy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 10:53:31 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192733AE7F;
-        Thu,  6 Oct 2022 07:53:31 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id q10so2293205oib.5;
-        Thu, 06 Oct 2022 07:53:31 -0700 (PDT)
+        Thu, 6 Oct 2022 10:54:58 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3E31D65A;
+        Thu,  6 Oct 2022 07:54:55 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id y100so3200641ede.6;
+        Thu, 06 Oct 2022 07:54:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bceuVvUJb3hxQm+ePCYNozIRIQ4HIe1CkvXUOasxSc0=;
-        b=ajytUqcnVpUIiUJPqr1uzTxRaxwz5XNCnPPwoAaAnKc5WRxa0ddxKNLqEGX/xgqmxR
-         CdtpHygUjmM3n+tI4HWfUMSy14R60990h3moPIHh16uI0GVMKIogpgbIwDmJpzhuQJfa
-         oH+zMjwGk2q4yvBWg+Vw4xs2cNBjPULCgukKb4nUSgBGqQ3jnWvnH1pFTNQaCx43mxcd
-         N2VIJbjoAqB7FGSVUkNv+qjRulpv3mcCl5xdHEfN2NMjd+TnpawsOrWEtlQjOlvQex81
-         VukXbhmiFb7ZqJ7XpFzrT98lJ9xzYpURfynwvKnSD5K0i8GKae9Oubt0GDaxVy6nKjNP
-         HlxQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=OcCFlsb0UPx35nzupcdQ+Jsu6S5hmDruOOCDGL2tRQU=;
+        b=LcRWZUjkVaSzP+xw32qY5UviScr9vgmwxKrpmL6rXsiGeRGuK/+g14ELWGxCZGrORm
+         qJQyhwScy4Th0H0aVlk809B5IzEBbOCmLeZrOu1R+4sBTjdFmzynVe0RrHAbWHP3Qaso
+         q+T9yYaigi7Kt+kKlkmQ2hxeH+rchg1Vaj0qSdQS9+PNaI2k3k9WEQNWxXOHP1AhlRdk
+         JKchX4Zqv234hqNXB9SjiKxKRRugT+Kir8XFBrqnpx80CBJX3PM9ES67z9/SsjXDgn4O
+         vVjQB1DNCpVKkfJUYaav9xL/U/Eo4R9GWJ3zj5cpYyypEf8HmdBabdhiW5Bg/4MrT/jy
+         /lKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bceuVvUJb3hxQm+ePCYNozIRIQ4HIe1CkvXUOasxSc0=;
-        b=682bvo+ZFtBLdeO7bN9hRSiSrj+DffqC5Mg4eL+KCnx5u6Cgfvosb7lEpsrgcJp6t9
-         Z97bRsFNByh+yrYUq50Oar5YzwDK2QszEzZYidYZzpEuKQiruKwRx+Kf6UwRopYwJuRx
-         KfkGYQQB7/7VxmE9mmwC8mQ2j/JkxlnonVVWnP04WFdh9uqbY74Lm8P2IXPXraNsfL1N
-         l3Ae7KkwV7rWL0d5ilkpYt8egY8XlCBGRqrsaAaw0tDcKZyjn+3GxbxiEjehORn15x0g
-         djGC4yimThxTg6DNh8UM2zdfRYi1NHK7EA0Cfl/F3QK5wbJq4R0rsxGlU6IgzgOnmiH0
-         6VcA==
-X-Gm-Message-State: ACrzQf3EqSw2Quh/RSXn/Z1WQi4sVlkcbM/YjnK1Y/dhZl6b1IkoZHAn
-        ucIal38HKC1VqblP0AWX73o=
-X-Google-Smtp-Source: AMsMyM4FYx8zNYauOySDk4nZprtJkqeDzXfw2rrXyfqj+d3DfQl1T+jGjKriFSBGEN4lHVykPwKsFA==
-X-Received: by 2002:a05:6808:2026:b0:34e:5c1c:77c5 with SMTP id q38-20020a056808202600b0034e5c1c77c5mr30175oiw.76.1665068010433;
-        Thu, 06 Oct 2022 07:53:30 -0700 (PDT)
-Received: from localhost.localdomain ([177.222.37.214])
-        by smtp.googlemail.com with ESMTPSA id f18-20020a9d5f12000000b00659579f505fsm5618043oti.64.2022.10.06.07.53.28
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=OcCFlsb0UPx35nzupcdQ+Jsu6S5hmDruOOCDGL2tRQU=;
+        b=59iETLQzjYaVp/rV1EuU0Y0y8dGBehMuj93euF4CP2TelMEm660pqOdJiAmen0sZKp
+         64+EIHGRzDlS0LvmLCXidm9jQsp3llL1M412qldukCBWQYK/DeNhBK1V6qa6bEN81XBk
+         Ldf/ieNeZALNsTA8JILIylGJLhJSxpfWyC+IDWDKdFn1yUhEexo2FqnBlnMYYOEvlLPp
+         x2Pc6/FDz28W8l7pi0OwwVQrATbJ8bRoDOTbqE5RSLS4oVHR1ESZY5CZcCVLfVlAV8vl
+         r171hVcyXNaf7zqWMthWGy2wfX0rGlg9FvbUiSmnM0pMWo5qwmZdOGRYdKat87W69mkE
+         6pVQ==
+X-Gm-Message-State: ACrzQf0MSba2vEwxfrdAGmH45LYbiLDguX2gnFLX1CvmBm1Zgqya8w5u
+        Op0eW0bgPo03CIfBya/IFKPVr9fuDt8=
+X-Google-Smtp-Source: AMsMyM7tAxRlst56qjcRjNPVAyBRK+EA8IHGDVRjg4uDfYiWRqaFMqbCok7sOPDfm7TIJjWbJl0I4w==
+X-Received: by 2002:a05:6402:2804:b0:439:83c2:8be2 with SMTP id h4-20020a056402280400b0043983c28be2mr161904ede.292.1665068093904;
+        Thu, 06 Oct 2022 07:54:53 -0700 (PDT)
+Received: from localhost.localdomain (wlan-247051.nbw.tue.nl. [131.155.247.51])
+        by smtp.gmail.com with ESMTPSA id i15-20020aa7dd0f000000b00457c321454asm5957591edv.37.2022.10.06.07.54.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 07:53:30 -0700 (PDT)
-From:   Henry Castro <hcvcastro@gmail.com>
-To:     thunderbird2k@gmail.com
-Cc:     Henry Castro <hcvcastro@gmail.com>, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] drivers: hid: warn feature report 0x81
-Date:   Thu,  6 Oct 2022 10:53:08 -0400
-Message-Id: <20221006145308.4393-1-hcvcastro@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <CAEc3jaCgEB5=3ATdaRXozMT3HrC1JeQVsY_HVF2VgY2oajzyow@mail.gmail.com>
-References: <CAEc3jaCgEB5=3ATdaRXozMT3HrC1JeQVsY_HVF2VgY2oajzyow@mail.gmail.com>
+        Thu, 06 Oct 2022 07:54:53 -0700 (PDT)
+From:   Nam Cao <namcaov@gmail.com>
+To:     jdelvare@suse.com
+Cc:     namcaov@gmail.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: i801: add lis3lv02d's I2C address for Vostro 5568
+Date:   Thu,  6 Oct 2022 16:54:40 +0200
+Message-Id: <20221006145440.10281-1-namcaov@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,67 +68,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unfortunately, my PS DualShock 4, does not support
-the feature 0x81 to get the MAC address. Instead,
-use a unique hash to fake a MAC address, so I can
-use DS4 to play Retroarch :)
+Dell Vostro 5568 laptop has lis3lv02d, but its i2c address is not known
+to the kernel. Add this address.
 
-Signed-off-by: Henry Castro <hcvcastro@gmail.com>
+Output of "cat /sys/devices/platform/lis3lv02d/position" on Dell Vostro
+5568 laptop:
+    - Horizontal: (-18,0,1044)
+    - Front elevated: (522,-18,1080)
+    - Left elevated: (-18,-360,1080)
+    - Upside down: (36,108,-1134)
+
+Signed-off-by: Nam Cao <namcaov@gmail.com>
 ---
+ drivers/i2c/busses/i2c-i801.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Just for reference if you want to try out if 0x12 works, you can try
-> this code. This is from the new driver (ps_get_report is from
-> hid-playstation, but you can just use one of the existing hid calls)
-> if you wanted to try.
-
-It works with my 2 DS4 =)
-
-
-		if (sc->hdev->bus == BUS_USB) {
-			buf = kzalloc(DS4_FEATURE_REPORT_PAIRING_INFO_SIZE, GFP_KERNEL);
-			if (!buf)
-				return -ENOMEM;
-
-			ret = hid_hw_raw_request(sc->hdev, DS4_FEATURE_REPORT_PAIRING_INFO, buf,
-						 DS4_FEATURE_REPORT_PAIRING_INFO_SIZE, HID_FEATURE_REPORT,
-						 HID_REQ_GET_REPORT);
-			if (ret != DS4_FEATURE_REPORT_PAIRING_INFO_SIZE) {
-				hid_err(sc->hdev, "Failed to retrieve DualShock4 pairing info:%pe\n", ERR_PTR(ret));
-				goto out_free;
-			}
-
-			memcpy(sc->mac_address, &buf[1], sizeof(sc->mac_address));
-
-
-
-
- drivers/hid/hid-sony.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/hid/hid-sony.c b/drivers/hid/hid-sony.c
-index 656caa07b25f..e3e9c58887cf 100644
---- a/drivers/hid/hid-sony.c
-+++ b/drivers/hid/hid-sony.c
-@@ -2641,13 +2641,14 @@ static int sony_check_add(struct sony_sc *sc)
- 				HID_REQ_GET_REPORT);
-
- 		if (ret != DS4_FEATURE_REPORT_0x81_SIZE) {
--			hid_err(sc->hdev, "failed to retrieve feature report 0x81 with the DualShock 4 MAC address\n");
--			ret = ret < 0 ? ret : -EINVAL;
--			goto out_free;
-+			uint32_t hash = full_name_hash(NULL, dev_name(&sc->hdev->dev),
-+						       strlen(dev_name(&sc->hdev->dev)));
-+			hid_warn(sc->hdev, "failed to retrieve feature report 0x81 with the DualShock 4 MAC address\n");
-+			memcpy(sc->mac_address, &hash, sizeof(hash));
-+		} else {
-+			memcpy(sc->mac_address, &buf[1], sizeof(sc->mac_address));
- 		}
-
--		memcpy(sc->mac_address, &buf[1], sizeof(sc->mac_address));
--
- 		snprintf(sc->hdev->uniq, sizeof(sc->hdev->uniq),
- 			 "%pMR", sc->mac_address);
- 	} else if ((sc->quirks & SIXAXIS_CONTROLLER_USB) ||
---
-2.20.1
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index a176296f4fff..e46561e095c6 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -1243,6 +1243,7 @@ static const struct {
+ 	 */
+ 	{ "Latitude 5480",      0x29 },
+ 	{ "Vostro V131",        0x1d },
++	{ "Vostro 5568",        0x29 },
+ };
+ 
+ static void register_dell_lis3lv02d_i2c_device(struct i801_priv *priv)
+-- 
+2.25.1
 
