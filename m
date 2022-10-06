@@ -2,177 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C6CF5F70F6
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 00:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D497F5F70F8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 00:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbiJFWIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 18:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35894 "EHLO
+        id S232174AbiJFWJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 18:09:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232077AbiJFWI3 (ORCPT
+        with ESMTP id S231793AbiJFWJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 18:08:29 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA08A2856
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 15:08:28 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id fb18so1846917qtb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 15:08:28 -0700 (PDT)
+        Thu, 6 Oct 2022 18:09:14 -0400
+Received: from resqmta-h1p-028593.sys.comcast.net (resqmta-h1p-028593.sys.comcast.net [IPv6:2001:558:fd02:2446::7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFDAABF17
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 15:09:11 -0700 (PDT)
+Received: from resomta-h1p-028434.sys.comcast.net ([96.102.179.205])
+        by resqmta-h1p-028593.sys.comcast.net with ESMTP
+        id gVlMoYu4LrhuigZ3Foqf4F; Thu, 06 Oct 2022 22:09:09 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=WR7FexmSJUxD0YwloPlNXbl5lfavkZmPyMBdSOh7+dg=;
-        b=Jp768wDVKQuIApCykR4trX854bTGhXHMNHXZmGw3HqgpMkp5mdXvp5jl8Dr1A0SG9w
-         4owsT2uQZtrQIxJWJ43NNlqrzHz+tEK/VEBS77w9tDes58wMS9uGEJ5cKE2HsieOekpc
-         jRR/R52a27jqLKyWB0OWPHWjTddcyo/7zCcjA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WR7FexmSJUxD0YwloPlNXbl5lfavkZmPyMBdSOh7+dg=;
-        b=sj1pqnaD//e05SCXS45KXSvsx9FwfU3VDz2k/5mURmXTOt/haINcb7RC7nsLH/ZPtg
-         rk80TZccSKaNqWF83+HOUglPA60rb+hNAGV7cibmd98UdcLgsiG2V5LF9o8lfFiNP3Jp
-         e0V3UnD+vt5lGYyQcbb/kSt/A8y2h/ouDyeB5VUlEdXVWxUkmDUiM9NXZ0jmReuJwLPt
-         3bPbu2R8tbURuXM0DkYDO4QsZOU/6F9k1ZFuWePFxSemZlijWBpsom209HH4ZgyEBvWI
-         e0JW37UAx59oPDrFxpuLvYCgIDnIkg8Ra74hTJRTaoftNYCYPR4gt+YLFJSq4dzAhBTF
-         fIpw==
-X-Gm-Message-State: ACrzQf3kOAfrEyBXUUpmcWTRagGPDxeni1F9I9DnO8rDOPUwEc1OKOWz
-        eiTybRbsoqYGEIR7dzMF3iWDYg==
-X-Google-Smtp-Source: AMsMyM7gvqGGQcS4DkvR0NwpkwelFeOzzsVe1h3WUNxpJSfyR1GBNkwq2f3MHa/gCeeV/y4vK/uckQ==
-X-Received: by 2002:a05:622a:612:b0:35d:567f:5ac4 with SMTP id z18-20020a05622a061200b0035d567f5ac4mr2102111qta.368.1665094107948;
-        Thu, 06 Oct 2022 15:08:27 -0700 (PDT)
-Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id o4-20020a05620a15c400b0069fe1dfbeffsm217304qkm.92.2022.10.06.15.08.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Oct 2022 15:08:27 -0700 (PDT)
-Message-ID: <584724c9-ac09-0231-bf4a-d7eb8ac8d4d0@broadcom.com>
-Date:   Thu, 6 Oct 2022 15:08:25 -0700
+        d=comcastmailservice.net; s=20211018a; t=1665094149;
+        bh=IKYUboxuiUIaVRLX9+Ls9Ayah1lDyM2CjdHPVn2SJhY=;
+        h=Received:Received:From:To:Subject:Date:Message-Id:MIME-Version;
+        b=pS92lRNt/kQ6IP1lIEp7tajA7dP81pNBSj6Dy+Ba7tiE6lHU0kDVY2hXcn3OH9nYJ
+         9AVb8cyUTnZj+ASjHsI9U9A1RE9dngd0ic0sgAGX/GAKNuYotzOX+Md0jpOtFcEW+j
+         1QOIonsglywIxgQZ5vMN7Ywot1+ndtfBBQAF+r4t9xvD1/eieEz/8H+ZQwahWs3FGa
+         nNyhOOZNTy2abruKUzjPNOC/WtEA1Kprfo0d559f5ghF9LkclPKG6imMI11/vpQrK7
+         Xb7t826LQbLM1Lohf0mxz4oAvviR6vO5DnX2c38lauRi3G28ZTOto1meEH1V2/nPOW
+         BXki4viB+LkFw==
+Received: from jderrick-mobl4.amr.corp.intel.com ([71.205.181.50])
+        by resomta-h1p-028434.sys.comcast.net with ESMTPA
+        id gZ2nocknTZjG3gZ2roEgwk; Thu, 06 Oct 2022 22:08:47 +0000
+X-Xfinity-VAAS: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeiiedgtdeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuvehomhgtrghsthdqtfgvshhipdfqfgfvpdfpqffurfetoffkrfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheplfhonhgrthhhrghnucffvghrrhhitghkuceojhhonhgrthhhrghnrdguvghrrhhitghksehlihhnuhigrdguvghvqeenucggtffrrghtthgvrhhnpedvtdejiefgueelteevudevhfdvjedvhfdtgfehjeeitdevueektdegtedttdehvdenucfkphepjedurddvtdehrddukedurdehtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehjuggvrhhrihgtkhdqmhhosghlgedrrghmrhdrtghorhhprdhinhhtvghlrdgtohhmpdhinhgvthepjedurddvtdehrddukedurdehtddpmhgrihhlfhhrohhmpehjohhnrghthhgrnhdruggvrhhrihgtkheslhhinhhugidruggvvhdpnhgspghrtghpthhtohepiedprhgtphhtthhopehsohhngheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrhgrihgusehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhonhgrthhhrghnrdguvghrrhhitghksehsoh
+ hlihguihhgmhdrtghomhdprhgtphhtthhopehjohhnrghthhgrnhigrdhskhdruggvrhhrihgtkhesihhnthgvlhdrtghomhdprhgtphhtthhopehjohhnrghthhgrnhdruggvrhhrihgtkheslhhinhhugidruggvvh
+X-Xfinity-VMeta: sc=-100.00;st=legit
+From:   Jonathan Derrick <jonathan.derrick@linux.dev>
+To:     Song Liu <song@kernel.org>
+Cc:     <linux-raid@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        jonathan.derrick@solidigm.com, jonathanx.sk.derrick@intel.com,
+        Jonathan Derrick <jonathan.derrick@linux.dev>
+Subject: [PATCH 0/2] Bitmap percentage flushing
+Date:   Thu,  6 Oct 2022 16:08:37 -0600
+Message-Id: <20221006220840.275-1-jonathan.derrick@linux.dev>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 6/6] phy: usb: Fix clock imbalance for suspend/resume
-To:     justinpopo6@gmail.com, alcooperx@gmail.com, kishon@ti.com,
-        vkoul@kernel.org, f.fainelli@gmail.com,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org
-Cc:     bcm-kernel-feedback-list@broadcom.com
-References: <1665005418-15807-1-git-send-email-justinpopo6@gmail.com>
- <1665005418-15807-7-git-send-email-justinpopo6@gmail.com>
-From:   Florian Fainelli <florian.fainelli@broadcom.com>
-In-Reply-To: <1665005418-15807-7-git-send-email-justinpopo6@gmail.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000d6109e05ea64eea5"
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_PASS,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000d6109e05ea64eea5
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+This introduces a percentage-flushing mechanism that works in-tandem to
+the delay timer. The percentage argument is based on the number of
+chunks dirty. It was chosen to use number of chunks due to large drives requiring
+smaller and smaller percentages (eg, 32TB drives-> 1% is 320GB).
 
+The first patch fixes a performance gap observed in RAID1
+configurations. With a synchronous qd1 workload, bitmap writes can
+easily become almost half of the I/O. This could be argued to be
+expected, but undesirable. Moving the unplug operation to the periodic
+delay work seemed to help the situation.
 
+The second part of this set adds a new field in the superblock and
+version, allowing for a new argument through mdadm specifying the number
+of chunks allowed to be dirty before flushing.
 
-On 10/5/2022 2:30 PM, justinpopo6@gmail.com wrote:
-> From: Justin Chen <justinpopo6@gmail.com>
-> 
-> We should be disabling clocks when wake from USB is not needed. Since
-> this wasn't done, we had a clock imbalance since clocks were always
-> being enabled on resume.
-> 
-> Fixes: ae532b2b7aa5 ("usb: Add "wake on" functionality for newer Synopsis XHCI controllers")
-> Fixes: b0c0b66c0b43 ("phy: usb: Add support for wake and USB low power mode for 7211 S2/S5")
-> Signed-off-by: Justin Chen <justinpopo6@gmail.com>
+Accompanying this set is an RFC for mdadm patch. It lacks documentation
+which will be sent in v2 if this changeset is appropriate.
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Jonathan Derrick (2):
+  md/bitmap: Move unplug to daemon thread
+  md/bitmap: Add chunk-count-based bitmap flushing
+
+ drivers/md/md-bitmap.c | 38 +++++++++++++++++++++++++++++++++++---
+ drivers/md/md-bitmap.h |  5 ++++-
+ drivers/md/md.h        |  1 +
+ drivers/md/raid1.c     |  2 --
+ drivers/md/raid10.c    |  4 ----
+ 5 files changed, 40 insertions(+), 10 deletions(-)
+
 -- 
-Florian
+2.31.1
 
---000000000000d6109e05ea64eea5
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
-9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
-AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
-UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
-KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
-nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
-Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
-VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
-ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
-CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
-MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
-d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
-hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
-bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
-BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
-KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
-kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
-2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
-3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
-NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
-AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
-LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIPYywZQpvz8ufndv
-PetfwOKg+paJ2vqjWsN/q+w7PNFlMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIyMTAwNjIyMDgyOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
-AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBIYTnYgVSVEwTjwbf4yaDJ1qIl6K9v/SAJ
-nHW8JOytXreqguo/NzygZilvXO19MvvF3E8RBMGnK6jDP2PxEL118dqbg+UAftrVAmnlN6ktcq8W
-Fmh+YINckqE5/99cn5ZCoYPjv5dbFcpinftmrIzR0SVHYoX+l2ht8aHtzCnqES8y+eLb6OQwjU+I
-lYhqvM05jc9ribK60ckJPhleWGs3qMdGnpBeOq8/+b1kmXe+8SZKR/0+ZrZYvgU7sCvFHUcVghlC
-y4cQpTy4OrmAGqqwf9hd5GBChMxh9AJj/amYUG2s2JHkmpdg9Tw+6lCkVoay/J6a3TLZFK0TZhNr
-mtkQ
---000000000000d6109e05ea64eea5--
