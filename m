@@ -2,158 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3165F6253
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E8E5F625D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiJFIMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 04:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
+        id S230423AbiJFINY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 04:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiJFIMw (ORCPT
+        with ESMTP id S230481AbiJFINI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 04:12:52 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060794B4A7;
-        Thu,  6 Oct 2022 01:12:50 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MjkhH5jsHz4xFv;
-        Thu,  6 Oct 2022 19:12:47 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1665043968;
-        bh=31lYof3k6TiuWy0jh42ikNoE+6WvWJWGhXoZV4qiUiM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ninumLr0iNSJyGMXf4X2E/vre60REOGPsV/mYzG6Nt4wZnsEKOK4BtU+gm/SRnwCJ
-         edrp3BSvqVcDFCI+KDMCNg2CGaE92XHDfOlrn7CX6PYK+HwK6W9H6fx+IkBpq+6VQF
-         mPpMfLna9jswtO1VCo7+/cWVHeP0EV7hrFtFbtGzmNsf/TF1qlm9zbfDN8vUyFNwcd
-         44n/lTks0r2Hj6/E5bC4KT08YaGnn7Fa01A/bFKpuZsD58jAA6xQL98mjVcfjDJM7/
-         qCn2RlxrWDoaq4POb2w/4O7QFlKVy5YrG2e7I3hItTy5RZZ8hCBoXxH6kyRG88mfcq
-         dOc9g6a5R/BrA==
-Date:   Thu, 6 Oct 2022 19:12:45 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Airlie <airlied@redhat.com>
-Cc:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Alex Deucher <alexdeucher@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: Re: linux-next: build failure after merge of the drm tree
-Message-ID: <20221006191245.11bb0e2c@canb.auug.org.au>
-In-Reply-To: <20221006092810.0c3a2238@canb.auug.org.au>
-References: <20220930105434.111407-1-broonie@kernel.org>
-        <20221004132047.435d42db@canb.auug.org.au>
-        <CAMwc25oshRcJBoCT70B+b42bh5sPqgyoHuBx6K6ZLrwBMHnJzw@mail.gmail.com>
-        <20221004140558.64f59f2c@canb.auug.org.au>
-        <YzwbW4YQwQPsRPYw@sirena.org.uk>
-        <CADnq5_PbPQPui1tOdUMB+OYbz6UBMKCgtwvE95oA+SfcN0RzNg@mail.gmail.com>
-        <09cd11c5-2a15-3653-957c-88c751fa9029@amd.com>
-        <20221006092810.0c3a2238@canb.auug.org.au>
+        Thu, 6 Oct 2022 04:13:08 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01FE5C9C6
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 01:13:06 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id x40so1315625ljq.9
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 01:13:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=knVgkzHrPTCqB1ZFhjM+hWo7hg4pHaozQe9OPUNBOUo=;
+        b=HJQe7+5xV1cJtj5fiZ8I0ZNzlmCbMnzkv+7OpTQqKOHCKAdEyF1ufnvaOLnm9E4kDf
+         I6334zEfb8BMVRReTSIuOABziXT8yT6TdS0eC9FrduTsv13s6g/XFCBrRlQtOxwBJnrk
+         /QpPdCV59qsuUMsc2ZGydAEuqgKAym3SV072InyRMYE+6V+WdpFjpUPGNrRI3i6nMOcO
+         0DS5OjULx7p3C9n/nZIZ6V3qhD8zlPbbylc+lH/HH0vhYNhuKUDUC1VHZ0z+eHImsyaj
+         QdzEccpIV+tSCh2q2J/Qsg6ogIBZqrnCglVBD0X/jGzNdVCL/udde0Umf2wuDxcpC+hZ
+         DXaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=knVgkzHrPTCqB1ZFhjM+hWo7hg4pHaozQe9OPUNBOUo=;
+        b=uHJzunLtqEItmjRQQWEwWJ1nXZL4E9X3QeK0kDMrFaiAm7a6YIoaIWwyN9u8fvGuzQ
+         aS0Pb0msqiqyu9L8G/SNGoAvsHw+80pFIa2DuvQy28gjR0aSTgNqGGRMFSILOnIJ+Xla
+         uhIa+s00a+Ozojn0yx01t1FrN2aO5RPSSqqvZ+5f6tMixXztqO1aicoXvIcKgOEQqWlU
+         k00kHvARD+NNtjfxao+J3SQNwRGHZJt/1gzABbBGUq7uiI68SnE0oeO1cYEdvi7DgPcc
+         L/syXnQb6UKhs3Owjb3sBynuNwNUB5DGKDGomebcUV4kwolGwr6ckDyoC+rGGB8IZoKV
+         a7/Q==
+X-Gm-Message-State: ACrzQf2BT87gJ3GwirlIuYTRcDhOXPAjPizj9J9jnb4DvBZumu3hGNsM
+        5H8v7CzeJJkEwxSK7tVYQZRfmA==
+X-Google-Smtp-Source: AMsMyM4zWbqUkeAPPnI+E/LINbSegImIRrqIp4sfOgPhFiovple/lcBRebLD2YelGk8j57cHPygWuw==
+X-Received: by 2002:a2e:90d6:0:b0:26b:8a74:6aa0 with SMTP id o22-20020a2e90d6000000b0026b8a746aa0mr1370533ljg.350.1665043985300;
+        Thu, 06 Oct 2022 01:13:05 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id q3-20020a0565123a8300b00498fc3d4cfdsm2615671lfu.189.2022.10.06.01.13.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Oct 2022 01:13:04 -0700 (PDT)
+Message-ID: <52faca2b-b4b4-6af8-6038-8e90bf02748c@linaro.org>
+Date:   Thu, 6 Oct 2022 10:13:02 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/fQ7FPaV88=DQ7b76DFZdCk_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v5 01/10] dt-bindings: pwm: Document Synopsys DesignWare
+ snps,pwm-dw-apb-timers-pwm2
+Content-Language: en-US
+To:     Ben Dooks <ben.dooks@sifive.com>, linux-pwm@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        u.kleine-koenig@pengutronix.de,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        jarkko.nikula@linux.intel.com,
+        William Salmon <william.salmon@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>
+References: <20221005221242.470734-1-ben.dooks@sifive.com>
+ <20221005221242.470734-2-ben.dooks@sifive.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221005221242.470734-2-ben.dooks@sifive.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/fQ7FPaV88=DQ7b76DFZdCk_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-On Thu, 6 Oct 2022 09:28:10 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> I have applied the following hack for today:
->=20
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 6 Oct 2022 09:14:26 +1100
-> Subject: [PATCH] fix up for drivers/gpu/drm/amd/display/dc/core/dc_stream=
-.c
->=20
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+On 06/10/2022 00:12, Ben Dooks wrote:
+> Add documentation for the bindings for Synopsys' DesignWare PWM block
+> as we will be adding DT/platform support to the Linux driver soon.
+> 
+> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
 > ---
->  drivers/gpu/drm/amd/display/dc/core/dc_stream.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c b/drivers/gp=
-u/drm/amd/display/dc/core/dc_stream.c
-> index ae13887756bf..a5da787b7876 100644
-> --- a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
-> +++ b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
-> @@ -520,9 +520,9 @@ bool dc_stream_remove_writeback(struct dc *dc,
->  	}
-> =20
->  	/* remove writeback info for disabled writeback pipes from stream */
-> -	for (i =3D 0, j =3D 0; i < stream->num_wb_info && j < MAX_DWB_PIPES; i+=
-+) {
-> +	for (i =3D 0, j =3D 0; i < stream->num_wb_info && i < MAX_DWB_PIPES; i+=
-+) {
->  		if (stream->writeback_info[i].wb_enabled) {
-> -			if (i !=3D j)
-> +			if ((j >=3D 0) && (j < i))
->  				/* trim the array */
->  				stream->writeback_info[j] =3D stream->writeback_info[i];
->  			j++;
+> v5:
+>  - fixed order of properties
+>  - corrected clock to two items
+> v4:
+>  - fixed typos, added reg
 
-This works as well, and (in my opinion) is better:
 
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c b/drivers/gpu/=
-drm/amd/display/dc/core/dc_stream.c
-index ae13887756bf..fb6222d4c430 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
-@@ -499,7 +499,7 @@ bool dc_stream_remove_writeback(struct dc *dc,
- 		struct dc_stream_state *stream,
- 		uint32_t dwb_pipe_inst)
- {
--	int i =3D 0, j =3D 0;
-+	unsigned int i, j;
- 	if (stream =3D=3D NULL) {
- 		dm_error("DC: dc_stream is NULL!\n");
- 		return false;
-@@ -520,9 +520,9 @@ bool dc_stream_remove_writeback(struct dc *dc,
- 	}
-=20
- 	/* remove writeback info for disabled writeback pipes from stream */
--	for (i =3D 0, j =3D 0; i < stream->num_wb_info && j < MAX_DWB_PIPES; i++)=
- {
-+	for (i =3D 0, j =3D 0; i < stream->num_wb_info; i++) {
- 		if (stream->writeback_info[i].wb_enabled) {
--			if (i !=3D j)
-+			if (j < i)
- 				/* trim the array */
- 				stream->writeback_info[j] =3D stream->writeback_info[i];
- 			j++;
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
---=20
-Cheers,
-Stephen Rothwell
+Best regards,
+Krzysztof
 
---Sig_/fQ7FPaV88=DQ7b76DFZdCk_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM+jf0ACgkQAVBC80lX
-0GyyIgf/WR7MxcXzbxhywbtkI+Sx+47sAft5hdECwLaEzF1auZ3Nv3xKH4yY79fR
-npO+OjDaVJ9YXdXXi/tpoBTMPfzFIwbcd0aGfGClO0OtJjDM2p0roXx64TMXM3f3
-TIZjRXIyhRWZscBae7/M4iOgcrSJ5ac2fZB5j70pnuJi144QbQc0ttaGRiqdWgTJ
-3c2UurXu2DJlSu2VvNXaID3NkvSF55mbonCYmuOhwy1yPqPZPnubMr0EBi36ztEM
-QB+LZ5XyvE7/Iyw320ImgsZMjenH1sphsOVukH48H6nMFBdwhX1bO8WHqB1PFO3u
-oGyN/rdPlSafTCucGLqFK19xsG0LHg==
-=Xs6o
------END PGP SIGNATURE-----
-
---Sig_/fQ7FPaV88=DQ7b76DFZdCk_--
