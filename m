@@ -2,249 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E403D5F6C84
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 19:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F07645F6C86
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 19:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbiJFRLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 13:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
+        id S230519AbiJFRLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 13:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiJFRLQ (ORCPT
+        with ESMTP id S229780AbiJFRLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 13:11:16 -0400
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02796A2840;
-        Thu,  6 Oct 2022 10:11:12 -0700 (PDT)
+        Thu, 6 Oct 2022 13:11:46 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA449A4848
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 10:11:45 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id br14-20020a056a00440e00b00548434985cdso1452427pfb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 10:11:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1665076273; x=1696612273;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YCMZD2AP3iQVb0aK1bLG/pOxiCyTeDnTpOa5PHM4oFE=;
-  b=A4t1gPIZd8TNrIu084PVccJfOaCPQVPnMXArRm7E16n93QnGdlzQHvJ3
-   ccYQEdsPR6qGdtBjszboY1BPug/WrzCiLCxNbeOYd3XyhjXeY1dL5e0q2
-   O20Zoue48CD30fT5+bLDTapHkEktRBmWnZYsAHEp2xHYJ+yCkVeT3m6OE
-   w=;
-X-IronPort-AV: E=Sophos;i="5.95,164,1661817600"; 
-   d="scan'208";a="252606526"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-388992e0.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 17:10:59 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2c-388992e0.us-west-2.amazon.com (Postfix) with ESMTPS id 8D31FA2533;
-        Thu,  6 Oct 2022 17:10:55 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Thu, 6 Oct 2022 17:10:54 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.161.176) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Thu, 6 Oct 2022 17:10:49 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <pabeni@redhat.com>
-CC:     <davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
-        <kuba@kernel.org>, <kuni1840@gmail.com>, <kuniyu@amazon.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <syzkaller-bugs@googlegroups.com>, <vyasevic@redhat.com>,
-        <yoshfuji@linux-ipv6.org>
-Subject: Re: [PATCH v4 net 3/5] tcp/udp: Call inet6_destroy_sock() in IPv6 sk->sk_destruct().
-Date:   Thu, 6 Oct 2022 10:10:38 -0700
-Message-ID: <20221006171038.68453-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <d669f9a18ae0b18fbecad7efbd2bc2d789f280f3.camel@redhat.com>
-References: <d669f9a18ae0b18fbecad7efbd2bc2d789f280f3.camel@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.161.176]
-X-ClientProxiedBy: EX13D40UWA002.ant.amazon.com (10.43.160.149) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ouKg7TyCIdZkg1NWdjg7eNYnq70p2SefFVvR7Lkt1MY=;
+        b=LssfsNIxBXo//o5yVMpFCPXp+s4z3rqFTTa669U5mPMzlNHICB64lUNvNe2dsITMFw
+         Z5hy0+V+8v4FKM8yFtcVVvkWpPtswWD5EMQnlhlhQmliDwqu9nWpoSs3oVntKTtNlVK5
+         9TzY1wkzZalAmv6/Oe50AJ9w0mAjdMlr6oBlB7k16G2pchn7DbKsf0GBGbMe1RsFpyTc
+         up1t/pAmu5noZthukMGLO0MJNofNCloCccV1pR7c52mjQKAVhjuzpZjm1CZKttXKHx6d
+         /mwzVXVwGBx2kV5rTzDBBFFmd4gNQuY6dctEY+knF5wbKyxswe1Xwn9yXI7/t0u9ActV
+         wfVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ouKg7TyCIdZkg1NWdjg7eNYnq70p2SefFVvR7Lkt1MY=;
+        b=e6u+VB1n35Ay/zmtMUGNogvjFWCnlPp82RIrab2pbXBt6O238aG4VW0RMsrO/Epydu
+         EL0Ld4yt1r/Ns5JAEYGiy7OWdED2s6haoXDMh+Y9npPD121sKpcXLPRuKoIjpFKf1L8q
+         9C9bb0rjkEjN2Pa2csmJ/SHTJLHXIgFz6KxwXfSQ3uSgo+Ck1GWRpg0dZjdkT2W0Jx5h
+         O9Ve/lyDy55RbVnGpQ76o0Nw6jMWvJmmR3hmC/6ft9zv9pTsjsy68E7s8V6szUxFwBTH
+         9vGBjQnR6bA0L9RFpJ++wIfk2JwwELFP3fmgWoIl8ZPDb1Wsf60sspII5So7B464ABIP
+         NOJQ==
+X-Gm-Message-State: ACrzQf0AGt4azyLi2JWr8rYTCpH7t/cen4B3+nHOFcVybDuCV7ylBUSC
+        7yc7Wto9X6SO7VhDuFXfnGUhOH1JDQk2
+X-Google-Smtp-Source: AMsMyM5NlmMkkHSBr8WvNftrIAfxFk5zNKvA9HEit+kXRza0IekpWLMYKZSPowHl+OOxBmujtveTRzWRdHky
+X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
+ (user=vipinsh job=sendgmr) by 2002:a05:6a00:1808:b0:542:f4f2:86aa with SMTP
+ id y8-20020a056a00180800b00542f4f286aamr478984pfa.28.1665076305334; Thu, 06
+ Oct 2022 10:11:45 -0700 (PDT)
+Date:   Thu,  6 Oct 2022 10:11:28 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+Message-ID: <20221006171133.372359-1-vipinsh@google.com>
+Subject: [PATCH v4 0/4] dirty_log_perf_test CPU pinning
+From:   Vipin Sharma <vipinsh@google.com>
+To:     seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com
+Cc:     andrew.jones@linux.dev, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vipin Sharma <vipinsh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From:   Paolo Abeni <pabeni@redhat.com>
-Date:   Thu, 06 Oct 2022 11:19:53 +0200
-> On Tue, 2022-10-04 at 10:18 -0700, Kuniyuki Iwashima wrote:
-> > Originally, inet6_sk(sk)->XXX were changed under lock_sock(), so we were
-> > able to clean them up by calling inet6_destroy_sock() during the IPv6 ->
-> > IPv4 conversion by IPV6_ADDRFORM.  However, commit 03485f2adcde ("udpv6:
-> > Add lockless sendmsg() support") added a lockless memory allocation path,
-> > which could cause a memory leak:
-> > 
-> > setsockopt(IPV6_ADDRFORM)                 sendmsg()
-> > +-----------------------+                 +-------+
-> > - do_ipv6_setsockopt(sk, ...)             - udpv6_sendmsg(sk, ...)
-> >   - lock_sock(sk)                           ^._ called via udpv6_prot
-> >   - WRITE_ONCE(sk->sk_prot, &tcp_prot)          before WRITE_ONCE()
-> >   - inet6_destroy_sock()
-> >   - release_sock(sk)                        - ip6_make_skb(sk, ...)
-> >                                               ^._ lockless fast path for
-> >                                                   the non-corking case
-> > 
-> >                                               - __ip6_append_data(sk, ...)
-> >                                                 - ipv6_local_rxpmtu(sk, ...)
-> >                                                   - xchg(&np->rxpmtu, skb)
-> >                                                     ^._ rxpmtu is never freed.
-> > 
-> >                                             - lock_sock(sk)
-> > 
-> > For now, rxpmtu is only the case, but not to miss the future change
-> > and a similar bug fixed in commit e27326009a3d ("net: ping6: Fix
-> > memleak in ipv6_renew_options()."), let's set a new function to IPv6
-> > sk->sk_destruct() and call inet6_cleanup_sock() there.  Since the
-> > conversion does not change sk->sk_destruct(), we can guarantee that
-> > we can clean up IPv6 resources finally.
-> > 
-> > We can now remove all inet6_destroy_sock() calls from IPv6 protocol
-> > specific ->destroy() functions, but such changes are invasive to
-> > backport.  So they can be posted as a follow-up later for net-next.
-> > 
-> > Fixes: 03485f2adcde ("udpv6: Add lockless sendmsg() support")
-> > Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-> > ---
-> > Cc: Vladislav Yasevich <vyasevic@redhat.com>
-> > ---
-> >  include/net/ipv6.h    |  1 +
-> >  include/net/udp.h     |  2 +-
-> >  include/net/udplite.h |  8 --------
-> >  net/ipv4/udp.c        |  9 ++++++---
-> >  net/ipv4/udplite.c    |  8 ++++++++
-> >  net/ipv6/af_inet6.c   |  9 ++++++++-
-> >  net/ipv6/udp.c        | 15 ++++++++++++++-
-> >  net/ipv6/udp_impl.h   |  1 +
-> >  net/ipv6/udplite.c    |  9 ++++++++-
-> >  9 files changed, 47 insertions(+), 15 deletions(-)
-> > 
-> > diff --git a/include/net/ipv6.h b/include/net/ipv6.h
-> > index dfa70789b771..e7ec3e8cd52e 100644
-> > --- a/include/net/ipv6.h
-> > +++ b/include/net/ipv6.h
-> > @@ -1179,6 +1179,7 @@ void ipv6_local_error(struct sock *sk, int err, struct flowi6 *fl6, u32 info);
-> >  void ipv6_local_rxpmtu(struct sock *sk, struct flowi6 *fl6, u32 mtu);
-> >  
-> >  void inet6_cleanup_sock(struct sock *sk);
-> > +void inet6_sock_destruct(struct sock *sk);
-> >  int inet6_release(struct socket *sock);
-> >  int inet6_bind(struct socket *sock, struct sockaddr *uaddr, int addr_len);
-> >  int inet6_getname(struct socket *sock, struct sockaddr *uaddr,
-> > diff --git a/include/net/udp.h b/include/net/udp.h
-> > index 5ee88ddf79c3..fee053bcd17c 100644
-> > --- a/include/net/udp.h
-> > +++ b/include/net/udp.h
-> > @@ -247,7 +247,7 @@ static inline bool udp_sk_bound_dev_eq(struct net *net, int bound_dev_if,
-> >  }
-> >  
-> >  /* net/ipv4/udp.c */
-> > -void udp_destruct_sock(struct sock *sk);
-> > +void udp_destruct_common(struct sock *sk);
-> >  void skb_consume_udp(struct sock *sk, struct sk_buff *skb, int len);
-> >  int __udp_enqueue_schedule_skb(struct sock *sk, struct sk_buff *skb);
-> >  void udp_skb_destructor(struct sock *sk, struct sk_buff *skb);
-> > diff --git a/include/net/udplite.h b/include/net/udplite.h
-> > index 0143b373602e..299c14ce2bb9 100644
-> > --- a/include/net/udplite.h
-> > +++ b/include/net/udplite.h
-> > @@ -25,14 +25,6 @@ static __inline__ int udplite_getfrag(void *from, char *to, int  offset,
-> >  	return copy_from_iter_full(to, len, &msg->msg_iter) ? 0 : -EFAULT;
-> >  }
-> >  
-> > -/* Designate sk as UDP-Lite socket */
-> > -static inline int udplite_sk_init(struct sock *sk)
-> > -{
-> > -	udp_init_sock(sk);
-> > -	udp_sk(sk)->pcflag = UDPLITE_BIT;
-> > -	return 0;
-> > -}
-> > -
-> >  /*
-> >   * 	Checksumming routines
-> >   */
-> > diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-> > index 560d9eadeaa5..48adb418e404 100644
-> > --- a/net/ipv4/udp.c
-> > +++ b/net/ipv4/udp.c
-> > @@ -1598,7 +1598,7 @@ int __udp_enqueue_schedule_skb(struct sock *sk, struct sk_buff *skb)
-> >  }
-> >  EXPORT_SYMBOL_GPL(__udp_enqueue_schedule_skb);
-> >  
-> > -void udp_destruct_sock(struct sock *sk)
-> > +void udp_destruct_common(struct sock *sk)
-> >  {
-> >  	/* reclaim completely the forward allocated memory */
-> >  	struct udp_sock *up = udp_sk(sk);
-> > @@ -1611,10 +1611,14 @@ void udp_destruct_sock(struct sock *sk)
-> >  		kfree_skb(skb);
-> >  	}
-> >  	udp_rmem_release(sk, total, 0, true);
-> > +}
-> > +EXPORT_SYMBOL_GPL(udp_destruct_common);
-> >  
-> > +static void udp_destruct_sock(struct sock *sk)
-> > +{
-> > +	udp_destruct_common(sk);
-> >  	inet_sock_destruct(sk);
-> >  }
-> > -EXPORT_SYMBOL_GPL(udp_destruct_sock);
-> >  
-> >  int udp_init_sock(struct sock *sk)
-> >  {
-> > @@ -1622,7 +1626,6 @@ int udp_init_sock(struct sock *sk)
-> >  	sk->sk_destruct = udp_destruct_sock;
-> >  	return 0;
-> >  }
-> > -EXPORT_SYMBOL_GPL(udp_init_sock);
-> >  
-> >  void skb_consume_udp(struct sock *sk, struct sk_buff *skb, int len)
-> >  {
-> > diff --git a/net/ipv4/udplite.c b/net/ipv4/udplite.c
-> > index 6e08a76ae1e7..4785ac4a8719 100644
-> > --- a/net/ipv4/udplite.c
-> > +++ b/net/ipv4/udplite.c
-> > @@ -17,6 +17,14 @@
-> >  struct udp_table 	udplite_table __read_mostly;
-> >  EXPORT_SYMBOL(udplite_table);
-> >  
-> > +/* Designate sk as UDP-Lite socket */
-> > +static inline int udplite_sk_init(struct sock *sk)
-> 
-> You should avoid the 'inline' specifier in c files.
+Pin vcpus to a host physical cpus in dirty_log_perf_test and optionally
+pin the main application thread to a physical cpu if provided. All tests
+based on perf_test_util framework can take advantage of it if needed.
 
-I'll fix it.
+While at it, I changed atoi() to atoi_paranoid() in other tests, sorted
+command line options alphabetically, and added break between -e and -g
+which was missed in original commit.
 
+v4:
+- Moved boolean to check vCPUs pinning from perf_test_vcpu_args to
+  perf_test_args.
+- Changed assert statements to make error more descriptive.
+- Modified break statement between 'e' and 'g' option in v3 by not copying
+  dirty_log_manual_caps = 0 to 'e'.
 
-> > +{
-> > +	udp_init_sock(sk);
-> > +	udp_sk(sk)->pcflag = UDPLITE_BIT;
-> > +	return 0;
-> > +}
-> > +
-> >  static int udplite_rcv(struct sk_buff *skb)
-> >  {
-> >  	return __udp4_lib_rcv(skb, &udplite_table, IPPROTO_UDPLITE);
-> > diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
-> > index 83b9e432f3df..ce5378b78ec9 100644
-> > --- a/net/ipv6/af_inet6.c
-> > +++ b/net/ipv6/af_inet6.c
-> > @@ -109,6 +109,13 @@ static __inline__ struct ipv6_pinfo *inet6_sk_generic(struct sock *sk)
-> >  	return (struct ipv6_pinfo *)(((u8 *)sk) + offset);
-> >  }
-> >  
-> > +void inet6_sock_destruct(struct sock *sk)
-> > +{
-> > +	inet6_cleanup_sock(sk);
-> > +	inet_sock_destruct(sk);
-> > +}
-> > +EXPORT_SYMBOL_GPL(inet6_sock_destruct);
-> 
-> I'm sorry for not noticing this before, but it looks like the above
-> export is not needed? only used by udp, which is in the same binary
-> (either kernel of ipv6 module) as af_inet6
+v3: https://lore.kernel.org/lkml/20220826184500.1940077-1-vipinsh@google.com
+- Moved atoi_paranoid() to test_util.c and replaced all atoi() usage
+  with atoi_paranoid()
+- Sorted command line options alphabetically.
+- Instead of creating a vcpu thread on a specific pcpu the thread will
+  migrate to the provided pcpu after its creation.
+- Decoupled -e and -g option.
 
-Ah, please don't be sorry, I appreciate your review!
-Exactly, it compiled without exporting the symbol, I'll remove it in v5.
+v2: https://lore.kernel.org/lkml/20220819210737.763135-1-vipinsh@google.com/
+- Removed -d option.
+- One cpu list passed as option, cpus for vcpus, followed by
+  application thread cpu.
+- Added paranoid cousin of atoi().
+
+v1: https://lore.kernel.org/lkml/20220817152956.4056410-1-vipinsh@google.com
+
+Vipin Sharma (4):
+  KVM: selftests: Add missing break between 'e' and 'g' option in
+    dirty_log_perf_test
+  KVM: selftests: Put command line options in alphabetical order in
+    dirty_log_perf_test
+  KVM: selftests: Add atoi_paranoid() to catch errors missed by atoi()
+  KVM: selftests: Run dirty_log_perf_test on specific CPUs
+
+ .../selftests/kvm/aarch64/arch_timer.c        |  8 +--
+ .../testing/selftests/kvm/aarch64/vgic_irq.c  |  6 +-
+ .../selftests/kvm/access_tracking_perf_test.c |  2 +-
+ .../selftests/kvm/demand_paging_test.c        |  2 +-
+ .../selftests/kvm/dirty_log_perf_test.c       | 64 +++++++++++++------
+ .../selftests/kvm/include/perf_test_util.h    |  6 ++
+ .../testing/selftests/kvm/include/test_util.h |  2 +
+ .../selftests/kvm/kvm_page_table_test.c       |  2 +-
+ .../selftests/kvm/lib/perf_test_util.c        | 58 ++++++++++++++++-
+ tools/testing/selftests/kvm/lib/test_util.c   | 18 ++++++
+ .../selftests/kvm/max_guest_memory_test.c     |  6 +-
+ .../kvm/memslot_modification_stress_test.c    |  4 +-
+ .../testing/selftests/kvm/memslot_perf_test.c | 10 +--
+ .../selftests/kvm/set_memory_region_test.c    |  2 +-
+ .../selftests/kvm/x86_64/nx_huge_pages_test.c |  4 +-
+ 15 files changed, 149 insertions(+), 45 deletions(-)
+
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
+
