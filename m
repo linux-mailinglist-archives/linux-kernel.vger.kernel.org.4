@@ -2,108 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDFA55F662C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD6745F6631
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbiJFMgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 08:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
+        id S231435AbiJFMiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 08:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiJFMgU (ORCPT
+        with ESMTP id S229942AbiJFMhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 08:36:20 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4CF85A8E;
-        Thu,  6 Oct 2022 05:36:18 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id A3BA73200805;
-        Thu,  6 Oct 2022 08:36:13 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 06 Oct 2022 08:36:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1665059773; x=
-        1665146173; bh=x/5eQeyF8wgxc3lBlMlLCE+D3SClhrVS+22aVr9TqjU=; b=q
-        +sgP3Tc/y297yW5XXTzhrO4+Qo6cxIjnmKI3zcvscNQwafBSie53iKn3KCSwJfSu
-        LC0WbgPyKW5Xc1UsQeJw3PwnECIjH8emzV0abYkXYxgCyh4Gif+antZgx7LNbqW/
-        9ddmEF/4b1GoW4FR/glvrutlElogDrL8gehTfKvuFoMmfdaH8IUKwgLo3V5fqDhp
-        32qlfia1GOqZZHrvoJbZln9rdSqlXgXoBI6QVb49px5nZOCs9Qkgp6CQQr3eLstx
-        5n9t028e3VkD6mHwgaCLAwsPE3fQyy2exQFRWiILShrXZJPMQ54fDVu5LnvuXa1o
-        tdXfQNwPw4cYE1X5fJARw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1665059773; x=1665146173; bh=x/5eQeyF8wgxc
-        3lBlMlLCE+D3SClhrVS+22aVr9TqjU=; b=raTmo2i386qfqhru2VjLPvoZMtJmv
-        nQQUiMPj6BWtWemO+UGjVXK8d9R+RQmHOFFWPV+rNcHEJY9k3pi2O7t4j3FPMCbE
-        +KOHy9DafDsRDnMY62SGvTRuRIi+orJuaksZxtHJfDQfx91niWX1tZ/Ol1RqVVB7
-        E9v9n7DveTFJTfHzGasj+FOQcQXoP+VhYB8lL95tZ1/DU3PWNghTYIxCUQSQYlAL
-        FUrSyHDLa+0TIMVMpvWm9DTnTn887/j+xiXEBrCRIeY3IX6vcD39kiT/i2bkYFdO
-        8SJYRtMINHRPKkewjt6UTPVgbti/V1PGgKReavF0D4ZQhQVulCmPhei3w==
-X-ME-Sender: <xms:uss-Y1vYy2Vqs8hF-ULSkI7VRJTg5ui-mHr7WbUC_8PfV6Q0F4lqlw>
-    <xme:uss-Y-f8BiJcJaRYQThmkup6rV_TuuP7O6V5dMhJpqiHDTSybh6J3nXc3I-bN9mPM
-    4OA5ryUbinLOfVRNws>
-X-ME-Received: <xmr:uss-Y4yQhTLgH2hwlyfhykGdjoe0LOt5x-YQ0KRx0v1n-odCTikP1z3yc3cK7_hZ1zRHEQXD_XIHNgX9J_GLvQeFXiSRLd3o903R>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeihedgheegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkrhhfgggtuggjfgesthdtredttderjeenucfhrhhomhepuegv
-    nhcuuehovggtkhgvlhcuoehmvgessggvnhgsohgvtghkvghlrdhnvghtqeenucggtffrrg
-    htthgvrhhnpeduteehgfefudfffeelfffhheejgfdvfffhledvueekudeuieegueejieff
-    vdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmvgessggvnhgsohgvtghkvghlrdhnvght
-X-ME-Proxy: <xmx:uss-Y8O_r3BBxeFMpfHX33weeXb5KKr6skLM9dBoKh0TLy3GXSsvRQ>
-    <xmx:uss-Y1-cJf9I8_HXk2-JQg_xeoQ4dFfS7l1r1V-Dl8O4Merzz4bJmA>
-    <xmx:uss-Y8WK-3erQvyA7yRtCKK6hrIVzT3Fo7WJjEmsrGHY3cMikx92rw>
-    <xmx:vcs-Y5Sbjc3jYNXO0uaAfqH0Nh35mLLSQDxdAnpMI3L5oTp3d7IyrQ>
-Feedback-ID: iffc1478b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 6 Oct 2022 08:36:10 -0400 (EDT)
-Date:   Thu, 6 Oct 2022 08:37:00 -0400
-From:   Ben Boeckel <me@benboeckel.net>
-To:     Pankaj Gupta <pankaj.gupta@nxp.com>
-Cc:     jarkko@kernel.org, a.fatoum@pengutronix.de, gilad@benyossef.com,
-        Jason@zx2c4.com, jejb@linux.ibm.com, zohar@linux.ibm.com,
-        dhowells@redhat.com, sumit.garg@linaro.org, david@sigma-star.at,
-        michael@walle.cc, john.ernberg@actia.se, jmorris@namei.org,
-        serge@hallyn.com, herbert@gondor.apana.org.au, davem@davemloft.net,
-        j.luebbe@pengutronix.de, ebiggers@kernel.org, richard@nod.at,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, sahil.malhotra@nxp.com,
-        kshitiz.varshney@nxp.com, horia.geanta@nxp.com, V.Sethi@nxp.com
-Subject: Re: [PATCH v0 2/8] keys-trusted: new cmd line option added
-Message-ID: <Yz7L7KZ4WVW6XBmx@megas.dev.benboeckel.internal>
-Reply-To: list.lkml.keyrings@me.benboeckel.net
-References: <20221006130837.17587-1-pankaj.gupta@nxp.com>
- <20221006130837.17587-3-pankaj.gupta@nxp.com>
+        Thu, 6 Oct 2022 08:37:54 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B7B85A8E;
+        Thu,  6 Oct 2022 05:37:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665059873; x=1696595873;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cZ1DyGBREhYanUww/M4Cfa6VqXvo80wIheIgHvT9G1c=;
+  b=SESjD++5LPwuY+OSa7y+8HM17FjfmIHhAYJYaXs76w7mRTbdFTTGiOzZ
+   UdI11N0GhOMGa3k07rNgYWXz1gMhhxOlKQeLrXsHyX8A4PngcI9QVyUPq
+   qoJfxuTickbf6tP7bJUguM6VqYStBUMeNKISnCYZMtbCUs+EJ/G29+qx2
+   FH2KXAz8QuGkdQ1oiT5iBSz147HH1Hf7tL3xo/84GsLa4sZKf8y9cfVhy
+   6P8lmLFRghNJcWpkDnktmqc/khjqZsSEtTNBSdp+EAYmZL6vrF6kXYVuh
+   tS/D7kcPIWdcE3OIu0wQwj9feifd3zyeVF3D3YiacFkVLvfBlNF6EVpgk
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="301031456"
+X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
+   d="scan'208";a="301031456"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 05:37:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="627001100"
+X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
+   d="scan'208";a="627001100"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 06 Oct 2022 05:37:51 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 17D4917E; Thu,  6 Oct 2022 15:38:10 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH v1 1/1] device property: Fix documentation for *_match_string() APIs
+Date:   Thu,  6 Oct 2022 15:38:07 +0300
+Message-Id: <20221006123807.37014-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221006130837.17587-3-pankaj.gupta@nxp.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 18:38:31 +0530, Pankaj Gupta wrote:
-> Changes done:
-> - new cmd line option "hw" needs to be suffix, to generate the
->   hw bound key.
+The returned value on success is an index of the matching string,
+starting from 0. Reflect this in the documentation.
 
-`Documentation/` is silent on this. Can you please add this there?
+Fixes: 3f5c8d318785 ("device property: Add fwnode_property_match_string()")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/base/property.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Other than that, is `hw` really a good name for this? Are there virtual
-devices for these things that can make them not hardware in some way?
-Is there a better name in such a case? Maybe something "device"
-oriented?
+diff --git a/drivers/base/property.c b/drivers/base/property.c
+index 617007a25783..bfed224c5724 100644
+--- a/drivers/base/property.c
++++ b/drivers/base/property.c
+@@ -236,7 +236,7 @@ EXPORT_SYMBOL_GPL(device_property_read_string);
+  * Find a given string in a string array and if it is found return the
+  * index back.
+  *
+- * Return: %0 if the property was found (success),
++ * Return: index, starting from %0, if the property was found (success),
+  *	   %-EINVAL if given arguments are not valid,
+  *	   %-ENODATA if the property does not have a value,
+  *	   %-EPROTO if the property is not an array of strings,
+@@ -457,7 +457,7 @@ EXPORT_SYMBOL_GPL(fwnode_property_read_string);
+  * Find a given string in a string array and if it is found return the
+  * index back.
+  *
+- * Return: %0 if the property was found (success),
++ * Return: index, starting from %0, if the property was found (success),
+  *	   %-EINVAL if given arguments are not valid,
+  *	   %-ENODATA if the property does not have a value,
+  *	   %-EPROTO if the property is not an array of strings,
+-- 
+2.35.1
 
---Ben
