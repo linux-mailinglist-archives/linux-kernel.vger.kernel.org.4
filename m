@@ -2,102 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F9C35F6E1E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 21:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817405F6E25
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 21:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbiJFTVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 15:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
+        id S231653AbiJFTXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 15:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbiJFTU7 (ORCPT
+        with ESMTP id S232102AbiJFTWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 15:20:59 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C651C8D0FB
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 12:20:57 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id lx7so2624947pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 12:20:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=bhbYN1/ws6y+dvibVWQIhc2niyZnNj0uIem726dovow=;
-        b=nfkPVlGQxxm0gH2aJgFsIJGQT1ZrA2aYg20i6S6j1e0pj9rutxyhA6DNlE+ldLGfB8
-         z3TH67MlNuDOm4QRNmE2nSaSvdwPZQkP+iQhx69iDFKze/TLzlT/zx3k7dfa9cdSCnpb
-         /bWQeCrx2pqX1KL0u5cltFMJyhI0roiByl8cc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=bhbYN1/ws6y+dvibVWQIhc2niyZnNj0uIem726dovow=;
-        b=LLPQSQyMEfVXv2U4j3RnJPwFETDSoRJPcshL4F14/N3UPH8KKBpDitf7BbObf8iqup
-         KtAzBYLfUjZBqdrpE5ntr0+XWy698Oexw9lmAD4PB3UrLKlEnWgAxdenNeOg33lg8iXe
-         KEzf/biqR+NNsQvH8YRpFcWwJA7ZD556d0Riwzgiaxj1Sj8Wfid83ap/hRGf5dR/64Hr
-         yM4a2/qBMisKjmL34f1dBFirxjqitMN5T3EWsOdtiE4JSPYGNEY/ey+mXvPphWxljDCw
-         RITCa4mBchTae+mXzmz6vPPij2CWTWTI+umiR+uNnRnvj8YIF674bAcY1qXeSbx3kalK
-         +NhQ==
-X-Gm-Message-State: ACrzQf0NUzKwoZmR8bzqBvKykbYik66Xsk+Vk/OCv+6od5+kbe1FQ73I
-        1d1btFeCorFHlDL2NSVAJGYVdw==
-X-Google-Smtp-Source: AMsMyM7xbIJakV+zr+CrMGNTwjFGTBB9I9gY4Yexu9BF+gqKocdMGxlTu6JuPlg58XON0QY5nDXoeg==
-X-Received: by 2002:a17:90a:a40a:b0:20a:882a:7ed8 with SMTP id y10-20020a17090aa40a00b0020a882a7ed8mr1222841pjp.129.1665084057317;
-        Thu, 06 Oct 2022 12:20:57 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id pc14-20020a17090b3b8e00b0020a28156e11sm1814611pjb.26.2022.10.06.12.20.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 12:20:56 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-Cc:     Kees Cook <keescook@chromium.org>, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Subject: [PATCH] ath9k: Remove -Warray-bounds exception
-Date:   Thu,  6 Oct 2022 12:20:54 -0700
-Message-Id: <20221006192054.1742982-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 6 Oct 2022 15:22:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9A21144C4
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 12:22:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 262C161A94
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 19:22:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E57FCC433D7;
+        Thu,  6 Oct 2022 19:22:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665084154;
+        bh=YsMh0kWe/OOR+5QG3loglTlzXYtyV8KBcvp4A3mJk5Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BVJCPliSRQiCQnT7Nl1mNjkmwplBTP4CTh/QWA/r38FtWwVGbWjuoeyTvGbaEt5Ep
+         sRnDdxkefmR3TRQULCPjSOp+KRIx0SdZjsp+ZUwI/6z1SIREquHhn84iNiUWZ/igTz
+         lmi1YCbk/hJYZpNCJxUCJML1iHEdri22IlDOWvrI=
+Date:   Thu, 6 Oct 2022 21:23:15 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Zheng Wang <zyytlz.wz@163.com>
+Cc:     1002992920@qq.com, airlied@linux.ie, alex000young@gmail.com,
+        dri-devel@lists.freedesktop.org, hackerzheng666@gmail.com,
+        intel-gfx@lists.freedesktop.org, jani.nikula@linux.intel.com,
+        linux-kernel@vger.kernel.org, security@kernel.org,
+        tvrtko.ursulin@linux.intel.com
+Subject: Re: [PATCH v2] drm/i915/gvt: fix double free bug in
+ split_2MB_gtt_entry
+Message-ID: <Yz8rIxV7bVCcfZb0@kroah.com>
+References: <20220928033340.1063949-1-zyytlz.wz@163.com>
+ <20221006165845.1735393-1-zyytlz.wz@163.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221006165845.1735393-1-zyytlz.wz@163.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GCC-12 emits false positive -Warray-bounds warnings with
-CONFIG_UBSAN_SHIFT (-fsanitize=shift). This is fixed in GCC 13[1],
-and there is top-level Makefile logic to remove -Warray-bounds for
-known-bad GCC versions staring with commit f0be87c42cbd ("gcc-12: disable
-'-Warray-bounds' universally for now").
+On Fri, Oct 07, 2022 at 12:58:45AM +0800, Zheng Wang wrote:
+> If intel_gvt_dma_map_guest_page failed, it will call
+> ppgtt_invalidate_spt, which will finally free the spt.
+> But the caller does not notice that, it will free spt again in error path.
+> 
+> Fix this by spliting invalidate and free in ppgtt_invalidate_spt.
+> Only free spt when in good case.
+> 
+> Reported-by: Zheng Wang <hackerzheng666@gmail.com>
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> ---
+> v2:
+> - split initial function into two api function suggested by Greg
+> 
+> v1: https://lore.kernel.org/all/20220928033340.1063949-1-zyytlz.wz@163.com/
+> ---
+>  drivers/gpu/drm/i915/gvt/gtt.c | 31 +++++++++++++++++++++----------
+>  1 file changed, 21 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/gtt.c
+> index ce0eb03709c3..55d8e1419302 100644
+> --- a/drivers/gpu/drm/i915/gvt/gtt.c
+> +++ b/drivers/gpu/drm/i915/gvt/gtt.c
+> @@ -959,6 +959,7 @@ static inline int ppgtt_put_spt(struct intel_vgpu_ppgtt_spt *spt)
+>  	return atomic_dec_return(&spt->refcount);
+>  }
+>  
+> +static int  ppgtt_invalidate_and_free_spt(struct intel_vgpu_ppgtt_spt *spt);
 
-Remove the local work-around.
-
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105679
-
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/net/wireless/ath/ath9k/Makefile |    5 -----
- 1 file changed, 5 deletions(-)
-
-diff --git a/drivers/net/wireless/ath/ath9k/Makefile b/drivers/net/wireless/ath/ath9k/Makefile
-index 9bdfcee2f448..eff94bcd1f0a 100644
---- a/drivers/net/wireless/ath/ath9k/Makefile
-+++ b/drivers/net/wireless/ath/ath9k/Makefile
-@@ -45,11 +45,6 @@ ath9k_hw-y:=	\
- 		ar9003_eeprom.o \
- 		ar9003_paprd.o
- 
--# FIXME: temporarily silence -Warray-bounds on non W=1+ builds
--ifndef KBUILD_EXTRA_WARN
--CFLAGS_mac.o += -Wno-array-bounds
--endif
--
- ath9k_hw-$(CONFIG_ATH9K_WOW) += ar9003_wow.o
- 
- ath9k_hw-$(CONFIG_ATH9K_BTCOEX_SUPPORT) += btcoex.o \
+Odd extra space after the 'int', why?
 
