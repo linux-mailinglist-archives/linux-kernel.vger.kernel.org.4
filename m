@@ -2,106 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D6D5F6F19
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 997505F6F1E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbiJFU1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 16:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
+        id S232218AbiJFU15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 16:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232064AbiJFU1H (ORCPT
+        with ESMTP id S232215AbiJFU1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 16:27:07 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14890BEAC4;
-        Thu,  6 Oct 2022 13:27:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665088026; x=1696624026;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Tes0madONZScJefM8sUzOGl1lgaC9WI0wDedhGmunZU=;
-  b=fcgI/2O6CVq8TmeiYdipyySAxtBBcrPIwDToi+bQPZMiFhK4aTj/gMXd
-   PlGvrAD9YhnvusHb2oRFF32PnmiTRLmzObDnYyPU1h9NLjdIu7lEuyz9r
-   3wZheAv4e+idnep/UnG38qdlhl7UJON1mt4mnLwS+/AbMhSvPBGsLeSDe
-   MHYxK7PMdWIa4LEwq+WIPZ74g+HW/Oj4AmTW/nylknkzOAXivUnjEfnES
-   pWyd4h96KiW9jDcif6Uon5nOIvrxVdbpPQCQTECTeGLTU116tISzbQcqV
-   iVgoFjGtNKsUwB0B0ZBUNUtfbnEhy/353dLpdxSdLnQoaPt8AhNc2DHcr
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="367688852"
-X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
-   d="scan'208";a="367688852"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 13:27:05 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="655763947"
-X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
-   d="scan'208";a="655763947"
-Received: from spvenkat-mobl.amr.corp.intel.com (HELO desk) ([10.209.50.56])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 13:27:05 -0700
-Date:   Thu, 6 Oct 2022 13:27:03 -0700
-From:   "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     'Jim Mattson' <jmattson@google.com>,
-        Suraj Jitindar Singh <surajjs@amazon.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "sjitindarsingh@gmail.com" <sjitindarsingh@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>, "bp@suse.de" <bp@suse.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
-        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] x86/speculation: Mitigate eIBRS PBRSB predictions with
- WRMSR
-Message-ID: <20221006202703.efa3ovs4eckevire@desk>
-References: <20221005220227.1959-1-surajjs@amazon.com>
- <CALMp9eTy2w_ZbkVSVvTwOW3wYH6vnn5waEWc0BesXL-kYRFy4g@mail.gmail.com>
- <a056259f338e411581b882555ed608cb@AcuMS.aculab.com>
+        Thu, 6 Oct 2022 16:27:37 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FA4BEFA5;
+        Thu,  6 Oct 2022 13:27:31 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1326637be6eso3477921fac.13;
+        Thu, 06 Oct 2022 13:27:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KP+Gzu0YP2WDiHdI3hIMst3oInf+/lguHR5tActNSM4=;
+        b=lCx/k5iyW2OaNBgy2O+nC7YyFIGy8MjECURERoV5zclLCqzq5o9qr8HAqCxumgiloh
+         mY9FRIQ5vJMe1ONcviUQXIFtfYZKrofmxIgto5BoRW03MpXNf+Rq2sCdeRxKm77VWVcs
+         i3ZO4dWGhQYwvSZTbOCqXG9j5HoKkwDSC+ASm2utwZoyNABq37vxB87czRWWnI5cRODN
+         6eFjE8/7ZyV/MtqlYnbQJpAtTnVyOn2waYVjnzFZZj9gLttmjSwkv/n3An81QGD20Th3
+         6ZynDJsUH9pkBZxPduCVClfWCOdhWz2EPg01g2mH5XcTiCEI4tDyMv/661SaieN5RdJH
+         PtVA==
+X-Gm-Message-State: ACrzQf3b0F4PUn+yVrds7k95fijzK/l/FV0bAQ8yt5p8r1+ePJzudgp1
+        k3N0b7AdOdi9gxJlWBCJlw==
+X-Google-Smtp-Source: AMsMyM7G4CWXEymU1hRGKMoMqgRlwj5vQua4l01gHGzlnDJPm+ko5R70BoPZShM4nmU2GAwpqd8Qcw==
+X-Received: by 2002:a05:6871:207:b0:132:7706:e74f with SMTP id t7-20020a056871020700b001327706e74fmr6501172oad.8.1665088050285;
+        Thu, 06 Oct 2022 13:27:30 -0700 (PDT)
+Received: from robh_at_kernel.org ([2607:fb90:8a65:c536:245:842:a3a4:9017])
+        by smtp.gmail.com with ESMTPSA id d21-20020a056830139500b00655fd5b878fsm219955otq.74.2022.10.06.13.27.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 13:27:29 -0700 (PDT)
+Received: (nullmailer pid 106993 invoked by uid 1000);
+        Thu, 06 Oct 2022 20:27:26 -0000
+Date:   Thu, 6 Oct 2022 15:27:26 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Shawn Guo <shawn.guo@linaro.org>,
+        krishna Lanka <quic_vamslank@quicinc.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        devicetree@vger.kernel.org,
+        Martin Botka <martin.botka@somainline.org>,
+        Andy Gross <agross@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Iskren Chernev <iskren.chernev@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Subject: Re: [PATCH 13/34] dt-bindings: pinctrl: qcom,sm8250: use common TLMM
+ schema
+Message-ID: <166508804230.106836.11124330711126453180.robh@kernel.org>
+References: <20221006140637.246665-1-krzysztof.kozlowski@linaro.org>
+ <20221006140637.246665-14-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a056259f338e411581b882555ed608cb@AcuMS.aculab.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221006140637.246665-14-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 08:25:15AM +0000, David Laight wrote:
->From: Jim Mattson
->> Sent: 05 October 2022 23:29
->>
->> On Wed, Oct 5, 2022 at 3:03 PM Suraj Jitindar Singh <surajjs@amazon.com> wrote:
->> >
->> > tl;dr: The existing mitigation for eIBRS PBRSB predictions uses an INT3 to
->> > ensure a call instruction retires before a following unbalanced RET. Replace
->> > this with a WRMSR serialising instruction which has a lower performance
->> > penalty.
->>
->> The INT3 is only on a speculative path and should not impact performance.
->
->Doesn't that depend on how quickly the cpu can abort the
->decode and execution of the INT3 instruction?
->INT3 is bound to generate a lot of uops and/or be microcoded.
->
->Old cpu couldn't abort fpu instructions.
->IIRC the Intel performance guide even suggested not interleaving
->code and data because the data might get speculatively executed
->and take a long time to abort.
->
->I actually wonder whether 'JMPS .' (eb fe) shouldn't be used
->instead of INT3 (cc) because it is fast to decode and execute.
->But I'm no expect here.
+On Thu, 06 Oct 2022 16:06:16 +0200, Krzysztof Kozlowski wrote:
+> Reference common Qualcomm TLMM pin controller schema, to bring common
+> properties, other pinctrl schemas and additional checks, like function
+> required only for GPIOs.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/pinctrl/qcom,sm8250-pinctrl.yaml | 34 ++++---------------
+>  1 file changed, 6 insertions(+), 28 deletions(-)
+> 
 
-I have been told that INT3 is better in this case because 'JMP .' would
-waste CPU resources.
+Acked-by: Rob Herring <robh@kernel.org>
