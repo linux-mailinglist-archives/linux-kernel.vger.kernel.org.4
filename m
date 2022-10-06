@@ -2,179 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C13A15F6426
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 12:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF8D5F6429
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 12:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbiJFKJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 06:09:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
+        id S229789AbiJFKKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 06:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbiJFKJv (ORCPT
+        with ESMTP id S229580AbiJFKKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 06:09:51 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85031BC0E;
-        Thu,  6 Oct 2022 03:09:48 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MjnB64ZwCzlXKL;
-        Thu,  6 Oct 2022 18:05:18 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 6 Oct 2022 18:09:44 +0800
-Message-ID: <fb3973b6-c65e-fb98-7cdf-46c8a4cf0c4d@huawei.com>
-Date:   Thu, 6 Oct 2022 18:09:44 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next v2 0/4] Add ftrace direct call for arm64
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Florent Revest <revest@chromium.org>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Thu, 6 Oct 2022 06:10:53 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108CC422D3
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 03:10:52 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d10so1621201pfh.6
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 03:10:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=nejt1fj38fltULT62/FjLAauaU4MfqY1Q9gtNTwMHWg=;
+        b=DePWpXaL28tCO2BGOPQxTfgkKA19ZzEFAgu9ehMWd2038sDv2KrbMNNrW/AP+0UTsG
+         BZnlq6WEu4MB0dlfJqzcoqlOYXDAHsRZi4LmIBDLciMoeof5p/NDozSOS1gJh27NXeeN
+         7iE5yoslA1Mrs6MkuturlSlfKmo8OiNpwgWFECoi5o2iqGtE3f+yobyIRR812PZcL2nm
+         QattyEGU2FYrTnt5xHMORS8Pw6P9tFyqRec6sZ3CLf+1CbyXIYXfhxR0a3Qrk6ndw292
+         4lgDe4omwL6afbkAN3BSor/KLeNbWhR7IOup8RoRkraUxzBup1HI9mvmQXmuA9jz/n95
+         Y7Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=nejt1fj38fltULT62/FjLAauaU4MfqY1Q9gtNTwMHWg=;
+        b=KtBcTkmdA3CTBhqIiG+hE9n69cfIHd1LuVBC0Pw18RsImsHyaStwk/9FhKdHgfuwq+
+         cjULGwfO79irVJCRkO9kl51tQha7mBkpf6ULqpXnA2vRIBjTyYpDRyEE1dmPWmddg4LZ
+         uDM6TYyXEPLyUgfM4O6attsHWAmHkEDhcjHw0n9KHQbJky2shj1TkqahkqHuYKpotYJi
+         XxGfvdzZpKJG4zhLpmqvAL2eVg4jMqTE45XhE+2PxNtcy9VO1q+K1/lf2SHhOWFhwdho
+         wXMOVexm8CyWbv3mXn6A9gV918zLmQIbJgPXf14yBUGZbE6NNckt6JRzQauD3ohDQvkw
+         qz7Q==
+X-Gm-Message-State: ACrzQf1G6GwKe7WteYdLAgW4F58NLybQYEJ/PAs5MS9/n0VwH+69uuiD
+        lfRjWG47oW2WmWBq4EBCxxPI9kxMlsiErKMP
+X-Google-Smtp-Source: AMsMyM5Mc4PPDGFOBxGHcZi8ZvSmv6eXKPEkMUC08xrz0BBflyZjUCAw8DD38knHfGjKhLjtEK1B+g==
+X-Received: by 2002:a62:144b:0:b0:562:38de:9a0e with SMTP id 72-20020a62144b000000b0056238de9a0emr4354715pfu.78.1665051051002;
+        Thu, 06 Oct 2022 03:10:51 -0700 (PDT)
+Received: from leoy-huanghe.lan (211-75-219-199.hinet-ip.hinet.net. [211.75.219.199])
+        by smtp.gmail.com with ESMTPSA id i15-20020a63584f000000b004393c5a8006sm1453127pgm.75.2022.10.06.03.10.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 03:10:49 -0700 (PDT)
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-References: <20220913162732.163631-1-xukuohai@huaweicloud.com>
- <f1e14934-dc54-9bf7-501a-89affdb7371e@iogearbox.net>
- <YzG51Jyd5zhvygtK@arm.com> <YzHk1zRf1Dp8YTEe@FVFF77S0Q05N>
- <970a25e4-9b79-9e0c-b338-ed1a934f2770@huawei.com>
- <YzR5WSLux4mmFIXg@FVFF77S0Q05N>
- <2cb606b4-aa8b-e259-cdfd-1bfc61fd7c44@huawei.com>
- <CABRcYmKPchvtkkgWhOJ6o3pHVqTWeenGawHfZ2ug8Akdh6NfnQ@mail.gmail.com>
- <7f34d333-3b2a-aea5-f411-d53be2c46eee@huawei.com>
- <20221005110707.55bd9354@gandalf.local.home>
- <CABRcYmJGY6fp0CtUBYN8BjEDN=r42BPLSBcrxqu491bTRmfm7g@mail.gmail.com>
- <20221005113019.18aeda76@gandalf.local.home>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <20221005113019.18aeda76@gandalf.local.home>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+Cc:     Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH v5] perf test: Introduce script for data symbol testing
+Date:   Thu,  6 Oct 2022 18:10:39 +0800
+Message-Id: <20221006101039.47870-1-leo.yan@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/5/2022 11:30 PM, Steven Rostedt wrote:
-> On Wed, 5 Oct 2022 17:10:33 +0200
-> Florent Revest <revest@chromium.org> wrote:
-> 
->> On Wed, Oct 5, 2022 at 5:07 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->>>
->>> On Wed, 5 Oct 2022 22:54:15 +0800
->>> Xu Kuohai <xukuohai@huawei.com> wrote:
->>>   
->>>> 1.3 attach bpf prog with with direct call, bpftrace -e 'kfunc:vfs_write {}'
->>>>
->>>> # dd if=/dev/zero of=/dev/null count=1000000
->>>> 1000000+0 records in
->>>> 1000000+0 records out
->>>> 512000000 bytes (512 MB, 488 MiB) copied, 1.72973 s, 296 MB/s
->>>>
->>>>
->>>> 1.4 attach bpf prog with with indirect call, bpftrace -e 'kfunc:vfs_write {}'
->>>>
->>>> # dd if=/dev/zero of=/dev/null count=1000000
->>>> 1000000+0 records in
->>>> 1000000+0 records out
->>>> 512000000 bytes (512 MB, 488 MiB) copied, 1.99179 s, 257 MB/s
->>
->> Thanks for the measurements Xu!
->>
->>> Can you show the implementation of the indirect call you used?
->>
->> Xu used my development branch here
->> https://github.com/FlorentRevest/linux/commits/fprobe-min-args
-> 
-> That looks like it could be optimized quite a bit too.
-> 
-> Specifically this part:
-> 
-> static bool bpf_fprobe_entry(struct fprobe *fp, unsigned long ip, struct ftrace_regs *regs, void *private)
-> {
-> 	struct bpf_fprobe_call_context *call_ctx = private;
-> 	struct bpf_fprobe_context *fprobe_ctx = fp->ops.private;
-> 	struct bpf_tramp_links *links = fprobe_ctx->links;
-> 	struct bpf_tramp_links *fentry = &links[BPF_TRAMP_FENTRY];
-> 	struct bpf_tramp_links *fmod_ret = &links[BPF_TRAMP_MODIFY_RETURN];
-> 	struct bpf_tramp_links *fexit = &links[BPF_TRAMP_FEXIT];
-> 	int i, ret;
-> 
-> 	memset(&call_ctx->ctx, 0, sizeof(call_ctx->ctx));
-> 	call_ctx->ip = ip;
-> 	for (i = 0; i < fprobe_ctx->nr_args; i++)
-> 		call_ctx->args[i] = ftrace_regs_get_argument(regs, i);
-> 
-> 	for (i = 0; i < fentry->nr_links; i++)
-> 		call_bpf_prog(fentry->links[i], &call_ctx->ctx, call_ctx->args);
-> 
-> 	call_ctx->args[fprobe_ctx->nr_args] = 0;
-> 	for (i = 0; i < fmod_ret->nr_links; i++) {
-> 		ret = call_bpf_prog(fmod_ret->links[i], &call_ctx->ctx,
-> 				      call_ctx->args);
-> 
-> 		if (ret) {
-> 			ftrace_regs_set_return_value(regs, ret);
-> 			ftrace_override_function_with_return(regs);
-> 
-> 			bpf_fprobe_exit(fp, ip, regs, private);
-> 			return false;
-> 		}
-> 	}
-> 
-> 	return fexit->nr_links;
-> }
-> 
-> There's a lot of low hanging fruit to speed up there. I wouldn't be too
-> fast to throw out this solution if it hasn't had the care that direct calls
-> have had to speed that up.
-> 
-> For example, trampolines currently only allow to attach to functions with 6
-> parameters or less (3 on x86_32). You could make 7 specific callbacks, with
-> zero to 6 parameters, and unroll the argument loop.
-> 
-> Would also be interesting to run perf to see where the overhead is. There
-> may be other locations to work on to make it almost as fast as direct
-> callers without the other baggage.
-> 
+This commit introduces a shell script for data symbol testing.
 
-There is something wrong with my pi4 perf, I'll send the perf report after
-I fix it.
+The testing is designed a data structure with 64-byte alignment, it has
+two fields "data1" and "data2", and other fields are reserved.
 
-> -- Steve
-> 
->>
->> As it stands, the performance impact of the fprobe based
->> implementation would be too high for us. I wonder how much Mark's idea
->> here https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/ftrace/per-callsite-ops
->> would help but it doesn't work right now.
-> 
-> 
-> .
+Using "perf mem" command, we can record and report memory samples for a
+self-contained workload with 1 second duration.  If have no any memory
+sample for the data structure "buf1", it reports failure;  and by
+checking the offset in structure "buf1", if any memory accessing is not
+for "data1" and "data2" fields, it means wrong data symbol parsing and
+returns failure.
+
+Signed-off-by: Leo Yan <leo.yan@linaro.org>
+---
+
+Changes from v4:
+- Remove the redundant argument "--" before CPU list (Namhyung).
+  This patch is dependent on the fixing:
+  https://lore.kernel.org/lkml/20221004200211.1444521-1-namhyung@kernel.org/
+
+Changes from v3:
+- Add specific testing chunk for AMD CPUs (Ravi).
+
+ tools/perf/tests/shell/test_data_symbol.sh | 93 ++++++++++++++++++++++
+ 1 file changed, 93 insertions(+)
+ create mode 100755 tools/perf/tests/shell/test_data_symbol.sh
+
+diff --git a/tools/perf/tests/shell/test_data_symbol.sh b/tools/perf/tests/shell/test_data_symbol.sh
+new file mode 100755
+index 000000000000..cd6eb54d235d
+--- /dev/null
++++ b/tools/perf/tests/shell/test_data_symbol.sh
+@@ -0,0 +1,93 @@
++#!/bin/bash
++# Test data symbol
++
++# SPDX-License-Identifier: GPL-2.0
++# Leo Yan <leo.yan@linaro.org>, 2022
++
++skip_if_no_mem_event() {
++	perf mem record -e list 2>&1 | egrep -q 'available' && return 0
++	return 2
++}
++
++skip_if_no_mem_event || exit 2
++
++# skip if there's no compiler
++if ! [ -x "$(command -v cc)" ]; then
++	echo "skip: no compiler, install gcc"
++	exit 2
++fi
++
++TEST_PROGRAM=$(mktemp /tmp/__perf_test.program.XXXXX)
++PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
++
++check_result() {
++	# The memory report format is as below:
++	#    99.92%  ...  [.] buf1+0x38
++	result=$(perf mem report -i ${PERF_DATA} -s symbol_daddr -q 2>&1 |
++		 awk '/buf1/ { print $4 }')
++
++	# Testing is failed if has no any sample for "buf1"
++	[ -z "$result" ] && return 1
++
++	while IFS= read -r line; do
++		# The "data1" and "data2" fields in structure "buf1" have
++		# offset "0x0" and "0x38", returns failure if detect any
++		# other offset value.
++		if [ "$line" != "buf1+0x0" ] && [ "$line" != "buf1+0x38" ]; then
++			return 1
++		fi
++	done <<< "$result"
++
++	return 0
++}
++
++cleanup_files()
++{
++	echo "Cleaning up files..."
++	rm -f ${PERF_DATA}
++	rm -f ${TEST_PROGRAM}
++}
++
++trap cleanup_files exit term int
++
++# compile test program
++echo "Compiling test program..."
++cat << EOF | cc -o ${TEST_PROGRAM} -x c -
++typedef struct _buf {
++	char data1;
++	char reserved[55];
++	char data2;
++} buf __attribute__((aligned(64)));
++
++static buf buf1;
++
++int main(void) {
++	for (;;) {
++		buf1.data1++;
++		buf1.data2 += buf1.data1;
++	}
++	return 0;
++}
++EOF
++
++echo "Recording workload..."
++
++# perf mem/c2c internally uses IBS PMU on AMD CPU which doesn't support
++# user/kernel filtering and per-process monitoring, spin program on
++# specific CPU and test in per-CPU mode.
++is_amd=$(egrep -c 'vendor_id.*AuthenticAMD' /proc/cpuinfo)
++if (($is_amd >= 1)); then
++	perf mem record -o ${PERF_DATA} -C 0 -- taskset -c 0 $TEST_PROGRAM &
++else
++	perf mem record --all-user -o ${PERF_DATA} -- $TEST_PROGRAM &
++fi
++
++PERFPID=$!
++
++sleep 1
++
++kill $PERFPID
++wait $PERFPID
++
++check_result
++exit $?
+-- 
+2.34.1
 
