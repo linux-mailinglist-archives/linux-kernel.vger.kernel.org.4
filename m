@@ -2,101 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2B55F684B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AADE85F684E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbiJFNhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 09:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57074 "EHLO
+        id S229673AbiJFNiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 09:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbiJFNhc (ORCPT
+        with ESMTP id S231432AbiJFNiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 09:37:32 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A24A99DE
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 06:37:31 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id qw20so3998644ejc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 06:37:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=1KBtCQA+POVQgcSO7IcdkKbJOYcYsiANOuZ7mA7FU3A=;
-        b=LsdhIKdvpjq+E2RQuOWZxicWS6QGeHaNtfNH1k/a6CWDS9JJyNkIMmqwaybdEfF1nn
-         onH6NfXu/Z1KePjmeteD0pzhTtNBZQfoTMDzLsHNsd9aT+MNLcR5Vu8lHKySLVmgi8Yi
-         rvAPCS+izjGHM/0D9VUU4/0fHvdB/npA4/RqzUgwKt0jO9xaCM01OPR94dudpkE/yhIM
-         u5/kRXswkHYZ4MNHHqc5SqP1xEsRls/SHH2yZ6/SW7RKg5A5YO1mHTXGsnyVdohXopO0
-         1n8E7Wdjc0hjXChB0PDXf93t/7S8MgtQxcICj+QfnAPoFP87/757+uvS4EMpKu/IIGVy
-         DCrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=1KBtCQA+POVQgcSO7IcdkKbJOYcYsiANOuZ7mA7FU3A=;
-        b=wKbYEr84IGN+dt+JP+s4TdHpj5K+dAgkJi0DnqjLkV+1mOKt0EXeE33hloWKer+32E
-         RMw9KdUxzUdHjKSMqAIVNf9udU6sS2oker9djr3LppMF03JV+ZyuuD5kX2CWlAVMUJOq
-         nas8jFkvZbIgGjaA4LkUKdovbDM/7x0dam2xZ4pASvnI3oxwZX19eW+/HKM59nlucLEm
-         N2IaBHpZLmRS7f7m4JziqUP6DY+VSUQK8PoIE+JWR3eHr/FXmAmVvelRCvGpVItxiAud
-         CemvmMtG1D5tDWyrk+hFAj5czXfmS1BjPdqYsN7XjG2tEgJNpAQ808F2Ko9mEilsFM0Q
-         yx7w==
-X-Gm-Message-State: ACrzQf08g6WgiU4R0BW44ehLtqcfYA26edh5oOqx2Ro2/mEnq6S1DM7f
-        lHzp40K/waPZXTWKjrHQz4Iiog==
-X-Google-Smtp-Source: AMsMyM7bnqMp+6Vd29aCm00f0CbgnkbIiZIM7a9RaRs+fmZ/teSS89vbvnwFen2XQsfYICJluA5tLA==
-X-Received: by 2002:a17:906:8453:b0:78d:4893:fede with SMTP id e19-20020a170906845300b0078d4893fedemr1346086ejy.637.1665063449792;
-        Thu, 06 Oct 2022 06:37:29 -0700 (PDT)
-Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
-        by smtp.gmail.com with ESMTPSA id z10-20020a50eb4a000000b0044e01e2533asm5901815edp.43.2022.10.06.06.37.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 06:37:29 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 15:37:28 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/8] riscv: cpu_relax: switch to
- riscv_has_extension_likely()
-Message-ID: <20221006133728.4ge3pmcm7mvksia7@kamzik>
-References: <20221006070818.3616-1-jszhang@kernel.org>
- <20221006070818.3616-8-jszhang@kernel.org>
+        Thu, 6 Oct 2022 09:38:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2DFD3ABD48;
+        Thu,  6 Oct 2022 06:38:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0C0D11692;
+        Thu,  6 Oct 2022 06:38:08 -0700 (PDT)
+Received: from [10.57.1.179] (unknown [10.57.1.179])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B64FF3F67D;
+        Thu,  6 Oct 2022 06:37:59 -0700 (PDT)
+Message-ID: <02ce379c-c718-b72d-fc74-cd8c904265fb@arm.com>
+Date:   Thu, 6 Oct 2022 14:37:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221006070818.3616-8-jszhang@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V3 4/7] driver/perf/arm_pmu_platform: Add support for BRBE
+ attributes detection
+Content-Language: en-US
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+References: <20220929075857.158358-1-anshuman.khandual@arm.com>
+ <20220929075857.158358-5-anshuman.khandual@arm.com>
+From:   James Clark <james.clark@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
+        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
+        catalin.marinas@arm.com
+In-Reply-To: <20220929075857.158358-5-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 03:08:17PM +0800, Jisheng Zhang wrote:
-> Switch cpu_relax() from statich branch to the new helper
-> riscv_has_extension_likely()
-> 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  arch/riscv/include/asm/vdso/processor.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/include/asm/vdso/processor.h b/arch/riscv/include/asm/vdso/processor.h
-> index 1e4f8b4aef79..fb30480f36a0 100644
-> --- a/arch/riscv/include/asm/vdso/processor.h
-> +++ b/arch/riscv/include/asm/vdso/processor.h
-> @@ -10,7 +10,7 @@
->  
->  static inline void cpu_relax(void)
->  {
-> -	if (!static_branch_likely(&riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_ZIHINTPAUSE])) {
-> +	if (!riscv_has_extension_likely(RISCV_ISA_EXT_ZIHINTPAUSE)) {
->  #ifdef __riscv_muldiv
->  		int dummy;
->  		/* In lieu of a halt instruction, induce a long-latency stall. */
-> -- 
-> 2.37.2
->
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+
+On 29/09/2022 08:58, Anshuman Khandual wrote:
+> This adds arm pmu infrastrure to probe BRBE implementation's attributes via
+> driver exported callbacks later. The actual BRBE feature detection will be
+> added by the driver itself.
+> 
+> CPU specific BRBE entries, cycle count, format support gets detected during
+> PMU init. This information gets saved in per-cpu struct pmu_hw_events which
+> later helps in operating BRBE during a perf event context.
+> 
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  drivers/perf/arm_pmu_platform.c | 34 +++++++++++++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+> 
+> diff --git a/drivers/perf/arm_pmu_platform.c b/drivers/perf/arm_pmu_platform.c
+> index 933b96e243b8..acdc445081aa 100644
+> --- a/drivers/perf/arm_pmu_platform.c
+> +++ b/drivers/perf/arm_pmu_platform.c
+> @@ -172,6 +172,36 @@ static int armpmu_request_irqs(struct arm_pmu *armpmu)
+>  	return err;
+>  }
+>  
+> +static void arm_brbe_probe_cpu(void *info)
+> +{
+> +	struct pmu_hw_events *hw_events;
+> +	struct arm_pmu *armpmu = info;
+> +
+> +	/*
+> +	 * Return from here, if BRBE driver has not been
+> +	 * implemented for this PMU. This helps prevent
+> +	 * kernel crash later when brbe_probe() will be
+> +	 * called on the PMU.
+> +	 */
+> +	if (!armpmu->brbe_probe)
+> +		return;
+> +
+> +	hw_events = per_cpu_ptr(armpmu->hw_events, smp_processor_id());
+> +	armpmu->brbe_probe(hw_events);
+> +}
+> +
+> +static int armpmu_request_brbe(struct arm_pmu *armpmu)
+> +{
+> +	int cpu, err = 0;
+> +
+> +	for_each_cpu(cpu, &armpmu->supported_cpus) {
+> +		err = smp_call_function_single(cpu, arm_brbe_probe_cpu, armpmu, 1);
+
+Hi Anshuman,
+
+I have LOCKDEP on and the patchset applied to perf/core (82aad7ff7) on
+git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git and I get
+this:
+
+   armv8-pmu pmu: hw perfevents: no interrupt-affinity property, guessing.
+   brbe: implementation found on cpu 0
+
+   =============================
+   [ BUG: Invalid wait context ]
+   6.0.0-rc7 #38 Not tainted
+   -----------------------------
+   kworker/u8:0/9 is trying to lock:
+   ffff000800855898 (&port_lock_key){....}-{3:3}, at:
+pl011_console_write+0x148/0x240
+   other info that might help us debug this:
+   context-{2:2}
+   5 locks held by kworker/u8:0/9:
+    #0: ffff00080032a138 ((wq_completion)eval_map_wq){+.+.}-{0:0}, at:
+process_one_work+0x200/0x6b0
+    #1: ffff80000807bde0
+((work_completion)(&eval_map_work)){+.+.}-{0:0}, at:
+process_one_work+0x200/0x6b0
+    #2: ffff80000aa3db70 (trace_event_sem){+.+.}-{4:4}, at:
+trace_event_eval_update+0x28/0x420
+    #3: ffff80000a9afe58 (console_lock){+.+.}-{0:0}, at:
+vprintk_emit+0x130/0x380
+    #4: ffff80000a9aff78 (console_owner){-...}-{0:0}, at:
+console_emit_next_record.constprop.0+0x128/0x338
+   stack backtrace:
+   CPU: 0 PID: 9 Comm: kworker/u8:0 Not tainted 6.0.0-rc7 #38
+   Hardware name: Foundation-v8A (DT)
+   Workqueue: eval_map_wq eval_map_work_func
+   Call trace:
+    dump_backtrace+0x114/0x120
+    show_stack+0x20/0x58
+    dump_stack_lvl+0x9c/0xd8
+    dump_stack+0x18/0x34
+    __lock_acquire+0x17cc/0x1920
+    lock_acquire+0x138/0x3b8
+    _raw_spin_lock+0x58/0x70
+    pl011_console_write+0x148/0x240
+    console_emit_next_record.constprop.0+0x194/0x338
+    console_unlock+0x18c/0x208
+    vprintk_emit+0x24c/0x380
+    vprintk_default+0x40/0x50
+    vprintk+0xd4/0xf0
+    _printk+0x68/0x90
+    arm64_pmu_brbe_probe+0x10c/0x128
+    armv8pmu_brbe_probe+0x18/0x28
+    arm_brbe_probe_cpu+0x44/0x58
+    __flush_smp_call_function_queue+0x1d0/0x440
+    generic_smp_call_function_single_interrupt+0x20/0x78
+    ipi_handler+0x98/0x368
+    handle_percpu_devid_irq+0xc0/0x3a8
+    generic_handle_domain_irq+0x34/0x50
+    gic_handle_irq+0x58/0x138
+    call_on_irq_stack+0x2c/0x58
+    do_interrupt_handler+0x88/0x90
+    el1_interrupt+0x40/0x78
+    el1h_64_irq_handler+0x18/0x28
+    el1h_64_irq+0x64/0x68
+    trace_event_eval_update+0x114/0x420
+    eval_map_work_func+0x30/0x40
+    process_one_work+0x298/0x6b0
+    worker_thread+0x54/0x408
+    kthread+0x118/0x128
+    ret_from_fork+0x10/0x20
+   brbe: implementation found on cpu 1
+   brbe: implementation found on cpu 2
+   brbe: implementation found on cpu 3
+
+> +		if (err)
+> +			return err;
+> +	}
+> +	return err;
+> +}
+> +
+>  static void armpmu_free_irqs(struct arm_pmu *armpmu)
+>  {
+>  	int cpu;
+> @@ -229,6 +259,10 @@ int arm_pmu_device_probe(struct platform_device *pdev,
+>  	if (ret)
+>  		goto out_free_irqs;
+>  
+> +	ret = armpmu_request_brbe(pmu);
+> +	if (ret)
+> +		goto out_free_irqs;
+> +
+>  	ret = armpmu_register(pmu);
+>  	if (ret) {
+>  		dev_err(dev, "failed to register PMU devices!\n");
