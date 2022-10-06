@@ -2,191 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2365F6974
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4855F696C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiJFOSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 10:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56098 "EHLO
+        id S231710AbiJFOPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 10:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbiJFOR3 (ORCPT
+        with ESMTP id S231970AbiJFOPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 10:17:29 -0400
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE1D606A5
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 07:15:03 -0700 (PDT)
-Received: by mail-qk1-f182.google.com with SMTP id oo23so1042551qkn.4
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 07:15:03 -0700 (PDT)
+        Thu, 6 Oct 2022 10:15:12 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F0CBCB2
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 07:12:47 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id r14so2922848lfm.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 07:12:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ntnmdCz7v5r64kcnWi8DSkoYbZLsQCVuJJM9qyrDCnw=;
-        b=B/MELwvxGHOUB9n/4IZqtXNP45/GUA/qzSkuclVSpXk/hHNETuFosn1BksqfdAO6YC
-         Uk7s0kBfRcQno51w58ZZeR1JRQ1FTx0KFzVowH5ahSpQFM00sjiLAqu/8a/6V2kjdyFE
-         BOaF5+dyP6N9n6rqssedaIY+lIsodO8jDsqxqQBbqPohnWSKRIraCSTiiKRhNJUswxrA
-         4OuQOHS8dxZNaz8aBi+/Q0+h81aVB2UEnUYx43vpmtGk6gpAbkgxX8X/+FJPS0zlByMk
-         QEl/foNsH27xCm2+Aj2r75obbZHv8GOoPql58jPWQ960t+qDJUHVZ0NHmJQhg+RSFZuv
-         gUTw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=n77JB3v5NQQWYXMjQE9mQos/CzAUaBxNKKkh7H62z+s=;
+        b=LErqkYQ3SKuNYCFFC05liT3/69AynMf1KtPpKCZaBCGgTDRYRpQMD+PACtiHdUHNVI
+         CvL7H/8TXvtFKsOimAKz9j64XVLhx++47eDDb4XoEJHNRQ4A1yei0XH+pHhZ/nuCbToP
+         QnT6vhg+DQWa0u+MCmqLMJX7KlspTevR+QOJ/exQD7s+yqOU9jDMeonj0iIrBJ7dF6GK
+         +XDbYeLQ9pUwvE+s97XqKmB3SsHEs5se1x5e6mSZGwuKp5/UvT+ejwzFzCpZXHUi4IEM
+         rciTiYPNX+VBCe04KFWxwdPqiRhlwgi0aD3xSse+ZGkoUdleRcyiWu60qAEtHCBiWSAN
+         9ldQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ntnmdCz7v5r64kcnWi8DSkoYbZLsQCVuJJM9qyrDCnw=;
-        b=2TjRsl/jo6cZl0K6YxSZ/NP3W+r2+0Nem+M2R0eqyuBS4B6rypuMdnamWIutH8aro1
-         MhKQTXoCSk55Vs4ZqxbJ3SGP3vxbzGqVxX4uAZAqpXltA166LqDU/udm/tDx++LSEgrh
-         +w2q9XC1gThfxQgtu1QTwEseQ4w2HiSr/ZHiQ0remQ1b+5r+xMd8uSJsGU6PyupTN332
-         VMr/zOVVSaegteEgyt721RgZOAfeazOAVZhuAwxvuvyBaBZ4NEYkt5kH7BpfqS0U4Ji/
-         f3kJHsr9WrrCGlGyEXFDBh+1va1kIlOZ0R545LfWyMfTejmWs1lVEX1w2lQPAySCIDZn
-         rC6Q==
-X-Gm-Message-State: ACrzQf1V7i7pLvAWqEHnH8Xclk0HVGt3kEYAZI8jv5pa+LX7raZ3rlC7
-        9wMeAnA4hlsd0e6OqOQfJg==
-X-Google-Smtp-Source: AMsMyM73nX69TZE1+MgUVtlQx7xVnxr/lUPIFB2FR88zpn3YmI15D7PxjegZ0vi/YooQMgojpkOXKQ==
-X-Received: by 2002:a37:9302:0:b0:6ce:3765:eb95 with SMTP id v2-20020a379302000000b006ce3765eb95mr130459qkd.177.1665065401988;
-        Thu, 06 Oct 2022 07:10:01 -0700 (PDT)
-Received: from serve.minyard.net ([47.184.185.126])
-        by smtp.gmail.com with ESMTPSA id o18-20020a05620a111200b006b98315c6fbsm3686391qkk.1.2022.10.06.07.10.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 07:10:01 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from dell1.minyard.net (unknown [IPv6:2001:470:b8f6:1d::35])
-        by serve.minyard.net (Postfix) with ESMTPSA id 8D0D2180015;
-        Thu,  6 Oct 2022 14:09:59 +0000 (UTC)
-Date:   Thu, 6 Oct 2022 09:09:57 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Andrew Jeffery <andrew@aj.id.au>
-Cc:     Joel Stanley <joel@jms.id.au>,
-        openipmi-developer@lists.sourceforge.net,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org
-Subject: Re: [PATCH] ipmi: kcs: Poll OBF briefly to reduce OBE latency
-Message-ID: <Yz7htdRvb+IhU060@dell1.minyard.net>
-Reply-To: minyard@acm.org
-References: <20220812144741.240315-1-andrew@aj.id.au>
- <CACPK8XdnFPXZuzAaSMOUnV6ng9y2_ZMcAff12q8Zxvr2HJZy-w@mail.gmail.com>
- <f6a85e5e-a3b1-4e5c-9db6-1222dcabd780@app.fastmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=n77JB3v5NQQWYXMjQE9mQos/CzAUaBxNKKkh7H62z+s=;
+        b=6M2ZmM9mXw5XjdxikbLIemFoC8RTuzOBKJWXZuepj9KUoyef8wRr5dOGzyPH+j/F1U
+         hucCC84JuIFxwkiUV+QDODqQ6ePWG2/J1kk/AhiKxa28zJowV2Bn+FvU/SIlaZXUZ/3w
+         YS+cQ8+BJ5yKa4Qg38PFG3tfAg9G1k529zp2XSvEKZMSmRFa26nwNLAr4+Ihsy1KMW+g
+         7g1ukHkuImJQB0a2MsZGNFMoDlsqD1pUT9HmNyq83KC6qU2UHryfHW6csUtfSkGVqsBM
+         /17TgCsHoA8+Lnoc3xZWhNylQpDmirlmNNBCvUylnD6ZFqcR+LnlE2kOz5xeS560G8CI
+         s+gA==
+X-Gm-Message-State: ACrzQf0It+eSvKZp0C7l3mk4a4/kQlkYlXB1okM4Qk61wcdHKefc3g4g
+        ToqjNThcaPGnTcy1qjlfUiIetg==
+X-Google-Smtp-Source: AMsMyM4ylZPoyJycfqTxZLE/wBpDPIPW+NjZKnv18zVYR3Uj+em69HKE9roVPotUhNN1V5zutAzBpw==
+X-Received: by 2002:a05:6512:261c:b0:49f:af36:d47 with SMTP id bt28-20020a056512261c00b0049faf360d47mr65017lfb.284.1665065502063;
+        Thu, 06 Oct 2022 07:11:42 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id be25-20020a05651c171900b0026c1cbbf461sm1922973ljb.80.2022.10.06.07.11.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Oct 2022 07:11:40 -0700 (PDT)
+Message-ID: <7bcb9ef1-6b56-2f5f-3ac9-acc9ed9370df@linaro.org>
+Date:   Thu, 6 Oct 2022 16:11:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f6a85e5e-a3b1-4e5c-9db6-1222dcabd780@app.fastmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2 1/2] spi: dt-bindings: amlogic, meson-gx-spicc: Add
+ pinctrl names for SPI signal states
+Content-Language: en-US
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Da Xue <da@libre.computer>, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20221004-up-aml-fix-spi-v2-0-3e8ae91a1925@baylibre.com>
+ <20221004-up-aml-fix-spi-v2-1-3e8ae91a1925@baylibre.com>
+ <d2ce98d7-1025-9c6e-e207-00e91942077a@linaro.org>
+ <fb2706e3-f758-a0b0-d595-75ef362a853e@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <fb2706e3-f758-a0b0-d595-75ef362a853e@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 01:36:51PM +1030, Andrew Jeffery wrote:
+On 06/10/2022 12:57, Amjad Ouled-Ameur wrote:
+> Hi Krzysztof,
 > 
+> Thank you for the review.
 > 
-> On Thu, 6 Oct 2022, at 10:20, Joel Stanley wrote:
-> > On Fri, 12 Aug 2022 at 14:48, Andrew Jeffery <andrew@aj.id.au> wrote:
-> >>
-> >> The ASPEED KCS devices don't provide a BMC-side interrupt for the host
-> >> reading the output data register (ODR). The act of the host reading ODR
-> >> clears the output buffer full (OBF) flag in the status register (STR),
-> >> informing the BMC it can transmit a subsequent byte.
-> >>
-> >> On the BMC side the KCS client must enable the OBE event *and* perform a
-> >> subsequent read of STR anyway to avoid races - the polling provides a
-> >> window for the host to read ODR if data was freshly written while
-> >> minimising BMC-side latency.
-> >>
-> >
-> > Fixes...?
+> On 10/5/22 10:14, Krzysztof Kozlowski wrote:
+>> On 04/10/2022 13:10, Amjad Ouled-Ameur wrote:
+>>> SPI pins of the SPICC Controller in Meson-GX needs to be controlled by
+>>> pin biais when idle. Therefore define three pinctrl names:
+>>> - default: SPI pins are controlled by spi function.
+>>> - idle-high: SCLK pin is pulled-up, but MOSI/MISO are still controlled
+>>> by spi function.
+>>> - idle-low: SCLK pin is pulled-down, but MOSI/MISO are still controlled
+>>> by spi function.
+>>>
+>>> Reported-by: Da Xue <da@libre.computer>
+>>> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+>>> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+>>> ---
+>>>   .../devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml   | 15 +++++++++++++++
+>>>   1 file changed, 15 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
+>>> index 0c10f7678178..53013e27f507 100644
+>>> --- a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
+>>> +++ b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
+>>> @@ -43,6 +43,14 @@ properties:
+>>>       minItems: 1
+>>>       maxItems: 2
+>>>   
+>>> +  pinctrl-0:
+>>> +    minItems: 1
+>> maxItems?
+>>
+> Will fill it in next version.
+>>> +
+>>> +  pinctrl-1:
+>>> +    maxItems: 1
+>>> +
+>>> +  pinctrl-names: true
+>> Why do you need all these in the bindings?
 > 
-> Is it a fix though? It's definitely an *improvement* in behaviour, but 
-> the existing behaviour also wasn't *incorrect*, just kinda unfortunate 
-> under certain timings? Dunno. I'm probably splitting hairs.
+> SPI clock bias needs to change at runtime depending on SPI mode, here is an example of
 > 
-> In any case, if we do want a fixes line:
+> how this is supposed to be used ("spi_idle_low_pins" and "spi_idle_low_pins" are defined
 > 
-> Fixes: 28651e6c4237 ("ipmi: kcs_bmc: Allow clients to control KCS IRQ state")
+> in the second patch of this series):
 
-I added the Fixes and Joel's review.
+I know what it the point in general of pinctrl configuration... But the
+question is why do you need to specify them in the bindings? Core
+handles that. IOW, do you require them and missing/incomplete pinctrl
+should be reported?
 
-Thanks,
+Best regards,
+Krzysztof
 
--corey
-
-> 
-> >
-> >> Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
-> >
-> > Reviewed-by: Joel Stanley <joel@jms.id.au>
-> 
-> Thanks!
-> 
-> >
-> >> ---
-> >>  drivers/char/ipmi/kcs_bmc_aspeed.c | 24 +++++++++++++++++++++---
-> >>  1 file changed, 21 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/drivers/char/ipmi/kcs_bmc_aspeed.c b/drivers/char/ipmi/kcs_bmc_aspeed.c
-> >> index cdc88cde1e9a..417e5a3ccfae 100644
-> >> --- a/drivers/char/ipmi/kcs_bmc_aspeed.c
-> >> +++ b/drivers/char/ipmi/kcs_bmc_aspeed.c
-> >> @@ -399,13 +399,31 @@ static void aspeed_kcs_check_obe(struct timer_list *timer)
-> >>  static void aspeed_kcs_irq_mask_update(struct kcs_bmc_device *kcs_bmc, u8 mask, u8 state)
-> >>  {
-> >>         struct aspeed_kcs_bmc *priv = to_aspeed_kcs_bmc(kcs_bmc);
-> >> +       int rc;
-> >> +       u8 str;
-> >
-> > str is status, it would be good to spell that out in full.
-> 
-> I guess if it trips enough people up we can rename it later.
-> 
-> >
-> >>
-> >>         /* We don't have an OBE IRQ, emulate it */
-> >>         if (mask & KCS_BMC_EVENT_TYPE_OBE) {
-> >> -               if (KCS_BMC_EVENT_TYPE_OBE & state)
-> >> -                       mod_timer(&priv->obe.timer, jiffies + OBE_POLL_PERIOD);
-> >> -               else
-> >> +               if (KCS_BMC_EVENT_TYPE_OBE & state) {
-> >> +                       /*
-> >> +                        * Given we don't have an OBE IRQ, delay by polling briefly to see if we can
-> >> +                        * observe such an event before returning to the caller. This is not
-> >> +                        * incorrect because OBF may have already become clear before enabling the
-> >> +                        * IRQ if we had one, under which circumstance no event will be propagated
-> >> +                        * anyway.
-> >> +                        *
-> >> +                        * The onus is on the client to perform a race-free check that it hasn't
-> >> +                        * missed the event.
-> >> +                        */
-> >> +                       rc = read_poll_timeout_atomic(aspeed_kcs_inb, str,
-> >> +                                                     !(str & KCS_BMC_STR_OBF), 1, 100, false,
-> >> +                                                     &priv->kcs_bmc, priv->kcs_bmc.ioreg.str);
-> >> +                       /* Time for the slow path? */
-> >
-> > The mod_timer is the slow path? The question mark threw me.
-> 
-> Yeah, mod_timer() is the slow path; read_poll_timeout_atomic() is the 
-> fast path and we've exhausted the time we're willing to wait there if 
-> we get -ETIMEDOUT.
-> 
-> The comment was intended as a description for the question posed by the 
-> condition. It made sense in my head but maybe it's confusing more than 
-> it is enlightening?
-> 
-> Andrew
-> 
-> >
-> >> +                       if (rc == -ETIMEDOUT)
-> >> +                               mod_timer(&priv->obe.timer, jiffies + OBE_POLL_PERIOD);
-> >> +               } else {
-> >>                         del_timer(&priv->obe.timer);
-> >> +               }
-> >>         }
-> >>
-> >>         if (mask & KCS_BMC_EVENT_TYPE_IBF) {
-> >> --
-> >> 2.34.1
-> >>
