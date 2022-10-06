@@ -2,194 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E63E5F6DF1
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 21:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0BF5F6DC6
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 20:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbiJFTKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 15:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37506 "EHLO
+        id S230334AbiJFSzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 14:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiJFTKd (ORCPT
+        with ESMTP id S229614AbiJFSzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 15:10:33 -0400
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A3833A03;
-        Thu,  6 Oct 2022 12:10:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1665083430; x=1696619430;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=L3wZx5jgEpsuCjj5ZBPl/Gm3fBywLYkBk0atiKCIlwM=;
-  b=TYS+ODZav9sLlqixKg3MVPjG9jmJlQ1h+9bF6SuOHoxyX6h5dXaYIv8X
-   z9Mwl5wJSjpBaJo7+woktRyyTTK9ADoi0OQySb/UFZR29GuPZ0/e3Su8l
-   I+Q93zdK1DW0jr6quNhqqo4BkGmDxgPqkYRyikQ5iqHwKxN3KrhzIc5Mw
-   A=;
-X-IronPort-AV: E=Sophos;i="5.95,164,1661817600"; 
-   d="scan'208";a="266911535"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-7dac3c4d.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 18:55:24 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-7dac3c4d.us-east-1.amazon.com (Postfix) with ESMTPS id B1A9AA0A88;
-        Thu,  6 Oct 2022 18:55:20 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Thu, 6 Oct 2022 18:55:20 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.161.176) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Thu, 6 Oct 2022 18:55:14 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-CC:     Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Kuniyuki Iwashima <kuni1840@gmail.com>,
-        <netdev@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>,
-        <linux-kernel@vger.kernel.org>, syzbot <syzkaller@googlegroups.com>
-Subject: [PATCH v5 net 5/5] tcp: Fix data races around icsk->icsk_af_ops.
-Date:   Thu, 6 Oct 2022 11:53:49 -0700
-Message-ID: <20221006185349.74777-6-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221006185349.74777-1-kuniyu@amazon.com>
-References: <20221006185349.74777-1-kuniyu@amazon.com>
+        Thu, 6 Oct 2022 14:55:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025DDC695E;
+        Thu,  6 Oct 2022 11:55:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30AB161A59;
+        Thu,  6 Oct 2022 18:55:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73DD8C433D6;
+        Thu,  6 Oct 2022 18:55:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665082543;
+        bh=tmTicypHL4AJTDy+gvYmq3jzH0FcSXkyP/2IndtLrxU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=iqDcM69oSm5yw1ZMskQj4T6lycuKNjpR+eoIF6iiF+J+2525f6mfvvlYVc1KGWTad
+         clEpCM2PyVnzNuvviF5/4HItBeAC6iUVyXXjiDus6MfmHBqHn5jtwd3eiBHu4m2NzP
+         N47wUUZ2dp1pggCNroTsjUrYWhSTrdqqVXmP26iHRf5G91udC/0IRbwWKYP5vxkUD6
+         kAYAC9YfMb/U0VcppwZbhzSAoqstt+u5Df0AdFMA5J7DFPdA4EQLX6ApZofR8lpC2c
+         3wDF568vSz145sUv8BH4yeFfkGcyypK/i0WgkbstG95RWbDPHcmLT54gi52FFD7cE2
+         2M7dbTBsSQagg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 0CB035C0F66; Thu,  6 Oct 2022 11:55:43 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 11:55:43 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org,
+        youssefesmat@google.com, surenb@google.com
+Subject: Re: [PATCH v7 00/11] rcu: call_rcu() power improvements
+Message-ID: <20221006185543.GB4196@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221004024157.2470238-1-joel@joelfernandes.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.161.176]
-X-ClientProxiedBy: EX13D18UWA003.ant.amazon.com (10.43.160.238) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221004024157.2470238-1-joel@joelfernandes.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-setsockopt(IPV6_ADDRFORM) and tcp_v6_connect() change icsk->icsk_af_ops
-under lock_sock(), but tcp_(get|set)sockopt() read it locklessly.  To
-avoid load/store tearing, we need to add READ_ONCE() and WRITE_ONCE()
-for the reads and writes.
+On Tue, Oct 04, 2022 at 02:41:46AM +0000, Joel Fernandes (Google) wrote:
+> v7 version of RCU lazy patches based on rcu/next branch.
+> 
+> To facilitate easier merge, I dropped tracing and other patches and just
+> implemented the new changes. I will post the tracing patches later along with
+> rcutop as I need to add new tracepoints that Frederic suggested.
+> 
+> Main recent changes:
+> 1. rcu_barrier() wake up only for lazy bypass list.
+> 2. Make all call_rcu() default-lazy and add call_rcu_flush() API.
+> 3. Take care of some callers using call_rcu_flush() API.
+> 4. Several refactorings suggested by Paul/Frederic.
+> 5. New call_rcu() to call_rcu_flush() conversions by Joel/Vlad/Paul.
+> 
+> I am seeing good performance and power with these patches on real ChromeOS x86
+> asymmetric hardware.
+> 
+> Earlier cover letter with lots of details is here:
+> https://lore.kernel.org/all/20220901221720.1105021-1-joel@joelfernandes.org/
+> 
+> List of recent changes:
+>     
+>     [ Frederic Weisbec: Program the lazy timer only if WAKE_NOT, since other
+>       deferral levels wake much earlier so for those it is not needed. ]
+>     
+>     [ Frederic Weisbec: Use flush flags to keep bypass API code clean. ]
+>     
+>     [ Frederic Weisbec: Make rcu_barrier() wake up only if main list empty. ]
+>     
+>     [ Frederic Weisbec: Remove extra 'else if' branch in rcu_nocb_try_bypass(). ]
+>     
+>     [ Joel: Fix issue where I was not resetting lazy_len after moving it to rdp ]
+>     
+>     [ Paul/Thomas/Joel: Make call_rcu() default lazy so users don't mess up. ]
+>     
+>     [ Paul/Frederic : Cosmetic changes, split out wakeup of nocb thread. ]
+>     
+>     [ Vlad/Joel : More call_rcu -> flush conversions ]
 
-Thanks to Eric Dumazet for providing the syzbot report:
+Thank you for your continued work on this!
 
-BUG: KCSAN: data-race in tcp_setsockopt / tcp_v6_connect
+I pulled these into an experimental branch, applied Uladzislau's
+Tested-by and ran a quick round of rcutorture.
 
-write to 0xffff88813c624518 of 8 bytes by task 23936 on cpu 0:
-tcp_v6_connect+0x5b3/0xce0 net/ipv6/tcp_ipv6.c:240
-__inet_stream_connect+0x159/0x6d0 net/ipv4/af_inet.c:660
-inet_stream_connect+0x44/0x70 net/ipv4/af_inet.c:724
-__sys_connect_file net/socket.c:1976 [inline]
-__sys_connect+0x197/0x1b0 net/socket.c:1993
-__do_sys_connect net/socket.c:2003 [inline]
-__se_sys_connect net/socket.c:2000 [inline]
-__x64_sys_connect+0x3d/0x50 net/socket.c:2000
-do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
+From TREE02, TREE03, and TREE09 I got this:
 
-read to 0xffff88813c624518 of 8 bytes by task 23937 on cpu 1:
-tcp_setsockopt+0x147/0x1c80 net/ipv4/tcp.c:3789
-sock_common_setsockopt+0x5d/0x70 net/core/sock.c:3585
-__sys_setsockopt+0x212/0x2b0 net/socket.c:2252
-__do_sys_setsockopt net/socket.c:2263 [inline]
-__se_sys_setsockopt net/socket.c:2260 [inline]
-__x64_sys_setsockopt+0x62/0x70 net/socket.c:2260
-do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
+In file included from kernel/rcu/tree.c:68:
+kernel/rcu/tree.h:449:13: error: ‘wake_nocb_gp’ used but never defined [-Werror]
+  449 | static bool wake_nocb_gp(struct rcu_data *rdp, bool force);
+      |             ^~~~~~~~~~~~
 
-value changed: 0xffffffff8539af68 -> 0xffffffff8539aff8
+One could argue that this is not a big deal, except that Linus gets a
+bit tetchy when this sort of thing shows up in mainline.
 
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 PID: 23937 Comm: syz-executor.5 Not tainted
-6.0.0-rc4-syzkaller-00331-g4ed9c1e971b1-dirty #0
+Nevetheless, it looks like we might be getting quite close!
 
-Hardware name: Google Google Compute Engine/Google Compute Engine,
-BIOS Google 08/26/2022
+							Thanx, Paul
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Reported-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
----
- net/ipv4/tcp.c           | 10 ++++++----
- net/ipv6/ipv6_sockglue.c |  3 ++-
- net/ipv6/tcp_ipv6.c      |  6 ++++--
- 3 files changed, 12 insertions(+), 7 deletions(-)
-
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 0c51abeee172..f8232811a5be 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -3796,8 +3796,9 @@ int tcp_setsockopt(struct sock *sk, int level, int optname, sockptr_t optval,
- 	const struct inet_connection_sock *icsk = inet_csk(sk);
- 
- 	if (level != SOL_TCP)
--		return icsk->icsk_af_ops->setsockopt(sk, level, optname,
--						     optval, optlen);
-+		/* Paired with WRITE_ONCE() in do_ipv6_setsockopt() and tcp_v6_connect() */
-+		return READ_ONCE(icsk->icsk_af_ops)->setsockopt(sk, level, optname,
-+								optval, optlen);
- 	return do_tcp_setsockopt(sk, level, optname, optval, optlen);
- }
- EXPORT_SYMBOL(tcp_setsockopt);
-@@ -4396,8 +4397,9 @@ int tcp_getsockopt(struct sock *sk, int level, int optname, char __user *optval,
- 	struct inet_connection_sock *icsk = inet_csk(sk);
- 
- 	if (level != SOL_TCP)
--		return icsk->icsk_af_ops->getsockopt(sk, level, optname,
--						     optval, optlen);
-+		/* Paired with WRITE_ONCE() in do_ipv6_setsockopt() and tcp_v6_connect() */
-+		return READ_ONCE(icsk->icsk_af_ops)->getsockopt(sk, level, optname,
-+								optval, optlen);
- 	return do_tcp_getsockopt(sk, level, optname, USER_SOCKPTR(optval),
- 				 USER_SOCKPTR(optlen));
- }
-diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
-index d7207a546aec..532f4478c884 100644
---- a/net/ipv6/ipv6_sockglue.c
-+++ b/net/ipv6/ipv6_sockglue.c
-@@ -479,7 +479,8 @@ int do_ipv6_setsockopt(struct sock *sk, int level, int optname,
- 
- 				/* Paired with READ_ONCE(sk->sk_prot) in inet6_stream_ops */
- 				WRITE_ONCE(sk->sk_prot, &tcp_prot);
--				icsk->icsk_af_ops = &ipv4_specific;
-+				/* Paired with READ_ONCE() in tcp_(get|set)sockopt() */
-+				WRITE_ONCE(icsk->icsk_af_ops, &ipv4_specific);
- 				sk->sk_socket->ops = &inet_stream_ops;
- 				sk->sk_family = PF_INET;
- 				tcp_sync_mss(sk, icsk->icsk_pmtu_cookie);
-diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
-index a8adda623da1..2a3f9296df1e 100644
---- a/net/ipv6/tcp_ipv6.c
-+++ b/net/ipv6/tcp_ipv6.c
-@@ -238,7 +238,8 @@ static int tcp_v6_connect(struct sock *sk, struct sockaddr *uaddr,
- 		sin.sin_port = usin->sin6_port;
- 		sin.sin_addr.s_addr = usin->sin6_addr.s6_addr32[3];
- 
--		icsk->icsk_af_ops = &ipv6_mapped;
-+		/* Paired with READ_ONCE() in tcp_(get|set)sockopt() */
-+		WRITE_ONCE(icsk->icsk_af_ops, &ipv6_mapped);
- 		if (sk_is_mptcp(sk))
- 			mptcpv6_handle_mapped(sk, true);
- 		sk->sk_backlog_rcv = tcp_v4_do_rcv;
-@@ -250,7 +251,8 @@ static int tcp_v6_connect(struct sock *sk, struct sockaddr *uaddr,
- 
- 		if (err) {
- 			icsk->icsk_ext_hdr_len = exthdrlen;
--			icsk->icsk_af_ops = &ipv6_specific;
-+			/* Paired with READ_ONCE() in tcp_(get|set)sockopt() */
-+			WRITE_ONCE(icsk->icsk_af_ops, &ipv6_specific);
- 			if (sk_is_mptcp(sk))
- 				mptcpv6_handle_mapped(sk, false);
- 			sk->sk_backlog_rcv = tcp_v6_do_rcv;
--- 
-2.30.2
-
+> Frederic Weisbecker (1):
+> rcu: Wake up nocb gp thread on rcu_barrier_entrain()
+> 
+> Joel Fernandes (Google) (7):
+> rcu: Make call_rcu() lazy to save power
+> rcu: Refactor code a bit in rcu_nocb_do_flush_bypass()
+> rcuscale: Add laziness and kfree tests
+> percpu-refcount: Use call_rcu_flush() for atomic switch
+> rcu/sync: Use call_rcu_flush() instead of call_rcu
+> rcu/rcuscale: Use call_rcu_flush() for async reader test
+> rcu/rcutorture: Use call_rcu_flush() where needed
+> 
+> Uladzislau Rezki (2):
+> scsi/scsi_error: Use call_rcu_flush() instead of call_rcu()
+> workqueue: Make queue_rcu_work() use call_rcu_flush()
+> 
+> Vineeth Pillai (1):
+> rcu: shrinker for lazy rcu
+> 
+> drivers/scsi/scsi_error.c |   2 +-
+> include/linux/rcupdate.h  |   7 ++
+> kernel/rcu/Kconfig        |   8 ++
+> kernel/rcu/rcu.h          |   8 ++
+> kernel/rcu/rcuscale.c     |  67 +++++++++++-
+> kernel/rcu/rcutorture.c   |  16 +--
+> kernel/rcu/sync.c         |   2 +-
+> kernel/rcu/tiny.c         |   2 +-
+> kernel/rcu/tree.c         | 140 +++++++++++++++++--------
+> kernel/rcu/tree.h         |  12 ++-
+> kernel/rcu/tree_exp.h     |   2 +-
+> kernel/rcu/tree_nocb.h    | 213 ++++++++++++++++++++++++++++++++------
+> kernel/workqueue.c        |   2 +-
+> lib/percpu-refcount.c     |   3 +-
+> 14 files changed, 388 insertions(+), 96 deletions(-)
+> 
+> --
+> 2.38.0.rc1.362.ged0d419d3c-goog
+> 
