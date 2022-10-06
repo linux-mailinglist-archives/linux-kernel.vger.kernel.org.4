@@ -2,90 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B0545F6F86
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74E0E5F6F8B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232286AbiJFUmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 16:42:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37224 "EHLO
+        id S232307AbiJFUmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 16:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232277AbiJFUlz (ORCPT
+        with ESMTP id S232269AbiJFUm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 16:41:55 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274299C2D2;
-        Thu,  6 Oct 2022 13:41:43 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1321a1e94b3so3574139fac.1;
-        Thu, 06 Oct 2022 13:41:42 -0700 (PDT)
+        Thu, 6 Oct 2022 16:42:29 -0400
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91CBFF8EB;
+        Thu,  6 Oct 2022 13:42:15 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id n83so3355055oif.11;
+        Thu, 06 Oct 2022 13:42:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rZrY5wrEfiPQFKCBqZiRWp+hyujoJ/ZhHEyAYAsTtgs=;
-        b=COzzPHpsahVC0L7uSdQfoXdIEel7kiB9rDnKuq1tLnq0KLBjcYnts5EW5sgFTmn8fb
-         a+rD0VTIIITOMt/pqyDhjzm7XakLpL/WsEs+WC4Rct+BHgg9Ux400viDtaZkx4+qlhVQ
-         vqwWr24nhp6ONC+p92cmtAlceUK4SdHmHkHyruP56/++K2AOU4T6e1n5v361JcimIACl
-         0/Jc8fJ10Yt/8o6E10LdotozfGZHHRk5VUHO8mEz9sp4JRjv3o/7ipglAbszN3zV9G87
-         Q0OComJ8BJb9n2v+Uu0YT7ZJG0icSh8n2idY7kN43PDCXqBS+EztFCMcuwFynWA39bWF
-         Lw6w==
-X-Gm-Message-State: ACrzQf3048oRN9WBkQwt5fRuknEWD1AzpbHkcv+R+Tjlb1m2kYRtRdiO
-        92HVojauRegYdydAHBpn1A==
-X-Google-Smtp-Source: AMsMyM7FcQx52PXZkljcrvwyaJ0DLgNa/LWl554KuLDblIGW2q38PzpOp/Wi9nSaHTMJLxzda5MqQg==
-X-Received: by 2002:a05:6870:a713:b0:131:8f4f:b8ea with SMTP id g19-20020a056870a71300b001318f4fb8eamr6441428oam.138.1665088886696;
-        Thu, 06 Oct 2022 13:41:26 -0700 (PDT)
+        bh=jg+Uo1zpi1C5p+UKCGILEDIgQu1mRxcSKD12TP8yRcE=;
+        b=Bh7KC0vrS4r7m037LHsOrVWYntQ5pOoDefCL8Ys75wmmwpeY/mJuyGDv8zWH8UWfFO
+         PRmfwITX9iJ4Se9nLUSVu6/70JcLZv0mMH398U+aZe+SyXYrVAESKkCWZ9KnNKl/sZFR
+         CQbqoJE//bGH2E8l1GgW1YCMjrDlZzGWHgMgWLD+H8gCVddQLPAZe9fR+2ajV1SMqBGK
+         8c4JGSuvsw83vtJZGSlhnDDhuXiIVKZZQjte08Jwd3TLD/iCtq/CuuXTSZ7PY/p6jlKs
+         4QMkZap3i2TDDyw1CjYBlCuk9OPbxAqvXURIbD21dDCXqN/aAh/j1xv/wEQMWyfHnplt
+         LP8A==
+X-Gm-Message-State: ACrzQf2hlSGC+sGJEYB7IiWWP+TTYfXv/eF4Q2DeTUK7pWfU8JaV122h
+        LtsUJ4uXNshRTeW44yG/dA==
+X-Google-Smtp-Source: AMsMyM4CUb8wzpAUKrWbU2uyyVArNB2BRnMnsn/WOfipPuCJijr4UwWO8razHhWKkDg0Z97H7t9Y2A==
+X-Received: by 2002:a05:6808:1447:b0:350:a9db:d721 with SMTP id x7-20020a056808144700b00350a9dbd721mr5795220oiv.33.1665088923612;
+        Thu, 06 Oct 2022 13:42:03 -0700 (PDT)
 Received: from robh_at_kernel.org ([2607:fb90:8a65:c536:245:842:a3a4:9017])
-        by smtp.gmail.com with ESMTPSA id l15-20020a9d550f000000b006393ea22c1csm306945oth.16.2022.10.06.13.41.24
+        by smtp.gmail.com with ESMTPSA id l15-20020a9d550f000000b006393ea22c1csm307622oth.16.2022.10.06.13.42.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 13:41:26 -0700 (PDT)
-Received: (nullmailer pid 120200 invoked by uid 1000);
-        Thu, 06 Oct 2022 20:41:18 -0000
-Date:   Thu, 6 Oct 2022 15:41:18 -0500
+        Thu, 06 Oct 2022 13:42:02 -0700 (PDT)
+Received: (nullmailer pid 120810 invoked by uid 1000);
+        Thu, 06 Oct 2022 20:41:56 -0000
+Date:   Thu, 6 Oct 2022 15:41:56 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Vinod Koul <vkoul@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        krishna Lanka <quic_vamslank@quicinc.com>,
+        devicetree@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Iskren Chernev <iskren.chernev@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Shawn Guo <shawn.guo@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
-        krishna Lanka <quic_vamslank@quicinc.com>
-Subject: Re: [PATCH 31/34] dt-bindings: pinctrl: qcom,sm8250-lpass-lpi: minor
- style cleanups
-Message-ID: <166508887569.120045.1434104375900994989.robh@kernel.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        linux-gpio@vger.kernel.org,
+        Iskren Chernev <iskren.chernev@gmail.com>,
+        linux-kernel@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>
+Subject: Re: [PATCH 32/34] dt-bindings: pinctrl: qcom,sc8280xp-lpass-lpi:
+ minor style cleanups
+Message-ID: <166508890253.120586.9547541955788820065.robh@kernel.org>
 References: <20221006140637.246665-1-krzysztof.kozlowski@linaro.org>
- <20221006140637.246665-32-krzysztof.kozlowski@linaro.org>
+ <20221006140637.246665-33-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221006140637.246665-32-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+In-Reply-To: <20221006140637.246665-33-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Oct 2022 16:06:34 +0200, Krzysztof Kozlowski wrote:
+On Thu, 06 Oct 2022 16:06:35 +0200, Krzysztof Kozlowski wrote:
 > Drop "binding" from description (and align it with other Qualcomm
-> pinctrl bindings), drop redundant minItems, use double quotes
-> consistently and drop redundant quotes.
+> pinctrl bindings), use double quotes consistently and drop redundant
+> quotes.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  .../pinctrl/qcom,sm8250-lpass-lpi-pinctrl.yaml   | 16 +++++++---------
->  1 file changed, 7 insertions(+), 9 deletions(-)
+>  .../pinctrl/qcom,sc8280xp-lpass-lpi-pinctrl.yaml    | 13 ++++++-------
+>  1 file changed, 6 insertions(+), 7 deletions(-)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
