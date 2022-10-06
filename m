@@ -2,92 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8795F6461
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 12:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 198CA5F6463
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 12:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbiJFKiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 06:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
+        id S231234AbiJFKj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 06:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbiJFKit (ORCPT
+        with ESMTP id S230391AbiJFKjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 06:38:49 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B642195E72
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 03:38:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665052728; x=1696588728;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=B3augJp3fk1qe+mBthnq0pxJCB8QBCksPWpBNe9BcX8=;
-  b=A+OcyPannz48RAE3rVXlz+W+MBs0r/1n+4LHNI9AxwQ3XatptWAClkPZ
-   5tiQAQ1GEd+DpbggDxfBuz7ZVYrx1jbPUpJBXioD3idEe6H737avXkGpn
-   wcgh9jtfe3m86YIjDdddCO2K2/2QuU9Ceua7oSvb0iJLWYdibu+r0tjbo
-   RUSzeZoph9djitimVx+gLmzsGDEU2M2JpYNm34oGuJORcBWe94eDDvbsl
-   EbCcxoHnLuF/ss6AF9J46rmbEn3sSnykj5aD7cB7oBUIS4C8CxXWXnxDf
-   Ta5yb9iXpRauEltRG2DDEqGj2CaFuRr1feLMuWMgQUEfulJlUdWfrIWFf
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="301009819"
-X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
-   d="scan'208";a="301009819"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 03:38:48 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="624674737"
-X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
-   d="scan'208";a="624674737"
-Received: from jnikula-mobl4.fi.intel.com (HELO localhost) ([10.237.66.153])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 03:38:45 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch
-Cc:     Jilin Yuan <yuanjilin@cdjrlc.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm/edid: fix repeated words in comments
-In-Reply-To: <20220907113644.32831-1-yuanjilin@cdjrlc.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220907113644.32831-1-yuanjilin@cdjrlc.com>
-Date:   Thu, 06 Oct 2022 13:38:42 +0300
-Message-ID: <87zge9p77x.fsf@intel.com>
+        Thu, 6 Oct 2022 06:39:25 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B891E97D45
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 03:39:24 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id qw20so2959685ejc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 03:39:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:subject
+         :references:to:user-agent:mime-version:date:message-id:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qy1SQssJgpmu6E/3UJtpV1dla+gXgwxJp38uBeeurqk=;
+        b=llzS4465S8Cem8lOqSeBQkABDbMKrFD7zBtRuJVELtLKveS34ajuEU+IYb6hnvGl0o
+         DzbYQdsfex41ei1f4ayMOiuALXLbqRhdQHRohUfB8QBumL64b3bfHczuzwIms2UUGlMr
+         4cDwLSUgOeXdez2bKhkyff9pM9T3WIhcwUZLFf/xo+l0YtrY51WqSLMznfXnL4wmx1JD
+         WrbZA6RGw5azBKgkGblOlnHc9GXxErpFMCrfPdfX3xFawpqnRnRvIYeI790cvqpBRt38
+         Mwq9idaofzDjng0TN/MGF5lxrfaUF1suQHl6s0/EJ1wHw4ThUa2AYAc1Tb4OfXWhT3kk
+         KbPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:subject
+         :references:to:user-agent:mime-version:date:message-id:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qy1SQssJgpmu6E/3UJtpV1dla+gXgwxJp38uBeeurqk=;
+        b=gIHTDpOezMAqmMeDqwKf86iSl3d6DTmi++vhNIaIeeIEaSAMfQXmYIEcL0LOLWw4vL
+         h2p440/OCNeM7Ps8w13rCDS5x+nnZ+eRX03O7U0kCVEDDeEV5vKvTtoESB30guVyyJ/U
+         /UllKvnvmkfDCv2sXvkDGUSGbiArvhx9bklVnd8fGI8PUlziA+P5IK6YiNmfoCBEMcoc
+         NvmfRivzPAk982z+Gpvg5s0tnVkgwWPzSk4NrIY+LH6KIouaOwnWCkZQ5H5RiLgJlvhV
+         HeFRlpRpwSwXy7KHHcMUSUUWNqxPzn8tnr1Pj4+qgP1/1ZVHovbSOZrRZ3GpKrkAyel6
+         0+kQ==
+X-Gm-Message-State: ACrzQf0a7H06OhTlmhTNUWPg+TgdOE6c5z9lAKyMo7oCQW/9X2NTyrME
+        x1RisUETLr7a1h/e7meTEPaCXVSwORCUAQ==
+X-Google-Smtp-Source: AMsMyM5U4gE2PlJNKLval+O+B6AJriV+SC7F1EoT81ovBnjt0TIXsf5/ssSowfZWO8bMAcd3cYpF0A==
+X-Received: by 2002:a17:907:c05:b0:73d:6e0a:8d22 with SMTP id ga5-20020a1709070c0500b0073d6e0a8d22mr3444804ejc.646.1665052763265;
+        Thu, 06 Oct 2022 03:39:23 -0700 (PDT)
+Received: from ?IPV6:2001:9e8:27fc:4b00:6362:cb9b:f9b:6c46? ([2001:9e8:27fc:4b00:6362:cb9b:f9b:6c46])
+        by smtp.gmail.com with ESMTPSA id o25-20020a170906769900b007829fb46a0esm10225598ejm.142.2022.10.06.03.39.22
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Oct 2022 03:39:22 -0700 (PDT)
+From:   Marc Miltenberger <marcmiltenberger@gmail.com>
+X-Google-Original-From: Marc Miltenberger <MarcMiltenberger@gmail.com>
+Message-ID: <4c45d359-3e58-05ec-0a40-1ebcf2283af2@gmail.com>
+Date:   Thu, 6 Oct 2022 12:39:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+To:     linux-kernel@vger.kernel.org
+References: <1266113f-75a1-b276-bb8c-3cdfcbabf043@alu.unizg.hr>
+Subject: Re: BUG: 6.0.0-RC kernels trigger Firefox snap bug with 6.0.0-rc3
+ through 6.0.0-rc7
+Content-Language: de-AT-frami
+In-Reply-To: <1266113f-75a1-b276-bb8c-3cdfcbabf043@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 07 Sep 2022, Jilin Yuan <yuanjilin@cdjrlc.com> wrote:
-> Delete the redundant word 'on'.
->
-> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+Hi there,
 
-Thanks for the patch, pushed to drm-misc-next.
+I have probably the same problem on Ubuntu kinetic kudu using 
+6.0.0-060000rc7daily20221002-generic obtained from 
+https://kernel.ubuntu.com/~kernel-ppa/mainline/daily/2022-10-02/amd64/
 
-BR,
-Jani.
+Firefox tabs crash randomly and chromium does not start with the message
+/bin/bash: /lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of 
+Verdef record
+/bin/bash: error while loading shared libraries: 
+/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verneed record
 
-> ---
->  drivers/gpu/drm/drm_edid.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-> index 4005dab6147d..25866b568d6b 100644
-> --- a/drivers/gpu/drm/drm_edid.c
-> +++ b/drivers/gpu/drm/drm_edid.c
-> @@ -6837,7 +6837,7 @@ drm_hdmi_avi_infoframe_quant_range(struct hdmi_avi_infoframe *frame,
->  	 * by non-zero YQ when receiving RGB. There doesn't seem to be any
->  	 * good way to tell which version of CEA-861 the sink supports, so
->  	 * we limit non-zero YQ to HDMI 2.0 sinks only as HDMI 2.0 is based
-> -	 * on on CEA-861-F.
-> +	 * on CEA-861-F.
->  	 */
->  	if (!is_hdmi2_sink(connector) ||
->  	    rgb_quant_range == HDMI_QUANTIZATION_RANGE_LIMITED)
+Chrome (without snap) works fine though.
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+On my machine, these issues also arose after installing 6.0.0; the 
+previous version I used (5.19.5) worked fine. In fact, I've reverted to 
+the older version without changing anything else and both firefox and 
+chromium are happily working again.
+
+Best regards,
+Marc
