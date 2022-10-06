@@ -2,134 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDE45F6853
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 503225F6857
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbiJFNi6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Oct 2022 09:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58668 "EHLO
+        id S231739AbiJFNjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 09:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231680AbiJFNix (ORCPT
+        with ESMTP id S231730AbiJFNjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 09:38:53 -0400
-Received: from mail5.swissbit.com (mail5.swissbit.com [148.251.244.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B528AC382;
-        Thu,  6 Oct 2022 06:38:47 -0700 (PDT)
-Received: from mail5.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 0413F3A170F;
-        Thu,  6 Oct 2022 15:38:45 +0200 (CEST)
-Received: from mail5.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id DC1FE3A1625;
-        Thu,  6 Oct 2022 15:38:44 +0200 (CEST)
-X-TM-AS-ERS: 10.149.2.42-127.5.254.253
-X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
-X-DDEI-TLS-USAGE: Used
-Received: from ex.swissbit.com (sbdeex04.sbitdom.lan [10.149.2.42])
-        by mail5.swissbit.com (Postfix) with ESMTPS;
-        Thu,  6 Oct 2022 15:38:44 +0200 (CEST)
-Received: from sbdeex04.sbitdom.lan (10.149.2.42) by sbdeex04.sbitdom.lan
- (10.149.2.42) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Thu, 6 Oct 2022
- 15:38:40 +0200
-Received: from sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818]) by
- sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818%9]) with mapi id
- 15.02.1118.009; Thu, 6 Oct 2022 15:38:40 +0200
-From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
-Subject: [PATCH 1/2] mmc: block: Remove error check of hw_reset on reset
-Thread-Topic: [PATCH 1/2] mmc: block: Remove error check of hw_reset on reset
-Thread-Index: AdjZiMURb3moNmapTDOMC5quWhQ63Q==
-Date:   Thu, 6 Oct 2022 13:38:40 +0000
-Message-ID: <cc0d807fbd2f4001adef8728f957c696@hyperstone.com>
-Accept-Language: en-US, de-DE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.153.3.46]
-Content-Type: text/plain;
-        charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        Thu, 6 Oct 2022 09:39:11 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036D8AC3A6
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 06:38:50 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id i7-20020a17090a65c700b0020ad9666a86so4398674pjs.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 06:38:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jTCYSZmMysxtSVfEJTY+s0G/UzQUqK+OIX1DRudo8Kg=;
+        b=TzWXmCFRuEwSQxIvtrbLg3T/gSXyynJruPXM2VsC2kWTdmxgp2c6gfxpoMvWW3Hghk
+         r18GM8xCrKv7P+cPLVf88WS43gkSrm4EvQQeUupsML+Z6vTl6tQfEY3EzjM/V7eL6KAD
+         ySdJB2j4CTJAHh3/lCiCWusUXeEvb4PYmS8uBwd5rJOvBkwmxxbT6wFvf0GPhvUuIWLE
+         ABDicttkDsY8z2JdCYV2ntUjJm4vRgIIo3vR15PMSmtLqxH0ksziR/0IbTeKoYDO1Rz4
+         igkCFxrP29PaR3yEvO09BAcQ7R9FrpqzBWAFAcQZPUBUe8kwpPjNIt8DQ7qKk2m6ghtc
+         IR3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jTCYSZmMysxtSVfEJTY+s0G/UzQUqK+OIX1DRudo8Kg=;
+        b=SkHWlXaeagPc8oI2rUEly5EuMEF3623/UtLj5H68oDmfb9YcNpTeM3Pydecj9ZQH9n
+         bA0dKko7RQslAph55I5M/HldXMYiDjJkIEaqsiaRPVjnKs+F1zE+adHh7m9PPGyw7Ms8
+         6mIDhNBpuCRO2cQo1Etew6podLWOy5LXtwcysCdc24CE6uFHAsqDZMKXIJN91ERcHkBZ
+         4yOnMr6tabaGBHfn+tiaGtpIofTH+fYdG87nekXNJcgnzME8fvTfrcOI/hXs1WGQi00o
+         2v0eTAy0vVij71Y8j7SKnYp/o5rV/qRgNcxpDq8BtgAbuD/En8EkieaJh0UkOUE3lnED
+         d3KA==
+X-Gm-Message-State: ACrzQf0CvezNHUf8vxL0/q/R72w+RNq6ni/8u9gY93WJqakN2SKHvzJe
+        7iVGvpGrXUxshpwjZJ+FOE5AOfm9UHX4hA==
+X-Google-Smtp-Source: AMsMyM6p5emMqF60uEZPjXHkvs1E1VToggNwIb6bqQONyLj6xjXv3FjpqqhDN3PJwImhRiE8UzhFTg==
+X-Received: by 2002:a17:902:db12:b0:176:d6a4:53ab with SMTP id m18-20020a170902db1200b00176d6a453abmr5024135plx.113.1665063529879;
+        Thu, 06 Oct 2022 06:38:49 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id w129-20020a623087000000b00541c68a0689sm12890163pfw.7.2022.10.06.06.38.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 06:38:49 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Deming Wang <wangdeming@inspur.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20221006084450.1513-1-wangdeming@inspur.com>
+References: <20221006084450.1513-1-wangdeming@inspur.com>
+Subject: Re: [PATCH] block: Remove the repeat word 'can'
+Message-Id: <166506352904.7298.7396235219714937696.b4-ty@kernel.dk>
+Date:   Thu, 06 Oct 2022 07:38:49 -0600
 MIME-Version: 1.0
-X-TMASE-Version: DDEI-5.1-9.0.1002-27184.007
-X-TMASE-Result: 10-4.612300-10.000000
-X-TMASE-MatchedRID: h20DFeLkM89gljMcj2tyXt5x7RpGJf1a0U0UWSZVhAriKUaoIhea7dAY
-        WUo4HSIkSrqDabEvLXFgvuOVbAf7tqGGOyqBK41vEXjPIvKd74BMkOX0UoduuTQM0/COoudwiE9
-        RqXHGrIfTnPJMGpZGuwR2KsmNWZajcgDifvL5MeqeAiCmPx4NwItuikALUpnGpuP9zg477pEqtq
-        5d3cxkNfAxRSAc0OEN9v+NNOVSdf8awsaFNipvKlkxhpwN50f7hfSmVWfOpMhaMOUu/TgNueVvw
-        BMCJ5qI
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-TMASE-XGENCLOUD: f14a20e7-1d43-420b-aaa1-e96bb1c30d59-0-0-200-0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-d9ed3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before switching back to the right partition in mmc_blk_reset
-there used to be a check if hw_reset was even supported.
-This return value was removed, so there is no reason to check.
+On Thu, 6 Oct 2022 04:44:50 -0400, Deming Wang wrote:
+> Remove the repeat word 'can' from the comments of bio_kmalloc.
+> 
+> 
 
-Fixes: fefdd3c91e0a ("mmc: core: Drop superfluous validations in mmc_hw|sw_reset()")
-Cc: stable@vger.kernel.org
+Applied, thanks!
 
-Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
----
- drivers/mmc/core/block.c | 24 ++++++++++--------------
- 1 file changed, 10 insertions(+), 14 deletions(-)
+[1/1] block: Remove the repeat word 'can'
+      commit: 340e134727c9adaefadc7e79b765c038e18e55c3
 
-diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-index ce89611a136e..8531f92fd0cb 100644
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -991,6 +991,8 @@ static int mmc_blk_reset(struct mmc_blk_data *md, struct mmc_host *host,
- 			 int type)
- {
- 	int err;
-+	struct mmc_blk_data *main_md = dev_get_drvdata(&host->card->dev);
-+	int part_err;
- 
- 	if (md->reset_done & type)
- 		return -EEXIST;
-@@ -998,20 +1000,14 @@ static int mmc_blk_reset(struct mmc_blk_data *md, struct mmc_host *host,
- 	md->reset_done |= type;
- 	err = mmc_hw_reset(host->card);
- 	/* Ensure we switch back to the correct partition */
--	if (err) {
--		struct mmc_blk_data *main_md =
--			dev_get_drvdata(&host->card->dev);
--		int part_err;
--
--		main_md->part_curr = main_md->part_type;
--		part_err = mmc_blk_part_switch(host->card, md->part_type);
--		if (part_err) {
--			/*
--			 * We have failed to get back into the correct
--			 * partition, so we need to abort the whole request.
--			 */
--			return -ENODEV;
--		}
-+	main_md->part_curr = main_md->part_type;
-+	part_err = mmc_blk_part_switch(host->card, md->part_type);
-+	if (part_err) {
-+		/*
-+		 * We have failed to get back into the correct
-+		 * partition, so we need to abort the whole request.
-+		 */
-+		return -ENODEV;
- 	}
- 	return err;
- }
+Best regards,
 -- 
-2.37.3
+Jens Axboe
 
-Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-Managing Director: Dr. Jan Peter Berns.
-Commercial register of local courts: Freiburg HRB381782
 
