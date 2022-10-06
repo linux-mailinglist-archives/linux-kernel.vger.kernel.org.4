@@ -2,92 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2235F6312
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9593D5F6314
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbiJFIvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 04:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
+        id S231253AbiJFIvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 04:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbiJFIvI (ORCPT
+        with ESMTP id S231209AbiJFIvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 04:51:08 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48D46DAC2
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 01:51:06 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id m19so332417lfq.9
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 01:51:06 -0700 (PDT)
+        Thu, 6 Oct 2022 04:51:12 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5366DAC2
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 01:51:09 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id n12so1585320wrp.10
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 01:51:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=tIvLoyAzCOVKOX99D0R9AADU51C3uknT25CXCqDgD1U=;
-        b=syjvuFslfwj1fipmU574j5/yWZL2S3jYhnbWtJ5/bW8iUM/V71vSmb5AsxhaQ/2G0o
-         ctXQnXj/0GSOAbOLK304yQgqsFpIlw2wn3vENsIXReAQESQ7FYQ3e3iDUnXAdUxwt4Td
-         kB2rW56eQNiKHDXyNU3pU/c0Ku79mAkkC7m5TZZLTqHBqVkt65rb0q9hLTPBpEEa/mRq
-         eX1zzMQ6IXkPCewSrX8mVTXOcPVRl/qAef1AVJ52kW5/Ujtn6X047jAV62EnnUX9Aztm
-         0/+I6X+EdhcVKtpUJDxafJIJ2F5NBl87Wqp+wSebFHrCPcoC3fkGq5u8ifnCkUUfBbKO
-         WVFw==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aIf8xFSpdZbA1GQzuqts7ymYscMRXeakvYyTWUDLadI=;
+        b=G2GZPFQtAV+fYMiWZUUw9Ycw4NyH/47he9vDSPotO9NB+kd/J+ZTdp4QRwxs3nUmel
+         HsE6XDKEW5sgrt/QH6ElbgDbCHmOcxh+iT0NqyFTt3vJCqNtDZ7xBXJUf2RQDiFIZTFO
+         BVmPbl+qzzABOI+E2a3Ou4i+0l7AqwQhJlxrFI10eOvuLOOv39p2bgFOjVUq3IzTNgdm
+         imCSquDjoB7r8VPw0135RDuR5doUnprvSetHHzy/LNFGfEJ/YtD0Ir9yiut3enBuyACk
+         uQoH3GbZCQR93o/HCw39kkDnAKJWHAGH1wnBO/YrX9FY3UIYazs78CpMd5gNZhMYqaud
+         BKEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=tIvLoyAzCOVKOX99D0R9AADU51C3uknT25CXCqDgD1U=;
-        b=eWkRPajoe9PdQGptLlUqfxCYSvl+ZmHCe5HBj4WKsoJEK6DClT3m8QwAHgjD4qycN0
-         fWCUU9iUxyAec5jT0QLpRorA3cQ+Hqw08QRk+YuRTpfyowJNSk3FBCY9hMxFZ6Q1bVuu
-         +9VOgGu4Dk25q/yJt3NuEpG1DrgLJH3ve9k+vrznB5sovvnoRQU7PTX5F2Q3wGgZ+uEj
-         CroRwFJahEUdRYCWY5BmimWXajWCyb72vSWBHdoR6hChku0Ncz0UpbyYG/qd8gobyQh7
-         lCAZvevPOfdNwZJnxm6J6tqPP/8glx5vZ2XgWg6vEEhNMfuBsK7mhFJXMWDVhP6oBUw3
-         MmGg==
-X-Gm-Message-State: ACrzQf3XCJxcGTygyrkYcyR1Hc3gcdcUpL0L/+0RsF1MefgEDoqs8NCF
-        Ky/ZLWIR1/97KFGXK7/jHwsGu6sKmqSCWe/HEA99uQ==
-X-Google-Smtp-Source: AMsMyM5ikUdU3CKf42PjcY0cjPjhnAUfk+hgFVaVlzCr5IsHwJzEJDOSLagw5jbRXrOt3sxCo/qZdi3EfGbbRlMYSzI=
-X-Received: by 2002:ac2:4c8b:0:b0:4a2:2432:93ff with SMTP id
- d11-20020ac24c8b000000b004a2243293ffmr1387544lfl.26.1665046264888; Thu, 06
- Oct 2022 01:51:04 -0700 (PDT)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aIf8xFSpdZbA1GQzuqts7ymYscMRXeakvYyTWUDLadI=;
+        b=ogE+tLoW4fdyyjLy4L+nEXPEQUNke4sDIBxJpWm1LUYyGAXjxtlOM3yzK5VHyJH+xt
+         bTBgw8L76RHbcqfaHqu063nOMIUZkvcfs+fFuvMXMQiltkvHcMabtNnFariY5e19jqXD
+         PZDVR9Pm5DTLhc7LEL3uKrhnsqovLhta6StmgK69xr7/nAqo2ZH4L7MmWZhwXs4PS71z
+         EzXN5inc/oE8a+z0j7udTy3U0IMJoeFO6VDuJBe8GYTqQq89Ix3h3oXFFZDsgXgBKXe1
+         Jf/5pC3eB2iua0DOhtXlDCtFXxQxLoYQczcCuFgtbghxj1G+vm/BA3ae8aSqeUvLIJPz
+         6+eQ==
+X-Gm-Message-State: ACrzQf2H+bZBEK/OxmC2PSBrx+fEr0Ju+J+ZIR/y1+f1YkQBNteKUBSo
+        a0Kc/IhZX8lKcjamyBn/ONyoBmQyKAI=
+X-Google-Smtp-Source: AMsMyM5MMGYHRauq4eVLkpLLZvw2RTDbvRrV8/jSalu4l28kT8hstXJuRFCaWh2Nh/nRrelPatgN7w==
+X-Received: by 2002:adf:ef43:0:b0:22d:c507:dd48 with SMTP id c3-20020adfef43000000b0022dc507dd48mr2337256wrp.416.1665046268371;
+        Thu, 06 Oct 2022 01:51:08 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id m7-20020a05600c3b0700b003a1980d55c4sm4886918wms.47.2022.10.06.01.51.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 01:51:08 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 09:51:06 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: mainline build failure due to 5d8c3e836fc2 ("drm/amd/display: fix
+ array-bounds error in dc_stream_remove_writeback()")
+Message-ID: <Yz6W+j+l0cJbr5dX@debian>
 MIME-Version: 1.0
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com> <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
-In-Reply-To: <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Thu, 6 Oct 2022 09:50:28 +0100
-Message-ID: <CA+EHjTz=o9M47frGCXgNJ8J5_Rn=YjzZR5uvCTxStw+GfGE5kg@mail.gmail.com>
-Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,124 +77,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi All,
 
-<...>
+The latest mainline kernel branch fails to build allmodconfig for every
+ARCH with gcc-11 with the error:
 
-
-> diff --git a/mm/memfd_inaccessible.c b/mm/memfd_inaccessible.c
-> new file mode 100644
-> index 000000000000..2d33cbdd9282
-> --- /dev/null
-> +++ b/mm/memfd_inaccessible.c
-
-<...>
-
-> +struct file *memfd_mkinaccessible(struct file *memfd)
-> +{
-> +       struct inaccessible_data *data;
-> +       struct address_space *mapping;
-> +       struct inode *inode;
-> +       struct file *file;
-> +
-> +       data = kzalloc(sizeof(*data), GFP_KERNEL);
-> +       if (!data)
-> +               return ERR_PTR(-ENOMEM);
-> +
-> +       data->memfd = memfd;
-> +       mutex_init(&data->lock);
-> +       INIT_LIST_HEAD(&data->notifiers);
-> +
-> +       inode = alloc_anon_inode(inaccessible_mnt->mnt_sb);
-> +       if (IS_ERR(inode)) {
-> +               kfree(data);
-> +               return ERR_CAST(inode);
-> +       }
-> +
-> +       inode->i_mode |= S_IFREG;
-> +       inode->i_op = &inaccessible_iops;
-> +       inode->i_mapping->private_data = data;
-> +
-> +       file = alloc_file_pseudo(inode, inaccessible_mnt,
-> +                                "[memfd:inaccessible]", O_RDWR,
-> +                                &inaccessible_fops);
-> +       if (IS_ERR(file)) {
-> +               iput(inode);
-> +               kfree(data);
-
-I think this might be missing a return at this point.
-
-> +       }
-> +
-> +       file->f_flags |= O_LARGEFILE;
-> +
-> +       mapping = memfd->f_mapping;
-> +       mapping_set_unevictable(mapping);
-> +       mapping_set_gfp_mask(mapping,
-> +                            mapping_gfp_mask(mapping) & ~__GFP_MOVABLE);
-> +
-> +       return file;
-> +}
-
-Thanks,
-/fuad
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c: In function 'dc_stream_remove_writeback':
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c:527:83: error: array subscript [0, 0] is outside array bounds of 'struct dc_writeback_info[1]' [-Werror=array-bounds]
+  527 |                                 stream->writeback_info[j] = stream->writeback_info[i];
+      |                                                             ~~~~~~~~~~~~~~~~~~~~~~^~~
+In file included from ./drivers/gpu/drm/amd/amdgpu/../display/dc/dc.h:1269,
+                 from ./drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:29,
+                 from ./drivers/gpu/drm/amd/amdgpu/../display/dc/basics/dc_common.h:29,
+                 from drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c:27:
+./drivers/gpu/drm/amd/amdgpu/../display/dc/dc_stream.h:241:34: note: while referencing 'writeback_info'
+  241 |         struct dc_writeback_info writeback_info[MAX_DWB_PIPES];
+      |                                  ^~~~~~~~~~~~~~
 
 
+git bisect pointed to 5d8c3e836fc2 ("drm/amd/display: fix array-bounds error in dc_stream_remove_writeback()")
 
-> +
-> +void inaccessible_register_notifier(struct file *file,
-> +                                   struct inaccessible_notifier *notifier)
-> +{
-> +       struct inaccessible_data *data = file->f_mapping->private_data;
-> +
-> +       mutex_lock(&data->lock);
-> +       list_add(&notifier->list, &data->notifiers);
-> +       mutex_unlock(&data->lock);
-> +}
-> +EXPORT_SYMBOL_GPL(inaccessible_register_notifier);
-> +
-> +void inaccessible_unregister_notifier(struct file *file,
-> +                                     struct inaccessible_notifier *notifier)
-> +{
-> +       struct inaccessible_data *data = file->f_mapping->private_data;
-> +
-> +       mutex_lock(&data->lock);
-> +       list_del(&notifier->list);
-> +       mutex_unlock(&data->lock);
-> +}
-> +EXPORT_SYMBOL_GPL(inaccessible_unregister_notifier);
-> +
-> +int inaccessible_get_pfn(struct file *file, pgoff_t offset, pfn_t *pfn,
-> +                        int *order)
-> +{
-> +       struct inaccessible_data *data = file->f_mapping->private_data;
-> +       struct file *memfd = data->memfd;
-> +       struct page *page;
-> +       int ret;
-> +
-> +       ret = shmem_getpage(file_inode(memfd), offset, &page, SGP_WRITE);
-> +       if (ret)
-> +               return ret;
-> +
-> +       *pfn = page_to_pfn_t(page);
-> +       *order = thp_order(compound_head(page));
-> +       SetPageUptodate(page);
-> +       unlock_page(page);
-> +
-> +       return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(inaccessible_get_pfn);
-> +
-> +void inaccessible_put_pfn(struct file *file, pfn_t pfn)
-> +{
-> +       struct page *page = pfn_t_to_page(pfn);
-> +
-> +       if (WARN_ON_ONCE(!page))
-> +               return;
-> +
-> +       put_page(page);
-> +}
-> +EXPORT_SYMBOL_GPL(inaccessible_put_pfn);
-> --
-> 2.25.1
->
+I will be happy to test any patch or provide any extra log if needed.
+
+Note:
+This is only seen with gcc-11, gcc-12 builds are ok.
+
+
+-- 
+Regards
+Sudip
