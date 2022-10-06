@@ -2,90 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED1CF5F7177
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 00:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49FD15F7178
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 00:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbiJFW67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 18:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60536 "EHLO
+        id S232323AbiJFW7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 18:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbiJFW65 (ORCPT
+        with ESMTP id S231725AbiJFW7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 18:58:57 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D712BEFA1
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 15:58:56 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id b5so3103657pgb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 15:58:56 -0700 (PDT)
+        Thu, 6 Oct 2022 18:59:40 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625316464
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 15:59:37 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id n16-20020a05600c4f9000b003c17bf8ddecso1451616wmq.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 15:59:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=T+CEJtAZnc2GDDwSotfE8CfL0V8jiLrzM2Svg4iqZbA=;
-        b=lzW3h+esCqFARjrEX15yJhjZ4dUujUjSo63SEh+Gd9Hw06dXzzxu/mRMzhqPUKF/1R
-         jOhJIK5SvJABZ8mDY3j2KzEew/lYbq6FPmlK8+tblrLGJSyYuMxxic6041/VOaENWN/1
-         U62zUdkEYscO06AFI2cEx3KHvI4IRt22TiLIA=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=avEX5sX4fWSQDRhQ5zfAho1hTMVB7N6QeUvMMZK6eUs=;
+        b=OKIqK8JAjQKBLYBDL7mNsO5e4cDNNxjykGWD5Nnz32y6EU/F65djn2Tl4IcJ+sMQz/
+         ks8XmGQzqIaYgDpg4TWW4w1CTVnw8aJi/KtB5jdi7LXyEwjZ3xXy6ruz6/4kQl3NPA10
+         kOGbOGS1nn2ykomkEwWdtQTuNdMeKpSLKChixUG3hGANrOxF9XIq7l6pft0Bdwk16gMb
+         H6/6tv896O1QHuBSwsdYwN07vzRT0iR+fvpIWfr2o7ZkBr4n2kQ6hvXqKUM024h/8LEr
+         Q4PX0iGulQdXxJ5WDP6MTg2oNAeFRAwSilt3iVsrfACACxvFx7G1JjyCDQJDvDAbBU8N
+         hzDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=T+CEJtAZnc2GDDwSotfE8CfL0V8jiLrzM2Svg4iqZbA=;
-        b=vPm3i3Qn6RklnK/xvWqxRDIbLKu7wJ+nQkizxA1r85QK5iJpCx8CnkjBEsuhC6ivVb
-         +rylRkygLGMaoj68exaX2HgONh8KK2WGgF1LYj0FCpIIf1yAgMfXJVKYZcqz+kDtuJaI
-         +/aDNXvwhW9/cUQbHPu4PqqQdTWLi//CutgpYNvPWZOYtxP6DEOB2JS7aEJk6pTRZs9o
-         9TBnffFlohP56Rrvyt2PU/OYArTYwLEeqGPJgr3zO9gXvnU+yivSkWH7dRn7ugTuBqHG
-         ZWJ9d7ey187LrtqEH0EHp5Q+0dk5E/YY8mrvF5y72p8xsDLNCgX4EdGr8wXVKExl3Ig2
-         hEWA==
-X-Gm-Message-State: ACrzQf1bxD+x3xSIZau7Dn4DbCKStYgyAwTUkNfwsI8mOdKVLC0m8SAv
-        Ksl6cn9v6Ntn2wYnZ4iAu8imMg==
-X-Google-Smtp-Source: AMsMyM48onVK3sX9oSAQFX+6F3BL4lSX22t+n/J4JFWx2rOMFeagXp1MqeBXwVCqeM+rdUEMBqb9tg==
-X-Received: by 2002:a62:4e8e:0:b0:54a:ee65:cde6 with SMTP id c136-20020a624e8e000000b0054aee65cde6mr1979233pfb.42.1665097135729;
-        Thu, 06 Oct 2022 15:58:55 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i8-20020a170902c94800b0017f5c7d3931sm118936pla.282.2022.10.06.15.58.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 15:58:54 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     ndesaulniers@google.com
-Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
-        gustavoars@kernel.org, dlatypov@google.com,
-        gwan-gyeong.mun@intel.com, nathan@kernel.org, trix@redhat.com,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v2] overflow: disable failing tests for older clang versions
-Date:   Thu,  6 Oct 2022 15:58:49 -0700
-Message-Id: <166509712398.1833114.15283539764161050044.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221006171751.3444575-1-ndesaulniers@google.com>
-References: <202210061321.xSA91B7C-lkp@intel.com> <20221006171751.3444575-1-ndesaulniers@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=avEX5sX4fWSQDRhQ5zfAho1hTMVB7N6QeUvMMZK6eUs=;
+        b=Ir8tDbvcH4BsyOlnNFjU+QsIVIQVvHSTYwGlt5Kt/62bjYszt1oUv80vA3nLoi98Et
+         /hEKLpKJrMZ3G8QRQIo2Bcq4g2YPy/nGqS5yzI1zk1aVNk4ttqbqy34zFnlFtWFROS4q
+         QJt/xt/e/Mz/nMwyCq4aYpsR1X0mv7k2LDu5XD4/XvkDQ/JDF394P6Of5ICT3W7WwhmC
+         ktIb6NtDdVfEzGUWbib4Q3LWan3n1ugQXbgdXqzMXU09G0s8cdMb6UEj9BiI/ZKa1Fhm
+         keoj9U0R5RHZfLezcQXOPex7ZEB88S23lBK4P9nmnNo2kQ7JDyRI/Ol86gTBj9N9L+D/
+         AZQA==
+X-Gm-Message-State: ACrzQf3ZQK+zmcr9x1rOoDQq6SWrXd2EqnIWzOKAsjbeGKE7cazTQbJf
+        wQog+T3K1fRYbwToCZd274RB67gL5GjrXI+84QjbdA==
+X-Google-Smtp-Source: AMsMyM6aKn0eJCmhL/qmPs1UoQzTSUlh8VLvuzERiTJx+Wjq91flrs4ovRZO5TNSUKWy+KWyE8aLgG8HwI6lGRUygt8=
+X-Received: by 2002:a7b:c8d5:0:b0:3b4:76bc:5dae with SMTP id
+ f21-20020a7bc8d5000000b003b476bc5daemr1335097wml.122.1665097174896; Thu, 06
+ Oct 2022 15:59:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220915004601.320198-1-pceballos@google.com> <87ilkzsd4f.fsf@intel.com>
+In-Reply-To: <87ilkzsd4f.fsf@intel.com>
+From:   Pablo Ceballos <pceballos@google.com>
+Date:   Thu, 6 Oct 2022 15:59:22 -0700
+Message-ID: <CAO9JgFyCQAtBVvtNYa-jL5O0mM69g53XEO7DKP9yHXXXBudoNQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/i915/display/lspcon: Increase LSPCON mode settle timeout
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Oct 2022 10:17:51 -0700, Nick Desaulniers wrote:
-> Building the overflow kunit tests with clang-11 fails with:
-> 
-> $ ./tools/testing/kunit/kunit.py run --arch=arm --make_options LLVM=1 \
-> overflow
-> ...
-> ld.lld: error: undefined symbol: __mulodi4
-> ...
-> 
-> [...]
+On Tue, Oct 4, 2022 at 10:38 AM Jani Nikula <jani.nikula@linux.intel.com> wrote:
+> Got any bug report with more info, or any other details to back this up?
+> This is kind of thin. What's the 800 ms based on?
 
-Applied to for-next/hardening, thanks!
+This issue affected several different CometLake-based Chrome OS device
+designs. The details of the original report are in the Google partner
+issue tracker (issue # 178169843), but I believe this requires a
+Google partner account to access:
+https://partnerissuetracker.corp.google.com/issues/178169843
 
-[1/1] overflow: disable failing tests for older clang versions
-      https://git.kernel.org/kees/c/2d4df670c64c
+The summary is that we were seeing these "*ERROR* LSPCON mode hasn't
+settled" messages in the kernel logs followed by the display not
+working at all. We increased the timeout to 500ms while investigation
+continued and this reduced the number of occurrences of this issue:
+https://chromium.googlesource.com/chromiumos/third_party/kernel/+/7b2899fc1a6f9409e8075b3153baaf02c4d1fc75
 
--- 
-Kees Cook
+The problem continued to occur on about 2% of devices even after
+increasing the timeout to 500ms. The investigation continued in issue
+# 188035814, with engineers from Parade and Intel involved.
+Ultimately, the recommendation from Intel engineers was to increase
+the timeout further:
+https://partnerissuetracker.corp.google.com/issues/188035814
 
+The timeout was then increased to 1000ms:
+https://chromium.googlesource.com/chromiumos/third_party/kernel/+/a16cfc2062e768c8e5ad8fa09b8ca127aa1ead9a
+
+I recently ran 100 reboot trials on one device and found that the
+median time for the LSPCON mode to settle was 440ms and the max was
+444ms. But we know from the original reports that even after we set
+the timeout to 500ms the issue continued to happen on some small
+percentage of devices. So this is why I picked the larger value of
+800ms.
