@@ -2,118 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F29E5F65E5
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0015F65EA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiJFMYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 08:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43028 "EHLO
+        id S230425AbiJFMZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 08:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiJFMYV (ORCPT
+        with ESMTP id S231148AbiJFMY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 08:24:21 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEE79C2C0;
-        Thu,  6 Oct 2022 05:24:19 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id A97F418844A7;
-        Thu,  6 Oct 2022 12:24:17 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 9148025001FA;
-        Thu,  6 Oct 2022 12:24:17 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 7014B9EC0005; Thu,  6 Oct 2022 12:24:17 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Thu, 6 Oct 2022 08:24:59 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71582193C6;
+        Thu,  6 Oct 2022 05:24:43 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 36EC166022F9;
+        Thu,  6 Oct 2022 13:24:41 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1665059081;
+        bh=BuajQsmdky1pSKHSsbY4UXSTa/ucDnsntUDGuRTR5Dw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NW+OCQ/VMKeFUq6aNI6w1YFB06kED9jdPOT2bcWZI9OeL9mUJErbD4BzStCnAkfpu
+         idj3em16pahptosz4k448Q+sGqtLTlRwV+k7O8X+jNcQBG9ue2uYlcm9sLgNGgJGFu
+         +NGIQGuDpt0CB3hHPothcvaVK4kOB86wPaneekFzqJsIRGoBTulZiMeYMnwo7tyP/V
+         TmGwN1mE6Oqkz+ItcP07PSJF04MXaP8B+OAh4HrbtUsKU/Vo8MVmJQlI4YQV6OvDF6
+         AYw9ZSMp2APKSfL/C4Hnn3TQbiead9GCci/PJWTtGMui5jeNxTYs2CIL2zrJBj5SzU
+         2r9Id2o1y5VIQ==
+Message-ID: <ef96bf71-7bce-7874-2e0e-f4ff6ab8f792@collabora.com>
+Date:   Thu, 6 Oct 2022 14:24:38 +0200
 MIME-Version: 1.0
-Date:   Thu, 06 Oct 2022 14:24:17 +0200
-From:   netdev@kapio-technology.com
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 3/8] arm64: dts: mediatek: mt7986: Fix watchdog compatible
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 net-next 8/9] net: dsa: mv88e6xxx: add blackhole ATU
- entries
-In-Reply-To: <20220928150256.115248-9-netdev@kapio-technology.com>
-References: <20220928150256.115248-1-netdev@kapio-technology.com>
- <20220928150256.115248-9-netdev@kapio-technology.com>
-User-Agent: Gigahost Webmail
-Message-ID: <b5cdf29e7b5a5f7fa4ab1df4c5fd6e62@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+        Rob Herring <robh+dt@kernel.org>, nfraprado@collabora.com
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20221006120715.24815-1-allen-kh.cheng@mediatek.com>
+ <20221006120715.24815-4-allen-kh.cheng@mediatek.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221006120715.24815-4-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-28 17:02, Hans Schultz wrote:
-> From: "Hans J. Schultz" <netdev@kapio-technology.com>
+Il 06/10/22 14:07, Allen-KH Cheng ha scritto:
+> MT7986's watchdog embeds a reset controller and needs only the
+> mediatek,mt7986-wdt compatible string as the MT6589 one is there
+> for watchdogs that don't have any reset controller capability.
 > 
-> Blackhole FDB entries can now be added, deleted or replaced in the
-> driver ATU.
-> 
-> Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
-> ---
->  drivers/net/dsa/mv88e6xxx/chip.c | 78 ++++++++++++++++++++++++++++++--
->  1 file changed, 74 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/net/dsa/mv88e6xxx/chip.c 
-> b/drivers/net/dsa/mv88e6xxx/chip.c
-> index 71843fe87f77..a17f30e5d4a6 100644
-> --- a/drivers/net/dsa/mv88e6xxx/chip.c
-> +++ b/drivers/net/dsa/mv88e6xxx/chip.c
-> @@ -2735,6 +2735,72 @@ static int mv88e6xxx_vlan_msti_set(struct 
-> dsa_switch *ds,
->  	return err;
->  }
-> 
-> +struct mv88e6xxx_vid_search_ctx {
-> +	u16 vid_search;
-> +	u16 fid_found;
-> +};
-> +
-> +static int mv88e6xxx_find_fid_on_matching_vid(struct mv88e6xxx_chip 
-> *chip,
-> +					      const struct mv88e6xxx_vtu_entry *entry,
-> +					      void *priv)
-> +{
-> +	struct mv88e6xxx_vid_search_ctx *ctx = priv;
-> +
+> Fixes: 50137c150f5f ("arm64: dts: mediatek: add basic mt7986 support")
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 
-FYI: I have already made updates to this part to use mv88e6xxx_vtu_get() 
-instead of the walk, which also fixes a problem when vid=0 in this 
-implementation.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+
