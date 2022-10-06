@@ -2,64 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48555F6F8D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED355F6F93
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbiJFUnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 16:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
+        id S232228AbiJFUqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 16:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbiJFUnV (ORCPT
+        with ESMTP id S229540AbiJFUp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 16:43:21 -0400
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92DB025E8D;
-        Thu,  6 Oct 2022 13:43:19 -0700 (PDT)
-Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 0F7F072C97D;
-        Thu,  6 Oct 2022 23:43:18 +0300 (MSK)
-Received: by mua.local.altlinux.org (Postfix, from userid 508)
-        id E45DE7CF8EC; Thu,  6 Oct 2022 23:43:17 +0300 (MSK)
-Date:   Thu, 6 Oct 2022 23:43:17 +0300
-From:   "Dmitry V. Levin" <ldv@altlinux.org>
-To:     Vitaly Chikunov <vt@altlinux.org>, Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Ian Rogers <irogers@google.com>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Subject: Re: [PATCH] libperf: Remove reference to non-uapi header
-Message-ID: <20221006204317.GB11960@altlinux.org>
-References: <20221006162919.2231389-1-vt@altlinux.org>
+        Thu, 6 Oct 2022 16:45:58 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2190BE2D7;
+        Thu,  6 Oct 2022 13:45:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665089157; x=1696625157;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OwJ1ROhRXZmye0Wodpt5I0o6ytjW0KtspOAjyDYbTpc=;
+  b=NXodHHbywNd7aDXfMNLCEtHsyk5uQ3CUBS7beOTGOYGqhwctv0c/bFMi
+   eTxV+vLwpCJx/dDE19EcA3WMundae/RNtLxLZLmktlf6dTy0yt46RzIgK
+   I2jqjWe1wxJKb3ARrVtH7bqkWmFA2QVhMm8r1ybj2h4A6+NQ+xYbzr9S1
+   iqQRDB0KdjvNOPK+GLpIP5xvu1NhantgVCjZf8yiS2qyChta/4toggijZ
+   V9o8sUcQzfLdIWSgmSkRf53O25TAESxFtoIcR1IqbS7Qr63eusrn8xyCt
+   4P4zIxSfK5PkuIm/vgOwXagUV+kyOq3m1IsNDHy8X3gLDJQRB/9twSe39
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="329999364"
+X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
+   d="scan'208";a="329999364"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 13:45:57 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="655769471"
+X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
+   d="scan'208";a="655769471"
+Received: from jlcone-mobl1.amr.corp.intel.com (HELO [10.212.128.129]) ([10.212.128.129])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 13:45:57 -0700
+Message-ID: <d64e6e9f-27b9-9bbb-aaf8-fca1681eada5@intel.com>
+Date:   Thu, 6 Oct 2022 13:45:56 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221006162919.2231389-1-vt@altlinux.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] x86/sgx: Replace kmap/kunmap_atomic calls
+Content-Language: en-US
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>
+Cc:     ira.weiny@intel.com
+References: <20220929160647.362798-1-kristen@linux.intel.com>
+ <3694452.kQq0lBPeGt@mypc>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <3694452.kQq0lBPeGt@mypc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 07:29:19PM +0300, Vitaly Chikunov wrote:
-> Fix build with libperf:
+On 10/6/22 13:37, Fabio M. De Francesco wrote:
+> kmap() were not suited in those cases because it might sleep. If the intents 
+> of the author are simply map a page while in atomic, so to avoid sleeping in 
+> atomic bugs, your conversions looks good. 
 > 
->   $ gcc ./tools/lib/perf/Documentation/examples/counting.c -lperf
->   In file included from ./tools/lib/perf/Documentation/examples/counting.c:8:
->   /usr/include/perf/event.h:9:10: fatal error: linux/compiler.h: No such file or directory
->       9 | #include <linux/compiler.h>
->         |          ^~~~~~~~~~~~~~~~~~
->   compilation terminated.
-> 
-> Fixes: b2f10cd4e805 ("perf cpumap: Fix alignment for masks in event encoding")
-> Cc: Ian Rogers <irogers@google.com>
-> Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+> For the reasons above, can you please say something more about why this code 
+> needed a kmap_atomic() instead of calling kmap()?
 
-Reviewed-by: Dmitry V. Levin <ldv@altlinux.org>
+This question is backwards.  kmap_atomic() is the default that folks
+use.  You use kmap_atomic() *always* unless you _need_ to sleep or one
+of the other kmap()-only things.
 
-
--- 
-ldv
+Folks don't and shouldn't have to explain why this was using kmap_atomic().
