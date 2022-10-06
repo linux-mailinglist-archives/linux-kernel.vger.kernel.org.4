@@ -2,148 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845FA5F6A54
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 17:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB77E5F6A56
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 17:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbiJFPK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 11:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42052 "EHLO
+        id S230206AbiJFPLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 11:11:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbiJFPKz (ORCPT
+        with ESMTP id S231582AbiJFPLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 11:10:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C1A3FEE0;
-        Thu,  6 Oct 2022 08:10:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BCDD6B82035;
-        Thu,  6 Oct 2022 15:10:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EBF3C433B5;
-        Thu,  6 Oct 2022 15:10:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665069051;
-        bh=EsOcPnG6SrdA7Pq8LqofCWapCMsw29KW3LBWaXqh73E=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IUXNQtJWFwyZgl6PZkiE5pSsvdmyq6/Mq8wgk6gwe3Eg3TyCCXP7E2AcRoS6iRaim
-         5WGDl3umltMsU2Qod6Rf0yoh9xtQp6J6ooFYG/cANd/RxbmFe9MkpJOov5b7qtbukx
-         5Z4W6VUPLErAE0qPdTCGffMsfl16uirOj2RP2GFWvzEQ6KQslrnekWm2+LrvmzCjTV
-         BDFAtDTvoR7parUWBkVbwQeUPDhCyyDdmSIA5EAL4KV1cUcYqjymkQnUE4gS0bNGXl
-         NbCpe+YYUmGdfhyNiNbLclSG3/9SEAdbba8lTcf33AFHKDIgO3u+o7cvI8j8cZVeOB
-         WE/PZotbbhBPQ==
-Received: by mail-ua1-f51.google.com with SMTP id p89so728639uap.12;
-        Thu, 06 Oct 2022 08:10:51 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1hknNtz2A4x9uH1JXJrj2+oVrDz9fcXnjriFKSI3iyP0vfHx3M
-        eTfXCm06IJEZbUetXQqscHUUlx184YPd5hmBCw==
-X-Google-Smtp-Source: AMsMyM5EMjw94DkinhMIy3TgxlR6A1EG+W79KwecYmw4NBP3HOUDgfdpeYVtkJB5wNhODUSNoXtrxa7HoEvV+g5VmAw=
-X-Received: by 2002:ab0:25d4:0:b0:3c1:c353:31cb with SMTP id
- y20-20020ab025d4000000b003c1c35331cbmr339075uan.63.1665069050451; Thu, 06 Oct
- 2022 08:10:50 -0700 (PDT)
+        Thu, 6 Oct 2022 11:11:12 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29891A59B7;
+        Thu,  6 Oct 2022 08:11:10 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1C937D6E;
+        Thu,  6 Oct 2022 08:11:16 -0700 (PDT)
+Received: from [10.57.0.62] (unknown [10.57.0.62])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6BF843F67D;
+        Thu,  6 Oct 2022 08:11:07 -0700 (PDT)
+Message-ID: <cce859cc-f25b-b4e8-70c5-917569aec050@arm.com>
+Date:   Thu, 6 Oct 2022 16:11:05 +0100
 MIME-Version: 1.0
-References: <1661809417-11370-1-git-send-email-lizhi.hou@amd.com>
- <f831f62b-004b-4f73-2a66-de9d675c44b6@gmail.com> <CAL_JsqJn=i=TT9NArHK25g1NkZN_G1GjN3EGEeTAvyW_PUhgcw@mail.gmail.com>
- <8ea70992-d4e9-8bbd-0fca-d5700f84e071@amd.com>
-In-Reply-To: <8ea70992-d4e9-8bbd-0fca-d5700f84e071@amd.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 6 Oct 2022 10:10:39 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJA8K0nKO=O2QjyHdue6=EHYNqCTw6pKUsBKwrdrYGePA@mail.gmail.com>
-Message-ID: <CAL_JsqJA8K0nKO=O2QjyHdue6=EHYNqCTw6pKUsBKwrdrYGePA@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/2] Generate device tree node for pci devices
-To:     Sonal Santan <sonal.santan@amd.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        helgaas@kernel.org, clement.leger@bootlin.com, max.zhen@amd.com,
-        larry.liu@amd.com, brian.xu@amd.com, stefano.stabellini@xilinx.com,
-        trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] perf test: Fix test_arm_coresight.sh failures on Juno
+Content-Language: en-US
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     coresight@lists.linaro.org, acme@kernel.org,
+        suzuki.poulose@arm.com, linux-perf-users@vger.kernel.org,
+        mathieu.poirier@linaro.org, mike.leach@linaro.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20221005140508.1537277-1-james.clark@arm.com>
+ <Yz7qx+4BxNYOCgvL@leoy-yangtze.lan>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <Yz7qx+4BxNYOCgvL@leoy-yangtze.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 2:29 PM Sonal Santan <sonal.santan@amd.com> wrote:
->
-> On 9/26/22 15:44, Rob Herring wrote:
-> > On Fri, Sep 16, 2022 at 6:15 PM Frank Rowand <frowand.list@gmail.com> wrote:
-> >>
-> >> On 8/29/22 16:43, Lizhi Hou wrote:
-> >>> This patch series introduces OF overlay support for PCI devices which
-> >>> primarily addresses two use cases. First, it provides a data driven method
-> >>> to describe hardware peripherals that are present in a PCI endpoint and
-> >>> hence can be accessed by the PCI host. An example device is Xilinx/AMD
-> >>> Alveo PCIe accelerators. Second, it allows reuse of a OF compatible
-> >>> driver -- often used in SoC platforms -- in a PCI host based system. An
-> >>> example device is Microchip LAN9662 Ethernet Controller.
-> >>>
-> >>> This patch series consolidates previous efforts to define such an
-> >>> infrastructure:
-> >>> https://lore.kernel.org/lkml/20220305052304.726050-1-lizhi.hou@xilinx.com/
-> >>> https://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.com/
-> >>>
-> >>> Normally, the PCI core discovers PCI devices and their BARs using the
-> >>> PCI enumeration process. However, the process does not provide a way to
-> >>> discover the hardware peripherals that are present in a PCI device, and
-> >>> which can be accessed through the PCI BARs. Also, the enumeration process
-> >>> does not provide a way to associate MSI-X vectors of a PCI device with the
-> >>> hardware peripherals that are present in the device. PCI device drivers
-> >>> often use header files to describe the hardware peripherals and their
-> >>> resources as there is no standard data driven way to do so. This patch> series proposes to use flattened device tree blob to describe the
-> >>> peripherals in a data driven way.
-> >>
-> >>> Based on previous discussion, using
-> >>> device tree overlay is the best way to unflatten the blob and populate
-> >>> platform devices.
-> >>
-> >> I still do not agree with this statement.  The device tree overlay
-> >> implementation is very incomplete and should not be used until it
-> >> becomes more complete.  No need to debate this right now, but I don't want
-> >> to let this go unchallenged.
-> >
-> > Then we should remove overlay support. The only way it becomes more
-> > complete is having actual users.
-> >
-> > But really, whether this is the right solution to the problem is
-> > independent of the state of kernel overlay support.
-> >
-> >> If there is no base system device tree on an ACPI based system, then I
-> >> am not convinced that a mixed ACPI / device tree implementation is
-> >> good architecture.
-> >
-> > Most/all of this series is needed for a DT system in which the PCI
-> > devices are not populated in the DT.
-> >
-> >>   I might be more supportive of using a device tree
-> >> description of a PCI device in a detached device tree (not linked to
-> >> the system device tree, but instead freestanding).  Unfortunately the
-> >> device tree functions assume a single system devicetree, with no concept
-> >> of a freestanding tree (eg, if a NULL device tree node is provided to
-> >> a function or macro, it often defaults to the root of the system device
-> >> tree).  I need to go look at whether the flag OF_DETACHED handles this,
-> >> or if it could be leveraged to do so.
-> >
-> > Instead of worrying about a theoretical problem, we should see if
-> > there is an actual problem for a user.
-> >
-> > I'm not so worried about DT functions themselves, but places which
-> > have 'if ACPI ... else (DT) ...' paths.
-> >
->
-> Bringing this thread back into focus. Any thoughts on how to move forward?
 
-Reviewers raise concerns/issues and the submitters work to address
-them or explain why they aren't an issue. The submitter has to push
-things forward. That's how the process works.
 
-As I noted, much of this is needed on a DT system with PCI device not
-described in DT. So you could split out any ACPI system support to
-avoid that concern for example. Enabling others to exercise these
-patches may help too. Perhaps use QEMU to create some imaginary
-device.
+On 06/10/2022 15:48, Leo Yan wrote:
+> Hi James,
+> 
+> On Wed, Oct 05, 2022 at 03:05:08PM +0100, James Clark wrote:
+>> This test commonly fails on Arm Juno because the instruction interval
+>> is large enough to miss generating any samples for Perf in system-wide
+>> mode.
+>>
+>> Fix this by lowering the interval until a comfortable number of Perf
+>> instructions are generated. The test is still quick to run because only
+>> a small amount of trace is gathered.
+>>
+>> Before:
+>>
+>>   sudo ./perf test coresight -vvv
+>>   ...
+>>   Recording trace with system wide mode
+>>   Looking at perf.data file for dumping branch samples:
+>>   Looking at perf.data file for reporting branch samples:
+>>   Looking at perf.data file for instruction samples:
+>>   CoreSight system wide testing: FAIL
+>>   ...
+>>
+>> After:
+>>
+>>   sudo ./perf test coresight -vvv
+>>   ...
+>>   Recording trace with system wide mode
+>>   Looking at perf.data file for dumping branch samples:
+>>   Looking at perf.data file for reporting branch samples:
+>>   Looking at perf.data file for instruction samples:
+>>   CoreSight system wide testing: PASS
+>>   ...
+> 
+> Since Arm Juno board has zero timestamp for CoreSight, I don't think
+> now arm_cs_etm.sh can really work on it.
+> 
+> If we want to pass the test on Juno board, we need to add option
+> "--itrace=Zi1000i" for "perf report" and "perf script"; but seems
+> to me "--itrace=Z..." is not a general case for testing ...
 
-Rob
+Unfortunately I now think that adding the Z option didn't improve
+anything in Coresight decoding other than removing the warning. I've
+never seen the zero timestamp issue on Juno though. I thought that was
+on some Qualcomm device? I'm not getting the warning on this test anyway.
+
+The problem is that timeless mode assumes per thread mode, and in per
+thread mode there is a separate buffer per thread, so the Coresight
+channel IDs are ignored. In systemwide mode the channel ID is important
+to know which CPU the trace came from. If this info is thrown away then
+not much works correctly.
+
+I plan to overhaul the whole decoder and remove all the assumptions
+about per-thread and timeless mode. It would be better if they were
+completely separate concepts.
+
+> 
+>> Signed-off-by: James Clark <james.clark@arm.com>
+>> ---
+>>  tools/perf/tests/shell/test_arm_coresight.sh | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/perf/tests/shell/test_arm_coresight.sh b/tools/perf/tests/shell/test_arm_coresight.sh
+>> index e4cb4f1806ff..daad786cf48d 100755
+>> --- a/tools/perf/tests/shell/test_arm_coresight.sh
+>> +++ b/tools/perf/tests/shell/test_arm_coresight.sh
+>> @@ -70,7 +70,7 @@ perf_report_instruction_samples() {
+>>  	#   68.12%  touch    libc-2.27.so   [.] _dl_addr
+>>  	#    5.80%  touch    libc-2.27.so   [.] getenv
+>>  	#    4.35%  touch    ld-2.27.so     [.] _dl_fixup
+>> -	perf report --itrace=i1000i --stdio -i ${perfdata} 2>&1 | \
+>> +	perf report --itrace=i20i --stdio -i ${perfdata} 2>&1 | \
+>>  		egrep " +[0-9]+\.[0-9]+% +$1" > /dev/null 2>&1
+> 
+> So here I am suspect that changing to "--itrace=i20i" can allow the test
+> to pass on Juno board.  Could you confirm for this?
+
+On Juno:
+
+  ./perf record -e cs_etm// -a -- ls
+
+With interval 20, 23 instruction samples are generated:
+
+  ./perf report --stdio --itrace=i20i | egrep " +[0-9]+\.[0-9]+% +perf "
+| wc -l
+
+  23
+
+With interval 1000, 0 are generated:
+
+  ./perf report --stdio --itrace=i1000i | egrep " +[0-9]+\.[0-9]+% +perf
+" | wc -l
+
+  Error:
+  The perf.data data has no samples!
+  0
+
+I think the issue is that ls is quite quick to run, so not much trace is
+generated for Perf. And it just depends on the scheduling which is
+slightly different on Juno. I don't think it's a bug. On N1SDP there are
+only 134 samples generated with i1000i, so it could probably end up with
+a random run generating 0 there too.
+
+
+> 
+> Thanks,
+> Leo
