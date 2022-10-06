@@ -2,73 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C845F6354
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CECE5F6358
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbiJFJJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 05:09:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
+        id S231157AbiJFJKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 05:10:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbiJFJJk (ORCPT
+        with ESMTP id S231346AbiJFJJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 05:09:40 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F8FCEF
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 02:09:37 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 189-20020a2516c6000000b006bbbcc3dd9bso1258172ybw.15
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 02:09:37 -0700 (PDT)
+        Thu, 6 Oct 2022 05:09:54 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856D0DFF4;
+        Thu,  6 Oct 2022 02:09:48 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a26so3146503ejc.4;
+        Thu, 06 Oct 2022 02:09:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=W6dnd6MUybWhVHYUHQ8d7S6D4UzG0vGs7tI9w8WKSPw=;
-        b=SSpzU+3wLTsbRTZVM5yu2Enu8uvoYL9bqFOuq1fID5Ck3vddYC9Fn2fSzvLKbenMUx
-         fuF4R6M5SBRsLSABcNeCV9rpYF62Ev+3xv/A+pnTFcZsv2lxVRPguNBfm5QCC6EMr7E7
-         H2vr6MX5XTebP3D0H5ofNAwLXJkTUMjqS54djUwpy0stP3+jl9ypp6h1ipVNdaNPtss1
-         SpAiACIC768tO0rIonQB/nhoOdlTl9Bl9YlCeF4YPv6cVlA7MjUcyKgelLElupjTIX2q
-         KiDfZ6dzGys/MZJ8FBdi91HZBLTjIe20tkGm6j4flwNHexG6NHjuhpLIIUgDGpxwmrpg
-         3Rag==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:message-id:cc:to:subject:from
+         :date:from:to:cc:subject:date;
+        bh=ODcrbPcnMCSSoamca2F6ZuB3LHikG1Oo3r1FOts8V4c=;
+        b=O6ITMpBkGQ1urboVjRkxd8KYLN9uP+y0IIo/cf4zzrLKl7P1Bqn7CdvLWwKcC3M/5Y
+         Id4wtwCKPPPKMG3GZQfgIJpdg5gHWhctohHKrrkb64+gtFljcykZgas12/8BhRW0ZjRV
+         Ilnp/IphwEy/7gy88QQqHBQrzh7Qq1QqIgTcq8MF8iPj6qZREa7OzwXcbPvd68l+9o6E
+         kKsZq0xHtVN7DZ+2QXyIWW9lbbNrSLAoe/IOViDIyRB0JBJC0ckj4un3Vwvx5ih9yAtR
+         6upfwI5IEC7Yu4q/mbMbcN7mgoFGSJlEwQwDWwAP+5PHt0HPneY5eQcKl1uWKePOmwOi
+         LyDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=W6dnd6MUybWhVHYUHQ8d7S6D4UzG0vGs7tI9w8WKSPw=;
-        b=qtm23fY/pD0Kqlj5sfO2nG8TT7EhTuoGR9ItaqXscMcN62jJTyJuEECBAi1APiLZGD
-         I76td6sIqDb5aKHF7MN3kaRf6ONYFi6S6PtuZbHBESjd2ckSOdtUavALB8/WkZrRUJAU
-         W8NaH6dx0rg9j4dJJM/n/GlzbJ5E0sq4DQPUSDX+vK/FfjsStBBqEHdVIuk0vKX3jIoj
-         klZlfUMh/k317PwchvJF3brTFSZCYEpAZ2rehGzYxxw+2zWIOEQ7uh9Yzf0fjuJSmhUd
-         xyWnUP+tkrJaQ2ILl8DwRIHXmL7TpMf24QussdMhl8tXDg3ZmKIpJeS4WQzhxDIjNicK
-         U7DQ==
-X-Gm-Message-State: ACrzQf3wjqN7uNoW/ycRQoNwxZT8Aao3u8GCkJ9RyKEHH5Ti3fYZDe3S
-        5Iaqpkzt0lYQMTUZJ4ampvq07FJEu+mc
-X-Google-Smtp-Source: AMsMyM7BSEaT9DRaVmFt6QmDrsflEMyuH9+JhiEkNuJR/D+9w0X/VRjRUTm1V5JxJGcr0IWCFKhdt8ZK2Am/
-X-Received: from apusaka-p920.tpe.corp.google.com ([2401:fa00:1:17:1fb9:e3c:c40d:dd12])
- (user=apusaka job=sendgmr) by 2002:a25:bc83:0:b0:6bc:a6d2:5216 with SMTP id
- e3-20020a25bc83000000b006bca6d25216mr3841415ybk.204.1665047376628; Thu, 06
- Oct 2022 02:09:36 -0700 (PDT)
-Date:   Thu,  6 Oct 2022 17:09:31 +0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221006170915.v3.1.I46e98b47be875d0b9abff2d19417c612077d1909@changeid>
-Subject: [PATCH v3] Bluetooth: btusb: Introduce generic USB reset
-From:   Archie Pusaka <apusaka@google.com>
-To:     linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Cc:     CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
-        Archie Pusaka <apusaka@chromium.org>,
-        Abhishek Pandit-Subedi <abhishekpandit@google.com>,
-        Ying Hsu <yinghsu@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        h=mime-version:references:in-reply-to:message-id:cc:to:subject:from
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=ODcrbPcnMCSSoamca2F6ZuB3LHikG1Oo3r1FOts8V4c=;
+        b=j/8CbWq9+lZ3RDMZSvxcTCPOmPDgLY5WwiBE+UGaXljn5bOuHMpXlHX0GJLGCqnJAQ
+         HJs73gUY0wBIauoFJA59vrkjgVC6su4KNGVnAu30XVncG1K9VbvNn3JpPGga9A5KHGdw
+         SY7oW6JvuNDoK4x0WZof6MCAENc0Cft1BZuezXI9Pd5S6iXzaPbxItKCDgj4car66O4U
+         Ktv5Z9LLfBSQvusuKdxbxrmlTg65x4m/esUT6GYUvJZDrNVeuF1/ErH8CDw08psBn8ow
+         VLsbTp0vzzXpO8RvjXRwU6lTVTeNpZ+g/1mLqmIiQ7EMfBY5IhrUvWNR9mmY1HkVZ4df
+         gekA==
+X-Gm-Message-State: ACrzQf2BnWfMttkCPuGCBM1e1fxShAHqpiCdTU8JMY+2HSWKh6oRAWfu
+        i3gAkuwrH2t2xlwVO42yjKs=
+X-Google-Smtp-Source: AMsMyM6NskjxS+PhyY75K/LPrChZI6R4TpD3VQ9478iz/K1Ew1itC7L8OMA3fWU03XTIMFHg+V/nYA==
+X-Received: by 2002:a17:906:7007:b0:6ff:8028:42e with SMTP id n7-20020a170906700700b006ff8028042emr3160836ejj.278.1665047386560;
+        Thu, 06 Oct 2022 02:09:46 -0700 (PDT)
+Received: from [10.34.19.122] ([95.183.227.98])
+        by smtp.gmail.com with ESMTPSA id la15-20020a170907780f00b007812ba2a360sm10184397ejc.149.2022.10.06.02.09.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 02:09:45 -0700 (PDT)
+Date:   Thu, 06 Oct 2022 12:09:35 +0300
+From:   Yassine Oudjana <yassine.oudjana@gmail.com>
+Subject: Re: [PATCH v2 05/10] dt-bindings: pinctrl: mediatek,pinctrl-mt6795:
+ Fix interrupt count
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Andy Teng <andy.teng@mediatek.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <0SQBJR.LFLSOU16ZA311@gmail.com>
+In-Reply-To: <17e4cfb0-e423-9cf8-8af1-588aed4481a5@collabora.com>
+References: <20221005174343.24240-1-y.oudjana@protonmail.com>
+        <20221005174343.24240-6-y.oudjana@protonmail.com>
+        <17e4cfb0-e423-9cf8-8af1-588aed4481a5@collabora.com>
+X-Mailer: geary/40.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,125 +82,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Archie Pusaka <apusaka@chromium.org>
 
-On cmd_timeout with no reset_gpio, reset the USB port as a last
-resort.
+On Thu, Oct 6 2022 at 11:01:29 AM +0200, AngeloGioacchino Del Regno 
+<angelogioacchino.delregno@collabora.com> wrote:
+> Il 05/10/22 19:43, Yassine Oudjana ha scritto:
+>> From: Yassine Oudjana <y.oudjana@protonmail.com>
+>> 
+>> The document currently states a maximum of 1 interrupt, but the DT
+>> has 2 specified causing a dtbs_check error. Change the limit to 2
+>> to pass the check and add a minimum limit.
+>> 
+>> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+>> ---
+>>   .../devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml   | 3 
+>> ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>> 
+>> diff --git 
+>> a/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml 
+>> b/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
+>> index 73ae6e11410b..483fcdc60487 100644
+>> --- 
+>> a/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
+>> +++ 
+>> b/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
+>> @@ -47,7 +47,8 @@ properties:
+>>       interrupts:
+>>       description: The interrupt outputs to sysirq.
+>> -    maxItems: 1
+>> +    minItems: 2
+>> +    maxItems: 2
+>>     # PIN CONFIGURATION NODES
+>>   patternProperties:
+> 
+> Nice catch.
+> The right thing to do is...
+> 
+>   interrupts:
+>     description: The interrupt outputs to sysirq.
+>     minItems: 1
+>       - description: EINT interrupt
+>       - description: EINT event_b interrupt
 
-This patch changes the behavior of btusb_intel_cmd_timeout and
-btusb_rtl_cmd_timeout.
+I didn't know what the interrupts where exactly and if either one is 
+optional so just to be safe I set the limit to 2. I'll do that nex time.
 
-Signed-off-by: Archie Pusaka <apusaka@chromium.org>
-Reviewed-by: Abhishek Pandit-Subedi <abhishekpandit@google.com>
-Reviewed-by: Ying Hsu <yinghsu@chromium.org>
+Thanks,
+Yassine
+> 
 
----
-Tested by not cancelling cmd_timer when handing hci event.
-Before the patch:
-ERR kernel: [  716.929206] Bluetooth: hci_cmd_timeout() hci0: command 0x0000 tx timeout
-ERR kernel: [  716.929218] Bluetooth: btusb_rtl_cmd_timeout() hci0: No gpio to reset Realtek device, ignoring
-
-After the patch:
-ERR kernel: [  225.270048] Bluetooth: hci_cmd_timeout() hci0: command 0x0000 tx timeout
-ERR kernel: [  225.270060] Bluetooth: btusb_rtl_cmd_timeout() hci0: Resetting usb device.
-INFO kernel: [  225.386613] usb 3-3: reset full-speed USB device number 3 using xhci_hcd
-
-Changes in v3:
-* introduce hdev->reset to override the generic reset function
-
-Changes in v2:
-* Update commit message
-
- drivers/bluetooth/btusb.c        | 35 +++++++++++++++++++++++---------
- include/net/bluetooth/hci_core.h |  1 +
- 2 files changed, 26 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index 271963805a38..e6add3604214 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -696,6 +696,28 @@ struct btusb_data {
- 	unsigned cmd_timeout_cnt;
- };
- 
-+static void btusb_reset(struct hci_dev *hdev)
-+{
-+	struct btusb_data *data;
-+	int err;
-+
-+	if (hdev->reset) {
-+		hdev->reset(hdev);
-+		return;
-+	}
-+
-+	data = hci_get_drvdata(hdev);
-+	/* This is not an unbalanced PM reference since the device will reset */
-+	err = usb_autopm_get_interface(data->intf);
-+	if (err) {
-+		bt_dev_err(hdev, "Failed usb_autopm_get_interface: %d", err);
-+		return;
-+	}
-+
-+	bt_dev_err(hdev, "Resetting usb device.");
-+	usb_queue_reset_device(data->intf);
-+}
-+
- static void btusb_intel_cmd_timeout(struct hci_dev *hdev)
- {
- 	struct btusb_data *data = hci_get_drvdata(hdev);
-@@ -705,7 +727,7 @@ static void btusb_intel_cmd_timeout(struct hci_dev *hdev)
- 		return;
- 
- 	if (!reset_gpio) {
--		bt_dev_err(hdev, "No way to reset. Ignoring and continuing");
-+		btusb_reset(hdev);
- 		return;
- 	}
- 
-@@ -736,7 +758,7 @@ static void btusb_rtl_cmd_timeout(struct hci_dev *hdev)
- 		return;
- 
- 	if (!reset_gpio) {
--		bt_dev_err(hdev, "No gpio to reset Realtek device, ignoring");
-+		btusb_reset(hdev);
- 		return;
- 	}
- 
-@@ -761,7 +783,6 @@ static void btusb_qca_cmd_timeout(struct hci_dev *hdev)
- {
- 	struct btusb_data *data = hci_get_drvdata(hdev);
- 	struct gpio_desc *reset_gpio = data->reset_gpio;
--	int err;
- 
- 	if (++data->cmd_timeout_cnt < 5)
- 		return;
-@@ -787,13 +808,7 @@ static void btusb_qca_cmd_timeout(struct hci_dev *hdev)
- 		return;
- 	}
- 
--	bt_dev_err(hdev, "Multiple cmd timeouts seen. Resetting usb device.");
--	/* This is not an unbalanced PM reference since the device will reset */
--	err = usb_autopm_get_interface(data->intf);
--	if (!err)
--		usb_queue_reset_device(data->intf);
--	else
--		bt_dev_err(hdev, "Failed usb_autopm_get_interface with %d", err);
-+	btusb_reset(hdev);
- }
- 
- static inline void btusb_free_frags(struct btusb_data *data)
-diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/hci_core.h
-index c54bc71254af..55a40f5606c3 100644
---- a/include/net/bluetooth/hci_core.h
-+++ b/include/net/bluetooth/hci_core.h
-@@ -659,6 +659,7 @@ struct hci_dev {
- 	int (*set_diag)(struct hci_dev *hdev, bool enable);
- 	int (*set_bdaddr)(struct hci_dev *hdev, const bdaddr_t *bdaddr);
- 	void (*cmd_timeout)(struct hci_dev *hdev);
-+	void (*reset)(struct hci_dev *hdev);
- 	bool (*wakeup)(struct hci_dev *hdev);
- 	int (*set_quality_report)(struct hci_dev *hdev, bool enable);
- 	int (*get_data_path_id)(struct hci_dev *hdev, __u8 *data_path);
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
 
