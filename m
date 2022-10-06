@@ -2,157 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5BC25F6AA6
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 17:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B315F6AAB
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 17:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbiJFPcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 11:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48490 "EHLO
+        id S231861AbiJFPdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 11:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiJFPc2 (ORCPT
+        with ESMTP id S231784AbiJFPdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 11:32:28 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D026CA598C;
-        Thu,  6 Oct 2022 08:32:27 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id r14so3287770lfm.2;
-        Thu, 06 Oct 2022 08:32:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date;
-        bh=PSnridKMFXX1oHGe8dg+gb0bRu2roWI84V1eijz8eLg=;
-        b=Do6RRGKJ0zGQppy6Mcem1G4C9hsJ3j71Us9VPtWZnSCFiFmDLfWxiF7S9Za+jssdAA
-         NLo0eE9a72yRyC22N4Q+M1hIBoAWwGBM6PQoMweuymrCQBfMLHRB3eTQcKynCSeMMHbO
-         3l5eurRXyqE9+fmYFyExiBfqYBjxinDcbInXwcXFjs7XvO1RwEA7faE4TTegHN1NzDGV
-         ileioX25/9kxe65DuHjFJ51ZAk1174U5pF7ijRxjkAtHV4cYoPH0sHLhyUkm1nRif9X0
-         kL0EvDKtssKvmQEyds/f/Z9JVw+x4zSKXGfzK2F3TUa7cwhfDv1Do9PCfZWLxILxOI9l
-         Hh7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=PSnridKMFXX1oHGe8dg+gb0bRu2roWI84V1eijz8eLg=;
-        b=mq1N6t7QMuLgR6yfKK7kfoLQ2oHI+BWHWZpbdwIXPz5R4WTHupxWeuBUCHu56+dJx/
-         Hmv4BuE7hTIqqUzwY9fwp/CJplzAMGMHHdNkneBLp/I2GGxGx0fGZ7hUiBrjnLMnjHN1
-         IY9v4kOiJjVQr0BNlSijY2lw9IrX5Gv8EEyqaXHh9zynDuKEgwtA+M5iL+HEi0VJZOri
-         fAV3cMtFNjM7OIbowW4qC6Ws0wN/oYEU/dpPA6d4+cO7rgksV01LaqhNv4SUhV0pwwie
-         UextS+yOjj1PQhGD6P1YoD749OKENOLKayCHCKWIBRtS7EWh2fZwXgNf0rPjMYQLq3E0
-         Xb4g==
-X-Gm-Message-State: ACrzQf25RxLhoF+UIGnmILlZgIu8kid+7zmaGfWcIUD+7hDc6PxEiU9U
-        JkUQhRzbz27HaB2wYaQ0Gzw=
-X-Google-Smtp-Source: AMsMyM5EFh6FHQ971Y6DxjG1i1/HXfuJ4x9s+wR245sRDEOF2gfiEw/XgAwM9/FRsbmBp0T1wjzQ7Q==
-X-Received: by 2002:a05:6512:2314:b0:4a2:6c4a:4fb9 with SMTP id o20-20020a056512231400b004a26c4a4fb9mr216012lfu.482.1665070346182;
-        Thu, 06 Oct 2022 08:32:26 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id g17-20020a2ea4b1000000b00267232d0652sm1912189ljm.46.2022.10.06.08.32.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Oct 2022 08:32:25 -0700 (PDT)
-Message-ID: <7bbc0c04-04a8-f2c6-0436-3be0fc1013c7@gmail.com>
-Date:   Thu, 6 Oct 2022 18:32:22 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
+        Thu, 6 Oct 2022 11:33:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07243B2751;
+        Thu,  6 Oct 2022 08:33:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6CF8B820E1;
+        Thu,  6 Oct 2022 15:33:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2208C433D7;
+        Thu,  6 Oct 2022 15:33:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665070393;
+        bh=b5fz2Faps9g6VlZUHemqmOjeGlkHE/XuO+Ju+7K214A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dqylxaX+JXllTIj8yLEPkVZBqPOA8RVrx3AnU9xEinCebuNlOnMyggpT2Y80GCOKD
+         jn8iiFVa+0tWfLJIarZ3gsc9/5t0tmhNFVpZDSmYTxEm3+VkTnm0l0SUpgjsEB63l2
+         CggpubewSFAbm+eamVnZO4CyMN9gRy+UD59XmmVr4BYO4qxyiS9KmAjYRaSobvpfXz
+         DnSX30IFKdyjSNgEeCssZktyaIUkNxCpFB7k0Lc+SXVgkoMAgW8m2BDe1NFSnP52GJ
+         X4HbSOH8Yj7yBUvZLDbotfkDUcHGpOI7PFo5Ulpg6CEjrH0C7sa5mARjW+j67nRLWp
+         XjHxO0UAdVaJw==
+Date:   Thu, 6 Oct 2022 17:33:10 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Quan Nguyen <quan@os.amperecomputing.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Corey Minyard <minyard@acm.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jagath Jog J <jagathjog1996@gmail.com>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1665066397.git.mazziesaccount@gmail.com>
- <80fa42040f385eb47f4f3c71b9b02f643a643e38.1665066397.git.mazziesaccount@gmail.com>
- <fc7c064f-074a-e66a-07b3-541f2ad56804@linaro.org>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [RFC PATCH v2 3/5] dt-bindings: iio: Add KX022A accelerometer
-In-Reply-To: <fc7c064f-074a-e66a-07b3-541f2ad56804@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        thang@os.amperecomputing.com
+Subject: Re: [PATCH v10 3/3] i2c: aspeed: Assert NAK when slave is busy
+Message-ID: <Yz71NjbmLZeRpmM2@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Quan Nguyen <quan@os.amperecomputing.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        thang@os.amperecomputing.com
+References: <20221004093106.1653317-1-quan@os.amperecomputing.com>
+ <20221004093106.1653317-4-quan@os.amperecomputing.com>
+ <Yz3VmWCqdolKg5sm@shikoro>
+ <c8c774c5-b274-a6f9-303b-e84c50800b5c@os.amperecomputing.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+SCqpgtCPKo+UDYP"
+Content-Disposition: inline
+In-Reply-To: <c8c774c5-b274-a6f9-303b-e84c50800b5c@os.amperecomputing.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi dee Ho Krzysztof,
 
-On 10/6/22 18:23, Krzysztof Kozlowski wrote:
-> On 06/10/2022 16:37, Matti Vaittinen wrote:
->> KX022A is a 3-axis Accelerometer from ROHM/Kionix. The sensor features
->> include variable ODRs, I2C and SPI control, FIFO/LIFO with watermark IRQ,
->> tap/motion detection, wake-up & back-to-sleep events, four acceleration
->> ranges (2, 4, 8 and 16g) and probably some other cool features.
->>
-> 
-> Thank you for your patch. There is something to discuss/improve.
-> 
->> +
->> +properties:
->> +  compatible:
->> +    const: kionix,kx022a
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    minItems: 1
->> +    maxItems: 2
->> +
->> +  interrupt-names:
->> +    minItems: 1
->> +    maxItems: 2
->> +    items:
->> +      enum:
->> +        - INT1
->> +        - INT2
-> 
-> This allows any order, which I assume was your intention.
-
-Yes. I don't see real need to restrict ordering - besides, with my 
-yaml/schema skills it'd took eternity to find corrct example(s) ;)
-
-My intention is that the user can give either one of these - or both. 
-Order needs naturally to match the order of IRQs - but this we can't know.
-
-> However maybe
-> at least fix it a bit like:
-> minItems: 1
-> items:
->    - enum: [ int1, int2]
->    - const: int2
-
-If you say so XD
-I can fix this for v3 :)
-
-> 
-> OTOH, the names are not really descriptive. Do they match pin names?
-> 
-
-Yes. They match to pin names used in the data-sheet.
+--+SCqpgtCPKo+UDYP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 
-Yours
-	-- Matti
+> Thank you for your patience with me through many versions.
 
-Ps. I've heard this year has not been that good with the mushrooms here 
-in Finland ;)
+You are welcome. In the end, I think the update of the target interface
+is an improvement, in deed. So, thank you for that!
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
 
-~~ When things go utterly wrong vim users can always type :help! ~~
+--+SCqpgtCPKo+UDYP
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmM+9TYACgkQFA3kzBSg
+KbYACw/9E3V2Y6ViQwRZW439rY0GLtJGPos89UPLB3b8h2XUl/8KWQBrU4MDD46d
+6VEho+Ae8+5OHpqczwMiXkgc+Z/Yc0OtfOUXCqEr339KH09Z2k930RdTb20dZf6t
+UZbq+wAaD9xn4nXBMEBM3YoBDbncbhTEamK0mKkh5lHmD2fZqXXRqpbBtwSZXN5s
+Y+Oshsl9cuGEkqde5gVhRR1DWJrOesWHmg51VhBvq0E74sSlWc3D4ByKYJ2K95qw
+w0gd48NMY5vtSvM8e2X2SqA/1rwYYi91bn5xFCM0hSXWmAU+hKhEW6O0rQrbZPu1
+9mwoOHEvTanaLpYiWCsnevEgEsLifpiKMlojSmQZIQLeFLTg69K36Gdyb57mNzD1
+4+Mb5QP4yjHkjA9uwr03qJv08xDKmQtnQhO/dkjz0iAE3uxdpGYb3XB0chL+YI7p
+rJV9CIETC+HFpzrKiOu9XGRNnLzu7dJ6Jx489UKzS+d2cofL+gZMTsAkeu1WXBEj
+UY8cqIm1rxaOJgy8SBotNJssqRS7TGL/TYtXFgFtQIJ2pISQHB1Yc9FdZSRdXHLF
+5wRpQZlTnIS9/wL/K29aAvePtLJHbDhUgaDIqU0JgNEdA1wA9wUj0RK0FrQyHBP0
+W96sDicwz7oVBGNZuX1lQHtfYGZqdBPIllgG8XaGlwNlwgRCiyg=
+=WHBN
+-----END PGP SIGNATURE-----
+
+--+SCqpgtCPKo+UDYP--
