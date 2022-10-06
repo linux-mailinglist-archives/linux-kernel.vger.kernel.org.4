@@ -2,76 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BAA5F69C9
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02EE85F69D0
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231292AbiJFOi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 10:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
+        id S231553AbiJFOkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 10:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231631AbiJFOiv (ORCPT
+        with ESMTP id S231415AbiJFOkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 10:38:51 -0400
+        Thu, 6 Oct 2022 10:40:20 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1E8AE861
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 07:38:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D68A9A9F2
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 07:40:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665067126;
+        s=mimecast20190719; t=1665067217;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=5O7C0eVcueYILC/8tnxwgVOGnNG5SRbPBQweUSiv/BI=;
-        b=PSnJWR40BJrBrvVHg3aQOx5zU2xuCVwWRRes3KufxViNAnMgR7SbVEy7PeMkVBs5RketN9
-        hUuQEuXj+f38sxBnYbd3SbOPgV5sK64+vq9nCTxCSYxyaivqy1n4O61Pic5237SdRQhbQJ
-        VN9Ixy+uqxjgktTqRYOa+A42v9FR+Xw=
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
- [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=p+tXcwSOV4d4EWIv9hMkfRyVLOs87m6DQEHcwhzbxwE=;
+        b=hztYbzUMbbtrC7+Xr6nf2C+vama1M8DDI+lNdEuJn5Wt142mfwhSfvHckeTPktT/bwoB2A
+        MSedFXUUl7khR+j2V8ZPrjZGPeSLG319YDrxx5uf8msd6qIwjBu9ALHzKumHVL8madgRvU
+        vR6i8F2B2tSYQ6rWzCLDguLsXMdq2v0=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-125-L_gwkVIrNP-hMnbOgGA2Gw-1; Thu, 06 Oct 2022 10:38:43 -0400
-X-MC-Unique: L_gwkVIrNP-hMnbOgGA2Gw-1
-Received: by mail-io1-f72.google.com with SMTP id j20-20020a6b3114000000b006a3211a0ff0so1236012ioa.7
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 07:38:43 -0700 (PDT)
+ us-mta-483-UDXB2-NMOQG24sLvTkhkBA-1; Thu, 06 Oct 2022 10:40:16 -0400
+X-MC-Unique: UDXB2-NMOQG24sLvTkhkBA-1
+Received: by mail-il1-f199.google.com with SMTP id j1-20020a056e02154100b002f9abf53769so1669639ilu.23
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 07:40:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5O7C0eVcueYILC/8tnxwgVOGnNG5SRbPBQweUSiv/BI=;
-        b=oGoxvsqHz1WiQARS+j9Cvo8X3KzGCwUc7VRI297R6Y9OSlcx4yGmYHFVxNahYUAxLo
-         Ju2EOgtSAPrSEcTm5WF6nduZnJnFwaB4T9Ft77npVJh932EKspinerYkp4JGACYQ/4TH
-         LHCLTnqQx9tssb0o9C78tcGRaB6tgmTB9Xbu0dW6MuEFmOMKbyHbK7wecbAa2G4FmvKN
-         GxsDCS2hGgqMJI7mHQKvMlUMtoxw+FHys024EKSaVCC4uLSbOCjyMUVxZic7fhKsJmVn
-         CcZuDrHdm83993xeLrVsvm/qYo+bY5M63JCjgPisWelTLNuQSojnaMRFeLGEMkV+/CMl
-         tpsQ==
-X-Gm-Message-State: ACrzQf0L1E62zBL6F0tEv74NxHJv3ItxcCfoOF30bmYNXpzt8Qt+/8mP
-        ZmqCOD4NbyAnLvamjw6w90g83WQQZvEZrlOymy0loksMiJlVcsBA+UhGButUkOs0Vv9lCTWFp8N
-        HL1saouib5rSqrpmAAtlIQKe+
-X-Received: by 2002:a05:6e02:6d1:b0:2f9:3901:933f with SMTP id p17-20020a056e0206d100b002f93901933fmr964ils.64.1665067122703;
-        Thu, 06 Oct 2022 07:38:42 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5/3L6ZorP/J1u+HdUyVBa0ZkXXbZ2hdZ2mtjO1HTpC2EG36vGGE8GNBnxR6ZXhha3GG873gA==
-X-Received: by 2002:a05:6e02:6d1:b0:2f9:3901:933f with SMTP id p17-20020a056e0206d100b002f93901933fmr954ils.64.1665067122540;
-        Thu, 06 Oct 2022 07:38:42 -0700 (PDT)
+        bh=p+tXcwSOV4d4EWIv9hMkfRyVLOs87m6DQEHcwhzbxwE=;
+        b=xZ05IPOXa/+u8Urtnfc5QQy6w1h7OGQEkx6jVjjF0XaHG10euWsKXoVhLlkDlwxSGl
+         7Odfq/yI7ZSHt+0NeueZeKCYidQFCYnDUTQrUAPE527ILWDanO9nNYjR1zZkDpiYhxUp
+         HIRWVZkPEbNJs1Jv6TlOOkQHXRAYUigFDVvUGbNrI8iwbmbJ8FgbXkCp3/CzAPKtdF/l
+         R3uI7V5/FXwVXfkbQZk2qIjlYxcYUv/uo3rGelyA9MgMLhZbCQNGJ2HUk9l9HrIAs8Vz
+         DCF7fcQ6Edj/BYYfRRrzbfgL9NBUDKbef21evTYCwaBOaMAc6orgYPJ8q7+h9jheOl1n
+         tGBw==
+X-Gm-Message-State: ACrzQf1h2jmj9UULb/Dvqdh/s+YDWBYNA1tHe2pyoIE8Fvao4GR246uC
+        tvn7RYgNqXZPEHOL8ghM3WNGgJOJS0YZ+6x+i255KbDMvEkLaTs8sBA01Qfl/HEIHZYvU9cLKF6
+        evlpxn2pIv47hNSRCb/wjkmzu
+X-Received: by 2002:a05:6602:2d8b:b0:6a5:3332:9bcf with SMTP id k11-20020a0566022d8b00b006a533329bcfmr56060iow.211.1665067215908;
+        Thu, 06 Oct 2022 07:40:15 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7PS+ghlX3Fgu57Ciup7KgD/GG+m2sG+bU/XEsDP15MrevQn26Tsa1Y2KiI3SdvPZ6FqNY3Hg==
+X-Received: by 2002:a05:6602:2d8b:b0:6a5:3332:9bcf with SMTP id k11-20020a0566022d8b00b006a533329bcfmr56050iow.211.1665067215702;
+        Thu, 06 Oct 2022 07:40:15 -0700 (PDT)
 Received: from x1 (c-98-239-145-235.hsd1.wv.comcast.net. [98.239.145.235])
-        by smtp.gmail.com with ESMTPSA id m37-20020a026d25000000b0035b3e0a3243sm7415073jac.57.2022.10.06.07.38.41
+        by smtp.gmail.com with ESMTPSA id b19-20020a026f53000000b0036353ba86c0sm2509913jae.9.2022.10.06.07.40.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 07:38:42 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 10:38:40 -0400
+        Thu, 06 Oct 2022 07:40:15 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 10:40:13 -0400
 From:   Brian Masney <bmasney@redhat.com>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: fix ufs_card_phy ref clock
-Message-ID: <Yz7ocG5/HhrcjeHS@x1>
-References: <20221005143305.388-1-johan+linaro@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     andersson@kernel.org, agross@kernel.org,
+        konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ahalaney@redhat.com, echanude@redhat.com
+Subject: Re: [PATCH v3] arm64: dts: qcom: sc8280xp: correct ref_aux clock for
+ ufs_mem_phy
+Message-ID: <Yz7ozWHRoYSlZu/0@x1>
+References: <20220830180120.2082734-1-bmasney@redhat.com>
+ <Yz2VnYHaTHVpiJAM@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221005143305.388-1-johan+linaro@kernel.org>
+In-Reply-To: <Yz2VnYHaTHVpiJAM@hovoldconsulting.com>
 User-Agent: Mutt/2.2.7 (2022-08-07)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -83,23 +83,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 05, 2022 at 04:33:05PM +0200, Johan Hovold wrote:
-> The GCC_UFS_REF_CLKREF_CLK must be enabled or the second UFS controller
-> fails to enumerate on sa8295p-adp.
-> 
-> Note that the vendor kernel enables both GCC_UFS_REF_CLKREF_CLK and
-> GCC_UFS_1_CARD_CLKREF_CLK and it is possible that the former should be
-> modelled as a parent of the latter. The clock driver also has a
-> GCC_UFS_CARD_CLKREF_CLK clock which the firmware appears to enable on
-> the ADP.
-> 
-> The usual lack of documentation for Qualcomm SoCs makes this a highly
-> annoying guessing game, but as the second controller works on the ADP
-> without either card reference clock enabled, only enable
-> GCC_UFS_REF_CLKREF_CLK for now.
-> 
-> Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+On Wed, Oct 05, 2022 at 04:33:01PM +0200, Johan Hovold wrote:
+> You should fix the Subject which still refers to the "ref_aux" clock.
 
-Reviewed-by: Brian Masney <bmasney@redhat.com>
+I'll send out a new version with the updated subject to make it easy for
+Bjorn to pick up.
+
+> I can confirm that this is needed also for sc8280xp-crd and sa8295p-adp,
+> so with Subject fixed:
+> 
+> Tested-by: Johan Hovold <johan+linaro@kernel.org>
+> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+
+Thanks!
+
+Brian
 
