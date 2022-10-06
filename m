@@ -2,101 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802775F660A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 291BF5F6612
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbiJFM20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 08:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
+        id S229506AbiJFM26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 08:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbiJFM2J (ORCPT
+        with ESMTP id S230341AbiJFM21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 08:28:09 -0400
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0110A9F77C;
-        Thu,  6 Oct 2022 05:28:06 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-132b8f6f1b2so1944045fac.11;
-        Thu, 06 Oct 2022 05:28:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YeL65/1U1Hoy7jWDjnXqoxK2kF0UFfaCh7UYp4Dp3Jw=;
-        b=MCQyBSNDPwfe9vUn5cZe3b2R9toow5xR+OmGLZzhYFD7ORU4ZYq8MDJtMV1CKcVtV/
-         FQ+pIix13QgpR/w42+QBpwQQbhoui1aLKGiQDxXY2qoBBJxvqpQnEGvr6sune9FL/1mM
-         AGrmDqakpIZqHCh6148FJaVDpkHMR8FDCzgQVXe/S+HHGB5NaQEbVOrRUw4GgNo2art4
-         7NrRmt6Oe/zn+TKo2y3w4VKAtRFvmcmtN0YTV6VFeRnDLfxvK9XQGlrqe4v0ZgutDTOf
-         /TLk3+NErFgNMzpPgoEdj+8E14Aa8WGbQIzBSVC8JsnRON3qu5qhJCMJUQkxUNqG1poE
-         oG6w==
-X-Gm-Message-State: ACrzQf3Tg6EUDq2Mj3kQhfZDbYhEjcciibbc9pnO+yFO5VQIn4PrHicQ
-        jVv1zxcN3ROHIijXyphrb+dvO9sitQ==
-X-Google-Smtp-Source: AMsMyM421KNMgt8ANf2A8dt0mXutgzLVqwXNndxnN0wF7DyhRhAJBbWhiyC15nLv4JoNw2feAeaiDw==
-X-Received: by 2002:a05:6870:3415:b0:133:197:3ca3 with SMTP id g21-20020a056870341500b0013301973ca3mr2093291oah.115.1665059286233;
-        Thu, 06 Oct 2022 05:28:06 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id cy21-20020a056830699500b00660ef042e17sm1575995otb.12.2022.10.06.05.28.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 05:28:01 -0700 (PDT)
-Received: (nullmailer pid 1613457 invoked by uid 1000);
-        Thu, 06 Oct 2022 12:27:55 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-In-Reply-To: <20221006104104.171368-4-krzysztof.kozlowski@linaro.org>
-References: <20221006104104.171368-1-krzysztof.kozlowski@linaro.org> <20221006104104.171368-4-krzysztof.kozlowski@linaro.org>
-Message-Id: <166505883313.1602848.6191967643505476092.robh@kernel.org>
-Subject: Re: [PATCH 4/4] dt-bindings: pinctrl: qcom,sdm630: convert to dtschema
-Date:   Thu, 06 Oct 2022 07:27:55 -0500
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Thu, 6 Oct 2022 08:28:27 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4891E9F764;
+        Thu,  6 Oct 2022 05:28:20 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BFF5566022FF;
+        Thu,  6 Oct 2022 13:28:17 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1665059298;
+        bh=8Sr8yw+JBOQAiJk8C/U+JAHoxicfODTLrAVUrwfiToA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=FN7s/832T+Xb+BqbvBlLY1QZKyUAOA8qjB0zl55D7jqCKQQVA180V2D0uSVhdq93H
+         F+uEIX4Ky13l9J8RVJlNM6AvqamuTRwXRTRauGaStR4a9ET4iZQb1z0pd6paOkjFlL
+         O2onoYr3/FPKPkCXumM/TOQrUcR/bQyBnsrJ05AnatrctQmi0qgsXVI6xvLHKABYKd
+         edJ2I+XtXTqe3MSiBy35MIOGfeFTrWo3pBvmwd6y/+kFGamssbZ/fpQRK+arsvI+3c
+         JOEt3QnnQqu6NL7gRolxLV6rqR0dhMNffEngkEU4raaR3tHoN3MaAJVbyhvVnzZGcr
+         8PMqFnVpjLrzw==
+Message-ID: <579c8387-ba4b-22d1-79a6-5cff94769fb5@collabora.com>
+Date:   Thu, 6 Oct 2022 14:28:15 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 0/8] MediaTek watchdog: Convert mtk-wdt.txt to dt-schema
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, nfraprado@collabora.com
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20221006120715.24815-1-allen-kh.cheng@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221006120715.24815-1-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Oct 2022 12:41:04 +0200, Krzysztof Kozlowski wrote:
-> Convert Qualcomm SDM630 and SDM660 pin controller bindings to DT schema.
-> Keep the parsing of pin configuration subnodes consistent with other
-> Qualcomm schemas (children named with '-state' suffix, their children
-> with '-pins').
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/pinctrl/qcom,sdm630-pinctrl.yaml | 189 +++++++++++++++++
->  .../bindings/pinctrl/qcom,sdm660-pinctrl.txt  | 191 ------------------
->  2 files changed, 189 insertions(+), 191 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdm630-pinctrl.yaml
->  delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdm660-pinctrl.txt
+Il 06/10/22 14:07, Allen-KH Cheng ha scritto:
+> Based on tag: next-20221006 linux-next/master, We use [1] and [2] as
+> references to send a new series.
 > 
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+For me, it's all good to go. Thanks for respinning that series.
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+Cheers!
+Angelo
 
-Full log is available here: https://patchwork.ozlabs.org/patch/
-
-
-pinctrl@3100000: 'blsp1-uart1-default', 'blsp1-uart1-sleep', 'blsp1-uart2-default', 'blsp2-uart1-active', 'blsp2-uart1-sleep', 'cam-vdig-default', 'cci0_default', 'cci1_default', 'i2c1-default', 'i2c1-sleep', 'i2c2-default', 'i2c2-sleep', 'i2c3-default', 'i2c3-sleep', 'i2c4-default', 'i2c4-sleep', 'i2c5-default', 'i2c5-sleep', 'i2c6-default', 'i2c6-sleep', 'i2c7-default', 'i2c7-sleep', 'i2c8-default', 'i2c8-sleep', 'imx219-vana-default', 'imx300-vana-default', 'sdc1-off', 'sdc1-on', 'sdc2-off', 'sdc2-on', 'ts-int-active', 'ts-lcd-id-active' do not match any of the regexes: '-state$', 'pinctrl-[0-9]+'
-	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb
-	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-discovery.dtb
-	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-pioneer.dtb
-	arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile-voyager.dtb
-	arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dtb
-
-pinctrl@3100000: 'blsp1-uart1-default', 'blsp1-uart1-sleep', 'blsp1-uart2-default', 'blsp2-uart1-active', 'blsp2-uart1-sleep', 'cci0_default', 'cci1_default', 'i2c1-default', 'i2c1-sleep', 'i2c2-default', 'i2c2-sleep', 'i2c3-default', 'i2c3-sleep', 'i2c4-default', 'i2c4-sleep', 'i2c5-default', 'i2c5-sleep', 'i2c6-default', 'i2c6-sleep', 'i2c7-default', 'i2c7-sleep', 'i2c8-default', 'i2c8-sleep', 'sdc1-off', 'sdc1-on', 'sdc2-off', 'sdc2-on' do not match any of the regexes: '-state$', 'pinctrl-[0-9]+'
-	arch/arm64/boot/dts/qcom/sda660-inforce-ifc6560.dtb
-	arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dtb
+> This series converts mtk-wdt.txt to dt-schema and contains
+>   - Fix watchdog compatibles for MT8186, MT7986 and MT8195,
+>   - Fix the watchdog name of mt8516
+>   - Add mt6795 and MT8173 watchdog compatible
+>   - Add support for toprgu reset on the MediaTek Helio X10 MT6795 SoC.
+> 
+> Changes since [1]:
+>   - Drop "timeout-sec: true" and use unevaluatedProperties
+> 
+> [1] https://lore.kernel.org/all/20221005113517.70628-1-angelogioacchino.delregno@collabora.com/
+> [2] https://lore.kernel.org/all/20220422121017.23920-3-allen-kh.cheng@mediatek.com/
+> 
+> Allen-KH Cheng (3):
+>    arm64: dts: mediatek: mt7986: Fix watchdog compatible
+>    arm64: dts: mediatek: mt8516: Fix the watchdog node name
+>    dt-bindings: watchdog: mediatek,mtk-wdt: Add compatible for MT8173
+> 
+> AngeloGioacchino Del Regno (5):
+>    arm64: dts: mediatek: mt8186: Fix watchdog compatible
+>    arm64: dts: mediatek: mt8195: Fix watchdog compatible
+>    dt-bindings: watchdog: mediatek: Convert mtk-wdt to json-schema
+>    dt-bindings: watchdog: mediatek,mtk-wdt: Add compatible for MT6795
+>    watchdog: mtk_wdt: Add support for MT6795 Helio X10 watchdog and
+>      toprgu
+> 
+>   .../bindings/watchdog/mediatek,mtk-wdt.yaml   | 80 +++++++++++++++++++
+>   .../devicetree/bindings/watchdog/mtk-wdt.txt  | 42 ----------
+>   arch/arm64/boot/dts/mediatek/mt7986a.dtsi     |  3 +-
+>   arch/arm64/boot/dts/mediatek/mt8186.dtsi      |  3 +-
+>   arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  3 +-
+>   arch/arm64/boot/dts/mediatek/mt8516.dtsi      |  2 +-
+>   drivers/watchdog/mtk_wdt.c                    |  6 ++
+>   7 files changed, 90 insertions(+), 49 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+>   delete mode 100644 Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> 
 
