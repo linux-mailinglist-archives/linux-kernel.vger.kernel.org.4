@@ -2,103 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24FA95F6093
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 07:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5B65F6095
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 07:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiJFFYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 01:24:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58748 "EHLO
+        id S229751AbiJFFZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 01:25:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiJFFY1 (ORCPT
+        with ESMTP id S229853AbiJFFZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 01:24:27 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6B1760E1
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 22:24:26 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4Mjfy04fXtz9srK;
-        Thu,  6 Oct 2022 07:24:24 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id JFDVKqW9pMLK; Thu,  6 Oct 2022 07:24:24 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4Mjfy03kv3z9scJ;
-        Thu,  6 Oct 2022 07:24:24 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6BCFE8B765;
-        Thu,  6 Oct 2022 07:24:24 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id qxpcNt9sdWlA; Thu,  6 Oct 2022 07:24:24 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.234])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4895F8B763;
-        Thu,  6 Oct 2022 07:24:24 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2965O9aq211188
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Thu, 6 Oct 2022 07:24:09 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2965O8OA211185;
-        Thu, 6 Oct 2022 07:24:08 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev
-Subject: [PATCH] iommu: fsl_pamu: Replace NO_IRQ by 0
-Date:   Thu,  6 Oct 2022 07:24:03 +0200
-Message-Id: <2a2570a8d12c80a7d36837b6c586daa708ca09d7.1665033732.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.37.1
+        Thu, 6 Oct 2022 01:25:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67297EFD6;
+        Wed,  5 Oct 2022 22:25:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CEC661844;
+        Thu,  6 Oct 2022 05:25:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9888C433B5;
+        Thu,  6 Oct 2022 05:25:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665033952;
+        bh=COGl5uV0nSso0ASdfQpE3uWYO735hZcandisnHobVps=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=QU44qG4Rm1M0zo9iHJPLh5Zj524EOifybS++udldoMyZWSqogiejpjindLfsdbkXi
+         hIo5mZumUMD6ZXiSZfORmxbC1MBM6soHIFaMzVIntXHr5Su9l/kxgoMtCHDlwG58RI
+         cVMXx4lT1vrUiwok/LrtWulWfs24AaH/4tptKksRVoLgqxODpcPtcpLvaAoaMW3oeX
+         Cw6KizHXhiKMaFYMjyipdEGwBUhwLnFkuojrjavw+zJDBmnnT5vXRkGbLMa0tgYGcy
+         LR81XyFoFtlbA/TUK5uii4Uq1jceG5Z9JuC7GE2cGDQIS0bxfVlCNz1k8hX3hQ/NtE
+         hAjLXEJiMLBOQ==
+Received: by mail-ed1-f50.google.com with SMTP id s30so1271035eds.1;
+        Wed, 05 Oct 2022 22:25:52 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1dah5iAMQfwkn3agg20iWdxIYVRvm2L9wJqRp6+kTWE+GCQQYk
+        lpKBzAizoQaAN6gXYcqviSUwzeUOTMxLFn0Xugw=
+X-Google-Smtp-Source: AMsMyM5NkOQxKS3BuwzOSC9pLfMrTJCGhnRFLhXo2lty1XKLpQ6+AS8o2HupP+dFpHMwKEOTnYORcQkSlc9VcVbt2nY=
+X-Received: by 2002:a05:6402:c81:b0:458:c428:173a with SMTP id
+ cm1-20020a0564020c8100b00458c428173amr2920220edb.298.1665033951020; Wed, 05
+ Oct 2022 22:25:51 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1665033842; l=1066; s=20211009; h=from:subject:message-id; bh=WVcxtNkdP75Xbucx/zgnBIsm6p0wTWlU5q6S1YFhBNo=; b=SaE4BxoXgGNkBEuhgX2OV8RyZh6I7OEIu2MewWz3a4QCsIWqiBhiJx+UF+r4gbfgHQlgC9/LO1BI HKYnTZX+CAdUQZ4xQjfVFsxL/M7lXwgz44SpMlCGlAw/UT2rhSc2
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Yz1t6rPLOzKT8Id+@debian> <CAAhV-H7FoDEEtqF_ZOwTGPeGK-4wpzsxEqvO+iuq=KpEuDUofQ@mail.gmail.com>
+ <CADVatmOmtd0jfzNvpyMiQnN0nUn3qZFjLnTjxrn7km3p-grwpQ@mail.gmail.com> <ad45e0e0409b07ecb719743e4febb2853143986d.camel@xry111.site>
+In-Reply-To: <ad45e0e0409b07ecb719743e4febb2853143986d.camel@xry111.site>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Thu, 6 Oct 2022 13:25:38 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7VPCT3aYeNFeLzLKYW8r3rGnk_X61a1wc-GTROPD2aSg@mail.gmail.com>
+Message-ID: <CAAhV-H7VPCT3aYeNFeLzLKYW8r3rGnk_X61a1wc-GTROPD2aSg@mail.gmail.com>
+Subject: Re: build failure of next-20221005 due to 4078ec1ef5ed ("LoongArch:
+ Use TLB for ioremap()")
+To:     Xi Ruoyao <xry111@xry111.site>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NO_IRQ is used to check the return of irq_of_parse_and_map().
+Hi, Ruoyao,
 
-On some architecture NO_IRQ is 0, on other architectures it is -1.
+On Wed, Oct 5, 2022 at 10:14 PM Xi Ruoyao <xry111@xry111.site> wrote:
+>
+> Hi Huacai,
+>
+> Try:
+>
+> #define iounmap(addr) ((void)(addr))
+This can solve the problem, and arm use the same way:
+#define tlb_flush(tlb)  ((void) tlb)
 
-irq_of_parse_and_map() returns 0 on error, independent of NO_IRQ.
+but I don't know whether this is the correct way.
 
-So use 0 instead of using NO_IRQ.
+Huacai
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- drivers/iommu/fsl_pamu.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/iommu/fsl_pamu.c b/drivers/iommu/fsl_pamu.c
-index 0d03f837a5d4..1b53d2da2c19 100644
---- a/drivers/iommu/fsl_pamu.c
-+++ b/drivers/iommu/fsl_pamu.c
-@@ -779,7 +779,7 @@ static int fsl_pamu_probe(struct platform_device *pdev)
- 	of_get_address(dev->of_node, 0, &size, NULL);
- 
- 	irq = irq_of_parse_and_map(dev->of_node, 0);
--	if (irq == NO_IRQ) {
-+	if (!irq) {
- 		dev_warn(dev, "no interrupts listed in PAMU node\n");
- 		goto error;
- 	}
-@@ -903,7 +903,7 @@ static int fsl_pamu_probe(struct platform_device *pdev)
- 	return 0;
- 
- error:
--	if (irq != NO_IRQ)
-+	if (irq)
- 		free_irq(irq, data);
- 
- 	kfree_sensitive(data);
--- 
-2.37.1
-
+>
+> This is how we normally silence an unused variable or parameter warning.
+> Not sure if the kernel uses the same convention though.
+>
+> On Wed, 2022-10-05 at 13:54 +0100, Sudip Mukherjee wrote:
+> > On Wed, Oct 5, 2022 at 1:30 PM Huacai Chen <chenhuacai@kernel.org>
+> > wrote:
+> > >
+> > > Hi, Sudip,
+> > >
+> > > This seems a false positive. When the implementation of iounmap() is
+> > > empty (but this is completely legal I think), these drivers will
+> > > cause
+> > > "unused variable error".
+> >
+> > And that error will fail the build as allmodconfig will have
+> > CONFIG_WERROR=y.
+> >
+>
+> --
+> Xi Ruoyao <xry111@xry111.site>
+> School of Aerospace Science and Technology, Xidian University
+>
