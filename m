@@ -2,495 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 753955F6D76
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 20:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2B35F6D7F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 20:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231795AbiJFSZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 14:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
+        id S231448AbiJFSaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 14:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiJFSZu (ORCPT
+        with ESMTP id S229919AbiJFSaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 14:25:50 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82915ABF15
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 11:25:46 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d24so2468802pls.4
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 11:25:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=69EzDpLbs9EzsS4AWp6YVWUC8iuPRFIo3bz+Bo6CRj4=;
-        b=lTvS7MR5P98iFJDNB8D1XahMLN1AEQ9iVfT7qwPBm7BKrGKPvKwqy9aUC2ZaXca8kH
-         VWI8B7qPVSSS1yqRXegmoRPa99KwuPq2fGXWjhQ4gCKopC/XS+bPOnEQAAero/wUP57z
-         rRnytaaz491ZGYIMFdzOktqrxy+q49lu8iYJbBJxAc7num/oxv8FE6o7QKKI7blpk5Aq
-         Y5D5G7KZ71uI4dhndpwMBahkqMVZ0Zad36j0iUrxlZSwXBxr/l70ZG22IyYdP9e7haAB
-         f4Zr38/ZlygttO9bXuNY3HbDPXQhmE4eXmMuKl8oai346R/y2+Vxpi6ejAyhQJ7btsAu
-         viQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=69EzDpLbs9EzsS4AWp6YVWUC8iuPRFIo3bz+Bo6CRj4=;
-        b=a3DAdXal7i4UCOV4z+kvTQ9OtZx5POYzPQrRyJLME/Iq549/Dtl2PuAljmaiEAtY3O
-         9IAQdQ65dzf7xowd8KF8TtH1zEHXErxQPdZTxrjtT1ORY2gXCBOrjcsT3DUEP0mP9f5Q
-         Vv+DGCg7Zuy+PEYSOvWgtb7tbPARLLR4NptBM7jsrhvICdpjv1rEGo/US0t6GkaeDrxJ
-         DbSTq2tQLUyRia6PlDR0V2xxSkOqembrQROicdIWC6SSy1/dj4vjD7q0+sdbXFfWmeSZ
-         dUI0Xpxz/d+AO2SJB1bkOSOPRuuOQ7wVMc98TTeKD4CeCrRs2Phmf2TBZwdAbCmRvNgC
-         Nk8A==
-X-Gm-Message-State: ACrzQf3QkQAa2uzuUDQtqgmMnCDsB36NmITAwG3LWcv6b36wBfMgLl9j
-        fxzim0XO/LO+GxXLyIX48Q7DGw==
-X-Google-Smtp-Source: AMsMyM7VxYKbj1msZheNrB1Yygb72HmHLa/JDAgVwoQC1ZlQuLn5xNmhjMXxXOdwC9LXmFIzZNh9zQ==
-X-Received: by 2002:a17:902:ea02:b0:176:afd7:3d1d with SMTP id s2-20020a170902ea0200b00176afd73d1dmr1166960plg.120.1665080745745;
-        Thu, 06 Oct 2022 11:25:45 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id z13-20020aa79e4d000000b0053ebe7ffddcsm1286010pfq.116.2022.10.06.11.25.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 11:25:44 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 18:25:40 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marcorr@google.com, michael.roth@amd.com, thomas.lendacky@amd.com,
-        joro@8bytes.org, mizhang@google.com, pbonzini@redhat.com,
-        andrew.jones@linux.dev
-Subject: Re: [V4 6/8] KVM: selftests: add library for creating/interacting
- with SEV guests
-Message-ID: <Yz8dpB5+RFjEhA3n@google.com>
-References: <20220829171021.701198-1-pgonda@google.com>
- <20220829171021.701198-7-pgonda@google.com>
+        Thu, 6 Oct 2022 14:30:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A4D1D32C
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 11:30:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665081004;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GR/VmE/JFWufoxQNscwIseQIsTcoM3u27LXR33wIOdM=;
+        b=IcQerrmivRAi+ZB8uuFw0WQ8k6WuuydHsP6OLqp9SypOYTJ63e+u4gp7jr5/1cK2Uz0Z0H
+        iW1ydY3Q9vUONs/KkyphxoNdMwwjB/frQFab0coCGM1yJI9hfPGkXnFHt7tCNgOZ78KuvY
+        4kvRPsEqAWSI4qBSYRjYYIJKMGN8EuU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-73-qRnYg_nkMKS5aQJDVxoO_A-1; Thu, 06 Oct 2022 14:29:59 -0400
+X-MC-Unique: qRnYg_nkMKS5aQJDVxoO_A-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 682443C0F66F;
+        Thu,  6 Oct 2022 18:29:58 +0000 (UTC)
+Received: from localhost (unknown [10.39.193.119])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3B6561121330;
+        Thu,  6 Oct 2022 18:29:56 +0000 (UTC)
+Date:   Thu, 6 Oct 2022 14:29:55 -0400
+From:   Stefan Hajnoczi <stefanha@redhat.com>
+To:     Ming Lei <tom.leiming@gmail.com>
+Cc:     "Denis V. Lunev" <den@virtuozzo.com>, io-uring@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kirill Tkhai <kirill.tkhai@openvz.org>,
+        Manuel Bentele <development@manuel-bentele.de>,
+        qemu-devel@nongnu.org, Kevin Wolf <kwolf@redhat.com>,
+        rjones@redhat.com, Xie Yongji <xieyongji@bytedance.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Mike Christie <mchristi@redhat.com>
+Subject: Re: ublk-qcow2: ublk-qcow2 is available
+Message-ID: <Yz8eo0IWMAJOwKWn@fedora>
+References: <Yza1u1KfKa7ycQm0@T590>
+ <Yzs9xQlVuW41TuNC@fedora>
+ <6659a0d5-60ab-9ac7-d25d-b4ff1940c6ab@virtuozzo.com>
+ <Yz2epPwoufj0mug/@fedora>
+ <Yz6tR24T8HPHJ70D@T590>
+ <Yz7fTANAxAQ8KT4v@fedora>
+ <Yz7vvNKSNRyBVObo@T590>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="6RwoVJ4k64p8vK98"
 Content-Disposition: inline
-In-Reply-To: <20220829171021.701198-7-pgonda@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yz7vvNKSNRyBVObo@T590>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022, Peter Gonda wrote:
-> Add interfaces to allow tests to create/manage SEV guests. The
-> additional state associated with these guests is encapsulated in a new
-> struct sev_vm, which is a light wrapper around struct kvm_vm. These
-> VMs will use vm_set_memory_encryption() and vm_get_encrypted_phy_pages()
-> under the covers to configure and sync up with the core kvm_util
-> library on what should/shouldn't be treated as encrypted memory.
-> 
-> Originally-by: Michael Roth <michael.roth@amd.com>
-> Signed-off-by: Peter Gonda <pgonda@google.com>
-> ---
->  tools/testing/selftests/kvm/Makefile          |   1 +
->  .../selftests/kvm/include/kvm_util_base.h     |   3 +
->  .../selftests/kvm/include/x86_64/sev.h        |  47 ++++
->  tools/testing/selftests/kvm/lib/x86_64/sev.c  | 232 ++++++++++++++++++
->  4 files changed, 283 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/include/x86_64/sev.h
->  create mode 100644 tools/testing/selftests/kvm/lib/x86_64/sev.c
-> 
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index 23649c5d42fc..0a70e50f0498 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -56,6 +56,7 @@ LIBKVM_x86_64 += lib/x86_64/processor.c
->  LIBKVM_x86_64 += lib/x86_64/svm.c
->  LIBKVM_x86_64 += lib/x86_64/ucall.c
->  LIBKVM_x86_64 += lib/x86_64/vmx.c
-> +LIBKVM_x86_64 += lib/x86_64/sev.c
->  
->  LIBKVM_aarch64 += lib/aarch64/gic.c
->  LIBKVM_aarch64 += lib/aarch64/gic_v3.c
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> index 489e8c833e5f..0927e262623d 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> @@ -69,6 +69,7 @@ struct userspace_mem_regions {
->  /* Memory encryption policy/configuration. */
->  struct vm_memcrypt {
->  	bool enabled;
-> +	bool encrypted;
->  	int8_t enc_by_default;
->  	bool has_enc_bit;
->  	int8_t enc_bit;
-> @@ -831,6 +832,8 @@ vm_paddr_t addr_arch_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva);
->  
->  static inline vm_paddr_t addr_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva)
->  {
-> +	TEST_ASSERT(!vm->memcrypt.encrypted,
 
-vm->protected
+--6RwoVJ4k64p8vK98
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +		    "Encrypted guests have their page tables encrypted so gva2gpa conversions are not possible.");
+On Thu, Oct 06, 2022 at 11:09:48PM +0800, Ming Lei wrote:
+> On Thu, Oct 06, 2022 at 09:59:40AM -0400, Stefan Hajnoczi wrote:
+> > On Thu, Oct 06, 2022 at 06:26:15PM +0800, Ming Lei wrote:
+> > > On Wed, Oct 05, 2022 at 11:11:32AM -0400, Stefan Hajnoczi wrote:
+> > > > On Tue, Oct 04, 2022 at 01:57:50AM +0200, Denis V. Lunev wrote:
+> > > > > On 10/3/22 21:53, Stefan Hajnoczi wrote:
+> > > > > > On Fri, Sep 30, 2022 at 05:24:11PM +0800, Ming Lei wrote:
+> > > > > > > ublk-qcow2 is available now.
+> > > > > > Cool, thanks for sharing!
+> > > > > yep
+> > > > >=20
+> > > > > > > So far it provides basic read/write function, and compression=
+ and snapshot
+> > > > > > > aren't supported yet. The target/backend implementation is co=
+mpletely
+> > > > > > > based on io_uring, and share the same io_uring with ublk IO c=
+ommand
+> > > > > > > handler, just like what ublk-loop does.
+> > > > > > >=20
+> > > > > > > Follows the main motivations of ublk-qcow2:
+> > > > > > >=20
+> > > > > > > - building one complicated target from scratch helps libublks=
+rv APIs/functions
+> > > > > > >    become mature/stable more quickly, since qcow2 is complica=
+ted and needs more
+> > > > > > >    requirement from libublksrv compared with other simple one=
+s(loop, null)
+> > > > > > >=20
+> > > > > > > - there are several attempts of implementing qcow2 driver in =
+kernel, such as
+> > > > > > >    ``qloop`` [2], ``dm-qcow2`` [3] and ``in kernel qcow2(ro)`=
+` [4], so ublk-qcow2
+> > > > > > >    might useful be for covering requirement in this field
+> > > > > There is one important thing to keep in mind about all partly-use=
+rspace
+> > > > > implementations though:
+> > > > > * any single allocation happened in the context of the
+> > > > > =A0=A0 userspace daemon through try_to_free_pages() in
+> > > > > =A0=A0 kernel has a possibility to trigger the operation,
+> > > > > =A0=A0 which will require userspace daemon action, which
+> > > > > =A0=A0 is inside the kernel now.
+> > > > > * the probability of this is higher in the overcommitted
+> > > > > =A0=A0 environment
+> > > > >=20
+> > > > > This was the main motivation of us in favor for the in-kernel
+> > > > > implementation.
+> > > >=20
+> > > > CCed Josef Bacik because the Linux NBD driver has dealt with memory
+> > > > reclaim hangs in the past.
+> > > >=20
+> > > > Josef: Any thoughts on userspace block drivers (whether NBD or ublk=
+) and
+> > > > how to avoid hangs in memory reclaim?
+> > >=20
+> > > If I remember correctly, there isn't new report after the last NBD(TC=
+MU) deadlock
+> > > in memory reclaim was addressed by 8d19f1c8e193 ("prctl: PR_{G,S}ET_I=
+O_FLUSHER
+> > > to support controlling memory reclaim").
+> >=20
+> > Denis: I'm trying to understand the problem you described. Is this
+> > correct:
+> >=20
+> > Due to memory pressure, the kernel reclaims pages and submits a write to
+> > a ublk block device. The userspace process attempts to allocate memory
+> > in order to service the write request, but it gets stuck because there
+> > is no memory available. As a result reclaim gets stuck, the system is
+> > unable to free more memory and therefore it hangs?
+>=20
+> The process should be killed in this situation if PR_SET_IO_FLUSHER
+> is applied since the page allocation is done in VM fault handler.
 
-Unnecessarily verbose, e.g.
+Thanks for mentioning PR_SET_IO_FLUSHER. There is more info in commit
+8d19f1c8e1937baf74e1962aae9f90fa3aeab463 ("prctl: PR_{G,S}ET_IO_FLUSHER
+to support controlling memory reclaim").
 
-		    "Protected VMs have private, inaccessible page tables");
+It requires CAP_SYS_RESOURCE :/. This makes me wonder whether
+unprivileged ublk will ever be possible.
 
-> +#define CPUID_MEM_ENC_LEAF 0x8000001f
-> +#define CPUID_EBX_CBIT_MASK 0x3f
-> +
-> +/* Common SEV helpers/accessors. */
+I think this addresses Denis' concern about hangs, but it doesn't solve
+them because I/O will fail. The real solution is probably what you
+mentioned...
 
-Please drop this comment and the "Local helpers" and "SEV VM implementation" comments
-below.  There's 0% chance these comments will stay fresh as code is added and moved
-around.  They also add no value IMO, e.g. "static" makes it quite obvious it's a
-local function, and sev_* vs. sev_es_*. vs. sev_snp_* namespacing takes care of the
-rest.
+> Firstly in theory the userspace part should provide forward progress
+> guarantee in code path for handling IO, such as reserving/mlock pages
+> for such situation. However, this issue isn't unique for nbd or ublk,
+> all userspace block device should have such potential risk, and vduse
+> is no exception, IMO.
 
-> +void sev_ioctl(int sev_fd, int cmd, void *data)
-> +{
-> +	int ret;
-> +	struct sev_issue_cmd arg;
-> +
-> +	arg.cmd = cmd;
-> +	arg.data = (unsigned long)data;
-> +	ret = ioctl(sev_fd, SEV_ISSUE_CMD, &arg);
-> +	TEST_ASSERT(ret == 0,
-> +		    "SEV ioctl %d failed, error: %d, fw_error: %d",
-> +		    cmd, ret, arg.error);
-> +}
-> +
-> +void kvm_sev_ioctl(struct sev_vm *sev, int cmd, void *data)
-> +{
-> +	struct kvm_sev_cmd arg = {0};
-> +	int ret;
-> +
-> +	arg.id = cmd;
-> +	arg.sev_fd = sev->fd;
-> +	arg.data = (__u64)data;
-> +
-> +	ret = ioctl(sev->vm->fd, KVM_MEMORY_ENCRYPT_OP, &arg);
-> +	TEST_ASSERT(ret == 0,
-> +		    "SEV KVM ioctl %d failed, rc: %i errno: %i (%s), fw_error: %d",
-> +		    cmd, ret, errno, strerror(errno), arg.error);
-> +}
-> +
-> +/* Local helpers. */
-> +
-> +static void sev_register_user_region(struct sev_vm *sev, void *hva, uint64_t size)
-> +{
-> +	struct kvm_enc_region range = {0};
-> +	int ret;
-> +
-> +	pr_debug("%s: hva: %p, size: %lu\n", __func__, hva, size);
-> +
-> +	range.addr = (__u64)hva;
-> +	range.size = size;
-> +
-> +	ret = ioctl(sev->vm->fd, KVM_MEMORY_ENCRYPT_REG_REGION, &range);
-> +	TEST_ASSERT(ret == 0, "failed to register user range, errno: %i\n", errno);
-> +}
-> +
-> +static void sev_encrypt_phy_range(struct sev_vm *sev, vm_paddr_t gpa, uint64_t size)
-> +{
-> +	struct kvm_sev_launch_update_data ksev_update_data = {0};
-> +
-> +	pr_debug("%s: addr: 0x%lx, size: %lu\n", __func__, gpa, size);
-> +
-> +	ksev_update_data.uaddr = (__u64)addr_gpa2hva(sev->vm, gpa);
-> +	ksev_update_data.len = size;
-> +
-> +	kvm_sev_ioctl(sev, KVM_SEV_LAUNCH_UPDATE_DATA, &ksev_update_data);
-> +}
-> +
-> +static void sev_encrypt(struct sev_vm *sev)
-> +{
-> +	const struct sparsebit *enc_phy_pages;
-> +	struct kvm_vm *vm = sev->vm;
-> +	sparsebit_idx_t pg = 0;
-> +	vm_paddr_t gpa_start;
-> +	uint64_t memory_size;
-> +	int ctr;
-> +	struct userspace_mem_region *region;
-> +
-> +	hash_for_each(vm->regions.slot_hash, ctr, region, slot_node) {
-> +		enc_phy_pages = vm_get_encrypted_phy_pages(
+=2E..here. Userspace needs to minimize memory allocations in the I/O code
+path and reserve sufficient resources to make forward progress.
 
-Please don't wrap after the opening paranthesis unless it's really, really necessary.
-More for future reference since I think vm_get_encrypted_phy_pages() should be open
-coded here.  E.g. in this case, the "enc_phy_" prefix doesn't add much value, and
-dropping that makes the code easier to read overall.
+Stefan
 
-		pages = vm_get_encrypted_phy_pages(sev->vm, region->region.slot,
-						   &gpa_start, &memory_size);
+--6RwoVJ4k64p8vK98
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +			sev->vm, region->region.slot, &gpa_start, &memory_size);
-> +		TEST_ASSERT(enc_phy_pages,
-> +			    "Unable to retrieve encrypted pages bitmap");
-> +		while (pg < (memory_size / vm->page_size)) {
-> +			sparsebit_idx_t pg_cnt;
+-----BEGIN PGP SIGNATURE-----
 
-s/pg_cnt/nr_pages
+iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmM/HqMACgkQnKSrs4Gr
+c8gdMwgAt2uBqb9BuOBYhclEKVi/V4v2vRqAzrMlGSsU3j6ZvtIH+JwfF420xYiA
+hhHDMxUwRyexA6SwnBN245+Mi5gxoOLZA/OjwQLyWCIuVNv8CS9UbwXdaQoa5IB1
+3iRSALpCD913qK70W/gAYmjX3p3aDq67F05bE8QQoz3F7D82iUmY3Nm96vQPIdzn
+4oyvKmSH8OoY4d566nNSqDKwIcQZ/dnRWmuDODjXDdSajoHjNzpKDAwU2L7oa4HF
+2CegrkFKNRuBqjdeoA6xfm1F6SXdxgwyfDuIFXoCk0E9o8QkggUX6Dm6Lx5AKW8u
+qa3d11zuwWY0scCPDzLp9bTitS7H7w==
+=1Utp
+-----END PGP SIGNATURE-----
 
-> +
-> +			if (sparsebit_is_clear(enc_phy_pages, pg)) {
-> +				pg = sparsebit_next_set(enc_phy_pages, pg);
-> +				if (!pg)
-> +					break;
-> +			}
-> +
-> +			pg_cnt = sparsebit_next_clear(enc_phy_pages, pg) - pg;
-> +			if (pg_cnt <= 0)
-> +				pg_cnt = 1;
-> +
-> +			sev_encrypt_phy_range(sev,
-> +					      gpa_start + pg * vm->page_size,
-> +					      pg_cnt * vm->page_size);
-> +			pg += pg_cnt;
-> +		}
-> +	}
-> +
-> +	sev->vm->memcrypt.encrypted = true;
-> +}
-> +
-> +/* SEV VM implementation. */
-> +
-> +static struct sev_vm *sev_vm_alloc(struct kvm_vm *vm)
-> +{
-> +	struct sev_user_data_status sev_status;
-> +	uint32_t eax, ebx, ecx, edx;
-> +	struct sev_vm *sev;
-> +	int sev_fd;
-> +
-> +	sev_fd = open(SEV_DEV_PATH, O_RDWR);
-> +	if (sev_fd < 0) {
-> +		pr_info("Failed to open SEV device, path: %s, error: %d, skipping test.\n",
-> +			SEV_DEV_PATH, sev_fd);
-> +		return NULL;
+--6RwoVJ4k64p8vK98--
 
-Printing "skipping test" is wrong as there's no guarantee the caller is going to
-skip the test.  E.g. the sole user in this series asserts, i.e. fails the test.
-
-I also think that waiting until VM allocation to perform these sanity checks is
-flawed.  Rather do these checks every time, add helpers to query SEV and SEV-ES
-support, and then use TEST_REQUIRE() to actually skip tests that require support,
-e.g.
-
-	TEST_REQUIRE(kvm_is_sev_supported());
-
-or
-
-	TEST_REQUIRE(kvm_is_sev_es_supported());
-
-Then this helper can simply assert that opening SEV_DEV_PATH succeeds.
-
-> +	}
-> +
-> +	sev_ioctl(sev_fd, SEV_PLATFORM_STATUS, &sev_status);
-> +
-> +	if (!(sev_status.api_major > SEV_FW_REQ_VER_MAJOR ||
-> +	      (sev_status.api_major == SEV_FW_REQ_VER_MAJOR &&
-> +	       sev_status.api_minor >= SEV_FW_REQ_VER_MINOR))) {
-> +		pr_info("SEV FW version too old. Have API %d.%d (build: %d), need %d.%d, skipping test.\n",
-> +			sev_status.api_major, sev_status.api_minor, sev_status.build,
-> +			SEV_FW_REQ_VER_MAJOR, SEV_FW_REQ_VER_MINOR);
-> +		return NULL;
-> +	}
-> +
-> +	sev = calloc(1, sizeof(*sev));
-
-TEST_ASSERT(sev, ...)
-
-> +	sev->fd = sev_fd;
-> +	sev->vm = vm;
-> +
-> +	/* Get encryption bit via CPUID. */
-> +	cpuid(CPUID_MEM_ENC_LEAF, &eax, &ebx, &ecx, &edx);
-> +	sev->enc_bit = ebx & CPUID_EBX_CBIT_MASK;
-
-Oh hey, another series of mine[*] that you can leverage :-)
-
-[*] https://lore.kernel.org/all/20221006005125.680782-1-seanjc@google.com
-
-> +
-> +	return sev;
-> +}
-> +
-> +void sev_vm_free(struct sev_vm *sev)
-> +{
-> +	kvm_vm_free(sev->vm);
-> +	close(sev->fd);
-> +	free(sev);
-> +}
-> +
-> +struct sev_vm *sev_vm_create(uint32_t policy, uint64_t npages)
-
-The migration test already defines sev_vm_create().  That conflict needs to be
-resolved.
-
-> +{
-> +	struct sev_vm *sev;
-> +	struct kvm_vm *vm;
-> +
-> +	/* Need to handle memslots after init, and after setting memcrypt. */
-> +	vm = vm_create_barebones();
-
-Do not use vm_create_barebones().  That API is only to be used for tests that do
-not intend to run vCPUs.
-
-
-
-> +	sev = sev_vm_alloc(vm);
-> +	if (!sev)
-> +		return NULL;
-> +	sev->sev_policy = policy;
-> +
-> +	kvm_sev_ioctl(sev, KVM_SEV_INIT, NULL);
-> +
-> +	vm->vpages_mapped = sparsebit_alloc();
-
-This is unnecessary and leaks memory, vm->vpages_mapped is allocated by
-____vm_create().
-
-> +	vm_set_memory_encryption(vm, true, true, sev->enc_bit);
-> +	pr_info("SEV cbit: %d\n", sev->enc_bit);
-> +	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, npages, 0);
-> +	sev_register_user_region(sev, addr_gpa2hva(vm, 0),
-> +				 npages * vm->page_size);
-
-Burying sev_register_user_region() in here is not going to be maintainble.  I
-think the best away to handle this is to add an arch hook in vm_userspace_mem_region_add()
-and automatically register regions when they're created.
-
-And with that, I believe sev_vm_create() can go away entirely and the SEV encryption
-stuff can be handled via a new vm_guest_mode.  ____vm_create() already has a gross
-__x86_64__ hook that we can tweak, e.g.
-
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 54b8d8825f5d..2d6cbca2c01a 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -238,9 +238,10 @@ struct kvm_vm *____vm_create(enum vm_guest_mode mode, uint64_t nr_pages)
-        case VM_MODE_P36V47_16K:
-                vm->pgtable_levels = 3;
-                break;
-+       case VM_MODE_PXXV48_4K_SEV:
-        case VM_MODE_PXXV48_4K:
- #ifdef __x86_64__
--               kvm_get_cpu_address_width(&vm->pa_bits, &vm->va_bits);
-+               kvm_init_vm_address_properties(vm);
-                /*
-                 * Ignore KVM support for 5-level paging (vm->va_bits == 57),
-                 * it doesn't take effect unless a CR4.LA57 is set, which it
-
-Then kvm_init_vm_address_properties() can pivot on vm->mode to deal with SEV
-specific stuff.
-
-> +
-> +	pr_info("SEV guest created, policy: 0x%x, size: %lu KB\n",
-> +		sev->sev_policy, npages * vm->page_size / 1024);
-> +
-> +	return sev;
-> +}
-> +
-> +void sev_vm_launch(struct sev_vm *sev)
-> +{
-> +	struct kvm_sev_launch_start ksev_launch_start = {0};
-> +	struct kvm_sev_guest_status ksev_status;
-> +
-> +	ksev_launch_start.policy = sev->sev_policy;
-> +	kvm_sev_ioctl(sev, KVM_SEV_LAUNCH_START, &ksev_launch_start);
-> +	kvm_sev_ioctl(sev, KVM_SEV_GUEST_STATUS, &ksev_status);
-> +	TEST_ASSERT(ksev_status.policy == sev->sev_policy, "Incorrect guest policy.");
-> +	TEST_ASSERT(ksev_status.state == SEV_GSTATE_LUPDATE,
-> +		    "Unexpected guest state: %d", ksev_status.state);
-> +
-> +	ucall_init(sev->vm, 0);
-> +
-> +	sev_encrypt(sev);
-> +}
-> +
-> +void sev_vm_launch_measure(struct sev_vm *sev, uint8_t *measurement)
-> +{
-> +	struct kvm_sev_launch_measure ksev_launch_measure;
-> +	struct kvm_sev_guest_status ksev_guest_status;
-> +
-> +	ksev_launch_measure.len = 256;
-> +	ksev_launch_measure.uaddr = (__u64)measurement;
-> +	kvm_sev_ioctl(sev, KVM_SEV_LAUNCH_MEASURE, &ksev_launch_measure);
-> +
-> +	/* Measurement causes a state transition, check that. */
-> +	kvm_sev_ioctl(sev, KVM_SEV_GUEST_STATUS, &ksev_guest_status);
-> +	TEST_ASSERT(ksev_guest_status.state == SEV_GSTATE_LSECRET,
-> +		    "Unexpected guest state: %d", ksev_guest_status.state);
-> +}
-> +
-> +void sev_vm_launch_finish(struct sev_vm *sev)
-> +{
-> +	struct kvm_sev_guest_status ksev_status;
-> +
-> +	kvm_sev_ioctl(sev, KVM_SEV_GUEST_STATUS, &ksev_status);
-> +	TEST_ASSERT(ksev_status.state == SEV_GSTATE_LUPDATE ||
-> +		    ksev_status.state == SEV_GSTATE_LSECRET,
-> +		    "Unexpected guest state: %d", ksev_status.state);
-> +
-> +	kvm_sev_ioctl(sev, KVM_SEV_LAUNCH_FINISH, NULL);
-> +
-> +	kvm_sev_ioctl(sev, KVM_SEV_GUEST_STATUS, &ksev_status);
-> +	TEST_ASSERT(ksev_status.state == SEV_GSTATE_RUNNING,
-> +		    "Unexpected guest state: %d", ksev_status.state);
-> +}
-
-Rather than force each test to invoke these via something like setup_test_common(),
-add the same kvm_arch_vm_post_create() hook that Vishal is likely going to add,
-and then automatically do all of the launch+measure+finish stuff for non-barebones
-VMs.  That will let SEV/SEV-ES tests use __vm_create_with_vcpus() and
-__vm_create().
-
-And it'd be a little gross, but I think it'd be wortwhile to add another layer
-to the "one_vcpu" helpers to make things even more convenient, e.g.
-
-struct kvm_vm *____vm_create_with_one_vcpu(enum vm_guest_mode mode,
-					   struct kvm_vcpu **vcpu,
-					   uint64_t extra_mem_pages,
-					   void *guest_code)
-{
-	struct kvm_vcpu *vcpus[1];
-	struct kvm_vm *vm;
-
-	vm = __vm_create_with_vcpus(mode, 1, extra_mem_pages, guest_code, vcpus);
-
-	*vcpu = vcpus[0];
-	return vm;
-}
-
-static inline struct kvm_vm *__vm_create_with_one_vcpu(struct kvm_vcpu **vcpu,
-						       uint64_t extra_mem_pages,
-						       void *guest_code)
-{
-	return ____vm_create_with_one_vcpu(VM_MODE_DEFAULT, vcpu,
-					   extra_mem_pages, guest_code);
-}
-
-static inline struct kvm_vm *____vm_create_with_one_vcpu(enum vm_guest_mode mode,
-					   struct kvm_vcpu **vcpu,
-					   uint64_t extra_mem_pages,
-					   void *guest_code)
-____vm_create_with_one_vcpu
-
-
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index dafe4471a6c7..593dfadb662e 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -298,9 +298,8 @@ struct kvm_vm *__vm_create(enum vm_guest_mode mode, uint32_t nr_runnable_vcpus,
- 
-        kvm_vm_elf_load(vm, program_invocation_name);
- 
--#ifdef __x86_64__
--       vm_create_irqchip(vm);
--#endif
-+       kvm_arch_vm_post_create(vm);
-+
-        return vm;
- }
- 
-
-[*] https://lore.kernel.org/all/YzsC4ibDqGh5qaP9@google.com
