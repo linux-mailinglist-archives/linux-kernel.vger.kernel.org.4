@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58CA45F6F25
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22CD75F6F2C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbiJFU2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 16:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
+        id S232049AbiJFUbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 16:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232204AbiJFU2Q (ORCPT
+        with ESMTP id S231862AbiJFUbD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 16:28:16 -0400
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47472BEADF;
-        Thu,  6 Oct 2022 13:28:11 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id s192so3344409oie.3;
-        Thu, 06 Oct 2022 13:28:10 -0700 (PDT)
+        Thu, 6 Oct 2022 16:31:03 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBC4BB06D;
+        Thu,  6 Oct 2022 13:31:02 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-12c8312131fso3527869fac.4;
+        Thu, 06 Oct 2022 13:31:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=w/p6Lh33TNDomwnPtEt0K+Q9z2znn41mK/BcoE/gVzU=;
-        b=zgOxi1Ciz9Q7QgkN1CAzqMd/d9QS6/RN5KrgCORD958kNif/Uo5XajDLVT834pzpzE
-         AiHlEHt2XK14wSmPTHrYFTH01pQHEew+TpQMAy0ZLlo0cJeKCZwhXqHIiqD4QIOSSK3T
-         XM9XnqqvcoDmwmmjaGYHPVGJQLtHF5ul4U/fq5VkFhBzJmHDpSKCBYAvwa99ni69g6P2
-         k623Yh09mlF3g61j7U0f/WYYxdGzj8SaY6Y///4aY3OnSG7iICOIZZpW8fLof0D5+plj
-         bAQJtxiwpJjlMyI7JRVYP7q75qLd8VjVEmcOqHvw+bUtBvKWBPxMTHBrOP+0G5nxOinZ
-         XwLw==
-X-Gm-Message-State: ACrzQf3WaJgg/5Lc3ZPoXQc5bfskWsPuMl0e1mxzad8TiI+IyJI9gUnm
-        GZSD/xRV4rRc5DwmGBVasQ==
-X-Google-Smtp-Source: AMsMyM4ngNRHK4in8EuO6Kr1puRTrTx2AG6P2hT/ki4H3omHFTjTYRdbY5gGnWaRXZqTv6vtK4odtg==
-X-Received: by 2002:a05:6808:11c6:b0:34d:8fb3:65b1 with SMTP id p6-20020a05680811c600b0034d8fb365b1mr747833oiv.29.1665088089556;
-        Thu, 06 Oct 2022 13:28:09 -0700 (PDT)
+        bh=yKRSisZxSLKy45qEkeneKmm4UnjsZDuiqULfpdxKOXc=;
+        b=6ZY76y1VJG/tq511j3oqbFzk4D1jOp7N+voW/tq6iVC3r56Z6Qh1PzMEaUUq2SvuIB
+         NjtXXBKHdPH05I14e90z/InEif1vCY9jIN62ePEJqtfoW4+kvxBJO3AIHL0XhukIitBG
+         xh3xs8/YAkaxb3EQPmkZ8eEWSz1L7Gny0PVV7CZNboweYs1sT/YuL1BbAr1vUO8RTfQ+
+         dk1Knw30GWGgp2rlFd7g73ZkBN9EMIZR8yDtEcyB+EcBQ+aKZQlRQZ1J4YXnJZ9mrAZM
+         L8zm1xhauDTeuvFO0+I5PHgRqeczNfzRQEjm//dhbRz7Yt7ga6TbupD9p29gFWRMkydx
+         p6bg==
+X-Gm-Message-State: ACrzQf3K3vsp6OZX+EW2KnZvPLkf9mG43INf3s/JHyQ80Oo+/DfJonw0
+        KqtdsgkXPpKHGgtDOGXsfA==
+X-Google-Smtp-Source: AMsMyM7twTgsx56JrN0ykHK8sHUyAHvyh24I+K32LdltRHhLb8WC36N4RKeDXY0ogYSDDNP2pajJsw==
+X-Received: by 2002:a05:6870:6488:b0:131:a45b:a8ca with SMTP id cz8-20020a056870648800b00131a45ba8camr839804oab.260.1665088262162;
+        Thu, 06 Oct 2022 13:31:02 -0700 (PDT)
 Received: from robh_at_kernel.org ([2607:fb90:8a65:c536:245:842:a3a4:9017])
-        by smtp.gmail.com with ESMTPSA id a25-20020a056870a19900b0012c52bd4369sm341239oaf.19.2022.10.06.13.28.07
+        by smtp.gmail.com with ESMTPSA id bu11-20020a0568300d0b00b00655ca9a109bsm296509otb.36.2022.10.06.13.31.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 13:28:09 -0700 (PDT)
-Received: (nullmailer pid 107638 invoked by uid 1000);
-        Thu, 06 Oct 2022 20:28:07 -0000
-Date:   Thu, 6 Oct 2022 15:28:07 -0500
+        Thu, 06 Oct 2022 13:31:01 -0700 (PDT)
+Received: (nullmailer pid 109978 invoked by uid 1000);
+        Thu, 06 Oct 2022 20:30:54 -0000
+Date:   Thu, 6 Oct 2022 15:30:54 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
         Martin Botka <martin.botka@somainline.org>,
-        linux-gpio@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
         Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
         krishna Lanka <quic_vamslank@quicinc.com>,
-        Iskren Chernev <iskren.chernev@gmail.com>
-Subject: Re: [PATCH 14/34] dt-bindings: pinctrl: qcom,sm8350: drop ref to
- pinctrl.yaml
-Message-ID: <166508808666.107592.14738999784946358386.robh@kernel.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Iskren Chernev <iskren.chernev@gmail.com>,
+        linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        devicetree@vger.kernel.org, Shawn Guo <shawn.guo@linaro.org>,
+        linux-gpio@vger.kernel.org
+Subject: Re: [PATCH 15/34] dt-bindings: pinctrl: qcom,sm8350: drop checks
+ used in common TLMM
+Message-ID: <166508825308.109832.795677746487823566.robh@kernel.org>
 References: <20221006140637.246665-1-krzysztof.kozlowski@linaro.org>
- <20221006140637.246665-15-krzysztof.kozlowski@linaro.org>
+ <20221006140637.246665-16-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221006140637.246665-15-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221006140637.246665-16-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -77,14 +78,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Oct 2022 16:06:17 +0200, Krzysztof Kozlowski wrote:
-> The binding references common Qualcomm TLMM pin controller schema, which
-> references pinctrl.yaml.
+On Thu, 06 Oct 2022 16:06:18 +0200, Krzysztof Kozlowski wrote:
+> The common Qualcomm TLMM pin controller schema already brings
+> requirement of function for GPIO pins.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  .../devicetree/bindings/pinctrl/qcom,sm8350-pinctrl.yaml         | 1 -
->  1 file changed, 1 deletion(-)
+>  .../bindings/pinctrl/qcom,sm8350-pinctrl.yaml         | 11 +----------
+>  1 file changed, 1 insertion(+), 10 deletions(-)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
