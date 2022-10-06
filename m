@@ -2,250 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287BD5F68AC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE07B5F68B0
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiJFN7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 09:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
+        id S231390AbiJFN7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 09:59:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiJFN7B (ORCPT
+        with ESMTP id S229453AbiJFN7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 09:59:01 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106AC9411E
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 06:58:59 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id n74so2302483yba.11
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 06:58:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s+YuoZmT4CdVaeJmCXtamdo4wpT48j9SRuR7X/Obpi8=;
-        b=k4hRQcSXX5JjQYo+iakkHH05fcSOAuDnx2fZhjDqWO7F66LLlOstMRbBHxBhZbXY2P
-         JbkaJ7cuc5WyaeM08s2NpgtwjHQOmsAL/NBLaHhwfm4BNEXkY55kaId1Dc5+sFdeAbJM
-         OPF2vOSwGK77xi31bSpXePSyBjiOKNXbG91WCyetFoRMYou23+GrzSCt1tiIXNc5043l
-         seCdkLL1gAwgKSMi7oeApt6/NZ9yVFKjIdxbM0dxlbMD1iPevoy/x3aY+kgN7JdwL53m
-         5/46p+SHXUU2wH/QZFv/arSfy0FOl1FrzJdvxcNI7ek+De5GzFmj++zw/4x2JP2BoG+R
-         A29Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s+YuoZmT4CdVaeJmCXtamdo4wpT48j9SRuR7X/Obpi8=;
-        b=Z2uQUnBU1Sp9MPD6/RzIre7iEX0sfqkMyorjyydhGMwCVcVM/wl41BUNUa2EGnbFQh
-         lssJBhlIwF8EYbbbA7gjpca3yeEeTdqtpm7ygb3V1lSEjA6vsC3O3XUbRufutZMCS2Hl
-         AqSBFDzptgFWD3gq9YwMczzpMnDbed+eMUI7eI4d31X6j1mLi+L+7PpgNXdiVW1nKkhb
-         kNFG8mgAj3eY2EMWtut8lmP7jCRtrZGSoy0OtOqeuEi8evLlpZhE1ssJpLle+OzjaiHJ
-         M6gDavHG9K4IHWp7pLhc2S/yICxfZLTtartYduKrmp6BZHYApxmvyjVqHFyjCpby662Q
-         yniA==
-X-Gm-Message-State: ACrzQf02hzZHV/XscYzpLicXw30WsXY+oCdYQ3bhaSLyEpQM3lKLWoNk
-        Ca6a3+HPZl6Ys1e+l0yzonO9TCQNfcw/DzF1eYPZew==
-X-Google-Smtp-Source: AMsMyM6569uzjp7wIOkVrIiK3+Cucvhc4vsxZ0OCzNx1LMALdMvzKbWwnh2I4uFeAWJEVnPX5/tLRpWfgwfx3GodvBY=
-X-Received: by 2002:a25:9d0a:0:b0:6bc:2641:19d4 with SMTP id
- i10-20020a259d0a000000b006bc264119d4mr4444038ybp.388.1665064737939; Thu, 06
- Oct 2022 06:58:57 -0700 (PDT)
+        Thu, 6 Oct 2022 09:59:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35B1DFDD
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 06:59:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665064787;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wvAFTm8FdW2/6pnC/amNx72dguHCE6Nha3ZiXPtT6Ek=;
+        b=SGlr3MYGXNCC9JLvoOM4ehGngvBlee55Kvufj3HmNTCxFIcClHqovd25zWhEh4vQuH+D0n
+        P2mDX/FqGzs7UPgJsU4htUcFlgD58gt2gXQsmq43mw163AfqhTshrfy3UYZdHmdGsvDnhq
+        n/5gnL7Fu2O7kRLZpU9e0iEkVWbQ55E=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-74-pkRHXZp8OU-oqy8cOmgpJQ-1; Thu, 06 Oct 2022 09:59:44 -0400
+X-MC-Unique: pkRHXZp8OU-oqy8cOmgpJQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D0075855307;
+        Thu,  6 Oct 2022 13:59:43 +0000 (UTC)
+Received: from localhost (unknown [10.39.193.119])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C1523111E412;
+        Thu,  6 Oct 2022 13:59:42 +0000 (UTC)
+Date:   Thu, 6 Oct 2022 09:59:40 -0400
+From:   Stefan Hajnoczi <stefanha@redhat.com>
+To:     "Denis V. Lunev" <den@virtuozzo.com>
+Cc:     Ming Lei <tom.leiming@gmail.com>, io-uring@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kirill Tkhai <kirill.tkhai@openvz.org>,
+        Manuel Bentele <development@manuel-bentele.de>,
+        qemu-devel@nongnu.org, Kevin Wolf <kwolf@redhat.com>,
+        rjones@redhat.com, Xie Yongji <xieyongji@bytedance.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Josef Bacik <josef@toxicpanda.com>
+Subject: Re: ublk-qcow2: ublk-qcow2 is available
+Message-ID: <Yz7fTANAxAQ8KT4v@fedora>
+References: <Yza1u1KfKa7ycQm0@T590>
+ <Yzs9xQlVuW41TuNC@fedora>
+ <6659a0d5-60ab-9ac7-d25d-b4ff1940c6ab@virtuozzo.com>
+ <Yz2epPwoufj0mug/@fedora>
+ <Yz6tR24T8HPHJ70D@T590>
 MIME-Version: 1.0
-References: <20220930144758.30232-1-kirill.shutemov@linux.intel.com>
-In-Reply-To: <20220930144758.30232-1-kirill.shutemov@linux.intel.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 6 Oct 2022 15:58:21 +0200
-Message-ID: <CAG_fn=X0xfY-5DS+YSpaLy8mHhAoJoceTq0vb2xmGBxB75wGMA@mail.gmail.com>
-Subject: Re: [PATCHv9 00/14] Linear Address Masking enabling
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="15fzNgcvZDw6D8kW"
+Content-Disposition: inline
+In-Reply-To: <Yz6tR24T8HPHJ70D@T590>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 4:48 PM Kirill A. Shutemov
-<kirill.shutemov@linux.intel.com> wrote:
->
-> Linear Address Masking[1] (LAM) modifies the checking that is applied to
-> 64-bit linear addresses, allowing software to use of the untranslated
-> address bits for metadata.
->
-> The capability can be used for efficient address sanitizers (ASAN)
-> implementation and for optimizations in virtual machines.
->
-> The patchset brings support for LAM for userspace addresses. Only LAM_U57=
- at
-> this time.
->
-> Please review and consider applying.
->
-> git://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git lam
 
-Not a big deal, but this tree contains LAM_U48 patches, and after
-skipping those the SVM patch does not apply cleanly.
+--15fzNgcvZDw6D8kW
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> v9:
->   - Fix race between LAM enabling and check that KVM memslot address does=
-n't
->     have any tags;
->   - Reduce untagged_addr() overhead until the first LAM user;
->   - Clarify SVM vs. LAM semantics;
->   - Use mmap_lock to serialize LAM enabling;
-> v8:
->   - Drop redundant smb_mb() in prctl_enable_tagged_addr();
->   - Cleanup code around build_cr3();
->   - Fix commit messages;
->   - Selftests updates;
->   - Acked/Reviewed/Tested-bys from Alexander and Peter;
-> v7:
->   - Drop redundant smb_mb() in prctl_enable_tagged_addr();
->   - Cleanup code around build_cr3();
->   - Fix commit message;
->   - Fix indentation;
-> v6:
->   - Rebased onto v6.0-rc1
->   - LAM_U48 excluded from the patchet. Still available in the git tree;
->   - add ARCH_GET_MAX_TAG_BITS;
->   - Fix build without CONFIG_DEBUG_VM;
->   - Update comments;
->   - Reviewed/Tested-by from Alexander;
-> v5:
->   - Do not use switch_mm() in enable_lam_func()
->   - Use mb()/READ_ONCE() pair on LAM enabling;
->   - Add self-test by Weihong Zhang;
->   - Add comments;
-> v4:
->   - Fix untagged_addr() for LAM_U48;
->   - Remove no-threads restriction on LAM enabling;
->   - Fix mm_struct access from /proc/$PID/arch_status
->   - Fix LAM handling in initialize_tlbstate_and_flush()
->   - Pack tlb_state better;
->   - Comments and commit messages;
-> v3:
->   - Rebased onto v5.19-rc1
->   - Per-process enabling;
->   - API overhaul (again);
->   - Avoid branches and costly computations in the fast path;
->   - LAM_U48 is in optional patch.
-> v2:
->   - Rebased onto v5.18-rc1
->   - New arch_prctl(2)-based API
->   - Expose status of LAM (or other thread features) in
->     /proc/$PID/arch_status
->
-> [1] ISE, Chapter 10. https://cdrdv2.intel.com/v1/dl/getContent/671368
->
-> Kirill A. Shutemov (10):
->   x86/mm: Fix CR3_ADDR_MASK
->   x86: CPUID and CR3/CR4 flags for Linear Address Masking
->   mm: Pass down mm_struct to untagged_addr()
->   x86/mm: Handle LAM on context switch
->   x86/uaccess: Provide untagged_addr() and remove tags before address
->     check
->   KVM: Serialize tagged address check against tagging enabling
->   x86/mm: Provide arch_prctl() interface for LAM
->   x86/mm: Reduce untagged_addr() overhead until the first LAM user
->   x86: Expose untagging mask in /proc/$PID/arch_status
->   x86/mm, iommu/sva: Make LAM and SVM mutually exclusive
->
-> Weihong Zhang (4):
->   selftests/x86/lam: Add malloc and tag-bits test cases for
->     linear-address masking
->   selftests/x86/lam: Add mmap and SYSCALL test cases for linear-address
->     masking
->   selftests/x86/lam: Add io_uring test cases for linear-address masking
->   selftests/x86/lam: Add inherit test cases for linear-address masking
->
->  arch/arm64/include/asm/memory.h               |   4 +-
->  arch/arm64/include/asm/signal.h               |   2 +-
->  arch/arm64/include/asm/uaccess.h              |   4 +-
->  arch/arm64/kernel/hw_breakpoint.c             |   2 +-
->  arch/arm64/kernel/traps.c                     |   4 +-
->  arch/arm64/mm/fault.c                         |  10 +-
->  arch/sparc/include/asm/pgtable_64.h           |   2 +-
->  arch/sparc/include/asm/uaccess_64.h           |   2 +
->  arch/x86/include/asm/cpufeatures.h            |   1 +
->  arch/x86/include/asm/mmu.h                    |  12 +-
->  arch/x86/include/asm/mmu_context.h            |  47 +
->  arch/x86/include/asm/processor-flags.h        |   4 +-
->  arch/x86/include/asm/tlbflush.h               |  35 +
->  arch/x86/include/asm/uaccess.h                |  46 +-
->  arch/x86/include/uapi/asm/prctl.h             |   5 +
->  arch/x86/include/uapi/asm/processor-flags.h   |   6 +
->  arch/x86/kernel/Makefile                      |   2 +
->  arch/x86/kernel/fpu/xstate.c                  |  47 -
->  arch/x86/kernel/proc.c                        |  60 ++
->  arch/x86/kernel/process.c                     |   3 +
->  arch/x86/kernel/process_64.c                  |  82 +-
->  arch/x86/mm/tlb.c                             |  48 +-
->  .../gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c  |   2 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c       |   2 +-
->  drivers/gpu/drm/radeon/radeon_gem.c           |   2 +-
->  drivers/infiniband/hw/mlx4/mr.c               |   2 +-
->  drivers/iommu/iommu-sva-lib.c                 |  12 +
->  drivers/media/common/videobuf2/frame_vector.c |   2 +-
->  drivers/media/v4l2-core/videobuf-dma-contig.c |   2 +-
->  .../staging/media/atomisp/pci/hmm/hmm_bo.c    |   2 +-
->  drivers/tee/tee_shm.c                         |   2 +-
->  drivers/vfio/vfio_iommu_type1.c               |   2 +-
->  fs/proc/task_mmu.c                            |   2 +-
->  include/linux/mm.h                            |  11 -
->  include/linux/mmu_context.h                   |   4 +
->  include/linux/uaccess.h                       |  15 +
->  lib/strncpy_from_user.c                       |   2 +-
->  lib/strnlen_user.c                            |   2 +-
->  mm/gup.c                                      |   6 +-
->  mm/madvise.c                                  |   2 +-
->  mm/mempolicy.c                                |   6 +-
->  mm/migrate.c                                  |   2 +-
->  mm/mincore.c                                  |   2 +-
->  mm/mlock.c                                    |   4 +-
->  mm/mmap.c                                     |   2 +-
->  mm/mprotect.c                                 |   2 +-
->  mm/mremap.c                                   |   2 +-
->  mm/msync.c                                    |   2 +-
->  tools/testing/selftests/x86/Makefile          |   2 +-
->  tools/testing/selftests/x86/lam.c             | 916 ++++++++++++++++++
->  virt/kvm/kvm_main.c                           |  14 +-
->  51 files changed, 1331 insertions(+), 125 deletions(-)
->  create mode 100644 arch/x86/kernel/proc.c
->  create mode 100644 tools/testing/selftests/x86/lam.c
->
-> --
-> 2.35.1
->
+On Thu, Oct 06, 2022 at 06:26:15PM +0800, Ming Lei wrote:
+> On Wed, Oct 05, 2022 at 11:11:32AM -0400, Stefan Hajnoczi wrote:
+> > On Tue, Oct 04, 2022 at 01:57:50AM +0200, Denis V. Lunev wrote:
+> > > On 10/3/22 21:53, Stefan Hajnoczi wrote:
+> > > > On Fri, Sep 30, 2022 at 05:24:11PM +0800, Ming Lei wrote:
+> > > > > ublk-qcow2 is available now.
+> > > > Cool, thanks for sharing!
+> > > yep
+> > >=20
+> > > > > So far it provides basic read/write function, and compression and=
+ snapshot
+> > > > > aren't supported yet. The target/backend implementation is comple=
+tely
+> > > > > based on io_uring, and share the same io_uring with ublk IO comma=
+nd
+> > > > > handler, just like what ublk-loop does.
+> > > > >=20
+> > > > > Follows the main motivations of ublk-qcow2:
+> > > > >=20
+> > > > > - building one complicated target from scratch helps libublksrv A=
+PIs/functions
+> > > > >    become mature/stable more quickly, since qcow2 is complicated =
+and needs more
+> > > > >    requirement from libublksrv compared with other simple ones(lo=
+op, null)
+> > > > >=20
+> > > > > - there are several attempts of implementing qcow2 driver in kern=
+el, such as
+> > > > >    ``qloop`` [2], ``dm-qcow2`` [3] and ``in kernel qcow2(ro)`` [4=
+], so ublk-qcow2
+> > > > >    might useful be for covering requirement in this field
+> > > There is one important thing to keep in mind about all partly-userspa=
+ce
+> > > implementations though:
+> > > * any single allocation happened in the context of the
+> > > =A0=A0 userspace daemon through try_to_free_pages() in
+> > > =A0=A0 kernel has a possibility to trigger the operation,
+> > > =A0=A0 which will require userspace daemon action, which
+> > > =A0=A0 is inside the kernel now.
+> > > * the probability of this is higher in the overcommitted
+> > > =A0=A0 environment
+> > >=20
+> > > This was the main motivation of us in favor for the in-kernel
+> > > implementation.
+> >=20
+> > CCed Josef Bacik because the Linux NBD driver has dealt with memory
+> > reclaim hangs in the past.
+> >=20
+> > Josef: Any thoughts on userspace block drivers (whether NBD or ublk) and
+> > how to avoid hangs in memory reclaim?
+>=20
+> If I remember correctly, there isn't new report after the last NBD(TCMU) =
+deadlock
+> in memory reclaim was addressed by 8d19f1c8e193 ("prctl: PR_{G,S}ET_IO_FL=
+USHER
+> to support controlling memory reclaim").
 
+Denis: I'm trying to understand the problem you described. Is this
+correct:
 
---=20
-Alexander Potapenko
-Software Engineer
+Due to memory pressure, the kernel reclaims pages and submits a write to
+a ublk block device. The userspace process attempts to allocate memory
+in order to service the write request, but it gets stuck because there
+is no memory available. As a result reclaim gets stuck, the system is
+unable to free more memory and therefore it hangs?
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
+Stefan
 
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+--15fzNgcvZDw6D8kW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmM+30wACgkQnKSrs4Gr
+c8iHRQf8CLjA5KPwDOjXvWn297/VU+slSiJzehP2Idpif/5l1xCQuasQWziB8flE
+skkANbVPQn8Y+Z/cwWykCx3XjZSoVDM+SO4VG1TMS1ZcPU+ODHzPdA1/yZwArg1J
+/6A8HxGpVAQYajnOmAMEBueuSUX30cN32YGh/uNykOU4q0Td8YzXS2ybbRGQfnit
+lkU4QvFm6foeKArFelx+8AP3xiQXIHulVtG4Yn72gnAIzZDgJlrsau3x05idY/+L
+acGUSyXP2PUnsZqFncWviWOfpa1LnyXDp1/bk4t/XRdrzSCReyOtcEwk/0ahFceh
+3AWMJdbDcA+5dP62qT3XyL6dCgaugQ==
+=bI8b
+-----END PGP SIGNATURE-----
+
+--15fzNgcvZDw6D8kW--
+
