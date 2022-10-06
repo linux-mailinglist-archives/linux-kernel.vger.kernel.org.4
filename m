@@ -2,221 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 925075F6624
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B71135F6626
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231203AbiJFMeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 08:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
+        id S231238AbiJFMeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 08:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiJFMeG (ORCPT
+        with ESMTP id S231362AbiJFMeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 08:34:06 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19F0637B;
-        Thu,  6 Oct 2022 05:34:03 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DCC9D6602301;
-        Thu,  6 Oct 2022 13:34:01 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1665059642;
-        bh=qkkpSsxIMeDT9BV02FWV/AHFBaKuCtwlZphzAFH4cCk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VEqNn94fof5Ie5QMY9/ws1jnX2t+w8B3WepGN2ReqqHvTu1tuCGr3C1tuVN/L44Tt
-         IefnVUZahCnaLb/Yw6SuWHxXVm/PPPalZIjralwVQcDt954qmQWdSSo5v2obAR0klS
-         FTif35BrPjVadDfbrcYit4ANdFzOybiWe61HWCCLDoSYHZ5OZ4iReEF+5epu2xXC+8
-         rTNYuZFjk3XCBLhbExuBMufffoMehrPAuSnvWf6kiqRRsaHNhsE42CU+Bfufd65C8+
-         gQ7lWMMLPU+OM8zMF+JgEfK/lMRSzlAFb7q6VBNbfIDzD4LtzSWDK4JqHjErf6y3vV
-         O+YzNBdP0G6hg==
-Message-ID: <8fd7c872-fadb-5dc2-6bc1-5b59a9a3b133@collabora.com>
-Date:   Thu, 6 Oct 2022 14:33:59 +0200
+        Thu, 6 Oct 2022 08:34:16 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D69E18B2F;
+        Thu,  6 Oct 2022 05:34:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665059654; x=1696595654;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KLPlNjfONSRgkRmAk1/3zUaUpgzi9KonOZUB6whE/kI=;
+  b=dhmZvqh2UDyFPxEe4xaBXs/Pn6QnSOG9iVN0RYIqyG0a30xcFswFXMws
+   KyPQNfE5ljEreAOWfUxs1ENU5vkwSlUV2VUSkvjE64M8dx3oNLMicKIPJ
+   90280pHFEqsVYXxKHQJ1HVBQtOOlNP9BGKs84/0pQzlb8m/BQazocs5/M
+   9FQj8sTWucC8D/20ELIIBfDhxKe1CzdtunvbhlvznOVvPu3rSy303oqde
+   MyKcUf7vcQmI5QrVrwfo85rs6NisUr38Q5RZTO8QwDVWeKelq7ZKKIky/
+   HR6XMJJJ9DYFjrH4fTS2NwLNAQuOUZGwSucwYEYdw1DSCdIBCEqulOz4g
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="303406042"
+X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
+   d="scan'208";a="303406042"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 05:34:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="953601835"
+X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
+   d="scan'208";a="953601835"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP; 06 Oct 2022 05:34:12 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ogQ4o-0038tb-1b;
+        Thu, 06 Oct 2022 15:34:10 +0300
+Date:   Thu, 6 Oct 2022 15:34:10 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, Qiang Zhao <qiang.zhao@nxp.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: Re: [PATCH v2 1/2] device property: Introduce
+ fwnode_device_is_compatible() helper
+Message-ID: <Yz7LQuf0L29cne3I@smile.fi.intel.com>
+References: <20221005152947.71696-1-andriy.shevchenko@linux.intel.com>
+ <20221005152947.71696-2-andriy.shevchenko@linux.intel.com>
+ <Yz3xsmy/3wlntStv@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3 2/4] dt-bindings: arm: mediatek: Add new bindings of
- MediaTek frequency hopping
-Content-Language: en-US
-To:     =?UTF-8?B?Sm9obnNvbiBXYW5nICjnjovogZbpkasp?= 
-        <Johnson.Wang@mediatek.com>, "robh@kernel.org" <robh@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        =?UTF-8?B?S3Vhbi1Ic2luIExlZSAo5p2O5Yag5pawKQ==?= 
-        <Kuan-Hsin.Lee@mediatek.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        =?UTF-8?B?WXUtQ2hhbmcgV2FuZyAo546L54Wc5qifKQ==?= 
-        <Yu-Chang.Wang@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        =?UTF-8?B?RWR3YXJkLUpXIFlhbmcgKOaliuWTsue2rSk=?= 
-        <Edward-JW.Yang@mediatek.com>
-References: <20220929114624.16809-1-johnson.wang@mediatek.com>
- <20220929114624.16809-3-johnson.wang@mediatek.com>
- <ed723cb2-ba79-55d7-7869-abf153e4af0a@collabora.com>
- <20220930190703.GA657929-robh@kernel.org>
- <5b84c81d0d7f71bb83fcbef860433e4704ae5c72.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <5b84c81d0d7f71bb83fcbef860433e4704ae5c72.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yz3xsmy/3wlntStv@paasikivi.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 06/10/22 13:23, Johnson Wang (王聖鑫) ha scritto:
-> On Fri, 2022-09-30 at 14:07 -0500, Rob Herring wrote:
->> On Thu, Sep 29, 2022 at 03:07:49PM +0200, AngeloGioacchino Del Regno
->> wrote:
->>> Il 29/09/22 13:46, Johnson Wang ha scritto:
->>>> Add the new binding documentation for MediaTek frequency hopping
->>>> and spread spectrum clocking control.
->>>>
->>>> Co-developed-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
->>>> Signed-off-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
->>>> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
->>>> ---
->>>>    .../arm/mediatek/mediatek,mt8186-fhctl.yaml   | 53
->>>> +++++++++++++++++++
->>>>    1 file changed, 53 insertions(+)
->>>>    create mode 100644
->>>> Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-
->>>> fhctl.yaml
->>>>
->>>> diff --git
->>>> a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-
->>>> fhctl.yaml
->>>> b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-
->>>> fhctl.yaml
->>>> new file mode 100644
->>>> index 000000000000..258dff7ce6bc
->>>> --- /dev/null
->>>> +++
->>>> b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-
->>>> fhctl.yaml
->>>> @@ -0,0 +1,53 @@
->>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>>> +%YAML 1.2
->>>> +---
->>>> +$id:
->>>> https://urldefense.com/v3/__http://devicetree.org/schemas/arm/mediatek/mediatek,mt8186-fhctl.yaml*__;Iw!!CTRNKA9wMg0ARbw!xVt73f8PaQKph8n0ffGHHmQIxdzooUtGr0xDNVqy_6V0vwcs5k-FLrmkB3PZupSu1ciC$
->>>>   
->>>> +$schema:
->>>> https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!xVt73f8PaQKph8n0ffGHHmQIxdzooUtGr0xDNVqy_6V0vwcs5k-FLrmkB3PZulXwBACk$
->>>>   
->>>> +
->>>> +title: MediaTek frequency hopping and spread spectrum clocking
->>>> control
->>>> +
->>>> +maintainers:
->>>> +  - Edward-JW Yang <edward-jw.yang@mediatek.com>
->>>> +
->>>> +description: |
->>>> +  Frequency hopping control (FHCTL) is a piece of hardware that
->>>> control
->>>> +  some PLLs to adopt "hopping" mechanism to adjust their
->>>> frequency.
->>>> +  Spread spectrum clocking (SSC) is another function provided by
->>>> this hardware.
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    const: mediatek,mt8186-fhctl
->>>> +
->>>> +  reg:
->>>> +    maxItems: 1
->>>> +
->>>> +  clocks:
->>>> +    description: Phandles of the PLL with FHCTL hardware
->>>> capability.
->>>> +    minItems: 1
->>>> +    maxItems: 30
->>>> +
->>>> +  mediatek,hopping-ssc-percent:
->>>> +    description: The percentage of spread spectrum clocking for
->>>> one PLL.
->>>> +    minItems: 1
->>>> +    maxItems: 30
->>>> +    items:
->>>> +      default: 0
->>>> +      minimum: 0
->>>> +      maximum: 8
->>>> +
->>>> +required:
->>>> +  - compatible
->>>> +  - reg
->>>> +  - clocks
->>>> +
->>>> +additionalProperties: false
->>>> +
->>>> +examples:
->>>> +  - |
->>>> +    #include <dt-bindings/clock/mt8186-clk.h>
->>>> +    fhctl: fhctl@1000ce00 {
->>>> +        compatible = "mediatek,mt8186-fhctl";
->>>> +        reg = <0x1000c000 0xe00>;
->>>> +        clocks = <&apmixedsys CLK_APMIXED_MSDCPLL>;
->>>> +        mediatek,hopping-ssc-percent = <3>;
->>>> +    };
->>>
->>>
->>> .... a more realistic example:
->>
->> One or 2 cells is really outside the scope of the binding as either
->> is
->> valid. If the parent bus only has 32-bits of address space, there's
->> little reason to use 2 cells.
->>
-> 
-> Hi Rob,
-> 
-> Thanks for the explanation.
-> 
-> Then I will keep this example the same in the next version.
+On Wed, Oct 05, 2022 at 09:05:54PM +0000, Sakari Ailus wrote:
+> On Wed, Oct 05, 2022 at 06:29:46PM +0300, Andy Shevchenko wrote:
 
-That was just to have it 1:1 with how it'll be written in the devicetree....
-....in any case, Johnson, there's a discrepancy in the iospace:
-1000ce00 vs 0c1000c000 - that has to be fixed anyway.
+...
 
-Cheers,
-Angelo
+> fwnode_property_match_string() returns zero on success, therefore >= 0 is
+> not needed. I'd just use !fwnode_property_match_string(...).
 
+No, it's bug in the documentation, thanks to rising an attention,
+I forgot to send a fix for it earlier.
+
+> For both patches:
 > 
-> BRs,
-> Johnson Wang
->>>
->>>      #include <dt-bindings/clock/mt8186-clk.h>
->>>
->>>      soc {
->>>          #address-cells = <2>;
->>>          #size-cells = <2>;
->>>
->>>          fhctl: fhctl@1000ce00 {
->>>              compatible = "mediatek,mt8186-fhctl";
->>>              reg = <0 0x1000c000 0 0xe00>;
->>>              clocks = <&apmixedsys CLK_APMIXED_MSDCPLL>;
->>>              mediatek,hopping-ssc-percent = <3>;
->>>          };
->>>      };
->>>
->>> After which...
->>>
->>> Reviewed-by: AngeloGioacchino Del Regno <
->>> angelogioacchino.delregno@collabora.com>
->>>
+> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+
+Thanks, but as stated above the condition in my patch is correct.
+It seems due to documentation bug we have some kind of "buggy" code,
+luckily not too many to fix.
+
+That said, I'm not going to resend this until PPC (Freescale) maintainers
+ask for it. Yang, what's your vision on this series?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
