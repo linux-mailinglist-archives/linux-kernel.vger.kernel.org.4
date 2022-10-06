@@ -2,167 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92DB5F708B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 23:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A125F711D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 00:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbiJFVwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 17:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
+        id S231865AbiJFWZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 18:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiJFVwu (ORCPT
+        with ESMTP id S229683AbiJFWZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 17:52:50 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D25FF8F5
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 14:52:49 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id r17so7482758eja.7
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 14:52:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8+A+zIRy16QFTg+cmAx3TJyR+vU5d527KfHF2GB4dYI=;
-        b=RIXXgpbKNH2W/Yc9juS3FkGjTsnvHzENyObFcZmjVP/qG2cZQgr+SOdUoivIdKIreq
-         GDYswOUP6UjobhIrUX1wihL03F5iWROBKC6MtjT0olnERcVnPOCpltKwXbiFo5c09i9X
-         nTL5V2YpMBliT6zZ5R+ww6+QSdseqbquKtUaXqLwYsKje4+mGFgcmYHTowhEOs8y22ly
-         AN887D4pOL0u3g+z+XejxJcYy5YJmK9bx+7kL4aJNVQKjdDaRmP93zLwYLzJQXNoWVDs
-         kn8+tsHtTBDWmeLIoIx7Z0WMDxfgZ/Q96Ehu4l13SgyQ7b6y0OZiJ8yEvkU6L8/wDEfp
-         azeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8+A+zIRy16QFTg+cmAx3TJyR+vU5d527KfHF2GB4dYI=;
-        b=fzRTrGdqo2J8JIDnhxU8H0BojjZeJGnK5+mmTPZknMoLLH0BcSdHvzI81uCIJFtIKy
-         4wGd5raw2JEMByjrRt1/Nw4sO9RuB9ApW2OK5lJB3+FBwR+swtXMA3R4rfPXU6FZJk+8
-         GcX3kRtvux0jJkd4cZM2uUm2eWAIqrW61q/BXJ99mZ2CfQCe33OwBrZ3wNjQavypXSWX
-         tHhSIelu+9WrCB+qLBxsXLRTMOxrq1YYrWtxLADg/0fIHukrWnDYq35NqbBeZ4IMQzst
-         srXWBt7qPtFgHg1/FgHwgMK6Zxedt7HSEe9Sja+m9ixssVSXILcvsgZJc+5X7tzxZ5mB
-         3j1Q==
-X-Gm-Message-State: ACrzQf2IG54/JVUU1bMTD+kL/Wlu3sIyK1wjhYG6Z+bZUIpmqRd7LeJc
-        Q7UeN3juiK68ep7JwlxL+sTzum4YZldz9UU+QRU=
-X-Google-Smtp-Source: AMsMyM6MrbuBaIzviWyIpo7LEtpXE8fYeSpkcuj1C5cQ6/GCjFgxYdxwQbGI17FJ2cBGZAbYznxSdPocQac1QxRdPlo=
-X-Received: by 2002:a17:907:980a:b0:78d:282f:1607 with SMTP id
- ji10-20020a170907980a00b0078d282f1607mr1526388ejc.511.1665093167478; Thu, 06
- Oct 2022 14:52:47 -0700 (PDT)
+        Thu, 6 Oct 2022 18:25:44 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4622EC5109;
+        Thu,  6 Oct 2022 15:25:39 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mk5c96hP2z4x1V;
+        Fri,  7 Oct 2022 09:25:29 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1665095134;
+        bh=WItBWR5VdZOwUNQvtjVFvL3cxTiPIDKBURswLB2Y0Yc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MHj76dkuR8itYSRyl2q8zESg6uAGL3+fih0lSoCdsjHaRnmdGt8Yn4p1hv2P+GD8S
+         wph0uWdc05eiXAQzA7SLp6OWOs5ENANejC7KxC08IQYwvKeUsyDC8n4KopwV9WBh8b
+         w92esPNUsUimS/ySiBRFSsWnWbNHYKj5Pmy2uxu9OStEPFV93OM/wU+wArqFNd/Qog
+         TOoQmIZuuT8SqjbwW2ktEbFgjFpDUfgs8ZPsteK3nBINMYCAwGI3gTffm5Mr5k2llv
+         uXUhebNBPHYcMiCcf/nFirJpKuQD8ovF8YPlc9+1nN6AWB0nb/DThuqp7Gn8jict/R
+         4oZeLTZqXzouA==
+Date:   Fri, 7 Oct 2022 05:16:28 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Daniel Xu <dxu@dxuuu.xyz>, Finn Behrens <me@kloenk.de>,
+        Gary Guo <gary@garyguo.net>, Julian Merkle <me@jvmerkle.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Wei Liu <wei.liu@kernel.org>, Wu XiangCheng <bobwxc@email.cn>,
+        Yuki Okushi <jtitor@2k36.org>
+Subject: linux-next: manual merge of the kbuild tree with Linus' tree
+Message-ID: <20221007051628.004a89d4@canb.auug.org.au>
 MIME-Version: 1.0
-References: <CAPM=9tzs4n8dDQ_XVVPS_5jrBgsNkhDQvf-B_XmUg+EG_M2i4Q@mail.gmail.com>
- <CAHk-=whUp5Ufur6Bmv=H-rDDTNJJ-KVqOKkL+5FmR01jp0dbcA@mail.gmail.com>
- <CADnq5_Of-8ZyBxee0fZ=0x-eV-2NX_+e9sd-9nmuHdLugSHp2g@mail.gmail.com>
- <CAHk-=wi43xD06UgO2McDT3R=ze_aHgOGjcDOoggSwmQRv2kA+A@mail.gmail.com>
- <CADnq5_N0Ef+1VUoDLdpHfJXqZFuPYbx5Lq+94NWciHcQC+VrMg@mail.gmail.com>
- <CAPM=9tyAOnzwXyyPuoceZ1mimAkzxR-63YmKfVtcQX=swywNvg@mail.gmail.com> <CAPM=9tyL=J26aHdhSSK0jwYQLHBf8jjTMvJmj1cQheUF=wpd-Q@mail.gmail.com>
-In-Reply-To: <CAPM=9tyL=J26aHdhSSK0jwYQLHBf8jjTMvJmj1cQheUF=wpd-Q@mail.gmail.com>
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 7 Oct 2022 07:52:35 +1000
-Message-ID: <CAPM=9tx8tjzz5q4gkLbh=R+xO5x-8QQOB9E=GAXrV6=-r844-A@mail.gmail.com>
-Subject: Re: [git pull] drm for 6.1-rc1
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/EGF=xV7cIqEmPDoPFq3HMOM";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Oct 2022 at 07:41, Dave Airlie <airlied@gmail.com> wrote:
->
-> On Fri, 7 Oct 2022 at 06:24, Dave Airlie <airlied@gmail.com> wrote:
-> >
-> > On Fri, 7 Oct 2022 at 06:14, Alex Deucher <alexdeucher@gmail.com> wrote:
-> > >
-> > > On Thu, Oct 6, 2022 at 3:48 PM Linus Torvalds
-> > > <torvalds@linux-foundation.org> wrote:
-> > > >
-> > > > On Thu, Oct 6, 2022 at 12:28 PM Alex Deucher <alexdeucher@gmail.com> wrote:
-> > > > >
-> > > > > Maybe you are seeing this which is an issue with GPU TLB flushes which
-> > > > > is kind of sporadic:
-> > > > > https://gitlab.freedesktop.org/drm/amd/-/issues/2113
-> > > >
-> > > > Well, that seems to be 5.19, and while timing changes (or whatever
-> > > > other software updates) could have made it start trigger, this machine
-> > > > has been pretty solid otgerwise.
-> > > >
-> > > > > Are you seeing any GPU page faults in your kernel log?
-> > > >
-> > > > Nothing even remotely like that "no-retry page fault" in that issue
-> > > > report. Of course, if it happens just before the whole thing locks
-> > > > up...
-> > >
-> > > Your chip is too old to support retry faults so it's likely you could
-> > > be just seeing a GPU page fault followed by a hang.  Your chip also
-> > > lacks a paging queue, so you would be affected by the TLB issue.
-> >
-> >
-> > Okay I got my FIJI running Linus tree and netconsole to blow up like
-> > this, running fedora 36 desktop, steam, firefox, and then I ran
-> > poweroff over ssh.
-> >
-> > [ 1234.778760] BUG: kernel NULL pointer dereference, address: 0000000000000088
-> > [ 1234.778782] #PF: supervisor read access in kernel mode
-> > [ 1234.778787] #PF: error_code(0x0000) - not-present page
-> > [ 1234.778791] PGD 0 P4D 0
-> > [ 1234.778798] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> > [ 1234.778803] CPU: 7 PID: 805 Comm: systemd-journal Not tainted 6.0.0+ #2
-> > [ 1234.778809] Hardware name: System manufacturer System Product
-> > Name/PRIME X370-PRO, BIOS 5603 07/28/2020
-> > [ 1234.778813] RIP: 0010:drm_sched_job_done.isra.0+0xc/0x140 [gpu_sched]
-> > [ 1234.778828] Code: aa 0f 1d ce e9 57 ff ff ff 48 89 d7 e8 9d 8f 3f
-> > ce e9 4a ff ff ff 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 41 54 55 53
-> > 48 89 fb <48> 8b af 88 00 00 00 f0 ff 8d f0 00 00 00 48 8b 85 80 01 00
-> > 00 f0
-> > [ 1234.778834] RSP: 0000:ffffabe680380de0 EFLAGS: 00010087
-> > [ 1234.778839] RAX: ffffffffc04e9230 RBX: 0000000000000000 RCX: 0000000000000018
-> > [ 1234.778897] RDX: 00000ba278e8977a RSI: ffff953fb288b460 RDI: 0000000000000000
-> > [ 1234.778901] RBP: ffff953fb288b598 R08: 00000000000000e0 R09: ffff953fbd98b808
-> > [ 1234.778905] R10: 0000000000000000 R11: ffffabe680380ff8 R12: ffffabe680380e00
-> > [ 1234.778908] R13: 0000000000000001 R14: 00000000ffffffff R15: ffff953fbd9ec458
-> > [ 1234.778912] FS:  00007f35e7008580(0000) GS:ffff95428ebc0000(0000)
-> > knlGS:0000000000000000
-> > [ 1234.778916] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [ 1234.778919] CR2: 0000000000000088 CR3: 000000010147c000 CR4: 00000000003506e0
-> > [ 1234.778924] Call Trace:
-> > [ 1234.778981]  <IRQ>
-> > [ 1234.778989]  dma_fence_signal_timestamp_locked+0x6a/0xe0
-> > [ 1234.778999]  dma_fence_signal+0x2c/0x50
-> > [ 1234.779005]  amdgpu_fence_process+0xc8/0x140 [amdgpu]
-> > [ 1234.779234]  sdma_v3_0_process_trap_irq+0x70/0x80 [amdgpu]
-> > [ 1234.779395]  amdgpu_irq_dispatch+0xa9/0x1d0 [amdgpu]
-> > [ 1234.779609]  amdgpu_ih_process+0x80/0x100 [amdgpu]
-> > [ 1234.779783]  amdgpu_irq_handler+0x1f/0x60 [amdgpu]
-> > [ 1234.779940]  __handle_irq_event_percpu+0x46/0x190
-> > [ 1234.779946]  handle_irq_event+0x34/0x70
-> > [ 1234.779949]  handle_edge_irq+0x9f/0x240
-> > [ 1234.779954]  __common_interrupt+0x66/0x100
-> > [ 1234.779960]  common_interrupt+0xa0/0xc0
-> > [ 1234.779965]  </IRQ>
-> > [ 1234.779968]  <TASK>
-> > [ 1234.779971]  asm_common_interrupt+0x22/0x40
-> > [ 1234.779976] RIP: 0010:finish_mkwrite_fault+0x22/0x110
-> > [ 1234.779981] Code: 1f 84 00 00 00 00 00 90 0f 1f 44 00 00 41 55 41
-> > 54 55 48 89 fd 53 48 8b 07 f6 40 50 08 0f 84 eb 00 00 00 48 8b 45 30
-> > 48 8b 18 <48> 89 df e8 66 bd ff ff 48 85 c0 74 0d 48 89 c2 83 e2 01 48
-> > 83 ea
-> > [ 1234.779985] RSP: 0000:ffffabe680bcfd78 EFLAGS: 00000202
-> >
-> > I'll see if I can dig any.
->
-> I'm kicking the tires on the drm-next tree just prior to submission,
-> and in an attempt to make myself look foolish and to tempt fate, it
-> seems stable.
+--Sig_/EGF=xV7cIqEmPDoPFq3HMOM
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yay it worked, crashed drm-next. will start reverting down the rabbit hole.
+Hi all,
 
-Dave.
+Today's linux-next merge of the kbuild tree got a conflict in:
+
+  Documentation/process/changes.rst
+
+between commit:
+
+  d07479b211b7 ("docs: add Rust documentation")
+
+from Linus' tree and commit:
+
+  0715fdb03e2c ("docs: bump minimal GNU Make version to 3.82")
+
+from the kbuild tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/process/changes.rst
+index 9a90197989dd,26a7fd875cfa..000000000000
+--- a/Documentation/process/changes.rst
++++ b/Documentation/process/changes.rst
+@@@ -31,9 -31,7 +31,9 @@@ you probably needn't concern yourself w
+  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+  GNU C                  5.1              gcc --version
+  Clang/LLVM (optional)  11.0.0           clang --version
+ +Rust (optional)        1.62.0           rustc --version
+ +bindgen (optional)     0.56.0           bindgen --version
+- GNU make               3.81             make --version
++ GNU make               3.82             make --version
+  bash                   4.2              bash --version
+  binutils               2.23             ld -v
+  flex                   2.5.35           flex --version
+
+--Sig_/EGF=xV7cIqEmPDoPFq3HMOM
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM/G3wACgkQAVBC80lX
+0Gx0xQf/fMHBQuecGKnRAlr8EmovP9qaY90Fr+Wqckj+dEsK7nIabIG2aNENFgvT
+gkBu3VgYHLDT383a3pnf8hJARzsezAGPLvy3mzuAuXgTb7Ob1gC98p8XCtZNOYk2
+C1BjXURtUSux5D2I03zzoDgwtErrM6ffmLsaNDThr+3QnuRtf1tqtcznMGBtipti
+4FU+Oa/r0xbLsakoZOuJs/m0YmiLXVLcn8M2YJYTaHBK3Gf2kkFMj1KU3B7ik7NB
+eCnV8OR7Qc4lxcsxq/90y9SaRoAYjTWRm/1qFk9XzwTsWPOIPTFTc4bveULpRrXz
+6lQhV+TK/18DTeDb1wfGxgUyXI2tiQ==
+=GSlG
+-----END PGP SIGNATURE-----
+
+--Sig_/EGF=xV7cIqEmPDoPFq3HMOM--
