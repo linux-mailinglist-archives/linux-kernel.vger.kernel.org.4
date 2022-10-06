@@ -2,74 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56A665F6E02
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 21:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 735045F6DFB
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 21:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232065AbiJFTPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 15:15:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41478 "EHLO
+        id S232060AbiJFTOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 15:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232136AbiJFTNq (ORCPT
+        with ESMTP id S231793AbiJFTON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 15:13:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59563A6C34;
-        Thu,  6 Oct 2022 12:13:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA75361A85;
-        Thu,  6 Oct 2022 19:13:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5934AC433D6;
-        Thu,  6 Oct 2022 19:13:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665083624;
-        bh=Ujbqbea8lMfhrQ16+Ky00kJ8zwYAk9S5tqzfldLIWEA=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=bb1MCIEhCWFSwJDEv/HMN54UEWGnW6OCuqLFSrDbsDjfHQHrjLITN8bVfQ+kdQRx+
-         tzYZiGey5NwgyYnk+1hFBquc54FJC8KEHg4UBMbL6PFY5R9v+6g5a52kcgGfPyvr0r
-         Azkpbl0alqGRFOI0dIqWXP0WuIPaUXOIK55xMjop6WRbaAep+YmDfud9VCSgYALGLh
-         hHp8WvoqhcR2g4BSbZDJ/Paa5Oh8b6EMWIwtDOrk0E3Wyld2SMhGyCwpNVH3jKSZay
-         ZXlq+wt+ZqksUlD8UjlpDDASrRO7yNwsEXmZeSOcbrIf3tTRnLisO8bH73HjhEb9bZ
-         slHS3WPK5Hpww==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 47007E2A05E;
-        Thu,  6 Oct 2022 19:13:44 +0000 (UTC)
-Subject: Re: [GIT PULL] asm-generic updates for 6.1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <5c3aa67f-bc78-4abe-aba2-e5679cb66994@app.fastmail.com>
-References: <5c3aa67f-bc78-4abe-aba2-e5679cb66994@app.fastmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <5c3aa67f-bc78-4abe-aba2-e5679cb66994@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-6.1
-X-PR-Tracked-Commit-Id: e19d4ebc536dadb607fe305fdaf48218d3e32d7c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 93ed07a23fd08b8613f64cf0a15d7fbdaca010fd
-Message-Id: <166508362427.672.3088824568748451813.pr-tracker-bot@kernel.org>
-Date:   Thu, 06 Oct 2022 19:13:44 +0000
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 6 Oct 2022 15:14:13 -0400
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359EAA3F45;
+        Thu,  6 Oct 2022 12:14:13 -0700 (PDT)
+Received: by mail-oo1-f45.google.com with SMTP id m11-20020a4aab8b000000b00476743c0743so2061672oon.10;
+        Thu, 06 Oct 2022 12:14:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3uOkqH8wHIIwG3lpTmOvwfF29077xeAWMGdj9Sqlpxw=;
+        b=Yz27A3sm4FVeUcOzBqmYXr/nEz0fKGJ3aA53in65MirZamGrYGWUKMdE4GdlzZVDE4
+         v7sMlkkCEEjie2fYtnnTesfzTKvMOjgLQsMoyDVtf3jQyTz95EGKFZZI+1HZJtFEDX9n
+         D7qx5BzN/mpOQIHqiSbUzXd6Oe6rETnwjSU5gTQxBv9PsPNfyYNu66hgv6N3/L/AC8x9
+         omQ/exPZ/9qGp6HPI5nLtVxcGPf0ZZN1DAeGFjkC4SeRYhtJ+IJiicB5472XXABTGG4P
+         ivWrdi7mnBEvEqStNgXqPzH79TqGr+TGi6FYyvwqB5fx0GXgDFeheHIG2TRu7+xCJT20
+         PN1g==
+X-Gm-Message-State: ACrzQf2wT/rkcyJvVLcX4nxVdYTNv6GlSzlS19N551anPxBaqr418Ih4
+        vHdOo6yEdgsg4fBEbgLnXQ==
+X-Google-Smtp-Source: AMsMyM71fwoUSf9tYFfjBz2mhmMUwcP7xYkN22Uv0oapeMLU2C9RJk3TElcPHKa3Anb+dB7iYTEPuA==
+X-Received: by 2002:a9d:30d1:0:b0:654:1288:7cb2 with SMTP id r17-20020a9d30d1000000b0065412887cb2mr605971otg.43.1665083652496;
+        Thu, 06 Oct 2022 12:14:12 -0700 (PDT)
+Received: from robh_at_kernel.org ([2607:fb90:8a65:c536:245:842:a3a4:9017])
+        by smtp.gmail.com with ESMTPSA id f13-20020a056830204d00b006594674d4ddsm195126otp.44.2022.10.06.12.14.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 12:14:11 -0700 (PDT)
+Received: (nullmailer pid 45552 invoked by uid 1000);
+        Thu, 06 Oct 2022 19:14:08 -0000
+Date:   Thu, 6 Oct 2022 14:14:08 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Sean Wang <sean.wang@kernel.org>, linux-gpio@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Teng <andy.teng@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2 02/10] dt-bindings: pinctrl: mediatek,mt6779-pinctrl:
+ Improve description
+Message-ID: <166508364780.45491.15443497028230774224.robh@kernel.org>
+References: <20221005174343.24240-1-y.oudjana@protonmail.com>
+ <20221005174343.24240-3-y.oudjana@protonmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221005174343.24240-3-y.oudjana@protonmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 06 Oct 2022 11:30:38 +0200:
+On Wed, 05 Oct 2022 20:43:35 +0300, Yassine Oudjana wrote:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
+> 
+> The current description mentions having to put the pin controller
+> node under a syscon node, but this is not the case in the current
+> MT6779 device tree. It seems that this is not actually needed, so
+> replace the current description with something more generic that
+> describes the use of the hardware block.
+> 
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> ---
+>  .../bindings/pinctrl/mediatek,mt6779-pinctrl.yaml          | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-6.1
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/93ed07a23fd08b8613f64cf0a15d7fbdaca010fd
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Reviewed-by: Rob Herring <robh@kernel.org>
