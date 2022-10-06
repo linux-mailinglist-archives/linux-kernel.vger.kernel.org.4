@@ -2,88 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C8E5F6E9F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BAFC5F6EA5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbiJFUG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 16:06:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53496 "EHLO
+        id S231417AbiJFUIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 16:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiJFUG5 (ORCPT
+        with ESMTP id S229990AbiJFUIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 16:06:57 -0400
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F61BCB99;
-        Thu,  6 Oct 2022 13:06:54 -0700 (PDT)
-Received: by mail-oo1-f51.google.com with SMTP id r15-20020a4abf0f000000b004761c7e6be1so2163027oop.9;
-        Thu, 06 Oct 2022 13:06:54 -0700 (PDT)
+        Thu, 6 Oct 2022 16:08:46 -0400
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC2ABF8;
+        Thu,  6 Oct 2022 13:08:44 -0700 (PDT)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-12c8312131fso3467456fac.4;
+        Thu, 06 Oct 2022 13:08:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=80q+U5/dIlTPVlYfuTJ0XFctEk9b83bIYA3FjUO6hsc=;
-        b=nq8jZIhp45ZAVOgaJEAy7ZoCeDadGBGSQ/6DRTgfGauQ9fZ7CSbomHpcO+LXzQKk9I
-         IRGpc1A24xqbDEssMfaz6f/BGdRKcQmWlRiFckShuC9/haa6Sg80d6KxiY7HZ+nPmLpm
-         d6s5vYb5NgHoiQ6lgeIpsuvzZiTZ1y+a77ybRORgvAONunhunFNB2RA4CvQZc5GzwB9V
-         B87hFMcEEDP8kFv5ZLTH+nwg0kttvlzdpKTGHYioqrA/Pw0xBo74qIq5B8Zx44p/NcDP
-         AooxK1I2iXKYptZwr7okWtrKlWGqPN4GTaX88NWnXHWXX7vzCAMSLNLqxEcFje1Kn4Tu
-         PP+A==
-X-Gm-Message-State: ACrzQf1+SgoUWuR4BVbGySKXw+bJ7huuijoSCSoQcZf31G3CerGIsLoM
-        2oGdaraDS3I2TvnzTFmRoA==
-X-Google-Smtp-Source: AMsMyM5zRHuuD+i7mKe7Be7MeoXuRrMDqrFVr5rc1SiyNZeMcIRrIrkxOCUcAkp0If3rh1/vOq8tSA==
-X-Received: by 2002:a05:6830:1e4c:b0:659:eca3:2c70 with SMTP id e12-20020a0568301e4c00b00659eca32c70mr687374otj.210.1665086813610;
-        Thu, 06 Oct 2022 13:06:53 -0700 (PDT)
+        bh=X8F5207qKWTdErH9oHBWKoYirrR+W+bJ9Qiy7Wsdnr0=;
+        b=uJYPgxs8oVM5qXhwONEblEui4r+5zag9eWQdAt4UA2vOTcvVSIdNpZGK7fmtuMvNWq
+         OTkQ/mllKVEhAkvs/ytE4pPD0jsN69OTJP3H9+F7n+lEZEbUerdU/BlRrnOD4VZhZybo
+         ZcvB/ait/VZe3fApsJNYomtkOvb6ee7zIeREbcCXInoJn3L3M5qajWnU86BrzLVdmtnA
+         sivRGgpFtYOEE4jRJv5UtfRdAYQIoVbCWwRGjvdNnbEqfjvcpcyCmPsGKW42MCcKQ5N2
+         Lr3USdFhsukuNFgq9ad9y+QpwkLpvst7Zijep0QDD9qmiL9npQhaIQV/5v2kqqUaeqxc
+         ItFg==
+X-Gm-Message-State: ACrzQf0WcS1pR8hnntn/VfVbYLfz3pX1nowKguYuFfDSfNkcrjKdIe1z
+        WNni9JIST7Ixq2iASBE2cQ==
+X-Google-Smtp-Source: AMsMyM5/X6guZDh/yiFZK1QItP5Pl1xGZJ2HG/voT2jGeJqQrE4zzY0wAuDa5/TYRIENEmIuKGO09Q==
+X-Received: by 2002:a05:6870:958b:b0:132:f094:fc99 with SMTP id k11-20020a056870958b00b00132f094fc99mr791213oao.112.1665086924183;
+        Thu, 06 Oct 2022 13:08:44 -0700 (PDT)
 Received: from robh_at_kernel.org ([2607:fb90:8a65:c536:245:842:a3a4:9017])
-        by smtp.gmail.com with ESMTPSA id g1-20020a056870c14100b0012752d3212fsm278337oad.53.2022.10.06.13.06.52
+        by smtp.gmail.com with ESMTPSA id x4-20020a056870434400b00132cf083105sm295062oah.7.2022.10.06.13.08.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 13:06:53 -0700 (PDT)
-Received: (nullmailer pid 88604 invoked by uid 1000);
-        Thu, 06 Oct 2022 20:06:52 -0000
-Date:   Thu, 6 Oct 2022 15:06:52 -0500
+        Thu, 06 Oct 2022 13:08:43 -0700 (PDT)
+Received: (nullmailer pid 90139 invoked by uid 1000);
+        Thu, 06 Oct 2022 20:08:39 -0000
+Date:   Thu, 6 Oct 2022 15:08:39 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-gpio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Subject: Re: [PATCH 4/4] dt-bindings: pinctrl: qcom,sdm630: convert to
- dtschema
-Message-ID: <166508681103.88478.10236771403142846231.robh@kernel.org>
-References: <20221006104104.171368-1-krzysztof.kozlowski@linaro.org>
- <20221006104104.171368-4-krzysztof.kozlowski@linaro.org>
+To:     Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>, dianders@chromium.org,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v7 3/4] dt-bindings: input: touchscreen: Add goodix
+ GT7986U touchscreen chip
+Message-ID: <166508689161.89649.5155955593934499402.robh@kernel.org>
+References: <20221006105823.532336-1-sheng-liang.pan@quanta.corp-partner.google.com>
+ <20221006185333.v7.3.I52e4b4b20e2eb0ae20f2a9bb198aa6410f04cf16@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221006104104.171368-4-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+In-Reply-To: <20221006185333.v7.3.I52e4b4b20e2eb0ae20f2a9bb198aa6410f04cf16@changeid>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Oct 2022 12:41:04 +0200, Krzysztof Kozlowski wrote:
-> Convert Qualcomm SDM630 and SDM660 pin controller bindings to DT schema.
-> Keep the parsing of pin configuration subnodes consistent with other
-> Qualcomm schemas (children named with '-state' suffix, their children
-> with '-pins').
+On Thu, 06 Oct 2022 18:58:22 +0800, Sheng-Liang Pan wrote:
+> Add an goodix touch screen chip GT7986U.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
 > ---
->  .../bindings/pinctrl/qcom,sdm630-pinctrl.yaml | 189 +++++++++++++++++
->  .../bindings/pinctrl/qcom,sdm660-pinctrl.txt  | 191 ------------------
->  2 files changed, 189 insertions(+), 191 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdm630-pinctrl.yaml
->  delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdm660-pinctrl.txt
+> 
+> Changes in v7:
+> - goodix gt7986 dt bindings added in v7
+> 
+>  Documentation/devicetree/bindings/input/goodix,gt7375p.yaml | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>
