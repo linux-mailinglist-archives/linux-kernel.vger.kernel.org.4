@@ -2,155 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C570E5F6B66
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 18:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8A35F6B68
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 18:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbiJFQTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 12:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
+        id S230287AbiJFQT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 12:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231415AbiJFQT3 (ORCPT
+        with ESMTP id S231460AbiJFQTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 12:19:29 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2728B48A0
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 09:19:24 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id gf8so2143418pjb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 09:19:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=6vcGCSyh/yp3xC5uIRVMFXTdQ0xt3noIJJL9jaVO1sg=;
-        b=QE3AQCSyl7woC242XO7P+dERgkeafBZ9F3zsmCqLJmcvrmgNZttdSaiJ4dMoaGtJ+X
-         WTd7v/l1hw0gNdEfTQbpPvvNXjQniznxY91XzEe3CGz4CdVhgsFGKs55j8StOhA7Y1AF
-         hNQdQEysPtPt9NLxouU0Jkck7fI5G5clOUuBY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=6vcGCSyh/yp3xC5uIRVMFXTdQ0xt3noIJJL9jaVO1sg=;
-        b=5f+W4nlMzehm/wKYLIZng58QENu6zzEJ6CjUUcpa9a5ymf4b1XfA1n2QhIsDV3uz/I
-         CKltlsXjgWqfLArM2uf6g7CPZdyi/7M4l87eVlPoYX3sUWzjjUOoKk1ISt1y6BgIOVpU
-         /Iu7m+h5PZyiYW5Zdc8WLF8Fr5I3z2l5mwt3T+DB53wUtSWg2zYIrBFxHKaKDjpYLhzj
-         TCKNuOD2baZ1yFo7deZkHwGFbYccQ7ZKqbetGasBwhTuRDNy9E4zyjP0GdwtyCZpMGPU
-         oaoPmBxjO7G3yPa8xL22e1FtLXgs5mgDoi0oZuuKNyn/ou6xWrnljCzGfmKul9FhCyYQ
-         z5EQ==
-X-Gm-Message-State: ACrzQf3Vvin07krTDFP2uGsb0ptNvY52VstoSsS8ohT3pDWq4WhemqaT
-        29VVWXCOaTyYRSfP+RFcL2iEPwWKssYZcNh7eo+0/Q==
-X-Google-Smtp-Source: AMsMyM5CP9aOlQkgIAdUuJuavCyQyZFUoy/1rQLLbWzXu4IQ8rUOqBG0DimAQLu5yLpHZ4X73ng7oEKd1LiUvV3fITE=
-X-Received: by 2002:a17:902:8542:b0:179:eb8d:f41d with SMTP id
- d2-20020a170902854200b00179eb8df41dmr247725plo.62.1665073163603; Thu, 06 Oct
- 2022 09:19:23 -0700 (PDT)
+        Thu, 6 Oct 2022 12:19:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B47BA440;
+        Thu,  6 Oct 2022 09:19:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DF7561A25;
+        Thu,  6 Oct 2022 16:19:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71B92C43470;
+        Thu,  6 Oct 2022 16:19:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665073189;
+        bh=Pld45Z4CvZ++lrOaJAma6PphMOkb0rHF45RNmYeXg10=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UldnsAG4GNAIf3bSaBgda3uTevViDMdSSwclyZxwkqmgQnRVyLusdJP9LFmQjQgPL
+         6dc2ARIw+4qhmVft10VEiQxS4WjjjpS7eEdNFITa2Y6weVWFQlwfltXCOjB5Kx/X2D
+         lNCiuw7/chMSMBwwCq+u8niyobby8oFZDrFVytzozRs2abSVgosb+OAmKyke28YcFF
+         S/hQ8y6GdVTIkkj9pEuuUsSbei47zrqjuab0cZohdZJyVU9QpAWJihH8FJXDc4z8+D
+         5YQLd5f8HOyxE8/tgmNcxoN8SeberFpSx9nWGH5SEg7UN+Rgca1fyH/dCzviVQ1nqd
+         Sc2XcdsSjVHjA==
+Received: by mail-lf1-f48.google.com with SMTP id g1so3433925lfu.12;
+        Thu, 06 Oct 2022 09:19:49 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2iEmW3FcbOhksFQvwkvmpODRunECi9rU/gD5sp8X7otIgh8VFC
+        fKmAKWJVQ/7hv1KomfdWKB8SLoActW1+GYIPhUk=
+X-Google-Smtp-Source: AMsMyM45oIBVZ07KF4ltMC+pidQt3Gbgah5PxR0JOD8znHmV8tQ+3YrjKDTYs/dwhYptFQFjBeeEIiXK8BPuXFstRGo=
+X-Received: by 2002:ac2:4d1c:0:b0:4a2:4119:f647 with SMTP id
+ r28-20020ac24d1c000000b004a24119f647mr270568lfi.426.1665073187373; Thu, 06
+ Oct 2022 09:19:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220913162732.163631-1-xukuohai@huaweicloud.com>
- <f1e14934-dc54-9bf7-501a-89affdb7371e@iogearbox.net> <YzG51Jyd5zhvygtK@arm.com>
- <YzHk1zRf1Dp8YTEe@FVFF77S0Q05N> <970a25e4-9b79-9e0c-b338-ed1a934f2770@huawei.com>
- <YzR5WSLux4mmFIXg@FVFF77S0Q05N> <2cb606b4-aa8b-e259-cdfd-1bfc61fd7c44@huawei.com>
- <CABRcYmKPchvtkkgWhOJ6o3pHVqTWeenGawHfZ2ug8Akdh6NfnQ@mail.gmail.com>
- <7f34d333-3b2a-aea5-f411-d53be2c46eee@huawei.com> <20221005110707.55bd9354@gandalf.local.home>
- <CABRcYmJGY6fp0CtUBYN8BjEDN=r42BPLSBcrxqu491bTRmfm7g@mail.gmail.com> <20221005113019.18aeda76@gandalf.local.home>
-In-Reply-To: <20221005113019.18aeda76@gandalf.local.home>
-From:   Florent Revest <revest@chromium.org>
-Date:   Thu, 6 Oct 2022 18:19:12 +0200
-Message-ID: <CABRcYmL0bDkgYP3tSwhZYaGUSbsUR3Gq85QCRiUAdXt65czzmg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/4] Add ftrace direct call for arm64
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Xu Kuohai <xukuohai@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Xu Kuohai <xukuohai@huaweicloud.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
+References: <YzcjeiOW8+i2Zxsd@itl-email> <CAMj1kXHBBbCNV3CLesqZi7ttmmi8y4tZ1KO5vievy_CJrU2o3Q@mail.gmail.com>
+ <YzeaKjmls1YI/3ox@itl-email> <01d22092-8292-8ed7-ece7-9ca32d15bbce@suse.com>
+ <YzxxXuovwQt3NskE@itl-email> <a0dc1158-01b1-4272-b86e-52f4996f0747@suse.com>
+ <Yz3I2qwl243h9ZfZ@itl-email> <CAMj1kXHFi71SKQAQHEjZTLyp-YooRTYZ2-nqydRZA5hys7tkKw@mail.gmail.com>
+ <Yz4yLyvX6un1rrqC@itl-email> <CAMj1kXFO9_yMw=_Fn2DBGgdYXgiK_OqafG5+TbJv1UKO1uQiJQ@mail.gmail.com>
+ <Yz7polT2R2OlT1aT@itl-email>
+In-Reply-To: <Yz7polT2R2OlT1aT@itl-email>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 6 Oct 2022 18:19:35 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGe77iwnYXWR=Hjn8eL8-1hMZbprjU8bnYaFWJnRZfdfw@mail.gmail.com>
+Message-ID: <CAMj1kXGe77iwnYXWR=Hjn8eL8-1hMZbprjU8bnYaFWJnRZfdfw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] Avoid using EFI tables Xen may have clobbered
+To:     Demi Marie Obenour <demi@invisiblethingslab.com>
+Cc:     Jan Beulich <jbeulich@suse.com>, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 5, 2022 at 5:30 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+On Thu, 6 Oct 2022 at 16:43, Demi Marie Obenour
+<demi@invisiblethingslab.com> wrote:
 >
-> On Wed, 5 Oct 2022 17:10:33 +0200
-> Florent Revest <revest@chromium.org> wrote:
->
-> > On Wed, Oct 5, 2022 at 5:07 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+> On Thu, Oct 06, 2022 at 09:31:47AM +0200, Ard Biesheuvel wrote:
+> > On Thu, 6 Oct 2022 at 03:41, Demi Marie Obenour
+> > <demi@invisiblethingslab.com> wrote:
 > > >
-> > > Can you show the implementation of the indirect call you used?
+> > > On Wed, Oct 05, 2022 at 11:28:29PM +0200, Ard Biesheuvel wrote:
+> > > > On Wed, 5 Oct 2022 at 20:11, Demi Marie Obenour
+> > > > <demi@invisiblethingslab.com> wrote:
+> > > > >
+> > > > > On Wed, Oct 05, 2022 at 08:15:07AM +0200, Jan Beulich wrote:
+> > > > > > On 04.10.2022 17:46, Demi Marie Obenour wrote:
+> > > > > > > Linux has a function called efi_mem_reserve() that is used to reserve
+> > > > > > > EfiBootServicesData memory that contains e.g. EFI configuration tables.
+> > > > > > > This function does not work under Xen because Xen could have already
+> > > > > > > clobbered the memory.  efi_mem_reserve() not working is the whole reason
+> > > > > > > for this thread, as it prevents EFI tables that are in
+> > > > > > > EfiBootServicesData from being used under Xen.
+> > > > > > >
+> > > > > > > A much nicer approach would be for Xen to reserve boot services memory
+> > > > > > > unconditionally, but provide a hypercall that dom0 could used to free
+> > > > > > > the parts of EfiBootServicesData memory that are no longer needed.  This
+> > > > > > > would allow efi_mem_reserve() to work normally.
+> > > > > >
+> > > > > > efi_mem_reserve() actually working would be a layering violation;
+> > > > > > controlling the EFI memory map is entirely Xen's job.
+> > > > >
+> > > > > Doing this properly would require Xen to understand all of the EFI
+> > > > > tables that could validly be in EfiBootServices* and which could be of
+> > > > > interest to dom0.  It might (at least on some very buggy firmware)
+> > > > > require a partial ACPI and/or SMBIOS implementation too, if the firmware
+> > > > > decided to put an ACPI or SMBIOS table in EfiBootServices*.
+> > > > >
+> > > > > > As to the hypercall you suggest - I wouldn't mind its addition, but only
+> > > > > > for the case when -mapbs is used. As I've indicated before, I'm of the
+> > > > > > opinion that default behavior should be matching the intentions of the
+> > > > > > spec, and the intention of EfiBootServices* is for the space to be
+> > > > > > reclaimed. Plus I'm sure you realize there's a caveat with Dom0 using
+> > > > > > that hypercall: It might use it for regions where data lives which it
+> > > > > > wouldn't care about itself, but which an eventual kexec-ed (or alike)
+> > > > > > entity would later want to consume. Code/data potentially usable by
+> > > > > > _anyone_ between two resets of the system cannot legitimately be freed
+> > > > > > (and hence imo is wrong to live in EfiBootServices* regions).
+> > > > >
+> > > > > I agree, but currently some such data *is* in EfiBootServices* regions,
+> > > > > sadly.  When -mapbs is *not* used, I recommend uninstalling all of the
+> > > > > configuration tables that point to EfiBootServicesData memory before
+> > > > > freeing that memory.
+> > > > >
+> > > >
+> > > > That seems like a reasonable approach to me. Tables like MEMATTR or
+> > > > RT_PROP are mostly relevant for bare metal where the host kernel maps
+> > > > the runtime services, and in general, passing on these tables without
+> > > > knowing what they do is kind of fishy anyway. You might even argue
+> > > > that only known table types should be forwarded in the first place,
+> > > > regardless of the memory type.
+> > >
+> > > Which tables are worth handling in Xen?  I know about ACPI, SMBIOS, and
+> > > ESRT, but I am curious which others Xen should preserve.  Currently, Xen
+> > > does not know about RT_PROP or MEMATTR; could this be a cause of
+> > > problems?
 > >
-> > Xu used my development branch here
-> > https://github.com/FlorentRevest/linux/commits/fprobe-min-args
+> > dom0 only has access to paravirtualized EFI runtime services, so
+> > consuming RT_PROP or MEMATTR should be up to Xen (they describe which
+> > runtime services remain available at runtime, and which permission
+> > attributes to use for the runtime services memory regions,
+> > respectively)
 >
-> That looks like it could be optimized quite a bit too.
+> Xen does not do this right now.  I wonder if this could be the cause of
+> compatibility issues with various firmware implementations.
 >
-> Specifically this part:
+> > Looking through the kernel code, I don't think there are any that dom0
+> > should care about beyond ACPI, SMBIOS and ESRT. But as you suggest,
+> > that means Xen should just mask them in the view of the EFI system
+> > table it exposes so dom0. Otherwise, the kernel may still try to map
+> > and parse them.
 >
-> static bool bpf_fprobe_entry(struct fprobe *fp, unsigned long ip, struct ftrace_regs *regs, void *private)
-> {
->         struct bpf_fprobe_call_context *call_ctx = private;
->         struct bpf_fprobe_context *fprobe_ctx = fp->ops.private;
->         struct bpf_tramp_links *links = fprobe_ctx->links;
->         struct bpf_tramp_links *fentry = &links[BPF_TRAMP_FENTRY];
->         struct bpf_tramp_links *fmod_ret = &links[BPF_TRAMP_MODIFY_RETURN];
->         struct bpf_tramp_links *fexit = &links[BPF_TRAMP_FEXIT];
->         int i, ret;
->
->         memset(&call_ctx->ctx, 0, sizeof(call_ctx->ctx));
->         call_ctx->ip = ip;
->         for (i = 0; i < fprobe_ctx->nr_args; i++)
->                 call_ctx->args[i] = ftrace_regs_get_argument(regs, i);
->
->         for (i = 0; i < fentry->nr_links; i++)
->                 call_bpf_prog(fentry->links[i], &call_ctx->ctx, call_ctx->args);
->
->         call_ctx->args[fprobe_ctx->nr_args] = 0;
->         for (i = 0; i < fmod_ret->nr_links; i++) {
->                 ret = call_bpf_prog(fmod_ret->links[i], &call_ctx->ctx,
->                                       call_ctx->args);
->
->                 if (ret) {
->                         ftrace_regs_set_return_value(regs, ret);
->                         ftrace_override_function_with_return(regs);
->
->                         bpf_fprobe_exit(fp, ip, regs, private);
->                         return false;
->                 }
->         }
->
->         return fexit->nr_links;
-> }
->
-> There's a lot of low hanging fruit to speed up there. I wouldn't be too
-> fast to throw out this solution if it hasn't had the care that direct calls
-> have had to speed that up.
->
-> For example, trampolines currently only allow to attach to functions with 6
-> parameters or less (3 on x86_32). You could make 7 specific callbacks, with
-> zero to 6 parameters, and unroll the argument loop.
+> What about the BGRT and MOKvar?  I agree that Xen should not expose the
+> others.  Should it just hide the tables, or should it actually uninstall
+> them?  My intuition is that the second would be technically more
+> correct, but also more likely to trigger bugs in various firmware
+> implementations.
 
-Sure, we can give this a try, I'll work on a macro that generates the
-7 callbacks and we can check how much that helps. My belief right now
-is that ftrace's iteration over all ops on arm64 is where we lose most
-time but now that we have numbers it's pretty easy to check hypothesis
-:)
+BGRT is a ACPI table not a EFI configuration table, so I'd assume it
+is treated the same way as other ACPI tables
+
+MOKvar is a fallback for systems where it doesn't fit into a volatile
+variable IIRC but I am not sure if it is actually implemented
+anywhere, and what type of memory region it is expected to use.
+
+However, I'm not sure if it even matters, given that Xen loads the
+dom0 kernel not the firmware, right?
