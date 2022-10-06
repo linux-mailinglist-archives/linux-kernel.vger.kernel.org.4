@@ -2,130 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3465F6848
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B705F6846
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbiJFNge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 09:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56096 "EHLO
+        id S231470AbiJFNg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 09:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbiJFNga (ORCPT
+        with ESMTP id S230255AbiJFNg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 09:36:30 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B216AA3DC;
-        Thu,  6 Oct 2022 06:36:29 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id g130so1995703oia.13;
-        Thu, 06 Oct 2022 06:36:29 -0700 (PDT)
+        Thu, 6 Oct 2022 09:36:26 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9643A99DE
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 06:36:24 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id y100so2850703ede.6
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 06:36:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BLXPxZYLJ33P9YRMaUqNWZNwY4Oz87dKOXcoOCv55Dg=;
-        b=G6T5Ttl7ZNwdME1gCPM3OZFNsthHEgOaB8eD2GTkklD6FlejW3OrrxlKV03ChVvYhL
-         Z4gBrDiQgKlEBToHoruFEgVEekBmlWPKMK7qlVZUkT/WiJTS/yzPzbGOlfb7yQCp7IAg
-         igEs37GHNFfjHUTE+x1+y63HhmSapFeiDt52jef8CPPz6E3ymYY/8LJ00K74+0hgw5Vr
-         2gDXQ9DcPKyTSTsuqzg0KqQm5qkWyaRaoYI7/65QKjtsH+KDZU+1ML9dgqK8D8xLBS4B
-         s9EIz84/KJVn4RqfaX6LE2TftEWWmkWwehTqNZknVoRE3KMnuI9zMrCqGbI5Q68VoLoB
-         jjYA==
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=0UfzhzFU90rUX1Zui/jkz3o75f5mI9Z9O0OKWUMBplQ=;
+        b=kLFfxeludzLzIaDOjssv83UlUa6NwmAXruQHUbh2cWE3MCcDBNocLfnlW04y0Uc334
+         EwOsQciNnARNDGu25LPXuTA7liiU9/SLLrg7I+r1nKHdcyyX8hU21KbRMY3kFfiPUPnJ
+         xTSQW/ry8qRSkPlZV3aGQ2cuKb6oSc1rorG2VLmIdIRfsaIxZjQBHgifXfosK1OLA3Qv
+         SIQuyrx8qTTLNJtAzRSLCfrpDrG+3xOD4ghayD3mdf6UFOpkEjX+0WvhjBivc6X+zVAt
+         JlweQb05TLiKGZM+THm0ZmdJvcGSbgMryHJX2LHf4p46utaGAc8WhnmSKJDIjKzGhFhI
+         rjKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BLXPxZYLJ33P9YRMaUqNWZNwY4Oz87dKOXcoOCv55Dg=;
-        b=uS8XDrxeRwBLl4KwCA577TKFbGCtE/LLtniGUwTiP7xx59ih89qBR+h9tuor/EoFkc
-         WjsV0X8LRIufxF0GH3O3SF1qV5j7GEtbCn2S6OHOLoSjtb8gNFNmAYnvMGv53ifCUEqY
-         5q1mwBT+KFWeBkaCET9qvcFMwwI4oVGI87JH4/VSyvvglhP7v1pE+VQkTddqH+6DUmxx
-         iGDz7RCht/RQV1gQbFy71BPipzrRgIXhFbFYPHeHF0J2XJscBoVYFArSeuWh8HAAgy5A
-         FLmGokATCDZYt2aRRegh2UkdaF/TYXGBeumsrAP1fZZ2nprQ0FG7qM2ILvcQFhATXJ+3
-         1Oyg==
-X-Gm-Message-State: ACrzQf1bJnCLrBhizgfWtUOONvbUBsXlCSqKCKV1sfIO02Y0yb+VZ1sB
-        xs4VpvZsvr0N/mIMxIC0RwI=
-X-Google-Smtp-Source: AMsMyM6EcixukxWzrQaXpJrqPqXt8odO87pvfGMhLYfHTuTZf/jO9L9z8/0mEIJS621E1vrjhwkKnA==
-X-Received: by 2002:a05:6808:3010:b0:351:4ed2:cb27 with SMTP id ay16-20020a056808301000b003514ed2cb27mr5007872oib.109.1665063388339;
-        Thu, 06 Oct 2022 06:36:28 -0700 (PDT)
-Received: from localhost.localdomain ([177.222.37.214])
-        by smtp.googlemail.com with ESMTPSA id l6-20020a056871068600b0011e37fb5493sm7051167oao.30.2022.10.06.06.36.26
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=0UfzhzFU90rUX1Zui/jkz3o75f5mI9Z9O0OKWUMBplQ=;
+        b=n1QyaRwN5aFV4Hh4NwP10rVTPZ7KfdlWMvNevoOPuoHGxb2e+utUSB6HRwjjYIQ3KK
+         SvvQxRDZG8sntbN4NRPgsxgf3QdjaIULZ5pUtkUosVn5lIbu2AjQd4MT0jja7+xBahG7
+         2kFT4mrA1gyzT3hGKyk6WdngrpR6SbDBdUHvuvmJT3WZghTzhA7VRP5hgm9RnWggSBRV
+         W+qk5ggcAolZdnwVeIvSApAAIKNo0b2FnfJgJy69nXizT/K5q6WKWGW7bmUSsBB2qmUk
+         IOsiSSC2k6p1xbIsIbw9+vic1LECKLfqLLzzP6qktoyMU04O2uLVadrsC/JzEollYTEj
+         dmmQ==
+X-Gm-Message-State: ACrzQf2JgxMqIcn+eCwmitE5SXv2IGVZlcjjP0TBTTrYhpHeHZkcIAEb
+        ahYLXUPanUAxq5qXc2a8YIAIoQ==
+X-Google-Smtp-Source: AMsMyM6+xhVtakhKWGU9SGpwhFNpt47nCQGSZGLsdYYQsMxXm0m3+WMbSh3KS1KsDrtAiU81a23ijQ==
+X-Received: by 2002:aa7:c314:0:b0:458:dc90:467a with SMTP id l20-20020aa7c314000000b00458dc90467amr4598176edq.284.1665063383412;
+        Thu, 06 Oct 2022 06:36:23 -0700 (PDT)
+Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
+        by smtp.gmail.com with ESMTPSA id g23-20020a056402181700b004591e6f7f47sm5838159edy.42.2022.10.06.06.36.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 06:36:27 -0700 (PDT)
-From:   Henry Castro <hcvcastro@gmail.com>
-To:     thunderbird2k@gmail.com
-Cc:     Henry Castro <hcvcastro@gmail.com>, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] drivers: hid: adjust gyro calibration data
-Date:   Thu,  6 Oct 2022 09:36:08 -0400
-Message-Id: <20221006133609.3839-1-hcvcastro@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <CAEc3jaDLE1_+cCdL0nwUq-TPzBhoPmukGs527TokNN=iwqO5Hw@mail.gmail.com>
-References: <CAEc3jaDLE1_+cCdL0nwUq-TPzBhoPmukGs527TokNN=iwqO5Hw@mail.gmail.com>
+        Thu, 06 Oct 2022 06:36:23 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 15:36:22 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/8] riscv: introduce riscv_has_extension_[un]likely()
+Message-ID: <20221006133622.xnruzidkrphgxa7d@kamzik>
+References: <20221006070818.3616-1-jszhang@kernel.org>
+ <20221006070818.3616-6-jszhang@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221006070818.3616-6-jszhang@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For some reason my DualShock 4 get the calibration
-data values equal:
+On Thu, Oct 06, 2022 at 03:08:15PM +0800, Jisheng Zhang wrote:
+> Generally, riscv ISA extensions are fixed for any specific hardware
+> platform, that's to say, the hart features won't change any more
+> after booting, this chacteristic make it straightforward to use
+> static branch to check one specific ISA extension is supported or not
+> to optimize performance.
+> 
+> However, some ISA extensions such as SVPBMT and ZICBOM are handled
+> via. the alternative sequences.
+> 
+> Basically, for ease of maintenance, we prefer to use static branches
+> in C code, but recently, Samuel found that the static branch usage in
+> cpu_relax() breaks building with CONFIG_CC_OPTIMIZE_FOR_SIZE[1]. As
+> Samuel pointed out, "Having a static branch in cpu_relax() is
+> problematic because that function is widely inlined, including in some
+> quite complex functions like in the VDSO. A quick measurement shows
+> this static branch is responsible by itself for around 40% of the jump
+> table."
+> 
+> Samuel's findings pointed out one of a few downsides of static branches
+> usage in C code to handle ISA extensions detected at boot time:
+> static branch's metadata in the __jump_table section, which is not
+> discarded after ISA extensions are finalized, wastes some space.
+> 
+> I want to try to solve the issue for all possible dynamic handling of
+> ISA extensions at boot time. Inspired by Mark[2], this patch introduces
+> riscv_has_extension_*() helpers, which work like static branches but
+> are patched using alternatives, thus the metadata can be freed after
+> patching.
+> 
+> [1]https://lore.kernel.org/linux-riscv/20220922060958.44203-1-samuel@sholland.org/
+> [2]https://lore.kernel.org/linux-arm-kernel/20220912162210.3626215-8-mark.rutland@arm.com/
+> 
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  arch/riscv/include/asm/hwcap.h | 37 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+> 
+> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> index 6cf445653911..54b88ee6cae1 100644
+> --- a/arch/riscv/include/asm/hwcap.h
+> +++ b/arch/riscv/include/asm/hwcap.h
+> @@ -8,6 +8,7 @@
+>  #ifndef _ASM_RISCV_HWCAP_H
+>  #define _ASM_RISCV_HWCAP_H
+>  
+> +#include <asm/alternative-macros.h>
+>  #include <asm/errno.h>
+>  #include <linux/bits.h>
+>  #include <uapi/asm/hwcap.h>
+> @@ -96,6 +97,42 @@ static __always_inline int riscv_isa_ext2key(int num)
+>  	}
+>  }
+>  
+> +static __always_inline bool
+> +riscv_has_extension_likely(const unsigned long ext)
+> +{
+> +	compiletime_assert(ext < RISCV_ISA_EXT_ID_MAX,
+> +			   "ext must be < RISCV_ISA_EXT_ID_MAX");
+> +
+> +	asm_volatile_goto(
+> +	ALTERNATIVE("j	%l[l_no]", "nop", 0, %[ext], 1)
+> +	:
+> +	: [ext] "i" (ext)
+> +	:
+> +	: l_no);
+> +
+> +	return true;
+> +l_no:
+> +	return false;
+> +}
+> +
+> +static __always_inline bool
+> +riscv_has_extension_unlikely(const unsigned long ext)
+> +{
+> +	compiletime_assert(ext < RISCV_ISA_EXT_ID_MAX,
+> +			   "ext must be < RISCV_ISA_EXT_ID_MAX");
+> +
+> +	asm_volatile_goto(
+> +	ALTERNATIVE("nop", "j	%l[l_yes]", 0, %[ext], 1)
+> +	:
+> +	: [ext] "i" (ext)
+> +	:
+> +	: l_yes);
+> +
+> +	return false;
+> +l_yes:
+> +	return true;
+> +}
+> +
+>  unsigned long riscv_isa_extension_base(const unsigned long *isa_bitmap);
+>  
+>  #define riscv_isa_extension_mask(ext) BIT_MASK(RISCV_ISA_EXT_##ext)
+> -- 
+> 2.37.2
+>
 
-	gyro_pitch_plus == gyro_pitch_minus
+Cheers to Mark for this nifty idea and to you for bringing it to riscv.
 
-Probably due to some defect in the DS4 hardware, and cause
-a CPU division exception to crash the linux kernel.
-
-At least with the patch, I can continue play Retroarch
-without using the Gyroscope :)
-
-Signed-off-by: Henry Castro <hcvcastro@gmail.com>
----
-
->> Hm, I'm not the biggest fan. Is this an official DS4 or a clone
->> device? It sounds like it is some type of clone (some look real).
-
-Sorry it happens in my DS4 clone:
-
-I have the log values:
-
-gyro_pitch_plus = 8704
-giro_pitch_minus = 8704
-
-Then the division exception:
-
-mult_frac(x, y, 0)
-
-
-
- drivers/hid/hid-sony.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/drivers/hid/hid-sony.c b/drivers/hid/hid-sony.c
-index 87b538656f64..656caa07b25f 100644
---- a/drivers/hid/hid-sony.c
-+++ b/drivers/hid/hid-sony.c
-@@ -1823,6 +1823,15 @@ static int dualshock4_get_calibration_data(struct sony_sc *sc)
- 	acc_z_plus       = get_unaligned_le16(&buf[31]);
- 	acc_z_minus      = get_unaligned_le16(&buf[33]);
-
-+	if (gyro_pitch_plus == gyro_pitch_minus)
-+		gyro_pitch_minus *= -1;
-+
-+	if (gyro_yaw_plus == gyro_yaw_minus)
-+		gyro_yaw_minus *= -1;
-+
-+	if (gyro_roll_plus == gyro_roll_minus)
-+		gyro_roll_minus *= -1;
-+
- 	/* Set gyroscope calibration and normalization parameters.
- 	 * Data values will be normalized to 1/DS4_GYRO_RES_PER_DEG_S degree/s.
- 	 */
---
-2.20.1
-
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
