@@ -2,143 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4855F696C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E75515F6969
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231710AbiJFOPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 10:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42930 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231970AbiJFOPM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230057AbiJFOPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 6 Oct 2022 10:15:12 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F0CBCB2
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 07:12:47 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id r14so2922848lfm.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 07:12:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=n77JB3v5NQQWYXMjQE9mQos/CzAUaBxNKKkh7H62z+s=;
-        b=LErqkYQ3SKuNYCFFC05liT3/69AynMf1KtPpKCZaBCGgTDRYRpQMD+PACtiHdUHNVI
-         CvL7H/8TXvtFKsOimAKz9j64XVLhx++47eDDb4XoEJHNRQ4A1yei0XH+pHhZ/nuCbToP
-         QnT6vhg+DQWa0u+MCmqLMJX7KlspTevR+QOJ/exQD7s+yqOU9jDMeonj0iIrBJ7dF6GK
-         +XDbYeLQ9pUwvE+s97XqKmB3SsHEs5se1x5e6mSZGwuKp5/UvT+ejwzFzCpZXHUi4IEM
-         rciTiYPNX+VBCe04KFWxwdPqiRhlwgi0aD3xSse+ZGkoUdleRcyiWu60qAEtHCBiWSAN
-         9ldQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=n77JB3v5NQQWYXMjQE9mQos/CzAUaBxNKKkh7H62z+s=;
-        b=6M2ZmM9mXw5XjdxikbLIemFoC8RTuzOBKJWXZuepj9KUoyef8wRr5dOGzyPH+j/F1U
-         hucCC84JuIFxwkiUV+QDODqQ6ePWG2/J1kk/AhiKxa28zJowV2Bn+FvU/SIlaZXUZ/3w
-         YS+cQ8+BJ5yKa4Qg38PFG3tfAg9G1k529zp2XSvEKZMSmRFa26nwNLAr4+Ihsy1KMW+g
-         7g1ukHkuImJQB0a2MsZGNFMoDlsqD1pUT9HmNyq83KC6qU2UHryfHW6csUtfSkGVqsBM
-         /17TgCsHoA8+Lnoc3xZWhNylQpDmirlmNNBCvUylnD6ZFqcR+LnlE2kOz5xeS560G8CI
-         s+gA==
-X-Gm-Message-State: ACrzQf0It+eSvKZp0C7l3mk4a4/kQlkYlXB1okM4Qk61wcdHKefc3g4g
-        ToqjNThcaPGnTcy1qjlfUiIetg==
-X-Google-Smtp-Source: AMsMyM4ylZPoyJycfqTxZLE/wBpDPIPW+NjZKnv18zVYR3Uj+em69HKE9roVPotUhNN1V5zutAzBpw==
-X-Received: by 2002:a05:6512:261c:b0:49f:af36:d47 with SMTP id bt28-20020a056512261c00b0049faf360d47mr65017lfb.284.1665065502063;
-        Thu, 06 Oct 2022 07:11:42 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id be25-20020a05651c171900b0026c1cbbf461sm1922973ljb.80.2022.10.06.07.11.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Oct 2022 07:11:40 -0700 (PDT)
-Message-ID: <7bcb9ef1-6b56-2f5f-3ac9-acc9ed9370df@linaro.org>
-Date:   Thu, 6 Oct 2022 16:11:39 +0200
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232399AbiJFOOp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Oct 2022 10:14:45 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2257125EE;
+        Thu,  6 Oct 2022 07:12:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665065545; x=1696601545;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=M/d+8Ye9ckZlA4mM2GLYA6fMAWkJIf5vhmZPmWG1h1A=;
+  b=KefSfVkhc7qeb8U1+vUU9yHQF1RZqH5HVpJVEuX18wnu1zMwRGCOF1fq
+   1TTKODF4TbH7SUO5zwF/NqmkYIVL7tx0E1RKc8ba7POSSv4oNnepL0Lx7
+   nP6Z9ij56bf6P1Q4QTc5G6EiOuRMV/NKgCygXkKsnZJeLmxE5yeoFfI+y
+   U4fEuucHUYCAWnfy+MGvhhOAYNYD/iGlVjQVE7f5FJhswR+hpnBiFZyAW
+   GKFV1w3pkjztzNXCjfEUEOyu2OidJCO0w8rGihEesahXtwj0gkOXhary9
+   XRE5d+LXfl6rkvLA33qHE/+6aEpBJxC7RaUGB39L7CoKZ8Y9HlCF/zJJB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="329879453"
+X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
+   d="scan'208";a="329879453"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 07:07:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="627026853"
+X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
+   d="scan'208";a="627026853"
+Received: from liuzhao-optiplex-7080.sh.intel.com (HELO localhost) ([10.239.160.132])
+  by fmsmga007.fm.intel.com with ESMTP; 06 Oct 2022 07:07:44 -0700
+Date:   Thu, 6 Oct 2022 22:13:13 +0800
+From:   Zhao Liu <zhao1.liu@linux.intel.com>
+To:     Ira Weiny <ira.weiny@intel.com>,
+        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
+        Wei Liu <wei.liu@kernel.org>
+Cc:     "K . Y . Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Zhenyu Wang <zhenyu.z.wang@intel.com>,
+        Zhao Liu <zhao1.liu@intel.com>
+Subject: Re: [PATCH] x86/hyperv: Replace kmap() with kmap_local_page()
+Message-ID: <Yz7ieVurWBnNH7da@liuzhao-OptiPlex-7080>
+References: <20220928095640.626350-1-zhao1.liu@linux.intel.com>
+ <21632541.EfDdHjke4D@localhost.localdomain>
+ <YztFEyUA48et0yTt@iweiny-mobl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 1/2] spi: dt-bindings: amlogic, meson-gx-spicc: Add
- pinctrl names for SPI signal states
-Content-Language: en-US
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Da Xue <da@libre.computer>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20221004-up-aml-fix-spi-v2-0-3e8ae91a1925@baylibre.com>
- <20221004-up-aml-fix-spi-v2-1-3e8ae91a1925@baylibre.com>
- <d2ce98d7-1025-9c6e-e207-00e91942077a@linaro.org>
- <fb2706e3-f758-a0b0-d595-75ef362a853e@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <fb2706e3-f758-a0b0-d595-75ef362a853e@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YztFEyUA48et0yTt@iweiny-mobl>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/10/2022 12:57, Amjad Ouled-Ameur wrote:
-> Hi Krzysztof,
+On Mon, Oct 03, 2022 at 01:24:51PM -0700, Ira Weiny wrote:
+> Date: Mon, 3 Oct 2022 13:24:51 -0700
+> From: Ira Weiny <ira.weiny@intel.com>
+> Subject: Re: [PATCH] x86/hyperv: Replace kmap() with kmap_local_page()
 > 
-> Thank you for the review.
+> On Mon, Oct 03, 2022 at 07:43:49PM +0200, Fabio M. De Francesco wrote:
+> > On Wednesday, September 28, 2022 11:56:40 AM CEST Zhao Liu wrote:
+> > > From: Zhao Liu <zhao1.liu@intel.com>
+> > > 
+> > > kmap() is being deprecated in favor of kmap_local_page()[1].
+> > > 
+> > > There are two main problems with kmap(): (1) It comes with an overhead as
+> > > mapping space is restricted and protected by a global lock for
+> > > synchronization and (2) it also requires global TLB invalidation when the
+> > > kmap's pool wraps and it might block when the mapping space is fully
+> > > utilized until a slot becomes available.
+> > > 
+> > > With kmap_local_page() the mappings are per thread, CPU local, can take
+> > > page faults, and can be called from any context (including interrupts).
+> > > It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+> > > the tasks can be preempted and, when they are scheduled to run again, the
+> > > kernel virtual addresses are restored and are still valid.
+> > > 
+> > > In the fuction hyperv_init() of hyperv/hv_init.c, the mapping is used in a
+> > > single thread and is short live. So, in this case, it's safe to simply use
+> > > kmap_local_page() to create mapping, and this avoids the wasted cost of
+> > > kmap() for global synchronization.
+> > > 
+> > > In addtion, the fuction hyperv_init() checks if kmap() fails by BUG_ON().
+> > > From the original discussion[2], the BUG_ON() here is just used to
+> > > explicitly panic NULL pointer. So still keep the BUG_ON() in place to check
+> > > if kmap_local_page() fails. 
+> > 
+> > How might kmap_local_page() return invalid kernel addresses? 
+> > 
+> > I think that, if this function returns, the pointer is always a valid kernel 
+> > address. Am I missing something?
 > 
-> On 10/5/22 10:14, Krzysztof Kozlowski wrote:
->> On 04/10/2022 13:10, Amjad Ouled-Ameur wrote:
->>> SPI pins of the SPICC Controller in Meson-GX needs to be controlled by
->>> pin biais when idle. Therefore define three pinctrl names:
->>> - default: SPI pins are controlled by spi function.
->>> - idle-high: SCLK pin is pulled-up, but MOSI/MISO are still controlled
->>> by spi function.
->>> - idle-low: SCLK pin is pulled-down, but MOSI/MISO are still controlled
->>> by spi function.
->>>
->>> Reported-by: Da Xue <da@libre.computer>
->>> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
->>> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
->>> ---
->>>   .../devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml   | 15 +++++++++++++++
->>>   1 file changed, 15 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
->>> index 0c10f7678178..53013e27f507 100644
->>> --- a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
->>> +++ b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
->>> @@ -43,6 +43,14 @@ properties:
->>>       minItems: 1
->>>       maxItems: 2
->>>   
->>> +  pinctrl-0:
->>> +    minItems: 1
->> maxItems?
->>
-> Will fill it in next version.
->>> +
->>> +  pinctrl-1:
->>> +    maxItems: 1
->>> +
->>> +  pinctrl-names: true
->> Why do you need all these in the bindings?
-> 
-> SPI clock bias needs to change at runtime depending on SPI mode, here is an example of
-> 
-> how this is supposed to be used ("spi_idle_low_pins" and "spi_idle_low_pins" are defined
-> 
-> in the second patch of this series):
+> I think this is my mistake.  I did not realize what Zhao was asking me the
+> other day and generally said to leave BUG_ON's alone and not change things.
 
-I know what it the point in general of pinctrl configuration... But the
-question is why do you need to specify them in the bindings? Core
-handles that. IOW, do you require them and missing/incomplete pinctrl
-should be reported?
+Thanks Fabio and Ira! This is my negligence, my consideration is still not
+thorough enough. I'll remove this BUG_ON().
 
-Best regards,
-Krzysztof
-
+> 
+> In this case kmap_local_page() will not return NULL.  It will BUG on its own if
+> it fails.
+> 
+> > 
+> > > Based on this consideration, memcpy_to_page()
+> > > is not selected here but only kmap_local_page() is used.
+> > 
+> > I can't agree with you, if the premises are that kmap_local_page() might 
+> > provide invalid addresses.
+>  
+> I'm ok with the patch as is.  But Fabio is correct and it may be worth removing
+> the check in a follow on patch.
+> Ira
+> 
+> > Thanks,
+> > 
+> > Fabio
+> > 
+> > > Therefore, replace kmap() with kmap_local_page() in hyperv/hv_init.c.
+> > > 
+> > > [1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com
+> > > [2]: https://lore.kernel.org/lkml/20200915103710.cqmdvzh5lys4wsqo@liuwe-devbox-debian-v2/
+> > > 
+> > > Suggested-by: Dave Hansen <dave.hansen@intel.com>
+> > > Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> > > Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > > Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
+> > > 
+> > > ---
+> > > Suggested by credits.
+> > > 	Dave: Referred to his comments about whether kmap() can fail and 
+> > the
+> > > 	      suggestion to keep BUG_ON() in place.
+> > > 	Ira: Referred to his task documentation and review comments about
+> > > 	     keeping BUG_ON() for kmap_local_page().
+> > > 	Fabio: Stole some of his boiler plate commit message.
+> > > ---
+> > >  arch/x86/hyperv/hv_init.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > 
+> > 
+> > 
