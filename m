@@ -2,187 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1475F65B2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A175F6771
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbiJFMFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 08:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36720 "EHLO
+        id S231313AbiJFNKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 09:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbiJFMD6 (ORCPT
+        with ESMTP id S230133AbiJFNKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 08:03:58 -0400
-Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10049.outbound.protection.outlook.com [40.107.1.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158E49DFA8;
-        Thu,  6 Oct 2022 05:03:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bIKhDFcdjxbYcM4HZCg9yRUru0yqJdZkHLAc4QASjnBbeB5dJ+Dip4n8oMDkSEWLdEhVXch0hHwLDvwBUOzLWDiQzyjrjByItTxjoV4eOedK71rOp2E6LHRMjlJz5zHRFJ+X9frg7yVO6gIe4HoWrlx1I6NmnVBci5yuvYA3vitoL0rwgXxrT6Q7XW5cLe9RbiKPH6e73w3cylVXBiYwdbmlS+JCGW2xIpgWvAo52/b7eHQXWsKRYYA3BELUCKrYzLAuJKlp7w2AlS3hYJnSqyu93+hQZHP8sUoTy40mfL93BjsSgYhaUqBBUqLrA0NJ+XhmdFrP2OJww2Ef+cv9EA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zJHKE1DoG8ShMStm76AC3w1I6ls2KmauOqjww3i9/Iw=;
- b=RWoFi0U0uNApGhCHkaYFmsqOm1I1CA3M87k9u6KbaHdsca66j6XZ94KMVDZmEF70AoYkPZiZsYJ/kCiHjs4vLK0gh0r983zzAtZk9X2tkwA6Eeh0oZ/WEspaNMoAp4d610fw3PQ6+ayHmChTGUz3BOl22s9+s1/N8OcLFY0x+y/pxupHmbwpfST4XTf3AtQXAqAh8OJJi3/xfDsRnG3P+WflQAq+0GW2k4c1FMHThy3SaFDLjJxbFGn8Hwkgy08FDZh3o9XbvOUKDgxxdzx9nLBbetroV7GDZZSbAwPxaMSeY8YUSvULqt4xpSaM555kPLPZ7ITeqNq6NEuLFBEbVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zJHKE1DoG8ShMStm76AC3w1I6ls2KmauOqjww3i9/Iw=;
- b=E2NtCIQr+xLH/u1e4l9FfoO+kgtZGaadDhnJ0SOX5pzyYL46AawYhdFe/HJPFCNZamRhcIcfuIlEKCm1PF50S58y9kvt2B2xpwcrWJiSjKK0i2krEO4EVkrRo8Cc2hNJPBNPxG8Xp636N3Kq+kdRExSIVL2R8jIX+KU1FHKjmG8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8630.eurprd04.prod.outlook.com (2603:10a6:10:2dd::15)
- by AS8PR04MB8245.eurprd04.prod.outlook.com (2603:10a6:20b:3f9::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.32; Thu, 6 Oct
- 2022 12:03:47 +0000
-Received: from DU2PR04MB8630.eurprd04.prod.outlook.com
- ([fe80::d551:6af4:bca4:88ea]) by DU2PR04MB8630.eurprd04.prod.outlook.com
- ([fe80::d551:6af4:bca4:88ea%7]) with mapi id 15.20.5676.032; Thu, 6 Oct 2022
- 12:03:47 +0000
-From:   Pankaj Gupta <pankaj.gupta@nxp.com>
-To:     jarkko@kernel.org, a.fatoum@pengutronix.de, gilad@benyossef.com,
-        Jason@zx2c4.com, jejb@linux.ibm.com, zohar@linux.ibm.com,
-        dhowells@redhat.com, sumit.garg@linaro.org, david@sigma-star.at,
-        michael@walle.cc, john.ernberg@actia.se, jmorris@namei.org,
-        serge@hallyn.com, herbert@gondor.apana.org.au, davem@davemloft.net,
-        j.luebbe@pengutronix.de, ebiggers@kernel.org, richard@nod.at,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, sahil.malhotra@nxp.com,
-        kshitiz.varshney@nxp.com, horia.geanta@nxp.com, V.Sethi@nxp.com
-Cc:     Pankaj Gupta <pankaj.gupta@nxp.com>
-Subject: [PATCH v0 8/8] dm-crypt: consumer-app setting the flag-is_hbk
-Date:   Thu,  6 Oct 2022 18:38:37 +0530
-Message-Id: <20221006130837.17587-9-pankaj.gupta@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221006130837.17587-1-pankaj.gupta@nxp.com>
-References: <20221006130837.17587-1-pankaj.gupta@nxp.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0011.apcprd02.prod.outlook.com
- (2603:1096:4:1f7::19) To DU2PR04MB8630.eurprd04.prod.outlook.com
- (2603:10a6:10:2dd::15)
+        Thu, 6 Oct 2022 09:10:36 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B391AE
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 06:10:35 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id u21so2720469edi.9
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 06:10:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=2j3ygm+GSrR/kLyqMDlbC2b6qASfbfMJleAyszzEGTQ=;
+        b=ZWBM0uCbPzhrgCjdFK9EkQwJqNvxYkgf9YOIb49x/8b1QImU3eoQXh4wYwySagDVTm
+         l2ZLhv0Lwy5tsjO5rjnh3St9a+dAaV63QCzT7hHuP0ndum9zqBYnUfCxag8++A+58MPI
+         BFYO0srN5xxVxCKPBm1QUpquGIeplt9d19LH2RqXnLGg8qQxY3f1oNEr+6Nj5kxas9bq
+         wF5klqgjVKxSYqKN43EDfXcqvSZAfgNIZe7TlFGKnjS05ivFwK9NgSq3Zk03k4Drw716
+         C5aq5G2DerEiPeBLf24HmIwi16MSW0K5Xqb/HAkspomYZhgb+ukcBzI9PlP95oYM6rwM
+         umZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=2j3ygm+GSrR/kLyqMDlbC2b6qASfbfMJleAyszzEGTQ=;
+        b=SQVaq1GgQvymKPVIO+4DNHmRXr4qqDTSLnyZk/MfwdXiH2kzpkhHzmE8mqg/YbAR4x
+         meZd3sYyPAV8augsiI/COooEKZZ1IjtMs1+sDATrOTOq6cTtG8RYnor+UWx7ZM730X/K
+         pthACxiVe/UN+lq28rFWzyzdVJAZCCWazC91RxT1hgIOkMYKFByBAOWgMyK9xYQK7x9s
+         nRgFCeghk8FGwGiM7/WGazi8kb9/rtsqBycb1yE+H6c2SMwBFAc38KEVnWrsDTwOqZlT
+         KayRO2TQ+figeepSLCYuxdf5AEce7Glg0o9sFZX3X3X2Yxo8DVlwiW0vvsRNd1snrcFJ
+         ul3g==
+X-Gm-Message-State: ACrzQf3ZuruPFzwjzaWg80u/N7nEFvFjzp2UgHW0MOb1kiyLvdEtdyFN
+        KxPrOtaax/L3/1zeApTY4wNMng==
+X-Google-Smtp-Source: AMsMyM5ssASFggd3BrLF/QiCZwS2iMg5YlzHPO9Ef9AWdzNL9idpBus68/QMYchoiXaaJ2f65IbkAA==
+X-Received: by 2002:a05:6402:2949:b0:451:fabf:d88a with SMTP id ed9-20020a056402294900b00451fabfd88amr4461739edb.324.1665061834369;
+        Thu, 06 Oct 2022 06:10:34 -0700 (PDT)
+Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
+        by smtp.gmail.com with ESMTPSA id d1-20020a056402144100b00456f2dbb379sm2606754edx.62.2022.10.06.06.10.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 06:10:34 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 15:10:33 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/8] riscv: move riscv_noncoherent_supported() out of
+ ZICBOM probe
+Message-ID: <20221006131033.jfb62me2zxz67gfs@kamzik>
+References: <20221006070818.3616-1-jszhang@kernel.org>
+ <20221006070818.3616-2-jszhang@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8630:EE_|AS8PR04MB8245:EE_
-X-MS-Office365-Filtering-Correlation-Id: 85020fc1-a3f5-41d3-4e90-08daa792d30e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: E1LcyNylw7fekofHUsQbu62g2DZE0H1l5k6FZtNAKWoEh3Jb5BWerTPgalhPIyTe2iLMuiGy3z39rHl9estqjbfXC+F+eLahPZQWswMaob8F3LPKiGtOTA2asDke26wzNl30h9tQi7ObshxVkCbuGOlmYxyMpcgHnasXPRnngI+6+ICj7W+KIMT6nEBHBDvrgyPfVsTpqi/BmVinJ5w+PHN358/likvqyxay72RE7D/L8y3yAn/dlMqPO4CSYEtp96sYKG+yQiIh1tXGB8roUB4wRnrwsSgpJcCW7RwGAKsw13jQDhB01iOsKaaGmlnSR4mN0mNy540VHVYCV6jfDw8iPXnmBga+3iUwgQ5FzBfEZZ1ZqRqgz3NZEo46S6+/3wg8w8Q3fwnVELeJte4Ljf5HIFmL+nBZgZFBAtQ4NyMTeGI0FxLhczWuwQ3ERVlAmKjUuu6IMIcEQGiUXNeoBr67wsfgdpQqe/plA+jNQOkQ/aFabdlJmIEcDtQuHFdY8SGwtbwmZgeWtiFmGc25uGkT0o5yRsEA3DdVDX4hJJ6e6cxmShwoXXrcbFpwCGJwu8xIvMDxMiadGxH18w5uy4y5rkGzMngjN2i52KKjxyohpkpC8yZBA7D6472PKOHxTQ23NqAK1TDvpMCbNQ03hAY0dPq3sBDY2B/H2uZXu0Y2j15LqkW4jS6UcV8UymdW0I8BSyDHoJOBCwoFZhHYYH9pxJuij8X9j5JQSEiRgE1EIOo/cA1RyOVsSdbt065hrpSgHxK5YrnCd6cz4+/rA1FCbDjYUNJleQ3VDHy576spofbknHyw/KAizQHikPPs
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8630.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(346002)(366004)(396003)(451199015)(2616005)(186003)(83380400001)(1076003)(38100700002)(7416002)(38350700002)(921005)(5660300002)(44832011)(2906002)(8936002)(6666004)(6506007)(52116002)(6486002)(6512007)(41300700001)(478600001)(26005)(6636002)(8676002)(66476007)(66946007)(4326008)(66556008)(316002)(36756003)(86362001)(21314003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cK3A61X15SvmEobr+R+H8VQcxWdjJaV0MYfdMmfF7nua+5B4tpfAcPKAPDza?=
- =?us-ascii?Q?pfv+VxXF7LVwlWTXK17sdx/GxbE9/9LMo91ntnH8Yc4rxndsuV1ryhqe4wVB?=
- =?us-ascii?Q?Na/igHz2YW1Q+QStKLbRpcctY/UJUft/x32521w+hKgZriZwRI/IuM0CPu90?=
- =?us-ascii?Q?wLLF83mQHs5wNDofik0c9ViLhXh9/sppxTopEJP+RPf0pFrmPwB1v0pwz5uG?=
- =?us-ascii?Q?dQ7zIUb5u7rCKLDAi2qwfjeku9PuCVqC728Db6BgWl/1DaOO3HwFpJa5IJOJ?=
- =?us-ascii?Q?oUAUaX5Q91z6ERLkNsM6VSQ16zK1BchsTJE7k2erTWMt2O4XsGCnBz/n1njm?=
- =?us-ascii?Q?LBGmosn3HLLbkIW+DF8eFw+PdEH1CWsKu9R96MYXsQqQwqX/ZfXX9zLCDDo1?=
- =?us-ascii?Q?janvK4MRkW7GRdXL58w2oBBLKOHo43Df4nLautxyQ2Dpc0s8irWscmi3p+pP?=
- =?us-ascii?Q?ybH49Sw2q+zrYQjsbDvyRdrwsBo7OW3O26dLlFTcRoOIHHB8n0WA6st+BQ2z?=
- =?us-ascii?Q?ggS3BN+laPUu+bqZZUu2Z+B7gBKRwek9au1Jo0EE8/hbEqHeQcUUIUqoJ0OT?=
- =?us-ascii?Q?P88pizX+jApmUh7DkuxpzVcHTAZ4v1QGk1HMP2+O1Uy3RxluYJiYIkMp+1Y8?=
- =?us-ascii?Q?5YyPovZ6SWYOzgjnD0JpBlcwYZbk7mltnC4Cf3Aa1+0Xi7uplTQtwi82ouV5?=
- =?us-ascii?Q?At/F7nwzS0YZqmhe9UI7h80TLltvLkQARmIYdyZ+GmSCGBp3Q6nV6wEOugKv?=
- =?us-ascii?Q?RXcXbKSnTAKVm+dd5RP22HmZ+ek/kEeku5E9C0KaKxQcLHmsAunLw0n6gd6g?=
- =?us-ascii?Q?eVwUVHuDjYS2DH3O4oca/+VHOXr+iXwSFqscFRiRAhIjLI4JZhOKs8PJtISZ?=
- =?us-ascii?Q?POQsGiUWOjMpj9gMBoUZ0u+6a2xDz8IjO3mOp9tmAHjkT4jaeWProUcRQ5wz?=
- =?us-ascii?Q?mFI6k5lt4eUbLQkgLVKmsqYQdKf8IHlemqz9zSzbWPA+lx3qOVg1FIg5ReoU?=
- =?us-ascii?Q?3TBSa1UhQ9RdrpeRilRG62WYVcwNdV9PHrjjZMRCoBe91YNLAkNFWxGEzCE7?=
- =?us-ascii?Q?eZXPGu2wn4xF0lUKiJh9fTVIFXwPjt4SwsvS62uSxFo2/hMM2y7N/19hq10r?=
- =?us-ascii?Q?PhNfxlGvxEbfjCBNriKoUOCFVW6mSX1mmVduS5PWZRsY6TvVOHHo1nlIiD+j?=
- =?us-ascii?Q?dTC1w3ovFHsmc7pCL/NJvd+6s5zuM0bFsEMLEX9GDmrffmRdLzNiH4yfz6v2?=
- =?us-ascii?Q?vlGVfE6f5OcxAydGMd901pi3KQ4qGLkqsgp1ENFdn5kKVQnD1uV5sjKMgyNZ?=
- =?us-ascii?Q?VTgttCksqNanaqbi24ToIWBVgYxH6avHHUlQ1RYuqbD5Df7vHqhUhbxAfOBJ?=
- =?us-ascii?Q?KMuqTNwcWchZPurEBBRi6W0stZXnWqQBl0jH8fm4LsgCPHCzQOP3R9ByGsmF?=
- =?us-ascii?Q?AfJxwj6Wr6DUvGBUgFfCIju5jeViYIZ3RXoe3T7HZxANBsU+Az/RUZW2vFqh?=
- =?us-ascii?Q?wK7y418qUB6tqjNMO4cpxFlcxwBXp/knUBpbe3YuJExeBMrQmFJzxh6c0x+z?=
- =?us-ascii?Q?3Tl8yNk7HPut6Pgvg6/PSkBmdbVOta8xYboER4wA?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 85020fc1-a3f5-41d3-4e90-08daa792d30e
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8630.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2022 12:03:47.7464
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: noNZ/HZSnaYX+SLssiqhN3yULnVd9dy0eTPuDiqb/aPJDQBLJ9+vwuNeAnHC3Xfg3AdWWOIYeGAHFqXJblhgUw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8245
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221006070818.3616-2-jszhang@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Consumer application:
-- Adding a flag 'is_hbk', in its "struct crypto_config".
+On Thu, Oct 06, 2022 at 03:08:11PM +0800, Jisheng Zhang wrote:
+> It's a bit wired to call riscv_noncoherent_supported() once when
 
-- After fetching the keys, it is setting the above
-  mentioned flag, based on the key fetched.
-  -- Note: Supported for trusted keys only.
+s/wired/weird/
 
-- After allocating the tfm, and before calling
-  crypto_xxx_setkey(), setting the:
-  -- tfm flag 'is_hbk':
-          cc->cipher_tfm.tfms[i]->base.is_hbk = cc->is_hbk;
-  -- tfm hbk_info, if cc->is_hbk, is non-zero.
+s/once/each time/
 
-  Note: HBK Supported for symmetric-key ciphers only.
+> insmod a module. Move the calling out of feature patch func.
+> 
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  arch/riscv/kernel/cpufeature.c | 7 +------
+>  arch/riscv/kernel/setup.c      | 4 ++++
+>  2 files changed, 5 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index 3b5583db9d80..03611b3ef45e 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -272,12 +272,7 @@ static bool __init_or_module cpufeature_probe_zicbom(unsigned int stage)
+>  	case RISCV_ALTERNATIVES_EARLY_BOOT:
+>  		return false;
+>  	default:
+> -		if (riscv_isa_extension_available(NULL, ZICBOM)) {
+> -			riscv_noncoherent_supported();
+> -			return true;
+> -		} else {
+> -			return false;
+> -		}
+> +		return riscv_isa_extension_available(NULL, ZICBOM);
+>  	}
+>  #endif
+>  
+> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> index 2dfc463b86bb..1a055c3f5d9d 100644
+> --- a/arch/riscv/kernel/setup.c
+> +++ b/arch/riscv/kernel/setup.c
+> @@ -299,6 +299,10 @@ void __init setup_arch(char **cmdline_p)
+>  	riscv_init_cbom_blocksize();
 
-Signed-off-by: Pankaj Gupta <pankaj.gupta@nxp.com>
----
- drivers/md/dm-crypt.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+I think we can move this riscv_init_cbom_blocksize() down to be above the
+new #ifdef in order to keep like calls grouped. It doesn't matter though.
 
-diff --git a/drivers/md/dm-crypt.c b/drivers/md/dm-crypt.c
-index 159c6806c19b..d28c4af2904e 100644
---- a/drivers/md/dm-crypt.c
-+++ b/drivers/md/dm-crypt.c
-@@ -221,6 +221,8 @@ struct crypt_config {
- 	struct mutex bio_alloc_lock;
- 
- 	u8 *authenc_key; /* space for keys in authenc() format (if used) */
-+	unsigned int is_hbk;
-+	struct hw_bound_key_info hbk_info;
- 	u8 key[];
- };
- 
-@@ -2397,10 +2399,16 @@ static int crypt_setkey(struct crypt_config *cc)
- 			r = crypto_aead_setkey(cc->cipher_tfm.tfms_aead[i],
- 					       cc->key + (i * subkey_size),
- 					       subkey_size);
--		else
-+		else {
-+			cc->cipher_tfm.tfms[i]->base.is_hbk = cc->is_hbk;
-+			if (cc->is_hbk)
-+				memcpy(&(cc->cipher_tfm.tfms[i]->base.hbk_info),
-+				       &(cc->hbk_info),
-+				       sizeof(struct hw_bound_key_info));
- 			r = crypto_skcipher_setkey(cc->cipher_tfm.tfms[i],
- 						   cc->key + (i * subkey_size),
- 						   subkey_size);
-+		}
- 		if (r)
- 			err = r;
- 	}
-@@ -2461,9 +2469,11 @@ static int set_key_trusted(struct crypt_config *cc, struct key *key)
- 	if (!tkp)
- 		return -EKEYREVOKED;
- 
-+	cc->is_hbk = tkp->is_hw_bound;
- 	if (cc->key_size != tkp->key_len)
- 		return -EINVAL;
- 
-+	memcpy(&(cc->hbk_info), &(tkp->hbk_info), sizeof(struct hw_bound_key_info));
- 	memcpy(cc->key, tkp->key, cc->key_size);
- 
- 	return 0;
--- 
-2.17.1
+>  	riscv_fill_hwcap();
+>  	apply_boot_alternatives();
+> +#ifdef CONFIG_RISCV_DMA_NONCOHERENT
+> +	if (riscv_isa_extension_available(NULL, ZICBOM))
+> +		riscv_noncoherent_supported();
+> +#endif
+>  }
+>  
+>  static int __init topology_init(void)
+> -- 
+> 2.37.2
 
+Otherwise,
+
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
