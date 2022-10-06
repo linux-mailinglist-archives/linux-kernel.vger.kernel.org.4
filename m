@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02A175F6771
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A165F6778
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbiJFNKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 09:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60086 "EHLO
+        id S231199AbiJFNMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 09:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiJFNKg (ORCPT
+        with ESMTP id S230291AbiJFNMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 09:10:36 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B391AE
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 06:10:35 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id u21so2720469edi.9
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 06:10:35 -0700 (PDT)
+        Thu, 6 Oct 2022 09:12:50 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275ABA8CC9
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 06:12:49 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a26so4502167ejc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 06:12:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ventanamicro.com; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=2j3ygm+GSrR/kLyqMDlbC2b6qASfbfMJleAyszzEGTQ=;
-        b=ZWBM0uCbPzhrgCjdFK9EkQwJqNvxYkgf9YOIb49x/8b1QImU3eoQXh4wYwySagDVTm
-         l2ZLhv0Lwy5tsjO5rjnh3St9a+dAaV63QCzT7hHuP0ndum9zqBYnUfCxag8++A+58MPI
-         BFYO0srN5xxVxCKPBm1QUpquGIeplt9d19LH2RqXnLGg8qQxY3f1oNEr+6Nj5kxas9bq
-         wF5klqgjVKxSYqKN43EDfXcqvSZAfgNIZe7TlFGKnjS05ivFwK9NgSq3Zk03k4Drw716
-         C5aq5G2DerEiPeBLf24HmIwi16MSW0K5Xqb/HAkspomYZhgb+ukcBzI9PlP95oYM6rwM
-         umZQ==
+        bh=Uj6swI85SnMt4TKWB4hA3wAhngDCYA06Mr8UAbXCX9Q=;
+        b=VLze14syKQUDXjp5/yioqgGgQub40T7iLwx0bcq0vmk1DWgeotwUNey5IC5+jct8we
+         advC8w3sx41bRGYKYK5gbZ3vtJ3XOWmDnIPPeqfndqbJIUT7VP6bD9r0CGGUXE78xtVl
+         VBjwCFz/fl9AYvb14rHbDLU/irXt5UNnAk6F0jrnNMLtciVTtH2pW7n62PIYonunUR2T
+         exA5+/dMg9cW0Y1IqJ0mJ+wxJioANSA61aUWYPvyV6a3rHC0fMIDadBuvjwxIeQToRLd
+         sZxGZTI6OkF10MbSdAkr9JI1OqzrBcz++Jj3efKBO3YxUbQxRpaHZ53TURiKSNQaNs8d
+         rksw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=2j3ygm+GSrR/kLyqMDlbC2b6qASfbfMJleAyszzEGTQ=;
-        b=SQVaq1GgQvymKPVIO+4DNHmRXr4qqDTSLnyZk/MfwdXiH2kzpkhHzmE8mqg/YbAR4x
-         meZd3sYyPAV8augsiI/COooEKZZ1IjtMs1+sDATrOTOq6cTtG8RYnor+UWx7ZM730X/K
-         pthACxiVe/UN+lq28rFWzyzdVJAZCCWazC91RxT1hgIOkMYKFByBAOWgMyK9xYQK7x9s
-         nRgFCeghk8FGwGiM7/WGazi8kb9/rtsqBycb1yE+H6c2SMwBFAc38KEVnWrsDTwOqZlT
-         KayRO2TQ+figeepSLCYuxdf5AEce7Glg0o9sFZX3X3X2Yxo8DVlwiW0vvsRNd1snrcFJ
-         ul3g==
-X-Gm-Message-State: ACrzQf3ZuruPFzwjzaWg80u/N7nEFvFjzp2UgHW0MOb1kiyLvdEtdyFN
-        KxPrOtaax/L3/1zeApTY4wNMng==
-X-Google-Smtp-Source: AMsMyM5ssASFggd3BrLF/QiCZwS2iMg5YlzHPO9Ef9AWdzNL9idpBus68/QMYchoiXaaJ2f65IbkAA==
-X-Received: by 2002:a05:6402:2949:b0:451:fabf:d88a with SMTP id ed9-20020a056402294900b00451fabfd88amr4461739edb.324.1665061834369;
-        Thu, 06 Oct 2022 06:10:34 -0700 (PDT)
+        bh=Uj6swI85SnMt4TKWB4hA3wAhngDCYA06Mr8UAbXCX9Q=;
+        b=ry6wDb42JbpifmVInt9KSzerDV1DBaO3wnWJjZ0mLnqpPWdSpt5XYEg6E2dILm9mQq
+         mr7Z5JRas4757WT1N0sWI3/JVvxH2Thtbvtieu10E6fEQQD73EWki5eYw2N6o9QJfs41
+         xES+aV1YBrT3hCj/pRmqzpZYKqvyAjxHvOnVoqlv6591mUE1GT3UHAz+kZ3//njToc80
+         JNuMm68Q8D32OZIU2Ti/6sly8vdPWHHcB3f3cHxnofSt2FprFzDqs3MD/RwH9DV+unjb
+         wEG+ArAPAzQZg3jY+I3hd9AFecZCVhbk21+bOxMCT/v9rVPaNz2bexRpd3bv1+bqjdkt
+         EkzQ==
+X-Gm-Message-State: ACrzQf1nYsd3J25KR+ld6D8lEq704Xh4kssQvRaocRRPjEX6VI2JxN1d
+        ZwkuPFjkzDetRLyesOoHiOWhmw==
+X-Google-Smtp-Source: AMsMyM5SXI6WyfxKVT3COUhfJ3/eLrlCeOa5idtoTaRyPcPX0sjtGwzkIm7M3KN/vsm+USPV7Fj4Dg==
+X-Received: by 2002:a17:907:8686:b0:78b:9606:8b9c with SMTP id qa6-20020a170907868600b0078b96068b9cmr4032609ejc.134.1665061967759;
+        Thu, 06 Oct 2022 06:12:47 -0700 (PDT)
 Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
-        by smtp.gmail.com with ESMTPSA id d1-20020a056402144100b00456f2dbb379sm2606754edx.62.2022.10.06.06.10.33
+        by smtp.gmail.com with ESMTPSA id c25-20020aa7c999000000b00457160c3c77sm5707205edt.20.2022.10.06.06.12.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 06:10:34 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 15:10:33 +0200
+        Thu, 06 Oct 2022 06:12:47 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 15:12:46 +0200
 From:   Andrew Jones <ajones@ventanamicro.com>
 To:     Jisheng Zhang <jszhang@kernel.org>
 Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/8] riscv: move riscv_noncoherent_supported() out of
- ZICBOM probe
-Message-ID: <20221006131033.jfb62me2zxz67gfs@kamzik>
+Subject: Re: [PATCH 2/8] riscv: cpufeature: detect
+ RISCV_ALTERNATIVES_EARLY_BOOT earlier
+Message-ID: <20221006131246.45m2qqoqfzq6dmls@kamzik>
 References: <20221006070818.3616-1-jszhang@kernel.org>
- <20221006070818.3616-2-jszhang@kernel.org>
+ <20221006070818.3616-3-jszhang@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221006070818.3616-2-jszhang@kernel.org>
+In-Reply-To: <20221006070818.3616-3-jszhang@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -73,61 +73,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 03:08:11PM +0800, Jisheng Zhang wrote:
-> It's a bit wired to call riscv_noncoherent_supported() once when
-
-s/wired/weird/
-
-s/once/each time/
-
-> insmod a module. Move the calling out of feature patch func.
+On Thu, Oct 06, 2022 at 03:08:12PM +0800, Jisheng Zhang wrote:
+> Now, the riscv_cpufeature_patch_func() do nothing in the stage of
+> RISCV_ALTERNATIVES_EARLY_BOOT. We can move the detection of "early
+> boot" stage earlier.
+> 
+> In following patch, we will make riscv_cpufeature_patch_func() scans
+> all ISA extensions.
 > 
 > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 > ---
->  arch/riscv/kernel/cpufeature.c | 7 +------
->  arch/riscv/kernel/setup.c      | 4 ++++
->  2 files changed, 5 insertions(+), 6 deletions(-)
+>  arch/riscv/kernel/cpufeature.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
 > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 3b5583db9d80..03611b3ef45e 100644
+> index 03611b3ef45e..afa54635c180 100644
 > --- a/arch/riscv/kernel/cpufeature.c
 > +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -272,12 +272,7 @@ static bool __init_or_module cpufeature_probe_zicbom(unsigned int stage)
->  	case RISCV_ALTERNATIVES_EARLY_BOOT:
->  		return false;
->  	default:
-> -		if (riscv_isa_extension_available(NULL, ZICBOM)) {
-> -			riscv_noncoherent_supported();
-> -			return true;
-> -		} else {
-> -			return false;
-> -		}
-> +		return riscv_isa_extension_available(NULL, ZICBOM);
->  	}
->  #endif
+> @@ -307,6 +307,9 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
+>  	struct alt_entry *alt;
+>  	u32 tmp;
 >  
-> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> index 2dfc463b86bb..1a055c3f5d9d 100644
-> --- a/arch/riscv/kernel/setup.c
-> +++ b/arch/riscv/kernel/setup.c
-> @@ -299,6 +299,10 @@ void __init setup_arch(char **cmdline_p)
->  	riscv_init_cbom_blocksize();
-
-I think we can move this riscv_init_cbom_blocksize() down to be above the
-new #ifdef in order to keep like calls grouped. It doesn't matter though.
-
->  	riscv_fill_hwcap();
->  	apply_boot_alternatives();
-> +#ifdef CONFIG_RISCV_DMA_NONCOHERENT
-> +	if (riscv_isa_extension_available(NULL, ZICBOM))
-> +		riscv_noncoherent_supported();
-> +#endif
->  }
->  
->  static int __init topology_init(void)
+> +	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
+> +		return;
+> +
+>  	for (alt = begin; alt < end; alt++) {
+>  		if (alt->vendor_id != 0)
+>  			continue;
 > -- 
 > 2.37.2
-
-Otherwise,
+>
 
 Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
