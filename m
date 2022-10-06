@@ -2,169 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 649C65F5E6D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 03:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C905F5E6C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 03:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiJFBld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 21:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
+        id S229713AbiJFBlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 21:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiJFBl3 (ORCPT
+        with ESMTP id S229492AbiJFBlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 21:41:29 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2069.outbound.protection.outlook.com [40.107.223.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515E47F082
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 18:41:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S6rPhFhSlYv7TOc9HMU4YMA/Z5PaU+cynW7+YE1iNNOpX0M61zvH6PwPHc97qljrD8aM6p6PHfPPxjA86zHDom2hnQyGWvuaDCJj99jXSxX6jY4Rx3eG4RRFKP1kIrIsI9G/s7OStP3uyBLVOSxQQPi7ZG1KZnX2s4fdHKuYyBjPVdTGBS/dN6cAUbCetATvJgGqIszHH+/J9sUF68jsAC41xoTCrlVueh61Hua3AAkdYXciwWl9Tj0sUGskzf1RXMiYM7rzZZMbAmXPpQHdv6lPnk9eLLpXVt/8+lSA2kGU2Y5kKMysLX4H/1MgzVxkgiNcbQI1rSk2ztOkfBsKew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=G04Jd+lxv+wNynFxKcgb9JPGEerOT5FKsaJQHpxSeHA=;
- b=QlMc9nste/zKPo/E2PXKbMwK/NXNbkwItWslNoTkJ3i0tcHdY1IfZzFBKUdTZ+UI1uIgTj80KSK9onK6ofG+c1Lzwtgl5eS7GqJR45Sj98UeVNnIL7bud+pCG8Zs/QZqh8C4ahL5huGKGdwdlD3BC6v8JWxcdKZqtF3OqnWfcrlEFZ0RA2etRRKhXkctod8jdt49Ljei34Z7zG6txJ6pAy6GfxGDZSldNaL64AImNU5pG6eXNfBUeG1yZVuWyPXjOWJJt8k8OMBpvgOnUQQSqggEoZbNzxCVYi7jMJYZ0s8A/ovu+GzOuIEEJrYqC1s+MQxTcsddlfOMzFjdUnH1Eg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=knights.ucf.edu; dmarc=pass action=none
- header.from=knights.ucf.edu; dkim=pass header.d=knights.ucf.edu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=knightsucfedu39751.onmicrosoft.com;
- s=selector2-knightsucfedu39751-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G04Jd+lxv+wNynFxKcgb9JPGEerOT5FKsaJQHpxSeHA=;
- b=dOk24EYneOT/104rgf+vhYpYxVjr+D6x/yHJvEJMOadFUnFz0R6BPK4bXnsD+Zyn5A33VYIGX9dCnwvOJr6n/tEMPl+Q5cU/3FmymwM47W+0CRi/DgfRjN3h+pyR2KYldJumROMxcWr75P5LIMkToHtbVGzgrYvWDG5JigOoMaM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=knights.ucf.edu;
-Received: from BN7PR07MB4195.namprd07.prod.outlook.com (2603:10b6:406:b1::33)
- by BL0PR07MB8083.namprd07.prod.outlook.com (2603:10b6:208:1c8::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Thu, 6 Oct
- 2022 01:41:27 +0000
-Received: from BN7PR07MB4195.namprd07.prod.outlook.com
- ([fe80::9a4c:e558:6a54:fc2c]) by BN7PR07MB4195.namprd07.prod.outlook.com
- ([fe80::9a4c:e558:6a54:fc2c%6]) with mapi id 15.20.5676.033; Thu, 6 Oct 2022
- 01:41:26 +0000
-Date:   Wed, 5 Oct 2022 21:39:24 -0400
-From:   Brent Pappas <pappasbrent@knights.ucf.edu>
-To:     Nam Cao <namcaov@gmail.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "cai.huoqing@linux.dev" <cai.huoqing@linux.dev>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] staging: most: net: Replace macros HB and LB with static
- inline functions
-Message-ID: <Yz4xzCDGxyva/yZN@knights.ucf.edu>
-References: <BN7PR07MB419563C5B405ED4082D7841DF65D9@BN7PR07MB4195.namprd07.prod.outlook.com>
- <20221005235728.GA118549@nam-dell>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221005235728.GA118549@nam-dell>
-X-ClientProxiedBy: BN9P220CA0004.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:408:13e::9) To BN7PR07MB4195.namprd07.prod.outlook.com
- (2603:10b6:406:b1::33)
+        Wed, 5 Oct 2022 21:41:10 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC45922BDC;
+        Wed,  5 Oct 2022 18:41:09 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id B1BC35C0078;
+        Wed,  5 Oct 2022 21:41:06 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 05 Oct 2022 21:41:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1665020466; x=
+        1665106866; bh=5JWGlL6qjpOxQyyZ9FB1dSYfeN4n/a+nsPGWR+zeiYc=; b=M
+        6og2O85RYor/MEkEK9NUu3wiW+BhmIu4XsJu4ZWKsQ32+PtEx3auXlLV1Vxy7xCx
+        SuI29dbENT/pW51oqx/kKeS6rYWGQwO2yuV9nwxF4IQXSPo69Mu4lgacDtNbCOYp
+        bHksDrcsO7vbcW+uZ1/Wf70s/W4ScBIsqxe51/dUt0D+yD3h7t+H8qxRp7GF3K5E
+        /4VgeIWd24J9IPhs25G7EMJNO8dRhNtn5Aw4zxmYm7gi0oUYz6pACaojGon7jAxF
+        +2YE+Es//c6MkE71uARRgLeLOlBu5qv7NvSw5PXWeLh5vVEwKo8aaqVJknV37n4d
+        cD2ft0lwigYokY8F72dQA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1665020466; x=1665106866; bh=5JWGlL6qjpOxQyyZ9FB1dSYfeN4n
+        /a+nsPGWR+zeiYc=; b=IapvrxS+eu9CRM2Y2xpRmwAEBSC07HId3PKvuDlordFq
+        FQn0PYGstKTIn1EWy6IVXIsBiQnr5wyq1G0GIAsX3XAUrn0lIOCLn2IK4K2n5OTC
+        ELdOXmbc9wR+smndYtDC4+ix/FHk0EvYSjGccIhTRcKnP6o5EZkejB6+fuoIjyF4
+        cviqYKjPJwuw3acPHvb+8nrJUcZxsPkMwg2mKliK9ztNYB7lKg405v7U8rqyLOmM
+        ynm6gc+s3YcVooFIZYt+T9Rjf1Lrk3t8Txnc3y3JjHGhgJtSjXPA4r1wWPQqMxQm
+        QgQXgsN2cI0VH/YhaXOP0pSdMkYwfIVVADA2+5TjWA==
+X-ME-Sender: <xms:MjI-Y0MK-kjrVZXrycLY6OoQgV_MAbR9y9PIHIxuls04COsCSIiFmA>
+    <xme:MjI-Y6-saI900FsdoMpNk91DHjxo-wuJSng511L3OZ9yMKioyJL633KFRTdz8nYqY
+    kAuJNXUWhsQpHE>
+X-ME-Received: <xmr:MjI-Y7QYawW0W1P_KkiHSTjB7-0xTVDxzwjuqk3SVwhvCxJ3epBqnVYRHCS4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeigedghedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepffgvmhhi
+    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
+    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepudeileefueetvdelheeuteffjeeg
+    jeegffekleevueelueekjeejudffteejkeetnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
+    lhgrsgdrtghomh
+X-ME-Proxy: <xmx:MjI-Y8uonqngOyQ1TDOcwx7-ZJi0gr1uWyVsWeVAwYOcNsdoEWXjlQ>
+    <xmx:MjI-Y8cEnKUQHfG8rFoPIKgLBC-vABsCntJtptGD09gTSlEmvwrKoA>
+    <xmx:MjI-Yw1vEyoZd-y5Ech6-96fX-3e4uyELk8VRXQSRiE1sCau-rYNJA>
+    <xmx:MjI-Y9VWOZ-b012cWbwraT3IrzSYRvS_471wcRHzbXVqAH4KpMJ2xg>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 5 Oct 2022 21:41:05 -0400 (EDT)
+Date:   Wed, 5 Oct 2022 21:40:58 -0400
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Jan Beulich <jbeulich@suse.com>, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+Subject: Re: [PATCH v4 1/2] Avoid using EFI tables Xen may have clobbered
+Message-ID: <Yz4yLyvX6un1rrqC@itl-email>
+References: <282a225d-8782-0321-6f0e-19dd4510dc42@suse.com>
+ <CAMj1kXFQNqsW5RfHGac-eGbosJHBybu6+-Fap_bi_kVxWNpGeg@mail.gmail.com>
+ <YzcjeiOW8+i2Zxsd@itl-email>
+ <CAMj1kXHBBbCNV3CLesqZi7ttmmi8y4tZ1KO5vievy_CJrU2o3Q@mail.gmail.com>
+ <YzeaKjmls1YI/3ox@itl-email>
+ <01d22092-8292-8ed7-ece7-9ca32d15bbce@suse.com>
+ <YzxxXuovwQt3NskE@itl-email>
+ <a0dc1158-01b1-4272-b86e-52f4996f0747@suse.com>
+ <Yz3I2qwl243h9ZfZ@itl-email>
+ <CAMj1kXHFi71SKQAQHEjZTLyp-YooRTYZ2-nqydRZA5hys7tkKw@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN7PR07MB4195:EE_|BL0PR07MB8083:EE_
-X-MS-Office365-Filtering-Correlation-Id: 68c4f828-ef95-4e74-ffff-08daa73be231
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SedSu7CYdtnDUay6sXDBe4j3YyfftgvBVqTx7I8n50s78ihGGi7xT2xds/VYABYhRnElZf0B1dJDn7i68YFqLpkpLFZjxJJEvMe0tYBD0SK6k4myRwbM/NXJwpy+YAh2ZmvwAEeUPdPpz1gznnuvZcR3XeG7jdFQPPPLyqj1ctHXOhZDNfObH68z0BQX4I9UMBQYE3k+13Hxf+X+/FiWV+m3LPp0UKKzsEKb5VbUedSJm82GoN4Zoh2WGOpDUN7vpHorBn2YRMHcWPGqQDIkfWU+Dc9lD5jNg17ZSVbZf+DZoyYJN0g6lIJJ6XjPvDtpbZNvVE7GJPd0HNdsWkkLlwsJ1/DRVqIXx8PT1adafuKWph3U/BMizd2ujgqeI0Bk/kRtlqQo32T7H565G0epZlDxwiG2m/ix4Rfnr7919izYTG32XrtpJpGYmJAXh/ys1s86/OMewwd0n4nxgUZlKABx0CGKSiULzKtsERpXG75sx1UJIo5EoLgWLqUx7iQFOx++Tqes+2L6sgSfXjKepw3qc9PTzmfeO5Nps0i+2iLPqcy9KsKdryiMDU4Zyxp2NZ6b6+Kwu2cy4lMedb1h/XgqWNkaPheYtpFZL52vhW3mJa1z/R/rbAemIE7o1gYevwGAozsqAuBE7nevTuM9wKZmsOG5OlOI0jiDS+giaflWdgaf67LCvlm357QYfyJYHn5vIxL6zSM9YxIn26OTzxqSYV3DBH3ylLo+k4xUKN8i/lGcMOzsMJrnf2CkJbH4L0zLaSMv85Hre8H/ycycDx+2mtU1J7/iE/XPP+3juZM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN7PR07MB4195.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(376002)(346002)(39860400002)(396003)(451199015)(786003)(316002)(66556008)(66476007)(5660300002)(8936002)(4326008)(45080400002)(8676002)(66946007)(41300700001)(54906003)(966005)(6486002)(478600001)(6916009)(75432002)(53546011)(86362001)(83380400001)(6506007)(2906002)(186003)(41320700001)(52116002)(38100700002)(38350700002)(26005)(2616005)(6512007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RVRMMWt4Y2dQU1B3S1hBaU9Ceis3Tk5yVHNDZ29Ec0QwRnFEM09RZzlqLzJF?=
- =?utf-8?B?YklFNHM3MSthRUlEQXJDOTdCaXJHL1ZzWFFDSVRVSDhudnUzVXhKRXlHaEk3?=
- =?utf-8?B?UmF3Nm5yd09Hb2N1LzlyN1ZYeS8zaGM5ZFoyQnJnTXFtOG9LQWVDMHVldzFx?=
- =?utf-8?B?dFV5Rm9hbk5mcGtBUU9RNCtVd0Y4M3lUMHdoa1QzVk4zeUFKd1Jhd3g2c3dZ?=
- =?utf-8?B?bnVRaEIwZUhXVDFrajRaSzBLejBGRWEwd0xsWUo3ck1yOThTKzRPQnpTMUN6?=
- =?utf-8?B?Yi9xTjk1RlZLNDV3VVl0UUZwN1ZpSk81Rm5sMnZZMTFYd3EwK0tjR1Joc2hR?=
- =?utf-8?B?L3lPbHl3dHhQUytoOFJ6dVpKaGtPeFhoUFk5L3lKcjlIWkpNVVd1ZDhPeGpI?=
- =?utf-8?B?ZVJvVjh4ZlI5NmNYbC83ZXh2dTdsTlNhOVBUbm5hc1QvY3Z1a3hVZ2s1Zzh0?=
- =?utf-8?B?d1d6a1A5SW1xdk5lNklmWlpDaWJodGd2ZCt3YzdybWhiM0R1SmhuQzZpY01G?=
- =?utf-8?B?bWhYMzg2bEpMWmJ4NDZDbTk4Tlp3QlNaeVZSN0RMaUt1QWNnczNxMEdOVEhH?=
- =?utf-8?B?NUdMSm82dk9HaWJNUTRncG5QYjM1RWdrcE16TEppL1pPNFQ0TFlrdnJnZkht?=
- =?utf-8?B?ejQxOGt3U0tVU1ZQYjBqSlZITEkzbzhjRURGbEJzNGtQN0dHY2pHM3RHUjRu?=
- =?utf-8?B?UjZTUHNKVXpOc3oxSkJlSmMxdGJpRncvcndNZllUUVNReUVNOXBKRHJPYXU4?=
- =?utf-8?B?YmFhd3lXazZwKzdoL3ZZeU9ZSlpyVG5YM2FPaXZIOUJLM0l0dktYMVdCOCtB?=
- =?utf-8?B?OCtwcyszNWRqbzN1ZGl3UWY2V2JyTGt2OWtyOC9rc0dJaXB6Y3l5T3dsYVhK?=
- =?utf-8?B?RFZDelZ2aTkwRHdSVzFjU25LQUtUdTJqZXNEd0JubVFmYmZSSUlSRDZVdGNh?=
- =?utf-8?B?a3ArOGVDSW8yUkl3ZmF5R2dxM0QxVHBqZzlpbjNsWHJPZ21CQXNkVVl0NjU4?=
- =?utf-8?B?T0IxaVhpWStOTE96bmpObUdMUmRQTlZjWVFock1aMVhHdFhKaUZvSFY2dWcv?=
- =?utf-8?B?Tkt3MVNDWlRzZXA2NTNUY0pBZmpHZWZycEFNU0tUaWxyRHNWQXhTOWd6M3lr?=
- =?utf-8?B?TUg1cHpNMExNRVA4UkJFcFBma211K2RiR05pbTZpZ0oyc2RvTU11ZHRhUGR0?=
- =?utf-8?B?QWs3MVYzeGRRT1JJWHczeGljV2RwMVpJWDR3MU5yQ1dpMlA1YmRNQldqSHYx?=
- =?utf-8?B?cmcvS095ejloSlBSVGlLNjV6WFF2cnRwODZEcVJ5bWZyMVVBYlNzTEZmaFE3?=
- =?utf-8?B?TGxSOGRFNFRIMnduaEtTK1FPdXJNZUVHeC83Y3dnWThjRkVGNnNFR01LU1NL?=
- =?utf-8?B?UmQ0OVBNODk3VUs5MXM1UXN4QlBkR2o2bll1eWcweFB3YTNJcGtiRGlaVDJU?=
- =?utf-8?B?ZU9IUS9CNWNadWlKeC9FNzd2Q1V1VXREQlVVR3NsVnFpbjNWZ3Y5dXY1bGZu?=
- =?utf-8?B?dVVjcHhSVlNhN3Y3UlpMNmY3SVNwL29veXovenk5TWp3aXZpL0twbHYvYzlG?=
- =?utf-8?B?UnMvMU5WMER3SDExTXVnYm40MVVaQjd4dzJoajNxQ2tCQ3gyN1BJTXFJSHJZ?=
- =?utf-8?B?Nlk4ZFlVVUlPOTJtOG1aV0pzT2NyMERPd0FsR2lFekd0d0VXNHBhVVdXclpD?=
- =?utf-8?B?VTJzdmNmbVhGRkptbElGWXp3Z2tieW1VaHJFYWkxTGw4MmI4S3lrOFBQNC9p?=
- =?utf-8?B?ZXRmQ1M5eHlrT3VSZmw2eDR0bUhwcjZIOVN0UmNOR0VWUG5UUU9GNVZDUGlH?=
- =?utf-8?B?WWZiTHFkK2ttM0xEOXQrcG5BTGorQUFGOUlRUUVFSzNYbUpORnZTbHM1T1Y4?=
- =?utf-8?B?di9mNk9KeXRlUEIyeko1REtQVVM1UkxtSXB6eXB0L0tDZ29DS2JOYTdVcjRN?=
- =?utf-8?B?UWFZY3NnbVErdit2MXRZRGFOZDV3dUI5OS9Mc2FHT1dqSzZuRzBXeUxJRURN?=
- =?utf-8?B?bUdnWUtHSi9kUTNYRjdqelBtalJiZDZRWFRBWUZNRXVoaDBQUXpNeHdQMG9Q?=
- =?utf-8?B?U1V4MjVrNzF2QjdwZXZ2YWdlVHBvSTN2YkZHTGRDR2ZVeHBzWjFyMHpzTHEw?=
- =?utf-8?B?UlBFYUJheEJnM1BzclpiZjI2OHBMekoyTVE3NU4zTVhLemNjRklIQ0huMWZ4?=
- =?utf-8?B?Y3c9PQ==?=
-X-OriginatorOrg: knights.ucf.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 68c4f828-ef95-4e74-ffff-08daa73be231
-X-MS-Exchange-CrossTenant-AuthSource: BN7PR07MB4195.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2022 01:41:26.7276
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5b16e182-78b3-412c-9196-68342689eeb7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZQ4qJxujwj2GuAFZWsa4VhZAhjdsxnaJyI7PW7AWHfEqM11rAaUnpy1tn+fIQkEHEm5SgP21EIH3hqH8htNircQSOczVskR1DdN1MBPMkWg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR07MB8083
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="O1bm1sqCXF+z9Gl5"
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXHFi71SKQAQHEjZTLyp-YooRTYZ2-nqydRZA5hys7tkKw@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/2022 19:57, Nam Cao wrote:
-> On Wed, Oct 05, 2022 at 04:10:44PM +0000, Brent Pappas wrote:
-> > Replace function-like macros "HB" and "LB" with static inline functions
-> > to comply with preferred Linux coding style standards.
-> > 
-> > Signed-off-by: Brent Pappas <pappasbrent@knights.ucf.edu>
-> > ---
-> > diff --git a/drivers/staging/most/net/net.c b/drivers/staging/most/net/net.c
-> > index 1d1fe8bff7ee..8a8fbc274b73 100644
-> > --- a/drivers/staging/most/net/net.c
-> > +++ b/drivers/staging/most/net/net.c
-> > @@ -36,8 +36,8 @@
-> >  #define PMS_TELID_MASK         0x0F
-> >  #define PMS_TELID_SHIFT                4
-> >  
-> > -#define HB(value)              ((u8)((u16)(value) >> 8))
-> > -#define LB(value)              ((u8)(value))
-> > +static inline u8 HB(unsigned int value)                { return ((u8)((u16)(value) >> 8)); }
-> > +static inline u8 LB(unsigned int value)                { return ((u8)(value)); }
-> >  
-> >  #define EXTRACT_BIT_SET(bitset_name, value) \
-> >         (((value) >> bitset_name##_SHIFT) & bitset_name##_MASK)
-> 
-> I cannot apply your patch. I think your email client modified some
-> whitespace characters.
-> 
-> Check this for more information:
-> https://nam02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.kernel.org%2Fdoc%2Fhtml%2Fv4.10%2Fprocess%2Femail-clients.html&amp;data=05%7C01%7Cpappasbrent%40knights.ucf.edu%7C3748a695ff1e438ecd0b08daa72d66bf%7C5b16e18278b3412c919668342689eeb7%7C0%7C0%7C638006110693613730%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=rq2pgVr1dqT2k9hC21LXueqMeIcVyk2Qjvjl1KtkhsU%3D&amp;reserved=0
-> 
-> Best regards,
-> Nam
 
-You are correct.
-The tabs were converted to spaces.
-I will read the link you have provided and fix the problem.
+--O1bm1sqCXF+z9Gl5
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 5 Oct 2022 21:40:58 -0400
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Jan Beulich <jbeulich@suse.com>, xen-devel@lists.xenproject.org,
+	linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+	Juergen Gross <jgross@suse.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+	Kees Cook <keescook@chromium.org>,
+	Anton Vorontsov <anton@enomsg.org>,
+	Colin Cross <ccross@android.com>, Tony Luck <tony.luck@intel.com>,
+	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
+Subject: Re: [PATCH v4 1/2] Avoid using EFI tables Xen may have clobbered
 
-Thank you,
-	
-Brent
--- 
+On Wed, Oct 05, 2022 at 11:28:29PM +0200, Ard Biesheuvel wrote:
+> On Wed, 5 Oct 2022 at 20:11, Demi Marie Obenour
+> <demi@invisiblethingslab.com> wrote:
+> >
+> > On Wed, Oct 05, 2022 at 08:15:07AM +0200, Jan Beulich wrote:
+> > > On 04.10.2022 17:46, Demi Marie Obenour wrote:
+> > > > Linux has a function called efi_mem_reserve() that is used to reser=
+ve
+> > > > EfiBootServicesData memory that contains e.g. EFI configuration tab=
+les.
+> > > > This function does not work under Xen because Xen could have already
+> > > > clobbered the memory.  efi_mem_reserve() not working is the whole r=
+eason
+> > > > for this thread, as it prevents EFI tables that are in
+> > > > EfiBootServicesData from being used under Xen.
+> > > >
+> > > > A much nicer approach would be for Xen to reserve boot services mem=
+ory
+> > > > unconditionally, but provide a hypercall that dom0 could used to fr=
+ee
+> > > > the parts of EfiBootServicesData memory that are no longer needed. =
+ This
+> > > > would allow efi_mem_reserve() to work normally.
+> > >
+> > > efi_mem_reserve() actually working would be a layering violation;
+> > > controlling the EFI memory map is entirely Xen's job.
+> >
+> > Doing this properly would require Xen to understand all of the EFI
+> > tables that could validly be in EfiBootServices* and which could be of
+> > interest to dom0.  It might (at least on some very buggy firmware)
+> > require a partial ACPI and/or SMBIOS implementation too, if the firmware
+> > decided to put an ACPI or SMBIOS table in EfiBootServices*.
+> >
+> > > As to the hypercall you suggest - I wouldn't mind its addition, but o=
+nly
+> > > for the case when -mapbs is used. As I've indicated before, I'm of the
+> > > opinion that default behavior should be matching the intentions of the
+> > > spec, and the intention of EfiBootServices* is for the space to be
+> > > reclaimed. Plus I'm sure you realize there's a caveat with Dom0 using
+> > > that hypercall: It might use it for regions where data lives which it
+> > > wouldn't care about itself, but which an eventual kexec-ed (or alike)
+> > > entity would later want to consume. Code/data potentially usable by
+> > > _anyone_ between two resets of the system cannot legitimately be freed
+> > > (and hence imo is wrong to live in EfiBootServices* regions).
+> >
+> > I agree, but currently some such data *is* in EfiBootServices* regions,
+> > sadly.  When -mapbs is *not* used, I recommend uninstalling all of the
+> > configuration tables that point to EfiBootServicesData memory before
+> > freeing that memory.
+> >
+>=20
+> That seems like a reasonable approach to me. Tables like MEMATTR or
+> RT_PROP are mostly relevant for bare metal where the host kernel maps
+> the runtime services, and in general, passing on these tables without
+> knowing what they do is kind of fishy anyway. You might even argue
+> that only known table types should be forwarded in the first place,
+> regardless of the memory type.
+
+Which tables are worth handling in Xen?  I know about ACPI, SMBIOS, and
+ESRT, but I am curious which others Xen should preserve.  Currently, Xen
+does not know about RT_PROP or MEMATTR; could this be a cause of
+problems?
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
+
+--O1bm1sqCXF+z9Gl5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmM+Mi8ACgkQsoi1X/+c
+IsFC3Q/+LInS5fyLV5q0WDsphEUWJpSm3d2wDWvD98SyzEt/5YAunxvLkGFXYcLS
+P8Q2FOVyDqmBG457YSSZSS8Qt0EPxbntfAIgJT6c81xrAYpAFFHfblt1uHnrnzBJ
+5iGIkr1j184qHSf/iK8xlaxFe2eZDjZM3Y0RFGeII6+RdqmF8Wm1yd2+JlVEqGgO
+GSHwnQtt+Ut5ahm7+XKh6CdyMOeP7A7Z8+AVk74mFvWrCrJQgDPvXCAxQYX2EXCw
+TrMvLfhv4RBOOaMmCcLevbEs+3MbQ7owXtiMS0uydsezCedtWoyS9tcQdFzuJHfX
+h68Aj+kiVe07m/9Gpx43Ed+C+k4aNXqja9skqUhqStUigzOzX0Q/tNsSZV7nlyhL
+xYmlU+pdkPSNK8cXngU/OK1GjZLoNs5oc+pGT6oIq5ipWaZpO4eLriu1lMBWSS6s
+iExS7Awf7owOnc6AjaaiIRIN0W7NJ7auK10lCXX9IjzlOp9WCfA9xNLXuMQHNxCr
+gj0r+7UbcQAQP7bDRYIS/lddXF3jiubTiYeuQIdG2Y/+mIg1x1EZcNApa3rVsrSN
+xM9ex0yrDJxj9EODFHvIF9K8meqbQKTbBKtLE86Kmz6LzU4B0qwq1eQHc1M/Mo/L
+glmKRPDzx+ys9qrdIVnBCoMRNFpqK8+ybCzZ4TFHDLhht4N6iBE=
+=+br+
+-----END PGP SIGNATURE-----
+
+--O1bm1sqCXF+z9Gl5--
