@@ -2,133 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CECE5F6358
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B44FD5F6364
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:15:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbiJFJKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 05:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
+        id S231360AbiJFJPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 05:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231346AbiJFJJy (ORCPT
+        with ESMTP id S231325AbiJFJPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 05:09:54 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856D0DFF4;
-        Thu,  6 Oct 2022 02:09:48 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a26so3146503ejc.4;
-        Thu, 06 Oct 2022 02:09:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:cc:to:subject:from
-         :date:from:to:cc:subject:date;
-        bh=ODcrbPcnMCSSoamca2F6ZuB3LHikG1Oo3r1FOts8V4c=;
-        b=O6ITMpBkGQ1urboVjRkxd8KYLN9uP+y0IIo/cf4zzrLKl7P1Bqn7CdvLWwKcC3M/5Y
-         Id4wtwCKPPPKMG3GZQfgIJpdg5gHWhctohHKrrkb64+gtFljcykZgas12/8BhRW0ZjRV
-         Ilnp/IphwEy/7gy88QQqHBQrzh7Qq1QqIgTcq8MF8iPj6qZREa7OzwXcbPvd68l+9o6E
-         kKsZq0xHtVN7DZ+2QXyIWW9lbbNrSLAoe/IOViDIyRB0JBJC0ckj4un3Vwvx5ih9yAtR
-         6upfwI5IEC7Yu4q/mbMbcN7mgoFGSJlEwQwDWwAP+5PHt0HPneY5eQcKl1uWKePOmwOi
-         LyDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:cc:to:subject:from
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ODcrbPcnMCSSoamca2F6ZuB3LHikG1Oo3r1FOts8V4c=;
-        b=j/8CbWq9+lZ3RDMZSvxcTCPOmPDgLY5WwiBE+UGaXljn5bOuHMpXlHX0GJLGCqnJAQ
-         HJs73gUY0wBIauoFJA59vrkjgVC6su4KNGVnAu30XVncG1K9VbvNn3JpPGga9A5KHGdw
-         SY7oW6JvuNDoK4x0WZof6MCAENc0Cft1BZuezXI9Pd5S6iXzaPbxItKCDgj4car66O4U
-         Ktv5Z9LLfBSQvusuKdxbxrmlTg65x4m/esUT6GYUvJZDrNVeuF1/ErH8CDw08psBn8ow
-         VLsbTp0vzzXpO8RvjXRwU6lTVTeNpZ+g/1mLqmIiQ7EMfBY5IhrUvWNR9mmY1HkVZ4df
-         gekA==
-X-Gm-Message-State: ACrzQf2BnWfMttkCPuGCBM1e1fxShAHqpiCdTU8JMY+2HSWKh6oRAWfu
-        i3gAkuwrH2t2xlwVO42yjKs=
-X-Google-Smtp-Source: AMsMyM6NskjxS+PhyY75K/LPrChZI6R4TpD3VQ9478iz/K1Ew1itC7L8OMA3fWU03XTIMFHg+V/nYA==
-X-Received: by 2002:a17:906:7007:b0:6ff:8028:42e with SMTP id n7-20020a170906700700b006ff8028042emr3160836ejj.278.1665047386560;
-        Thu, 06 Oct 2022 02:09:46 -0700 (PDT)
-Received: from [10.34.19.122] ([95.183.227.98])
-        by smtp.gmail.com with ESMTPSA id la15-20020a170907780f00b007812ba2a360sm10184397ejc.149.2022.10.06.02.09.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 02:09:45 -0700 (PDT)
-Date:   Thu, 06 Oct 2022 12:09:35 +0300
-From:   Yassine Oudjana <yassine.oudjana@gmail.com>
-Subject: Re: [PATCH v2 05/10] dt-bindings: pinctrl: mediatek,pinctrl-mt6795:
- Fix interrupt count
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Andy Teng <andy.teng@mediatek.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <0SQBJR.LFLSOU16ZA311@gmail.com>
-In-Reply-To: <17e4cfb0-e423-9cf8-8af1-588aed4481a5@collabora.com>
-References: <20221005174343.24240-1-y.oudjana@protonmail.com>
-        <20221005174343.24240-6-y.oudjana@protonmail.com>
-        <17e4cfb0-e423-9cf8-8af1-588aed4481a5@collabora.com>
-X-Mailer: geary/40.0
+        Thu, 6 Oct 2022 05:15:21 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65442E9E1
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 02:15:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ot4ktfeknrez+0rFTxYXifglqcTo/ZnYJl8BenTVKT8=; b=OYP1NBP+/E3tDZzycmcMtHbf8Y
+        pdT7bOvfRha18Og/QcPUP1Mf/P2LothmUh1QIQ4bFBqvJrmXNsRU/Oy9C06ZIH2W+P/09DeMuW1an
+        Wdsubt7zO0QTESdw7BRjirsVw4f0xo+jk/g/apg0kIDp190KQaIAj8kSQ+bxQk383Vj6zPkSjsTLT
+        5aoeIGDAH/IAHX32IapsNkoSwMemIETcqc0MQyAhaQ4/nCRh0VLKxXAezAr0GP8kp3R5kD5pFOFjc
+        l45cv6E3rl9nj/10JHtr/IZbJtclzeCpMS5qUQAWWkbBjzfqwzyt7CQxNumQ+ihre3xs7HIww48gR
+        4CvtKaUw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ogMy0-001Cea-Ph; Thu, 06 Oct 2022 09:14:57 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AFA0F30017D;
+        Thu,  6 Oct 2022 11:14:55 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8287E209D9D88; Thu,  6 Oct 2022 11:14:55 +0200 (CEST)
+Date:   Thu, 6 Oct 2022 11:14:55 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [RFC PATCH 15/23] thermal: intel: hfi: Report per-cpu
+ class-specific performance scores
+Message-ID: <Yz6cjzrmu8HNPhhy@hirez.programming.kicks-ass.net>
+References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
+ <20220909231205.14009-16-ricardo.neri-calderon@linux.intel.com>
+ <YzLlk8NL5qkOOxzX@hirez.programming.kicks-ass.net>
+ <20221005235959.GB29251@ranerica-svr.sc.intel.com>
+ <Yz6XQHafjIpfkyyY@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yz6XQHafjIpfkyyY@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Thu, Oct 6 2022 at 11:01:29 AM +0200, AngeloGioacchino Del Regno 
-<angelogioacchino.delregno@collabora.com> wrote:
-> Il 05/10/22 19:43, Yassine Oudjana ha scritto:
->> From: Yassine Oudjana <y.oudjana@protonmail.com>
->> 
->> The document currently states a maximum of 1 interrupt, but the DT
->> has 2 specified causing a dtbs_check error. Change the limit to 2
->> to pass the check and add a minimum limit.
->> 
->> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
->> ---
->>   .../devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml   | 3 
->> ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->> 
->> diff --git 
->> a/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml 
->> b/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
->> index 73ae6e11410b..483fcdc60487 100644
->> --- 
->> a/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
->> +++ 
->> b/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
->> @@ -47,7 +47,8 @@ properties:
->>       interrupts:
->>       description: The interrupt outputs to sysirq.
->> -    maxItems: 1
->> +    minItems: 2
->> +    maxItems: 2
->>     # PIN CONFIGURATION NODES
->>   patternProperties:
+On Thu, Oct 06, 2022 at 10:52:16AM +0200, Peter Zijlstra wrote:
+> On Wed, Oct 05, 2022 at 04:59:59PM -0700, Ricardo Neri wrote:
+> > On Tue, Sep 27, 2022 at 01:59:15PM +0200, Peter Zijlstra wrote:
+> > > On Fri, Sep 09, 2022 at 04:11:57PM -0700, Ricardo Neri wrote:
+> > > > Support the arch_get_task_class_score() interface of the scheduler. Use the
+> > > > data that Intel Thread Director provides to inform the scheduler the
+> > > > performance of a class of tasks when placed on a given CPU.
+> > > > 
+> > > 
+> > > > +static void get_one_hfi_cap(struct hfi_instance *hfi_instance, s16 index,
+> > > > +			    struct hfi_cpu_data *hfi_caps, int class)
+> > > > +{
+> > > > +	struct hfi_cpu_data *caps;
+> > > > +
+> > > > +	/* Find the capabilities of @cpu */
+> > > > +	caps = hfi_instance->data + index * hfi_features.cpu_stride +
+> > > > +	       class * hfi_features.class_stride;
+> > > > +	memcpy(hfi_caps, caps, sizeof(*hfi_caps));
+> > > > +}
+> > > > +
+> > > > +int intel_hfi_get_task_class_score(int class, int cpu)
+> > > > +{
+> > > > +	struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, cpu);
+> > > > +	struct hfi_instance *instance;
+> > > > +	struct hfi_cpu_data caps;
+> > > > +	unsigned long flags;
+> > > > +	int cap;
+> > > > +
+> > > > +	if (cpu < 0 || cpu >= nr_cpu_ids)
+> > > > +		return -EINVAL;
+> > > > +
+> > > > +	if (class == TASK_CLASS_UNCLASSIFIED)
+> > > > +		return -EINVAL;
+> > > > +
+> > > > +	if (class >= (int)hfi_features.nr_classes)
+> > > > +		return -EINVAL;
+> > > > +
+> > > > +	instance = info->hfi_instance;
+> > > > +	if (!instance)
+> > > > +		return -ENOENT;
+> > > > +
+> > > > +	raw_spin_lock_irqsave(&instance->table_lock, flags);
+> > > > +	get_one_hfi_cap(instance, info->index, &caps, class);
+> > > > +	cap = caps.perf_cap;
+> > > > +	raw_spin_unlock_irqrestore(&instance->table_lock, flags);
+> > > > +
+> > > > +	return cap;
+> > > > +}
+> > > 
+> > > Does any of that data actually ever change? Isn't the class score fixed
+> > > per CPU type?
+> > 
+> > Yes, data can change. The Intel SDM Vol 3 Section 14.6.7 states that the
+> > table can be updated during runtime.
 > 
-> Nice catch.
-> The right thing to do is...
+> I find the SDM is often unreadable gibberish, this part doesn't dissapoint.
 > 
->   interrupts:
->     description: The interrupt outputs to sysirq.
->     minItems: 1
->       - description: EINT interrupt
->       - description: EINT event_b interrupt
-
-I didn't know what the interrupts where exactly and if either one is 
-optional so just to be safe I set the limit to 2. I'll do that nex time.
-
-Thanks,
-Yassine
+> There's a ton of might and maybe there; what does it actually do and how
+> often does it do it? Given the thermal interrupt is such a shitshow, we
+> really, as in *REALLY* don't want this to happen at any frequency at
+> all.
 > 
+> And if it barely happens, why do we care if it happens at all?
 
+I enabled this HFI crud on my ADL (INTEL_HFI_THERMAL -- because
+apparently Debian doesn't default enable this) and now I get all of _1_
+interrupt during boot.
 
+Building a kernel on that machine doesn't manage to trip another one.
+
+TRM:          1          1          1          1          1          1          1          1          1          1          1          1          1          1          1          1          1          1          1          1          1          1          1          1   Thermal event interrupts
+
+So yeah.. *can* change, but doesn't.
