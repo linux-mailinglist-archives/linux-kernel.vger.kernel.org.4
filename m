@@ -2,241 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64AD65F64E2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 13:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2E35F64D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 13:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbiJFLJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 07:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
+        id S231430AbiJFLI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 07:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231452AbiJFLJL (ORCPT
+        with ESMTP id S231365AbiJFLIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 07:09:11 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70639C222;
-        Thu,  6 Oct 2022 04:09:01 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MjpSb2RVzz9xGZF;
-        Thu,  6 Oct 2022 19:02:55 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwDnY17_tj5jaD+iAA--.3422S8;
-        Thu, 06 Oct 2022 12:08:42 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v2 6/6] selftests/bpf: Add tests for _opts variants of bpf_*_get_fd_by_id()
-Date:   Thu,  6 Oct 2022 13:07:36 +0200
-Message-Id: <20221006110736.84253-7-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221006110736.84253-1-roberto.sassu@huaweicloud.com>
-References: <20221006110736.84253-1-roberto.sassu@huaweicloud.com>
+        Thu, 6 Oct 2022 07:08:25 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDD19B862
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 04:08:23 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id t4so792988wmj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 04:08:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CbeeFZ+x3aHj+XaOJLuyuhdGWHomvDtrnGAOISq7ELg=;
+        b=Ck8AReTJ9PME9fyJ5bXtOD/KlktSnDb4/OtXx1sJS7huduv7GfLAMWSXKqcIN17UF3
+         R7/9ZR5n+M7+mdAm6920py5T4bhkLTORzDBj9I6CIxG5KCWswu7G7S1x119Bj+UzzPJl
+         9jnWMDHTL3WMjbMDNwEFczA8NZPaJ2FObPXXb6h8xz8DBDDSIUXoPRwhWsJQ3HG5VgWm
+         Avb9Kj4Ip+Jjb2+EbMMGAovxT+wEkgjSWxnw/wkEO5QwGvHYPdg3BTs3tl//OaryYvFo
+         C9iHLk5rpOlH14SYUmLC0aIORmgGLquwwfnn96p5hI+L54qSvraQLI3PeV3Eq5PVcqwj
+         U15Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CbeeFZ+x3aHj+XaOJLuyuhdGWHomvDtrnGAOISq7ELg=;
+        b=P6OzZpmIP5hmqxEaIR8gDxqmiQj7NzATq9hTdllLkarlHwSIUZHelAT3cYWY5a7XSe
+         eEqv9h6NyowGDlRRcCcnS4KsyV5IYeRqpTiNHnreLQmNlLm8qK8F2nPAJdMG6mHZEaFu
+         cUq/17HLjgGSFH2y9LJP1xeRgjsN9ywAnk8iqccb+lTvv8MtjgiZj4LSDr6pa7KI9DV9
+         vJPwLkIosC8sELECZoGVBWEnvxWd0lM+x18sIBSIHz+hdeMuseEYPThrPwVOJmdKWoUf
+         AqzObpjU2iYZP2+uuVPUY1nOpJIyPX9kb1IbWZjFI8KFu2Ui3k2LNR2mLt9LenW3PHlO
+         8x7A==
+X-Gm-Message-State: ACrzQf2sXXKp7WsmYKg+Nds0LFO22rr9YmvLjrFufDuOO62yJVK6xoZF
+        +FyXwMlK4SnJJXm/43ZnZw0jlQ==
+X-Google-Smtp-Source: AMsMyM476u1+t4iuw4iTs7clnDHL2LOAoA/r6b7hlBpiXlWfhv4Cgr5efpX+4UWm4OsdqnRY4ViAxQ==
+X-Received: by 2002:a05:600c:524b:b0:3b4:8c0c:f3b6 with SMTP id fc11-20020a05600c524b00b003b48c0cf3b6mr6717571wmb.50.1665054501394;
+        Thu, 06 Oct 2022 04:08:21 -0700 (PDT)
+Received: from [192.168.0.20] (210.145.15.109.rev.sfr.net. [109.15.145.210])
+        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0a5500b003b4e009deb2sm5928180wmq.41.2022.10.06.04.08.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Oct 2022 04:08:20 -0700 (PDT)
+Message-ID: <cdebdf53-d691-41b6-bb8e-f66bb6f56e56@baylibre.com>
+Date:   Thu, 6 Oct 2022 13:08:19 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v3] arm64: dts: mediatek: mt8183: disable thermal zones
+ without trips.
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221004101130.17256-1-aouledameur@baylibre.com>
+ <17f3fd40-70c1-2e8d-8002-dfe9690aed88@linaro.org>
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+In-Reply-To: <17f3fd40-70c1-2e8d-8002-dfe9690aed88@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwDnY17_tj5jaD+iAA--.3422S8
-X-Coremail-Antispam: 1UD129KBjvJXoW3XF4rJF43GFW8ur47Kr4Uurg_yoWxXr4xpa
-        93WF1YkrWFqr4093s3JF43Cr4xKFW8X3yUJ3s7WFy3Zr10qFn7Ww48WF13tF9IgrZ5Cwsx
-        Zay3trWfGr4UuFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262
-        kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s02
-        6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GF
-        v_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvE
-        c7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
-        AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZF
-        pf9x07jxwIDUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgARBF1jj3-niwAAs1
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+Hi Daniel,
 
-Introduce the data_input map, write-protected with a small eBPF program
-implementing the lsm/bpf_map hook.
+Thank you for your feedback.
 
-Then, ensure that bpf_map_get_fd_by_id() and bpf_map_get_fd_by_id_opts()
-with NULL opts don't succeed due to requesting read-write access to the
-write-protected map. Also, ensure that bpf_map_get_fd_by_id_opts() with
-open_flags in opts set to BPF_F_RDONLY instead succeeds.
+On 10/4/22 12:47, Daniel Lezcano wrote:
+>
+> Hi Amjad,
+>
+> On 04/10/2022 12:11, Amjad Ouled-Ameur wrote:
+>> Thermal zones without trip point are not registered by thermal core.
+>>
+>> tzts1 ~ tzts6 zones of mt8183 were intially introduced for test-purpose
+>> only.
+>>
+>> Disable the zones above and keep only cpu_thermal enabled.
+>
+> It does not make sense to disable the thermal zones. Either the thermal zones are needed or they are not. Keeping them for debug purpose is not desired.
+As Matthias Brugger mentioned in previous versions, DTS should describe the HW as it is, the sensors are in the HW.
+>
+> Alternatively to removal, you can:
+>
+>  - remove 'sustainable-power'
+>  - add a passive trip point, optionally a hot trip point and a critical trip point
 
-After obtaining a read-only fd, ensure that only map lookup succeeds and
-not update. Ensure that update works only with the read-write fd obtained
-at program loading time, when the write protection was not yet enabled.
+Why removing "sustainable-power" instead of simply disabling the device ? Especially that, if a user needs to use the sensor
 
-Finally, ensure that the other _opts variants of bpf_*_get_fd_by_id() don't
-work if the BPF_F_RDONLY flag is set in opts (due to the kernel not
-handling the open_flags member of bpf_attr).
+in the future, they might not be able to find the right sustainable-power ; thus I think it should remain the way it is.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- tools/testing/selftests/bpf/DENYLIST.s390x    |  1 +
- .../bpf/prog_tests/libbpf_get_fd_by_id_opts.c | 87 +++++++++++++++++++
- .../bpf/progs/test_libbpf_get_fd_by_id_opts.c | 36 ++++++++
- 3 files changed, 124 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_by_id_opts.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_libbpf_get_fd_by_id_opts.c
+As to adding tripping points, MediaTek does not have ones to add for now for those sensors.
 
-diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
-index 17e074eb42b8..f3a56dcc4eec 100644
---- a/tools/testing/selftests/bpf/DENYLIST.s390x
-+++ b/tools/testing/selftests/bpf/DENYLIST.s390x
-@@ -75,3 +75,4 @@ user_ringbuf                             # failed to find kernel BTF type ID of
- lookup_key                               # JIT does not support calling kernel function                                (kfunc)
- verify_pkcs7_sig                         # JIT does not support calling kernel function                                (kfunc)
- kfunc_dynptr_param                       # JIT does not support calling kernel function                                (kfunc)
-+libbpf_get_fd_by_id_opts                 # failed to attach: ERROR: strerror_r(-524)=22                                (trampoline)
-diff --git a/tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_by_id_opts.c b/tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_by_id_opts.c
-new file mode 100644
-index 000000000000..25e5dfa9c315
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_by_id_opts.c
-@@ -0,0 +1,87 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ */
-+
-+#include <test_progs.h>
-+
-+#include "test_libbpf_get_fd_by_id_opts.skel.h"
-+
-+void test_libbpf_get_fd_by_id_opts(void)
-+{
-+	struct test_libbpf_get_fd_by_id_opts *skel;
-+	struct bpf_map_info info_m = {};
-+	__u32 len = sizeof(info_m), value;
-+	int ret, zero = 0, fd = -1;
-+	LIBBPF_OPTS(bpf_get_fd_by_id_opts, fd_opts_rdonly,
-+		.open_flags = BPF_F_RDONLY,
-+	);
-+
-+	skel = test_libbpf_get_fd_by_id_opts__open_and_load();
-+	if (!ASSERT_OK_PTR(skel,
-+			   "test_libbpf_get_fd_by_id_opts__open_and_load"))
-+		return;
-+
-+	ret = test_libbpf_get_fd_by_id_opts__attach(skel);
-+	if (!ASSERT_OK(ret, "test_libbpf_get_fd_by_id_opts__attach"))
-+		goto close_prog;
-+
-+	ret = bpf_obj_get_info_by_fd(bpf_map__fd(skel->maps.data_input),
-+				     &info_m, &len);
-+	if (!ASSERT_OK(ret, "bpf_obj_get_info_by_fd"))
-+		goto close_prog;
-+
-+	fd = bpf_map_get_fd_by_id(info_m.id);
-+	if (!ASSERT_LT(fd, 0, "bpf_map_get_fd_by_id"))
-+		goto close_prog;
-+
-+	fd = bpf_map_get_fd_by_id_opts(info_m.id, NULL);
-+	if (!ASSERT_LT(fd, 0, "bpf_map_get_fd_by_id_opts"))
-+		goto close_prog;
-+
-+	fd = bpf_map_get_fd_by_id_opts(info_m.id, &fd_opts_rdonly);
-+	if (!ASSERT_GE(fd, 0, "bpf_map_get_fd_by_id_opts"))
-+		goto close_prog;
-+
-+	/* Map lookup should work with read-only fd. */
-+	ret = bpf_map_lookup_elem(fd, &zero, &value);
-+	if (!ASSERT_OK(ret, "bpf_map_lookup_elem"))
-+		goto close_prog;
-+
-+	if (!ASSERT_EQ(value, 0, "map value mismatch"))
-+		goto close_prog;
-+
-+	/* Map update should not work with read-only fd. */
-+	ret = bpf_map_update_elem(fd, &zero, &len, BPF_ANY);
-+	if (!ASSERT_LT(ret, 0, "bpf_map_update_elem"))
-+		goto close_prog;
-+
-+	/* Map update should work with read-write fd. */
-+	ret = bpf_map_update_elem(bpf_map__fd(skel->maps.data_input), &zero,
-+				  &len, BPF_ANY);
-+	if (!ASSERT_OK(ret, "bpf_map_update_elem"))
-+		goto close_prog;
-+
-+	/* Prog get fd with opts set should not work (no kernel support). */
-+	ret = bpf_prog_get_fd_by_id_opts(0, &fd_opts_rdonly);
-+	if (!ASSERT_EQ(ret, -EINVAL, "bpf_prog_get_fd_by_id_opts"))
-+		goto close_prog;
-+
-+	/* Link get fd with opts set should not work (no kernel support). */
-+	ret = bpf_link_get_fd_by_id_opts(0, &fd_opts_rdonly);
-+	if (!ASSERT_EQ(ret, -EINVAL, "bpf_link_get_fd_by_id_opts"))
-+		goto close_prog;
-+
-+	/* BTF get fd with opts set should not work (no kernel support). */
-+	ret = bpf_btf_get_fd_by_id_opts(0, &fd_opts_rdonly);
-+	ASSERT_EQ(ret, -EINVAL, "bpf_btf_get_fd_by_id_opts");
-+
-+close_prog:
-+	if (fd >= 0)
-+		close(fd);
-+
-+	test_libbpf_get_fd_by_id_opts__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_libbpf_get_fd_by_id_opts.c b/tools/testing/selftests/bpf/progs/test_libbpf_get_fd_by_id_opts.c
-new file mode 100644
-index 000000000000..f5ac5f3e8919
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_libbpf_get_fd_by_id_opts.c
-@@ -0,0 +1,36 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ */
-+
-+#include "vmlinux.h"
-+#include <errno.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+/* From include/linux/mm.h. */
-+#define FMODE_WRITE	0x2
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} data_input SEC(".maps");
-+
-+char _license[] SEC("license") = "GPL";
-+
-+SEC("lsm/bpf_map")
-+int BPF_PROG(check_access, struct bpf_map *map, fmode_t fmode)
-+{
-+	if (map != (struct bpf_map *)&data_input)
-+		return 0;
-+
-+	if (fmode & FMODE_WRITE)
-+		return -EACCES;
-+
-+	return 0;
-+}
--- 
-2.25.1
 
+Regards,
+
+Amjad
+
+>
+> The passive trip point will allow the userspace to set a value in order to get notified about the devices temperature (writable trip point). The hot temperature will send a notification to userspace so it can take a last chance decision to drop the temperature before the critical temperature.
+>
+> The passive trip point temperature could be a high temperature.
+>
+> The mitigation is also managed from userspace as a whole.
+>
+>
+>> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+>> ---
+>>   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 6 ++++++
+>>   1 file changed, 6 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+>> index 9d32871973a2..53f7a0fbaa88 100644
+>> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+>> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+>> @@ -1191,6 +1191,7 @@ tzts1: tzts1 {
+>>                   polling-delay = <0>;
+>>                   thermal-sensors = <&thermal 1>;
+>>                   sustainable-power = <5000>;
+>> +                status = "disabled";
+>>                   trips {};
+>>                   cooling-maps {};
+>>               };
+>> @@ -1200,6 +1201,7 @@ tzts2: tzts2 {
+>>                   polling-delay = <0>;
+>>                   thermal-sensors = <&thermal 2>;
+>>                   sustainable-power = <5000>;
+>> +                status = "disabled";
+>>                   trips {};
+>>                   cooling-maps {};
+>>               };
+>> @@ -1209,6 +1211,7 @@ tzts3: tzts3 {
+>>                   polling-delay = <0>;
+>>                   thermal-sensors = <&thermal 3>;
+>>                   sustainable-power = <5000>;
+>> +                status = "disabled";
+>>                   trips {};
+>>                   cooling-maps {};
+>>               };
+>> @@ -1218,6 +1221,7 @@ tzts4: tzts4 {
+>>                   polling-delay = <0>;
+>>                   thermal-sensors = <&thermal 4>;
+>>                   sustainable-power = <5000>;
+>> +                status = "disabled";
+>>                   trips {};
+>>                   cooling-maps {};
+>>               };
+>> @@ -1227,6 +1231,7 @@ tzts5: tzts5 {
+>>                   polling-delay = <0>;
+>>                   thermal-sensors = <&thermal 5>;
+>>                   sustainable-power = <5000>;
+>> +                status = "disabled";
+>>                   trips {};
+>>                   cooling-maps {};
+>>               };
+>> @@ -1236,6 +1241,7 @@ tztsABB: tztsABB {
+>>                   polling-delay = <0>;
+>>                   thermal-sensors = <&thermal 6>;
+>>                   sustainable-power = <5000>;
+>> +                status = "disabled";
+>>                   trips {};
+>>                   cooling-maps {};
+>>               };
+>
+>
