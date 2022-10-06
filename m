@@ -2,106 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE0A5F66FD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7995F6708
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbiJFM4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 08:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49020 "EHLO
+        id S230209AbiJFM7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 08:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231710AbiJFM4U (ORCPT
+        with ESMTP id S231474AbiJFM6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 08:56:20 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349BBA598A;
-        Thu,  6 Oct 2022 05:55:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665060925; x=1696596925;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=S5navL3jnwUzMbkOa6ZBmAleAMC/wLUzNSkL2hnfgy8=;
-  b=Fmz13lQV/0WzaQrvvX5t/tXe8jkg5/GJyl0zWZJtrZnzpUdh+CB/a8J9
-   U86FsZoDjm7k4/DS3PVjZd6aLSJ3GTlAUo25IU7XZv6L2ahvq0/pZoSar
-   2ixkg/ZAxHBUFzMAKjahWHuVtQeH4ksn593Zworb4VUETd6CTXLUoudJa
-   bwD0VP/ZowZITjSjHuQ09K59GVV1g1gUwD7SWcaXN+jYL77JP7sS6sk6v
-   yZyfWFdnc2ZX4ldymFIYDt8Wvl35dwWK8hyOfJRkyRKT8XKqT3dAFyR2M
-   5v28PQ1m84GAY7Y/gsTw2q/AZ8EP1ntVGDJwyagpHIwLLEyqo6LraLYhz
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="302151218"
-X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
-   d="scan'208";a="302151218"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 05:55:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="693341005"
-X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
-   d="scan'208";a="693341005"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Oct 2022 05:55:07 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ogQP3-0039HF-2x;
-        Thu, 06 Oct 2022 15:55:05 +0300
-Date:   Thu, 6 Oct 2022 15:55:05 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v1 1/1] device property: Fix documentation for
- *_match_string() APIs
-Message-ID: <Yz7QKTrKtjh3RTYg@smile.fi.intel.com>
-References: <20221006123807.37014-1-andriy.shevchenko@linux.intel.com>
- <Yz7N9b3qibyaPAhJ@paasikivi.fi.intel.com>
+        Thu, 6 Oct 2022 08:58:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F1631E;
+        Thu,  6 Oct 2022 05:58:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BCBDCB81FCF;
+        Thu,  6 Oct 2022 12:58:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3080DC433C1;
+        Thu,  6 Oct 2022 12:58:34 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="jM72sEmp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1665061112;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Cy+TvXeuBlQBpKZ85Gz71XfrwaBFdgj2EOkEjFq4oj0=;
+        b=jM72sEmpr2WmU4lD5kxfUFDLgPwhfdQkvrJiCluULi4OY1o5sMNbSsUY1L1aQLNsaU7IbM
+        UXwFGPiIiOMzVMfDkf93GRmdXaDFh+Qoa2WH5PO4HOsZTyh4aWKdhjrdkXF7qKB6CrheE4
+        7t0K0MOBB+//oXNLBPHEpxlzzlaU0pU=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 58f73b69 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 6 Oct 2022 12:58:32 +0000 (UTC)
+Received: by mail-vs1-f42.google.com with SMTP id l127so1909319vsc.3;
+        Thu, 06 Oct 2022 05:58:31 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0LkLizrLAYvyllcPhPDqug5DCXgwyIBPZHyXNZVpfxSFhEsbc8
+        vYl7cU87kbHk3bQ+ltIY/1ToKYkbbyASXTjaY0c=
+X-Google-Smtp-Source: AMsMyM6bN/N0v77xkMIHRe+au6d89krdEiug+7xWjxwXgig3YnOZy/y7fPjRCz3uGFAZP0QEevNmHhO3PqUzQLRsK2M=
+X-Received: by 2002:a05:6102:1481:b0:39a:67f5:3096 with SMTP id
+ d1-20020a056102148100b0039a67f53096mr2254146vsv.70.1665061110855; Thu, 06 Oct
+ 2022 05:58:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yz7N9b3qibyaPAhJ@paasikivi.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221005214844.2699-1-Jason@zx2c4.com> <202210052310.BF756EBEBE@keescook>
+In-Reply-To: <202210052310.BF756EBEBE@keescook>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Thu, 6 Oct 2022 06:58:19 -0600
+X-Gmail-Original-Message-ID: <CAHmME9pvW1SF5hfaE796KLmisbX2TK67F3xO6OKV2ZBiqvEeOg@mail.gmail.com>
+Message-ID: <CAHmME9pvW1SF5hfaE796KLmisbX2TK67F3xO6OKV2ZBiqvEeOg@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] treewide cleanup of random integer usage
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-api@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 12:45:41PM +0000, Sakari Ailus wrote:
-> On Thu, Oct 06, 2022 at 03:38:07PM +0300, Andy Shevchenko wrote:
-> > The returned value on success is an index of the matching string,
-> > starting from 0. Reflect this in the documentation.
+On Thu, Oct 6, 2022 at 12:15 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Wed, Oct 05, 2022 at 11:48:39PM +0200, Jason A. Donenfeld wrote:
+> > I've CC'd get_maintainers.pl, which is a pretty big list. Probably some
+> > portion of those are going to bounce, too, and everytime you reply to
+>
+> The real problem is that replies may not reach the vger lists:
+>
+> Subject: BOUNCE linux-kernel@vger.kernel.org: Header field too long (>8192)
+>
+> But the originals somehow ended up on lore?
+>
+> https://lore.kernel.org/lkml/20221005214844.2699-1-Jason@zx2c4.com/
 
-> > Fixes: 3f5c8d318785 ("device property: Add fwnode_property_match_string()")
+Heh, those aren't quite the originals. Same message IDs, but I did
+evil things to get them on there.
 
-...
+v2 coming shortly to rectify this mess.
 
-> > - * Return: %0 if the property was found (success),
-> > + * Return: index, starting from %0, if the property was found (success),
-> >   *	   %-EINVAL if given arguments are not valid,
-> >   *	   %-ENODATA if the property does not have a value,
-> >   *	   %-EPROTO if the property is not an array of strings,
-> 
-> There are other error codes that can be returned such as -ENOMEM or what
-> else may be returned by fwnode_property_read_string_array().
-> 
-> I might just refer to fwnode_property_read_string_array() and document here
-> those specific to these functions.
-> 
-> Just FYI... I guess this could be a separate patch, too.
-
-Right, I think we would rather do an incremental change since that will be
-more intrusive and would not be exactly the fix (improvement?).
-
-> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-
-Thanks!
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Jason
