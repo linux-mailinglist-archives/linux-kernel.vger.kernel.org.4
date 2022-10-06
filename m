@@ -2,120 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD6C5F678B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0E85F679F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231487AbiJFNPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 09:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
+        id S229514AbiJFNRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 09:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbiJFNPm (ORCPT
+        with ESMTP id S230216AbiJFNR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 09:15:42 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B13A8CF6
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 06:15:38 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id y20so916387qtv.5
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 06:15:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=GSOPunDdTF0UIVvBpION9xBpexDiGo+rjOxipFbXtOA=;
-        b=j4TXfdYhCC5IuPEKT7c142DGOyyUICiYEJ2rQ5pM4q0yiZx4WA0kHStxgeCysxKdIn
-         TuxQmiKuGnCh2iLv5lCSAeVvdfZCgr0gslAO6C/wmbiJpJE+HGv9p0BlGAp2YHTd7MAZ
-         JFShEKjZddNRI3EB69zxWrjNCIn5FEtT938q5Kh600byBOTgEAyr3Cw5BxKLykg6qGKZ
-         putHsZDuOr6KOj1BUasiDhf52tRH/Ed62HmMrAEpEsYDeTWjqgqViGX5p251folDWhG6
-         /9qz6hzxVHLZMa8vddlM+hc6XFLs5D7qWuuoVr7OgpiuiN/JdE0keFKPOZzvhwuMVbjX
-         g/wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=GSOPunDdTF0UIVvBpION9xBpexDiGo+rjOxipFbXtOA=;
-        b=TSIPPPGQHiP0xHEA5mvKMMRCV4BMHhjT0cr8GGIfEb1qb8flgKbFDtpbzsjO5T1VAp
-         LHawNCLTgX8Dl7mhFwwviGQ3hIr1WC5KplLbCvC6IdyDDwxKI+TL+Plv+8Sfq6ahpRIu
-         cTPtLZkDsyw5aUmb81U8aKFl/OjElZk42TN0G5UYjKVFe5Wi334bzxvzLspzttAzmgRw
-         dw+lifvDv5BQ5wCkj6Q3NBye3I6f6NeK44szawn4mQ+lpn46TvwkkOFWhCFakY50MesK
-         mLVKmeDzvDBu/iUoV0rGW0xfNzEEUcHDIAXzb+4Me+DrVnAIRdk0dYy9plkavvseQxnR
-         z+zQ==
-X-Gm-Message-State: ACrzQf1zKA+QDHwGxN8S8syhm63J/gK0pf51dAoOcsnyA9nzfvnGd8WV
-        bKFsq84aXbvVi0b1+Sn5iqJnMTfYmCv4KEyI
-X-Google-Smtp-Source: AMsMyM4GpHypPhwf4qnIOCDMCCPPCaDHHZXra2UnB6U4hePjwcf7/TKsWZTRJwrBHYFFgt7B+K7zfA==
-X-Received: by 2002:ac8:5703:0:b0:35c:c3f6:5991 with SMTP id 3-20020ac85703000000b0035cc3f65991mr3383265qtw.185.1665062137334;
-        Thu, 06 Oct 2022 06:15:37 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
-        by smtp.gmail.com with ESMTPSA id k11-20020a05620a0b8b00b006cbc6e1478csm18686320qkh.57.2022.10.06.06.15.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 06:15:36 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1ogQit-00A1hY-6O;
-        Thu, 06 Oct 2022 10:15:35 -0300
-Date:   Thu, 6 Oct 2022 10:15:35 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        cake@lists.bufferbloat.net, ceph-devel@vger.kernel.org,
-        coreteam@netfilter.org, dccp@vger.kernel.org, dev@openvswitch.org,
-        dmaengine@vger.kernel.org, drbd-dev@lists.linbit.com,
-        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
-        linux-actions@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-fbdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-hams@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mm@kvack.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-raid@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-sctp@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        lvs-devel@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, rds-devel@oss.oracle.com,
-        SHA-cyfmac-dev-list@infineon.com, target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net
-Subject: Re: [PATCH v1 3/5] treewide: use get_random_u32() when possible
-Message-ID: <Yz7U99PPl8uHCLFY@ziepe.ca>
-References: <20221005214844.2699-1-Jason@zx2c4.com>
- <20221005214844.2699-4-Jason@zx2c4.com>
- <Yz7OdfKZeGkpZSKb@ziepe.ca>
- <CAHmME9r_vNRFFjUvqx8QkBddg_kQU=FMgpk9TqOVZdvX6zXHNg@mail.gmail.com>
+        Thu, 6 Oct 2022 09:17:26 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E953BA9260
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 06:17:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=8T2sFVcyf0kuqa8Hcqks7UqJO8ynKlOIJSB8sPGVj5E=; b=RjZOS2m9aaIZKYJtK4OLvKk2yG
+        efbClYQBz3qcI6Zkwn+exlZBqr4DRAsW64VVvZwCguJG4YNG7ACGqzHrnF5BYRxvs5+a7LYIGKUDm
+        dHCY6BQHyF2QXGtmKZU3JgAvxonLu32KLXJCrdl002eYQdylFApe31CJQXdhpl2NlzPzaW7nMOjFZ
+        a1LzUChIysxuApOVqHdEQWp84oNDwlI4u7mRZP4lg036gdoY0jSdNyUMTOFVwqAtkNXpOLvMBhj8E
+        pPiCqf3WdMmvfS18c7UlS2qZq6eJc04FmwqpeZz0QpsQ8yfVr1obfwaA6Q1417T0bOHz/84DhiMHy
+        R8vesyTbuanSZLLVGt7EVx6/75J05vs3d+uVI707DXxudMQuQ5y83PO5pn+3JaB2cI3QxHP9/aueu
+        0c62iBtngpUyo+pzdCYSHXGykgknplnCdYKpoUKQz5LvhHUzD126sFO3oboeUQ2OMChuLVpOX6NJV
+        z6JsyrYIgAZqCKIQPbKKRDkETX17Nzdig3uCcrLLOwWYgwWcLQoP+TJ/zcXJfImTsdphdkBw1m4pW
+        TowYyAZGSArJ0NrAkKbpIbdoj/uA+5jq/spNvNj9c4xNPcaeJ+zPCkkKPdF+hVOfwT9Y1yrObRtzg
+        4j8UcrxNbpFuk5SuUfckUk3KAhHprahGc02zc3YA8=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     v9fs-developer@lists.sourceforge.net,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        syzbot <syzbot+2f20b523930c32c160cc@syzkaller.appspotmail.com>
+Cc:     syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net/9p: use a dedicated spinlock for trans_fd
+Date:   Thu, 06 Oct 2022 15:16:40 +0200
+Message-ID: <2356596.7K3kzkM6Yp@silver>
+In-Reply-To: <20220904112928.1308799-1-asmadeus@codewreck.org>
+References: <2470e028-9b05-2013-7198-1fdad071d999@I-love.SAKURA.ne.jp>
+ <20220904112928.1308799-1-asmadeus@codewreck.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHmME9r_vNRFFjUvqx8QkBddg_kQU=FMgpk9TqOVZdvX6zXHNg@mail.gmail.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 07:05:48AM -0600, Jason A. Donenfeld wrote:
-
-> > > diff --git a/drivers/infiniband/ulp/ipoib/ipoib_cm.c b/drivers/infiniband/ulp/ipoib/ipoib_cm.c
-> > > index fd9d7f2c4d64..a605cf66b83e 100644
-> > > --- a/drivers/infiniband/ulp/ipoib/ipoib_cm.c
-> > > +++ b/drivers/infiniband/ulp/ipoib/ipoib_cm.c
-> > > @@ -465,7 +465,7 @@ static int ipoib_cm_req_handler(struct ib_cm_id *cm_id,
-> > >               goto err_qp;
-> > >       }
-> > >
-> > > -     psn = prandom_u32() & 0xffffff;
-> > > +     psn = get_random_u32() & 0xffffff;
-> >
-> >  prandom_max(0xffffff + 1)
+On Sonntag, 4. September 2022 13:29:28 CEST Dominique Martinet wrote:
+> Shamelessly copying the explanation from Tetsuo Handa's suggested
+> patch[1] (slightly reworded):
+> syzbot is reporting inconsistent lock state in p9_req_put()[2],
+> for p9_tag_remove() from p9_req_put() from IRQ context is using
+> spin_lock_irqsave() on "struct p9_client"->lock but trans_fd
+> (not from IRQ context) is using spin_lock().
 > 
-> That'd work, but again it's not more clear. Authors here are going for
-> a 24-bit number, and masking seems like a clear way to express that.
+> Since the locks actually protect different things in client.c and in
+> trans_fd.c, just replace trans_fd.c's lock by a new one specific to the
+> transport instead of using spin_lock_irq* variants everywhere
+> (client.c's protect the idr for tag allocations, while
+> trans_fd.c's protects its own req list and request status field
+> that acts as the transport's state machine)
+> 
+> Link:
+> https://lkml.kernel.org/r/2470e028-9b05-2013-7198-1fdad071d999@I-love.SAKUR
+> A.ne.jp [1] Link:
+> https://syzkaller.appspot.com/bug?extid=2f20b523930c32c160cc [2]
+> Reported-by: syzbot <syzbot+2f20b523930c32c160cc@syzkaller.appspotmail.com>
+> Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+> ---
+> Tetsuo Handa-san, thank you very much!
+> I'm sorry for not respecting your opinion but it's been a pleasure to
+> have submissions from someone on JST :)
+> 
+> Both this and your previous patch only impact trans_fd which I can't
+> test super easily, so while I've sent the patch here I'll only queue it
+> to -next hopefully next week after I've had time to setup a compatible
+> server again...
+> 
+>  net/9p/trans_fd.c | 42 ++++++++++++++++++++++++++----------------
+>  1 file changed, 26 insertions(+), 16 deletions(-)
+>
 
-vs just asking directly for a 24 bit number?
+Late on the party, sorry. Note that you already queued a slightly different 
+version than this patch here, anyway, one thing ...
 
-Jason
+> diff --git a/net/9p/trans_fd.c b/net/9p/trans_fd.c
+> index ef5760971f1e..5b4807411281 100644
+> --- a/net/9p/trans_fd.c
+> +++ b/net/9p/trans_fd.c
+> @@ -91,6 +91,7 @@ struct p9_poll_wait {
+>   * @mux_list: list link for mux to manage multiple connections (?)
+>   * @client: reference to client instance for this connection
+>   * @err: error state
+> + * @req_lock: lock protecting req_list and requests statuses
+>   * @req_list: accounting for requests which have been sent
+>   * @unsent_req_list: accounting for requests that haven't been sent
+>   * @rreq: read request
+> @@ -114,6 +115,7 @@ struct p9_conn {
+>  	struct list_head mux_list;
+>  	struct p9_client *client;
+>  	int err;
+> +	spinlock_t req_lock;
+>  	struct list_head req_list;
+>  	struct list_head unsent_req_list;
+>  	struct p9_req_t *rreq;
+> @@ -189,10 +191,10 @@ static void p9_conn_cancel(struct p9_conn *m, int err)
+> 
+>  	p9_debug(P9_DEBUG_ERROR, "mux %p err %d\n", m, err);
+> 
+> -	spin_lock(&m->client->lock);
+> +	spin_lock(&m->req_lock);
+> 
+>  	if (m->err) {
+> -		spin_unlock(&m->client->lock);
+> +		spin_unlock(&m->req_lock);
+>  		return;
+>  	}
+> 
+> @@ -205,7 +207,7 @@ static void p9_conn_cancel(struct p9_conn *m, int err)
+>  		list_move(&req->req_list, &cancel_list);
+>  	}
+> 
+> -	spin_unlock(&m->client->lock);
+> +	spin_unlock(&m->req_lock);
+> 
+>  	list_for_each_entry_safe(req, rtmp, &cancel_list, req_list) {
+>  		p9_debug(P9_DEBUG_ERROR, "call back req %p\n", req);
+> @@ -360,7 +362,7 @@ static void p9_read_work(struct work_struct *work)
+>  	if ((m->rreq) && (m->rc.offset == m->rc.capacity)) {
+>  		p9_debug(P9_DEBUG_TRANS, "got new packet\n");
+>  		m->rreq->rc.size = m->rc.offset;
+> -		spin_lock(&m->client->lock);
+> +		spin_lock(&m->req_lock);
+>  		if (m->rreq->status == REQ_STATUS_SENT) {
+>  			list_del(&m->rreq->req_list);
+>  			p9_client_cb(m->client, m->rreq, 
+REQ_STATUS_RCVD);
+> @@ -369,14 +371,14 @@ static void p9_read_work(struct work_struct *work)
+>  			p9_debug(P9_DEBUG_TRANS,
+>  				 "Ignore replies associated with a 
+cancelled request\n");
+>  		} else {
+> -			spin_unlock(&m->client->lock);
+> +			spin_unlock(&m->req_lock);
+>  			p9_debug(P9_DEBUG_ERROR,
+>  				 "Request tag %d errored out while we 
+were reading the reply\n",
+>  				 m->rc.tag);
+>  			err = -EIO;
+>  			goto error;
+>  		}
+> -		spin_unlock(&m->client->lock);
+> +		spin_unlock(&m->req_lock);
+>  		m->rc.sdata = NULL;
+>  		m->rc.offset = 0;
+>  		m->rc.capacity = 0;
+> @@ -454,10 +456,10 @@ static void p9_write_work(struct work_struct *work)
+>  	}
+> 
+>  	if (!m->wsize) {
+> -		spin_lock(&m->client->lock);
+> +		spin_lock(&m->req_lock);
+>  		if (list_empty(&m->unsent_req_list)) {
+>  			clear_bit(Wworksched, &m->wsched);
+> -			spin_unlock(&m->client->lock);
+> +			spin_unlock(&m->req_lock);
+>  			return;
+>  		}
+> 
+> @@ -472,7 +474,7 @@ static void p9_write_work(struct work_struct *work)
+>  		m->wpos = 0;
+>  		p9_req_get(req);
+>  		m->wreq = req;
+> -		spin_unlock(&m->client->lock);
+> +		spin_unlock(&m->req_lock);
+>  	}
+> 
+>  	p9_debug(P9_DEBUG_TRANS, "mux %p pos %d size %d\n",
+> @@ -670,10 +672,10 @@ static int p9_fd_request(struct p9_client *client,
+> struct p9_req_t *req) if (m->err < 0)
+>  		return m->err;
+> 
+> -	spin_lock(&client->lock);
+> +	spin_lock(&m->req_lock);
+>  	req->status = REQ_STATUS_UNSENT;
+>  	list_add_tail(&req->req_list, &m->unsent_req_list);
+> -	spin_unlock(&client->lock);
+> +	spin_unlock(&m->req_lock);
+> 
+>  	if (test_and_clear_bit(Wpending, &m->wsched))
+>  		n = EPOLLOUT;
+> @@ -688,11 +690,13 @@ static int p9_fd_request(struct p9_client *client,
+> struct p9_req_t *req)
+> 
+>  static int p9_fd_cancel(struct p9_client *client, struct p9_req_t *req)
+>  {
+> +	struct p9_trans_fd *ts = client->trans;
+> +	struct p9_conn *m = &ts->conn;
+>  	int ret = 1;
+> 
+>  	p9_debug(P9_DEBUG_TRANS, "client %p req %p\n", client, req);
+> 
+> -	spin_lock(&client->lock);
+> +	spin_lock(&m->req_lock);
+> 
+>  	if (req->status == REQ_STATUS_UNSENT) {
+>  		list_del(&req->req_list);
+> @@ -700,21 +704,24 @@ static int p9_fd_cancel(struct p9_client *client,
+> struct p9_req_t *req) p9_req_put(client, req);
+>  		ret = 0;
+>  	}
+> -	spin_unlock(&client->lock);
+> +	spin_unlock(&m->req_lock);
+> 
+>  	return ret;
+>  }
+> 
+>  static int p9_fd_cancelled(struct p9_client *client, struct p9_req_t *req)
+>  {
+> +	struct p9_trans_fd *ts = client->trans;
+> +	struct p9_conn *m = &ts->conn;
+> +
+>  	p9_debug(P9_DEBUG_TRANS, "client %p req %p\n", client, req);
+> 
+> -	spin_lock(&client->lock);
+> +	spin_lock(&m->req_lock);
+>  	/* Ignore cancelled request if message has been received
+>  	 * before lock.
+>  	 */
+>  	if (req->status == REQ_STATUS_RCVD) {
+> -		spin_unlock(&client->lock);
+> +		spin_unlock(&m->req_lock);
+>  		return 0;
+>  	}
+> 
+> @@ -723,7 +730,8 @@ static int p9_fd_cancelled(struct p9_client *client,
+> struct p9_req_t *req) */
+>  	list_del(&req->req_list);
+>  	req->status = REQ_STATUS_FLSHD;
+> -	spin_unlock(&client->lock);
+> +	spin_unlock(&m->req_lock);
+> +
+>  	p9_req_put(client, req);
+> 
+>  	return 0;
+> @@ -832,6 +840,7 @@ static int p9_fd_open(struct p9_client *client, int rfd,
+> int wfd)
+> 
+>  	client->trans = ts;
+>  	client->status = Connected;
+> +	spin_lock_init(&ts->conn.req_lock);
+
+Are you sure this is the right place for spin_lock_init()? Not rather in 
+p9_conn_create()?
+
+>  	return 0;
+> 
+> @@ -866,6 +875,7 @@ static int p9_socket_open(struct p9_client *client,
+> struct socket *csocket) p->wr = p->rd = file;
+>  	client->trans = p;
+>  	client->status = Connected;
+> +	spin_lock_init(&p->conn.req_lock);
+
+Same here.
+
+> 
+>  	p->rd->f_flags |= O_NONBLOCK;
+
+The rest LGTM.
+
+Best regards,
+Christian Schoenebeck
+
+
