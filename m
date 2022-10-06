@@ -2,69 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599A05F69DE
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:42:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E235F69E2
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbiJFOmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 10:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
+        id S229538AbiJFOoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 10:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231691AbiJFOmr (ORCPT
+        with ESMTP id S230189AbiJFOn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 10:42:47 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FBFB0B0B
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 07:42:40 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id f11so3052956wrm.6
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 07:42:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=l2gnFSFPSlRjaIYrHodxPWa3mPS8gpS3VL5ic+NAZDAXyOnk5V+Xdq1Dgn5Dp200Hc
-         JWlTMbTyTWesteuPQvbfdpcheRJrGZRoVGYfudA9i/O6WQSK5jqH0lOQhyZLph79GzUh
-         NWpi+wGlnUH24IDERjfS2iSCVEXPI2BPuCpIiS8mjO6yZDBGS4yx1onSXd/uzPekccDY
-         IzwCLklIBe8frcYrTJ6g5NIKpMHD0Sosh29Y0GCaGFzVMCUtnfx1nIz0vnnASKS31GOy
-         iPCUAM/rQSQ9tw6L5eaZXs/0+s7Ndrc8E1SmWs97mkGsWIyDFKyf0f4JDfMqvbrV8Tt9
-         uNIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=GzhgdaOLudGrQo2L3HIV8hKvdFt+9gWlnAcKEeQD2hIEwWY5Rkt3jDHbTixMTN/1tJ
-         JQmPXN97NpqYBgHgyLLqWUKcBQ0QqLbDGVV6HkQugu+1vxvTi+OFxu/Yz4lrUahIzjAz
-         1SM5lRD9BkS52RsXrnNN0kKtU5/2KVZwxSZKMzbe28k4oZs4tOdzf6NkYtuXIxIq70g/
-         qpAZjLt1bjbL9VxRNsZ6LUYiNwndxC9eP/CKTGIOqrCHxsC4UWCCsLn3IlhCEin0JTbw
-         OfZ3oHFclxqJ7fOUxPU60HwOKViPUJbmCc4musbK2zbusXH7GAS60EcFolQTNC2mici8
-         jclA==
-X-Gm-Message-State: ACrzQf3s+p9tn9yT8Z0W2X3Xkew9/Wbf9iIm5Zs6jssqrZ3ELHwBg9Hk
-        XgRl4Vv/zwZbQMIVddTMcaC+ieyKNgrYgPceshs=
-X-Google-Smtp-Source: AMsMyM7o6Qaq+wE5sacAWhfflIWdQZlEDdIz94f/qzsQMcSRjrRMx+v8NKi2m85icARiW9ISkfKtUfTiVsowLKFNNoQ=
-X-Received: by 2002:a5d:5847:0:b0:22b:377:6786 with SMTP id
- i7-20020a5d5847000000b0022b03776786mr193974wrf.568.1665067358627; Thu, 06 Oct
- 2022 07:42:38 -0700 (PDT)
+        Thu, 6 Oct 2022 10:43:59 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7B4AA3E4
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 07:43:58 -0700 (PDT)
+X-UUID: 18910ae5b4e74b06b01041f50367ce57-20221006
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=XIEKHeBnDpf8qnQLc78wkKjbYdk1bbgIcbqYREQemf4=;
+        b=K8qrRa403rjLLFBBYGnan4dRdQrEBLigGtSaUz245NgPNoVmojK2ppZ0wu6tmS23jnMBC2LeQ4axuWG+fdnEljlx+qWGmCdjcAQS8sfvVw9AdMYl0/m6Nz6I9CPXXjp7RhdH4zHRCBDuD1aeG72Xf5SX0Q6oDrfgFbi4lcRkvl8=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:ecbc4707-4287-45b2-bde6-864e2c835686,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:100
+X-CID-INFO: VERSION:1.1.11,REQID:ecbc4707-4287-45b2-bde6-864e2c835686,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:100
+X-CID-META: VersionHash:39a5ff1,CLOUDID:8215bcb8-daef-48a8-8c50-40026d6a74c2,B
+        ulkID:221006224356NX69IPMM,BulkQuantity:0,Recheck:0,SF:28|17|19|48|823|824
+        ,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,
+        COL:0
+X-UUID: 18910ae5b4e74b06b01041f50367ce57-20221006
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1621879693; Thu, 06 Oct 2022 22:43:54 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 6 Oct 2022 22:43:52 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Thu, 6 Oct 2022 22:43:52 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Vinod Koul <vkoul@kernel.org>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v3 1/2] phy: core: add debugfs root
+Date:   Thu, 6 Oct 2022 22:43:30 +0800
+Message-ID: <20221006144331.12526-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Reply-To: oenenhayrettin@gmail.com
-Sender: ff7392108@gmail.com
-Received: by 2002:a5d:56c4:0:0:0:0:0 with HTTP; Thu, 6 Oct 2022 07:42:37 -0700 (PDT)
-From:   Oenen Mehmet <oenenhayrettin@gmail.com>
-Date:   Thu, 6 Oct 2022 14:42:37 +0000
-X-Google-Sender-Auth: zcsaim0rojJjZpW2gxjCEZp1ax4
-Message-ID: <CA++Sywb1ZhTXTPr3hb5-bD=gS8KPgDuX+8HL7qTEACU2sTr7sQ@mail.gmail.com>
-Subject: Hello. I contacted you to manage my new project in your country.
- Reply to me if you are interested to manage my project funds. Regards.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add a debugfs root for phy class, then phy drivers can add debugfs files
+under this folder.
+
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+v2~v3: no changes
+---
+ drivers/phy/phy-core.c  | 6 ++++++
+ include/linux/phy/phy.h | 2 ++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+index d93ddf1262c5..2f9f69190519 100644
+--- a/drivers/phy/phy-core.c
++++ b/drivers/phy/phy-core.c
+@@ -11,6 +11,7 @@
+ #include <linux/export.h>
+ #include <linux/module.h>
+ #include <linux/err.h>
++#include <linux/debugfs.h>
+ #include <linux/device.h>
+ #include <linux/slab.h>
+ #include <linux/of.h>
+@@ -1204,6 +1205,9 @@ void devm_of_phy_provider_unregister(struct device *dev,
+ }
+ EXPORT_SYMBOL_GPL(devm_of_phy_provider_unregister);
+ 
++struct dentry *phy_debug_root;
++EXPORT_SYMBOL_GPL(phy_debug_root);
++
+ /**
+  * phy_release() - release the phy
+  * @dev: the dev member within phy
+@@ -1233,6 +1237,8 @@ static int __init phy_core_init(void)
+ 
+ 	phy_class->dev_release = phy_release;
+ 
++	phy_debug_root = debugfs_create_dir("phy", NULL);
++
+ 	return 0;
+ }
+ device_initcall(phy_core_init);
+diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+index b1413757fcc3..c398749d49b9 100644
+--- a/include/linux/phy/phy.h
++++ b/include/linux/phy/phy.h
+@@ -205,6 +205,8 @@ struct phy_lookup {
+ #define devm_of_phy_provider_register_full(dev, children, xlate) \
+ 	__devm_of_phy_provider_register(dev, children, THIS_MODULE, xlate)
+ 
++extern struct dentry *phy_debug_root;
++
+ static inline void phy_set_drvdata(struct phy *phy, void *data)
+ {
+ 	dev_set_drvdata(&phy->dev, data);
+-- 
+2.18.0
 
