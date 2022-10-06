@@ -2,66 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E085F682E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DCD5F683E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbiJFNbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 09:31:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45234 "EHLO
+        id S231342AbiJFNdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 09:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiJFNbu (ORCPT
+        with ESMTP id S231481AbiJFNcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 09:31:50 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24BDAA374;
-        Thu,  6 Oct 2022 06:31:26 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id u21so2802061edi.9;
-        Thu, 06 Oct 2022 06:31:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=6ZdDTmo4+335EbBvlEmQjT8GDpny2W8EHJfskLeQgYU=;
-        b=OM8dnY2tg5vevPKL7Mnvbt5ETiaM4d58uhREXqFxxKt0/V8KauGHkWTvb7x2Oqt0IQ
-         aEejxhNdge0oFvaJY8CAdxgnWAgK4wSbysP8CQBrYZU3tVc/HUG18oqON1Qc4k0HyvmX
-         xlO3nuv08QPmrsaC57vOL93rMqf5EgWpd8LoA0wI1km1qOGq2FaqvoFLcrHX61sGkweU
-         UCD0Mp5xzvsFNg18sdEOvnJG0+cBg12+ROqA3DOYIVWuyz7cndaSK170EIJX7lh9BErx
-         EWob7RD84FlsXzau9HMYQ7oaLWlnBSdFxt77whBg73BDOMcQkml0e3x8yR7IJXGg4cVc
-         iYgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=6ZdDTmo4+335EbBvlEmQjT8GDpny2W8EHJfskLeQgYU=;
-        b=n6kqmsHs5KkljSLHqndvoQYvwFSU+DqTroM42HQkNdIZS9bBSOSh5u1XsxEVwaIyN4
-         NTgnulLX2dGKARqO6nQUTZ3u0kJe+3YmkQ2sg7hzhBMRB7kHfxGFSz11kKJzj0nGrTXF
-         6oZ08R4Z5MY1fuQEGiGs2DhNymWRycZ95gkLxWbki856Ayw4JMAXmhk7WsatGXCStCr5
-         Kh28wYdvgm8ZyYEq9hgfMxXbrZg8h9Xjkl2G+xbzvMXah1h9AQ/lRlzz3rCKn4I+kHod
-         GZTr9uQMh7J1LlwSS2607mm31XoH0KUeDp0BYTJ3lvFnyD2bfx9TprsDbmZVOACp24FR
-         u1Tg==
-X-Gm-Message-State: ACrzQf2oS/ppGn/uLo9iSdCDlyLi4LciBWCc7rWiDgN92+7d1EHFmrMu
-        Bl+3QaVOSvRqpIwwJezF+TT+4DewXXMxX1Vty2Y=
-X-Google-Smtp-Source: AMsMyM5EPdeLuWOWDgXAOEFMd2VbWS3fbiofJOic5lMpfbYcw1O+Uxlkjte/6Xq5LeSybtdVQY6hogt1NJyXHeeymfo=
-X-Received: by 2002:a05:6402:524d:b0:459:3619:9cfa with SMTP id
- t13-20020a056402524d00b0045936199cfamr4749148edd.227.1665062993966; Thu, 06
- Oct 2022 06:29:53 -0700 (PDT)
+        Thu, 6 Oct 2022 09:32:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A505FC1;
+        Thu,  6 Oct 2022 06:32:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47EBD619B3;
+        Thu,  6 Oct 2022 13:31:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D819C433C1;
+        Thu,  6 Oct 2022 13:31:13 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="dCt1XlLR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1665063067;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=19y9yEzpIVCdXeybhvKA7dJEvUCmehig1gThjjfIZlg=;
+        b=dCt1XlLRhK46o65EhJYBSpRmYOT4n7MeVXGzqEAmpcGdWyuxeH5sPJp8L+8s50v59qatMG
+        Pop9Q+fWN3pqL5OpRxJVaBL/44G7A5DyWYXHpzYYf1aO4M481jtYlUZ2z2P2gTZK51QEX3
+        xI04TaxnmVtdtVX+upl/OVmNZ34Lghg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 07574342 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 6 Oct 2022 13:31:07 +0000 (UTC)
+Received: by mail-ua1-f49.google.com with SMTP id p89so623802uap.12;
+        Thu, 06 Oct 2022 06:31:05 -0700 (PDT)
+X-Gm-Message-State: ACrzQf39I0aG5QvIzUh/9qcHBEF1elKF+vF9hNH7v2anSGfBoAICV2EV
+        ngllvXKIEIB5FbGUv+zfb/ab2TbIsHShqQy6ySY=
+X-Google-Smtp-Source: AMsMyM5LOcwlCqLDJ8Sdf5AH9P6p8LW9hstCcin8XnWJVl2TEMHnjzVUue7OZJku+oxVakLrWA9vu3wGp+73FInbltY=
+X-Received: by 2002:ab0:70b9:0:b0:3d7:84d8:35ae with SMTP id
+ q25-20020ab070b9000000b003d784d835aemr2699257ual.24.1665063063460; Thu, 06
+ Oct 2022 06:31:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221006092929.30041-1-jgross@suse.com>
-In-Reply-To: <20221006092929.30041-1-jgross@suse.com>
-From:   Jason Andryuk <jandryuk@gmail.com>
-Date:   Thu, 6 Oct 2022 09:29:41 -0400
-Message-ID: <CAKf6xpvS20J0oz6vn+g47OBbKxEhAC8f2gyQ9otj+rOn+L9FOw@mail.gmail.com>
-Subject: Re: [PATCH] xen/pcifront: move xenstore config scanning into sub-function
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        xen-devel@lists.xenproject.org
+References: <20221006132510.23374-1-Jason@zx2c4.com>
+In-Reply-To: <20221006132510.23374-1-Jason@zx2c4.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Thu, 6 Oct 2022 07:30:52 -0600
+X-Gmail-Original-Message-ID: <CAHmME9pXuGKNsm3cCOMLSOMJoX2XJnHffpiF_rr32mW2ozShhw@mail.gmail.com>
+Message-ID: <CAHmME9pXuGKNsm3cCOMLSOMJoX2XJnHffpiF_rr32mW2ozShhw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] treewide cleanup of random integer usage
+To:     linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        =?UTF-8?Q?Christoph_B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dave Airlie <airlied@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hugh Dickins <hughd@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Graf <tgraf@suug.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
+        kernel-janitors@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mm@kvack.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-nvme@lists.infradead.org,
+        linux-rdma@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,57 +107,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 6, 2022 at 5:29 AM Juergen Gross <jgross@suse.com> wrote:
->
-> pcifront_try_connect() and pcifront_attach_devices() share a large
-> chunk of duplicated code for reading the config information from
-> Xenstore, which only differs regarding a function call.
->
-> Put that code into a new sub-function. While at it fix the error
-> reporting in case the root-xx node had the wrong format.
->
-> As the return value of pcifront_try_connect() and
-> pcifront_attach_devices() are not used anywhere make those functions
-> return void. As an additional bonus this removes the dubious return
-> of -EFAULT in case of an unexpected driver state.
->
-> Signed-off-by: Juergen Gross <jgross@suse.com>
-> ---
->  drivers/pci/xen-pcifront.c | 133 +++++++++++--------------------------
->  1 file changed, 40 insertions(+), 93 deletions(-)
->
-> diff --git a/drivers/pci/xen-pcifront.c b/drivers/pci/xen-pcifront.c
-> index 689271c4245c..a68e47dcdd7e 100644
-> --- a/drivers/pci/xen-pcifront.c
-> +++ b/drivers/pci/xen-pcifront.c
-> @@ -819,76 +819,79 @@ static int pcifront_publish_info(struct pcifront_device *pdev)
+On Thu, Oct 6, 2022 at 7:25 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> This is a five part treewide cleanup of random integer handling.
+> [...]
+> Please take a look!
 
->         err = xenbus_scanf(XBT_NIL, pdev->xdev->otherend,
->                            "root_num", "%d", &num_roots);
->         if (err == -ENOENT) {
->                 xenbus_dev_error(pdev->xdev, err,
->                                  "No PCI Roots found, trying 0000:00");
-> -               err = pcifront_scan_root(pdev, 0, 0);
-> +               if (rescan)
-> +                       err = pcifront_rescan_root(pdev, 0, 0);
-> +               else
-> +                       err = pcifront_scan_root(pdev, 0, 0);
+I should add that this patchset probably appears bigger than it
+already is, due in part to that wall of motivational text. Keep in
+mind, though, that the whole thing is only "305 insertions(+), 342
+deletions(-)", so it should be conventionally reviewable.
 
-Early in pcifront_rescan_root(), we have:
-
-        b = pci_find_bus(domain, bus);
-        if (!b)
-                /* If the bus is unknown, create it. */
-                return pcifront_scan_root(pdev, domain, bus);
-
-pcifront_scan_root() does some allocation, but the later scanning
-matches that of pcifront_rescan_root().  So I think we can just always
-call pcifront_rescan_root() and it should do the right thing.  That
-drops the need for the rescan boolean.
-
-Regardless of the above idea:
-
-Reviewed-by: Jason Andryuk <jandryuk@gmail.com>
-
-Regards,
 Jason
