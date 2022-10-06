@@ -2,116 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745DF5F6973
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30875F6975
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbiJFOR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 10:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
+        id S231823AbiJFOSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 10:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbiJFOQr (ORCPT
+        with ESMTP id S231735AbiJFORa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 10:16:47 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C39AE214
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 07:14:15 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id d196so1339064iof.11
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 07:14:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uPoSw2DcS8I2PL1GAxLCIjBZkmIbahmymE7q5ESqNH4=;
-        b=J9UmphxOwRlKuKwKJGEStMq2njru+PiIwGVLUfPBPq5L+NiQWR0X0ph0BMc2W5nbt8
-         4fY0afnp5OGHoR48WDeXsZwHxoMN5k4f3cAvRzRwXhvGYbcMUIpKQGeu62j2J2SnGy+J
-         Xj/w4pUH+FdGPKiKioCFBigar50r6VlCGptHXogYu0vEHZthEC9POAERgLfXsIlNUJAT
-         4LL5lhcH/9QJf5wjtvXr093IFQ5FVgHnW9DKsbH5n9oFVp8IFEYJH/pVve/xHlsOIZTb
-         JrrThpZZTRv6pIFAUlojtCkCpeK6hrRAxbyXE8fkyWQe0FnS13WwHzjaGBDQmYXcBSxS
-         r/Fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uPoSw2DcS8I2PL1GAxLCIjBZkmIbahmymE7q5ESqNH4=;
-        b=dY31nzR1trVBQmLMP/P+67271UUxdFCtIx459YuVB3+84FqbuDT1qeyTjesIST/FrK
-         PDQ7nREJKObZGowzrn2G9p7wOJK5WEhGICniKccnJcc1P56xu/IPRz2NplRHNh/cBIS6
-         VVTVtfaxBeD/rNWyHsLuSf/QBQ9GIc58t2uPYBJi0W6vwJFSS9ztJr3XNqw06kWMmYpD
-         uJuZDd42/ZqD0GeuT8kOcKrAQuuxCvF+a8cFAF6x5C/DZNbTtNpleYoBU09a4gDYHjTo
-         MSFHo/EysYnRMy8akK8QLYAkbjYy3tcOCcmRgfvoGDrogw5O35c+HlP71rJ/O++sHeLL
-         IHdA==
-X-Gm-Message-State: ACrzQf1rtwHrUbuIET5kqYKXg/2sXV6NKZp4Ehjw9lZnz+wF6Ybpoiaf
-        Ybj2y8rHiTgk3QeQmkkeP756YzKPjmDW/tzjGLqVww==
-X-Google-Smtp-Source: AMsMyM6kii+MO2rLiB+gLKVkRtdEKc2Fqc0GkifGVmj9R/yf+5vbD7WJTCsBBNNUYIzb2JEn4WLbsp9vBGxMSZlBt2Y=
-X-Received: by 2002:a6b:5d07:0:b0:6bb:7253:a439 with SMTP id
- r7-20020a6b5d07000000b006bb7253a439mr37286iob.2.1665065653849; Thu, 06 Oct
- 2022 07:14:13 -0700 (PDT)
+        Thu, 6 Oct 2022 10:17:30 -0400
+Received: from mail-m118206.qiye.163.com (mail-m118206.qiye.163.com [115.236.118.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC8CC57241
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 07:15:02 -0700 (PDT)
+Received: from lyc-workstation.. (unknown [221.212.176.62])
+        by mail-m118206.qiye.163.com (HMail) with ESMTPA id 38763BE0B01;
+        Thu,  6 Oct 2022 22:14:58 +0800 (CST)
+From:   YingChi Long <me@inclyc.cn>
+To:     me@inclyc.cn
+Cc:     bp@alien8.de, chang.seok.bae@intel.com,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        ndesaulniers@google.com, pbonzini@redhat.com, tglx@linutronix.de,
+        x86@kernel.org, david.laight@aculab.com
+Subject: [PATCH v3] x86/fpu: use _Alignof to avoid UB in TYPE_ALIGN
+Date:   Thu,  6 Oct 2022 22:14:42 +0800
+Message-Id: <20221006141442.2475978-1-me@inclyc.cn>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220925153151.2467884-1-me@inclyc.cn>
+References: <20220925153151.2467884-1-me@inclyc.cn>
 MIME-Version: 1.0
-References: <20221006082735.1321612-1-keescook@chromium.org>
- <20221006082735.1321612-2-keescook@chromium.org> <20221006090506.paqjf537cox7lqrq@wittgenstein>
-In-Reply-To: <20221006090506.paqjf537cox7lqrq@wittgenstein>
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 6 Oct 2022 16:13:37 +0200
-Message-ID: <CAG48ez0sEkmaez9tYqgMXrkREmXZgxC9fdQD3mzF9cGo_=Tfyg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] fs/exec: Explicitly unshare fs_struct on exec
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Jorge Merlino <jorge.merlino@canonical.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org,
-        John Johansen <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Todd Kjos <tkjos@google.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        Prashanth Prahlad <pprahlad@redhat.com>,
-        Micah Morton <mortonm@chromium.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>, linux-kernel@vger.kernel.org,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFPN1dZLVlBSVdZDwkaFQgSH1lBWUJOGkpWQktITU1PHhgYQxlJVQIWExYaEhckFA4PWV
+        dZGBILWUFZSUlKVUlKSVVKTE1VTUlZV1kWGg8SFR0UWUFZT0tIVUpJS0NOTVVKS0tVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MD46Fgw6TjlOATYuM09POSxN
+        DghPFDpVSlVKTU1OS01OTUJCSk1CVTMWGhIXVRYeOxIVGBcCGFUYFUVZV1kSC1lBWUlJSlVJSklV
+        SkxNVU1JWVdZCAFZQUhOSU03Bg++
+X-HM-Tid: 0a83ada645d02d28kusn38763be0b01
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 6, 2022 at 11:05 AM Christian Brauner <brauner@kernel.org> wrote:
-> On Thu, Oct 06, 2022 at 01:27:34AM -0700, Kees Cook wrote:
-> > The check_unsafe_exec() counting of n_fs would not add up under a heavily
-> > threaded process trying to perform a suid exec, causing the suid portion
-> > to fail. This counting error appears to be unneeded, but to catch any
-> > possible conditions, explicitly unshare fs_struct on exec, if it ends up
->
-> Isn't this a potential uapi break? Afaict, before this change a call to
-> clone{3}(CLONE_FS) followed by an exec in the child would have the
-> parent and child share fs information. So if the child e.g., changes the
-> working directory post exec it would also affect the parent. But after
-> this change here this would no longer be true. So a child changing a
-> workding directoro would not affect the parent anymore. IOW, an exec is
-> accompanied by an unshare(CLONE_FS). Might still be worth trying ofc but
-> it seems like a non-trivial uapi change but there might be few users
-> that do clone{3}(CLONE_FS) followed by an exec.
+WG14 N2350 made very clear that it is an UB having type definitions with
+in "offsetof". This patch change the implementation of macro
+"TYPE_ALIGN" to builtin "_Alignof" to avoid undefined behavior.
 
-I believe the following code in Chromium explicitly relies on this
-behavior, but I'm not sure whether this code is in active use anymore:
+I've grepped all source files to find any type definitions within
+"offsetof".
 
-https://source.chromium.org/chromium/chromium/src/+/main:sandbox/linux/suid/sandbox.c;l=101?q=CLONE_FS&sq=&ss=chromium
+    offsetof\(struct .*\{ .*,
+
+This implementation of macro "TYPE_ALIGN" seemes to be the only case of
+type definitions within offsetof in the kernel codebase.
+
+I've made a clang patch that rejects any definitions within
+__builtin_offsetof (usually #defined with "offsetof"), and tested
+compiling with this patch, there are no error if this patch applied.
+
+ISO C11 _Alignof is subtly different from the GNU C extension
+__alignof__. __alignof__ is the preferred alignment and _Alignof the
+minimal alignment. For 'long long' on x86 these are 8 and 4
+respectively.
+
+The macro TYPE_ALIGN we're replacing has behavior that matches
+_Alignof rather than __alignof__.
+
+Signed-off-by: YingChi Long <me@inclyc.cn>
+Link: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2350.htm
+Link: https://godbolt.org/z/sPs1GEhbT
+Link: https://gcc.gnu.org/onlinedocs/gcc/Alignment.html
+Link: https://reviews.llvm.org/D133574
+---
+v3:
+- commit message changes suggested by Nick and David
+
+v2: https://lore.kernel.org/all/20220927153338.4177854-1-me@inclyc.cn/
+---
+ arch/x86/kernel/fpu/init.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/kernel/fpu/init.c b/arch/x86/kernel/fpu/init.c
+index 621f4b6cac4a..de96c11e1fe9 100644
+--- a/arch/x86/kernel/fpu/init.c
++++ b/arch/x86/kernel/fpu/init.c
+@@ -133,9 +133,6 @@ static void __init fpu__init_system_generic(void)
+ 	fpu__init_system_mxcsr();
+ }
+
+-/* Get alignment of the TYPE. */
+-#define TYPE_ALIGN(TYPE) offsetof(struct { char x; TYPE test; }, test)
+-
+ /*
+  * Enforce that 'MEMBER' is the last field of 'TYPE'.
+  *
+@@ -143,8 +140,8 @@ static void __init fpu__init_system_generic(void)
+  * because that's how C aligns structs.
+  */
+ #define CHECK_MEMBER_AT_END_OF(TYPE, MEMBER) \
+-	BUILD_BUG_ON(sizeof(TYPE) != ALIGN(offsetofend(TYPE, MEMBER), \
+-					   TYPE_ALIGN(TYPE)))
++	BUILD_BUG_ON(sizeof(TYPE) !=         \
++		     ALIGN(offsetofend(TYPE, MEMBER), _Alignof(TYPE)))
+
+ /*
+  * We append the 'struct fpu' to the task_struct:
+--
+2.35.1
+
