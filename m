@@ -2,173 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FBB65F5F37
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 04:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36BD85F5F3B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 04:56:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbiJFCzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 22:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
+        id S230074AbiJFC4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 22:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbiJFCzT (ORCPT
+        with ESMTP id S230063AbiJFC4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 22:55:19 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3132B8992F;
-        Wed,  5 Oct 2022 19:52:48 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id f193so744533pgc.0;
-        Wed, 05 Oct 2022 19:52:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=A1VbCAXIYbfneAnNEMFHKQ0qqjQfqURaDKyX/Tusj6A=;
-        b=gwVXdp4WTb32v4iigii12jJNfK/9jLMKDlfHJixd9CUlkpjBiuFYVqly6GDED8ReEP
-         HWmTq5CMeWmsOOZnV8DcyPMDJ0PNDZyTXiTA2ez6FqBJ1tsPtYwfpJ5x9IdqlCbm/bH0
-         bEHcPJiBozmxDbyKyCXxxUz8yM2Nz1fleuA6W8mRUl7WiM9xBZPWK72udVHicgrcS+nd
-         zsUYH75zsP4H06ADpWt/CMP3JD+872gyBBhgCN8ZcfK98OR3XCVf0eQlNOGdZSXjuzC+
-         yiuQ8rB7SZP46Ta2wIYjDpf5qYZXaHGX582RQrWSCWXHqpB2fz7W7hGUpwCGvA+9pv1o
-         JBlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=A1VbCAXIYbfneAnNEMFHKQ0qqjQfqURaDKyX/Tusj6A=;
-        b=3hOxPWj6WNRzHQIq5kySFVdeQwhQf2CgkOhDk9olaE49FR/vDqZvgNfBoPromB7sO6
-         Ehup9lt3I/8pTzCYLJfWO7eRNenttvc5tWYC6Ufysqp0kgGN2ZbXRPDsl5GrRDnvFLQS
-         qUtQafUdl3Mwbo6kbNprD9AR8ZkhwAqIhWzg1v2rb3K7gQAflhvPY54hItXrhdeJaFqp
-         ERxlEaZuvhv0n1ATyhLlAuX6E73swZMNOMuRpo7vyQOOcwRJeAf1lNojr0/Gf/K/sBDX
-         EVqjwRuTG3oEtbGBHy5WIBoej5XHL8e58WAKjLM62zexGAbp6g4XFLcSUCqBAwuT00w0
-         eChQ==
-X-Gm-Message-State: ACrzQf1kXX4OxQRKBtf6gdRJvya+NLBwIk2FBT0P07NfHtx+C7MWkeNd
-        Z60L408R+lo3ANLSWT6DMaU=
-X-Google-Smtp-Source: AMsMyM6Mwheb7z9+PAaDCQ6TpRI278byfyhz9jDEgYn7iFsvcuPIqRaBbejSjNmRCS0L8m/5qnAkhw==
-X-Received: by 2002:a63:5f58:0:b0:458:802:d24b with SMTP id t85-20020a635f58000000b004580802d24bmr2478666pgb.401.1665024755647;
-        Wed, 05 Oct 2022 19:52:35 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id k7-20020a63ff07000000b00439f027789asm496649pgi.59.2022.10.05.19.52.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Oct 2022 19:52:35 -0700 (PDT)
-Message-ID: <fca75232-bf18-e6e8-0072-0906a618ea9c@gmail.com>
-Date:   Thu, 6 Oct 2022 11:52:29 +0900
+        Wed, 5 Oct 2022 22:56:20 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBEA7FFAB;
+        Wed,  5 Oct 2022 19:54:56 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2962f2pB017580;
+        Thu, 6 Oct 2022 02:54:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=22YcYq+W1feRc4HBuCzwqSEcjToWsa3pJjCRJMDKwOE=;
+ b=G/650jOgfd3+wyx4fOLpTBsBSC/14eGB1u//NUP2Jhjh7j4lmluJDJ03GATl124QxUj/
+ hqYPcgOJ14rw3cTouERXRiPl++V6qCj9FWzdGjrnwY4hGqhueQGsDHCOV+FgwhoTC04+
+ AjgcgogSR0q0kxjAn0hIS4rsW2weBO+5Z18tr2QCx59sNuusCoTeVQCG8IWt723A4BBq
+ cDybgfsBOCnZSV4lg0mqdFiRNvBc1dzmXOkHwWZ+XsmDIPbuH8URe7j0m5NSMLSJ+Ck3
+ rLdMWNXNwR5cabewv7yr+hHYXRMKSFvYny6HCK+85qxWXw/zeAME74bJS4WOE9tC9Kn6 pw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k0escvw01-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Oct 2022 02:54:50 +0000
+Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2962sn4O020936;
+        Thu, 6 Oct 2022 02:54:49 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 3jxemkrcn2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Oct 2022 02:54:49 +0000
+Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2962snrJ020929;
+        Thu, 6 Oct 2022 02:54:49 GMT
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 2962snga020928
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Oct 2022 02:54:49 +0000
+Received: from hu-ppareek-blr.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Wed, 5 Oct 2022 19:54:45 -0700
+Date:   Thu, 6 Oct 2022 08:24:41 +0530
+From:   Parikshit Pareek <quic_ppareek@quicinc.com>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        "Shazad Hussain" <quic_shazhuss@quicinc.com>,
+        Brian Masney <bmasney@redhat.com>,
+        "Johan Hovold" <johan@kernel.org>
+Subject: Re: [PATCH v5 0/3] arm64: dts: qcom: add dts for sa8540p-ride board
+Message-ID: <20221006025441.GA31711@hu-ppareek-blr.qualcomm.com>
+References: <20221003125444.12975-1-quic_ppareek@quicinc.com>
+ <02365772-de32-56ab-65a2-0a2fbccb5e2e@somainline.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2] locking/memory-barriers.txt: Improve documentation for
- writel() example
-Content-Language: en-US
-To:     Parav Pandit <parav@nvidia.com>
-Cc:     bagasdotme@gmail.com, arnd@arndb.de, stern@rowland.harvard.edu,
-        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, paulmck@kernel.org,
-        dlustig@nvidia.com, joel@joelfernandes.org, corbet@lwn.net,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
-References: <20221005104749.157444-1-parav@nvidia.com>
- <6a6941fb-53a0-cdd2-9783-590cb959d4e7@gmail.com>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <6a6941fb-53a0-cdd2-9783-590cb959d4e7@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <02365772-de32-56ab-65a2-0a2fbccb5e2e@somainline.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: YzRmov9snVSBKpE-BcNYVsx8tBVMPKhJ
+X-Proofpoint-GUID: YzRmov9snVSBKpE-BcNYVsx8tBVMPKhJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-05_05,2022-10-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 clxscore=1015 suspectscore=0 mlxscore=0
+ mlxlogscore=726 impostorscore=0 spamscore=0 bulkscore=0 priorityscore=1501
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210060016
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Oct 2022 11:48:04 +0900, Akira Yokosawa wrote:
-> Hi,
+On Mon, Oct 03, 2022 at 11:05:11PM +0200, Konrad Dybcio wrote:
 > 
-> Maybe I'm too nit-picky, but see below:
+> On 03/10/2022 14:54, Parikshit Pareek wrote:
+> > Change in v5:
+> > - Moved the usb and ufs nodes from sa8540p-adp.dtsi file to respective
+> >    board specific dts files: sa8295p-adp.dts and sa8540p-adp-ride.dts.
 > 
-> On Wed, 5 Oct 2022 13:47:49 +0300, Parav Pandit wrote:
->> The cited commit describes that when using writel(), explcit wmb()
->> is not needed. wmb() is an expensive barrier. writel() uses the needed
->> platform specific barrier instead of expensive wmb().
->>
->> Hence update the example to be more accurate that matches the current
->> implementation.
->>
->> commit 5846581e3563 ("locking/memory-barriers.txt: Fix broken DMA vs. MMIO ordering example")
+> Is there any benefit in this? USB0/2 and UFS (not UFS card) nodes are
+> identical
 > 
-> You can cite the commit in the Changelog text.
-> Just say:
-> 
->     Commit 5846581e3563 ("locking/memory-barriers.txt: Fix broken DMA vs.
->     MMIO ordering example") describes that when using writel(), ...
-> 
-> Also, a blank line is needed above S-o-b tags as a delimiter.
-> 
->> Signed-off-by: Parav Pandit <parav@nvidia.com>
->>
->> ---
->> changelog:
->> v1->v2:
->> - Further improved description of writel() example
->> - changed commit subject from 'usage' to 'example'
->> v0->v1:
->> - Corrected to mention I/O barrier instead of dma_wmb().
->> - removed numbered references in commit log
->> - corrected typo 'explcit' to 'explicit' in commit log
->> ---
->>  Documentation/memory-barriers.txt | 10 ++++++----
->>  1 file changed, 6 insertions(+), 4 deletions(-)
->>
->> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
->> index 832b5d36e279..49e1433db407 100644
->> --- a/Documentation/memory-barriers.txt
->> +++ b/Documentation/memory-barriers.txt
->> @@ -1927,10 +1927,12 @@ There are some more advanced barrier functions:
->>       before we read the data from the descriptor, and the dma_wmb() allows
->>       us to guarantee the data is written to the descriptor before the device
->>       can see it now has ownership.  The dma_mb() implies both a dma_rmb() and
->> -     a dma_wmb().  Note that, when using writel(), a prior wmb() is not needed
->> -     to guarantee that the cache coherent memory writes have completed before
->> -     writing to the MMIO region.  The cheaper writel_relaxed() does not provide
->> -     this guarantee and must not be used here.
->> +     a dma_wmb().  Note that, when using writel(), a prior barrier is not
-> If you permit a slightly long line here, this hunk would be much easier to
-> compare:
-> 
-> +     a dma_wmb().  Note that, when using writel(), a prior barrier is not needed
->       to guarantee that the cache coherent memory writes have completed before
->       writing to the MMIO region.  The cheaper writel_relaxed() does not provide
-> +     this guarantee and must not be used here. Hence, writeX() is always
-> +     preferred which inserts needed platform specific barrier before writing to
-> +     the specified MMIO region.
-> 
-> That said, I don't feel comfortable with the sentence you added.
-> It looks to me it is redundant because such a guarantee of writeX() is already
-> covered in the section of "KERNEL I/O BARRIER EFFECTS".
-> See the relevant explanation quoted below:
-> 
-> 	3. A writeX() by a CPU thread to the peripheral will first wait for the
-> 	   completion of all prior writes to memory either issued by, or
-> 	   propagated to, the same thread. This ensures that writes by the CPU
-> 	   to an outbound DMA buffer allocated by dma_alloc_coherent() will be
-> 	   visible to a DMA engine when the CPU writes to its MMIO control
-> 	   register to trigger the transfer.
-> 
-> Also please not that this document should not describe any implementation
-I meant       note
+> in the 2 files.
+Similar boards might come in future, anticipated to be differing mainly
+with respect to usb/ufs. Hence thought it better to put ufs/usb nodes in
+board specific dts.
 
-> details of those accessors. This document is not meant as an implementation
-> guide, but a guide for kernel developers who use them. This is clearly
-> mentioned in "DISCLAIMER" at the top of this file.
+Regards,
+Parikshit Pareek
 > 
->         Thanks, Akira
 > 
->> +     needed to guarantee that the cache coherent memory writes have completed
->> +     before writing to the MMIO region.  The cheaper writel_relaxed() does not
->> +     provide this guarantee and must not be used here. Hence, writeX() is always
->> +     preferred which inserts needed platform specific barrier before writing to
->> +     the specified MMIO region.
->>  
->>       See the subsection "Kernel I/O barrier effects" for more information on
->>       relaxed I/O accessors and the Documentation/core-api/dma-api.rst file for
+> Konrad
+> 
+> >    Took inputs from Shazad Hussain in this regard(John)
+> > - Added more description of the board differences(John)
+> > - Not including Reviewed-by for Krzysztof, because of the new changes to
+> >    be reviewed.
+> > - Removed Reported-by tag(John).
+> > 
+> > Changes in v4:
+> >   - Removed the ufs_card_hc node, as it is not mounted on Qdrive-3 board.
+> >   - Removed usb_1 relared nodes, as usb1 doesn't have any port connected on
+> >     Qdrive3 board.
+> >   - Added Reported-by tag for Shazad(for ufs and usb_1 node removals)
+> > 
+> > Changes in v3:
+> >   - Added Acked-by tag (Krzysztof)
+> >   - Renamed dtsi to sa8540p-adp.dtsi (John)
+> >   - Removed copyright from sa8295-adp.dts and sa8295-adp.dtsi(John)
+> >   - Added cover letter
+> > 
+> > change in v2:
+> > - Make dt-binding patch as the first one in the patch set
+> > - Add , after year 2022, in the license header
+> > 
+> > Initial version:
+> > - Move the common nodes to sa8540p-adp.dtsi, and create qrive-3 board
+> >    specific file sa8540p-adp-ride.dts.
+> > 
+> > 
+> > Parikshit Pareek (3):
+> >    dt-bindings: arm: qcom: Document additional sa8540p device
+> >    arm64: dts: qcom: sa8295p: move common nodes to dtsi
+> >    arm64: dts: qcom: introduce sa8540p-ride dts
+> > 
+> >   .../devicetree/bindings/arm/qcom.yaml         |   1 +
+> >   arch/arm64/boot/dts/qcom/Makefile             |   1 +
+> >   arch/arm64/boot/dts/qcom/sa8295p-adp.dts      | 528 +++++-------------
+> >   arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts |  71 +++
+> >   .../{sa8295p-adp.dts => sa8540p-adp.dtsi}     | 133 -----
+> >   5 files changed, 219 insertions(+), 515 deletions(-)
+> >   rewrite arch/arm64/boot/dts/qcom/sa8295p-adp.dts (70%)
+> >   create mode 100644 arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts
+> >   copy arch/arm64/boot/dts/qcom/{sa8295p-adp.dts => sa8540p-adp.dtsi} (72%)
+> > 
