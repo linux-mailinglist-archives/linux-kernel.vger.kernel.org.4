@@ -2,191 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2B35F6D7F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 20:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AA85F6D88
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 20:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbiJFSaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 14:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56688 "EHLO
+        id S231277AbiJFSbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 14:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiJFSaH (ORCPT
+        with ESMTP id S231819AbiJFSbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 14:30:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A4D1D32C
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 11:30:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665081004;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GR/VmE/JFWufoxQNscwIseQIsTcoM3u27LXR33wIOdM=;
-        b=IcQerrmivRAi+ZB8uuFw0WQ8k6WuuydHsP6OLqp9SypOYTJ63e+u4gp7jr5/1cK2Uz0Z0H
-        iW1ydY3Q9vUONs/KkyphxoNdMwwjB/frQFab0coCGM1yJI9hfPGkXnFHt7tCNgOZ78KuvY
-        4kvRPsEqAWSI4qBSYRjYYIJKMGN8EuU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-73-qRnYg_nkMKS5aQJDVxoO_A-1; Thu, 06 Oct 2022 14:29:59 -0400
-X-MC-Unique: qRnYg_nkMKS5aQJDVxoO_A-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 682443C0F66F;
-        Thu,  6 Oct 2022 18:29:58 +0000 (UTC)
-Received: from localhost (unknown [10.39.193.119])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3B6561121330;
-        Thu,  6 Oct 2022 18:29:56 +0000 (UTC)
-Date:   Thu, 6 Oct 2022 14:29:55 -0400
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     Ming Lei <tom.leiming@gmail.com>
-Cc:     "Denis V. Lunev" <den@virtuozzo.com>, io-uring@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kirill Tkhai <kirill.tkhai@openvz.org>,
-        Manuel Bentele <development@manuel-bentele.de>,
-        qemu-devel@nongnu.org, Kevin Wolf <kwolf@redhat.com>,
-        rjones@redhat.com, Xie Yongji <xieyongji@bytedance.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Mike Christie <mchristi@redhat.com>
-Subject: Re: ublk-qcow2: ublk-qcow2 is available
-Message-ID: <Yz8eo0IWMAJOwKWn@fedora>
-References: <Yza1u1KfKa7ycQm0@T590>
- <Yzs9xQlVuW41TuNC@fedora>
- <6659a0d5-60ab-9ac7-d25d-b4ff1940c6ab@virtuozzo.com>
- <Yz2epPwoufj0mug/@fedora>
- <Yz6tR24T8HPHJ70D@T590>
- <Yz7fTANAxAQ8KT4v@fedora>
- <Yz7vvNKSNRyBVObo@T590>
+        Thu, 6 Oct 2022 14:31:33 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72396AA34D;
+        Thu,  6 Oct 2022 11:31:32 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id m81so3008838oia.1;
+        Thu, 06 Oct 2022 11:31:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KLSUG+i+YfUxCARVJTD1GslXbH0UKN+cZHn6UsaYzBg=;
+        b=fZg6klCgbal5S5LyLap7E1l92Ytg2/ipGvE3NNsX+Yydh61Jga0Ys2YMOo05+LwPAf
+         8w24PXt5DIXI2SBkAa0tbMa82JRu3QhTrf/rECh2PP+q94awywDtvL1eUCfbHAQLM5cZ
+         fnODJfbNZN+avjTlgrJhAhdbz2kLM/lPkA5gpZfHi1+uih0awjf+TDmeE9R4bTgnpgyv
+         az5yKz/wp6qUVQq6CHa/dB6OsCbSvTz+wa0yfN31Teo/dt4SrTnZ0R2LtsaHJ1v1G3Fq
+         x1z611IkW4QsoEg9uVd9B2nnR0YQ436LVBRgd558w9yeiYmNaqDeMuHQBm7/m5xPMuyv
+         jMYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KLSUG+i+YfUxCARVJTD1GslXbH0UKN+cZHn6UsaYzBg=;
+        b=NFNgg36lKUofLWVAOJrgOt0VY+a17kVfXo1OfHVG+5X5rhwC8mSiRUlt5kCzKRPk9b
+         KEm3fXsh8ya88x6BeM5hNMxat5okYyIuVTSLO06ZzUwWHsM+D3rnUYKqJng5y/Tx1O/A
+         TxxvVEtf5/17g2WDzOOg9iSGl2+u5rNANTh7qHFU+Jym4+VhjUSElyHie7ylIhLLKXum
+         wY6JLBYUHOuSgd9hmkX95g8t4GB6oNkF9TIruh90n9tk/xS1ctG+0wHeipbhj94Snxc6
+         fJPcuPk/9M1ytRASakvy4OgFPk74N8dFb/pIW4HxoSiYmfPgBLd6/mzHt0HavVc1JWoo
+         l4ag==
+X-Gm-Message-State: ACrzQf1D6xTUNwFl0qBFZpohdoeuX+zHnpAmANb7YB27ZpFGuAd4Y94Y
+        J2nGQMxfLNUd8btXMR+aRLY=
+X-Google-Smtp-Source: AMsMyM6/NVTZ+0fokMyhiCeou3tD8LlJk1ayumLAvEacbx/3wUtCkDP4gg2L2F03C7hL2qv7tdh3jg==
+X-Received: by 2002:a05:6808:1448:b0:350:c8a5:3e7e with SMTP id x8-20020a056808144800b00350c8a53e7emr5767070oiv.234.1665081091752;
+        Thu, 06 Oct 2022 11:31:31 -0700 (PDT)
+Received: from localhost.localdomain ([177.222.37.214])
+        by smtp.googlemail.com with ESMTPSA id 6-20020aca0506000000b003509cc4ad4esm6110429oif.39.2022.10.06.11.31.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 11:31:31 -0700 (PDT)
+From:   Henry Castro <hcvcastro@gmail.com>
+To:     thunderbird2k@gmail.com
+Cc:     Henry Castro <hcvcastro@gmail.com>, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] drivers: hid: adjust gyro calibration data
+Date:   Thu,  6 Oct 2022 14:31:05 -0400
+Message-Id: <20221006183105.5416-1-hcvcastro@gmail.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <CAEc3jaALWiuHTxNz21k3d7f0BMYxCdK0qWmng=tu6w-prej7Jw@mail.gmail.com>
+References: <CAEc3jaALWiuHTxNz21k3d7f0BMYxCdK0qWmng=tu6w-prej7Jw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="6RwoVJ4k64p8vK98"
-Content-Disposition: inline
-In-Reply-To: <Yz7vvNKSNRyBVObo@T590>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+For some reason my DualShock 4 get the calibration
+data values equal:
 
---6RwoVJ4k64p8vK98
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+	gyro_pitch_plus == gyro_pitch_minus
 
-On Thu, Oct 06, 2022 at 11:09:48PM +0800, Ming Lei wrote:
-> On Thu, Oct 06, 2022 at 09:59:40AM -0400, Stefan Hajnoczi wrote:
-> > On Thu, Oct 06, 2022 at 06:26:15PM +0800, Ming Lei wrote:
-> > > On Wed, Oct 05, 2022 at 11:11:32AM -0400, Stefan Hajnoczi wrote:
-> > > > On Tue, Oct 04, 2022 at 01:57:50AM +0200, Denis V. Lunev wrote:
-> > > > > On 10/3/22 21:53, Stefan Hajnoczi wrote:
-> > > > > > On Fri, Sep 30, 2022 at 05:24:11PM +0800, Ming Lei wrote:
-> > > > > > > ublk-qcow2 is available now.
-> > > > > > Cool, thanks for sharing!
-> > > > > yep
-> > > > >=20
-> > > > > > > So far it provides basic read/write function, and compression=
- and snapshot
-> > > > > > > aren't supported yet. The target/backend implementation is co=
-mpletely
-> > > > > > > based on io_uring, and share the same io_uring with ublk IO c=
-ommand
-> > > > > > > handler, just like what ublk-loop does.
-> > > > > > >=20
-> > > > > > > Follows the main motivations of ublk-qcow2:
-> > > > > > >=20
-> > > > > > > - building one complicated target from scratch helps libublks=
-rv APIs/functions
-> > > > > > >    become mature/stable more quickly, since qcow2 is complica=
-ted and needs more
-> > > > > > >    requirement from libublksrv compared with other simple one=
-s(loop, null)
-> > > > > > >=20
-> > > > > > > - there are several attempts of implementing qcow2 driver in =
-kernel, such as
-> > > > > > >    ``qloop`` [2], ``dm-qcow2`` [3] and ``in kernel qcow2(ro)`=
-` [4], so ublk-qcow2
-> > > > > > >    might useful be for covering requirement in this field
-> > > > > There is one important thing to keep in mind about all partly-use=
-rspace
-> > > > > implementations though:
-> > > > > * any single allocation happened in the context of the
-> > > > > =A0=A0 userspace daemon through try_to_free_pages() in
-> > > > > =A0=A0 kernel has a possibility to trigger the operation,
-> > > > > =A0=A0 which will require userspace daemon action, which
-> > > > > =A0=A0 is inside the kernel now.
-> > > > > * the probability of this is higher in the overcommitted
-> > > > > =A0=A0 environment
-> > > > >=20
-> > > > > This was the main motivation of us in favor for the in-kernel
-> > > > > implementation.
-> > > >=20
-> > > > CCed Josef Bacik because the Linux NBD driver has dealt with memory
-> > > > reclaim hangs in the past.
-> > > >=20
-> > > > Josef: Any thoughts on userspace block drivers (whether NBD or ublk=
-) and
-> > > > how to avoid hangs in memory reclaim?
-> > >=20
-> > > If I remember correctly, there isn't new report after the last NBD(TC=
-MU) deadlock
-> > > in memory reclaim was addressed by 8d19f1c8e193 ("prctl: PR_{G,S}ET_I=
-O_FLUSHER
-> > > to support controlling memory reclaim").
-> >=20
-> > Denis: I'm trying to understand the problem you described. Is this
-> > correct:
-> >=20
-> > Due to memory pressure, the kernel reclaims pages and submits a write to
-> > a ublk block device. The userspace process attempts to allocate memory
-> > in order to service the write request, but it gets stuck because there
-> > is no memory available. As a result reclaim gets stuck, the system is
-> > unable to free more memory and therefore it hangs?
->=20
-> The process should be killed in this situation if PR_SET_IO_FLUSHER
-> is applied since the page allocation is done in VM fault handler.
+Probably due to some defect in the DS4 hardware, and cause
+a CPU division exception to crash the linux kernel.
 
-Thanks for mentioning PR_SET_IO_FLUSHER. There is more info in commit
-8d19f1c8e1937baf74e1962aae9f90fa3aeab463 ("prctl: PR_{G,S}ET_IO_FLUSHER
-to support controlling memory reclaim").
+At least with the patch, I can continue play Retroarch
+without using the Gyroscope :)
 
-It requires CAP_SYS_RESOURCE :/. This makes me wonder whether
-unprivileged ublk will ever be possible.
+Signed-off-by: Henry Castro <hcvcastro@gmail.com>
+---
 
-I think this addresses Denis' concern about hangs, but it doesn't solve
-them because I/O will fail. The real solution is probably what you
-mentioned...
+> Are it only these which are equal or are there are other funky ones?
+> Are all constants in general the same? I'm just trying to figure out
+> if some of this device would even need calibration.
 
-> Firstly in theory the userspace part should provide forward progress
-> guarantee in code path for handling IO, such as reserving/mlock pages
-> for such situation. However, this issue isn't unique for nbd or ublk,
-> all userspace block device should have such potential risk, and vduse
-> is no exception, IMO.
+More data logs:
 
-=2E..here. Userspace needs to minimize memory allocations in the I/O code
-path and reserve sufficient resources to make forward progress.
+gyro_pitch_plus=8704 giro_pitch_minus=8704
+gyro_yaw_plus=8704 giro_yaw_minus=-8704
+gyro_roll_plus=-8704 giro_roll_minus=-8704
 
-Stefan
+Yes, They are constants values :( I
 
---6RwoVJ4k64p8vK98
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+ drivers/hid/hid-sony.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmM/HqMACgkQnKSrs4Gr
-c8gdMwgAt2uBqb9BuOBYhclEKVi/V4v2vRqAzrMlGSsU3j6ZvtIH+JwfF420xYiA
-hhHDMxUwRyexA6SwnBN245+Mi5gxoOLZA/OjwQLyWCIuVNv8CS9UbwXdaQoa5IB1
-3iRSALpCD913qK70W/gAYmjX3p3aDq67F05bE8QQoz3F7D82iUmY3Nm96vQPIdzn
-4oyvKmSH8OoY4d566nNSqDKwIcQZ/dnRWmuDODjXDdSajoHjNzpKDAwU2L7oa4HF
-2CegrkFKNRuBqjdeoA6xfm1F6SXdxgwyfDuIFXoCk0E9o8QkggUX6Dm6Lx5AKW8u
-qa3d11zuwWY0scCPDzLp9bTitS7H7w==
-=1Utp
------END PGP SIGNATURE-----
+diff --git a/drivers/hid/hid-sony.c b/drivers/hid/hid-sony.c
+index 87b538656f64..656caa07b25f 100644
+--- a/drivers/hid/hid-sony.c
++++ b/drivers/hid/hid-sony.c
+@@ -1823,6 +1823,15 @@ static int dualshock4_get_calibration_data(struct sony_sc *sc)
+ 	acc_z_plus       = get_unaligned_le16(&buf[31]);
+ 	acc_z_minus      = get_unaligned_le16(&buf[33]);
 
---6RwoVJ4k64p8vK98--
++	if (gyro_pitch_plus == gyro_pitch_minus)
++		gyro_pitch_minus *= -1;
++
++	if (gyro_yaw_plus == gyro_yaw_minus)
++		gyro_yaw_minus *= -1;
++
++	if (gyro_roll_plus == gyro_roll_minus)
++		gyro_roll_minus *= -1;
++
+ 	/* Set gyroscope calibration and normalization parameters.
+ 	 * Data values will be normalized to 1/DS4_GYRO_RES_PER_DEG_S degree/s.
+ 	 */
+--
+2.20.1
 
