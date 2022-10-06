@@ -2,119 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DCD5F683E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 788CA5F6839
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:33:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbiJFNdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 09:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
+        id S231658AbiJFNc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 09:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231481AbiJFNcu (ORCPT
+        with ESMTP id S231451AbiJFNcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 09:32:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A505FC1;
-        Thu,  6 Oct 2022 06:32:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47EBD619B3;
-        Thu,  6 Oct 2022 13:31:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D819C433C1;
-        Thu,  6 Oct 2022 13:31:13 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="dCt1XlLR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1665063067;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=19y9yEzpIVCdXeybhvKA7dJEvUCmehig1gThjjfIZlg=;
-        b=dCt1XlLRhK46o65EhJYBSpRmYOT4n7MeVXGzqEAmpcGdWyuxeH5sPJp8L+8s50v59qatMG
-        Pop9Q+fWN3pqL5OpRxJVaBL/44G7A5DyWYXHpzYYf1aO4M481jtYlUZ2z2P2gTZK51QEX3
-        xI04TaxnmVtdtVX+upl/OVmNZ34Lghg=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 07574342 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 6 Oct 2022 13:31:07 +0000 (UTC)
-Received: by mail-ua1-f49.google.com with SMTP id p89so623802uap.12;
-        Thu, 06 Oct 2022 06:31:05 -0700 (PDT)
-X-Gm-Message-State: ACrzQf39I0aG5QvIzUh/9qcHBEF1elKF+vF9hNH7v2anSGfBoAICV2EV
-        ngllvXKIEIB5FbGUv+zfb/ab2TbIsHShqQy6ySY=
-X-Google-Smtp-Source: AMsMyM5LOcwlCqLDJ8Sdf5AH9P6p8LW9hstCcin8XnWJVl2TEMHnjzVUue7OZJku+oxVakLrWA9vu3wGp+73FInbltY=
-X-Received: by 2002:ab0:70b9:0:b0:3d7:84d8:35ae with SMTP id
- q25-20020ab070b9000000b003d784d835aemr2699257ual.24.1665063063460; Thu, 06
- Oct 2022 06:31:03 -0700 (PDT)
+        Thu, 6 Oct 2022 09:32:51 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F3EABD68
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 06:32:27 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id kg6so4555733ejc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 06:32:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jLWyENnFNe547LYKA1l7p+V/55M9Qg7wqXNSQA+tPh4=;
+        b=nfG8TGPZxwjq9nowPYag+alN8xtu6pejhDtfYE3OhQch5uXaWTBml/QIGfPxYDUNwu
+         +WXVC7j1jDM33vPzl1VBqXVPTPXxIrHOnIKLJPe6xptKo6mInngkiHKX3HJLCm09bDB+
+         GyFh2WHI6SIl4eSfO8Evw75JTMX4gm3DxD5EZkGNGd6bTO9A3qjQrphbIJLLRWkFd7gQ
+         ORT1z5SjhmXjqEQC5y3GIwMLELg1u6TK++pgfuJ2LYDNMSKRru9GVT8g7EcJWVQhvLhP
+         nio6yB/9ntQLDq5Cn1fJIDTBxvrNKxtrxmlXJccLrjfYw24ZOqVhvybo3WUYcFfU1I+H
+         t1gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jLWyENnFNe547LYKA1l7p+V/55M9Qg7wqXNSQA+tPh4=;
+        b=6DmF7eGzdeioIYx8AwW0RRL6qjiNuPkHPSlRIXeS/Ccn/gSVR/imASRnLQSW8bm51+
+         5RhME97yyVXwU7aPSP+csxGaCcZ/OrfSTSjNOHzapbvVl4tJqECIGMEcQ68Ng9yvI8eA
+         TUEt9UnUw7cRsc6iGGwtS8WDfuiwTUf17Av7tmJlMDNOiPSqANsGjWyGi9MZznMlcU3X
+         GobU0zY1VyV6vq9Nj2S1nCnTTzyNEUtcwWl2iUrgwsnINGeCYr6ioyElJCimlt7zQTaL
+         n9epolFoM8/7u++gjnZZuxgnvxg6I0kAvHqbdK0WldFED8EFNk90Qfk4CfCgHwEff4A0
+         UNMA==
+X-Gm-Message-State: ACrzQf2w/kUv7SwwYvRIkuCrEIyGQ3pEmoOSTpNBXYXUKAIFQv1ymihY
+        ZfACIV46ADDnGGRg5KQvPB3BC2KE3nrtZA==
+X-Google-Smtp-Source: AMsMyM6YGeAonCo9d5iqTsdyfBooPTFkF3ZB935YD873xQHdht4JfA2MNitsVbozbRgnrNAha2YkmA==
+X-Received: by 2002:a17:907:7210:b0:783:37b0:b5ca with SMTP id dr16-20020a170907721000b0078337b0b5camr3937247ejc.689.1665063067246;
+        Thu, 06 Oct 2022 06:31:07 -0700 (PDT)
+Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
+        by smtp.gmail.com with ESMTPSA id d1-20020a170906304100b00788c622fa2csm9459973ejd.135.2022.10.06.06.31.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 06:31:06 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 15:31:05 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/8] riscv: cpufeature: extend
+ riscv_cpufeature_patch_func to all ISA extensions
+Message-ID: <20221006133105.hj3r2z4loybsfeqe@kamzik>
+References: <20221006070818.3616-1-jszhang@kernel.org>
+ <20221006070818.3616-5-jszhang@kernel.org>
 MIME-Version: 1.0
-References: <20221006132510.23374-1-Jason@zx2c4.com>
-In-Reply-To: <20221006132510.23374-1-Jason@zx2c4.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 6 Oct 2022 07:30:52 -0600
-X-Gmail-Original-Message-ID: <CAHmME9pXuGKNsm3cCOMLSOMJoX2XJnHffpiF_rr32mW2ozShhw@mail.gmail.com>
-Message-ID: <CAHmME9pXuGKNsm3cCOMLSOMJoX2XJnHffpiF_rr32mW2ozShhw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] treewide cleanup of random integer usage
-To:     linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        =?UTF-8?Q?Christoph_B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Dave Airlie <airlied@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Westphal <fw@strlen.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hugh Dickins <hughd@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Graf <tgraf@suug.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
-        kernel-janitors@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mm@kvack.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-nvme@lists.infradead.org,
-        linux-rdma@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221006070818.3616-5-jszhang@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 6, 2022 at 7:25 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> This is a five part treewide cleanup of random integer handling.
-> [...]
-> Please take a look!
+On Thu, Oct 06, 2022 at 03:08:14PM +0800, Jisheng Zhang wrote:
+> make the riscv_cpufeature_patch_func() scan all ISA extensions rather
+> than limited feature macros.
+> 
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  arch/riscv/include/asm/errata_list.h |  9 ++--
+>  arch/riscv/kernel/cpufeature.c       | 61 +++-------------------------
+>  2 files changed, 9 insertions(+), 61 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
+> index 19a771085781..722525f4fc96 100644
+> --- a/arch/riscv/include/asm/errata_list.h
+> +++ b/arch/riscv/include/asm/errata_list.h
+> @@ -6,6 +6,7 @@
+>  #define ASM_ERRATA_LIST_H
+>  
+>  #include <asm/alternative.h>
+> +#include <asm/hwcap.h>
+>  #include <asm/vendorid_list.h>
+>  
+>  #ifdef CONFIG_ERRATA_SIFIVE
+> @@ -20,10 +21,6 @@
+>  #define	ERRATA_THEAD_NUMBER 2
+>  #endif
+>  
+> -#define	CPUFEATURE_SVPBMT 0
+> -#define	CPUFEATURE_ZICBOM 1
+> -#define	CPUFEATURE_NUMBER 2
+> -
+>  #ifdef __ASSEMBLY__
+>  
+>  #define ALT_INSN_FAULT(x)						\
+> @@ -53,7 +50,7 @@ asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,	\
+>  #define ALT_SVPBMT(_val, prot)						\
+>  asm(ALTERNATIVE_2("li %0, 0\t\nnop",					\
+>  		  "li %0, %1\t\nslli %0,%0,%3", 0,			\
+> -			CPUFEATURE_SVPBMT, CONFIG_RISCV_ISA_SVPBMT,	\
+> +			RISCV_ISA_EXT_SVPBMT, CONFIG_RISCV_ISA_SVPBMT,	\
+>  		  "li %0, %2\t\nslli %0,%0,%4", THEAD_VENDOR_ID,	\
+>  			ERRATA_THEAD_PBMT, CONFIG_ERRATA_THEAD_PBMT)	\
+>  		: "=r"(_val)						\
+> @@ -127,7 +124,7 @@ asm volatile(ALTERNATIVE_2(						\
+>  	"add a0, a0, %0\n\t"						\
+>  	"2:\n\t"							\
+>  	"bltu a0, %2, 3b\n\t"						\
+> -	"nop", 0, CPUFEATURE_ZICBOM, CONFIG_RISCV_ISA_ZICBOM,		\
+> +	"nop", 0, RISCV_ISA_EXT_ZICBOM, CONFIG_RISCV_ISA_ZICBOM,	\
+>  	"mv a0, %1\n\t"							\
+>  	"j 2f\n\t"							\
+>  	"3:\n\t"							\
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index afa54635c180..2b1f18f97253 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -251,61 +251,11 @@ void __init riscv_fill_hwcap(void)
+>  }
+>  
+>  #ifdef CONFIG_RISCV_ALTERNATIVE
+> -static bool __init_or_module cpufeature_probe_svpbmt(unsigned int stage)
+> -{
+> -#ifdef CONFIG_RISCV_ISA_SVPBMT
+> -	switch (stage) {
+> -	case RISCV_ALTERNATIVES_EARLY_BOOT:
+> -		return false;
+> -	default:
+> -		return riscv_isa_extension_available(NULL, SVPBMT);
+> -	}
+> -#endif
+> -
+> -	return false;
+> -}
+> -
+> -static bool __init_or_module cpufeature_probe_zicbom(unsigned int stage)
+> -{
+> -#ifdef CONFIG_RISCV_ISA_ZICBOM
+> -	switch (stage) {
+> -	case RISCV_ALTERNATIVES_EARLY_BOOT:
+> -		return false;
+> -	default:
+> -		return riscv_isa_extension_available(NULL, ZICBOM);
+> -	}
+> -#endif
+> -
+> -	return false;
+> -}
+> -
+> -/*
+> - * Probe presence of individual extensions.
+> - *
+> - * This code may also be executed before kernel relocation, so we cannot use
+> - * addresses generated by the address-of operator as they won't be valid in
+> - * this context.
+> - */
+> -static u32 __init_or_module cpufeature_probe(unsigned int stage)
+> -{
+> -	u32 cpu_req_feature = 0;
+> -
+> -	if (cpufeature_probe_svpbmt(stage))
+> -		cpu_req_feature |= (1U << CPUFEATURE_SVPBMT);
+> -
+> -	if (cpufeature_probe_zicbom(stage))
+> -		cpu_req_feature |= (1U << CPUFEATURE_ZICBOM);
+> -
+> -	return cpu_req_feature;
+> -}
+> -
+>  void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
+>  						  struct alt_entry *end,
+>  						  unsigned int stage)
+>  {
+> -	u32 cpu_req_feature = cpufeature_probe(stage);
+>  	struct alt_entry *alt;
+> -	u32 tmp;
+>  
+>  	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
+>  		return;
+> @@ -313,15 +263,16 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
+>  	for (alt = begin; alt < end; alt++) {
+>  		if (alt->vendor_id != 0)
+>  			continue;
+> -		if (alt->errata_id >= CPUFEATURE_NUMBER) {
+> -			WARN(1, "This feature id:%d is not in kernel cpufeature list",
+> +		if (alt->errata_id >= RISCV_ISA_EXT_ID_MAX) {
 
-I should add that this patchset probably appears bigger than it
-already is, due in part to that wall of motivational text. Keep in
-mind, though, that the whole thing is only "305 insertions(+), 342
-deletions(-)", so it should be conventionally reviewable.
+Ok, so RISCV_ISA_EXT_ID_MAX is used here now, but we could use
+RISCV_ISA_EXT_MAX directly instead.
 
-Jason
+> +			WARN(1, "This extension id:%d is not in ISA extension list",
+                                                               ^ the
+>  				alt->errata_id);
+>  			continue;
+>  		}
+>  
+> -		tmp = (1U << alt->errata_id);
+> -		if (cpu_req_feature & tmp)
+> -			patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
+> +		if (!test_bit(alt->errata_id, riscv_isa))
+
+Maybe avoid using riscv_isa directly in case we want to move this function
+out of cpufeature.c some day?
+
+  if (!__riscv_isa_extension_available(NULL, alt->errata_id))
+
+
+> +			continue;
+> +
+> +		patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
+>  	}
+>  }
+>  #endif
+> -- 
+> 2.37.2
+>
+
+Otherwise,
+
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
