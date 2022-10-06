@@ -2,112 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB325F6DB0
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 20:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783B05F6DBD
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 20:54:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbiJFSsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 14:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
+        id S229815AbiJFSyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 14:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiJFSsF (ORCPT
+        with ESMTP id S230472AbiJFSyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 14:48:05 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07BC0B6007
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 11:48:04 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id n83so3015398oif.11
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 11:48:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vJ9aXvF0UV+hPF6vLhTwevLaf+MHU+7z3WZDrs6PuE8=;
-        b=C92DsrJa5pMHAVCLNB/mBu5Se8g4ReDdr4exh89KR8dSfA2vbRsHRJIS+8WJVKh7Hx
-         x3HTDXWT9+itDjTTvo+rRQuBc/f4nbRtWpv5Kk6ZOys8syaQSHrTO/XveqoM7wUChlyI
-         Yz8nvI/k5xSKmWTB2VxQGD63/h3PqBSNkLnZs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vJ9aXvF0UV+hPF6vLhTwevLaf+MHU+7z3WZDrs6PuE8=;
-        b=7TesMG5NJcYVbrVQ694eJ/OWj0BC9Rwvopv9UHtdam4nHVn4KrcJTn3qtR9FLDL7Uo
-         TKAz6UUDd9dhKrLrDlWCs3h7pXSArBokyUywwSbaxnZiIvj85C1unQ51kJkFJU6E7UNR
-         sP0Z3CDlq46Z1Hd4MUkHNa/WKMmVZlGDHTzfsQZ1/yrwFB6/GbzEzEYM5MsSUNrB4Cw8
-         4eqeecuHVoidAxuYVjIAtYo+uZNl44t6QXr8KP7VxkTmc7FtwUuOGDVuk/capW5eQ2UD
-         fvgICrrkPo+f/8+bIFFDCscly9MUolsJdwuO6Olev2hDkYkqJVjKffNgOBduo6GSmi7t
-         penw==
-X-Gm-Message-State: ACrzQf1i7yIt8p78EUxwXol1wTsBfo2/kZvF/2pI9m965c4i+pFTC20T
-        7Za6UkwWTghkZ0eS1VwIon0lhNt5N0p0RA==
-X-Google-Smtp-Source: AMsMyM5JqsbuNRomH1eOZ6A4xFxCDoUZZd7x/4lNOlLoJCmfB/GW6PtZJKyxGXGns1Td4wk8WRF3ZQ==
-X-Received: by 2002:aca:180b:0:b0:352:8bda:c428 with SMTP id h11-20020aca180b000000b003528bdac428mr5581657oih.13.1665082082479;
-        Thu, 06 Oct 2022 11:48:02 -0700 (PDT)
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com. [209.85.161.45])
-        by smtp.gmail.com with ESMTPSA id w45-20020a4a97b0000000b0047f992f1b87sm699385ooi.41.2022.10.06.11.48.01
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Oct 2022 11:48:01 -0700 (PDT)
-Received: by mail-oo1-f45.google.com with SMTP id d22-20020a4a5216000000b0047f740d5847so1998090oob.13
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 11:48:01 -0700 (PDT)
-X-Received: by 2002:a05:6830:611:b0:65c:26ce:5dc with SMTP id
- w17-20020a056830061100b0065c26ce05dcmr574454oti.176.1665082081255; Thu, 06
- Oct 2022 11:48:01 -0700 (PDT)
+        Thu, 6 Oct 2022 14:54:15 -0400
+X-Greylist: delayed 322 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Oct 2022 11:54:12 PDT
+Received: from mail.postadigitale.org (mail.postadigitale.org [IPv6:2a01:4f8:200:34ed::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0ADC6940
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 11:54:12 -0700 (PDT)
+Received: from hostpad (p200300E4eF14Bb00Cd44aE579e46a63E.dip0.t-ipconnect.de [IPv6:2003:e4:ef14:bb00:cd44:ae57:9e46:a63e])
+        by mail.postadigitale.org (Postfix) with ESMTPSA id 4277D19CDA
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 20:48:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=postadigitale.de;
+        s=20180517; t=1665082127;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=M7sAER942m6X30CtkI1UU4lRPxRm6N9uYVQbrMaQFe0=;
+        b=XRKGDDRn5y5rzPLno37AxZFfq9jWcU6dyQtIpIXgmr7w7oNgJZ5RFcztthl+NZCke9QqW8
+        2uwPYqqyrYpZkuXIXv8ACkQJOHc+/qdbhQ7Sa55GDDUrcv2Q8XZnZNkrL6uSc4Mwq0ye2T
+        eTy5e95gc9wN4a3iRdQPlxbG/3Oe+gs=
+Date:   Thu, 6 Oct 2022 18:48:45 +0000
+From:   Simon Brand <simon.brand@postadigitale.de>
+To:     linux-kernel@vger.kernel.org
+Subject: Possibility to disable icotl TIOCSTI
+Message-ID: <Yz8jDbLap91dRVyH@hostpad>
 MIME-Version: 1.0
-References: <CAPM=9tzs4n8dDQ_XVVPS_5jrBgsNkhDQvf-B_XmUg+EG_M2i4Q@mail.gmail.com>
-In-Reply-To: <CAPM=9tzs4n8dDQ_XVVPS_5jrBgsNkhDQvf-B_XmUg+EG_M2i4Q@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 6 Oct 2022 11:47:45 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whUp5Ufur6Bmv=H-rDDTNJJ-KVqOKkL+5FmR01jp0dbcA@mail.gmail.com>
-Message-ID: <CAHk-=whUp5Ufur6Bmv=H-rDDTNJJ-KVqOKkL+5FmR01jp0dbcA@mail.gmail.com>
-Subject: Re: [git pull] drm for 6.1-rc1
-To:     Dave Airlie <airlied@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 4, 2022 at 8:42 PM Dave Airlie <airlied@gmail.com> wrote:
->
-> Lots of stuff all over, some new AMD IP support and gang
-> submit support [..]
+Hello,
 
-Hmm.
+in the past there have been attempts to restrict the TIOCSTI ioctl. [0, 1]
+None of them are present in the current kernel.
+Since those tries there have been some security issues (sandbox
+escapes in flatpak (CVE-2019-10063) [2] and snap (CVE 2019-7303) [3],
+runuser [4], su [5]).
 
-I have now had my main desktop lock up twice after pulling this.
-Nothing in the dmesg after a reboot, and nothing in particular that
-seems to trigger it, so I have a hard time even guessing what's up,
-but the drm changes are the primary suspect.
+I ask to merge the patches from linux-hardening [6, 7] so users can
+opt out of this behavior. These patches provide the
+`SECURITY_TIOCSTI_RESTRICT` Kconfig (default no) and a
+`tiocsti_restrict` sysctl.
 
-I will try to see if I can get any information out of the machine, but
-with the symptom being just a dead machine ...
+Escapes can be reproduced easiliy (on archlinux) via a python script:
+```
+import fcntl
+import termios
+with open("/dev/tty", "w") as fd:
+    for c in "id\n":
+        fcntl.ioctl(fd, termios.TIOCSTI, c)
+```
+Now run as root:
+# su user
+$ python3 /path/to/script.py ; exit
+uid=0(root) ...
 
-This is the same (old) Radeon device:
+At least to me, this result was not expected.
 
-   49:00.0 VGA compatible controller: Advanced Micro Devices, Inc.
-[AMD/ATI] Ellesmere [Radeon RX 470/480/570/570X/580/580X/590] (rev e7)
+I asked it before on kernelnewbies mailing list. [8]
+Please set me in CC, because I have not subscribed to this list.
 
-with dual 4k monitors, running on my good old Threadripper setup.
+Best and thank you,
+Simon
 
-Again, there's no explicit reason to blame the drm pull, except that
-it started after that merge (that machine ran the kernel with the
-networking pull for a day with no problems, and while there were other
-pull requests in between them, they seem to be fairly unrelated to the
-hardware I have).
-
-But the lockup is so sporadic (twice in the last day) that I really
-can't bisect it, so I'm afraid I have very very little info.
-
-Any suggestions?
-
-                      Linus
+[0] https://lkml.kernel.org/lkml/CAG48ez1NBnrsPnHN6D9nbOJP6+Q6zEV9vfx9q7ME4Eti-vRmhQ@mail.gmail.com/T/
+[1] https://lkml.kernel.org/lkml/20170420174100.GA16822@mail.hallyn.com/T/
+[2] https://github.com/flatpak/flatpak/issues/2782
+[3] https://wiki.ubuntu.com/SecurityTeam/KnowledgeBase/SnapIoctlTIOCSTI
+[4] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=815922
+[5] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=628843
+[6] https://github.com/anthraxx/linux-hardened/commit/d0e49deb1a39dc64e7c7db3340579
+[7] https://github.com/anthraxx/linux-hardened/commit/ea8f20602a993c90125bf08da3989
+[8] https://www.spinics.net/lists/newbies/msg64019.html
