@@ -2,172 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83EF35F6700
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DAA5F66F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbiJFM4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 08:56:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
+        id S231807AbiJFMzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 08:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231740AbiJFM4Y (ORCPT
+        with ESMTP id S230461AbiJFMzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 08:56:24 -0400
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960B421828;
-        Thu,  6 Oct 2022 05:55:33 -0700 (PDT)
-Received: by mail-ej1-f48.google.com with SMTP id r17so4322258eja.7;
-        Thu, 06 Oct 2022 05:55:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=pMgQyMBUHz4DAGv7dUKQ5faE2OXLKUuJdGmQsBE60y8=;
-        b=AUCe13PGJRYHhE/cTCIPw3OUFheQpUYNOU1YGMsrmfFlzNw2kwLLxVFE7xU4qNWRhj
-         9+MqUoB1YKqUZ3grGYiXLXIciHboc0OhiCtxIR1W6M6cavsAtHlj8DlNj+fTVvalDIHy
-         74udg159h7+Xf8btJEit/ihZjOhuuIrIzg9xBO3ev96L9E/t8wiG+V9Pk6SPpVBYA/4e
-         0cBR56s7R/eWMiRwmY8UgV4MYlvuFtsey9C35FuQE9TFx9hvThpq6mFowVovaFMgQxMq
-         1kR8ncqlEbm7AvVMob7N3+9WrsNEH0eadJyccflxQBerghS+1SNTMW5eEMB8BSvJASQK
-         bX8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=pMgQyMBUHz4DAGv7dUKQ5faE2OXLKUuJdGmQsBE60y8=;
-        b=JZX3MSiVAIFWTKQp5c+/RkLvEMiehP+yNk6eK8bkAS25L0ACywHhsm3OxdoXDtbrxZ
-         GudILje6ImjSGU/LuHTq09zIe5QwN4pMQanac1eHIbsILflVF9Tk9z74nV5MF9JOZBGw
-         rVAkDOnWClF0YijLZR3oeCT4/7DQV7UdCoSLcnk4DlQfFWjf2RrLd606rUlArfxSCR+L
-         xSSTLDAUItuAP/6We7+/851v2QO6i80pxbdzr4CJIRunGOmYKX9eH6pC4pcUlhciCF+D
-         ZezVT5PvitQ0gveRxjYAJAQ0cZU2mzlmATZ/w5NGgKhZ4qrAPbDQf4obWfNZXdCrGa4e
-         kJEA==
-X-Gm-Message-State: ACrzQf2vvzKQIgXLwxer9+SHmf7In+2MMJ5gMw7vvmfL3Z5mbr8rXWR1
-        1MWJOUbsVAXuwICuP4Re9zU=
-X-Google-Smtp-Source: AMsMyM5eI7766P4xReWjJJvJIeOwhFNTHRvpw0SnB31J+1Nay85fWQ9zH9PSAx5ICwz59XycOdax6Q==
-X-Received: by 2002:a17:907:7ea7:b0:78d:3638:9018 with SMTP id qb39-20020a1709077ea700b0078d36389018mr3934377ejc.236.1665060627958;
-        Thu, 06 Oct 2022 05:50:27 -0700 (PDT)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id b40-20020a509f2b000000b00456c6b4b777sm5710157edf.69.2022.10.06.05.50.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 05:50:27 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 14:50:25 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-tegra@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: tegra: Update comment about config space
-Message-ID: <Yz7PEakeTyvmnxDh@orome>
-References: <20220911113216.14892-1-pali@kernel.org>
- <YzRcYwQYlawV10QS@orome>
- <20221005194336.gdnu4vfzkudedjw5@pali>
+        Thu, 6 Oct 2022 08:55:13 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4689A59A7;
+        Thu,  6 Oct 2022 05:54:32 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:52790)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1ogQMl-001wrk-SK; Thu, 06 Oct 2022 06:52:43 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:37142 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1ogQMk-00FeG7-Lp; Thu, 06 Oct 2022 06:52:43 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <CAHC9VhShpEVTuogj4h74PxbEeTUNn4odo8SE6GBvb6sGUM0LHw@mail.gmail.com>
+        <87sfk3mim9.fsf@email.froward.int.ebiederm.org>
+        <CAHk-=wiCqicQrnQPeHbDF7ECKHk_ceYzZK5dYq7y5nZTZhpB8g@mail.gmail.com>
+        <87r0zmigx6.fsf@email.froward.int.ebiederm.org>
+        <CAHk-=wihQGNanXu3aeN12rsq+2K9BDkZEij-9HWtbVxFbXg1rw@mail.gmail.com>
+Date:   Thu, 06 Oct 2022 07:52:13 -0500
+In-Reply-To: <CAHk-=wihQGNanXu3aeN12rsq+2K9BDkZEij-9HWtbVxFbXg1rw@mail.gmail.com>
+        (Linus Torvalds's message of "Wed, 5 Oct 2022 11:54:32 -0700")
+Message-ID: <87h70h5d36.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ERmlPpGZ/YGPk8vW"
-Content-Disposition: inline
-In-Reply-To: <20221005194336.gdnu4vfzkudedjw5@pali>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1ogQMk-00FeG7-Lp;;;mid=<87h70h5d36.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX18bJ2eMLHkzxYk/0SFWDcGQLZA8+RhXvg0=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Linus Torvalds <torvalds@linux-foundation.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 668 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 12 (1.7%), b_tie_ro: 10 (1.5%), parse: 1.20
+        (0.2%), extract_message_metadata: 20 (2.9%), get_uri_detail_list: 3.5
+        (0.5%), tests_pri_-1000: 16 (2.4%), tests_pri_-950: 1.49 (0.2%),
+        tests_pri_-900: 1.24 (0.2%), tests_pri_-90: 127 (19.0%), check_bayes:
+        125 (18.7%), b_tokenize: 12 (1.7%), b_tok_get_all: 13 (1.9%),
+        b_comp_prob: 4.4 (0.7%), b_tok_touch_all: 91 (13.6%), b_finish: 1.06
+        (0.2%), tests_pri_0: 470 (70.3%), check_dkim_signature: 0.78 (0.1%),
+        check_dkim_adsp: 11 (1.7%), poll_dns_idle: 0.41 (0.1%), tests_pri_10:
+        2.3 (0.3%), tests_pri_500: 13 (2.0%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [GIT PULL] LSM patches for v6.1
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Linus Torvalds <torvalds@linux-foundation.org> writes:
 
---ERmlPpGZ/YGPk8vW
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Wed, Oct 5, 2022 at 5:39 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>>
+>> We already have /proc/sys/user/max_user_namespaces.  It is a per userns
+>> control so you can run it in as fine grain as you like.  A little
+>> cumbersome perhaps but real.
+>
+> It's not that it's cumbersome.
+>
+> It's that it is *USELESS*.
 
-On Wed, Oct 05, 2022 at 09:43:36PM +0200, Pali Roh=C3=A1r wrote:
-> On Wednesday 28 September 2022 16:38:27 Thierry Reding wrote:
-> > On Sun, Sep 11, 2022 at 01:32:16PM +0200, Pali Roh=C3=A1r wrote:
-> > > Like many other ARM PCIe controllers, it uses old PCI Configuration
-> > > Mechanism #1 from PCI Local Bus for accessing PCI config space.
-> > > It is not PCIe ECAM in any case.
-> > >=20
-> > > Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
-> > > ---
-> > >  drivers/pci/controller/pci-tegra.c | 8 +++++---
-> > >  1 file changed, 5 insertions(+), 3 deletions(-)
-> >=20
-> > Perhaps this should be rolled into the PCI_CONF1_EXT_ADDRESS patch?
->=20
-> Well, I split documentation change and PCI_CONF1_EXT_ADDRESS usage into
-> two patches as those are two different / separate things. Documentation
-> change is a fix (because documentation is wrong) and PCI_CONF1_EXT_ADDRESS
-> is an improvement - code cleanup. And in case if there is a issue with
-> "cleanup" patch it can be reverted without need to revert also "fix"
-> part. This is just information how I looked at these changes and why I
-> decided to split them.
->=20
-> > On
-> > the other hand there's really no use in keeping this comment around
-> > after that other patch because the documentation for the new macro lays
-> > out the details already.
-> >=20
-> > Thierry
->=20
-> Ok, whether documentation is needed or not - it is your maintainer
-> decision. Maybe really obvious things do not have to be documented.
-> Also another look at this problem can be that if somebody wrote wrong
-> documentation for it, maybe it is not too obvious? I do not have opinion
-> on this, so choose what is better :-)
+Not quite.  Because you can have lower settings inside created user
+namespaces, it is easy to create a user namespace so inside of
+a sandbox you can't create more user namespaces.
 
-I wrote that documentation back at the time and I fail to see what
-exactly is wrong about it. Granted, it doesn't mention the Intel PCI
-Configuration mechanism #1 from the PCI Local Bus Specification, but
-that's just because I didn't know about it. Back when I wrote this I
-was looking at the PCIe specifications (because, well, this supports
-PCIe) and I noticed that it was similar to ECAM. And that's exactly
-what the comment says and it points out what the differences are.
+> Sure, it limits the memory footprint of somebody who does the
+> fork-bomb equivalent of user namespaces, but that's the least of the
+> problems.
+>
+> Just think of normal users. They'd want a limited number of user
+> namespaces for things like sandboxing (whether google chrome or
+> whatever).
+>
+> So distros do want to allow people a few of them.
+>
+> But they want to be able to do so in a *controlled* manner. Not a "ok,
+> this user can create five user namespaces and do whatever they want in
+> them". Because we've had the issues where some kernel part has gotten
+> things wrong, and thought "local NS root means root" or similar.
+>
+> So it's not about the number of namespaces. AT ALL. It's about *who*
+> and *what* does them.
 
-So just because the mapping is closer to PCI_CONF1_EXT_ADDRESS than
-ECAM, it doesn't automatically make the comment wrong. The mapping also
-isn't exactly PCI_CONF1_EXT_ADDRESS, so the new comment can be
-considered equally wrong. The mapping is neither ECAM nor PCI_CONF1, so
-describing it one way or the other doesn't make a difference.
+I see your concern that I am not acknowledging the current state of play
+of user namespaces, and what problems they may be causing people.  Let
+me describe what I understand the current state to be and you can
+correct me where I am wrong.
 
-> In any case, wrong documentation (which is the current state) should be
-> fixed (and removal in most case is also proper fix).
+At this point every old-school distro I am aware of enables user
+namespaces by default. (I don't know what android and chrome-os do).  As
+best I have been able to determine the bugs that are turning up are the
+same kinds of bugs and at roughly the same rates as bugs turn up
+anywhere else in the user/kernel interface.
 
-Again, I don't see that this fixes anything because there was no bug.
-The documentation change makes the most sense when combined with the
-change that actually implements this in terms of the new macro.
+There is a common trend that shows up when people examine posted
+exploits (especially exploits connected to CVEs), a lot of the exploits
+create user namespaces.  As best as I have been able to determine this
+has two causes.  Arranging the conditions so that the bugs can be
+triggered without using user namespaces is more difficult.  There is
+more attack surface when user namespaces are enabled.
 
-The existing documentation exists to give further background information
-about the mapping. If we remove the comment out of context we loose that
-extra information. However, if at the same time we change the code to
-use another (documented) macro, then we replace the information without
-loosing anything.
+Even so it is my sense that for a typical linux desktop the additional
+risk of running with user namespaces enabled is negligible.  My sense is
+that there is a modest probability that there is a exploitable kernel
+bug with user namespaces disabled, and that enabling them only slightly
+increases the probability that there is an exploitable kernel bug.
 
-Thierry
+The conclusion I draw from that is that it is ok to leave the use of
+namespaces enabled by default for most people most of the time.
 
---ERmlPpGZ/YGPk8vW
-Content-Type: application/pgp-signature; name="signature.asc"
+As best as I can determine it takes running on separate machines, or
+possibly running inside of virtual machines to provide reasonable safety
+from an attacker who manages to run arbitrary unprivileged userspace
+code.  I don't believe disabling user namespaces appreciably moves the
+needle.
 
------BEGIN PGP SIGNATURE-----
+In the linux desktop space there is chrome, and things like flatpak
+that use sandboxes to run applications.  Making the gain of being able
+to construct your own sandboxes something that has practical utility.
+I believe that sandboxes make it more difficult for attackers to
+achieve the ability to run arbitrary unprivileged userspace code.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmM+zw4ACgkQ3SOs138+
-s6GdLQ/+K2j1y2qtNmImdTk6z0RFpErz4nwlOCuWT8DAT/EhGoQbinPh2BdjSXNg
-YXhfLiuq2EPHg/sE0m5EGifBF6ntxU35M34GZydQ/sSpLpyymYDyUj1iWul7PbGe
-/OKq/0sOmL/F9L0lkouwEnnftncz5JDa/xGEQ5g6D3wiyTsz1IVorXUjC8ezilSm
-ZNxdgaV1uwV4k5Tt+tLGK1FXA1G1bLi0wEUJm3c/sUPQLGkF+HHCeyxzwkDMyVe1
-9j5Go1tULi6ZPMGw4MZvX7g02dZ9kZif9I2xf6P+N9LHyvAeG8vVCMlj8In3IT1B
-CUwiYwx70qucJZB9gAnOeHWBWCFPHf9gi97kGvkQ4ysCMQ022j2FrsnyEIJ+IwL2
-TdiU6Sf60TAjmLudBew0Gf4ruDPyQWL5DLHOb/bqYWd59PBsd2Svno4S7JwaJUKK
-fPLwilYCpMjwD/jy7eBG5Hkoehd0jEeTZbg4wVczJVbCHVV3hKJShVpaHjH5CN1p
-iaZcK67rPEFyRjuq6skj8bkFKqUaQFRBe7Ui1nrntDi33e32W9JnwJ7DadVeuGfu
-9zWLcIxKEHTAaKdx/tUG6RJL+qCLaB/5GBx/7NzLQk4QQn9gOrBb9wm3EkXsUtRR
-/JnJkLSvqaDK4VzuGSMkmt/0tPGI+LFF4pSeqqBu0jvfru78CFY=
-=uOBE
------END PGP SIGNATURE-----
 
---ERmlPpGZ/YGPk8vW--
+So I think user namespaces are better default on.  Having user
+namespaces default on means that people find them available and use
+them.  Asking people to code for enviroments where user namespaces
+may be on, may be off to the best I believe will encourage people
+not to use the best tools that are available for securing their
+applications, and so will be a net detriment to the community.
+
+That is why max_user_namespaces looks like all it is good for is
+preventing the user namespace equivalent of fork bombs, but is in fact
+trivially capable of disabling user namespaces in sandboxes.
+
+I do think there are cases where things get locked down and sandboxed
+and tight that people should disable anything and everything they don't
+need.  That in those case you want to implement the principle of least
+privilege.  I see no problem with supporting those kinds of systems.
+
+>> I don't know.  I tried to have the conversation and Paul shut it down.
+>
+> I really get the feeling that the problem here is that you're not even
+> acknowledging the whole issue to begin with, since you mention that
+> "max_user_namespaces" not once, but twice in the email.
+
+Mentioning max_user_namespaces was my point that I very much see the
+need for some controls.  That there are some already existing and
+that is the one I built in the kernel already.  Not a contention
+that these are good enough.
+
+Saying Paul was the one who shut things down was probably going a bit
+too far.  But I am very frustrated that the my attempts to figure out
+what was going on.
+
+
+>> It would be the easiest thing in the world in security_capable to
+>> ask is this a trusted app, if not the answer is no.
+>
+> Isn't this *literally* what security_create_user_ns() would basically
+> be doing?
+
+The actual implementation of security_create_user_ns() current creates
+regressions in userspace.
+
+So I think the current implementation needs to be reverted, and the
+current failure paths in create_user_ns with the same behavior need to
+be fixed and we can talk about what are appropriate mechanisms to add
+to the kernel.
+
+I trust you can handle the revert of the regression.  At the moment I
+have spent way more time on this then I have time for.  My family needs
+me.
+
+Eric
