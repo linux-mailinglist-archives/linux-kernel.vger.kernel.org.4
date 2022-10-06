@@ -2,145 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED335F61A0
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 09:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 068305F61A8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 09:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbiJFH27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 03:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
+        id S230288AbiJFHcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 03:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiJFH24 (ORCPT
+        with ESMTP id S230272AbiJFHcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 03:28:56 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8077F111
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 00:28:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665041336; x=1696577336;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=0hHB0HurPLCsv05+ws89CRXb9GtCxT7+4TZpgH3fRR8=;
-  b=cNJ9poIcco4B0vGWHD3RDSFHxTvk98nRZgGLwMgQ7ql5K9iUjWir/tON
-   gftC4vC+A6StyN7n6/GfLSGGNbQLENPcCtHH8shRLiyGyQhDlUarIDqvd
-   2SOklSsKGkZgnVa0JbqiN+k2Axcx5g3H6YLL/LfPcE2AhPWMU8HCQJUtY
-   QVD4bwbTgZWNLwt2HYI5ZPZ0SWLlhc+dYek4fIO+cMjqVQi1ldygM30Jf
-   jU6Eauo3xVP8Yz3LzU7WH6sZazHMqqrRXFfd5lbvBzPv6zU4T7Uy948on
-   VP66R0ntysOdWV1hrlEuqvdodBoRID7ofY2TCD40xPNZb9tab3g/r4Io/
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="283088341"
-X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
-   d="scan'208";a="283088341"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 00:28:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="953513215"
-X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
-   d="scan'208";a="953513215"
-Received: from lkp-server01.sh.intel.com (HELO d4f44333118a) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 06 Oct 2022 00:28:54 -0700
-Received: from kbuild by d4f44333118a with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ogLJO-00024L-0j;
-        Thu, 06 Oct 2022 07:28:54 +0000
-Date:   Thu, 06 Oct 2022 15:28:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2022.10.03a] BUILD SUCCESS
- fece0fa66ffa3c22dcc8845d0081b2849c1d4295
-Message-ID: <633e8398.2wKda/Mx7WYnDWZg%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 6 Oct 2022 03:32:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01848E465;
+        Thu,  6 Oct 2022 00:32:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A4C261868;
+        Thu,  6 Oct 2022 07:32:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2334C433D7;
+        Thu,  6 Oct 2022 07:32:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665041521;
+        bh=VEE+qeskd4vr15hp0HONqTNmGFQc194J37xrvzeQFbA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=p3GArwweEXG2MRPB0YiHgtfe31rDdrMAM3rqo8Hf4bD9zuKp1WCND2l8bPnSyWDAG
+         MyyD877aalEd0wimXnkH51ZDgsoHBd2S3FOBGER2clswRz1Wybejlo0MDmaVTi/RFV
+         jexIyjUV8kSIDLT4bTlO2RdX3upVdyItpIvgGIE8APijU1eKwCKWJN14+2/SiukeK8
+         GPi65RrikNAKqWDctAGvPEz7gbcmOk81NuyGWFyl9DaJGeZWpq40lDP0+V+nQxsvJd
+         WJ+YQ7k+LRFeF0k5Cow/CCQ2aaKb7hWXv/JE6ZqOUpH5zNco7mh3zrAFndcgz+ds+T
+         gITytupwMwt2g==
+Received: by mail-lj1-f173.google.com with SMTP id f9so1200519ljk.12;
+        Thu, 06 Oct 2022 00:32:01 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1g3n7sVsYsNE68Ql2Wa831RgEaOO9kplTModVpKeHI7IeWl9U5
+        j6pW8FvUNrVZ3Oy8TrNBQSPXyX3mL1BHWupYYHE=
+X-Google-Smtp-Source: AMsMyM4FY1O/rb/P8UUxDe34KFVoPInPMbW8nB/Pt6z7vbO72Tszv6qLckNvVf6ZyCal7E1hTuT+B0rpFotRK8/+HiM=
+X-Received: by 2002:a2e:2d0a:0:b0:26c:a1c:cdf with SMTP id t10-20020a2e2d0a000000b0026c0a1c0cdfmr1335959ljt.352.1665041519591;
+ Thu, 06 Oct 2022 00:31:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <282a225d-8782-0321-6f0e-19dd4510dc42@suse.com>
+ <CAMj1kXFQNqsW5RfHGac-eGbosJHBybu6+-Fap_bi_kVxWNpGeg@mail.gmail.com>
+ <YzcjeiOW8+i2Zxsd@itl-email> <CAMj1kXHBBbCNV3CLesqZi7ttmmi8y4tZ1KO5vievy_CJrU2o3Q@mail.gmail.com>
+ <YzeaKjmls1YI/3ox@itl-email> <01d22092-8292-8ed7-ece7-9ca32d15bbce@suse.com>
+ <YzxxXuovwQt3NskE@itl-email> <a0dc1158-01b1-4272-b86e-52f4996f0747@suse.com>
+ <Yz3I2qwl243h9ZfZ@itl-email> <CAMj1kXHFi71SKQAQHEjZTLyp-YooRTYZ2-nqydRZA5hys7tkKw@mail.gmail.com>
+ <Yz4yLyvX6un1rrqC@itl-email>
+In-Reply-To: <Yz4yLyvX6un1rrqC@itl-email>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 6 Oct 2022 09:31:47 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFO9_yMw=_Fn2DBGgdYXgiK_OqafG5+TbJv1UKO1uQiJQ@mail.gmail.com>
+Message-ID: <CAMj1kXFO9_yMw=_Fn2DBGgdYXgiK_OqafG5+TbJv1UKO1uQiJQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] Avoid using EFI tables Xen may have clobbered
+To:     Demi Marie Obenour <demi@invisiblethingslab.com>
+Cc:     Jan Beulich <jbeulich@suse.com>, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.10.03a
-branch HEAD: fece0fa66ffa3c22dcc8845d0081b2849c1d4295  clocksource: Reject bogus watchdog clocksource measurements
+On Thu, 6 Oct 2022 at 03:41, Demi Marie Obenour
+<demi@invisiblethingslab.com> wrote:
+>
+> On Wed, Oct 05, 2022 at 11:28:29PM +0200, Ard Biesheuvel wrote:
+> > On Wed, 5 Oct 2022 at 20:11, Demi Marie Obenour
+> > <demi@invisiblethingslab.com> wrote:
+> > >
+> > > On Wed, Oct 05, 2022 at 08:15:07AM +0200, Jan Beulich wrote:
+> > > > On 04.10.2022 17:46, Demi Marie Obenour wrote:
+> > > > > Linux has a function called efi_mem_reserve() that is used to reserve
+> > > > > EfiBootServicesData memory that contains e.g. EFI configuration tables.
+> > > > > This function does not work under Xen because Xen could have already
+> > > > > clobbered the memory.  efi_mem_reserve() not working is the whole reason
+> > > > > for this thread, as it prevents EFI tables that are in
+> > > > > EfiBootServicesData from being used under Xen.
+> > > > >
+> > > > > A much nicer approach would be for Xen to reserve boot services memory
+> > > > > unconditionally, but provide a hypercall that dom0 could used to free
+> > > > > the parts of EfiBootServicesData memory that are no longer needed.  This
+> > > > > would allow efi_mem_reserve() to work normally.
+> > > >
+> > > > efi_mem_reserve() actually working would be a layering violation;
+> > > > controlling the EFI memory map is entirely Xen's job.
+> > >
+> > > Doing this properly would require Xen to understand all of the EFI
+> > > tables that could validly be in EfiBootServices* and which could be of
+> > > interest to dom0.  It might (at least on some very buggy firmware)
+> > > require a partial ACPI and/or SMBIOS implementation too, if the firmware
+> > > decided to put an ACPI or SMBIOS table in EfiBootServices*.
+> > >
+> > > > As to the hypercall you suggest - I wouldn't mind its addition, but only
+> > > > for the case when -mapbs is used. As I've indicated before, I'm of the
+> > > > opinion that default behavior should be matching the intentions of the
+> > > > spec, and the intention of EfiBootServices* is for the space to be
+> > > > reclaimed. Plus I'm sure you realize there's a caveat with Dom0 using
+> > > > that hypercall: It might use it for regions where data lives which it
+> > > > wouldn't care about itself, but which an eventual kexec-ed (or alike)
+> > > > entity would later want to consume. Code/data potentially usable by
+> > > > _anyone_ between two resets of the system cannot legitimately be freed
+> > > > (and hence imo is wrong to live in EfiBootServices* regions).
+> > >
+> > > I agree, but currently some such data *is* in EfiBootServices* regions,
+> > > sadly.  When -mapbs is *not* used, I recommend uninstalling all of the
+> > > configuration tables that point to EfiBootServicesData memory before
+> > > freeing that memory.
+> > >
+> >
+> > That seems like a reasonable approach to me. Tables like MEMATTR or
+> > RT_PROP are mostly relevant for bare metal where the host kernel maps
+> > the runtime services, and in general, passing on these tables without
+> > knowing what they do is kind of fishy anyway. You might even argue
+> > that only known table types should be forwarded in the first place,
+> > regardless of the memory type.
+>
+> Which tables are worth handling in Xen?  I know about ACPI, SMBIOS, and
+> ESRT, but I am curious which others Xen should preserve.  Currently, Xen
+> does not know about RT_PROP or MEMATTR; could this be a cause of
+> problems?
 
-elapsed time: 797m
+dom0 only has access to paravirtualized EFI runtime services, so
+consuming RT_PROP or MEMATTR should be up to Xen (they describe which
+runtime services remain available at runtime, and which permission
+attributes to use for the runtime services memory regions,
+respectively)
 
-configs tested: 63
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                                 defconfig
-alpha                               defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-powerpc                           allnoconfig
-x86_64                          rhel-8.3-func
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-s390                                defconfig
-sh                               allmodconfig
-x86_64                           rhel-8.3-kvm
-s390                             allmodconfig
-i386                                defconfig
-i386                 randconfig-a011-20221003
-powerpc                          allmodconfig
-m68k                             allyesconfig
-mips                             allyesconfig
-i386                 randconfig-a012-20221003
-m68k                             allmodconfig
-i386                 randconfig-a013-20221003
-arc                              allyesconfig
-i386                 randconfig-a015-20221003
-alpha                            allyesconfig
-i386                 randconfig-a016-20221003
-i386                 randconfig-a014-20221003
-s390                             allyesconfig
-i386                             allyesconfig
-arm                                 defconfig
-arc                  randconfig-r043-20221003
-arc                  randconfig-r043-20221002
-s390                 randconfig-r044-20221003
-riscv                randconfig-r042-20221003
-x86_64               randconfig-a011-20221003
-x86_64               randconfig-a012-20221003
-ia64                             allmodconfig
-arm64                            allyesconfig
-x86_64               randconfig-a013-20221003
-arm                              allyesconfig
-x86_64               randconfig-a014-20221003
-x86_64               randconfig-a016-20221003
-x86_64               randconfig-a015-20221003
-
-clang tested configs:
-i386                 randconfig-a003-20221003
-i386                 randconfig-a002-20221003
-i386                 randconfig-a001-20221003
-i386                 randconfig-a004-20221003
-hexagon              randconfig-r041-20221003
-hexagon              randconfig-r041-20221002
-i386                 randconfig-a005-20221003
-hexagon              randconfig-r045-20221002
-i386                 randconfig-a006-20221003
-hexagon              randconfig-r045-20221003
-riscv                randconfig-r042-20221002
-s390                 randconfig-r044-20221002
-x86_64               randconfig-a005-20221003
-x86_64               randconfig-a002-20221003
-x86_64               randconfig-a001-20221003
-x86_64               randconfig-a004-20221003
-x86_64               randconfig-a006-20221003
-x86_64               randconfig-a003-20221003
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Looking through the kernel code, I don't think there are any that dom0
+should care about beyond ACPI, SMBIOS and ESRT. But as you suggest,
+that means Xen should just mask them in the view of the EFI system
+table it exposes so dom0. Otherwise, the kernel may still try to map
+and parse them.
