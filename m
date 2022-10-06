@@ -2,113 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E4D5F6E41
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 21:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6655F6E44
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 21:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232005AbiJFTaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 15:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
+        id S231878AbiJFTcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 15:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231987AbiJFTaO (ORCPT
+        with ESMTP id S230286AbiJFTcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 15:30:14 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350FBA0303
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 12:30:11 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id sc25so682188ejc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 12:30:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=k2PLX7t8akejXX2rlvi6ieaQqVuMDuBcH+372rToY1E=;
-        b=D5rsC75yDUF9kWV3SquzIST3kPDsCVq58ukVLeJ5qmZglaoUSOcG3mq/Kw1MhbQXt1
-         YdLMe6XV4Yxmbg7yhHXcsAyt2922i6I8tCuoQNIeZoiAhUbwmggWK27n8m9FAWx4XKeY
-         0Ktpzjw4yvUWDXdDOWH9yFBMxQQrXCU2eGQma5j5beosI5UCpcvI6yq34F6Xkzj+51pt
-         6Jw2DeI6Rc03l7WXtCMp40MPb3VI54QHBKSYpTzaK7ESaxjkiNYLB6cO6EzjyZPpG+Mc
-         mwOuf7y/fp5iJ/wLRZesKkdGJR3KMB4+Bvmw2+PBUFPBG6tHFu+WiSTB9v3lBuvojg0/
-         C7mg==
+        Thu, 6 Oct 2022 15:32:39 -0400
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CD5C2C81;
+        Thu,  6 Oct 2022 12:32:38 -0700 (PDT)
+Received: by mail-oi1-f172.google.com with SMTP id s192so3184294oie.3;
+        Thu, 06 Oct 2022 12:32:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k2PLX7t8akejXX2rlvi6ieaQqVuMDuBcH+372rToY1E=;
-        b=fl+hVhfzv3rc88Ji/MCD+tg8ssuye48ShrJ0O5zJiuKtPg7eY9Os20hsiPat9prfa5
-         7FuSK6C3jvPT2Mp6040vJthqz86Rrlr5qu+hOoVTUk4kSUatObStZtRjy9NxuEywdykr
-         6occysG05ID90OqE/JtqCcKINO6FGS7d7aA0f08MK4PqTSkTFqLACP3yTE1HwFhLaELn
-         +J6IEuhc2+nPXdKVfMpaK5HEtRDYNN6FJjK73gpRLOFt9e3n0bO9MsWj3ePxcZHRu3iY
-         vXtC73YSf1duWYjbBvSg5x0FzY/FWqqmzspnSyB2GgOCop1C94DXC7SB3/70kuquMvCf
-         PJGw==
-X-Gm-Message-State: ACrzQf3k05wLDPvvluHj2CgNPp4ftJ/Db03SMPgJCkDxQnfp3SxffgG8
-        ++fiuWNA1m9rDivkZrI9G8M47taSUrdZtABd3YfIjp6U
-X-Google-Smtp-Source: AMsMyM5B4b9kXUU1nZSUXa3bnfD4TPjf2+WmtG8vzAMZ3L/4bjMQge3FqWc3rAzZz/eazJuyQiuRj/DzwNNGDxg2MgM=
-X-Received: by 2002:a17:906:5a44:b0:78d:4c17:9856 with SMTP id
- my4-20020a1709065a4400b0078d4c179856mr1177122ejc.477.1665084609198; Thu, 06
- Oct 2022 12:30:09 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ou2iWBMYAeA/yRIZnkILz0jhRRskqquaQO86kp7WlKY=;
+        b=6/m8LEu0l51Mnxg4rBcdXW/JAmq2QwSKC3IGMgcbuq/112HGz17ER9Vs/ITkvb3PeA
+         pyMrId2kONAj8KYc5P0/Y03PUTCrXixMNfYpPUKdyEwcq46g1+MUT1koOWDizgkyT4PU
+         cP3g1tGdzBE0XtCsRZysi4U01qdLm+aGh1xf+Oq4l7UjhDQPQnXMgdN3MELH/AGg9Eb6
+         +n4z1oBEZHlO4U8ZdP8vgr3JmYnO5VYrGqahL6N+aOqsvAsRV76nWaLHGlDGbUCjhOZA
+         olNU+DKuZnjJYIeNKgLOGxMTzxDpuscwWdTgBzd0JWyLw+FthNj5phPcIzNAV+/vTojU
+         ObFw==
+X-Gm-Message-State: ACrzQf0vS8oMm309skLIaEoM7paVJQ9l5cwC6whvJl4/VK9vVjWiPJ86
+        q0+9x9lxgy5Bpp8ibR4Osw==
+X-Google-Smtp-Source: AMsMyM6+iKp6n/gVIENPluD3O291vWyTSKOHTvo1T/SMpsq0uv6Gqf3JBN4hgfpp+k6Ft2W1pkEHoA==
+X-Received: by 2002:a05:6808:118e:b0:345:9c3e:121d with SMTP id j14-20020a056808118e00b003459c3e121dmr624143oil.211.1665084757531;
+        Thu, 06 Oct 2022 12:32:37 -0700 (PDT)
+Received: from robh_at_kernel.org ([2607:fb90:8a65:c536:245:842:a3a4:9017])
+        by smtp.gmail.com with ESMTPSA id z90-20020a9d24e3000000b00655c6b2655esm171173ota.68.2022.10.06.12.32.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 12:32:36 -0700 (PDT)
+Received: (nullmailer pid 60798 invoked by uid 1000);
+        Thu, 06 Oct 2022 19:32:35 -0000
+Date:   Thu, 6 Oct 2022 14:32:34 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Teng <andy.teng@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-mediatek@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Sean Wang <sean.wang@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v2 09/10] dt-bindings: pinctrl: mediatek,mt6779-pinctrl:
+ Document MT6735 pin controller bindings
+Message-ID: <166508475428.60747.9048131740903882168.robh@kernel.org>
+References: <20221005174343.24240-1-y.oudjana@protonmail.com>
+ <20221005174343.24240-10-y.oudjana@protonmail.com>
 MIME-Version: 1.0
-References: <CAPM=9tzs4n8dDQ_XVVPS_5jrBgsNkhDQvf-B_XmUg+EG_M2i4Q@mail.gmail.com>
- <CAHk-=whUp5Ufur6Bmv=H-rDDTNJJ-KVqOKkL+5FmR01jp0dbcA@mail.gmail.com>
-In-Reply-To: <CAHk-=whUp5Ufur6Bmv=H-rDDTNJJ-KVqOKkL+5FmR01jp0dbcA@mail.gmail.com>
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 7 Oct 2022 05:29:57 +1000
-Message-ID: <CAPM=9tzr1EAA=OaFmrPFT3UqQO+dixdZTPzs=tqdmgP+F_ojEA@mail.gmail.com>
-Subject: Re: [git pull] drm for 6.1-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221005174343.24240-10-y.oudjana@protonmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Oct 2022 at 04:48, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Tue, Oct 4, 2022 at 8:42 PM Dave Airlie <airlied@gmail.com> wrote:
-> >
-> > Lots of stuff all over, some new AMD IP support and gang
-> > submit support [..]
->
-> Hmm.
->
-> I have now had my main desktop lock up twice after pulling this.
-> Nothing in the dmesg after a reboot, and nothing in particular that
-> seems to trigger it, so I have a hard time even guessing what's up,
-> but the drm changes are the primary suspect.
->
-> I will try to see if I can get any information out of the machine, but
-> with the symptom being just a dead machine ...
->
-> This is the same (old) Radeon device:
->
->    49:00.0 VGA compatible controller: Advanced Micro Devices, Inc.
-> [AMD/ATI] Ellesmere [Radeon RX 470/480/570/570X/580/580X/590] (rev e7)
->
-> with dual 4k monitors, running on my good old Threadripper setup.
->
-> Again, there's no explicit reason to blame the drm pull, except that
-> it started after that merge (that machine ran the kernel with the
-> networking pull for a day with no problems, and while there were other
-> pull requests in between them, they seem to be fairly unrelated to the
-> hardware I have).
->
-> But the lockup is so sporadic (twice in the last day) that I really
-> can't bisect it, so I'm afraid I have very very little info.
->
-> Any suggestions?
+On Wed, 05 Oct 2022 20:43:42 +0300, Yassine Oudjana wrote:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
+> 
+> Add bindings for the pin controller found on MediaTek MT6735 and
+> MT6735M SoCs, including describing a method to manually specify
+> a pin and function in the pinmux property making defining bindings
+> for each pin/function combination unnecessary. The pin controllers
+> on those SoCs are generally identical, with the only difference
+> being the lack of MSDC2 pins (198-203) on MT6735M.
+> 
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> ---
+>  .../pinctrl/mediatek,mt6779-pinctrl.yaml      | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+> 
 
-netconsole?
-
-I'll plug in my 480 and see if I can make it die.
-
-Dave.
+Reviewed-by: Rob Herring <robh@kernel.org>
