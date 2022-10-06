@@ -2,124 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36CBB5F71CC
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 01:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D657B5F71D1
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 01:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbiJFXa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 19:30:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33780 "EHLO
+        id S232080AbiJFXcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 19:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231966AbiJFXaX (ORCPT
+        with ESMTP id S231966AbiJFXcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 19:30:23 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875ED6C12A;
-        Thu,  6 Oct 2022 16:30:18 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mk72q24Frz4xFv;
-        Fri,  7 Oct 2022 10:30:10 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1665099013;
-        bh=AvsXYVMr5pUsHxl5+ynS9PRlAPjPZ2qP64JqGIETe9w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=d9hTaRTcxSo/v79Y4TBfO7he6feFJdrTte1OkN9NIETv8dMDCVtCaWeJZXMH5MzV+
-         umR+KfyJqalfm/t+Dz/VvQTW1MpIit8cBkXmFTvbRSSc/trrKYx/FHDyww8RFHj4z2
-         WnkzMTfpbeCJGxwi0jVz8i+KMChPMyd5Vm7NBxRu/r/Z5F2EVZtAumjaPExZJahc0x
-         KaJ3cFu5ND+ZUexN0GReNVKPnW+O5bcaNBmQq8FLEHbga9egAtnNtVReyWEs1un2iO
-         wJ8fJKTvy4olDu60p4GKbrfBPgTyfD1IlruI6duNo80GOCY6iW3aflcdcvSpNmyVyv
-         qELDTs5Ylenrg==
-Date:   Fri, 7 Oct 2022 10:30:08 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Joel Stanley <joel@jms.id.au>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Olof Johansson <olof@lixom.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: linux-next: build warnings after merge of the broadcom tree
-Message-ID: <20221007103008.3ad5913f@canb.auug.org.au>
-In-Reply-To: <d019295b10f2d84e945d8e55ecc52e4f@milecki.pl>
-References: <20220725095913.31e859ec@canb.auug.org.au>
-        <df8f4765-a804-cb50-bbb5-475925ba2036@milecki.pl>
-        <20220815105419.4df1005b@canb.auug.org.au>
-        <20220831091654.45d5ed41@canb.auug.org.au>
-        <20221005114841.4540d325@canb.auug.org.au>
-        <abbe10d1-4c2a-5fad-3f92-e55c514d3ce2@gmail.com>
-        <CACPK8Xecn8ZREAqcLcuZHjA=NhaanRMKu4W39okAkBFX4aaOnw@mail.gmail.com>
-        <f8416a63-3460-4b43-8532-2d5eacea4457@app.fastmail.com>
-        <20221006111725.01ed0eac@canb.auug.org.au>
-        <d019295b10f2d84e945d8e55ecc52e4f@milecki.pl>
+        Thu, 6 Oct 2022 19:32:22 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB5E82853
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 16:32:21 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id i6so3466343pfb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 16:32:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=yKadD/ss3Cpk+H0BiQNsKCB2TUcUsguQbnKNQv5/kN0=;
+        b=IgojzYuxWx2bE00Y98xdo0ZwWyX0MZ9wy7TvUxGiMEtFuoOEdEZjS5oN5sYhLmr4/Y
+         eruo2kTpDD3jJCf8z9Cnoz2B8e8+sc8y8ii5mRZItYaKYWdBujy4y0lB/1GqI77x1B89
+         XxigEm+0aaOtp5nSV4K9N2KfEMTfRLUI8tzy4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=yKadD/ss3Cpk+H0BiQNsKCB2TUcUsguQbnKNQv5/kN0=;
+        b=V2a4yETFXM7wwRJHpIx+Vp45mnflwNWrO2/AnQi3tqvL4fTB+nb+jDRfyDHFNBhxtm
+         elIZBAssnK/rQNbJjiXMvodQgQwF0dXVDZQT7DfmmqP4yIsnQn4WdUOcnKLx5JetOvPY
+         IKIPIVlMMJt4+LyCng/RSwsaeASYQpgRh6Rw122bJCS4dfw0J4Et5TRa7AG/tvMsT1dY
+         48gnJ1vec70QHkl88LYj3x86ZVpzP02erjXYUtVnp3A5/UjoAUBAtw+FkYBU2cq7sSSG
+         uxXhYMRZzNQrZ5mRncfDYVHNZsojyBiEHspAIo+3IpZF2Du/e5QEXLYl1beEezGoHfB/
+         jMbw==
+X-Gm-Message-State: ACrzQf0ONh91QgimNOkWOCYbU5qOAP54SQVrnWhHbO6yXyw7WZZBFAcL
+        gPl6lQgbCRe4YBVlcnlnJVVK1w==
+X-Google-Smtp-Source: AMsMyM58m5Pz9GELGoenXWXqCUJQc7hwYRza3mJYd2c7sDABYcd/pK5mE+G6qWj/gBEEKH1KKSgW9A==
+X-Received: by 2002:a05:6a00:1c99:b0:562:6292:9e4e with SMTP id y25-20020a056a001c9900b0056262929e4emr1927478pfw.22.1665099141269;
+        Thu, 06 Oct 2022 16:32:21 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w2-20020a1709026f0200b00172dc6e1916sm153559plk.220.2022.10.06.16.32.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 16:32:20 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 16:32:19 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, anton@enomsg.org,
+        ccross@android.com, tony.luck@intel.com
+Subject: Re: [PATCH 2/8] pstore: Expose kmsg_bytes as a module parameter
+Message-ID: <202210061628.76EAEB8@keescook>
+References: <20221006224212.569555-1-gpiccoli@igalia.com>
+ <20221006224212.569555-3-gpiccoli@igalia.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wpbl.L1Cxku3v9fLwievJ4F";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221006224212.569555-3-gpiccoli@igalia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/wpbl.L1Cxku3v9fLwievJ4F
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On Thu, Oct 06, 2022 at 07:42:06PM -0300, Guilherme G. Piccoli wrote:
+> Currently this tuning is only exposed as a filesystem option,
+> but most Linux distros automatically mount pstore, hence changing
+> this setting requires remounting it. Also, if that mount option
+> wasn't explicitly set it doesn't show up in mount information,
+> so users cannot check what is the current value of kmsg_bytes.
+> 
+> Let's then expose it as a module parameter, allowing both user
+> visibility at all times (even if not manually set) and also the
+> possibility of setting that as a boot/module parameter.
 
-Hi Rafa=C5=82,
+I've been meaning to do this too. :)
 
-On Thu, 06 Oct 2022 07:14:05 +0200 Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.p=
-l> wrote:
->
-> On 2022-10-06 02:17, Stephen Rothwell wrote:
-> > On Wed, 05 Oct 2022 09:21:21 +0200 "Arnd Bergmann" <arnd@arndb.de> > wr=
-ote: =20
-> >> >> Agreed. Alternatively, we could just remove the pcie@ nodes from =20
-> >> bcm5301x as a hotfix, as they are clearly not usable in the
-> >> current form, and none of the three versions (5.19, Rafa=C5=82's
-> >> patch missing ranges, and Florian's patch with incorrect ranges)
-> >> actually conform to the binding. =20
-> >> >> I'll tentatively apply the revert for now so I can send the pull =20
-> >> request tonight. If someone comes up with a better fix, I can
-> >> use that instead. =20
-> >=20
-> > I applied the revert to the merge of the arm-soc tree today and *all*
-> > the warnings are gone. =20
->=20
-> As explained by Joel, there are dtc and yaml warnings.
->=20
-> Not "*all*" warnings are gone
-> dtc warnings are gone
-> yaml warnings are back
->=20
-> Which may be OK, just clarifying.
+> 
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> ---
+>  fs/pstore/platform.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/pstore/platform.c b/fs/pstore/platform.c
+> index c32957e4b256..be05090076ce 100644
+> --- a/fs/pstore/platform.c
+> +++ b/fs/pstore/platform.c
+> @@ -89,6 +89,11 @@ static char *compress =
+>  module_param(compress, charp, 0444);
+>  MODULE_PARM_DESC(compress, "compression to use");
+>  
+> +/* How much of the kernel log to snapshot */
+> +unsigned long kmsg_bytes = CONFIG_PSTORE_DEFAULT_KMSG_BYTES;
+> +module_param(kmsg_bytes, ulong, 0444);
+> +MODULE_PARM_DESC(kmsg_bytes, "amount of kernel log to snapshot (in bytes)");
+> +
+>  /* Compression parameters */
+>  static struct crypto_comp *tfm;
+>  
+> @@ -100,9 +105,6 @@ struct pstore_zbackend {
+>  static char *big_oops_buf;
+>  static size_t big_oops_buf_sz;
+>  
+> -/* How much of the console log to snapshot */
+> -unsigned long kmsg_bytes = CONFIG_PSTORE_DEFAULT_KMSG_BYTES;
+> -
+>  void pstore_set_kmsg_bytes(int bytes)
+>  {
+>  	kmsg_bytes = bytes;
+> -- 
+> 2.38.0
 
-Ah, OK, now I see.  The build I do (arm multi_v7_defconfig) does not
-produce the yaml warnings (for me anyway - maybe I have not installed
-some optional build tool?), so I never saw them - all I saw was all the
-new dtc warnings.
+Doing a mount will override the result, so I wonder if there should be
+two variables, etc... not a concern for the normal use case.
 
---=20
-Cheers,
-Stephen Rothwell
+Also, I've kind of wanted to get rid of a "default" for this and instead
+use a value based on the compression vs record sizes, etc. But I didn't
+explore it.
 
---Sig_/wpbl.L1Cxku3v9fLwievJ4F
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM/ZQAACgkQAVBC80lX
-0GyhKQgAgt10n1faLLVS2zCSGPjeQQpYAqxAP24Q7MmFdIbpzlEITRH3aefwXW6c
-r3WHzyqB2noUhWTmx59fAbNj3hbK3SZ06QiZsgFPZx0mfkOePA8FPzw0ASRkUDDD
-XQqRdqPXljueIshrJf6CfhQ/fiLFr2UhOWG+Mel+hyJdCb76c9X8oyfMCEDy8ypU
-MFYbGhN5iM0IjAhee9cFwc3xtop/jxW3MrbQQ7jWtw1xC5HlXzGddqOOZA6b0U7v
-i81W2F0/7RqUGEUAtoza9lM+w+o9HQuH6Q1ju/lvq9Nbey4oP2AWJJycB/9L1eO8
-Byuv4OCgELAXF0vYO6Gk0sfk0Qx+Hg==
-=l9W+
------END PGP SIGNATURE-----
-
---Sig_/wpbl.L1Cxku3v9fLwievJ4F--
+-- 
+Kees Cook
