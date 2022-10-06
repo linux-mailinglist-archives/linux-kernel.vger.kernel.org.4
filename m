@@ -2,169 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2392E5F7214
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 01:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F237C5F7215
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 01:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232238AbiJFXxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 19:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41620 "EHLO
+        id S232068AbiJFXye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 19:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232161AbiJFXxQ (ORCPT
+        with ESMTP id S231733AbiJFXya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 19:53:16 -0400
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA6760489;
-        Thu,  6 Oct 2022 16:53:15 -0700 (PDT)
-Received: by mail-ua1-x934.google.com with SMTP id p89so1172590uap.12;
-        Thu, 06 Oct 2022 16:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date;
-        bh=QaPt7Sx7U2CASqlnTSCIDEhsb4pzTZJD0EMmYjUa7Dw=;
-        b=U62SMnXBt3hvhlAz6O+Cjknk8+V4UxaNHZEeWgERgHHGR0G/Q1uleIarOySYsIiQuN
-         yGAwgGiqDZQ/YBvH8UHVKtas886qk9pdS72vwsxa85+eA+xHSu2iRKLLdFiyNQSmcbJb
-         N869mG2vE6bSsoOnVs0ubwGSJpuVHaL3aGWzaT/KVCf14Xc+LzGxSjl1eTtdBOdFX3rs
-         m7w+F6h+z8IC8l0twl5mjFvwU/Tvy6CUigrlpslDm0rmDzaD+Kv6v9FmfTkqoJth61op
-         my2eGsY4bgTz1lzvwC/6ccYWex4nNOAuyoITO232fXqVSvRGuG1Z2CWONdwbLdFwZySe
-         XXOQ==
+        Thu, 6 Oct 2022 19:54:30 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82586604B1
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 16:54:21 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id w16-20020a6b4a10000000b006a5454c789eso2210775iob.20
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 16:54:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=QaPt7Sx7U2CASqlnTSCIDEhsb4pzTZJD0EMmYjUa7Dw=;
-        b=74ZgCN8RnR+9aCZoJoLUi8Xbaz8EMtBovjJDEtnCPLjSKN6ZEC5OvEUm0lvlUmV9LR
-         cYbbzON8APdZ1VOwn1RVoI+eZs6KWSX619JM5INGz6lhU9AbdZstS79NSQKZmOfS9PR2
-         kxjEao7i0WGau94A5gGXyKlQTFRD9Wu3053UHIsW+7LojPeRaJ4in0N2fp4LSgdw8yFE
-         ZwIrHvH6hbhS42gXvoiPkT2FUjR+bnyfMLi9ai/Co9H/4JGXDX0jgeXZpM6yw9/CvSMm
-         cbiqerQWUF1lun9G9HkAFkk9CZnjwNjSr+pGGYeKm75eU3L6IKYrZk4jR9HX39HUZNAO
-         XQvw==
-X-Gm-Message-State: ACrzQf2R7N90WCxm0m2sjdrdqeAQRAMXXxl8AcG6tB3Y00QnMeFtB8OC
-        ufUvUxMUwJZs5vFA3RpQqDhkRwPd5IDk6F0tuYW8pNdLgrc=
-X-Google-Smtp-Source: AMsMyM4FmuoT7wT3Td6eRFSGGXrT4+p77sxMe8rs6Bc4gIZmGdK8ufUQd6LNtfwm1VlTHUCmF4FmjCXTatTvkhmDq/I=
-X-Received: by 2002:ab0:6494:0:b0:3da:7cac:c48d with SMTP id
- p20-20020ab06494000000b003da7cacc48dmr1532942uam.96.1665100393941; Thu, 06
- Oct 2022 16:53:13 -0700 (PDT)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nxdtOjk8S9rTADaHem6JSDHhaJv3J9+AGllHjfNZSRw=;
+        b=AJmhiie/cVomW6Y4sIbON5eXFvsR2R2Y2pDqQ/wB9Nuj8tdpR+z5i8qOYBv6wZeaF1
+         i3y9emhYAuYd86c02xb0t4qblMiS8RwrnKct2vSdxdJqhXd+u7SFdl/AmDcEuMTdX2Af
+         gSGGsKqPUKbFKegue6NweIJYo5sjtzpa6iRsfGQEhD+I9DGkVpI1pQD/uNKqz5kUgcbG
+         Hv6ngX1HBdszSnsogRRzjbdlpOjGlD0jUKcfF/8oddGAdglBXxHy7k87mKkeCm/4YIv9
+         JY4B+aTK9ZCQsmb3aOUjBE4VcXfqxdcFz75l3DzEc8xtrmfTjR9wLHkF3Lb0xVuFDqUR
+         avkA==
+X-Gm-Message-State: ACrzQf2j519nRPb5aYV1OCfk2Cy3K6+rEPY8mJTrxFHqo8f/l9tsUxjZ
+        MzuCL7Cq42p5olLV2yXVh49FUj2pV3PMsP6oSPbM8C91KlsN
+X-Google-Smtp-Source: AMsMyM6bxh2gnneY3hwtVTulwlSmnwtBF7GxoR/OY3h77a2Rm4qfhN6tAvYV9WoC0jPQ2Ppze25juGmVW3OCzbbvFD5tmmqpRci1
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Thu, 6 Oct 2022 18:53:02 -0500
-Message-ID: <CAH2r5mtx9gsG01JDMWakP0o-76rzyX_YKzbgVdZZwboaVVDF3g@mail.gmail.com>
-Subject: [GIT PULL] ksmbd server fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Namjae Jeon <linkinjeon@kernel.org>
+X-Received: by 2002:a6b:c384:0:b0:6a4:3773:1fa9 with SMTP id
+ t126-20020a6bc384000000b006a437731fa9mr1022612iof.181.1665100460903; Thu, 06
+ Oct 2022 16:54:20 -0700 (PDT)
+Date:   Thu, 06 Oct 2022 16:54:20 -0700
+In-Reply-To: <2387955.jE0xQCEvom@mypc>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007cd19505ea66692e@google.com>
+Subject: Re: [syzbot] memory leak in __get_metapage
+From:   syzbot <syzbot+389b82b29093b3e2640a@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, fmdefrancesco@gmail.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-4fe89d07dcc2804c8b562f6c7896a45643d34b2f:
+Hello,
 
-  Linux 6.0 (2022-10-02 14:09:07 -0700)
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+memory leak in __get_metapage
 
-are available in the Git repository at:
+BUG: memory leak
+unreferenced object 0xffff88810abfae80 (size 128):
+  comm "syz-executor.0", pid 4206, jiffies 4294944336 (age 14.270s)
+  hex dump (first 32 bytes):
+    00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff8148f863>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+    [<ffffffff81c5adba>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+    [<ffffffff81c5adba>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
+    [<ffffffff81c43722>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+    [<ffffffff81c45114>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+    [<ffffffff81c45114>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+    [<ffffffff81c46f3f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+    [<ffffffff81c57c5a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+    [<ffffffff81c3a397>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+    [<ffffffff815f9a23>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
+    [<ffffffff81602a05>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
+    [<ffffffff81602b79>] __do_sys_mkdir fs/namei.c:4058 [inline]
+    [<ffffffff81602b79>] __se_sys_mkdir fs/namei.c:4056 [inline]
+    [<ffffffff81602b79>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
+    [<ffffffff846099a5>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff846099a5>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-  git://git.samba.org/ksmbd.git tags/6.1-rc-ksmbd-fixes
+BUG: memory leak
+unreferenced object 0xffff88810abfaf00 (size 128):
+  comm "syz-executor.0", pid 4206, jiffies 4294944336 (age 14.270s)
+  hex dump (first 32 bytes):
+    00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff8148f863>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+    [<ffffffff81c5adba>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+    [<ffffffff81c5adba>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
+    [<ffffffff81c43722>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+    [<ffffffff81c45114>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+    [<ffffffff81c45114>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+    [<ffffffff81c46f3f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+    [<ffffffff81c57c5a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+    [<ffffffff81c3a397>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+    [<ffffffff815f9a23>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
+    [<ffffffff81602a05>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
+    [<ffffffff81602b79>] __do_sys_mkdir fs/namei.c:4058 [inline]
+    [<ffffffff81602b79>] __se_sys_mkdir fs/namei.c:4056 [inline]
+    [<ffffffff81602b79>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
+    [<ffffffff846099a5>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff846099a5>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-for you to fetch changes up to f5ba1cdaf5eb380e148183bda06d4844b457d095:
+BUG: memory leak
+unreferenced object 0xffff88810a5a7080 (size 128):
+  comm "syz-executor.0", pid 4206, jiffies 4294944336 (age 14.270s)
+  hex dump (first 32 bytes):
+    00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff8148f863>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+    [<ffffffff81c5adba>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+    [<ffffffff81c5adba>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
+    [<ffffffff81c43722>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+    [<ffffffff81c45114>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+    [<ffffffff81c45114>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+    [<ffffffff81c46f3f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+    [<ffffffff81c57c5a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+    [<ffffffff81c3a397>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+    [<ffffffff815f9a23>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
+    [<ffffffff81602a05>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
+    [<ffffffff81602b79>] __do_sys_mkdir fs/namei.c:4058 [inline]
+    [<ffffffff81602b79>] __se_sys_mkdir fs/namei.c:4056 [inline]
+    [<ffffffff81602b79>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
+    [<ffffffff846099a5>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff846099a5>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-  ksmbd: validate share name from share config response (2022-10-05
-01:15:44 -0500)
+BUG: memory leak
+unreferenced object 0xffff888114d44e80 (size 128):
+  comm "syz-executor.0", pid 4734, jiffies 4294944949 (age 8.140s)
+  hex dump (first 32 bytes):
+    00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff8148f863>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+    [<ffffffff81c5adba>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+    [<ffffffff81c5adba>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
+    [<ffffffff81c43722>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+    [<ffffffff81c45114>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+    [<ffffffff81c45114>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+    [<ffffffff81c46f3f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+    [<ffffffff81c57c5a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+    [<ffffffff81c3a397>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+    [<ffffffff815f9a23>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
+    [<ffffffff81602a05>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
+    [<ffffffff81602b79>] __do_sys_mkdir fs/namei.c:4058 [inline]
+    [<ffffffff81602b79>] __se_sys_mkdir fs/namei.c:4056 [inline]
+    [<ffffffff81602b79>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
+    [<ffffffff846099a5>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff846099a5>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-----------------------------------------------------------------
-24 ksmbd server fixes, including 4 for stable
-- RDMA (smbdirect fixes)
-- Fixes for SMB3.1.1 POSIX Extensions (especially for id mapping)
-- various casemapping fixes for mount and lookup
-- UID mapping fixes
-- Fix confusing error message
-- Negotiate protocol fixes, including NTLMSSP fix
-- Two encryption fixes
-- directory listing fix
-- some cleanup fixes
 
-----------------------------------------------------------------
-Al Viro (3):
-      ksmbd: don't open-code file_path()
-      ksmbd: don't open-code %pD
-      ksmbd: constify struct path
 
-Atte Heikkil=C3=A4 (3):
-      ksmbd: casefold utf-8 share names and fix ascii lowercase conversion
-      ksmbd: make utf-8 file name comparison work in __caseless_lookup()
-      ksmbd: validate share name from share config response
+Tested on:
 
-Christian Brauner (1):
-      ksmbd: port to vfs{g,u}id_t and associated helpers
+commit:         ffb39098 Merge tag 'linux-kselftest-kunit-6.1-rc1' of ..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14c99b0a880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=10f41fbb818af57a
+dashboard link: https://syzkaller.appspot.com/bug?extid=389b82b29093b3e2640a
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Hyunchul Lee (1):
-      MAINTAINERS: remove Hyunchul Lee from ksmbd maintainers
-
-Micka=C3=ABl Sala=C3=BCn (1):
-      ksmbd: Fix user namespace mapping
-
-Namjae Jeon (12):
-      ksmbd: remove generic_fillattr use in smb2_open()
-      MAINTAINERS: Add Tom Talpey as ksmbd reviewer
-      ksmbd: fix incorrect handling of iterate_dir
-      ksmbd: update documentation
-      ksmbd: change security id to the one samba used for posix extension
-      ksmbd: set file permission mode to match Samba server posix
-extension behavior
-      ksmbd: fill sids in SMB_FIND_FILE_POSIX_INFO response
-      ksmbd: fix endless loop when encryption for response fails
-      ksmbd: fix encryption failure issue for session logoff response
-      ksmbd: set NTLMSSP_NEGOTIATE_SEAL flag to challenge blob
-      ksmbd: hide socket error message when ipv6 config is disable
-      ksmbd: call ib_drain_qp when disconnected
-
-Tom Talpey (2):
-      ksmbd: decrease the number of SMB3 smbdirect server SGEs
-      ksmbd: reduce server smbdirect max send/receive segment sizes
-
-Zhang Xiaoxu (1):
-      ksmbd: Fix wrong return value and message length check in smb2_ioctl(=
-)
-
- Documentation/filesystems/cifs/ksmbd.rst |  42 +++++++++++++++-------
- MAINTAINERS                              |   2 +-
- fs/ksmbd/auth.c                          |  15 +++++---
- fs/ksmbd/auth.h                          |   3 +-
- fs/ksmbd/connection.c                    |   8 +++++
- fs/ksmbd/connection.h                    |   2 ++
- fs/ksmbd/ksmbd_netlink.h                 |   3 +-
- fs/ksmbd/mgmt/share_config.c             |  36 +++++++++++--------
- fs/ksmbd/mgmt/share_config.h             |   4 ++-
- fs/ksmbd/mgmt/tree_connect.c             |   6 ++--
- fs/ksmbd/mgmt/tree_connect.h             |   2 +-
- fs/ksmbd/misc.c                          |  46 +++++++++++++++++++-----
- fs/ksmbd/misc.h                          |   5 +--
- fs/ksmbd/ndr.c                           |   8 +++--
- fs/ksmbd/oplock.c                        |  27 +++++++++-----
- fs/ksmbd/server.c                        |   4 +--
- fs/ksmbd/smb2pdu.c                       | 126
-+++++++++++++++++++++++++++++++++++++---------------------------
- fs/ksmbd/smb2pdu.h                       |   7 ++--
- fs/ksmbd/smb_common.c                    |   6 ++--
- fs/ksmbd/smbacl.c                        |  12 ++++---
- fs/ksmbd/smbacl.h                        |  18 +++++-----
- fs/ksmbd/transport_rdma.c                |   8 +++--
- fs/ksmbd/transport_tcp.c                 |   3 +-
- fs/ksmbd/unicode.h                       |   3 +-
- fs/ksmbd/vfs.c                           |  36 ++++++++++++-------
- fs/ksmbd/vfs.h                           |   4 ++-
- 26 files changed, 284 insertions(+), 152 deletions(-)
-
---=20
-Thanks,
-
-Steve
+Note: no patches were applied.
