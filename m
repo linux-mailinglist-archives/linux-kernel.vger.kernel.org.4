@@ -2,116 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5B15F6B58
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 18:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335E75F6B63
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 18:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbiJFQSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 12:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42290 "EHLO
+        id S231719AbiJFQTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 12:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231499AbiJFQSX (ORCPT
+        with ESMTP id S231572AbiJFQTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 12:18:23 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB24E88A09;
-        Thu,  6 Oct 2022 09:18:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665073102; x=1696609102;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IS9/8GZEIZjGTZSUozDDT7Qbp2bCtL4B2ZSEaLpZNYA=;
-  b=Gnc+f/P7Wf3CK9GcO9dlvPNZmDYj+p6M5oK1IJL3n/l5M2BZ+KsGa1Aw
-   ZsZloP6fxCg5C2PiyrAQ9vb7DQm4G5HuOA/9Cb1hxm3xbu/+VGF1v/E3b
-   BHZpMGpe5u4U3edJxyiresKjgdNakpY2lR8VzrvSIAbv7fRkSsEeVDXou
-   wXmA1CoWQaQSV2ZqyjoyNG55tP21Fy5rsHbHeShbUyqNWXE7C140tX8ri
-   iRAktbQc0S0XDqEr2jAxfzAT+H2aJ0ilfwUlQhCAZIfXs7vOzzMHqoHwG
-   xU66VYuSI4v/wq0PWo7DOGcIfYH8E6t6j8QEItHtFP9ywh0RK/rNOWDlY
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="290752703"
-X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
-   d="scan'208";a="290752703"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 09:17:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="953684392"
-X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
-   d="scan'208";a="953684392"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 06 Oct 2022 09:17:41 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ogTZ5-003Ehi-1q;
-        Thu, 06 Oct 2022 19:17:39 +0300
-Date:   Thu, 6 Oct 2022 19:17:39 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jagath Jog J <jagathjog1996@gmail.com>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 1/5] regulator: Add devm helpers for get and enable
-Message-ID: <Yz7/o1q7p8NmGKMe@smile.fi.intel.com>
-References: <cover.1665066397.git.mazziesaccount@gmail.com>
- <fa667d6870976a2cf2d60f06e262982872349d74.1665066397.git.mazziesaccount@gmail.com>
+        Thu, 6 Oct 2022 12:19:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B858ACA30;
+        Thu,  6 Oct 2022 09:19:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3766D619EC;
+        Thu,  6 Oct 2022 16:19:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBB7DC433D6;
+        Thu,  6 Oct 2022 16:19:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665073153;
+        bh=ZgXM77/CXlz1KembRPwUCZZrHGoZx+VZ1yM34EffbDU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gEShlUmDsmrXFXkkL6VV7Tkd4KDRKAAj4NZuGie4VsVXHZydPqgc8prwovsqfWB6L
+         MCElEH85luzIXRFjWFJ6ZX07qiAqTRF5oyrMiPWvWWI7Js2zPfWkBEMMr267knlXEV
+         fgNiLhGl/45LlWkH1k/InWUQsgzNCeNWTCeP+GMXMctcoP+BZf7gXsfLoglwyqzi1s
+         uO/wUhFVDCKYJTxxe0r/aSDasdXzJvWsi+FFu60VRt2eTJUfDoOtFowcNfgSQeLAop
+         hGhR/v6A/Ig5JTp/YU4IYN1Sa4hW8LR/oSHXNzQvjgCamlxAcFC0wuxl/IPgFpljev
+         vMno992AvkUxw==
+Date:   Thu, 6 Oct 2022 19:19:08 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Dominique Martinet <asmadeus@codewreck.org>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        v9fs-developer@lists.sourceforge.net, linux_oss@crudebyte.com,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com,
+        davem@davemloft.net, edumazet@google.com, ericvh@gmail.com,
+        kuba@kernel.org, lucho@ionkov.net, netdev@vger.kernel.org
+Subject: Re: [PATCH 1/2] Revert "9p: p9_client_create: use p9_client_destroy
+ on failure"
+Message-ID: <Yz7//EA4mfR7KL3D@unreal>
+References: <cover.1664442592.git.leonro@nvidia.com>
+ <024537aa138893c838d9cacc2e24f311c1e83d25.1664442592.git.leonro@nvidia.com>
+ <Yzww1LRLIE+It6J8@kadam>
+ <YzyfM1rJrmT1Qe4N@codewreck.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fa667d6870976a2cf2d60f06e262982872349d74.1665066397.git.mazziesaccount@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YzyfM1rJrmT1Qe4N@codewreck.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 05:36:52PM +0300, Matti Vaittinen wrote:
-> A few regulator consumer drivers seem to be just getting a regulator,
-> enabling it and registering a devm-action to disable the regulator at
-> the driver detach and then forget about it.
+On Wed, Oct 05, 2022 at 06:01:39AM +0900, Dominique Martinet wrote:
+> Dan Carpenter wrote on Tue, Oct 04, 2022 at 04:10:44PM +0300:
+> > On Thu, Sep 29, 2022 at 12:37:55PM +0300, Leon Romanovsky wrote:
+> > > Rely on proper unwind order.
+> > > 
+> > > This reverts commit 3ff51294a05529d0baf6d4b2517e561d12efb9f9.
+> > > 
+> > > Reported-by: syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com
+> > > Signed-off-by: Leon Romanovsky <leon@kernel.org>
+> > 
+> > The commit message doesn't really say what the problem is to the user.
+> > Is this just to make the next patch easier?
 > 
-> We can simplify this a bit by adding a devm-helper for this pattern.
-> Add devm_regulator_get_enable() and devm_regulator_get_enable_optional()
+> Yes (and perhaps a bit of spite from the previous discussion), and the
+> next patch was not useable so I am not applying this as is.
+> 
+> The next patch was meant as an alternative implementation to this fix:
+> https://lore.kernel.org/all/20220928221923.1751130-1-asmadeus@codewreck.org/T/#u
+> 
+> At this point I have the original fix in my -next branch but it hasn't
+> had any positive review (and well, I myself agree it's ugly), so unless
+> Leon sends a v2 I'll need to think of a better way of tracking if
+> clnt->trans_mod->create has been successfully called.
+> I'm starting to think that since we don't have so many clnt I can
+> probably just fit a bool/bitfield in one of the holes of the struct
+> and just keep track of it; that'll be less error-prone than relying on
+> clnt->trans (which -is- initialized in create() most of the time, but
+> not in a way we can rely on) or reworking create() to return it as I
+> originally wanted to do (rdma still needs to populate clnt->trans behind
+> the scenees before create() returns, so the abstraction is also quite
+> ugly)
+> 
+> The current breakage is actually quite bad so I'll try to send that
+> today or tomorrow for merging next week unless Leon resends something we
+> can work with... Conceptually won't be different than the patch
+> currently in next so hopefully can pretend it's had a couple of weeks of
+> testing...
 
-...
+I can't resend anything in near future and most of the time have very
+limited access to computer due to holidays here.
 
-> (cherry picked from commit b6058e052b842a19c8bb639798d8692cd0e7589f)
+Thanks
 
-Not sure:
- - why this is in the commit message
- - what it points to, since
-$ git show b6058e052b842a19c8bb639798d8692cd0e7589f
- fatal: bad object b6058e052b842a19c8bb639798d8692cd0e7589f
-
-> Already in Mark's regulator tree. Not to be merged. Included just for
-> the sake of the completeness. Will be dropped when series is rebased on
-> top of the 6.1-rc1
-
-Ah, I see, but does it mean the commit has been rebased or you used wrong SHA?
-
-...
-
-> +static void regulator_action_disable(void *d)
-> +{
-> +	struct regulator *r = (struct regulator *)d;
-
-Cast is not needed.
-
-> +	regulator_disable(r);
-> +}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> -- 
+> Dominique
