@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E3E5F5E0C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 02:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8983D5F5E11
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 02:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbiJFAv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 20:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
+        id S229880AbiJFAw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 20:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiJFAvm (ORCPT
+        with ESMTP id S229865AbiJFAvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 20:51:42 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E7C46601
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 17:51:36 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id a20-20020a17090acb9400b0020aff595f9eso177086pju.5
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 17:51:36 -0700 (PDT)
+        Wed, 5 Oct 2022 20:51:46 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB9D4BD02
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 17:51:39 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id q3-20020a17090a304300b0020aede449d6so116468pjl.4
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 17:51:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=KXQHf4GGreclJV8UKG8o93Lp2p7h1XuOoBqM1BAPjfg=;
-        b=MsxFUJnJbSr31qkjxrcQS41clk5/JoUKMdvBOwVkSaF+YTh6E39DA5Ov5XjXyxzv74
-         GgpHQzEE1F9MUE+h6qnMxBLSo+RdoIBQwA4pICJTn+AH2MbIxuOTy4/RCskc2kChcZbK
-         owZXXUOah/47VaAYjbLFEoDOuAR34Nm+rTKWPjG9FTYd/ZgSoHJYdTi06swsHJQRPSko
-         /NwPDXQfmnSp683jgo3l/QjJ/nsFxLL5IZuPT1qYqEz3EvMWJC8nIsby4Hl9/kLHVaZD
-         t1xO3UOa6hZ2H3Qi/pUtQkFOkfu3K1qHpIxLFhLMsWYyIYoYYBAf2lkJ7xclW7rSCTLt
-         C/tw==
+        bh=7soigY1/Tz7WOVBHk7JHdF5hp208aWepLSOPTuKShpk=;
+        b=GXtN7HVAOXnla58u9BNt8+Ey5jQt5uUmrrbK9ZfJrdWtm6YFP/Dj8cVRqNMbUkkmob
+         mN3945nSzxfQXtUoq8YVtyVxgelo/i0qumerWkZE2o1p8iN/HbES3dG+gDIuKcrxtaSv
+         WbjJU/hc3/LRL8FuNcvIhvYe+PFemxPCwzu56iWb9sSt8Qz9l1qVvoqWCtQKxme+ArjL
+         O8xT2RLuokpiwR8AjaRCov2UO3eK0YHoNIsxi8/6jpqQ9IC7MC1zJj08v5vdflnMlg9r
+         hDhro6g9MZ+UNoOQHGIILBxWHN2NfRBXEyP3/obgdh/fqcJIc4jv5yQbusVjayCP4syw
+         YBBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KXQHf4GGreclJV8UKG8o93Lp2p7h1XuOoBqM1BAPjfg=;
-        b=EpQmvBBOWPSJ/HHUcuR3MM4VrFdp1YVgpAG/aksUkgDL1ZcRL/UjH3LaV9pwnm8GNr
-         VRUjrRcB0IzL7g8mFM3jU2AgxG+PbPkONShNq6gQfVRBz7XT+lWUCAWF/VrbONvwAdQY
-         rhQXA1ZyAxibQS1J47sG28QxjcZVAKSuHDnmJqAFRRbSfw+BMa0Z+g8BYTJYhW2iD6NN
-         Qp1S5j/6vIgjsQcR83+CGVERNM8dj+RS+S3Alj0FdFi95UpId74RnX82LI76MeoO2zVH
-         7hNIj8zMUoGbl1v7oosI5bVobGIAZLm/0EheDHJ/b+cnv8rGCPxR0CYUChakxOc7G5Gu
-         H+Ug==
-X-Gm-Message-State: ACrzQf3l32JpcEelKQa4jkF13DSpqcEAPyQwZQmXsb0x4qqEeYGrnqLa
-        RKmXuAuNh8MuqdUGtU52UuUiuzWnv24=
-X-Google-Smtp-Source: AMsMyM7OC3MEsHGB3Bg35pHH2zXARp4iXQExj7zSOZlcCvThVuxdWQkBKMUyTkqasS1rlmF0ClAmLoOPCHU=
+        bh=7soigY1/Tz7WOVBHk7JHdF5hp208aWepLSOPTuKShpk=;
+        b=RctM6CdKkP7BsbZ7iK+aoAKsYUMfhzxO/vwQGLs2iwn5r8JtEYNaH9zAGAH7dci6lM
+         c98GH7iv0CvB7w8yRwoBVGIr2SG6jUZK5Jq+/4e5cASnBVG1e/knMQ3bOUIkaqJU0t12
+         3ftajDsWxbXerSobnAUdPEr3hnVPUMeMM8OuPN8qo96EVcgNldSlMDoaiBwIvMFICUfZ
+         hfBzI8l3MIdwxqBkjdfnCcUxgW3Q1pHyGMnjQpqLHzFgtWfvjjtkbw3vJpMI0esDA83a
+         3FFJHKHm/dlyV6gR9ozspRy0DIC9iLrTdcIxQPxWs86Y7GTUmADWXpEo78BnjhTOydyB
+         lcOg==
+X-Gm-Message-State: ACrzQf0DvSaWAOe106XI+XvpqZGUYmT1b7DEYYlaOFo0pE/KeTXMK4kU
+        PZRecZHoDmbiqg7VJ0x/IhayVjAYnF8=
+X-Google-Smtp-Source: AMsMyM6j6dPsXwG80Bv5TCwwBBE3hp2YFW4wFkbm8U1r9+v+wF3U9/2O/qoIFzmJ3xv91Z/3nERO0nRRGE0=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:2412:b0:178:796d:c694 with SMTP id
- e18-20020a170903241200b00178796dc694mr2113381plo.42.1665017496375; Wed, 05
- Oct 2022 17:51:36 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:c986:b0:205:f08c:a82b with SMTP id
+ w6-20020a17090ac98600b00205f08ca82bmr157518pjt.1.1665017498155; Wed, 05 Oct
+ 2022 17:51:38 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu,  6 Oct 2022 00:51:18 +0000
+Date:   Thu,  6 Oct 2022 00:51:19 +0000
 In-Reply-To: <20221006005125.680782-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20221006005125.680782-1-seanjc@google.com>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221006005125.680782-6-seanjc@google.com>
-Subject: [PATCH 05/12] KVM: selftests: Refactor kvm_cpuid_has() to prep for
- X86_PROPERTY_* support
+Message-ID: <20221006005125.680782-7-seanjc@google.com>
+Subject: [PATCH 06/12] KVM: selftests: Add kvm_cpu_*() support for X86_PROPERTY_*
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -71,55 +70,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Refactor kvm_cpuid_has() to prepare for extending X86_PROPERTY_* support
-to KVM as well as "this CPU".
+Extent X86_PROPERTY_* support to KVM, i.e. add kvm_cpu_property() and
+kvm_cpu_has_p(), and use the new helpers in kvm_get_cpu_address_width().
 
 No functional change intended.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../selftests/kvm/lib/x86_64/processor.c      | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+ .../selftests/kvm/include/x86_64/processor.h  | 34 ++++++++++++++++---
+ .../selftests/kvm/lib/x86_64/processor.c      | 17 ++++++----
+ 2 files changed, 39 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index fb9e90d25b60..30e8dfe2111e 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -700,8 +700,9 @@ const struct kvm_cpuid2 *kvm_get_supported_cpuid(void)
- 	return cpuid;
+diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+index 55458e3d3ab4..b2babda9eac8 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/processor.h
++++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+@@ -205,6 +205,7 @@ struct kvm_x86_cpu_property {
+ 
+ #define X86_PROPERTY_MAX_EXT_LEAF		KVM_X86_CPU_PROPERTY(0x80000000, 0, EAX, 0, 31)
+ #define X86_PROPERTY_MAX_PHY_ADDR		KVM_X86_CPU_PROPERTY(0x80000008, 0, EAX, 0, 7)
++#define X86_PROPERTY_MAX_VIRT_ADDR		KVM_X86_CPU_PROPERTY(0x80000008, 0, EAX, 8, 15)
+ #define X86_PROPERTY_PHYS_ADDR_REDUCTION	KVM_X86_CPU_PROPERTY(0x8000001F, 0, EBX, 6, 11)
+ 
+ #define X86_PROPERTY_MAX_CENTAUR_LEAF		KVM_X86_CPU_PROPERTY(0xC0000000, 0, EAX, 0, 31)
+@@ -697,6 +698,34 @@ static inline bool kvm_cpu_has(struct kvm_x86_cpu_feature feature)
+ 	return kvm_cpuid_has(kvm_get_supported_cpuid(), feature);
  }
  
--bool kvm_cpuid_has(const struct kvm_cpuid2 *cpuid,
--		   struct kvm_x86_cpu_feature feature)
-+static uint32_t __kvm_cpu_has(const struct kvm_cpuid2 *cpuid,
-+			      uint32_t function, uint32_t index,
-+			      uint8_t reg, uint8_t lo, uint8_t hi)
- {
- 	const struct kvm_cpuid_entry2 *entry;
- 	int i;
-@@ -714,12 +715,18 @@ bool kvm_cpuid_has(const struct kvm_cpuid2 *cpuid,
- 		 * order, but kvm_x86_cpu_feature matches that mess, so yay
- 		 * pointer shenanigans!
- 		 */
--		if (entry->function == feature.function &&
--		    entry->index == feature.index)
--			return (&entry->eax)[feature.reg] & BIT(feature.bit);
-+		if (entry->function == function && entry->index == index)
-+			return ((&entry->eax)[reg] & GENMASK(hi, lo)) >> lo;
- 	}
- 
--	return false;
-+	return 0;
++uint32_t kvm_cpuid_property(const struct kvm_cpuid2 *cpuid,
++			    struct kvm_x86_cpu_property property);
++
++static inline uint32_t kvm_cpu_property(struct kvm_x86_cpu_property property)
++{
++	return kvm_cpuid_property(kvm_get_supported_cpuid(), property);
 +}
 +
-+bool kvm_cpuid_has(const struct kvm_cpuid2 *cpuid,
-+		   struct kvm_x86_cpu_feature feature)
++static __always_inline bool kvm_cpu_has_p(struct kvm_x86_cpu_property property)
 +{
-+	return __kvm_cpu_has(cpuid, feature.function, feature.index,
-+			     feature.reg, feature.bit, feature.bit);
++	uint32_t max_leaf;
++
++	switch (property.function & 0xc0000000) {
++	case 0:
++		max_leaf = kvm_cpu_property(X86_PROPERTY_MAX_BASIC_LEAF);
++		break;
++	case 0x40000000:
++		max_leaf = kvm_cpu_property(X86_PROPERTY_MAX_KVM_LEAF);
++		break;
++	case 0x80000000:
++		max_leaf = kvm_cpu_property(X86_PROPERTY_MAX_EXT_LEAF);
++		break;
++	case 0xc0000000:
++		max_leaf = kvm_cpu_property(X86_PROPERTY_MAX_CENTAUR_LEAF);
++	}
++	return max_leaf >= property.function;
++}
++
+ static inline size_t kvm_cpuid2_size(int nr_entries)
+ {
+ 	return sizeof(struct kvm_cpuid2) +
+@@ -809,11 +838,6 @@ static inline uint32_t kvm_get_cpuid_max_basic(void)
+ 	return kvm_get_supported_cpuid_entry(0)->eax;
  }
  
+-static inline uint32_t kvm_get_cpuid_max_extended(void)
+-{
+-	return kvm_get_supported_cpuid_entry(0x80000000)->eax;
+-}
+-
+ void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits);
+ bool vm_is_unrestricted_guest(struct kvm_vm *vm);
+ 
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index 30e8dfe2111e..99c309595c99 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -729,6 +729,13 @@ bool kvm_cpuid_has(const struct kvm_cpuid2 *cpuid,
+ 			     feature.reg, feature.bit, feature.bit);
+ }
+ 
++uint32_t kvm_cpuid_property(const struct kvm_cpuid2 *cpuid,
++			    struct kvm_x86_cpu_property property)
++{
++	return __kvm_cpu_has(cpuid, property.function, property.index,
++			     property.reg, property.lo_bit, property.hi_bit);
++}
++
  uint64_t kvm_get_feature_msr(uint64_t msr_index)
+ {
+ 	struct {
+@@ -1066,16 +1073,12 @@ bool is_amd_cpu(void)
+ 
+ void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits)
+ {
+-	const struct kvm_cpuid_entry2 *entry;
+-
+-	/* SDM 4.1.4 */
+-	if (kvm_get_cpuid_max_extended() < 0x80000008) {
++	if (!kvm_cpu_has_p(X86_PROPERTY_MAX_PHY_ADDR)) {
+ 		*pa_bits == kvm_cpu_has(X86_FEATURE_PAE) ? 36 : 32;
+ 		*va_bits = 32;
+ 	} else {
+-		entry = kvm_get_supported_cpuid_entry(0x80000008);
+-		*pa_bits = entry->eax & 0xff;
+-		*va_bits = (entry->eax >> 8) & 0xff;
++		*pa_bits = kvm_cpu_property(X86_PROPERTY_MAX_PHY_ADDR);
++		*va_bits = kvm_cpu_property(X86_PROPERTY_MAX_VIRT_ADDR);
+ 	}
+ }
+ 
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
