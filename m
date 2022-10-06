@@ -2,105 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B58C5F6A7E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 17:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01AF45F6A83
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 17:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231652AbiJFPYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 11:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
+        id S231744AbiJFPZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 11:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbiJFPYk (ORCPT
+        with ESMTP id S231730AbiJFPZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 11:24:40 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2776E77
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 08:24:35 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id i134so1520884ioa.8
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 08:24:35 -0700 (PDT)
+        Thu, 6 Oct 2022 11:25:08 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1018E0D8
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 08:25:06 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id 204so2327366pfx.10
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 08:25:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=1a+psg2nqIZL7bAZ6z1cIQFIUH3jE8LmypWSBzkS2oo=;
-        b=rSXh1u7hwhORzZwyDce9LUkOzigRIDR41Au4fcmTpZ2GI2gKKIJvrJ/i0/ClQ/LSub
-         e0HTQ+YSb3fdIXmE140lznkj3350+Jxd7RiGKzq2riUNJK3zR595y/bYaKns/XnO1d6I
-         Ty6f3XcarE4fwy+tDx9srBv0EhzGaB0FDSz/iYxhk+kxiQtnpwBqb1rXOoASXrYcv2L9
-         PrJRODlq08hZ7j34hBhEMdAmZDnPqJURVbx3C6iPpMZOlGUmNhw/4pXbI4sV6InCoW3A
-         RxCH3NBUXeO9kZkP+LkJDaDb2Z7z1NiGV+Uuw7Jz925LRjMeZP87mclo8m8A6EGtKrUc
-         x8PQ==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date;
+        bh=OtDkks39cgYVeSHQm8gd1cyY+JEJiwboAG4vuizNOOQ=;
+        b=bwYKBKdRbKMXUGR+1Ba8s3APih/vqE4MzepUDPFpZZHmlwMDQPXFSRTr6JI2afx1mB
+         5cCbkbKmfA/SsPQewwxLX0n1fuUOpqCqwDg8icP+4MjefbAGmbzfdCmtuHboewFG1cgf
+         2Xuw32nN44/m5B/9jthRwgcr/98+HiByIIItU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1a+psg2nqIZL7bAZ6z1cIQFIUH3jE8LmypWSBzkS2oo=;
-        b=oYLByxwNkrrvBCtPKXFivf0YP1DLf9nXUc9crfSBoPu3h32XHMI8OwNDP6zOhjUOln
-         huQYDJamxQiu42wuqimVWAe/Q9r0dZYPmeCiw2NiiYKUExZRTN7kBLace4eJS3jC1172
-         9GMUOq0MJ5nPtQIDL6eqJelQciaaKIxrxNRmBb2JDN//nQ3MKKdOJDaCbDXk7lUvjYja
-         zLbVRwqFy4rOc4+AgmRB8SM1RrU1gzONp77N3DfKTBp314DJSX8LBFv3nd+FiQZw1FIn
-         IJCSpoGofJm4dwqDCrH/p7mdIyr29jVLLNRza/L1lyYhWfk1hhHy3vFabLXsNgB/mUwg
-         uoTg==
-X-Gm-Message-State: ACrzQf2usfAw0EwT8kU4gGJsPyG+ClkDI83+yeihYA9IDUC2Mpz9pztt
-        Ejbe0Mm7/tKlQOvYmOkw+V2mUTAQ16HbxqcFTNNPyA==
-X-Google-Smtp-Source: AMsMyM4vahoSfRZE5lpPET3RLGsrNUFdrN5iUP1gQqWxcLez6lwgoo+5s1Ej6C5tpjbEy+hQr6LmPZK1lGSy426yfB8=
-X-Received: by 2002:a6b:5d07:0:b0:6bb:7253:a439 with SMTP id
- r7-20020a6b5d07000000b006bb7253a439mr164573iob.2.1665069875206; Thu, 06 Oct
- 2022 08:24:35 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=OtDkks39cgYVeSHQm8gd1cyY+JEJiwboAG4vuizNOOQ=;
+        b=WJgPceMmYj1VgGucfCqRhekO0bNEBkyWrOaDZ/9VQVuqLGuDBahGV1/wnZLJO4hLom
+         pTDCOO/lxl/LBIaCYOYCgrGDFIRtd2nC2UHBsEElAq+hFTLFxJjDTu0yO5hY8yZADuw1
+         CANjMgT9rUSWTweMUC25X51YAMbkAXka7+RjpUxzOPMo7ZIq0hu8m9iuflcYpIZVzoCo
+         NtsTeL8GWFi1Q7rQD0o8neTEoPThQ6UziOGc/kuQu54RmnpSXLH+nMVvZz9taTjw2T+q
+         dMXhXxLv9xtUhheoo1RRDVJP0JxrtwauC0rZlgh5v4SMOCfbQ9XIp9S5+K8OXtY7Riju
+         BUXg==
+X-Gm-Message-State: ACrzQf2R/23ZW6GaXjMKbwKYhfmfBexpbN11VyL2LuMNybFyOhBFhEQ7
+        RXrK0KqXBjmn4GjbcviTg2yfrQ==
+X-Google-Smtp-Source: AMsMyM5z1VQ/jYK2JD6/gNJiBdecIUmzcUy8MsflqoW0L8g/0cewBDfu6RFeroKPJlKOEYkHIn4RBA==
+X-Received: by 2002:a05:6a00:22c9:b0:561:8635:7b35 with SMTP id f9-20020a056a0022c900b0056186357b35mr334380pfj.3.1665069905412;
+        Thu, 06 Oct 2022 08:25:05 -0700 (PDT)
+Received: from [127.0.0.1] (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 73-20020a63054c000000b0042fe1914e26sm2006066pgf.37.2022.10.06.08.25.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Oct 2022 08:25:04 -0700 (PDT)
+Date:   Thu, 06 Oct 2022 08:25:01 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Jann Horn <jannh@google.com>,
+        Christian Brauner <brauner@kernel.org>
+CC:     Eric Biederman <ebiederm@xmission.com>,
+        Jorge Merlino <jorge.merlino@canonical.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org,
+        John Johansen <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Richard Haines <richard_c_haines@btinternet.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Todd Kjos <tkjos@google.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        Prashanth Prahlad <pprahlad@redhat.com>,
+        Micah Morton <mortonm@chromium.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Andrei Vagin <avagin@gmail.com>, linux-kernel@vger.kernel.org,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 1/2] fs/exec: Explicitly unshare fs_struct on exec
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAG48ez0sEkmaez9tYqgMXrkREmXZgxC9fdQD3mzF9cGo_=Tfyg@mail.gmail.com>
+References: <20221006082735.1321612-1-keescook@chromium.org> <20221006082735.1321612-2-keescook@chromium.org> <20221006090506.paqjf537cox7lqrq@wittgenstein> <CAG48ez0sEkmaez9tYqgMXrkREmXZgxC9fdQD3mzF9cGo_=Tfyg@mail.gmail.com>
+Message-ID: <86CE201B-5632-4BB7-BCF6-7CB2C2895409@chromium.org>
 MIME-Version: 1.0
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 6 Oct 2022 17:23:59 +0200
-Message-ID: <CAG48ez3h-mnp9ZFC10v+-BW_8NQvxbwBsMYJFP8JX31o0B17Pg@mail.gmail.com>
-Subject: ptep_get_lockless() on 32-bit x86/mips/sh looks wrong
-To:     Linux-MM <linux-mm@kvack.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     kernel list <linux-kernel@vger.kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@mellanox.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ptep_get_lockless() does the following under CONFIG_GUP_GET_PTE_LOW_HIGH:
-
-pte_t pte;
-do {
-  pte.pte_low = ptep->pte_low;
-  smp_rmb();
-  pte.pte_high = ptep->pte_high;
-  smp_rmb();
-} while (unlikely(pte.pte_low != ptep->pte_low));
-
-It has a comment above it that argues that this is correct because:
-1. A present PTE can't become non-present and then become a present
-PTE pointing to another page without a TLB flush in between.
-2. TLB flushes involve IPIs.
-
-As far as I can tell, in particular on x86, _both_ of those
-assumptions are false; perhaps on mips and sh only one of them is?
-
-Number 2 is straightforward: X86 can run under hypervisors, and when
-it runs under hypervisors, the MMU paravirtualization code (including
-the KVM version) can implement remote TLB flushes without IPIs.
-
-Number 1 is gnarlier, because breaking that assumption implies that
-there can be a situation where different threads see different memory
-at the same virtual address because their TLBs are incoherent. But as
-far as I know, it can happen when MADV_DONTNEED races with an
-anonymous page fault, because zap_pte_range() does not always flush
-stale TLB entries before dropping the page table lock. I think that's
-probably fine, since it's a "garbage in, garbage out" kind of
-situation - but if a concurrent GUP-fast can then theoretically end up
-returning a completely unrelated page, that's bad.
 
 
-Sadly, mips and sh don't define arch_cmpxchg_double(), so we can't
-just change ptep_get_lockless() to use arch_cmpxchg_double() and be
-done with it...
+On October 6, 2022 7:13:37 AM PDT, Jann Horn <jannh@google=2Ecom> wrote:
+>On Thu, Oct 6, 2022 at 11:05 AM Christian Brauner <brauner@kernel=2Eorg> =
+wrote:
+>> On Thu, Oct 06, 2022 at 01:27:34AM -0700, Kees Cook wrote:
+>> > The check_unsafe_exec() counting of n_fs would not add up under a hea=
+vily
+>> > threaded process trying to perform a suid exec, causing the suid port=
+ion
+>> > to fail=2E This counting error appears to be unneeded, but to catch a=
+ny
+>> > possible conditions, explicitly unshare fs_struct on exec, if it ends=
+ up
+>>
+>> Isn't this a potential uapi break? Afaict, before this change a call to
+>> clone{3}(CLONE_FS) followed by an exec in the child would have the
+>> parent and child share fs information=2E So if the child e=2Eg=2E, chan=
+ges the
+>> working directory post exec it would also affect the parent=2E But afte=
+r
+>> this change here this would no longer be true=2E So a child changing a
+>> workding directoro would not affect the parent anymore=2E IOW, an exec =
+is
+>> accompanied by an unshare(CLONE_FS)=2E Might still be worth trying ofc =
+but
+>> it seems like a non-trivial uapi change but there might be few users
+>> that do clone{3}(CLONE_FS) followed by an exec=2E
+>
+>I believe the following code in Chromium explicitly relies on this
+>behavior, but I'm not sure whether this code is in active use anymore:
+>
+>https://source=2Echromium=2Eorg/chromium/chromium/src/+/main:sandbox/linu=
+x/suid/sandbox=2Ec;l=3D101?q=3DCLONE_FS&sq=3D&ss=3Dchromium
+
+Oh yes=2E I think I had tried to forget this existed=2E Ugh=2E Okay, so ba=
+ck to the drawing board, I guess=2E The counting will need to be fixed=2E=
+=2E=2E
+
+It's possible we can move the counting after dethread -- it seems the earl=
+y count was just to avoid setting flags after the point of no return, but i=
+t's not an error condition=2E=2E=2E
+
+--=20
+Kees Cook
