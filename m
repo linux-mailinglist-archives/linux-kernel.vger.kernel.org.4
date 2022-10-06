@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94085F69B6
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:37:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6845F69B9
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbiJFOhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 10:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60512 "EHLO
+        id S231502AbiJFOh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 10:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiJFOhD (ORCPT
+        with ESMTP id S229637AbiJFOhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 10:37:03 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9328321A;
-        Thu,  6 Oct 2022 07:37:02 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id a29so3039135lfo.1;
-        Thu, 06 Oct 2022 07:37:02 -0700 (PDT)
+        Thu, 6 Oct 2022 10:37:23 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C79983F19;
+        Thu,  6 Oct 2022 07:37:22 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id f37so2993362lfv.8;
+        Thu, 06 Oct 2022 07:37:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=00zNPjSV0NBnL/fqot4cVHiAuUteLJu0Hqble2AqPlI=;
-        b=jLkxnaE6g2QlVfw6r4SfnRsGhqANVLQCmbqVqAPddbzc2Hlt6vumlPhAwOUTFRAYs9
-         d/KNkdWYMbp3SCC545Q7PKeHBlOva9VHeiqBqhKaj/jcCSRnMXB3mZDDWHY2wnuwF2VV
-         9fcWy6y2YU08w3rVhwz3xeO9T8CGSToNhEIQalwMjNy64BrAb6mDOcXgAWK/HIV8On1T
-         eK3st/VoChGvUE3qlTL5tfrT5ePveGYZ8AEjiaZFkYfdLnG5WGBDJxxTIx6FBNMK4268
-         6pfVhNEZJG1tc/8l2dl0M/F+l3JjUiJZUEzyRuITdriiM21mX+mQ+Y3qYMxM/DYwBWAo
-         BBQw==
+        bh=TIOQsYCwUfvmYBpnckXs7J461Nfe7jNypQ8rjuxui5M=;
+        b=UoOejhVb8uhTDW4mIIC6+sC9g9rgk8Ejo2ExD/mTw8tLBlk0QwgT7FkBe0F2W1Nu6P
+         RuCkElQO/d1dBdWp13c3VtBT0kcLkWysZjhSUgcSUh54uV2ODwPvWWbFDnN3lP34BN33
+         9pFrTQ50vxXqozR9T2K7SwEnNHDY0Vul5kgWiUs5yALvYDL+PJKF8SjOaRmeCHhzJZlJ
+         BIwUfel++pEr1+2+YpbVvJlChpmcpruT+18cdtkAujjH9rrZ/+NpqUuc20s7WK5Iklbg
+         SIXUAZdjLSfkTFgQduy46dB/AHVdRGFHmHIc+8AgSJ6HzhYEPxCvpa4uGyRlhHdejOgA
+         RrhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=00zNPjSV0NBnL/fqot4cVHiAuUteLJu0Hqble2AqPlI=;
-        b=Wrwoum/GQhH1AVMDPB2FOYgOuLSSSqOlQh8nhxmLZRVwovPae5WUBu9LsDpe3Uk0LW
-         LO6TGj3RxZIeOCdy60S6sFSmsOVctgimkTiaiTwqiowb03ixENb3BbU+FsdHE8qtjc8Y
-         hbyxL5zKjJrG3itnjoGzC2Ccq5dNOOgg7erLrgUkAoNQy01VSRexXQlW3XZP1Jqla5qg
-         +oOWvxeXl2i6ciYStqZfGycdQqkWcosFww6YunlEdQG64csuEif8moikdP/eaYTQ1OOZ
-         i2A80HF+Dw1MKQvq79RyYSfpewRBw6fY/OiGH1oQLNjlyBkEjFPldLjYmAA4mHqNkuMI
-         /Dsw==
-X-Gm-Message-State: ACrzQf2BONKnkwxMqEv5jWQdEe4JIdnT7zvKo+LALd/9tYsrtY68xi4V
-        p/zU07lo4cibD1a99Ic8M0c=
-X-Google-Smtp-Source: AMsMyM4ar/eKhA4YXpbfMC3LzHoOECJ4YMFrhXTEqAwQpgNZ3C3rSJftHJk85dr/oOKd4qPibTs4Zg==
-X-Received: by 2002:a19:9202:0:b0:49d:7310:742f with SMTP id u2-20020a199202000000b0049d7310742fmr115161lfd.312.1665067020638;
-        Thu, 06 Oct 2022 07:37:00 -0700 (PDT)
+        bh=TIOQsYCwUfvmYBpnckXs7J461Nfe7jNypQ8rjuxui5M=;
+        b=Dzxavq1WSnYPy87ocf14AT+P0zHp4N7LpWGryPyTtGQ4m4rf5OC67Z7yOCNqvAz0wd
+         GVHcJH8z00WFxSaHxPehJxARmDnObWfEdNv0MORMeJzLyA+uyzv7s6+EGHaWJ18CQmyx
+         xzohrPcOUYQV1CAZyBgk8MDVAJQjFSssTSsav5xhaoxYQiaBxgZtaKik2R+WIDqkz8wa
+         za3f4PjegZWVKE2jIUBx7Y27q2PUameYZeF/WMWEw2dDmtSa8xunJT4EUILG7af9cH4z
+         z813zheiet29B8F0WK9V8OYc6A7b+Mt5cZDuHRlGLM2mJ5p+tKV44V6gPmM5LEbA40TK
+         AkZw==
+X-Gm-Message-State: ACrzQf14+2zGmVh9cdC2XpJTtFElILJKOKfjbclzcjrKGSAKWaQHoMOD
+        027z1dChz7dul4OJ7z04sHQ=
+X-Google-Smtp-Source: AMsMyM68nVJo1+16nF5jOCHFbbaBlMhSus02odyFoAUULTd4wWsn3gXhAfBwB1ceKOQnEsd60Q513A==
+X-Received: by 2002:ac2:4acf:0:b0:4a2:6c60:935 with SMTP id m15-20020ac24acf000000b004a26c600935mr91402lfp.397.1665067040824;
+        Thu, 06 Oct 2022 07:37:20 -0700 (PDT)
 Received: from dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id h4-20020a05651c124400b0026be1de1500sm1925140ljh.79.2022.10.06.07.36.58
+        by smtp.gmail.com with ESMTPSA id o20-20020a056512231400b0049f9c732858sm2713975lfu.254.2022.10.06.07.37.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 07:36:59 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 17:36:52 +0300
+        Thu, 06 Oct 2022 07:37:20 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 17:37:14 +0300
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
@@ -63,12 +63,12 @@ Cc:     Jonathan Cameron <jic23@kernel.org>,
         Cosmin Tanislav <demonsingur@gmail.com>,
         linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v2 1/5] regulator: Add devm helpers for get and enable
-Message-ID: <fa667d6870976a2cf2d60f06e262982872349d74.1665066397.git.mazziesaccount@gmail.com>
+Subject: [RFC PATCH v2 2/5] regulator: Add devm helpers for get and enable
+Message-ID: <a80bd095506411dae86760f307725b9ecddd9426.1665066397.git.mazziesaccount@gmail.com>
 References: <cover.1665066397.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/g10kuR76MIgIRry"
+        protocol="application/pgp-signature"; boundary="Epbr6MBHrwzV0do7"
 Content-Disposition: inline
 In-Reply-To: <cover.1665066397.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,7 +82,7 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---/g10kuR76MIgIRry
+--Epbr6MBHrwzV0do7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -95,127 +95,187 @@ We can simplify this a bit by adding a devm-helper for this pattern.
 Add devm_regulator_get_enable() and devm_regulator_get_enable_optional()
 
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-(cherry picked from commit b6058e052b842a19c8bb639798d8692cd0e7589f)
+Link: https://lore.kernel.org/r/ed7b8841193bb9749d426f3cb3b199c9460794cd.16=
+60292316.git.mazziesaccount@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 
 ---
-
 Already in Mark's regulator tree. Not to be merged. Included just for
 the sake of the completeness. Will be dropped when series is rebased on
 top of the 6.1-rc1
 ---
- drivers/regulator/devres.c         | 59 ++++++++++++++++++++++++++++++
- include/linux/regulator/consumer.h | 13 +++++++
- 2 files changed, 72 insertions(+)
+ drivers/regulator/devres.c         | 105 +++++++++++++++++++++++++++++
+ include/linux/regulator/consumer.h |  14 ++++
+ 2 files changed, 119 insertions(+)
 
 diff --git a/drivers/regulator/devres.c b/drivers/regulator/devres.c
-index 32823a87fd40..3cb3eb49ad8a 100644
+index 3cb3eb49ad8a..3265e75e97ab 100644
 --- a/drivers/regulator/devres.c
 +++ b/drivers/regulator/devres.c
-@@ -70,6 +70,65 @@ struct regulator *devm_regulator_get_exclusive(struct de=
-vice *dev,
+@@ -253,6 +253,111 @@ int devm_regulator_bulk_get_const(struct device *dev,=
+ int num_consumers,
  }
- EXPORT_SYMBOL_GPL(devm_regulator_get_exclusive);
+ EXPORT_SYMBOL_GPL(devm_regulator_bulk_get_const);
 =20
-+static void regulator_action_disable(void *d)
++static int devm_regulator_bulk_match(struct device *dev, void *res,
++				     void *data)
 +{
-+	struct regulator *r =3D (struct regulator *)d;
++	struct regulator_bulk_devres *match =3D res;
++	struct regulator_bulk_data *target =3D data;
 +
-+	regulator_disable(r);
++	/*
++	 * We check the put uses same consumer list as the get did.
++	 * We _could_ scan all entries in consumer array and check the
++	 * regulators match but ATM I don't see the need. We can change this
++	 * later if needed.
++	 */
++	return match->consumers =3D=3D target;
 +}
 +
-+static int _devm_regulator_get_enable(struct device *dev, const char *id,
-+				      int get_type)
++/**
++ * devm_regulator_bulk_put - Resource managed regulator_bulk_put()
++ * @consumers: consumers to free
++ *
++ * Deallocate regulators allocated with devm_regulator_bulk_get(). Normally
++ * this function will not need to be called and the resource management
++ * code will ensure that the resource is freed.
++ */
++void devm_regulator_bulk_put(struct regulator_bulk_data *consumers)
 +{
-+	struct regulator *r;
-+	int ret;
++	int rc;
++	struct regulator *regulator =3D consumers[0].consumer;
 +
-+	r =3D _devm_regulator_get(dev, id, get_type);
-+	if (IS_ERR(r))
-+		return PTR_ERR(r);
++	rc =3D devres_release(regulator->dev, devm_regulator_bulk_release,
++			    devm_regulator_bulk_match, consumers);
++	if (rc !=3D 0)
++		WARN_ON(rc);
++}
++EXPORT_SYMBOL_GPL(devm_regulator_bulk_put);
 +
-+	ret =3D regulator_enable(r);
-+	if (!ret)
-+		ret =3D devm_add_action_or_reset(dev, &regulator_action_disable, r);
++static void devm_regulator_bulk_disable(void *res)
++{
++	struct regulator_bulk_devres *devres =3D res;
++	int i;
 +
++	for (i =3D 0; i < devres->num_consumers; i++)
++		regulator_disable(devres->consumers[i].consumer);
++}
++
++/**
++ * devm_regulator_bulk_get_enable - managed get'n enable multiple regulato=
+rs
++ *
++ * @dev:           device to supply
++ * @num_consumers: number of consumers to register
++ * @id:            list of supply names or regulator IDs
++ *
++ * @return 0 on success, an errno on failure.
++ *
++ * This helper function allows drivers to get several regulator
++ * consumers in one operation with management, the regulators will
++ * automatically be freed when the device is unbound.  If any of the
++ * regulators cannot be acquired then any regulators that were
++ * allocated will be freed before returning to the caller.
++ */
++int devm_regulator_bulk_get_enable(struct device *dev, int num_consumers,
++				   const char * const *id)
++{
++	struct regulator_bulk_devres *devres;
++	struct regulator_bulk_data *consumers;
++	int i, ret;
++
++	devres =3D devm_kmalloc(dev, sizeof(*devres), GFP_KERNEL);
++	if (!devres)
++		return -ENOMEM;
++
++	devres->consumers =3D devm_kcalloc(dev, num_consumers, sizeof(*consumers),
++					 GFP_KERNEL);
++	consumers =3D devres->consumers;
++	if (!consumers)
++		return -ENOMEM;
++
++	devres->num_consumers =3D num_consumers;
++
++	for (i =3D 0; i < num_consumers; i++)
++		consumers[i].supply =3D id[i];
++
++	ret =3D devm_regulator_bulk_get(dev, num_consumers, consumers);
 +	if (ret)
-+		devm_regulator_put(r);
++		return ret;
++
++	for (i =3D 0; i < num_consumers; i++) {
++		ret =3D regulator_enable(consumers[i].consumer);
++		if (ret)
++			goto unwind;
++	}
++
++	ret =3D devm_add_action(dev, devm_regulator_bulk_disable, devres);
++	if (!ret)
++		return 0;
++
++unwind:
++	while (--i >=3D 0)
++		regulator_disable(consumers[i].consumer);
++
++	devm_regulator_bulk_put(consumers);
 +
 +	return ret;
 +}
++EXPORT_SYMBOL_GPL(devm_regulator_bulk_get_enable);
 +
-+/**
-+ * devm_regulator_get_enable_optional - Resource managed regulator get and=
- enable
-+ * @dev: device to supply
-+ * @id:  supply name or regulator ID.
-+ *
-+ * Get and enable regulator for duration of the device life-time.
-+ * regulator_disable() and regulator_put() are automatically called on dri=
-ver
-+ * detach. See regulator_get_optional() and regulator_enable() for more
-+ * information.
-+ */
-+int devm_regulator_get_enable_optional(struct device *dev, const char *id)
-+{
-+	return _devm_regulator_get_enable(dev, id, OPTIONAL_GET);
-+}
-+EXPORT_SYMBOL_GPL(devm_regulator_get_enable_optional);
-+
-+/**
-+ * devm_regulator_get_enable - Resource managed regulator get and enable
-+ * @dev: device to supply
-+ * @id:  supply name or regulator ID.
-+ *
-+ * Get and enable regulator for duration of the device life-time.
-+ * regulator_disable() and regulator_put() are automatically called on dri=
-ver
-+ * detach. See regulator_get() and regulator_enable() for more
-+ * information.
-+ */
-+int devm_regulator_get_enable(struct device *dev, const char *id)
-+{
-+	return _devm_regulator_get_enable(dev, id, NORMAL_GET);
-+}
-+EXPORT_SYMBOL_GPL(devm_regulator_get_enable);
-+
- /**
-  * devm_regulator_get_optional - Resource managed regulator_get_optional()
-  * @dev: device to supply
+ static void devm_rdev_release(struct device *dev, void *res)
+ {
+ 	regulator_unregister(*(struct regulator_dev **)res);
 diff --git a/include/linux/regulator/consumer.h b/include/linux/regulator/c=
 onsumer.h
-index bc6cda706d1f..8e6cf65851b0 100644
+index 8e6cf65851b0..ee3b4a014611 100644
 --- a/include/linux/regulator/consumer.h
 +++ b/include/linux/regulator/consumer.h
-@@ -207,6 +207,8 @@ struct regulator *__must_check regulator_get_optional(s=
-truct device *dev,
- 						      const char *id);
- struct regulator *__must_check devm_regulator_get_optional(struct device *=
-dev,
- 							   const char *id);
-+int devm_regulator_get_enable(struct device *dev, const char *id);
-+int devm_regulator_get_enable_optional(struct device *dev, const char *id);
- void regulator_put(struct regulator *regulator);
- void devm_regulator_put(struct regulator *regulator);
-=20
-@@ -354,6 +356,17 @@ devm_regulator_get_exclusive(struct device *dev, const=
- char *id)
- 	return ERR_PTR(-ENODEV);
+@@ -246,12 +246,15 @@ int __must_check regulator_bulk_get(struct device *de=
+v, int num_consumers,
+ 				    struct regulator_bulk_data *consumers);
+ int __must_check devm_regulator_bulk_get(struct device *dev, int num_consu=
+mers,
+ 					 struct regulator_bulk_data *consumers);
++void devm_regulator_bulk_put(struct regulator_bulk_data *consumers);
+ int __must_check devm_regulator_bulk_get_const(
+ 	struct device *dev, int num_consumers,
+ 	const struct regulator_bulk_data *in_consumers,
+ 	struct regulator_bulk_data **out_consumers);
+ int __must_check regulator_bulk_enable(int num_consumers,
+ 				       struct regulator_bulk_data *consumers);
++int devm_regulator_bulk_get_enable(struct device *dev, int num_consumers,
++				   const char * const *id);
+ int regulator_bulk_disable(int num_consumers,
+ 			   struct regulator_bulk_data *consumers);
+ int regulator_bulk_force_disable(int num_consumers,
+@@ -388,6 +391,10 @@ static inline void devm_regulator_put(struct regulator=
+ *regulator)
+ {
  }
 =20
-+static inline int devm_regulator_get_enable(struct device *dev, const char=
- *id)
++static inline void devm_regulator_bulk_put(struct regulator_bulk_data *con=
+sumers)
 +{
-+	return -ENODEV;
 +}
 +
-+static inline int devm_regulator_get_enable_optional(struct device *dev,
-+						     const char *id)
+ static inline int regulator_register_supply_alias(struct device *dev,
+ 						  const char *id,
+ 						  struct device *alias_dev,
+@@ -478,6 +485,13 @@ static inline int regulator_bulk_enable(int num_consum=
+ers,
+ 	return 0;
+ }
+=20
++static inline int devm_regulator_bulk_get_enable(struct device *dev,
++						 int num_consumers,
++						 const char * const *id)
 +{
-+	return -ENODEV;
++	return 0;
 +}
 +
- static inline struct regulator *__must_check
- regulator_get_optional(struct device *dev, const char *id)
+ static inline int regulator_bulk_disable(int num_consumers,
+ 					 struct regulator_bulk_data *consumers)
  {
 --=20
 2.37.3
@@ -233,19 +293,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---/g10kuR76MIgIRry
+--Epbr6MBHrwzV0do7
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmM+6AQACgkQeFA3/03a
-ocVd2QgAzMXs4723DPOcSmcxc+ndzLBrklRylOVkRmrrybLlgCCNZZvWBJu0AyFj
-nPejGuGhRkMcYhmrigTuFuEGpkGf5P5U0L8/UyDzjicEtX6CxyGRn9asooFzyFL7
-9CxJlIoAoi2gEVlQ8++SwPxjkxz1ZPR8MR3YsX+W0ECC90tPti0I2Cwym3ue1JVM
-2FF6DcWG7J4jyWO+9MbQZrmS1sZBu7IM9BjS5DnzOY0akYQejmXPfgzVZoE7q7+F
-xBXEj2vX6eB+zw/uAvIm7hIZfll/XDMk7lWq4oU+ui8MXp/gr5LZL0mxHQ/U+W+s
-d0Lsop/UlvLMXZ+uudXW8MeQsavTnA==
-=YEA1
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmM+6BoACgkQeFA3/03a
+ocWYzgf/dGa7CvdE9jSXZIvYxGfPY+lUorBXYaygwOAayKb23L9nDPl9rc83oGur
+8cPl6uZFKAnQ34NLwV89w336Vd+ONvdc31QD0fUJ9gzKCyjOVUGugQF8G8arTTbM
+RXtsOZqN27W+j+u5RPX/AWoHp+/LfN7Snkr4q15RfHM3lYWBwKVAQ2dncGyVsELu
+Kdb+CvVSABZOZ4CqI+i4Q1lIlLSoC11MisxKMCjm27Is+3O9iOucJgGcn00xPu1i
+JrWfwxPYjpg1sjWPlDNPwTO4CznEU4gjR/DfTvZ4er0DrMO2KwQhvJLeoSQXbD1E
+QNsZ/Qvkzpd1lIxJn8u8to/+FtdlHQ==
+=QLwe
 -----END PGP SIGNATURE-----
 
---/g10kuR76MIgIRry--
+--Epbr6MBHrwzV0do7--
