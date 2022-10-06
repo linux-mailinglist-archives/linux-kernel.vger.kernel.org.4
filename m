@@ -2,65 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8292D5F5FE3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 06:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D1C05F5FEA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 06:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiJFEDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 00:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45744 "EHLO
+        id S229810AbiJFEHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 00:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiJFECw (ORCPT
+        with ESMTP id S229729AbiJFEHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 00:02:52 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405F861108;
-        Wed,  5 Oct 2022 21:02:49 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id y205so835047yby.13;
-        Wed, 05 Oct 2022 21:02:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=x3eehCTygRMcGwgA/sYSeNxSxRVYTsgJ/fp198wT1QM=;
-        b=dH1fwDr41VvYjt4mkP8reQT8K4odY+grw3qyrkMvXr+Yrjc5xlRwGnsarS4VPiU2oP
-         yUQPBg6RCuL501kqT6fh/O/5Xdebt5B6FLIHSDopXxAr+NXJNwoB1pWnclWtZ+7sdrHA
-         pFyoZNXGZSBro9LErp9w5sdSWUrNLcArS+jixy13OnPHFO1Tip5qczRvADFkAX2Mprr5
-         VylhLy/u+F7nIFuqjCaoU/d7721deESvggaw7XTO38ld0WZsqaYxRA3e5VreY7h9brap
-         p6EB8jI3alJ6luXsBAvo2SPiLdlXiYtAAG6V1qdBrYxdblbu1SN9JnMNU9I1pcuBSlH8
-         sBMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=x3eehCTygRMcGwgA/sYSeNxSxRVYTsgJ/fp198wT1QM=;
-        b=KRJ/Mu8DihrEk3o+D6UCJwg1aVXUNTzYpdnY/gv6j/+59dM3nAg+rDtzZ5fF0rbkWZ
-         53LtPAPsGyr0nA1jSoY4Qbwg2Xy3qkuMruTsP/RRedrMdKUs9fqIlgQF7rIj8zo+vlJM
-         9QGexgUHF7Dxa588iUDk/gzT4C8U1JTBQ/FACibC41ruP7D5gk6oIZqwjv7xUzES5dSX
-         fqXShZAiy52TxPDaEOwCPhJpNCo2ZiDvwZBQU13ll/9kn+og7If9zOMQDfhP4Dq0hjU9
-         az072+4oVkvE3wfTCBI4+bhB1kId1MqQPFadPckTbNu5RQ7lnxQqK/ZHsQnlkSbCZYqk
-         c3aA==
-X-Gm-Message-State: ACrzQf35t5uxqbgyhO3EaPxv+ZRzbTp9s1uDH1Z3m1eATbGgvkK7p7tX
-        ye8FWtW5ADHDnNhzKDgW/tf9UWzW7m7CinzxAHM=
-X-Google-Smtp-Source: AMsMyM7fiyr5BM7m9N9mEXoHZ2R9ieURlDQiuyGtzhga3iiXRDNGgKgvDLm8R94/tCeY0388UuL5oZlnyOFTYgHbNg4=
-X-Received: by 2002:a25:bc90:0:b0:6bd:74b:3b7c with SMTP id
- e16-20020a25bc90000000b006bd074b3b7cmr3237174ybk.450.1665028968212; Wed, 05
- Oct 2022 21:02:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221002220126.18849-1-hcvcastro@gmail.com>
-In-Reply-To: <20221002220126.18849-1-hcvcastro@gmail.com>
-From:   Roderick Colenbrander <thunderbird2k@gmail.com>
-Date:   Wed, 5 Oct 2022 21:02:37 -0700
-Message-ID: <CAEc3jaBiN_b_AJGugkYSwxF-ZWHzD6ib4r99tm9Z4RwN2=bgzw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] drivers: hid: warn feature report 0x81
-To:     Henry Castro <hcvcastro@gmail.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Thu, 6 Oct 2022 00:07:44 -0400
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17ED588A20;
+        Wed,  5 Oct 2022 21:07:37 -0700 (PDT)
+X-QQ-mid: bizesmtp78t1665029140tcrfg847
+Received: from wuhui-virtual-machine.localdoma ( [58.251.166.8])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 06 Oct 2022 12:05:18 +0800 (CST)
+X-QQ-SSF: 01400000000000F0U000000A0000000
+X-QQ-FEAT: DQ0OCu3gog2jS1XCuga4iSoPGUC/H47sfmt8qhHpOqY8NW50ybQYpFP4i3KXM
+        OKbzsNQoFCPP9vmRIpIaVbWqWl2Pyk4mTmvdqFckYH2gdZW2S22GxGrAYV/7o3W2ETszjo/
+        Q2Jqr8wn6xRlVYPokNHAfJECon3BvOsuO1UQFCC2rIzMP0Kk30HqqdneZNP4wLudX0PhB9B
+        Wh3cdGsnUMlE7+f6/7AmCQG8GdrVXSJ1d1opxvSZGwo3YzdUC4NsdjZwAzjb10JnD2EuJFt
+        DgKkdPUbRXHFsPwVT5p4402zB3/F1ZN6PGAtPE3PdflfJFCI06NEdYQBt6PtsU/53DUzFkp
+        3Cs6TTscg97q1y9lIf9nS1z7+rkf9XsQlj4fY9RaJt7U9T6g3s=
+X-QQ-GoodBg: 2
+From:   Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
+To:     bagasdotme@gmail.com
+Cc:     akiyks@gmail.com, akpm@linux-foundation.org,
+        caoyixuan2019@email.szu.edu.cn, corbet@lwn.net,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rppt@kernel.org, skhan@linuxfoundation.org,
+        yejiajian2018@email.szu.edu.cn, zhangyinan2019@email.szu.edu.cn
+Subject: [PATCH v5] Documentation/mm/page_owner.rst: delete frequently changing experimental data
+Date:   Thu,  6 Oct 2022 12:05:17 +0800
+Message-Id: <20221006040517.19736-1-caoyixuan2019@email.szu.edu.cn>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <bf4b507a-f996-6aef-71e6-d73fcddc6163@gmail.com>
+References: <bf4b507a-f996-6aef-71e6-d73fcddc6163@gmail.com>
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:email.szu.edu.cn:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,51 +51,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I see in the other email. If it doesn't support this request, it is
-likely a clone device. We are about to submit a brand new DS4 driver
-(for hid-playstation). It will use a different report (0x12) if I
-recall which does the same thing. That's the more mainstream one we
-use.
+The kernel size changes due to many factors, such as compiler
+version, configuration, and the build environment. This makes
+size comparison figures irrelevant to reader's setup.
 
-Thanks,
-Roderick
+Remove these figures and describe the effects of page owner
+to the kernel size in general instead.
 
-On Sun, Oct 2, 2022 at 3:01 PM Henry Castro <hcvcastro@gmail.com> wrote:
->
-> Unfortunately, my PS DualShock 4, does not support
-> the feature 0x81 to get the MAC address. Instead,
-> use a unique hash to fake a MAC address, so I can
-> use DS4 to play Retroarch :)
->
-> Signed-off-by: Henry Castro <hcvcastro@gmail.com>
-> ---
->  drivers/hid/hid-sony.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/hid/hid-sony.c b/drivers/hid/hid-sony.c
-> index 656caa07b25f..e3e9c58887cf 100644
-> --- a/drivers/hid/hid-sony.c
-> +++ b/drivers/hid/hid-sony.c
-> @@ -2641,13 +2641,14 @@ static int sony_check_add(struct sony_sc *sc)
->                                 HID_REQ_GET_REPORT);
->
->                 if (ret != DS4_FEATURE_REPORT_0x81_SIZE) {
-> -                       hid_err(sc->hdev, "failed to retrieve feature report 0x81 with the DualShock 4 MAC address\n");
-> -                       ret = ret < 0 ? ret : -EINVAL;
-> -                       goto out_free;
-> +                       uint32_t hash = full_name_hash(NULL, dev_name(&sc->hdev->dev),
-> +                                                      strlen(dev_name(&sc->hdev->dev)));
-> +                       hid_warn(sc->hdev, "failed to retrieve feature report 0x81 with the DualShock 4 MAC address\n");
-> +                       memcpy(sc->mac_address, &hash, sizeof(hash));
-> +               } else {
-> +                       memcpy(sc->mac_address, &buf[1], sizeof(sc->mac_address));
->                 }
->
-> -               memcpy(sc->mac_address, &buf[1], sizeof(sc->mac_address));
-> -
->                 snprintf(sc->hdev->uniq, sizeof(sc->hdev->uniq),
->                          "%pMR", sc->mac_address);
->         } else if ((sc->quirks & SIXAXIS_CONTROLLER_USB) ||
-> --
-> 2.20.1
->
+Signed-off-by: Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
+---
+ Documentation/mm/page_owner.rst | 20 ++++----------------
+ 1 file changed, 4 insertions(+), 16 deletions(-)
+
+diff --git a/Documentation/mm/page_owner.rst b/Documentation/mm/page_owner.rst
+index f18fd8907049..127514955a5e 100644
+--- a/Documentation/mm/page_owner.rst
++++ b/Documentation/mm/page_owner.rst
+@@ -38,22 +38,10 @@ not affect to allocation performance, especially if the static keys jump
+ label patching functionality is available. Following is the kernel's code
+ size change due to this facility.
+ 
+-- Without page owner::
+-
+-   text    data     bss     dec     hex filename
+-   48392   2333     644   51369    c8a9 mm/page_alloc.o
+-
+-- With page owner::
+-
+-   text    data     bss     dec     hex filename
+-   48800   2445     644   51889    cab1 mm/page_alloc.o
+-   6662     108      29    6799    1a8f mm/page_owner.o
+-   1025       8       8    1041     411 mm/page_ext.o
+-
+-Although, roughly, 8 KB code is added in total, page_alloc.o increase by
+-520 bytes and less than half of it is in hotpath. Building the kernel with
+-page owner and turning it on if needed would be great option to debug
+-kernel memory problem.
++Although enabling page owner increases kernel size by several kilobytes,
++most of this code is outside page allocator and its hot path. Building
++the kernel with page owner and turning it on if needed would be great
++option to debug kernel memory problem.
+ 
+ There is one notice that is caused by implementation detail. page owner
+ stores information into the memory from struct page extension. This memory
+-- 
+2.17.1
+
