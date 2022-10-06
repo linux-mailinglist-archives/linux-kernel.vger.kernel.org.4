@@ -2,87 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DF105F62D9
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 098645F62DC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbiJFIga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 04:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56130 "EHLO
+        id S230460AbiJFIhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 04:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230441AbiJFIg0 (ORCPT
+        with ESMTP id S230440AbiJFIhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 04:36:26 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3368695E6A;
-        Thu,  6 Oct 2022 01:36:22 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6220E660226D;
-        Thu,  6 Oct 2022 09:36:19 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1665045380;
-        bh=wFoOAN7bFW7ZcEUlEyrquYeMDkaLoO1zFNmCBqZXDyE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=momluOxPJp6aehDMfKrO28U93jCgFg9oTviy7NW67owqYTPG4f0TkFEupHLBgRC88
-         k2W81OkStlQz7uoLtA5s6btCHdRqP6S3AX5PV7nC75yx4plhMfRTB0nCCE8l2dpWL0
-         TtOKECUYee50s+C/6dGykHim1Ja96+N4BsyOimlx3eUYe+HfJqI3hiPgzHFhD2kCVx
-         MD/W25E6ru32yDnbQZez5rUHISK6ab6OjIeslrRu5dMETwe96zK7+30CPfk04DKcz1
-         /kaB1AW13g865R7QugWoz5WMb44P0I7d7Br6RPPq6lz5BY0+N1x5qh02OUm9c/QrbK
-         BBPmjoMgb8/TA==
-Message-ID: <56aadffa-82be-f8ff-03d3-2a880b50ef49@collabora.com>
-Date:   Thu, 6 Oct 2022 10:36:17 +0200
+        Thu, 6 Oct 2022 04:37:12 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9EC95AD5;
+        Thu,  6 Oct 2022 01:37:09 -0700 (PDT)
+Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MjlBk1khBz6H73T;
+        Thu,  6 Oct 2022 16:35:42 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.31; Thu, 6 Oct 2022 10:37:07 +0200
+Received: from [10.126.169.169] (10.126.169.169) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 6 Oct 2022 09:37:06 +0100
+Message-ID: <9cc48b3f-5dbe-665e-d125-dffd53e930fb@huawei.com>
+Date:   Thu, 6 Oct 2022 09:37:06 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 3/5] dt-bindings: watchdog: mediatek: Convert mtk-wdt to
- json-schema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        wim@linux-watchdog.org
-Cc:     linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        allen-kh.cheng@mediatek.com, seiya.wang@mediatek.com,
-        tinghan.shen@mediatek.com, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221005113517.70628-1-angelogioacchino.delregno@collabora.com>
- <20221005113517.70628-4-angelogioacchino.delregno@collabora.com>
- <1f3ebf6f-117f-62a7-8e02-3e8a3bcf7e9f@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <1f3ebf6f-117f-62a7-8e02-3e8a3bcf7e9f@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v5 0/7] libsas and drivers: NCQ error handling
+To:     Niklas Cassel <Niklas.Cassel@wdc.com>
+CC:     "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "jinpu.wang@cloud.ionos.com" <jinpu.wang@cloud.ionos.com>,
+        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linuxarm <linuxarm@huawei.com>,
+        yangxingui <yangxingui@huawei.com>,
+        yanaijie <yanaijie@huawei.com>
+References: <1664262298-239952-1-git-send-email-john.garry@huawei.com>
+ <YzwvpUUftX6Ziurt@x1-carbon>
+ <cfa52b91-db81-a179-76c2-8a61266c099d@huawei.com>
+ <27148ec5-d1ae-d9a2-1b00-a4c34d2da198@huawei.com>
+ <Yz33FGwd3YvQUAqT@x1-carbon>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <Yz33FGwd3YvQUAqT@x1-carbon>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.126.169.169]
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 05/10/22 18:33, Krzysztof Kozlowski ha scritto:
-> On 05/10/2022 13:35, AngeloGioacchino Del Regno wrote:
->> Convert the MediaTek watchdog bindings to schema.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On 05/10/2022 22:28, Niklas Cassel wrote:
+> Do you know why it fails to read the log?
+> Can you read the NCQ Command Error log using ATA16 passthrough commands?
 > 
-> There is already work in progress:
+> sudo sg_sat_read_gplog -d --log=0x10 /dev/sdc
 > 
-> https://lore.kernel.org/all/20220422121017.23920-3-allen-kh.cheng@mediatek.com/
+> The first byte is the last NCQ tag (in hex) that failed.
+
+Please see other reply.
+
 > 
-> Best regards,
-> Krzysztof
+> 
+> I tried your patch, and it looks good:
+
+Thanks, good to know.
+
+> 
+> [ 6656.228131] ata5.00: exception Emask 0x0 SAct 0x460000 SErr 0x0 action 0x0
+> [ 6656.252759] ata5.00: failed command: WRITE FPDMA QUEUED
+> [ 6656.271554] ata5.00: cmd 61/00:00:00:d8:8a/04:00:ce:03:00/40 tag 17 ncq dma 524288 out
+>                          res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device error)
+> [ 6656.309308] ata5.00: status: { DRDY ERR }
+> [ 6656.316403] ata5.00: error: { ABRT }
+> [ 6656.322300] ata5.00: failed command: WRITE FPDMA QUEUED
+> [ 6656.330871] ata5.00: cmd 61/00:00:00:dc:8a/04:00:ce:03:00/40 tag 18 ncq dma 524288 out
+>                          res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device error)
+> [ 6656.356295] ata5.00: status: { DRDY ERR }
+> [ 6656.362931] ata5.00: error: { ABRT }
+> [ 6656.368897] ata5.00: failed command: WRITE FPDMA QUEUED
+> [ 6656.377471] ata5.00: cmd 61/00:00:00:d4:8a/04:00:ce:03:00/40 tag 22 ncq dma 524288 out
+>                          res 43/04:00:ff:d7:8a/00:00:ce:03:00/40 Emask 0x400 (NCQ error) <F>
+> [ 6656.403149] ata5.00: status: { DRDY SENSE ERR }
+> [ 6656.410624] ata5.00: error: { ABRT }
+> 
+> However, since this is a change from the existing behavior of this driver,
+> this could go as a separate patch, and does not need to delay this series.
+> 
 > 
 
-I'm sorry, I forgot about that.
+ok, but I am not sure about this series for 6.1 since it's now, so I 
+will just wait.
 
-Allen, how do we proceed? Do you want to send a new version of yours, or should
-I go on with a v2 for this one?
+> 
+> I also think that we should do a similar patch for sas_ata_task_done():
+> 
+> diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
+> index d35c9296f738..648d0693ceee 100644
+> --- a/drivers/scsi/libsas/sas_ata.c
+> +++ b/drivers/scsi/libsas/sas_ata.c
+> @@ -140,7 +140,7 @@ static void sas_ata_task_done(struct sas_task *task)
+>                          }
+>   
+>                          dev->sata_dev.fis[3] = 0x04; /* status err */
+> -                       dev->sata_dev.fis[2] = ATA_ERR;
+> +                       dev->sata_dev.fis[2] = ATA_ERR | ATA_DRDY;
+>                  }
+>          }
+> 
+> To avoid all SAS errors from being reported as HSM errors.
 
-Regards,
-Angelo
+Yeah, I tend to agree. I can put that change in another patch.
+
+Thanks,
+John
