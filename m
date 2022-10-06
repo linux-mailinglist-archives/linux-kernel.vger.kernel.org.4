@@ -2,107 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 785B25F5D98
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 02:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEED15F5D9C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 02:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbiJFARh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 20:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39274 "EHLO
+        id S229582AbiJFATd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 20:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiJFARf (ORCPT
+        with ESMTP id S229768AbiJFAT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 20:17:35 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3826673922;
-        Wed,  5 Oct 2022 17:17:32 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MjX7r16d0z4x1R;
-        Thu,  6 Oct 2022 11:17:27 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1665015450;
-        bh=/FXxgeNqypV39KZ75lnqr6O6dEY9shiUVMoU67UEf3g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FaZ/Gp5iEA2LNs2r8rP9RspB7i2Ts/++TFDqd2aVVOqOachSRUI7AphpPJsQ0HqbP
-         I53uK6p19EN/2L455Sg++DDPZIwKtFuAEkKJqYqx9yQA4ab8CrC6C6/nWOlZ9YuYrV
-         v4xR9bmHm4fpClZ5kaUjKsByMPXs86j/xc1dYOTQt5sTj9Ob8nPPCjtmgJyZdjxh1y
-         kfBEMbnp10ESVXUMi47dCZQ00f81OhCixcvPJgrt+eUu5KHRZPfbP7kaqz3mfLWaIH
-         HvcSQUwwR+2pVcU+klnVjYc/zaDu0FKD/ryiEYFkAMJwksfBfmZ3ee9Iem++nGDhza
-         dlil5hSalK45Q==
-Date:   Thu, 6 Oct 2022 11:17:25 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Arnd Bergmann" <arnd@arndb.de>
-Cc:     "Joel Stanley" <joel@jms.id.au>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Olof Johansson" <olof@lixom.net>,
-        =?UTF-8?B?UmFm?= =?UTF-8?B?YcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: linux-next: build warnings after merge of the broadcom tree
-Message-ID: <20221006111725.01ed0eac@canb.auug.org.au>
-In-Reply-To: <f8416a63-3460-4b43-8532-2d5eacea4457@app.fastmail.com>
-References: <20220725095913.31e859ec@canb.auug.org.au>
-        <df8f4765-a804-cb50-bbb5-475925ba2036@milecki.pl>
-        <20220815105419.4df1005b@canb.auug.org.au>
-        <20220831091654.45d5ed41@canb.auug.org.au>
-        <20221005114841.4540d325@canb.auug.org.au>
-        <abbe10d1-4c2a-5fad-3f92-e55c514d3ce2@gmail.com>
-        <CACPK8Xecn8ZREAqcLcuZHjA=NhaanRMKu4W39okAkBFX4aaOnw@mail.gmail.com>
-        <f8416a63-3460-4b43-8532-2d5eacea4457@app.fastmail.com>
+        Wed, 5 Oct 2022 20:19:28 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C437A768;
+        Wed,  5 Oct 2022 17:19:26 -0700 (PDT)
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 2960J5I8015309;
+        Thu, 6 Oct 2022 09:19:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2960J5I8015309
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1665015546;
+        bh=itNOCR5gHtTQrdnJYXTJ9ngkBQvQLMn5fhd9zkw7mxE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=EI3lpVwylC1M2wCxCFRUzbXfsMuANn43jr19db5l/53yqpzVUC6+6Z9pCw5edYSsy
+         gv34wuXqw76s9fqJ3sQnWux4NSijZGnKjmjm0e6dBcbO3xNZaYHBfjcpEjxQ2sybrf
+         gfFvEaaXZof+0TxlWHksSbjvOdYjtCh5qqdf0gy91tYCww7SghGngVtwueiTSt5vVf
+         mXny5wVZaPXVDxrZmvBLlh7JE4etreJGeJe0Kfg7y2Trdmdg2Iy1sE737iicBZ9CmW
+         KukSS074jpxrECiXl3XGPYe89wjpTYQTvDRR1MB2+zhpPnpdMHOMZT50tjDby0ohxn
+         l4PxFTskQszlA==
+X-Nifty-SrcIP: [209.85.160.50]
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1326637be6eso480526fac.13;
+        Wed, 05 Oct 2022 17:19:06 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3DMgHDxuoNDEPc72UpuGRO9980cO6xEP2kAwsBrxSuAeQtod7K
+        fFsxXiG/WAxyvKfZtYIQ4Ym8OJS0+/EOLrUkks8=
+X-Google-Smtp-Source: AMsMyM4LZp9IHbDPVhKdcdqhFmwxHOwXb30w+ZDcwdrOF2TcxdbsSMat7DRkf5Zhi/Vp8IfqzcyQM7iEtVyJCnTdfLA=
+X-Received: by 2002:a05:6870:8a09:b0:132:554d:2f3d with SMTP id
+ p9-20020a0568708a0900b00132554d2f3dmr4011406oaq.194.1665015545341; Wed, 05
+ Oct 2022 17:19:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/jJaJovNuPEl9t6vd97RGOaU";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221001202836.3110985-1-masahiroy@kernel.org> <CANiq72=GidTB23dH1kXu1jTMSH-7Qe-2NLaD5ChrzLEU3X=O7w@mail.gmail.com>
+In-Reply-To: <CANiq72=GidTB23dH1kXu1jTMSH-7Qe-2NLaD5ChrzLEU3X=O7w@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 6 Oct 2022 09:18:29 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQaUh58ou=+ZtqXgkd8AGqXqnzryJXy0201ORrgezwPXw@mail.gmail.com>
+Message-ID: <CAK7LNAQaUh58ou=+ZtqXgkd8AGqXqnzryJXy0201ORrgezwPXw@mail.gmail.com>
+Subject: Re: [PATCH] docs: bump minimal GNU Make version to 3.82
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     linux-kbuild@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/jJaJovNuPEl9t6vd97RGOaU
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi Arnd,
-
-On Wed, 05 Oct 2022 09:21:21 +0200 "Arnd Bergmann" <arnd@arndb.de> wrote:
+On Mon, Oct 3, 2022 at 4:22 AM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
 >
-> Agreed. Alternatively, we could just remove the pcie@ nodes from
-> bcm5301x as a hotfix, as they are clearly not usable in the
-> current form, and none of the three versions (5.19, Rafa=C5=82's
-> patch missing ranges, and Florian's patch with incorrect ranges)
-> actually conform to the binding.
->=20
-> I'll tentatively apply the revert for now so I can send the pull
-> request tonight. If someone comes up with a better fix, I can
-> use that instead.
+> On Sat, Oct 1, 2022 at 10:30 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > The error message looks weird, but the reason is that the 'private'
+> > keyword is only supported since GNU Make 3.82.
+>
+> Sorry about that. Indeed, it was added in 3.82 [1,2]. Given GCC 5.1
+> (the current minimum) was released 5 years later, I guess it is OK to
+> increase it.
+>
+> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+>
+> [1] https://git.savannah.gnu.org/cgit/make.git/commit/?id=5b4d419476e9fbda8ea26017f6ec15956d103ed9
+> [2] https://git.savannah.gnu.org/cgit/make.git/tree/ChangeLog?h=3.82#n814
+>
+> Cheers,
+> Miguel
 
-I applied the revert to the merge of the arm-soc tree today and *all*
-the warnings are gone.
 
---=20
-Cheers,
-Stephen Rothwell
+Applied to linux-kbuild.
 
---Sig_/jJaJovNuPEl9t6vd97RGOaU
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM+HpUACgkQAVBC80lX
-0Gwqhgf+L95a7+fs9qPa4OK9tGLvl5PHQdKKDOfH6P/SSQw8ohprXeAc0ReuIbEL
-0inLRel+nX+jYEZ0rm7dipPruh9DwYhj/3Uur0y1FYsEvkm2rcuyqydWHzAW8OsE
-nuD+m2JlyOgNA1EB9nK5jZZ4IlqoVREgxzMTK9d1Xv4md8xkEwJ/U0CEuNO0Xg64
-ePR7dJ55KnzppmKLRjETlcChlZu3FR78zd2ck0EN+Wgo460z+1u0seDBaFSwfsAK
-KYB3SA/jwA6dCghJmxEsVvdaq+D4aLEmXRqNmdM7EO24rX/0cX/AxujoztX++BeM
-T+meDt7EXoW6T0bApNMUuQaIl/fHVQ==
-=RUX0
------END PGP SIGNATURE-----
-
---Sig_/jJaJovNuPEl9t6vd97RGOaU--
+-- 
+Best Regards
+Masahiro Yamada
