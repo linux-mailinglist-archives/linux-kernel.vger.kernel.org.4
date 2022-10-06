@@ -2,100 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF4E5F6149
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 08:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39AFF5F6150
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 09:01:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiJFG6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 02:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
+        id S229959AbiJFHBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 03:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiJFG6p (ORCPT
+        with ESMTP id S229786AbiJFHBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 02:58:45 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C94F474D6;
-        Wed,  5 Oct 2022 23:58:44 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id n186so1110544vsc.9;
-        Wed, 05 Oct 2022 23:58:44 -0700 (PDT)
+        Thu, 6 Oct 2022 03:01:34 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566DA895F9
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 00:01:33 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id u24so882900plq.12
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 00:01:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=TJqlP80Odus2D0JVNeZG0GyW2KovItTk2V4asNZineM=;
-        b=JzukLpQzk/5NkTTS3tT90HIOPDFNdQ481hvyL8cOoL2jLwbZKig/fWrd66WVqNyaDr
-         diEKy3Qqh62ArECH6cBfodk4eUGkip68jjat7WmX81O4Ws8vpk+acP7eN8DqBffGMHL3
-         Q19Qvgal+nWLwZPTPPg327m38+k7oiY5RudrZ1z7OzvY8n+niPzLulGY4lUMn75Sb21b
-         LkRJ/Up8442dp1VamFO/jfMvXyK/RO+slFdb13c7WXjGPmmruBj7KBEL6upbx/YmK2iT
-         +LWsNdBlgXNa4SQey9mLr0TY1dBRt5zEt07BX8VCCSMaFe4nR9ETXME1BZFiRvHubnz6
-         wWtQ==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=+lbQl0rCWp6tUyMuSCFzB+6AqJEUrQkOLadwCqKXhk8=;
+        b=P95tTnDc1Zlo/FcKgRsnGgHRjJuXF/BFr+q4DuBF33xCmhNVRs6A28XD98ty9ydWhR
+         I0fNfA9HigrTrxzxM8SRehh5Ge3szOsR8uqcuHDzpkuDwL28EF8Nx7W6Jtxnf4ewqv7c
+         vZdNf5PJ4XLSjhccFK2aEjcik36/tWfKRJXjg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=TJqlP80Odus2D0JVNeZG0GyW2KovItTk2V4asNZineM=;
-        b=JWyC969kBVBtqWiTpTnMG2kO+sji8pW9VmAiV+qnsObyKjbAdSZ7vvBbQXFG4Ujs3Y
-         jDXJFIbzfZUe9K37XrLX84PFT9Sr7WBn52hz8X5VcARvZA0RTfVoat3tV+Ks1Gdagdv2
-         g3XPQ8h32YaApP+h1B03musia7o3sZ/9BxcCvEgDi00ka3pJ0lw4BHiR4NwGjF7Mp2RZ
-         vdfsUaGft8kw0K9gSQli2MXgmO+9GYHi1MmQ8eG9uQW9cyFq9ycePeXUSIcv6tBSCyIz
-         ET7zHFlEu9au8a9LqHQaWp5kdXXd5mtDl1mIP5KLTIAsJrToCONL8C+BA4IA86Gh4pYT
-         IqGw==
-X-Gm-Message-State: ACrzQf1bDreWvIkd/4yy/+ec9qLiCU15wuaEY3njdxFafSI3CTs15+7D
-        a/GgjJXirg5nKJH2PWlw3Lvp3blwZoevsmLbczI=
-X-Google-Smtp-Source: AMsMyM4onYZAMxhs6EoLcrmsenTeXbLk2iEct1qKwKXx/sTDhTwMSrB2/g8Z5gfGSY34TwOlBc6/xKUgHgQACniRNoE=
-X-Received: by 2002:a67:c48b:0:b0:3a6:7c10:7422 with SMTP id
- d11-20020a67c48b000000b003a67c107422mr1722542vsk.4.1665039523521; Wed, 05 Oct
- 2022 23:58:43 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=+lbQl0rCWp6tUyMuSCFzB+6AqJEUrQkOLadwCqKXhk8=;
+        b=u6x28/yv/xU+dNIEZERJjkQjDEuRzmFHFqnbMQ8g3eFvA1mDNbZ1wD1WRpEJBaZbKB
+         yRVtP9P2lV11e9RVdHn6uJJpum8msxbeWkdA21MIGGSWItPFf6knPulYCCzu5e0XBYBJ
+         lmoNVEuua1e3R614VN7kEE38nqrlx7dlOyY57D7n7Sv669AW/uu8CJuZVqVtLNc/VFbE
+         MMDuno+cHzToshIYGS51SJrW698CV4yIgsWhC6wsYIbxd0vgH1N3gRuMZ3BGURmMCC4S
+         JnIHcOpEkaFAStMr/C5nggr9fuRHpDjlaXYzu3VRQmU3WyXto2kiYFzdORB+h/v/DkCV
+         7AKQ==
+X-Gm-Message-State: ACrzQf1U2a+6eMwH8GNOGYHiEfWrzDA2LEG4yJd3rMNY++65u1Zo4Yjs
+        ZF/phrLp7NjBlK8582iqf4Xmxg==
+X-Google-Smtp-Source: AMsMyM6P4p2fzjX7EoySe3pBKUHcQlET2UNqLJholUcyZnckHtT8XafYbihl5e+uuD/gwL/5Z3GhKA==
+X-Received: by 2002:a17:902:ed97:b0:17f:7ad0:16cb with SMTP id e23-20020a170902ed9700b0017f7ad016cbmr3342781plj.97.1665039692613;
+        Thu, 06 Oct 2022 00:01:32 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k12-20020a17090a62cc00b002008d0df002sm2173296pjs.50.2022.10.06.00.01.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 00:01:31 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 00:01:30 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Jorge Merlino <jorge.merlino@canonical.com>,
+        David Howells <dhowells@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Hugh Dickins <hughd@google.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Fix race condition when exec'ing setuid files
+Message-ID: <202210052326.5CF2AF342@keescook>
+References: <20220910211215.140270-1-jorge.merlino@canonical.com>
+ <202209131456.76A13BC5E4@keescook>
+ <c9ca551b-070b-dcee-b4b4-b7fbfc33ab5d@canonical.com>
+ <202210051950.CAF8CDBF@keescook>
 MIME-Version: 1.0
-References: <20221005085305.42075-1-romain.perier@gmail.com>
- <20221005085305.42075-2-romain.perier@gmail.com> <20221005230214.1A24CC433C1@smtp.kernel.org>
-In-Reply-To: <20221005230214.1A24CC433C1@smtp.kernel.org>
-From:   Romain Perier <romain.perier@gmail.com>
-Date:   Thu, 6 Oct 2022 08:58:32 +0200
-Message-ID: <CABgxDo+v1PHbgFwyyTFkT2WtxBUBO+Ygi9ncS0oNQzzxHAO7Ew@mail.gmail.com>
-Subject: Re: [PATCH RESEND v6 1/1] clk: mstar: msc313 cpupll clk driver
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Daniel Palmer <daniel@0x0f.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Willy Tarreau <w@1wt.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202210051950.CAF8CDBF@keescook>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le jeu. 6 oct. 2022 =C3=A0 01:02, Stephen Boyd <sboyd@kernel.org> a =C3=A9c=
-rit :
->
-> Quoting Romain Perier (2022-10-05 01:53:05)
-> > From: Daniel Palmer <daniel@0x0f.com>
-> >
-> > Add a driver for the CPU pll/ARM pll/MIPS pll that is present
-> > in MStar SoCs.
-> >
-> > Currently there is no documentation for this block so it's possible
-> > this driver isn't entirely correct.
-> >
-> > Only tested on the version of this IP in the MStar/SigmaStar
-> > ARMv7 SoCs.
-> >
-> > Signed-off-by: Daniel Palmer <daniel@0x0f.com>
-> > Co-developed-by: Willy Tarreau <w@1wt.eu>
-> > Signed-off-by: Willy Tarreau <w@1wt.eu>
->
-> Missing Signed-off-by Romain.
+On Wed, Oct 05, 2022 at 08:06:15PM -0700, Kees Cook wrote:
+> Dave, this tracks back to commit a6f76f23d297 ("CRED: Make execve() take
+> advantage of copy-on-write credentials") ... any ideas what's happening
+> here?
 
-Signed-off-by: Romain Perier <romain.perier@gmail.com>
+Er, rather, it originates before git history, but moved under lock in
+commit 0bf2f3aec547 ("CRED: Fix SUID exec regression").
+
+Eric, Al, Hugh, does this ring a bell?
+
+It originates from 1da177e4c3f4 ("Linux-2.6.12-rc2") in git...
+
+static inline int unsafe_exec(struct task_struct *p)
+{
+       int unsafe = 0;
+...
+       if (atomic_read(&p->fs->count) > 1 ||
+           atomic_read(&p->files->count) > 1 ||
+           atomic_read(&p->sighand->count) > 1)
+               unsafe |= LSM_UNSAFE_SHARE;
+
+       return unsafe;
+}
+
+Current code is:
+
+static void check_unsafe_exec(struct linux_binprm *bprm)
+{
+        struct task_struct *p = current, *t;
+        unsigned n_fs;
+...
+        t = p;
+        n_fs = 1;
+        spin_lock(&p->fs->lock);
+        rcu_read_lock();
+        while_each_thread(p, t) {
+                if (t->fs == p->fs)
+                        n_fs++;
+        }
+        rcu_read_unlock();
+
+        if (p->fs->users > n_fs)
+                bprm->unsafe |= LSM_UNSAFE_SHARE;
+        else
+                p->fs->in_exec = 1;
+        spin_unlock(&p->fs->lock);
+}
 
 
-It is okay, like this ?
+Which seemed to take its form from:
 
-Cheers,
-Romain
+0bf2f3aec547 ("CRED: Fix SUID exec regression")
+
+Quoting the rationale for the checks:
+    ...
+    moved the place in which the 'safeness' of a SUID/SGID exec was performed to
+    before de_thread() was called.  This means that LSM_UNSAFE_SHARE is now
+    calculated incorrectly.  This flag is set if any of the usage counts for
+    fs_struct, files_struct and sighand_struct are greater than 1 at the time the
+    determination is made.  All of which are true for threads created by the
+    pthread library.
+
+    So, instead, we count up the number of threads (CLONE_THREAD) that are sharing
+    our fs_struct (CLONE_FS), files_struct (CLONE_FILES) and sighand_structs
+    (CLONE_SIGHAND/CLONE_THREAD) with us.  These will be killed by de_thread() and
+    so can be discounted by check_unsafe_exec().
+
+So, I think this is verifying that when attempting a suid exec, there is
+no process out there with our fs_struct, file_struct, or sighand_struct
+that would survive the de_thread() and be able to muck with the suid's
+shared environment:
+
+       if (atomic_read(&p->fs->count) > n_fs ||
+           atomic_read(&p->files->count) > n_files ||
+           atomic_read(&p->sighand->count) > n_sighand)
+
+Current code has eliminated the n_files and n_sighand tests:
+
+n_sighand was removed by commit
+f1191b50ec11 ("check_unsafe_exec() doesn't care about signal handlers sharing")
+
+n_files was removed by commit
+e426b64c412a ("fix setuid sometimes doesn't")
+
+The latter reads very much like the current bug report. :) So likely the n_fs
+test is buggy too...
+
+After de_thread(), I see the calls to unshare_sighand() and
+unshare_files(), so those check out.
+
+What's needed to make p->fs safe? Doing an unshare of it seems possible,
+since it exists half as a helper, unshare_fs(), and half open-coded in
+ksys_unshare (see "new_fw").
+
+Should we wire this up after de_thread() like the other two?
+
+-Kees
+
+-- 
+Kees Cook
