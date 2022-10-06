@@ -2,87 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5087B5F6438
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 12:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B88C5F6439
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 12:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbiJFKOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 06:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39918 "EHLO
+        id S230520AbiJFKO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 06:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiJFKOJ (ORCPT
+        with ESMTP id S230425AbiJFKOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 06:14:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3536E6C13E
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 03:14:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665051247;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dAdYI9+QG+yvH01DAjeN7mJ9hlotsPkqRPFvWXOIksI=;
-        b=fpA5wdgmLaiCfH4SI5/EeifNS+aUX87ySPvpkmkbyHxuzwexsMWOhzXTiml7tL4MXmJ5cA
-        gM8DN+eT1ejMt5AEzzPoj+xF9RFv4az4TEvOIFUxKbwQktxOBjDlQa0WjXteShcHUszcJv
-        ZWZ0A1kWD461S0SAwgGck1LiTHqVhcc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-518-SWus2_ThNQC2TQKOd7pj9g-1; Thu, 06 Oct 2022 06:14:02 -0400
-X-MC-Unique: SWus2_ThNQC2TQKOd7pj9g-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B209C29AA2F4;
-        Thu,  6 Oct 2022 10:14:01 +0000 (UTC)
-Received: from localhost (unknown [10.39.194.193])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 24E49477F55;
-        Thu,  6 Oct 2022 10:14:01 +0000 (UTC)
-Date:   Thu, 6 Oct 2022 11:14:00 +0100
-From:   "Richard W.M. Jones" <rjones@redhat.com>
-To:     Stefan Hajnoczi <stefanha@gmail.com>
-Cc:     Ming Lei <tom.leiming@gmail.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        io-uring@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kirill Tkhai <kirill.tkhai@openvz.org>,
-        Manuel Bentele <development@manuel-bentele.de>,
-        qemu-devel@nongnu.org, Kevin Wolf <kwolf@redhat.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        "Denis V. Lunev" <den@openvz.org>,
-        Stefano Garzarella <sgarzare@redhat.com>
-Subject: Re: ublk-qcow2: ublk-qcow2 is available
-Message-ID: <20221006101400.GC7636@redhat.com>
-References: <Yza1u1KfKa7ycQm0@T590>
- <Yzs9xQlVuW41TuNC@fedora>
- <YzwARuAZdaoGTUfP@T590>
- <CAJSP0QXVK=wUy_JgJ9NmNMtKTRoRX0MwOZUuFWU-1mVWWKij8A@mail.gmail.com>
+        Thu, 6 Oct 2022 06:14:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 52A4BFAD7
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 03:14:49 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 57D73169C;
+        Thu,  6 Oct 2022 03:14:55 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.34.149])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B705F3F792;
+        Thu,  6 Oct 2022 03:14:47 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 11:14:42 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] arm64: jump_label: mark arguments as const to
+ satisfy asm constraints
+Message-ID: <Yz6qksBFFj9Wo9M8@FVFF77S0Q05N.cambridge.arm.com>
+References: <20221006075542.2658-1-jszhang@kernel.org>
+ <20221006075542.2658-2-jszhang@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJSP0QXVK=wUy_JgJ9NmNMtKTRoRX0MwOZUuFWU-1mVWWKij8A@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20221006075542.2658-2-jszhang@kernel.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 09:53:32AM -0400, Stefan Hajnoczi wrote:
-> qemu-nbd doesn't use io_uring to handle the backend IO,
+On Thu, Oct 06, 2022 at 03:55:41PM +0800, Jisheng Zhang wrote:
+> Inspired by x86 commit 864b435514b2("x86/jump_label: Mark arguments as
+> const to satisfy asm constraints"), mark arch_static_branch()'s and
+> arch_static_branch_jump()'s arguments as const to satisfy asm
+> constraints. And Steven in [1] also pointed out that "The "i"
+> constraint needs to be a constant."
 
-Would this be fixed by your (not yet upstream) libblkio driver for
-qemu?
+It needs to be a *compile-time constant*, but `const` on a function argument
+only ensures that the function can't modify the argument, not that it's a
+constant in the caller.
 
-Rich.
+I think this is a quirk of the optimizer rather than anything else.
 
--- 
-Richard Jones, Virtualization Group, Red Hat http://people.redhat.com/~rjones
-Read my programming and virtualization blog: http://rwmj.wordpress.com
-virt-p2v converts physical machines to virtual machines.  Boot with a
-live CD or over the network (PXE) and turn machines into KVM guests.
-http://libguestfs.org/virt-v2v
+> Tested with building a simple external kernel module with "O0".
 
+Is building with `-O0` supported? I thought we required using `-O2` or above
+for a bunch of code that requires constant propagation, etc.
+
+I don't really have a problem with making this const, but I don't particularly
+want to try to "fix" all the other code that depends on constant propagation to
+assemble, and I'm worried this is the canary in the coal mine.
+
+Thanks,
+Mark.
+
+> 
+> [1]https://lore.kernel.org/all/20210212094059.5f8d05e8@gandalf.local.home/
+> 
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  arch/arm64/include/asm/jump_label.h | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/jump_label.h b/arch/arm64/include/asm/jump_label.h
+> index cea441b6aa5d..48ddc0f45d22 100644
+> --- a/arch/arm64/include/asm/jump_label.h
+> +++ b/arch/arm64/include/asm/jump_label.h
+> @@ -15,8 +15,8 @@
+>  
+>  #define JUMP_LABEL_NOP_SIZE		AARCH64_INSN_SIZE
+>  
+> -static __always_inline bool arch_static_branch(struct static_key *key,
+> -					       bool branch)
+> +static __always_inline bool arch_static_branch(struct static_key * const key,
+> +					       const bool branch)
+>  {
+>  	asm_volatile_goto(
+>  		"1:	nop					\n\t"
+> @@ -32,8 +32,8 @@ static __always_inline bool arch_static_branch(struct static_key *key,
+>  	return true;
+>  }
+>  
+> -static __always_inline bool arch_static_branch_jump(struct static_key *key,
+> -						    bool branch)
+> +static __always_inline bool arch_static_branch_jump(struct static_key * const key,
+> +						    const bool branch)
+>  {
+>  	asm_volatile_goto(
+>  		"1:	b		%l[l_yes]		\n\t"
+> -- 
+> 2.37.2
+> 
