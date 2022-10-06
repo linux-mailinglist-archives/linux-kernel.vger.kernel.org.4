@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D68C5F717C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 01:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E01365F717E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 01:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiJFXBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 19:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
+        id S232362AbiJFXBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 19:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbiJFXBP (ORCPT
+        with ESMTP id S231858AbiJFXBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 19:01:15 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F36FFF97
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 16:01:14 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id pq16so2973362pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 16:01:14 -0700 (PDT)
+        Thu, 6 Oct 2022 19:01:18 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E46E220ED
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 16:01:15 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id b2so3006389plc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 16:01:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=anISFbJjAjDIRPLJj7qAWgC2bHYps5yuOXEilsdNLtY=;
-        b=EhmKoP0UfagPqit1M6IOyZoC5dZ9WJ4TM90+Nn6QgUxOn1Tx1zdLmjajrA2VVjZ6ui
-         6zxUgjfbYR2vpWtn7ZawmRDm5maTeAjSisjYByOzyhHUlJVY1x8RLfjhVy/CLvgmuU4R
-         wUW2mHPJwXrV90z+lpbG4QN3qjM/mZCBpT1HsZwim8aSfeCBwU/czmOY95Q43Vx9V2K+
-         C8sFyAkNpbj0x87Rcwg5TuzxkHdUte9cuEaKHtNhskUG5JT6mzlxYLAFVoEnVwHsEZte
-         fyW6L5KXFUDDewJSXoZETCiCmdlswfrAtCilrcIbfazfkL8ibGHx66pDQrwfY0Q/d9fw
-         6STw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jGt/X8mSuzied0JB7HVQVACVCG4nPguuP5r+W5zyq8o=;
+        b=EM0wy8gtE99AqkZ3qIL5oLs08njI8p0laCPFOB83/zz6JVWhO7vjr5QlF627E6fv8Q
+         lz6m7Qg6rCrZuPVxrsNgxfsGBLzSKXqclrV7lixNZzVYOftWBA2PIg1UZYFO997U3NS5
+         Yvgc6ExZ4+5GTtjz4xWwua8pIn6Jx9Csdc3gvTwo9b6zdM4D1i592xK2K3bbHX2mtp15
+         6QRiB0BPpE5I68F15CSYp2Rj9ahU6g770iqwPRfwstbHYJF8HbtPiWI6soN5inqqbBmO
+         BJ0NO6nFCP32LdV6edUSlCy1Sec4AgCYueZ95BwqPCVdWgbg9R+m6zQwmPUFpElepu7c
+         Orxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=anISFbJjAjDIRPLJj7qAWgC2bHYps5yuOXEilsdNLtY=;
-        b=cPTwiODvaJIEvNstKKFQ6kWabJ6vduRO95FnMsdHN4Z8SRLns2kIiaRA3j3jOfAKqv
-         s5PKvRaiyFfwyzTdhpsxS2KbwMjWAfqzGWUL1TLS26T3gpAPpGpRObYnbi+54E+pnJgX
-         +gXp8xUqcX2lv5gKb+uh6jiLhdCXOYcKttaQ4cmmJRWCLA4LlipJERxCVsfYS5hJUe6b
-         BN2Vzq33zHTWXW8iQgZDyQLyljKe38vVJE0JWP0D6nDi3H0bK/s7+chggeSN+QY6FlvN
-         sEXWXV2V8qjQATSDeNQCMKKkn6KANT4Ourzrs+BycoKv9NAIFYIs3D/Vp6/vOvTnz2ep
-         sONA==
-X-Gm-Message-State: ACrzQf13yBSu7EsoteuYq0gIKu2oN/npZbF8jXKBTjOSqi+mdyCvWKhp
-        Ji6UtRqPmkh3kZrCxeK0AddBZjezQ1qooQ==
-X-Google-Smtp-Source: AMsMyM4OIzejez0bkjljwc0CT8TkhyhuVjpXlC4/HJk78p0kg6ne12YpdhWh8nN0Lkgz+n3+k+RTYw==
-X-Received: by 2002:a17:902:ec86:b0:177:f35c:e118 with SMTP id x6-20020a170902ec8600b00177f35ce118mr1697617plg.138.1665097273528;
-        Thu, 06 Oct 2022 16:01:13 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jGt/X8mSuzied0JB7HVQVACVCG4nPguuP5r+W5zyq8o=;
+        b=cjDQ/OfHC6PE+IqlDVyx5+hpMcFA5cfFx/gxULq6qZ30jBAzLqPpYnR9L1/oOXZbuN
+         bg8LVLjsK3n7wGHV1feLYuBvSHCIwVzXjElWibPGtkWB0NWQnGCSM+SbT5F6Mb5CgYGj
+         +mMlHSuYLVVMhoOqoMLC09JHnuVDQK6bc5Wq2DzAVJgCb01B15pz/SzF+L5Ay2GddtOO
+         iSVosN+rXTebrHD4sSvt6mY7wkR6cHI/656QpCZHtEYU40CniIvVxpYhN7WSFWnhYniC
+         RVt33U0hDJbmyq4wj/Ew/n/DgxQHg99Ntmowj9h4rzBSRaQ4l7g0ljBrAt5+CNSYIGfF
+         srpQ==
+X-Gm-Message-State: ACrzQf055FfQavvffU3ILJPltWDi2mGE12j+Sl02riJp350l7F4WyJnE
+        l+dz+NJcI2035O22YTn5Z2V1eHRHWOLXog==
+X-Google-Smtp-Source: AMsMyM6Hi4QgBTulEjD5cf32a+RSzxOUlYrF7GdbO5FP8z22ZYJt/3bwkpwxmjhwFP8rnanSFKqeEQ==
+X-Received: by 2002:a17:90a:1785:b0:20a:6162:2b6a with SMTP id q5-20020a17090a178500b0020a61622b6amr1987900pja.180.1665097274361;
+        Thu, 06 Oct 2022 16:01:14 -0700 (PDT)
 Received: from atishp.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id bc8-20020a656d88000000b0043a1c0a0ab1sm257309pgb.83.2022.10.06.16.01.12
+        by smtp.gmail.com with ESMTPSA id bc8-20020a656d88000000b0043a1c0a0ab1sm257309pgb.83.2022.10.06.16.01.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 16:01:13 -0700 (PDT)
+        Thu, 06 Oct 2022 16:01:14 -0700 (PDT)
 From:   Atish Patra <atishp@rivosinc.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Atish Patra <atishp@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
         Daniel Kiper <daniel.kiper@oracle.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
         Fu Wei <tekkamanninja@gmail.com>,
         Leif Lindholm <quic_llindhol@quicinc.com>,
         Nikita Ermakov <arei@altlinux.org>,
@@ -61,10 +62,12 @@ Cc:     Atish Patra <atishp@rivosinc.com>,
         Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
         Julian Andres Klode <julian.klode@canonical.com>,
         Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Subject: [v4 PATCH 0/3] Unify ARM64 & RISC-V Linux Loader
-Date:   Thu,  6 Oct 2022 16:00:48 -0700
-Message-Id: <20221006230051.185850-1-atishp@rivosinc.com>
+Subject: [v4 PATCH 1/3] loader: Move arm64 linux loader to common code
+Date:   Thu,  6 Oct 2022 16:00:49 -0700
+Message-Id: <20221006230051.185850-2-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221006230051.185850-1-atishp@rivosinc.com>
+References: <20221006230051.185850-1-atishp@rivosinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,44 +79,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series unifies the linux loader for ARM64 & RISC-V. The linux loader
-for ARM64 is pretty much arch independent. Thus, this series just moves
-it to the common directory and update the make files.
+ARM64 linux loader code is written in such a way that it can be reused
+across different architectures without much change. Move it to common
+code so that RISC-V doesn't have to define a separate loader.
 
-This series is rebased on top of Ard's LoadFile2 series[1].
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+Signed-off-by: Atish Patra <atishp@rivosinc.com>
+---
+ grub-core/Makefile.core.def             | 4 ++--
+ grub-core/loader/{arm64 => efi}/linux.c | 0
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ rename grub-core/loader/{arm64 => efi}/linux.c (100%)
 
-The unification effort was a little mess and I was to blame :(.
-I started the effort but couldn't follow up after. Nikita picked it up
-and rebased all the patches along with LoadFile2.
-
-However, Nikita did not follow up after v3 as well. Ard revised his
-LoadFile2 series few weeks back. As the ocotober deadline for next grub
-release is closing, I decided to rebase the patches so that RISC-V support
-can be officially part of the release. Sorry for the mess/confusion.
-
-This series has been tested with OpenSuse image in Qemu. It would be good
-to get more testing on ARM64 and real RISC-V boards as well.
-
-Changes from v3->V4:
-1. Added all the comments on v3.
-2. Dropped LoadFile2 patches as Ard's series[1] updated those patches
-
-[1] https://lists.gnu.org/archive/html/grub-devel/2022-09/msg00057.html
-
-Atish Patra (3):
-loader: Move arm64 linux loader to common code
-RISC-V: Update image header
-RISC-V: Use common linux loader
-
-grub-core/Makefile.core.def             |  8 ++--
-grub-core/loader/{arm64 => efi}/linux.c |  0
-grub-core/loader/riscv/linux.c          | 59 -------------------------
-include/grub/riscv32/linux.h            | 15 ++++---
-include/grub/riscv64/linux.h            | 21 +++++----
-5 files changed, 25 insertions(+), 78 deletions(-)
-rename grub-core/loader/{arm64 => efi}/linux.c (100%)
-delete mode 100644 grub-core/loader/riscv/linux.c
-
---
+diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
+index 5212dfab1369..ce95c76eaffa 100644
+--- a/grub-core/Makefile.core.def
++++ b/grub-core/Makefile.core.def
+@@ -1817,9 +1817,9 @@ module = {
+   sparc64_ieee1275 = loader/sparc64/ieee1275/linux.c;
+   ia64_efi = loader/ia64/efi/linux.c;
+   arm_coreboot = loader/arm/linux.c;
+-  arm_efi = loader/arm64/linux.c;
++  arm_efi = loader/efi/linux.c;
+   arm_uboot = loader/arm/linux.c;
+-  arm64 = loader/arm64/linux.c;
++  arm64 = loader/efi/linux.c;
+   riscv32 = loader/riscv/linux.c;
+   riscv64 = loader/riscv/linux.c;
+   common = loader/linux.c;
+diff --git a/grub-core/loader/arm64/linux.c b/grub-core/loader/efi/linux.c
+similarity index 100%
+rename from grub-core/loader/arm64/linux.c
+rename to grub-core/loader/efi/linux.c
+-- 
 2.25.1
 
