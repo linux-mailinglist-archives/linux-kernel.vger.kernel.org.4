@@ -2,251 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6FDE5F6C75
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 19:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B9E5F6C79
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 19:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231753AbiJFRBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 13:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33372 "EHLO
+        id S230458AbiJFRCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 13:02:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiJFRBG (ORCPT
+        with ESMTP id S230320AbiJFRCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 13:01:06 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64296FAD0;
-        Thu,  6 Oct 2022 10:00:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665075645; x=1696611645;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=2Bqgzrp3vtMupt4HNoMx9Nbs0GAwkw5X72t1qJY7vHg=;
-  b=Y6NmjK4UnG6rTdtWAPjf3xydG5wYirg9Sp/tNv+5VM64+Csqn6p1UWkK
-   4DD+3tFT1Wx57m6pjTygU7OTPQN6MTommb+ohi82ueKpvgFybpELsQOi/
-   kkV2kn5sW0SavEGtlK16O8fhzaFVsUs5nEHUl0/541z4ptQuwLGBndV8h
-   P9Jpw3okGstgEqtgxWncniaSJsfB64BsJ3pXcY7ysex8kWrEWPG6cXZci
-   TahfApy0krFrdc2kJ+SM9XuBI7ctHzIgDFuLizk3lqJA69ZXrEwXTi8rI
-   cxF91/YNenvfAd12DgteAIlXPf/+892wSqSSE4Dxxnl4dPgGNRnE0ZXki
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="303481507"
-X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
-   d="scan'208";a="303481507"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 10:00:32 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="729224224"
-X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
-   d="scan'208";a="729224224"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 10:00:32 -0700
-Date:   Thu, 6 Oct 2022 10:00:43 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v3 4/4] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-In-Reply-To: <YzxRxo8jL7rB1+px@smile.fi.intel.com>
-Message-ID: <alpine.DEB.2.22.394.2210060940150.1988353@rhweight-WRK1>
-References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com> <20221004143718.1076710-5-matthew.gerlach@linux.intel.com> <YzxRxo8jL7rB1+px@smile.fi.intel.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Thu, 6 Oct 2022 13:02:41 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2065.outbound.protection.outlook.com [40.107.94.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0FE2D77C
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 10:02:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eFt3YqoZf7aFau3N2z6Vk84KQDHkrvLcsF6wAVwUY7izvaJ0snrhS2Oqb3i/KjonJOkQOzIyyAJEQhhbe2CGLzgCjrPo15g7aw2BYKN4GYG18ijZTnZzC1C1ltqiOMTRW15wrimxbGfw2iG1sjZThjYH2yWBDn/Vd56Ur+WanYbIIT+EfY/zpkhhABQsuwXvovqbL0ExvcwPx4tncFDeLFG+pd8T3qoBP0BIRRdHTXXujnwNXV3Rw2JYruIDeqnuD70glVSgRDTTgr+kzXz5dB1ze/ja3OKqaxdujNgqoX1RfBWYYfirdosE4DPmK6kCHPe4c0L5lM0J2iNchOMz1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3A6A38UvKJos/7OatNutgVVGrCz+/fFtZfS4/680Dv4=;
+ b=Ku1kWyDTWjmNQgrbzQ5qr4vv2sW/DwfdSi+Us3I8nhz3dPGk6IjO+ngQbGyLdLCMWb1ALVjZtQDmMcrx9bIVwe47IwHVW7oDaG2x7Arr8KHXjBAMsGIm98cDsDodhNMg8wjTJhODufzd3sfbwMeWlgG6/gM3mDN6zbhh7KOobZXOelTTRBmasc3Emswzks1Zf8Hr6z3x/gVpn7HUhapP8LJeDHUjKWRlhkXNDoKEMEdODw3OnrPSC50pyEjk+tYmyLF3Hspesdj45LXCTNBspQDkBd2MjeypvJXnCOCvUrygsQRU+a6R+VWv/JL32rmlhP0m7wTiujVeInDUZfl+sQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=knights.ucf.edu; dmarc=pass action=none
+ header.from=knights.ucf.edu; dkim=pass header.d=knights.ucf.edu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=knightsucfedu39751.onmicrosoft.com;
+ s=selector2-knightsucfedu39751-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3A6A38UvKJos/7OatNutgVVGrCz+/fFtZfS4/680Dv4=;
+ b=b82+oojeOea3Re1PWf+MLylorDKHgzaWeBzjdiLnPYKEtoSqjcCstY4vlpG9+hGZ4/bMerdEnf+wbaCmkaNQ8+gNH+fQd0w0YvmafEPPaMHfxiTHnMxFxHm71QpVTHUuO413x0THiOZmQt+eQ5ey1VjNxAAN5vZb93hys9AofDc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=knights.ucf.edu;
+Received: from BN7PR07MB4195.namprd07.prod.outlook.com (2603:10b6:406:b1::33)
+ by DM6PR07MB5019.namprd07.prod.outlook.com (2603:10b6:5:20::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Thu, 6 Oct
+ 2022 17:02:37 +0000
+Received: from BN7PR07MB4195.namprd07.prod.outlook.com
+ ([fe80::9a4c:e558:6a54:fc2c]) by BN7PR07MB4195.namprd07.prod.outlook.com
+ ([fe80::9a4c:e558:6a54:fc2c%6]) with mapi id 15.20.5676.036; Thu, 6 Oct 2022
+ 17:02:37 +0000
+Date:   Thu, 6 Oct 2022 13:02:34 -0400
+From:   Brent Pappas <pappasbrent@knights.ucf.edu>
+To:     Nam Cao <namcaov@gmail.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "cai.huoqing@linux.dev" <cai.huoqing@linux.dev>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] staging: most: net: Replace macros HB and LB with static
+ inline functions
+Message-ID: <Yz8KKkZ18svZdeec@knights.ucf.edu>
+References: <BN7PR07MB419563C5B405ED4082D7841DF65D9@BN7PR07MB4195.namprd07.prod.outlook.com>
+ <20221005235728.GA118549@nam-dell>
+ <Yz7WVCzAviUYstX9@knights.ucf.edu>
+ <20221006134230.GA14040@nam-dell>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221006134230.GA14040@nam-dell>
+X-ClientProxiedBy: BN0PR04CA0181.namprd04.prod.outlook.com
+ (2603:10b6:408:e9::6) To BN7PR07MB4195.namprd07.prod.outlook.com
+ (2603:10b6:406:b1::33)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN7PR07MB4195:EE_|DM6PR07MB5019:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4783d766-5f93-4165-5cc3-08daa7bc91d2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SqMSJkyHk4P5GCFHttLEYbArNfpe5RnP0a3Z7W2FkfXaZHDR6hb7BJUXYavv8ElCz7Vu5ZaryMwDdhkH9spnUYQBjEqCydEVmgGvtVOrxQQHzr/yUl0SJlY82Dcb4d94eGzJ6qqEPFDVuvzeP4ItS0n9yNA64ivagZJbVLoncKKixwh/rVcFZY2lucX2BH415uszn5GIy7bzQl0YnUQRG4XCBPRv3VIr7tpUKsSvdO0fnsrUy4PvXXU3P1dlGDfxeZGLdQkrlYOo8VejQSK6T1YyOhbKHHqvyQM12fcc6Qc3SW9ypPf+C/ozxQGDUBwbunfqplLBfK3+Kc2X9kV1vqUbT7VehOMt7SfBzUif/zK1zKVHVay3K4+NttgGMCghA73oX0YaTfR5QRu0lTvVekL1AkhR4WOGZA0uc2t8ooZI51E3cIqtWeFkylh49dEWbWtNOOsy+Uuc/soJ9fkiuBfHxaY+CQaEbKChyJlBm9Waf2/z5Sp8efS4FtIJwpzRy2NMnIFJemUCIDUyLAsP/k8yA9oz2N/UU+ODW5OGrkH/KTKgzGIdqPw8kwcJu1O+y4pxeHgjiaWS7uzLhpoQ+LbFzTThygDiOscU6KCETn4IRvZhRk1elicEDkqtAlTbEpBvb8um5e8PEcom5DD7KzHyM7EvSwjiO4a4GpN/m4s0xeKVEpo/me5MHccJ5+HqwTuiqS4Cs0Kmtuhz29DdpT1PyH/WxTZhcnbLKn+Fuy4AtpGKxxgErsrI0rvodC5M
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN7PR07MB4195.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(396003)(376002)(136003)(366004)(451199015)(8676002)(2906002)(66946007)(66556008)(786003)(4326008)(4744005)(5660300002)(54906003)(66476007)(6486002)(478600001)(41300700001)(8936002)(6916009)(6506007)(6512007)(26005)(86362001)(186003)(52116002)(316002)(75432002)(6666004)(2616005)(41320700001)(38350700002)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YUZMcGVyM1VESUEzaW9NV0M0S21mR0RlS3ljZEVrNG16R3ZwbVlHNjBpaUhh?=
+ =?utf-8?B?dVB6RkxKd0pod0RGSVRVK1JaLzRZeW1QOGJYSUhVRUh3TXRLS3I1Nkd6ZEE3?=
+ =?utf-8?B?WUNjUmhURCtpTWNobzYyUTVUd2RqKzJRaFBUb3lCR1JTUnBQb2FwU3lTSjdW?=
+ =?utf-8?B?MnUrU3J5M2JhMW1BclpVb2VXaEU3MXV4YnNjcWxHWEtvNGIrMTFCdHUwbmtq?=
+ =?utf-8?B?NW9CMVl4L08vdm42V3Z5MkZjNVRFdkhxTGNseVdKbkZ5UjduNUZ3SzBGWU1l?=
+ =?utf-8?B?VHplZUtSb0tPWDdZZmhzbTU5bzluQUhaczErek83U3B1MGVMRFdnOWE5UG5D?=
+ =?utf-8?B?anpoTkoxQ1N5QnNXNlc5QVlCUFFNZ2RlR1F4cWRLeVpxVnN6S3hhZzFKVnhy?=
+ =?utf-8?B?R1hTZjlLcWltNGlwYnJJL2VidHRsV1hDdXZyNnQ0QXhvdnRnVDlHZklvaVAz?=
+ =?utf-8?B?MFNOVkVjeGVMVG1BNmNKYVpmREJVTVlqVVZ1SWQwMUdKTXVGbmx0SkRvNnFY?=
+ =?utf-8?B?WHp2UnRrVVRxV0pRM0VGT0V1V3BpYnlUOGphZXo0T0ZlRkR6b3llWm9pR1VU?=
+ =?utf-8?B?WUUvc3JBOG40MG1KZUxqcENtVTF0TDZPSVcyRC9MUG0xNFhaNFJzRjZjTzRE?=
+ =?utf-8?B?T2RYeUNJTEVmaUxUTW9ReURCWkVuNWRHTmJ1Y3ZId2gwdXBiMm5jODdZZUV4?=
+ =?utf-8?B?SFh6VWJDQXFzQVcrK0E1TFNCQ1YzOXczeWV5dHhoa1ZDSjhMTHVWU2xrTWJ4?=
+ =?utf-8?B?STNyMkNnSXh1Y3BCbzR0b0s3cnlnWVhKeXZNcElGRXlVdzg0d0R5UEM3M1Zs?=
+ =?utf-8?B?emtUYWJqZm9CTWM4U004ZHFhUmNwcDlhOG5UK1puZGhOajRUMUp0UVpLQlZi?=
+ =?utf-8?B?aS9tOFhNSXBJaGIxT1VqQ3haeVRFc1JySVd4VFp0NFVaa1VaeUk1TWNaUWh6?=
+ =?utf-8?B?SkhvaFF5UDk3SmJKT2RKemtvN0x3R1BMNHNEK3pSb1BON1piQURlK3YyV1FY?=
+ =?utf-8?B?QUJYTnlBTEJjWTJtWWdIYXIwa2lJMktyZUxvc3pyUy85R1phV0VQRDVPb3ky?=
+ =?utf-8?B?a05XOTl3ZFgzTy9LTDVPTXpIMFZPdUZ5SjJzdVlPSHk4TVlNUFV1SVVDUEdC?=
+ =?utf-8?B?T2dPcUdXSFBoU1JYTHYzeHJXREFhSUs4U0tFZHNGTDg2ZW8yZ290OFBSeHNw?=
+ =?utf-8?B?bEc4YUhTMmdKSW5kZHBRQ29rV3AvOFNoeWxTMkwzM0hLbzQxMEd5cU4rRld2?=
+ =?utf-8?B?SnZ6UWNBSkpJTHpvYTdNUkV3YWRELzhoQWdieDdYVitTR0RmdXR5OW1IZUlK?=
+ =?utf-8?B?NGdpWDl5N2pETW5qQS9HZytUbC83Uy84T1JtRGVCdkU5eW5XakwwV3l5MmZS?=
+ =?utf-8?B?MHkwZXpvRTg1RmtTdzJ3bkFjb1NkUmF3d2lvSEZXZHZDMXZzWGphN1pjMGo0?=
+ =?utf-8?B?SW1ITjVkL1VUYnlLcEx2L0dhVHB6azcwdjgzRW1CZUhublVpZ2paQitmcTJr?=
+ =?utf-8?B?bDJyaDE5bjZKbU1vRk1GZmw5ZzRrVzNtRmRFVDJEaXEwa1ZFWnV0SzdjQ1pS?=
+ =?utf-8?B?MTh3cWdCbkFBRzBrZUdHSGJzejRZSU9adzlSbHRTMHlHYzJzSUdMTWlZWk9i?=
+ =?utf-8?B?M0U0TVkxU21uMSsyNVBXVlV5Q3h1b3puazloTU5BQURncmJRMTlsKytEUENr?=
+ =?utf-8?B?cU53SkxhQzVoR3kyTDhwQ1ppeDAyZ2RjL2k4cFg4a1hQSDR5SklLZmVFWmJj?=
+ =?utf-8?B?OEFRU254dFVWR3FrR0NaN3VrMXlXOGZrT1FvcHhtUVdpK2tZM0Iwd2JkY3N3?=
+ =?utf-8?B?T0Zwc3NMTEswTytxWHY4bzFub2RNalAvSmoxeDRXWXI3UVlkakp6Z3dGcmpU?=
+ =?utf-8?B?cG52bEtQQ0N5c1I5eFFRK3ArbWRqZ0loRlhhQS9FcGtRS3hpU2J4Ny85ZUdG?=
+ =?utf-8?B?WGo4ZjllOXpEWGZ4RHdDMFp1dWRSOTZVQzZFbktRNlNVNG1UUzZsNVM5OEVP?=
+ =?utf-8?B?c0Q0V2JDVlNRSU5GZnRWczVHUlJ3SWcwZ0RxZk5DMkh6Q204SVNEanRaZXpW?=
+ =?utf-8?B?bG5Qb2dwTGhoL2pCMVRGRUdZclFMVWdYc1J2VmJGUXpqWFRNL2VyZ0QvRG1q?=
+ =?utf-8?B?cGJaa0JqN0RKT2xGVkM1d0xaMmZ0UXdhazVGaXZaZURHZlBCSG1mR1M1QVQ1?=
+ =?utf-8?B?dlE9PQ==?=
+X-OriginatorOrg: knights.ucf.edu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4783d766-5f93-4165-5cc3-08daa7bc91d2
+X-MS-Exchange-CrossTenant-AuthSource: BN7PR07MB4195.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2022 17:02:37.1331
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5b16e182-78b3-412c-9196-68342689eeb7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iSGqGoKwDVJih3UUmy9dIi0GE9aydn56OsWS67AL2UG3Z4Kzf6FTVmzc3us3Z2ryg/qPaaaFnWw/jwPEpkNzEwDYJxKjAaYXZct98zOs9gA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR07MB5019
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Replace function-like macros "HB" and "LB" with static inline functions
+to comply with preferred Linux coding style standards.
 
+Signed-off-by: Brent Pappas <pappasbrent@knights.ucf.edu>
+---
+Changelog:
+V1 -> V2: Resent diff from a mail client that would not replace tabs
+          with spaces so that patch can be successfully applied.
 
-On Tue, 4 Oct 2022, Andy Shevchenko wrote:
-
-> On Tue, Oct 04, 2022 at 07:37:18AM -0700, matthew.gerlach@linux.intel.com wrote:
->> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>
->> Add a Device Feature List (DFL) bus driver for the Altera
->> 16550 implementation of UART.
->
-> ...
->
->> Reported-by: kernel test robot <lkp@intel.com>
->
-> https://docs.kernel.org/process/submitting-patches.html?highlight=reported#using-reported-by-tested-by-reviewed-by-suggested-by-and-fixes
->
-> "The Reported-by tag gives credit to people who find bugs and report them and it
-> hopefully inspires them to help us again in the future. Please note that if the
-> bug was reported in private, then ask for permission first before using the
-> Reported-by tag. The tag is intended for bugs; please do not use it to credit
-> feature requests."
->
-
-The kernel test robot did find a bug in my v1 submission.  I was missing 
-the static keyword for a function declaration.  Should I remove the tag?
-
->
-> ...
->
->> +	if (!dfhv1_has_params(dfh_base)) {
->> +		dev_err(dev, "missing required DFH parameters\n");
->> +		return -EINVAL;
->> +	}
->
-> Why not use dev_err_probe() everywhere since this is called only at ->probe()
-> stage?
-
-I wasn't sure if using dev_err_probe() was correct, since the usage is 
-technically in a different function.  Since the code is only called from 
-->probe(), and it is much cleaner, I'll switch to dev_err_probe() 
-everywhere
-
-> > ...
->
->> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_CLK_FRQ);
->> +	if (off < 0) {
->> +		dev_err(dev, "missing CLK_FRQ param\n");
->
->> +		return -EINVAL;
->
-> Why error code is being shadowed?
-
-Definitely a mistake.
-
->
->> +	}
->
-> ...
->
->> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_FIFO_LEN);
->> +	if (off < 0) {
->> +		dev_err(dev, "missing FIFO_LEN param\n");
->> +		return -EINVAL;
->
-> Ditto.
->
->> +	}
->
-> ...
->
->> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_REG_LAYOUT);
->> +	if (off < 0) {
->> +		dev_err(dev, "missing REG_LAYOUT param\n");
->> +		return -EINVAL;
->> +	}
->
-> Ditto.
->
-> ...
->
->> +	dev_dbg(dev, "UART_LAYOUT_ID width %lld shift %d\n",
->> +		FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v), (int)uart->port.regshift);
->
-> Casting in printf() in kernel in 99% shows the wrong specifier in use. Try to
-> select the best suitable one.
-
-I will remove the casting and find the correct format specifier.
-
->
-> ...
->
->> +	dfh_base = devm_ioremap_resource(dev, &dfl_dev->mmio_res);
->> +	if (IS_ERR(dfh_base))
->> +		return PTR_ERR(dfh_base);
->> +
->> +	res_size = resource_size(&dfl_dev->mmio_res);
->> +
->> +	ret = dfl_uart_get_params(dev, dfh_base, res_size, &uart);
->
->> +	devm_iounmap(dev, dfh_base);
->> +	devm_release_mem_region(dev, dfl_dev->mmio_res.start, res_size);
->
-> If it's temporary, may be you shouldn't even consider devm_ioremap_resource()
-> to begin with? The devm_* release type of functions in 99% of the cases
-> indicate of the abusing devm_.
-
-I will change the code to call ioremap() and request_mem_region() directly 
-instead of the devm_ versions.
-
->
->> +	if (ret < 0)
->> +		return dev_err_probe(dev, ret, "failed uart feature walk\n");
->
-> ...
->
->> +	dev_info(dev, "serial8250_register_8250_port %d\n", dfluart->line);
->
-> Why do we need this noise?
-
-No, we do not need this noise.
-
->
-> ...
->
->> +	if (dfluart->line >= 0)
->
-> When this can be false?
-
-This can never be false.  I will remove it.
-
->
->> +		serial8250_unregister_port(dfluart->line);
->
-> ...
->
->> +config SERIAL_8250_DFL
->> +	tristate "DFL bus driver for Altera 16550 UART"
->> +	depends on SERIAL_8250 && FPGA_DFL
->> +	help
->> +	  This option enables support for a Device Feature List (DFL) bus
->> +	  driver for the Altera 16650 UART.  One or more Altera 16650 UARTs
->> +	  can be instantiated in a FPGA and then be discovered during
->> +	  enumeration of the DFL bus.
->
-> When m, what be the module name?
-
-I see the file, kernel/drivers/tty/serial/8250/8250_dfl.ko, installed 
-into /lib/modules/...  I also see "alias dfl:t0000f0024* 8250_dfl" in 
-modules.alias
-
-
->
-> ...
->
->>  obj-$(CONFIG_SERIAL_8250_FOURPORT)	+= 8250_fourport.o
->>  obj-$(CONFIG_SERIAL_8250_ACCENT)	+= 8250_accent.o
->>  obj-$(CONFIG_SERIAL_8250_BOCA)		+= 8250_boca.o
->> +obj-$(CONFIG_SERIAL_8250_DFL)		+= 8250_dfl.o
->
-> This group of drivers for the 4 UARTs on the board or so, does FPGA belong to
-> it? (Same Q, btw, for the Kconfig section. And yes, I know that some of the
-> entries are not properly placed there and in Makefile.)
-
-Since 8250_dfl results in its own module, and my kernel config doesn't 
-have FOURPORT, ACCENT, nor BOCA, I guess I don't understand the problem.
-
->
->>  obj-$(CONFIG_SERIAL_8250_EXAR_ST16C554)	+= 8250_exar_st16c554.o
->>  obj-$(CONFIG_SERIAL_8250_HUB6)		+= 8250_hub6.o
->>  obj-$(CONFIG_SERIAL_8250_FSL)		+= 8250_fsl.o
->
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-
-Thanks for the feedback.
-
-
->
->
->
+diff --git a/drivers/staging/most/net/net.c b/drivers/staging/most/net/net.c
+index 1d1fe8bff7ee..8a8fbc274b73 100644
+--- a/drivers/staging/most/net/net.c
++++ b/drivers/staging/most/net/net.c
+@@ -36,8 +36,8 @@
+ #define PMS_TELID_MASK		0x0F
+ #define PMS_TELID_SHIFT		4
+ 
+-#define HB(value)		((u8)((u16)(value) >> 8))
+-#define LB(value)		((u8)(value))
++static inline u8 HB(unsigned int value)		{ return ((u8)((u16)(value) >> 8)); }
++static inline u8 LB(unsigned int value)		{ return ((u8)(value)); }
+ 
+ #define EXTRACT_BIT_SET(bitset_name, value) \
+ 	(((value) >> bitset_name##_SHIFT) & bitset_name##_MASK) 
