@@ -2,73 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA665F63C6
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 509465F63EB
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbiJFJn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 05:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52400 "EHLO
+        id S231515AbiJFJ4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 05:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiJFJn0 (ORCPT
+        with ESMTP id S231175AbiJFJ4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 05:43:26 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38122844E3
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 02:43:23 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id i4-20020a056e02152400b002fa876e95b3so1129035ilu.17
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 02:43:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L72TxMqn957lCY1q6MQNwCwEIeO2DumpQTLfXHJDx2U=;
-        b=K4Hz4Cf9nh3ryIME1C1G2evgypOBP+2itGW1Vpmu8dpxTXCVcVwg2Sibdl4xTxwD3W
-         cWAoCM0CH1PQKtXxGvOkeODAfJjxoigWlje5tMabXqK2+pwtADllvJ3ymOBiuAWRLeOE
-         tkcK0WVtMlmc2e8onBRNFKviGJuyySxFDqkKvvICeaNqIdClN6JxD+dKUiVA2j4vom0U
-         DxneJR6cQjoxN7bYrtDnCILjnZ/MClBxKzyrQV2k041Y9yQPNlNP3q19McHbB2d9L6++
-         hPtacfzmMXmq/uAdrCVLG3XXLMQhrFPmgba5RXxhzRBBTIKWAEq7gaqXYWEkXZOaAtuT
-         nTSA==
-X-Gm-Message-State: ACrzQf3sWETBEvtNYyKHO8jPyOm8ZAtCSjeQdpmUSGsybCADx57dOrc2
-        CD9b4ZeVg2Go10JOlHrtcDzxGdMzSXWGXJisQkgBuJ/1hv+T
-X-Google-Smtp-Source: AMsMyM7EC0ZZu26V+PPR2QQv2e5WsIu0BMXIfrMQJ90KByy98aZxmoJRS7LVjWfnbLh4Ipd50tWWQ6rRGlkxWKP3U9lx4oCwhVyG
+        Thu, 6 Oct 2022 05:56:10 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671D382761;
+        Thu,  6 Oct 2022 02:56:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665050165; x=1696586165;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ped3EFOSYgP0u/JOGENQgHEAPb1CTPyVsTF/z2bnBqI=;
+  b=L0NHfLuvLkCl1pVQ6S5hUSZA98zGNWlQCSOiIuhwBrK/I7g0NOsaIvHf
+   wHxu3MyGQ0KReGyRupAdmhUW6T47Q2UYdY7U3pXZqwY3EDKqXBLWOdE3/
+   Sk2Rit8pPO3srbjqjEIQQMaoYqQRwAdx33ex6ZN3ulI3IT9RY5BFnrLMR
+   4jxknb0RgGG8DKiNbZfGgeRkWxy92enpwzP10qtckQYbCAnCYRHPtO5lO
+   N5l/eruZfqBdixkxeA+Wgxop052SGJBPsJscwo+yGuV0FcZ6kbAIWyAYN
+   kVcdD5ljijjzby0WZNcznbu9o7CN9AKE2t9x+ku5tuXneJQ/tLXYGwj2I
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="301000600"
+X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
+   d="scan'208";a="301000600"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 02:56:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="869785880"
+X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
+   d="scan'208";a="869785880"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga006.fm.intel.com with ESMTP; 06 Oct 2022 02:56:00 -0700
+Date:   Thu, 6 Oct 2022 17:47:04 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     matthew.gerlach@linux.intel.com, hao.wu@intel.com,
+        russell.h.weight@intel.com, basheer.ahmed.muddebihal@intel.com,
+        trix@redhat.com, mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de
+Subject: Re: [PATCH v3 3/4] fpga: dfl: add basic support for DFHv1
+Message-ID: <Yz6kGM0qvIF/E2Bp@yilunxu-OptiPlex-7050>
+References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com>
+ <20221004143718.1076710-4-matthew.gerlach@linux.intel.com>
+ <YzxNCngIuzMqIOHe@smile.fi.intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:d51:b0:35a:5808:41ff with SMTP id
- d17-20020a0566380d5100b0035a580841ffmr1972552jak.45.1665049402278; Thu, 06
- Oct 2022 02:43:22 -0700 (PDT)
-Date:   Thu, 06 Oct 2022 02:43:22 -0700
-In-Reply-To: <2217443.iZASKD2KPV@mypc>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000280f3e05ea5a868a@google.com>
-Subject: Re: [syzbot] memory leak in __get_metapage
-From:   syzbot <syzbot+389b82b29093b3e2640a@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, fmdefrancesco@gmail.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzxNCngIuzMqIOHe@smile.fi.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 2022-10-04 at 18:11:06 +0300, Andy Shevchenko wrote:
+> On Tue, Oct 04, 2022 at 07:37:17AM -0700, matthew.gerlach@linux.intel.com wrote:
+> > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> > 
+> > Add generic support for MSIX interrupts for DFL devices.
+> 
 
-syzbot tried to test the proposed patch but the build/boot failed:
+...
 
-failed to checkout kernel repo git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/6.0: failed to run ["git" "fetch" "--force" "f569e972c8e9057ee9c286220c83a480ebf30cc5" "6.0"]: exit status 128
-fatal: couldn't find remote ref 6.0
+> 
+> > +int dfhv1_find_param(void __iomem *base, resource_size_t max, int param)
+> > +{
+> > +	int off = DFHv1_PARAM_HDR;
+> > +	u64 v, next;
+> > +
+> > +	while (off < max) {
+> > +		v = readq(base + off);
+> > +		if (param == FIELD_GET(DFHv1_PARAM_HDR_ID, v))
+> 
+> > +			return (DFHv1_PARAM_DATA + off);
+> 
+> Too many parentheses.
+> 
+> > +
+> > +		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
+> > +		if (!next)
+> > +			break;
+> > +
+> > +		off += next;
+> > +	}
+> > +
+> > +	return -ENOENT;
+> > +}
+> 
+> The entire function seems a bit dangerous to me. You can ask for any max which
+> covers (up to) 64-bit address space and then do MMIO by basically arbitrary
+> address. How do you protect against wrong MMIO window here? (This is FPGA, so
+> anything can be read from HW, i.o.w. it's _untrusted_ source of the data.)
+> 
+> Also, have you tested this with IOMMU enabled? How do they work together (if
+> there is any collision at all between two?)
 
+Yeah, again I don't think this API is good to be used across modules,
+even if the parameters got checked. It requires too much details for
+other domain developers.
 
+How about:
 
-Tested on:
+  dfl_find_param(struct dfl_device *ddev, int param_id)
 
-commit:         [unknown 
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 6.0
-dashboard link: https://syzkaller.appspot.com/bug?extid=389b82b29093b3e2640a
-compiler:       
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1634a658880000
-
+Thanks,
+Yilun
