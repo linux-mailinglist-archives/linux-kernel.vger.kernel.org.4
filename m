@@ -2,74 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A15F65F6103
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 08:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D60DD5F6108
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 08:28:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbiJFGYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 02:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
+        id S230212AbiJFG2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 02:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiJFGYK (ORCPT
+        with ESMTP id S229812AbiJFG14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 02:24:10 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3DB89AEC
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 23:24:08 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id w10so1380337edd.4
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 23:24:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=hcwsr+gxsxYhjpD2bB7DUVncJgwA9R5/DlEljscp2s0=;
-        b=NJri+RJsCQX1v6PEjp7l9HpnrU7itfxe3i3yU/37dNWDDBhMgv6eSv9aaKcC/efLqJ
-         aeJbPSl5Bby1+28sixlaa+qCs6LYgYw/8L+LyPgleIQDG2xH9hKayZe2nZr03G6UQ60U
-         Kd6Bsitsbk71avsoS8gmrNpfQGKGnX8PjQWra1hlR+9MqurTuTiKve6So6Yauy6ne5ld
-         g8ogpv6fx1mVWtxpIZKWec/4nvRtWcY6I81kXqDehFrTZeouiMNGPh2vOYYoRbK5CKtz
-         b7cOcqQXFIh2mPH+OgF+AtNtLT4aOv3XKHnZMQwR7YKMmrf1Bw1NOpvAfIDH/mX8iCsY
-         vaQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=hcwsr+gxsxYhjpD2bB7DUVncJgwA9R5/DlEljscp2s0=;
-        b=t9gcSsGOMFnL6WthBhUtxwv9j24h3nl4aMrCVr6gWYVQxc+imkezDUx1mTPQdt964i
-         EP0b1KxQMz3bXqGfnGbAAqSrTCAWVQ2Y1CQ1PBMaPeAKsvoj1cPMAMHidJ22gV44DeRP
-         6kTvuj92UnqtZGfVWWgqTaXkb+l9DhRZInDw4/zytD0+1vgXpsZH7Tp14240aC332L9R
-         FFRlpXPltVGg+kqYAWXgmlYwTzTEk7NQSOWl56F4G+2IqKFexjkKZL6zW7YrruA0WmU5
-         OnK1jaw9SQjUzZMIf9TiTvH/NWFv7/TPNftpyBVSKirtaMHLCTcjOyBq+JMXDDTlXvp1
-         aJ1w==
-X-Gm-Message-State: ACrzQf1XjGAqdCFAoPdi6tgnB61hxmVxfivhXatTjHtX31rdUdkcgBv6
-        RE9P3CAswo+VMvlUcnukc3OI1iRDrCqF9eAAuFeg/A==
-X-Google-Smtp-Source: AMsMyM45Fo5EqDCOTvGzAIiJi6QN5VCakFhFt5Khq+dHMnxFOxnAznWVaQOOFUO5stJANfFH4Rz6OIlSSFIqJiIJ/Dc=
-X-Received: by 2002:a05:6402:1856:b0:458:db1e:20ec with SMTP id
- v22-20020a056402185600b00458db1e20ecmr3214007edy.14.1665037447118; Wed, 05
- Oct 2022 23:24:07 -0700 (PDT)
+        Thu, 6 Oct 2022 02:27:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC75868B4;
+        Wed,  5 Oct 2022 23:27:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20840B81FFD;
+        Thu,  6 Oct 2022 06:27:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB6B6C433D6;
+        Thu,  6 Oct 2022 06:27:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665037672;
+        bh=QIfdJBiRQKsa5RhMHnupg9fLel0B7FyX4apbBxJ5XBo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hudoBHGF6wYBmTOvztFyGW3iset3ApQrpYXpMj2zXngnJytXZ0QHDgwo/hLa9PIf6
+         mYq/VIh0wL5xAUsxkAnS6YaxfgnsM+vzOJMSe8SE9iLvJxwk8/pu94QCWlpmcPhSsM
+         EyJ4H4qeVGEIucKwNIHBNSuLfgTxO7YVbljKskG0=
+Date:   Thu, 6 Oct 2022 08:28:32 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Elliot Berman <quic_eberman@quicinc.com>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 13/14] gunyah: rsc_mgr: Add auxiliary devices for
+ console
+Message-ID: <Yz51kCQmMUtpiEKt@kroah.com>
+References: <20220928195633.2348848-1-quic_eberman@quicinc.com>
+ <20220928195633.2348848-14-quic_eberman@quicinc.com>
+ <Yzbev2mZodsZhFY3@kroah.com>
+ <1db27cda-356e-bae2-3c6a-b7916123a269@quicinc.com>
+ <Yz0ig/Dnp4ovHjeN@kroah.com>
+ <31a4de54-9fbe-8487-903d-28528a1b42d3@quicinc.com>
 MIME-Version: 1.0
-References: <20221002002326.946620-1-ira.weiny@intel.com> <20221002002326.946620-3-ira.weiny@intel.com>
- <CAFA6WYOGT1sJLA4c_B88NaXgxv4fm-idi5QMYvXdXB0acCF3sw@mail.gmail.com> <TYZPR03MB65279558CC22F5130B710EA8FB5D9@TYZPR03MB6527.apcprd03.prod.outlook.com>
-In-Reply-To: <TYZPR03MB65279558CC22F5130B710EA8FB5D9@TYZPR03MB6527.apcprd03.prod.outlook.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Thu, 6 Oct 2022 11:53:55 +0530
-Message-ID: <CAFA6WYMT9S1Di6DN_UXc823f0ZTkqerE1PB=oG6wmfx28vEbDg@mail.gmail.com>
-Subject: Re: [PATCH 2/4] tee: Remove vmalloc page support
-To:     =?UTF-8?B?UGhpbCBDaGFuZyAo5by15LiW5YuzKQ==?= 
-        <Phil.Chang@mediatek.com>
-Cc:     "ira.weiny@intel.com" <ira.weiny@intel.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <31a4de54-9fbe-8487-903d-28528a1b42d3@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,157 +75,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Phil,
+On Wed, Oct 05, 2022 at 02:47:46PM -0700, Elliot Berman wrote:
+> 
+> 
+> On 10/4/2022 11:21 PM, Greg Kroah-Hartman wrote:
+> > On Tue, Oct 04, 2022 at 04:49:27PM -0700, Elliot Berman wrote:
+> > > On 9/30/2022 5:19 AM, Greg Kroah-Hartman wrote:
+> > > > On Wed, Sep 28, 2022 at 12:56:32PM -0700, Elliot Berman wrote:
+> > > > > Gunyah resource manager exposes a concrete functionalities which
+> > > > > complicate a single resource manager driver.
+> > > > 
+> > > > I am sorry, but I do not understand this sentance.  What is so
+> > > > complicated about individual devices being created?  Where are they
+> > > > created?  What bus?
+> > > 
+> > > There's no complexity here with using individual devices, that's why I
+> > > wanted to create secondary (auxiliary devices).
+> > > 
+> > > IOW -- "I have a platform device that does a lot of different things. Split
+> > > up the different functionalities of that device into sub devices using the
+> > > auxiliary bus."
+> > 
+> > Why not just have multiple platform devices?  You control them, don't
+> > make it more complex than it should be.
+> > 
+> > And why are these platform devices at all?
+> > 
+> > As you say:
+> > 
+> > > A key requirement for utilizing the auxiliary bus is that there is no
+> > > dependency on a physical bus, device, register accesses or regmap support.
+> > > These individual devices split from the core cannot live on the platform bus
+> > > as they are not physical devices that are controlled by DT/ACPI.
+> > 
+> > These are not in the DT.  So just make your own bus for them instead of
+> > using a platform device.  Don't abuse a platform device please.
+> > 
+> 
+> I'll avoid creating platform devices. Are there any concerns with creating
+> auxiliary device under the platform device?
 
-Please don't top-post in the OSS mailing list.
+Yes, don't do it if you do not have to, auxiliary devices are there only
+if you have no other choice.
 
-On Wed, 5 Oct 2022 at 08:59, Phil Chang (=E5=BC=B5=E4=B8=96=E5=8B=B3) <Phil=
-.Chang@mediatek.com> wrote:
->
-> Hi Sumit
->
-> Thanks for mentioning that, in fact, our product is low memory devices, a=
-nd continuous pages are extremely valuable.
-> Although our driver is not upstream yet but highly dependent on tee shm v=
-malloc support,
+Just make 2 real devices on your own virtual bus please.
 
-Sorry but you need to get your driver mainline in order to support
-vmalloc interface. As otherwise it's a maintenance nightmare to
-support interfaces in the mainline for out-of-tree drivers.
+thanks,
 
--Sumit
-
-> some scenarios are driver alloc high order pages but system memory is fra=
-gmentation so that alloc failed.
-> In this situation, vmalloc support is important and gives flexible usage =
-to user.
->
->
-> -----Original Message-----
-> From: Sumit Garg <sumit.garg@linaro.org>
-> Sent: Monday, October 3, 2022 2:57 PM
-> To: ira.weiny@intel.com
-> Cc: Jens Wiklander <jens.wiklander@linaro.org>; Andrew Morton <akpm@linux=
--foundation.org>; Al Viro <viro@zeniv.linux.org.uk>; Fabio M. De Francesco =
-<fmdefrancesco@gmail.com>; Christoph Hellwig <hch@lst.de>; Linus Torvalds <=
-torvalds@linux-foundation.org>; op-tee@lists.trustedfirmware.org; linux-ker=
-nel@vger.kernel.org; linux-mm@kvack.org; Phil Chang (=E5=BC=B5=E4=B8=96=E5=
-=8B=B3) <Phil.Chang@mediatek.com>
-> Subject: Re: [PATCH 2/4] tee: Remove vmalloc page support
->
-> + Phil
->
-> Hi Ira,
->
-> On Sun, 2 Oct 2022 at 05:53, <ira.weiny@intel.com> wrote:
-> >
-> > From: Ira Weiny <ira.weiny@intel.com>
-> >
-> > The kernel pages used by shm_get_kernel_pages() are allocated using
-> > GFP_KERNEL through the following call stack:
-> >
-> > trusted_instantiate()
-> >         trusted_payload_alloc() -> GFP_KERNEL
-> >         <trusted key op>
-> >                 tee_shm_register_kernel_buf()
-> >                         register_shm_helper()
-> >                                 shm_get_kernel_pages()
-> >
-> > Where <trusted key op> is one of:
-> >
-> >         trusted_key_unseal()
-> >         trusted_key_get_random()
-> >         trusted_key_seal()
-> >
-> > Remove the vmalloc page support from shm_get_kernel_pages().  Replace
-> > with a warn on once.
-> >
-> > Cc: Jens Wiklander <jens.wiklander@linaro.org>
-> > Cc: Al Viro <viro@zeniv.linux.org.uk>
-> > Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-> > Cc: Christoph Hellwig <hch@lst.de>
-> > Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> >
-> > ---
-> > Jens I went with the suggestion from Linus and Christoph and rejected
-> > vmalloc addresses.  I did not hear back from you regarding Linus'
-> > question if the vmalloc page support was required by an up coming
-> > patch set or not.  So I assumed it was something out of tree.
->
-> It looks like I wasn't CC'd to that conversation. IIRC, support for vmall=
-oc addresses was added recently by Phil here [1]. So I would like to give h=
-im a chance if he is planning to post a corresponding kernel driver upstrea=
-m.
->
-> [1] https://urldefense.com/v3/__https://lists.trustedfirmware.org/archive=
-s/list/op-tee@lists.trustedfirmware.org/thread/M7HI3P2M66V27SK35CGQRICZ7DJZ=
-5J2W/__;!!CTRNKA9wMg0ARbw!wGOKR9k3khZJlPt1K_xBCXX4EBM5ZCfWKuruFgSP45H8wTvJr=
-x4_St3Fb5ZrljD5QQ$
->
-> -Sumit
->
-> > ---
-> >  drivers/tee/tee_shm.c | 36 ++++++++++++------------------------
-> >  1 file changed, 12 insertions(+), 24 deletions(-)
-> >
-> > diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c index
-> > 27295bda3e0b..527a6eabc03e 100644
-> > --- a/drivers/tee/tee_shm.c
-> > +++ b/drivers/tee/tee_shm.c
-> > @@ -24,37 +24,25 @@ static void shm_put_kernel_pages(struct page
-> > **pages, size_t page_count)  static int shm_get_kernel_pages(unsigned l=
-ong start, size_t page_count,
-> >                                 struct page **pages)  {
-> > +       struct kvec *kiov;
-> >         size_t n;
-> >         int rc;
-> >
-> > -       if (is_vmalloc_addr((void *)start)) {
-> > -               struct page *page;
-> > -
-> > -               for (n =3D 0; n < page_count; n++) {
-> > -                       page =3D vmalloc_to_page((void *)(start + PAGE_=
-SIZE * n));
-> > -                       if (!page)
-> > -                               return -ENOMEM;
-> > -
-> > -                       get_page(page);
-> > -                       pages[n] =3D page;
-> > -               }
-> > -               rc =3D page_count;
-> > -       } else {
-> > -               struct kvec *kiov;
-> > -
-> > -               kiov =3D kcalloc(page_count, sizeof(*kiov), GFP_KERNEL)=
-;
-> > -               if (!kiov)
-> > -                       return -ENOMEM;
-> > +       if (WARN_ON_ONCE(is_vmalloc_addr((void *)start)))
-> > +               return -EINVAL;
-> >
-> > -               for (n =3D 0; n < page_count; n++) {
-> > -                       kiov[n].iov_base =3D (void *)(start + n * PAGE_=
-SIZE);
-> > -                       kiov[n].iov_len =3D PAGE_SIZE;
-> > -               }
-> > +       kiov =3D kcalloc(page_count, sizeof(*kiov), GFP_KERNEL);
-> > +       if (!kiov)
-> > +               return -ENOMEM;
-> >
-> > -               rc =3D get_kernel_pages(kiov, page_count, 0, pages);
-> > -               kfree(kiov);
-> > +       for (n =3D 0; n < page_count; n++) {
-> > +               kiov[n].iov_base =3D (void *)(start + n * PAGE_SIZE);
-> > +               kiov[n].iov_len =3D PAGE_SIZE;
-> >         }
-> >
-> > +       rc =3D get_kernel_pages(kiov, page_count, 0, pages);
-> > +       kfree(kiov);
-> > +
-> >         return rc;
-> >  }
-> >
-> > --
-> > 2.37.2
-> >
+greg k-h
