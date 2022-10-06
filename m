@@ -2,160 +2,341 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36BD85F5F3B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 04:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C185F5F56
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 05:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbiJFC4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 22:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39034 "EHLO
+        id S229640AbiJFDM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 23:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbiJFC4U (ORCPT
+        with ESMTP id S230081AbiJFDMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 22:56:20 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBEA7FFAB;
-        Wed,  5 Oct 2022 19:54:56 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2962f2pB017580;
-        Thu, 6 Oct 2022 02:54:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=22YcYq+W1feRc4HBuCzwqSEcjToWsa3pJjCRJMDKwOE=;
- b=G/650jOgfd3+wyx4fOLpTBsBSC/14eGB1u//NUP2Jhjh7j4lmluJDJ03GATl124QxUj/
- hqYPcgOJ14rw3cTouERXRiPl++V6qCj9FWzdGjrnwY4hGqhueQGsDHCOV+FgwhoTC04+
- AjgcgogSR0q0kxjAn0hIS4rsW2weBO+5Z18tr2QCx59sNuusCoTeVQCG8IWt723A4BBq
- cDybgfsBOCnZSV4lg0mqdFiRNvBc1dzmXOkHwWZ+XsmDIPbuH8URe7j0m5NSMLSJ+Ck3
- rLdMWNXNwR5cabewv7yr+hHYXRMKSFvYny6HCK+85qxWXw/zeAME74bJS4WOE9tC9Kn6 pw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k0escvw01-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Oct 2022 02:54:50 +0000
-Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2962sn4O020936;
-        Thu, 6 Oct 2022 02:54:49 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 3jxemkrcn2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Oct 2022 02:54:49 +0000
-Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2962snrJ020929;
-        Thu, 6 Oct 2022 02:54:49 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 2962snga020928
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Oct 2022 02:54:49 +0000
-Received: from hu-ppareek-blr.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Wed, 5 Oct 2022 19:54:45 -0700
-Date:   Thu, 6 Oct 2022 08:24:41 +0530
-From:   Parikshit Pareek <quic_ppareek@quicinc.com>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        "Shazad Hussain" <quic_shazhuss@quicinc.com>,
-        Brian Masney <bmasney@redhat.com>,
-        "Johan Hovold" <johan@kernel.org>
-Subject: Re: [PATCH v5 0/3] arm64: dts: qcom: add dts for sa8540p-ride board
-Message-ID: <20221006025441.GA31711@hu-ppareek-blr.qualcomm.com>
-References: <20221003125444.12975-1-quic_ppareek@quicinc.com>
- <02365772-de32-56ab-65a2-0a2fbccb5e2e@somainline.org>
+        Wed, 5 Oct 2022 23:12:44 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42634895F2;
+        Wed,  5 Oct 2022 20:12:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665025959; x=1696561959;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gh5OVqF15e9clx6zOacfWTHXWSaHJb/fk8tuPk8eGYY=;
+  b=aIPXZ3QTv8MGKmdAIyGMcs2GyjPXSbCqaJW/47oV/81FAJI9JNylwtbi
+   wk1/AGyuJk4e6jVAgQHuMxU4xMJwJ85EWkatpTWUtT20AoqDeQ6VbckO4
+   /kE3hEpF1kkKo3yAgQEIifGEwMk/gmgEhAJIhwIQqY4eYjaEEigDF8+wP
+   8kUQvlC3O6oKSer/wZLCwHa/z738sY9qylVRfd9lguRp/e5Dw0kOchO6s
+   mf+18w0JtU/4v1NkTfgdcIeRqDzN4uxUqDSAzgLI3eRzqye4NPMISIHcJ
+   SPDuucUkdFckEJw2qlj8y9ZWMQR/TvHNx03zpOZsJ+xkLnEmQ/ee9+jHZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="303307618"
+X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
+   d="scan'208";a="303307618"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 20:12:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="953444525"
+X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
+   d="scan'208";a="953444525"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga005.fm.intel.com with ESMTP; 05 Oct 2022 20:12:35 -0700
+Date:   Thu, 6 Oct 2022 11:03:39 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, dg@emlix.com,
+        j.zink@pengutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, system@metrotek.ru
+Subject: Re: [PATCH v13 1/2] fpga: lattice-sysconfig-spi: add Lattice
+ sysCONFIG FPGA manager
+Message-ID: <Yz5Fi3lBrzV8LMm7@yilunxu-OptiPlex-7050>
+References: <20220926143924.11367-1-i.bornyakov@metrotek.ru>
+ <20220926143924.11367-2-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <02365772-de32-56ab-65a2-0a2fbccb5e2e@somainline.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: YzRmov9snVSBKpE-BcNYVsx8tBVMPKhJ
-X-Proofpoint-GUID: YzRmov9snVSBKpE-BcNYVsx8tBVMPKhJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-05_05,2022-10-05_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 clxscore=1015 suspectscore=0 mlxscore=0
- mlxlogscore=726 impostorscore=0 spamscore=0 bulkscore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210060016
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220926143924.11367-2-i.bornyakov@metrotek.ru>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 11:05:11PM +0200, Konrad Dybcio wrote:
+On 2022-09-26 at 17:39:23 +0300, Ivan Bornyakov wrote:
+> Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+> slave SPI sysCONFIG interface.
 > 
-> On 03/10/2022 14:54, Parikshit Pareek wrote:
-> > Change in v5:
-> > - Moved the usb and ufs nodes from sa8540p-adp.dtsi file to respective
-> >    board specific dts files: sa8295p-adp.dts and sa8540p-adp-ride.dts.
+> sysCONFIG interface core functionality is separate from both ECP5 and
+> SPI specifics, so support for other FPGAs with different port types can
+> be added in the future.
 > 
-> Is there any benefit in this? USB0/2 and UFS (not UFS card) nodes are
-> identical
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> ---
+>  drivers/fpga/Kconfig                 |  11 +
+>  drivers/fpga/Makefile                |   2 +
+>  drivers/fpga/lattice-sysconfig-spi.c | 151 ++++++++++
+>  drivers/fpga/lattice-sysconfig.c     | 428 +++++++++++++++++++++++++++
+>  drivers/fpga/lattice-sysconfig.h     |  41 +++
+>  5 files changed, 633 insertions(+)
+>  create mode 100644 drivers/fpga/lattice-sysconfig-spi.c
+>  create mode 100644 drivers/fpga/lattice-sysconfig.c
+>  create mode 100644 drivers/fpga/lattice-sysconfig.h
 > 
-> in the 2 files.
-Similar boards might come in future, anticipated to be differing mainly
-with respect to usb/ufs. Hence thought it better to put ufs/usb nodes in
-board specific dts.
+> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> index 6c416955da53..d1a8107fdcb3 100644
+> --- a/drivers/fpga/Kconfig
+> +++ b/drivers/fpga/Kconfig
+> @@ -263,4 +263,15 @@ config FPGA_MGR_MICROCHIP_SPI
+>  	  programming over slave SPI interface with .dat formatted
+>  	  bitstream image.
+>  
+> +config FPGA_MGR_LATTICE_SYSCONFIG
+> +	tristate
+> +
+> +config FPGA_MGR_LATTICE_SYSCONFIG_SPI
+> +	tristate "Lattice sysCONFIG SPI FPGA manager"
+> +	depends on SPI
+> +	select FPGA_MGR_LATTICE_SYSCONFIG
+> +	help
+> +	  FPGA manager driver support for Lattice FPGAs programming over slave
+> +	  SPI sysCONFIG interface.
+> +
+>  endif # FPGA
+> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> index 42ae8b58abce..72e554b4d2f7 100644
+> --- a/drivers/fpga/Makefile
+> +++ b/drivers/fpga/Makefile
+> @@ -20,6 +20,8 @@ obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
+>  obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
+>  obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)	+= versal-fpga.o
+>  obj-$(CONFIG_FPGA_MGR_MICROCHIP_SPI)	+= microchip-spi.o
+> +obj-$(CONFIG_FPGA_MGR_LATTICE_SYSCONFIG)	+= lattice-sysconfig.o
+> +obj-$(CONFIG_FPGA_MGR_LATTICE_SYSCONFIG_SPI)	+= lattice-sysconfig-spi.o
+>  obj-$(CONFIG_ALTERA_PR_IP_CORE)		+= altera-pr-ip-core.o
+>  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)	+= altera-pr-ip-core-plat.o
+>  
+> diff --git a/drivers/fpga/lattice-sysconfig-spi.c b/drivers/fpga/lattice-sysconfig-spi.c
+> new file mode 100644
+> index 000000000000..1428705ae7d1
+> --- /dev/null
+> +++ b/drivers/fpga/lattice-sysconfig-spi.c
+> @@ -0,0 +1,151 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Lattice FPGA programming over slave SPI sysCONFIG interface.
+> + */
+> +
+> +#include <linux/spi/spi.h>
+> +
+> +#include "lattice-sysconfig.h"
+> +
+> +static const u32 ecp5_spi_max_speed_hz = 60000000;
+> +
+> +static int sysconfig_spi_cmd_write(struct sysconfig_priv *priv,
+> +				   const void *tx_buf, size_t tx_len)
+> +{
+> +	struct spi_device *spi = to_spi_device(priv->dev);
+> +
+> +	return spi_write(spi, tx_buf, tx_len);
+> +}
+> +
+> +static int sysconfig_spi_cmd_read(struct sysconfig_priv *priv,
+> +				  const void *tx_buf, size_t tx_len,
+> +				  void *rx_buf, size_t rx_len)
+> +{
+> +	struct spi_device *spi = to_spi_device(priv->dev);
+> +
+> +	return spi_write_then_read(spi, tx_buf, tx_len, rx_buf, rx_len);
+> +}
+> +
+> +static int sysconfig_spi_bitstream_burst_init(struct sysconfig_priv *priv)
+> +{
+> +	const u8 lsc_bitstream_burst[] = SYSCONFIG_LSC_BITSTREAM_BURST;
+> +	struct spi_device *spi = to_spi_device(priv->dev);
+> +	struct spi_transfer xfer = {
+> +		.tx_buf = lsc_bitstream_burst,
+> +		.len = sizeof(lsc_bitstream_burst),
+> +		.cs_change = 1,
+> +	};
+> +	struct spi_message msg;
+> +	int ret;
+> +
+> +	spi_message_init_with_transfers(&msg, &xfer, 1);
+> +
+> +	/*
+> +	 * Lock SPI bus for exclusive usage until FPGA programming is done.
+> +	 * SPI bus will be released in sysconfig_spi_bitstream_burst_complete().
+> +	 */
+> +	spi_bus_lock(spi->controller);
+> +
+> +	ret = spi_sync_locked(spi, &msg);
+> +	if (ret)
+> +		spi_bus_unlock(spi->controller);
+> +
+> +	return ret;
+> +}
+> +
+> +static int sysconfig_spi_bitstream_burst_write(struct sysconfig_priv *priv,
+> +					       const char *buf, size_t len)
+> +{
+> +	struct spi_device *spi = to_spi_device(priv->dev);
+> +	struct spi_transfer xfer = {
+> +		.tx_buf = buf,
+> +		.len = len,
+> +		.cs_change = 1,
+> +	};
+> +	struct spi_message msg;
+> +
+> +	spi_message_init_with_transfers(&msg, &xfer, 1);
+> +
+> +	return spi_sync_locked(spi, &msg);
+> +}
+> +
+> +static int sysconfig_spi_bitstream_burst_complete(struct sysconfig_priv *priv)
+> +{
+> +	struct spi_device *spi = to_spi_device(priv->dev);
+> +
+> +	/* Bitstream burst write is done, release SPI bus */
+> +	spi_bus_unlock(spi->controller);
+> +
+> +	/* Toggle CS to finish bitstream write */
+> +	return spi_write(spi, NULL, 0);
+> +}
+> +
+> +static int sysconfig_spi_probe(struct spi_device *spi)
+> +{
+> +	const struct spi_device_id *dev_id;
+> +	struct device *dev = &spi->dev;
+> +	struct sysconfig_priv *priv;
+> +	const u32 *spi_max_speed;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	spi_max_speed = device_get_match_data(dev);
+> +	if (!spi_max_speed) {
+> +		dev_id = spi_get_device_id(spi);
+> +		if (!dev_id)
+> +			return -ENODEV;
+> +
+> +		spi_max_speed = (const u32 *)dev_id->driver_data;
+> +	}
+> +
+> +	if (!spi_max_speed)
+> +		return -EINVAL;
+> +
+> +	if (spi->max_speed_hz > *spi_max_speed) {
+> +		dev_err(dev, "SPI speed %u is too high, maximum speed is %u\n",
+> +			spi->max_speed_hz, *spi_max_speed);
+> +		return -EINVAL;
+> +	}
+> +
+> +	priv->dev = dev;
+> +	priv->command_write = sysconfig_spi_cmd_write;
+> +	priv->command_read = sysconfig_spi_cmd_read;
+> +	priv->bitstream_burst_write_init = sysconfig_spi_bitstream_burst_init;
+> +	priv->bitstream_burst_write = sysconfig_spi_bitstream_burst_write;
+> +	priv->bitstream_burst_write_complete = sysconfig_spi_bitstream_burst_complete;
+> +
+> +	return sysconfig_probe(priv);
+> +}
+> +
+> +static const struct spi_device_id sysconfig_spi_ids[] = {
+> +	{
+> +		.name = "sysconfig-ecp5",
+> +		.driver_data = (kernel_ulong_t)&ecp5_spi_max_speed_hz,
+> +	}, {},
+> +};
+> +MODULE_DEVICE_TABLE(spi, sysconfig_spi_ids);
+> +
+> +#if IS_ENABLED(CONFIG_OF)
+> +static const struct of_device_id sysconfig_of_ids[] = {
+> +	{
+> +		.compatible = "lattice,sysconfig-ecp5",
+> +		.data = &ecp5_spi_max_speed_hz,
+> +	}, {},
+> +};
+> +MODULE_DEVICE_TABLE(of, sysconfig_of_ids);
+> +#endif /* IS_ENABLED(CONFIG_OF) */
+> +
+> +static struct spi_driver lattice_sysconfig_driver = {
+> +	.probe = sysconfig_spi_probe,
+> +	.id_table = sysconfig_spi_ids,
+> +	.driver = {
+> +		.name = "lattice_sysconfig_spi_fpga_mgr",
+> +		.of_match_table = of_match_ptr(sysconfig_of_ids),
+> +	},
+> +};
+> +module_spi_driver(lattice_sysconfig_driver);
+> +
+> +MODULE_DESCRIPTION("Lattice sysCONFIG Slave SPI FPGA Manager");
+> +MODULE_LICENSE("GPL");
+> diff --git a/drivers/fpga/lattice-sysconfig.c b/drivers/fpga/lattice-sysconfig.c
+> new file mode 100644
+> index 000000000000..f9acff1ab122
+> --- /dev/null
+> +++ b/drivers/fpga/lattice-sysconfig.c
+> @@ -0,0 +1,428 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Lattice FPGA sysCONFIG interface functions independent of port type.
+> + */
+> +
+> +#include <linux/delay.h>
+> +#include <linux/fpga/fpga-mgr.h>
+> +#include <linux/gpio/consumer.h>
+> +
+> +#include "lattice-sysconfig.h"
+> +
+> +static int sysconfig_cmd_write(struct sysconfig_priv *priv, const void *buf,
+> +			       size_t buf_len)
+> +{
+> +	return priv->command_write(priv, buf, buf_len);
+> +}
+> +
+> +static int sysconfig_cmd_read(struct sysconfig_priv *priv, const void *tx_buf,
+> +			      size_t tx_len, void *rx_buf, size_t rx_len)
+> +{
+> +	return priv->command_read(priv, tx_buf, tx_len, rx_buf, rx_len);
+> +}
+> +
+> +static int sysconfig_read_busy(struct sysconfig_priv *priv)
+> +{
+> +	const u8 lsc_check_busy[] = SYSCONFIG_LSC_CHECK_BUSY;
+> +	u8 busy;
+> +	int ret;
+> +
+> +	ret = sysconfig_cmd_read(priv, lsc_check_busy, sizeof(lsc_check_busy),
+> +				 &busy, sizeof(busy));
+> +
+> +	return ret ? : busy;
+> +}
+> +
+> +static int sysconfig_poll_busy(struct sysconfig_priv *priv)
+> +{
+> +	unsigned long timeout;
+> +	int ret;
+> +
+> +	timeout = jiffies + msecs_to_jiffies(SYSCONFIG_POLL_BUSY_TIMEOUT_MS);
+> +
+> +	while (time_before(jiffies, timeout)) {
+> +		ret = sysconfig_read_busy(priv);
+> +		if (ret <= 0)
+> +			return ret;
+> +
+> +		usleep_range(SYSCONFIG_POLL_INTERVAL_US,
+> +			     SYSCONFIG_POLL_INTERVAL_US * 2);
+> +	}
+> +
+> +	return -EBUSY;
 
-Regards,
-Parikshit Pareek
-> 
-> 
-> Konrad
-> 
-> >    Took inputs from Shazad Hussain in this regard(John)
-> > - Added more description of the board differences(John)
-> > - Not including Reviewed-by for Krzysztof, because of the new changes to
-> >    be reviewed.
-> > - Removed Reported-by tag(John).
-> > 
-> > Changes in v4:
-> >   - Removed the ufs_card_hc node, as it is not mounted on Qdrive-3 board.
-> >   - Removed usb_1 relared nodes, as usb1 doesn't have any port connected on
-> >     Qdrive3 board.
-> >   - Added Reported-by tag for Shazad(for ufs and usb_1 node removals)
-> > 
-> > Changes in v3:
-> >   - Added Acked-by tag (Krzysztof)
-> >   - Renamed dtsi to sa8540p-adp.dtsi (John)
-> >   - Removed copyright from sa8295-adp.dts and sa8295-adp.dtsi(John)
-> >   - Added cover letter
-> > 
-> > change in v2:
-> > - Make dt-binding patch as the first one in the patch set
-> > - Add , after year 2022, in the license header
-> > 
-> > Initial version:
-> > - Move the common nodes to sa8540p-adp.dtsi, and create qrive-3 board
-> >    specific file sa8540p-adp-ride.dts.
-> > 
-> > 
-> > Parikshit Pareek (3):
-> >    dt-bindings: arm: qcom: Document additional sa8540p device
-> >    arm64: dts: qcom: sa8295p: move common nodes to dtsi
-> >    arm64: dts: qcom: introduce sa8540p-ride dts
-> > 
-> >   .../devicetree/bindings/arm/qcom.yaml         |   1 +
-> >   arch/arm64/boot/dts/qcom/Makefile             |   1 +
-> >   arch/arm64/boot/dts/qcom/sa8295p-adp.dts      | 528 +++++-------------
-> >   arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts |  71 +++
-> >   .../{sa8295p-adp.dts => sa8540p-adp.dtsi}     | 133 -----
-> >   5 files changed, 219 insertions(+), 515 deletions(-)
-> >   rewrite arch/arm64/boot/dts/qcom/sa8295p-adp.dts (70%)
-> >   create mode 100644 arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts
-> >   copy arch/arm64/boot/dts/qcom/{sa8295p-adp.dts => sa8540p-adp.dtsi} (72%)
-> > 
+return -ETIMEDOUT? To be aligned with sysconfig_poll_gpio.
+
+Others look good to me.
+
+Thanks,
+Yilun
