@@ -2,91 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E7D5F647C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 12:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC4B5F647D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 12:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbiJFKqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 06:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58262 "EHLO
+        id S231209AbiJFKqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 06:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbiJFKp6 (ORCPT
+        with ESMTP id S230400AbiJFKqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 06:45:58 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2357598345;
-        Thu,  6 Oct 2022 03:45:57 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id s30so2230068eds.1;
-        Thu, 06 Oct 2022 03:45:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=JlewNC+bXlKO7hBF9QOboFp9ra4eqjAA0Th/QL6KAjs=;
-        b=V5+22EF0z9JU3TfI7zxVGI90zPEHaY34y3h0majEKYCjGaxXZDT37hKKKI2ShmVu1M
-         RzY8kc3+Wqfr+m7saN4YLi14O7o3qH3nz4Bs8f6XSSJIhQb+MNJDTpih29LFpDiEsPTk
-         qOdsENd7pDSqzB+dtQAmBMyDgk9lRMhVbTdy2zWul19DJPGScWzerIbCcfo2JOoXg01V
-         GSEutzkRW4r1nIEAIhP5wOIyTJ24zDk07ILyK8iTQJgLVNg7mSR/xsYv4/Cd4RDxPYZc
-         mrXuYSYrOkdgWhL4GZMGOy50WSwXBW96EZ0jocVGE/+CcaFlivqSN3epjzlWXreIjKog
-         KRLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=JlewNC+bXlKO7hBF9QOboFp9ra4eqjAA0Th/QL6KAjs=;
-        b=6DtqucRiRGVeU/0rjt8zj91nlgp428L3YuD9v54LqNLbxoaC6AH2USjH46PYdTiY+O
-         KKuqMvFT3PjyWTTcmJSOGoZ7/L3ChoLxqe2osojI6gtr4yt6wMWpVzsNCdSSWiOmh75N
-         x671Eq6AEOOeI0o0tpJz2mHq3C2j5Fd+zlyjtTaoAbMqi3BB4hd7zA7uO8P+5mET1c0X
-         4mchSxppT4BrttrJF2EMRMlgsDJ0pe/3id/nW3vmY3lQbFWR4u0EedOt/nQM1/uE8sYi
-         GsfE1s+IkOGHXN4ILeyr/RrcbAZY1qbz+r0CzSvRvJqg/K9KI9z24TOsWgZ+8jA4OzcK
-         CzMw==
-X-Gm-Message-State: ACrzQf3VlqL4FWM9x4u5kQBwdfwJtvOxVse8gE+779jpW6TC0BhgUutz
-        zAJvdjAsnhztlzrq7VYtx+fRc63v8RI=
-X-Google-Smtp-Source: AMsMyM7ed9G8B2olEg4hdfNCZCSrGATCWwkhVigJk1KTXGizVbtVMH8ibbpRk9eXGGw6rmS3Tw1E+Q==
-X-Received: by 2002:a05:6402:280f:b0:458:ea37:7f00 with SMTP id h15-20020a056402280f00b00458ea377f00mr3909895ede.1.1665053155458;
-        Thu, 06 Oct 2022 03:45:55 -0700 (PDT)
-Received: from masalkhi.. (p5ddb3856.dip0.t-ipconnect.de. [93.219.56.86])
-        by smtp.gmail.com with ESMTPSA id d1-20020a056402144100b00456f2dbb379sm2369104edx.62.2022.10.06.03.45.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 03:45:55 -0700 (PDT)
-From:   Abd-Alrhman Masalkhi <abd.masalkhi@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-fsdevel@vger.kernel.org
-Subject: A field in files_struct has been used without initialization
-Date:   Thu,  6 Oct 2022 12:44:39 +0200
-Message-Id: <20221006104439.46235-1-abd.masalkhi@gmail.com>
-X-Mailer: git-send-email 2.29.0.rc1.dirty
+        Thu, 6 Oct 2022 06:46:38 -0400
+Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7522A98345;
+        Thu,  6 Oct 2022 03:46:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1665053190;
+        bh=CVAJNVccyTnvqFUKt2qhoZ3SSQTQEZAtvmO3iOKMZls=;
+        h=X-UI-Sender-Class:Date:From:Subject:Cc:References:In-Reply-To;
+        b=V5M1qQCo9OdHL8ak7bbmn4YXkX/f2K9NsVs+y+x3UgD62DLdN6AYxMz93DU8gJI7W
+         MhkV3NeaJvaHj9qlbBmFjld0Figd9q1iVJ7cespd/EpIM7/GyWlF1FMLCfUTXyT7sG
+         PyrwHORzRwTlCJZLHwUmNNMIKyaOEGV6oXL8ChQU=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [10.24.110.15] ([143.244.37.25]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MeU0q-1pEMEc2I9U-00aV83; Thu, 06
+ Oct 2022 12:46:30 +0200
+Message-ID: <6363db78-f676-427d-b479-7065091f3f59@gmx.com>
+Date:   Thu, 6 Oct 2022 10:46:29 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+From:   "Artem S. Tashkinov" <aros@gmx.com>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+Cc:     workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <YzmBjgXq9geMnL1B@mit.edu>
+ <79bb605a-dab8-972d-aa4a-a5e5ee49387c@gmx.com>
+ <20221002141321.394de676@rorschach.local.home>
+ <6de0925c-a98a-219e-eed2-ba898ef974f8@gmx.com>
+ <20221002180844.2e91b1f1@rorschach.local.home>
+ <3a3b9346-e243-e178-f8dd-f8e1eacdc6ae@gmx.com> <YzoY+dxLuCfOp0sL@ZenIV>
+ <b032e79a-a9e3-fc72-9ced-39411e5464c9@gmx.com> <YzqjfU66alRlGk5y@kernel.org>
+ <251201be-9552-3a51-749c-3daf4d181250@gmx.com>
+ <20221003142240.hu5gj7fms5wdoujk@meerkat.local>
+In-Reply-To: <20221003142240.hu5gj7fms5wdoujk@meerkat.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:/T9qNnatvq6JAullCLcdS33+cIlq9WfwvAi1kVZ3kQ5n3x+m+fF
+ 4xpYW0LIkYE+oUf1WqHc2eTjn5PjevFKCr645WjI/WdsnAJmNBrqIJVJVw6B4iZqIuFoSme
+ 5pRpvpuBZ50cPcBFwwZXEqkXNW5iKlT2ikehn419q4seKiPRMA252Q3BvTtA/kkEmuFQQgQ
+ YTDX1pfAXNjtiYcT4nLJA==
+X-UI-Out-Filterresults: junk:10;V03:K0:3sij++BXOwQ=:gAN+cI7T6MUJ63MzWulkflwB
+ e4jrmNcpwvcohQvEKcJTYbJxq9/HjJNGzCDXL+rTj1v7HFSFScqjcDoCqg32vdl8UkeoDRm6i
+ ziTosPjXnATs9SUZX9TtyG4P7tzQ4SKM3WcDKaYsWH8E0YRgqhwG+AMynrGno5pK3vVxhLaku
+ ROUUJPPsLtp6cQ4eg34KfBBEsPfsOpmR0hczj8b6GhxHw2+6ZRZsr50OT9ddvLbZDBQDPaZtp
+ ymBgzdMCkWZw0g1Y3/UZk3R2f91y3OOiCrId1E9o1eqxCgCN6zDfRPcgB1AR9AW+DKUqaQqBz
+ 6oJ31rrduemFVK8KfgOMsUwU6KKvm0cv2Cv6QhZZLBhgl8kfALxHHgog9NoYSB6Iu0aHOzKDe
+ FTri8erpMp6ZFcLcvIzu85QiZBS71cgofYM+uHRaZRfQgnRyMB0pyCXiHMvTxugUOpeRJ7B/K
+ hzLu8qKj0f6MAlaWzfZV79zA8b7YxSyZ8ox+rokq6WG/Qe3nBcS+eP1/NW/TOqT8Fo08YeYJx
+ 2nWQuVF11CsOOyUpEgHodfPWLr1DPJ7KxQb6COA11sr9JYK1oqjU5fA5spkLlBKtT//65tV9l
+ tejVqFobGVJj2lu8z3STcGSs4TJLYZx6qApgWgjriBe9L1hKoth5MFXzPZBz8kqBx0c81CtG+
+ Syxy3N9gIMJi4+r3KGbA9nwWP6yu4kUlmTfLTbS/sTr0nZRnnimcNXJ2QUqHQkz789RhNvVqb
+ 7al6PA7r333z8RgpDpxsRGvI3gReOhUW/yKIKSBTFsL5Q7PKJHSPFj9OvE5WEwObUvvdMwYXM
+ 2dfEnINY4/CnVNKYtCGuyfmnG/lPujO9CRHzjMZBZnUVWAsHJB6NR5BR+Uad0h+Om/awfwJwQ
+ AcElHBU4J+4s7jDGHdCMwV0lpZa7qHCIZgN+VcC7J9y+4sHifkPb5IQp1OPdGst6JEe52YZWP
+ 8xl3cKJSzI8PYlDNYHrax1ijFvZt05j41HZDVpep2lonAtDQG+Gq20weiTLYXDIxSBVvJif5K
+ iWeyEnq3x+6zxCc0BjW8DqIqjIo6qXzvSaOHOZiOQ+mBXougs+EqjjiStB0WWvLG0YNcY7v3n
+ Dat3H9abAyX+3DbHoG//wJJLoMMXXTLKAujwM28/myAqGavlB1e7yLB2o/++W0TKkFk+DYY8X
+ Zp37NHIVsxwFBjVLPhamgM0i1mVaUg7J37y1Z+etO/HV0g==
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,MISSING_HEADERS,RCVD_IN_MSPIKE_H2,RCVD_IN_SBL,
+        SPF_HELO_NONE,SPF_PASS,TVD_PH_BODY_ACCOUNTS_PRE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linux community,
 
-I have came acrose the following code in dup_fd()
 
-1	newf = kmem_cache_alloc(files_cachep, GFP_KERNEL);
-2	if (!newf)
-3		goto out;
-4
-5	atomic_set(&newf->count, 1);
-6
-7	spin_lock_init(&newf->file_lock);
-8	newf->resize_in_progress = false;
-9	init_waitqueue_head(&newf->resize_wait);
-10	newf->next_fd = 0;
-11	new_fdt = &newf->fdtab;
-12	new_fdt->max_fds = NR_OPEN_DEFAULT;
-13	new_fdt->close_on_exec = newf->close_on_exec_init;
+On 10/3/22 14:22, Konstantin Ryabitsev wrote:
+> On Mon, Oct 03, 2022 at 09:16:06AM +0000, Artem S. Tashkinov wrote:
+>> The initial conversation started with the fact that Bugzilla is old,
+>> semi-deprecated, requires MySQL [no idea what's bad about it, Bugzilla
+>> can work with MariaDB and Percona as well]
+>
+> It can't, actually. It only works with MySQL 5.7 or an equally ancient M=
+ariaDB.
+> No, there is no official fix (because nobody is working on bugzilla).
+> https://bugzilla.mozilla.org/show_bug.cgi?id=3D1592129
+>
 
-On line 13 new_fdt->close_on_exec has given the value of
-newf->close_on_exec_init, but new_fdt->close_on_exec itself has not
-been initialized, is it intended to be like this.
+(I wanted to send this message two days ago but my email account was
+suspended at the time - I'm still sending it though it feels like it's
+no longer relevant).
 
-Thanky you very much!
+Speaking of Bugzilla Harmony:
+
+* KDE already uses it:
+https://invent.kde.org/websites/bugs-kde-org/-/merge_requests/1
+* Mozilla has been using it for quite time already
+* It has a docker container/image, so it's a breeze to install
+
+I've dealt with a dozen other bug trackers and to me Bugzilla remains
+the most powerful and featureful, while not being too complicated to set
+up and use.
+
+Lastly I've had a crazy idea for a second of maybe migrating the kernel
+bugzilla over to RedHat/IBM (by asking them whether they are willing to
+help) but on a second thought it's really really bad as the company is
+very large and there's a ton of bureaucracy, so managing it would become
+quite a hassle. Also, I wouldn't want the LF to hand control over it to
+RedHat.
+
+Best regards,
+Artem
