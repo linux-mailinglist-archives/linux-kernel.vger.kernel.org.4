@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 364EB5F606C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 07:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61AA65F606F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 07:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiJFFGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 01:06:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
+        id S230100AbiJFFIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 01:08:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbiJFFGI (ORCPT
+        with ESMTP id S229454AbiJFFId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 01:06:08 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99207733FE
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 22:06:02 -0700 (PDT)
+        Thu, 6 Oct 2022 01:08:33 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1647FFB1
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 22:08:32 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4884A21A11;
-        Thu,  6 Oct 2022 05:06:01 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1D7E121A13;
+        Thu,  6 Oct 2022 05:08:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1665032761; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1665032911; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=9OQTIjVFUC01bkI7WDIN0F1RArit60c4eKNRzzbaU1s=;
-        b=kmretDP4zgjTmp9fNKYLXaBgLcYZB1zYClG9ql4w2TIaCdbZtz5IvmEhu/ymTvc85BvVUv
-        LkCXqJvdda3HcX+UgmFnei0+xUQS2wXLsWwIkYpwQrxuc3M5lLjXDqo6+thLaJ6bZrF4Hy
-        JqTClBc2m4TdUlJn3sUNwCqpSvORhfo=
+        bh=UtHwfo8Ti3LHLWISJ0bchZhWJ1S+x17mLDCbC2H7SSg=;
+        b=quOtWuzDil+KA1fGnPub9ADouWjX80WqEyoGTBT6GV0HiB7om58I8O44B8XAZbPlepc640
+        Cj6w9oDrMzu+MekSysh7Oh3g2TBXxFwlFywT3bXYxWuZjjgJO2xjfar7OvPJufd/krEwuj
+        wrLqh55trdLUOTVMrYmVnRbjYs85JJw=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1A4771376E;
-        Thu,  6 Oct 2022 05:06:01 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E5C761376E;
+        Thu,  6 Oct 2022 05:08:30 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id LEtgBDliPmNuYgAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 06 Oct 2022 05:06:01 +0000
-Message-ID: <8abd9c77-286f-903c-d398-3d441bf830a6@suse.com>
-Date:   Thu, 6 Oct 2022 07:06:00 +0200
+        id GX2SNs5iPmMmYwAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 06 Oct 2022 05:08:30 +0000
+Message-ID: <d1f39ce3-fe09-d3b0-fa6d-01345d1d0429@suse.com>
+Date:   Thu, 6 Oct 2022 07:08:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH 1/2] xen/virtio: Fix n_pages calculation in
- xen_grant_dma_map(unmap)_page()
+Subject: Re: [PATCH 2/2] xen/virtio: Fix potential deadlock when accessing
+ xen_grant_dma_devices
 Content-Language: en-US
 To:     Oleksandr Tyshchenko <olekstysh@gmail.com>,
         xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
 Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
         Stefano Stabellini <sstabellini@kernel.org>
 References: <20221005174823.1800761-1-olekstysh@gmail.com>
- <20221005174823.1800761-2-olekstysh@gmail.com>
+ <20221005174823.1800761-3-olekstysh@gmail.com>
 From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20221005174823.1800761-2-olekstysh@gmail.com>
+In-Reply-To: <20221005174823.1800761-3-olekstysh@gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha256;
  protocol="application/pgp-signature";
- boundary="------------S0yywZOxdoyVl9IXTchDhhtW"
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+ boundary="------------mbQdv0kQz0uSmT0oRkoQkJHb"
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,38 +68,43 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------S0yywZOxdoyVl9IXTchDhhtW
-Content-Type: multipart/mixed; boundary="------------H5xTe0spdc0H7pc06G0WZsV3";
+--------------mbQdv0kQz0uSmT0oRkoQkJHb
+Content-Type: multipart/mixed; boundary="------------YjsZi846T4W4XxJfFfiDnH4b";
  protected-headers="v1"
 From: Juergen Gross <jgross@suse.com>
 To: Oleksandr Tyshchenko <olekstysh@gmail.com>,
  xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
 Cc: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
  Stefano Stabellini <sstabellini@kernel.org>
-Message-ID: <8abd9c77-286f-903c-d398-3d441bf830a6@suse.com>
-Subject: Re: [PATCH 1/2] xen/virtio: Fix n_pages calculation in
- xen_grant_dma_map(unmap)_page()
+Message-ID: <d1f39ce3-fe09-d3b0-fa6d-01345d1d0429@suse.com>
+Subject: Re: [PATCH 2/2] xen/virtio: Fix potential deadlock when accessing
+ xen_grant_dma_devices
 References: <20221005174823.1800761-1-olekstysh@gmail.com>
- <20221005174823.1800761-2-olekstysh@gmail.com>
-In-Reply-To: <20221005174823.1800761-2-olekstysh@gmail.com>
+ <20221005174823.1800761-3-olekstysh@gmail.com>
+In-Reply-To: <20221005174823.1800761-3-olekstysh@gmail.com>
 
---------------H5xTe0spdc0H7pc06G0WZsV3
-Content-Type: multipart/mixed; boundary="------------EIxqeP0Iw83Y0cKe9U0jeESa"
+--------------YjsZi846T4W4XxJfFfiDnH4b
+Content-Type: multipart/mixed; boundary="------------VZerug55gyCMYD0oUDokualh"
 
---------------EIxqeP0Iw83Y0cKe9U0jeESa
+--------------VZerug55gyCMYD0oUDokualh
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: base64
 
 T24gMDUuMTAuMjIgMTk6NDgsIE9sZWtzYW5kciBUeXNoY2hlbmtvIHdyb3RlOg0KPiBGcm9t
 OiBPbGVrc2FuZHIgVHlzaGNoZW5rbyA8b2xla3NhbmRyX3R5c2hjaGVua29AZXBhbS5jb20+
-DQo+IA0KPiBUYWtlIHBhZ2Ugb2Zmc2V0IGludG8gdGhlIGFjY291bnQgd2hlbiBjYWxjdWxh
-dGluZyB0aGUgbnVtYmVyIG9mIHBhZ2VzDQo+IHRvIGJlIGdyYW50ZWQuDQo+IA0KPiBTaWdu
-ZWQtb2ZmLWJ5OiBPbGVrc2FuZHIgVHlzaGNoZW5rbyA8b2xla3NhbmRyX3R5c2hjaGVua29A
-ZXBhbS5jb20+DQo+IEZpeGVzOiBkNmFjYTM1MDRjN2QgKCJ4ZW4vZ3JhbnQtZG1hLW9wczog
-QWRkIG9wdGlvbiB0byByZXN0cmljdCBtZW1vcnkgYWNjZXNzIHVuZGVyIFhlbiIpDQoNClJl
-dmlld2VkLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQoNCg0KSnVlcmdl
-bg0KDQo=
---------------EIxqeP0Iw83Y0cKe9U0jeESa
+DQo+IA0KPiBBcyBmaW5kX3hlbl9ncmFudF9kbWFfZGF0YSgpIGlzIGNhbGxlZCBmcm9tIGJv
+dGggaW50ZXJydXB0IGFuZCBwcm9jZXNzDQo+IGNvbnRleHRzLCB0aGUgYWNjZXNzIHRvIHhl
+bl9ncmFudF9kbWFfZGV2aWNlcyBYQXJyYXkgbXVzdCBiZSBwcm90ZWN0ZWQNCj4gYnkgeGFf
+bG9ja19pcnFzYXZlIHRvIGF2b2lkIGRlYWRsb2NrIHNjZW5hcmlvLg0KPiBBcyBYQXJyYXkg
+QVBJIGRvZXNuJ3QgcHJvdmlkZSB4YV9zdG9yZV9pcnFzYXZlIGhlbHBlciwgY2FsbCBsb2Nr
+bGVzcw0KPiBfX3hhX3N0b3JlIGRpcmVjdGx5IGFuZCBndWFyZCBpdCBleHRlcm5hbGx5Lg0K
+PiANCj4gQWxzbyBtb3ZlIHRoZSBzdG9yYWdlIG9mIHRoZSBYQXJyYXkncyBlbnRyeSB0byBh
+IHNlcGFyYXRlIGhlbHBlci4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IE9sZWtzYW5kciBUeXNo
+Y2hlbmtvIDxvbGVrc2FuZHJfdHlzaGNoZW5rb0BlcGFtLmNvbT4NCj4gRml4ZXM6IGQ2YWNh
+MzUwNGM3ZCAoInhlbi9ncmFudC1kbWEtb3BzOiBBZGQgb3B0aW9uIHRvIHJlc3RyaWN0IG1l
+bW9yeSBhY2Nlc3MgdW5kZXIgWGVuIikNCg0KUmV2aWV3ZWQtYnk6IEp1ZXJnZW4gR3Jvc3Mg
+PGpncm9zc0BzdXNlLmNvbT4NCg0KDQpKdWVyZ2VuDQo=
+--------------VZerug55gyCMYD0oUDokualh
 Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
 Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
 Content-Description: OpenPGP public key
@@ -157,24 +162,24 @@ jR/i1DG86lem3iBDXzXsZDn8R38=3D
 =3D2wuH
 -----END PGP PUBLIC KEY BLOCK-----
 
---------------EIxqeP0Iw83Y0cKe9U0jeESa--
+--------------VZerug55gyCMYD0oUDokualh--
 
---------------H5xTe0spdc0H7pc06G0WZsV3--
+--------------YjsZi846T4W4XxJfFfiDnH4b--
 
---------------S0yywZOxdoyVl9IXTchDhhtW
+--------------mbQdv0kQz0uSmT0oRkoQkJHb
 Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmM+YjgFAwAAAAAACgkQsN6d1ii/Ey+W
-TAgAlo+G+ByB4ukMNLrhiBvZj0DCG4cUOtEvSd1qQxDAiv7AxRqB48XE5d/ockZl0hF4tS0XUt9w
-hTBSNbKA2heyXCqhrBX8H/+GP3y8M2En09eYp2NVWr2fQnJl6/oYzgRvSg4ehAwv6ikNY9dBqEa6
-eIVQcSOoS+OgOBZQmD+c+yDiAv674DbM26PH68IlzghLpkM7w6MMNrWiolCznqPjwKapboLCASaR
-SFQs7y4qPOnOK0klBZQkWsxFU9DvtASifsOkjdMDH2h57a/mxU+2xmsiGKFvMzBnBTQvKt1HNVZt
-SUzgpSGcNB0AWn/cstkiWAleckRmt16QuxZ92Hsb0g==
-=IHI8
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmM+Ys4FAwAAAAAACgkQsN6d1ii/Ey+u
+7wgAhkg/ICzjGggW2a98n0rkGRZk2T0sFrVEJJJWWDGIYi3Z0NVVdd4VTwbVjqiYcDkyCYBE8G8y
+EKueKfVQBC78Ma86iwewgBCzLbFUPswr+GQijrIIyAH1jarHefYB+W0SFfwVfgjdN8vP4tnAHjiq
+LyWzpCvxG8GU2i7OuTQGj/NkrFb6J7soK4M8dAHTcAXfvhKD6woPMQgDsMOO1yqq5g/PbKlg7AqA
+WKdz1jKyB6NKWa0Vi+n+SqF9H0CDY6JuP5gLYyOGv64hTcpX/y+ncGuEq7KTVzFiV+qcwRxLwgK7
+EnnYaGK7mWdYnp5Fx8QssZJ2jyI+hKEFOpvlNR2Oqg==
+=l33E
 -----END PGP SIGNATURE-----
 
---------------S0yywZOxdoyVl9IXTchDhhtW--
+--------------mbQdv0kQz0uSmT0oRkoQkJHb--
