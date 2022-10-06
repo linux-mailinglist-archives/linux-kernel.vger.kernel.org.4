@@ -2,108 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 335E75F6B63
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 18:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C570E5F6B66
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 18:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbiJFQTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 12:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
+        id S231446AbiJFQTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 12:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231572AbiJFQTP (ORCPT
+        with ESMTP id S231415AbiJFQT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 12:19:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B858ACA30;
-        Thu,  6 Oct 2022 09:19:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3766D619EC;
-        Thu,  6 Oct 2022 16:19:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBB7DC433D6;
-        Thu,  6 Oct 2022 16:19:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665073153;
-        bh=ZgXM77/CXlz1KembRPwUCZZrHGoZx+VZ1yM34EffbDU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gEShlUmDsmrXFXkkL6VV7Tkd4KDRKAAj4NZuGie4VsVXHZydPqgc8prwovsqfWB6L
-         MCElEH85luzIXRFjWFJ6ZX07qiAqTRF5oyrMiPWvWWI7Js2zPfWkBEMMr267knlXEV
-         fgNiLhGl/45LlWkH1k/InWUQsgzNCeNWTCeP+GMXMctcoP+BZf7gXsfLoglwyqzi1s
-         uO/wUhFVDCKYJTxxe0r/aSDasdXzJvWsi+FFu60VRt2eTJUfDoOtFowcNfgSQeLAop
-         hGhR/v6A/Ig5JTp/YU4IYN1Sa4hW8LR/oSHXNzQvjgCamlxAcFC0wuxl/IPgFpljev
-         vMno992AvkUxw==
-Date:   Thu, 6 Oct 2022 19:19:08 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Dominique Martinet <asmadeus@codewreck.org>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        v9fs-developer@lists.sourceforge.net, linux_oss@crudebyte.com,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com,
-        davem@davemloft.net, edumazet@google.com, ericvh@gmail.com,
-        kuba@kernel.org, lucho@ionkov.net, netdev@vger.kernel.org
-Subject: Re: [PATCH 1/2] Revert "9p: p9_client_create: use p9_client_destroy
- on failure"
-Message-ID: <Yz7//EA4mfR7KL3D@unreal>
-References: <cover.1664442592.git.leonro@nvidia.com>
- <024537aa138893c838d9cacc2e24f311c1e83d25.1664442592.git.leonro@nvidia.com>
- <Yzww1LRLIE+It6J8@kadam>
- <YzyfM1rJrmT1Qe4N@codewreck.org>
+        Thu, 6 Oct 2022 12:19:29 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2728B48A0
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 09:19:24 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id gf8so2143418pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 09:19:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=6vcGCSyh/yp3xC5uIRVMFXTdQ0xt3noIJJL9jaVO1sg=;
+        b=QE3AQCSyl7woC242XO7P+dERgkeafBZ9F3zsmCqLJmcvrmgNZttdSaiJ4dMoaGtJ+X
+         WTd7v/l1hw0gNdEfTQbpPvvNXjQniznxY91XzEe3CGz4CdVhgsFGKs55j8StOhA7Y1AF
+         hNQdQEysPtPt9NLxouU0Jkck7fI5G5clOUuBY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=6vcGCSyh/yp3xC5uIRVMFXTdQ0xt3noIJJL9jaVO1sg=;
+        b=5f+W4nlMzehm/wKYLIZng58QENu6zzEJ6CjUUcpa9a5ymf4b1XfA1n2QhIsDV3uz/I
+         CKltlsXjgWqfLArM2uf6g7CPZdyi/7M4l87eVlPoYX3sUWzjjUOoKk1ISt1y6BgIOVpU
+         /Iu7m+h5PZyiYW5Zdc8WLF8Fr5I3z2l5mwt3T+DB53wUtSWg2zYIrBFxHKaKDjpYLhzj
+         TCKNuOD2baZ1yFo7deZkHwGFbYccQ7ZKqbetGasBwhTuRDNy9E4zyjP0GdwtyCZpMGPU
+         oaoPmBxjO7G3yPa8xL22e1FtLXgs5mgDoi0oZuuKNyn/ou6xWrnljCzGfmKul9FhCyYQ
+         z5EQ==
+X-Gm-Message-State: ACrzQf3Vvin07krTDFP2uGsb0ptNvY52VstoSsS8ohT3pDWq4WhemqaT
+        29VVWXCOaTyYRSfP+RFcL2iEPwWKssYZcNh7eo+0/Q==
+X-Google-Smtp-Source: AMsMyM5CP9aOlQkgIAdUuJuavCyQyZFUoy/1rQLLbWzXu4IQ8rUOqBG0DimAQLu5yLpHZ4X73ng7oEKd1LiUvV3fITE=
+X-Received: by 2002:a17:902:8542:b0:179:eb8d:f41d with SMTP id
+ d2-20020a170902854200b00179eb8df41dmr247725plo.62.1665073163603; Thu, 06 Oct
+ 2022 09:19:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzyfM1rJrmT1Qe4N@codewreck.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220913162732.163631-1-xukuohai@huaweicloud.com>
+ <f1e14934-dc54-9bf7-501a-89affdb7371e@iogearbox.net> <YzG51Jyd5zhvygtK@arm.com>
+ <YzHk1zRf1Dp8YTEe@FVFF77S0Q05N> <970a25e4-9b79-9e0c-b338-ed1a934f2770@huawei.com>
+ <YzR5WSLux4mmFIXg@FVFF77S0Q05N> <2cb606b4-aa8b-e259-cdfd-1bfc61fd7c44@huawei.com>
+ <CABRcYmKPchvtkkgWhOJ6o3pHVqTWeenGawHfZ2ug8Akdh6NfnQ@mail.gmail.com>
+ <7f34d333-3b2a-aea5-f411-d53be2c46eee@huawei.com> <20221005110707.55bd9354@gandalf.local.home>
+ <CABRcYmJGY6fp0CtUBYN8BjEDN=r42BPLSBcrxqu491bTRmfm7g@mail.gmail.com> <20221005113019.18aeda76@gandalf.local.home>
+In-Reply-To: <20221005113019.18aeda76@gandalf.local.home>
+From:   Florent Revest <revest@chromium.org>
+Date:   Thu, 6 Oct 2022 18:19:12 +0200
+Message-ID: <CABRcYmL0bDkgYP3tSwhZYaGUSbsUR3Gq85QCRiUAdXt65czzmg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/4] Add ftrace direct call for arm64
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Xu Kuohai <xukuohai@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Xu Kuohai <xukuohai@huaweicloud.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 05, 2022 at 06:01:39AM +0900, Dominique Martinet wrote:
-> Dan Carpenter wrote on Tue, Oct 04, 2022 at 04:10:44PM +0300:
-> > On Thu, Sep 29, 2022 at 12:37:55PM +0300, Leon Romanovsky wrote:
-> > > Rely on proper unwind order.
-> > > 
-> > > This reverts commit 3ff51294a05529d0baf6d4b2517e561d12efb9f9.
-> > > 
-> > > Reported-by: syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com
-> > > Signed-off-by: Leon Romanovsky <leon@kernel.org>
-> > 
-> > The commit message doesn't really say what the problem is to the user.
-> > Is this just to make the next patch easier?
-> 
-> Yes (and perhaps a bit of spite from the previous discussion), and the
-> next patch was not useable so I am not applying this as is.
-> 
-> The next patch was meant as an alternative implementation to this fix:
-> https://lore.kernel.org/all/20220928221923.1751130-1-asmadeus@codewreck.org/T/#u
-> 
-> At this point I have the original fix in my -next branch but it hasn't
-> had any positive review (and well, I myself agree it's ugly), so unless
-> Leon sends a v2 I'll need to think of a better way of tracking if
-> clnt->trans_mod->create has been successfully called.
-> I'm starting to think that since we don't have so many clnt I can
-> probably just fit a bool/bitfield in one of the holes of the struct
-> and just keep track of it; that'll be less error-prone than relying on
-> clnt->trans (which -is- initialized in create() most of the time, but
-> not in a way we can rely on) or reworking create() to return it as I
-> originally wanted to do (rdma still needs to populate clnt->trans behind
-> the scenees before create() returns, so the abstraction is also quite
-> ugly)
-> 
-> The current breakage is actually quite bad so I'll try to send that
-> today or tomorrow for merging next week unless Leon resends something we
-> can work with... Conceptually won't be different than the patch
-> currently in next so hopefully can pretend it's had a couple of weeks of
-> testing...
+On Wed, Oct 5, 2022 at 5:30 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Wed, 5 Oct 2022 17:10:33 +0200
+> Florent Revest <revest@chromium.org> wrote:
+>
+> > On Wed, Oct 5, 2022 at 5:07 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+> > >
+> > > Can you show the implementation of the indirect call you used?
+> >
+> > Xu used my development branch here
+> > https://github.com/FlorentRevest/linux/commits/fprobe-min-args
+>
+> That looks like it could be optimized quite a bit too.
+>
+> Specifically this part:
+>
+> static bool bpf_fprobe_entry(struct fprobe *fp, unsigned long ip, struct ftrace_regs *regs, void *private)
+> {
+>         struct bpf_fprobe_call_context *call_ctx = private;
+>         struct bpf_fprobe_context *fprobe_ctx = fp->ops.private;
+>         struct bpf_tramp_links *links = fprobe_ctx->links;
+>         struct bpf_tramp_links *fentry = &links[BPF_TRAMP_FENTRY];
+>         struct bpf_tramp_links *fmod_ret = &links[BPF_TRAMP_MODIFY_RETURN];
+>         struct bpf_tramp_links *fexit = &links[BPF_TRAMP_FEXIT];
+>         int i, ret;
+>
+>         memset(&call_ctx->ctx, 0, sizeof(call_ctx->ctx));
+>         call_ctx->ip = ip;
+>         for (i = 0; i < fprobe_ctx->nr_args; i++)
+>                 call_ctx->args[i] = ftrace_regs_get_argument(regs, i);
+>
+>         for (i = 0; i < fentry->nr_links; i++)
+>                 call_bpf_prog(fentry->links[i], &call_ctx->ctx, call_ctx->args);
+>
+>         call_ctx->args[fprobe_ctx->nr_args] = 0;
+>         for (i = 0; i < fmod_ret->nr_links; i++) {
+>                 ret = call_bpf_prog(fmod_ret->links[i], &call_ctx->ctx,
+>                                       call_ctx->args);
+>
+>                 if (ret) {
+>                         ftrace_regs_set_return_value(regs, ret);
+>                         ftrace_override_function_with_return(regs);
+>
+>                         bpf_fprobe_exit(fp, ip, regs, private);
+>                         return false;
+>                 }
+>         }
+>
+>         return fexit->nr_links;
+> }
+>
+> There's a lot of low hanging fruit to speed up there. I wouldn't be too
+> fast to throw out this solution if it hasn't had the care that direct calls
+> have had to speed that up.
+>
+> For example, trampolines currently only allow to attach to functions with 6
+> parameters or less (3 on x86_32). You could make 7 specific callbacks, with
+> zero to 6 parameters, and unroll the argument loop.
 
-I can't resend anything in near future and most of the time have very
-limited access to computer due to holidays here.
-
-Thanks
-
-> -- 
-> Dominique
+Sure, we can give this a try, I'll work on a macro that generates the
+7 callbacks and we can check how much that helps. My belief right now
+is that ftrace's iteration over all ops on arm64 is where we lose most
+time but now that we have numbers it's pretty easy to check hypothesis
+:)
