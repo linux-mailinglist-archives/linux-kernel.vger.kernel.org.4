@@ -2,165 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F4525F7079
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 23:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A3C35F7083
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 23:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232022AbiJFVl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 17:41:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55082 "EHLO
+        id S231354AbiJFVrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 17:47:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiJFVl0 (ORCPT
+        with ESMTP id S229729AbiJFVrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 17:41:26 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2135E654
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 14:41:25 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id s2so4669572edd.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 14:41:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=t+BFfG9yghXPurL6NLe/D4YtZuRs9YqZY2gHzJt8FhE=;
-        b=jLrZe1SovfLM4D+6+aoKJUrnQr/D3YdaBT0jWcQsx1tRRtJmcXAERvt+FCQm0xkzzE
-         bPu13fjvf+mkVolvK8pzrEECPJ00aoH04dkcY9nrbXGj+HHGzhXk89hchQUrcohMypBW
-         Kpp2UpDMmSk/w3F0Pof4cFLqHPJ9uVeS4NB+0FGhXUaxgN7ZDNu2Hx1EKKQkQqhnMv4F
-         nYB6MMV5ddoJSfvi1/C41sbXb84s6gJGoHvnJ59JW3ewu1ladLC0q2Ufp7QV4kj7xfvh
-         CFfmAQFPZbtNDq7F07kyv4ZvUoK9dCsP2W2GEqMNnJ9q1YZrUcdELqoEuBxSmD1LcABO
-         0OgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t+BFfG9yghXPurL6NLe/D4YtZuRs9YqZY2gHzJt8FhE=;
-        b=a0CCGcSgc0D+Lwvp+5E9rbx0X1LSWJVBwHeIN3SL/gZZXtJXjK6XsTCchMhkseClwN
-         3/IkPwMQyf3rfa1n9LfdT5g1lvNRCmZ1GXZmR7aF/69cnJuImBCvxcwEuPnCvbrKyU0P
-         y1NhhqhHZvwpiItecF0fHxZsDYFKDVyffYcI8TShtoPIJvoCClfdF/CzOWjs369629Ax
-         bYwNrf/OiJpBvOnTChF6be5LGmxwF1vqetYqjSzZp/TxFB2zyg1sO0PqFzKF1DIZBbqI
-         pNyUjJbYHqcl9jG1AV7PmrCKHhnAZnikovbjQNybn7aBEedO6YQCfJ7vhEKiv2l281e7
-         LHjQ==
-X-Gm-Message-State: ACrzQf2Fera4LFbUgwELkPzAskOkALJO2FoIMmXUFRm9DfePVJEHJtze
-        3Xb6l8kLJxrrU/RQ+I4fet/TgRH8n/ZU6uk3JeM=
-X-Google-Smtp-Source: AMsMyM4uRknQwBd24MUgt2cGgmDnI1lRLbQ9FeMEosCjl5yBMVmNtwOI2sxATbsixLzVUV4oRip3wWrEc/JTJvnXT/Y=
-X-Received: by 2002:a05:6402:51cb:b0:459:f3f9:2a20 with SMTP id
- r11-20020a05640251cb00b00459f3f92a20mr1709129edd.74.1665092483560; Thu, 06
- Oct 2022 14:41:23 -0700 (PDT)
+        Thu, 6 Oct 2022 17:47:32 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F363FBEFA5;
+        Thu,  6 Oct 2022 14:47:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665092850; x=1696628850;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=SXGjsA1E5RfmhjNKZMf6XZ6SCP9fS2o5Y11+tqgFSfQ=;
+  b=LNVjmkQOmWjUN6pdpHtEGsH2jAOz5Z9N712/USBOuOhUWzwwKCJOuyTF
+   hBmLxJOoHuEI3l3oyknzLckVyztGCMVHqm4cien7VZ8MrMXockGQbuDuX
+   JR/qu8K2v3Cf7RLWH1DHkgiKiao60BnBst4jSY/rmFe8DdI9NiFZrdi4r
+   6Cw0ZRYQ2Npe/llWYfltvQ5XKlLfGDZN70bCRoam1PtfnlgTIZTifDMx4
+   vNENzoypHyIog3kRgCEB3cvrLzI+exTZ6e4UC1IUnE8Xekw415oKWo4o3
+   Pq50NgMfIAsz2ao3Mm5FQ5oR8jTp3WTFjO9TbeFlS/XUKlOUDfe7lfaXt
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="330014699"
+X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
+   d="scan'208";a="330014699"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 14:47:30 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="767318383"
+X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
+   d="scan'208";a="767318383"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 14:47:29 -0700
+Date:   Thu, 6 Oct 2022 14:47:40 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, Lukas Wunner <lukas@wunner.de>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v3 4/4] tty: serial: 8250: add DFL bus driver for Altera
+ 16550.
+In-Reply-To: <d75abf9c-e982-563f-b2-d5a376367b1e@linux.intel.com>
+Message-ID: <alpine.DEB.2.22.394.2210061445220.1772307@rhweight-WRK1>
+References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com> <20221004143718.1076710-5-matthew.gerlach@linux.intel.com> <d75abf9c-e982-563f-b2-d5a376367b1e@linux.intel.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-References: <CAPM=9tzs4n8dDQ_XVVPS_5jrBgsNkhDQvf-B_XmUg+EG_M2i4Q@mail.gmail.com>
- <CAHk-=whUp5Ufur6Bmv=H-rDDTNJJ-KVqOKkL+5FmR01jp0dbcA@mail.gmail.com>
- <CADnq5_Of-8ZyBxee0fZ=0x-eV-2NX_+e9sd-9nmuHdLugSHp2g@mail.gmail.com>
- <CAHk-=wi43xD06UgO2McDT3R=ze_aHgOGjcDOoggSwmQRv2kA+A@mail.gmail.com>
- <CADnq5_N0Ef+1VUoDLdpHfJXqZFuPYbx5Lq+94NWciHcQC+VrMg@mail.gmail.com> <CAPM=9tyAOnzwXyyPuoceZ1mimAkzxR-63YmKfVtcQX=swywNvg@mail.gmail.com>
-In-Reply-To: <CAPM=9tyAOnzwXyyPuoceZ1mimAkzxR-63YmKfVtcQX=swywNvg@mail.gmail.com>
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 7 Oct 2022 07:41:11 +1000
-Message-ID: <CAPM=9tyL=J26aHdhSSK0jwYQLHBf8jjTMvJmj1cQheUF=wpd-Q@mail.gmail.com>
-Subject: Re: [git pull] drm for 6.1-rc1
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323328-166967846-1665092868=:1772307"
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Oct 2022 at 06:24, Dave Airlie <airlied@gmail.com> wrote:
->
-> On Fri, 7 Oct 2022 at 06:14, Alex Deucher <alexdeucher@gmail.com> wrote:
-> >
-> > On Thu, Oct 6, 2022 at 3:48 PM Linus Torvalds
-> > <torvalds@linux-foundation.org> wrote:
-> > >
-> > > On Thu, Oct 6, 2022 at 12:28 PM Alex Deucher <alexdeucher@gmail.com> wrote:
-> > > >
-> > > > Maybe you are seeing this which is an issue with GPU TLB flushes which
-> > > > is kind of sporadic:
-> > > > https://gitlab.freedesktop.org/drm/amd/-/issues/2113
-> > >
-> > > Well, that seems to be 5.19, and while timing changes (or whatever
-> > > other software updates) could have made it start trigger, this machine
-> > > has been pretty solid otgerwise.
-> > >
-> > > > Are you seeing any GPU page faults in your kernel log?
-> > >
-> > > Nothing even remotely like that "no-retry page fault" in that issue
-> > > report. Of course, if it happens just before the whole thing locks
-> > > up...
-> >
-> > Your chip is too old to support retry faults so it's likely you could
-> > be just seeing a GPU page fault followed by a hang.  Your chip also
-> > lacks a paging queue, so you would be affected by the TLB issue.
->
->
-> Okay I got my FIJI running Linus tree and netconsole to blow up like
-> this, running fedora 36 desktop, steam, firefox, and then I ran
-> poweroff over ssh.
->
-> [ 1234.778760] BUG: kernel NULL pointer dereference, address: 0000000000000088
-> [ 1234.778782] #PF: supervisor read access in kernel mode
-> [ 1234.778787] #PF: error_code(0x0000) - not-present page
-> [ 1234.778791] PGD 0 P4D 0
-> [ 1234.778798] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> [ 1234.778803] CPU: 7 PID: 805 Comm: systemd-journal Not tainted 6.0.0+ #2
-> [ 1234.778809] Hardware name: System manufacturer System Product
-> Name/PRIME X370-PRO, BIOS 5603 07/28/2020
-> [ 1234.778813] RIP: 0010:drm_sched_job_done.isra.0+0xc/0x140 [gpu_sched]
-> [ 1234.778828] Code: aa 0f 1d ce e9 57 ff ff ff 48 89 d7 e8 9d 8f 3f
-> ce e9 4a ff ff ff 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 41 54 55 53
-> 48 89 fb <48> 8b af 88 00 00 00 f0 ff 8d f0 00 00 00 48 8b 85 80 01 00
-> 00 f0
-> [ 1234.778834] RSP: 0000:ffffabe680380de0 EFLAGS: 00010087
-> [ 1234.778839] RAX: ffffffffc04e9230 RBX: 0000000000000000 RCX: 0000000000000018
-> [ 1234.778897] RDX: 00000ba278e8977a RSI: ffff953fb288b460 RDI: 0000000000000000
-> [ 1234.778901] RBP: ffff953fb288b598 R08: 00000000000000e0 R09: ffff953fbd98b808
-> [ 1234.778905] R10: 0000000000000000 R11: ffffabe680380ff8 R12: ffffabe680380e00
-> [ 1234.778908] R13: 0000000000000001 R14: 00000000ffffffff R15: ffff953fbd9ec458
-> [ 1234.778912] FS:  00007f35e7008580(0000) GS:ffff95428ebc0000(0000)
-> knlGS:0000000000000000
-> [ 1234.778916] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [ 1234.778919] CR2: 0000000000000088 CR3: 000000010147c000 CR4: 00000000003506e0
-> [ 1234.778924] Call Trace:
-> [ 1234.778981]  <IRQ>
-> [ 1234.778989]  dma_fence_signal_timestamp_locked+0x6a/0xe0
-> [ 1234.778999]  dma_fence_signal+0x2c/0x50
-> [ 1234.779005]  amdgpu_fence_process+0xc8/0x140 [amdgpu]
-> [ 1234.779234]  sdma_v3_0_process_trap_irq+0x70/0x80 [amdgpu]
-> [ 1234.779395]  amdgpu_irq_dispatch+0xa9/0x1d0 [amdgpu]
-> [ 1234.779609]  amdgpu_ih_process+0x80/0x100 [amdgpu]
-> [ 1234.779783]  amdgpu_irq_handler+0x1f/0x60 [amdgpu]
-> [ 1234.779940]  __handle_irq_event_percpu+0x46/0x190
-> [ 1234.779946]  handle_irq_event+0x34/0x70
-> [ 1234.779949]  handle_edge_irq+0x9f/0x240
-> [ 1234.779954]  __common_interrupt+0x66/0x100
-> [ 1234.779960]  common_interrupt+0xa0/0xc0
-> [ 1234.779965]  </IRQ>
-> [ 1234.779968]  <TASK>
-> [ 1234.779971]  asm_common_interrupt+0x22/0x40
-> [ 1234.779976] RIP: 0010:finish_mkwrite_fault+0x22/0x110
-> [ 1234.779981] Code: 1f 84 00 00 00 00 00 90 0f 1f 44 00 00 41 55 41
-> 54 55 48 89 fd 53 48 8b 07 f6 40 50 08 0f 84 eb 00 00 00 48 8b 45 30
-> 48 8b 18 <48> 89 df e8 66 bd ff ff 48 85 c0 74 0d 48 89 c2 83 e2 01 48
-> 83 ea
-> [ 1234.779985] RSP: 0000:ffffabe680bcfd78 EFLAGS: 00000202
->
-> I'll see if I can dig any.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-I'm kicking the tires on the drm-next tree just prior to submission,
-and in an attempt to make myself look foolish and to tempt fate, it
-seems stable.
+--8323328-166967846-1665092868=:1772307
+Content-Type: text/plain; charset=ISO-8859-15; format=flowed
+Content-Transfer-Encoding: 8BIT
 
-This might mean a silent merge conflict/regression, I'll bash on the
-drm-next tree a lot more and see if I can play spot the difference.
 
-Dave.
+
+On Wed, 5 Oct 2022, Ilpo Järvinen wrote:
+
+> On Tue, 4 Oct 2022, matthew.gerlach@linux.intel.com wrote:
+>
+>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>
+>> Add a Device Feature List (DFL) bus driver for the Altera
+>> 16550 implementation of UART.
+>>
+>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> ---
+>> v3: use passed in location of registers
+>>     use cleaned up functions for parsing parameters
+>>
+>> v2: clean up error messages
+>>     alphabetize header files
+>>     fix 'missing prototype' error by making function static
+>>     tried to sort Makefile and Kconfig better
+>> ---
+>>  drivers/tty/serial/8250/8250_dfl.c | 177 +++++++++++++++++++++++++++++
+>>  drivers/tty/serial/8250/Kconfig    |   9 ++
+>>  drivers/tty/serial/8250/Makefile   |   1 +
+>>  3 files changed, 187 insertions(+)
+>>  create mode 100644 drivers/tty/serial/8250/8250_dfl.c
+>>
+>> diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
+>> new file mode 100644
+>> index 000000000000..110ad3a73459
+>> --- /dev/null
+>> +++ b/drivers/tty/serial/8250/8250_dfl.c
+>> @@ -0,0 +1,177 @@
+>
+>> +static int dfl_uart_get_params(struct device *dev, void __iomem *dfh_base, resource_size_t max,
+>> +			       struct uart_8250_port *uart)
+>> +{
+>> +	u64 v, fifo_len, reg_width;
+>> +	int off;
+>> +
+>> +	if (!dfhv1_has_params(dfh_base)) {
+>> +		dev_err(dev, "missing required DFH parameters\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_CLK_FRQ);
+>> +	if (off < 0) {
+>> +		dev_err(dev, "missing CLK_FRQ param\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	uart->port.uartclk = readq(dfh_base + off);
+>> +	dev_dbg(dev, "UART_CLK_ID %u Hz\n", uart->port.uartclk);
+>> +
+>> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_FIFO_LEN);
+>> +	if (off < 0) {
+>> +		dev_err(dev, "missing FIFO_LEN param\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	fifo_len = readq(dfh_base + off);
+>> +	dev_dbg(dev, "UART_FIFO_ID fifo_len %llu\n", fifo_len);
+>> +
+>> +	switch (fifo_len) {
+>> +	case 32:
+>> +		uart->port.type = PORT_ALTR_16550_F32;
+>> +		break;
+>> +
+>> +	case 64:
+>> +		uart->port.type = PORT_ALTR_16550_F64;
+>> +		break;
+>> +
+>> +	case 128:
+>> +		uart->port.type = PORT_ALTR_16550_F128;
+>> +		break;
+>> +
+>> +	default:
+>> +		dev_err(dev, "bad fifo_len %llu\n", fifo_len);
+>
+> I'd tell user "unsupported" rather than "bad".
+
+The word, unsupported, sounds better.  I will change it in both places you 
+suggested.
+
+>
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	off = dfhv1_find_param(dfh_base, max, DFHv1_PARAM_ID_REG_LAYOUT);
+>> +	if (off < 0) {
+>> +		dev_err(dev, "missing REG_LAYOUT param\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	v = readq(dfh_base + off);
+>> +	uart->port.regshift = FIELD_GET(DFHv1_PARAM_ID_REG_SHIFT, v);
+>> +	reg_width = FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v);
+>> +
+>> +	dev_dbg(dev, "UART_LAYOUT_ID width %lld shift %d\n",
+>> +		FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v), (int)uart->port.regshift);
+>
+> Why not use reg_width directly?
+
+Good catch.
+
+>
+>> +	switch (reg_width) {
+>> +	case 4:
+>> +		uart->port.iotype = UPIO_MEM32;
+>> +		break;
+>> +
+>> +	case 2:
+>> +		uart->port.iotype = UPIO_MEM16;
+>> +		break;
+>> +
+>> +	default:
+>> +		dev_err(dev, "invalid reg_width %lld\n", reg_width);
+>
+> unsupported ?
+>
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int dfl_uart_probe(struct dfl_device *dfl_dev)
+>> +{
+>> +	struct device *dev = &dfl_dev->dev;
+>> +	struct uart_8250_port uart;
+>> +	struct dfl_uart *dfluart;
+>> +	resource_size_t res_size;
+>> +	void __iomem *dfh_base;
+>> +	int ret;
+>> +
+>> +	memset(&uart, 0, sizeof(uart));
+>> +	uart.port.flags = UPF_IOREMAP;
+>> +	uart.port.mapbase = dfl_dev->csr_res.start;
+>> +	uart.port.mapsize = resource_size(&dfl_dev->csr_res);
+>> +
+>> +	dfluart = devm_kzalloc(dev, sizeof(*dfluart), GFP_KERNEL);
+>> +	if (!dfluart)
+>> +		return -ENOMEM;
+>> +
+>> +	dfh_base = devm_ioremap_resource(dev, &dfl_dev->mmio_res);
+>> +	if (IS_ERR(dfh_base))
+>> +		return PTR_ERR(dfh_base);
+>> +
+>> +	res_size = resource_size(&dfl_dev->mmio_res);
+>> +
+>> +	ret = dfl_uart_get_params(dev, dfh_base, res_size, &uart);
+>> +
+>> +	devm_iounmap(dev, dfh_base);
+>> +	devm_release_mem_region(dev, dfl_dev->mmio_res.start, res_size);
+>> +
+>> +	if (ret < 0)
+>> +		return dev_err_probe(dev, ret, "failed uart feature walk\n");
+>> +
+>> +	dev_dbg(dev, "nr_irqs %d %p\n", dfl_dev->num_irqs, dfl_dev->irqs);
+>> +
+>> +	if (dfl_dev->num_irqs == 1)
+>> +		uart.port.irq = dfl_dev->irqs[0];
+>> +
+>> +	/* register the port */
+>
+> This comment is pretty useless. Just drop it.
+
+Will drop this useless comment.
+
+>
+>> +	dfluart->line = serial8250_register_8250_port(&uart);
+>> +	if (dfluart->line < 0)
+>> +		return dev_err_probe(dev, dfluart->line, "unable to register 8250 port.\n");
+>> +
+>> +	dev_info(dev, "serial8250_register_8250_port %d\n", dfluart->line);
+>
+> This you want to drop too. It seems a debug thing rather than info level
+> stuff.
+
+It is actually redundant output because serial8250_register_8250_port() 
+produces useful output.  I will drop the line.
+
+>
+>
+> -- 
+> i.
+>
+>
+--8323328-166967846-1665092868=:1772307--
