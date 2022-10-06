@@ -2,93 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC8C5F6E88
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7382B5F6FF3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 23:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232146AbiJFUBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 16:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
+        id S231624AbiJFVIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 17:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiJFUBR (ORCPT
+        with ESMTP id S232023AbiJFVIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 16:01:17 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF093AE229;
-        Thu,  6 Oct 2022 13:01:15 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id 204so3014738pfx.10;
-        Thu, 06 Oct 2022 13:01:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=QID4mZ6+Ln4Dy9tQ5FS+Lme8sqZOwvScyJQa62DK9Qg=;
-        b=GlxyKn5KHcw9Jfdpa1JYWX8RZidLlXbH6fpRWyw8NNYUhCD0PzG7CDqZ0VhET3yDKl
-         PxVk3A8JNfdl5MISuhLfRNRkAhheQuJaVUgNfCdyNzSYF67dKfdwZdqs7whZBKU5M7E4
-         kFAfMTa8dHsDkIVX0/n2xb8LTZK91BYnxlAF1NLsHj/1f6SF/WrPLLUFfDbYN7gsGx8j
-         lFCQg9IrGks3d0EwFVYBU4+XI+YRJHM3vQm+eHHR2+CsvdD4MjlFXuwLTiNTHwKsXQM/
-         6q24uFxdsH8AP11ZxN58NoJ9/cTCnaSjayuxFBPfcjgK2GoBusDA85Jcz71YKfAYJqip
-         nXaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=QID4mZ6+Ln4Dy9tQ5FS+Lme8sqZOwvScyJQa62DK9Qg=;
-        b=Fpcv71bzIOeZw6AYLwSMSBVLxK6ZU1tLesrwAnHzQv4c8TePbDSOG7oT8CQcB+FKXa
-         lwL+18fv3L7ZEgpK5cSOpw2NZPwSjVN9JnTZGDH9TSSzBXft69LIhfkamowrDJgtAtEv
-         I2f/4uz4yZWJyd56PCN4NNsoKkQ5IZW5oDpjsutJ0vckMahAR+WCgQVIY+2Dih7XGrSD
-         pOT21ei1ZRf4venQlyaWMJdxIzjJgTHqFK3pX8d4MjAl6jqo2cWAriCaH1rjbG7+C0Uz
-         80OCbRrQ8EjG8pzkvMryoOw66px5OTEoDw5hpwZiqiGlm0w2/TDgknbP8AKH9zMFf1pt
-         wOjw==
-X-Gm-Message-State: ACrzQf3ggbkOHT+TQQZtTasJ9t5neOTjxOqa2YDj0mRcMIJgygZkQZPJ
-        I0TNCmQMLkkKpe+HiAjqzAIzP4fseYtaX255EVE=
-X-Google-Smtp-Source: AMsMyM7eoytn3Ir5HNBSL96ewlJpbViQJ1cOjUJ4f0xnE25K5dKlnaFzSg7ZbuKK+/WGrK0f4mgsaHMDkIE4jDyJdoU=
-X-Received: by 2002:a63:d4f:0:b0:457:2427:eac with SMTP id 15-20020a630d4f000000b0045724270eacmr1294278pgn.251.1665086475275;
- Thu, 06 Oct 2022 13:01:15 -0700 (PDT)
+        Thu, 6 Oct 2022 17:08:41 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADB5C14A3;
+        Thu,  6 Oct 2022 14:08:38 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mk3vM33ZQz4xFv;
+        Fri,  7 Oct 2022 08:08:31 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1665090513;
+        bh=tBh7R6EFNvNHC472p+hpxdozssjAKs0uoyZ2/Iz5m7c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lEZ1s/HQiOR9m8FWwvlBEaEksytuS4VvE0NaNWxJyYQUqlyvAgZV9TvsHaf8jc+0F
+         TMbVyFcXYBIBH1GRM2dfDclqp0olE3JhdqgiOlM02TBf3ifpLxwe0y7qgBco6xYr//
+         TrnyLkwtS7pFp5fKipMYaYCoYsWSo+suiCDC9y9tvJ370eCjGwKA2+BxDQBi92NFoP
+         xx9AyE7ttg86rcV5lvlsAyfUHOcWzEE8lyMK4ghfM5X0MtyVxfVn4yYOn/wFCH+qR0
+         BSBfEKgW9sOOF+2Z7+us9y+wJu/NzsOI7BQe581i8o1E1N38oqDfsKdSW8ypePg/ce
+         2LEnAms0O1R8w==
+Date:   Fri, 7 Oct 2022 03:52:44 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Airlie <airlied@redhat.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: Re: linux-next: build failure after merge of the drm tree
+Message-ID: <20221007035244.46e258a3@canb.auug.org.au>
+In-Reply-To: <CADnq5_N1cZiG39KzUzdHCtLRRCipMMNXjaNuAvoQs8=VTjtGCA@mail.gmail.com>
+References: <20220930105434.111407-1-broonie@kernel.org>
+        <20221004132047.435d42db@canb.auug.org.au>
+        <CAMwc25oshRcJBoCT70B+b42bh5sPqgyoHuBx6K6ZLrwBMHnJzw@mail.gmail.com>
+        <20221004140558.64f59f2c@canb.auug.org.au>
+        <YzwbW4YQwQPsRPYw@sirena.org.uk>
+        <CADnq5_PbPQPui1tOdUMB+OYbz6UBMKCgtwvE95oA+SfcN0RzNg@mail.gmail.com>
+        <09cd11c5-2a15-3653-957c-88c751fa9029@amd.com>
+        <20221006092810.0c3a2238@canb.auug.org.au>
+        <20221006191245.11bb0e2c@canb.auug.org.au>
+        <CADnq5_N1cZiG39KzUzdHCtLRRCipMMNXjaNuAvoQs8=VTjtGCA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221005113210.255710920@linuxfoundation.org>
-In-Reply-To: <20221005113210.255710920@linuxfoundation.org>
-From:   Allen Pais <stable.kernel.dev@gmail.com>
-Date:   Thu, 6 Oct 2022 13:01:04 -0700
-Message-ID: <CAJq+SaBC_JANh4zKHdLNhfc+iL2_3ogm+UHxbhLSC3SR+vvkJw@mail.gmail.com>
-Subject: Re: [PATCH 5.4 00/51] 5.4.217-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/yq=CMsPbtfbw3ZbIbj0A.8v";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This is the start of the stable review cycle for the 5.4.217 release.
-> There are 51 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 07 Oct 2022 11:31:56 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.217-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
+--Sig_/yq=CMsPbtfbw3ZbIbj0A.8v
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-compiled and booted with no errors or regressions on
-x86_64 & ARM64 test systems.
+Hi Alex,
 
-Tested-by: Allen Pais <apais@linux.microsoft.com>
+On Thu, 6 Oct 2022 09:56:32 -0400 Alex Deucher <alexdeucher@gmail.com> wrot=
+e:
+>
+> This looks good to me.  Care to add you s-o-b?
+>=20
+> On Thu, Oct 6, 2022 at 4:12 AM Stephen Rothwell <sfr@canb.auug.org.au> wr=
+ote:
+> >
+> > This works as well, and (in my opinion) is better:
+> >
+> > diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c b/drivers/=
+gpu/drm/amd/display/dc/core/dc_stream.c
+> > index ae13887756bf..fb6222d4c430 100644
+> > --- a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
+> > +++ b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
+> > @@ -499,7 +499,7 @@ bool dc_stream_remove_writeback(struct dc *dc,
+> >                 struct dc_stream_state *stream,
+> >                 uint32_t dwb_pipe_inst)
+> >  {
+> > -       int i =3D 0, j =3D 0;
+> > +       unsigned int i, j;
+> >         if (stream =3D=3D NULL) {
+> >                 dm_error("DC: dc_stream is NULL!\n");
+> >                 return false;
+> > @@ -520,9 +520,9 @@ bool dc_stream_remove_writeback(struct dc *dc,
+> >         }
+> >
+> >         /* remove writeback info for disabled writeback pipes from stre=
+am */
+> > -       for (i =3D 0, j =3D 0; i < stream->num_wb_info && j < MAX_DWB_P=
+IPES; i++) {
+> > +       for (i =3D 0, j =3D 0; i < stream->num_wb_info; i++) {
+> >                 if (stream->writeback_info[i].wb_enabled) {
+> > -                       if (i !=3D j)
+> > +                       if (j < i)
+> >                                 /* trim the array */
+> >                                 stream->writeback_info[j] =3D stream->w=
+riteback_info[i];
+> >                         j++;
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/yq=CMsPbtfbw3ZbIbj0A.8v
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmM/B9wACgkQAVBC80lX
+0GxPBwf/X9e+0uhZmXWuqnUtNXKQwd59fHfR7z+ygsIZb+QvXVfou3rxBBG01k9L
+ynx2bUMXHzZclPr4YRBTujJg+WUrGRaSSwQLYMnaMldJPLIw1DVOzQPJc55MzkTx
+Ot1EwdItYS0CohnccfrUZwWTs7j8j5rkn9tQNDRmkPAS5HQ+SzIir2oA0axR78yT
+tL9uxN762UYNBTPGH07aZ2Z/tMMTglop9JtzsAhtJJzUMK9G4VMMP1UDld8PfYwf
+1yz85G9JBKhEjk+NItYGvKLK3XzxERwusBaUUGgb77dsZ2A/njBwZkkHjPeP7Djr
+gvipz9skgMi5RjNrKa3caq0X0EYP6g==
+=mEP6
+-----END PGP SIGNATURE-----
+
+--Sig_/yq=CMsPbtfbw3ZbIbj0A.8v--
