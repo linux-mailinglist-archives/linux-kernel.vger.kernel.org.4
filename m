@@ -2,71 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 965355F6E69
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 21:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C7D5F6E6C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 21:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbiJFTuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 15:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53806 "EHLO
+        id S232105AbiJFTve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 15:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbiJFTuT (ORCPT
+        with ESMTP id S231879AbiJFTva (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 15:50:19 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6069A23BF7
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 12:50:17 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 195so2778989pga.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 12:50:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dpir34eU+5LP/tNP3NKp61NmZ3W+CXLyocH49Fhg49A=;
-        b=thOK5q1hFcVw5CAfmwDcWYs/2tKq8hhhJ0DPVM9nmt4V5ZjMW7zzZ/9peDO2hCCnrF
-         va4C6NxLTn3UNoZ+pHUBSalsX3Lsrz084MaFLjK01lJNklxTIqCmGNxL/a40m7qmBeI5
-         lGHugj5RBSrkpH44i+naEnh73VyE6J9q98bH5dQnXSWHFnP1TMKlc8zf8phuiHe24GhD
-         VHQr09gu4vTtE79XBk98YPvMFntJF1mQdgRDDxZslg/P1yj95mL5CVzzg5054XdAmUOa
-         PJ/zjReX9Up1EHLEEcfFxK25QqOCQWFbXjHSzbRo90Cfhv5sCTATGpgqv0pP/EFosuCF
-         Ecgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dpir34eU+5LP/tNP3NKp61NmZ3W+CXLyocH49Fhg49A=;
-        b=iEhAD+Fsn6KyRBddctshl/lwpVaQban2lIQWyoM9djJgwxVB/+gDiWqzIPU5pQ+E42
-         GVAREd6TEOL67f2WxTw2gkgeEVSGaySbnNjl4G6coU44NSnc0GO5kl6iDm+WpHmxAZ4u
-         Jig4RcHHI+1tBRup/v1XeTuIoyhwrFMCXJiIVQgZobYuRwsfxEpFuwzFVSzefW2upqRJ
-         MwbCYkyqLZPfmP8rkDACvQZYi72b9nUKVsvg8PEaUMd/6wfX6fcqiut4A3+eRkBzjm7V
-         SB68DmUvt/erUcCHNujJnyygFYqyQUJbXT2TkqVpX6JSGwOEBbH17T+/SOB1YJSWyVl5
-         WKzg==
-X-Gm-Message-State: ACrzQf0ysMiWRVRe4AnND2/YbM8PFkgP0EtF/zL/ewgacz1R7/QiqAw5
-        nz1plr/dg4fq6wzl7E7BHjWUYg==
-X-Google-Smtp-Source: AMsMyM6XzxJrL/53BvOJnFCJqrsPOdcYV/8B5iYckuAl+zzs9v21CBMQx39TEnmR4CXn2FLTReDb3w==
-X-Received: by 2002:a05:6a00:b4d:b0:561:b974:94b9 with SMTP id p13-20020a056a000b4d00b00561b97494b9mr1325486pfo.26.1665085816695;
-        Thu, 06 Oct 2022 12:50:16 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id f80-20020a623853000000b00562362dbbc1sm3635363pfa.157.2022.10.06.12.50.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 12:50:15 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 19:50:12 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     pbonzini@redhat.com, dmatlack@google.com, andrew.jones@linux.dev,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 4/4] KVM: selftests: Run dirty_log_perf_test on
- specific CPUs
-Message-ID: <Yz8xdJEMjcfdrcWC@google.com>
-References: <20221006171133.372359-1-vipinsh@google.com>
- <20221006171133.372359-5-vipinsh@google.com>
+        Thu, 6 Oct 2022 15:51:30 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2055.outbound.protection.outlook.com [40.107.223.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056C26E2F7
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 12:51:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HU+7f2uLG+5QLtsAI9nyhnfehp5T/jQ6rGBxgQcWuYKJr9intjrRoRX33F+cLaxE72mialCDvxxLxvnb6CaBeo/ADMTMvBNgZuKU4LFcOnh1+M66mucG3F4rUxxDX1MqOKnUkFhTkLxRpvVdXmQ6rRiLlk+7YPFzpJIuJG4vlgQLrYjgN/tNAaFFd4S/5hHDa+CgJOJtSZ9NF+09aaImF+2fyjfmpIk3rUI1aSOQuOH0MM77zhHaA2/+3WwHgwXvuPBNNBTSDKhfA7KT50Mslc2d779AM+N0wdFL61M7w70vBLw2rHEwN08IMWqhlC5Tl7YDFubOXVqz/DqVXpPdaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LdJJ5yN5iMVjxQQ1QR9/YqOw3ux5p1T3soLjGjd9D78=;
+ b=lUFTxOYx7xGL5Qbisltj4GfUkOxgPzsXN7dJW5evdVJdEi+dPg+z6WDPva15QLpZN7XF5H2coK7oSbEIxBlxNzTQmIY0LoUl7lGCJsEF2JA5PzencB7mVlRxlmd83roMWwS6FP5+8uGz7/k4JZ0VkRvTPstTuxzoM8ABYfxz5MtSLGVzgMDYyDCtGm2gsCPMDx1ET69HRd9wogieCiw/Qi6CUVyRmy2UYzpREEkfbiBkU+45dGdu9OiDe5A6CMvn7NS/8qCZ3gtbbtdl92uye5v/ErbyqFy9y7MnMfZzMHhpeiS/czXUS9W7eH7MFSd9z2xEO/rqgvfkXxP3tjw8UA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LdJJ5yN5iMVjxQQ1QR9/YqOw3ux5p1T3soLjGjd9D78=;
+ b=C6zORDmnz3p+lbspb9RpSTtgj1QrGW1EQbG+BBjyFsmshvlqSd4vzWaR8+GoHyGNfTXYInCBc/h2zYDzRfI7dhtHcVfRUYrOvYLl+HdTRsjyBhwTTq8TICquXqXkT8vXMDvLvGJnDkqQdZiV76RYiiebfbjIfnJHE45lo8oc+mE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
+ SN7PR12MB7021.namprd12.prod.outlook.com (2603:10b6:806:262::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Thu, 6 Oct
+ 2022 19:51:25 +0000
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::8d54:65c4:c1e5:8f02]) by DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::8d54:65c4:c1e5:8f02%4]) with mapi id 15.20.5676.032; Thu, 6 Oct 2022
+ 19:51:25 +0000
+Message-ID: <0608aa11-2165-7693-6cdc-1c7ef8228622@amd.com>
+Date:   Thu, 6 Oct 2022 15:51:46 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: mainline build failure due to 5d8c3e836fc2 ("drm/amd/display: fix
+ array-bounds error in dc_stream_remove_writeback()")
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <Yz6W+j+l0cJbr5dX@debian>
+ <CAHk-=whR8T1x6DRnOMJsorajT3A-y9+j5Mpeh0zcUXcJiJWheg@mail.gmail.com>
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+In-Reply-To: <CAHk-=whR8T1x6DRnOMJsorajT3A-y9+j5Mpeh0zcUXcJiJWheg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR08CA0008.namprd08.prod.outlook.com
+ (2603:10b6:208:239::13) To DM4PR12MB6280.namprd12.prod.outlook.com
+ (2603:10b6:8:a2::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221006171133.372359-5-vipinsh@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|SN7PR12MB7021:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4be52a60-e629-4eb9-a262-08daa7d426b7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: x41ZG7hqWm6c4Z/540qYIg9LRVC2j1LwjMSHyoWREdEDA3ULIEwti3gh/meT/C/FL/XgCtErU3PjZj4v/pd6bJCu+slwbngxA2UExCV2/PvH2DyRRObwg2S2Vvt9HheVUc7dAJqzC+KxlQM54o3qqjCVEfc+5bVbX6rzl+FhvkHtKKGE6nNugbWfNB0USZ3WUm3ZIMFhbm36xX0gcGoxkOij0j3RS9YHXnIbHZ40zIrrvHvQeK/VpW2ENfVGOt+XWnEWPKHJ7sQX408OR/Pqdi7cpxOkVAqvaykf0KVrSaiwBfU+ljrZwb1tGxq7PGGCaHmYKPcFOPZ0ma/x6yVae0keys2BkzjYxHO9/6T+4FCwWoV6jVy7TIjM5++x2WyPIxGQt7cTFBTcP3+qX7EsN0gnMWxeASUWSVxOE1Rt29L3w5zNqIG1ilBHG2EaNxiw07FsGXhE/KViyrn3CEZT1+Ias1bigrL1SflESVDoXweJM4hX7wLQQwHOmxgyHKtp+fpLzQM16xgyrCnYIegwqwPUCgmnYCg5QDOxAFzLCVH/IzDWtNDXkh+ct4A8+9y+TUNB7YQDWKYSTOEXnF8MZ/jY90gzfaIyrFbAvPrWvHN8ZDDOj7DyxaJh2fsQXcuxoLkiKsxCTkHm1tmNUfLVp+L4urScoY0Z3VA67mcq/yTscjB2iF/zs15Xf7AG1ZZGqI06ekgkOqFvOvua5I08wtfh54A8HARDucFdG0ZgiCiTzg7dcs6BdyHQsGTufjQDTVPuzkW/ED0RxoaqxEbPmnEjv4+6sufOzKdr3SfCS4zI7Vs2AIy3YCgCQNBj0eyF
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(396003)(376002)(39860400002)(346002)(451199015)(26005)(8676002)(6666004)(44832011)(66476007)(6506007)(36756003)(41300700001)(6512007)(4326008)(5660300002)(66946007)(66556008)(8936002)(38100700002)(316002)(31696002)(86362001)(186003)(2906002)(2616005)(966005)(53546011)(6486002)(110136005)(31686004)(83380400001)(54906003)(478600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Um9KZnIwcDFCL3R0WlFuWm5QWFE5RFFuR0lmOHowVEd2b1hJRW9XNFZMM1No?=
+ =?utf-8?B?TTdNZkRWYjNtdVR2REQxeXE2REI2TmtCRGQwOG9Pa0Zud1l2NjJUQ3VJUnQ3?=
+ =?utf-8?B?cGtSenZ6emtjU3o5Qm5LZDMrSXJPRVo5czQ5NjE2dWMydmc3bm1aS2EyNkRH?=
+ =?utf-8?B?cEJkUnBkbHFvdWFjQXBQcjI4emNRc1pmc1V2TkQySldiTExWM043cUY5Wk5T?=
+ =?utf-8?B?MFdWOTJ2SS9NZEdaTU1qRFZQdkZ3VVlUY0FQaklhVUwwUU5IRjgzZEM5MzAv?=
+ =?utf-8?B?cmkwZ0RaUldJUm9RUHo0V2RITjM0akxwTHJRSWVMTE01anVocVhLQXBMQ1Ja?=
+ =?utf-8?B?U1IyUHJDZkpHRVlJb015eUFMUC9YNmQwa04yTU9iZEVKamlMR0l5MUE0VmI4?=
+ =?utf-8?B?ODVwUEpjdlZ4U1V0a2NBTGJkcU56TmlOSVBtaEVmaHRVdkZnNDlhRHpUUlVw?=
+ =?utf-8?B?RjNsV3NlWGhVR2xPQmdBUSt5WU5UL1J0MGJMR2RmTUszL1h0RjdHM3ZpQ0Zl?=
+ =?utf-8?B?YnZsWDBxZ3JXaXZGMUgwZlN2VHlDZUFyMVgwSDZGZHZMTzBFYnkxSzRLblMr?=
+ =?utf-8?B?M1ZGdVFNYlhOaG83VktpRVlIWUE5MUxObDZScDY4L2JkWlNmbG9VWWp2M3Ns?=
+ =?utf-8?B?NUZTWEVkVlZ4Yy95cWF4MWxjczcxSGNVY3l4QnJhWjY4bndFOUtObStkRDVD?=
+ =?utf-8?B?OG1ZQmlGM0JvRFYyZHNPVTh3cXp1SGxmNllaTzZhR2pUbU5wUk56azNjdjlq?=
+ =?utf-8?B?SWJmaVpBRFhOZHhCVVBua1dtNWlIQ2VXZlJjVk0vR3Z0bGlIb1FhUTJvQzdl?=
+ =?utf-8?B?K3BKOGJvNTMxK0pFMmF3b2xPQ2JCYTcvTm5BWFpHdXdVK0VFRjdxb2JYOFJS?=
+ =?utf-8?B?UnVURjY3Ti9BdDNUQytmSUUrbzYxSmlxVS9taUJoOWp2ei82Tzl5ZDlveXV6?=
+ =?utf-8?B?V1NlN090dlREbmRPOGdEa1Q5OGQ1Sy9qNlY5cklUR2phTGZsWmRKR3NjTnJN?=
+ =?utf-8?B?SXJDa21Hblc5MXRZOTRGeko1MWlzazAxUlFLc2FNQzBrUWs1VzZiNzVUcmdH?=
+ =?utf-8?B?WjZPOFowMk0zSGIvSkRxM0xmQW4zT3IweEhyUXMyakNrVW53bzRESkgxYnhH?=
+ =?utf-8?B?L0E5aWVRcXVkZ0NTUzRnbTQyR2lvTmp4cldsTDRuMlZYRDQ1KytLejkrSVB3?=
+ =?utf-8?B?RGx0elZZU3VwUEtEN2U3SFhpTFlxZTB3QVR0ZERBVmhCOEJYUW9acHBnU2Fy?=
+ =?utf-8?B?MVBOSmRsdlNpaE9GbHhmS08zNituZkpmSld0TGtYSldjVXVEQ1pNR0xLa1RM?=
+ =?utf-8?B?OXJkanN2VnhPYi9XTGN2MUd3TVZ3amJwR0Z4Y2JDTno0OWdmWVd4dURueHJM?=
+ =?utf-8?B?OFNpZTRzZS9VdzRWakdQTHhvVmEvR3NYZlM2aC9ra1dlNHFmN1hyc0JvdHF0?=
+ =?utf-8?B?c1czUFMrcG94MmwwaFRzM0s1T2ZLZmw1ODB2T1JHYlhnS0E5ZXVQNXVhcU5s?=
+ =?utf-8?B?VFRvSlBvaXpJQVdNcTY4eWpRc01BVWwrYjFjN1VIakphNk9lMG9GbldJMXJ3?=
+ =?utf-8?B?Sk9UOXRTMVV2SHZpSlVsSm1iYTFPMzl2T2tXaFB2TC84SUx4MkYvemVEOHdM?=
+ =?utf-8?B?cTN4NjliZEI2SzBub1YyaGlMbW9pWmtnV2tkcEtqNmt6a3BrZG1hOWRzYkE1?=
+ =?utf-8?B?STArOGRMOGNORTEvSlg2N0pZc0pEcVF1MlI0MXhma0hsaVdxblpjdFEzb01Z?=
+ =?utf-8?B?TGxsSlNRNGtleWNydkhMTUVXamh3WGNCYUFpZTJ0RXc2RWROYkludC84Y1g5?=
+ =?utf-8?B?NDREYWIvT2IvMXkrdnIwMWs1VkFFYjlxUmJnNDJtR3hkTDhqbnRId3hKRXlE?=
+ =?utf-8?B?V2tvSjZLb21iUEhrMlpob3lpREd6ZzdQcUFKVnl5U2JFUTJQbWtMSVNxd01I?=
+ =?utf-8?B?ZFBYTWJBTW9pYUFhOHY5R1BxZ1lPZjJnYU4zWi9FdFd6ejNlcjYwbC96VEZk?=
+ =?utf-8?B?c2JaVzhiTXluWU9lMjNZcCszeGhaWUdWUjhBZ0VPNkFpWkhGRTdHMGlCVTk2?=
+ =?utf-8?B?K00zWmZUZVJOMy9FUEVDOGFEd2lmK0NtTWN2SzMxbnBHR2VBVmdpclZldDRu?=
+ =?utf-8?Q?QXrPZg6kmx0LzIeV9M8epjoEU?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4be52a60-e629-4eb9-a262-08daa7d426b7
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2022 19:51:25.2382
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PTM955vpKjlGqhcc60gLt3vdo4OTPPLldmtpX9Lnh2WG1W0OoyIF8tLFCSsH6SwMtWhG3pVyzAfgpek85E5+Aw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7021
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,249 +136,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022, Vipin Sharma wrote:
-> Add command line options, -c,  to run the vCPUs and optionally the main
+Hey Linus,
 
-Stale, there's only one option now.   Extra space too.  And an uber nit, just
-"vCPUs" instead of "the vCPUs".  And if you introduce "pin" here (though that's
-probably unnecessary since it's nearly ubiquitous terminology), it can be used
-throughout to be more succinct, e.g.
-
-Add a command line topion, -c, to pin vCPUs to physical CPUs (pCPUS), i.e.
-to force vCPUs to run on specific pCPUs.
-
-> process on the specific CPUs on a host machine. This is useful as it
-> provides a way to analyze performance based on the vCPUs and dirty log
-> worker locations, like on the different numa nodes or on the same numa
-
-s/numa/NUMA
-
-> nodes.
-
-Please add a link to the discussion that led to implementing only 1:1 pinning,
-along with a brief blurb to call out that this is deliberately "limited" in order
-to keep things simple.
-
-> Link: https://lore.kernel.org/lkml/20220801151928.270380-1-vipinsh@google.com
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> Suggested-by: David Matlack <dmatlack@google.com>
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
-
-Suggested-by: is generally intended to document that someone else came up with
-the original idea.  Even for significant massages to APIs like this, there's no
-need to add Suggested-by for me as I most definitely didn't come up with the
-original idea of pinning vCPUs.  It's obviously not a big deal, but sometimes
-knowing who originally suggested something does help provide context.
-
-> ---
->  .../selftests/kvm/dirty_log_perf_test.c       | 23 +++++++-
->  .../selftests/kvm/include/perf_test_util.h    |  6 ++
->  .../selftests/kvm/lib/perf_test_util.c        | 58 ++++++++++++++++++-
->  3 files changed, 84 insertions(+), 3 deletions(-)
+On 2022-10-06 15:39, Linus Torvalds wrote:
+> On Thu, Oct 6, 2022 at 1:51 AM Sudip Mukherjee (Codethink)
+> <sudipm.mukherjee@gmail.com> wrote:
+>>
+>> This is only seen with gcc-11, gcc-12 builds are ok.
 > 
-> diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> index ecda802b78ff..33f83e423f75 100644
-> --- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> +++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> @@ -353,7 +353,7 @@ static void help(char *name)
->  	puts("");
->  	printf("usage: %s [-h] [-i iterations] [-p offset] [-g] "
->  	       "[-m mode] [-n] [-b vcpu bytes] [-v vcpus] [-o] [-s mem type]"
-> -	       "[-x memslots]\n", name);
-> +	       "[-x memslots] [-c physical cpus to run test on]\n", name);
->  	puts("");
->  	printf(" -i: specify iteration counts (default: %"PRIu64")\n",
->  	       TEST_HOST_LOOP_N);
-> @@ -383,6 +383,18 @@ static void help(char *name)
->  	backing_src_help("-s");
->  	printf(" -x: Split the memory region into this number of memslots.\n"
->  	       "     (default: 1)\n");
-> +	printf(" -c: Comma separated values of the physical CPUs, which will run\n"
-
-Lead with what the option does, then dive into gory details.  In most cases, a user
-is going to dump the help text to find something specific (I constantly forget params)
-or to get a general idea of what's possible.  E.g. someone should have a clear
-understanding of _what_ the command line option does after the first blurb, without
-having to understand the details of the command.
-
-> +	       "     the vCPUs, optionally, followed by the main application thread cpu.\n"
-> +	       "     Number of values must be at least the number of vCPUs.\n"
-> +	       "     The very next number is used to pin main application thread.\n\n"
-> +	       "     Example: ./dirty_log_perf_test -v 3 -c 22,23,24,50\n"
-> +	       "     This means that the vcpu 0 will run on the physical cpu 22,\n"
-> +	       "     vcpu 1 on the physical cpu 23, vcpu 2 on the physical cpu 24\n"
-> +	       "     and the main thread will run on cpu 50.\n\n"
-
-This can be much more brief by using common acronyms for pCPU, and simply stating
-"pin" instead of "on the", e.g.
-
-	printf(" -c: Pin tasks to physical CPUs.  Takes a list of comma separated\n"
-	       "     values (target pCPU), one for each vCPU, plus an optional\n"
-	       "     entry for the main application task (specified via entry\n"
-	       "     <nr_vcpus + 1>).  If used, entries must be provided for all\n"
-	       "     vCPUs, i.e. pinning vCPUs is all or nothing.\n\n"
-	       "     Example: ./dirty_log_perf_test -v 3 -c 22,23,24,50\n"
-	       "     will create 3 vCPUs, and pin vCPU0=>pCPU22, vCPU1=>pCPU23\n"
-	       "     vCPU2=>pCPU24, and pin the application task to pCPU50.\n"
-	       "     To leave the application task unpinned, drop the final entry:"
-	       "       ./dirty_log_perf_test -v 3 -c 22,23,24\n\n"
-	       "     (default: no pinning)\n");
-
-
-> +	       "     Example: ./dirty_log_perf_test -v 3 -c 22,23,24\n"
-> +	       "     Same as the previous example except now main application\n"
-> +	       "     thread can run on any physical cpu\n\n"
-> +	       "     (default: No cpu mapping)\n");
->  	puts("");
->  	exit(0);
->  }
-
-...
-
-> +static void pin_me_to_pcpu
-
-Maybe s/me/this_task ?
-
-> (int pcpu)
-
-Unless we're using -1 as "don't pin" or "invalid", this should be an unsigned value.
-
-> +{
-> +	cpu_set_t cpuset;
-> +	int err;
-> +
-> +	CPU_ZERO(&cpuset);
-> +	CPU_SET(pcpu, &cpuset);
-
-To save user pain:
-
-	r = sched_getaffinity(0, sizeof(allowed_mask), &allowed_mask);
-	TEST_ASSERT(!r, "sched_getaffinity failed, errno = %d (%s)", errno,
-		    strerror(errno));
-
-	TEST_ASSERT(CPU_ISSET(pcpu, &allowed_mask),
-		    "Task '%d' not allowed to run on pCPU '%d'\n");
-
-	CPU_ZERO(&allowed_mask);
-	CPU_SET(cpu, &allowed_mask);
-
-that way the user will get an explicit error message if they try to pin a vCPU/task
-that has already been affined by something else.  And then, in theory,
-sched_setaffinity() should never fail.
-
-Or you could have two cpu_set_t objects and use CPU_AND(), but that seems
-unnecessarily complex.
-
-> +	err = sched_setaffinity(0, sizeof(cpu_set_t), &cpuset);
-> +	TEST_ASSERT(err == 0, "sched_setaffinity() errored out for pcpu: %d\n", pcpu);
-
-!err is the preferred style, though I vote to use "r" instead of "err".  And print
-the errno so that the user can debug.
-
-	r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
-	TEST_ASSERT(!r, "sched_setaffinity failed, errno = %d (%s)",
-		    errno, strerror(errno));
-
-> +}
-> +
->  static void *vcpu_thread_main(void *data)
->  {
->  	struct vcpu_thread *vcpu = data;
-> +	int idx = vcpu->vcpu_idx;
-> +	struct perf_test_vcpu_args *vcpu_args = &perf_test_args.vcpu_args[idx];
-> +
-> +	if (perf_test_args.pin_vcpus)
-> +		pin_me_to_pcpu(vcpu_args->pcpu);
->  
->  	WRITE_ONCE(vcpu->running, true);
->  
-> @@ -255,7 +274,7 @@ static void *vcpu_thread_main(void *data)
->  	while (!READ_ONCE(all_vcpu_threads_running))
->  		;
->  
-> -	vcpu_thread_fn(&perf_test_args.vcpu_args[vcpu->vcpu_idx]);
-> +	vcpu_thread_fn(vcpu_args);
->  
->  	return NULL;
->  }
-> @@ -292,3 +311,40 @@ void perf_test_join_vcpu_threads(int nr_vcpus)
->  	for (i = 0; i < nr_vcpus; i++)
->  		pthread_join(vcpu_threads[i].thread, NULL);
->  }
-> +
-> +static int pcpu_num(const char *cpu_str)
-> +{
-> +	int pcpu = atoi_paranoid(cpu_str);
-
-newline after declaration.  Though maybe just omit this helper entirely?  As a
-somewhat belated thought, it's trivial to let "-1" mean "don't pin this vCPU".
-No idea if there's a use case for that, but it's not any more work to support.
-
-Even if <0 is invalid, what about just having pin_task_to_pcu() do all the
-sanity checking?  That way it's more obvious that that helper isn't failing to
-sanity check the incoming value.
-
-> +	TEST_ASSERT(pcpu >= 0, "Invalid cpu number: %d\n", pcpu);
-> +	return pcpu;
-> +}
-> +
-> +void perf_test_setup_pinning(const char *pcpus_string, int nr_vcpus)
-> +{
-> +	char delim[2] = ",";
-> +	char *cpu, *cpu_list;
-> +	int i = 0;
-> +
-> +	cpu_list = strdup(pcpus_string);
-> +	TEST_ASSERT(cpu_list, "strdup() allocation failed.\n");
-> +
-> +	cpu = strtok(cpu_list, delim);
-> +
-> +	// 1. Get all pcpus for vcpus
-
-No C++ comments please.
-
-> +	while (cpu && i < nr_vcpus) {
-> +		perf_test_args.vcpu_args[i++].pcpu = pcpu_num(cpu);
-> +		cpu = strtok(NULL, delim);
-> +	}
-> +
-> +	TEST_ASSERT(i == nr_vcpus,
-> +		    "Number of pcpus (%d) not sufficient for the number of vcpus (%d).",
-> +		    i, nr_vcpus);
-
-Rather than assert after the fact, use a for-loop:
-
-	for (i = 0; i < nr_vcpus; i++ {
-		TEST_ASSERT(cpu, "pCPU not provided for vCPU%d\n", i);
-		perf_test_args.vcpu_args[i++].pcpu = atoi_paranoid(cpu);
-		cpu = strtok(NULL, delim);
-	}
-
-so as to avoid having to consume the loop control variable before and after the
-loop.  Or even
-
-	for (i = 0, cpu = strtok(cpu_list, delim);
-	     i < nr_vcpus;
-	     i++, cpu = strtok(NULL, delim)) {
-		TEST_ASSERT(cpu, "pCPU not provided for vCPU%d\n", i);
-		perf_test_args.vcpu_args[i++].pcpu = atoi_paranoid(cpu);
-	}
-
-Though IMO the latter is gratuitous and hard to read.
-
-> +
-> +	perf_test_args.pin_vcpus = true;
-> +
-> +	// 2. Check if main worker is provided
-> +	if (cpu)
-> +		pin_me_to_pcpu(pcpu_num(cpu));
-
-Verify the string is now empty?  I.e. that there isn't trailing garbage.
-
-> +
-> +	free(cpu_list);
-> +}
-> -- 
-> 2.38.0.rc1.362.ged0d419d3c-goog
+> Hmm. This seems to be some odd gcc issue.
 > 
+> I *think* that what is going on is that the test
+> 
+>          j = 0 ; j < MAX_DWB_PIPES
+> 
+> makes gcc decide that "hey, j is in the range [0,MAX_DWB_PIPES[", and
+> then since MAX_DWB_PIPES is 1, that simplifies to "j must be zero".
+> Good range analysis so far.
+> 
+> But for 'i', we start off with that lower bound of 0, but the upper
+> bound is not fixed (the test for "i" is: "i < stream->num_wb_info").
+> 
+> And then that "if (i != j)", so now gcc decides that it can simplify
+> that to "if (i != 0)", and then simplifies *that* to "oh, the lower
+> bound of 'i' in that code is actually 1.
+> 
+> So then it decides that "stream->writeback_info[i]" must be out of bounds.
+> 
+> Of course, the *reality* is that stream->num_wb_info should be <=
+> MAX_DWB_PIPES, and as such (with the current MAX_DWB_PIPES value of 1)
+> it's not that 'i' can be 1, it's that the code in question cannot be
+> reached at all.
+> 
+> What confuses me is that error message ("array subscript [0, 0] is
+> outside array bounds of 'struct dc_writeback_info[1]') which seems to
+> be aware that the value is actually 0.
+> 
+> So this seems to be some gcc-11 range analysis bug, but I don't know
+> what the fix is. I suspect some random code change would magically
+> just make gcc realize it's ok after all, but since it all depends on
+> random gcc confusion, I don't know what the random code change would
+> be.
+> 
+> The fix *MAY* be to just add a '&& i < MAX_DWB_PIPES' to that loop
+> too, and then gcc will see that both i and j are always 0, and that
+> the code is unreachable and not warn about it. Hmm? Can you test that?
+> 
+> And the reason gcc-12 builds are ok probably isn't that gcc-12 gets
+> this right, it's simply that gcc-12 gets so many *opther* things wrong
+> that we already disabled -Warray-bounds with gcc-12 entirely.
+> 
+> If somebody cannot come up with a fix, I suspect the solution is "gcc
+> array bounds analysis is terminally buggy" and we just need to disable
+> it for gcc-11 too.
+
+It seems that Stephen has a fix for this that works for multiple 
+versions of GCC, see: 
+https://lore.kernel.org/all/20221006191245.11bb0e2c@canb.auug.org.au/
+
+> 
+> Kees, any idea? Who else might be interested in fixing a -Warray-bounds issue?
+> 
+>                   Linus
+
+-- 
+Hamza
+
