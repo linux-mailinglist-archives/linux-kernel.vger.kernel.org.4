@@ -2,114 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BE75F67C5
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:22:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93ACC5F67C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbiJFNWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 09:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
+        id S230400AbiJFNXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 09:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiJFNWv (ORCPT
+        with ESMTP id S230272AbiJFNW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 09:22:51 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE239DD9F
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 06:22:50 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id i7-20020a17090a65c700b0020ad9666a86so4355256pjs.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 06:22:50 -0700 (PDT)
+        Thu, 6 Oct 2022 09:22:59 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C97A9277;
+        Thu,  6 Oct 2022 06:22:58 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id m81so2013488oia.1;
+        Thu, 06 Oct 2022 06:22:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=0J5p0MbR2bEpUCfICH6xdp5imi0dLtMRyP6mnTPI/+k=;
-        b=dxX2F4zyYa1xRChIHhPTrKdOCGEqOGa0lb+en2rudcFgWZ8diAttoWVlpS8P5RFk2q
-         6EHe7Y3j30qgW+BWugJp2fVOsDkr3oQvdRmf8FXCjXwVUSP2XMRyl/r3QZUa1zdVpKyd
-         W1rSt16irT5exqf6zdlGdrdpouTJUCjaVIXezMgqxSkTB6JPcGSAFSOQg8PDdG9GZvyx
-         Sc6FjhliCoFU9scQLK/w0TqrBIJN9oTiAHvnBvnI7jdTqGmRKQEY6/iSPFaDGpuZK6xa
-         XN9EO5BdE3ZCY+TC3605f3H3zUkoJtA/5/6HXI5mk/9dKnFdwb9m9fQn0OjuYvb6oI4U
-         G7QA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dmvq8KIE/zpZSMh2g+NahhwyurlwxFIfoRR8ad0sVPs=;
+        b=JJ+nNeKI0ZOFxYlUfd3f0Mxr0tfGkUB582syHapBEi6yb/d2om7T8rrGb7GFlyVS1w
+         lImJdHdZulBPaX3JabDIRn1vLEp/0Dx9FzFc9TmyVI1wgCJDdUngqeHTHhkkenMgJaDQ
+         I297SjxoJ3iOeR9QrTA4Ij7FgjzUhRYMhS/yYRePoFvJZ6vfqmqgJ83o9rcECwnl10J6
+         EqVczBqdIqsrIu2piwpaGw2Df6GXygwAFFghBP2dIUzsEJ4YhlEFBceReg2+atw52a+q
+         RLFPuVBfFB0x5kDBk8oQIcfQTals/oJl0OiUVIMYx2h/vlhwRd+klQV4uXSHH7zXTPiB
+         9Fog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=0J5p0MbR2bEpUCfICH6xdp5imi0dLtMRyP6mnTPI/+k=;
-        b=itAsBRWUCTcw42KgDBb1IU0AgfNJO/DNKr2Iojdj7OeX+xvGIm5gInvPMKBcmV0egM
-         qo5jgpAMsrS1NcGRMnvVdb8aEVPWthvxdpmQgt2PS8Bzn/IcCdjhkojAxz1jgKx4u7Jp
-         yaryAlpj5s/DCz7vn2uKPLDR/I4uLP3WfqNRGDzpy27Ldxx0Vd40gz9Qo9OMtyp17okO
-         JrnC3prXow+ztsB58DR0jkcUg2IEhECIexuo2/6jq6qmua/iPBpIbE5zE6WjKQxWY7Oi
-         1gfQUEWAyB8acUnMZtfwGuAO00dE11yTjytzyfaIZPOGk2J5ly3rfiPT+TW6xPc5a2gc
-         Ow0w==
-X-Gm-Message-State: ACrzQf0Wq8Uo0Wa57hgdD7wY0IHmY6U3KSGLEiNs8tajtnnMbaROVBp0
-        Zwyc4ZZo3WhRCuph7k5u5EDMQuLuKEtU+cMLHAyenA==
-X-Google-Smtp-Source: AMsMyM6v2weV/Fdu3N0Bh6wAO2lrR1bMLaSlCLlNSbj8E6HaaXQrDXazFUiH4q0I1rXy6ekFB4TZ40s1/xO4X/uDcNA=
-X-Received: by 2002:a17:90b:4b4b:b0:20a:926f:3c2e with SMTP id
- mi11-20020a17090b4b4b00b0020a926f3c2emr5136641pjb.87.1665062570526; Thu, 06
- Oct 2022 06:22:50 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Dmvq8KIE/zpZSMh2g+NahhwyurlwxFIfoRR8ad0sVPs=;
+        b=TbeAiOi9PWALSz1LIRkvXJdPsMveHi532ez7bbm/8o7zryhS0XelLGd5xosRkkVTbM
+         xoUs7YLNAxsWon3jEzNIhhzpaegnRfWG6r8/ox86wJ7ZEp0avupx63fuqqDMgQnw5Use
+         radWtB8cnlvbi917q21ySOz7c6A+FLw2gPsoFOPnHuBlBkm+IeZprDnTZM8CRaPMtvvX
+         KXq5fv2rE8Itz0FwWbr4az2TldGVDRfD7HaM7aP8o2p45s99asbNxo+TnOIOduSSAIci
+         YPY25YsFIIYqJZyHzr+2QL4X/xybWhwVNUMrgfhddavU2GeaKBvDY68hLMBKnBjiY06N
+         kE9A==
+X-Gm-Message-State: ACrzQf1Uwp9gYs1axPhPXBhN0dS/QYcUt9fqvpe84n24CTyVY0WW1H47
+        0czFH+mXqkpcu16VumhnsA8=
+X-Google-Smtp-Source: AMsMyM64hY326AropxKvRAnkG37ZybxlGxZIuOJcyXrML4zdtT9KoK6ui8ZdXSpfr4i4d2gNr6H/rw==
+X-Received: by 2002:a05:6808:2001:b0:353:ee38:4641 with SMTP id q1-20020a056808200100b00353ee384641mr4936114oiw.156.1665062578103;
+        Thu, 06 Oct 2022 06:22:58 -0700 (PDT)
+Received: from localhost.localdomain ([177.222.37.214])
+        by smtp.googlemail.com with ESMTPSA id p13-20020a0568708a0d00b001326b043f37sm4741322oaq.36.2022.10.06.06.22.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 06:22:57 -0700 (PDT)
+From:   Henry Castro <hcvcastro@gmail.com>
+To:     thunderbird2k@gmail.com
+Cc:     Henry Castro <hcvcastro@gmail.com>, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] drivers: hid: warn feature report 0x81
+Date:   Thu,  6 Oct 2022 09:22:40 -0400
+Message-Id: <20221006132240.3706-1-hcvcastro@gmail.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <CAEc3jaBiN_b_AJGugkYSwxF-ZWHzD6ib4r99tm9Z4RwN2=bgzw@mail.gmail.com>
+References: <CAEc3jaBiN_b_AJGugkYSwxF-ZWHzD6ib4r99tm9Z4RwN2=bgzw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220809223401.24599-1-mike.leach@linaro.org> <20220809223401.24599-14-mike.leach@linaro.org>
- <231e1e51-ab6c-2084-bb97-0594eb5fcbad@arm.com>
-In-Reply-To: <231e1e51-ab6c-2084-bb97-0594eb5fcbad@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Thu, 6 Oct 2022 14:22:38 +0100
-Message-ID: <CAJ9a7VjNpfbMCJppfD=hy=0dBrMpWcZ=gfKH0PQ8-mR8yUAjPQ@mail.gmail.com>
-Subject: Re: [PATCH v3 13/13] coresight: trace-id: Add debug & test macros to
- Trace ID allocation
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, mathieu.poirier@linaro.org,
-        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        linux-perf-users@vger.kernel.org, leo.yan@linaro.org,
-        quic_jinlmao@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Oct 2022 at 12:06, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
->
-> On 09/08/2022 23:34, Mike Leach wrote:
-> > Adds in a number of pr_debug macros to allow the debugging and test of
-> > the trace ID allocation system.
-> >
-> > Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> > ---
-> >   .../hwtracing/coresight/coresight-trace-id.c  | 36 +++++++++++++++++++
-> >   1 file changed, 36 insertions(+)
-> >
-> > diff --git a/drivers/hwtracing/coresight/coresight-trace-id.c b/drivers/hwtracing/coresight/coresight-trace-id.c
-> > index ac9092896dec..24c19ff493a9 100644
-> > --- a/drivers/hwtracing/coresight/coresight-trace-id.c
-> > +++ b/drivers/hwtracing/coresight/coresight-trace-id.c
-> > @@ -69,6 +69,30 @@ static void coresight_trace_id_set_pend_rel(int id, struct coresight_trace_id_ma
-> >       set_bit(id, id_map->pend_rel_ids);
-> >   }
-> >
-> > +/* #define TRACE_ID_DEBUG 1 */
-> > +#ifdef TRACE_ID_DEBUG
-> > +static char page_buf[PAGE_SIZE];
-> > +
-> > +static void coresight_trace_id_dump_table(struct coresight_trace_id_map *id_map,
-> > +                                       const char *func_name)
-> > +{
-> > +     pr_debug("%s id_map::\n", func_name);
-> > +     bitmap_print_to_pagebuf(0, page_buf, id_map->used_ids, CORESIGHT_TRACE_IDS_MAX);
-> > +     pr_debug("Avial= %s\n", page_buf);
->
-> Could we not use %pb directly and skip the bitmap_print_to_pagebuf  ?
->
-> Suzuki
+Unfortunately, my PS DualShock 4, does not support
+the feature 0x81 to get the MAC address. Instead,
+use a unique hash to fake a MAC address, so I can
+use DS4 to play Retroarch :)
 
-In short, yes!
+Signed-off-by: Henry Castro <hcvcastro@gmail.com>
+---
 
-Mike
+>> I see in the other email. If it doesn't support this request, it is
+>> likely a clone device. We are about to submit a brand new DS4 driver
+>> (for hid-playstation). It will use a different report (0x12) if I
+>> recall which does the same thing. That's the more mainstream one we
+>> use.
+
+I have 2 DualShock 4, I did not notice but I have one DS4 compatible
+(clone, I guess).
+
+The DS4 Sony -> returns -ETIMEDOUT
+The DS4 clone -> returns -EPIPE
+
+Look great the new DS4 driver :)
 
 
--- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+
+ drivers/hid/hid-sony.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/hid/hid-sony.c b/drivers/hid/hid-sony.c
+index 656caa07b25f..e3e9c58887cf 100644
+--- a/drivers/hid/hid-sony.c
++++ b/drivers/hid/hid-sony.c
+@@ -2641,13 +2641,14 @@ static int sony_check_add(struct sony_sc *sc)
+ 				HID_REQ_GET_REPORT);
+
+ 		if (ret != DS4_FEATURE_REPORT_0x81_SIZE) {
+-			hid_err(sc->hdev, "failed to retrieve feature report 0x81 with the DualShock 4 MAC address\n");
+-			ret = ret < 0 ? ret : -EINVAL;
+-			goto out_free;
++			uint32_t hash = full_name_hash(NULL, dev_name(&sc->hdev->dev),
++						       strlen(dev_name(&sc->hdev->dev)));
++			hid_warn(sc->hdev, "failed to retrieve feature report 0x81 with the DualShock 4 MAC address\n");
++			memcpy(sc->mac_address, &hash, sizeof(hash));
++		} else {
++			memcpy(sc->mac_address, &buf[1], sizeof(sc->mac_address));
+ 		}
+
+-		memcpy(sc->mac_address, &buf[1], sizeof(sc->mac_address));
+-
+ 		snprintf(sc->hdev->uniq, sizeof(sc->hdev->uniq),
+ 			 "%pMR", sc->mac_address);
+ 	} else if ((sc->quirks & SIXAXIS_CONTROLLER_USB) ||
+--
+2.20.1
+
