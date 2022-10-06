@@ -2,55 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7465F6D6F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 20:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38FC55F6D70
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 20:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbiJFSUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 14:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
+        id S231808AbiJFSUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 14:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbiJFSUM (ORCPT
+        with ESMTP id S231676AbiJFSUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 14:20:12 -0400
-Received: from dispatch1-us1.ppe-hosted.com (dispatch1-us1.ppe-hosted.com [148.163.129.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A641E2CC81
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 11:20:11 -0700 (PDT)
-X-Virus-Scanned: Proofpoint Essentials engine
-Received: from mx1-us1.ppe-hosted.com (unknown [10.7.64.219])
-        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id 566A41C0087
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 18:20:09 +0000 (UTC)
-Received: from mail3.candelatech.com (mail2.candelatech.com [208.74.158.173])
-        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id 2AEAA780089
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 18:20:09 +0000 (UTC)
-Received: from [192.168.100.195] (50-251-239-81-static.hfc.comcastbusiness.net [50.251.239.81])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail3.candelatech.com (Postfix) with ESMTPSA id ADE0613C2B0
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 11:20:08 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail3.candelatech.com ADE0613C2B0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=candelatech.com;
-        s=default; t=1665080408;
-        bh=7diBoMweNGC6v/Sh3rcte0YwUYK7Vl289pXuOAyOF8U=;
-        h=To:From:Subject:Date:From;
-        b=GpwYCkqNtjDtbTR/ndjNfstMaRhhkfr7ngxaKIVybqlvFbUO8peTxLzXICfTlZzgQ
-         Ds7hZEyuzfqb5bu+Chal/L1Whzkrk9fQduntiHZLC9PMBsxEW4kbrMJY/mAI6DcI2q
-         YLAZ0X9GgUjhyQ8M7Qbm5GJ/D/ibBfsZ6rtnA2tE=
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-From:   Ben Greear <greearb@candelatech.com>
-Subject: Invalid wait context in serial console path, 5.19.11+
-Organization: Candela Technologies
-Message-ID: <12d2c1b4-3175-0201-7531-2d80b06d9f95@candelatech.com>
-Date:   Thu, 6 Oct 2022 11:20:08 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Thu, 6 Oct 2022 14:20:39 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E80696F8
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 11:20:39 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-132e9bc5ff4so3117780fac.7
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 11:20:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kvZZAbpP6BsRmYO8eDv4ALVmewEv2pB5Qkzc/cExC/c=;
+        b=LrEjH2cWkq3csQCkPUASQkN9+IfYjOMJvwTATtoZz1Pey9Bh1q2Wem5Yxdo77vW1s3
+         KNzlvLsPIYCLT9GWyJU6iZLu0fjuqCLSWONMRP65fryja4NUDXuaDcm4mILly16tcGC1
+         E2fSpojOg8qHrBYMXiJgtQDxAH+RE/TguFFxw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kvZZAbpP6BsRmYO8eDv4ALVmewEv2pB5Qkzc/cExC/c=;
+        b=t7CklJSYw/i/M7UXrOZeaSDEPYSkaYOcRwOd3A1DEDmveOqIBcdeTzksrmIq2LJOmC
+         Qgq6WNc7hKV6Asns530gbgG54Td1PgMS1G4YUKjgQUMrO0UpcqIWp11XfVEpAcOw/uqn
+         u9/nSdqUL4Rfhet38R1s4PPpUjR1WaWsh409DjD5WjscWJAUceZZm/rqco7w2BMBl4hj
+         58K8brQUXHpsCWoIe4mE/cIR7h/BCC6tZog9efq16B6EXnGErxxIxmTTstu0K0J3SaIx
+         yb42Ah988Zc6O43rYkwwcBvAkq46YK70g6i+9TYA+mHTk8RdqhfTUrdt2MFt9O5fH7Xl
+         JsKQ==
+X-Gm-Message-State: ACrzQf08SFoxLCQq+XDrb3xq3ghmtBNdIuG3IWtGU/FaUl3CiFXrkbM9
+        HQCosyxXgtkpmUYpXW8cTyCTWnOXG2+DbQ==
+X-Google-Smtp-Source: AMsMyM5P8dZ63P0EwfsMqjTMoI2kyr4UOj+ucD7WvPSDGRrCZpVAse8Yz7siPM1lSJw5Or5ctz50yg==
+X-Received: by 2002:a05:6870:4286:b0:132:756f:6b97 with SMTP id y6-20020a056870428600b00132756f6b97mr575676oah.38.1665080437204;
+        Thu, 06 Oct 2022 11:20:37 -0700 (PDT)
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com. [209.85.161.44])
+        by smtp.gmail.com with ESMTPSA id y31-20020a056870459f00b0010bf07976c9sm146782oao.41.2022.10.06.11.20.33
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Oct 2022 11:20:34 -0700 (PDT)
+Received: by mail-oo1-f44.google.com with SMTP id c17-20020a4aa4d1000000b0047653e7c5f3so1981328oom.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 11:20:33 -0700 (PDT)
+X-Received: by 2002:a05:6830:611:b0:65c:26ce:5dc with SMTP id
+ w17-20020a056830061100b0065c26ce05dcmr531643oti.176.1665080433520; Thu, 06
+ Oct 2022 11:20:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-MDID: 1665080409-RzTtEneyKarZ
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221002002326.946620-1-ira.weiny@intel.com> <20221002002326.946620-3-ira.weiny@intel.com>
+ <CAFA6WYOGT1sJLA4c_B88NaXgxv4fm-idi5QMYvXdXB0acCF3sw@mail.gmail.com>
+ <TYZPR03MB65279558CC22F5130B710EA8FB5D9@TYZPR03MB6527.apcprd03.prod.outlook.com>
+ <CAFA6WYMT9S1Di6DN_UXc823f0ZTkqerE1PB=oG6wmfx28vEbDg@mail.gmail.com>
+In-Reply-To: <CAFA6WYMT9S1Di6DN_UXc823f0ZTkqerE1PB=oG6wmfx28vEbDg@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 6 Oct 2022 11:20:16 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whVyH-wSWLd=Zn4rwo+91T+qzRvfMPC2yFX98GxykOqOw@mail.gmail.com>
+Message-ID: <CAHk-=whVyH-wSWLd=Zn4rwo+91T+qzRvfMPC2yFX98GxykOqOw@mail.gmail.com>
+Subject: Re: [PATCH 2/4] tee: Remove vmalloc page support
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     =?UTF-8?B?UGhpbCBDaGFuZyAo5by15LiW5YuzKQ==?= 
+        <Phil.Chang@mediatek.com>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,75 +86,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Oct 5, 2022 at 11:24 PM Sumit Garg <sumit.garg@linaro.org> wrote:
+>
+> Sorry but you need to get your driver mainline in order to support
+> vmalloc interface.
 
-I found this in the logs of a KASAN+LOCKDEP kernel system...
-Not sure it caused any real problems...
+Actually, I think even then we shouldn't support vmalloc - and
+register_shm_helper() just needs to be changed to pass in an array of
+actual page pointers instead.
 
-Oct 06 19:33:13 ct523c-0b4f kernel:
-Oct 06 19:33:13 ct523c-0b4f kernel: =============================
-Oct 06 19:33:13 ct523c-0b4f kernel: [ BUG: Invalid wait context ]
-Oct 06 19:33:13 ct523c-0b4f kernel: 5.19.11+ #8 Not tainted
-Oct 06 19:33:13 ct523c-0b4f kernel: -----------------------------
-Oct 06 19:33:13 ct523c-0b4f kernel: swapper/0/1 is trying to lock:
-Oct 06 19:33:13 ct523c-0b4f kernel: ffffffff85232c18 (&port_lock_key){....}-{3:3}, at: serial8250_console_write+0x630/0x680
-Oct 06 19:33:13 ct523c-0b4f kernel: other info that might help us debug this:
-Oct 06 19:33:13 ct523c-0b4f kernel: context-{5:5}
-Oct 06 19:33:13 ct523c-0b4f kernel: 3 locks held by swapper/0/1:
-Oct 06 19:33:13 ct523c-0b4f kernel:  #0: ffffffff836393a0 (rcu_tasks.cbs_gbl_lock){....}-{2:2}, at: cblist_init_generic+0x22/0x2f0
-Oct 06 19:33:13 ct523c-0b4f kernel:  #1: ffffffff8362c740 (console_lock){+.+.}-{0:0}, at: vprintk_emit+0xd2/0x310
-Oct 06 19:33:13 ct523c-0b4f kernel:  #2: ffffffff8354c340 (console_owner){....}-{0:0}, at: console_emit_next_record.constprop.31+0x1d9/0x500
-Oct 06 19:33:13 ct523c-0b4f kernel: stack backtrace:
-Oct 06 19:33:13 ct523c-0b4f kernel: CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.19.11+ #8
-Oct 06 19:33:13 ct523c-0b4f kernel: Hardware name: Default string Default string/SKYBAY, BIOS 5.12 02/19/2019
-Oct 06 19:33:13 ct523c-0b4f kernel: Call Trace:
-Oct 06 19:33:13 ct523c-0b4f kernel:  <TASK>
-Oct 06 19:33:13 ct523c-0b4f kernel:  dump_stack_lvl+0x55/0x6d
-Oct 06 19:33:13 ct523c-0b4f kernel:  __lock_acquire.cold.69+0xc7/0x31b
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? stack_trace_save+0x85/0xb0
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? filter_irq_stacks+0x70/0x70
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? lockdep_hardirqs_on_prepare+0x200/0x200
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? rcu_read_lock_sched_held+0x9c/0xd0
-Oct 06 19:33:13 ct523c-0b4f kernel:  lock_acquire+0x155/0x3e0
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? serial8250_console_write+0x630/0x680
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? lock_release+0x400/0x400
-Oct 06 19:33:13 ct523c-0b4f kernel:  _raw_spin_lock_irqsave+0x3c/0x60
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? serial8250_console_write+0x630/0x680
-Oct 06 19:33:13 ct523c-0b4f kernel:  serial8250_console_write+0x630/0x680
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? serial8250_config_port+0x15f0/0x15f0
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? lock_release+0x400/0x400
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? do_raw_spin_lock+0x114/0x1d0
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? rwlock_bug.part.2+0x50/0x50
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? prb_read_valid+0x61/0x90
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? prb_final_commit+0x50/0x50
-Oct 06 19:33:13 ct523c-0b4f kernel:  console_emit_next_record.constprop.31+0x281/0x500
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? info_print_ext_header.constprop.32+0x130/0x130
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? rcu_read_lock_sched_held+0x9c/0xd0
-Oct 06 19:33:13 ct523c-0b4f kernel:  console_unlock+0x1dc/0x2d0
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? devkmsg_read+0x3d0/0x3d0
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? vprintk_emit+0xd2/0x310
-Oct 06 19:33:13 ct523c-0b4f kernel:  vprintk_emit+0xdb/0x310
-Oct 06 19:33:13 ct523c-0b4f kernel:  _printk+0x9a/0xc0
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? record_print_text.cold.35+0x11/0x11
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? proc_register+0x1a0/0x230
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? do_raw_spin_lock+0x114/0x1d0
-Oct 06 19:33:13 ct523c-0b4f kernel:  cblist_init_generic.cold.26+0x24/0x32
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? proc_create+0x10/0x10
-Oct 06 19:33:13 ct523c-0b4f kernel:  rcu_init_tasks_generic+0x1c/0x113
-Oct 06 19:33:13 ct523c-0b4f kernel:  kernel_init_freeable+0x25e/0x460
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? lockdep_hardirqs_on_prepare+0x132/0x200
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? console_on_rootfs+0x4d/0x4d
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? mark_held_locks+0x29/0xa0
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? rest_init+0x1c0/0x1c0
-Oct 06 19:33:13 ct523c-0b4f kernel:  kernel_init+0x13/0x130
-Oct 06 19:33:13 ct523c-0b4f kernel:  ? rest_init+0x1c0/0x1c0
-Oct 06 19:33:13 ct523c-0b4f kernel:  ret_from_fork+0x1f/0x30
-Oct 06 19:33:13 ct523c-0b4f kernel:  </TASK>
+At that point TEE_SHM_USER_MAPPED should also go away, because then
+it's the caller that should just do either the user space page
+pinning, or pass in the kernel page pointer.
 
-Thanks,
-Ben
+JensW, is there some reason that wouldn't work?
 
--- 
-Ben Greear <greearb@candelatech.com>
-Candela Technologies Inc  http://www.candelatech.com
-
+                 Linus
