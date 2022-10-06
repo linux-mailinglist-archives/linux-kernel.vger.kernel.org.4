@@ -2,247 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A8C5F6E7C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 21:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC3E5F6E85
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 21:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232136AbiJFTzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 15:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
+        id S232149AbiJFT6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 15:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232117AbiJFTzk (ORCPT
+        with ESMTP id S232100AbiJFT6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 15:55:40 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2690DA50EE
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 12:55:39 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id f15-20020a056e020b4f00b002fa34db70f0so2313688ilu.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 12:55:39 -0700 (PDT)
+        Thu, 6 Oct 2022 15:58:30 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD61A879B
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 12:58:30 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id y136so3044567pfb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 12:58:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IXlZwi8tQbkf9JfbcZapOF4ed3WL+b+3X/IWlS/eJJk=;
+        b=b0Rh4NehN3Ua78YBcPYsHQRHI+cXa2P38z4vFCn4EMumhVLD2gUkUUhcbmW1jpw5+3
+         gC5tR1DMA2PS5HxUv2ZXHMsqJ1fwo6eQ2Uebuv+eMiFXUrCdYQ6Q/VWq2Y3gIeMDwCi0
+         42VckS5DcH0tcv9cTSkkKLL5jAdpvS36C0KXOqLDf4Bvat0FxppBmfuXMe7uCKWsbBsP
+         u5TNBQEgUm1vHyC0ACFGiusSqsx7ye3p6DYfKWJhUgbcQnVxoFX80oqAP1GoK+RBiYco
+         tNJLhdJcUvv5BnSTZJVoajzXd0V2HQ0k1nwH7rYOFe1YhVG1IMl3zNWW9qUDxQCDU6wE
+         PFiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CI+uai2QDkCju301rOk87BT0Y+GssDsqYlX2eODpnME=;
-        b=DWlMPZYnxmX3n+rngt6EoRMkPB6YY6F4P4/UfeTsxsfXAOHzb5DOuWuJ+g3PQ53dUh
-         XCFygCeoTMqOjFj6bbDQAeErTh1Us8ASvblZpbULEdwyeonAY8YZPzJLfjJi8aVtvR3Z
-         TV5ju893y+BVVo4OMERq6KKvRx329yrlRc0vJ9XUZALeVDHvtfifQITUWziMqcz1ANPd
-         ubxVDLzVsmp9cRARrN2mRZocez6W/QbmCKlWFp2Pcp42r4SDYz+uFho2ROy/FJFuzkod
-         vm28hcuwvGJ6jhniYmUQWJfc8deCBHTrB1y6/OPJlbqMmh9O9hox8tI6tvvwb+V7ho+3
-         Hkpg==
-X-Gm-Message-State: ACrzQf2Q4juNMCTbWHjJqOcADQMNgqw6AEtTrwqpa8sc6eYlwGEg+4Po
-        P1yGFyZt3yjbI1Kfhdf/g+ZQokTAFvKprytcb/yXBnVL+sY/
-X-Google-Smtp-Source: AMsMyM73mcvYbJjn58gHRIKYKf+0CeYztbHiRTF2Oz53eXRBmm8LZY8T3y1zHsbVvM2YgLH1226qPI6sk2BT9dm/SPihVi0Fbin9
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IXlZwi8tQbkf9JfbcZapOF4ed3WL+b+3X/IWlS/eJJk=;
+        b=UeQEtU3ThfbFKsEIHnHNwz+0zvpgQ7n0MxS9+aXUdHEZiEqG/iCPuWL7SPq+/HGQBP
+         djxals5w5958MNEGsikjkf1o83Ek0qdAOg/bOxPyi0TH+O8AtSMxq+iuc65UBAvVjxh8
+         xK/nMrbHhjuB1+lKU2Y6+OSvSXgtsw9n5yrcuz8gkGNsmX3+guzqM3zWhpqfgPfZfM+l
+         OQptv+CF13YdsmC9l3goP+qWfUnm3Z0DhGptnG2GFEleFWjtOJFMBtpgWYsX3ddEgFkE
+         az5lglMEUG/yG6UuU2NVoYohURBaCsCO89fXen57xtNF6VJwTTiK4pqvPkuQ7OXW+YTK
+         0gBQ==
+X-Gm-Message-State: ACrzQf1to9IxTyPLeSB2C6q30rEQFRukBi2/TXp8sTjjlSEZWnV+MGEl
+        TjiSuF7zTRQUUo41TwP1NUw8QA==
+X-Google-Smtp-Source: AMsMyM7NRiApVi3AWDuHyOSLddOe4w1fQiDb+pletF5e3gBtmvRoFD4jVaQfg4IWWzKnlbXPmfbWBA==
+X-Received: by 2002:a05:6a00:1249:b0:543:aa0a:9c0a with SMTP id u9-20020a056a00124900b00543aa0a9c0amr1174972pfi.2.1665086309546;
+        Thu, 06 Oct 2022 12:58:29 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id f14-20020a17090a4a8e00b0020b092534fbsm102727pjh.40.2022.10.06.12.58.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 12:58:28 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 19:58:25 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     pbonzini@redhat.com, dmatlack@google.com, andrew.jones@linux.dev,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 3/4] KVM: selftests: Add atoi_paranoid() to catch
+ errors missed by atoi()
+Message-ID: <Yz8zYXvhp9WGH4Uz@google.com>
+References: <20221006171133.372359-1-vipinsh@google.com>
+ <20221006171133.372359-4-vipinsh@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:c80f:0:b0:6a5:481a:6219 with SMTP id
- y15-20020a5ec80f000000b006a5481a6219mr705547iol.36.1665086138422; Thu, 06 Oct
- 2022 12:55:38 -0700 (PDT)
-Date:   Thu, 06 Oct 2022 12:55:38 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cd1c5b05ea63135f@google.com>
-Subject: [syzbot] WARNING: locking bug in complete_all (2)
-From:   syzbot <syzbot+89f4560b096bdbf2cd4b@syzkaller.appspotmail.com>
-To:     airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, hamohammed.sa@gmail.com,
-        linux-kernel@vger.kernel.org, melissa.srw@gmail.com,
-        rodrigosiqueiramelo@gmail.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221006171133.372359-4-vipinsh@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Oct 06, 2022, Vipin Sharma wrote:
+> +int atoi_paranoid(const char *num_str)
+> +{
+> +	int num;
+> +	char *end_ptr;
 
-syzbot found the following issue on:
+Reverse fir-tree when it's convention:
 
-HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=13b7a1b8880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=aae2d21e7dd80684
-dashboard link: https://syzkaller.appspot.com/bug?extid=89f4560b096bdbf2cd4b
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+	char *end_ptr;
 
-Unfortunately, I don't have any reproducer for this issue yet.
+> +
+> +	errno = 0;
+> +	num = (int)strtol(num_str, &end_ptr, 10);
+> +	TEST_ASSERT(!errno, "strtol(\"%s\") failed", num_str);
+> +	TEST_ASSERT(num_str != end_ptr,
+> +		    "strtol(\"%s\") didn't find any valid number.\n", num_str);
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/11078f50b80b/disk-bbed346d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/398e5f1e6c84/vmlinux-bbed346d.xz
+s/number/integer ?  And should that be "a valid intenger", not "any valid integer"?
+"any" implies that this helper will be happy if there's at least one integer,
+whereas I believe the intent is to find _exactly_ one integer.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+89f4560b096bdbf2cd4b@syzkaller.appspotmail.com
+> +	TEST_ASSERT(
+> +		*end_ptr == '\0',
 
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(1)
-WARNING: CPU: 1 PID: 976 at kernel/locking/lockdep.c:231 check_wait_context kernel/locking/lockdep.c:4727 [inline]
-WARNING: CPU: 1 PID: 976 at kernel/locking/lockdep.c:231 __lock_acquire+0x2b0/0x30a4 kernel/locking/lockdep.c:5003
-Modules linked in:
-CPU: 1 PID: 976 Comm: kworker/u4:3 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Workqueue: bat_events batadv_nc_worker
-pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : check_wait_context kernel/locking/lockdep.c:4727 [inline]
-pc : __lock_acquire+0x2b0/0x30a4 kernel/locking/lockdep.c:5003
-lr : hlock_class kernel/locking/lockdep.c:231 [inline]
-lr : check_wait_context kernel/locking/lockdep.c:4727 [inline]
-lr : __lock_acquire+0x298/0x30a4 kernel/locking/lockdep.c:5003
-sp : ffff80000800ba20
-x29: ffff80000800bb00 x28: 0000000000000004 x27: ffff0000c6431b20
-x26: ffff0000fc9faa30 x25: ffff0000c6432550 x24: 0000000000000080
-x23: 0000000000000000 x22: 0000000000000001 x21: 0000000000000000
-x20: 0000000000000000 x19: aaab27e894723d1c x18: 000000000000ba7e
-x17: ffff8001f1d7d000 x16: ffff80000db49158 x15: ffff0000c6431a80
-x14: 0000000000000000 x13: 0000000000000012 x12: ffff80000d5ef920
-x11: ff808000081c0d5c x10: ffff80000dd0b198 x9 : 68ac72b3ffb08100
-x8 : 0000000000000000 x7 : 4e5241575f534b43 x6 : ffff80000819545c
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000100010003 x0 : 0000000000000016
-Call trace:
- check_wait_context kernel/locking/lockdep.c:4727 [inline]
- __lock_acquire+0x2b0/0x30a4 kernel/locking/lockdep.c:5003
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
- __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
- _raw_spin_lock_irqsave+0x6c/0xb4 kernel/locking/spinlock.c:162
- complete_all+0x24/0xa0 kernel/sched/completion.c:63
- drm_send_event_helper+0x50/0x228 drivers/gpu/drm/drm_file.c:783
- drm_send_event_timestamp_locked+0x34/0x48 drivers/gpu/drm/drm_file.c:827
- send_vblank_event drivers/gpu/drm/drm_vblank.c:1016 [inline]
- drm_handle_vblank_events+0x258/0x334 drivers/gpu/drm/drm_vblank.c:1914
- drm_handle_vblank+0x188/0x310 drivers/gpu/drm/drm_vblank.c:1975
- drm_crtc_handle_vblank+0x24/0x38 drivers/gpu/drm/drm_vblank.c:2009
- vkms_vblank_simulate+0x84/0x1b4 drivers/gpu/drm/vkms/vkms_crtc.c:29
- __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
- __hrtimer_run_queues+0x210/0x390 kernel/time/hrtimer.c:1749
- hrtimer_interrupt+0x12c/0x510 kernel/time/hrtimer.c:1811
- timer_handler drivers/clocksource/arm_arch_timer.c:653 [inline]
- arch_timer_handler_virt+0x58/0x6c drivers/clocksource/arm_arch_timer.c:664
- handle_percpu_devid_irq+0xb0/0x1c8 kernel/irq/chip.c:930
- generic_handle_irq_desc include/linux/irqdesc.h:158 [inline]
- handle_irq_desc kernel/irq/irqdesc.c:648 [inline]
- generic_handle_domain_irq+0x4c/0x6c kernel/irq/irqdesc.c:704
- gic_handle_irq+0x78/0x1b4 drivers/irqchip/irq-gic.c:359
- call_on_irq_stack+0x2c/0x54 arch/arm64/kernel/entry.S:889
- do_interrupt_handler+0x7c/0xc0 arch/arm64/kernel/entry-common.c:274
- __el1_irq arch/arm64/kernel/entry-common.c:470 [inline]
- el1_interrupt+0x34/0x68 arch/arm64/kernel/entry-common.c:485
- el1h_64_irq_handler+0x18/0x24 arch/arm64/kernel/entry-common.c:490
- el1h_64_irq+0x64/0x68 arch/arm64/kernel/entry.S:577
- arch_local_irq_enable arch/arm64/include/asm/irqflags.h:35 [inline]
- __local_bh_enable_ip+0x144/0x1a4 kernel/softirq.c:401
- __raw_spin_unlock_bh include/linux/spinlock_api_smp.h:167 [inline]
- _raw_spin_unlock_bh+0x48/0x58 kernel/locking/spinlock.c:210
- spin_unlock_bh include/linux/spinlock.h:394 [inline]
- batadv_nc_purge_paths+0x1d0/0x214 net/batman-adv/network-coding.c:471
- batadv_nc_worker+0x394/0x484 net/batman-adv/network-coding.c:720
- process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
- worker_thread+0x340/0x610 kernel/workqueue.c:2436
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:860
-irq event stamp: 2991678
-hardirqs last  enabled at (2991677): [<ffff800008102154>] __local_bh_enable_ip+0x13c/0x1a4 kernel/softirq.c:401
-hardirqs last disabled at (2991678): [<ffff80000bfb6088>] __el1_irq arch/arm64/kernel/entry-common.c:467 [inline]
-hardirqs last disabled at (2991678): [<ffff80000bfb6088>] el1_interrupt+0x24/0x68 arch/arm64/kernel/entry-common.c:485
-softirqs last  enabled at (2991676): [<ffff80000becc320>] spin_unlock_bh include/linux/spinlock.h:394 [inline]
-softirqs last  enabled at (2991676): [<ffff80000becc320>] batadv_nc_purge_paths+0x1d0/0x214 net/batman-adv/network-coding.c:471
-softirqs last disabled at (2991674): [<ffff80000becc1b0>] spin_lock_bh include/linux/spinlock.h:354 [inline]
-softirqs last disabled at (2991674): [<ffff80000becc1b0>] batadv_nc_purge_paths+0x60/0x214 net/batman-adv/network-coding.c:442
----[ end trace 0000000000000000 ]---
-Unable to handle kernel NULL pointer dereference at virtual address 00000000000000b8
-Mem abort info:
-  ESR = 0x0000000096000007
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x07: level 3 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000007
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=000000010affc000
-[00000000000000b8] pgd=080000010a948003, p4d=080000010a948003, pud=080000010ad99003, pmd=080000010ada3003, pte=0000000000000000
-Internal error: Oops: 0000000096000007 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 1 PID: 976 Comm: kworker/u4:3 Tainted: G        W          6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Workqueue: bat_events batadv_nc_worker
-pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : check_wait_context kernel/locking/lockdep.c:4727 [inline]
-pc : __lock_acquire+0x2d0/0x30a4 kernel/locking/lockdep.c:5003
-lr : hlock_class kernel/locking/lockdep.c:231 [inline]
-lr : check_wait_context kernel/locking/lockdep.c:4727 [inline]
-lr : __lock_acquire+0x298/0x30a4 kernel/locking/lockdep.c:5003
-sp : ffff80000800ba20
-x29: ffff80000800bb00 x28: 0000000000000004 x27: ffff0000c6431b20
-x26: ffff0000fc9faa30 x25: ffff0000c6432550 x24: 0000000000000080
-x23: 0000000000000000 x22: 0000000000000001 x21: 0000000000000000
-x20: 0000000000000000 x19: aaab27e894723d1c x18: 000000000000ba7e
-x17: ffff8001f1d7d000 x16: ffff80000db49158 x15: ffff0000c6431a80
-x14: 0000000000000000 x13: 0000000000000012 x12: ffff80000d5ef920
-x11: ff808000081c0d5c x10: ffff80000dd0b198 x9 : 00000000000c5d1c
-x8 : 0000000000000000 x7 : 4e5241575f534b43 x6 : ffff80000819545c
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000100010003 x0 : 0000000000000016
-Call trace:
- hlock_class kernel/locking/lockdep.c:222 [inline]
- check_wait_context kernel/locking/lockdep.c:4728 [inline]
- __lock_acquire+0x2d0/0x30a4 kernel/locking/lockdep.c:5003
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
- __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
- _raw_spin_lock_irqsave+0x6c/0xb4 kernel/locking/spinlock.c:162
- complete_all+0x24/0xa0 kernel/sched/completion.c:63
- drm_send_event_helper+0x50/0x228 drivers/gpu/drm/drm_file.c:783
- drm_send_event_timestamp_locked+0x34/0x48 drivers/gpu/drm/drm_file.c:827
- send_vblank_event drivers/gpu/drm/drm_vblank.c:1016 [inline]
- drm_handle_vblank_events+0x258/0x334 drivers/gpu/drm/drm_vblank.c:1914
- drm_handle_vblank+0x188/0x310 drivers/gpu/drm/drm_vblank.c:1975
- drm_crtc_handle_vblank+0x24/0x38 drivers/gpu/drm/drm_vblank.c:2009
- vkms_vblank_simulate+0x84/0x1b4 drivers/gpu/drm/vkms/vkms_crtc.c:29
- __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
- __hrtimer_run_queues+0x210/0x390 kernel/time/hrtimer.c:1749
- hrtimer_interrupt+0x12c/0x510 kernel/time/hrtimer.c:1811
- timer_handler drivers/clocksource/arm_arch_timer.c:653 [inline]
- arch_timer_handler_virt+0x58/0x6c drivers/clocksource/arm_arch_timer.c:664
- handle_percpu_devid_irq+0xb0/0x1c8 kernel/irq/chip.c:930
- generic_handle_irq_desc include/linux/irqdesc.h:158 [inline]
- handle_irq_desc kernel/irq/irqdesc.c:648 [inline]
- generic_handle_domain_irq+0x4c/0x6c kernel/irq/irqdesc.c:704
- gic_handle_irq+0x78/0x1b4 drivers/irqchip/irq-gic.c:359
- call_on_irq_stack+0x2c/0x54 arch/arm64/kernel/entry.S:889
- do_interrupt_handler+0x7c/0xc0 arch/arm64/kernel/entry-common.c:274
- __el1_irq arch/arm64/kernel/entry-common.c:470 [inline]
- el1_interrupt+0x34/0x68 arch/arm64/kernel/entry-common.c:485
- el1h_64_irq_handler+0x18/0x24 arch/arm64/kernel/entry-common.c:490
- el1h_64_irq+0x64/0x68 arch/arm64/kernel/entry.S:577
- arch_local_irq_enable arch/arm64/include/asm/irqflags.h:35 [inline]
- __local_bh_enable_ip+0x144/0x1a4 kernel/softirq.c:401
- __raw_spin_unlock_bh include/linux/spinlock_api_smp.h:167 [inline]
- _raw_spin_unlock_bh+0x48/0x58 kernel/locking/spinlock.c:210
- spin_unlock_bh include/linux/spinlock.h:394 [inline]
- batadv_nc_purge_paths+0x1d0/0x214 net/batman-adv/network-coding.c:471
- batadv_nc_worker+0x394/0x484 net/batman-adv/network-coding.c:720
- process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
- worker_thread+0x340/0x610 kernel/workqueue.c:2436
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:860
-Code: b002db8a 91056210 9106614a b9400329 (3942e114) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	b002db8a 	adrp	x10, 0x5b71000
-   4:	91056210 	add	x16, x16, #0x158
-   8:	9106614a 	add	x10, x10, #0x198
-   c:	b9400329 	ldr	w9, [x25]
-* 10:	3942e114 	ldrb	w20, [x8, #184] <-- trapping instruction
+Weird and unnecessary wrap+indentation.
 
+> +		"strtol(\"%s\") failed to parse trailing characters \"%s\".\n",
+> +		num_str, end_ptr);
+> +
+> +	return num;
+> +}
+> diff --git a/tools/testing/selftests/kvm/max_guest_memory_test.c b/tools/testing/selftests/kvm/max_guest_memory_test.c
+> index 9a6e4f3ad6b5..1595b73dc09a 100644
+> --- a/tools/testing/selftests/kvm/max_guest_memory_test.c
+> +++ b/tools/testing/selftests/kvm/max_guest_memory_test.c
+> @@ -193,15 +193,15 @@ int main(int argc, char *argv[])
+>  	while ((opt = getopt(argc, argv, "c:h:m:s:H")) != -1) {
+>  		switch (opt) {
+>  		case 'c':
+> -			nr_vcpus = atoi(optarg);
+> +			nr_vcpus = atoi_paranoid(optarg);
+>  			TEST_ASSERT(nr_vcpus > 0, "number of vcpus must be >0");
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Many users require a positive and or non-negative value, maybe add wrappers in
+a follow-up?
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+			nr_vcpus = atoi_positive(optarg);
+
+and later down
+
+			targs->tfirst = atoi_non_negative(optarg);
+
+We'll lose custom error messages, but I don't think that's a big deal.  Definitely
+not required, just a thought.
+
+> diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
+> index 0d55f508d595..c366949c8362 100644
+> --- a/tools/testing/selftests/kvm/set_memory_region_test.c
+> +++ b/tools/testing/selftests/kvm/set_memory_region_test.c
+> @@ -407,7 +407,7 @@ int main(int argc, char *argv[])
+>  
+>  #ifdef __x86_64__
+>  	if (argc > 1)
+> -		loops = atoi(argv[1]);
+> +		loops = atoi_paranoid(argv[1]);
+
+This is a good candidate for atoi_positive().
+
+>  	else
+>  		loops = 10;
+>  
+> diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> index 59ffe7fd354f..354b6902849c 100644
+> --- a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> @@ -241,10 +241,10 @@ int main(int argc, char **argv)
+>  	while ((opt = getopt(argc, argv, "hp:t:r")) != -1) {
+>  		switch (opt) {
+>  		case 'p':
+> -			reclaim_period_ms = atoi(optarg);
+> +			reclaim_period_ms = atoi_paranoid(optarg);
+>  			break;
+>  		case 't':
+> -			token = atoi(optarg);
+> +			token = atoi_paranoid(optarg);
+>  			break;
+>  		case 'r':
+>  			reboot_permissions = true;
+> -- 
+> 2.38.0.rc1.362.ged0d419d3c-goog
+> 
