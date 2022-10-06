@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C1C5F70F5
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 00:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6CF5F70F6
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 00:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232093AbiJFWIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 18:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
+        id S232124AbiJFWIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 18:08:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232066AbiJFWIG (ORCPT
+        with ESMTP id S232077AbiJFWI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 18:08:06 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE27314298B
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 15:08:02 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id l27so1867296qtv.4
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 15:08:02 -0700 (PDT)
+        Thu, 6 Oct 2022 18:08:29 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA08A2856
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 15:08:28 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id fb18so1846917qtb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 15:08:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=fqbQ6GREjxv+KykwM9eHH7kILFgI9OYKNCjFo0/2oBc=;
-        b=WaDlA5LdGiBh1mzUMjcjVrRIbu7JGgE/LQAYyzNLBPF2ha7ey4RBTuEnFoGFQR2jFD
-         btEJtJor3lqh9IslzfyTsbaNrgUXF80rtmQ5yFNP3noxjw7c2lY/P8DKb0kEE17tEOyG
-         VBSDOoUbmuCULFjBGlPbn3C7ONJq3uyzbuORY=
+        bh=WR7FexmSJUxD0YwloPlNXbl5lfavkZmPyMBdSOh7+dg=;
+        b=Jp768wDVKQuIApCykR4trX854bTGhXHMNHXZmGw3HqgpMkp5mdXvp5jl8Dr1A0SG9w
+         4owsT2uQZtrQIxJWJ43NNlqrzHz+tEK/VEBS77w9tDes58wMS9uGEJ5cKE2HsieOekpc
+         jRR/R52a27jqLKyWB0OWPHWjTddcyo/7zCcjA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fqbQ6GREjxv+KykwM9eHH7kILFgI9OYKNCjFo0/2oBc=;
-        b=YrEb4emzPMYej+XyqyFW7xbdm8oqpPZHCVrVPNINDxOGcv6MxZK9slvX8t74/wk4sj
-         y2FioKuSMmaH7MCGTvfaT/bHWtKdHmlF6ZXwzsopCD3qxb3yYq49K87MSXGkW+Hd66yB
-         UzBphnD02VXPWfUGr+Aw6PgBKv84hhFnr4pgYDOourP57B0ThDjEivO2kffcgvnZ09Wk
-         75tKBofWwJEeF33i4aYzePa89Wk1oKTVLhtym3iwwC8geSra9k3hqjFauUqetfn/Ltef
-         x/AzUikrBQJmL2QigBIO2BOpNW3c4t8bJrh1WIFfuBxjJPE39uQfX0Ld+6DnvjNHONGg
-         /Nsw==
-X-Gm-Message-State: ACrzQf1ckWDb14jpOLS8R0eYOVWXs4LPANvcuEPjd3eeWvHSs1kBpayP
-        tFIWucg+H0spQaOlSkdePwZitA==
-X-Google-Smtp-Source: AMsMyM5qx1P9cTPnlMjf/2DuHtObjQyyeQByl+P36iYMabZIRuYrTqd/kabwGxxJCqFByx4qmvFNeA==
-X-Received: by 2002:a05:622a:50a:b0:35d:5d18:c2a2 with SMTP id l10-20020a05622a050a00b0035d5d18c2a2mr2067245qtx.515.1665094081151;
-        Thu, 06 Oct 2022 15:08:01 -0700 (PDT)
+        bh=WR7FexmSJUxD0YwloPlNXbl5lfavkZmPyMBdSOh7+dg=;
+        b=sj1pqnaD//e05SCXS45KXSvsx9FwfU3VDz2k/5mURmXTOt/haINcb7RC7nsLH/ZPtg
+         rk80TZccSKaNqWF83+HOUglPA60rb+hNAGV7cibmd98UdcLgsiG2V5LF9o8lfFiNP3Jp
+         e0V3UnD+vt5lGYyQcbb/kSt/A8y2h/ouDyeB5VUlEdXVWxUkmDUiM9NXZ0jmReuJwLPt
+         3bPbu2R8tbURuXM0DkYDO4QsZOU/6F9k1ZFuWePFxSemZlijWBpsom209HH4ZgyEBvWI
+         e0JW37UAx59oPDrFxpuLvYCgIDnIkg8Ra74hTJRTaoftNYCYPR4gt+YLFJSq4dzAhBTF
+         fIpw==
+X-Gm-Message-State: ACrzQf3kOAfrEyBXUUpmcWTRagGPDxeni1F9I9DnO8rDOPUwEc1OKOWz
+        eiTybRbsoqYGEIR7dzMF3iWDYg==
+X-Google-Smtp-Source: AMsMyM7gvqGGQcS4DkvR0NwpkwelFeOzzsVe1h3WUNxpJSfyR1GBNkwq2f3MHa/gCeeV/y4vK/uckQ==
+X-Received: by 2002:a05:622a:612:b0:35d:567f:5ac4 with SMTP id z18-20020a05622a061200b0035d567f5ac4mr2102111qta.368.1665094107948;
+        Thu, 06 Oct 2022 15:08:27 -0700 (PDT)
 Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id m19-20020a05620a24d300b006cbb8ca04f8sm335401qkn.40.2022.10.06.15.07.59
+        by smtp.gmail.com with ESMTPSA id o4-20020a05620a15c400b0069fe1dfbeffsm217304qkm.92.2022.10.06.15.08.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Oct 2022 15:08:00 -0700 (PDT)
-Message-ID: <3dbb2699-eff3-ea1f-06db-33844074c69f@broadcom.com>
-Date:   Thu, 6 Oct 2022 15:07:58 -0700
+        Thu, 06 Oct 2022 15:08:27 -0700 (PDT)
+Message-ID: <584724c9-ac09-0231-bf4a-d7eb8ac8d4d0@broadcom.com>
+Date:   Thu, 6 Oct 2022 15:08:25 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.1
-Subject: Re: [PATCH 5/6] phy: usb: Use slow clock for wake enabled suspend
+Subject: Re: [PATCH 6/6] phy: usb: Fix clock imbalance for suspend/resume
 To:     justinpopo6@gmail.com, alcooperx@gmail.com, kishon@ti.com,
         vkoul@kernel.org, f.fainelli@gmail.com,
         linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org
 Cc:     bcm-kernel-feedback-list@broadcom.com
 References: <1665005418-15807-1-git-send-email-justinpopo6@gmail.com>
- <1665005418-15807-6-git-send-email-justinpopo6@gmail.com>
+ <1665005418-15807-7-git-send-email-justinpopo6@gmail.com>
 From:   Florian Fainelli <florian.fainelli@broadcom.com>
-In-Reply-To: <1665005418-15807-6-git-send-email-justinpopo6@gmail.com>
+In-Reply-To: <1665005418-15807-7-git-send-email-justinpopo6@gmail.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000003d2ed105ea64ed03"
+        boundary="000000000000d6109e05ea64eea5"
 X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -72,7 +72,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000003d2ed105ea64ed03
+--000000000000d6109e05ea64eea5
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
@@ -82,17 +82,19 @@ Content-Transfer-Encoding: 7bit
 On 10/5/2022 2:30 PM, justinpopo6@gmail.com wrote:
 > From: Justin Chen <justinpopo6@gmail.com>
 > 
-> The logic was incorrect when switching to slow clock. We want the slow
-> clock if wake_enabled is set.
+> We should be disabling clocks when wake from USB is not needed. Since
+> this wasn't done, we had a clock imbalance since clocks were always
+> being enabled on resume.
 > 
 > Fixes: ae532b2b7aa5 ("usb: Add "wake on" functionality for newer Synopsis XHCI controllers")
+> Fixes: b0c0b66c0b43 ("phy: usb: Add support for wake and USB low power mode for 7211 S2/S5")
 > Signed-off-by: Justin Chen <justinpopo6@gmail.com>
 
 Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
 Florian
 
---0000000000003d2ed105ea64ed03
+--000000000000d6109e05ea64eea5
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -163,14 +165,14 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIKMauPYjhDeFOVM6
-PLosj537TANb9CUVsPHsdMX9RkFdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIyMTAwNjIyMDgwMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIPYywZQpvz8ufndv
+PetfwOKg+paJ2vqjWsN/q+w7PNFlMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIyMTAwNjIyMDgyOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAXGF8efaDopVS3Ek8StGD/33WzhEP9TXvF
-qxsXpVgDL9+S+SsVNLqIBPptVQUYHpqnNB7X+QImIrbUdJihH1LaAOfC3KHezYGRkuGXLzWGtaOi
-ySAASt2hPtLV/WqAtfx+9xwXoEq6rgmEjNy8HYR/lE8iXzn1OxJsHf6dKYT/4ofQ1tzawcRhsCwh
-y6mBwm9GQA8yhdn/b1twg/R4WgKD5LmAMNQuNhmSFouOTGorLT/C24f/HEfQoUvRPfUw3qfQ93gf
-q9vjIpJRh3EAgd6vMBmGPjxGHeT0kv0yjJhPuVF6IbvUPhF9FY8n0YZr/ZZMVohQTgEeRv9Y9vQU
-/2A9
---0000000000003d2ed105ea64ed03--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBIYTnYgVSVEwTjwbf4yaDJ1qIl6K9v/SAJ
+nHW8JOytXreqguo/NzygZilvXO19MvvF3E8RBMGnK6jDP2PxEL118dqbg+UAftrVAmnlN6ktcq8W
+Fmh+YINckqE5/99cn5ZCoYPjv5dbFcpinftmrIzR0SVHYoX+l2ht8aHtzCnqES8y+eLb6OQwjU+I
+lYhqvM05jc9ribK60ckJPhleWGs3qMdGnpBeOq8/+b1kmXe+8SZKR/0+ZrZYvgU7sCvFHUcVghlC
+y4cQpTy4OrmAGqqwf9hd5GBChMxh9AJj/amYUG2s2JHkmpdg9Tw+6lCkVoay/J6a3TLZFK0TZhNr
+mtkQ
+--000000000000d6109e05ea64eea5--
