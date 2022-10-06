@@ -2,57 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341DD5F63A1
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 897B85F63A5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbiJFJ3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 05:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58952 "EHLO
+        id S231491AbiJFJ3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 05:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiJFJ3e (ORCPT
+        with ESMTP id S231455AbiJFJ3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 05:29:34 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82968FD5B;
-        Thu,  6 Oct 2022 02:29:32 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 6 Oct 2022 05:29:45 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DFD2642
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 02:29:38 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 772132197F;
-        Thu,  6 Oct 2022 09:29:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1665048571; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=L7RZFM5d4dnIi1GRTKhMwES2/uyXuvfgoPRuTe96ogM=;
-        b=Ci/J0VnfozSfW1tn8VrgOAeBJ0GslTmfAaoB/QDoi2AQB8js+3KZ7nxA6MxMpRSmow6xVi
-        j2hmf+j+RbkQkmXnOztnb/pndUnWf44vQX6nrfx02GbaRGavkRcfPmN3RY6FOYJjL0o+cN
-        1YtXQlXJfn1PeYjiWilheBlS/EyqdzM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3D0A51376E;
-        Thu,  6 Oct 2022 09:29:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Plt5DfufPmNIVAAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 06 Oct 2022 09:29:31 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        xen-devel@lists.xenproject.org
-Subject: [PATCH] xen/pcifront: move xenstore config scanning into sub-function
-Date:   Thu,  6 Oct 2022 11:29:29 +0200
-Message-Id: <20221006092929.30041-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8228B6601595;
+        Thu,  6 Oct 2022 10:29:36 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1665048577;
+        bh=kvxxKqrwKOa1pX0j27ZJQT3NZRH0yvcPw/O79fTGVb4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=P8izCRHPICQPADzDxWwzctcQljlGz2l47sPaqD9eoWBv/8WdBYYn4QQ//ONtN2r/i
+         TvddvJmAeMCLYr2hHe9IsFovdg5HpDXuwRZc+ZkDnJ2vy3ZhDGda8uVUfLWidvpBPW
+         0pxcCjWPwb3jG12fL5sgUrgskdtcg86diT8o9eAslxZMUuYmTFukuYlu9ZQpDRdfwn
+         mm0xukYF1olcKQOJR2zDO+SldwcCQJTOinKcNnMWoHs8QQ0oEIZ41GoIE4T+2M7cxC
+         7QrJdxQ6ZysZqdqaZg1Eh65bT+Gwsr5kukDOdXep4bq3Zd13mnb4RJbeenFPl4LoFC
+         5KVcNrIsAavJw==
+Message-ID: <ded0300b-5b54-48eb-038e-102ae91573c5@collabora.com>
+Date:   Thu, 6 Oct 2022 11:29:33 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v9, 2/4] mailbox: mtk-cmdq: add gce software ddr enable
+ private data
+Content-Language: en-US
+To:     Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Hsin-Yi Wang <hsinyi@chromium.org>
+References: <20221006043456.8754-1-yongqiang.niu@mediatek.com>
+ <20221006043456.8754-3-yongqiang.niu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221006043456.8754-3-yongqiang.niu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,212 +65,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pcifront_try_connect() and pcifront_attach_devices() share a large
-chunk of duplicated code for reading the config information from
-Xenstore, which only differs regarding a function call.
+Il 06/10/22 06:34, Yongqiang Niu ha scritto:
+> if gce work control by software, we need set software enable
+> for MT8186 Soc
+> 
+> there is a handshake flow between gce and ddr hardware,
+> if not set ddr enable flag of gce, ddr will fall into idle
+> mode, then gce instructions will not process done.
+> we need set this flag of gce to tell ddr when gce is idle or busy
+> controlled by software flow.
+> 
+> 0x48[2:0] means control by software
+> 0x48[18:16] means ddr enable
+> 0x48[2:0] is pre-condition of 0x48[18:16].
+> if we want set 0x48[18:16] ddr enable, 0x48[2:0] must be set at same
+> time.
+> and only these bits is useful, other bits is useless bits
+> 
+> Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
+> ---
+>   drivers/mailbox/mtk-cmdq-mailbox.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
+> index c3cb24f51699..04eb44d89119 100644
+> --- a/drivers/mailbox/mtk-cmdq-mailbox.c
+> +++ b/drivers/mailbox/mtk-cmdq-mailbox.c
+> @@ -39,6 +39,7 @@
+>   
+>   #define GCE_GCTL_VALUE			0x48
+>   #define GCE_CTRL_BY_SW				GENMASK(2, 0)
+> +#define GCE_DDR_EN				GENMASK(18, 16)
+>   
+>   #define CMDQ_THR_ACTIVE_SLOT_CYCLES	0x3200
+>   #define CMDQ_THR_ENABLED		0x1
+> @@ -81,6 +82,7 @@ struct cmdq {
+>   	bool			suspended;
+>   	u8			shift_pa;
+>   	bool			control_by_sw;
+> +	bool			sw_ddr_en;
+>   	u32			gce_num;
+>   };
+>   
+> @@ -88,6 +90,7 @@ struct gce_plat {
+>   	u32 thread_nr;
+>   	u8 shift;
+>   	bool control_by_sw;
+> +	bool sw_ddr_en;
+>   	u32 gce_num;
+>   };
+>   
+> @@ -132,6 +135,9 @@ static void cmdq_init(struct cmdq *cmdq)
+>   	if (cmdq->control_by_sw)
+>   		writel(GCE_CTRL_BY_SW, cmdq->base + GCE_GCTL_VALUE);
+>   
+> +	if (cmdq->sw_ddr_en)
+> +		writel(GCE_DDR_EN | GCE_CTRL_BY_SW, cmdq->base + GCE_GCTL_VALUE);
+> +
 
-Put that code into a new sub-function. While at it fix the error
-reporting in case the root-xx node had the wrong format.
+No. That's redundant.
+Here's a better way:
 
-As the return value of pcifront_try_connect() and
-pcifront_attach_devices() are not used anywhere make those functions
-return void. As an additional bonus this removes the dubious return
-of -EFAULT in case of an unexpected driver state.
+	u32 gctl_regval = 0;
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
- drivers/pci/xen-pcifront.c | 133 +++++++++++--------------------------
- 1 file changed, 40 insertions(+), 93 deletions(-)
+	if (cmdq->control_by_sw)
+		gctl_regval = GCE_CTRL_BY_SW;
+	if (cmdq->sw_ddr_en)
+		gctl_regval |= GCE_DDR_EN;
 
-diff --git a/drivers/pci/xen-pcifront.c b/drivers/pci/xen-pcifront.c
-index 689271c4245c..a68e47dcdd7e 100644
---- a/drivers/pci/xen-pcifront.c
-+++ b/drivers/pci/xen-pcifront.c
-@@ -819,76 +819,79 @@ static int pcifront_publish_info(struct pcifront_device *pdev)
- 	return err;
- }
- 
--static int pcifront_try_connect(struct pcifront_device *pdev)
-+static void pcifront_connect(struct pcifront_device *pdev, bool rescan)
- {
--	int err = -EFAULT;
-+	int err;
- 	int i, num_roots, len;
- 	char str[64];
- 	unsigned int domain, bus;
- 
--
--	/* Only connect once */
--	if (xenbus_read_driver_state(pdev->xdev->nodename) !=
--	    XenbusStateInitialised)
--		goto out;
--
--	err = pcifront_connect_and_init_dma(pdev);
--	if (err && err != -EEXIST) {
--		xenbus_dev_fatal(pdev->xdev, err,
--				 "Error setting up PCI Frontend");
--		goto out;
--	}
--
- 	err = xenbus_scanf(XBT_NIL, pdev->xdev->otherend,
- 			   "root_num", "%d", &num_roots);
- 	if (err == -ENOENT) {
- 		xenbus_dev_error(pdev->xdev, err,
- 				 "No PCI Roots found, trying 0000:00");
--		err = pcifront_scan_root(pdev, 0, 0);
-+		if (rescan)
-+			err = pcifront_rescan_root(pdev, 0, 0);
-+		else
-+			err = pcifront_scan_root(pdev, 0, 0);
- 		if (err) {
- 			xenbus_dev_fatal(pdev->xdev, err,
- 					 "Error scanning PCI root 0000:00");
--			goto out;
-+			return;
- 		}
- 		num_roots = 0;
- 	} else if (err != 1) {
--		if (err == 0)
--			err = -EINVAL;
--		xenbus_dev_fatal(pdev->xdev, err,
-+		xenbus_dev_fatal(pdev->xdev, err >= 0 ? -EINVAL : err,
- 				 "Error reading number of PCI roots");
--		goto out;
-+		return;
- 	}
- 
- 	for (i = 0; i < num_roots; i++) {
- 		len = snprintf(str, sizeof(str), "root-%d", i);
--		if (unlikely(len >= (sizeof(str) - 1))) {
--			err = -ENOMEM;
--			goto out;
--		}
-+		if (unlikely(len >= (sizeof(str) - 1)))
-+			return;
- 
- 		err = xenbus_scanf(XBT_NIL, pdev->xdev->otherend, str,
- 				   "%x:%x", &domain, &bus);
- 		if (err != 2) {
--			if (err >= 0)
--				err = -EINVAL;
--			xenbus_dev_fatal(pdev->xdev, err,
-+			xenbus_dev_fatal(pdev->xdev, err >= 0 ? -EINVAL : err,
- 					 "Error reading PCI root %d", i);
--			goto out;
-+			return;
- 		}
- 
--		err = pcifront_scan_root(pdev, domain, bus);
-+		if (rescan)
-+			err = pcifront_rescan_root(pdev, domain, bus);
-+		else
-+			err = pcifront_scan_root(pdev, domain, bus);
- 		if (err) {
- 			xenbus_dev_fatal(pdev->xdev, err,
- 					 "Error scanning PCI root %04x:%02x",
- 					 domain, bus);
--			goto out;
-+			return;
- 		}
- 	}
- 
--	err = xenbus_switch_state(pdev->xdev, XenbusStateConnected);
-+	xenbus_switch_state(pdev->xdev, XenbusStateConnected);
-+}
- 
--out:
--	return err;
-+static void pcifront_try_connect(struct pcifront_device *pdev)
-+{
-+	int err;
-+
-+	/* Only connect once */
-+	if (xenbus_read_driver_state(pdev->xdev->nodename) !=
-+	    XenbusStateInitialised)
-+		return;
-+
-+	err = pcifront_connect_and_init_dma(pdev);
-+	if (err && err != -EEXIST) {
-+		xenbus_dev_fatal(pdev->xdev, err,
-+				 "Error setting up PCI Frontend");
-+		return;
-+	}
-+
-+	pcifront_connect(pdev, false);
- }
- 
- static int pcifront_try_disconnect(struct pcifront_device *pdev)
-@@ -914,67 +917,11 @@ static int pcifront_try_disconnect(struct pcifront_device *pdev)
- 	return err;
- }
- 
--static int pcifront_attach_devices(struct pcifront_device *pdev)
-+static void pcifront_attach_devices(struct pcifront_device *pdev)
- {
--	int err = -EFAULT;
--	int i, num_roots, len;
--	unsigned int domain, bus;
--	char str[64];
--
--	if (xenbus_read_driver_state(pdev->xdev->nodename) !=
-+	if (xenbus_read_driver_state(pdev->xdev->nodename) ==
- 	    XenbusStateReconfiguring)
--		goto out;
--
--	err = xenbus_scanf(XBT_NIL, pdev->xdev->otherend,
--			   "root_num", "%d", &num_roots);
--	if (err == -ENOENT) {
--		xenbus_dev_error(pdev->xdev, err,
--				 "No PCI Roots found, trying 0000:00");
--		err = pcifront_rescan_root(pdev, 0, 0);
--		if (err) {
--			xenbus_dev_fatal(pdev->xdev, err,
--					 "Error scanning PCI root 0000:00");
--			goto out;
--		}
--		num_roots = 0;
--	} else if (err != 1) {
--		if (err == 0)
--			err = -EINVAL;
--		xenbus_dev_fatal(pdev->xdev, err,
--				 "Error reading number of PCI roots");
--		goto out;
--	}
--
--	for (i = 0; i < num_roots; i++) {
--		len = snprintf(str, sizeof(str), "root-%d", i);
--		if (unlikely(len >= (sizeof(str) - 1))) {
--			err = -ENOMEM;
--			goto out;
--		}
--
--		err = xenbus_scanf(XBT_NIL, pdev->xdev->otherend, str,
--				   "%x:%x", &domain, &bus);
--		if (err != 2) {
--			if (err >= 0)
--				err = -EINVAL;
--			xenbus_dev_fatal(pdev->xdev, err,
--					 "Error reading PCI root %d", i);
--			goto out;
--		}
--
--		err = pcifront_rescan_root(pdev, domain, bus);
--		if (err) {
--			xenbus_dev_fatal(pdev->xdev, err,
--					 "Error scanning PCI root %04x:%02x",
--					 domain, bus);
--			goto out;
--		}
--	}
--
--	xenbus_switch_state(pdev->xdev, XenbusStateConnected);
--
--out:
--	return err;
-+		pcifront_connect(pdev, true);
- }
- 
- static int pcifront_detach_devices(struct pcifront_device *pdev)
--- 
-2.35.3
+	if (val)
+		writel(gctl_regval, cmdq->base + GCE_GCTL_VALUE);
+
+Regards,
+Angelo
+
+>   	writel(CMDQ_THR_ACTIVE_SLOT_CYCLES, cmdq->base + CMDQ_THR_SLOT_CYCLES);
+>   	for (i = 0; i <= CMDQ_MAX_EVENT; i++)
+>   		writel(i, cmdq->base + CMDQ_SYNC_TOKEN_UPDATE);
+> @@ -545,6 +551,7 @@ static int cmdq_probe(struct platform_device *pdev)
+>   	cmdq->thread_nr = plat_data->thread_nr;
+>   	cmdq->shift_pa = plat_data->shift;
+>   	cmdq->control_by_sw = plat_data->control_by_sw;
+> +	cmdq->sw_ddr_en = plat_data->sw_ddr_en;
+>   	cmdq->gce_num = plat_data->gce_num;
+>   	cmdq->irq_mask = GENMASK(cmdq->thread_nr - 1, 0);
+>   	err = devm_request_irq(dev, cmdq->irq, cmdq_irq_handler, IRQF_SHARED,
+
+
 
