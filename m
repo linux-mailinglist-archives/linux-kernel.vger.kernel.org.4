@@ -2,159 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9615F6EDA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D3045F6EDE
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231749AbiJFUUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 16:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
+        id S230478AbiJFUVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 16:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230357AbiJFUUm (ORCPT
+        with ESMTP id S229642AbiJFUVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 16:20:42 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC4D1727A3
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 13:20:38 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id lx7so2744180pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 13:20:38 -0700 (PDT)
+        Thu, 6 Oct 2022 16:21:40 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C19B489D
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 13:21:38 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id y5so4397189lfl.4
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 13:21:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date;
-        bh=Rk5zz4A39+pbcgAoB20NzVrsEawygpTbgx4vBx4ppIs=;
-        b=BYx3cjQRaQ61qD4kci8lj8sUlKGwxBQTGugOVwVFovwHCmI/LQDbCjb+DkICpsvW4m
-         STdWXo4QVJpb8zGJImpu91r/m8zGJm3KZaeFnkzRlgCgjI+0GDcxB5MTmrhucCW633IN
-         I6hYYHjSrLy5aixD/PhLwPqvTzNVP1wuQopiQ=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=v14VcMWCpMI9EAr+1tPnKmC3n5xnws8GNTWCzmKsRug=;
+        b=F/dpLSj0BF/XtPU+zcGNBPzEv3P9OsdC8HyGhg4kDoKL1vxoh3SIVFgLzTqkf0EuIu
+         8AXp9vidgCQJyHZckA57xKCZrGKE0Yz9mLGV58OqsCCQbBTSvr8jC9c4qWrkjDho3Vt4
+         YhAexpdfSJ9p1SWLrhpprQDM2LoPt0KafbknRhrNKj8ywgenVZ36/QVVZIb6ixKDB6S1
+         wG0nOYnRdMAfWZj2o1awAZMQfu+xaTUc0cO774KJkIp/oWW1ur7GKz0mk06NgaTD8zP4
+         /i3lUcTq3ttrbUU8DLvzMpmpOZOgXdnIPFL/cWhB4I5DM29LKimqzmSt0mq+FFbwcJKW
+         cyDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Rk5zz4A39+pbcgAoB20NzVrsEawygpTbgx4vBx4ppIs=;
-        b=ZYalmGmRx25TY4yO6Wewbr6d68aK9Vld3QQJkqUr5qIJ4BhTMiWaq7HMZ3vjoHVC9K
-         M4Kxo9r5+WDd9fcpMbUrfHEOyANYrijCAtfDdMEtwlu+j4j3Zqj4tErsms2DVtGSkLnS
-         4n9kDgUkP/SqInkZy6VBHDf1qaPsBEZnoiZqPESptdwLgu7IoJ679PFqP95ZT/dKJ1VP
-         YpkaERwZOB5Pe4WPr2XMhlQe+G3fcX5lnMmij61or0nlSFwuCf5kzXQDAgZYA5ho3+5D
-         fAU2IwbhZbLEXMWjxl1eBl2aNW7PhRd91nWIHIM0Xr/t+nAaI5oFyvAYJdmBahtAkHuy
-         WxrQ==
-X-Gm-Message-State: ACrzQf24s5srquUZYXRcI4PG2HHjRxvWkzu3Hx54mK91oo0+/cLNpfO+
-        RyU+Sygz7ZN+8biXijXJ/BzZvA==
-X-Google-Smtp-Source: AMsMyM6jQK6faWu8ciVNIyHuo5DdhGUHU792hu5M2+fkiWdd1JDFyJ7HN7J/+hDDUVtrL381rrTPHQ==
-X-Received: by 2002:a17:902:864c:b0:179:fe02:611e with SMTP id y12-20020a170902864c00b00179fe02611emr1539895plt.10.1665087637621;
-        Thu, 06 Oct 2022 13:20:37 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id p8-20020a635b08000000b0045328df8bd0sm148201pgb.71.2022.10.06.13.20.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 13:20:36 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 13:20:35 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Jorge Merlino <jorge.merlino@canonical.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Jann Horn <jannh@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org,
-        John Johansen <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Todd Kjos <tkjos@google.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        Prashanth Prahlad <pprahlad@redhat.com>,
-        Micah Morton <mortonm@chromium.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>, linux-kernel@vger.kernel.org,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] Fix race condition when exec'ing setuid files
-Message-ID: <202210061301.207A20C8E5@keescook>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=v14VcMWCpMI9EAr+1tPnKmC3n5xnws8GNTWCzmKsRug=;
+        b=WVmsLp32PctotTrcZOI2tkpe/TrNCQynYMXIXeAhlRT1j9982znmfh/Zs0weFCcQNx
+         ukP+9IGwRiC4Ks7jQK91TB97Pdo0m2wHxqphBk0terClkX86x6mYx3b3VMoEFj4xqjuR
+         D2QwyVEX9/FEw38OsvfJDgmm3doXJU4ibG13+Zy1ExvD0rtBeEE4fmqAHVkrHpCl2zot
+         ezttVIHjCL4rwvudlwjp+komZc2n66hpiMz6paUwM2AH9hXIe9AMlWi5h6CI53jfuc9S
+         OvAuYrv+NYmVoMS3gOcZSzsE7n3hk75dsYTLNkaY6Ervoiy9YlhwOk4u6nTMvabSQTRP
+         yjRQ==
+X-Gm-Message-State: ACrzQf3k6Bjl6x6XyXZGFLk5enEYFf1SIfsfifaF/g+eY68LDGFEPF3y
+        Lk/LkbwuvXQAPgGzHc0Y6YYX7Q==
+X-Google-Smtp-Source: AMsMyM7mONzSeI+/IkeSV1+W1JYGBirCWpTnzVqCzlkOIi4W5z5C/c5nH7kl/AoPDaTlWk9yra5+hA==
+X-Received: by 2002:ac2:4c8e:0:b0:4a2:4745:a63d with SMTP id d14-20020ac24c8e000000b004a24745a63dmr591062lfl.605.1665087697349;
+        Thu, 06 Oct 2022 13:21:37 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id b3-20020a056512070300b004a2386b8ce8sm21100lfs.211.2022.10.06.13.21.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Oct 2022 13:21:37 -0700 (PDT)
+Message-ID: <52d2b67a-5f5b-0c71-a455-f30b0b7afd57@linaro.org>
+Date:   Thu, 6 Oct 2022 22:21:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202209131456.76A13BC5E4@keescook>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 00/34] pinctrl/arm64: qcom: continued - fix Qualcomm TLMM
+ pinctrl schema warnings (5th set)
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        krishna Lanka <quic_vamslank@quicinc.com>,
+        Iskren Chernev <iskren.chernev@gmail.com>,
+        Martin Botka <martin.botka@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221006140637.246665-1-krzysztof.kozlowski@linaro.org>
+ <Yz75DAmjI1GbwQpI@gerhold.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Yz75DAmjI1GbwQpI@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 13, 2022 at 15:03:38 -0700, Kees Cook wrote:
-> It seems quite unusual to have a high-load heavily threaded
-> process decide to exec.
+On 06/10/2022 17:49, Stephan Gerhold wrote:
+>>  .../qcom,sm8450-lpass-lpi-pinctrl.yaml        | 13 ++--
+>>  .../bindings/pinctrl/qcom,sm8450-pinctrl.yaml | 22 ++----
+> 
+> Just a random thought since you are already doing minor style cleanups
+> here: Some of these files are named incorrectly, e.g. qcom,sm8450-pinctrl.yaml
+> actually documents "qcom,sm8450-tlmm". I noticed this while adding
+> qcom,msm8909-tlmm but I have to admit that it did not bother me enough
+> to actually prepare a patch for this (and now it would just conflict
+> with all your patches). :)
+> 
+> No need to change anything here, just thought I'd mention it.
 
-In looking at this a bunch more, I actually think everything is working
-as intended. If a process is actively launching threads while also trying
-to exec, they're going to create races for themselves.
+Sure, I can change this as well. Thanks for sharing!
 
-So the question, then, is "why are they trying to exec while actively
-spawning new threads?" That appears to be the core problem here, and as
-far as I can tell, the kernel has behaved this way for a very long time.
-I don't think the kernel should fix this, either, because it leads to a
-very weird state for userspace, where the thread spawner may suddenly
-die due to the exec happening in another thread. This really looks like
-something userspace needs to handle correctly (i.e. don't try to exec
-while actively spawning threads).
+Best regards,
+Krzysztof
 
-For example, here's a fix to the original PoC:
-
---- a.c.original        2022-10-06 13:07:13.279845619 -0700
-+++ a.c 2022-10-06 13:10:27.702941645 -0700
-@@ -8,8 +8,10 @@
-        return NULL;
- }
- 
-+int stop_spawning;
-+
- void *target(void *p) {
--       for (;;) {
-+       while (!stop_spawning) {
-                pthread_t t;
-                if (pthread_create(&t, NULL, nothing, NULL) == 0)
-                        pthread_join(t, NULL);
-@@ -17,18 +19,26 @@
-        return NULL;
- }
- 
-+#define MAX_THREADS    10
-+
- int main(void)
- {
-+       pthread_t threads[MAX_THREADS];
-        struct timespec tv;
-        int i;
- 
--       for (i = 0; i < 10; i++) {
--               pthread_t t;
--               pthread_create(&t, NULL, target, NULL);
-+       for (i = 0; i < MAX_THREADS; i++) {
-+               pthread_create(&threads[i], NULL, target, NULL);
-        }
-        tv.tv_sec = 0;
-        tv.tv_nsec = 100000;
-        nanosleep(&tv, NULL);
-+
-+       /* Signal shut down, and collect spawners. */
-+       stop_spawning = 1;
-+       for (i = 0; i < MAX_THREADS; i++)
-+               pthread_join(threads[i], NULL);
-+
-        if (execl("./b", "./b", NULL) < 0)
-                perror("execl");
-        return 0;
-
-
--- 
-Kees Cook
