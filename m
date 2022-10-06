@@ -2,159 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 775885F62AB
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6FD5F62A8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiJFIaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 04:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
+        id S229680AbiJFIaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 04:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbiJFIaW (ORCPT
+        with ESMTP id S230323AbiJFI3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 04:30:22 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA373167DE;
-        Thu,  6 Oct 2022 01:30:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665045020; x=1696581020;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=p145ntU9QNRXpDPuVN87WcpkTwAW9lcMxG8ANKDfxXI=;
-  b=U8qFFTBVXDp9gcpV5oF7gsIGjE8BRaKodiT7vCvT5Vaw1NX0YHAmwXgw
-   DVxG2tpObCDboNjROJXATrrjABwPSNHuc1frRWSeOMzwGXcV9W9GEs+4c
-   jW5Ff354e/TvCv/7hKb5pjzrxsBXlW31pwygdi3Z275gUMjd4MRDz6IGy
-   CN06DUwUie9HGRQf3An+fFoErpa0Ijhn7VuuWUeZbsU1wxw3oXNBy8Z/5
-   /hMFI9PTcHeZVWFugaeMPmKkHpaCN2x8jzvwx0rF4R+2iJiVQyRVE1A/N
-   akERyPQyRdqUyVzvVNwDFJV+i3ZDga/FPXsdPGiD13EX0QPy+BDKNf00z
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="304377611"
-X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
-   d="scan'208";a="304377611"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 01:29:43 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="575742350"
-X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
-   d="scan'208";a="575742350"
-Received: from pkastovs-mobl.ger.corp.intel.com (HELO localhost) ([10.252.61.167])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 01:29:41 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] docs: improve the HTML formatting of kerneldoc
- comments
-In-Reply-To: <20221006065329.787c2592@sal.lan>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20221004201222.281845-1-corbet@lwn.net>
- <20221004201222.281845-6-corbet@lwn.net> <87r0zmqkao.fsf@intel.com>
- <20221006065329.787c2592@sal.lan>
-Date:   Thu, 06 Oct 2022 11:29:40 +0300
-Message-ID: <875ygxqrrf.fsf@intel.com>
+        Thu, 6 Oct 2022 04:29:54 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5548C167CE
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 01:29:53 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id x40so1359812ljq.9
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 01:29:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=uAYIfN3N6hYQLcdG5GZs69RpxPFHvLDVLJ8F8G3QEWo=;
+        b=pw9hGkYx2KQyN2wfgY9vSshmp+Fj+edTmCL4mkANcmIVu84iXMHCUubYCirf6CIc9r
+         Ozrums9nd51THvGi6STK86s5aMKbzb4cCKT3E+BpEkjKxLl9b0ioJTLq4hkHbtsMWUZ2
+         kFkpyKREUTVHZ5rFBRaOI3/7cb5ti8bJuSgfbdURYZTR+kXXIT6jUA/aB4aVrEDa9g1C
+         SLgDVQVQG5wnbzmhbCowEm0AHE7VkDpTUK9ysKxDQZuSnrrhJspR7o7LtYDfCXyDWNGk
+         EUB9SYp3dOPN3AnSABZihqNpYnfSMfHJ8UPi+Qm3Bx2GbOECp7JNXaFqXqS8Z9nTcd2O
+         YvCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=uAYIfN3N6hYQLcdG5GZs69RpxPFHvLDVLJ8F8G3QEWo=;
+        b=bol2LqpuN/2IisDl7PkFhyHqhe53ADRzohlxJrkGukfS1Hg9/5vjwT+3d05MOiVGbh
+         PX55c65aqvrul6CN0B8x7k3QLqazjZ0j5N6Bl0Iq4kqCK/1wdXNB5oEHk+8iktqkpRbx
+         Eoi8TTPK/gsgmPB93F4LMtKMuSCxaLUe1rUnw9eyegJUO9JKM9KT21WlT3WJeuzuv2Cp
+         tKVn5pjAZ6S19/08xrFl1pEd6JwytNq7GTK73EuObIbeetjO9pZKWmuu3oTyLcYzAaHs
+         UvNd8tiA6qwGiVD1VligTXJ4eIKOcGr6i5GaAE7CQsrDDURP6kcYgiMoeAkOyU7Lhemi
+         Uz4w==
+X-Gm-Message-State: ACrzQf0kIXCliuuMnu6goMJpAOe1NmsHGdwDfNewJJMiXLZS1au2l8Jr
+        NImD+h4KHcG8dOlAifX6svnfSA==
+X-Google-Smtp-Source: AMsMyM5WvUbcQT6uavWgb+MuZ7ljzT285yhajFAuaHxWUbLbKif7P7D7eXzbR0OpJlpLn775T1I1+w==
+X-Received: by 2002:a05:651c:44f:b0:26d:ff1e:131e with SMTP id g15-20020a05651c044f00b0026dff1e131emr1231310ljg.308.1665044991429;
+        Thu, 06 Oct 2022 01:29:51 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id k17-20020ac24f11000000b0048b365176d9sm2616201lfr.286.2022.10.06.01.29.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Oct 2022 01:29:50 -0700 (PDT)
+Message-ID: <8259cc0c-93e2-4e62-3ce5-9372e2b40397@linaro.org>
+Date:   Thu, 6 Oct 2022 10:29:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [RFCv2 PATCH 2/4] bus: add Wiegand bus driver
+Content-Language: en-US
+To:     =?UTF-8?Q?Martin_Za=c5=a5ovi=c4=8d?= <m.zatovic1@gmail.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linus.walleij@linaro.org, brgl@bgdev.pl,
+        gregkh@linuxfoundation.org, jeffrey.l.hugo@gmail.com,
+        andersson@kernel.org, Michael.Srba@seznam.cz, saravanak@google.com,
+        mani@kernel.org, hemantk@codeaurora.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+References: <20221005145746.172138-1-m.zatovic1@gmail.com>
+ <20221005145746.172138-2-m.zatovic1@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221005145746.172138-2-m.zatovic1@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Oct 2022, Mauro Carvalho Chehab <mchehab@kernel.org> wrote:
-> Em Wed, 05 Oct 2022 19:58:39 +0300
-> Jani Nikula <jani.nikula@linux.intel.com> escreveu:
->
->> On Tue, 04 Oct 2022, Jonathan Corbet <corbet@lwn.net> wrote:
->> > Make a few changes to cause functions documented by kerneldoc to stand out
->> > better in the rendered documentation.  Specifically, change kernel-doc to
->> > put the description section into a ".. container::" section, then add a bit
->> > of CSS to indent that section relative to the function prototype (or struct
->> > or enum definition).  Tweak a few other CSS parameters while in the
->> > neighborhood to improve the formatting.  
->> 
->> Way back I tried to keep the formatting changes minimal to avoid opening
->> that particular can of worms along with the rest of the Sphinx
->> transition.
->> 
->> But I do wonder if people find value in repeating e.g. the struct
->> definitions in the documentation. I'd argue the rendered documentation
->> is more for an overview, and if you need to know the exact details,
->> you'll be in the editor typing code and you can look up the actual
->> definition in source. Having the definition feels maybe a bit excessive.
->
-> I have split thoughts regards to it. The advantage of having the
-> struct definition there is to allow checking the type of each argument,
-> which is useful. It also provide a way to double-check if the parser
-> is dealing well with the argument, but, on the counter-side, the
-> type printed by kernel-doc may not be identical to what's inside the
-> Kernel, on some special cases, as the parse logic for arguments is
-> complex. The same applies on functions and macros.
+On 05/10/2022 16:57, Martin Zaťovič wrote:
+> The Wiegand bus driver spawns devices and matches them with
+> drivers.
+> 
+> Signed-off-by: Martin Zaťovič <m.zatovic1@gmail.com>
+> ---
+> The bus driver currently assumes that any new Wiegand driver will
+> have a matching entry in the devicetree. It is currently sufficient
+> as I will only be implementing the GPIO driver. If someone
+> implements a Wiegand driver that will not use devicetree, he will
+> also have to edit this bus driver, in order to match properly. Is
+> that a correct approach?
 
-Two alternatives to removing it come to mind:
+(...)
 
-- Generating links to git.kernel.org at right version, file and line.
+> +static struct wiegand_device *
+> +of_register_wiegand_device(struct wiegand *wiegand, struct device_node *nc)
+> +{
+> +	struct wiegand_device *dev;
+> +	const char *val;
+> +	int ret;
+> +
+> +	dev = wiegand_alloc_device(wiegand);
+> +	if (!dev) {
+> +		dev_err(wiegand->dev,
+> +			"Wiegand device alloc error for %pOF\n", nc);
+> +		return ERR_PTR(-ENOMEM);
+> +	}
+> +
+> +	ret = of_property_read_string(nc, "compatible", &val);
+> +	if (ret) {
+> +		dev_err(wiegand->dev, "%pOF has no valid 'compatible' property (%d)\n",
+> +			nc, ret);
+> +		goto err_put;
+> +	}
+> +
+> +	if (strcmp(val, "wiegand,wiegand-gpio") == 0) {
 
-- A collapsible (and collapsed by default) code box. I think this needs
-  html/css hacking, not possible in Sphinx out of the box.
+This does not look right. Bus can have any device attached, so limiting
+some bus behavior to a specific device is not really scalable.
 
->> 
->> We also don't use Sphinx C Domain's ".. c:member::" for struct/union
->> members, 
->
-> I'm wondering how much extra build time this would impact ;-)
-> If the impact is not huge, I'm in favor of using it.
->
->> or ".. c:enumerator::" for enumeration contants. 
->
-> This one can be more problematic, as it could break existing
-> cross-references.
+Anyway device and node matching should not be with strcmp but rather
+of_*_match().
 
-Certainly.
+Best regards,
+Krzysztof
 
->
->> They provide arguably nicer rendering out of the box than our stuff.
->
-> Agreed.
->
->> The Sphinx way to do parameter lists would be field lists i.e. ":param
->> foo: description". Ditto for return values ":return: description". (Not
->> saying we should convert the comments, but kernel-doc the script could
->> emit those.)
->> 
->> Perhaps we'd be better off going towards Sphinx standard usage than
->> tweaking our own thing?
->> 
->> I'm afraid I don't have the time to work on this. Talk is cheap and all
->> that. My two cents.
->> 
->> Anyway, here are some examples how this might look like: [1].
->> 
->> 
->> BR,
->> Jani.
->> 
->> 
->> 
->> [1] https://hawkmoth.readthedocs.io/en/latest/examples.html
->
-> It reminds that we're currently lacking a  way to describe non-macro
-> #defines. In special for bit-based defines, it would be nice to have
-> a good way to document them, without needing to convert defines into 
-> enums.
-
-ITYM simple or non-function-like macros. Sphinx supports ".. macro::"
-for that nowadays, but don't know since what version. That's what I use
-in Hawkmoth, and ".. function::" for macros with args.
-
-BR,
-Jani.
-
->
-> Regards,
-> Mauro
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
