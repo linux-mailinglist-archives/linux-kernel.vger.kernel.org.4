@@ -2,76 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0015F65EA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E545F65ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbiJFMZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 08:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
+        id S231169AbiJFMZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 08:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231148AbiJFMY7 (ORCPT
+        with ESMTP id S229445AbiJFMZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 08:24:59 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71582193C6;
-        Thu,  6 Oct 2022 05:24:43 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 36EC166022F9;
-        Thu,  6 Oct 2022 13:24:41 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1665059081;
-        bh=BuajQsmdky1pSKHSsbY4UXSTa/ucDnsntUDGuRTR5Dw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NW+OCQ/VMKeFUq6aNI6w1YFB06kED9jdPOT2bcWZI9OeL9mUJErbD4BzStCnAkfpu
-         idj3em16pahptosz4k448Q+sGqtLTlRwV+k7O8X+jNcQBG9ue2uYlcm9sLgNGgJGFu
-         +NGIQGuDpt0CB3hHPothcvaVK4kOB86wPaneekFzqJsIRGoBTulZiMeYMnwo7tyP/V
-         TmGwN1mE6Oqkz+ItcP07PSJF04MXaP8B+OAh4HrbtUsKU/Vo8MVmJQlI4YQV6OvDF6
-         AYw9ZSMp2APKSfL/C4Hnn3TQbiead9GCci/PJWTtGMui5jeNxTYs2CIL2zrJBj5SzU
-         2r9Id2o1y5VIQ==
-Message-ID: <ef96bf71-7bce-7874-2e0e-f4ff6ab8f792@collabora.com>
-Date:   Thu, 6 Oct 2022 14:24:38 +0200
+        Thu, 6 Oct 2022 08:25:49 -0400
+X-Greylist: delayed 1524 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Oct 2022 05:25:44 PDT
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219EB26CB
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 05:25:42 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1ogPwa-0006uL-Nl; Thu, 06 Oct 2022 14:25:40 +0200
+Message-ID: <0fb2a9ff-df76-8af9-e54a-c2dc6bfd9478@leemhuis.info>
+Date:   Thu, 6 Oct 2022 14:25:40 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 3/8] arm64: dts: mediatek: mt7986: Fix watchdog compatible
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, nfraprado@collabora.com
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20221006120715.24815-1-allen-kh.cheng@mediatek.com>
- <20221006120715.24815-4-allen-kh.cheng@mediatek.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221006120715.24815-4-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ Thunderbird/102.3.1
+Subject: Re: 6.0.0-RC kernels trigger Firefox snap bug with 6.0.0-rc3 through
+ 6.0.0-rc7
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        linux-kernel@vger.kernel.org
+Cc:     Marc Miltenberger <marcmiltenberger@gmail.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <b0c258c3-6dcf-aade-efc4-d62a8b3a1ce2@alu.unizg.hr>
+ <5bb75cbc-a0db-537b-12d0-889230c865d8@leemhuis.info>
+In-Reply-To: <5bb75cbc-a0db-537b-12d0-889230c865d8@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1665059144;09051bbe;
+X-HE-SMSGID: 1ogPwa-0006uL-Nl
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 06/10/22 14:07, Allen-KH Cheng ha scritto:
-> MT7986's watchdog embeds a reset controller and needs only the
-> mediatek,mt7986-wdt compatible string as the MT6589 one is there
-> for watchdogs that don't have any reset controller capability.
+One more question:
+
+On 06.10.22 14:00, Thorsten Leemhuis wrote:
+> Hi, this is your Linux kernel regression tracker.
 > 
-> Fixes: 50137c150f5f ("arm64: dts: mediatek: add basic mt7986 support")
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> For the impatient: please shoot if you have a vague idea why 6.0 might
+> cause error messages like these when running firefox via snap:
+> 
+>> /bin/bash: /lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
+>> /bin/bash: error while loading shared libraries: /lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verneed record 
+> 
+> Anyway, moving on.
+> 
+> CCing Marc, who's also affected, and the regression mailing list, as it
+> should be in the loop for all regressions, as explained here:
+> https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
+> 
+> On 27.09.22 19:57, Mirsad Goran Todorovac wrote:
+>>
+>> This is my first kernel BUG report,
+> 
+> Many thx for your report!
+> 
+>> so please bear with me for a while
+>> if I'm doing something wrong or otherwise awkward.
+>> I've noticed it in the 6.0.0-rc3 kernel
+> 
+> So rc2 was working fine for you?
+> 
+>> and following patches to see if it will be fixed by other testers.
+>>
+>> I've read the bug report instructions, so I hope this will be useful.
+> 
+> These?
+> https://docs.kernel.org/admin-guide/reporting-issues.html
+> 
+> Just wondering, as then I maybe should make it clearer that sending a
+> report to just the mainling list is a bad idea, as nearly nobody will
+> see this.
+> 
+>> However, now we are at rc7, so keeping it for myself when the kernel is
+>> near production state might be an offence to good conscience.
+> 
+>> In particular, it is the problem with Firefox 104.x and 105.x, which has
+>> tabs crashing, and later it refuses to restart.
+>>
+>> Exactly the same config works with the other Linux kernels tried (5.15.x
+>> and 5.19.x) on the Ubuntu 22.04 system.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Were those two vanilla kernels? I asked in #snappy on IRC and was told
+that "snapd simply expects some ubuntu bit in patched into the kernel if
+it detects that it runs on an official ubuntu install...". This was also
+suggested "it probably makes sense to file a but in LP to make the
+kernel team aware".
 
+Ciao, Thorsten
 
+>> Firefox is a snap. The bug persisted with apparmor ON and OFF.
+> 
+>> The kernel is compiled with KMEMLEAK and KASAN options, but otherwise it
+>> is the default config file for Ubuntu's rc3 release candidate.
+> 
+> Hmm. I have no idea at all what kernel change might cause this and hence
+> don't know whom to ask to look into this. What really would help
+> tremendously: if someone could bisect the problem with a vanilla kernel.
+> 
+> Here is a rough guide (hopefully I sooner or later find time to write
+> one that is more user-friedly):
+> https://docs.kernel.org/admin-guide/bug-bisect.html
+> 
+>> Here is the syslog of the startup.
+>>
+>> Please find dmesg output. It is rather similar to the dmesg output of
+>> production kernels.
+>>
+>> /var/log/syslog:
+>>
+>> Sep 27 18:43:20 IdeaPad-3 firefox_firefox.desktop[5811]: message
+>> repeated 11 times: [ /snap/firefox/1883/usr/lib/firefox/firefox:
+>> /snap/firefox/1883/usr/lib/firefox/firefox: no version information
+>> available (required by
+>> /snap/firefox/1883/usr/lib/firefox/libmozsandbox.so)]
+>> Sep 27 18:43:20 IdeaPad-3 firefox_firefox.desktop[5811]:
+>> /snap/firefox/1883/usr/lib/firefox/firefox:
+>> /lib/x86_64-linux-gnu/libpthread.so.0: version `' not found (required by
+>> /snap/firefox/1883/usr/lib/firefox/libmozsandbox.so)
+>> Sep 27 18:43:20 IdeaPad-3 firefox_firefox.desktop[5811]:
+>> /snap/firefox/1883/usr/lib/firefox/firefox:
+>> /lib/x86_64-linux-gnu/librt.so.1: version `' not found (required by
+>> /snap/firefox/1883/usr/lib/firefox/libmozsandbox.so)
+>> Sep 27 18:43:20 IdeaPad-3 firefox_firefox.desktop[5811]:
+>> /snap/firefox/1883/usr/lib/firefox/firefox:
+>> /lib/x86_64-linux-gnu/libdl.so.2: version `' not found (required by
+>> /snap/firefox/1883/usr/lib/firefox/libmozsandbox.so)
+>> Sep 27 18:43:27 IdeaPad-3 firefox_firefox.desktop[2686]: Missing chrome
+>> or resource URL: resource://gre/modules/UpdateListener.sys.mjs
+>> Sep 27 18:43:31 IdeaPad-3 firefox_firefox.desktop[2921]:
+>> /snap/firefox/1883/usr/lib/firefox/firefox: symbol lookup error:
+>> /snap/firefox/1883/usr/lib/firefox/libmozsandbox.so: undefined symbol: ,
+>> version
+>> Sep 27 18:43:33 IdeaPad-3 systemd[1791]:
+>> snap.firefox.firefox.8b8574d2-116e-411a-9bba-c145e8cc0aa2.scope:
+>> Consumed 10min 18.279s CPU time.
+>> Sep 27 18:44:49 IdeaPad-3 snapd[818]: storehelpers.go:748: cannot
+>> refresh: snap has no updates available: "bare", "canonical-livepatch",
+>> "core", "core18", "core20", "firefox", "gnome-3-34-1804",
+>> "gnome-3-38-2004", "gtk-common-themes", "slack", "snap-store", "snapd",
+>> "zoom-client"
+>> Sep 27 19:04:59 IdeaPad-3 systemd[1791]: Started
+>> snap.firefox.firefox.d0067088-10d8-459d-a40d-fed0c95b1481.scope.
+>> Sep 27 19:05:04 IdeaPad-3 systemd[1791]:
+>> snap.firefox.firefox.d0067088-10d8-459d-a40d-fed0c95b1481.scope:
+>> Consumed 4.239s CPU time.
+>> Sep 27 19:05:41 IdeaPad-3 systemd[1791]: Started
+>> snap.firefox.firefox.c93d07ee-bee6-492d-aa89-2e27db5d5ae7.scope.
+>> Sep 27 19:05:42 IdeaPad-3 systemd[1791]:
+>> snap.firefox.firefox.c93d07ee-bee6-492d-aa89-2e27db5d5ae7.scope:
+>> Consumed 1.256s CPU time.
+>> Sep 27 19:06:39 IdeaPad-3 systemd[1791]: Started
+>> snap.firefox.firefox.b4550475-1ff8-41ee-9a39-305174eeaa44.scope.
+>> Sep 27 19:06:41 IdeaPad-3 systemd[1791]:
+>> snap.firefox.firefox.b4550475-1ff8-41ee-9a39-305174eeaa44.scope:
+>> Consumed 1.231s CPU time.
+>> Sep 27 19:06:55 IdeaPad-3 systemd[1791]: Started
+>> snap.firefox.firefox.c42cb676-a7a7-49e6-8685-610bd9c1de81.scope.
+>>
+>> $ sudo dmesg -l err
+>> [    1.638759] ACPI BIOS Error (bug): Could not resolve symbol
+>> [\_SB.PCI0], AE_NOT_FOUND (20220331/dswload2-162)
+>> [    1.638854] ACPI Error: AE_NOT_FOUND, During name lookup/catalog
+>> (20220331/psobject-220)
+>> [    2.175611] ACPI BIOS Error (bug): Could not resolve symbol
+>> [\_SB.PC00.DGPV], AE_NOT_FOUND (20220331/psargs-330)
+>> [    2.175731] ACPI Error: Aborting method \_SB.PC00.PEG0.PCRP._ON due
+>> to previous error (AE_NOT_FOUND) (20220331/psparse-529)
+>> [    5.519037] integrity: Problem loading X.509 certificate -65
+>> [   10.010679] mtd device must be supplied (device name is empty)
+>> [   12.220863] i801_smbus 0000:00:1f.4: Transaction timeout
+>> [   12.222934] i801_smbus 0000:00:1f.4: Failed terminating the transaction
+>> [   12.223023] i801_smbus 0000:00:1f.4: SMBus is busy, can't use it!
+>> [   13.092867] rcu: INFO: rcu_preempt detected expedited stalls on
+>> CPUs/tasks: { 3-.... } 6 jiffies s: 61 root: 0x8/.
+>> [   13.092878] rcu: blocking rcu_node structures (internal RCU debug):
+>> [   13.991053] mtd device must be supplied (device name is empty)
+>> [   15.315968] Bluetooth: hci0: Malformed MSFT vendor event: 0x02
+>> [   18.018388] ACPI BIOS Error (bug): Could not resolve symbol
+>> [\_TZ.ETMD], AE_NOT_FOUND (20220331/psargs-330)
+>> [   18.018857] ACPI Error: Aborting method \_SB.IETM._OSC due to
+>> previous error (AE_NOT_FOUND) (20220331/psparse-529)
+>>
+>> Please find attached the config file for the kernel build. Source is rc7
+>> "master" clean after rc7 rlse.
+>>
+>> Here is the demonstration of bug with apparmor ON and OFF:
+>>
+>> $ sudo systemctl stop apparmor
+>> $ firefox &
+>> [1] 7825
+>> $ date: date: no version information available (required by date)
+>> date: date: no version information available (required by date)
+>> date: date: no version information available (required by date)
+>> date: date: no version information available (required by date)
+>> date: date: no version information available (required by date)
+>> date: date: no version information available (required by date)
+>> date: symbol lookup error: date: undefined symbol: , version GLIBC_2.2.5
+>> chmod: chmod: no version information available (required by chmod)
+>> chmod: chmod: no version information available (required by chmod)
+>> chmod: chmod: no version information available (required by chmod)
+>> chmod: chmod: no version information available (required by chmod)
+>> chmod: chmod: no version information available (required by chmod)
+>> chmod: symbol lookup error: chmod: undefined symbol: , version
+>> xdg-user-dirs-update: error while loading shared libraries:
+>> xdg-user-dirs-update: unsupported version 0 of Verneed record
+>> rm: rm: no version information available (required by rm)
+>> rm: rm: no version information available (required by rm)
+>> rm: rm: no version information available (required by rm)
+>> rm: rm: no version information available (required by rm)
+>> rm: rm: no version information available (required by rm)
+>> rm: symbol lookup error: rm: undefined symbol: , version GLIBC_2.2.5
+>> XPCOMGlueLoad error for file
+>> /snap/firefox/1883/usr/lib/firefox/libmozsandbox.so:
+>> /lib/x86_64-linux-gnu/libpthread.so.0: version `' not found (required by
+>> /snap/firefox/1883/usr/lib/firefox/libmozsandbox.so)
+>> Couldn't load XPCOM.
+>>
+>> [1]+  Exit 255                firefox
+>> $
+>> $ sudo systemctl start apparmor
+>> $ firefox &
+>> [1] 7996
+>> $ date: date: no version information available (required by date)
+>> date: date: no version information available (required by date)
+>> date: date: no version information available (required by date)
+>> date: date: no version information available (required by date)
+>> date: date: no version information available (required by date)
+>> date: date: no version information available (required by date)
+>> date: symbol lookup error: date: undefined symbol: , version GLIBC_2.2.5
+>> chmod: chmod: no version information available (required by chmod)
+>> chmod: chmod: no version information available (required by chmod)
+>> chmod: chmod: no version information available (required by chmod)
+>> chmod: chmod: no version information available (required by chmod)
+>> chmod: chmod: no version information available (required by chmod)
+>> chmod: symbol lookup error: chmod: undefined symbol: , version
+>> xdg-user-dirs-update: error while loading shared libraries:
+>> xdg-user-dirs-update: unsupported version 0 of Verneed record
+>> XPCOMGlueLoad error for file
+>> /snap/firefox/1883/usr/lib/firefox/libmozsandbox.so:
+>> /lib/x86_64-linux-gnu/libpthread.so.0: version `' not found (required by
+>> /snap/firefox/1883/usr/lib/firefox/libmozsandbox.so)
+>> Couldn't load XPCOM.
+>>
+>> All other apps work OK AFAICS, however I suspected a kernel bug since it
+>> only shows only in RC kernels
+>> (even the Ubuntu's own 6.0.0-rc3 mainline build).
+>>
+>> Hope this helps someone. I could provide more info at request.
+>>
+>> Kind regards,
+>>
+>> Mirsad
+>>
+>> [config file removed when quoting]
+> 
+> Anyway, to be sure below issue doesn't fall through the cracks
+> unnoticed, I'm adding it to regzbot, my Linux kernel regression tracking
+> bot:
+> 
+> #regzbot ^introduced v5.19..v6.0-rc3
+> #regzbot title Firefox snap fails to run ("undefined symbol" and
+> "unsupported version 0 of Verneed record" error messages)
+> #regzbot ignore-activity
+> 
+> This isn't a regression? This issue or a fix for it are already
+> discussed somewhere else? It was fixed already? You want to clarify when
+> the regression started to happen? Or point out I got the title or
+> something else totally wrong? Then just reply -- ideally with also
+> telling regzbot about it, as explained here:
+> https://linux-regtracking.leemhuis.info/tracked-regression/
+> 
+> Reminder for developers: When fixing the issue, add 'Link:' tags
+> pointing to the report (the mail this one replies to), as explained for
+> in the Linux kernel's documentation; above webpage explains why this is
+> important for tracked regressions.
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> 
+> P.S.: As the Linux kernel's regression tracker I deal with a lot of
+> reports and sometimes miss something important when writing mails like
+> this. If that's the case here, don't hesitate to tell me in a public
+> reply, it's in everyone's interest to set the public record straight.
