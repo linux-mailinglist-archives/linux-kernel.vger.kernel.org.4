@@ -2,156 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5415F622B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 09:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9F15F6257
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiJFH4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 03:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39930 "EHLO
+        id S230500AbiJFINI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 04:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230441AbiJFH4g (ORCPT
+        with ESMTP id S229633AbiJFINF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 03:56:36 -0400
-Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B087527CD6;
-        Thu,  6 Oct 2022 00:56:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1665042986;
-        bh=UxqOWl+5Fnu5BtMbVy/UIVQ40JwvSPGP9jrVh2B1CO8=;
-        h=X-UI-Sender-Class:Date:Subject:Cc:References:From:In-Reply-To;
-        b=CZtDCWr9IbSPn/tM+zuzLY1JZnhRZH00lkKITVTEZVK+THtBe3QEMlUUlPVkeWcHM
-         QJf8z86cSslIvvtCuEHOtMm00bAApWryE9p06pAJcTBPWIjcfQFe1kepW4a9wxnERL
-         Zo7HmL8PU6iKlzVqdrBciINrTyPY5evWL3VD0ktc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [10.24.110.15] ([143.244.37.25]) by mail.gmx.net (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1M6Daq-1oZl6Q2Iem-006eJS; Thu, 06
- Oct 2022 09:56:26 +0200
-Message-ID: <3ee2a3d6-5711-3240-c181-cd34426932ed@gmx.com>
-Date:   Thu, 6 Oct 2022 07:56:24 +0000
+        Thu, 6 Oct 2022 04:13:05 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91496069B;
+        Thu,  6 Oct 2022 01:13:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding;
+        bh=/wJy8btL5+zjwXLVcEbk8/IgDRwXL8RenhqmrkUWmwE=;
+        b=I/e0jfLCvkYBP1QhhHsXpjlgg+JMuIJscvb2JoR3ILr2Hm9vgcW7wMBpKfTpCDOly9qn3eOHniM+o
+         mxX+MrDFiDyohPjpH6sZcKG5jGjFQ8TxNYbiR0CS2M+XpIppauWHVN7bU/q2C4Wv71g0XWd4SRyU35
+         WA30K8nkmZnW4YQwovFO2SMmdiB778ZibaiLst/rSD2HlC/5QQXSgRVY+KjqXTIu9gjpLmTRIUTWHo
+         dP2KBY6DbsxUAWElR7/UVZKJER7TOLnnkETi1opx6Zh6wumXtm8y99EXGxFiruYhfuRBZALuJw/UKV
+         jXBTjuU+EYgeaVavd4yVw8Jcld7QXOQ==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.4.1445, Stamp: 3], Multi: [Enabled, t: (0.000015,0.024642)], BW: [Enabled, t: (0.000024,0.000002)], RTDA: [Enabled, t: (0.079925), Hit: No, Details: v2.42.0; Id: 15.52k23o.1gem5liaf.8q2; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from localhost.localdomain ([92.100.86.33])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Thu, 6 Oct 2022 11:12:52 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, dg@emlix.com, j.zink@pengutronix.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        system@metrotek.ru
+Subject: [PATCH v14 0/2] Lattice sysCONFIG SPI FPGA manager
+Date:   Thu,  6 Oct 2022 10:44:47 +0300
+Message-Id: <20221006074449.24082-1-i.bornyakov@metrotek.ru>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-Cc:     ksummit <ksummit-discuss@lists.linuxfoundation.org>,
-        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
- <20221004175354.bfvg3vhfqch35ib5@meerkat.local>
-From:   "Artem S. Tashkinov" <aros@gmx.com>
-In-Reply-To: <20221004175354.bfvg3vhfqch35ib5@meerkat.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:pXQ1jKnLz0YSBlquK4q7D7JoQVjjVm62KF2orsKZYLNPYNAj+h3
- MVJJZhpolAu2PeU1r3bkYJozjk8FLElf36L9FQA3wWpdUoVsIAUY08Jiog+u4WiOBzh7V6/
- hQ0v2ifDq5S0tZzW4yQiwegFTtA5ckez8WhoTzEjMaOcWr7tPFz26arLSBcAhEE/PBr1SFC
- nwcegtu+eaHRIqjxn/Sag==
-X-UI-Out-Filterresults: junk:10;V03:K0:wJa772Smk1s=:s2w1iITOWIn6kRqZiH1Oo2pZ
- tSwHrSi8YZS0GHfw/4Dwx+A3k+9M8JKHB+HpN/2tURgfnVvRWlj5t+n39p4I/IQ4B9g4IN1dI
- R8SE2cQN1sAE9NRgKB7TasMzQb0omodxG7smA3/lkjJjdp8Le6O2v8ncLSIUmsXbIZS9xYySx
- wOcEyCcvhy77OLHyj4reUihMknpSL8wLY23IDe3byzWnnhDE15Jk4rNyptUmdF1bBa3jmmzaP
- 67/wOSaQNL8SUY+QGYjFyVV2EbtjDmhebn+psljW7mRa+ly0aBqgbp3aeGP0auLxC/maI6pXA
- isUd84kbw9q+YY2U8wgBJk1SUH9dAq15f90NaMT8eB1FfGsJiSxfEPcRaXv7DaqoA4uyDUvBH
- +P8TSwYbPwzRZafqBD8UnFjuFzZ8xMYyNe+l8Q2jr8BGXXMoe0YsBK0uaAvix7NrxtPKQxJVF
- 5oXcwlfgOFxapb3lVXmMA8qp2CpUGHO3hnxQwFRNfLq0y0vJJORRp4tx1qOKznd7+lUMzAt9r
- O6htHm8AHW0awmjftmhciYGNvZf8q8J/QLbKQQrV4ZGplL585Xl5wXj6E4H2rWN7ZhTpaEzPX
- DsQHub/ffIvo8Wlo26Bf3I7zMu6UhTGNXYPS/aCO3ERyGTojU1WEVBxfloCIrfvQlEfOemeVQ
- PdP1eJBn7zBzkhy32/zxUz2YZByLOrWTMBH/W8Dyiaq/HfysIT6BWqgmbchthqPw+jMPwSv48
- 8YI7PCj97kbY2pQVFwnGx1Tigfb7rRSsR8MR1vE62CSe5ultFld1EFwejYv9OYzwFjLmDBhF7
- nzNpJSIBpYvz6B07boRqoKn/CAiymY/5MUxh0pI1L1ecgOunqvNeN/v9Xfzq15r9NtPhtx1o3
- OhcTb+s71dUoCcHN88RMdP+MmGH3Lu7VzSYbE/Io4gV3NaxdoTmtfbadwdRd7R9WvC6Usedtg
- ypHVmH5EY05W++soDvt3JTgBQ4uJyQZehNDiRCJMLWApij6IWoxgaPn0TyDaxaww03Y7S70TK
- D1mIXFiH/dgrjG7dNCApaGg/wlaOXWaWVn8a/X041ki6sGzbZyo91eImJ+L3McSOVAmDoxLgg
- NGeCJAeQ8giC97578l2bPMgyQQZzLhnx2zO1t7JdxXeyBW2k48Ii8ZfZANISrzV5sW7qM972x
- i0TP7yAnpbdEeLhLwj1ralEWsolG7TqoVQXnmdcCq43lggKRcqOGJrIQRWUDH2Y+xQaJ+lwGL
- rdnhxOeAt0Hq5Wprdc+oOCiLC7xsmvXXDd3iT/kvNwYqEiZZXm5LvkRIMHt6sDq5VY31b2feU
- N34UOdXwTB0YBvMlYPCJi6BAaPI3a26LE22hfpUENaxeQW0zDF+UmIQiFMaV48l75R+XW7Fz4
- doV5DsQ3UvaBfBsNKKEL+CUtFWViNlrE/i3EH/Wotp2f3lDz8trT/drPJ20wLO5nWj8nU/4tv
- Lqp7n0SGDNrRo9BpdQWOAcggiykV3qZ/DZAErwK1hvBuv7IZJcg2aZeIDs+NjlCFeR7O5+7KP
- u3Ne+i7UAYVn7ThkS0nQ0lxpGEyIfNcrQ7BGhcvgfw7/ZHD/46/m7sraWNzZtwVXw==
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,MISSING_HEADERS,RCVD_IN_SBL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+slave SPI sysCONFIG interface.
+
+ChangeLog:
+  v1 -> v2:
+    * remove "spi" from compatible string
+    * reword description in dt-bindings doc
+    * add reference to spi-peripheral-props.yaml in dt-binding doc
+    * fix DTS example in dt-bindings doc: 4-spaces indentations, no
+      undersores in node names.
+  v2 -> v3:
+    * fix typo "##size-cells" -> "#size-cells" in dt-bindings example
+  v3 -> v4:
+    * dt-bindings: reword description
+    * dt-bindings: revert props order
+  v4 -> v5:
+    * dt-bindings: remove trailing dot from title
+    * dt-bindings: reword description to avoid driver reference
+    * dt-bindings: add "Reviewed-by: Krzysztof Kozlowski" tag
+  v5 -> v6:
+    * ecp5-spi: lock SPI bus for exclusive usage in
+      ecp5_ops_write_init(), release in ecp5_ops_write_complete()
+      or on error
+  v6 -> v7:
+    * ecp5-spi.c -> lattice-sysconfig-spi.c. Reworked to represent
+      generalized sysCONFIG port with implementations for ECP5 and
+      MachXO2
+    * lattice,ecp5-fpga-mgr.yaml -> lattice,sysconfig.yaml. Reworked to
+      document both ECP5 and MachXO2 sysCONFIG.
+    * dt-bindings: remove "Reviewed-by: Krzysztof Kozlowski" tag as doc
+      was rewritten by a considerable amount.
+  v7 -> v8:
+    * dt-bindings: move "program-gpios", "init-gpios" and "done-gpios"
+      to top-level properties and disallow them for MachXO2 variant.
+  v8 -> v9:
+    * dt-bindings: "program-gpios", "init-gpios" and "done-gpios" are
+      now optional for both ECP5 and MachXO2
+    * lattice-sysconfig-spi.c -> sysconfig-spi.c + sysconfig.c +
+      sysconfig.h
+        ** reworked to be one sysCONFIG FPGA Manager rather than two
+	   distinct ECP5 and MachXO2 managers
+	** splitted to port type agnostic sysconfig.c and SPI-specific
+	   sysconfig-spi.c
+	** command transfer function moved to callback for ease of
+	   adding another port type, such as I2C
+  v9 -> v10:
+    * split sysconfig_transfer() callback into separate command_write()
+      and command_write_then_read(). There are too many transfers
+      without readback.
+    * add command_write_with_data() callback which performs single
+      transfer of command + data. It's needed for better abstraction of
+      paged bitstream write routine.
+    * move sysconfig_lsc_burst_init() to bitstream_burst_write_init()
+      callback to break dependence of sysconfig.c from sysconfig-spi.c
+    * move sysconfig_lsc_burst_complete() to bitstream_burst_write_complete()
+      callback to break dependence of sysconfig.c from sysconfig-spi.c
+    * add bitstream_burst_write() to abstract fpga_manager_ops->write()
+      from bus type
+    * remove struct spi_device from struct sysconfig_priv, use
+      to_spi_device()
+    * move fpga_manager_ops initialization to sysconfig.c
+  v10 -> v11:
+    * rename sysconfig_lsc_burst_init() to sysconfig_spi_lsc_burst_init()
+    * rename sysconfig_bitstream_burst_write() to
+      sysconfig_spi_bitstream_burst_write()
+    * rename sysconfig_lsc_burst_complete() to
+      sysconfig_spi_lsc_burst_complete()
+    * rename "ecp5-fpga-mgr" to "sysconfig-ecp5"
+    * rename "machxo2-fpga-mgr" to "sysconfig-machxo2"
+    * move spi_max_speed_hz from struct sysconfig_fpga_priv to
+      struct sysconfig_spi_fpga_priv, which is local to sysconfig-spi.c
+    * remove SPI bus unlock on write error form
+      sysconfig_spi_bitstream_burst_write(), call
+      sysconfig_burst_write_complete() on error in
+      sysconfig_bitstream_burst_write() instead.
+  v11 -> v12:
+    * build sysconfig core as separate module to prevent duplication of
+      common code segments across different binaries
+    * rename sysconfig.c to lattice-sysconfig.c
+    * rename sysconfig.h to lattice-sysconfig.h
+    * rename sysconfig-spi.c to lattice-sysconfig-spi.c
+    * rename sysconfig_spi_cmd_write_then_read() to
+      sysconfig_spi_cmd_read()
+    * rename command_write_then_read() callback to command_read()
+    * rename sysconfig_cmd_write_then_read() to sysconfig_cmd_read()
+    * rename sysconfig_spi_lsc_burst_init() to
+      sysconfig_spi_bitstream_burst_init()
+    * rename sysconfig_spi_lsc_burst_complete() to
+      sysconfig_spi_bitstream_burst_complete()
+    * remove excessive !spi check from sysconfig_spi_cmd_write(),
+      sysconfig_spi_cmd_read(), sysconfig_spi_bitstream_burst_init(),
+      sysconfig_spi_bitstream_burst_write() and
+      sysconfig_spi_bitstream_burst_complete()
+    * drop MachXO2 support
+        ** drop struct sysconfig_fpga_priv
+        ** drop paged write
+        ** drop command_write_with_data() and friends
+        ** drop ISC_PROGRAM_DONE routine
+        ** drop refresh from sysconfig_isc_finish()
+        ** sysconfig_isc_erase() only erase SRAM
+	** drop MachXO2 mentions from DT bindings doc
+  v12 -> v13:
+    * use device_get_match_data() instead of of_device_get_match_data()
+      and drop of_device.h inclusion
+    * in polling routines use time_before(jiffies, timeout) instead of
+      retries count
+    * add usleep_range() to gpio polling routine
+    * check fail status of command in more pronounced way
+    * check definition of sysconfig_priv callbacks at probe
+    * (BIT(23) | BIT(24) | BIT(25)) -> GENMASK(25, 23)
+  v13 -> v14:
+    * return -ETIMEDOUT instead of -EBUSY from sysconfig_poll_busy() to
+      align with sysconfig_poll_gpio()
+
+Ivan Bornyakov (2):
+  fpga: lattice-sysconfig-spi: add Lattice sysCONFIG FPGA manager
+  dt-bindings: fpga: document Lattice sysCONFIG FPGA manager
+
+ .../bindings/fpga/lattice,sysconfig.yaml      |  81 ++++
+ drivers/fpga/Kconfig                          |  11 +
+ drivers/fpga/Makefile                         |   2 +
+ drivers/fpga/lattice-sysconfig-spi.c          | 151 ++++++
+ drivers/fpga/lattice-sysconfig.c              | 428 ++++++++++++++++++
+ drivers/fpga/lattice-sysconfig.h              |  41 ++
+ 6 files changed, 714 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+ create mode 100644 drivers/fpga/lattice-sysconfig-spi.c
+ create mode 100644 drivers/fpga/lattice-sysconfig.c
+ create mode 100644 drivers/fpga/lattice-sysconfig.h
+
+-- 
+2.35.1
 
 
-On 10/4/22 17:53, Konstantin Ryabitsev wrote:
-> On Thu, Sep 29, 2022 at 01:19:24PM +0200, Thorsten Leemhuis wrote:
->> Hi!
->>
->> TLDR: Core Linux kernel developers are unhappy with the state of
->> bugzilla.kernel.org; to improve things I plan to change a few important
->> aspects of its configuration, unless somebody comes up with better idea=
-s
->> to tackle current problems: (1) Create a catch-all product making it
->> totally obvious to submitters that likely nobody will look into the
->> ticket. (2) Remove or hide all products & components where the subsyste=
-m
->> didn't fully commit to look into newly submitted reports. (3) Change th=
-e
->> text on the front page to make it clear that most kernel bug reports
->> need to be sent by mail.
->
-> Here's my counter-plan, which builds on top of yours.
->
-> 1. Create a Kernel/Kernel product that acts as a starting point for all =
-bug
->     submissions.
-> 2. Create and maintain a mapping from MAINTAINER subsystem entries to
->     Product/Component categories in Bugzilla (the scheme to be establish=
-ed).
-> 3. Establish and maintain a team of designated triage people who are wil=
-ling
->     to look at incoming bugs to either:
->
->     a. quick-close them as non-actionable (tainted kernel, distro kernel=
-, spam)
->     b. obtain missing information from the submitter as necessary
->     c. figure out the correct component to assign, to the best of their =
-ability
->     d. set a "triaged" flag
->
-> 4. a backend monitoring bot will track all bug changes and, when it sees=
- a bug
->     get the "triaged" state, it will:
->
->     a. create a useful bug summary from all bug comments
->     b. figure out who to notify based on the mapping (see #2 above)
->     c. send out the email to everyone identified
->
-> 5. the same backend monitoring bot will track responses and update the b=
-ug
->     comments as needed; any comments added via the bugzilla site will be
->     similarly sent out as follow-up messages.
->
-> 6. the bot can also monitor commits and other discussions via lore.kerne=
-l.org
->     and automatically add comments/links when it sees the bug mentioned
->     elsewhere.
->
-> I'm happy to take care of everything bot-related (apparently, programmin=
-g bots
-> is what I do now -- I just wish it was the cool and glamorous kind).
->
-> As I have stated multiple times, the hard part will be keeping a team of
-> people who are willing to do the bug triage work, but maybe we can start=
- with
-> Greg KH using his intern funds to hire someone (assuming he's not alread=
-y
-> using these funds for someone to help him with all the other tasks).
->
-> Does that sound like a plan for everyone?
-
-This looks fabulous.
-
-Except, I'd love to let users have an option of submitting bugs to the
-component they specify manually.
-
-(I've removed a ton of people from CC because my email provider
-absolutely hates when I send emails to many addresseses simultaneously -
-my account was completely blocked for five days while I tried hard to
-reach support).
