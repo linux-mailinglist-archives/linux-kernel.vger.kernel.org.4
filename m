@@ -2,96 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C775F71BB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 01:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B23455F71BD
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 01:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbiJFXZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 19:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
+        id S229734AbiJFX0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 19:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbiJFXZ1 (ORCPT
+        with ESMTP id S229955AbiJFX0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 19:25:27 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC4FA026C
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 16:25:25 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id c24so3042779pls.9
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 16:25:25 -0700 (PDT)
+        Thu, 6 Oct 2022 19:26:10 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5082BBE38
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 16:26:09 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id f9so3890948ljk.12
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 16:26:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=ZygdtQl3rMbRdr0w7DkWhiBa9Z/ADOW5Xl5z6vw76/M=;
-        b=mCQ7z+1sm6CPEVtpHP2AtNHhVfoTZVPVZDgNCg9GLx3hI+hkwyYAZZXvN93sXLoMYe
-         md9rMPaTRGTg3j7egudLHDiRPem/o5w4nMWPvN+8ymzky56qBBbJwfcoct0jxQIVImUX
-         DUBmAcEt+5VV6gX09rs3kG8BuhRJYawP57tGM=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mV9Q8TxTnZx5YN34R7SUXMVFq34AMSjPHpiLz7F3AAE=;
+        b=Jof8LQIU/LTuSSP8IlLOJPBNTJHtoMtM4OCWw8V1VoKbuCusd4xVtpujTiPT8afnee
+         nTlskKM4P3VaniKgPk3WpNFloS+8fkySpc1bOdHqtcMd1dW830VlZuNe4woPoTqywiSA
+         bb/yVRjeb9lzQvfm/xJBL4vwjZy8/MOQI1GaoUUlj9k8SAo3Hc8qyxuxH0n6381BKmVt
+         07mG4mibyTyFYEul/6qXEW+rwhVKVJor7+IjQq/ae7H/83nbYl33YedC0Lka1M91VddC
+         qGdaJ519jZLxMn/yBCCclfxMc6aBkqK142cDYorwp+Y/39aFGbaK+5xC02QZCkdofsLR
+         jVMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=ZygdtQl3rMbRdr0w7DkWhiBa9Z/ADOW5Xl5z6vw76/M=;
-        b=ovWPMFJPjEMJYZCYxrCbpYdHCmDNTtu8B8uX6DdmvEx/wFgF/3DitWULz0aKu5A7Z7
-         GA17q2ETz6ZIo/wWSueqapSekDSggvlxc/oEiU0UAzuI6ouNdPQYQRqWUstw0eZV31kk
-         4Md6vIFFZWa3Oj+p4GhJNfDpQYQQCP0KaWx0Pf+i0Tnollcd+4wVVZ2GW7eppI4c0bRV
-         LqhzTiHmSWaTIFtajsHiztfl2wT2Rxim2N7M6IeedgEo9IZYUNnq04WNiGjVeFAkOAj4
-         nM40KwsLLBLx699bD/3c8HBa2coRcohhfKlqCtS0bikqPr3QNSnGmroLS6R4QJ9KCrZH
-         Wnhg==
-X-Gm-Message-State: ACrzQf1UlYaisoO5ZnCHZND5Ltvg2FVkiBdbEJTp2I3sQMLp+zY+vnOt
-        a7j+WWODND1uyxyS7M9KKgFmEQ==
-X-Google-Smtp-Source: AMsMyM6qxU/L9aMpEr/lJy/8m9/mq139FUyqoAlJHW0DO2A/kU8trV0M01fDLHjg0R39Pb2BAZA3kQ==
-X-Received: by 2002:a17:90b:1c0a:b0:20a:7393:d8e9 with SMTP id oc10-20020a17090b1c0a00b0020a7393d8e9mr12748478pjb.188.1665098724550;
-        Thu, 06 Oct 2022 16:25:24 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z15-20020aa7958f000000b0053dea60f3c8sm172734pfj.87.2022.10.06.16.25.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 16:25:23 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gpiccoli@igalia.com
-Cc:     Kees Cook <keescook@chromium.org>, ardb@kernel.org,
-        kernel@gpiccoli.net, anton@enomsg.org, ccross@android.com,
-        Tony Luck <tony.luck@intel.com>, kernel-dev@igalia.com,
-        linux-efi@vger.kernel.org
-Subject: Re: [PATCH 0/8] Some pstore improvements
-Date:   Thu,  6 Oct 2022 16:24:52 -0700
-Message-Id: <166509868540.1834775.12982405101524535051.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221006224212.569555-1-gpiccoli@igalia.com>
-References: <20221006224212.569555-1-gpiccoli@igalia.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mV9Q8TxTnZx5YN34R7SUXMVFq34AMSjPHpiLz7F3AAE=;
+        b=CUxYGAvcGRJFz/ImDp9yDIETdoBSv9U5KlmBbLXjBRPoUcenYrqRM/5HqgQN4WnSom
+         6TVLojqT7QxGOnkW1fwhh/y+h01ZIu2SST9d1pSoSsppfiQ+BbaOc041GR3cRu3Q/q9B
+         iIcPPS8miudZla8HfscYuBywRQnEsA4TADbYIxHCnhIa36NEgDhPkh6l+WNuuBN7SHK3
+         K/86jExJTrDRizu2Nj7jHYkcpH/79zQgqDagX6/04hh8HVofOjpLRffQytmpV1oeiOHd
+         hJ7B0N4lLXjIhnsnwBqkyPN6J8W8pjaug3zrs/TSuu86UBT7UjrBoQCJvgrSwiLKiHOV
+         t3fQ==
+X-Gm-Message-State: ACrzQf1LBle3533Zu7VKvU7LfWFinJzGDf1YduJrCTPb0XxTx3rif4Gh
+        o32Hfbkfrmdk5XY9WGI6wBd3NBGevZvOqM7CK313fg==
+X-Google-Smtp-Source: AMsMyM4Bsu70blXGXiZx0d4DQ3MtJDtM6pfc4RygLl3vlfkNLKFvVBBszLm918fiUVz4Nmnpp8s3Ox0KB5jtzGZLrXI=
+X-Received: by 2002:a2e:aa20:0:b0:26e:609:cf08 with SMTP id
+ bf32-20020a2eaa20000000b0026e0609cf08mr669552ljb.422.1665098767843; Thu, 06
+ Oct 2022 16:26:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221006171133.372359-1-vipinsh@google.com> <20221006171133.372359-5-vipinsh@google.com>
+ <Yz8xdJEMjcfdrcWC@google.com>
+In-Reply-To: <Yz8xdJEMjcfdrcWC@google.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Thu, 6 Oct 2022 16:25:31 -0700
+Message-ID: <CAHVum0e4fiaB7hGSA6z1SaiZ1632f9Md2p0Nw6G=5wqhHYvdJg@mail.gmail.com>
+Subject: Re: [PATCH v4 4/4] KVM: selftests: Run dirty_log_perf_test on
+ specific CPUs
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, dmatlack@google.com, andrew.jones@linux.dev,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Oct 2022 19:42:04 -0300, Guilherme G. Piccoli wrote:
-> overall. Most of them are minors, but the implicit conversion thing
-> is a bit more "relevant" in a sense it's more invasive and would fit
-> more as a "fix".
-> 
-> The code is based on v6.0, and it was tested with multiple compression
-> algorithms (zstd, deflate, lz4, lzo, 842) and two backends (ramoops and
-> efi_pstore) - I've used a QEMU UEFI guest and Steam Deck for this goal.
-> 
-> [...]
+On Thu, Oct 6, 2022 at 12:50 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Thu, Oct 06, 2022, Vipin Sharma wrote:
+> ...
+>
+> > +static void pin_me_to_pcpu
+>
+> Maybe s/me/this_task ?
 
-Applied to for-next/pstore, thanks!
+Sure.
 
-[1/8] pstore: Improve error reporting in case of backend overlap
-      https://git.kernel.org/kees/c/55dbe25ee4c8
-[2/8] pstore: Expose kmsg_bytes as a module parameter
-      https://git.kernel.org/kees/c/1af13c2b6324
-[3/8] pstore: Inform unregistered backend names as well
-      https://git.kernel.org/kees/c/a4f92789f799
+>
+> > (int pcpu)
+>
+> Unless we're using -1 as "don't pin" or "invalid", this should be an unsigned value.
+>
+> > +{
+> > +     cpu_set_t cpuset;
+> > +     int err;
+> > +
+> > +     CPU_ZERO(&cpuset);
+> > +     CPU_SET(pcpu, &cpuset);
+>
+> To save user pain:
+>
+>         r = sched_getaffinity(0, sizeof(allowed_mask), &allowed_mask);
+>         TEST_ASSERT(!r, "sched_getaffinity failed, errno = %d (%s)", errno,
+>                     strerror(errno));
+>
+>         TEST_ASSERT(CPU_ISSET(pcpu, &allowed_mask),
+>                     "Task '%d' not allowed to run on pCPU '%d'\n");
+>
+>         CPU_ZERO(&allowed_mask);
+>         CPU_SET(cpu, &allowed_mask);
+>
+> that way the user will get an explicit error message if they try to pin a vCPU/task
+> that has already been affined by something else.  And then, in theory,
+> sched_setaffinity() should never fail.
+>
+> Or you could have two cpu_set_t objects and use CPU_AND(), but that seems
+> unnecessarily complex.
+>
 
--- 
-Kees Cook
+sched_setaffinity() doesn't fail when we assign more than one task to
+the pCPU, it allows multiple tasks to be on the same pCPU. One of the
+reasons it fails is if it is provided a cpu number which is bigger
+than what is actually available on the host.
 
+I am not convinced that pinning vCPUs to the same pCPU should throw an
+error. We should allow if someone wants to try and compare performance
+by over subscribing or any valid combination they want to test.
+
+...
+
+> > +static int pcpu_num(const char *cpu_str)
+> > +{
+> > +     int pcpu = atoi_paranoid(cpu_str);
+>
+> newline after declaration.  Though maybe just omit this helper entirely?  As a
+> somewhat belated thought, it's trivial to let "-1" mean "don't pin this vCPU".
+> No idea if there's a use case for that, but it's not any more work to support.
+>
+> Even if <0 is invalid, what about just having pin_task_to_pcu() do all the
+> sanity checking?  That way it's more obvious that that helper isn't failing to
+> sanity check the incoming value.
+>
+
+This will go away with atoi_non_negative() API I will write in v5. I
+won't even need this function then.
+
+...
+
+> > +     while (cpu && i < nr_vcpus) {
+> > +             perf_test_args.vcpu_args[i++].pcpu = pcpu_num(cpu);
+> > +             cpu = strtok(NULL, delim);
+> > +     }
+> > +
+> > +     TEST_ASSERT(i == nr_vcpus,
+> > +                 "Number of pcpus (%d) not sufficient for the number of vcpus (%d).",
+> > +                 i, nr_vcpus);
+>
+> Rather than assert after the fact, use a for-loop:
+>
+>         for (i = 0; i < nr_vcpus; i++ {
+>                 TEST_ASSERT(cpu, "pCPU not provided for vCPU%d\n", i);
+>                 perf_test_args.vcpu_args[i++].pcpu = atoi_paranoid(cpu);
+>                 cpu = strtok(NULL, delim);
+>         }
+>
+> so as to avoid having to consume the loop control variable before and after the
+> loop.  Or even
+>
+>         for (i = 0, cpu = strtok(cpu_list, delim);
+>              i < nr_vcpus;
+>              i++, cpu = strtok(NULL, delim)) {
+>                 TEST_ASSERT(cpu, "pCPU not provided for vCPU%d\n", i);
+>                 perf_test_args.vcpu_args[i++].pcpu = atoi_paranoid(cpu);
+>         }
+>
+> Though IMO the latter is gratuitous and hard to read.
+>
+
+I will use the former one.
+
+> > +
+> > +     perf_test_args.pin_vcpus = true;
+> > +
+> > +     // 2. Check if main worker is provided
+> > +     if (cpu)
+> > +             pin_me_to_pcpu(pcpu_num(cpu));
+>
+> Verify the string is now empty?  I.e. that there isn't trailing garbage.
+>
+
+Okay, I will add the verification.
+
+All other suggestions to which I haven't responded, I agree with them
+and will make the changes in v5.
