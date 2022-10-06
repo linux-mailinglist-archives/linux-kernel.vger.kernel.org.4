@@ -2,66 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C5E5F6600
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F905F660B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbiJFM2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 08:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
+        id S229888AbiJFM23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 08:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiJFM15 (ORCPT
+        with ESMTP id S231238AbiJFM2L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 08:27:57 -0400
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247AAB85E;
-        Thu,  6 Oct 2022 05:27:57 -0700 (PDT)
-Received: by mail-oi1-f178.google.com with SMTP id s192so1832972oie.3;
-        Thu, 06 Oct 2022 05:27:57 -0700 (PDT)
+        Thu, 6 Oct 2022 08:28:11 -0400
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCB0A0259;
+        Thu,  6 Oct 2022 05:28:08 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id v134so1801836oie.10;
+        Thu, 06 Oct 2022 05:28:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IivXsPp5lB5UeXK+nUb21Vu9wuwXJqHD7QS9qHFH17M=;
-        b=c/MbcbpS33CpNHuGjD7Os9bjbk4Y8TctPJU/nW5teyWnR0fz3uYYpeEMVkTRATn7nn
-         J3sif4eNc803gUzTO7zQJcfHhK8k2Myg4uI4uOmfR3Mda8Tj6XEMExglAiM1k2hmdchD
-         s+sqDcBC7PF/YRN5HT2v80bQWuvqngqkFYoMXMnvZTgX0ATMk7s0Zou2orggFKpzrhAy
-         XoiVIckRhlE2LUqEbb2CsKoBJ5ESstGBy+xzt3D6rx9FNJaBInvXnlhL12tILec2c/FA
-         utmA3Zdt30PpTskTtMFL289+/cXlF1/NT3yUpyGQaT3wZztg5FDY75tPbaWQyBFjMNQw
-         GjZw==
-X-Gm-Message-State: ACrzQf2KV1oNRrjWWlaCyQnE7DGlg5TBeUk0JjSptja8BEFNzY9cN6tf
-        0ObGG6jItMvc62zn/M6T9w==
-X-Google-Smtp-Source: AMsMyM6v4daLPkZQEVW4dBm3lahUxfM8urW8wX2Qa4pW/2l5uyythd5T/wl5E/sb0t6hvvgholskYA==
-X-Received: by 2002:a54:4485:0:b0:34f:b741:9932 with SMTP id v5-20020a544485000000b0034fb7419932mr2235426oiv.42.1665059276383;
-        Thu, 06 Oct 2022 05:27:56 -0700 (PDT)
+        bh=Ie2NVaibuJVOQuIOjeuf0bg2Uj2OCg4BSeKdkXj8/qE=;
+        b=Q0QnV20rMXb3zHWI5NmLFjkIHlPBdiayEbUt9KChlI8Z5z2kfB4VG3kp1dwTz7uXYs
+         58U8ZjA2rMqtZ/rUemRAPmxeMgKG6Xx7vWk3q8zo4l1ArmXSabKfX9PzIBQdpaML0IxF
+         zqIEiMAVnPmeICF6073MaAXOkY6lkq/aLurJ5yJuBQbbYk8vvn0RF+dElRw5/omujuak
+         JSTOkmU3l15o+814By/9Jwh8JL/xO8n3FgKIDUMLTk8MJ1KvPs4WMc2G36fTxr7LQYeG
+         qvvck6lj8/MOdeuz0Ig46IEUR7AtJahoihkVfwU3Ho1Fr6Y1ikyDHaPfZYS8D1a5mgOr
+         grXw==
+X-Gm-Message-State: ACrzQf0URPcamhWQKdWGTm7NDY5LLR+9hP4YHjKye+ekvaBGD83NqyuC
+        VJpAx/1KfTRkm2DYMpJLYF/oHIQuSQ==
+X-Google-Smtp-Source: AMsMyM4nYeOID395+fMyqW4zTjfssuMAcg2266RidlXN1+HuyB61zkhBpt6VKV7/LUttUI8UcGRV/A==
+X-Received: by 2002:a05:6808:1704:b0:351:43bc:5e52 with SMTP id bc4-20020a056808170400b0035143bc5e52mr4675081oib.107.1665059287689;
+        Thu, 06 Oct 2022 05:28:07 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d15-20020a056870d28f00b00132218cb7afsm5706785oae.42.2022.10.06.05.27.55
+        by smtp.gmail.com with ESMTPSA id v13-20020a056870708d00b0012779ba00fesm2131618oae.2.2022.10.06.05.28.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 05:27:55 -0700 (PDT)
-Received: (nullmailer pid 1613448 invoked by uid 1000);
+        Thu, 06 Oct 2022 05:28:07 -0700 (PDT)
+Received: (nullmailer pid 1613455 invoked by uid 1000);
         Thu, 06 Oct 2022 12:27:55 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     allen <allen.chen@ite.com.tw>
-Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Pin-yen Lin <treapking@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Robert Foss <robert.foss@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Hermes Wu <Hermes.Wu@ite.com.tw>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>
-In-Reply-To: <20221006020444.15823-2-allen.chen@ite.com.tw>
-References: <20221006020444.15823-1-allen.chen@ite.com.tw> <20221006020444.15823-2-allen.chen@ite.com.tw>
-Message-Id: <166505880800.1601475.16626115923147161854.robh@kernel.org>
-Subject: Re: [PATCH v3 1/2] dt-bindings: it6505: add properties to restrict output bandwidth
+        Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>, Andy Gross <agross@kernel.org>
+In-Reply-To: <20221005-mdm9615-pinctrl-yaml-v1-6-0cbc006e2a30@linaro.org>
+References: <20221005-mdm9615-pinctrl-yaml-v1-0-0cbc006e2a30@linaro.org> <20221005-mdm9615-pinctrl-yaml-v1-6-0cbc006e2a30@linaro.org>
+Message-Id: <166505883191.1602730.12398385623531260133.robh@kernel.org>
+Subject: Re: [PATCH 6/6] dt-bindings: soc: qcom: ipc-rpm: refer to qcom,ipc-rpm-regulator.yaml
 Date:   Thu, 06 Oct 2022 07:27:55 -0500
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -73,40 +66,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Oct 2022 10:04:43 +0800, allen wrote:
-> From: allen chen <allen.chen@ite.com.tw>
+On Thu, 06 Oct 2022 09:58:03 +0000, Neil Armstrong wrote:
+> Now we have bindings for the expected regulators subnode, refer
+> to the right qcom,ipc-rpm-regulator.yaml bindings.
 > 
-> Add properties to restrict dp output data-lanes and clock.
-> 
-> Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
-> Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
->  .../bindings/display/bridge/ite,it6505.yaml          | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+>  Documentation/devicetree/bindings/soc/qcom/qcom,ipc-rpm.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-yamllint warnings/errors:
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml: properties:ite,dp-output-max-pixel-clock-mhz: '$ref' should not be valid under {'const': '$ref'}
-	hint: Standard unit suffix properties don't need a type $ref
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+Full log is available here: https://patchwork.ozlabs.org/patch/
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/
+rpm@104000: 'clock-controller', 'clock-names', 'clocks', 'pm8058-regulators', 'pm8901-regulators' do not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/qcom-apq8060-dragonboard.dtb
+	arch/arm/boot/dts/qcom-msm8660-surf.dtb
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+rpm@108000: 'clock-controller', 'clock-names', 'clocks' do not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
+	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+rpm@108000: 'clock-controller' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
+	arch/arm/boot/dts/qcom-apq8064-cm-qs600.dtb
+	arch/arm/boot/dts/qcom-apq8064-ifc6410.dtb
+	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
 
-pip3 install dtschema --upgrade
+rpm@108000: regulators:vdd_ncp-supply: [[10]] is not of type 'object'
+	arch/arm/boot/dts/qcom-msm8960-cdp.dtb
 
-Please check and re-submit.
+rpm@108000: regulators:vdd_ncp-supply: [[50]] is not of type 'object'
+	arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dtb
+
+rpm@108000: regulators:vin_ncp-supply: [[48]] is not of type 'object'
+	arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dtb
 
