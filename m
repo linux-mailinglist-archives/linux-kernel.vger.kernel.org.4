@@ -2,137 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C84FD5F5D99
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 02:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A21CD5F5DA0
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 02:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiJFATR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 20:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39812 "EHLO
+        id S229711AbiJFAUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 20:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiJFATP (ORCPT
+        with ESMTP id S229379AbiJFAUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 20:19:15 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0601A74CDB
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 17:19:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 585C5CE13D9
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 00:19:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A161DC433D6;
-        Thu,  6 Oct 2022 00:19:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665015550;
-        bh=gNH9JFMRj4028X6vghjl+A/oKEsjEpj+6Qt/m1foJc4=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=sjA7iFR0DU+H8mqfrY4QeN/vh/sdujzUR/RI4Ja/fRy1jhEOxTS3JsxSkk/gm56Wg
-         LjOaaSVKwLbUrF0rwmNhrDuxAjRVWVHBPoFhFOy12E4OafGNJZgY3obwPjSQ7exUnb
-         HCJ035iqG1pPJIV/pJPnv1Wq/+6RM/hDsfB3rNcCk48TUU8nQ9bOXWqjqRsfSyJG+0
-         ICf6RpzSXUQvmS6Zg6b7+4Z07Ps08YYM/+i3vfePRwruzuSCN38SR6jSDTQQcSGE4U
-         Q5I+Ht1gsxadn6LZ9BkMJJJuesKzmT3X0FbNTqExf67hXN+7wvRyA+NyAEqYgtsCoj
-         AR/dGeOsNiksA==
-Date:   Wed, 5 Oct 2022 17:19:07 -0700 (PDT)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
-cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH 2/2] xen/virtio: Fix potential deadlock when accessing
- xen_grant_dma_devices
-In-Reply-To: <20221005174823.1800761-3-olekstysh@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2210051719000.3690179@ubuntu-linux-20-04-desktop>
-References: <20221005174823.1800761-1-olekstysh@gmail.com> <20221005174823.1800761-3-olekstysh@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 5 Oct 2022 20:20:01 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A8412AD1
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 17:19:59 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id u10-20020a056a00098a00b00543b3eb6416so215245pfg.15
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 17:19:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o9WEcnWLMKxZwMtTodHX4q5GvyqiEbURiuxhFWhQzg8=;
+        b=oXcxSA13acU4as0darZJViHLiCmfX3PuNH4O6iD4Nq/xd+SJ+wzTcP6WlXT/RT/+1d
+         fXaaeZAh3ahLxBdHOYbF7PWcgwLTFUDMjHR/Q8aauABnQj9g8i57nLbp5yHlx8E9Y7lB
+         F8U688GPCwmmeiulMv3REbxAkVbsXuw7yu74Mz9p4NrnZbOnUVxp2La2XxqGkUwZ6Xkx
+         58Id57mZwVVQ/gcGpBDt/bF4zGoehjIRV2ksLaKJ4QUDTh3kUpTMWgwgJ/f+NWKii8j/
+         TD/iSPOVb4cMA1zjFBvLI88uFDxEv9EEi7BL17OIHA/F0JhFBn1iYW95GB41ajc3Zu0p
+         OR0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o9WEcnWLMKxZwMtTodHX4q5GvyqiEbURiuxhFWhQzg8=;
+        b=qWZC84XfSczVIHOYq6Zv9kWKDbSIVZSGdiQagkfww+JbRweMuxxWgFHHaI7zAkNw4U
+         z0eQuul+E7kbEfgFKXxuZUozaDtqI66MuHP1R0NNONaOebOHFTfUJtVdhC+oiKs8VN+B
+         o6gRfyzlgkc+RA/0Meju3SUROBNXBMxIk/a17UL7iyT2WsZ9q9u28kTswtXEKhY76HH0
+         +xjI9x4vdgTsNZjV+wFsSpS9OpSbiH/V/Ldbvqn1p+CgWBhcsvVjpuUvr10wMl5KmMQd
+         Z13Hv9Li8rO04RkxFVmedb9cFwYdrtSKHEMMbBa/5h3XSqh97TGza6cmfy7McsTZY7aB
+         CqtA==
+X-Gm-Message-State: ACrzQf0Lws81EqPIlEnr5tdpJ1Gvnj8Yldgpb1yRTYmSn4MAqppiwA7W
+        N4wUSF2qYxGhdm5WxY8OB7S/CYC0uyw=
+X-Google-Smtp-Source: AMsMyM6VAC7yrcpRHro1NEZgo4Ciub9t/u7KEYjsP9iAd9sy6LEpCHIC3zj3L32DIRDw/0n7URyCJTFd3n0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a62:584:0:b0:55a:a7a5:b597 with SMTP id
+ 126-20020a620584000000b0055aa7a5b597mr2331554pff.71.1665015598823; Wed, 05
+ Oct 2022 17:19:58 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Thu,  6 Oct 2022 00:19:56 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+Message-ID: <20221006001956.329314-1-seanjc@google.com>
+Subject: [PATCH] KVM: nVMX: Inject #GP, not #UD, if "generic" VMXON CR0/CR4
+ check fails
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Li <ercli@ucdavis.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Oct 2022, Oleksandr Tyshchenko wrote:
-> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> 
-> As find_xen_grant_dma_data() is called from both interrupt and process
-> contexts, the access to xen_grant_dma_devices XArray must be protected
-> by xa_lock_irqsave to avoid deadlock scenario.
-> As XArray API doesn't provide xa_store_irqsave helper, call lockless
-> __xa_store directly and guard it externally.
-> 
-> Also move the storage of the XArray's entry to a separate helper.
-> 
-> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> Fixes: d6aca3504c7d ("xen/grant-dma-ops: Add option to restrict memory access under Xen")
+Inject #GP for if VMXON is attempting with a CR0/CR4 that fails the
+generic "is CRx valid" check, but passes the CR4.VMXE check, and do the
+generic checks _after_ handling the post-VMXON VM-Fail.
 
-Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
+The CR4.VMXE check, and all other #UD cases, are special pre-conditions
+that are enforced prior to pivoting on the current VMX mode, i.e. occur
+before interception if VMXON is attempted in VMX non-root mode.
 
+All other CR0/CR4 checks generate #GP and effectively have lower priority
+than the post-VMXON check.
 
-> ---
->  drivers/xen/grant-dma-ops.c | 24 +++++++++++++++++++-----
->  1 file changed, 19 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-> index 1998d0e8ce82..c66f56d24013 100644
-> --- a/drivers/xen/grant-dma-ops.c
-> +++ b/drivers/xen/grant-dma-ops.c
-> @@ -25,7 +25,7 @@ struct xen_grant_dma_data {
->  	bool broken;
->  };
->  
-> -static DEFINE_XARRAY(xen_grant_dma_devices);
-> +static DEFINE_XARRAY_FLAGS(xen_grant_dma_devices, XA_FLAGS_LOCK_IRQ);
->  
->  #define XEN_GRANT_DMA_ADDR_OFF	(1ULL << 63)
->  
-> @@ -42,14 +42,29 @@ static inline grant_ref_t dma_to_grant(dma_addr_t dma)
->  static struct xen_grant_dma_data *find_xen_grant_dma_data(struct device *dev)
->  {
->  	struct xen_grant_dma_data *data;
-> +	unsigned long flags;
->  
-> -	xa_lock(&xen_grant_dma_devices);
-> +	xa_lock_irqsave(&xen_grant_dma_devices, flags);
->  	data = xa_load(&xen_grant_dma_devices, (unsigned long)dev);
-> -	xa_unlock(&xen_grant_dma_devices);
-> +	xa_unlock_irqrestore(&xen_grant_dma_devices, flags);
->  
->  	return data;
->  }
->  
-> +static int store_xen_grant_dma_data(struct device *dev,
-> +				    struct xen_grant_dma_data *data)
-> +{
-> +	unsigned long flags;
-> +	int ret;
-> +
-> +	xa_lock_irqsave(&xen_grant_dma_devices, flags);
-> +	ret = xa_err(__xa_store(&xen_grant_dma_devices, (unsigned long)dev, data,
-> +			GFP_ATOMIC));
-> +	xa_unlock_irqrestore(&xen_grant_dma_devices, flags);
-> +
-> +	return ret;
-> +}
-> +
->  /*
->   * DMA ops for Xen frontends (e.g. virtio).
->   *
-> @@ -338,8 +353,7 @@ void xen_grant_setup_dma_ops(struct device *dev)
->  	 */
->  	data->backend_domid = iommu_spec.args[0];
->  
-> -	if (xa_err(xa_store(&xen_grant_dma_devices, (unsigned long)dev, data,
-> -			GFP_KERNEL))) {
-> +	if (store_xen_grant_dma_data(dev, data)) {
->  		dev_err(dev, "Cannot store Xen grant DMA data\n");
->  		goto err;
->  	}
-> -- 
-> 2.25.1
-> 
+Per the SDM:
+
+    IF (register operand) or (CR0.PE = 0) or (CR4.VMXE = 0) or ...
+        THEN #UD;
+    ELSIF not in VMX operation
+        THEN
+            IF (CPL > 0) or (in A20M mode) or
+            (the values of CR0 and CR4 are not supported in VMX operation)
+                THEN #GP(0);
+    ELSIF in VMX non-root operation
+        THEN VMexit;
+    ELSIF CPL > 0
+        THEN #GP(0);
+    ELSE VMfail("VMXON executed in VMX root operation");
+    FI;
+
+which, if re-written without ELSIF, yields:
+
+    IF (register operand) or (CR0.PE = 0) or (CR4.VMXE = 0) or ...
+        THEN #UD
+
+    IF in VMX non-root operation
+        THEN VMexit;
+
+    IF CPL > 0
+        THEN #GP(0)
+
+    IF in VMX operation
+        THEN VMfail("VMXON executed in VMX root operation");
+
+    IF (in A20M mode) or
+       (the values of CR0 and CR4 are not supported in VMX operation)
+                THEN #GP(0);
+
+Note, KVM unconditionally forwards VMXON VM-Exits that occur in L2 to L1,
+i.e. there is no need to check the vCPU is not in VMX non-root mode.  Add
+a comment to explain why unconditionally forwarding such exits is
+functionally correct.
+
+Reported-by: Eric Li <ercli@ucdavis.edu>
+Fixes: c7d855c2aff2 ("KVM: nVMX: Inject #UD if VMXON is attempted with incompatible CR0/CR4")
+Cc: stable@vger.kernel.org
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+
+Eric, any testing you can provide would be very welcome.  It took me an
+embarassingly long time to wrap my head around the SDM's pseucode.  I
+_think_ I got it right this time...
+
+ arch/x86/kvm/vmx/nested.c | 60 ++++++++++++++++++++++++++-------------
+ 1 file changed, 41 insertions(+), 19 deletions(-)
+
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index 8f67a9c4a287..19b2f55e7666 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -5099,33 +5099,55 @@ static int handle_vmxon(struct kvm_vcpu *vcpu)
+ 		| FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX;
+ 
+ 	/*
+-	 * Note, KVM cannot rely on hardware to perform the CR0/CR4 #UD checks
+-	 * that have higher priority than VM-Exit (see Intel SDM's pseudocode
+-	 * for VMXON), as KVM must load valid CR0/CR4 values into hardware while
+-	 * running the guest, i.e. KVM needs to check the _guest_ values.
++	 * Manually check CR4.VMXE checks, KVM must force CR4.VMXE=1 to enter
++	 * the guest and so cannot rely on hardware to perform the check,
++	 * which has higher priority than VM-Exit (see Intel SDM's pseudocode
++	 * for VMXON).
+ 	 *
+-	 * Rely on hardware for the other two pre-VM-Exit checks, !VM86 and
+-	 * !COMPATIBILITY modes.  KVM may run the guest in VM86 to emulate Real
+-	 * Mode, but KVM will never take the guest out of those modes.
++	 * Rely on hardware for the other pre-VM-Exit checks, CR0.PE=1, !VM86
++	 * and !COMPATIBILITY modes.  For an unrestricted guest, KVM doesn't
++	 * force any of the relevant guest state.  For a restricted guest, KVM
++	 * does force CR0.PE=1, but only to also force VM86 in order to emulate
++	 * Real Mode, and so there's no need to check CR0.PE manually.
++	 */
++	if (!kvm_read_cr4_bits(vcpu, X86_CR4_VMXE)) {
++		kvm_queue_exception(vcpu, UD_VECTOR);
++		return 1;
++	}
++
++	/*
++	 * The CPL is checked for "not in VMX operation" and for "in VMX root",
++	 * and has higher priority than the VM-Fail due to being post-VMXON,
++	 * i.e. VMXON #GPs outside of VMX non-root if CPL!=0.  In VMX non-root,
++	 * VMXON causes VM-Exit and KVM unconditionally forwards VMXON VM-Exits
++	 * from L2 to L1, i.e. there's no need to check for the vCPU being in
++	 * VMX non-root.
++	 *
++	 * Forwarding the VM-Exit unconditionally, i.e. without performing the
++	 * #UD checks (see above), is functionally ok because KVM doesn't allow
++	 * L1 to run L2 without CR4.VMXE=0, and because KVM never modifies L2's
++	 * CR0 or CR4, i.e. it's L2's responsibility to emulate #UDs that are
++	 * missed by hardware due to shadowing CR0 and/or CR4.
++	 */
++	if (vmx_get_cpl(vcpu)) {
++		kvm_inject_gp(vcpu, 0);
++		return 1;
++	}
++
++	if (vmx->nested.vmxon)
++		return nested_vmx_fail(vcpu, VMXERR_VMXON_IN_VMX_ROOT_OPERATION);
++
++	/*
++	 * Invalid CR0/CR4 generates #GP.  These checks are performed if and
++	 * only if the vCPU isn't already in VMX operation, i.e. effectively
++	 * have lower priority than the VM-Fail above.
+ 	 */
+ 	if (!nested_host_cr0_valid(vcpu, kvm_read_cr0(vcpu)) ||
+ 	    !nested_host_cr4_valid(vcpu, kvm_read_cr4(vcpu))) {
+-		kvm_queue_exception(vcpu, UD_VECTOR);
+-		return 1;
+-	}
+-
+-	/*
+-	 * CPL=0 and all other checks that are lower priority than VM-Exit must
+-	 * be checked manually.
+-	 */
+-	if (vmx_get_cpl(vcpu)) {
+ 		kvm_inject_gp(vcpu, 0);
+ 		return 1;
+ 	}
+ 
+-	if (vmx->nested.vmxon)
+-		return nested_vmx_fail(vcpu, VMXERR_VMXON_IN_VMX_ROOT_OPERATION);
+-
+ 	if ((vmx->msr_ia32_feature_control & VMXON_NEEDED_FEATURES)
+ 			!= VMXON_NEEDED_FEATURES) {
+ 		kvm_inject_gp(vcpu, 0);
+
+base-commit: e779ce9d17c44a338b4fa3be8715e3b7eb9706f0
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
+
