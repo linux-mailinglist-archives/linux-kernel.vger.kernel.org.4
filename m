@@ -2,162 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE07B5F68B0
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B57F65F68B3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 16:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbiJFN7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 09:59:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39512 "EHLO
+        id S230006AbiJFOAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 10:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiJFN7t (ORCPT
+        with ESMTP id S231552AbiJFOAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 09:59:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35B1DFDD
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 06:59:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665064787;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wvAFTm8FdW2/6pnC/amNx72dguHCE6Nha3ZiXPtT6Ek=;
-        b=SGlr3MYGXNCC9JLvoOM4ehGngvBlee55Kvufj3HmNTCxFIcClHqovd25zWhEh4vQuH+D0n
-        P2mDX/FqGzs7UPgJsU4htUcFlgD58gt2gXQsmq43mw163AfqhTshrfy3UYZdHmdGsvDnhq
-        n/5gnL7Fu2O7kRLZpU9e0iEkVWbQ55E=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-74-pkRHXZp8OU-oqy8cOmgpJQ-1; Thu, 06 Oct 2022 09:59:44 -0400
-X-MC-Unique: pkRHXZp8OU-oqy8cOmgpJQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D0075855307;
-        Thu,  6 Oct 2022 13:59:43 +0000 (UTC)
-Received: from localhost (unknown [10.39.193.119])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C1523111E412;
-        Thu,  6 Oct 2022 13:59:42 +0000 (UTC)
-Date:   Thu, 6 Oct 2022 09:59:40 -0400
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     "Denis V. Lunev" <den@virtuozzo.com>
-Cc:     Ming Lei <tom.leiming@gmail.com>, io-uring@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kirill Tkhai <kirill.tkhai@openvz.org>,
-        Manuel Bentele <development@manuel-bentele.de>,
-        qemu-devel@nongnu.org, Kevin Wolf <kwolf@redhat.com>,
-        rjones@redhat.com, Xie Yongji <xieyongji@bytedance.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Josef Bacik <josef@toxicpanda.com>
-Subject: Re: ublk-qcow2: ublk-qcow2 is available
-Message-ID: <Yz7fTANAxAQ8KT4v@fedora>
-References: <Yza1u1KfKa7ycQm0@T590>
- <Yzs9xQlVuW41TuNC@fedora>
- <6659a0d5-60ab-9ac7-d25d-b4ff1940c6ab@virtuozzo.com>
- <Yz2epPwoufj0mug/@fedora>
- <Yz6tR24T8HPHJ70D@T590>
+        Thu, 6 Oct 2022 10:00:07 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C3229802
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 07:00:05 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id a13so3004552edj.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 07:00:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E3VUvRlbpuvf0sSI/tMS6r4LiVAE0zxyqHrBnHrDjVs=;
+        b=gqWZo0POJFIpXr6KC2pBuLd9vp3XUt7rv5cfK/YRtT8dWF7zknLkup9KyDu6I3ZO5C
+         NSxgqn/8zdG+o+eQp9iu2PS03+ULrVn5n2wYa/nzEHdc1d4fGTYghzmRDt/H069GSYac
+         7HUihpidwUaizW8onUuV2B+TdjUPeDd2Xr6f+UZ485VyIttUjGUehJbEV4n3FjzzEAf+
+         223OZ02LAPr/+yJ7/0bjwfCEz+jhJ2O6whEx0pks8Xu2pDD1Q0v/QejRVE4J7bN2RtAU
+         PxklD38eAETKbfvvkgXI/Zk7lNDWiwv1FGOp18brdxxRQf8ntv6ZDWopr/u1OUzmqgMR
+         ctKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E3VUvRlbpuvf0sSI/tMS6r4LiVAE0zxyqHrBnHrDjVs=;
+        b=nnvrZa10T6EmBCBnZ1/Kfjykzpw2qljsFCqbzV37Nf+gvmx4NoXAq7rx0SzL2DsZPk
+         AHzk6rkV3gpE2mzbfmMhB5/OVhki/G4cdrx9heikpXq/K/6O2wzZRS1HOeKeWP91Qtt5
+         er8WmyTI5ORK6HXtS8d5G8Lln9gO+qkDqTzuaRoIZTy2va0OT7sHUYZ8Y/j+XJwsGrCH
+         3SMz4UKItXcdrbLA7No598MMJUXsE2Nbu1JFQ5epEukyhDZB+6ZTNYy4MggEmcBOEg1n
+         J2qflILwVEFlQEizNRp88xIAxjgaIOOwXSMARrzlArMg2Z30AtjEipkvWb9ZawtEalF0
+         heGQ==
+X-Gm-Message-State: ACrzQf3Yjh9qMttWdclJbmeKHmtPCvMBLS7HIEm9+MVP4l4cAto2OJxx
+        6Qbj0zw2lvHTGtQlDhHu8k1mkA==
+X-Google-Smtp-Source: AMsMyM6U8geCMz0HfEPcxRTfzYl8glFCMpBQGQRDMLam2KLlSCcpSglOCh36sG+3x+wK4VMIOQoBhQ==
+X-Received: by 2002:a05:6402:156:b0:440:b458:93df with SMTP id s22-20020a056402015600b00440b45893dfmr4982111edu.337.1665064803139;
+        Thu, 06 Oct 2022 07:00:03 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:9c:201:504b:a880:4e60:e32d])
+        by smtp.gmail.com with ESMTPSA id er6-20020a056402448600b004580b26e32esm5812366edb.81.2022.10.06.07.00.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 07:00:02 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 15:59:55 +0200
+From:   Marco Elver <elver@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, Dmitry Vyukov <dvyukov@google.com>
+Subject: Re: [PATCH] perf: Fix missing SIGTRAPs
+Message-ID: <Yz7fWw8duIOezSW1@elver.google.com>
+References: <20220927121322.1236730-1-elver@google.com>
+ <Yz7ZLaT4jW3Y9EYS@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="15fzNgcvZDw6D8kW"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yz6tR24T8HPHJ70D@T590>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yz7ZLaT4jW3Y9EYS@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Oct 06, 2022 at 03:33PM +0200, Peter Zijlstra wrote:
+> 
+> OK, so the below seems to pass the concurrent sigtrap_threads test for
+> me and doesn't have that horrible irq_work_sync hackery.
+> 
+> Does it work for you too?
 
---15fzNgcvZDw6D8kW
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'm getting this (courtesy of syzkaller):
 
-On Thu, Oct 06, 2022 at 06:26:15PM +0800, Ming Lei wrote:
-> On Wed, Oct 05, 2022 at 11:11:32AM -0400, Stefan Hajnoczi wrote:
-> > On Tue, Oct 04, 2022 at 01:57:50AM +0200, Denis V. Lunev wrote:
-> > > On 10/3/22 21:53, Stefan Hajnoczi wrote:
-> > > > On Fri, Sep 30, 2022 at 05:24:11PM +0800, Ming Lei wrote:
-> > > > > ublk-qcow2 is available now.
-> > > > Cool, thanks for sharing!
-> > > yep
-> > >=20
-> > > > > So far it provides basic read/write function, and compression and=
- snapshot
-> > > > > aren't supported yet. The target/backend implementation is comple=
-tely
-> > > > > based on io_uring, and share the same io_uring with ublk IO comma=
-nd
-> > > > > handler, just like what ublk-loop does.
-> > > > >=20
-> > > > > Follows the main motivations of ublk-qcow2:
-> > > > >=20
-> > > > > - building one complicated target from scratch helps libublksrv A=
-PIs/functions
-> > > > >    become mature/stable more quickly, since qcow2 is complicated =
-and needs more
-> > > > >    requirement from libublksrv compared with other simple ones(lo=
-op, null)
-> > > > >=20
-> > > > > - there are several attempts of implementing qcow2 driver in kern=
-el, such as
-> > > > >    ``qloop`` [2], ``dm-qcow2`` [3] and ``in kernel qcow2(ro)`` [4=
-], so ublk-qcow2
-> > > > >    might useful be for covering requirement in this field
-> > > There is one important thing to keep in mind about all partly-userspa=
-ce
-> > > implementations though:
-> > > * any single allocation happened in the context of the
-> > > =A0=A0 userspace daemon through try_to_free_pages() in
-> > > =A0=A0 kernel has a possibility to trigger the operation,
-> > > =A0=A0 which will require userspace daemon action, which
-> > > =A0=A0 is inside the kernel now.
-> > > * the probability of this is higher in the overcommitted
-> > > =A0=A0 environment
-> > >=20
-> > > This was the main motivation of us in favor for the in-kernel
-> > > implementation.
-> >=20
-> > CCed Josef Bacik because the Linux NBD driver has dealt with memory
-> > reclaim hangs in the past.
-> >=20
-> > Josef: Any thoughts on userspace block drivers (whether NBD or ublk) and
-> > how to avoid hangs in memory reclaim?
->=20
-> If I remember correctly, there isn't new report after the last NBD(TCMU) =
-deadlock
-> in memory reclaim was addressed by 8d19f1c8e193 ("prctl: PR_{G,S}ET_IO_FL=
-USHER
-> to support controlling memory reclaim").
+ |  BUG: using smp_processor_id() in preemptible [00000000] code: syz-executor.8/22848
+ |  caller is perf_swevent_get_recursion_context+0x13/0x80
+ |  CPU: 0 PID: 22860 Comm: syz-executor.6 Not tainted 6.0.0-rc3-00017-g1472d7e42f41 #64
+ |  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
+ |  Call Trace:
+ |   <TASK>
+ |   dump_stack_lvl+0x6a/0x86
+ |   check_preemption_disabled+0xdf/0xf0
+ |   perf_swevent_get_recursion_context+0x13/0x80
+ |   perf_pending_task+0xf/0x80
+ |   task_work_run+0x73/0xc0
+ |   do_exit+0x459/0xf20
+ |   do_group_exit+0x3f/0xe0
+ |   get_signal+0xe04/0xe60
+ |   arch_do_signal_or_restart+0x3f/0x780
+ |   exit_to_user_mode_prepare+0x135/0x1a0
+ |   irqentry_exit_to_user_mode+0x6/0x30
+ |   asm_sysvec_irq_work+0x16/0x20
 
-Denis: I'm trying to understand the problem you described. Is this
-correct:
+That one I could fix up with:
 
-Due to memory pressure, the kernel reclaims pages and submits a write to
-a ublk block device. The userspace process attempts to allocate memory
-in order to service the write request, but it gets stuck because there
-is no memory available. As a result reclaim gets stuck, the system is
-unable to free more memory and therefore it hangs?
+ | diff --git a/kernel/events/core.c b/kernel/events/core.c
+ | index 9319af6013f1..2f1d51b50be7 100644
+ | --- a/kernel/events/core.c
+ | +++ b/kernel/events/core.c
+ | @@ -6563,6 +6563,7 @@ static void perf_pending_task(struct callback_head *head)
+ |  	 * If we 'fail' here, that's OK, it means recursion is already disabled
+ |  	 * and we won't recurse 'further'.
+ |  	 */
+ | +	preempt_disable_notrace();
+ |  	rctx = perf_swevent_get_recursion_context();
+ |  
+ |  	if (event->pending_work) {
+ | @@ -6573,6 +6574,7 @@ static void perf_pending_task(struct callback_head *head)
+ |  
+ |  	if (rctx >= 0)
+ |  		perf_swevent_put_recursion_context(rctx);
+ | +	preempt_enable_notrace();
+ |  }
+ |  
+ |  #ifdef CONFIG_GUEST_PERF_EVENTS
 
-Stefan
+But following that, I get:
 
---15fzNgcvZDw6D8kW
-Content-Type: application/pgp-signature; name="signature.asc"
+ | ======================================================
+ | WARNING: possible circular locking dependency detected
+ | 6.0.0-rc3-00017-g1472d7e42f41-dirty #65 Not tainted
+ | ------------------------------------------------------
+ | syz-executor.11/13018 is trying to acquire lock:
+ | ffffffffbb754a18 ((console_sem).lock){-.-.}-{2:2}, at: down_trylock+0xa/0x30 kernel/locking/semaphore.c:139
+ | 
+ | but task is already holding lock:
+ | ffff8ea992e00e20 (&ctx->lock){-.-.}-{2:2}, at: perf_event_context_sched_out kernel/events/core.c:3499 [inline]
+ | ffff8ea992e00e20 (&ctx->lock){-.-.}-{2:2}, at: __perf_event_task_sched_out+0x29e/0xb50 kernel/events/core.c:3608
+ | 
+ | which lock already depends on the new lock.
+ | 
+ |  << snip ... lockdep unhappy we're trying to WARN >>
+ | 
+ | WARNING: CPU: 3 PID: 13018 at kernel/events/core.c:2288 event_sched_out+0x3f2/0x410 kernel/events/core.c:2288
+ | Modules linked in:
+ | CPU: 3 PID: 13018 Comm: syz-executor.11 Not tainted 6.0.0-rc3-00017-g1472d7e42f41-dirty #65
+ | Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
+ | RIP: 0010:event_sched_out+0x3f2/0x410 kernel/events/core.c:2288
+ | Code: ff ff e8 21 b2 f9 ff 65 8b 05 76 67 7f 46 85 c0 0f 84 0f ff ff ff e8 0d b2 f9 ff 90 0f 0b 90 e9 01 ff ff ff e8 ff b1 f9 ff 90 <0f> 0b 90 e9 3b fe ff ff e8 f1 b1 f9 ff 90 0f 0b 90 e9 01 ff ff ff
+ | RSP: 0018:ffffa69c8931f9a8 EFLAGS: 00010012
+ | RAX: 0000000040000000 RBX: ffff8ea99526f1c8 RCX: ffffffffb9824d01
+ | RDX: ffff8ea9934a0040 RSI: 0000000000000000 RDI: ffff8ea99526f1c8
+ | RBP: ffff8ea992e00e00 R08: 0000000000000000 R09: 0000000000000000
+ | R10: 00000000820822cd R11: 00000000d820822c R12: ffff8eacafcf2e50
+ | R13: ffff8eacafcf2e58 R14: ffffffffbb62e9a0 R15: ffff8ea992e00ef8
+ | FS:  00007fdcddbb6640(0000) GS:ffff8eacafcc0000(0000) knlGS:0000000000000000
+ | CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+ | CR2: 00007fdcddbb5fa8 CR3: 0000000112846004 CR4: 0000000000770ee0
+ | DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+ | DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000600
+ | PKRU: 55555554
+ | Call Trace:
+ |  <TASK>
+ |  group_sched_out.part.0+0x5c/0xe0 kernel/events/core.c:2320
+ |  group_sched_out kernel/events/core.c:2315 [inline]
+ |  ctx_sched_out+0x35d/0x3c0 kernel/events/core.c:3288
+ |  task_ctx_sched_out+0x3d/0x60 kernel/events/core.c:2657
+ |  perf_event_context_sched_out kernel/events/core.c:3505 [inline]
+ |  __perf_event_task_sched_out+0x31b/0xb50 kernel/events/core.c:3608
+ |  perf_event_task_sched_out include/linux/perf_event.h:1266 [inline]
+ |  prepare_task_switch kernel/sched/core.c:4992 [inline]
+ |  context_switch kernel/sched/core.c:5134 [inline]
+ |  __schedule+0x4f8/0xb20 kernel/sched/core.c:6494
+ |  preempt_schedule_irq+0x39/0x70 kernel/sched/core.c:6806
+ |  irqentry_exit+0x32/0x90 kernel/entry/common.c:428
+ |  asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
+ | RIP: 0010:try_to_freeze include/linux/freezer.h:66 [inline]
+ | RIP: 0010:freezer_count include/linux/freezer.h:128 [inline]
+ | RIP: 0010:coredump_wait fs/coredump.c:407 [inline]
+ | RIP: 0010:do_coredump+0x1193/0x1b60 fs/coredump.c:563
+ | Code: d3 25 df ff 83 e3 08 0f 84 f0 03 00 00 e8 c5 25 df ff 48 f7 85 88 fe ff ff 00 01 00 00 0f 85 7e fc ff ff 31 db e9 83 fc ff ff <e8> a8 25 df ff e8 63 43 d3 ff e9 d2 f1 ff ff e8 99 25 df ff 48 85
+ | RSP: 0018:ffffa69c8931fc30 EFLAGS: 00000246
+ | RAX: 7fffffffffffffff RBX: ffff8ea9934a0040 RCX: 0000000000000000
+ | RDX: 0000000000000001 RSI: ffffffffbb4ab491 RDI: 00000000ffffffff
+ | RBP: ffffa69c8931fdc0 R08: 0000000000000001 R09: 0000000000000001
+ | R10: 00000000ffffffff R11: 00000000ffffffff R12: ffff8ea9934a0040
+ | R13: ffffffffbb792620 R14: 0000000000000108 R15: 0000000000000001
+ |  get_signal+0xe56/0xe60 kernel/signal.c:2843
+ |  arch_do_signal_or_restart+0x3f/0x780 arch/x86/kernel/signal.c:869
+ |  exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
+ |  exit_to_user_mode_prepare+0x135/0x1a0 kernel/entry/common.c:201
+ |  __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ |  syscall_exit_to_user_mode+0x1a/0x50 kernel/entry/common.c:294
+ |  do_syscall_64+0x48/0x90 arch/x86/entry/common.c:86
+ |  entry_SYSCALL_64_after_hwframe+0x64/0xce
+ | RIP: 0033:0x7fdcddc48549
+ | Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+ | RSP: 002b:00007fdcddbb60f8 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+ | RAX: 0000000000000001 RBX: 00007fdcddd62f88 RCX: 00007fdcddc48549
+ | RDX: 00000000000f4240 RSI: 0000000000000081 RDI: 00007fdcddd62f8c
+ | RBP: 00007fdcddd62f80 R08: 000000000000001e R09: 0000000000000000
+ | R10: 0000000000000003 R11: 0000000000000246 R12: 00007fdcddd62f8c
+ | R13: 00007ffc4136118f R14: 0000000000000000 R15: 00007fdcddbb6640
+ |  </TASK>
+ | irq event stamp: 128
+ | hardirqs last  enabled at (127): [<ffffffffba9f7237>] irqentry_exit+0x37/0x90 kernel/entry/common.c:431
+ | hardirqs last disabled at (128): [<ffffffffba9faa5b>] __schedule+0x6cb/0xb20 kernel/sched/core.c:6393
+ | softirqs last  enabled at (106): [<ffffffffbae0034f>] softirq_handle_end kernel/softirq.c:414 [inline]
+ | softirqs last  enabled at (106): [<ffffffffbae0034f>] __do_softirq+0x34f/0x4d5 kernel/softirq.c:600
+ | softirqs last disabled at (99): [<ffffffffb9693821>] invoke_softirq kernel/softirq.c:445 [inline]
+ | softirqs last disabled at (99): [<ffffffffb9693821>] __irq_exit_rcu+0xb1/0x120 kernel/softirq.c:650
+ | ---[ end trace 0000000000000000 ]---
+ | BUG: kernel NULL pointer dereference, address: 0000000000000000
+ | #PF: supervisor instruction fetch in kernel mode
+ | #PF: error_code(0x0010) - not-present page
+ | PGD 8000000112e91067 P4D 8000000112e91067 PUD 114481067 PMD 0 
+ | Oops: 0010 [#1] PREEMPT SMP PTI
+ | CPU: 1 PID: 13018 Comm: syz-executor.11 Tainted: G        W          6.0.0-rc3-00017-g1472d7e42f41-dirty #65
+ | Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
+ | RIP: 0010:0x0
+ | Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+ | RSP: 0018:ffffa69c8931fd18 EFLAGS: 00010293
+ | RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffffffb96be917
+ | RDX: ffff8ea9934a0040 RSI: 0000000000000000 RDI: ffff8ea99526f620
+ | RBP: ffff8ea9934a0040 R08: 0000000000000000 R09: 0000000000000000
+ | R10: 0000000000000001 R11: ffffffffb9cb7eaf R12: ffff8ea9934a08f0
+ | R13: ffff8ea992fc9cf8 R14: ffff8ea98c65dec0 R15: ffff8ea9934a0828
+ | FS:  0000000000000000(0000) GS:ffff8eacafc40000(0000) knlGS:0000000000000000
+ | CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+ | CR2: ffffffffffffffd6 CR3: 000000011343a003 CR4: 0000000000770ee0
+ | DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+ | DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000600
+ | PKRU: 55555554
+ | Call Trace:
+ |  <TASK>
+ |  task_work_run+0x73/0xc0 kernel/task_work.c:177
+ |  exit_task_work include/linux/task_work.h:38 [inline]
+ |  do_exit+0x459/0xf20 kernel/exit.c:795
+ |  do_group_exit+0x3f/0xe0 kernel/exit.c:925
+ |  get_signal+0xe04/0xe60 kernel/signal.c:2857
+ |  arch_do_signal_or_restart+0x3f/0x780 arch/x86/kernel/signal.c:869
+ |  exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
+ |  exit_to_user_mode_prepare+0x135/0x1a0 kernel/entry/common.c:201
+ |  __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ |  syscall_exit_to_user_mode+0x1a/0x50 kernel/entry/common.c:294
+ |  do_syscall_64+0x48/0x90 arch/x86/entry/common.c:86
+ |  entry_SYSCALL_64_after_hwframe+0x64/0xce
+ | RIP: 0033:0x7fdcddc48549
+ | Code: Unable to access opcode bytes at RIP 0x7fdcddc4851f.
+ | RSP: 002b:00007fdcddbb60f8 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+ | RAX: 0000000000000001 RBX: 00007fdcddd62f88 RCX: 00007fdcddc48549
+ | RDX: 00000000000f4240 RSI: 0000000000000081 RDI: 00007fdcddd62f8c
+ | RBP: 00007fdcddd62f80 R08: 000000000000001e R09: 0000000000000000
+ | R10: 0000000000000003 R11: 0000000000000246 R12: 00007fdcddd62f8c
+ | R13: 00007ffc4136118f R14: 0000000000000000 R15: 00007fdcddbb6640
+ |  </TASK>
+ | Modules linked in:
+ | CR2: 0000000000000000
+ | ---[ end trace 0000000000000000 ]---
+ | RIP: 0010:0x0
+ | Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+ | RSP: 0018:ffffa69c8931fd18 EFLAGS: 00010293
+ | RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffffffb96be917
+ | RDX: ffff8ea9934a0040 RSI: 0000000000000000 RDI: ffff8ea99526f620
+ | RBP: ffff8ea9934a0040 R08: 0000000000000000 R09: 0000000000000000
+ | R10: 0000000000000001 R11: ffffffffb9cb7eaf R12: ffff8ea9934a08f0
+ | R13: ffff8ea992fc9cf8 R14: ffff8ea98c65dec0 R15: ffff8ea9934a0828
+ | FS:  0000000000000000(0000) GS:ffff8eacafc40000(0000) knlGS:0000000000000000
+ | CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+ | CR2: ffffffffffffffd6 CR3: 000000011343a003 CR4: 0000000000770ee0
+ | DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+ | DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000600
+ | PKRU: 55555554
+ | ----------------
+ | Code disassembly (best guess):
+ |    0:	d3 25 df ff 83 e3    	shll   %cl,-0x1c7c0021(%rip)        # 0xe383ffe5
+ |    6:	08 0f                	or     %cl,(%rdi)
+ |    8:	84 f0                	test   %dh,%al
+ |    a:	03 00                	add    (%rax),%eax
+ |    c:	00 e8                	add    %ch,%al
+ |    e:	c5 25 df ff          	vpandn %ymm7,%ymm11,%ymm15
+ |   12:	48 f7 85 88 fe ff ff 	testq  $0x100,-0x178(%rbp)
+ |   19:	00 01 00 00
+ |   1d:	0f 85 7e fc ff ff    	jne    0xfffffca1
+ |   23:	31 db                	xor    %ebx,%ebx
+ |   25:	e9 83 fc ff ff       	jmp    0xfffffcad
+ | * 2a:	e8 a8 25 df ff       	call   0xffdf25d7 <-- trapping instruction
+ |   2f:	e8 63 43 d3 ff       	call   0xffd34397
+ |   34:	e9 d2 f1 ff ff       	jmp    0xfffff20b
+ |   39:	e8 99 25 df ff       	call   0xffdf25d7
+ |   3e:	48                   	rex.W
+ |   3f:	85                   	.byte 0x85
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmM+30wACgkQnKSrs4Gr
-c8iHRQf8CLjA5KPwDOjXvWn297/VU+slSiJzehP2Idpif/5l1xCQuasQWziB8flE
-skkANbVPQn8Y+Z/cwWykCx3XjZSoVDM+SO4VG1TMS1ZcPU+ODHzPdA1/yZwArg1J
-/6A8HxGpVAQYajnOmAMEBueuSUX30cN32YGh/uNykOU4q0Td8YzXS2ybbRGQfnit
-lkU4QvFm6foeKArFelx+8AP3xiQXIHulVtG4Yn72gnAIzZDgJlrsau3x05idY/+L
-acGUSyXP2PUnsZqFncWviWOfpa1LnyXDp1/bk4t/XRdrzSCReyOtcEwk/0ahFceh
-3AWMJdbDcA+5dP62qT3XyL6dCgaugQ==
-=bI8b
------END PGP SIGNATURE-----
+So something isn't quite right yet. Unfortunately I don't have a good
+reproducer. :-/
 
---15fzNgcvZDw6D8kW--
-
+Thanks,
+-- Marco
