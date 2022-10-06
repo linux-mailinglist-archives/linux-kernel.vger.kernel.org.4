@@ -2,85 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D21745F661D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 925075F6624
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbiJFMbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 08:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
+        id S231203AbiJFMeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 08:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiJFMbw (ORCPT
+        with ESMTP id S229796AbiJFMeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 08:31:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF3D6243;
-        Thu,  6 Oct 2022 05:31:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 6 Oct 2022 08:34:06 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19F0637B;
+        Thu,  6 Oct 2022 05:34:03 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F73F61912;
-        Thu,  6 Oct 2022 12:31:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4C1BC433C1;
-        Thu,  6 Oct 2022 12:31:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665059510;
-        bh=qBB40RhNZZef+X0NR2nmNND2hfKC19kCVVV44L/TaaE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QwZiOIFq049pfooSE6MKrACtd5DV/+7cDblLsBgE831XpG6PsimKdUbuqvS8Co55c
-         /AkxpWb+E78ukE2OLYCEItLrhDj/ClkSf3kfPgcKmGfrN3tJJ01zGoPE55GQBZjidO
-         4GpO1DH5WFhQcWrkRGQah9Bhq5RR5yhiZVLQx/iGIAWhOQPjYa62sjkh5/Dexgwf8k
-         D1X02UXgy2Cuhq15H53EXL3SZCFllp8AOkTp5DTUx1gFA3qec8QkC2FOhOnU0KiiP8
-         Ww40Ogm4VWaUCTNBRqvgYDLltkqJF4o/t3uq4mC1kXoHcxOQlMZAo4uEpgc0gxjqFb
-         nyR+qpqeJ2JUQ==
-Date:   Thu, 6 Oct 2022 14:31:44 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-tegra@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: tegra: Update comment about config space
-Message-ID: <Yz7KsHGyctceNf+T@lpieralisi>
-References: <20220911113216.14892-1-pali@kernel.org>
- <YzRcYwQYlawV10QS@orome>
- <20221005194336.gdnu4vfzkudedjw5@pali>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DCC9D6602301;
+        Thu,  6 Oct 2022 13:34:01 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1665059642;
+        bh=qkkpSsxIMeDT9BV02FWV/AHFBaKuCtwlZphzAFH4cCk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=VEqNn94fof5Ie5QMY9/ws1jnX2t+w8B3WepGN2ReqqHvTu1tuCGr3C1tuVN/L44Tt
+         IefnVUZahCnaLb/Yw6SuWHxXVm/PPPalZIjralwVQcDt954qmQWdSSo5v2obAR0klS
+         FTif35BrPjVadDfbrcYit4ANdFzOybiWe61HWCCLDoSYHZ5OZ4iReEF+5epu2xXC+8
+         rTNYuZFjk3XCBLhbExuBMufffoMehrPAuSnvWf6kiqRRsaHNhsE42CU+Bfufd65C8+
+         gQ7lWMMLPU+OM8zMF+JgEfK/lMRSzlAFb7q6VBNbfIDzD4LtzSWDK4JqHjErf6y3vV
+         O+YzNBdP0G6hg==
+Message-ID: <8fd7c872-fadb-5dc2-6bc1-5b59a9a3b133@collabora.com>
+Date:   Thu, 6 Oct 2022 14:33:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v3 2/4] dt-bindings: arm: mediatek: Add new bindings of
+ MediaTek frequency hopping
+Content-Language: en-US
+To:     =?UTF-8?B?Sm9obnNvbiBXYW5nICjnjovogZbpkasp?= 
+        <Johnson.Wang@mediatek.com>, "robh@kernel.org" <robh@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        =?UTF-8?B?S3Vhbi1Ic2luIExlZSAo5p2O5Yag5pawKQ==?= 
+        <Kuan-Hsin.Lee@mediatek.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        =?UTF-8?B?WXUtQ2hhbmcgV2FuZyAo546L54Wc5qifKQ==?= 
+        <Yu-Chang.Wang@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        =?UTF-8?B?RWR3YXJkLUpXIFlhbmcgKOaliuWTsue2rSk=?= 
+        <Edward-JW.Yang@mediatek.com>
+References: <20220929114624.16809-1-johnson.wang@mediatek.com>
+ <20220929114624.16809-3-johnson.wang@mediatek.com>
+ <ed723cb2-ba79-55d7-7869-abf153e4af0a@collabora.com>
+ <20220930190703.GA657929-robh@kernel.org>
+ <5b84c81d0d7f71bb83fcbef860433e4704ae5c72.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <5b84c81d0d7f71bb83fcbef860433e4704ae5c72.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221005194336.gdnu4vfzkudedjw5@pali>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 05, 2022 at 09:43:36PM +0200, Pali Roh�r wrote:
-
-[...]
-
-> > On
-> > the other hand there's really no use in keeping this comment around
-> > after that other patch because the documentation for the new macro lays
-> > out the details already.
-> > 
-> > Thierry
+Il 06/10/22 13:23, Johnson Wang (王聖鑫) ha scritto:
+> On Fri, 2022-09-30 at 14:07 -0500, Rob Herring wrote:
+>> On Thu, Sep 29, 2022 at 03:07:49PM +0200, AngeloGioacchino Del Regno
+>> wrote:
+>>> Il 29/09/22 13:46, Johnson Wang ha scritto:
+>>>> Add the new binding documentation for MediaTek frequency hopping
+>>>> and spread spectrum clocking control.
+>>>>
+>>>> Co-developed-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
+>>>> Signed-off-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
+>>>> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+>>>> ---
+>>>>    .../arm/mediatek/mediatek,mt8186-fhctl.yaml   | 53
+>>>> +++++++++++++++++++
+>>>>    1 file changed, 53 insertions(+)
+>>>>    create mode 100644
+>>>> Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-
+>>>> fhctl.yaml
+>>>>
+>>>> diff --git
+>>>> a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-
+>>>> fhctl.yaml
+>>>> b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-
+>>>> fhctl.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..258dff7ce6bc
+>>>> --- /dev/null
+>>>> +++
+>>>> b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-
+>>>> fhctl.yaml
+>>>> @@ -0,0 +1,53 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id:
+>>>> https://urldefense.com/v3/__http://devicetree.org/schemas/arm/mediatek/mediatek,mt8186-fhctl.yaml*__;Iw!!CTRNKA9wMg0ARbw!xVt73f8PaQKph8n0ffGHHmQIxdzooUtGr0xDNVqy_6V0vwcs5k-FLrmkB3PZupSu1ciC$
+>>>>   
+>>>> +$schema:
+>>>> https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!xVt73f8PaQKph8n0ffGHHmQIxdzooUtGr0xDNVqy_6V0vwcs5k-FLrmkB3PZulXwBACk$
+>>>>   
+>>>> +
+>>>> +title: MediaTek frequency hopping and spread spectrum clocking
+>>>> control
+>>>> +
+>>>> +maintainers:
+>>>> +  - Edward-JW Yang <edward-jw.yang@mediatek.com>
+>>>> +
+>>>> +description: |
+>>>> +  Frequency hopping control (FHCTL) is a piece of hardware that
+>>>> control
+>>>> +  some PLLs to adopt "hopping" mechanism to adjust their
+>>>> frequency.
+>>>> +  Spread spectrum clocking (SSC) is another function provided by
+>>>> this hardware.
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    const: mediatek,mt8186-fhctl
+>>>> +
+>>>> +  reg:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  clocks:
+>>>> +    description: Phandles of the PLL with FHCTL hardware
+>>>> capability.
+>>>> +    minItems: 1
+>>>> +    maxItems: 30
+>>>> +
+>>>> +  mediatek,hopping-ssc-percent:
+>>>> +    description: The percentage of spread spectrum clocking for
+>>>> one PLL.
+>>>> +    minItems: 1
+>>>> +    maxItems: 30
+>>>> +    items:
+>>>> +      default: 0
+>>>> +      minimum: 0
+>>>> +      maximum: 8
+>>>> +
+>>>> +required:
+>>>> +  - compatible
+>>>> +  - reg
+>>>> +  - clocks
+>>>> +
+>>>> +additionalProperties: false
+>>>> +
+>>>> +examples:
+>>>> +  - |
+>>>> +    #include <dt-bindings/clock/mt8186-clk.h>
+>>>> +    fhctl: fhctl@1000ce00 {
+>>>> +        compatible = "mediatek,mt8186-fhctl";
+>>>> +        reg = <0x1000c000 0xe00>;
+>>>> +        clocks = <&apmixedsys CLK_APMIXED_MSDCPLL>;
+>>>> +        mediatek,hopping-ssc-percent = <3>;
+>>>> +    };
+>>>
+>>>
+>>> .... a more realistic example:
+>>
+>> One or 2 cells is really outside the scope of the binding as either
+>> is
+>> valid. If the parent bus only has 32-bits of address space, there's
+>> little reason to use 2 cells.
+>>
 > 
-> Ok, whether documentation is needed or not - it is your maintainer
-> decision. Maybe really obvious things do not have to be documented.
-> Also another look at this problem can be that if somebody wrote wrong
-> documentation for it, maybe it is not too obvious? I do not have opinion
-> on this, so choose what is better :-)
+> Hi Rob,
 > 
-> In any case, wrong documentation (which is the current state) should be
-> fixed (and removal in most case is also proper fix).
+> Thanks for the explanation.
+> 
+> Then I will keep this example the same in the next version.
 
-I agree. I would apply this patch if Thierry is still OK with it.
+That was just to have it 1:1 with how it'll be written in the devicetree....
+....in any case, Johnson, there's a discrepancy in the iospace:
+1000ce00 vs 0c1000c000 - that has to be fixed anyway.
 
-Lorenzo
+Cheers,
+Angelo
+
+> 
+> BRs,
+> Johnson Wang
+>>>
+>>>      #include <dt-bindings/clock/mt8186-clk.h>
+>>>
+>>>      soc {
+>>>          #address-cells = <2>;
+>>>          #size-cells = <2>;
+>>>
+>>>          fhctl: fhctl@1000ce00 {
+>>>              compatible = "mediatek,mt8186-fhctl";
+>>>              reg = <0 0x1000c000 0 0xe00>;
+>>>              clocks = <&apmixedsys CLK_APMIXED_MSDCPLL>;
+>>>              mediatek,hopping-ssc-percent = <3>;
+>>>          };
+>>>      };
+>>>
+>>> After which...
+>>>
+>>> Reviewed-by: AngeloGioacchino Del Regno <
+>>> angelogioacchino.delregno@collabora.com>
+>>>
+
