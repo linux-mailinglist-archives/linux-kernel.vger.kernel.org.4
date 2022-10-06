@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B5B5F5D70
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 02:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7515F5D73
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 02:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbiJFADW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 20:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44238 "EHLO
+        id S229747AbiJFAD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 20:03:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiJFADU (ORCPT
+        with ESMTP id S229719AbiJFADV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 20:03:20 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D05C82624
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 17:03:18 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id s15-20020a63524f000000b0043891d55a30so135595pgl.16
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 17:03:18 -0700 (PDT)
+        Wed, 5 Oct 2022 20:03:21 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FA186820
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 17:03:20 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id m2-20020a17090a158200b002058e593c2bso64199pja.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 17:03:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IhY9vucrkor49I71IpqJ03K3yiVNV0ac/5M4Ac7yZ08=;
-        b=HTX52T215o5gjd0vibNKgCp3S1F2RS99LZ1I/5GOvxUfcvq0STNjgJoXkosy1dA5be
-         PTXvq+ODSgWtjyipG69HfkZ3JB4acMSUIespy2Ke65T8RIan3wxshBA3jtPohcAFtT0y
-         9Nefz08fyxpMPv48XtISSrzv81VLe3c24xK+HbBt40NHLP4DNQqw4ZQP107nU2GErm6j
-         BB7oqgdrD2tqGX/m7b4XhUWMJQexg79JAbsY3PBy7s+WC0XEtbiP4BmZgaJzR11HHBu0
-         8zi1SrMhZy6R7g3n1vAH7GQ6rkdXn9r5nnaJWsmPFc2LtaP1aeryRdO3/cg2AllnQ74e
-         rK6w==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
+        bh=RhM6iZSMqYtBZOLPIkknX0vr2yAb2zl+Qo+V+WJBCzM=;
+        b=QeCiF3Wy7QypRn8LL6KEND4sblDwtIs2fywt4CssoMs9BpJHlhBJcHOH3u43seZLRE
+         qMg27TeaFQ0Skzfkp4wyjubVvS7ovR02YzTtPff43g1mSM+LkapNVwe62udL+/hKa5J2
+         zgtEJPXtDjfeMCM+FF0PRPDQvbOgBWaPr8Wfw5K2vQnHtva2TP9+3rvBceYBJa9THvGH
+         NcFsMd6akL0ZMAN06laMZAJkq9k29RUydhmc7cEQGVqa9/DrtPkW7kOmXIUzmWZMd1Xq
+         hM2NB1jtMICf+WgaqGs3z8I8akjjg20Jwutnhg7RvSoZuQc7wjHnbr1aiiM01y0lZPoi
+         whNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IhY9vucrkor49I71IpqJ03K3yiVNV0ac/5M4Ac7yZ08=;
-        b=p6GbJnRxCXKb9VDR2hLBRkiwLWH5ET1rSt2nWOR/KFM57iqrC46qBgfgUz5S26kD3h
-         MswncWvd+1R11AvP3Tr419BSacc5B8H9HoI7uA6nSwtFcorWzzgTD3Kr9EXVTJmqBQWJ
-         Cch8Q/TWmPxrQSwSkO1FeqRMWO56bB9Lde65kJ20ZTGh3+GC8d+KTzrBV9lXTLXigkiT
-         JXXJgBYQNGlp32lHoFwY6EnH2TumthhDEpzJu3LwAV3HKn24KF2Z4otvbilVN86s55Nm
-         9HwCCbyVAThkbaxe7kPLecY6knjIbigmBVAlE2tGqtD/jR5H3hTXgcvYWwoKCAUVHSpd
-         yU0A==
-X-Gm-Message-State: ACrzQf2AaBQGH74MEoqdsU7H87wwaRVhT6V6L0HW65jwuTYJedy49oPr
-        CqvkDTlGV1IsWCvBI+mBe+JkPLioTrY=
-X-Google-Smtp-Source: AMsMyM5ZhowdA1UfcDz0lnUYeQbEC6PPQwe9rGh6n8tafk+dBxXku5crZMiLBpmLqaiiCa08vofWpzZ34Go=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RhM6iZSMqYtBZOLPIkknX0vr2yAb2zl+Qo+V+WJBCzM=;
+        b=2s+KvCbQnawzQH/v2kNoNco6QmKJGdmmNr0B8Zdnj/oV1FpjPT2lFWkSf3yxYpbleH
+         lrurZQP+PBAmtruUIEUsWI3Pina9v3GH/+3L/P757up2aW+ZCwgEd3ZvMAu//QDROYYU
+         CwWpkypIo5Jjs8/qT42gdXys70FAfH8gRaEnJRlenvt22tB9HkXdNjb1xSOBslGlXci6
+         cZjUVIkFIncED9K9ZX06yMmuCY4fRIX8KTIUOpglFdkQFUKF6BpbcMGLD0pq1Hxuw7Ml
+         FeAHkCR2TVJQszPVbsf/MQ+mdnnfpjxpuXrj6bOgVvcVFnthRishhNWbw74zqb7wuRsJ
+         SUuA==
+X-Gm-Message-State: ACrzQf27vtPqFcK7YnRN8QJZvMybR1jeyf+ZIJout8JfnwuexJQ2q9nZ
+        KAx4pVK6bCK+R6qctZHyPE6iGGD2mGI=
+X-Google-Smtp-Source: AMsMyM6Krv128iFVqVqEOV6EZrfbhUl8komxmlaBGDQkso9y7sj6k62Ayi2e7U/8PAwFvB9I8ORgP6hUqEI=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:8a88:b0:17f:8642:7c9a with SMTP id
- p8-20020a1709028a8800b0017f86427c9amr1889292plo.13.1665014597897; Wed, 05 Oct
- 2022 17:03:17 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:179c:b0:561:71d3:e112 with SMTP id
+ s28-20020a056a00179c00b0056171d3e112mr1899973pfg.12.1665014599587; Wed, 05
+ Oct 2022 17:03:19 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu,  6 Oct 2022 00:03:06 +0000
+Date:   Thu,  6 Oct 2022 00:03:07 +0000
+In-Reply-To: <20221006000314.73240-1-seanjc@google.com>
 Mime-Version: 1.0
+References: <20221006000314.73240-1-seanjc@google.com>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221006000314.73240-1-seanjc@google.com>
-Subject: [PATCH v5 0/8] KVM: x86: Intel LBR related perf cleanups
+Message-ID: <20221006000314.73240-2-seanjc@google.com>
+Subject: [PATCH v5 1/8] perf/x86/core: Zero @lbr instead of returning -1 in
+ x86_perf_get_lbr() stub
 From:   Sean Christopherson <seanjc@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -67,7 +71,7 @@ Cc:     Mark Rutland <mark.rutland@arm.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,71 +79,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PeterZ, I dropped your ACK from v4 because the perf patches were completely
-broken.
+Drop the return value from x86_perf_get_lbr() and have the stub zero out
+the @lbr structure instead of returning -1 to indicate "no LBR support".
+KVM doesn't actually check the return value, and instead subtly relies on
+zeroing the number of LBRs in intel_pmu_init().
 
-Fix a bug where KVM incorrectly advertises PMU_CAP_LBR_FMT to userspace if
-perf has disabled LBRs, e.g. because probing one or more LBR MSRs during
-setup hit a #GP.
+Formalize "nr=0 means unsupported" so that KVM doesn't need to add a
+pointless check on the return value to fix KVM's benign bug.
 
-The non-KVM patch cleans up a KVM-specific perf API to fix a benign bug
-where KVM ignores the error return from the API.
+Note, the stub is necessary even though KVM x86 selects PERF_EVENTS and
+the caller exists only when CONFIG_KVM_INTEL=y.  Despite the name,
+KVM_INTEL doesn't strictly require CPU_SUP_INTEL, it can be built with
+any of INTEL || CENTAUR || ZHAOXIN CPUs.
 
-The remaining patches clean up KVM's PERF_CAPABILITIES mess, which makes
-everything far more complex than it needs to be by 
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/events/intel/lbr.c       | 6 +-----
+ arch/x86/include/asm/perf_event.h | 6 +++---
+ 2 files changed, 4 insertions(+), 8 deletions(-)
 
-v5:
- - Drop perf patches that removed stubs.  The stubs are sadly necessary
-   when CPU_SUP_INTEL=n && KVM_INTEL={m,y}, which is possible due to
-   KVM_INTEL effectively depending on INTEL || CENTAUR || ZHAOXIN.
-   [hint provided by kernel test robot].
- - Add a patch to ignore guest CPUID on host userspace MSR writes.
- - Add supported PERF_CAPABILITIES to kvm_caps to simplify code for all
-   parties.
-
-v4
- - https://lore.kernel.org/all/20220901173258.925729-1-seanjc@google.com:
- - Make vmx_get_perf_capabilities() non-inline to avoid references to
-   x86_perf_get_lbr() when CPU_SUP_INTEL=n. [kernel test robot]
-
-v3:
- - https://lore.kernel.org/all/20220831000051.4015031-1-seanjc@google.com
- - Drop patches for bug #1 (already merged).
- - Drop misguided "clean up the capability check" patch. [Like]
-
-v2:
- - https://lore.kernel.org/all/20220803192658.860033-1-seanjc@google.com
- - Add patches to fix bug #2. [Like]
- - Add a patch to clean up the capability check.
- - Tweak the changelog for the PMU refresh bug fix to call out that
-   KVM should disallow changing feature MSRs after KVM_RUN. [Like]
-
-v1: https://lore.kernel.org/all/20220727233424.2968356-1-seanjc@google.com
-
-Sean Christopherson (8):
-  perf/x86/core: Zero @lbr instead of returning -1 in x86_perf_get_lbr()
-    stub
-  KVM: VMX: Advertise PMU LBRs if and only if perf supports LBRs
-  KVM: VMX: Fold vmx_supported_debugctl() into vcpu_supported_debugctl()
-  KVM: VMX: Ignore guest CPUID for host userspace writes to DEBUGCTL
-  KVM: x86: Track supported PERF_CAPABILITIES in kvm_caps
-  KVM: x86: Init vcpu->arch.perf_capabilities in common x86 code
-  KVM: x86: Handle PERF_CAPABILITIES in common x86's
-    kvm_get_msr_feature()
-  KVM: x86: Directly query supported PERF_CAPABILITIES for WRMSR checks
-
- arch/x86/events/intel/lbr.c       |  6 +---
- arch/x86/include/asm/perf_event.h |  6 ++--
- arch/x86/kvm/svm/svm.c            |  3 +-
- arch/x86/kvm/vmx/capabilities.h   | 37 ----------------------
- arch/x86/kvm/vmx/pmu_intel.c      |  1 -
- arch/x86/kvm/vmx/vmx.c            | 51 +++++++++++++++++++++++--------
- arch/x86/kvm/x86.c                | 14 ++++-----
- arch/x86/kvm/x86.h                |  1 +
- 8 files changed, 52 insertions(+), 67 deletions(-)
-
-
-base-commit: e18d6152ff0f41b7f01f9817372022df04e0d354
+diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+index 47fca6a7a8bc..3abf7b041220 100644
+--- a/arch/x86/events/intel/lbr.c
++++ b/arch/x86/events/intel/lbr.c
+@@ -1876,10 +1876,8 @@ void __init intel_pmu_arch_lbr_init(void)
+  * x86_perf_get_lbr - get the LBR records information
+  *
+  * @lbr: the caller's memory to store the LBR records information
+- *
+- * Returns: 0 indicates the LBR info has been successfully obtained
+  */
+-int x86_perf_get_lbr(struct x86_pmu_lbr *lbr)
++void x86_perf_get_lbr(struct x86_pmu_lbr *lbr)
+ {
+ 	int lbr_fmt = x86_pmu.intel_cap.lbr_format;
+ 
+@@ -1887,8 +1885,6 @@ int x86_perf_get_lbr(struct x86_pmu_lbr *lbr)
+ 	lbr->from = x86_pmu.lbr_from;
+ 	lbr->to = x86_pmu.lbr_to;
+ 	lbr->info = (lbr_fmt == LBR_FORMAT_INFO) ? x86_pmu.lbr_info : 0;
+-
+-	return 0;
+ }
+ EXPORT_SYMBOL_GPL(x86_perf_get_lbr);
+ 
+diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+index f6fc8dd51ef4..18c105571d11 100644
+--- a/arch/x86/include/asm/perf_event.h
++++ b/arch/x86/include/asm/perf_event.h
+@@ -542,12 +542,12 @@ static inline void perf_check_microcode(void) { }
+ 
+ #if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_INTEL)
+ extern struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr, void *data);
+-extern int x86_perf_get_lbr(struct x86_pmu_lbr *lbr);
++extern void x86_perf_get_lbr(struct x86_pmu_lbr *lbr);
+ #else
+ struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr, void *data);
+-static inline int x86_perf_get_lbr(struct x86_pmu_lbr *lbr)
++static inline void x86_perf_get_lbr(struct x86_pmu_lbr *lbr)
+ {
+-	return -1;
++	memset(lbr, 0, sizeof(*lbr));
+ }
+ #endif
+ 
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
