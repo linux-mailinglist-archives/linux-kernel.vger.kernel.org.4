@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73265F6D49
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 19:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D11E35F6D4B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 19:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbiJFR5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 13:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
+        id S230144AbiJFR7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 13:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbiJFR5B (ORCPT
+        with ESMTP id S229540AbiJFR7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 13:57:01 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2B9AE204
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 10:56:59 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id h8-20020a17090a054800b00205ccbae31eso5011247pjf.5
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 10:56:59 -0700 (PDT)
+        Thu, 6 Oct 2022 13:59:38 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F711DDF
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 10:59:36 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id nb11so6311768ejc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 10:59:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Ew5U/zqlN15J4j3h5hCZA2cjGBGnLv9k5+/aqrXH4Z4=;
-        b=pRTmbm0MH/KaCv4CN2mlwOQHH8KkdTrXQ4+icasRMMZjojQKWwyW2hZ5bKHq5UouEn
-         ad/1CjPi+CiChlZW8AppPN0is27kUmyRMX7GD2t0wTb+9Zu6OBxbFlQPexrtbx8y5RAA
-         k1jNndWDe7cju5EdavxVLasH0BysgPwxLSnyV4DXxhQcGB6pzErnXzMxTcYm35V6PVFV
-         UEWLggnHagS8Za1Nh9FMd5UQFg6qjGSstyPDkEFQuXEpQx1ZshOA6qySlqv4yqBnp4WQ
-         oWRv5g+ra35HXYY7vzicv7iadRrBGyZ+dQH4aqzup/eBDFEXlTaNBX+dfhwrKiHqq1oI
-         ttqw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9C7ByqeSaw8akdMJt6lEHhq8DB9Wv7neSKwYSa568Bc=;
+        b=GBm0FgVhh/SmHkKRk0VR06xZUv2s5FfWzez1BIME/djcjD8cCDknzdtn1Fzhu5g/kg
+         S0nic5/R50Bm/zdW792pnzivTdOkci4ZuJd6UtTqZkWQR+bgoIeaRseAhInbl5QEe0et
+         8N9tZHW6xeR/VzU5/A/FgJuS8BCAfMW2jbFDvQk6P/9FFkXYFHolvelHSX0+cC3UQHsT
+         sbTIVXvPoU0hKTnRuQIheFe9SkyQKUzCkxiQfgRPn5TKhablgXDgTJotMao2Y2fAanLQ
+         K2x1hQrwtmzM/aRWdW6b7HIO9mMYR5nU8rLvbd3Nhsd4eWQlW3wVo7MOTKd5tTGzY/XV
+         cC1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Ew5U/zqlN15J4j3h5hCZA2cjGBGnLv9k5+/aqrXH4Z4=;
-        b=RzaUMxL+P9POqUDx8FaiPha+5pMCMlzDABU43//JcHdWQRP2IT2dRlcHjXq9rZPJIK
-         5ne3ZFe1RKMdcu7o7xmmxfPHgKztLeJeJF7oUOEQ4ydPhhKxkfWf7toYS+OPP6BRbj8w
-         SJd+khDAe5jaPGCtd9Wgb+ulcyustV5r6Pyz/pJxQqsh9qxBrdIx5FZEvTJU09me6sPb
-         /V9JsAdQZNb6FKAY9oVYkHFdqXZ8CeQq6EbvJhIzCWoGRKr86LzLC1DB0FjIU44wGUFJ
-         NuLngi19dHdyCPLw5+1sTPZfhghHOV7I6kjiazq2HA7Ad8pl7wFH7GsIQioSXn9MlcZJ
-         4AAw==
-X-Gm-Message-State: ACrzQf3wwcDeZFJILE/lowFu0G0G1v9JyPWhbTN/gYm3ewG4G7P3TYk/
-        sDMPIN03qZanZUKXMhfutU+S/07speNt929tX8ovHA==
-X-Google-Smtp-Source: AMsMyM7ctjkDNOFrgPQTYEkNHbpezmOk/2ifv3pjFSMHmP963jkMzYypweFyfZqFXzQdmSGDeeb3Xes3Y2eMCchSKFE=
-X-Received: by 2002:a17:90b:33c3:b0:20a:ebc3:6514 with SMTP id
- lk3-20020a17090b33c300b0020aebc36514mr10329734pjb.147.1665079018869; Thu, 06
- Oct 2022 10:56:58 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9C7ByqeSaw8akdMJt6lEHhq8DB9Wv7neSKwYSa568Bc=;
+        b=QEKA+cEzU+yeTIfdOSP7gJzHAhvTfOgkSwRvcbpAPPh0R/kZ6jr9jRxWI4E5hUkC1S
+         IBm5gyhjw0RUsW329hCVEimH4/IIzv28QQA1hwBH3L4h3MVxpEwWxrCLmFdKQgFvePd7
+         7eEYn2V4alhVjSOdGMPRQ3n3ssdAHijWphBNZ4oZxn4+Ntyg2kBdPgds4J/uPN3L7mcx
+         R+lm4ifUHVCIv36c7MPb2KkB7NIwr3yRyzuJggGmEEb1C1CqNl8n87vd1Q0P5pY9m0nh
+         K1YKNKqrBizVGri7wY2NmdK+46GXtEOyT2S/9BrAMimpeWAI+rJjNDrCq2Q8ZAZJW23o
+         SM0w==
+X-Gm-Message-State: ACrzQf14VKpFP3kSKUOxVS9LsCs0+Z8/epZRiGwzwx9m4/iJAR0/UNsv
+        ZyTRdp1GalbPHiuAYuyye97PHXTb7Js0ag==
+X-Google-Smtp-Source: AMsMyM5kuaauO1vW4syhZvX2RO/dfucMb6YYgUT3lLJ4eHvtA3RTG8amKMunPAeu3qoE1ar1WyyYcA==
+X-Received: by 2002:a17:907:8a0a:b0:78d:2ecb:63e6 with SMTP id sc10-20020a1709078a0a00b0078d2ecb63e6mr919611ejc.620.1665079174812;
+        Thu, 06 Oct 2022 10:59:34 -0700 (PDT)
+Received: from [192.168.1.93] (adsl-75.176.58.241.tellas.gr. [176.58.241.75])
+        by smtp.gmail.com with ESMTPSA id b17-20020a17090630d100b0078b03d57fa7sm45931ejb.34.2022.10.06.10.59.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Oct 2022 10:59:34 -0700 (PDT)
+Message-ID: <96a16b32-0950-b538-65e5-9955ed8cc529@gmail.com>
+Date:   Thu, 6 Oct 2022 20:59:33 +0300
 MIME-Version: 1.0
-References: <20220817185410.1174782-1-nathan@kernel.org> <CAKwvOd=0R76r6YqNiOhGNt_XrA_t_ZbuBbNNdNXV4CWpDy0+Bg@mail.gmail.com>
- <Yv3uI/MoJVctmBCh@worktop.programming.kicks-ass.net> <CAKwvOdk09OCeOrmHJBzRhp4XQykH_tkBGi9DY870C=suBzz9YQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdk09OCeOrmHJBzRhp4XQykH_tkBGi9DY870C=suBzz9YQ@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 6 Oct 2022 10:56:47 -0700
-Message-ID: <CAKwvOdm-eyK5UEtARz5KW2D38GJkXJbUtbpRUCK5RKcHUAVzrw@mail.gmail.com>
-Subject: Re: [PATCH] x86/build: Move '-mindirect-branch-cs-prefix' out of
- GCC-only block
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        "Moreira, Joao" <joao.moreira@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] xen/virtio: Convert PAGE_SIZE/PAGE_SHIFT/PFN_UP to Xen
+ counterparts
+Content-Language: en-US
+To:     Oleksandr Tyshchenko <olekstysh@gmail.com>,
+        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Juergen Gross <jgross@suse.com>
+References: <20221006120912.1948459-1-olekstysh@gmail.com>
+From:   Xenia Ragiadakou <burzalodowa@gmail.com>
+In-Reply-To: <20221006120912.1948459-1-olekstysh@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,81 +78,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 4, 2022 at 2:27 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> On Thu, Aug 18, 2022 at 12:45 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Wed, Aug 17, 2022 at 03:08:01PM -0700, Nick Desaulniers wrote:
-> > > On Wed, Aug 17, 2022 at 11:56 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > >
-> > > > LLVM 16 will have support for this flag so move it out of the GCC-only
-> > > > block to allow LLVM builds to take advantage of it.
-> > > >
-> > > > Link: https://github.com/ClangBuiltLinux/linux/issues/1665
-> > > > Link: https://github.com/llvm/llvm-project/commit/6f867f9102838ebe314c1f3661fdf95700386e5a
-> > > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > >
-> > > Thanks for the patch, I also boot tested this (in virtual guests for
-> > > both 64b and 32b).
-> > >
-> > > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> > > Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-> > >
-> > > Peter, is there anything else special about these prefixes needed to
-> > > make use of them?
-> >
-> > The thing to do is boot with (warning, *very* verbose):
-> >
-> >         "spectre_v2=retpoline,lfence debug-alternative"
->
-> ah, debug-alternative also needs loglevel=8. Was wondering why I
-> wasn't getting anything new in the output...
->
-> No kidding on the verbosity. For a defconfig, booting in QEMU and
-> redirecting stdout to a file produced a 95257 line file.
->
-> $ grep "SMP alternatives: retpoline" /tmp/log.txt | wc -l
-> 18623
-> $ du -h /tmp/log.txt
-> 11M /tmp/log.txt
-> $ grep "SMP alternatives: retpoline" /tmp/log.txt | tr -s ' '
-> ...
-> [ 56.736261] SMP alternatives: retpoline at:
-> pm_check_save_msr+0x30/0x80 (ffffffffaa34b320) len: 6 to:
-> __x86_indirect_thunk_r11+0x0/0x20
-> $ grep "SMP alternatives: retpoline" /tmp/log.txt | tr -s ' ' | cut -d
-> ' ' -f 10 | sort -u
-> 5
-> 6
-> # Curious about the 5, looks like there's only 2 cases:
-> $ grep "SMP alternatives: retpoline" /tmp/log.txt | grep 'len: 5'
-> [    0.147261] SMP alternatives: retpoline at: ret_from_fork+0x1d/0x30
-> (ffffffffa9601dbd) len: 5 to: __x86_indirect_thunk_rbx+0x0/0x20
-> [    2.274261] SMP alternatives: retpoline at: __efi_call+0x23/0x30
-> (ffffffffa9671663) len: 5 to: __x86_indirect_thunk_rdi+0x0/0x20
 
-For the typical len 6 case:
-[    0.710345] SMP alternatives: ffffffffa2b6d1f2: orig: 2e e8 88 5f 09 ff
-[    0.711345] SMP alternatives: ffffffffa2b6d1f2: repl: 0f ae e8 41 ff d3
-[    0.712345] SMP alternatives: retpoline at: setup_arch+0x4b0/0x58c
-(ffffffffa2b6d2ef) len: 6 to: __x86_indirect_thunk_r11+0x0/0x20
+On 10/6/22 15:09, Oleksandr Tyshchenko wrote:
+> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+> 
+> Although XEN_PAGE_SIZE is equal to PAGE_SIZE (4KB) for now, it would
+> be more correct to use Xen specific #define-s as XEN_PAGE_SIZE can
+> be changed at some point in the future.
+> 
+> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+> ---
+> Cc: Juergen Gross <jgross@suse.com>
+> Cc: Xenia Ragiadakou <burzalodowa@gmail.com>
+> 
+> As it was proposed at:
+> https://lore.kernel.org/xen-devel/20221005174823.1800761-1-olekstysh@gmail.com/
+> 
+> Should go in only after that series.
+> ---
+>   drivers/xen/grant-dma-ops.c | 20 ++++++++++----------
+>   1 file changed, 10 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
+> index c66f56d24013..5392fdc25dca 100644
+> --- a/drivers/xen/grant-dma-ops.c
+> +++ b/drivers/xen/grant-dma-ops.c
+> @@ -31,12 +31,12 @@ static DEFINE_XARRAY_FLAGS(xen_grant_dma_devices, XA_FLAGS_LOCK_IRQ);
+>   
+>   static inline dma_addr_t grant_to_dma(grant_ref_t grant)
+>   {
+> -	return XEN_GRANT_DMA_ADDR_OFF | ((dma_addr_t)grant << PAGE_SHIFT);
+> +	return XEN_GRANT_DMA_ADDR_OFF | ((dma_addr_t)grant << XEN_PAGE_SHIFT);
+>   }
 
-2e is the cs prefix, so it looks like this is working.
+With this change, can the offset added to the dma handle, generated by 
+grant_to_dma(), be the offset in the page? Couldn't it corrupt the grant 
+ref?
 
-https://github.com/llvm/llvm-project/issues/58201
-:^)
+>   
+>   static inline grant_ref_t dma_to_grant(dma_addr_t dma)
+>   {
+> -	return (grant_ref_t)((dma & ~XEN_GRANT_DMA_ADDR_OFF) >> PAGE_SHIFT);
+> +	return (grant_ref_t)((dma & ~XEN_GRANT_DMA_ADDR_OFF) >> XEN_PAGE_SHIFT);
+>   }
+>   
+>   static struct xen_grant_dma_data *find_xen_grant_dma_data(struct device *dev)
+> @@ -79,7 +79,7 @@ static void *xen_grant_dma_alloc(struct device *dev, size_t size,
+>   				 unsigned long attrs)
+>   {
+>   	struct xen_grant_dma_data *data;
+> -	unsigned int i, n_pages = PFN_UP(size);
+> +	unsigned int i, n_pages = XEN_PFN_UP(size);
+>   	unsigned long pfn;
+>   	grant_ref_t grant;
+>   	void *ret;
+> @@ -91,14 +91,14 @@ static void *xen_grant_dma_alloc(struct device *dev, size_t size,
+>   	if (unlikely(data->broken))
+>   		return NULL;
+>   
+> -	ret = alloc_pages_exact(n_pages * PAGE_SIZE, gfp);
+> +	ret = alloc_pages_exact(n_pages * XEN_PAGE_SIZE, gfp);
+>   	if (!ret)
+>   		return NULL;
+>   
+>   	pfn = virt_to_pfn(ret);
+>   
+>   	if (gnttab_alloc_grant_reference_seq(n_pages, &grant)) {
+> -		free_pages_exact(ret, n_pages * PAGE_SIZE);
+> +		free_pages_exact(ret, n_pages * XEN_PAGE_SIZE);
+>   		return NULL;
+>   	}
+>   
+> @@ -116,7 +116,7 @@ static void xen_grant_dma_free(struct device *dev, size_t size, void *vaddr,
+>   			       dma_addr_t dma_handle, unsigned long attrs)
+>   {
+>   	struct xen_grant_dma_data *data;
+> -	unsigned int i, n_pages = PFN_UP(size);
+> +	unsigned int i, n_pages = XEN_PFN_UP(size);
+>   	grant_ref_t grant;
+>   
+>   	data = find_xen_grant_dma_data(dev);
+> @@ -138,7 +138,7 @@ static void xen_grant_dma_free(struct device *dev, size_t size, void *vaddr,
+>   
+>   	gnttab_free_grant_reference_seq(grant, n_pages);
+>   
+> -	free_pages_exact(vaddr, n_pages * PAGE_SIZE);
+> +	free_pages_exact(vaddr, n_pages * XEN_PAGE_SIZE);
+>   }
+>   
+>   static struct page *xen_grant_dma_alloc_pages(struct device *dev, size_t size,
+> @@ -168,7 +168,7 @@ static dma_addr_t xen_grant_dma_map_page(struct device *dev, struct page *page,
+>   					 unsigned long attrs)
+>   {
+>   	struct xen_grant_dma_data *data;
+> -	unsigned int i, n_pages = PFN_UP(offset + size);
+> +	unsigned int i, n_pages = XEN_PFN_UP(offset + size);
 
-> Is there anything else I can do to help verify Nathan and Joao's
-> patches?  If not, would you mind Ack'ing this so the x86 maintainers
-> can pick it up?
+The offset, here, refers to the offset in the page ...
 
-I see it's already been Acked, so NVM. This is good to go.
+>   	grant_ref_t grant;
+>   	dma_addr_t dma_handle;
+>   
+> @@ -200,8 +200,8 @@ static void xen_grant_dma_unmap_page(struct device *dev, dma_addr_t dma_handle,
+>   				     unsigned long attrs)
+>   {
+>   	struct xen_grant_dma_data *data;
+> -	unsigned long offset = dma_handle & (PAGE_SIZE - 1);
+> -	unsigned int i, n_pages = PFN_UP(offset + size);
+> +	unsigned long offset = dma_handle & ~XEN_PAGE_MASK;
 
-> Noting that Joao's patch was applied in my tests.
-> https://reviews.llvm.org/D134915
-> I plan to land Joao's patch imminently.
+... while, here, it refers to the offset in the grant.
+So, the calculated number of grants may differ.
 
-Merging.
+> +	unsigned int i, n_pages = XEN_PFN_UP(offset + size);
+>   	grant_ref_t grant;
+>   
+>   	if (WARN_ON(dir == DMA_NONE))
+
 -- 
-Thanks,
-~Nick Desaulniers
+Xenia
