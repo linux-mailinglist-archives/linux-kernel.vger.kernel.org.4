@@ -2,196 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56CFE5F6D28
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 19:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A78615F6D2C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 19:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231814AbiJFRnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 13:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
+        id S230264AbiJFRo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 13:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231600AbiJFRnG (ORCPT
+        with ESMTP id S229683AbiJFRoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 13:43:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A76B40E8;
-        Thu,  6 Oct 2022 10:43:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 92CCAB82126;
-        Thu,  6 Oct 2022 17:43:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0459C433C1;
-        Thu,  6 Oct 2022 17:43:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665078181;
-        bh=8L4ETKVrJv6anS4RBzHd/U96VBFqskwrKbkT5eLy2Lg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LwpzeQQzjm9tuiUHEQXke23UfORLgjnFJs5mYsTMrDIfxJFnOcZqV/iyk6DGjwSJ5
-         cG+niFpHlrmX8g+T93ukA1wJAzBlJAPQu0YJ6rcRtu1t78gHvC4/dBifVpA+9zy5Ke
-         GhigiDZFhyOLEH41El9uQQE7dl+PEOmbyF3QsPwqMPghYS2wUZG64TF0SpYTILd3Mv
-         4/IzLrH4zlLacwnMtFqAf2Xa9Gvm/K+r7xEfcOGmeivxXGQtGBXGR07qc3YPXcHeyI
-         naFMeV1nfDMLfDfCy48/xYIYFCZl2HLSfrHTSpEFbcMg6aoJ82Sv3kPlwbCzocA0Op
-         6SCn53nbnlK2w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 7C9234062C; Thu,  6 Oct 2022 14:42:58 -0300 (-03)
-Date:   Thu, 6 Oct 2022 14:42:58 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     carsten.haitzler@foss.arm.com, Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
-        mike.leach@linaro.org, linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v9 02/13] perf test: Add build infra for perf test tools
- for CoreSight tests
-Message-ID: <Yz8TojIibofTn8Rp@kernel.org>
-References: <20220909152803.2317006-1-carsten.haitzler@foss.arm.com>
- <20220909152803.2317006-3-carsten.haitzler@foss.arm.com>
- <Yz67SHpIN5NggKEk@kernel.org>
- <Yz6/zlchVnNsVlzJ@kernel.org>
- <Yz7RAgMN6WGnD3OZ@leoy-yangtze.lan>
- <Yz7klV3h+JJ+ilAp@kernel.org>
- <Yz7vJ9Wy0zCTwp1t@leoy-yangtze.lan>
- <Yz8Ma75+RgGVYqBN@kernel.org>
+        Thu, 6 Oct 2022 13:44:25 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF48B3B3A;
+        Thu,  6 Oct 2022 10:44:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665078264; x=1696614264;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0Algq8hyduIEzy6JYyaOhF1vsvyg3XX+0FRx/6j5o0g=;
+  b=P40ET/E+96MyPWObFb/pj2DToiN71/rWVfNN96w5AcLuw6VBH+/3BMjw
+   w5wJWMId5jSRn3W3bZMxqWa0fLPTN2fF7VWy1LXJ8JTpFTi4WgeHXDSe0
+   +4o1R2C2478UfB7Hz7qSKZKWrVdbxA42OYmXKMpQ7fsiVd1MyzBtf3My8
+   x6rS20cG7vzmpilqERzCht7+0SjIZxFOGAyS8AV2SRGG+Ioq6n9hgasX1
+   UzBcoRr94OLj2m2klPG1Ldiry4DMmxHU4oK6rLpbr9H9PxWXF7OswvIQF
+   FkdjcuBtXGKowFVT3X8Ez+BApVFQH1jrkn8WCi6uKyWuhCzItz/unVmbd
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="367644479"
+X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
+   d="scan'208";a="367644479"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 10:44:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="687529739"
+X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
+   d="scan'208";a="687529739"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 06 Oct 2022 10:44:18 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ogUuu-003HN6-1V;
+        Thu, 06 Oct 2022 20:44:16 +0300
+Date:   Thu, 6 Oct 2022 20:44:16 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     matthew.gerlach@linux.intel.com
+Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v3 4/4] tty: serial: 8250: add DFL bus driver for Altera
+ 16550.
+Message-ID: <Yz8T8GdzMLyAKIMb@smile.fi.intel.com>
+References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com>
+ <20221004143718.1076710-5-matthew.gerlach@linux.intel.com>
+ <YzxRxo8jL7rB1+px@smile.fi.intel.com>
+ <alpine.DEB.2.22.394.2210060940150.1988353@rhweight-WRK1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yz8Ma75+RgGVYqBN@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <alpine.DEB.2.22.394.2210060940150.1988353@rhweight-WRK1>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Oct 06, 2022 at 02:12:11PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Thu, Oct 06, 2022 at 11:07:19PM +0800, Leo Yan escreveu:
-> > On Thu, Oct 06, 2022 at 11:22:13AM -0300, Arnaldo Carvalho de Melo wrote:
+On Thu, Oct 06, 2022 at 10:00:43AM -0700, matthew.gerlach@linux.intel.com wrote:
+> On Tue, 4 Oct 2022, Andy Shevchenko wrote:
+> > On Tue, Oct 04, 2022 at 07:37:18AM -0700, matthew.gerlach@linux.intel.com wrote:
+
+...
+
+> > > Reported-by: kernel test robot <lkp@intel.com>
 > > 
-> > [...]
+> > https://docs.kernel.org/process/submitting-patches.html?highlight=reported#using-reported-by-tested-by-reviewed-by-suggested-by-and-fixes
 > > 
-> > > > @@ -1006,7 +1014,10 @@ install-tests: all install-gtk
-> > > >                 $(INSTALL) tests/shell/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell'; \
-> > > >                 $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
-> > > >                 $(INSTALL) tests/shell/lib/*.sh -m 644 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
-> > > > -               $(INSTALL) tests/shell/lib/*.py -m 644 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'
-> > > > +               $(INSTALL) tests/shell/lib/*.py -m 644 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
-> > > > +               $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/coresight'; \
-> > > > +               $(INSTALL) tests/shell/coresight/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/coresight'
-> > > > +       $(Q)$(MAKE) -C tests/shell/coresight install-tests
-> > > > 
-> > > > It's deliberately to not add '-m 644' when install coresight test
-> > > > shell scripts under the folder tests/shell/coresight/ so that we can
-> > > > keep the executable permission for these scripts.  On the other flip,
-> > > > we set 644 mode for the scripts under tests/shell/lib/ so these
-> > > > scripts will not be executed directly by perf test framework.
-> > > > 
-> > > > @Carsten, if have chance could you confirm for above change?
-> > > 
-> > > If you need for some .sh, coresight test's to have x set while all of
-> > > the others don't have, and you have a good reason for that, ok, we just
-> > > add a comment.
-> > 
-> > Simply to say, all lib scripts are not needed for execute permission.
-> > Yes, it's good to add a comment for the installation steps.
-> > 
-> > > > >   DESCEND plugins
-> > > > >   GEN     /tmp/build/perf/python/perf.so
-> > > > >   INSTALL trace_plugins
-> > > > >   INSTALL binaries
-> > > > >   INSTALL tests
-> > > > > install: cannot stat 'tests/shell/coresight/*.sh': No such file or directory
-> > > > > make[2]: *** [Makefile.perf:1007: install-tests] Error 1
-> > > > > make[2]: *** Waiting for unfinished jobs....
-> > > > > 
-> > > > > I'll add it back when the first .sh gets added to tests/shell/coresight/
-> > > > 
-> > > > Sorry for introducing extra efforts for you and thanks!
-> > > 
-> > > This also has to go, I'll check and fix this loop that doesn't follow
-> > > the existing output style, happens with ´make install', etc too:
-> > > 
-> > > ⬢[acme@toolbox perf]$ make -C tools/perf clean
-> > > make: Entering directory '/var/home/acme/git/perf/tools/perf'
-> > >   CLEAN   x86
-> > >   CLEAN   libtraceevent
-> > >   CLEAN   libapi
-> > >   CLEAN   libbpf
-> > >   CLEAN   libsubcmd
-> > >   CLEAN   libperf
-> > >   CLEAN   fixdep
-> > >   CLEAN   feature-detect
-> > >   CLEAN   python
-> > >   CLEAN   bpf-skel
-> > > make -C asm_pure_loop clean >/dev/null        <-------------------
-> > > make -C memcpy_thread clean >/dev/null        <-------------------
-> > > make -C thread_loop clean >/dev/null          <-------------------
-> > > make -C unroll_loop_thread clean >/dev/null   <-------------------
-> > 
-> > Ouch, if we can update the file tests/shell/coresight/Makefile as below:
-> > 
-> > $(CLEANDIRS):
-> >         $(call QUIET_CLEAN, test-$(@:clean-%=%)) $(Q)$(MAKE) -C $(@:clean-%=%) clean >/dev/null
+> > "The Reported-by tag gives credit to people who find bugs and report them and it
+> > hopefully inspires them to help us again in the future. Please note that if the
+> > bug was reported in private, then ask for permission first before using the
+> > Reported-by tag. The tag is intended for bugs; please do not use it to credit
+> > feature requests."
 > 
-> I had to do it, so far, at the time that the above line is first added
-> as:
+> The kernel test robot did find a bug in my v1 submission.  I was missing the
+> static keyword for a function declaration.  Should I remove the tag?
+
+What's yours take from the above documentation?
+
+...
+
+> > > +	dfh_base = devm_ioremap_resource(dev, &dfl_dev->mmio_res);
+> > > +	if (IS_ERR(dfh_base))
+> > > +		return PTR_ERR(dfh_base);
+> > > +
+> > > +	res_size = resource_size(&dfl_dev->mmio_res);
+> > > +
+> > > +	ret = dfl_uart_get_params(dev, dfh_base, res_size, &uart);
+> > 
+> > > +	devm_iounmap(dev, dfh_base);
+> > > +	devm_release_mem_region(dev, dfl_dev->mmio_res.start, res_size);
+> > 
+> > If it's temporary, may be you shouldn't even consider devm_ioremap_resource()
+> > to begin with? The devm_* release type of functions in 99% of the cases
+> > indicate of the abusing devm_.
 > 
-> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> index a20b4adb5e3451f1..194e582e70c2c766 100644
-> --- a/tools/perf/Makefile.perf
-> +++ b/tools/perf/Makefile.perf
-> @@ -635,7 +635,8 @@ tests-coresight-targets: FORCE
->  	$(Q)$(MAKE) -C $(TESTS_CORESIGHT_DIR)
->  
->  tests-coresight-targets-clean:
-> -	$(Q)$(MAKE) -C $(TESTS_CORESIGHT_DIR) clean
-> +	$(call QUIET_CLEAN, coresight)
-> +	$(Q)$(MAKE) -C $(TESTS_CORESIGHT_DIR) O=$(OUTPUT) clean >/dev/null
->  
->  all: shell_compatibility_test $(ALL_PROGRAMS) $(LANG_BINDINGS) $(OTHER_PROGRAMS) tests-coresight-targets
->  
-> diff --git a/tools/perf/tests/shell/coresight/Makefile b/tools/perf/tests/shell/coresight/Makefile
-> index 3fee05cfcb0e73f6..6baab5cbaa9aa3b1 100644
-> --- a/tools/perf/tests/shell/coresight/Makefile
-> +++ b/tools/perf/tests/shell/coresight/Makefile
-> @@ -20,6 +20,6 @@ CLEANDIRS = $(SUBDIRS:%=clean-%)
->  
->  clean: $(CLEANDIRS)
->  $(CLEANDIRS):
-> -	$(Q)$(MAKE) -C $(@:clean-%=%) clean >/dev/null
-> +	$(call QUIET_CLEAN, test-$(@:clean-%=%)) $(Q)$(MAKE) -C $(@:clean-%=%) clean >/dev/null
->  
->  .PHONY: all clean $(SUBDIRS) $(CLEANDIRS) $(INSTALLDIRS)
+> I will change the code to call ioremap() and request_mem_region() directly
+> instead of the devm_ versions.
 
-And for the normal build and install, somehow that $(Q) is not being
-obeyed there, so I'm using straight @ for now so that we have a clean
-output, someone more knowledgeable in the Makefile voodoo can then fix
-it.
+But why will you need request_mem_region() in that case?
 
-⬢[acme@toolbox perf]$ git log --oneline -1
-e1700b67a41092a5 (HEAD) perf test: Add build infra for perf test tools for ARM CoreSight tests
-⬢[acme@toolbox perf]$ git diff
-diff --git a/tools/perf/tests/shell/coresight/Makefile b/tools/perf/tests/shell/coresight/Makefile
-index 6baab5cbaa9aa3b1..6f3b3f07049c2d53 100644
---- a/tools/perf/tests/shell/coresight/Makefile
-+++ b/tools/perf/tests/shell/coresight/Makefile
-@@ -8,13 +8,13 @@ SUBDIRS =
+> > > +	if (ret < 0)
+> > > +		return dev_err_probe(dev, ret, "failed uart feature walk\n");
 
- all: $(SUBDIRS)
- $(SUBDIRS):
--       $(Q)$(MAKE) -C $@
-+       @$(MAKE) -C $@
+...
 
- INSTALLDIRS = $(SUBDIRS:%=install-%)
+> > > +config SERIAL_8250_DFL
+> > > +	tristate "DFL bus driver for Altera 16550 UART"
+> > > +	depends on SERIAL_8250 && FPGA_DFL
+> > > +	help
+> > > +	  This option enables support for a Device Feature List (DFL) bus
+> > > +	  driver for the Altera 16650 UART.  One or more Altera 16650 UARTs
+> > > +	  can be instantiated in a FPGA and then be discovered during
+> > > +	  enumeration of the DFL bus.
+> > 
+> > When m, what be the module name?
+> 
+> I see the file, kernel/drivers/tty/serial/8250/8250_dfl.ko, installed into
+> /lib/modules/...  I also see "alias dfl:t0000f0024* 8250_dfl" in
+> modules.alias
 
- install-tests: $(INSTALLDIRS)
- $(INSTALLDIRS):
--       $(Q)$(MAKE) -C $(@:install-%=%) install-tests
-+       @$(MAKE) -C $(@:install-%=%) install-tests >/dev/null
+My point is that user who will run `make menuconfig` will read this and have
+no clue after the kernel build if the module was built or not. Look into other
+(recent) sections of the Kconfig for drivers in the kernel for how they inform
+user about the module name (this more or less standard pattern you just need
+to copy'n'paste'n'edit carefully).
 
- CLEANDIRS = $(SUBDIRS:%=clean-%)
+...
 
-⬢[acme@toolbox perf]$
+> > >  obj-$(CONFIG_SERIAL_8250_FOURPORT)	+= 8250_fourport.o
+> > >  obj-$(CONFIG_SERIAL_8250_ACCENT)	+= 8250_accent.o
+> > >  obj-$(CONFIG_SERIAL_8250_BOCA)		+= 8250_boca.o
+> > > +obj-$(CONFIG_SERIAL_8250_DFL)		+= 8250_dfl.o
+> > 
+> > This group of drivers for the 4 UARTs on the board or so, does FPGA belong to
+> > it? (Same Q, btw, for the Kconfig section. And yes, I know that some of the
+> > entries are not properly placed there and in Makefile.)
+> 
+> Since 8250_dfl results in its own module, and my kernel config doesn't have
+> FOURPORT, ACCENT, nor BOCA, I guess I don't understand the problem.
+
+The Makefile is a bit chaotic, but try to find the sorted (more or less)
+group of drivers that are not 4 ports and squeeze your entry there
+(I expect somewhere between the LPSS/MID lines).
+
+It will help to sort out that mess in the future.
+
+> > >  obj-$(CONFIG_SERIAL_8250_EXAR_ST16C554)	+= 8250_exar_st16c554.o
+> > >  obj-$(CONFIG_SERIAL_8250_HUB6)		+= 8250_hub6.o
+> > >  obj-$(CONFIG_SERIAL_8250_FSL)		+= 8250_fsl.o
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
