@@ -2,108 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696E55F5E6F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 03:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF4D5F5E7D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 03:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiJFBoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 21:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40588 "EHLO
+        id S229923AbiJFBu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 21:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiJFBoD (ORCPT
+        with ESMTP id S229468AbiJFBuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 21:44:03 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B5C7F08F
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 18:44:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665020642; x=1696556642;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CneSLw/fFoLPlSnTLl0TJU6+uM4dil9z5AcF2EVouV8=;
-  b=GlgVJY+H7BthealhunNNbqrgfg0nKOGCxPdh8ml8X5kX8i387Z2AOqsE
-   UIBeoo2d8lDgp+BZrSgf1s7q23+KyQbtsM6M2LU2NqUykuhv+4i7ctooJ
-   oN7JwUmL+PrfGJm949UQH/IvP2WP/6VatiZrmwWfTqUwgZCafG+hqhzsw
-   LIVtEawGgEfeYhXqCRJPZJGnvjl9gU/eQ1O9ubvuRcAydbLH5QtaeZNLS
-   ZjEPKjVMaY3T7OCRvuXRMXz+iZp0PnrS/vq7Hq+VrMEf/10fOu19QYtLs
-   LT2Blo8XdVuheFXESd7JJDibLkcpqQJJ6Mymy320CG3ycb2Kcxsba9k06
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="367445634"
-X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
-   d="scan'208";a="367445634"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 18:44:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="626823519"
-X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
-   d="scan'208";a="626823519"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga007.fm.intel.com with ESMTP; 05 Oct 2022 18:44:01 -0700
-Date:   Wed, 5 Oct 2022 18:50:30 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [RFC PATCH 17/23] thermal: intel: hfi: Enable the Intel Thread
- Director
-Message-ID: <20221006015030.GC29251@ranerica-svr.sc.intel.com>
-References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
- <20220909231205.14009-18-ricardo.neri-calderon@linux.intel.com>
- <YzLl5+yMUrrGiphr@hirez.programming.kicks-ass.net>
+        Wed, 5 Oct 2022 21:50:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241032C67C;
+        Wed,  5 Oct 2022 18:50:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62096B81F7E;
+        Thu,  6 Oct 2022 01:50:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45094C433C1;
+        Thu,  6 Oct 2022 01:50:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665021051;
+        bh=QcwagBeSbuvRCsWJIUdcRzilPwxU7LcEOFNF7wVbWwo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Spjou0Ke2vUCPkkiik+9LyrmcFtV2qX+eyjNqeSQc5B3afnB7a1l+Ef8K8XKMBxXA
+         dF1LCcWmpnBr5piKgGuIeq38stk/+3Bzl1jx9ixZm52goyH88eYzJZl5ac01+vkMUo
+         EMNRThZHgEfO1M0QQkoxTK4NmnlPNXGPkZ5cUa+mwSDulhi6VhCaJHzxDvuCEf31Bi
+         ScPxxm4vuABATmr0ZRYL+CbY1jkQLaJEhT+p97jYSDNC3T9gPZgPGz1YbjxC7YDTN4
+         e7zRydw0Ym1Z0fktYN7zr9Ykn61a8HCcnirWEz2NKI8omimuLDqG++h0lyT838uc8d
+         rBYQNqFYxz8Tw==
+Date:   Wed, 5 Oct 2022 20:50:47 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Melody Olvera <quic_molvera@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] pinctrl: qcom: Add QDU1000/QRU1000 pinctrl driver
+Message-ID: <20221006015047.4ten7sjsth7sw6s7@baldur>
+References: <20221001030546.28220-1-quic_molvera@quicinc.com>
+ <20221001030546.28220-3-quic_molvera@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YzLl5+yMUrrGiphr@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221001030546.28220-3-quic_molvera@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 02:00:39PM +0200, Peter Zijlstra wrote:
-> On Fri, Sep 09, 2022 at 04:11:59PM -0700, Ricardo Neri wrote:
-> 
-> > +config INTEL_THREAD_DIRECTOR
-> > +	bool "Intel Thread Director"
-> > +	depends on INTEL_HFI_THERMAL
-> > +	depends on SMP
-> > +	select SCHED_TASK_CLASSES
-> > +	help
-> > +	  Select this option to enable the Intel Thread Director. If selected,
-> > +	  hardware classifies tasks based on the type of instructions they
-> > +	  execute. It also provides performance capabilities for each class of
-> > +	  task. On hybrid processors, the scheduler uses this data to place
-> > +	  tasks of classes of higher performance on higher-performnance CPUs.
-> 
-> Do we really need yet another CONFIG symbol for all this!? AFAICT this
-> Thread Director crud simply extends the HFI table and doesn't actually
-> carry that much code with it.
-> 
-> Best to always have it on when HFI is on, no?
+On Fri, Sep 30, 2022 at 08:05:46PM -0700, Melody Olvera wrote:
+[..]
+> diff --git a/drivers/pinctrl/qcom/pinctrl-qdru1000.c b/drivers/pinctrl/qcom/pinctrl-qdru1000.c
+> new file mode 100644
+> index 000000000000..8b931ff80bb4
+> --- /dev/null
+> +++ b/drivers/pinctrl/qcom/pinctrl-qdru1000.c
+> @@ -0,0 +1,59 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pinctrl/pinctrl.h>
+> +
+> +#include "pinctrl-msm.h"
+> +#include "pinctrl-qdru1000.h"
+> +
+> +static const struct msm_pinctrl_soc_data qdru1000_tlmm = {
+> +	.pins = qdru1000_pins,
+> +	.npins = ARRAY_SIZE(qdru1000_pins),
+> +	.functions = qdru1000_functions,
+> +	.nfunctions = ARRAY_SIZE(qdru1000_functions),
+> +	.groups = qdru1000_groups,
+> +	.ngroups = ARRAY_SIZE(qdru1000_groups),
+> +	.ngpios = 151,
+> +};
+> +
+> +static int qdru1000_tlmm_probe(struct platform_device *pdev)
+> +{
+> +	return msm_pinctrl_probe(pdev, &qdru1000_tlmm);
+> +}
+> +
+> +static const struct of_device_id qdru1000_tlmm_of_match[] = {
+> +	{ .compatible = "qcom,qdu1000-tlmm", },
+> +	{ .compatible = "qcom,qru1000-tlmm", },
+> +	{ },
+> +};
+> +
+> +static struct platform_driver qdru1000_tlmm_driver = {
+> +	.driver = {
+> +		.name = "qdru1000-tlmm",
+> +		.of_match_table = qdru1000_tlmm_of_match,
+> +	},
+> +	.probe = qdru1000_tlmm_probe,
+> +	.remove = msm_pinctrl_remove,
+> +};
+> +
+> +static int __init qdru1000_tlmm_init(void)
+> +{
+> +	return platform_driver_register(&qdru1000_tlmm_driver);
+> +}
+> +arch_initcall(qdru1000_tlmm_init);
+> +
+> +static void __exit qdru1000_tlmm_exit(void)
+> +{
+> +	platform_driver_unregister(&qdru1000_tlmm_driver);
+> +}
+> +module_exit(qdru1000_tlmm_exit);
+> +
+> +MODULE_DESCRIPTION("QTI QDRU1000 TLMM driver");
+> +MODULE_LICENSE("GPL v2");
 
-I decided to add CONFIG_INTEL_THREAD_DIRECTOR mainly to select CONFIG_IPC_
-CLASS and have the needed members of task_struct only when needed. Legacy,
-classless, HFI can work with the Thread Director part on some processors
-(e.g., Sapphire Rapids or, FWIW, Lakefield).
+"GPL" only please.
 
-I could get rid of CONFIG_INTEL_THREAD_DIRECTOR and instead wrap the Thread
-Director code in an #ifdef(CONFIG_IPC_CLASS) block instead.
+> +MODULE_DEVICE_TABLE(of, qdru1000_tlmm_of_match);
 
-Thanks and BR,
-Ricardo
+Please add this next to qdru1000_tlmm_of_match.
+
+> diff --git a/drivers/pinctrl/qcom/pinctrl-qdru1000.h b/drivers/pinctrl/qcom/pinctrl-qdru1000.h
+
+I'm not able to see why this is in a header file and the commit message
+doesn't give a clue. Please align with the customary form, or motivate
+your choice.
+
+[..]
+> +
+> +enum qdru1000_functions {
+> +	msm_mux_gpio,
+> +	msm_mux_CMO_PRI,
+> +	msm_mux_SI5518_INT,
+> +	msm_mux_atest_char_start,
+> +	msm_mux_atest_char_status0,
+> +	msm_mux_atest_char_status1,
+> +	msm_mux_atest_char_status2,
+> +	msm_mux_atest_char_status3,
+
+For anything that denotes different pins in one function, please drop
+the suffix and make this a list of functions.
+
+[..]
+> +	msm_mux_qspi_data_0,
+> +	msm_mux_qspi_data_1,
+> +	msm_mux_qspi_data_2,
+> +	msm_mux_qspi_data_3,
+> +	msm_mux_qup0_se0_l0,
+
+E.g. msm_mux_qup0_se0 is enough, giving each pin its own function means
+that we need to define each pin separate in DT.
+
+Regards,
+Bjorn
