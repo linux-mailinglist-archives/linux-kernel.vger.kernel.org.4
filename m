@@ -2,151 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924805F70EA
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 00:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F18145F70E0
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 00:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbiJFWD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 18:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52514 "EHLO
+        id S231754AbiJFWDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 18:03:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231934AbiJFWDp (ORCPT
+        with ESMTP id S231586AbiJFWD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 18:03:45 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3EA51142FA;
-        Thu,  6 Oct 2022 15:03:43 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a26so7569218ejc.4;
-        Thu, 06 Oct 2022 15:03:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gs9ymlzhHg78SV9AeCxTEe9UU7UvQjNqAP4fEvcWuVo=;
-        b=cDvtzJ1+rH2aUDW/MjVaanBqq4xprQ163nM3w0nQS67mWJ8EUWOVoaS7Wl9XbcKOI4
-         OU4XdH1S8zjbofM+8kGAp3I54MA+l4SFGmpJSZn5AS17PYIvlDLnZFB/ER+n+w0C/PYo
-         7Y8sAoebIFnwjsMUtJEyBzABclMOwjAnEuUW2DVeXuaRX8t2O0AbeBOro9BKp9QpaEBw
-         Z4uoma5saX2eK48eG+abHMsqWn1ytkvW/jbehgnFL1q7FplpoSRbm9nrfXd0+cu+jSc8
-         RmrPifWxJhEnQIpmSq8YIh1QYyiBl6ilcVqU2gS72q4V98XBoF6/4uWXo5v5rBz+6Jy3
-         sGUg==
+        Thu, 6 Oct 2022 18:03:26 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953F51142E2
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 15:03:22 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id a21-20020a5d89d5000000b006b97a46422eso2037573iot.5
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 15:03:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gs9ymlzhHg78SV9AeCxTEe9UU7UvQjNqAP4fEvcWuVo=;
-        b=2XhcAIXZcw7UFmOE1ds8myqjy3XsyeIjEejQFmMZ4hQKeIhKi/OETBCfx1aFhKd3qH
-         riHbbqqsJYJGwSWrWY2OCEepRjsC/fSCRx0CV6gtCGvslZMydkOJN7LLWFyoSIlMvyqJ
-         dhY8r1PGVDuqHwxz7is6H2nBKjQ2eeuI11BfcILg4h5RQOvPR9WtmWs0obHMTiQrgA2K
-         NuWdAetx1X5h58HWShW49VuoR2wfRASZq/zGTcI8akR2w5Q1sqRbvzB+kkHIK14mXGCY
-         imSJU2Q8PYW0GgAMwAB5fRDIKnrQsnM5btk2hArQlQf8nwhX0kZRwr0H1OebLe2tIh5d
-         NhKA==
-X-Gm-Message-State: ACrzQf2Ksxz7BD25rmEGRui8qekh4OGwlfWZApdS6YDqDu72Qbc+3HXw
-        7Pj8FRAGoP8oZwJ6z2197nk7I2mJeYA=
-X-Google-Smtp-Source: AMsMyM5dtCnFEjRz1leYXttCvnccz2O+6tIP0Hmu/upNBDMJIqo0vffiWQ8Hc3rZamj4iiPGRM0L8Q==
-X-Received: by 2002:a17:906:fe49:b0:73d:70c5:1a52 with SMTP id wz9-20020a170906fe4900b0073d70c51a52mr1637528ejb.469.1665093821971;
-        Thu, 06 Oct 2022 15:03:41 -0700 (PDT)
-Received: from stbsrv-and-01.and.broadcom.net ([192.19.144.250])
-        by smtp.gmail.com with ESMTPSA id f14-20020a17090631ce00b0078246b1360fsm241484ejf.131.2022.10.06.15.03.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 15:03:40 -0700 (PDT)
-From:   Jim Quinlan <jim2101024@gmail.com>
-To:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        bcm-kernel-feedback-list@broadcom.com, jim2101024@gmail.com,
-        james.quinlan@broadcom.com
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v1 4/5] PCI: brcmstb: Functions needlessly specified as "inline"
-Date:   Thu,  6 Oct 2022 18:03:20 -0400
-Message-Id: <20221006220322.33000-5-jim2101024@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221006220322.33000-1-jim2101024@gmail.com>
-References: <20221006220322.33000-1-jim2101024@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        bh=6IJIJqMDGFCohKrd+JKckm0XxXnzTcfpT36QiFBeR1k=;
+        b=34R4LF7iDJtMC8Av1PYB4JXjMIu78eYCfzBI7X6kR7AyBlx7DChJ5CzEtjnhL8Gkow
+         i/q0JyQekMA+eeKhPUe0GzAerrsmaMYG4dKYDMK3O/PURoElgGctR6EJiGicBQZqef/4
+         +WU5kV2iMj82o/NNeFCtWUT8DPIvvskuyvKIx8uvHpSyt6i3BlZlfIDaA+A9ir65ZI6Q
+         aK2h+qnr/h9G/P12lhet8QWxv+DLhi9YSc5Izzhf5mBlGX60d5d5jhkTh0LBHySavDp+
+         OOuaBy25DxQdDLzjr1958DzA9MQHvuLAvqbTrDk23RdsL3A1NZlgshW8KsiGZq0ts2By
+         anKw==
+X-Gm-Message-State: ACrzQf1tcSnEpB13Ll+Sk3ez339KOQdxUolE7ueMXoxGU+yA+2lD+gJY
+        6RHVxkNK+apEm51hZJI8piYo15lf9B43SEXZUnCFHJaknk+1
+X-Google-Smtp-Source: AMsMyM7KLZwAvT/TyGWR3s23yIONUIqRLJBX9fZ6QZxi2gi8K9BnjLAE96clAuT5B8F4fJAnNio39JNRxVmABda5ugAj95A3KOMF
+MIME-Version: 1.0
+X-Received: by 2002:a02:a682:0:b0:34c:14fc:b490 with SMTP id
+ j2-20020a02a682000000b0034c14fcb490mr977406jam.196.1665093801898; Thu, 06 Oct
+ 2022 15:03:21 -0700 (PDT)
+Date:   Thu, 06 Oct 2022 15:03:21 -0700
+In-Reply-To: <12068295.O9o76ZdvQC@mypc>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000947b3a05ea64dc75@google.com>
+Subject: Re: [syzbot] memory leak in __get_metapage
+From:   syzbot <syzbot+389b82b29093b3e2640a@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, fmdefrancesco@gmail.com,
+        ira.weiny@intel.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A number of inline functions are called rarely and/or are not
-time-critical.  Take out the "inline" and let the compiler do its work.
+Hello,
 
-Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
----
- drivers/pci/controller/pcie-brcmstb.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+SYZFATAL: executor failed NUM times: executor NUM: exit status NUM
 
-diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
-index c7210cec1f58..e3045f1eadbc 100644
---- a/drivers/pci/controller/pcie-brcmstb.c
-+++ b/drivers/pci/controller/pcie-brcmstb.c
-@@ -723,7 +723,7 @@ static void __iomem *brcm7425_pcie_map_bus(struct pci_bus *bus,
- 	return base + DATA_ADDR(pcie);
- }
- 
--static inline void brcm_pcie_bridge_sw_init_set_generic(struct brcm_pcie *pcie, u32 val)
-+static void brcm_pcie_bridge_sw_init_set_generic(struct brcm_pcie *pcie, u32 val)
- {
- 	u32 tmp, mask =  RGR1_SW_INIT_1_INIT_GENERIC_MASK;
- 	u32 shift = RGR1_SW_INIT_1_INIT_GENERIC_SHIFT;
-@@ -733,7 +733,7 @@ static inline void brcm_pcie_bridge_sw_init_set_generic(struct brcm_pcie *pcie,
- 	writel(tmp, pcie->base + PCIE_RGR1_SW_INIT_1(pcie));
- }
- 
--static inline void brcm_pcie_bridge_sw_init_set_7278(struct brcm_pcie *pcie, u32 val)
-+static void brcm_pcie_bridge_sw_init_set_7278(struct brcm_pcie *pcie, u32 val)
- {
- 	u32 tmp, mask =  RGR1_SW_INIT_1_INIT_7278_MASK;
- 	u32 shift = RGR1_SW_INIT_1_INIT_7278_SHIFT;
-@@ -743,7 +743,7 @@ static inline void brcm_pcie_bridge_sw_init_set_7278(struct brcm_pcie *pcie, u32
- 	writel(tmp, pcie->base + PCIE_RGR1_SW_INIT_1(pcie));
- }
- 
--static inline void brcm_pcie_perst_set_4908(struct brcm_pcie *pcie, u32 val)
-+static void brcm_pcie_perst_set_4908(struct brcm_pcie *pcie, u32 val)
- {
- 	if (WARN_ONCE(!pcie->perst_reset, "missing PERST# reset controller\n"))
- 		return;
-@@ -754,7 +754,7 @@ static inline void brcm_pcie_perst_set_4908(struct brcm_pcie *pcie, u32 val)
- 		reset_control_deassert(pcie->perst_reset);
- }
- 
--static inline void brcm_pcie_perst_set_7278(struct brcm_pcie *pcie, u32 val)
-+static void brcm_pcie_perst_set_7278(struct brcm_pcie *pcie, u32 val)
- {
- 	u32 tmp;
- 
-@@ -764,7 +764,7 @@ static inline void brcm_pcie_perst_set_7278(struct brcm_pcie *pcie, u32 val)
- 	writel(tmp, pcie->base +  PCIE_MISC_PCIE_CTRL);
- }
- 
--static inline void brcm_pcie_perst_set_generic(struct brcm_pcie *pcie, u32 val)
-+static void brcm_pcie_perst_set_generic(struct brcm_pcie *pcie, u32 val)
- {
- 	u32 tmp;
- 
-@@ -773,7 +773,7 @@ static inline void brcm_pcie_perst_set_generic(struct brcm_pcie *pcie, u32 val)
- 	writel(tmp, pcie->base + PCIE_RGR1_SW_INIT_1(pcie));
- }
- 
--static inline int brcm_pcie_get_rc_bar2_size_and_offset(struct brcm_pcie *pcie,
-+static int brcm_pcie_get_rc_bar2_size_and_offset(struct brcm_pcie *pcie,
- 							u64 *rc_bar2_size,
- 							u64 *rc_bar2_offset)
- {
--- 
-2.17.1
+2022/10/06 22:02:25 SYZFATAL: executor failed 11 times: executor 0: exit status 67
+SYZFAIL: wrong response packet
+ (errno 16: Device or resource busy)
+loop exited with status 67
 
+SYZFAIL: wrong response packet
+ (errno 16: Device or resource busy)
+loop exited with status 67
+
+
+Tested on:
+
+commit:         ffb39098 Merge tag 'linux-kselftest-kunit-6.1-rc1' of ..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=167fffb8880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=10f41fbb818af57a
+dashboard link: https://syzkaller.appspot.com/bug?extid=389b82b29093b3e2640a
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Note: no patches were applied.
