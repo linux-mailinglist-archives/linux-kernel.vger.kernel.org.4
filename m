@@ -2,51 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 787585F6365
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C625F6369
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbiJFJPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 05:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
+        id S231379AbiJFJQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 05:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231390AbiJFJPn (ORCPT
+        with ESMTP id S231363AbiJFJP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 05:15:43 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB4E4C620
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 02:15:39 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 346BB240002;
-        Thu,  6 Oct 2022 09:15:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1665047737;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=APsvoPiMqcgjCyLTp/wGIQOIyM81IZBQevZbMqq+Di8=;
-        b=IQIM17DyCVjN4QeDnWr1ZxFxkJhFQggIouff0aDO/EKaVmhpD0ELpPj1L/dRkNSEOJtrzJ
-        A1U1zEXCTv9nQkQj65UmYWrRj/IxOX1aNGsondJ+NW79i8ItHiqBh/3uEn77zJwrphIms7
-        Xf+yK1jVNA+BQztZI56f7fmqUJFKdkgKRY7yQnpDcsJRNrPM7Hvcwf3pE8yrTkDrwYkC1Q
-        k+lALc+pTtYYjrPsNFDFRkoYy57YVLXMBQaOJ28pxPJlD2KKKQRmhQF+mo7qP7bubh7K/V
-        WttSbm4vEzwCO6iFyVEexQdEZwUixv+hCBL4SjKFIMYnA1FFKm/RK9/wKAfLZw==
-Date:   Thu, 6 Oct 2022 11:15:36 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Deming Wang <wangdeming@inspur.com>
-Cc:     <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mtd: Delete commented printk and add some space for
- required
-Message-ID: <20221006111536.2c285116@xps-13>
-In-Reply-To: <20221006090419.1635-1-wangdeming@inspur.com>
-References: <20221006090419.1635-1-wangdeming@inspur.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Thu, 6 Oct 2022 05:15:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6868C449;
+        Thu,  6 Oct 2022 02:15:55 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8D1C966022F9;
+        Thu,  6 Oct 2022 10:15:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1665047754;
+        bh=5fVE/DrwU8k543ezqYxJj3KgWv2kkl6AOAI2rFqsjAo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=e/dPgR5hRXC9cYBOE61HPI5ZXHPIAHPs7oR/MtClhA0VGY3NUyN7WXK/Ou8KDMr/i
+         ivaG5zxpTVw/4vCb9fSH2xgwHpyz/0i23X7DfDllM3K1KVp4q31BbiKH64bbpbab7J
+         8NKs3HQdr/7LXOE+M1WLU4vlMsPF7PAjrDZ6Qp7EmVOIQqRvDIo15U7DuAEhJZ9jOM
+         wADppJdVCRM2OHAskkBaUkJ3SKKNWTPOm215Ui0eymRq1BoQfWnYrxGxCOdYpWoXFi
+         1cNLKSQxG28DxqKsAczJ9+jdp9JRzUEXle7qe6zCpsX8ALzMqWAuKMg4USaUKQdKc/
+         rWaugsiUK28cg==
+Message-ID: <3430472e-0da3-4e92-7e40-b5b9731db98e@collabora.com>
+Date:   Thu, 6 Oct 2022 11:15:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 10/10] pinctrl: mediatek: Add MT6735 pinctrl driver
+Content-Language: en-US
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Andy Teng <andy.teng@mediatek.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20221005174343.24240-1-y.oudjana@protonmail.com>
+ <20221005174343.24240-11-y.oudjana@protonmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221005174343.24240-11-y.oudjana@protonmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,82 +66,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Deming,
-
-wangdeming@inspur.com wrote on Thu, 6 Oct 2022 05:04:19 -0400:
-
-> Delete commented printk for NFTL_findwriteunit and
->=20
-> NFTL_makefreeblock. Add required space for the variable blockofs
-
-I would rather not delete these comments because they are very old and
-I believe were debugging lines in the past. I hope we will never have
-to dig into this driver anymore but if we have to, I would suggest to
-use debug printk's instead.
-
-Also, if you want to clean up a bit the driver, you can go a little bit
-further and address eg. all whitespace issues.
-
-> Signed-off-by: Deming Wang <wangdeming@inspur.com>
+Il 05/10/22 19:43, Yassine Oudjana ha scritto:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
+> 
+> Add a driver for the MediaTek MT6735 SoC pin controller. This driver
+> also supports the pin controller on MT6735M, which lacks 6 physical
+> pins (198-203) used for MSDC2 on MT6735.
+> 
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 > ---
->  drivers/mtd/nftlcore.c | 9 +--------
->  1 file changed, 1 insertion(+), 8 deletions(-)
->=20
-> diff --git a/drivers/mtd/nftlcore.c b/drivers/mtd/nftlcore.c
-> index 64d319e959b2..e3c17ed4c219 100644
-> --- a/drivers/mtd/nftlcore.c
-> +++ b/drivers/mtd/nftlcore.c
-> @@ -486,7 +486,6 @@ static u16 NFTL_makefreeblock( struct NFTLrecord *nft=
-l , unsigned pendingblock)
-> =20
->  		while (EUN <=3D nftl->lastEUN) {
->  			thislen++;
-> -			//printk("VUC %d reaches len %d with EUN %d\n", chain, thislen, EUN);
->  			EUN =3D nftl->ReplUnitTable[EUN] & 0x7fff;
->  			if (thislen > 0xff00) {
->  				printk("Endless loop in Virtual Chain %d: Unit %x\n",
-> @@ -501,7 +500,6 @@ static u16 NFTL_makefreeblock( struct NFTLrecord *nft=
-l , unsigned pendingblock)
->  		}
-> =20
->  		if (thislen > ChainLength) {
-> -			//printk("New longest chain is %d with length %d\n", chain, thislen);
->  			ChainLength =3D thislen;
->  			LongestChain =3D chain;
->  		}
-> @@ -525,7 +523,7 @@ static inline u16 NFTL_findwriteunit(struct NFTLrecor=
-d *nftl, unsigned block)
->  	u16 thisVUC =3D block / (nftl->EraseSize / 512);
->  	struct mtd_info *mtd =3D nftl->mbd.mtd;
->  	unsigned int writeEUN;
-> -	unsigned long blockofs =3D (block * 512) & (nftl->EraseSize -1);
-> +	unsigned long blockofs =3D (block * 512) & (nftl->EraseSize - 1);
->  	size_t retlen;
->  	int silly, silly2 =3D 3;
->  	struct nftl_oob oob;
-> @@ -592,10 +590,6 @@ static inline u16 NFTL_findwriteunit(struct NFTLreco=
-rd *nftl, unsigned block)
->  			   a chain to make room.
->  			*/
-> =20
-> -			/* First remember the start of this chain */
-> -			//u16 startEUN =3D nftl->EUNtable[thisVUC];
-> -
-> -			//printk("Write to VirtualUnitChain %d, calling makefreeblock()\n", t=
-hisVUC);
->  			writeEUN =3D NFTL_makefreeblock(nftl, BLOCK_NIL);
-> =20
->  			if (writeEUN =3D=3D BLOCK_NIL) {
-> @@ -618,7 +612,6 @@ static inline u16 NFTL_findwriteunit(struct NFTLrecor=
-d *nftl, unsigned block)
->  				printk(KERN_WARNING "Cannot make free space.\n");
->  				return BLOCK_NIL;
->  			}
-> -			//printk("Restarting scan\n");
->  			continue;
->  		}
-> =20
+>   MAINTAINERS                                   |    8 +
+>   drivers/pinctrl/mediatek/Kconfig              |    6 +
+>   drivers/pinctrl/mediatek/Makefile             |    1 +
+>   drivers/pinctrl/mediatek/pinctrl-mt6735.c     |  584 +++
+>   drivers/pinctrl/mediatek/pinctrl-mtk-mt6735.h | 3993 +++++++++++++++++
+>   5 files changed, 4592 insertions(+)
+>   create mode 100644 drivers/pinctrl/mediatek/pinctrl-mt6735.c
+>   create mode 100644 drivers/pinctrl/mediatek/pinctrl-mtk-mt6735.h
+> 
 
+..snip..
+
+> diff --git a/drivers/pinctrl/mediatek/pinctrl-mt6735.c b/drivers/pinctrl/mediatek/pinctrl-mt6735.c
+> new file mode 100644
+> index 000000000000..dd9dad9cb142
+> --- /dev/null
+> +++ b/drivers/pinctrl/mediatek/pinctrl-mt6735.c
+> @@ -0,0 +1,584 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2022 Yassine Oudjana <y.oudjana@protonmail.com>
+> + */
+> +
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +
+> +#include "pinctrl-mtk-mt6735.h"
+> +#include "pinctrl-paris.h"
+> +
+
+..snip..
+
+> +
+> +/* Pin group registers */
+> +#define GPIO_IES	0x000
+> +#define GPIO_SMT	0x010
+> +#define GPIO_TDSEL0	0x020
+> +#define	GPIO_TDSEL1	0x024
+
+This is the only reason why I can't give you a Reviewed-by, and I'm sad about that.
+Please fix that tabulation after #define.
+
+> +#define GPIO_RDSEL0	0x028
+> +#define GPIO_RDSEL1	0x02c
+> +#define GPIO_PULLEN0	0x030
+> +#define GPIO_PULLEN1	0x040
+> +#define GPIO_PULLSEL0	0x050
+> +#define GPIO_PULLSEL1	0x060
+> +#define	GPIO_DRV0	0x070
+> +#define	GPIO_DRV1	0x074
+
+...and same here.
+
+> +#define GPIO_PUPD0	0x080
+> +#define GPIO_PUPD1	0x090
+> +
 
 Thanks,
-Miqu=C3=A8l
+Angelo
