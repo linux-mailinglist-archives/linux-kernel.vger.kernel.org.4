@@ -2,124 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D068C5F6647
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB91A5F664A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 14:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiJFMlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 08:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50466 "EHLO
+        id S229796AbiJFMn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 08:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbiJFMls (ORCPT
+        with ESMTP id S229454AbiJFMnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 08:41:48 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2879B8F950;
-        Thu,  6 Oct 2022 05:41:48 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 99075320090D;
-        Thu,  6 Oct 2022 08:41:45 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Thu, 06 Oct 2022 08:41:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1665060105; x=
-        1665146505; bh=WjfN3TnG3qyIp+b77nmfwa/0mGwvYTAgTe3PiH8ciEE=; b=W
-        cl/t60RHccMRbIHxNtZppCSGv+KOGIG8iyciTRiIkmxlKm/MZBBKvbwiAnpxaD8T
-        BwL//MpPzgRNUqF6OJY2t+baiVRpJtI+o/bSz+Il9b+RjJ1CZxQFZ8vSjg+YxUG+
-        MqJ+2PeL8zO4ukHP/NwRBww7XIypeJ5yh4anM0wCFdI/0SyYfUPlzkDqVBLtHk9p
-        iVGmZLsULN7JTDF4EAdRzprGOm6nInRsIhN18gVLnm668myEORgmwkbzqOloHy9m
-        xUHvVSnXxPAK5hdPgAYmzw4pZ8Jn4lIg0WVEAQplL9Ot5a3B1QmGs53uSP9ga7ZL
-        6q6kvnoKOek0NAw1EiyJQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1665060105; x=1665146505; bh=WjfN3TnG3qyIp
-        +b77nmfwa/0mGwvYTAgTe3PiH8ciEE=; b=BFZYF9gXLkSbDZHyxHzhBjPsY0R0t
-        WHiUm2vlPDiOXSkd8tuR/ov0+L3wREOdmJSgXTwxBBYeBlQfeQM70z46pfJvP1+A
-        sYnhMWMG4lgmrCevaW5n/7Q3v/2MSDPOSZ44tMC5eymjFPcdFNLdYFe/oKq89Ie3
-        Ir7tqxFfCIR8jLPin5rvtpjtOTOIGqB1A51DacMV+pWzE08SzeRp36z/REhWf1PN
-        2Op5dYFPm+Xc3wv6eamrpVSZMv0rEIDI6wUtWib1F9BLjcq9oogZuD6wuaiMZrfb
-        WULL9CLod1fyHtnG/vIsKnLAyQtAcbCb2rfLsAIKMrbFSVGWpEdSCrdDw==
-X-ME-Sender: <xms:B80-Yz230Gol5ZsN305g5vda9sgmTF2Jj7QFTSDK65QixInnufiJFQ>
-    <xme:B80-YyHvsBkXgIGh7cDi_pts6YaarCeEcRITfE__hFxGDVpjliOko0Xl770y6g7pd
-    M1HgUqV-GTlNU2HAws>
-X-ME-Received: <xmr:B80-Yz7P-e51cRaEyPWZrILIqpQo037ZLsvj-xuik-3lM82VUaif0EhceVt2QXBozevoKvw6IXi6-0OfWascDEdeqlndwLLCRCAW>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeihedgheehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkrhhfgggtuggjfgesthdtredttderjeenucfhrhhomhepuegv
-    nhcuuehovggtkhgvlhcuoehmvgessggvnhgsohgvtghkvghlrdhnvghtqeenucggtffrrg
-    htthgvrhhnpeduteehgfefudfffeelfffhheejgfdvfffhledvueekudeuieegueejieff
-    vdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmvgessggvnhgsohgvtghkvghlrdhnvght
-X-ME-Proxy: <xmx:B80-Y41dmkadIYs_oMXZBoivvasthp8GFDy7FLiyBnqh6UwRVwQHkw>
-    <xmx:B80-Y2FHBoC3JsDIF1p0ZZDqV6GUEHo8pEzpaskN82DrQU3lx7BebA>
-    <xmx:B80-Y58mIJNlaASd6QTkImhS3Am2DRugin2253QiW4ajPqDMvKSaIw>
-    <xmx:Cc0-Y5bv-TC9YXZspjWrC4mBc0i-uNmb0ESAeNCEF9nXSdj7Hbv4tg>
-Feedback-ID: iffc1478b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 6 Oct 2022 08:41:43 -0400 (EDT)
-Date:   Thu, 6 Oct 2022 08:42:32 -0400
-From:   Ben Boeckel <me@benboeckel.net>
-To:     Pankaj Gupta <pankaj.gupta@nxp.com>
-Cc:     jarkko@kernel.org, a.fatoum@pengutronix.de, gilad@benyossef.com,
-        Jason@zx2c4.com, jejb@linux.ibm.com, zohar@linux.ibm.com,
-        dhowells@redhat.com, sumit.garg@linaro.org, david@sigma-star.at,
-        michael@walle.cc, john.ernberg@actia.se, jmorris@namei.org,
-        serge@hallyn.com, herbert@gondor.apana.org.au, davem@davemloft.net,
-        j.luebbe@pengutronix.de, ebiggers@kernel.org, richard@nod.at,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, sahil.malhotra@nxp.com,
-        kshitiz.varshney@nxp.com, horia.geanta@nxp.com, V.Sethi@nxp.com
-Subject: Re: [PATCH v0 6/8] KEYS: trusted: caam based black key
-Message-ID: <Yz7NOB1vePLE4yoB@megas.dev.benboeckel.internal>
-Reply-To: list.lkml.keyrings@me.benboeckel.net
-References: <20221006130837.17587-1-pankaj.gupta@nxp.com>
- <20221006130837.17587-7-pankaj.gupta@nxp.com>
+        Thu, 6 Oct 2022 08:43:55 -0400
+X-Greylist: delayed 335 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Oct 2022 05:43:53 PDT
+Received: from domac.alu.hr (domac.alu.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760609C7D6
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 05:43:53 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 179676050B;
+        Thu,  6 Oct 2022 14:43:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1665060232; bh=fs7KHqmHeiIFNPlBoUMGVosi8XckqJHSIRXbXj7UE1M=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=xXPczsMcdXAyu7phZOu3AUY4kgUkF41Ku/3EJjNQbYQZLn4ti0Mibiz9Uk07jfgpc
+         kcpizeSPRaPjT31cwWlC4/JDWMyG/LUOJ8IBUI+VCGxmzXJx8/J5Xbn796utMe5Lyn
+         1X6ewjG/6fh2JWcx88UQq8rO7lCoYJopdSmP0RByusqmu5Tkl8ijYEUmjKTeDpIry6
+         TLNdO3wbHplLqgbD2lc27Rz20C6sty1LnjISGAB6dHr1Is7DjJhntCOyJiQCYL2TzP
+         a5lQLsJoeYM5d8g5zI508PuD+7q7+kw4pGe2ECmfMMflXh+q2oJlBaJl/+uqHl4OB/
+         x9yLwucfikKMQ==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id UUOdgQTbOGBq; Thu,  6 Oct 2022 14:43:49 +0200 (CEST)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id CEC48604F9;
+        Thu,  6 Oct 2022 14:43:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1665060229; bh=fs7KHqmHeiIFNPlBoUMGVosi8XckqJHSIRXbXj7UE1M=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ArTIOVtsOQGQ70PV5r90W0IsFZ27Yx/mqJ1omK4iOs6yvaUXp6blawZfrk1TkaKc/
+         DeQCmiJ4AsLfD5l3/ALXzKozpLGFGF7U74Ruyu8CMOzRkTyqs77m1n5e6bNHXCaYmT
+         XUjUxjFjozN0Mg50HaFWhSBBGNGY0Ul2J8dj5sFsg4CGdVOluGxVUgS3MkviI65vZ8
+         1p0RYJdnUWp2OkB/c2qcXMLdwgyzrr88GYhaFR7+pywA/zfXcZXhJaYyt/yAl1Vy+G
+         PuDWDJbPb5oQEUxE8SZmeBVXCbunSRCA7ipfoMm7rYwMHVIiawhAkTCyZKm7qn4o8y
+         OWv/NDMGO9VcQ==
+Message-ID: <bdab45d3-c893-42ff-dbb9-5fa93d0dff55@alu.unizg.hr>
+Date:   Thu, 6 Oct 2022 14:43:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221006130837.17587-7-pankaj.gupta@nxp.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: 6.0.0-RC kernels trigger Firefox snap bug with 6.0.0-rc3 through
+ 6.0.0-rc7
+Content-Language: en-US
+To:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        linux-kernel@vger.kernel.org
+Cc:     Marc Miltenberger <marcmiltenberger@gmail.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <b0c258c3-6dcf-aade-efc4-d62a8b3a1ce2@alu.unizg.hr>
+ <5bb75cbc-a0db-537b-12d0-889230c865d8@leemhuis.info>
+ <0fb2a9ff-df76-8af9-e54a-c2dc6bfd9478@leemhuis.info>
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <0fb2a9ff-df76-8af9-e54a-c2dc6bfd9478@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 18:38:35 +0530, Pankaj Gupta wrote:
-> - CAAM supports two types of black keys:
->   -- Plain key encrypted with ECB
->   -- Plain key encrypted with CCM
+On 10/6/22 14:25, Thorsten Leemhuis wrote:
 
-What is a "black key"? Is this described in the documentation or local
-comments at all? (I know I'm unfamiliar with CAAM, but maybe this should
-be mentioned somewhere?).
+> One more question:
+>
+> On 06.10.22 14:00, Thorsten Leemhuis wrote:
+> Were those two vanilla kernels? I asked in #snappy on IRC and was told
+> that "snapd simply expects some ubuntu bit in patched into the kernel if
+> it detects that it runs on an official ubuntu install...". This was also
+> suggested "it probably makes sense to file a but in LP to make the
+> kernel team aware".
+>
+> Ciao, Thorsten
+Yes, last time I tried it with git clone from linux_stable on kernel.org and
+config-6.0.0-060000-generic from the official Ubuntu mainline build from 
+the repo.
+No changes to .config. (I have deliberately excluded KMEMLEAK and KASAN to
+eliminate those.)
 
->   Note: Due to robustness, default encytption used for black key is CCM.
-                                     ^^^^^^^^^^ encryption
+My build with Ubuntu config showed the tab crash|Verneed record problem,
+while Ubuntu original 6.0.0 is still testing. I will know more when I 
+come home.
 
-What "robustness"? Surely there's some more technical details involved
-here?
+Have a nice day,
+mt
 
-> - A black key blob is generated, and added to trusted key payload.
->   This is done as part of sealing operation, that was triggered as a result of:
->   -- new key generation
->   -- load key,
+-- 
 
-It seems that "black keys" are what the uapi calls "hw". I think this
-should be mentioned in the commit message (and CAAM docs).
+Mirsad Goran Todorovac
+CARNet sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+-- 
+CARNet system engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+tel. +385 (0)1 3711 451
+mob. +385 91 57 88 355
 
-What do other keytypes do if `hw` is requested and it's not possible
-(say, `big_key`)?
-
-Thanks,
-
---Ben
