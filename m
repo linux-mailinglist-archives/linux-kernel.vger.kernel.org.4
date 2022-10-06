@@ -2,181 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B145F6DE4
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 21:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA2A5F6E2F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 21:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231852AbiJFTFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 15:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44514 "EHLO
+        id S231671AbiJFT0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 15:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232730AbiJFTEB (ORCPT
+        with ESMTP id S231631AbiJFT0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 15:04:01 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CBD101E5
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 12:03:02 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id m3so4119194eda.12
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 12:03:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=L4HFerM9Fp6en0oU9MHoqVEv3dK/9bv13dNE/Vzs2Nw=;
-        b=hnFRMZCecA0/DdOE3N3vt5Tg04G7wJcDtSFXvn7CynJT0qJA7rWHA4mhN/IdgqZZI0
-         FKx4Ooe9b/dzsvmPoAhiGGMHkqTLlMkJvKdd0hBlJmLnIn9P6wDB/mJT4VOvbBbknw/k
-         pUm6S3MIJXApFac/eNitxbv38UPRFn/fAbHnUXtmWQJ1j+45PvLrFR4Rg9+1jQXXKpRc
-         vNNAjOvtINdg1BjzohKbw65veISD1mnjwbzrj28fv4/rX+HioiutFtXTs/o9NIEh/QJ2
-         3EJhS9wHe79+XlcLqhBhFjP4pH4Leoi31kbvz8ie1VAJeiXiQDb8tfRgAqvJ2vpVNcEp
-         FPHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=L4HFerM9Fp6en0oU9MHoqVEv3dK/9bv13dNE/Vzs2Nw=;
-        b=mZBQVtQSnsej6YTG1/bpwaVp5NO8jM8Rnd/nNm5v+4dXZf3BujrFYih82u8cD4CpSl
-         suRE935ADFubqZsYPdpobjOWGwmrsvoNv7YBGBEqfo4Du7TKNe4hICbOe0QZNxFcFQmE
-         gagr1vr3ohInBlJoTi8rUOl4LzhqX5BsHMQVFK1M8BDfkuTQ9g6jKg4pYahBSk58aBln
-         +LdWAsMuyHQ204hZphNuqzTz+qGs9S/dC68PajLhAOZbSZ0i9tLfIWK9AHGbrdnJ0CZv
-         lPl+YYArsdOFHct7WoygLKkyeNRF1HggZPt8Taaub/i1Zy4+oy8CLYTz9aLi1Pavnnod
-         rh2Q==
-X-Gm-Message-State: ACrzQf2/2fpeSA8uJOK7v85JlOWZMg5prSpSdD5zfW5d6AbUrLDkF9PL
-        ZV4eV3/tXBktJD/H4AYX3yWTXTyaj8RH4T50Jwn+BbYHZqzCAQ==
-X-Google-Smtp-Source: AMsMyM44Iobg6Noxy+SAyuWqHpJB3WjXv+l4qAWc0Z9Va82X4DIQn1eK4PLyJrlWXX6gGRxFL6zOpJEzJxy/nc4oRzo=
-X-Received: by 2002:a05:6402:1555:b0:458:ed89:24e9 with SMTP id
- p21-20020a056402155500b00458ed8924e9mr1216787edx.55.1665082980642; Thu, 06
- Oct 2022 12:03:00 -0700 (PDT)
+        Thu, 6 Oct 2022 15:26:20 -0400
+X-Greylist: delayed 1186 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Oct 2022 12:26:12 PDT
+Received: from syslogsrv (unknown [217.20.186.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE029E6AD;
+        Thu,  6 Oct 2022 12:26:12 -0700 (PDT)
+Received: from fg200.ow.s ([172.20.254.44] helo=localhost.localdomain)
+        by syslogsrv with esmtp (Exim 4.90_1)
+        (envelope-from <maksym.glubokiy@plvision.eu>)
+        id 1ogWAN-0004O0-OZ; Thu, 06 Oct 2022 22:04:19 +0300
+From:   Maksym Glubokiy <maksym.glubokiy@plvision.eu>
+To:     Taras Chornyi <tchornyi@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Volodymyr Mytnyk <vmytnyk@marvell.com>,
+        Serhiy Boiko <serhiy.boiko@plvision.eu>,
+        Vadym Kochan <vkochan@marvell.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Maksym Glubokiy <maksym.glubokiy@plvision.eu>
+Subject: [PATCH net] prestera: matchall: do not rollback if rule exists
+Date:   Thu,  6 Oct 2022 22:04:09 +0300
+Message-Id: <20221006190409.881219-1-maksym.glubokiy@plvision.eu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221005113210.255710920@linuxfoundation.org>
-In-Reply-To: <20221005113210.255710920@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 7 Oct 2022 00:32:47 +0530
-Message-ID: <CA+G9fYseK+Or9B5NPU1DP=FOa09Ko0ApdAs1DsHxm8hbqTcKJg@mail.gmail.com>
-Subject: Re: [PATCH 5.4 00/51] 5.4.217-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net,
-        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FSL_HELO_NON_FQDN_1,
+        HELO_NO_DOMAIN,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Oct 2022 at 17:03, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.4.217 release.
-> There are 51 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 07 Oct 2022 11:31:56 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.217-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+From: Serhiy Boiko <serhiy.boiko@plvision.eu>
 
+If you try to create a 'mirror' ACL rule on a port that already has a
+mirror rule, prestera_span_rule_add() will fail with EEXIST error.
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+This forces rollback procedure which destroys existing mirror rule on
+hardware leaving it visible in linux.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Add an explicit check for EEXIST to prevent the deletion of the existing
+rule but keep user seeing error message:
 
-NOTE:
-Daniel already reported build warnings on x86.
+  $ tc filter add dev sw1p1 ... skip_sw action mirred egress mirror dev sw1p2
+  $ tc filter add dev sw1p1 ... skip_sw action mirred egress mirror dev sw1p3
+  RTNETLINK answers: File exists
+  We have an error talking to the kernel
 
-## Build
-* kernel: 5.4.217-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.4.y
-* git commit: 6376bfa24632084363dcc5cd0cc8c5a1fdd4a721
-* git describe: v5.4.215-83-g6376bfa24632
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.215-83-g6376bfa24632
+Fixes: 13defa275eef ("net: marvell: prestera: Add matchall support")
+Signed-off-by: Serhiy Boiko <serhiy.boiko@plvision.eu>
+Signed-off-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
+---
+ drivers/net/ethernet/marvell/prestera/prestera_matchall.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-## No Test Regressions (compared to v5.4.215-31-gd69f2dcfc489)
+diff --git a/drivers/net/ethernet/marvell/prestera/prestera_matchall.c b/drivers/net/ethernet/marvell/prestera/prestera_matchall.c
+index 6f2b95a5263e..1da9c1bc1ee9 100644
+--- a/drivers/net/ethernet/marvell/prestera/prestera_matchall.c
++++ b/drivers/net/ethernet/marvell/prestera/prestera_matchall.c
+@@ -96,6 +96,8 @@ int prestera_mall_replace(struct prestera_flow_block *block,
+ 
+ 	list_for_each_entry(binding, &block->binding_list, list) {
+ 		err = prestera_span_rule_add(binding, port, block->ingress);
++		if (err == -EEXIST)
++			return err;
+ 		if (err)
+ 			goto rollback;
+ 	}
+-- 
+2.25.1
 
-## No Metric Regressions (compared to v5.4.215-31-gd69f2dcfc489)
-
-## No Test Fixes (compared to v5.4.215-31-gd69f2dcfc489)
-
-## No Metric Fixes (compared to v5.4.215-31-gd69f2dcfc489)
-
-## Test result summary
-total: 95584, pass: 83145, fail: 750, skip: 11283, xfail: 406
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 329 total, 327 passed, 2 failed
-* arm64: 60 total, 55 passed, 5 failed
-* i386: 31 total, 29 passed, 2 failed
-* mips: 56 total, 53 passed, 3 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 61 total, 57 passed, 4 failed
-* riscv: 27 total, 26 passed, 1 failed
-* s390: 15 total, 15 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 57 total, 55 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
