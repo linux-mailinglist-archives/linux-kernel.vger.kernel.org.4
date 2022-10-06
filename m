@@ -2,182 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2E35F64D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 13:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4C375F6549
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 13:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbiJFLI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 07:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33558 "EHLO
+        id S229947AbiJFLhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 07:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbiJFLIZ (ORCPT
+        with ESMTP id S229636AbiJFLhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 07:08:25 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDD19B862
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 04:08:23 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id t4so792988wmj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 04:08:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CbeeFZ+x3aHj+XaOJLuyuhdGWHomvDtrnGAOISq7ELg=;
-        b=Ck8AReTJ9PME9fyJ5bXtOD/KlktSnDb4/OtXx1sJS7huduv7GfLAMWSXKqcIN17UF3
-         R7/9ZR5n+M7+mdAm6920py5T4bhkLTORzDBj9I6CIxG5KCWswu7G7S1x119Bj+UzzPJl
-         9jnWMDHTL3WMjbMDNwEFczA8NZPaJ2FObPXXb6h8xz8DBDDSIUXoPRwhWsJQ3HG5VgWm
-         Avb9Kj4Ip+Jjb2+EbMMGAovxT+wEkgjSWxnw/wkEO5QwGvHYPdg3BTs3tl//OaryYvFo
-         C9iHLk5rpOlH14SYUmLC0aIORmgGLquwwfnn96p5hI+L54qSvraQLI3PeV3Eq5PVcqwj
-         U15Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CbeeFZ+x3aHj+XaOJLuyuhdGWHomvDtrnGAOISq7ELg=;
-        b=P6OzZpmIP5hmqxEaIR8gDxqmiQj7NzATq9hTdllLkarlHwSIUZHelAT3cYWY5a7XSe
-         eEqv9h6NyowGDlRRcCcnS4KsyV5IYeRqpTiNHnreLQmNlLm8qK8F2nPAJdMG6mHZEaFu
-         cUq/17HLjgGSFH2y9LJP1xeRgjsN9ywAnk8iqccb+lTvv8MtjgiZj4LSDr6pa7KI9DV9
-         vJPwLkIosC8sELECZoGVBWEnvxWd0lM+x18sIBSIHz+hdeMuseEYPThrPwVOJmdKWoUf
-         AqzObpjU2iYZP2+uuVPUY1nOpJIyPX9kb1IbWZjFI8KFu2Ui3k2LNR2mLt9LenW3PHlO
-         8x7A==
-X-Gm-Message-State: ACrzQf2sXXKp7WsmYKg+Nds0LFO22rr9YmvLjrFufDuOO62yJVK6xoZF
-        +FyXwMlK4SnJJXm/43ZnZw0jlQ==
-X-Google-Smtp-Source: AMsMyM476u1+t4iuw4iTs7clnDHL2LOAoA/r6b7hlBpiXlWfhv4Cgr5efpX+4UWm4OsdqnRY4ViAxQ==
-X-Received: by 2002:a05:600c:524b:b0:3b4:8c0c:f3b6 with SMTP id fc11-20020a05600c524b00b003b48c0cf3b6mr6717571wmb.50.1665054501394;
-        Thu, 06 Oct 2022 04:08:21 -0700 (PDT)
-Received: from [192.168.0.20] (210.145.15.109.rev.sfr.net. [109.15.145.210])
-        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0a5500b003b4e009deb2sm5928180wmq.41.2022.10.06.04.08.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Oct 2022 04:08:20 -0700 (PDT)
-Message-ID: <cdebdf53-d691-41b6-bb8e-f66bb6f56e56@baylibre.com>
-Date:   Thu, 6 Oct 2022 13:08:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v3] arm64: dts: mediatek: mt8183: disable thermal zones
- without trips.
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221004101130.17256-1-aouledameur@baylibre.com>
- <17f3fd40-70c1-2e8d-8002-dfe9690aed88@linaro.org>
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-In-Reply-To: <17f3fd40-70c1-2e8d-8002-dfe9690aed88@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        Thu, 6 Oct 2022 07:37:13 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D475282D;
+        Thu,  6 Oct 2022 04:37:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
+         references;
+        bh=GIY3bZi9HVXnvzyS5oqZMEDPucc/o9GlOvOqUP5eDF4=;
+        b=ZgCCrz5AG8mTIuEGbaaSfXnrU6UKmmZa93dVuv7dmjF3czqQjtw9djJdHHKCogw4Sv1UOIGYQuezr
+         tSGxwTaUJb/XYaOka8Me3wb3btZ24S0li7dbjWVi9ZUrWX7H/1oLNraI6mlwP01l+lh43NOJlt+e0F
+         KWDZHROHatUGXDWyjAeIi+OkfjJstCH+uqPMlzfMA2PCSnltYd2WmwO3uqxDRM9oflMFbGSb+GN+aG
+         Eu2nk99KfOg13WsjdM+zs2ycpfUmxGDz7GoemcrLAP9N9jkH8fzomMFg9BuPx2+1A4KSKtaWJ5t4r8
+         5ED4p9+AYctkiiTazPHKe54uotyLS4Q==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.4.1445, Stamp: 3], Multi: [Enabled, t: (0.000008,0.010061)], BW: [Enabled, t: (0.000015,0.000001)], RTDA: [Enabled, t: (0.084681), Hit: No, Details: v2.42.0; Id: 15.52k1ra.1gemhbbfc.5bcm; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from x260 ([92.100.86.33])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Thu, 6 Oct 2022 14:37:00 +0300
+Date:   Thu, 6 Oct 2022 14:09:04 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, dg@emlix.com, j.zink@pengutronix.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, system@metrotek.ru,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH v14 1/2] fpga: lattice-sysconfig-spi: add Lattice
+ sysCONFIG FPGA manager
+Message-ID: <20221006110904.mj4wrcotmakfih6z@x260>
+References: <20221006074449.24082-1-i.bornyakov@metrotek.ru>
+ <20221006074449.24082-2-i.bornyakov@metrotek.ru>
+ <20221006081801.xqnnvn6k7rmjokvt@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221006081801.xqnnvn6k7rmjokvt@pengutronix.de>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On Thu, Oct 06, 2022 at 10:18:01AM +0200, Marc Kleine-Budde wrote:
+> On 06.10.2022 10:44:48, Ivan Bornyakov wrote:
+> > Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+> > slave SPI sysCONFIG interface.
+> > 
+> > sysCONFIG interface core functionality is separate from both ECP5 and
+> > SPI specifics, so support for other FPGAs with different port types can
+> > be added in the future.
+> > 
+> > Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> > ---
+> 
+> [...]
+> 
+> > +static int sysconfig_spi_bitstream_burst_init(struct sysconfig_priv *priv)
+> > +{
+> > +	const u8 lsc_bitstream_burst[] = SYSCONFIG_LSC_BITSTREAM_BURST;
+> 
+> I think you're not allowed to use stack memory for SPI transfers. Better
+> clarify this with the SPI people.
+> 
 
-Thank you for your feedback.
+You are right. Documentation/spi/spi-summary.rst says:
 
-On 10/4/22 12:47, Daniel Lezcano wrote:
->
-> Hi Amjad,
->
-> On 04/10/2022 12:11, Amjad Ouled-Ameur wrote:
->> Thermal zones without trip point are not registered by thermal core.
->>
->> tzts1 ~ tzts6 zones of mt8183 were intially introduced for test-purpose
->> only.
->>
->> Disable the zones above and keep only cpu_thermal enabled.
->
-> It does not make sense to disable the thermal zones. Either the thermal zones are needed or they are not. Keeping them for debug purpose is not desired.
-As Matthias Brugger mentioned in previous versions, DTS should describe the HW as it is, the sensors are in the HW.
->
-> Alternatively to removal, you can:
->
->  - remove 'sustainable-power'
->  - add a passive trip point, optionally a hot trip point and a critical trip point
+  - Follow standard kernel rules, and provide DMA-safe buffers in
+    your messages.
 
-Why removing "sustainable-power" instead of simply disabling the device ? Especially that, if a user needs to use the sensor
+Thanks for pointing out.
 
-in the future, they might not be able to find the right sustainable-power ; thus I think it should remain the way it is.
+> > +	struct spi_device *spi = to_spi_device(priv->dev);
+> > +	struct spi_transfer xfer = {
+> > +		.tx_buf = lsc_bitstream_burst,
+> > +		.len = sizeof(lsc_bitstream_burst),
+> > +		.cs_change = 1,
+> > +	};
+> > +	struct spi_message msg;
+> > +	int ret;
+> > +
+> > +	spi_message_init_with_transfers(&msg, &xfer, 1);
+> > +
+> > +	/*
+> > +	 * Lock SPI bus for exclusive usage until FPGA programming is done.
+> > +	 * SPI bus will be released in sysconfig_spi_bitstream_burst_complete().
+> > +	 */
+> > +	spi_bus_lock(spi->controller);
+> > +
+> > +	ret = spi_sync_locked(spi, &msg);
+> > +	if (ret)
+> > +		spi_bus_unlock(spi->controller);
+> > +
+> > +	return ret;
+> > +}
+> 
+> regards,
+> Marc
+> 
+> -- 
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-As to adding tripping points, MediaTek does not have ones to add for now for those sensors.
 
 
-Regards,
-
-Amjad
-
->
-> The passive trip point will allow the userspace to set a value in order to get notified about the devices temperature (writable trip point). The hot temperature will send a notification to userspace so it can take a last chance decision to drop the temperature before the critical temperature.
->
-> The passive trip point temperature could be a high temperature.
->
-> The mitigation is also managed from userspace as a whole.
->
->
->> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
->> ---
->>   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
->> index 9d32871973a2..53f7a0fbaa88 100644
->> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
->> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
->> @@ -1191,6 +1191,7 @@ tzts1: tzts1 {
->>                   polling-delay = <0>;
->>                   thermal-sensors = <&thermal 1>;
->>                   sustainable-power = <5000>;
->> +                status = "disabled";
->>                   trips {};
->>                   cooling-maps {};
->>               };
->> @@ -1200,6 +1201,7 @@ tzts2: tzts2 {
->>                   polling-delay = <0>;
->>                   thermal-sensors = <&thermal 2>;
->>                   sustainable-power = <5000>;
->> +                status = "disabled";
->>                   trips {};
->>                   cooling-maps {};
->>               };
->> @@ -1209,6 +1211,7 @@ tzts3: tzts3 {
->>                   polling-delay = <0>;
->>                   thermal-sensors = <&thermal 3>;
->>                   sustainable-power = <5000>;
->> +                status = "disabled";
->>                   trips {};
->>                   cooling-maps {};
->>               };
->> @@ -1218,6 +1221,7 @@ tzts4: tzts4 {
->>                   polling-delay = <0>;
->>                   thermal-sensors = <&thermal 4>;
->>                   sustainable-power = <5000>;
->> +                status = "disabled";
->>                   trips {};
->>                   cooling-maps {};
->>               };
->> @@ -1227,6 +1231,7 @@ tzts5: tzts5 {
->>                   polling-delay = <0>;
->>                   thermal-sensors = <&thermal 5>;
->>                   sustainable-power = <5000>;
->> +                status = "disabled";
->>                   trips {};
->>                   cooling-maps {};
->>               };
->> @@ -1236,6 +1241,7 @@ tztsABB: tztsABB {
->>                   polling-delay = <0>;
->>                   thermal-sensors = <&thermal 6>;
->>                   sustainable-power = <5000>;
->> +                status = "disabled";
->>                   trips {};
->>                   cooling-maps {};
->>               };
->
->
