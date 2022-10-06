@@ -2,98 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198CA5F6463
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 12:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAFDE5F646D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 12:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbiJFKj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 06:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
+        id S231259AbiJFKlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 06:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiJFKjZ (ORCPT
+        with ESMTP id S230144AbiJFKlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 06:39:25 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B891E97D45
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 03:39:24 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id qw20so2959685ejc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 03:39:24 -0700 (PDT)
+        Thu, 6 Oct 2022 06:41:11 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF13028E39
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 03:41:09 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id bu25so2096670lfb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 03:41:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:subject
-         :references:to:user-agent:mime-version:date:message-id:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=qy1SQssJgpmu6E/3UJtpV1dla+gXgwxJp38uBeeurqk=;
-        b=llzS4465S8Cem8lOqSeBQkABDbMKrFD7zBtRuJVELtLKveS34ajuEU+IYb6hnvGl0o
-         DzbYQdsfex41ei1f4ayMOiuALXLbqRhdQHRohUfB8QBumL64b3bfHczuzwIms2UUGlMr
-         4cDwLSUgOeXdez2bKhkyff9pM9T3WIhcwUZLFf/xo+l0YtrY51WqSLMznfXnL4wmx1JD
-         WrbZA6RGw5azBKgkGblOlnHc9GXxErpFMCrfPdfX3xFawpqnRnRvIYeI790cvqpBRt38
-         Mwq9idaofzDjng0TN/MGF5lxrfaUF1suQHl6s0/EJ1wHw4ThUa2AYAc1Tb4OfXWhT3kk
-         KbPw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=naxtmjyipBAu9ix1sQH7QzZjfA9PG1FIif/h0w3MNtQ=;
+        b=lGuGq+qIEfwhEaZyb+pI3oRNQkPTJxSals8c3ok4XzQkKYjoH3cPjrsyH9n1Xf1Y4b
+         oby1ETF6vjU0lo4XdsdZlucNkKyqSx5TvJ5IwkNOMFdWoycTSW/tBt/90C3qyzC3CfMS
+         siJrJK1hPjbkVsIHCNZJye6NA/+DVAwPpeXbNoV5xzJ1I1YnHnsFVVa9uyk8+baIBVq5
+         L1ReH/DXTBdCXCmqYoohn7jPUA0YGmAz1BzgiEZneUBRZyZZQTJsT1yL/456Lb2PCe2v
+         m549jak0SJEDEMumokwNIONLfCFBL1HqLbxyuvNk84RjUfMCg5RgPU1SRQIg+HiBdHUb
+         CFTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:subject
-         :references:to:user-agent:mime-version:date:message-id:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qy1SQssJgpmu6E/3UJtpV1dla+gXgwxJp38uBeeurqk=;
-        b=gIHTDpOezMAqmMeDqwKf86iSl3d6DTmi++vhNIaIeeIEaSAMfQXmYIEcL0LOLWw4vL
-         h2p440/OCNeM7Ps8w13rCDS5x+nnZ+eRX03O7U0kCVEDDeEV5vKvTtoESB30guVyyJ/U
-         /UllKvnvmkfDCv2sXvkDGUSGbiArvhx9bklVnd8fGI8PUlziA+P5IK6YiNmfoCBEMcoc
-         NvmfRivzPAk982z+Gpvg5s0tnVkgwWPzSk4NrIY+LH6KIouaOwnWCkZQ5H5RiLgJlvhV
-         HeFRlpRpwSwXy7KHHcMUSUUWNqxPzn8tnr1Pj4+qgP1/1ZVHovbSOZrRZ3GpKrkAyel6
-         0+kQ==
-X-Gm-Message-State: ACrzQf0a7H06OhTlmhTNUWPg+TgdOE6c5z9lAKyMo7oCQW/9X2NTyrME
-        x1RisUETLr7a1h/e7meTEPaCXVSwORCUAQ==
-X-Google-Smtp-Source: AMsMyM5U4gE2PlJNKLval+O+B6AJriV+SC7F1EoT81ovBnjt0TIXsf5/ssSowfZWO8bMAcd3cYpF0A==
-X-Received: by 2002:a17:907:c05:b0:73d:6e0a:8d22 with SMTP id ga5-20020a1709070c0500b0073d6e0a8d22mr3444804ejc.646.1665052763265;
-        Thu, 06 Oct 2022 03:39:23 -0700 (PDT)
-Received: from ?IPV6:2001:9e8:27fc:4b00:6362:cb9b:f9b:6c46? ([2001:9e8:27fc:4b00:6362:cb9b:f9b:6c46])
-        by smtp.gmail.com with ESMTPSA id o25-20020a170906769900b007829fb46a0esm10225598ejm.142.2022.10.06.03.39.22
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Oct 2022 03:39:22 -0700 (PDT)
-From:   Marc Miltenberger <marcmiltenberger@gmail.com>
-X-Google-Original-From: Marc Miltenberger <MarcMiltenberger@gmail.com>
-Message-ID: <4c45d359-3e58-05ec-0a40-1ebcf2283af2@gmail.com>
-Date:   Thu, 6 Oct 2022 12:39:22 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=naxtmjyipBAu9ix1sQH7QzZjfA9PG1FIif/h0w3MNtQ=;
+        b=H9T8BaubCIkDuFUdtYMI89XrYaPh2Q4aZZwfSUS7eGMZDrQkrDDwSPJrWS4vZwoPeJ
+         dpWxDLdYZujRu4xJs3dgeBGEuDqhYcBMA7NSX8I6lmDMGJk0uCzmBHkeWKyEW7CjmQIp
+         PUmbW7x7qINvtk24oU9Enj3CN1IBuDNIk2oRMd96nGJk49MNH1wf+LkMmzVnJkPYL/9l
+         Kjtlfk2EKmaT+oXH2UMCEijDBbpvQMzbSa3nCdkKKx4qlVeDfGqHneLZhEiTfhK4JFEP
+         cWQVvBiZGPNtzWsE6NWaC75qnfzyX3OtgKurfJk888nNvfsMoHTRGqWK7k8X7LTWaJkH
+         NqWw==
+X-Gm-Message-State: ACrzQf0Riev7crKj83sC2Q4ZCP4JT2zhgZ2XAoC4mRqzml7d1fjSmMjo
+        gaBtpV5sqyl+nPcDAmuNxZkcPA==
+X-Google-Smtp-Source: AMsMyM6p0PC34myeqOG+ohgRGrOEIIXsBkJm0MGSxfSb/HwujLhh3lcxnx+RUrVD9TS2QJWlLsChWQ==
+X-Received: by 2002:a05:6512:22c3:b0:4a2:1698:58db with SMTP id g3-20020a05651222c300b004a2169858dbmr1750313lfu.554.1665052868156;
+        Thu, 06 Oct 2022 03:41:08 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id q3-20020a0565123a8300b00492aefd73a5sm2648293lfu.132.2022.10.06.03.41.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 03:41:07 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/4] arm64: dts: qcom: sdm630: add UART pin functions
+Date:   Thu,  6 Oct 2022 12:41:01 +0200
+Message-Id: <20221006104104.171368-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-To:     linux-kernel@vger.kernel.org
-References: <1266113f-75a1-b276-bb8c-3cdfcbabf043@alu.unizg.hr>
-Subject: Re: BUG: 6.0.0-RC kernels trigger Firefox snap bug with 6.0.0-rc3
- through 6.0.0-rc7
-Content-Language: de-AT-frami
-In-Reply-To: <1266113f-75a1-b276-bb8c-3cdfcbabf043@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi there,
+Configure UART1 and UART2 pins to respective functions in default state,
+otherwise the pins might stay as GPIOs.
 
-I have probably the same problem on Ubuntu kinetic kudu using 
-6.0.0-060000rc7daily20221002-generic obtained from 
-https://kernel.ubuntu.com/~kernel-ppa/mainline/daily/2022-10-02/amd64/
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sdm630.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Firefox tabs crash randomly and chromium does not start with the message
-/bin/bash: /lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of 
-Verdef record
-/bin/bash: error while loading shared libraries: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verneed record
+diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+index e119060ac56c..bc7c341e793c 100644
+--- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+@@ -723,6 +723,7 @@ tlmm: pinctrl@3100000 {
+ 
+ 			blsp1_uart1_default: blsp1-uart1-default {
+ 				pins = "gpio0", "gpio1", "gpio2", "gpio3";
++				function = "blsp_uart1";
+ 				drive-strength = <2>;
+ 				bias-disable;
+ 			};
+@@ -735,6 +736,7 @@ blsp1_uart1_sleep: blsp1-uart1-sleep {
+ 
+ 			blsp1_uart2_default: blsp1-uart2-default {
+ 				pins = "gpio4", "gpio5";
++				function = "blsp_uart2";
+ 				drive-strength = <2>;
+ 				bias-disable;
+ 			};
+-- 
+2.34.1
 
-Chrome (without snap) works fine though.
-
-On my machine, these issues also arose after installing 6.0.0; the 
-previous version I used (5.19.5) worked fine. In fact, I've reverted to 
-the older version without changing anything else and both firefox and 
-chromium are happily working again.
-
-Best regards,
-Marc
