@@ -2,73 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22EFE5F6399
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E9E5F639A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbiJFJZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 05:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54044 "EHLO
+        id S231443AbiJFJZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 05:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiJFJZ2 (ORCPT
+        with ESMTP id S231318AbiJFJZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 05:25:28 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF9573333
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 02:25:27 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 766E36601595;
-        Thu,  6 Oct 2022 10:25:25 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1665048326;
-        bh=w1BmtUXhzHDGMFiI+Pc6ZggZiUYyH+xNoewjHhSzN58=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mX0dHidhD8S4lk0mTAgOrisK0fe8bdiT2j9qe6BdItfN54PSR/qIjUfIC5l43DHwA
-         FUrgI/3uQQTxdmWLQkc1atDQGSq6b8A37vnUO6zL+B3G0CSlE0512FO0T8lmMMabKi
-         QKmdSrg2Spp0xZ9cMizAYJRrFu20KmJlFQRuoRtXbOflttIEvrc40tlRFTU2+KZSh1
-         6ClwJFMbp3GP2JTURpbxidpWPQpGwnVcyZs7M2GQkhpbzK+4FOVr15GclZePe7pDQS
-         LyfgskvH/jmD89Nqz2UKEaEVwmIhXCYKeP+AolvghTQClsE7xLkyHKTgkcU8WK+v+Z
-         SZQI2HmatsmtA==
-Message-ID: <ef492dd1-3f03-93eb-6009-063089350b22@collabora.com>
-Date:   Thu, 6 Oct 2022 11:25:22 +0200
+        Thu, 6 Oct 2022 05:25:39 -0400
+Received: from mail-yw1-x1144.google.com (mail-yw1-x1144.google.com [IPv6:2607:f8b0:4864:20::1144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC14C8FD5B
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 02:25:36 -0700 (PDT)
+Received: by mail-yw1-x1144.google.com with SMTP id 00721157ae682-349c4310cf7so12424657b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 02:25:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A8Lc3wAimhB0NV3fEZnKSiGf+iaWHiRr2Q0Yml4bXTw=;
+        b=GhyCANsVCMv7Xj5vPzTJQ8C9eAqFcljvOZ/qHwD0VVG8KmDuQcjuVDGjBhUed/apAA
+         bGPxBqBZM+fy9NCtISAzU/iT1uS03KxTmh1h3Ncm4MYYUJSHgDUxeNFh37zU4uRa7VlE
+         3vzqOQgKHTc96cHwqaMZyzZVagsYbV6XO7f6/Zp0FkMdtierYqbESMOaKu6Fe0cBkKmd
+         e4gsZy4tU1wGTM7UIduND1fNxY1ddVpTAVfxG96G8YFFDp6AMwPT3uaoLFy3DyM8KFPH
+         mywARYQ13/MDzfyqGLGlAvXurMirF+vOnWV2zliFQwWuTX/MAAdOC0aplQbqjEPM/14o
+         cXXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A8Lc3wAimhB0NV3fEZnKSiGf+iaWHiRr2Q0Yml4bXTw=;
+        b=HwqdjR6L/S2iB/O57lyeV7Zp6fxv50jCHecnp5z+tuFVIulVP5G8vWK8XPmqhjhbTK
+         eySDdiFen43uTT3daDNyD8Fm+Z+aWfLaBJJ+X8i5NTN+UdcZlYOUvsdRQiJxLLuPEX63
+         4XGcplzB+98XF6PrzPVvRP0S+0ZreoLpTYTfh4JqSzooYuRXTpZEgT+Wt3GJLRADp38c
+         xBXMHGrhscz72VM/mIaEB53RPgivkY84jZUwVqzwp5JZVR+aBZsJJU8dHyqAcqXyPFvN
+         6jRUKwzljP5qHKO01AZ2rTCblHbS4WdCEeCy7FSbkNhzVgNi75OrkW/Nprb18ASN1Bzp
+         xLEA==
+X-Gm-Message-State: ACrzQf3UAapPXLk1Ee6QGKoDiHLJAofLdVuvHYWiAo+MkMfuHzXHlC06
+        zT/4GnFEShVpdMqNUZW35McpM7TkAdLebSm1YUk=
+X-Google-Smtp-Source: AMsMyM7r14qx4ru1dSw1/Srb9sosmlXg1OK/JszDtOAHtqzxbICymHhj9hgf9aIgACsX1Rp4Lso3kluqu2ZbVnhDc2Y=
+X-Received: by 2002:a0d:cb4b:0:b0:354:473f:a431 with SMTP id
+ n72-20020a0dcb4b000000b00354473fa431mr3571651ywd.463.1665048335591; Thu, 06
+ Oct 2022 02:25:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v9, 1/4] mailbox: mtk-cmdq: Use GCE_CTRL_BY_SW definition
- instead of number
-Content-Language: en-US
-To:     Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-References: <20221006043456.8754-1-yongqiang.niu@mediatek.com>
- <20221006043456.8754-2-yongqiang.niu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221006043456.8754-2-yongqiang.niu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7000:a002:b0:3c0:efc2:48c4 with HTTP; Thu, 6 Oct 2022
+ 02:25:35 -0700 (PDT)
+Reply-To: financialdepartmentus69@gmail.com
+From:   "Financial Department U.S" <antoniogarcia26b@gmail.com>
+Date:   Thu, 6 Oct 2022 10:25:35 +0100
+Message-ID: <CAP4MGN1MXabj0UEymO9MWYG_tAMN_Pt77PPR1A0k+4BoueoZFw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 06/10/22 06:34, Yongqiang Niu ha scritto:
-> Use GCE_CTRL_BY_SW definition instead of number
-> 
-> Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
+-- 
+Dear Friend,
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+I have an important message just get back for more details.
 
+Sincerely,
+Mr Jones Moore
+Deputy department of the treasury
+United State.
