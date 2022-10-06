@@ -2,140 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94D65F720F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 01:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D22945F7210
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 01:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231939AbiJFXvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 19:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40438 "EHLO
+        id S232067AbiJFXvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 19:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbiJFXvR (ORCPT
+        with ESMTP id S231949AbiJFXvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 19:51:17 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4507B60480
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 16:51:16 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id w191so3477171pfc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 16:51:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flatmax-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Bb0bMzq7CzIxn27Bm3qAvEt7vJtMj9Hk4nZZ0L4qohs=;
-        b=q4540usMviIDIHmpiRUMzOa910OncxizTkP+E/hL5zNuXzop6odk7tuyzVEDTHNHIX
-         X/3uM3TDImpdIbf4DvksZX1syZyFsZK4mB3ANxxnmaqVDlvw1/wVxyOEI0siPqwKhj//
-         MhmpNxgQNCEdGkfr95TMowoeyKvNWZ3P/PQorHxYmfj7BdtflyblEDl1m7lL7Jhi68xG
-         14UsSIp+a9qRu7OCnaVXbOiV2Lmlvr3FgmmAjn6SB5AnbePu9oqN+FuzvjjsFrf43ntO
-         5CD1mkbnRzyAk/OlS3YOZRbiQ7NAowFqbYUOK8b4Jad8rpaydFC3a69hOF6gUYrWiX4m
-         o6lw==
+        Thu, 6 Oct 2022 19:51:36 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9470060480
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 16:51:35 -0700 (PDT)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1563E41477
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 23:51:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1665100293;
+        bh=f7kGweGAvVrWoZ0XynvIzuUJDcE2Jq/GgJuC22F875M=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=ZktXPd/NrOcuFRhDkVYrhrAHRnmFHb1QCdmMejDyyNydH2kGu84hPtQ0DB1pcHhMF
+         /ACFP8G/eYIMeg9Fz+ciLW+0NpRka0lqhw5TjdueqIm+DhCvfQBp0gqwLhPGUlxhwZ
+         Ei5zJ+bcI1A3Ej//mghx/O5+UfQzABypUVKa+CppWFMAktgM6v4bWku+m3p5gRWx4D
+         iS2hJaYCtGMs1GqCQOK2tHtoxSVTKtt9CcmXg/dZJidc3eq/9xzrMgUCjNiNMsRiIY
+         gk3O7Rp8r6X1S5N+iWWzBIecST7SVGjIaHSMqpx5o4BUsR1su5W+VQGZG8SvK2yIIo
+         Tijza4Zd7QAOw==
+Received: by mail-ed1-f71.google.com with SMTP id l7-20020a056402254700b004591f1de8ffso2626059edb.15
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 16:51:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bb0bMzq7CzIxn27Bm3qAvEt7vJtMj9Hk4nZZ0L4qohs=;
-        b=qdEY8ybZwxm2c87lCGmxhpja80qnT5bQBRI83vM7pW7y9/UnRGRocShiP2/FI8Tg9j
-         mi47cKPDGkzEZKVXubiojwGFJ2d9diPlTXB8r3TlujG7OpCseAf1IG19nojcVUqfOhI1
-         +rI+bOMZKGqNoYA5vekxZowLGtN/ontFzIaT4lQr8xaTXJgUot1oq9QAHQ3UBl8iArQC
-         UWR0a3bhvDl4W4ajZBg+j4ZkEu7hS5yRu4pNhdI72aZC7clGhYlyFq2/fGfECPrwLW69
-         x1Z2ZYuZJY7Pyej1dAJnmBQk9xCeammNtaAFgmTbLEjWf/DCSkJf1Hockor7deQq3u0k
-         ibsA==
-X-Gm-Message-State: ACrzQf0m2bD+KDAEaZH83iv/F6FHEexobv6RIGPTTjGgOy7Owym7J02a
-        r//GvQ2fzbsRIWdmxUz89bspJw==
-X-Google-Smtp-Source: AMsMyM4oijrcSQd/dKg069SIlyyV2cQasyARBrPUoBqyO98yId81kE4Hm2QtLr3/SKm6UV/Hq/309A==
-X-Received: by 2002:a05:6a00:1691:b0:53b:3f2c:3257 with SMTP id k17-20020a056a00169100b0053b3f2c3257mr1946901pfc.21.1665100275607;
-        Thu, 06 Oct 2022 16:51:15 -0700 (PDT)
-Received: from ?IPV6:2406:3400:213:70c0:9df6:7e57:88ce:1bea? ([2406:3400:213:70c0:9df6:7e57:88ce:1bea])
-        by smtp.gmail.com with ESMTPSA id l6-20020a170902f68600b0017f92246e4dsm176326plg.181.2022.10.06.16.51.13
+        bh=f7kGweGAvVrWoZ0XynvIzuUJDcE2Jq/GgJuC22F875M=;
+        b=7+1mDYD+NRuqfNGoVPkXegN92FA2zooGenZ+fMoCRFDpjKuYJig+9JCcmKJByYx09V
+         PiT9a+/Hm3gY7XVMAocEShU/xOk5fZz8VFl3QzzvpKRZrUY/R1mV8VcEcnHv7SPYjL7I
+         gRoVqU3JgkdRqYYTxTBPkbh79KNJh5VlgZMdYS/5wH3RKCGcVoHa+W7Br+VOgIdDcm35
+         PW8GTD9Su9FRWPfKgWhxTGPKipoIjFoh4di9I5DuOkKD+ZcZGQAcpWkO0TAM0vXYwBKd
+         9OOpbXrOlcGXKvkc1Q1GM7Tt+4apdhXb5AGDiJHTN4DPQYrMZSrT0t4gims4/Y5ZrX/v
+         f2cQ==
+X-Gm-Message-State: ACrzQf1wYD1Cri13pdx2fqetHzD1B/3+fnfnkusIa1mFhs1lFWrp/Pye
+        XvVNhhdHZ1js3CZVe4ex0leLIGGEq5s14vwHbToJxye1OTIHhC1V/b3f3dN1tO1gdnbYI2Sh/pJ
+        6JRzR4zAIIcISGTF7fF3JWcqG9Qwxid+guuyDKWVDdQ==
+X-Received: by 2002:a17:907:2672:b0:734:a952:439a with SMTP id ci18-20020a170907267200b00734a952439amr1754764ejc.539.1665100291895;
+        Thu, 06 Oct 2022 16:51:31 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5lYngrZEeBFvBJJ6JL/pRmthTCtapwWcWYnD6TSUGZPRYbNlsQ6iGt0VCThOJOInBGoHbmeg==
+X-Received: by 2002:a17:907:2672:b0:734:a952:439a with SMTP id ci18-20020a170907267200b00734a952439amr1754740ejc.539.1665100291651;
+        Thu, 06 Oct 2022 16:51:31 -0700 (PDT)
+Received: from [172.25.0.170] (ip-084-118-157-002.um23.pools.vodafone-ip.de. [84.118.157.2])
+        by smtp.gmail.com with ESMTPSA id ee47-20020a056402292f00b0044eb5b922bdsm371026edb.24.2022.10.06.16.51.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Oct 2022 16:51:15 -0700 (PDT)
-Message-ID: <4f2e69e1-c9a2-0197-341c-c8c0bc9fda1c@flatmax.com>
-Date:   Fri, 7 Oct 2022 10:51:11 +1100
+        Thu, 06 Oct 2022 16:51:31 -0700 (PDT)
+Message-ID: <b1306db2-74c5-c207-7c6d-beba0f1593f4@canonical.com>
+Date:   Fri, 7 Oct 2022 01:51:29 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: sound/soc/codecs/src4xxx-i2c.c:28:34: warning: unused variable
- 'src4xxx_of_match'
-Content-Language: en-AU
-To:     kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-References: <202210070151.yWxzUNdm-lkp@intel.com>
-From:   Matt Flax <flatmax@flatmax.com>
-In-Reply-To: <202210070151.yWxzUNdm-lkp@intel.com>
+ Thunderbird/102.3.1
+Subject: Re: [v4 PATCH 2/3] RISC-V: Update image header
+Content-Language: en-US
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiper <daniel.kiper@oracle.com>,
+        Fu Wei <tekkamanninja@gmail.com>,
+        Leif Lindholm <quic_llindhol@quicinc.com>,
+        Nikita Ermakov <arei@altlinux.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Julian Andres Klode <julian.klode@canonical.com>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20221006230051.185850-1-atishp@rivosinc.com>
+ <20221006230051.185850-3-atishp@rivosinc.com>
+From:   Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+In-Reply-To: <20221006230051.185850-3-atishp@rivosinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
-
-Can this test system be updated to catch of_match_ptr usage ?
-
-Here is the decleration :
-
-static const struct of_device_id src4xxx_of_match[] = {
-     { .compatible = "ti,src4392", },
-     { }
-};
-MODULE_DEVICE_TABLE(of, src4xxx_of_match);
-
-Here is the usage (in the same file) :
-
-static struct i2c_driver src4xxx_i2c_driver = {
-     .driver = {
-         .name = "src4xxx",
-         .of_match_table = of_match_ptr(src4xxx_of_match),
 
 
-On 7/10/22 04:21, kernel test robot wrote:
-> Hi Matt,
->
-> FYI, the error/warning still remains.
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   833477fce7a14d43ae4c07f8ddc32fa5119471a2
-> commit: 4e6bedd3c396014ba70de2b4c9995c8e024e82b3 ASoC: codecs: add support for the TI SRC4392 codec
-> date:   8 weeks ago
-> config: hexagon-randconfig-r045-20221006
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4e6bedd3c396014ba70de2b4c9995c8e024e82b3
->          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->          git fetch --no-tags linus master
->          git checkout 4e6bedd3c396014ba70de2b4c9995c8e024e82b3
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash sound/soc/codecs/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
->>> sound/soc/codecs/src4xxx-i2c.c:28:34: warning: unused variable 'src4xxx_of_match' [-Wunused-const-variable]
->     static const struct of_device_id src4xxx_of_match[] = {
->                                      ^
->     1 warning generated.
->
->
-> vim +/src4xxx_of_match +28 sound/soc/codecs/src4xxx-i2c.c
->
->      27	
->    > 28	static const struct of_device_id src4xxx_of_match[] = {
->      29		{ .compatible = "ti,src4392", },
->      30		{ }
->      31	};
->      32	MODULE_DEVICE_TABLE(of, src4xxx_of_match);
->      33	
->      34	
->
+On 10/7/22 01:00, Atish Patra wrote:
+> Update the RISC-V Linux kernel image headers as per the current header.
+> 
+> Reference:
+> <Linux kernel source>/Documentation/riscv/boot-image-header.rst
+> 
+> 474efecb65dc: ("riscv: modify the Image header to improve compatibility with the ARM64 header")
+> 
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> ---
+>   include/grub/riscv32/linux.h | 15 ++++++++-------
+>   include/grub/riscv64/linux.h | 21 +++++++++++++--------
+>   2 files changed, 21 insertions(+), 15 deletions(-)
+> 
+> diff --git a/include/grub/riscv32/linux.h b/include/grub/riscv32/linux.h
+> index 512b777c8a41..de0dbdcd1be5 100644
+> --- a/include/grub/riscv32/linux.h
+> +++ b/include/grub/riscv32/linux.h
+> @@ -19,20 +19,21 @@
+>   #ifndef GRUB_RISCV32_LINUX_HEADER
+>   #define GRUB_RISCV32_LINUX_HEADER 1
+>   
+> -#define GRUB_LINUX_RISCV_MAGIC_SIGNATURE 0x52534356 /* 'RSCV' */
+> +#define GRUB_LINUX_RISCV_MAGIC_SIGNATURE 0x05435352 /* 'RSC\0x5' */
+
+Thanks for following up on this series.
+
+Considering 69edb312056 ("loader/arm64/linux: Remove magic number header 
+field check") why should this constant exist in GRUB at all?
+
+In a follow up patch we could remove it together with 
+GRUB_LINUX_ARM_MAGIC_SIGNATURE, GRUB_LINUX_ARMXX_MAGIC_SIGNATURE, and 
+GRUB_LINUX_ARMXX_MAGIC_SIGNATURE.
+
+>   
+> -/* From linux/Documentation/riscv/booting.txt */
+> +/* From linux/Documentation/riscv/boot-image-header.rst */
+>   struct linux_riscv_kernel_header
+>   {
+>     grub_uint32_t code0;		/* Executable code */
+>     grub_uint32_t code1;		/* Executable code */
+> -  grub_uint64_t text_offset;	/* Image load offset */
+> -  grub_uint64_t res0;		/* reserved */
+> -  grub_uint64_t res1;		/* reserved */
+> +  grub_uint64_t text_offset;	/* Image load offset, little endian */
+> +  grub_uint64_t image_size;	/* Effective Image size, little endian */
+> +  grub_uint64_t flags;		/* kernel flags, little endian */
+> +  grub_uint32_t version;	/* Version of this header */
+> +  grub_uint32_t res1;		/* reserved */
+>     grub_uint64_t res2;		/* reserved */
+>     grub_uint64_t res3;		/* reserved */
+
+According to tag next-20221006 of 
+Documentation/riscv/boot-image-header.rst and of 
+arch/riscv/include/asm/image.h this field is called 'magic' and filled 
+it with the string 'RISCV\0\0\0'.
+
+> -  grub_uint64_t res4;		/* reserved */
+> -  grub_uint32_t magic;		/* Magic number, little endian, "RSCV" */
+> +  grub_uint32_t magic;		/* Magic number, little endian, "RSC\x05" */
+
+The Linux kernel documentation calls this field magic2.
+
+Of course this is functionally irrelevant as we don't care about the 
+content of both fields.
+
+>     grub_uint32_t hdr_offset;	/* Offset of PE/COFF header */
+>   };
+>   
+> diff --git a/include/grub/riscv64/linux.h b/include/grub/riscv64/linux.h
+> index 3630c30fbf1a..ea77f8718222 100644
+> --- a/include/grub/riscv64/linux.h
+> +++ b/include/grub/riscv64/linux.h
+> @@ -19,23 +19,28 @@
+>   #ifndef GRUB_RISCV64_LINUX_HEADER
+>   #define GRUB_RISCV64_LINUX_HEADER 1
+>   
+> -#define GRUB_LINUX_RISCV_MAGIC_SIGNATURE 0x52534356 /* 'RSCV' */
+> +#include <grub/efi/pe32.h>
+> +
+> +#define GRUB_LINUX_RISCV_MAGIC_SIGNATURE 0x05435352 /* 'RSC\0x5' */
+
+to be removed in future
+
+Best regards
+
+Heinrich
+
+>   
+>   #define GRUB_EFI_PE_MAGIC	0x5A4D
+>   
+> -/* From linux/Documentation/riscv/booting.txt */
+> +/* From linux/Documentation/riscv/boot-image-header.rst */
+>   struct linux_riscv_kernel_header
+>   {
+>     grub_uint32_t code0;		/* Executable code */
+>     grub_uint32_t code1;		/* Executable code */
+> -  grub_uint64_t text_offset;	/* Image load offset */
+> -  grub_uint64_t res0;		/* reserved */
+> -  grub_uint64_t res1;		/* reserved */
+> +  grub_uint64_t text_offset;	/* Image load offset, little endian */
+> +  grub_uint64_t image_size;	/* Effective Image size, little endian */
+> +  grub_uint64_t flags;		/* kernel flags, little endian */
+> +  grub_uint32_t version;	/* Version of this header */
+> +  grub_uint32_t res1;		/* reserved */
+>     grub_uint64_t res2;		/* reserved */
+> -  grub_uint64_t res3;		/* reserved */
+> -  grub_uint64_t res4;		/* reserved */
+> -  grub_uint32_t magic;		/* Magic number, little endian, "RSCV" */
+> +  grub_uint64_t magic;		/* magic (RISC-V specifc, deprecated)*/
+> +  grub_uint32_t magic2;		/* Magic number 2 (to match the ARM64 'magic' field pos) */
+>     grub_uint32_t hdr_offset;	/* Offset of PE/COFF header */
+> +
+> +  struct grub_coff_image_header coff_image_header;
+>   };
+>   
+>   #define linux_arch_kernel_header linux_riscv_kernel_header
