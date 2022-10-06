@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FDCF5F5E54
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 03:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D7F5F5E56
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 03:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiJFBOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Oct 2022 21:14:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34168 "EHLO
+        id S229661AbiJFBQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Oct 2022 21:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiJFBN6 (ORCPT
+        with ESMTP id S229453AbiJFBQE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Oct 2022 21:13:58 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE825B046;
-        Wed,  5 Oct 2022 18:13:54 -0700 (PDT)
-X-UUID: 660974c1e94240988ab2326e0c6f453d-20221006
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=i9WWBc8AgT+qWmWIUrtTH/9MaL3rSQ0+cKCWP1pOwcM=;
-        b=AhBW68x6WgauEajqKJiEYqaTCIyfHvXSrjPqMpj9LH8TOoi//o1T6NaS6SBjuFAb+lvFN7daNsVCJrQyzstdDBWEsa+NZo7S6c5+kzZmboSrYf/SKBz2QLgee5/X2bhC5Em7BTL/a9Rv5Hv/L0xrB4SZ349YZ4OL0mdRikNNWLs=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:f3cbe9fc-5b41-449a-a862-e60213f87905,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:45
-X-CID-INFO: VERSION:1.1.11,REQID:f3cbe9fc-5b41-449a-a862-e60213f87905,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-        elease,TS:45
-X-CID-META: VersionHash:39a5ff1,CLOUDID:f3f8a4b8-daef-48a8-8c50-40026d6a74c2,B
-        ulkID:221006091349GWKV8DM5,BulkQuantity:0,Recheck:0,SF:28|17|19|48|102,TC:
-        nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:
-        0
-X-UUID: 660974c1e94240988ab2326e0c6f453d-20221006
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 693899008; Thu, 06 Oct 2022 09:13:48 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 6 Oct 2022 09:13:46 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs13n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Thu, 6 Oct 2022 09:13:46 +0800
-Message-ID: <ad18266e7c3234506c850cbefd6c222c359faab3.camel@mediatek.com>
-Subject: Re: [PATCH] dt-bindings: mediatek: vcodec: Add the platform
- compatible to schema
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>
-Date:   Thu, 6 Oct 2022 09:13:45 +0800
-In-Reply-To: <166479591681.1661748.6265395941647267106.robh@kernel.org>
-References: <20221001030752.14486-1-irui.wang@mediatek.com>
-         <166479591681.1661748.6265395941647267106.robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 5 Oct 2022 21:16:04 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649A58688B
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 18:16:03 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id s30so801568eds.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 18:16:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=UD5WZvl07zDG0Ktotv+C2zDk5OW0CrTnjIhxhYrmHvc=;
+        b=oLg/PNobtt8qLAw2VBBpEiqf8ghenKX/ITrIQYJt0lXo+PQUjATHGVQ1cuCPJHY5VT
+         0vr2qMrwXTJD2N1ilTauFiBcNfYqP2ZtHh/AzGYk3hcjiWduS5A6ZXdN+2GW0zMdyynC
+         VZqMF7gvr18IVoiOvszZpnLQlasfaXZRMHLSQg21Ny1DCzMDPGBuVRA2bZHMZzQXnz6E
+         v9UwRDpQ7cwYTg0UX9YUZbcyY2cA5tKd5aG1/AQ/aUoLdZ7BO4jaEIwCIex8nHoxqvky
+         FfiKld2e6y0TKqyQ/iKynbIVMKsgEIE65UZmxXBYnHx9Ota2eoCjxQXziAshfijzjmLj
+         Bx9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=UD5WZvl07zDG0Ktotv+C2zDk5OW0CrTnjIhxhYrmHvc=;
+        b=RUOJH+bMeHNrUnlikxpVSYEvEVPrfzjQcFD1GdGOmDwV5eKYnoe4S9N/3CScz9fby2
+         53D1G4wKnbqvQ83Jjl1Cx1iVUeyMhUfTyTQcxPGPqNkHqOtFXS6yT5dcnT0wu8gp6gCX
+         vz0r6wX4N6jr3ZG1siAt8kfrvHhnr9A6oN5Ci+QFR2JHI2pgEo9EJPBzUE8mEKHS0jgW
+         PTLR4GDH2TJ+G1IM572eSlVuiakWvXgGcSIO0LQl+M3Tg4UeIKqezvkadVp/2f/LD1pk
+         jrUT8q0Ng8vyXhObxyu8duyIXyRECsl68uRUqpW4cNRm77vYcgIKWejhHbIp9e6oCV0Z
+         ZApA==
+X-Gm-Message-State: ACrzQf32IeSxs81w/ziVV6vpVON1KQeanwokuy51M/MaIsVJHx2bptIj
+        1ZjBGoybjh6IefVz3vp3yejt/WcvDriBkQ==
+X-Google-Smtp-Source: AMsMyM4O2Gl6i1UpuoHysJlkuhFYMHWLZwHlt17pG0SJy5x0C3V5cbrFOj2bW3yUecTM1x3XOottYw==
+X-Received: by 2002:a05:6402:ea8:b0:456:d188:b347 with SMTP id h40-20020a0564020ea800b00456d188b347mr2242040eda.15.1665018961803;
+        Wed, 05 Oct 2022 18:16:01 -0700 (PDT)
+Received: from mypc.localnet (host-79-17-38-224.retail.telecomitalia.it. [79.17.38.224])
+        by smtp.gmail.com with ESMTPSA id k11-20020a17090632cb00b007030c97ae62sm9460143ejk.191.2022.10.05.18.16.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 18:16:00 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Cc:     syzbot <syzbot+389b82b29093b3e2640a@syzkaller.appspotmail.com>
+Subject: Re: [syzbot] memory leak in __get_metapage
+Date:   Thu, 06 Oct 2022 03:15:55 +0200
+Message-ID: <4449089.LvFx2qVVIh@mypc>
+In-Reply-To: <0000000000008a5a2e05ea318aa9@google.com>
+References: <0000000000008a5a2e05ea318aa9@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
+Content-Type: multipart/mixed; boundary="nextPart2273918.ElGaqSPkdT"
+Content-Transfer-Encoding: 7Bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,46 +71,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Rob,
+This is a multi-part message in MIME format.
 
-Thanks for your reviewing.
+--nextPart2273918.ElGaqSPkdT
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 2022-10-03 at 08:24 -0500, Rob Herring wrote:
-> On Sat, 01 Oct 2022 11:07:52 +0800, Irui Wang wrote:
-> > There are venc node warnings when running dtbs_check, the clock-
-> > names
-> > was unexpected, missing properties '#address-cells' and '#size-
-> > cells'.
-> > Add the corresponding platform compatible to schema.
-> > 
-> > Signed-off-by: Irui Wang <irui.wang@mediatek.com>
-> > ---
-> >  .../bindings/media/mediatek,vcodec-encoder.yaml      | 12
-> > +++++++++++-
-> >  1 file changed, 11 insertions(+), 1 deletion(-)
-> > 
+On Tuesday, October 4, 2022 10:49:42 AM CEST syzbot wrote:
+> Hello,
 > 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
+> syzbot found the following issue on:
 > 
-> Note that it is not yet a requirement to have 0 warnings for
-> dtbs_check.
-> This will change in the future.
+> HEAD commit:    4fe89d07dcc2 Linux 6.0
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=169a7924880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=21254cf9c7c084e0
+> dashboard link: https://syzkaller.appspot.com/bug?extid=389b82b29093b3e2640a
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils 
+for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10bdd7ec880000
 > 
-> Full log is available here: https://patchwork.ozlabs.org/patch/
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/651a252f7035/
+disk-4fe89d07.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/776feb8e0e5b/
+vmlinux-4fe89d07.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+389b82b29093b3e2640a@syzkaller.appspotmail.com
+> 
+> BUG: memory leak
+> unreferenced object 0xffff888114339e80 (size 128):
+>   comm "syz-executor.0", pid 3673, jiffies 4295017005 (age 12.610s)
+>   hex dump (first 32 bytes):
+>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
+>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
+>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
+>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
+>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
+>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
+>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> BUG: memory leak
+> unreferenced object 0xffff888114339e00 (size 128):
+>   comm "syz-executor.0", pid 3673, jiffies 4295017005 (age 12.610s)
+>   hex dump (first 32 bytes):
+>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
+>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
+>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
+>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
+>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
+>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
+>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> BUG: memory leak
+> unreferenced object 0xffff888114339d80 (size 128):
+>   comm "syz-executor.0", pid 3673, jiffies 4295017005 (age 12.610s)
+>   hex dump (first 32 bytes):
+>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
+>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
+>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
+>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
+>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
+>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
+>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> BUG: memory leak
+> unreferenced object 0xffff8881142f0300 (size 128):
+>   comm "syz-executor.0", pid 3676, jiffies 4295017533 (age 7.330s)
+>   hex dump (first 32 bytes):
+>     00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff814927b3>] mempool_alloc+0x73/0x230 mm/mempool.c:392
+>     [<ffffffff81c5aefa>] alloc_metapage fs/jfs/jfs_metapage.c:176 [inline]
+>     [<ffffffff81c5aefa>] __get_metapage+0x38a/0x9b0 fs/jfs/jfs_metapage.c:651
+>     [<ffffffff81c43862>] diNewExt+0x3f2/0x9d0 fs/jfs/jfs_imap.c:2265
+>     [<ffffffff81c45254>] diAllocExt fs/jfs/jfs_imap.c:1945 [inline]
+>     [<ffffffff81c45254>] diAllocAG+0x9a4/0xd50 fs/jfs/jfs_imap.c:1662
+>     [<ffffffff81c4707f>] diAlloc+0x31f/0x900 fs/jfs/jfs_imap.c:1583
+>     [<ffffffff81c57d9a>] ialloc+0x6a/0x3a0 fs/jfs/jfs_inode.c:56
+>     [<ffffffff81c3a4c7>] jfs_mkdir+0xf7/0x480 fs/jfs/namei.c:225
+>     [<ffffffff815fc703>] vfs_mkdir+0x223/0x340 fs/namei.c:4013
+>     [<ffffffff816056e5>] do_mkdirat+0x1a5/0x1e0 fs/namei.c:4038
+>     [<ffffffff81605859>] __do_sys_mkdir fs/namei.c:4058 [inline]
+>     [<ffffffff81605859>] __se_sys_mkdir fs/namei.c:4056 [inline]
+>     [<ffffffff81605859>] __x64_sys_mkdir+0x69/0x90 fs/namei.c:4056
+>     [<ffffffff845eab95>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff845eab95>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
 
-Yes, it's not a new warning, the 'clock-names' in mt8192.dtsi was
-already unexpected without the patch's schema, we will fix it in the
-future patch.
+#syz test git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 
 
-Thanks
-Best Regards
-> 
-> 
-> vcodec@17020000: clock-names:0: 'venc_sel' was expected
-> 	arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8192-asurada-spherion-r0.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8192-evb.dtb
-> 
+
+--nextPart2273918.ElGaqSPkdT
+Content-Disposition: attachment; filename="jfs.diff"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/x-patch; charset="UTF-8"; name="jfs.diff"
+
+diff --git a/fs/jfs/jfs_metapage.c b/fs/jfs/jfs_metapage.c
+index 2e8461ce74de..b3ba1cefc230 100644
+--- a/fs/jfs/jfs_metapage.c
++++ b/fs/jfs/jfs_metapage.c
+@@ -678,6 +678,7 @@ struct metapage *__get_metapage(struct inode *inode, unsigned long lblock,
+ 
+ unlock:
+ 	unlock_page(page);
++	put_page(page);
+ 	return NULL;
+ }
+ 
+
+--nextPart2273918.ElGaqSPkdT--
+
+
 
