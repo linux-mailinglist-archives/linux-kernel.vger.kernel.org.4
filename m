@@ -2,72 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7715F6F18
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F8F5F6F1A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232003AbiJFU1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 16:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
+        id S232166AbiJFU1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 16:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232037AbiJFU1F (ORCPT
+        with ESMTP id S232081AbiJFU1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 16:27:05 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547D8BEADD
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 13:27:03 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id b2so2712986plc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 13:27:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MSfOYgB7QcjQtHbJhfVo2r2XCJmV0WBSW4LA1S6H6mY=;
-        b=n+IETemn0RhHM4VOKVH9refh4D/Bw8dtlhNbXet6YMrvQvK0gEZxQtKL6qx9Tt6mQb
-         sRysWq4jRMrEmQ6t+6VVGWbK4vcphDCi7ifEON/MBQSK2rvc87ASCJnM59HEqSUf4X16
-         NAXbngEpATB2TmH9MN7FpnDG1B30CCkYA+uC1ea6mvtj734cYG9uKa0Z7q9MLvXNF7sx
-         ccXw5ywHg8ZerTX0LShwy1Dy51N3QhGBlDVwdl998WeVBKKWvid0DclxYStGmM9N1bwk
-         3hXnSzu5eCW5iNkmvPeRI8Zo8c2DyKpKsdioQ3kKQr6quWvQ/72tZEspm3vFkK+1SJPX
-         eaKg==
+        Thu, 6 Oct 2022 16:27:08 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B66BEAC0;
+        Thu,  6 Oct 2022 13:27:07 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-134072c15c1so278916fac.2;
+        Thu, 06 Oct 2022 13:27:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MSfOYgB7QcjQtHbJhfVo2r2XCJmV0WBSW4LA1S6H6mY=;
-        b=ziolhKxITRUhPkNlfGJ/5LdfCCvRySbD15GyTUifB3fVBODaRh2cPqmhXiN11riUB/
-         mgqOClsqXKfUU5bJFMafy2bbnptB+lvol0bbWas4rfsvh37dle98FGoZA15dUMNFirMf
-         HdsLLkpqT+jizuL7XQeyNNKArkb9lhuxVao1B5TxNMDf6Ni7EfjAbmUIAMGn+OFYoscD
-         InMTeQGJ2i7fjKnrjl2YsEYqqVkGvG/hDrsncOOJDxz0xPF4VwFBfuOZcPNO5CrKc+mu
-         s6q9z2NdmaNlkByGI9LLVxGrsew/alJEbvlRmWA49TMnISBiVTqkmN9UOG9V8wF1CkPh
-         h49g==
-X-Gm-Message-State: ACrzQf0Yd9/ckPfWjwyaEbGvuoljUEktBKxvXSaWrernndzFqSwD78EO
-        +hVU50LJbEPpPY35QnsHGGcQNg==
-X-Google-Smtp-Source: AMsMyM4kf4UcVHaIKsExjPykA+zggYu68a12YmLiVGDSQfscQxedLL+YNFHBL87NjcWx/ynk17GF2Q==
-X-Received: by 2002:a17:90b:3510:b0:202:f18c:fdb6 with SMTP id ls16-20020a17090b351000b00202f18cfdb6mr1502448pjb.122.1665088022293;
-        Thu, 06 Oct 2022 13:27:02 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id f11-20020a170902684b00b0017f93a4e330sm21062pln.193.2022.10.06.13.27.01
+        bh=gtbKD79xzcu3GnByW/u9LLD7bXS1blAdwhG+DUsm8yI=;
+        b=wX6bm+G9uW+DkdCu8cVRBj3YPdQmriEJFyuroRzIlZzkG273UA6LrscicBqSH7Ni1H
+         u+ISb8eitamN0pcGp19psQTNPBBmoquyObdYk6RtZbntJt1h1hP7gVvQ1jdRHxXrkbbP
+         1SPYdFnDGjEhOzNOC5SKoBhTwoCpqKiXcYLaCdMj8zv8X60aUe0nbxsB3/7ld3EZ4rSM
+         56YSYTeL5ZUO4d3bDlXy8TDhwIkY4ODnPQhlJTglD3URy8dRJNF/SkQlNZAUVt6A6+TN
+         ewHI/t1kHWSc9dgfydEHam/veu99t1elwrJhrTehqbNqWZkVh1OlaZ1BzxC9+qIjxaiQ
+         0jmg==
+X-Gm-Message-State: ACrzQf3TgAdIfQ+cz90BPcb8hNLyvan1KbVwOiyG9Ya7R47WCsn1wqLd
+        JOheZL6p3nteqwI7Bnjk3A==
+X-Google-Smtp-Source: AMsMyM5ctJijtfZOkqs+Jp+RYSpWQNFrg7rO9jVsfrITcKq8e6LICGe+qrGW2rO22az7TE6lpIL91g==
+X-Received: by 2002:a05:6870:d626:b0:132:9149:dc8a with SMTP id a38-20020a056870d62600b001329149dc8amr6116543oaq.141.1665088026458;
+        Thu, 06 Oct 2022 13:27:06 -0700 (PDT)
+Received: from robh_at_kernel.org ([2607:fb90:8a65:c536:245:842:a3a4:9017])
+        by smtp.gmail.com with ESMTPSA id h6-20020a9d6406000000b0065c2c46077dsm245765otl.67.2022.10.06.13.27.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 13:27:01 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 20:26:57 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     pbonzini@redhat.com, dmatlack@google.com, andrew.jones@linux.dev,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 4/4] KVM: selftests: Run dirty_log_perf_test on
- specific CPUs
-Message-ID: <Yz86ETKxsCGb7s+u@google.com>
-References: <20221006171133.372359-1-vipinsh@google.com>
- <20221006171133.372359-5-vipinsh@google.com>
- <Yz8xdJEMjcfdrcWC@google.com>
+        Thu, 06 Oct 2022 13:27:05 -0700 (PDT)
+Received: (nullmailer pid 106568 invoked by uid 1000);
+        Thu, 06 Oct 2022 20:27:03 -0000
+Date:   Thu, 6 Oct 2022 15:27:03 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Gross <agross@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        krishna Lanka <quic_vamslank@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-gpio@vger.kernel.org,
+        Martin Botka <martin.botka@somainline.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Iskren Chernev <iskren.chernev@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Subject: Re: [PATCH 12/34] dt-bindings: pinctrl: qcom,sm6375-tlmm: drop
+ checks used in common TLMM
+Message-ID: <166508802223.106507.11800474591947623954.robh@kernel.org>
+References: <20221006140637.246665-1-krzysztof.kozlowski@linaro.org>
+ <20221006140637.246665-13-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yz8xdJEMjcfdrcWC@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+In-Reply-To: <20221006140637.246665-13-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,48 +78,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022, Sean Christopherson wrote:
-> On Thu, Oct 06, 2022, Vipin Sharma wrote:
-> > +{
-> > +	cpu_set_t cpuset;
-> > +	int err;
-> > +
-> > +	CPU_ZERO(&cpuset);
-> > +	CPU_SET(pcpu, &cpuset);
+On Thu, 06 Oct 2022 16:06:15 +0200, Krzysztof Kozlowski wrote:
+> The common Qualcomm TLMM pin controller schema already brings
+> requirement of function for GPIO pins.
 > 
-> To save user pain:
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../devicetree/bindings/pinctrl/qcom,sm6375-tlmm.yaml | 11 +----------
+>  1 file changed, 1 insertion(+), 10 deletions(-)
 > 
-> 	r = sched_getaffinity(0, sizeof(allowed_mask), &allowed_mask);
-> 	TEST_ASSERT(!r, "sched_getaffinity failed, errno = %d (%s)", errno,
-> 		    strerror(errno));
 
-Forgot TEST_ASSERT() already provides errno, this can just be:
-
-	TEST_ASSERT(!r, "sched_getaffinity() failed");
-
-> 
-> 	TEST_ASSERT(CPU_ISSET(pcpu, &allowed_mask),
-> 		    "Task '%d' not allowed to run on pCPU '%d'\n");
-> 
-> 	CPU_ZERO(&allowed_mask);
-> 	CPU_SET(cpu, &allowed_mask);
-> 
-> that way the user will get an explicit error message if they try to pin a vCPU/task
-> that has already been affined by something else.  And then, in theory,
-> sched_setaffinity() should never fail.
-> 
-> Or you could have two cpu_set_t objects and use CPU_AND(), but that seems
-> unnecessarily complex.
-> 
-> > +	err = sched_setaffinity(0, sizeof(cpu_set_t), &cpuset);
-> > +	TEST_ASSERT(err == 0, "sched_setaffinity() errored out for pcpu: %d\n", pcpu);
-> 
-> !err is the preferred style, though I vote to use "r" instead of "err".  And print
-> the errno so that the user can debug.
-
-As above, ignore the last, forgot TEST_ASSERT() provides errno.
-
-> 
-> 	r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
-> 	TEST_ASSERT(!r, "sched_setaffinity failed, errno = %d (%s)",
-> 		    errno, strerror(errno));
+Acked-by: Rob Herring <robh@kernel.org>
