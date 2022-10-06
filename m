@@ -2,134 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 921D25F6250
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53ED35F6251
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 10:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230312AbiJFILI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 04:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
+        id S229731AbiJFIMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 04:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiJFILD (ORCPT
+        with ESMTP id S229633AbiJFIMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 04:11:03 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A2273BC4A
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 01:11:02 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3F4E71BF7;
-        Thu,  6 Oct 2022 01:11:08 -0700 (PDT)
-Received: from pierre123.arm.com (unknown [10.57.35.228])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 587A33F792;
-        Thu,  6 Oct 2022 01:10:59 -0700 (PDT)
-From:   Pierre Gondois <pierre.gondois@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Pierre Gondois <pierre.gondois@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-Subject: [PATCH v2 1/1] sched/fair: Check if prev_cpu has highest spare cap in feec()
-Date:   Thu,  6 Oct 2022 10:10:52 +0200
-Message-Id: <20221006081052.3862167-2-pierre.gondois@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221006081052.3862167-1-pierre.gondois@arm.com>
-References: <20221006081052.3862167-1-pierre.gondois@arm.com>
+        Thu, 6 Oct 2022 04:12:10 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50193326D3
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 01:12:09 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-81-ecYf1g42M7WCiHz6PXlHAA-1; Thu, 06 Oct 2022 09:12:06 +0100
+X-MC-Unique: ecYf1g42M7WCiHz6PXlHAA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Thu, 6 Oct
+ 2022 09:12:04 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Thu, 6 Oct 2022 09:12:04 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Nick Desaulniers' <ndesaulniers@google.com>,
+        YingChi Long <me@inclyc.cn>
+CC:     "bp@alien8.de" <bp@alien8.de>,
+        "chang.seok.bae@intel.com" <chang.seok.bae@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>
+Subject: RE: [PATCH v2] x86/fpu: use _Alignof to avoid UB in TYPE_ALIGN
+Thread-Topic: [PATCH v2] x86/fpu: use _Alignof to avoid UB in TYPE_ALIGN
+Thread-Index: AQHY2OxpWhPzSK6onk63/aasphivCa4BAxaA
+Date:   Thu, 6 Oct 2022 08:12:04 +0000
+Message-ID: <aa329b6fa5764e03ad6891142c2311fc@AcuMS.aculab.com>
+References: <20220927153338.4177854-1-me@inclyc.cn>
+ <20221005072913.982634-1-me@inclyc.cn>
+ <CAKwvOdm6wSgG-_HrRR_9+mLnksbK4qNA8-F--bAVTjwY1C4brA@mail.gmail.com>
+ <CAKwvOdnDKSdw4fh+FQWNgPNMnLuD=YBhKQHaxtkXJO7DWK_zpA@mail.gmail.com>
+ <CAKwvOd=H5kB=nsParYME2KoQxj-eDC_DAN09y1T2E7yqS43H4Q@mail.gmail.com>
+In-Reply-To: <CAKwvOd=H5kB=nsParYME2KoQxj-eDC_DAN09y1T2E7yqS43H4Q@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When evaluating the CPU candidates in the perf domain (pd) containing
-the previously used CPU (prev_cpu), find_energy_efficient_cpu()
-evaluates the energy of the pd:
-- without the task (base_energy)
-- with the task placed on prev_cpu (if the task fits)
-- with the task placed on the CPU with the highest spare capacity,
-  prev_cpu being excluded from this set
-
-If prev_cpu is already the CPU with the highest spare capacity,
-max_spare_cap_cpu will be the CPU with the second highest spare
-capacity.
-
-On an Arm64 Juno-r2, with a workload of 10 tasks at a 10% duty cycle,
-when prev_cpu and max_spare_cap_cpu are both valid candidates,
-prev_spare_cap > max_spare_cap at ~82%.
-Thus the energy of the pd when placing the task on max_spare_cap_cpu
-is computed with no possible positive outcome 82% most of the time.
-
-Do not consider max_spare_cap_cpu as a valid candidate if
-prev_spare_cap > max_spare_cap.
-
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
----
- kernel/sched/fair.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 914096c5b1ae..bcae7bdd5582 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6900,7 +6900,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 	for (; pd; pd = pd->next) {
- 		unsigned long cpu_cap, cpu_thermal_cap, util;
- 		unsigned long cur_delta, max_spare_cap = 0;
--		bool compute_prev_delta = false;
-+		unsigned long prev_spare_cap = 0;
- 		int max_spare_cap_cpu = -1;
- 		unsigned long base_energy;
- 
-@@ -6944,18 +6944,19 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 
- 			if (cpu == prev_cpu) {
- 				/* Always use prev_cpu as a candidate. */
--				compute_prev_delta = true;
-+				prev_spare_cap = cpu_cap;
- 			} else if (cpu_cap > max_spare_cap) {
- 				/*
- 				 * Find the CPU with the maximum spare capacity
--				 * in the performance domain.
-+				 * among the remaining CPUs in the performance
-+				 * domain.
- 				 */
- 				max_spare_cap = cpu_cap;
- 				max_spare_cap_cpu = cpu;
- 			}
- 		}
- 
--		if (max_spare_cap_cpu < 0 && !compute_prev_delta)
-+		if (max_spare_cap_cpu < 0 && prev_spare_cap == 0)
- 			continue;
- 
- 		eenv_pd_busy_time(&eenv, cpus, p);
-@@ -6963,7 +6964,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 		base_energy = compute_energy(&eenv, pd, cpus, p, -1);
- 
- 		/* Evaluate the energy impact of using prev_cpu. */
--		if (compute_prev_delta) {
-+		if (prev_spare_cap > 0) {
- 			prev_delta = compute_energy(&eenv, pd, cpus, p,
- 						    prev_cpu);
- 			/* CPU utilization has changed */
-@@ -6974,7 +6975,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 		}
- 
- 		/* Evaluate the energy impact of using max_spare_cap_cpu. */
--		if (max_spare_cap_cpu >= 0) {
-+		if (max_spare_cap_cpu >= 0 && max_spare_cap > prev_spare_cap) {
- 			cur_delta = compute_energy(&eenv, pd, cpus, p,
- 						   max_spare_cap_cpu);
- 			/* CPU utilization has changed */
--- 
-2.25.1
+RnJvbTogTmljayBEZXNhdWxuaWVycw0KPiBTZW50OiAwNSBPY3RvYmVyIDIwMjIgMTk6NTgNCi4u
+Lg0KPiBodHRwczovL3d3dy5vcGVuLXN0ZC5vcmcvanRjMS9zYzIyL3dnMTQvd3d3L2RvY3MvbjMw
+NTQucGRmDQo+IFNlY3Rpb24gNi4yLjggIkFsaWdubWVudCBvZiBvYmplY3RzIiByZWZlcnMgdG8g
+ImZ1bmRhbWVudGFsIGFsaWdubWVudCINCj4gYW5kICJleHRlbmRlZCBhbGlnbm1lbnQuIg0KPiAN
+Cj4gSSB3b25kZXIgaWYgaXQgd291bGQgYmUgcHJlY2lzZSB0byBzYXkgdGhhdCAiX0FsaWdub2Yg
+ZXZhbHVhdGVzIHRvIHRoZQ0KPiBmdW5kYW1lbnRhbCBhbGlnbm1lbnQgd2hpbGUgX19hbGlnbm9m
+X18gZXZhbHVhdGVzIHRvIHRoZSBleHRlbmRlZA0KPiBhbGlnbm1lbnQgKHdoaWNoIGlzIGltcGxl
+bWVudGF0aW9uIGRlZmluZWQsIHR5cGljYWxseSBieSB0aGUgbWFjaGluZQ0KPiBzcGVjaWZpYyBB
+QkkpLiIgVGhvdWdoIGV2ZW4gdGhhdCBzZWVtcyBpbXByZWNpc2Ugc2luY2UgaXQgc291bmRzIGxp
+a2UNCj4gYSBmdW5kYW1lbnRhbCBhbGlnbm1lbnQgY291bGQgYmUgbGVzcyB0aGFuIG9yIGVxdWFs
+IHRvIHdoYXQgYWxpZ25vZg0KPiBldmFsdWF0ZXMgdG8uDQoNCkV4Y2VwdCB0aGF0IG5laXRoZXIg
+b2YgdGhvc2UgdGVybXMgbWFrZXMgYW55IHNlbnNlIHRvIG1vc3QNCnBlb3BsZS4NClNvbWV0aGlu
+ZyBsaWtlICJfX2FsaWdub2ZfXygpIGlzIHRoZSBwcmVmZXJyZWQgYWxpZ25tZW50IGFuZA0KX0Fs
+aWdub2YoKSB0aGUgbWluaW1hbCBhbGlnbm1lbnQuIEZvciAnbG9uZyBsb25nJyBvbiB4ODYgdGhl
+c2UNCmFyZSA4IGFuZCA0IHJlc3BlY3RpdmVseS4iDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVk
+IEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5l
+cywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
