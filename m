@@ -2,197 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 741725F6D87
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 20:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B345F6D8D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 20:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231873AbiJFSbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 14:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
+        id S231704AbiJFScr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 14:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231783AbiJFSb1 (ORCPT
+        with ESMTP id S229505AbiJFSco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 14:31:27 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1E8AA34D
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 11:31:23 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id c7so2551089pgt.11
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 11:31:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5tqpyzMMfKgYRQNtK1HpD/acwmpZ7QOJOYhsAzwpzxM=;
-        b=fa84eRR0WULkX9PBmJMowIb5wtxulEbChbHx3QTmTywdR3H6dUR/OFCekwJ9kX0ion
-         OWnMU/X1h2xenNFoqVG2wT9CD8RVh1x+KpExrKV0TUZeWtGTu1hNbhISFT6xKfuCCNlg
-         b02zuzlNM875Aa2StQEoExcxePzpXHnoRlgWWJy0hvoRhPVb8GAGS66PqfsmyeYH2F+C
-         6StSx3vUSCdPCSmm4auVTAAapZvfeLaUIsZuoXEu0LYvHF9Frx5QMw6bIpoOIVn/WGbT
-         rQ5shfWYf9QPRMZR65zMZUrFSdah7Yp3e1/GXxfIgQ84Seij9vRsR+2tF5c1gliC0MHR
-         26lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5tqpyzMMfKgYRQNtK1HpD/acwmpZ7QOJOYhsAzwpzxM=;
-        b=rfVtoepFmtqv1mlBkNplXr7N6BjNjhCO4Jk5+KnNXu0i1yA5tNS0bvHgj5hABLEx7f
-         ZMfRmYGuoDN8dV7wYJkSdnH/1npzYV0aHXMk/gYvc4KvAAOZsVQBhTkxa6RKc3xebWeu
-         a73aY9ZFFDV7ih1YOx88d2ey9g7FajhpMCh2dG0TthQBlhgirkal+HuPQpSRCQNoGtsZ
-         Tfun8M6h0jxm8IjGxWJBHEvxXXtcf6juJ3/HgNzvmjedUeFsq9bWAFr5fHeLBHw9dbq4
-         l37Rn2fBiB3LeJGnL/7NZJfSYI0cPtE/Aq5g9/3bYmSehXcJhzm8k578EivXoHEUq6c6
-         +R8Q==
-X-Gm-Message-State: ACrzQf2huzS6mIDKG6FI7zIR/7e4gmUydiE5gOvpPPA8ElR3C2llHw2+
-        iunFyIA0xs42sMrbqqIORi4fdw==
-X-Google-Smtp-Source: AMsMyM5VjpJstVpZ6fMJq81hg2Zk1rlj0F5x+JOErJlhi+pl/A09JgHlzkidlzgGzMAna0/X4lqJ8A==
-X-Received: by 2002:a63:d145:0:b0:443:c25f:5dd5 with SMTP id c5-20020a63d145000000b00443c25f5dd5mr1010382pgj.554.1665081082646;
-        Thu, 06 Oct 2022 11:31:22 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id j12-20020a170903024c00b0017a04542a45sm12849930plh.159.2022.10.06.11.31.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 11:31:21 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 18:31:18 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marcorr@google.com, michael.roth@amd.com, thomas.lendacky@amd.com,
-        joro@8bytes.org, mizhang@google.com, pbonzini@redhat.com,
-        andrew.jones@linux.dev
-Subject: Re: [V4 8/8] KVM: selftests: Add simple sev vm testing
-Message-ID: <Yz8e9t0L//pXD9S9@google.com>
-References: <20220829171021.701198-1-pgonda@google.com>
- <20220829171021.701198-9-pgonda@google.com>
+        Thu, 6 Oct 2022 14:32:44 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D741727A1
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 11:32:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665081162; x=1696617162;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FtP3irN2yi0dlbcCwo1TNXjKuigWX1/G3V8ZbKCv2DI=;
+  b=QKqLAu6qd8PAJqzhILVZcFgnHvohRsEJBV0Lq6oyy0p5O1wYMIFWel6P
+   XWTIOV6EduSV5JthgU8LKp1Acl7AcnBIj8zM6DgGRBIMmDStr56rBCNgc
+   fwyXpWrPLPg/zrYjKABNAUEHx1DJfOSJJ5zD+pHAqUvBuvMF8/frgHV+T
+   Y3NrOmMYwoP51Japo+nwOlfFT6mfssxVxLfDeoPwjCJ9kdQElLmnrOCz2
+   Vb5LoY+9+Pn7MDPCBRLzzf7gec/ntTJxhapvqwEr+ygXj044i8xCzK812
+   iPImTkMLbRo/j1uiQ/LHd9DHrZISMsOh1TPWMmOOzD3x7O1qUqnw9VVTl
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="367659798"
+X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
+   d="scan'208";a="367659798"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 11:32:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="602550602"
+X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
+   d="scan'208";a="602550602"
+Received: from lkp-server01.sh.intel.com (HELO 3c15167049b7) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 06 Oct 2022 11:32:39 -0700
+Received: from kbuild by 3c15167049b7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ogVfi-0000NH-1i;
+        Thu, 06 Oct 2022 18:32:38 +0000
+Date:   Fri, 07 Oct 2022 02:31:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ af5711744371af25129fa6b4cd836ac5c8337039
+Message-ID: <633f1f1b.uIITF4CfdUCNRSdh%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220829171021.701198-9-pgonda@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022, Peter Gonda wrote:
-> +	for (i = 0; i <= NR_SYNCS; ++i) {
-> +		vcpu_run(vcpu);
-> +		switch (get_ucall(vcpu, &uc)) {
-> +		case UCALL_SYNC:
-> +			continue;
-> +		case UCALL_DONE:
-> +			return;
-> +		case UCALL_ABORT:
-> +			TEST_ASSERT(false, "%s at %s:%ld\n\tvalues: %#lx, %#lx",
-> +				    (const char *)uc.args[0], __FILE__,
-> +				    uc.args[1], uc.args[2], uc.args[3]);
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: af5711744371af25129fa6b4cd836ac5c8337039  Merge branch into tip/master: 'x86/mm'
 
-REPORT_GUEST_ASSERT
+elapsed time: 725m
 
-> +		default:
-> +			TEST_ASSERT(
-> +				false, "Unexpected exit: %s",
-> +				exit_reason_str(vcpu->run->exit_reason));
+configs tested: 67
+configs skipped: 2
 
-TEST_FAIL
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> +		}
-> +	}
-> +}
-> +
-> +static void guest_sev_code(void)
-> +{
-> +	uint32_t eax, ebx, ecx, edx;
-> +	uint64_t sev_status;
-> +
-> +	GUEST_SYNC(1);
-> +
-> +	GUEST_ASSERT(this_cpu_has(X86_FEATURE_SEV));
-> +
-> +	sev_status = rdmsr(MSR_AMD64_SEV);
-> +	GUEST_ASSERT((sev_status & 0x1) == 1);
+gcc tested configs:
+arc                                 defconfig
+alpha                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                          rhel-8.3-func
+s390                             allmodconfig
+s390                                defconfig
+i386                 randconfig-a014-20221003
+i386                 randconfig-a011-20221003
+x86_64                    rhel-8.3-kselftests
+i386                 randconfig-a012-20221003
+i386                 randconfig-a013-20221003
+x86_64                              defconfig
+i386                 randconfig-a015-20221003
+i386                 randconfig-a016-20221003
+arm                                 defconfig
+powerpc                           allnoconfig
+x86_64                           rhel-8.3-kvm
+x86_64                               rhel-8.3
+x86_64               randconfig-a011-20221003
+x86_64                         rhel-8.3-kunit
+powerpc                          allmodconfig
+i386                                defconfig
+x86_64                           rhel-8.3-syz
+x86_64               randconfig-a012-20221003
+s390                             allyesconfig
+x86_64               randconfig-a013-20221003
+x86_64               randconfig-a015-20221003
+mips                             allyesconfig
+arm64                            allyesconfig
+sh                               allmodconfig
+arm                              allyesconfig
+m68k                             allmodconfig
+x86_64               randconfig-a014-20221003
+x86_64               randconfig-a016-20221003
+x86_64                           allyesconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+i386                             allyesconfig
+riscv                randconfig-r042-20221003
+ia64                             allmodconfig
+arc                  randconfig-r043-20221003
+arc                  randconfig-r043-20221002
+s390                 randconfig-r044-20221003
+csky                              allnoconfig
+arc                               allnoconfig
+alpha                             allnoconfig
+riscv                             allnoconfig
 
-Add a #define for the magic 0x1.  And the "== 1" is unnecessary.  Hmm, and the
-querying of SEV/SEV-ES/etc status in MSR_AMD64_SEV should be done in helpers.
+clang tested configs:
+i386                 randconfig-a003-20221003
+i386                 randconfig-a002-20221003
+i386                 randconfig-a001-20221003
+i386                 randconfig-a004-20221003
+i386                 randconfig-a005-20221003
+i386                 randconfig-a006-20221003
+hexagon              randconfig-r041-20221003
+x86_64               randconfig-a003-20221003
+riscv                randconfig-r042-20221002
+x86_64               randconfig-a002-20221003
+hexagon              randconfig-r041-20221002
+x86_64               randconfig-a001-20221003
+x86_64               randconfig-a004-20221003
+s390                 randconfig-r044-20221002
+x86_64               randconfig-a006-20221003
+x86_64               randconfig-a005-20221003
+hexagon              randconfig-r045-20221002
+hexagon              randconfig-r045-20221003
 
-> +
-> +	GUEST_DONE();
-> +}
-> +
-> +static struct sev_vm *setup_test_common(void *guest_code, uint64_t policy,
-> +					struct kvm_vcpu **vcpu)
-> +{
-> +	uint8_t measurement[512];
-> +	struct sev_vm *sev;
-> +	struct kvm_vm *vm;
-> +	int i;
-> +
-> +	sev = sev_vm_create(policy, TOTAL_PAGES);
-> +	TEST_ASSERT(sev, "sev_vm_create() failed to create VM\n");
-
-See earlier comments on using TEST_REQUIRE.
-
-> +
-> +	vm = sev->vm;
-> +
-> +	/* Set up VCPU and initial guest kernel. */
-> +	*vcpu = vm_vcpu_add(vm, 0, guest_code);
-> +	kvm_vm_elf_load(vm, program_invocation_name);
-> +
-> +	/* Allocations/setup done. Encrypt initial guest payload. */
-> +	sev_vm_launch(sev);
-> +
-> +	/* Dump the initial measurement. A test to actually verify it would be nice. */
-> +	sev_vm_launch_measure(sev, measurement);
-> +	pr_info("guest measurement: ");
-> +	for (i = 0; i < 32; ++i)
-> +		pr_info("%02x", measurement[i]);
-> +	pr_info("\n");
-> +
-> +	sev_vm_launch_finish(sev);
-
-I believe this entire function gets replaced with
-
-	vm = ____vm_create_with_one_vcpu(VM_MODE_PXXV48_4K_SEV, &vcpu, 0,
-					 guest_code);
-
-> +
-> +	return sev;
-> +}
-> +
-> +static void test_sev(void *guest_code, uint64_t policy)
-> +{
-> +	struct sev_vm *sev;
-> +	struct kvm_vcpu *vcpu;
-> +
-> +	sev = setup_test_common(guest_code, policy, &vcpu);
-> +
-> +	/* Guest is ready to run. Do the tests. */
-
-Comment doesn't add much value.
-
-> +	guest_run_loop(vcpu);
-> +
-> +	pr_info("guest ran successfully\n");
-
-Meh, the test passing is a good indication the test ran successfully.
-
-> +
-> +	sev_vm_free(sev);
-> +}
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +	/* SEV tests */
-
-Again, stating the obvious.
-
-> +	test_sev(guest_sev_code, SEV_POLICY_NO_DBG);
-> +	test_sev(guest_sev_code, 0);
-> +
-> +	return 0;
-> +}
-> -- 
-> 2.37.2.672.g94769d06f0-goog
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
