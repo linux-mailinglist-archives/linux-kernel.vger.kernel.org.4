@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435125F6474
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 12:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A465F6475
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 12:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbiJFKlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 06:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50340 "EHLO
+        id S231310AbiJFKlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 06:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbiJFKlO (ORCPT
+        with ESMTP id S231251AbiJFKlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 06:41:14 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0089E8C030
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 03:41:11 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 10so2083436lfy.5
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 03:41:11 -0700 (PDT)
+        Thu, 6 Oct 2022 06:41:15 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF61728E39
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 03:41:13 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id j4so2186487lfk.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 03:41:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=8/s4+Zhp3AA+ILc/39DUxsaauZZbo+pty0Z14OO/gDM=;
-        b=X9wW/sw1xi5rp5ddlmo7sLAzztlKE9EvLLHwWGzUUIC3vsF5kOlTK7+WYJW95pDvtZ
-         ZrCIYP7kggvAa+7rLUllzWW0c1yY3aI6JU/quHfyumGq7M+68JxCURlCzv+AXFt/XwJg
-         0sFCml5DHVKir88GYJKQZA/96EXp3mLnGJ0UlpAVx6mOd9KJSDebTEOLCLXOpHkLuRC/
-         i3hkS/hFWr570iTp3jr9F58dm1tjeQpARGMS59uu+cx8gccueqxkYZBftAZEgSGj//q0
-         vwi/edMFpWrdfSXa2EfR0Vef5HyuGYQSuC9HckCeiQyZ4V5HmIrPmS/q/jtmLYtWqD8p
-         +0Zg==
+        bh=83k5JZ/X4KlDsxEl7RSSXfEDOzc2Wi0Ts3Xh70GQyqI=;
+        b=tHIzFFqvVxCrJyYTGV9KpmOY0dOkR8C9pDgYKyP5LLgJnxX3PIm+N5/LBdU5UDZyCu
+         wAtt4tQMTiUlcE3sOZ/nPeNluxGTomz7WBqvkvMKnCl6i2xDVmSZ33FG+fkcpGTP2Jb7
+         pYxiOIOi8h7qy4CfYVlAJQa3ij/+dLIv536SjrnxxJooOXaw31MiVkkZavab9dI+pk1C
+         rVr3/542CQiBMktr2+RuXnBFMTSNO3t9ljR0lIho9gLuD62ZGn1GEJAzZJrmZXVmFkjy
+         OcFi8/BexywZDO18nBFDPWREtu7ejPSQbnHvoEeA/ATJAXF5HbmpaiJ01EnezvkmhrMz
+         +d9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=8/s4+Zhp3AA+ILc/39DUxsaauZZbo+pty0Z14OO/gDM=;
-        b=Z9TJULyRfKtjZm3iI8XUo2t/IPTRTR00vNfN43zkfSF8/UIz8drSWkxcqjaoPVhovd
-         uZJ5CEhZi9t3m7U4PuBag5+1x1Jud8tmvLo+nALwuYGg1AWtjfUuAif3p9Yw0WBXvFd5
-         O7xUvMLz0KoQlxMNeam6aeImYhek4M5X2yVMUqnCNia59HdsbwLk4vvDXkGz4GyhDSJ9
-         VnyLksYe6vbpVC6mjMMhFCF5C0QVVNaYn0A4ze6VKCqnhzAAD4r98czFEcwwTWvdsJBX
-         wosgEX02tpKUVoPsD28vdIgHtKUYl0hB/JX4lVWwKm1CF+gYMa/dhmoHZ25DqZvIyYz7
-         LLPw==
-X-Gm-Message-State: ACrzQf21ZRMFnClESC4aHwvn3/R02ZnD5ZdODrHkpdW0naQz6zXtKwTO
-        XvDtZpbF9kVpCcBM6ut6JKI20w==
-X-Google-Smtp-Source: AMsMyM4CP0KBqODsWe5iZm0bUmvDLjcFDA2xPQ6djtE6thldP2wNZKaVnG0Hp97lCJDfnWWnMIXGGA==
-X-Received: by 2002:a05:6512:3981:b0:4a2:2dc5:d2e7 with SMTP id j1-20020a056512398100b004a22dc5d2e7mr1556215lfu.634.1665052870197;
-        Thu, 06 Oct 2022 03:41:10 -0700 (PDT)
+        bh=83k5JZ/X4KlDsxEl7RSSXfEDOzc2Wi0Ts3Xh70GQyqI=;
+        b=ncOdvVN2edfvHO+aPa5r6aijcFVCgRem+VzBqNN4U0C7QgDhbT9xqem438oBG3GHAq
+         gG0oSraLXBTFy3+9mURcPhadPoH8JB9Fh/KuOEoixvWSkssa6G3/769PHqLWB3dmorgF
+         7XQ8w2JgL9iZOdbbHuC6JDq9VRXFnDwVQ/kOiN5BD6YBb32nDtNNNjAMGw4YBn/x5tVQ
+         ienrvR1K+YFtW4jyJRq1oaqvivwfXRQuXuLf0+VTeZEfJprf6VCsNJyWAECpaXCj+05k
+         aHVdUcVYH/KgiUrd3ZTa99qwUgKk7At/E6VuCYN5PMztqHxFX4QjOgtK6IgJc6Bgw69Z
+         ZOZw==
+X-Gm-Message-State: ACrzQf0T+Ubp9Va3gIdZeVvpUfeflOYZl6FBhQd7NRJpX2BT1fyhQuXq
+        a7t5OsNuhHYAFdzJNVXbBPP4sQ==
+X-Google-Smtp-Source: AMsMyM7Jm1Sa4Q3BbJzA4l65LJriQdZkFXGMyYj3od6G0FKi3wPg4I9FPR5Dav29KHO6zWcuQVTpkw==
+X-Received: by 2002:a05:6512:1281:b0:4a2:5c10:c38b with SMTP id u1-20020a056512128100b004a25c10c38bmr1712647lfs.2.1665052871515;
+        Thu, 06 Oct 2022 03:41:11 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id q3-20020a0565123a8300b00492aefd73a5sm2648293lfu.132.2022.10.06.03.41.09
+        by smtp.gmail.com with ESMTPSA id q3-20020a0565123a8300b00492aefd73a5sm2648293lfu.132.2022.10.06.03.41.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 03:41:09 -0700 (PDT)
+        Thu, 06 Oct 2022 03:41:11 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -59,9 +59,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 3/4] arm64: dts: qcom: sdm630: align TLMM pin configuration with DT schema
-Date:   Thu,  6 Oct 2022 12:41:03 +0200
-Message-Id: <20221006104104.171368-3-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 4/4] dt-bindings: pinctrl: qcom,sdm630: convert to dtschema
+Date:   Thu,  6 Oct 2022 12:41:04 +0200
+Message-Id: <20221006104104.171368-4-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221006104104.171368-1-krzysztof.kozlowski@linaro.org>
 References: <20221006104104.171368-1-krzysztof.kozlowski@linaro.org>
@@ -69,503 +69,419 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DT schema expects TLMM pin configuration nodes to be named with
-'-state' suffix and their optional children with '-pins' suffix.  All
-nodes for GPIOs must also define the function property.
+Convert Qualcomm SDM630 and SDM660 pin controller bindings to DT schema.
+Keep the parsing of pin configuration subnodes consistent with other
+Qualcomm schemas (children named with '-state' suffix, their children
+with '-pins').
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../boot/dts/qcom/sda660-inforce-ifc6560.dts  |   6 +-
- .../dts/qcom/sdm630-sony-xperia-nile.dtsi     |  18 ++-
- arch/arm64/boot/dts/qcom/sdm630.dtsi          | 121 ++++++++----------
- .../sdm636-sony-xperia-ganges-mermaid.dts     |   2 +-
- .../boot/dts/qcom/sdm660-xiaomi-lavender.dts  |   6 +-
- 5 files changed, 75 insertions(+), 78 deletions(-)
+ .../bindings/pinctrl/qcom,sdm630-pinctrl.yaml | 189 +++++++++++++++++
+ .../bindings/pinctrl/qcom,sdm660-pinctrl.txt  | 191 ------------------
+ 2 files changed, 189 insertions(+), 191 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdm630-pinctrl.yaml
+ delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdm660-pinctrl.txt
 
-diff --git a/arch/arm64/boot/dts/qcom/sda660-inforce-ifc6560.dts b/arch/arm64/boot/dts/qcom/sda660-inforce-ifc6560.dts
-index 28050bc5f081..f8f8a9f35e27 100644
---- a/arch/arm64/boot/dts/qcom/sda660-inforce-ifc6560.dts
-+++ b/arch/arm64/boot/dts/qcom/sda660-inforce-ifc6560.dts
-@@ -401,16 +401,18 @@ vreg_bob: bob {
- };
- 
- &sdc2_state_on {
--	sd-cd {
-+	sd-cd-pins {
- 		pins = "gpio54";
-+		function = "gpio";
- 		bias-pull-up;
- 		drive-strength = <2>;
- 	};
- };
- 
- &sdc2_state_off {
--	sd-cd {
-+	sd-cd-pins {
- 		pins = "gpio54";
-+		function = "gpio";
- 		bias-disable;
- 		drive-strength = <2>;
- 	};
-diff --git a/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi b/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi
-index 09c07800793a..d604a9675508 100644
---- a/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi
-@@ -577,16 +577,18 @@ vreg_l19a_3p3: l19 {
- };
- 
- &sdc2_state_on {
--	sd-cd {
-+	sd-cd-pins {
- 		pins = "gpio54";
-+		function = "gpio";
- 		bias-pull-up;
- 		drive-strength = <2>;
- 	};
- };
- 
- &sdc2_state_off {
--	sd-cd {
-+	sd-cd-pins {
- 		pins = "gpio54";
-+		function = "gpio";
- 		bias-disable;
- 		drive-strength = <2>;
- 	};
-@@ -615,33 +617,35 @@ &sdhc_2 {
- &tlmm {
- 	gpio-reserved-ranges = <8 4>;
- 
--	ts_int_active: ts-int-active {
-+	ts_int_active: ts-int-active-state {
- 		pins = "gpio45";
-+		function = "gpio";
- 		drive-strength = <8>;
- 		bias-pull-up;
- 	};
- 
--	ts_lcd_id_active: ts-lcd-id-active {
-+	ts_lcd_id_active: ts-lcd-id-active-state {
- 		pins = "gpio56";
-+		function = "gpio";
- 		drive-strength = <8>;
- 		bias-disable;
- 	};
- 
--	imx300_vana_default: imx300-vana-default {
-+	imx300_vana_default: imx300-vana-default-state {
- 		pins = "gpio50";
- 		function = "gpio";
- 		bias-disable;
- 		drive-strength = <2>;
- 	};
- 
--	imx219_vana_default: imx219-vana-default {
-+	imx219_vana_default: imx219-vana-default-state {
- 		pins = "gpio51";
- 		function = "gpio";
- 		bias-disable;
- 		drive-strength = <2>;
- 	};
- 
--	cam_vdig_default: cam-vdig-default {
-+	cam_vdig_default: cam-vdig-default-state {
- 		pins = "gpio52";
- 		function = "gpio";
- 		bias-disable;
-diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-index 796c19b9b2eb..41481493c1e5 100644
---- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-@@ -721,35 +721,36 @@ tlmm: pinctrl@3100000 {
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
- 
--			blsp1_uart1_default: blsp1-uart1-default {
-+			blsp1_uart1_default: blsp1-uart1-default-state {
- 				pins = "gpio0", "gpio1", "gpio2", "gpio3";
- 				function = "blsp_uart1";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			blsp1_uart1_sleep: blsp1-uart1-sleep {
-+			blsp1_uart1_sleep: blsp1-uart1-sleep-state {
- 				pins = "gpio0", "gpio1", "gpio2", "gpio3";
-+				function = "gpio";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			blsp1_uart2_default: blsp1-uart2-default {
-+			blsp1_uart2_default: blsp1-uart2-default-state {
- 				pins = "gpio4", "gpio5";
- 				function = "blsp_uart2";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			blsp2_uart1_default: blsp2-uart1-active {
--				tx-rts {
-+			blsp2_uart1_default: blsp2-uart1-active-state {
-+				tx-rts-pins {
- 					pins = "gpio16", "gpio19";
- 					function = "blsp_uart5";
- 					drive-strength = <2>;
- 					bias-disable;
- 				};
- 
--				rx {
-+				rx-pins {
- 					/*
- 					 * Avoid garbage data while BT module
- 					 * is powered off or not driving signal
-@@ -760,7 +761,7 @@ rx {
- 					bias-pull-up;
- 				};
- 
--				cts {
-+				cts-pins {
- 					/* Match the pull of the BT module */
- 					pins = "gpio18";
- 					function = "blsp_uart5";
-@@ -769,15 +770,15 @@ cts {
- 				};
- 			};
- 
--			blsp2_uart1_sleep: blsp2-uart1-sleep {
--				tx {
-+			blsp2_uart1_sleep: blsp2-uart1-sleep-state {
-+				tx-pins {
- 					pins = "gpio16";
- 					function = "gpio";
- 					drive-strength = <2>;
- 					bias-pull-up;
- 				};
- 
--				rx-cts-rts {
-+				rx-cts-rts-pins {
- 					pins = "gpio17", "gpio18", "gpio19";
- 					function = "gpio";
- 					drive-strength = <2>;
-@@ -785,228 +786,216 @@ rx-cts-rts {
- 				};
- 			};
- 
--			i2c1_default: i2c1-default {
-+			i2c1_default: i2c1-default-state {
- 				pins = "gpio2", "gpio3";
- 				function = "blsp_i2c1";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c1_sleep: i2c1-sleep {
-+			i2c1_sleep: i2c1-sleep-state {
- 				pins = "gpio2", "gpio3";
- 				function = "blsp_i2c1";
- 				drive-strength = <2>;
- 				bias-pull-up;
- 			};
- 
--			i2c2_default: i2c2-default {
-+			i2c2_default: i2c2-default-state {
- 				pins = "gpio6", "gpio7";
- 				function = "blsp_i2c2";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c2_sleep: i2c2-sleep {
-+			i2c2_sleep: i2c2-sleep-state {
- 				pins = "gpio6", "gpio7";
- 				function = "blsp_i2c2";
- 				drive-strength = <2>;
- 				bias-pull-up;
- 			};
- 
--			i2c3_default: i2c3-default {
-+			i2c3_default: i2c3-default-state {
- 				pins = "gpio10", "gpio11";
- 				function = "blsp_i2c3";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c3_sleep: i2c3-sleep {
-+			i2c3_sleep: i2c3-sleep-state {
- 				pins = "gpio10", "gpio11";
- 				function = "blsp_i2c3";
- 				drive-strength = <2>;
- 				bias-pull-up;
- 			};
- 
--			i2c4_default: i2c4-default {
-+			i2c4_default: i2c4-default-state {
- 				pins = "gpio14", "gpio15";
- 				function = "blsp_i2c4";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c4_sleep: i2c4-sleep {
-+			i2c4_sleep: i2c4-sleep-state {
- 				pins = "gpio14", "gpio15";
- 				function = "blsp_i2c4";
- 				drive-strength = <2>;
- 				bias-pull-up;
- 			};
- 
--			i2c5_default: i2c5-default {
-+			i2c5_default: i2c5-default-state {
- 				pins = "gpio18", "gpio19";
- 				function = "blsp_i2c5";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c5_sleep: i2c5-sleep {
-+			i2c5_sleep: i2c5-sleep-state {
- 				pins = "gpio18", "gpio19";
- 				function = "blsp_i2c5";
- 				drive-strength = <2>;
- 				bias-pull-up;
- 			};
- 
--			i2c6_default: i2c6-default {
-+			i2c6_default: i2c6-default-state {
- 				pins = "gpio22", "gpio23";
- 				function = "blsp_i2c6";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c6_sleep: i2c6-sleep {
-+			i2c6_sleep: i2c6-sleep-state {
- 				pins = "gpio22", "gpio23";
- 				function = "blsp_i2c6";
- 				drive-strength = <2>;
- 				bias-pull-up;
- 			};
- 
--			i2c7_default: i2c7-default {
-+			i2c7_default: i2c7-default-state {
- 				pins = "gpio26", "gpio27";
- 				function = "blsp_i2c7";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c7_sleep: i2c7-sleep {
-+			i2c7_sleep: i2c7-sleep-state {
- 				pins = "gpio26", "gpio27";
- 				function = "blsp_i2c7";
- 				drive-strength = <2>;
- 				bias-pull-up;
- 			};
- 
--			i2c8_default: i2c8-default {
-+			i2c8_default: i2c8-default-state {
- 				pins = "gpio30", "gpio31";
- 				function = "blsp_i2c8_a";
- 				drive-strength = <2>;
- 				bias-disable;
- 			};
- 
--			i2c8_sleep: i2c8-sleep {
-+			i2c8_sleep: i2c8-sleep-state {
- 				pins = "gpio30", "gpio31";
- 				function = "blsp_i2c8_a";
- 				drive-strength = <2>;
- 				bias-pull-up;
- 			};
- 
--			cci0_default: cci0_default {
--				pinmux {
--					pins = "gpio36","gpio37";
--					function = "cci_i2c";
--				};
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sdm630-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sdm630-pinctrl.yaml
+new file mode 100644
+index 000000000000..057801652d1a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,sdm630-pinctrl.yaml
+@@ -0,0 +1,189 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pinctrl/qcom,sdm630-pinctrl.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm SDM630 and SDM660 TLMM pin controller
++
++maintainers:
++  - Bjorn Andersson <andersson@kernel.org>
++  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
++
++description:
++  Top Level Mode Multiplexer pin controller node in Qualcomm SDM630 and SDM660
++  SoC.
++
++allOf:
++  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
++
++properties:
++  compatible:
++    enum:
++      - qcom,sdm630-pinctrl
++      - qcom,sdm660-pinctrl
++
++  reg:
++    maxItems: 3
++
++  reg-names:
++    items:
++      - const: south
++      - const: center
++      - const: north
++
++  interrupts: true
++  interrupt-controller: true
++  "#interrupt-cells": true
++  gpio-controller: true
++
++  gpio-reserved-ranges:
++    minItems: 1
++    maxItems: 57
++
++  gpio-line-names:
++    maxItems: 114
++
++  "#gpio-cells": true
++  gpio-ranges: true
++  wakeup-parent: true
++
++patternProperties:
++  "-state$":
++    oneOf:
++      - $ref: "#/$defs/qcom-sdm630-tlmm-state"
++      - patternProperties:
++          "-pins$":
++            $ref: "#/$defs/qcom-sdm630-tlmm-state"
++        additionalProperties: false
++
++$defs:
++  qcom-sdm630-tlmm-state:
++    type: object
++    description:
++      Pinctrl node's client devices use subnodes for desired pin configuration.
++      Client device subnodes use below standard properties.
++    $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
++
++    properties:
++      pins:
++        description:
++          List of gpio pins affected by the properties specified in this
++          subnode.
++        items:
++          oneOf:
++            - pattern: "^gpio([0-9]|[1-9][0-9]|10[0-9]|11[0-3])$"
++            - enum: [ sdc1_clk, sdc1_cmd, sdc1_data, sdc1_rclk, sdc2_clk,
++                      sdc2_cmd, sdc2_data ]
++        minItems: 1
++        maxItems: 36
++
++      function:
++        description:
++          Specify the alternative function to be configured for the specified
++          pins.
++        enum: [ adsp_ext, agera_pll, atest_char, atest_char0, atest_char1,
++                atest_char2, atest_char3, atest_gpsadc0, atest_gpsadc1,
++                atest_tsens, atest_tsens2, atest_usb1, atest_usb10,
++                atest_usb11, atest_usb12, atest_usb13, atest_usb2, atest_usb20,
++                atest_usb21, atest_usb22, atest_usb23, audio_ref, bimc_dte0,
++                bimc_dte1, blsp_i2c1, blsp_i2c2, blsp_i2c3, blsp_i2c4,
++                blsp_i2c5, blsp_i2c6, blsp_i2c7, blsp_i2c8_a, blsp_i2c8_b,
++                blsp_spi1, blsp_spi2, blsp_spi3, blsp_spi3_cs1, blsp_spi3_cs2,
++                blsp_spi4, blsp_spi5, blsp_spi6, blsp_spi7, blsp_spi8_a,
++                blsp_spi8_b, blsp_spi8_cs1, blsp_spi8_cs2, blsp_uart1,
++                blsp_uart2, blsp_uart5, blsp_uart6_a, blsp_uart6_b, blsp_uim1,
++                blsp_uim2, blsp_uim5, blsp_uim6, cam_mclk, cci_async, cci_i2c,
++                cri_trng, cri_trng0, cri_trng1, dbg_out, ddr_bist, gcc_gp1,
++                gcc_gp2, gcc_gp3, gpio, gps_tx_a, gps_tx_b, gps_tx_c,
++                isense_dbg, jitter_bist, ldo_en, ldo_update, m_voc, mdp_vsync,
++                mdss_vsync0, mdss_vsync1, mdss_vsync2, mdss_vsync3, mss_lte,
++                nav_pps_a, nav_pps_b, nav_pps_c, pa_indicator, phase_flag0,
++                phase_flag1, phase_flag10, phase_flag11, phase_flag12,
++                phase_flag13, phase_flag14, phase_flag15, phase_flag16,
++                phase_flag17, phase_flag18, phase_flag19, phase_flag2,
++                phase_flag20, phase_flag21, phase_flag22, phase_flag23,
++                phase_flag24, phase_flag25, phase_flag26, phase_flag27,
++                phase_flag28, phase_flag29, phase_flag3, phase_flag30,
++                phase_flag31, phase_flag4, phase_flag5, phase_flag6,
++                phase_flag7, phase_flag8, phase_flag9, pll_bypassnl, pll_reset,
++                pri_mi2s, pri_mi2s_ws, prng_rosc, pwr_crypto, pwr_modem,
++                pwr_nav, qdss_cti0_a, qdss_cti0_b, qdss_cti1_a, qdss_cti1_b,
++                qdss_gpio, qdss_gpio0, qdss_gpio1, qdss_gpio10, qdss_gpio11,
++                qdss_gpio12, qdss_gpio13, qdss_gpio14, qdss_gpio15, qdss_gpio2,
++                qdss_gpio3, qdss_gpio4, qdss_gpio5, qdss_gpio6, qdss_gpio7,
++                qdss_gpio8, qdss_gpio9, qlink_enable, qlink_request, qspi_clk,
++                qspi_cs, qspi_data0, qspi_data1, qspi_data2, qspi_data3,
++                qspi_resetn, sec_mi2s, sndwire_clk, sndwire_data, sp_cmu,
++                ssc_irq, tgu_ch0, tgu_ch1, tsense_pwm1, tsense_pwm2, uim1_clk,
++                uim1_data, uim1_present, uim1_reset, uim2_clk, uim2_data,
++                uim2_present, uim2_reset, uim_batt, vfr_1, vsense_clkout,
++                vsense_data0, vsense_data1, vsense_mode, wlan1_adc0,
++                wlan1_adc1, wlan2_adc0, wlan2_adc1 ]
++
++      bias-disable: true
++      bias-pull-down: true
++      bias-pull-up: true
++      drive-strength: true
++      input-enable: true
++      output-high: true
++      output-low: true
++
++    required:
++      - pins
++
++    additionalProperties: false
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    pinctrl@3100000 {
++        compatible = "qcom,sdm630-pinctrl";
++        reg = <0x03100000 0x400000>,
++              <0x03500000 0x400000>,
++              <0x03900000 0x400000>;
++        reg-names = "south", "center", "north";
++        interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
++        gpio-controller;
++        gpio-ranges = <&tlmm 0 0 114>;
++        #gpio-cells = <2>;
++        interrupt-controller;
++        #interrupt-cells = <2>;
++
++        blsp1-uart1-default-state {
++            pins = "gpio0", "gpio1", "gpio2", "gpio3";
++            function = "gpio";
++            drive-strength = <2>;
++            bias-disable;
++        };
++
++        blsp2_uart1_default: blsp2-uart1-active-state {
++            tx-rts-pins {
++                pins = "gpio16", "gpio19";
++                function = "blsp_uart5";
++                drive-strength = <2>;
++                bias-disable;
++            };
++
++            rx-pins {
++                pins = "gpio17";
++                function = "blsp_uart5";
++                drive-strength = <2>;
++                bias-pull-up;
++            };
++
++            cts-pins {
++                pins = "gpio18";
++                function = "blsp_uart5";
++                drive-strength = <2>;
++                bias-pull-down;
++            };
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sdm660-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/qcom,sdm660-pinctrl.txt
+deleted file mode 100644
+index be034d329e10..000000000000
+--- a/Documentation/devicetree/bindings/pinctrl/qcom,sdm660-pinctrl.txt
++++ /dev/null
+@@ -1,191 +0,0 @@
+-Qualcomm Technologies, Inc. SDM660 TLMM block
 -
--				pinconf {
--					pins = "gpio36","gpio37";
--					bias-pull-up;
--					drive-strength = <2>;
--				};
-+			cci0_default: cci0-default-state {
-+				pins = "gpio36","gpio37";
-+				function = "cci_i2c";
-+				bias-pull-up;
-+				drive-strength = <2>;
- 			};
- 
--			cci1_default: cci1_default {
--				pinmux {
--					pins = "gpio38","gpio39";
--					function = "cci_i2c";
--				};
+-This binding describes the Top Level Mode Multiplexer block found in the
+-SDM660 platform.
 -
--				pinconf {
--					pins = "gpio38","gpio39";
--					bias-pull-up;
--					drive-strength = <2>;
--				};
-+			cci1_default: cci1-default-state {
-+				pins = "gpio38","gpio39";
-+				function = "cci_i2c";
-+				bias-pull-up;
-+				drive-strength = <2>;
- 			};
- 
--			sdc1_state_on: sdc1-on {
--				clk {
-+			sdc1_state_on: sdc1-on-state {
-+				clk-pins {
- 					pins = "sdc1_clk";
- 					bias-disable;
- 					drive-strength = <16>;
- 				};
- 
--				cmd {
-+				cmd-pins {
- 					pins = "sdc1_cmd";
- 					bias-pull-up;
- 					drive-strength = <10>;
- 				};
- 
--				data {
-+				data-pins {
- 					pins = "sdc1_data";
- 					bias-pull-up;
- 					drive-strength = <10>;
- 				};
- 
--				rclk {
-+				rclk-pins {
- 					pins = "sdc1_rclk";
- 					bias-pull-down;
- 				};
- 			};
- 
--			sdc1_state_off: sdc1-off {
--				clk {
-+			sdc1_state_off: sdc1-off-state {
-+				clk-pins {
- 					pins = "sdc1_clk";
- 					bias-disable;
- 					drive-strength = <2>;
- 				};
- 
--				cmd {
-+				cmd-pins {
- 					pins = "sdc1_cmd";
- 					bias-pull-up;
- 					drive-strength = <2>;
- 				};
- 
--				data {
-+				data-pins {
- 					pins = "sdc1_data";
- 					bias-pull-up;
- 					drive-strength = <2>;
- 				};
- 
--				rclk {
-+				rclk-pins {
- 					pins = "sdc1_rclk";
- 					bias-pull-down;
- 				};
- 			};
- 
--			sdc2_state_on: sdc2-on {
--				clk {
-+			sdc2_state_on: sdc2-on-state {
-+				clk-pins {
- 					pins = "sdc2_clk";
- 					bias-disable;
- 					drive-strength = <16>;
- 				};
- 
--				cmd {
-+				cmd-pins {
- 					pins = "sdc2_cmd";
- 					bias-pull-up;
- 					drive-strength = <10>;
- 				};
- 
--				data {
-+				data-pins {
- 					pins = "sdc2_data";
- 					bias-pull-up;
- 					drive-strength = <10>;
- 				};
- 			};
- 
--			sdc2_state_off: sdc2-off {
--				clk {
-+			sdc2_state_off: sdc2-off-state {
-+				clk-pins {
- 					pins = "sdc2_clk";
- 					bias-disable;
- 					drive-strength = <2>;
- 				};
- 
--				cmd {
-+				cmd-pins {
- 					pins = "sdc2_cmd";
- 					bias-pull-up;
- 					drive-strength = <2>;
- 				};
- 
--				data {
-+				data-pins {
- 					pins = "sdc2_data";
- 					bias-pull-up;
- 					drive-strength = <2>;
-diff --git a/arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dts b/arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dts
-index 58f687fc49e0..9702e5f59a1d 100644
---- a/arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm636-sony-xperia-ganges-mermaid.dts
-@@ -19,7 +19,7 @@ / {
- };
- 
- &sdc2_state_on {
--	clk {
-+	clk-pins {
- 		drive-strength = <14>;
- 	};
- };
-diff --git a/arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dts b/arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dts
-index a3559f6e34a5..270091db48fc 100644
---- a/arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dts
-@@ -372,16 +372,18 @@ &pm660l_wled {
- };
- 
- &sdc2_state_on {
--	sd-cd {
-+	sd-cd-pins {
- 		pins = "gpio54";
-+		function = "gpio";
- 		bias-pull-up;
- 		drive-strength = <2>;
- 	};
- };
- 
- &sdc2_state_off {
--	sd-cd {
-+	sd-cd-pins {
- 		pins = "gpio54";
-+		function = "gpio";
- 		bias-disable;
- 		drive-strength = <2>;
- 	};
+-- compatible:
+-	Usage: required
+-	Value type: <string>
+-	Definition: must be "qcom,sdm660-pinctrl" or
+-		    "qcom,sdm630-pinctrl".
+-
+-- reg:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: the base address and size of the north, center and south
+-		    TLMM tiles.
+-
+-- reg-names:
+-       Usage: required
+-       Value type: <stringlist>
+-       Definition: names for the cells of reg, must contain "north", "center"
+-                   and "south".
+-
+-- interrupts:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: should specify the TLMM summary IRQ.
+-
+-- interrupt-controller:
+-	Usage: required
+-	Value type: <none>
+-	Definition: identifies this node as an interrupt controller
+-
+-- #interrupt-cells:
+-	Usage: required
+-	Value type: <u32>
+-	Definition: must be 2. Specifying the pin number and flags, as defined
+-		    in <dt-bindings/interrupt-controller/irq.h>
+-
+-- gpio-controller:
+-	Usage: required
+-	Value type: <none>
+-	Definition: identifies this node as a gpio controller
+-
+-- gpio-ranges:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: Specifies the mapping between gpio controller and
+-		    pin-controller pins.
+-
+-- #gpio-cells:
+-	Usage: required
+-	Value type: <u32>
+-	Definition: must be 2. Specifying the pin number and flags, as defined
+-		    in <dt-bindings/gpio/gpio.h>
+-
+-Please refer to ../gpio/gpio.txt and ../interrupt-controller/interrupts.txt for
+-a general description of GPIO and interrupt bindings.
+-
+-Please refer to pinctrl-bindings.txt in this directory for details of the
+-common pinctrl bindings used by client devices, including the meaning of the
+-phrase "pin configuration node".
+-
+-The pin configuration nodes act as a container for an arbitrary number of
+-subnodes. Each of these subnodes represents some desired configuration for a
+-pin, a group, or a list of pins or groups. This configuration can include the
+-mux function to select on those pin(s)/group(s), and various pin configuration
+-parameters, such as pull-up, drive strength, etc.
+-
+-
+-PIN CONFIGURATION NODES:
+-
+-The name of each subnode is not important; all subnodes should be enumerated
+-and processed purely based on their content.
+-
+-Each subnode only affects those parameters that are explicitly listed. In
+-other words, a subnode that lists a mux function but no pin configuration
+-parameters implies no information about any pin configuration parameters.
+-Similarly, a pin subnode that describes a pullup parameter implies no
+-information about e.g. the mux function.
+-
+-
+-The following generic properties as defined in pinctrl-bindings.txt are valid
+-to specify in a pin configuration subnode:
+-
+-- pins:
+-	Usage: required
+-	Value type: <string-array>
+-	Definition: List of gpio pins affected by the properties specified in
+-		    this subnode.  Valid pins are:
+-		    gpio0-gpio113,
+-		        Supports mux, bias and drive-strength
+-		    sdc1_clk, sdc1_cmd, sdc1_data sdc2_clk, sdc2_cmd, sdc2_data sdc1_rclk,
+-		        Supports bias and drive-strength
+-
+-- function:
+-	Usage: required
+-	Value type: <string>
+-	Definition: Specify the alternative function to be configured for the
+-		    specified pins. Functions are only valid for gpio pins.
+-		    Valid values are:
+-		    adsp_ext, agera_pll, atest_char, atest_char0, atest_char1,
+-		    atest_char2, atest_char3, atest_gpsadc0, atest_gpsadc1,
+-		    atest_tsens, atest_tsens2, atest_usb1, atest_usb10,
+-		    atest_usb11, atest_usb12, atest_usb13, atest_usb2,
+-		    atest_usb20, atest_usb21, atest_usb22, atest_usb23,
+-		    audio_ref, bimc_dte0, bimc_dte1, blsp_i2c1, blsp_i2c2,
+-		    blsp_i2c3, blsp_i2c4, blsp_i2c5, blsp_i2c6, blsp_i2c7,
+-		    blsp_i2c8_a, blsp_i2c8_b, blsp_spi1, blsp_spi2, blsp_spi3,
+-		    blsp_spi3_cs1, blsp_spi3_cs2, blsp_spi4, blsp_spi5,
+-		    blsp_spi6, blsp_spi7, blsp_spi8_a, blsp_spi8_b,
+-		    blsp_spi8_cs1, blsp_spi8_cs2, blsp_uart1, blsp_uart2,
+-		    blsp_uart5, blsp_uart6_a, blsp_uart6_b, blsp_uim1,
+-		    blsp_uim2, blsp_uim5, blsp_uim6, cam_mclk, cci_async,
+-		    cci_i2c, cri_trng, cri_trng0, cri_trng1, dbg_out, ddr_bist,
+-		    gcc_gp1, gcc_gp2, gcc_gp3, gpio, gps_tx_a, gps_tx_b, gps_tx_c,
+-		    isense_dbg, jitter_bist, ldo_en, ldo_update, m_voc, mdp_vsync,
+-		    mdss_vsync0, mdss_vsync1, mdss_vsync2, mdss_vsync3, mss_lte,
+-		    nav_pps_a, nav_pps_b, nav_pps_c, pa_indicator, phase_flag0,
+-		    phase_flag1, phase_flag10, phase_flag11, phase_flag12,
+-		    phase_flag13, phase_flag14, phase_flag15, phase_flag16,
+-		    phase_flag17, phase_flag18, phase_flag19, phase_flag2,
+-		    phase_flag20, phase_flag21, phase_flag22, phase_flag23,
+-		    phase_flag24, phase_flag25, phase_flag26, phase_flag27,
+-		    phase_flag28, phase_flag29, phase_flag3, phase_flag30,
+-		    phase_flag31, phase_flag4, phase_flag5, phase_flag6,
+-		    phase_flag7, phase_flag8, phase_flag9, pll_bypassnl,
+-		    pll_reset, pri_mi2s, pri_mi2s_ws, prng_rosc, pwr_crypto,
+-		    pwr_modem, pwr_nav, qdss_cti0_a, qdss_cti0_b, qdss_cti1_a,
+-		    qdss_cti1_b, qdss_gpio, qdss_gpio0, qdss_gpio1, qdss_gpio10,
+-		    qdss_gpio11, qdss_gpio12, qdss_gpio13, qdss_gpio14, qdss_gpio15,
+-		    qdss_gpio2, qdss_gpio3, qdss_gpio4, qdss_gpio5, qdss_gpio6,
+-		    qdss_gpio7, qdss_gpio8, qdss_gpio9, qlink_enable, qlink_request,
+-		    qspi_clk, qspi_cs, qspi_data0, qspi_data1, qspi_data2,
+-		    qspi_data3, qspi_resetn, sec_mi2s, sndwire_clk, sndwire_data,
+-		    sp_cmu, ssc_irq, tgu_ch0, tgu_ch1, tsense_pwm1, tsense_pwm2,
+-		    uim1_clk, uim1_data, uim1_present, uim1_reset, uim2_clk,
+-		    uim2_data, uim2_present, uim2_reset, uim_batt, vfr_1,
+-		    vsense_clkout, vsense_data0, vsense_data1, vsense_mode,
+-		    wlan1_adc0, wlan1_adc1, wlan2_adc0, wlan2_adc1
+-
+-- bias-disable:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins should be configured as no pull.
+-
+-- bias-pull-down:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins should be configured as pull down.
+-
+-- bias-pull-up:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins should be configured as pull up.
+-
+-- output-high:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins are configured in output mode, driven
+-		    high.
+-		    Not valid for sdc pins.
+-
+-- output-low:
+-	Usage: optional
+-	Value type: <none>
+-	Definition: The specified pins are configured in output mode, driven
+-		    low.
+-		    Not valid for sdc pins.
+-
+-- drive-strength:
+-	Usage: optional
+-	Value type: <u32>
+-	Definition: Selects the drive strength for the specified pins, in mA.
+-		    Valid values are: 2, 4, 6, 8, 10, 12, 14 and 16
+-
+-Example:
+-
+-	tlmm: pinctrl@3100000 {
+-		compatible = "qcom,sdm660-pinctrl";
+-		reg = <0x3100000 0x200000>,
+-		      <0x3500000 0x200000>,
+-		      <0x3900000 0x200000>;
+-		reg-names = "south", "center", "north";
+-		interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
+-		gpio-controller;
+-		gpio-ranges = <&tlmm 0 0 114>;
+-		#gpio-cells = <2>;
+-		interrupt-controller;
+-		#interrupt-cells = <2>;
+-	};
 -- 
 2.34.1
 
