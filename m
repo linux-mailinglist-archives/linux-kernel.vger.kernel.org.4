@@ -2,55 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF43D5F60BC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 07:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D925F60BF
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 07:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiJFFmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 01:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53310 "EHLO
+        id S230178AbiJFFpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 01:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJFFmD (ORCPT
+        with ESMTP id S229883AbiJFFpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 01:42:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF87B89812;
-        Wed,  5 Oct 2022 22:42:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74818B81EA0;
-        Thu,  6 Oct 2022 05:42:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 773AFC433C1;
-        Thu,  6 Oct 2022 05:41:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665034919;
-        bh=n6c4VvqngC4tq6JMLCIJjyOZ8FbiloEgzYjwG3LxPlo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IZKWZ8Ktkq2qWRUa7pcHiU/6//pZB+4vJUfPh6MIPWpRAAnAwb/qRA9PxIaCqBj4n
-         IoSAh5YNkcUqvb/pF1oHfzHJhVz71QeoiLJNjfSmAfR7XJG1m+vuylZgh5R26eztJ2
-         m43Ye0rXVjyD01Y4gY+8uNebpysWNd48ub2enqsU95U8pEbAkk2FCXComJtHRWmoFv
-         ggfxFzcY9nBUsjBJjP/HwvRjwp+Cbk46x3rUxRfYfRdk6vt6g+xZWgmyyY8Xw6Z9z1
-         e/9XcHc7Wsqrg6riA7w5O9tRUMrvvtZhjxrrvVLThAaghQVmmQx/GT3229ZI3Th75F
-         GOpY7FuH1fglw==
-Date:   Thu, 6 Oct 2022 06:41:52 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Subject: Re: [PATCH 5/5] docs: improve the HTML formatting of kerneldoc
- comments
-Message-ID: <20221006064152.0c82a351@sal.lan>
-In-Reply-To: <87tu4i9tli.fsf@meer.lwn.net>
-References: <20221004201222.281845-1-corbet@lwn.net>
-        <20221004201222.281845-6-corbet@lwn.net>
-        <20221005065909.33ba2523@sal.lan>
-        <87tu4i9tli.fsf@meer.lwn.net>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Thu, 6 Oct 2022 01:45:13 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2186A32A93
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Oct 2022 22:45:13 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id y15so155438pff.7
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Oct 2022 22:45:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=zHiKWHLUiEejnPGH1G2wAyZsdKfADMIbnHWjWlmRMao=;
+        b=tl8RJsAPTOLZS/YMGLNBH1ch7H4kbv9Y1gZtT9Ull0r5CBiD6eUdSipUWpN81KZD4o
+         1B2B7DnDh1UkERW85Kpuwu94+gpahq9tgcUK4bAZ41sM2gdyAWdR2yJhde597K3T5ijb
+         YS57MhN2YnsOTLUhB3XmjywOZZt5msHmyPjDnzU59v1fugjfQsSY+YSnS8pav99+URgn
+         sYfh2wSV3xu5ZxiuZm1tXH5eiWYCU9Dp85BfZ53BPIeArxaaCU7CqPt/ZeEykdqZnLAj
+         E1tdx37CJ8wfwINyGwIOe5cu1NhW9vHO71MVVQqWE5tOQFJ4WS7XTmRL9xuMyzRc13Bk
+         Q9gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=zHiKWHLUiEejnPGH1G2wAyZsdKfADMIbnHWjWlmRMao=;
+        b=jWswM6VL3C2wkXfzoYe5w67R35RPiy08HMYt/AdMEdUX5LeYo6PlIFmO7jtAQzk2ui
+         ObGZ4ghouygf1LRo8WBrQv5KZhcDpaAL3NB6fmklTZhhRW+vuNVAobsdAM+agnxaxocp
+         MOz5V/v8a27jvYWzlqCWgPdlcMeuHnmCYEbS7/kpOHEwhDEPB+cSgAXxvu8W/1eTYEta
+         8YKYiIawL42Awpaexcg6O86379CMiSQaBDSXzl0njXQc1H12nLK/D/YLzugCt28vJIm3
+         5IgzEHnW6Ami/9AZbou6jcAqs5xYhIptFnfCxllxjCqWdrivOhyAbOzqOXFSC1CF0ivF
+         AqRg==
+X-Gm-Message-State: ACrzQf06Kb1Y40zq6T9jGwbSLFkToYraQZ2QvQEnd6dxAkRJEwxseTGi
+        dtUahIg3SGZ1OIHBFGCWWCmfOA==
+X-Google-Smtp-Source: AMsMyM5vd8OGf+eWFBFD9UvRzJr7NaLqmbEhXMZTxTI6ty50qCKgo7J7kWQc4x+BqzwP5m3G5NO1pQ==
+X-Received: by 2002:a05:6a00:cd6:b0:546:d03:3dd7 with SMTP id b22-20020a056a000cd600b005460d033dd7mr3034708pfv.19.1665035112497;
+        Wed, 05 Oct 2022 22:45:12 -0700 (PDT)
+Received: from leoy-yangtze.lan (45.78.17.119.16clouds.com. [45.78.17.119])
+        by smtp.gmail.com with ESMTPSA id a15-20020a170902710f00b0017f9021ddc6sm584474pll.289.2022.10.05.22.45.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Oct 2022 22:45:11 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 13:45:05 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        James Clark <james.clark@arm.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] perf: Skip and warn on unknown format 'configN'
+ attrs
+Message-ID: <Yz5rYU/sWtJcRZ7B@leoy-yangtze.lan>
+References: <20220914-arm-perf-tool-spe1-2-v2-v3-0-8189fc04dcc6@kernel.org>
+ <20220914-arm-perf-tool-spe1-2-v2-v3-1-8189fc04dcc6@kernel.org>
+ <YzU/o3kxS/BYpJhn@leoy-yangtze.lan>
+ <CAL_Jsq+3pt_yr5LLFNR-DsXQycD-_gd5fum8QbfxUzHPR-zfJw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_Jsq+3pt_yr5LLFNR-DsXQycD-_gd5fum8QbfxUzHPR-zfJw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,38 +80,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, 05 Oct 2022 09:29:45 -0600
-Jonathan Corbet <corbet@lwn.net> escreveu:
+On Tue, Oct 04, 2022 at 12:07:30PM -0500, Rob Herring wrote:
 
-> Mauro Carvalho Chehab <mchehab@kernel.org> writes:
+[...]
 
-> > Also, when the container directive was introduced? Does it affect
-> > the minimal Sphinx version we support? It seems that this was old
-> > enough to not require any changes at the minimal version, but,
-> > from https://www.sphinx-doc.org/en/master/changes.html, it seems
-> > that LaTeX support for it was added only at Sphinx v4.1 on this PR:
-> >
-> > 	https://github.com/sphinx-doc/sphinx/pull/9166
-> >
-> > So, we need to double-check if are there any changes before and after
-> > such version at the places container is used - or change the kerneldoc
-> > to only emit such tags on PDF depending on the Sphinx version.  
+> >     INIT_LIST_HEAD(&perf_pmu__fake.format);
 > 
-> I've tested things as far back as 2.4.5, where all is well.  I don't
-> currently have a machine that is capable of running earlier versions;
-> I'll need to conjure one of those up, I guess.
+> I ended up fixing this in perf_pmu__warn_invalid_formats() instead as
+> the test dealing with internal stuct pmu details didn't seem right:
 > 
-> (Either that or just bite the bullet and move the minimum version
-> forward!)
+> +       /* fake pmu doesn't have format list */
+> +       if (pmu == &perf_pmu__fake)
+> +               return;
+> +
 
-I would just set 2.4.4 as the minimal version. This is already
-the minimal version for PDF output anyway:
+Good point.  It would be even better to fix it in the first place
+rather than checking fake PMU in perf_pmu__warn_invalid_formats(),
+how about below fixing in util/pmu.c?
 
-	my $rec_version = "1.7.9";	# PDF won't build here
-	my $min_pdf_version = "2.4.4";	# Min version where pdf builds
+-struct perf_pmu perf_pmu__fake;
++struct perf_pmu perf_pmu__fake = {
++       .format = LIST_HEAD_INIT(perf_pmu__fake.format),
++};
 
-and requirements.txt also sets to it. Yet, it would be nice to
-change requirements to 2.4.5 as the default pip-installed version.
-
-Regards,
-Mauro
+Thanks,
+Leo
