@@ -2,76 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 173765F6E4B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 21:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56EF65F6E4E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 21:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231948AbiJFTjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 15:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59578 "EHLO
+        id S231995AbiJFTk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 15:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbiJFTjs (ORCPT
+        with ESMTP id S232014AbiJFTkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 15:39:48 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8A8959A
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 12:39:46 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id s21so1634898qtx.6
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 12:39:46 -0700 (PDT)
+        Thu, 6 Oct 2022 15:40:16 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD6C6D553
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 12:40:15 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id 3so3055527vsh.5
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 12:40:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sladewatkins.net; s=googled;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=UnZGCi4lAmBUf8JisG3D6lHwZb0Q4B1rLpDXzInXGYo=;
-        b=GudvCiK6AJJcPDBe0RMPUZKJ/Ls83ouOE78RjCgTRwHjduxtK+ucE4gyBEDPavlBjg
-         SAKuoLI9Z52JB5EnguWzgReETECnQ4T+QWXMbUgkgQWJoR4KZWwREgF6xATVsod4u1ro
-         AVActcJLWfAGLxSyBZzaTZfyXL/iPfMt+KZ9UEW2p0i8zEXmkovEMt8+89dlxSoUqiJc
-         aC7I833EdYjJOz4mvL5EWZcO3Qq9ONE4RKm/zSdaibRdnUaTzw1hc+EEee5eXBFe8q5f
-         UXzPTxoZoBAmOpNOmqH3leLAWQP5rkD46h5/7bQrM0QDWLCL2E02b9LnqoCQ2v2ySodd
-         1/Ow==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oEc/V5K1Hiz7/4wWbbIIQE2MUW9NYfI5CWqEEyZwESU=;
+        b=NYC0CmQIuFWQzXFFZgBfc7weSbJfuC2QUMUCsdwp6SZG9JIuTX/6Z9o7nz+Hv64OTu
+         AEr+pGRgCzhIL3Vzk26rGKUlKq6E+PJn9MGx2VCga1NoHjE4YC0UV4ZxuqyNNhiRK+bA
+         CgFYONIBM0wY9kEsqV5rxQkFHIu0t3ho+HWdfyLlTEivyoh6OaEFMbz1kssda+e9wUGJ
+         idcLv9la3esvdEEXgWbPmdJhKnDMoV2HtVcPSH/tKYIVFeuBojEsDcE69Z2KbIY1gTZc
+         11GSsgjPc45hMnozlarI/WmDBXUI22nTAsYMcCk8d8rjxDJik+bgmyC+O6l0SK4NOhkl
+         PtVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UnZGCi4lAmBUf8JisG3D6lHwZb0Q4B1rLpDXzInXGYo=;
-        b=IxUFoLNFDhz48Km687haNl+760vLphsKTLDCd3MwuJOQT5q5Ly+k0Vsnm7Yt+HKNhV
-         ru4lpb0Xl6L3pTmg8kis289YMFxOY3d1fsJO/+o4EnEFy3+VHHLl5WCaH75MhkNLDLse
-         /GVYW/YJfSAJ0FlPWncncLVrwOKQM0EcUYINRQ1flylBfiqSdtRMMKtGBbFc6r18l1yq
-         FFNc0V95PxWtV93c/z4oDbq/ythMFvz5GvNj4VJQENC6D7qdCxaKvmw6VpvbZj2RKzGa
-         VX5V6tvtBgra8TbzSO+iQrVoMbGg5Vd8YiibqLfFSHy2R8ouXl9BuNAvlTJI8YQsBlWa
-         JrfQ==
-X-Gm-Message-State: ACrzQf31YI5xfofOpPIXpq3+c7HHb1JqiPgrmdGDQ5yUYasSmqY8eMtE
-        9IHxOgPzmMu9CpRsnnQSYrx5kg==
-X-Google-Smtp-Source: AMsMyM5ggu6d7HYK3018zl3UUJe53SmLzrFGiOZdAj8nJkPr9zL6QX+Js40nJA01UQe1FAqeGlxKGA==
-X-Received: by 2002:ac8:5f53:0:b0:35b:b155:1c1f with SMTP id y19-20020ac85f53000000b0035bb1551c1fmr1648601qta.148.1665085184482;
-        Thu, 06 Oct 2022 12:39:44 -0700 (PDT)
-Received: from [192.168.1.30] (pool-108-4-135-94.albyny.fios.verizon.net. [108.4.135.94])
-        by smtp.gmail.com with ESMTPSA id bm8-20020a05620a198800b006cfc7f9eea0sm20187653qkb.122.2022.10.06.12.39.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Oct 2022 12:39:43 -0700 (PDT)
-Message-ID: <1777dc59-d580-d843-3049-ff7019de53b3@sladewatkins.net>
-Date:   Thu, 6 Oct 2022 15:39:41 -0400
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oEc/V5K1Hiz7/4wWbbIIQE2MUW9NYfI5CWqEEyZwESU=;
+        b=oG32x2EznmvB+OA3X79JHgNWJZK3gjFuFnsa4h3bYTiGLnfWB+qcvOiA/IOiK++FlK
+         rrdv9IcsACQExg1S/f9Twj3PnHmQUgqxaH5w3JGwM/7btc0BfYLlSnO69jFYwlDDsn5I
+         fEWm7L5pUE1//tugrSSpi2qpDwbFV8KnGJh0ejy6jYXyDgxv4eUToTGZItzgsXzKvktc
+         KreJFQONJ/wtbATB/EUZGJB6vfptiwca905BiBHFkXiHOzpFEy7mKO+u2ronCIKz078F
+         ch0MGjW0HKr+PD5HbyBWtX1xzQpZFGNMJd/T+NWks8b/IZJWZRjrr6wpOCyaETlqFg3h
+         8h3w==
+X-Gm-Message-State: ACrzQf1p83Tu1NJj10AZng+6tfoOxygPB2iMFrhNnYYUWLOL+i1SCs7M
+        S3EM7fA7CY3l5/55NSofs66dK4Uot2xyb9/uvyqzSw==
+X-Google-Smtp-Source: AMsMyM670pxWPsqsaj/wgnyeYiQ8w0AcRuG0UXXGJGGNz6gs/OUI07bqEmePGSW/VbLMkf1nQxpCmjccMgRupRMoeB8=
+X-Received: by 2002:a67:d51b:0:b0:3a6:f485:8874 with SMTP id
+ l27-20020a67d51b000000b003a6f4858874mr945789vsj.15.1665085214332; Thu, 06 Oct
+ 2022 12:40:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.2
-From:   Slade Watkins <srw@sladewatkins.net>
-Subject: Re: [PATCH 5.4 00/51] 5.4.217-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com
-References: <20221005113210.255710920@linuxfoundation.org>
-Content-Language: en-US
-In-Reply-To: <20221005113210.255710920@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <cb6c406e-1431-fcfd-ef82-87259760ead9@joelfernandes.org>
+ <20220930134931.mpopdvri4xuponw2@wubuntu> <00140e95-0fe2-1ce4-1433-a3211f9da20c@joelfernandes.org>
+ <20221003161404.kdow5uyj7kvbqyxs@wubuntu> <bb28d85a-c50f-a25f-aeb4-672eecb75b55@joelfernandes.org>
+ <20221005100402.3i46oqx5lxsw2qer@wubuntu> <CAEXW_YSPBzjvWaFqhvYpO=RFyjKR0uTPChUwScNsFnEaZupsVQ@mail.gmail.com>
+In-Reply-To: <CAEXW_YSPBzjvWaFqhvYpO=RFyjKR0uTPChUwScNsFnEaZupsVQ@mail.gmail.com>
+From:   Youssef Esmat <youssefesmat@google.com>
+Date:   Thu, 6 Oct 2022 14:40:03 -0500
+Message-ID: <CALUeGD0OP4ZqDFcT10=ih40tGsm9gjjno7NP_Jwd1RxiUJZ0CQ@mail.gmail.com>
+Subject: Re: Sum of weights idea for CFS PI
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Qais Yousef <qais.yousef@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>, bristot@redhat.com,
+        clark.williams@gmail.com, bigeasy@linutronix.de,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,18 +78,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/5/22 at 7:31 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.217 release.
-> There are 51 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 07 Oct 2022 11:31:56 +0000.
-> Anything received after that time might be too late.
+On Thu, Oct 6, 2022 at 8:53 AM Joel Fernandes <joel@joelfernandes.org> wrote:
+>
+> On Wed, Oct 5, 2022 at 6:04 AM Qais Yousef <qais.yousef@arm.com> wrote:
+> >
+> > Hi Joel
+> >
+> > On 10/04/22 16:27, Joel Fernandes wrote:
+> >
+> > [...]
+> >
+> > > I am treating the following the same:
+> > >
+> > >       a.  when A is running, it would be as above.
+> > >       b.  but if A was sleeping, B, C, and D would get 1/3.
+> > >
+> > >  similar to
+> > >
+> > >       a.  when A is running *and blocked on C for all its runtime*
+> > >               ^^ -- in this case, B and D should not have their distributions
+> > >                     changed at all because they are not participating in the
+> > >                     lock acquire and release. So they should neither be hurt
+> > >                     any more, nor be boosted. They should simply stay same [1]
+> > >
+> > >       b.  but if A was sleeping, B, C, and D would get 1/3.
+> > >
+> > >
+> > > [1] Why? Consider 3 tasks in the all-RT case, A high, B medium and C low prio.
+> > >
+> > > If all are running 100% and A does not block on C, B is blocked by A
+> > > indefinitely. So the prio of A and B are inverted. We seek to rectify this, that
+> > > is we need make changes such that, B is returned back to the blocked state. We
+> > > do this by boosting C.
+> > >
+> > > In other words, the prio inheritance will cause B's distribution to not be
+> > > changed (it was supposed to be blocked before and it is now going to be blocked
+> > > state again).
+> > >
+> > > CFS should not behave any differently, B's distribution should not be changed
+> > > before/after the priority inhertiance of A by C. That's just my opinion - and
+> > > that's how I calculated to distribution. With that mind, could you go back to
+> > > seeing if my math was originally correct or did I mess something up?
+> >
+> > It's not about the math. But I think the before and after can't be the same for
+> > C..
+>
+> C is acquiring/releasing the lock so I expect its distribution to
+> change. I was talking about the poor B who has nothing to do with the
+> lock.
+>
+> > > > I don't think this is valid. If A is blocked on C for 50% of the time, and
+> > > > sleeping for 50% of the time, when did it get blocked/unblocked?
+> > > >
+> > > > This will have an impact on the average share for C and skew it, no?
+> > > >
+> > > > Unless I missed something, the average share of C being (3/5 + 1/3) is an
+> > > > impossible state. You need to consider the portion of time when C runs as 1/5,
+> > > > when A is actually not blocked on anything, too.
+> > > >
+> > > > Hmm actually I just re-read your statement below and you just say 3/5 (18/30)
+> > > > is too much. You didn't consider the average. I'll leave the above in hope to
+> > > > help me understand what am I missing and where I went wrong :-)
+> > > >
+> > > > Generally IMHO looking at the average will not help. I think if the share
+> > > > values make sense in each state individually (and I believe they are), that
+> > > > would be enough. AFAICS, B and D are still taking the right amount of time when
+> > > > C inherits the bandwidth. And C by definition will run longer when A is blocked
+> > > > on it for the whole duration of this blocked time.
+> > >
+> > > I was degenerating the case where A sleeps (say I/O) vs A blocks, to simplify
+> > > the math, and then taking average of that. I think that's reasonable?
+> >
+> > I'm not sure. This is skewing the results in my view.
+> >
+> > I think the comparison should just be:
+> >
+> > 1) A, B, C, and D are all running and nothing gets blocked at all. Then shares
+> >    would be:
+> >
+> >    2/5, 1/5, 1/5, 1/5
+> >
+> > 2) A is blocked and C; B, C, D are running with no blocked time. Shares would
+> >    be:
+> >
+> >    - , 1/5, 3/5, 1/5
+> >
+> > By definition, we want to treat A in (2) as RUNNING because as soon as
+> > C unblocks A we should return to (1). From B and D perspective, their share is
+> > not impacted throughout this transition. Which is AFAIU is what we want to
+> > achieve.
+> >
+> > I think considering the sleeping time and averaging can lead to misleading
+> > results if care is not taken.
+>
+> Yes, but that doesn't mean we can just ignore it. It is easy in my
+> view to skew the inherited weight to a very large number, only to find
+> that tasks unrelated to the lock acquire/release are "suffering"
+> though they had nothing to do with the lock or the PI. But it is
+> reasonable to try the simple approach first and see the impact.
+>
+> I also never said the averaging approach or consideration of sleeping
+> time is perfect ;-)
+>
+> > Anyway - just trying to explain how I see it and why C is unlikely to be taking
+> > too much time. I could be wrong. As Youssef said, I think there's no
+> > fundamental problem here.
+>
+> I know on Android where they use smaller HZ, the large tick causes
+> lots of problems for large nice deltas. Example if a highly niced task
+> was to be preempted for 1ms, and preempts instead at 3ms, then the
+> less-niced task will not be so nice (even less nice than it promised
+> to be) any more because of the 2ms boost that the higher niced task
+> got. This can lead the the sched_latency thrown out of the window. Not
+> adjusting the weights properly can potentially make that problem much
+> worse IMO.
 
-5.4.217-rc1 compiled and booted with no errors or regressions on my 
-x86_64 test system.
+Once C releases the lock it should get adjusted and A will get
+adjusted also regardless of tick. At the point we adjust the weights
+we have a chance to check for preemption and cause a reschedule.
 
-Tested-by: Slade Watkins <srw@sladewatkins.net>
+If C doesn't release the lock quickly (hopefully rare), it should
+continue to run at the adjusted weight since it is still blocking A.
 
--srw
+>
+> Thanks.
