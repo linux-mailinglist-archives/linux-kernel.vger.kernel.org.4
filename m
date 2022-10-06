@@ -2,81 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F18145F70E0
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 00:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA78A5F70EC
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 00:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbiJFWDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 18:03:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
+        id S232043AbiJFWED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 18:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbiJFWD0 (ORCPT
+        with ESMTP id S232035AbiJFWDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 18:03:26 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953F51142E2
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 15:03:22 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id a21-20020a5d89d5000000b006b97a46422eso2037573iot.5
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 15:03:22 -0700 (PDT)
+        Thu, 6 Oct 2022 18:03:49 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0AD14298C;
+        Thu,  6 Oct 2022 15:03:47 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id bj12so7446592ejb.13;
+        Thu, 06 Oct 2022 15:03:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WVgi7cf2nCE6FtjgZdFym8h242QTEgsOcOWpCYFthvU=;
+        b=i8nPaM07aW4cMqaMDWT75pSBMzwZRPp1grWHmnpf6JyHfmUyVET6ufw21LcCDff05L
+         CrN2uZhUoyuEE+tn9hX5KHQlJ/ugeZvxNrXuPoX93juF8DSn1okUYV6ZNQ4Dfpy9wX5s
+         eylSiTE05hB3tAPXWHDBF45EVs/A6mF273B4GshO1jDGMtEbprs9Une7tcHF070HXCSC
+         PoUfLyz8CD9Z9foxK6lY2IkDslbStcy23Zm57u/iAOn3RO/OuWgDoQotpK/Gtzbnq2DH
+         LacJHThC+ndnfOi7XBJEwdjNpqWUMkRKxYyZdXN+xVkWY2ToYACmzyH4G3K8TyRMQPcs
+         cIsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
+        h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6IJIJqMDGFCohKrd+JKckm0XxXnzTcfpT36QiFBeR1k=;
-        b=34R4LF7iDJtMC8Av1PYB4JXjMIu78eYCfzBI7X6kR7AyBlx7DChJ5CzEtjnhL8Gkow
-         i/q0JyQekMA+eeKhPUe0GzAerrsmaMYG4dKYDMK3O/PURoElgGctR6EJiGicBQZqef/4
-         +WU5kV2iMj82o/NNeFCtWUT8DPIvvskuyvKIx8uvHpSyt6i3BlZlfIDaA+A9ir65ZI6Q
-         aK2h+qnr/h9G/P12lhet8QWxv+DLhi9YSc5Izzhf5mBlGX60d5d5jhkTh0LBHySavDp+
-         OOuaBy25DxQdDLzjr1958DzA9MQHvuLAvqbTrDk23RdsL3A1NZlgshW8KsiGZq0ts2By
-         anKw==
-X-Gm-Message-State: ACrzQf1tcSnEpB13Ll+Sk3ez339KOQdxUolE7ueMXoxGU+yA+2lD+gJY
-        6RHVxkNK+apEm51hZJI8piYo15lf9B43SEXZUnCFHJaknk+1
-X-Google-Smtp-Source: AMsMyM7KLZwAvT/TyGWR3s23yIONUIqRLJBX9fZ6QZxi2gi8K9BnjLAE96clAuT5B8F4fJAnNio39JNRxVmABda5ugAj95A3KOMF
-MIME-Version: 1.0
-X-Received: by 2002:a02:a682:0:b0:34c:14fc:b490 with SMTP id
- j2-20020a02a682000000b0034c14fcb490mr977406jam.196.1665093801898; Thu, 06 Oct
- 2022 15:03:21 -0700 (PDT)
-Date:   Thu, 06 Oct 2022 15:03:21 -0700
-In-Reply-To: <12068295.O9o76ZdvQC@mypc>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000947b3a05ea64dc75@google.com>
-Subject: Re: [syzbot] memory leak in __get_metapage
-From:   syzbot <syzbot+389b82b29093b3e2640a@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, fmdefrancesco@gmail.com,
-        ira.weiny@intel.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        bh=WVgi7cf2nCE6FtjgZdFym8h242QTEgsOcOWpCYFthvU=;
+        b=B3GapZc0lUXqoC6SYs5URRxDLJeyXiB9vAkGfot2Rj8r5QIlC+s5dm+sgwBarKZGPr
+         I2wynkaBwau8uJ4Oj86ymJi6NZ8wH/QTYC5uodRE503O8TT34Nz/B+dx4VkQR1VgUXxA
+         R7dj1wVZqs5IhEcEdFVTp/VIHDjKTar3FJXftRPnLQml/mMJrZrzGlZ+GxEWtkZlPwNR
+         UuzA5g0JR/rWXvzURZ90J4EvwkpEE8WPOtw4eRn6kaWRPubJaYHfUfXFgSRrkGQd4lO2
+         hIs26msU1eykJQvwAg0fjDUvVMs+SjF3li/3rpU05Xz7RLm96GTc3pXDmpOb+NKE0R+4
+         PECQ==
+X-Gm-Message-State: ACrzQf1xIPfHEgaKhs+VOEqNBfVGIwzeRq81ImYlYZHsIB3pdmG7HVQg
+        KOeR3wcwDRo0KNo1u4S8WMb5IrNeb20=
+X-Google-Smtp-Source: AMsMyM4Q4/D5aTPTEHm/+pjWR/xFQs5R+gr+q/KnW2RoaEJtIaSqwoApES+cSI8EAe6Hf+m+MM8Dqg==
+X-Received: by 2002:a17:907:9816:b0:787:4350:3a19 with SMTP id ji22-20020a170907981600b0078743503a19mr1521283ejc.627.1665093825886;
+        Thu, 06 Oct 2022 15:03:45 -0700 (PDT)
+Received: from stbsrv-and-01.and.broadcom.net ([192.19.144.250])
+        by smtp.gmail.com with ESMTPSA id f14-20020a17090631ce00b0078246b1360fsm241484ejf.131.2022.10.06.15.03.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 15:03:44 -0700 (PDT)
+From:   Jim Quinlan <jim2101024@gmail.com>
+To:     linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        bcm-kernel-feedback-list@broadcom.com, jim2101024@gmail.com,
+        james.quinlan@broadcom.com
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
+        BCM2711/BCM2835 ARM ARCHITECTURE),
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM
+        BCM2711/BCM2835 ARM ARCHITECTURE),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v1 5/5] PCI: brcmstb: Set RCB_{MPS,64B}_MODE bits
+Date:   Thu,  6 Oct 2022 18:03:21 -0400
+Message-Id: <20221006220322.33000-6-jim2101024@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20221006220322.33000-1-jim2101024@gmail.com>
+References: <20221006220322.33000-1-jim2101024@gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Set RCB_MPS mode bit so that data for PCIe read requests up to the size of
+the Maximum Payload Size (MPS) are returned in one completion, and data for
+PCIe read requests greater than the MPS are split at the specified Read
+Completion Boundary setting.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-SYZFATAL: executor failed NUM times: executor NUM: exit status NUM
+Set RCB_64B so that read compeletion boudnary is 64B.
 
-2022/10/06 22:02:25 SYZFATAL: executor failed 11 times: executor 0: exit status 67
-SYZFAIL: wrong response packet
- (errno 16: Device or resource busy)
-loop exited with status 67
+Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+---
+ drivers/pci/controller/pcie-brcmstb.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-SYZFAIL: wrong response packet
- (errno 16: Device or resource busy)
-loop exited with status 67
+diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
+index e3045f1eadbc..edf283e2b5dd 100644
+--- a/drivers/pci/controller/pcie-brcmstb.c
++++ b/drivers/pci/controller/pcie-brcmstb.c
+@@ -53,6 +53,8 @@
+ #define PCIE_RC_DL_MDIO_RD_DATA				0x1108
+ 
+ #define PCIE_MISC_MISC_CTRL				0x4008
++#define  PCIE_MISC_MISC_CTRL_PCIE_RCB_64B_MODE_MASK	0x80
++#define  PCIE_MISC_MISC_CTRL_PCIE_RCB_MPS_MODE_MASK	0x400
+ #define  PCIE_MISC_MISC_CTRL_SCB_ACCESS_EN_MASK		0x1000
+ #define  PCIE_MISC_MISC_CTRL_CFG_READ_UR_MODE_MASK	0x2000
+ #define  PCIE_MISC_MISC_CTRL_MAX_BURST_SIZE_MASK	0x300000
+@@ -900,11 +902,16 @@ static int brcm_pcie_setup(struct brcm_pcie *pcie)
+ 	else
+ 		burst = 0x2; /* 512 bytes */
+ 
+-	/* Set SCB_MAX_BURST_SIZE, CFG_READ_UR_MODE, SCB_ACCESS_EN */
++	/*
++	 * Set SCB_MAX_BURST_SIZE, CFG_READ_UR_MODE, SCB_ACCESS_EN,
++	 * RCB_MPS_MODE, RCB_64B_MODE
++	 */
+ 	tmp = readl(base + PCIE_MISC_MISC_CTRL);
+ 	u32p_replace_bits(&tmp, 1, PCIE_MISC_MISC_CTRL_SCB_ACCESS_EN_MASK);
+ 	u32p_replace_bits(&tmp, 1, PCIE_MISC_MISC_CTRL_CFG_READ_UR_MODE_MASK);
+ 	u32p_replace_bits(&tmp, burst, PCIE_MISC_MISC_CTRL_MAX_BURST_SIZE_MASK);
++	u32p_replace_bits(&tmp, 1, PCIE_MISC_MISC_CTRL_PCIE_RCB_MPS_MODE_MASK);
++	u32p_replace_bits(&tmp, 1, PCIE_MISC_MISC_CTRL_PCIE_RCB_64B_MODE_MASK);
+ 	writel(tmp, base + PCIE_MISC_MISC_CTRL);
+ 
+ 	ret = brcm_pcie_get_rc_bar2_size_and_offset(pcie, &rc_bar2_size,
+-- 
+2.17.1
 
-
-Tested on:
-
-commit:         ffb39098 Merge tag 'linux-kselftest-kunit-6.1-rc1' of ..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=167fffb8880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=10f41fbb818af57a
-dashboard link: https://syzkaller.appspot.com/bug?extid=389b82b29093b3e2640a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: no patches were applied.
