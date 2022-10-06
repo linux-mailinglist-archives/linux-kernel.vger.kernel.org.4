@@ -2,156 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E954D5F71A4
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 01:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 686A05F71AA
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 01:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232091AbiJFXWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 19:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43328 "EHLO
+        id S229729AbiJFXWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 19:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiJFXWJ (ORCPT
+        with ESMTP id S229912AbiJFXW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 19:22:09 -0400
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B005DCD5DE;
-        Thu,  6 Oct 2022 16:22:08 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-132e9bc5ff4so3901050fac.7;
-        Thu, 06 Oct 2022 16:22:08 -0700 (PDT)
+        Thu, 6 Oct 2022 19:22:27 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9295CD5EC;
+        Thu,  6 Oct 2022 16:22:26 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id g13so1789740ile.0;
+        Thu, 06 Oct 2022 16:22:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=+TEoWgEKTvbiJtOYsEhCaZpzROl8ImC9jVpcIpr9rdA=;
+        b=LEsNljBht9CfS9iP7WzSiemiu4S4Ct90L/IXFPTsG4ClZiwQXJ/ciE77IUb9WwHnuy
+         cK33AT6sQ/tdrC2P2Ho4kmtNjz1wg59WoVdUKLz6ifwvt7tmHmyUFE74w874P8zaUoI2
+         Agg6Yrmtx++jD2bHy+A8jbYJz83rYOo5cBR3kCFwpwQhdncBDFhhRsaCKLl7+IrpZkqG
+         fykMxH4NCIfT1sb8TFnF1e5e2w8kdM1LsZ5XguU23xmROGVVujwKFAvV6S9rO8HX47KZ
+         ylEj57zmvpCLUTGuMFp8x8JJBxRqGTIBYz5xOwdXolQkyZCwbaJPfhjMCqSCA64RIle7
+         ATJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HmsVmNuvH5llXHCRrOMCMsMCaj3Vx0koPaw1zFQJKGg=;
-        b=dFJ3gs0fRPIoZ5zoOFDaPveUe/IPr/t1OQy7LGZhKwlM3/PzkIwWvYyw7LrRdiyqjw
-         sIu7nSL1ri1eSbkoxaEZK0WCKgPZamj4/fe7YNKFU2ndKu9Pyz1Bvs/GERBRpLyYJ728
-         N6pAEZ5kB+9IekdP6xr9viIiA51xc/zvb4SZZCPz/R6AqPHpbI83M6GiZTd+DuER6BET
-         ZwNj+v8g23aCOQJmVpDgUM+zkkmltCD81A/8p40twf8JhAXk4B7II1D7hz/nQpaDM1CY
-         d6+MCcKv0uW2sP8RS1q8YZoLunr56rZypDMKWNFLDyUT+2m0bGSgd39D0Gr96SW3xxfL
-         5/Hg==
-X-Gm-Message-State: ACrzQf0XODKV/CokkF/qUZJP06Coo017QKZG1/Ds4wtwigYXPDPa62z0
-        tpY8WWunuMMVwMOHWO92EbMilIfl0eS5WxAvX2s=
-X-Google-Smtp-Source: AMsMyM56OlhXuQFe9+f8r7Wln7s2fdsIdnceFep7gSXsFNaiNfg9hHxz50jzN1NIlXQl5NZx0Siy2Sl36Yg2IEvYoMI=
-X-Received: by 2002:a05:6870:82ac:b0:133:34b:6f10 with SMTP id
- q44-20020a05687082ac00b00133034b6f10mr1172379oae.218.1665098527991; Thu, 06
- Oct 2022 16:22:07 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=+TEoWgEKTvbiJtOYsEhCaZpzROl8ImC9jVpcIpr9rdA=;
+        b=AeMW6HFFAPhrfz3Dnu+HtLAZad4ERcyEIXvFjKzXAmqP1mVfykZCNSqF9X+2wKhEvU
+         k5lFB8HhZE37w3vhU4rjKSkqSv1Hs0Q6r0V4jP/vDlIROqmgLs6/3AYf69osJAO88KSK
+         v+wJ6BVeoszY7Ee1S8pLJJEcyEFPZKUo5e7OXdSQ40BWew62T8XRGg5kt9iHV+zdG+9D
+         6Hj0zAKTYrk+U7eb193WTuiC+I/wTAy/1FYY3TCFVZvHk8ezR/AY6QYJqS1wQQcs1ehk
+         YISagq0Gr9U9DdZ2xZxWcgeiR5B4+3NOj8cplbceuRCy7uAIDQuz6aI4jwXyZWjfkYVv
+         I2KQ==
+X-Gm-Message-State: ACrzQf38AYFQkM+nV3+MZDxa16nfAA2XPd7ZyRCBHc6s6wZ/EjXxqiIg
+        VdySaDqL77JPg7sPFLtpXPZV6DUuwxbDsg==
+X-Google-Smtp-Source: AMsMyM6AWsot4DhUoPLqLnJu+BQTwKSnXw48oIotZLDAu/blMk9OHITtBJMVXWE9n9kR37uL2drMHQ==
+X-Received: by 2002:a05:6e02:164d:b0:2f9:46bb:6ffb with SMTP id v13-20020a056e02164d00b002f946bb6ffbmr945606ilu.320.1665098546112;
+        Thu, 06 Oct 2022 16:22:26 -0700 (PDT)
+Received: from localhost ([2607:fea8:a2e2:2d00::d5cc])
+        by smtp.gmail.com with UTF8SMTPSA id x94-20020a0294e7000000b00363455b779csm264890jah.159.2022.10.06.16.22.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Oct 2022 16:22:25 -0700 (PDT)
+From:   Richard Acayan <mailingradian@gmail.com>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Richard Acayan <mailingradian@gmail.com>,
+        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: [PATCH v8 0/3] SDM670 Pin Control Driver
+Date:   Thu,  6 Oct 2022 19:22:16 -0400
+Message-Id: <20221006232219.37505-1-mailingradian@gmail.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-References: <20221003204647.1481128-1-namhyung@kernel.org> <20221003204647.1481128-3-namhyung@kernel.org>
- <CAP-5=fUw9j=PJrJ1khM2L9bpYbFYK3=0MKeeJqT2Y5mGasCvJA@mail.gmail.com>
-In-Reply-To: <CAP-5=fUw9j=PJrJ1khM2L9bpYbFYK3=0MKeeJqT2Y5mGasCvJA@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 6 Oct 2022 16:21:56 -0700
-Message-ID: <CAM9d7chCu0Ji7hdNcxq1tX+H1zaxgs5NkZUjU_5b5-s+J0FFJQ@mail.gmail.com>
-Subject: Re: [PATCH 2/5] libperf: Propagate maps only if necessary
-To:     Ian Rogers <irogers@google.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 6, 2022 at 11:52 AM Ian Rogers <irogers@google.com> wrote:
->
-> On Mon, Oct 3, 2022 at 1:46 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > The current code propagate evsel's cpu map settings to evlist when it's
-> > added to an evlist.  But the evlist->all_cpus and each evsel's cpus will
-> > be updated in perf_evlist__set_maps() later.  No need to do it before
-> > evlist's cpus are set actually.
-> >
-> > In fact it discards this intermediate all_cpus maps at the beginning
-> > of perf_evlist__set_maps().  Let's not do this.  It's only needed when
-> > an evsel is added after the evlist cpu/thread maps are set.
-> >
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> >  tools/lib/perf/evlist.c                  | 11 ++++-------
-> >  tools/lib/perf/include/internal/evlist.h |  1 +
-> >  2 files changed, 5 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
-> > index 187129652ab6..8ce92070086c 100644
-> > --- a/tools/lib/perf/evlist.c
-> > +++ b/tools/lib/perf/evlist.c
-> > @@ -67,9 +67,7 @@ static void perf_evlist__propagate_maps(struct perf_evlist *evlist)
-> >  {
-> >         struct perf_evsel *evsel;
-> >
-> > -       /* Recomputing all_cpus, so start with a blank slate. */
-> > -       perf_cpu_map__put(evlist->all_cpus);
-> > -       evlist->all_cpus = NULL;
-> > +       evlist->needs_map_propagation = true;
->
-> Might be nice to also clear this in  perf_evlist__init.
+Changes since v7:
+ - remove complement_fw_reserved_gpios from patch 3
 
-It's zero-initialized so I skipped it.  I couldn't find places
-where it resets the existing evlist.
+Changes since v6:
+ - remove bitmap_fill() call completely (original commit was 4c0efbfb2669
+   ("pinctrl: msm: Add ability for drivers to supply a reserved GPIO list"),
+   original author CC'd)
+ - group some entries in pingroup arrays for less lines
+ - accumulate review tags
 
-But now I think we should not call perf_evlist__set_maps()
-in evlist__init() from perf tools.
+Changes since v5:
+ - remove function requirement in schema
+ - change "-state$" regex to double quotes in schema
+ - drop quotes from qcom-tlmm-state ref in dt schema
 
->
-> >
-> >         perf_evlist__for_each_evsel(evlist, evsel)
-> >                 __perf_evlist__propagate_maps(evlist, evsel);
-> > @@ -81,7 +79,9 @@ void perf_evlist__add(struct perf_evlist *evlist,
-> >         evsel->idx = evlist->nr_entries;
-> >         list_add_tail(&evsel->node, &evlist->entries);
-> >         evlist->nr_entries += 1;
-> > -       __perf_evlist__propagate_maps(evlist, evsel);
-> > +
-> > +       if (evlist->needs_map_propagation)
-> > +               __perf_evlist__propagate_maps(evlist, evsel);
->
-> I think a comment here would be useful. Something like:
-> Adding events won't set the CPU maps in the evlist until
-> set_maps/propogate_maps is called. Catch the case that an evsel is
-> added after this and propagate the map.
+Changes since v4:
+ - accumulate review tag
+ - use --cover-letter
+ - this is effectively a resend
 
-Looks good, will add!
+Changes since v3:
+ - constrain gpio-reserved-ranges to 1-75 items
+ - proper indentation in dt-bindings example (actually tagged this time
+   instead of an outdated commit)
+ - remove unnecessary commit reference
+ - rename complement_fw_reserved_gpios -> complement_fw_gpio_ranges
 
-Thanks,
-Namhyung
+Changes since v2:
+ - remove quotes from pinctrl.yaml# in dt-bindings
+ - constrain gpio-reserved-ranges to 1-76 items (includes ufs_reset)
+ - indentation in dt-bindings example
+ - cite downstream kernel source
+ - remove MODULE_AUTHOR (most imported pinctrl drivers don't have this)
 
+Changes since v1:
+ - add a field in msm_pinctrl_soc_data to accomodate the needs of the
+   driver and device dts
+ - apply changes made to existing tlmm dt documentation
+ - add reserved gpios array
+ - rename device tree compat string to qcom,sdm670-tlmm
+ - remove dependency on ACPI
+ - move MODULE_DEVICE_TABLE macro call up
+ - add missing pins (fixes most of the debugfs problems)
+ - move qup0_pins down
+ - add whitespace between UFS_RESET macro and pins array
 
-> >  }
-> >
-> >  void perf_evlist__remove(struct perf_evlist *evlist,
-> > @@ -177,9 +177,6 @@ void perf_evlist__set_maps(struct perf_evlist *evlist,
-> >                 evlist->threads = perf_thread_map__get(threads);
-> >         }
-> >
-> > -       if (!evlist->all_cpus && cpus)
-> > -               evlist->all_cpus = perf_cpu_map__get(cpus);
-> > -
-> >         perf_evlist__propagate_maps(evlist);
-> >  }
-> >
-> > diff --git a/tools/lib/perf/include/internal/evlist.h b/tools/lib/perf/include/internal/evlist.h
-> > index 6f89aec3e608..850f07070036 100644
-> > --- a/tools/lib/perf/include/internal/evlist.h
-> > +++ b/tools/lib/perf/include/internal/evlist.h
-> > @@ -19,6 +19,7 @@ struct perf_evlist {
-> >         int                      nr_entries;
-> >         int                      nr_groups;
-> >         bool                     has_user_cpus;
-> > +       bool                     needs_map_propagation;
-> >         /**
-> >          * The cpus passed from the command line or all online CPUs by
-> >          * default.
-> > --
-> > 2.38.0.rc1.362.ged0d419d3c-goog
-> >
+This patch series adds the driver for the Qualcomm Snapdragon 670 TLMM
+(Top-Level Mode Multiplexer) and introduces a new field so that SDM670-
+related device trees can reserve their own gpios.
+
+Richard Acayan (3):
+  dt-bindings: pinctrl: qcom: add sdm670 pinctrl
+  pinctrl: qcom: do not reinitialize gpio valid mask
+  pinctrl: qcom: add sdm670 pinctrl
+
+ .../bindings/pinctrl/qcom,sdm670-tlmm.yaml    |  129 ++
+ drivers/pinctrl/qcom/Kconfig                  |    9 +
+ drivers/pinctrl/qcom/Makefile                 |    1 +
+ drivers/pinctrl/qcom/pinctrl-msm.c            |    3 +-
+ drivers/pinctrl/qcom/pinctrl-sdm670.c         | 1345 +++++++++++++++++
+ 5 files changed, 1485 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml
+ create mode 100644 drivers/pinctrl/qcom/pinctrl-sdm670.c
+
+-- 
+2.38.0
+
