@@ -2,120 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEC55F6498
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 12:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC40B5F64A7
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 12:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbiJFK42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 06:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
+        id S231220AbiJFK6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 06:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbiJFK40 (ORCPT
+        with ESMTP id S231381AbiJFK6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 06:56:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA1098359;
-        Thu,  6 Oct 2022 03:56:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16E44B8206D;
-        Thu,  6 Oct 2022 10:56:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB77EC43140;
-        Thu,  6 Oct 2022 10:56:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665053782;
-        bh=n1sONnyBy19nROIXw+eEDPEBq0RR7AXvCLWvs323kMg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=miEGJUm4FWmWmXjKNlKsxMKtRsvnrlQNwL4YenRVPxZepzsh5uVbFYjDns3vA5BGr
-         j3A53GwtViyBSfJhc9i2gpkxIEmRqWRqxApmKgmd3ePr3+ru+S4pGKCvum1TqjCy3f
-         V+WjyeCjdyIkgZIBfN03LASLuB+Bj9rqCufVtEgMz5A2QGaP8lcbOrkobfcOXi0i7Q
-         djXW0C1m63i56so2GEqGNWdT2QdSvHCOllHoB61FEdHSWFDBbGBf7mUjXa/mrAS4hj
-         Xwy3J96SZAn6ybv4j6V423iJ3kfjAujIOH4Vi3Rb3uOEzy1eNyus7NOquQDiHweZrQ
-         Ge8XYaEQ9Cx3Q==
-Received: by mail-lf1-f50.google.com with SMTP id b2so2122534lfp.6;
-        Thu, 06 Oct 2022 03:56:22 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1ZyM8KXq+VMJC70nD2VTqDhSbBKeSllaqIdI8CDi8GPlznXuYZ
-        jbadcemPjQ41nw+QDaZqMYuxTZ8+lUoPNkdpm58=
-X-Google-Smtp-Source: AMsMyM5XVgXpY1Gi+XZfGzDdqbBl0FgkTmDXDWQCom0Pu7D17z12Oaq9iuMVD2YJY6S9f56SbO4uJ60/ZeBMaXqvFgw=
-X-Received: by 2002:ac2:4d1c:0:b0:4a2:4119:f647 with SMTP id
- r28-20020ac24d1c000000b004a24119f647mr1502331lfi.426.1665053780725; Thu, 06
- Oct 2022 03:56:20 -0700 (PDT)
+        Thu, 6 Oct 2022 06:58:32 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D9698CAF;
+        Thu,  6 Oct 2022 03:58:31 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id qn17so3813584ejb.0;
+        Thu, 06 Oct 2022 03:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=dtuWscWrUWja3PJx/MNBAlClayApddB5Fza3lHyp908=;
+        b=q2CwkQN0dNAyhiSkuBngj29o+W0Gv8dH9ZUumeFaXEBIkVcPNiivCZF2obZbN1wrm4
+         9mLj3p0qd0GWaL30pPva/jYEBbgIhThYEYXwKjsOkyXgKWHq4ztjv5C0wL4DDaHcbDK2
+         cSBLT57T61eu/72etWy7BUMGY00vrlzDHJcAtVyfK+3vCdtp70VjKigmHE0/hAQIueEN
+         Z/t7RB3y6zNpQjTED3o7WjIH8UVzc3fuhs8gafxVItt+1gBgA2QPvOnr9P+gHkOMLF4T
+         EVZAj2ko1K98uSwyeUUXJNaTAndE6sIiOeCVo5RfLaE59oImd9yi4GaPao3EXmbQgzjX
+         /D1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=dtuWscWrUWja3PJx/MNBAlClayApddB5Fza3lHyp908=;
+        b=OJ8p9qgTWqraZpmerFxyHdvmmE6eE9J9JInnEMOSQSQ26HUIiRDQUTz2ubPPryoJJn
+         BkbonE8ZWnDbWBiQSid+Gd5eFkgDEGF6qJdQ32Cho10gw5GEs3qavk6MsAlna5TDsq6m
+         wMMtQsj3yAjhNN+vZblMpDmAByQFw7mOam7RLUIQPlS6y3dd5vDjbgo9ZQVmbeW7/8pB
+         18N38lFsy85m4hMQFU2zeSIikx8yGZ6eiejlVHGfMwv/fyf/8Aeamg7IccvLMoglWB+6
+         cqMMNk251eTTW+cUZED7SAyRduvA61WKqIKR096tfl1+I/TPOWrdXuxkRD5m34CAJnlw
+         TDkA==
+X-Gm-Message-State: ACrzQf0LXuggGX3AQ9/KbsSCxLbg5XpkNWcqblDxsvPsPn97USoolgvp
+        3NFeGHOqEY0ArHdmUda/DguqpaK+xJs=
+X-Google-Smtp-Source: AMsMyM6MLDP/agBnw6nYvX0NbkG+NdXn/iaPFI8tmlxK6KiJkWX380E9kU434k5TAZwXugX3trWWJQ==
+X-Received: by 2002:a17:907:97d5:b0:782:23b0:ecb8 with SMTP id js21-20020a17090797d500b0078223b0ecb8mr3615440ejc.100.1665053910135;
+        Thu, 06 Oct 2022 03:58:30 -0700 (PDT)
+Received: from masalkhi.. (p5ddb3856.dip0.t-ipconnect.de. [93.219.56.86])
+        by smtp.gmail.com with ESMTPSA id n19-20020aa7c693000000b00458a03203b1sm5677703edq.31.2022.10.06.03.58.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 03:58:29 -0700 (PDT)
+From:   Abd-Alrhman Masalkhi <abd.masalkhi@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org
+Subject: RE: A field in files_struct has been used without initialization
+Date:   Thu,  6 Oct 2022 12:57:28 +0200
+Message-Id: <20221006105728.47115-1-abd.masalkhi@gmail.com>
+X-Mailer: git-send-email 2.29.0.rc1.dirty
+In-Reply-To: <20221006104439.46235-1-abd.masalkhi@gmail.com>
+References: <20221006104439.46235-1-abd.masalkhi@gmail.com>
 MIME-Version: 1.0
-References: <20220921145422.437618-1-ardb@kernel.org> <20220921145422.437618-3-ardb@kernel.org>
- <Yz6xBROUBPyaUSoB@zn.tnic>
-In-Reply-To: <Yz6xBROUBPyaUSoB@zn.tnic>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 6 Oct 2022 12:56:09 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGCWmay_=cncZpZwXoyLgzt7=2dVuXHaaQU=K6NEXrezQ@mail.gmail.com>
-Message-ID: <CAMj1kXGCWmay_=cncZpZwXoyLgzt7=2dVuXHaaQU=K6NEXrezQ@mail.gmail.com>
-Subject: Re: [PATCH v2 02/16] x86/compressed: efi-mixed: move 32-bit
- entrypoint code into .text section
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Michael Roth <michael.roth@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Oct 2022 at 12:42, Borislav Petkov <bp@alien8.de> wrote:
->
-> On Wed, Sep 21, 2022 at 04:54:08PM +0200, Ard Biesheuvel wrote:
-> > Move the code that stores the arguments passed to the EFI entrypoint
-> > into the .text section, so that it can be moved into a separate
-> > compilation unit in a subsequent patch.
-> >
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > ---
-> >  arch/x86/boot/compressed/head_64.S | 34 ++++++++++++--------
-> >  1 file changed, 20 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
-> > index d33f060900d2..1ba2fc2357e6 100644
-> > --- a/arch/x86/boot/compressed/head_64.S
-> > +++ b/arch/x86/boot/compressed/head_64.S
-> > @@ -303,24 +303,28 @@ SYM_FUNC_START(efi32_stub_entry)
-> >       popl    %ecx
-> >       popl    %edx
-> >       popl    %esi
-> > +     jmp     efi32_entry
-> > +SYM_FUNC_END(efi32_stub_entry)
-> >
-> > +     .text
-> > +SYM_FUNC_START_LOCAL(efi32_entry)
-> >       call    1f
-> > -1:   pop     %ebp
-> > -     subl    $ rva(1b), %ebp
-> > -
-> > -     movl    %esi, rva(efi32_boot_args+8)(%ebp)
-> > -SYM_INNER_LABEL(efi32_pe_stub_entry, SYM_L_LOCAL)
-> > -     movl    %ecx, rva(efi32_boot_args)(%ebp)
-> > -     movl    %edx, rva(efi32_boot_args+4)(%ebp)
-> > -     movb    $0, rva(efi_is64)(%ebp)
-> > +1:   pop     %ebx
->
-> I'm guessing according to the EFI mixed mode calling convention, %ebx is
-> not a live register which gets overwritten here...?
->
-> Looking at efi32_pe_entry() from where this is called, %ebx looks live.
->
-> What am I missing?
->
+> new_fdt->close_on_exec itself has not been initialized, is it intended
+> to be like this.
 
-efi32_pe_entry() preserves and restores the caller's value of %ebx,
-because from there, we might actually return control to the firmware.
-The value it keeps in %ebx itself is not live when it jumps to
-efi32_entry - it stores its value into image_offset, which is reloaded
-from memory at a later point.
+I meant:
 
-efi32_stub_entry() is the 'EFI handover protocol' entry point, which
-cannot return to the firmware (and we discard the return address
-already) so %ebx can be clobbered.
+newf->close_on_exec_init itself has not been initialized ...
+
