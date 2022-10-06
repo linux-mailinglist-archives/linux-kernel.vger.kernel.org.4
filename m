@@ -2,189 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC585F711A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 00:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D5A5F7120
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 00:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbiJFWYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 18:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
+        id S231926AbiJFW3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 18:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232283AbiJFWYB (ORCPT
+        with ESMTP id S229683AbiJFW3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 18:24:01 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F2CF1904;
-        Thu,  6 Oct 2022 15:24:00 -0700 (PDT)
+        Thu, 6 Oct 2022 18:29:37 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A718FBF2;
+        Thu,  6 Oct 2022 15:29:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665095040; x=1696631040;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=KfziOm5EbaEsewwxZsiXqYnDBhy0tNb1GQYOUvhzcvs=;
-  b=XWtw4sJVLsOFzafsH1XPKNQ7AWv32ah3pvQ7wYKxAk1yPL4BcK+ST3Y4
-   E2kipGti57kn2Kc2vIqdcU8kW7a2hpdE3BeKovIwupvKK0+9iSu+IZOG6
-   hXvxtJoSW2FDtk/c5G0KnwmUPvHJZpb9lwg6jPG6iF4XJCZk6NBmUjgE8
-   fPRKQmmBbCgMxVWeL44WnqtTxlijcG/cHdhsMPjyrML/TSf1FTiIPTf7/
-   pHU9zb58EJk5ojVQMjFkq5s+fwu0RYLsSydqYIslr2VI/Qr0/fFCnvcst
-   yEBDaoxKZoa3cxwYyl5fh3jNf9xYaPf7xPG75qsfTsTWcgrNUl3NMx0IK
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="286816182"
+  t=1665095376; x=1696631376;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=k3VDWwiUKZLEvjl46lh7KsMqnfu7pLgXi6thYeJCce4=;
+  b=QvdG5G15msbQrX9Hl5cC8Nr0PwRQC4U6F321LBjJ4DaBX+XY+H7qGJ/R
+   kxW/gOaxpi3ovmRssyUW+JK0zTCxILhQyH6bOCbHVeWMJ/gMU8fq6rr2V
+   2fN23B8veeGVj6G6vaAnBX3P62LzUd/MPqJz4k3HRq6HKrFDlqAbULv+3
+   fIUAebX3y7HMAHa5nq3Lh243L9tMYP6NbiS3EFOR1u/M7r50NEd8PBiFd
+   aSKi5jHa51PzrISrxYgT17Xs30zGYCrQQdK1U0Sczq7SyttaB8SrQt8Uu
+   1Rit0sZTe0Rp50iOslHJduyy+HgIc/JJv+oAX4ugDiG8bA72JahuCSm4Q
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="290852693"
 X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
-   d="scan'208";a="286816182"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 15:23:59 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="714025046"
+   d="scan'208";a="290852693"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 15:29:36 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="750321487"
 X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
-   d="scan'208";a="714025046"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 15:23:58 -0700
-Date:   Thu, 6 Oct 2022 15:24:16 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v3 4/4] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-In-Reply-To: <Yz8T8GdzMLyAKIMb@smile.fi.intel.com>
-Message-ID: <alpine.DEB.2.22.394.2210061517300.1772307@rhweight-WRK1>
-References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com> <20221004143718.1076710-5-matthew.gerlach@linux.intel.com> <YzxRxo8jL7rB1+px@smile.fi.intel.com> <alpine.DEB.2.22.394.2210060940150.1988353@rhweight-WRK1>
- <Yz8T8GdzMLyAKIMb@smile.fi.intel.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+   d="scan'208";a="750321487"
+Received: from iitotia-mobl1.amr.corp.intel.com (HELO [10.212.143.59]) ([10.212.143.59])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 15:29:35 -0700
+Message-ID: <3dfccc80-e089-4915-d57e-96d26b237182@intel.com>
+Date:   Thu, 6 Oct 2022 15:29:35 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] x86/sgx: Replace kmap/kunmap_atomic calls
+Content-Language: en-US
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        ira.weiny@intel.com
+References: <20220929160647.362798-1-kristen@linux.intel.com>
+ <3694452.kQq0lBPeGt@mypc> <d64e6e9f-27b9-9bbb-aaf8-fca1681eada5@intel.com>
+ <8124835.T7Z3S40VBb@mypc>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <8124835.T7Z3S40VBb@mypc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/6/22 15:02, Fabio M. De Francesco wrote:
+> On Thursday, October 6, 2022 10:45:56 PM CEST Dave Hansen wrote:
+> Am I still missing anything fundamental?
 
+Yes. :)
 
-On Thu, 6 Oct 2022, Andy Shevchenko wrote:
+kmap() users can sleep.  That means the number of them that you need to
+keep around is unbounded.  kmap_atomic()'s fundamentally can't sleep so
+you need fewer of them.  That means that when you kunmap_atomic() you
+can use a simple, fast, CPU-local TLB flushing operation.  kunmap()
+eventually requires a big fat global TLB flush.
 
-> On Thu, Oct 06, 2022 at 10:00:43AM -0700, matthew.gerlach@linux.intel.com wrote:
->> On Tue, 4 Oct 2022, Andy Shevchenko wrote:
->>> On Tue, Oct 04, 2022 at 07:37:18AM -0700, matthew.gerlach@linux.intel.com wrote:
->
-> ...
->
->>>> Reported-by: kernel test robot <lkp@intel.com>
->>>
->>> https://docs.kernel.org/process/submitting-patches.html?highlight=reported#using-reported-by-tested-by-reviewed-by-suggested-by-and-fixes
->>>
->>> "The Reported-by tag gives credit to people who find bugs and report them and it
->>> hopefully inspires them to help us again in the future. Please note that if the
->>> bug was reported in private, then ask for permission first before using the
->>> Reported-by tag. The tag is intended for bugs; please do not use it to credit
->>> feature requests."
->>
->> The kernel test robot did find a bug in my v1 submission.  I was missing the
->> static keyword for a function declaration.  Should I remove the tag?
->
-> What's yours take from the above documentation?
->
+So, you're right.  On lowmem-only systems, kmap() *can* be cheaper than
+kmap_atomic().  But, on highmem systems there's no contest:
+kmap_atomic() is king.
 
-Since the kernel test robot did find a bug. The tag should stay.
+That's why kmap_atomic() is and should be the default.
 
-> ...
->
->>>> +	dfh_base = devm_ioremap_resource(dev, &dfl_dev->mmio_res);
->>>> +	if (IS_ERR(dfh_base))
->>>> +		return PTR_ERR(dfh_base);
->>>> +
->>>> +	res_size = resource_size(&dfl_dev->mmio_res);
->>>> +
->>>> +	ret = dfl_uart_get_params(dev, dfh_base, res_size, &uart);
->>>
->>>> +	devm_iounmap(dev, dfh_base);
->>>> +	devm_release_mem_region(dev, dfl_dev->mmio_res.start, res_size);
->>>
->>> If it's temporary, may be you shouldn't even consider devm_ioremap_resource()
->>> to begin with? The devm_* release type of functions in 99% of the cases
->>> indicate of the abusing devm_.
->>
->> I will change the code to call ioremap() and request_mem_region() directly
->> instead of the devm_ versions.
->
-> But why will you need request_mem_region() in that case?
+>> You use kmap_atomic() *always* unless you _need_ to sleep or one
+>> of the other kmap()-only things.
+> 
+> What would happen if you rely on switching in atomic as a side effect of 
+> kmap_atomic() and then you convert to kmap_local_page() without explicitly 
+> disabling, for example, preemption since who converts don't care to know if 
+> the code is in atomic before calling kmap_atomic() before or after the call 
+> (as I said there may be cases where non atomic execution must disable 
+> preemption for some reasons only between the mapping and the unmapping?
+> 
+> If I were a maintainer I wouldn't trust changes that let me think that the 
+> developer can't tell if we need to disable something while converting to 
+> kmap_local_page().
 
-It doesn't seem that I need to call request_mem_regsion; so I will skip 
-it.
-
->
->>>> +	if (ret < 0)
->>>> +		return dev_err_probe(dev, ret, "failed uart feature walk\n");
->
-> ...
->
->>>> +config SERIAL_8250_DFL
->>>> +	tristate "DFL bus driver for Altera 16550 UART"
->>>> +	depends on SERIAL_8250 && FPGA_DFL
->>>> +	help
->>>> +	  This option enables support for a Device Feature List (DFL) bus
->>>> +	  driver for the Altera 16650 UART.  One or more Altera 16650 UARTs
->>>> +	  can be instantiated in a FPGA and then be discovered during
->>>> +	  enumeration of the DFL bus.
->>>
->>> When m, what be the module name?
->>
->> I see the file, kernel/drivers/tty/serial/8250/8250_dfl.ko, installed into
->> /lib/modules/...  I also see "alias dfl:t0000f0024* 8250_dfl" in
->> modules.alias
->
-> My point is that user who will run `make menuconfig` will read this and have
-> no clue after the kernel build if the module was built or not. Look into other
-> (recent) sections of the Kconfig for drivers in the kernel for how they inform
-> user about the module name (this more or less standard pattern you just need
-> to copy'n'paste'n'edit carefully).
->
-> ...
-
-I think this should be added:
-           To compile this driver as a module, chose M here: the
-           module will be called 8250_dfl.
->
->>>>  obj-$(CONFIG_SERIAL_8250_FOURPORT)	+= 8250_fourport.o
->>>>  obj-$(CONFIG_SERIAL_8250_ACCENT)	+= 8250_accent.o
->>>>  obj-$(CONFIG_SERIAL_8250_BOCA)		+= 8250_boca.o
->>>> +obj-$(CONFIG_SERIAL_8250_DFL)		+= 8250_dfl.o
->>>
->>> This group of drivers for the 4 UARTs on the board or so, does FPGA belong to
->>> it? (Same Q, btw, for the Kconfig section. And yes, I know that some of the
->>> entries are not properly placed there and in Makefile.)
->>
->> Since 8250_dfl results in its own module, and my kernel config doesn't have
->> FOURPORT, ACCENT, nor BOCA, I guess I don't understand the problem.
->
-> The Makefile is a bit chaotic, but try to find the sorted (more or less)
-> group of drivers that are not 4 ports and squeeze your entry there
-> (I expect somewhere between the LPSS/MID lines).
->
-> It will help to sort out that mess in the future.
-
-I will move 8250_dfl between LPSS and MID lines in the Makefile.  Should I 
-move the definition in Kconfig to be between LPSS and MID to be consistent?
-
->
->>>>  obj-$(CONFIG_SERIAL_8250_EXAR_ST16C554)	+= 8250_exar_st16c554.o
->>>>  obj-$(CONFIG_SERIAL_8250_HUB6)		+= 8250_hub6.o
->>>>  obj-$(CONFIG_SERIAL_8250_FSL)		+= 8250_fsl.o
->
-> -- 
-> With Best Regards,
-> Andy Shevchenko
->
->
->
+In this case, it's just not that complicated.  The SGX code isn't
+relying on anything subtle that kmap_local_page() does not provide.
