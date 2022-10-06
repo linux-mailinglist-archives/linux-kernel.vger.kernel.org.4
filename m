@@ -2,140 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C98645F6197
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 09:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95CC35F6166
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 09:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbiJFHSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 03:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33466 "EHLO
+        id S230153AbiJFHJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 03:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbiJFHSW (ORCPT
+        with ESMTP id S230152AbiJFHJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 03:18:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519268E0D0
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 00:18:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ADBF61871
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 07:18:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A24A9C433C1;
-        Thu,  6 Oct 2022 07:18:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665040682;
-        bh=CDY3LOHif93dA/5GcjxLOgr3s2+BMCkMTymaYNZuiyA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qRm9LVZBrunvLnYytd4pxa3rFq57nHfJ9HsOwpVTeWPTZL9sFAJFrYSAejIdUkx2+
-         +YWVA9Eo3yES9EQw9vR36Re1DZf8dhjtceMd03N6u3RCK+4X2qLONGZEcfnYBLpDKL
-         hwPWSOWrkWM9W32TBw54oRrYC8Dk0URo+cdsVvMIqxw3t3RKe5+AQWn+M4rwwHOyS9
-         LCNF+pVn+aEpOcKXGNhIhkrtPk6VZs8B8J/PSxyZ/1pv4uwg9411eHxebQnt0XrWbb
-         yGu+Tcq7FLQy8KgWezDl4mFSASslMOxJxrPovxMLCwChU97FyjTPIc0grP8kx8o+cM
-         BxDCWLzehBhzQ==
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 8/8] riscv: remove riscv_isa_ext_keys[] array and related usage
-Date:   Thu,  6 Oct 2022 15:08:18 +0800
-Message-Id: <20221006070818.3616-9-jszhang@kernel.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221006070818.3616-1-jszhang@kernel.org>
-References: <20221006070818.3616-1-jszhang@kernel.org>
+        Thu, 6 Oct 2022 03:09:09 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2046.outbound.protection.outlook.com [40.107.255.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9C68D0E9
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 00:08:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ecczGMTio7CZQKk9fQVPyFsjhaWrNlKJe7Eug7vxFTGhMptOdSzeuVj5ID+ATfH2GDVC6GWZlE5BMmEW723OkFuYRxrveyAuzrouy9q5iLiAF6t0x34Ca6AWSGI3ufFiUgt6TAN9J7r3oiW5Fc90sWIQmVmtGWCIaJvmrVrMtIxe13QMdZrYZOKmKoMpuCrRKdG74Vs6j7sWDtg7peMtrE2YbrMxB6cVDHsCNpnIOKK44C2GlYWcD1JSGe2KDvQpXEjcJl5s9is8Ur+QtBvwA3k7EeF2eJS9ootDm5Otv9zgBVoItNfM8UEFYwirRzkEtMyQtqw5g2el0xxGh/4a+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oEhfys8WyLik2IG5wuweP4+UICMjWC7PBzvNuxx5xsU=;
+ b=Z3aQD3JwQcNRzzA1SqsxdHMjr3xn9Dry6KPdLEa83uRC7l+c+EpmWnnj/duOXwZSLXIYrgLarLAvvoJzo9aJ1EVmukSj/x6Bko42F48fNnAEXvAtlRSfQ+qnbGbhz4ia5UHnStiruQPAdMnsaoSujzj6xml1a+aScvsWpg3OeVNfKeS3dGEhIVStoJG8ipiPxXxnMcuA87MrB0dpT/inSP7bO3xVXMQuFLfYUvnUc6mLydUYGTt1TVrvGRhRneJMOSV1j6pVviENWjsmXTh1ij3szarwrUlsaOIV++yT1LGyIrdhCYwc+GIEjxfv7j44ymXEojy8YOSqGiAfg/Sp9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 211.20.1.79) smtp.rcpttodomain=lists.sr.ht smtp.mailfrom=wiwynn.com;
+ dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=wiwynn.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oEhfys8WyLik2IG5wuweP4+UICMjWC7PBzvNuxx5xsU=;
+ b=nhdMcRTA8s7HmsBm/u1j5jeo7vxUAVcuRlTK5emtMR/81BhGLwcwkIn7ijriVXWBcWMHzE/L4FcW6VL29qdStOvqfIPxNav2/wxyj12QroO28CTQkUZz8Gcj9P3WKAI1pbDdr+ahECXmPG5um7Z2VYIg9Es9XibtB4Qe2zhtlM/QFfmtp7furLfoA9+oDHYQ/6KuYS9Y7g9qsByv+Z3cZTUxtLiTCK5oNC78aR1v0lERwf4XS1Q+GJkenUKlX6I2SQjzkd/g6UYu/mh9bBEEy0aWtlwp8GchTaN0m1AT0OiPCghscP6k5RMDitY4U+PM6T4losj73NbdNScHLgIgbQ==
+Received: from TYAPR01CA0219.jpnprd01.prod.outlook.com (2603:1096:404:11e::15)
+ by SEZPR04MB6825.apcprd04.prod.outlook.com (2603:1096:101:eb::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.34; Thu, 6 Oct
+ 2022 07:08:50 +0000
+Received: from TYZAPC01FT030.eop-APC01.prod.protection.outlook.com
+ (2603:1096:404:11e:cafe::5e) by TYAPR01CA0219.outlook.office365.com
+ (2603:1096:404:11e::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.32 via Frontend
+ Transport; Thu, 6 Oct 2022 07:08:49 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
+ smtp.mailfrom=Wiwynn.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=Wiwynn.com;
+Received-SPF: Fail (protection.outlook.com: domain of Wiwynn.com does not
+ designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
+ client-ip=211.20.1.79; helo=localhost.localdomain;
+Received: from localhost.localdomain (211.20.1.79) by
+ TYZAPC01FT030.mail.protection.outlook.com (10.118.152.138) with Microsoft
+ SMTP Server id 15.20.5709.10 via Frontend Transport; Thu, 6 Oct 2022 07:08:48
+ +0000
+From:   Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+To:     ~sircmpwn/email-test-drive@lists.sr.ht
+Cc:     patrick@stwcx.xyz, garnermic@fb.com,
+        Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mtd: spi-nor: winbond: add support for w25q01jv-im
+Date:   Thu,  6 Oct 2022 15:08:40 +0800
+Message-Id: <20221006070841.2106194-1-Delphine_CC_Chiu@Wiwynn.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZAPC01FT030:EE_|SEZPR04MB6825:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 81783988-8a25-44a8-bc2a-08daa7699e0e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jQ2CJggutL6XXj0NglqU+m+a1wKjJI0MR1e7TWm3f9gp8y1YmFgmU7t7FbGJaiNV8vNM/NEsYQIwwWez7A11DmWmZ+YXC4lTytz4Kx/21BxKZ+LWT8Er3n7vPHieNbtQyUzbHeeMYLzJCM0p7WMP+H1p260vGXgx2ag8s2N/10m605aMcBQqy3XOgGSOBKvG1UERo/0fnC1xan+CzQN44EYF3U1BqE68x3jrEcXmKO2RYLKOF/ACmvJhJ7m2f8LO1w2ukQodtK6XrKQqhmSW25+OJw3DQSjm/G85huQ8mEUtc/VJRxzFxWAQY4Xa4JNfZJjKBzy9xW/cXWDamCf5c4pXxBk2g0Amr+tlATO8cyHDedsAAm1HAv/8MY7ly46hNK9gjwyy6KOqkZ3esB8Byd7fyCRVPwsnT4jqRbZMuomndZPcZ+vZ2XUhheIuTO2Eok3ATfWvI9zCBC/qiA0+YyDnSFp+3KjBTYcTucqqiqbDLWc2o187ZTsw8iGcCp2x6hMIw++3LVcWcqUCJWwQ/hnOUsOHDdL+nl0Dbcrx84rP3wSfOtZZ6xX1Yr+W/o18OjVc9zZR0p7Baf001nAc0FakauEFQ/4Nn89XwZlWmdr4bRXCjCX45shyP1sOsyD2rOQawABRn5gxnrBoeGgXx5WSl+8GFyzSiCTDDIxlMe4ULDu0QSPAWn6fgSSDfc4GmVXZn06uvkOGut5T+/a8snw7ig5740iuN185QF/LmyY=
+X-Forefront-Antispam-Report: CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230022)(6069001)(4636009)(136003)(346002)(396003)(39860400002)(376002)(451199015)(46966006)(36840700001)(956004)(2616005)(336012)(1076003)(186003)(47076005)(8676002)(4744005)(5660300002)(41300700001)(7416002)(8936002)(70206006)(4326008)(70586007)(6512007)(82310400005)(6666004)(2906002)(9316004)(26005)(36756003)(6506007)(40480700001)(316002)(54906003)(36736006)(478600001)(6486002)(36906005)(86362001)(82740400003)(356005)(81166007)(36860700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: wiwynn.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2022 07:08:48.6830
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 81783988-8a25-44a8-bc2a-08daa7699e0e
+X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
+X-MS-Exchange-CrossTenant-AuthSource: TYZAPC01FT030.eop-APC01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR04MB6825
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SCC_THREE_WORD_MONTY,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All users have switched to riscv_has_extension_*, removed unused
-definitions, vars and related setting code.
+Add support for winbond w25q01jv-im chip.
 
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
 ---
- arch/riscv/include/asm/hwcap.h | 28 ----------------------------
- arch/riscv/kernel/cpufeature.c |  9 ---------
- 2 files changed, 37 deletions(-)
+ drivers/mtd/spi-nor/winbond.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-index 54b88ee6cae1..f52fbc121ebe 100644
---- a/arch/riscv/include/asm/hwcap.h
-+++ b/arch/riscv/include/asm/hwcap.h
-@@ -62,18 +62,6 @@ enum {
- 
- extern unsigned long elf_hwcap;
- 
--
--/*
-- * This enum represents the logical ID for each RISC-V ISA extension static
-- * keys. We can use static key to optimize code path if some ISA extensions
-- * are available.
-- */
--enum riscv_isa_ext_key {
--	RISCV_ISA_EXT_KEY_FPU,		/* For 'F' and 'D' */
--	RISCV_ISA_EXT_KEY_ZIHINTPAUSE,
--	RISCV_ISA_EXT_KEY_MAX,
--};
--
- struct riscv_isa_ext_data {
- 	/* Name of the extension displayed to userspace via /proc/cpuinfo */
- 	char uprop[RISCV_ISA_EXT_NAME_LEN_MAX];
-@@ -81,22 +69,6 @@ struct riscv_isa_ext_data {
- 	unsigned int isa_ext_id;
+diff --git a/drivers/mtd/spi-nor/winbond.c b/drivers/mtd/spi-nor/winbond.c
+index ffaa24055259..2b02b05ceb0a 100644
+--- a/drivers/mtd/spi-nor/winbond.c
++++ b/drivers/mtd/spi-nor/winbond.c
+@@ -139,6 +139,9 @@ static const struct flash_info winbond_nor_parts[] = {
+ 	{ "w25q512jvq", INFO(0xef4020, 0, 64 * 1024, 1024)
+ 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
+ 			      SPI_NOR_QUAD_READ) },
++	{ "w25q01jv-im", INFO(0xef7021, 0, 64 * 1024, 2048)
++		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
++			      SPI_NOR_QUAD_READ) },
  };
  
--extern struct static_key_false riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_MAX];
--
--static __always_inline int riscv_isa_ext2key(int num)
--{
--	switch (num) {
--	case RISCV_ISA_EXT_f:
--		return RISCV_ISA_EXT_KEY_FPU;
--	case RISCV_ISA_EXT_d:
--		return RISCV_ISA_EXT_KEY_FPU;
--	case RISCV_ISA_EXT_ZIHINTPAUSE:
--		return RISCV_ISA_EXT_KEY_ZIHINTPAUSE;
--	default:
--		return -EINVAL;
--	}
--}
--
- static __always_inline bool
- riscv_has_extension_likely(const unsigned long ext)
- {
-diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-index 2b1f18f97253..6bc3fb749274 100644
---- a/arch/riscv/kernel/cpufeature.c
-+++ b/arch/riscv/kernel/cpufeature.c
-@@ -28,9 +28,6 @@ unsigned long elf_hwcap __read_mostly;
- /* Host ISA bitmap */
- static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
- 
--DEFINE_STATIC_KEY_ARRAY_FALSE(riscv_isa_ext_keys, RISCV_ISA_EXT_KEY_MAX);
--EXPORT_SYMBOL(riscv_isa_ext_keys);
--
  /**
-  * riscv_isa_extension_base() - Get base extension word
-  *
-@@ -242,12 +239,6 @@ void __init riscv_fill_hwcap(void)
- 		if (elf_hwcap & BIT_MASK(i))
- 			print_str[j++] = (char)('a' + i);
- 	pr_info("riscv: ELF capabilities %s\n", print_str);
--
--	for_each_set_bit(i, riscv_isa, RISCV_ISA_EXT_MAX) {
--		j = riscv_isa_ext2key(i);
--		if (j >= 0)
--			static_branch_enable(&riscv_isa_ext_keys[j]);
--	}
- }
- 
- #ifdef CONFIG_RISCV_ALTERNATIVE
 -- 
-2.37.2
+2.25.1
 
