@@ -2,89 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776C65F637E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2275F6380
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 11:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiJFJUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 05:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
+        id S231241AbiJFJUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 05:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiJFJUq (ORCPT
+        with ESMTP id S231187AbiJFJUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 05:20:46 -0400
-Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1BB2F666
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 02:20:45 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id BLB00143;
-        Thu, 06 Oct 2022 17:20:43 +0800
-Received: from localhost.localdomain (10.200.104.82) by
- jtjnmail201603.home.langchao.com (10.100.2.3) with Microsoft SMTP Server id
- 15.1.2507.12; Thu, 6 Oct 2022 17:20:43 +0800
-From:   Deming Wang <wangdeming@inspur.com>
-To:     <keescook@chromium.org>, <boqun.feng@gmail.com>,
-        <gregkh@linuxfoundation.org>, <ojeda@kernel.org>,
-        <masahiroy@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, Deming Wang <wangdeming@inspur.com>
-Subject: [PATCH] kallsyms: add required space for unified style
-Date:   Thu, 6 Oct 2022 05:20:42 -0400
-Message-ID: <20221006092042.1753-1-wangdeming@inspur.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 6 Oct 2022 05:20:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81EE22A267
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 02:20:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665048046;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mw6vh8Fj2nr/tAp1jCRdKpprVY4vooB4N4OGmMaId3w=;
+        b=NGPc2xEKKOptrR4fH1ZYMk26Tig9ZfMOKLrEOXEl1mQwt4chERnpKq6Rilfss+F7JEaAMc
+        AqJ8LuK6leqLvC0K7lDoFc0i8DXosfMzZNYLZl6ftDeqjK1i/lj/8RNYdj5zY8XsNbfiSm
+        Bi8bAw6X4OoVQIHy1MR8uS04D68EaXI=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-282-2rgRvlc6MquBVYgUtAQEyQ-1; Thu, 06 Oct 2022 05:20:45 -0400
+X-MC-Unique: 2rgRvlc6MquBVYgUtAQEyQ-1
+Received: by mail-wr1-f72.google.com with SMTP id m3-20020adfc583000000b0022cd60175bbso294660wrg.6
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 02:20:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=mw6vh8Fj2nr/tAp1jCRdKpprVY4vooB4N4OGmMaId3w=;
+        b=mHlO5s2kxJIaZwYjLFS51+avU6sWrkz2RIHXh24aX0ZRldYegWc63y8HGqFsnlL39R
+         W+NBQpKCSCdACmiSi/8RBA+t7pfqLOqmHhfv+GMfjvnRUnrDJermzF6eb0Cju48W3u1+
+         SIDjXSu4G9qEaFFAw+pqFyBFR2nJCSgjre4RpgnY31S+CXqP7G279IFJnZVcfxuoC1Ue
+         KSbukcN0aURxPBw3mmYfuftHzXFS2Bjq0+Kh2cMtg7WxS/ZCVlxhkJCY0LEYerT7UjOb
+         WDtSeqeUxkl8XmEF50IHCRmzd5ugO62khXZ9KQIrWyktaOubNBm6mJ4pdN+16cqlgqni
+         1btQ==
+X-Gm-Message-State: ACrzQf3/7mpnQ9/y8vM+ipaKJKWsT+LdCA5zprnBqyWF6/F0BsTz6w9N
+        gtxjfhHmBjinzrydN+0uHcWSTiWsWWds7+9YCbFr+n+/gtnO8gZj3ha1S/stLcMi5AzGwI5aS2T
+        Qm+VCyDPhdCPbScxTo5E46t6m
+X-Received: by 2002:a05:6000:783:b0:22e:35dd:5f48 with SMTP id bu3-20020a056000078300b0022e35dd5f48mr2418055wrb.106.1665048044465;
+        Thu, 06 Oct 2022 02:20:44 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6CPRIjlEs2RQKZxShqi1C0hC1GtJGCC/hdDMM0onx6qferHIFo+jEb+L9bsJrIDf7AP0JKGg==
+X-Received: by 2002:a05:6000:783:b0:22e:35dd:5f48 with SMTP id bu3-20020a056000078300b0022e35dd5f48mr2418025wrb.106.1665048044084;
+        Thu, 06 Oct 2022 02:20:44 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:3700:aed2:a0f8:c270:7f30? (p200300cbc7053700aed2a0f8c2707f30.dip0.t-ipconnect.de. [2003:cb:c705:3700:aed2:a0f8:c270:7f30])
+        by smtp.gmail.com with ESMTPSA id az30-20020adfe19e000000b002286670bafasm7091697wrb.48.2022.10.06.02.20.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Oct 2022 02:20:43 -0700 (PDT)
+Message-ID: <9a84440f-1462-2193-7dd6-c84e8bb22232@redhat.com>
+Date:   Thu, 6 Oct 2022 11:20:42 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.200.104.82]
-tUid:   202210061720433fc399169644100ccc40985d8b7e1c2e
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>
+References: <20220930141931.174362-1-david@redhat.com>
+ <20220930141931.174362-7-david@redhat.com> <Yz3wcDZPFvKBmnet@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1 6/7] mm/ksm: convert break_ksm() to use
+ walk_page_range_vma()
+In-Reply-To: <Yz3wcDZPFvKBmnet@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-add required space before and after operators.
+>> +int break_ksm_pud_entry(pud_t *pud, unsigned long addr, unsigned long next,
+>> +			struct mm_walk *walk)
+>> +{
+>> +	/* We only care about page tables to walk to a single base page. */
+>> +	if (pud_leaf(*pud) || !pud_present(*pud))
+>> +		return 1;
+>> +	return 0;
+>> +}
+> 
+> Is this needed?  I thought the pgtable walker handlers this already.
+> 
+> [...]
+> 
 
-Signed-off-by: Deming Wang <wangdeming@inspur.com>
----
- scripts/kallsyms.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Most probably yes. I was trying to avoid about PUD splits, but I guess 
+we simply should not care in VMAs that are considered by KSM (MERGABLE). 
+Most probably never ever happens.
 
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 03fa07ad45d9..1df9944030e2 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -213,7 +213,7 @@ static void check_symbol_range(const char *sym, unsigned long long addr,
- 
- static struct sym_entry *read_symbol(FILE *in)
- {
--	char name[KSYM_NAME_LEN_BUFFER+1], type;
-+	char name[KSYM_NAME_LEN_BUFFER + 1], type;
- 	unsigned long long addr;
- 	unsigned int len;
- 	struct sym_entry *sym;
-@@ -388,7 +388,7 @@ static int expand_symbol(const unsigned char *data, int len, char *result)
- 		c = *data;
- 		/* if the table holds a single char that is the same as the one
- 		 * we are looking for, then end the search */
--		if (best_table[c][0]==c && best_table_len[c]==1) {
-+		if (best_table[c][0] == c && best_table_len[c] == 1) {
- 			*result++ = c;
- 			total++;
- 		} else {
-@@ -641,7 +641,7 @@ static int find_best_token(void)
- {
- 	int i, best, bestprofit;
- 
--	bestprofit=-10000;
-+	bestprofit = -10000;
- 	best = 0;
- 
- 	for (i = 0; i < 0x10000; i++) {
+>>   static int break_ksm(struct vm_area_struct *vma, unsigned long addr)
+>>   {
+>> -	struct page *page;
+>>   	vm_fault_t ret = 0;
+>>   
+>> +	if (WARN_ON_ONCE(!IS_ALIGNED(addr, PAGE_SIZE)))
+>> +		return -EINVAL;
+>> +
+>>   	do {
+>>   		bool ksm_page = false;
+>>   
+>>   		cond_resched();
+>> -		page = follow_page(vma, addr,
+>> -				FOLL_GET | FOLL_MIGRATION | FOLL_REMOTE);
+>> -		if (IS_ERR_OR_NULL(page))
+>> -			break;
+>> -		if (PageKsm(page))
+>> -			ksm_page = true;
+>> -		put_page(page);
+>> +		ret = walk_page_range_vma(vma, addr, addr + PAGE_SIZE,
+>> +					  &break_ksm_ops, &ksm_page);
+>> +		if (WARN_ON_ONCE(ret < 0))
+>> +			return ret;
+> 
+> I'm not sure this would be worth it, especially with a 4% degrade.  The
+> next patch will be able to bring 50- LOC, but this patch does 60+ anyway,
+> based on another new helper just introduced...
+> 
+> I just don't see whether there's strong enough reason to do so to drop
+> FOLL_MIGRATE.  It's different to the previous VM_FAULT_WRITE refactor
+> because of the unshare approach was much of a good reasoning to me.
+> 
+> Perhaps I missed something?
+
+My main motivation is to remove most of that GUP hackery here, which is
+1) Getting a reference on a page and waiting for migration to finish
+    even though both is unnecessary.
+2) As we don't have sufficient control, we added FOLL_MIGRATION hacks to
+    MM core to work around limitations in the GUP-based approacj.
+3) We rely on legacy follow_page() interface that we should really get
+    rid of in the long term.
+
+All we want to do is walk the page tables and make a decision if 
+something we care about is mapped. Instead of leaking these details via 
+hacks into GUP code and making that code harder to grasp/maintain, this 
+patch moves that logic to the actual user, while reusing generic page 
+walking code.
+
+Yes, we have to extend page walking code, but it's just the natural, 
+non-hacky way of doing it.
+
+Regarding the 4% performance degradation (if I wouldn't have added the 
+benchmarks, nobody would know and probably care ;) ), I am not quite 
+sure why that is the case. We're just walking page tables after all in 
+both cases. Maybe the callback-based implementation of pagewalk code is 
+less efficient, but we might be able to improve that implementation if 
+we really care about performance here. Maybe removing 
+break_ksm_pud_entry() already improves the numbers slightly.
+
+Thanks!
+
 -- 
-2.27.0
+Thanks,
+
+David / dhildenb
 
