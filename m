@@ -2,41 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 783B05F6DBD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 20:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCF65F6DB7
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 20:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiJFSyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 14:54:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34042 "EHLO
+        id S229479AbiJFSu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 14:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbiJFSyP (ORCPT
+        with ESMTP id S229990AbiJFSuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 14:54:15 -0400
-X-Greylist: delayed 322 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Oct 2022 11:54:12 PDT
-Received: from mail.postadigitale.org (mail.postadigitale.org [IPv6:2a01:4f8:200:34ed::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0ADC6940
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 11:54:12 -0700 (PDT)
-Received: from hostpad (p200300E4eF14Bb00Cd44aE579e46a63E.dip0.t-ipconnect.de [IPv6:2003:e4:ef14:bb00:cd44:ae57:9e46:a63e])
-        by mail.postadigitale.org (Postfix) with ESMTPSA id 4277D19CDA
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 20:48:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=postadigitale.de;
-        s=20180517; t=1665082127;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=M7sAER942m6X30CtkI1UU4lRPxRm6N9uYVQbrMaQFe0=;
-        b=XRKGDDRn5y5rzPLno37AxZFfq9jWcU6dyQtIpIXgmr7w7oNgJZ5RFcztthl+NZCke9QqW8
-        2uwPYqqyrYpZkuXIXv8ACkQJOHc+/qdbhQ7Sa55GDDUrcv2Q8XZnZNkrL6uSc4Mwq0ye2T
-        eTy5e95gc9wN4a3iRdQPlxbG/3Oe+gs=
-Date:   Thu, 6 Oct 2022 18:48:45 +0000
-From:   Simon Brand <simon.brand@postadigitale.de>
-To:     linux-kernel@vger.kernel.org
-Subject: Possibility to disable icotl TIOCSTI
-Message-ID: <Yz8jDbLap91dRVyH@hostpad>
+        Thu, 6 Oct 2022 14:50:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA8CB0B02;
+        Thu,  6 Oct 2022 11:50:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15F4E61A59;
+        Thu,  6 Oct 2022 18:50:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91689C433D6;
+        Thu,  6 Oct 2022 18:50:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665082252;
+        bh=AGnaOsCZJB2D12fIhHy6tdcZWEtEWaGlKpZIQ+DL/bI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cUIJwKsq7bClVzGiRmW5rpzBZ8wyXxXV76CAkIxeLxec40X5Vtjk6vT+2r7DW0Nx7
+         yZb6toL1wruJgIHaRrLqSrpdeqO7ZD/zUqr7aKpNOHcjmx/oLirEAVRATqNGBfd1vS
+         wiI4yiJWXdSfw21Qyb50R2AjH4zkdhdQEMa4+Yo0xkgWdkkLy1ursPzT7TQt6mX96L
+         c3AXWzTVSOxggtPlKPvuWrLoV1QXtYui5575fLqMCbUCfs3b+UxdIGVenet9JGTYgb
+         +hZgAOAgjDgLtzzzZvL0pZ1edFp3t+7oVw4ivAxymvcdohOxuGIxmD+wyBoKBHThH6
+         hflmjmfQYFAPg==
+Date:   Thu, 6 Oct 2022 21:50:28 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "keescook@chromium.org" <keescook@chromium.org>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v2 23/39] x86: Introduce userspace API for CET enabling
+Message-ID: <Yz8jdMgv6jEm9rcH@kernel.org>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-24-rick.p.edgecombe@intel.com>
+ <202210031141.0E0DE2CAEE@keescook>
+ <8d453bb86cfe45125f2c9f2dba273d1f45d33638.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <8d453bb86cfe45125f2c9f2dba273d1f45d33638.camel@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,46 +88,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Oct 03, 2022 at 10:51:02PM +0000, Edgecombe, Rick P wrote:
+> CC Mike about ptrace/CRIU question.
+> 
+> On Mon, 2022-10-03 at 12:01 -0700, Kees Cook wrote:
+> > On Thu, Sep 29, 2022 at 03:29:20PM -0700, Rick Edgecombe wrote:
+> > > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> > > 
+> > > Add three new arch_prctl() handles:
+> > > 
+> > >  - ARCH_CET_ENABLE/DISABLE enables or disables the specified
+> > >    feature. Returns 0 on success or an error.
+> > > 
+> > >  - ARCH_CET_LOCK prevents future disabling or enabling of the
+> > >    specified feature. Returns 0 on success or an error
+> > > 
+> > > The features are handled per-thread and inherited over
+> > > fork(2)/clone(2),
+> > > but reset on exec().
 
-in the past there have been attempts to restrict the TIOCSTI ioctl. [0, 1]
-None of them are present in the current kernel.
-Since those tries there have been some security issues (sandbox
-escapes in flatpak (CVE-2019-10063) [2] and snap (CVE 2019-7303) [3],
-runuser [4], su [5]).
+...
 
-I ask to merge the patches from linux-hardening [6, 7] so users can
-opt out of this behavior. These patches provide the
-`SECURITY_TIOCSTI_RESTRICT` Kconfig (default no) and a
-`tiocsti_restrict` sysctl.
+> > > +#include <linux/sched.h>
+> > > +#include <linux/bitops.h>
+> > > +#include <asm/prctl.h>
+> > > +
+> > > +long cet_prctl(struct task_struct *task, int option, unsigned long
+> > > features)
+> > > +{
+> > > +	if (option == ARCH_CET_LOCK) {
+> > > +		task->thread.features_locked |= features;
+> > > +		return 0;
+> > > +	}
+> > > +
+> > > +	/* Don't allow via ptrace */
+> > > +	if (task != current)
+> > > +		return -EINVAL;
+> > 
+> > ... but locking _is_ allowed via ptrace? If that intended, it should
+> > be
+> > explicitly mentioned in the commit log and in a comment here.
+> 
+> I believe CRIU needs to lock via ptrace as well. Maybe Mike can
+> confirm.
 
-Escapes can be reproduced easiliy (on archlinux) via a python script:
-```
-import fcntl
-import termios
-with open("/dev/tty", "w") as fd:
-    for c in "id\n":
-        fcntl.ioctl(fd, termios.TIOCSTI, c)
-```
-Now run as root:
-# su user
-$ python3 /path/to/script.py ; exit
-uid=0(root) ...
+Actually, I didn't use ptrace for locking, I did it with "plain"
+arch_prctl().
 
-At least to me, this result was not expected.
-
-I asked it before on kernelnewbies mailing list. [8]
-Please set me in CC, because I have not subscribed to this list.
-
-Best and thank you,
-Simon
-
-[0] https://lkml.kernel.org/lkml/CAG48ez1NBnrsPnHN6D9nbOJP6+Q6zEV9vfx9q7ME4Eti-vRmhQ@mail.gmail.com/T/
-[1] https://lkml.kernel.org/lkml/20170420174100.GA16822@mail.hallyn.com/T/
-[2] https://github.com/flatpak/flatpak/issues/2782
-[3] https://wiki.ubuntu.com/SecurityTeam/KnowledgeBase/SnapIoctlTIOCSTI
-[4] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=815922
-[5] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=628843
-[6] https://github.com/anthraxx/linux-hardened/commit/d0e49deb1a39dc64e7c7db3340579
-[7] https://github.com/anthraxx/linux-hardened/commit/ea8f20602a993c90125bf08da3989
-[8] https://www.spinics.net/lists/newbies/msg64019.html
+I still can't say for sure CRIU won't need this, I didn't have time yet to
+have a closer look at this set.
+ 
+-- 
+Sincerely yours,
+Mike.
