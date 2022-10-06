@@ -2,81 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B282C5F6BCD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 18:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B04A75F6BD4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 18:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbiJFQcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 12:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44744 "EHLO
+        id S231344AbiJFQdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 12:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiJFQcj (ORCPT
+        with ESMTP id S229540AbiJFQdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 12:32:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D172B3B1A;
-        Thu,  6 Oct 2022 09:32:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 948C361A22;
-        Thu,  6 Oct 2022 16:32:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECF77C433D6;
-        Thu,  6 Oct 2022 16:32:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665073958;
-        bh=EpiLhU9Vopf2fm0LDuMXBE1GSbO3K9x1KfL5hJfKdU0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BfWleTUhRNqsI+maojBT7rGzIWgqvXoBiV0VQVtNdYcAwLRLn3oSWOlWEokzJwW9E
-         oBChMo9X78YlxVggVl19ZnLJPpMrFCvpYDdYt64FWpe2ON7JmQUcWtD/avdUgySgm/
-         dbNpGVE2oOEdXvir0obKPKdFsxNRDKP1G0vg0LtXT/fvzEeo0fXvves6BZsJxLLK/h
-         +2anJgh1iHcX+D0vZ2pqy+ae58mtEqUr1bAensM/YvIkoE3ifuoj4C6TXJYkZm31Fk
-         SZJX80WXRMIxoYkNMIaagConJqkM70l/K4uj9BB8vk50Oh77cJ1XRbW2IwYTc7NhR8
-         GwncyKKF7SAxg==
-Date:   Thu, 6 Oct 2022 09:32:37 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Daeho Jeong <daeho43@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
-        Daeho Jeong <daehojeong@google.com>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] f2fs: introduce F2FS_IOC_START_ATOMIC_REPLACE
-Message-ID: <Yz8DJROpwCcNyxVX@magnolia>
-References: <20221004171351.3678194-1-daeho43@gmail.com>
- <20221004171351.3678194-2-daeho43@gmail.com>
- <Yz6S3kP4rjm5/30N@infradead.org>
+        Thu, 6 Oct 2022 12:33:07 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075A5564E9;
+        Thu,  6 Oct 2022 09:33:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665073987; x=1696609987;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TJJ/1zxufUxlDmU0djkNFp5wBEou9ApgW5ZqTTd2L0w=;
+  b=ISBPGQHyUrFr/t5XN+M52jzdHt+iye935V5SSm5Rwoi92M8r0pIiXHSs
+   zp9THXq1jXgeYhDlV0EkZ8NLkxrEBFirNd4NEjVeGqOnnccip8O2fsArM
+   RyuBDIhkF0cm0SXhSypiYymKFbi9SvWiUX6EsKgqm+mUn9peQaMDCDm0b
+   yS31izoo1P5RLFO+SjF7RO8KT6a9i/u3EmMzIDW27U0GBLJcWMkmCX2aG
+   3xlKKLW5W2h66gLchq1iDOqRKZBgDqalS2bWiYKfG6uJRkzEAoLSOnvLD
+   FfoszV02tcu7MBWiGPLbyIPbx0AbcZfHgKQ16h8ZPtf60pS8z7vRPo0R+
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="365436581"
+X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
+   d="scan'208";a="365436581"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 09:33:06 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="627078507"
+X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
+   d="scan'208";a="627078507"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 09:33:06 -0700
+From:   Tony Luck <tony.luck@intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Len Brown <lenb@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Tony Luck <tony.luck@intel.com>
+Subject: [PATCH] ACPI / extlog: Handle multiple records
+Date:   Thu,  6 Oct 2022 09:32:58 -0700
+Message-Id: <20221006163258.318916-1-tony.luck@intel.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yz6S3kP4rjm5/30N@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 01:33:34AM -0700, Christoph Hellwig wrote:
-> On Tue, Oct 04, 2022 at 10:13:51AM -0700, Daeho Jeong wrote:
-> > From: Daeho Jeong <daehojeong@google.com>
-> > 
-> > introduce a new ioctl to replace the whole content of a file atomically,
-> > which means it induces truncate and content update at the same time.
-> > We can start it with F2FS_IOC_START_ATOMIC_REPLACE and complete it with
-> > F2FS_IOC_COMMIT_ATOMIC_WRITE. Or abort it with
-> > F2FS_IOC_ABORT_ATOMIC_WRITE.
-> 
-> It would be great to Cc Darrick and linux-fsdevel as there have been
-> attempts to do this properly at the VFS level instead of a completely
-> undocumented ioctl.
+If there is no user space consumer of extlog_mem trace records, then
+Linux properly handles multiple error records in an ELOG block
 
-It's been a while since I sent the last RFC, but yes, it's still in my
-queue as part of the xfs online fsck patchserieses.
+	extlog_print()
+	  print_extlog_rcd()
+	    __print_extlog_rcd()
+	      cper_estatus_print()
+		apei_estatus_for_each_section()
 
-https://lore.kernel.org/linux-fsdevel/161723932606.3149451.12366114306150243052.stgit@magnolia/
+But the other code path hard codes looking for a single record to
+output a trace record.
 
-More recent git branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/log/?h=atomic-file-updates
+Fix by using the same apei_estatus_for_each_section() iterator
+to step over all records.
 
---D
+Fixes: 2dfb7d51a61d ("trace, RAS: Add eMCA trace event interface")
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+---
+ drivers/acpi/acpi_extlog.c | 33 ++++++++++++++++++++-------------
+ 1 file changed, 20 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/acpi/acpi_extlog.c b/drivers/acpi/acpi_extlog.c
+index 72f1fb77abcd..4af2cfcbbd2d 100644
+--- a/drivers/acpi/acpi_extlog.c
++++ b/drivers/acpi/acpi_extlog.c
+@@ -12,6 +12,7 @@
+ #include <linux/ratelimit.h>
+ #include <linux/edac.h>
+ #include <linux/ras.h>
++#include <acpi/ghes.h>
+ #include <asm/cpu.h>
+ #include <asm/mce.h>
+ 
+@@ -138,8 +139,8 @@ static int extlog_print(struct notifier_block *nb, unsigned long val,
+ 	int	cpu = mce->extcpu;
+ 	struct acpi_hest_generic_status *estatus, *tmp;
+ 	struct acpi_hest_generic_data *gdata;
+-	const guid_t *fru_id = &guid_null;
+-	char *fru_text = "";
++	const guid_t *fru_id;
++	char *fru_text;
+ 	guid_t *sec_type;
+ 	static u32 err_seq;
+ 
+@@ -160,17 +161,23 @@ static int extlog_print(struct notifier_block *nb, unsigned long val,
+ 
+ 	/* log event via trace */
+ 	err_seq++;
+-	gdata = (struct acpi_hest_generic_data *)(tmp + 1);
+-	if (gdata->validation_bits & CPER_SEC_VALID_FRU_ID)
+-		fru_id = (guid_t *)gdata->fru_id;
+-	if (gdata->validation_bits & CPER_SEC_VALID_FRU_TEXT)
+-		fru_text = gdata->fru_text;
+-	sec_type = (guid_t *)gdata->section_type;
+-	if (guid_equal(sec_type, &CPER_SEC_PLATFORM_MEM)) {
+-		struct cper_sec_mem_err *mem = (void *)(gdata + 1);
+-		if (gdata->error_data_length >= sizeof(*mem))
+-			trace_extlog_mem_event(mem, err_seq, fru_id, fru_text,
+-					       (u8)gdata->error_severity);
++	apei_estatus_for_each_section(estatus, gdata) {
++		if (gdata->validation_bits & CPER_SEC_VALID_FRU_ID)
++			fru_id = (guid_t *)gdata->fru_id;
++		else
++			fru_id = &guid_null;
++		if (gdata->validation_bits & CPER_SEC_VALID_FRU_TEXT)
++			fru_text = gdata->fru_text;
++		else
++			fru_text = "";
++		sec_type = (guid_t *)gdata->section_type;
++		if (guid_equal(sec_type, &CPER_SEC_PLATFORM_MEM)) {
++			struct cper_sec_mem_err *mem = (void *)(gdata + 1);
++
++			if (gdata->error_data_length >= sizeof(*mem))
++				trace_extlog_mem_event(mem, err_seq, fru_id, fru_text,
++						       (u8)gdata->error_severity);
++		}
+ 	}
+ 
+ out:
+-- 
+2.37.3
+
