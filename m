@@ -2,95 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 418805F64C6
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 13:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 754BD5F64CB
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 13:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231343AbiJFLFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 07:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58542 "EHLO
+        id S231314AbiJFLIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 07:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiJFLFN (ORCPT
+        with ESMTP id S230512AbiJFLIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 07:05:13 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333673FD65;
-        Thu,  6 Oct 2022 04:05:12 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 13B9284940;
-        Thu,  6 Oct 2022 13:05:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1665054310;
-        bh=uB3llXnK0KYLYYhpTualwjpRdRLy8b7Ts3GeCKJRb+E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JwS15yadaMbolc4mFfxB7s2jNP+Lhr5urPPF+CnPRGcfEmnCpmG2NDf4vUN5FeKij
-         l5CvODJ8va4xbM75MvHU6R2KYGnJ81J+7AqGDmgRiEmyh/DUsy+qUxgEKJ7nmA0Ecf
-         XeXQ6SbcVQTAWEJ7jlkA3kyjfqdKDqncGkVyEmunAbFIuKaCDbrNIZ8ygEJt6rOa/d
-         4td8/gMzafgxfpe+vFyajFDMOpRip14h5OwGwv6XRnB0MvxwpiuuJSPsYBeTrUzQo5
-         LnNij59bho/H57Ky82T13yzLjJbkT+F5bOO/JDifyjyS8q9Vk3hHaRqd8s+Php9ayv
-         d/hxmljzpPF2w==
-Message-ID: <f85808f9-979d-1dc5-ac9a-9519c62e2737@denx.de>
-Date:   Thu, 6 Oct 2022 13:05:08 +0200
+        Thu, 6 Oct 2022 07:08:17 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E35A9B850;
+        Thu,  6 Oct 2022 04:08:12 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4MjpSw33s1z9v7cV;
+        Thu,  6 Oct 2022 19:03:12 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwDnY17_tj5jaD+iAA--.3422S2;
+        Thu, 06 Oct 2022 12:07:52 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v2 0/6] Add _opts variant for bpf_*_get_fd_by_id()
+Date:   Thu,  6 Oct 2022 13:07:30 +0200
+Message-Id: <20221006110736.84253-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [RFC PATCH 0/2] Propose critical clocks
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Marco Felsch <m.felsch@pengutronix.de>, abel.vesa@linaro.org,
-        abelvesa@kernel.org, festevam@gmail.com, kernel@pengutronix.de,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        robh+dt@kernel.org, s.hauer@pengutronix.de, shawnguo@kernel.org
-Cc:     Peng Fan <peng.fan@nxp.com>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-imx@nxp.com
-References: <20220913102141.971148-1-m.felsch@pengutronix.de>
- <20221005082348.v43xbjrhbdlbaohv@pengutronix.de>
- <20221005230609.5BA04C433D6@smtp.kernel.org>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <20221005230609.5BA04C433D6@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwDnY17_tj5jaD+iAA--.3422S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kw4UCw4xJw4rGr4fJF1UZFb_yoW8urWDp3
+        93Gw1Fkr45XFyI93sxJa9Yvrn5GFWxWw4UGas7Jr15urW0qF4kZ340gF15Gr9xW395Wwsx
+        Zr4Yyr98Gw1UAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvmb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
+        0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02
+        F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4I
+        kC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7Cj
+        xVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+        6r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2
+        IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E
+        87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnU
+        UI43ZEXa7IU07PEDUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQARBF1jj4PmOQAAs5
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/6/22 01:06, Stephen Boyd wrote:
-> Quoting Marco Felsch (2022-10-05 01:23:48)
->> Hi Stephen, Michael,
->>
->> I know it is a busy time right now, but maybe you have a few minutes for
->> this RFC. I know it is incomplete, but the interessting part is there
->> and it would fix a real issue we encountered on the imx8mm-evk's.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-The i.MX8M hang when using 32kHz supplied by PMIC is solved by modeling 
-the clock in DT correctly, see:
+Add the _opts variant for bpf_*_get_fd_by_id() functions, to be able to
+pass to the kernel more options, when requesting a fd of an eBPF object.
 
-https://lore.kernel.org/all/20220924174603.458956-1-marex@denx.de/
+Pass the options through a newly introduced structure,
+bpf_get_fd_by_id_opts, which currently contains open_flags (the other two
+members are for compatibility and for padding).
 
-> There's another approach by Marek[1]. Can you work together on a
-> solution? I think we should step away from trying to make the critical
-> flag work during clk registration, and turn on the clk during provider
-> registration instead.
+open_flags allows the caller to request specific permissions to access a
+map (e.g. read-only). This is useful for example in the situation where a
+map is write-protected.
 
-So that would work like the qualcomm-specific 'protected-clock' property?
+Besides patches 2-6, which introduce the new variants and the data
+structure, patch 1 fixes the LIBBPF_1.0.0 declaration in libbpf.map.
 
-I really want to avoid such clock-driver specific hacks which are poorly 
-or inconsistently supported. This critical-clock should be a generic 
-solution and that should be in clock core.
+Changelog
 
-> That hopefully makes it simpler. We can keep the
-> clk flag of course, so that the clk can't be turned off, but otherwise
-> we shouldn't need to make registration path check for the property.
-> 
-> [1] https://lore.kernel.org/all/20220924174517.458657-1-marex@denx.de/
+v1:
+ - Don't CC stable kernel mailing list for patch 1 (suggested by Andrii)
+ - Rename bpf_get_fd_opts struct to bpf_get_fd_by_id_opts (suggested by
+   Andrii)
+ - Move declaration of _opts variants after non-opts variants (suggested by
+   Andrii)
+ - Correctly initialize bpf_map_info, fix style issues, use map from
+   skeleton, check valid fd in the test (suggested by Andrii)
+ - Rename libbpf_get_fd_opts test to libbpf_get_fd_by_id_opts
+
+Roberto Sassu (6):
+  libbpf: Fix LIBBPF_1.0.0 declaration in libbpf.map
+  libbpf: Introduce bpf_get_fd_by_id_opts and
+    bpf_map_get_fd_by_id_opts()
+  libbpf: Introduce bpf_prog_get_fd_by_id_opts()
+  libbpf: Introduce bpf_btf_get_fd_by_id_opts()
+  libbpf: Introduce bpf_link_get_fd_by_id_opts()
+  selftests/bpf: Add tests for _opts variants of bpf_*_get_fd_by_id()
+
+ tools/lib/bpf/bpf.c                           | 48 +++++++++-
+ tools/lib/bpf/bpf.h                           | 16 ++++
+ tools/lib/bpf/libbpf.map                      |  6 +-
+ tools/testing/selftests/bpf/DENYLIST.s390x    |  1 +
+ .../bpf/prog_tests/libbpf_get_fd_by_id_opts.c | 87 +++++++++++++++++++
+ .../bpf/progs/test_libbpf_get_fd_by_id_opts.c | 36 ++++++++
+ 6 files changed, 189 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_by_id_opts.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_libbpf_get_fd_by_id_opts.c
+
+-- 
+2.25.1
 
