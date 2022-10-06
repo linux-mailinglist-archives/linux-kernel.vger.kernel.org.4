@@ -2,123 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B425F6B84
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 18:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 699875F6B88
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 18:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbiJFQXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 12:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52016 "EHLO
+        id S230381AbiJFQYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 12:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiJFQXj (ORCPT
+        with ESMTP id S230185AbiJFQYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 12:23:39 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F8EA4B83
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 09:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665073419; x=1696609419;
-  h=message-id:date:mime-version:from:to:subject:
-   content-transfer-encoding;
-  bh=4RHoqnlVO18S5RSifl3ytEVYHd+wpvwKV+XKQeCs98U=;
-  b=CXKbCw/weKrZ8RBvqQPsLN4njznE2PzddwRsaAIWYBmN2FTIYKMW80TP
-   Dcn2V/9rzfR5j/feN8hW+2kdojLMwpEMvoAKDObXEUVPLqk0fFc18N2fo
-   37T+xGHjZHEyBXQT9FEy0mUWYFQJXEGjko7Cod8t+S/k60E1V/Xg7OSUW
-   XV3AcSaDkPh5Ya+hoRoiYhEBNOnjtWE0ecV07AncAcayH9b/GDPAdT9po
-   vW032miyLmYhHZWbaBE3EolV/EKR6FUmMXWqzPOAYMBOJbZiWNwAWWDa4
-   CZQ5I274UfGSy3py0WSOiMAltjMPrkUgiSdC2NfsIhx7e6ptMkfg+0mjw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="365433862"
-X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
-   d="scan'208";a="365433862"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 09:23:38 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="624783842"
-X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
-   d="scan'208";a="624783842"
-Received: from jlcone-mobl1.amr.corp.intel.com (HELO [10.212.128.129]) ([10.212.128.129])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 09:23:37 -0700
-Message-ID: <f42d43fd-30b0-e661-4b47-61ab15ef76ab@intel.com>
-Date:   Thu, 6 Oct 2022 09:23:37 -0700
+        Thu, 6 Oct 2022 12:24:18 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689F7BE2EB
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 09:24:17 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id o5so1376261wms.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 09:24:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gz2zH6sh025pIqlTZgZMoOhe3ZbD5/XGD/oE55GsOo4=;
+        b=m35n7BqPwsKlEjazLbG/T3uIcwIq47NDFB/F8Vd1kol6Y/0jD+iDJjS73RwsP3WiQS
+         1FIWgG8jScTZOSACMoQogM2TFcuExDX2N0REjilBxEGhHyOjWczfAGI9Ov9z4O/6BFLn
+         9SI4CXu+5WJ2Mv430w16hOh3t+kzEipiIFrldyxN7bEdhxdC22NVnfLwfABJb6sfQfcf
+         h2nwTQc3kLka1hTQ5E7rb7vOYDy1oaky5fBQPdm3BfhFEo4nxqL5xrbG7T4nNU3hm5WA
+         4ltMYMcQQtwRLrVEGoDDlO1wmBLoiLRlf3JpvjDIdxLshrs8fI+D1ZyUtfeJnONZtXfA
+         IxdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gz2zH6sh025pIqlTZgZMoOhe3ZbD5/XGD/oE55GsOo4=;
+        b=M99OWTFzaFhTm5L/Hp9Q0EyI0dS31P/voNaouk0QuE5SN0kU/RUL+DNE7T83xe8Wak
+         V0i/Zo0EQyQD15ZaJPsBstgxXGliC3/E19FP4cmHOSAgX0mi/l5uXpzsqnpCOu6n9gof
+         PjGM/PvsXzuusHf5QnyJ3l8giQD+hy4rPxQ/LuVp554Q4I6IRWsL/kUme4H+fRDtiySa
+         f8o/tQamd0PTQmecV620SQ0nNW7188UX0qXT/pDRC5A2uuiKJsh8o6xT/Zta6kXN/c4I
+         Iur2NdE3Iq3OjjDpVfuj30FO+C60JI/cjDDSvOmS2tYrVzMXvF2mMnnMThen6a+ZbXQG
+         SA2Q==
+X-Gm-Message-State: ACrzQf2vsKjhuf+CHCE6PKq5IQsXBMDmXIP0gekM4+9nasSZnjWNjQJ7
+        Tm92aWlKPTkBV86YOymWUdA8cw==
+X-Google-Smtp-Source: AMsMyM5skw1JGH7+6bgcuKYSFzfHByP4+bqCs9NzMAUlLCsEfbv4o0liZAnEbqJbo13111iNMGUExQ==
+X-Received: by 2002:a05:600c:12c6:b0:3bd:eeec:309 with SMTP id v6-20020a05600c12c600b003bdeeec0309mr7722582wmd.167.1665073455974;
+        Thu, 06 Oct 2022 09:24:15 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id k19-20020a05600c1c9300b003c1b492daa4sm3180145wms.36.2022.10.06.09.24.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 09:24:15 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     corbet@lwn.net, linux@leemhuis.info,
+        konstantin@linuxfoundation.org, krzysztof.kozlowski@linaro.org,
+        linux-doc@vger.kernel.org, joe@perches.com
+Cc:     linux-kernel@vger.kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: [PATCH v6 0/1] Fixup instructions around mailing recipients
+Date:   Thu,  6 Oct 2022 17:24:12 +0100
+Message-Id: <20221006162413.858527-1-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-From:   Dave Hansen <dave.hansen@intel.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/mm for 6.1
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+V6:
+- Drops distinction between dedicated and non-dedicated mailing lists
+- I appreciate Akria's concern on keeping the text concise but OTOH I think
+  we should call out supporters and reviewers as well as the mailing
+  list(s) produced by get_maintainer as mail addresses which ought to be
+  mailed.
 
-Please pull some x86/mm changes for v6.1.  There are some small things
-here, plus one big one.  The big one detected and refused to create W+X
-kernel mappings.  This caused a bit of trouble and it is entirely
-disabled on 32-bit due to known unfixable EFI issues.  It also oopsed
-on some systemd eBPF use, which kept some users from booting.
+  A little bit of extra text should hopefully help others get the right
+  list of recipients, with the least amount of additional text added as
+  possible.
 
-The eBPF issue is fixed, but those troubles were caught relatively
-recently which made me nervous that there are more lurking.  The final
-commit in x86_mm_for_v6.1_rc1 retains the warnings, but doesn't
-actually refuse to create W+X mappings.
+V5:
+- Drops get_maintainer.pl removal of supporter - Joe Perches
+- Back to one standalone Documentation change - Krzysztof's suggested list
 
---
+RESEND:
++ Akira
 
-The following changes since commit 42e66b1cc3a070671001f8a1e933a80818a192bf:
+V4:
+- Change the subject line of the series
+  Previous: Expand get_maintainer to be explicit about supporters
+  https://lore.kernel.org/all/20220930064629.329514-1-bryan.odonoghue@linaro.org/t/
 
-  Merge tag 'net-6.0-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-09-01 09:20:42 -0700)
+- Update get_maintainer.pl to return "maintainer" for both "S: Supported"
+  and "S: Maintained" - Theodore Tso
+  For the purposes of sending a patch whether or not the maintainer is
+  listed as volunteer or paid is not really useful information.
+  Listing both as "maintainer" is clearer the end user.
 
-are available in the Git repository at:
+- Incorporate Krzysztof's list of recipients into
+  Documentation/process/submitting-patches.rst.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_mm_for_v6.1_rc1
+- I didn't include the get_mainainter.pl example.
+  Comments from both Akira and Joe suggest to me the example is not that
+  useful.
 
-for you to fetch changes up to c5129ecc12a3101555d8922b1e0aa90f91247ab6:
+- get_maintainer will no longer produce "supporter" so one could argue that
+  the documentation shouldn't refer to supporters however not all of the
+  potential output strings are documented and I've opted not to document
+  "chief penguin" either.
 
-  x86/mm: Ease W^X enforcement back to just a warning (2022-10-04 12:53:52 -0700)
+  I'd like to focus on the particular case of supporters with some
+  reasonable knock-on documentation tweaks for the obvious gaps we've
+  identified in our discussion because "supporter" really means
+  "maintainer" and you absolutely have to mail that person to get your
+  patch into the right inbox.
 
-----------------------------------------------------------------
+V3:
 
- * Detect insecure W+X mappings and warn about them, including a
-   few bug fixes and relaxing the enforcement
- * Do a long-overdue defconfig update and enabling W+X boot-time
-   detection
- * Cleanup _PAGE_PSE handling (follow-up on an earlier bug)
- * Rename a change_page_attr function
+- Drops change to get_maintainer.pl - Theodore
+- Rewords around `get_maintainer --nogit-fallback` and gives an example
 
-----------------------------------------------------------------
-Borislav Petkov (1):
-      x86/mm: Rename set_memory_present() to set_memory_p()
+I think the document text now is clearer and should be more helpful to
+others in getting their minimum submission list right every time.
 
-Dave Hansen (3):
-      x86/mm/32: Fix W^X detection when page tables do not support NX
-      x86/mm: Disable W^X detection and enforcement on 32-bit
-      x86/mm: Ease W^X enforcement back to just a warning
+V2:
 
-Ingo Molnar (3):
-      Merge branch 'linus' into x86/mm, to refresh the branch
-      x86/defconfig: Refresh the defconfigs
-      x86/defconfig: Enable CONFIG_DEBUG_WX=y
+https://lore.kernel.org/lkml/20220928003006.230103-1-bryan.odonoghue@linaro.org/T/#u
 
-Linus Torvalds (1):
-      x86/mm: Add prot_sethuge() helper to abstract out _PAGE_PSE handling
+- Documentation/process
+  Added in text to also make clear subsystem mailing list should be
+  included - Krzysztof
 
-Peter Zijlstra (1):
-      x86/mm: Refuse W^X violations
+- Changed get_maintainer.pl to print maintainer[supporter] or
+  maintainer[volunteer] depending on MAINTAINERS file. - Thorsten/Bryan
 
- arch/x86/configs/i386_defconfig   |  6 ++++--
- arch/x86/configs/x86_64_defconfig |  5 +++--
- arch/x86/mm/init_64.c             | 19 ++++++++++---------
- arch/x86/mm/pat/set_memory.c      | 49 +++++++++++++++++++++++++++++++++++++++++++++++--
- 4 files changed, 64 insertions(+), 15 deletions(-)
+- Choose supporter and volunteer instead of supported and volunteer
+  Supporter and volunteer describe the role of the person whereas supported
+  and volunteer would describe an activity and a role which isn't
+  consistent. - Thorsten/Bryan
+
+- I didn't change Documentation/process/5.Posting.rst
+  This file doesn't mention get_maintainer.pl and I was mostly aiming to
+  fixup the process around get_maintainer.pl. - Thorsten
+
+- Myself and Thorsten discussed changing get_maintainer.pl, how it seems
+  like a desirable thing to do but also that "it might break scripts for
+  people" and it might.
+
+  I don't know if get_maintainer.pl is or should be considered to be a
+  stable interface and an explicit software contract but, making it clear a
+  supporter is also a maintainer seems like the right thing to do from a
+  transmission of information perspective.
+
+  There is still the option of just updating Documentation/process in
+  isolation.
+
+V1:
+- Sent a standalone change to Documentation/process stating
+  get_maintainer.pl email addresses marked "supporter" should be included
+  in a patch run.
+
+
+
+Bryan O'Donoghue (1):
+  Documentation/process: Be more explicit about who to mail on patch
+    submission
+
+ Documentation/process/submitting-patches.rst | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+-- 
+2.37.3
 
