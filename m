@@ -2,81 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E27705F6BB5
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 18:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ABDC5F6BB8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 18:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231891AbiJFQ02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 12:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
+        id S231527AbiJFQ11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 12:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231624AbiJFQ0K (ORCPT
+        with ESMTP id S230216AbiJFQ1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 12:26:10 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0627AB4883;
-        Thu,  6 Oct 2022 09:26:09 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id pq16so2190015pjb.2;
-        Thu, 06 Oct 2022 09:26:08 -0700 (PDT)
+        Thu, 6 Oct 2022 12:27:24 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB40CE9BE;
+        Thu,  6 Oct 2022 09:27:23 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id 13so5778822ejn.3;
+        Thu, 06 Oct 2022 09:27:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/hbfYGNHUkbmVg6N1hzYd69NmOtZCOiVnEh8wTB8DMg=;
-        b=JjzxOMhV7V2SgpMy8q792kZr9G7r7J3adWjJGYYmRSiSFvbW08bB1UgaE7fwo1sIQI
-         iQ8HG3TuMDbxJaRyslyiS3KT7kmWWvcarDncNPocMUcR9PzQsbEC7BmJ/ijB3kzb+8WC
-         MF0E71SeMUCHx9MPEHcpQT+xLHkKfl9PuTUH/P464HusQKg0FIjBzXWA4ZQnbuzZKlml
-         qXCQoiWcBiqzx2VBpjXSi4tyDMoTZ65+8bpRGgsPT/78ct+FY+D15l/2r0tSLcqkwHUe
-         z0st7mOBR1eCc33EQ84SGPOjVLhE3e/9kxJOHgvc3BU3Vp/dQZWocl03Ec9ldxqeDspg
-         SwsQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=1kXYRJVvVuB6/yCg+mLXa+n2OpJV2ALpI5+bxh3cOos=;
+        b=CyGVdpIRf0cbkRRlaQmlIM4GbYrItWETO4moUB0zABjHGn+1Bb5HHwCCrwYBQSdG1z
+         YC0Mo0XlKB75VeUZ/tJLkKEazynqHAdt2RXqbZQ7RFv78GUf5L3UQVLsOU6zdZEwiZac
+         SBrkH5q2D8PZcWVlYrSSPu5iu5DNoO+XHQPihtd1TbNlapY8sRyKQqe9zKr/w/PEqZHR
+         x0rPhaaRYuIGeVx/OGinB2GIMhzjl+TxEqwMsa/r4HYIyXFoF3EMA4Tvj4SsNs8OmWK5
+         eD4wxZUqXbkkCQdkaKwPpGze4+jRMB4c54N9Tg/zx6n75XD1KXS/NRKR8cw9YpZv9dVv
+         sDXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/hbfYGNHUkbmVg6N1hzYd69NmOtZCOiVnEh8wTB8DMg=;
-        b=zKYjk1TdKarvj4B5pLc+jOBIxpDy88SS/HyJL13ih/3ponBMLQwsNtx52o+bEjDuKg
-         Hzbv9SPrHxZ5kGH8bhj+y8uN+Kq1iDJ/o0+5QczJl63F/gB1OrtY/k5g2g/LUWWNIons
-         0ZzIdHh17A9hfLRoYeWCjQTEF8EHmB2G2Gz5NePuoWWSlllhW6jbgkmwBEDRoY/exstL
-         rp2mrA1XLKVeXsAhPINdblYdwUhxOxwmGioAZFNhgxebQeryGQ4Z0mq+AlkXKWlOL0cV
-         h5TK7HEsXqqNAXG3rLQO+XToecufjjtU3+bpKZGTo49DXFDjWj63wqeYQJZrmSivp3Yb
-         0QcA==
-X-Gm-Message-State: ACrzQf2Y6EafSuy1ol1gTb3v2VgR9PWoyKohcNkpR8gkdl13IjbzMIEq
-        q8vYn9MwV5TTPGYKn1wQj2Mo2Cpx8vpdgw==
-X-Google-Smtp-Source: AMsMyM5F6u1RXpZU1tZnO4TqKmN/xrY68kBym4WjqB8nJ5GrAT4yc25/Qc/whLqCZsnKUkQHSIPNCQ==
-X-Received: by 2002:a17:90a:f190:b0:20a:a8b1:b199 with SMTP id bv16-20020a17090af19000b0020aa8b1b199mr11525129pjb.83.1665073568325;
-        Thu, 06 Oct 2022 09:26:08 -0700 (PDT)
-Received: from localhost ([2406:7400:61:5d7c:350b:1ad7:ecfb:8fec])
-        by smtp.gmail.com with ESMTPSA id c192-20020a621cc9000000b00562a0c8a195sm544942pfc.69.2022.10.06.09.26.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Oct 2022 09:26:07 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 06 Oct 2022 21:56:00 +0530
-Message-Id: <CNEZBDQ6ZMHN.220HJ00NJ8J68@skynet-linux>
-Subject: Re: [PATCH v2 2/2] dt-bindings: remoteproc: qcom: adsp: Add ADSP on
- MSM8953
-From:   "Sireesh Kodali" <sireeshkodali1@gmail.com>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <linux-kernel@vger.kernel.org>
-Cc:     <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <dmitry.baryshkov@linaro.org>, "Andy Gross" <agross@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@somainline.org>,
-        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Manivannan Sadhasivam" <mani@kernel.org>
-X-Mailer: aerc 0.12.0
-References: <20221006044745.286264-1-sireeshkodali1@gmail.com>
- <20221006044745.286264-3-sireeshkodali1@gmail.com>
- <14aca742-4a27-c1d9-3015-eade31a4a3ca@linaro.org>
-In-Reply-To: <14aca742-4a27-c1d9-3015-eade31a4a3ca@linaro.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=1kXYRJVvVuB6/yCg+mLXa+n2OpJV2ALpI5+bxh3cOos=;
+        b=zuiVJwCK7UnxbiwsavaEu6NbgpD9ouHRemYkLT3FJyMLSue6f19lRDIgAi0DGfKTqV
+         AuKwMXP96XifSamyh39aGwnu0+ZjG1ssEBYzH0ToEPJUdzwFK5wPOyBLGQYUgZk4Gjuq
+         C1RAMjwCt/HqRi5AWby9EK2fOqxSrYHTiVvoxjsaIRtYEJsKjayMpmVJSl6lvNytWOBs
+         xMoVrqrf70cnFle6Z7VybGkNgQVE5GQLoa4ct4p7KcbyncIXfK1Ddp2W/s2C7JcGWQMD
+         impKFTrSZ+pwi3CK+JDAVQrakCooFGgCZUtl/6pdd0WY1h71qKguLKUKFlAYFsokUjtz
+         /c8A==
+X-Gm-Message-State: ACrzQf18h8NT1S6uH3fplsi0l6hnX2/Rycv5x65VaGTeA6eSXixwVFbC
+        GWZRpN1mqOQNI0zHhvk7lnbG/4ibRUfYNv+8ex4=
+X-Google-Smtp-Source: AMsMyM6gC7LkWalsDjJCsF+lKGjCe9nrQw7x15pqRpmn46ydjr2W6YgI0uNqMQX0BN+RkIlpHUqujS6nxpuUk5qDvvg=
+X-Received: by 2002:a17:907:6087:b0:78d:2d1c:c050 with SMTP id
+ ht7-20020a170907608700b0078d2d1cc050mr538377ejc.481.1665073642415; Thu, 06
+ Oct 2022 09:27:22 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221006153440.18049-1-jgross@suse.com>
+In-Reply-To: <20221006153440.18049-1-jgross@suse.com>
+From:   Jason Andryuk <jandryuk@gmail.com>
+Date:   Thu, 6 Oct 2022 12:27:09 -0400
+Message-ID: <CAKf6xpvUat2HP_WO=LSxLC46=KN2exSmqn+DWHTN74HK6H2HLQ@mail.gmail.com>
+Subject: Re: [PATCH v2] xen/pcifront: move xenstore config scanning into sub-function
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        xen-devel@lists.xenproject.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,38 +69,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu Oct 6, 2022 at 12:42 PM IST, Krzysztof Kozlowski wrote:
-> On 06/10/2022 06:47, Sireesh Kodali wrote:
-> > Add support for booting the Audio DSP on the MSM8953 platform. This is
-> > used by SoCs like SDM450, SDM625, SDM626, APQ8053, etc. Since the
-> > configuration is the same on all SoCs, a single compatible string is
-> > used.
-> >=20
-> > Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
-> > ---
-> >  Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yam=
-l b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-> > index 3072af5f9d79..c9d69f6160a1 100644
-> > --- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-> > +++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-> > @@ -18,6 +18,7 @@ properties:
-> >      enum:
-> >        - qcom,msm8226-adsp-pil
-> >        - qcom,msm8974-adsp-pil
-> > +      - qcom,msm8953-adsp-pil
+On Thu, Oct 6, 2022 at 11:35 AM Juergen Gross <jgross@suse.com> wrote:
 >
-> Alphanumeric order.
-
-Ok, will be fixed in v3
-
-Regards,
-Sireesh Kodali
+> pcifront_try_connect() and pcifront_attach_devices() share a large
+> chunk of duplicated code for reading the config information from
+> Xenstore, which only differs regarding calling pcifront_rescan_root()
+> or pcifront_scan_root().
 >
-> Same in other places.
->
-> Best regards,
-> Krzysztof
+> Put that code into a new sub-function. It is fine to always call
+> pcifront_rescan_root() from that common function, as it will fallback
+> to pcifront_scan_root() if the domain/bus combination isn't known
+> yet (and pcifront_scan_root() should never be called for an already
+> kneon domain/bus combination anyway). In order to avoid duplicate
 
+known
+
+> messages for the fallback case move the check for domain/bus not knwon
+
+known
+
+> to the beginning of pcifront_rescan_root().
+>
+> While at it fix the error reporting in case the root-xx node had the
+> wrong format.
+>
+> As the return value of pcifront_try_connect() and
+> pcifront_attach_devices() are not used anywhere make those functions
+> return void. As an additional bonus this removes the dubious return
+> of -EFAULT in case of an unexpected driver state.
+>
+> Signed-off-by: Juergen Gross <jgross@suse.com>
+
+Reviewed-by: Jason Andryuk <jandryuk@gmail.com>
