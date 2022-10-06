@@ -2,133 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6BD85F6DCE
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 21:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5235B5F6DED
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 21:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232650AbiJFTDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 15:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
+        id S229946AbiJFTJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 15:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231971AbiJFTCb (ORCPT
+        with ESMTP id S231980AbiJFTJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 15:02:31 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDA11144F4
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 12:01:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665082897; x=1696618897;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eloqXl/5HqSaNDYR4ND9CwZjrnE5ddVstvROr2A2S6o=;
-  b=XZ/fMCUlzGTLW9fb68jHq7fZN8SoGhfS/56wMU1R0lnhD3bzLLgXoXPY
-   cruAGh1K+y/lfItSl8s7ozb7F1FxkF4pzql1miGEcio7kHyy7XvS0x+p7
-   bN5mJa/VuggfFLg+FGF3FkKoWtgKYSs6XQuNbbnkTY2AWP1Ys/r8qFgd6
-   Bw90bzOT2yyzwpOiysiIm7A9fFgH+WfzGM1s4KNgPQ6qF/C37oLL6QYuF
-   ZX+NgwMi3JAcGV8TXOMKxeyx1BwWA2ihuVUla0YHvoblTcaY/lU01lL49
-   emwagnmKizr1mRNzrG5a+5Lwo3xcpuTA/Ak6BJx72sU+ApOKp7gV/QgaD
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="389833373"
-X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
-   d="scan'208";a="389833373"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 12:01:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="800005354"
-X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
-   d="scan'208";a="800005354"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga005.jf.intel.com with ESMTP; 06 Oct 2022 12:01:29 -0700
-Date:   Thu, 6 Oct 2022 12:07:58 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [RFC PATCH 09/23] sched/fair: Use task-class performance score
- to pick the busiest group
-Message-ID: <20221006190758.GA1624@ranerica-svr.sc.intel.com>
-References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
- <20220909231205.14009-10-ricardo.neri-calderon@linux.intel.com>
- <YzLYDPU+upHeUG65@hirez.programming.kicks-ass.net>
- <20221005233841.GA29251@ranerica-svr.sc.intel.com>
- <Yz6T4OslXxKdAlM/@hirez.programming.kicks-ass.net>
+        Thu, 6 Oct 2022 15:09:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A3780507
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 12:09:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665083359;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4msz0RPjroIPvdhEPZqlzrvdxXuX3VI658evT0Z/580=;
+        b=byF1Z/NyJR6PkOAEA1jrrxzUEXFlbxJoUjxh3T/t/kFGdcX+t0bddR5IOvNns77FQU6PHy
+        WJSLdICUD6WHCTVwy3Huso1VnHzGgaupEIcJCmYnLZK9/MdMnYtqfvUr+k6psoxfSht7NF
+        fo2mWqjWnV5McHTPIjZ4wbpjkDVQ3rY=
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
+ [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-440-ExHkusDCN5a8ZuNE_1GDaA-1; Thu, 06 Oct 2022 15:09:18 -0400
+X-MC-Unique: ExHkusDCN5a8ZuNE_1GDaA-1
+Received: by mail-oo1-f72.google.com with SMTP id f26-20020a4a9d5a000000b0044e0692f7d0so1397981ook.19
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 12:09:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4msz0RPjroIPvdhEPZqlzrvdxXuX3VI658evT0Z/580=;
+        b=kyoVYBaEJGIjMcKH3gj56empGHAfthRtxwEjBXlV94EvPL06VS7NgmHdLMhjhMIrWZ
+         HdqrJE4B8dYJqs8lGINstbtHihkoNLUQS6gC9IOAraSfacRHIFAnMM3CnYFxveEldrHs
+         evqBd9Y+plwY32FrYzOXsmxsgat3p20gwGxCPu12ey0lJj4kxQ97i0i2EZRSenbxIYyh
+         cLiegCU8Oe+PfbNRqX3GyBUG4BJA2qP+G12IpuDci/pN02eZqHUkxgIpEtbFi7yVDHxh
+         FqWSu55QvkE6K/cTkcKkLYeJISUC489iFTTjXHGgHDFseuab7ZfjRRLjpEhGkvuQxO5d
+         SIEg==
+X-Gm-Message-State: ACrzQf1c6k38bv4s/s0OP9hgQEuEf435gRoS96FFsLo1+VtoLrlAChaI
+        7yw49veiXq3esW6lC3mkb9hy5PfTi1eg62P3f/dnauDcWJ7gG3D26NVmn42CEcoSOjhl9EjAhRJ
+        F8DM+TkiBNViUmfzsCFD2Od4A
+X-Received: by 2002:a9d:5a9b:0:b0:660:e857:b82f with SMTP id w27-20020a9d5a9b000000b00660e857b82fmr585520oth.241.1665083357326;
+        Thu, 06 Oct 2022 12:09:17 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM40570OwbfPkviKJSAM28HRn8clY3t/YlF0scbU7MVJRX9nMFfxEF8Ik1lYacEkW6E1TgsQXg==
+X-Received: by 2002:a9d:5a9b:0:b0:660:e857:b82f with SMTP id w27-20020a9d5a9b000000b00660e857b82fmr585507oth.241.1665083357077;
+        Thu, 06 Oct 2022 12:09:17 -0700 (PDT)
+Received: from localhost (pool-100-0-210-47.bstnma.fios.verizon.net. [100.0.210.47])
+        by smtp.gmail.com with ESMTPSA id q19-20020a05687101d300b0012d6f3d370bsm205215oad.55.2022.10.06.12.09.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 12:09:16 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 15:09:15 -0400
+From:   Eric Chanudet <echanude@redhat.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-rt-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mailbox: qcom-ipcc: flag IRQ NO_THREAD
+Message-ID: <20221006190915.2koau7vlnvinqk3b@echanude>
+References: <20221003170849.383005-1-echanude@redhat.com>
+ <Yzv/3vsIMtgu7noY@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yz6T4OslXxKdAlM/@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yzv/3vsIMtgu7noY@linutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 10:37:52AM +0200, Peter Zijlstra wrote:
-> On Wed, Oct 05, 2022 at 04:38:41PM -0700, Ricardo Neri wrote:
-> > On Tue, Sep 27, 2022 at 01:01:32PM +0200, Peter Zijlstra wrote:
-> > > On Fri, Sep 09, 2022 at 04:11:51PM -0700, Ricardo Neri wrote:
+On Tue, Oct 04, 2022 at 11:41:50AM +0200, Sebastian Andrzej Siewior wrote:
+> On 2022-10-03 13:08:49 [-0400], Eric Chanudet wrote:
+> > PREEMPT_RT forces qcom-ipcc's handler to be threaded with interrupts
+> > enabled, which triggers a warning in __handle_irq_event_percpu():
+> >     irq 173 handler irq_default_primary_handler+0x0/0x10 enabled interrupts
+> >     WARNING: CPU: 0 PID: 77 at kernel/irq/handle.c:161 __handle_irq_event_percpu+0x4c4/0x4d0
+> > 
+> > Mark it IRQF_NO_THREAD to avoid running the handler in a threaded
+> > context with threadirqs or PREEMPT_RT enabled.
 > 
-> > > > @@ -9049,6 +9111,12 @@ static bool update_sd_pick_busiest(struct lb_env *env,
-> > > >  		/* Prefer to move from lowest priority CPU's work */
-> > > >  		if (sched_asym_prefer(sg->asym_prefer_cpu, sds->busiest->asym_prefer_cpu))
-> > > >  			return false;
-> > > > +
-> > > > +		/* @sg and @sds::busiest have the same priority. */
-> > > > +		if (sched_asym_class_pick(sds->busiest, sg, &sds->busiest_stat, sgs))
-> > > > +			return false;
-> > > > +
-> > > > +		/* @sg has lower priority than @sds::busiest. */
-> > > >  		break;
-> > > >  
-> > > >  	case group_misfit_task:
-> > > 
-> > > So why does only this one instance of asym_prefer() require tie
-> > > breaking?
-> > 
-> > This is the only place in which two sched groups with running tasks and of
-> > equal priority are compared.
-> > 
-> > In all other places sched_asym_prefer() is used to compare the destination
-> > CPU with others. Since asym_packing is done only when the destination CPU is
-> > idle, there is no need to break this tie.
+> The important bit of information is that this is a IRQ-multiplexer and
+> such it must not be threaded. Otherwise its child-interrupts would be
+> invoked from the thread handler which is not desired.
+> This is noticed by PREEMPT_RT but also on a non-PREEMPT_RT kernel where
+> `threadirqs' has been used.
 
-> 
-> That would make for a fine comment, no? Because as presented one is left
-> wondering, why if asym_prefer() needs tie breaking, only this one site
-> needs it.
+Thank you, I will send a v2 shortly updating the description with the
+above.
 
-Sure.  I will add this comment.
+> Side note: Using request_irq() has the side effect that this interrupt
+> pops-up in /proc/interrupts and the "child-interrupt", too. So you
+> account two interrupts while "one" on the HW side occurred. 
+> Maybe irq_set_chained_handler_and_data() would be better use.
 
-> 
-> > > And while looking through this, I must ask about the comment that goes
-> > > with sched_set_itmt_core_prio() vs the sg->asym_prefer_cpu assignment in
-> > > init_sched_groups_capacity(), what-up ?!
-> > 
-> > Are you referring to this comment?
-> > 
-> > 	"No need to rebuild sched domain after updating
-> > 	 the CPU priorities. The sched domains have no
-> > 	 dependency on CPU priorities"
-> > 
-> > If yes, then it looks wrong to me. Sched domains are rebuilt after updating
-> > priorities.
+I see.
 
-I can included in the series a patch removing this comment.
+> Either way, this addresses the problem,
 
-Thanks and BR,
-Ricardo
+-- 
+Eric Chanudet
+
