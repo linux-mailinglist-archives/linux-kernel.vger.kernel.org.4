@@ -2,202 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 730BF5F70F9
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 00:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 188985F70FC
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 00:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbiJFWJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 18:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
+        id S229567AbiJFWKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 18:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232077AbiJFWJO (ORCPT
+        with ESMTP id S232192AbiJFWKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 18:09:14 -0400
-Received: from resqmta-h1p-028591.sys.comcast.net (resqmta-h1p-028591.sys.comcast.net [IPv6:2001:558:fd02:2446::9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1C0B6017
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 15:09:11 -0700 (PDT)
-Received: from resomta-h1p-028434.sys.comcast.net ([96.102.179.205])
-        by resqmta-h1p-028591.sys.comcast.net with ESMTP
-        id gRssoZm6KhQF9gZ3FoMzub; Thu, 06 Oct 2022 22:09:09 +0000
+        Thu, 6 Oct 2022 18:10:05 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668F350182;
+        Thu,  6 Oct 2022 15:10:01 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id cn9so1851013qtb.11;
+        Thu, 06 Oct 2022 15:10:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=comcastmailservice.net; s=20211018a; t=1665094149;
-        bh=/3S8XYUPoLNoCQFIeNIKXKOqGeoEn1XS9eHYJ1DMxRs=;
-        h=Received:Received:From:To:Subject:Date:Message-Id:MIME-Version;
-        b=sS75FlrEChfEwMJx0Nvzdb8o2dOh8w74OOEgtRjB/bVxdEJm0MvZ96uGuRIXXGldr
-         oPxw6YpSQ9T04laROsdg9fhbOed5JoP/1o7dz3MVKUc9m2mbXckJHGqaa/o/vmkOq1
-         p8mymwnrL79+IE4sr2q1FsG2xXwzRAjqyx4No+hcqUG2Mvlnk/XOWiYHAJYrALaBlv
-         h19WVT1kxF0j16d3GEJrm/hQDm9YHtx2Klvbgqs68+nqq450K0BNvjpeMTXIeeiu4P
-         uZf2mzYBPrUVsCXa2CazZ4IjJteufFLXWeRbS1A+XeEAKADENQfWdx0Uh2E6D2IZ9C
-         ZdFs+AvQuELZg==
-Received: from jderrick-mobl4.amr.corp.intel.com ([71.205.181.50])
-        by resomta-h1p-028434.sys.comcast.net with ESMTPA
-        id gZ2nocknTZjG3gZ2woEgxW; Thu, 06 Oct 2022 22:08:51 +0000
-X-Xfinity-VAAS: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeiiedgtdeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuvehomhgtrghsthdqtfgvshhipdfqfgfvpdfpqffurfetoffkrfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomheplfhonhgrthhhrghnucffvghrrhhitghkuceojhhonhgrthhhrghnrdguvghrrhhitghksehlihhnuhigrdguvghvqeenucggtffrrghtthgvrhhnpedtteeljeffgfffveehhfetveefuedvheevffffhedtjeeuvdevgfeftddtheeftdenucfkphepjedurddvtdehrddukedurdehtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehjuggvrhhrihgtkhdqmhhosghlgedrrghmrhdrtghorhhprdhinhhtvghlrdgtohhmpdhinhgvthepjedurddvtdehrddukedurdehtddpmhgrihhlfhhrohhmpehjohhnrghthhgrnhdruggvrhhrihgtkheslhhinhhugidruggvvhdpnhgspghrtghpthhtohepiedprhgtphhtthhopehsohhngheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrhgrihgusehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhonhgrthhhrghnrdguvghrrhhitghkse
- hsohhlihguihhgmhdrtghomhdprhgtphhtthhopehjohhnrghthhgrnhigrdhskhdruggvrhhrihgtkhesihhnthgvlhdrtghomhdprhgtphhtthhopehjohhnrghthhgrnhdruggvrhhrihgtkheslhhinhhugidruggvvh
-X-Xfinity-VMeta: sc=-100.00;st=legit
-From:   Jonathan Derrick <jonathan.derrick@linux.dev>
-To:     Song Liu <song@kernel.org>
-Cc:     <linux-raid@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        jonathan.derrick@solidigm.com, jonathanx.sk.derrick@intel.com,
-        Jonathan Derrick <jonathan.derrick@linux.dev>
-Subject: [PATCH 2/2] md/bitmap: Add chunk-count-based bitmap flushing
-Date:   Thu,  6 Oct 2022 16:08:40 -0600
-Message-Id: <20221006220840.275-4-jonathan.derrick@linux.dev>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221006220840.275-1-jonathan.derrick@linux.dev>
-References: <20221006220840.275-1-jonathan.derrick@linux.dev>
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/XrH2sxsPKYItZtSBGPJ3bI0IwKkzcfUGbbaVwuiGmY=;
+        b=j1isgOmtWWFqFUvcOlyM8rYtnHSX2PzJyUy05dmrY9YLz+LF7So+N/1SMpb5qXSTCb
+         6LpsKXcS4NxYd/ywloTWjobmentFAgqUL3UWh1OIffuEG9OPew4sCkhU/FK1jk0NWpcK
+         8sRbl4JRBL/2NMq3nw+KFmGnqj4g5NaiV9saQM6ZuMgSAupyGHMX/2IOzRTmdJvmGcZv
+         6vMAJ+r0xScW/Sq+s0oNO/jAf9wZLdwBx+fc6tYBhuOyAXKaiYrAamSJ+7QC0VeLjkrx
+         RF2McqCAhJM76y0NdwyZATzXNtYPDXMn01ta2IYq0T1wpTkZcuIZud4yzMY5ly/laknx
+         QGrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/XrH2sxsPKYItZtSBGPJ3bI0IwKkzcfUGbbaVwuiGmY=;
+        b=K3SUOVbdjiYtYXe4D43spqpbTyAKndr2GGGj4U6NuhFtwDWcaL3At9ZZK+bAeFKVUm
+         LC5M0BXAGe7fT8gv/tg5jho7uf/3gbqKopul5XBFKpFnnw3qcp1JNcFbNyqlXi8OqCmh
+         +oA/TSyOQkFH3tgsmOAyM19G7OlXDvRty7L9MTiFYyBl78k82WQ5MjFIKC3mA/LoA2Y+
+         462WMTlpmMGS4q/Cb+EWp8pDB6jfytvFe5VQUfjQkthGUAqPv5BTltBTUYeAKSdy7yET
+         ajcYi9vZFLqv68Cq2OlJ/3W//0mxgH5qAl2ykDQhLn1xXAE0zlEWd4Le+d5nCEPQPLpi
+         BInA==
+X-Gm-Message-State: ACrzQf0b0+Bk3DhFTwxT7XcUiDo1PssyZKxQlNBoGTohkY0F+qvz3Y4z
+        hyHC7YgqyCT/7h6D6Rd2BP4=
+X-Google-Smtp-Source: AMsMyM6/1a2g5xThw0iaVZRdHB+aVWN2t48lxj4BPjAStRH4zk3+gBH5dcSvyqhJZpm3yEtSiTAHJw==
+X-Received: by 2002:a05:622a:34f:b0:35d:4cec:4d7e with SMTP id r15-20020a05622a034f00b0035d4cec4d7emr2154375qtw.56.1665094200132;
+        Thu, 06 Oct 2022 15:10:00 -0700 (PDT)
+Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id q23-20020a37f717000000b006cf43968db6sm226286qkj.76.2022.10.06.15.09.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Oct 2022 15:09:59 -0700 (PDT)
+Message-ID: <70f033e8-839c-fbfc-f1f0-72ba988d3586@gmail.com>
+Date:   Thu, 6 Oct 2022 15:09:56 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_PASS,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v1 4/5] PCI: brcmstb: Functions needlessly specified as
+ "inline"
+Content-Language: en-US
+To:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221006220322.33000-1-jim2101024@gmail.com>
+ <20221006220322.33000-5-jim2101024@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221006220322.33000-5-jim2101024@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In addition to the timer, allow the bitmap flushing to be controlled by a
-counter that tracks the number of dirty chunks and flushes when it exceeds a
-user-defined chunk-count threshold.
 
-This introduces a new field to the bitmap superblock and version 6.
 
-Signed-off-by: Jonathan Derrick <jonathan.derrick@linux.dev>
----
- drivers/md/md-bitmap.c | 37 ++++++++++++++++++++++++++++++++++---
- drivers/md/md-bitmap.h |  5 ++++-
- drivers/md/md.h        |  1 +
- 3 files changed, 39 insertions(+), 4 deletions(-)
+On 10/6/2022 3:03 PM, Jim Quinlan wrote:
+> A number of inline functions are called rarely and/or are not
+> time-critical.  Take out the "inline" and let the compiler do its work.
+> 
+> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
 
-diff --git a/drivers/md/md-bitmap.c b/drivers/md/md-bitmap.c
-index 451259b38d25..fa6b3c71c314 100644
---- a/drivers/md/md-bitmap.c
-+++ b/drivers/md/md-bitmap.c
-@@ -499,6 +499,7 @@ void md_bitmap_print_sb(struct bitmap *bitmap)
- 	pr_debug("         state: %08x\n", le32_to_cpu(sb->state));
- 	pr_debug("     chunksize: %d B\n", le32_to_cpu(sb->chunksize));
- 	pr_debug("  daemon sleep: %ds\n", le32_to_cpu(sb->daemon_sleep));
-+	pr_debug("  flush chunks: %d\n", le32_to_cpu(sb->daemon_flush_chunks));
- 	pr_debug("     sync size: %llu KB\n",
- 		 (unsigned long long)le64_to_cpu(sb->sync_size)/2);
- 	pr_debug("max write behind: %d\n", le32_to_cpu(sb->write_behind));
-@@ -581,6 +582,7 @@ static int md_bitmap_read_sb(struct bitmap *bitmap)
- 	bitmap_super_t *sb;
- 	unsigned long chunksize, daemon_sleep, write_behind;
- 	unsigned long long events;
-+	unsigned int daemon_flush_chunks;
- 	int nodes = 0;
- 	unsigned long sectors_reserved = 0;
- 	int err = -EINVAL;
-@@ -644,7 +646,7 @@ static int md_bitmap_read_sb(struct bitmap *bitmap)
- 	if (sb->magic != cpu_to_le32(BITMAP_MAGIC))
- 		reason = "bad magic";
- 	else if (le32_to_cpu(sb->version) < BITMAP_MAJOR_LO ||
--		 le32_to_cpu(sb->version) > BITMAP_MAJOR_CLUSTERED)
-+		 le32_to_cpu(sb->version) > BITMAP_MAJOR_CHUNKFLUSH)
- 		reason = "unrecognized superblock version";
- 	else if (chunksize < 512)
- 		reason = "bitmap chunksize too small";
-@@ -660,6 +662,9 @@ static int md_bitmap_read_sb(struct bitmap *bitmap)
- 		goto out;
- 	}
- 
-+	if (sb->version == cpu_to_le32(BITMAP_MAJOR_CHUNKFLUSH))
-+		daemon_flush_chunks = le32_to_cpu(sb->daemon_flush_chunks);
-+
- 	/*
- 	 * Setup nodes/clustername only if bitmap version is
- 	 * cluster-compatible
-@@ -720,6 +725,7 @@ static int md_bitmap_read_sb(struct bitmap *bitmap)
- 			bitmap->events_cleared = bitmap->mddev->events;
- 		bitmap->mddev->bitmap_info.chunksize = chunksize;
- 		bitmap->mddev->bitmap_info.daemon_sleep = daemon_sleep;
-+		bitmap->mddev->bitmap_info.daemon_flush_chunks = daemon_flush_chunks;
- 		bitmap->mddev->bitmap_info.max_write_behind = write_behind;
- 		bitmap->mddev->bitmap_info.nodes = nodes;
- 		if (bitmap->mddev->bitmap_info.space == 0 ||
-@@ -1218,6 +1224,31 @@ static bitmap_counter_t *md_bitmap_get_counter(struct bitmap_counts *bitmap,
- 					       sector_t offset, sector_t *blocks,
- 					       int create);
- 
-+static bool md_daemon_should_sleep(struct mddev *mddev)
-+{
-+	struct bitmap *bitmap = mddev->bitmap;
-+	struct bitmap_page *bp;
-+	unsigned long k, pages;
-+	unsigned int count = 0;
-+
-+	if (time_after(jiffies, bitmap->daemon_lastrun
-+			+ mddev->bitmap_info.daemon_sleep))
-+		return false;
-+
-+	if (mddev->bitmap_info.daemon_flush_chunks) {
-+		bp = bitmap->counts.bp;
-+		pages = bitmap->counts.pages;
-+		for (k = 0; k < pages; k++)
-+			if (bp[k].map && !bp[k].hijacked)
-+				count += bp[k].count;
-+
-+		if (count >= mddev->bitmap_info.daemon_flush_chunks)
-+			return false;
-+	}
-+
-+	return true;
-+}
-+
- /*
-  * bitmap daemon -- periodically wakes up to clean bits and flush pages
-  *			out to disk
-@@ -1240,8 +1271,8 @@ void md_bitmap_daemon_work(struct mddev *mddev)
- 		mutex_unlock(&mddev->bitmap_info.mutex);
- 		return;
- 	}
--	if (time_before(jiffies, bitmap->daemon_lastrun
--			+ mddev->bitmap_info.daemon_sleep))
-+
-+	if (md_daemon_should_sleep(mddev))
- 		goto done;
- 
- 	md_bitmap_unplug(bitmap);
-diff --git a/drivers/md/md-bitmap.h b/drivers/md/md-bitmap.h
-index cfd7395de8fd..e0aeedbdde17 100644
---- a/drivers/md/md-bitmap.h
-+++ b/drivers/md/md-bitmap.h
-@@ -11,10 +11,12 @@
- /* version 4 insists the bitmap is in little-endian order
-  * with version 3, it is host-endian which is non-portable
-  * Version 5 is currently set only for clustered devices
-++ * Version 6 supports the flush-chunks threshold
-  */
- #define BITMAP_MAJOR_HI 4
- #define BITMAP_MAJOR_CLUSTERED 5
- #define	BITMAP_MAJOR_HOSTENDIAN 3
-+#define BITMAP_MAJOR_CHUNKFLUSH 6
- 
- /*
-  * in-memory bitmap:
-@@ -135,7 +137,8 @@ typedef struct bitmap_super_s {
- 				  * reserved for the bitmap. */
- 	__le32 nodes;        /* 68 the maximum number of nodes in cluster. */
- 	__u8 cluster_name[64]; /* 72 cluster name to which this md belongs */
--	__u8  pad[256 - 136]; /* set to zero */
-+	__le32 daemon_flush_chunks; /* 136 dirty chunks between flushes */
-+	__u8  pad[256 - 140]; /* set to zero */
- } bitmap_super_t;
- 
- /* notes:
-diff --git a/drivers/md/md.h b/drivers/md/md.h
-index b4e2d8b87b61..d25574e46283 100644
---- a/drivers/md/md.h
-+++ b/drivers/md/md.h
-@@ -497,6 +497,7 @@ struct mddev {
- 		struct mutex		mutex;
- 		unsigned long		chunksize;
- 		unsigned long		daemon_sleep; /* how many jiffies between updates? */
-+		unsigned int		daemon_flush_chunks; /* how many dirty chunks between updates */
- 		unsigned long		max_write_behind; /* write-behind mode */
- 		int			external;
- 		int			nodes; /* Maximum number of nodes in the cluster */
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.31.1
-
+Florian
