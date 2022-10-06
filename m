@@ -2,100 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2865F6E96
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:04:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B87E5F6E9B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 22:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbiJFUEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 16:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
+        id S231969AbiJFUFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 16:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiJFUEa (ORCPT
+        with ESMTP id S229683AbiJFUFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 16:04:30 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25E7B1BBC;
-        Thu,  6 Oct 2022 13:04:29 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id s2so4389419edd.2;
-        Thu, 06 Oct 2022 13:04:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CbX17zyeqGpxUhDbllE/IZ5gcvd2y3iJ70NgCSA4d7c=;
-        b=efDHX24d11Gqby8OWWO15PesJdSkhVFkd4WvzA0cZFc019I84BuRFaKtLiT/J8c2NG
-         y5CgggOjngsVGwGFG2hY6GeCrz3CDi4m7Eq3fmIoVn0isLAPm+LrcRllfemjUiEJv0aa
-         zl5dhGPT0Yic3YuW4CQPKIfDgGGWr18QORK9f94jpr75/3OQX3I5VFfY3pB1KwzQ2Rut
-         3OBwGjK9vPP5iTOuC9wsPjEczTwzCxq6yCrmDF7q0e6j3aBPxuPgGMYrUSuwl4Yg61nM
-         GgHI1uvfYQbQuRgwjJKMAOZlgdP3/srZ12gXkRvAnl42PbmEilB3BAXyF4p/1PSMejqu
-         9Mtg==
+        Thu, 6 Oct 2022 16:05:30 -0400
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C668B5171;
+        Thu,  6 Oct 2022 13:05:30 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id w70so3296091oie.2;
+        Thu, 06 Oct 2022 13:05:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CbX17zyeqGpxUhDbllE/IZ5gcvd2y3iJ70NgCSA4d7c=;
-        b=bcemAw1HS5EJVahVdKpv4b5FNsDWICQ5/bgfIA6w1+0xngSzWgmA4GxA9tYCh+b+hn
-         1Yb4ZWKBmXmwEmQqUIh9aDlZWLXpIWWDc3nV+yIL1bBtvpQzEfiWZcD+nYw/AxKuQOJL
-         lEGahO7hU7ucEt02Ljv3jhMQ2gWMNKhpITHeA6m2kNm1y908Fn3p1oMS6lFTf460ACXf
-         g36cnrSeWAFpWC98Igx7dpq3bzhQdLt+eG098w7rdDBbb27a/b9ea1hq38ekK0LLwBX+
-         HbMPTiqdxtRT21ZiyfTuVEKVHMa6PSHpzM39yK7+6ylp6MxCKemfTTItdnKShrBX9wXE
-         joeg==
-X-Gm-Message-State: ACrzQf0QzJBhwjjXWm+eh1mo+yv+B5jW+3RszSvkfQCqkh0qFsvMPUvR
-        eKJMVk2rQArzlgMjE5JbOmo=
-X-Google-Smtp-Source: AMsMyM7KdH9xZap62bO609qHFz5E7/TCeFx+TM/MTjShbd1eB8/e6hDULf2DbdD9dqoPXqLbwHi+dw==
-X-Received: by 2002:a05:6402:40d3:b0:451:5249:d516 with SMTP id z19-20020a05640240d300b004515249d516mr1438097edb.154.1665086668149;
-        Thu, 06 Oct 2022 13:04:28 -0700 (PDT)
-Received: from debian64.daheim (p5b0d7ff5.dip0.t-ipconnect.de. [91.13.127.245])
-        by smtp.gmail.com with ESMTPSA id qt4-20020a170906ece400b00773f3cb67ffsm175447ejb.28.2022.10.06.13.04.27
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3pJH4PuTjBuoWmRihPf+t/jCmt8a+4/g7Af5wjTdXEM=;
+        b=53Cp7wvbJkMXMlMZm4ZWr3H4v/VZIGPc7cBlmhikUTJw7MH0UHJVRKzOsTRKxKnIam
+         2SBgqH26NsZHqJaP9ZL5Z3iZQWAXKfbaJSm3XhFmsEB7g7wwx/TzMNysTtP4zMQKHHLd
+         q9e7uvJdKdqGscR4F/wAE6IsintM4dvn72OV4jmg1zrjPrwfGnje1t7YksVu/6QCxUCU
+         d7JmmL7bo1IdTrH/3Haby1mfz1sAYlUm7KNJwgXgidVmQZdVzmL9LQvLSJM/Q5YZYEFq
+         kFz4AaXKcEBG4tMJIRyG2Uh+rZfB1s6lqX1Iav3SFesXZZOvzLDXdcQHMi1pswQ9U7Z6
+         PMSQ==
+X-Gm-Message-State: ACrzQf3/tOp23Wsx4aL+USge7HK/wzhg61akD8zWxr8kXEMGEY3PhTxt
+        F/61ISARJ8KW46Fik1k2kA==
+X-Google-Smtp-Source: AMsMyM6MPRvfPqvI2vExExGRa1lwJqmLSVRATOQPJ/DAK/Z5xSR06U0pHHn4GRWU8UIJ+GfZxlzqXg==
+X-Received: by 2002:a05:6808:11c8:b0:353:f092:f11b with SMTP id p8-20020a05680811c800b00353f092f11bmr641084oiv.239.1665086729360;
+        Thu, 06 Oct 2022 13:05:29 -0700 (PDT)
+Received: from robh_at_kernel.org ([2607:fb90:8a65:c536:245:842:a3a4:9017])
+        by smtp.gmail.com with ESMTPSA id h13-20020a056870538d00b00127ba61535fsm319188oan.15.2022.10.06.13.05.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 13:04:27 -0700 (PDT)
-Received: from localhost.daheim ([127.0.0.1])
-        by debian64.daheim with esmtp (Exim 4.96)
-        (envelope-from <chunkeey@gmail.com>)
-        id 1ogVDd-000RBz-0u;
-        Thu, 06 Oct 2022 22:04:26 +0200
-Message-ID: <a859515d-8c6d-3757-a4cc-1fe5c8360908@gmail.com>
-Date:   Thu, 6 Oct 2022 22:04:26 +0200
+        Thu, 06 Oct 2022 13:05:28 -0700 (PDT)
+Received: (nullmailer pid 87333 invoked by uid 1000);
+        Thu, 06 Oct 2022 20:05:26 -0000
+Date:   Thu, 6 Oct 2022 15:05:26 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>, Lee Jones <lee@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 6/6] dt-bindings: soc: qcom: ipc-rpm: refer to
+ qcom,ipc-rpm-regulator.yaml
+Message-ID: <20221006200526.GA86823-robh@kernel.org>
+References: <20221005-mdm9615-pinctrl-yaml-v1-0-0cbc006e2a30@linaro.org>
+ <20221005-mdm9615-pinctrl-yaml-v1-6-0cbc006e2a30@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] wifi: carl9170: Remove -Warray-bounds exception
-Content-Language: de-DE
-To:     Kees Cook <keescook@chromium.org>,
-        Christian Lamparter <chunkeey@googlemail.com>
-Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-References: <20221006192051.1742930-1-keescook@chromium.org>
-From:   Christian Lamparter <chunkeey@gmail.com>
-In-Reply-To: <20221006192051.1742930-1-keescook@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221005-mdm9615-pinctrl-yaml-v1-6-0cbc006e2a30@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/10/2022 21:20, Kees Cook wrote:
-> GCC-12 emits false positive -Warray-bounds warnings with
-> CONFIG_UBSAN_SHIFT (-fsanitize=shift). This is fixed in GCC 13[1],
-> and there is top-level Makefile logic to remove -Warray-bounds for
-> known-bad GCC versions staring with commit f0be87c42cbd ("gcc-12: disable
-> '-Warray-bounds' universally for now").
+On Thu, Oct 06, 2022 at 09:58:03AM +0000, Neil Armstrong wrote:
+> Now we have bindings for the expected regulators subnode, refer
+> to the right qcom,ipc-rpm-regulator.yaml bindings.
 > 
-> Remove the local work-around.
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/soc/qcom/qcom,ipc-rpm.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105679
-> 
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-Acked-by: Christian Lamparter <chunkeey@gmail.com>
+> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,ipc-rpm.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,ipc-rpm.yaml
+> index d416950189d1..d18200d5c5b5 100644
+> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,ipc-rpm.yaml
+> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,ipc-rpm.yaml
+> @@ -47,7 +47,7 @@ properties:
+>  
+>    regulators:
+>      type: object
+> -    $ref: /schemas/regulator/regulator.yaml#
+> +    $ref: /schemas/regulator/qcom,ipc-rpm-regulator.yaml#
 
+Just reorder your patches.
+
+Rob
