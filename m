@@ -2,66 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7ADC5F6886
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5AC5F6879
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Oct 2022 15:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbiJFNuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 09:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
+        id S231391AbiJFNta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 09:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbiJFNuJ (ORCPT
+        with ESMTP id S229540AbiJFNt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 09:50:09 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33255286CA
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 06:49:56 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso5000066pjq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 06:49:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=mWMJic3+3eVweR7Hb3wJwKAsDypmbh3PTgAfppiGim0=;
-        b=ZkJ3eSSvWEQHG4zrCYO/rtAQMC+rTCblUgkXT/sojUfeAz6djcfzmaQhTE1VFhHlb5
-         c1atXYEjU3xEGE7hI13KaDEcIgKWkEtN1hvwHwEilxv96++sncyPLWqzhVGEXpdUs06G
-         CdnNu3apyqKTZeVSCSOWHTmHzGnFe3F2KnJM3MWKtya9Y3YnYefumWTirYL9USS1lYub
-         A/mEPLmhBfwN3a8nKOKM2rGPY5Mu7KrZF82KX4Ex4dyspcvVZE3FoiZPzuE8M8MOv+bw
-         OGNw6BEO2hAZNd93A/lo5mHGoPx0ZTYnxKuuVNn8KZcYJUWz6h7H+Lqu3yOpWNU2Gh62
-         93nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=mWMJic3+3eVweR7Hb3wJwKAsDypmbh3PTgAfppiGim0=;
-        b=svI6PWebPisnhrMk85wGt/9l2v6BKfSSU1yQG5+bgV5EsV4zvtc/BrwMeLFImzS5bB
-         X7jEeAhsLGJQhCqVUgVjMtSs7dkB2UGl9MlRu3oybFmLzP6jUvcWIniX4G6932UXsboi
-         K6EdJU1GtlU3bK+5AdFqYfP+cvx1wvk7sOwW0wERIOpKDQofqeSm4wsyyZiR4THEYPtB
-         lWFYirN/Ipj0pY5JcKi4GxC75qGW6sA+nzmbxsxXVIuMMO/sadm+0hCyj1EL9crPl0b3
-         +qF87NVRMl93E7kz75xxEYpqVENcZrnkjAL4d1H2L/h5vLbemSsFEJ3qEHdh6RqE4JN6
-         jnag==
-X-Gm-Message-State: ACrzQf1jIT99/Oopa6o/T7e5/UDISlpDI7tcQmJWC7TgbS1vVyLxI/fz
-        +jsDYCGHZ+Yl0PP2gcP8imRk
-X-Google-Smtp-Source: AMsMyM6adD7Qiz1npAI/QIQqcXzzqSFAqQ7y/8Uf2egzhAubDRgCFWLfQ2y5Xniqseks4ePMXNdkGg==
-X-Received: by 2002:a17:90a:4b47:b0:20a:e47c:1450 with SMTP id o7-20020a17090a4b4700b0020ae47c1450mr10742123pjl.198.1665064195847;
-        Thu, 06 Oct 2022 06:49:55 -0700 (PDT)
-Received: from localhost.localdomain ([220.158.158.220])
-        by smtp.gmail.com with ESMTPSA id k25-20020a635a59000000b00434760ee36asm1874053pgm.16.2022.10.06.06.49.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 06:49:55 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     kishon@kernel.org, lpieralisi@kernel.org, bhelgaas@google.com
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kw@linux.com, robh@kernel.org, vidyas@nvidia.com, vigneshr@ti.com,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v3 3/5] PCI: endpoint: Use a separate lock for protecting epc->pci_epf list
-Date:   Thu,  6 Oct 2022 19:19:25 +0530
-Message-Id: <20221006134927.41437-4-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221006134927.41437-1-manivannan.sadhasivam@linaro.org>
-References: <20221006134927.41437-1-manivannan.sadhasivam@linaro.org>
+        Thu, 6 Oct 2022 09:49:28 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2737754B8;
+        Thu,  6 Oct 2022 06:49:27 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 343975BF;
+        Thu,  6 Oct 2022 13:49:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 343975BF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1665064167; bh=3yOrPKvm0I0vrMoU1xDUguybCRr2Y2rZ9sRGcj/GPVk=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=M15Npdr5zFEbg/WWNkF8N2xj7UcbZfJnAEJLjSocyILQCMySxGl730RpoCX/REsgK
+         DWpc8fliCdPbtMTvdl/kMbn1XdjOLDUcmqMh9TO3MYNPx7utf7fL6qKrLMJv8tKzZS
+         MpRhh5h9cCyJdVoAxix2R0clJgwQ/DaJU5xIme1E6X4S/am00CgjQBB6BZJTH6ovNF
+         WF8dgpZ3GpVo9N8UZURMPazjRZKC/oKz3MNNwAIOh6fo6+k9Aw6+eOHSUMSOYYlFU2
+         XLHH/KOypBOs42hjGNQayoDbLXxU4uTChRNs3QNW4rebEHbwDbYR5ajQlhIID6XzDb
+         oB7/IBuoH8sTg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH RFC 0/5] docs: Improvements to our HTML output
+In-Reply-To: <87tu4hp5pg.fsf@intel.com>
+References: <20221004201222.281845-1-corbet@lwn.net> <87tu4hp5pg.fsf@intel.com>
+Date:   Thu, 06 Oct 2022 07:49:26 -0600
+Message-ID: <87k05d83kp.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -71,105 +51,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The EPC controller maintains a list of EPF drivers added to it. For
-protecting this list against the concurrent accesses, the epc->lock
-(used for protecting epc_ops) has been used so far. Since there were
-no users trying to use epc_ops and modify the pci_epf list simultaneously,
-this was not an issue.
+Jani Nikula <jani.nikula@linux.intel.com> writes:
 
-But with the addition of callback mechanism for passing the events, this
-will be a problem. Because the pci_epf list needs to be iterated first
-for getting hold of the EPF driver and then the relevant event specific
-callback needs to be called for the driver.
+> I admit my wish-list replies to this thread may seem a bit obnoxious,
+> when I'm not prepared to contribute. Sorry about that. My intention was
+> not to block any of this, rather muse about what the future direction
+> might be.
 
-If the same epc->lock is used, then it will result in a deadlock scenario.
+Wish lists are good.  As noted before, if we're depending on me to come
+up with the web design, we're in trouble...
 
-For instance,
+> Overall I think this is an improvement.
+>
+> There's only two things that I'd like to get addressed, not necessarily
+> now, but eventually:
+>
+> - As mentioned, the main div width as pixels in the alabaster
+>   theme. It's really crappy on wide 4K displays. Only a quarter of the
+>   full screen width is used.
+>
+> - The function/struct/etc. main descriptions are now displayed in the
+>   gray background, along with the "declaration", instead of white
+>   background. Is that an intenational alabaster feature, or is it
+>   something we do to cause that? Seems like the description gets a bit
+>   hidden there.
 
-...
-	mutex_lock(&epc->lock);
-	list_for_each_entry(epf, &epc->pci_epf, list) {
-		epf->event_ops->core_init(epf);
-		|
-		|-> pci_epc_set_bar();
-			|
-			|-> mutex_lock(&epc->lock) # DEADLOCK
-...
+Both of these should be relatively easily done with CSS overrides, I'll
+look into it.
 
-So to fix this issue, use a separate lock called "list_lock" for
-protecting the pci_epf list against the concurrent accesses. This lock
-will also be used by the callback mechanism.
-
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/pci/endpoint/pci-epc-core.c | 9 +++++----
- include/linux/pci-epc.h             | 2 ++
- 2 files changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
-index 3bc9273d0a08..6cce430d431b 100644
---- a/drivers/pci/endpoint/pci-epc-core.c
-+++ b/drivers/pci/endpoint/pci-epc-core.c
-@@ -613,7 +613,7 @@ int pci_epc_add_epf(struct pci_epc *epc, struct pci_epf *epf,
- 	if (type == SECONDARY_INTERFACE && epf->sec_epc)
- 		return -EBUSY;
- 
--	mutex_lock(&epc->lock);
-+	mutex_lock(&epc->list_lock);
- 	func_no = find_first_zero_bit(&epc->function_num_map,
- 				      BITS_PER_LONG);
- 	if (func_no >= BITS_PER_LONG) {
-@@ -640,7 +640,7 @@ int pci_epc_add_epf(struct pci_epc *epc, struct pci_epf *epf,
- 
- 	list_add_tail(list, &epc->pci_epf);
- ret:
--	mutex_unlock(&epc->lock);
-+	mutex_unlock(&epc->list_lock);
- 
- 	return ret;
- }
-@@ -672,11 +672,11 @@ void pci_epc_remove_epf(struct pci_epc *epc, struct pci_epf *epf,
- 		list = &epf->sec_epc_list;
- 	}
- 
--	mutex_lock(&epc->lock);
-+	mutex_lock(&epc->list_lock);
- 	clear_bit(func_no, &epc->function_num_map);
- 	list_del(list);
- 	epf->epc = NULL;
--	mutex_unlock(&epc->lock);
-+	mutex_unlock(&epc->list_lock);
- }
- EXPORT_SYMBOL_GPL(pci_epc_remove_epf);
- 
-@@ -773,6 +773,7 @@ __pci_epc_create(struct device *dev, const struct pci_epc_ops *ops,
- 	}
- 
- 	mutex_init(&epc->lock);
-+	mutex_init(&epc->list_lock);
- 	INIT_LIST_HEAD(&epc->pci_epf);
- 	ATOMIC_INIT_NOTIFIER_HEAD(&epc->notifier);
- 
-diff --git a/include/linux/pci-epc.h b/include/linux/pci-epc.h
-index a48778e1a4ee..fe729dfe509b 100644
---- a/include/linux/pci-epc.h
-+++ b/include/linux/pci-epc.h
-@@ -122,6 +122,7 @@ struct pci_epc_mem {
-  * struct pci_epc - represents the PCI EPC device
-  * @dev: PCI EPC device
-  * @pci_epf: list of endpoint functions present in this EPC device
-+ * list_lock: Mutex for protecting pci_epf list
-  * @ops: function pointers for performing endpoint operations
-  * @windows: array of address space of the endpoint controller
-  * @mem: first window of the endpoint controller, which corresponds to
-@@ -139,6 +140,7 @@ struct pci_epc_mem {
- struct pci_epc {
- 	struct device			dev;
- 	struct list_head		pci_epf;
-+	struct mutex			list_lock;
- 	const struct pci_epc_ops	*ops;
- 	struct pci_epc_mem		**windows;
- 	struct pci_epc_mem		*mem;
--- 
-2.25.1
-
+jon
