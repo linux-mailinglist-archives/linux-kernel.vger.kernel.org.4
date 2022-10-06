@@ -2,272 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 276145F7196
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 01:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AACC15F70DF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 00:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232138AbiJFXQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 19:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34234 "EHLO
+        id S231600AbiJFWCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 18:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbiJFXQS (ORCPT
+        with ESMTP id S229529AbiJFWCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 19:16:18 -0400
-X-Greylist: delayed 3595 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Oct 2022 16:16:15 PDT
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05AA94120;
-        Thu,  6 Oct 2022 16:16:14 -0700 (PDT)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 296LRJ1M3706824
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Thu, 6 Oct 2022 14:27:19 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 296LRJ1M3706824
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022090501; t=1665091641;
-        bh=83oafeKZfAlix6QiAi5tyBeuvZ5eUW0hhmVMZremg+o=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=he58tKmvIQguFWQuXk4StAkobvC4MMRcgWm5oocTjATGRjxGaMUIwUgQuvmY5viZp
-         OdiI5JtB78Nl6Q1Or4ZYxFqSiYbDj5OE1/uFwvcSGRkGH9dGkt9d879hBtR0vH2bGc
-         7aH12+QOMsIw09wrwwGzj2TSdqLbgGqiZuNdlE8L9+qEaqPDRyBgWXppvye9w/e69Z
-         IOaxQKuLoOW8QXyzS/uMpO/UHI9HiQCdbc5SdJmT/mKBZrAn0s6hAWyQl9aY9IVHYZ
-         DtSBH3xBedi5AtXWjOr9sBXBoZLsUc4D7Mvh3VswLI+oqxa63rPjDEAwHeVQp+3PDI
-         GTqTedLcwbnfQ==
-Date:   Thu, 06 Oct 2022 14:27:18 -0700
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Ali Raza <aliraza@bu.edu>, linux-kernel@vger.kernel.org
-CC:     corbet@lwn.net, masahiroy@kernel.org, michal.lkml@markovi.net,
-        ndesaulniers@google.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, luto@kernel.org,
-        ebiederm@xmission.com, keescook@chromium.org, peterz@infradead.org,
-        viro@zeniv.linux.org.uk, arnd@arndb.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, pbonzini@redhat.com,
-        jpoimboe@kernel.org, linux-doc@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        x86@kernel.org, rjones@redhat.com, munsoner@bu.edu, tommyu@bu.edu,
-        drepper@redhat.com, lwoodman@redhat.com, mboydmcse@gmail.com,
-        okrieg@bu.edu, rmancuso@bu.edu
-Subject: Re: [RFC UKL 00/10] Unikernel Linux (UKL)
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20221003222133.20948-1-aliraza@bu.edu>
-References: <20221003222133.20948-1-aliraza@bu.edu>
-Message-ID: <85EF9D5D-6DCC-410C-96F5-C16F0E62BF22@zytor.com>
+        Thu, 6 Oct 2022 18:02:46 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76ADE1142F6;
+        Thu,  6 Oct 2022 15:02:44 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id x59so4691887ede.7;
+        Thu, 06 Oct 2022 15:02:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date;
+        bh=q8/n3EMD5cnLWaIZS6weR3Cz4dVlkLr18gotr5nuyIY=;
+        b=mknW/K5+nRpvbAoFF+wPkCGRLTnkZ0J3ANaHD1k5R22m0oZibnQnQx7/i2xA/1XT1C
+         fBBP2byMcKnVhmSCOor92+msIN4pM5H8cOomwRbDGepoFD4CRfkHQMrpcSZnG8EkBEm0
+         HEquvnmTrxpk7WKulUq8u4eCqy8y0dP+TmtvaGdmD/Gy4S6QEiSMkOgI8rm6WQisy98o
+         rrb9jODo3atjPu0qeVpDv9PCBb7OPukqK5pNWKkVJajZGziWjt3v3v76VnfeLGnyLrwE
+         +i3PldKubNKlcHYBfgOOqSsdzjALWRZF/YoKL6P0zAKm4xn0/BS6MOYFZwEc+p3pZXow
+         PzQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=q8/n3EMD5cnLWaIZS6weR3Cz4dVlkLr18gotr5nuyIY=;
+        b=qDzuEM9KGGb8dFEL7tYcTSmr/R7MlVDvJXGWI/NPsEEARcsBUcJS/fDILQzcZUq3d6
+         ls1A2oXvZdftJ1w96DV4y2WUNRdZwkPuq0hMrP/JpCe4D122K8bLr47JSZYPrDK+zcsl
+         qTEiVH8ubQaiCSfVV4r6fMCxXTvY69Jh9BDabHD6mHG19/SBD8jDic018UiJZaKXjiIk
+         /Y+SFq/8fG2ojLoxpNZ9DU5TLL0EEZM26Q2ocQRZ3ehp/J52eV5YaYYRi3kKys4VCRpd
+         AZ70IUSgzlFWQzsEKxXxhz0QP77pjcQcZEHUbIZsuYdxCKV4GjL01APiOgxMe/sFWDhz
+         wJ1A==
+X-Gm-Message-State: ACrzQf3t7xb3duEa2fRo66ARA5m+tezbYOiu8wMg2c34BKYBcIsU3kz1
+        8bAoN9Z811pUn2RBHml6YvrPrFmQ5mKLFA==
+X-Google-Smtp-Source: AMsMyM7Q80bsglq+Gt8IWNpz7Vpm1iZAP5p3wYEdito9JSxFIfIdZamXJNSBP6POTkAtu3xuMaY2dA==
+X-Received: by 2002:a05:6402:5406:b0:452:1560:f9d4 with SMTP id ev6-20020a056402540600b004521560f9d4mr1790233edb.333.1665093762599;
+        Thu, 06 Oct 2022 15:02:42 -0700 (PDT)
+Received: from mypc.localnet (host-79-17-38-224.retail.telecomitalia.it. [79.17.38.224])
+        by smtp.gmail.com with ESMTPSA id ti5-20020a170907c20500b0078bfff89de4sm269924ejc.58.2022.10.06.15.02.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 15:02:41 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>, ira.weiny@intel.com
+Subject: Re: [PATCH] x86/sgx: Replace kmap/kunmap_atomic calls
+Date:   Fri, 07 Oct 2022 00:02:42 +0200
+Message-ID: <8124835.T7Z3S40VBb@mypc>
+In-Reply-To: <d64e6e9f-27b9-9bbb-aaf8-fca1681eada5@intel.com>
+References: <20220929160647.362798-1-kristen@linux.intel.com> <3694452.kQq0lBPeGt@mypc> <d64e6e9f-27b9-9bbb-aaf8-fca1681eada5@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On October 3, 2022 3:21:23 PM PDT, Ali Raza <aliraza@bu=2Eedu> wrote:
->Unikernel Linux (UKL) is a research project aimed at integrating
->application specific optimizations to the Linux kernel=2E This RFC aims t=
-o
->introduce this research to the community=2E Any feedback regarding the id=
-ea,
->goals, implementation and research is highly appreciated=2E
->
->Unikernels are specialized operating systems where an application is link=
-ed
->directly with the kernel and runs in supervisor mode=2E This allows the
->developers to implement application specific optimizations to the kernel,
->which can be directly invoked by the application (without going through t=
-he
->syscall path)=2E An application can control scheduling and resource
->management and directly access the hardware=2E Application and the kernel=
- can
->be co-optimized, e=2Eg=2E, through LTO, PGO, etc=2E All of these optimiza=
-tions,
->and others, provide applications with huge performance benefits over
->general purpose operating systems=2E
->
->Linux is the de-facto operating system of today=2E Applications depend on=
- its
->battle tested code base, large developer community, support for legacy
->code, a huge ecosystem of tools and utilities, and a wide range of
->compatible hardware and device drivers=2E Linux also allows some degree o=
-f
->application specific optimizations through build time config options,
->runtime configuration, and recently through eBPF=2E But still, there is a
->need for even more fine-grained application specific optimizations, and
->some developers resort to kernel bypass techniques=2E
->
->Unikernel Linux (UKL) aims to get the best of both worlds by bringing
->application specific optimizations to the Linux ecosystem=2E This way,
->unmodified applications can keep getting the benefits of Linux while taki=
-ng
->advantage of the unikernel-style optimizations=2E Optionally, application=
-s
->can be modified to invoke deeper optimizations=2E
->
->There are two steps to unikernel-izing Linux, i=2Ee=2E, first, equip Linu=
-x with
->a unikernel model, and second, actually use that model to implement
->application specific optimizations=2E This patch focuses on the first par=
-t=2E
->Through this patch, unmodified applications can be built as Linux
->unikernels, albeit with only modest performance advantages=2E Like
->unikernels, UKL would allow an application to be statically linked into t=
-he
->kernel and executed in supervisor mode=2E However, UKL preserves most of =
-the
->invariants and design of Linux, including a separate page-able applicatio=
-n
->portion of the address space and a pinned kernel portion, the ability to
->run multiple processes, and distinct execution modes for application and
->kernel code=2E Kernel execution mode and application execution mode are
->different, e=2Eg=2E, the application execution mode allows application th=
-reads
->to be scheduled, handle signals, etc=2E, which do not apply to kernel
->threads=2E Application built as a Linux unikernel will have its text and =
-data
->loaded with the kernel at boot time, while the rest of the address space
->would remain unchanged=2E These applications invoke the system call
->functionality through a function call into the kernel system call entry
->point instead of through the syscall assembly instruction=2E UKL would
->support a normal userspace so the UKL application can be started, managed=
-,
->profiled, etc=2E, using normal command line utilities=2E
->
->Once Linux has a unikernel model, different application specific
->optimizations are possible=2E We have tried a few, e=2Eg=2E, fast system =
-call
->transitions, shared stacks to allow LTO, invoking kernel functions
->directly, etc=2E We have seen huge performance benefits, details of which=
- are
->not relevant to this patch and can be found in our paper=2E
->(https://arxiv=2Eorg/pdf/2206=2E00789=2Epdf)
->
->UKL differs significantly from previous projects, e=2Eg=2E, UML, KML and =
-LKL=2E
->User Mode Linux (UML) is a virtual machine monitor implemented on syscall
->interface, a very different goal from UKL=2E Kernel Mode Linux (KML) allo=
-ws
->applications to run in kernel mode and replaces syscalls with function
->calls=2E While KML stops there, UKL goes further=2E UKL links application=
-s and
->kernel together which allows further optimizations e=2Eg=2E, fast system =
-call
->transitions, shared stacks to allow LTO, invoking kernel functions direct=
-ly
->etc=2E Details can be found in the paper linked above=2E Linux Kernel Lib=
-rary
->(LKL) harvests arch independent code from Linux, takes it to userspace as=
- a
->library to be linked with applications=2E A host needs to provide arch
->dependent functionality=2E This model is very different from UKL=2E A det=
-ailed
->discussion of related work is present in the paper linked above=2E
->
->See samples/ukl for a simple TCP echo server example which can be built a=
-s
->a normal user space application and also as a UKL application=2E In the L=
-inux
->config options, a path to the compiled and partially linked application
->binary can be specified=2E Kernel built with UKL enabled will search this
->location for the binary and link with the kernel=2E Applications and requ=
-ired
->libraries need to be compiled with -mno-red-zone -mcmodel=3Dkernel flags
->because kernel mode execution can trample on application red zones and in
->order to link with the kernel and be loaded in the high end of the addres=
-s
->space, application should have the correct memory model=2E Examples of ot=
-her
->applications like Redis, Memcached etc along with glibc and libgcc etc=2E=
-,
->can be found at https://github=2Ecom/unikernelLinux/ukl
->
->List of authors and contributors:
->=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
->Ali Raza - aliraza@bu=2Eedu
->Thomas Unger - tommyu@bu=2Eedu
->Matthew Boyd - mboydmcse@gmail=2Ecom
->Eric Munson - munsoner@bu=2Eedu
->Parul Sohal - psohal@bu=2Eedu
->Ulrich Drepper - drepper@redhat=2Ecom
->Richard W=2EM=2E Jones - rjones@redhat=2Ecom
->Daniel Bristot de Oliveira - bristot@kernel=2Eorg
->Larry Woodman - lwoodman@redhat=2Ecom
->Renato Mancuso - rmancuso@bu=2Eedu
->Jonathan Appavoo - jappavoo@bu=2Eedu
->Orran Krieger - okrieg@bu=2Eedu
->
->Ali Raza (9):
->  kbuild: Add sections and symbols to linker script for UKL support
->  x86/boot: Load the PT_TLS segment for Unikernel configs
->  sched: Add task_struct tracking of kernel or application execution
->  x86/entry: Create alternate entry path for system calls
->  x86/uaccess: Make access_ok UKL aware
->  x86/fault: Skip checking kernel mode access to user address space for
->    UKL
->  x86/signal: Adjust signal handler register values and return frame
->  exec: Make exec path for starting UKL application
->  Kconfig: Add config option for enabling and sample for testing UKL
->
->Eric B Munson (1):
->  exec: Give userspace a method for starting UKL process
->
-> Documentation/index=2Erst           |   1 +
-> Documentation/ukl/ukl=2Erst         | 104 +++++++++++++++++++++++
-> Kconfig                           |   2 +
-> Makefile                          |   4 +
-> arch/x86/boot/compressed/misc=2Ec   |   3 +
-> arch/x86/entry/entry_64=2ES         | 133 ++++++++++++++++++++++++++++++
-> arch/x86/include/asm/elf=2Eh        |   9 +-
-> arch/x86/include/asm/uaccess=2Eh    |   8 ++
-> arch/x86/kernel/process=2Ec         |  13 +++
-> arch/x86/kernel/process_64=2Ec      |  49 ++++++++---
-> arch/x86/kernel/signal=2Ec          |  22 +++--
-> arch/x86/kernel/vmlinux=2Elds=2ES     |  98 ++++++++++++++++++++++
-> arch/x86/mm/fault=2Ec               |   7 +-
-> fs/binfmt_elf=2Ec                   |  28 +++++++
-> fs/exec=2Ec                         |  75 +++++++++++++----
-> include/asm-generic/sections=2Eh    |   4 +
-> include/asm-generic/vmlinux=2Elds=2Eh |  32 ++++++-
-> include/linux/sched=2Eh             |  26 ++++++
-> kernel/Kconfig=2Eukl                |  41 +++++++++
-> samples/ukl/Makefile              |  16 ++++
-> samples/ukl/README                |  17 ++++
-> samples/ukl/syscall=2ES             |  28 +++++++
-> samples/ukl/tcp_server=2Ec          |  99 ++++++++++++++++++++++
-> scripts/mod/modpost=2Ec             |   4 +
-> 24 files changed, 785 insertions(+), 38 deletions(-)
-> create mode 100644 Documentation/ukl/ukl=2Erst
-> create mode 100644 kernel/Kconfig=2Eukl
-> create mode 100644 samples/ukl/Makefile
-> create mode 100644 samples/ukl/README
-> create mode 100644 samples/ukl/syscall=2ES
-> create mode 100644 samples/ukl/tcp_server=2Ec
->
->
->base-commit: 4fe89d07dcc2804c8b562f6c7896a45643d34b2f
+On Thursday, October 6, 2022 10:45:56 PM CEST Dave Hansen wrote:
+> On 10/6/22 13:37, Fabio M. De Francesco wrote:
+> > kmap() were not suited in those cases because it might sleep. If the 
+intents 
+> > of the author are simply map a page while in atomic, so to avoid sleeping 
+in 
+> > atomic bugs, your conversions looks good. 
+> > 
+> > For the reasons above, can you please say something more about why this 
+code 
+> > needed a kmap_atomic() instead of calling kmap()?
+> 
+> This question is backwards.  kmap_atomic() is the default that folks
+> use.
 
-This is basically taking Linux and turning it into a whole new operating s=
-ystem, while expecting the Linux kernel community to carry the support burd=
-en thereof=2E
+Sorry, I can't understand why kmap_atomic() is the default. What advantage we 
+get from disabling pagefaults and probably also preemption (it depends on !
+PREEMPT_RT also when we don't need that the kernel runs in atomic?
 
-We have seen this before, notably with Xen=2E It is *expensive* and *painf=
-ul* for the maintenance of the mainstream kernel=2E
+Do you mean that the more code run in atomic, the less pagefaults we allow, 
+the less preemption we allow, and so on, the better we get from Linux?
 
-Linux already has a notion of "kernel mode applications", they are called =
-kernel modules and kernel threads=2E It seems to me that you are trying to =
-introduce a user space compatibility layer into the kernel, with the only b=
-enefit being avoiding the syscall overhead=2E The latter is bigger than we =
-would like, which is why we are changing the x86 hardware architecture to i=
-mprove it=2E
+Do you remember that what I say above happens both on 64 bits systems as well 
+as in 32 bits?
 
-In my opinion, this would require *enormous* justification to put it into =
-mainline=2E
+I'm a newcomer so I may be wrong, however I think that in 64 bits systems we 
+gain from simply returning page_address() and from finer granularity
+ (less atomic, less critical sections, instead more preemption and / or 
+migration).
+
+Why shouldn't be kmap() the default choice in a preemptible kernel if sections 
+don't need that disabling of pagefaults, along with preemption (which get 
+disabled many more times that only migration)?
+
+Am I still missing anything fundamental?
+
+> You use kmap_atomic() *always* unless you _need_ to sleep or one
+> of the other kmap()-only things.
+
+What would happen if you rely on switching in atomic as a side effect of 
+kmap_atomic() and then you convert to kmap_local_page() without explicitly 
+disabling, for example, preemption since who converts don't care to know if 
+the code is in atomic before calling kmap_atomic() before or after the call 
+(as I said there may be cases where non atomic execution must disable 
+preemption for some reasons only between the mapping and the unmapping?
+
+If I were a maintainer I wouldn't trust changes that let me think that the 
+developer can't tell if we need to disable something while converting to 
+kmap_local_page().
+
+I hope this time I've been to convey more clearly my thoughts. I'm sorry for 
+my scarce knowledge of English.
+
+Thanks,
+
+Fabio
+
+> 
+> Folks don't and shouldn't have to explain why this was using kmap_atomic().
+> 
+
 
 
 
