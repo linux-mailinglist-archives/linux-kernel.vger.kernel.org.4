@@ -2,462 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987995F79F3
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 16:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 031DD5F79F8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 16:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbiJGOvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 10:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
+        id S229827AbiJGOwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 10:52:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiJGOv1 (ORCPT
+        with ESMTP id S229835AbiJGOwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 10:51:27 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D534FBCEF
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 07:51:22 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id q7so3509109ljp.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 07:51:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zd7yOaS0BmZTkZAmYmbWFYEnA2+ZcJB1UPx4SFJpXHA=;
-        b=LERRTzp/XcUl7pw/L0RvSSAkgh7f1YdRK7t0u27QTfs2X/yO8qwM+AhFLDU//R1IcO
-         ywO3mBlZ43I6GqUxbJlR/GR+TNWzesFLzx1Ns7shvQV+vordKxfmbLczmaeoB3zwClXu
-         95+nLwvXEawgnlLum/IweYBZBMi3LOlWUy50gumKQ/g73ZpbN6EMTuGG4jhLiDv73aJP
-         xz63QUVev4Bg6YH6mdgLj7ijHViBgtJDUHYrpr750nocHzUgwZ637i88hImBJNZ7ZygK
-         1TkXvq69B3/BP1BnOrxYey4ekSaeOJobbIS2Hv1VglO7k4lio/WtZm2LffYz7loHYtOJ
-         3lew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Zd7yOaS0BmZTkZAmYmbWFYEnA2+ZcJB1UPx4SFJpXHA=;
-        b=Kkm1v+dp0jb4kK8buJBOvzkDMPtlPezep1c9aLo/H3IpedYZKki0xhXpO0AScFAm48
-         qhbqiY3fp1kw9ITpvv36OklCVSpnROJub4QAtxeL8KaMC46iMyedQ8PFs3l8/AHuJ6sj
-         cZk+BdEQ7qWRRZRET3ZdtkvxRdwl4CtgvbWsxQ0of0LO+Otag1/YmPP6kCTGBRGP7OPe
-         j4t/RhdXY542LKC3vvYnAAtK2i4fCWv24KefKLnD8WFoCAGFO6LNEuIZHBfrVNMTlgEe
-         Sx3Xd6im1S0xMp6xZ4d7dFGWA/SbOcfpetgHsW1ofjgdOJ0YnT69/TdMfpK8L2oePy8F
-         q6sQ==
-X-Gm-Message-State: ACrzQf1nRY21dbt4FVUrxAbjlSUMp6mtmSEmJJHqzCWIK+DgEVo2vc8T
-        Ra5cZ9f5OhL6ZQcFdFC01m5B8JOw8ibKMg==
-X-Google-Smtp-Source: AMsMyM6fmB08UlaXdqXLuaJMvnpsHN1LDdKcQbrF7RMgfjOJPphLaVhG/GLqNngYbehoWNUzkriaDg==
-X-Received: by 2002:a05:651c:160c:b0:264:a5ae:7dd2 with SMTP id f12-20020a05651c160c00b00264a5ae7dd2mr1898244ljq.80.1665154280527;
-        Fri, 07 Oct 2022 07:51:20 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id v12-20020ac2592c000000b0049876c1bb24sm315624lfi.225.2022.10.07.07.51.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 07:51:20 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Doug Anderson <dianders@chromium.org>
-Subject: [PATCH 2/2] dt-bindings: pinctrl: qcom,sc7180: convert to dtschema
-Date:   Fri,  7 Oct 2022 16:51:16 +0200
-Message-Id: <20221007145116.46554-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221007145116.46554-1-krzysztof.kozlowski@linaro.org>
-References: <20221007145116.46554-1-krzysztof.kozlowski@linaro.org>
+        Fri, 7 Oct 2022 10:52:05 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C1766865;
+        Fri,  7 Oct 2022 07:51:52 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 779EE320025E;
+        Fri,  7 Oct 2022 10:51:49 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Fri, 07 Oct 2022 10:51:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1665154309; x=1665240709; bh=cbXxlpgk38
+        Og2OSP3BeodMmIhEyN7me626e1pixIS0A=; b=aIPzan2K/5vwQr3WnGbKft/MgW
+        JPGZlxE2o0tOeKglTTMczDdDL7JbYv9rOKwG/XlKMVhd0Ux97xTInMITTUI12vZj
+        Vs/ZOPTYVzrGvDTig+9cFE/h0mL5blPZbQlu3wiu6G1LabZLDjmYLWgnn2FaRgFY
+        gt8h3HXClEx/HULvjWErDnGBTOrX2vbhYFfFaLvZpDkImZrirbA+nEfRAOpy3yIK
+        azG8KOWEjENV5M9d/wSEM7QVSNMJOKj44IesruQluxpdtZlcleN7mAk5/PKAgdVF
+        sK0u7si7JPPNFVQFLS9CIKvCpQkI4RWFdzp94LyC9ir8cU2vaZ8Q9ko56OOw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665154309; x=1665240709; bh=cbXxlpgk38Og2OSP3BeodMmIhEyN
+        7me626e1pixIS0A=; b=snGjR8CIxyRDi1bd8qkxVdrIhI15r1WXpAvJPKxKG4q4
+        /F6y1Jdd7P+3JQjYs397XarlQoA7MdNHxLd/EN5Ad5OrFOUBLwyS5QD4A4JjhHQR
+        kjlCk9J6+Sbr5oqrxAmOUAqFZagh7+PUIhgN9atbrmm/2hIZS7uALcx+ikIaz8TM
+        986ouMn+UJS3/5ZVGKBjtmR1KTYNXAtFZTYgEEEBasgqEjTlK7ivfzzOukJV6UMl
+        X9/9ABpgJSDm0bv25BKWU6YCwc16Cc5WHnjCFWKZfUxhZM9wlpNirqCO6B+04HoZ
+        eXJK9TuDzAEjLESKDZj40vS09DdZe+FM4czuRnReGw==
+X-ME-Sender: <xms:BD1AYy1_2ZOZUpxE6_a3TZsTRqdU65-R2RDKm611YXzdX2cOCHR5Mg>
+    <xme:BD1AY1GwT-cC0kU7SM4HPMDPZDaTn8ndOoKDas96uKFfwUTDpXXtS_anmAU2Ge9-3
+    pJWix0uSOzuzw>
+X-ME-Received: <xmr:BD1AY64wY9Xh14lJyiK1raFmpMK-vjspn9YGSjwPRFnWmIa-ElO4grkHAHlr>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeijedgkedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:BD1AYz16QwKwJUZQaILrOIyFb8g5oxpXd4mF-nBVxqsX0qoRupC5Mg>
+    <xmx:BD1AY1GeDWn6s677bS3Yjcx-1UoO-dlW961jtqxbM23r_PIM0mxfoQ>
+    <xmx:BD1AY8_Km6gKn85xfUo1qo6davpj5oQFwW8VM7sF3aIt6tlAMxSx2Q>
+    <xmx:BT1AY99mzHQEy5O-ygwPRc-OojV7e19P51nI6_W6Xe6_Dkre2QlrQQ>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 7 Oct 2022 10:51:48 -0400 (EDT)
+Date:   Fri, 7 Oct 2022 16:52:31 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tsbogend@alpha.franken.de, linux-api@vger.kernel.org,
+        f.fainelli@gmail.com
+Subject: Re: [PATCH v5] MIPS: Expose prid and globalnumber to sysfs
+Message-ID: <Y0A9L2KajswAEKsu@kroah.com>
+References: <20221007141207.30635-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221007141207.30635-1-jiaxun.yang@flygoat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Qualcomm SC7180 pin controller bindings to DT schema.  Keep the
-parsing of pin configuration subnodes consistent with other Qualcomm
-schemas (children named with '-state' suffix, their children with
-'-pins').
+On Fri, Oct 07, 2022 at 03:12:07PM +0100, Jiaxun Yang wrote:
+> Some application would like to know precise model and rev of processor
+> to do errata workaround or optimization.
+> 
+> Expose them in sysfs as:
+> /sys/devices/system/cpu/cpuX/regs/identification/prid
+> /sys/devices/system/cpu/cpuX/regs/identification/globalnumber
+> 
+> Reusing AArch64 CPU registers directory.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+> v2: Drop static qualifier for kobj (gregkh)
+> v3: Use kzalloc to allocate struct cpuregs.
+>     note: When Greg mentioned about static I was thinking about
+>     static qualifier of percpu variable. After reading documents
+>     again it turns out kobjs should be allocated at runtime. Arm64's
+>     cpuinfo kobj is also on a percpu variable... I guess that was a
+>     intentional use?
+> v4: Properly handle err of kobj creation. (gregkh)
+> v5: Drop invalid kfree
+> ---
+>  .../ABI/testing/sysfs-devices-system-cpu      | 11 +++
+>  arch/mips/kernel/topology.c                   | 99 +++++++++++++++++++
+>  2 files changed, 110 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+> index 5bf61881f012..9fdfe2de0f76 100644
+> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
+> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+> @@ -512,6 +512,17 @@ Description:	information about CPUs heterogeneity.
+>  
+>  		cpu_capacity: capacity of cpuX.
+>  
+> +What:		/sys/devices/system/cpu/cpuX/regs/
+> +		/sys/devices/system/cpu/cpuX/regs/identification/
+> +		/sys/devices/system/cpu/cpuX/regs/identification/prid
+> +		/sys/devices/system/cpu/cpuX/regs/identification/globalnumber
+> +Date:		October 2022
+> +Contact:	Linux MIPS Kernel Mailing list <linux-mips@vger.kernel.org>
+> +Description:	MIPS CPU registers
+> +
+> +		'identification' directory exposes the Processor ID and Global Number
+> +		registers for identifying model and revision of the CPU.
+> +
+>  What:		/sys/devices/system/cpu/vulnerabilities
+>  		/sys/devices/system/cpu/vulnerabilities/meltdown
+>  		/sys/devices/system/cpu/vulnerabilities/spectre_v1
+> diff --git a/arch/mips/kernel/topology.c b/arch/mips/kernel/topology.c
+> index 9429d85a4703..80aaaca3cfbc 100644
+> --- a/arch/mips/kernel/topology.c
+> +++ b/arch/mips/kernel/topology.c
+> @@ -5,6 +5,8 @@
+>  #include <linux/node.h>
+>  #include <linux/nodemask.h>
+>  #include <linux/percpu.h>
+> +#include <linux/seq_file.h>
+> +#include <linux/smp.h>
+>  
+>  static DEFINE_PER_CPU(struct cpu, cpu_devices);
+>  
+> @@ -26,3 +28,100 @@ static int __init topology_init(void)
+>  }
+>  
+>  subsys_initcall(topology_init);
+> +
+> +static struct kobj_type cpuregs_kobj_type = {
+> +	.sysfs_ops = &kobj_sysfs_ops,
+> +};
+> +
+> +struct cpureg {
+> +	struct kobject kobj;
+> +	struct cpuinfo_mips *info;
+> +};
+> +static DEFINE_PER_CPU(struct cpureg *, cpuregs);
+> +
+> +#define kobj_to_cpureg(kobj)	container_of(kobj, struct cpureg, kobj)
+> +#define CPUREGS_ATTR_RO(_name, _field)						\
+> +	static ssize_t _name##_show(struct kobject *kobj,			\
+> +			struct kobj_attribute *attr, char *buf)			\
+> +	{									\
+> +		struct cpuinfo_mips *info = kobj_to_cpureg(kobj)->info;		\
+> +										\
+> +		return sprintf(buf, "0x%08x\n", info->_field);	\
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+sysfs_emit() please.
 
----
 
-Cc: Doug Anderson <dianders@chromium.org>
----
- .../bindings/pinctrl/qcom,sc7180-pinctrl.txt  | 187 ------------------
- .../bindings/pinctrl/qcom,sc7180-pinctrl.yaml | 163 +++++++++++++++
- 2 files changed, 163 insertions(+), 187 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.txt
- create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.yaml
+> +	}									\
+> +	static struct kobj_attribute cpuregs_attr_##_name = __ATTR_RO(_name)
+> +
+> +CPUREGS_ATTR_RO(prid, processor_id);
+> +CPUREGS_ATTR_RO(globalnumber, globalnumber);
+> +
+> +static struct attribute *cpuregs_id_attrs[] = {
+> +	&cpuregs_attr_prid.attr,
+> +	&cpuregs_attr_globalnumber.attr,
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group cpuregs_attr_group = {
+> +	.attrs = cpuregs_id_attrs,
+> +	.name = "identification"
+> +};
+> +
+> +static int cpuregs_cpu_online(unsigned int cpu)
+> +{
+> +	int rc;
+> +	struct device *dev;
+> +	struct cpureg *reg;
+> +
+> +	dev = get_cpu_device(cpu);
+> +	if (!dev) {
+> +		rc = -ENODEV;
+> +		goto out;
+> +	}
+> +	reg = kzalloc(sizeof(struct cpureg), GFP_KERNEL);
+> +	if (!reg) {
+> +		rc = -ENOMEM;
+> +		goto out;
+> +	}
+> +	rc = kobject_init_and_add(&reg->kobj, &cpuregs_kobj_type,
+> +					&dev->kobj, "regs");
+> +	if (rc)
+> +		goto out_kobj;
+> +	rc = sysfs_create_group(&reg->kobj, &cpuregs_attr_group);
+> +	if (rc)
+> +		goto out_kobj;
+> +
+> +	return 0;
+> +out_kobj:
+> +	kobject_put(&reg->kobj);
+> +out:
+> +	return rc;
+> +}
+> +
+> +static int cpuregs_cpu_offline(unsigned int cpu)
+> +{
+> +	struct device *dev;
+> +	struct cpureg *reg = per_cpu(cpuregs, cpu);
+> +
+> +	dev = get_cpu_device(cpu);
+> +	if (!dev || !reg)
+> +		return -ENODEV;
+> +	if (reg->kobj.parent) {
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.txt
-deleted file mode 100644
-index 6ffeac9801df..000000000000
---- a/Documentation/devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.txt
-+++ /dev/null
-@@ -1,187 +0,0 @@
--Qualcomm Technologies, Inc. SC7180 TLMM block
--
--This binding describes the Top Level Mode Multiplexer block found in the
--SC7180 platform.
--
--- compatible:
--	Usage: required
--	Value type: <string>
--	Definition: must be "qcom,sc7180-pinctrl"
--
--- reg:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: the base address and size of the north, south and west
--		    TLMM tiles
--
--- reg-names:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: names for the cells of reg, must contain "north", "south"
--		    and "west".
--
--- interrupts:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: should specify the TLMM summary IRQ.
--
--- interrupt-controller:
--	Usage: required
--	Value type: <none>
--	Definition: identifies this node as an interrupt controller
--
--- #interrupt-cells:
--	Usage: required
--	Value type: <u32>
--	Definition: must be 2. Specifying the pin number and flags, as defined
--		    in <dt-bindings/interrupt-controller/irq.h>
--
--- gpio-controller:
--	Usage: required
--	Value type: <none>
--	Definition: identifies this node as a gpio controller
--
--- #gpio-cells:
--	Usage: required
--	Value type: <u32>
--	Definition: must be 2. Specifying the pin number and flags, as defined
--		    in <dt-bindings/gpio/gpio.h>
--
--- gpio-ranges:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition:  see ../gpio/gpio.txt
--
--- gpio-reserved-ranges:
--	Usage: optional
--	Value type: <prop-encoded-array>
--	Definition: see ../gpio/gpio.txt
--
--Please refer to ../gpio/gpio.txt and ../interrupt-controller/interrupts.txt for
--a general description of GPIO and interrupt bindings.
--
--Please refer to pinctrl-bindings.txt in this directory for details of the
--common pinctrl bindings used by client devices, including the meaning of the
--phrase "pin configuration node".
--
--The pin configuration nodes act as a container for an arbitrary number of
--subnodes. Each of these subnodes represents some desired configuration for a
--pin, a group, or a list of pins or groups. This configuration can include the
--mux function to select on those pin(s)/group(s), and various pin configuration
--parameters, such as pull-up, drive strength, etc.
--
--
--PIN CONFIGURATION NODES:
--
--The name of each subnode is not important; all subnodes should be enumerated
--and processed purely based on their content.
--
--Each subnode only affects those parameters that are explicitly listed. In
--other words, a subnode that lists a mux function but no pin configuration
--parameters implies no information about any pin configuration parameters.
--Similarly, a pin subnode that describes a pullup parameter implies no
--information about e.g. the mux function.
--
--
--The following generic properties as defined in pinctrl-bindings.txt are valid
--to specify in a pin configuration subnode:
--
--- pins:
--	Usage: required
--	Value type: <string-array>
--	Definition: List of gpio pins affected by the properties specified in
--		    this subnode.
--
--		    Valid pins are:
--		      gpio0-gpio118
--		        Supports mux, bias and drive-strength
--
--		      sdc1_clk, sdc1_cmd, sdc1_data sdc2_clk, sdc2_cmd,
--		      sdc2_data sdc1_rclk
--		        Supports bias and drive-strength
--
--		      ufs_reset
--			Supports bias and drive-strength
--
--- function:
--	Usage: required
--	Value type: <string>
--	Definition: Specify the alternative function to be configured for the
--		    specified pins. Functions are only valid for gpio pins.
--		    Valid values are:
--
--		    adsp_ext, agera_pll, aoss_cti, atest_char, atest_char0,
--		    atest_char1, atest_char2, atest_char3, atest_tsens,
--		    atest_tsens2, atest_usb1, atest_usb10, atest_usb11,
--		    atest_usb12, atest_usb13, atest_usb2, atest_usb20,
--		    atest_usb21, atest_usb22, atest_usb23, audio_ref,
--		    btfm_slimbus, cam_mclk, cci_async, cci_i2c, cci_timer0,
--		    cci_timer1, cci_timer2, cci_timer3, cci_timer4,
--		    cri_trng, dbg_out, ddr_bist, ddr_pxi0, ddr_pxi1,
--		    ddr_pxi2, ddr_pxi3, dp_hot, edp_lcd, gcc_gp1, gcc_gp2,
--		    gcc_gp3, gpio, gp_pdm0, gp_pdm1, gp_pdm2, gps_tx,
--		    jitter_bist, ldo_en, ldo_update, lpass_ext, mdp_vsync,
--		    mdp_vsync0, mdp_vsync1, mdp_vsync2, mdp_vsync3, mi2s_0,
--		    mi2s_1, mi2s_2, mss_lte, m_voc, pa_indicator, phase_flag,
--		    PLL_BIST, pll_bypassnl, pll_reset, prng_rosc, qdss,
--		    qdss_cti, qlink_enable, qlink_request, qspi_clk, qspi_cs,
--		    qspi_data, qup00, qup01, qup02_i2c, qup02_uart, qup03,
--		    qup04_i2c, qup04_uart, qup05, qup10, qup11_i2c, qup11_uart,
--		    qup12, qup13_i2c, qup13_uart, qup14, qup15, sdc1_tb,
--		    sdc2_tb, sd_write, sp_cmu, tgu_ch0, tgu_ch1, tgu_ch2,
--		    tgu_ch3, tsense_pwm1, tsense_pwm2, uim1, uim2, uim_batt,
--		    usb_phy, vfr_1, _V_GPIO, _V_PPS_IN, _V_PPS_OUT,
--		    vsense_trigger, wlan1_adc0, wlan1_adc1, wlan2_adc0,
--		    wlan2_adc1,
--
--- bias-disable:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins should be configured as no pull.
--
--- bias-pull-down:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins should be configured as pull down.
--
--- bias-pull-up:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins should be configured as pull up.
--
--- output-high:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins are configured in output mode, driven
--		    high.
--		    Not valid for sdc pins.
--
--- output-low:
--	Usage: optional
--	Value type: <none>
--	Definition: The specified pins are configured in output mode, driven
--		    low.
--		    Not valid for sdc pins.
--
--- drive-strength:
--	Usage: optional
--	Value type: <u32>
--	Definition: Selects the drive strength for the specified pins, in mA.
--		    Valid values are: 2, 4, 6, 8, 10, 12, 14 and 16
--
--Example:
--
--	tlmm: pinctrl@3500000 {
--		compatible = "qcom,sc7180-pinctrl";
--		reg = <0x3500000 0x300000>,
--		      <0x3900000 0x300000>,
--		      <0x3D00000 0x300000>;
--		reg-names = "west", "north", "south";
--		interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
--		gpio-controller;
--		#gpio-cells = <2>;
--		gpio-ranges = <&tlmm 0 0 119>;
--		gpio-reserved-ranges = <0 4>, <106 4>;
--		interrupt-controller;
--		#interrupt-cells = <2>;
--	};
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.yaml
-new file mode 100644
-index 000000000000..68ac2230edb6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.yaml
-@@ -0,0 +1,163 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/pinctrl/qcom,sc7180-pinctrl.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm SC7180 TLMM pin controller
-+
-+maintainers:
-+  - Bjorn Andersson <andersson@kernel.org>
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-+
-+description:
-+  Top Level Mode Multiplexer pin controller in Qualcomm SC7180 SoC.
-+
-+properties:
-+  compatible:
-+    const: qcom,sc7180-pinctrl
-+
-+  reg:
-+    maxItems: 3
-+
-+  reg-names:
-+    items:
-+      - const: west
-+      - const: north
-+      - const: south
-+
-+  interrupts: true
-+  interrupt-controller: true
-+  "#interrupt-cells": true
-+  gpio-controller: true
-+  "#gpio-cells": true
-+  gpio-ranges: true
-+  wakeup-parent: true
-+
-+  gpio-reserved-ranges:
-+    minItems: 1
-+    maxItems: 60
-+
-+  gpio-line-names:
-+    maxItems: 119
-+
-+patternProperties:
-+  "-state$":
-+    oneOf:
-+      - $ref: "#/$defs/qcom-sc7180-tlmm-state"
-+      - patternProperties:
-+          "-pins$":
-+            $ref: "#/$defs/qcom-sc7180-tlmm-state"
-+        additionalProperties: false
-+
-+$defs:
-+  qcom-sc7180-tlmm-state:
-+    type: object
-+    description:
-+      Pinctrl node's client devices use subnodes for desired pin configuration.
-+      Client device subnodes use below standard properties.
-+    $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
-+
-+    properties:
-+      pins:
-+        description:
-+          List of gpio pins affected by the properties specified in this
-+          subnode.
-+        items:
-+          oneOf:
-+            - pattern: "^gpio([0-9]|[1-9][0-9]|10[0-9]|11[0-8])$"
-+            - enum: [ sdc1_rclk, sdc1_clk, sdc1_cmd, sdc1_data, sdc2_clk,
-+                      sdc2_cmd, sdc2_data, ufs_reset ]
-+        minItems: 1
-+        maxItems: 36
-+
-+      function:
-+        description:
-+          Specify the alternative function to be configured for the specified
-+          pins.
-+
-+        enum: [ adsp_ext, agera_pll, aoss_cti, atest_char, atest_char0,
-+                atest_char1, atest_char2, atest_char3, atest_tsens,
-+                atest_tsens2, atest_usb1, atest_usb10, atest_usb11,
-+                atest_usb12, atest_usb13, atest_usb2, atest_usb20, atest_usb21,
-+                atest_usb22, atest_usb23, audio_ref, btfm_slimbus, cam_mclk,
-+                cci_async, cci_i2c, cci_timer0, cci_timer1, cci_timer2,
-+                cci_timer3, cci_timer4, cri_trng, dbg_out, ddr_bist, ddr_pxi0,
-+                ddr_pxi1, ddr_pxi2, ddr_pxi3, dp_hot, edp_lcd, gcc_gp1,
-+                gcc_gp2, gcc_gp3, gpio, gp_pdm0, gp_pdm1, gp_pdm2, gps_tx,
-+                jitter_bist, ldo_en, ldo_update, lpass_ext, mdp_vsync,
-+                mdp_vsync0, mdp_vsync1, mdp_vsync2, mdp_vsync3, mi2s_0, mi2s_1,
-+                mi2s_2, mss_lte, m_voc, pa_indicator, phase_flag, PLL_BIST,
-+                pll_bypassnl, pll_reset, prng_rosc, qdss, qdss_cti,
-+                qlink_enable, qlink_request, qspi_clk, qspi_cs, qspi_data,
-+                qup00, qup01, qup02_i2c, qup02_uart, qup03, qup04_i2c,
-+                qup04_uart, qup05, qup10, qup11_i2c, qup11_uart, qup12,
-+                qup13_i2c, qup13_uart, qup14, qup15, sdc1_tb, sdc2_tb,
-+                sd_write, sp_cmu, tgu_ch0, tgu_ch1, tgu_ch2, tgu_ch3,
-+                tsense_pwm1, tsense_pwm2, uim1, uim2, uim_batt, usb_phy, vfr_1,
-+                _V_GPIO, _V_PPS_IN, _V_PPS_OUT, vsense_trigger, wlan1_adc0,
-+                wlan1_adc1, wlan2_adc0, wlan2_adc1 ]
-+
-+      drive-strength:
-+        enum: [2, 4, 6, 8, 10, 12, 14, 16]
-+        default: 2
-+        description:
-+          Selects the drive strength for the specified pins, in mA.
-+
-+      bias-pull-down: true
-+      bias-pull-up: true
-+      bias-disable: true
-+      input-enable: true
-+      output-high: true
-+      output-low: true
-+
-+    required:
-+      - pins
-+
-+    additionalProperties: false
-+
-+allOf:
-+  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    tlmm: pinctrl@3500000 {
-+        compatible = "qcom,sc7180-pinctrl";
-+        reg = <0x03500000 0x300000>,
-+              <0x03900000 0x300000>,
-+              <0x03d00000 0x300000>;
-+        reg-names = "west", "north", "south";
-+        interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
-+        gpio-controller;
-+        #gpio-cells = <2>;
-+        interrupt-controller;
-+        #interrupt-cells = <2>;
-+        gpio-ranges = <&tlmm 0 0 120>;
-+        wakeup-parent = <&pdc>;
-+
-+        dp_hot_plug_det: dp-hot-plug-det-state {
-+            pins = "gpio117";
-+            function = "dp_hot";
-+        };
-+
-+        qup_spi11_cs_gpio: qup-spi11-cs-gpio-state {
-+            spi-pins {
-+                pins = "gpio53", "gpio54", "gpio55";
-+                function = "qup15";
-+            };
-+
-+            cs-pins {
-+                pins = "gpio56";
-+                function = "gpio";
-+            };
-+        };
-+    };
--- 
-2.34.1
+Why are you looking at the parent of a kobject?  Why not just always
+remove the kobject if you have a reference to it now?  How does the
+parent matter?
 
+thanks,
+
+greg k-h
