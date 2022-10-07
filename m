@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 636755F79D4
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 16:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5DE5F79DE
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 16:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiJGOlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 10:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60922 "EHLO
+        id S229712AbiJGOnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 10:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiJGOlM (ORCPT
+        with ESMTP id S229495AbiJGOm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 10:41:12 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33BED7F276;
-        Fri,  7 Oct 2022 07:41:11 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MkW8k5xbDzlX0w;
-        Fri,  7 Oct 2022 22:36:38 +0800 (CST)
-Received: from kwepemm600020.china.huawei.com (7.193.23.147) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 7 Oct 2022 22:41:07 +0800
-Received: from [127.0.0.1] (10.174.178.94) by kwepemm600020.china.huawei.com
- (7.193.23.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 7 Oct
- 2022 22:41:05 +0800
-Message-ID: <ea4af77d-25bb-7c26-127c-75cd74dddd22@huawei.com>
-Date:   Fri, 7 Oct 2022 22:41:03 +0800
+        Fri, 7 Oct 2022 10:42:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB90FC1F2
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 07:42:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3ADC861D43
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 14:42:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92ED5C433C1;
+        Fri,  7 Oct 2022 14:42:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665153777;
+        bh=LBsdgEgWGpm3BX3s8qMCaLUB5qE654Y2XMy0ZXH5+cM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=m7TJGIa8lsAeUcDbWY0TlC6+PGoEMwf1fZOKXsuYT21bCZOi3Etx13yGYm4hEczqj
+         VpfmYuQpYOJ3cw9ktDuQNTbN0dDM0yXCAqg/CNKv7FaFYRs4QxG5XLCF+8kdOQIOIs
+         4x/EPYsMHFOw/osPEOoiatG5/7n6WRUnWhfdZnen4XyRPCQ15zO9KMUSr197ZaNgxe
+         xUHBQBDa8yYge54bQaXAe2NjJ9BfMQeg/LaMLtN0iNtvQ0bnbqMriSn2kgeZpkzd39
+         ah4u6Ejsy85omxpweY4cpU6altgpKgsQeY4cDKmVn/zUC6a1UvDja97aKlj61ro7EM
+         PHyHZrvgxhBqA==
+Message-ID: <de559e06-7391-b28e-2d59-50abc68c3034@kernel.org>
+Date:   Fri, 7 Oct 2022 22:42:53 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 4.19 00/25] 4.19.261-rc1 review
+ Thunderbird/102.3.2
+Subject: Re: [f2fs-dev] [PATCH v4 1/2] f2fs: correct i_size change for atomic
+ writes
+To:     Daeho Jeong <daeho43@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
+        Daeho Jeong <daehojeong@google.com>
+References: <20221004171351.3678194-1-daeho43@gmail.com>
+ <b1ca9048-99c5-1ab4-fb77-5fe0bbc6d4de@kernel.org>
+ <CACOAw_zXTHzc5mjPchGNXkgnswZLxLEBfRoEztB7VFdV-rtpwQ@mail.gmail.com>
+ <4d7f250d-19c0-acd0-dde4-752f95c5fc2a@kernel.org>
+ <CACOAw_weAbKWs6qi5x9t2=L41tVUV+CKjG-BGn1gOOtgjdWYug@mail.gmail.com>
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
-        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>
-References: <20221003070715.406550966@linuxfoundation.org>
-From:   zhouzhixiu <zhouzhixiu@huawei.com>
-In-Reply-To: <20221003070715.406550966@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <CACOAw_weAbKWs6qi5x9t2=L41tVUV+CKjG-BGn1gOOtgjdWYug@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.94]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600020.china.huawei.com (7.193.23.147)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,52 +63,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/10/7 22:22, Daeho Jeong wrote:
+>>
+>> Fine to me.
+>>
+>> But another question is, now it allows GC to migrate blocks belong
+>> to atomic files, so, during migration, it may update extent cache,
+>> once largest extent was updated, it will mark inode dirty, but after
+>> this patch, it may lose the extent change? thoughts?
+>>
+> 
+> Oh, I missed that case. Maybe we could prevent updating the i_size of
+> atomic files in f2fs_update_inode() while allowing inode dirtying.
 
-On 2022/10/3 15:12, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.261 release.
-> There are 25 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 05 Oct 2022 07:07:06 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.261-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
-> -------------
-Tested on arm64 and x86 for 4.19.261-rc1,
+Agreed. :)
 
-Kernel 
-repo:https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-Branch: linux-4.19.y
-Version: 4.19.261-rc1
-Commit: 22f1795c5b7e877ba2a4c701f802752ae685a164
-Compiler: gcc version 7.3.0 (GCC)
-
-arm64:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 8947
-passed: 8947
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-x86:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 8947
-passed: 8947
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-Tested-by: Hulk Robot <hulkrobot@huawei.com>
-
+Thanks,
