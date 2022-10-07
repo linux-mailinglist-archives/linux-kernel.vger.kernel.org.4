@@ -2,154 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E47C5F72F5
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 04:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 800C55F72FC
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 05:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiJGC6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 22:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44438 "EHLO
+        id S229544AbiJGDEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 23:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJGC6J (ORCPT
+        with ESMTP id S229506AbiJGDDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 22:58:09 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B79DFF8DE
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 19:58:08 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 129so3484975pgc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 19:58:08 -0700 (PDT)
+        Thu, 6 Oct 2022 23:03:49 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5910ABD7A
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 20:03:38 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id w10so5297331edd.4
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 20:03:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HHqtVs8j+ID4jgqw57yAt3FtHMv/XStpjtf/AugVE1Y=;
-        b=FhXOA3SGFnbaWCxieNMDC1nYdp/i+xNk1Qz42dQC7LPITUdJcbeCD8MXgS1lEAl+Ff
-         4Q7YoMcKPvYOvGsh593C5ovx3865nXrA4jLf7wZ6cTMZUoq9waJYSMYXPSQEZ+w3HOfW
-         SISSGdo5Z4e4aPv8ylbZrhV5D33e1LqZ6TLSZgZCWwGJxqu9Znv9u20bgyXS8gVa0ASs
-         6oMiHtBzpvqB4UNYNn2PU4RhiMUmuVPtXdpJnizixXLqZONDEPwtTxWTvvvXE6FfdHDg
-         qTnnVa5pvh83sPhZySmfb1IUP1QM5OkEgfI1ZDKgrJT5AWmx6IBhYMpJj9qfGXXUNk4O
-         NuLw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6/aYioF4N5ThTyHVeNoYcSeTR8mlwsDHQnEmk6vsWyk=;
+        b=gmrIKuwlQuZQtmboltbIB71xhEuRmUxCcRm4pm4YJux0WLpJoGR+6eRFJsaQE9zGtC
+         XzDK8wXvny2ImNsTZEgNZwcdguv+LMBc8HtsRdImlL0gKToERpQuLPjZNr4RstlniC4n
+         6FsV9tryo2dVcOmp45gp9fqHJoiR1QqYowXRPzHjimTp/TKy0K9Wiv1wJd0t+J+d8z1J
+         LHlr6K0B1+EVEs/c6ttJW0XqWVhwDYG8XQL1o/mPEG789FmVTx9RfQCVrFwJT5ekK0sO
+         JbPDTjw2AFxxlqxNJfi8iO71gWbCU0T7jlJ3gfOPc23zS+7TbBCnG7Ekt3SiFvLRgD03
+         buzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HHqtVs8j+ID4jgqw57yAt3FtHMv/XStpjtf/AugVE1Y=;
-        b=CMURKYeQEK+NdzyYtwNvayIvMxNKHoVzKa2Oex5u4w9/cVyKiFyBy60MDBSBcX+53X
-         TYA1iL/r+V9p/52M93N8nwkcXJQoi2daGBMejxsdjJWX5bpqoaIxEZQO1Lp4ITXPophX
-         dYBab1odUn5xBzcFGenmHc2uFzgAdZJeTy3bZxnKOJBMElye0xIaRTd/hnSMhpS8uFsz
-         6mmhS4PpBEEPUD2zPg43O6Nyh+nrualXiRb81Epd0pw63C7ODWlkeHUFu6c7DBK+4fr7
-         nCgqCzBjEZpMZQQQTFO34+c/cFIS92Ow75MH6rHuaseUYl977P1c73tT48WXZugIXnG8
-         hr5Q==
-X-Gm-Message-State: ACrzQf1HdtmaQSuUVHb1WE4NQtJW7IsjcgDuAgBjZF1rXbiJqmgoZX++
-        q9OHOppVctbyHSmPpqmRPLtyHQ==
-X-Google-Smtp-Source: AMsMyM53dmoZUhAeR2ad3+PvCeAPrlnhjAul4X/Pb1ufZcrCsgu+iGRJpvj0OGds7mcXRXSYxl4bQA==
-X-Received: by 2002:a05:6a00:14d3:b0:546:e93c:4768 with SMTP id w19-20020a056a0014d300b00546e93c4768mr2621000pfu.36.1665111487824;
-        Thu, 06 Oct 2022 19:58:07 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id f17-20020a170902ce9100b00172f4835f60sm333199plg.189.2022.10.06.19.58.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 19:58:07 -0700 (PDT)
-Date:   Thu, 06 Oct 2022 19:58:07 -0700 (PDT)
-X-Google-Original-Date: Thu, 06 Oct 2022 19:57:50 PDT (-0700)
-Subject:     Re: [PATCH 3/3] EDAC/sifive: use sifive_ccache instead of sifive_l2
-In-Reply-To: <20220829062202.3287-4-zong.li@sifive.com>
-CC:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, greentime.hu@sifive.com,
-        conor.dooley@microchip.com, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        zong.li@sifive.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     zong.li@sifive.com
-Message-ID: <mhng-fe7df193-2cac-4022-928d-a18e63f5e1c1@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6/aYioF4N5ThTyHVeNoYcSeTR8mlwsDHQnEmk6vsWyk=;
+        b=IVVCu5rAilMDbsugU3neQDsoCqP84c8CtND4Ot8RwD/94zvaDVtqlluXA858/PwUq3
+         tity9MmmNrjXPtZthaoya2f3UOugNyHPZKnv9tKljfxE/seiPJ16/oue/2CtwSQPukeh
+         8Zm6/prUGprtIQ9AhS4CYTX+TKhJbXWtQ9XrFawEtCJd3C7R1WYK4C3seUcTJ+mIRd5n
+         /Z3NqFpbEfke1q5rZ92r9qiUs0JI/CR3331bI6hwH6yEMMXtyXHtRMpwrglY71gZcDLD
+         9/rAUjBNiI+elSEXQ9jWoxA2U1FOcS7hsxKtzAdjaO3hsMzNpYek1vp6NIn2QdPBeR4/
+         uMkQ==
+X-Gm-Message-State: ACrzQf2Y7RVO8wtQBtj4VZSrO+Ga77JlNC6+Vn5X5Rbg3PdP6hK6y9P9
+        B7q5kZJ1wYVrSuIjMTaZzHScSVm27B5DdWxpqoyk5BiWCNw=
+X-Google-Smtp-Source: AMsMyM6PQJQsK3xI5al/3JWJB4uphl/G9uZ9iXZo9hJPw8zdzuPKbI4MsJQgPVjzUaBLaivCBPEqBPo0K/0usIHWE80=
+X-Received: by 2002:a05:6402:5c9:b0:446:fb0:56bb with SMTP id
+ n9-20020a05640205c900b004460fb056bbmr2647543edx.173.1665111817323; Thu, 06
+ Oct 2022 20:03:37 -0700 (PDT)
+MIME-Version: 1.0
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 7 Oct 2022 13:03:25 +1000
+Message-ID: <CAPM=9tzQnonp1KDSZ7ziUNdm8EfJX=VhmE9gA4L8wDO_AoYLuw@mail.gmail.com>
+Subject: [git pull] drm regression fix
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 28 Aug 2022 23:22:02 PDT (-0700), zong.li@sifive.com wrote:
-> The sifive L2 has been renamed to sifive CCACHE, EDAC driver needs to
-> apply the change as well
+Hi Linus,
 
-That means the build would be broken before this patch, which we 
-generally try to avoid as it breaks things like bisecting.
+This reverts the patch I found with rough bisection to instability
+around fences and the oops I got from netconsole.
 
->
-> Signed-off-by: Zong Li <zong.li@sifive.com>
-> ---
->  drivers/edac/Kconfig       |  2 +-
->  drivers/edac/sifive_edac.c | 12 ++++++------
->  2 files changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-> index 17562cf1fe97..456602d373b7 100644
-> --- a/drivers/edac/Kconfig
-> +++ b/drivers/edac/Kconfig
-> @@ -473,7 +473,7 @@ config EDAC_ALTERA_SDMMC
->
->  config EDAC_SIFIVE
->  	bool "Sifive platform EDAC driver"
-> -	depends on EDAC=y && SIFIVE_L2
-> +	depends on EDAC=y && SIFIVE_CCACHE
->  	help
->  	  Support for error detection and correction on the SiFive SoCs.
->
-> diff --git a/drivers/edac/sifive_edac.c b/drivers/edac/sifive_edac.c
-> index ee800aec7d47..b844e2626fd5 100644
-> --- a/drivers/edac/sifive_edac.c
-> +++ b/drivers/edac/sifive_edac.c
-> @@ -2,7 +2,7 @@
->  /*
->   * SiFive Platform EDAC Driver
->   *
-> - * Copyright (C) 2018-2019 SiFive, Inc.
-> + * Copyright (C) 2018-2022 SiFive, Inc.
->   *
->   * This driver is partially based on octeon_edac-pc.c
->   *
-> @@ -10,7 +10,7 @@
->  #include <linux/edac.h>
->  #include <linux/platform_device.h>
->  #include "edac_module.h"
-> -#include <soc/sifive/sifive_l2_cache.h>
-> +#include <soc/sifive/sifive_ccache.h>
->
->  #define DRVNAME "sifive_edac"
->
-> @@ -32,9 +32,9 @@ int ecc_err_event(struct notifier_block *this, unsigned long event, void *ptr)
->
->  	p = container_of(this, struct sifive_edac_priv, notifier);
->
-> -	if (event == SIFIVE_L2_ERR_TYPE_UE)
-> +	if (event == SIFIVE_CCACHE_ERR_TYPE_UE)
->  		edac_device_handle_ue(p->dci, 0, 0, msg);
-> -	else if (event == SIFIVE_L2_ERR_TYPE_CE)
-> +	else if (event == SIFIVE_CCACHE_ERR_TYPE_CE)
->  		edac_device_handle_ce(p->dci, 0, 0, msg);
->
->  	return NOTIFY_OK;
-> @@ -67,7 +67,7 @@ static int ecc_register(struct platform_device *pdev)
->  		goto err;
->  	}
->
-> -	register_sifive_l2_error_notifier(&p->notifier);
-> +	register_sifive_ccache_error_notifier(&p->notifier);
->
->  	return 0;
->
-> @@ -81,7 +81,7 @@ static int ecc_unregister(struct platform_device *pdev)
->  {
->  	struct sifive_edac_priv *p = platform_get_drvdata(pdev);
->
-> -	unregister_sifive_l2_error_notifier(&p->notifier);
-> +	unregister_sifive_ccache_error_notifier(&p->notifier);
->  	edac_device_del_device(&pdev->dev);
->  	edac_device_free_ctl_info(p->dci);
+Christian, I tried the two patches from drm-next, but the oops still
+occurred, a good reproducer for me was to run vulkan cts with
+deqp-runner in parallel here.
+
+Regards,
+Dave.
+
+drm-next-2022-10-07-1:
+drm fix for 6.1-rc1
+
+sched:
+- revert patch causing oopses
+The following changes since commit 65898687cf7392c372ea8d04a88617e2cb794465:
+
+  Merge tag 'amd-drm-next-6.1-2022-09-30' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-next (2022-10-04
+09:42:24 +1000)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-next-2022-10-07-1
+
+for you to fetch changes up to bafaf67c42f4b547bf4fb329ac6dcb28b05de15e:
+
+  Revert "drm/sched: Use parent fence instead of finished" (2022-10-07
+12:58:39 +1000)
+
+----------------------------------------------------------------
+drm fix for 6.1-rc1
+
+sched:
+- revert patch causing oopses
+
+----------------------------------------------------------------
+Dave Airlie (1):
+      Revert "drm/sched: Use parent fence instead of finished"
+
+ drivers/gpu/drm/scheduler/sched_main.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
