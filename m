@@ -2,142 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8D05F7AB4
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7DB5F7AC3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiJGPmV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Oct 2022 11:42:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
+        id S229725AbiJGPnr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Oct 2022 11:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiJGPmS (ORCPT
+        with ESMTP id S229506AbiJGPnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 11:42:18 -0400
-Received: from mail3.swissbit.com (mail3.swissbit.com [176.95.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D21D01A2;
-        Fri,  7 Oct 2022 08:42:17 -0700 (PDT)
-Received: from mail3.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 1C5E4463458;
-        Fri,  7 Oct 2022 17:42:16 +0200 (CEST)
-Received: from mail3.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 0B01F463256;
-        Fri,  7 Oct 2022 17:42:16 +0200 (CEST)
-X-TM-AS-ERS: 10.149.2.42-127.5.254.253
-X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
-X-DDEI-TLS-USAGE: Used
-Received: from ex.swissbit.com (unknown [10.149.2.42])
-        by mail3.swissbit.com (Postfix) with ESMTPS;
-        Fri,  7 Oct 2022 17:42:15 +0200 (CEST)
-Received: from sbdeex04.sbitdom.lan (10.149.2.42) by sbdeex04.sbitdom.lan
- (10.149.2.42) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Fri, 7 Oct 2022
- 17:42:14 +0200
-Received: from sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818]) by
- sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818%9]) with mapi id
- 15.02.1118.009; Fri, 7 Oct 2022 17:42:14 +0200
-From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
-Subject: [PATCHv2 1/2] mmc: block: Remove error check of hw_reset on reset
-Thread-Topic: [PATCHv2 1/2] mmc: block: Remove error check of hw_reset on
- reset
-Thread-Index: AdjaYu5u2TzZtJoER6CJQ4u+nZWuhA==
-Date:   Fri, 7 Oct 2022 15:42:14 +0000
-Message-ID: <003d34d1643242488b533dc14f69830f@hyperstone.com>
-Accept-Language: en-US, de-DE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.242.2.22]
-Content-Type: text/plain;
-        charset="iso-8859-1"
+        Fri, 7 Oct 2022 11:43:45 -0400
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A685D73C8
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 08:43:44 -0700 (PDT)
+Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay02.hostedemail.com (Postfix) with ESMTP id 13EF712131A;
+        Fri,  7 Oct 2022 15:43:43 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf06.hostedemail.com (Postfix) with ESMTPA id 8BFEC20012;
+        Fri,  7 Oct 2022 15:43:20 +0000 (UTC)
+Message-ID: <62acd27e418ff202ef2ffedd2474ae7f53f93368.camel@perches.com>
+Subject: Re: [PATCH v2 1/3] mtd: mtdoops: change printk() to counterpart pr_
+ functions
+From:   Joe Perches <joe@perches.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Ray Zhang <sgzhang@google.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Fri, 07 Oct 2022 08:43:39 -0700
+In-Reply-To: <20221007095236.37113034@xps-13>
+References: <20221007065042.700761-1-sgzhang@google.com>
+         <20221007065042.700761-2-sgzhang@google.com>
+         <070d253e718c1a6d72fb52c1d2f02ec461d825a1.camel@perches.com>
+         <20221007095236.37113034@xps-13>
+Content-Type: text/plain; charset="ISO-8859-1"
 Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-X-TMASE-Version: DDEI-5.1-9.0.1002-27188.000
-X-TMASE-Result: 10-3.773200-10.000000
-X-TMASE-MatchedRID: h20DFeLkM89gljMcj2tyXt5x7RpGJf1a0U0UWSZVhAriKUaoIhea7dAY
-        WUo4HSIkSrqDabEvLXFgvuOVbAf7tqGGOyqBK41vEXjPIvKd74BMkOX0UoduuTQM0/COoudwiE9
-        RqXHGrIfTnPJMGpZGuwR2KsmNWZajcgDifvL5MerknMSTG9lH+H0tCKdnhB58nFK7VE/xL0n6C0
-        ePs7A07YVH0dq7wY7up8Odl1VwpCRVHBEXgVCD3X9wMOUU04+ZQZwX4iVDtYdcNPORB/oDOt3+6
-        HdnF6ie
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-TMASE-XGENCLOUD: db260ff9-9ee1-4b08-ba8e-86aa9f4d7280-0-0-200-0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Queue-Id: 8BFEC20012
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Stat-Signature: za138si87dtfybssdp7nwo3qnip19zdb
+X-Rspamd-Server: rspamout04
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18P8E5dDtrUnR65WTaWOg4rMOxd5qzw2vI=
+X-HE-Tag: 1665157400-298926
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before switching back to the right partition in mmc_blk_reset
-there used to be a check if hw_reset was even supported.
-This return value was removed, so there is no reason to check.
+On Fri, 2022-10-07 at 09:52 +0200, Miquel Raynal wrote:
+> Hi Joe, Ray,
+> 
+> joe@perches.com wrote on Fri, 07 Oct 2022 00:09:26 -0700:
+> 
+> > On Fri, 2022-10-07 at 06:50 +0000, Ray Zhang wrote:
+> > > To comply with latest kernel code requirement, change printk() to
+> > > counterpart pr_ functions in mtdoops driver:
+> > > - change printk(INFO) to pr_info()
+> > > - change printk(DEBUG) to pr_debug()  
+> > 
+> > There is a different behavior with printk(KERN_DEBUG to pr_debug(
+> > as pr_debug is a no-op unless dynamic debugging is enabled or
+> > DEBUG is defined.
+> 
+> I didn't know about this difference. I was expecting printk(KERN_DEBUG)
+> to behave the same as pr_debug/dev_dbg.
 
-Fixes: fefdd3c91e0a ("mmc: core: Drop superfluous validations in mmc_hw|sw_reset()")
-Cc: stable@vger.kernel.org
+No worries.  Most people do not know this trivia.
 
-Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
----
--v2: Do not attempt to switch partitions if reset failed
+I just wanted to inform in case it matters here.
+Likely it does not matter.
 
- drivers/mmc/core/block.c | 28 +++++++++++++---------------
- 1 file changed, 13 insertions(+), 15 deletions(-)
+> But honestly in this driver I feel fine changing the printk(KERN_DEBUG)
+> into pr_debug().
 
-diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-index ce89611a136e..8db72cba2bbe 100644
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -991,29 +991,27 @@ static int mmc_blk_reset(struct mmc_blk_data *md, struct mmc_host *host,
- 			 int type)
- {
- 	int err;
-+	struct mmc_blk_data *main_md = dev_get_drvdata(&host->card->dev);
-+	int part_err;
- 
- 	if (md->reset_done & type)
- 		return -EEXIST;
- 
- 	md->reset_done |= type;
- 	err = mmc_hw_reset(host->card);
-+	if (err)
-+		return err;
- 	/* Ensure we switch back to the correct partition */
--	if (err) {
--		struct mmc_blk_data *main_md =
--			dev_get_drvdata(&host->card->dev);
--		int part_err;
--
--		main_md->part_curr = main_md->part_type;
--		part_err = mmc_blk_part_switch(host->card, md->part_type);
--		if (part_err) {
--			/*
--			 * We have failed to get back into the correct
--			 * partition, so we need to abort the whole request.
--			 */
--			return -ENODEV;
--		}
-+	main_md->part_curr = main_md->part_type;
-+	part_err = mmc_blk_part_switch(host->card, md->part_type);
-+	if (part_err) {
-+		/*
-+		 * We have failed to get back into the correct
-+		 * partition, so we need to abort the whole request.
-+		 */
-+		return -ENODEV;
- 	}
--	return err;
-+	return 0;
- }
- 
- static inline void mmc_blk_reset_success(struct mmc_blk_data *md, int type)
--- 
-2.37.3
-
-Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-Managing Director: Dr. Jan Peter Berns.
-Commercial register of local courts: Freiburg HRB381782
-
+Your choice...
