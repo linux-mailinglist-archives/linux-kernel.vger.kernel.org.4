@@ -2,186 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 517AF5F7556
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 10:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E89005F7558
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 10:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiJGIcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 04:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
+        id S229482AbiJGIdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 04:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiJGIcJ (ORCPT
+        with ESMTP id S229562AbiJGIdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 04:32:09 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1A1B97A3;
-        Fri,  7 Oct 2022 01:32:01 -0700 (PDT)
-X-UUID: 6bcb8ed71e454958810a24336c8da0ce-20221007
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=M6J//J6Fq13iMDaOT5b/GjHw3WgHNuCr8mtww6fN078=;
-        b=JVTC4qoaXoiEBsN/cxjvrs79hhB9n9i4B1YjmIVxMuBklVn2zUjlSJ1qBOPLUkIAnMDWvYy4gx/IgzsEAW7ug7o89uUg5bSUCvE0tZATT/nRMr4806W9N+brC2vc8ujt/77kAI11qp2nZj0S59PsIpFsV2Bku3S1X63Q3Dp30Hk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:8bc65ec7-a808-4e04-82b9-20d500d11ad9,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:39a5ff1,CLOUDID:c2b8d4b8-daef-48a8-8c50-40026d6a74c2,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 6bcb8ed71e454958810a24336c8da0ce-20221007
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1779876219; Fri, 07 Oct 2022 16:31:53 +0800
-Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 7 Oct 2022 16:31:52 +0800
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (172.21.101.239)
- by mtkmbs10n1.mediatek.com (172.21.101.34) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Fri, 7 Oct 2022 16:31:52 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OnynBerzF+RF3E7L3r4B0iWFMDpK84tiPgpJb94i9357gL2t05ACSjHYhsxSFnaGVS8Pb/Ukd+glPCwQFiW/Zec3AMrGpSQhKOrRhUtqoJLn2YobNMAxjgALe2ZOLnaExpnPvugCxZLt6SpGjFhVwx2SAFspvEzNtLi5qq6pO4OHTX6UU0hGolfW9XBcJxTP5IHUl/ZpdAJr8XTDsImNsFlS0jT3JqImIvtWGkSh/dOwd/R04jqND1zbFd+Lp7FEuqMTAgE5cMEDvgC1OFcL3hW5tOvNKIS3anoeOIWY/ph3mmxCsQrNiTlstVNvKHif/Qn0AtxEClTVgaG3XKk9NA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M6J//J6Fq13iMDaOT5b/GjHw3WgHNuCr8mtww6fN078=;
- b=Fisj8sQfjem3cGiWQVDBi3W/shRWqlVyErD65QX6cclOEi8SLnq4dEtBz74s4zccgXnq6XtrIdWJxdB7yEsBMIZwU6vZit4ddhZVXFZiOZKG0i2XKIdp0dnMH9byzR+5tzdjhpnPupAZa9uey/EXIIU8sXZ+whX457/QCPkXHx8a+2jAjsviJiI9Rep37AHXh5NNSH4Q9pd9mbDguAPERSuOOD8CmEHSTM3sS22I47/WNoZHV0JZ327zCBFalVG7kFQpNtq0Ruue92D0nrovFxzGWbSpTBYpsGgrLpsQd/gMKAYq7RfRPnNa6qUTM65qE/TE1nR1tKwMaFwy3m7s+w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
+        Fri, 7 Oct 2022 04:33:36 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30C7B97A2;
+        Fri,  7 Oct 2022 01:33:35 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id lx7so3915933pjb.0;
+        Fri, 07 Oct 2022 01:33:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M6J//J6Fq13iMDaOT5b/GjHw3WgHNuCr8mtww6fN078=;
- b=eaPBuGaXZQlJyUs1AjnXU6AdxRcR0xXuw1hQ2pab2/GO3ZWyRlVDrVxFFnrih6BrtgOV5MoItbm/9rAMIYXp+hULokD/5mmOxtnIBFB5tss9iHJyDr0I3LDGXV99WszrSaHMfKX+Go1JkkzAue4PsDenKteH8nEeABAVByS0nmU=
-Received: from TYZPR03MB6919.apcprd03.prod.outlook.com (2603:1096:400:28c::9)
- by KL1PR03MB6197.apcprd03.prod.outlook.com (2603:1096:820:90::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.9; Fri, 7 Oct
- 2022 08:31:49 +0000
-Received: from TYZPR03MB6919.apcprd03.prod.outlook.com
- ([fe80::1334:39fc:7259:5f6a]) by TYZPR03MB6919.apcprd03.prod.outlook.com
- ([fe80::1334:39fc:7259:5f6a%3]) with mapi id 15.20.5709.009; Fri, 7 Oct 2022
- 08:31:49 +0000
-From:   =?utf-8?B?QWxsZW4tS0ggQ2hlbmcgKOeoi+WGoOWLsyk=?= 
-        <Allen-KH.Cheng@mediatek.com>
-To:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "nfraprado@collabora.com" <nfraprado@collabora.com>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 5/8] dt-bindings: watchdog: mediatek: Convert mtk-wdt to
- json-schema
-Thread-Topic: [PATCH 5/8] dt-bindings: watchdog: mediatek: Convert mtk-wdt to
- json-schema
-Thread-Index: AQHY2Xxgj/Y4i7hVY0qggcHf6HNYqq4CiN6AgAASpAA=
-Date:   Fri, 7 Oct 2022 08:31:48 +0000
-Message-ID: <054b23d46c3ef7960859444d51ce13f760ad7791.camel@mediatek.com>
-References: <20221006120715.24815-1-allen-kh.cheng@mediatek.com>
-         <20221006120715.24815-6-allen-kh.cheng@mediatek.com>
-         <e9fe9674-8b33-dd6f-2db4-1ea4ed8d17af@linaro.org>
-In-Reply-To: <e9fe9674-8b33-dd6f-2db4-1ea4ed8d17af@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYZPR03MB6919:EE_|KL1PR03MB6197:EE_
-x-ms-office365-filtering-correlation-id: e2027f30-731b-4812-3010-08daa83e60aa
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HOArdHhxddg58QtLJGJk/Toa7LqEwr2R5JFvE842BNUCpzasq74dHBO5Zhb/+DdLuWusUEvidmun1EUsxs/yptOwQiNHku08tOuRACBOnmUQFp5lirN3dE6s6APf2ldzU0p5DZNNiXi1b1xWtyD84GE1iSojZzRr4v22/p99CkZAccm6uskxMAwcHJHD2NOh95Bvqs2DIk+FY30cICUJXDQ7gQjVl8os1tQm4doTLnRjI88Qp5Z0FDO6ezRyie1uTa1G7D9Aw8GENw90WWodkxh93OqZmg7pdVgZ652JZq3fjjdrnFJ8ygYRsLup7kCyYbuqIEy9URe5vTtfr6rHEdPa2Qnr8+b9d2Q9rw9y/xeU/iQnRFXn5YsYbx1LiBmFg6iTWbaFjaMHS/N9mUghiGAQnbeGmf4+LdkhiPbTnmVqncXjTja0SEwuX+9P9TmkeYNGF6rNH4RpUY7FMvVRz3tZw6VXB10zd6Pe9f+BzKv10lzfoKES6Fa883pP5GW21ddSgf8h8RVGN4Q2pJ/zH8Aw6AOF66L+gNQkmUmM0kfFRcuDIryf50wiAcx5gKRM7tEbKXdcxrHb+oz1v1xLILHs1xWQlJf1FsMkU3xCjAK7kOvOYl4wbXV+WB1m00MsfVd6Aor0ktaQwFo5CsGJrz/5kCIJ+cbVDROKor7VtAr+h9z6l7XsuydQcMg8efp3MGS4B69B19ZbSWz9n7aCuRVvh82XLps/tfGdd1HQr+kjkBQPD3e/n/OI7qkLd0iyC+cibezRitQHCbCSR4Zmrcslzvvg2fPPeRdkVI74/FdLBFQYtsdjF2kFZfzkj3D4
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR03MB6919.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(376002)(136003)(366004)(39860400002)(451199015)(122000001)(53546011)(2616005)(26005)(186003)(6512007)(6506007)(4744005)(76116006)(478600001)(6486002)(8936002)(86362001)(7416002)(5660300002)(71200400001)(38070700005)(64756008)(110136005)(66556008)(38100700002)(54906003)(85182001)(316002)(2906002)(8676002)(66446008)(66476007)(4326008)(66946007)(41300700001)(36756003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ejVhck91SGJWeCtKdXlGTm13cThUMThzdUlUK3FiSzRNRVJESEgwb1J4eFMw?=
- =?utf-8?B?V3pFOFA3TGgyckFoTEp6TzNqc2Q4eGprMXNrQWZLQVBGYzZNOFQ3VHVucVpM?=
- =?utf-8?B?dFdlMnVRV1IxcXRZT3psQkNTMlNVTnJxV0VneGtmZG1ScE1DcEtlbTR1QWtE?=
- =?utf-8?B?OVlWWWs2dE1JRFZKbVNKWVlGcXdsd3JXZWxyNGdCNVIwQi9UaU0zdExiZm5R?=
- =?utf-8?B?Sk1XOCs2RmR2alBXZUlMaXZZeGVBWU5NWHJKOXpOMkR0YmxrTUVCTnEyT0JQ?=
- =?utf-8?B?Q0haVm5XQkVXODcvOHZNNnpuWlNZaStjR2orVDNObHZ4T3R4TElBZWwrQjE1?=
- =?utf-8?B?N1UvT3loaVRSOHFTbXBYYjhxYXVBZktTQUJQNkJmOTlCYWYwbjVsQ0hwc0t5?=
- =?utf-8?B?Z2VFMHIzcjIzRENQb1NQNENDQ3lwdHBtTEEyTjRRZlJ1QkUyUzJSc2t1emJz?=
- =?utf-8?B?VDY4WUVRcG5FWWxVejZaemh4Q2U2SVFOd2luQ2l5dFlyTDlYRXZMMnQwUHFn?=
- =?utf-8?B?dWZXZTlORmY5dldueWtva1JENTUwSXgrRHRuM3FoVFFJN2NCS3E0SzJ6dHNV?=
- =?utf-8?B?bzZmOEpPN3RIL0pidWlna3QvMHZuRllsSnFnNmJ2QXhjc2lTeUUvMU90TEJw?=
- =?utf-8?B?V3BOVVR5alRqTFdRaWFtdm1OSFVrNE0rOThjbmpIYm9KS251ZUNxVFlqaWY4?=
- =?utf-8?B?dDR4SXpGQVZXdk5JSVdJNFZRUmE0Y01vSkRvWjUyV1czTnNFWk5hUXJDdjM2?=
- =?utf-8?B?UU9mUGlxcHFyS2p5TmRKSGZTSDRiTlJrV0l6b2dzZ3o2cG5uTXNnNXAwS0oy?=
- =?utf-8?B?N2VXbVMyWXd5QUVxTjZGVHYzWmZsOGZlVStvMElrdi9ZSHNDSDRXaG93US9i?=
- =?utf-8?B?NmNhSFJnL2hDVjZPZ05uaEdvSEp6aThUUVpwbGhiV1RDRG0wSHN2cUNOcGR0?=
- =?utf-8?B?YkZPck1DdkpOZDFBOEcwL3pJSzZKRDdQYjlXQkdra3NTWjRVKzNzODM0Z0Rn?=
- =?utf-8?B?KzFINU9MY3I4VVEyV2UzTWYrcGlrOUNUcCtrM0p1aHBUWnpzRVZ0cWJ6d0ov?=
- =?utf-8?B?ellIc1NFNWV3RDBUcElSa3lIZ3R5T2hoVGRzQ202R283WW5VbnorRUh2R3Qy?=
- =?utf-8?B?ZjhLK09sbDIvc1ZUT2FuNnFlR2djRlhxNGFJb1hmeE8zd2Z4ck1ZWXF6Unl4?=
- =?utf-8?B?RUZsUllDdXdTYTFEeTV5Qjg4K1pXMW90T2VrZ1c0NzI0aThIMFZWajc5ZnIx?=
- =?utf-8?B?Rno1SHA0cStHZHFuSExYbGRPQTQ3Qk5UTHBxang0SWU3T2lKUjhGWS9tVSts?=
- =?utf-8?B?T3dLSUlqT1lHS0NNVlN0Wlk4TjQ2dzdBcnhhSm80MXkybnNHOHlWVURodnBR?=
- =?utf-8?B?TjUzQ0JtRVJUTXE2UFo3QWVYMGVKWHh2bWRReU9CdXZ5eURkRVNxOW5LMzJI?=
- =?utf-8?B?UlY3Q2NRWkQvLzJhQndYTnRkTFBJSDJJaC8vZHZxcGl5clpZeVFiRTFqWi8z?=
- =?utf-8?B?cDRoK092cVVsKzRqcDFXamp2N05RWXN2YmJZNmhldWpKV01BYm5ZUE5pTnh5?=
- =?utf-8?B?dXBQREJUQ3dDbVd0TjVxcTlVUldyMzdmRlNJQnN6WXZLU3JBU0Q4ZXg3cHBE?=
- =?utf-8?B?SXBqdFBYSXFZWTBEQVhaRE5oQWdRUHcrZEcyNHlaTkZMOXQzUzQyU3VKTEhF?=
- =?utf-8?B?VnNzR0tHM051L0RLSStqSWJQZ0pNYVQ4N3puL1Vqc3oxRG5tL2prdXRtakdz?=
- =?utf-8?B?ZkZVbWVMYU8xUlhYOTNYWGlaaTVZYlZQd1ZjeWRTTXZyTW1QODBtcituQnlD?=
- =?utf-8?B?eG1ma0VVaXQxZmVJOTQwMDZBWkFUVDRCN2IvK3RBTm5qWVc1NzdmUkJMcTJ5?=
- =?utf-8?B?Ylp6c3RMVCtaNjdBVi8wUTRZNHorQngrd0ovRmtGVHQ3My9nc1EvYTYzQVdl?=
- =?utf-8?B?UExCY2JvblZoTTUvenE1R2F0N0tPRVBMak9KNGgvR1FRMTJmMENaWEhJL012?=
- =?utf-8?B?Vk9PUmNtRU9rU2VibkxodC9iZkNicDlSVldoQkNta2hLZW5DdWtMbGlWbWlw?=
- =?utf-8?B?bkZCTFhhcHZlUng1RXhQd1FSN3VZRDNlWGxsYTZqVVpXMC9HVG1UUjdNK0RQ?=
- =?utf-8?B?Q2RYdDJ4dzhKdy94WHFrSkg2Zzh1eFhrQ0hGNW4yWSt6S29UcDFtWEw5NzYw?=
- =?utf-8?B?Vmc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DC80C78F009E734EA0C399DC1F6869EF@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=t8AvHLBrW0u0+zP3kVvWPEDq2LuXtLquFKvkRq6GRpw=;
+        b=eLxeatpmAbGEj7/LFEmAhqjqPVqkAxEmu04khoe3lpOsW3/2Vvltp0pSfrLjIiok03
+         M/NpPJ6EveheUFtlMmg50n/GEwcgcYu0M5U0fbiFuYfPXuKFYwVcFYoC60heRUOgafBT
+         xCDEPt735WiC5fjIN0yss8U7P3bWnZmiMS3yvZgcHxjUgSp/0OfqRmYNJdo8eIeByi07
+         pUOL9J5IoOyFOyOC/BSYr3K8HBgpQGx+CyQ3o75zoSDMPqYRupg344TmQ4oIStaHhXR9
+         dZUnNkRzg3ALL6ZbTbTaXZKgqb4s3c1HMhJIapC0h8sPWkdTsQq4uWYuxmdULXzwk7Y1
+         LYHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t8AvHLBrW0u0+zP3kVvWPEDq2LuXtLquFKvkRq6GRpw=;
+        b=1DIn5r/26VJhVSYS/9hEej5OQcG91kshZsQLj6fbX9c56dk/uZvn4ZTVQoe+0RflKd
+         omjNRsNg5TkSzeCyGR9xW4F8yTkVuH9Cj/voHeNnJOgcimPi/Qg3FhYSYQ6QUyjW+Q97
+         zAzWTdINUVZw2Sq008HIJ3OiDGscmAkwG2TaiMu6tH2OUfsy5hfBlRib8GnoydEOsCbm
+         lrX95S67pRxff40Ch/LWYuIC1tDajTMR9Zx5b2DSnRQHfH4CrPMrFseKZ9Ji1wayCTmA
+         hf6h/WKN9wNIs7kjUwiHzzxUEdHEhbFW+oCpjzyJYazSOgWJZfMBw0Aa6Nnb8it0HYGh
+         v4/Q==
+X-Gm-Message-State: ACrzQf3qcn9MAfDNKOKiVLoHvAYdbZADF8H1No6Sm066MPMt67SosXMa
+        lJbzAhy3t3FZYfUmDc0KkXQ=
+X-Google-Smtp-Source: AMsMyM7MRyd/TxAVuMQJkKWcGMTHmVr7iW4cf58HSCHSQlkDJdVxaoELplBF0CW9NNcCrKJCXnXpCA==
+X-Received: by 2002:a17:90b:3b4b:b0:203:3265:d314 with SMTP id ot11-20020a17090b3b4b00b002033265d314mr15177200pjb.196.1665131615035;
+        Fri, 07 Oct 2022 01:33:35 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-21.three.co.id. [180.214.232.21])
+        by smtp.gmail.com with ESMTPSA id c4-20020a170902d48400b0017f637b3e87sm945231plg.279.2022.10.07.01.33.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Oct 2022 01:33:34 -0700 (PDT)
+Message-ID: <eb7e7927-84b4-a952-e8c7-dec518bfcda9@gmail.com>
+Date:   Fri, 7 Oct 2022 15:33:25 +0700
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR03MB6919.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e2027f30-731b-4812-3010-08daa83e60aa
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Oct 2022 08:31:48.9238
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GliYruxNpUEfga+2sh6I/RqrKk0XC8Xk49M2R6sO//XEIN7DZXM+95CSAilgAp/tvrUDJEkt/fXfyLh8PsCOyvJRhiI20aAhGge3JnbiK2w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR03MB6197
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY,
-        URIBL_CSS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v5 00/12] x86/resctrl: Support for AMD QoS new features
+Content-Language: en-US
+To:     Babu Moger <babu.moger@amd.com>, corbet@lwn.net,
+        reinette.chatre@intel.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de
+Cc:     fenghua.yu@intel.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, paulmck@kernel.org, akpm@linux-foundation.org,
+        quic_neeraju@quicinc.com, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
+        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
+        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
+        jmattson@google.com, daniel.sneddon@linux.intel.com,
+        sandipan.das@amd.com, tony.luck@intel.com, james.morse@arm.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        eranian@google.com
+References: <166431016617.373387.1968875281081252467.stgit@bmoger-ubuntu>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <166431016617.373387.1968875281081252467.stgit@bmoger-ubuntu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgS3J6eXN6dG9mLA0KDQpPbiBGcmksIDIwMjItMTAtMDcgYXQgMDk6MjUgKzAyMDAsIEtyenlz
-enRvZiBLb3psb3dza2kgd3JvdGU6DQo+IE9uIDA2LzEwLzIwMjIgMTQ6MDcsIEFsbGVuLUtIIENo
-ZW5nIHdyb3RlOg0KPiANCj4gVGhhbmsgeW91IGZvciB5b3VyIHBhdGNoLiBUaGVyZSBpcyBzb21l
-dGhpbmcgdG8gZGlzY3Vzcy9pbXByb3ZlLg0KPiANCj4gDQo+ID4gKyAgLSBNYXR0aGlhcyBCcnVn
-Z2VyIDxtYXR0aGlhcy5iZ2dAZ21haWwuY29tPg0KPiA+ICsNCj4gPiArZGVzY3JpcHRpb246DQo+
-ID4gKyAgVGhlIHdhdGNoZG9nIHN1cHBvcnRzIGEgcHJlLXRpbWVvdXQgaW50ZXJydXB0IHRoYXQg
-ZmlyZXMNCj4gPiArICB0aW1lb3V0LXNlYy8yIGJlZm9yZSB0aGUgZXhwaXJ5Lg0KPiA+ICsNCj4g
-PiArYWxsT2Y6DQo+ID4gKyAgLSAkcmVmOiB3YXRjaGRvZy55YW1sIw0KPiA+ICsNCj4gPiArcHJv
-cGVydGllczoNCj4gPiArICBjb21wYXRpYmxlOg0KPiA+ICsgICAgb25lT2Y6DQo+ID4gKyAgICAg
-IC0gaXRlbXM6DQo+ID4gKyAgICAgICAgICAtIGVudW06DQo+IA0KPiBUaGlzIGlzIGp1c3Qgb25l
-IGVudW0gaW4gIml0ZW1zIiwgc28gbm8gbmVlZCBmb3IgdGhlICJpdGVtcyIuDQo+IA0KDQpHb3Qg
-aXQsIEkgd2lsbCBkcm9wIHRoaXMgZm9yIHYyLg0KDQpUaGFua3MsDQpBbGxlbg0KDQoNCj4gPiAr
-ICAgICAgICAgICAgICAtIG1lZGlhdGVrLG10MjcxMi13ZHQNCj4gPiArICAgICAgICAgICAgICAt
-IG1lZGlhdGVrLG10NjU4OS13ZHQNCj4gPiArICAgICAgICAgICAgICAtIG1lZGlhdGVrLG10Nzk4
-Ni13ZHQNCj4gPiArICAgICAgICAgICAgICAtIG1lZGlhdGVrLG10ODE4My13ZHQNCj4gPiArICAg
-ICAgICAgICAgICAtIG1lZGlhdGVrLG10ODE4Ni13ZHQNCj4gPiArICAgICAgICAgICAgICAtIG1l
-ZGlhdGVrLG10ODE5Mi13ZHQNCj4gPiArICAgICAgICAgICAgICAtIG1lZGlhdGVrLG10ODE5NS13
-ZHQNCj4gDQo+IEJlc3QgcmVnYXJkcywNCj4gS3J6eXN6dG9mDQo+IA0K
+On 9/28/22 03:25, Babu Moger wrote:
+> New AMD processors can now support following QoS features.
+> 
+> 1. Slow Memory Bandwidth Allocation (SMBA)
+>    With this feature, the QOS enforcement policies can be applied
+>    to the external slow memory connected to the host. QOS enforcement
+>    is accomplished by assigning a Class Of Service (COS) to a processor
+>    and specifying allocations or limits for that COS for each resource
+>    to be allocated.
+> 
+>    Currently, CXL.memory is the only supported "slow" memory device. With
+>    the support of SMBA feature the hardware enables bandwidth allocation
+>    on the slow memory devices.
+> 
+> 2. Bandwidth Monitoring Event Configuration (BMEC)
+>    The bandwidth monitoring events mbm_total_event and mbm_local_event 
+>    are set to count all the total and local reads/writes respectively.
+>    With the introduction of slow memory, the two counters are not enough
+>    to count all the different types are memory events. With the feature
+>    BMEC, the users have the option to configure mbm_total_event and
+>    mbm_local_event to count the specific type of events.
+> 
+>    Following are the bitmaps of events supported.
+>    Bits    Description
+>      6       Dirty Victims from the QOS domain to all types of memory
+>      5       Reads to slow memory in the non-local NUMA domain
+>      4       Reads to slow memory in the local NUMA domain
+>      3       Non-temporal writes to non-local NUMA domain
+>      2       Non-temporal writes to local NUMA domain
+>      1       Reads to memory in the non-local NUMA domain
+>      0       Reads to memory in the local NUMA domain
+> 
+> This series adds support for these features.
+> 
+> Feature description is available in the specification, "AMD64 Technology Platform Quality
+> of Service Extensions, Revision: 1.03 Publication # 56375 Revision: 1.03 Issue Date: February 2022".
+> 
+> Link: https://www.amd.com/en/support/tech-docs/amd64-technology-platform-quality-service-extensions
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=206537
+> 
+> ---
+> v5:
+>   Summary of changes.
+>   1. Split the series into two. The first two patches are bug fixes. So, sent them separate.
+>   2. The config files mbm_total_config and mbm_local_config are now under
+>      /sys/fs/resctrl/info/L3_MON/. Removed these config files from mon groups.
+>   3. Ran "checkpatch --strict --codespell" on all the patches. Looks good with few known exceptions.
+>   4. Few minor text changes in resctrl.rst file. 
+> 
+> v4:
+>   https://lore.kernel.org/lkml/166257348081.1043018.11227924488792315932.stgit@bmoger-ubuntu/
+>   Got numerios of comments from Reinette Chatre. Addressed most of them. 
+>   Summary of changes.
+>   1. Removed mon_configurable under /sys/fs/resctrl/info/L3_MON/.  
+>   2. Updated mon_features texts if the BMEC is supported.
+>   3. Added more explanation about the slow memory support.
+>   4. Replaced smp_call_function_many with on_each_cpu_mask call.
+>   5. Removed arch_has_empty_bitmaps
+>   6. Few other text changes.
+>   7. Removed Reviewed-by if the patch is modified.
+>   8. Rebased the patches to latest tip.
+> 
+> v3:
+>   https://lore.kernel.org/lkml/166117559756.6695.16047463526634290701.stgit@bmoger-ubuntu/ 
+>   a. Rebased the patches to latest tip. Resolved some conflicts.
+>      https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+>   b. Taken care of feedback from Bagas Sanjaya.
+>   c. Added Reviewed by from Mingo.
+>   Note: I am still looking for comments from Reinette or Fenghua.
+> 
+> v2:
+>   https://lore.kernel.org/lkml/165938717220.724959.10931629283087443782.stgit@bmoger-ubuntu/
+>   a. Rebased the patches to latest stable tree (v5.18.15). Resolved some conflicts.
+>   b. Added the patch to fix CBM issue on AMD. This was originally discussed
+>      https://lore.kernel.org/lkml/20220517001234.3137157-1-eranian@google.com/
+> 
+> v1:
+>   https://lore.kernel.org/lkml/165757543252.416408.13547339307237713464.stgit@bmoger-ubuntu/
+> 
+> Babu Moger (12):
+>       x86/cpufeatures: Add Slow Memory Bandwidth Allocation feature flag
+>       x86/resctrl: Add a new resource type RDT_RESOURCE_SMBA
+>       x86/cpufeatures: Add Bandwidth Monitoring Event Configuration feature flag
+>       x86/resctrl: Include new features in command line options
+>       x86/resctrl: Detect and configure Slow Memory Bandwidth allocation
+>       x86/resctrl: Introduce data structure to support monitor configuration
+>       x86/resctrl: Add sysfs interface to read mbm_total_bytes event configuration
+>       x86/resctrl: Add sysfs interface to read mbm_local_bytes event configuration
+>       x86/resctrl: Add sysfs interface to write mbm_total_bytes event configuration
+>       x86/resctrl: Add sysfs interface to write mbm_local_bytes event configuration
+>       x86/resctrl: Replace smp_call_function_many() with on_each_cpu_mask()
+>       Documentation/x86: Update resctrl_ui.rst for new features
+> 
+> 
+>  .../admin-guide/kernel-parameters.txt         |   2 +-
+>  Documentation/x86/resctrl.rst                 | 130 +++++++-
+>  arch/x86/include/asm/cpufeatures.h            |   2 +
+>  arch/x86/kernel/cpu/cpuid-deps.c              |   1 +
+>  arch/x86/kernel/cpu/resctrl/core.c            |  51 ++-
+>  arch/x86/kernel/cpu/resctrl/ctrlmondata.c     |   2 +-
+>  arch/x86/kernel/cpu/resctrl/internal.h        |  33 +-
+>  arch/x86/kernel/cpu/resctrl/monitor.c         |   9 +-
+>  arch/x86/kernel/cpu/resctrl/rdtgroup.c        | 298 ++++++++++++++++--
+>  arch/x86/kernel/cpu/scattered.c               |   2 +
+>  10 files changed, 496 insertions(+), 34 deletions(-)
+> 
+
+Hi Babu, sorry for having to do public reply to this v5 cover letter
+due to accidentally delete the preview documentation patch for your
+upcoming v6.
+
+Thanks for privately sending me the preview patch. Seeing it at a glance,
+LGTM. Please send the full v6 series for us to review.
+
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara
