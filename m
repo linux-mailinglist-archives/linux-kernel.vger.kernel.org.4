@@ -2,132 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95CC55F77C2
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 13:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E398B5F77D2
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 14:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbiJGL6U convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Oct 2022 07:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
+        id S229605AbiJGMDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 08:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiJGL6Q (ORCPT
+        with ESMTP id S229634AbiJGMDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 07:58:16 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F6CD57E6
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 04:58:12 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-25-ABR5MNZQOUi4UB5yYMDNEA-1; Fri, 07 Oct 2022 12:58:08 +0100
-X-MC-Unique: ABR5MNZQOUi4UB5yYMDNEA-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Fri, 7 Oct
- 2022 12:58:06 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Fri, 7 Oct 2022 12:58:06 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Theodore Ts'o' <tytso@mit.edu>, Kees Cook <keescook@chromium.org>
-CC:     Jorge Merlino <jorge.merlino@canonical.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Jann Horn <jannh@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        John Johansen <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Todd Kjos <tkjos@google.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        Prashanth Prahlad <pprahlad@redhat.com>,
-        Micah Morton <mortonm@chromium.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "apparmor@lists.ubuntu.com" <apparmor@lists.ubuntu.com>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: RE: [PATCH] Fix race condition when exec'ing setuid files
-Thread-Topic: [PATCH] Fix race condition when exec'ing setuid files
-Thread-Index: AQHY2e33//tmcksZekaHt2mlO/Dtmq4C0tkw
-Date:   Fri, 7 Oct 2022 11:58:06 +0000
-Message-ID: <f01aae2a5936450f889fa5a7d350d363@AcuMS.aculab.com>
-References: <202209131456.76A13BC5E4@keescook>
- <202210061301.207A20C8E5@keescook> <Yz+Dln7AAMU+Oj9X@mit.edu>
-In-Reply-To: <Yz+Dln7AAMU+Oj9X@mit.edu>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 7 Oct 2022 08:03:41 -0400
+Received: from smtpout1.mo3004.mail-out.ovh.net (smtpout1.mo3004.mail-out.ovh.net [79.137.123.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785A3D0CDF;
+        Fri,  7 Oct 2022 05:03:40 -0700 (PDT)
+Received: from pro2.mail.ovh.net (unknown [10.108.16.207])
+        by mo3004.mail-out.ovh.net (Postfix) with ESMTPS id DE4DA243ABA;
+        Fri,  7 Oct 2022 12:03:38 +0000 (UTC)
+Received: from [192.168.1.41] (88.161.25.233) by DAG1EX1.emp2.local
+ (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Fri, 7 Oct
+ 2022 14:03:38 +0200
+Message-ID: <60fcb1ba-f5d4-deaf-d251-7d8c127c353b@traphandler.com>
+Date:   Fri, 7 Oct 2022 14:03:37 +0200
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RESEND PATCH v3 4/4] leds: Add a multicolor LED driver to group
+ monochromatic LEDs
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     <pavel@ucw.cz>, <robh+dt@kernel.org>,
+        <sven.schwermer@disruptive-technologies.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <johan+linaro@kernel.org>,
+        <marijn.suijten@somainline.org>, <bjorn.andersson@linaro.org>,
+        <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sha@pengutronix.de>
+References: <20220917081339.3354075-1-jjhiblot@traphandler.com>
+ <20220917081339.3354075-5-jjhiblot@traphandler.com>
+ <CAHp75VeAnJQt7kS8UE+OKcqnScYnmHnVvL+QNW6jR=yF0=oMAA@mail.gmail.com>
+ <6d3d2dfd-4d44-c91a-2145-bae624926259@traphandler.com>
+ <CAHp75VePiAs_qz2fxAheoGbq4wk39x5uoVUKZdbN254RDevgsQ@mail.gmail.com>
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+In-Reply-To: <CAHp75VePiAs_qz2fxAheoGbq4wk39x5uoVUKZdbN254RDevgsQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [88.161.25.233]
+X-ClientProxiedBy: DAG2EX2.emp2.local (172.16.2.12) To DAG1EX1.emp2.local
+ (172.16.2.1)
+X-Ovh-Tracer-Id: 1556838100135524631
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeijedggeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthejredttdefjeenucfhrhhomheplfgvrghnqdflrggtqhhuvghsucfjihgslhhothcuoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqnecuggftrfgrthhtvghrnhepieejfedukeevudfghfetudevhffhhfekjeeiudegtdehueevgfdvgeeivdeifedvnecukfhppedtrddtrddtrddtpdekkedrudeiuddrvdehrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehprhhovddrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehshhgrsehpvghnghhuthhrohhnihigrdguvgdpoffvtefjohhsthepmhhofedttdeg
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Theodore Ts'o
-> Sent: 07 October 2022 02:41
-> 
-> On Thu, Oct 06, 2022 at 01:20:35PM -0700, Kees Cook wrote:
-> >
-> > So the question, then, is "why are they trying to exec while actively
-> > spawning new threads?" That appears to be the core problem here, and as
-> > far as I can tell, the kernel has behaved this way for a very long time.
-> > I don't think the kernel should fix this, either, because it leads to a
-> > very weird state for userspace, where the thread spawner may suddenly
-> > die due to the exec happening in another thread. This really looks like
-> > something userspace needs to handle correctly (i.e. don't try to exec
-> > while actively spawning threads).
-> 
-> One of the classic failure modes is when a threaded program calls a
-> library, and that library might try to do a fork/exec (or call
-> system(3) to run some command.  e.g., such as running "lvm create ..."
-> or to spawn some kind of helper daemon.
-> 
-> There are a number of stack overflow questions about this, and there
-> are some solutions to _some_ of the problems, such as using
-> pthread_atfork(), and knowing that you are about to call fork/exec,
-> and use some out of band mechanism to to make sure no threads get
-> spawned until the fork/exec is completed --- but if you don't know
-> that a library is going to do a fork/exec, well, life is tough.
 
-Or that a library thread is about to create a new thread.
+On 07/10/2022 10:53, Andy Shevchenko wrote:
+> On Fri, Oct 7, 2022 at 9:34 AM Jean-Jacques Hiblot
+> <jjhiblot@traphandler.com> wrote:
+>> On 17/09/2022 10:37, Andy Shevchenko wrote:
+>>> On Sat, Sep 17, 2022 at 11:14 AM Jean-Jacques Hiblot
+>>> <jjhiblot@traphandler.com> wrote:
+> ...
+>
+>>>> +               led_cdev = devm_of_led_get(dev, count);
+>>> Why _of_ variant? Please, make this OF independent since it's
+>>> pretending to cover not only OF-based systems.
+>> This is not OF independent. It could be, but that will wait until
+>> someone needs it. I don't know much about ACPI and have no hardware to
+>> test it on.
+>>
+>> I'll add the missing  dependency on OF in the Kconfig.
+> No, please consider getting rid of OF-centric API usage.
 
-> One technique even advocated by a stack overflow article is "avoid
-> using threads whenver possible".  :-/
+The trouble is that the OF-agnostic API for leds doesn't exist yet and I 
+don't really want to add it without any way to test it.
 
-Doesn't fork() only create the current thread in the new process?
-So by the time exec() runs there is a nice single threaded process
-with an fd table that isn't shared.
-
-For helpers there is always (a properly implemented) posix_spawn() :-)
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+>
+> ...
+>
+> I'm not sure why you left a lot of context in the reply without
+> commenting or replying to it.
+>
