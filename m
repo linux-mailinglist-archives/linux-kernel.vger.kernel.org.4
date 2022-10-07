@@ -2,87 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 205F95F7454
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 08:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 126BD5F745A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 08:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiJGGql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 02:46:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
+        id S229731AbiJGGsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 02:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiJGGqh (ORCPT
+        with ESMTP id S229628AbiJGGsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 02:46:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6113C4581;
-        Thu,  6 Oct 2022 23:46:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8FB82B82208;
-        Fri,  7 Oct 2022 06:46:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1C42C433D7;
-        Fri,  7 Oct 2022 06:46:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665125193;
-        bh=2R565puu3jSvZEU5YxKdHU+f3N7E1A0C+trOmuYcd7E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2oxYsOZEtN6bZBXUIasaOa0HMbiNmYZa+Pug9zlHBg+9TECHFW0p+K3YVM/Masn72
-         9Fbr6g2AguG+4tt3QmywYrtVhyh6iS8OuTR2HpUUijIPZHB+vMpsT1sDOYqfM8c3vs
-         l1T3cvovLvA4FwvAZAKC5AODuy0rnLQEleo8ftFs=
-Date:   Fri, 7 Oct 2022 08:47:13 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     stable@vger.kernel.org, Alexey Dobriyan <adobriyan@gmail.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-kernel@vger.kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH RESEND stable 5.4] perf tools: Fixup
- get_current_dir_name() compilation
-Message-ID: <Yz/LcYbEwz4smq1H@kroah.com>
-References: <20221005204028.4066674-1-f.fainelli@gmail.com>
+        Fri, 7 Oct 2022 02:48:01 -0400
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E894C1DB0
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 23:48:00 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id A65D2240104
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 08:47:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1665125278; bh=0UWS+iyjBP6iUUcWb5qqEtxi5shbZVmZZKIvv3o2RwY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kWXsIkCXQzqkU1wY5Iz2vbLfIxBcEwHyxKJR4vzK+pbFBQddApoQRqJm/dNbE32Vg
+         A2vhoAOFA0yuFaqnBIS6dSTazEFKRDXwsniKF1idzG5Y6AbHO8zh1heU7suzZjiM4m
+         bzzhGv/fCpcbqsMri+tSjgddLXykzWb5g3hVZhtzmdbpMN//MJaKPvrTC0AoTQwn6/
+         o7UppGLS89dmdQSy9vBX111ahBhkZD39emxPcR22yTw3gd04Egeye9VFLZsP4KbLOy
+         VGLLZLO9F5awdP4a3XpvwHfm4Bv2A0ebd7BZB4h3ZVnoLxvxZuCX0MoGfBT6OvEgxI
+         j51D8Me7YZzSg==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4MkJlx3ydQz6tpg;
+        Fri,  7 Oct 2022 08:47:57 +0200 (CEST)
+Date:   Fri,  7 Oct 2022 06:47:56 +0000
+From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: corsair-psu: fix typo in USB id description
+Message-ID: <20221007084756.6f4053c5@posteo.net>
+In-Reply-To: <20221005182215.GA2626047@roeck-us.net>
+References: <Yzql13NOvQLlrye1@monster.localdomain>
+        <20221005182215.GA2626047@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221005204028.4066674-1-f.fainelli@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 05, 2022 at 01:40:28PM -0700, Florian Fainelli wrote:
-> From: Alexey Dobriyan <adobriyan@gmail.com>
-> 
-> commit 128dbd78bd673f9edbc4413072b23efb6657feb0 upstream
-> 
-> strdup() prototype doesn't live in stdlib.h .
-> 
-> Add limits.h for PATH_MAX definition as well.
-> 
-> This fixes the build on Android.
-> 
-> Signed-off-by: Alexey Dobriyan (SK hynix) <adobriyan@gmail.com>
-> Acked-by: Namhyung Kim <namhyung@kernel.org>
-> Link: http://lore.kernel.org/lkml/YRukaQbrgDWhiwGr@localhost.localdomain
-> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
-> 
-> This patch is necessary to build perf with a musl-libc toolchain, not
-> just Android's bionic.
-> 
-> Resending because missed stable the first time
+On Wed, 5 Oct 2022 11:22:15 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-Both backports now queued up, thanks.
+> On Mon, Oct 03, 2022 at 09:05:27AM +0000, Wilken Gottwalt wrote:
+> > Fixes: 0cf46a653bda ("hwmon: (corsair-psu) add USB id of new revision of the HX1000i psu")
+> > Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+> 
+> Applied. In the future, please add some description (subject is
+> insufficient).
 
-greg k-h
+Oh sorry. I wasn't sure how to handle this, I mean the title already says all,
+nothing more to add.
+
+greetings,
+Will
