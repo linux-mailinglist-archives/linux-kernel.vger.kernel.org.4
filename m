@@ -2,111 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5565F80D1
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 00:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD815F80D6
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 00:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiJGWgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 18:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43948 "EHLO
+        id S229637AbiJGWid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 18:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiJGWgh (ORCPT
+        with ESMTP id S229453AbiJGWia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 18:36:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE3F65253
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 15:36:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665182195;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=r6bv2go9G+BjO6JEUVB2l8Xszg9KiwwYaLXejJm6qDg=;
-        b=CIyTD0CJdQXhn5Lh6ojQDDMYJuQfZ4ZodwaTpthoAxNV/7TaYL6O8TR0U2mD+zHy9e/q3n
-        51G5vYwXF77rqtS5G6agMUbIBtWUNT97LWsvHKrRJotSK3ypuuCXdFmMwkwSNorjrEZGJ5
-        w+lBp/u3JdXH0AtMFZg7t1o9yyFpZ98=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-651-dOzntLHgO5S6_6Yn-ZmSNw-1; Fri, 07 Oct 2022 18:36:34 -0400
-X-MC-Unique: dOzntLHgO5S6_6Yn-ZmSNw-1
-Received: by mail-qv1-f72.google.com with SMTP id i1-20020a056214020100b004afa3dbf35dso3758948qvt.14
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 15:36:34 -0700 (PDT)
+        Fri, 7 Oct 2022 18:38:30 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC7782620;
+        Fri,  7 Oct 2022 15:38:29 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id bj12so14075668ejb.13;
+        Fri, 07 Oct 2022 15:38:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=t8oJ8uBoYKbakm2xp42zEcxh+wgG/wSoLfz35djbU/4=;
+        b=DlXrTOSDvLfazgkLEPef9AnZOEtZ2+YrtJpz/sXI0zMUAGn+P43fOVtQw7m5zh5AJP
+         J5BoGFHRMDuHCdSDabqg75/Vkr0abZMyuZ92GS1xGGM1L/bWJ3HwEJz59JtbCO3Z9cX+
+         4DKOF2YepJNhP0Bup72VAgQjXUtE9bnX4WIVkiGMm2BuaFVY6GspNJCIGayp62lXnJ/k
+         ZXEVqctH62gTEbk0iVdVtadkYHe/i9tKR6S/hEE+Tc1v0k+wiXt4vw6bEnPcSQ8rn9bI
+         fF0W835PXI/vMaDE5zcUno1W39B+FEjaY7pyydh3stU2WqqaKacBd3KqG+CSv5Q1y/Sh
+         TVIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=r6bv2go9G+BjO6JEUVB2l8Xszg9KiwwYaLXejJm6qDg=;
-        b=Aj9LD45NMzynLF6/XktUkqjOvYXmp/MFKtd6576Wi4rphgRjQwtfSbzwpo3P4D3Xio
-         YIL6SiYccP5EOO8g09PnTxJhMHnNZ2pM+ecZS/f2D0T+i5Pg/gowU9GLKrctBsFn8Gxw
-         JjcuruBdSXZacuyuxtJgU3S2XoH9vQ/yv5kooY1kSHNZeP0ckhJkcatdqI0qU7tomYg8
-         gbroGv4MicYdxmuecP2Fv7D9gI3jURJU2dgxNCchctGNdUjxJyX71IrkdpkqB7VXEbvO
-         uftFARtoGafitna80u7NTw0PS0R5LHlRrfng8t14hfsx4yACsoqze7FYrOlusA72MYrr
-         d0KA==
-X-Gm-Message-State: ACrzQf37JbwlGaOHPx+EflWbw6Rv0Js78UGzAKjra4zokakIfWm7uAEB
-        XU7b58vOsvWZhq/c2V5sbu9vr9kMqKqPJ6v9+4k40ygmf+zsaZsCpQFv3/XgYIRRnADjKCbeOPv
-        f5Or9g1dOSSJDnPqLWs17a+I4
-X-Received: by 2002:ad4:5bc5:0:b0:4af:b73f:1914 with SMTP id t5-20020ad45bc5000000b004afb73f1914mr6080925qvt.117.1665182194075;
-        Fri, 07 Oct 2022 15:36:34 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM78p2McfJOYHRwtugZaxb3pWVgHssIx6T2xoDstxpOxZiXQBQs1wSoGi63opRGYZnFej6t5Pw==
-X-Received: by 2002:ad4:5bc5:0:b0:4af:b73f:1914 with SMTP id t5-20020ad45bc5000000b004afb73f1914mr6080907qvt.117.1665182193919;
-        Fri, 07 Oct 2022 15:36:33 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id r23-20020ae9d617000000b006ce5ba64e30sm2958721qkk.136.2022.10.07.15.36.31
+        bh=t8oJ8uBoYKbakm2xp42zEcxh+wgG/wSoLfz35djbU/4=;
+        b=H1yrslxuKtm+yHmZCDZ0c8n74atKakNUISI/tRqd3eaFjTm6I7XxfIe8hlNbjCndeX
+         ZF5RUXwnwcIumHgoqv4ZSVBOU6kYacrRnnd3jRmps55Jl+aywb5SnUD1NttZL5p76mSd
+         K8usgNnFCOH+FlFMDyysnSlnfW15lVZ5wHrJPDVDT4WcD0AXnjZhfI0D/oWZ2znuiwEt
+         wtj1cl7f4Z4sqnXcTBJOWGEOahno+RSuvpZSxpCj5ErdXnCE3Nn17tD0Y8Ec0P8ovo/8
+         kEMXJfc1hXkH470R6tNhrHaWu16qcCpYvuZugffLaY7cvRRfhOI0b+3Mz/2mRWiIEJ4N
+         xpmQ==
+X-Gm-Message-State: ACrzQf2iYkrDgBSB/Slhzrgx3XIe5C+IqQE2e7i4FQKbLPXpZ0motVpg
+        KGMxMj7KGpzFk04/KGhUFCU=
+X-Google-Smtp-Source: AMsMyM7yo7t/qh9RZubKlbdW93yEvgrdgtZYdCAstPJOKqo34tY4aTvR8YCrjuTk9B3Li4qp36C9KQ==
+X-Received: by 2002:a17:907:7629:b0:776:a147:8524 with SMTP id jy9-20020a170907762900b00776a1478524mr5806800ejc.632.1665182308244;
+        Fri, 07 Oct 2022 15:38:28 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id s26-20020a056402165a00b00456d40f6b73sm2223299edx.87.2022.10.07.15.38.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 15:36:33 -0700 (PDT)
-Date:   Fri, 7 Oct 2022 18:36:30 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     syzbot <syzbot+2c2bb573a9524a95e787@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, david@redhat.com, jack@suse.cz,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, namit@vmware.com, rppt@kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Subject: Re: [syzbot] WARNING in change_pte_range
-Message-ID: <Y0Cp7uHwq4yWMiDN@xz-m1.local>
-References: <000000000000495a9305e9dea876@google.com>
- <0000000000004f5d5205ea790cf0@google.com>
+        Fri, 07 Oct 2022 15:38:26 -0700 (PDT)
+Date:   Sat, 8 Oct 2022 01:38:24 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v3 net-next 12/14] dt-bindings: net: dsa: ocelot: add
+ ocelot-ext documentation
+Message-ID: <20221007223824.xf7aga3rs74fmcup@skbuf>
+References: <20220926002928.2744638-1-colin.foster@in-advantage.com>
+ <20220926002928.2744638-13-colin.foster@in-advantage.com>
+ <20220927202600.hy5dr2s6j4jnmfpg@skbuf>
+ <Y0CPmuxTRr799AR5@euler>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0000000000004f5d5205ea790cf0@google.com>
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Y0CPmuxTRr799AR5@euler>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 03:08:22PM -0700, syzbot wrote:
-> syzbot has bisected this issue to:
+On Fri, Oct 07, 2022 at 01:44:10PM -0700, Colin Foster wrote:
+> With regards to the interrupts - I don't really have a concept of how
+> those will work, since there isn't a processor for those lines to
+> interrupt. So while there is this for the 7514:
 > 
-> commit b1f9e876862d8f7176299ec4fb2108bc1045cbc8
-> Author: Peter Xu <peterx@redhat.com>
-> Date:   Fri May 13 03:22:56 2022 +0000
+> interrupts = <18 21 16>;
+> interrupt-names = "ptp_rdy", "xtr", "fdma";
 > 
->     mm/uffd: enable write protection for shmem & hugetlbfs
+> it seems like there isn't anything to add there.
 > 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=108e8fb8880000
-> start commit:   511cce163b75 Merge tag 'net-6.0-rc8' of git://git.kernel.o..
-> git tree:       upstream
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=128e8fb8880000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=148e8fb8880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=4520785fccee9b40
-> dashboard link: https://syzkaller.appspot.com/bug?extid=2c2bb573a9524a95e787
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14ecac35080000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15668b38880000
-> 
-> Reported-by: syzbot+2c2bb573a9524a95e787@syzkaller.appspotmail.com
-> Fixes: b1f9e876862d ("mm/uffd: enable write protection for shmem & hugetlbfs")
-> 
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> 
+> That is, unless there's something deeper that is going on that I don't
+> fully understand yet. It wouldn't be the first time and, realistically,
+> won't be the last. I'll copy the 7514 for now, as I plan to send out an
+> RFC shortly with all these updates.
 
-#syz dup: WARNING in change_protection
+I was under the impression that the interrupt controller could be
+configured to route the interrupts to external destinations EXT_DST0 or
+EXT_DST1, which have the indices 2 and 3, respectively, in the DST_INTR_*
+set of registers of the ICPU_CFG:INTR block. I could be wrong, though,
+maybe this is just for PCIe, I never looked at the pinout of this chip
+to study whether it's possible to use these as I expect, but normally
+for things like PTP TX timestamping, you'd expect that the switch
+notifies the external host when a packet has been timestamped and that
+timestamp is available in the FIFO. The interrupts out of this switch
+could also be useful for the PHY state machine, to disable polling.
 
--- 
-Peter Xu
-
+Although in the general sense I agree with you, it's better not to add
+anything than to add something and be wrong about it. This is where the
+limitations start showing for the idea that "device tree describes
+hardware, which is independent of software implementation". It's all too
+easy to say this when you have an implementation already written.
+Anyway.  DT doesn't describe hardware, but what software wants to
+understand of it, and that makes it inseparable to some degree from
+software implementation.
