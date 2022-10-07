@@ -2,81 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1DF5F7460
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 08:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 091255F7463
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 08:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbiJGGwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 02:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59342 "EHLO
+        id S229788AbiJGGxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 02:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiJGGwb (ORCPT
+        with ESMTP id S229773AbiJGGxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 02:52:31 -0400
-Received: from mout.web.de (mout.web.de [217.72.192.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2172C6C942
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 23:52:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
-        t=1665125548; bh=ju1pJ/daD2F5QWFWspNVkPyTPab6Mhsr8C5SzJfc7DU=;
-        h=X-UI-Sender-Class:Subject:From:To:Date;
-        b=BBNxRDYvgqfZAIFX1yatY0tEhKUZXaQthkawqx83wMNCPNoxabqBK+8RhRHIAdDrQ
-         90Lavj8bKon16vvZJoiCRIt/ilgvQSl38QSM3XaTg4P/im8mE9ljnqfHgDNRjCTD5V
-         pD8wx7gPM3oWUeEeavTkTTFGhO8yoLRsA7lWsk3ySMHd+CSsXR5/UeH/z9l/aMaXmd
-         SBTGWVO2HNl/vJ9Wtf+rgFEMuLsoSYidouXLyp4oQ1MEtxvXM+WDzvFGvhsd9lBHki
-         cJgLY2mGLjp9fRzzlrHDQtDVN4OgB/q3ezBeia8lY3C5h0JRiZmNnOUJfmbhI+Ik23
-         69ZCphQLwMIkw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.0.101] ([176.198.191.160]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MyNwk-1pPahk09qW-00yty9 for
- <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 08:52:28 +0200
-Message-ID: <6ee3541aa2a6b61703a567650b8e2cf6e2de3aaf.camel@web.de>
-Subject: Re: [git pull] drm for 6.1-rc1
-From:   Bert Karwatzki <spasswolf@web.de>
-To:     linux-kernel@vger.kernel.org
-Date:   Fri, 07 Oct 2022 08:52:26 +0200
+        Fri, 7 Oct 2022 02:53:39 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931676C946
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 23:53:36 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id u189so4159162vsb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 23:53:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xo2HAOYWApt+uBnXx1ssfbK0iPppR/25ymQTC0xAXAY=;
+        b=JqjrXPjPsngbq+RcrzuUTIY8ga2SZlf62d7n4LPwSRbYkPOjKdzJVK9Yh05TfEwj/R
+         7KU63wO7WquwOHU9t61Rd/PpM3UBv+DLB+aLOD+/9DsZjVcpGunquOEq/NZDL61xnN7w
+         yWgX4k1DzhojDIZdZzRyknUNl7EYQi7PgrQE0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Xo2HAOYWApt+uBnXx1ssfbK0iPppR/25ymQTC0xAXAY=;
+        b=yDUgopM0jhOSjvbwWNSsivyx9YK8KbHM96Y9YaiWp63JiX4McP74izh3IDxujpqlJ8
+         iMdb9qcDy+OReHGLMPe40MkbeVQ2SVAl//RrWD9PnxJ9EaQdKfaOGolO4osov1fwV6+L
+         1+tUSZW4bJv58wCXnP4lZ9WyeBHFsMUrDypkE4q1Gdvmh9Yh8dLr29x8PczDTLBMxZIz
+         3IMFLI+mLkg2AnJk8lzry3GU93h/fOEeWgb0vgoMms/2e1ctBHNfq7GIMWcjuHSujD+E
+         BFU2vYy8FDTuftecXow21IfDuvVoa/MUcAXOy+7gNtx9BqhSu3cPm++ZUwGMEOw/tJSp
+         HHZw==
+X-Gm-Message-State: ACrzQf1+31bb4ZihgFo/datEaVNw9LIgHOg/KUcTJ7UPIhG8nHy8VFFc
+        4Cwx+AbEwMJloxUURZJCN259qpGuXRNGu423u34UCA==
+X-Google-Smtp-Source: AMsMyM5Bw7v+A7dz3X1bKXBiH9oshzG1ksFfuTHCWJGnWw050D4ZbNIRgRKapqRJXmh/punzxW+3VR1+ooXCzzsT1Zg=
+X-Received: by 2002:a05:6102:3ed5:b0:386:91a5:a246 with SMTP id
+ n21-20020a0561023ed500b0038691a5a246mr2272190vsv.26.1665125615320; Thu, 06
+ Oct 2022 23:53:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221006212528.103790-1-nfraprado@collabora.com> <20221006212528.103790-5-nfraprado@collabora.com>
+In-Reply-To: <20221006212528.103790-5-nfraprado@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 7 Oct 2022 14:53:24 +0800
+Message-ID: <CAGXv+5F684=hFa42vSuN24eBTGjj7LEQNzog9U8dEQffz0JZMw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] arm64: dts: mediatek: asurada: Enable audio support
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.0-2 
-MIME-Version: 1.0
-X-Provags-ID: V03:K1:O3ZYG7m1/JoX3+Q81gly63hKVN5VF7rzoYPDYMDuoJWvBArY03y
- Yt+CfSFRdL2kW0C1tsaeIxIXNbx3eTI4L0mqQMYae2xHf7UmPTMyE9HMZR4H93K8ANMBrUR
- cIDSVasYL1Giz1ggu6rdWmKbpqWIGJTX1xs978repLJrE0vJhzqV3ZkIIQBWLfv983Lrkbm
- cUX8YfLOeNzWypuVzNRkg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Mp16ZpMR6DY=:NeSSzLKgrfpNoNcNiiixPA
- ooL1ZeNo0KCE6N2l2DZVljlK+41I0tqiZ/7RQAVfmiN7tjIw9d70oZCd2nQW1Iec9VEeqGsB1
- YquaOozcVDFeoft1aCb0+QK7lG0hkVpeMVHRxbWJKcIF38U2n9lHBRgzYvpNj1sXCQ+KV6f9s
- ztjZ/7QUUQQyh/BZ9qSltrehUDOfzuucyiI0H7ILmJfPwrt9w30/0OkXv2PQODbIdeohXmTjN
- iKZPhgDAx1DmGMDa6slVfGX8t1YsX5tGRCLrvlTJP9LjvQLZvJLblLNnU9/kXSo4L9Uv/EmRs
- YwNOcF5JlfM71iGwgNfdel2kYybBljYMAvDc1jL9hZIAp8qGL1M+QbbDVNMit2qPHP1SC+Mbq
- twxK4b+CsFRrnX+6dZifbOSsKERkBC8A4GguhuQ5qjCTy1pBoHfdia49aH9zdof0YgQbB7SyC
- mgyH5MKteSR2Fwl6lCUk9C4+avgAXfEYNZDYovXla5GSob2p0jNYuhuShVRlV6EMlz+eDbyYn
- 04r1kHzI+0p1QNVPHWcsp4peUs1H6xFrroBm0WyJG2AHvT3nU5+ORk1/2SfSLlCFGZsdxXATJ
- R29h4sFz3qmi1ZXn0/1bpDvnQzLTUBRQkvJlNriw/GuI5qXiMhbfNfEaVzU2wI5fD4I2Wu9H5
- t94qKBC9OLQnBcji8XWnXw/tIz3HpVR8ZUHhhqeGc2ztfJB8upmxMvvlGd1kmNRg9jCV2bdtW
- EKhIjAL5FOsWx9L6MlZA5m69GuJpYip7UhJuFTg4AEEQOUjHbYQ6ZpF+DqACnGOrnvkbIXM3d
- 8d/nxpYDv5zfONVIR2efLMocs6mUX/Pq8/jGfiWubLdEwNR+c9JDHPe7BUsLIWnOxGoso78dB
- vVv1WbZTVk9yMftZtMuWBDquS0XBO/+kkBEkj4MyiAXIxIc1isFFSfAHD5TTnU/Vh6tZi4v6p
- NcRVYMZ3CFAS76Hwjx3upte4hp9Pz5NxcnIXoJUpsbRh0pcPUPXprsGb4dHXmlbuPQn4updpX
- GIrrOrZzSRnkkeBc0Hx33bjff4O9e+D/VK+MSFdYeodEtvR/vBneyHMCAkrQGIBcozk/8rKNB
- +FcNahbAqlU9c2C3OmTTBvv+I4xbpjfJaGFOZ2JKd/Q8l58/QYyuilz1IGuWRkrK0VRy1nJkK
- /eYHqQ+nhIWqoary97DdCukiOgR2esxoD52tLBIW4SQxQBSHWtJXzR6RQ/QMwiJXpqaQeGbjj
- qdkiFzn7eHD1qHNOM3fGuaYhE3GM66KPLM1gMA3paNnraU4FxgUVBE/9eDvO715+1qKgFGIoe
- hDeYFUbC0hqIrYld2GRrrowGB7lz4tt6/FRi3CmGaNV99wOxUvSn0jGvYp6uPuqPOYCG1yqnA
- EAddgkpjm5MrUzvyPZYlKR/loo1BI75KLHGjdlo5TGzjMEQkvE4+DYaBn6TTLPvbjIXzrKS+F
- G/BW7pp/y1n8hNhi7XN8w/BCFZxZsxECAvs5lq+0Kr63LEGWpt5Ac/v36X8K5DF1tCigZozIA
- ZQs4Aqk7D8VreT2ENNGmbdzzuUR4oAnOAfW+IZ94Y9tRF
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's also this issue with the drm scheduler. Going back to checking
-the finished fence solves this for me on this device:
-03:00.0 Display controller: Advanced Micro Devices, Inc. [AMD/ATI] Navi
-23 [Radeon RX 6600/6600 XT/6600M] (rev c3)
-https://gitlab.freedesktop.org/drm/amd/-/issues/2179
+On Fri, Oct 7, 2022 at 5:25 AM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
+>
+> Enable audio support for the Asurada platform. This consists of the
+> machine sound card, the rt1015p codec for the speakers, the rt5682 codec
+> for the headset, and the dmic codec for the internal microphone.
+>
+> HDMI audio support is left out for now since the DisplayPort chip
+> required isn't enabled yet.
+>
+> Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
 
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+
+However the UCM you linked to in the cover letter didn't seem to work
+correctly.
