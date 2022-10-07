@@ -2,133 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168175F79FE
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 16:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0645F79FF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 16:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiJGOxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 10:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52448 "EHLO
+        id S229854AbiJGOyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 10:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbiJGOxd (ORCPT
+        with ESMTP id S229623AbiJGOyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 10:53:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 40FBA66846;
-        Fri,  7 Oct 2022 07:53:31 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E45F106F;
-        Fri,  7 Oct 2022 07:53:37 -0700 (PDT)
-Received: from [10.57.65.170] (unknown [10.57.65.170])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5EF863F67D;
-        Fri,  7 Oct 2022 07:53:28 -0700 (PDT)
-Message-ID: <d95eb458-151b-0a31-0aa6-4073ea962d2c@arm.com>
-Date:   Fri, 7 Oct 2022 15:53:21 +0100
+        Fri, 7 Oct 2022 10:54:12 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A706966847;
+        Fri,  7 Oct 2022 07:54:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B6AC4CE1872;
+        Fri,  7 Oct 2022 14:54:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6149C433C1;
+        Fri,  7 Oct 2022 14:54:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665154447;
+        bh=nSNo2OllKvBqhjRhBLV7kwuHdL90pchIhWduLmlIpvo=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ke2X6SFEccKcRJaEJQ+H0iU+5TckpufEZjDMVMSaYCD+tQr1XlFsNdYxSbVh7JZ59
+         a6Jur1q0lsoCjCpIqrXiK8l5P5mN900LjNWYib/KTtyAEhMmFhte06ryIBqDYZ78Bp
+         q//ZdRQ+emB3kjk4NPLcmXq2y5648nwB45Y3mduFT01nwpmRc/mJ/g+IuN/Ay6L13n
+         3OwpQn0PAGj60azWGrWdiRzcqOgF0ZfoyJzIJbAEdUed7ec6uItLKPonglDGf8uimw
+         WA/DpjFwqp482+qD1LOs9XCh7JdmNy4Hszg1kn+0gdi7sONhjXGwvXUFoOzZq8eNWX
+         30fIzxUq5nyLg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 884DC5C0546; Fri,  7 Oct 2022 07:54:06 -0700 (PDT)
+Date:   Fri, 7 Oct 2022 07:54:06 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, neeraj.iitr10@gmail.com,
+        frederic@kernel.org, rostedt@goodmis.org, youssefesmat@google.com,
+        surenb@google.com
+Subject: Re: [PATCH v7 00/11] rcu: call_rcu() power improvements
+Message-ID: <20221007145406.GH4196@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221004024157.2470238-1-joel@joelfernandes.org>
+ <20221006185543.GB4196@paulmck-ThinkPad-P17-Gen-1>
+ <Y0A6S77d6DFgoKzx@pc636>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 2/3] arm64: tegra: Add GPCDMA support for Tegra I2C
-Content-Language: en-GB
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Akhil R <akhilrajeev@nvidia.com>, christian.koenig@amd.com,
-        devicetree@vger.kernel.org, digetx@gmail.com, jonathanh@nvidia.com,
-        ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        sumit.semwal@linaro.org, wsa@kernel.org
-References: <20220906144716.16274-1-akhilrajeev@nvidia.com>
- <20220906144716.16274-3-akhilrajeev@nvidia.com> <Y0AnpYeECoyQchmY@orome>
- <Y0A44EIF74bri/uu@orome>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <Y0A44EIF74bri/uu@orome>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y0A6S77d6DFgoKzx@pc636>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-07 15:34, Thierry Reding wrote:
-> On Fri, Oct 07, 2022 at 03:20:37PM +0200, Thierry Reding wrote:
->> On Tue, Sep 06, 2022 at 08:17:15PM +0530, Akhil R wrote:
->>> Add dma properties to support GPCDMA for I2C in Tegra 186 and later
->>> chips
->>>
->>> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
->>> ---
->>>   arch/arm64/boot/dts/nvidia/tegra186.dtsi | 32 ++++++++++++++++++++++++
->>>   arch/arm64/boot/dts/nvidia/tegra194.dtsi | 32 ++++++++++++++++++++++++
->>>   arch/arm64/boot/dts/nvidia/tegra234.dtsi | 32 ++++++++++++++++++++++++
->>>   3 files changed, 96 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/nvidia/tegra186.dtsi b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
->>> index 59a10fb184f8..3580fbf99091 100644
->>> --- a/arch/arm64/boot/dts/nvidia/tegra186.dtsi
->>> +++ b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
->>> @@ -672,6 +672,10 @@
->>>   		clock-names = "div-clk";
->>>   		resets = <&bpmp TEGRA186_RESET_I2C1>;
->>>   		reset-names = "i2c";
->>> +		iommus = <&smmu TEGRA186_SID_GPCDMA_0>;
->>> +		dma-coherent;
->>
->> I wonder: why do we need the iommus and dma-coherent properties here?
->> The I2C controllers are not directly accessing memory, instead it's the
->> GPCDMA via the dmas/dma-names properties. The GPCDMA already has these
->> properties set, so they seem to be useless here.
+On Fri, Oct 07, 2022 at 04:40:11PM +0200, Uladzislau Rezki wrote:
+> On Thu, Oct 06, 2022 at 11:55:43AM -0700, Paul E. McKenney wrote:
+> > On Tue, Oct 04, 2022 at 02:41:46AM +0000, Joel Fernandes (Google) wrote:
+> > > v7 version of RCU lazy patches based on rcu/next branch.
+> > > 
+> > > To facilitate easier merge, I dropped tracing and other patches and just
+> > > implemented the new changes. I will post the tracing patches later along with
+> > > rcutop as I need to add new tracepoints that Frederic suggested.
+> > > 
+> > > Main recent changes:
+> > > 1. rcu_barrier() wake up only for lazy bypass list.
+> > > 2. Make all call_rcu() default-lazy and add call_rcu_flush() API.
+> > > 3. Take care of some callers using call_rcu_flush() API.
+> > > 4. Several refactorings suggested by Paul/Frederic.
+> > > 5. New call_rcu() to call_rcu_flush() conversions by Joel/Vlad/Paul.
+> > > 
+> > > I am seeing good performance and power with these patches on real ChromeOS x86
+> > > asymmetric hardware.
+> > > 
+> > > Earlier cover letter with lots of details is here:
+> > > https://lore.kernel.org/all/20220901221720.1105021-1-joel@joelfernandes.org/
+> > > 
+> > > List of recent changes:
+> > >     
+> > >     [ Frederic Weisbec: Program the lazy timer only if WAKE_NOT, since other
+> > >       deferral levels wake much earlier so for those it is not needed. ]
+> > >     
+> > >     [ Frederic Weisbec: Use flush flags to keep bypass API code clean. ]
+> > >     
+> > >     [ Frederic Weisbec: Make rcu_barrier() wake up only if main list empty. ]
+> > >     
+> > >     [ Frederic Weisbec: Remove extra 'else if' branch in rcu_nocb_try_bypass(). ]
+> > >     
+> > >     [ Joel: Fix issue where I was not resetting lazy_len after moving it to rdp ]
+> > >     
+> > >     [ Paul/Thomas/Joel: Make call_rcu() default lazy so users don't mess up. ]
+> > >     
+> > >     [ Paul/Frederic : Cosmetic changes, split out wakeup of nocb thread. ]
+> > >     
+> > >     [ Vlad/Joel : More call_rcu -> flush conversions ]
+> > 
+> > Thank you for your continued work on this!
+> > 
+> > I pulled these into an experimental branch, applied Uladzislau's
+> > Tested-by and ran a quick round of rcutorture.
+> > 
+> > From TREE02, TREE03, and TREE09 I got this:
+> > 
+> > In file included from kernel/rcu/tree.c:68:
+> > kernel/rcu/tree.h:449:13: error: ‘wake_nocb_gp’ used but never defined [-Werror]
+> >   449 | static bool wake_nocb_gp(struct rcu_data *rdp, bool force);
+> >       |             ^~~~~~~~~~~~
+> > 
+> > One could argue that this is not a big deal, except that Linus gets a
+> > bit tetchy when this sort of thing shows up in mainline.
+> > 
+> Sorry. I have not tested TREE02, TREE03 and TREE09 scenarios. My goal
+> was to check below functionalities:
 > 
-> Looking at this some more, the reason why we need these is so that the
-> struct device backing these I2C controllers is attached to an IOMMU and
-> the DMA ops are set up correspondingly. Without these, the DMA memory
-> allocated by the I2C controllers will not be mapped through the IOMMU
-> and cause faults because the GPCDMA is the one that needs to access
-> those.
-> 
-> I do recall that we have a similar case for audio where the "sound card"
-> needs to have an iommus property to make sure it allocates memory
-> through the same IOMMU domain as the ADMA, which is the device that ends
-> up doing the actual memory accesses.
-> 
-> Rob, Robin, Will, do you know of a good way other than the DT workaround
-> here to address this? I think ideally we would want to obtain the "DMA
-> parent" of these devices so that we allocate memory for that parent
-> instead of the child. We do have some existing infrastructure for this
-> type of relationship with the __of_get_dma_parent() function as well as
-> the interconnects property, but I wonder if that's really the right way
-> to represent this.
-> 
-> Adding "interconnects" properties would also duplicate the "dmas"
-> properties we already use to obtain the TX and RX DMA channels. One
-> simple way to more accurately do this would be to reach into the DMA
-> engine internals (dma_chan->device->dev) and pass that to dma_alloc_*()
-> to make sure we allocate for the correct device. For audio that could be
-> a bit complicated because most of that code is shared across multiple
-> vendors. I couldn't find any examples where a driver would reach into
-> DMA channels to allocate for the parent, so I'm wondering what other
-> people do to solve this issue. Or if anyone else even has the same
-> issue.
+> - call_rcu_flush() does not introduce any delays once it is queued
+> - call_rcu() does not apply pressure on the RCU-machinery from wake-up point of view
+> - boot-time is not degraded
+> - synchronize_rcu() and rcu_barrier() work as expected
+> - if bypass consists of lazy callbacks the *flush() one has to initiate the offloading
 
-As far as I'm aware that's the correct approach, i.e. if a driver is 
-using an external dmaengine then it's responsible for making DMA 
-mappings for the correct DMA channel device. We ended up being a bit 
-asymmetrical in that the dmaengine driver itself has to take care of its 
-own mapping for the non-memory end of a transfer when an IOMMU is 
-involved - that's what dma_map_resource() was created for, see pl330 and 
-rcar-dmac for examples.
+I am not blaming you, just making people aware of an issue needing
+some resolution.  After all, you only said that you tested it, not that
+you tested all possible corner cases on all possible hardware running
+all possible workloads.  ;-)
 
-The only driver I have first-hand experience with in this context is 
-amba-pl011, using pl330 through an SMMU on the Arm Juno board, but that 
-definitely works fine without DT hacks.
-
-Robin.
-
-> Adding Lars-Peter for the sound/dmaengine helpers and Vinod for general
-> dmaengine. Perhaps they have some thoughts on or experience with this.
-> 
-> Thierry
+							Thanx, Paul
