@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D3E25F78EE
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 15:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 828055F78F8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 15:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiJGN17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 09:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
+        id S229915AbiJGN2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 09:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiJGN14 (ORCPT
+        with ESMTP id S229852AbiJGN2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 09:27:56 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55098804BB
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 06:27:55 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id z97so7034069ede.8
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 06:27:55 -0700 (PDT)
+        Fri, 7 Oct 2022 09:28:24 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675BAD8EE0
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 06:28:22 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id a10so7286518wrm.12
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 06:28:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PORH37wl02w5zim2PpJcX5b14ycsNmFAFsoV/wDCQVg=;
-        b=U8zIpLC9vkt1BxrKzxjy6Cz9Wfr50dEgERMUW7D3MmIk3M/GAnxJb0zX6CzjP1tWVm
-         sh2qvWo/lWg/5UYdKf3IW9vu+3q5HyCpHAJzHMF8Y0so/+inIAUn7rHPiwOY2tNxDGMc
-         mPARgY289vvOo0g1re36cTnA5sXHjurm0HQcJlEystO7CBW4Lxfsma8/vmjCJXAEOznS
-         2PBgX3kVoYBFo3rSe+mtq97swC9VN3P/7LeLbEWtjI7/PiuDN3mH5G/rknAXEZ4TgNbv
-         mn9+Q9n74kZdOKaBq0wbOoY8trlau9Wr0kwO0811xNWR9RCaIbQkALXA88J1xoukgH5O
-         yb3Q==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+NhJXIBatYo7vmxUfSCkvyd6QtE5/cJnLsB7ZobvAfI=;
+        b=ofe98FyuQKGMglUfrhbthGpSUXbPUQ3ihQ0ni94nCqilwncChj9IHcMPPndQi27NU6
+         V8CKg5T0BBxGdAhe9q6OAu6lfdIlcpmzZ4lDH/yzGEUsInuDbpnCkjJ4tNcRFrNHguAl
+         0LddeJnGmItnob4p4+pVBwOCNDDual2xxrNTpAZhxTs1NybDTBlw5JU+0N3F8Cq6/UcH
+         J74xPT8lRpjTriYM6j37S2m1PWMnwhqiA4ViiazUzRmKkPaQZ4CLLwVvd9ogeCX2y/au
+         1Gj+Q1MkKAxuxS4RQl7mIL7Ca1tuKqwLfzIDihwS2WBDtIWfYMzLFxHLjjmijR+77B5o
+         7mFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PORH37wl02w5zim2PpJcX5b14ycsNmFAFsoV/wDCQVg=;
-        b=os6NdBd5FUcw9z2+TKa/7DKDI7vKdFv1hQKhgLY8t2lv1PC5LbyauEMQpqiLHgg57n
-         t+d6V8y5fOtpQclr0cBXp3G8uyoAEv+EeSNOpm0qAtVWMoE22qkz2WGAjAU+mnkavwDf
-         AuP/URlxuNU0wVwT+bgl8U1bYbOCzT/BN7MY5Q82tm2SHNUw19zsovlm8iDXJA/adMNg
-         QR9a7iVHNPt6dy59foQwvwiLMhIDkliR03YN022B6/oxJlxi8deghuQa40AJ7fr/QiqY
-         No8KpWYEkg5+w43YqcQf8DJodawgzVlEFGNHoDqYStqksRTWqr8vmmF8lGOV+sjgdEE/
-         N9Yw==
-X-Gm-Message-State: ACrzQf0npgQO6PoMRaV7WVpljkmbXLO5gEQEU/yRITJfduDjIrrgD9tx
-        47WHHVqhOZXoDEHrAMCrkqE=
-X-Google-Smtp-Source: AMsMyM6dRcRpow+v9ntj3SdSgn+856xu57eMalm4LP36SOxY1H2aCoZRDpopoA4CB96QCMhTyUgivg==
-X-Received: by 2002:a05:6402:2489:b0:454:11de:7698 with SMTP id q9-20020a056402248900b0045411de7698mr4712240eda.214.1665149273742;
-        Fri, 07 Oct 2022 06:27:53 -0700 (PDT)
-Received: from otyshchenko.router ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id cn22-20020a0564020cb600b00459012e5145sm1438183edb.70.2022.10.07.06.27.52
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+NhJXIBatYo7vmxUfSCkvyd6QtE5/cJnLsB7ZobvAfI=;
+        b=CmhUhZYPDRgBzieoXuwGE2EOtiFafXZLWpS7pAEXYcRzhW2MDtpL+GslcH1LB2adjk
+         n7F9bqkmz7plcEiPMh8xyYGgYVV87KtvZxUpUtNqtUxmfJ0RnZDpm/icOR460ziCm4sa
+         aTo5ZvKCvQdrwxT13J3zBULQXYDc90GElQ6EH+Gs9lQVZontGKU7FZrZLiINIdlXdjJX
+         5373nFqf1wp9R2FNq9HbD9jNC4MaIc6fWBI/xe+dCQUgEQlQO0tbzuT3XeiYnzJ3M2ZI
+         gwAWNX0V7CpRHCTkCYUkCnTGNOzGoByv9gMdf1jN4K1+GhZgnQm5ZDITl9bJ4PFjEJA9
+         AazQ==
+X-Gm-Message-State: ACrzQf2yUvXxokCPRMg1ttI+YqXIqZ5kC4w/GwnhOy2MXXW1ya8c3/K7
+        /RS88Sfr2zogmBeg86Eih/eMCA==
+X-Google-Smtp-Source: AMsMyM7KHRjsb7VNPG1/2OrIL453nCw6i8GA+IY9RFDjEsotOk3ij3/WI8siVeGN6kTiY75pM8s+CQ==
+X-Received: by 2002:a5d:6d08:0:b0:22c:cf20:387d with SMTP id e8-20020a5d6d08000000b0022ccf20387dmr3288288wrq.518.1665149300416;
+        Fri, 07 Oct 2022 06:28:20 -0700 (PDT)
+Received: from localhost ([2a01:cb19:85e6:1900:5f1e:d910:dd1e:5b09])
+        by smtp.gmail.com with ESMTPSA id w5-20020a5d6805000000b002285f73f11dsm2585914wru.81.2022.10.07.06.28.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 06:27:53 -0700 (PDT)
-From:   Oleksandr Tyshchenko <olekstysh@gmail.com>
-To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Xenia Ragiadakou <burzalodowa@gmail.com>
-Subject: [PATCH] xen/virtio: Handle cases when page offset > PAGE_SIZE properly
-Date:   Fri,  7 Oct 2022 16:27:36 +0300
-Message-Id: <20221007132736.2275574-1-olekstysh@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 07 Oct 2022 06:28:19 -0700 (PDT)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Eirin Nya <nyanpasu256@gmail.com>, linux-input@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] Input: Remove redundant field elantech_data::y_max
+In-Reply-To: <20220929082119.22112-2-nyanpasu256@gmail.com>
+References: <20220929082119.22112-1-nyanpasu256@gmail.com>
+ <20220929082119.22112-2-nyanpasu256@gmail.com>
+Date:   Fri, 07 Oct 2022 15:28:19 +0200
+Message-ID: <87ilkv7ogc.fsf@mkorpershoek-xps-13-9370.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,60 +68,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Hi Eirin,
 
-Passed to xen_grant_dma_map_page() offset in the page
-can be > PAGE_SIZE even if the guest uses the same page granularity
-as Xen (4KB).
+Thank you for your patch.
 
-Before current patch, if such case happened we ended up providing
-grants for the whole region in xen_grant_dma_map_page() which
-was really unnecessary. The more, we ended up not releasing all
-grants which represented that region in xen_grant_dma_unmap_page().
+On Thu, Sep 29, 2022 at 01:21, Eirin Nya <nyanpasu256@gmail.com> wrote:
 
-Current patch updates the code to be able to deal with such cases.
+> elantech_data::y_max is copied from elantech_device_info::y_max, and
+> neither is mutated after initialization. So remove the redundant
+> variable to prevent future bugs when updating y_max.
+>
+> Signed-off-by: Eirin Nya <nyanpasu256@gmail.com>
+> ---
+>  drivers/input/mouse/elantech.c | 17 ++++++++---------
+>  drivers/input/mouse/elantech.h |  1 -
+>  2 files changed, 8 insertions(+), 10 deletions(-)
 
-Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
----
-Cc: Juergen Gross <jgross@suse.com>
-Cc: Xenia Ragiadakou <burzalodowa@gmail.com>
+Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
 
-Depens on:
-https://lore.kernel.org/xen-devel/20221005174823.1800761-1-olekstysh@gmail.com/
-
-Should go in only after that series.
----
- drivers/xen/grant-dma-ops.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-index c66f56d24013..1385f0e686fe 100644
---- a/drivers/xen/grant-dma-ops.c
-+++ b/drivers/xen/grant-dma-ops.c
-@@ -168,7 +168,9 @@ static dma_addr_t xen_grant_dma_map_page(struct device *dev, struct page *page,
- 					 unsigned long attrs)
- {
- 	struct xen_grant_dma_data *data;
--	unsigned int i, n_pages = PFN_UP(offset + size);
-+	unsigned long dma_offset = offset_in_page(offset),
-+			gfn_offset = PFN_DOWN(offset);
-+	unsigned int i, n_pages = PFN_UP(dma_offset + size);
- 	grant_ref_t grant;
- 	dma_addr_t dma_handle;
- 
-@@ -187,10 +189,10 @@ static dma_addr_t xen_grant_dma_map_page(struct device *dev, struct page *page,
- 
- 	for (i = 0; i < n_pages; i++) {
- 		gnttab_grant_foreign_access_ref(grant + i, data->backend_domid,
--				xen_page_to_gfn(page) + i, dir == DMA_TO_DEVICE);
-+				xen_page_to_gfn(page) + i + gfn_offset, dir == DMA_TO_DEVICE);
- 	}
- 
--	dma_handle = grant_to_dma(grant) + offset;
-+	dma_handle = grant_to_dma(grant) + dma_offset;
- 
- 	return dma_handle;
- }
--- 
-2.25.1
-
+>
+> diff --git a/drivers/input/mouse/elantech.c b/drivers/input/mouse/elantech.c
+> index ece97f8c6a..79e31611fc 100644
+> --- a/drivers/input/mouse/elantech.c
+> +++ b/drivers/input/mouse/elantech.c
+> @@ -360,7 +360,7 @@ static void elantech_report_absolute_v1(struct psmouse *psmouse)
+>  		input_report_abs(dev, ABS_X,
+>  			((packet[1] & 0x0c) << 6) | packet[2]);
+>  		input_report_abs(dev, ABS_Y,
+> -			etd->y_max - (((packet[1] & 0x03) << 8) | packet[3]));
+> +			etd->info.y_max - (((packet[1] & 0x03) << 8) | packet[3]));
+>  	}
+>  
+>  	input_report_key(dev, BTN_TOOL_FINGER, fingers == 1);
+> @@ -435,7 +435,7 @@ static void elantech_report_absolute_v2(struct psmouse *psmouse)
+>  		 * byte 4:  .   .   .   .  y11 y10 y9  y8
+>  		 * byte 5: y7  y6  y5  y4  y3  y2  y1  y0
+>  		 */
+> -		y1 = etd->y_max - (((packet[4] & 0x0f) << 8) | packet[5]);
+> +		y1 = etd->info.y_max - (((packet[4] & 0x0f) << 8) | packet[5]);
+>  
+>  		pres = (packet[1] & 0xf0) | ((packet[4] & 0xf0) >> 4);
+>  		width = ((packet[0] & 0x30) >> 2) | ((packet[3] & 0x30) >> 4);
+> @@ -450,7 +450,7 @@ static void elantech_report_absolute_v2(struct psmouse *psmouse)
+>  		 */
+>  		x1 = (((packet[0] & 0x10) << 4) | packet[1]) << 2;
+>  		/* byte 2: ay7 ay6 ay5 ay4 ay3 ay2 ay1 ay0 */
+> -		y1 = etd->y_max -
+> +		y1 = etd->info.y_max -
+>  			((((packet[0] & 0x20) << 3) | packet[2]) << 2);
+>  		/*
+>  		 * byte 3:  .   .  by8 bx8  .   .   .   .
+> @@ -458,7 +458,7 @@ static void elantech_report_absolute_v2(struct psmouse *psmouse)
+>  		 */
+>  		x2 = (((packet[3] & 0x10) << 4) | packet[4]) << 2;
+>  		/* byte 5: by7 by8 by5 by4 by3 by2 by1 by0 */
+> -		y2 = etd->y_max -
+> +		y2 = etd->info.y_max -
+>  			((((packet[3] & 0x20) << 3) | packet[5]) << 2);
+>  
+>  		/* Unknown so just report sensible values */
+> @@ -579,7 +579,7 @@ static void elantech_report_absolute_v3(struct psmouse *psmouse,
+>  		 * byte 4:  .   .   .   .  y11 y10 y9  y8
+>  		 * byte 5: y7  y6  y5  y4  y3  y2  y1  y0
+>  		 */
+> -		y1 = etd->y_max - (((packet[4] & 0x0f) << 8) | packet[5]);
+> +		y1 = etd->info.y_max - (((packet[4] & 0x0f) << 8) | packet[5]);
+>  		break;
+>  
+>  	case 2:
+> @@ -593,7 +593,7 @@ static void elantech_report_absolute_v3(struct psmouse *psmouse,
+>  			 * byte 4:   .    .    .    .  ay11 ay10 ay9  ay8
+>  			 * byte 5: ay7  ay6  ay5  ay4  ay3  ay2  ay1  ay0
+>  			 */
+> -			etd->mt[0].y = etd->y_max -
+> +			etd->mt[0].y = etd->info.y_max -
+>  				(((packet[4] & 0x0f) << 8) | packet[5]);
+>  			/*
+>  			 * wait for next packet
+> @@ -605,7 +605,7 @@ static void elantech_report_absolute_v3(struct psmouse *psmouse,
+>  		x1 = etd->mt[0].x;
+>  		y1 = etd->mt[0].y;
+>  		x2 = ((packet[1] & 0x0f) << 8) | packet[2];
+> -		y2 = etd->y_max - (((packet[4] & 0x0f) << 8) | packet[5]);
+> +		y2 = etd->info.y_max - (((packet[4] & 0x0f) << 8) | packet[5]);
+>  		break;
+>  	}
+>  
+> @@ -681,7 +681,7 @@ static void process_packet_head_v4(struct psmouse *psmouse)
+>  		return;
+>  
+>  	etd->mt[id].x = ((packet[1] & 0x0f) << 8) | packet[2];
+> -	etd->mt[id].y = etd->y_max - (((packet[4] & 0x0f) << 8) | packet[5]);
+> +	etd->mt[id].y = etd->info.y_max - (((packet[4] & 0x0f) << 8) | packet[5]);
+>  	pres = (packet[1] & 0xf0) | ((packet[4] & 0xf0) >> 4);
+>  	traces = (packet[0] & 0xf0) >> 4;
+>  
+> @@ -1253,7 +1253,6 @@ static int elantech_set_input_params(struct psmouse *psmouse)
+>  		input_abs_set_res(dev, ABS_MT_POSITION_Y, info->y_res);
+>  	}
+>  
+> -	etd->y_max = y_max;
+>  	etd->width = width;
+>  
+>  	return 0;
+> diff --git a/drivers/input/mouse/elantech.h b/drivers/input/mouse/elantech.h
+> index 571e6ca11d..1ec004f72d 100644
+> --- a/drivers/input/mouse/elantech.h
+> +++ b/drivers/input/mouse/elantech.h
+> @@ -180,7 +180,6 @@ struct elantech_data {
+>  	unsigned char reg_25;
+>  	unsigned char reg_26;
+>  	unsigned int single_finger_reports;
+> -	unsigned int y_max;
+>  	unsigned int width;
+>  	struct finger_pos mt[ETP_MAX_FINGERS];
+>  	unsigned char parity[256];
+> -- 
+> 2.37.3
