@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C109A5F7FDB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 23:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAAA85F7FF0
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 23:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiJGVZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 17:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
+        id S229495AbiJGV33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 17:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiJGVY6 (ORCPT
+        with ESMTP id S229628AbiJGV31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 17:24:58 -0400
+        Fri, 7 Oct 2022 17:29:27 -0400
 Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9772F62F2;
-        Fri,  7 Oct 2022 14:24:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F7A8F25C;
+        Fri,  7 Oct 2022 14:29:26 -0700 (PDT)
 Received: from localhost.localdomain (unknown [46.242.14.200])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 103BF40786D7;
-        Fri,  7 Oct 2022 21:24:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 103BF40786D7
+        by mail.ispras.ru (Postfix) with ESMTPSA id 1220440786D8;
+        Fri,  7 Oct 2022 21:29:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 1220440786D8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1665177875;
-        bh=FPLAsDXSrJKXKzu7XVJBAupHoVIjUYLA9XU1WyROiy4=;
+        s=default; t=1665178164;
+        bh=T1srQC60gTAQ5zmFqrvA4KhMvR4V6nXKygZUoh6L5eI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YyBO/mBLBpQRe6SOLc/qpcWBC418xZZRnE/hdhyedvo+1971OKb2LT195forLfw+6
-         J+h4AqNp0hYQqecjwY+7/0k2t8FmNMbFG5CncEhY4cof8TcmQpfnu1B+gkctufRi5R
-         xR6PtXMfRj19cgQod2JOIRfe/V5Jfu8OZxLHaSsI=
+        b=Edli/HVPNdneKVg0Cg20qgzWvhX9XWgJwwhz1fL++uJwWj4ctEYF5r9yVPD6qXnH/
+         wYP0sD++C9vzRuS9iwglZ9kGq8SkE+z8mQ+UYd4nUMzXc0xmP9f3X8xq9g/vwS1jtb
+         vEGQj8jjEoP1SpMZ/mz8aymMEUg+wL4doVr8dJmY=
 From:   Fedor Pchelkin <pchelkin@ispras.ru>
 To:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
         Kalle Valo <kvalo@kernel.org>
@@ -39,9 +39,9 @@ Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
         Alexey Khoroshilov <khoroshilov@ispras.ru>,
         lvc-project@linuxtesting.org,
         Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH v2] ath9k: verify the expected usb_endpoints are present
-Date:   Sat,  8 Oct 2022 00:24:13 +0300
-Message-Id: <20221007212413.266531-1-pchelkin@ispras.ru>
+Subject: [PATCH v3] ath9k: verify the expected usb_endpoints are present
+Date:   Sat,  8 Oct 2022 00:29:16 +0300
+Message-Id: <20221007212916.267004-1-pchelkin@ispras.ru>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <87o7unczd4.fsf@toke.dk>
 References: 
@@ -86,6 +86,7 @@ Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
 Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
 ---
 v1->v2: use reverse x-mas tree ordering of the variable definitions
+v2->v3: fix tab
 
  drivers/net/wireless/ath/ath9k/hif_usb.c | 14 ++++++++++++++
  1 file changed, 14 insertions(+)
@@ -112,7 +113,7 @@ index 4d9002a9d082..7bbbeb411056 100644
 +			usb_endpoint_num(int_in) != USB_REG_IN_PIPE ||
 +			usb_endpoint_num(int_out) != USB_REG_OUT_PIPE) {
 +		dev_err(&udev->dev,
-+						"ath9k_htc: Device endpoint numbers are not the expected ones\n");
++				"ath9k_htc: Device endpoint numbers are not the expected ones\n");
 +		return -ENODEV;
 +	}
 +
