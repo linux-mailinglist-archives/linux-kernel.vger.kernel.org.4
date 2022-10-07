@@ -2,50 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E2D5F78BD
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 15:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 122EB5F78C2
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 15:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbiJGNQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 09:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
+        id S229452AbiJGNRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 09:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiJGNQQ (ORCPT
+        with ESMTP id S229867AbiJGNRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 09:16:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D9FCBFED
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 06:16:14 -0700 (PDT)
+        Fri, 7 Oct 2022 09:17:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9DAD018E
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 06:17:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 785F961D0B
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 13:16:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E96DBC433D6;
-        Fri,  7 Oct 2022 13:16:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BCABCB822E6
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 13:17:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0B4FC433D6;
+        Fri,  7 Oct 2022 13:17:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665148573;
-        bh=UB2Z41XKQq+aDykwR9QkpIVEGsdZTMB900AR+oPYcEQ=;
+        s=k20201202; t=1665148625;
+        bh=f+Qm9GXfjCsCnVzjA7YLDOi76PJFXUc5CeVj8sq1VDU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZSXl1ocwinGvuprFGb7jSMoIdmwB0YlKbG892m+6ou/R7iSAX8Gx9ptlFuniyS4Nw
-         JHbOQgvRYjBdkd64K58+pJGaIy28KfBa9/euUncn7F4+j9Y+DexzKIDx8FN7jZwKqk
-         7KdENGiHEIT1sKmQQAVyr/AzA3sKLGM4paLPiaeJZiNmNJsj0ZsH1NPtkcB3mo7gGb
-         kHyM55Prw/j+w4BdNIq9oTIgG8IOx5yDeLiyud09FNea1c/fFa73FW7N6zckmEbo9W
-         V/7IoYypN5ZdsxG5uFfokuj/DJqJLGXCbPmh8MR7PNv0L2aCL8btpjtrmqblimyNPy
-         wODhS8ksNoB/A==
-Date:   Fri, 7 Oct 2022 14:16:09 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] Backlight for v6.1
-Message-ID: <Y0AmmR2NfKc/Y7Mb@google.com>
-References: <Yz18QA27+gN0oaM3@google.com>
- <CAHk-=whK-q1W-X0q0f_nBJ9sKyta-DVJhEAS4BF_oKAVAUQ4Jw@mail.gmail.com>
+        b=QJf0BJt9dM1tcDlmrMOKLj4V0MvRJU4e4OoEO+1fxptuqC1ZMXdrfpndRUSqJAuja
+         NmXrDVyDK6zWvhOQ9uZ61ybkQIoV57tphhyHED3iWPpkmXHDRQnV/1LCjszGuRRQBl
+         FDHkcwWbuTtf6Fatlu+Dwuingvsj508QbIyvovy0B+xANLZ0ETlWGhpFa6A6QNiJ0f
+         RsVI0KxSc/tjlEwQVKdjIyTQt7aZgkX+t2kCmg9bcRTzT5RMjW4ItU+2QPXzpKBRbj
+         PBxmTHjvp2NjQsY7AmZZcJDpR72sI+/5sOgJVLBLYzMytQ1mZctMqQiUdTlQW127bf
+         /6WSeZ9E4T57g==
+Date:   Fri, 7 Oct 2022 14:17:00 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        catalin.marinas@arm.com
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Neng Chen <nengchen@linux.alibaba.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Hongbo Yao <yaohongbo@linux.alibaba.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers/perf: ALIBABA_UNCORE_DRW_PMU should depend on
+ ACPI
+Message-ID: <20221007131659.GB26341@willie-the-truck>
+References: <2a4407bb598285660fa5e604e56823ddb12bb0aa.1664285774.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=whK-q1W-X0q0f_nBJ9sKyta-DVJhEAS4BF_oKAVAUQ4Jw@mail.gmail.com>
+In-Reply-To: <2a4407bb598285660fa5e604e56823ddb12bb0aa.1664285774.git.geert+renesas@glider.be>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,36 +60,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 05 Oct 2022, Linus Torvalds wrote:
+On Tue, Sep 27, 2022 at 03:37:16PM +0200, Geert Uytterhoeven wrote:
+> The Alibaba T-Head Yitian 710 DDR Sub-system Driveway PMU driver relies
+> solely on ACPI for matching.  Hence add a dependency on ACPI, to prevent
+> asking the user about this driver when configuring a kernel without ACPI
+> support.
+> 
+> Fixes: cf7b61073e4526ca ("drivers/perf: add DDR Sub-System Driveway PMU driver for Yitian 710 SoC")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  drivers/perf/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/perf/Kconfig b/drivers/perf/Kconfig
+> index 44c07ea487f4482a..341010f20b777905 100644
+> --- a/drivers/perf/Kconfig
+> +++ b/drivers/perf/Kconfig
+> @@ -185,7 +185,7 @@ config APPLE_M1_CPU_PMU
+>  
+>  config ALIBABA_UNCORE_DRW_PMU
+>  	tristate "Alibaba T-Head Yitian 710 DDR Sub-system Driveway PMU driver"
+> -	depends on ARM64 || COMPILE_TEST
+> +	depends on (ARM64 && ACPI) || COMPILE_TEST
+>  	help
+>  	  Support for Driveway PMU events monitoring on Yitian 710 DDR
+>  	  Sub-system.
 
-> On Wed, Oct 5, 2022 at 5:44 AM Lee Jones <lee@kernel.org> wrote:
-> >
-> >    - Add support for MediaTek MT6370 Backlight
-> 
-> Hmm. This new driver has a
-> 
->         depends on MFD_MT6370
-> 
-> but there is no such symbol anywhere.
-> 
-> It turns out the same is true of the MT6370 regulator driver that was
-> added during the previous merge window.
-> 
-> I do see that MFD_MT6370 in linux-next, but I don't see any pull
-> request for this, and now that I started looking I do see that we had
-> this already in 6.0.
-> 
-> I do *not* believe that it's ok to randomly take "drivers" that depend
-> on functionality that hasn't even been merged yet, and that are
-> basically just dead code but hidden away this non-obvious way.
-> 
-> I've pulled this, but I want to just state that this is bad, bad, bad.
-> If it has dependencies that aren't met, it damn well shouldn't be sent
-> upstream in a form where upstream can't even build test the thing.
+Acked-by: Will Deacon <will@kernel.org>
 
-PR satisfying this dependency was submitted the following day:
+Another one for Catalin to queue as a fix.
 
-https://lore.kernel.org/all/Yz6Zi7B2RS16sXhT@google.com/
-
--- 
-Lee Jones [李琼斯]
+Will
