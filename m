@@ -2,151 +2,362 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4353B5F75EB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D65CE5F75F2
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiJGJPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 05:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
+        id S229843AbiJGJP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 05:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiJGJPJ (ORCPT
+        with ESMTP id S229896AbiJGJPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 05:15:09 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67FE74DF2A
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 02:15:03 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-165-SM2il4aTNXS-NQtWmWJl3A-1; Fri, 07 Oct 2022 10:14:58 +0100
-X-MC-Unique: SM2il4aTNXS-NQtWmWJl3A-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Fri, 7 Oct
- 2022 10:14:54 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Fri, 7 Oct 2022 10:14:54 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christophe Leroy' <christophe.leroy@csgroup.eu>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        =?utf-8?B?Q2hyaXN0b3BoIELDtmhtd2FsZGVy?= 
-        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "Dave Airlie" <airlied@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Westphal <fw@strlen.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Heiko Carstens" <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        "Hugh Dickins" <hughd@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Jozsef Kadlecsik" <kadlec@netfilter.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Pablo Neira Ayuso" <pablo@netfilter.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        "Russell King" <linux@armlinux.org.uk>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Graf <tgraf@suug.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        =?utf-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
-        Chuck Lever <chuck.lever@oracle.com>, Jan Kara <jack@suse.cz>
-Subject: RE: [PATCH v3 3/5] treewide: use get_random_u32() when possible
-Thread-Topic: [PATCH v3 3/5] treewide: use get_random_u32() when possible
-Thread-Index: AQHY2asa0LDp17FxT0u8eu+L+6kCF64CocNw
-Date:   Fri, 7 Oct 2022 09:14:54 +0000
-Message-ID: <e0c127f9e80146c19fab9f987bb2f588@AcuMS.aculab.com>
-References: <20221006165346.73159-1-Jason@zx2c4.com>
- <20221006165346.73159-4-Jason@zx2c4.com>
- <848ed24c-13ef-6c38-fd13-639b33809194@csgroup.eu>
- <CAHmME9raQ4E00r9r8NyWJ17iSXE_KniTG0onCNAfMmfcGar1eg@mail.gmail.com>
- <f10fcfbf-2da6-cf2d-6027-fbf8b52803e9@csgroup.eu>
- <6396875c-146a-acf5-dd9e-7f93ba1b4bc3@csgroup.eu>
-In-Reply-To: <6396875c-146a-acf5-dd9e-7f93ba1b4bc3@csgroup.eu>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 7 Oct 2022 05:15:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B727EA287C;
+        Fri,  7 Oct 2022 02:15:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5BA461C1D;
+        Fri,  7 Oct 2022 09:15:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D5C1C433C1;
+        Fri,  7 Oct 2022 09:15:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665134140;
+        bh=qVJoQ6YlfJEzLvx32Gk1iCvr34KtLSNoE7vybUBEf/M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vFg7oKfCjVey3WEqhHGHWUeZ7O86HKFqJBQtjwGxKZmu2mmkWTEoTx6EAQnQLTOLF
+         u32dMb288GLNFKRjsNZW2zu2JAAoPqDpgWV+Y1jmAGbJ2/ewuQGnvX1F2ZrjGgb8EY
+         MWPIFuVTtznuxFEQu8D1n1aF/zKjWRqEMoM8ulyX/19JAqF4wdMn3r6948x9qyDPO6
+         pXpf0cAcmEVsQHn8dKwHBAoPveMDJWxczY5f4stbFrDj/OOCt51ETVUXS14rNPgag+
+         CAx6y5aeVLicCeqvCVbIA+bWW/oIFsy5jL8JCRXwPVZqyAkeqIt4ISOalzXH2mH1B+
+         aoLFmE8z+rxJw==
+Date:   Fri, 7 Oct 2022 11:15:30 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     maz@kernel.org, tglx@linutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kw@linux.com, bhelgaas@google.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        peng.fan@nxp.com, aisheng.dong@nxp.com, jdmason@kudzu.us,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        kishon@ti.com, lorenzo.pieralisi@arm.com, ntb@lists.linux.dev,
+        lznuaa@gmail.com, imx@lists.linux.dev,
+        manivannan.sadhasivam@linaro.org
+Subject: Re: [PATCH v12 6/6] PCI: endpoint: Add vNTB MSI support
+Message-ID: <Yz/uMiElbqB3ThGd@lpieralisi>
+References: <20220922161246.20586-1-Frank.Li@nxp.com>
+ <20220922161246.20586-7-Frank.Li@nxp.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220922161246.20586-7-Frank.Li@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQ2hyaXN0b3BoZSBMZXJveQ0KPiBTZW50OiAwNiBPY3RvYmVyIDIwMjIgMTg6NDMNCi4u
-Lg0KPiBCdXQgdGFraW5nIGludG8gYWNjb3VudCB0aGF0IHNwIG11c3QgcmVtYWluIDE2IGJ5dGVz
-IGFsaWduZWQsIHdvdWxkIGl0DQo+IGJlIGJldHRlciB0byBkbyBzb21ldGhpbmcgbGlrZSA/DQo+
-IA0KPiAJc3AgLT0gcHJhbmRvbV91MzJfbWF4KFBBR0VfU0laRSA+PiA0KSA8PCA0Ow0KDQpUaGF0
-IG1ha2VzIG1lIHRoaW5rLi4uDQpJZiBwcmFuZG9tX3UzMl9tYXgoKSBpcyBwYXNzZWQgYSAoY29u
-c3RhbnQpIHBvd2VyIG9mIDIgaXQgZG9lc24ndA0KbmVlZCB0byBkbyB0aGUgbXVsdGlwbHksIGl0
-IGNhbiBqdXN0IGRvIGEgc2hpZnQgcmlnaHQuDQoNCkRvZXNuJ3QgaXQgYWxzbyBhbHdheXMgZ2V0
-IGEgMzJiaXQgcmFuZG9tIHZhbHVlPw0KU28gYWN0dWFsbHkgZ2V0X3JhbmRvbV91MzIoKSAmIFBB
-R0VfTUFTSyAmIH4weGYgaXMgZmFzdGVyIQ0KDQpXaGVuIFBBR0VfU0laRSBpcyA0aywgUEFHRV9T
-SVpFID4+IDQgaXMgMjU2IHNvIGl0IGNvdWxkIHVzZToNCglnZXRfcmFtZG9tX3U4KCkgPDwgNA0K
-DQpZb3UgYWxzbyBzZWVtIHRvIGhhdmUgcmVtb3ZlZCBwcmFuZG9tX3UzMigpIGluIGZhdm91ciBv
-Zg0KZ2V0X3JhbmRvbV91MzIoKSBidXQgaGF2ZSBhZGRlZCBtb3JlIHByYW5kb21feHh4eCgpIGZ1
-bmN0aW9ucy4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJh
-bWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0
-cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+On Thu, Sep 22, 2022 at 11:12:46AM -0500, Frank Li wrote:
+>                       ┌───────┐                   ┌──────────┐
+>                       │       │                   │          │
+>     ┌─────────────┐   │ PCI   │                   │ PCI Host │
+>     │ MSI         │◄┐ │ EP    │                   │          │
+>     │ Controller  │ │ │       │ 3.MSI Write       │          │
+>     └────────┬────┘ └─┼───────┼───────────────────┤          │
+>       ▲      │        │       │                   ├─BAR_n    │
+>       │      └────────┼───────┼──────────────────►│          │
+>       │               │       │ 2.Call Back       │          │
+>       │               │       │   write_msi_msg() │          │
+>       │               │       │                   │          │
+>       │               └───┬───┘                   └──────────┘
+>       │                   │
+>       └───────────────────┘
+>       1.platform_msi_domain_alloc_irqs()
+> 
+> There is no defined way of raising IRQs by PCI host to the PCI endpoint.
+> Only define MSI/MSI-X to let EP notified RC status change.
 
+This picture is misleading, especially (2). IIUC all this patch is
+doing is implementing an NTB DB in the EP, that's it, we should
+reword the commit log as such.
+
+We are in the merge window - it is very likely this patch should
+be postponed to v6.2, I didn't notice that the IRQchip changes
+went in - apologies.
+
+> The memory assigned for BAR region by the PCI host is mapped to the
+> message address of platform msi interrupt controller in PCI Endpoint.
+> Such that, whenever the PCI host writes to the BAR region, it will
+> trigger an IRQ in the Endpoint.
+> 
+> Basic working follow as
+> 1. EP function driver call platform_msi_domain_alloc_irqs() alloc a
+> MSI irq from MSI controller with call back function write_msi_msg();
+> 2. write_msg_msg will config BAR and map to address defined in msi_msg;
+> 3. Host side trigger an IRQ in Endpoint by write to BAR region.
+> 
+> Add MSI support for pci-epf-vntb. Query if system has an MSI controller.
+> Set up doorbell address according to struct msi_msg.
+> 
+> So PCI RC can write this doorbell address to trigger EP side's IRQ.
+> 
+> If no MSI controller exists, fall back to software polling.
+> 
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  drivers/pci/endpoint/functions/pci-epf-vntb.c | 148 +++++++++++++++---
+>  1 file changed, 127 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> index acea753af29ed..8fdeac2201e29 100644
+> --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> @@ -44,6 +44,7 @@
+>  #include <linux/pci-epc.h>
+>  #include <linux/pci-epf.h>
+>  #include <linux/ntb.h>
+> +#include <linux/msi.h>
+>  
+>  static struct workqueue_struct *kpcintb_workqueue;
+>  
+> @@ -137,11 +138,14 @@ struct epf_ntb {
+>  	struct epf_ntb_ctrl *reg;
+>  
+>  	u32 *epf_db;
+> +	phys_addr_t epf_db_phys;
+>  
+>  	phys_addr_t vpci_mw_phy[MAX_MW];
+>  	void __iomem *vpci_mw_addr[MAX_MW];
+>  
+>  	struct delayed_work cmd_handler;
+> +
+> +	int msi_virqbase;
+>  };
+>  
+>  #define to_epf_ntb(epf_group) container_of((epf_group), struct epf_ntb, group)
+> @@ -256,10 +260,13 @@ static void epf_ntb_cmd_handler(struct work_struct *work)
+>  
+>  	ntb = container_of(work, struct epf_ntb, cmd_handler.work);
+>  
+> -	for (i = 1; i < ntb->db_count; i++) {
+> -		if (ntb->epf_db[i]) {
+> -			ntb_db_event(&ntb->ntb, i);
+> -			ntb->epf_db[i] = 0;
+> +	if (!ntb->epf_db_phys) {
+> +		for (i = 1; i < ntb->db_count; i++) {
+> +			if (ntb->epf_db[i]) {
+> +				ntb->db |= 1 << (i - 1);
+> +				ntb_db_event(&ntb->ntb, i);
+> +				ntb->epf_db[i] = 0;
+> +			}
+>  		}
+>  	}
+>  
+> @@ -464,7 +471,7 @@ static int epf_ntb_config_spad_bar_alloc(struct epf_ntb *ntb)
+>  
+>  	for (i = 0; i < ntb->db_count; i++) {
+>  		ntb->reg->db_data[i] = 1 + i;
+> -		ntb->reg->db_offset[i] = 0;
+> +		ntb->reg->db_offset[i] = sizeof(u32) * i;
+
+Why sizeof(u32) ?
+
+>  	}
+>  
+>  	return 0;
+> @@ -517,6 +524,28 @@ static int epf_ntb_configure_interrupt(struct epf_ntb *ntb)
+>  	return 0;
+>  }
+>  
+> +static int epf_ntb_db_size(struct epf_ntb *ntb)
+> +{
+> +	const struct pci_epc_features *epc_features;
+> +	size_t size = sizeof(u32) * ntb->db_count;
+
+Same question.
+
+> +	u32 align;
+> +
+> +	epc_features = pci_epc_get_features(ntb->epf->epc,
+> +					    ntb->epf->func_no,
+> +					    ntb->epf->vfunc_no);
+> +	align = epc_features->align;
+> +
+> +	if (size < 128)
+> +		size = 128;
+> +
+> +	if (align)
+> +		size = ALIGN(size, align);
+> +	else
+> +		size = roundup_pow_of_two(size);
+> +
+> +	return size;
+> +}
+> +
+>  /**
+>   * epf_ntb_db_bar_init() - Configure Doorbell window BARs
+>   * @ntb: NTB device that facilitates communication between HOST and VHOST
+> @@ -540,27 +569,26 @@ static int epf_ntb_db_bar_init(struct epf_ntb *ntb)
+>  					    ntb->epf->func_no,
+>  					    ntb->epf->vfunc_no);
+>  	align = epc_features->align;
+> -
+> -	if (size < 128)
+> -		size = 128;
+> -
+> -	if (align)
+> -		size = ALIGN(size, align);
+> -	else
+> -		size = roundup_pow_of_two(size);
+> +	size = epf_ntb_db_size(ntb);
+>  
+>  	barno = ntb->epf_ntb_bar[BAR_DB];
+> +	epf_bar = &ntb->epf->bar[barno];
+>  
+> -	mw_addr = pci_epf_alloc_space(ntb->epf, size, barno, align, 0);
+> -	if (!mw_addr) {
+> -		dev_err(dev, "Failed to allocate OB address\n");
+> -		return -ENOMEM;
+> +	if (ntb->epf_db_phys) {
+> +		mw_addr = NULL;
+> +		epf_bar->phys_addr = ntb->epf_db_phys;
+> +		epf_bar->barno = barno;
+> +		epf_bar->size = size;
+> +	} else {
+> +		mw_addr = pci_epf_alloc_space(ntb->epf, size, barno, align, 0);
+> +		if (!mw_addr) {
+> +			dev_err(dev, "Failed to allocate doorbell address\n");
+> +			return -ENOMEM;
+> +		}
+>  	}
+>  
+>  	ntb->epf_db = mw_addr;
+>  
+> -	epf_bar = &ntb->epf->bar[barno];
+> -
+>  	ret = pci_epc_set_bar(ntb->epf->epc, ntb->epf->func_no, ntb->epf->vfunc_no, epf_bar);
+>  	if (ret) {
+>  		dev_err(dev, "Doorbell BAR set failed\n");
+> @@ -719,6 +747,83 @@ static int epf_ntb_init_epc_bar(struct epf_ntb *ntb)
+>  	return 0;
+>  }
+>  
+> +#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
+> +static void epf_ntb_write_msi_msg(struct msi_desc *desc, struct msi_msg *msg)
+> +{
+> +	struct epf_ntb *ntb = dev_get_drvdata(desc->dev);
+> +	struct epf_ntb_ctrl *reg = ntb->reg;
+> +	int size = epf_ntb_db_size(ntb);
+> +	u64 addr;
+> +
+> +	addr = msg->address_hi;
+> +	addr <<= 32;
+> +	addr |= msg->address_lo;
+> +
+> +	reg->db_data[desc->msi_index] = msg->data;
+> +
+> +	if (!desc->msi_index)
+> +		ntb->epf_db_phys = round_down(addr, size);
+> +
+> +	reg->db_offset[desc->msi_index] = addr - ntb->epf_db_phys;
+> +}
+> +#endif
+
+Can we move this hunk down into the same #ifdef guard please ?
+
+> +static irqreturn_t epf_ntb_interrupt_handler(int irq, void *data)
+> +{
+> +	struct epf_ntb *ntb = data;
+> +	int index;
+> +
+> +	index = irq - ntb->msi_virqbase;
+> +	ntb->db |= 1 << (index - 1);
+> +	ntb_db_event(&ntb->ntb, index);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
+> +static void epf_ntb_epc_msi_init(struct epf_ntb *ntb)
+> +{
+> +	struct device *dev = &ntb->epf->dev;
+> +	struct irq_domain *domain;
+> +	int virq;
+> +	int ret;
+> +	int i;
+> +
+> +	domain = dev_get_msi_domain(ntb->epf->epc->dev.parent);
+> +	if (!domain)
+> +		return;
+> +
+> +	dev_set_msi_domain(dev, domain);
+> +
+> +	if (platform_msi_domain_alloc_irqs(&ntb->epf->dev,
+> +		ntb->db_count,
+> +		epf_ntb_write_msi_msg)) {
+> +		dev_err(dev, "Can't allocate MSI, falling back to polling mode\n");
+> +		return;
+> +	}
+> +	dev_info(dev, "Using MSI as doorbell\n");
+
+Is it really useful to print this in the kernel log ? dev_dbg seems more
+suitable to me.
+
+> +
+> +	for (i = 0; i < ntb->db_count; i++) {
+> +		virq = msi_get_virq(dev, i);
+> +		ret = devm_request_irq(dev, virq,
+> +			       epf_ntb_interrupt_handler, 0,
+> +			       "pci_epf_vntb", ntb);
+> +
+> +		if (ret) {
+> +			dev_err(dev, "Failed to request doorbell IRQ! Falling back to polling mode");
+> +			ntb->epf_db_phys = 0;
+> +			break;
+
+Doesn't this require a platform_msi_domain_free_irqs() ?
+
+Thanks,
+Lorenzo
+
+> +		}
+> +
+> +		if (!i)
+> +			ntb->msi_virqbase = virq; /* msi start virq number */
+> +	}
+> +}
+> +#else
+> +static void epf_ntb_epc_msi_init(struct epf_ntb *ntb)
+> +{
+> +}
+> +#endif /* CONFIG_GENERIC_MSI_IRQ_DOMAIN */
+>  /**
+>   * epf_ntb_epc_init() - Initialize NTB interface
+>   * @ntb: NTB device that facilitates communication between HOST and VHOST
+> @@ -1320,14 +1425,15 @@ static int epf_ntb_bind(struct pci_epf *epf)
+>  		goto err_bar_alloc;
+>  	}
+>  
+> +	epf_set_drvdata(epf, ntb);
+> +	epf_ntb_epc_msi_init(ntb);
+> +
+>  	ret = epf_ntb_epc_init(ntb);
+>  	if (ret) {
+>  		dev_err(dev, "Failed to initialize EPC\n");
+>  		goto err_bar_alloc;
+>  	}
+>  
+> -	epf_set_drvdata(epf, ntb);
+> -
+>  	pci_space[0] = (ntb->vntb_pid << 16) | ntb->vntb_vid;
+>  	pci_vntb_table[0].vendor = ntb->vntb_vid;
+>  	pci_vntb_table[0].device = ntb->vntb_pid;
+> -- 
+> 2.35.1
+> 
