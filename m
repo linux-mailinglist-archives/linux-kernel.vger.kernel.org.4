@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8F45F7BDA
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 18:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E145F7BDE
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 18:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbiJGQ4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 12:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
+        id S229899AbiJGQ45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 12:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiJGQ4p (ORCPT
+        with ESMTP id S229834AbiJGQ4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 12:56:45 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAC35FDFD
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 09:56:44 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id u10so2798308ilm.5
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 09:56:44 -0700 (PDT)
+        Fri, 7 Oct 2022 12:56:46 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3040F46DB9
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 09:56:45 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id 4so4072355iou.9
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 09:56:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4UKLX7j9DF0b0nVBHqCcizEjwTs/7OhMEZz7ThiWmPU=;
-        b=4XlkKsLZxCrt+c9fmGB5bq2MTyFakYDlhyvSOt757T7suNWNTtXfhxzaLcHiqtH5yD
-         /J6qS/O2YJPeWXDF/LOzsCLN3i9uKcAyuvDvLzX6z9+F4k7G5bikxOcHzaS+b2BAPc14
-         NMKcjMkjJ7eplGMRtkarPXexSfQUOo1BMenVGhCL9/IdP7OJqW4W5MW2uDzaN0iwWm3H
-         Exnsa3Nkdn9g7WVMgmFtbAxQr1OKWGz9dZi4YgDKRSgXAn98OHwfw4Lm2kz3Rjj1HfpA
-         CgTJbpLBY/zARLGF7FlJM2gjujUuUsLZnuBxAyw50Je2StP4d2HAn7rUXZ5MZvBnS8lv
-         dNRQ==
+        bh=RG3Q+CFVM1jwdBZfpkSgMBovuxPpkHVLQimnfbDB7qo=;
+        b=Ccn6u7yVrMjm4PfhysRT3eZJKgn/nieVJoC5uVIx4IaYNlhnUM3QK47Us6ax5DQgkJ
+         90L+c9/TwnUfzgBXT0g3JoyAkM+vHiRL0xr1TUfB86vmCZE4ALJPTL97tAsqgd5k717M
+         c5AzVt5LrbaZJcVczzLXh/1DvVTkNpQGrYsjnlX7zlW+dNB+UAFHe/Cg6pRXnyfTP5Zk
+         PTywbUxXsLI1KEtM0yN6pIeIqS7lGG06PG9Z77r5TrvvRR1hYm9PNQYH/8AtrpoeGrQe
+         ReUinQgm1CytQaM0wKeLii6nqIgy57XSohHaR/JrdcpRIlu0ReF4jnw2sBXKsC/LAHSp
+         DCJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4UKLX7j9DF0b0nVBHqCcizEjwTs/7OhMEZz7ThiWmPU=;
-        b=42AtqEjTgy+ZO9ItI+0nzyeY5ZN7fCxo7r62ml5JCqFLRQ/0q/2ZPMaAGs5wqjx1kE
-         YB5gzB/u+ynbj2G9c4wCdCpJjKI7DTTOv9huQKSH5cplbJ/n97SjeAlVvCOBug/7PB57
-         NCVEFL9vlF/bUa8BwRryaWjg7r20nwFvsYl4o6mucOP4weNIJh758WUYaBwKLBXzcexf
-         wP8oXnCQCDz8+ft2Y4P5WNdjxwDd7dEKqzlqrUejoyI7u/IzVjF/yCyUEK5Q2yeCaZup
-         /vIP5FdLP+7okBTUeT9P+eI+nb1kggUOMIDx/iP+rGZ0dfabn4T+VXHye7DwfseKuKen
-         PNMw==
-X-Gm-Message-State: ACrzQf1fW2x4t7GlYUSX13hG6MhBd3va0oXldhDT9CZtG9F4OkkL8VKd
-        VZHGmXKig/X4n/170dTtXRpD/W7Emjpjhw==
-X-Google-Smtp-Source: AMsMyM4OvaNbHc5o7fDN2kfr0Oa71t2vvJjYaC8Pb78cW2Rj1iHSsk0tf7UB7bsSc96VGdKdM1lWdw==
-X-Received: by 2002:a92:6912:0:b0:2ea:fa2e:462d with SMTP id e18-20020a926912000000b002eafa2e462dmr2830314ilc.155.1665161803214;
-        Fri, 07 Oct 2022 09:56:43 -0700 (PDT)
+        bh=RG3Q+CFVM1jwdBZfpkSgMBovuxPpkHVLQimnfbDB7qo=;
+        b=xTDkdJ1A182LoAkozh6XxXxnJQiX7ctjjq1IC/GRjlN8QpQYVXaLfU/RaHK+osrVsK
+         H1rW4nuvMM+7Z+ooh91zFxo7tw3H7kg+eeZIXzKfkyyVUezcp0RzVdTCtCce7dTWgNgR
+         TUhdUT+/FSrbn3gXMQXVwegiOxn9x14Lb6W8K9efpSnqeruKVSz0/ikdDVpmI1mPoDbk
+         G82Zwsxyo2o6YvGpp8dorv28HtkYCz7LwSzjYRHY/XT579EwYi5OoofwHmhVwce9p7Vc
+         JKbv3uJ/WTc76XzH0uUPhe3JBK3a/qVlUhz+6gWrpbucTiSRxG7Crqjn8UHvCXDFsmsk
+         DVnQ==
+X-Gm-Message-State: ACrzQf1eqlYmAfwVxLsloEs44NQSBx9PQQi15pX+Vpout3xE3nmG8UFp
+        JZ14g3QsRhquWpntYiP+Fp0h+iJHecZnLA==
+X-Google-Smtp-Source: AMsMyM4yKZrnfwt2NxMdj+RlCbLqnMTEgMZPruyOyr65JkMUdnD3dNvnizz9JoX9XFqH/FAnikkodw==
+X-Received: by 2002:a5d:924b:0:b0:6a4:c19d:c5b3 with SMTP id e11-20020a5d924b000000b006a4c19dc5b3mr2740837iol.147.1665161804288;
+        Fri, 07 Oct 2022 09:56:44 -0700 (PDT)
 Received: from m1max.localdomain ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id a6-20020a056e020e0600b002eb5eb4f8f9sm1055584ilk.77.2022.10.07.09.56.42
+        by smtp.gmail.com with ESMTPSA id a6-20020a056e020e0600b002eb5eb4f8f9sm1055584ilk.77.2022.10.07.09.56.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 09:56:42 -0700 (PDT)
+        Fri, 07 Oct 2022 09:56:43 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 1/4] eventpoll: cleanup branches around sleeping for events
-Date:   Fri,  7 Oct 2022 10:56:34 -0600
-Message-Id: <20221007165637.22374-2-axboe@kernel.dk>
+Subject: [PATCH 2/4] eventpoll: split out wait handling
+Date:   Fri,  7 Oct 2022 10:56:35 -0600
+Message-Id: <20221007165637.22374-3-axboe@kernel.dk>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221007165637.22374-1-axboe@kernel.dk>
 References: <20221007165637.22374-1-axboe@kernel.dk>
@@ -70,40 +70,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rather than have two separate branches here, collapse them into a single
-one instead. No functional changes here, just a cleanup in preparation
-for changes in this area.
+In preparation for making changes to how wakeups and sleeps are done,
+move the timeout scheduling into a helper and manage it rather than
+rely on schedule_hrtimeout_range().
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- fs/eventpoll.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ fs/eventpoll.c | 70 ++++++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 56 insertions(+), 14 deletions(-)
 
 diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-index 8b56b94e2f56..8a75ae70e312 100644
+index 8a75ae70e312..01b9dab2b68c 100644
 --- a/fs/eventpoll.c
 +++ b/fs/eventpoll.c
-@@ -1869,14 +1869,15 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
- 		 * important.
+@@ -1762,6 +1762,47 @@ static int ep_autoremove_wake_function(struct wait_queue_entry *wq_entry,
+ 	return ret;
+ }
+ 
++struct epoll_wq {
++	wait_queue_entry_t wait;
++	struct hrtimer timer;
++	bool timed_out;
++};
++
++static enum hrtimer_restart ep_timer(struct hrtimer *timer)
++{
++	struct epoll_wq *ewq = container_of(timer, struct epoll_wq, timer);
++	struct task_struct *task = ewq->wait.private;
++
++	ewq->timed_out = true;
++	wake_up_process(task);
++	return HRTIMER_NORESTART;
++}
++
++static void ep_schedule(struct eventpoll *ep, struct epoll_wq *ewq, ktime_t *to,
++			u64 slack)
++{
++	if (ewq->timed_out)
++		return;
++	if (to && *to == 0) {
++		ewq->timed_out = true;
++		return;
++	}
++	if (!to) {
++		schedule();
++		return;
++	}
++
++	hrtimer_init_on_stack(&ewq->timer, CLOCK_MONOTONIC, HRTIMER_MODE_ABS);
++	ewq->timer.function = ep_timer;
++	hrtimer_set_expires_range_ns(&ewq->timer, *to, slack);
++	hrtimer_start_expires(&ewq->timer, HRTIMER_MODE_ABS);
++
++	schedule();
++
++	hrtimer_cancel(&ewq->timer);
++	destroy_hrtimer_on_stack(&ewq->timer);
++}
++
+ /**
+  * ep_poll - Retrieves ready events, and delivers them to the caller-supplied
+  *           event buffer.
+@@ -1782,13 +1823,15 @@ static int ep_autoremove_wake_function(struct wait_queue_entry *wq_entry,
+ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
+ 		   int maxevents, struct timespec64 *timeout)
+ {
+-	int res, eavail, timed_out = 0;
++	int res, eavail;
+ 	u64 slack = 0;
+-	wait_queue_entry_t wait;
+ 	ktime_t expires, *to = NULL;
++	struct epoll_wq ewq;
+ 
+ 	lockdep_assert_irqs_enabled();
+ 
++	ewq.timed_out = false;
++
+ 	if (timeout && (timeout->tv_sec | timeout->tv_nsec)) {
+ 		slack = select_estimate_accuracy(timeout);
+ 		to = &expires;
+@@ -1798,7 +1841,7 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
+ 		 * Avoid the unnecessary trip to the wait queue loop, if the
+ 		 * caller specified a non blocking operation.
+ 		 */
+-		timed_out = 1;
++		ewq.timed_out = 1;
+ 	}
+ 
+ 	/*
+@@ -1823,10 +1866,10 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
+ 				return res;
+ 		}
+ 
+-		if (timed_out)
++		if (ewq.timed_out)
+ 			return 0;
+ 
+-		eavail = ep_busy_loop(ep, timed_out);
++		eavail = ep_busy_loop(ep, ewq.timed_out);
+ 		if (eavail)
+ 			continue;
+ 
+@@ -1850,8 +1893,8 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
+ 		 * performance issue if a process is killed, causing all of its
+ 		 * threads to wake up without being removed normally.
+ 		 */
+-		init_wait(&wait);
+-		wait.func = ep_autoremove_wake_function;
++		init_wait(&ewq.wait);
++		ewq.wait.func = ep_autoremove_wake_function;
+ 
+ 		write_lock_irq(&ep->lock);
+ 		/*
+@@ -1870,10 +1913,9 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
  		 */
  		eavail = ep_events_available(ep);
--		if (!eavail)
-+		if (!eavail) {
- 			__add_wait_queue_exclusive(&ep->wq, &wait);
--
--		write_unlock_irq(&ep->lock);
--
--		if (!eavail)
-+			write_unlock_irq(&ep->lock);
- 			timed_out = !schedule_hrtimeout_range(to, slack,
- 							      HRTIMER_MODE_ABS);
-+		} else {
-+			write_unlock_irq(&ep->lock);
-+		}
-+
- 		__set_current_state(TASK_RUNNING);
+ 		if (!eavail) {
+-			__add_wait_queue_exclusive(&ep->wq, &wait);
++			__add_wait_queue_exclusive(&ep->wq, &ewq.wait);
+ 			write_unlock_irq(&ep->lock);
+-			timed_out = !schedule_hrtimeout_range(to, slack,
+-							      HRTIMER_MODE_ABS);
++			ep_schedule(ep, &ewq, to, slack);
+ 		} else {
+ 			write_unlock_irq(&ep->lock);
+ 		}
+@@ -1887,7 +1929,7 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
+ 		 */
+ 		eavail = 1;
  
- 		/*
+-		if (!list_empty_careful(&wait.entry)) {
++		if (!list_empty_careful(&ewq.wait.entry)) {
+ 			write_lock_irq(&ep->lock);
+ 			/*
+ 			 * If the thread timed out and is not on the wait queue,
+@@ -1896,9 +1938,9 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
+ 			 * Thus, when wait.entry is empty, it needs to harvest
+ 			 * events.
+ 			 */
+-			if (timed_out)
+-				eavail = list_empty(&wait.entry);
+-			__remove_wait_queue(&ep->wq, &wait);
++			if (ewq.timed_out)
++				eavail = list_empty(&ewq.wait.entry);
++			__remove_wait_queue(&ep->wq, &ewq.wait);
+ 			write_unlock_irq(&ep->lock);
+ 		}
+ 	}
 -- 
 2.35.1
 
