@@ -2,85 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399695F746C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 08:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 308745F746F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 08:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbiJGG4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 02:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
+        id S229591AbiJGG6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 02:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiJGG4g (ORCPT
+        with ESMTP id S229514AbiJGG6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 02:56:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9948DB8C1A
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 23:56:35 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oghHc-0000xc-U9; Fri, 07 Oct 2022 08:56:32 +0200
-Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oghHc-0003F6-5l; Fri, 07 Oct 2022 08:56:32 +0200
-Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oghHb-0096Ut-IG; Fri, 07 Oct 2022 08:56:31 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     linux-pci@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>, stable@vger.kernel.org
-Subject: [PATCH] PCI/sysfs: Fix double free in error path
-Date:   Fri,  7 Oct 2022 08:56:18 +0200
-Message-Id: <20221007065618.2169880-1-s.hauer@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Fri, 7 Oct 2022 02:58:10 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D57FDB41
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 23:58:08 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id bn8so4669415ljb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 23:58:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=nox5N58PUPNJ5yQ3AV4MMMQoVYs4CGRh4FHi/aYZtq8=;
+        b=cmIEcUaEDsgVERCGiwJFsICFmmfj8aGoPKoKJzFg9dKVokuVhnWNsdkJi+jizD9EdW
+         J7sMQP+R7NC0xH0YgSqYhSufWYLp233d+K0fYZ/qLsky5/99jpCAdw3wr6+was66hurw
+         S/mFnuFYVHg5h/oxryT60QiKLeViTkGx4NlpLs+hI2+x4YnZC68Ho35eaNqgZmgvRrBj
+         HfMhVLnvTcxbZt3HCyPcHld9XxBF1iFgW9Zause1Dse3Do7qR9Ckh2byYSo1xFqRcLEj
+         LneiL4XERdQlZYTPz7ytGILkLMDTzJhZSyBmbFE1UR87yTRcguSIMMsTQ9xCqtVGfIwf
+         Z/8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=nox5N58PUPNJ5yQ3AV4MMMQoVYs4CGRh4FHi/aYZtq8=;
+        b=ihk971Mn6Qrn40xgdlOmRt2BGLAZyDjYKDW905pYXYL+aP0rFxtJv1QtvwnnmNEo1Y
+         P+NpK/BkyLBcOt27AbZqKQLHfxu6kegxiNPgpACz2lfYnJUzWXmow5yHuuJ0iPzlC0aH
+         A+wGbXuYsd/G2h/caBMaoCWJotEM3PYYv9qsSH10R9J59d4/QqJXOt8xD5lfLHdSmN1W
+         T+vIZB/8X7XRiU8w+DExBG9mhI2SDKzsyux9H3pPQPA/Zi41WX6f0Dw0fsi4OM69XIdH
+         LeJC9NYoX2pMQ/bz0NQ4KjRSbSqUpXOov3tgBXgw+Jkj2r0k1irGJN3AcpRmKllxrNZ4
+         CKGQ==
+X-Gm-Message-State: ACrzQf3mFLGgnXeJUdDJ1wQOSU4rUrsrvTyvK8jJHhPdNKizAdx2T0u4
+        K6MRK0PSNls5NGM2PyOIK0d5ig==
+X-Google-Smtp-Source: AMsMyM6qoiQIAmh1kbEthnONGWlXkdxK6WQpyoTgkWMObI0QiE5aE0pH2esA9hnjH3V2xb61cNcIeQ==
+X-Received: by 2002:a05:651c:1a0a:b0:26c:d1e:7b3 with SMTP id by10-20020a05651c1a0a00b0026c0d1e07b3mr1221828ljb.160.1665125887244;
+        Thu, 06 Oct 2022 23:58:07 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id j15-20020a056512344f00b0049f9c732858sm168618lfr.254.2022.10.06.23.58.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Oct 2022 23:58:06 -0700 (PDT)
+Message-ID: <f66ebd71-3003-aefe-44ad-ef2cc78bf102@linaro.org>
+Date:   Fri, 7 Oct 2022 08:58:05 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v3 1/2] dt-bindings: it6505: add properties to restrict
+ output bandwidth
+To:     allen.chen@ite.com.tw
+Cc:     Jau-Chih.Tseng@ite.com.tw, Kenneth.Hung@ite.com.tw,
+        Hermes.Wu@ite.com.tw, treapking@chromium.org,
+        andrzej.hajda@intel.com, narmstrong@baylibre.com,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221006020444.15823-1-allen.chen@ite.com.tw>
+ <20221006020444.15823-2-allen.chen@ite.com.tw>
+ <94c660bc-b7eb-1aea-8ae2-0ee7993091fd@linaro.org>
+ <7acf5664832f43fbaa684c19415894c7@ite.com.tw>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <7acf5664832f43fbaa684c19415894c7@ite.com.tw>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When pci_create_attr() fails then pci_remove_resource_files() is called
-which will iterate over the res_attr[_wc] arrays and frees every non
-NULL entry. To avoid a double free here we have to set the failed entry
-to NULL in pci_create_attr() when freeing it.
+On 07/10/2022 05:18, allen.chen@ite.com.tw wrote:
+> hi
+> 
+> -----Original Message-----
+> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> 
+> Sent: Thursday, October 6, 2022 4:17 PM
+> To: Allen Chen (陳柏宇) <allen.chen@ite.com.tw>
+> Cc: Jau-Chih Tseng (曾昭智) <Jau-Chih.Tseng@ite.com.tw>; Kenneth Hung (洪家倫) <Kenneth.Hung@ite.com.tw>; Hermes Wu (吳佳宏) <Hermes.Wu@ite.com.tw>; Pin-yen Lin <treapking@chromium.org>; Andrzej Hajda <andrzej.hajda@intel.com>; Neil Armstrong <narmstrong@baylibre.com>; Robert Foss <robert.foss@linaro.org>; Laurent Pinchart <Laurent.pinchart@ideasonboard.com>; Jonas Karlman <jonas@kwiboo.se>; Jernej Skrabec <jernej.skrabec@gmail.com>; David Airlie <airlied@linux.ie>; Daniel Vetter <daniel@ffwll.ch>; Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>; open list:DRM DRIVERS <dri-devel@lists.freedesktop.org>; open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS <devicetree@vger.kernel.org>; open list <linux-kernel@vger.kernel.org>
+> Subject: Re: [PATCH v3 1/2] dt-bindings: it6505: add properties to restrict output bandwidth
+> 
+> On 06/10/2022 04:04, allen wrote:
+>> From: allen chen <allen.chen@ite.com.tw>
+>>
+>> Add properties to restrict dp output data-lanes and clock.
+>>
+>> Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
+>> Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
+>> ---
+>>  .../bindings/display/bridge/ite,it6505.yaml          | 12 ++++++++++++
+>>  1 file changed, 12 insertions(+)
+>>
+>> diff --git 
+>> a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml 
+>> b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+>> index 833d11b2303a..f5482a614d05 100644
+>> --- a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+>> +++ b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+>> @@ -52,6 +52,16 @@ properties:
+>>      maxItems: 1
+>>      description: extcon specifier for the Power Delivery
+>>  
+>> +  ite,dp-output-data-lane-count:
+>> +    description: restrict the dp output data-lanes with value of 1-4
+> 
+> Drop "with value of 1-4" because it is redundant, but instead explain what this property is about. "Restrict output" is not yet enough.
+> Restrict the number? Or choose specific lanes? Why it cannot be data-lanes from video-interfaces?
+> 
+> ==> DP output bandwidth depends on data-lane-count, so the number of output data-lane-count will restrict output bandwidth.
+> In this dt-binding we don't have output endpoint, so use another property name to configure.
+> If need to use data-lanes, where can we put in this dt-binding?
 
-Fixes: b562ec8f74e4 ("PCI: Don't leak memory if sysfs_create_bin_file() fails")
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: <stable@vger.kernel.org>
----
- drivers/pci/pci-sysfs.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+I see you got review in v2 to rename it, but it still should be the same
+property, if it has similar/same meaning. It can be put here. You just
+need to define its type or reference other schema (e.g. video-interfaces
+if applicable) which defines it.
 
-diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-index fc804e08e3cb5..a07381d46ddae 100644
---- a/drivers/pci/pci-sysfs.c
-+++ b/drivers/pci/pci-sysfs.c
-@@ -1196,8 +1196,13 @@ static int pci_create_attr(struct pci_dev *pdev, int num, int write_combine)
- 	res_attr->size = pci_resource_len(pdev, num);
- 	res_attr->private = (void *)(unsigned long)num;
- 	retval = sysfs_create_bin_file(&pdev->dev.kobj, res_attr);
--	if (retval)
-+	if (retval) {
-+		if (write_combine)
-+			pdev->res_attr_wc[num] = NULL;
-+		else
-+			pdev->res_attr[num] = NULL;
- 		kfree(res_attr);
-+	}
- 
- 	return retval;
- }
--- 
-2.30.2
+Best regards,
+Krzysztof
 
