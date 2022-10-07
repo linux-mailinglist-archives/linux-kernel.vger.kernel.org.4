@@ -2,108 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFE35F74A6
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 09:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E5F5F74A8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 09:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbiJGHXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 03:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53076 "EHLO
+        id S229884AbiJGHZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 03:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiJGHXp (ORCPT
+        with ESMTP id S229712AbiJGHZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 03:23:45 -0400
-Received: from mout.web.de (mout.web.de [212.227.17.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2B0C0687
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 00:23:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
-        t=1665127420; bh=cy8Ct/zdox6eTUJMOHbh6Xzw2LPW+jh13NnxIrEHTvg=;
-        h=X-UI-Sender-Class:Subject:From:Reply-To:To:Date;
-        b=RlUSM52lItw06NOqdpKooSfspkpm/6yFMNDHV4hSpVW6NBMR4AaXnIlLy08sysUJ4
-         y+m+qCGHWRC/XnR06yPZG2ZXa15ImEWgT7LCr1McUBf6i3Q54TnL0K2xRcAPkYbV1P
-         AeSPCDt3OBL8sN8znwsWs7AMef8NtHIVXU8ZSyox2idLQmiiH7f6HjOMwtYwChFq7l
-         gieHHvjnvaYIoob44Csr+/KahQffaM4GFLCYJWplIG4pRZ/ILXTircApZ4B/zN5Etk
-         yGEKUBQ5x7NXpfuu6CBoBxIugMbX+mMZOSjEitZ4rO7jqWBm1Bz0Yw1lDbIMK+PTiL
-         YyKCap3s6o2rQ==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.0.101] ([176.198.191.160]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1N14pE-1pLmj825rG-012hb6 for
- <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 09:23:40 +0200
-Message-ID: <5c0092d617625a2acaf72c1f623b7349a1d666a8.camel@web.de>
-Subject: Re: [git pull] drm for 6.1-rc1
-From:   Bert Karwatzki <spasswolf@web.de>
-Reply-To: torvalds@linux-foundation.org
-To:     linux-kernel@vger.kernel.org
-Date:   Fri, 07 Oct 2022 09:23:40 +0200
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.0-2 
+        Fri, 7 Oct 2022 03:25:10 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A28039B9E
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 00:25:08 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 10so6058037lfy.5
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 00:25:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=z6pbeOdotLRHHyLhHXUxZEFAlmYdp5RIPKSKkUaT36I=;
+        b=kWfYkegF/+NHSvikV88fmsB5HHGNrSmdsbvrlTz+ZjHyvsTnFHTHErFlERfNG4k+mX
+         iXEV5AmyM6hlAKwP9J62BWOrqMCDJ11vqIWOx3qBQJ73nvuy4/4nGEwbFjtg99qZLFUD
+         5YxJFG8AGtHAiOr2F+fh1i6CKLV81PHMY0PDq1nrfeRxWm9+ySayR865kxIjGHDoWkMg
+         YeOBn0+1m2t1a56kyIq7EMWZYkrf7Vixenscdlz9WOaXSwQQMq0utTS0VOEDKTHtdhl2
+         yzqG2R74Nq3zEQZqLpKKVRCN1Wb0oZ4yEDgQGJDuD36I9woMxY1p+/LJNE72rey95LPe
+         GtyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=z6pbeOdotLRHHyLhHXUxZEFAlmYdp5RIPKSKkUaT36I=;
+        b=ZLLLujqBUJXkDOt/ti83yY553aha2M7a46qmRoy2M/8qSkui3vdoowrrX+qxxLJXF8
+         EwaVP+W8xhwdNXijBSdAl8jVcXxQQutBcn1HfsxvXikDJT0hdSGLRazOGwrMDDObUgAw
+         AMU60R/DF7YnHkqcWldpOXFn1Dlx/3GnrOsuLaYdZblF6Fk0ktw0SraYaR4t4y/EQVcA
+         daPXrs1mmpBN4Kf1rqFFJnlEcsCiP7X5mxgc0xAsrPPy2cDALEihBLBDIPW/NAVEjQvB
+         CpDuPeLfW1AARk5Bwqs6e9NbZlOIhHeOvUmN9sKpPD6MN8nAYlKNpfrVJZhmSgPP3acT
+         Nalw==
+X-Gm-Message-State: ACrzQf1vom6Bxnu4AogvlWzI8AjNIZ9tRKWRLqa6a5YXiALwaxqJt2xQ
+        qXVlXoTMocvanu0X4PEyr+6vTA==
+X-Google-Smtp-Source: AMsMyM7SxRlA7vcJhHDTJ/TZj8w8L3BIV84OHGGZg8Q4LrVBRLncdVeqKKKFwQSWXpyYZn2PkGvmkw==
+X-Received: by 2002:ac2:4e03:0:b0:485:74c4:97ce with SMTP id e3-20020ac24e03000000b0048574c497cemr1273773lfr.13.1665127507027;
+        Fri, 07 Oct 2022 00:25:07 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id g6-20020a056512118600b00492dadd8143sm182607lfr.168.2022.10.07.00.25.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Oct 2022 00:25:06 -0700 (PDT)
+Message-ID: <e9fe9674-8b33-dd6f-2db4-1ea4ed8d17af@linaro.org>
+Date:   Fri, 7 Oct 2022 09:25:05 +0200
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:PpN28fbZWf1Hr5iyq6MizhiVGmEQnylCyJtNM9iOQlhWkcA2ZNn
- WXi6qAzjMRXFUX40nyXcDiye4x3qrjg22pKNvjtP/won5iMYvgcTh1zfLIo2Ay//TjGmM73
- 8ajBfC8Fw5ZqL1CfQn0fOst4fEYLWKef094irYIIuFN0LS9Z1CTwhTdWE3hLbkdVBRu03hj
- PgVXb2CUUFMdHHmf7Aucg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:uJvDvEFDw50=:zEzE/5zpgyBUB2cgGOp/xw
- HdcufCieJGdv+Icvn+TsJZeNP0NaDOCxAhrrt+PctJjrPrezcF5Q0QOynbHGgJ8PWAN3hqCUF
- q6gWLkXTTcoJnlT7DeS9KW9gas6v3uGOpzisqiQ3jssHzlHAIVv/UeTZ/mqQ2uu2UTeSUZUyv
- clLoMhfFyLWkXGqTN9AbsoK0U9TBT/8CzYUuUspM/daVrVkw8XedeDjBhkg04tWPHs+qh2x4I
- GPHh7ac7GWkcNpVAFfHcWxahgUj/aGhIchK9fy0Nd7Nt6U3jmpgH+ALL+WDqZSFsbMqeIqTkF
- bz9diCKKZBhnlTZfPo4N4Untm2xKPoIiYZpg3G68eW79sn9EIva/A+D9MTg9heqKRyrNa0HYp
- HXFD7eAWoGjYBF/QRKXzWCOWV7udL5Fx2+dAG5kgjWt0sEbIG9CM50+zXb56kE52b3yrDEMo4
- zpkSlBLFc+crAmb1OCyRQZjt6I/bPXAMgKs4QHWsG5jOaiQKwZJfiHbvicwVPIn44ia3xtSNW
- lZXCqZ4/7GceEx2yW72Z8CHD+IKiHUK5l7dcgJiGXrl3ya0dQmYWSQLvCn/yrhl18qLKIxgAo
- H6qlD0RpcvVIdLjuFIuCAbs2FX1IazzgpMpyGrxNIbw02e2EkZbCrw752siMFJFHKNGk0Fwp8
- 9lK2e2U+t/ADTdT4y/GJ+84RPNDr/FqLIcC9I0NyrvByOWRpQAHtu+S2JY/GDeKqqv25Gjp6J
- Z4jaD6DYAV42/cqG7CtwXh6CAwdA0XjKSjdIvvY09aBEeO6+nCRkK6O8rrKxQOrOc4E9LhRER
- Ms6jVyyazXPwfkmWSWYfZQDrwvQANl4hkqPy0tj8aTsYz6Dt1tCchg2VCMTGJhq6FmcxT8OBx
- LZuvBqngkWNXlbfjTJPMz+Fai2Bu7MZ+FCYE4w0bBHxe4CVO63yUMmIzqrg4ogMgwnTxAD35i
- VL+WO1yrjfAS90NCXgX9mMz75BpZs/+Cm/WkdBYlZY2oO9zT1iCwzAzRSZmE6xRt0A6igS9ha
- d+bEwV1Md20wm44jJ5MP9eqsWYF0Fvg9kqaskSH2Guaq4vI6iYhJKtnkJ6EWM7qWrYyh5QhoI
- N/ZbVZh+EhWiW+DGJUBmZL5LYkPTEa2VxzZ/3ULRThXvcVzkFNbt6ewduB5exeBnn+AvXoUtT
- zmsjXXwb4z67CIQ7W0mPXAFtA4CQmqSn1xIOHT+5BFVXxkIkG8MFTltDp41Yi/ms/Ku+jCVNi
- X8m5JEnjJDRM7Y+tIT5kfQiF6YIKD8tmj9lyMzi4F/nRiIwwsb2vBPNNNdHnhgKF1sWxcFt4i
- mhPsR+ELC9MJXNMc2f930kI1thS9Uja6c0E/1aksyzzJoi+Nvqa/V8xwr/jDFoYmcWshoXRTe
- oSAMpsd9L2awBPXs3Cgzm2SYybkgTmbRY2Zma1HCEzs4nSHEFkS/lu1qJwB/tCg3zn7xrr3kh
- jafbKpGHAiI4WDnHvGTzx4SvuH2ePbOETzPdqWKqpYpkqeyR7+uvNdbGYP0kLkAuLp0ikvuAB
- f5G5p4Z/rhcz0S5upHbJRC9FcLcwy6G7LxbGAmsvmv8Tj
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 5/8] dt-bindings: watchdog: mediatek: Convert mtk-wdt to
+ json-schema
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, nfraprado@collabora.com
+Cc:     angelogioacchino.delregno@collabora.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20221006120715.24815-1-allen-kh.cheng@mediatek.com>
+ <20221006120715.24815-6-allen-kh.cheng@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221006120715.24815-6-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 6, 2022 at 3:48 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->=20
-> On Thu, Oct 6, 2022 at 12:28 PM Alex Deucher <alexdeucher@gmail.com>
-> wrote:
-> >=20
-> > Maybe you are seeing this which is an issue with GPU TLB flushe
-> > which
-> > is kind of sporadic:
-> > https://gitlab.freedesktop.org/drm/amd/-/issues/2113
->=20
-> Well, that seems to be 5.19, and while timing changes (or whatever
-> other software updates) could have made it start trigger, this
->
-> machine
-> has been pretty solid otgerwise.
->=20
-> > Are you seeing any GPU page faults in your kernel log?
->=20
-> Nothing even remotely like that "no-retry page fault" in that issue
-> report. Of course, if it happens just before the whole thing locks
-> up...
+On 06/10/2022 14:07, Allen-KH Cheng wrote:
 
-There's also this issue with the drm scheduler which causes a lockup
-without messages (but with a flashing capslock LED). Going back to
-checking the finished fence solves this for me on this device:
-03:00.0 Display controller: Advanced Micro Devices, Inc. [AMD/ATI] Navi
-23 [Radeon RX 6600/6600 XT/6600M] (rev c3)
-https://gitlab.freedesktop.org/drm/amd/-/issues/2179
+Thank you for your patch. There is something to discuss/improve.
 
 
+> +  - Matthias Brugger <matthias.bgg@gmail.com>
+> +
+> +description:
+> +  The watchdog supports a pre-timeout interrupt that fires
+> +  timeout-sec/2 before the expiry.
+> +
+> +allOf:
+> +  - $ref: watchdog.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+
+This is just one enum in "items", so no need for the "items".
+
+> +              - mediatek,mt2712-wdt
+> +              - mediatek,mt6589-wdt
+> +              - mediatek,mt7986-wdt
+> +              - mediatek,mt8183-wdt
+> +              - mediatek,mt8186-wdt
+> +              - mediatek,mt8192-wdt
+> +              - mediatek,mt8195-wdt
+
+Best regards,
+Krzysztof
 
