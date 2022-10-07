@@ -2,79 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC9F5F7489
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 09:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C5A5F748F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 09:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiJGHGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 03:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
+        id S229853AbiJGHHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 03:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiJGHGm (ORCPT
+        with ESMTP id S229817AbiJGHHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 03:06:42 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371F2A6C08
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 00:06:40 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id d24so466197ljl.9
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 00:06:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=FSmGNYPsHl9Ro1MJ7SK0qxA2b0opEEGQTUXyGcDbh9o=;
-        b=foHGxaipVhE4g1J2J3AKimMGWlMyYJ94BYSHus4iZXvHzycxZHOaxVIcx75vQhOkhM
-         RUVn3+LF8DvwQqMfdRMsxSMAJQngOWfZ6Svfr2JJ+G/4EvJx4bwVbjnmBY4t8CWfPni/
-         aOR68VVLHTz7M7lPiPwoxWld9aXAT2/zkWVus3Zvn8q61bqVvRZ33+lRHBUNJTqjTFbs
-         7XOGhE0fGA7qyBmXMZYY+mSQ5mFW34rU2W0UDjJGmxSIG+Y43UQsQLQ/lMx7EWFebWB4
-         /P3j0y4pT6ICbE7mbZW5+cWBwZvsuC95D1CrY8tVaGHo0rW8nIQJiv1qvS6CfpB+hnHJ
-         9lwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=FSmGNYPsHl9Ro1MJ7SK0qxA2b0opEEGQTUXyGcDbh9o=;
-        b=b5H+I2EZ/6+RPFLqZtPECAbiUBpke4xW0iHX+vzZdlXv9Qfhpdym0C+p4pj0xsgfgs
-         FS2Nij2Dxjiqx86wHmeVdF9KT72dOUOXome/REjfT9sCJuE48arlq9Y/+U8tN+2kR5d3
-         0RMeLmKA+gezEP0jKdNlqXMqpv2yIwabV78WtbNMUXOoCKzE8Hj8kEYFt+aD+pCSxysI
-         H+WCNHvtK2vqKknUInPNWemlIzv919DObMMZ0V1SbDVMLcopdY4IcRV5S3vzkItnCv/R
-         wa8ujM8yB+UhtUYFzyrwcaqKgMO67zAURfWRdcjJlelGI3sShwtKvl6ORdOoNEsxOGhi
-         iC0Q==
-X-Gm-Message-State: ACrzQf3NZfAFhJFgdLmw5rTN26ipowJB7dS40qJDSKYuDPWHxjK4Lluk
-        kVzbdu0TMQfLyHyST0VttDvmUQ==
-X-Google-Smtp-Source: AMsMyM7eIvv5GKIgDiCZIjDDnCooaDnHvZD7wBLGQTTRpllEwxZlb9pUXT4af4QcZRMvuZKVS512JA==
-X-Received: by 2002:a2e:92c8:0:b0:25d:6ddf:e71d with SMTP id k8-20020a2e92c8000000b0025d6ddfe71dmr1129408ljh.170.1665126398407;
-        Fri, 07 Oct 2022 00:06:38 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a17-20020a056512201100b004a27bb1ad62sm173557lfb.205.2022.10.07.00.06.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Oct 2022 00:06:38 -0700 (PDT)
-Message-ID: <4b861177-df32-ab9c-c746-f32f0ee6438d@linaro.org>
-Date:   Fri, 7 Oct 2022 09:06:37 +0200
+        Fri, 7 Oct 2022 03:07:39 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60232A8CFE
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 00:07:38 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oghSJ-00025J-Rl; Fri, 07 Oct 2022 09:07:35 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oghSJ-0007h8-I6; Fri, 07 Oct 2022 09:07:35 +0200
+Date:   Fri, 7 Oct 2022 09:07:35 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     linux-pci@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] PCI/sysfs: Fix double free in error path
+Message-ID: <20221007070735.GX986@pengutronix.de>
+References: <20221007065618.2169880-1-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v3] greatlakes: dts: Add Facebook greatlakes (AST2600) BMC
-Content-Language: en-US
-To:     Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
-        krzysztof.kozlowski@linaro.or
-Cc:     patrick@stwcx.xyz, garnermic@fb.com,
-        Bonnie Lo <Bonnie_Lo@Wiwynn.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org
-References: <20221007055346.3484180-1-Delphine_CC_Chiu@Wiwynn.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221007055346.3484180-1-Delphine_CC_Chiu@Wiwynn.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221007065618.2169880-1-s.hauer@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,41 +53,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/10/2022 07:53, Delphine CC Chiu wrote:
-> Add linux device tree entry related to
-> greatlakes specific devices connected to BMC SoC.
+On Fri, Oct 07, 2022 at 08:56:18AM +0200, Sascha Hauer wrote:
+> When pci_create_attr() fails then pci_remove_resource_files() is called
+> which will iterate over the res_attr[_wc] arrays and frees every non
+> NULL entry. To avoid a double free here we have to set the failed entry
+> to NULL in pci_create_attr() when freeing it.
 > 
-> ---
-> --- v3 - Add documentation of board compatible (bindings)
-> ---    - Add board compatible
-> ---    - Remove the bootargs
-> ---    - Revise the DTS node name
-> ---
-> --- v2 - Add binding document
-> ---
-> --- v1 - Initial draft
 
-This is a friendly reminder during the review process.
+You might consider applying this alternative version instead which IMO
+looks a bit better.
 
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
+Sascha
 
-Thank you.
+-------------------------------8<-----------------------------
 
-> ---
-> 
-> Signed-off-by: Bonnie Lo <Bonnie_Lo@Wiwynn.com>
-> ---
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../dts/aspeed-bmc-facebook-greatlakes.dts    | 241 ++++++++++++++++++
+From fe8e0e6f914c14395c751b7dc165967b12427995 Mon Sep 17 00:00:00 2001
+From: Sascha Hauer <s.hauer@pengutronix.de>
+Date: Fri, 7 Oct 2022 07:35:35 +0200
+Subject: [PATCH] PCI/sysfs: Fix double free in error path
 
-You need to document the binding. I think you already did, but then
-submitted without it. Read the process:
+When pci_create_attr() fails then pci_remove_resource_files() is called
+which will iterate over the res_attr[_wc] arrays and frees every non
+NULL entry. To avoid a double free here set the array entry only after
+it's clear we successfully initialized it.
 
-https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst
+Fixes: b562ec8f74e4 ("PCI: Don't leak memory if sysfs_create_bin_file() fails")
+Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: <stable@vger.kernel.org>
+---
+ drivers/pci/pci-sysfs.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
+index fc804e08e3cb5..6dd4050c9f2ed 100644
+--- a/drivers/pci/pci-sysfs.c
++++ b/drivers/pci/pci-sysfs.c
+@@ -1174,11 +1174,9 @@ static int pci_create_attr(struct pci_dev *pdev, int num, int write_combine)
+ 
+ 	sysfs_bin_attr_init(res_attr);
+ 	if (write_combine) {
+-		pdev->res_attr_wc[num] = res_attr;
+ 		sprintf(res_attr_name, "resource%d_wc", num);
+ 		res_attr->mmap = pci_mmap_resource_wc;
+ 	} else {
+-		pdev->res_attr[num] = res_attr;
+ 		sprintf(res_attr_name, "resource%d", num);
+ 		if (pci_resource_flags(pdev, num) & IORESOURCE_IO) {
+ 			res_attr->read = pci_read_resource_io;
+@@ -1196,10 +1194,17 @@ static int pci_create_attr(struct pci_dev *pdev, int num, int write_combine)
+ 	res_attr->size = pci_resource_len(pdev, num);
+ 	res_attr->private = (void *)(unsigned long)num;
+ 	retval = sysfs_create_bin_file(&pdev->dev.kobj, res_attr);
+-	if (retval)
++	if (retval) {
+ 		kfree(res_attr);
++		return retval;
++	}
++
++	if (write_combine)
++		pdev->res_attr_wc[num] = res_attr;
++	else
++		pdev->res_attr[num] = res_attr;
+ 
+-	return retval;
++	return 0;
+ }
+ 
+ /**
+-- 
+2.30.2
 
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
