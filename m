@@ -2,140 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A68D95F78D7
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 15:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87BCD5F78DD
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 15:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiJGNUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 09:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41816 "EHLO
+        id S229871AbiJGNVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 09:21:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiJGNUo (ORCPT
+        with ESMTP id S229630AbiJGNVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 09:20:44 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EF87EFDA;
-        Fri,  7 Oct 2022 06:20:42 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id bj12so11193722ejb.13;
-        Fri, 07 Oct 2022 06:20:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yN1ILS/XaAxkmv7Qr0HgSkKZ/T+I7TUvBhKMzgNmA/Q=;
-        b=HQToq95gCwSLDQbIkWdRsIH8yaWacVN8QRzXc/0CuCt0rQGSXtL1O8rArUko2jFJNG
-         Xj/0LcjRwJn7Fx6N++EtObGFD9TmLaTduJGPa0JW6QcWarm34wi4CakC372ueT8V4CBX
-         1Dc7AYKMJlZfLezzvZ07zRIhpbJHj+A+vLhxxa3/ew9Co2HcRwxgflKaSNP1HU9FBKXa
-         4d2VQgzo9eBb/NcnWKq58RQL7S4THHiZpVz5zQ4RfadaDWHyl7PDlfetJR9+3mnBU11S
-         qMjbJ+WGUiqldhgnWucTz51zbv2+eMVj0V2crWXdPNUoNDxtI7Sw3vl6MRH85yQv+rxz
-         SGKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yN1ILS/XaAxkmv7Qr0HgSkKZ/T+I7TUvBhKMzgNmA/Q=;
-        b=CfqRcAncz4CQtNnmVNsWxypSgGH+a50/mf6o5t7pLLpM91wSAht0U+m6fGs8T7069M
-         U4HkIx6HIxDvIMJIoatB7IQuqLQ8RJS46x/c1znuq4LpabZcnM1SPAs/Q32uUdE598Tb
-         eo4/Ut8aGmXzBnJVrqM3iud/gr6Hue5fu35zgjlNBbDWa43AOMFUsPLJQB3rkYzNQcxf
-         u5t6IyH4ZE0hCuBssbkvXph7mHbyXqU37kM7aJTen0a1byffkso9F75GRifotZXpBaTK
-         lqStKEutG3mbdvH1b7IYznTp9AYZLdqZ7r2sQEzQCylverbrk+EFqlFmC4tGNoESKoUQ
-         W0aQ==
-X-Gm-Message-State: ACrzQf21CqOtK5BZvtWsi7yTLVo1vNf6mnE8cBv9xReTU+ObXwCoIPZk
-        60xt9Uj/xnZp3KNxUWIy+Ds=
-X-Google-Smtp-Source: AMsMyM4Ub5PwdR3ymkjLuRW2b3AXvLb/WJb1xCbD7ZN8+5Ch8dgi/bOegSQ1xQVmt1i0nEDsb018WQ==
-X-Received: by 2002:a17:907:7203:b0:783:6e65:c0c3 with SMTP id dr3-20020a170907720300b007836e65c0c3mr4085765ejc.227.1665148840549;
-        Fri, 07 Oct 2022 06:20:40 -0700 (PDT)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id l10-20020a1709060cca00b007402796f065sm1207664ejh.132.2022.10.07.06.20.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 06:20:39 -0700 (PDT)
-Date:   Fri, 7 Oct 2022 15:20:37 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     christian.koenig@amd.com, devicetree@vger.kernel.org,
-        digetx@gmail.com, jonathanh@nvidia.com, ldewangan@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, robh+dt@kernel.org,
-        sumit.semwal@linaro.org, wsa@kernel.org
-Subject: Re: [PATCH v2 2/3] arm64: tegra: Add GPCDMA support for Tegra I2C
-Message-ID: <Y0AnpYeECoyQchmY@orome>
-References: <20220906144716.16274-1-akhilrajeev@nvidia.com>
- <20220906144716.16274-3-akhilrajeev@nvidia.com>
+        Fri, 7 Oct 2022 09:21:17 -0400
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA4F79E2ED;
+        Fri,  7 Oct 2022 06:21:12 -0700 (PDT)
+Received: from [192.168.4.25] (unknown [62.77.71.229])
+        by mx.gpxsee.org (Postfix) with ESMTPSA id 1104D44632;
+        Fri,  7 Oct 2022 15:21:10 +0200 (CEST)
+Message-ID: <c04fce1e-63b1-c698-4ac8-746617600f5c@gpxsee.org>
+Date:   Fri, 7 Oct 2022 15:21:09 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="2nh9Rh/eMLM33gB/"
-Content-Disposition: inline
-In-Reply-To: <20220906144716.16274-3-akhilrajeev@nvidia.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH V6 XDMA 0/2] xilinx XDMA driver
+Content-Language: en-US
+To:     Lizhi Hou <lizhi.hou@amd.com>, vkoul@kernel.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        trix@redhat.com
+Cc:     max.zhen@amd.com, sonal.santan@amd.com, larry.liu@amd.com,
+        brian.xu@amd.com
+References: <1664919839-27149-1-git-send-email-lizhi.hou@amd.com>
+ <4e4481e9-0eb9-ac28-b9ff-348adb4dc866@gpxsee.org>
+ <e04c498e-c3f5-9b0f-14cf-56057dd77d4e@amd.com>
+From:   =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>
+In-Reply-To: <e04c498e-c3f5-9b0f-14cf-56057dd77d4e@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 06. 10. 22 19:42, Lizhi Hou wrote:
+> 
+> On 10/6/22 09:37, Martin Tůma wrote:
+>> On 04. 10. 22 23:43, Lizhi Hou wrote:
+>>> Hello,
+>>>
+>>> This V6 of patch series is to provide the platform driver to support the
+>>> Xilinx XDMA subsystem. The XDMA subsystem is used in conjunction with 
+>>> the
+>>> PCI Express IP block to provide high performance data transfer 
+>>> between host
+>>> memory and the card's DMA subsystem. It also provides up to 16 user
+>>> interrupt wires to user logic that generate interrupts to the host.
+>>>
+>>>              +-------+       +-------+       +-----------+
+>>>     PCIe     |       |       |       |       |           |
+>>>     Tx/Rx    |       |       |       |  AXI  |           |
+>>>   <=======>  | PCIE  | <===> | XDMA  | <====>| User Logic|
+>>>              |       |       |       |       |           |
+>>>              +-------+       +-------+       +-----------+
+>>>
+>>> The XDMA has been used for Xilinx Alveo PCIe devices.
+>>> And it is also integrated into Versal ACAP DMA and Bridge Subsystem.
+>>>      https://www.xilinx.com/products/boards-and-kits/alveo.html
+>>> https://docs.xilinx.com/r/en-US/pg344-pcie-dma-versal/Introduction-to-the-DMA-and-Bridge-Subsystems
+>>>
+>>> The device driver for any FPGA based PCIe device which leverages XDMA 
+>>> can
+>>> call the standard dmaengine APIs to discover and use the XDMA subsystem
+>>> without duplicating the XDMA driver code in its own driver.
+>>>
+>>> Changes since v5:
+>>> - Modified user logic interrupt APIs to handle user logic IP which 
+>>> does not
+>>>    have its own register to enable/disable interrupt.
+>>> - Clean up code based on review comments.
+>>>
+>>> Changes since v4:
+>>> - Modified user logic interrupt APIs.
+>>>
+>>> Changes since v3:
+>>> - Added one patch to support user logic interrupt.
+>>>
+>>> Changes since v2:
+>>> - Removed tasklet.
+>>> - Fixed regression bug introduced to V2.
+>>> - Test Robot warning.
+>>>
+>>> Changes since v1:
+>>> - Moved filling hardware descriptor to xdma_prep_device_sg().
+>>> - Changed hardware descriptor enum to "struct xdma_hw_desc".
+>>> - Minor changes from code review comments.
+>>>
+>>> Lizhi Hou (2):
+>>>    dmaengine: xilinx: xdma: Add xilinx xdma driver
+>>>    dmaengine: xilinx: xdma: Add user logic interrupt support
+>>>
+>>>   MAINTAINERS                            |   11 +
+>>>   drivers/dma/Kconfig                    |   13 +
+>>>   drivers/dma/xilinx/Makefile            |    1 +
+>>>   drivers/dma/xilinx/xdma-regs.h         |  171 ++++
+>>>   drivers/dma/xilinx/xdma.c              | 1034 ++++++++++++++++++++++++
+>>>   include/linux/dma/amd_xdma.h           |   16 +
+>>>   include/linux/platform_data/amd_xdma.h |   34 +
+>>>   7 files changed, 1280 insertions(+)
+>>>   create mode 100644 drivers/dma/xilinx/xdma-regs.h
+>>>   create mode 100644 drivers/dma/xilinx/xdma.c
+>>>   create mode 100644 include/linux/dma/amd_xdma.h
+>>>   create mode 100644 include/linux/platform_data/amd_xdma.h
+>>>
+>>
+>> Hi,
+>> I have rewritten our V4L2 driver to use this new XDMA driver, but it 
+>> does not work on our HW (where the previous Xilinx XDMA driver derived 
+>> from the Xilinx sample code worked fine). The driver is sucessfully 
+>> loaded and 4(2+2) DMA channels are successfully created. But when a 
+>> DMA transfer is initiated, I get an error from my PC's DMA chip:
+>>
+>> AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x000a address=0x36a00000 
+>> flags=0x0000]
+>>
+>> and no error from XDMA.
+>>
+>> Does the driver expect some special FPGA IP core configuration? Or is 
+>> there something else I'm missing? My code is quiet similar to what you 
+>> use in your XRT repo on GitHub (there is btw. a bug in the XRT code - 
+>> you do not clear the dma_slave_config struct before using) but in my 
+>> case the DMA transfer triggers the AMD-Vi error and timeouts.
+>>
+>> The code of our driver is attached, the relevant parts are in mgb4_dma.c
+>> and mgb4_core.c.
+>>
+>> M.
+> 
+> Hi Martin,
+> 
+> Thanks for trying this and got a lot thing works. I have read your 
+> driver. Could you call pci_map_sg() before calling prep_sg()? (and 
+> pci_unmap_sg()) after transfer complete?
+> 
+> example: 
+> https://github.com/houlz0507/XRT-1/blob/xdma_v4_usage/src/runtime_src/core/pcie/driver/linux/xocl/subdev/xdma.c#L103
+> 
+> 
+> Thanks,
+> 
+> Lizhi
+> 
 
---2nh9Rh/eMLM33gB/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi,
+That's not the problem, the sg is already mapped by V4L2 videobuf-dma-sg
+(https://elixir.bootlin.com/linux/v6.0/source/drivers/media/v4l2-core/videobuf-dma-sg.c#L285). 
+With the original XDMA driver I was also not mapping the sg and it 
+worked fine. And yes, I have tried it anyway and it didn't help ;-)
 
-On Tue, Sep 06, 2022 at 08:17:15PM +0530, Akhil R wrote:
-> Add dma properties to support GPCDMA for I2C in Tegra 186 and later
-> chips
->=20
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> ---
->  arch/arm64/boot/dts/nvidia/tegra186.dtsi | 32 ++++++++++++++++++++++++
->  arch/arm64/boot/dts/nvidia/tegra194.dtsi | 32 ++++++++++++++++++++++++
->  arch/arm64/boot/dts/nvidia/tegra234.dtsi | 32 ++++++++++++++++++++++++
->  3 files changed, 96 insertions(+)
->=20
-> diff --git a/arch/arm64/boot/dts/nvidia/tegra186.dtsi b/arch/arm64/boot/d=
-ts/nvidia/tegra186.dtsi
-> index 59a10fb184f8..3580fbf99091 100644
-> --- a/arch/arm64/boot/dts/nvidia/tegra186.dtsi
-> +++ b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
-> @@ -672,6 +672,10 @@
->  		clock-names =3D "div-clk";
->  		resets =3D <&bpmp TEGRA186_RESET_I2C1>;
->  		reset-names =3D "i2c";
-> +		iommus =3D <&smmu TEGRA186_SID_GPCDMA_0>;
-> +		dma-coherent;
+So there must be some other problem in your XDMA driver.
 
-I wonder: why do we need the iommus and dma-coherent properties here?
-The I2C controllers are not directly accessing memory, instead it's the
-GPCDMA via the dmas/dma-names properties. The GPCDMA already has these
-properties set, so they seem to be useless here.
-
-I'm asking because they cause a lot of warnings from the DT validators,
-so we either need to remove them (if they are not necessary) or add the
-DT binding documentation for them.
-
-Thierry
-
---2nh9Rh/eMLM33gB/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNAJ6MACgkQ3SOs138+
-s6FrCBAAo6+7wV1IijPKmArINgF4BAJvTVLS3ZBnbDY6Wujxrg2cxqmwk0ey9+sU
-RhmaOy6rQi6l3AVfURxyHbwybwRpRL4fAuaxE8pxND8YqIYxGa8kBu536DuhfxxC
-WARBhPMSrxTqnTq8bw0BzD64PV99kpR79eiwblns44XjsC3HMObcFzCG8/zIVmyb
-QL0cNVHK+hI3SJDLaLfdY+8X8gaVoJi2jF8xJ1+hcBHlZDTLbCIGiY2hBzX8Z4EL
-8uteO/Q9QP7qk5pJ0K5hE/LrB4jHEbxDLwnoumeQLHzxh/LNkn138mIis2KrEBW+
-aN7IZyglYu2gOpi4MPWGPTs9LebQpnB+G6aRI5XqnraNuOOkkaK7FldrU8Fa/xzy
-aABT2fxDA6JiuBpUfFXZVlvj7btlB12CKAwXd8jux8sqn1YpuZVV4aTQSTAKZuBT
-HKbAJrCeTKq8ek/ykjk6kk48RB4PV/JkKwD3XxzbZNhRj+SngT2Ami/r/DvGtYKZ
-T6J6QG9nHAYKpvk+G3uNHGrlJZmsKjvuoMHTnCkfEJPqPCw/ScZgAsk7Bj0Ib/0t
-i+8VEJVVM+PHtM4JTWNdc4UWRdA8bBMa4+quSbnZNv16pHq8BLV+dAEtUL3ZTbr0
-851rF9dc4pfIIl6XodDNem1N4bHNdPDvGmk6/EbPsIriFhDKflg=
-=ENWq
------END PGP SIGNATURE-----
-
---2nh9Rh/eMLM33gB/--
+M.
