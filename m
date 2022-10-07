@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2CA05F787E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 15:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0835F7881
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 15:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiJGNAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 09:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
+        id S229845AbiJGNA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 09:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiJGM74 (ORCPT
+        with ESMTP id S229829AbiJGM76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 08:59:56 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF1318B38;
-        Fri,  7 Oct 2022 05:59:48 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id u10so7206718wrq.2;
-        Fri, 07 Oct 2022 05:59:47 -0700 (PDT)
+        Fri, 7 Oct 2022 08:59:58 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127F92D1D7;
+        Fri,  7 Oct 2022 05:59:49 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id a3so7251550wrt.0;
+        Fri, 07 Oct 2022 05:59:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PVLrACcSKUPhaj5dkzpeft8dc3na+SzUoUyCH0CxQdc=;
-        b=DyWFQsu7X3KCZe7cMwk7WfNuPX+E6P4ASu1VzPNNmhee/7D0jcse1/z8KqM/eThL32
-         x7YhJ3rWXGy/Zz4Y7Gb4ZsDLTyK+8JUVL28uDjBzqS+axCNJmKnD8PTId3Ydbc4rNmjl
-         uuwmT2tQ2woLJtAQpACaMr+cMgcLNBCZ3SwARjA2HsXWGOThUfV34kai+F4PljJ3XxLd
-         0BnfegdCnrVBJVUmdU6KzNa3MjKZXtsJhOifMoAFhFv52dukVxu/hwu1tYsXxRVi/Ail
-         NpB44KgwNCxHPc4dS7ob4IFkLB/Tnznoob/hSDQImfoQG7OxizdKhfciFumeBLkmUUrW
-         pWnA==
+        bh=XbkEIuq95eSoiLeUfE84b7FgReJpboo04kC8dJdnn18=;
+        b=pocDwKv8mQ2RyT1Czn+1mfjjZDgRESJxNBBluLbxiY5ru0U1ZjxTQb9C2jF754obmT
+         LKX8fxJaTsC4LklSmMvGQ1aPaKgWowGEc9QwR/uCxFD3251/oPIxDpzus3LzxUXaBkZO
+         lckxv1lQXvMMAN7z2gQFQAM22EFeD9NnCrvX3laG9jhDx32CcwMkEk7VMoRsFApbRMJf
+         95CoJghNp4Fta5tKbiMwAn0XpK023Yj8Xktk5N+6AL5+S1uXx/AxYIvtmyVPs3PEJCBS
+         Z7Xd7y4UxKzx5oe8psUaiL2QA/Pgdi0UeBw4wwVburOXZ0ewEzj7SmDDWlWXwMxnc6L5
+         tpGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PVLrACcSKUPhaj5dkzpeft8dc3na+SzUoUyCH0CxQdc=;
-        b=unBnrVeld4yoGt3rSWgtu6GOo5NPZ2IlOXt5snbZQvfue9b+UdCP0ZpakSP5FnIFSr
-         CCIJvlpET/D9LQg749K42JnAW1bjMZluzAmabLB2jcyhpzftZfl2VR0tHInPhCyrhBOu
-         +nTJgSpuW2z8bn3DRj81GbMEzzsBMiMNCOkAJFHcANcBNnyRnuih5iBNLbpXptTjot5A
-         q3LPCv/II8iM2UcfK/NRO2u1GMp/5Q21XZfik2U8bQw5BeT+QG+zwDU0JNX5v38Bs0Fh
-         HrxmkyMUZmgaUoRibJB2Y4mlNwslKuxyMiVJADM3gTErT7En8C1SBnGoKG+HOnyegWGF
-         SeXw==
-X-Gm-Message-State: ACrzQf2AyEAq1182PyFu2L7w51lzI4mGN6ycxB/RwtKfHyf+mafHHVx8
-        SmwEqZdSLB4JaQ6YTV7f4Lc=
-X-Google-Smtp-Source: AMsMyM4UqKaqiRWCIrUoQV9U1D8DCBnEWwXVW8JC5m1oy3ts9Y/S2543eendEL5h/L/kDtbdhy4EJw==
-X-Received: by 2002:adf:ec03:0:b0:22e:4d3:bb37 with SMTP id x3-20020adfec03000000b0022e04d3bb37mr3123892wrn.665.1665147587543;
-        Fri, 07 Oct 2022 05:59:47 -0700 (PDT)
+        bh=XbkEIuq95eSoiLeUfE84b7FgReJpboo04kC8dJdnn18=;
+        b=GrBQBN8N181kBcA7t5aGXPvzhD5hJXnOqiUEsWIqH4sVnRLIeo3Ivr2GOk2cN88bNJ
+         +CLgqYzL+og3iKk00WxUZW7sRy45noiMosz91jtDf1TyJn/T91qUrb4BDkLoDpNq7HNW
+         QyFpMExAoujJel4M/Mo1NpaOdHXTsOsEBiMLnwuLccECMLWhbRrLd2uN6fNxnTSZE/Fl
+         RlF03e+BL1IllR7agaAipeo1fGiMKhBqGV+WgQgZIShFOynjKPAloQz92maDDbI1t6PX
+         I+mWqS8iL+QNw9bGj8jbcAHOD+bDwCxwnCdSErAYLcqC1fJZ/6ry0USgDkGuVtsxDgku
+         ElnA==
+X-Gm-Message-State: ACrzQf0bc0Yg+elulhHg3pEQCp1c5w/EknDKIqv9HgbbXUyWCENGtCQs
+        3NVezgW4oa8Oax8sNJidUvI=
+X-Google-Smtp-Source: AMsMyM7/Sdm+Nb59dRAKOoMfQ11vSakY4VD9Gt4DdgEouYfafenFOU93NAAtzGchUyp7CZosrjvxfQ==
+X-Received: by 2002:a05:6000:16c6:b0:22e:5032:f15b with SMTP id h6-20020a05600016c600b0022e5032f15bmr3152640wrf.104.1665147589374;
+        Fri, 07 Oct 2022 05:59:49 -0700 (PDT)
 Received: from localhost.localdomain ([95.183.227.98])
-        by smtp.gmail.com with ESMTPSA id i15-20020adffdcf000000b00223b8168b15sm2008243wrs.66.2022.10.07.05.59.45
+        by smtp.gmail.com with ESMTPSA id i15-20020adffdcf000000b00223b8168b15sm2008243wrs.66.2022.10.07.05.59.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 05:59:47 -0700 (PDT)
+        Fri, 07 Oct 2022 05:59:49 -0700 (PDT)
 From:   Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
 To:     Linus Walleij <linus.walleij@linaro.org>,
@@ -64,10 +64,10 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         Yassine Oudjana <yassine.oudjana@gmail.com>,
         linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 07/10] arm64: dts: mediatek: mt6797: Make pin configuration nodes follow DT bindings
-Date:   Fri,  7 Oct 2022 15:59:01 +0300
-Message-Id: <20221007125904.55371-8-y.oudjana@protonmail.com>
+        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: [PATCH v3 08/10] dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Document MT6765 pin controller
+Date:   Fri,  7 Oct 2022 15:59:02 +0300
+Message-Id: <20221007125904.55371-9-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221007125904.55371-1-y.oudjana@protonmail.com>
 References: <20221007125904.55371-1-y.oudjana@protonmail.com>
@@ -85,99 +85,56 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Add -pins suffix to pin configuration nodes to follow DT bindings
-and pass dtbs_check.
+The MT6765 pin controller has had a driver for a while, but DT
+bindings were never documented for it.
 
 Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- arch/arm64/boot/dts/mediatek/mt6797.dtsi | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ .../pinctrl/mediatek,mt6779-pinctrl.yaml      | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt6797.dtsi b/arch/arm64/boot/dts/mediatek/mt6797.dtsi
-index 15616231022a..0c2b477184ae 100644
---- a/arch/arm64/boot/dts/mediatek/mt6797.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt6797.dtsi
-@@ -135,70 +135,70 @@ pio: pinctrl@10005000 {
- 		gpio-controller;
- 		#gpio-cells = <2>;
+diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
+index cada3530dd0a..71a9aae2cc8c 100644
+--- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
+@@ -18,6 +18,7 @@ description:
+ properties:
+   compatible:
+     enum:
++      - mediatek,mt6765-pinctrl
+       - mediatek,mt6779-pinctrl
+       - mediatek,mt6795-pinctrl
+       - mediatek,mt6797-pinctrl
+@@ -62,6 +63,28 @@ required:
  
--		uart0_pins_a: uart0 {
-+		uart0_pins_a: uart0-pins {
- 			pins0 {
- 				pinmux = <MT6797_GPIO234__FUNC_UTXD0>,
- 					 <MT6797_GPIO235__FUNC_URXD0>;
- 			};
- 		};
- 
--		uart1_pins_a: uart1 {
-+		uart1_pins_a: uart1-pins {
- 			pins1 {
- 				pinmux = <MT6797_GPIO232__FUNC_URXD1>,
- 					 <MT6797_GPIO233__FUNC_UTXD1>;
- 			};
- 		};
- 
--		i2c0_pins_a: i2c0 {
-+		i2c0_pins_a: i2c0-pins {
- 			pins0 {
- 				pinmux = <MT6797_GPIO37__FUNC_SCL0_0>,
- 					 <MT6797_GPIO38__FUNC_SDA0_0>;
- 			};
- 		};
- 
--		i2c1_pins_a: i2c1 {
-+		i2c1_pins_a: i2c1-pins {
- 			pins1 {
- 				pinmux = <MT6797_GPIO55__FUNC_SCL1_0>,
- 					 <MT6797_GPIO56__FUNC_SDA1_0>;
- 			};
- 		};
- 
--		i2c2_pins_a: i2c2 {
-+		i2c2_pins_a: i2c2-pins {
- 			pins2 {
- 				pinmux = <MT6797_GPIO96__FUNC_SCL2_0>,
- 					 <MT6797_GPIO95__FUNC_SDA2_0>;
- 			};
- 		};
- 
--		i2c3_pins_a: i2c3 {
-+		i2c3_pins_a: i2c3-pins {
- 			pins3 {
- 				pinmux = <MT6797_GPIO75__FUNC_SDA3_0>,
- 					 <MT6797_GPIO74__FUNC_SCL3_0>;
- 			};
- 		};
- 
--		i2c4_pins_a: i2c4 {
-+		i2c4_pins_a: i2c4-pins {
- 			pins4 {
- 				pinmux = <MT6797_GPIO238__FUNC_SDA4_0>,
- 					 <MT6797_GPIO239__FUNC_SCL4_0>;
- 			};
- 		};
- 
--		i2c5_pins_a: i2c5 {
-+		i2c5_pins_a: i2c5-pins {
- 			pins5 {
- 				pinmux = <MT6797_GPIO240__FUNC_SDA5_0>,
- 					 <MT6797_GPIO241__FUNC_SCL5_0>;
- 			};
- 		};
- 
--		i2c6_pins_a: i2c6 {
-+		i2c6_pins_a: i2c6-pins {
- 			pins6 {
- 				pinmux = <MT6797_GPIO152__FUNC_SDA6_0>,
- 					 <MT6797_GPIO151__FUNC_SCL6_0>;
- 			};
- 		};
- 
--		i2c7_pins_a: i2c7 {
-+		i2c7_pins_a: i2c7-pins {
- 			pins7 {
- 				pinmux = <MT6797_GPIO154__FUNC_SDA7_0>,
- 					 <MT6797_GPIO153__FUNC_SCL7_0>;
+ allOf:
+   - $ref: "pinctrl.yaml#"
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: mediatek,mt6765-pinctrl
++    then:
++      properties:
++        reg:
++          minItems: 9
++          maxItems: 9
++
++        reg-names:
++          items:
++            - const: iocfg0
++            - const: iocfg1
++            - const: iocfg2
++            - const: iocfg3
++            - const: iocfg4
++            - const: iocfg5
++            - const: iocfg6
++            - const: iocfg7
++            - const: eint
+   - if:
+       properties:
+         compatible:
 -- 
 2.38.0
 
