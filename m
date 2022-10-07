@@ -2,87 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33B705F7A30
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2600B5F7A34
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbiJGPAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 11:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
+        id S229969AbiJGPDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 11:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiJGPAT (ORCPT
+        with ESMTP id S230007AbiJGPDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 11:00:19 -0400
-Received: from mail5.swissbit.com (mail5.swissbit.com [148.251.244.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2AF12D3A;
-        Fri,  7 Oct 2022 08:00:15 -0700 (PDT)
-Received: from mail5.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 685993A175B;
-        Fri,  7 Oct 2022 17:00:13 +0200 (CEST)
-Received: from mail5.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 588CD3A1756;
-        Fri,  7 Oct 2022 17:00:13 +0200 (CEST)
-X-TM-AS-ERS: 10.149.2.42-127.5.254.253
-X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
-X-DDEI-TLS-USAGE: Used
-Received: from ex.swissbit.com (sbdeex04.sbitdom.lan [10.149.2.42])
-        by mail5.swissbit.com (Postfix) with ESMTPS;
-        Fri,  7 Oct 2022 17:00:13 +0200 (CEST)
-Received: from sbdeex04.sbitdom.lan (10.149.2.42) by sbdeex04.sbitdom.lan
- (10.149.2.42) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Fri, 7 Oct 2022
- 17:00:12 +0200
-Received: from sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818]) by
- sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818%9]) with mapi id
- 15.02.1118.009; Fri, 7 Oct 2022 17:00:09 +0200
-From:   =?utf-8?B?Q2hyaXN0aWFuIEzDtmhsZQ==?= <CLoehle@hyperstone.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-CC:     Adrian Hunter <adrian.hunter@intel.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 1/2] mmc: block: Remove error check of hw_reset on reset
-Thread-Topic: [PATCH 1/2] mmc: block: Remove error check of hw_reset on reset
-Thread-Index: AdjZiMURb3moNmapTDOMC5quWhQ63QAtAFmAAAf8AIA=
-Date:   Fri, 7 Oct 2022 15:00:09 +0000
-Message-ID: <8d6277a6c1c8414a924908085e36ca26@hyperstone.com>
-References: <cc0d807fbd2f4001adef8728f957c696@hyperstone.com>
- <CAPDyKFpvsDoLherwwyR5f7oJ0Fdwu6HV0MLgX+DrHkXkQrwbLQ@mail.gmail.com>
-In-Reply-To: <CAPDyKFpvsDoLherwwyR5f7oJ0Fdwu6HV0MLgX+DrHkXkQrwbLQ@mail.gmail.com>
-Accept-Language: en-US, de-DE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.242.2.22]
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 7 Oct 2022 11:03:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC26EDD88C
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 08:03:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665155025;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G8ttGtE2a2pTgoA/DqN+azedYAoX3sBGph+P0+5Qq/M=;
+        b=WDKng4SfpMwQctJO1joseSzf02e3hIWfQisCKzp3ivLH6Pg5kouzktGJJrgopqB3J4oI7y
+        69s5z4zzta+pkhmM1P6KD06xiRirTFFg7ZH7tEU3WrZNHplZvgiHbBym1yydqnmiUbcQKk
+        DyFEUvqocOtD37RBwKGfeRjC327sI8k=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-500-_W7al9XuO-m-9MJk3OAWhw-1; Fri, 07 Oct 2022 11:03:43 -0400
+X-MC-Unique: _W7al9XuO-m-9MJk3OAWhw-1
+Received: by mail-qk1-f200.google.com with SMTP id h8-20020a05620a284800b006b5c98f09fbso3981044qkp.21
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 08:03:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G8ttGtE2a2pTgoA/DqN+azedYAoX3sBGph+P0+5Qq/M=;
+        b=wK46LuNJ/W31V9w+tMD4ELTL3PIfVths5aD2INhQxXrUHOERttVQY2rt/7yOz0hYzI
+         ei+MkHUcl2KgaC62EWY2imXu3DDoG8qXvw0woZW88n8XAO0DJzCt3gBOluqp67pcNrDU
+         AXUxSg3glKxmoCs+noS4mu1oXV54d99U4rl0mbMXAumzw5IXIGNvol+t3Be2g+uFL77Y
+         ORWbMV5sxf6TlRtd4EN8F4SKHTalTFBI2mTG65kJ9g82r2ByQHUkcvukrGzjqMnV2Vae
+         Ja6WQauYNR/N6O7OWDgxKlcwly2DqyfaZ7lVwN6PraYhw4UTHydHXePjvWjyFal612wo
+         KpQQ==
+X-Gm-Message-State: ACrzQf25al9xjIiNyyE+2iuC+Q6PJn+B+GUPkGp8hUO7BsjAoaWI154k
+        O7amJjF+eNxb+q52YSOxwNoGGBOSIBp2ulcmcQGRcJoSFIxYtue7SRMK1rfaiqA+ApeC6fhan/S
+        NE5IzyWFXyXWD8m69BVbzDPym
+X-Received: by 2002:a05:622a:5cb:b0:394:8a8c:7063 with SMTP id d11-20020a05622a05cb00b003948a8c7063mr4558080qtb.330.1665155023532;
+        Fri, 07 Oct 2022 08:03:43 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6rKdQz36a0mgxBntg7slDBs/JqYYsZlFJrYaDVhGwd+e+Z7Fl4Xv1Pf4YaXvUgtvGqcQ2Dsg==
+X-Received: by 2002:a05:622a:5cb:b0:394:8a8c:7063 with SMTP id d11-20020a05622a05cb00b003948a8c7063mr4558054qtb.330.1665155023292;
+        Fri, 07 Oct 2022 08:03:43 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id v1-20020a05620a0f0100b006bb8b5b79efsm2339333qkl.129.2022.10.07.08.03.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 08:03:42 -0700 (PDT)
+Date:   Fri, 7 Oct 2022 11:03:41 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v3 2/3] kvm: Add new pfn error KVM_PFN_ERR_SIGPENDING
+Message-ID: <Y0A/zTD/KhiyLkcg@x1n>
+References: <20220817003614.58900-1-peterx@redhat.com>
+ <20220817003614.58900-3-peterx@redhat.com>
+ <Yz+DRTfdFGmSR7Mq@google.com>
 MIME-Version: 1.0
-X-TMASE-Version: DDEI-5.1-9.0.1002-27188.000
-X-TMASE-Result: 10--7.203000-10.000000
-X-TMASE-MatchedRID: BFQSNthdAqLUL3YCMmnG4vHkpkyUphL9kYC3rjkUXRIO+Vu0Lo01HwYQ
-        A2yc++RYpqXAH7H2REn+UMZCE8h83zF/ZjNXMgkjBe3KRVyu+k1kwkcTpSH1opsoi2XrUn/J+ZL
-        5o+vRV7wDpAZ2/B/BlndkDsyT8WoOavP8b9lJtWr6C0ePs7A07RQEL0GGu6SDY9hTeCVAf4BudH
-        BuiX/oYBeQR30Ut74RqrR89ANDRzY=
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-TMASE-XGENCLOUD: 883a19fc-630e-46c5-97c3-da13a4be1491-0-0-200-0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yz+DRTfdFGmSR7Mq@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBZZXMsIHRoaXMgaXMgY2VydGFpbmx5IHJlc3RvcmluZyB0aGUgYmVoYXZpb3VyIGFuZCBmaXhp
-bmcgYSBidWcuIFRoYW5rcyENCj4gDQo+IEhvd2V2ZXIsIEkgZG8gd29uZGVyIGFib3V0IHdoYXQn
-cyB0aGUgcG9pbnQgb2YgdHJ5aW5nIHRvIHN3aXRjaCBiYWNrIHRvIHRoZSBjb3JyZWN0IHBhcnRp
-dGlvbiBpZiB0aGUgbW1jX2h3X3Jlc2V0KCkgPiBmYWlsZWQgKHJldHVybmVkIGEgbmVnYXRpdmUg
-ZXJyb3IgY29kZSkuIEl0IGxvb2tzIGxpa2UgdGhhdCBzaG91bGRuJ3QgbWF0dGVyLCBpZiB0aGUg
-cmVzZXQgZmFpbGVkIHdlIGFyZSBzY3Jld2VkIGFueXdheSwgPiByaWdodD8NCg0KSSBhZ3JlZSB3
-aXRoIHlvdSwgdGhlIG9ubHkgcmVhc29uIGZvciBpdCBpcyB0byBrZWVwIGJlaGF2aW9yIGluIGxp
-bmUgd2l0aCBlcnIgIT0gLUVPUE5PVFNVUFAsDQpGb3IgdGhlIGNhc2UgdGhhdCBuZWl0aGVyIG9m
-IHlvdSByZW1lbWJlcnMgdGhlIG9yaWdpbmFsIGludGVudCwgSSdsbCBzZW5kIGEgdjIuDQoNClJl
-Z2FyZHMsDQpDaHJpc3RpYW4NCg0KSHlwZXJzdG9uZSBHbWJIIHwgUmVpY2hlbmF1c3RyLiAzOWEg
-IHwgNzg0NjcgS29uc3RhbnoKTWFuYWdpbmcgRGlyZWN0b3I6IERyLiBKYW4gUGV0ZXIgQmVybnMu
-CkNvbW1lcmNpYWwgcmVnaXN0ZXIgb2YgbG9jYWwgY291cnRzOiBGcmVpYnVyZyBIUkIzODE3ODI=
+On Fri, Oct 07, 2022 at 01:39:17AM +0000, Sean Christopherson wrote:
+> On Tue, Aug 16, 2022, Peter Xu wrote:
+> > Since at it, renaming kvm_handle_bad_page to kvm_handle_error_pfn assuming
+> 
+> Please put parantheses after function names, e.g. kvm_handle_bad_page().
+> 
+> > that'll match better with what it does, e.g. KVM_PFN_ERR_SIGPENDING is not
+> > accurately a bad page but just one kind of errors.
+> 
+> ...
+> 
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index 3e1317325e1f..23dc46da2f18 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -3134,8 +3134,13 @@ static void kvm_send_hwpoison_signal(unsigned long address, struct task_struct *
+> >  	send_sig_mceerr(BUS_MCEERR_AR, (void __user *)address, PAGE_SHIFT, tsk);
+> >  }
+> >  
+> > -static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
+> > +static int kvm_handle_error_pfn(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
+> >  {
+> > +	if (is_sigpending_pfn(pfn)) {
+> > +		kvm_handle_signal_exit(vcpu);
+> > +		return -EINTR;
+> > +	}
+> 
+> ...
+> 
+> > @@ -2648,9 +2651,12 @@ kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool *async,
+> >  	if (atomic)
+> >  		return KVM_PFN_ERR_FAULT;
+> >  
+> > -	npages = hva_to_pfn_slow(addr, async, write_fault, writable, &pfn);
+> > +	npages = hva_to_pfn_slow(addr, async, write_fault, interruptible,
+> > +				 writable, &pfn);
+> >  	if (npages == 1)
+> >  		return pfn;
+> > +	if (npages == -EINTR)
+> > +		return KVM_PFN_ERR_SIGPENDING;
+> 
+> This patch should be split into 3 parts:
+> 
+>   1. Add KVM_PFN_ERR_SIGPENDING and the above code
+>   2. Add the interruptible flag
+>   3. Add handling in x86 and rename kvm_handle_bad_page()
+> 
+> With #3 merged with patch 3.
+> 
+> That was if there's oddball arch code that reacts poorly to KVM_PFN_ERR_SIGPENDING,
+> those errors will bisect to #1.
+> 
+> And if there's a typo in the plumbing, that bisects to #2.
+> 
+> And if something goes sideways in x86, those bugs bisect to #3 (patch 3), and it's
+> easy to revert just the x86 changes (though I can't imagine that's likely).
+
+Yeah the x86 change in this patch is indeed a bit weird with the generic
+subject.  All points taken, thanks.
+
+-- 
+Peter Xu
 
