@@ -2,154 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81055F778F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 13:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3766F5F7793
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 13:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbiJGLjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 07:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45138 "EHLO
+        id S229768AbiJGLjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 07:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiJGLjc (ORCPT
+        with ESMTP id S229725AbiJGLjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 07:39:32 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80078.outbound.protection.outlook.com [40.107.8.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B8C53A64;
-        Fri,  7 Oct 2022 04:39:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l8zF5t7zlPQj7jSUQEch5GkWhNiQ05q3zEgKb+BZ6+QqjeJNdv9ORtluj+o0BidodMajqRKw7HkwkkIDx+0YGeGWAp7uKAjBC+9ERXlY1Q4vik0L8Ghd6FgHl8ddiiFWNWXVTny1hZH0ZkWBh5GhzZAfhH9tjJ4vhl3loHf+RVP6xR6GiwoajDCCzHyblCN+wDb8cpg/cnf/vtCGd7RPOIL1JBggBgxr114/++Ojv2ug8WJpeiPM8dk0nS2Ts2QhDi6fNwtTFwODH/8Cb1heP9WWnZeSwez4oXMlKHiPXEM5WzfRj8J/AbhgyzLf+Udd648+oOZOmI3DcADKaDRSxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kBLs5vwak3NjfENvDnAYvLsTnccP+BRHdV2Te+rhT2w=;
- b=Z+65HF3TGHm3vC0YVPy9Fsm7XrB0LAVHkeoKlcCslZdwb3TXLIZZWGaMLZS7sxKVhGLqKMe3rAvFGC8RevgAu10Q8zzXb1Bc9QMr9Kr9Bdg5icJqp74nXNpbaxK10foYi9cpjznaqfv2isLgNtrLjd6jzAmrG3lz0+LHOHg2c7m7+Zc/O9WovfZAW23GXQy/51NEWszq7+Sar8MDl93Pk6ZIlcK9DcDDxGM6M8WAZ98q4Eq4rV4OZBs6CUIh1vjetpF2axNVpuloZ0NfavSPWiGkeghHrenZYtOafq3X9LKSIAphc9ETdRKSSNLkVDc7C+cRCLZA7fhaRRHGV1cqzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kBLs5vwak3NjfENvDnAYvLsTnccP+BRHdV2Te+rhT2w=;
- b=USFpzqaSypqjviyph88EhY+4uqmpEFOsEjLq9OBbPbWwIhbypMOICnJMEvGlt07CT6zStH3dWTXz8Ua5JITLLgVJCYaQmCM5AyvUTlbAWJm8kbOCj38eYgKAQrjBbvu18P9Up+WHSH9OG/8g9iKTTANs88f5mUBQqW/MkgpSTVw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB6407.eurprd04.prod.outlook.com (2603:10a6:20b:d9::10)
- by AM7PR04MB6933.eurprd04.prod.outlook.com (2603:10a6:20b:10d::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.39; Fri, 7 Oct
- 2022 11:39:28 +0000
-Received: from AM6PR04MB6407.eurprd04.prod.outlook.com
- ([fe80::21c0:915e:4429:33fe]) by AM6PR04MB6407.eurprd04.prod.outlook.com
- ([fe80::21c0:915e:4429:33fe%3]) with mapi id 15.20.5676.032; Fri, 7 Oct 2022
- 11:39:28 +0000
-Message-ID: <425858dc-59fe-2311-61ae-3b6dc77a2576@nxp.com>
-Date:   Fri, 7 Oct 2022 17:09:18 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [EXT] Re: [PATCH v5 1/2] dt-bindings: uwb: Device tree
- information for Nxp SR1XX SOCs
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Will Deacon <will@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        robh+dt@kernel.org
-Cc:     mb@lightnvm.io, ckeepax@opensource.cirrus.com, arnd@arndb.d,
-        mst@redhat.com, javier@javigon.com, mikelley@microsoft.com,
-        jasowang@redhat.com, sunilmut@microsoft.com,
-        bjorn.andersson@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, ashish.deshpande@nxp.com,
-        rvmanjumce@gmail.com
-References: <20220914142944.576482-1-manjunatha.venkatesh@nxp.com>
- <20220914142944.576482-2-manjunatha.venkatesh@nxp.com>
- <78651e07-6b3e-4243-8e1f-fcd1dfb3ffe1@www.fastmail.com>
-From:   Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>
-In-Reply-To: <78651e07-6b3e-4243-8e1f-fcd1dfb3ffe1@www.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SGXP274CA0024.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::36)
- To AM6PR04MB6407.eurprd04.prod.outlook.com (2603:10a6:20b:d9::10)
+        Fri, 7 Oct 2022 07:39:42 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39343267C;
+        Fri,  7 Oct 2022 04:39:39 -0700 (PDT)
+Received: from [10.10.2.52] (unknown [10.10.2.52])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 20FDE40786C1;
+        Fri,  7 Oct 2022 11:39:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 20FDE40786C1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1665142772;
+        bh=RvDRFB7SscBbOK1M1nysxjqWBWdiGV6sE0yj5LXDjVE=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=ZennULcfIF84ilsFKM4D18KTGziKTajRPxzx/Ji4de+EZdBEH2wJrLiKhv/l7CCRB
+         BEB1I2odA0ANYgIIyc/SG5azXw6Jgy+SlMB3ZkFN48PgKzhAqPZiS/g8TVSoyS4WSp
+         XyH0UFywDtKsggQ5soqjNAKorOLJL3oU5O175ItA=
+Subject: Re: [lvc-project] [PATCH 5.10 1/1] Backport of rpmsg: qcom: glink:
+ replace strncpy() with strscpy_pad()
+To:     Andrew Chernyakov <acherniakov@astralinux.ru>,
+        stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     lvc-project@linuxtesting.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>
+References: <20221007104120.75208-1-acherniakov@astralinux.ru>
+ <20221007104120.75208-2-acherniakov@astralinux.ru>
+From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
+Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
+ 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
+ kK2E04Fb+Zk1eJvHYRc=
+Message-ID: <d9bf2538-b450-d3ac-0542-8cad4a525f07@ispras.ru>
+Date:   Fri, 7 Oct 2022 14:39:30 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB6407:EE_|AM7PR04MB6933:EE_
-X-MS-Office365-Filtering-Correlation-Id: dcc897be-f7e2-4922-410c-08daa8589774
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lPh9GxI+igUFQ2DcUjQ7Cz+aRRI0QkqTGU2NiTLYvQkmmbFFQ2TdSJ2CCXiZYKv0IY1wK31k6Biavy/TO+Rbh7dau61kPI8ZdzHmPXOZNiFPLn5RYg89WIpxcTw3kNOfuPrgf37rV2u5/Gzmn5+oeVBEFbBwRtI1JxvEos+IvaTrcl1AVtj28qM+4WYsieiAvWavPWi0zr8sNlby1hKF5DbwdHlkyZgvuCJy45LuPY6CE5y/sd85SZUzGh91wOkaWt7L6GnTlqF1XglpRIzIkoHxViMVb09AvFOsRX/7FxenAmqWMZOe5n0lhJpzFBfyXXln/LDBbY5rM9xEjA+euQ6xEnoyZFsIAfaAGiwzcRNO1lLVMInrBdqRi8TqfnDZQVfm8aKL9SZRA3AwQVlo5Q3Ft4EcM5u45Ry9ySmrbYsQSneDYeYlcpl1KfnF8fOUibNoOSgos+yp0fkocgBU8LLl7imhTqv6BphAtj0zr4BRMU2/31wgzubss2egUzWm5ffEYqmCxeqR8HycfmoVZtC5gdGb0v6ujd/ChoDqfJ8R1Eg6nqQrM787kgfCmD2NAb1eX3AM/o4OfAI+EiW1zc2FYvcj0pvXy/hdNVhzg1hezax/EqbOWKdBaUUYWo7iNHWENxIpTIov9jl132Pq+iYd2DKPrmBdiI7nEGYvKUUQ4uMfOgGB1y8N7atiI7OHPR9t19dWGewbIp4/5gpp25Dgu7XSzwY+37KB1O1v21oXxYUnavDnYniW7hRpambf/RxXjrQU8Wm0WFdJIWOp5qbjBto2z+SXoaGJ2hdX2KlmRm7T/EpRE08ys63MfuLf5wJOwjcH7QSS5WmYsvQtFKhDdZvkR05GzoaL42DhwK0hRziu2iKaNXQla16N2+a8
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6407.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(366004)(346002)(376002)(136003)(451199015)(478600001)(316002)(8676002)(6506007)(4326008)(6666004)(53546011)(66556008)(52116002)(110136005)(55236004)(66476007)(66946007)(36756003)(6486002)(86362001)(31696002)(186003)(38350700002)(38100700002)(2616005)(26005)(6512007)(41300700001)(31686004)(2906002)(5660300002)(8936002)(7416002)(4744005)(44832011)(32563001)(45980500001)(43740500002)(473944003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SzZvZkRpbEM4cXJNUU1qY3lZNE5qcWdxN2V6YnRGOTN0Z3Q0WC9wZSt1ZUtD?=
- =?utf-8?B?cy9odHgrOGlzMktqMHY2WTRXWWl6elVUTkhZb2tQUTE3aWlwRFRzOVlibzUy?=
- =?utf-8?B?aXpLNDR2NzdITUFLOXdoT1RKVU1YYUVQcXR4NGEzVGJkejUvNmVPU0UzbW4v?=
- =?utf-8?B?YUpYOVdaZkhxMVY2eENMaklmSnlQMUxkYzdvSVlTS21JdjEva2czWG9xb0Qw?=
- =?utf-8?B?OWVQM2g0blo2ZmtlZWF0Z0daS2tyMmdDVE9MNUR0SnRhNkt6VTVlaEl4VnJD?=
- =?utf-8?B?NFhqb05lelFCTDZTQ1JVbkJEL2hFVzZ2SFh2VitZYVZBcGd0Q0g1ZWpNbERR?=
- =?utf-8?B?aFFlYTJUcVk0T1pzOEIvTnljVzlTdGxDbTBvRGtWRUlKRlp5WmttbTlmeENh?=
- =?utf-8?B?NWpBcGt6cFFVMnFxYmRZK0Q0dmVHL1ZaU0d4b1loSUVXZm8vTk42bllpZmRJ?=
- =?utf-8?B?TTdCK1JOSVFzU1hRNkxxSDVHNWlWbUxZL084S3M1RzBkTkRrZ3NYblk0aEpj?=
- =?utf-8?B?ZnlRVjF0S3lDVjB0dlFWRzgzWGw3b3RCTUtVeDlJUFkrem14SUpoYkRFREdz?=
- =?utf-8?B?MG1PVHZZeHkwd29ZN0pLdS9wS0ZDcVJ0QXluUDBjek1tTnBsM3pKN2FjdFVW?=
- =?utf-8?B?bzBEUEFOQWkrRG1GR1hJOTNPQW1FN0thNGZnNEJYUUlnNXpBNFMwTE4zWUd2?=
- =?utf-8?B?REhMOFZCM1BLUG9XOVJ6SnhjWjhySnlYakd3SU5wcFdzSXQ3Y2pRQjhLb2tv?=
- =?utf-8?B?cW5GTVFVZlZiWU1nK1VMRERFU1lNLzFvaWRzZnpMWSsxV0hHUXV5SGNrek91?=
- =?utf-8?B?NGlTMU9sTmlBR3dwM3NjQWt3QjluQkl0QVI0eXZENVgrd1doUnA1dUNlbS9F?=
- =?utf-8?B?bTFyRkdEbkdTMnhxNk5aeFBvTXM2VWJtaWhkWk9QZCtnWmw1TjhLMnRPYjVo?=
- =?utf-8?B?d01ycndQakJtblNEWVgyK3BpdWdFbjZuZU14d2JWT3NwMngxK01HaC8rQnBC?=
- =?utf-8?B?VllETVJsby8xZnNncm4vbEx0VUROODAyUVhPbXFyOTBUbGowNXFxTmlzV2xv?=
- =?utf-8?B?dXdTVHFHcWUzbkdPMkhPaDJwSW5YNkp2bldmazVhUFYydnpuSG44bnIySDZv?=
- =?utf-8?B?NzIrREZRa1FFQk5Dc3gwN2MzbTBzSjlUek9YVG9pWHNiTnZnY2xtc0JRTHly?=
- =?utf-8?B?cjcwcVliWjJMMUpacmxINGw0WDlRVU1TeHFFWm1TU2ZxT0ZvbWthVDlNRHNP?=
- =?utf-8?B?alYzUzhTRWd1bmtvaTZnbXhvL240VDU4bTdCdEk0NmlGTnJyNGJIV0l1eUpw?=
- =?utf-8?B?QnMzbnFlS0V1ZDNBS1lYWHhiU3BubWZRN09DcnF6SkRIN2pRd3gvYWRJN09Q?=
- =?utf-8?B?S2VHYzVlRWEvWmRxRmdTRjlWMjBrbGlYcUg4REkrQmJmdE1XajJkMFlmN2hn?=
- =?utf-8?B?NE56dVJuRFltZ1FKclNkS0NVQXNUS3JwS3hacWw2RjlZS1NSWDVHN1h3dFJh?=
- =?utf-8?B?cFhucVFvOEhoeEdtNHBRS3FvWWR1elJ2Q2tvZTlOU2llTmNTcnhPMHJ3dWQ2?=
- =?utf-8?B?VWliV3o3M3drTERKR0F2c2J0RERQQWx0QmZ2czFjL2hzVVdld1BVYjhtdm5w?=
- =?utf-8?B?LzBYeWJzbG8vRHJvRytNYnJqd0xUZ1hXMm04Z3ZFenRvTVRFTGg5UFhaQXhR?=
- =?utf-8?B?R2V3Vk44MDdaWW5hU1hxbE1Mcm1Uak11Mmp6UG5KUC8zRVVBMUFsZlNtdkhC?=
- =?utf-8?B?NnhiYk5aOE1jNWN6SXVvMmZqR0pBZTBXbzA4K0YzdTBMSnIwKzU1RGVKOTBs?=
- =?utf-8?B?T1Z0V29DdEVLeFVPcEdEL2h1blhsalYwUU1ERWs3dHk3MzdXaWFaM3NrSkph?=
- =?utf-8?B?bVJxb2pnczE0Q3ZHbXpFUG53RTJFdVRqajhUNFl2WE5ubktGcEZMV1REemw2?=
- =?utf-8?B?aTlBT09jdXRxQ3Y0Y3RuNUUvREJEdk94VEFvcHBKdWZsOGZhNHBhUWsvcmJL?=
- =?utf-8?B?dkRPdmxBMUhrSWZRMkxhWFlVaFBNRWJtai9XVU9LVHdXaUJwcGVxa0dwNnYx?=
- =?utf-8?B?TVZtTUdDK280d0V5WkRxRzNnWkhOM3ZhdDFKN242amowTlQ0bk1ZRlhCbGFO?=
- =?utf-8?B?N014Y3lnN1cyTUFjYXd5NVlQcDNNWnlHR3I5LzZCS2N6ai9nb3pWQ0wzQW53?=
- =?utf-8?Q?9uMARycFuj0cCJlGV+0L5SU=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dcc897be-f7e2-4922-410c-08daa8589774
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6407.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2022 11:39:28.0413
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: O0eV4NCsvFY2lzVrm8rXFQD51ZBx0Qe3PiTgwO8nmlvIu4v0KsuYOsTMGHl4EivQTcH5grLzB2Unp/wSqSsR4tznZtaV9cAQtp+/H0phGWc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6933
+In-Reply-To: <20221007104120.75208-2-acherniakov@astralinux.ru>
+Content-Type: text/plain; charset=utf-8
+Content-Language: ru-RU
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dear Andrew,
 
-On 9/14/2022 8:06 PM, Arnd Bergmann wrote:
-> Caution: EXT Email
->
-> On Wed, Sep 14, 2022, at 4:29 PM, Manjunatha Venkatesh wrote:
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - nxp,sr1xx
->> +
-> You should not have wildcard names in the compatible string.
-> Make this a specific model number without 'xx', and
-> have the devices list their own name along with the oldest
-> one they are compatible with.
->
->       Arnd
-This driver is common for both sr100 and sr150,so we have used sr1xx
-naming convention or can we use name with highest version(sr150)?
+For backporting patches you should follow the following pattern:
+
+---------------------------------------------
+Subject: [PATCH 5.10 1/1] {ORIGINAL COMMIT SUBJECT}
+
+From:  {ORIGINAL AUTHOR EMAIL}
+
+commit {ORIGINAL COMMIT HASH} upstream.
+
+{ORIGINAL COMMIT TEXT INCLUDING ALL SIGGNED_OFF}
+
+Signed-off-by: {YOUR EMAIL}
+---
+{ORIGINAL PATCH}
+---------------------------------------------
+
+e.g.
+---------------------------------------------
+Subject: [PATCH 5.10 1/1] rpmsg: qcom: glink: replace strncpy() with
+strscpy_pad()
+
+From:  Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+commit 766279a8f85df32345dbda03b102ca1ee3d5ddea upstream.
+
+The use of strncpy() is considered deprecated for NUL-terminated
+strings[1]. Replace strncpy() with strscpy_pad(), to keep existing
+pad-behavior of strncpy, similarly to commit 08de420a8014 ("rpmsg:
+glink: Replace strncpy() with strscpy_pad()").  This fixes W=1 warning:
+
+  In function ‘qcom_glink_rx_close’,
+    inlined from ‘qcom_glink_work’ at
+../drivers/rpmsg/qcom_glink_native.c:1638:4:
+  drivers/rpmsg/qcom_glink_native.c:1549:17: warning: ‘strncpy’
+specified bound 32 equals destination size [-Wstringop-truncation]
+   1549 |                 strncpy(chinfo.name, channel->name,
+sizeof(chinfo.name));
+
+[1]
+https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings
+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link:
+https://lore.kernel.org/r/20220519073330.7187-1-krzysztof.kozlowski@linaro.org
+
+Signed-off-by: Andrew Chernyakov <acherniakov@astralinux.ru>
+---
+.....
+---------------------------------------------
+
+Please update the patch according the requirements and resend.
+
+Thank you,
+Alexey
+
+
+On 07.10.2022 13:41, Andrew Chernyakov wrote:
+> The use of strncpy() is considered deprecated for NULL-terminated
+> strings[1]. Replace strncpy() with strscpy_pad(), to keep existing
+> pad-behavior of strncpy, strncpy was found on line 1424 of
+> /drivers/rpmsg/qcom_glink_native.c.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> 
+> Signed-off-by: Andrew Chernyakov <acherniakov@astralinux.ru>
+> ---
+>  drivers/rpmsg/qcom_glink_native.c | 2 +-
+>  drivers/rpmsg/qcom_smd.c          | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
+> index 4840886532ff..66a63b205744 100644
+> --- a/drivers/rpmsg/qcom_glink_native.c
+> +++ b/drivers/rpmsg/qcom_glink_native.c
+> @@ -1424,7 +1424,7 @@ static int qcom_glink_rx_open(struct qcom_glink *glink, unsigned int rcid,
+>  		}
+>  
+>  		rpdev->ept = &channel->ept;
+> -		strncpy(rpdev->id.name, name, RPMSG_NAME_SIZE);
+> +		strscpy_pad(rpdev->id.name, name, RPMSG_NAME_SIZE);
+>  		rpdev->src = RPMSG_ADDR_ANY;
+>  		rpdev->dst = RPMSG_ADDR_ANY;
+>  		rpdev->ops = &glink_device_ops;
+> diff --git a/drivers/rpmsg/qcom_smd.c b/drivers/rpmsg/qcom_smd.c
+> index 0b1e853d8c91..b5167ef93abf 100644
+> --- a/drivers/rpmsg/qcom_smd.c
+> +++ b/drivers/rpmsg/qcom_smd.c
+> @@ -1073,7 +1073,7 @@ static int qcom_smd_create_device(struct qcom_smd_channel *channel)
+>  
+>  	/* Assign public information to the rpmsg_device */
+>  	rpdev = &qsdev->rpdev;
+> -	strncpy(rpdev->id.name, channel->name, RPMSG_NAME_SIZE);
+> +	strscpy_pad(rpdev->id.name, channel->name, RPMSG_NAME_SIZE);
+>  	rpdev->src = RPMSG_ADDR_ANY;
+>  	rpdev->dst = RPMSG_ADDR_ANY;
+>  
+> @@ -1304,7 +1304,7 @@ static void qcom_channel_state_worker(struct work_struct *work)
+>  
+>  		spin_unlock_irqrestore(&edge->channels_lock, flags);
+>  
+> -		strncpy(chinfo.name, channel->name, sizeof(chinfo.name));
+> +		strscpy_pad(chinfo.name, channel->name, sizeof(chinfo.name));
+>  		chinfo.src = RPMSG_ADDR_ANY;
+>  		chinfo.dst = RPMSG_ADDR_ANY;
+>  		rpmsg_unregister_device(&edge->dev, &chinfo);
+> 
+
