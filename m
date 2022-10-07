@@ -2,199 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B865F74C1
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 09:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F58A5F74C3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 09:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiJGHhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 03:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49018 "EHLO
+        id S229739AbiJGHiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 03:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiJGHha (ORCPT
+        with ESMTP id S229611AbiJGHiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 03:37:30 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B47EBEFBC;
-        Fri,  7 Oct 2022 00:37:29 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2977Dko6007623;
-        Fri, 7 Oct 2022 07:37:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=0tJIjO6ybCsXmZLLUXndslexBjrOkGwVENGAZilreYg=;
- b=InkWfKS9a7cKAduI3pS0rtIn3MBbwD9H0d5UK2hQ6KQqXwPW9qDRsQ5UDESypv9WSKA4
- pBCaIt3Vwc5O8Ch+7BS+gV0Gq04ffYMLEstg/jqWVDEJ1nkUs+ldy8EIa0fRZvwMWhIF
- BUm1PURFVB3Hw1VFyU3aIEtbwIV2fzDHnd/xTD0KDefNoymLEz9H3/LvvRvSmJm2ufCF
- j+0v2cldyyQ9SDpgj12+BE326OueYO7mFkTJ/d2Bw7bws8DFY3GAgFeS4ijrlaV/txlx
- 3e6+kaIrYUw0RV1h5olgPhBZkTPQ2tFQWYEgO99mvZTEughqJBIBgCM+CdHaNL8EnXq9 Cw== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k2fhmrqsc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Oct 2022 07:37:18 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2977aV4K012516;
-        Fri, 7 Oct 2022 07:37:16 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06ams.nl.ibm.com with ESMTP id 3jxctj898g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Oct 2022 07:37:16 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2977bDFi59507154
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 7 Oct 2022 07:37:13 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4248E5207E;
-        Fri,  7 Oct 2022 07:37:13 +0000 (GMT)
-Received: from sig-9-145-159-233.de.ibm.com (unknown [9.145.159.233])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 4D9935208C;
-        Fri,  7 Oct 2022 07:37:12 +0000 (GMT)
-Message-ID: <e4b0a9cfd0abfcb6647466166bdc3b8378dcf720.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 3/6] iommu/s390: Fix potential s390_domain aperture
- shrinking
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev
-Cc:     linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
-        robin.murphy@arm.com, jgg@nvidia.com, linux-kernel@vger.kernel.org
-Date:   Fri, 07 Oct 2022 09:37:11 +0200
-In-Reply-To: <acbc56b3-41b4-f71a-01d7-63c34348e079@linux.ibm.com>
-References: <20221006144700.3380098-1-schnelle@linux.ibm.com>
-         <20221006144700.3380098-4-schnelle@linux.ibm.com>
-         <acbc56b3-41b4-f71a-01d7-63c34348e079@linux.ibm.com>
+        Fri, 7 Oct 2022 03:38:13 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCF5BEFBB
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 00:38:12 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id r17so9493729eja.7
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 00:38:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Ku0WBdsuMJGZ8wwI4SyomnhiRhTorORkpnPBO0up1yE=;
+        b=Jay2kDsdMF/g4Udi2DLXcFb160zjAC+Il3BuXygkD/KUa9inF37wDdq8KHv8gSWp1w
+         1uq3dvlUTTmzQDG+IadTuaqLwvI9+Cr2d+kUa/0llsY9t9oyI0R3iFCeYsq1eA2+DyO6
+         k15czwk1jOM6XckTTBX5jrSdGgm/qXbUs+ZDZLGDTNj/tO2GWxeQG+2b6EwmDemp6nye
+         PGdhsiI1f6Aaz6JW2orY10xcNuBRnslhLJZb4t+hoysAhcJkyILR7Oe+Kn9PsDeWZyYt
+         C0HsqsnIgngTSE0TFSOvGrxG71U3OElS4URg4kbvdWqlfWESCclFVGTLfPVbLo7MsjXK
+         dtfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ku0WBdsuMJGZ8wwI4SyomnhiRhTorORkpnPBO0up1yE=;
+        b=LJp2+AwmMfHRFA+Cpvv1vKqSmgbNY/pOwonLGev+3up39tjYfG2Fie0Y7ZfqG0g6u/
+         MMMMTP6ScUF1c80bpN7llVDTB5LOKSExuggmo767q0jZ6WfJm8ISvROTYdRJfWqO3RNv
+         jSzAn2rnOy0LgagiGJQ6E3sGM0CV9l4DJI+w7r/Df4Pye4WzLpsg6cBcgwdICPaBo4oe
+         uUX9QQ9Q29ALgmgDLiku1ghFTNOsiQes1voNG0OdUi9lunR1zIVCdwBKVJuRg0BY3hrP
+         Ly7SaRKCidv11ZuL5PjV0VTgMb9SMaOIPE4EB5Xp+nVwS5W00inDQC7GOmnKLWH1nLu9
+         NWPA==
+X-Gm-Message-State: ACrzQf2F4ngRL44Cq3e8ngOXYhTFar3CBMRbVS4x5IcxomgFum5RHm6W
+        vt7F70WIR67mJCKSCgg9mDLcaPyCBCNJjt0IFotcvrGJdWJLjQ==
+X-Google-Smtp-Source: AMsMyM7ZGR1jzbxdNbPC02pdYz7WmIREumAZNtbfzGT/YJtqv7JoDfUrE95PbWwygMwEe2Ji0VjVZFyG42qEeOc4cu0=
+X-Received: by 2002:a17:907:60c7:b0:78c:b9e8:89b8 with SMTP id
+ hv7-20020a17090760c700b0078cb9e889b8mr2984367ejc.439.1665128290828; Fri, 07
+ Oct 2022 00:38:10 -0700 (PDT)
+MIME-Version: 1.0
+From:   Kaiwan N Billimoria <kaiwan.billimoria@gmail.com>
+Date:   Fri, 7 Oct 2022 13:07:54 +0530
+Message-ID: <CAPDLWs-Z8pYkwQ13dEgHXqSCjiq4xVnjuAXTy26H3=8NZCpV_g@mail.gmail.com>
+Subject: Reg the next LTS kernel (6.1?)
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: pK7i9V4qkNRS--P0ujSBBu4fItO-833k
-X-Proofpoint-ORIG-GUID: pK7i9V4qkNRS--P0ujSBBu4fItO-833k
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-06_05,2022-10-06_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 impostorscore=0 mlxscore=0 adultscore=0
- clxscore=1015 mlxlogscore=999 lowpriorityscore=0 phishscore=0 bulkscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210070044
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-10-06 at 17:02 -0400, Matthew Rosato wrote:
-> On 10/6/22 10:46 AM, Niklas Schnelle wrote:
-> > The s390 IOMMU driver currently sets the IOMMU domain's aperture to
-> > match the device specific DMA address range of the device that is first
-> > attached. This is not ideal. For one if the domain has no device
-> > attached in the meantime the aperture could be shrunk allowing
-> > translations outside the aperture to exist in the translation tables.
-> > Also this is a bit of a misuse of the aperture which really should
-> > describe what addresses can be translated and not some device specific
-> > limitations.
-> > 
-> > Instead of misusing the aperture like this we can instead create
-> > reserved ranges for the ranges inaccessible to the attached devices
-> > allowing devices with overlapping ranges to still share an IOMMU domain.
-> > This also significantly simplifies s390_iommu_attach_device() allowing
-> > us to move the aperture check to the beginning of the function and
-> > removing the need to hold the device list's lock to check the aperture.
-> > 
-> > As we then use the same aperture for all domains and it only depends on
-> > the table properties we can already check zdev->start_dma/end_dma at
-> > probe time and turn the check on attach into a WARN_ON().
-> > 
-> > Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> 
-> Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> 
-> > ---
-> > v4->v5:
-> > - Make aperture check in attach a WARN_ON() and fail in probe if
-> >   zdev->start_dma/end_dma doesn't git in aperture  (Jason)
-> > 
-> >  drivers/iommu/s390-iommu.c | 65 +++++++++++++++++++++++++-------------
-> >  1 file changed, 43 insertions(+), 22 deletions(-)
-> > 
-> > diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
-> > index 9b3ae4b14636..1f6c9bee9a80 100644
-> > --- a/drivers/iommu/s390-iommu.c
-> > +++ b/drivers/iommu/s390-iommu.c
-> > @@ -62,6 +62,9 @@ static struct iommu_domain *s390_domain_alloc(unsigned domain_type)
-> >  		kfree(s390_domain);
-> >  		return NULL;
-> >  	}
-> > +	s390_domain->domain.geometry.force_aperture = true;
-> > +	s390_domain->domain.geometry.aperture_start = 0;
-> > +	s390_domain->domain.geometry.aperture_end = ZPCI_TABLE_SIZE_RT - 1;
-> >  
-> >  	spin_lock_init(&s390_domain->dma_table_lock);
-> >  	spin_lock_init(&s390_domain->list_lock);
-> > @@ -102,46 +105,32 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
-> >  	struct s390_domain *s390_domain = to_s390_domain(domain);
-> >  	struct zpci_dev *zdev = to_zpci_dev(dev);
-> >  	unsigned long flags;
-> > -	int cc, rc = 0;
-> > +	int cc;
-> >  
-> >  	if (!zdev)
-> >  		return -ENODEV;
-> >  
-> > +	WARN_ON(domain->geometry.aperture_start > zdev->end_dma ||
-> > +		domain->geometry.aperture_end < zdev->start_dma);
-> > +
+Greetings!
+I'm working on the 2nd edition of the Linux Kernel Programming book
+(https://www.amazon.com/gp/product/B07RW915K4/ref=dbs_a_def_rwt_bibl_vppi_i0)
+and request your help...
 
-I think this one should still return with -EINVAL.
+I'd like to base the book upon as recent a kernel version as is
+feasible, of course, with the caveat that it's a long-term (LTS) one
+that will be around for a while. Currently, the 5.10 LTS kernel's EOL
+date - Dec 2026 - makes it an ideal candidate.
 
-> >  	if (zdev->s390_domain)
-> >  		__s390_iommu_detach_device(zdev);
-> >  	else if (zdev->dma_table)
-> >  		zpci_dma_exit_device(zdev);
-> >  
-> > -	zdev->dma_table = s390_domain->dma_table;
-> >  	cc = zpci_register_ioat(zdev, 0, zdev->start_dma, zdev->end_dma,
-> > -				virt_to_phys(zdev->dma_table));
-> > +				virt_to_phys(s390_domain->dma_table));
-> >  	if (cc)
-> >  		return -EIO;
-> >  
-> > -	spin_lock_irqsave(&s390_domain->list_lock, flags);
-> > -	/* First device defines the DMA range limits */
-> > -	if (list_empty(&s390_domain->devices)) {
-> > -		domain->geometry.aperture_start = zdev->start_dma;
-> > -		domain->geometry.aperture_end = zdev->end_dma;
-> > -		domain->geometry.force_aperture = true;
-> > -	/* Allow only devices with identical DMA range limits */
-> > -	} else if (domain->geometry.aperture_start != zdev->start_dma ||
-> > -		   domain->geometry.aperture_end != zdev->end_dma) {
-> > -		spin_unlock_irqrestore(&s390_domain->list_lock, flags);
-> > -		rc = -EINVAL;
-> > -		goto out_unregister;
-> > -	}
-> > +	zdev->dma_table = s390_domain->dma_table;
-> >  	zdev->s390_domain = s390_domain;
-> > +
-> > +	spin_lock_irqsave(&s390_domain->list_lock, flags);
-> >  	list_add(&zdev->iommu_list, &s390_domain->devices);
-> >  	spin_unlock_irqrestore(&s390_domain->list_lock, flags);
-> >  
-> >  	return 0;
-> > -
-> > -out_unregister:
-> > -	zpci_unregister_ioat(zdev, 0);
-> > -	zdev->dma_table = NULL;
-> > -
-> > -	return rc;
-> >  }
-> >  
-> > 
----8<---
+However, if possible, I'd (also) like to use a 6.x kernel; so, my
+question comes down to this: will a 6.1 kernel release occur soon (I
+heard it should be around Dec this year)? Will it be an LTS kernel
+(again, should be I guess), and, if so, very important for me, what's
+the likely EOL date?
 
-
+Much appreciate your time, TIA.
+T&R,
+Kaiwan.
