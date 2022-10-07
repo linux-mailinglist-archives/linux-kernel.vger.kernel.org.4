@@ -2,77 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED1B5F8114
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 01:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7963A5F8115
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 01:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiJGXRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 19:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
+        id S229695AbiJGXR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 19:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiJGXRk (ORCPT
+        with ESMTP id S229730AbiJGXRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 19:17:40 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBADD8B2C2
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 16:17:37 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id 10so5880958pli.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 16:17:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3VntPma6h9YXldWusKRirKa+AxvzlFLxSpnoOOvfbEY=;
-        b=Lw5fVRNuMGTXDOBUV8sWh1sbwxiATNyFn5sU8LQHGlrdcjl2RO1zQMGM4h2Tmbbrg/
-         dzR4AX2LEsdqHpEtq2VXT1AktDCi/eAxuoTHKd+2004AmAbkDVEQ2gpm5lwFjwdNDPKc
-         hc/pJ0qDS8e7vs4IkKY5iNoPL2VqtIZCdDMlc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3VntPma6h9YXldWusKRirKa+AxvzlFLxSpnoOOvfbEY=;
-        b=vadaXPbWZnInWhTaIKn20zvJwGPki3t4OCm9U27gHrltKiww25TkzsvzWwSPKGIf37
-         ihKaq+yR8jMFkNrqVWAzNbwvKdXVYV4MIB73+lgAo9DzL8af5ruSPINaYaRYapobIII7
-         rQpw4nmG8pR18vqVB1jamTMr259q+vX4vz99TpmQO02ioSZs0Upo1yP2ajoVrRyna5rR
-         WmptKnF08WfPjOMLMbs0iN5CDv1nS/870X+ZXAkTwWeRDwRxFRJAsjugk/e5v8EJdD6D
-         WUS2D1otKvYhGZXqKnPEL3RCdrwduAPomE/mqy2diw5ov3pVgVIhKnBV65Gv3jLXmzOD
-         BfTw==
-X-Gm-Message-State: ACrzQf1PNmw/NJehkDIcgwuEAKMYcUhtfG/u+6nBHLAGyBnuKrGH88lR
-        zbRYFkuJBU4iZeOhLCRCJj6K6A==
-X-Google-Smtp-Source: AMsMyM6dsbNeWBcjJm9aRIb7GnG5PGfyHyuEE4bQKFj2jK/3xPcKVdrwJUFENovkupK3JRiP3BgzWw==
-X-Received: by 2002:a17:902:b182:b0:178:8977:4013 with SMTP id s2-20020a170902b18200b0017889774013mr6762196plr.27.1665184657464;
-        Fri, 07 Oct 2022 16:17:37 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z5-20020a623305000000b00562a0c8a195sm2155931pfz.69.2022.10.07.16.17.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 16:17:36 -0700 (PDT)
-Date:   Fri, 7 Oct 2022 16:17:35 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        linux-fsdevel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Paul Kirth <paulkirth@google.com>
-Subject: Re: [PATCH] fs/select: avoid clang stack usage warning
-Message-ID: <202210071614.4297AB65D8@keescook>
-References: <20190307090146.1874906-1-arnd@arndb.de>
- <20221006222124.aabaemy7ofop7ccz@google.com>
- <c646ea1e-c860-41cf-9a8e-9abe541034ff@app.fastmail.com>
- <CAKwvOdkEied8hf6Oid0sGf0ybF2WqrzOvtRiXa=j7Ms-Rc6uBA@mail.gmail.com>
- <e554eb3c-d065-4aad-b6d2-a12469eaf49c@app.fastmail.com>
+        Fri, 7 Oct 2022 19:17:53 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49399F759
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 16:17:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5A8E6CE18D3
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 23:17:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CC1BC433C1;
+        Fri,  7 Oct 2022 23:17:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665184667;
+        bh=g4k39+l5WOW6KmldEWGm/pmbP8ZMxghfPuq3gJQX1+k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=atCzcVdvVlyTQ+aCgrh4pXO4NZes0/NC88Dq8sqDjG27qOxtSg06vPTQsKLfrDFUs
+         M1fAVgmxaMEIT8gVgghyOqXW1D82NtjReYgQqpHHXcyNh7op9Jpj4jbo2V+aazStNF
+         m5hum0hsbQhfshxfXBIdtXtVwTtLbtVMq1LKzUXZiCrASvkwK8pYVGOHvjG9QbZS/l
+         IUtWPudj6le0WzVRlTxcljgbpGj5VMXNNfcCED+y5WiR85fBQSFTOvrlKGzsDROE/w
+         qsD8PcqHrIrjZAElY5l5P8k8sOyjpbmmcOpd+TwYEsYIL6Ev26vfFHRZ+gmmuHCzq2
+         hTLzTvjtOQApA==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ogwbB-00FDKL-4F;
+        Sat, 08 Oct 2022 00:17:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e554eb3c-d065-4aad-b6d2-a12469eaf49c@app.fastmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Date:   Sat, 08 Oct 2022 00:17:44 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, asahi@lists.linux.dev,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] irqchip/apple-aic: Add support for A7-A11 SoCs
+In-Reply-To: <20221007200022.22844-3-konrad.dybcio@somainline.org>
+References: <20221007200022.22844-1-konrad.dybcio@somainline.org>
+ <20221007200022.22844-3-konrad.dybcio@somainline.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <37c075fc9aa9624d65b8fdda3cb5ae96@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: konrad.dybcio@somainline.org, ~postmarketos/upstreaming@lists.sr.ht, asahi@lists.linux.dev, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, martin.botka@somainline.org, angelogioacchino.delregno@somainline.org, marijn.suijten@somainline.org, jamipkettunen@somainline.org, tglx@linutronix.de, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,32 +74,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 11:42:51PM +0200, Arnd Bergmann wrote:
-> On Fri, Oct 7, 2022, at 9:04 PM, Nick Desaulniers wrote:
-> > On Fri, Oct 7, 2022 at 1:28 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >> - The behavior of -ftrivial-auto-var-init= is a bit odd here: with =zero or
-> >>   =pattern, the stack usage is just below the limit (1020), without the
-> >>   option it is up to 1044. It looks like your .config picks =zero, which
-> >>   was dropped in the latest clang version, so it falls back to not
-> >
-> > Huh? What do you mean by "was dropped?"
-> >
-> > The config I sent has:
-> > CONFIG_CC_HAS_AUTO_VAR_INIT_PATTERN=y
-> > CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO_BARE=y
-> > CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO=y
-> > # CONFIG_INIT_STACK_NONE is not set
-> > CONFIG_INIT_STACK_ALL_ZERO=y
+On 2022-10-07 21:00, Konrad Dybcio wrote:
+> Add support for A7-A11 SoCs by if-ing out some features only present
+> on A11 & newer (implementation-defined IPI & UNCORE registers).
 > 
-> When I use this config on my kernel tree (currently on top of
-> next-20220929 for unrelated work) and build with clang-16,
-> CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO is disabled, so it falls
-> back from CONFIG_INIT_STACK_NONE instead of the unavailable
-> CONFIG_INIT_STACK_ALL_ZERO.
+> Also, annotate IPI regs support in the aic struct so that the driver
+> can tell whether the SoC supports these, as they are written to,
+> even if fast IPI is disabled. This in turn causes a crash on older
+> platforms, as the implemention-defined registers either do
+> something else or are not supposed to be touched - definitely not a
+> NOP though.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> ---
+> Changes since v3:
+> - Replace use_fast_ipi with has_uncore_ipi_regs in aic_init_cpu
+> (logic error, this was written to regardless of FIPI usage before,
+> but touching Sn_... regs on SoCs that don't explicitly use them for
+> IPIs makes them sepuku..)
+> - Drop A11 compatible
+> 
+>  drivers/irqchip/irq-apple-aic.c | 47 ++++++++++++++++++++++-----------
+>  1 file changed, 32 insertions(+), 15 deletions(-)
 
-I think you have a very recent Clang but are building a tree that
-doesn't have commit 607e57c6c62c ("hardening: Remove Clang's enable flag
-for -ftrivial-auto-var-init=zero").
+Since you cannot be bothered to read the review comments on
+the previous versions of this series, I'll do the same with
+these patches. Feel free to stop Cc-ing me.
 
+         M.
 -- 
-Kees Cook
+Jazz is not dead. It just smells funny...
