@@ -2,179 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 051B35F73E5
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 07:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5435F73E8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 07:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiJGFTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 01:19:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
+        id S229596AbiJGFV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 01:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiJGFTe (ORCPT
+        with ESMTP id S229472AbiJGFVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 01:19:34 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E44115C08
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 22:19:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 22AF22199F;
-        Fri,  7 Oct 2022 05:19:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1665119969; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ejzy7TEHov+nIAMCI1XFyhDUZZW5+GOk87DJxP7CNaY=;
-        b=Aqgt+IPCyj21zORa/HFyxvmEVfh8M63qWr5hDdHZfA9YZu5GgNckohRuFvk33/c/WC6KGg
-        tdQSJXFMzL1Ux+lGa1/R9oyXpFsZZCOjccMDXR0wbL9Jj8IB883apnFhWfDo0NwyUPL4qP
-        kitcvUTKNNWkAfX6ypDh6OjSZAJ6pwo=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D8B9613345;
-        Fri,  7 Oct 2022 05:19:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id P19aM+C2P2OBLQAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 07 Oct 2022 05:19:28 +0000
-Message-ID: <47853f65-0fce-6ee1-f6ab-115ab48df7a3@suse.com>
-Date:   Fri, 7 Oct 2022 07:19:28 +0200
+        Fri, 7 Oct 2022 01:21:54 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2055.outbound.protection.outlook.com [40.107.255.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325CB115C1B
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 22:21:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QnbUFFdKqIVfXkamwe3IZNxt41Iqz1wopzHLAfJFNe2FgbpVMv+xVVt8Z4F2vOIry6qTZzqNLzf3ieemUK7U9tMCFaiWF22WuUhtPr3jrXbdZphFXi2PdMUkFxjBLVA1OdZPnaiJkn95wSJK7V+yAbwu3he+CHyA+Og82IqU13Wd5w6bo7rQDYS8pAcc0njOd1WpWXcpWOKUql4+mVuTR0nOAiQC0CP+nXK1yV3JdxGnkMcglaFoYBNzMzCxoG3+mXhZ1sc/bXN+06GqAvAevk56VQZscO7bXBaCjVkgU3U7e3FdYOjH5o5+rdvdSjK248keX/vjoq0r8vF2Sn/cLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cDSABVANcvQU8Z1+8dkqGsyl6Sw+lcenc1+fwuUqXsQ=;
+ b=mm39cGfeD+y8NVQniT4FZWlm+R0puDnb5Hw7snaMOWbWWXmFNL80MVSwIG8Jhgzfhver4TuQ3SWFWsdkAM8FRNx4RdBcEkhNlqesp/OfSfs9BCJkJ2AbZGxN6JYOk7Kdu15KN2QpQFjGQiFWqyRGB3CWhWhNaNn8gSYH8t2+Wcd93PIQEozx6iWtiwPZ4RzzJ5vVW5/wWpw33XrKNz8D6vP3n+gYz7e9qztf5vO7vVmLMEsBI7dY8UJCpL2SlqhQqAKxDFwgoCa4egS5tk1SL3/bKTuZsLG3AKn4+SWUTSz1zeQxx+JbSUwARw7Mxq7qzCIUQ4TTkjBuZc/FUIjcYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 211.20.1.79) smtp.rcpttodomain=walle.cc smtp.mailfrom=wiwynn.com; dmarc=fail
+ (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=wiwynn.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cDSABVANcvQU8Z1+8dkqGsyl6Sw+lcenc1+fwuUqXsQ=;
+ b=oJHWW+fAaaec8LiSqnLPD5v0lJRTUrhGqYxsqduSvMCzNWsnIHyR9n9aDGWrY+lhrSY9KNWGrNKmtPGtZSf72DMPUClb+jwB2TJSIvgaFKZ5jk0y3Rwm4Lb4DFiqQCW2Xk4raPGIkOTBCBjXE7oBQWcJifAVDjYcQuxnXIKRF2LnG1/6/7i9chWKP3Kf+zlIYJOeHOQLZYqlo8Fr3e39zou7Y4ZLQeDXLSGoVsNvb2fiVCYpgP/lko+TJpcQgIyixGJQJM7vFe1CjFEwpWRHzkcreEkFfotlMKv4cq2SbdxUVOEDV469Q/xrWE1y0VOyhBrscYSX0In1WImSRFGFNA==
+Received: from PS2PR01CA0056.apcprd01.prod.exchangelabs.com
+ (2603:1096:300:57::20) by SEYPR04MB6773.apcprd04.prod.outlook.com
+ (2603:1096:101:da::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.34; Fri, 7 Oct
+ 2022 05:21:48 +0000
+Received: from PSAAPC01FT024.eop-APC01.prod.protection.outlook.com
+ (2603:1096:300:57:cafe::79) by PS2PR01CA0056.outlook.office365.com
+ (2603:1096:300:57::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.38 via Frontend
+ Transport; Fri, 7 Oct 2022 05:21:48 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
+ smtp.mailfrom=Wiwynn.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=Wiwynn.com;
+Received-SPF: Fail (protection.outlook.com: domain of Wiwynn.com does not
+ designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
+ client-ip=211.20.1.79; helo=localhost.localdomain;
+Received: from localhost.localdomain (211.20.1.79) by
+ PSAAPC01FT024.mail.protection.outlook.com (10.13.38.118) with Microsoft SMTP
+ Server id 15.20.5709.10 via Frontend Transport; Fri, 7 Oct 2022 05:21:47
+ +0000
+From:   Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+To:     michael@walle.cc
+Cc:     patrick@stwcx.xyz, garnermic@fb.com,
+        Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mtd: spi-nor: winbond: add support for w25q01jv-im
+Date:   Fri,  7 Oct 2022 13:21:08 +0800
+Message-Id: <20221007052108.3339266-1-Delphine_CC_Chiu@Wiwynn.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 0/2] Misc fixes for Xen grant DMA-mapping layer
-Content-Language: en-US
-To:     Oleksandr Tyshchenko <olekstysh@gmail.com>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>
-References: <20221005174823.1800761-1-olekstysh@gmail.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20221005174823.1800761-1-olekstysh@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------SOsSx1a3rFmS0YD7wzBcZ2on"
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PSAAPC01FT024:EE_|SEYPR04MB6773:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: fbf5c7b5-9d12-4e87-d913-08daa823d50f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DHtE3Z4L0x8lsgPBvexC7IhpPVWvV6VUNn9ErcUTPOmwTEsOPItMYWkj2IwFHpMcx2Ga//2w+no/jDJc7nt0/YMUkoRr8ot7c2bz/ta2KhtFz5RZkq9M3yp9fkLs+GQ/WRLjjfC1HN8ln88AHSgUDtBH053i/MHln2pp5vzsZLc4Ws/dbTWg4TzZH61cxwOTrj9rBLWx+fyMokVsUUSXDQjPVaHZwCXeRzrzHteqJxwX0SDCKwwTzhCrJDx1Hdb0USV9AFWB3ORmzN6lxybf0FJJAozwt/xlhl7N9O59uStZtrDDcIKc30QvVfz5Mks+U60P/Z2IGJhUaYfftx/alWhRZ3Oigy5GaTtuVK0ZQY1p+9JduQ7EcrBkeHJvVrFAl7apKQmtTZJ+ifqKhMWvb9z3pckxA6e5JCLeNC0gqMTsv3WrpzNL72R7k+i07SYg9cOMvzKMhJf/0yEMTeJ/1yNMfJGBR54VV2Cu0GfU0gFlJ6ErFZVev+Oq7cwHcLkZP4ZgKw/ry9pIziK2eq9m4QygkyrplA7+8hO2nZKWu5GbcEGyQEPLkH0wqYoZFde7YymHDUkwgdpI3e97Afe5Ys8u3wluLr70BU4avKXBdXgPgn4eYYD7uGdx3B/x1BRr713vt554pke85I7nFIeZbKEfOy/tUnWe92WCpUQnLcba8sqOX2upeH1cqdLJQWonW5MRSfiGTJGjceooSy+ZB8w9NIzHobZNbLU3J7rM1vM=
+X-Forefront-Antispam-Report: CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230022)(6069001)(4636009)(136003)(396003)(346002)(39860400002)(376002)(451199015)(46966006)(36840700001)(1076003)(336012)(956004)(2616005)(186003)(6506007)(6512007)(6666004)(26005)(4326008)(6486002)(36906005)(36736006)(478600001)(47076005)(6916009)(8676002)(316002)(70206006)(54906003)(70586007)(41300700001)(8936002)(7416002)(36756003)(356005)(2906002)(82740400003)(5660300002)(4744005)(36860700001)(81166007)(86362001)(9316004)(82310400005)(40480700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: wiwynn.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2022 05:21:47.1535
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fbf5c7b5-9d12-4e87-d913-08daa823d50f
+X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
+X-MS-Exchange-CrossTenant-AuthSource: PSAAPC01FT024.eop-APC01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR04MB6773
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SCC_THREE_WORD_MONTY,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------SOsSx1a3rFmS0YD7wzBcZ2on
-Content-Type: multipart/mixed; boundary="------------qtAE5mJL6H3HlkunW5gNx0pW";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Oleksandr Tyshchenko <olekstysh@gmail.com>,
- xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
- Stefano Stabellini <sstabellini@kernel.org>
-Message-ID: <47853f65-0fce-6ee1-f6ab-115ab48df7a3@suse.com>
-Subject: Re: [PATCH 0/2] Misc fixes for Xen grant DMA-mapping layer
-References: <20221005174823.1800761-1-olekstysh@gmail.com>
-In-Reply-To: <20221005174823.1800761-1-olekstysh@gmail.com>
+Add support for winbond w25q01jv-im chip.
 
---------------qtAE5mJL6H3HlkunW5gNx0pW
-Content-Type: multipart/mixed; boundary="------------ifS0aZNKw8d0gSh2PMBv6ACs"
+Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+---
+ drivers/mtd/spi-nor/winbond.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---------------ifS0aZNKw8d0gSh2PMBv6ACs
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+diff --git a/drivers/mtd/spi-nor/winbond.c b/drivers/mtd/spi-nor/winbond.c
+index ffaa24055259..850f2fd867aa 100644
+--- a/drivers/mtd/spi-nor/winbond.c
++++ b/drivers/mtd/spi-nor/winbond.c
+@@ -139,6 +139,8 @@ static const struct flash_info winbond_nor_parts[] = {
+ 	{ "w25q512jvq", INFO(0xef4020, 0, 64 * 1024, 1024)
+ 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
+ 			      SPI_NOR_QUAD_READ) },
++	{ "w25q01jvm", INFO(0xef7021, 0, 64 * 1024, 2048)
++		PARSE_SFDP },
+ };
+ 
+ /**
+-- 
+2.25.1
 
-T24gMDUuMTAuMjIgMTk6NDgsIE9sZWtzYW5kciBUeXNoY2hlbmtvIHdyb3RlOg0KPiBGcm9t
-OiBPbGVrc2FuZHIgVHlzaGNoZW5rbyA8b2xla3NhbmRyX3R5c2hjaGVua29AZXBhbS5jb20+
-DQo+IA0KPiBIZWxsbyBhbGwuDQo+IA0KPiBUaGVzZSBhcmUgc2V2ZXJhbCBmaXhlcyBJIGNv
-bGxlY3RlZCB3aGVuIHBsYXlpbmcgd2l0aCB2aXJ0aW8tbmV0IGRldmljZQ0KPiB1c2luZyBY
-ZW4gZ3JhbnQgbWFwcGluZ3MuDQo+IA0KPiBUZXN0ZWQgd2l0aCBib3RoIHZpcnRpby1ibGsg
-YW5kIHZpcnRpby1uZXQgZGV2aWNlcy4NCj4gDQo+IE9sZWtzYW5kciBUeXNoY2hlbmtvICgy
-KToNCj4gICAgeGVuL3ZpcnRpbzogRml4IG5fcGFnZXMgY2FsY3VsYXRpb24gaW4geGVuX2dy
-YW50X2RtYV9tYXAodW5tYXApX3BhZ2UoKQ0KPiAgICB4ZW4vdmlydGlvOiBGaXggcG90ZW50
-aWFsIGRlYWRsb2NrIHdoZW4gYWNjZXNzaW5nDQo+ICAgICAgeGVuX2dyYW50X2RtYV9kZXZp
-Y2VzDQo+IA0KPiAgIGRyaXZlcnMveGVuL2dyYW50LWRtYS1vcHMuYyB8IDI5ICsrKysrKysr
-KysrKysrKysrKysrKystLS0tLS0tDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDIyIGluc2VydGlv
-bnMoKyksIDcgZGVsZXRpb25zKC0pDQo+IA0KDQpTZXJpZXMgcHVzaGVkIHRvIHhlbi90aXAu
-Z2l0IGZvci1saW51cy02LjENCg0KDQpKdWVyZ2VuDQo=
---------------ifS0aZNKw8d0gSh2PMBv6ACs
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------ifS0aZNKw8d0gSh2PMBv6ACs--
-
---------------qtAE5mJL6H3HlkunW5gNx0pW--
-
---------------SOsSx1a3rFmS0YD7wzBcZ2on
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmM/tuAFAwAAAAAACgkQsN6d1ii/Ey8G
-bgf/du6WhlvN6TM8LUThjNHkx1yKlPgAth564txOMqLFAd+WVYglM6Gmgq+lqLsqlsU8jlyjv+Po
-lKgmgYLQSXiiFAjxl1ktGP0jgNszMoCoaY2x7rNMwiC861uZ9T/WSxGfsW9Cfi4Z2tb6Phn5aK3o
-Smi+6sW/QKNq82DLHDxlubXBZokB8ZtM8Z3t3Tgag6Mrw/3/Ok5slFDJmA+B0kKQ8xCHdRjSKQFN
-yNGEErZyuJljV0g+wPLcTV0m9HVE4Swp3xz14PtS+xVyaOG34B3CpC4DsrbQLXLD6XxzIqMpeLR2
-Po1PTRmD6c6/L1lE05O8yPhifFaVDLsVgebxuaXnqw==
-=Pjss
------END PGP SIGNATURE-----
-
---------------SOsSx1a3rFmS0YD7wzBcZ2on--
