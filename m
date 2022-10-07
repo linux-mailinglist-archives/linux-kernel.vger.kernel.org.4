@@ -2,87 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB135F7E30
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA83B5F7E31
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbiJGTkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 15:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
+        id S230074AbiJGTkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 15:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiJGTjt (ORCPT
+        with ESMTP id S230033AbiJGTj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 15:39:49 -0400
-Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [5.144.164.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81236178
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 12:39:37 -0700 (PDT)
-Received: from [192.168.1.101] (95.49.30.201.neoplus.adsl.tpnet.pl [95.49.30.201])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 3BFA01F8F4;
-        Fri,  7 Oct 2022 21:39:35 +0200 (CEST)
-Message-ID: <c8c48b34-974d-7497-c44d-992d0c4116cb@somainline.org>
-Date:   Fri, 7 Oct 2022 21:39:34 +0200
+        Fri, 7 Oct 2022 15:39:56 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E40B27DC6
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 12:39:55 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id h189-20020a1c21c6000000b003bd44dc526fso1498873wmh.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 12:39:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=afUUSBRhezaQIIa/PqXPHMg3oRJPH6N9lA2MHCGelh4=;
+        b=DXKWKNbw3ktneaE8BZzgJ8o1ien78MDtWtjoaxqEXV7h+mb533qSBvW4d73g1gClaG
+         KNSfhN8+za7B6f5umH1m90hLz0j3XMC4GkK6w64P+Tid9RyizOWccxtnEt0AFFs3jty8
+         gMAWL9LjyrXXQiu3BAHk+6p8FMzmUavwjqmn2Ups7GhUwYQabs3rEl0MNHdlzXwjdGte
+         9NqqYktR1msC/gP/9RN/auFxIqkZ/sN9PXGvjcb8gXrycoT8iQoLl0Znq/ucKlSvvjaz
+         oSihAX9GR6B4QvtuKyD/Ugg5OMdmSJSPesbxUbJZyZopKPm6i/Z5qd7Ni+KIz9fWCInm
+         Qr7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=afUUSBRhezaQIIa/PqXPHMg3oRJPH6N9lA2MHCGelh4=;
+        b=y/qMMTiQbJaJ56Fn0F21LlPeDSsrgN692nNeBqRJwGi4so7kpAI/gyGHY6eebJYDKV
+         kORXrPnBdajuNBCEpqi7V5dPjFsmpM0DPR0wBN0pjSnLDx97yjhL/5qH0w1j1Bgh/GNC
+         Z1eVdST4X65/nJuO+BwlnAGpRKYKWYxihtw30Hros0bAzxrkQw19X4rasGy/FvGVUnWa
+         TGKzpXhcW9iAgqav+G+SlYcDNXl6Kudu+e9XVQsDAHYYOmt1Aq02/yzI1sPOrSGPLtzx
+         gRT+w8FYTt/TQWikI/H0c3s6MilsiwLvRlhjVvQP0wMd5YUwzSiI/+3eqkdEuQUawLo0
+         HWjA==
+X-Gm-Message-State: ACrzQf1SWoVdFTdY+VBz+fF+Kwg3LMRcBGNn6kiRieYRlV/O7dT/Y5o8
+        ZElo2TXb88zmUx3lwBW15cVJ1yypg5q0hHxQX8o=
+X-Google-Smtp-Source: AMsMyM6f+aR2C0vM+WFe+S5FBRclR+T2xxh51Gsn1tY65wc195blV3wnv2YfZH9MNXiMXPOYyiA08YIgMh75Foc7cqE=
+X-Received: by 2002:a05:600c:510e:b0:3b5:1ab:fa5 with SMTP id
+ o14-20020a05600c510e00b003b501ab0fa5mr11501733wms.204.1665171593456; Fri, 07
+ Oct 2022 12:39:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 2/4] arm64: dts: qcom: sdm630: correct I2C8 pin functions
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221006104104.171368-1-krzysztof.kozlowski@linaro.org>
- <20221006104104.171368-2-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20221006104104.171368-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+From:   Sheryl Robert <techdatab2businesss@gmail.com>
+Date:   Fri, 7 Oct 2022 14:39:42 -0500
+Message-ID: <CAEBq3SLVWk6WRF4dKQ-+0GDxmdpDq97g+mk0zVeWMP6bOCMMMw@mail.gmail.com>
+Subject: RE: Dreamforce Attendees Email List-2022
+To:     Sheryl Robert <techdatab2businesss@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
+        FILL_THIS_FORM_LONG,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+Would you be interested in acquiring Dreamforce Attendees Email List 2022?
 
-On 6.10.2022 12:41, Krzysztof Kozlowski wrote:
-> The I2C8 pins are split into i2c8_a (GPIO30 and GPIO31) and i2c8_b
-> (GPIO44 and GPIO52).  Correct the name of function for I2C8 pins.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+List Includes: Company Name, First Name, Last Name, Full Name, Contact
+Job Title, Verified Email Address, Website URL, Mailing address, Phone
+number, Industry and many more=E2=80=A6
 
-Konrad
->  arch/arm64/boot/dts/qcom/sdm630.dtsi | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> index bc7c341e793c..796c19b9b2eb 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> @@ -885,14 +885,14 @@ i2c7_sleep: i2c7-sleep {
->  
->  			i2c8_default: i2c8-default {
->  				pins = "gpio30", "gpio31";
-> -				function = "blsp_i2c8";
-> +				function = "blsp_i2c8_a";
->  				drive-strength = <2>;
->  				bias-disable;
->  			};
->  
->  			i2c8_sleep: i2c8-sleep {
->  				pins = "gpio30", "gpio31";
-> -				function = "blsp_i2c8";
-> +				function = "blsp_i2c8_a";
->  				drive-strength = <2>;
->  				bias-pull-up;
->  			};
+Number of Contacts :45,968
+Cost : $1,829
+
+If you=E2=80=99re interested please let me know I will assist you with furt=
+her details.
+
+Kind Regards,
+Sheryl Robert
+Marketing Coordinators
