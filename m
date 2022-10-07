@@ -2,74 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1C55F7D99
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6887B5F7D9B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbiJGTE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 15:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
+        id S229620AbiJGTGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 15:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiJGTEZ (ORCPT
+        with ESMTP id S229445AbiJGTGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 15:04:25 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BAA94E401
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 12:04:24 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id c24so5367205plo.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 12:04:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=21A6ZjPuJYw0WXuNQnO8404OZpL79Fxvlo9cifFtwEE=;
-        b=OgjwR2mpvL7at1QiCptYJGYayigIS2Mnch4J2YrXJaQ42rnGB/rkvrX9a67tle7xCW
-         DV71jD5VbMXXT2fc+6W0GIBPw1RiWVdwt6xGnnYBPGuFo/EzsOy/rYI7EuOCIe3RPp6f
-         Yl/EYakcL4uTGWudHHVZseK0jFW5qg1nLAG4ilXwFF+7zrcOlHvO6YaFMLo01IDsHNMz
-         /aLxG6AryM6U/BcZnz6+L5Z7priSsJeGNyF5GYnJIqCU0z3nnctU3XBYqlY72vmrxcCm
-         oD+C6JsVYJXXYXNb2pFrfb5IRNVRWQy7LL3JjivtxT2cs4CraTszZRiSB9sC+s0w6SnG
-         3gmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=21A6ZjPuJYw0WXuNQnO8404OZpL79Fxvlo9cifFtwEE=;
-        b=6sBu8/gLqzzqd/XEkdBY5uqEjXfiECD6ESocIaikR7P4Sq/nVCaAKVYBerX/Apg+Ar
-         9lmfc4hqFlChWxXB7y0NE1Xo9gQb1Wmqva3xQFcQ2n6bT2PVShtTvfDkkz+AcWRPI4qZ
-         IGtx+WniPFXCoX/iamOrGTI/hFNO3OUEEbEHKREIs10FVb+8OXc5sl9D5cFhkYZOL6e8
-         shwgRUDp4js0VX/rCc+ItW71KqKnKArdftat2vGHkYDQK0BoqKPVdmtKRDjpLXf1/km9
-         KNE5Ej7tr/cIq7VBkWtNYz8UYR6l228zJXsAd/3VR9f2B/V3B5HHbr4suiXQyU/T9D0b
-         xKqw==
-X-Gm-Message-State: ACrzQf23LOeOnSauUeCxNaN5s1xxxtwDTfRWktM3PS0m983Ttrga6f2p
-        YdKqArErVaWZ+L8+WiLBVvJtAbYKXqE2JaOEYTZHWQ==
-X-Google-Smtp-Source: AMsMyM4sNQYpMbZ9f/4CGWZVJyb3GZQElKXVzVQNQlRukk6gLIsS/wsrK2rtho4EMPQYRyH3dy8QJ4ruM6l9u5XKLvo=
-X-Received: by 2002:a17:90b:3a88:b0:209:f35d:ad53 with SMTP id
- om8-20020a17090b3a8800b00209f35dad53mr17920889pjb.102.1665169463422; Fri, 07
- Oct 2022 12:04:23 -0700 (PDT)
+        Fri, 7 Oct 2022 15:06:08 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2050.outbound.protection.outlook.com [40.107.22.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6595D2F022;
+        Fri,  7 Oct 2022 12:06:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Y42J+mc0/dthltF3CsDrmvR5jhoZS7OBBok1csLxYOQ3jzUY9L8qCCic6k9YIz3FUTHLM1peMXIzucoh4ALDdYcE8/+1+C9kZ4iMQGwGhQViVS0hhzrSUgS7w/atGJRYowyQhkP8B+wdAroD2BBLRhG8vVLxCb/FApMAUkqgckUneyYFTDDnJjcHNI0jDzT/A7BAUHIsE49VQZ8gXT04zzVg2Pf3i+NXxmuzGE/tCttjJvmUV+FqV/laMw3f5jW1FhiGMq+dzk8Pl9rinLV4r5QHapxquZuuna+bjc8QAebHwKAu0tSinlMGypmh9bLlI7G++B8MGlqer7gwfQTHkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=afhnLC3ueoWlgjWqXtaFAX40xslZhdBXedU2tsfwXNk=;
+ b=CceAoLXOi8bZgjNMsRvMb/V+CWQy2OZcc/Td6uMQc8+rZh3mHe7vCoULIihoVchdzmYK2QE2TZo1xj0b4prTbmIJvXuy4SB1Hkdc/ffe9RPvN8GTo610pC7cZQH2ubpnWf7n50mxOQmeJL2UJgl2zpgVgmhGKV+dvZEdZzOgma11e9C6PUkEBUfjx3JQj+8HeF8fb6U9fxGSceBLfV3ej69St5R6MOCWcvdUCEeS9gdJcnZAP+wxwTcJIIhLKZd9vjoYYyshJhk1yGHDBS6mYK0cy+F4H172CC9yTdcdYgv6WunVHUcfhsMt6iSCRTpHkJlc/t8YfXu/so9kV/fGnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=afhnLC3ueoWlgjWqXtaFAX40xslZhdBXedU2tsfwXNk=;
+ b=MzR9678+fOyfXEFmiBpNWChMZlHRh6YQP+TanNphmco7bRY04uBYPqkAJFdZeo1rvg5DofOa1K1z0AOhoszaEMDOXZV93XjT8aWOYltvn1GNOvG10n2Ck7HcTmBSleU5DyjGw7HLQ1SehQMSgShuhjQkeAFUaA70qG7rIv3RSvoiZsNln7icrR7HkiZwJPpVPef6QnWjlw2MXmzRpiUd5Q0NGXVcDs2lU9EzOENZGb4ZxUh2WSPdHTdOA3TedSz34vCPakoP6I80FsagAs3bXqHhwWcuLJFSR5WSeUMzb6hu55QPXhz3jRmoAJT4vEaw05aBEIwYpAfP0eJ7vBnkYw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
+ by GV1PR03MB8541.eurprd03.prod.outlook.com (2603:10a6:150:9f::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Fri, 7 Oct
+ 2022 19:06:00 +0000
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::204a:de22:b651:f86d]) by DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::204a:de22:b651:f86d%6]) with mapi id 15.20.5676.034; Fri, 7 Oct 2022
+ 19:05:59 +0000
+Subject: Re: [PATCH] rtc: abx80x: Don't warn about oscillator failure after
+ PoR
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221007163712.2193966-1-sean.anderson@seco.com>
+ <Y0B2pNv8otKkLs1D@mail.local>
+From:   Sean Anderson <sean.anderson@seco.com>
+Message-ID: <a7c4fdc6-a704-31dd-d596-daa484328024@seco.com>
+Date:   Fri, 7 Oct 2022 15:05:55 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+In-Reply-To: <Y0B2pNv8otKkLs1D@mail.local>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL0PR02CA0132.namprd02.prod.outlook.com
+ (2603:10b6:208:35::37) To DB7PR03MB4972.eurprd03.prod.outlook.com
+ (2603:10a6:10:7d::22)
 MIME-Version: 1.0
-References: <20190307090146.1874906-1-arnd@arndb.de> <20221006222124.aabaemy7ofop7ccz@google.com>
- <c646ea1e-c860-41cf-9a8e-9abe541034ff@app.fastmail.com>
-In-Reply-To: <c646ea1e-c860-41cf-9a8e-9abe541034ff@app.fastmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 7 Oct 2022 12:04:11 -0700
-Message-ID: <CAKwvOdkEied8hf6Oid0sGf0ybF2WqrzOvtRiXa=j7Ms-Rc6uBA@mail.gmail.com>
-Subject: Re: [PATCH] fs/select: avoid clang stack usage warning
-To:     Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>
-Cc:     linux-fsdevel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Paul Kirth <paulkirth@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB7PR03MB4972:EE_|GV1PR03MB8541:EE_
+X-MS-Office365-Filtering-Correlation-Id: c81358e6-a366-4392-4885-08daa896f828
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CIudr79yVt/3B57RvJ6W9El4km59aIf3HIJt+pLtoO18+kpsLDFhmugg92VWvn0jzgZE3nXDtYz3ho4P3XHkX/PF2qGKnxCif+19AdIgOSAKrh0ycpMHBwzZtPSjEjklQMSvy/GXu8eGWSKhfh6O7skmKkf70HdhCi9FqM5qrAhJy8DA3ygnvyD6PL3U4Hqoet41c16+7fph4TCgTx0o+p0ose+jqWoSOJd3uUu7RqaFhSpBuTDjB+CQJO1P+ZON5YpTMVLnj/7k+twfNnDF0vzM+MYPUJP0PMBuv2t/mt4+o/s4qdQhelmGiuaUk/SYbYVkmykfQyuZc73tJM1n/iFqQp5TEjfx2mDJQY2Os0+8YUxiaYfZIwiDo9itQ0Dzq1h1pmclpYZfM4i7DqJUbwX51Ob7E2hoBXRf0t9KfhBmuIqSR5P8tlDa+H460boBZWmcPQvu2aRRNBMIK6UfqM6vPPxurMtOg45phVjWjM0BnU6B+albAuLyxacO2pMehQ0+3R4oxQjTpCqZXoSKmXmkGHGZ0X7iZQo8zTzqe4QH+QlL+13E02yUo0nCw6KHdQS7cCEAc4B2iH4lQaSrqNCMCDJu1tPkwMWJ7TMr7jOKVDRglfIV6Iz3u8H6IhOrKtYrqZ8vPVvvzqHPURP53WINNVDhVJfZ94XJNbZg2rxWQZzYgKYfzHrZ+t3vB1hhIjbuIJ4Uf/iZGC02+V5+5UZM5dd+I7NEOYo19+7xlgH6c3NJDrgyLXOeR1IIYP1dKEt7y8DMiwXf+tSr2p/w+fDgpep+HjOaxdZGsbE7xpriP2Hlft9YdNP8FxIlF01IhyD6y7LOWhpg2olS+M0dzw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39850400004)(366004)(396003)(136003)(346002)(376002)(451199015)(2616005)(66476007)(53546011)(86362001)(6666004)(8676002)(52116002)(4326008)(66946007)(6512007)(6916009)(6506007)(316002)(38100700002)(66556008)(26005)(31696002)(38350700002)(478600001)(83380400001)(6486002)(36756003)(186003)(31686004)(41300700001)(44832011)(5660300002)(2906002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R2NLd2Zobzd5NGNzSnllTTVJN0ZOTkdHSngzenZQV3kxdExkMERrbUZ2b2RQ?=
+ =?utf-8?B?bDRxVHVZeldHTjRvQUgyWC9US1hJZXlEQ0N5R0xXU0Q2UWFtTW85VW82c3Y3?=
+ =?utf-8?B?VFVSTUtsZElvVEp0TXAzQkl3Zkp1OENkbkkydWNjQWNtUmh3aE5YWjNua3lj?=
+ =?utf-8?B?VGdRU3Y3U0tWcmNxa01EN2xwNC8wQ3VwWEtOY1dRd1NaMjhkWE9DRk0vdkwr?=
+ =?utf-8?B?bUVPN1dya0VReVplMEVPcldrNGQ0VmM4SzZwTm8xSStIS2FKMlV0cUtOaTEz?=
+ =?utf-8?B?SEpSV1JiYmg5NzNtdGZCQkJYUjJTaUpsVlVRaVpEdkE3b2FFRWNETTV6S3VN?=
+ =?utf-8?B?UWZiTGRURUt5Z3hVNUxQZlAyYW8rRFErakR2cmg3MVcrSWc0MmNRUlorSmtn?=
+ =?utf-8?B?M2RpSi81aG40b1MwQVZxM3ZOTnFaMWVyZXZMWml2N01kOEkxWndlakUyM1JQ?=
+ =?utf-8?B?RzUvTTBGSWR4VlgzZWY5R1dMUmwwSm1Ea3M0Qk1JR0JNZ3BhYlZpZzBpTlhw?=
+ =?utf-8?B?cVpXaTY0SGhZQnk2U1NaRkRrNHlUUkY2R254NXJOa04wclFDUmp5ckdub3Zw?=
+ =?utf-8?B?U3RLbWxLN2tVRHRDUTJjQk9oaldwVEMwRStnSDNZYjlEYVhqT2ZXSjcvbGtI?=
+ =?utf-8?B?S1JSK0RNZ0t2ZE1MdzFVMi9ONVdqWkFnOVJ0RlZTNWE0QzQyS1E1eHc1UlFr?=
+ =?utf-8?B?V1QrT1VtckpreldDTEFPZXo2dmhTU0ZCdzZuM1Q2NGV5Um9Na0xBV2l2ZS9M?=
+ =?utf-8?B?dXZPaTBOejM3ZWJXcmFHNlEwd0tuQU1tWWZZbG1pV25EZ2lscC9DQ3daMlBw?=
+ =?utf-8?B?ZDhMK3ZvOHpLQmVQWXd2ZnplQ3AyMGUraCs3QlRReGFhWHlJVi9rNWhSVEli?=
+ =?utf-8?B?ck5nQ3pFSjRQbjVUVVU2VDBMOHJybWVJSGNaRnYxSE4weitRTWhaeXMwOUJH?=
+ =?utf-8?B?NWFCM2RsdGl3bHZhZHpqK3ZxMkdoNFQ3WExxVTZDejF5MnN2M2xhSUhoK0pO?=
+ =?utf-8?B?cHdKdlNvMDFZQ3ZxMTRIdXRockJzcVI3cUxiR1lkVzRUR1hHZi9vQ3drNTlu?=
+ =?utf-8?B?bXpSZ2t6ZXgrZ0tDZE9kbHRqZGhkS0ZwcGlXMFBNcFBFalp3S1g5MWxlRTY0?=
+ =?utf-8?B?T3NOKzRQaUxBVTloMTdLZEJxcGJoeW9CNHdidXp1NHMvSlhROVBGN0VMcU5Z?=
+ =?utf-8?B?c1BzOTFGbUFxUFVjMFBBK1ZObC9sbnk5M1Q2YkJnNUxSYW5FV3ZWSFJkSmFB?=
+ =?utf-8?B?WXhSWDFVaXB0NkRzbFZ5VW5HTGtxMm1CTlBGUjNlUjJMOFNhVVFqR0NERjJm?=
+ =?utf-8?B?WFhveHRVU2FVV0ZucGxrelEza1Mzd1p0TlpsbFFhZ1ZISDNjQ2VyYldnVkxT?=
+ =?utf-8?B?NVRmalQwSWRxcjJNY2NEUXo4ckQrT3F2RVJwYXVBTGhnenRyamxhZWJZN2VG?=
+ =?utf-8?B?YzhqV3kzQSt3VzlqU0UranVzWTlla2xRbFQ1QUlyZWNjZVNxNklNT2RwWERp?=
+ =?utf-8?B?NXV1NEluZi92N1lRU1ZzNkVOTURhdm5zNVF3MVZRSzlPM0JyK0syUUY3QVVl?=
+ =?utf-8?B?Zm1LbU42eTVzVXE0b3BkdmlSVUVZL2t1QnRDRWZZZ2QwZlpaTGZ3VGxaS0FO?=
+ =?utf-8?B?SmFKN1VCOEt1Sk5Va08xN002ZTQ3UCtTV1FjVXlOV05TbElhWjN0SmJXQllC?=
+ =?utf-8?B?N28yMHJXUUcyMkxkYkF2d29sMUtPZ3J4Rk9nMk9CeFdVRzQwRDNOT0QzdVpx?=
+ =?utf-8?B?cE5FVmlMaE9Ub2wrUVk3eVN3b2tyVkJleDhzWlZ3c0Q2SldYNEFYdUdURE50?=
+ =?utf-8?B?S092cWVRZjF4bXhlTWFVdFJlbVBZVTlXT3VLaFVCVHdDMzlIZ2VoOGYyUXh5?=
+ =?utf-8?B?SW5WREN3L212dU00K1JqMzcxS1duVUdlNTF6V21INDFYbU4za1B2RUFIWVRS?=
+ =?utf-8?B?VEVVSHdTSjVqZGNiM1puY2VTdURES3F1RVRoWHF1WlpjUDJsRjNTbkl1VVVR?=
+ =?utf-8?B?MUh0SVdhRTlSR0tYbllONFhMdW13M1hYbFVXN1JieGlXNk8yTUtTVkJERGdU?=
+ =?utf-8?B?ZWxBUzVDbXUvUlJSdEtSUFhRVFNvTXM4Q0sxWmFqN0VWUDRSVDlzZUlkMnJE?=
+ =?utf-8?B?dEVtVWhoOEQ2SnZqbE9oQlpWZFkwWGMwSjNMd1NmbHArU0NZNkxTeTNlUlVX?=
+ =?utf-8?B?OXc9PQ==?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c81358e6-a366-4392-4885-08daa896f828
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2022 19:05:59.7671
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JRkoASAokFEcw0/bs4oEh883UbN3x8fgknz5b0EXao7W6DkgiK4EiPRq49WlhswV3lHm4+rvYJWTBKy5o9WZYw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR03MB8541
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,204 +127,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Kees, Paul
-
-On Fri, Oct 7, 2022 at 1:28 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, Oct 7, 2022, at 12:21 AM, Nick Desaulniers wrote:
-> > On Thu, Mar 07, 2019 at 10:01:36AM +0100, Arnd Bergmann wrote:
-> >> The select() implementation is carefully tuned to put a sensible amount
-> >> of data on the stack for holding a copy of the user space fd_set,
-> >> but not too large to risk overflowing the kernel stack.
-> >>
-> >> When building a 32-bit kernel with clang, we need a little more space
-> >> than with gcc, which often triggers a warning:
-> >>
-> >> fs/select.c:619:5: error: stack frame size of 1048 bytes in function 'core_sys_select' [-Werror,-Wframe-larger-than=]
-> >> int core_sys_select(int n, fd_set __user *inp, fd_set __user *outp,
-> >>
-> >> I experimentally found that for 32-bit ARM, reducing the maximum
-> >> stack usage by 64 bytes keeps us reliably under the warning limit
-> >> again.
-> >>
-> >> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> >> ---
-> >>  include/linux/poll.h | 4 ++++
-> >>  1 file changed, 4 insertions(+)
-> >>
-> >> diff --git a/include/linux/poll.h b/include/linux/poll.h
-> >> index 7e0fdcf905d2..1cdc32b1f1b0 100644
-> >> --- a/include/linux/poll.h
-> >> +++ b/include/linux/poll.h
-> >> @@ -16,7 +16,11 @@
-> >>  extern struct ctl_table epoll_table[]; /* for sysctl */
-> >>  /* ~832 bytes of stack space used max in sys_select/sys_poll before allocating
-> >>     additional memory. */
-> >> +#ifdef __clang__
-> >> +#define MAX_STACK_ALLOC 768
-> >
-> > Hi Arnd,
-> > Upon a toolchain upgrade for Android, our 32b x86 image used for
-> > first-party developer VMs started tripping -Wframe-larger-than= again
-> > (thanks -Werror) which is blocking our ability to upgrade our toolchain.
-> >
-> > I've attached the zstd compressed .config file that reproduces with ToT
-> > LLVM:
-> >
-> > $ cd linux
-> > $ zstd -d path/to/config.zst -o .config
-> > $ make ARCH=i386 LLVM=1 -j128 fs/select.o
-> > fs/select.c:625:5: error: stack frame size (1028) exceeds limit (1024)
-> > in 'core_sys_select' [-Werror,-Wframe-larger-than]
-> > int core_sys_select(int n, fd_set __user *inp, fd_set __user *outp,
-> >     ^
-> >
-> > As you can see, we're just barely tipping over the limit.  Should I send
-> > a patch to reduce this again? If so, any thoughts by how much?
-> > Decrementing the current value by 4 builds the config in question, but
-> > seems brittle.
-> >
-> > Do we need to only do this if !CONFIG_64BIT?
-> > commit ad312f95d41c ("fs/select: avoid clang stack usage warning")
-> > seems to allude to this being more problematic on 32b targets?
->
-> I think we should keep the limit consistent between 32 bit and 64 bit
-> kernels. Lowering the allocation a bit more would of course have a
-> performance impact for users that are just below the current limit,
-> so I think it would be best to first look at what might be going
-> wrong in the compiler.
->
-> I managed to reproduce the issue and had a look at what happens
-> here. A few random observations:
->
-> - the kernel is built with -fsanitize=local-bounds, dropping this
->   option reduces the stack allocation for this function by around
->   100 bytes, which would be the easiest change for you to build
->   those kernels again without any source changes, but it may also
->   be possible to change the core_sys_select function in a way that
->   avoids the insertion of runtime bounds checks.
-
-Thanks for taking a look Arnd; ++beers_owed;
-
-I'm not sure we'd want to disable CONFIG_UBSAN_LOCAL_BOUNDS=y for this
-particular configuration of the kernel over this, or remove
--fsanitize=local-bounds for this translation unit (even if we did so
-specifically for 32b targets).  FWICT, the parameter n of function
-core_sys_select() is used to index into the stack allocated stack_fds,
-which is what -fsanitize=local-bounds is inserting runtime guards for.
-
-If I dump the compiler IR (before register allocation), the only
-explicit stack allocations I observe once the middle end optimizations
-have run are:
-
-1. a single 64b value...looks like the ktime_t passed to
-poll_schedule_timeout IIUC.
-2. a struct poll_wqueues inlined from do_select.
-3. 64x32b array, probably stack_fds.
-
-(oh, yeah, those are correct, if I rebuild with `KCFLAGS="-g0
--fno-discard-value-names"` the IR retains identifiers for locals. I
-should send a patch for that for kbuild).
-
-I think that implies that the final stack slots emitted are a result
-of the register allocator failing to keep all temporary values live in
-registers; they are spilled to the stack.
-
-Paul has been playing with visualizing stack slots recently, and might
-be able to provide more color.
-
-I worry that the back end might do tail duplication or if conversion
-and potentially split large stack values into two distinct
-(non-overlapping) stack slots, but haven't seen that yet in reality.
-
-We've also seen poor stack slot reuse with KASAN with clang as well...
-
->
-> - If I mark 'do_select' as noinline_for_stack, the reported frame
->   size is decreased a lot and is suddenly independent of
->   -fsanitize=local-bounds:
->   fs/select.c:625:5: error: stack frame size (336) exceeds limit (100) in 'core_sys_select' [-Werror,-Wframe-larger-than]
-> int core_sys_select(int n, fd_set __user *inp, fd_set __user *outp,
->   fs/select.c:479:21: error: stack frame size (684) exceeds limit (100) in 'do_select' [-Werror,-Wframe-larger-than]
-> static noinline int do_select(int n, fd_set_bits *fds, struct timespec64 *end_time)
-
-I think this approach makes the most sense to me; the caller
-core_sys_select() has a large stack allocation `stack_fds`, and so
-does the callee do_select with `table`.  Add in inlining and long live
-ranges and it makes sense that stack spills are going to tip us over
-the threshold set by -Wframe-larger-than.
-
-Whether you make do_select() `noinline_for_stack` conditional on
-additional configs like CC_IS_CLANG or CONFIG_UBSAN_LOCAL_BOUNDS is
-perhaps also worth considering.
-
-How would you feel about a patch that:
-1. reverts commit ad312f95d41c ("fs/select: avoid clang stack usage warning")
-2. marks do_select noinline_for_stack
-
-?
-
-I assume the point of "small string optimization" going on with
-`stack_fds` in core_sys_select() is that the potential overhead for
-kmalloc is much much higher than the cost of not inlining do_select()
-into core_sys_select().  The above approach does solve this .config's
-instance, and seems slightly less brittle to me.
-
->   However, I don't even see how this makes sense at all, given that
->   the actual frame size should be at least SELECT_STACK_ALLOC!
-
-I think the math checks out:
-
-#define FRONTEND_STACK_ALLOC  256
-#define SELECT_STACK_ALLOC  FRONTEND_STACK_ALLOC
-long stack_fds[SELECT_STACK_ALLOC/sizeof(long)];
-
-sizeof(long) == 4; // i386 ilp32
-sizeof(stack_fds) == sizeof(long) * 256 / sizeof(long) == 256
-
->
-> - The behavior of -ftrivial-auto-var-init= is a bit odd here: with =zero or
->   =pattern, the stack usage is just below the limit (1020), without the
->   option it is up to 1044. It looks like your .config picks =zero, which
->   was dropped in the latest clang version, so it falls back to not
-
-Huh? What do you mean by "was dropped?"
-
-The config I sent has:
-CONFIG_CC_HAS_AUTO_VAR_INIT_PATTERN=y
-CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO_BARE=y
-CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO=y
-# CONFIG_INIT_STACK_NONE is not set
-CONFIG_INIT_STACK_ALL_ZERO=y
-
-Disabling INIT_STACK_ALL_ZERO from the config provided doesn't elide
-the diagnostic.
-Enabling INIT_STACK_ALL_PATTERN does... explicit stack allocations in
-IR haven't changed. In the generated assembly we're pushing 3x 4B
-GPRs, subtracting 8B from the stack pointer, then another 1008B.
-(Filed: https://github.com/llvm/llvm-project/issues/58237)
-So that's 3 * 4B + 8B + 1008B == 1028.  But CONFIG_FRAME_WARN is set
-to 1024.  I wonder if this diagnostic is not as precise as it could
-be, or my math is wrong?
-
-It looks like for arrays INIT_STACK_ALL_PATTERN uses memset to fill
-the array with 0xFF rather than 0x00 used by INIT_STACK_ALL_ZERO. Not
-sure why that would make a difference, but curious that it does.
-Looking at the delta in the (massive) IR between the two, it looks
-like the second for loop preheader and body differ. That's going to
-result in different choices by the register allocator.  The second
-loop is referencing `can_busy_loop`, `busy_flag`, and `retval1` FWICT
-when looking at IR. That looks like one of the loops in do_select.
-
->   initializing. Setting it to =pattern should give you the old
->   behavior, but I don't understand why clang uses more stack without
->   the initialization, rather than using less, as it would likely cause
->   fewer spills
->
->        Arnd
 
 
+On 10/7/22 2:57 PM, Alexandre Belloni wrote:
+> Hi,
+> 
+> On 07/10/2022 12:37:12-0400, Sean Anderson wrote:
+>> According to the datasheet, the "oscillator failure" bit is set
+>> 
+>> > ...on a power on reset, when both the system and battery voltages have
+>> > dropped below acceptable levels. It is also set if an Oscillator Failure
+>> > occurs....
+>> 
+>> From testing, this bit is also set if a software reset is initiated.
+>> 
+>> This bit has a confusing name; it really tells us whether the time data
+>> is valid. We clear it when writing the time. If it is still set, that
+>> means there is a persistent issue (such as an oscillator failure),
+>> instead of a transient one (such as power loss).
+>> 
+>> Because there are several other reasons which might cause this bit
+>> to be set (including booting for the first time or a battery failure),
+>> do not warn about oscillator failures willy-nilly. This may cause system
+>> integrators to waste time looking into the wrong line of investigation.
+>> 
+>> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+>> ---
+>> 
+>>  drivers/rtc/rtc-abx80x.c | 17 ++++++++++++++++-
+>>  1 file changed, 16 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
+>> index 9b0138d07232..1eb752e4e39d 100644
+>> --- a/drivers/rtc/rtc-abx80x.c
+>> +++ b/drivers/rtc/rtc-abx80x.c
+>> @@ -115,6 +115,7 @@ struct abx80x_priv {
+>>  	struct rtc_device *rtc;
+>>  	struct i2c_client *client;
+>>  	struct watchdog_device wdog;
+>> +	bool wrote_time;
+>>  };
+>>  
+>>  static int abx80x_write_config_key(struct i2c_client *client, u8 key)
+>> @@ -167,6 +168,7 @@ static int abx80x_enable_trickle_charger(struct i2c_client *client,
+>>  static int abx80x_rtc_read_time(struct device *dev, struct rtc_time *tm)
+>>  {
+>>  	struct i2c_client *client = to_i2c_client(dev);
+>> +	struct abx80x_priv *priv = i2c_get_clientdata(client);
+>>  	unsigned char buf[8];
+>>  	int err, flags, rc_mode = 0;
+>>  
+>> @@ -181,7 +183,18 @@ static int abx80x_rtc_read_time(struct device *dev, struct rtc_time *tm)
+>>  			return flags;
+>>  
+>>  		if (flags & ABX8XX_OSS_OF) {
+>> -			dev_err(dev, "Oscillator failure, data is invalid.\n");
+> 
+> Simply remove the line.
 
--- 
-Thanks,
-~Nick Desaulniers
+I think it's important to warn the user if the oscillator actually fails
+so they can e.g. replace the crystal. Additionally, this can help debug
+failed batteries, since you will see "Time data invalid" in the boot log.
+
+--Sean
+
+>> +			/*
+>> +			 * The OF bit can be set either because of a reset
+>> +			 * (PoR/Software reset) or because of an oscillator
+>> +			 * failure. Effectively, it indicates that the stored
+>> +			 * time is invalid. When we write the time, we clear
+>> +			 * this bit. If it stays set, then this indicates an
+>> +			 * oscillator failure.
+>> +			 */
+>> +			if (priv->wrote_time)
+>> +				dev_err(dev, "Oscillator failure\n");
+>> +			else
+>> +				dev_info(dev, "Time data invalid\n");
+>>  			return -EINVAL;
+>>  		}
+>>  	}
+>> @@ -207,6 +220,7 @@ static int abx80x_rtc_read_time(struct device *dev, struct rtc_time *tm)
+>>  static int abx80x_rtc_set_time(struct device *dev, struct rtc_time *tm)
+>>  {
+>>  	struct i2c_client *client = to_i2c_client(dev);
+>> +	struct abx80x_priv *priv = i2c_get_clientdata(client);
+>>  	unsigned char buf[8];
+>>  	int err, flags;
+>>  
+>> @@ -240,6 +254,7 @@ static int abx80x_rtc_set_time(struct device *dev, struct rtc_time *tm)
+>>  		dev_err(&client->dev, "Unable to write oscillator status register\n");
+>>  		return err;
+>>  	}
+>> +	priv->wrote_time = true;
+>>  
+>>  	return 0;
+>>  }
+>> -- 
+>> 2.35.1.1320.gc452695387.dirty
+>> 
+> 
