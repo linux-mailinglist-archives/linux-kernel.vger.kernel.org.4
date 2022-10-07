@@ -2,50 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126BD5F745A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 08:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD475F745C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 08:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiJGGsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 02:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51308 "EHLO
+        id S229737AbiJGGvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 02:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiJGGsB (ORCPT
+        with ESMTP id S229492AbiJGGvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 02:48:01 -0400
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E894C1DB0
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 23:48:00 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id A65D2240104
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 08:47:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1665125278; bh=0UWS+iyjBP6iUUcWb5qqEtxi5shbZVmZZKIvv3o2RwY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=kWXsIkCXQzqkU1wY5Iz2vbLfIxBcEwHyxKJR4vzK+pbFBQddApoQRqJm/dNbE32Vg
-         A2vhoAOFA0yuFaqnBIS6dSTazEFKRDXwsniKF1idzG5Y6AbHO8zh1heU7suzZjiM4m
-         bzzhGv/fCpcbqsMri+tSjgddLXykzWb5g3hVZhtzmdbpMN//MJaKPvrTC0AoTQwn6/
-         o7UppGLS89dmdQSy9vBX111ahBhkZD39emxPcR22yTw3gd04Egeye9VFLZsP4KbLOy
-         VGLLZLO9F5awdP4a3XpvwHfm4Bv2A0ebd7BZB4h3ZVnoLxvxZuCX0MoGfBT6OvEgxI
-         j51D8Me7YZzSg==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4MkJlx3ydQz6tpg;
-        Fri,  7 Oct 2022 08:47:57 +0200 (CEST)
-Date:   Fri,  7 Oct 2022 06:47:56 +0000
-From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: corsair-psu: fix typo in USB id description
-Message-ID: <20221007084756.6f4053c5@posteo.net>
-In-Reply-To: <20221005182215.GA2626047@roeck-us.net>
-References: <Yzql13NOvQLlrye1@monster.localdomain>
-        <20221005182215.GA2626047@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Fri, 7 Oct 2022 02:51:18 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C8F1176C5
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 23:51:17 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id j3-20020a170902da8300b001782a6fbc87so2793408plx.5
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 23:51:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tfq9PSGDXYpZtQCHcbvdnQkS1SYQVEwTPGR6C7TSjig=;
+        b=XIYie7P9h7PQH9nyPA5sytpXQ+nirNYK9pq/gqG+8siVETbp96FSGn0WQDYKVN+mhw
+         mTRYyGpCXbhtTmHJkF8QOZtoVnVLLm8n7njs7piHPjhti6kvF96dg1FDH6CQjP+nt2vE
+         gZA0ORzUpF4YiXrlj1xudqFlukEhwyo7/S2bjzDwaFpIiF2Y3Elym/tOITnLSqpHkigs
+         EvqeHnDUhvQCi2O7ocMaLM4lBkji3vJE0CwZWWtXATytnN5xb7yGnamMuCzmUB73E4W1
+         C+YFwa607cckvF3sNR0I+OhOYguVa7CL61ChD/FgYBPXpedfg1z/qGoNhPgZxu5AODk/
+         XXog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tfq9PSGDXYpZtQCHcbvdnQkS1SYQVEwTPGR6C7TSjig=;
+        b=LDCcv2fiwwlh+iO01cv0cvHXqGJXveS8TIMqtjeI5FEIlFWbcJ8uP1HbBQ/l1WWCDv
+         Z/3Dc9Tb2BjcmnWO2Kx8UHFhuT74XQezC6cTSIJqRY8+sR8FAPK2J2+nU8K7WgZUNQr6
+         I3EYSljA+dtll1KF6vGoYcZoXNt7dYshOBSMD0mhAv4kE75foMuSZ4RPbVTpi3HmBPnp
+         aYkYV4wqEI+OvJP0oTvjENiOYAy35fWTUVkDNIcAD/nZik5dfIqHMLO8RtwqM2m4zJQ8
+         CHOsisxd1nfMki1LYFZDa0uOD5AGiw6KLOUxWzcWVZPZWdpnhgMFfhCRbPQpujdIIi/I
+         NqBw==
+X-Gm-Message-State: ACrzQf26qvMjskpnHBFpot0JYSZ8GHRt4Ej8cdsEfaGzMAyNw+U8DoIv
+        Uf0gkb8NdIsfidJpkoQxpwvu6t4dlKZF
+X-Google-Smtp-Source: AMsMyM77gwewrkwlUBIXJIRw0AYhQ3+4cmMkTaTi5DgxmQFldZmVoa3rzJoVPLNGFjXvJ1sfZvIXpkgUbNnd
+X-Received: from sgzhang.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3d89])
+ (user=sgzhang job=sendgmr) by 2002:a17:90a:f016:b0:20b:a65f:af42 with SMTP id
+ bt22-20020a17090af01600b0020ba65faf42mr1196300pjb.79.1665125450706; Thu, 06
+ Oct 2022 23:50:50 -0700 (PDT)
+Date:   Fri,  7 Oct 2022 06:50:39 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+Message-ID: <20221007065042.700761-1-sgzhang@google.com>
+Subject: [PATCH v2 0/3] mtd: mtdoops: use pr_ functions, add and direct call
+ mtdoops_erase function when panic
+From:   Ray Zhang <sgzhang@google.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ray Zhang <sgzhang@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,18 +69,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Oct 2022 11:22:15 -0700
-Guenter Roeck <linux@roeck-us.net> wrote:
+In mtdoops driver, to comply with latest kernel code requirement, change
+printk() to counterpart pr_ functions. Add mtdoops_erase function; When
+panic function invokes mtdoops, if needed, call mtdoops_erase function
+immediately.
 
-> On Mon, Oct 03, 2022 at 09:05:27AM +0000, Wilken Gottwalt wrote:
-> > Fixes: 0cf46a653bda ("hwmon: (corsair-psu) add USB id of new revision of the HX1000i psu")
-> > Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
-> 
-> Applied. In the future, please add some description (subject is
-> insufficient).
+Ray Zhang (3):
+  mtd: mtdoops: change printk() to counterpart pr_ functions
+  mtd: mtdoops: add mtdoops_erase function and move mtdoops_inc_counter
+    to after it
+  mtd: mtdoops: panic caused mtdoops to call mtdoops_erase function
+    immediately
 
-Oh sorry. I wasn't sure how to handle this, I mean the title already says all,
-nothing more to add.
+ drivers/mtd/mtdoops.c | 107 +++++++++++++++++++++++-------------------
+ 1 file changed, 60 insertions(+), 47 deletions(-)
 
-greetings,
-Will
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
+
