@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC105F74E9
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 09:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D40B85F74EF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 09:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiJGHyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 03:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
+        id S229648AbiJGHzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 03:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiJGHyP (ORCPT
+        with ESMTP id S229805AbiJGHzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 03:54:15 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E9E868B4
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 00:54:14 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id 187so3052878iov.10
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 00:54:13 -0700 (PDT)
+        Fri, 7 Oct 2022 03:55:18 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69389F747
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 00:55:16 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id o65so3070593iof.4
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 00:55:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=atishpatra.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=z3HmofIkLHyjFSNfg+w/HLXXCvk+x88+K8Xha7iHo70=;
-        b=JL219CpZ9HN4n6xe7FrmK4uQLg0GErBZ7UVSeT5/WCimWUoE3YLNjTYivFn66DOg+G
-         FGGXNwa5LHpIZJLNWVOteU7c1YfOwgcy8zMkvjz0r1WU4Eoc3nesjE7x05eHoQmqqidO
-         wmAmsFIdn4xbCTa1AsoShro+6NA+9gy3TyKU0=
+        bh=YMtULBVuhc9ss92jUe+D+WcboNyvjfJAcLdpgC5afT4=;
+        b=X3o3bgw2QtF306MV5U22AkyUGQFtuCl0MhXVGwyUbmd5TMWoQgkDslPJTUEweBMvZT
+         afR7YuWsfMshOWtJxLYb2FHeSN59FnQONV5RXO/Kt48XQPEPNl+9P3E+UGX9NBJ6R1Tr
+         loS8wRUfFK28GeOc8X3FlGe7EJStt8L/gK3ug=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=z3HmofIkLHyjFSNfg+w/HLXXCvk+x88+K8Xha7iHo70=;
-        b=UJONgHirqkr+kJxFpwACe6e/oAq10bTNpSdAmSK0ZgJSwxAtwhzgfJe/faPj6dq/vD
-         8Wg/zzvrgkYkTv2CobweU2+Ix7r/jPNc820ntdNGzczc9fDV6HF68Ssa0uu7CrGTgi9+
-         DL9D+JKDXGIhEIfLz7RikXfPyF0e3re8GZnzTiWF7p4Aacb0IrIvaokyCSvqv114boyW
-         Zl8D8l8+a3CrR2gYi9kL2BQLHont+FnAsR5W+ciP+yC/Wqnu09DIw4qCWGn4cpNB6UFL
-         MEq7JXW1IxXThLiejAFbrptQkO6jYDN/PxhWmV7km2RucitjnVQGkm9io2qaHPf1bRmx
-         oM1Q==
-X-Gm-Message-State: ACrzQf3fmvhGDbrQPwhKqMPT8Ut/nBcOITZuYUA28AlDVt+/HLYC1OkO
-        82JwRly/4AVEaxAwboAjr1okCqR6RI2Cfiy5CcP4
-X-Google-Smtp-Source: AMsMyM4hnwa9n8R0VVhVDUnbeMfGz0pzn/C/7xHfZ+SA71TLfQPovLp8Ftbin4tvHH8KvVKmU30gq1dajprNTdvFF3o=
-X-Received: by 2002:a05:6602:15c7:b0:6a1:c3fc:98fd with SMTP id
- f7-20020a05660215c700b006a1c3fc98fdmr1666538iow.151.1665129253372; Fri, 07
- Oct 2022 00:54:13 -0700 (PDT)
+        bh=YMtULBVuhc9ss92jUe+D+WcboNyvjfJAcLdpgC5afT4=;
+        b=C+cjMInfaw1G5C+ujITD2mM958wsDKoz0KMltk5ivUbeUMP4R2S+2zXTgz9andvc0/
+         ohSt+kuHg/+mEd8FX7H9jqTWayfCbAcdLXEUJwta4aVLFVY+9mmiJLZHsMgk8/Mx6TdM
+         L5VMD1RJcrpNSv67V5HLGrOs/3c+xiw9LgHfP08/9Ldg2y8FzVnyTpMI/hl3Zwl/u1+J
+         Vden1aZBMcyToH6iCmiFc2+N4jeyA836LqY2f9Hax2BEmOaokhDkmjQh2hbb71q799UN
+         FcQvcBXoKggP8ieLVOCBR3TqN+SI/xAv0CEJNRssjn364BawfKUO+Rf1myXyOuQwIx/f
+         NTfQ==
+X-Gm-Message-State: ACrzQf1FR8dH/cD6SLqwdZmt1vcvGlnqIgNIli+gJVxHmp6JvNRW8/E1
+        YYoaMKrIIogX9dfYqKRqcW1A7WDNMw09Ia3N4iAE
+X-Google-Smtp-Source: AMsMyM6EDHgywRXu/TbOnSPbtmkkkpWNMcSYQabcafBng0EhxaTjeYoB2pMtzP8DveIpUaejP3k4UCEpc2qRNhVAht4=
+X-Received: by 2002:a5e:9911:0:b0:6b9:c02b:3746 with SMTP id
+ t17-20020a5e9911000000b006b9c02b3746mr1561354ioj.127.1665129316201; Fri, 07
+ Oct 2022 00:55:16 -0700 (PDT)
 MIME-Version: 1.0
 References: <20221006230051.185850-1-atishp@rivosinc.com> <20221006230051.185850-3-atishp@rivosinc.com>
  <b1306db2-74c5-c207-7c6d-beba0f1593f4@canonical.com> <CAMj1kXENi6rGK5tuU5ny5gAXMGLErx3o8ci3stazq0HJO5QArg@mail.gmail.com>
  <4ef86adf-a7c7-5ffc-6acc-9d269ea089ba@canonical.com>
 In-Reply-To: <4ef86adf-a7c7-5ffc-6acc-9d269ea089ba@canonical.com>
 From:   Atish Patra <atishp@atishpatra.org>
-Date:   Fri, 7 Oct 2022 00:54:02 -0700
-Message-ID: <CAOnJCULKVMMMtxdWgeLb=3Au+yXUmoD9eK8Lowin8WdDGvhiew@mail.gmail.com>
+Date:   Fri, 7 Oct 2022 00:55:05 -0700
+Message-ID: <CAOnJCULj1Dr7p1q6NBWif8WQSfXvksXEo4arZY9ZSOW=SNrR2Q@mail.gmail.com>
 Subject: Re: [v4 PATCH 2/3] RISC-V: Update image header
 To:     Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
 Cc:     Ard Biesheuvel <ardb@kernel.org>,
@@ -113,17 +113,11 @@ On Fri, Oct 7, 2022 at 12:50 AM Heinrich Schuchardt
 > >> Considering 69edb312056 ("loader/arm64/linux: Remove magic number header
 > >> field check") why should this constant exist in GRUB at all?
 > >>
-
-Yes. Those are not required. I will remove those.
-
 > >> In a follow up patch we could remove it together with
 > >> GRUB_LINUX_ARM_MAGIC_SIGNATURE, GRUB_LINUX_ARMXX_MAGIC_SIGNATURE, and
 > >> GRUB_LINUX_ARMXX_MAGIC_SIGNATURE.
 > >>
 > >
-GRUB_LINUX_ARM_MAGIC_SIGNATURE is still being used in ARM32 loaders.
-The other one can be removed.
-
 > > Indeed.
 > >
 > > But by the same reasoning, why do we need per-arch kernel header
@@ -135,6 +129,10 @@ The other one can be removed.
 >
 > Acked-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
 >
+
+Thanks for reviewing it. I will send the next version right now. I
+screwed up my scripts and grub-devel was not in the CC also.
+
 > >
 > >>>
 > >>> -/* From linux/Documentation/riscv/booting.txt */
@@ -165,10 +163,6 @@ The other one can be removed.
 > >>
 > >> The Linux kernel documentation calls this field magic2.
 > >>
-
-Yes. I forgot to update this one for rv32. RV64 header file has the
-correct fields.
-
 > >> Of course this is functionally irrelevant as we don't care about the
 > >> content of both fields.
 > >>
@@ -188,9 +182,6 @@ correct fields.
 > >>> +
 > >>> +#define GRUB_LINUX_RISCV_MAGIC_SIGNATURE 0x05435352 /* 'RSC\0x5' */
 > >>
-
-Done.
-
 > >> to be removed in future
 > >>
 > >> Best regards
