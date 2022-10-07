@@ -2,83 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA83B5F7E31
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5935F7E3D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbiJGTkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 15:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33100 "EHLO
+        id S230215AbiJGTkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 15:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiJGTj4 (ORCPT
+        with ESMTP id S230120AbiJGTkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 15:39:56 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E40B27DC6
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 12:39:55 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id h189-20020a1c21c6000000b003bd44dc526fso1498873wmh.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 12:39:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=afUUSBRhezaQIIa/PqXPHMg3oRJPH6N9lA2MHCGelh4=;
-        b=DXKWKNbw3ktneaE8BZzgJ8o1ien78MDtWtjoaxqEXV7h+mb533qSBvW4d73g1gClaG
-         KNSfhN8+za7B6f5umH1m90hLz0j3XMC4GkK6w64P+Tid9RyizOWccxtnEt0AFFs3jty8
-         gMAWL9LjyrXXQiu3BAHk+6p8FMzmUavwjqmn2Ups7GhUwYQabs3rEl0MNHdlzXwjdGte
-         9NqqYktR1msC/gP/9RN/auFxIqkZ/sN9PXGvjcb8gXrycoT8iQoLl0Znq/ucKlSvvjaz
-         oSihAX9GR6B4QvtuKyD/Ugg5OMdmSJSPesbxUbJZyZopKPm6i/Z5qd7Ni+KIz9fWCInm
-         Qr7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=afUUSBRhezaQIIa/PqXPHMg3oRJPH6N9lA2MHCGelh4=;
-        b=y/qMMTiQbJaJ56Fn0F21LlPeDSsrgN692nNeBqRJwGi4so7kpAI/gyGHY6eebJYDKV
-         kORXrPnBdajuNBCEpqi7V5dPjFsmpM0DPR0wBN0pjSnLDx97yjhL/5qH0w1j1Bgh/GNC
-         Z1eVdST4X65/nJuO+BwlnAGpRKYKWYxihtw30Hros0bAzxrkQw19X4rasGy/FvGVUnWa
-         TGKzpXhcW9iAgqav+G+SlYcDNXl6Kudu+e9XVQsDAHYYOmt1Aq02/yzI1sPOrSGPLtzx
-         gRT+w8FYTt/TQWikI/H0c3s6MilsiwLvRlhjVvQP0wMd5YUwzSiI/+3eqkdEuQUawLo0
-         HWjA==
-X-Gm-Message-State: ACrzQf1SWoVdFTdY+VBz+fF+Kwg3LMRcBGNn6kiRieYRlV/O7dT/Y5o8
-        ZElo2TXb88zmUx3lwBW15cVJ1yypg5q0hHxQX8o=
-X-Google-Smtp-Source: AMsMyM6f+aR2C0vM+WFe+S5FBRclR+T2xxh51Gsn1tY65wc195blV3wnv2YfZH9MNXiMXPOYyiA08YIgMh75Foc7cqE=
-X-Received: by 2002:a05:600c:510e:b0:3b5:1ab:fa5 with SMTP id
- o14-20020a05600c510e00b003b501ab0fa5mr11501733wms.204.1665171593456; Fri, 07
- Oct 2022 12:39:53 -0700 (PDT)
+        Fri, 7 Oct 2022 15:40:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7A9C5884;
+        Fri,  7 Oct 2022 12:40:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3141B8242F;
+        Fri,  7 Oct 2022 19:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7404AC433C1;
+        Fri,  7 Oct 2022 19:40:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665171615;
+        bh=r9RHj3JVPBS4Nf+3GLxt7M35xPV1N2v79wn2NXG965A=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=HvbuGLetDWkC33XsRwMefBZV+Pj7QfhvBC34nCLcoA0RM5EcAoC2sN2/parqe7gIi
+         RxZm7uGkApeVjaagp+jCFKpzdFSKb88vdnh8GpJo5P+6sJMlliYjgM0hrsePVO2mWv
+         wOyv42VtjkUEs1lFjqe0gI8Nk6KKnFC8BTW1mcfZFHUBnHXBYK1NUBWpJyrCur+YSe
+         gAxefidF4PUnSkqH6HwMIdVmtMIzmg04u0XaKufsJy28FT2T7/DXLUac427StXLD0C
+         I6ll7oQxod2TOQ3qGw4gDoyrmW3Hksi8x73VtsFELDIrhlXkvrLUdzsLeOg/Yo/QDX
+         yfbblcCtplZeA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 58AE1E2A05D;
+        Fri,  7 Oct 2022 19:40:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-From:   Sheryl Robert <techdatab2businesss@gmail.com>
-Date:   Fri, 7 Oct 2022 14:39:42 -0500
-Message-ID: <CAEBq3SLVWk6WRF4dKQ-+0GDxmdpDq97g+mk0zVeWMP6bOCMMMw@mail.gmail.com>
-Subject: RE: Dreamforce Attendees Email List-2022
-To:     Sheryl Robert <techdatab2businesss@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
-        FILL_THIS_FORM_LONG,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3] Bluetooth: btusb: Introduce generic USB reset
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <166517161535.22886.13424048980960656308.git-patchwork-notify@kernel.org>
+Date:   Fri, 07 Oct 2022 19:40:15 +0000
+References: <20221006170915.v3.1.I46e98b47be875d0b9abff2d19417c612077d1909@changeid>
+In-Reply-To: <20221006170915.v3.1.I46e98b47be875d0b9abff2d19417c612077d1909@changeid>
+To:     Archie Pusaka <apusaka@google.com>
+Cc:     linux-bluetooth@vger.kernel.org, luiz.dentz@gmail.com,
+        marcel@holtmann.org, chromeos-bluetooth-upstreaming@chromium.org,
+        apusaka@chromium.org, abhishekpandit@google.com,
+        yinghsu@chromium.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, johan.hedberg@gmail.com, pabeni@redhat.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello:
 
-Would you be interested in acquiring Dreamforce Attendees Email List 2022?
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-List Includes: Company Name, First Name, Last Name, Full Name, Contact
-Job Title, Verified Email Address, Website URL, Mailing address, Phone
-number, Industry and many more=E2=80=A6
+On Thu,  6 Oct 2022 17:09:31 +0800 you wrote:
+> From: Archie Pusaka <apusaka@chromium.org>
+> 
+> On cmd_timeout with no reset_gpio, reset the USB port as a last
+> resort.
+> 
+> This patch changes the behavior of btusb_intel_cmd_timeout and
+> btusb_rtl_cmd_timeout.
+> 
+> [...]
 
-Number of Contacts :45,968
-Cost : $1,829
+Here is the summary with links:
+  - [v3] Bluetooth: btusb: Introduce generic USB reset
+    https://git.kernel.org/bluetooth/bluetooth-next/c/b9c747ff82b4
 
-If you=E2=80=99re interested please let me know I will assist you with furt=
-her details.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Kind Regards,
-Sheryl Robert
-Marketing Coordinators
+
