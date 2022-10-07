@@ -2,224 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D40B85F74EF
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 09:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B91E5F74FB
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 09:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiJGHzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 03:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
+        id S229745AbiJGH5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 03:57:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbiJGHzS (ORCPT
+        with ESMTP id S229605AbiJGH47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 03:55:18 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69389F747
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 00:55:16 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id o65so3070593iof.4
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 00:55:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YMtULBVuhc9ss92jUe+D+WcboNyvjfJAcLdpgC5afT4=;
-        b=X3o3bgw2QtF306MV5U22AkyUGQFtuCl0MhXVGwyUbmd5TMWoQgkDslPJTUEweBMvZT
-         afR7YuWsfMshOWtJxLYb2FHeSN59FnQONV5RXO/Kt48XQPEPNl+9P3E+UGX9NBJ6R1Tr
-         loS8wRUfFK28GeOc8X3FlGe7EJStt8L/gK3ug=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YMtULBVuhc9ss92jUe+D+WcboNyvjfJAcLdpgC5afT4=;
-        b=C+cjMInfaw1G5C+ujITD2mM958wsDKoz0KMltk5ivUbeUMP4R2S+2zXTgz9andvc0/
-         ohSt+kuHg/+mEd8FX7H9jqTWayfCbAcdLXEUJwta4aVLFVY+9mmiJLZHsMgk8/Mx6TdM
-         L5VMD1RJcrpNSv67V5HLGrOs/3c+xiw9LgHfP08/9Ldg2y8FzVnyTpMI/hl3Zwl/u1+J
-         Vden1aZBMcyToH6iCmiFc2+N4jeyA836LqY2f9Hax2BEmOaokhDkmjQh2hbb71q799UN
-         FcQvcBXoKggP8ieLVOCBR3TqN+SI/xAv0CEJNRssjn364BawfKUO+Rf1myXyOuQwIx/f
-         NTfQ==
-X-Gm-Message-State: ACrzQf1FR8dH/cD6SLqwdZmt1vcvGlnqIgNIli+gJVxHmp6JvNRW8/E1
-        YYoaMKrIIogX9dfYqKRqcW1A7WDNMw09Ia3N4iAE
-X-Google-Smtp-Source: AMsMyM6EDHgywRXu/TbOnSPbtmkkkpWNMcSYQabcafBng0EhxaTjeYoB2pMtzP8DveIpUaejP3k4UCEpc2qRNhVAht4=
-X-Received: by 2002:a5e:9911:0:b0:6b9:c02b:3746 with SMTP id
- t17-20020a5e9911000000b006b9c02b3746mr1561354ioj.127.1665129316201; Fri, 07
- Oct 2022 00:55:16 -0700 (PDT)
+        Fri, 7 Oct 2022 03:56:59 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D971FAA3F4
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 00:56:58 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ogiDy-0008DF-0P; Fri, 07 Oct 2022 09:56:50 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 201DAF6BFB;
+        Fri,  7 Oct 2022 07:56:48 +0000 (UTC)
+Date:   Fri, 7 Oct 2022 09:56:47 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Subject: Re: [PATCH] can: kvaser_usb: Remove -Warray-bounds exception
+Message-ID: <20221007075647.3e2jm4g5qlytvqgo@pengutronix.de>
+References: <20221006192035.1742912-1-keescook@chromium.org>
 MIME-Version: 1.0
-References: <20221006230051.185850-1-atishp@rivosinc.com> <20221006230051.185850-3-atishp@rivosinc.com>
- <b1306db2-74c5-c207-7c6d-beba0f1593f4@canonical.com> <CAMj1kXENi6rGK5tuU5ny5gAXMGLErx3o8ci3stazq0HJO5QArg@mail.gmail.com>
- <4ef86adf-a7c7-5ffc-6acc-9d269ea089ba@canonical.com>
-In-Reply-To: <4ef86adf-a7c7-5ffc-6acc-9d269ea089ba@canonical.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Fri, 7 Oct 2022 00:55:05 -0700
-Message-ID: <CAOnJCULj1Dr7p1q6NBWif8WQSfXvksXEo4arZY9ZSOW=SNrR2Q@mail.gmail.com>
-Subject: Re: [v4 PATCH 2/3] RISC-V: Update image header
-To:     Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Daniel Kiper <daniel.kiper@oracle.com>,
-        Fu Wei <tekkamanninja@gmail.com>,
-        Leif Lindholm <quic_llindhol@quicinc.com>,
-        Nikita Ermakov <arei@altlinux.org>,
-        Julian Andres Klode <julian.klode@canonical.com>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mdrwwnddiarwtxpo"
+Content-Disposition: inline
+In-Reply-To: <20221006192035.1742912-1-keescook@chromium.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 7, 2022 at 12:50 AM Heinrich Schuchardt
-<heinrich.schuchardt@canonical.com> wrote:
->
->
->
-> On 10/7/22 09:20, Ard Biesheuvel wrote:
-> > On Fri, 7 Oct 2022 at 01:51, Heinrich Schuchardt
-> > <heinrich.schuchardt@canonical.com> wrote:
-> >>
-> >>
-> >>
-> >> On 10/7/22 01:00, Atish Patra wrote:
-> >>> Update the RISC-V Linux kernel image headers as per the current header.
-> >>>
-> >>> Reference:
-> >>> <Linux kernel source>/Documentation/riscv/boot-image-header.rst
-> >>>
-> >>> 474efecb65dc: ("riscv: modify the Image header to improve compatibility with the ARM64 header")
-> >>>
-> >>> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> >>> ---
-> >>>    include/grub/riscv32/linux.h | 15 ++++++++-------
-> >>>    include/grub/riscv64/linux.h | 21 +++++++++++++--------
-> >>>    2 files changed, 21 insertions(+), 15 deletions(-)
-> >>>
-> >>> diff --git a/include/grub/riscv32/linux.h b/include/grub/riscv32/linux.h
-> >>> index 512b777c8a41..de0dbdcd1be5 100644
-> >>> --- a/include/grub/riscv32/linux.h
-> >>> +++ b/include/grub/riscv32/linux.h
-> >>> @@ -19,20 +19,21 @@
-> >>>    #ifndef GRUB_RISCV32_LINUX_HEADER
-> >>>    #define GRUB_RISCV32_LINUX_HEADER 1
-> >>>
-> >>> -#define GRUB_LINUX_RISCV_MAGIC_SIGNATURE 0x52534356 /* 'RSCV' */
-> >>> +#define GRUB_LINUX_RISCV_MAGIC_SIGNATURE 0x05435352 /* 'RSC\0x5' */
-> >>
-> >> Thanks for following up on this series.
-> >>
-> >> Considering 69edb312056 ("loader/arm64/linux: Remove magic number header
-> >> field check") why should this constant exist in GRUB at all?
-> >>
-> >> In a follow up patch we could remove it together with
-> >> GRUB_LINUX_ARM_MAGIC_SIGNATURE, GRUB_LINUX_ARMXX_MAGIC_SIGNATURE, and
-> >> GRUB_LINUX_ARMXX_MAGIC_SIGNATURE.
-> >>
-> >
-> > Indeed.
-> >
-> > But by the same reasoning, why do we need per-arch kernel header
-> > typedefs at all?  The only fields we access are generic PE/COFF header
-> > fields.
->
-> That said I would suggest to put the series in without any further
-> iterations and clean up afterwards.
->
-> Acked-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
->
 
-Thanks for reviewing it. I will send the next version right now. I
-screwed up my scripts and grub-devel was not in the CC also.
+--mdrwwnddiarwtxpo
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> >
-> >>>
-> >>> -/* From linux/Documentation/riscv/booting.txt */
-> >>> +/* From linux/Documentation/riscv/boot-image-header.rst */
-> >>>    struct linux_riscv_kernel_header
-> >>>    {
-> >>>      grub_uint32_t code0;              /* Executable code */
-> >>>      grub_uint32_t code1;              /* Executable code */
-> >>> -  grub_uint64_t text_offset; /* Image load offset */
-> >>> -  grub_uint64_t res0;                /* reserved */
-> >>> -  grub_uint64_t res1;                /* reserved */
-> >>> +  grub_uint64_t text_offset; /* Image load offset, little endian */
-> >>> +  grub_uint64_t image_size;  /* Effective Image size, little endian */
-> >>> +  grub_uint64_t flags;               /* kernel flags, little endian */
-> >>> +  grub_uint32_t version;     /* Version of this header */
-> >>> +  grub_uint32_t res1;                /* reserved */
-> >>>      grub_uint64_t res2;               /* reserved */
-> >>>      grub_uint64_t res3;               /* reserved */
-> >>
-> >> According to tag next-20221006 of
-> >> Documentation/riscv/boot-image-header.rst and of
-> >> arch/riscv/include/asm/image.h this field is called 'magic' and filled
-> >> it with the string 'RISCV\0\0\0'.
-> >>
-> >>> -  grub_uint64_t res4;                /* reserved */
-> >>> -  grub_uint32_t magic;               /* Magic number, little endian, "RSCV" */
-> >>> +  grub_uint32_t magic;               /* Magic number, little endian, "RSC\x05" */
-> >>
-> >> The Linux kernel documentation calls this field magic2.
-> >>
-> >> Of course this is functionally irrelevant as we don't care about the
-> >> content of both fields.
-> >>
-> >>>      grub_uint32_t hdr_offset; /* Offset of PE/COFF header */
-> >>>    };
-> >>>
-> >>> diff --git a/include/grub/riscv64/linux.h b/include/grub/riscv64/linux.h
-> >>> index 3630c30fbf1a..ea77f8718222 100644
-> >>> --- a/include/grub/riscv64/linux.h
-> >>> +++ b/include/grub/riscv64/linux.h
-> >>> @@ -19,23 +19,28 @@
-> >>>    #ifndef GRUB_RISCV64_LINUX_HEADER
-> >>>    #define GRUB_RISCV64_LINUX_HEADER 1
-> >>>
-> >>> -#define GRUB_LINUX_RISCV_MAGIC_SIGNATURE 0x52534356 /* 'RSCV' */
-> >>> +#include <grub/efi/pe32.h>
-> >>> +
-> >>> +#define GRUB_LINUX_RISCV_MAGIC_SIGNATURE 0x05435352 /* 'RSC\0x5' */
-> >>
-> >> to be removed in future
-> >>
-> >> Best regards
-> >>
-> >> Heinrich
-> >>
-> >>>
-> >>>    #define GRUB_EFI_PE_MAGIC   0x5A4D
-> >>>
-> >>> -/* From linux/Documentation/riscv/booting.txt */
-> >>> +/* From linux/Documentation/riscv/boot-image-header.rst */
-> >>>    struct linux_riscv_kernel_header
-> >>>    {
-> >>>      grub_uint32_t code0;              /* Executable code */
-> >>>      grub_uint32_t code1;              /* Executable code */
-> >>> -  grub_uint64_t text_offset; /* Image load offset */
-> >>> -  grub_uint64_t res0;                /* reserved */
-> >>> -  grub_uint64_t res1;                /* reserved */
-> >>> +  grub_uint64_t text_offset; /* Image load offset, little endian */
-> >>> +  grub_uint64_t image_size;  /* Effective Image size, little endian */
-> >>> +  grub_uint64_t flags;               /* kernel flags, little endian */
-> >>> +  grub_uint32_t version;     /* Version of this header */
-> >>> +  grub_uint32_t res1;                /* reserved */
-> >>>      grub_uint64_t res2;               /* reserved */
-> >>> -  grub_uint64_t res3;                /* reserved */
-> >>> -  grub_uint64_t res4;                /* reserved */
-> >>> -  grub_uint32_t magic;               /* Magic number, little endian, "RSCV" */
-> >>> +  grub_uint64_t magic;               /* magic (RISC-V specifc, deprecated)*/
-> >>> +  grub_uint32_t magic2;              /* Magic number 2 (to match the ARM64 'magic' field pos) */
-> >>>      grub_uint32_t hdr_offset; /* Offset of PE/COFF header */
-> >>> +
-> >>> +  struct grub_coff_image_header coff_image_header;
-> >>>    };
-> >>>
-> >>>    #define linux_arch_kernel_header linux_riscv_kernel_header
+On 06.10.2022 12:20:35, Kees Cook wrote:
+> GCC-12 emits false positive -Warray-bounds warnings with
+> CONFIG_UBSAN_SHIFT (-fsanitize=3Dshift). This is fixed in GCC 13[1],
+> and there is top-level Makefile logic to remove -Warray-bounds for
+> known-bad GCC versions staring with commit f0be87c42cbd ("gcc-12: disable
+> '-Warray-bounds' universally for now").
+>=20
+> Remove the local work-around.
+>=20
+> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D105679
+>=20
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
+Applied to linux-can-next/main.
 
+Thanks,
+Marc
 
--- 
-Regards,
-Atish
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--mdrwwnddiarwtxpo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmM/27wACgkQrX5LkNig
+010vAQgAkL2nVGUp5uFl5m5LUQQDiBi5hflSPSP1u7B8UrI7yuPAwLF+mlzv80PO
+eS+yMvKoAC6tiFPHS0p7tmBdxiJBZ4u8/64qOh73cx1qizqk6g9MTT3i8eOk0oY6
+bSgrhhwyYZAK67O7xueEJogtxKI41caGhX9KUvqEU/1qb7bNvZqUCGb9k4GtGSFA
+6ctpE/WJ158TWcgKOM8T6gM8e42Nnjt8C8JCODNmotLNMYtqZRaqa/56ECQ+oSVh
+GbG+h7E0A2+hZc926FXqEfDPy3gJJxYvpKSPVvJxGchm5PCmbg0rytte6P0Mp7w3
+9Un5ncNR6QnIXLGsNCG02X5lRz4B5A==
+=3Lk2
+-----END PGP SIGNATURE-----
+
+--mdrwwnddiarwtxpo--
