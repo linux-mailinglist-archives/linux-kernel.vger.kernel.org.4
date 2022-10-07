@@ -2,122 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E3F5F763A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B59715F7632
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbiJGJ1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 05:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60426 "EHLO
+        id S229728AbiJGJ0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 05:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiJGJ0m (ORCPT
+        with ESMTP id S229559AbiJGJ0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 05:26:42 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E56FDB7E
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 02:26:38 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 70so3935642pjo.4
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 02:26:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zD3O1L1ojBhgR+j1WVoN6w4Vq4fXYzVbRBriwzwY8XQ=;
-        b=OwW1Pnkg6++3R7dfzassb1BzGQNvxGiMWgBknPF6qEVCitKiSpSdB0a2z4A4hu0rJS
-         o1Dxd4LzyKUxW1nfhBLLz3HgMz8PpMWbFXkgyS5o5qDZRhb2pmkR4WTxtNcstz831Cmm
-         hs08O0AmhERjCNky7UutIISJB4vpnaYrYkw1Aad/E0SZSKSpUsHaXMK3YBuksVXxgiAt
-         /uBWosUhzlupHlUKHu2oPRu3/vJ3DYkvzHepFyz8si4gbWQReryzXjMGnIIdG6pZPQw/
-         rjqEzhqrZ0mCfR3X+OpJoF82Jc0JOVx0R7BydFGH9k7iCmkaqP17g0TdaVp5cMOCwJ77
-         S1OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zD3O1L1ojBhgR+j1WVoN6w4Vq4fXYzVbRBriwzwY8XQ=;
-        b=P+gSYr/6KKOSTqz+2sk1aK2IQMHT03Vwk6MttMrJB8zfmvQFmejLOXB9RZEE5+Lo6C
-         HBD5o3p3e7QYSA1DPQCOPfsWCG642le3mpEjC1n2LMfXoI6i6J0wmZhBQtl3SSXw+EG/
-         ToDmGIMAdjKcyipqD8JNryj+OIQZdIIJv9tYyMoRTUITj4n3oKahAdVG9qmvkciKMNxF
-         5tkykGwPib0LwGrWJ5LqSsOFw7QCoDd0TM4uB5nSK3XZXga6GSfJ+71ITG07zA6XShHa
-         S9d8kUSWPFdJ8MQ8PJZDnEEkGeLYYEjaqfM4PMXXyJ++rqAmT/zLR5zhGQclppBHM291
-         f2qw==
-X-Gm-Message-State: ACrzQf3P7usZo6R3CzEwUxeinUu+UW2c2q+MOygN4VsJL+railc1hxbl
-        paqXZDWptKIlgJ1Lgp+ALcNQEw==
-X-Google-Smtp-Source: AMsMyM62HDWdtXV+hj6G0UxkKeuYhoJ/5th07sKDOtsbYnp8MUdIF1o9hB5IycxViMiliwGEcgof9w==
-X-Received: by 2002:a17:90b:1bc2:b0:200:a97b:4ae5 with SMTP id oa2-20020a17090b1bc200b00200a97b4ae5mr4483809pjb.147.1665134797159;
-        Fri, 07 Oct 2022 02:26:37 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.246])
-        by smtp.gmail.com with ESMTPSA id p7-20020a170902e74700b0016ef87334aesm1069394plf.162.2022.10.07.02.26.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 02:26:36 -0700 (PDT)
-From:   Zhang Yuchen <zhangyuchen.lcr@bytedance.com>
-To:     minyard@acm.org
-Cc:     openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, qi.zheng@linux.dev,
-        Zhang Yuchen <zhangyuchen.lcr@bytedance.com>
-Subject: [PATCH 3/3] ipmi: fix memleak when unload ipmi driver
-Date:   Fri,  7 Oct 2022 17:26:17 +0800
-Message-Id: <20221007092617.87597-4-zhangyuchen.lcr@bytedance.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
-In-Reply-To: <20221007092617.87597-1-zhangyuchen.lcr@bytedance.com>
-References: <20221007092617.87597-1-zhangyuchen.lcr@bytedance.com>
+        Fri, 7 Oct 2022 05:26:12 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B844F2513;
+        Fri,  7 Oct 2022 02:26:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665134771; x=1696670771;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YIsvu8HuZoKfT0WBNxjXL2VasbVdSxWppe8Gs3rIq6U=;
+  b=lgV+Escms5zyViBvmedV3BHNjjb3FjjYj3Vz3SzYv4k0JXq+4hjSlm7Z
+   r4wxpTH0Ri9xpOMDvtHwj7d93ePr3ndqye1fjavDVQQ+SETk4itjJWcSm
+   wa8rwMZIT/8eJXO8VmESYry5dyAie8TXc4x4yNV3pM5aWwoQPO3bkgpkS
+   5FwlBOd0Tn2PaEuo4c362qsQW98fTFbIC1/XD4vUU2g+dv369hvJQlOyO
+   kia5cm/CgIT7PszSeLeDt+YUCfvMLXWgB9lh/d1JZONjtIsUmsVYuIlsY
+   aADoUXeW7RL6U688rIGXycyhSIPVhJPCvgocB1YG8oOBtTC77bqJsmGC+
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="302414297"
+X-IronPort-AV: E=Sophos;i="5.95,166,1661842800"; 
+   d="scan'208";a="302414297"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 02:26:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="658277156"
+X-IronPort-AV: E=Sophos;i="5.95,166,1661842800"; 
+   d="scan'208";a="658277156"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 07 Oct 2022 02:26:03 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 6645E17E; Fri,  7 Oct 2022 12:26:23 +0300 (EEST)
+Date:   Fri, 7 Oct 2022 12:26:23 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph B??hmwalder <christoph.boehmwalder@linbit.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dave Airlie <airlied@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Graf <tgraf@suug.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
+        kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        loongarch@lists.linux.dev, netdev@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org,
+        Toke H??iland-J??rgensen <toke@toke.dk>,
+        Chuck Lever <chuck.lever@oracle.com>, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH v3 3/5] treewide: use get_random_u32() when possible
+Message-ID: <Yz/wv0sqBR+J+jy+@black.fi.intel.com>
+References: <20221006165346.73159-1-Jason@zx2c4.com>
+ <20221006165346.73159-4-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221006165346.73159-4-Jason@zx2c4.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After the IPMI disconnect problem, the memory kept rising and we tried
-to unload the driver to free the memory. However, only part of the
-free memory is recovered after the driver is uninstalled. Using
-ebpf to hook free functions, we find that neither ipmi_user nor
-ipmi_smi_msg is free, only ipmi_recv_msg is free.
+On Thu, Oct 06, 2022 at 10:53:44AM -0600, Jason A. Donenfeld wrote:
+>  drivers/thunderbolt/xdomain.c                  |  2 +-
 
-We find that the deliver_smi_err_response call in clean_smi_msgs does
-the destroy processing on each message from the xmit_msg queue without
-checking the return value and free ipmi_smi_msg.
-
-deliver_smi_err_response is called only at this location. Adding the
-free handling has no effect.
-
-To verify, try using ebpf to trace the free function.
-
-  $ bpftrace -e 'kretprobe:ipmi_alloc_recv_msg {printf("alloc rcv
-      %p\n",retval);} kprobe:free_recv_msg {printf("free recv %p\n",
-      arg0)} kretprobe:ipmi_alloc_smi_msg {printf("alloc smi %p\n",
-        retval);} kprobe:free_smi_msg {printf("free smi  %p\n",arg0)}'
-
-Signed-off-by: Zhang Yuchen <zhangyuchen.lcr@bytedance.com>
----
- drivers/char/ipmi/ipmi_msghandler.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/char/ipmi/ipmi_msghandler.c b/drivers/char/ipmi/ipmi_msghandler.c
-index c8a3b208f923..7a7534046b5b 100644
---- a/drivers/char/ipmi/ipmi_msghandler.c
-+++ b/drivers/char/ipmi/ipmi_msghandler.c
-@@ -3710,12 +3710,15 @@ static void deliver_smi_err_response(struct ipmi_smi *intf,
- 				     struct ipmi_smi_msg *msg,
- 				     unsigned char err)
- {
-+	int rv;
- 	msg->rsp[0] = msg->data[0] | 4;
- 	msg->rsp[1] = msg->data[1];
- 	msg->rsp[2] = err;
- 	msg->rsp_size = 3;
- 	/* It's an error, so it will never requeue, no need to check return. */
--	handle_one_recv_msg(intf, msg);
-+	rv = handle_one_recv_msg(intf, msg);
-+	if (rv == 0)
-+		ipmi_free_smi_msg(msg);
- }
- 
- static void cleanup_smi_msgs(struct ipmi_smi *intf)
--- 
-2.30.2
-
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
