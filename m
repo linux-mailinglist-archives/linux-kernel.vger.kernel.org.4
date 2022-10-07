@@ -2,210 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31EEE5F7D1D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 20:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 793765F7D22
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 20:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbiJGSEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 14:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
+        id S229824AbiJGSFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 14:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbiJGSDK (ORCPT
+        with ESMTP id S230193AbiJGSDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 14:03:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3D0D9962;
-        Fri,  7 Oct 2022 11:02:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE869614ED;
-        Fri,  7 Oct 2022 18:02:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63A14C4347C;
-        Fri,  7 Oct 2022 18:02:12 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZNjDptlw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1665165731;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wugUkH0LlLzYfPgynaJ//AEyTMustLSmvE+oyYjIDcM=;
-        b=ZNjDptlwlMYkKhw0FDQ4C8wQnpdfM/SDLQk0M4umRY2L8YGB3Azu2CQDA4isKCN0VAEUs9
-        5EDfqSuPe+w2fGOv2rrx81ewduKLXLdJaxvCnnXTzCj8SabhP/TvMyPEvC1jg+J+JCOIVx
-        JuHnL8hFtoUa9nb/vH/2B3tuswcWENk=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b5c9a69b (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Fri, 7 Oct 2022 18:02:11 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
+        Fri, 7 Oct 2022 14:03:41 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E5A86F90
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 11:02:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=S2z7kL/puGmrjNYlyHAwGHHEwyzprFts21kmJPvb+tA=; b=stIurYOm1Eq5Jmv9ryuWsRZALi
+        S9nb4Z/bfXmUrPUhWv3StqLFqxF/QyVqlUSwbVnUgGsXD2ZGX1OsvDVKzmz7hpk6LP/lL4a4Nw6Tn
+        AIfqou5bRhZewiYU53EvuEoitfLf6mkhGoko08mdshH6vAuDA+NB0qvE3DougXZr+17YHTnJihD6b
+        sF5DVL8WnOEa+EJVEHOn4K/TVAwt/fj/qsnE/kBMKN2NNVXKxkcU7lLycd54yNweptmfGj9Zkuk/R
+        ZW6cKdNVO2kDtbtH9XofNXSzKGvoMu2fwnsC4unM8lfIs5cD6YntnoCQkYEBeNW8pJ8WCguiBgaiz
+        07l0XqFQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ogrgB-0024GK-TE; Fri, 07 Oct 2022 18:02:35 +0000
+Date:   Fri, 7 Oct 2022 19:02:35 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Dave Airlie <airlied@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Westphal <fw@strlen.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Huacai Chen <chenhuacai@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
         Hugh Dickins <hughd@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Graf <tgraf@suug.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>,
-        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
-        kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        loongarch@lists.linux.dev, netdev@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org
-Subject: [PATCH v4 6/6] prandom: remove unused functions
-Date:   Fri,  7 Oct 2022 12:01:07 -0600
-Message-Id: <20221007180107.216067-7-Jason@zx2c4.com>
-In-Reply-To: <20221007180107.216067-1-Jason@zx2c4.com>
-References: <20221007180107.216067-1-Jason@zx2c4.com>
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Marco Elver <elver@google.com>
+Subject: Re: [PATCH] mm: move PG_slab flag to page_type
+Message-ID: <Y0BpuxUb+Y8BKHIM@casper.infradead.org>
+References: <20220919125708.276864-1-42.hyeyoo@gmail.com>
+ <Yy+NCJ525S+HzP4k@casper.infradead.org>
+ <Y0AreJczk6FdiKxr@hyeyoo>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0AreJczk6FdiKxr@hyeyoo>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With no callers left of prandom_u32() and prandom_bytes(), as well as
-get_random_int(), remove these deprecated wrappers, in favor of
-get_random_u32() and get_random_bytes().
+On Fri, Oct 07, 2022 at 10:36:56PM +0900, Hyeonggon Yoo wrote:
+> > First, you say that folio_mapped() returns false for slab pages.  That's
+> > only true for order-0 slab pages.  For larger pages,
+> > 
+> >         if (!folio_test_large(folio))
+> >                 return atomic_read(&folio->_mapcount) >= 0;
+> >         if (atomic_read(folio_mapcount_ptr(folio)) >= 0)
+> >                 return true;
+> > 
+> > so that's going to depend what folio_mapcount_ptr() aliases with.
+> 
+> IIUC it's true for order > 0 slab too.
+> 
+> As slab pages are not mapped to userspace at all,
+> entire compound page nor base pages are not mapped to userspace.
+> 
+> AFAIK followings are true for order > 0 slab:
+>         - (first tail page)->compound_mapcount is -1
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c   | 11 +++++------
- include/linux/prandom.h | 12 ------------
- include/linux/random.h  |  5 -----
- 3 files changed, 5 insertions(+), 23 deletions(-)
+That's the part I wasn't sure of.  I think we do, in
+prep_compound_head().
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 01acf235f263..2fe28eeb2f38 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -97,7 +97,7 @@ MODULE_PARM_DESC(ratelimit_disable, "Disable random ratelimit suppression");
-  * Returns whether or not the input pool has been seeded and thus guaranteed
-  * to supply cryptographically secure random numbers. This applies to: the
-  * /dev/urandom device, the get_random_bytes function, and the get_random_{u8,
-- * u16,u32,u64,int,long} family of functions.
-+ * u16,u32,u64,long} family of functions.
-  *
-  * Returns: true if the input pool has been seeded.
-  *          false if the input pool has not been seeded.
-@@ -161,15 +161,14 @@ EXPORT_SYMBOL(wait_for_random_bytes);
-  *	u16 get_random_u16()
-  *	u32 get_random_u32()
-  *	u64 get_random_u64()
-- *	unsigned int get_random_int()
-  *	unsigned long get_random_long()
-  *
-  * These interfaces will return the requested number of random bytes
-  * into the given buffer or as a return value. This is equivalent to
-- * a read from /dev/urandom. The u8, u16, u32, u64, int, and long
-- * family of functions may be higher performance for one-off random
-- * integers, because they do a bit of buffering and do not invoke
-- * reseeding until the buffer is emptied.
-+ * a read from /dev/urandom. The u8, u16, u32, u64, long family of
-+ * functions may be higher performance for one-off random integers,
-+ * because they do a bit of buffering and do not invoke reseeding
-+ * until the buffer is emptied.
-  *
-  *********************************************************************/
- 
-diff --git a/include/linux/prandom.h b/include/linux/prandom.h
-index 78db003bc290..e0a0759dd09c 100644
---- a/include/linux/prandom.h
-+++ b/include/linux/prandom.h
-@@ -12,18 +12,6 @@
- #include <linux/percpu.h>
- #include <linux/random.h>
- 
--/* Deprecated: use get_random_u32 instead. */
--static inline u32 prandom_u32(void)
--{
--	return get_random_u32();
--}
--
--/* Deprecated: use get_random_bytes instead. */
--static inline void prandom_bytes(void *buf, size_t nbytes)
--{
--	return get_random_bytes(buf, nbytes);
--}
--
- struct rnd_state {
- 	__u32 s1, s2, s3, s4;
- };
-diff --git a/include/linux/random.h b/include/linux/random.h
-index 08322f700cdc..147a5e0d0b8e 100644
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -42,10 +42,6 @@ u8 get_random_u8(void);
- u16 get_random_u16(void);
- u32 get_random_u32(void);
- u64 get_random_u64(void);
--static inline unsigned int get_random_int(void)
--{
--	return get_random_u32();
--}
- static inline unsigned long get_random_long(void)
- {
- #if BITS_PER_LONG == 64
-@@ -100,7 +96,6 @@ declare_get_random_var_wait(u8, u8)
- declare_get_random_var_wait(u16, u16)
- declare_get_random_var_wait(u32, u32)
- declare_get_random_var_wait(u64, u32)
--declare_get_random_var_wait(int, unsigned int)
- declare_get_random_var_wait(long, unsigned long)
- #undef declare_get_random_var
- 
--- 
-2.37.3
+>         - _mapcount of base pages are -1
+> 
+> So:
+>         folio_mapped() and page_mapped() (if applied to head page)
+>         returns false for larger pages with this patch.
+> 
+> I wrote simple testcase and did check that folio_mapped() and page_mapped()
+> returns false for both order-0 page and larger pages. (and SLAB
+> returned true for them before)
+> 
+> > Second, this patch changes the behaviour of PageSlab() when applied to
+> > tail pages.
+> 
+> Altough it changes the way it checks the flag,
+> 
+> it does not change behavior when applied to tail pages - PageSlab() on tail
+> page returns false with or without this patch.
 
+Really?  It seems to me that it returns true at the moment.  Look:
+
+__PAGEFLAG(Slab, slab, PF_NO_TAIL)
+
+#define PF_NO_TAIL(page, enforce) ({                                    \
+                VM_BUG_ON_PGFLAGS(enforce && PageTail(page), page);     \
+                PF_POISONED_CHECK(compound_head(page)); })
+
+so AFAICS, PageSlab checks the Slab bit on the head page, not the
+tail page.
+
+> If PageSlab() need to return true for tail pages too,
+> we may make it check page_type at head page.
+> 
+> But I'm not sure when it the behavior is needed.
+> Can you please share your insight on this?
+
+There are tools like tools/vm/page-types.c which expect PageSlab to
+return true for tail pages.
+
+> > Which raises the further question of what PageBuddy(),
+> > PageTable(), PageGuard() and PageIsolated() should do for multi-page
+> > folios, if that is even possible.
+> 
+> For users that uses real compound page like slab, we can make it check
+> page_type of head page. (if needed)
+> 
+> But for cases David described, there isn't much thing we can do
+> except making them to use real compound pages.
+> 
+> > Third, can we do this without that awkward __u16 thing?  Perhaps
+> > 
+> > -#define PG_buddy        0x00000080
+> > -#define PG_offline      0x00000100
+> > -#define PG_table        0x00000200
+> > -#define PG_guard        0x00000400
+> > +#define PG_buddy        0x00010000
+> > +#define PG_offline      0x00020000
+> > +#define PG_table        0x00040000
+> > +#define PG_guard        0x00080000
+> > +#define PG_slab         0x00100000
+> > 
+> > ... and then use wrappers in slab.c to access the bottom 16 bits?
+> 
+> Definitely! I prefer that way and will adjust in RFC v2.
+> 
+> Thank you for precious feedback.
+
+No problem.  I suggested (in an off-list email) that you consider counting
+'active' by subtraction rather than addition because I have a feeling that
+
+int active(struct slab *slab)
+{
+	return ~(slab->page_type | PG_slab);
+}
+
+would be better than
+
+int active(struct slab *slab)
+{
+	return slab->page_type & 0xffff;
+}
+
+at least in part because you don't have to clear the bottom 16 bits of
+page_type when you clear PG_slab, and you don't have to re-set them
+when you set PG_slab.
