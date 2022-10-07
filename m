@@ -2,241 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E40D25F769D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 12:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B32B5F769F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 12:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiJGKEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 06:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43502 "EHLO
+        id S229772AbiJGKFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 06:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiJGKEr (ORCPT
+        with ESMTP id S229745AbiJGKFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 06:04:47 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C854FF2
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 03:04:43 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id x59so6326747ede.7
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 03:04:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1iifIEkFqOx21PbYu2SYSZR1pWpEUPpfD9W/DNlYdWI=;
-        b=ZKMtP0LGTNUjkoW3rTexa+d8V52P3q+n6gt2y9nosyan7m6moTic2HU+aNSGSWhqIi
-         fs+8pSy7uKiKs6g2F6WOiXWGf5Pfl1zoppRPDgVfPRAiAB4qFZJGUfgARg0JeHYkqPd2
-         z73b8rEsizzrdcUoLvKHvWgRy0bM/ScttklcY/QRH8z0Fa8myUmZxQ47e4LE9UFNcjzi
-         i7TJYna2X9UN7oS6lfpte+wKHHc3VzMJcmWBYmGKy8jKO6D+jG6w9jVAcvZz1JqhlZsE
-         7NhWGlgEKYYRvVfWGS4LR78s61YVKRqJyzCrd0nKr3rpuK7rtV3t7avybwF5+1x2WQCA
-         dFIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1iifIEkFqOx21PbYu2SYSZR1pWpEUPpfD9W/DNlYdWI=;
-        b=ALwpyjdhiNic7Ig2m9Qc/z2HJwiZlHj1O/cVWV3dnQ0GCdtaWe6AGqyIwc7LgunnYl
-         Xk1mBVhTVg/MBlYrS5edoQlYA4W63zMoDIxT65cn56NrkBigJirAkBRtEbVOevAJAk6o
-         7QxvkN1WrZH46RnAlJSL+SEj25cxirD9MWA7kKf2CgJBDl98sHuY4N6Db3hDgxln/4uA
-         Cfape8Qm9MbfKzz0op9k1BDti/XxpUFN8SXzfOtyRu+1pqCXw4zuQw9Kh65WnsfOglyP
-         TCVDJnik/F8tgFWcltmvaR+FBRG4/AGmR34WZGqMk4cPOrkJuLSI4uHUnVqs/nxw2I0v
-         nBCg==
-X-Gm-Message-State: ACrzQf23SOUPXbaswDQXdHg8xSunPNhGL3d2hhFYR6gE7BM4L2Bly5/d
-        nBcdur++9IJIJS2FY1F3s030DbKmuksdc8MARPDb
-X-Google-Smtp-Source: AMsMyM4e5wtnUbDbMUa7Ln5mJl3S3oV+lXr/PQWXtBS6+tnHoiYQhUCafIH1ziEbWaUko7QSe0mMPEmLWcAhch2qYKQ=
-X-Received: by 2002:a05:6402:1856:b0:458:db1e:20ec with SMTP id
- v22-20020a056402185600b00458db1e20ecmr3897594edy.14.1665137081898; Fri, 07
- Oct 2022 03:04:41 -0700 (PDT)
+        Fri, 7 Oct 2022 06:05:09 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BD37F243;
+        Fri,  7 Oct 2022 03:05:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665137109; x=1696673109;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qQ1zrUjHcG+48NjTzwE6c3iRSqpwNICl7g4gQRyV8HQ=;
+  b=K9peTyuNlHXPRXaLsl9qJo/cNKjB6IeY5fv2k59VTbLfn1VeoRDgXhxo
+   KdlLGKAN+KWp44R7YCyUjf2CMatwSPuZPkMngS5eOisQwqJa4lvBUgFIa
+   AVdIxuWtJUVomDF5zQgslnydl9oz5GjqowPDJ1h1e/HD/uxQagMhcbD8M
+   hHBgyv3CWxGjJ1rLXsYANRpw70xSO8AaieMu7xRG13gFB4nPQfSKCFb+w
+   0BieczLoyAFUSbr2ig2i9UEX7S4rbFqC8DNb08M+ZNiyXIzolht4QJe9c
+   s5NQ2KRWRJydZNLsPwClgwnKJXqPyJ3PmJNTcM+8NxpnTWgxa1bhjo5CS
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="283419553"
+X-IronPort-AV: E=Sophos;i="5.95,166,1661842800"; 
+   d="scan'208";a="283419553"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 03:04:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="767528763"
+X-IronPort-AV: E=Sophos;i="5.95,166,1661842800"; 
+   d="scan'208";a="767528763"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 07 Oct 2022 03:04:52 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 07 Oct 2022 13:04:51 +0300
+Date:   Fri, 7 Oct 2022 13:04:51 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Bastian Rieck <bastian@rieck.me>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        grzegorz.alibozek@gmail.com, andrew.co@free.fr, meven29@gmail.com,
+        pchernik@gmail.com, jorge.cep.mart@gmail.com,
+        danielmorgan@disroot.org, bernie@codewiz.org,
+        saipavanchitta1998@gmail.com, rubin@starset.net,
+        maniette@gmail.com, nate@kde.org
+Subject: Re: [RFC PATCH 0/2] usb: typec: ucsi: Check connection on resume
+Message-ID: <Yz/5w5faKmnJNPut@kuha.fi.intel.com>
+References: <20220907115626.21976-1-heikki.krogerus@linux.intel.com>
+ <YxrbtWDR7XI4s+Q+@kuha.fi.intel.com>
+ <YyRUF5cFGpe2xf+m@kuha.fi.intel.com>
+ <11781567.uqkIggiGGz@nimue>
 MIME-Version: 1.0
-References: <Yza1u1KfKa7ycQm0@T590> <Yzs9xQlVuW41TuNC@fedora>
- <YzwARuAZdaoGTUfP@T590> <CAJSP0QXVK=wUy_JgJ9NmNMtKTRoRX0MwOZUuFWU-1mVWWKij8A@mail.gmail.com>
- <Yz0FrzJVZTqlQtJ5@T590> <CAJSP0QUQgA8Az3Kx8-6ynbWxDxaSVW3xWOPj4VBPhhUhsRYT9g@mail.gmail.com>
- <Yz668hfMAuES2/lt@T590>
-In-Reply-To: <Yz668hfMAuES2/lt@T590>
-From:   Yongji Xie <xieyongji@bytedance.com>
-Date:   Fri, 7 Oct 2022 18:04:29 +0800
-Message-ID: <CACycT3t346g2gc9anp_T8vz5=9ds=NAGJhcSU8T2EmyCNuDCSw@mail.gmail.com>
-Subject: Re: ublk-qcow2: ublk-qcow2 is available
-To:     Ming Lei <tom.leiming@gmail.com>
-Cc:     Stefan Hajnoczi <stefanha@gmail.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        io-uring@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kirill Tkhai <kirill.tkhai@openvz.org>,
-        Manuel Bentele <development@manuel-bentele.de>,
-        qemu-devel@nongnu.org, Kevin Wolf <kwolf@redhat.com>,
-        rjones@redhat.com, "Denis V. Lunev" <den@openvz.org>,
-        Stefano Garzarella <sgarzare@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <11781567.uqkIggiGGz@nimue>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 6, 2022 at 7:24 PM Ming Lei <tom.leiming@gmail.com> wrote:
->
-> On Wed, Oct 05, 2022 at 08:21:45AM -0400, Stefan Hajnoczi wrote:
-> > On Wed, 5 Oct 2022 at 00:19, Ming Lei <tom.leiming@gmail.com> wrote:
-> > >
-> > > On Tue, Oct 04, 2022 at 09:53:32AM -0400, Stefan Hajnoczi wrote:
-> > > > On Tue, 4 Oct 2022 at 05:44, Ming Lei <tom.leiming@gmail.com> wrote:
-> > > > >
-> > > > > On Mon, Oct 03, 2022 at 03:53:41PM -0400, Stefan Hajnoczi wrote:
-> > > > > > On Fri, Sep 30, 2022 at 05:24:11PM +0800, Ming Lei wrote:
-> > > > > > > ublk-qcow2 is available now.
-> > > > > >
-> > > > > > Cool, thanks for sharing!
-> > > > > >
-> > > > > > >
-> > > > > > > So far it provides basic read/write function, and compression and snapshot
-> > > > > > > aren't supported yet. The target/backend implementation is completely
-> > > > > > > based on io_uring, and share the same io_uring with ublk IO command
-> > > > > > > handler, just like what ublk-loop does.
-> > > > > > >
-> > > > > > > Follows the main motivations of ublk-qcow2:
-> > > > > > >
-> > > > > > > - building one complicated target from scratch helps libublksrv APIs/functions
-> > > > > > >   become mature/stable more quickly, since qcow2 is complicated and needs more
-> > > > > > >   requirement from libublksrv compared with other simple ones(loop, null)
-> > > > > > >
-> > > > > > > - there are several attempts of implementing qcow2 driver in kernel, such as
-> > > > > > >   ``qloop`` [2], ``dm-qcow2`` [3] and ``in kernel qcow2(ro)`` [4], so ublk-qcow2
-> > > > > > >   might useful be for covering requirement in this field
-> > > > > > >
-> > > > > > > - performance comparison with qemu-nbd, and it was my 1st thought to evaluate
-> > > > > > >   performance of ublk/io_uring backend by writing one ublk-qcow2 since ublksrv
-> > > > > > >   is started
-> > > > > > >
-> > > > > > > - help to abstract common building block or design pattern for writing new ublk
-> > > > > > >   target/backend
-> > > > > > >
-> > > > > > > So far it basically passes xfstest(XFS) test by using ublk-qcow2 block
-> > > > > > > device as TEST_DEV, and kernel building workload is verified too. Also
-> > > > > > > soft update approach is applied in meta flushing, and meta data
-> > > > > > > integrity is guaranteed, 'make test T=qcow2/040' covers this kind of
-> > > > > > > test, and only cluster leak is reported during this test.
-> > > > > > >
-> > > > > > > The performance data looks much better compared with qemu-nbd, see
-> > > > > > > details in commit log[1], README[5] and STATUS[6]. And the test covers both
-> > > > > > > empty image and pre-allocated image, for example of pre-allocated qcow2
-> > > > > > > image(8GB):
-> > > > > > >
-> > > > > > > - qemu-nbd (make test T=qcow2/002)
-> > > > > >
-> > > > > > Single queue?
-> > > > >
-> > > > > Yeah.
-> > > > >
-> > > > > >
-> > > > > > >     randwrite(4k): jobs 1, iops 24605
-> > > > > > >     randread(4k): jobs 1, iops 30938
-> > > > > > >     randrw(4k): jobs 1, iops read 13981 write 14001
-> > > > > > >     rw(512k): jobs 1, iops read 724 write 728
-> > > > > >
-> > > > > > Please try qemu-storage-daemon's VDUSE export type as well. The
-> > > > > > command-line should be similar to this:
-> > > > > >
-> > > > > >   # modprobe virtio_vdpa # attaches vDPA devices to host kernel
-> > > > >
-> > > > > Not found virtio_vdpa module even though I enabled all the following
-> > > > > options:
-> > > > >
-> > > > >         --- vDPA drivers
-> > > > >           <M>   vDPA device simulator core
-> > > > >           <M>     vDPA simulator for networking device
-> > > > >           <M>     vDPA simulator for block device
-> > > > >           <M>   VDUSE (vDPA Device in Userspace) support
-> > > > >           <M>   Intel IFC VF vDPA driver
-> > > > >           <M>   Virtio PCI bridge vDPA driver
-> > > > >           <M>   vDPA driver for Alibaba ENI
-> > > > >
-> > > > > BTW, my test environment is VM and the shared data is done in VM too, and
-> > > > > can virtio_vdpa be used inside VM?
-> > > >
-> > > > I hope Xie Yongji can help explain how to benchmark VDUSE.
-> > > >
-> > > > virtio_vdpa is available inside guests too. Please check that
-> > > > VIRTIO_VDPA ("vDPA driver for virtio devices") is enabled in "Virtio
-> > > > drivers" menu.
-> > > >
-> > > > >
-> > > > > >   # modprobe vduse
-> > > > > >   # qemu-storage-daemon \
-> > > > > >       --blockdev file,filename=test.qcow2,cache.direct=of|off,aio=native,node-name=file \
-> > > > > >       --blockdev qcow2,file=file,node-name=qcow2 \
-> > > > > >       --object iothread,id=iothread0 \
-> > > > > >       --export vduse-blk,id=vduse0,name=vduse0,num-queues=$(nproc),node-name=qcow2,writable=on,iothread=iothread0
-> > > > > >   # vdpa dev add name vduse0 mgmtdev vduse
-> > > > > >
-> > > > > > A virtio-blk device should appear and xfstests can be run on it
-> > > > > > (typically /dev/vda unless you already have other virtio-blk devices).
-> > > > > >
-> > > > > > Afterwards you can destroy the device using:
-> > > > > >
-> > > > > >   # vdpa dev del vduse0
-> > > > > >
-> > > > > > >
-> > > > > > > - ublk-qcow2 (make test T=qcow2/022)
-> > > > > >
-> > > > > > There are a lot of other factors not directly related to NBD vs ublk. In
-> > > > > > order to get an apples-to-apples comparison with qemu-* a ublk export
-> > > > > > type is needed in qemu-storage-daemon. That way only the difference is
-> > > > > > the ublk interface and the rest of the code path is identical, making it
-> > > > > > possible to compare NBD, VDUSE, ublk, etc more precisely.
-> > > > >
-> > > > > Maybe not true.
-> > > > >
-> > > > > ublk-qcow2 uses io_uring to handle all backend IO(include meta IO) completely,
-> > > > > and so far single io_uring/pthread is for handling all qcow2 IOs and IO
-> > > > > command.
-> > > >
-> > > > qemu-nbd doesn't use io_uring to handle the backend IO, so we don't
-> > >
-> > > I tried to use it via --aio=io_uring for setting up qemu-nbd, but not succeed.
-> > >
-> > > > know whether the benchmark demonstrates that ublk is faster than NBD,
-> > > > that the ublk-qcow2 implementation is faster than qemu-nbd's qcow2,
-> > > > whether there are miscellaneous implementation differences between
-> > > > ublk-qcow2 and qemu-nbd (like using the same io_uring context for both
-> > > > ublk and backend IO), or something else.
-> > >
-> > > The theory shouldn't be too complicated:
-> > >
-> > > 1) io uring passthough(pt) communication is fast than socket, and io command
-> > > is carried over io_uring pt commands, and should be fast than virio
-> > > communication too.
-> > >
-> > > 2) io uring io handling is fast than libaio which is taken in the
-> > > test on qemu-nbd, and all qcow2 backend io(include meta io) is handled
-> > > by io_uring.
-> > >
-> > > https://github.com/ming1/ubdsrv/blob/master/tests/common/qcow2_common
-> > >
-> > > 3) ublk uses one single io_uring to handle all io commands and qcow2
-> > > backend IOs, so batching handling is common, and it is easy to see
-> > > dozens of IOs/io commands handled in single syscall, or even more.
-> >
-> > I agree with the theory but theory has to be tested through
-> > experiments in order to validate it. We can all learn from systematic
-> > performance analysis - there might even be bottlenecks in ublk that
-> > can be solved to improve performance further.
->
-> Indeed, one thing is that ublk uses get user pages to retrieve user pages
-> for copying data, this way may add latency for big chunk IO, since
-> latency of get user pages should be increased linearly by nr_pages.
->
-> I looked into vduse code a bit too, and vduse still needs the page copy,
-> but lots of bounce pages are allocated and cached in the whole device
-> lifetime, this way can void the latency for retrieving & allocating
-> pages runtime with cost of extra memory consumption. Correct me
-> if it is wrong, Xie Yongji or anyone?
->
+On Fri, Oct 07, 2022 at 12:00:16PM +0200, Bastian Rieck wrote:
+> Dear Heikki, dear all,
+> 
+> I am still unable to reproduce the previous error messages I 
+> mentioned. In the meantime, the UCSI issues disappeared with 5.19.9 
+> for me (!). I think this is related to a revert by Takashi Iwai  [1] 
+> in 5.19.8.
+> 
+> Given these data, would it be useful to test your patch against 
+> 5.19.9 or a more recent version?
 
-Yes, you are right. Another way is registering the preallocated
-userspace memory as bounce buffer.
+No need. I'm just about to resend these.
 
-Thanks,
-Yongji
+thanks,
+
+-- 
+heikki
