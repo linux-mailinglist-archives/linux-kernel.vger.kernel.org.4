@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8515B5F770B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 12:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FAE25F770C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 12:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbiJGKsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 06:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
+        id S229541AbiJGKsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 06:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiJGKse (ORCPT
+        with ESMTP id S229582AbiJGKsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 06:48:34 -0400
+        Fri, 7 Oct 2022 06:48:35 -0400
 Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2083.outbound.protection.outlook.com [40.107.22.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C45120BC6
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 03:48:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6E6F473C
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 03:48:34 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SVkpD6at8SDdaMY72hUyUMbKMI0YL2dmGc9gbq/B+cEAoDtYH8rZRAawwxJxLaJe1UE/NhMSEzlDEym3UjZqCOixcQX4U2kZSEuBQ4qLrvfvugEa+dazx690eFoqXVQBOtl1Fqb0zs1AA5GvTPiwvQWPgONw4CMYki9YgpY8hq+ZKTMWqrhg6dXChyiiYHQBp/5PtrSrk+Spn3Np7cTPr6BOQhLE1CauLOrWJyn0FKP/vxzhgZP0izBBWLJEl8eaSrQrYThRdI/saGgfAr81f2/LeC3CyomilFbOp4jB1NXoSH+gVe3JN1ju9vGT+6W1qYff/zPqSeHA9BO0GmfS0w==
+ b=fpWyLosSbLDE9MI/5mb/Msng68JRjRem0dC9k8WvX3b5miMRdf0rbwiUVA9RKbP/FABB0QSExUb5H25AFlWVUdF1W54baXM3wmrmLRzjiShX8f4YtF6g2KNp2OYZpAYPZEKyt4DNSbtVC6nual3/6R+8kWnkFjYL5pEV1tArxPsZMk6XKwlUW3mjMI9zGfGF4dHa3wgkz9NDZuoDUloJKHQLNwEPWTQPFX6ArQgxpxgDICQVx6JHJHYUaEgtKdJj+R6yzq6AsXxWV1igFAo984UOc5wpBo1pIJHLV7Dld77tHxeiCNU41DA//4RgxgOBqwOqv18LuYOHhilsaggKfg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HW9D+BSmI6pRhbYTKCGKsKv+BuzjNz4WwrRy7sRVd8I=;
- b=n4MzYqJ2trZ/IMe4A0N626FdichAwrFThsmWmAR5DP6ztNZDn17pLKKUFBeQAWV+ji+rEWLE5GGDRk1p+7gm+XWeT/ZEz8Rpg2ElOdVSc4DwtBczgL04WiAbOexxTCRMKRdN6DJ0uoX7Qp1eU96G4TH30WHtE1Gqt2fm63pfC2M0HmXYh5W3emyOixSVdy6jVcw2KrnCqkfY2nY4IpYGlnanHfaqUnGNPmRT/9AF2Ztb7PXK8SrDbZZTZFL9rXeOHilKAqQ7LnP7vzdeEO42ClbnVYc/1XxgFb8PSgw35duhKm0+6x8qfFpNAAiPR1pwcsQuSR4XdydWeRmPeXM9gw==
+ bh=18prcxBJREUaGwRmTI+XBWEaWZutDkiUUm/t36qn5T8=;
+ b=YJjjHIw1J8Y5yF2EESKevN0tuEcabJr6EcJHO9oF0Gj8yMfRPndAzKrGf4pT1mX2l+r4yFfZN0lhAMqebaNsvjBRmnR66u/BksyWhvcyoedLnuRKRD4t036aQyCaJfkuvu3b9gzzwVSOiA3HSgrV2SrmAi/E0xsBwySo2sMSxiLPJSMqjvpg0EeT9lZtJb6ABbLfvwary2gr2Tg3acfF/skQhesmvu9mZf/RmcuVgeGpMbEhLtt9AS6kTNQtHnmO/eVmuFROCUiu84UqXKzD+NIe1VRutKCSwkvo00I9YuVqUOoELKVBMeBLqKSxAvJEn5KLCj0TU8Jmk5T/dZ7jLg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=iopsys.eu; dmarc=pass action=none header.from=iopsys.eu;
  dkim=pass header.d=iopsys.eu; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iopsys.eu;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HW9D+BSmI6pRhbYTKCGKsKv+BuzjNz4WwrRy7sRVd8I=;
- b=V6XV1qGNoKk04Sjv4wlqFHhNJ1ZKmnk7LkmCVFPtaGif/PzJ7b/0Fux34XPHmtyEC0tfSbWcomXG1QogiMeay2q0tFYcNHuaRK7LoPP+zOlf9znJSW7SOZHE2ns7INGQG6i9Dw90kv5mwSsME1VnVDLy5PAbQtt7t+KgUBgaXMA=
+ bh=18prcxBJREUaGwRmTI+XBWEaWZutDkiUUm/t36qn5T8=;
+ b=tAId3B0k1llGT6XPFPS1QSFfSvIULJI1QXZ7luKrwvz4fQ8eCcp6csoFZm0zZi2nP9vwx5+/UjEJ5ZsPlzRvnVWuGJc97gG8onDcQABxBWkuyJ9nt2o/xBZQy5qpRdTOd3HUjilUz76aLSwkD/QdYWGAA8LA9AU7baTkNysoYD4=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=iopsys.eu;
 Received: from PAXPR08MB6494.eurprd08.prod.outlook.com (2603:10a6:102:154::16)
  by DB9PR08MB8457.eurprd08.prod.outlook.com (2603:10a6:10:3d7::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.19; Fri, 7 Oct
- 2022 10:48:28 +0000
+ 2022 10:48:29 +0000
 Received: from PAXPR08MB6494.eurprd08.prod.outlook.com
  ([fe80::3c25:b934:e13d:d6bd]) by PAXPR08MB6494.eurprd08.prod.outlook.com
  ([fe80::3c25:b934:e13d:d6bd%5]) with mapi id 15.20.5676.032; Fri, 7 Oct 2022
- 10:48:28 +0000
+ 10:48:29 +0000
 From:   mikhail.kshevetskiy@iopsys.eu
 To:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
 Cc:     Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>,
@@ -48,10 +48,12 @@ Cc:     Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>,
         Richard Weinberger <richard@nod.at>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Frieder Schrempf <frieder.schrempf@kontron.de>
-Subject: [PATCH 1/2] mtd: spinand: winbond: fix winbond lashes identifications
-Date:   Fri,  7 Oct 2022 13:48:19 +0300
-Message-Id: <20221007104820.198938-1-mikhail.kshevetskiy@iopsys.eu>
+Subject: [PATCH 2/2] mtd: spinand: winbond: add Winbond W25N02KV flash support
+Date:   Fri,  7 Oct 2022 13:48:20 +0300
+Message-Id: <20221007104820.198938-2-mikhail.kshevetskiy@iopsys.eu>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221007104820.198938-1-mikhail.kshevetskiy@iopsys.eu>
+References: <20221007104820.198938-1-mikhail.kshevetskiy@iopsys.eu>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: GV3P280CA0013.SWEP280.PROD.OUTLOOK.COM
@@ -60,51 +62,51 @@ X-ClientProxiedBy: GV3P280CA0013.SWEP280.PROD.OUTLOOK.COM
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PAXPR08MB6494:EE_|DB9PR08MB8457:EE_
-X-MS-Office365-Filtering-Correlation-Id: ba979715-4610-4e1c-c88c-08daa85177db
+X-MS-Office365-Filtering-Correlation-Id: e261c601-813c-4559-e47c-08daa851789c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3y+WKAip/xh5zr+B+f8S3Hyj9hQlp3YGksfCP8Q3WUMFaV1z/h3Yyrlt9RjFTG+YP6fSE3AdjGeoQKPc3InJ4JwxnvYjqyeulGaJft96cyb/G/noBQBCBnBTsqn6hCwNGFBtatXI1UXAu5b2VGgvTHh51gqqDCLYQFB8q4+asekihevLDbWnkJa8pQRrXDbk6Ta2KeGCM42XE3gH+bXBqiRxEhSEoy6W9IiQ9pZV71nDQ9jjc+nzHKfCwydj3tOroiaQ8yjfrus8nszOTIKFFtryZxlazKpntYF5kwS+WBiUCRpl4Nj/dCYoKnqS6s9oKe6Q20m3ykpIdPiLBg2Vs0fEWr10ipvVgfBrDFakmxiOskzgYGrouAQbuooR1oEVeappTW0/bzetPaJLj0j1LrOlxiouUJGdXvTAoEXze3Ba7trDH1753zf8urjmQyqb1DBt6VqnBS72Xnwunqwh0+7SwvEKFZZyXVmGDezYkAhWqoA7UgPZgrR2pmv1yzwGJ6yIq8df5aUB+9KuKCMyIoqzPXCCo+oOGRWLoYInId7DiHUIQbNSg40gW2884tNu9C9vDif5RbykWq8o1kYkfppXRuN9H7eEkzIAO8uSBENPItUNwi74mEXXUD1L7uJr338oslafz/qC6JhZ4xewbcr5YZ+n9453a5YfdmNlOQtF92yA9Hm8tpEwvn7WMRL+kh01sI2MaLwOXxolTtO+DyYwx0yC+k1zWuZb1M9Hir/M3R5NlEzQ3844wauJzMjGKAkdM5KvfGoOd4ijXE9TRQ==
+X-Microsoft-Antispam-Message-Info: lwYtwUhqaFN4ZDGvXZLFQ/8r4j5vetWaapQ4+L1to0U+jmy2Pk/yENlYH3bAd0SH4wy9WY2IuXDhaiO44Sye0ua6EoCDCgrddfr1ZV5upPRBq1OKAyJAuYQk/pyHXGy+gDrccl92igdHGp0jqT8vbHLQMAhrWz0N9lQ8Hvp/igmQM/PMPzp+csMDSDpu13T5DFkFAsRtBJwmryqCL6OsNm1IPUahkD/2ZgWjoWyACNW41A/sIXcW2NaDe2Ft0cZblu6x70TaVes6sei3ciZWR/tvdW/dUgbXKNdI+6YOrkC93x80GF5kQhvsULPggXgk+3hVNUL1IQ7vhkbS4tVUXqignpzQYN7lcEGmRVPGpWNlbnfkT0Q5u4WsoNMUO7TF5ow+P6SmdW17zUUUzSZ/800kMxnmANbe7n36IHZUzfZiEqPazWV9FTUKQ91TP0UlIXYSgOMnpgJBqpa4DTtxaLx4OzazSijxbYCm/N7d5Wc3GuEOEMAw4S0Oujjfn2M8+6xdm3kEsYW8T+pYaJ9R5i0ZkRN5nOmCPZEW6JU8TVW0WhbPYk2GCwAP9BvAQlrr+zptQX0bXN5CqUUmrj5vMO/8H3n/O6FWcllQMq+WXVam7DcajCn4a0dyy5e+THUrPaJ/eG2RLCaEtAn8w1p6aNkpj6QWgGEgSQMpra7WPXGyz2urpa8Vsf2daV3WZibUZrOlCvmXUgx3buBHdEJ/QkOpD/3KaMcZ18zyMHtu1WHK5T9v5f++DB941OeZ00gEStsT0HXicUY6U6nkakJYQw==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR08MB6494.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39840400004)(346002)(376002)(366004)(396003)(451199015)(8676002)(38350700002)(66946007)(36756003)(66556008)(66476007)(186003)(38100700002)(1076003)(41300700001)(6666004)(2616005)(86362001)(4326008)(52116002)(83380400001)(2906002)(5660300002)(6506007)(26005)(8936002)(6512007)(9686003)(6486002)(316002)(54906003)(478600001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hUNcGgEZyju1Wwc2GLY5gJ3uYoaLY8in+Hme2HmfB9cZAmnNPs8KqLgOAXmd?=
- =?us-ascii?Q?P8B6p3JSk9UjHrCdgj9x7YL3ajIVj+EIw4AqMFDjk/KWWBdyyxtgqVoxNh8/?=
- =?us-ascii?Q?of8eBN0nm611O7PDyA0VCUx6rtBOWyZ7inRcWN4p+0toyhNz+bo0DtDKxLaT?=
- =?us-ascii?Q?5t7sLOmazcCtIWJPAa7PDJHmSpL+6e+BGN2St6XosQUL9UevKdvPlOWczbO6?=
- =?us-ascii?Q?ii7J7d21Xp5jBRTOPXBuzPv+qAVVk9UBrDek1m2/3DP6Jm7aXgC04dx+7G1q?=
- =?us-ascii?Q?9uAsrp3TBDEvumsVjXB5JwRz8xPSedz0UKNeJ6icOnqPPXiO1IetlNHkq6rz?=
- =?us-ascii?Q?PoJIY8EEhrybIY9XIZOmI7VXLmDIRJrIz+H0fl4NVtOQ42FR7rcXbpMCiyES?=
- =?us-ascii?Q?06fkgELpt4tHA0V4+pIEyyeO66SZUdT0+aP0S7jxyVzRDvwK5kdZIxayIf/p?=
- =?us-ascii?Q?rJBEQIz+wpsFSnsc7vqCA0ZW2pATNWFaHGVoqsAqG04xQKcC3TLMnClvgdup?=
- =?us-ascii?Q?Kz3/+somqoHHM/Q2VL9XB+nOw57gQMpAc5veK6/YnTGvahcgSTTlIGja+63U?=
- =?us-ascii?Q?Q+2sGsIimuftK5N1waejX+hBIfL3vrKXJTCg5fWO8+nx/FnDgc2b3hIIfkoV?=
- =?us-ascii?Q?7MtPwQtbM9db8RYKCFJfGRlBddM9D8y4PX4I19Cnmxw/R8dZTAbgLfuqQnPf?=
- =?us-ascii?Q?eNHvZkWFc3PL/lMNTnKox4PE6dRznrTioZ7511BsxMQwbH++hUWm715P5Kjq?=
- =?us-ascii?Q?KAjxc7Q/+N1asKMVz/wYyH3nPfl0oVcAiaxt7My4q81RP0V82v+oBhJjpPaK?=
- =?us-ascii?Q?v+hfTU8DwNQlmXWdXYsMLXb3pd07AX3aCAqzsMG2vSMt2Jif0Lh76639Yxfd?=
- =?us-ascii?Q?RCmULjAdP6HyRgae/dXjgpvSTC0KeQaZcZcFNN4pZepKOmQIv26H/LLs+VnC?=
- =?us-ascii?Q?zGH4jRqRb82jf+Z9b/QHp/E5CCONRQBapPBgrs4y9WAQrnvUXUAYUqaoYgA1?=
- =?us-ascii?Q?t5n4Iz3mUi3WUS57daviqID2Xibi4GryXyXWvoIHCLVv4dJEjGxOhGSOYTO8?=
- =?us-ascii?Q?84I7ia+FEBCZqu3jZlzHhOP3GjDkZbJRiMujGjHYmvIdDVwTOFRctz7r1TF4?=
- =?us-ascii?Q?DsSG/MB0SfJl3ef33wwaFbyb6o+2ZWFzrtftNR/6bAtMQgIIFOrnUAyR0F1N?=
- =?us-ascii?Q?C7AuQ8xkLGKn753KgOxe8xAUeug1qvaxTjON+08tFfn5voqWkfWawhooYXrS?=
- =?us-ascii?Q?qxYnEo5U5nOur7FK5Eb29hRibujO5PIuUXczoRLIUUrM+EGM1xdw2AR/y2hE?=
- =?us-ascii?Q?JuMMngLSGP17UXeCa82kbQ6nNtHn8Gr+HtmT4RfiifEc2CoBz0H/HtqehuG1?=
- =?us-ascii?Q?YnL89XExlNOO2x+BI/mApDKT2sADLSKjvnyVk5H86B7kfEjLaoBDPeo1a6cF?=
- =?us-ascii?Q?KB4VYQSuZjWN7aWvh/58SOZtsSGvBXPCeJjPJE8loAlwHartRenLUbjRWNTU?=
- =?us-ascii?Q?4sa+JONqd1BuPOzex2VmGCol/Rz98tXVyrxnOTLu+D+97Rnov3e50ekbO/CH?=
- =?us-ascii?Q?oDJh5s8bFKYZ0WKkyD7d73ohFgJV2M+sttBJHSHOCC8guSXVXlRs7XwBKV1v?=
- =?us-ascii?Q?qDVv69rQdOf5PKhKAIyjiUM=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QK+srXjLDoBlqA6CZiSWWwfVnY70UhN7Ig15SyzkW4HXBkk7fbTHibLttDiJ?=
+ =?us-ascii?Q?i377IqooWateEEHeVdaT8xFLBkce/5d8Y+J7tiMQZq19gJsucEydZFkgL0+k?=
+ =?us-ascii?Q?FytelkzLmScvD8jDrzvQN6cxJGCUfUzWxVsFQBH7H+ke1sNx2Z91VGL1aGRB?=
+ =?us-ascii?Q?RClfrk4mj/uKsDj85dSTaBQ7Qx1DOEs4+aqLn1tV6NFwMjg39qPck/61jNMX?=
+ =?us-ascii?Q?Eg2y3TNKPXp7l7NrTZhre4WFGon2eJ5Ces9tmW20PVRvnKpPnVPBP/Ktn3MA?=
+ =?us-ascii?Q?HK+9qEqS/hIDhIS353XluR4PWd5L2YjwZ8DTRc6Qp60K+4PgN7W4fFmpZIYo?=
+ =?us-ascii?Q?t7ifSucgOZshquDvOfFN4bH0Jukzz724/GjmcEgg0FBKvu9hJe4ZxNMm/Njk?=
+ =?us-ascii?Q?ZBOTqKE8J2o6TM0GZefwuqQ1Kex9zqPzIonHTSiy7sTk1PKV368xzbLW/CvS?=
+ =?us-ascii?Q?aq/usMHCycoKqFQe4CptBbzHn7T0WW6Fyh5i3hDPTbTdC8hdrPGg8KI+CIUl?=
+ =?us-ascii?Q?y6BOyoaMbKQqfJLC5eEbZwtwXya56Xyjjh1A5CM6yXUy8OPE7kHus5B5ulH8?=
+ =?us-ascii?Q?srPfFDoPAlQrnOQUG6C/t2oMNbCmOU/DG9F04uTBm+eq7uGS89tkt37z5El1?=
+ =?us-ascii?Q?hBpKF5PBJuuOf89112O5ORCGedOF44vgVn62HsUbCGL7Nxm/K/K3/4JFG+a3?=
+ =?us-ascii?Q?JqptMb1fkIsLOapZ+ARcaUI1QJjXljBwaOtu5S7QmRoWYM1CBEk08uiPs54W?=
+ =?us-ascii?Q?p138gILC1Juvw4Y0wLqtpWlNw6Bc+f6Yorpon3UkgCH8LA0P+y02ZMFun0If?=
+ =?us-ascii?Q?zoONx3UHDgwzf1pxx7ch9dUnpG/zj0jf22nre/zX0+Om+0WaEE83AKbyQcHv?=
+ =?us-ascii?Q?FsQznHyYtanrkju7jbf+EtP9fz/K4B26qlqdqiUyRRjAreOJLPTYGevDyanY?=
+ =?us-ascii?Q?UF0dgtmJT+VT0qCKOrOAyHFJ01iukjx9MHG9AAyvMJa+KqeeYeNou27KELSG?=
+ =?us-ascii?Q?wJL/GEIp/P9FOprmL+NgX2FpTIlmllpT+PR3obN/zoAdgAjQovzmtuieL/UA?=
+ =?us-ascii?Q?XiZkto3MU5+0KQRSTzzjN8L9mfMKfk/J6eIH/dadWS13X4Bvre0kvbhs7QlU?=
+ =?us-ascii?Q?PypDvOHlBCf9Y4OJ82ImOPPX7LIwHwVvbb9pDnfyNFjqT/nu0LRPe2P6rtMf?=
+ =?us-ascii?Q?Re9JA4ETkdET0Sd3PdGd/icM/wJ4GYQWgoTxzCTyWkncSEFmlvIrd+ORWTVp?=
+ =?us-ascii?Q?VjJxAVgWnK/kDiYylsbaLJyMRFhonyJDs73Yf2v2r+HcggBz/sPe5M4tuVQW?=
+ =?us-ascii?Q?AUCjTBuJPWfiXd7UjvGxVrpq+XV84zgu6T/ZLw5qMoSwzl75KsO/zbpg7/47?=
+ =?us-ascii?Q?ZirMRriMitjghB3tjV1roOlTEeI6ZCtHSWAGoMXMBn5NzqmX0RB3lcYu0ah2?=
+ =?us-ascii?Q?fUo6gGfW1/gYFaT5dRNL1eWoHXmSpX0J75pK6nPoHvbcHGdzzd6XcwB5hg5n?=
+ =?us-ascii?Q?kQCUlCdlyCMmlO48AKzWFiMKetUSfbrVzqlUCeCgZtsWe3s4ATJKCaI87yBw?=
+ =?us-ascii?Q?GcRsRWlnFayT1xFvGqCrSFOPbH766RTwfObfSuEawSn4JBEyxkR+o3ldJf3U?=
+ =?us-ascii?Q?ZA=3D=3D?=
 X-OriginatorOrg: iopsys.eu
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba979715-4610-4e1c-c88c-08daa85177db
+X-MS-Exchange-CrossTenant-Network-Message-Id: e261c601-813c-4559-e47c-08daa851789c
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR08MB6494.eurprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2022 10:48:28.4631
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2022 10:48:29.7288
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 7ff78d65-2de4-40f5-8675-0569e5c7a65d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dKJlIlVwTut+Pb86U8WegfTSV52OGBGfvpSItwf4mAOoBB5ZObJJbph2iaqjsZf6QM7Azt6cDilvEy2RLmzRUHa76Cc03vKRJgrvljcKF+E=
+X-MS-Exchange-CrossTenant-UserPrincipalName: ENvCUa0RkpqimXQmHYiKMc6xn9obsCaChMCVoqG5pc/h9y7XjWRq34OEI72x4pInOFpeHy4M3XgJXAmv5Z+wneNad3sD37cisGCqPcbeBuw=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB8457
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -118,40 +120,104 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
 
-Winbond uses 3 bytes to identify flash: vendor_id, dev_id_0, dev_id_1,
-but current driver uses only first 2 bytes of it for devices
-idenfification. As result Winbond W25N02KV flash (id_bytes: EF, AA, 22)
-is identified as W25N01GV (id_bytes: EF, AA, 21).
-
-Fix this by adding missed identification bytes.
-
 Signed-off-by: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
 ---
- drivers/mtd/nand/spi/winbond.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/mtd/nand/spi/winbond.c | 75 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 75 insertions(+)
 
 diff --git a/drivers/mtd/nand/spi/winbond.c b/drivers/mtd/nand/spi/winbond.c
-index 76684428354e..ed368a55d68f 100644
+index ed368a55d68f..3ad58cd284d8 100644
 --- a/drivers/mtd/nand/spi/winbond.c
 +++ b/drivers/mtd/nand/spi/winbond.c
-@@ -76,7 +76,7 @@ static int w25m02gv_select_target(struct spinand_device *spinand,
+@@ -74,6 +74,72 @@ static int w25m02gv_select_target(struct spinand_device *spinand,
+ 	return spi_mem_exec_op(spinand->spimem, &op);
+ }
  
++static int w25n02kv_ooblayout_ecc(struct mtd_info *mtd, int section,
++				  struct mtd_oob_region *region)
++{
++	if (section > 3)
++		return -ERANGE;
++
++	region->offset = 64 + (16 * section);
++	region->length = 13;
++
++	return 0;
++}
++
++static int w25n02kv_ooblayout_free(struct mtd_info *mtd, int section,
++				   struct mtd_oob_region *region)
++{
++	if (section > 3)
++		return -ERANGE;
++
++	region->offset = (16 * section) + 2;
++	region->length = 14;
++
++	return 0;
++}
++
++static const struct mtd_ooblayout_ops w25n02kv_ooblayout = {
++	.ecc = w25n02kv_ooblayout_ecc,
++	.free = w25n02kv_ooblayout_free,
++};
++
++static int w25n02kv_ecc_get_status(struct spinand_device *spinand,
++				   u8 status)
++{
++	struct nand_device *nand = spinand_to_nand(spinand);
++	u8 mbf = 0;
++	struct spi_mem_op op = SPINAND_GET_FEATURE_OP(0x30, &mbf);
++
++	switch (status & STATUS_ECC_MASK) {
++	case STATUS_ECC_NO_BITFLIPS:
++		return 0;
++
++	case STATUS_ECC_UNCOR_ERROR:
++		return -EBADMSG;
++
++	case STATUS_ECC_HAS_BITFLIPS:
++		/*
++		 * Let's try to retrieve the real maximum number of bitflips
++		 * in order to avoid forcing the wear-leveling layer to move
++		 * data around if it's not necessary.
++		 */
++		if (spi_mem_exec_op(spinand->spimem, &op))
++			return nanddev_get_ecc_conf(nand)->strength;
++
++		mbf >>= 4;
++
++		if (WARN_ON(mbf > nanddev_get_ecc_conf(nand)->strength || !mbf))
++			return nanddev_get_ecc_conf(nand)->strength;
++
++		return mbf;
++
++	default:
++		break;
++	}
++
++	return -EINVAL;
++}
++
  static const struct spinand_info winbond_spinand_table[] = {
  	SPINAND_INFO("W25M02GV",
--		     SPINAND_ID(SPINAND_READID_METHOD_OPCODE_DUMMY, 0xab),
-+		     SPINAND_ID(SPINAND_READID_METHOD_OPCODE_DUMMY, 0xab, 0x21),
- 		     NAND_MEMORG(1, 2048, 64, 64, 1024, 20, 1, 1, 2),
- 		     NAND_ECCREQ(1, 512),
- 		     SPINAND_INFO_OP_VARIANTS(&read_cache_variants,
-@@ -86,7 +86,7 @@ static const struct spinand_info winbond_spinand_table[] = {
- 		     SPINAND_ECCINFO(&w25m02gv_ooblayout, NULL),
- 		     SPINAND_SELECT_TARGET(w25m02gv_select_target)),
- 	SPINAND_INFO("W25N01GV",
--		     SPINAND_ID(SPINAND_READID_METHOD_OPCODE_DUMMY, 0xaa),
-+		     SPINAND_ID(SPINAND_READID_METHOD_OPCODE_DUMMY, 0xaa, 0x21),
- 		     NAND_MEMORG(1, 2048, 64, 64, 1024, 20, 1, 1, 1),
- 		     NAND_ECCREQ(1, 512),
- 		     SPINAND_INFO_OP_VARIANTS(&read_cache_variants,
+ 		     SPINAND_ID(SPINAND_READID_METHOD_OPCODE_DUMMY, 0xab, 0x21),
+@@ -94,6 +160,15 @@ static const struct spinand_info winbond_spinand_table[] = {
+ 					      &update_cache_variants),
+ 		     0,
+ 		     SPINAND_ECCINFO(&w25m02gv_ooblayout, NULL)),
++	SPINAND_INFO("W25N02KV",
++		     SPINAND_ID(SPINAND_READID_METHOD_OPCODE_DUMMY, 0xaa, 0x22),
++		     NAND_MEMORG(1, 2048, 128, 64, 2048, 40, 1, 1, 1),
++		     NAND_ECCREQ(8, 512),
++		     SPINAND_INFO_OP_VARIANTS(&read_cache_variants,
++					      &write_cache_variants,
++					      &update_cache_variants),
++		     0,
++		     SPINAND_ECCINFO(&w25n02kv_ooblayout, w25n02kv_ecc_get_status)),
+ };
+ 
+ static int winbond_spinand_init(struct spinand_device *spinand)
 -- 
 2.35.1
 
