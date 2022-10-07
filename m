@@ -2,151 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16DF45F804B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 23:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F315F8054
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 23:54:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiJGVuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 17:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
+        id S229469AbiJGVym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 17:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbiJGVum (ORCPT
+        with ESMTP id S229459AbiJGVyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 17:50:42 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BF483F0E
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 14:50:40 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id s68-20020a632c47000000b00434e0e75076so3467983pgs.7
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 14:50:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=O8RGq8MFx6yg4rvWL2LsrEdijzeVAuwua99jyz3WuY0=;
-        b=Jm4fGwHaDYx7k9kxYT6mKkXoumBg51rFPtFVs1GUI0RDAED/uoDgT2YNed/lVzfR63
-         h0TE9R+NpFZlX072/6JitNBwgwOCkwj7MWGEJ9gSHP7juK93M7454+wy1rhY7QCus+rq
-         wETw9tMRCilnjfF4BoNjlvaT7PaGOETx1PmHdjQz/gZyRd/vatqaqevPArtVOBLVpt7D
-         qtJj4KgMq7PvlziZGs6v15glFw3zQHU4ozOBFV0tWIsguGo/HUN1RbaBMF2gkCbsHk42
-         I5W0wotcQX/ykvIoxcCSVRcdg3YeZdE/rgpy8N/In3caWqbczTRDU6ug4vJspOvW+iWe
-         kC6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O8RGq8MFx6yg4rvWL2LsrEdijzeVAuwua99jyz3WuY0=;
-        b=IP3w8tQexhDSVjZYjSDiRUmNP+h1nf7c71ccox5FJwqNBuSEN2iUzD4ZYxfsrxjuac
-         ZSmsBv7TmOHql5HqnWW5pTZyr8unlkS1PALhrm/Gg/pcABoP//P09SwaMJI7gxAmYJjW
-         oUCttofTGULAu0ROkyKL4fovYZWQ1Xuo8N7DNiinBA5NZqkD2kjmOmyVxJ7EhaPMwEoz
-         T2ezqumSFCOFiCD33M8zR7n9siBVAeiTMbL/qL+PEe6ttXWPPdyGPj3N6r9DN3XuCGiM
-         Mo5PC1PqU+bizfqY5Jmsc3pJ6j5GBrJ+Of51Qjw2RH/qQaDyOgfmHYEiTr0XhjOsbz+u
-         7LQw==
-X-Gm-Message-State: ACrzQf0ILh6OWfHhwq0Eo7J2L8OyCPpVj34Qvj69dWr2VDyKxBkvIeI3
-        99znRxohm8yJ6il4zhJbFeDTbasOdiNl
-X-Google-Smtp-Source: AMsMyM6u9ghCGBUvbM5APJ6uXbUZZysoD0yKXdfPswKlv7hHAgLwY/TTgHaNURF+8tLhijVM7Y0cjxypeMEW
-X-Received: from sgzhang.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3d89])
- (user=sgzhang job=sendgmr) by 2002:a62:1a8d:0:b0:544:1309:19f3 with SMTP id
- a135-20020a621a8d000000b00544130919f3mr7193381pfa.37.1665179440177; Fri, 07
- Oct 2022 14:50:40 -0700 (PDT)
-Date:   Fri,  7 Oct 2022 21:50:27 +0000
-In-Reply-To: <20221007215027.918507-1-sgzhang@google.com>
-Mime-Version: 1.0
-References: <20221007215027.918507-1-sgzhang@google.com>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221007215027.918507-4-sgzhang@google.com>
-Subject: [PATCH v3 3/3] mtd: mtdoops: panic caused mtdoops to call
- mtdoops_erase function immediately
-From:   Ray Zhang <sgzhang@google.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Ray Zhang <sgzhang@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 7 Oct 2022 17:54:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8292FCD3;
+        Fri,  7 Oct 2022 14:54:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D4E061DF3;
+        Fri,  7 Oct 2022 21:54:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8B8EC433C1;
+        Fri,  7 Oct 2022 21:54:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665179674;
+        bh=G2Bpq4X4c8Ld9teic5MSWuwfYmtsWLlVtQM7SvLz7EM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NJdWRQVjYLReY1JTMnenjvtgVCZt4egbIwOAesAgJ0c5LRyiJ6FS2Is1wil1ZXdTz
+         AJ1kwpOlrcj05wS26ZoEzT3/8h530P4CX+wFcr9u1OEiqHvLE+PC7ho2e7GJFdEUru
+         7tzvwEpp+KSGnrXLeNvlQNkIzXs14GKQ2UEf9fckV+owFuT9iIYNbE89lYFrF4/9i6
+         RXxYXRFq8nqmJMmmQd4o6QJMRj+U707HR9qwU7r4/1xjmo4p6qYx/RPgcl8VWzrfqq
+         vMBKtC9AalFy4+WmipyZkd+XoDdrkbKg+xypPSWQwhnm8oQlSaLdzQoYjHHrShp+pT
+         +BMOJNADjwkmA==
+Date:   Sat, 8 Oct 2022 00:54:28 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v8 2/8] KVM: Extend the memslot to support fd-based
+ private memory
+Message-ID: <Y0CgFIq6JnHmdWrL@kernel.org>
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-3-chao.p.peng@linux.intel.com>
+ <Yz7s+JIexAHJm5dc@kernel.org>
+ <Yz7vHXZmU3EpmI0j@kernel.org>
+ <Yz71ogila0mSHxxJ@google.com>
+ <Y0AJ++m/TxoscOZg@kernel.org>
+ <Y0A+rogB6TRDtbyE@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0A+rogB6TRDtbyE@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The panic function disables the local interrupts, preemption, and all
-other processors. When the invoked mtdoops needs to erase a used page,
-calling schedule_work() to do it will not work. Instead, just call
-mtdoops_erase function immediately.
+On Fri, Oct 07, 2022 at 02:58:54PM +0000, Sean Christopherson wrote:
+> On Fri, Oct 07, 2022, Jarkko Sakkinen wrote:
+> > On Thu, Oct 06, 2022 at 03:34:58PM +0000, Sean Christopherson wrote:
+> > > On Thu, Oct 06, 2022, Jarkko Sakkinen wrote:
+> > > > On Thu, Oct 06, 2022 at 05:58:03PM +0300, Jarkko Sakkinen wrote:
+> > > > > On Thu, Sep 15, 2022 at 10:29:07PM +0800, Chao Peng wrote:
+> > > > > > This new extension, indicated by the new flag KVM_MEM_PRIVATE, adds two
+> > > > > > additional KVM memslot fields private_fd/private_offset to allow
+> > > > > > userspace to specify that guest private memory provided from the
+> > > > > > private_fd and guest_phys_addr mapped at the private_offset of the
+> > > > > > private_fd, spanning a range of memory_size.
+> > > > > > 
+> > > > > > The extended memslot can still have the userspace_addr(hva). When use, a
+> > > > > > single memslot can maintain both private memory through private
+> > > > > > fd(private_fd/private_offset) and shared memory through
+> > > > > > hva(userspace_addr). Whether the private or shared part is visible to
+> > > > > > guest is maintained by other KVM code.
+> > > > > 
+> > > > > What is anyway the appeal of private_offset field, instead of having just
+> > > > > 1:1 association between regions and files, i.e. one memfd per region?
+> > > 
+> > > Modifying memslots is slow, both in KVM and in QEMU (not sure about Google's VMM).
+> > > E.g. if a vCPU converts a single page, it will be forced to wait until all other
+> > > vCPUs drop SRCU, which can have severe latency spikes, e.g. if KVM is faulting in
+> > > memory.  KVM's memslot updates also hold a mutex for the entire duration of the
+> > > update, i.e. conversions on different vCPUs would be fully serialized, exacerbating
+> > > the SRCU problem.
+> > > 
+> > > KVM also has historical baggage where it "needs" to zap _all_ SPTEs when any
+> > > memslot is deleted.
+> > > 
+> > > Taking both a private_fd and a shared userspace address allows userspace to convert
+> > > between private and shared without having to manipulate memslots.
+> > 
+> > Right, this was really good explanation, thank you.
+> > 
+> > Still wondering could this possibly work (or not):
+> > 
+> > 1. Union userspace_addr and private_fd.
+> 
+> No, because userspace needs to be able to provide both userspace_addr (shared
+> memory) and private_fd (private memory) for a single memslot.
 
-Tested:
-~# echo c > /proc/sysrq-trigger
-[  171.654759] sysrq: Trigger a crash
-[  171.658325] Kernel panic - not syncing: sysrq triggered crash
-......
-[  172.406423] mtdoops: not ready 34, 35 (erase immediately)
-[  172.432285] mtdoops: ready 34, 35
-[  172.435633] Rebooting in 10 seconds..
+Got it, thanks for clearing my misunderstandings on this topic, and it
+is quite obviously visible in 5/8 and 7/8. I.e. if I got it right,
+memblock can be partially private, and you dig the shared holes with
+KVM_MEMORY_ENCRYPT_UNREG_REGION. We have (in Enarx) ATM have memblock
+per host mmap, I was looking into this dilated by that mindset but makes
+definitely sense to support that.
 
-Signed-off-by: Ray Zhang <sgzhang@google.com>
----
- drivers/mtd/mtdoops.c | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/mtd/mtdoops.c b/drivers/mtd/mtdoops.c
-index eca48dff9b53..eccb7dea892f 100644
---- a/drivers/mtd/mtdoops.c
-+++ b/drivers/mtd/mtdoops.c
-@@ -168,7 +168,7 @@ static void mtdoops_workfunc_erase(struct work_struct *work)
- 	mtdoops_erase(cxt);
- }
- 
--static void mtdoops_inc_counter(struct mtdoops_context *cxt)
-+static void mtdoops_inc_counter(struct mtdoops_context *cxt, int panic)
- {
- 	cxt->nextpage++;
- 	if (cxt->nextpage >= cxt->oops_pages)
-@@ -178,12 +178,20 @@ static void mtdoops_inc_counter(struct mtdoops_context *cxt)
- 		cxt->nextcount = 0;
- 
- 	if (page_is_used(cxt, cxt->nextpage)) {
--		schedule_work(&cxt->work_erase);
--		return;
-+		pr_debug("mtdoops: not ready %d, %d (erase %s)\n",
-+			 cxt->nextpage, cxt->nextcount,
-+			 panic ? "immediately" : "scheduled");
-+		if (panic) {
-+			/* In case of panic, erase immediately */
-+			mtdoops_erase(cxt);
-+		} else {
-+			/* Otherwise, schedule work to erase it "nicely" */
-+			schedule_work(&cxt->work_erase);
-+		}
-+	} else {
-+		pr_debug("mtdoops: ready %d, %d (no erase)\n",
-+			 cxt->nextpage, cxt->nextcount);
- 	}
--
--	pr_debug("mtdoops: ready %d, %d (no erase)\n",
--		 cxt->nextpage, cxt->nextcount);
- }
- 
- static void mtdoops_write(struct mtdoops_context *cxt, int panic)
-@@ -219,7 +227,7 @@ static void mtdoops_write(struct mtdoops_context *cxt, int panic)
- 	mark_page_used(cxt, cxt->nextpage);
- 	memset(cxt->oops_buf, 0xff, record_size);
- 
--	mtdoops_inc_counter(cxt);
-+	mtdoops_inc_counter(cxt, panic);
- out:
- 	clear_bit(0, &cxt->oops_buf_busy);
- }
-@@ -284,7 +292,7 @@ static void find_next_position(struct mtdoops_context *cxt)
- 		cxt->nextcount = maxcount;
- 	}
- 
--	mtdoops_inc_counter(cxt);
-+	mtdoops_inc_counter(cxt, 0);
- }
- 
- static void mtdoops_do_dump(struct kmsg_dumper *dumper,
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
-
+BR, Jarkko
