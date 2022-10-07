@@ -2,140 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5935F7E68
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 22:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3825F7E73
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 22:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbiJGUCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 16:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50952 "EHLO
+        id S230087AbiJGUDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 16:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiJGUCm (ORCPT
+        with ESMTP id S230063AbiJGUDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 16:02:42 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FB2108DE3
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 13:02:41 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so8144350pjq.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 13:02:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Stpxx95ZDS9bG7gmnuOOMaTOxoqM57dWWZd+DU6ZCY=;
-        b=EuVXkfT890+uXLhGn1y6QZEwG27EWOv4n808K0IFF1hwKchiIKSQdpzc+vGCxXct3T
-         6Qnm3cms+sekDh6uwCBfaCmSIH6KdAwIuB2k8Ue4aEXM5AeTDnmjh0PodxtrvbUat4fQ
-         a5hp5P4/UkiclTjfT0EeFWrV1kf+VWZ7s5q1vciJVEpoIlToRu1rRHDcSdTOM42jpP1r
-         qFDXIjfj4qTs0KjOU/pj4a/hYmAhE7Xu7n2tOvudDuU6Y23wx4eYT+0wdG011b6aXoRa
-         CBJtDDRCV/NQ7y+BGQKGqEcbFmAlJJzeMylBeNrY+UxquCz5vfB7X2s334mkB44MKj/F
-         Nw3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6Stpxx95ZDS9bG7gmnuOOMaTOxoqM57dWWZd+DU6ZCY=;
-        b=E8H2DVgGuX8Bl0oyoqwA8f+01sSTCNNy3xRVPUpmCQ0QzAZx0KazhsH1PvjzGNaPOU
-         nvD3N6OxgOhMNVwHESVgcdivcZmYQjHiFKHzRcNIKMyl5OJqkohD5u61V4M2kAtxTqZ1
-         jtpNld/S+vEHpY63W/h6tzsS1ArUK5uOixUHtVo4q37pGXUickq6Py+XBP6Nkp0uri4K
-         qEyxpBhpQaSrrxhZgGFg73nn0rVghm3A+vsefIc5OyDyY4OXusycxvUxS2l/wKNLFd54
-         XEzzAjXgHro8n9VqLWttE5kOfwzl+S6FrQXJCLBzM1gA/N/Qut2Ojyv5XrBGhXoULGG/
-         uvHQ==
-X-Gm-Message-State: ACrzQf0qbIbBp/dVT1rMJOQSDpmLwNPN7ckhvTq2avTakQz4muKUDuuS
-        HrJNXDQvMUCgLpQRsaiIcEcxGw==
-X-Google-Smtp-Source: AMsMyM6Rh8YqTGb3IqdGB22AIAmJShevOI/0MPvRB6FqAdLfLtB7gC1oCxKtpabLfH6405OBOBApGw==
-X-Received: by 2002:a17:90b:350b:b0:205:dfc1:63a7 with SMTP id ls11-20020a17090b350b00b00205dfc163a7mr7074824pjb.41.1665172960680;
-        Fri, 07 Oct 2022 13:02:40 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id o2-20020a170902d4c200b0016dbdf7b97bsm1855468plg.266.2022.10.07.13.02.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 13:02:39 -0700 (PDT)
-Date:   Fri, 7 Oct 2022 20:02:36 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] KVM: x86/pmu: Limit the maximum number of
- supported Intel GP counters
-Message-ID: <Y0CF3F/pJOBnY1Xz@google.com>
-References: <20220919091008.60695-1-likexu@tencent.com>
- <20220919091008.60695-2-likexu@tencent.com>
+        Fri, 7 Oct 2022 16:03:44 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF8A118767
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 13:03:43 -0700 (PDT)
+Received: from [127.0.0.1] ([73.223.250.219])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 297K3FPb3889477
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Fri, 7 Oct 2022 13:03:15 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 297K3FPb3889477
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2022090501; t=1665172996;
+        bh=X2g9nKEpXhztLuafwCQwISYVdwjCkNSLi2LIVlrXkBQ=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=B+9IMzlf7Mb0dTAyg2GjuX8HmF2d8HbqaccH3xO/Uxn1RF4+q1AlXz3/kUfWk8k0u
+         okvllDiCAgELcyzrVjvWt8qsBt7BB3Ts3PN28ajSItkdPbgWjKuHYwqD2cGJIee4RP
+         ob1DCMsBhK9/ZaE1OLwG0x27NmJQBIswNMnVXeau8ImBWmvD1SNV2Fx0Tl2NWBVK0m
+         ymDqApWQH4ZQouZSVlC/lKlUEzgjusW4FhEgUQQnnWJwQwxsEVOnOduvh/UhpW7auw
+         6wODmt/2cRSzm9Frr0zp6gzqY54BDDX6rYvXPTsBRaRshLhUv72+k9mLdMcuCaQjgH
+         fP8cX2POxOo5g==
+Date:   Fri, 07 Oct 2022 13:03:12 -0700
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        "Li, Xin3" <xin3.li@intel.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_6/6=5D_x86/gsseg=3A_use_the_LKGS_in?= =?US-ASCII?Q?struction_if_available_for_load=5Fgs=5Findex=28=29?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <Y0B83cSSwJnRtGAn@hirez.programming.kicks-ass.net>
+References: <20221006154041.13001-1-xin3.li@intel.com> <20221006154041.13001-7-xin3.li@intel.com> <Y0A77RLAgXQyrVPq@hirez.programming.kicks-ass.net> <BN6PR1101MB21611798953AADA4DFD71719A85F9@BN6PR1101MB2161.namprd11.prod.outlook.com> <Y0B83cSSwJnRtGAn@hirez.programming.kicks-ass.net>
+Message-ID: <80AC2E90-D842-4EA2-A413-3CC5CFF088BC@zytor.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919091008.60695-2-likexu@tencent.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
-> 
-> The Intel Architectural IA32_PMCx MSRs addresses range allows for
-> a maximum of 8 GP counters. A local macro (named KVM_INTEL_PMC_MAX_GENERIC)
-> is introduced to take back control of this virtual capability to avoid
-> errors introduced by the out-of-bound counter emulations.
+On October 7, 2022 12:24:13 PM PDT, Peter Zijlstra <peterz@infradead=2Eorg>=
+ wrote:
+>On Fri, Oct 07, 2022 at 06:01:06PM +0000, Li, Xin3 wrote:
+>> > > +	alternative_io("1: call asm_load_gs_index\n"
+>> > > +		       "=2Epushsection \"=2Efixup\",\"ax\"\n"
+>> > > +		       "2:	xorl %k[sel], %k[sel]\n"
+>> > > +		       "	jmp 1b\n"
+>> > > +		       "=2Epopsection\n"
+>> > > +		       _ASM_EXTABLE(1b, 2b),
+>> > > +		       _ASM_BYTES(0x3e) LKGS_DI,
+>> > > +		       X86_FEATURE_LKGS,
+>> > > +		       ASM_OUTPUT2([sel] "+D" (sel), ASM_CALL_CONSTRAINT),
+>> > > +		       ASM_NO_INPUT_CLOBBER(_ASM_AX));
+>> > >  }
+>> >=20
+>> > I'm very sure none of this was tested=2E=2E=2E the =2Efixup section h=
+asn't existed for
+>> > almost a year now=2E
+>>=20
+>> Weird, did you ever check a kernel dump?
+>
+>$ readelf -WS defconfig-build/vmlinux | grep fixup
+>[ 5] =2Epci_fixup        PROGBITS        ffffffff826a5350 18a5350 003570 =
+00   A  0   0 16
+>[ 6] =2Erela=2Epci_fixup   RELA            0000000000000000 360c388 00502=
+8 18   I 60   5  8
+>
+>In fact, when I add one I get:
+>
+>ld: warning: orphan section `=2Efixup' from `arch/x86/kernel/traps=2Eo' b=
+eing placed in section `=2Efixup'
 
-Phrase changelogs as commands.
-
-> Suggested-by: Jim Mattson <jmattson@google.com>
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> Reviewed-by: Jim Mattson <jmattson@google.com>
-> ---
->  arch/x86/include/asm/kvm_host.h |  6 +++++-
->  arch/x86/kvm/pmu.c              |  2 +-
->  arch/x86/kvm/vmx/pmu_intel.c    |  4 ++--
->  arch/x86/kvm/x86.c              | 12 +++++++-----
->  4 files changed, 15 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 2c96c43c313a..17abcf5c496a 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -501,6 +501,10 @@ struct kvm_pmc {
->  	bool intr;
->  };
->  
-> +/* More counters may conflict with other existing Architectural MSRs */
-> +#define KVM_INTEL_PMC_MAX_GENERIC	8
-
-This is weird and backwards.  Common x86 code shouldn't "prefer" Intel over AMD,
-or vice versa.  Similar to KVM_MAX_NR_USER_RETURN_MSRS, the way to do this is to
-define KVM's common software limit, and then verify that the vendor limits are
-below that common limit.  E.g.
-
-#define KVM_MAX_NR_PMU_GP_COUNTERS	8
-
-and then add compile-time assertions that Intel stays below the max (and obviously
-AMD as well).
-
-> +#define MSR_ARCH_PERFMON_PERFCTR_MAX	(MSR_ARCH_PERFMON_PERFCTR0 + KVM_INTEL_PMC_MAX_GENERIC - 1)
-> +#define MSR_ARCH_PERFMON_EVENTSEL_MAX	(MSR_ARCH_PERFMON_EVENTSEL0 + KVM_INTEL_PMC_MAX_GENERIC - 1)
-
-These are Intel specific, correct?  I.e. "arch" means "Intel architectural MSRs"?
-
-The perf-defined names are out of KVM's control, but adding what appears to be
-generic #defines in common KVM that are actually Intel specific is confusing.
-Given that there's only a single user, I think the easiest thing is to just open
-code the users, e.g.
-
-		case MSR_ARCH_PERFMON_PERFCTR0 ...
-		     MSR_ARCH_PERFMON_PERFCTR0 + KVM_MAX_NR_PMU_GP_COUNTERS - 1:
-			if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_PERFCTR0 >=
-			    min(KVM_MAX_NR_PMU_GP_COUNTERS, kvm_pmu_cap.num_counters_gp))
-				continue;
-			break;
-		case MSR_ARCH_PERFMON_EVENTSEL0 ...
-		     MSR_ARCH_PERFMON_EVENTSEL0 + KVM_MAX_NR_PMU_GP_COUNTERS - 1:
-			if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_EVENTSEL0 >=
-			    min(KVM_INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
-				continue;
-			break;
-
+Perhaps the two of you need to compare confugurations?
