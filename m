@@ -2,156 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B0755F72C5
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 04:31:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6E35F72CF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 04:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232045AbiJGCbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 22:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
+        id S231819AbiJGCfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 22:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbiJGCbE (ORCPT
+        with ESMTP id S229919AbiJGCfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 22:31:04 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E08EC4C00
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 19:31:02 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id fw14so3262039pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 19:31:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9oXX1ToddAdjCT7RrejoF1gtgX9gXH4OgxAoTE01pKk=;
-        b=CoIUIlp/l30nI9b/o2YjTZvVwciHUnvYi5SK6ywag4/a/mcM6KppbWz3KG3F4//vFl
-         bMqA96n9dGXj+ileOiyC3XdJ68h6UoSjqU1idAlEXpkIchHHXywDqsIilE6dXFxDNARW
-         NtBLKvxwl4fxQfXNrre7UJChNy6Vo3bE4ijrP3epqwzH/YL+htGdUQOR96BxodrCR6KT
-         2al3u4KWt/1aPXEAVWZlplrfopo19Tgye9BhgGJO/02xU5IU1lGy0sQR1+uWJ3xx/ysr
-         2wfcfGs4Gp4y2Rb8LNxGCkrhQNTDlj3PSjiC8+7t3cjcArXERmYuC/zhL0RuJOgLcqLO
-         TinA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9oXX1ToddAdjCT7RrejoF1gtgX9gXH4OgxAoTE01pKk=;
-        b=K2tOfoJXsM397vNN5XEKoDnF+SLyazXXBavkm7AG6siOd2LqlLoYVtMQaqMiqIisyh
-         9IsBNYM3F/lbzENrPYxlGJciSseCLeLvFq4BS/EhcpXsMt3rVmMeHQrZnh0axWhFu3ak
-         spiCXLso+gozFdlNn2sqC3uVjQfX9NWmg54xGvRQNVOVNpUXKhhP8ZqPAhgpQFMkEKC9
-         2AbsrT8ZsznpOrDlNZEOZ+zyIlAC6BxXxraSPCFRRbK3IfqZmCewM8VxGbZny3nOAg2K
-         DpUZsQ0Hwvmm4oQmsGyUxdMMpHsAF3RPKD0EUermvEwHMX/QP5O1fe2fNTZwvPyTfwHZ
-         j+vw==
-X-Gm-Message-State: ACrzQf0hnxsfFxij5BD1zJA6nddjyCsmQkksFwq46D/Te+m0y7umcUCQ
-        Dtd7FUDr5jdSYwI4S8fDZq1l2A==
-X-Google-Smtp-Source: AMsMyM4kchN+uqfbU5gVp8zmvTg52VKf0+O3238fnLuQ4FqZxuadQCVq4nUrE/VsX2pSjMg0cIFJAw==
-X-Received: by 2002:a17:902:c950:b0:178:4544:55c1 with SMTP id i16-20020a170902c95000b00178454455c1mr2537890pla.168.1665109862049;
-        Thu, 06 Oct 2022 19:31:02 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id p8-20020a170902780800b001743ba85d39sm318593pll.110.2022.10.06.19.31.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 19:31:01 -0700 (PDT)
-Date:   Thu, 06 Oct 2022 19:31:01 -0700 (PDT)
-X-Google-Original-Date: Thu, 06 Oct 2022 19:30:58 PDT (-0700)
-Subject:     Re: [PATCH] RISC-V: Add STACKLEAK erasing the kernel stack at the end of syscalls
-In-Reply-To: <6c48657c-04df-132d-6167-49ed293dea44@microchip.com>
-CC:     guoren@kernel.org, oleg@redhat.com, vgupta@kernel.org,
-        linux@armlinux.org.uk, monstr@monstr.eu, dinguyen@kernel.org,
-        davem@davemloft.net, Arnd Bergmann <arnd@arndb.de>,
-        shorne@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, ardb@kernel.org, heiko@sntech.de,
-        daolu@rivosinc.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-snps-arc@lists.infradead.org, sparclinux@vger.kernel.org,
-        openrisc@lists.librecores.org, xianting.tian@linux.alibaba.com,
-        linux-efi@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Conor.Dooley@microchip.com
-Message-ID: <mhng-8c3bb2e7-e84e-4aaa-bce8-3e8054255a2c@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 6 Oct 2022 22:35:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F00B48A1;
+        Thu,  6 Oct 2022 19:35:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D27461B27;
+        Fri,  7 Oct 2022 02:35:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C611AC433C1;
+        Fri,  7 Oct 2022 02:35:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665110142;
+        bh=cQuKCiWfU/2J+LYO5sPPzD/nSjKkEzACVE1++kaEJxg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SxpaYvLSh3p1Dakz0anXXycu0YeCICXXKUP0me6Payo0t3NVqdHG/0PBQ9eATaADq
+         pN5iZKhCIzmlM+q+0Epi9k2bS3Q7g5qa4kbfd4JynzFPAfJ3rWzhTHvlFBx/cinBzp
+         N4wwdemWu6S1I2k/+iFfxxexKPvLLXkKVioucyQyx3Y4hMFZtJv/+XRjVlTzT/niRX
+         fiPXwLjoflavHYOBZQPvHLe1hYCZ8IM1Qve4tQRP38NcqxuEX3LB1uj51Qs53QIAE4
+         BjKa2PvEG6p+7BnVCUC/4OZFXQwpEsLsvRiBtjNReUiibdx8jsYJH8GSmJ7/elcQH9
+         wvYBTmWSkfb0w==
+Date:   Thu, 6 Oct 2022 19:35:42 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-man@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-xfs@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-block@vger.kernel.org
+Subject: Re: [man-pages PATCH v3] statx.2, open.2: document STATX_DIOALIGN
+Message-ID: <Yz+QflrzmdpF7g70@magnolia>
+References: <20221004174307.6022-1-ebiggers@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221004174307.6022-1-ebiggers@kernel.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 06 Sep 2022 10:35:10 PDT (-0700), Conor.Dooley@microchip.com wrote:
-> On 03/09/2022 17:23, guoren@kernel.org wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->> 
->> From: Xianting Tian <xianting.tian@linux.alibaba.com>
->> 
->> This adds support for the STACKLEAK gcc plugin to RISC-V and disables
->> the plugin in EFI stub code, which is out of scope for the protection.
->> 
->> For the benefits of STACKLEAK feature, please check the commit
->> afaef01c0015 ("x86/entry: Add STACKLEAK erasing the kernel stack at the end of syscalls")
->> 
->> Performance impact (tested on qemu env with 1 riscv64 hart, 1GB mem)
->>     hackbench -s 512 -l 200 -g 15 -f 25 -P
->>     2.0% slowdown
->> 
->> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+On Tue, Oct 04, 2022 at 10:43:07AM -0700, Eric Biggers wrote:
+> From: Eric Biggers <ebiggers@google.com>
 > 
-> What changed since Xianting posted it himself a week ago:
-> https://lore.kernel.org/linux-riscv/20220828135407.3897717-1-xianting.tian@linux.alibaba.com/
+> Document the STATX_DIOALIGN support for statx()
+> (https://git.kernel.org/linus/725737e7c21d2d25).
 > 
-> There's an older patch from Du Lao adding STACKLEAK too:
-> https://lore.kernel.org/linux-riscv/20220615213834.3116135-1-daolu@rivosinc.com/
+> Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+> Signed-off-by: Eric Biggers <ebiggers@google.com>
+> ---
 > 
-> But since there's been no activity there since June...
+> I'm resending this now that support for STATX_DIOALIGN has been merged
+> upstream.
 
-Looks like the only issues were some commit log wording stuff, and that 
-there's a test suite that should be run.  It's not clear from the 
-commits that anyone has done that, I'm fine with the patch if it passes 
-the tests but don't really know how to run them.
+Woo!  Thank you for getting this over the line! :)
 
-Has anyone run the tests?
+--D
 
+> v3: updated mentions of Linux version, fixed some punctuation, and added
+>     a Reviewed-by
 > 
->> ---
->>  arch/riscv/Kconfig                    | 1 +
->>  arch/riscv/include/asm/processor.h    | 4 ++++
->>  arch/riscv/kernel/entry.S             | 3 +++
->>  drivers/firmware/efi/libstub/Makefile | 2 +-
->>  4 files changed, 9 insertions(+), 1 deletion(-)
->> 
->> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> index ed66c31e4655..61fd0dad4463 100644
->> --- a/arch/riscv/Kconfig
->> +++ b/arch/riscv/Kconfig
->> @@ -85,6 +85,7 @@ config RISCV
->>         select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
->>         select HAVE_ARCH_THREAD_STRUCT_WHITELIST
->>         select HAVE_ARCH_VMAP_STACK if MMU && 64BIT
->> +       select HAVE_ARCH_STACKLEAK
->>         select HAVE_ASM_MODVERSIONS
->>         select HAVE_CONTEXT_TRACKING_USER
->>         select HAVE_DEBUG_KMEMLEAK
->> diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
->> index d0537573501e..5e1fc4f82883 100644
->> --- a/drivers/firmware/efi/libstub/Makefile
->> +++ b/drivers/firmware/efi/libstub/Makefile
->> @@ -25,7 +25,7 @@ cflags-$(CONFIG_ARM)          := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
->>                                    -fno-builtin -fpic \
->>                                    $(call cc-option,-mno-single-pic-base)
->>  cflags-$(CONFIG_RISCV)         := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
->> -                                  -fpic
->> +                                  -fpic $(DISABLE_STACKLEAK_PLUGIN)
->> 
->>  cflags-$(CONFIG_EFI_GENERIC_STUB) += -I$(srctree)/scripts/dtc/libfdt
->> 
->> --
->> 2.17.1
->> 
->> 
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> v2: rebased onto man-pages master branch, mentioned xfs, and updated
+>     link to patchset
+> 
+>  man2/open.2  | 43 ++++++++++++++++++++++++++++++++-----------
+>  man2/statx.2 | 29 +++++++++++++++++++++++++++++
+>  2 files changed, 61 insertions(+), 11 deletions(-)
+> 
+> diff --git a/man2/open.2 b/man2/open.2
+> index deba7e4ea..b8617e0d2 100644
+> --- a/man2/open.2
+> +++ b/man2/open.2
+> @@ -1732,21 +1732,42 @@ of user-space buffers and the file offset of I/Os.
+>  In Linux alignment
+>  restrictions vary by filesystem and kernel version and might be
+>  absent entirely.
+> -However there is currently no filesystem\-independent
+> -interface for an application to discover these restrictions for a given
+> -file or filesystem.
+> -Some filesystems provide their own interfaces
+> -for doing so, for example the
+> +The handling of misaligned
+> +.B O_DIRECT
+> +I/Os also varies; they can either fail with
+> +.B EINVAL
+> +or fall back to buffered I/O.
+> +.PP
+> +Since Linux 6.1,
+> +.B O_DIRECT
+> +support and alignment restrictions for a file can be queried using
+> +.BR statx (2),
+> +using the
+> +.B STATX_DIOALIGN
+> +flag.
+> +Support for
+> +.B STATX_DIOALIGN
+> +varies by filesystem; see
+> +.BR statx (2).
+> +.PP
+> +Some filesystems provide their own interfaces for querying
+> +.B O_DIRECT
+> +alignment restrictions, for example the
+>  .B XFS_IOC_DIOINFO
+>  operation in
+>  .BR xfsctl (3).
+> +.B STATX_DIOALIGN
+> +should be used instead when it is available.
+>  .PP
+> -Under Linux 2.4, transfer sizes, the alignment of the user buffer,
+> -and the file offset must all be multiples of the logical block size
+> -of the filesystem.
+> -Since Linux 2.6.0, alignment to the logical block size of the
+> -underlying storage (typically 512 bytes) suffices.
+> -The logical block size can be determined using the
+> +If none of the above is available, then direct I/O support and alignment
+> +restrictions can only be assumed from known characteristics of the filesystem,
+> +the individual file, the underlying storage device(s), and the kernel version.
+> +In Linux 2.4, most block device based filesystems require that the file offset
+> +and the length and memory address of all I/O segments be multiples of the
+> +filesystem block size (typically 4096 bytes).
+> +In Linux 2.6.0, this was relaxed to the logical block size of the block device
+> +(typically 512 bytes).
+> +A block device's logical block size can be determined using the
+>  .BR ioctl (2)
+>  .B BLKSSZGET
+>  operation or from the shell using the command:
+> diff --git a/man2/statx.2 b/man2/statx.2
+> index 0d1b4591f..50397057d 100644
+> --- a/man2/statx.2
+> +++ b/man2/statx.2
+> @@ -61,7 +61,12 @@ struct statx {
+>         containing the filesystem where the file resides */
+>      __u32 stx_dev_major;   /* Major ID */
+>      __u32 stx_dev_minor;   /* Minor ID */
+> +
+>      __u64 stx_mnt_id;      /* Mount ID */
+> +
+> +    /* Direct I/O alignment restrictions */
+> +    __u32 stx_dio_mem_align;
+> +    __u32 stx_dio_offset_align;
+>  };
+>  .EE
+>  .in
+> @@ -247,6 +252,8 @@ STATX_BTIME	Want stx_btime
+>  STATX_ALL	The same as STATX_BASIC_STATS | STATX_BTIME.
+>  	It is deprecated and should not be used.
+>  STATX_MNT_ID	Want stx_mnt_id (since Linux 5.8)
+> +STATX_DIOALIGN	Want stx_dio_mem_align and stx_dio_offset_align
+> +	(since Linux 6.1; support varies by filesystem)
+>  .TE
+>  .in
+>  .PP
+> @@ -407,6 +414,28 @@ This is the same number reported by
+>  .BR name_to_handle_at (2)
+>  and corresponds to the number in the first field in one of the records in
+>  .IR /proc/self/mountinfo .
+> +.TP
+> +.I stx_dio_mem_align
+> +The alignment (in bytes) required for user memory buffers for direct I/O
+> +.BR "" ( O_DIRECT )
+> +on this file, or 0 if direct I/O is not supported on this file.
+> +.IP
+> +.B STATX_DIOALIGN
+> +.IR "" ( stx_dio_mem_align
+> +and
+> +.IR stx_dio_offset_align )
+> +is supported on block devices since Linux 6.1.
+> +The support on regular files varies by filesystem; it is supported by ext4,
+> +f2fs, and xfs since Linux 6.1.
+> +.TP
+> +.I stx_dio_offset_align
+> +The alignment (in bytes) required for file offsets and I/O segment lengths for
+> +direct I/O
+> +.BR "" ( O_DIRECT )
+> +on this file, or 0 if direct I/O is not supported on this file.
+> +This will only be nonzero if
+> +.I stx_dio_mem_align
+> +is nonzero, and vice versa.
+>  .PP
+>  For further information on the above fields, see
+>  .BR inode (7).
+> 
+> base-commit: bc28d289e5066fc626df260bafc249846a0f6ae6
+> -- 
+> 2.37.3
 > 
