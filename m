@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0CF15F7366
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 05:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 953495F7369
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 05:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiJGDiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 23:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
+        id S229716AbiJGDmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 23:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiJGDiD (ORCPT
+        with ESMTP id S229501AbiJGDmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 23:38:03 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6385CB0B2F;
-        Thu,  6 Oct 2022 20:38:01 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id d27so1203713qtw.8;
-        Thu, 06 Oct 2022 20:38:01 -0700 (PDT)
+        Thu, 6 Oct 2022 23:42:08 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD6742ADE;
+        Thu,  6 Oct 2022 20:42:07 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id de14so2413748qvb.5;
+        Thu, 06 Oct 2022 20:42:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=h+7OrheKhEw/UgXjdWGZBr8IlT56BkbaBFYQu69ElzQ=;
-        b=p4mjg/UnT5B0pgKEWX0oVNyE0j8bEqxntPJvbHYC6N3HTIjdoY2wngiqlA06Oj/M6v
-         3TZLXSJNAUSBZYMMTbrNZ0ewhsG+0Y68p9U78mSo8jHYBVw/J5ITpoNqwsmHZHoFP8xj
-         kh3SgOc0O3Zr0UvyWv4HSU/NdnB3jABUPbpvRdIGp7D6vrObef0SMT08Kg74BwmpRhW1
-         N3KGzc9RToRvgOjSuMq9oSkSTPrg4AGuyw/QD16+whZYfSJM8DdoqmhB8Yt7IFdOYz3p
-         GxHaRheOVP+jaCvgy8+LW+faKzllKKK0j4xXNWLbEKACDybHp+HWXVT9bG64qKDTs/P1
-         ivSQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iC5L0euxuRisBkUR/6515IKt3GI2uffEHDVxsffOfBg=;
+        b=fkuYjA79BKmImZyPPSBktW6F4k89V6B/1AB0Wxlb/nraYWAR29FBwM4g6cdoXck2PB
+         zGnRrxoVjsZs9mUCJMY8ISZezsXWcXTGPLYr6hjy5h4XNd+pl0X6bqk4AoZ34bUh/SXp
+         Mf2VxGtkgShceazj0tLmvDQC2mcFCPPbr6WnSUVDB2sxGpweT4gahF10/7pNOTSNcXb0
+         5MH+Xjh+00rOLN9QYu2Mk35bfubWMTsPXpjm/AHxbQ+J2pXl3q+iWWMdMlQqAyWvgA97
+         zfSdt+ayz1lOjhRVCSFby1qt5yUHtD9jKYeH2wablECUc3naDurYxUHqbC372hLLIrsm
+         FmiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h+7OrheKhEw/UgXjdWGZBr8IlT56BkbaBFYQu69ElzQ=;
-        b=P/mc6T3CxYZAVjLtrtLAmN+6eW3s7d6iYjicCkkXBzGBFI+Wq9JQ9fLMWaSozun8yV
-         071DxhUeBYNgUL2jdJOWINtHjlYDYkSsuZyAucjerRZg4Q9sx4scxjau173AKEhM0kLk
-         KW2Ip2BIYFVOtS7GnWJkzDKHQ0YY86IG5VSiGZV0KL8oYopUIHm0vz6S5F16+NOVJJBZ
-         SnZvf1LhWUdsn+VwptG2/Zn2sqtTDlvBc1bNgI+7Hb7jrrRMEFLIf23RlibtpB4twVvM
-         S/UcpKwUhDm/I9LGpADG7GnJjzMDcTJ+D7YlDhokBNbt94PtFidGLTEZOcvUE+H7rDJq
-         JWyw==
-X-Gm-Message-State: ACrzQf2katksvA2OJ0l7RjF1lKMcHUASfZGScDgqDjPA3+T6s/itth3S
-        kqy7NgHSz60A9Riv1fw3VCXXWP0fjiU=
-X-Google-Smtp-Source: AMsMyM7+6+ATWlbRWGEdM4cqMA1+okeU7ZdShfwV63Z8scEDotwILFioY5fN2ATl1gzhPLROX5vFkg==
-X-Received: by 2002:ac8:5c45:0:b0:35c:cd2c:c8f8 with SMTP id j5-20020ac85c45000000b0035ccd2cc8f8mr2776338qtj.105.1665113880411;
-        Thu, 06 Oct 2022 20:38:00 -0700 (PDT)
-Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id y17-20020a37f611000000b006af1f0af045sm852241qkj.107.2022.10.06.20.37.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Oct 2022 20:37:59 -0700 (PDT)
-Message-ID: <17ce5b72-c2c8-ae9e-de07-568619ca3c4b@gmail.com>
-Date:   Thu, 6 Oct 2022 20:37:57 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] MAINTAINERS: Update maintainers for broadcom USB
-Content-Language: en-US
-To:     justinpopo6@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        vkoul@kernel.org, kishon@ti.com, linux-phy@lists.infradead.org
-Cc:     alcooperx@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        justin.chen@broadcom.com
-References: <1665098469-19008-1-git-send-email-justinpopo6@gmail.com>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iC5L0euxuRisBkUR/6515IKt3GI2uffEHDVxsffOfBg=;
+        b=EMyWsUKyNO+LMuZgMAYw4gKOmb9rUCmNBnGnUsornm2UWQ9Yfu5l4ygRZTUqa8bSah
+         szpTgpFzv+GuDlFGXgIM7YuuRHjXJW8e+pBnlnwJC+aV4Adz5DglHwGKja5vORho7aRs
+         5W1Pg4dgf9tjR+rTWPXwJnT7KZUq2dNexr4D1RyD3KkbEpEi/YGH7xe6NE7gzUCjK7hT
+         3f84OeZiXmH1e8NGFDqt+hhbA4QZrQB4sg37aZGmQwEEifEE7CipY0XH7FlUSlN5Dn7m
+         vd1Mle6aTp2bAuLdCAW7Zpi8JISXQqO3lA+n+lVilbE5puBHzQHIPKa2klDligutYnfp
+         CdYA==
+X-Gm-Message-State: ACrzQf1fYrAPI0ah9oEQNRg88GSKNM15LFo6kvq44zS59pspiRtvmDmu
+        VX75nU3Az/tOivlc6N83byLOtH66LtQ=
+X-Google-Smtp-Source: AMsMyM5hnPp2CEJasetQmLXEe/K8g3ubXRyFrKtVcq7DpsOyssynfYk8Q5+6Z2nqDfM2nfj9IMikew==
+X-Received: by 2002:a05:6214:234a:b0:474:2318:3f3b with SMTP id hu10-20020a056214234a00b0047423183f3bmr2611176qvb.10.1665114126138;
+        Thu, 06 Oct 2022 20:42:06 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id l20-20020a05620a28d400b006d1debe2637sm1085596qkp.11.2022.10.06.20.42.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 20:42:05 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <1665098469-19008-1-git-send-email-justinpopo6@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+To:     netdev@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net] net: systemport: Enable all RX descriptors for SYSTEMPORT Lite
+Date:   Thu,  6 Oct 2022 20:42:01 -0700
+Message-Id: <20221007034201.4126054-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,17 +75,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The original commit that added support for the SYSTEMPORT Lite variant
+halved the number of RX descriptors due to a confusion between the
+number of descriptors and the number of descriptor words. There are 512
+descriptor *words* which means 256 descriptors total.
 
+Fixes: 44a4524c54af ("net: systemport: Add support for SYSTEMPORT Lite")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ drivers/net/ethernet/broadcom/bcmsysport.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 10/6/2022 4:21 PM, justinpopo6@gmail.com wrote:
-> From: Justin Chen <justinpopo6@gmail.com>
-> 
-> Al Cooper is no longer the downstream maintainer for broadcom USB.
-> I will be taking his place as downstream and as an additional
-> upstream maintainer.
-> 
-> Signed-off-by: Justin Chen <justinpopo6@gmail.com>
-
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+diff --git a/drivers/net/ethernet/broadcom/bcmsysport.h b/drivers/net/ethernet/broadcom/bcmsysport.h
+index 16b73bb9acc7..5af16e5f9ad0 100644
+--- a/drivers/net/ethernet/broadcom/bcmsysport.h
++++ b/drivers/net/ethernet/broadcom/bcmsysport.h
+@@ -484,7 +484,7 @@ struct bcm_rsb {
+ 
+ /* Number of Receive hardware descriptor words */
+ #define SP_NUM_HW_RX_DESC_WORDS		1024
+-#define SP_LT_NUM_HW_RX_DESC_WORDS	256
++#define SP_LT_NUM_HW_RX_DESC_WORDS	512
+ 
+ /* Internal linked-list RAM size */
+ #define SP_NUM_TX_DESC			1536
 -- 
-Florian
+2.25.1
+
