@@ -2,75 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895DF5F80FF
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 00:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF685F810C
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 01:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiJGWzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 18:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45868 "EHLO
+        id S229668AbiJGXKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 19:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiJGWzM (ORCPT
+        with ESMTP id S229650AbiJGXKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 18:55:12 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A11230F56
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 15:55:10 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id y136so6119344pfb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 15:55:10 -0700 (PDT)
+        Fri, 7 Oct 2022 19:10:18 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7099B6685C;
+        Fri,  7 Oct 2022 16:10:15 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id b2so14291298eja.6;
+        Fri, 07 Oct 2022 16:10:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rtoZt27StfCUmX+Bnz3gqQ40JrFnPYdCDaiJ+WdcE2I=;
-        b=O4FzzAzt8PMUC+TkOyyRMf3xSZI0c6cT+ueviXF2ICIKJ+guY6PjTyhMjIRxKIBj/v
-         DZjKSG7YFiJQYd53b6YdCTDTjFAusIuw3FyQjWCBGzzwq/OZL3zScBgq7Kn2ZE/oIVU0
-         2gKCZvl/IlARDEimjpvPwZO01vBCNN0cBXzE7Sl9YOZIfML0fxgQwu3sw6dnJXA34XLK
-         LZH7Zag7hQybphtYetu8IKgfub7kAw8sC0JTwmlMoQ/WVrqOxDfA11FFpLdDv60jJXus
-         6+Bb+WgApraXNrYLvlvEhwmN5L0x1o4I0YOlA0cMYcBknpGn8awfPFH7oQB101ArUNBH
-         wf9w==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Ff2Jx6NqQG39IX2GQ6H1L2VLrUXyrTBZ4zR3/wpS5c=;
+        b=TQ5hNUCStSck7y6p1Whdcoa73KeayH7AuFrs4Vax9jNIbKtGXCBkCEef+hIQ6xnu6w
+         aY6IcLczj5cWmILYkbZMZaw6BHtJhX2V8pDIHgxKM1RCwqIWlJ6tztZ+WHlvDEn4BbOF
+         4BehIlne49rE5evLVCO4K6HEIE6T82rct3LWJ4v4FWAdYL7dtxuWU7GHfd3EGTZ0rIJd
+         QiMBMCxMdf1KlekypSIKA9AqbHlSHjBwglLu93SNbeCKQT3cHDSyNB60YyHvYAk7Kkiy
+         aQGHJkPQhA20ArdgC6nmOEzUQn/wlcvveoO0fUq86m528h50e1qBUJEhMuMLTpfmMtCh
+         padQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rtoZt27StfCUmX+Bnz3gqQ40JrFnPYdCDaiJ+WdcE2I=;
-        b=eXUIZ6dFaMxtUNR1BjkMRxDp+02ajme7dwk0oofSuWn2JvkUkls17F5KitLbJ7WNw0
-         eROHGathS+V/L1wzb5DDUIGZLMvy5twBLxUvKYIi7D5ykSRdnwK4bkthZwad9wz7cX3d
-         XffTnRR0MlTsRaXNMazgjmsxSRe0LYwaNs/ph+MDkW4IPrB7BTyj3FJb6C+nzrFMagpy
-         JlZdSTaTHguFix+65OqWU5rECltGiDwgkho1Oi1FZNERPusmeG7kvDE07g/rM3XjhZkr
-         JhHepc61KSmBOgaDdiIuAsOiwPsNyhLf4B3OjzNH/K4tO8qPVU03U6E/eMll7Tn7hJ+S
-         mzxg==
-X-Gm-Message-State: ACrzQf1pO1XaFnOKlUpisFGG2k8W5WUQu06mazIyaG2z9YQyBsvMZduo
-        fDiSJa+UXTJDrycqwnAU6k95HVd/mkPgvNE8uwDK+A==
-X-Google-Smtp-Source: AMsMyM51fdeGUqT7QtPa9chaJQbN6LzlFpMhIv4wL7yOUtVYIqqOmYkTCzTn/FrZ+uZo3sktDNvgQvlJ9KKJbs6r1CI=
-X-Received: by 2002:a63:e709:0:b0:438:98e8:d1c with SMTP id
- b9-20020a63e709000000b0043898e80d1cmr6567201pgi.403.1665183309403; Fri, 07
- Oct 2022 15:55:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190307090146.1874906-1-arnd@arndb.de> <20221006222124.aabaemy7ofop7ccz@google.com>
- <c646ea1e-c860-41cf-9a8e-9abe541034ff@app.fastmail.com> <CAKwvOdkEied8hf6Oid0sGf0ybF2WqrzOvtRiXa=j7Ms-Rc6uBA@mail.gmail.com>
- <e554eb3c-d065-4aad-b6d2-a12469eaf49c@app.fastmail.com>
-In-Reply-To: <e554eb3c-d065-4aad-b6d2-a12469eaf49c@app.fastmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 7 Oct 2022 15:54:57 -0700
-Message-ID: <CAKwvOdmNiSok3sAMJs2PQLs0yVzOfMTaQTWjyW8q2oc3VF60sw@mail.gmail.com>
-Subject: Re: [PATCH] fs/select: avoid clang stack usage warning
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Kees Cook <keescook@chromium.org>, linux-fsdevel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Christoph Hellwig <hch@lst.de>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+Ff2Jx6NqQG39IX2GQ6H1L2VLrUXyrTBZ4zR3/wpS5c=;
+        b=7KtqB7u6rZyMXOrE20nHvO9nkLIHuKEoFYYyHeSMWNrO5ZDeKmJvxcyuVNtl+gpfrb
+         Q1jSAJuplmro0uiEAVcXHjQLe362R7x2HsK6F9Ee+JGCCnitr4POIxgDq2bWR6fBr6bJ
+         ulu17P2WBdONpPSnyHZlF194juVD52d6u8YDrdDcn0yx7ZXqP44WqaoEzF3RqfEeRooY
+         fRlVhfKywDwl4tYdngAEwoiaXtWQpdBOCLBfvp6nlaFH94sFlRNPBT3F4obTffdOaER4
+         15cqSU9dgBORxF+CnhNjMn37PJs9JVa2boOqZHrV3GYv0nfMH+TniwIj9D1A/0de98T3
+         ki5A==
+X-Gm-Message-State: ACrzQf2nhXbgBs+/AGjk4+D5d6uXBPZ9MJOGKZm+C+4x7Nrkpi5ZRdI7
+        Bcy0ch6bm9SaD+koQGbpEVk=
+X-Google-Smtp-Source: AMsMyM66DYwy3KBDvU1hRrO+OD2oPJcipG0iAaxGdBoANV2842BWfe3qlyxCBJ8EjIHQNyZFVsfo6Q==
+X-Received: by 2002:a17:907:3da2:b0:78d:3b45:11d9 with SMTP id he34-20020a1709073da200b0078d3b4511d9mr5812419ejc.87.1665184213952;
+        Fri, 07 Oct 2022 16:10:13 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id p17-20020a17090653d100b0078d175d6dc5sm1815909ejo.201.2022.10.07.16.10.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 16:10:12 -0700 (PDT)
+Date:   Sat, 8 Oct 2022 02:10:09 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Colin Foster <colin.foster@in-advantage.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Paul Kirth <paulkirth@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v3 net-next 12/14] dt-bindings: net: dsa: ocelot: add
+ ocelot-ext documentation
+Message-ID: <20221007231009.qgcirfezgib5vu6y@skbuf>
+References: <20220926002928.2744638-1-colin.foster@in-advantage.com>
+ <20220926002928.2744638-13-colin.foster@in-advantage.com>
+ <ec63b5aa-3dec-3c27-e987-25e36b1632ba@linaro.org>
+ <20221004121517.4j5637hnioepsxgd@skbuf>
+ <6444e5d1-0fc9-03e2-9b2a-ec19fa1e7757@linaro.org>
+ <20221004160135.lqugs6cf5b7fwkxq@skbuf>
+ <cae8e149-ef1e-66c6-20f5-067e3fd8c586@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cae8e149-ef1e-66c6-20f5-067e3fd8c586@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,78 +94,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 7, 2022 at 2:43 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, Oct 7, 2022, at 9:04 PM, Nick Desaulniers wrote:
-> > On Fri, Oct 7, 2022 at 1:28 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >> On Fri, Oct 7, 2022, at 12:21 AM, Nick Desaulniers wrote:
-> >> > On Thu, Mar 07, 2019 at 10:01:36AM +0100, Arnd Bergmann wrote:
-> >>
-> >> - If I mark 'do_select' as noinline_for_stack, the reported frame
-> >>   size is decreased a lot and is suddenly independent of
-> >>   -fsanitize=local-bounds:
-> >>   fs/select.c:625:5: error: stack frame size (336) exceeds limit (100) in 'core_sys_select' [-Werror,-Wframe-larger-than]
-> >> int core_sys_select(int n, fd_set __user *inp, fd_set __user *outp,
-> >>   fs/select.c:479:21: error: stack frame size (684) exceeds limit (100) in 'do_select' [-Werror,-Wframe-larger-than]
-> >> static noinline int do_select(int n, fd_set_bits *fds, struct timespec64 *end_time)
-> >
-> > I think this approach makes the most sense to me; the caller
-> > core_sys_select() has a large stack allocation `stack_fds`, and so
-> > does the callee do_select with `table`.  Add in inlining and long live
-> > ranges and it makes sense that stack spills are going to tip us over
-> > the threshold set by -Wframe-larger-than.
-> >
-> > Whether you make do_select() `noinline_for_stack` conditional on
-> > additional configs like CC_IS_CLANG or CONFIG_UBSAN_LOCAL_BOUNDS is
-> > perhaps also worth considering.
-> >
-> > How would you feel about a patch that:
-> > 1. reverts commit ad312f95d41c ("fs/select: avoid clang stack usage warning")
-> > 2. marks do_select noinline_for_stack
-> >
-> > ?
->
-> That is probably ok, but it does need proper testing to ensure that
-> there are no performance regressions.
+On Wed, Oct 05, 2022 at 10:09:06AM +0200, Krzysztof Kozlowski wrote:
+> > The /spi/soc@0 node actually has a compatible of "mscc,vsc7512" which
+> > Colin did not show in the example (it is not "simple-bus"). It is covered
+> > by Documentation/devicetree/bindings/mfd/mscc,ocelot.yaml. Still waiting
+> > for a better suggestion for how to name the mfd container node.
+> 
+> Then still the /spi node does not seem related. If I understand
+> correctly, your device described in this bindings is a child of soc@0.
+> Sounds fine. How that soc@0 is connected to the parent - via SPI or
+> whatever - is not related to this binding, is it? It is related to the
+> soc binding, but not here.
 
-Any recommendations on how to do so?
+It's an example, it's meant to be informative. It is the first DSA
+driver of its kind. When everybody else ATM puts the ethernet-switch node
+under the &spi controller node, this puts it under &spi/soc@<chip-select>/,
+for reasons that have to do with scalability. If the examples aren't a
+good place to make this more obvious, I don't know why we don't just
+tell people to RTFD.
 
-> Do you know if gcc inlines the
-> function by default? If not, we probably don't need to make it
-> conditional.
+> > Unrelated to your "existing soc example" (the VSC9953), but relevant and
+> > you may want to share your opinion on this:
+> > 
+> > The same hardware present in the VSC7514 SoC can also be driven by an
+> > integrated MIPS processor, and in that case, it is indeed expected that
+> > the same dt-bindings cover both the /soc and the /spi/soc@0/ relative
+> > positioning of their OF node. This is true for simpler peripherals like
+> > "mscc,ocelot-miim", "mscc,ocelot-pinctrl", "mscc,ocelot-sgpio". However
+> > it is not true for the main switching IP of the SoC itself.
+> > 
+> > When driven by a switchdev driver, by the internal MIPS processor (the
+> > DMA engine is what is used for packet I/O), the switching IP follows the
+> > Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml binding
+> > document.
+> > 
+> > When driven by a DSA driver (external processor, host frames are
+> > redirected through an Ethernet port instead of DMA controller),
+> > the switching IP follows the Documentation/devicetree/bindings/net/dsa/mscc,ocelot.yaml
+> > document.
+> > 
+> > The switching IP is special in this regard because the hardware is not
+> > used in the same way. The DSA dt-binding also needs the 'ethernet'
+> > phandle to be present in a port node. The different placement of the
+> > bindings according to the use case of the hardware is a bit awkward, but
+> > is a direct consequence of the separation between DSA and pure switchdev
+> > drivers that has existed thus far (and the fact that DSA has its own
+> > folder in the dt-bindings, with common properties in dsa.yaml and
+> > dsa-port.yaml etc). It is relatively uncommon for a switching IP to have
+> > provisioning to be used in both modes, and for Linux to support both
+> > modes (using different drivers), yet this is what we have here.
+> 
+> Is there a question here to me? What shall I do with this paragraph? You
+> know, I do not have a problem of lack of material to read...
 
-Ah good idea.  For i386 defconfig and x86_64 defconfig, it does not!
+For mscc,vsc7514-switch we have a switchdev driver. For mscc,vsc7512-switch,
+Colin is working on a DSA driver. Their dt-bindings currently live in
+different folders. The mscc,vsc7514-switch can also be used together
+with a DSA driver, and support for that will inevitably be added. When
+it will, how and where do you recommend the dt-bindings should be added?
+In net/dsa/mscc,ocelot.yaml, together with the other switches used in
+DSA mode, or in net/mscc,vsc7514-switch.yaml, because its compatible
+string already exists there? We can't have a compatible string present
+in multiple schemas, right?
 
-Here's how I tested that:
-$ make -j128 defconfig fs/select.o
-$ llvm-objdump -Dr --disassemble-symbols=core_sys_select fs/select.o |
-grep do_select
-
-This seems to be affected by -fno-conserve-stack, a currently gcc-only
-command line flag. If I remove that, then i386 defconfig will inline
-do_select but x86_64 defconfig will not.
-
-I have a sneaking suspicion that -fno-conserve-stack and
--Wframe-larger-than conspire in GCC to avoid inlining when doing so
-would trip `-Wframe-larger-than` warnings, but it's just a conspiracy
-theory; I haven't read the source.  Probably should implement exactly
-that behavior in LLVM.
-
-I'll triple check 32b+64b arm configs next week to verify.  But if GCC
-is not inlining do_select into core_sys_select then I think my patch
-https://lore.kernel.org/llvm/20221007201140.1744961-1-ndesaulniers@google.com/
-is on the right track; probably could drop the 32b-only condition and
-make a note of GCC in the commit message.
-
-Also, my colleague Paul just whipped up a neat tool to help debug
--Wframe-larger-than.
-https://reviews.llvm.org/D135488
-See the output from my run here:
-https://paste.debian.net/1256338/
-It's a very early WIP, but I think it would be incredibly helpful to
-have this, and will probably help us improve Clang's stack usage.
-
-
--- 
-Thanks,
-~Nick Desaulniers
+This matters because it has implications upon what Colin should do with
+the mscc,vsc7512-switch. If your answer to my question is "add $ref: dsa.yaml#
+to net/mscc,vsc7514-switch.yaml", then I don't see why we wouldn't do
+that now, and wait until the vsc7514 to make that move anyway.
