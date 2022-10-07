@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C66C85F7EFD
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 22:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B92AB5F7F0F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 22:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiJGUlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 16:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34142 "EHLO
+        id S229675AbiJGUnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 16:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiJGUk7 (ORCPT
+        with ESMTP id S229517AbiJGUnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 16:40:59 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B577B03CC;
-        Fri,  7 Oct 2022 13:40:56 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id b4so8890775wrs.1;
-        Fri, 07 Oct 2022 13:40:56 -0700 (PDT)
+        Fri, 7 Oct 2022 16:43:43 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D0CA8798;
+        Fri,  7 Oct 2022 13:43:42 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id bu30so8848790wrb.8;
+        Fri, 07 Oct 2022 13:43:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Xno8DvPJDMlxcVtto8QzuqlpStaL3vI83oHShJE2jU=;
-        b=YzHEfDXbKJ9+2wHbnZQNvajFf73uxxRr+wT6grsEaJBtNYK+NMZljyYq90jt/nzTOz
-         tifAYemIrpriWZmamazG6vNEaaxsUR90LrjeqF6smKN9YXOZ+2lEWqRupmcdYYIKy527
-         opDedPeBaXJkZbuC6R7mT4QaCMLmSUatoK+1GUtpJutKGM5JgNEkPlm4dQYRRIvsCMeG
-         lXb+/GYd+sy0oKfJgSKXk3p0Hwj7D/eF4q0aYbEkBuPBq/7WyP/uMETg8bfb0kYiCU6l
-         Dm1gSEHuaXkp4Ty8jjVxjOCcq0JlyTZU2tK4u73lP1mxL3t5Tr/aiF3GwQMFMzFTveJh
-         bAZg==
+        bh=6etltRDJaMEsXq7CgGpxh6ihdfKctaGSXtyFke3/FDw=;
+        b=TndZ+muxYZ0cI2pBO/BHBtusqwEKHvBzCVDFUTKaC6imQsrzORraDPI9sULCMl2L/w
+         N6EbZeAw66GWtUt0LTMLRefgGgQzf7TDnQumotQgYlGFtvOW/32J9p0YI6HnRa4/AJrv
+         IpuIpZzMFxT3O48GESXSxbZ/veeMqERQ+feI2Gx7N+019IA7RmGroZxfKC/vEhucCA9d
+         ab1fgQ9fbTW0uu8yas1vS9+/Nj6m4NgkRVesu45yUSmUdrzgVat+1vixgtlP0Bnyh4yg
+         u2olFX9MmpiNHJiD4vZgdWfouNHmRxvqdNZQVUdCIFCI2zuYdQLp27581SpU5gp1Hoxi
+         T7vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1Xno8DvPJDMlxcVtto8QzuqlpStaL3vI83oHShJE2jU=;
-        b=vOMG+I0XyM4zSeJiL4exrE6rKlDknQH3fRpzP14kOq0rJ8uIM0Xj0CTbjjJpkHFe08
-         TrAwp92ZNwq3u7Kn8vGqxQ9NVNUJAW/w8ud++iVvC28deCoYGE7EKFjr5GZBfzbWzzY7
-         yDgZlN6i+GVo/D2vwaFtm9+ta+S6lWCmt4+BVvKm8K41NV9HPYyg9BLQm1dMI25cjuF0
-         A+kzyy8epy0JTFbM8XzqZe4N+ia9KGfv/d/EZRDOZd/IBSHRhYRJTfJ+Ee0lRe4VdZio
-         AHApxO9pIr3Orlq/uvX8veTFDJa+c3RWg5veIVSyuoDyftk2WTu18GA2rdVy/l3VjALo
-         4UOg==
-X-Gm-Message-State: ACrzQf3tSTMrMFSsEvpRF5GIw0rf2HiCNVVvcLZcKkVxx/PBoJFM39ZS
-        Ddq67To99pO8q20u1MXmGE0=
-X-Google-Smtp-Source: AMsMyM6trq2An6Jv7nmktxh1tAYT1BHNZPIsZRp3vEWbagzIGyQU9YJEExejAkmm8C8T0JkiD1wzkQ==
-X-Received: by 2002:a5d:4b8b:0:b0:22e:4185:bcc7 with SMTP id b11-20020a5d4b8b000000b0022e4185bcc7mr4583362wrt.174.1665175255183;
-        Fri, 07 Oct 2022 13:40:55 -0700 (PDT)
+        bh=6etltRDJaMEsXq7CgGpxh6ihdfKctaGSXtyFke3/FDw=;
+        b=ERL54xv9UBZ5FmctdrbpkMWym8jfyJGlhQMyEUwTvYZLuHjvyB+vxlJ0oSO8xlbF8x
+         nybiI2YqdwxXzSmi9LZkcWjjb5iEv7Yv0IlqRR6+xrq2LY8aritkjsBvdbVuAGOOWWsI
+         CqeHPDk6JRnniNobd9dCV7mk+panseLPXaIoASjwU8Or4BN/CShRA8wIRmej6NP7W52I
+         RA0aqK71R/wdlvVZcbnrS2BJjUEytHWtgIz735ISS1Fjah2sTwkVv+gPaLQdUebDbHWK
+         riGqNqXPZF3DYij/i91aaEVC4W1jXCYePT/GLlmPK4Q/WP+LHTLruM7edClGHvSNpzpL
+         z5Tg==
+X-Gm-Message-State: ACrzQf3Z0/I6YI6pPOKR86dzZ4lEwW1wK112UAqYssbWqkId6ITzxGfW
+        AiSmbqw0zeyTZ7nDRUxdq8k=
+X-Google-Smtp-Source: AMsMyM6OWxg7nz4QaZKt8xJN2Wb98XGb7qMQC4ayyZ2d06mFVmFv6hn/YfYezssEsO01kvTnsk0gzQ==
+X-Received: by 2002:adf:f58b:0:b0:22e:3c4:cf83 with SMTP id f11-20020adff58b000000b0022e03c4cf83mr4572862wro.379.1665175420392;
+        Fri, 07 Oct 2022 13:43:40 -0700 (PDT)
 Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id u11-20020a5d468b000000b0022add5a6fb1sm2839992wrq.30.2022.10.07.13.40.54
+        by smtp.gmail.com with ESMTPSA id s10-20020a5d6a8a000000b0022a9246c853sm2841738wru.41.2022.10.07.13.43.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 13:40:54 -0700 (PDT)
+        Fri, 07 Oct 2022 13:43:40 -0700 (PDT)
 From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>, linux-unionfs@vger.kernel.org
+To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ovl: Kconfig: Fix spelling mistake "undelying" -> "underlying"
-Date:   Fri,  7 Oct 2022 21:40:54 +0100
-Message-Id: <20221007204054.2757493-1-colin.i.king@gmail.com>
+Subject: [PATCH] init: Kconfig: Fix spelling mistake "satify" -> "satisfy"
+Date:   Fri,  7 Oct 2022 21:43:39 +0100
+Message-Id: <20221007204339.2757753-1-colin.i.king@gmail.com>
 X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -73,22 +73,22 @@ There is a spelling mistake in a Kconfig description. Fix it.
 
 Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- fs/overlayfs/Kconfig | 2 +-
+ init/Kconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/overlayfs/Kconfig b/fs/overlayfs/Kconfig
-index dd188c7996b3..6708e54b0e30 100644
---- a/fs/overlayfs/Kconfig
-+++ b/fs/overlayfs/Kconfig
-@@ -96,7 +96,7 @@ config OVERLAY_FS_XINO_AUTO
- 	depends on 64BIT
- 	help
- 	  If this config option is enabled then overlay filesystems will use
--	  unused high bits in undelying filesystem inode numbers to map all
-+	  unused high bits in underlying filesystem inode numbers to map all
- 	  inodes to a unified address space.  The mapped 64bit inode numbers
- 	  might not be compatible with applications that expect 32bit inodes.
+diff --git a/init/Kconfig b/init/Kconfig
+index a19314933e54..645e70829441 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -72,7 +72,7 @@ config RUST_IS_AVAILABLE
+ 	  This shows whether a suitable Rust toolchain is available (found).
  
+ 	  Please see Documentation/rust/quick-start.rst for instructions on how
+-	  to satify the build requirements of Rust support.
++	  to satisfy the build requirements of Rust support.
+ 
+ 	  In particular, the Makefile target 'rustavailable' is useful to check
+ 	  why the Rust toolchain is not being detected.
 -- 
 2.37.3
 
