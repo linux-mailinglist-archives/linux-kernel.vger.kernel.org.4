@@ -2,139 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDED05F758A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 10:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C51595F758D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 10:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiJGIwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 04:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
+        id S229669AbiJGIxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 04:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiJGIwf (ORCPT
+        with ESMTP id S229735AbiJGIxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 04:52:35 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE866CAE57;
-        Fri,  7 Oct 2022 01:52:31 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id q10-20020a17090a304a00b0020b1d5f6975so3085389pjl.0;
-        Fri, 07 Oct 2022 01:52:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TB46KdvMZJgbp7dR23YxTpKAGexyJNaQ7bch9IZKt5g=;
-        b=LBVqR/yPOZwnyKzExIyyeK2UXrPOk/YcWE0CJHj+Y71HAu4SeFTCiLYC2TTConOuKa
-         iCqBXE+VJSoEDuDJJaG167OwcsEKmPNvHSxOzxmRz3rNt88cW4v2rD/mf3uzK0vdzbyy
-         ESS1NLv4eJgRvbehfiTj80l+kBB4KIit9CSiyAu7LZaqkqoBb/rClNbnkCAg+W7sfvYL
-         rlqwJYepj2zpik//780faN81CpKDaKlT+UigHfVwGQtV0QryXdSjlIrD6ZhZQiIlN+Zf
-         pNgzOd0C6q29AXAUQxDpSo6+xz4xIB6Qv+MyQAKFY+1zK3vFqAqenEd8yTFjqS9NDORq
-         ot2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TB46KdvMZJgbp7dR23YxTpKAGexyJNaQ7bch9IZKt5g=;
-        b=ItO5hOBKti+5eYdecEHyZGzA9/RMuAreSKXjd7dJTGZ5PEihR9UJaWEKQmjFcnhl54
-         5JpBeeN1I7teWltxuQRVSRKeOpgbvvov6ll1xo6Gpmfgpg6xkY+B5u5VeF94BnwDIunp
-         aoeEFe0cvBC/GL39iC9k6RZ2E1YI+sX3peHXc8nv1hCHlwC3yHF9vYeC6wfw8yOh61r8
-         0yUXOe6s7Tl3elP1+iCh43XA/EcBVtuH6h+dJAf1LpY3WgoV7zpHJQujkl0M/lWtREph
-         0hd8vY7LjhvahNnCWiN4PLZY2+Pfh8jpZkMbd4MHJSByETM8wrnFlqQhlNhmGXPJ+dnq
-         pI4w==
-X-Gm-Message-State: ACrzQf3Q41+H1sYnUFqJTPORDuw7C/0AlTdSiEmMQOuZN/xB70hCYYxo
-        sUz/ufUo9r8xCcr1x9XVVDFUfRnxXQk=
-X-Google-Smtp-Source: AMsMyM4gkNpnh1O7voFAVF9dYkmGJM6lYlbeaDWjeJk6W/pyhR6leZnn7elmN8ywM8HFHG08KGPGIg==
-X-Received: by 2002:a17:902:ea09:b0:179:c4bc:20e2 with SMTP id s9-20020a170902ea0900b00179c4bc20e2mr3801539plg.132.1665132750900;
-        Fri, 07 Oct 2022 01:52:30 -0700 (PDT)
-Received: from carrot.. (i220-109-170-101.s42.a014.ap.plala.or.jp. [220.109.170.101])
-        by smtp.gmail.com with ESMTPSA id x188-20020a6263c5000000b0056268979639sm1026918pfb.123.2022.10.07.01.52.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 01:52:29 -0700 (PDT)
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-nilfs <linux-nilfs@vger.kernel.org>,
-        syzbot <syzbot+7381dc4ad60658ca4c05@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] nilfs2: fix leak of nilfs_root in case of writer thread creation failure
-Date:   Fri,  7 Oct 2022 17:52:26 +0900
-Message-Id: <20221007085226.57667-1-konishi.ryusuke@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <00000000000098972c05e2117b39@google.com>
-References: <00000000000098972c05e2117b39@google.com>
+        Fri, 7 Oct 2022 04:53:06 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FE6CAE57;
+        Fri,  7 Oct 2022 01:53:04 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1C0C26602329;
+        Fri,  7 Oct 2022 09:53:02 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1665132782;
+        bh=vtFElDx7m6ery3R7WHMzjFgwq5qcoN9DS+Yyj6A964Q=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=EmbYq3a7kp/at3p3BEgiwkClYB6r+EffnRkLhd+qYZ2v8ZLBw9/1gPg8YsB6bpsf2
+         YmMi2o8kRfkKaY6n4tag1dm1eCpmi22oLDcH2kz0cvdoOssXHK/hrqQ1WKiXnVRCPV
+         /b2ZnYBhkoT42lzIz6tP4zfRPJMNvILVGCDZFZxQqJxS3/fMgAhvGQZUYIDEbcLbim
+         X334vqTnhHGxUYetu35zF/BoDKZVLSzCKVzLodY6B2VxxM9crQop0+90E9L2HfgG2F
+         N+lufwLLz1yV/B2/zlJaF8BqFi/QCJQgyxZbPQ7YsnyO72f1UznvmbKzD3zOjXOQ3a
+         eacY+QdgD+eEg==
+Message-ID: <f12144d1-d37a-2bd7-5c28-4b15b84818ef@collabora.com>
+Date:   Fri, 7 Oct 2022 10:52:59 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 0/4] MT8195 Acer Tomato - Audio support
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220922094908.41623-1-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5EzD_CvZHv_HOd4cRB_3qzUDUYwvOBN1qkkdP4ygo862w@mail.gmail.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGXv+5EzD_CvZHv_HOd4cRB_3qzUDUYwvOBN1qkkdP4ygo862w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If nilfs_attach_log_writer() failed to create a log writer thread, it
-frees a data structure of the log writer without any cleanup.  After
-commit e912a5b66837 ("nilfs2: use root object to get ifile"), this
-causes a leak of struct nilfs_root, which started to leak an ifile
-metadata inode and a kobject on that struct.
+Il 07/10/22 10:42, Chen-Yu Tsai ha scritto:
+> Hi,
+> 
+> On Thu, Sep 22, 2022 at 5:49 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> This series enables full support for audio, with DSP, on the Cherry
+>> Chromebooks.
+>> Related ALSA UCM2 configuration was already merged in its upstream
+>> repository [1]: this is fully tested and working as-is since all of
+>> the required fixes for MT8195 SOF drivers were picked and are present
+>> since `next-20220908`.
+>>
+>> [1]: https://github.com/alsa-project/alsa-ucm-conf/commit/a59c3b1a57de8eb424c4f754bb031265e856260e
+> 
+> While trying this patch, I get the following error:
+> 
+> # modprobe mt8195-mt6359
+> [   44.985107] mt6359-sound mt6359-sound: ASoC: sink widget AIF1TX overwritten
+> [   44.994393] dmic-codec dmic-codec: GPIO lookup for consumer dmicen
+> [   45.000636] dmic-codec dmic-codec: using device tree for GPIO lookup
+> [   45.007165] of_get_named_gpiod_flags: can't parse 'dmicen-gpios'
+> property of node '/dmic-codec[0]'
+> [   45.016177] of_get_named_gpiod_flags: can't parse 'dmicen-gpio'
+> property of node '/dmic-codec[0]'
+> [   45.025084] dmic-codec dmic-codec: using lookup tables for GPIO lookup
+> [   45.031666] dmic-codec dmic-codec: No GPIO consumer dmicen found
+> [   45.041434] sof-audio-of-mt8195 10803000.dsp: Topology: ABI 3:22:1
+> Kernel ABI 3:23:0
+> [   45.050185] mt8195_mt6359 mt8195-sound: ASoC: Parent card not yet
+> available, widget card binding deferred
+> [   45.060566] sof-audio-of-mt8195 10803000.dsp: ipc tx error for
+> 0x30010000 (msg/reply size: 96/20): -22
+> [   45.069965] sof-audio-of-mt8195 10803000.dsp: Failed to setup widget AFE3.IN
+> [   45.077575] sof-audio-of-mt8195 10803000.dsp: error: tplg component
+> load failed -22
+> [   45.085291] sof-audio-of-mt8195 10803000.dsp: error: failed to load
+> DSP topology -22
+> [   45.093062] sof-audio-of-mt8195 10803000.dsp: ASoC: error at
+> snd_soc_component_probe on 10803000.dsp: -22
+> [   45.102880] mt8195_mt6359 mt8195-sound: ASoC: failed to instantiate card -22
+> [   45.123915] mt8195_mt6359: probe of mt8195-sound failed with error -22
+> 
+> Any ideas?
 
-In addition, if the kernel is booted with panic_on_warn, the above
-ifile metadata inode leak will cause the following panic when the
-nilfs2 kernel module is removed:
+We have to recheck if the firmware that was sent upstream is the right one for
+Tomato's dts topology variant, I think.
+That's surely a firmware issue that you're seeing, anyway.
 
-  kmem_cache_destroy nilfs2_inode_cache: Slab cache still has objects when
-  called from nilfs_destroy_cachep+0x16/0x3a [nilfs2]
-  WARNING: CPU: 8 PID: 1464 at mm/slab_common.c:494 kmem_cache_destroy+0x138/0x140
-  ...
-  RIP: 0010:kmem_cache_destroy+0x138/0x140
-  Code: 00 20 00 00 e8 a9 55 d8 ff e9 76 ff ff ff 48 8b 53 60 48 c7 c6 20 70 65 86 48 c7 c7 d8 69 9c 86 48 8b 4c 24 28 e8 ef 71 c7 00 <0f> 0b e9 53 ff ff ff c3 48 81 ff ff 0f 00 00 77 03 31 c0 c3 53 48
-  ...
-  Call Trace:
-   <TASK>
-   ? nilfs_palloc_freev.cold.24+0x58/0x58 [nilfs2]
-   nilfs_destroy_cachep+0x16/0x3a [nilfs2]
-   exit_nilfs_fs+0xa/0x1b [nilfs2]
-    __x64_sys_delete_module+0x1d9/0x3a0
-   ? __sanitizer_cov_trace_pc+0x1a/0x50
-   ? syscall_trace_enter.isra.19+0x119/0x190
-   do_syscall_64+0x34/0x80
-   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-   ...
-   </TASK>
-  Kernel panic - not syncing: panic_on_warn set ...
+sof-mt8195.ri
 
-This patch fixes these issues by calling nilfs_detach_log_writer()
-cleanup function if spawning the log writer thread fails.
-
-Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Fixes: e912a5b66837 ("nilfs2: use root object to get ifile")
-Reported-by: syzbot+7381dc4ad60658ca4c05@syzkaller.appspotmail.com
-Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Cc: stable@vger.kernel.org
----
- fs/nilfs2/segment.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/fs/nilfs2/segment.c b/fs/nilfs2/segment.c
-index 0afe0832c754..5276ab525f01 100644
---- a/fs/nilfs2/segment.c
-+++ b/fs/nilfs2/segment.c
-@@ -2786,10 +2786,9 @@ int nilfs_attach_log_writer(struct super_block *sb, struct nilfs_root *root)
- 	inode_attach_wb(nilfs->ns_bdev->bd_inode, NULL);
- 
- 	err = nilfs_segctor_start_thread(nilfs->ns_writer);
--	if (err) {
--		kfree(nilfs->ns_writer);
--		nilfs->ns_writer = NULL;
--	}
-+	if (unlikely(err))
-+		nilfs_detach_log_writer(sb);
-+
- 	return err;
- }
- 
--- 
-2.34.1
-
+Cheers,
+Angelo
