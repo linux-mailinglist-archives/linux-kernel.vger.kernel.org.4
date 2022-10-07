@@ -2,442 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 340A35F7BE0
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 18:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D6C5F7BE6
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 19:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbiJGQ5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 12:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
+        id S229725AbiJGRAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 13:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbiJGQ4t (ORCPT
+        with ESMTP id S229689AbiJGRAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 12:56:49 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E651946DB9
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 09:56:46 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id u10so2798362ilm.5
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 09:56:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dbBXQdH6Biw9ZL6BC4iovaHCIiANA2YGcpyF37wDdyQ=;
-        b=j2Zh2OIT0OBTcwGeFc70NIm4U/Jv7GRw+g0fEMIWqc4lpGkyFIj1mqhS66tb0RPbt1
-         4f9Of5Armjd6tTRT51mUf2jemRrDBuUb5rLeHNaNC5wAFLV9+6+dL8xRtWOgwSjsqwIZ
-         AUsb9ML3qkDeMdrTsYLAPPTFof5Tl+Kf+z5ZbqEMQ/NDXgslx+VWq3c/u0ExvrOxygJE
-         crUC9NFh6Em0RBufTSeEcMjopu8sE/b3OhmWtH91382vgW5T2yLCXdMNOj3kLyJmo+Be
-         GemtPUuBbbaJoGpceIckTAcc521ad0TBqdglZcF4kb4PgSx/0XtP6+1ES8gMtT6JqTaS
-         KJAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dbBXQdH6Biw9ZL6BC4iovaHCIiANA2YGcpyF37wDdyQ=;
-        b=KecPT3HORS8rAAitIsTNAuXpQdHY2NUSY0fuw0+VEkeIogI+3hsRgLb2EriTcDAiPT
-         QMVlAxX1PO0n3sYwFgwbmxy3Q38bDAG5B7Ql52z0RAKkLADMJtI6K4s09AoFb5o2M7wC
-         fo4pbML1IV+GWAkPDmlYoVb5cQH9M7jmsjSpMYDkAYUackgmM1ggWcQ6trLK2qH4bhB+
-         klqL6TQwGA/QmI8b4q1iyNIZS1xrDERwakLobFy0ivAeIx52BZnitzloHTaGY29vqi5F
-         bEDYR0yWK7M5NTHjbi8CHp9hxaHhvV6QkIESoR5YPwXBJ3ye1C7zt5NwCxHqVXLxYmwB
-         YsMA==
-X-Gm-Message-State: ACrzQf3m8S5PMMaSt0b3L74lx+sPNTfYYhe9Db8sEtdxYEhD36DjIypD
-        2VA/F49Szo0S5zat6zxZVfJB3RaDbnXphQ==
-X-Google-Smtp-Source: AMsMyM4cd19LOkCQXBpjx9j+X3RTH9HqoJfd+r/KT/Uep1nNboL/FXYLPHw/WV/JS7akfIniviVdtA==
-X-Received: by 2002:a92:c568:0:b0:2f9:e77d:293c with SMTP id b8-20020a92c568000000b002f9e77d293cmr2680095ilj.319.1665161806162;
-        Fri, 07 Oct 2022 09:56:46 -0700 (PDT)
-Received: from m1max.localdomain ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id a6-20020a056e020e0600b002eb5eb4f8f9sm1055584ilk.77.2022.10.07.09.56.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 09:56:45 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 4/4] eventpoll: add support for min-wait
-Date:   Fri,  7 Oct 2022 10:56:37 -0600
-Message-Id: <20221007165637.22374-5-axboe@kernel.dk>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221007165637.22374-1-axboe@kernel.dk>
-References: <20221007165637.22374-1-axboe@kernel.dk>
+        Fri, 7 Oct 2022 13:00:03 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on20606.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8a::606])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE13303DB;
+        Fri,  7 Oct 2022 10:00:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Yl0UH51MqDQrOM/AkvYM22j5BgesNt/RPuCBm5lqJse23ftfc/MtP+F+OhvRvHw4H1erik8LSXiuCFHKqVuHxwvDCsJrZtkdDH+Omwih4AVSAgRJWUI5UOPziuocJ/7OpIPgxRWkaWHqDxeFopLg1PrLG5XA8oJ3wCfmf0lHe3vs7d98jUhCIpUEau4rOs9wi5+Qv5Sfig2vV1iKt7spunQrJVEoGorFHKiv7250TyWDiuQuSdJA3w2BNy4onFyy4wkGWsVcoKTH4+0EZD75G31SPibJOhe/cL6kgcU15MkJw1rRejLA8O9JHhzICZ6Cgu2a+nIo9ogs9CZx3A9Mcg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=32hflWF8ScZ7h1doJRg6HofB1diwmI72CIvspbdSDHw=;
+ b=GtwahfjtACQb3xUoVjmKc5NDCQ4BV0DomFfDLvdNcxgl+sPqBy5iR8/LLMeNQ2X2RSHWCnxSVSS91aUZuORpz/W7j5evjdemjCymtGOkqeVaLHdk1FkniZCU/dJUOFi5nrs5C056A3bR4uP1o5Zndh+9vgnSD2vhbPKOnqutlLgX29FXzMnVx+I3/c79/ODCCC9lbNS+hEx03eoAL5yNe56wmFi8aDKs0FTYihBNVlJyVEI7mLvF9QIkGuT/owb/vn+2M6gUj3tYMkDX5cl0+m5I/gntVZDRsAFWW2MgmDAFAZY0wxNhTdIA+8iWOEO01sqqU/nszZ+Fe/XpydlR0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=32hflWF8ScZ7h1doJRg6HofB1diwmI72CIvspbdSDHw=;
+ b=fqtFpoenjTJu+v4/Nluttq1eODzO7CjnwnYvAVbpRY5vANG6yqd0vs3qFi7+qbDAZDv/W/HhgQlglnems24t5EYnFJnbs528yN76KF8jeCHcd2d1TaIDuszTOt7oTt2wJ2Iu0qDQOuo7OlOXialI80M/x0G8RvTnRavOYCrh5MBM2lGf2PoczAUVQb1q6Ea+edfGEGdaTi/BBccSg0S2FzTz0dYE1uV2E6wv9jwJbWKj0S03SAE0Ck7cqiT/YQmQa9sETxdFTWOHINVfBzH8faIOF5ZAkDgm5c+h9p5RK3zRAxmUOPswTAcJAv4fPIA4rH80hxHhKJb3n3sIV+cmuw==
+Received: from BN0PR02CA0021.namprd02.prod.outlook.com (2603:10b6:408:e4::26)
+ by PH7PR12MB6956.namprd12.prod.outlook.com (2603:10b6:510:1b9::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Fri, 7 Oct
+ 2022 16:59:57 +0000
+Received: from BN8NAM11FT096.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e4:cafe::ee) by BN0PR02CA0021.outlook.office365.com
+ (2603:10b6:408:e4::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.29 via Frontend
+ Transport; Fri, 7 Oct 2022 16:59:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN8NAM11FT096.mail.protection.outlook.com (10.13.177.195) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5709.10 via Frontend Transport; Fri, 7 Oct 2022 16:59:56 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Fri, 7 Oct 2022
+ 09:59:47 -0700
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 7 Oct 2022
+ 09:59:47 -0700
+Received: from pshete-ubuntu.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Fri, 7 Oct 2022 09:59:43 -0700
+From:   Prathamesh Shete <pshete@nvidia.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <smangipudi@nvidia.com>, <pshete@nvidia.com>,
+        <kyarlagadda@nvidia.com>, <anrao@nvidia.com>
+Subject: [PATCH v3] arm64: tegra: Add Tegra234 SDMMC1 device tree node
+Date:   Fri, 7 Oct 2022 22:29:41 +0530
+Message-ID: <20221007165941.16539-1-pshete@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <7bf3f70a-4af6-c62a-75fc-89591d5de04b@linaro.org>
+References: <7bf3f70a-4af6-c62a-75fc-89591d5de04b@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT096:EE_|PH7PR12MB6956:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1e06e706-a392-4462-6ca4-08daa8855cd6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xVYkIX1WP7bXVnOOWQR7mmXBnXCUPgxB0ea1Ge6YeL7Td7/GkD/uS4J+ILHwdPNhdgQEjLkHDl6p5TaBx2Hn4LAiKgoOoYaOY+apxVeV9C8/haxjVX/ihgsqjV4TSmwhbpniaGXv4NdCnPHDkhKm1jXGcgnl8MCyuHxpgs33n9tGdignCY+JSIb8Tr5WLXM7lmFgnmpiFUYyHxbudv9i1sXtWuuHF212C7t22/NtMDYzGY1nyNQw8bgrPrWyZFVhpMAOoQ5qXCHoqZDmY+4y3IkVaji1cfH8ww1e/Yu3mmKdr+kiZnnmozE5rAIHJwhTdFjQEEmdLTpZKyVsLkc2sZCRuOA45j7OJKEeNFdISuJz5qn+TvfrGNKmkVQB+CiAvKP2cNH2psYhYFORgcF+fQg5ri1+kclsUKWmMt0GZY9+l/VETs3CKJeRCcg2qTEdycoeLcCp8KRQvWECQ3k07CIhFdaTofvNhlpbfXs3uZBCvusIj9QNZYtBoDRa/Tk+GVoZJwKSQaLxAw3tEEPzHInLRXg7pkAJ1KX6Rlnd7lJsmf4VhotIqCR+Lgrcswvb21pIt4FRCBMM6gwMxjrN96EU6zKsQJoYDoFpcG/c+3uZf73WJINSECtZsz9MaR3uEN+ncegAUj5N5UzUUv0X8h5qSBfBqlsCDSP09PPTFQZruuBXWED/B+lso8wF6DpZRZ7o3wToUo7+Nxy4mCF34EdQhF6WHadgwAi9Ku8tgtlsD8ATOcNItPd49Jpy+9OkD+flAk2PkGot6nDNR7QSkA==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(346002)(376002)(136003)(451199015)(46966006)(36840700001)(40470700004)(7696005)(107886003)(36860700001)(7636003)(70206006)(8676002)(82740400003)(4326008)(54906003)(70586007)(356005)(478600001)(40480700001)(86362001)(36756003)(82310400005)(83380400001)(1076003)(2616005)(47076005)(186003)(26005)(336012)(110136005)(8936002)(40460700003)(2906002)(5660300002)(316002)(426003)(41300700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2022 16:59:56.5988
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e06e706-a392-4462-6ca4-08daa8855cd6
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT096.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6956
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rather than just have a timeout value for waiting on events, add
-EPOLL_CTL_MIN_WAIT to allow setting a minimum time that epoll_wait()
-should always wait for events to arrive.
+Add device tree node for Tegra234 SDMMC1 instance.
+Add and enable SD card instance in device tree.
 
-For medium workload efficiencies, some production workloads inject
-artificial timers or sleeps before calling epoll_wait() to get
-better batching and higher efficiencies. While this does help, it's
-not as efficient as it could be. By adding support for epoll_wait()
-for this directly, we can avoids extra context switches and scheduler
-and timer overhead.
-
-As an example, running an AB test on an identical workload at about
-~370K reqs/second, without this change and with the sleep hack
-mentioned above (using 200 usec as the timeout), we're doing 310K-340K
-non-voluntary context switches per second. Idle CPU on the host is 27-34%.
-With the the sleep hack removed and epoll set to the same 200 usec
-value, we're handling the exact same load but at 292K-315k non-voluntary
-context switches and idle CPU of 33-41%, a substantial win.
-
-Basic test case:
-
-struct d {
-        int p1, p2;
-};
-
-static void *fn(void *data)
-{
-        struct d *d = data;
-        char b = 0x89;
-
-	/* Generate 2 events 20 msec apart */
-        usleep(10000);
-        write(d->p1, &b, sizeof(b));
-        usleep(10000);
-        write(d->p2, &b, sizeof(b));
-
-        return NULL;
-}
-
-int main(int argc, char *argv[])
-{
-        struct epoll_event ev, events[2];
-        pthread_t thread;
-        int p1[2], p2[2];
-        struct d d;
-        int efd, ret;
-
-        efd = epoll_create1(0);
-        if (efd < 0) {
-                perror("epoll_create");
-                return 1;
-        }
-
-        if (pipe(p1) < 0) {
-                perror("pipe");
-                return 1;
-        }
-        if (pipe(p2) < 0) {
-                perror("pipe");
-                return 1;
-        }
-
-        ev.events = EPOLLIN;
-        ev.data.fd = p1[0];
-        if (epoll_ctl(efd, EPOLL_CTL_ADD, p1[0], &ev) < 0) {
-                perror("epoll add");
-                return 1;
-        }
-        ev.events = EPOLLIN;
-        ev.data.fd = p2[0];
-        if (epoll_ctl(efd, EPOLL_CTL_ADD, p2[0], &ev) < 0) {
-                perror("epoll add");
-                return 1;
-        }
-
-	/* always wait 200 msec for events */
-        ev.data.u64 = 200000;
-        if (epoll_ctl(efd, EPOLL_CTL_MIN_WAIT, -1, &ev) < 0) {
-                perror("epoll add set timeout");
-                return 1;
-        }
-
-        d.p1 = p1[1];
-        d.p2 = p2[1];
-        pthread_create(&thread, NULL, fn, &d);
-
-	/* expect to get 2 events here rather than just 1 */
-        ret = epoll_wait(efd, events, 2, -1);
-        printf("epoll_wait=%d\n", ret);
-
-        return 0;
-}
-
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
 ---
- fs/eventpoll.c                 | 132 ++++++++++++++++++++++++++-------
- include/linux/eventpoll.h      |   2 +-
- include/uapi/linux/eventpoll.h |   1 +
- 3 files changed, 109 insertions(+), 26 deletions(-)
+ .../boot/dts/nvidia/tegra234-p3701-0000.dtsi  |  7 +++
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi      | 60 +++++++++++++++++++
+ 2 files changed, 67 insertions(+)
 
-diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-index 79aa61a951df..ccb8400e2252 100644
---- a/fs/eventpoll.c
-+++ b/fs/eventpoll.c
-@@ -39,6 +39,11 @@
- #include <linux/rculist.h>
- #include <net/busy_poll.h>
+diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi b/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi
+index 9e4d72cfa69f..fe52810e5b9d 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi
+@@ -55,6 +55,13 @@
+ 			};
+ 		};
  
-+/*
-+ * If a default min_wait timeout is desired, set this to non-zero. In usecs.
-+ */
-+#define EPOLL_DEF_MIN_WAIT	0
++		mmc@3400000 {
++			status = "okay";
++			bus-width = <4>;
++			cd-gpios = <&gpio TEGRA234_MAIN_GPIO(G, 7) GPIO_ACTIVE_LOW>;
++			disable-wp;
++		};
 +
- /*
-  * LOCKING:
-  * There are three level of locking required by epoll :
-@@ -117,6 +122,9 @@ struct eppoll_entry {
- 	/* The "base" pointer is set to the container "struct epitem" */
- 	struct epitem *base;
+ 		mmc@3460000 {
+ 			status = "okay";
+ 			bus-width = <8>;
+diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+index 0170bfa8a467..58f6165100a8 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+@@ -7,6 +7,7 @@
+ #include <dt-bindings/memory/tegra234-mc.h>
+ #include <dt-bindings/power/tegra234-powergate.h>
+ #include <dt-bindings/reset/tegra234-reset.h>
++#include <dt-bindings/pinctrl/pinctrl-tegra-io-pad.h>
  
-+	/* min wait time if (min_wait_ts) & 1 != 0 */
-+	ktime_t min_wait_ts;
+ / {
+ 	compatible = "nvidia,tegra234";
+@@ -895,6 +896,45 @@
+ 			status = "disabled";
+ 		};
+ 
++		mmc@3400000 {
++			compatible = "nvidia,tegra194-sdhci", "nvidia,tegra234-sdhci";
++			reg = <0x03400000 0x20000>;
++			interrupts = <GIC_SPI 62 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&bpmp TEGRA234_CLK_SDMMC1>,
++				 <&bpmp TEGRA234_CLK_SDMMC_LEGACY_TM>;
++			clock-names = "sdhci", "tmclk";
++			assigned-clocks = <&bpmp TEGRA234_CLK_SDMMC1>,
++					<&bpmp TEGRA234_CLK_PLLC4_MUXED>;
++			assigned-clock-parents =
++					  <&bpmp TEGRA234_CLK_PLLC4_MUXED>,
++					  <&bpmp TEGRA234_CLK_PLLC4_VCO_DIV2>;
++			resets = <&bpmp TEGRA234_RESET_SDMMC1>;
++			reset-names = "sdhci";
++			interconnects = <&mc TEGRA234_MEMORY_CLIENT_SDMMCRA &emc>,
++					<&mc TEGRA234_MEMORY_CLIENT_SDMMCWA &emc>;
++			interconnect-names = "dma-mem", "write";
++			iommus = <&smmu_niso1 TEGRA234_SID_SDMMC1A>;
++			pinctrl-names = "sdmmc-3v3", "sdmmc-1v8";
++			pinctrl-0 = <&sdmmc1_3v3>;
++			pinctrl-1 = <&sdmmc1_1v8>;
++			nvidia,pad-autocal-pull-up-offset-3v3-timeout =
++								      <0x07>;
++			nvidia,pad-autocal-pull-down-offset-3v3-timeout =
++									<0x07>;
++			nvidia,pad-autocal-pull-up-offset-1v8-timeout = <0x06>;
++			nvidia,pad-autocal-pull-down-offset-1v8-timeout =
++									<0x07>;
++			nvidia,pad-autocal-pull-up-offset-sdr104 = <0x00>;
++			nvidia,pad-autocal-pull-down-offset-sdr104 = <0x00>;
++			nvidia,default-tap = <14>;
++			nvidia,default-trim = <0x8>;
++			sd-uhs-sdr25;
++			sd-uhs-sdr50;
++			sd-uhs-ddr50;
++			sd-uhs-sdr104;
++			status = "disabled";
++		};
 +
- 	/*
- 	 * Wait queue item that will be linked to the target file wait
- 	 * queue head.
-@@ -217,6 +225,9 @@ struct eventpoll {
- 	u64 gen;
- 	struct hlist_head refs;
+ 		mmc@3460000 {
+ 			compatible = "nvidia,tegra234-sdhci", "nvidia,tegra186-sdhci";
+ 			reg = <0x03460000 0x20000>;
+@@ -1541,6 +1581,26 @@
  
-+	/* min wait for epoll_wait() */
-+	unsigned int min_wait_ts;
+ 			#interrupt-cells = <2>;
+ 			interrupt-controller;
 +
- #ifdef CONFIG_NET_RX_BUSY_POLL
- 	/* used to track busy poll napi_id */
- 	unsigned int napi_id;
-@@ -953,6 +964,7 @@ static int ep_alloc(struct eventpoll **pep)
- 	ep->rbr = RB_ROOT_CACHED;
- 	ep->ovflist = EP_UNACTIVE_PTR;
- 	ep->user = user;
-+	ep->min_wait_ts = EPOLL_DEF_MIN_WAIT;
- 
- 	*pep = ep;
- 
-@@ -1747,6 +1759,32 @@ static struct timespec64 *ep_timeout_to_timespec(struct timespec64 *to, long ms)
- 	return to;
- }
- 
-+struct epoll_wq {
-+	wait_queue_entry_t wait;
-+	struct hrtimer timer;
-+	ktime_t timeout_ts;
-+	ktime_t min_wait_ts;
-+	struct eventpoll *ep;
-+	bool timed_out;
-+	int maxevents;
-+	int wakeups;
-+};
++			sdmmc1_3v3: sdmmc1-3v3 {
++				pins = "sdmmc1-hv";
++				power-source = <TEGRA_IO_PAD_VOLTAGE_3V3>;
++			};
 +
-+static bool ep_should_min_wait(struct epoll_wq *ewq)
-+{
-+	if (ewq->min_wait_ts & 1) {
-+		/* just an approximation */
-+		if (++ewq->wakeups >= ewq->maxevents)
-+			goto stop_wait;
-+		if (ktime_before(ktime_get_ns(), ewq->min_wait_ts))
-+			return true;
-+	}
++			sdmmc1_1v8: sdmmc1-1v8 {
++				pins = "sdmmc1-hv";
++				power-source = <TEGRA_IO_PAD_VOLTAGE_1V8>;
++			};
 +
-+stop_wait:
-+	ewq->min_wait_ts &= ~(u64) 1;
-+	return false;
-+}
++			sdmmc3_3v3: sdmmc3-3v3 {
++				pins = "sdmmc3-hv";
++				power-source = <TEGRA_IO_PAD_VOLTAGE_3V3>;
++			};
 +
- /*
-  * autoremove_wake_function, but remove even on failure to wake up, because we
-  * know that default_wake_function/ttwu will only fail if the thread is already
-@@ -1756,27 +1794,37 @@ static struct timespec64 *ep_timeout_to_timespec(struct timespec64 *to, long ms)
- static int ep_autoremove_wake_function(struct wait_queue_entry *wq_entry,
- 				       unsigned int mode, int sync, void *key)
- {
--	int ret = default_wake_function(wq_entry, mode, sync, key);
-+	struct epoll_wq *ewq = container_of(wq_entry, struct epoll_wq, wait);
-+	int ret;
-+
-+	/*
-+	 * If min wait time hasn't been satisfied yet, keep waiting
-+	 */
-+	if (ep_should_min_wait(ewq))
-+		return 0;
++			sdmmc3_1v8: sdmmc3-1v8 {
++				pins = "sdmmc3-hv";
++				power-source = <TEGRA_IO_PAD_VOLTAGE_1V8>;
++			};
+ 		};
  
-+	ret = default_wake_function(wq_entry, mode, sync, key);
- 	list_del_init(&wq_entry->entry);
- 	return ret;
- }
- 
--struct epoll_wq {
--	wait_queue_entry_t wait;
--	struct hrtimer timer;
--	ktime_t timeout_ts;
--	bool timed_out;
--};
--
- static enum hrtimer_restart ep_timer(struct hrtimer *timer)
- {
- 	struct epoll_wq *ewq = container_of(timer, struct epoll_wq, timer);
- 	struct task_struct *task = ewq->wait.private;
-+	const bool is_min_wait = ewq->min_wait_ts & 1;
-+
-+	if (!is_min_wait || ep_events_available(ewq->ep)) {
-+		if (!is_min_wait)
-+			ewq->timed_out = true;
-+		ewq->min_wait_ts &= ~(u64) 1;
-+		wake_up_process(task);
-+		return HRTIMER_NORESTART;
-+	}
- 
--	ewq->timed_out = true;
--	wake_up_process(task);
--	return HRTIMER_NORESTART;
-+	ewq->min_wait_ts &= ~(u64) 1;
-+	hrtimer_set_expires_range_ns(&ewq->timer, ewq->timeout_ts, 0);
-+	return HRTIMER_RESTART;
- }
- 
- static void ep_schedule(struct eventpoll *ep, struct epoll_wq *ewq, ktime_t *to,
-@@ -1831,12 +1879,14 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
- 
- 	lockdep_assert_irqs_enabled();
- 
-+	ewq.ep = ep;
- 	ewq.timed_out = false;
-+	ewq.maxevents = maxevents;
-+	ewq.wakeups = 0;
- 
- 	if (timeout && (timeout->tv_sec | timeout->tv_nsec)) {
- 		slack = select_estimate_accuracy(timeout);
--		to = &ewq.timeout_ts;
--		*to = timespec64_to_ktime(*timeout);
-+		ewq.timeout_ts = timespec64_to_ktime(*timeout);
- 	} else if (timeout) {
- 		/*
- 		 * Avoid the unnecessary trip to the wait queue loop, if the
-@@ -1845,6 +1895,21 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
- 		ewq.timed_out = 1;
- 	}
- 
-+	/*
-+	 * If min_wait is set for this epoll instance, note the min_wait
-+	 * time. Ensure the lowest bit is set in ewq.min_wait_ts, that's
-+	 * the state bit for whether or not min_wait is enabled.
-+	 */
-+	if (ep->min_wait_ts) {
-+		ewq.min_wait_ts = ktime_add_us(ktime_get_ns(),
-+						ep->min_wait_ts);
-+		ewq.min_wait_ts |= (u64) 1;
-+		to = &ewq.min_wait_ts;
-+	} else {
-+		ewq.min_wait_ts = 0;
-+		to = &ewq.timeout_ts;
-+	}
-+
- 	/*
- 	 * This call is racy: We may or may not see events that are being added
- 	 * to the ready list under the lock (e.g., in IRQ callbacks). For cases
-@@ -1913,7 +1978,7 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
- 		 * important.
- 		 */
- 		eavail = ep_events_available(ep);
--		if (!eavail) {
-+		if (!eavail || ewq.min_wait_ts & 1) {
- 			__add_wait_queue_exclusive(&ep->wq, &ewq.wait);
- 			write_unlock_irq(&ep->lock);
- 			ep_schedule(ep, &ewq, to, slack);
-@@ -2111,6 +2176,31 @@ int do_epoll_ctl(int epfd, int op, int fd, struct epoll_event *epds,
- 	if (!f.file)
- 		goto error_return;
- 
-+	/*
-+	 * We have to check that the file structure underneath the file
-+	 * descriptor the user passed to us _is_ an eventpoll file.
-+	 */
-+	error = -EINVAL;
-+	if (!is_file_epoll(f.file))
-+		goto error_fput;
-+
-+	/*
-+	 * At this point it is safe to assume that the "private_data" contains
-+	 * our own data structure.
-+	 */
-+	ep = f.file->private_data;
-+
-+	/*
-+	 * Handle EPOLL_CTL_MIN_WAIT upfront as we don't need to care about
-+	 * the fd being passed in.
-+	 */
-+	if (op == EPOLL_CTL_MIN_WAIT) {
-+		/* return old value */
-+		error = ep->min_wait_ts;
-+		ep->min_wait_ts = epds->data;
-+		goto error_fput;
-+	}
-+
- 	/* Get the "struct file *" for the target file */
- 	tf = fdget(fd);
- 	if (!tf.file)
-@@ -2126,12 +2216,10 @@ int do_epoll_ctl(int epfd, int op, int fd, struct epoll_event *epds,
- 		ep_take_care_of_epollwakeup(epds);
- 
- 	/*
--	 * We have to check that the file structure underneath the file descriptor
--	 * the user passed to us _is_ an eventpoll file. And also we do not permit
--	 * adding an epoll file descriptor inside itself.
-+	 * We do not permit adding an epoll file descriptor inside itself.
- 	 */
- 	error = -EINVAL;
--	if (f.file == tf.file || !is_file_epoll(f.file))
-+	if (f.file == tf.file)
- 		goto error_tgt_fput;
- 
- 	/*
-@@ -2147,12 +2235,6 @@ int do_epoll_ctl(int epfd, int op, int fd, struct epoll_event *epds,
- 			goto error_tgt_fput;
- 	}
- 
--	/*
--	 * At this point it is safe to assume that the "private_data" contains
--	 * our own data structure.
--	 */
--	ep = f.file->private_data;
--
- 	/*
- 	 * When we insert an epoll file descriptor inside another epoll file
- 	 * descriptor, there is the chance of creating closed loops, which are
-@@ -2251,7 +2333,7 @@ SYSCALL_DEFINE4(epoll_ctl, int, epfd, int, op, int, fd,
- {
- 	struct epoll_event epds;
- 
--	if (ep_op_has_event(op) &&
-+	if ((ep_op_has_event(op) || op == EPOLL_CTL_MIN_WAIT) &&
- 	    copy_from_user(&epds, event, sizeof(struct epoll_event)))
- 		return -EFAULT;
- 
-diff --git a/include/linux/eventpoll.h b/include/linux/eventpoll.h
-index 3337745d81bd..cbef635cb7e4 100644
---- a/include/linux/eventpoll.h
-+++ b/include/linux/eventpoll.h
-@@ -59,7 +59,7 @@ int do_epoll_ctl(int epfd, int op, int fd, struct epoll_event *epds,
- /* Tells if the epoll_ctl(2) operation needs an event copy from userspace */
- static inline int ep_op_has_event(int op)
- {
--	return op != EPOLL_CTL_DEL;
-+	return op != EPOLL_CTL_DEL && op != EPOLL_CTL_MIN_WAIT;
- }
- 
- #else
-diff --git a/include/uapi/linux/eventpoll.h b/include/uapi/linux/eventpoll.h
-index 8a3432d0f0dc..81ecb1ca36e0 100644
---- a/include/uapi/linux/eventpoll.h
-+++ b/include/uapi/linux/eventpoll.h
-@@ -26,6 +26,7 @@
- #define EPOLL_CTL_ADD 1
- #define EPOLL_CTL_DEL 2
- #define EPOLL_CTL_MOD 3
-+#define EPOLL_CTL_MIN_WAIT	4
- 
- /* Epoll event masks */
- #define EPOLLIN		(__force __poll_t)0x00000001
+ 		aon-fabric@c600000 {
 -- 
-2.35.1
+2.17.1
 
