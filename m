@@ -2,304 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8935F7819
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 14:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78FE55F781E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 14:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiJGMlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 08:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
+        id S229674AbiJGMnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 08:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiJGMlI (ORCPT
+        with ESMTP id S229586AbiJGMnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 08:41:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E53DED1C;
-        Fri,  7 Oct 2022 05:41:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4014E61CD5;
-        Fri,  7 Oct 2022 12:41:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18725C433D6;
-        Fri,  7 Oct 2022 12:40:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665146460;
-        bh=k3p4RHAw+QEwWScHrKYPvoyEhjLHmOZX8Y1a0KB/8QI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=frxn9l6htA+lZY3KAZ0sobWHjhr4tl3aodtOyUP3fc58WJqXX4XErG1KB+AvZ+/5X
-         SYQNCcQrV3MA6Kzr+Id8ImeC0pyCjdENlqx4egGWvheEWO/OYbTttdTzmth3DMjPzU
-         0tHhOc5290vJEpN0c6CrOYpgGOMEcJk1qH5RGJUlZlWz6piCE8wzJMn/9ykoXDk7ie
-         g908tMeDARLvempxyKIOWgmEQ9CoOQlKYje+B+sWq4viTriwFhEgj+EjFITe8OBh2j
-         bgOsyc0/e0k0I6YEg4OS5Ux5iFwel0WdoLHUSXp/jzMqQ3v6sG35fjSbCCVlzFGSMv
-         uxxylEN+A2nIg==
-Date:   Fri, 7 Oct 2022 18:10:56 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dma <dmaengine@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL]: dmaengine updates for v6.1-rc1
-Message-ID: <Y0AeWM7UabE2ZK34@matsya>
+        Fri, 7 Oct 2022 08:43:09 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA6ACF183;
+        Fri,  7 Oct 2022 05:43:08 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id a3so7189173wrt.0;
+        Fri, 07 Oct 2022 05:43:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bmg35OUPOqpItFbb0fVCmp2BRL8Uzo+x+AWBO3UBbuk=;
+        b=Vv+yV+YDonhhn4XHYSoPlHX8XAOKIfdmRGmwlFsBM6poITqF4hYx21ryn22p/Iv5OG
+         zpG6X3TmnRKSuS4etgmZjC0xG896FVHDP06ANhxn2wNwjFEBFrFuhyLqPlTXmK9Hn1n4
+         n32pxmud7iTfs3jREucJuRoGY9DifpfvozVNoDJgOl2tjE2xeBmzzwgKlnfAtdnouGzv
+         HKyy1CVz7Fi986Ohih98mr80Epyk9G43BNgQltr8IMMX35jVW3tBQU6x5gN9AR9f9UKQ
+         jqO9Q9ewrT7pfP5lbbakmLjldvKzPaViX2fosCvWyr/4Xcu1vRtxolbEtuPsvmCqgAUm
+         6jRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bmg35OUPOqpItFbb0fVCmp2BRL8Uzo+x+AWBO3UBbuk=;
+        b=vqEGVVWy6V2WIC+1TE7+2PjH0C69GT5E4gOXTr6/ukws9GINjctmSFO4fWaBxokUsS
+         iofJlGrL5qZbaP6spFGzT6kb5T63WDrOuW3MKejTsScvM+EiMuqVZdcS1TrlGHHl7XXh
+         lUoMluKankSDBkA2cPyTk1ZV7oZThO9AVRJWxPl0Avnqu9eVFi2EX2o7TcvjMCcd0VMt
+         GJjkavs2igSESmz+fS1MfZbgP8h4GQkl7ihfkky+NP4EsZZN8Ebze83tWGQx8ZYCY50I
+         sVMRL0bvL+TzkTaRGDYyZRWMS5zvjZ/pcgYw02JpZb848Tg3/nN+4R8TA9FWbzxgix4f
+         7jLA==
+X-Gm-Message-State: ACrzQf3KgwTahqLvJtsxnrYLB+/t2MhulJJzhqmW+jR3r7Az3dLnTmRH
+        Qfm04J2O8IWd2fUQpTyczuk=
+X-Google-Smtp-Source: AMsMyM7e/TZxd225fRtkWwaGrz4F/mzY0myKMuzE5tXZhg/gFu8rcafrqcK06dugaJE4/4zMtBJdkg==
+X-Received: by 2002:adf:e6cc:0:b0:22c:e0b9:ef60 with SMTP id y12-20020adfe6cc000000b0022ce0b9ef60mr3264023wrm.404.1665146586890;
+        Fri, 07 Oct 2022 05:43:06 -0700 (PDT)
+Received: from [192.168.42.102] (mo-217-129-7-245.netvisao.pt. [217.129.7.245])
+        by smtp.gmail.com with ESMTPSA id j38-20020a05600c1c2600b003b3365b38f9sm1320809wms.10.2022.10.07.05.43.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Oct 2022 05:43:06 -0700 (PDT)
+Message-ID: <7da4c888-6637-5be9-3e9a-26e0c5f19fb8@gmail.com>
+Date:   Fri, 7 Oct 2022 13:43:05 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="YwH7OzFFF1YwJZMw"
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: [PATCH 4/4] fs/ntfs3: rename hidedotfiles mount option to
+ hide_dot_files
+Content-Language: en-US
+From:   Daniel Pinto <danielpinto52@gmail.com>
+To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        ntfs3@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <536f13a9-0890-7e69-65e9-5fe1a30e04ef@gmail.com>
+In-Reply-To: <536f13a9-0890-7e69-65e9-5fe1a30e04ef@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The hidedotfiles mount option provides the same functionality as
+the NTFS-3G hide_dot_files mount option. As such, it should be
+named the same for compatibility with NTGS-3G.
 
---YwH7OzFFF1YwJZMw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Rename the hidedotfiles to hide_dot_files for compatibility with
+NTFS-3G.
 
-Hello Linus,
+Signed-off-by: Daniel Pinto <danielpinto52@gmail.com>
+---
+ fs/ntfs3/frecord.c | 2 +-
+ fs/ntfs3/inode.c   | 2 +-
+ fs/ntfs3/super.c   | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-Please pull to receive dmaengine updates for v6.1-rc1. Bunch of new
-device/driver support and updates to drivers this time around.
-
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
-
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git tags/dm=
-aengine-6.1-rc1
-
-for you to fetch changes up to b957df98469240d459bcfae6904b36d6ecea9bee:
-
-  dmaengine: ioat: remove unused declarations in dma.h (2022-09-29 22:46:09=
- +0530)
-
-----------------------------------------------------------------
-dmaengine updates for v6.1-rc1
-
-New Support:
- - AngeloGioacchino Del Regno added support for MT6795 SoC dma controller
- - Christian Marangi updated qcom-adm controller binding to yaml
- - Geert Uytterhoeven added yaml binding for Renesas r8a779g0 dma controller
- - Luca Weiss added support for Qualcomm SM6350 GPI dma controller
-
-Updates:
- - Amelie Delaunay provided STM32 DMA-MDMA chaining support
- - Andy Shevchenko updated hsu driver to use managed resources
- - Dave Jiang & Jerry Snitselaar provided usual round of idxd driver updates
- - Janne Grunau & Martin Povi=C5=A1er updated apple dma driver for iommu an=
-d pd
-   properties and removed use of devres for irqs
- - Swati Agarwal added device_synchronize support for Xilinx zynqmp driver
-
-----------------------------------------------------------------
-Amelie Delaunay (6):
-      dmaengine: stm32-dma: introduce 3 helpers to address channel flags
-      dmaengine: stm32-dma: use bitfield helpers
-      docs: arm: stm32: introduce STM32 DMA-MDMA chaining feature
-      dmaengine: stm32-dmamux: set dmamux channel id in dma features bitfie=
-ld
-      dmaengine: stm32-dma: add support to trigger STM32 MDMA
-      dmaengine: stm32-mdma: add support to be triggered by STM32 DMA
-
-Andy Shevchenko (4):
-      dmaengine: hsu: Finish conversion to managed resources
-      dmaengine: hsu: using for_each_set_bit to simplify the code
-      dmaengine: hsu: Use GENMASK() consistently
-      dmaengine: hsu: Include headers we are direct user of
-
-AngeloGioacchino Del Regno (1):
-      dt-bindings: dma: mediatek,uart-dma: Add binding for MT6795 SoC
-
-Bhupesh Sharma (1):
-      dt-bindings: dma: Make minor fixes to qcom,bam-dma binding doc
-
-Christian Marangi (4):
-      dmaengine: qcom-adm: fix wrong sizeof config in slave_config
-      dmaengine: qcom-adm: fix wrong calling convention for prep_slave_sg
-      dt-bindings: dma: rework qcom,adm Documentation to yaml schema
-      dt-bindings: dma: add additional pbus reset to qcom,adm
-
-Christophe JAILLET (1):
-      dmaengine: stm32-dmamux: Simplify code and save a few bytes of memory
-
-Dario Binacchi (1):
-      dmaengine: mxs: use platform_driver_register
-
-Dave Jiang (6):
-      dmaengine: ioat: stop mod_timer from resurrecting deleted timer in __=
-cleanup()
-      dmaengine: idxd: convert ats_dis to a wq flag
-      dmanegine: idxd: reformat opcap output to match bitmap_parse() input
-      dmaengine: idxd: add WQ operation cap restriction support
-      dmaengine: idxd: add configuration for concurrent work descriptor pro=
-cessing
-      dmaengine: idxd: add configuration for concurrent batch descriptor pr=
-ocessing
-
-Deming Wang (1):
-      Documentation: devicetree: dma: update the comments
-
-Gaosheng Cui (1):
-      dmaengine: ioat: remove unused declarations in dma.h
-
-Geert Uytterhoeven (1):
-      dt-bindings: renesas,rcar-dmac: Add r8a779g0 support
-
-Gustavo A. R. Silva (1):
-      dmaengine: sh: rcar-dmac: Replace zero-length arrays with DECLARE_FLE=
-X_ARRAY() helper
-
-Harini Katakam (1):
-      dmaengine: pl330: Remove unused flags
-
-Janne Grunau (1):
-      dt-bindings: dma: apple,admac: Add iommus and power-domains properties
-
-Jason Wang (1):
-      dmaengine: stm32-dmamux: Fix comment typo
-
-Jean Delvare (1):
-      dmaengine: dw-axi-dmac: Drop obsolete dependency on COMPILE_TEST
-
-Jerry Snitselaar (3):
-      dmaengine: idxd: avoid deadlock in process_misc_interrupts()
-      dmaengine: idxd: Set wq state to disabled in idxd_wq_disable_cleanup()
-      dmaengine: idxd: track enabled workqueues in bitmap
-
-Jiapeng Chong (1):
-      dmaengine: ti: edma: Remove some unused functions
-
-Jie Hai (7):
-      dmaengine: hisilicon: Disable channels when unregister hisi_dma
-      dmaengine: hisilicon: Fix CQ head update
-      dmaengine: hisilicon: Add multi-thread support for a DMA channel
-      dmaengine: hisilicon: Use macros instead of magic number
-      dmaengine: hisilicon: Adapt DMA driver to HiSilicon IP09
-      dmaengine: hisilicon: Dump regs to debugfs
-      MAINTAINERS: Add myself as maintainer for hisi_dma
-
-Luca Weiss (2):
-      dt-bindings: dmaengine: qcom: gpi: add compatible for SM6350
-      dmaengine: qcom: gpi: Add SM6350 support
-
-Manivannan Sadhasivam (1):
-      dmaengine: dw-edma: Remove runtime PM support
-
-Martin Povi=C5=A1er (2):
-      dmaengine: apple-admac: Do not use devres for IRQs
-      dmaengine: apple-admac: Trigger shared reset
-
-Matt Ranostay (2):
-      dmaengine: ti: k3-psil: add additional TX threads for j7200
-      dmaengine: ti: k3-psil: add additional TX threads for j721e
-
-Rob Herring (1):
-      dt-bindings: dma: arm,pl330: Add missing 'iommus' property
-
-Shaomin Deng (2):
-      dmaengine: virt-dma: Fix double word in comments
-      dmaengine: pl08x: Fix double word
-
-Swati Agarwal (1):
-      dmaengine: zynqmp_dma: Add device_synchronize support
-
-Tudor Ambarus (1):
-      dmaengine: at_xdmac: Replace two if statements with only one with two=
- conditions
-
-Tuo Cao (1):
-      dmaengine: qcom: gpi: move read_lock_bh to read_lock in tasklet
-
-Vaishnav Achath (2):
-      dmaengine: ti: k3-udma: Reset UDMA_CHAN_RT byte counters to prevent o=
-verflow
-      dmaengine: ti: k3-udma: Respond TX done if DMA_PREP_INTERRUPT is not =
-requested
-
-Yuan Can (1):
-      dmaengine: idxd: Remove unused struct idxd_fault
-
-ye xingchen (1):
-      dmaengine: sf-pdma:Remove the print function dev_err()
-
- Documentation/ABI/stable/sysfs-driver-dma-idxd     |  35 ++
- Documentation/arm/index.rst                        |   1 +
- .../arm/stm32/stm32-dma-mdma-chaining.rst          | 415 +++++++++++++
- .../devicetree/bindings/dma/apple,admac.yaml       |   7 +
- .../devicetree/bindings/dma/arm,pl330.yaml         |   6 +
- .../devicetree/bindings/dma/mediatek,uart-dma.yaml |   1 +
- .../devicetree/bindings/dma/qcom,adm.yaml          |  99 ++++
- .../devicetree/bindings/dma/qcom,bam-dma.yaml      |   8 +-
- .../devicetree/bindings/dma/qcom,gpi.yaml          |   1 +
- Documentation/devicetree/bindings/dma/qcom_adm.txt |  61 --
- .../devicetree/bindings/dma/renesas,rcar-dmac.yaml |   1 +
- .../devicetree/bindings/dma/ti-dma-crossbar.txt    |   2 +-
- MAINTAINERS                                        |   1 +
- drivers/dma/Kconfig                                |   2 +-
- drivers/dma/amba-pl08x.c                           |   2 +-
- drivers/dma/apple-admac.c                          |  45 +-
- drivers/dma/at_xdmac.c                             |   5 +-
- drivers/dma/dw-edma/dw-edma-core.c                 |  12 -
- drivers/dma/hisi_dma.c                             | 650 +++++++++++++++++=
-+---
- drivers/dma/hsu/hsu.c                              |   8 +
- drivers/dma/hsu/hsu.h                              |  12 +-
- drivers/dma/hsu/pci.c                              |  47 +-
- drivers/dma/idxd/device.c                          |  38 +-
- drivers/dma/idxd/idxd.h                            |  10 +-
- drivers/dma/idxd/init.c                            |  36 ++
- drivers/dma/idxd/irq.c                             |  13 +-
- drivers/dma/idxd/registers.h                       |  35 +-
- drivers/dma/idxd/sysfs.c                           | 187 +++++-
- drivers/dma/ioat/dma.c                             |   6 +-
- drivers/dma/ioat/dma.h                             |   2 -
- drivers/dma/mxs-dma.c                              |  11 +-
- drivers/dma/pl330.c                                |   4 -
- drivers/dma/qcom/gpi.c                             |   7 +-
- drivers/dma/qcom/qcom_adm.c                        |  22 +-
- drivers/dma/s3c24xx-dma.c                          |   2 +-
- drivers/dma/sf-pdma/sf-pdma.c                      |   8 +-
- drivers/dma/sh/rcar-dmac.c                         |   4 +-
- drivers/dma/stm32-dma.c                            | 136 +++--
- drivers/dma/stm32-dmamux.c                         |  12 +-
- drivers/dma/stm32-mdma.c                           |  70 ++-
- drivers/dma/ti/edma.c                              |  40 --
- drivers/dma/ti/k3-psil-j7200.c                     |  67 +++
- drivers/dma/ti/k3-psil-j721e.c                     |  79 +++
- drivers/dma/ti/k3-udma.c                           |  37 +-
- drivers/dma/xilinx/zynqmp_dma.c                    |  12 +
- include/linux/dma/hsu.h                            |   6 +-
- include/linux/platform_data/dma-hsu.h              |   2 +-
- 47 files changed, 1854 insertions(+), 413 deletions(-)
- create mode 100644 Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
- create mode 100644 Documentation/devicetree/bindings/dma/qcom,adm.yaml
- delete mode 100644 Documentation/devicetree/bindings/dma/qcom_adm.txt
-
---=20
-~Vinod
-
---YwH7OzFFF1YwJZMw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEE+vs47OPLdNbVcHzyfBQHDyUjg0cFAmNAHlgACgkQfBQHDyUj
-g0cRLg//RDmZ4PcCxFoaBcFRhkLl5otjpgR5WMN9WgMDIt+8rZOS1X2wkpZICEle
-c1O9fxgJyDLkrOf4CBWuCoKZGO2iSV7+YvNKNHk6jkYsPzFEZB+HUrhIXrtYXAOQ
-V3qqKP+rwCrvbfmksSa01hq40GQZFrJioZ7YGhm376G8+2TdZvBuBUNuTcu192NM
-0DVMfziY77lXgUUGqMrNlMq4C+wqry/iLidpZ+M/wH5ebR+lbZRAG5iqvfc9mDkL
-KU2WJLRWYYYC5kJ5lZ8gOPYiAhd32JcNb432FWcS01nMlHeqvuj5zWmqV8/1mJVd
-76rOyWLAv9e7hNr7dSMrF7ATN4c/D50zafJLaJV1bi38wBNpeVaFajRDZYUbiEUP
-kTD73K65/IUqsAirbLxE5Hv5liDyS7HkS/nNabow6/bl1ksiVlGQToN8+sD9G4Qx
-0vTN2vVLcsQxvtQKvo5D8uCEWfuB4L3JQGy7lGG3Z/p6uxn6c9TY7sNmMJzBZu1c
-OMPPuU9B5/QNxBmrOaCVrTe8hY9nwVqQyhamOEiLxEeepX+Y3wabj9cUayErXyuz
-dKdla4AGV7kw9hS+X4ryHsH+0Szqt6j7SY8bmUEgoy20KApjYTO5sr0FdOOdEKzj
-YNcEesbarOCXIV42SEyXmHEiKVhLVedm5TB0eaDI5OC4Ho/pUso=
-=vED+
------END PGP SIGNATURE-----
-
---YwH7OzFFF1YwJZMw--
+diff --git a/fs/ntfs3/frecord.c b/fs/ntfs3/frecord.c
+index 41a20d71562a..552dbc5b80b1 100644
+--- a/fs/ntfs3/frecord.c
++++ b/fs/ntfs3/frecord.c
+@@ -3018,7 +3018,7 @@ int ni_add_name(struct ntfs_inode *dir_ni, struct ntfs_inode *ni,
+ 	struct ATTR_FILE_NAME *de_name = (struct ATTR_FILE_NAME *)(de + 1);
+ 	u16 de_key_size = le16_to_cpu(de->key_size);
+ 
+-	/* If option "hidedotfiles" then set hidden attribute for dot files. */
++	/* If option "hide_dot_files" then set hidden attribute for dot files. */
+ 	if (ni->mi.sbi->options->hide_dot_files) {
+ 		if (de_name->name_len > 0 &&
+ 		    le16_to_cpu(de_name->name[0]) == '.')
+diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
+index e9cf00d14733..7ce2bb7646db 100644
+--- a/fs/ntfs3/inode.c
++++ b/fs/ntfs3/inode.c
+@@ -1272,7 +1272,7 @@ struct inode *ntfs_create_inode(struct user_namespace *mnt_userns,
+ 		fa = FILE_ATTRIBUTE_ARCHIVE;
+ 	}
+ 
+-	/* If option "hidedotfiles" then set hidden attribute for dot files. */
++	/* If option "hide_dot_files" then set hidden attribute for dot files. */
+ 	if (sbi->options->hide_dot_files && name->name[0] == '.')
+ 		fa |= FILE_ATTRIBUTE_HIDDEN;
+ 
+diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
+index d796541e2a67..af67756998df 100644
+--- a/fs/ntfs3/super.c
++++ b/fs/ntfs3/super.c
+@@ -268,7 +268,7 @@ static const struct fs_parameter_spec ntfs_fs_parameters[] = {
+ 	fsparam_flag_no("force",		Opt_force),
+ 	fsparam_flag_no("sparse",		Opt_sparse),
+ 	fsparam_flag_no("hidden",		Opt_nohidden),
+-	fsparam_flag_no("hidedotfiles",		Opt_hide_dot_files),
++	fsparam_flag_no("hide_dot_files",	Opt_hide_dot_files),
+ 	fsparam_flag_no("acl",			Opt_acl),
+ 	fsparam_flag_no("showmeta",		Opt_showmeta),
+ 	fsparam_flag_no("prealloc",		Opt_prealloc),
+@@ -562,7 +562,7 @@ static int ntfs_show_options(struct seq_file *m, struct dentry *root)
+ 	if (opts->nohidden)
+ 		seq_puts(m, ",nohidden");
+ 	if (opts->hide_dot_files)
+-		seq_puts(m, ",hidedotfiles");
++		seq_puts(m, ",hide_dot_files");
+ 	if (opts->force)
+ 		seq_puts(m, ",force");
+ 	if (opts->noacsrules)
