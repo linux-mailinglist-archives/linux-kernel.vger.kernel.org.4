@@ -2,120 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41DA75F7E20
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CF55F7E26
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbiJGTic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 15:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33462 "EHLO
+        id S230024AbiJGTiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 15:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiJGTiP (ORCPT
+        with ESMTP id S230185AbiJGTi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 15:38:15 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22DF103DB6
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 12:38:10 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id c24so5438253plo.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 12:38:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3rrcXpuZKRM+KusxikaUH8D4u3EuQEaFpgWMrgs+cjc=;
-        b=HDD9/5jA8tDMlJhLAIdy30TF+iTMHSUbr/TR1j6RQXFrRbmYCKpbMdd+pjqNgxiS1E
-         gPYrCqdLW+wADluCZ+5p5qXqixX/JOR88d16oahiNLWuv/8GkDLeg0XNzWpcYnT42++H
-         AXkDK/3JkKtjntneEuzE4+aSTe/TOuRs9377L3hdGrmGaTpJuqB1Uns3zm//XphsSv46
-         3AVcEFF4sufBMecyEYrodtY1X0g9Ok7hkINjfyc5KXjUoKjS+s4ikYH10yc9Gnl/b9yz
-         GBLcMNjxfSQAN8Xysl7YYu0t/3QXYDRWMqlS+MLnrEMtD3PwIA5lv8yGUwXeqyLZiIDR
-         QO3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3rrcXpuZKRM+KusxikaUH8D4u3EuQEaFpgWMrgs+cjc=;
-        b=LJPagaf6h99ygVrZHXeJZAswB3rbo+BYDxTinhejpbUh8UneiIwxpv0BRmo/T6mRx0
-         7SGZ0bZWzakg8lWdfXC4xn6LJvIylghB7ZwpRAoSVh2wnUSfc8dHOnL9aJgMeKuzyOQn
-         cCzTLzOv/a1MKToMUFEvC/Gbv3rdPZH3yPCBQnJTbBmFm3g+UwXHGaL1LinqR2n6K9Lm
-         7byWehe+BlKqOWunhHE2EFlJZP8rosXnt26ofSsoCBKixNOeHV5bgJVdbdj2iG3vVV/V
-         /PZz9Y+YXPhoSHHe/MgDGWx/A+slpLiJ7n3pWfbEwpj3/QcdlO2QIDauOVMQiaVgY2rs
-         /sTg==
-X-Gm-Message-State: ACrzQf3KItRv9mYsrDwphPQaCicuBDjRgYOU5+dNeioH9g2BAywwFo5P
-        W74bD7g5O+6/oou7jHZCXXdJgG/qcROwsg==
-X-Google-Smtp-Source: AMsMyM75cyiDVTH3kQfgXNUDRS9hdpc7CkqxGMy547GhYQsQAaMw+aObwLFCGhqc0sEBfjBMrcDAhw==
-X-Received: by 2002:a17:902:aa46:b0:178:9ee5:c7f1 with SMTP id c6-20020a170902aa4600b001789ee5c7f1mr6730566plr.69.1665171489623;
-        Fri, 07 Oct 2022 12:38:09 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id u4-20020a170902e80400b0018099c987e6sm348648plg.285.2022.10.07.12.38.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 12:38:09 -0700 (PDT)
-Date:   Fri, 7 Oct 2022 19:38:05 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Subject: Re: [PATCH v3 1/3] KVM: x86/pmu: Stop adding speculative Intel GP
- PMCs that don't exist yet
-Message-ID: <Y0CAHch5UR2Lp0tU@google.com>
-References: <20220919091008.60695-1-likexu@tencent.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919091008.60695-1-likexu@tencent.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 7 Oct 2022 15:38:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF06103D90;
+        Fri,  7 Oct 2022 12:38:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AB9561CED;
+        Fri,  7 Oct 2022 19:38:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7AED0C433D6;
+        Fri,  7 Oct 2022 19:38:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665171502;
+        bh=QW/PiwE0BOz8BFPT7ztpoOIgr+n+7TanxvPnfU1uilI=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=eKVO8c9Yz8HHMcOrXVhXtLWkOwS6rQyjufbUnX58xpQCUJF48bubxlLlJTC1Q1EFL
+         LiRyg9YgjHPurVRBIEkyuh1Sc86Gc+VKZT1+NExGGAmB2kf1EsjQ0noJpn54YeFjHA
+         m3TE5JTzIm87fTmyUJ6SJAbQE8czwjuFhkwHRMeFN0X/yWp3c3ZvAzhsAblPZR7DpV
+         s3b2CCEDLj8b5FfuCuvuy+S/3ZHV6CMYYgCsaQ9ZLU8pKnwo4mof2ic+iQVskuEFmM
+         UfSCJzFVRfZq6XOAOJ2VwIkhZsRHs00myDoAAW1Ffvp1jER9eazML6WLYnDebB3xh1
+         p9UxgciOlgA4A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6A567E2A05C;
+        Fri,  7 Oct 2022 19:38:22 +0000 (UTC)
+Subject: Re: [GIT PULL v2] first round of SCSI updates for the 6.0+ merge window
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <86a4f9d512e094c98a984553fb914580e774d4ef.camel@HansenPartnership.com>
+References: <86a4f9d512e094c98a984553fb914580e774d4ef.camel@HansenPartnership.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <86a4f9d512e094c98a984553fb914580e774d4ef.camel@HansenPartnership.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-misc
+X-PR-Tracked-Commit-Id: 57569c37f0add1b6489e1a1563c71519daf732cf
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 62e6e5940c0c09433efa52d0fa9a11623a4704b2
+Message-Id: <166517150242.21522.7111319851190885685.pr-tracker-bot@kernel.org>
+Date:   Fri, 07 Oct 2022 19:38:22 +0000
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
-> 
-> The Intel April 2022 SDM - Table 2-2. IA-32 Architectural MSRs adds
-> a new architectural IA32_OVERCLOCKING_STATUS msr (0x195), plus the
-> presence of IA32_CORE_CAPABILITIES (0xCF), the theoretical effective
-> maximum value of the Intel GP PMCs is 14 (0xCF - 0xC1) instead of 18.
-> 
-> But the conclusion of this speculation "14" is very fragile and can
-> easily be overturned once Intel declares another meaningful arch msr
+The pull request you sent on Fri, 07 Oct 2022 15:24:09 -0400:
 
-s/msr/MSR for consistency
+> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-misc
 
-> in the above reserved range, and even worse, just conjecture, Intel
-> probably put PMCs 8-15 in a completely different range of MSR indices.
-> 
-> A conservative proposal would be to stop at the maximum number of Intel
-> GP PMCs supported today. Also subsequent changes would limit both AMD
-> and Intel on the number of GP counter supported by KVM.
-> 
-> There are some boxes like Intel P4 (non Architectural PMU) may indeed
-> have 18 counters , but those counters are in a completely different msr
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/62e6e5940c0c09433efa52d0fa9a11623a4704b2
 
-unnecessary whitespace before the comma.  And s/msr/MSR again.
+Thank you!
 
-> address range and is not supported by KVM.
-> 
-> Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
-> Fixes: cf05a67b68b8 ("KVM: x86: omit "impossible" pmu MSRs from MSR list")
-
-Does this need Cc: stable@vger.kernel.org?  Or is this benign enough that we don't
-care?
-
-No need for a v4, the above nits can be handled when applying.
-
-> Suggested-by: Jim Mattson <jmattson@google.com>
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> Reviewed-by: Jim Mattson <jmattson@google.com>
-> ---
-
-In the future, please provide a cover letter even for trivial series, it helps
-(me at least) mentally organize patches.
-
-Thanks!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
