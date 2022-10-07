@@ -2,103 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CAD95F760A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5955F7615
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbiJGJT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 05:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43246 "EHLO
+        id S229634AbiJGJWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 05:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJGJTZ (ORCPT
+        with ESMTP id S229481AbiJGJWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 05:19:25 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7236C972;
-        Fri,  7 Oct 2022 02:19:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665134364; x=1696670364;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hoHyGOlZw7mT9PchNcyohGTzSrqH9AYZczrdE0VAU4M=;
-  b=kyCvqBubOBZezdH4TXrbtP66CK3UlyUQMU9C7cPYB3JOtRsdCM8vWUvb
-   oILIO7/RWD0qYRN4H792aarVY8yq7XVBGxNmdQgCUOE8PIYvkXcJ0IcXO
-   XTafkxrVhl4nrw6KrxEy0d4gMDqqyPGd5Zx9JmtDuojcliTB/QhLKpNPc
-   FJ8t4TjaxfgAmZ0o0L1CGGzcWubBo9s96B7go8eLTiBUcFcxoUsiUdliQ
-   Dxzkolt3zaGPSq2rKE4r9h6waaXg831bN6KrnmjI/21yqwdL6v8zTBc9B
-   A7nNHU6DjvqFwAbgQmlLTAI4ldbsPVqOazJWaZeGhOI9jpBFmlaCSdIHi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="303672950"
-X-IronPort-AV: E=Sophos;i="5.95,166,1661842800"; 
-   d="scan'208";a="303672950"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 02:19:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="620197894"
-X-IronPort-AV: E=Sophos;i="5.95,166,1661842800"; 
-   d="scan'208";a="620197894"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 07 Oct 2022 02:19:20 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ogjVm-003Xxs-1k;
-        Fri, 07 Oct 2022 12:19:18 +0300
-Date:   Fri, 7 Oct 2022 12:19:18 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        jic23@kernel.org, lars@metafoo.de, chiaen_wu@richtek.com,
-        alice_chen@richtek.com, cy_huang@richtek.com,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, szunichen@gmail.com
-Subject: Re: [PATCH v13 5/5] leds: flash: mt6370: Add MediaTek MT6370
- flashlight support
-Message-ID: <Yz/vFml0mwaF0+f9@smile.fi.intel.com>
-References: <cover.1664991040.git.chiaen_wu@richtek.com>
- <1bcd19dbd09650ddac7b96b0fe2932698be2731e.1664991040.git.chiaen_wu@richtek.com>
- <Yz11bkxz9lK4wOHE@smile.fi.intel.com>
- <CABtFH5J2r=Qq1kNb=yp6Hf7=oKJH9qeiwsO+4ejy5m9N+ZODXg@mail.gmail.com>
+        Fri, 7 Oct 2022 05:22:17 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB59CA8BB
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 02:22:15 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1ogjYY-00063C-EQ; Fri, 07 Oct 2022 11:22:10 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jisheng Zhang <jszhang@kernel.org>
+Subject: Re: [PATCH 3/8] riscv: hwcap: make ISA extension ids can be used in asm
+Date:   Fri, 07 Oct 2022 11:22:09 +0200
+Message-ID: <13539612.RDIVbhacDa@diego>
+In-Reply-To: <20221006070818.3616-4-jszhang@kernel.org>
+References: <20221006070818.3616-1-jszhang@kernel.org> <20221006070818.3616-4-jszhang@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABtFH5J2r=Qq1kNb=yp6Hf7=oKJH9qeiwsO+4ejy5m9N+ZODXg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 09:28:17AM +0800, ChiaEn Wu wrote:
-> On Wed, Oct 5, 2022 at 8:15 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-
-...
-
-> > > +config LEDS_MT6370_FLASH
-> > > +     tristate "Flash LED Support for MediaTek MT6370 PMIC"
-> >
-> > > +     depends on LEDS_CLASS && OF
-> >
-> > Why do you have OF dependency?
-> >
+Am Donnerstag, 6. Oktober 2022, 09:08:13 CEST schrieb Jisheng Zhang:
+> We will make use of ISA extension in asm files, so make the multi-letter
+> RISC-V ISA extension IDs macros rather than enums and move them and
+> those base ISA extension IDs to suitable place.
 > 
-> Hi Andy,
-> The original idea is to use the "fwnode_property_*" related function.
-> But this side may only consider just "Build Pass" (?)
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  arch/riscv/include/asm/hwcap.h | 45 +++++++++++++++++-----------------
+>  1 file changed, 23 insertions(+), 22 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> index 6f59ec64175e..6cf445653911 100644
+> --- a/arch/riscv/include/asm/hwcap.h
+> +++ b/arch/riscv/include/asm/hwcap.h
+> @@ -12,20 +12,6 @@
+>  #include <linux/bits.h>
+>  #include <uapi/asm/hwcap.h>
+>  
+> -#ifndef __ASSEMBLY__
+> -#include <linux/jump_label.h>
+> -/*
+> - * This yields a mask that user programs can use to figure out what
+> - * instruction set this cpu supports.
+> - */
+> -#define ELF_HWCAP		(elf_hwcap)
+> -
+> -enum {
+> -	CAP_HWCAP = 1,
+> -};
+> -
+> -extern unsigned long elf_hwcap;
+> -
+>  #define RISCV_ISA_EXT_a		('a' - 'a')
+>  #define RISCV_ISA_EXT_c		('c' - 'a')
+>  #define RISCV_ISA_EXT_d		('d' - 'a')
+> @@ -46,21 +32,36 @@ extern unsigned long elf_hwcap;
+>  #define RISCV_ISA_EXT_BASE 26
+>  
+>  /*
+> - * This enum represent the logical ID for each multi-letter RISC-V ISA extension.
+> + * These macros represent the logical ID for each multi-letter RISC-V ISA extension.
+>   * The logical ID should start from RISCV_ISA_EXT_BASE and must not exceed
+>   * RISCV_ISA_EXT_MAX. 0-25 range is reserved for single letter
+>   * extensions while all the multi-letter extensions should define the next
+>   * available logical extension id.
+>   */
+> -enum riscv_isa_ext_id {
+> -	RISCV_ISA_EXT_SSCOFPMF = RISCV_ISA_EXT_BASE,
+> -	RISCV_ISA_EXT_SVPBMT,
+> -	RISCV_ISA_EXT_ZICBOM,
+> -	RISCV_ISA_EXT_ZIHINTPAUSE,
+> -	RISCV_ISA_EXT_SSTC,
+> -	RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
+> +#define RISCV_ISA_EXT_SSCOFPMF 		26
+> +#define RISCV_ISA_EXT_SVPBMT		27
+> +#define RISCV_ISA_EXT_ZICBOM		28
+> +#define RISCV_ISA_EXT_ZIHINTPAUSE	29
+> +#define RISCV_ISA_EXT_SSTC		30
+> +
+> +#define RISCV_ISA_EXT_ID_MAX		RISCV_ISA_EXT_MAX
+> +
+> +
 
-Yes, you increase a compile test coverage by dropping that dependency.
+nit: double empty line
 
-> I will remove "OF" in the v14 patch.
+> +#ifndef __ASSEMBLY__
+> +#include <linux/jump_label.h>
+> +/*
+> + * This yields a mask that user programs can use to figure out what
+> + * instruction set this cpu supports.
+> + */
+> +#define ELF_HWCAP		(elf_hwcap)
+> +
+> +enum {
+> +	CAP_HWCAP = 1,
+>  };
+>  
+> +extern unsigned long elf_hwcap;
+> +
+> +
 
--- 
-With Best Regards,
-Andy Shevchenko
+nit: double empty line, otherwise
+
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+
+>  /*
+>   * This enum represents the logical ID for each RISC-V ISA extension static
+>   * keys. We can use static key to optimize code path if some ISA extensions
+> 
+
+
 
 
