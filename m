@@ -2,98 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10445F7EA0
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 22:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2000A5F7EA2
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 22:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbiJGUXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 16:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55328 "EHLO
+        id S230087AbiJGUYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 16:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJGUXl (ORCPT
+        with ESMTP id S229459AbiJGUX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 16:23:41 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F400D9AFF5;
-        Fri,  7 Oct 2022 13:23:40 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id n35-20020a05600c502300b003b4924c6868so4903515wmr.1;
-        Fri, 07 Oct 2022 13:23:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=N4kEDyMI5UqC9ruVvmCcki1BdeOTW3NtjCIMHC3n+Jg=;
-        b=Dtu4pTRs03tYHwEXfWsls4vcDbX2kF2YLFQXzp9UFGWcai2XfQqci6d2tNVUZwl6xD
-         azA5HQvB+G8u/RfN8kPHfH6y0VlDklPDTd4eVCeCqu/1kK6x6t1I6B9fKYdZO8HvihxR
-         kQ8Zf6QiW4TsoAElwkpr2S/FdZNX65olf6ULu3i5dK9t4qC9nOXwdPKHa77xQHEq1lWy
-         CI5qr8Bau4z0eFh16/8zNPKf96etRbqvHGTkhCy0aPAs8cGDaa3Dk0ZhP6Bp/sbFZAdn
-         lyasOa/K6eVTa8X0UIcQvr/J7w2rvEC1VJnNuaz+VHLj5pqVVITI3PdPBxKDsivUWJmH
-         pLeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N4kEDyMI5UqC9ruVvmCcki1BdeOTW3NtjCIMHC3n+Jg=;
-        b=LWNCZhpBnS08LACkwCGcfb19tzsWE55fUgyW8/qNpLMXVoMkxfMG21oyZwpl2NIHbg
-         WELlerFsofRdETzUl+NWkXGStAQljyvFou9NeE0b9mLTGEFe2lgnGPsRJjpzzzjpQyhp
-         Iq+ZS7P8iGg2jl4jBT62TtH7BIiorfiEfOlaSYzWu2Zzs054hxkmKYMN/PWVySq/1IBS
-         8SpfI1hpn0ek9ufQkSM3Lrk3I6pVt0k0cYO+2hD+sLLHaPr8icR8N34C7VjyzN/ufpE/
-         wiYLt8tM2S2YL9lhzlccY5FggO5oOa9QzkGGmqTSRQs1ck/yTc8pRW+UB70KMmYzfm2L
-         Cylw==
-X-Gm-Message-State: ACrzQf1eQ/XOXj/KHNco12xMwetOKf3Zb0gY6TX6Xho5xraKs6qXykS+
-        TiPwTBLn3/7Dx8MXl98GmMA=
-X-Google-Smtp-Source: AMsMyM7FOf1VWcxEIUUoCJsxtPAhOvtPxcgbzPEoWCDXoB8cgyQj/iZHvPe5+m/QMYSmDjAAGCIoog==
-X-Received: by 2002:a05:600c:229a:b0:3c0:130d:320d with SMTP id 26-20020a05600c229a00b003c0130d320dmr9394670wmf.51.1665174219391;
-        Fri, 07 Oct 2022 13:23:39 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id m7-20020a056000008700b00228daaa84aesm2843561wrx.25.2022.10.07.13.23.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 13:23:38 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/msm: Kconfig: Fix spelling mistake "throught" -> "through"
-Date:   Fri,  7 Oct 2022 21:23:38 +0100
-Message-Id: <20221007202338.2755731-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Fri, 7 Oct 2022 16:23:59 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0109AA377
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 13:23:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=aks1dZGTodUV2dfvpsgaj5WVgEEHrocb8tLpo0QMpGA=; b=gRb0SFmPivD0ONoUqsL8KSHIyc
+        ISxshrhY9/7nGao4vqf7Xs/FXf1CKAs9SnCJotfED1XsJ5mYQ0SxtLNOZQkd+QBCj3Evk7G7FzLZh
+        br5mCIDPonR7en/3Y6oqt07ebHaDl1DZ8cIQ+JBjjxaS87BPU0jG5MqttPocy7dmkK9XIfZypQJY1
+        wYHoTrjuv8wwUlOEwPpuDKtF4tsg9sk5SaDKO1VmB7VNUB1TF9m1jJFL+n3fVWbazxT9TT78CSXYi
+        X6IKcUOu5RSknld9udiTY3fgv0PdJQVXvI1LuNg/yFfEtjskfnJyHPIfi5191bLSpdhcE4DYJI9bA
+        I786gGVA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ogtsq-002ApD-0D; Fri, 07 Oct 2022 20:23:48 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 59CCD300137;
+        Fri,  7 Oct 2022 22:23:43 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4187B2C12B12D; Fri,  7 Oct 2022 22:23:43 +0200 (CEST)
+Date:   Fri, 7 Oct 2022 22:23:43 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     "Li, Xin3" <xin3.li@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+Subject: Re: [PATCH 6/6] x86/gsseg: use the LKGS instruction if available for
+ load_gs_index()
+Message-ID: <Y0CKz/wjvYYYgH3P@hirez.programming.kicks-ass.net>
+References: <20221006154041.13001-1-xin3.li@intel.com>
+ <20221006154041.13001-7-xin3.li@intel.com>
+ <Y0A77RLAgXQyrVPq@hirez.programming.kicks-ass.net>
+ <BN6PR1101MB21611798953AADA4DFD71719A85F9@BN6PR1101MB2161.namprd11.prod.outlook.com>
+ <Y0B83cSSwJnRtGAn@hirez.programming.kicks-ass.net>
+ <80AC2E90-D842-4EA2-A413-3CC5CFF088BC@zytor.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <80AC2E90-D842-4EA2-A413-3CC5CFF088BC@zytor.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a Kconfig description. Fix it.
+On Fri, Oct 07, 2022 at 01:03:12PM -0700, H. Peter Anvin wrote:
+> On October 7, 2022 12:24:13 PM PDT, Peter Zijlstra <peterz@infradead.org> wrote:
+> >On Fri, Oct 07, 2022 at 06:01:06PM +0000, Li, Xin3 wrote:
+> >> > > +	alternative_io("1: call asm_load_gs_index\n"
+> >> > > +		       ".pushsection \".fixup\",\"ax\"\n"
+> >> > > +		       "2:	xorl %k[sel], %k[sel]\n"
+> >> > > +		       "	jmp 1b\n"
+> >> > > +		       ".popsection\n"
+> >> > > +		       _ASM_EXTABLE(1b, 2b),
+> >> > > +		       _ASM_BYTES(0x3e) LKGS_DI,
+> >> > > +		       X86_FEATURE_LKGS,
+> >> > > +		       ASM_OUTPUT2([sel] "+D" (sel), ASM_CALL_CONSTRAINT),
+> >> > > +		       ASM_NO_INPUT_CLOBBER(_ASM_AX));
+> >> > >  }
+> >> > 
+> >> > I'm very sure none of this was tested... the .fixup section hasn't existed for
+> >> > almost a year now.
+> >> 
+> >> Weird, did you ever check a kernel dump?
+> >
+> >$ readelf -WS defconfig-build/vmlinux | grep fixup
+> >[ 5] .pci_fixup        PROGBITS        ffffffff826a5350 18a5350 003570 00   A  0   0 16
+> >[ 6] .rela.pci_fixup   RELA            0000000000000000 360c388 005028 18   I 60   5  8
+> >
+> >In fact, when I add one I get:
+> >
+> >ld: warning: orphan section `.fixup' from `arch/x86/kernel/traps.o' being placed in section `.fixup'
+> 
+> Perhaps the two of you need to compare confugurations?
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/gpu/drm/msm/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Whatever for? I know the robots report this warning because there was
+one from the KVM cross-merge when the .fixup removal went in. It got
+reported and fixed and that was the last of it.
 
-diff --git a/drivers/gpu/drm/msm/Kconfig b/drivers/gpu/drm/msm/Kconfig
-index 4e0cbd682725..3c9dfdb0b328 100644
---- a/drivers/gpu/drm/msm/Kconfig
-+++ b/drivers/gpu/drm/msm/Kconfig
-@@ -155,7 +155,7 @@ config DRM_MSM_HDMI
- 	  Compile in support for the HDMI output MSM DRM driver. It can
- 	  be a primary or a secondary display on device. Note that this is used
- 	  only for the direct HDMI output. If the device outputs HDMI data
--	  throught some kind of DSI-to-HDMI bridge, this option can be disabled.
-+	  through some kind of DSI-to-HDMI bridge, this option can be disabled.
- 
- config DRM_MSM_HDMI_HDCP
- 	bool "Enable HDMI HDCP support in MSM DRM driver"
--- 
-2.37.3
+Anyway; try:
+
+  $ git grep "\.fixup" arch/x86/
+
+there isn't a single usage.
+
+Andrew Cooper suggested upgrading the orphan section warning to a hard
+link error, orphan sections are bad regardless.
 
