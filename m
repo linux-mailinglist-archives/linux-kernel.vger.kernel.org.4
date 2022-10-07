@@ -2,73 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 520985F79EA
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 16:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E4A5F79EC
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 16:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbiJGOuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 10:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48550 "EHLO
+        id S229800AbiJGOud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 10:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiJGOuP (ORCPT
+        with ESMTP id S229772AbiJGOu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 10:50:15 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00A031DFD
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 07:50:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gP7xsO9cyEMHQsua78LuEGfwPbb4ID2j321XcwffKOM=; b=B/TLotH4eJji0kI+mOSPmy2yRb
-        yOV58kWH5stlMmmPBi99V0xWo9Yj8slsik9fKWrbJ1Q5xGsl7mLQLUkRBcmy8Bh5hDUMmqv8bEF2J
-        /f/sjS2XKvWHkXbVWqoWEzTtxbBRNNVHr2g/G40VtA7jqkKjzyHg073W37qhqwex9UA4UDPMu64U/
-        6TXxyPO4AL0OKb6IwXb7S0BeCnyniTIebEPi/XlNF+laU0T5G6vtlxWNoxPKF+fW6+yngHGFbLG8L
-        VVZINxPfz73Ak38iiFJq4+R0QGEN7Fl2ZTFwtufKkMmhX8B4yBu8q3ESsPZmHtHXhpx1lvCB74Kgo
-        Bz9drnhA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ogofq-001U9Z-52; Fri, 07 Oct 2022 14:50:02 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BE7AD30006D;
-        Fri,  7 Oct 2022 16:50:01 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A50392BDA8087; Fri,  7 Oct 2022 16:50:01 +0200 (CEST)
-Date:   Fri, 7 Oct 2022 16:50:01 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Xin Li <xin3.li@intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com
-Subject: Re: [PATCH 4/6] x86/gsseg: move local_irq_save/restore() into
- asm_load_gs_index()
-Message-ID: <Y0A8mWvT0mLm3nVD@hirez.programming.kicks-ass.net>
-References: <20221006154041.13001-1-xin3.li@intel.com>
- <20221006154041.13001-5-xin3.li@intel.com>
+        Fri, 7 Oct 2022 10:50:28 -0400
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605DF5A8BB;
+        Fri,  7 Oct 2022 07:50:21 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by a.mx.secunet.com (Postfix) with ESMTP id CEBF82057B;
+        Fri,  7 Oct 2022 16:50:17 +0200 (CEST)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id fDj5BHZ5B1YY; Fri,  7 Oct 2022 16:50:17 +0200 (CEST)
+Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by a.mx.secunet.com (Postfix) with ESMTPS id 3BA0120536;
+        Fri,  7 Oct 2022 16:50:17 +0200 (CEST)
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+        by mailout2.secunet.com (Postfix) with ESMTP id 2CC0480004A;
+        Fri,  7 Oct 2022 16:50:17 +0200 (CEST)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 7 Oct 2022 16:50:17 +0200
+Received: from [172.18.157.49] (172.18.157.49) by mbx-essen-01.secunet.de
+ (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 7 Oct
+ 2022 16:50:16 +0200
+To:     Steffen Klassert <steffen.klassert@secunet.com>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+From:   Christian Langrock <christian.langrock@secunet.com>
+Subject: [PATCH ipsec v6] xfrm: replay: Fix ESN wrap around for GSO
+Autocrypt: addr=christian.langrock@secunet.com; keydata=
+ mQENBFee7jkBCACkeMIuzZu/KBA1q3kKGr7d9iiZGF5IpJnIE9dMiK3uaz7uM26VSTJVp6jd
+ GuSGGGmb81OSLEcIEIsYKXvjblAKUX1A74t3WMRcky3MwJbmN6AkN8QlP45mDddtPRf1ElB2
+ S32i9OrEkvw8xcvHYPwbaHenXic4/8fHWEh+vtd/5/5TDTIU/ag9tQfPea13ixXN0PuccMub
+ FeUMpwFCg324+Z19iGvfDWWZmQQGlBjc3Q6z0hXOb/deWL/+lPS4t+tTgpmmZO4XkIs+18Kq
+ xCVukCbnqV0y+04sj3G1GQ/DlGvZHxwywBceAL7BvmdeXQKAS0KRL5zrghIBCgnUyutDABEB
+ AAG0M0NocmlzdGlhbiBMYW5ncm9jayA8Y2hyaXN0aWFuLmxhbmdyb2NrQHNlY3VuZXQuY29t
+ PokBNwQTAQgAIQUCV57uOQIbAwULCQgHAgYVCAkKCwIEFgIDAQIeAQIXgAAKCRCjeMdfgutr
+ Xu3kCACIBx6UHReBtBciNUPkP3fRaGeSOADIrql72VKD9faLAHTt6w8kvyzb8Ctpa77jswJt
+ 21c349mF3maPlpNtpswqH27bTlXYhNcXxcmHPCbNtN3yGUy0UuIJfBMZc8PLqiqYoY5GKD3u
+ imeVbDYjgNhebO2f1cUvwY2wTwX6b0tgKVK0xYYTDpXI1/2MVGsjXqak7PQoqVq0sDu0gIAA
+ i1QO0Fbb6jIaHj6CEM2hpBTBk8qbkPs/MqYGdLl4oXvkWTLduQjm6dMtjxvIt6WJWZQbLjTe
+ QIfc21luNQKDmfT623pVTPPMMAciWfpdw63FblfGcfBnAKCJ8JBj0z9T6/PmuQENBFee7jkB
+ CADS7amJPbY2dWpeGtE+I9yLL53lSriP4L6rI9UoEwNM1OkjnB7wFnH8dm8N68K2OJogkHwo
+ X2OnzGhxJ28NHRuAh++3hIYY+gU4HMLaX3onDK1oqAdYczhJ7f6UCPbYaghkzJ6Vg/FEWpA8
+ u5vG/BX4y+F3/Y98l6mzAX5wLmTapRwdfuRCXRA6jlIHIOwP3NPKK4Pz2E7witsimV1ucN4u
+ XFiZ36CUPAiXXlER9iPZnQUSyCobqJOJKm4C7wUNQ1negCXDBd3KjSyzTIafw/oYG4RrWGul
+ iI2ig/qTUC8cZdAJTMBjUJR6ugJazMB1Rg17p2GRD0AzUOV2qdqYFqQFABEBAAGJAR8EGAEI
+ AAkFAlee7jkCGwwACgkQo3jHX4Lra17vtQgAg2g0JEXVTGT36BDJgVjIUY1evnm1fWwTPpco
+ kP/8/aO2ubmlxtWQ2hV5OPfL5nDday2S4Nq5j3kqQq+rvUrORVmvT4WxYZM1fr2nibuzaUbs
+ JtxphNpjahrsEcLLTzBW4CbHTaL4YTT+ZD/GDeHoxAh9JfMkdMBXHyWTuw+QSP0pp7WvNsDo
+ sukKFyQ0rve9PH2dry6A0oLP7UxtAzEERV2Se0BueZPQuVnU6Cvj3ZStK28JDhMjxIPkZPE5
+ kCV8QNF8OsiwymA3aoPKe5Bw0lOcjuuJkxRa5bazyuubX9pIIgTeGsecgpSgpfA9jsEHKFqo
+ LuxUA+77VQ5hSydVaQ==
+Message-ID: <6810817b-e6b7-feac-64f8-c83c517ae9a5@secunet.com>
+Date:   Fri, 7 Oct 2022 16:50:15 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221006154041.13001-5-xin3.li@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
+ mbx-essen-01.secunet.de (10.53.40.197)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 08:40:39AM -0700, Xin Li wrote:
->  SYM_FUNC_START(asm_load_gs_index)
->  	FRAME_BEGIN
-> +	pushf
-> +	pop	%rax
-> +	andl	$X86_EFLAGS_IF, %eax	/* Interrupts enabled? */
-> +	jz	1f
-> +	cli
-> +1:
+When using GSO it can happen that the wrong seq_hi is used for the last
+packets before the wrap around. This can lead to double usage of a
+sequence number. To avoid this, we should serialize this last GSO
+packet.
 
-Why the pop,andl,jz ? AFAICT our arch_local_irq_save() doesn't even
-bother with that, why does this function.
+Fixes: d7dbefc45cf5 ("xfrm: Add xfrm_replay_overflow functions for offloading")
+Co-developed-by: Steffen Klassert <steffen.klassert@secunet.com>
+Signed-off-by: Christian Langrock <christian.langrock@secunet.com>
+---
+Changes in v6:
+ - move overflow check to offloading path to avoid locking issues
+
+Changes in v5:
+ - Fix build
+
+Changes in v4:
+ - move changelog within comment
+ - add reviewer
+
+Changes in v3:
+- fix build
+- remove wrapper function
+
+Changes in v2:
+- switch to bool as return value
+- remove switch case in wrapper function
+---
+ net/ipv4/esp4_offload.c |  3 +++
+ net/ipv6/esp6_offload.c |  3 +++
+ net/xfrm/xfrm_device.c  | 15 ++++++++++++++-
+ net/xfrm/xfrm_replay.c  |  2 +-
+ 4 files changed, 21 insertions(+), 2 deletions(-)
+
+diff --git a/net/ipv4/esp4_offload.c b/net/ipv4/esp4_offload.c
+index 170152772d33..3969fa805679 100644
+--- a/net/ipv4/esp4_offload.c
++++ b/net/ipv4/esp4_offload.c
+@@ -314,6 +314,9 @@ static int esp_xmit(struct xfrm_state *x, struct sk_buff *skb,  netdev_features_
+                        xo->seq.low += skb_shinfo(skb)->gso_segs;
+        }
+ 
++       if (xo->seq.low < seq)
++               xo->seq.hi++;
++
+        esp.seqno = cpu_to_be64(seq + ((u64)xo->seq.hi << 32));
+ 
+        ip_hdr(skb)->tot_len = htons(skb->len);
+diff --git a/net/ipv6/esp6_offload.c b/net/ipv6/esp6_offload.c
+index 79d43548279c..242f4295940e 100644
+--- a/net/ipv6/esp6_offload.c
++++ b/net/ipv6/esp6_offload.c
+@@ -346,6 +346,9 @@ static int esp6_xmit(struct xfrm_state *x, struct sk_buff *skb,  netdev_features
+                        xo->seq.low += skb_shinfo(skb)->gso_segs;
+        }
+ 
++       if (xo->seq.low < seq)
++               xo->seq.hi++;
++
+        esp.seqno = cpu_to_be64(xo->seq.low + ((u64)xo->seq.hi << 32));
+ 
+        len = skb->len - sizeof(struct ipv6hdr);
+diff --git a/net/xfrm/xfrm_device.c b/net/xfrm/xfrm_device.c
+index 5f5aafd418af..21269e8f2db4 100644
+--- a/net/xfrm/xfrm_device.c
++++ b/net/xfrm/xfrm_device.c
+@@ -97,6 +97,18 @@ static void xfrm_outer_mode_prep(struct xfrm_state *x, struct sk_buff *skb)
+        }
+ }
+ 
++static inline bool xmit_xfrm_check_overflow(struct sk_buff *skb)
++{
++       struct xfrm_offload *xo = xfrm_offload(skb);
++       __u32 seq = xo->seq.low;
++
++       seq += skb_shinfo(skb)->gso_segs;
++       if (unlikely(seq < xo->seq.low))
++               return true;
++
++       return false;
++}
++
+ struct sk_buff *validate_xmit_xfrm(struct sk_buff *skb, netdev_features_t features, bool *again)
+ {
+        int err;
+@@ -134,7 +146,8 @@ struct sk_buff *validate_xmit_xfrm(struct sk_buff *skb, netdev_features_t featur
+                return skb;
+        }
+ 
+-       if (skb_is_gso(skb) && unlikely(x->xso.dev != dev)) {
++       if (skb_is_gso(skb) && (unlikely(x->xso.dev != dev) ||
++                               unlikely(xmit_xfrm_check_overflow(skb)))) {
+                struct sk_buff *segs;
+ 
+                /* Packet got rerouted, fixup features and segment it. */
+diff --git a/net/xfrm/xfrm_replay.c b/net/xfrm/xfrm_replay.c
+index 9f4d42eb090f..ce56d659c55a 100644
+--- a/net/xfrm/xfrm_replay.c
++++ b/net/xfrm/xfrm_replay.c
+@@ -714,7 +714,7 @@ static int xfrm_replay_overflow_offload_esn(struct xfrm_state *x, struct sk_buff
+                        oseq += skb_shinfo(skb)->gso_segs;
+                }
+ 
+-               if (unlikely(oseq < replay_esn->oseq)) {
++               if (unlikely(xo->seq.low < replay_esn->oseq)) {
+                        XFRM_SKB_CB(skb)->seq.output.hi = ++oseq_hi;
+                        xo->seq.hi = oseq_hi;
+                        replay_esn->oseq_hi = oseq_hi;
+
+base-commit: 0326074ff4652329f2a1a9c8685104576bd8d131
+-- 
+2.37.1.223.g6a475b71f8
