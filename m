@@ -2,100 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B61F5F789F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 15:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6167E5F78B3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 15:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiJGNJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 09:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
+        id S229836AbiJGNNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 09:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiJGNJ3 (ORCPT
+        with ESMTP id S229819AbiJGNNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 09:09:29 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664C5CBFD2;
-        Fri,  7 Oct 2022 06:09:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0BeKBcF7ouX2G91odn0fVr+GuMOLBqXSocw/B9YMzNQ=; b=nEqRyilqSYRnop1hcQ4p+Obmvq
-        iH/L/WeUXcWmsKz+z/g7DKlYcUt9aVvfYj+ghXrJeQ9KDfoiy60mF8aySpZlJq+Q0wovEuM1RXtHY
-        c1LClyOdf4SCgCtiiFPO0QzXchdPa8c7iWfcovXPCpI6ojPoLNzdbevq1Z59E4MXYsV2NjrkRJyYy
-        7KPGzL1sSLlcx46Yh0kezEeQJfMTzPzHKnTg9uLbzb+lGVT58bgnT4rI/7znt7OJ6/IQxIzyPHY2C
-        YmNnHiKedAD4xJnHc6oQ0/4gYHCJhnrIP4BdRMkVwBGGrImWyUfYkm1qPA6p1na2fR+EgSvkXP5tu
-        1LTISozw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ogn6L-001THF-Il; Fri, 07 Oct 2022 13:09:17 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0D51A300155;
-        Fri,  7 Oct 2022 15:09:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E2DB92BDA8BD6; Fri,  7 Oct 2022 15:09:16 +0200 (CEST)
-Date:   Fri, 7 Oct 2022 15:09:16 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, Dmitry Vyukov <dvyukov@google.com>
-Subject: Re: [PATCH] perf: Fix missing SIGTRAPs
-Message-ID: <Y0Ak/D05KhJeKaed@hirez.programming.kicks-ass.net>
-References: <20220927121322.1236730-1-elver@google.com>
- <Yz7ZLaT4jW3Y9EYS@hirez.programming.kicks-ass.net>
- <Yz7fWw8duIOezSW1@elver.google.com>
- <Yz78MMMJ74tBw0gu@hirez.programming.kicks-ass.net>
- <Yz/zXpF1yLshrJm/@elver.google.com>
+        Fri, 7 Oct 2022 09:13:15 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45931CBFF3
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 06:13:14 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id o9-20020a17090a0a0900b0020ad4e758b3so4693752pjo.4
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 06:13:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Bx1A8VZz2C9MrIadfwpDwtJ95gIG5yP6liuo34oI2JU=;
+        b=klfdocq1WkN/CJB6VFdoFVsNBhv2or+S6nkqOOeN+5/2YRV/U4XmlES4zvcZfA4a4k
+         DvSgiVZMPhP979+YaFDhbOxrLiAFhYlF2L8NnPuocmimP0nMRALkcWwBhzo1N5sqEF50
+         Sup7/NvbiGeRh97GYXxzXxN2VgBmdByVeugdayYBWYoMIa9h7x2S6oldfIlzx9seWajQ
+         tXiekocjVamz9qFgCqeDele+fBqURG1PIZ7kWPLgLannPAIlsfqwP08nWsZCqCT91DDW
+         XCmPtKGcJJMx/n1D89j15MOfGwDr/XkxuKuVLdN3OKFbekMEFTDbT3NEiOsj80xYEeZG
+         i6qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Bx1A8VZz2C9MrIadfwpDwtJ95gIG5yP6liuo34oI2JU=;
+        b=AySDS5W/Wpj333hqN/WtzHl01xkEO2QVO/X+h7VjpQOhXMKiIEnoVB9PrFJkcCyTXl
+         tF+zjl4ZphTbuxRwvI4GlBnqbVIotmv7Tkz7cXGDxFEPcdpFPbmiB/kDCvrcGF5By+00
+         PnuB8E/UCc7LXsKGIxtCDx0Ghin+6LIaWEzda1bhl2qN+dvyybCio4fjaqlD+bqGPdBn
+         aupddJfGIkJjD/V44NDLDa51rRTsRhaQ9a+bDZGzLj9tY4ZhvPqN1C1JyMp2UOuUkfNi
+         zdWHYBdQNQg3T49J7yrSWt4/5Ezck34ENTsEFdUvbU5eGB84c64SMOqhAC4OJRiS0TZZ
+         pGmQ==
+X-Gm-Message-State: ACrzQf3MefQiNNhzZ0eGCiRSRBa8xBThMZOI9QFLqxRVbo7AjEfy3KhR
+        efnE4OUwtAppUDhJ/XLKRV0nn8Z4Ejfl6Rz9oI7BzA==
+X-Google-Smtp-Source: AMsMyM7tGKO3Q1AzhonCNeE4O6rxBaH/B+z+9vUkBMit50X+3vZ9txh4xN776AnHvV+41w+DJw5eWc/WdYcyjyZyq7U=
+X-Received: by 2002:a17:90b:4d07:b0:1ef:521c:f051 with SMTP id
+ mw7-20020a17090b4d0700b001ef521cf051mr16774732pjb.164.1665148393003; Fri, 07
+ Oct 2022 06:13:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yz/zXpF1yLshrJm/@elver.google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <08aac29e2d8545a6b56e092bc508409e@hyperstone.com>
+In-Reply-To: <08aac29e2d8545a6b56e092bc508409e@hyperstone.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 7 Oct 2022 15:12:36 +0200
+Message-ID: <CAPDyKFqw2CNS+M5iMcP-_FyBThrUvGbyECMrEJheUD4YP7fwEw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] mmc: queue: Flush recovery work on cleanup
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        =?UTF-8?Q?Christian_L=C3=B6hle?= <CLoehle@hyperstone.com>
+Cc:     Linux MMC List <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 11:37:34AM +0200, Marco Elver wrote:
+On Thu, 6 Oct 2022 at 15:39, Christian L=C3=B6hle <CLoehle@hyperstone.com> =
+wrote:
+>
+> To prevent any recovery work running after the queue cleanup flush it.
+> Any recovery running post-cleanup dereferenced mq->card as NULL
+> and was not meaningful to begin with.
+>
+> Cc: stable@vger.kernel.org
+>
+> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+> ---
+>  drivers/mmc/core/queue.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/mmc/core/queue.c b/drivers/mmc/core/queue.c
+> index fefaa901b50f..a1b985d3dfda 100644
+> --- a/drivers/mmc/core/queue.c
+> +++ b/drivers/mmc/core/queue.c
+> @@ -493,6 +493,13 @@ void mmc_cleanup_queue(struct mmc_queue *mq)
+>         if (blk_queue_quiesced(q))
+>                 blk_mq_unquiesce_queue(q);
+>
+> +       /*
+> +        * If the recovery completes the last (and only remaining) reques=
+t in
+> +        * the queue, and the card has been removed, we could end up here=
+ with
+> +        * the recovery not quite finished yet, so flush it.
+> +        */
+> +       flush_work(&mq->recovery_work);
+> +
 
-> That worked. In addition I had to disable the ctx->task != current check
-> if we're in task_work, because presumably the event might have already
-> been disabled/moved??
+Not sure if it really matters in this case, but isn't
+cancel_work_sync() the more proper thing to call instead?
 
-Uhmmm... uhhh... damn. (wall-time was significantly longer)
+>         blk_mq_free_tag_set(&mq->tag_set);
+>
+>         /*
 
-Does this help?
-
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -6490,8 +6490,8 @@ static void __perf_pending_irq(struct pe
- 	if (cpu == smp_processor_id()) {
- 		if (event->pending_sigtrap) {
- 			event->pending_sigtrap = 0;
--			local_dec(&event->ctx->nr_pending);
- 			perf_sigtrap(event);
-+			local_dec(&event->ctx->nr_pending);
- 		}
- 		if (event->pending_disable) {
- 			event->pending_disable = 0;
-@@ -6563,8 +6563,8 @@ static void perf_pending_task(struct cal
- 
- 	if (event->pending_work) {
- 		event->pending_work = 0;
--		local_dec(&event->ctx->nr_pending);
- 		perf_sigtrap(event);
-+		local_dec(&event->ctx->nr_pending);
- 	}
- 
- 	if (rctx >= 0)
+Kind regards
+Uffe
