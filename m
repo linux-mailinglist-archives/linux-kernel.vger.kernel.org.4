@@ -2,47 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 693A45F7DC4
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 401925F7DCF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiJGTQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 15:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34094 "EHLO
+        id S229720AbiJGTRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 15:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiJGTQ0 (ORCPT
+        with ESMTP id S229459AbiJGTR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 15:16:26 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED3A248CC;
-        Fri,  7 Oct 2022 12:16:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+Y+vRoIyoltNuN+rr5FhUbGNtlxBK+mU+zg/3qDDD2s=; b=I5nLEo9TfrcWAP4gQMYKY/+gnk
-        zwVsDA9nCptU7un07+UPkzG7VAnBXWX0yqOZu6mkiqOJTaQZxp8/tTlFPCFjhpP2lKIKGKIZ5aZT0
-        wJTkzYo9r8iG+ptoEV3fNBykcXjHnFH1qCEo1falxAYrQukqQX6+UJ9MjGFrMUm0l7EmvhFxh6LvD
-        OYRDYsdvBoanicC94Lv1iq4KLIFdLD4891WWT0dB2HKXDHVHh8AwGTO3V+kORxsMdQy6DCpqzP24z
-        TJcNXK6/8h9CI+yyoKXJ6U3y61nh2BlYJ8/+Aa5aTJas5xQDkUgLf7gA5KRKfbNkKoAhU3UezsfeW
-        pTidbOuQ==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1ogspP-008Lg9-2Y;
-        Fri, 07 Oct 2022 19:16:11 +0000
-Date:   Fri, 7 Oct 2022 20:16:11 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Abd-Alrhman Masalkhi <abd.masalkhi@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: A field in files_struct has been used without initialization
-Message-ID: <Y0B6+0MLZI/nv1aC@ZenIV>
-References: <20221006104439.46235-1-abd.masalkhi@gmail.com>
- <20221006105728.47115-1-abd.masalkhi@gmail.com>
+        Fri, 7 Oct 2022 15:17:28 -0400
+Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABF330F
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 12:17:27 -0700 (PDT)
+Received: by mail-oo1-xc29.google.com with SMTP id s1-20020a4a81c1000000b0047d5e28cdc0so4102982oog.12
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 12:17:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2JDsqVdZnjWlaOQvu6EPe39LCBHFKQkuG1fa3tT0Gjw=;
+        b=FayXRpNYC52MB8bTFhSz9+bsYprGVX95RfpxGW5qmC9ETLZKKhPBNDgsrYpSrOLKac
+         x7J7OjkHOv2jzukOS0U+18mOEFxY76SKT3qOv1XfdOyEu1dfIvmA6dYbGzNed9AzfWSv
+         9kakobjTxkn4LVnsYDdRzVAdFCA2TQ04sYgYk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2JDsqVdZnjWlaOQvu6EPe39LCBHFKQkuG1fa3tT0Gjw=;
+        b=o/ZAfSigccvlqWr/qAoqKat86Wg7tWJJQNyPSBerMxdlgq5eam1IvfgzrnFwpEzNNi
+         TUpmL+ry2J6fu5BF+qM/iaPS2OayXemsL5Mth3dqeXwchQvo4ptLe6v+CqwLdMMK4wTE
+         nhRbwohkGAP1nIrq9MGpauksU3ZCwUAqgYBpT2PD5zuDgOa/wbL/iTICbBrzmd7S4Lp1
+         DQr5lSrfhXCZTDeJQj7r6viVzJyaKOkUKaZybrm5eu5A7wImyjxxTZ/jatTxToKClMGw
+         +1X3AVQY8WQFQ9Br1dpHOFAu3GCFEisE48uNiM6gctGkEFtm4C7rKeEFRCZcn9lOwBJ2
+         3jZw==
+X-Gm-Message-State: ACrzQf2AftNHfZWFFL2V6fgSYOQKxe0hklwWUxIXj9zuMb4fymXrgNLk
+        f4jesCm25fXyo5xn66iUUuZBwIOc9Ai9Cg==
+X-Google-Smtp-Source: AMsMyM7nvkkZeVShgs/JN9ElYnAZSxY98dG7fg8ZPFAZ1JboUwopQtl5rjVpXGI2r8KpUUI+TJdwig==
+X-Received: by 2002:a05:6830:6101:b0:65b:d1b2:256e with SMTP id ca1-20020a056830610100b0065bd1b2256emr2816365otb.118.1665170246061;
+        Fri, 07 Oct 2022 12:17:26 -0700 (PDT)
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com. [209.85.160.54])
+        by smtp.gmail.com with ESMTPSA id p204-20020aca42d5000000b003436fa2c23bsm1381646oia.7.2022.10.07.12.17.25
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Oct 2022 12:17:25 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-13207a86076so6618211fac.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 12:17:25 -0700 (PDT)
+X-Received: by 2002:a05:6870:c888:b0:12c:7f3b:d67d with SMTP id
+ er8-20020a056870c88800b0012c7f3bd67dmr3561496oab.229.1665170244926; Fri, 07
+ Oct 2022 12:17:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221006105728.47115-1-abd.masalkhi@gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <3727e267ba5a03e021ba06e46a97f260dcccc3e7.camel@HansenPartnership.com>
+In-Reply-To: <3727e267ba5a03e021ba06e46a97f260dcccc3e7.camel@HansenPartnership.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 7 Oct 2022 12:17:09 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whAUVVgVQWHig=rK1sw7RhjVENrqXDcKGF_mP8mmU9oFA@mail.gmail.com>
+Message-ID: <CAHk-=whAUVVgVQWHig=rK1sw7RhjVENrqXDcKGF_mP8mmU9oFA@mail.gmail.com>
+Subject: Re: [GIT PULL] first round of SCSI updates for the 6.0+ merge window
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,76 +75,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 12:57:28PM +0200, Abd-Alrhman Masalkhi wrote:
-> > new_fdt->close_on_exec itself has not been initialized, is it intended
-> > to be like this.
-> 
-> I meant:
-> 
-> newf->close_on_exec_init itself has not been initialized ...
+On Fri, Oct 7, 2022 at 9:16 AM James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
+>
+> The patch is available here:
+>
+> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-misc
 
-Huh? close_on_exec_init is an array, and this assignment stores the address
-of its first (and only) element into newf->fdtab.close_on_exec.  So it's
-basically
-	newf->fdtab.close_on_exec = &newf->close_on_exec_init[0];
+Nope. Nothing there. That's just very old state from July.
 
-->fdtab and ->close_on_exec_init are to be used only if we need no more than
-BITS_PER_LONG descriptors.  It's common enough to make avoiding a separate
-allocation (and separate cacheline on following the pointer chain) worth
-the trouble.
+And since the pull request isn't even standard 'git request-pull'
+format, there's no indication of what the top commit *should* be.
 
-Note that we do not use newf->fdtab directly - we use newf->fdt.
+Please fix and re-post a proper pull request,
 
-What happens here is
-        new_fdt = &newf->fdtab;
-	...
-	set newf->fdtab contents for the case we need few descriptors
-
-	if we need more
-		allocate a separate struct fdtable, bitmaps, etc.
-		set the contents of that separate fdtable
-		new_fdt = that new fdtable
-
-	copy bitmaps into whatever new_fdt->close_on_exec and
-	new_fdt->open_fds are pointing at.
-
-	copy file pointers into whatever new_fdt->fd[] points at.
-
-	set newf->fdt to new_fdt.
-
-The value of newf->close_on_exec_init is simply newf + known constant.
-It needs no initialization at all.  The *contents* of the array
-it points to is used only if new_fdt remains pointing to newf->fdtab;
-in that case it's initialized by
-	copy_fd_bitmaps(new_fdt, old_fdt, open_files);
-
-IOW, for few-descriptors case we end up with
-
-newf:
-	fdt			points to newf->fdtab
-	fdtab.close_on_exec	points to newf->close_on_exec_init[0]
-	fdtab.full_fd_bits	points to newf->full_fd_bits_init[0]
-	fdtab.open_fds		points to newf->open_fds_init[0]
-	fdtab.fd		points to newf->fd_array[0]
-	fdtab.max_fds		max capacity; will be BITS_PER_LONG
-	close_on_exec_init[0]	hosts the close_on_exec bitmap
-	full_fd_bits_init[0]	hosts the full_fd_bits bitmap
-	open_fds_init[0]	hosts the open_fds bitmap
-	fd_array[]		contains file pointers (BITS_PER_LONG of them)
-
-For more-than-a-few-descriptors case we have
-
-array of pointers (from first kvmalloc() in alloc_fdtable()): contains file pointers
-array of unsigned long (from the second kmvalloc() there): hosts the bitmaps
-fdtable (allocated in alloc_fdtable()):
-	open_fds		points to the beginning of bitmap-hosting array
-	close_on_exec		points to the middle third of the same array
-	full_fd_bits		points to the last third of the same array
-	fd			points to array of struct file pointers.
-	max_fds			max capacity, matches the sizes of arrays.
-newf:
-	fdt			points to fdtable
-	fdtab, ..._init and fd_array 	unused
-
-Might be useful to take a piece of paper and draw the picture,
-I really don't want to bother with ASCII graphics for that...
+               Linus
