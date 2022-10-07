@@ -2,101 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E0B5F7DFB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA6E5F7DFF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiJGT3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 15:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43128 "EHLO
+        id S229707AbiJGTck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 15:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiJGT3u (ORCPT
+        with ESMTP id S229445AbiJGTch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 15:29:50 -0400
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297EF12AA2;
-        Fri,  7 Oct 2022 12:29:46 -0700 (PDT)
-Received: from [192.168.1.101] (95.49.30.201.neoplus.adsl.tpnet.pl [95.49.30.201])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 734172006C;
-        Fri,  7 Oct 2022 21:29:42 +0200 (CEST)
-Message-ID: <18771e86-4633-fcf5-0ae1-ecaae515eb2b@somainline.org>
-Date:   Fri, 7 Oct 2022 21:29:41 +0200
+        Fri, 7 Oct 2022 15:32:37 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FDFB14F8
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 12:32:36 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 195so5515142pga.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 12:32:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eWIDooZIJ21SaT4AaqXCKaAk3JRTLPG/RdiaYdE09z4=;
+        b=nk0Tk/QQ8LsMSXY4egtXKpDJkrjrsNQTmEQ/ZfXiJaiybsz4nAiGpOPR1C9VlTXXEt
+         lHrnJrqLxWHOIeEz2rIH9+ZlMj0lDCMoaSyrLqdtMox25q2ra6VHiwIDbhqbq/RhAseb
+         wvOUzyqGhNBWllIJOgsM6OoVunnb/vvbUIeTg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eWIDooZIJ21SaT4AaqXCKaAk3JRTLPG/RdiaYdE09z4=;
+        b=FOh3wv5iOHpsOBTTYrt3oD/aV4cmCh4Rodbei2vZGBzasfnTpuLMZQk0hY9/SI2zAI
+         w1Y6rcmyAUXIB66phFWRIYrS/Cf8lL3bTkwp74ALXaQNsMsD/cjTlxfNfDlqnoE/RNGI
+         cwsmq1Iag8P4uu8AzjN7t3vBfxsE4Sy5n1+PrZAV7+uaMpKtYAj6QX6+ncDvq7ZZ+5SG
+         Nup71vSFhINEcDqXhlmzxxEwxVyPTZRHVojLy/1eJjpDcVOJrUJ3Fxrg3SYJ7hEJmjXB
+         FMyfuIY8b5JdHhOLlyA7IZWmKi4sN3qiYtIaDhJeeuuq0TBQiG8M1ZnSo3KgHFERJ9UD
+         J4xA==
+X-Gm-Message-State: ACrzQf1K+bZiT1buB9XVADoIzHrhyY2C10H7fNxcljBAyNGSQA/3tR7w
+        py72YdxkjQDvJuXIZTeCLJ+ycg==
+X-Google-Smtp-Source: AMsMyM5QxZLYI3xdVdaU5MDoEnFyFHpC35HOwHxRuSbTrqtqKdU+tM5qMxxnNfuMWHrjs5R+580dXg==
+X-Received: by 2002:a63:145d:0:b0:44b:f115:f90f with SMTP id 29-20020a63145d000000b0044bf115f90fmr6036831pgu.157.1665171155674;
+        Fri, 07 Oct 2022 12:32:35 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id e6-20020a656886000000b0043b565cb57csm2064059pgt.73.2022.10.07.12.32.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 12:32:35 -0700 (PDT)
+Date:   Fri, 7 Oct 2022 12:32:34 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, kernel-dev@igalia.com,
+        kernel@gpiccoli.net, anton@enomsg.org, ccross@android.com,
+        tony.luck@intel.com, linux-efi@vger.kernel.org
+Subject: Re: [PATCH 8/8] efi: pstore: Add module parameter for setting the
+ record size
+Message-ID: <202210071230.63CF832@keescook>
+References: <20221006224212.569555-1-gpiccoli@igalia.com>
+ <20221006224212.569555-9-gpiccoli@igalia.com>
+ <202210061614.8AA746094A@keescook>
+ <CAMj1kXF4UyRMh2Y_KakeNBHvkHhTtavASTAxXinDO1rhPe_wYg@mail.gmail.com>
+ <f857b97c-9fb5-8ef6-d1cb-3b8a02d0e655@igalia.com>
+ <CAMj1kXFy-2KddGu+dgebAdU9v2sindxVoiHLWuVhqYw+R=kqng@mail.gmail.com>
+ <2a341c4d-763e-cfa4-0537-93451d8614fa@igalia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: fix ufs_card_phy ref clock
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221005143305.388-1-johan+linaro@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20221005143305.388-1-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2a341c4d-763e-cfa4-0537-93451d8614fa@igalia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Oct 07, 2022 at 10:45:33AM -0300, Guilherme G. Piccoli wrote:
+> On 07/10/2022 10:19, Ard Biesheuvel wrote:
+> > [...]
+> > 
+> > OVMF has
+> > 
+> > OvmfPkg/OvmfPkgX64.dsc:
+> > gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x2000
+> > OvmfPkg/OvmfPkgX64.dsc:
+> > gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x8400
+> > 
+> > where the first one is without secure boot and the second with secure boot.
+> > 
+> > Interestingly, the default is
+> > 
+> > gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x400
+> > 
+> > so this is probably where this 1k number comes from. So perhaps it is
+> > better to leave it at 1k after all :-(
+> > 
+> 
+> Oh darn...
+> 
+> So, let's stick with 1024 then? If so, no need for re-submitting right?
 
+Given OVMF showing this as a max, it doesn't seem right to also make
+this a minimum? Perhaps choose a different minimum to be enforced.
 
-On 5.10.2022 16:33, Johan Hovold wrote:
-> The GCC_UFS_REF_CLKREF_CLK must be enabled or the second UFS controller
-> fails to enumerate on sa8295p-adp.
-> 
-> Note that the vendor kernel enables both GCC_UFS_REF_CLKREF_CLK and
-> GCC_UFS_1_CARD_CLKREF_CLK and it is possible that the former should be
-> modelled as a parent of the latter. The clock driver also has a
-> GCC_UFS_CARD_CLKREF_CLK clock which the firmware appears to enable on
-> the ADP.
-My guess would be that XBL/whatever other bootloader enables all of them as
-it scans for bootable devices and only gates one afterwards..
+Also, can you update the commit log with Ard's archeology on
+gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize ?
 
-
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-
-Konrad
-> 
-> The usual lack of documentation for Qualcomm SoCs makes this a highly
-> annoying guessing game, but as the second controller works on the ADP
-> without either card reference clock enabled, only enable
-> GCC_UFS_REF_CLKREF_CLK for now.
-> 
-> Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
-> 
-> The related issue for the first controller is being fixed here:
-> 
-> 	https://lore.kernel.org/lkml/20220830180120.2082734-1-bmasney@redhat.com/T/#u
-> 
-> Johan
-> 
-> 
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index cf7ef37c11ec..917f1feac6ac 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -960,7 +960,7 @@ ufs_card_phy: phy@1da7000 {
->  			ranges;
->  			clock-names = "ref",
->  				      "ref_aux";
-> -			clocks = <&gcc GCC_UFS_1_CARD_CLKREF_CLK>,
-> +			clocks = <&gcc GCC_UFS_REF_CLKREF_CLK>,
->  				 <&gcc GCC_UFS_CARD_PHY_AUX_CLK>;
->  
->  			resets = <&ufs_card_hc 0>;
+-- 
+Kees Cook
