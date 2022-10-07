@@ -2,97 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE935F7478
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 08:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E08E85F747E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 09:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbiJGG7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 02:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
+        id S229876AbiJGHAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 03:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiJGG7h (ORCPT
+        with ESMTP id S229824AbiJGG74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 02:59:37 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8833FDB5E
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 23:59:32 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id bu25so5991684lfb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 23:59:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=VW3+3oss6LB7BSPpMVbQ+o0wN4V6S0JUswgw6rXnncU=;
-        b=y5WDIRdgh4FHvyzVk6cJyj3DMEBu8HeWt6R4yjMVOeSxAZeWMSDLQvyS2k6g4jVcz5
-         OBBgNWCEhIQTUgtef2TD8WhJRDi2WK6oekasCNu+RQ4dD9jBHsuH38vZOHGVe/GCT197
-         uF8geGQa7+XUfzyV5P8pGb4PUXt4oXLYymJ1+A9ZIK3NGMFff6dnhcpqoJb685it+7sn
-         RMKTkr+2ng62iavwX+a3K1ccS+VdKjUe2PgZ6j7FXnE6KvyPVQS/3JeHM3HTZhXUk85h
-         +jmvKEP6vT31euC5pjjJyUlWWvAftxwLcal4yCJN/5rlC763QLp4T0qA/QHRv9bDOZwJ
-         5o/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=VW3+3oss6LB7BSPpMVbQ+o0wN4V6S0JUswgw6rXnncU=;
-        b=C47hFRE5sI2yGh+LdM+NxNZ8XTZhDUFyqehoiZ3nx7dmQxgl7Vva1DJqqH+S6BZh3K
-         AUtHPE/PXNpcfsp99LPjsb1tSh8oxiSZg2J1oLoB+JND0g3TbFlh2JzKg7eNNKMhe+m0
-         KCvEN7V7KjopXmQPCdQIqf1KcfzZiAjBK4+maKcDR7cElOjNxBVk6HB+LAL3dVGpN+UR
-         0OW34dqQDGRAXRlb/roweTt3461u6BBn09M12sT3E8E//UYeO8lLY9YmcMO1OSM4qRmb
-         QJZkrSp6leB8PoJwfEl2EKfQxzN4d69TvPeXBqXPJn4rHhXXhv2JOyaI0JHbT18B/JGL
-         sIBA==
-X-Gm-Message-State: ACrzQf0MYW8Pcya5TurQaK7p10pzXq6RbBaeFIxNWuC5o5BcF4V/vSpd
-        YQfABcut7IyDi7HJbjLCce1sIpfIDfcMbA==
-X-Google-Smtp-Source: AMsMyM7zFfC/u5V00RksOcmN4PrHawK1b1BsN+nXUsr9jhVs1GAmiTNwWp+Ud4iYkQSolvGVKtAmUg==
-X-Received: by 2002:ac2:4a73:0:b0:4a2:4f2c:199d with SMTP id q19-20020ac24a73000000b004a24f2c199dmr1240104lfp.443.1665125971044;
-        Thu, 06 Oct 2022 23:59:31 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id c19-20020ac25f73000000b00499fe9ce5f2sm174403lfc.175.2022.10.06.23.59.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Oct 2022 23:59:30 -0700 (PDT)
-Message-ID: <f14ae849-cb1d-d039-00d8-6ae230e8dc13@linaro.org>
-Date:   Fri, 7 Oct 2022 08:59:29 +0200
+        Fri, 7 Oct 2022 02:59:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2563E13F37;
+        Thu,  6 Oct 2022 23:59:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0075B8220F;
+        Fri,  7 Oct 2022 06:59:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8AF1C433D7;
+        Fri,  7 Oct 2022 06:59:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665125985;
+        bh=9wr1e5ewYQYmphDre30sBLxkhXdzYS0rjyoiWTszXfA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fHOxCmU4bzvM0RPKnb1a0rOzbqjKAt6vKXGFHbdVgSbv/xC409V5mCr3FLJQdad/2
+         4tpwGM90CWWXQNmX31PUyt3tP9pe7NNoain7pXpoqLhxw9EKD8SByBfp7v+KfKbSNQ
+         ht78ftOkGQc13sw5KdcUmw3uEvuE1uNNmwORriAY=
+Date:   Fri, 7 Oct 2022 09:00:26 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Justin Chen <justinpopo6@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        vkoul@kernel.org, kishon@ti.com, linux-phy@lists.infradead.org,
+        f.fainelli@gmail.com, alcooperx@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, justin.chen@broadcom.com
+Subject: Re: [PATCH] MAINTAINERS: Update maintainers for broadcom USB
+Message-ID: <Yz/Oik0uXXo0uGk6@kroah.com>
+References: <1665098469-19008-1-git-send-email-justinpopo6@gmail.com>
+ <Yz/G0jQxc4c2gzhl@kroah.com>
+ <CAJx26kUTzBeNkV_=gEeUYaatBwugT1uFH_b_ggq-fXaJDRBMqQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: sm8150: align TLMM pin
- configuration with DT schema
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221006144518.256956-1-krzysztof.kozlowski@linaro.org>
- <20221007025735.5iceh26gd3agawx2@builder.lan>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221007025735.5iceh26gd3agawx2@builder.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJx26kUTzBeNkV_=gEeUYaatBwugT1uFH_b_ggq-fXaJDRBMqQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/10/2022 04:57, Bjorn Andersson wrote:
-> On Thu, Oct 06, 2022 at 04:45:17PM +0200, Krzysztof Kozlowski wrote:
->> DT schema expects TLMM pin configuration nodes to be named with
->> '-state' suffix and their optional children with '-pins' suffix.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+On Thu, Oct 06, 2022 at 11:46:45PM -0700, Justin Chen wrote:
+> On Thu, Oct 6, 2022 at 11:26 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Thu, Oct 06, 2022 at 04:21:09PM -0700, justinpopo6@gmail.com wrote:
+> > > From: Justin Chen <justinpopo6@gmail.com>
+> > >
+> > > Al Cooper is no longer the downstream maintainer for broadcom USB.
+> > > I will be taking his place as downstream and as an additional
+> > > upstream maintainer.
+> >
+> > What do you mean by "downstream" here?
+> >
+> Downstream as in internal to Broadcom. Apologies for the confusion.
 
-This one is a DTS, so it is supposed to go via your tree. :)
+Ok, but then why are these all gmail.com addresses?  Why not use your
+proper work addresses instead so that we can at least validate that the
+patches are coming from a broadcom.com domain?
 
-Best regards,
-Krzysztof
+Also, you should reword the changelog text :)
 
+thanks,
+
+greg k-h
