@@ -2,54 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6E35F72CF
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 04:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08EF35F72DE
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 04:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbiJGCfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 22:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
+        id S229482AbiJGCpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 22:45:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiJGCfq (ORCPT
+        with ESMTP id S229445AbiJGCpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 22:35:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F00B48A1;
-        Thu,  6 Oct 2022 19:35:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D27461B27;
-        Fri,  7 Oct 2022 02:35:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C611AC433C1;
-        Fri,  7 Oct 2022 02:35:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665110142;
-        bh=cQuKCiWfU/2J+LYO5sPPzD/nSjKkEzACVE1++kaEJxg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SxpaYvLSh3p1Dakz0anXXycu0YeCICXXKUP0me6Payo0t3NVqdHG/0PBQ9eATaADq
-         pN5iZKhCIzmlM+q+0Epi9k2bS3Q7g5qa4kbfd4JynzFPAfJ3rWzhTHvlFBx/cinBzp
-         N4wwdemWu6S1I2k/+iFfxxexKPvLLXkKVioucyQyx3Y4hMFZtJv/+XRjVlTzT/niRX
-         fiPXwLjoflavHYOBZQPvHLe1hYCZ8IM1Qve4tQRP38NcqxuEX3LB1uj51Qs53QIAE4
-         BjKa2PvEG6p+7BnVCUC/4OZFXQwpEsLsvRiBtjNReUiibdx8jsYJH8GSmJ7/elcQH9
-         wvYBTmWSkfb0w==
-Date:   Thu, 6 Oct 2022 19:35:42 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-man@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-xfs@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-block@vger.kernel.org
-Subject: Re: [man-pages PATCH v3] statx.2, open.2: document STATX_DIOALIGN
-Message-ID: <Yz+QflrzmdpF7g70@magnolia>
-References: <20221004174307.6022-1-ebiggers@kernel.org>
+        Thu, 6 Oct 2022 22:45:47 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310547CB42
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 19:45:46 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id k2so8516434ejr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 19:45:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ivyaq7Zdbnsd0LwI0QA38s0k4M1IqIXnuitGACfqB9k=;
+        b=bzFrq8wdea7xDwYZs0RAQ24bbRSX8VcLP9T5BKZxhrCx3Uz9b8LaQn/kiACgUxsGJO
+         OXaNDtefBFsWuashZDwx6B8Pr0Pz5MM1LsbM/Z9WnEBA/5YV9404CT6lf8QWh6rBSse4
+         Gq2a1Ga/98MxfJMP7VOkdth94yFqwq4AlLOg9LgaK5QSBghQ/nNPyTRxmsL2ZaFN6PDB
+         GvqSgzqZPl+oeRmYWJYKqa/Gd216GWXdMRyTDGG9SJpNROFqQiLB/VCM2RELnwPw3sbG
+         2P3THmEsvMnfHbTVNj3Npm8KVDUtfyxIvqRlTlbkY7Kvg0J2ztYhKgYoNCesoc2zSHQK
+         +orw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ivyaq7Zdbnsd0LwI0QA38s0k4M1IqIXnuitGACfqB9k=;
+        b=7JAGZu7qwhmpcsFWRGHoJt5nmh6RIFgLRRGCf4Dns3CUsqGqkdSPqvrRzw+UTBluOl
+         NoKz7cly+soqpAB/j2hv43DdT2D6AE/8QG1+2F/fdEijieqQAliO0ApQpV3Ww+PRN7LH
+         Vbb/3+aImCMqKu1M7pfjeAa1S3R5bVgFksTqMV3mjHX1oFUXrJ9IWjd1iOrJjiko9tX7
+         TNSppv3MEA3H6LFtgYM+97h8t8Of2KW4viNqCb3hLu+edWfZBXDor92wfJVlTyTHadbF
+         I6Y5Jx7oov15ZbGLdTW7B0fxw3DrV7ltb/l8Xdp19o+KDLRzuJyJnrtxcaHzZU9jtnnm
+         0adQ==
+X-Gm-Message-State: ACrzQf27gwHQiMwLZAxYbJLhxBpXNidUibY2BlBCvdh0dBz2t2jg3iwx
+        9kdnKcdjKveFHrk6jySY35Mz3kaf9peyX7AT0+A=
+X-Google-Smtp-Source: AMsMyM6ZGfHXX4tnm3sbFfUmH7+FXiBdS4uSaaCbjic61nBpTDo17A/Czhtq0ORlyQ0XNdPGduA6taEF1aLeNVapW2U=
+X-Received: by 2002:a17:906:eec7:b0:733:189f:b07a with SMTP id
+ wu7-20020a170906eec700b00733189fb07amr2382947ejb.230.1665110744602; Thu, 06
+ Oct 2022 19:45:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221004174307.6022-1-ebiggers@kernel.org>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS autolearn=ham
+References: <CAPM=9tzs4n8dDQ_XVVPS_5jrBgsNkhDQvf-B_XmUg+EG_M2i4Q@mail.gmail.com>
+ <CAHk-=whUp5Ufur6Bmv=H-rDDTNJJ-KVqOKkL+5FmR01jp0dbcA@mail.gmail.com>
+ <CADnq5_Of-8ZyBxee0fZ=0x-eV-2NX_+e9sd-9nmuHdLugSHp2g@mail.gmail.com>
+ <CAHk-=wi43xD06UgO2McDT3R=ze_aHgOGjcDOoggSwmQRv2kA+A@mail.gmail.com>
+ <CADnq5_N0Ef+1VUoDLdpHfJXqZFuPYbx5Lq+94NWciHcQC+VrMg@mail.gmail.com>
+ <CAPM=9tyAOnzwXyyPuoceZ1mimAkzxR-63YmKfVtcQX=swywNvg@mail.gmail.com> <CAHk-=wgghR4N-4XWjoK18NDkvjBL7i00ab8+otQg955pNGG_dQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wgghR4N-4XWjoK18NDkvjBL7i00ab8+otQg955pNGG_dQ@mail.gmail.com>
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 7 Oct 2022 12:45:32 +1000
+Message-ID: <CAPM=9txE+0EH2Tv_0toDD52j0JO7iDZoJap6qmvMAnRaDRwJNg@mail.gmail.com>
+Subject: Re: [git pull] drm for 6.1-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arvind.Yadav@amd.com
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,148 +79,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 10:43:07AM -0700, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> Document the STATX_DIOALIGN support for statx()
-> (https://git.kernel.org/linus/725737e7c21d2d25).
-> 
-> Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
-> ---
-> 
-> I'm resending this now that support for STATX_DIOALIGN has been merged
-> upstream.
+On Fri, 7 Oct 2022 at 09:45, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Thu, Oct 6, 2022 at 1:25 PM Dave Airlie <airlied@gmail.com> wrote:
+> >
+> >
+> > [ 1234.778760] BUG: kernel NULL pointer dereference, address: 000000000=
+0000088
+> > [ 1234.778813] RIP: 0010:drm_sched_job_done.isra.0+0xc/0x140 [gpu_sched=
+]
+>
+> As far as I can tell, that's the line
+>
+>         struct drm_gpu_scheduler *sched =3D s_fence->sched;
+>
+> where 's_fence' is NULL. The code is
+>
+>    0: 0f 1f 44 00 00        nopl   0x0(%rax,%rax,1)
+>    5: 41 54                push   %r12
+>    7: 55                    push   %rbp
+>    8: 53                    push   %rbx
+>    9: 48 89 fb              mov    %rdi,%rbx
+>    c:* 48 8b af 88 00 00 00 mov    0x88(%rdi),%rbp <-- trapping instructi=
+on
+>   13: f0 ff 8d f0 00 00 00 lock decl 0xf0(%rbp)
+>   1a: 48 8b 85 80 01 00 00 mov    0x180(%rbp),%rax
+>
+> and that next 'lock decl' instruction would have been the
+>
+>         atomic_dec(&sched->hw_rq_count);
+>
+> at the top of drm_sched_job_done().
+>
+> Now, as to *why* you'd have a NULL s_fence, it would seem that
+> drm_sched_job_cleanup() was called with an active job. Looking at that
+> code, it does
+>
+>         if (kref_read(&job->s_fence->finished.refcount)) {
+>                 /* drm_sched_job_arm() has been called */
+>                 dma_fence_put(&job->s_fence->finished);
+>         ...
+>
+> but then it does
+>
+>         job->s_fence =3D NULL;
+>
+> anyway, despite the job still being active. The logic of that kind of
+> "fake refcount" escapes me. The above looks fundamentally racy, not to
+> say pointless and wrong (a refcount is a _count_, not a flag, so there
+> could be multiple references to it, what says that you can just
+> decrement one of them and say "I'm done").
+>
+> Now, _why_ any of that happens, I have no idea. I'm just looking at
+> the immediate "that pointer is NULL" thing, and reacting to what looks
+> like a completely bogus refcount pattern.
+>
+> But that odd refcount pattern isn't new, so it's presumably some user
+> on the amd gpu side that changed.
+>
+> The problem hasn't happened again for me, but that's not saying a lot,
+> since it was very random to begin with.
 
-Woo!  Thank you for getting this over the line! :)
+I chased down the culprit to a drm sched patch, I'll send you a pull
+with a revert in it.
 
---D
+commit e4dc45b1848bc6bcac31eb1b4ccdd7f6718b3c86
+Author: Arvind Yadav <Arvind.Yadav@amd.com>
+Date:   Wed Sep 14 22:13:20 2022 +0530
 
-> v3: updated mentions of Linux version, fixed some punctuation, and added
->     a Reviewed-by
-> 
-> v2: rebased onto man-pages master branch, mentioned xfs, and updated
->     link to patchset
-> 
->  man2/open.2  | 43 ++++++++++++++++++++++++++++++++-----------
->  man2/statx.2 | 29 +++++++++++++++++++++++++++++
->  2 files changed, 61 insertions(+), 11 deletions(-)
-> 
-> diff --git a/man2/open.2 b/man2/open.2
-> index deba7e4ea..b8617e0d2 100644
-> --- a/man2/open.2
-> +++ b/man2/open.2
-> @@ -1732,21 +1732,42 @@ of user-space buffers and the file offset of I/Os.
->  In Linux alignment
->  restrictions vary by filesystem and kernel version and might be
->  absent entirely.
-> -However there is currently no filesystem\-independent
-> -interface for an application to discover these restrictions for a given
-> -file or filesystem.
-> -Some filesystems provide their own interfaces
-> -for doing so, for example the
-> +The handling of misaligned
-> +.B O_DIRECT
-> +I/Os also varies; they can either fail with
-> +.B EINVAL
-> +or fall back to buffered I/O.
-> +.PP
-> +Since Linux 6.1,
-> +.B O_DIRECT
-> +support and alignment restrictions for a file can be queried using
-> +.BR statx (2),
-> +using the
-> +.B STATX_DIOALIGN
-> +flag.
-> +Support for
-> +.B STATX_DIOALIGN
-> +varies by filesystem; see
-> +.BR statx (2).
-> +.PP
-> +Some filesystems provide their own interfaces for querying
-> +.B O_DIRECT
-> +alignment restrictions, for example the
->  .B XFS_IOC_DIOINFO
->  operation in
->  .BR xfsctl (3).
-> +.B STATX_DIOALIGN
-> +should be used instead when it is available.
->  .PP
-> -Under Linux 2.4, transfer sizes, the alignment of the user buffer,
-> -and the file offset must all be multiples of the logical block size
-> -of the filesystem.
-> -Since Linux 2.6.0, alignment to the logical block size of the
-> -underlying storage (typically 512 bytes) suffices.
-> -The logical block size can be determined using the
-> +If none of the above is available, then direct I/O support and alignment
-> +restrictions can only be assumed from known characteristics of the filesystem,
-> +the individual file, the underlying storage device(s), and the kernel version.
-> +In Linux 2.4, most block device based filesystems require that the file offset
-> +and the length and memory address of all I/O segments be multiples of the
-> +filesystem block size (typically 4096 bytes).
-> +In Linux 2.6.0, this was relaxed to the logical block size of the block device
-> +(typically 512 bytes).
-> +A block device's logical block size can be determined using the
->  .BR ioctl (2)
->  .B BLKSSZGET
->  operation or from the shell using the command:
-> diff --git a/man2/statx.2 b/man2/statx.2
-> index 0d1b4591f..50397057d 100644
-> --- a/man2/statx.2
-> +++ b/man2/statx.2
-> @@ -61,7 +61,12 @@ struct statx {
->         containing the filesystem where the file resides */
->      __u32 stx_dev_major;   /* Major ID */
->      __u32 stx_dev_minor;   /* Minor ID */
-> +
->      __u64 stx_mnt_id;      /* Mount ID */
-> +
-> +    /* Direct I/O alignment restrictions */
-> +    __u32 stx_dio_mem_align;
-> +    __u32 stx_dio_offset_align;
->  };
->  .EE
->  .in
-> @@ -247,6 +252,8 @@ STATX_BTIME	Want stx_btime
->  STATX_ALL	The same as STATX_BASIC_STATS | STATX_BTIME.
->  	It is deprecated and should not be used.
->  STATX_MNT_ID	Want stx_mnt_id (since Linux 5.8)
-> +STATX_DIOALIGN	Want stx_dio_mem_align and stx_dio_offset_align
-> +	(since Linux 6.1; support varies by filesystem)
->  .TE
->  .in
->  .PP
-> @@ -407,6 +414,28 @@ This is the same number reported by
->  .BR name_to_handle_at (2)
->  and corresponds to the number in the first field in one of the records in
->  .IR /proc/self/mountinfo .
-> +.TP
-> +.I stx_dio_mem_align
-> +The alignment (in bytes) required for user memory buffers for direct I/O
-> +.BR "" ( O_DIRECT )
-> +on this file, or 0 if direct I/O is not supported on this file.
-> +.IP
-> +.B STATX_DIOALIGN
-> +.IR "" ( stx_dio_mem_align
-> +and
-> +.IR stx_dio_offset_align )
-> +is supported on block devices since Linux 6.1.
-> +The support on regular files varies by filesystem; it is supported by ext4,
-> +f2fs, and xfs since Linux 6.1.
-> +.TP
-> +.I stx_dio_offset_align
-> +The alignment (in bytes) required for file offsets and I/O segment lengths for
-> +direct I/O
-> +.BR "" ( O_DIRECT )
-> +on this file, or 0 if direct I/O is not supported on this file.
-> +This will only be nonzero if
-> +.I stx_dio_mem_align
-> +is nonzero, and vice versa.
->  .PP
->  For further information on the above fields, see
->  .BR inode (7).
-> 
-> base-commit: bc28d289e5066fc626df260bafc249846a0f6ae6
-> -- 
-> 2.37.3
-> 
+    drm/sched: Use parent fence instead of finished
+
+    Using the parent fence instead of the finished fence
+    to get the job status. This change is to avoid GPU
+    scheduler timeout error which can cause GPU reset.
+
+    Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
+    Reviewed-by: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+    Link: https://patchwork.freedesktop.org/patch/msgid/20220914164321.2156=
+-6-Arvind.Yadav@amd.com
+    Signed-off-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+
+I'll let Arvind and Christian maybe work out what is going wrong there.
+
+Dave.
+
+>
+>                  Linus
