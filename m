@@ -2,121 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 697FD5F8137
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 01:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E06C5F8147
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 01:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbiJGXal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 19:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40630 "EHLO
+        id S229699AbiJGXiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 19:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiJGXa3 (ORCPT
+        with ESMTP id S229673AbiJGXhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 19:30:29 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0582D3740D
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 16:30:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665185428; x=1696721428;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PNssUzBwhqhEAhtMVzvvKKGAbRzvhWqeld2MLSjq8Fc=;
-  b=Jeu8UaeTsi3/Lhs2BHu/zaGhmC/ljUanGThhr6BRhCujDHcCr4YLoQjX
-   EwWg625tRFb1ShLF/+D/hQJcRqBZWx1Fxr7mMAVBRG2sgGGeo2DebcW2t
-   OxLg/pit7grf94dxX5s8EPOzvaCdzya7Jw5BUBDA15OWa2TlJiYuy+Ja3
-   N1zDyvGmIfKzeNvzCjbr+CXxT0WB92G+uXLWJHertGmCGq7eOJtN3IPNu
-   RceJl11Kpuee+sIZ6WDXN2Unl6cuHzJqIzn5B0vcnvdg/PaqzGOY+eUOt
-   z3kiDZPQ13xzHWWIUDKpqTCygFpa/oXrrSC07g8+hPErMx3l5Rn+UMRWz
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10493"; a="302584626"
-X-IronPort-AV: E=Sophos;i="5.95,168,1661842800"; 
-   d="scan'208";a="302584626"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 16:30:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10493"; a="603053334"
-X-IronPort-AV: E=Sophos;i="5.95,168,1661842800"; 
-   d="scan'208";a="603053334"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga006.jf.intel.com with ESMTP; 07 Oct 2022 16:30:27 -0700
-Date:   Fri, 7 Oct 2022 16:36:58 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [RFC PATCH 10/23] sched/fair: Use classes of tasks when
- selecting a busiest runqueue
-Message-ID: <20221007233658.GA6555@ranerica-svr.sc.intel.com>
-References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
- <20220909231205.14009-11-ricardo.neri-calderon@linux.intel.com>
- <YzLdxS3dXCHq+bLa@hirez.programming.kicks-ass.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzLdxS3dXCHq+bLa@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 7 Oct 2022 19:37:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7FA2618;
+        Fri,  7 Oct 2022 16:37:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1F2D61E03;
+        Fri,  7 Oct 2022 23:37:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5D8C0C433B5;
+        Fri,  7 Oct 2022 23:37:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665185870;
+        bh=357zRFROIW4a2y8A+PgWe9vPssaARCkGsIvrFwgEUAs=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=l8U+HwtovLcoymGcKoyQATy/VG/XU7vXnhpLKp3F9eAlieqT/Sf3wRrelYPj/gzc6
+         gUbIP0NMMPQlMMndQL6KPqB99OUeqVP5hmW2ZfknowtpvDajtjSl89LjCURm4GZ/BP
+         ooeeIaaQga4wBjbSrFPQ4AYXfZsrgxT9chC0Z5aySivQ+pD8D1ZRPvcGyvn4AGKMLV
+         uAbqtVik5n6pDD9i7ugfg7XoT5OWnLNegNps5WhO7Nwe3en5Wk91EAP39UxBhoNrkK
+         X/ihQMXmpDKuGbbUsNMpOwfs5LKk6p/d/d33re0LBCUf34x5CHC5xphLVTEHywlhno
+         UwuIURBE9omNg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 43C29E21ED6;
+        Fri,  7 Oct 2022 23:37:50 +0000 (UTC)
+Subject: Re: [GIT PULL]: dmaengine updates for v6.1-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Y0AeWM7UabE2ZK34@matsya>
+References: <Y0AeWM7UabE2ZK34@matsya>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Y0AeWM7UabE2ZK34@matsya>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git tags/dmaengine-6.1-rc1
+X-PR-Tracked-Commit-Id: b957df98469240d459bcfae6904b36d6ecea9bee
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 416a2f4f91525fcdec821320bc4608cf012d418e
+Message-Id: <166518587026.18327.1358246973646450497.pr-tracker-bot@kernel.org>
+Date:   Fri, 07 Oct 2022 23:37:50 +0000
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        dma <dmaengine@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 01:25:57PM +0200, Peter Zijlstra wrote:
-> On Fri, Sep 09, 2022 at 04:11:52PM -0700, Ricardo Neri wrote:
-> 
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 7368a0b453ee..085b1f75d90b 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -10009,6 +10009,7 @@ static struct rq *find_busiest_queue(struct lb_env *env,
-> >  	int i;
-> >  
-> >  	for_each_cpu_and(i, sched_group_span(group), env->cpus) {
-> > +		int busiest_class_delta_score = INT_MIN;
-> 
-> You sure you want to break ties toward a negative IPC 'improvement' ?
+The pull request you sent on Fri, 7 Oct 2022 18:10:56 +0530:
 
-Yes. We may have a negative IPC class delta if the destination CPU has
-lower prioriy than the CPUs in the busiest group. This may occur when
-the busiest group is a core with more than one busy SMT sibling.
+> git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git tags/dmaengine-6.1-rc1
 
-> 
-> >  		unsigned long capacity, load, util;
-> >  		unsigned int nr_running;
-> >  		enum fbq_type rt;
-> > @@ -10118,6 +10119,20 @@ static struct rq *find_busiest_queue(struct lb_env *env,
-> >  			if (busiest_nr < nr_running) {
-> >  				busiest_nr = nr_running;
-> >  				busiest = rq;
-> > +			} else if (sched_task_classes_enabled() &&
-> > +				   busiest_nr == nr_running) {
-> > +				int curr_class_delta_score;
-> > +
-> > +				curr_class_delta_score = arch_get_task_class_score(rq->curr->class,
-> > +										   env->dst_cpu) -
-> > +							 arch_get_task_class_score(rq->curr->class,
-> > +										   cpu_of(rq));
-> 
-> *sigh*, you really couldn't find a more ugly layout if you tried.
-> 
-> Perhaps use less than novella length identifiers?
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/416a2f4f91525fcdec821320bc4608cf012d418e
 
-Sure, I will revisit the naming of the identifiers.
+Thank you!
 
-Thanks and BR,
-Ricardo
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
