@@ -2,107 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609FA5F741C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 08:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0FC85F741D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 08:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbiJGGIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 02:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48428 "EHLO
+        id S229587AbiJGGJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 02:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiJGGIu (ORCPT
+        with ESMTP id S229588AbiJGGJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 02:08:50 -0400
-Received: from forward500j.mail.yandex.net (forward500j.mail.yandex.net [5.45.198.250])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552F2B2772
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 23:08:47 -0700 (PDT)
-Received: from sas1-78334f65778a.qloud-c.yandex.net (sas1-78334f65778a.qloud-c.yandex.net [IPv6:2a02:6b8:c08:b21f:0:640:7833:4f65])
-        by forward500j.mail.yandex.net (Yandex) with ESMTP id 065F76CB6733;
-        Fri,  7 Oct 2022 09:08:46 +0300 (MSK)
-Received: by sas1-78334f65778a.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id gnALNBxKrX-8gi0sD8f;
-        Fri, 07 Oct 2022 09:08:44 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1665122925;
-        bh=/dZOB0OZJ5ewGOYu6Vfqo3dohgfS+f5k8XzKDbToPI0=;
-        h=Cc:Message-ID:Subject:Date:References:To:From:In-Reply-To;
-        b=iRCL76I/Z5mJWT4zaddxYfALWpgqZn2sHdNjdOuO/IP5PzDvVxEcsgiKDEuKMl29I
-         DSnX1ikLFGBDZBU9qGlr5A0yGMRzjZXRmh7Fghn7MazWYgaw77in7dHvQLLLizxlaa
-         td9mpUR0go+l/s8gTdV06Bgb3ipi06Spsx+Zg48E=
-Authentication-Results: sas1-78334f65778a.qloud-c.yandex.net; dkim=pass header.i=@maquefel.me
-Date:   Fri, 7 Oct 2022 09:08:42 +0300
-From:   Nikita Shubin <nikita.shubin@maquefel.me>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux@yadro.com, Nikita Shubin <n.shubin@yadro.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
-        Tsukasa OI <research_trasio@irq.a4lg.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] riscv: fix multi-letter extension compare
-Message-ID: <20221007090842.69272c4a@redslave.neermore.group>
-In-Reply-To: <20221006070257.11632-1-nikita.shubin@maquefel.me>
-References: <20221006070257.11632-1-nikita.shubin@maquefel.me>
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 7 Oct 2022 02:09:29 -0400
+Received: from domac.alu.hr (domac.alu.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4462117550
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 23:09:28 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 32D3D6050A;
+        Fri,  7 Oct 2022 08:09:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1665122965; bh=LqmfREN0Bf1qQESZX6VLXgUCmD1S5JVvfBYMPvqcMC4=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=TfOjpOWopc9dRS8tf/MSkZRQ7fIjp41MowtTX75mk0qrfK0OqPNP5az+KTvxEc0hY
+         ug9HefUwIwqYr5cUrVm2nNWIERc1+Sjp0vaLXkbm4tZ+DL4D2OdgfoDelyyy2IdTsX
+         VzfS994CZQVazsI6iqw1o6t3ATu91/FOBiiwkIwJL2WbqlnYPVwyGUE6iY/CFq34Vo
+         7NPngFKtOy5fllT84tNdEGkkW4dL4itXzJnLX7lpYVSRCkX24vUyDl7FOUryZKfOkR
+         2xitFq0kYgv2bkur/CoooEHXB3AUKbEskIfXD6rzTW40iFgbV/nJpnKTgO6FLBuP3e
+         n9Ai4+8r80/ig==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id OvRwdqezS8bm; Fri,  7 Oct 2022 08:09:22 +0200 (CEST)
+Received: from [161.53.83.51] (pc-mtodorov.grf.hr [161.53.83.51])
+        by domac.alu.hr (Postfix) with ESMTPSA id 6697E60509;
+        Fri,  7 Oct 2022 08:09:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1665122962; bh=LqmfREN0Bf1qQESZX6VLXgUCmD1S5JVvfBYMPvqcMC4=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=x8hGZKrgIUM85evjEktBsYlawmnGNZqGqcJ4gAqFhrWMAM/nVctwUNcMl9FNpCiLg
+         SDg37HoLOVVDaF/7sO51wpRcUMZF2w3100Job3DPead1dsOtaQ4nrlsD90k8lG6xhX
+         IxwapdnslAmslHEdPDscncVDMLFkNt/hOnOahMPly4fjxNuQhKfEzZ2V3+NNIQHZwu
+         biGyxKYdlLM2MJ0odTWcR77CGO4hHXGwPoxHz8q7z7YeQ/8sMtQDUbKfIh6V6Cr5sK
+         KBJgJHh0P91uQpo0REuPaDwY/dIVjlDSeO4kv/EiUcRTgPNY6y4K66a2gtlJ/YJgM1
+         8YO+VYLkNj2lg==
+Message-ID: <f092502a-1e1c-4aa2-c7bd-4e4a6d99ce9b@alu.unizg.hr>
+Date:   Fri, 7 Oct 2022 08:09:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: Re: 6.0.0-RC kernels trigger Firefox snap bug with 6.0.0-rc3 through
+ 6.0.0-rc7
+To:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        linux-kernel@vger.kernel.org
+Cc:     Marc Miltenberger <marcmiltenberger@gmail.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <b0c258c3-6dcf-aade-efc4-d62a8b3a1ce2@alu.unizg.hr>
+ <5bb75cbc-a0db-537b-12d0-889230c865d8@leemhuis.info>
+ <0fb2a9ff-df76-8af9-e54a-c2dc6bfd9478@leemhuis.info>
+ <bdab45d3-c893-42ff-dbb9-5fa93d0dff55@alu.unizg.hr>
+ <dd62210d-d095-f971-2b7b-0ec54fd189a9@leemhuis.info>
+ <c05134cc-92fa-dac2-e738-cf6fae194521@alu.unizg.hr>
+ <6ba15505-1c04-df2b-237f-b3060f26d2e6@leemhuis.info>
+ <f23494b5-b4ea-a32a-e260-4541039dedc8@alu.unizg.hr>
+Content-Language: en-US
+In-Reply-To: <f23494b5-b4ea-a32a-e260-4541039dedc8@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Atish,
+On 06. 10. 2022. 19:13, Mirsad Goran Todorovac wrote:
 
-My bad, i somehow decided that 'sscofpmf' should
-be 'zsscofpmf' in device tree, but it's 'Sscofpmf' actually.
+> On 06. 10. 2022. 18:58, Thorsten Leemhuis wrote:
+>
+>> On 06.10.22 18:43, Mirsad Goran Todorovac wrote:
+>>
+>> On 06. 10. 2022. 15:23, Thorsten Leemhuis wrote:
+>>>> On 06.10.22 14:43, Mirsad Todorovac wrote:
+>>>>> On 10/6/22 14:25, Thorsten Leemhuis wrote:
+>>>>>
+>>>>>> One more question:
+>>>>>>
+>>>>>> On 06.10.22 14:00, Thorsten Leemhuis wrote:
+>>>>>> Were those two vanilla kernels? I asked in #snappy on IRC and was told
+>>>>>> that "snapd simply expects some ubuntu bit in patched into the kernel if
+>>>>>> it detects that it runs on an official ubuntu install...". This was also
+>>>>>> suggested "it probably makes sense to file a but in LP to make the
+>>>>>> kernel team aware".
+>>>>>>
+>>>>> Yes, last time I tried it with git clone from linux_stable on kernel.org
+>>>>> and
+>>>>> config-6.0.0-060000-generic from the official Ubuntu mainline build
+>>>> You don't want to do that. Better take the config used to build a
+>>>> working kernel (say 5.19.y) and then build 6.0 with it (after running
+>>>> "make olddefconfig"), because it might be a new kernel option (say for a
+>>>> new security technique) that might cause the problem, as explained here:
+>>>> https://docs.kernel.org/admin-guide/reporting-regressions.html
+>>> If I understood well, that would mean buildingwww.kernel.org  git
+>>> linux_stable
+>>> source with Ubuntu's config-5.9.13-051903?
+>> I meant "please download Linux 6.0 (ideally through git, that you have
+>> everything to perform a bisection), add the config from a working kernel
+>> (if config-5.9.13-051903 is one, yeah, then take that) as .config and
+>> then run "make olddefconfig" before compiling and installing the kernel
+>> to see if 6.0 fails with that config that was working.
+>
+> Thank you for all your instructions.
+>
+> Yes, I can confirm I already did a git pull from 
+> git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+> and a `git checkout linux6.0.y' with Ubuntu's config-5.19.13-051903, 
+> for that will, being a
+> generic build, surely cover all my devices.
+>
+> The build is already in progress, but it may take a couple of hours 
+> for the bud to show with
+> Firefox "tabs crashed" and consequential Verneed record mismatch, 
+> provided it hath not been
+> fixed already by something else.
+>
+> Still, I would be the happier version of myself if we could pinpoint 
+> the exact line of kernel source
+> that caused this. (And yes, all my builds were from kernel.org repos, 
+> whether Mr. Torvalds's or
+> the linux_stable line.)
+>
+Hi Thorsten, Marc,
 
-Sorry for noise please ignore this patch.
+I can confirm that the "Firefox tab crashed" problem with Verneed record 
+version mismatch persisted in the
+official Ubuntu's 6.0.0-06000 mainline build:
 
-On Thu,  6 Oct 2022 10:02:56 +0300
-Nikita Shubin <nikita.shubin@maquefel.me> wrote:
+marvin@marvin-IdeaPad-3-15ITL6:~$ uname -rms
+Linux 6.0.0-060000-generic x86_64
+marvin@marvin-IdeaPad-3-15ITL6:~$ /snap/bin/firefox &
+[1] 45245
+marvin@marvin-IdeaPad-3-15ITL6:~$ /bin/bash: 
+/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
+/bin/bash: error while loading shared libraries: 
+/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verneed record
 
-> From: Nikita Shubin <n.shubin@yadro.com>
-> 
-> Increment ext pointer to match letters after 'z' character, so it
-> points to actual extension name.
-> 
-> Fixes: 4905ec2fb7e6 ("RISC-V: Add sscofpmf extension support")
-> Signed-off-by: Nikita Shubin <n.shubin@yadro.com>
-> ---
-> Hello Atish,
-> 
-> Sorry to blame you, but i double checked this and i don't see a way 
-> how extensions from device tree could be successfully matched with 
-> encoded ones without incrementing the ext pointer or prepending 
-> the encoded extensions with 'z' letter.
-> 
-> I have no idea how this could slip through review - am i missing
-> something ? ---
->  arch/riscv/kernel/cpufeature.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/riscv/kernel/cpufeature.c
-> b/arch/riscv/kernel/cpufeature.c index 3b5583db9d80..031546052dc0
-> 100644 --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -199,6 +199,7 @@ void __init riscv_fill_hwcap(void)
->  				this_hwcap |= isa2hwcap[(unsigned
-> char)(*ext)]; set_bit(*ext - 'a', this_isa);
->  			} else {
-> +				ext++;
->  				SET_ISA_EXT_MAP("sscofpmf",
-> RISCV_ISA_EXT_SSCOFPMF); SET_ISA_EXT_MAP("svpbmt",
-> RISCV_ISA_EXT_SVPBMT); SET_ISA_EXT_MAP("zicbom",
-> RISCV_ISA_EXT_ZICBOM);
+[1]+  Exit 127                /snap/bin/firefox
+marvin@marvin-IdeaPad-3-15ITL6:~$
+
+The build with the Ubuntu's config-5.19.3-051903-generic config file an 
+linux_stable 6.0.0 source
+is currently in testing. To repeat, it usually took a couple of hours of 
+work in Firefox (especially playing Youtube
+videos in a tab) before the bug manifested.
+
+Regards,
+-mt
+
+-- 
+
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+-- 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
+tel. +385 (0)1 3711 451
+mob. +385 91 57 88 355
 
