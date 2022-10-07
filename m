@@ -2,118 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 638125F77AE
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 13:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D1A5F77B6
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 13:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbiJGLwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 07:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37706 "EHLO
+        id S229688AbiJGLym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 07:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiJGLwC (ORCPT
+        with ESMTP id S229513AbiJGLyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 07:52:02 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CCEB7ECB;
-        Fri,  7 Oct 2022 04:52:00 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id e129so4443110pgc.9;
-        Fri, 07 Oct 2022 04:52:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=US3Gb047SY8Dq4+eZYrFm7pCYLCCqm5ow/t9m2ICNWQ=;
-        b=SAknEYDrNdrqAMzs7OhKIzQZfKbR2T+lY36/60vHTGYv9PIKFpzA+Acn/I0djXEHbu
-         mKkq6CPFcqt50Zn5OHGXU16oDhZ+rNajeqCypfD0nrbOBln5h/b66KWQkMf7npSYmX4Y
-         1gUUluiiQ1fA7d7gb6HQ2Y7q4FVGhRfGYtImTAuIZplJEGCFkdslARV8OcKTCqwDb+ii
-         C2bnc6dZ1qAQ3EvHEE9Rri62nx1t0FOKxXAwf90irjfNYuDsA4ehy19894ohiCTC6xj/
-         hYnWGTDXxBYjo1B3YOGm2zYpWUH0cdYOJRwpKOSjoCQ9Wrzq3MamEO7wed/d8x/q8BaJ
-         Dtrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=US3Gb047SY8Dq4+eZYrFm7pCYLCCqm5ow/t9m2ICNWQ=;
-        b=zZS8RyP62QUBkXo+DOigxEEa0BjKmUc4tVfWfDdmexxp/03QiPOoQ7xF8484TJNq+O
-         j5r5/nPia/XKS9hPj8NrkvJNetFaMu73oIrmsapIv10zb205nXRxHpFjaH2/VXwY9CjV
-         1aA6bok/gWMBGuVulzd6bEc/MJl3/uXnTtniLkoxN2Lw42ez+K25nyAtzPp8s+4QRlaU
-         OhCtDfPwmawIl03D7c8J4lTilK8xW1GvzfoPQC2shzu9OOO4dkQ9FT3iKvr4ZZoALzZz
-         xJKlu/IfJiuubuLeMAqecwebpyBNexiCzwo8P1PLv9fWXu+yxz3yIgDG12Up88hZfvU0
-         4HUQ==
-X-Gm-Message-State: ACrzQf2w8DLY6Y5WaLRb7zxBIsadnI5A4WnVA+DYVFkD+Sb4ls03+Ieg
-        ZbPhrMxRE/nQz9D+SAWOZnw1FvN6OpQES6NEdFc=
-X-Google-Smtp-Source: AMsMyM5bKM2n6T9R0fdy+E1igkb+3XmtmmLUSaAs2cCs5UN+499nLVCEvgNIqFTs88aNq59nky0o/a3tEdudon8s7+4=
-X-Received: by 2002:a62:144b:0:b0:562:38de:9a0e with SMTP id
- 72-20020a62144b000000b0056238de9a0emr4845862pfu.78.1665143520248; Fri, 07 Oct
- 2022 04:52:00 -0700 (PDT)
+        Fri, 7 Oct 2022 07:54:39 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7404DD7
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 04:54:35 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oglw0-0006tO-8L; Fri, 07 Oct 2022 13:54:32 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jisheng Zhang <jszhang@kernel.org>
+Subject: Re: [PATCH 4/8] riscv: cpufeature: extend riscv_cpufeature_patch_func to all ISA extensions
+Date:   Fri, 07 Oct 2022 13:54:31 +0200
+Message-ID: <3185764.oiGErgHkdL@diego>
+In-Reply-To: <20221006070818.3616-5-jszhang@kernel.org>
+References: <20221006070818.3616-1-jszhang@kernel.org> <20221006070818.3616-5-jszhang@kernel.org>
 MIME-Version: 1.0
-References: <20221007111442.51481-1-a5b6@riseup.net> <20221007111442.51481-2-a5b6@riseup.net>
-In-Reply-To: <20221007111442.51481-2-a5b6@riseup.net>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Fri, 7 Oct 2022 08:51:45 -0300
-Message-ID: <CAOMZO5C3PgvV6uoOZ_2iO8=QpE6bHzquo-hxNV4QgX6EmpcUGQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] drivers: gpu: drm: add driver for samsung
- s6e3fc2x01 cmd mode panel
-To:     Nia Espera <a5b6@riseup.net>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Caleb Connolly <caleb@connolly.tech>,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nia,
+Am Donnerstag, 6. Oktober 2022, 09:08:14 CEST schrieb Jisheng Zhang:
+> make the riscv_cpufeature_patch_func() scan all ISA extensions rather
+> than limited feature macros.
+> 
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  arch/riscv/include/asm/errata_list.h |  9 ++--
+>  arch/riscv/kernel/cpufeature.c       | 61 +++-------------------------
+>  2 files changed, 9 insertions(+), 61 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
+> index 19a771085781..722525f4fc96 100644
+> --- a/arch/riscv/include/asm/errata_list.h
+> +++ b/arch/riscv/include/asm/errata_list.h
+> @@ -6,6 +6,7 @@
+>  #define ASM_ERRATA_LIST_H
+>  
+>  #include <asm/alternative.h>
+> +#include <asm/hwcap.h>
+>  #include <asm/vendorid_list.h>
+>  
+>  #ifdef CONFIG_ERRATA_SIFIVE
+> @@ -20,10 +21,6 @@
+>  #define	ERRATA_THEAD_NUMBER 2
+>  #endif
+>  
+> -#define	CPUFEATURE_SVPBMT 0
+> -#define	CPUFEATURE_ZICBOM 1
+> -#define	CPUFEATURE_NUMBER 2
+> -
+>  #ifdef __ASSEMBLY__
+>  
+>  #define ALT_INSN_FAULT(x)						\
+> @@ -53,7 +50,7 @@ asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,	\
+>  #define ALT_SVPBMT(_val, prot)						\
+>  asm(ALTERNATIVE_2("li %0, 0\t\nnop",					\
+>  		  "li %0, %1\t\nslli %0,%0,%3", 0,			\
+> -			CPUFEATURE_SVPBMT, CONFIG_RISCV_ISA_SVPBMT,	\
+> +			RISCV_ISA_EXT_SVPBMT, CONFIG_RISCV_ISA_SVPBMT,	\
+>  		  "li %0, %2\t\nslli %0,%0,%4", THEAD_VENDOR_ID,	\
+>  			ERRATA_THEAD_PBMT, CONFIG_ERRATA_THEAD_PBMT)	\
+>  		: "=r"(_val)						\
+> @@ -127,7 +124,7 @@ asm volatile(ALTERNATIVE_2(						\
+>  	"add a0, a0, %0\n\t"						\
+>  	"2:\n\t"							\
+>  	"bltu a0, %2, 3b\n\t"						\
+> -	"nop", 0, CPUFEATURE_ZICBOM, CONFIG_RISCV_ISA_ZICBOM,		\
+> +	"nop", 0, RISCV_ISA_EXT_ZICBOM, CONFIG_RISCV_ISA_ZICBOM,	\
 
-On Fri, Oct 7, 2022 at 8:16 AM Nia Espera <a5b6@riseup.net> wrote:
+hmm, would it make sense to also at the same time extend the errata_id
+in the alternatives struct to unsigned long?
 
-> +static int samsung_s6e3fc2x01_prepare(struct drm_panel *panel)
-> +{
-> +       struct samsung_s6e3fc2x01 *ctx = to_samsung_s6e3fc2x01(panel);
-> +       struct device *dev = &ctx->dsi->dev;
-> +       int ret;
-> +
-> +       if (ctx->prepared)
-> +               return 0;
-> +
-> +       ret = regulator_enable(ctx->supply);
-> +       if (ret < 0) {
-> +               dev_err(dev, "Failed to enable regulator: %d\n", ret);
-> +               return ret;
-> +       }
-> +
-> +       samsung_s6e3fc2x01_reset(ctx);
-> +
-> +       ret = samsung_s6e3fc2x01_on(ctx);
-> +       if (ret < 0) {
-> +               dev_err(dev, "Failed to initialize panel: %d\n", ret);
-> +               gpiod_set_value_cansleep(ctx->reset_gpio, 1);
+Right now it's a unsigned int, and we're already at bit30 with the current extensions.
 
-You should also call regulator_disable() here in the case of failure.
+Otherwise the idea is pretty neat of allowing easy handling for all extensions
 
-> +static int samsung_s6e3fc2x01_unprepare(struct drm_panel *panel)
-> +{
-> +       struct samsung_s6e3fc2x01 *ctx = to_samsung_s6e3fc2x01(panel);
-> +       struct device *dev = &ctx->dsi->dev;
-> +       int ret;
-> +
-> +       if (!ctx->prepared)
-> +               return 0;
-> +
-> +       ret = samsung_s6e3fc2x01_off(ctx);
-> +       if (ret < 0)
-> +               dev_err(dev, "Failed to un-initialize panel: %d\n", ret);
-> +
-> +       gpiod_set_value_cansleep(ctx->reset_gpio, 1);
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 
-regulator_disable() should be called here as well.
+
+>  	"mv a0, %1\n\t"							\
+>  	"j 2f\n\t"							\
+>  	"3:\n\t"							\
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index afa54635c180..2b1f18f97253 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -251,61 +251,11 @@ void __init riscv_fill_hwcap(void)
+>  }
+>  
+>  #ifdef CONFIG_RISCV_ALTERNATIVE
+> -static bool __init_or_module cpufeature_probe_svpbmt(unsigned int stage)
+> -{
+> -#ifdef CONFIG_RISCV_ISA_SVPBMT
+> -	switch (stage) {
+> -	case RISCV_ALTERNATIVES_EARLY_BOOT:
+> -		return false;
+> -	default:
+> -		return riscv_isa_extension_available(NULL, SVPBMT);
+> -	}
+> -#endif
+> -
+> -	return false;
+> -}
+> -
+> -static bool __init_or_module cpufeature_probe_zicbom(unsigned int stage)
+> -{
+> -#ifdef CONFIG_RISCV_ISA_ZICBOM
+> -	switch (stage) {
+> -	case RISCV_ALTERNATIVES_EARLY_BOOT:
+> -		return false;
+> -	default:
+> -		return riscv_isa_extension_available(NULL, ZICBOM);
+> -	}
+> -#endif
+> -
+> -	return false;
+> -}
+> -
+> -/*
+> - * Probe presence of individual extensions.
+> - *
+> - * This code may also be executed before kernel relocation, so we cannot use
+> - * addresses generated by the address-of operator as they won't be valid in
+> - * this context.
+> - */
+> -static u32 __init_or_module cpufeature_probe(unsigned int stage)
+> -{
+> -	u32 cpu_req_feature = 0;
+> -
+> -	if (cpufeature_probe_svpbmt(stage))
+> -		cpu_req_feature |= (1U << CPUFEATURE_SVPBMT);
+> -
+> -	if (cpufeature_probe_zicbom(stage))
+> -		cpu_req_feature |= (1U << CPUFEATURE_ZICBOM);
+> -
+> -	return cpu_req_feature;
+> -}
+> -
+>  void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
+>  						  struct alt_entry *end,
+>  						  unsigned int stage)
+>  {
+> -	u32 cpu_req_feature = cpufeature_probe(stage);
+>  	struct alt_entry *alt;
+> -	u32 tmp;
+>  
+>  	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
+>  		return;
+> @@ -313,15 +263,16 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
+>  	for (alt = begin; alt < end; alt++) {
+>  		if (alt->vendor_id != 0)
+>  			continue;
+> -		if (alt->errata_id >= CPUFEATURE_NUMBER) {
+> -			WARN(1, "This feature id:%d is not in kernel cpufeature list",
+> +		if (alt->errata_id >= RISCV_ISA_EXT_ID_MAX) {
+> +			WARN(1, "This extension id:%d is not in ISA extension list",
+>  				alt->errata_id);
+>  			continue;
+>  		}
+>  
+> -		tmp = (1U << alt->errata_id);
+> -		if (cpu_req_feature & tmp)
+> -			patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
+> +		if (!test_bit(alt->errata_id, riscv_isa))
+> +			continue;
+> +
+> +		patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
+>  	}
+>  }
+>  #endif
+> 
+
+
+
+
