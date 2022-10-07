@@ -2,173 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F325F763E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DBE25F7640
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiJGJ23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 05:28:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33506 "EHLO
+        id S229730AbiJGJ30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 05:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiJGJ20 (ORCPT
+        with ESMTP id S229509AbiJGJ3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 05:28:26 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE473B56DF
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 02:28:24 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id v134so4859057oie.10
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 02:28:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JxLAH+bnod0VfWRdnLNFFaWOZptJDJqV0Gq0f68hNdc=;
-        b=Lld1GrctRhHOLbNsUNrujKK+MA6Gux6LyL6cFvYmqezas+x2uXUh0neHffeKlflrpg
-         dZkxx8hziJWp3N7O/T/3HPCuk+wbLZG0pbMfhDNLxG9i7Pulwx7P45z/gUbRlk7cHsWM
-         OULqzB+Sd9lowQX+RG4FzxkPt0m5B6fPgGT1k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JxLAH+bnod0VfWRdnLNFFaWOZptJDJqV0Gq0f68hNdc=;
-        b=XvdaKTTxD3PAcceaTWLJkjQ2SxNiXy6tQT6gUcfWNZIkgbBflAazAsAF/DzqYE8DL0
-         /z9xZiF6HWFEa3zXsq8qJTTogQpO11nZgElAj6nmetkk3glLJ8sjn+SrseT9rXiU/sge
-         7mRT15rFcMqP4tWaYhhPizgYk7XK/gZiQ7k8b5bqbwElfZWvS7fGveVJPCmPjoYBR1xB
-         4sK+evqBA68t/X3QfkDnja+ZX6wWh5EvmoJP/vaMNH/21ByNOhPojCV+LP+p1MoypYf1
-         8PoV/yT80mLoyzsY480KsrQEPN8ek77SGmLCZTOF8oCzj9UupyDSzKgYgyicRV8Zpe8v
-         RG7Q==
-X-Gm-Message-State: ACrzQf0T2cDbT0XVSuw5uMBeYVi5UOQnkC1WshsfIWN5K2hGjxMP5MeG
-        2/YLYAZb2aWL/5TqoX8RWoBSxcExq13xDxrNRoaXXA==
-X-Google-Smtp-Source: AMsMyM4iCHqpCD5g3MdwdOFmIgnP809IboqOPrt054xZ791CkiY/TmbkuiTtOrcsRVDaXZe6VZnDY559987elRnrgWI=
-X-Received: by 2002:a05:6808:e8c:b0:354:2751:69ae with SMTP id
- k12-20020a0568080e8c00b00354275169aemr2402247oil.228.1665134904319; Fri, 07
- Oct 2022 02:28:24 -0700 (PDT)
+        Fri, 7 Oct 2022 05:29:24 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF3BB56DF
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 02:29:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=C+D7+hOHycfn5UGsK+QEShGplvumi31tH2Ocmf5n6Pw=; b=FOvMLnKHYlt9J3Ks99lXraJuMl
+        CP1pYk5jOXnhZUcsxg4LuymL8L1xs4DLeeQ185O6VEALOWi8/my/h5dbunhGV75NAmRUC1ATA2Z18
+        mSFSZb9ZdJhUUMvD1slcc1l9ams5zX7Gnn/v3MjkRW5aODXv60NNNxuxEI4JeNbvkVTmKRe9T+nv3
+        /1dhjJK0qpvI9oIeH2+QBKgYLh6itkbtZ+zfUFOrUMLMjIQ1hZ9cRO1+HKoRoiE28aiZqjfn33jhg
+        can+Ld1qRctQK8a3a3U55XBVGHPaHt7tylwDS/FjycZFLkC7O+xdQ6IJVW1oCWvQrYmy5Ao5f5040
+        Lril1kuLWYboMz3VUTxFhL05Lafn85p7K4df3V5PoNH8O10ShqxPMS4kA6dpu3bP7HIw7aipqF26F
+        Ldfda45lZUB3A9kvN/NGg6+MmCIUFllFoX5h497ChWzPA3veNxXJ/exBDUdfKaTAYOSGiwtwvGl4g
+        crFJB8SdP8Gv8oTUzGoDI5lYim8pW96CfPCqLcq9EhhZlUm/EpQ5qnNvid+TtMAfSNY+RlwlrD72V
+        29gvb2zuSRIyGOkjaWJJnVyjPClUM9h4+pgezpOkrt+xGVAod9X2rO75RnxoMWRKl0+HGxI5iy1Yf
+        lqSYPp+coYGgviif85S+1UIqnTPZlaDSlQsq10cq4=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     v9fs-developer@lists.sourceforge.net,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        syzbot <syzbot+2f20b523930c32c160cc@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net/9p: use a dedicated spinlock for trans_fd
+Date:   Fri, 07 Oct 2022 11:29:12 +0200
+Message-ID: <2239557.riDjnQHxZP@silver>
+In-Reply-To: <Yz97YyDlV8tOr82t@codewreck.org>
+References: <2470e028-9b05-2013-7198-1fdad071d999@I-love.SAKURA.ne.jp>
+ <2356596.7K3kzkM6Yp@silver> <Yz97YyDlV8tOr82t@codewreck.org>
 MIME-Version: 1.0
-References: <CAPM=9tzs4n8dDQ_XVVPS_5jrBgsNkhDQvf-B_XmUg+EG_M2i4Q@mail.gmail.com>
- <CAHk-=whUp5Ufur6Bmv=H-rDDTNJJ-KVqOKkL+5FmR01jp0dbcA@mail.gmail.com>
- <CADnq5_Of-8ZyBxee0fZ=0x-eV-2NX_+e9sd-9nmuHdLugSHp2g@mail.gmail.com>
- <CAHk-=wi43xD06UgO2McDT3R=ze_aHgOGjcDOoggSwmQRv2kA+A@mail.gmail.com>
- <CADnq5_N0Ef+1VUoDLdpHfJXqZFuPYbx5Lq+94NWciHcQC+VrMg@mail.gmail.com>
- <CAPM=9tyAOnzwXyyPuoceZ1mimAkzxR-63YmKfVtcQX=swywNvg@mail.gmail.com>
- <CAHk-=wgghR4N-4XWjoK18NDkvjBL7i00ab8+otQg955pNGG_dQ@mail.gmail.com> <CAKMK7uF_fKs=Ge5b3sCxa3YgWFaJsLBdCQVj+fDn6ukh9GvKKA@mail.gmail.com>
-In-Reply-To: <CAKMK7uF_fKs=Ge5b3sCxa3YgWFaJsLBdCQVj+fDn6ukh9GvKKA@mail.gmail.com>
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-Date:   Fri, 7 Oct 2022 11:28:12 +0200
-Message-ID: <CAKMK7uHsZejvVN1RcS23YsFhb4JvuScpHys17Vn+A7PirE+q1A@mail.gmail.com>
-Subject: Re: [git pull] drm for 6.1-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrey Grodzovsky <Andrey.Grodzovsky@amd.com>
-Cc:     Dave Airlie <airlied@gmail.com>,
-        Alex Deucher <alexdeucher@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Forgot to add Andrey as scheduler maintainer.
--Daniel
+On Freitag, 7. Oktober 2022 03:05:39 CEST Dominique Martinet wrote:
+> Christian Schoenebeck wrote on Thu, Oct 06, 2022 at 03:16:40PM +0200:
+> > >  net/9p/trans_fd.c | 42 ++++++++++++++++++++++++++----------------
+> > >  1 file changed, 26 insertions(+), 16 deletions(-)
+> > 
+> > Late on the party, sorry. Note that you already queued a slightly
+> > different
+> > version than this patch here, anyway, one thing ...
+> 
+> Did I? Oh, I apparently reworded the commit message a bit, sorry:
+> 
+> (where HEAD is this patch and 1622... the queued patch)
+> 
+> $ git range-diff HEAD^- 16228c9a4215^-
+> 1:  e35fb8546af2 ! 1:  16228c9a4215 net/9p: use a dedicated spinlock for
+> trans_fd @@ Commit message
+> 
+>          Since the locks actually protect different things in client.c and
+> in trans_fd.c, just replace trans_fd.c's lock by a new one specific to the
+> -    transport instead of using spin_lock_irq* variants everywhere -   
+> (client.c's protect the idr for tag allocations, while
+>     -    trans_fd.c's protects its own req list and request status field
+>     +    transport (client.c's protect the idr for fid/tag allocations,
+>     +    while trans_fd.c's protects its own req list and request status
+> field that acts as the transport's state machine)
+> 
+>     -    Link:
+> https://lkml.kernel.org/r/20220904112928.1308799-1-asmadeus@codewreck.org +
+>    Link:
+> https://lore.kernel.org/r/20220904112928.1308799-1-asmadeus@codewreck.org
+> Link:
+> https://lkml.kernel.org/r/2470e028-9b05-2013-7198-1fdad071d999@I-love.SAKUR
+> A.ne.jp [1] Link:
+> https://syzkaller.appspot.com/bug?extid=2f20b523930c32c160cc [2]
+> Reported-by: syzbot <syzbot+2f20b523930c32c160cc@syzkaller.appspotmail.com>
 
-On Fri, 7 Oct 2022 at 10:16, Daniel Vetter <daniel.vetter@ffwll.ch> wrote:
->
-> On Fri, 7 Oct 2022 at 01:45, Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > On Thu, Oct 6, 2022 at 1:25 PM Dave Airlie <airlied@gmail.com> wrote:
-> > >
-> > >
-> > > [ 1234.778760] BUG: kernel NULL pointer dereference, address: 0000000000000088
-> > > [ 1234.778813] RIP: 0010:drm_sched_job_done.isra.0+0xc/0x140 [gpu_sched]
-> >
-> > As far as I can tell, that's the line
-> >
-> >         struct drm_gpu_scheduler *sched = s_fence->sched;
-> >
-> > where 's_fence' is NULL. The code is
-> >
-> >    0: 0f 1f 44 00 00        nopl   0x0(%rax,%rax,1)
-> >    5: 41 54                push   %r12
-> >    7: 55                    push   %rbp
-> >    8: 53                    push   %rbx
-> >    9: 48 89 fb              mov    %rdi,%rbx
-> >    c:* 48 8b af 88 00 00 00 mov    0x88(%rdi),%rbp <-- trapping instruction
-> >   13: f0 ff 8d f0 00 00 00 lock decl 0xf0(%rbp)
-> >   1a: 48 8b 85 80 01 00 00 mov    0x180(%rbp),%rax
-> >
-> > and that next 'lock decl' instruction would have been the
-> >
-> >         atomic_dec(&sched->hw_rq_count);
-> >
-> > at the top of drm_sched_job_done().
-> >
-> > Now, as to *why* you'd have a NULL s_fence, it would seem that
-> > drm_sched_job_cleanup() was called with an active job. Looking at that
-> > code, it does
-> >
-> >         if (kref_read(&job->s_fence->finished.refcount)) {
-> >                 /* drm_sched_job_arm() has been called */
-> >                 dma_fence_put(&job->s_fence->finished);
-> >         ...
-> >
-> > but then it does
-> >
-> >         job->s_fence = NULL;
-> >
-> > anyway, despite the job still being active. The logic of that kind of
-> > "fake refcount" escapes me. The above looks fundamentally racy, not to
-> > say pointless and wrong (a refcount is a _count_, not a flag, so there
-> > could be multiple references to it, what says that you can just
-> > decrement one of them and say "I'm done").
->
-> Just figured I'll clarify this, because it's indeed a bit wtf and the
-> comment doesn't explain much. drm_sched_job_cleanup can be called both
-> when a real job is being cleaned up (which holds a full reference on
-> job->s_fence and needs to drop it) and to simplify error path in job
-> constructions (and the "is this refcount initialized already" signals
-> what exactly needs to be cleaned up or not). So no race, because the
-> only times this check goes different is when job construction has
-> failed before the job struct is visible by any other thread.
->
-> But yeah the comment could actually explain what's going on here :-)
->
-> And yeah the patch Dave reverted screws up the cascade of references
-> that ensures this all stays alive until drm_sched_job_cleanup is
-> called on active jobs, so looks all reasonable to me. Some Kunit tests
-> maybe to exercise these corners? Not the first time pure scheduler
-> code blew up, so proably worth the effort.
-> -Daniel
->
-> >
-> > Now, _why_ any of that happens, I have no idea. I'm just looking at
-> > the immediate "that pointer is NULL" thing, and reacting to what looks
-> > like a completely bogus refcount pattern.
-> >
-> > But that odd refcount pattern isn't new, so it's presumably some user
-> > on the amd gpu side that changed.
-> >
-> > The problem hasn't happened again for me, but that's not saying a lot,
-> > since it was very random to begin with.
-> >
-> >                  Linus
->
->
->
-> --
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch
+No, that's not what I meant, but my bad, it was the following chunk that 
+didn't apply here:
+
+diff a/net/9p/trans_fd.c b/net/9p/trans_fd.c    (rejected hunks)
+@@ -205,7 +207,7 @@ static void p9_conn_cancel(struct p9_conn *m, int err)
+                list_move(&req->req_list, &cancel_list);
+        }
+ 
+-       spin_unlock(&m->client->lock);
++       spin_unlock(&m->req_lock);
+ 
+        list_for_each_entry_safe(req, rtmp, &cancel_list, req_list) {
+                p9_debug(P9_DEBUG_ERROR, "call back req %p\n", req);
+
+And that was because this patch was based on:
+https://github.com/martinetd/linux/commit/52f1c45dde9136f964d
+
+I usually tag patches depending on another patch not being merged yet (and not 
+being tied to the same series) like:
+
+  Based-on: <message-id>
+
+> > > @@ -832,6 +840,7 @@ static int p9_fd_open(struct p9_client *client, int
+> > > rfd, int wfd)
+> > > 
+> > >  	client->trans = ts;
+> > >  	client->status = Connected;
+> > > 
+> > > +	spin_lock_init(&ts->conn.req_lock);
+> > 
+> > Are you sure this is the right place for spin_lock_init()? Not rather in
+> > p9_conn_create()?
+> 
+> Good point, 'ts->conn' (named... m over there for some reason...) is
+> mostly initialized in p9_conn_create; it makes much more sense to move
+> it there despite being slightly further away from the allocation.
+> 
+> It's a bit of a pain to check as the code is spread over many paths (fd,
+> unix, tcp) but it looks equivalent to me:
+>  - p9_fd_open is only called from p9_fd_create which immediately calls
+> p9_conn_create
+>  - below p9_socket_open itself immediately calls p9_conn_create
+
+Yeah, looks pretty much the same, but better to have init code at the same 
+place. Either or.
+
+> I've moved the init and updated my next branch after very basic check
+> https://github.com/martinetd/linux/commit/e5cfd99e9ea6c13b3f0134585f269c5092
+> 47ac0e: ----
+> diff --git a/net/9p/trans_fd.c b/net/9p/trans_fd.c
+> index 5b4807411281..d407f31bb49d 100644
+> --- a/net/9p/trans_fd.c
+> +++ b/net/9p/trans_fd.c
+> @@ -591,6 +591,7 @@ static void p9_conn_create(struct p9_client *client)
+>  	INIT_LIST_HEAD(&m->mux_list);
+>  	m->client = client;
+> 
+> +	spin_lock_init(&m->req_lock);
+>  	INIT_LIST_HEAD(&m->req_list);
+>  	INIT_LIST_HEAD(&m->unsent_req_list);
+>  	INIT_WORK(&m->rq, p9_read_work);
+> @@ -840,7 +841,6 @@ static int p9_fd_open(struct p9_client *client, int rfd,
+> int wfd)
+> 
+>  	client->trans = ts;
+>  	client->status = Connected;
+> -	spin_lock_init(&ts->conn.req_lock);
+> 
+>  	return 0;
+> 
+> @@ -875,7 +875,6 @@ static int p9_socket_open(struct p9_client *client,
+> struct socket *csocket) p->wr = p->rd = file;
+>  	client->trans = p;
+>  	client->status = Connected;
+> -	spin_lock_init(&p->conn.req_lock);
+> 
+>  	p->rd->f_flags |= O_NONBLOCK;
+> 
+> ----
+> 
+> > The rest LGTM.
+> 
+> Thank you for the look :)
+
+With that changed, you can add my RB-tag. :)
+
+Thanks!
+
+Best regards,
+Christian Schoenebeck
 
 
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
