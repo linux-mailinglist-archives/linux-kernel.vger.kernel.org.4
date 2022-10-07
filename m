@@ -2,222 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B925F77BD
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 13:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95CC55F77C2
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 13:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiJGL6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 07:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
+        id S229479AbiJGL6U convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Oct 2022 07:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiJGL6B (ORCPT
+        with ESMTP id S229581AbiJGL6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 07:58:01 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE04CF866
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 04:57:59 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 52B391F88D;
-        Fri,  7 Oct 2022 11:57:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1665143878; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TPDABE6V9DnT9VHFEqqqdfPppCdSWtIZjchCcrjiRHs=;
-        b=NfgDeJHO27KqfMmMEX4q2nFT9N16Uu+xBV1RydBhQ+kM5bFgCFLQQ8KgMLeUqZ7ZK9EWsS
-        C+tfBiGAhO8DlTATSrdHc4XlfcfHQv1q3U4uT5GEv4w1XWNpXwIukJi4mIk6CUxcDE3QAH
-        3CdU3lZMNKUNusjOer+ODwuexzqbU3w=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 456CD2C142;
-        Fri,  7 Oct 2022 11:57:57 +0000 (UTC)
-Date:   Fri, 7 Oct 2022 13:57:53 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        Fri, 7 Oct 2022 07:58:16 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F6CD57E6
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 04:58:12 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-25-ABR5MNZQOUi4UB5yYMDNEA-1; Fri, 07 Oct 2022 12:58:08 +0100
+X-MC-Unique: ABR5MNZQOUi4UB5yYMDNEA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Fri, 7 Oct
+ 2022 12:58:06 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Fri, 7 Oct 2022 12:58:06 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Theodore Ts'o' <tytso@mit.edu>, Kees Cook <keescook@chromium.org>
+CC:     Jorge Merlino <jorge.merlino@canonical.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Jann Horn <jannh@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk 14/18] printk: Document struct console
-Message-ID: <Y0AUQSvug9V0miXU@alley>
-References: <20220924000454.3319186-1-john.ogness@linutronix.de>
- <20220924000454.3319186-15-john.ogness@linutronix.de>
+        Andy Lutomirski <luto@kernel.org>,
+        "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        John Johansen <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Richard Haines <richard_c_haines@btinternet.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Todd Kjos <tkjos@google.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        Prashanth Prahlad <pprahlad@redhat.com>,
+        Micah Morton <mortonm@chromium.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "apparmor@lists.ubuntu.com" <apparmor@lists.ubuntu.com>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: RE: [PATCH] Fix race condition when exec'ing setuid files
+Thread-Topic: [PATCH] Fix race condition when exec'ing setuid files
+Thread-Index: AQHY2e33//tmcksZekaHt2mlO/Dtmq4C0tkw
+Date:   Fri, 7 Oct 2022 11:58:06 +0000
+Message-ID: <f01aae2a5936450f889fa5a7d350d363@AcuMS.aculab.com>
+References: <202209131456.76A13BC5E4@keescook>
+ <202210061301.207A20C8E5@keescook> <Yz+Dln7AAMU+Oj9X@mit.edu>
+In-Reply-To: <Yz+Dln7AAMU+Oj9X@mit.edu>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220924000454.3319186-15-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 2022-09-24 02:10:50, John Ogness wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
+From: Theodore Ts'o
+> Sent: 07 October 2022 02:41
 > 
-> Add docbook comments to struct console.
+> On Thu, Oct 06, 2022 at 01:20:35PM -0700, Kees Cook wrote:
+> >
+> > So the question, then, is "why are they trying to exec while actively
+> > spawning new threads?" That appears to be the core problem here, and as
+> > far as I can tell, the kernel has behaved this way for a very long time.
+> > I don't think the kernel should fix this, either, because it leads to a
+> > very weird state for userspace, where the thread spawner may suddenly
+> > die due to the exec happening in another thread. This really looks like
+> > something userspace needs to handle correctly (i.e. don't try to exec
+> > while actively spawning threads).
+> 
+> One of the classic failure modes is when a threaded program calls a
+> library, and that library might try to do a fork/exec (or call
+> system(3) to run some command.  e.g., such as running "lvm create ..."
+> or to spawn some kind of helper daemon.
+> 
+> There are a number of stack overflow questions about this, and there
+> are some solutions to _some_ of the problems, such as using
+> pthread_atfork(), and knowing that you are about to call fork/exec,
+> and use some out of band mechanism to to make sure no threads get
+> spawned until the fork/exec is completed --- but if you don't know
+> that a library is going to do a fork/exec, well, life is tough.
 
-Great!
+Or that a library thread is about to create a new thread.
 
-> --- a/include/linux/console.h
-> +++ b/include/linux/console.h
-> @@ -15,6 +15,7 @@
->  #define _LINUX_CONSOLE_H_ 1
->  
->  #include <linux/atomic.h>
-> +#include <linux/bits.h>
+> One technique even advocated by a stack overflow article is "avoid
+> using threads whenver possible".  :-/
 
-This probably should have been in another patch?
+Doesn't fork() only create the current thread in the new process?
+So by the time exec() runs there is a nice single threaded process
+with an fd table that isn't shared.
 
->  #include <linux/rculist.h>
->  #include <linux/types.h>
->  
-> @@ -139,37 +140,77 @@ static inline int con_debug_leave(void)
->  /*
->   * The interface for a console, or any other device that wants to capture
->   * console messages (printer driver?)
-> - *
-> - * If a console driver is marked CON_BOOT then it will be auto-unregistered
-> - * when the first real console is registered.  This is for early-printk drivers.
->   */
->  
-> -#define CON_PRINTBUFFER	(1)
-> -#define CON_CONSDEV	(2) /* Preferred console, /dev/console */
-> -#define CON_ENABLED	(4)
-> -#define CON_BOOT	(8)
-> -#define CON_ANYTIME	(16) /* Safe to call when cpu is offline */
-> -#define CON_BRL		(32) /* Used for a braille device */
-> -#define CON_EXTENDED	(64) /* Use the extended output format a la /dev/kmsg */
-> +/**
-> + * cons_flags - General console flags
-> + * @CON_PRINTBUFFER:	On register, start from the oldest dmesg record
+For helpers there is always (a properly implemented) posix_spawn() :-)
 
-This a bit misleading. It starts from the oldest record that has not
-been read via syslog yet. dmesg has been using /dev/kmsg by default
-since a long time and it does not touch syslog_seq.
+	David
 
-IMHO, in practice, it starts from the oldest record available in the ring
-buffer. I think that nobody is using syslog syscall any longer. Also
-console drivers are registered quite early. I am not sure if userspace
-has any chance to read the log.
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-Finally, the flag is cleared when a boot consoles are replaced by
-the preferred console.
-
-I would write something like:
-
-+ * @CON_PRINTBUFFER:	Used by newly registered consoles to avoid duplicate
-  *			output of messages that were already shown by boot
-  *			console or read by userspace via syslog() syscall.
-
-
-> + * @CON_CONSDEV:	Questionable historical leftover to denote which console
-> + *			driver is the preferred console which is defining what
-> + *			backs up /dev/console
-
-It is true. But it sounds like it can be removed. But it can't be done
-easily because it can be checked by userspace. For example, it is checked by
-https://github.com/bitstreamout/showconsole/blob/master/showconsole.c
-
-Another problem is that it is just the best effort. It might happen
-that it is set for a wrong driver. But I would consider this a bug.
-
-I would write something like:
-
- * @CON_CONSDEV:	Indicates that the console driver is backing
- *			/dev/console.
-
-> + * @CON_ENABLED:	Indicates if a console is allowed to print records. If false,
-> + *			the console also will not advance to later records.
-> + * @CON_BOOT:		Marks the console driver as early console driver which
-> + *			is used during boot before the real driver becomes available.
-> + *			It will be automatically unregistered unless the early console
-> + *			command line parameter for this console has the 'keep' option set.
-
-This is more complicated. And it is a real mess, huh, huh, huh.
-
-There are earlyprintk= and earlycon= parameters. They both register
-boot consoles but earlyprintk= is supported only on some architectures.
-
-I did not check it. My guess is that earlyprintk= was the first attempt
-to show kernel messages as early as possible. There is also
-early_printk() function that calls early_console->write()
-directly. I think that it is used by Peter Zijlstra who
-wants to avoid console_lock().
-
-earlycon= does just the bare minimum to initialize driver
-(no sysfs stuff, ...). Otherwise, the console works the same
-way as a normal console driver defied by console=. It is called
-from console_unlock().
-
-Now, only earlyprintk= handle the "keep" parameter, see
-setup_early_printk(). The CON_BOOT flag is not set when
-"keep" parameter is used, see early_console_register().
-
-earlycon= does not support the "keep" parameter. There is
-the "keep_bootcon" option instead.
-
-Lovely, isn't it?
-
-OK, I suggest to write something like:
-
- * @CON_BOOT:		Marks the console driver as early console driver which
- *			is used during boot before the real driver becomes
- *			available. It will be automatically unregistered
- *			when the real console driver is registered unless
- *			"keep_bootcon" parameter is used.
-
-> + * @CON_ANYTIME:	A misnomed historical flag which tells the core code that the
-
-s/misnomed/misnamed/ ?
-
-> + *			legacy @console::write callback can be invoked on a CPU which
-> + *			is marked OFFLINE. That's misleading as it suggests that there
-> + *			is no contextual limit for invoking the callback.
-
-When I was digging the history, the motivation for this flag was
-whether the per-CPU areas were initialized. Maybe, we should mention it here:
-
- * @CON_ANYTIME:	A misnamed historical flag which tells the core code
- *			that the legacy @console::write callback can be invoked
- *			on a CPU which is marked OFFLINE. That's misleading as
- *			it suggests that there is no contextual limit for
- *			invoking the callback. The original motivation was
- *			readiness of the per-CPU areas.
-
-> + * @CON_BRL:		Indicates a braille device which is exempt from receiving the
-> + *			printk spam for obvious reasons
-> + * @CON_EXTENDED:	The console supports the extended output format of /dev/kmesg
-> + *			which requires a larger output record buffer
-> + */
-> +enum cons_flags {
-> +	CON_PRINTBUFFER		= BIT(0),
-> +	CON_CONSDEV		= BIT(1),
-> +	CON_ENABLED		= BIT(2),
-> +	CON_BOOT		= BIT(3),
-> +	CON_ANYTIME		= BIT(4),
-> +	CON_BRL			= BIT(5),
-> +	CON_EXTENDED		= BIT(6),
-> +};
->  
-> +/**
-> + * struct console - The console descriptor structure
-> + * @name:		The name of the console driver
-> + * @write:		Write callback to output messages (Optional)
-
-I am surprised that write() callback is optional. But it seems
-that, for example, ttynull_console does not have it defined.
-
-> + * @read:		Read callback for console input (Optional)
-> + * @device:		The underlying TTY device driver (Optional)
-> + * @unblank:		Callback to unblank the console (Optional)
-> + * @setup:		Callback for initializing the console (Optional)
-
-Thanks a lot for this effort.
-
-Best Regards,
-Petr
