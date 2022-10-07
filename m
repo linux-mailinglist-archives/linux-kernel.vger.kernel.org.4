@@ -2,192 +2,369 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB56E5F7FB3
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 23:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9072C5F7FAD
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 23:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbiJGVRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 17:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiJGVRg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229666AbiJGVRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 7 Oct 2022 17:17:36 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2043.outbound.protection.outlook.com [40.107.101.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A5073C1B;
-        Fri,  7 Oct 2022 14:17:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Yqpv+EeHnxh5MXCtBHfIFSTZSIV5SgrFE5GC4EheF7IxmHvJTlZtrI9mLHKh76tDUfjzi6mNh4S8Sk37PAVgSVv18sCf4iIngHUg0hHJtt45mxY+o1FYsNnDC1BuE3a7FgpWimnd5ElG539qH6slvM0NjCQkGKBDyiZmRAqVis9OiXWJXxemdpIGe95oYDcW9vDvnqiGC54L215OXFNX0APb7PSwNsEAm0ZNFSbqt2waCrywlJ2aTvbJ0GlhSqitU+0H48RFcvx/svcQFZRdoRzr7h1+I5ka8ZsfXJdNsmtLdYHIEnVnKE0W8yViJaulqzIM3n9w4DbVHzz5ScRsdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=j51i0QUL/GQU+TUlox0vZI0lQDIXngfwMeYzEIXiQ0Q=;
- b=GKCMQgfPTyA+SgzCXGNgrWqHuH+/s+XP/1S/FzccbVP6o3MqcjGWiRcCsNdp0GiG2M3W7Qs5BGpbZZhTbZQkXzqILx5vFXU1HTz2Bh13iEXVViHWyaqTLYO8xkdf/q0UCxB2tPzTkzT/U0pcx41UGiIxTiRcLY7mZGnBt0nYAUOhD1X5fBk6S7mMjbqYdAsFDdYnQACtHaNXawFQdlH+O3knMyJdu1LEge/PTO/CLgJza3yuUW6tgFgVSzrQD6R71Q5tORhBfgR501JsRYh7DBazVfLt7+zp72NO6l0r7a9UjUpHpEP30IUZodSIDoDZauXe3OxbQznNnCPGKx97xw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j51i0QUL/GQU+TUlox0vZI0lQDIXngfwMeYzEIXiQ0Q=;
- b=uwNVC6l+jd2umBzYV11g4Be4UsGxmgfei5UU1oAE/R7aFGjzvDmF2qL+sPVt4vNROHyZF55X7yL9rKt09dCtiJpmHFuErSFfmhrNNlJdzU4rf7LKwPhvtzLnDBgD6sqMf3RDCSTPEO+Abvz/BXCX0/DaEcM+hGODXZsywPgtk4k=
-Received: from BN8PR15CA0072.namprd15.prod.outlook.com (2603:10b6:408:80::49)
- by DS0PR12MB7702.namprd12.prod.outlook.com (2603:10b6:8:130::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.32; Fri, 7 Oct
- 2022 21:17:31 +0000
-Received: from BN8NAM11FT042.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:80:cafe::3f) by BN8PR15CA0072.outlook.office365.com
- (2603:10b6:408:80::49) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.34 via Frontend
- Transport; Fri, 7 Oct 2022 21:17:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT042.mail.protection.outlook.com (10.13.177.85) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5709.10 via Frontend Transport; Fri, 7 Oct 2022 21:17:31 +0000
-Received: from ethanolx50f7host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 7 Oct
- 2022 16:17:30 -0500
-From:   Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-To:     <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "Robert Richter" <rrichter@amd.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        "Terry Bowman" <terry.bowman@amd.com>,
-        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Subject: [PATCH 2/2] efi/cper, cxl: Decode CXL Error Log
-Date:   Fri, 7 Oct 2022 21:17:14 +0000
-Message-ID: <20221007211714.71129-3-Smita.KoralahalliChannabasappa@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221007211714.71129-1-Smita.KoralahalliChannabasappa@amd.com>
-References: <20221007211714.71129-1-Smita.KoralahalliChannabasappa@amd.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229672AbiJGVRb (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 7 Oct 2022 17:17:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327476745C;
+        Fri,  7 Oct 2022 14:17:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC77661B86;
+        Fri,  7 Oct 2022 21:17:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08267C433C1;
+        Fri,  7 Oct 2022 21:17:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665177443;
+        bh=NdTN1rJRVjwWbCds+aKCtjsrPJHC36DwsRDyq/yjEcM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WvIpI0oG/gjIti+rkj8Wf5M7C1JbY3GYncWq/hiYthoAT8Xj1wLp5LY+7+UsyXWv4
+         PJdEwS2IDEHoDsQsp/+vJ/smsSpoVaeZX746jDY4/61qKQkvLeWLSRCUIfoSX5JB6a
+         XpKsgI/he+cVWW55H+4e9My6pgLar2oIIk4LtxLpMqCwQAGYOyeCKsXtJtE0tRh/tZ
+         jBEidU7YriwTHyzpjy/WQEcDxpjFFdy3lUIkvWXPC858LYibnylNJcRC/9bIaOyieI
+         WAosrtInHBHCX0Q7mUSgAO5s3BOWODkWf0IGJ7mGUZ/cZn1WTs4qv5NLKizg/6a3kN
+         97ny6FY3znzZw==
+Date:   Fri, 7 Oct 2022 14:17:22 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dave Airlie <airlied@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Graf <tgraf@suug.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
+        kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        loongarch@lists.linux.dev, netdev@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH v4 2/6] treewide: use prandom_u32_max() when possible
+Message-ID: <Y0CXYjV8qMpJxxBa@magnolia>
+References: <20221007180107.216067-1-Jason@zx2c4.com>
+ <20221007180107.216067-3-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT042:EE_|DS0PR12MB7702:EE_
-X-MS-Office365-Filtering-Correlation-Id: 43431578-cb34-4259-5246-08daa8a9584c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 79bOGSZHtmWxxOrHvuFxoAfr7tBkYFYNFQgUqE4CeIQx9lCKETo/tKoInuYdYG5x2v/Kfs1FPaJwJACAtM2G3uoUUR0oDLoK236lP2Fqfn9IPI3oQKUkP72+dINutu5nl7684OVe441nXAUIkRw65HTy1u0aJ2TLlXR6lWU2EdSdjDVPEs8/9e+vEEuJddSxGr0NFST6F3j9VN4Pl4Kq0MWc2w0T8cZxJHcuTJikCXHSfmlYIKGLJBhko/25ht5itprMIWVfieCIyucUCNChK9KyVIqAcpyjzW25Az00ECudOKn2SPXQiz9rJ6hiVdnnfHwQ16jT7rXpTVVwU+XrfQq9Zw2kkjTZAwZg2lMQHyrVBGd+f4wFSMO3bP0h4B0MhK+eD3wxSIfZ4PYiYAD7ANtA70skMmlPCSP7leViT8qfOM7Dn/hewIAdrqJbNXyymfEIiGrpyG6IuKY8rEwCdU2Nw5l91MqXNe9B5onJaqtiAPziJYkrcwXSNsRD3bcbJybvqqiBu4Ci/amI9jirZRIDJeOvtAEqfLTAIJoYN5LVTT5BJ7b9h08NJUPK5StHuX2Ht08UnXq4IkdDFgFgCL1Q1sfeZYEYwHUQvx9nZdC8RvsgHKH6lSSRfcpazWLjfKIjKqFCXBncvCPu7nMFDnQCmObQF+tKTTH/nOni9kvNCfkxRpSSlrwMnW4je/uNsIqiHb69UVifLhOpp0jhk+djILBlFhJhA02maY9uKRdi5LAZNfnJidxSeRtz55FqBOYV78czvZha5JeJt3dil1sU3uK2X206FpOFq0KGQvmNR5k9VHm02zksJA+AI5in
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(136003)(39860400002)(376002)(451199015)(36840700001)(46966006)(40470700004)(54906003)(316002)(5660300002)(70586007)(41300700001)(70206006)(8936002)(36860700001)(426003)(8676002)(4326008)(47076005)(2906002)(86362001)(336012)(40480700001)(82740400003)(7696005)(40460700003)(6666004)(478600001)(1076003)(356005)(16526019)(186003)(110136005)(26005)(81166007)(2616005)(82310400005)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2022 21:17:31.0370
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43431578-cb34-4259-5246-08daa8a9584c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT042.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7702
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221007180107.216067-3-Jason@zx2c4.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Print the CXL Error Log field as found in CXL Protocol Error Section.
+On Fri, Oct 07, 2022 at 12:01:03PM -0600, Jason A. Donenfeld wrote:
+> Rather than incurring a division or requesting too many random bytes for
+> the given range, use the prandom_u32_max() function, which only takes
+> the minimum required bytes from the RNG and avoids divisions.
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Reviewed-by: KP Singh <kpsingh@kernel.org>
+> Reviewed-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com> # for drbd
+> Reviewed-by: Jan Kara <jack@suse.cz> # for ext2, ext4, and sbitmap
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
 
-The CXL RAS Capability structure will be reused by OS First Handling
-and the duplication/appropriate placement will be addressed eventually.
+<snip, skip to the xfs part>
 
-Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
----
- drivers/firmware/efi/cper_cxl.c | 21 +++++++++++++++++++++
- include/linux/cxl_err.h         | 21 +++++++++++++++++++++
- 2 files changed, 42 insertions(+)
- create mode 100644 include/linux/cxl_err.h
+> diff --git a/fs/xfs/libxfs/xfs_alloc.c b/fs/xfs/libxfs/xfs_alloc.c
+> index e2bdf089c0a3..6261599bb389 100644
+> --- a/fs/xfs/libxfs/xfs_alloc.c
+> +++ b/fs/xfs/libxfs/xfs_alloc.c
+> @@ -1520,7 +1520,7 @@ xfs_alloc_ag_vextent_lastblock(
+>  
+>  #ifdef DEBUG
+>  	/* Randomly don't execute the first algorithm. */
+> -	if (prandom_u32() & 1)
+> +	if (prandom_u32_max(2))
 
-diff --git a/drivers/firmware/efi/cper_cxl.c b/drivers/firmware/efi/cper_cxl.c
-index e5f48f0de1a4..c3d1d0770aef 100644
---- a/drivers/firmware/efi/cper_cxl.c
-+++ b/drivers/firmware/efi/cper_cxl.c
-@@ -8,6 +8,7 @@
-  */
- 
- #include <linux/cper.h>
-+#include <linux/cxl_err.h>
- #include "cper_cxl.h"
- 
- #define PROT_ERR_VALID_AGENT_TYPE		BIT_ULL(0)
-@@ -16,6 +17,7 @@
- #define PROT_ERR_VALID_SERIAL_NUMBER		BIT_ULL(3)
- #define PROT_ERR_VALID_CAPABILITY		BIT_ULL(4)
- #define PROT_ERR_VALID_DVSEC			BIT_ULL(5)
-+#define PROT_ERR_VALID_ERROR_LOG		BIT_ULL(6)
- 
- static const char * const prot_err_agent_type_strs[] = {
- 	"Restricted CXL Device",
-@@ -84,4 +86,23 @@ void cper_print_prot_err(const char *pfx, const struct cper_sec_prot_err *prot_e
- 			break;
- 		}
- 	}
-+
-+	if (prot_err->valid_bits & PROT_ERR_VALID_ERROR_LOG) {
-+		size_t size = sizeof(*prot_err) + prot_err->dvsec_len;
-+		struct ras_capability_regs *cxl_ras;
-+
-+		pr_info("%s Error log length: 0x%04x\n", pfx, prot_err->err_len);
-+
-+		pr_info("%s CXL Error Log:\n", pfx);
-+		cxl_ras = (struct ras_capability_regs *)((long)prot_err + size);
-+		pr_info("%s cxl_ras_uncor_status: 0x%08x, cxl_ras_uncor_mask: 0x%08x\n",
-+			pfx, cxl_ras->uncor_status, cxl_ras->uncor_mask);
-+		pr_info("%s cxl_ras_uncor_severity: 0x%08x\n", pfx,
-+			cxl_ras->uncor_severity);
-+		pr_info("%s cxl_ras_cor_status: 0x%08x, cxl_ras_cor_mask: 0x%08x\n",
-+			pfx, cxl_ras->cor_status, cxl_ras->cor_mask);
-+		pr_info("%s Header Log Registers:\n", pfx);
-+		print_hex_dump(pfx, "", DUMP_PREFIX_OFFSET, 16, 4, cxl_ras->header_log,
-+			       sizeof(cxl_ras->header_log), 0);
-+	}
- }
-diff --git a/include/linux/cxl_err.h b/include/linux/cxl_err.h
-new file mode 100644
-index 000000000000..c89dbb6c286f
---- /dev/null
-+++ b/include/linux/cxl_err.h
-@@ -0,0 +1,21 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2022 Advanced Micro Devices, Inc.
-+ *
-+ * Author: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-+ */
-+
-+#ifndef LINUX_CXL_ERR_H
-+#define LINUX_CXL_ERR_H
-+
-+struct ras_capability_regs {
-+	u32 uncor_status;
-+	u32 uncor_mask;
-+	u32 uncor_severity;
-+	u32 cor_status;
-+	u32 cor_mask;
-+	u32 cap_control;
-+	u32 header_log[16];
-+};
-+
-+#endif //__CXL_ERR_
--- 
-2.17.1
+I wonder if these usecases (picking 0 or 1 randomly) ought to have a
+trivial wrapper to make it more obvious that we want boolean semantics:
 
+static inline bool prandom_bool(void)
+{
+	return prandom_u32_max(2);
+}
+
+	if (prandom_bool())
+		use_crazy_algorithm(...);
+
+But this translation change looks correct to me, so for the XFS parts:
+Acked-by: Darrick J. Wong <djwong@kernel.org>
+
+--D
+
+
+>  		return 0;
+>  #endif
+>  
+> diff --git a/fs/xfs/libxfs/xfs_ialloc.c b/fs/xfs/libxfs/xfs_ialloc.c
+> index 6cdfd64bc56b..7838b31126e2 100644
+> --- a/fs/xfs/libxfs/xfs_ialloc.c
+> +++ b/fs/xfs/libxfs/xfs_ialloc.c
+> @@ -636,7 +636,7 @@ xfs_ialloc_ag_alloc(
+>  	/* randomly do sparse inode allocations */
+>  	if (xfs_has_sparseinodes(tp->t_mountp) &&
+>  	    igeo->ialloc_min_blks < igeo->ialloc_blks)
+> -		do_sparse = prandom_u32() & 1;
+> +		do_sparse = prandom_u32_max(2);
+>  #endif
+>  
+>  	/*
+> diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
+> index 4b71a96190a8..66ee9b4b7925 100644
+> --- a/include/linux/nodemask.h
+> +++ b/include/linux/nodemask.h
+> @@ -509,7 +509,7 @@ static inline int node_random(const nodemask_t *maskp)
+>  	w = nodes_weight(*maskp);
+>  	if (w)
+>  		bit = bitmap_ord_to_pos(maskp->bits,
+> -			get_random_int() % w, MAX_NUMNODES);
+> +			prandom_u32_max(w), MAX_NUMNODES);
+>  	return bit;
+>  #else
+>  	return 0;
+> diff --git a/lib/cmdline_kunit.c b/lib/cmdline_kunit.c
+> index e6a31c927b06..a72a2c16066e 100644
+> --- a/lib/cmdline_kunit.c
+> +++ b/lib/cmdline_kunit.c
+> @@ -76,7 +76,7 @@ static void cmdline_test_lead_int(struct kunit *test)
+>  		int rc = cmdline_test_values[i];
+>  		int offset;
+>  
+> -		sprintf(in, "%u%s", prandom_u32_max(256), str);
+> +		sprintf(in, "%u%s", get_random_int() % 256, str);
+>  		/* Only first '-' after the number will advance the pointer */
+>  		offset = strlen(in) - strlen(str) + !!(rc == 2);
+>  		cmdline_do_one_test(test, in, rc, offset);
+> @@ -94,7 +94,7 @@ static void cmdline_test_tail_int(struct kunit *test)
+>  		int rc = strcmp(str, "") ? (strcmp(str, "-") ? 0 : 1) : 1;
+>  		int offset;
+>  
+> -		sprintf(in, "%s%u", str, prandom_u32_max(256));
+> +		sprintf(in, "%s%u", str, get_random_int() % 256);
+>  		/*
+>  		 * Only first and leading '-' not followed by integer
+>  		 * will advance the pointer.
+> diff --git a/lib/kobject.c b/lib/kobject.c
+> index 5f0e71ab292c..a0b2dbfcfa23 100644
+> --- a/lib/kobject.c
+> +++ b/lib/kobject.c
+> @@ -694,7 +694,7 @@ static void kobject_release(struct kref *kref)
+>  {
+>  	struct kobject *kobj = container_of(kref, struct kobject, kref);
+>  #ifdef CONFIG_DEBUG_KOBJECT_RELEASE
+> -	unsigned long delay = HZ + HZ * (get_random_int() & 0x3);
+> +	unsigned long delay = HZ + HZ * prandom_u32_max(4);
+>  	pr_info("kobject: '%s' (%p): %s, parent %p (delayed %ld)\n",
+>  		 kobject_name(kobj), kobj, __func__, kobj->parent, delay);
+>  	INIT_DELAYED_WORK(&kobj->release, kobject_delayed_cleanup);
+> diff --git a/lib/reed_solomon/test_rslib.c b/lib/reed_solomon/test_rslib.c
+> index 6faf9c9a6215..4d241bdc88aa 100644
+> --- a/lib/reed_solomon/test_rslib.c
+> +++ b/lib/reed_solomon/test_rslib.c
+> @@ -199,7 +199,7 @@ static int get_rcw_we(struct rs_control *rs, struct wspace *ws,
+>  
+>  		derrlocs[i] = errloc;
+>  
+> -		if (ewsc && (prandom_u32() & 1)) {
+> +		if (ewsc && prandom_u32_max(2)) {
+>  			/* Erasure with the symbol intact */
+>  			errlocs[errloc] = 2;
+>  		} else {
+> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+> index c4f04edf3ee9..ef0661504561 100644
+> --- a/lib/sbitmap.c
+> +++ b/lib/sbitmap.c
+> @@ -21,7 +21,7 @@ static int init_alloc_hint(struct sbitmap *sb, gfp_t flags)
+>  		int i;
+>  
+>  		for_each_possible_cpu(i)
+> -			*per_cpu_ptr(sb->alloc_hint, i) = prandom_u32() % depth;
+> +			*per_cpu_ptr(sb->alloc_hint, i) = prandom_u32_max(depth);
+>  	}
+>  	return 0;
+>  }
+> diff --git a/lib/test_hexdump.c b/lib/test_hexdump.c
+> index 0927f44cd478..41a0321f641a 100644
+> --- a/lib/test_hexdump.c
+> +++ b/lib/test_hexdump.c
+> @@ -208,7 +208,7 @@ static void __init test_hexdump_overflow(size_t buflen, size_t len,
+>  static void __init test_hexdump_overflow_set(size_t buflen, bool ascii)
+>  {
+>  	unsigned int i = 0;
+> -	int rs = (prandom_u32_max(2) + 1) * 16;
+> +	int rs = prandom_u32_max(2) + 1 * 16;
+>  
+>  	do {
+>  		int gs = 1 << i;
+> diff --git a/lib/test_vmalloc.c b/lib/test_vmalloc.c
+> index 4f2f2d1bac56..56ffaa8dd3f6 100644
+> --- a/lib/test_vmalloc.c
+> +++ b/lib/test_vmalloc.c
+> @@ -151,9 +151,7 @@ static int random_size_alloc_test(void)
+>  	int i;
+>  
+>  	for (i = 0; i < test_loop_count; i++) {
+> -		n = prandom_u32();
+> -		n = (n % 100) + 1;
+> -
+> +		n = prandom_u32_max(n % 100) + 1;
+>  		p = vmalloc(n * PAGE_SIZE);
+>  
+>  		if (!p)
+> @@ -293,16 +291,12 @@ pcpu_alloc_test(void)
+>  		return -1;
+>  
+>  	for (i = 0; i < 35000; i++) {
+> -		unsigned int r;
+> -
+> -		r = prandom_u32();
+> -		size = (r % (PAGE_SIZE / 4)) + 1;
+> +		size = prandom_u32_max(PAGE_SIZE / 4) + 1;
+>  
+>  		/*
+>  		 * Maximum PAGE_SIZE
+>  		 */
+> -		r = prandom_u32();
+> -		align = 1 << ((r % 11) + 1);
+> +		align = 1 << (prandom_u32_max(11) + 1);
+>  
+>  		pcpu[i] = __alloc_percpu(size, align);
+>  		if (!pcpu[i])
+> @@ -393,14 +387,11 @@ static struct test_driver {
+>  
+>  static void shuffle_array(int *arr, int n)
+>  {
+> -	unsigned int rnd;
+>  	int i, j;
+>  
+>  	for (i = n - 1; i > 0; i--)  {
+> -		rnd = prandom_u32();
+> -
+>  		/* Cut the range. */
+> -		j = rnd % i;
+> +		j = prandom_u32_max(i);
+>  
+>  		/* Swap indexes. */
+>  		swap(arr[i], arr[j]);
+> diff --git a/net/core/pktgen.c b/net/core/pktgen.c
+> index a13ee452429e..5ca4f953034c 100644
+> --- a/net/core/pktgen.c
+> +++ b/net/core/pktgen.c
+> @@ -2469,11 +2469,11 @@ static void mod_cur_headers(struct pktgen_dev *pkt_dev)
+>  	}
+>  
+>  	if ((pkt_dev->flags & F_VID_RND) && (pkt_dev->vlan_id != 0xffff)) {
+> -		pkt_dev->vlan_id = prandom_u32() & (4096 - 1);
+> +		pkt_dev->vlan_id = prandom_u32_max(4096);
+>  	}
+>  
+>  	if ((pkt_dev->flags & F_SVID_RND) && (pkt_dev->svlan_id != 0xffff)) {
+> -		pkt_dev->svlan_id = prandom_u32() & (4096 - 1);
+> +		pkt_dev->svlan_id = prandom_u32_max(4096);
+>  	}
+>  
+>  	if (pkt_dev->udp_src_min < pkt_dev->udp_src_max) {
+> diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+> index b9d995b5ce24..9dc070f2018e 100644
+> --- a/net/ipv4/inet_hashtables.c
+> +++ b/net/ipv4/inet_hashtables.c
+> @@ -794,7 +794,7 @@ int __inet_hash_connect(struct inet_timewait_death_row *death_row,
+>  	 * on low contention the randomness is maximal and on high contention
+>  	 * it may be inexistent.
+>  	 */
+> -	i = max_t(int, i, (prandom_u32() & 7) * 2);
+> +	i = max_t(int, i, prandom_u32_max(8) * 2);
+>  	WRITE_ONCE(table_perturb[index], READ_ONCE(table_perturb[index]) + i + 2);
+>  
+>  	/* Head lock still held and bh's disabled */
+> diff --git a/net/sunrpc/cache.c b/net/sunrpc/cache.c
+> index c3c693b51c94..f075a9fb5ccc 100644
+> --- a/net/sunrpc/cache.c
+> +++ b/net/sunrpc/cache.c
+> @@ -677,7 +677,7 @@ static void cache_limit_defers(void)
+>  
+>  	/* Consider removing either the first or the last */
+>  	if (cache_defer_cnt > DFR_MAX) {
+> -		if (prandom_u32() & 1)
+> +		if (prandom_u32_max(2))
+>  			discard = list_entry(cache_defer_list.next,
+>  					     struct cache_deferred_req, recent);
+>  		else
+> diff --git a/net/sunrpc/xprtsock.c b/net/sunrpc/xprtsock.c
+> index e976007f4fd0..c2caee703d2c 100644
+> --- a/net/sunrpc/xprtsock.c
+> +++ b/net/sunrpc/xprtsock.c
+> @@ -1619,7 +1619,7 @@ static int xs_get_random_port(void)
+>  	if (max < min)
+>  		return -EADDRINUSE;
+>  	range = max - min + 1;
+> -	rand = (unsigned short) prandom_u32() % range;
+> +	rand = (unsigned short) prandom_u32_max(range);
+>  	return rand + min;
+>  }
+>  
+> -- 
+> 2.37.3
+> 
