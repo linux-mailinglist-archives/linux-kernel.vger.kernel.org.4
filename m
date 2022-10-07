@@ -2,108 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FBCF5F7A27
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 16:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E115F7A26
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 16:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiJGO6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 10:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34646 "EHLO
+        id S229729AbiJGO5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 10:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiJGO6W (ORCPT
+        with ESMTP id S229838AbiJGO5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 10:58:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8AB10B7B1
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 07:57:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665154652;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=N4bh1NN9tgTX7cJpj5y0BC71k+dzF97OkLvXcrjvyMc=;
-        b=exvrd4xcXJbpUFeJhwTNAHP3nU6JrDAaJ6TY7aQM5dzOjH1YYiObE0isgt1B/TA6DbgU2e
-        X0YWlay5Qvx9PHePn/wD4ma7CLVsKyykveEbFAppQeFOj0C8+jnC5TexoJVEicwkCseVnm
-        nw2R9PpiDmcY9qaNWHK6JE7DZTGEqVU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-461-Lk67Qyt-NXyii8iiu9ikHQ-1; Fri, 07 Oct 2022 10:57:28 -0400
-X-MC-Unique: Lk67Qyt-NXyii8iiu9ikHQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 7 Oct 2022 10:57:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAB9CA881;
+        Fri,  7 Oct 2022 07:56:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0D5A5100DEA4;
-        Fri,  7 Oct 2022 14:57:27 +0000 (UTC)
-Received: from [10.22.18.97] (unknown [10.22.18.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 34CDC63AE9;
-        Fri,  7 Oct 2022 14:57:26 +0000 (UTC)
-Message-ID: <2afd6a8c-016b-0a7c-8574-d2a10641938f@redhat.com>
-Date:   Fri, 7 Oct 2022 10:57:25 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98E3F61D52;
+        Fri,  7 Oct 2022 14:56:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66E66C433C1;
+        Fri,  7 Oct 2022 14:56:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665154618;
+        bh=Zfvt0wexCVsNrahiRALkq97xPZe65m8xOeAuDN+wsto=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GpE/y38xZ2Q1aCWbYcYn4ZnB/6HDd5M74URvl1eMOjf4ZWjl55/dBMmyzIpmW8+oo
+         aQaL0OrZgf/gowSxZAmTc2p8A6G9lZ+BThkrKMM3GpfKRNWRBdwi7+PGZBPNhWurlE
+         awVjPVgO002qcVsZyKFhiaTG/LVEx/h9IXwvQZng=
+Date:   Fri, 7 Oct 2022 16:57:39 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        robh+dt@kernel.org, mb@lightnvm.io, ckeepax@opensource.cirrus.com,
+        arnd@arndb.d, mst@redhat.com, javier@javigon.com,
+        mikelley@microsoft.com, jasowang@redhat.com,
+        sunilmut@microsoft.com, bjorn.andersson@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        ashish.deshpande@nxp.com, rvmanjumce@gmail.com
+Subject: Re: [EXT] Re: [PATCH v5 2/2] misc: nxp-sr1xx: UWB driver support for
+ sr1xx series chip
+Message-ID: <Y0A+Y3uNzpzGx0Ey@kroah.com>
+References: <20220914142944.576482-1-manjunatha.venkatesh@nxp.com>
+ <20220914142944.576482-3-manjunatha.venkatesh@nxp.com>
+ <0b2da6f2-62f8-41a3-bf07-b6895a2dedee@www.fastmail.com>
+ <cd397721-f549-5c65-2c65-35b09c3ea7f9@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v10 3/5] sched: Enforce user requested affinity
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-References: <20220922180041.1768141-1-longman@redhat.com>
- <20220922180041.1768141-4-longman@redhat.com>
- <Yz/5CZ8nj7MI+cO2@hirez.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Yz/5CZ8nj7MI+cO2@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cd397721-f549-5c65-2c65-35b09c3ea7f9@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Oct 07, 2022 at 07:34:25PM +0530, Manjunatha Venkatesh wrote:
+> 
+> On 9/14/2022 8:39 PM, Arnd Bergmann wrote:
+> > Caution: EXT Email
+> > 
+> > On Wed, Sep 14, 2022, at 4:29 PM, Manjunatha Venkatesh wrote:
+> > 
+> > > NXP has SR1XX family of UWB Subsystems (UWBS) devices. SR1XX SOCs
+> > > are FiRa Compliant. SR1XX SOCs are flash less devices and they need
+> > > Firmware Download on every device boot. More details on the SR1XX Family
+> > > can be found athttps://www.nxp.com/products/:UWB-TRIMENSION
+> > > 
+> > > The sr1xx driver work the SR1XX Family of UWBS, and uses UWB Controller
+> > > Interface (UCI).  The corresponding details are available in the FiRa
+> > > Consortium Website (https://www.firaconsortium.org/).
+> > I know nothing about UWB, so I have no idea if the user interface
+> > you propose here makes sense. My guess is that there is a good chance
+> > that there are other implementations of UWB that would not work
+> > with this specific driver interface, so you probably need a
+> > slightly higher-level abstraction.
+> > 
+> > We had an older subsystem that was called UWB and that got removed
+> > a while ago:
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/staging/uwb?id=caa6772db4c1deb5d9add48e95d6eab50699ee5e
+> > 
+> > Is that the same UWB or something completely different?
+> Basically, it is SPI device driver which supports UCI(Ultra-wide band
+> Command Interface) packet structure. It is not same as in mentioned link.
 
-On 10/7/22 06:01, Peter Zijlstra wrote:
-> On Thu, Sep 22, 2022 at 02:00:39PM -0400, Waiman Long wrote:
->> @@ -9647,6 +9656,9 @@ void __init sched_init(void)
->>   			cpumask_size(), GFP_KERNEL, cpu_to_node(i));
->>   		per_cpu(select_rq_mask, i) = (cpumask_var_t)kzalloc_node(
->>   			cpumask_size(), GFP_KERNEL, cpu_to_node(i));
->> +		per_cpu(runqueues.scratch_mask, i) =
->> +			(cpumask_var_t)kzalloc_node(cpumask_size(),
->> +						    GFP_KERNEL, cpu_to_node(i));
->>   	}
->>   #endif /* CONFIG_CPUMASK_OFFSTACK */
->>   
-> That doesn't actually apply; I've made it:
->
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -9748,6 +9748,7 @@ void __init sched_init(void)
->   
->   		rq->core_cookie = 0UL;
->   #endif
-> +		zalloc_cpumask_var_node(&per_cpu(runqueues.scratch_mask, i), GFP_KERNEL, cpu_to_node(i));
->   	}
->   
->   	set_load_weight(&init_task, false);
->
-Sorry, I should have worked on the latest tip tree instead.
+Why isn't this just a normal SPI driver and you do the "UCI" commands
+from userspace through the device node there?
 
-Thanks,
-Longman
+I know I asked this before, but I can't remember the answer, sorry, so
+please include that in the changelog information when you resubmit.
 
+thanks,
+
+greg k-h
