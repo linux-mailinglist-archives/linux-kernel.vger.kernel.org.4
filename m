@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57CD05F724B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 02:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 652F95F7251
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 02:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232371AbiJGAgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 20:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
+        id S231645AbiJGAg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 20:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232122AbiJGAgl (ORCPT
+        with ESMTP id S232252AbiJGAgo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 20:36:41 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E06A2876;
-        Thu,  6 Oct 2022 17:36:37 -0700 (PDT)
+        Thu, 6 Oct 2022 20:36:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35653BEFB0;
+        Thu,  6 Oct 2022 17:36:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 77739CE1780;
-        Fri,  7 Oct 2022 00:36:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C8179C43470;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E127161B9A;
+        Fri,  7 Oct 2022 00:36:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4ECC5C433D6;
         Fri,  7 Oct 2022 00:36:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1665102993;
-        bh=oXQFuhl7D24SiOpcAZXFmtJ8gYfa2GADC2S0btZ6eFI=;
+        bh=r/whBGlFGYLar5r6hEiGQ02ScdUAtI19UXatfCuxx8g=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=GWycd2D6l97FEmXnWp2j1owDqmV9smLdwQT2uBm/YjCqPhDWfkYmILKwkipGXT6wC
-         eMsFWnWIUZ0YKl7379K7jixs+SNaDH7OV6cW/dnD5YjFq7WzN9Ut+Jaa0H7KbaLoGc
-         mcS9Fpb9FYLBXrHqaCZUFdnhSMvv7BH9MKum1CblpcgEElgyCk1OQUU38Qho41/T3H
-         eMMmDVgABS7/Y2JB6cKflzTfMXkI5cCBlkQG5NQnr+nVIrMm4JljQofdN2NkiplyLU
-         oNttI8ARAweZYXy+QybFixRFUj61lAwXOr6mdEI+tCMQs+EmVkE8oJJ/H027DPlVfa
-         YvsJ9yGDbhHlw==
+        b=G3qqaDyL6rfNrYdJX9j1roPVJDssKzxqxBcvB2AfcbrcCGzmAeJbhCMe5vVt7YJjP
+         K+Ir5YkGwLHFfk3dXL/0CvLIpoEyXrxkgjZpJHGukzwqkWZh6o7jvnxDBfiEYGktwU
+         Y92F+ddXDlJqps6zC4+xhmVY3jmjhR55+7qIKprtqjCCBtGavo6JmZRhDNOMUq2mJ7
+         X/3xDQz0ZBMlDfczRG4I1LX80yYcW8VLbsCt528RLqx4+c7Hlg+HjjfVCM96+gJv67
+         wawg3yq9ph0Boaf1mBQYte0z09L164oGSx/cgJMMB5knX70ZEDje+N29lB8ZW+3Qvg
+         GngQckU5MOE/A==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B2C5FE43EFB;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3B92EE2A05F;
         Fri,  7 Oct 2022 00:36:33 +0000 (UTC)
-Subject: Re: [git pull] vfs.git pile 6 (constification, mostly struct path)
+Subject: Re: [git pull] vfs.git pile 2 (d_path)
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YzxnDoPjLjkuUlXp@ZenIV>
-References: <YzxnDoPjLjkuUlXp@ZenIV>
+In-Reply-To: <Yzxk9FF7G4LpBVCS@ZenIV>
+References: <Yzxk9FF7G4LpBVCS@ZenIV>
 X-PR-Tracked-List-Id: <linux-fsdevel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YzxnDoPjLjkuUlXp@ZenIV>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-path
-X-PR-Tracked-Commit-Id: 88569546e8a13a0c1ccf119dac72376784b0ea42
+X-PR-Tracked-Message-Id: <Yzxk9FF7G4LpBVCS@ZenIV>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-d_path
+X-PR-Tracked-Commit-Id: c4c8451147da569a79eff5edcd2864e8ee21d7aa
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4c0ed7d8d6e3dc013c4599a837de84794baa5b62
-Message-Id: <166510299372.12004.8436536069241357744.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 70df64d6c6c2f76be47311fa6630d6edbefa711e
+Message-Id: <166510299324.12004.3776494710352315205.pr-tracker-bot@kernel.org>
 Date:   Fri, 07 Oct 2022 00:36:33 +0000
 To:     Al Viro <viro@zeniv.linux.org.uk>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -60,12 +60,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 4 Oct 2022 18:02:06 +0100:
+The pull request you sent on Tue, 4 Oct 2022 17:53:08 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-path
+> git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-d_path
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4c0ed7d8d6e3dc013c4599a837de84794baa5b62
+https://git.kernel.org/torvalds/c/70df64d6c6c2f76be47311fa6630d6edbefa711e
 
 Thank you!
 
