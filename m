@@ -2,97 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7125F7BB8
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 18:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0B55F7BBD
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 18:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbiJGQnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 12:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58636 "EHLO
+        id S229957AbiJGQn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 12:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbiJGQm6 (ORCPT
+        with ESMTP id S229824AbiJGQnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 12:42:58 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA7012BBB3;
-        Fri,  7 Oct 2022 09:42:54 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 7 Oct 2022 12:43:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1E08F258
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 09:43:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B94471F8B8;
-        Fri,  7 Oct 2022 16:42:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1665160972;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HaccSeUGZu2fvON00lDt3tYKp6gt1Hbc3QbH4jnVy4o=;
-        b=oeuK6ZjFLeBc8JAYHAay2Fo4Q6BqWXItBqzVcHAsLo3DhVLLXb4yY4cM0nlS8T8kPq81Zq
-        m/C3CLhmmeac5IFpNMFSOTATpKCJ6IelXfaWX7vhzX772Qsw/woVDYU6Oa2raPuzGZm2VT
-        iKZFvoSEfgkKA5NhAsSWr0ZhXPDrv/I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1665160972;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HaccSeUGZu2fvON00lDt3tYKp6gt1Hbc3QbH4jnVy4o=;
-        b=cYg8Z88QEHxpqrwCwiND9kX05dehEkONGP/NoSQ9SDO+UkL/3IqxHZ044aXwRrGaWzlJCm
-        nBGlvRGUL3hKrzCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7A59313A3D;
-        Fri,  7 Oct 2022 16:42:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id HQr6HAxXQGMZSgAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Fri, 07 Oct 2022 16:42:52 +0000
-Date:   Fri, 7 Oct 2022 18:42:49 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     liujing <liujing@cmss.chinamobile.com>
-Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] btrfs: fixed an incorrect variable assignment
-Message-ID: <20221007164249.GU13389@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <20220916031149.6140-1-liujing@cmss.chinamobile.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id DEECEB8229E
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 16:43:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0D61C433D7;
+        Fri,  7 Oct 2022 16:43:41 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Neng Chen <nengchen@linux.alibaba.com>,
+        Will Deacon <will@kernel.org>,
+        Hongbo Yao <yaohongbo@linux.alibaba.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] drivers/perf: ALIBABA_UNCORE_DRW_PMU should depend on ACPI
+Date:   Fri,  7 Oct 2022 17:43:39 +0100
+Message-Id: <166516099472.3824419.14858681398467671385.b4-ty@arm.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <2a4407bb598285660fa5e604e56823ddb12bb0aa.1664285774.git.geert+renesas@glider.be>
+References: <2a4407bb598285660fa5e604e56823ddb12bb0aa.1664285774.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220916031149.6140-1-liujing@cmss.chinamobile.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 11:11:49PM -0400, liujing wrote:
-> In the btrfs_reclaim_bgs_work function, 
-> there is an assignment of int ret =0, 
-> but this assignment is not used in the following code, 
-> so it can be defined as int ret.
+On Tue, 27 Sep 2022 15:37:16 +0200, Geert Uytterhoeven wrote:
+> The Alibaba T-Head Yitian 710 DDR Sub-system Driveway PMU driver relies
+> solely on ACPI for matching.  Hence add a dependency on ACPI, to prevent
+> asking the user about this driver when configuring a kernel without ACPI
+> support.
 > 
-> Signed-off-by: liujing <liujing@cmss.chinamobile.com>
-> ---
->  fs/btrfs/block-group.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/fs/btrfs/block-group.c b/fs/btrfs/block-group.c
-> index c52b6e245b9a..a4c7fb423244 100644
-> --- a/fs/btrfs/block-group.c
-> +++ b/fs/btrfs/block-group.c
-> @@ -1571,7 +1571,7 @@ void btrfs_reclaim_bgs_work(struct work_struct *work)
->  	list_sort(NULL, &fs_info->reclaim_bgs, reclaim_bgs_cmp);
->  	while (!list_empty(&fs_info->reclaim_bgs)) {
->  		u64 zone_unusable;
-> -		int ret = 0;
-> +		int ret;
 
-I'm not sure we need to fix that, is it fixing some warning? Also please
-rephrase the subject, it's not 'incorrect', the code works as expected
-but the initial value is not used.
+Applied to arm64 (for-next/core), thanks!
+
+[1/1] drivers/perf: ALIBABA_UNCORE_DRW_PMU should depend on ACPI
+      https://git.kernel.org/arm64/c/e08d07dd9f80
+
+-- 
+Catalin
+
