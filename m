@@ -2,187 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA8D5F7AD2
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC5AA5F7B02
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbiJGPqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 11:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
+        id S229734AbiJGPus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 11:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiJGPp6 (ORCPT
+        with ESMTP id S229559AbiJGPun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 11:45:58 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F5B6BCCD
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 08:45:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665157556; x=1696693556;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=VuFmAkClbZafiHmPmevb08e9wxmyfIIz+PHdLsaP7DQ=;
-  b=QYudQWFV0LFu3C0rSdkIxfeVn5SOycgavUCfcddJOB3YkjsGcmaqm5O1
-   fA2mrIOr7KmZq5R0WIVSRd2/N56K2fHDa+uyOYZWQtng/xXRPKYv1UcBL
-   Uh3751wus9/fL4OE27g4dwn3UaLy+h1D5tcHP0SBXj5wlVnjX3RYFU2Td
-   8t1vGND1boMITZfWWOX0XcmTyxIpBNbsc4++RqikQ2igqSOvsUgp7f8QS
-   c7et7bUgPgDJMlgKfcvRCycqyiUVX1BGGltZU44lL8ln3ZTdXJXmKhZLx
-   8mxzE6uKJfVdsnirLwPbSvJFO6JMysssmyIz5TFL8iDdqTiy1Ea2neyq6
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10493"; a="286989640"
-X-IronPort-AV: E=Sophos;i="5.95,167,1661842800"; 
-   d="scan'208";a="286989640"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 08:45:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10493"; a="576275909"
-X-IronPort-AV: E=Sophos;i="5.95,167,1661842800"; 
-   d="scan'208";a="576275909"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga003.jf.intel.com with ESMTP; 07 Oct 2022 08:45:49 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 7 Oct 2022 08:45:48 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Fri, 7 Oct 2022 08:45:48 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.170)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Fri, 7 Oct 2022 08:45:48 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cAbZHMQ+x6j6Y++Jsfa35/hKIUxe2CA6dpuFZFemzoKxtxE6oFykGNdXFJyb7AOsjd0gEjFrZohcbk3XG9LQabI8C4d8izm+JIkNhSDoseMGcrR27X8EOOwPlyu7KOJXPIYXh4l6eepy7CNQ20Sv5jggPegBJbyjadzFftb5djO9T+e4Rbq4hZBtna6JSwZkLcVfBJsyuZoLow8JW4Gqqj253Xd1MngMakIZ1uzID6sYoI+EECXTqR8cwWP18rrHwocAlgEdjkvtSZcFIoP+VVebP2rvrKOXy/2tDD7W9LUTWz49IxzXvkZrC+N2f76K8UB/gNyo4lv50upcDGHTOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FuFGPIJxW5VZzfbqd28kHQL0m9+f6T2efdNJ/r8a+Ns=;
- b=iu++WmtElEZGtmecnTfUWgwz32ep3TabRcolT09GVBxx+BunLc9gf3a/8nYlXa8QXfG/rNgZHzOyjgHk78/Zv5lL0PHA37mEcVOyYwDOf6MWslyBo4BbJG6JTe5ur97jZYRyRalOTbzI5iCXfrOwOwYtpi8qNPKyhh7X2pa+/6hEklU8PqfeGtf3bFDXvarBCIq62D2vVaOxhNOBFv9cSNheZrZ9TAfRk0h7ZdGFfnxEVMXbgpTEInvBn3NmZ9noorsRPtQWiPByfMDMoXxRGHQZn2VcieVAwMUaglIuSQxn0EHCX7MmyrD3xxGU53fZDy4gZaznr2sPl3fIRPdUPg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by SA2PR11MB4988.namprd11.prod.outlook.com (2603:10b6:806:f8::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15; Fri, 7 Oct
- 2022 15:45:45 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::6f83:c165:aa0c:efae]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::6f83:c165:aa0c:efae%6]) with mapi id 15.20.5676.032; Fri, 7 Oct 2022
- 15:45:45 +0000
-Date:   Fri, 7 Oct 2022 08:45:40 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christoph Hellwig <hch@lst.de>,
-        kernel test robot <lkp@intel.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2] highmem: Fix kmap_to_page() for kmap_local_page()
- addresses
-Message-ID: <Y0BJpOiAlStJJ5CM@iweiny-desk3>
-References: <20221006040555.1502679-1-ira.weiny@intel.com>
- <20221006133331.dabd345508f7d62a887dfb4d@linux-foundation.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221006133331.dabd345508f7d62a887dfb4d@linux-foundation.org>
-X-ClientProxiedBy: SJ0PR03CA0195.namprd03.prod.outlook.com
- (2603:10b6:a03:2ef::20) To SA1PR11MB6733.namprd11.prod.outlook.com
- (2603:10b6:806:25c::17)
+        Fri, 7 Oct 2022 11:50:43 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170D695AC9
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 08:50:42 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id b2so12236404eja.6
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 08:50:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fNTmuNCWLOBt7Dn0WJ9AWpiVdld1LXssI0yIAz367cA=;
+        b=epIDQ6A1NNQAad6uG5hDVw65y+OS+Gi7r1NkL6k7hU1W/gPZkSZiyNbfyA0m4OrKJm
+         cTosb3yx0utfeygMpBS7Flbe00GJQoiNG6p9H+qj7AysMK77myuofqRcnU+LG/eutpD+
+         uMd/EYLzhOPPCW4x01BjMJUqSR2lS5UlXEYQ7PSp0MXWOGw8XWX8LYCMLEUkFEvhz/SD
+         FJD0CGHm2PKwIBO7oDsO+y10ko8spzKUhV9D2BMcwJi7182EGQp8PyWD6hFxFa9kgIP9
+         7QkRRP9UkyncU0vPYiPS2IFymQcQ8T00hoP8p6TbvBWY/fdj6SWQqN7+JWt9z45KV05J
+         Y96A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fNTmuNCWLOBt7Dn0WJ9AWpiVdld1LXssI0yIAz367cA=;
+        b=nTEh2IY8aCAZ0oUlxd354QXKHt8Zy/Y/8a8uGa5MHanCC49HubA+EHzL6tRWXfDOpP
+         DZf0waHtMMfgMq3s4a2i2kvQ6sEC1ajpTYCpQj3WIrR+Lcl4wCPXjclu0nrIkIwArVdU
+         xe7eJfoyENhyMlD6VW7piqCjZ2TtLcRz+7EvjjCCT9lUC7zSZFIN2Gr7HkxC3Jma8lwW
+         PGD57et4KmCb3tWB5P1Xvii0i/im1V/GvVMwwgOpufDwR1vWxDjPUPD6roTfczIBD6B6
+         KWsQSMsCUI2jnA7vUA22UtROTUZcLOsEbFa79fnvqUf3E2FcTSrAf21M9j/nTFhrVnEb
+         Vvpw==
+X-Gm-Message-State: ACrzQf2ww9JPTDtAYY3fsQPcqWpHzwxmsPqFdLR9O5IxYhpV6TI9j5mC
+        c3rcc5hz6LoAQeEvHyNL4G33O1BkknEmGA==
+X-Google-Smtp-Source: AMsMyM6Df+6E0+r6CgIGkIXFZqhXP/GHw9Pf0It4zNF+xakRMXSZw9LtRpRSeR3bhbNF8kZlo/hI1g==
+X-Received: by 2002:a17:907:62a1:b0:781:b320:90c0 with SMTP id nd33-20020a17090762a100b00781b32090c0mr4432995ejc.255.1665157840495;
+        Fri, 07 Oct 2022 08:50:40 -0700 (PDT)
+Received: from [192.168.1.93] (adsl-75.176.58.241.tellas.gr. [176.58.241.75])
+        by smtp.gmail.com with ESMTPSA id r9-20020a1709061ba900b00782cd82db09sm1395373ejg.106.2022.10.07.08.50.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Oct 2022 08:50:40 -0700 (PDT)
+Message-ID: <677bc264-c507-3bed-6d51-0d010a0dd449@gmail.com>
+Date:   Fri, 7 Oct 2022 18:50:33 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|SA2PR11MB4988:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1a1b764a-fda7-4e48-e786-08daa87aff7e
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oxTqVMOXjTi1IRAse9cSuuEOHBpvW9DqipmKgnAdqz49Z5DPOJri7m13ddiFCaaNwFsLOX5QS4+7BdBp5RJBeQZH/bDG1Q0s/3ghcUJFRj0+lRx0+y7pJJwjL2sQabjUBpZR1JJ4KMOO3sJkz9jUG4Ux9yLc5GPjo7QUBBnrpyt/ndqy0CLupspivLPRTl3Du3bdUqKKdktpgMdoxN6HFKWbUx6e5n1iyALaEtGHaMME5PZZuRXKAy9B4ZrDZsqFv2sJnrHN73ZIWPtqPihfsKSJcxgDecKKZF/4aDpYh5qebnivCAB4FNlGIAzD9tFtlVqrY9kRIW8iuUnTD6NT8SpqA3mxCU5zvBaa38mCEE8VSrCyNDYkd0ms6PKRN2cLBAXI69JXS2OTYkwD42G3uwNOC/PANfT6bRaiRhnwpRkLoKYqX0kEWFpDCCLuqm3ny8IECE6vZpODCOaQqrzJlKqmMhD2bhGFIab+U5uw+l6KCBx0GObyYiSU+m7I3CAYQdq23eIRhLWdLT2GZezLOBFNZ2nhqdhSvLqPLfC8EMpfER7ynxWZrGyQq1l5LIvgN3/9KduMjyOCXBmYyxzKC/idVR02hIaatFiDYa8fVilAHGYR4V1SmyKOp+EwDgVsMB1QSRmbCyw9Lrvz8Ofs3BEIZY+MHe/xE+aM/5bSFCcQjn+7Z3jFky37X2CYaZZEvLGjvoBlahGln5gS+pQ20BXrPdqlTdxjRttjv791ycxfkwvDCQRXyJh9N/g67Y52
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39860400002)(136003)(346002)(376002)(396003)(366004)(451199015)(966005)(6486002)(6506007)(478600001)(8676002)(66946007)(66556008)(66476007)(316002)(54906003)(6916009)(6666004)(4326008)(38100700002)(186003)(26005)(9686003)(6512007)(82960400001)(33716001)(86362001)(8936002)(2906002)(44832011)(41300700001)(5660300002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bar97cD3lbXEGvf5z+108l/B3OPI8FRojimDYqbEqHDL79M64Ot21wW/sWc3?=
- =?us-ascii?Q?eopYVUg78p6QSdwpV6x/TRu1lDp2wxmQnr2WSMP9B/Lp5+DC947p6qA5VLxr?=
- =?us-ascii?Q?bNFUnSrXnys1PN0HQW/hAW+TtlvdqZ8u5jLwVb3G/lAr4vRitDkjGBdAcfYc?=
- =?us-ascii?Q?VkaTFFUxkoh/qOaKfFw9ctEZobkrmSqY8Fc0PoAwtGhM25wzoFT42n7xjzqF?=
- =?us-ascii?Q?gXZyyJm0ziO13/p+vRj5U7r/ok8nqD9t5dR2mR1dl9KGIS0rOTA9v3NATDPk?=
- =?us-ascii?Q?nINFYMIZE5KdCTPKLkJI/IVr0pbtDBqGaA8U8/77hBtCLEAPUGE3t89tvRdk?=
- =?us-ascii?Q?FbDS9FjdD2OOjkYrdQ+ebjhhPIpmcCPFlmOaqasyVPyT6p7i58caY6sF0xvn?=
- =?us-ascii?Q?Uwa0hBpobp/cyLWym3Qq2yDiSzATlOJvfZvHIygPYDYzbWQT0qb6aXDstpFO?=
- =?us-ascii?Q?Rae8pNdpOqBQZP0CDQ/0oQk1cHe3CWSFOiTUZSc3L+/VQdTubyrzRJdeY2ts?=
- =?us-ascii?Q?OrSAbUGhd6HS4PG/4A5tPyhfW/OkYjekvbgGKKIxYoEKjEFyG1ah7t2MqcX2?=
- =?us-ascii?Q?+xa9L+0POtm1hf809kddPP2XrMU9ZlyoLZEsvI0RTLXLCySSyPR2rIyfjFwu?=
- =?us-ascii?Q?KywC4CfQkBfVXyV1EMhERTMkv1Xb1J51EXkolJQW8zYj9lrKl1wFF/FSslqt?=
- =?us-ascii?Q?L4YvXl6Kzh/5nO1UzQ+5LPvo+/CA/42hHRXNy21EpM1rNHE554o6EKFhrd8W?=
- =?us-ascii?Q?nBqrwf1Hy+rS05dEHeQuZKA9Om/y2pS0665SFQZdkrWG8Ks6I6WfS6JGDap/?=
- =?us-ascii?Q?z5JxWxujbyVs+PsGCZKKyKjnDSTLNmOoVRDFkgvC8mrqMaFUoUkG8UBrkxpY?=
- =?us-ascii?Q?44nF15hJ0+eSf2oeEY1vC+/jPQIc+J1OtIJT9ixGQ5Sp4Q1NyHbrrsFof8lv?=
- =?us-ascii?Q?qIUpKYRd4Tw5u8BJDoHZdggPKkxSLx6D6W57IJ6N+D2hmqDNccdbORwMjS1n?=
- =?us-ascii?Q?4rLqm/hRi3YhzXb6ZLLEqhpFqdjoacmuDeQMfeCChiqqjvlKNRyhuKrnpcXV?=
- =?us-ascii?Q?jfi1Szua1egyKhdUIGZBy8KAvJfs5xAe9J0+DU8HNmTBDvp8F8YHp2XqDf1i?=
- =?us-ascii?Q?7qEzSZTUrSbhWXKnhFPABWPaG1Z4eEDJO2JjfZbvowlshGR0aYFEFt7RWMK/?=
- =?us-ascii?Q?A1b7Cq8bjXb2dYyEZMJkD8HBuLOP9qWmTVdS/dh0wQFDWmwfdkG4cQY/qEVr?=
- =?us-ascii?Q?ybnagM1Ozis1iWcJJpWZ03VQ2Hec/DVToRduX//tlZf/1dCfAIfo0Yp9sBYq?=
- =?us-ascii?Q?KflMuV8PhOUGbGGadEQWxaANhpQq8/wtr+BenYPksoZlnhGxcgm6DFimS6+q?=
- =?us-ascii?Q?vwzVp6rMx/esxEf5aCLYsxsfQiseMKzJ4gBW0pWVCSSmKrCsYUQYq2/D6bGp?=
- =?us-ascii?Q?LD8y9CKDW6l208T4W5my/OYizOMp8Om3UYBb8Ld+61h4nGbfAP8LPH5wmaWX?=
- =?us-ascii?Q?7fRCBDvouD4j+v9mfSLM+CvVGHtUYOrg3W5hbDE4RA4OUlbEih8A9OPlCGcL?=
- =?us-ascii?Q?P/sMFjvoFsA253E58YsqM4o/zDWnvoWaZrUWqkA/?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a1b764a-fda7-4e48-e786-08daa87aff7e
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2022 15:45:45.3580
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HOkBGYWoM8QrZz9dNAfZO3QyBDvl8QgaF1XvW3GvyHdPV+keKrJuyrs5xfT0hdp8f+j2rmlm1oLlz0+8BSr7SA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4988
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] xen/virtio: Convert PAGE_SIZE/PAGE_SHIFT/PFN_UP to Xen
+ counterparts
+Content-Language: en-US
+To:     Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Oleksandr Tyshchenko <olekstysh@gmail.com>
+References: <20221006120912.1948459-1-olekstysh@gmail.com>
+ <96a16b32-0950-b538-65e5-9955ed8cc529@gmail.com>
+ <b3b8047e-b4a5-1e75-2a55-a7beecf8ca7d@epam.com>
+ <7f54bdab-c68f-0d38-93f4-007408151f01@gmail.com>
+ <816da52a-f646-c114-fa6d-9320152a0e79@epam.com>
+From:   Xenia Ragiadakou <burzalodowa@gmail.com>
+In-Reply-To: <816da52a-f646-c114-fa6d-9320152a0e79@epam.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 01:33:31PM -0700, Andrew Morton wrote:
-> On Wed,  5 Oct 2022 21:05:55 -0700 ira.weiny@intel.com wrote:
+
+On 10/7/22 16:43, Oleksandr Tyshchenko wrote:
 > 
-> > kmap_to_page() is used to get the page for a virtual address which may
-> > be kmap'ed.  Unfortunately, kmap_local_page() stores mappings in a
-> > thread local array separate from kmap().  These mappings were not
-> > checked by the call.
-> > 
-> > Check the kmap_local_page() mappings and return the page if found.
-> > 
-> > Because it is intended to remove kmap_to_page() add a warn on once to
-> > the kmap checks to flag potential issues early.
+> On 07.10.22 10:15, Xenia Ragiadakou wrote:
+>>
+>> On 10/7/22 00:13, Oleksandr Tyshchenko wrote:
+>>
+>> Hi Oleksandr
 > 
-> What were the user-visible runtime effects of this?
-
-No one actually hit a bug with this because AFAIK only one kmap() call has been
-converted to kmap_local_page() which then eventually calls kmap_to_page().
-
-	https://lore.kernel.org/lkml/YzN+ZYLjK6HI1P1C@ZenIV/
-
-However that has already been fixed by Al in that thread.
-
 > 
-> Are we able to identify a Fixes:?
+> Hello Xenia
+> 
+> 
+>>
+>>>
+>>> On 06.10.22 20:59, Xenia Ragiadakou wrote:
+>>>
+>>> Hello Xenia
+>>>
+>>>>
+>>>> On 10/6/22 15:09, Oleksandr Tyshchenko wrote:
+>>>>> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+>>>>>
+>>>>> Although XEN_PAGE_SIZE is equal to PAGE_SIZE (4KB) for now, it would
+>>>>> be more correct to use Xen specific #define-s as XEN_PAGE_SIZE can
+>>>>> be changed at some point in the future.
+>>>>>
+>>>>> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+>>>>> ---
+>>>>> Cc: Juergen Gross <jgross@suse.com>
+>>>>> Cc: Xenia Ragiadakou <burzalodowa@gmail.com>
+>>>>>
+>>>>> As it was proposed at:
+>>>>> https://urldefense.com/v3/__https://lore.kernel.org/xen-devel/20221005174823.1800761-1-olekstysh@gmail.com/__;!!GF_29dbcQIUBPA!zHt-xZ_7tZc_EM6zva21E_YgwIiEeimFWfsJIpPwAu-TBcnzQhXHqlKzmXmwIcI6uIx_arHNZiaZeHt_428_8p-DyMpd$
+>>>>>
+>>>>> [lore[.]kernel[.]org]
+>>>>>
+>>>>> Should go in only after that series.
+>>>>> ---
+>>>>>     drivers/xen/grant-dma-ops.c | 20 ++++++++++----------
+>>>>>     1 file changed, 10 insertions(+), 10 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
+>>>>> index c66f56d24013..5392fdc25dca 100644
+>>>>> --- a/drivers/xen/grant-dma-ops.c
+>>>>> +++ b/drivers/xen/grant-dma-ops.c
+>>>>> @@ -31,12 +31,12 @@ static DEFINE_XARRAY_FLAGS(xen_grant_dma_devices,
+>>>>> XA_FLAGS_LOCK_IRQ);
+>>>>>       static inline dma_addr_t grant_to_dma(grant_ref_t grant)
+>>>>>     {
+>>>>> -    return XEN_GRANT_DMA_ADDR_OFF | ((dma_addr_t)grant <<
+>>>>> PAGE_SHIFT);
+>>>>> +    return XEN_GRANT_DMA_ADDR_OFF | ((dma_addr_t)grant <<
+>>>>> XEN_PAGE_SHIFT);
+>>>>>     }
+>>>>
+>>>> With this change, can the offset added to the dma handle, generated by
+>>>> grant_to_dma(), be the offset in the page? Couldn't it corrupt the
+>>>> grant ref?
+>>>
+>>>
+>>> Good point, indeed, I think it could corrupt if guest uses a different
+>>> than Xen page granularity (i.e 64KB).
+>>>
+>>>
+>>>>
+>>>>>       static inline grant_ref_t dma_to_grant(dma_addr_t dma)
+>>>>>     {
+>>>>> -    return (grant_ref_t)((dma & ~XEN_GRANT_DMA_ADDR_OFF) >>
+>>>>> PAGE_SHIFT);
+>>>>> +    return (grant_ref_t)((dma & ~XEN_GRANT_DMA_ADDR_OFF) >>
+>>>>> XEN_PAGE_SHIFT);
+>>>>>     }
+>>>>>       static struct xen_grant_dma_data *find_xen_grant_dma_data(struct
+>>>>> device *dev)
+>>>>> @@ -79,7 +79,7 @@ static void *xen_grant_dma_alloc(struct device
+>>>>> *dev, size_t size,
+>>>>>                      unsigned long attrs)
+>>>>>     {
+>>>>>         struct xen_grant_dma_data *data;
+>>>>> -    unsigned int i, n_pages = PFN_UP(size);
+>>>>> +    unsigned int i, n_pages = XEN_PFN_UP(size);
+>>>>>         unsigned long pfn;
+>>>>>         grant_ref_t grant;
+>>>>>         void *ret;
+>>>>> @@ -91,14 +91,14 @@ static void *xen_grant_dma_alloc(struct device
+>>>>> *dev, size_t size,
+>>>>>         if (unlikely(data->broken))
+>>>>>             return NULL;
+>>>>>     -    ret = alloc_pages_exact(n_pages * PAGE_SIZE, gfp);
+>>>>> +    ret = alloc_pages_exact(n_pages * XEN_PAGE_SIZE, gfp);
+>>>>>         if (!ret)
+>>>>>             return NULL;
+>>>>>           pfn = virt_to_pfn(ret);
+>>>>>           if (gnttab_alloc_grant_reference_seq(n_pages, &grant)) {
+>>>>> -        free_pages_exact(ret, n_pages * PAGE_SIZE);
+>>>>> +        free_pages_exact(ret, n_pages * XEN_PAGE_SIZE);
+>>>>>             return NULL;
+>>>>>         }
+>>>>>     @@ -116,7 +116,7 @@ static void xen_grant_dma_free(struct device
+>>>>> *dev, size_t size, void *vaddr,
+>>>>>                        dma_addr_t dma_handle, unsigned long attrs)
+>>>>>     {
+>>>>>         struct xen_grant_dma_data *data;
+>>>>> -    unsigned int i, n_pages = PFN_UP(size);
+>>>>> +    unsigned int i, n_pages = XEN_PFN_UP(size);
+>>>>>         grant_ref_t grant;
+>>>>>           data = find_xen_grant_dma_data(dev);
+>>>>> @@ -138,7 +138,7 @@ static void xen_grant_dma_free(struct device
+>>>>> *dev, size_t size, void *vaddr,
+>>>>>           gnttab_free_grant_reference_seq(grant, n_pages);
+>>>>>     -    free_pages_exact(vaddr, n_pages * PAGE_SIZE);
+>>>>> +    free_pages_exact(vaddr, n_pages * XEN_PAGE_SIZE);
+>>>>>     }
+>>>>>       static struct page *xen_grant_dma_alloc_pages(struct device *dev,
+>>>>> size_t size,
+>>>>> @@ -168,7 +168,7 @@ static dma_addr_t xen_grant_dma_map_page(struct
+>>>>> device *dev, struct page *page,
+>>>>>                          unsigned long attrs)
+>>>>>     {
+>>>>>         struct xen_grant_dma_data *data;
+>>>>> -    unsigned int i, n_pages = PFN_UP(offset + size);
+>>>>> +    unsigned int i, n_pages = XEN_PFN_UP(offset + size);
+>>>>
+>>>> The offset, here, refers to the offset in the page ...
+>>>>
+>>>>>         grant_ref_t grant;
+>>>>>         dma_addr_t dma_handle;
+>>>>>     @@ -200,8 +200,8 @@ static void xen_grant_dma_unmap_page(struct
+>>>>> device *dev, dma_addr_t dma_handle,
+>>>>>                          unsigned long attrs)
+>>>>>     {
+>>>>>         struct xen_grant_dma_data *data;
+>>>>> -    unsigned long offset = dma_handle & (PAGE_SIZE - 1);
+>>>>> -    unsigned int i, n_pages = PFN_UP(offset + size);
+>>>>> +    unsigned long offset = dma_handle & ~XEN_PAGE_MASK;
+>>>>
+>>>> ... while, here, it refers to the offset in the grant.
+>>>> So, the calculated number of grants may differ.
+>>>
+>>> Good point, I think you are right, so we need to additionally use
+>>> xen_offset_in_page() macro in xen_grant_dma_map_page(),
+>>>
+>>> something like that to be squashed with current patch:
+>>>
+>>>
+>>> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
+>>> index 9d5eca6d638a..bb984dc05deb 100644
+>>> --- a/drivers/xen/grant-dma-ops.c
+>>> +++ b/drivers/xen/grant-dma-ops.c
+>>> @@ -169,7 +169,7 @@ static dma_addr_t xen_grant_dma_map_page(struct
+>>> device *dev, struct page *page,
+>>>                                             unsigned long attrs)
+>>>     {
+>>>            struct xen_grant_dma_data *data;
+>>> -       unsigned int i, n_pages = XEN_PFN_UP(offset + size);
+>>> +       unsigned int i, n_pages = XEN_PFN_UP(xen_offset_in_page(offset)
+>>> + size);
+>>>            grant_ref_t grant;
+>>>            dma_addr_t dma_handle;
+>>>
+>>> @@ -191,7 +191,7 @@ static dma_addr_t xen_grant_dma_map_page(struct
+>>> device *dev, struct page *page,
+>>>                                    xen_page_to_gfn(page) + i, dir ==
+>>> DMA_TO_DEVICE);
+>>>            }
+>>>
+>>> -       dma_handle = grant_to_dma(grant) + offset;
+>>> +       dma_handle = grant_to_dma(grant) + xen_offset_in_page(offset);
+>>>
+>>>            return dma_handle;
+>>>     }
+>>>
+>>> Did I get your point right?
+>>>
+>>
+>> I think it 's more complicated than that.
+>> Let's say that the offset in page is > XEN_PAGE_SIZE, then the
+>> calculation of the number of grants won't take into account the part
+>> of the offset that is multiple of the XEN_PAGE_SIZE i.e it will
+>> calculate only the strictly necessary number of grants.
+>> But xen_grant_dma_map_page() grants access to the whole page because,
+>> as it can be observed in the code snippet below, it does not take into
+>> account the page offset.
+>>
+>> for (i = 0; i < n_pages; i++) {
+>>    gnttab_grant_foreign_access_ref(grant + i, data->backend_domid,
+>> xen_page_to_gfn(page) + i, dir == DMA_TO_DEVICE);
+>> }
+> 
+> 
+> Thanks, valid point. Agree it's indeed more complicated. I will comment
+> on that later. I have just pushed another fix, it is not related to
+> XEN_PAGE_SIZE directly, but also about page offset > PAGE_SIZE
+> 
 
-I suppose this could be added as a Fixes: to the original patch introducing
-kmap_local_page()?  But one could argue that kmap_to_page() was only intended
-to support kmap() addresses because it does not work with kmap_atomic()
-addresses either.
+I got a little bit confused with the order that the patches will be 
+applied :)
+IIUC the above scenario cannot happen, i.e the offset to be > PAGE_SIZE, 
+because this callback is used to map for transfer a portion of a single 
+page.
 
-I'm proposing this as a stop gap to ensure that work can continue on converting
-kmap() uses to kmap_local_page() without fear of causing breakage while
-simultaneously we evaluate and hopefully remove kmap_to_page() as well.
+> so touches the same code and should be prereq:
+> 
+> https://lore.kernel.org/all/20221007132736.2275574-1-olekstysh@gmail.com/
+> 
+> 
+>>
+>>>>
+>>>>
+>>>>> +    unsigned int i, n_pages = XEN_PFN_UP(offset + size);
+>>>>>         grant_ref_t grant;
+>>>>>           if (WARN_ON(dir == DMA_NONE))
+>>>>
+>>>
+>>> Thank you.
+>>>
+>>>
+>>
 
-Ira
+-- 
+Xenia
