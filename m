@@ -2,98 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59ECE5F7344
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 05:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C89645F7347
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 05:20:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiJGDTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 23:19:10 -0400
+        id S229812AbiJGDUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 23:20:13 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiJGDSV (ORCPT
+        with ESMTP id S229707AbiJGDTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 23:18:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301CF115C35;
-        Thu,  6 Oct 2022 20:18:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3AB2DB821FE;
-        Fri,  7 Oct 2022 03:18:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA012C433D6;
-        Fri,  7 Oct 2022 03:17:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665112678;
-        bh=h1blTJr+JpQGieoE+GfzLHaegoCpTolhkU+YqBTdIxk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NMNd+ZdL2rZ/81SkDZRQKha2X+HA7DK3QvKi+We2FpJTqE2nLvjsAvT3J7+cLCUSI
-         UM2ZxfmEHK+Ji3VGnGxg3BvOHfbQS4OPUvqqO/rCIeBR5d7oeDCuFKEKKbPe2gaQcd
-         UtbrFm7rjE43ZMLXOph0/W3oE31ghiNEe5tRdRoItgbsEPvVYmCGwP+Njf6AHJdB35
-         T+wrVhsjY9SiH16r4/CzFpKhAwvN6MjGgDk2+60WoeyKakl6mbNPXGk6/9aU1LU38R
-         sxeI7G+QZd8iwWunVdHr0cncfryC+NTM69N3PkLb/kp1V3OCta7EDo+dE1bMKvkvnu
-         0nEkwTpNhl1zw==
-Date:   Thu, 6 Oct 2022 22:17:55 -0500
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 15/16] dt-bindings: pinctrl: qcom,sc7280: add
- bias-bus-hold and input-enable
-Message-ID: <20221007031755.p6lng3ib27thz4ip@builder.lan>
-References: <20220930192954.242546-1-krzysztof.kozlowski@linaro.org>
- <20220930192954.242546-16-krzysztof.kozlowski@linaro.org>
+        Thu, 6 Oct 2022 23:19:36 -0400
+Received: from ironport.ite.com.tw (60-251-196-230.hinet-ip.hinet.net [60.251.196.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F90115C2D;
+        Thu,  6 Oct 2022 20:18:36 -0700 (PDT)
+Received: from unknown (HELO mse.ite.com.tw) ([192.168.35.30])
+  by ironport.ite.com.tw with ESMTP; 07 Oct 2022 11:18:28 +0800
+Received: from CSBMAIL1.internal.ite.com.tw (CSBMAIL1.internal.ite.com.tw [192.168.65.58])
+        by mse.ite.com.tw with ESMTP id 2973INig052837;
+        Fri, 7 Oct 2022 11:18:23 +0800 (GMT-8)
+        (envelope-from allen.chen@ite.com.tw)
+Received: from CSBMAIL1.internal.ite.com.tw (192.168.65.58) by
+ CSBMAIL1.internal.ite.com.tw (192.168.65.58) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.14; Fri, 7 Oct 2022 11:18:23 +0800
+Received: from CSBMAIL1.internal.ite.com.tw ([fe80::dd22:b444:859b:61c7]) by
+ CSBMAIL1.internal.ite.com.tw ([fe80::dd22:b444:859b:61c7%18]) with mapi id
+ 15.01.2176.014; Fri, 7 Oct 2022 11:18:23 +0800
+From:   <allen.chen@ite.com.tw>
+To:     <krzysztof.kozlowski@linaro.org>
+CC:     <Jau-Chih.Tseng@ite.com.tw>, <Kenneth.Hung@ite.com.tw>,
+        <Hermes.Wu@ite.com.tw>, <treapking@chromium.org>,
+        <andrzej.hajda@intel.com>, <narmstrong@baylibre.com>,
+        <robert.foss@linaro.org>, <Laurent.pinchart@ideasonboard.com>,
+        <jonas@kwiboo.se>, <jernej.skrabec@gmail.com>, <airlied@linux.ie>,
+        <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v3 1/2] dt-bindings: it6505: add properties to restrict
+ output bandwidth
+Thread-Topic: [PATCH v3 1/2] dt-bindings: it6505: add properties to restrict
+ output bandwidth
+Thread-Index: AQHY2VwH4XaKCUkNtUyljQ/FMSbcHK4CPVTQ
+Date:   Fri, 7 Oct 2022 03:18:23 +0000
+Message-ID: <7acf5664832f43fbaa684c19415894c7@ite.com.tw>
+References: <20221006020444.15823-1-allen.chen@ite.com.tw>
+ <20221006020444.15823-2-allen.chen@ite.com.tw>
+ <94c660bc-b7eb-1aea-8ae2-0ee7993091fd@linaro.org>
+In-Reply-To: <94c660bc-b7eb-1aea-8ae2-0ee7993091fd@linaro.org>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [192.168.70.46]
+x-tm-snts-smtp: 7A0657408AC383F36A83D34E00884192F659069CA4697D1DC55F10CE896CB5A62002:8
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220930192954.242546-16-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MAIL: mse.ite.com.tw 2973INig052837
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 09:29:53PM +0200, Krzysztof Kozlowski wrote:
-> The SC7280 pinctrl driver supports bias-bus-hold and input-enable, and
-> DTS already use it (sc7280-idp).
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Acked-by: Rob Herring <robh@kernel.org>
-
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
-
-> ---
->  .../devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml    | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml
-> index 4606ca980dc4..1db05c43d58c 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml
-> @@ -117,13 +117,11 @@ $defs:
->            Selects the drive strength for the specified pins, in mA.
->  
->        bias-pull-down: true
-> -
->        bias-pull-up: true
-> -
-> +      bias-bus-hold: true
->        bias-disable: true
-> -
-> +      input-enable: true
->        output-high: true
-> -
->        output-low: true
->  
->      required:
-> -- 
-> 2.34.1
-> 
+aGkNCg0KLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IEtyenlzenRvZiBLb3psb3dz
+a2kgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9yZz4gDQpTZW50OiBUaHVyc2RheSwgT2N0
+b2JlciA2LCAyMDIyIDQ6MTcgUE0NClRvOiBBbGxlbiBDaGVuICjpmbPmn4/lrocpIDxhbGxlbi5j
+aGVuQGl0ZS5jb20udHc+DQpDYzogSmF1LUNoaWggVHNlbmcgKOabvuaYreaZuikgPEphdS1DaGlo
+LlRzZW5nQGl0ZS5jb20udHc+OyBLZW5uZXRoIEh1bmcgKOa0quWutuWAqykgPEtlbm5ldGguSHVu
+Z0BpdGUuY29tLnR3PjsgSGVybWVzIFd1ICjlkLPkvbPlro8pIDxIZXJtZXMuV3VAaXRlLmNvbS50
+dz47IFBpbi15ZW4gTGluIDx0cmVhcGtpbmdAY2hyb21pdW0ub3JnPjsgQW5kcnplaiBIYWpkYSA8
+YW5kcnplai5oYWpkYUBpbnRlbC5jb20+OyBOZWlsIEFybXN0cm9uZyA8bmFybXN0cm9uZ0BiYXls
+aWJyZS5jb20+OyBSb2JlcnQgRm9zcyA8cm9iZXJ0LmZvc3NAbGluYXJvLm9yZz47IExhdXJlbnQg
+UGluY2hhcnQgPExhdXJlbnQucGluY2hhcnRAaWRlYXNvbmJvYXJkLmNvbT47IEpvbmFzIEthcmxt
+YW4gPGpvbmFzQGt3aWJvby5zZT47IEplcm5laiBTa3JhYmVjIDxqZXJuZWouc2tyYWJlY0BnbWFp
+bC5jb20+OyBEYXZpZCBBaXJsaWUgPGFpcmxpZWRAbGludXguaWU+OyBEYW5pZWwgVmV0dGVyIDxk
+YW5pZWxAZmZ3bGwuY2g+OyBSb2IgSGVycmluZyA8cm9iaCtkdEBrZXJuZWwub3JnPjsgS3J6eXN6
+dG9mIEtvemxvd3NraSA8a3J6eXN6dG9mLmtvemxvd3NraStkdEBsaW5hcm8ub3JnPjsgb3BlbiBs
+aXN0OkRSTSBEUklWRVJTIDxkcmktZGV2ZWxAbGlzdHMuZnJlZWRlc2t0b3Aub3JnPjsgb3BlbiBs
+aXN0Ok9QRU4gRklSTVdBUkUgQU5EIEZMQVRURU5FRCBERVZJQ0UgVFJFRSBCSU5ESU5HUyA8ZGV2
+aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmc+OyBvcGVuIGxpc3QgPGxpbnV4LWtlcm5lbEB2Z2VyLmtl
+cm5lbC5vcmc+DQpTdWJqZWN0OiBSZTogW1BBVENIIHYzIDEvMl0gZHQtYmluZGluZ3M6IGl0NjUw
+NTogYWRkIHByb3BlcnRpZXMgdG8gcmVzdHJpY3Qgb3V0cHV0IGJhbmR3aWR0aA0KDQpPbiAwNi8x
+MC8yMDIyIDA0OjA0LCBhbGxlbiB3cm90ZToNCj4gRnJvbTogYWxsZW4gY2hlbiA8YWxsZW4uY2hl
+bkBpdGUuY29tLnR3Pg0KPiANCj4gQWRkIHByb3BlcnRpZXMgdG8gcmVzdHJpY3QgZHAgb3V0cHV0
+IGRhdGEtbGFuZXMgYW5kIGNsb2NrLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogUGluLVllbiBMaW4g
+PHRyZWFwa2luZ0BjaHJvbWl1bS5vcmc+DQo+IFNpZ25lZC1vZmYtYnk6IEFsbGVuIENoZW4gPGFs
+bGVuLmNoZW5AaXRlLmNvbS50dz4NCj4gLS0tDQo+ICAuLi4vYmluZGluZ3MvZGlzcGxheS9icmlk
+Z2UvaXRlLGl0NjUwNS55YW1sICAgICAgICAgIHwgMTIgKysrKysrKysrKysrDQo+ICAxIGZpbGUg
+Y2hhbmdlZCwgMTIgaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCANCj4gYS9Eb2N1bWVu
+dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvZGlzcGxheS9icmlkZ2UvaXRlLGl0NjUwNS55YW1s
+IA0KPiBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9kaXNwbGF5L2JyaWRnZS9p
+dGUsaXQ2NTA1LnlhbWwNCj4gaW5kZXggODMzZDExYjIzMDNhLi5mNTQ4MmE2MTRkMDUgMTAwNjQ0
+DQo+IC0tLSBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9kaXNwbGF5L2JyaWRn
+ZS9pdGUsaXQ2NTA1LnlhbWwNCj4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
+bmdzL2Rpc3BsYXkvYnJpZGdlL2l0ZSxpdDY1MDUueWFtbA0KPiBAQCAtNTIsNiArNTIsMTYgQEAg
+cHJvcGVydGllczoNCj4gICAgICBtYXhJdGVtczogMQ0KPiAgICAgIGRlc2NyaXB0aW9uOiBleHRj
+b24gc3BlY2lmaWVyIGZvciB0aGUgUG93ZXIgRGVsaXZlcnkNCj4gIA0KPiArICBpdGUsZHAtb3V0
+cHV0LWRhdGEtbGFuZS1jb3VudDoNCj4gKyAgICBkZXNjcmlwdGlvbjogcmVzdHJpY3QgdGhlIGRw
+IG91dHB1dCBkYXRhLWxhbmVzIHdpdGggdmFsdWUgb2YgMS00DQoNCkRyb3AgIndpdGggdmFsdWUg
+b2YgMS00IiBiZWNhdXNlIGl0IGlzIHJlZHVuZGFudCwgYnV0IGluc3RlYWQgZXhwbGFpbiB3aGF0
+IHRoaXMgcHJvcGVydHkgaXMgYWJvdXQuICJSZXN0cmljdCBvdXRwdXQiIGlzIG5vdCB5ZXQgZW5v
+dWdoLg0KUmVzdHJpY3QgdGhlIG51bWJlcj8gT3IgY2hvb3NlIHNwZWNpZmljIGxhbmVzPyBXaHkg
+aXQgY2Fubm90IGJlIGRhdGEtbGFuZXMgZnJvbSB2aWRlby1pbnRlcmZhY2VzPw0KDQo9PT4gRFAg
+b3V0cHV0IGJhbmR3aWR0aCBkZXBlbmRzIG9uIGRhdGEtbGFuZS1jb3VudCwgc28gdGhlIG51bWJl
+ciBvZiBvdXRwdXQgZGF0YS1sYW5lLWNvdW50IHdpbGwgcmVzdHJpY3Qgb3V0cHV0IGJhbmR3aWR0
+aC4NCkluIHRoaXMgZHQtYmluZGluZyB3ZSBkb24ndCBoYXZlIG91dHB1dCBlbmRwb2ludCwgc28g
+dXNlIGFub3RoZXIgcHJvcGVydHkgbmFtZSB0byBjb25maWd1cmUuDQpJZiBuZWVkIHRvIHVzZSBk
+YXRhLWxhbmVzLCB3aGVyZSBjYW4gd2UgcHV0IGluIHRoaXMgZHQtYmluZGluZz8NCg0KPiArICAg
+ICRyZWY6IC9zY2hlbWFzL3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL3VpbnQzMg0KPiArICAgIGVu
+dW06IFsgMSwgMiwgNCBdDQo+ICsNCj4gKyAgaXRlLGRwLW91dHB1dC1tYXgtcGl4ZWwtY2xvY2st
+bWh6Og0KDQpUZXN0IHlvdXIgcGF0Y2hlcyBiZWZvcmUgc2VuZGluZy4NCg0KQmVzdCByZWdhcmRz
+LA0KS3J6eXN6dG9mDQoNCg==
