@@ -2,226 +2,403 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 115905F80E3
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 00:45:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C24495F80F0
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 00:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiJGWp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 18:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59294 "EHLO
+        id S229739AbiJGWr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 18:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbiJGWpZ (ORCPT
+        with ESMTP id S229693AbiJGWrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 18:45:25 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2047.outbound.protection.outlook.com [40.107.223.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC9DD994F;
-        Fri,  7 Oct 2022 15:45:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ura9u66txJkfNhX6Yjf0JC7ff1hAzED3NblGloutUpEvmZN1pYYONHVaEax7EHTeWWS0N97H4w1hX/peytZw+QH3hOc33BraFKjwICsH50W9pVscEiYqoCY+oQrtjtUAg88bJJ84jq1qKekIap6VIKNrlcmMt2c95e/R5cZ6pZow8IcQfq78NHbiA5E01LHP0XXFzBCtCWhglZ4DzWyJaCaptYRLFFduR6gra6KGPW3W2pAmZ7t1e1Q3YFrD2RvtV4e0t78AlDtEMZZY5dy3QM0dMmP9cdWq3OXNjNIAZipQmOZ2yNrzxW1cpsyLNkA9fAxIWQu6mCD++4LEthBXZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sV6+JznRciddzFJIX+zTChAVA7v0FdF9omXljvRoU6o=;
- b=SxzVbTbxrt0Xzfvk68zKclS74jAJ5ckbOArr6C9NHj0J7YO8/jWde+olMZlIWhDSyhRpuMkxNNF6M9cgWLs9Xdj8Ndw9mCTx/Te+3X6rKqYp1O2S1/JG2/gT4GHW12fbsxjaR+lxVWWZdP0K+EMv0QUUZlURIVgLELhJl/6gpt5z3SI6p6HUZ+ekB/rjLW+77YeRxldw+a+1XUHPQyIhX0bEayNQcA4xX7ynjLGzhSq+J/anKJdVuQUewVqtA0XMJeY7OApcEIH+FsDA/z/6E6zEBEWgOCNxBscMhh+1ASpa+uZ1BawumYXelvITTZeJ2IYl3jcuUey4kBiSgdZHWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sV6+JznRciddzFJIX+zTChAVA7v0FdF9omXljvRoU6o=;
- b=CDujKbpAlFA3nnOdXj2dDcdBEcQy1sYuGrS9m7Yig2h/rwb/XiY+y2Xwj+IRSdY9En/dauX5w9JgrJlGQ4FgwELj3wnULAKdPHX65XWCddJVbHeIdZyQvy+WGFY8RPWp0aNDM/dLBvUCF3XDGOaomDhIbjSyga89+J/837MPaAc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB4502.namprd12.prod.outlook.com (2603:10b6:208:263::20)
- by MN0PR12MB5953.namprd12.prod.outlook.com (2603:10b6:208:37c::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.36; Fri, 7 Oct
- 2022 22:45:21 +0000
-Received: from MN2PR12MB4502.namprd12.prod.outlook.com
- ([fe80::b182:d24b:ba8a:1635]) by MN2PR12MB4502.namprd12.prod.outlook.com
- ([fe80::b182:d24b:ba8a:1635%7]) with mapi id 15.20.5709.015; Fri, 7 Oct 2022
- 22:45:21 +0000
-Message-ID: <7f2dc633-23a2-16dc-8a55-0611e2cd6b7c@amd.com>
-Date:   Fri, 7 Oct 2022 15:45:17 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH RFC 0/2] Generate device tree node for pci devices
-To:     Rob Herring <robh@kernel.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        helgaas@kernel.org, clement.leger@bootlin.com, max.zhen@amd.com,
-        larry.liu@amd.com, brian.xu@amd.com, stefano.stabellini@xilinx.com,
-        trix@redhat.com
-References: <1661809417-11370-1-git-send-email-lizhi.hou@amd.com>
- <f831f62b-004b-4f73-2a66-de9d675c44b6@gmail.com>
- <CAL_JsqJn=i=TT9NArHK25g1NkZN_G1GjN3EGEeTAvyW_PUhgcw@mail.gmail.com>
- <8ea70992-d4e9-8bbd-0fca-d5700f84e071@amd.com>
- <CAL_JsqJA8K0nKO=O2QjyHdue6=EHYNqCTw6pKUsBKwrdrYGePA@mail.gmail.com>
-Content-Language: en-US
-From:   Sonal Santan <sonal.santan@amd.com>
-In-Reply-To: <CAL_JsqJA8K0nKO=O2QjyHdue6=EHYNqCTw6pKUsBKwrdrYGePA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0199.namprd13.prod.outlook.com
- (2603:10b6:a03:2c3::24) To MN2PR12MB4502.namprd12.prod.outlook.com
- (2603:10b6:208:263::20)
+        Fri, 7 Oct 2022 18:47:51 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9669F11C254
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 15:47:46 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id x1so5767893plv.5
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 15:47:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yZqaicka3IU4vV1MYdOWb5w3mOcfwDVNwAUulPcr27Y=;
+        b=iXQ9UvdzaG3zByw2GBNLz3/YVU1qnMbHWTkFhauTR657sXRQGAG+NlE+Q9rJd5luVx
+         INuHridXF4858oAPsKtGfjtbkx2VdjBSQCDETBbwUrSMqp7tkUzuQxOHz4Iev7dLesfK
+         vpnuiiKohn9Hx+Mnal9EiATSUtY0yZ8+mCOj4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yZqaicka3IU4vV1MYdOWb5w3mOcfwDVNwAUulPcr27Y=;
+        b=J0/0iqN3U4SXmphdbtbpM4Nyid/jy2JLbK0AsKPqF/KyazrVWmCpH0s5qFkjlYggnK
+         RxB2TDkEsj24vIFnPO+DdFZjuszpXVnZxEAXoN+HbmTnFfvkvEejWLDyjkMaXQvGWLLT
+         fL6aAwNV9vn2xPXZAIUQZY9plHlTHmUTECopwb5aQf3aoNOIAiysDgEHTFdxiYKOPDNG
+         R3VAfPJFd4yDRn1ZnKeRUu1GCDaSsrQVoKDmuas0BmKISiwtUOXOiohxfyks2X5Zzztf
+         +e7eKZxwWfd3Si9CFr2QNBgr6FrzRD0O2UsTKTthcz3IGwna4Dgoj9BKr0u5K00gEy41
+         /SRw==
+X-Gm-Message-State: ACrzQf3f2u7+MidWq79UIsZuS+QkW5tfznwO5Ob6ak8q6q1+aqiiw8eT
+        i0PZgjbo4QsZUI0sgcGeuwrTGQ==
+X-Google-Smtp-Source: AMsMyM69gQJ00Sz5u9R9f9VP3RUWXmTzR4M6xX7XuJJaYjHWOM1kbOa6WmdFAYvizvrv4fE33FE/eQ==
+X-Received: by 2002:a17:902:6945:b0:17b:f38b:900f with SMTP id k5-20020a170902694500b0017bf38b900fmr6900771plt.85.1665182865829;
+        Fri, 07 Oct 2022 15:47:45 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q27-20020aa7983b000000b005625d5ae760sm2210282pfl.11.2022.10.07.15.47.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 15:47:45 -0700 (PDT)
+Date:   Fri, 7 Oct 2022 15:47:44 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dave Airlie <airlied@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        KP Singh <kpsingh@kernel.org>, Marco Elver <elver@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Graf <tgraf@suug.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
+        kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        loongarch@lists.linux.dev, netdev@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH v4 2/6] treewide: use prandom_u32_max() when possible
+Message-ID: <202210071241.445289C5@keescook>
+References: <20221007180107.216067-1-Jason@zx2c4.com>
+ <20221007180107.216067-3-Jason@zx2c4.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4502:EE_|MN0PR12MB5953:EE_
-X-MS-Office365-Filtering-Correlation-Id: 44f36692-b2c3-4e43-8139-08daa8b59d4c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: C5sh0q3UaGyAx8f4e/yRfgxJQxIOouOpq8Gq6UQUwz5Yo/Ei1NMEwQKygYo+Ir8bVgiJBA2NrYoT4QSPjxtIp1/TVudK9N0YAfVIY8Y5Iq7pcJ1f0L7BcjxrGnIWK1zZfEbh0lrs8Ni4RsKBlLd2tPe5MzEh6LUH7rB6ZhVy90cAT4UbRT7A5Ubps7AeCCO9O1+vxqkGtJWkEnEAAH0p1l4rUp14v5iM01i6SJhdhOHGWdUvZ2Tzy6Lp0cd4z+ZrYZKzDLdu5dGDnNiZP2GP5SW9KO9us1jCXaIK1yhCeXN5TLjr7i04Yu8P5mADjr+MWLdMeC1g7XskmId3znPboPJY75xu2l+2Mno+1KJkJq9EMuboRTBwhnTDSsvSCAfLHYAIqJ0SR+ldE1ajIKL6GdyPKdly+vlwUT/Sl2PnxwoL+AXZW0xTLGHAi80Uib/JO8JWG13/biRWnPTdXS1nVPWfGffx66FEtelKbjrDHsKNj/0drX5n6IaAe8+eMxV+3vCBVzo6lMJmMlXr+AdQrXzGQtcGqAgSHoowVj6I5I0mFnbtt+YwXfHrvMZg5C5Y8eBBnpwY9BGRhASYscoJGWcCCOvvYBSOogbVOcbJ+y8Nm6AZGcyqrsfy4zLsQy5zi4iCro9wnCfByjpAqdEdtyJNk2Qfxm3q9aLRaaNfh3JtJt5by/eELzJ3T+4SI+/MNjcj5QrQzVUGYB+Ymiuwcmvx6HKQf8ULyFZ+5wDPIKUy9RQBSqPHbZ63LC4Ez9k1M8ddGshkkboRn3W9SmRDiT/dMA5tX0euDm6fMsq1uCzUVr5U5ZW5WF36tTF3hHElMfzV3GRJo2guXNwkUpc2O6Zgw2skdGfGLlZ4wQ4BjR0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4502.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(366004)(136003)(39860400002)(346002)(451199015)(2906002)(66946007)(66556008)(6506007)(4326008)(8676002)(6916009)(54906003)(36756003)(316002)(478600001)(966005)(6486002)(53546011)(66476007)(31696002)(38100700002)(26005)(83380400001)(6512007)(186003)(86362001)(2616005)(8936002)(6666004)(41300700001)(31686004)(5660300002)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aHB5Y3d0aUtrRzFtajlmNWk3YVBIdUJxK1pHQVFKV2R4Nm51aVJJWnZlRVZH?=
- =?utf-8?B?aC9DYlU5RjFwOW1SbmJJSUpXMjl2SjdNVVNzL1dGdTg5eWNNNElKTVpyU3NO?=
- =?utf-8?B?d1Bsd29YN2lEUmJjK1gzRzc2RUkrbUlMR0NOTVJpQkxMc2xUQ3hlQVdWN3RW?=
- =?utf-8?B?TW9hNkxzVlR2WXR1Wko1MkdQaTR5TElXc3A4eExlRE9wSHMyeDAzd01GS1oz?=
- =?utf-8?B?NDVVb0NqSFZQOHdUYUhPUVlwekR1VlhKOHZodXpWQ3Zob0FkMWhaUFE2aFNE?=
- =?utf-8?B?RFpyT2QvZ1hJWXQ0SXV1WDBFRFE4QkdDaXZyN3RrOFlveElZZ3JISU9lVHo3?=
- =?utf-8?B?eGlBcHhaR29FNjZ2ZmdSWHlnYmUzREdDMW9GWEI2MWVMd3hncFZXY0o3ZTh0?=
- =?utf-8?B?bGQ2TU5weDBMRW9BSmkzYmQ5MVJ4MUJwVkZ0aDlxb0RmVytiU0R2YTJiMmtU?=
- =?utf-8?B?U2FIWFdYK1pST0QrQ1VYcmtVUXdGaWhiQytzWnNyNDFCSHZPZWxMV2tic2I3?=
- =?utf-8?B?czRXV3ljZXJEcVVwWWZ6bEllRW5mcDJDVHJhSUNSMVZnRVR3cG5neVBjZEcv?=
- =?utf-8?B?Zzk2bXdVRHVvaWVBTmRZdkFldUVFTkxDa242bENrVXM1MDUrL25jQm9oQkdJ?=
- =?utf-8?B?aFVZUWxnK0d6d3ZrdTNNS0ZYQjltaGZmYkVuWHJVMG9SVDBVdGtoSmFYL2t5?=
- =?utf-8?B?TDFYZG0zL0xzeFpmMGVhTzFPa3BOWWQ0aEUxOXRVbHR5VytBa2VuT2ZTNHRR?=
- =?utf-8?B?endBTVM3TG5MM0JyaTY1WGJYNjBsZFA0NkFlTnFiS3EzUWMvTE1peThQZnhQ?=
- =?utf-8?B?RHM0b2ZlQktBOVhCa0ZEWUJ3M0J1dStXZ0FLM2o3SlBVMitUSlBvcHVLZzRz?=
- =?utf-8?B?OE9JM0U3WDRURjNFWW9IM2hXWG1pcGlCbU1PSm1xZGIrd01Ta0hyZ2JIQ0pp?=
- =?utf-8?B?ZXRpekd0ZFgrRWFIZW5ONHRReGFSMkJOZUg3U3RvVThxVUJxVVVWYi9CS1Z2?=
- =?utf-8?B?NThMYklYZnlqZm9NUVhlM1ErenVmMzdZMVdaNmw1dkdjN3NUM3JBNThEQXRB?=
- =?utf-8?B?b2dGY1VEWVhxK1VHRHpzZ3ZUbmQ1NytjVzZpdUtDUFo4MkdKVjYwb1dGYm41?=
- =?utf-8?B?UXR0b2pwVmRzMnducDVHNndSNGFlWlArOWppcHBqcFUrUzMwa0xtM202cDhn?=
- =?utf-8?B?elFoaFlYNldYWW1mUm5LVGFzdU1EVjgrQVY2eWxYV3oxTStjbS9DVFZoRXVN?=
- =?utf-8?B?cWU0UjVHTG56TWsxcFVyZDJZU0dsdmdUY09qS09neElVeEtjSjNqYTAvYlha?=
- =?utf-8?B?S25UZjJwMXhzU1VLQ051VDhtRG1tWEg3NExMQ1h6R0FGOG1vUW5oWWxmeURN?=
- =?utf-8?B?bldMcEtnYVJHWXczakJrY3VZZ2VNYTcySCtubSszUmgxTDRKeS9JcEhGMkZY?=
- =?utf-8?B?Yy9FZVM3UVdVWU96L21kZWNJK3U1SUFXMUVLOFJXbEhESXZlYXdwcXg4WCtB?=
- =?utf-8?B?NmpJckpEMGg0aThITGd2aTMvWjAwY3Eyc2x0YjdQMUhYTkErUHBiaEV1YWY5?=
- =?utf-8?B?SVNQRDA1Qnl0UWlPME5GTEVuemVUbWE2R2F0ZGR5dHUraDFsVHRZamhRV0p6?=
- =?utf-8?B?azZLSTRlc0xBYVdYblNiaW5LVlJjdElSdlc2eVhDWVdvWUlLWVEzMVV0aTRt?=
- =?utf-8?B?L01EY3NRWmpQTHU5anlvdjVzQUNGYWRFWEd4cHBTSnE1L2VoclJEYU4yZGtk?=
- =?utf-8?B?ZmJBRkhaR3pnbHZzQUd5OHVUMCtwRW1LSVdWT2VPVkNHdFBrTTROOHh0WnFp?=
- =?utf-8?B?ay82OW9xU1hmTklMaS96K205ZW9KZWNSTFRKemxacFVXbmdhWm9nMnE4cWNT?=
- =?utf-8?B?bFpLREgvajYxQWozRW5lR0FnaFR6NnJoMFA2OG9MR1lrdVgrMzh3TUxzSFUv?=
- =?utf-8?B?SGNMayt3UlcvNkxObXJ3SkpFbGtxd3JmSEh5bTlGSitRdUVmRVFKWldYM21U?=
- =?utf-8?B?N21WVThZQW9ldlU2bnlHWXRtaUhaWWgwZUlsTWVGcWQ2N2xiNzloWWJkcjRC?=
- =?utf-8?B?My81UklLQ0thQmtRQTJwdzQ3UWhGeFB2L2E2dUhLZVFoNWlxTkxoZ0E0YTNq?=
- =?utf-8?Q?7UENIK4NX5dwseNrZpkzxpfLN?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 44f36692-b2c3-4e43-8139-08daa8b59d4c
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4502.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2022 22:45:21.0273
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: i0wUKkk28QrwIJhLkATGaZ0U4GWABor0tmbUD4ZdEgvovWzCgAFYm9gwLgYTZpYp
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5953
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221007180107.216067-3-Jason@zx2c4.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/6/22 08:10, Rob Herring wrote:
-> On Fri, Sep 30, 2022 at 2:29 PM Sonal Santan <sonal.santan@amd.com> wrote:
->>
->> On 9/26/22 15:44, Rob Herring wrote:
->>> On Fri, Sep 16, 2022 at 6:15 PM Frank Rowand <frowand.list@gmail.com> wrote:
->>>>
->>>> On 8/29/22 16:43, Lizhi Hou wrote:
->>>>> This patch series introduces OF overlay support for PCI devices which
->>>>> primarily addresses two use cases. First, it provides a data driven method
->>>>> to describe hardware peripherals that are present in a PCI endpoint and
->>>>> hence can be accessed by the PCI host. An example device is Xilinx/AMD
->>>>> Alveo PCIe accelerators. Second, it allows reuse of a OF compatible
->>>>> driver -- often used in SoC platforms -- in a PCI host based system. An
->>>>> example device is Microchip LAN9662 Ethernet Controller.
->>>>>
->>>>> This patch series consolidates previous efforts to define such an
->>>>> infrastructure:
->>>>> https://lore.kernel.org/lkml/20220305052304.726050-1-lizhi.hou@xilinx.com/
->>>>> https://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.com/
->>>>>
->>>>> Normally, the PCI core discovers PCI devices and their BARs using the
->>>>> PCI enumeration process. However, the process does not provide a way to
->>>>> discover the hardware peripherals that are present in a PCI device, and
->>>>> which can be accessed through the PCI BARs. Also, the enumeration process
->>>>> does not provide a way to associate MSI-X vectors of a PCI device with the
->>>>> hardware peripherals that are present in the device. PCI device drivers
->>>>> often use header files to describe the hardware peripherals and their
->>>>> resources as there is no standard data driven way to do so. This patch> series proposes to use flattened device tree blob to describe the
->>>>> peripherals in a data driven way.
->>>>
->>>>> Based on previous discussion, using
->>>>> device tree overlay is the best way to unflatten the blob and populate
->>>>> platform devices.
->>>>
->>>> I still do not agree with this statement.  The device tree overlay
->>>> implementation is very incomplete and should not be used until it
->>>> becomes more complete.  No need to debate this right now, but I don't want
->>>> to let this go unchallenged.
->>>
->>> Then we should remove overlay support. The only way it becomes more
->>> complete is having actual users.
->>>
->>> But really, whether this is the right solution to the problem is
->>> independent of the state of kernel overlay support.
->>>
->>>> If there is no base system device tree on an ACPI based system, then I
->>>> am not convinced that a mixed ACPI / device tree implementation is
->>>> good architecture.
->>>
->>> Most/all of this series is needed for a DT system in which the PCI
->>> devices are not populated in the DT.
->>>
->>>>    I might be more supportive of using a device tree
->>>> description of a PCI device in a detached device tree (not linked to
->>>> the system device tree, but instead freestanding).  Unfortunately the
->>>> device tree functions assume a single system devicetree, with no concept
->>>> of a freestanding tree (eg, if a NULL device tree node is provided to
->>>> a function or macro, it often defaults to the root of the system device
->>>> tree).  I need to go look at whether the flag OF_DETACHED handles this,
->>>> or if it could be leveraged to do so.
->>>
->>> Instead of worrying about a theoretical problem, we should see if
->>> there is an actual problem for a user.
->>>
->>> I'm not so worried about DT functions themselves, but places which
->>> have 'if ACPI ... else (DT) ...' paths.
->>>
->>
->> Bringing this thread back into focus. Any thoughts on how to move forward?
+On Fri, Oct 07, 2022 at 12:01:03PM -0600, Jason A. Donenfeld wrote:
+> Rather than incurring a division or requesting too many random bytes for
+> the given range, use the prandom_u32_max() function, which only takes
+> the minimum required bytes from the RNG and avoids divisions.
+
+I actually meant splitting the by-hand stuff by subsystem, but nearly
+all of these can be done mechanically too, so it shouldn't be bad. Notes
+below...
+
 > 
-> Reviewers raise concerns/issues and the submitters work to address
-> them or explain why they aren't an issue. The submitter has to push
-> things forward. That's how the process works.
-> 
-We are working on updating the patch set to address the feedback. The 
-design is still based on device tree overlay infrastructure.
+> [...]
+> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+> index 92bcc1768f0b..87203429f802 100644
+> --- a/arch/arm64/kernel/process.c
+> +++ b/arch/arm64/kernel/process.c
+> @@ -595,7 +595,7 @@ unsigned long __get_wchan(struct task_struct *p)
+>  unsigned long arch_align_stack(unsigned long sp)
+>  {
+>  	if (!(current->personality & ADDR_NO_RANDOMIZE) && randomize_va_space)
+> -		sp -= get_random_int() & ~PAGE_MASK;
+> +		sp -= prandom_u32_max(PAGE_SIZE);
+>  	return sp & ~0xf;
+>  }
+>  
 
-> As I noted, much of this is needed on a DT system with PCI device not
-> described in DT. So you could split out any ACPI system support to
-> avoid that concern for example. Enabling others to exercise these
-> patches may help too. Perhaps use QEMU to create some imaginary
-> device.
-To verify this patch set, in addition to a x86_64/ACPI based system, we 
-also have an AARCH64/DT QEMU setup where we have attached a physical 
-Alveo device. We haven't run into any ACPI or DTO issues so far.
+@mask@
+expression MASK;
+@@
 
-Perhaps we can introduce this feature in a phased manner where we first 
-enable DT based platforms and then enable ACPI based platforms?
+- (get_random_int() & ~(MASK))
++ prandom_u32_max(MASK)
 
--Sonal
-> 
-> Rob
+> diff --git a/arch/loongarch/kernel/vdso.c b/arch/loongarch/kernel/vdso.c
+> index f32c38abd791..8c9826062652 100644
+> --- a/arch/loongarch/kernel/vdso.c
+> +++ b/arch/loongarch/kernel/vdso.c
+> @@ -78,7 +78,7 @@ static unsigned long vdso_base(void)
+>  	unsigned long base = STACK_TOP;
+>  
+>  	if (current->flags & PF_RANDOMIZE) {
+> -		base += get_random_int() & (VDSO_RANDOMIZE_SIZE - 1);
+> +		base += prandom_u32_max(VDSO_RANDOMIZE_SIZE);
+>  		base = PAGE_ALIGN(base);
+>  	}
+>  
 
+@minus_one@
+expression FULL;
+@@
+
+- (get_random_int() & ((FULL) - 1)
++ prandom_u32_max(FULL)
+
+> diff --git a/arch/parisc/kernel/vdso.c b/arch/parisc/kernel/vdso.c
+> index 63dc44c4c246..47e5960a2f96 100644
+> --- a/arch/parisc/kernel/vdso.c
+> +++ b/arch/parisc/kernel/vdso.c
+> @@ -75,7 +75,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm,
+>  
+>  	map_base = mm->mmap_base;
+>  	if (current->flags & PF_RANDOMIZE)
+> -		map_base -= (get_random_int() & 0x1f) * PAGE_SIZE;
+> +		map_base -= prandom_u32_max(0x20) * PAGE_SIZE;
+>  
+>  	vdso_text_start = get_unmapped_area(NULL, map_base, vdso_text_len, 0, 0);
+>  
+
+These are more fun, but Coccinelle can still do them with a little
+Pythonic help:
+
+// Find a potential literal
+@literal_mask@
+expression LITERAL;
+identifier randfunc =~ "get_random_int|prandom_u32|get_random_u32";
+position p;
+@@
+
+        (randfunc()@p & (LITERAL))
+
+// Add one to the literal.
+@script:python add_one@
+literal << literal_mask.LITERAL;
+RESULT;
+@@
+
+if literal.startswith('0x'):
+        value = int(literal, 16) + 1
+        coccinelle.RESULT = cocci.make_expr("0x%x" % (value))
+elif literal[0] in '123456789':
+        value = int(literal, 10) + 1
+        coccinelle.RESULT = cocci.make_expr("%d" % (value))
+else:
+        print("I don't know how to handle: %s" % (literal))
+
+// Replace the literal mask with the calculated result.
+@plus_one@
+expression literal_mask.LITERAL;
+position literal_mask.p;
+expression add_one.RESULT;
+identifier FUNC;
+@@
+
+-       (FUNC()@p & (LITERAL))
++       prandom_u32_max(RESULT)
+
+> diff --git a/drivers/mtd/tests/stresstest.c b/drivers/mtd/tests/stresstest.c
+> index cb29c8c1b370..d2faaca7f19d 100644
+> --- a/drivers/mtd/tests/stresstest.c
+> +++ b/drivers/mtd/tests/stresstest.c
+> @@ -45,9 +45,8 @@ static int rand_eb(void)
+>  	unsigned int eb;
+>  
+>  again:
+> -	eb = prandom_u32();
+>  	/* Read or write up 2 eraseblocks at a time - hence 'ebcnt - 1' */
+> -	eb %= (ebcnt - 1);
+> +	eb = prandom_u32_max(ebcnt - 1);
+>  	if (bbt[eb])
+>  		goto again;
+>  	return eb;
+
+This can also be done mechanically:
+
+@multi_line@
+identifier randfunc =~ "get_random_int|prandom_u32|get_random_u32";
+identifier RAND;
+expression E;
+@@
+
+-       RAND = randfunc();
+        ... when != RAND
+-       RAND %= (E);
++       RAND = prandom_u32_max(E);
+
+@collapse_ret@
+type TYPE;
+identifier VAR;
+expression E;
+@@
+
+ {
+-       TYPE VAR;
+-       VAR = (E);
+-       return VAR;
++       return E;
+ }
+
+@drop_var@
+type TYPE;
+identifier VAR;
+@@
+
+ {
+-       TYPE VAR;
+        ... when != VAR
+ }
+
+> diff --git a/fs/ext2/ialloc.c b/fs/ext2/ialloc.c
+> index 998dd2ac8008..f4944c4dee60 100644
+> --- a/fs/ext2/ialloc.c
+> +++ b/fs/ext2/ialloc.c
+> @@ -277,8 +277,7 @@ static int find_group_orlov(struct super_block *sb, struct inode *parent)
+>  		int best_ndir = inodes_per_group;
+>  		int best_group = -1;
+>  
+> -		group = prandom_u32();
+> -		parent_group = (unsigned)group % ngroups;
+> +		parent_group = prandom_u32_max(ngroups);
+>  		for (i = 0; i < ngroups; i++) {
+>  			group = (parent_group + i) % ngroups;
+>  			desc = ext2_get_group_desc (sb, group, NULL);
+
+Okay, that one is too much for me -- checking that group is never used
+after the assignment removal is likely possible, but beyond my cocci
+know-how. :)
+
+> diff --git a/fs/ext4/ialloc.c b/fs/ext4/ialloc.c
+> index f73e5eb43eae..36d5bc595cc2 100644
+> --- a/fs/ext4/ialloc.c
+> +++ b/fs/ext4/ialloc.c
+> @@ -463,10 +463,9 @@ static int find_group_orlov(struct super_block *sb, struct inode *parent,
+>  			hinfo.hash_version = DX_HASH_HALF_MD4;
+>  			hinfo.seed = sbi->s_hash_seed;
+>  			ext4fs_dirhash(parent, qstr->name, qstr->len, &hinfo);
+> -			grp = hinfo.hash;
+> +			parent_group = hinfo.hash % ngroups;
+>  		} else
+> -			grp = prandom_u32();
+> -		parent_group = (unsigned)grp % ngroups;
+> +			parent_group = prandom_u32_max(ngroups);
+>  		for (i = 0; i < ngroups; i++) {
+>  			g = (parent_group + i) % ngroups;
+>  			get_orlov_stats(sb, g, flex_size, &stats);
+
+Much less easy mechanically. :)
+
+> diff --git a/lib/test_hexdump.c b/lib/test_hexdump.c
+> index 0927f44cd478..41a0321f641a 100644
+> --- a/lib/test_hexdump.c
+> +++ b/lib/test_hexdump.c
+> @@ -208,7 +208,7 @@ static void __init test_hexdump_overflow(size_t buflen, size_t len,
+>  static void __init test_hexdump_overflow_set(size_t buflen, bool ascii)
+>  {
+>  	unsigned int i = 0;
+> -	int rs = (prandom_u32_max(2) + 1) * 16;
+> +	int rs = prandom_u32_max(2) + 1 * 16;
+>  
+>  	do {
+>  		int gs = 1 << i;
+
+This looks wrong. Cocci says:
+
+-       int rs = (get_random_int() % 2 + 1) * 16;
++       int rs = (prandom_u32_max(2) + 1) * 16;
+
+> diff --git a/lib/test_vmalloc.c b/lib/test_vmalloc.c
+> index 4f2f2d1bac56..56ffaa8dd3f6 100644
+> --- a/lib/test_vmalloc.c
+> +++ b/lib/test_vmalloc.c
+> @@ -151,9 +151,7 @@ static int random_size_alloc_test(void)
+>  	int i;
+>  
+>  	for (i = 0; i < test_loop_count; i++) {
+> -		n = prandom_u32();
+> -		n = (n % 100) + 1;
+> -
+> +		n = prandom_u32_max(n % 100) + 1;
+>  		p = vmalloc(n * PAGE_SIZE);
+>  
+>  		if (!p)
+
+This looks wrong. Cocci says:
+
+-               n = prandom_u32();
+-               n = (n % 100) + 1;
++               n = prandom_u32_max(100) + 1;
+
+> @@ -293,16 +291,12 @@ pcpu_alloc_test(void)
+>  		return -1;
+>  
+>  	for (i = 0; i < 35000; i++) {
+> -		unsigned int r;
+> -
+> -		r = prandom_u32();
+> -		size = (r % (PAGE_SIZE / 4)) + 1;
+> +		size = prandom_u32_max(PAGE_SIZE / 4) + 1;
+>  
+>  		/*
+>  		 * Maximum PAGE_SIZE
+>  		 */
+> -		r = prandom_u32();
+> -		align = 1 << ((r % 11) + 1);
+> +		align = 1 << (prandom_u32_max(11) + 1);
+>  
+>  		pcpu[i] = __alloc_percpu(size, align);
+>  		if (!pcpu[i])
+> @@ -393,14 +387,11 @@ static struct test_driver {
+>  
+>  static void shuffle_array(int *arr, int n)
+>  {
+> -	unsigned int rnd;
+>  	int i, j;
+>  
+>  	for (i = n - 1; i > 0; i--)  {
+> -		rnd = prandom_u32();
+> -
+>  		/* Cut the range. */
+> -		j = rnd % i;
+> +		j = prandom_u32_max(i);
+>  
+>  		/* Swap indexes. */
+>  		swap(arr[i], arr[j]);
+
+Yup, agrees with Cocci on these.
+
+-- 
+Kees Cook
