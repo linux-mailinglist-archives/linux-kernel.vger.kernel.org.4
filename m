@@ -2,125 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 639025F7515
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 10:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92EB75F751A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 10:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiJGINP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 04:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51350 "EHLO
+        id S229707AbiJGIOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 04:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbiJGINL (ORCPT
+        with ESMTP id S229459AbiJGIOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 04:13:11 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893FDEB7EF
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 01:13:09 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id s206so4028675pgs.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 01:13:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=n8VvFVGhEVMZdHi8+5seVzuqaqkjdyrnFvIS6loiHwQ=;
-        b=HtkV+NUpGjW7HXSzGJ6oZnrPPTREyGeCYFxDvh7RlDGAcijsSCgwmHoR9SvGnmuab4
-         RsXVY5O3pLgan83+qkOJvhAaNmKc9TwmI6qEB5F+EydiYfkpYtJnEUUzb5G4TyildDnm
-         dsvdCtBlg7drsXYMJvDzlxYjxh4GvEthtGbcdbws1UG/qVdX9gSufwzp7srZJyBYc8ca
-         FYlRxDr5roboKs6JuzY359e2+MgipzjxTOw1OLhQ7NY4lnzxmtQze/7t0G80HJ+ORaUb
-         +pW67ITt3KaHOmYgsRfhAJVQTn3JdR3WFf+uaO3FWT1/sIk7UcnjVYjXyf+3XZTn8UmX
-         n+rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=n8VvFVGhEVMZdHi8+5seVzuqaqkjdyrnFvIS6loiHwQ=;
-        b=dv4QocelsjXMjDSl7d1QDipkbh7pce+Ymv6Gr0JTJ3c1i8PMdlL3mAkfi+X/fHngMY
-         BQUXZvFNq7ALi7tQzEzxaNw8w2otu1waVUWk6RPJSeAmOHgpwD+GZeXD04PyfQMq2rNP
-         o73e6ilhKJLY1wM3sHOtlcbC8VCiAY7ugg407t03psaI7II7/3jshG7ML4dU26SbDUxR
-         eu1dAHKT7ZQoCuLb5hcaQzLE5qHE3di5RWb9tgT24AepA06i66jGdrQCY8pReVhQeQRl
-         Kjof0ShPFPhlQqDNitzsqz0kMjLcuOPtxA+m7RI4KDwVy0tOM6XEHQjFJjpe9L1YjjKp
-         kltg==
-X-Gm-Message-State: ACrzQf3ybjxA3JjJCVkJljToYOXsjbxxYB8TLlfh8D3Z3xI+kkMql4kN
-        brE31fMXq4OAhJTgYnLHb0DDzlZjX0bE10HufkCx/g==
-X-Google-Smtp-Source: AMsMyM68Bm1nFSvBPk7n2zafQw6ucnG0uukpNbiIy7kClP9xZYK6Z4ajGqFrItQYiTZlZU9CwF24JXqJDcADBkzlKiU=
-X-Received: by 2002:a63:5b48:0:b0:458:1e98:c862 with SMTP id
- l8-20020a635b48000000b004581e98c862mr3472673pgm.568.1665130389005; Fri, 07
- Oct 2022 01:13:09 -0700 (PDT)
+        Fri, 7 Oct 2022 04:14:14 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92832F1935;
+        Fri,  7 Oct 2022 01:14:13 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2977fmnQ031215;
+        Fri, 7 Oct 2022 08:13:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=dtd3CMHEDsC9DUqgNxiqohaQ+nZUyjGQZk5G1Ce326w=;
+ b=JXOduRrtTDhRMlsIbXdiuTMCL104/cDeoEP+o0Bj78qJvtHGsK4KA0Q87vA3jLGTAzXH
+ 7p7b+ZMboaTi8Bt3bj87RheQhJVWSGMrr9CR2xIOsOqHgooP4r4EVft6faxo5xsJWIjh
+ 6fjN41Gvhcl5rq96GFfflKxCAKC9RTCABTB7L2z+CbCXeIqizm0tpUw10+MjAQc04ZM6
+ nKVhDjuAwT1DGakl45BptIuoTaLW40HhMRHeoNnu4HCYjIro9IWskvXX23we9g0YSu08
+ eA6cy3YlsGsHQlaD27p4cmuADH53yzEJ0YOoMG8AtvOpgRTCj9WVXcooQRr4/nFNgrFp yQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k2fxr106k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Oct 2022 08:13:58 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2977fmEv031218;
+        Fri, 7 Oct 2022 08:13:57 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k2fxr1060-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Oct 2022 08:13:57 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29787HwC017647;
+        Fri, 7 Oct 2022 08:13:55 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04fra.de.ibm.com with ESMTP id 3jxd68x3nn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Oct 2022 08:13:55 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2978DpNC62456234
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 7 Oct 2022 08:13:51 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BCF6AA4054;
+        Fri,  7 Oct 2022 08:13:51 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 45ACFA405B;
+        Fri,  7 Oct 2022 08:13:51 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  7 Oct 2022 08:13:51 +0000 (GMT)
+From:   Sumanth Korikkar <sumanthk@linux.ibm.com>
+To:     olsajiri@gmail.com
+Cc:     bpf@vger.kernel.org, gor@linux.ibm.com, hca@linux.ibm.com,
+        iii@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-tip-commits@vger.kernel.org, namhyung@kernel.org,
+        peterz@infradead.org, sumanthk@linux.ibm.com, svens@linux.ibm.com,
+        tip-bot2@linutronix.de, tmricht@linux.ibm.com, x86@kernel.org
+Subject: [PATCH] bpf: fix sample_flags for bpf_perf_event_output
+Date:   Fri,  7 Oct 2022 10:13:27 +0200
+Message-Id: <20221007081327.1047552-1-sumanthk@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <Yz8lbkx3HYQpnvIB@krava>
+References: <Yz8lbkx3HYQpnvIB@krava>
 MIME-Version: 1.0
-References: <20221002002326.946620-1-ira.weiny@intel.com> <20221002002326.946620-3-ira.weiny@intel.com>
- <CAFA6WYOGT1sJLA4c_B88NaXgxv4fm-idi5QMYvXdXB0acCF3sw@mail.gmail.com>
- <TYZPR03MB65279558CC22F5130B710EA8FB5D9@TYZPR03MB6527.apcprd03.prod.outlook.com>
- <CAFA6WYMT9S1Di6DN_UXc823f0ZTkqerE1PB=oG6wmfx28vEbDg@mail.gmail.com> <CAHk-=whVyH-wSWLd=Zn4rwo+91T+qzRvfMPC2yFX98GxykOqOw@mail.gmail.com>
-In-Reply-To: <CAHk-=whVyH-wSWLd=Zn4rwo+91T+qzRvfMPC2yFX98GxykOqOw@mail.gmail.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Fri, 7 Oct 2022 10:12:57 +0200
-Message-ID: <CAHUa44GkTLCzuSij5FbjBXFBM1CCQROtrCtHHtj70ZRi-3K7uA@mail.gmail.com>
-Subject: Re: [PATCH 2/4] tee: Remove vmalloc page support
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Sumit Garg <sumit.garg@linaro.org>,
-        =?UTF-8?B?UGhpbCBDaGFuZyAo5by15LiW5YuzKQ==?= 
-        <Phil.Chang@mediatek.com>,
-        "ira.weiny@intel.com" <ira.weiny@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: vy7-shgvwI2HEsF_dLzPypgUPE8Ao3EA
+X-Proofpoint-ORIG-GUID: 3yeAUfUDBSAgaV1q30dqMv7CtkEjuzEU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-06_05,2022-10-06_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ malwarescore=0 spamscore=0 lowpriorityscore=0 adultscore=0 suspectscore=0
+ phishscore=0 mlxlogscore=999 impostorscore=0 priorityscore=1501
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210070048
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 6, 2022 at 8:20 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Wed, Oct 5, 2022 at 11:24 PM Sumit Garg <sumit.garg@linaro.org> wrote:
-> >
-> > Sorry but you need to get your driver mainline in order to support
-> > vmalloc interface.
->
-> Actually, I think even then we shouldn't support vmalloc - and
-> register_shm_helper() just needs to be changed to pass in an array of
-> actual page pointers instead.
+* Raw data is also filled by bpf_perf_event_output.
+* Add sample_flags to indicate raw data.
+* This eliminates the segfaults as shown below:
+  Run ./samples/bpf/trace_output
+  BUG pid 9 cookie 1001000000004 sized 4
+  BUG pid 9 cookie 1001000000004 sized 4
+  BUG pid 9 cookie 1001000000004 sized 4
+  Segmentation fault (core dumped)
 
-register_shm_helper() is an internal function, I suppose it's what's
-passed to tee_shm_register_user_buf() and especially
-tee_shm_register_kernel_buf() in this case.
+Fixes: 838d9bb62d13 ("perf: Use sample_flags for raw_data")
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
+---
+ kernel/trace/bpf_trace.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-So the gain is that in the kernel it becomes the caller's
-responsibility to provide the array of page pointers and the TEE
-subsystem doesn't need to care about what kind of kernel memory it is
-any longer. Yes, that should avoid eventual complexities with
-vmalloc() etc.
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 49fb9ec8366d..1ed08967fb97 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -687,6 +687,7 @@ BPF_CALL_5(bpf_perf_event_output, struct pt_regs *, regs, struct bpf_map *, map,
+ 
+ 	perf_sample_data_init(sd, 0, 0);
+ 	sd->raw = &raw;
++	sd->sample_flags |= PERF_SAMPLE_RAW;
+ 
+ 	err = __bpf_perf_event_output(regs, map, flags, sd);
+ 
+@@ -745,6 +746,7 @@ u64 bpf_event_output(struct bpf_map *map, u64 flags, void *meta, u64 meta_size,
+ 	perf_fetch_caller_regs(regs);
+ 	perf_sample_data_init(sd, 0, 0);
+ 	sd->raw = &raw;
++	sd->sample_flags |= PERF_SAMPLE_RAW;
+ 
+ 	ret = __bpf_perf_event_output(regs, map, flags, sd);
+ out:
+-- 
+2.36.1
 
->
-> At that point TEE_SHM_USER_MAPPED should also go away, because then
-> it's the caller that should just do either the user space page
-> pinning, or pass in the kernel page pointer.
->
-> JensW, is there some reason that wouldn't work?
-
-We still need to know if it's kernel or user pages in
-release_registered_pages().
-
-The struct tee_shm:s acquired with syscalls from user space are
-reference counted. As are the kernel tee_shm:s, but I believe we could
-separate them to avoid reference counting tee_shm:s used by kernel
-clients if needed. I'll need to look closer at this if we're going to
-use that approach.
-
-Without reference counting the caller of tee_shm_free() can be certain
-that the secure world is done with the memory so we could delegate the
-kernel pages part of release_registered_pages() to the caller instead.
-
-Cheers,
-Jens
-
->
->                  Linus
