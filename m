@@ -2,99 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7715F7E14
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C375F7E19
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbiJGTgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 15:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59772 "EHLO
+        id S229505AbiJGTgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 15:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiJGTge (ORCPT
+        with ESMTP id S229810AbiJGTgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 15:36:34 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519D8100BD9;
-        Fri,  7 Oct 2022 12:36:33 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id mx8so3695221qvb.8;
-        Fri, 07 Oct 2022 12:36:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zT+O0QTiUdGcu5fC+oP0NDvqRtFHHQvCkGaAkhwWHIM=;
-        b=QZzbJAVg4gJHSRBIeJsh9srTdDG/mC6KUiT1/ZODb+OB/axESaJz/5W+hhGEOM619E
-         PZvvttamZyoatc4n1BXHEUvD1Um/W5UK9fRarf4dq9QVhCWp+D2KOLQXvr/z/WDIomsb
-         16Cw+4p6GzHe3EDRETnJ0eq03WJWtwa/jA0g2pPhUmAHbUXubqqDSnaGhrHERAbuxLqW
-         cVzSFGL/by+v8rD8zLzlWC7Y23JODljwnjXne83NJGnMj9Yg9KPYCXdsBgrsSvDeNEzG
-         4Voi2zIt4f2HPtG6+xTDgF+BzZk4AvQtSzeFaq5qUk6yvcCDIQYBXTZnHa8614qUWoQh
-         O6sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zT+O0QTiUdGcu5fC+oP0NDvqRtFHHQvCkGaAkhwWHIM=;
-        b=8SQAVQRPLFrl7EeqdIuC5P2WLJGDGYE/24VfE2tTzHMujcmg/ed0RJDJmCNND06oGQ
-         01jcJieZSqgDa9Gwku8L4lzISy8e7GA55ILgBZrsZn6e7THDJnO35/t+bWNy3AKM4qkH
-         Ggq/FByk6LRnSEhlL9tClVY88PQqly2SvlGszA8+LzPR6ZT7yvO4WO8RaMjewy5R7noq
-         5I6hSfy4Q2Kcqi0KgYB2UbdaxZHP3QVAyKMNu1F+ZjsQALtKQsqTvuL+doqWQzRYLTBy
-         xCQhhqfsxB0RZRJ8n9WrVMi24V/VRnZGjsf3xfoaMDM9wN6UW1IZLMX9TopTljp+DsyQ
-         L1hg==
-X-Gm-Message-State: ACrzQf1pvckkfRk1Rg7vHE3HGg/WtiH7WTahP8z0yQoGpP/1Jxxft/82
-        lczq+IT/fKkLColBKaRw3dA=
-X-Google-Smtp-Source: AMsMyM7fbhFjefNeCTZ2HYs/Zh0cApdxSjziQfBuB7lYZLPDLzvnuIgzMW+UGKNYSLZm2xvMNkr9aQ==
-X-Received: by 2002:a05:6214:dc2:b0:4b1:7f96:50dd with SMTP id 2-20020a0562140dc200b004b17f9650ddmr5629094qvt.34.1665171392449;
-        Fri, 07 Oct 2022 12:36:32 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id c20-20020ac86614000000b003447c4f5aa5sm2715018qtp.24.2022.10.07.12.36.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Oct 2022 12:36:31 -0700 (PDT)
-Message-ID: <26ccc8e3-c40b-e77a-134c-4175694c587d@gmail.com>
-Date:   Fri, 7 Oct 2022 12:36:28 -0700
+        Fri, 7 Oct 2022 15:36:43 -0400
+Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [IPv6:2001:4b7a:2000:18::170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18530100BEC
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 12:36:40 -0700 (PDT)
+Received: from [192.168.1.101] (95.49.30.201.neoplus.adsl.tpnet.pl [95.49.30.201])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 60C812009D;
+        Fri,  7 Oct 2022 21:36:37 +0200 (CEST)
+Message-ID: <ad9f1515-a7ff-e8a5-bbc0-4f0278c08952@somainline.org>
+Date:   Fri, 7 Oct 2022 21:36:36 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 1/5] PCI: brcmstb: Enable Multi-MSI
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 2/6] arm: dts: qcom: mdm9615: fix pinctrl subnodes
 Content-Language: en-US
-To:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221006220322.33000-1-jim2101024@gmail.com>
- <20221006220322.33000-2-jim2101024@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221006220322.33000-2-jim2101024@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Andy Gross <agross@kernel.org>, Lee Jones <lee@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+References: <20221005-mdm9615-pinctrl-yaml-v1-0-0cbc006e2a30@linaro.org>
+ <20221005-mdm9615-pinctrl-yaml-v1-2-0cbc006e2a30@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20221005-mdm9615-pinctrl-yaml-v1-2-0cbc006e2a30@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/6/22 15:03, Jim Quinlan wrote:
-> We always wanted to enable Multi-MSI but didn't have a test device until
-> recently.  In addition, there are some devices out there that will ask for
-> multiple MSI but refuse to work if they are only granted one.
-> 
-> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+
+On 6.10.2022 11:57, Neil Armstrong wrote:
+> Fix the MDM9615 DT to the expected subnodes namings.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+
+Konrad
+>  .../boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts  |  8 ++++----
+>  arch/arm/boot/dts/qcom-mdm9615-wp8548.dtsi         | 22 +++++++++++-----------
+>  2 files changed, 15 insertions(+), 15 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts b/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts
+> index 4e53b3d70195..30a110984597 100644
+> --- a/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts
+> +++ b/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts
+> @@ -45,8 +45,8 @@ &msmgpio {
+>  	 * - 42: IOT0_GPIO1 and SD Card Detect
+>  	 */
+>  
+> -	gpioext1_pins: gpioext1_pins {
+> -		pins {
+> +	gpioext1_pins: gpioext1-state {
+> +		gpioext1-pins {
+>  			pins = "gpio2";
+>  			function = "gpio";
+>  			input-enable;
+> @@ -54,8 +54,8 @@ pins {
+>  		};
+>  	};
+>  
+> -	sdc_cd_pins: sdc_cd_pins {
+> -		pins {
+> +	sdc_cd_pins: sdc-cd-state {
+> +		sdc-cd-pins {
+>  			pins = "gpio42";
+>  			function = "gpio";
+>  			drive-strength = <2>;
+> diff --git a/arch/arm/boot/dts/qcom-mdm9615-wp8548.dtsi b/arch/arm/boot/dts/qcom-mdm9615-wp8548.dtsi
+> index 2fe8693dc3cd..92c8003dac25 100644
+> --- a/arch/arm/boot/dts/qcom-mdm9615-wp8548.dtsi
+> +++ b/arch/arm/boot/dts/qcom-mdm9615-wp8548.dtsi
+> @@ -22,8 +22,8 @@ &msmgpio {
+>  	pinctrl-0 = <&reset_out_pins>;
+>  	pinctrl-names = "default";
+>  
+> -	gsbi3_pins: gsbi3_pins {
+> -		mux {
+> +	gsbi3_pins: gsbi3-state {
+> +		gsbi3-pins {
+>  			pins = "gpio8", "gpio9", "gpio10", "gpio11";
+>  			function = "gsbi3";
+>  			drive-strength = <8>;
+> @@ -31,8 +31,8 @@ mux {
+>  		};
+>  	};
+>  
+> -	gsbi4_pins: gsbi4_pins {
+> -		mux {
+> +	gsbi4_pins: gsbi4-state {
+> +		gsbi4-pins {
+>  			pins = "gpio12", "gpio13", "gpio14", "gpio15";
+>  			function = "gsbi4";
+>  			drive-strength = <8>;
+> @@ -40,15 +40,15 @@ mux {
+>  		};
+>  	};
+>  
+> -	gsbi5_i2c_pins: gsbi5_i2c_pins {
+> -		pin16 {
+> +	gsbi5_i2c_pins: gsbi5-i2c-state {
+> +		sda-pins {
+>  			pins = "gpio16";
+>  			function = "gsbi5_i2c";
+>  			drive-strength = <8>;
+>  			bias-disable;
+>  		};
+>  
+> -		pin17 {
+> +		scl-pins {
+>  			pins = "gpio17";
+>  			function = "gsbi5_i2c";
+>  			drive-strength = <2>;
+> @@ -56,8 +56,8 @@ pin17 {
+>  		};
+>  	};
+>  
+> -	gsbi5_uart_pins: gsbi5_uart_pins {
+> -		mux {
+> +	gsbi5_uart_pins: gsbi5-uart-state {
+> +		gsbi5-uart-pins {
+>  			pins = "gpio18", "gpio19";
+>  			function = "gsbi5_uart";
+>  			drive-strength = <8>;
+> @@ -65,8 +65,8 @@ mux {
+>  		};
+>  	};
+>  
+> -	reset_out_pins: reset_out_pins {
+> -		pins {
+> +	reset_out_pins: reset-out-state {
+> +		reset-out-pins {
+>  			pins = "gpio66";
+>  			function = "gpio";
+>  			drive-strength = <2>;
+> 
