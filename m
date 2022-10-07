@@ -2,90 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9FBA5F7C15
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 19:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F37B5F7C24
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 19:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbiJGRNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 13:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
+        id S229592AbiJGRSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 13:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiJGRNJ (ORCPT
+        with ESMTP id S229445AbiJGRSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 13:13:09 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F22CF84D
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 10:12:55 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso7333528pjq.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 10:12:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=r9B2Io37F2WB3dubxdTH3aMsWowlvQ//OiuVGJXtoP0=;
-        b=aDsNi2kFJ4h252fuK/kVoczwyXDG2McRIApgv12rS9woAmFaizTDPsoQHUZnV/Gqmk
-         i/UC24IzUs/CQVt5w7bFFCz+XFNVOIiBaafD3b62A6eKRApYVcJqfS26KCTmVT+fOIaV
-         um1gKp3tvK5aTPSHGRJue2yGzahdoxjhD+1me5h4hJiOVpujqZnUK2VOJhm0JtBw0Wxh
-         QRxi7xyOWD8lOJjcbqdmpA2eX0ha07e9WP0tfXzqOb3lglo3VkgF1qsfH/wSlBpCMYva
-         EK0QP4f16UJhsERB/QDMTEhqzg3DmsxgN+g2xGpmAe1HcoNwZ3h02lACf8UDiR1FMayc
-         4uhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r9B2Io37F2WB3dubxdTH3aMsWowlvQ//OiuVGJXtoP0=;
-        b=72Ul47LqU0pQI6LXObvJWUlCBPnk9RzuI10ca7gDfwtIO8pCuWWmzpnZ9UeFaO/Pkk
-         /JnJzhpNgV6cd0HJgx7u9BbCS9BH2GqFNhQlI5YVoFw9oYIgErzsxRP0Se5icyeRy6Mo
-         eB9HJLJfF6WegNV2HDFzla/9IoIuWRwRD9eV2MpRkc62cA14V6unp3dxP3/EnDNwf8B1
-         7x0EagHsxfrPdmBa1+GZSZ0TEXblEPNQAIUBXopmk6ppITJOsThltfQCqN2/enwSThx9
-         ANwO/XMHbfGz/4IWOtmF7Q3l1G72Y5vvA5sbTQibJmoIWE+FpTCGYab/r/zO9J1LRpBg
-         P3VA==
-X-Gm-Message-State: ACrzQf2JG68mm3sVrk5ADwK51BmBEooGP+UfLEGcFwnQeuw4l76y7C3d
-        e+QI/toizBAMY06P2TlWU8a79A==
-X-Google-Smtp-Source: AMsMyM6iPTxQDdy3IiuF993uK93cycK/yyvuHhFri/bkK8tDViN5HgvcPljdj91mS/E4dn0KeWVatQ==
-X-Received: by 2002:a17:902:e54c:b0:180:40fb:e1a2 with SMTP id n12-20020a170902e54c00b0018040fbe1a2mr2543172plf.14.1665162775039;
-        Fri, 07 Oct 2022 10:12:55 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id x13-20020aa79acd000000b00561c3ec5346sm1839174pfp.129.2022.10.07.10.12.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 10:12:53 -0700 (PDT)
-Date:   Fri, 7 Oct 2022 17:12:49 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Hao Peng <flyingpenghao@gmail.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kvm: x86: keep srcu writer side operation mutually
- exclusive
-Message-ID: <Y0BeEVxkDkctmTIX@google.com>
-References: <CAPm50a+aygp3T1mNjzGXtL2nyNm-mHFZ3YO8F7eO0gCxZDuQsA@mail.gmail.com>
+        Fri, 7 Oct 2022 13:18:14 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE06D57D3;
+        Fri,  7 Oct 2022 10:18:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Qu0RZlUOKHKbdJ93oyFutpaLoUL4bQrVrDVJWi930ac=; b=Q0GO23CTsRrxoMOQjBT07b+fbV
+        xuHE10+DAr4bRVKdI21rVUamN7uWea2x2WNRmw/k4O6MPz8tcxa0e8gdbRgtcikOsgRm6U9bVNtj9
+        NemvdrSzkjq+5qZFSIqDfYcP8/khTwRJLWO0ENyhwlnjl6OavwwZ8pJQTslvlxA2g5xz9ZiMn/EMg
+        /E+xc4H9GfCHrxZhwZiHBU/LTfFOo8WVgshOfZdrGzyNdpgp83WFv+VRxyL/XYtl5vEpxXugq7AaZ
+        2mOeZtggX+2Xr6/40reAzY+9g41G18YaYwerbGXemmx2SzKVpAHhNMH0SqaJq6UMRCnjJCBos635x
+        D2zSOXeQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ogqyr-0022Yg-Rl; Fri, 07 Oct 2022 17:17:50 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 911D3300155;
+        Fri,  7 Oct 2022 19:17:43 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 753BC2BD94364; Fri,  7 Oct 2022 19:17:43 +0200 (CEST)
+Date:   Fri, 7 Oct 2022 19:17:43 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        David Gow <davidgow@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v10 25/27] x86: enable initial Rust support
+Message-ID: <Y0BfN1BdVCWssvEu@hirez.programming.kicks-ass.net>
+References: <20220927131518.30000-1-ojeda@kernel.org>
+ <20220927131518.30000-26-ojeda@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPm50a+aygp3T1mNjzGXtL2nyNm-mHFZ3YO8F7eO0gCxZDuQsA@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220927131518.30000-26-ojeda@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 08, 2022, Hao Peng wrote:
-> From: Peng Hao <flyingpeng@tencent.com>
-> 
-> Synchronization operations on the writer side of SRCU should be
-> invoked within the mutex.
+On Tue, Sep 27, 2022 at 03:14:56PM +0200, Miguel Ojeda wrote:
+> Note that only x86_64 is covered and not all features nor mitigations
+> are handled, but it is enough as a starting point and showcases
+> the basics needed to add Rust support for a new architecture.
 
-Why?  Synchronizing SRCU is necessary only to ensure that all previous readers go
-away before the old filter is freed.  There's no need to serialize synchronization
-between writers.  The mutex ensures each writer operates on the "new" filter that's
-set by the previous writer, i.e. there's no danger of a double-free.  And the next
-writer will wait for readers to _its_ "new" filter.
+Does it fail the build if required options are missing? Specifically are
+things like kCFI and IBT enabled? Silently not handling those will
+result in an unbootable image.
 
-I think it's a moot point though, as this is a subset of patch I posted[*] to fix
-other issues with the PMU event filter.
+As to missing mitigations; does it at least visibly warn people?
 
-[*] https://lore.kernel.org/all/20220923001355.3741194-2-seanjc@google.com
+I'm very *very* uncomfortable having to 'support' a half-arsed compiler
+like this.
