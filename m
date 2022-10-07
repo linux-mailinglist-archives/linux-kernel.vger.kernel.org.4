@@ -2,136 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 251375F7B36
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 18:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A915F7B3C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 18:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiJGQMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 12:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59682 "EHLO
+        id S229918AbiJGQOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 12:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiJGQMf (ORCPT
+        with ESMTP id S229650AbiJGQOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 12:12:35 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894C3FC1EB
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 09:12:33 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id f37so7948992lfv.8
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 09:12:33 -0700 (PDT)
+        Fri, 7 Oct 2022 12:14:39 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A985EB5F
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 09:14:35 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id b2so12380164eja.6
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 09:14:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A8tlFzRr5PaJFwlIwm9GBuMbfRHqOtAY2JydGxcD8TM=;
-        b=AsBMu4d7kHj3ZjKHzmYBUDwyc/ovOkWmCo6Y556oJZzIZwOdUQBVbWOqxapV3gLBFn
-         AjGpKKgyZavDkAQA62JesgQLYg0doJC+0o/jIfKl023od/xtfn83WGfIOs2Zb/chziYb
-         MuSHsDNWFO+GSlRrb0Qeuk7D1JUdAaftiSbjZdiHOp0onK2UcrApPuneKhKOcYNhp/Md
-         OyAckksPuV7v6eswvxBIZ/d3v/Rad/swjKkUYmx9ukacLv04TsBMPt31jduKclArFNuY
-         LG6efbZKLpAVWZAUw9M82iL0FbeYc/s2WUc1xEeLzCQOj2910oQVEiodHQdWsFTZrqCc
-         8xuw==
+        d=google.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gwCgcEFb6EqweOCGJwFjwMplx0cMo00I0pQaRZheEns=;
+        b=FLiXrIyCWCwIh4B7g6oOtQeS0K8OpzpCsj7kykdMijQaKSo6U6qLpZLv5183N831/Z
+         o97aNMbep3GAWS0wQMhtu2BI/UprI8Vo9qxwerSYZzjU+70Vg+E+zm2cGRFWfJnCT1MQ
+         5aZEVehO6KOzH2QLEs7DtmeWin72GDMaiqITZ/pYKvXswY5SDAFGcVvEW70xMD2HW0ES
+         HGR6yqzTiZ2lIUSeizd2EAi08tYXTfHsd8SNe5IuUnBjLOzW8aWDOvIlbLTTx96M3KSq
+         i8IH+LHnTANkheqM77lFKwPCgkuaD7wLDkZmrfuFw1oiGoNPcFNCd+r230YSNMSIYyP8
+         Astw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A8tlFzRr5PaJFwlIwm9GBuMbfRHqOtAY2JydGxcD8TM=;
-        b=YGZf+/ezcBc5eNEWsUliNoDAiziCt5wygrxV5iys/d5rtji1pv8qs8xgwyCcDaQJqo
-         EKbcLK0UKrBxILPosrgHPA/8rYBnhzhLBw/pmOWp85iQTHiX4zYAY89JsgrbRF99w3RG
-         gQzjM0w9V3EiwrwQ56WPmtglBOJdKfIb4Rw+ojEuQciJSpM+NCj8SyQo2Bs1Mb1Af86i
-         coueMeu7dPOYgQ7hlSiPIk800AUVG3T7OsAmeEKJgkg1t6YPXVTDnyp7UvjVAqkBo12K
-         S6mqyRefvAMSonCvm+FLPbRu4+ZlH9EBFhxSI5ZGwOHSsOTQJbFsRD5emL89Z/RoR8iC
-         vw8Q==
-X-Gm-Message-State: ACrzQf1OmUkv/rWz9okstORmKVdI4aO9DjyUA67uZoTO596pxdPDug8X
-        8Cmys7flwje9BIqW18wB9NTmrw==
-X-Google-Smtp-Source: AMsMyM7EC1svtAnzEBYUfnBsoQ1ddsfwAE50qB7frYZPgOYvwHe2G/NccZx7R7BLXhAaS3Nx4KEFHw==
-X-Received: by 2002:a05:6512:3606:b0:4a2:71df:7938 with SMTP id f6-20020a056512360600b004a271df7938mr2209143lfs.279.1665159151676;
-        Fri, 07 Oct 2022 09:12:31 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id z15-20020a2ebe0f000000b00261e2aab7c2sm319999ljq.58.2022.10.07.09.12.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Oct 2022 09:12:31 -0700 (PDT)
-Message-ID: <4f44c3a8-13e6-4062-86f3-f3721df71a44@linaro.org>
-Date:   Fri, 7 Oct 2022 18:12:30 +0200
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gwCgcEFb6EqweOCGJwFjwMplx0cMo00I0pQaRZheEns=;
+        b=kR226x8W0NP+QnW7iMHx68C6oVFjk0c62hkHz91SvtdKhtb4pGnNT1ATVRTklaRY+v
+         GUkvln1z5q/9VqKOfLPqr3TYb2JrfKqZ3OX1hBCpMo2wUtO7Ti56SWJ7aRUHv+uFiVap
+         IyNoXVdC9R3bjWLIGXcrZwkQXzre1EJrNQEAmAT7phHdoCxIjpyLQq8uEi40jPm9ymnK
+         wIbdvS7HZR89zHR/XY5oYBj/zokp7edD5HFIWK3tHoCNuPe6dq+pKNiPCYN6QF1l5ys7
+         UGQsvi/JSKwV6Lu3/VOzW+FggANIWPecWxKqOzfJiNYI5lSsNSwtTM7TIXEMmAAnv6T0
+         pMNQ==
+X-Gm-Message-State: ACrzQf1xrCg1yzV+0X7ShZkt5PTrI5PpMjc/H98mT8x3lcI4bNEkGhBc
+        kvk0gm8sUX+NcasXRaknp4hOhclSZyq1dw==
+X-Google-Smtp-Source: AMsMyM4okfVRbMsO3Ymv4vwJs9wuatFTCbhTbraksBWWxhhaFX9/mcQHd/2T30xj00lGBinhZSBhTw==
+X-Received: by 2002:a17:906:da86:b0:77a:52b3:da48 with SMTP id xh6-20020a170906da8600b0077a52b3da48mr4502878ejb.373.1665159274119;
+        Fri, 07 Oct 2022 09:14:34 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:9c:201:4e4:454c:b135:33f2])
+        by smtp.gmail.com with ESMTPSA id pk18-20020a170906d7b200b00741383c1c5bsm1379772ejb.196.2022.10.07.09.14.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 09:14:33 -0700 (PDT)
+Date:   Fri, 7 Oct 2022 18:14:27 +0200
+From:   Marco Elver <elver@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, Dmitry Vyukov <dvyukov@google.com>
+Subject: Re: [PATCH] perf: Fix missing SIGTRAPs
+Message-ID: <Y0BQYxewPB/6KWLz@elver.google.com>
+References: <20220927121322.1236730-1-elver@google.com>
+ <Yz7ZLaT4jW3Y9EYS@hirez.programming.kicks-ass.net>
+ <Yz7fWw8duIOezSW1@elver.google.com>
+ <Yz78MMMJ74tBw0gu@hirez.programming.kicks-ass.net>
+ <Yz/zXpF1yLshrJm/@elver.google.com>
+ <Y0Ak/D05KhJeKaed@hirez.programming.kicks-ass.net>
+ <Y0AwaxcJNOWhMKXP@elver.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v5 2/3] arm64: dts: qcom: sc7280: Add
- sc7280-herobrine-audio-rt5682.dtsi
-Content-Language: en-US
-To:     Judy Hsiao <judyhsiao@chromium.org>, bjorn.andersson@linaro.org
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-        dianders@chromium.org, mka@chromium.org, cychiang@google.com,
-        judyhsiao@google.com, swboyd@chromium.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220930152613.2018360-1-judyhsiao@chromium.org>
- <20220930152613.2018360-3-judyhsiao@chromium.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220930152613.2018360-3-judyhsiao@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0AwaxcJNOWhMKXP@elver.google.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/09/2022 17:26, Judy Hsiao wrote:
-> Audio dtsi for sc7280 boards that using rt5682 headset codec:
-> 1. Add dt nodes for sound card which use I2S playback and record
->    through rt5682s and I2S playback through max98357a.
-> 2. Enable lpass cpu node and add pin control and dai-links.
+On Fri, Oct 07, 2022 at 03:58PM +0200, Marco Elver wrote:
+> On Fri, Oct 07, 2022 at 03:09PM +0200, Peter Zijlstra wrote:
+> > On Fri, Oct 07, 2022 at 11:37:34AM +0200, Marco Elver wrote:
+> > 
+> > > That worked. In addition I had to disable the ctx->task != current check
+> > > if we're in task_work, because presumably the event might have already
+> > > been disabled/moved??
+> > 
+> > Uhmmm... uhhh... damn. (wall-time was significantly longer)
+> > 
+> > Does this help?
 > 
-> Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> ---
->  .../qcom/sc7280-herobrine-audio-rt5682.dtsi   | 122 ++++++++++++++++++
->  1 file changed, 122 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
+> No unfortunately - still see:
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
-> new file mode 100644
-> index 000000000000..2dbdeeb29ece
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
-> @@ -0,0 +1,122 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + *
+> [   82.300827] ------------[ cut here ]------------
+> [   82.301680] WARNING: CPU: 0 PID: 976 at kernel/events/core.c:6466 perf_sigtrap+0x60/0x70
 
-Skip empty comment line.
-
-> + * This file defines the common audio settings for the child boards
-> + * using rt5682 codec.
-> + *
-> + * Copyright 2022 Google LLC.
-> + */
-> +
-> +/ {
-> +	/* BOARD-SPECIFIC TOP LEVEL NODES */
-> +	sound: sound {
-> +		compatible = "google,sc7280-herobrine";
-> +		model = "sc7280-rt5682-max98360a-1mic";
-> +
-> +		status = "okay";
-
-No need.
-
-> +		audio-routing =
-> +			"Headphone Jack", "HPOL",
-> +			"Headphone Jack", "HPOR";
-> +
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-
-Best regards,
-Krzysztof
-
+Whenever the warning fires, I see that event->state is OFF.
