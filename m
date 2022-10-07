@@ -2,204 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38CF95F7E07
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4EE5F7E0D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbiJGTeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 15:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50166 "EHLO
+        id S229778AbiJGTfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 15:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJGTeB (ORCPT
+        with ESMTP id S229673AbiJGTfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 15:34:01 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133D4BC60E;
-        Fri,  7 Oct 2022 12:34:00 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id bn8so6835873ljb.6;
-        Fri, 07 Oct 2022 12:33:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QtS1o7ZM2YgF2GXs993wWNlA4xjsIHvbfmEx/5K+0ys=;
-        b=oLTsLLIRHa469/sp9g8M1izhVH+XprkuZfwEtpM/f9oh1eYN2SwLDcg6eMofGrXOD0
-         VLT2WBQTfMTyxOgADXIUAMSl/3qFuO/s7LVI8HhBNn98euIVTHg6fDISKWI8It2aDpSo
-         idm4S4jLWnAsC3EvbIbFYhAJ7pZEGdR6KXZTS/+MuvbqR9KDDPFL1DkBgltwCQxVd/A0
-         NTohnClC2E2TVqREVhAVZKvW/ij/XOq4Ig/eN2yXr3K8rljOQ9STQ+fhIAdnLHqrm4D1
-         kQpE8nCkFctC3k5YMvkIFJb7nIPu7kPhsSudRWHP24/s6EtDlaCGhNETDVgC6CWCA1vt
-         OjRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QtS1o7ZM2YgF2GXs993wWNlA4xjsIHvbfmEx/5K+0ys=;
-        b=XeKJplLH41IP+DhwNTM+AyjgmZi4ONMPFDlyRXdcsOXEATSUnGxIET2M4I3fPMhIDo
-         0lY8RPjttivgg84k7gUmtBoaR3Z06GN0Ncf//chWHgb/yv5ykCldPYyFLffkUzyEMH3u
-         AxHLb3m7grZd19Qn2gVmPIaQpx7gwXSBem7pVPNIJVs2t7pRYiFOezekwml5hXHqUe9e
-         y9AzFY8ev82nrFX2GXmjcS08OIThsP88H2+OkSkAHxhvWbmrbsMQuV7wn4RD2zhsXaXU
-         hpXDufYKkGZTevF+ZfsuNhU9acSnPPTWf2FPtNyEJR4NrvDu3vKkkP5Xdz6/SCnwxldS
-         kTCA==
-X-Gm-Message-State: ACrzQf3BoqqdPt/wc5hyUREtV0dKTxf2e8pL8WsR2PtIjM5D9+TAbcJd
-        ejmZib6hNNbrKRc7qrZBNemEGqWUipiF5asS8fY=
-X-Google-Smtp-Source: AMsMyM5Y8hz2zCDNOF7AQDInxjpA7Mjg4A4qiKR79VFmU44L6j9VrLmUPF9kKQRokpDMciv1XCfLdhs1mHDCpUiaJ8I=
-X-Received: by 2002:a2e:b74f:0:b0:26c:426c:60fc with SMTP id
- k15-20020a2eb74f000000b0026c426c60fcmr2353785ljo.432.1665171238234; Fri, 07
- Oct 2022 12:33:58 -0700 (PDT)
+        Fri, 7 Oct 2022 15:35:08 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDA142D74
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 12:34:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665171301; x=1696707301;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=A1JVSJumD15xJOvO47sg+6LNAU7gON9Nkn4nIzM3pMU=;
+  b=K+vNvFGgIX7oRZr0r6uU25HD3R3/5nYvQFg5NY/m0tvk13/VvTbsX3TT
+   6CcKZdYA7OfQhg2fP06N+j9HZyIsr3rz+wzO78vcq8wiYO/h6kfOhMLlO
+   wPw8mlTjL2pYiNyZIRMz3MYGygsQQo97qDY9LjSC7FEITII0zGAy+4TbG
+   P+w522nT2JnAL6wG0iag9oU3bqZnZ9JPUHnBSp8rIPE/3N4xjrKfVQxtU
+   26uHm4nMRy8w9dLPqf/D/MtlsZep6NXHu7tjEmz3uNjttw9ia1VI1CNs+
+   6oZrDRI1x59aa5SXYHx2XfB3JCunOlZBhqLP5s9dH7s3FduGjMpl5cAKZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10493"; a="284188678"
+X-IronPort-AV: E=Sophos;i="5.95,167,1661842800"; 
+   d="scan'208";a="284188678"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 12:34:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10493"; a="656176587"
+X-IronPort-AV: E=Sophos;i="5.95,167,1661842800"; 
+   d="scan'208";a="656176587"
+Received: from lkp-server01.sh.intel.com (HELO 3c15167049b7) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 07 Oct 2022 12:34:58 -0700
+Received: from kbuild by 3c15167049b7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ogt7Z-0001SN-1A;
+        Fri, 07 Oct 2022 19:34:57 +0000
+Date:   Sat, 08 Oct 2022 03:34:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 8e0b84a8b7f8a448f5439eed087f68eec5e775ac
+Message-ID: <63407f58.irN3GWl1u48UCgM/%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220807221152.38948-1-Igor.Skalkin@opensynergy.com>
- <20220807185846-mutt-send-email-mst@kernel.org> <02222fcb-eaba-617a-c51c-f939678e3d74@opensynergy.com>
- <20221007090223-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20221007090223-mutt-send-email-mst@kernel.org>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Fri, 7 Oct 2022 12:33:46 -0700
-Message-ID: <CABBYNZKfLOxrTAVLRSH+hOwaB5RYkGdjbtfabufUcgR3oy897A@mail.gmail.com>
-Subject: Re: [PATCH] virtio_bt: Fix alignment in configuration struct
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Igor Skalkin <igor.skalkin@opensynergy.com>,
-        Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        linux-bluetooth@vger.kernel.org, mgo@opensynergy.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 8e0b84a8b7f8a448f5439eed087f68eec5e775ac  Merge branch into tip/master: 'x86/mm'
 
-On Fri, Oct 7, 2022 at 6:03 AM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Mon, Aug 08, 2022 at 02:04:43PM +0200, Igor Skalkin wrote:
-> > On 8/8/22 01:00, Michael S. Tsirkin wrote:
-> >
-> >     On Mon, Aug 08, 2022 at 12:11:52AM +0200, Igor Skalkin wrote:
-> >
-> >         According to specification [1], "For the device-specific config=
-uration
-> >         space, the driver MUST use 8 bit wide accesses for 8 bit wide f=
-ields,
-> >         16 bit wide and aligned accesses for 16 bit wide fields and 32 =
-bit wide
-> >         and aligned accesses for 32 and 64 bit wide fields.".
-> >
-> >         Current version of the configuration structure:
-> >
-> >             struct virtio_bt_config {
-> >                 __u8  type;
-> >                 __u16 vendor;
-> >                 __u16 msft_opcode;
-> >             } __attribute__((packed));
-> >
-> >         has both 16bit fields non-aligned.
-> >
-> >         This commit fixes it.
-> >
-> >         [1] https://ddec1-0-en-ctp.trendmicro.com:443/wis/clicktime/v1/=
-query?url=3Dhttps%3a%2f%2fdocs.oasis%2dopen.org%2fvirtio%2fvirtio%2fv1.1%2f=
-virtio%2dv1.1.pdf&umid=3Dd1786ace-e8ea-40e8-9665-96c0949174e5&auth=3D53c7c7=
-de28b92dfd96e93d9dd61a23e634d2fbec-39b15885ceebe9fda9357320aec1ccbac416a470
-> >
-> >         Signed-off-by: Igor Skalkin <Igor.Skalkin@opensynergy.com>
-> >
-> >     This is all true enough, but the problem is
-> >     1. changing uapi like this can't be done, will break userspace
-> >     2. the driver has more issues and no one seems to want to
-> >        maintain it.
-> >     I posted a patch "Bluetooth: virtio_bt: mark broken" and intend
-> >     to merge it for this release.
-> >
-> > This is very sad. We already use this driver in our projects.
->
-> Ping. If we still have no maintainer I'm marking it broken, users
-> should at least be warned.
+elapsed time: 728m
 
-Please resend.
+configs tested: 138
+configs skipped: 2
 
->
-> > Our virtio bluetooth device has two backends - HCI_USER socket backend =
-for one
-> > platform and uart backend for the other, and works well (after applying=
- your
-> > "[PATCH] Bluetooth: virtio_bt: fix device remove") patch, so this "devi=
-ce
-> > removal" problem can probably be considered solved .
-> > We could help with the rest of the problems you listed that can be solv=
-ed
-> > (specification, QEMU support).
-> > And the only problem that is difficult to solve (because of the need to=
- change
-> > UAPI header files) is just this one with unaligned configuration fields=
-.
-> > At the moment, it does not reproduce, because without VIRTIO_BT_F_VND_H=
-CI
-> > (Indicates vendor command support) feature negotiated, the driver does =
-not
-> > read the non-aligned configuration fields.
-> >
-> > So, what would you advise us to do? Continuing to use the "marked broke=
-n"
-> > driver, start writing a specification for a new from scratch, better on=
-e?
-> > Or is there any way to bring this one back to life?
-> >
-> >
-> >
-> >         ---
-> >          include/uapi/linux/virtio_bt.h | 2 +-
-> >          1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> >         diff --git a/include/uapi/linux/virtio_bt.h b/include/uapi/linu=
-x/virtio_bt.h
-> >         index a7bd48daa9a9..adc03709cc4f 100644
-> >         --- a/include/uapi/linux/virtio_bt.h
-> >         +++ b/include/uapi/linux/virtio_bt.h
-> >         @@ -23,9 +23,9 @@ enum virtio_bt_config_vendor {
-> >          };
-> >
-> >          struct virtio_bt_config {
-> >         -       __u8  type;
-> >                 __u16 vendor;
-> >                 __u16 msft_opcode;
-> >         +       __u8  type;
-> >          } __attribute__((packed));
-> >
-> >          #endif /* _UAPI_LINUX_VIRTIO_BT_H */
-> >         --
-> >         2.34.1
-> >
-> > --
-> >
-> > Best regards,
-> >
-> > Igor Skalkin
-> > Software Engineer
-> >
-> > OpenSynergy GmbH
-> > Rotherstr. 20, 10245 Berlin
-> >
-> > igor.skalkin@opensynergy.com
-> > www.opensynergy.com
-> >
-> > registered: Amtsgericht Charlottenburg, HRB 108616B
-> > General Management: Rolf Morich, Stefaan Sonck Thiebaut
-> >
-> >
-> > Please mind our privacy notice pursuant to Art. 13 GDPR. // Unsere Hinw=
-eise zum
-> > Datenschutz gem. Art. 13 DSGVO finden Sie hier.
->
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+alpha                               defconfig
+i386                                defconfig
+x86_64                           rhel-8.3-syz
+arm                                 defconfig
+powerpc                           allnoconfig
+x86_64                              defconfig
+x86_64                         rhel-8.3-kunit
+x86_64                          rhel-8.3-func
+x86_64                               rhel-8.3
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-kvm
+s390                                defconfig
+riscv                randconfig-r042-20221007
+s390                             allmodconfig
+mips                             allyesconfig
+arc                  randconfig-r043-20221007
+powerpc                          allmodconfig
+sh                               allmodconfig
+arc                  randconfig-r043-20221006
+x86_64                           allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+s390                             allyesconfig
+s390                 randconfig-r044-20221007
+alpha                            allyesconfig
+arm64                            allyesconfig
+x86_64               randconfig-a011-20221003
+i386                             allyesconfig
+arm                              allyesconfig
+i386                 randconfig-a011-20221003
+x86_64               randconfig-a015-20221003
+i386                 randconfig-a012-20221003
+x86_64               randconfig-a014-20221003
+i386                 randconfig-a013-20221003
+x86_64               randconfig-a012-20221003
+i386                 randconfig-a015-20221003
+x86_64               randconfig-a013-20221003
+i386                 randconfig-a016-20221003
+powerpc                 mpc85xx_cds_defconfig
+sh                            migor_defconfig
+powerpc                      tqm8xx_defconfig
+powerpc                     tqm8555_defconfig
+nios2                            alldefconfig
+x86_64               randconfig-a016-20221003
+i386                 randconfig-a014-20221003
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+powerpc                        warp_defconfig
+powerpc                      makalu_defconfig
+csky                             alldefconfig
+arc                      axs103_smp_defconfig
+mips                            gpr_defconfig
+i386                          randconfig-c001
+ia64                             allmodconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+riscv                randconfig-r042-20221003
+arc                  randconfig-r043-20221003
+arc                  randconfig-r043-20221002
+s390                 randconfig-r044-20221003
+powerpc                  storcenter_defconfig
+powerpc                     mpc83xx_defconfig
+mips                  maltasmvp_eva_defconfig
+arm                         s3c6400_defconfig
+mips                     loongson1b_defconfig
+powerpc                     asp8347_defconfig
+m68k                          hp300_defconfig
+arm                        keystone_defconfig
+sh                           se7751_defconfig
+sh                         ap325rxa_defconfig
+arm                  randconfig-c002-20221002
+x86_64                        randconfig-c001
+mips                        bcm47xx_defconfig
+sparc64                             defconfig
+mips                      loongson3_defconfig
+microblaze                          defconfig
+arm64                            alldefconfig
+openrisc                    or1ksim_defconfig
+nios2                            allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc                           allyesconfig
+xtensa                         virt_defconfig
+powerpc                    adder875_defconfig
+powerpc                      pcm030_defconfig
+riscv                            allmodconfig
+mips                       bmips_be_defconfig
+powerpc                     ep8248e_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sparc64                          alldefconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+um                               alldefconfig
+powerpc                     sequoia_defconfig
+sh                          kfr2r09_defconfig
 
---=20
-Luiz Augusto von Dentz
+clang tested configs:
+hexagon              randconfig-r045-20221006
+s390                 randconfig-r044-20221006
+hexagon              randconfig-r041-20221006
+riscv                randconfig-r042-20221006
+hexagon              randconfig-r045-20221007
+hexagon              randconfig-r041-20221007
+i386                 randconfig-a003-20221003
+x86_64               randconfig-a002-20221003
+x86_64               randconfig-a001-20221003
+x86_64               randconfig-a004-20221003
+x86_64               randconfig-a006-20221003
+i386                 randconfig-a002-20221003
+x86_64               randconfig-a003-20221003
+i386                 randconfig-a001-20221003
+x86_64               randconfig-a005-20221003
+i386                 randconfig-a006-20221003
+i386                 randconfig-a004-20221003
+i386                 randconfig-a005-20221003
+powerpc                   microwatt_defconfig
+mips                malta_qemu_32r6_defconfig
+powerpc                      obs600_defconfig
+arm                       cns3420vb_defconfig
+x86_64                        randconfig-k001
+powerpc                   bluestone_defconfig
+powerpc                          g5_defconfig
+powerpc                      pmac32_defconfig
+arm                                 defconfig
+powerpc                      ppc44x_defconfig
+arm                     am200epdkit_defconfig
+powerpc                    gamecube_defconfig
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+powerpc                 mpc832x_mds_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
