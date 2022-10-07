@@ -2,97 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6728C5F7BFA
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 19:02:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CCB45F7BFD
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 19:04:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbiJGRCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 13:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39864 "EHLO
+        id S230152AbiJGREi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 13:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbiJGRCR (ORCPT
+        with ESMTP id S229785AbiJGREe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 13:02:17 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25523D5BD;
-        Fri,  7 Oct 2022 10:02:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=AQv93op+k5Gt9JN/aohlZjFMvqKcFqY8ovnVzXuwPuQ=; b=Pe/uWQRJRr6GwWj3Jav6a4p2nJ
-        kNYc9uK/kB0GygBjbdhpymaU7lg7RxmcmstpYzLgvusDwDg/MwqVtrKSMI8fDGhAzTB3yOG2qqLf2
-        Ro3zk1no8UKiiCrmJHYQY6NRtxaEnRKu9N0sjLxW6Nzrc4ADnq5W7lgUb+pcq/XdnM2FzwpKxxqXZ
-        Qg4sbg7zj2jQnfb5LtIO+0kxVIENpfbBOkFdIa2AyTEuvFykXGlyv1WAHVP3ctIGNo/h+Bmo+O20w
-        c/DhBVQ+gXs2ZyEk+dIFAwXgg3kqmpf4OE6WOCScPaEtsXURqdp7wTJJPpxJQYYWjCuvl36Nh8CEE
-        poNb/34g==;
-Received: from 201-43-120-40.dsl.telesp.net.br ([201.43.120.40] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1ogqji-00DNEg-4I; Fri, 07 Oct 2022 19:02:10 +0200
-Message-ID: <00780cd5-8c4b-dfe1-950d-393cbaaff3fb@igalia.com>
-Date:   Fri, 7 Oct 2022 14:01:53 -0300
+        Fri, 7 Oct 2022 13:04:34 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC548F944
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 10:04:32 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id h13so3987989pfr.7
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 10:04:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZUUzZIftjGJJ6CoH+q40cUT1QWxhIqNVVsnKaRyBuhg=;
+        b=cIxEVVp2tRw8lX1Qj4mub7QKmuMxA6hlcpEiaoFNZosU9ukRGr4P7jMf7Ntajtim/7
+         bRZ6aXc48CjkO1X7ciSxsCvMmD7OBZ2vTTKwBrjuEJTdlUcBhfvuDKiK1l+yFgkjc/Xz
+         NaxiHoS4W8C66Dd1PwVD77v6tLsNSyfuBZVdN+ddoaBwPBUcoIwpxNP3rsptyju5dhli
+         z9IVXu/mXs/uRsxMJrhDMB1mF6vKxRGevYEZNUXWgLEmDLgBzN4ZU9GRORpbkV08QRqA
+         f3dCq8EZVXDC0MFzLaAAsqIFKuLWnp15GybYJZ7/eU76ih75VfhUa3XQ65NvfTeZdNYV
+         20Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZUUzZIftjGJJ6CoH+q40cUT1QWxhIqNVVsnKaRyBuhg=;
+        b=oFh1aabFwrrDQ1dDep2Ccog5e5IdOsrD+5fo2DoxL1ZZn8uhphtPNJt504aRYAU8+g
+         qLBhhWbL9bwHnSTYrRXoEDw+yaRnLwr20/pzWuyyv9A7qFWbw3UANUx7+rONHmfTejZA
+         swmfWcRNRLOOaEgap6hQUNiJfwR/vIw8SH7kLNH7m0Jev01m8Btsab9gf9UXQQyG+IUk
+         rykJwwPuQHfmKtWevO7MVyjMeNmADubwg83R2VBjWki44YzVzX45Tb7biHU3/WsdxgfF
+         xJ5LdbfiLVD4JiLnclvjXmx3kQ2UVIcdw0JHAVk5BEi1o0jxlQBnMFVKTJnFfdEk2RYE
+         mnqw==
+X-Gm-Message-State: ACrzQf2avYTqhJiQGO8Xr2oZ8frkPtFNcTZ9GdEHtaDKNSevBaLwnb3x
+        hKBF1UhZTs9y4NGvavYymP+3xA==
+X-Google-Smtp-Source: AMsMyM60Jjxu72B5ImIXCbOhSGLRAo8ehy713AO2fvfXk9EHBoweOUPDSYhTleaJqCeg4spD3lqYrQ==
+X-Received: by 2002:a63:120b:0:b0:43c:771b:4c52 with SMTP id h11-20020a63120b000000b0043c771b4c52mr5502813pgl.370.1665162271565;
+        Fri, 07 Oct 2022 10:04:31 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id y75-20020a62ce4e000000b005613220346asm1832609pfg.205.2022.10.07.10.04.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 10:04:30 -0700 (PDT)
+Date:   Fri, 7 Oct 2022 17:04:26 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Hao Peng <flyingpenghao@gmail.com>
+Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH ] kvm: x86: Reduce unnecessary function call
+Message-ID: <Y0BcGnabCp9ukxDs@google.com>
+References: <CAPm50aK9oe-m5QWfrFjzGx_vvNveA+U6-Fs3KD5+Zq5RZ+UhDg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 8/8] efi: pstore: Add module parameter for setting the
- record size
-Content-Language: en-US
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, anton@enomsg.org, ccross@android.com,
-        tony.luck@intel.com, linux-efi@vger.kernel.org
-References: <20221006224212.569555-1-gpiccoli@igalia.com>
- <20221006224212.569555-9-gpiccoli@igalia.com>
- <202210061614.8AA746094A@keescook>
- <CAMj1kXF4UyRMh2Y_KakeNBHvkHhTtavASTAxXinDO1rhPe_wYg@mail.gmail.com>
- <f857b97c-9fb5-8ef6-d1cb-3b8a02d0e655@igalia.com>
- <CAMj1kXFy-2KddGu+dgebAdU9v2sindxVoiHLWuVhqYw+R=kqng@mail.gmail.com>
- <2a341c4d-763e-cfa4-0537-93451d8614fa@igalia.com>
- <CAMj1kXE6aObn7hGneGMMiJ-ss7YaiYDFL+HqktYt2WMUpZnFjQ@mail.gmail.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <CAMj1kXE6aObn7hGneGMMiJ-ss7YaiYDFL+HqktYt2WMUpZnFjQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPm50aK9oe-m5QWfrFjzGx_vvNveA+U6-Fs3KD5+Zq5RZ+UhDg@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/10/2022 12:06, Ard Biesheuvel wrote:
-> [...]
-> Well, I did spot this oddity
+On Fri, Oct 07, 2022, Hao Peng wrote:
+> From: Peng Hao <flyingpeng@tencent.com>
 > 
->         efi_pstore_info.buf = kmalloc(4096, GFP_KERNEL);
->         if (!efi_pstore_info.buf)
->                 return -ENOMEM;
+> kvm->lock is held very close to mutex_is_locked(kvm->lock).
+> Do not need to call mutex_is_locked.
 > 
->        efi_pstore_info.bufsize = 1024;
+> Signed-off-by: Peng Hao <flyingpeng@tencent.com>
+> ---
+>  arch/x86/kvm/pmu.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> So that hardcoded 4096 looks odd, but at least it is larger than the
-> default 1024. So what happens if you increase the record size to >
-> 4096?
+> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+> index 02f9e4f245bd..8a7dbe2c469a 100644
+> --- a/arch/x86/kvm/pmu.c
+> +++ b/arch/x86/kvm/pmu.c
+> @@ -601,8 +601,7 @@ int kvm_vm_ioctl_set_pmu_event_filter(struct kvm
+> *kvm, void __user *argp)
+>         sort(&filter->events, filter->nevents, sizeof(__u64), cmp_u64, NULL);
+> 
+>         mutex_lock(&kvm->lock);
+> -       filter = rcu_replace_pointer(kvm->arch.pmu_event_filter, filter,
+> -                                    mutex_is_locked(&kvm->lock));
+> +       filter = rcu_replace_pointer(kvm->arch.pmu_event_filter, filter, 1);
 
-This is a very good finding, thanks a bunch Ard and apologies for this
-mistake!
+I'd prefer to keep the mutex_is_locked() call, even though it's quite silly, as
+it self-documents what is being used to protect writes to pmu_event_filter.
+The third paramter is evaluated iff CONFIG_PROVE_RCU=y, which is the complete
+oppositive of performance sensitive, so in practice there's no real downside to
+the somewhat superfluous call.
 
-Before this patch it was "safe" doing this way since the allocation was
-4096 whereas the size value was 1024. Now, with my change this is not
-valid anymore, and my feeling is that it worked fine in my tests because
-I'm testing panic (which is a single CPU/no-IRQ scenario), so basically
-we're corrupting memory...but nothing broke in my tests due to panic
-scenario.
-
-Thanks again, I'll fix that - need to allocate record_size.
-
-
-Guilherme
-
-
-
+>         mutex_unlock(&kvm->lock);
+> 
+>         synchronize_srcu_expedited(&kvm->srcu);
+> --
+> 2.27.0
