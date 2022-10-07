@@ -2,224 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351775F7DBF
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0FF65F7DC0
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiJGTO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 15:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33926 "EHLO
+        id S229832AbiJGTPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 15:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiJGTOi (ORCPT
+        with ESMTP id S229761AbiJGTOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 15:14:38 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2089.outbound.protection.outlook.com [40.107.20.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF5DD8EED;
-        Fri,  7 Oct 2022 12:14:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BDcZ2FP9oTAa4VYPwqgZhiOLelVGvbqhWljfW22n9Q0luLG42sK5DRLElkqPLLL30s9WycPjgLQsgA3fwLgQhp5w5gntkpjMgQAt+UntMWEUfOziU2fNfJHHMfKvmGaC4bKMYGuxnQCYrV3LKxWesLutft6Hnrl1OwDLuBrQRd/svKyAthjxb+kRHtwqDKtXlcWx4uBghKqz1elRmML6AWMEADWsx9oeKUOeHThXviPpCFEGdxjo/r3uL/4Ic2vOidCwfZVfv/5g2V51bJFjA6W+yfrx5T2cUyePVwa0GDNve/nOpnfcvf5tQD6ciBxQnsqWGUtjT3ygyOOQAQjVDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AF6juBIUfEb+5nX+4ySQMH0fMffTYAz1usWWEhHb174=;
- b=bI14bGliWB+xCSLxRHTcgj50L9nNQpkEYM10LmM+Ao+Nba4otzNA5ZG6++Vf/KB1/4MgOsGPd3V1LChV/zRtskkcm+AhlQttwd1MC6IslC2wibdpoMYDtwLJW8uVnELmQXgz2HSD0MCMNIrDM6NeDKYVsYi2MDIzSwoFzld7WdYIdeBPiO343tU6/h9o8ghQdmWrUQYEiAQIdz9Wdgp6bDNKrGgt9gQS8Vz8wXnr317HSelBIbakTaiqs0Zn0uPIsTbjgALCTAt6EiRP/u8qBOryDuq4PaHLv+I8HDHQOwHu6Gx1bFidalmt/v90+yk4jfZ3JSvD2ZT1TALKMYYmjw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AF6juBIUfEb+5nX+4ySQMH0fMffTYAz1usWWEhHb174=;
- b=f79F9LjoVoSRQeWdIUtaUm9Vfp9Ae2UEKKFuXSsaEdiaOH2kz4HWy2ocE4mA/lCVGJhM0a8LJpKSjTXV9X9+piUeeO8LbpkN2JC6c78vQ73v7fu9827QI5XvoVABpX5sy4T2I88NZU+l2szifW1ouVLMF34/38374meK7jX27Fs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM9PR04MB8793.eurprd04.prod.outlook.com (2603:10a6:20b:408::22)
- by PAXPR04MB8192.eurprd04.prod.outlook.com (2603:10a6:102:1cd::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Fri, 7 Oct
- 2022 19:14:23 +0000
-Received: from AM9PR04MB8793.eurprd04.prod.outlook.com
- ([fe80::54da:4ebc:2916:de90]) by AM9PR04MB8793.eurprd04.prod.outlook.com
- ([fe80::54da:4ebc:2916:de90%5]) with mapi id 15.20.5676.038; Fri, 7 Oct 2022
- 19:14:23 +0000
-From:   Frank Li <Frank.Li@nxp.com>
-To:     imx@lists.linux.dev, Jon Mason <jdmason@kudzu.us>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        ntb@lists.linux.dev (open list:NTB DRIVER CORE),
-        linux-pci@vger.kernel.org (open list:PCI ENDPOINT SUBSYSTEM),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v13 6/6] PCI: endpoint: pci-epf-vntb: fix sparse build warning
-Date:   Fri,  7 Oct 2022 15:13:26 -0400
-Message-Id: <20221007191326.193079-8-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221007191326.193079-1-Frank.Li@nxp.com>
-References: <20221007191326.193079-1-Frank.Li@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BY3PR03CA0015.namprd03.prod.outlook.com
- (2603:10b6:a03:39a::20) To AM9PR04MB8793.eurprd04.prod.outlook.com
- (2603:10a6:20b:408::22)
+        Fri, 7 Oct 2022 15:14:44 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A8E26D6
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 12:14:36 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id a15-20020a6b660f000000b006a0d0794ad1so3791907ioc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 12:14:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M4APzCkPuF600r0PgqvgOnvCjhsuYAH/Jg4lyIp+ByI=;
+        b=tahJqVZiuYC1PoaYzBi5JUQjrsBhNJEwUPk9wXAJXEP6nRlymu9U0Prg1Cw+/oF7Oo
+         hHxiP18Zp1B4GoLfjB/Y8zbiPA1JqQ089xscBzieA6kydkHJt3+8rdkiaW9ko0IXXxyt
+         lZxDsVsyhMBekfZ32k7UuYdbKLN7fBXbt8Qa1f3+Z5SU9CRrqDBDr/LZDxiZ28k5YCTs
+         ZACMKu2ojpbBjhJz8bxoODMgRUAaME0XVnLVxPsJYOjzXWe2OH9u4QxnJ/C2mRi3YnqN
+         OSgBT2kVg+5/fF2dNFp+vhHaGyCoLa+9a73pJRx6JWezD0e3r3jsHhj/gt190Mw/OeyE
+         lO9w==
+X-Gm-Message-State: ACrzQf2LcUnkcDibEhBWB+mTPPXyevRnza9sAywPoykR4kA8LBnGmlB4
+        uA02Hb01v1TuiIDbeK1iT8rs0xh5nLUTWnvRsJGwb8UimD+o
+X-Google-Smtp-Source: AMsMyM5/ZcDTdnJFZvYu9Ur+MDfNC36uSndF/XYziyAsQw+Nt0oTwPoDkSb95/OpySnJHxTAAttc8SgdNFRQC6Kqqnrw9KxRPKHW
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8793:EE_|PAXPR04MB8192:EE_
-X-MS-Office365-Filtering-Correlation-Id: 02efded4-0a41-4f46-5336-08daa898248a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2rs/trbiKnESiT3VnY1yCU0S/1JBLTsoJIENblkv/Ic0QMqU67WFEQxJwFfvdgB9JEBTBlOJk7IzTWQ+tfA+MX6U3V8hDGtfsOA7SwRF3i6dPoekMm3y7u1s5yTLvKzuhHCaAxnM2L/xP44MlgiSRSbrpqoy2CvCUy8A6CCMUzABdSjza7y1cIvikSQkrsksDmaFyzpqe5ZVd1pklldtQXIP+Rtz18jHRfMIrLxshblPcCgUWQGk9Dj3eBi/D+L5FCSJx+XsrXsK7VaJcZ4avjK+Jvw64XSnnPwcgD5qvd3q2AlARivrRCdKlk25d69lvmz2LqX90OiFidG5pKujQf0kz5Zpng9aNH/7AUg5BCOyyHJqZ8xrRkcXQxI5mn6CKoVYlvXXzrkFz1PpbKiNPZaltcZWAFZDBBiR4TAYcZaP9msjG1l7CErMmVq1zIbAq6eweOxws8WXhVExlq7euQ9YQaNMjpsd/Zw79WKvsXpBpLKerVdTKoSqmoVsWRPptYR+ExdswL9cYdGT51V1cAgHRESt5xudUVkQH4aZ9K6mitjJ/J4a5i/+iMrNUY+OnXwp5h/65dvcPFQ82JApNBdW+q8QqdeS00UXQCys8X5hVBSxWd6pwq4whD47dVduixNzwNoo8d5vwfo4/v/PLbC0YccKHIc1mx+EvAHiC8N3aOuyxNRIKmzh+jQ1S8k74Ivgfdyi4pYcTHSuD3X44hEfcQBzTUR4uuBmQ1aC2gby2jW5iKLzFyQKicuNcIP2C3aZBDFT6Zm91rGK0CjXjGJ0/tBcUIQkgYeuB/VxkdI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8793.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(39860400002)(346002)(376002)(366004)(451199015)(66946007)(36756003)(7416002)(38350700002)(8676002)(38100700002)(2906002)(1076003)(41300700001)(66476007)(186003)(66556008)(83380400001)(6512007)(8936002)(2616005)(52116002)(26005)(86362001)(5660300002)(921005)(6506007)(6486002)(110136005)(478600001)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wsx9KZkOFICTXV2hXorz6usH0EKYqo2s9/YrRZSbp662bQF8vGRmNiV/6Na7?=
- =?us-ascii?Q?IAu8+0SMV5pqZyERp7haHH+P/6SoUxSk4fTDZ0NrbAWVfkKy/p3pM6YEUyeC?=
- =?us-ascii?Q?oDW/Ebjsq3/TUSD4JNg6ptp7LTw+AGDVRjuRIOjeORKDY53UCP79o3Og+6zV?=
- =?us-ascii?Q?5efyodxDmAmsLNTqeH13nGsWgW9VAuloC9qvHXYHmPhcuHAiJht2ibNj/8Zg?=
- =?us-ascii?Q?Tzc8KJ3oPSolvzH+4ptjdcYeLskfAL7eJyRQ12mAk9GYDtIq6qwC+xeKLilW?=
- =?us-ascii?Q?HMvGKCiAFpIydWEvo1375O8tQd2ta7QNyRgfefLRKoHV53JqaqfGBhnzQTrb?=
- =?us-ascii?Q?fO4Hd/rYbOtfwbBNos0FjqNZIXIidS4IEtyUUKjDV9rSfeJrUOd5jB0O9S1a?=
- =?us-ascii?Q?MLPDJzskTdjWyd001MrDCIbT3bdbZE+PXUHpbDv24MaRmkUTmACmpV7yJ2sR?=
- =?us-ascii?Q?+BvdHQxA6GqG/DkXp5JQSMrAqoRPrCyTU0porQjO24WB7KWZFesIWXjTVeox?=
- =?us-ascii?Q?Maod1TR4MmoEkQgxPsq1yooO6wG3ent8zcOfzUTixSRgVIZ1Oo8fup+REZtc?=
- =?us-ascii?Q?2HpC96DPpm/C1Dn6QRMWUtdzuP56GZPeUq2qWf/undz+cdCfgdisog8UjZsU?=
- =?us-ascii?Q?OJD6Fl48xbVKE9v2XZYNNgppQXtc8kch2egTz8V36Mor+hhyK1FNvOc4PH7B?=
- =?us-ascii?Q?iCU8aSsOXPpueRcYjcxnpbsfUuI26ci0Qv3ZuShkmx9RFBK2cdyNDBtliJfi?=
- =?us-ascii?Q?x2p6Wnwz1DJypdA8ZFlxmfMgXcNhB/eGL/8PNoK688hOA+fpeWe9QhzuSQ9X?=
- =?us-ascii?Q?TykDvJzUPOci+pOTzc2wQaUQH75h9IQKx7ci3NMyMyAWLT4epad78LpF0TeB?=
- =?us-ascii?Q?bXSN4Df4mYST7kvI/rC4mchAdCIhVB8tlFlzoxAYFT0COtdoUvVxc/nIErRv?=
- =?us-ascii?Q?inu4QRaNLFG58Z+7mdsLGWOKL/D3LBRDUnYXKBjUXSJ6P1ViCMKrs9j5iyOc?=
- =?us-ascii?Q?t+4lgB791oU9IvS5Y/S04IkVXgL9Mdff2FijFf3h4BsDGNv6S4DZge5iVGpz?=
- =?us-ascii?Q?yACnSzOi7sTI9bYEbF5k9lvKUnEKmJGXZUt7N8qt+aIIwMIAYIetbRB+eUNd?=
- =?us-ascii?Q?K44rsDeDBIpztRDwraqOAiOCWU0AHoiPnW2w3QrHlQEzfL2ddePhICuoFBug?=
- =?us-ascii?Q?EVBCFF7rftmmyZRBN2YFwhuOzz96ofF5S1zD9SwiItRsHQaVblRv9mYm84Tc?=
- =?us-ascii?Q?xOmKrAuOJ4VIQF46dH5JYGe3mDLF+AQE8QXuM0U2y2atGRYAvlceQSa5Gei4?=
- =?us-ascii?Q?+6JZ8/8aXA03D5nP0xv05238a+7g18iWPp3lSWMY7NydHOJ7LHNcz/A640h6?=
- =?us-ascii?Q?GuaQorYAKR/GXTpYURfiBazCFOYvxbrnjSlQ1UoUEygzYmVi7/JvCUaZ7Y+U?=
- =?us-ascii?Q?chW0TnhhkAhpN8EI3CflzF54G4wXp4+0yFgCTtyoJ5bmypya9iIq/drhDG5v?=
- =?us-ascii?Q?O+KTBQdpVHZKGxiVWef0xZexOKmd6+femZ5UOzn5tx+iBBi6U2KQU/NwcFFx?=
- =?us-ascii?Q?0q4GziFY6Nn3zlp7zvg=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 02efded4-0a41-4f46-5336-08daa898248a
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8793.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2022 19:14:23.0699
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Q4Fi0MCzi7JUbawLmImUqGsvuI6p3mpU1hMQpcV6LfwsswZ7IBRqabzzS+mXm1i9/WOdM8aFb0s67qjWyxvGNQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8192
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:1644:b0:35a:5304:f19f with SMTP id
+ a4-20020a056638164400b0035a5304f19fmr3512556jat.270.1665170075858; Fri, 07
+ Oct 2022 12:14:35 -0700 (PDT)
+Date:   Fri, 07 Oct 2022 12:14:35 -0700
+In-Reply-To: <000000000000905ada05ea45e13c@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000dcbba905ea769e07@google.com>
+Subject: Re: [syzbot] WARNING: nested lock was not taken in ntfs_fill_super
+From:   syzbot <syzbot+b9bd2bf91ab68a2ab30c@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        nathan@kernel.org, ndesaulniers@google.com, ntfs3@lists.linux.dev,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Li <frank.li@nxp.com>
+syzbot has found a reproducer for the following issue on:
 
-Using  epf_db[i] instead of readl() because epf_db is located in local
-memory and allocated by dma_alloc_coherent().
+HEAD commit:    4c86114194e6 Merge tag 'iomap-6.1-merge-1' of git://git.ke..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=121dd3f4880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9905c889cc4ad738
+dashboard link: https://syzkaller.appspot.com/bug?extid=b9bd2bf91ab68a2ab30c
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17a62cc8880000
 
-Sparse build warning when there are not __iomem at readl().
-Added __iomem force type convert in vntb_epf_peer_spad_read\write()
-and vntb_epf_spad_read\write(). This require strong order at read and
-write.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/bf7f1dcd539b/disk-4c861141.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c214481af743/vmlinux-4c861141.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/a53514c0308a/mount_0.gz
 
-Signed-off-by: Frank Li <frank.li@nxp.com>
----
- drivers/pci/endpoint/functions/pci-epf-vntb.c | 27 +++++++++----------
- 1 file changed, 13 insertions(+), 14 deletions(-)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b9bd2bf91ab68a2ab30c@syzkaller.appspotmail.com
 
-diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-index 54616281da9e..9f1ec6788e51 100644
---- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-+++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-@@ -136,7 +136,7 @@ struct epf_ntb {
- 
- 	struct epf_ntb_ctrl *reg;
- 
--	void __iomem *epf_db;
-+	u32 *epf_db;
- 
- 	phys_addr_t vpci_mw_phy[MAX_MW];
- 	void __iomem *vpci_mw_addr[MAX_MW];
-@@ -257,12 +257,9 @@ static void epf_ntb_cmd_handler(struct work_struct *work)
- 	ntb = container_of(work, struct epf_ntb, cmd_handler.work);
- 
- 	for (i = 1; i < ntb->db_count; i++) {
--		if (readl(ntb->epf_db + i * sizeof(u32))) {
--			if (readl(ntb->epf_db + i * sizeof(u32)))
--				ntb->db |= 1 << (i - 1);
--
-+		if (ntb->epf_db[i]) {
- 			ntb_db_event(&ntb->ntb, i);
--			writel(0, ntb->epf_db + i * sizeof(u32));
-+			ntb->epf_db[i] = 0;
- 		}
- 	}
- 
-@@ -529,13 +526,15 @@ static int epf_ntb_configure_interrupt(struct epf_ntb *ntb)
- static int epf_ntb_db_bar_init(struct epf_ntb *ntb)
- {
- 	const struct pci_epc_features *epc_features;
--	u32 align;
- 	struct device *dev = &ntb->epf->dev;
--	int ret;
- 	struct pci_epf_bar *epf_bar;
--	void __iomem *mw_addr;
- 	enum pci_barno barno;
--	size_t size = sizeof(u32) * ntb->db_count;
-+	void *mw_addr;
-+	size_t size;
-+	u32 align;
-+	int ret;
-+
-+	size = sizeof(u32) * ntb->db_count;
- 
- 	epc_features = pci_epc_get_features(ntb->epf->epc,
- 					    ntb->epf->func_no,
-@@ -1123,7 +1122,7 @@ static u32 vntb_epf_spad_read(struct ntb_dev *ndev, int idx)
- 	struct epf_ntb *ntb = ntb_ndev(ndev);
- 	int off = ntb->reg->spad_offset, ct = ntb->reg->spad_count * sizeof(u32);
- 	u32 val;
--	void __iomem *base = ntb->reg;
-+	void __iomem *base = (void __iomem *)ntb->reg;
- 
- 	val = readl(base + off + ct + idx * sizeof(u32));
- 	return val;
-@@ -1134,7 +1133,7 @@ static int vntb_epf_spad_write(struct ntb_dev *ndev, int idx, u32 val)
- 	struct epf_ntb *ntb = ntb_ndev(ndev);
- 	struct epf_ntb_ctrl *ctrl = ntb->reg;
- 	int off = ctrl->spad_offset, ct = ctrl->spad_count * sizeof(u32);
--	void __iomem *base = ntb->reg;
-+	void __iomem *base = (void __iomem *)ntb->reg;
- 
- 	writel(val, base + off + ct + idx * sizeof(u32));
- 	return 0;
-@@ -1145,7 +1144,7 @@ static u32 vntb_epf_peer_spad_read(struct ntb_dev *ndev, int pidx, int idx)
- 	struct epf_ntb *ntb = ntb_ndev(ndev);
- 	struct epf_ntb_ctrl *ctrl = ntb->reg;
- 	int off = ctrl->spad_offset;
--	void __iomem *base = ntb->reg;
-+	void __iomem *base = (void __iomem *)ntb->reg;
- 	u32 val;
- 
- 	val = readl(base + off + idx * sizeof(u32));
-@@ -1157,7 +1156,7 @@ static int vntb_epf_peer_spad_write(struct ntb_dev *ndev, int pidx, int idx, u32
- 	struct epf_ntb *ntb = ntb_ndev(ndev);
- 	struct epf_ntb_ctrl *ctrl = ntb->reg;
- 	int off = ctrl->spad_offset;
--	void __iomem *base = ntb->reg;
-+	void __iomem *base = (void __iomem *)ntb->reg;
- 
- 	writel(val, base + off + idx * sizeof(u32));
- 	return 0;
--- 
-2.34.1
+loop0: detected capacity change from 0 to 4096
+ntfs3: loop0: Different NTFS' sector size (1024) and media sector size (512)
+==================================
+WARNING: Nested lock was not taken
+6.0.0-syzkaller-06475-g4c86114194e6 #0 Not tainted
+----------------------------------
+syz-executor.0/3971 is trying to lock:
+ffff8880721ddb70 (&sb->s_type->i_lock_key#33){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:349 [inline]
+ffff8880721ddb70 (&sb->s_type->i_lock_key#33){+.+.}-{2:2}, at: _atomic_dec_and_lock+0x9d/0x110 lib/dec_and_lock.c:28
+
+but this task is not holding:
+general protection fault, probably for non-canonical address 0xdffffc0000000003: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000018-0x000000000000001f]
+CPU: 1 PID: 3971 Comm: syz-executor.0 Not tainted 6.0.0-syzkaller-06475-g4c86114194e6 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+RIP: 0010:print_lock_nested_lock_not_held kernel/locking/lockdep.c:4885 [inline]
+RIP: 0010:__lock_acquire+0x1112/0x1f60 kernel/locking/lockdep.c:5044
+Code: 3c 30 00 48 8b 5c 24 70 74 12 48 89 df e8 96 42 73 00 49 be 00 00 00 00 00 fc ff df 48 8b 1b 48 83 c3 18 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 74 08 48 89 df e8 6f 42 73 00 48 8b 33 45 31 f6 48
+RSP: 0018:ffffc90004bef828 EFLAGS: 00010006
+RAX: 0000000000000003 RBX: 0000000000000018 RCX: f3af2e06a081bf00
+RDX: 0000000000000000 RSI: 0000000080000001 RDI: 0000000000000000
+RBP: ffff88807f6085e0 R08: ffffffff816af64d R09: ffffed1017364f13
+R10: ffffed1017364f13 R11: 1ffff11017364f12 R12: ffff88807f608848
+R13: bd0c5e3edb57b21a R14: dffffc0000000000 R15: ffff88807f608000
+FS:  00007f4b59f80700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f4b59f81000 CR3: 000000007a2ee000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5666
+ __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+ _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
+ spin_lock include/linux/spinlock.h:349 [inline]
+ _atomic_dec_and_lock+0x9d/0x110 lib/dec_and_lock.c:28
+ iput+0x85/0x760 fs/inode.c:1765
+ ntfs_fill_super+0x3af3/0x42a0 fs/ntfs3/super.c:1190
+ get_tree_bdev+0x400/0x620 fs/super.c:1323
+ vfs_get_tree+0x88/0x270 fs/super.c:1530
+ do_new_mount+0x289/0xad0 fs/namespace.c:3040
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f4b58e8bada
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f4b59f7ff88 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f4b58e8bada
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f4b59f7ffe0
+RBP: 00007f4b59f80020 R08: 00007f4b59f80020 R09: 0000000020000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000020000000
+R13: 0000000020000100 R14: 00007f4b59f7ffe0 R15: 00000000200021c0
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:print_lock_nested_lock_not_held kernel/locking/lockdep.c:4885 [inline]
+RIP: 0010:__lock_acquire+0x1112/0x1f60 kernel/locking/lockdep.c:5044
+Code: 3c 30 00 48 8b 5c 24 70 74 12 48 89 df e8 96 42 73 00 49 be 00 00 00 00 00 fc ff df 48 8b 1b 48 83 c3 18 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 74 08 48 89 df e8 6f 42 73 00 48 8b 33 45 31 f6 48
+RSP: 0018:ffffc90004bef828 EFLAGS: 00010006
+RAX: 0000000000000003 RBX: 0000000000000018 RCX: f3af2e06a081bf00
+RDX: 0000000000000000 RSI: 0000000080000001 RDI: 0000000000000000
+RBP: ffff88807f6085e0 R08: ffffffff816af64d R09: ffffed1017364f13
+R10: ffffed1017364f13 R11: 1ffff11017364f12 R12: ffff88807f608848
+R13: bd0c5e3edb57b21a R14: dffffc0000000000 R15: ffff88807f608000
+FS:  00007f4b59f80700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f4b59f81000 CR3: 000000007a2ee000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	3c 30                	cmp    $0x30,%al
+   2:	00 48 8b             	add    %cl,-0x75(%rax)
+   5:	5c                   	pop    %rsp
+   6:	24 70                	and    $0x70,%al
+   8:	74 12                	je     0x1c
+   a:	48 89 df             	mov    %rbx,%rdi
+   d:	e8 96 42 73 00       	callq  0x7342a8
+  12:	49 be 00 00 00 00 00 	movabs $0xdffffc0000000000,%r14
+  19:	fc ff df
+  1c:	48 8b 1b             	mov    (%rbx),%rbx
+  1f:	48 83 c3 18          	add    $0x18,%rbx
+  23:	48 89 d8             	mov    %rbx,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 80 3c 30 00       	cmpb   $0x0,(%rax,%r14,1) <-- trapping instruction
+  2f:	74 08                	je     0x39
+  31:	48 89 df             	mov    %rbx,%rdi
+  34:	e8 6f 42 73 00       	callq  0x7342a8
+  39:	48 8b 33             	mov    (%rbx),%rsi
+  3c:	45 31 f6             	xor    %r14d,%r14d
+  3f:	48                   	rex.W
 
