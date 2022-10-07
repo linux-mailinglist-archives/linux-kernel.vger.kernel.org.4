@@ -2,96 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE355F7A8D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 896855F7A95
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiJGPan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 11:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
+        id S229703AbiJGPdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 11:33:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbiJGPak (ORCPT
+        with ESMTP id S229507AbiJGPdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 11:30:40 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A455E64B
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 08:30:39 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id j4so7928834lfk.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 08:30:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tuiVOYBuSRdCoq6JBgsradlYkyFOVbPZ4RSHU4bESXU=;
-        b=S7J5cv5ZQR3AiTkEJFpB/rXSL+ffDHKKXt9BlxzAIbOP8w18332i4PtAoHE4DF/x60
-         Fv87NWKyWbYnhfji976bxToUYnQaz3TphiDRM+fclcbBGirMCTp4V+GFer4635UzwP6d
-         WmFTUs7gAk/H8121eWKBnS0BNm4KhgjRkdVlrPFzZObxrAap9raKjaurnsyMtv9IokFy
-         3V9Ujeyu6YrGh9kdpWguVvGZhqFKrmnSfRfii52pLXhM81RtpM5uUCe2rxPSw0IrqVqN
-         1OrNXo0iUKNi9j1/vze5M9tAVdO3rYFtnf9X7FOg4ISpqRZJ5IqSBE7+ldnK5pV/2PUS
-         WX1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tuiVOYBuSRdCoq6JBgsradlYkyFOVbPZ4RSHU4bESXU=;
-        b=Ng0H+1Y2CPgbdK6NZBO5OTJS5K3JxgsYwMEwLFC7FrqbS3izlhdn4PcYqnxhZFRs1d
-         aDWtoLkoGEG6CDbOyCuUsnDuQ8x+0npQrGQCZszUGYFzLCf1aZyu2oM9jF8SH9f/KFum
-         Hl3f7ccLIpZOMEaazBcu1fi7KTX0Lr1VpS/pMPJ1JkXO1Vjp7FauEtVzW50VRhciKFSH
-         0FJxyeDKhePhkcPU9vktxnoqa5CjRuPZ3To8BKCIDUWGzGAdxhBRCKaUk3Zu0XQ9VuO9
-         q0PMBNJ7Mx7ECU/aAttyjXATeW3woXNxvjBbt+EVVv7F4QIf9Zt9AMvFLrr/LpN1tTYe
-         6I2w==
-X-Gm-Message-State: ACrzQf32u11DkH0XRAxmhrHm5eLzHVcnUTXnzgaEDoCv0pWU6vlx9Zws
-        f9uXWmWAl0L7b5qIfmdiIm6HbR2c2lw27VL2uVo=
-X-Google-Smtp-Source: AMsMyM4MYRu7IQs/a9kO7Dryt61BgQCOlGOn1S69SgfwIOXfzGJvPq2Ld5Mk6YwphzYfexKidqTfvmAXlOh2eDfAJ/4=
-X-Received: by 2002:ac2:47e1:0:b0:4a2:40e5:781a with SMTP id
- b1-20020ac247e1000000b004a240e5781amr1948052lfp.335.1665156637664; Fri, 07
- Oct 2022 08:30:37 -0700 (PDT)
+        Fri, 7 Oct 2022 11:33:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35615118743;
+        Fri,  7 Oct 2022 08:32:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E713FB8229E;
+        Fri,  7 Oct 2022 15:32:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A72C433D6;
+        Fri,  7 Oct 2022 15:32:55 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="eKn4nF+X"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1665156773;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mGyG/s3JlJVyhDWuuZIYCk22RBHdtHriCjT//4ElmeY=;
+        b=eKn4nF+XLw9QUWiDT6M2jTqTquB7JKMBD3iliblTo4hqAN2xI1S0xd12OeMJ2C5UyryAtO
+        8qAggbCfIDCfdFfZdo81e8eJtwsJLNKJrFBWI20KZ9IWP3X22w6XkFEfgTWyed5ZkHVwXb
+        ZCRrw01W7EjrMiuZzKSEmIHS9YRvXIc=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0dd9c5d0 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Fri, 7 Oct 2022 15:32:53 +0000 (UTC)
+Received: by mail-vs1-f46.google.com with SMTP id 3so5380705vsh.5;
+        Fri, 07 Oct 2022 08:32:52 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3cMhLWE6FV7drweLNE602kchglHRMnMCdstu4Mj6T+0hU0OEHa
+        ee6kpnOy5Hmn8IxXNjoxc2dEbI9BPJGr1vjBiGY=
+X-Google-Smtp-Source: AMsMyM5GUUcprpoeQv1qzUEwWZPU/W15cOz46cgtY19IIuNNAFEGJvCw79B+i292aE+mrvSx7cb1712hSkk76bZTfaM=
+X-Received: by 2002:a05:6102:2908:b0:398:ac40:d352 with SMTP id
+ cz8-20020a056102290800b00398ac40d352mr2772827vsb.55.1665156771722; Fri, 07
+ Oct 2022 08:32:51 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a9a:70ca:0:b0:225:e6d6:7fd2 with HTTP; Fri, 7 Oct 2022
- 08:30:36 -0700 (PDT)
-Reply-To: kaylamanthey7733@gmail.com
-From:   Kayla Manthey <so3001131@gmail.com>
-Date:   Fri, 7 Oct 2022 15:30:36 +0000
-Message-ID: <CACJLTOaaCZy_u2nAJ+wP172i3UaTmzsVhbzPx_q7VQGw3K8zFQ@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
+References: <20220930231050.749824-1-Jason@zx2c4.com> <20220930231050.749824-2-Jason@zx2c4.com>
+ <YzgGmh6EQtWzO4HV@zx2c4.com> <Yz2+UsgVGRSm+o7W@linutronix.de>
+ <Yz3yQzaNUcdIuUMX@zx2c4.com> <Yz55w4gNtZn8JzmG@linutronix.de>
+ <Yz7JXEaTFWa1VLKJ@zx2c4.com> <Y0AxMObsOLfqEjLt@zx2c4.com> <Y0A97NrHvzkfaG0J@linutronix.de>
+In-Reply-To: <Y0A97NrHvzkfaG0J@linutronix.de>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Fri, 7 Oct 2022 09:32:40 -0600
+X-Gmail-Original-Message-ID: <CAHmME9rhtZrwns_d7gQc8vrhWHKZqv6PkWi=JSQXsQOvvRr8UA@mail.gmail.com>
+Message-ID: <CAHmME9rhtZrwns_d7gQc8vrhWHKZqv6PkWi=JSQXsQOvvRr8UA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] random: spread out jitter callback to different CPUs
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Sultan Alsawaf <sultan@kerneltoast.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4902]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [so3001131[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [so3001131[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [kaylamanthey7733[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:136 listed in]
-        [list.dnswl.org]
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings, My name is Kayla Manthey, please reply me back
+On Fri, Oct 7, 2022 at 8:55 AM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+>
+> On 2022-10-07 08:01:20 [-0600], Jason A. Donenfeld wrote:
+> > Here's a reproducer of this flow, which prints out:
+> >
+> >     [    4.157610] wireguard: Stack on cpu 1 is corrupt
+>
+> I understood Sultan's description. The end of story (after discussing
+> this tglx) is that this will be documented since it can't be fixed for
+> add_timer_on().
+
+Right, that's about where I wound up too, which is why I just
+abandoned the approach of this patchset. Calling del_timer_sync()
+before each new add_timer_on() (but after !timer_pending()) seems
+kinda ugly.
+
+Jason
