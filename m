@@ -2,73 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB20E5F7DDE
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B785F7DE9
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiJGTVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 15:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45300 "EHLO
+        id S230071AbiJGTWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 15:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiJGTUo (ORCPT
+        with ESMTP id S229862AbiJGTUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 15:20:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D2EBC626
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 12:20:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0DA82B80A08
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 19:20:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C9AE9C433D7;
-        Fri,  7 Oct 2022 19:20:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665170420;
-        bh=gL+cWcJ1emruwxOjquvPbx5EHhXZdJd4sCqcnZhxXg0=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=ubjUFwOFoCRgL6GH88gzooQg4iQZSMZNF0TZWilkuc10Bpt57XLKje2MUBGLVVTeY
-         WHNFIBeZWhNLDOlwiFj3vFAikFSP2a7QN/ldZSB7QklJSahZiltrnpLGGGC5u+9Jrm
-         4F3n4jOZeS5KCCNHkokqyD4wlxeVvjx8pvkasfroGL5HtqmBbPKYq50cWrDH0dAQsk
-         7bInMis2kN/Y4YubKNVlXLXkhRorFD/nRR5JdcWGo3Jv6linh9Q6PnbQZPi6JTRENd
-         AbMsftYYBntk93GWgrATeTjehxpkRJZ/P+ZQem0njzDKxfSDuNSMERB0XqCAjQdytb
-         J4yzdfInSGH2g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B39F4E21ED6;
-        Fri,  7 Oct 2022 19:20:20 +0000 (UTC)
-Subject: Re: [GIT PULL] hsi changes for v6.1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221006194201.qdf4biulcdfw3mdu@mercury.elektranox.org>
-References: <20221006194201.qdf4biulcdfw3mdu@mercury.elektranox.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221006194201.qdf4biulcdfw3mdu@mercury.elektranox.org>
-X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-hsi.git tags/hsi-for-6.1
-X-PR-Tracked-Commit-Id: 811908159e7ee583e30565018a08284cf5ddae77
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 83da5ec6b7fccd37547477effa6a4b1162c1acf1
-Message-Id: <166517042073.8063.7734726699543872820.pr-tracker-bot@kernel.org>
-Date:   Fri, 07 Oct 2022 19:20:20 +0000
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 7 Oct 2022 15:20:55 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC4EAE4D;
+        Fri,  7 Oct 2022 12:20:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1665170448;
+        bh=WSOw/wYZM9nPRhOgiR6PK0gTS1xb4ZHpESGts5kdqzw=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=lOV8KdTusafn3Lq6RXI7fFuXucpETkNkOWtsmfoHc7wQftnLQG4o6aFl5EVdZLgQO
+         KsQ3t5oG773Bvxvd8qIRb2ppZ7ROL0Sf5Pwp33tmcCbFNnY4Lcrk2fwLBOm37+nCzF
+         sPh4443k6gnm0bKkOBsq6NI7b+pCjqXOwYzI9VaA=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id B12511286FAE;
+        Fri,  7 Oct 2022 15:20:48 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id C7gAieNRKEC6; Fri,  7 Oct 2022 15:20:48 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1665170448;
+        bh=WSOw/wYZM9nPRhOgiR6PK0gTS1xb4ZHpESGts5kdqzw=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=lOV8KdTusafn3Lq6RXI7fFuXucpETkNkOWtsmfoHc7wQftnLQG4o6aFl5EVdZLgQO
+         KsQ3t5oG773Bvxvd8qIRb2ppZ7ROL0Sf5Pwp33tmcCbFNnY4Lcrk2fwLBOm37+nCzF
+         sPh4443k6gnm0bKkOBsq6NI7b+pCjqXOwYzI9VaA=
+Received: from lingrow.int.hansenpartnership.com (c-67-166-174-65.hsd1.va.comcast.net [67.166.174.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 1745F1286FAD;
+        Fri,  7 Oct 2022 15:20:48 -0400 (EDT)
+Message-ID: <8daacf52af60a30c37d74dc6b957c62f5bd3f351.camel@HansenPartnership.com>
+Subject: Re: [GIT PULL] first round of SCSI updates for the 6.0+ merge window
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Fri, 07 Oct 2022 15:20:47 -0400
+In-Reply-To: <CAHk-=whAUVVgVQWHig=rK1sw7RhjVENrqXDcKGF_mP8mmU9oFA@mail.gmail.com>
+References: <3727e267ba5a03e021ba06e46a97f260dcccc3e7.camel@HansenPartnership.com>
+         <CAHk-=whAUVVgVQWHig=rK1sw7RhjVENrqXDcKGF_mP8mmU9oFA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 6 Oct 2022 21:42:01 +0200:
+On Fri, 2022-10-07 at 12:17 -0700, Linus Torvalds wrote:
+> On Fri, Oct 7, 2022 at 9:16 AM James Bottomley
+> <James.Bottomley@hansenpartnership.com> wrote:
+> > The patch is available here:
+> > 
+> > git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-
+> > misc
+> 
+> Nope. Nothing there. That's just very old state from July.
+> 
+> And since the pull request isn't even standard 'git request-pull'
+> format, there's no indication of what the top commit *should* be.
+> 
+> Please fix and re-post a proper pull request,
 
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-hsi.git tags/hsi-for-6.1
+Hm, yes, that was a screw up and a half: I pushed the wrong tag.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/83da5ec6b7fccd37547477effa6a4b1162c1acf1
+Hang on.
 
-Thank you!
+James
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+
