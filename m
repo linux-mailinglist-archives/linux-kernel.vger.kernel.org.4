@@ -2,198 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F22F05F8015
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 23:36:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A825F8040
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 23:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiJGVgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 17:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
+        id S229691AbiJGVna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 17:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiJGVgC (ORCPT
+        with ESMTP id S229819AbiJGVnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 17:36:02 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15E410C4D0
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 14:35:52 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id t12-20020a17090a3b4c00b0020b04251529so5752577pjf.5
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 14:35:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f+wrwccqdr/zF+1tP1F0UnlCET9RTVASvUjJL3hAGzM=;
-        b=HGs1RayrgTgUjIt/VJSsGC+WEqkhCp1S82B5zMpTiKUCHGV8MUSkaoFaclYVBBKoJO
-         2jbgDbb7hN85Lhe0G7tQwEzExctfTuNhSIH4wbBU+21qEKUE5c29uvHDLL/oDfh6CDYV
-         8HQCnmsMkUG5TQmzLbdu/pBfqPBydSpc7dt5N0GGEZ6ajNnJ+X9uCVLvi4yya65vs2xG
-         l9jJF5qVrER931/BXzThv7fjNNm0K+Bk+fo3M1/3v6X12gH7dTWU3cZf6MIi9VW6EIDK
-         JoQpgGb0qkHWZ12BWEY+al/8t4b4vcZbGSrMRetFhmjWyaszWHkSX2zcFbJ5U8a7Z1Z0
-         ylsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f+wrwccqdr/zF+1tP1F0UnlCET9RTVASvUjJL3hAGzM=;
-        b=eCmTilmBjNeNvRwMiYGKdWIRSUv6f/ADx/46cg02uc//5gHEP7jyDZURTEB+DaRD39
-         DDi/sbtlIE5nZTnac3XZOZbDcxzsmVKdZDwJBBLQvlKVWaizWt+RncsttNOHBMdM2sn5
-         ejY1A7tJ1lWzvDNFVMBXHS9jqNjEZXcZRDVbDtAwizr/h/1abCe7ZBZpTkRlwqN/YZWZ
-         0/ZbxNfHqP4vfvZJJNlyuf3WUoU8HHNWkP8OomYcH+rw2wHEiZPgfzrfKbyj45HYvxcD
-         6C7kCcaRRSCV4lK1t1k1LNCbi/tdvTH+zFNnizUWf3ZaRDLZUrfplNa8jcqj/b0ihbxm
-         rE0Q==
-X-Gm-Message-State: ACrzQf2Zf7eq7DVROPMbl8jd3d+k0UvKi0F4PpyKSP9oVYaIT5ojbMPI
-        ldtiFv9DrzTBi85Po3nMqJk=
-X-Google-Smtp-Source: AMsMyM5CA/5ugdTIDbGsq24SwxOBXcWIV2TsGkAQGTBU81XGOxyyJDdJPShYMuoW/SC5jv/DYQvrBg==
-X-Received: by 2002:a17:90b:3149:b0:202:e9e9:632f with SMTP id ip9-20020a17090b314900b00202e9e9632fmr18805312pjb.96.1665178551253;
-        Fri, 07 Oct 2022 14:35:51 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id w19-20020a631613000000b004597e92f99dsm2091586pgl.66.2022.10.07.14.35.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 14:35:50 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 7 Oct 2022 11:35:49 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     syzbot <syzbot+534ee3d24c37c411f37f@syzkaller.appspotmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [syzbot] general protection fault in kernfs_get_inode
-Message-ID: <Y0CbtVwW6+QIYJdQ@slm.duckdns.org>
-References: <000000000000385cbf05ea3f1862@google.com>
- <00000000000028a44005ea40352b@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000028a44005ea40352b@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Fri, 7 Oct 2022 17:43:21 -0400
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F552127908;
+        Fri,  7 Oct 2022 14:43:17 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 5146A2B06610;
+        Fri,  7 Oct 2022 17:43:13 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Fri, 07 Oct 2022 17:43:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1665178992; x=1665182592; bh=AnI23BSBsJ
+        Pl7z4tgUtQwDLGRb6TaTjJl8AQi9i3Poo=; b=tvKQpcli/B9BBh4EKTgp12Feb9
+        ZdYHQ4TVHU1qh7v4l5No1zEK2FCM9Lkz6NbkEzAqJa7i9y/LpVZf5p+Arvzt1ogk
+        a86lyXLOS6xrQTrr7C7tMsj6KmC/77u67KJidDxqIIVIWjJ979Mg75Nbz/UUzRlq
+        PmvK2W+fGxi2oc4EedgZjLiK9ku6Zwp+g8UKRi7MThTLVuSKU5sW0aD7nHs0yDqF
+        13seVrN9JucVXwmEI3eFCnLBIvOBDzqsdurmNgBRJzJ3Irs7Y0GcHwXmlR2qsTJg
+        Ejk7HOf16qFPCXmm1F0l3c2aKWW4CLyWSlHKTxPjZJa0G3zqIGGkYKaKv6wA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665178992; x=1665182592; bh=AnI23BSBsJPl7z4tgUtQwDLGRb6T
+        aTjJl8AQi9i3Poo=; b=qeGKAULW4BvlACmN/nluXT19xw2mvzWKVHCAIt1k+NkD
+        2W367w/5HoJ5Z+VA9ZGgdlauomJJ2PQlww1DAYdqPrsvNI/XkPVcXmjOm2n575nx
+        BLV8kNIBo04PiYpdttK78Rhc9S+AsQDoVAJCxYDP/YeGh204vY7aspJxz8jwvbCZ
+        QpRCkBfPPiyn2LjdZCoCTKE1wTuIDC4uHyLU23wRi/+HWgJpLSzmuemMzahzdSxO
+        zjFjiCmLveNvBSIlz2Q4hZe79oZeHIYHaVojsk5O1zlFjwBQFdPFcoixwb+1WgsA
+        FyIunedS/iQxQKaiKUxmpc/4FkngYappFjB3vucVEA==
+X-ME-Sender: <xms:b51AY4AytO4Mw3NvRvFdsCiQKICB2uT90DHLirbeE3JcB4-BLt_Jwg>
+    <xme:b51AY6icDl5TDGUs_fgMffcqH95ea_EXiN_5VKl8nDiZ7-0Z6Kai_LsSjs-5Y6Irv
+    cAvMuGwnvewsWtKU24>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeikedgtdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepjedvvddvudeludehjeeitdehheeivdejgfelleffiefgvefhhfeuudfhgeef
+    feehnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:b51AY7n7Nz84kAbPIjHwmkGnGKTkF5jHoZMRwqA8laTz0njXedj4Wg>
+    <xmx:b51AY-zPbfhyWaPG_uYeda4wg_z5YmL-ScyTPiacZaaSWNmqAmLd6Q>
+    <xmx:b51AY9RTYwGv4b77vfVjBwAKSALegwna_8-YPMdPUl2s1GmXoaGHQg>
+    <xmx:cJ1AYyKDVi2OBrRE-3yIDisa3YBXAObRieDNTvn7Uwnba3sziW86gDZsDCc>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id DAD8EB60089; Fri,  7 Oct 2022 17:43:11 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
+Mime-Version: 1.0
+Message-Id: <e554eb3c-d065-4aad-b6d2-a12469eaf49c@app.fastmail.com>
+In-Reply-To: <CAKwvOdkEied8hf6Oid0sGf0ybF2WqrzOvtRiXa=j7Ms-Rc6uBA@mail.gmail.com>
+References: <20190307090146.1874906-1-arnd@arndb.de>
+ <20221006222124.aabaemy7ofop7ccz@google.com>
+ <c646ea1e-c860-41cf-9a8e-9abe541034ff@app.fastmail.com>
+ <CAKwvOdkEied8hf6Oid0sGf0ybF2WqrzOvtRiXa=j7Ms-Rc6uBA@mail.gmail.com>
+Date:   Fri, 07 Oct 2022 23:42:51 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Kees Cook" <keescook@chromium.org>
+Cc:     linux-fsdevel@vger.kernel.org,
+        "Alexander Viro" <viro@zeniv.linux.org.uk>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Andi Kleen" <ak@linux.intel.com>,
+        "Christoph Hellwig" <hch@lst.de>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        "Paul Kirth" <paulkirth@google.com>
+Subject: Re: [PATCH] fs/select: avoid clang stack usage warning
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(cc'ing Christian and quoting whole body)
+On Fri, Oct 7, 2022, at 9:04 PM, Nick Desaulniers wrote:
+> On Fri, Oct 7, 2022 at 1:28 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>> On Fri, Oct 7, 2022, at 12:21 AM, Nick Desaulniers wrote:
+>> > On Thu, Mar 07, 2019 at 10:01:36AM +0100, Arnd Bergmann wrote:
+>>
+>> - the kernel is built with -fsanitize=local-bounds, dropping this
+>>   option reduces the stack allocation for this function by around
+>>   100 bytes, which would be the easiest change for you to build
+>>   those kernels again without any source changes, but it may also
+>>   be possible to change the core_sys_select function in a way that
+>>   avoids the insertion of runtime bounds checks.
+>
+> Thanks for taking a look Arnd; ++beers_owed;
+>
+> I'm not sure we'd want to disable CONFIG_UBSAN_LOCAL_BOUNDS=y for this
+> particular configuration of the kernel over this, or remove
+> -fsanitize=local-bounds for this translation unit (even if we did so
+> specifically for 32b targets).  FWICT, the parameter n of function
+> core_sys_select() is used to index into the stack allocated stack_fds,
+> which is what -fsanitize=local-bounds is inserting runtime guards for.
 
-Christan, I can't repro it here but think what we need is sth like the
-following. The problem is that cgroup_is_dead() check in the fork path isn't
-enough as the perm check depends on cgrp->procs_file being available but
-that is cleared while DYING before DEAD. So, depending on the timing, we can
-end up trying to deref NULL pointer in may_write.
+Right, so what I was thinking is that the existing runtime check
+'if (size > sizeof(stack_fds) / 6)' could be rewritten in a way that
+clang sees the bounds correctly, as the added check would test for
+the exact same limit, right? It might be too hard to figure out, or
+it might have other side-effects.
 
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 8ad2c267ff471..603b7167450a1 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -4934,6 +4934,10 @@ static int cgroup_may_write(const struct cgroup *cgrp, struct super_block *sb)
- 
- 	lockdep_assert_held(&cgroup_mutex);
- 
-+	/*if @cgrp is being removed, procs_file may already be gone */
-+	if (!cgrp->procs_file.kn)
-+		return -ENODEV;
-+
- 	inode = kernfs_get_inode(sb, cgrp->procs_file.kn);
- 	if (!inode)
- 		return -ENOMEM;
+>> - If I mark 'do_select' as noinline_for_stack, the reported frame
+>>   size is decreased a lot and is suddenly independent of
+>>   -fsanitize=local-bounds:
+>>   fs/select.c:625:5: error: stack frame size (336) exceeds limit (100) in 'core_sys_select' [-Werror,-Wframe-larger-than]
+>> int core_sys_select(int n, fd_set __user *inp, fd_set __user *outp,
+>>   fs/select.c:479:21: error: stack frame size (684) exceeds limit (100) in 'do_select' [-Werror,-Wframe-larger-than]
+>> static noinline int do_select(int n, fd_set_bits *fds, struct timespec64 *end_time)
+>
+> I think this approach makes the most sense to me; the caller
+> core_sys_select() has a large stack allocation `stack_fds`, and so
+> does the callee do_select with `table`.  Add in inlining and long live
+> ranges and it makes sense that stack spills are going to tip us over
+> the threshold set by -Wframe-larger-than.
+>
+> Whether you make do_select() `noinline_for_stack` conditional on
+> additional configs like CC_IS_CLANG or CONFIG_UBSAN_LOCAL_BOUNDS is
+> perhaps also worth considering.
+>
+> How would you feel about a patch that:
+> 1. reverts commit ad312f95d41c ("fs/select: avoid clang stack usage warning")
+> 2. marks do_select noinline_for_stack
+>
+> ?
 
+That is probably ok, but it does need proper testing to ensure that
+there are no performance regressions. Do you know if gcc inlines the
+function by default? If not, we probably don't need to make it
+conditional.
 
-On Tue, Oct 04, 2022 at 07:19:34PM -0700, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
-> 
-> HEAD commit:    0326074ff465 Merge tag 'net-next-6.1' of git://git.kernel...
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=149c92cc880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=e1de7ca9efcc028c
-> dashboard link: https://syzkaller.appspot.com/bug?extid=534ee3d24c37c411f37f
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10af2492880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=104874f0880000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/43729d6ce2fc/disk-0326074f.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/1f76d6f68eb3/vmlinux-0326074f.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+534ee3d24c37c411f37f@syzkaller.appspotmail.com
-> 
-> general protection fault, probably for non-canonical address 0xdffffc0000000012: 0000 [#1] PREEMPT SMP KASAN
-> KASAN: null-ptr-deref in range [0x0000000000000090-0x0000000000000097]
-> CPU: 1 PID: 3617 Comm: syz-executor384 Not tainted 6.0.0-syzkaller-02734-g0326074ff465 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-> RIP: 0010:kernfs_ino include/linux/kernfs.h:358 [inline]
-> RIP: 0010:kernfs_get_inode+0x2e/0x520 fs/kernfs/inode.c:254
-> Code: 41 56 41 55 41 54 49 89 fc 53 48 89 f3 e8 1a 04 7e ff 48 8d bb 90 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 3a 04 00 00 48 8b b3 90 00 00 00 4c 89 e7 e8 79
-> RSP: 0018:ffffc90003c8fa30 EFLAGS: 00010206
-> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: 0000000000000012 RSI: ffffffff81fd1156 RDI: 0000000000000090
-> RBP: ffffc90003c8fa50 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000000000001 R11: 0000000000000024 R12: ffff8880224ba000
-> R13: ffff888075922000 R14: ffff88801ebf0000 R15: ffff8880211ae000
-> FS:  0000555556907300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000020000200 CR3: 000000001c179000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  cgroup_may_write+0x86/0x120 kernel/cgroup/cgroup.c:4937
->  cgroup_css_set_fork kernel/cgroup/cgroup.c:6237 [inline]
->  cgroup_can_fork+0x961/0xec0 kernel/cgroup/cgroup.c:6331
->  copy_process+0x43ed/0x7090 kernel/fork.c:2358
->  kernel_clone+0xe7/0xab0 kernel/fork.c:2671
->  __do_sys_clone3+0x1cd/0x2e0 kernel/fork.c:2963
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f621d8c3e99
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffcaa952ec8 EFLAGS: 00000206 ORIG_RAX: 00000000000001b3
-> RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f621d8c3e99
-> RDX: 0000000000000000 RSI: 0000000000000058 RDI: 00007ffcaa952f40
-> RBP: 0000000000000000 R08: 00007ffcaa952d60 R09: 00007ffcaa952ef0
-> R10: 00000000ffffffff R11: 0000000000000206 R12: 00007ffcaa952eec
-> R13: 00007ffcaa952f00 R14: 00007ffcaa952f40 R15: 0000000000000000
->  </TASK>
-> Modules linked in:
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:kernfs_ino include/linux/kernfs.h:358 [inline]
-> RIP: 0010:kernfs_get_inode+0x2e/0x520 fs/kernfs/inode.c:254
-> Code: 41 56 41 55 41 54 49 89 fc 53 48 89 f3 e8 1a 04 7e ff 48 8d bb 90 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 3a 04 00 00 48 8b b3 90 00 00 00 4c 89 e7 e8 79
-> RSP: 0018:ffffc90003c8fa30 EFLAGS: 00010206
-> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: 0000000000000012 RSI: ffffffff81fd1156 RDI: 0000000000000090
-> RBP: ffffc90003c8fa50 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000000000001 R11: 0000000000000024 R12: ffff8880224ba000
-> R13: ffff888075922000 R14: ffff88801ebf0000 R15: ffff8880211ae000
-> FS:  0000555556907300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007ffcaa9cb8f0 CR3: 000000001c179000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> ----------------
-> Code disassembly (best guess):
->    0:	41 56                	push   %r14
->    2:	41 55                	push   %r13
->    4:	41 54                	push   %r12
->    6:	49 89 fc             	mov    %rdi,%r12
->    9:	53                   	push   %rbx
->    a:	48 89 f3             	mov    %rsi,%rbx
->    d:	e8 1a 04 7e ff       	callq  0xff7e042c
->   12:	48 8d bb 90 00 00 00 	lea    0x90(%rbx),%rdi
->   19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
->   20:	fc ff df
->   23:	48 89 fa             	mov    %rdi,%rdx
->   26:	48 c1 ea 03          	shr    $0x3,%rdx
-> * 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
->   2e:	0f 85 3a 04 00 00    	jne    0x46e
->   34:	48 8b b3 90 00 00 00 	mov    0x90(%rbx),%rsi
->   3b:	4c 89 e7             	mov    %r12,%rdi
->   3e:	e8                   	.byte 0xe8
->   3f:	79                   	.byte 0x79
-> 
+> I assume the point of "small string optimization" going on with
+> `stack_fds` in core_sys_select() is that the potential overhead for
+> kmalloc is much much higher than the cost of not inlining do_select()
+> into core_sys_select().  The above approach does solve this .config's
+> instance, and seems slightly less brittle to me.
+>
+>>   However, I don't even see how this makes sense at all, given that
+>>   the actual frame size should be at least SELECT_STACK_ALLOC!
+>
+> I think the math checks out:
+>
+> #define FRONTEND_STACK_ALLOC  256
+> #define SELECT_STACK_ALLOC  FRONTEND_STACK_ALLOC
+> long stack_fds[SELECT_STACK_ALLOC/sizeof(long)];
+>
+> sizeof(long) == 4; // i386 ilp32
+> sizeof(stack_fds) == sizeof(long) * 256 / sizeof(long) == 256
 
--- 
-tejun
+Ah right, I misread what the code actually does here.
+
+>> - The behavior of -ftrivial-auto-var-init= is a bit odd here: with =zero or
+>>   =pattern, the stack usage is just below the limit (1020), without the
+>>   option it is up to 1044. It looks like your .config picks =zero, which
+>>   was dropped in the latest clang version, so it falls back to not
+>
+> Huh? What do you mean by "was dropped?"
+>
+> The config I sent has:
+> CONFIG_CC_HAS_AUTO_VAR_INIT_PATTERN=y
+> CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO_BARE=y
+> CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO=y
+> # CONFIG_INIT_STACK_NONE is not set
+> CONFIG_INIT_STACK_ALL_ZERO=y
+
+When I use this config on my kernel tree (currently on top of
+next-20220929 for unrelated work) and build with clang-16,
+CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO is disabled, so it falls
+back from CONFIG_INIT_STACK_NONE instead of the unavailable
+CONFIG_INIT_STACK_ALL_ZERO.
+
+> Disabling INIT_STACK_ALL_ZERO from the config provided doesn't elide
+> the diagnostic.
+> Enabling INIT_STACK_ALL_PATTERN does... explicit stack allocations in
+> IR haven't changed. In the generated assembly we're pushing 3x 4B
+> GPRs, subtracting 8B from the stack pointer, then another 1008B.
+> (Filed: https://github.com/llvm/llvm-project/issues/58237)
+> So that's 3 * 4B + 8B + 1008B == 1028.  But CONFIG_FRAME_WARN is set
+> to 1024.  I wonder if this diagnostic is not as precise as it could
+> be, or my math is wrong?
+>
+> It looks like for arrays INIT_STACK_ALL_PATTERN uses memset to fill
+> the array with 0xFF rather than 0x00 used by INIT_STACK_ALL_ZERO. Not
+> sure why that would make a difference, but curious that it does.
+
+The warning sizes I see are:
+
+zero: 1028
+pattern: 1020
+none: 1044
+
+So you are right, even with =pattern I get the warning, even though it's
+16 bytes less than the =none case I was looking at first.
+
+      Arnd
