@@ -2,89 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4565F721B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 01:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE915F7223
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 02:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232123AbiJFX6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 19:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50496 "EHLO
+        id S231200AbiJGACg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 20:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiJFX6q (ORCPT
+        with ESMTP id S229955AbiJGACc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 19:58:46 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A562142CB2
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 16:58:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=Gxc90LALKCGw03i9q6AW2ibojsSeeP/54Gweysctd9E=; b=kZzdyoudU3Qd4nKIuVaPDxHP96
-        nd+DEpGujDwPt7F+Spxgqyv0ik832ldoYu9KRgn+wdNUeY64rNibQRyNZlVj7TVyLgxesEA9vAgm5
-        I3GPDtw/a686JMn9wjjRHC7issOKllcV/QA9j7Ee6A88WaODaRdh5ZfwI6/OCmSHazRqq8vvk4VcH
-        NFSXCq6mRH+63L6FFr/Hs+KG3UNgH7X7dzeXdRil080MqaI721O//5psJ/1EX8yQlgAQH4d/jaPGH
-        9AzFxmtfErihsyQqzuTcSWElTHV3uzfZP4niLsGNm0rQ6EQNLUrRlvTIqi9ZS9C/KtIxy+PFBivCw
-        dP591g3Q==;
-Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ogalI-001XLV-Bz; Thu, 06 Oct 2022 23:58:44 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        alsa-devel@alsa-project.org, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>
-Subject: [PATCH] ASoC: codecs: wsa883x: add GPIOLIB dependency
-Date:   Thu,  6 Oct 2022 16:58:35 -0700
-Message-Id: <20221006235835.31072-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.37.3
+        Thu, 6 Oct 2022 20:02:32 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D7289833;
+        Thu,  6 Oct 2022 17:02:31 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id g28so3484046pfk.8;
+        Thu, 06 Oct 2022 17:02:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gYg/RvcgaNxKeP5eY8q8jtJ41j5gX5Rd2AG83SIvepA=;
+        b=J+b0UU72ME0E807XJXhkWAmP6Gdk254tET0U/YVBTiUAAbSp2/mKZiSq3PzPbXbmsG
+         dmAQBT7NWAUj5jL9I4cqJ3OyN3OYx2fzkLiGtDNmn6g442FshlDP+VPXufxmrw1NugCt
+         vXoU6LtY6UFXGVNjfFHKaSDUE/+Ik+rv8BCuX/v4MMWS6VYPKMFyHWRzbbwZfGfqwoTj
+         NZzk1jEeIP243N0gy31TMIWI/xyVPsnwcYHO/loptpNg/0nPIOel5bVOA0hwCxSU36w6
+         E4PxinriXvL0lCOPqWAafEicdqm9XyGHoC1i65mEY6CjSB+kTkdv380oV4G6msbr7r4H
+         Lslg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gYg/RvcgaNxKeP5eY8q8jtJ41j5gX5Rd2AG83SIvepA=;
+        b=atTzaRKdNGIlfqS7zoP1gdlZcMAlBTDHl5XmP5k9e/PeTZDPQZPzyKyH3+c/TZ216u
+         qZiHHvvkor4GbBCuCMM+0Pe9OAVlQdNJ91tf7NvQKqIK2rpin3beQ4GLbwz46eCU1sYm
+         dpxLUz73yvUxCv7TkmKA3ORW4DjIG1ooOCFiBPJCcGGWyK72vLNHZm18LU39Gaize2MQ
+         1CwxDfaLTRbFZid4vbJZi5bT70OBTAKR18cxoRS/OI2LtG0I3vJN8iE+KfSA1R67ZfzG
+         Z1ZQUsW8YWj8Z5xXVVx4L0GNHqLqhDX95tzcr9nXuwmhrkfsjq/YfNm5jFPngphDZonX
+         fv4A==
+X-Gm-Message-State: ACrzQf0bTGwAcOfIq7pTITKyavlm7SzaQZadRndTwG8ImSvvLRUMJ55O
+        253GfURo2NkG/inasRs8pWY0kHI66Fw=
+X-Google-Smtp-Source: AMsMyM5yMg4VflvLyEw2sCxDHHod72rvlY8baYscBhKN/JDerdSIrLTQUn6Y/YYxchV1msAmHGe+bQ==
+X-Received: by 2002:a63:1718:0:b0:447:9ff3:66c0 with SMTP id x24-20020a631718000000b004479ff366c0mr1975033pgl.521.1665100950604;
+        Thu, 06 Oct 2022 17:02:30 -0700 (PDT)
+Received: from [192.168.1.5] ([159.192.229.185])
+        by smtp.googlemail.com with ESMTPSA id x16-20020aa79a50000000b0056283e2bdbdsm192834pfj.138.2022.10.06.17.02.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Oct 2022 17:02:30 -0700 (PDT)
+Message-ID: <7000d9db-7a1f-01c2-b78d-2ad35ca4c148@gmail.com>
+Date:   Fri, 7 Oct 2022 07:02:25 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 2/2] USB: serial: option: add support for docomo L-03F
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        "johan@kernel.org" <johan@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     Hiroyuki Yamamoto <hyamamo@allied-telesis.co.jp>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220914025541.1018233-1-chris.packham@alliedtelesis.co.nz>
+ <20220914025541.1018233-3-chris.packham@alliedtelesis.co.nz>
+ <621867a7-e513-c0c8-fb4f-2116d3aa8c7c@gmail.com>
+ <a15dc62e-4a0d-805e-497a-010c9dcc4c9c@alliedtelesis.co.nz>
+ <699018fe-dabc-21fc-1080-154555f210eb@alliedtelesis.co.nz>
+Content-Language: en-US
+From:   Lars Melin <larsm17@gmail.com>
+In-Reply-To: <699018fe-dabc-21fc-1080-154555f210eb@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix a build error when GPIOLIB is not set/enabled:
-
-../sound/soc/codecs/wsa883x.c: In function 'wsa883x_probe':
-../sound/soc/codecs/wsa883x.c:1394:25: error: implicit declaration of function 'devm_gpiod_get_optional'; did you mean 'devm_regulator_get_optional'? [-Werror=implicit-function-declaration]
- 1394 |         wsa883x->sd_n = devm_gpiod_get_optional(&pdev->dev, "powerdown",
-../sound/soc/codecs/wsa883x.c:1395:49: error: 'GPIOD_FLAGS_BIT_NONEXCLUSIVE' undeclared (first use in this function)
- 1395 |                                                 GPIOD_FLAGS_BIT_NONEXCLUSIVE);
-../sound/soc/codecs/wsa883x.c:1414:9: error: implicit declaration of function 'gpiod_direction_output'; did you mean 'gpio_direction_output'? [-Werror=implicit-function-declaration]
- 1414 |         gpiod_direction_output(wsa883x->sd_n, 1);
+On 10/7/2022 02:44, Chris Packham wrote:
+> Hi Lars,
 
 
-Fixes: 43b8c7dc85a14 ("ASoC: codecs: add wsa883x amplifier support")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: Banajit Goswami <bgoswami@quicinc.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: alsa-devel@alsa-project.org
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Takashi Iwai <tiwai@suse.com>
----
- sound/soc/codecs/Kconfig |    1 +
- 1 file changed, 1 insertion(+)
+> Just following up on this. I've not been able to track down one of the
+> actual modems and have had radio silence from my colleagues who did the
+> original work.
+> 
+> Is the 1/2 patch of this series acceptable on it's own? (should I rebase
+> and resubmit it).
+> 
 
---- a/sound/soc/codecs/Kconfig
-+++ b/sound/soc/codecs/Kconfig
-@@ -2029,6 +2029,7 @@ config SND_SOC_WSA881X
- config SND_SOC_WSA883X
- 	tristate "WSA883X Codec"
- 	depends on SOUNDWIRE
-+	depends on GPIOLIB
- 	select REGMAP_SOUNDWIRE
- 	tristate
- 	help
+
+Patch 1/2 for NetIndex UX302NC USB modem has the same error as patch 2/2 
+for the Docomo USB modem, both are LTE CAT3 devices and there is no mfgr 
+providing only a serial ppp dial-up modem interface for high-speed 
+devices like these, they always have a direct net interface.
+
+I have dug up the driver installer from NetIndex web site, the interface 
+usage is:
+
+MI_00 NCXX UX302NC HS-USB Diagnostics
+MI_01 NCXX UX302NC HS-USB Modem
+MI_02 NCXX UX302NC HS-USB Application
+MI_03 NCXX UX302NC Ethernet Adapter
+
+
+and info in the driver files tells us that the chip mfgr is Qualcomm and 
+the net interface is QMI so it must be blacklisted in the option driver.
+
+
+thanks
+Lars
+
+
+
