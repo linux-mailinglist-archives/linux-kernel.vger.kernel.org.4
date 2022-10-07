@@ -2,215 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56A825F8040
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 23:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE5B5F803C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 23:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiJGVna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 17:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
+        id S229642AbiJGVnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 17:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiJGVnV (ORCPT
+        with ESMTP id S229453AbiJGVnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 17:43:21 -0400
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F552127908;
-        Fri,  7 Oct 2022 14:43:17 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 5146A2B06610;
-        Fri,  7 Oct 2022 17:43:13 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 07 Oct 2022 17:43:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1665178992; x=1665182592; bh=AnI23BSBsJ
-        Pl7z4tgUtQwDLGRb6TaTjJl8AQi9i3Poo=; b=tvKQpcli/B9BBh4EKTgp12Feb9
-        ZdYHQ4TVHU1qh7v4l5No1zEK2FCM9Lkz6NbkEzAqJa7i9y/LpVZf5p+Arvzt1ogk
-        a86lyXLOS6xrQTrr7C7tMsj6KmC/77u67KJidDxqIIVIWjJ979Mg75Nbz/UUzRlq
-        PmvK2W+fGxi2oc4EedgZjLiK9ku6Zwp+g8UKRi7MThTLVuSKU5sW0aD7nHs0yDqF
-        13seVrN9JucVXwmEI3eFCnLBIvOBDzqsdurmNgBRJzJ3Irs7Y0GcHwXmlR2qsTJg
-        Ejk7HOf16qFPCXmm1F0l3c2aKWW4CLyWSlHKTxPjZJa0G3zqIGGkYKaKv6wA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665178992; x=1665182592; bh=AnI23BSBsJPl7z4tgUtQwDLGRb6T
-        aTjJl8AQi9i3Poo=; b=qeGKAULW4BvlACmN/nluXT19xw2mvzWKVHCAIt1k+NkD
-        2W367w/5HoJ5Z+VA9ZGgdlauomJJ2PQlww1DAYdqPrsvNI/XkPVcXmjOm2n575nx
-        BLV8kNIBo04PiYpdttK78Rhc9S+AsQDoVAJCxYDP/YeGh204vY7aspJxz8jwvbCZ
-        QpRCkBfPPiyn2LjdZCoCTKE1wTuIDC4uHyLU23wRi/+HWgJpLSzmuemMzahzdSxO
-        zjFjiCmLveNvBSIlz2Q4hZe79oZeHIYHaVojsk5O1zlFjwBQFdPFcoixwb+1WgsA
-        FyIunedS/iQxQKaiKUxmpc/4FkngYappFjB3vucVEA==
-X-ME-Sender: <xms:b51AY4AytO4Mw3NvRvFdsCiQKICB2uT90DHLirbeE3JcB4-BLt_Jwg>
-    <xme:b51AY6icDl5TDGUs_fgMffcqH95ea_EXiN_5VKl8nDiZ7-0Z6Kai_LsSjs-5Y6Irv
-    cAvMuGwnvewsWtKU24>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeikedgtdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepjedvvddvudeludehjeeitdehheeivdejgfelleffiefgvefhhfeuudfhgeef
-    feehnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:b51AY7n7Nz84kAbPIjHwmkGnGKTkF5jHoZMRwqA8laTz0njXedj4Wg>
-    <xmx:b51AY-zPbfhyWaPG_uYeda4wg_z5YmL-ScyTPiacZaaSWNmqAmLd6Q>
-    <xmx:b51AY9RTYwGv4b77vfVjBwAKSALegwna_8-YPMdPUl2s1GmXoaGHQg>
-    <xmx:cJ1AYyKDVi2OBrRE-3yIDisa3YBXAObRieDNTvn7Uwnba3sziW86gDZsDCc>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id DAD8EB60089; Fri,  7 Oct 2022 17:43:11 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
-Mime-Version: 1.0
-Message-Id: <e554eb3c-d065-4aad-b6d2-a12469eaf49c@app.fastmail.com>
-In-Reply-To: <CAKwvOdkEied8hf6Oid0sGf0ybF2WqrzOvtRiXa=j7Ms-Rc6uBA@mail.gmail.com>
-References: <20190307090146.1874906-1-arnd@arndb.de>
- <20221006222124.aabaemy7ofop7ccz@google.com>
- <c646ea1e-c860-41cf-9a8e-9abe541034ff@app.fastmail.com>
- <CAKwvOdkEied8hf6Oid0sGf0ybF2WqrzOvtRiXa=j7Ms-Rc6uBA@mail.gmail.com>
-Date:   Fri, 07 Oct 2022 23:42:51 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Nick Desaulniers" <ndesaulniers@google.com>,
-        "Kees Cook" <keescook@chromium.org>
-Cc:     linux-fsdevel@vger.kernel.org,
-        "Alexander Viro" <viro@zeniv.linux.org.uk>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Andi Kleen" <ak@linux.intel.com>,
-        "Christoph Hellwig" <hch@lst.de>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        "Paul Kirth" <paulkirth@google.com>
-Subject: Re: [PATCH] fs/select: avoid clang stack usage warning
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 7 Oct 2022 17:43:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76D411C6EB
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 14:43:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665178986;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G87IKnTFlRlP5ZA/YM0aUFdTmppoFiXpaMJaSdjq7DA=;
+        b=R9YpyDXgKO0uyYFSK896e9TTvTFXAap/SIXcJwBuGm/jx9xfFx7XnychZeGzCV7cgddM9g
+        vkW85k/G6dYsYlK4ImqgJSShnmXQdowRTRhJn1e8hb4at6UapTv9Z+UbkwsDobXFh+tPYC
+        Zze645NZVCP3lC6HMuSJITew/xAtTMc=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-125-yBi09M3KP623ifsK0am8BA-1; Fri, 07 Oct 2022 17:43:04 -0400
+X-MC-Unique: yBi09M3KP623ifsK0am8BA-1
+Received: by mail-oo1-f70.google.com with SMTP id u27-20020a4a6c5b000000b0047f91b7b4bfso3101315oof.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 14:43:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G87IKnTFlRlP5ZA/YM0aUFdTmppoFiXpaMJaSdjq7DA=;
+        b=HbaG0PNsXB+w+Lt2S80Ju9I/nG2SsLzUHiRBW0NWvnmRErpAie4AwsbphggUbWhSv9
+         s+uL7iqfDGMEwCGFNkWiLHNHeMQA1ezXOsi3PAWNeaP5R0uO0IdMq/Lla33qrLC9uWya
+         Fe+5KLHedWFTHEdQNhGAYII/0VgFlmNZAfa4d1O39pGyEZJNyfrwREN0RgLQnBefTHdV
+         hzPnEBjEpanABjs9a4gH04XtqbJxHOsNVwKt383zyHOOC8XtcEYfrWq3JtW82gaBsM8E
+         wJ36hpP3hIWgkH+7q+djjl64gI/Gcp0NAl+HGkABxpf7mZnpqaCZDuVHdmiENDgOogDv
+         4vSg==
+X-Gm-Message-State: ACrzQf3S71XXw6gIP5/Y+/Li4qAQha1Xvhnq8blc5tQURl9yE0woYkiX
+        oL6ViZtQhwTOa9VnexDSHlw5WWYgvboswSh9rYq261hxuORPSTlMt5t6t96jhrQqUi9g7wZwFlT
+        wfZtQSG/EqorlQIcbXP2NBuA6
+X-Received: by 2002:a05:6870:9107:b0:132:b47e:2c76 with SMTP id o7-20020a056870910700b00132b47e2c76mr9271731oae.203.1665178982294;
+        Fri, 07 Oct 2022 14:43:02 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7T1AloyETxY3BAZyZfMe6U/mXW2p2VpMBIVV621kKpq04eX/S6hmYsylQdmGFWsqrPrhuWaQ==
+X-Received: by 2002:a05:6870:9107:b0:132:b47e:2c76 with SMTP id o7-20020a056870910700b00132b47e2c76mr9271682oae.203.1665178980604;
+        Fri, 07 Oct 2022 14:43:00 -0700 (PDT)
+Received: from ?IPv6:2804:1b3:a801:9473:d360:c737:7c9c:d52b? ([2804:1b3:a801:9473:d360:c737:7c9c:d52b])
+        by smtp.gmail.com with ESMTPSA id f13-20020a056830204d00b006594674d4ddsm1768654otp.44.2022.10.07.14.42.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 14:43:00 -0700 (PDT)
+Message-ID: <b23b08274ccff99fb341ea272e968f72c2e289ce.camel@redhat.com>
+Subject: Re: [PATCH v1 1/1] crypto/pcrypt: Do not use isolated CPUs for
+ callback
+From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 07 Oct 2022 18:42:57 -0300
+In-Reply-To: <Yz1/TVUV+KnLvodg@fuller.cnet>
+References: <20221004062536.280712-1-leobras@redhat.com>
+         <Yz1/TVUV+KnLvodg@fuller.cnet>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 7, 2022, at 9:04 PM, Nick Desaulniers wrote:
-> On Fri, Oct 7, 2022 at 1:28 AM Arnd Bergmann <arnd@arndb.de> wrote:
->> On Fri, Oct 7, 2022, at 12:21 AM, Nick Desaulniers wrote:
->> > On Thu, Mar 07, 2019 at 10:01:36AM +0100, Arnd Bergmann wrote:
->>
->> - the kernel is built with -fsanitize=local-bounds, dropping this
->>   option reduces the stack allocation for this function by around
->>   100 bytes, which would be the easiest change for you to build
->>   those kernels again without any source changes, but it may also
->>   be possible to change the core_sys_select function in a way that
->>   avoids the insertion of runtime bounds checks.
->
-> Thanks for taking a look Arnd; ++beers_owed;
->
-> I'm not sure we'd want to disable CONFIG_UBSAN_LOCAL_BOUNDS=y for this
-> particular configuration of the kernel over this, or remove
-> -fsanitize=local-bounds for this translation unit (even if we did so
-> specifically for 32b targets).  FWICT, the parameter n of function
-> core_sys_select() is used to index into the stack allocated stack_fds,
-> which is what -fsanitize=local-bounds is inserting runtime guards for.
+On Wed, 2022-10-05 at 09:57 -0300, Marcelo Tosatti wrote:
+> On Tue, Oct 04, 2022 at 03:25:37AM -0300, Leonardo Bras wrote:
+> > Currently pcrypt_aead_init_tfm() will pick callback cpus (ctx->cb_cpu)
+> > from any online cpus. Later padata_reorder() will queue_work_on() the
+> > chosen cb_cpu.
+> >=20
+> > This is undesired if the chosen cb_cpu is listed as isolated (i.e. usin=
+g
+> > isolcpus=3D... kernel parameter), since the work queued will interfere =
+with
+> > the workload on the isolated cpu.
+> >=20
+> > Make sure isolated cpus are not used for pcrypt.
+> >=20
+> > Signed-off-by: Leonardo Bras <leobras@redhat.com>
+> > ---
+> >  crypto/pcrypt.c | 10 +++++++---
+> >  1 file changed, 7 insertions(+), 3 deletions(-)
+> >=20
+> > diff --git a/crypto/pcrypt.c b/crypto/pcrypt.c
+> > index 9d10b846ccf73..9017d08c91a8d 100644
+> > --- a/crypto/pcrypt.c
+> > +++ b/crypto/pcrypt.c
+> > @@ -16,6 +16,7 @@
+> >  #include <linux/kobject.h>
+> >  #include <linux/cpu.h>
+> >  #include <crypto/pcrypt.h>
+> > +#include <linux/sched/isolation.h>
+> > =20
+> >  static struct padata_instance *pencrypt;
+> >  static struct padata_instance *pdecrypt;
+> > @@ -175,13 +176,16 @@ static int pcrypt_aead_init_tfm(struct crypto_aea=
+d *tfm)
+> >  	struct pcrypt_instance_ctx *ictx =3D aead_instance_ctx(inst);
+> >  	struct pcrypt_aead_ctx *ctx =3D crypto_aead_ctx(tfm);
+> >  	struct crypto_aead *cipher;
+> > +	struct cpumask non_isolated;
+> > +
+> > +	cpumask_and(&non_isolated, cpu_online_mask, housekeeping_cpumask(HK_T=
+YPE_DOMAIN));
+>=20
+> Since certain systems do not use isolcpus=3Ddomain, so please use a flag
+> that is setup by nohz_full=3D, for example HK_FLAG_MISC:
+>=20
+> static int __init housekeeping_nohz_full_setup(char *str)
+> {
+>         unsigned long flags;
+>=20
+>         flags =3D HK_FLAG_TICK | HK_FLAG_WQ | HK_FLAG_TIMER | HK_FLAG_RCU=
+ |
+>                 HK_FLAG_MISC | HK_FLAG_KTHREAD;
+>=20
+>         return housekeeping_setup(str, flags);
+> }
+> __setup("nohz_full=3D", housekeeping_nohz_full_setup);
 
-Right, so what I was thinking is that the existing runtime check
-'if (size > sizeof(stack_fds) / 6)' could be rewritten in a way that
-clang sees the bounds correctly, as the added check would test for
-the exact same limit, right? It might be too hard to figure out, or
-it might have other side-effects.
+Oh, sure.=C2=A0
+Since we are talking about WorkQueues, I think it makes sense to pick
+HK_FLAG_WQ.=20
 
->> - If I mark 'do_select' as noinline_for_stack, the reported frame
->>   size is decreased a lot and is suddenly independent of
->>   -fsanitize=local-bounds:
->>   fs/select.c:625:5: error: stack frame size (336) exceeds limit (100) in 'core_sys_select' [-Werror,-Wframe-larger-than]
->> int core_sys_select(int n, fd_set __user *inp, fd_set __user *outp,
->>   fs/select.c:479:21: error: stack frame size (684) exceeds limit (100) in 'do_select' [-Werror,-Wframe-larger-than]
->> static noinline int do_select(int n, fd_set_bits *fds, struct timespec64 *end_time)
->
-> I think this approach makes the most sense to me; the caller
-> core_sys_select() has a large stack allocation `stack_fds`, and so
-> does the callee do_select with `table`.  Add in inlining and long live
-> ranges and it makes sense that stack spills are going to tip us over
-> the threshold set by -Wframe-larger-than.
->
-> Whether you make do_select() `noinline_for_stack` conditional on
-> additional configs like CC_IS_CLANG or CONFIG_UBSAN_LOCAL_BOUNDS is
-> perhaps also worth considering.
->
-> How would you feel about a patch that:
-> 1. reverts commit ad312f95d41c ("fs/select: avoid clang stack usage warning")
-> 2. marks do_select noinline_for_stack
->
-> ?
+>=20
+> Also, shouldnt you use cpumask_t ?/
 
-That is probably ok, but it does need proper testing to ensure that
-there are no performance regressions. Do you know if gcc inlines the
-function by default? If not, we probably don't need to make it
-conditional.
+Yeah, I think so.=C2=A0
+I was quick to choose the 'struct cpumask' because all functions would oper=
+ate
+in this variable type, but yeah, I think it makes sense to have this variab=
+le
+being opaque here.
 
-> I assume the point of "small string optimization" going on with
-> `stack_fds` in core_sys_select() is that the potential overhead for
-> kmalloc is much much higher than the cost of not inlining do_select()
-> into core_sys_select().  The above approach does solve this .config's
-> instance, and seems slightly less brittle to me.
->
->>   However, I don't even see how this makes sense at all, given that
->>   the actual frame size should be at least SELECT_STACK_ALLOC!
->
-> I think the math checks out:
->
-> #define FRONTEND_STACK_ALLOC  256
-> #define SELECT_STACK_ALLOC  FRONTEND_STACK_ALLOC
-> long stack_fds[SELECT_STACK_ALLOC/sizeof(long)];
->
-> sizeof(long) == 4; // i386 ilp32
-> sizeof(stack_fds) == sizeof(long) * 256 / sizeof(long) == 256
+>=20
+> Looks good otherwise.
+>=20
+> Thanks!
 
-Ah right, I misread what the code actually does here.
+Thank you for reviewing!=20
 
->> - The behavior of -ftrivial-auto-var-init= is a bit odd here: with =zero or
->>   =pattern, the stack usage is just below the limit (1020), without the
->>   option it is up to 1044. It looks like your .config picks =zero, which
->>   was dropped in the latest clang version, so it falls back to not
->
-> Huh? What do you mean by "was dropped?"
->
-> The config I sent has:
-> CONFIG_CC_HAS_AUTO_VAR_INIT_PATTERN=y
-> CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO_BARE=y
-> CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO=y
-> # CONFIG_INIT_STACK_NONE is not set
-> CONFIG_INIT_STACK_ALL_ZERO=y
+Leo
 
-When I use this config on my kernel tree (currently on top of
-next-20220929 for unrelated work) and build with clang-16,
-CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO is disabled, so it falls
-back from CONFIG_INIT_STACK_NONE instead of the unavailable
-CONFIG_INIT_STACK_ALL_ZERO.
+>=20
+>=20
+> > =20
+> >  	cpu_index =3D (unsigned int)atomic_inc_return(&ictx->tfm_count) %
+> > -		    cpumask_weight(cpu_online_mask);
+> > +		    cpumask_weight(&non_isolated);
+> > =20
+> > -	ctx->cb_cpu =3D cpumask_first(cpu_online_mask);
+> > +	ctx->cb_cpu =3D cpumask_first(&non_isolated);
+> >  	for (cpu =3D 0; cpu < cpu_index; cpu++)
+> > -		ctx->cb_cpu =3D cpumask_next(ctx->cb_cpu, cpu_online_mask);
+> > +		ctx->cb_cpu =3D cpumask_next(ctx->cb_cpu, &non_isolated);
+> > =20
+> >  	cipher =3D crypto_spawn_aead(&ictx->spawn);
+> > =20
+> > --=20
+> > 2.37.3
+> >=20
+> >=20
+>=20
 
-> Disabling INIT_STACK_ALL_ZERO from the config provided doesn't elide
-> the diagnostic.
-> Enabling INIT_STACK_ALL_PATTERN does... explicit stack allocations in
-> IR haven't changed. In the generated assembly we're pushing 3x 4B
-> GPRs, subtracting 8B from the stack pointer, then another 1008B.
-> (Filed: https://github.com/llvm/llvm-project/issues/58237)
-> So that's 3 * 4B + 8B + 1008B == 1028.  But CONFIG_FRAME_WARN is set
-> to 1024.  I wonder if this diagnostic is not as precise as it could
-> be, or my math is wrong?
->
-> It looks like for arrays INIT_STACK_ALL_PATTERN uses memset to fill
-> the array with 0xFF rather than 0x00 used by INIT_STACK_ALL_ZERO. Not
-> sure why that would make a difference, but curious that it does.
-
-The warning sizes I see are:
-
-zero: 1028
-pattern: 1020
-none: 1044
-
-So you are right, even with =pattern I get the warning, even though it's
-16 bytes less than the =none case I was looking at first.
-
-      Arnd
