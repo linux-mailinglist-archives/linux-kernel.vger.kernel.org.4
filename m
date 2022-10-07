@@ -2,68 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CFF45F7EC6
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 22:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A4B5F7F3C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 22:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbiJGU3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 16:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
+        id S229637AbiJGUtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 16:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbiJGU3q (ORCPT
+        with ESMTP id S229469AbiJGUtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 16:29:46 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53164B7E6;
-        Fri,  7 Oct 2022 13:29:44 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id n12so8803503wrp.10;
-        Fri, 07 Oct 2022 13:29:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=acRXa3EbxjDyuWzNCvorzoeftSZn5YgHw3PgsDGMlh4=;
-        b=ejhUykAcblfBmQrplTJ1MOeHuxLMSdvlZGi/Zyp4Htc37OoT3TCD+E199JOXX8ET2S
-         9kf6GTe3w8/gHeaTZm/UnnBLeOTWnQT5TXEdzs9UjqtceNJDCym/b9SJ/XzAgOxNga19
-         wM5h8hLITh6aiuR3pBTXv63m5W4/jTCCqONJDOyb9elLVqqecnJyJpT5uoN1yON3auxB
-         9zRPRO4bBf1JQ4mTQqQ0iyKIA8iV7ak5WWFnbgB13RSpqJfiUsrAOYX0sQBGS54VKNuZ
-         1h9korPY7/0Rl+uKXm/+6vHCTuEhEYdKFTL5Xir1wmZbqSEI2I/fHWB3MLKcmNa4qwMb
-         bQ7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=acRXa3EbxjDyuWzNCvorzoeftSZn5YgHw3PgsDGMlh4=;
-        b=cy/YH8p6bRDryBP/Krf4ozMmHzx87S+c6Sy9WDAmifSo6LEipX+Gn+DgYDytDgf0Dg
-         n62JZojgQpnLW+e1xAnFe6hklrzFwtxLWrZkLrZzGKL14J4WlDScOSFZSYW310LCMtf5
-         WKvG72EIi8U0pI45nqUFoz5+QlpcVO2fTUDxmGvdczH5llijrfwE3GZhaBVjWWDpzhpB
-         j6cozTSnDurzf2Ppt3pXUPI5bXb9uNgesJ3Ewk1PIufJZ53MRtHNZZcMzCPqnIAXP3VN
-         MMdRdfFaDTMAI2dHckdBi+ij011G6IJahvLdu/OAIlFtygyt9s+683CfJ2i+SdNHbZSO
-         D3Iw==
-X-Gm-Message-State: ACrzQf2rBMacNBazf/aDxR1Tr74yVx875yMOKf6TYjm0jUsvIIg7pHMY
-        NFQwGyPwazSvadGofIO05z4=
-X-Google-Smtp-Source: AMsMyM5Q6e6m8tHnLpJSYt1IEkbis6gB4v3Y0+Cot/ua6m2dEHtOxf18bWfz/yW4quBb9mKWTPnWZw==
-X-Received: by 2002:a05:6000:1002:b0:22e:131c:4249 with SMTP id a2-20020a056000100200b0022e131c4249mr4738044wrx.50.1665174582783;
-        Fri, 07 Oct 2022 13:29:42 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id d17-20020a5d6dd1000000b0022cd6e852a2sm3564195wrz.45.2022.10.07.13.29.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 13:29:42 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Teddy Wang <teddy.wang@siliconmotion.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: sm750fb: Kconfig: Fix spelling mistake "accelearion" -> "acceleration"
-Date:   Fri,  7 Oct 2022 21:29:41 +0100
-Message-Id: <20221007202941.2756304-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Fri, 7 Oct 2022 16:49:00 -0400
+X-Greylist: delayed 1129 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 07 Oct 2022 13:48:58 PDT
+Received: from smtpout2.mo529.mail-out.ovh.net (smtpout2.mo529.mail-out.ovh.net [79.137.123.220])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A654813FBE
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 13:48:58 -0700 (PDT)
+Received: from mxplan5.mail.ovh.net (unknown [10.108.1.125])
+        by mo529.mail-out.ovh.net (Postfix) with ESMTPS id 94A661303F460;
+        Fri,  7 Oct 2022 22:30:05 +0200 (CEST)
+Received: from kaod.org (37.59.142.106) by DAG4EX2.mxp5.local (172.16.2.32)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Fri, 7 Oct
+ 2022 22:30:04 +0200
+Authentication-Results: garm.ovh; auth=pass (GARM-106R006ae27c1e1-0ba7-49ef-b5c0-50886aca72bf,
+                    72EF84A86A0CAB1F8CEB0FBBC9371DA6A893A50B) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 82.66.77.115
+Message-ID: <c1bfbadf-0989-329b-308e-1a3c79ca2caa@kaod.org>
+Date:   Fri, 7 Oct 2022 22:29:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [v2] spi: aspeed: Fix typo in mode_bits field for AST2600
+ platform
+Content-Language: en-US
+To:     Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>, <broonie@kernel.org>,
+        <joel@jms.id.au>, <andrew@aj.id.au>,
+        <linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <BMC-SW@aspeedtech.com>, <steven_lee@aspeedtech.com>
+References: <20221005083209.222272-1-chin-ting_kuo@aspeedtech.com>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <20221005083209.222272-1-chin-ting_kuo@aspeedtech.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+X-Originating-IP: [37.59.142.106]
+X-ClientProxiedBy: DAG2EX1.mxp5.local (172.16.2.11) To DAG4EX2.mxp5.local
+ (172.16.2.32)
+X-Ovh-Tracer-GUID: 61269dbd-0814-42ac-865a-8955e68af19d
+X-Ovh-Tracer-Id: 10109736741803953074
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeijedgudehtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhepkfffgggfuffvfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepieegvdffkeegfeetuddttddtveduiefhgeduffekiedtkeekteekhfffleevleelnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrddutdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehmgihplhgrnhehrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheptghlgheskhgrohgurdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtohepshhtvghvvghnpghlvggvsegrshhpvggvughtvggthhdrtghomhdpoffvtefjohhsthepmhhohedvle
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,26 +61,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a Kconfig description. Fix it.
+On 10/5/22 10:32, Chin-Ting Kuo wrote:
+> Both quad SPI TX and RX modes can be supported on AST2600.
+> Correct typo in mode_bits field in both ast2600_fmc_data
+> and ast2600_spi_data structs.
+> 
+> Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/staging/sm750fb/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Cédric Le Goater <clg@kaod.org>
 
-diff --git a/drivers/staging/sm750fb/Kconfig b/drivers/staging/sm750fb/Kconfig
-index 8c0d8a873d5b..2101a6605efc 100644
---- a/drivers/staging/sm750fb/Kconfig
-+++ b/drivers/staging/sm750fb/Kconfig
-@@ -8,7 +8,7 @@ config FB_SM750
- 	select FB_CFB_IMAGEBLIT
- 	help
- 	  Frame buffer driver for the Silicon Motion SM750 chip
--	  with 2D accelearion and dual head support.
-+	  with 2D acceleration and dual head support.
- 
- 	  This driver is also available as a module. The module will be
- 	  called sm750fb. If you want to compile it as a module, say M
--- 
-2.37.3
+Thanks,
+
+C.
+
+
+> ---
+>   drivers/spi/spi-aspeed-smc.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
+> index a334e89add86..33cefcf18392 100644
+> --- a/drivers/spi/spi-aspeed-smc.c
+> +++ b/drivers/spi/spi-aspeed-smc.c
+> @@ -1163,7 +1163,7 @@ static const struct aspeed_spi_data ast2500_spi_data = {
+>   static const struct aspeed_spi_data ast2600_fmc_data = {
+>   	.max_cs	       = 3,
+>   	.hastype       = false,
+> -	.mode_bits     = SPI_RX_QUAD | SPI_RX_QUAD,
+> +	.mode_bits     = SPI_RX_QUAD | SPI_TX_QUAD,
+>   	.we0	       = 16,
+>   	.ctl0	       = CE0_CTRL_REG,
+>   	.timing	       = CE0_TIMING_COMPENSATION_REG,
+> @@ -1178,7 +1178,7 @@ static const struct aspeed_spi_data ast2600_fmc_data = {
+>   static const struct aspeed_spi_data ast2600_spi_data = {
+>   	.max_cs	       = 2,
+>   	.hastype       = false,
+> -	.mode_bits     = SPI_RX_QUAD | SPI_RX_QUAD,
+> +	.mode_bits     = SPI_RX_QUAD | SPI_TX_QUAD,
+>   	.we0	       = 16,
+>   	.ctl0	       = CE0_CTRL_REG,
+>   	.timing	       = CE0_TIMING_COMPENSATION_REG,
 
