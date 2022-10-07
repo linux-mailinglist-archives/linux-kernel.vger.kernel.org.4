@@ -2,312 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BFB65F80B7
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 00:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E515F80BE
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 00:23:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiJGWTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 18:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
+        id S229641AbiJGWXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 18:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbiJGWTQ (ORCPT
+        with ESMTP id S229624AbiJGWXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 18:19:16 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BFD9C7E5
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 15:19:13 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id 10so5792884pli.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 15:19:13 -0700 (PDT)
+        Fri, 7 Oct 2022 18:23:16 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA17FD01A6
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 15:23:14 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id t4so3647111wmj.5
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 15:23:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bgGfGMmgZcTgRkcv5RMEIwz9Tdn3jga876+AoB1hcVM=;
-        b=oP8otBidcp+51iAMk8Ul1te2fmxymf/gFlAPGWKmq0IFrWooNvqf20ptiB+juM/8gi
-         zyUWt0fXjHAZMERlbNUAOH4H4LMkXOKjkmVL6Kfuqh6Ml+Ar3cEqWjXV1x4entip0e7z
-         Q3GDacTaLvtMkUCmf3QDLFCswWTZjCdYMT4onp02sO1plDPH6UZ8oEA6GFR64oUpd4C0
-         8uutrIkQjI+14qBSbzD77bKM0uN1EG2dYgqtoihbU9dqAG+IebJBjogmQCKrnXI7RySh
-         zzmuPTNiDix20zo+iL5quqCq3W9QLqD4TxIoMrYbHDSNjwuX0SjiBIcRgFfLiDzpCkGM
-         IuGA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MImtf0Wf4m+QCdLQViE/JC/7ATAAtbSE1jIuWWLnJvA=;
+        b=EkmsnPinOHoAe1msnfPZIqppKVi9NZfAp14tWuESUEWdySA7FzW5P/Lx7qmFQc5xoT
+         tIKmNTq6cmITRsdnhWIdolKS/+mmCrIMH1Aisj0SVlIvqptcAnQ+WsiTrKqWlI6LGhIV
+         Tc46U5KQE4FgKgp9V94Y4A9sSU9QoVvPDUqbkZnrS98Qvz6+LJIkucRiHUX+ojVUTUB+
+         1i9RXsjYBZc+1bSKss029x+0cBASDUBc09UNd0Sasm4ix6ScqlDlk98SOUHk/OT6VRmz
+         r4tEwMbLwO/NjKoOWpsj+p4kAeDQIXdnOhao/zrS3U8OoV9fqbVLz7eyb2zBy1cHie5y
+         joYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bgGfGMmgZcTgRkcv5RMEIwz9Tdn3jga876+AoB1hcVM=;
-        b=Uix5yMHAgZdDXY69664CzyqQtewBYeRkKeWlJHEUWf9ReT/+NrIBi4k1j+LeyZzvIW
-         gNHewbwZE71V07CWQ0XFklUqugywyzOJriCXV4H+UoLdIpncJWUTFAg7c/Jvk4uHJ9KH
-         qcUXJF9qd6c6y1oHARGgTIK9Yknh/yX6YJeae3KTtAgdcgzk/7mEW02JaBRV/WIMQTOE
-         2aiYqfQGT8CSB2KNOQuzl53yv8hqFe7lEB7XAkjOpGLH+D29il1Pu8DurGcvpQm9xrzx
-         mCpVLXwgSdEgYY5h2kvlJtGhIj12XfMJc7DkvcAwlE8PENAShLJ+6Fv1TA1hZ3vxVxbn
-         d6Kg==
-X-Gm-Message-State: ACrzQf11aRAfQUPv9hzWdUvdWDjDizjhjXNrWwR7MwBtfzgg9KhFQNBd
-        m3fLJkFqznSfA69TFnbHGdiBUA==
-X-Google-Smtp-Source: AMsMyM7euDqs9H7UQ0Yn4ieSA0Glg2rY15Fb9v0W+GySyeIGGfsYP7kRJizUie/DdRpwsbJ7n8EHHQ==
-X-Received: by 2002:a17:90a:7c4a:b0:20a:b201:461a with SMTP id e10-20020a17090a7c4a00b0020ab201461amr7545475pjl.181.1665181152680;
-        Fri, 07 Oct 2022 15:19:12 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id z5-20020a623305000000b00562a0c8a195sm2112417pfz.69.2022.10.07.15.19.11
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MImtf0Wf4m+QCdLQViE/JC/7ATAAtbSE1jIuWWLnJvA=;
+        b=q0MhLisswx6dPTD15iSne96V9SyYJLOVZpEh9S8z+WePpxdK+OoSx/GaPGHr8O0aEY
+         bsllREDfRN3kE2F11/C4IH7pRaG3g1KfuGlMlplpKIldtMv7zg+O4ljv+TSci1W3Xdvk
+         kvRBmJe8f30RU68I9iuBhl65KG8IEl2Izw+1FNyuldHxlHxJu9DMF0n1s2ruZI7K0e++
+         jxxxmbSJ6ofk4kB05lQhaSMiBLGW8fLTxJPhOke+ShKygkW+qRgoJSGmgXNyF/h8HUqN
+         CGGdPZNJFwi9jGNHHOLA0xxucUxay3+QGw+o6Jh4WDuGQ5+mG1FZLbv1JDS7TbVS5cSC
+         tCvw==
+X-Gm-Message-State: ACrzQf31mBtU9bpFGB6G85OA9r0XTY0tWveVbyVBinDUlmMgDFHRxuff
+        +EiwG3kIUIfiKnOa9w/5zsYgUQ==
+X-Google-Smtp-Source: AMsMyM5biB58MjjwoI54Sm9NJ1aowLkAk7UBf2LQFmWAjoz9bJsxy3V8abHtA4Ks8YUspX2Axq9hPg==
+X-Received: by 2002:a05:600c:1d23:b0:3c0:7701:8a54 with SMTP id l35-20020a05600c1d2300b003c077018a54mr9273178wms.84.1665181393349;
+        Fri, 07 Oct 2022 15:23:13 -0700 (PDT)
+Received: from localhost.localdomain (cpc76482-cwma10-2-0-cust629.7-3.cable.virginm.net. [86.14.22.118])
+        by smtp.gmail.com with ESMTPSA id d5-20020a05600c34c500b003c409244bb0sm1115777wmq.6.2022.10.07.15.23.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 15:19:12 -0700 (PDT)
-Date:   Fri, 7 Oct 2022 22:19:08 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Jim Mattson <jmattson@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] KVM: x86/pmu: Make part of the Intel v2 PMU MSRs
- handling x86 generic
-Message-ID: <Y0Cl3GtMhwr3hwK8@google.com>
-References: <20220919093453.71737-1-likexu@tencent.com>
- <20220919093453.71737-2-likexu@tencent.com>
- <CALMp9eRPEFHFfW+MnMkcTBFB+vjcEe3ekg8JMrKJaRQuq7=-8Q@mail.gmail.com>
- <856e3332-9f6b-a5f7-c3ec-afe89003cb84@gmail.com>
+        Fri, 07 Oct 2022 15:23:12 -0700 (PDT)
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        phone-devel@vger.kernel.org,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH v5 0/2] power: supply: introduce support for the Qualcomm smb2 charger
+Date:   Fri,  7 Oct 2022 23:22:01 +0100
+Message-Id: <20221007222205.126190-1-caleb.connolly@linaro.org>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <856e3332-9f6b-a5f7-c3ec-afe89003cb84@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022, Like Xu wrote:
-> On 22/9/2022 8:20 am, Jim Mattson wrote:
-> > >   int kvm_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
-> > >   {
-> > > +       struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
-> > > +       u32 msr = msr_info->index;
-> > > +       u64 data = msr_info->data;
-> > > +       u64 diff;
-> > > +
-> > > +       switch (msr) {
-> > > +       case MSR_CORE_PERF_GLOBAL_STATUS:
-> > > +               if (msr_info->host_initiated) {
-> > > +                       pmu->global_status = data;
-> > > +                       return 0;
-> > > +               }
-> > > +               break; /* RO MSR */
-> > Perhaps 'return 1'?
-> > > +       case MSR_CORE_PERF_GLOBAL_CTRL:
-> > > +               if (pmu->global_ctrl == data)
-> > > +                       return 0;
-> > > +               if (kvm_valid_perf_global_ctrl(pmu, data)) {
-> > > +                       diff = pmu->global_ctrl ^ data;
-> > > +                       pmu->global_ctrl = data;
-> > > +                       reprogram_counters(pmu, diff);
-> > > +                       return 0;
-> > > +               }
-> > > +               break;
-> > Perhaps 'return 1'?
-> > > +       case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
-> > > +               if (!(data & pmu->global_ovf_ctrl_mask)) {
-> > > +                       if (!msr_info->host_initiated)
-> > > +                               pmu->global_status &= ~data;
+Add a driver for the Qualcomm PMI8998/PM660 Switch-Mode Battery Charger.
+This is the second generation SMB charger, and replaces the previous
+SMBB hardware found in older PMICs.
 
-Pre-existing code question: why are writes from host userspace dropped?  Is the
-intent to avoid clearing the status register when the VM is migrated?
+This driver provides basic support for initialising the hardware,
+configuring the USB input current limit and reporting information about
+the state of the charger. Features like type-c dual role support and OTG
+switching will be added in future patches.
 
-> > > +                       return 0;
-> > > +               }
-> > > +               break;
-> > Perhaps 'return 1'?
+This patch series depends on my previous series adding support for
+the Round Robin ADC which is used for reading the USB voltage and
+current, it is currently queued in linux-next, and can be found here:
+https://lore.kernel.org/linux-arm-msm/20220429220904.137297-1-caleb.connolly@linaro.org/
+This has now been merged
 
-Assuming the code is inverted, I'd prefer to keep the "break" to be consistent
-with the other set_msr() helpers.
+Changes since v4:
+ * Fix typo when setting FAST_CHARGE_CURRENT_CFG - the OnePlus 6 now charges
+   properly!
+ * Limited charge current to 1A until we better understand the thermal
+   protection features and how to use them.
+ * Address Sebastian's comments (thanks for your patience with this)
+ * re-run clang-format
 
-> All above applied.
+Changes since v3:
+ * Drop DTS patches, to be sent in a future series
+ * Add POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT so that the charger will
+   be exposed as a cooling device,
+   see https://lore.kernel.org/linux-pm/164f2458-fb66-f238-7143-bdbe1e200870@linaro.org
+ * Run clang-format and prevent it from breaking the formatting of the
+   defines
+ * Apply Sebastian's suggested fixes
 
-I realize the code is pre-existing, but as opportunistic refactoring this should
-be cleaned up to align with pretty much every other set_msr() helper, and with
-respect to how the kernel typically handles errors.  The preferred pattern is to do:
+Changes since v2:
+ * Use devm_delayed_work_autocancel
+ * Minor driver fixes
+ * Pick up Krzysztof's R-b on the DT patch
 
-		if (xyz)
-			return <error>
+Changes since v1:
+ * Rename the driver to pmi8998_charger
+ * Drop unnecessary (and very broken) mutex
+ * Rework the driver based on feedback to v1
+ * Fix some minor bugs and improve Automatic Input Current Limit support
 
-		<commit change>
-	
-		return <success>
+Caleb Connolly (2):
+  power: supply: add Qualcomm PMI8998 SMB2 Charger driver
+  dt-bindings: power: supply: qcom,pmi8998-charger: add bindings for
+    smb2 driver
 
-I.e. intel_pmu_set_msr() is backwards, and having "default" statement silently
-fallthrough is a bit nasty.
+ .../power/supply/qcom,pmi8998-charger.yaml    |   82 ++
+ drivers/power/supply/Kconfig                  |   16 +
+ drivers/power/supply/Makefile                 |    1 +
+ drivers/power/supply/qcom_pmi8998_charger.c   | 1040 +++++++++++++++++
+ 4 files changed, 1139 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
+ create mode 100644 drivers/power/supply/qcom_pmi8998_charger.c
 
-Cases like MSR_PEBS_DATA_CFG have also needlessly copied the "do check iff the
-value is changing".
-		
-Can you add fold in the below (lightly tested) prep patch to fix intel_pmu_set_msr()?
-Then this patch becomes a straight code movement.
-
---
-From: Sean Christopherson <seanjc@google.com>
-Date: Fri, 7 Oct 2022 14:40:49 -0700
-Subject: [PATCH] KVM: VMX: Refactor intel_pmu_set_msr() to align with other
- set_msr() helpers
-
-Invert the flows in intel_pmu_set_msr()'s case statements so that they
-follow the kernel's preferred style of:
-
-	if (<not valid>)
-		return <error>
-
-	<commit change>
-	return <success>
-
-which is also the style used by every other set_msr() helper (except
-AMD's PMU variant, which doesn't use a switch statement).
-
-Opportunstically move the "val == current" checks below the validity
-checks.  Except for the one-off case for MSR_P6_EVNTSEL2, the reserved
-bit checks are extremely cheap, and the guest is unlikely to frequently
-write the current value, i.e. avoiding the reserved bit checks doesn't
-add much (any?) value.
-
-No functional change intended.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/pmu_intel.c | 78 ++++++++++++++++++------------------
- 1 file changed, 39 insertions(+), 39 deletions(-)
-
-diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index 25b70a85bef5..3031baa6742b 100644
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -397,44 +397,43 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 
- 	switch (msr) {
- 	case MSR_CORE_PERF_FIXED_CTR_CTRL:
--		if (pmu->fixed_ctr_ctrl == data)
--			return 0;
--		if (!(data & pmu->fixed_ctr_ctrl_mask)) {
-+		if (data & pmu->fixed_ctr_ctrl_mask)
-+			return 1;
-+
-+		if (pmu->fixed_ctr_ctrl != data)
- 			reprogram_fixed_counters(pmu, data);
--			return 0;
--		}
- 		break;
- 	case MSR_CORE_PERF_GLOBAL_STATUS:
--		if (msr_info->host_initiated) {
--			pmu->global_status = data;
--			return 0;
--		}
--		break; /* RO MSR */
-+		if (!msr_info->host_initiated)
-+			return 1;
-+
-+		pmu->global_status = data;
-+		break;
- 	case MSR_CORE_PERF_GLOBAL_CTRL:
--		if (pmu->global_ctrl == data)
--			return 0;
--		if (kvm_valid_perf_global_ctrl(pmu, data)) {
-+		if (!kvm_valid_perf_global_ctrl(pmu, data))
-+			return 1;
-+
-+		if (pmu->global_ctrl != data) {
- 			diff = pmu->global_ctrl ^ data;
- 			pmu->global_ctrl = data;
- 			reprogram_counters(pmu, diff);
--			return 0;
- 		}
- 		break;
- 	case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
--		if (!(data & pmu->global_ovf_ctrl_mask)) {
--			if (!msr_info->host_initiated)
--				pmu->global_status &= ~data;
--			return 0;
--		}
-+		if (data & pmu->global_ovf_ctrl_mask)
-+			return 1;
-+
-+		if (!msr_info->host_initiated)
-+			pmu->global_status &= ~data;
- 		break;
- 	case MSR_IA32_PEBS_ENABLE:
--		if (pmu->pebs_enable == data)
--			return 0;
--		if (!(data & pmu->pebs_enable_mask)) {
-+		if (data & pmu->pebs_enable_mask)
-+			return 1;
-+
-+		if (pmu->pebs_enable != data) {
- 			diff = pmu->pebs_enable ^ data;
- 			pmu->pebs_enable = data;
- 			reprogram_counters(pmu, diff);
--			return 0;
- 		}
- 		break;
- 	case MSR_IA32_DS_AREA:
-@@ -443,14 +442,11 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		if (is_noncanonical_address(data, vcpu))
- 			return 1;
- 		pmu->ds_area = data;
--		return 0;
-+		break;
- 	case MSR_PEBS_DATA_CFG:
--		if (pmu->pebs_data_cfg == data)
--			return 0;
--		if (!(data & pmu->pebs_data_cfg_mask)) {
--			pmu->pebs_data_cfg = data;
--			return 0;
--		}
-+		if (data & pmu->pebs_data_cfg_mask)
-+			return 1;
-+		pmu->pebs_data_cfg = data;
- 		break;
- 	default:
- 		if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
-@@ -463,28 +459,32 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 				data = (s64)(s32)data;
- 			pmc->counter += data - pmc_read_counter(pmc);
- 			pmc_update_sample_period(pmc);
--			return 0;
-+			break;
- 		} else if ((pmc = get_fixed_pmc(pmu, msr))) {
- 			pmc->counter += data - pmc_read_counter(pmc);
- 			pmc_update_sample_period(pmc);
--			return 0;
-+			break;
- 		} else if ((pmc = get_gp_pmc(pmu, msr, MSR_P6_EVNTSEL0))) {
--			if (data == pmc->eventsel)
--				return 0;
- 			reserved_bits = pmu->reserved_bits;
- 			if ((pmc->idx == 2) &&
- 			    (pmu->raw_event_mask & HSW_IN_TX_CHECKPOINTED))
- 				reserved_bits ^= HSW_IN_TX_CHECKPOINTED;
--			if (!(data & reserved_bits)) {
-+			if (data & reserved_bits)
-+				return 1;
-+
-+			if (data != pmc->eventsel) {
- 				pmc->eventsel = data;
- 				reprogram_counter(pmc);
--				return 0;
- 			}
--		} else if (intel_pmu_handle_lbr_msrs_access(vcpu, msr_info, false))
--			return 0;
-+			break;
-+		} else if (intel_pmu_handle_lbr_msrs_access(vcpu, msr_info, false)) {
-+			break;
-+		}
-+		/* Not a known PMU MSR. */
-+		return 1;
- 	}
- 
--	return 1;
-+	return 0;
- }
- 
- static void setup_fixed_pmc_eventsel(struct kvm_pmu *pmu)
-
-base-commit: e18d6152ff0f41b7f01f9817372022df04e0d354
 -- 
-
+2.38.0
 
