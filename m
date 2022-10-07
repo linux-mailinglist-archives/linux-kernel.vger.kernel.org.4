@@ -2,184 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F55D5F7A50
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 703A05F7A4F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbiJGPKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 11:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
+        id S229997AbiJGPKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 11:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbiJGPKl (ORCPT
+        with ESMTP id S230020AbiJGPKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 11:10:41 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C85FBB075
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 08:10:36 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E0889211C3;
-        Fri,  7 Oct 2022 15:10:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1665155433; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/9NyaT9kc7y2hABIl2Ej5DgC0r071ytcPJuf8xermk8=;
-        b=CaOHIGOZFZt9dj2LYvEYX4OkngiTbpUmGdHrW+ZMcHT9pA9H+vMyZRHxrSSBKMyzKalxZR
-        a6t42FtdPnm5L46/ZL3c88gDmYkjUirA56uFTOAgjRTqWxGNpEbrw8Js4YLsGTGQUfK78G
-        T4Q3CNh/ybOQEhubChhdndqgf4zIAMI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AA80913A9A;
-        Fri,  7 Oct 2022 15:10:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fEN9J2lBQGO7JgAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 07 Oct 2022 15:10:33 +0000
-Message-ID: <090c9202-68ed-a62b-c10a-350e1531bd90@suse.com>
-Date:   Fri, 7 Oct 2022 17:10:33 +0200
+        Fri, 7 Oct 2022 11:10:23 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53DF688AD;
+        Fri,  7 Oct 2022 08:10:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665155422; x=1696691422;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=ozz4dRjKrdNdv2whvmeTudwuPMNq3KNa5u3HQ0DA55k=;
+  b=fxm0p9vbv2DsUj+QclJeFLNEAVnUabjzLMkecQq8xppr3R4lLRx1TeOU
+   E4eW8yXINhubRyRTrbFXHorhhWAYxkpu1wbbwYDBgICnYBNmd/oopOuk3
+   GTOPpCF7M7K6vNQBlNhZzY8/cByFkjPgjMx95Ua0gLkS3jD9MAKZUALA7
+   sYr4gdTTX5hQx3aIo1sjysSZOEGSaxoSQXCnFqVcF5rYe8awlqOKDNz4A
+   AUQeZy/qpTV3vxTa2RVOXNMkgoiadVo4pD3aIG6oC2Lt2mbvHKRDLNDSJ
+   5AmRzJBqgd6ANRGzbyqiqVHG2t0e+xUBrpCYfnikVGjqq7jINHXrPnOwe
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10493"; a="301357183"
+X-IronPort-AV: E=Sophos;i="5.95,167,1661842800"; 
+   d="scan'208";a="301357183"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 08:10:22 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10493"; a="625173439"
+X-IronPort-AV: E=Sophos;i="5.95,167,1661842800"; 
+   d="scan'208";a="625173439"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 08:10:21 -0700
+Date:   Fri, 7 Oct 2022 08:10:34 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v3 4/4] tty: serial: 8250: add DFL bus driver for Altera
+ 16550.
+In-Reply-To: <Yz/uTGeNaOP4Btli@smile.fi.intel.com>
+Message-ID: <alpine.DEB.2.22.394.2210070807340.2155700@rhweight-WRK1>
+References: <20221004143718.1076710-1-matthew.gerlach@linux.intel.com> <20221004143718.1076710-5-matthew.gerlach@linux.intel.com> <YzxRxo8jL7rB1+px@smile.fi.intel.com> <alpine.DEB.2.22.394.2210060940150.1988353@rhweight-WRK1> <Yz8T8GdzMLyAKIMb@smile.fi.intel.com>
+ <alpine.DEB.2.22.394.2210061517300.1772307@rhweight-WRK1> <Yz/uTGeNaOP4Btli@smile.fi.intel.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] xen/virtio: Handle cases when page offset > PAGE_SIZE
- properly
-Content-Language: en-US
-To:     Oleksandr Tyshchenko <olekstysh@gmail.com>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Xenia Ragiadakou <burzalodowa@gmail.com>
-References: <20221007132736.2275574-1-olekstysh@gmail.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20221007132736.2275574-1-olekstysh@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------eG0Azqfrz4Pl3dZ20BiE4UjI"
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------eG0Azqfrz4Pl3dZ20BiE4UjI
-Content-Type: multipart/mixed; boundary="------------zrU2QzhXpGsV8GuX8utfpQG4";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Oleksandr Tyshchenko <olekstysh@gmail.com>,
- xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
- Stefano Stabellini <sstabellini@kernel.org>,
- Xenia Ragiadakou <burzalodowa@gmail.com>
-Message-ID: <090c9202-68ed-a62b-c10a-350e1531bd90@suse.com>
-Subject: Re: [PATCH] xen/virtio: Handle cases when page offset > PAGE_SIZE
- properly
-References: <20221007132736.2275574-1-olekstysh@gmail.com>
-In-Reply-To: <20221007132736.2275574-1-olekstysh@gmail.com>
 
---------------zrU2QzhXpGsV8GuX8utfpQG4
-Content-Type: multipart/mixed; boundary="------------wFlYredAldefDdUApsew02Gt"
 
---------------wFlYredAldefDdUApsew02Gt
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On Fri, 7 Oct 2022, Andy Shevchenko wrote:
 
-T24gMDcuMTAuMjIgMTU6MjcsIE9sZWtzYW5kciBUeXNoY2hlbmtvIHdyb3RlOg0KPiBGcm9t
-OiBPbGVrc2FuZHIgVHlzaGNoZW5rbyA8b2xla3NhbmRyX3R5c2hjaGVua29AZXBhbS5jb20+
-DQo+IA0KPiBQYXNzZWQgdG8geGVuX2dyYW50X2RtYV9tYXBfcGFnZSgpIG9mZnNldCBpbiB0
-aGUgcGFnZQ0KPiBjYW4gYmUgPiBQQUdFX1NJWkUgZXZlbiBpZiB0aGUgZ3Vlc3QgdXNlcyB0
-aGUgc2FtZSBwYWdlIGdyYW51bGFyaXR5DQo+IGFzIFhlbiAoNEtCKS4NCj4gDQo+IEJlZm9y
-ZSBjdXJyZW50IHBhdGNoLCBpZiBzdWNoIGNhc2UgaGFwcGVuZWQgd2UgZW5kZWQgdXAgcHJv
-dmlkaW5nDQo+IGdyYW50cyBmb3IgdGhlIHdob2xlIHJlZ2lvbiBpbiB4ZW5fZ3JhbnRfZG1h
-X21hcF9wYWdlKCkgd2hpY2gNCj4gd2FzIHJlYWxseSB1bm5lY2Vzc2FyeS4gVGhlIG1vcmUs
-IHdlIGVuZGVkIHVwIG5vdCByZWxlYXNpbmcgYWxsDQo+IGdyYW50cyB3aGljaCByZXByZXNl
-bnRlZCB0aGF0IHJlZ2lvbiBpbiB4ZW5fZ3JhbnRfZG1hX3VubWFwX3BhZ2UoKS4NCj4gDQo+
-IEN1cnJlbnQgcGF0Y2ggdXBkYXRlcyB0aGUgY29kZSB0byBiZSBhYmxlIHRvIGRlYWwgd2l0
-aCBzdWNoIGNhc2VzLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogT2xla3NhbmRyIFR5c2hjaGVu
-a28gPG9sZWtzYW5kcl90eXNoY2hlbmtvQGVwYW0uY29tPg0KDQpSZXZpZXdlZC1ieTogSnVl
-cmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuY29tPg0KDQoNCkp1ZXJnZW4NCg0K
---------------wFlYredAldefDdUApsew02Gt
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+> On Thu, Oct 06, 2022 at 03:24:16PM -0700, matthew.gerlach@linux.intel.com wrote:
+>> On Thu, 6 Oct 2022, Andy Shevchenko wrote:
+>>> On Thu, Oct 06, 2022 at 10:00:43AM -0700, matthew.gerlach@linux.intel.com wrote:
+>>>> On Tue, 4 Oct 2022, Andy Shevchenko wrote:
+>>>>> On Tue, Oct 04, 2022 at 07:37:18AM -0700, matthew.gerlach@linux.intel.com wrote:
+>
+> ...
+>
+>>>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>>>
+>>>>> https://docs.kernel.org/process/submitting-patches.html?highlight=reported#using-reported-by-tested-by-reviewed-by-suggested-by-and-fixes
+>>>>>
+>>>>> "The Reported-by tag gives credit to people who find bugs and report them and it
+>>>>> hopefully inspires them to help us again in the future. Please note that if the
+>>>>> bug was reported in private, then ask for permission first before using the
+>>>>> Reported-by tag. The tag is intended for bugs; please do not use it to credit
+>>>>> feature requests."
+>>>>
+>>>> The kernel test robot did find a bug in my v1 submission.  I was missing the
+>>>> static keyword for a function declaration.  Should I remove the tag?
+>>>
+>>> What's yours take from the above documentation?
+>>
+>> Since the kernel test robot did find a bug. The tag should stay.
+>
+> I suggest otherwise because of the last sentence in the cited excerpt: "please
+> do not use it to credit feature requests". To distinguish "feature request" you
+> can ask yourself "Am I fixing _existing_ code or adding a new one?" And the
+> answer here is crystal clear (at least to me).
+>
+> ...
+>
+>>>>>> +config SERIAL_8250_DFL
+>>>>>> +	tristate "DFL bus driver for Altera 16550 UART"
+>>>>>> +	depends on SERIAL_8250 && FPGA_DFL
+>>>>>> +	help
+>>>>>> +	  This option enables support for a Device Feature List (DFL) bus
+>>>>>> +	  driver for the Altera 16650 UART.  One or more Altera 16650 UARTs
+>>>>>> +	  can be instantiated in a FPGA and then be discovered during
+>>>>>> +	  enumeration of the DFL bus.
+>>>>>
+>>>>> When m, what be the module name?
+>>>>
+>>>> I see the file, kernel/drivers/tty/serial/8250/8250_dfl.ko, installed into
+>>>> /lib/modules/...  I also see "alias dfl:t0000f0024* 8250_dfl" in
+>>>> modules.alias
+>>>
+>>> My point is that user who will run `make menuconfig` will read this and have
+>>> no clue after the kernel build if the module was built or not. Look into other
+>>> (recent) sections of the Kconfig for drivers in the kernel for how they inform
+>>> user about the module name (this more or less standard pattern you just need
+>>> to copy'n'paste'n'edit carefully).
+>>
+>> I think this should be added:
+>>           To compile this driver as a module, chose M here: the
+>>           module will be called 8250_dfl.
+>
+> Looks good to me!
+>
+>
+>>>>>>  obj-$(CONFIG_SERIAL_8250_FOURPORT)	+= 8250_fourport.o
+>>>>>>  obj-$(CONFIG_SERIAL_8250_ACCENT)	+= 8250_accent.o
+>>>>>>  obj-$(CONFIG_SERIAL_8250_BOCA)		+= 8250_boca.o
+>>>>>> +obj-$(CONFIG_SERIAL_8250_DFL)		+= 8250_dfl.o
+>>>>>
+>>>>> This group of drivers for the 4 UARTs on the board or so, does FPGA belong to
+>>>>> it? (Same Q, btw, for the Kconfig section. And yes, I know that some of the
+>>>>> entries are not properly placed there and in Makefile.)
+>>>>
+>>>> Since 8250_dfl results in its own module, and my kernel config doesn't have
+>>>> FOURPORT, ACCENT, nor BOCA, I guess I don't understand the problem.
+>>>
+>>> The Makefile is a bit chaotic, but try to find the sorted (more or less)
+>>> group of drivers that are not 4 ports and squeeze your entry there
+>>> (I expect somewhere between the LPSS/MID lines).
+>>>
+>>> It will help to sort out that mess in the future.
+>>
+>> I will move 8250_dfl between LPSS and MID lines in the Makefile.  Should I
+>> move the definition in Kconfig to be between LPSS and MID to be consistent?
+>
+> D is not ordered if put between L and M, I meant not to literally put it there
+> but think about it a bit.
+>
+> Kconfig is another story because it has different approach in ordering (seems
+> so), try to find the best compromise there.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+In the Kconfig, I think the driver fits into the section, Misc. 
+options/drivers.  Within this section, I think SERIAL_8250_DFL should go 
+before SERIAL_8250_DW to approximate alphabetical ordering.  Similarly, I 
+think 8250_dfl.o should go above 8250_dw.o in the Makefile.
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------wFlYredAldefDdUApsew02Gt--
-
---------------zrU2QzhXpGsV8GuX8utfpQG4--
-
---------------eG0Azqfrz4Pl3dZ20BiE4UjI
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmNAQWkFAwAAAAAACgkQsN6d1ii/Ey9w
-cwf5AVa4s11Y5TevJXo/7Xv6prUoX8Mb6XJ9VNtq6sVZ2QkeRLYsl1YIfP5kKZCJGnZd+Dmz6LR4
-J28x7tykCI6ETL3xkZugQ8N6N4wUFX/jFeldfGqJ88E9szfsH+AXun+IKFIP5ERenZeZrHsc3l9u
-uY5JFKB638pauo0ZAqWKwyOw0c2D83ODznUTLAiTGDmAun3ududV93gveG4JZshcrvIDad5qMvis
-hCJBd8U13qOlseyAN8f8hXknaW2Av07OZ0lVizdWN8bJJwWOl9Dkn1bI5sAmqdZ8arOKd5HelF2S
-k9lxdI/asCTVbpYgMPpJVTkqPcZVGNTyIVAHGeZmYg==
-=Au6E
------END PGP SIGNATURE-----
-
---------------eG0Azqfrz4Pl3dZ20BiE4UjI--
+>
+>>>>>>  obj-$(CONFIG_SERIAL_8250_EXAR_ST16C554)	+= 8250_exar_st16c554.o
+>>>>>>  obj-$(CONFIG_SERIAL_8250_HUB6)		+= 8250_hub6.o
+>>>>>>  obj-$(CONFIG_SERIAL_8250_FSL)		+= 8250_fsl.o
+>
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+>
+>
+>
