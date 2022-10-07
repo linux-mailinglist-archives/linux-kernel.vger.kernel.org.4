@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18AAB5F73DF
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 07:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C20A5F73E1
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 07:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbiJGFRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 01:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
+        id S229555AbiJGFST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 01:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiJGFRp (ORCPT
+        with ESMTP id S229590AbiJGFSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 01:17:45 -0400
+        Fri, 7 Oct 2022 01:18:16 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD9BC4596
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 22:17:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF17112AA5;
+        Thu,  6 Oct 2022 22:18:15 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 1CE761F8CA;
-        Fri,  7 Oct 2022 05:17:42 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 614B61F8CC;
+        Fri,  7 Oct 2022 05:18:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1665119862; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1665119894; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Zrm6Wc+cYsGICXIrvOSQaUWN6L6oSr49mpVFNBqOZrg=;
-        b=XA0ODdRJ+yVw3qcB6zwsGKKwVieknSmf0qC7HnLqfoEmS2wItOP0HWIsk79OyiB/HOUyU9
-        jXbug179Mfkjxo3huHtS5FIlLX1kZxwnGr3fIArbnohoTvNjWqF81+5+vYiQLwN4NsK8rf
-        e/Lskrmn/+lgL/2nn/yGdAZ0A8H8BAs=
+        bh=oO32dF6LSGJv6QRy7bnLXN3JnA/dYMc641Lz3P1THdU=;
+        b=tc1UQdTC+Mc6aFLukkGaKEYRP2HnXdqlRnQspoF9gnJopD+s2sIcFfHK1ZOkVcJ7TcgkMf
+        soCKJGkBlhuC78IpOLqqYKct2+tDscKYxiKVl/7DOmedkFDekkxX3XnO6i/jS5q9ZHr84A
+        I0VdzGz41w1FbrNumjeNdkhcf9Y+6js=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CD9DA13345;
-        Fri,  7 Oct 2022 05:17:41 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2A60013345;
+        Fri,  7 Oct 2022 05:18:14 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 5dRBMHW2P2PgLAAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 07 Oct 2022 05:17:41 +0000
-Message-ID: <9aa1e6ba-a153-8dfa-ce28-3ab78b26c6e4@suse.com>
-Date:   Fri, 7 Oct 2022 07:17:41 +0200
+        id p1oCCZa2P2MELQAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 07 Oct 2022 05:18:14 +0000
+Message-ID: <c051bd08-cc4c-ec09-6c69-92797433fcf2@suse.com>
+Date:   Fri, 7 Oct 2022 07:18:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH v2 0/2] xen/gntdev: Fixes for leaks and VMA splitting
+Subject: Re: [PATCH] xen/xenbus: Fix spelling mistake "hardward" -> "hardware"
 Content-Language: en-US
-To:     "M. Vefa Bicakci" <m.v.b@runbox.com>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc:     Stefano Stabellini <sstabellini@kernel.org>,
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
         Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Demi Marie Obenour <demi@invisiblethingslab.com>,
-        Gerd Hoffmann <kraxel@redhat.com>
-References: <20221002222006.2077-1-m.v.b@runbox.com>
+        xen-devel@lists.xenproject.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221004160639.154421-1-colin.i.king@gmail.com>
 From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20221002222006.2077-1-m.v.b@runbox.com>
+In-Reply-To: <20221004160639.154421-1-colin.i.king@gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha256;
  protocol="application/pgp-signature";
- boundary="------------XVXLrARPWfnvGr02GkSvkKP9"
+ boundary="------------WpUMG8nIhzBhKfw1vtyVkMg0"
 X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -68,88 +67,33 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------XVXLrARPWfnvGr02GkSvkKP9
-Content-Type: multipart/mixed; boundary="------------8CduX9LunJEd0aizjbOGzcP3";
+--------------WpUMG8nIhzBhKfw1vtyVkMg0
+Content-Type: multipart/mixed; boundary="------------A04Nxt4ZlfcWpTo61rjd4kIN";
  protected-headers="v1"
 From: Juergen Gross <jgross@suse.com>
-To: "M. Vefa Bicakci" <m.v.b@runbox.com>, xen-devel@lists.xenproject.org,
- linux-kernel@vger.kernel.org
-Cc: Stefano Stabellini <sstabellini@kernel.org>,
+To: Colin Ian King <colin.i.king@gmail.com>,
+ Stefano Stabellini <sstabellini@kernel.org>,
  Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
- Demi Marie Obenour <demi@invisiblethingslab.com>,
- Gerd Hoffmann <kraxel@redhat.com>
-Message-ID: <9aa1e6ba-a153-8dfa-ce28-3ab78b26c6e4@suse.com>
-Subject: Re: [PATCH v2 0/2] xen/gntdev: Fixes for leaks and VMA splitting
-References: <20221002222006.2077-1-m.v.b@runbox.com>
-In-Reply-To: <20221002222006.2077-1-m.v.b@runbox.com>
+ xen-devel@lists.xenproject.org
+Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <c051bd08-cc4c-ec09-6c69-92797433fcf2@suse.com>
+Subject: Re: [PATCH] xen/xenbus: Fix spelling mistake "hardward" -> "hardware"
+References: <20221004160639.154421-1-colin.i.king@gmail.com>
+In-Reply-To: <20221004160639.154421-1-colin.i.king@gmail.com>
 
---------------8CduX9LunJEd0aizjbOGzcP3
-Content-Type: multipart/mixed; boundary="------------MS0Hml100OrkEs5C7vmMaYEN"
+--------------A04Nxt4ZlfcWpTo61rjd4kIN
+Content-Type: multipart/mixed; boundary="------------2uxkbQ2epXfomdpOphrV0889"
 
---------------MS0Hml100OrkEs5C7vmMaYEN
+--------------2uxkbQ2epXfomdpOphrV0889
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: base64
 
-T24gMDMuMTAuMjIgMDA6MjAsIE0uIFZlZmEgQmljYWtjaSB3cm90ZToNCj4gSGkgYWxsLA0K
-PiANCj4gRmlyc3Qgb2YgYWxsLCBzb3JyeSBmb3IgdGhlIGRlbGF5IQ0KPiANCj4gVGhlc2Ug
-cGF0Y2hlcyBjb250aW51ZSB0aGUgY29kZSByZXZpZXcgZm9yIHRoZSBmb2xsb3dpbmcgcGF0
-Y2hlczoNCj4gICAgaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcveGVuLWRldmVsLzIwMjIwOTEy
-MDQwMDAyLjE5ODE5MS0xLW0udi5iQHJ1bmJveC5jb20vdC8jdQ0KPiANCj4gVGhlIG9yaWdp
-bmFsIGRlc2NyaXB0aW9uIG9mIHRoZSBwYXRjaCBzZXQgaXMgYXMgZm9sbG93czoNCj4gDQo+
-ICAgICJUaGUgY2hhbmdlcyBpbiB0aGlzIHBhdGNoIHNlcmllcyBpbnRlbmQgdG8gZml4IHRo
-ZSBYZW4gZ3JhbnQgZGV2aWNlDQo+ICAgIGRyaXZlciwgc28gdGhhdCBncmFudCBtYXBwaW5n
-IGxlYWtzIGNhdXNlZCBieSBwYXJ0aWFsbHkgZmFpbGVkIGdyYW50DQo+ICAgIG1hcHBpbmcg
-b3BlcmF0aW9ucyBhcmUgYXZvaWRlZCB3aXRoIHRoZSBmaXJzdCBwYXRjaCwgYW5kIHNvIHRo
-YXQgdGhlDQo+ICAgIHNwbGl0dGluZyBvZiBWTUFzIGRvZXMgbm90IHJlc3VsdCBpbiBpbmNv
-cnJlY3RseSB1bm1hcHBlZCBncmFudCBwYWdlcw0KPiAgICB3aXRoIHRoZSBzZWNvbmQgcGF0
-Y2guIFRoZSBzZWNvbmQgcGF0Y2ggYWxzbyBwcmV2ZW50cyBhIHNpbWlsYXIgaXNzdWUNCj4g
-ICAgaW4gYSBkb3VibGUtbWFwcGluZyBzY2VuYXJpbywgd2hlcmUgbW1hcCgpIGlzIHVzZWQg
-d2l0aCBNQVBfRklYRUQgdG8NCj4gICAgbWFwIGdyYW50cyBvdmVyIGFuIGV4aXN0aW5nIG1h
-cHBpbmcgY3JlYXRlZCB3aXRoIHRoZSBzYW1lIGdyYW50cywgYW5kDQo+ICAgIHdoZXJlIGdy
-YW50IHBhZ2VzIGFyZSB1bm1hcHBlZCBpbmNvcnJlY3RseSBhcyB3ZWxsLiINCj4gDQo+IEEg
-c3VtbWFyeSBvZiB0aGUgY2hhbmdlcyBmcm9tIHYxIGlzIGFzIGZvbGxvd3M6DQo+IC0gQWRk
-cmVzc2VkIEp1ZXJnZW4ncyBjb2RlIHJldmlldyBjb21tZW50IHJlZ2FyZGluZyB0aGUgZmly
-c3QgcGF0Y2guDQo+IC0gQW1lbmRlZCB0aGUgZGVzY3JpcHRpb24gb2YgdGhlIHNlY29uZCBw
-YXRjaCB0byBub3RlIHRoYXQgdGhlIGRlc2NyaWJlZA0KPiAgICBpc3N1ZXMgYXJlIGVuY291
-bnRlcmVkIHdpdGggUFYgZG9tYWlucy4NCj4gDQo+IFZlcmlmaWNhdGlvbiBub3RlczoNCj4g
-DQo+IC0gSSBoYXZlIHRlc3RlZCB0aGVzZSBjb21taXRzIG9uIHRvcCBvZiBMaW51eCB2NS4x
-NS43MCBhbmQgdjUuMTUuNzEsIGFuZA0KPiAgICBJIHZlcmlmaWVkIHRoYXQgdGhleSBjb21w
-aWxlIHN1Y2Nlc3NmdWxseSBvbiB0b3Agb2YgdGhlIHRhZw0KPiAgICAibmV4dC0yMDIyMDkz
-MCIsIHdoaWNoIGNvcnJlc3BvbmRzIHRvIHRoZSBiYXNlIGNvbW1pdCBJRCBpbmNsdWRlZCBh
-dA0KPiAgICB0aGUgYm90dG9tIG9mIHRoaXMgZS1tYWlsLg0KPiANCj4gLSBNeSB0ZXN0cyBj
-b25zaXN0IG9mIHVzaW5nIGEga2VybmVsIHdpdGggUXViZXMgT1MgdjQuMSdzIHBhdGNoZXMg
-YW5kDQo+ICAgIHRoZXNlIHBhdGNoZXMgb24gbXkgbWFpbiBjb21wdXRlciBmb3IgZGF5LXRv
-LWRheSB0YXNrcywgaW4gY29uanVuY3Rpb24NCj4gICAgd2l0aCBRdWJlcyBPUydzIHZlcnNp
-b24gb2YgdGhlIFhlbiBoeXBlcnZpc29yIHY0LjE0LjUsIHdpdGggdGhlIGxhdHRlcg0KPiAg
-ICBjdXN0b20tY29tcGlsZWQgd2l0aCBDT05GSUdfREVCVUcuDQo+IA0KPiAtIEkgdXNlZCBh
-IHRlc3QgcHJvZ3JhbSB0aGF0IHZlcmlmaWVzIHRoZSBmb2xsb3dpbmcgc2NlbmFyaW9zIHdp
-dGggYW4NCj4gICAgdW5wcml2aWxlZ2VkIHBhcmF2aXJ0dWFsaXplZCAoUFYpIFhlbiBkb21h
-aW46DQo+IA0KPiAgICAtIEEgcHJvZ3JhbSBtbWFwKClzIHR3byBwYWdlcyBmcm9tIGFub3Ro
-ZXIgWGVuIGRvbWFpbiBhbmQgbXVubWFwKClzDQo+ICAgICAgdGhlIHBhZ2VzIG9uZSBieSBv
-bmUuIFRoaXMgdXNlZCB0byByZXN1bHQgaW4gaW1wbGljaXQgdW5tYXAgZXJyb3JzDQo+ICAg
-ICAgdG8gYmUgcmVwb3J0ZWQgYnkgWGVuIGFuZCBhIGdlbmVyYWwgcHJvdGVjdGlvbiBmYXVs
-dCB0byBiZSB0cmlnZ2VyZWQNCj4gICAgICBieSBYZW4gaW4gdGhlIGFmZmVjdGVkIGRvbWFp
-biwgYnV0IG5vdyB3b3JrcyBhcyBleHBlY3RlZC4NCj4gICAgLSBBIHByb2dyYW0gbW1hcCgp
-cyB0d28gcGFnZXMgZnJvbSBhbm90aGVyIFhlbiBkb21haW4gYW5kIHRoZW4NCj4gICAgICBh
-dHRlbXB0cyB0byByZW1hcCAodmlhIE1BUF9GSVhFRCkgdGhlIHNhbWUgbWFwcGluZyBhZ2Fp
-biBvdmVyIHRoZQ0KPiAgICAgIHNhbWUgdmlydHVhbCBhZGRyZXNzLiBUaGlzIHVzZWQgdG8g
-cmVzdWx0IGluIHNpbWlsYXIgaXNzdWVzDQo+ICAgICAgKGltcGxpY2l0IHVubWFwIGVycm9y
-cyBhbmQgZ2VuZXJhbCBwcm90ZWN0aW9uIGZhdWx0KSwgYnV0IG5vdyBpcw0KPiAgICAgIHJl
-amVjdGVkIGJ5IHRoZSBrZXJuZWwuDQo+ICAgIC0gQSBwcm9ncmFtIG1tYXAoKXMgdHdvIHBh
-Z2VzIGZyb20gYW5vdGhlciBYZW4gZG9tYWluIGFuZCB0aGVuDQo+ICAgICAgYXR0ZW1wdHMg
-dG8gbW1hcCgpIHRoZSBzYW1lIG1hcHBpbmcgYWdhaW4gdG8gYSBkaWZmZXJlbnQgdmlydHVh
-bA0KPiAgICAgIGFkZHJlc3MsIGJ5IHBhc3NpbmcgTlVMTCBhcyBtbWFwKCkncyBmaXJzdCBh
-cmd1bWVudC4gVGhpcyB1c2VkIHRvIGJlDQo+ICAgICAgcmVqZWN0ZWQgYnkgdGhlIGtlcm5l
-bCwgYW5kIGl0IGNvbnRpbnVlcyB0byBiZSByZWplY3RlZCBieSB0aGUNCj4gICAgICBrZXJu
-ZWwuDQo+IA0KPiAtIFVucHJpdmlsZWdlZCBQVkggWGVuIGRvbWFpbnMgd2VyZSBhbHNvIHNh
-bml0eSB0ZXN0ZWQgd2l0aCB0aGUgc2FtZQ0KPiAgICB0ZXN0IHByb2dyYW0uIEkgc2hvdWxk
-IG5vdGUgdGhhdCBQVkggZG9tYWlucyB3b3JrZWQgYXMgZXhwZWN0ZWQNCj4gICAgd2l0aG91
-dCB0aGVzZSBwYXRjaGVzIHRvby4NCj4gDQo+IC0gRmluYWxseSwgSSBoYXZlIHZlcmlmaWVk
-IHRoYXQgdGhlIG9yaWdpbmFsICJnLmUuIDB4MTIzNCBzdGlsbCBwZW5kaW5nIg0KPiAgICBp
-c3N1ZSBkb2VzIG5vdCBhcHBlYXIgYWZ0ZXIgcmFwaWRseSByZXNpemluZyBHVUkgd2luZG93
-cyBpbiBRdWJlcyBPUw0KPiAgICB2NC4xLg0KDQpTZXJpZXMgcHVzaGVkIHRvIHhlbi90aXAu
-Z2l0IGZvci1saW51cy02LjENCg0KDQpKdWVyZ2VuDQoNCg==
---------------MS0Hml100OrkEs5C7vmMaYEN
+T24gMDQuMTAuMjIgMTg6MDYsIENvbGluIElhbiBLaW5nIHdyb3RlOg0KPiBUaGVyZSBpcyBh
+IHNwZWxsaW5nIG1pc3Rha2UgaW4gdGhlIG1vZHVsZSBkZXNjcmlwdGlvbi4gRml4IGl0Lg0K
+PiANCj4gU2lnbmVkLW9mZi1ieTogQ29saW4gSWFuIEtpbmcgPGNvbGluLmkua2luZ0BnbWFp
+bC5jb20+DQoNClB1c2hlZCB0byB4ZW4vdGlwLmdpdCBmb3ItbGludXMtNi4xDQoNCg0KSnVl
+cmdlbg0KDQo=
+--------------2uxkbQ2epXfomdpOphrV0889
 Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
 Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
 Content-Description: OpenPGP public key
@@ -207,24 +151,24 @@ jR/i1DG86lem3iBDXzXsZDn8R38=3D
 =3D2wuH
 -----END PGP PUBLIC KEY BLOCK-----
 
---------------MS0Hml100OrkEs5C7vmMaYEN--
+--------------2uxkbQ2epXfomdpOphrV0889--
 
---------------8CduX9LunJEd0aizjbOGzcP3--
+--------------A04Nxt4ZlfcWpTo61rjd4kIN--
 
---------------XVXLrARPWfnvGr02GkSvkKP9
+--------------WpUMG8nIhzBhKfw1vtyVkMg0
 Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmM/tnUFAwAAAAAACgkQsN6d1ii/Ey9s
-9wf+PcgWSXtUZ0T6HsJ/UghG07f8HEcW11vT6tZ3+FjPs2GDMiIJfvpAnlys6Syh0DWST2MK4VC+
-JJzLvwCkNkPfMEFdohWuRtLyju3LStD4NcVQ4vdFM/U9a36iBNpb/+H+1SrSgy2Lm47GQGCyV/fO
-4T34mtZy5q4Cyx/2FswlK1eOb5hDjpEum6rgl1rWgz+zmEs+zki6dFHppWFLYzFvMKmyAkBGXtGc
-t6kBq2ajBYS5C7zMTyHDHuE7OrB/HWu3PyYiERZOQ9P8WRXtLJ9rzL2/HHHKPPBKeJ+CUNlt6A6+
-tOpDxnlqyjMNFgRe8c+l1k8Bk2hN0skCppcBeoOHlA==
-=Eelx
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmM/tpUFAwAAAAAACgkQsN6d1ii/Ey+T
+rgf+JnzW+s3I5PCNTcTrCVZ+oWOcvQ+P4iEsjhyZKdAY407567wiKGiNkP84jXoSSFp5GieMIsVc
+eoy1cBi/MAl9oWl7ATdK9UWn5ulK3VMpZrbzUg9AMHMV3bzIbJR9c98aoF4b4tHcXXbjNtn2TfiR
+EbdrsV2WsMUMk9Z15TsFqtC4p+gK27IiP+6PpClPfM+P8iANHrVDQ51c/FGYHXiPZV6pnQCwmglr
+35hVBXgKOGki+wRvqWwnOI56GIp99tPpIwxMX9nDaiQDDL+Bbl8JrzGMTIjxwI0PCooX4p3Mm2n3
+S5t/28O4Cz0AjYWk8sunghu8x7L2fAdm5UqcsSTiKA==
+=JOTh
 -----END PGP SIGNATURE-----
 
---------------XVXLrARPWfnvGr02GkSvkKP9--
+--------------WpUMG8nIhzBhKfw1vtyVkMg0--
