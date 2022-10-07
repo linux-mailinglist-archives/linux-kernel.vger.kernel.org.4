@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC935F7AA7
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECBDF5F7AAB
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiJGPhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 11:37:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53664 "EHLO
+        id S229720AbiJGPjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 11:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiJGPhv (ORCPT
+        with ESMTP id S229896AbiJGPjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 11:37:51 -0400
+        Fri, 7 Oct 2022 11:39:18 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8795BB7EC8
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 08:37:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86C97118751;
+        Fri,  7 Oct 2022 08:39:16 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 87A09106F;
-        Fri,  7 Oct 2022 08:37:56 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 77AF1106F;
+        Fri,  7 Oct 2022 08:39:22 -0700 (PDT)
 Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9303A3F67D;
-        Fri,  7 Oct 2022 08:37:48 -0700 (PDT)
-Date:   Fri, 7 Oct 2022 16:37:46 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C844E3F67D;
+        Fri,  7 Oct 2022 08:39:13 -0700 (PDT)
+Date:   Fri, 7 Oct 2022 16:39:11 +0100
 From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, souvik.chakravarty@arm.com,
-        wleavitt@marvell.com, peter.hilber@opensynergy.com,
-        nicola.mazzucato@arm.com, tarek.el-sherbiny@arm.com
-Subject: Re: [PATCH v3 0/9] Introduce a unified API for SCMI Server testing
-Message-ID: <Y0BHynXmexuqKEqJ@e120937-lin>
-References: <20220903183042.3913053-1-cristian.marussi@arm.com>
- <CAKfTPtAt4803k1WpQru+8Sg5PFkSXaSF6b6wNeyu6yCiypVUEw@mail.gmail.com>
+        linux-pm@vger.kernel.org, sudeep.holla@arm.com,
+        james.quinlan@broadcom.com, Jonathan.Cameron@huawei.com,
+        f.fainelli@gmail.com, etienne.carriere@linaro.org,
+        vincent.guittot@linaro.org, daniel.lezcano@linaro.org,
+        tarek.el-sherbiny@arm.com, adrian.slatineanu@arm.com,
+        souvik.chakravarty@arm.com, wleavitt@marvell.com,
+        wbartczak@marvell.com, dan.carpenter@oracle.com,
+        lukasz.luba@arm.com
+Subject: Re: [PATCH v2 1/3] powercap: arm_scmi: Add SCMI Powercap based driver
+Message-ID: <Y0BIH6SkEzx6Qgry@e120937-lin>
+References: <20220906142337.1697569-1-cristian.marussi@arm.com>
+ <20220906142337.1697569-2-cristian.marussi@arm.com>
+ <CAJZ5v0gOA+VYYHwnz=6MRdQ9ZaPmU5GfB-8xADSazZH2AE57yg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKfTPtAt4803k1WpQru+8Sg5PFkSXaSF6b6wNeyu6yCiypVUEw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gOA+VYYHwnz=6MRdQ9ZaPmU5GfB-8xADSazZH2AE57yg@mail.gmail.com>
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,160 +50,615 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 04:23:33PM +0200, Vincent Guittot wrote:
-> Hi Cristian,
-> 
-
-Hi Vincent
-
-thanks for give it a try !
-
-> On Sat, 3 Sept 2022 at 20:31, Cristian Marussi <cristian.marussi@arm.com> wrote:
+On Fri, Oct 07, 2022 at 05:09:07PM +0200, Rafael J. Wysocki wrote:
+> On Tue, Sep 6, 2022 at 4:24 PM Cristian Marussi
+> <cristian.marussi@arm.com> wrote:
 > >
-> > Hi all,
+> > Add a powercap driver that, using the ARM SCMI Protocol to query the SCMI
+> > platform firmware for the list of existing Powercap domains, registers all
+> > of such discovered domains under the new 'arm-scmi' powercap control type.
 > >
-> > This series aims to introduce a new SCMI unified userspace interface meant
-> > to ease testing an SCMI Server implementation for compliance, fuzzing etc.,
-> > from the perspective of the OSPM agent (non-secure world only ...)
+> > A new simple powercap zone and constraint is registered for all the SCMI
+> > powercap zones that are found.
 > >
-> > It is proposed as a testing/development facility, it is NOT meant to be a
-> > feature to use in production, but only enabled in Kconfig for test
-> > deployments.
-> >
-> > Currently an SCMI Compliance Suite like the one at [1] can only work by
-> > injecting SCMI messages at the SCMI transport layer using the mailbox test
-> > driver (CONFIG_MAILBOX_TEST) via its few debugfs entries and looking at
-> > the related replies from the SCMI backend Server.
-> >
+> > Cc: Rafael J. Wysocki <rafael@kernel.org>
+> > Cc: linux-pm@vger.kernel.org
+> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 > 
-> ...
-> 
-> >
-> > In V2 the runtime enable/disable switching capability has been removed
-> > (for now) since still not deemed to be stable/reliable enough: as a
-> > consequence when SCMI Raw support is compiled in, the regular SCMI stack
-> > drivers are now inhibited permanently for that Kernel.
-> >
-> > A quick and trivial example from the shell...reading from a sensor
-> > injecting a properly crafted packet in raw mode:
-> >
-> >         # INJECT THE SENSOR_READING MESSAGE FOR SENSOR ID=1 (binary little endian)
-> >         root@deb-buster-arm64:~# echo -e -n \\x06\\x54\\x00\\x00\\x01\\x00\\x00\\x00\\x00\\x00\\x00\\x00 > /sys/kernel/debug/scmi_raw/message
-> 
-> I have tried your patchset with an SCMI server using an optee-os
-> transport channel but I have a timed out error when trying your
-> example above to read sensor1
-> 
-> #  echo -e -n \\x06\\x54\\x00\\x00\\x01\\x00\\x00\\x00\\x00\\x00\\x00\\x00
-> > /sys/kernel/debug/scmi_raw/message
-> # [   93.306690] arm-scmi firmware:scmi0: timed out in RAW response -
-> HDR:00005406
-> 
-> and there no response available when trying to read it with
-> # cat /sys/kernel/debug/scmi_raw/message
-> 
+> Can you please fold patches [2-3/3] in the series into the first one?
+> You can add information that fixes from Dan Carpenter are included to
+> the patch changelog.
 
-is there anything cat'ting /sys/kernel/debug/scmi_raw/errors ?
+Sure I'll do in the next version.
 
 > 
-> The sensor 1 can be successfully read in normal mode:
-> # cat /sys/class/hwmon/hwmon0/temp1_input
-> 25000
-> #
-> 
-> In both case, the SCMI server received the requests and replied successfully
-> 
-> Could it be that you process the answer differently in case of raw mode ?
+> Also I would like the SCMI people to look at this and tell me that it
+> makes sense to them.
 > 
 
-Well, absolutely, when in raw mode the reply is picked up directly into
-the RX path and copied in a message queue to be read from asyncrhnously
-later via debugfs.
+I'll ping them.
 
-... mmm I think I found the problem...the reply is picked up on the RX *IRQ*
-path as of now...but in optee/SMC there is no interrupt (sometime there is in
-SMC) and the reply is instead read back straight away (transport is marked as
-sync_cmds_completed_on_ret=true in fact).... so this is the issue probably ...
-I have NOT tested on anything but mailbox and virtio till now...and I
-missed this possibility that this NO-irq reply was a thing even when NOT
-in polling mode (which I do not support)...my bad :<
-
-Ok, next week I'll rework the series to fix this big_BUG and some other minor
-things...in the meantime if you want to try this snippet down below...
-
-... this won't definitely be the final patch but it could let you experiment
-more (only build tested though )
-
-Thanks for testing !
+Thanks,
 Cristian
 
---->8-------
-
-diff --git a/drivers/firmware/arm_scmi/raw_mode.c b/drivers/firmware/arm_scmi/raw_mode.c
-index 13eeebe4b7a8..b9fcb66a1b6a 100644
---- a/drivers/firmware/arm_scmi/raw_mode.c
-+++ b/drivers/firmware/arm_scmi/raw_mode.c
-@@ -197,6 +197,8 @@ struct scmi_dbg_raw_data {
-        size_t rx_size;
- };
- 
-+void scmi_raw_message_report(void *r, struct scmi_xfer *xfer, unsigned int idx);
-+
- static inline
- struct scmi_raw_buffer *scmi_raw_buffer_get(struct scmi_raw_mode_info *raw,
-                                            unsigned int idx)
-@@ -389,22 +391,34 @@ static void scmi_xfer_raw_worker(struct work_struct *work)
- 
-                xfer = rw->xfer;
- 
--               /*
--                * Waiters are queued by wait-deadline at the end, so some of
--                * them could have been already expired when processed, BUT we
--                * have to check the completion status anyway just in case a
--                * virtually expired (aged) transaction was indeed completed
--                * fine and we'll have to wait for the asynchronous part (if
--                * any).
--                */
--               aging = jiffies - rw->start_jiffies;
--               tmo = max_tmo > aging ? max_tmo - aging : 0;
--
--               if ((tmo && !wait_for_completion_timeout(&xfer->done, tmo)) ||
--                   (!tmo && !try_wait_for_completion(&xfer->done))) {
--                       dev_err(dev, "timed out in RAW response - HDR:%08X\n",
--                               pack_scmi_header(&xfer->hdr));
--                       ret = -ETIMEDOUT;
-+               if (!raw->desc->sync_cmds_completed_on_ret) {
-+                       /*
-+                        * Waiters are queued by wait-deadline at the end, so some of
-+                        * them could have been already expired when processed, BUT we
-+                        * have to check the completion status anyway just in case a
-+                        * virtually expired (aged) transaction was indeed completed
-+                        * fine and we'll have to wait for the asynchronous part (if
-+                        * any).
-+                        */
-+                       aging = jiffies - rw->start_jiffies;
-+                       tmo = max_tmo > aging ? max_tmo - aging : 0;
-+
-+                       if ((tmo &&
-+                            !wait_for_completion_timeout(&xfer->done, tmo)) ||
-+                            (!tmo && !try_wait_for_completion(&xfer->done))) {
-+                               dev_err(dev,
-+                                       "timed out in RAW response - HDR:%08X\n",
-+                                       pack_scmi_header(&xfer->hdr));
-+                               ret = -ETIMEDOUT;
-+                       }
-+               } else {
-+                       raw->desc->ops->fetch_response(rw->cinfo, xfer);
-+                       /* Trace polled replies. */
-+                       trace_scmi_msg_dump(xfer->hdr.protocol_id, xfer->hdr.id,
-+                                           "RESP",
-+                                           xfer->hdr.seq, xfer->hdr.status,
-+                                           xfer->rx.buf, xfer->rx.len);
-+                       scmi_raw_message_report(raw, xfer, SCMI_RAW_REPLY_QUEUE);
-                }
- 
-                /* Avoid unneeded async waits */
-
-
----8<-------
-
+> > ---
+> > v1 --> v2
+> > - using clamp_t() to simplify normalizations
+> > - cleanup style in block of var declarations
+> > - refactor scale conversions code
+> > - add MAINTAINER entry
+> > - refactored normalizations and added dev_dbg
+> > vOLD --> v1
+> > - fix _init cleaning up powerctrl zone on failure
+> > - removed uneeded casting
+> > - simplified normalization helpers
+> > ---
+> >  MAINTAINERS                          |   1 +
+> >  drivers/powercap/Kconfig             |  13 +
+> >  drivers/powercap/Makefile            |   1 +
+> >  drivers/powercap/arm_scmi_powercap.c | 508 +++++++++++++++++++++++++++
+> >  4 files changed, 523 insertions(+)
+> >  create mode 100644 drivers/powercap/arm_scmi_powercap.c
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 9d7f64dc0efe..c3bfc7c5aa91 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -19737,6 +19737,7 @@ F:      drivers/clk/clk-sc[mp]i.c
+> >  F:     drivers/cpufreq/sc[mp]i-cpufreq.c
+> >  F:     drivers/firmware/arm_scmi/
+> >  F:     drivers/firmware/arm_scpi.c
+> > +F:     drivers/powercap/arm_scmi_powercap.c
+> >  F:     drivers/regulator/scmi-regulator.c
+> >  F:     drivers/reset/reset-scmi.c
+> >  F:     include/linux/sc[mp]i_protocol.h
+> > diff --git a/drivers/powercap/Kconfig b/drivers/powercap/Kconfig
+> > index 515e3ceb3393..90d33cd1b670 100644
+> > --- a/drivers/powercap/Kconfig
+> > +++ b/drivers/powercap/Kconfig
+> > @@ -44,6 +44,19 @@ config IDLE_INJECT
+> >           synchronously on a set of specified CPUs or alternatively
+> >           on a per CPU basis.
+> >
+> > +config ARM_SCMI_POWERCAP
+> > +       tristate "ARM SCMI Powercap driver"
+> > +       depends on ARM_SCMI_PROTOCOL
+> > +       help
+> > +         This enables support for the ARM Powercap based on ARM SCMI
+> > +         Powercap protocol.
+> > +
+> > +         ARM SCMI Powercap protocol allows power limits to be enforced
+> > +         and monitored against the SCMI Powercap domains advertised as
+> > +         available by the SCMI platform firmware.
+> > +
+> > +         When compiled as module it will be called arm_scmi_powercap.ko.
+> > +
+> >  config DTPM
+> >         bool "Power capping for Dynamic Thermal Power Management (EXPERIMENTAL)"
+> >         depends on OF
+> > diff --git a/drivers/powercap/Makefile b/drivers/powercap/Makefile
+> > index 494617cdad88..4474201b4aa7 100644
+> > --- a/drivers/powercap/Makefile
+> > +++ b/drivers/powercap/Makefile
+> > @@ -6,3 +6,4 @@ obj-$(CONFIG_POWERCAP)  += powercap_sys.o
+> >  obj-$(CONFIG_INTEL_RAPL_CORE) += intel_rapl_common.o
+> >  obj-$(CONFIG_INTEL_RAPL) += intel_rapl_msr.o
+> >  obj-$(CONFIG_IDLE_INJECT) += idle_inject.o
+> > +obj-$(CONFIG_ARM_SCMI_POWERCAP) += arm_scmi_powercap.o
+> > diff --git a/drivers/powercap/arm_scmi_powercap.c b/drivers/powercap/arm_scmi_powercap.c
+> > new file mode 100644
+> > index 000000000000..a91438867f8c
+> > --- /dev/null
+> > +++ b/drivers/powercap/arm_scmi_powercap.c
+> > @@ -0,0 +1,508 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * SCMI Powercap support.
+> > + *
+> > + * Copyright (C) 2022 ARM Ltd.
+> > + */
+> > +
+> > +#include <linux/device.h>
+> > +#include <linux/math.h>
+> > +#include <linux/limits.h>
+> > +#include <linux/list.h>
+> > +#include <linux/module.h>
+> > +#include <linux/powercap.h>
+> > +#include <linux/scmi_protocol.h>
+> > +
+> > +#define to_scmi_powercap_zone(z)               \
+> > +       container_of(z, struct scmi_powercap_zone, zone)
+> > +
+> > +static const struct scmi_powercap_proto_ops *powercap_ops;
+> > +
+> > +struct scmi_powercap_zone {
+> > +       unsigned int height;
+> > +       struct device *dev;
+> > +       struct scmi_protocol_handle *ph;
+> > +       const struct scmi_powercap_info *info;
+> > +       struct scmi_powercap_zone *spzones;
+> > +       struct powercap_zone zone;
+> > +       struct list_head node;
+> > +};
+> > +
+> > +struct scmi_powercap_root {
+> > +       unsigned int num_zones;
+> > +       struct scmi_powercap_zone *spzones;
+> > +       struct list_head *registered_zones;
+> > +};
+> > +
+> > +static struct powercap_control_type *scmi_top_pcntrl;
+> > +
+> > +static int scmi_powercap_zone_release(struct powercap_zone *pz)
+> > +{
+> > +       return 0;
+> > +}
+> > +
+> > +static int scmi_powercap_get_max_power_range_uw(struct powercap_zone *pz,
+> > +                                               u64 *max_power_range_uw)
+> > +{
+> > +       *max_power_range_uw = U32_MAX;
+> > +       return 0;
+> > +}
+> > +
+> > +static int scmi_powercap_get_power_uw(struct powercap_zone *pz,
+> > +                                     u64 *power_uw)
+> > +{
+> > +       struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
+> > +       u32 avg_power, pai;
+> > +       int ret;
+> > +
+> > +       if (!spz->info->powercap_monitoring)
+> > +               return -EINVAL;
+> > +
+> > +       ret = powercap_ops->measurements_get(spz->ph, spz->info->id, &avg_power,
+> > +                                            &pai);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       *power_uw = avg_power;
+> > +       if (spz->info->powercap_scale_mw)
+> > +               *power_uw *= 1000;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static const struct powercap_zone_ops zone_ops = {
+> > +       .get_max_power_range_uw = scmi_powercap_get_max_power_range_uw,
+> > +       .get_power_uw = scmi_powercap_get_power_uw,
+> > +       .release = scmi_powercap_zone_release,
+> > +};
+> > +
+> > +static void scmi_powercap_normalize_cap(const struct scmi_powercap_zone *spz,
+> > +                                       u64 power_limit_uw, u32 *norm)
+> > +{
+> > +       bool scale_mw = spz->info->powercap_scale_mw;
+> > +       u64 val;
+> > +
+> > +       val = scale_mw ? DIV_ROUND_UP_ULL(power_limit_uw, 1000) : power_limit_uw;
+> > +       /*
+> > +        * This cast is lossless since here @req_power is certain to be within
+> > +        * the range [min_power_cap, max_power_cap] whose bounds are assured to
+> > +        * be two unsigned 32bits quantities.
+> > +        */
+> > +       *norm = clamp_t(u32, val, spz->info->min_power_cap,
+> > +                       spz->info->max_power_cap);
+> > +       *norm = rounddown(*norm, spz->info->power_cap_step);
+> > +
+> > +       val = (scale_mw) ? *norm * 1000 : *norm;
+> > +       if (power_limit_uw != val)
+> > +               dev_dbg(spz->dev,
+> > +                       "Normalized %s:CAP - requested:%llu - normalized:%llu\n",
+> > +                       spz->info->name, power_limit_uw, val);
+> > +}
+> > +
+> > +static int scmi_powercap_set_power_limit_uw(struct powercap_zone *pz, int cid,
+> > +                                           u64 power_uw)
+> > +{
+> > +       struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
+> > +       u32 norm_power;
+> > +
+> > +       if (!spz->info->powercap_cap_config)
+> > +               return -EINVAL;
+> > +
+> > +       scmi_powercap_normalize_cap(spz, power_uw, &norm_power);
+> > +
+> > +       return powercap_ops->cap_set(spz->ph, spz->info->id, norm_power, false);
+> > +}
+> > +
+> > +static int scmi_powercap_get_power_limit_uw(struct powercap_zone *pz, int cid,
+> > +                                           u64 *power_limit_uw)
+> > +{
+> > +       struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
+> > +       u32 power;
+> > +       int ret;
+> > +
+> > +       ret = powercap_ops->cap_get(spz->ph, spz->info->id, &power);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       *power_limit_uw = power;
+> > +       if (spz->info->powercap_scale_mw)
+> > +               *power_limit_uw *= 1000;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static void scmi_powercap_normalize_time(const struct scmi_powercap_zone *spz,
+> > +                                        u64 time_us, u32 *norm)
+> > +{
+> > +       /*
+> > +        * This cast is lossless since here @time_us is certain to be within the
+> > +        * range [min_pai, max_pai] whose bounds are assured to be two unsigned
+> > +        * 32bits quantities.
+> > +        */
+> > +       *norm = clamp_t(u32, time_us, spz->info->min_pai, spz->info->max_pai);
+> > +       *norm = rounddown(*norm, spz->info->pai_step);
+> > +
+> > +       if (time_us != *norm)
+> > +               dev_dbg(spz->dev,
+> > +                       "Normalized %s:PAI - requested:%llu - normalized:%u\n",
+> > +                       spz->info->name, time_us, *norm);
+> > +}
+> > +
+> > +static int scmi_powercap_set_time_window_us(struct powercap_zone *pz, int cid,
+> > +                                           u64 time_window_us)
+> > +{
+> > +       struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
+> > +       u32 norm_pai;
+> > +
+> > +       if (!spz->info->powercap_pai_config)
+> > +               return -EINVAL;
+> > +
+> > +       scmi_powercap_normalize_time(spz, time_window_us, &norm_pai);
+> > +
+> > +       return powercap_ops->pai_set(spz->ph, spz->info->id, norm_pai);
+> > +}
+> > +
+> > +static int scmi_powercap_get_time_window_us(struct powercap_zone *pz, int cid,
+> > +                                           u64 *time_window_us)
+> > +{
+> > +       struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
+> > +       int ret;
+> > +       u32 pai;
+> > +
+> > +       ret = powercap_ops->pai_get(spz->ph, spz->info->id, &pai);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       *time_window_us = pai;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static int scmi_powercap_get_max_power_uw(struct powercap_zone *pz, int cid,
+> > +                                         u64 *max_power_uw)
+> > +{
+> > +       struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
+> > +
+> > +       *max_power_uw = spz->info->max_power_cap;
+> > +       if (spz->info->powercap_scale_mw)
+> > +               *max_power_uw *= 1000;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static int scmi_powercap_get_min_power_uw(struct powercap_zone *pz, int cid,
+> > +                                         u64 *min_power_uw)
+> > +{
+> > +       struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
+> > +
+> > +       *min_power_uw = spz->info->min_power_cap;
+> > +       if (spz->info->powercap_scale_mw)
+> > +               *min_power_uw *= 1000;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static int scmi_powercap_get_max_time_window_us(struct powercap_zone *pz,
+> > +                                               int cid, u64 *time_window_us)
+> > +{
+> > +       struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
+> > +
+> > +       *time_window_us = spz->info->max_pai;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static int scmi_powercap_get_min_time_window_us(struct powercap_zone *pz,
+> > +                                               int cid, u64 *time_window_us)
+> > +{
+> > +       struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
+> > +
+> > +       *time_window_us = (u64)spz->info->min_pai;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static const char *scmi_powercap_get_name(struct powercap_zone *pz, int cid)
+> > +{
+> > +       return "SCMI power-cap";
+> > +}
+> > +
+> > +static const struct powercap_zone_constraint_ops constraint_ops  = {
+> > +       .set_power_limit_uw = scmi_powercap_set_power_limit_uw,
+> > +       .get_power_limit_uw = scmi_powercap_get_power_limit_uw,
+> > +       .set_time_window_us = scmi_powercap_set_time_window_us,
+> > +       .get_time_window_us = scmi_powercap_get_time_window_us,
+> > +       .get_max_power_uw = scmi_powercap_get_max_power_uw,
+> > +       .get_min_power_uw = scmi_powercap_get_min_power_uw,
+> > +       .get_max_time_window_us = scmi_powercap_get_max_time_window_us,
+> > +       .get_min_time_window_us = scmi_powercap_get_min_time_window_us,
+> > +       .get_name = scmi_powercap_get_name,
+> > +};
+> > +
+> > +static void scmi_powercap_unregister_all_zones(struct scmi_powercap_root *pr)
+> > +{
+> > +       int i;
+> > +
+> > +       /* Un-register children zones first starting from the leaves */
+> > +       for (i = pr->num_zones - 1; i >= 0; i--) {
+> > +               if (!list_empty(&pr->registered_zones[i])) {
+> > +                       struct scmi_powercap_zone *spz;
+> > +
+> > +                       list_for_each_entry(spz, &pr->registered_zones[i], node)
+> > +                               powercap_unregister_zone(scmi_top_pcntrl,
+> > +                                                        &spz->zone);
+> > +               }
+> > +       }
+> > +}
+> > +
+> > +static inline bool
+> > +scmi_powercap_is_zone_registered(struct scmi_powercap_zone *spz)
+> > +{
+> > +       return !list_empty(&spz->node);
+> > +}
+> > +
+> > +static inline unsigned int
+> > +scmi_powercap_get_zone_height(struct scmi_powercap_zone *spz)
+> > +{
+> > +       if (spz->info->parent_id == SCMI_POWERCAP_ROOT_ZONE_ID)
+> > +               return 0;
+> > +
+> > +       return spz->spzones[spz->info->parent_id].height + 1;
+> > +}
+> > +
+> > +static inline struct scmi_powercap_zone *
+> > +scmi_powercap_get_parent_zone(struct scmi_powercap_zone *spz)
+> > +{
+> > +       if (spz->info->parent_id == SCMI_POWERCAP_ROOT_ZONE_ID)
+> > +               return NULL;
+> > +
+> > +       return &spz->spzones[spz->info->parent_id];
+> > +}
+> > +
+> > +/**
+> > + * scmi_powercap_register_zone  - Register an SCMI powercap zone recursively
+> > + *
+> > + * @pr: A reference to the root powercap zones descriptors
+> > + * @spz: A reference to the SCMI powercap zone to register
+> > + *
+> > + * When registering SCMI powercap zones with the powercap framework we should
+> > + * take care to always register zones starting from the root ones and to
+> > + * deregister starting from the leaves.
+> > + *
+> > + * Unfortunately we cannot assume that the array of available SCMI powercap
+> > + * zones provided by the SCMI platform firmware is built to comply with such
+> > + * requirement.
+> > + *
+> > + * This function, given an SCMI powercap zone to register, takes care to walk
+> > + * the SCMI powercap zones tree up to the root looking recursively for
+> > + * unregistered parent zones before registering the provided zone; at the same
+> > + * time each registered zone height in such a tree is accounted for and each
+> > + * zone, once registered, is stored in the @registered_zones array that is
+> > + * indexed by zone height: this way will be trivial, at unregister time, to walk
+> > + * the @registered_zones array backward and unregister all the zones starting
+> > + * from the leaves, removing children zones before parents.
+> > + *
+> > + * While doing this, we prune away any zone marked as invalid (like the ones
+> > + * sporting an SCMI abstract power scale) as long as they are positioned as
+> > + * leaves in the SCMI powercap zones hierarchy: any non-leaf invalid zone causes
+> > + * the entire process to fail since we cannot assume the correctness of an SCMI
+> > + * powercap zones hierarchy if some of the internal nodes are missing.
+> > + *
+> > + * Note that the array of SCMI powercap zones as returned by the SCMI platform
+> > + * is known to be sane, i.e. zones relationships have been validated at the
+> > + * protocol layer.
+> > + *
+> > + * Return: 0 on Success
+> > + */
+> > +static int scmi_powercap_register_zone(struct scmi_powercap_root *pr,
+> > +                                      struct scmi_powercap_zone *spz)
+> > +{
+> > +       int ret = 0;
+> > +       struct scmi_powercap_zone *parent;
+> > +
+> > +       if (!spz->info)
+> > +               return ret;
+> > +
+> > +       parent = scmi_powercap_get_parent_zone(spz);
+> > +       if (parent && !scmi_powercap_is_zone_registered(parent)) {
+> > +               /*
+> > +                * Bail out if a parent domain was marked as unsupported:
+> > +                * only domains participating as leaves can be skipped.
+> > +                */
+> > +               if (!parent->info)
+> > +                       return -ENODEV;
+> > +
+> > +               ret = scmi_powercap_register_zone(pr, parent);
+> > +               if (ret)
+> > +                       return ret;
+> > +       }
+> > +
+> > +       if (!scmi_powercap_is_zone_registered(spz)) {
+> > +               struct powercap_zone *z;
+> > +
+> > +               z = powercap_register_zone(&spz->zone,
+> > +                                          scmi_top_pcntrl,
+> > +                                          spz->info->name,
+> > +                                          parent ? &parent->zone : NULL,
+> > +                                          &zone_ops, 1, &constraint_ops);
+> > +               if (!IS_ERR(z)) {
+> > +                       spz->height = scmi_powercap_get_zone_height(spz);
+> > +                       list_add(&spz->node,
+> > +                                &pr->registered_zones[spz->height]);
+> > +                       dev_dbg(spz->dev,
+> > +                               "Registered node %s - parent %s - height:%d\n",
+> > +                               spz->info->name,
+> > +                               parent ? parent->info->name : "ROOT",
+> > +                               spz->height);
+> > +                       ret = 0;
+> > +               } else {
+> > +                       ret = PTR_ERR(z);
+> > +                       dev_err(spz->dev,
+> > +                               "Error registering node:%s - parent:%s - h:%d - ret:%d\n",
+> > +                                spz->info->name,
+> > +                                parent ? parent->info->name : "ROOT",
+> > +                                spz->height, ret);
+> > +               }
+> > +       }
+> > +
+> > +       return ret;
+> > +}
+> > +
+> > +static int scmi_powercap_probe(struct scmi_device *sdev)
+> > +{
+> > +       int ret, i;
+> > +       struct scmi_powercap_root *pr;
+> > +       struct scmi_powercap_zone *spz;
+> > +       struct scmi_protocol_handle *ph;
+> > +       struct device *dev = &sdev->dev;
+> > +
+> > +       if (!sdev->handle)
+> > +               return -ENODEV;
+> > +
+> > +       powercap_ops = sdev->handle->devm_protocol_get(sdev,
+> > +                                                      SCMI_PROTOCOL_POWERCAP,
+> > +                                                      &ph);
+> > +       if (IS_ERR(powercap_ops))
+> > +               return PTR_ERR(powercap_ops);
+> > +
+> > +       pr = devm_kzalloc(dev, sizeof(*pr), GFP_KERNEL);
+> > +       if (!pr)
+> > +               return -ENOMEM;
+> > +
+> > +       pr->num_zones = powercap_ops->num_domains_get(ph);
+> > +       if (pr->num_zones < 0) {
+> > +               dev_err(dev, "number of powercap domains not found\n");
+> > +               return pr->num_zones;
+> > +       }
+> > +
+> > +       pr->spzones = devm_kcalloc(dev, pr->num_zones,
+> > +                                  sizeof(*pr->spzones), GFP_KERNEL);
+> > +       if (!pr->spzones)
+> > +               return -ENOMEM;
+> > +
+> > +       /* Allocate for worst possible scenario of maximum tree height. */
+> > +       pr->registered_zones = devm_kcalloc(dev, pr->num_zones,
+> > +                                           sizeof(*pr->registered_zones),
+> > +                                           GFP_KERNEL);
+> > +       if (!pr->registered_zones)
+> > +               return -ENOMEM;
+> > +
+> > +       for (i = 0, spz = pr->spzones; i < pr->num_zones; i++, spz++) {
+> > +               /*
+> > +                * Powercap domains are validate by the protocol layer, i.e.
+> > +                * when only non-NULL domains are returned here, whose
+> > +                * parent_id is assured to point to another valid domain.
+> > +                */
+> > +               spz->info = powercap_ops->info_get(ph, i);
+> > +
+> > +               spz->dev = dev;
+> > +               spz->ph = ph;
+> > +               spz->spzones = pr->spzones;
+> > +               INIT_LIST_HEAD(&spz->node);
+> > +               INIT_LIST_HEAD(&pr->registered_zones[i]);
+> > +
+> > +               /*
+> > +                * Forcibly skip powercap domains using an abstract scale.
+> > +                * Note that only leaves domains can be skipped, so this could
+> > +                * lead later to a global failure.
+> > +                */
+> > +               if (!spz->info->powercap_scale_uw &&
+> > +                   !spz->info->powercap_scale_mw) {
+> > +                       dev_warn(dev,
+> > +                                "Abstract power scale not supported. Skip %s.\n",
+> > +                                spz->info->name);
+> > +                       spz->info = NULL;
+> > +                       continue;
+> > +               }
+> > +       }
+> > +
+> > +       /*
+> > +        * Scan array of retrieved SCMI powercap domains and register them
+> > +        * recursively starting from the root domains.
+> > +        */
+> > +       for (i = 0, spz = pr->spzones; i < pr->num_zones; i++, spz++) {
+> > +               ret = scmi_powercap_register_zone(pr, spz);
+> > +               if (ret) {
+> > +                       dev_err(dev,
+> > +                               "Failed to register powercap zone %s - ret:%d\n",
+> > +                               spz->info->name, ret);
+> > +                       scmi_powercap_unregister_all_zones(pr);
+> > +                       return ret;
+> > +               }
+> > +       }
+> > +
+> > +       dev_set_drvdata(dev, pr);
+> > +
+> > +       dev_info(dev, "Registered %d SCMI Powercap domains !\n", pr->num_zones);
+> > +
+> > +       return ret;
+> > +}
+> > +
+> > +static void scmi_powercap_remove(struct scmi_device *sdev)
+> > +{
+> > +       struct device *dev = &sdev->dev;
+> > +       struct scmi_powercap_root *pr = dev_get_drvdata(dev);
+> > +
+> > +       scmi_powercap_unregister_all_zones(pr);
+> > +}
+> > +
+> > +static const struct scmi_device_id scmi_id_table[] = {
+> > +       { SCMI_PROTOCOL_POWERCAP, "powercap" },
+> > +       { },
+> > +};
+> > +MODULE_DEVICE_TABLE(scmi, scmi_id_table);
+> > +
+> > +static struct scmi_driver scmi_powercap_driver = {
+> > +       .name = "scmi-powercap",
+> > +       .probe = scmi_powercap_probe,
+> > +       .remove = scmi_powercap_remove,
+> > +       .id_table = scmi_id_table,
+> > +};
+> > +
+> > +static int __init scmi_powercap_init(void)
+> > +{
+> > +       int ret;
+> > +
+> > +       scmi_top_pcntrl = powercap_register_control_type(NULL, "arm-scmi", NULL);
+> > +       if (!scmi_top_pcntrl)
+> > +               return -ENODEV;
+> > +
+> > +       ret = scmi_register(&scmi_powercap_driver);
+> > +       if (ret)
+> > +               powercap_unregister_control_type(scmi_top_pcntrl);
+> > +
+> > +       return ret;
+> > +}
+> > +module_init(scmi_powercap_init);
+> > +
+> > +static void __exit scmi_powercap_exit(void)
+> > +{
+> > +       scmi_unregister(&scmi_powercap_driver);
+> > +
+> > +       powercap_unregister_control_type(scmi_top_pcntrl);
+> > +}
+> > +module_exit(scmi_powercap_exit);
+> > +
+> > +MODULE_AUTHOR("Cristian Marussi <cristian.marussi@arm.com>");
+> > +MODULE_DESCRIPTION("ARM SCMI Powercap driver");
+> > +MODULE_LICENSE("GPL");
+> > --
+> > 2.32.0
+> >
