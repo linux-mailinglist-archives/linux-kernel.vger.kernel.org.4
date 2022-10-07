@@ -2,83 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6480C5F7236
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 02:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C865F7239
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 02:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232277AbiJGASy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 20:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48828 "EHLO
+        id S232273AbiJGAXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 20:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231872AbiJGASv (ORCPT
+        with ESMTP id S231587AbiJGAXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 20:18:51 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64A615E0E5
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 17:18:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=y7q8z+gAQ4AacYDHG/hNzgpPqU8tnPULnTP0RVAwnZ4=; b=iCLUTYzPRvNTYdeBKMw9YX6AAa
-        cyeSvhNyxF2x674Ishjoiqzycc+VK74AJ1x1i+Vl3Vrc+ZYO9RAp9rFgIzf6O5O0B+1UOnZJJDkwg
-        e9F550NNfWaaR91AjCGRL7wiGbwpk+qBIZ6PYhQpLdzVhmqJ4jjZsI4KLcXWD/btgmrSlIuO4KqjF
-        K0COq2EesfJTUKleP1I1IBzkROOjDsxv4HrMoJoavrxipDvV5BzvIXxjvgKjs6WaMSrmkCMlvZ3/6
-        R/sc0x7gwu6chWNEsVsHDb+137U5z6tCt+h0BUvgcbX8LFaZ7X3EpTo12yK6gLwNBGdhhLR6bOO2N
-        cnl8k2Fw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ogb4a-006AiU-Ll; Fri, 07 Oct 2022 00:18:40 +0000
-Date:   Thu, 6 Oct 2022 17:18:40 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     liushixin2@huawei.com, chuanjian@nfschina.com,
-        linux-kernel@vger.kernel.org, mcgrof@kernel.org
-Subject: [GIT PULL] sysctl changes for v6.1-rc1
-Message-ID: <Yz9wYMDqTBeHi66p@bombadil.infradead.org>
+        Thu, 6 Oct 2022 20:23:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9623FC510A
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 17:23:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D41861921
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 00:23:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5011DC433C1;
+        Fri,  7 Oct 2022 00:23:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665102217;
+        bh=Et26OS3EyRmy77qPfsgsF4rcn/zFt1wMAuvka68v87U=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=HqwJ3XEQ4nYbxIa9HgoA/a7H7BKi8YZZgdoGyWU0p1t3yobUxFminM/Nmzhx7DtWE
+         g4/UdyCL2b9YXIq1ufshqRbgzCmpCujqe7CRjCh91WSJLx7henkuE10iQE7vtgo6dY
+         zXDO45zb0YclllssCxvKoeyufx+tocHyVs+cx5lHeQDZFeRQQemgF3IhCiEVamV9eb
+         30YVr2Fmf1Z5khqxrznRy+C9swz/2Uk6a+pB/9IU/kZEA5U0wrm3KfX3vE/FqKy2dN
+         m4Wu2Qgb5t2q7Loz10eQPfMmSYbNs4gVT67zOGi6UmnKvwcr1VkpAQAojRkD2jRt1o
+         qzNf6xBnqQqUg==
+Date:   Thu, 6 Oct 2022 17:23:34 -0700 (PDT)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>
+cc:     Juergen Gross <jgross@suse.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
+Subject: Re: [PATCH 1/3] xen/virtio: restructure xen grant dma setup
+In-Reply-To: <a8482a7b-0d89-861d-bc87-632d3230c173@epam.com>
+Message-ID: <alpine.DEB.2.22.394.2210061723240.3690179@ubuntu-linux-20-04-desktop>
+References: <20221006071500.15689-1-jgross@suse.com> <20221006071500.15689-2-jgross@suse.com> <a8482a7b-0d89-861d-bc87-632d3230c173@epam.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 7e18e42e4b280c85b76967a9106a13ca61c16179:
+On Thu, 6 Oct 2022, Oleksandr Tyshchenko wrote:
+> On 06.10.22 10:14, Juergen Gross wrote:
+> 
+> Hello Juergen
+> 
+> > In order to prepare supporting other means than device tree for
+> > setting up virtio devices under Xen, restructure the functions
+> > xen_is_grant_dma_device() and xen_grant_setup_dma_ops() a little bit.
+> >
+> > Signed-off-by: Juergen Gross <jgross@suse.com>
+> 
+> 
+> Patch looks good,
+> 
+> one NIT, xen_dt_grant_setup_dma_ops() down the code doesn't actually 
+> setup DMA OPS, it retrieves the backend domid via device-tree means and 
+> stores it,
+> 
+> so I would rename to it, maybe something like 
+> xen_dt_grant_setup_backend_domid() or xen_dt_grant_init_backend_domid(), 
+> but I am not sure it would be good alternative.
+> 
+> 
+> So, w/ or w/o renaming:
+> 
+> Reviewed-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+> 
+> also
+> 
+> Tested-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com> # Arm64 
+> only
 
-  Linux 6.0-rc4 (2022-09-04 13:10:01 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/sysctl-6.1-rc1
-
-for you to fetch changes up to c06a17fe056b84f5784b2f13753870eb65edc9ed:
-
-  kernel/sysctl-test: use SYSCTL_{ZERO/ONE_HUNDRED} instead of i_{zero/one_hundred} (2022-09-08 16:56:45 -0700)
-
-----------------------------------------------------------------
-sysctl changes for v6.1-rc1
-
-Just some boring cleanups on the sysctl front for this release.
-This has been on linux-next for at least 4 weeks now.
-
-----------------------------------------------------------------
-Dong Chuanjian (1):
-      kernel/sysctl.c: remove unnecessary (void*) conversions
-
-Li zeming (1):
-      proc: remove initialization assignment
-
-Liu Shixin (3):
-      sysctl: remove max_extfrag_threshold
-      kernel/sysctl.c: move sysctl_vals and sysctl_long_vals to sysctl.c
-      kernel/sysctl-test: use SYSCTL_{ZERO/ONE_HUNDRED} instead of i_{zero/one_hundred}
-
- fs/proc/proc_sysctl.c |  9 +--------
- kernel/sysctl-test.c  | 43 ++++++++++++++++++++-----------------------
- kernel/sysctl.c       | 22 ++++++++++++----------
- 3 files changed, 33 insertions(+), 41 deletions(-)
+Acked-by: Stefano Stabellini <sstabellini@kernel.org>
