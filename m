@@ -2,95 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51CE75F7577
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 10:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2585F757C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 10:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiJGIrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 04:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46102 "EHLO
+        id S229643AbiJGIrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 04:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiJGIrL (ORCPT
+        with ESMTP id S229452AbiJGIrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 04:47:11 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32ECC9AFC2
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 01:47:10 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id d27so1446645qtw.8
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 01:47:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sladewatkins.net; s=googled;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aBnpp0sDJqctU48vfQ6g+lgvjUgr8EqGIShTt9dMo7I=;
-        b=So2mOLRiFPO4IrylFWHZWJJk/3VXaTt2NPyoMnQ5A3MepDesWCkQbV6kUONBwbp232
-         lG23uhlEW9IjaW7lW6hmc0DEHQTJMmBU0UOFaKkziWQVFH7o2+MLVrIstILajKZWGz+i
-         7M1JHWf62GONh83LthHWw3fAHZjJ3kGzFUcQBjpekK3TOb/11+Ncnd1H3lqn5HuAARym
-         E3wyfIFV5lf+NPBJ8cT31Am1RW7D0tvG8cTfM1dl/w+h3qud3QjszwpFXmCpf+ndyr2N
-         gU5lri5hlIwyKffYK49ovERz570NCZbJhGcip6cV7TI4W/qmdu8WqbPVxElyJ2bCFZuo
-         5I1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aBnpp0sDJqctU48vfQ6g+lgvjUgr8EqGIShTt9dMo7I=;
-        b=3ewbfN9y4f8yGZFmmlng3O7HmHljCaonPrwkxTc8eyCZ3/7lfbjIU9O6joTEFtUveA
-         nHFH1g9Wa0s7kj9GgBi87n+00cN6WY/9vByHxgLEWiwEO+IexrLZU0TUFMG9guunEa2G
-         408AHbbErqvy2PWTt5mn38hY72XqAKz6NGb/2XnBVSYBBGmWSGL61vEPf/Xj+CIa1F9x
-         WoMI5IP2wssrP+mB1fOAGM/fh4ezj6Y6aVllg4tff6u9FgTVYLXY5hFoJx2ROFVpGmDM
-         VEUMgacZB60LSPJlcGI40+UIDthh0OZzBGhpafHIK1p+33o16LmLdx3b8rt+qrpHPAYs
-         7arw==
-X-Gm-Message-State: ACrzQf1TliOGlo/W9LbV6DoXuwevV6w/CEX94zKfZBXjK0pjBgER1XXi
-        br5iqTDlbFMZHakk9/SZADIfkMqzH/Z5gyk7yuFFaQ==
-X-Google-Smtp-Source: AMsMyM4DqMy2+MvS3ZdxcUPmFL9ihfz/PmQXU0cbt3KGiIblWWdaITB4N/ws3HzghR2EK3ZWvOExmg==
-X-Received: by 2002:a05:622a:58c:b0:394:d520:dba0 with SMTP id c12-20020a05622a058c00b00394d520dba0mr3375330qtb.664.1665132429281;
-        Fri, 07 Oct 2022 01:47:09 -0700 (PDT)
-Received: from [192.168.1.30] (pool-108-4-135-94.albyny.fios.verizon.net. [108.4.135.94])
-        by smtp.gmail.com with ESMTPSA id k11-20020a05620a0b8b00b006cbc6e1478csm1474410qkh.57.2022.10.07.01.47.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Oct 2022 01:47:08 -0700 (PDT)
-Message-ID: <43d5fd3c-dbe3-6090-8a56-c2ffb1f00e0d@sladewatkins.net>
-Date:   Fri, 7 Oct 2022 04:47:07 -0400
+        Fri, 7 Oct 2022 04:47:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD41B97BC;
+        Fri,  7 Oct 2022 01:47:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36D24B821FD;
+        Fri,  7 Oct 2022 08:47:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE80AC433B5;
+        Fri,  7 Oct 2022 08:47:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665132466;
+        bh=JvsJAjK2viLhsl8prgm3Okm0KP7YFzOENNR4sX/iqN4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nXruCk3dbtw+hIqHFFdug4hTm3jQ1IJdKDoOosX+TkLI9KFp37Pn5lNkLBoG4/mZv
+         gl8zj9kXkl9ng3n0TZ29lUD7WatF1kjrfYtMeA3ARTvmNrZdPOsWL6GrMLc/4icpxf
+         q5JsV5KcM8JKZGjir/Gyg1rDJhs7AzE4ii184f5YvjkbW9exzAppjdu6Bogem83WUr
+         NZ/JfLtJS1ynRk46IEQJD4TxsVIM8p0krK/vy4WqTCyt8IYk5FPPGA8BGnUjEh7vyW
+         VFrQLmHMjlfWV7KAXR4MoHd5T3tAew98vKXRK7Kq+Wf4iAUwXpuIRubwX+pS+vqj6j
+         S9jmbg1qeKJRA==
+Received: by mail-lf1-f44.google.com with SMTP id d6so6284698lfs.10;
+        Fri, 07 Oct 2022 01:47:45 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0LVIalsa6aZMmerNMugKwpfwfgcx1y712KGl2wDvqLPLDVnuHg
+        jUPyaTQP1gMzRferTgArtZIro/CIZH9T08VZ16Q=
+X-Google-Smtp-Source: AMsMyM44yFaEOObizVHcR/26W5DJQcgwhUIpkSjU8hV6Nx+Zcb8O5A+eclJsmCZAfvMMSTvo7bD6iPEYReVnj3we8TA=
+X-Received: by 2002:a05:6512:261b:b0:4a1:abd7:3129 with SMTP id
+ bt27-20020a056512261b00b004a1abd73129mr1528800lfb.637.1665132464012; Fri, 07
+ Oct 2022 01:47:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.2
-Subject: Re: BUG: 6.0.0-RC kernels trigger Firefox snap bug with 6.0.0-rc3
- through 6.0.0-rc7
-Content-Language: en-US
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     LKML <linux-kernel@vger.kernel.org>, regressions@lists.linux.dev,
-        regressions@leemhuis.info
-References: <b0c258c3-6dcf-aade-efc4-d62a8b3a1ce2@alu.unizg.hr>
- <1266113f-75a1-b276-bb8c-3cdfcbabf043@alu.unizg.hr>
- <47CFBECB-AE3D-4252-972D-933D2DF4A8EB@sladewatkins.net>
- <77bc5046-7b69-6100-f991-60b4d53994ee@alu.hr>
- <0BD28445-7393-4153-B15C-59E5DA868E80@sladewatkins.net>
- <2F9EDCCA-AB85-44CE-AD9F-44394C8663B8@sladewatkins.net>
- <254f0b04-428e-cad8-02e3-0224b798b060@alu.unizg.hr>
-From:   Slade Watkins <srw@sladewatkins.net>
-In-Reply-To: <254f0b04-428e-cad8-02e3-0224b798b060@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221006224212.569555-1-gpiccoli@igalia.com> <20221006224212.569555-8-gpiccoli@igalia.com>
+ <202210061616.40497D6C@keescook>
+In-Reply-To: <202210061616.40497D6C@keescook>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 7 Oct 2022 10:47:32 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGg9moz0Fg+wFYg2GjLD2gW1RGmQqT3mu+cNi0KuYyAqA@mail.gmail.com>
+Message-ID: <CAMj1kXGg9moz0Fg+wFYg2GjLD2gW1RGmQqT3mu+cNi0KuYyAqA@mail.gmail.com>
+Subject: Re: [PATCH 7/8] efi: pstore: Follow convention for the efi-pstore
+ backend name
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, anton@enomsg.org,
+        ccross@android.com, tony.luck@intel.com, linux-efi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Mirsad,
+On Fri, 7 Oct 2022 at 01:16, Kees Cook <keescook@chromium.org> wrote:
+>
+> On Thu, Oct 06, 2022 at 07:42:11PM -0300, Guilherme G. Piccoli wrote:
+> > For some reason, the efi-pstore backend name (exposed through the
+> > pstore infrastructure) is hardcoded as "efi", whereas all the other
+> > backends follow a kind of convention in using the module name.
+> >
+> > Let's do it here as well, to make user's life easier (they might
+> > use this info for unloading the module backend, for example).
+> >
+> > Cc: Ard Biesheuvel <ardb@kernel.org>
+> > Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+>
+> Looks fine to me. Ard, if you don't object, I can carry this in the
+> pstore tree.
+>
 
-On 10/3/22 at 4:18 AM, Mirsad Goran Todorovac wrote:
-> 
-> I'm sorry you couldn't reproduce the bug. I will try to provide the list of the installed pkgs the
-> next time, for both configs
-So, I'm able to reproduce this now on Ubuntu 22.04 with 6.0 mainline. Unfortunately, I won't be able to bisect and send that info to Thorsten and the Regressions list until Monday afternoon most likely. Both are Cc'd on this update.
-
-[+Thorsten, +Regressions List]
-
-Best,
--srw
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
