@@ -2,274 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B934A5F7E5C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 674E25F7E60
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbiJGT4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 15:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
+        id S229960AbiJGT7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 15:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiJGT4e (ORCPT
+        with ESMTP id S229630AbiJGT7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 15:56:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538CCB40EF;
-        Fri,  7 Oct 2022 12:56:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D04F3B82446;
-        Fri,  7 Oct 2022 19:56:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70124C433D6;
-        Fri,  7 Oct 2022 19:56:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665172589;
-        bh=a/01ILpeAOG6Hq469xSdhepxBw9DlD51I2SjaCYf0wM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=LG3YuKeFmjJtdpaekLU3F5GxRsgdkfax0zlhslFCDettqfyYWnfaxAr2u7g7fPbUy
-         43KOPdhajcjk+FzmNn7fBsY7unL/EkZ1KGqbZjmCV/XjYHsPWDSutYXSV9YL/oDvp4
-         iXOjBQCOZd5XYtT4uwZT/08qGHhd5PCMOMM9gwUdN5vDnwkzHvai/78y10tFi2OR8U
-         HM8ZSkD1bsq5bOM9e8fgZ8ch8IoGXBLfz9/t8UjcA3TOYeOt5IbALSoLBCwTT7Yqz+
-         t085A4waimZ9Yc/uHPaUG6rWcO8PGISF0oRSksRxD91hjRrHSXZbyOPsuYXWpf6T08
-         th57evb2+R/HA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 13ED75C06AE; Fri,  7 Oct 2022 12:56:29 -0700 (PDT)
-Date:   Fri, 7 Oct 2022 12:56:29 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org,
-        youssefesmat@google.com, surenb@google.com
-Subject: Re: [PATCH v7 10/11] scsi/scsi_error: Use call_rcu_flush() instead
- of call_rcu()
-Message-ID: <20221007195629.GK4196@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <Y0BfvzpF1DE10nOg@google.com>
- <00F8CD19-98E7-4CEB-AC8E-4E86642E91A7@joelfernandes.org>
- <20221007175208.GI4196@paulmck-ThinkPad-P17-Gen-1>
- <Y0B+CqZVP3bqQyn5@google.com>
+        Fri, 7 Oct 2022 15:59:17 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9225112BBB7
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 12:59:15 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id n12so8713612wrp.10
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 12:59:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xLhn5O0s6mSFDFd2G8Z0EYT0Ydw1EQtGD2+/PxXPLis=;
+        b=QAmNy9rf42OQPRWeyaysdE9sgBqnfT0EsiVmNqxUApUpcD3JoyNd7oY+okGu+mnnLM
+         sp30NA+bhqg+RJe7YB10fP5yJK3O6UN+WCMjk74ABVldfWTk4bixkP7VlA9rC6A4pvrE
+         44jHcH0NTct8Qenh18oHGNa9Hxc8g4d678HevrOY1R7eV8lV7yfztZcwP1vUQwnfRlnt
+         qHRRTaA37jbrWv5dgmlziYpf8jBtgx/61PBB4uU5DNMgV16wj7CxiF63vjSdPxyZe+tU
+         O9j/02HCOJdNI36FaWfIBiq0ZJG4L5QNYj4fb+Hn2/QEx3kGMyoJSxmMrKb82T59i4iR
+         v+CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xLhn5O0s6mSFDFd2G8Z0EYT0Ydw1EQtGD2+/PxXPLis=;
+        b=7OnngZsody8Xlo7fb2yRR+Ni9WmnGSLpqcBGiX5Sy2kR4qF+hdpyZ/PqkSWGfwGFSc
+         sLNGCldqfq4CCc04+EMu1wUJdVVQqKndM6NWF3SvDMjVi+oEJt/D4ZmcjX5dXBugZ9dx
+         9zev2dEehVwrH1mB3gwwMr0Ed461m6o3Ykl6o5dA2zLb1fRuAM5/TCp4pfm9r8N+Lj1h
+         fdwzW3vQ1etEh0wSxtj6dENUQcBkip0HeahkJ1KWLjA1uaSgFI1nZUS37nlwh0kThrCL
+         HaqCBKtCqrKAtl8GoZYchjg+X1QEHstxEkx9HObsSxnNKKJoalQdFmydBhx1B/+DnAfF
+         PgtA==
+X-Gm-Message-State: ACrzQf1w2EsY55MuscaDPvvLNOWg9fELeHUW0Cd9Y6q6oYD6g6dvhc1n
+        qTj8Eh9HC/YvWqqZAUPVVW2CbxIxojsq/w==
+X-Google-Smtp-Source: AMsMyM7DROCnW8ScMO/J45oKbClHQqsXWFqyJIf/V5IJUedp9vgiyPVmWDXDPg/NuZQfWba29WTqcA==
+X-Received: by 2002:adf:e309:0:b0:22c:c332:9af7 with SMTP id b9-20020adfe309000000b0022cc3329af7mr4411249wrj.217.1665172754033;
+        Fri, 07 Oct 2022 12:59:14 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:5a9e:bab6:45e8:abe8])
+        by smtp.gmail.com with ESMTPSA id u9-20020a5d4349000000b0022cdb687bf9sm3720822wrr.0.2022.10.07.12.59.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 12:59:13 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [GIT PULL] gpio: updates for v6.1-rc1
+Date:   Fri,  7 Oct 2022 21:59:06 +0200
+Message-Id: <20221007195906.350225-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y0B+CqZVP3bqQyn5@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 07:29:14PM +0000, Joel Fernandes wrote:
-> On Fri, Oct 07, 2022 at 10:52:08AM -0700, Paul E. McKenney wrote:
-> > On Fri, Oct 07, 2022 at 01:31:23PM -0400, Joel Fernandes wrote:
-> > > 
-> > > 
-> > > > On Oct 7, 2022, at 1:19 PM, Joel Fernandes <joel@joelfernandes.org> wrote:
-> > > > 
-> > > > ﻿On Fri, Oct 07, 2022 at 03:18:26AM +0000, Joel Fernandes wrote:
-> > > >>> On Tue, Oct 04, 2022 at 02:41:56AM +0000, Joel Fernandes (Google) wrote:
-> > > >>> From: Uladzislau Rezki <urezki@gmail.com>
-> > > >>> 
-> > > >>> Slow boot time is seen on KVM running typical Linux distributions due to
-> > > >>> SCSI layer calling call_rcu(). Recent changes to save power may be
-> > > >>> causing this slowness. Using call_rcu_flush() fixes the issue and brings
-> > > >>> the boot time back to what it originally was. Convert it.
-> > > >>> 
-> > > >>> Signed-off-by: Uladzislau Rezki <urezki@gmail.com>
-> > > >>> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > > >> 
-> > > >> And I successfully setup Debian on KVM and verified that this fixes it, so
-> > > >> now I have a nice reproducible rig for my
-> > > >> 'lazy-callback-doing-a-wakeup-detector' (I wrote half the detector thanks to
-> > > >> ideas from Steve, and will finish the other half tomorrow or so).
-> > > >> 
-> > > >> Tested-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > > > 
-> > > > Looks like I can catch Vlad's issue with the below patch. Thoughts? Does this
-> > > > look reasonable for mainline? (I think so as it is self-contained and the
-> > > > debug option is default off, and could be useful down the line).
-> > 
-> > Excellent as a debug patch!!!  Let's see how it goes -- if it proves
-> > sufficiently useful, some form should go into mainline.  Or at least
-> > be feature prominently somewhere public.
-> 
-> Ok that sounds good.
-> 
-> > > > [    6.887033 ] rcu: *****************************************************
-> > > > [    6.891242 ] rcu: RCU: A wake up has been detected from a lazy callback!
-> > > > [    6.895377 ] rcu: The callback name is: scsi_eh_inc_host_failed
-> > > > [    6.899084 ] rcu: The task it woke up is: scsi_eh_1 (61)
-> > > > [    6.902405 ] rcu: This could cause performance issues! Check the stack.
-> > > > [    6.906532 ] rcu: *****************************************************
-> > > > 
-> > > > 
-> > > > [   17.127128 ] rcu: *****************************************************
-> > > > [   17.131397 ] rcu: RCU: A wake up has been detected from a lazy callback!
-> > > > [   17.135703 ] rcu: The callback name is: scsi_eh_inc_host_failed
-> > > > [   17.139485 ] rcu: The task it woke up is: scsi_eh_1 (61)
-> > > > [   17.142828 ] rcu: This could cause performance issues! Check the stack.
-> > > > [   17.146962 ] rcu: *****************************************************
-> > > > 
-> > > > And thanks to Steve for the binary search code.
-> > > > 
-> > > > One thing I found is I have to ignore kworkers because there are times when a
-> > > > work item is queued from a callback and those callbacks don't seem to
-> > > > contribute to performance issues. So I am filtering these:
-> > > > 
-> > > > [   38.631724 ] rcu: The callback name is: thread_stack_free_rcu
-> > > > [   38.635317 ] rcu: The task it woke up is: kworker/3:2 (143)
-> > > > 
-> > > > [   39.649332 ] rcu: The callback name is: delayed_put_task_struct
-> > > > [   39.653037 ] rcu: The task it woke up is: kworker/0:1 (40)
-> > > > 
-> > > > ---8<-----------------------
-> > > > 
-> > > > From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
-> > > > Subject: [PATCH] lazy wake debug
-> > > > 
-> > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > > > ---
-> > > > kernel/rcu/Kconfig      |   7 ++
-> > > > kernel/rcu/lazy-debug.h | 149 ++++++++++++++++++++++++++++++++++++++++
-> > > > kernel/rcu/tree.c       |   9 +++
-> > > > 3 files changed, 165 insertions(+)
-> > > > create mode 100644 kernel/rcu/lazy-debug.h
-> > > > 
-> > > > diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-> > > > index edd632e68497..08c06f739187 100644
-> > > > --- a/kernel/rcu/Kconfig
-> > > > +++ b/kernel/rcu/Kconfig
-> > > > @@ -322,4 +322,11 @@ config RCU_LAZY
-> > > >      To save power, batch RCU callbacks and flush after delay, memory
-> > > >      pressure or callback list growing too big.
-> > > > 
-> > > > +config RCU_LAZY_DEBUG
-> > > > +    bool "RCU callback lazy invocation debugging"
-> > > > +    depends on RCU_LAZY
-> > > > +    default n
-> > > > +    help
-> > > > +      Debugging to catch issues caused by delayed RCU callbacks.
-> > > > +
-> > > > endmenu # "RCU Subsystem"
-> > > > diff --git a/kernel/rcu/lazy-debug.h b/kernel/rcu/lazy-debug.h
-> > > > new file mode 100644
-> > > > index 000000000000..fc1cc1cb89f0
-> > > > --- /dev/null
-> > > > +++ b/kernel/rcu/lazy-debug.h
-> > > > @@ -0,0 +1,149 @@
-> > > > +#include <linux/string.h>
-> > > > +#include <linux/spinlock.h>
-> > > > +
-> > > > +#ifdef CONFIG_RCU_LAZY_DEBUG
-> > > > +#include <linux/preempt.h>
-> > > > +#include <trace/events/sched.h>
-> > > > +
-> > > > +static DEFINE_PER_CPU(bool, rcu_lazy_cb_exec) = false;
-> > > > +static DEFINE_PER_CPU(void *, rcu_lazy_ip) = NULL;
-> > > > +
-> > > > +static DEFINE_RAW_SPINLOCK(lazy_funcs_lock);
-> > > > +
-> > > > +#define FUNC_SIZE 1024
-> > > 
-> > > And I know this array can overflow in the future so I will add checks for that in the code if we are going with this patch.
-> > 
-> > I believe that there are fewer than 300 RCU callback functions, but yes,
-> > there would need to at least be a check at some point.
-> > 
-> > I still strongly suggest the static search in addition to this.  Yes, this
-> > is a cool patch, but it should be mostly used for the difficult-to-find
-> > instances.
-> 
-> I wrote some scripts shared below (could be improves) which search for "wake"
-> in code following an RCU callback's reference. This catches SCSI too but I
-> did find one more:
-> 
-> (1)
-> rxrpc_destroy_connection()
-> 
-> 	which does:
-> 	wake_up_var(&conn->params.local->rxnet->nr_conns);
-> 
-> 
-> I think I'll change this to call_rcu_flush() to be safe.
-> 
-> ========
-> 
-> All others are harmless / false-positives which I inspected and didn't have
-> anything concerning.
+Linus,
 
-Very good, and thank you for doing this!
+Here's the main pull-request from the GPIO subsystem for this merge window.
+We have a single new driver, support for a bunch of new models, improvements
+in drivers and core gpiolib code as well device-tree bindings changes.
 
-Maybe include the script in the cover letter of the next version?
+Details are in the signed tag.
 
-							Thanx, Paul
+Please pull.
+Bartosz Golaszewski
 
-> ---8<-----------------------
-> 
-> From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
-> Subject: [PATCH] debug: look for wake references after rcu callback body
-> 
-> First run search-call-rcu.sh which generates some files, then run
-> search-wakers.sh to see the references to wake.
-> 
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
->  search-call-rcu.sh | 19 +++++++++++++++++++
->  search-wakers.sh   | 15 +++++++++++++++
->  2 files changed, 34 insertions(+)
->  create mode 100755 search-call-rcu.sh
->  create mode 100755 search-wakers.sh
-> 
-> diff --git a/search-call-rcu.sh b/search-call-rcu.sh
-> new file mode 100755
-> index 000000000000..21406355888c
-> --- /dev/null
-> +++ b/search-call-rcu.sh
-> @@ -0,0 +1,19 @@
-> +#!/bin/bash
-> +
-> +rm func-list
-> +touch func-list
-> +
-> +for f in $(find . \( -name "*.c" -o -name "*.h" \) | grep -v rcu); do
-> +
-> +	funcs=$(perl -0777 -ne 'while(m/call_rcu\([&]?.+,\s?(.+)\).*;/g){print "$1\n";}' $f)
-> +
-> +	if [ "x$funcs" != "x" ]; then
-> +		for func in $funcs; do
-> +			echo "$f $func" >> func-list
-> +			echo "$f $func"
-> +		done
-> +	fi
-> +
-> +done
-> +
-> +cat func-list | sort | uniq | tee func-list-sorted
-> diff --git a/search-wakers.sh b/search-wakers.sh
-> new file mode 100755
-> index 000000000000..a96d60a7e16b
-> --- /dev/null
-> +++ b/search-wakers.sh
-> @@ -0,0 +1,15 @@
-> +#!/bin/bash
-> +
-> +while read fl; do
-> +	file=$(echo $fl | cut -d " " -f1)
-> +	func=$(echo $fl | cut -d " " -f2)
-> +
-> +	grep -A 30 $func $file | grep wake > /dev/null
-> +
-> +	if [ $? -eq 0 ]; then
-> +		echo "keyword wake found after function reference $func in $file"
-> +		echo "Output:"
-> +		grep -A 30 $func $file 
-> +		echo "==========================================================="
-> +	fi
-> +done < func-list-sorted
-> -- 
-> 2.38.0.rc1.362.ged0d419d3c-goog
-> 
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio-updates-for-v6.1-rc1
+
+for you to fetch changes up to 3c92506d86785967fd7e7933e04491b9276c2f00:
+
+  gpio: tc3589x: Make irqchip immutable (2022-10-03 20:56:46 +0200)
+
+----------------------------------------------------------------
+gpio updates for v6.1-rc1
+
+New drivers:
+- add a new driver for the IMX System Controller Unit GPIOs
+
+GPIO core:
+- add fdinfo output for the GPIO character device file descriptors (allows
+  user-space to determine which processes own which GPIO lines)
+- improvements to OF GPIO code
+- new quirk for Asus UM325UAZ in gpiolib-acpi
+- new quirk for Freescale SPI in gpiolib-of
+
+Driver improvements:
+- add a new macro that reduces the amount of boilerplate code in ISA drivers
+  and use it in relevant drivers
+- support two new models in gpio-pca953x
+- support new model in gpio-f7188x
+- convert more drivers to use immutable irq chips
+- other minor tweaks
+
+Device-tree bindings:
+- add DT bindings for gpio-imx-scu
+- convert Xilinx GPIO bindings to YAML
+- reference the properties from the SPI peripheral device-tree bindings
+  instead of providing custom ones in the GPIO controller document
+- add parsing of GPIO hog nodes to the DT bindings for gpio-mpfs-gpio
+- relax the node name requirements in gpio-stmpe
+- add new models for gpio-rcar and gpio-pxa95xx
+- add a new vendor prefix: Diodes (for Diodes, Inc.)
+
+Misc:
+- pulled in the immutable branch from the x86 platform drivers tree including
+  support for a new simatic board that depends on GPIO changes
+
+----------------------------------------------------------------
+Bartosz Golaszewski (3):
+      Merge tag 'platform-drivers-x86-simatec-1' of git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86 into gpio/for-next
+      Merge tag 'intel-gpio-v6.1-1' of gitolite.kernel.org:pub/scm/linux/kernel/git/andy/linux-gpio-intel into gpio/for-next
+      gpiolib: cdev: add fdinfo output for line request file descriptors
+
+Conor Dooley (1):
+      dt-bindings: gpio: mpfs-gpio: allow parsing of hog child nodes.
+
+Dmitry Torokhov (5):
+      gpiolib: make fwnode_get_named_gpiod() static
+      gpiolib: of: do not ignore requested index when applying quirks
+      gpiolib: of: make Freescale SPI quirk similar to all others
+      gpiolib: rework quirk handling in of_find_gpio()
+      gpiolib: of: factor out conversion from OF flags
+
+Francesco Dolcini (1):
+      dt-bindings: gpio: stmpe: Remove node name requirement
+
+Geert Uytterhoeven (1):
+      dt-bindings: gpio: renesas,rcar-gpio: Add r8a779g0 support
+
+Henning Schild (7):
+      gpio-f7188x: switch over to using pr_fmt
+      gpio-f7188x: add a prefix to macros to keep gpio namespace clean
+      gpio-f7188x: Add GPIO support for Nuvoton NCT6116
+      gpio-f7188x: use unique labels for banks/chips
+      leds: simatic-ipc-leds-gpio: add new model 227G
+      platform/x86: simatic-ipc: enable watchdog for 227G
+      platform/x86: simatic-ipc: add new model 427G
+
+Jeffy Chen (1):
+      gpio/rockchip: Convert to generic_handle_domain_irq()
+
+Krzysztof Kozlowski (1):
+      dt-bindings: gpio: fairchild,74hc595: use spi-peripheral-props.yaml
+
+Linus Walleij (2):
+      gpio: ucb1400: Use proper header
+      gpio: tc3589x: Make irqchip immutable
+
+Mario Limonciello (2):
+      gpiolib: acpi: Add support to ignore programming an interrupt
+      gpiolib: acpi: Add a quirk for Asus UM325UAZ
+
+Martyn Welch (5):
+      dt-bindings: vendor-prefixes: add Diodes
+      dt-bindings: gpio: pca95xx: add entry for pcal6534 and PI4IOE5V6534Q
+      gpio: pca953x: Fix pca953x_gpio_set_pull_up_down()
+      gpio: pca953x: Swap if statements to save later complexity
+      gpio: pca953x: Add support for PCAL6534
+
+Michael Walle (1):
+      gpiolib: fix OOB access in quirk callbacks
+
+Nate Drude (2):
+      dt-bindings: gpio: pca95xx: add entry for pcal6408
+      gpio: pca953x: introduce support for nxp,pcal6408
+
+Qingtao Cao (1):
+      gpio: exar: access MPIO registers on cascaded chips
+
+Sergio Paracuellos (1):
+      gpio: mt7621: Switch to use platform_get_irq() function
+
+Shenwei Wang (3):
+      dt-bindings: gpio: Add imx scu gpio driver bindings
+      dt-bindings: firmware: imx: Add imx-scu gpio node
+      gpio: imx-scu: add imx-scu GPIO driver
+
+Srinivas Neeli (1):
+      dt-bindings: gpio: gpio-xilinx: Convert Xilinx axi gpio binding to YAML
+
+Uwe Kleine-König (1):
+      gpio: twl4030: Reorder functions which allows to drop a forward declaraion
+
+William Breathitt Gray (6):
+      isa: Introduce the module_isa_driver_with_irq helper macro
+      counter: 104-quad-8: Ensure number of irq matches number of base
+      gpio: 104-dio-48e: Ensure number of irq matches number of base
+      gpio: 104-idi-48: Ensure number of irq matches number of base
+      gpio: 104-idio-16: Ensure number of irq matches number of base
+      gpio: ws16c48: Ensure number of irq matches number of base
+
+ .../devicetree/bindings/firmware/fsl,scu.yaml      |   5 +
+ .../bindings/gpio/fairchild,74hc595.yaml           |   7 +-
+ .../bindings/gpio/fsl,imx8qxp-sc-gpio.yaml         |  39 +++
+ .../devicetree/bindings/gpio/gpio-pca95xx.yaml     |  99 ++++----
+ .../devicetree/bindings/gpio/gpio-stmpe.txt        |   3 +-
+ .../devicetree/bindings/gpio/gpio-xilinx.txt       |  48 ----
+ .../bindings/gpio/microchip,mpfs-gpio.yaml         |  18 ++
+ .../bindings/gpio/renesas,rcar-gpio.yaml           |   1 +
+ .../devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml | 154 ++++++++++++
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ drivers/counter/104-quad-8.c                       |   5 +-
+ drivers/gpio/Kconfig                               |   7 +-
+ drivers/gpio/Makefile                              |   1 +
+ drivers/gpio/gpio-104-dio-48e.c                    |   5 +-
+ drivers/gpio/gpio-104-idi-48.c                     |   5 +-
+ drivers/gpio/gpio-104-idio-16.c                    |   5 +-
+ drivers/gpio/gpio-exar.c                           |  40 ++-
+ drivers/gpio/gpio-f7188x.c                         | 275 ++++++++++++---------
+ drivers/gpio/gpio-imx-scu.c                        | 139 +++++++++++
+ drivers/gpio/gpio-mt7621.c                         |   7 +-
+ drivers/gpio/gpio-pca953x.c                        | 177 ++++++++++---
+ drivers/gpio/gpio-rockchip.c                       |  21 +-
+ drivers/gpio/gpio-tc3589x.c                        |   8 +-
+ drivers/gpio/gpio-twl4030.c                        |  26 +-
+ drivers/gpio/gpio-ucb1400.c                        |   1 +
+ drivers/gpio/gpio-ws16c48.c                        |   5 +-
+ drivers/gpio/gpiolib-acpi.c                        |  38 ++-
+ drivers/gpio/gpiolib-cdev.c                        |  18 ++
+ drivers/gpio/gpiolib-of.c                          | 184 ++++++--------
+ drivers/gpio/gpiolib.c                             | 132 +++++-----
+ drivers/leds/simple/simatic-ipc-leds-gpio.c        |  42 +++-
+ drivers/platform/x86/simatic-ipc.c                 |  10 +-
+ include/linux/gpio/consumer.h                      |  13 -
+ include/linux/isa.h                                |  52 +++-
+ include/linux/platform_data/x86/simatic-ipc-base.h |   1 +
+ include/linux/platform_data/x86/simatic-ipc.h      |   2 +
+ include/linux/ucb1400.h                            |   2 +-
+ 37 files changed, 1089 insertions(+), 508 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/gpio/fsl,imx8qxp-sc-gpio.yaml
+ delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-xilinx.txt
+ create mode 100644 Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml
+ create mode 100644 drivers/gpio/gpio-imx-scu.c
