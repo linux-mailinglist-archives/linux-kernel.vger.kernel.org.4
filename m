@@ -2,178 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64DBF5F77A1
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 13:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 638125F77AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 13:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiJGLrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 07:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
+        id S229569AbiJGLwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 07:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiJGLrD (ORCPT
+        with ESMTP id S229494AbiJGLwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 07:47:03 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D049E0D2
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 04:47:02 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oglof-0001AS-BC; Fri, 07 Oct 2022 13:46:57 +0200
-Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1ogloe-0005lQ-2k; Fri, 07 Oct 2022 13:46:56 +0200
-Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oglod-00BXDN-98; Fri, 07 Oct 2022 13:46:55 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     linux-gpio@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, kernel@pengutronix.de,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v5 2/2] dt-bindings: gpio: Add gpio-latch binding document
-Date:   Fri,  7 Oct 2022 13:46:47 +0200
-Message-Id: <20221007114647.2723457-3-s.hauer@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221007114647.2723457-1-s.hauer@pengutronix.de>
-References: <20221007114647.2723457-1-s.hauer@pengutronix.de>
+        Fri, 7 Oct 2022 07:52:02 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CCEB7ECB;
+        Fri,  7 Oct 2022 04:52:00 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id e129so4443110pgc.9;
+        Fri, 07 Oct 2022 04:52:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=US3Gb047SY8Dq4+eZYrFm7pCYLCCqm5ow/t9m2ICNWQ=;
+        b=SAknEYDrNdrqAMzs7OhKIzQZfKbR2T+lY36/60vHTGYv9PIKFpzA+Acn/I0djXEHbu
+         mKkq6CPFcqt50Zn5OHGXU16oDhZ+rNajeqCypfD0nrbOBln5h/b66KWQkMf7npSYmX4Y
+         1gUUluiiQ1fA7d7gb6HQ2Y7q4FVGhRfGYtImTAuIZplJEGCFkdslARV8OcKTCqwDb+ii
+         C2bnc6dZ1qAQ3EvHEE9Rri62nx1t0FOKxXAwf90irjfNYuDsA4ehy19894ohiCTC6xj/
+         hYnWGTDXxBYjo1B3YOGm2zYpWUH0cdYOJRwpKOSjoCQ9Wrzq3MamEO7wed/d8x/q8BaJ
+         Dtrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=US3Gb047SY8Dq4+eZYrFm7pCYLCCqm5ow/t9m2ICNWQ=;
+        b=zZS8RyP62QUBkXo+DOigxEEa0BjKmUc4tVfWfDdmexxp/03QiPOoQ7xF8484TJNq+O
+         j5r5/nPia/XKS9hPj8NrkvJNetFaMu73oIrmsapIv10zb205nXRxHpFjaH2/VXwY9CjV
+         1aA6bok/gWMBGuVulzd6bEc/MJl3/uXnTtniLkoxN2Lw42ez+K25nyAtzPp8s+4QRlaU
+         OhCtDfPwmawIl03D7c8J4lTilK8xW1GvzfoPQC2shzu9OOO4dkQ9FT3iKvr4ZZoALzZz
+         xJKlu/IfJiuubuLeMAqecwebpyBNexiCzwo8P1PLv9fWXu+yxz3yIgDG12Up88hZfvU0
+         4HUQ==
+X-Gm-Message-State: ACrzQf2w8DLY6Y5WaLRb7zxBIsadnI5A4WnVA+DYVFkD+Sb4ls03+Ieg
+        ZbPhrMxRE/nQz9D+SAWOZnw1FvN6OpQES6NEdFc=
+X-Google-Smtp-Source: AMsMyM5bKM2n6T9R0fdy+E1igkb+3XmtmmLUSaAs2cCs5UN+499nLVCEvgNIqFTs88aNq59nky0o/a3tEdudon8s7+4=
+X-Received: by 2002:a62:144b:0:b0:562:38de:9a0e with SMTP id
+ 72-20020a62144b000000b0056238de9a0emr4845862pfu.78.1665143520248; Fri, 07 Oct
+ 2022 04:52:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221007111442.51481-1-a5b6@riseup.net> <20221007111442.51481-2-a5b6@riseup.net>
+In-Reply-To: <20221007111442.51481-2-a5b6@riseup.net>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Fri, 7 Oct 2022 08:51:45 -0300
+Message-ID: <CAOMZO5C3PgvV6uoOZ_2iO8=QpE6bHzquo-hxNV4QgX6EmpcUGQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] drivers: gpu: drm: add driver for samsung
+ s6e3fc2x01 cmd mode panel
+To:     Nia Espera <a5b6@riseup.net>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Caleb Connolly <caleb@connolly.tech>,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds a binding for a GPIO multiplexer driver based on latches
-connected to other GPIOs.
+Hi Nia,
 
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
+On Fri, Oct 7, 2022 at 8:16 AM Nia Espera <a5b6@riseup.net> wrote:
 
-Notes:
-    Changes since v3:
-    - Introduce delays between GPIO toggles as suggested by Serge Semin
-    
-    Changes since v1:
-    - Add license to binding file
+> +static int samsung_s6e3fc2x01_prepare(struct drm_panel *panel)
+> +{
+> +       struct samsung_s6e3fc2x01 *ctx = to_samsung_s6e3fc2x01(panel);
+> +       struct device *dev = &ctx->dsi->dev;
+> +       int ret;
+> +
+> +       if (ctx->prepared)
+> +               return 0;
+> +
+> +       ret = regulator_enable(ctx->supply);
+> +       if (ret < 0) {
+> +               dev_err(dev, "Failed to enable regulator: %d\n", ret);
+> +               return ret;
+> +       }
+> +
+> +       samsung_s6e3fc2x01_reset(ctx);
+> +
+> +       ret = samsung_s6e3fc2x01_on(ctx);
+> +       if (ret < 0) {
+> +               dev_err(dev, "Failed to initialize panel: %d\n", ret);
+> +               gpiod_set_value_cansleep(ctx->reset_gpio, 1);
 
- .../devicetree/bindings/gpio/gpio-latch.yaml  | 94 +++++++++++++++++++
- 1 file changed, 94 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/gpio/gpio-latch.yaml
+You should also call regulator_disable() here in the case of failure.
 
-diff --git a/Documentation/devicetree/bindings/gpio/gpio-latch.yaml b/Documentation/devicetree/bindings/gpio/gpio-latch.yaml
-new file mode 100644
-index 0000000000000..1ed82a2cebdaa
---- /dev/null
-+++ b/Documentation/devicetree/bindings/gpio/gpio-latch.yaml
-@@ -0,0 +1,94 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/gpio/gpio-latch.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: GPIO latch controller
-+
-+maintainers:
-+  - Sascha Hauer <s.hauer@pengutronix.de>
-+
-+description: |
-+  This binding describes a GPIO multiplexer based on latches connected to
-+  other GPIOs, like this:
-+
-+  CLK0 ----------------------.        ,--------.
-+  CLK1 -------------------.  `--------|>    #0 |
-+                          |           |        |
-+  OUT0 ----------------+--|-----------|D0    Q0|-----|<
-+  OUT1 --------------+-|--|-----------|D1    Q1|-----|<
-+  OUT2 ------------+-|-|--|-----------|D2    Q2|-----|<
-+  OUT3 ----------+-|-|-|--|-----------|D3    Q3|-----|<
-+  OUT4 --------+-|-|-|-|--|-----------|D4    Q4|-----|<
-+  OUT5 ------+-|-|-|-|-|--|-----------|D5    Q5|-----|<
-+  OUT6 ----+-|-|-|-|-|-|--|-----------|D6    Q6|-----|<
-+  OUT7 --+-|-|-|-|-|-|-|--|-----------|D7    Q7|-----|<
-+         | | | | | | | |  |           `--------'
-+         | | | | | | | |  |
-+         | | | | | | | |  |           ,--------.
-+         | | | | | | | |  `-----------|>    #1 |
-+         | | | | | | | |              |        |
-+         | | | | | | | `--------------|D0    Q0|-----|<
-+         | | | | | | `----------------|D1    Q1|-----|<
-+         | | | | | `------------------|D2    Q2|-----|<
-+         | | | | `--------------------|D3    Q3|-----|<
-+         | | | `----------------------|D4    Q4|-----|<
-+         | | `------------------------|D5    Q5|-----|<
-+         | `--------------------------|D6    Q6|-----|<
-+         `----------------------------|D7    Q7|-----|<
-+                                      `--------'
-+
-+  The number of clk-gpios and latched-gpios is not fixed. The actual number
-+  of number of latches and the number of inputs per latch is derived from
-+  the number of GPIOs given in the corresponding device tree properties.
-+
-+properties:
-+  compatible:
-+    const: gpio-latch
-+  "#gpio-cells":
-+    const: 2
-+
-+  clk-gpios:
-+    description: Array of GPIOs to be used to clock a latch
-+
-+  latched-gpios:
-+    description: Array of GPIOs to be used as inputs per latch
-+
-+  setup-duration-ns:
-+    description: Delay in nanoseconds to wait after the latch inputs have been
-+      set up
-+
-+  clock-duration-ns:
-+    description: Delay in nanoseconds to wait between clock output changes
-+
-+  gpio-controller: true
-+
-+  gpio-line-names: true
-+
-+required:
-+  - compatible
-+  - "#gpio-cells"
-+  - gpio-controller
-+  - clk-gpios
-+  - latched-gpios
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    gpio-latch {
-+        #gpio-cells = <2>;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&pinctrl_di_do_leds>;
-+        compatible = "gpio-latch";
-+        gpio-controller;
-+        setup-duration-ns = <100>;
-+        clock-duration-ns = <100>;
-+
-+        clk-gpios = <&gpio3 7 0>, <&gpio3 8 0>;
-+        latched-gpios = <&gpio3 21 0>, <&gpio3 22 0>,
-+                       <&gpio3 23 0>, <&gpio3 24 0>,
-+                       <&gpio3 25 0>, <&gpio3 26 0>,
-+                       <&gpio3 27 0>, <&gpio3 28 0>;
-+    };
--- 
-2.30.2
+> +static int samsung_s6e3fc2x01_unprepare(struct drm_panel *panel)
+> +{
+> +       struct samsung_s6e3fc2x01 *ctx = to_samsung_s6e3fc2x01(panel);
+> +       struct device *dev = &ctx->dsi->dev;
+> +       int ret;
+> +
+> +       if (!ctx->prepared)
+> +               return 0;
+> +
+> +       ret = samsung_s6e3fc2x01_off(ctx);
+> +       if (ret < 0)
+> +               dev_err(dev, "Failed to un-initialize panel: %d\n", ret);
+> +
+> +       gpiod_set_value_cansleep(ctx->reset_gpio, 1);
 
+regulator_disable() should be called here as well.
