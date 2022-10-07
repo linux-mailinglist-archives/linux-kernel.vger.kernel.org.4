@@ -2,162 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF685F810C
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 01:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EED1B5F8114
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 01:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbiJGXKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 19:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
+        id S229689AbiJGXRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 19:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiJGXKS (ORCPT
+        with ESMTP id S229511AbiJGXRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 19:10:18 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7099B6685C;
-        Fri,  7 Oct 2022 16:10:15 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id b2so14291298eja.6;
-        Fri, 07 Oct 2022 16:10:15 -0700 (PDT)
+        Fri, 7 Oct 2022 19:17:40 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBADD8B2C2
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 16:17:37 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id 10so5880958pli.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 16:17:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Ff2Jx6NqQG39IX2GQ6H1L2VLrUXyrTBZ4zR3/wpS5c=;
-        b=TQ5hNUCStSck7y6p1Whdcoa73KeayH7AuFrs4Vax9jNIbKtGXCBkCEef+hIQ6xnu6w
-         aY6IcLczj5cWmILYkbZMZaw6BHtJhX2V8pDIHgxKM1RCwqIWlJ6tztZ+WHlvDEn4BbOF
-         4BehIlne49rE5evLVCO4K6HEIE6T82rct3LWJ4v4FWAdYL7dtxuWU7GHfd3EGTZ0rIJd
-         QiMBMCxMdf1KlekypSIKA9AqbHlSHjBwglLu93SNbeCKQT3cHDSyNB60YyHvYAk7Kkiy
-         aQGHJkPQhA20ArdgC6nmOEzUQn/wlcvveoO0fUq86m528h50e1qBUJEhMuMLTpfmMtCh
-         padQ==
+        bh=3VntPma6h9YXldWusKRirKa+AxvzlFLxSpnoOOvfbEY=;
+        b=Lw5fVRNuMGTXDOBUV8sWh1sbwxiATNyFn5sU8LQHGlrdcjl2RO1zQMGM4h2Tmbbrg/
+         dzR4AX2LEsdqHpEtq2VXT1AktDCi/eAxuoTHKd+2004AmAbkDVEQ2gpm5lwFjwdNDPKc
+         hc/pJ0qDS8e7vs4IkKY5iNoPL2VqtIZCdDMlc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+Ff2Jx6NqQG39IX2GQ6H1L2VLrUXyrTBZ4zR3/wpS5c=;
-        b=7KtqB7u6rZyMXOrE20nHvO9nkLIHuKEoFYYyHeSMWNrO5ZDeKmJvxcyuVNtl+gpfrb
-         Q1jSAJuplmro0uiEAVcXHjQLe362R7x2HsK6F9Ee+JGCCnitr4POIxgDq2bWR6fBr6bJ
-         ulu17P2WBdONpPSnyHZlF194juVD52d6u8YDrdDcn0yx7ZXqP44WqaoEzF3RqfEeRooY
-         fRlVhfKywDwl4tYdngAEwoiaXtWQpdBOCLBfvp6nlaFH94sFlRNPBT3F4obTffdOaER4
-         15cqSU9dgBORxF+CnhNjMn37PJs9JVa2boOqZHrV3GYv0nfMH+TniwIj9D1A/0de98T3
-         ki5A==
-X-Gm-Message-State: ACrzQf2nhXbgBs+/AGjk4+D5d6uXBPZ9MJOGKZm+C+4x7Nrkpi5ZRdI7
-        Bcy0ch6bm9SaD+koQGbpEVk=
-X-Google-Smtp-Source: AMsMyM66DYwy3KBDvU1hRrO+OD2oPJcipG0iAaxGdBoANV2842BWfe3qlyxCBJ8EjIHQNyZFVsfo6Q==
-X-Received: by 2002:a17:907:3da2:b0:78d:3b45:11d9 with SMTP id he34-20020a1709073da200b0078d3b4511d9mr5812419ejc.87.1665184213952;
-        Fri, 07 Oct 2022 16:10:13 -0700 (PDT)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id p17-20020a17090653d100b0078d175d6dc5sm1815909ejo.201.2022.10.07.16.10.11
+        bh=3VntPma6h9YXldWusKRirKa+AxvzlFLxSpnoOOvfbEY=;
+        b=vadaXPbWZnInWhTaIKn20zvJwGPki3t4OCm9U27gHrltKiww25TkzsvzWwSPKGIf37
+         ihKaq+yR8jMFkNrqVWAzNbwvKdXVYV4MIB73+lgAo9DzL8af5ruSPINaYaRYapobIII7
+         rQpw4nmG8pR18vqVB1jamTMr259q+vX4vz99TpmQO02ioSZs0Upo1yP2ajoVrRyna5rR
+         WmptKnF08WfPjOMLMbs0iN5CDv1nS/870X+ZXAkTwWeRDwRxFRJAsjugk/e5v8EJdD6D
+         WUS2D1otKvYhGZXqKnPEL3RCdrwduAPomE/mqy2diw5ov3pVgVIhKnBV65Gv3jLXmzOD
+         BfTw==
+X-Gm-Message-State: ACrzQf1PNmw/NJehkDIcgwuEAKMYcUhtfG/u+6nBHLAGyBnuKrGH88lR
+        zbRYFkuJBU4iZeOhLCRCJj6K6A==
+X-Google-Smtp-Source: AMsMyM6dsbNeWBcjJm9aRIb7GnG5PGfyHyuEE4bQKFj2jK/3xPcKVdrwJUFENovkupK3JRiP3BgzWw==
+X-Received: by 2002:a17:902:b182:b0:178:8977:4013 with SMTP id s2-20020a170902b18200b0017889774013mr6762196plr.27.1665184657464;
+        Fri, 07 Oct 2022 16:17:37 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z5-20020a623305000000b00562a0c8a195sm2155931pfz.69.2022.10.07.16.17.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 16:10:12 -0700 (PDT)
-Date:   Sat, 8 Oct 2022 02:10:09 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Colin Foster <colin.foster@in-advantage.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        Fri, 07 Oct 2022 16:17:36 -0700 (PDT)
+Date:   Fri, 7 Oct 2022 16:17:35 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        linux-fsdevel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Christoph Hellwig <hch@lst.de>,
         Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH v3 net-next 12/14] dt-bindings: net: dsa: ocelot: add
- ocelot-ext documentation
-Message-ID: <20221007231009.qgcirfezgib5vu6y@skbuf>
-References: <20220926002928.2744638-1-colin.foster@in-advantage.com>
- <20220926002928.2744638-13-colin.foster@in-advantage.com>
- <ec63b5aa-3dec-3c27-e987-25e36b1632ba@linaro.org>
- <20221004121517.4j5637hnioepsxgd@skbuf>
- <6444e5d1-0fc9-03e2-9b2a-ec19fa1e7757@linaro.org>
- <20221004160135.lqugs6cf5b7fwkxq@skbuf>
- <cae8e149-ef1e-66c6-20f5-067e3fd8c586@linaro.org>
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Paul Kirth <paulkirth@google.com>
+Subject: Re: [PATCH] fs/select: avoid clang stack usage warning
+Message-ID: <202210071614.4297AB65D8@keescook>
+References: <20190307090146.1874906-1-arnd@arndb.de>
+ <20221006222124.aabaemy7ofop7ccz@google.com>
+ <c646ea1e-c860-41cf-9a8e-9abe541034ff@app.fastmail.com>
+ <CAKwvOdkEied8hf6Oid0sGf0ybF2WqrzOvtRiXa=j7Ms-Rc6uBA@mail.gmail.com>
+ <e554eb3c-d065-4aad-b6d2-a12469eaf49c@app.fastmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cae8e149-ef1e-66c6-20f5-067e3fd8c586@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <e554eb3c-d065-4aad-b6d2-a12469eaf49c@app.fastmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 05, 2022 at 10:09:06AM +0200, Krzysztof Kozlowski wrote:
-> > The /spi/soc@0 node actually has a compatible of "mscc,vsc7512" which
-> > Colin did not show in the example (it is not "simple-bus"). It is covered
-> > by Documentation/devicetree/bindings/mfd/mscc,ocelot.yaml. Still waiting
-> > for a better suggestion for how to name the mfd container node.
+On Fri, Oct 07, 2022 at 11:42:51PM +0200, Arnd Bergmann wrote:
+> On Fri, Oct 7, 2022, at 9:04 PM, Nick Desaulniers wrote:
+> > On Fri, Oct 7, 2022 at 1:28 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> >> - The behavior of -ftrivial-auto-var-init= is a bit odd here: with =zero or
+> >>   =pattern, the stack usage is just below the limit (1020), without the
+> >>   option it is up to 1044. It looks like your .config picks =zero, which
+> >>   was dropped in the latest clang version, so it falls back to not
+> >
+> > Huh? What do you mean by "was dropped?"
+> >
+> > The config I sent has:
+> > CONFIG_CC_HAS_AUTO_VAR_INIT_PATTERN=y
+> > CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO_BARE=y
+> > CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO=y
+> > # CONFIG_INIT_STACK_NONE is not set
+> > CONFIG_INIT_STACK_ALL_ZERO=y
 > 
-> Then still the /spi node does not seem related. If I understand
-> correctly, your device described in this bindings is a child of soc@0.
-> Sounds fine. How that soc@0 is connected to the parent - via SPI or
-> whatever - is not related to this binding, is it? It is related to the
-> soc binding, but not here.
+> When I use this config on my kernel tree (currently on top of
+> next-20220929 for unrelated work) and build with clang-16,
+> CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO is disabled, so it falls
+> back from CONFIG_INIT_STACK_NONE instead of the unavailable
+> CONFIG_INIT_STACK_ALL_ZERO.
 
-It's an example, it's meant to be informative. It is the first DSA
-driver of its kind. When everybody else ATM puts the ethernet-switch node
-under the &spi controller node, this puts it under &spi/soc@<chip-select>/,
-for reasons that have to do with scalability. If the examples aren't a
-good place to make this more obvious, I don't know why we don't just
-tell people to RTFD.
+I think you have a very recent Clang but are building a tree that
+doesn't have commit 607e57c6c62c ("hardening: Remove Clang's enable flag
+for -ftrivial-auto-var-init=zero").
 
-> > Unrelated to your "existing soc example" (the VSC9953), but relevant and
-> > you may want to share your opinion on this:
-> > 
-> > The same hardware present in the VSC7514 SoC can also be driven by an
-> > integrated MIPS processor, and in that case, it is indeed expected that
-> > the same dt-bindings cover both the /soc and the /spi/soc@0/ relative
-> > positioning of their OF node. This is true for simpler peripherals like
-> > "mscc,ocelot-miim", "mscc,ocelot-pinctrl", "mscc,ocelot-sgpio". However
-> > it is not true for the main switching IP of the SoC itself.
-> > 
-> > When driven by a switchdev driver, by the internal MIPS processor (the
-> > DMA engine is what is used for packet I/O), the switching IP follows the
-> > Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml binding
-> > document.
-> > 
-> > When driven by a DSA driver (external processor, host frames are
-> > redirected through an Ethernet port instead of DMA controller),
-> > the switching IP follows the Documentation/devicetree/bindings/net/dsa/mscc,ocelot.yaml
-> > document.
-> > 
-> > The switching IP is special in this regard because the hardware is not
-> > used in the same way. The DSA dt-binding also needs the 'ethernet'
-> > phandle to be present in a port node. The different placement of the
-> > bindings according to the use case of the hardware is a bit awkward, but
-> > is a direct consequence of the separation between DSA and pure switchdev
-> > drivers that has existed thus far (and the fact that DSA has its own
-> > folder in the dt-bindings, with common properties in dsa.yaml and
-> > dsa-port.yaml etc). It is relatively uncommon for a switching IP to have
-> > provisioning to be used in both modes, and for Linux to support both
-> > modes (using different drivers), yet this is what we have here.
-> 
-> Is there a question here to me? What shall I do with this paragraph? You
-> know, I do not have a problem of lack of material to read...
-
-For mscc,vsc7514-switch we have a switchdev driver. For mscc,vsc7512-switch,
-Colin is working on a DSA driver. Their dt-bindings currently live in
-different folders. The mscc,vsc7514-switch can also be used together
-with a DSA driver, and support for that will inevitably be added. When
-it will, how and where do you recommend the dt-bindings should be added?
-In net/dsa/mscc,ocelot.yaml, together with the other switches used in
-DSA mode, or in net/mscc,vsc7514-switch.yaml, because its compatible
-string already exists there? We can't have a compatible string present
-in multiple schemas, right?
-
-This matters because it has implications upon what Colin should do with
-the mscc,vsc7512-switch. If your answer to my question is "add $ref: dsa.yaml#
-to net/mscc,vsc7514-switch.yaml", then I don't see why we wouldn't do
-that now, and wait until the vsc7514 to make that move anyway.
+-- 
+Kees Cook
