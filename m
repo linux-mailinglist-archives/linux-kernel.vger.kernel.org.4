@@ -2,128 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59715F7632
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F325F763E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiJGJ0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 05:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59550 "EHLO
+        id S229695AbiJGJ23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 05:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiJGJ0M (ORCPT
+        with ESMTP id S229509AbiJGJ20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 05:26:12 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B844F2513;
-        Fri,  7 Oct 2022 02:26:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665134771; x=1696670771;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YIsvu8HuZoKfT0WBNxjXL2VasbVdSxWppe8Gs3rIq6U=;
-  b=lgV+Escms5zyViBvmedV3BHNjjb3FjjYj3Vz3SzYv4k0JXq+4hjSlm7Z
-   r4wxpTH0Ri9xpOMDvtHwj7d93ePr3ndqye1fjavDVQQ+SETk4itjJWcSm
-   wa8rwMZIT/8eJXO8VmESYry5dyAie8TXc4x4yNV3pM5aWwoQPO3bkgpkS
-   5FwlBOd0Tn2PaEuo4c362qsQW98fTFbIC1/XD4vUU2g+dv369hvJQlOyO
-   kia5cm/CgIT7PszSeLeDt+YUCfvMLXWgB9lh/d1JZONjtIsUmsVYuIlsY
-   aADoUXeW7RL6U688rIGXycyhSIPVhJPCvgocB1YG8oOBtTC77bqJsmGC+
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="302414297"
-X-IronPort-AV: E=Sophos;i="5.95,166,1661842800"; 
-   d="scan'208";a="302414297"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 02:26:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="658277156"
-X-IronPort-AV: E=Sophos;i="5.95,166,1661842800"; 
-   d="scan'208";a="658277156"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 07 Oct 2022 02:26:03 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 6645E17E; Fri,  7 Oct 2022 12:26:23 +0300 (EEST)
-Date:   Fri, 7 Oct 2022 12:26:23 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph B??hmwalder <christoph.boehmwalder@linbit.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Dave Airlie <airlied@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Westphal <fw@strlen.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Graf <tgraf@suug.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>,
-        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
-        kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        loongarch@lists.linux.dev, netdev@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org,
-        Toke H??iland-J??rgensen <toke@toke.dk>,
-        Chuck Lever <chuck.lever@oracle.com>, Jan Kara <jack@suse.cz>
-Subject: Re: [PATCH v3 3/5] treewide: use get_random_u32() when possible
-Message-ID: <Yz/wv0sqBR+J+jy+@black.fi.intel.com>
-References: <20221006165346.73159-1-Jason@zx2c4.com>
- <20221006165346.73159-4-Jason@zx2c4.com>
+        Fri, 7 Oct 2022 05:28:26 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE473B56DF
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 02:28:24 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id v134so4859057oie.10
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 02:28:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JxLAH+bnod0VfWRdnLNFFaWOZptJDJqV0Gq0f68hNdc=;
+        b=Lld1GrctRhHOLbNsUNrujKK+MA6Gux6LyL6cFvYmqezas+x2uXUh0neHffeKlflrpg
+         dZkxx8hziJWp3N7O/T/3HPCuk+wbLZG0pbMfhDNLxG9i7Pulwx7P45z/gUbRlk7cHsWM
+         OULqzB+Sd9lowQX+RG4FzxkPt0m5B6fPgGT1k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JxLAH+bnod0VfWRdnLNFFaWOZptJDJqV0Gq0f68hNdc=;
+        b=XvdaKTTxD3PAcceaTWLJkjQ2SxNiXy6tQT6gUcfWNZIkgbBflAazAsAF/DzqYE8DL0
+         /z9xZiF6HWFEa3zXsq8qJTTogQpO11nZgElAj6nmetkk3glLJ8sjn+SrseT9rXiU/sge
+         7mRT15rFcMqP4tWaYhhPizgYk7XK/gZiQ7k8b5bqbwElfZWvS7fGveVJPCmPjoYBR1xB
+         4sK+evqBA68t/X3QfkDnja+ZX6wWh5EvmoJP/vaMNH/21ByNOhPojCV+LP+p1MoypYf1
+         8PoV/yT80mLoyzsY480KsrQEPN8ek77SGmLCZTOF8oCzj9UupyDSzKgYgyicRV8Zpe8v
+         RG7Q==
+X-Gm-Message-State: ACrzQf0T2cDbT0XVSuw5uMBeYVi5UOQnkC1WshsfIWN5K2hGjxMP5MeG
+        2/YLYAZb2aWL/5TqoX8RWoBSxcExq13xDxrNRoaXXA==
+X-Google-Smtp-Source: AMsMyM4iCHqpCD5g3MdwdOFmIgnP809IboqOPrt054xZ791CkiY/TmbkuiTtOrcsRVDaXZe6VZnDY559987elRnrgWI=
+X-Received: by 2002:a05:6808:e8c:b0:354:2751:69ae with SMTP id
+ k12-20020a0568080e8c00b00354275169aemr2402247oil.228.1665134904319; Fri, 07
+ Oct 2022 02:28:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221006165346.73159-4-Jason@zx2c4.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <CAPM=9tzs4n8dDQ_XVVPS_5jrBgsNkhDQvf-B_XmUg+EG_M2i4Q@mail.gmail.com>
+ <CAHk-=whUp5Ufur6Bmv=H-rDDTNJJ-KVqOKkL+5FmR01jp0dbcA@mail.gmail.com>
+ <CADnq5_Of-8ZyBxee0fZ=0x-eV-2NX_+e9sd-9nmuHdLugSHp2g@mail.gmail.com>
+ <CAHk-=wi43xD06UgO2McDT3R=ze_aHgOGjcDOoggSwmQRv2kA+A@mail.gmail.com>
+ <CADnq5_N0Ef+1VUoDLdpHfJXqZFuPYbx5Lq+94NWciHcQC+VrMg@mail.gmail.com>
+ <CAPM=9tyAOnzwXyyPuoceZ1mimAkzxR-63YmKfVtcQX=swywNvg@mail.gmail.com>
+ <CAHk-=wgghR4N-4XWjoK18NDkvjBL7i00ab8+otQg955pNGG_dQ@mail.gmail.com> <CAKMK7uF_fKs=Ge5b3sCxa3YgWFaJsLBdCQVj+fDn6ukh9GvKKA@mail.gmail.com>
+In-Reply-To: <CAKMK7uF_fKs=Ge5b3sCxa3YgWFaJsLBdCQVj+fDn6ukh9GvKKA@mail.gmail.com>
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+Date:   Fri, 7 Oct 2022 11:28:12 +0200
+Message-ID: <CAKMK7uHsZejvVN1RcS23YsFhb4JvuScpHys17Vn+A7PirE+q1A@mail.gmail.com>
+Subject: Re: [git pull] drm for 6.1-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrey Grodzovsky <Andrey.Grodzovsky@amd.com>
+Cc:     Dave Airlie <airlied@gmail.com>,
+        Alex Deucher <alexdeucher@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 10:53:44AM -0600, Jason A. Donenfeld wrote:
->  drivers/thunderbolt/xdomain.c                  |  2 +-
+Forgot to add Andrey as scheduler maintainer.
+-Daniel
 
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+On Fri, 7 Oct 2022 at 10:16, Daniel Vetter <daniel.vetter@ffwll.ch> wrote:
+>
+> On Fri, 7 Oct 2022 at 01:45, Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > On Thu, Oct 6, 2022 at 1:25 PM Dave Airlie <airlied@gmail.com> wrote:
+> > >
+> > >
+> > > [ 1234.778760] BUG: kernel NULL pointer dereference, address: 0000000000000088
+> > > [ 1234.778813] RIP: 0010:drm_sched_job_done.isra.0+0xc/0x140 [gpu_sched]
+> >
+> > As far as I can tell, that's the line
+> >
+> >         struct drm_gpu_scheduler *sched = s_fence->sched;
+> >
+> > where 's_fence' is NULL. The code is
+> >
+> >    0: 0f 1f 44 00 00        nopl   0x0(%rax,%rax,1)
+> >    5: 41 54                push   %r12
+> >    7: 55                    push   %rbp
+> >    8: 53                    push   %rbx
+> >    9: 48 89 fb              mov    %rdi,%rbx
+> >    c:* 48 8b af 88 00 00 00 mov    0x88(%rdi),%rbp <-- trapping instruction
+> >   13: f0 ff 8d f0 00 00 00 lock decl 0xf0(%rbp)
+> >   1a: 48 8b 85 80 01 00 00 mov    0x180(%rbp),%rax
+> >
+> > and that next 'lock decl' instruction would have been the
+> >
+> >         atomic_dec(&sched->hw_rq_count);
+> >
+> > at the top of drm_sched_job_done().
+> >
+> > Now, as to *why* you'd have a NULL s_fence, it would seem that
+> > drm_sched_job_cleanup() was called with an active job. Looking at that
+> > code, it does
+> >
+> >         if (kref_read(&job->s_fence->finished.refcount)) {
+> >                 /* drm_sched_job_arm() has been called */
+> >                 dma_fence_put(&job->s_fence->finished);
+> >         ...
+> >
+> > but then it does
+> >
+> >         job->s_fence = NULL;
+> >
+> > anyway, despite the job still being active. The logic of that kind of
+> > "fake refcount" escapes me. The above looks fundamentally racy, not to
+> > say pointless and wrong (a refcount is a _count_, not a flag, so there
+> > could be multiple references to it, what says that you can just
+> > decrement one of them and say "I'm done").
+>
+> Just figured I'll clarify this, because it's indeed a bit wtf and the
+> comment doesn't explain much. drm_sched_job_cleanup can be called both
+> when a real job is being cleaned up (which holds a full reference on
+> job->s_fence and needs to drop it) and to simplify error path in job
+> constructions (and the "is this refcount initialized already" signals
+> what exactly needs to be cleaned up or not). So no race, because the
+> only times this check goes different is when job construction has
+> failed before the job struct is visible by any other thread.
+>
+> But yeah the comment could actually explain what's going on here :-)
+>
+> And yeah the patch Dave reverted screws up the cascade of references
+> that ensures this all stays alive until drm_sched_job_cleanup is
+> called on active jobs, so looks all reasonable to me. Some Kunit tests
+> maybe to exercise these corners? Not the first time pure scheduler
+> code blew up, so proably worth the effort.
+> -Daniel
+>
+> >
+> > Now, _why_ any of that happens, I have no idea. I'm just looking at
+> > the immediate "that pointer is NULL" thing, and reacting to what looks
+> > like a completely bogus refcount pattern.
+> >
+> > But that odd refcount pattern isn't new, so it's presumably some user
+> > on the amd gpu side that changed.
+> >
+> > The problem hasn't happened again for me, but that's not saying a lot,
+> > since it was very random to begin with.
+> >
+> >                  Linus
+>
+>
+>
+> --
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch
+
+
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
