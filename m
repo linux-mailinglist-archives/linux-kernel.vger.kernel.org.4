@@ -2,118 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E55A5F7307
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 05:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0E15F7309
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 05:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbiJGDF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 23:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
+        id S229581AbiJGDIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 23:08:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiJGDFd (ORCPT
+        with ESMTP id S229502AbiJGDIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 23:05:33 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E9D1BE88
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 20:05:31 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id b15so3331615pje.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 20:05:31 -0700 (PDT)
+        Thu, 6 Oct 2022 23:08:12 -0400
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0082D112A83;
+        Thu,  6 Oct 2022 20:08:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=J0flw4m11S0YkBSfXTbnOZpdPQvclpjjpCP9ZUVoipg=;
-        b=Zvkian0aIr7blYD6OMaPdxJzgrIEi3mAcpdPwjkvXe5Il6UvoATmwhKS2hmLMjMLJk
-         v4khv7zNX/u7Uft1BCXbI2vLlBkYU7emGbUkI+IsH8nBCDrANfuTK/JkNTXzsde7F9B5
-         unR1ErQrFRpu4hQ8YJxgsjq2Aa4r3XwlARx51/X+mdwfnittcqNrFxBYdUpIKSlHRh7T
-         LqxuFBVsfH98fUWXId9oCZ6Me2KDCiiToc1SmaZcUeBRBxJNTbp7NnGKUoiPAoes9JmP
-         W8s3X0WJ5M+RRALTOB4TjE0q4LE0IGH3KwjJc2h68bJt6DvxtPwdS0ztWifptNoWy8X8
-         PAPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J0flw4m11S0YkBSfXTbnOZpdPQvclpjjpCP9ZUVoipg=;
-        b=lFjC2sbMAWRCCpEgvGMLsUqxdp+oB4WcnMM3gVOh8EKPnP8MBdaX4yw1R5YPzC4MrJ
-         yyILZAvT+mCiDLTaIrQ7gYBvpMBbKkaC6rcZEMKwbpV5hItkPH/4/C8JDoO/YiV1ZqUG
-         51CLj/umyp9kQh3Z6j2m63IWEwvbdlWIiQ5MjZH0CG1L4HgPYG8FXVlCiLT7xBitMEmw
-         HBRzNztqoDj1vueIh7H1HISqIkstHnfHU6Ve8+9F7vGU0hxrmIDcprtfru9ggmjSdKSP
-         DsN9cHDzNPXKoNKDr6OaMgqXBppIeWTpmr/FmQqkO+KCMS6+xd/NsqadyoGry8HganrR
-         QkAA==
-X-Gm-Message-State: ACrzQf0Gkv592gKtOumRG8GwTPW0gFl6L7TBN54VE2x0DPrT5H+pr3Df
-        RyN/EHtb0hTZ/0heojWXZ3lViA==
-X-Google-Smtp-Source: AMsMyM6onODrgPKfFIvPd397f6B2dV1HH1hcB8Pqn6pkZPpaqhERaSy1DiQEr7M0ivHPTA39GIJuCQ==
-X-Received: by 2002:a17:90a:1c02:b0:1e0:df7:31f2 with SMTP id s2-20020a17090a1c0200b001e00df731f2mr13444790pjs.222.1665111930878;
-        Thu, 06 Oct 2022 20:05:30 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id t3-20020a17090340c300b00172e19c5f8bsm341162pld.168.2022.10.06.20.05.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 20:05:30 -0700 (PDT)
-Date:   Thu, 06 Oct 2022 20:05:30 -0700 (PDT)
-X-Google-Original-Date: Thu, 06 Oct 2022 20:05:28 PDT (-0700)
-Subject:     Re: [PATCH] riscv: enable THP_SWAP for RV64
-In-Reply-To: <Yz57T4eob3pXAVSP@wendy>
-CC:     jszhang@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     conor.dooley@microchip.com
-Message-ID: <mhng-382406aa-3eaf-4318-b5e6-9fc8a370f4d9@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1665112091; x=1696648091;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=t0TGTbCRSo1+9eDYc5/sFmyOC1mHTSsFw6KJNuqjFs0=;
+  b=gOrzGJt+mfc0H5s+tj6vMBEbnSYGwqiGtCXC1iyjUF4khUhmmVOEmK6i
+   UFj8Q0drTqt/Wbv+xj5GlprPt66jZHu8MyW7HRxcD/9S+qmwJEYenxzNd
+   sGmw9DIRxywL2icyvPTVrTsmQFDyPBjFtGYR3daDj7bVwtdjqlY0bgJy+
+   Q=;
+X-IronPort-AV: E=Sophos;i="5.95,164,1661817600"; 
+   d="scan'208";a="249322900"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-54a073b7.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 03:08:00 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-54a073b7.us-east-1.amazon.com (Postfix) with ESMTPS id 59A60846E5;
+        Fri,  7 Oct 2022 03:07:58 +0000 (UTC)
+Received: from EX19D012UWC003.ant.amazon.com (10.13.138.175) by
+ EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Fri, 7 Oct 2022 03:07:57 +0000
+Received: from EX19D021UWA002.ant.amazon.com (10.13.139.48) by
+ EX19D012UWC003.ant.amazon.com (10.13.138.175) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.12; Fri, 7 Oct 2022 03:07:57 +0000
+Received: from EX19D021UWA002.ant.amazon.com ([fe80::451a:f171:e742:d57d]) by
+ EX19D021UWA002.ant.amazon.com ([fe80::451a:f171:e742:d57d%5]) with mapi id
+ 15.02.1118.012; Fri, 7 Oct 2022 03:07:57 +0000
+From:   "Herrenschmidt, Benjamin" <benh@amazon.com>
+To:     "Bhatnagar, Rishabh" <risbhat@amazon.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "sashal@kernel.org" <sashal@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Bacco, Mike" <mbacco@amazon.com>
+Subject: Re: [PATCH 0/6] IRQ handling patches backport to 4.14 stable
+Thread-Topic: [PATCH 0/6] IRQ handling patches backport to 4.14 stable
+Thread-Index: AQHY2fn/R7SwxdIgikaLo/Tsj+ZW0w==
+Date:   Fri, 7 Oct 2022 03:07:56 +0000
+Message-ID: <58294d242fc256a48abb31926232565830197f02.camel@amazon.com>
+References: <20220929210651.12308-1-risbhat@amazon.com>
+         <YzmujBxtwUxHexem@kroah.com>
+In-Reply-To: <YzmujBxtwUxHexem@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.43.160.214]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <039754907AFB3246A4D68C57570C2BC5@amazon.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 05 Oct 2022 23:53:03 PDT (-0700), conor.dooley@microchip.com wrote:
-> On Wed, Oct 05, 2022 at 07:35:53PM -0700, Palmer Dabbelt wrote:
->> On Sun, 21 Aug 2022 10:05:59 PDT (-0700), jszhang@kernel.org wrote:
->> > I have a Sipeed Lichee RV dock board which only has 512MB DDR, so
->> > memory optimizations such as swap on zram are helpful. As is seen
->> > in commit d0637c505f8a ("arm64: enable THP_SWAP for arm64") and
->> > commit bd4c82c22c367e ("mm, THP, swap: delay splitting THP after
->> > swapped out"), THP_SWAP can improve the swap throughput significantly.
->> >
->> > Enable THP_SWAP for RV64, testing the micro-benchmark which is
->> > introduced by commit d0637c505f8a ("arm64: enable THP_SWAP for arm64")
->> > shows below numbers on the Lichee RV dock board:
->> >
->> > thp swp throughput w/o patch: 66908 bytes/ms (mean of 10 tests)
->> > thp swp throughput w/ patch: 322638 bytes/ms (mean of 10 tests)
->> >
->> > Improved by 382%!
->> >
->> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
->> > ---
->> >  arch/riscv/Kconfig | 1 +
->> >  1 file changed, 1 insertion(+)
->> >
->> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> > index ed66c31e4655..19088c750c7f 100644
->> > --- a/arch/riscv/Kconfig
->> > +++ b/arch/riscv/Kconfig
->> > @@ -45,6 +45,7 @@ config RISCV
->> >  	select ARCH_WANT_FRAME_POINTERS
->> >  	select ARCH_WANT_GENERAL_HUGETLB
->> >  	select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
->> > +	select ARCH_WANTS_THP_SWAP if TRANSPARENT_HUGEPAGE
->> >  	select BINFMT_FLAT_NO_DATA_START_OFFSET if !MMU
->> >  	select BUILDTIME_TABLE_SORT if MMU
->> >  	select CLONE_BACKWARDS
->>
->> Thanks, this is on for-next.
->
-> FYI, this is v1 of a patchset that went to v3.
-> v3 only changed the commit message, but v2 had a functional change.
->
-> v3 is here:
-> https://lore.kernel.org/all/20220829145742.3139-1-jszhang@kernel.org/
-
-Thanks, not sure why I missed those.  I've put the v3 on for-next.
+KHB1dHRpbmcgbXkgQGFtYXpvbi5jb20gaGF0IG9uKQ0KDQpPbiBTdW4sIDIwMjItMTAtMDIgYXQg
+MTc6MzAgKzAyMDAsIEdyZWcgS0ggd3JvdGU6DQoNCg0KPiBPbiBUaHUsIFNlcCAyOSwgMjAyMiBh
+dCAwOTowNjo0NVBNICswMDAwLCBSaXNoYWJoIEJoYXRuYWdhciB3cm90ZToNCj4gPiBUaGlzIHBh
+dGNoIHNlcmllcyBiYWNrcG9ydHMgYSBidW5jaCBvZiBwYXRjaGVzIHJlbGF0ZWQgSVJRIGhhbmRs
+aW5nDQo+ID4gd2l0aCByZXNwZWN0IHRvIGZyZWVpbmcgdGhlIGlycSBsaW5lIHdoaWxlIElSUSBp
+cyBpbiBmbGlnaHQgYXQgQ1BVDQo+ID4gb3IgYXQgdGhlIGhhcmR3YXJlIGxldmVsLg0KPiA+IFJl
+Y2VudGx5IHdlIHNhdyB0aGlzIGlzc3VlIGluIHNlcmlhbCA4MjUwIGRyaXZlciB3aGVyZSB0aGUg
+SVJRIHdhcw0KPiA+IGJlaW5nDQo+ID4gZnJlZWQgd2hpbGUgdGhlIGlycSB3YXMgaW4gZmxpZ2h0
+IG9yIG5vdCB5ZXQgZGVsaXZlcmVkIHRvIHRoZSBDUFUuDQo+ID4gQXMgYQ0KPiA+IHJlc3VsdCB0
+aGUgaXJxY2hpcCB3YXMgZ29pbmcgaW50byBhIHdlZGdlZCBzdGF0ZSBhbmQgSVJRIHdhcyBub3QN
+Cj4gPiBnZXR0aW5nDQo+ID4gZGVsaXZlcmVkIHRvIHRoZSBjcHUuIFRoZXNlIHBhdGNoZXMgaGVs
+cGVkIGZpeGVkIHRoZSBpc3N1ZSBpbiA0LjE0DQo+ID4ga2VybmVsLg0KPiANCj4gV2h5IGlzIHRo
+ZSBzZXJpYWwgZHJpdmVyIGZyZWVpbmcgYW4gaXJxIHdoaWxlIHRoZSBzeXN0ZW0gaXMgcnVubmlu
+Zz8NCj4gQWgsIHRoaXMgY291bGQgaGFwcGVuIG9uIGEgdHR5IGhhbmd1cCwgcmlnaHQ/DQoNClJp
+Z2h0LiBSaXNoYWJoIGFuc3dlcmVkIHRoYXQgc2VwYXJhdGVseS4NCg0KPiA+IExldCB1cyBrbm93
+IGlmIG1vcmUgcGF0Y2hlcyBuZWVkIGJhY2twb3J0aW5nLg0KPiANCj4gV2hhdCBoYXJkd2FyZSBw
+bGF0Zm9ybSB3ZXJlIHRoZXNlIHBhdGNoZXMgdGVzdGVkIG9uIHRvIHZlcmlmeSB0aGV5DQo+IHdv
+cmsgcHJvcGVybHk/wqAgQW5kIHdoeSBjYW4ndCB0aGV5IG1vdmUgdG8gNC4xOSBvciBuZXdlciBp
+ZiB0aGV5DQo+IHJlYWxseSBuZWVkIHRoaXMgZml4P8KgIFdoYXQncyBwcmV2ZW50aW5nIHRoYXQ/
+DQo+IA0KPiBBcyBBbWF6b24gZG9lc24ndCBzZWVtIHRvIGJlIHRlc3RpbmcgNC4xNC55IC1yYyBy
+ZWxlYXNlcywgSSBmaW5kIGl0DQo+IG9kZCB0aGF0IHlvdSBhbGwgZGlkIHRoaXMgYmFja3BvcnQu
+wqAgSXMgdGhpcyBhIGtlcm5lbCB0aGF0IHlvdSBhbGwNCj4gY2FyZSBhYm91dD8NCg0KVGhlc2Ug
+d2VyZSB0ZXN0ZWQgb24gYSBjb2xsZWN0aW9uIG9mIEVDMiBpbnN0YW5jZXMsIHZpcnR1YWwgYW5k
+IG1ldGFsIEkNCmJlbGlldmUgKFJpc2hhYmgsIHBsZWFzZSBjb25maXJtKS4NCg0KQW1hem9uIExp
+bnV4IDIgcnVucyA0LjE0IG9yIDUuMTAuIFVuZm9ydHVuYXRlbHkgd2Ugc3RpbGwgaGF2ZSB0bw0K
+c3VwcG9ydCBjdXN0b21lcnMgcnVubmluZyB0aGUgZm9ybWVyLg0KDQpXZSdsbCBiZSBpbmNsdWRp
+bmcgdGhlc2UgcGF0Y2hlcyBpbiBvdXIgcmVsZWFzZXMsIHdlIHRob3VnaHQgaXQgd291bGQNCmJl
+IG5pY2UgdG8gaGF2ZSB0aGVtIGluIC1zdGFibGUgYXMgd2VsbCBmb3IgdGhlIHNha2Ugb2Ygd2hv
+ZXZlciBlbHNlDQptaWdodCBiZSBzdGlsbCB1c2luZyB0aGlzIGtlcm5lbC4gTm8gaHVnZSBkZWFs
+IGlmIHRoZXkgZG9uJ3QuDQoNCkFzIGZvciB0ZXN0aW5nIC1yYydzLCB5ZXMsIHdlIG5lZWQgdG8g
+Z2V0IGJldHRlciBhdCB0aGF0IChhbmQgcHVibGlzaA0Kd2hhdCB3ZSB0ZXN0KS4gUG9pbnQgdGFr
+ZW4gOi0pDQoNCkNoZWVycywNCkJlbi4NCg0K
