@@ -2,67 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763925F7370
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 05:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B29B25F7372
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 05:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbiJGDvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 23:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40936 "EHLO
+        id S229735AbiJGDvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 23:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiJGDvd (ORCPT
+        with ESMTP id S229719AbiJGDvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 23:51:33 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F0EBE2D7
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 20:51:32 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-1326637be6eso4353009fac.13
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 20:51:32 -0700 (PDT)
+        Thu, 6 Oct 2022 23:51:41 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCDDBEAEC
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 20:51:40 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id p7so571809vsr.7
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 20:51:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ywOJjC1iAeM1WckDzdDR6XJ9UsRidM3rIQ+Y2hJNDKM=;
-        b=Cm8A2XN+mF9SQCfZ8U83Xr2/sdIj3A4gzywnUW/7Rg8Ps6TUj4mhzqhCDtGqP7rbCX
-         cR0e5rS0OPRwXdYsVNItxkjYH46iUD/Bd/+KUmlHvltKz67cwSfZ1QPHMg10zi1Iw9bm
-         vDZbb+QvIf3iyYRqE/pS19gScSSw1GkfnatsP8vKo8rbOgn6RPhSaNJX1B1SkuM2/vq7
-         1ro4NazkBLM0NjJ1s+DFBjBdE1QhYGBWWpOMpKVLCIXLv5L9XAAnJtiRU9u+E/g+SHEl
-         qm19+eysnC3NebtYzE6Z6Mi6JCPSiZIIXR689VTSW5J1/AfsM2qmJLQlgJZEeJllTKHy
-         aB6Q==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RerK2rBiuhYMfubodkZfB/ZpDqYK/wxKKL/JNwD3Q+M=;
+        b=dlmBPgiOtRxGkbv7rjlv2SMcccR1EQVBHJ2axjdsJ02yrr5hKaM36d+WvZWaDEzGGt
+         0Ip2I6qxqD35xFWKvcjWIRq3XMC3cSpvesLHz4hwsf8JP/9SIqaaTetF/Ruw2KzYi6+x
+         O/+bfdw6x86sDV0ciAF9kUjgj1XrBkcTYu3P0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ywOJjC1iAeM1WckDzdDR6XJ9UsRidM3rIQ+Y2hJNDKM=;
-        b=JhMGpN2wO800vbMI5d7IuGY6uZkOKsdl4dOl18kkloEO8VNqoroQboD7hBlwIjvo92
-         s3vUUe/OZOaRz6qG4scrZV4cd7nhcs17AJB7UplA/yfAxTzsa2J7EUMMwMFQBbDdpq2Y
-         DCVQi52CZixpm7VUgcq+TtzXDYUNJOf1uW2MJ6AnMSEf0etpBoLYpFqhOPQ76lRfZB9s
-         0IiADdIUyz7g5FV3W9yVLXUhiKow/N6Qs/7ngFfbo99vC8PB6D3WprH9rxiuhSJThgRw
-         Bp28trOdYQpG/gu5Yz8fV2zNEy+wA9zVwm4VcL7QM/dCEbAzhdwkj+wdiVa0w9frpohs
-         2wBA==
-X-Gm-Message-State: ACrzQf1OsE+vgtnDI+rP8OP1EEp3rhxJvSNcwupvR2vq90A035YaGOU7
-        X4eX13c1Pj9KjwMGluYo0uihj5yszivquzQGsjHvFg==
-X-Google-Smtp-Source: AMsMyM58r3x61gcQz490WPKR8f7M4ASa5M+2B+LqM+DSCDhS6Ek4QKEKnabKgdcccswhnXNdVIOArInEoUBb8fej4mo=
-X-Received: by 2002:a05:6870:ac21:b0:132:f716:1804 with SMTP id
- kw33-20020a056870ac2100b00132f7161804mr4707931oab.248.1665114691420; Thu, 06
- Oct 2022 20:51:31 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RerK2rBiuhYMfubodkZfB/ZpDqYK/wxKKL/JNwD3Q+M=;
+        b=tmytvskDtG4H0yvNXBo4WzpbGpz7Mzd4GHmv4coHTifNQBL32tKTwtPUVyuUPcLWvC
+         Pl++xa/ZnsLLWbB2SnHWKel4htvkTIpbwsPnylbGPH5eIqyaWs2iPWg3/yv7BIqSlund
+         BdspA1fI2FFZqx1OnyzBhNbzO9JBJSBjJ8sTCxvyi9ZKWDgtZsAfXUFvWzAkVaJ01z8Q
+         wNZ7G5ACniGndxyjU9Y0upxnPB1mNizmVgYcjYB1QmcHYbf01JMALnK4dLawCt8KkedM
+         iBSLFMvQn+YCpdvOhXQkhtjmIlhChUeYZdbbQWvSviC0vqHs5kxnM6cgoxI22DzgfPE9
+         EQkQ==
+X-Gm-Message-State: ACrzQf12JmyDel0/2bokocwAejCDULt2DRStIwswpZOpTmLAO00DlHix
+        u436lc/HcdNe2mWgirFo/o6FgvehX9L92oqPm6prvw==
+X-Google-Smtp-Source: AMsMyM6DZCU3H5d9leQfxkyqeLDM36598wR9p8zY1m3Q8gko7dMPnHiaV3d9xfcbyRe5ChJLBf+e8d8wNaErE59zoxY=
+X-Received: by 2002:a67:ac09:0:b0:39a:eab8:a3a6 with SMTP id
+ v9-20020a67ac09000000b0039aeab8a3a6mr1621057vse.9.1665114699289; Thu, 06 Oct
+ 2022 20:51:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220829062202.3287-2-zong.li@sifive.com> <mhng-050016e5-0f50-4366-b4bd-98b4b36a56bb@palmer-ri-x1c9>
-In-Reply-To: <mhng-050016e5-0f50-4366-b4bd-98b4b36a56bb@palmer-ri-x1c9>
-From:   Zong Li <zong.li@sifive.com>
-Date:   Fri, 7 Oct 2022 11:51:20 +0800
-Message-ID: <CANXhq0qMuU3-R=5fM6WK28259dBBbM+6Sg6-=ayiSVLuccx9TQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: sifive-ccache: rename SiFive L2 cache to
- composible cache
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, greentime.hu@sifive.com,
-        conor.dooley@microchip.com, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221006212528.103790-1-nfraprado@collabora.com> <20221006212528.103790-6-nfraprado@collabora.com>
+In-Reply-To: <20221006212528.103790-6-nfraprado@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 7 Oct 2022 11:51:28 +0800
+Message-ID: <CAGXv+5GmJOYnfLsovO_+piuJ1ry1R0ZQqALRGK3MNp=nUO-TNw@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] arm64: dts: mediatek: asurada: Add aliases for i2c
+ and mmc
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,66 +72,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 7, 2022 at 10:58 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+On Fri, Oct 7, 2022 at 5:25 AM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
 >
-> On Sun, 28 Aug 2022 23:22:00 PDT (-0700), zong.li@sifive.com wrote:
-> > Since composible cache may be L3 cache if private L2 cache exists, it
-> > should use its original name composible cache to prevent confusion.
-> >
-> > Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
-> > Signed-off-by: Zong Li <zong.li@sifive.com>
-> > ---
-> >  .../riscv/{sifive-l2-cache.yaml => sifive-ccache.yaml}      | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> >  rename Documentation/devicetree/bindings/riscv/{sifive-l2-cache.yaml => sifive-ccache.yaml} (92%)
-> >
-> > diff --git a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml b/Documentation/devicetree/bindings/riscv/sifive-ccache.yaml
-> > similarity index 92%
-> > rename from Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
-> > rename to Documentation/devicetree/bindings/riscv/sifive-ccache.yaml
-> > index 69cdab18d629..1a64a5384e36 100644
-> > --- a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
-> > +++ b/Documentation/devicetree/bindings/riscv/sifive-ccache.yaml
-> > @@ -12,8 +12,8 @@ maintainers:
-> >    - Paul Walmsley  <paul.walmsley@sifive.com>
-> >
-> >  description:
-> > -  The SiFive Level 2 Cache Controller is used to provide access to fast copies
-> > -  of memory for masters in a Core Complex. The Level 2 Cache Controller also
-> > +  The SiFive Composable Cache Controller is used to provide access to fast copies
-> > +  of memory for masters in a Core Complex. The Composable Cache Controller also
-> >    acts as directory-based coherency manager.
-> >    All the properties in ePAPR/DeviceTree specification applies for this platform.
-> >
-> > @@ -27,6 +27,7 @@ select:
-> >          enum:
-> >            - sifive,fu540-c000-ccache
-> >            - sifive,fu740-c000-ccache
-> > +          - sifive,ccache0
+> Add aliases for the i2c and mmc nodes on the Asurada platform DT to
+> ensure that we get stable ids for those devices on userspace.
 >
-> Looks like Rob's bot had comments and I don't see a v2.  Sorry if I'm
-> missing something.
+> Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+>
+> ---
+>
+> Changes in v2:
+> - Added this commit
+>
+>  arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi b/arch/arm6=
+4/boot/dts/mediatek/mt8192-asurada.dtsi
+> index dac2d4f5e670..758ca42a6156 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+> @@ -11,6 +11,18 @@
+>
+>  / {
+>         aliases {
+> +               i2c0 =3D &i2c0;
+> +               i2c1 =3D &i2c1;
+> +               i2c2 =3D &i2c2;
+> +               i2c3 =3D &i2c3;
+> +               i2c4 =3D &i2c4;
+> +               i2c5 =3D &i2c5;
+> +               i2c6 =3D &i2c6;
+> +               i2c7 =3D &i2c7;
+> +               i2c8 =3D &i2c8;
+> +               i2c9 =3D &i2c9;
 
-Hi Palmer,
-We moved this series to the following patch set:
-http://lists.infradead.org/pipermail/linux-riscv/2022-October/020196.html
+You should only add aliases for interfaces that are actually enabled.
 
-Sorry for the confusion. Many thanks for considering this series.
+Also, I think we can disable i2c6. None of the current products use it.
 
+ChenYu
+
+> +               mmc0 =3D &mmc0;
+> +               mmc1 =3D &mmc1;
+>                 serial0 =3D &uart0;
+>         };
 >
-> Also: I'd guess that we only had the SOC-specific mappings on purpose.
-> It's kind of a grey area and I'm OK either way, but I'd definately
-> prefer the DT folks to get a chance to review these.  My guess is that
-> they're not looking due to the bot comments, but sorry again if I've
-> missed it.
+> --
+> 2.37.3
 >
-> >    required:
-> >      - compatible
-> > @@ -37,6 +38,7 @@ properties:
-> >        - enum:
-> >            - sifive,fu540-c000-ccache
-> >            - sifive,fu740-c000-ccache
-> > +          - sifive,ccache0
-> >        - const: cache
-> >
-> >    cache-block-size:
