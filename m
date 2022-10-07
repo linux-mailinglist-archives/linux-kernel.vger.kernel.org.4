@@ -2,171 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F2F5F7F14
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 22:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8595F7F15
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 22:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiJGUoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 16:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36208 "EHLO
+        id S229837AbiJGUol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 16:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiJGUoS (ORCPT
+        with ESMTP id S229905AbiJGUof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 16:44:18 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152DBB2DB2;
-        Fri,  7 Oct 2022 13:44:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SsoZRHOZ/vgb8kwwow5Zq+mVvffYxuX148FQAXGLX2aWxKQUmR2U/x9LqOgqnXd39tqocZrAioad4aMZwyQ49tHWSz84E956X4tj1l0A7USVi+maflF9pEb8AVdPU7jMHg0ismwxzsmcoedxCKqgyyfeLrrmqnglPWNRWH8Bb6HmS6xXYb0sM2S7+gOp+llCO8UMBnfXVBN6FbhT1ENKOYrXDYvaMIalc7Wi1SR7QTJKTdlm5fxjHa5A5bugbhl1vyzeSOMaUVGD5TnChjepgZtZGDPln85tnEigiN48owZZDoMXXV6EQI49w1qEmBNaTs5+Ye7MKraHgJbkKDkWrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QVhF8p4/ugTT6rThdb1yJChll+6LmkcYadKmXF+dzy4=;
- b=dDcfvJhF+dKSF/1LuXPQgqZRKxHfhiARRvV60t4DW3Y8UsShxR2V0ub5jkjSm4xQxZzAZHVWhb/0+fEG0fKQ2mahgs8nKqq2XeidNgjSza4dIjwA1+DhV7EhQXTvugGu5SDczHMn/F6gfvcZJnDcuSAORFPyIS09IEJmolCv1yxu3T0+CPG2PiXJWznJ4O9UJy8A1XWcSxzML7maQD8StDhAB298AMmSO4587d0qow0V4PcBMy3tWAjOp5ISAIfHaCoXgMjoKamEUV7ZxbXLaNAZ1DvFwR8ZSR22G6LUs7515qY/IAkWPCh8FtKuen8Ih+H8RAUCCGRufLL3x2aKDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+        Fri, 7 Oct 2022 16:44:35 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F75E127BE7
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 13:44:32 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id n7so5589041plp.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 13:44:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QVhF8p4/ugTT6rThdb1yJChll+6LmkcYadKmXF+dzy4=;
- b=N4UcDlnAy1OpXbpmX1a7tlLpoSn2e2Vhhd6X6QG6Re2hurVBYJhh3RdW2MMOAIlRjUkOVygxZ9p4Jd2Gw56fnpZoJTsEdbhx6VOImA4JB32dTmIUiYPi90scw6IQxsvDlVLP8LHFyKmL2mE8/3y4LTMgbqGOkMe31w+c2U4AJ+U=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by DM4PR10MB5942.namprd10.prod.outlook.com
- (2603:10b6:8:af::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Fri, 7 Oct
- 2022 20:44:15 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::ee5e:cbf9:e304:942f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::ee5e:cbf9:e304:942f%7]) with mapi id 15.20.5676.028; Fri, 7 Oct 2022
- 20:44:14 +0000
-Date:   Fri, 7 Oct 2022 13:44:10 -0700
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH v3 net-next 12/14] dt-bindings: net: dsa: ocelot: add
- ocelot-ext documentation
-Message-ID: <Y0CPmuxTRr799AR5@euler>
-References: <20220926002928.2744638-1-colin.foster@in-advantage.com>
- <20220926002928.2744638-13-colin.foster@in-advantage.com>
- <20220927202600.hy5dr2s6j4jnmfpg@skbuf>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927202600.hy5dr2s6j4jnmfpg@skbuf>
-X-ClientProxiedBy: BYAPR02CA0040.namprd02.prod.outlook.com
- (2603:10b6:a03:54::17) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=W1NQpYe+rizQ5Ab+ZRs17Za6tnD7OfyvsVmBDjKriLg=;
+        b=FlW98FG7Tf4wPIgYq+kE2MLeLLB8+hzJIgv7ZFTtJeTpZ2KwaLhWjeppyceKEeDofo
+         eNSUhAxXvjglRfhYPgDxGBbsRA0CW7MWig1ikSPWH0hNAZJ/QKFDY056SN5kRHpvZtbt
+         l1RLwL/g7o1YjTYXTQ2KFM5idwre/gwwg2ZPgrwqAkWwo32zL4mFNIpEtqsIt8zkLpBO
+         hrJJWq+uVmuqSqb/QsDtA7Ob7OlVFmeisIoGGs1XkxssItDCLBgFcT+1yHKOpie/l/Dr
+         faopCEoIeyGeIKZs95S14gmrvjiIkUUn7/cRXKqXGLJ9psik3POA01q3+CPbfuz9FfjX
+         NhFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W1NQpYe+rizQ5Ab+ZRs17Za6tnD7OfyvsVmBDjKriLg=;
+        b=5+VAmiCEJxdTl5KpzMQglxAV4vTdxCSaL48bmD4/OkvsAYoJBxxq4mEOl81xXz167T
+         hGAG5w8fBu3bWFfaWuA0bBEIEor27oPhyltMl9x6NlkMRGA47QtihA2DqN2egpsJdw0Q
+         wEW71/pMZTouKwBI9l+6xnKpfceepbi83SgJ1xpfBAZXtJhNPuCMbvSvxaNZ9IBUKKc4
+         4xXXccDvoEP7TFd76DS62e94uzlYDYDFsOAyWNy0XlIFb8IWF+qqd9ky9GKwp4/4uhr7
+         /Ywl9CVNkGAg640fdj+ep6RUJt+vvugyo53q17zpP7AMaCCAsAEMn43P5Kde0h9ucYr8
+         bQ8g==
+X-Gm-Message-State: ACrzQf15++bBenBH4PHKUH6Y7EV4qk88R1TGB9GFPuI4/IhUZq6Sj4AC
+        TqKE8gwyZgwSTkBWSXNAkmqhpQCjWHQV4rEAvV/AIg==
+X-Google-Smtp-Source: AMsMyM51FkdHCVqiZbsc2kegAmfl95oHhXUFPyTY3jX+A27YKyLG+BckMn6XyT/Fikdt54cNpecc0XQLc0ZMq249v4w=
+X-Received: by 2002:a17:90b:3a88:b0:209:f35d:ad53 with SMTP id
+ om8-20020a17090b3a8800b00209f35dad53mr18301725pjb.102.1665175471430; Fri, 07
+ Oct 2022 13:44:31 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|DM4PR10MB5942:EE_
-X-MS-Office365-Filtering-Correlation-Id: dd275cd9-6a18-4d43-579c-08daa8a4b254
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FLZDQeQS17j2Meog4uI5KHJAFWUxPsArpuxpD5JarW2MFrF26aM5TDmdpT4k509K2RbK+vymUCSlS2Q+OX1TVWaoaiGXseW89dXXSRsTkDQd+iXJW/muflxHWk6YUW44ypn1rYpdIHsfMziUyn2fZdZzer0fCVrLljRu/4hClDbknIMWADMTWu251V+I0hVuGfCGJ5IktIjjPVuo6uqnx421YyV+uwHX7dKf++T61dcT2rgUGHt4lY/HHHm04rF0Cv/C5ki6MRXjQaH+eCmVT96oIcl46hpZdZvt+s1swJMuB7yzGP2+j3PghADwc0T/TBYpyXNtZksiZdvydmeYPKcyfYWU8FS8/VRZEhdTDdoiXvZN9Tj37GI2IXqKEreU7Yq3s9RH2ya+MRX7ou/O/pajsugmnYT4kayOu+Qi2dcjEj0/Hov8oNBbXF9vy4yP6U3ao81I0dm+cQHb1o7tJlazcefiqFB4gCn9p5aOaNz6v82na3fxk/A6DAPFgO/otjhyvRBWX7vmL2Ew80K8nyqe+pI8uhE+ng3QXf70TwO8NrGxirBXMaUI5FtZfc3pe+5z0c6bX+/NLBDg1suIamAOQsjwYvxQXA5gFV8QFPPWCfqQpEGM2uW2Rm4yUxXiN1KmbqzlTd5+NsU7avWtp7xfOPFBZskoFVxaxgA8bFeqheMbDAY5lk+JTNYad3G3tzFk51F9xYjKm3q28Jmgbg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39840400004)(346002)(376002)(366004)(136003)(396003)(451199015)(2906002)(66946007)(41300700001)(186003)(6666004)(26005)(33716001)(6512007)(54906003)(9686003)(8936002)(86362001)(6486002)(316002)(6506007)(7416002)(478600001)(44832011)(38100700002)(6916009)(5660300002)(83380400001)(66556008)(66476007)(4326008)(8676002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ciWgi5e06fG57ADKU8zKxBf7gYm7HrHz5OaBmX6KATNKQhfl2QvwzZjOme/h?=
- =?us-ascii?Q?jChinKMuRTdDzo8r6nDDxj3kB5Xy4qWdVZ/uuPAW1WoWtGvO3P3gm37F+R/A?=
- =?us-ascii?Q?JCGOm+7WGQt7MSmoa21zV1AEZmEJ6hbE6cpln/4BX8tcMjJarGWfnYfYa0St?=
- =?us-ascii?Q?jGnYmZ3538hCxOOpjCYfAuQCn3HSZbxhI3aEx0c8+m2EzVUZxNSrDrQA2V1j?=
- =?us-ascii?Q?cFBKiTJfOQBdt1hseRqVzFY2vak2UCbYBuggvLJ+ghwhd29NbvXYvLYSKAMc?=
- =?us-ascii?Q?JgBHRi+twEliVxvMRjAd2xHfMQRYVbzfs75hZWsXSM34UqipczlnpBDfT6IJ?=
- =?us-ascii?Q?TgXCK5kvCp0ebDMUCqVcqDYl4wQtSqIzJkTlMsl5hNLbVMW1Q8Dy9u6R4Ert?=
- =?us-ascii?Q?YkSgRL53nX+lQMilEnxPXtOck+l+myKhtLFH+jIQ5smVTV+yKU2S3mO+nl9O?=
- =?us-ascii?Q?7vdqa4rafBpHvQzyfKShrqaDBRxAPXbpR/0gLI2Su9N1NolimHuhzYT4alYU?=
- =?us-ascii?Q?BMb5J4Rlj/Zd0gkKdGHlal9sW6tCSoSzRolou4SFh1vRyTl7BgGbNFQkI+4g?=
- =?us-ascii?Q?1Yl3R90RRExhbBQ5r5NtU1Si2HcRGZdojbbA9iqjycXfaCbeAvxuGylZA9pQ?=
- =?us-ascii?Q?y84tTwAZpUQMhguji3P7nLX5FXaM3BU+vdDdho47pA3QNKDKcxftX/6/dkXW?=
- =?us-ascii?Q?hMlihSFPsZyDsDsWipJSvIq3lh0Rm7Zai0d8nHkZqG3aBUWlKM3TvhEdOTb1?=
- =?us-ascii?Q?pCZc8TB6G7H7mnX6CVQQcXp6rgsn/WxcMD6GTTp2umfs5p9byULRAZuhlq5R?=
- =?us-ascii?Q?I2OsBBF52v5zJ2c2hlztCAq4j3vVe2U7R7wtTmponN3CMllaLgeQk4/O+XG4?=
- =?us-ascii?Q?BIlOmvJrLMwr8bGkogHJxbE87diZaOIVYg/Evmr7CEC7L+cmpCISaWd3WfPz?=
- =?us-ascii?Q?aHqBKDbiir5qMXrw2Dc+RsvaHovUuGEETsBRhAVoCO4IWu7ofmH1qbmGIVn7?=
- =?us-ascii?Q?R1dZiHBqRBXpGHysVPRpXaDKLYm8zPD6CILPPHSRa3Uai5vkLIYQvcfvfIA2?=
- =?us-ascii?Q?sjVaPXQ1NiKamb36sppqmCG99hQPSoAjtGahdwZ82Wi/9SbRoMPcflNPPCJT?=
- =?us-ascii?Q?rBPtXXFVpU7eKjWdjh1i0rnwB1JXI1uR1Z+rpc6HzTp/KZTxOQ4IY6F5U8rM?=
- =?us-ascii?Q?/NFrCax1//9uasY+HI3Jb9YxJmGymnaTliy/Z6vk2ZDUpZ0H2O1efTsfMSSP?=
- =?us-ascii?Q?PqbhEdZX5aVKNCp42dFdyFxrxNB8871uANJSeBQmDFuPhDrMdowDTkbQ0NQN?=
- =?us-ascii?Q?/Q/c2vpDpk2ioMsFAF0CxUiEDERf7f/X8xfsoLpB/36qrzhtO87xiWwjwD6p?=
- =?us-ascii?Q?GNJLMzrzfkE0TgP+1MsjystfYyq1WJnpHyWIVfD+uQjqUiboxfcsYoIl12hL?=
- =?us-ascii?Q?IW7/m1YtN0wGEj6RB4wh+odH/NpYSE1PYsfIZPHvpYjho5oEBcwGP/wpe2mL?=
- =?us-ascii?Q?jNuzjGdB7zIVSWY2cnaZzbEVF0UMJEEjnIv48BBUPqbwDZ9WrANsBo9COAYQ?=
- =?us-ascii?Q?hwWTMKffd4ru6W+21QomkH1rrnyIlCaHxl1xaCf1P7iPM5A6+hvGF2ZXOTyH?=
- =?us-ascii?Q?6A=3D=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dd275cd9-6a18-4d43-579c-08daa8a4b254
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2022 20:44:14.8664
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 09saHnr0y8aMyWF7n9WaPxG4ntWqOlNZI5Nn3aQ7hU93upjRoIH1xBNMp+VVyK5hVEdm2JoyuYeXg0DFcZniPe4fhbb7+oNFwD9Tx+2j3fE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB5942
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221006230017.1833458-1-keescook@chromium.org>
+In-Reply-To: <20221006230017.1833458-1-keescook@chromium.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 7 Oct 2022 13:44:19 -0700
+Message-ID: <CAKwvOdkhAQx3gxbRFfd3jU0G9Dox+0McDyOcr=174Mv4c7Y8rA@mail.gmail.com>
+Subject: Re: [PATCH] overflow: Refactor test skips for Clang-specific issues
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        llvm@lists.linux.dev, Vitor Massaru Iha <vitor@massaru.org>,
+        kernel test robot <lkp@intel.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 11:26:00PM +0300, Vladimir Oltean wrote:
-> On Sun, Sep 25, 2022 at 05:29:26PM -0700, Colin Foster wrote:
-> > +
-> > +    The Ocelot family consists of four devices, the VSC7511, VSC7512, VSC7513,
-> > +    and the VSC7514. The VSC7513 and VSC7514 both have an internal MIPS
-> > +    processor that natively support Linux. Additionally, all four devices
-> > +    support control over external interfaces, SPI and PCIe. The Ocelot-Ext
-> > +    driver is for the external control portion.
-> > +
-> > +    The following PHY interface types are supported:
-> > +
-> > +      - phy-mode = "internal": on ports 0, 1, 2, 3
-> 
-> More PHY interface types are supported. Please document them all.
-> It doesn't matter what the driver supports. Drivers and device tree
-> blobs should be able to have different lifetimes. A driver which doesn't
-> support the SERDES ports should work with a device tree that defines
-> them, and a driver that supports the SERDES ports should work with a
-> device tree that doesn't.
-> 
-> Similar for the other stuff which isn't documented (interrupts, SERDES
-> PHY handles etc). Since there is already an example with vsc7514, you
-> know how they need to look, even if they don't work yet on your
-> hardware, no?
-> 
+On Thu, Oct 6, 2022 at 4:00 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> Convert test exclusion into test skipping. This brings the logic for
+> why a test is being skipped into the test itself, instead of having to
+> spread ifdefs around the code. This will make cleanup easier as minimum
+> tests get raised. Drop __maybe_unused so missed tests will be noticed
+> again and clean up whitespace.
+>
+> For example, clang-11 on i386:
+>
+> [15:52:32] ================== overflow (18 subtests) ==================
+> [15:52:32] [PASSED] u8_u8__u8_overflow_test
+> [15:52:32] [PASSED] s8_s8__s8_overflow_test
+> [15:52:32] [PASSED] u16_u16__u16_overflow_test
+> [15:52:32] [PASSED] s16_s16__s16_overflow_test
+> [15:52:32] [PASSED] u32_u32__u32_overflow_test
+> [15:52:32] [PASSED] s32_s32__s32_overflow_test
+> [15:52:32] [SKIPPED] u64_u64__u64_overflow_test
+> [15:52:32] [SKIPPED] s64_s64__s64_overflow_test
+> [15:52:32] [SKIPPED] u32_u32__int_overflow_test
+> [15:52:32] [PASSED] u32_u32__u8_overflow_test
+> [15:52:32] [PASSED] u8_u8__int_overflow_test
+> [15:52:32] [PASSED] int_int__u8_overflow_test
+> [15:52:32] [PASSED] shift_sane_test
+> [15:52:32] [PASSED] shift_overflow_test
+> [15:52:32] [PASSED] shift_truncate_test
+> [15:52:32] [PASSED] shift_nonsense_test
+> [15:52:32] [PASSED] overflow_allocation_test
+> [15:52:32] [PASSED] overflow_size_helpers_test
+> [15:52:32] ==================== [PASSED] overflow =====================
+> [15:52:32] ============================================================
+> [15:52:32] Testing complete. Ran 18 tests: passed: 15, skipped: 3
+>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Tom Rix <trix@redhat.com>
+> Cc: Daniel Latypov <dlatypov@google.com>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-With regards to the interrupts - I don't really have a concept of how
-those will work, since there isn't a processor for those lines to
-interrupt. So while there is this for the 7514:
+Thanks; much nicer!
 
-interrupts = <18 21 16>;
-interrupt-names = "ptp_rdy", "xtr", "fdma";
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
 
-it seems like there isn't anything to add there.
+I ran the following tests:
+$ ./tools/testing/kunit/kunit.py run --arch=i386 --make_options LLVM=1 overflow
+$ ./tools/testing/kunit/kunit.py run --arch=arm --make_options LLVM=1 overflow
+$ make LLVM=1 -j128 defconfig
+$ ./scripts/config -e KUNIT -e KUNIT_ALL_TESTS
+$ make LLVM=1 -j128 olddefconfig lib/overflow_kunit.o W=1
 
-That is, unless there's something deeper that is going on that I don't
-fully understand yet. It wouldn't be the first time and, realistically,
-won't be the last. I'll copy the 7514 for now, as I plan to send out an
-RFC shortly with all these updates.
+> ---
+>  lib/overflow_kunit.c | 52 +++++++++++++++++++++++++++++---------------
+>  1 file changed, 35 insertions(+), 17 deletions(-)
+>
+> diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
+> index 2914c9d36b0f..3062b33e4bb1 100644
+> --- a/lib/overflow_kunit.c
+> +++ b/lib/overflow_kunit.c
+> @@ -16,6 +16,34 @@
+>  #include <linux/types.h>
+>  #include <linux/vmalloc.h>
+>
+> +#define SKIP(cond, reason)             do {                    \
+> +       if (cond) {                                             \
+> +               kunit_skip(test, reason);                       \
+> +               return;                                         \
+> +       }                                                       \
+> +} while (0)
+> +
+> +/*
+> + * Clang 11 and earlier generate unwanted libcalls for signed output
+> + * on unsigned input.
+> + */
+> +#if defined(CONFIG_CC_IS_CLANG) && __clang_major__ <= 11
+> +# define SKIP_SIGN_MISMATCH(t) SKIP(t, "Clang 11 unwanted libcalls")
+> +#else
+> +# define SKIP_SIGN_MISMATCH(t) do { } while (0)
+> +#endif
+> +
+> +/*
+> + * Clang 13 and earlier generate unwanted libcalls for 64-bit tests on
+> + * 32-bit hosts.
+> + */
+> +#if defined(CONFIG_CC_IS_CLANG) && __clang_major__ <= 13 &&    \
+> +    BITS_PER_LONG != 64
+> +# define SKIP_64_ON_32(t)      SKIP(t, "Clang 13 unwanted libcalls")
+> +#else
+> +# define SKIP_64_ON_32(t)      do { } while (0)
+> +#endif
+> +
+>  #define DEFINE_TEST_ARRAY_TYPED(t1, t2, t)                     \
+>         static const struct test_ ## t1 ## _ ## t2 ## __ ## t { \
+>                 t1 a;                                           \
+> @@ -94,7 +122,6 @@ DEFINE_TEST_ARRAY(u32) = {
+>         {-4U, 5U, 1U, -9U, -20U, true, false, true},
+>  };
+>
+> -#if BITS_PER_LONG == 64
+>  DEFINE_TEST_ARRAY(u64) = {
+>         {0, 0, 0, 0, 0, false, false, false},
+>         {1, 1, 2, 0, 1, false, false, false},
+> @@ -118,7 +145,6 @@ DEFINE_TEST_ARRAY(u64) = {
+>          false, true, false},
+>         {-15ULL, 10ULL, -5ULL, -25ULL, -150ULL, false, false, true},
+>  };
+> -#endif
+>
+>  DEFINE_TEST_ARRAY(s8) = {
+>         {0, 0, 0, 0, 0, false, false, false},
+> @@ -194,7 +220,6 @@ DEFINE_TEST_ARRAY(s32) = {
+>         {S32_MAX, S32_MAX, -2, 0, 1, true, false, true},
+>  };
+>
+> -#if BITS_PER_LONG == 64
+>  DEFINE_TEST_ARRAY(s64) = {
+>         {0, 0, 0, 0, 0, false, false, false},
+>
+> @@ -223,7 +248,6 @@ DEFINE_TEST_ARRAY(s64) = {
+>         {-128, -1, -129, -127, 128, false, false, false},
+>         {0, -S64_MAX, -S64_MAX, S64_MAX, 0, false, false, false},
+>  };
+> -#endif
+>
+>  #define check_one_op(t, fmt, op, sym, a, b, r, of) do {                        \
+>         int _a_orig = a, _a_bump = a + 1;                               \
+> @@ -246,7 +270,7 @@ DEFINE_TEST_ARRAY(s64) = {
+>
+>  #define DEFINE_TEST_FUNC_TYPED(n, t, fmt)                              \
+>  static void do_test_ ## n(struct kunit *test, const struct test_ ## n *p) \
+> -{                                                                      \
+> +{                                                                      \
+>         check_one_op(t, fmt, add, "+", p->a, p->b, p->sum, p->s_of);    \
+>         check_one_op(t, fmt, add, "+", p->b, p->a, p->sum, p->s_of);    \
+>         check_one_op(t, fmt, sub, "-", p->a, p->b, p->diff, p->d_of);   \
+> @@ -254,10 +278,15 @@ static void do_test_ ## n(struct kunit *test, const struct test_ ## n *p) \
+>         check_one_op(t, fmt, mul, "*", p->b, p->a, p->prod, p->p_of);   \
+>  }                                                                      \
+>                                                                         \
+> -__maybe_unused                                                         \
+>  static void n ## _overflow_test(struct kunit *test) {                  \
+>         unsigned i;                                                     \
+>                                                                         \
+> +       SKIP_64_ON_32(__same_type(t, u64));                             \
+> +       SKIP_64_ON_32(__same_type(t, s64));                             \
+> +       SKIP_SIGN_MISMATCH(__same_type(n ## _tests[0].a, u32) &&        \
+> +                          __same_type(n ## _tests[0].b, u32) &&        \
+> +                          __same_type(n ## _tests[0].sum, int));       \
+> +                                                                       \
+>         for (i = 0; i < ARRAY_SIZE(n ## _tests); ++i)                   \
+>                 do_test_ ## n(test, &n ## _tests[i]);                   \
+>         kunit_info(test, "%zu %s arithmetic tests finished\n",          \
+> @@ -273,10 +302,8 @@ DEFINE_TEST_FUNC(u16, "%d");
+>  DEFINE_TEST_FUNC(s16, "%d");
+>  DEFINE_TEST_FUNC(u32, "%u");
+>  DEFINE_TEST_FUNC(s32, "%d");
+> -#if BITS_PER_LONG == 64
+>  DEFINE_TEST_FUNC(u64, "%llu");
+>  DEFINE_TEST_FUNC(s64, "%lld");
+> -#endif
+>
+>  DEFINE_TEST_ARRAY_TYPED(u32, u32, u8) = {
+>         {0, 0, 0, 0, 0, false, false, false},
+> @@ -716,18 +743,9 @@ static struct kunit_case overflow_test_cases[] = {
+>         KUNIT_CASE(s16_s16__s16_overflow_test),
+>         KUNIT_CASE(u32_u32__u32_overflow_test),
+>         KUNIT_CASE(s32_s32__s32_overflow_test),
+> -/* Clang 13 and earlier generate unwanted libcalls on 32-bit. */
+> -#if BITS_PER_LONG == 64
+>         KUNIT_CASE(u64_u64__u64_overflow_test),
+>         KUNIT_CASE(s64_s64__s64_overflow_test),
+> -#endif
+> -/*
+> - * Clang 11 and earlier generate unwanted libcalls for signed output, unsigned
+> - * input.
+> - */
+> -#if !(defined(CONFIG_CC_IS_CLANG) && __clang_major__ <= 11)
+>         KUNIT_CASE(u32_u32__int_overflow_test),
+> -#endif
+>         KUNIT_CASE(u32_u32__u8_overflow_test),
+>         KUNIT_CASE(u8_u8__int_overflow_test),
+>         KUNIT_CASE(int_int__u8_overflow_test),
+> --
+> 2.34.1
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers
