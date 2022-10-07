@@ -2,247 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710CD5F7E72
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 22:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5935F7E68
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 22:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbiJGUDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 16:03:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
+        id S230033AbiJGUCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 16:02:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbiJGUDn (ORCPT
+        with ESMTP id S229703AbiJGUCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 16:03:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8D112C8B0
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 13:03:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665173019;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jaDcObpjcx0whPL96jk38beBrOuRKo+eqX0wqNpM3Cc=;
-        b=P+lIyk+e0CPKAEcXbbQsDGytM3pSE2HiXWeW7NP38w5yUSHLYGCuSuucP33CsCkagHA0Xl
-        151o2pP9yjDQ1PeDz0xhPVbLkmo8lCO3ZH7OMrITtTWxWfWY5mkXbEVSe9xPFuqCCFlhIl
-        3Pk9fHEL2zLDpOzOjIrrd39Z4gNTtAk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-264-kStNREYhN0OL2iSIbHz80Q-1; Fri, 07 Oct 2022 16:03:36 -0400
-X-MC-Unique: kStNREYhN0OL2iSIbHz80Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 67B08882826;
-        Fri,  7 Oct 2022 20:03:34 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 29A1A2166B4D;
-        Fri,  7 Oct 2022 20:03:32 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id 258DA416CE48; Fri,  7 Oct 2022 17:01:33 -0300 (-03)
-Date:   Fri, 7 Oct 2022 17:01:33 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Guo Ren <guoren@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [RFC PATCH 0/5] Generic IPI sending tracepoint
-Message-ID: <Y0CFnWDpMNGajIRD@fuller.cnet>
-References: <20221007154145.1877054-1-vschneid@redhat.com>
+        Fri, 7 Oct 2022 16:02:42 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FB2108DE3
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 13:02:41 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so8144350pjq.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 13:02:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Stpxx95ZDS9bG7gmnuOOMaTOxoqM57dWWZd+DU6ZCY=;
+        b=EuVXkfT890+uXLhGn1y6QZEwG27EWOv4n808K0IFF1hwKchiIKSQdpzc+vGCxXct3T
+         6Qnm3cms+sekDh6uwCBfaCmSIH6KdAwIuB2k8Ue4aEXM5AeTDnmjh0PodxtrvbUat4fQ
+         a5hp5P4/UkiclTjfT0EeFWrV1kf+VWZ7s5q1vciJVEpoIlToRu1rRHDcSdTOM42jpP1r
+         qFDXIjfj4qTs0KjOU/pj4a/hYmAhE7Xu7n2tOvudDuU6Y23wx4eYT+0wdG011b6aXoRa
+         CBJtDDRCV/NQ7y+BGQKGqEcbFmAlJJzeMylBeNrY+UxquCz5vfB7X2s334mkB44MKj/F
+         Nw3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6Stpxx95ZDS9bG7gmnuOOMaTOxoqM57dWWZd+DU6ZCY=;
+        b=E8H2DVgGuX8Bl0oyoqwA8f+01sSTCNNy3xRVPUpmCQ0QzAZx0KazhsH1PvjzGNaPOU
+         nvD3N6OxgOhMNVwHESVgcdivcZmYQjHiFKHzRcNIKMyl5OJqkohD5u61V4M2kAtxTqZ1
+         jtpNld/S+vEHpY63W/h6tzsS1ArUK5uOixUHtVo4q37pGXUickq6Py+XBP6Nkp0uri4K
+         qEyxpBhpQaSrrxhZgGFg73nn0rVghm3A+vsefIc5OyDyY4OXusycxvUxS2l/wKNLFd54
+         XEzzAjXgHro8n9VqLWttE5kOfwzl+S6FrQXJCLBzM1gA/N/Qut2Ojyv5XrBGhXoULGG/
+         uvHQ==
+X-Gm-Message-State: ACrzQf0qbIbBp/dVT1rMJOQSDpmLwNPN7ckhvTq2avTakQz4muKUDuuS
+        HrJNXDQvMUCgLpQRsaiIcEcxGw==
+X-Google-Smtp-Source: AMsMyM6Rh8YqTGb3IqdGB22AIAmJShevOI/0MPvRB6FqAdLfLtB7gC1oCxKtpabLfH6405OBOBApGw==
+X-Received: by 2002:a17:90b:350b:b0:205:dfc1:63a7 with SMTP id ls11-20020a17090b350b00b00205dfc163a7mr7074824pjb.41.1665172960680;
+        Fri, 07 Oct 2022 13:02:40 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id o2-20020a170902d4c200b0016dbdf7b97bsm1855468plg.266.2022.10.07.13.02.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 13:02:39 -0700 (PDT)
+Date:   Fri, 7 Oct 2022 20:02:36 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] KVM: x86/pmu: Limit the maximum number of
+ supported Intel GP counters
+Message-ID: <Y0CF3F/pJOBnY1Xz@google.com>
+References: <20220919091008.60695-1-likexu@tencent.com>
+ <20220919091008.60695-2-likexu@tencent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221007154145.1877054-1-vschneid@redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220919091008.60695-2-likexu@tencent.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Valentin,
+On Mon, Sep 19, 2022, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
+> 
+> The Intel Architectural IA32_PMCx MSRs addresses range allows for
+> a maximum of 8 GP counters. A local macro (named KVM_INTEL_PMC_MAX_GENERIC)
+> is introduced to take back control of this virtual capability to avoid
+> errors introduced by the out-of-bound counter emulations.
 
-On Fri, Oct 07, 2022 at 04:41:40PM +0100, Valentin Schneider wrote:
-> Background
-> ==========
-> 
-> Detecting IPI *reception* is relatively easy, e.g. using
-> trace_irq_handler_{entry,exit} or even just function-trace
-> flush_smp_call_function_queue() for SMP calls.  
-> 
-> Figuring out their *origin*, is trickier as there is no generic tracepoint tied
-> to e.g. smp_call_function():
-> 
-> o AFAIA x86 has no tracepoint tied to sending IPIs, only receiving them
->   (cf. trace_call_function{_single}_entry()).
-> o arm/arm64 do have trace_ipi_raise(), which gives us the target cpus but also a
->   mostly useless string (smp_calls will all be "Function call interrupts").
-> o Other architectures don't seem to have any IPI-sending related tracepoint.  
-> 
-> I believe one reason those tracepoints used by arm/arm64 ended up as they were
-> is because these archs used to handle IPIs differently from regular interrupts
-> (the IRQ driver would directly invoke an IPI-handling routine), which meant they 
-> never showed up in trace_irq_handler_{entry, exit}. The trace_ipi_{entry,exit}
-> tracepoints gave a way to trace IPI reception but those have become redundant as
-> of: 
-> 
->       56afcd3dbd19 ("ARM: Allow IPIs to be handled as normal interrupts")
->       d3afc7f12987 ("arm64: Allow IPIs to be handled as normal interrupts")
-> 
-> which gave IPIs a "proper" handler function used through
-> generic_handle_domain_irq(), which makes them show up via
-> trace_irq_handler_{entry, exit}.
-> 
-> Changing stuff up
-> =================
-> 
-> Per the above, it would make sense to reshuffle trace_ipi_raise() and move it
-> into generic code. This also came up during Daniel's talk on Osnoise at the CPU
-> isolation MC of LPC 2022 [1]. 
-> 
-> Now, to be useful, such a tracepoint needs to export:
-> o targeted CPU(s)
-> o calling context
-> 
-> The only way to get the calling context with trace_ipi_raise() is to trigger a
-> stack dump, e.g. $(trace-cmd -e ipi* -T echo 42).
-> 
-> As for the targeted CPUs, the existing tracepoint does export them, albeit in
-> cpumask form, which is quite inconvenient from a tooling perspective. For
-> instance, as far as I'm aware, it's not possible to do event filtering on a
-> cpumask via trace-cmd.
+Phrase changelogs as commands.
 
-https://man7.org/linux/man-pages/man1/trace-cmd-set.1.html
-
-       -f filter
-           Specify a filter for the previous event. This must come after
-           a -e. This will filter what events get recorded based on the
-           content of the event. Filtering is passed to the kernel
-           directly so what filtering is allowed may depend on what
-           version of the kernel you have. Basically, it will let you
-           use C notation to check if an event should be processed or
-           not.
-
-               ==, >=, <=, >, <, &, |, && and ||
-
-           The above are usually safe to use to compare fields.
-
-This looks overkill to me (consider large number of bits set in mask).
-
-+#define trace_ipi_send_cpumask(callsite, mask) do {            \
-+	if (static_key_false(&__tracepoint_ipi_send_cpu.key)) { \
-+               int cpu;                                        \
-+               for_each_cpu(cpu, mask)                         \
-+                       trace_ipi_send_cpu(callsite, cpu);	\
-+	}                                                       \
-+} while (0)
-
-
+> Suggested-by: Jim Mattson <jmattson@google.com>
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> Reviewed-by: Jim Mattson <jmattson@google.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h |  6 +++++-
+>  arch/x86/kvm/pmu.c              |  2 +-
+>  arch/x86/kvm/vmx/pmu_intel.c    |  4 ++--
+>  arch/x86/kvm/x86.c              | 12 +++++++-----
+>  4 files changed, 15 insertions(+), 9 deletions(-)
 > 
-> Because of the above points, this is introducing a new tracepoint.
-> 
-> Patches
-> =======
-> 
-> This results in having trace events for:
-> 
-> o smp_call_function*()
-> o smp_send_reschedule()
-> o irq_work_queue*()
-> 
-> This is incomplete, just looking at arm64 there's more IPI types that aren't covered:
-> 
->   IPI_CPU_STOP,
->   IPI_CPU_CRASH_STOP,
->   IPI_TIMER,
->   IPI_WAKEUP,
-> 
-> ... But it feels like a good starting point.
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 2c96c43c313a..17abcf5c496a 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -501,6 +501,10 @@ struct kvm_pmc {
+>  	bool intr;
+>  };
+>  
+> +/* More counters may conflict with other existing Architectural MSRs */
+> +#define KVM_INTEL_PMC_MAX_GENERIC	8
 
-Can't you have a single tracepoint (or variant with cpumask) that would
-cover such cases as well?
+This is weird and backwards.  Common x86 code shouldn't "prefer" Intel over AMD,
+or vice versa.  Similar to KVM_MAX_NR_USER_RETURN_MSRS, the way to do this is to
+define KVM's common software limit, and then verify that the vendor limits are
+below that common limit.  E.g.
 
-Maybe (as parameters for tracepoint):
+#define KVM_MAX_NR_PMU_GP_COUNTERS	8
 
-	* type (reschedule, smp_call_function, timer, wakeup, ...).
+and then add compile-time assertions that Intel stays below the max (and obviously
+AMD as well).
 
-	* function address: valid for smp_call_function, irq_work_queue
-	  types.
+> +#define MSR_ARCH_PERFMON_PERFCTR_MAX	(MSR_ARCH_PERFMON_PERFCTR0 + KVM_INTEL_PMC_MAX_GENERIC - 1)
+> +#define MSR_ARCH_PERFMON_EVENTSEL_MAX	(MSR_ARCH_PERFMON_EVENTSEL0 + KVM_INTEL_PMC_MAX_GENERIC - 1)
 
-> Another thing worth mentioning is that depending on the callsite, the _RET_IP_
-> fed to the tracepoint is not always useful - generic_exec_single() doesn't tell
-> you much about the actual callback being sent via IPI, so there might be value
-> in exploding the single tracepoint into at least one variant for smp_calls.
+These are Intel specific, correct?  I.e. "arch" means "Intel architectural MSRs"?
 
-Not sure i grasp what you mean by "exploding the single tracepoint...",
-but yes knowing the function or irq work function is very useful.
+The perf-defined names are out of KVM's control, but adding what appears to be
+generic #defines in common KVM that are actually Intel specific is confusing.
+Given that there's only a single user, I think the easiest thing is to just open
+code the users, e.g.
 
-> 
-> Links
-> =====
-> 
-> [1]: https://youtu.be/5gT57y4OzBM?t=14234
-> 
-> Valentin Schneider (5):
->   trace: Add trace_ipi_send_{cpu, cpumask}
->   sched, smp: Trace send_call_function_single_ipi()
->   smp: Add a multi-CPU variant to send_call_function_single_ipi()
->   irq_work: Trace calls to arch_irq_work_raise()
->   treewide: Rename and trace arch-definitions of smp_send_reschedule()
-> 
->  arch/alpha/kernel/smp.c          |  2 +-
->  arch/arc/kernel/smp.c            |  2 +-
->  arch/arm/kernel/smp.c            |  5 +----
->  arch/arm64/kernel/smp.c          |  3 +--
->  arch/csky/kernel/smp.c           |  2 +-
->  arch/hexagon/kernel/smp.c        |  2 +-
->  arch/ia64/kernel/smp.c           |  4 ++--
->  arch/loongarch/include/asm/smp.h |  2 +-
->  arch/mips/include/asm/smp.h      |  2 +-
->  arch/openrisc/kernel/smp.c       |  2 +-
->  arch/parisc/kernel/smp.c         |  4 ++--
->  arch/powerpc/kernel/smp.c        |  4 ++--
->  arch/riscv/kernel/smp.c          |  4 ++--
->  arch/s390/kernel/smp.c           |  2 +-
->  arch/sh/kernel/smp.c             |  2 +-
->  arch/sparc/kernel/smp_32.c       |  2 +-
->  arch/sparc/kernel/smp_64.c       |  2 +-
->  arch/x86/include/asm/smp.h       |  2 +-
->  arch/xtensa/kernel/smp.c         |  2 +-
->  include/linux/smp.h              |  1 +
->  include/trace/events/ipi.h       | 27 +++++++++++++++++++++++++++
->  kernel/irq_work.c                | 12 +++++++++++-
->  kernel/sched/core.c              |  7 +++++--
->  kernel/smp.c                     | 18 +++++++++++++++++-
->  24 files changed, 84 insertions(+), 31 deletions(-)
-> 
-> --
-> 2.31.1
-> 
-> 
+		case MSR_ARCH_PERFMON_PERFCTR0 ...
+		     MSR_ARCH_PERFMON_PERFCTR0 + KVM_MAX_NR_PMU_GP_COUNTERS - 1:
+			if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_PERFCTR0 >=
+			    min(KVM_MAX_NR_PMU_GP_COUNTERS, kvm_pmu_cap.num_counters_gp))
+				continue;
+			break;
+		case MSR_ARCH_PERFMON_EVENTSEL0 ...
+		     MSR_ARCH_PERFMON_EVENTSEL0 + KVM_MAX_NR_PMU_GP_COUNTERS - 1:
+			if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_EVENTSEL0 >=
+			    min(KVM_INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
+				continue;
+			break;
 
