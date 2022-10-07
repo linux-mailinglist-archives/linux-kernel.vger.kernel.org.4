@@ -2,83 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6855F77DA
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 14:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A025F77EC
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 14:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiJGMLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 08:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
+        id S229591AbiJGM0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 08:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiJGMLp (ORCPT
+        with ESMTP id S229587AbiJGM00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 08:11:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C703C897C;
-        Fri,  7 Oct 2022 05:11:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC86C61CCE;
-        Fri,  7 Oct 2022 12:11:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C402C433D6;
-        Fri,  7 Oct 2022 12:11:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665144704;
-        bh=0pN/KKvgXNTMlPUD7QSUeOpqyBrffihcXMWu6MhPQiM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=nmmFoPjEDUzOUP9DBzwSLDZ3gLvz7kL0F8cxCuFSgCO7Ms3JHwkykpi5JLsE9hZJA
-         0+chcMkQ4IbSFmoWstQJOCHX0DTCG+jnLCUt/MxL/l0Gp/vRWyEh8u2kY9c2EDL1E/
-         5/fXBSjJI9CjzRWjdUUfly77v98lyGMNieg6Ju+53Qf0QRAYw48skLPuhRACJkg2C5
-         A5o2q24H3d9EsgbwBsp8IS7i6o+22OJzNqSKrlXq/IB5WeNBDniQAKQZbg0CB4h8LT
-         LRWDPyvpG2Fdv+94bL83+h54f3wKmRj4kPC/8rWYhhRKBYM1VuF4EJ9uyjI03c1Qmf
-         q2YgrSNS//GWw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1ogmCZ-0001Q0-Vh; Fri, 07 Oct 2022 14:11:40 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Lee Jones <lee@kernel.org>
+        Fri, 7 Oct 2022 08:26:26 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E859A98F3
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 05:26:19 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id f9so5496316ljk.12
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 05:26:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eWK8ltIDIkui3ySL4w1wqLeglJS7qqPhWaK+ZxDPlzo=;
+        b=qjO6OVdvJhlNxmB4052GCBtnuDlboPeXq/lQh0poEN4u2jzhUCvBxwB2aHDi9EtOC6
+         kQ7ezfUfR6PFkr0UclfQHe2t4aewrU3j5aJ23eQqS+eUYSozKSUpobiuY1i8E1t7oIoq
+         vXMGSYaqgDLp6mpSIAGhOLrd5/QPn9zFAtVmk0msv7MRb7s9tr10M1wHcL9EAkYOhJ0h
+         4OBftQd9Swivypx/g5x39pAIv+q86cuvphmEpyqbaEzRdXIj8FMl527fbUycm6YEmPZw
+         enGBpl+wWPco63TPZZ4Wb8zjJmU1C1qC+gC16+VeeCLxuvFAKH2Lkr7F2LPHUrRO6SBw
+         QuKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eWK8ltIDIkui3ySL4w1wqLeglJS7qqPhWaK+ZxDPlzo=;
+        b=5wBwWgiNt7SLfyKpmxYG6HEcEX5tU3KjKaLO23mEKMEWOHn8R9Ycrhz/ES1KDxkl6R
+         Q0aBYa7n+Ed4x4VeCNg2kfgHusJMBhYqOvWSuLO8zoAma3AfEEF8yNV4jxqyQA0Z/kkG
+         RdgQwpzPMaOXvsjqj2J5FjcN/gsi8r2d4JyrjWjnUQIiyDJkBse3EQ0tLmrbQFtw3Rzf
+         1Tg/8tfspMNm2AYATL1/1fB7hwCneh82h57bR1gRMjgCPZ2f+sh3K4NWtkAXjBB+rSDF
+         hIfEZbOPwRhTTdBVfbo9sTzSJwC2cFCGgXUZQ1OCT/X7f25cFPfClNjyFtwB0WM18T/r
+         fjtg==
+X-Gm-Message-State: ACrzQf0FAoiQqK0uKRl71RNG37d3cQ6pKmvKMJbRD4gV6dJXPEXNDDaJ
+        jrhN872un8Xls4VdLjMmJZzn6A==
+X-Google-Smtp-Source: AMsMyM65SjzOOQvBru/Gza0vh62MUFmFnt85NMWgCQ4hRnraNaKmsKCR4xfdOiOArggIC/dMZzNtmg==
+X-Received: by 2002:a2e:9d88:0:b0:26a:95c1:218f with SMTP id c8-20020a2e9d88000000b0026a95c1218fmr1558690ljj.223.1665145577901;
+        Fri, 07 Oct 2022 05:26:17 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id s22-20020a056512203600b00498f3ebffb2sm286031lfs.25.2022.10.07.05.26.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Oct 2022 05:26:17 -0700 (PDT)
+Message-ID: <10f629f9-733b-3b8e-4e80-af16920b3615@linaro.org>
+Date:   Fri, 7 Oct 2022 14:26:16 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 5.10 1/1] Backport of rpmsg: qcom: glink: replace
+ strncpy() with strscpy_pad()
+To:     Andrew Chernyakov <acherniakov@astralinux.ru>,
+        stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH] dt-bindings: mfd: qcom,tcsr: add sc8280xp binding
-Date:   Fri,  7 Oct 2022 14:11:10 +0200
-Message-Id: <20221007121110.5432-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+References: <20221007104120.75208-1-acherniakov@astralinux.ru>
+ <20221007104120.75208-2-acherniakov@astralinux.ru>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221007104120.75208-2-acherniakov@astralinux.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a binding for the SC8280XP TCSR.
+On 07/10/2022 12:41, Andrew Chernyakov wrote:
+> The use of strncpy() is considered deprecated for NULL-terminated
+> strings[1]. Replace strncpy() with strscpy_pad(), to keep existing
+> pad-behavior of strncpy, strncpy was found on line 1424 of
+> /drivers/rpmsg/qcom_glink_native.c.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> 
+> Signed-off-by: Andrew Chernyakov <acherniakov@astralinux.ru>
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml | 1 +
- 1 file changed, 1 insertion(+)
+This is not a correct backport. You lost entire information about
+original patch and its history. You even dropped my authorship. The
+certificate of origin chain is broken and not correct.
 
-diff --git a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-index d3c25daa995e..914d4ff6d3d7 100644
---- a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-+++ b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-@@ -22,6 +22,7 @@ properties:
-               - qcom,qcs404-tcsr
-               - qcom,sc7180-tcsr
-               - qcom,sc7280-tcsr
-+              - qcom,sc8280xp-tcsr
-               - qcom,sdm630-tcsr
-               - qcom,sdm845-tcsr
-               - qcom,sm8150-tcsr
--- 
-2.35.1
+You must follow the process of backporting of patches:
+
+https://elixir.bootlin.com/linux/v5.19.14/source/Documentation/process/submitting-patches.rst
+
+Best regards,
+Krzysztof
 
