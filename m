@@ -2,127 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2295F766D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27FD65F766A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbiJGJpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 05:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40154 "EHLO
+        id S229551AbiJGJpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 05:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiJGJpm (ORCPT
+        with ESMTP id S229487AbiJGJpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 05:45:42 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3A148C9D;
-        Fri,  7 Oct 2022 02:45:40 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id j7so6455666wrr.3;
-        Fri, 07 Oct 2022 02:45:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EQkrLmzT3Pvs6KFi5WAH9SS4PAeF6bOPV5uy+VMuFaU=;
-        b=URWhMdnZurrj0JGkaHhZWS1Hb/wxi0oCu8/3WD0OIL65EtHWMnklxQ5XqxkIjTL/B5
-         N7xpNnpQ+M8rKHRQFHYb+paRvh0EyNlN4EEUzu9CCRmTeHiVRNU/OwCXr2YchUlcof3e
-         fevesm1nDkiNOXckaZO9/J4RT0wSUXaEGoKREPrlJBPo0O8082l8MKf8Zb49/PjF2TCS
-         m2snA09tMpIoKXLCQu7c9iuXj9PTan9gdlQ79UdkKAuaUxrqaxr1wDmC1s7cx7mgfsCY
-         9E5AIUFXpoRWDapYlzKFqxkuhPMThRplkkW2XHoJO+wUa9ssFtuP1EPwk82oxDc6HA2T
-         jbBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EQkrLmzT3Pvs6KFi5WAH9SS4PAeF6bOPV5uy+VMuFaU=;
-        b=UAzdWD32NFubJe0yYDj2QicvoB2ZVXHvTH0wudZZ2jj9avxgvad0yvgBbcrTLer4lC
-         AAuiQMdEzxJnZdfR4iY95M7M9BBkYJfiY24FbyhcPt/0Kr8TKlBoor46s+ypuAHsr6nY
-         KlH0bsDKBVeQCGJ1p4ULwM+YfxWVFE5XEasXvSjlqVKZu1gB8pmvzHO6o2/ku/KnrBww
-         oDkr2KjSKPS7AaVGu7BzCB8gHCjtoEBr0XUt6MBw/sLGL22MrB/4w26yXi2a8vFp6YtP
-         GHl69IrRDLkhPlsTZIyMPCiZUWqWsBh4rIwKR1yRAVahG9i9J/nMzc8eS902bILCp2lG
-         vM6A==
-X-Gm-Message-State: ACrzQf1R9vDNsxdanz+m0how/d+oAnY69wL0UTdepOpqAkGUkspkufvl
-        w2WDFiZlVXozPcwoUCWkoaY=
-X-Google-Smtp-Source: AMsMyM7n+NI3gVVcc2w9u29r2TQ7mzmd/4mQneSIxf8PvyH/zA3P6p6aUGX9oUN4sLE6BbdJqjQapw==
-X-Received: by 2002:adf:f90d:0:b0:20c:de32:4d35 with SMTP id b13-20020adff90d000000b0020cde324d35mr2603406wrr.583.1665135939037;
-        Fri, 07 Oct 2022 02:45:39 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id j39-20020a05600c48a700b003a5537bb2besm1686541wmp.25.2022.10.07.02.45.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 02:45:38 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 7 Oct 2022 11:45:36 +0200
-To:     Sumanth Korikkar <sumanthk@linux.ibm.com>, peterz@infradead.org
-Cc:     olsajiri@gmail.com, bpf@vger.kernel.org, gor@linux.ibm.com,
-        hca@linux.ibm.com, iii@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-tip-commits@vger.kernel.org, namhyung@kernel.org,
-        svens@linux.ibm.com, tip-bot2@linutronix.de, tmricht@linux.ibm.com,
-        x86@kernel.org
-Subject: Re: [PATCH] bpf: fix sample_flags for bpf_perf_event_output
-Message-ID: <Yz/1QNGfO39Y7dOJ@krava>
-References: <Yz8lbkx3HYQpnvIB@krava>
- <20221007081327.1047552-1-sumanthk@linux.ibm.com>
+        Fri, 7 Oct 2022 05:45:12 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00B933E1D;
+        Fri,  7 Oct 2022 02:45:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1665135907; x=1696671907;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0Ire7ZsaBoZrk4q5Oev/H2q9lfYP9QG/ubwbSlN/mx4=;
+  b=NsHPj4dsFVOU2E5pS5w05ScN77haCPJiMIdM8KO5dYtvb2glhB8oDCoo
+   KtoBFz+sRjG3mCM3Jkdsf/5HV64H2ks20v5dk1Mop7R+/8uvnDP94Y2wX
+   9fttYgFXEs33ANQbF+fI+AXF5CLl/OrzV/O1tDSzJ3q1i9wuLELBkWB4s
+   W1bpohE4EviVWzkinwl5UfcKLQfI8fymqIUhcDO7DmFzwHbqz0b4oMyJo
+   V0PkEpv7NsaPL+vEupR5s5jTAcnNayUxc6Bq1CuGEKpUxTT8gqNhsEEul
+   sQ2YIEdUj8OKxo1Z0k6LI8QEIPNbPi+sBVN8yZ9VRdX0etWYhoRmGkIFR
+   A==;
+X-IronPort-AV: E=Sophos;i="5.95,166,1661842800"; 
+   d="scan'208";a="183703352"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Oct 2022 02:45:06 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 7 Oct 2022 02:45:06 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Fri, 7 Oct 2022 02:45:05 -0700
+Date:   Fri, 7 Oct 2022 11:49:38 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     <UNGLinuxDriver@microchip.com>, <andy.shevchenko@gmail.com>,
+        <linus.walleij@linaro.org>, <linux-gpio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] pinctrl: ocelot: Fix interrupt controller
+Message-ID: <20221007094938.qqf7exuthvz5gkdq@soft-dev3-1.localhost>
+References: <20220909145942.844102-1-horatiu.vultur@microchip.com>
+ <20220920120642.690340-1-michael@walle.cc>
+ <20220920193033.bpmyt6pdob5b45id@soft-dev3-1.localhost>
+ <683fc322fddebe39a93a46aefcd5e2dd@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20221007081327.1047552-1-sumanthk@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <683fc322fddebe39a93a46aefcd5e2dd@walle.cc>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 10:13:27AM +0200, Sumanth Korikkar wrote:
-> * Raw data is also filled by bpf_perf_event_output.
-> * Add sample_flags to indicate raw data.
-> * This eliminates the segfaults as shown below:
->   Run ./samples/bpf/trace_output
->   BUG pid 9 cookie 1001000000004 sized 4
->   BUG pid 9 cookie 1001000000004 sized 4
->   BUG pid 9 cookie 1001000000004 sized 4
->   Segmentation fault (core dumped)
+The 10/06/2022 13:43, Michael Walle wrote:
+
+Hi Walle,
+
+> Seeing 20 was definitely fishy, seeing two instead of one maybe not
+> so much. I guess it will create one spurious interrupt if none of
+> the registered handlers will care.
 > 
-> Fixes: 838d9bb62d13 ("perf: Use sample_flags for raw_data")
-> Acked-by: Namhyung Kim <namhyung@kernel.org>
-> Signed-off-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
+> OTOH, the code below won't work in all cases anyway, right? It's just
+> best effort.
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+I was expecting to work in all cases, but if you found some cases that
+would not work, please point them out.
 
-Peter,
-I think this should go through your tree again?
-bpf-next/master does not have sample_flags merged yet
-
-thanks,
-jirka
-
-> ---
->  kernel/trace/bpf_trace.c | 2 ++
->  1 file changed, 2 insertions(+)
 > 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 49fb9ec8366d..1ed08967fb97 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -687,6 +687,7 @@ BPF_CALL_5(bpf_perf_event_output, struct pt_regs *, regs, struct bpf_map *, map,
->  
->  	perf_sample_data_init(sd, 0, 0);
->  	sd->raw = &raw;
-> +	sd->sample_flags |= PERF_SAMPLE_RAW;
->  
->  	err = __bpf_perf_event_output(regs, map, flags, sd);
->  
-> @@ -745,6 +746,7 @@ u64 bpf_event_output(struct bpf_map *map, u64 flags, void *meta, u64 meta_size,
->  	perf_fetch_caller_regs(regs);
->  	perf_sample_data_init(sd, 0, 0);
->  	sd->raw = &raw;
-> +	sd->sample_flags |= PERF_SAMPLE_RAW;
->  
->  	ret = __bpf_perf_event_output(regs, map, flags, sd);
->  out:
-> -- 
-> 2.36.1
+> > Below I have a diff that I tried with LAN8814 PHYs and I could see that
+> > count in /proc/interrupts is increasing correctly.
+> > 
+> > > I've verified that there is only one low pulse on the interrupt line.
+> > > I've
+> > > noticed though, that the number of interrupts seem to be correlating
+> > > with
+> > > the length of the low pulse.
+> > ---
+> > diff --git a/drivers/pinctrl/pinctrl-ocelot.c
+> > b/drivers/pinctrl/pinctrl-ocelot.c
+> > index c7df8c5fe5854..105771ff82e62 100644
+> > --- a/drivers/pinctrl/pinctrl-ocelot.c
+> > +++ b/drivers/pinctrl/pinctrl-ocelot.c
+> > @@ -1863,19 +1863,28 @@ static void ocelot_irq_unmask_level(struct
+> > irq_data *data)
+> >       if (val & bit)
+> >               ack = true;
+> > 
+> > +     /* Try to clear any rising edges */
+> > +     if (!active && ack)
+> > +             regmap_write_bits(info->map, REG(OCELOT_GPIO_INTR, info, gpio),
+> > +                               bit, bit);
 > 
+> Might we lose interrupts here, if the line would go active again right
+> after the read of the line state and before reading the "ack" bit?
+
+We lose the interrupt here, as the HW will not generate another one
+but at later point we read again the line status. And if the line is
+active then we kick again the interrupt handler again.
+
+> 
+> > +
+> >       /* Enable the interrupt now */
+> >       gpiochip_enable_irq(chip, gpio);
+> >       regmap_update_bits(info->map, REG(OCELOT_GPIO_INTR_ENA, info, gpio),
+> >                          bit, bit);
+> > 
+> >       /*
+> > -      * In case the interrupt line is still active and the interrupt
+> > -      * controller has not seen any changes in the interrupt line, then it
+> > -      * means that there happen another interrupt while the line was
+> > active.
+> > +      * In case the interrupt line is still active then it means that
+> > +      * there happen another interrupt while the line was active.
+> >        * So we missed that one, so we need to kick the interrupt again
+> >        * handler.
+> >        */
+> > -     if (active && !ack) {
+> > +     regmap_read(info->map, REG(OCELOT_GPIO_IN, info, gpio), &val);
+> > +     if ((!(val & bit) && trigger_level == IRQ_TYPE_LEVEL_LOW) ||
+> > +           (val & bit && trigger_level == IRQ_TYPE_LEVEL_HIGH))
+> > +             active = true;
+> 
+> Why do you read the line state twice? What happens if the line state
+> changes right after you've read it?
+
+Here we need to read again the status because we might have clear the
+ack of interrupt.
+If the line becomes active right after this read, then the HW will
+generate another interrupt as the interrupt is enabled and ack is
+cleared.
+
+> 
+> > +
+> > +     if (active) {
+> >               struct ocelot_irq_work *work;
+> > 
+> >               work = kmalloc(sizeof(*work), GFP_ATOMIC);
+> 
+> So yes, maybe the trade-off that there will be two interrupts are
+> better than this additional patch. But it should be documented
+> somewhere, even if it's just a comment in this driver.
+> 
+> -michael
+
+-- 
+/Horatiu
