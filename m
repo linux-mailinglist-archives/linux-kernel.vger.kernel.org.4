@@ -2,108 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D02F5F7259
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 02:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 391565F725B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 02:45:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231416AbiJGAnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 20:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57668 "EHLO
+        id S231142AbiJGApd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 20:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiJGAnJ (ORCPT
+        with ESMTP id S229652AbiJGAp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 20:43:09 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10olkn2079.outbound.protection.outlook.com [40.92.41.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62579ABD5E;
-        Thu,  6 Oct 2022 17:43:07 -0700 (PDT)
+        Thu, 6 Oct 2022 20:45:29 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2049.outbound.protection.outlook.com [40.107.114.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB48D8E0F2
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 17:45:25 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ffOnQ0V7XQxGm/Z+K90iHYhl9euDCobfW16V3FAsrNW2ZvwaOrnjx50ni/uPTcpoagygmyhhu6MakRA49VviSetMMizpPjt/m0vx0Y7NeDni/1xQJ+ERX7wTr8x5nzWbbmuuVEdRUVSI/apIgz8YTV2eb3GjTJm8XJvWvs8pFT+UbSYjuA7xz8feDWqLJD1SFwjFE/hyDM0A3/sQFf3TPAxCSUmuVRfAuKTUmrMwusnONLzDLGTfArzvDuzb7JrVbXeQTcIaEzH1fGb/+t5NxXYlgoxyVb1K7mJYMEolXfkZlWPy5BgeLejyvaU/srYgG11k4Ir5fAumdxfhgbkqmQ==
+ b=bsYEILdxIgJLji+SzohxgKwH5OYrEo/ISU4yYkYL1Ezxh0MQAb/8LMY9mQuxErgDLGE+ytFGr9J0uT78yfOnbnIPR7tWPvdM+2yfEoocOW2kJAV9YFBINzA7fNMKtCjPzhFWb7Tr58bHOeFHKkSatRi1ZnmQ6ts9LnknUUGm/zX+RUsWBSX+Z97w9SI1YrRHckjWRTcq4XXH1G420OkQwHUXb6PS18jsgJt4PtuNRdmsMMNH4iNRI+tspjeynnPpDSrtHm8UnaAN8UEfyM33n09b+CLc6H1nGWGzoeBa0KbrM5JbUQArx67EC/LTWvbdOpoinmmVpooeLV++yVb8xw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pqukOOrvRDIhkBG1itTCkuejnMLMzhVBDjnmBgzOZ5Y=;
- b=WIGspF+KKj8g48TzFuktfg7Z0JmHN4VQZkwiRneKgX7ehbmeW7OOKyROQNn0dNVemzxnJg/3GknB5g2v2MWTxx7LmylStjDVRc8rKXdD0qDIG+LCOlFg1WKqU3fNHskhoEDUyffVqMzwqpOyFNmMdYVKi3m4sSCNUg6dwj9a+AHA7+O2KT1uGo5FxD0Rd0BvQ5AFW+X69xRuKY3heq+6EV2vnw0cKISS9ocgOmZSSk1O4EzgAAU7AeMJC/eLqYgZ7OZ1LeIM+JH1ihpSQzrAeM4NP/4U98f+CGmtsQ3WiFqxsIBfKiP9fmUVqo2YQHdDWMohDJ1eVbN52J/8QQhnqg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
+ bh=xCj3FxqmW0nWuB61mohj/wSTpaK0UBGVx7Sl7+mRhi8=;
+ b=bVJ96/2MBubwYrktljlzIZVp1HvxkJg7cM11gTTsIIb3QXkhSN6UM7a7Ys5UNulh/4UUTUpH2t1yOH4nyMFtb1kK5/2Dpo7bovNFnymNCI5Yp5GiP5CTMFJNqSBCSVuAbVGtdrRwkgN+fzPl5i+egELkc+353/4jkoRbvDsAMyNsHB71EMomzKfEcpa5DoV4W6QJgB0Vce5cXfObDJWX6r5GBmUg8xs9HSJqMPOIEpaShjuzA0By5h8aQwyC+c7jpCUBVZrtQ5WBala5++6UurojULfdpBq35dK7kv8tQSEueyewQbv0a6ypn/IyVbbiJh5eq5YRkzpICdMCh0IjPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nec.com; dmarc=pass action=none header.from=nec.com; dkim=pass
+ header.d=nec.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pqukOOrvRDIhkBG1itTCkuejnMLMzhVBDjnmBgzOZ5Y=;
- b=kcn2AwBR5GXp5b977KH2miBiJve1EqiErw3hJ+s5/5AAeu2MejuaHlD7zZNpKnK3S18d5HvIuTmfi/+OrcSqpoa6gk5RUnSRNzdwP63GLbQAJx/RCNxPVT8AXrRDNuyuUFXhg4x7lQm8pTDGokic4Yt7X8Q6P3ehB/euppMcVJ5tGuJNp7PzA6unfCfUDsLitolxlBJSfs2+nd0rAi13PN/JFg8NWOm4b2lu83uMU1IrYVmhXsDIx0eiosNo9/w1koAYURhVg4tcfAXHtLv1TO4+oZkqID9bTRMyIfvJJWG/IMdDaqlpSeMspzVnHCkZ5fPVXXGupAHkGih3pUngtg==
-Received: from MN2PR01MB5358.prod.exchangelabs.com (2603:10b6:208:117::26) by
- SJ0PR01MB6221.prod.exchangelabs.com (2603:10b6:a03:295::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5676.20; Fri, 7 Oct 2022 00:43:05 +0000
-Received: from MN2PR01MB5358.prod.exchangelabs.com
- ([fe80::3c11:1e6d:4c2b:c8c7]) by MN2PR01MB5358.prod.exchangelabs.com
- ([fe80::3c11:1e6d:4c2b:c8c7%6]) with mapi id 15.20.5676.034; Fri, 7 Oct 2022
- 00:43:05 +0000
-From:   Arminder Singh <arminders208@outlook.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        asahi@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Sven Peter <sven@svenpeter.dev>,
-        Hector Martin <marcan@marcan.st>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Arminder Singh <arminders208@outlook.com>
-Subject: [PATCH v3] i2c/pasemi: PASemi I2C controller IRQ enablement
-Date:   Thu,  6 Oct 2022 20:42:03 -0400
-Message-ID: <MN2PR01MB5358ED8FC32C0CFAEBD4A0E19F5F9@MN2PR01MB5358.prod.exchangelabs.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [wI8Vag+iqIejAVU6v720xiuzB+MDRhCoOK5FgCeod/5NcFcomaqQ9XIWD6BRe3mf]
-X-ClientProxiedBy: BLAPR03CA0047.namprd03.prod.outlook.com
- (2603:10b6:208:32d::22) To MN2PR01MB5358.prod.exchangelabs.com
- (2603:10b6:208:117::26)
-X-Microsoft-Original-Message-ID: <20221007004202.2662001-1-arminders208@outlook.com>
+ bh=xCj3FxqmW0nWuB61mohj/wSTpaK0UBGVx7Sl7+mRhi8=;
+ b=c4q1fys8wKtVhZfnot7pqVW/oYccG9s05zduKQsZlRWcF08dDyTEw9FLf1m/Mhcq2G8Chy/NqHgzIRs7XiFGpA4Qyoj+sGzlVQNElpvmUGc2CBJsa36qFe/YCmrcmLfI7fJvKb0n7NZhm2zdEpYCpJAB6c7RM4zic5/ieBC3r5E=
+Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
+ by OS0PR01MB5988.jpnprd01.prod.outlook.com (2603:1096:604:c9::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.38; Fri, 7 Oct
+ 2022 00:45:23 +0000
+Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
+ ([fe80::982:49a5:97ae:7673]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
+ ([fe80::982:49a5:97ae:7673%8]) with mapi id 15.20.5676.032; Fri, 7 Oct 2022
+ 00:45:23 +0000
+From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
+        <naoya.horiguchi@nec.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+CC:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jane Chu <jane.chu@oracle.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/4] mm,hwpoison,hugetlb,memory_hotplug: hotremove
+ memory section with hwpoisoned hugepage
+Thread-Topic: [PATCH v3 1/4] mm,hwpoison,hugetlb,memory_hotplug: hotremove
+ memory section with hwpoisoned hugepage
+Thread-Index: AQHY0ArcdHIUTTnqNEKZccQtIY0xxq30EqqAgACHoACADZGwgA==
+Date:   Fri, 7 Oct 2022 00:45:23 +0000
+Message-ID: <20221007004501.GA3227576@hori.linux.bs1.fc.nec.co.jp>
+References: <20220921091359.25889-1-naoya.horiguchi@linux.dev>
+ <20220921091359.25889-2-naoya.horiguchi@linux.dev>
+ <91a4759f-88e4-f9ac-aff5-41d2db5ecfdd@huawei.com>
+ <20220928012647.GA597297@u2004.lan>
+ <e75128b5-ea83-48b4-8371-d146ed391f86@huawei.com>
+In-Reply-To: <e75128b5-ea83-48b4-8371-d146ed391f86@huawei.com>
+Accept-Language: ja-JP, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nec.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYWPR01MB8591:EE_|OS0PR01MB5988:EE_
+x-ms-office365-filtering-correlation-id: a5b6d84e-ab44-4c3e-42ce-08daa7fd37e6
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: bJ7WS9k0vsG/FvYigFLFiGPlBrRpGAw3Q/9eSGcw9Gw+yCdJrcWoN4o28WW/48WjXIwVq7c8qs06ekYbCtxYXmeygMwHgnThC9fjTUdp6yXxqebaq/ltTIPjgTl/nvI/ADRAnlMkNF41ANNU5CS2cFOLfXx4J0AyAu3d1xu3DeCenMDQaP+Od1mpKrAH18wr/SgiMH8fcHgj+AX1xYmBqM6JXLQsyBJ4yBxCbj0Q+EJTK38/VMQIqvkvULAmO9wi+D8+Ee6k44AikejMH11YT01itJVirtaRBBWToY2PQMwX1noa3FqJOeMq9k1Mg2L70CjpvPtSrgxacrywBDgNBYGidE23RABRGuSMEwRsuN8htQGiFQOEN4ImmNv+9ao7U3GxvzrP/DLEq9qdkkmOQ8YmP6DGX4bxVVIMf6w6wo2VoZ8vOveyYPG3ZbgFwvuyh344jxpnsIO+QJjnAw83IPvXfmw4RQwMbx1W6vRF/oR9KQ6X5P7MgmFySF70hQlHPSC6O2Ljhtkr1cu71/FpTgm7sw5S9V4VzJuiIYB0HiaW5R0djsQwlT5q68yvVB1+Zp2NJMg2eI6y/jlh39eOMuaWp7g5l1a+k4reYtABdKNIvwR2Kn9Z+GQLMYwBgtLCtDse1qHLig7GZMLA1kXL7hNXm7AHhfIjl1ky6dKBVIjxdY3rZ50eJ9zO14aE6O5+qh0RYW8J3AaUvsWCKZhk3fmme0jBgXUe6oA6Phui7v4fMVhSWq/Hb0yM2k6247LEUzpdhkRwgUzhETh6EuCgOg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(136003)(396003)(366004)(376002)(451199015)(5660300002)(41300700001)(8936002)(38100700002)(122000001)(66446008)(76116006)(8676002)(66476007)(66946007)(66556008)(4326008)(82960400001)(64756008)(38070700005)(85182001)(33656002)(86362001)(2906002)(7416002)(6512007)(9686003)(26005)(6506007)(186003)(1076003)(478600001)(53546011)(71200400001)(6486002)(6916009)(54906003)(83380400001)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NWVWVUh3TUVURXlEc1VmY3AzMVI0a29zYnNwcDJaSFlRY1lTcWY4dk9jT2Rz?=
+ =?utf-8?B?c2hqQ1VyVzNmaDhrcmxIcFI1NmpOb3FBLzc3Tlh1NlVXbUlqdXhrQ0x0dE1L?=
+ =?utf-8?B?eUcvMzFaQTR5TDh2L0I4b0FRM1V0NFRxRTJOMjlxd2gyL1BmUUZ5akgvNWVq?=
+ =?utf-8?B?b3kxYS91MzRJak5aOEdKMlVMNDVsVHNGV3FrY2szWDNXR0xybmwyM1JwRzhP?=
+ =?utf-8?B?TTNFRWRla29KbTRGN1NkdkVaQ2Jqa1FkR3hCMTg0MzdhWlNjQnRxSXNwcUZP?=
+ =?utf-8?B?YkZWeW56a2dxVWFjSFJkbDEvdTU3bFNqbFRNaDRlTFphYVRUWEJaeGNMd1BH?=
+ =?utf-8?B?VGJDeXpWbVAzbFU2Qndmc1VYWjBSclRjSWpsbk1LdDBLZ3NqQWJXUlhpcU9h?=
+ =?utf-8?B?UFh3TmNqeFIzaitoTEs0OERsQ1hRU0Z2bkJyWVE2RnQvWFZXYnNFK1ZVUGUy?=
+ =?utf-8?B?NVhSMmVCcGxORVM0dnpMa3Jhc1NQWFpRUERDMlBlaTFFdTgwdURsVFQ4aGJU?=
+ =?utf-8?B?dnA3QlluZUNaUDlPandGVWZGZ2R0ZmNXc1lHeC9aNkRmQkdlZGtobTlQdVFh?=
+ =?utf-8?B?SEM5L04wdnJBUlhWaFhpQ1hkZzBMcXh1MWhDV0NRaGQzOVJKY0xTQWNQakNi?=
+ =?utf-8?B?c2poRmxDMjZjNVZjUXJtcEh0d3FIaDVDWW4yNHJaRmM1SDZzUWh2aUFMeHM4?=
+ =?utf-8?B?WUszYkVhMStnNHE4cTNub1VlYkxLeWNKT05td242SnV6L2t4aUFsT3pyanJU?=
+ =?utf-8?B?dnpiL0xiOVlHT21vdnFyKytHNjZmV0lENGJSRWk3Ymt0NmFSdENGWmZRbGhu?=
+ =?utf-8?B?eGZEcElad0pjU2ZkMGlUWi9yN09tMG5rMnNLTDgxd2JPRVBIRHZqOFhDNytO?=
+ =?utf-8?B?MmxJZXIzKzhhZGg4TGhORnhaYTNTazhjT09ucy91STBvcDZISGpEWEpHUlBy?=
+ =?utf-8?B?dlFMSTVDQ1pzRmNLSUFlZzVRajlCeHBScGdrK3NwSGlGNzdXTTJSZCtXVHdk?=
+ =?utf-8?B?UmRRd2xZMkdvRTczQXBsR3FLKytLUjVoTUJWeWlYdmdlcnk1SXZrY2xzR3dR?=
+ =?utf-8?B?YjRibTh5OXM5Wm56YWIyK3pjTlAvTStHeFVXOHlRdEpEZDhrUzJ4b2w5MDZM?=
+ =?utf-8?B?akZnaU9FRFkzRklwZ1RmU3dBc081Z0wvcWhlUXZSdkM2UVY4aC8yb1BDTGlJ?=
+ =?utf-8?B?amlqbnp5ZHFWTjRETkJzdjN5ZWxtVVpJODZKWnQrMmFOS1Q3L1IrNGFGQmMw?=
+ =?utf-8?B?SWp2ayt2RkJkd0VUeHdlMjFiZ0JtMjkyMVVDOHBSbndtYVRtTmpSaXBsNDB5?=
+ =?utf-8?B?djM5eWZiU2lLVC9Jd25PZmxwa3duWkZhWkp4UmFyUTJEdnpBalI0dXRLR2NF?=
+ =?utf-8?B?dFBlbko5T09ZWnBWcUF3MFpCMjlEMERPdHNmK1JaVGNSOTBLbFRtVGNjNW1V?=
+ =?utf-8?B?Nkx4dTZxMEYzNDZTeGxCMlJ6TkYrTEtIV3dsbG8yeHRabkdMdXhtZHpEV011?=
+ =?utf-8?B?eTdSck9yMWF5eDFmWkZlUmg4ZTdPeWtWTWc2TzRMVXFnbTVEenZ4OHZUZWxj?=
+ =?utf-8?B?V09XZWt2NngxSDFIY244eHBxQndLcmZZZ25FZTgrZ1R2UUdheEdxU2hpZnds?=
+ =?utf-8?B?ZlUxZlpDOTNacWtpTEVzZ1IvSkR5Y0pVeEUzWjJ3ajNZVldRWHFhMTRZMUlI?=
+ =?utf-8?B?amRJNEtyMVd4Mis4eVpDOEt3WjU5a1RTZ1NOUVJVc1RqSkhXSDVrekVGUm12?=
+ =?utf-8?B?bTJJd3FseVhCeUY4TVFGNFlreFZ3OStMSlcxVXM2Z29RcWxtOW5Gd2ptVVEz?=
+ =?utf-8?B?Z1lFV2JVT0xMWmVyUGZWckJqbEhINWxPemR4V3BzSkVBblNOVzMvSkFSMmpS?=
+ =?utf-8?B?SVFjQ1hKZ3FNcTEyZk5meENMN1Y0RkgrejZORlRJYVBFckdNNEFqaFJYb3Jq?=
+ =?utf-8?B?MlNNM1BYZmd1OVNtSzFtQjBYNFZ1MWhTSTRJd0o3bW5JbkJQeVh5bGRRQzBZ?=
+ =?utf-8?B?VDRsVWVWaVJyREpHeDlRdHhGdEQ4SkEwYnBRSFdpUDlBeUI2VVc3UmYrR2Vl?=
+ =?utf-8?B?WDNnOVBKc1BORXVidW1NMEowMXRzUC9rOXBSdm0yOEIyU2RsclZwR1pzbk5G?=
+ =?utf-8?B?VkZ1ZVBmOWRVZXBFWHJtbnZ5TnRTY1N1ZUtLU293MFFmelBUSmdsdjBSZXh0?=
+ =?utf-8?B?WUE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <74A3270784BB5C4A9C66CB87731976AB@jpnprd01.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR01MB5358:EE_|SJ0PR01MB6221:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5c67f286-26c3-4b08-b8d5-08daa7fce50a
-X-MS-Exchange-SLBlob-MailProps: ZpxNddEKiWz9xWgIDw6EsgO2Ibru/UT1cZ7XV10NTqMVi6rxHosuiqEw0YtFBVR/OMiGlhALjdxZc/ohAYz4GCASMc7q6VA3lPUCe5teuSOf1thQmHuN5WGhAXP7YThY2Bc2WlXITjqWIHnL/pwsPd/wGrlqSx9im70ez3PnETAdXzyV+DdXoQODc/78yivKJxVOPUVr+TcaMTq6VMo6LcHJYuwp4n6R6kEBUzpl9uk2SsLmTsYKoFd7O1K3/MYsFQI7Uq0K0f0uJJDCpOMgnU6JT97H5UdBwdR3eI0sMQhBudl+qU65KCrQM3dw1X3EKOnkXYf1DKV7br010TBqZjE00Tfl/62D3m5PfcW5DXZ1nSzWgHuRXzn8DeOEE8cKL7/vB0O8X/i1NJU6AAdB/NJ/Bvvl7XauE/xppn3Hvvl9lSSfMgDu27RgQj3vmzm4wgWRt6S1nWWLkrWL7zPFqMh9yWJsSVJDFRovTtzKI4FeOO0LaqcjQpVskEGP8bw5u5wLraAdoRALBRjosz5b+otrpQW/QGt8o4FOd0g8VdQyupocf4TNHxsQxzbRn+ZVKH/0cO1RhHoZ3xZuymcPAtOPtpque3CZ6HV5ZrRi/hM5E0l5QM3XyPLka8SYH0zheckXKqgDRGDPSsSIQtRhkDDu5IDlUYAp1n3e6nFr4f1rRtCX1wbTK8F3d1sJKtjf6sayBEhEVVLHhiU0cvtJBYjMlIW/cBBO+FOfKnU2O2TZWs+Cpl0jRIjTjzrvoNjUx9fHXx84L2WPIcE4pP/jhziuvtzmuzLMp+EdSFhmPuHoH+EH2SLw5fhZTOrh6E4IJM0wGl3sBIUYUpP9Mbc2RA==
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FJm4ivqDBVCSG1SP3POC7Qbms7P47i/5cRndT0GadIQiqCUCbwp7yR6VDOcT93gGcs3Vmtl5dFlGxou5IcRA8BQuS+kNoXnRg7ZrB43KthcxtbJNDKKp+CXxgvk9VBApTB2cCRHBULu468lxe6KtZoAyVnM2kQB3IAzYfJtMM13TqJekI25eQqh7NyY+l8jsLHk9aImyCWSrTTuu4/7pWyMZKQsFr8aUYMV7LJ/NXFiWb/sgFhOpvsHXuQYp3IGeDWBBB1M+zsgTqmnMT7MDeO6FKHB2Op0kUwzDhvTkpyqsLb9GwpRvwrgM3iFxkZiETnyKusVgouP7PMHtrMY6PVhnY+aKJBy6t+W8f7etdzgzuR6TNLuRSx6KHNqjQ6RO0IE/+7MX+lwg7tNraS8GrcSLvsfrAgAEhmiaIlttDcVALxTPmmLMPsU/2p0upYccResWO2YXQcMSbVQQSxfO7LqN119Dd/SfVfxBMpzlhLuRxxWZT67ipkmCICsATNm72omMoLgIEvptpbb8r5v9Yy6ofLZtHdRknD6aE7IpapIMAbWdbZ+wkMwhUDkvSmU9I0BaHfE1caou/PuGVXbvmb5yS+nge8tFE5tkkYqupj0GX0AdeMKqxtSx22OW9e4QQEhu3Efbr4U76hLikXDUnVwtL5XGNHq+lj4bMVeCCnhj7EhNXrlmfL5h39E849Dvb0V9xxc89qsyWTP363Oe5Q57oMPKVc17013ZidBquXE=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qvnBOh22pvUEwsGytVUDVbj8Fs7EltnwDUPWrOFsE1DP5ohyt9kOEPj3NBGf?=
- =?us-ascii?Q?1XhDijtNgVhzoqrP1kjfysIVwd3F+2GQXGutuqJ+WQ4Brjx/EhjPF8KMewTa?=
- =?us-ascii?Q?0U+iem37hFVlSpy/nOSs6zuNXI/ICTcGlGGul6UdOBf5z6MTFmmJnNaKk7fd?=
- =?us-ascii?Q?YZAwjmkSG6owvi/lI8LCMjqCNPfSi1yOWFuPNCwW2YSqMqKm6IUVVB58hKQJ?=
- =?us-ascii?Q?ilbcLF69mIToc708w6A5yz2UjRkQerXFeFk05LKbZWdVtby84t+uhRXgJyq0?=
- =?us-ascii?Q?Ce9Zchw2QwSL9DaVaS7Di/zJq9PFZW/hl/+OvtQMgBNUEroWhzDFn3Yuxmdb?=
- =?us-ascii?Q?GM5FWbfcTjtxgmPbNCa5bNS8XkkkUciLGaFlPH0gwr4v+1zGm6vI/G3Fy/VK?=
- =?us-ascii?Q?pA9FVVbo3f8Y64jIS8VT/TLq2EvWPH8uBQQAm/FVFiYrU8fA4cnNqBByGB8V?=
- =?us-ascii?Q?KE+Fk6xC+I+pMaERuJLujgF2W20NpoBrT88JlvJvgMVYVAlI3IQpyjxGqoxz?=
- =?us-ascii?Q?I2VJfvFqJsrbbjZgRwpeW3iUtOG8x5am7Lsl2BYwJ/MRGKSomMyA6cW2XIyH?=
- =?us-ascii?Q?gVaGyI2Lg6zXyvLZKfzFJyJ9+sao6KOi2/Zrdtyc7ptDadz3yCvbqBwpf3ka?=
- =?us-ascii?Q?ubtS7gD7FypUV1Xq2xhF7rGmp912p1FB9wmBXgoSMr7YbcSU+9ZLaKndzdZO?=
- =?us-ascii?Q?67CYtMkQ5xtJl+JKAuix7qSrpKcSGXxjFR8BbGlFRqk7xv0Mb9xxS3mptRo3?=
- =?us-ascii?Q?4PJmUFtXnJsDfdQEYebJRq4Qon1CQGwzuh1p3elt+2bFar6SFQzxE3K8bZEp?=
- =?us-ascii?Q?Q+LxnIo98GPf3kcMHSd61U6cMCS9LaUYK0a9w8hFjrqZY0iLg9fb06Be8JoL?=
- =?us-ascii?Q?Lew+I+D7wnlHV99lkJ3f+d5m5bcBAGuBM0cKGCbdeZm81z5p08htPNkDBcW5?=
- =?us-ascii?Q?c/ARCn5UzDpNRWZ6hbfh/W7ENvhXO03gmQN1K1prnpr+OgFfoASVoz0MjIQh?=
- =?us-ascii?Q?2B56hpLeuhK5ypJ76MqvIj7mROClZO1vj1Nzh9nHPDAV0vCe3ay5DRsgJgeV?=
- =?us-ascii?Q?wgyanmBiKvvK8u6CX+wDCGrvnW3wwFHkJ/rb+iafXDP9XCdypCQX8nrrhhTI?=
- =?us-ascii?Q?X6VFRq2s6N3prpEVeY6lR76ucFVbOTCK8+A5o/3PY3gMAovLsC801rJ91deK?=
- =?us-ascii?Q?PLIUZ3snPufJU2bn0pQoPqP989UYd1pHcwobhRA2p3OzbNfxzsOV5rh4s9qw?=
- =?us-ascii?Q?6xTeRLesd0huGAb3lmj986UYZT8PD9aOGfxZifUMFxP3wcEzpjQfWe0oLCoA?=
- =?us-ascii?Q?8KKdJGOVaTLcWeSA8GrYSDnrxH3L/nJGmkI8lT4HO2oHKA=3D=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c67f286-26c3-4b08-b8d5-08daa7fce50a
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR01MB5358.prod.exchangelabs.com
+X-OriginatorOrg: nec.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2022 00:43:05.1690
+X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a5b6d84e-ab44-4c3e-42ce-08daa7fd37e6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Oct 2022 00:45:23.2123
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR01MB6221
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FqCJ5Njbj2n7T5WKKSKqTNr4Ly4+4wUvZ6bNJfTLoMXPEyckKlay/pG/buxMmJ/TIrmiDt4VpdUbEE7JZOJT4Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS0PR01MB5988
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,176 +141,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds IRQ support to the PASemi I2C controller driver to 
-increase the performace of I2C transactions on platforms with PASemi I2C 
-controllers. While primarily intended for Apple silicon platforms, this 
-patch should also help in enabling IRQ support for older PASemi hardware 
-as well should the need arise.
-
-Signed-off-by: Arminder Singh <arminders208@outlook.com>
----
-This version of the patch has been tested on an M1 Ultra Mac Studio,
-as well as an M1 MacBook Pro, and userspace launches successfully
-while using the IRQ path for I2C transactions.
-
-This version of the patch only contains fixes to the whitespace and
-alignment issues found in v2 of the patch, and as such the testing that
-Christian Zigotsky did on PASemi hardware for v2 of the patch also applies
-to this version of the patch as well.
-(See v2 patch email thread for the "Tested-by" tag)
-
-v2 to v3 changes:
- - Fixed some whitespace and alignment issues found in v2 of the patch
-
-v1 to v2 changes:
- - moved completion setup from pasemi_platform_i2c_probe to
-   pasemi_i2c_common_probe to allow PASemi and Apple platforms to share
-   common completion setup code in case PASemi hardware gets IRQ support
-   added
- - initialized the status variable in pasemi_smb_waitready when going down
-   the non-IRQ path
- - removed an unnecessary cast of dev_id in the IRQ handler
- - fixed alignment of struct member names in i2c-pasemi-core.h
-   (addresses Christophe's feedback in the original submission)
- - IRQs are now disabled after the wait_for_completion_timeout call
-   instead of inside the IRQ handler
-   (prevents the IRQ from going off after the completion times out)
- - changed the request_irq call to a devm_request_irq call to obviate
-   the need for a remove function and a free_irq call
-   (thanks to Sven for pointing this out in the original submission)
- - added a reinit_completion call to pasemi_reset 
-   as a failsafe to prevent missed interrupts from causing the completion
-   to never complete (thanks to Arnd Bergmann for pointing this out)
- - removed the bitmask variable in favor of just using the value
-   directly (it wasn't used anywhere else)
-
-v2 linked here: https://lore.kernel.org/linux-i2c/MN2PR01MB535821C8058C7814B2F8EEDF9F599@MN2PR01MB5358.prod.exchangelabs.com/
-v1 linked here: https://lore.kernel.org/linux-i2c/MN2PR01MB535838492432C910F2381F929F6F9@MN2PR01MB5358.prod.exchangelabs.com/T/#m11b3504c2667517aad7521514c99ca0e07a9381f
-
-Hopefully the patch is good to go this time around!
-
- drivers/i2c/busses/i2c-pasemi-core.c     | 29 ++++++++++++++++++++----
- drivers/i2c/busses/i2c-pasemi-core.h     |  5 ++++
- drivers/i2c/busses/i2c-pasemi-platform.c |  6 +++++
- 3 files changed, 36 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-pasemi-core.c b/drivers/i2c/busses/i2c-pasemi-core.c
-index 9028ffb58cc0..4855144b370e 100644
---- a/drivers/i2c/busses/i2c-pasemi-core.c
-+++ b/drivers/i2c/busses/i2c-pasemi-core.c
-@@ -21,6 +21,7 @@
- #define REG_MTXFIFO	0x00
- #define REG_MRXFIFO	0x04
- #define REG_SMSTA	0x14
-+#define REG_IMASK	0x18
- #define REG_CTL		0x1c
- #define REG_REV		0x28
- 
-@@ -66,6 +67,7 @@ static void pasemi_reset(struct pasemi_smbus *smbus)
- 		val |= CTL_EN;
- 
- 	reg_write(smbus, REG_CTL, val);
-+	reinit_completion(&smbus->irq_completion);
- }
- 
- static void pasemi_smb_clear(struct pasemi_smbus *smbus)
-@@ -81,11 +83,18 @@ static int pasemi_smb_waitready(struct pasemi_smbus *smbus)
- 	int timeout = 10;
- 	unsigned int status;
- 
--	status = reg_read(smbus, REG_SMSTA);
--
--	while (!(status & SMSTA_XEN) && timeout--) {
--		msleep(1);
-+	if (smbus->use_irq) {
-+		reinit_completion(&smbus->irq_completion);
-+		reg_write(smbus, REG_IMASK, SMSTA_XEN | SMSTA_MTN);
-+		wait_for_completion_timeout(&smbus->irq_completion, msecs_to_jiffies(10));
-+		reg_write(smbus, REG_IMASK, 0);
- 		status = reg_read(smbus, REG_SMSTA);
-+	} else {
-+		status = reg_read(smbus, REG_SMSTA);
-+		while (!(status & SMSTA_XEN) && timeout--) {
-+			msleep(1);
-+			status = reg_read(smbus, REG_SMSTA);
-+		}
- 	}
- 
- 	/* Got NACK? */
-@@ -344,10 +353,14 @@ int pasemi_i2c_common_probe(struct pasemi_smbus *smbus)
- 
- 	/* set up the sysfs linkage to our parent device */
- 	smbus->adapter.dev.parent = smbus->dev;
-+	smbus->use_irq = 0;
-+	init_completion(&smbus->irq_completion);
- 
- 	if (smbus->hw_rev != PASEMI_HW_REV_PCI)
- 		smbus->hw_rev = reg_read(smbus, REG_REV);
- 
-+	reg_write(smbus, REG_IMASK, 0);
-+
- 	pasemi_reset(smbus);
- 
- 	error = devm_i2c_add_adapter(smbus->dev, &smbus->adapter);
-@@ -356,3 +369,11 @@ int pasemi_i2c_common_probe(struct pasemi_smbus *smbus)
- 
- 	return 0;
- }
-+
-+irqreturn_t pasemi_irq_handler(int irq, void *dev_id)
-+{
-+	struct pasemi_smbus *smbus = dev_id;
-+
-+	complete(&smbus->irq_completion);
-+	return IRQ_HANDLED;
-+}
-diff --git a/drivers/i2c/busses/i2c-pasemi-core.h b/drivers/i2c/busses/i2c-pasemi-core.h
-index 4655124a37f3..88821f4e8a9f 100644
---- a/drivers/i2c/busses/i2c-pasemi-core.h
-+++ b/drivers/i2c/busses/i2c-pasemi-core.h
-@@ -7,6 +7,7 @@
- #include <linux/i2c-smbus.h>
- #include <linux/io.h>
- #include <linux/kernel.h>
-+#include <linux/completion.h>
- 
- #define PASEMI_HW_REV_PCI -1
- 
-@@ -16,6 +17,10 @@ struct pasemi_smbus {
- 	void __iomem		*ioaddr;
- 	unsigned int		 clk_div;
- 	int			 hw_rev;
-+	int			 use_irq;
-+	struct completion	 irq_completion;
- };
- 
- int pasemi_i2c_common_probe(struct pasemi_smbus *smbus);
-+
-+irqreturn_t pasemi_irq_handler(int irq, void *dev_id);
-diff --git a/drivers/i2c/busses/i2c-pasemi-platform.c b/drivers/i2c/busses/i2c-pasemi-platform.c
-index 88a54aaf7e3c..e35945a91dbe 100644
---- a/drivers/i2c/busses/i2c-pasemi-platform.c
-+++ b/drivers/i2c/busses/i2c-pasemi-platform.c
-@@ -49,6 +49,7 @@ static int pasemi_platform_i2c_probe(struct platform_device *pdev)
- 	struct pasemi_smbus *smbus;
- 	u32 frequency;
- 	int error;
-+	int irq_num;
- 
- 	data = devm_kzalloc(dev, sizeof(struct pasemi_platform_i2c_data),
- 			    GFP_KERNEL);
-@@ -82,6 +83,11 @@ static int pasemi_platform_i2c_probe(struct platform_device *pdev)
- 	if (error)
- 		goto out_clk_disable;
- 
-+	irq_num = platform_get_irq(pdev, 0);
-+	error = devm_request_irq(smbus->dev, irq_num, pasemi_irq_handler, 0, "pasemi_apple_i2c", (void *)smbus);
-+
-+	if (!error)
-+		smbus->use_irq = 1;
- 	platform_set_drvdata(pdev, data);
- 
- 	return 0;
--- 
-2.34.1
-
+T24gV2VkLCBTZXAgMjgsIDIwMjIgYXQgMDU6MzI6MTJQTSArMDgwMCwgTWlhb2hlIExpbiB3cm90
+ZToNCj4gT24gMjAyMi85LzI4IDk6MjYsIE5hb3lhIEhvcmlndWNoaSB3cm90ZToNCj4gPj4+IEBA
+IC0xODE1LDYgKzE4MTUsMTMgQEAgaW50IF9fZ2V0X2h1Z2VfcGFnZV9mb3JfaHdwb2lzb24odW5z
+aWduZWQgbG9uZyBwZm4sIGludCBmbGFncykNCi4uLg0KPiA+Pj4gQEAgLTE4NjIsNiArMTg2OSw3
+IEBAIHN0YXRpYyBpbnQgdHJ5X21lbW9yeV9mYWlsdXJlX2h1Z2V0bGIodW5zaWduZWQgbG9uZyBw
+Zm4sIGludCBmbGFncywgaW50ICpodWdldGxiDQo+ID4+PiAgDQo+ID4+PiAgCWlmIChod3BvaXNv
+bl9maWx0ZXIocCkpIHsNCj4gPj4+ICAJCWh1Z2V0bGJfY2xlYXJfcGFnZV9od3BvaXNvbihoZWFk
+KTsNCj4gPj4+ICsJCVNldEhQYWdlTWlncmF0YWJsZShoZWFkKTsNCj4gPj4NCj4gPj4gV291bGQg
+d2Ugc2V0IEhQYWdlTWlncmF0YWJsZSBmbGFnIGZvciBmcmVlIGh1Z2V0bGIgcGFnZXMgaGVyZT8g
+SUlVQywgdGhleSdyZSBub3QgZXhwZWN0ZWQgdG8gaGF2ZSB0aGlzIGZsYWcgc2V0Lg0KPiA+IA0K
+PiA+IFRoYW5rIHlvdSwgeW91J3JlIHJpZ2h0LiAgVGhpcyBzaG91bGQgYmUgZG9uZSBpbiAiaWYg
+KHJlcyA9PSAxKSIgYmxvY2suDQo+IA0KPiBJZiByZXMgPT0gMSwgaXQgbWVhbnMgaHVnZXRsYiBw
+YWdlIHJlZmNudCBpcyBpbmNyZW1lbnRlZC4gQnV0IGl0IHNlZW1zIHRoaXMgZG9lcyBub3QgbmVj
+ZXNzYXJpbHkgbWVhbg0KPiBIUGFnZU1pZ3JhdGFibGUgaXMgY2xlYXJlZCBieSBfX2dldF9odWdl
+X3BhZ2VfZm9yX2h3cG9pc29uKCkgaWYgdGhlIGh1Z2V0bGIgcGFnZSBpcyBhbHJlYWR5IGlzb2xh
+dGVkLg0KPiBJZiBzbywgd2UgbWlnaHQgc2V0IEhQYWdlTWlncmF0YWJsZSBmbGFnIGJhY2sgZm9y
+IGFscmVhZHkgaXNvbGF0ZWQgaHVnZXRsYiBwYWdlcz8NCg0KIyBzb3JyeSBmb3IgbXkgbGF0ZSBy
+ZXBseSwgSSB3YXMgYnVzeSB3aXRoIHBlcnNvbmFsIG1hdHRlcnMgdGhlc2UgZGF5cy4uLg0KDQpZ
+ZXMsIHRoYXQgY291bGQgaGFwcGVuIChhbmQgYWxzbyBpbiB0aGUgY2FzZSB3aGVyZSBNRl9DT1VO
+VF9JTkNSRUFTRUQgaXMNCnNldCkuICBXZSBuZWVkIHN0b3JlIHdoZXRoZXIgSFBhZ2VNaWdyYXRh
+YmxlIGZsYWcgaXMgY2xlYXJlZCBvciBub3QgaW4NCl9fZ2V0X2h1Z2VfcGFnZV9mb3JfaHdwb2lz
+b24oKS4gIEknbGwgYWRkIGEgcGFyYW1ldGVyIHRvDQpfX2dldF9odWdlX3BhZ2VfZm9yX2h3cG9p
+c29uKCkgdG8gcmV0dXJuIHRoZSBmbGFnIGNoYW5nZSB0byB0aGUgY2FsbGVyLg0KQnV0IEkgYWxz
+byB0aGluayB0aGF0IHRoZXJlJ3JlIGEgZmV3IGludGVybmFsIHN0YXRlcyBkdXJpbmcgZXJyb3Ig
+aGFuZGxpbmcsDQpzbyBpdCBtaWdodCBiZSBnb29kIHRvIGFkZCBzb21lIHN0cnVjdHVyZSBsaWtl
+ICJzdHJ1Y3QgaHdwb2lzb25fY29udHJvbCINCnRvIHNhdmUgc3VjaCBpbnRlcm5hbCBzdGF0ZXMg
+b3ZlciByZWxhdGVkIGZ1bmN0aW9ucyAobm90IGluIHRoaXMgc2VyaWVzKS4NCg0KVGhhbmtzLA0K
+TmFveWEgSG9yaWd1Y2hp
