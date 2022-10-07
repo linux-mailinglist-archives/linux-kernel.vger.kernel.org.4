@@ -2,155 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 554CD5F7686
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B649F5F7688
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbiJGJwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 05:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48042 "EHLO
+        id S229470AbiJGJxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 05:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbiJGJvv (ORCPT
+        with ESMTP id S229683AbiJGJxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 05:51:51 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8761FCA8B4;
-        Fri,  7 Oct 2022 02:51:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M8mk5i+549jgcZf92MwgOVPLie1/mMaGDwuHm9QsbSagS+F4X/3IzwmuGnYMq09GQdYS9w+bUEHAzI7r4pe0ruCwldCKhVWFjxbeCCVGSc0pxwbxEeHBVix0pyCms+3tBo7tQNWzzyBmLvlCzj7tG44k2jNUBZEq3XgBkX6DPa1cPQ+gSxs02RYwyWcldOTcBjnsqOD+bfh6GvV/FhsnPGE9l/N7V7jwreYd+a6WTPu0tKDtktyFZNFU0sNkJeR6SXOqtmYn/fI0YYkUoNrD/yxQZycnp79katjgw4ltO8/dhrk6L8itSOjOkVvtSC8YuPlmRCuU00c1YHDG7JvwNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+8cSDXU0EPK12iY8g+Kd5atNI5mVyNKV0QQWHvTEnS0=;
- b=AIsWToCdw5nPmgpdVY0IRqei+ZdpshP9YncdQsFWtwEN0BANik8zKtbZR7HPiXr7hgYP3PFAsf8Er/Rsl6bCBvjtKk+SCNDWYLF7NXzd7vYwBz4l7/mSpSx5hdFKfoPvfALfDYO6pb8+0503g0rqx4hCtM3DZMn8jFqCZC8a1rw4D5i8IHI++uR2fqzWBsEmNoneGNtUZhjvNMZvxgRsvttDba7UJRil3oqOpygL3pglfbtsAuB9ryN/2vTQ5GZGZ/jl0aSnCgoamNFAlX3kdIWaTpJ9nTONV5E63+wOUFa55cvk72LGqz7KmsPoFTIdUfRDhlGbWjzPLB5zIvXxQg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+8cSDXU0EPK12iY8g+Kd5atNI5mVyNKV0QQWHvTEnS0=;
- b=WSTO205e0CGZGxR5sHoMo4vJ88S8Jtx+yFL/9nocBHjxBZ5OVHru7vj+WaHvKzhIr9u8wjpOAhvh51Q1te4MwDoGDE51HXZQtSSuVSLTrsGjcskKHo18bxWqO2MT1ioNlURHcY6PJu9mxl/k5Vqa/tMi0hQsqWRu2h3mQBw1/yXJL2FoiXztRVEr/geHET3dyv7p7cS4KosYMkgvtmrsHFnMwi7EJL+5/l041PVA8cUyfHfWbAeXcfQu014zGg4HwVbxtEMQIRtuRIWZWG6vaYwNWwhKSeJ5APNMvLG2wDThh0Jl3iFstykIeV2VLGkvK8zmQtNgeLsMnsj8brztpg==
-Received: from BN9PR03CA0188.namprd03.prod.outlook.com (2603:10b6:408:f9::13)
- by SA1PR12MB5657.namprd12.prod.outlook.com (2603:10b6:806:234::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Fri, 7 Oct
- 2022 09:51:42 +0000
-Received: from BN8NAM11FT106.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:f9:cafe::4a) by BN9PR03CA0188.outlook.office365.com
- (2603:10b6:408:f9::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24 via Frontend
- Transport; Fri, 7 Oct 2022 09:51:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- BN8NAM11FT106.mail.protection.outlook.com (10.13.177.7) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5709.10 via Frontend Transport; Fri, 7 Oct 2022 09:51:36 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Fri, 7 Oct 2022
- 02:51:24 -0700
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Fri, 7 Oct 2022 02:51:23 -0700
-Received: from kkartik-desktop.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server id 15.2.986.29 via Frontend
- Transport; Fri, 7 Oct 2022 02:51:20 -0700
-From:   Kartik <kkartik@nvidia.com>
-To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <digetx@gmail.com>, <kkartik@nvidia.com>, <windhl@126.com>,
-        <ndesaulniers@google.com>, <nathan@kernel.org>,
-        <skamble@nvidia.com>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 3/3] soc/tegra: fuse: add opt-dla-disable nvmem cell
-Date:   Fri, 7 Oct 2022 15:21:08 +0530
-Message-ID: <1665136268-29494-4-git-send-email-kkartik@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1665136268-29494-1-git-send-email-kkartik@nvidia.com>
-References: <1665136268-29494-1-git-send-email-kkartik@nvidia.com>
+        Fri, 7 Oct 2022 05:53:12 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E9ABEF8E
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 02:53:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C1FBD1F88B;
+        Fri,  7 Oct 2022 09:53:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1665136381; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e3t5FKcXvjfeXviMl0VsEjmCbVtdPLfPwfRi8JItI9I=;
+        b=EMB7CrhN8A+oZTMlapSSSeGhr6z8lgy5EqX8TQf8lZ521QMeU8sWtkW6p9VXT2xt1DXybx
+        m72eqxkQixo9RtVeMRffJTjPReuood5+2ptLiDu2QPCvYDbirKREwOOiMurshh+6sj9rpI
+        rvXkCRxOnVBBCAX3FD41WmYMO1+qPOE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1665136381;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e3t5FKcXvjfeXviMl0VsEjmCbVtdPLfPwfRi8JItI9I=;
+        b=3JkkXBeromZaRHNfVYCjdHUXqkh4ufAOyNphvLRKQi+zckP1eXp01bfZVqVAuhnsXkl3rT
+        y6hbkj6VcSSmLuBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5FDCF13A3D;
+        Fri,  7 Oct 2022 09:53:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id aAHJE/32P2PRHAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 07 Oct 2022 09:53:01 +0000
+Message-ID: <b56221bd-04c7-ce23-f3e9-03cae58ec724@suse.cz>
+Date:   Fri, 7 Oct 2022 11:53:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT106:EE_|SA1PR12MB5657:EE_
-X-MS-Office365-Filtering-Correlation-Id: 18398717-e322-4258-8a78-08daa8498672
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 55b2B1+LMt/itKwoaQjEERznOgDpG1zav4HRbncUnRhY5vdO0G5T505GV1N+NeS/iQHMDgHh43KH+25J4YRQXlFsEV07v1Ya+r5Tf/YZmW0RZPqAODEsPhSlCK4K3NwuhsWz8q7lWYqiwkyTZcgZ2Swz1IdSfrMHDjOhBj2yHHZJ1C7EVToOdB2TjTh/YJSZlv+ALGy6oObHeMRQ/9/fZMjYs8KRDHOu6e7hXDV8nlRaWoxl1Px9wFpQgmQpZ2g1ku+qXLlrUsorsZgrOB4bmqp6/zwbhB5/9w3UZq0WIo4olqA0YSDwAiu96IAMnQz3nPsHpqKHK0avgbt9lyaSzYDM1U73sF23llkT7TxD+iyrEFvvCqw1BJx1uGw1IwVCAEuK1afKnYxwsZlNn3JuvwxRRhvKe8zGHLN5cM/XjL+L7/aJpyb37rvtl30Pjkdlfe/Z/bYAnFCXYBRd4SrKs13xshKN9MiYMuIvj5huPY6y3qouWoN3VLzRGA8esWxbbF0/HSYi6hTiYJEMfk8v7oiN/7USSF3luou9VkyTab/IzAGtWfn19MN2mr02Ssr1nNNfxt23fKhDfejsl3YCo/OU9KwjQHgYEejA7xN61oICWkq7PZL6fdwmTXKs9JkfASu/Tl5SLkYZ1NKjsVMsEL6A+msRAmxkIjHYGjlY39ZtmCdtHm4gFG3jdUhk/7GXWPFmxEmjCeBZgS5SEkZrCyXscXLb0QTkqyWwEf/VuGvcBg7q8TNUQ8U9+8XAN1WkkWExFl2nChthQos0yv4C2XfZokKvfSPp88TVrVceoX6yFxIjZ5ehnvs6yPPtN9nfjiLIA/eCBSYH2CtY/hnrIw==
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(346002)(376002)(136003)(451199015)(46966006)(40470700004)(36840700001)(6666004)(70206006)(8676002)(86362001)(82310400005)(40460700003)(7696005)(70586007)(36860700001)(82740400003)(921005)(40480700001)(336012)(356005)(2616005)(186003)(478600001)(36756003)(2906002)(26005)(316002)(7636003)(8936002)(47076005)(426003)(110136005)(83380400001)(41300700001)(5660300002)(2101003)(83996005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2022 09:51:36.6204
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 18398717-e322-4258-8a78-08daa8498672
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT106.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB5657
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] lib: check if stack_table valid in __stack_depot_save
+To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Marco Elver <elver@google.com>,
+        Imran Khan <imran.f.khan@oracle.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
+        steve.kang@unisoc.com
+References: <1665021391-1035-1-git-send-email-zhaoyang.huang@unisoc.com>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <1665021391-1035-1-git-send-email-zhaoyang.huang@unisoc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tegra234 DLA (Deep Learning Accelerator) driver requires access to
-opt_dla_disable fuse to correctly identify internal or production
-boards.
+On 10/6/22 03:56, zhaoyang.huang wrote:
+> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> 
+> NULL pointer reported in below lkp test report which should caused by invalid
+> stack_table in very early stage before stack_depot_early_init called. I would like
+> have kmemleak use stackdepot to track backtrace in this commit which lead to
 
-Add nvmem cell "opt-dla-disable" for Tegra234 SOC, this allows DLA
-driver to read opt_dla_disable fuse via nvmem interface.
+This commit?
+https://lore.kernel.org/all/1664447407-8821-1-git-send-email-zhaoyang.huang@unisoc.com/
 
-Signed-off-by: Kartik <kkartik@nvidia.com>
----
- drivers/soc/tegra/fuse/fuse-tegra30.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+It looks it adds stackdepot handling to kmemleak without making sure
+stackdepot is initialized. Please read the comment of stack_depot_init() /
+commit log of commit 2dba5eb1c73b ("lib/stackdepot: allow optional init and
+stack_table allocation by kvmalloc()") for details.
 
-diff --git a/drivers/soc/tegra/fuse/fuse-tegra30.c b/drivers/soc/tegra/fuse/fuse-tegra30.c
-index 932a03c64534a..0ee907af655b3 100644
---- a/drivers/soc/tegra/fuse/fuse-tegra30.c
-+++ b/drivers/soc/tegra/fuse/fuse-tegra30.c
-@@ -630,6 +630,12 @@ static const struct nvmem_cell_info tegra234_fuse_cells[] = {
- 		.bytes = 4,
- 		.bit_offset = 0,
- 		.nbits = 32,
-+	}, {
-+		.name = "opt-dla-disable",
-+		.offset = 0x3f0,
-+		.bytes = 4,
-+		.bit_offset = 0,
-+		.nbits = 32,
- 	},
- };
- 
-@@ -644,6 +650,16 @@ static const struct nvmem_cell_lookup tegra234_fuse_lookups[] = {
- 		.cell_name = "xusb-pad-calibration-ext",
- 		.dev_id = "3520000.padctl",
- 		.con_id = "calibration-ext",
-+	}, {
-+		.nvmem_name = "fuse",
-+		.cell_name = "opt-dla-disable",
-+		.dev_id = "15880000.nvdla0",
-+		.con_id = "dla-disable",
-+	}, {
-+		.nvmem_name = "fuse",
-+		.cell_name = "opt-dla-disable",
-+		.dev_id = "158c0000.nvdla1",
-+		.con_id = "dla-disable",
- 	},
- };
- 
--- 
-2.17.1
+So this patch is most likely unnecessary and should be dropped from mm.
+
+> stack hash access before stackdepot is initialized. Add stack_table as extra
+> criteria in __stack_depot_save's entry check.
+> 
+> commit: a65edf711f97a0a3764fc04b0301ab2e073992db ("[PATCH] mm: use stack_depot for recording kmemleak's backtrace")
+> url: https://github.com/intel-lab-lkp/linux/commits/zhaoyang-huang/mm-use-stack_depot-for-recording-kmemleak-s-backtrace/20220929-183243
+> base: https://git.kernel.org/cgit/linux/kernel/git/akpm/mm.git mm-everything
+> patch link: https://lore.kernel.org/linux-mm/1664447407-8821-1-git-send-email-zhaoyang.huang@unisoc.com
+> 
+> in testcase: boot
+> 
+> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+> 
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> 
+> 	[    0.191645][    T0] BUG: kernel NULL pointer dereference, address: 0000000000000000
+> 	[    0.192360][    T0] #PF: supervisor read access in kernel mode
+> 	[    0.192862][    T0] #PF: error_code(0x0000) - not-present page
+> 	[    0.193371][    T0] PGD 0 P4D 0
+> 	[    0.193672][    T0] Oops: 0000 [#1] SMP PTI
+> 	[    0.194051][    T0] CPU: 0 PID: 0 Comm: swapper Not tainted 6.0.0-rc3-00706-ga65edf711f97 #26
+> 	[    0.194755][    T0] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
+> 	[ 0.195583][ T0] RIP: 0010:__stack_depot_save (kbuild/src/x86_64-2/lib/stackdepot.c:452)
+> 	[ 0.196081][ T0] Code: 03 48 c7 c7 ec 17 b3 84 e8 f1 ea 85 ff 44 89 e0 23 05 d4 aa 01 03 48 8d 04 c3 48 89 c3 48 89 c7 48 89 44 24 28 e8 34 fc 85 ff <4c> 8b 33 4d 85 f6 0f 84 b6 00 00 00 8b 04 24 83 e8 01 48 8d 04 c5
+> 	All code
+> 	========
+> 	0:   03 48 c7                add    -0x39(%rax),%ecx
+> 	3:   c7                      (bad)
+> 	4:   ec                      in     (%dx),%al
+> 	5:   17                      (bad)
+> 	6:   b3 84                   mov    $0x84,%bl
+> 	8:   e8 f1 ea 85 ff          callq  0xffffffffff85eafe
+> 	d:   44 89 e0                mov    %r12d,%eax
+> 	10:   23 05 d4 aa 01 03       and    0x301aad4(%rip),%eax        # 0x301aaea
+> 	16:   48 8d 04 c3             lea    (%rbx,%rax,8),%rax
+> 	1a:   48 89 c3                mov    %rax,%rbx
+> 	1d:   48 89 c7                mov    %rax,%rdi
+> 	20:   48 89 44 24 28          mov    %rax,0x28(%rsp)
+> 	25:   e8 34 fc 85 ff          callq  0xffffffffff85fc5e
+> 	2a:*  4c 8b 33                mov    (%rbx),%r14              <-- trapping instruction
+> 	2d:   4d 85 f6                test   %r14,%r14
+> 	30:   0f 84 b6 00 00 00       je     0xec
+> 	36:   8b 04 24                mov    (%rsp),%eax
+> 	39:   83 e8 01                sub    $0x1,%eax
+> 	3c:   48                      rex.W
+> 	3d:   8d                      .byte 0x8d
+> 	3e:   04 c5                   add    $0xc5,%al
+> 
+> 	Code starting with the faulting instruction
+> 	===========================================
+> 	0:   4c 8b 33                mov    (%rbx),%r14
+> 	3:   4d 85 f6                test   %r14,%r14
+> 	6:   0f 84 b6 00 00 00       je     0xc2
+> 	c:   8b 04 24                mov    (%rsp),%eax
+> 	f:   83 e8 01                sub    $0x1,%eax
+> 	12:   48                      rex.W
+> 	13:   8d                      .byte 0x8d
+> 	14:   04 c5                   add    $0xc5,%al
+> 	[    0.197693][    T0] RSP: 0000:ffffffff83603ca8 EFLAGS: 00010046
+> 	[    0.198214][    T0] RAX: ffffffff83613cd8 RBX: 0000000000000000 RCX: ffffffff81b16d2c
+> 	[    0.198858][    T0] RDX: 0000000000000b1e RSI: 0000000000000000 RDI: 0000000000000000
+> 	[    0.199499][    T0] RBP: 00000000c5a6b597 R08: ffffffff8479d118 R09: 0000000000000000
+> 	[    0.200142][    T0] R10: 0000000000000004 R11: 0001ffffffffffff R12: 0000000027b2cd0a
+> 	[    0.200787][    T0] R13: 0000000000000003 R14: 000000004954f68c R15: ffffffff83603d54
+> 	[    0.201488][    T0] FS:  0000000000000000(0000) GS:ffffffff842c9000(0000) knlGS:0000000000000000
+> 	[    0.202247][    T0] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> 	[    0.202807][    T0] CR2: 0000000000000000 CR3: 000000000360a000 CR4: 00000000000406b0
+> 	[    0.203470][    T0] Call Trace:
+> 	[    0.203748][    T0]  <TASK>
+> 	[ 0.203996][ T0] stack_depot_save (kbuild/src/x86_64-2/lib/stackdepot.c:534)
+> 	[ 0.204406][ T0] set_track_prepare (kbuild/src/x86_64-2/mm/slub.c:752)
+> 	[ 0.204816][ T0] ? memblock_alloc_range_nid (kbuild/src/x86_64-2/mm/memblock.c:1424)
+> 	[ 0.205311][ T0] ? memblock_alloc_internal (kbuild/src/x86_64-2/mm/memblock.c:1514)
+> 	[ 0.205781][ T0] ? memblock_alloc_try_nid (kbuild/src/x86_64-2/mm/memblock.c:1614 (discriminator 3))
+> 	[ 0.206238][ T0] ? setup_command_line (kbuild/src/x86_64-2/init/main.c:631)
+> 	[ 0.206670][ T0] ? start_kernel (kbuild/src/x86_64-2/init/main.c:965)
+> 	[ 0.207068][ T0] ? secondary_startup_64_no_verify (kbuild/src/x86_64-2/arch/x86/kernel/head_64.S:358)
+> 	[ 0.207612][ T0] ? __raw_callee_save___native_queued_spin_unlock (??:?)
+> 	[ 0.208251][ T0] ? write_comp_data (kbuild/src/x86_64-2/kernel/kcov.c:236)
+> 	[ 0.208678][ T0] ? strncpy (kbuild/src/x86_64-2/lib/string.c:115)
+> 	[ 0.209040][ T0] __create_object (kbuild/src/x86_64-2/mm/kmemleak.c:681)
+> 	[ 0.209447][ T0] kmemleak_alloc_phys (kbuild/src/x86_64-2/mm/kmemleak.c:1212)
+> 	[ 0.209867][ T0] memblock_alloc_range_nid (kbuild/src/x86_64-2/mm/memblock.c:1424)
+> 	[ 0.210344][ T0] memblock_alloc_internal (kbuild/src/x86_64-2/mm/memblock.c:1514)
+> 	[ 0.210806][ T0] memblock_alloc_try_nid (kbuild/src/x86_64-2/mm/memblock.c:1614 (discriminator 3))
+> 	[ 0.211255][ T0] setup_command_line (kbuild/src/x86_64-2/init/main.c:631)
+> 	[ 0.211678][ T0] start_kernel (kbuild/src/x86_64-2/init/main.c:965)
+> 	[ 0.212063][ T0] ? load_ucode_bsp (kbuild/src/x86_64-2/arch/x86/kernel/cpu/microcode/core.c:176)
+> 	[ 0.212483][ T0] secondary_startup_64_no_verify (kbuild/src/x86_64-2/arch/x86/kernel/head_64.S:358)
+> 	[    0.212996][    T0]  </TASK>
+> 	[    0.213247][    T0] Modules linked in:
+> 	[    0.213591][    T0] CR2: 0000000000000000
+> 	[    0.213955][    T0] ---[ end trace 0000000000000000 ]---
+> 	[ 0.214415][ T0] RIP: 0010:__stack_depot_save (kbuild/src/x86_64-2/lib/stackdepot.c:452)
+> 	[ 0.214933][ T0] Code: 03 48 c7 c7 ec 17 b3 84 e8 f1 ea 85 ff 44 89 e0 23 05 d4 aa 01 03 48 8d 04 c3 48 89 c3 48 89 c7 48 89 44 24 28 e8 34 fc 85 ff <4c> 8b 33 4d 85 f6 0f 84 b6 00 00 00 8b 04 24 83 e8 01 48 8d 04 c5
+> 
+> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> ---
+>  lib/stackdepot.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/lib/stackdepot.c b/lib/stackdepot.c
+> index e73fda2..97b6a2a 100644
+> --- a/lib/stackdepot.c
+> +++ b/lib/stackdepot.c
+> @@ -421,7 +421,7 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+>  	 */
+>  	nr_entries = filter_irq_stacks(entries, nr_entries);
+>  
+> -	if (unlikely(nr_entries == 0) || stack_depot_disable)
+> +	if (unlikely(nr_entries == 0) || stack_depot_disable || !stack_table)
+>  		goto fast_exit;
+>  
+>  	hash = hash_stack(entries, nr_entries);
 
