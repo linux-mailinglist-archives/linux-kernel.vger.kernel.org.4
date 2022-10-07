@@ -2,174 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0FC85F741D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 08:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4BC85F741F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 08:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiJGGJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 02:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
+        id S229598AbiJGGLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 02:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiJGGJ3 (ORCPT
+        with ESMTP id S229588AbiJGGLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 02:09:29 -0400
-Received: from domac.alu.hr (domac.alu.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4462117550
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 23:09:28 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 32D3D6050A;
-        Fri,  7 Oct 2022 08:09:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1665122965; bh=LqmfREN0Bf1qQESZX6VLXgUCmD1S5JVvfBYMPvqcMC4=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=TfOjpOWopc9dRS8tf/MSkZRQ7fIjp41MowtTX75mk0qrfK0OqPNP5az+KTvxEc0hY
-         ug9HefUwIwqYr5cUrVm2nNWIERc1+Sjp0vaLXkbm4tZ+DL4D2OdgfoDelyyy2IdTsX
-         VzfS994CZQVazsI6iqw1o6t3ATu91/FOBiiwkIwJL2WbqlnYPVwyGUE6iY/CFq34Vo
-         7NPngFKtOy5fllT84tNdEGkkW4dL4itXzJnLX7lpYVSRCkX24vUyDl7FOUryZKfOkR
-         2xitFq0kYgv2bkur/CoooEHXB3AUKbEskIfXD6rzTW40iFgbV/nJpnKTgO6FLBuP3e
-         n9Ai4+8r80/ig==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id OvRwdqezS8bm; Fri,  7 Oct 2022 08:09:22 +0200 (CEST)
-Received: from [161.53.83.51] (pc-mtodorov.grf.hr [161.53.83.51])
-        by domac.alu.hr (Postfix) with ESMTPSA id 6697E60509;
-        Fri,  7 Oct 2022 08:09:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1665122962; bh=LqmfREN0Bf1qQESZX6VLXgUCmD1S5JVvfBYMPvqcMC4=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=x8hGZKrgIUM85evjEktBsYlawmnGNZqGqcJ4gAqFhrWMAM/nVctwUNcMl9FNpCiLg
-         SDg37HoLOVVDaF/7sO51wpRcUMZF2w3100Job3DPead1dsOtaQ4nrlsD90k8lG6xhX
-         IxwapdnslAmslHEdPDscncVDMLFkNt/hOnOahMPly4fjxNuQhKfEzZ2V3+NNIQHZwu
-         biGyxKYdlLM2MJ0odTWcR77CGO4hHXGwPoxHz8q7z7YeQ/8sMtQDUbKfIh6V6Cr5sK
-         KBJgJHh0P91uQpo0REuPaDwY/dIVjlDSeO4kv/EiUcRTgPNY6y4K66a2gtlJ/YJgM1
-         8YO+VYLkNj2lg==
-Message-ID: <f092502a-1e1c-4aa2-c7bd-4e4a6d99ce9b@alu.unizg.hr>
-Date:   Fri, 7 Oct 2022 08:09:12 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: Re: 6.0.0-RC kernels trigger Firefox snap bug with 6.0.0-rc3 through
- 6.0.0-rc7
-To:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-kernel@vger.kernel.org
-Cc:     Marc Miltenberger <marcmiltenberger@gmail.com>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <b0c258c3-6dcf-aade-efc4-d62a8b3a1ce2@alu.unizg.hr>
- <5bb75cbc-a0db-537b-12d0-889230c865d8@leemhuis.info>
- <0fb2a9ff-df76-8af9-e54a-c2dc6bfd9478@leemhuis.info>
- <bdab45d3-c893-42ff-dbb9-5fa93d0dff55@alu.unizg.hr>
- <dd62210d-d095-f971-2b7b-0ec54fd189a9@leemhuis.info>
- <c05134cc-92fa-dac2-e738-cf6fae194521@alu.unizg.hr>
- <6ba15505-1c04-df2b-237f-b3060f26d2e6@leemhuis.info>
- <f23494b5-b4ea-a32a-e260-4541039dedc8@alu.unizg.hr>
+        Fri, 7 Oct 2022 02:11:34 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2068.outbound.protection.outlook.com [40.107.243.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AD0B97B6
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 23:11:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=i/ed3Fwuv4KK1s+LF72vF1ADmYSFocQsCgGW4VKwbZBSppnroQ6VEJbPIKry4K5LWUMb9K/4ffZkyMlTa/5KeXe/JpGUsvTO3ZsHVGpqWXerb/xQJli1dhOaazKneguPO9DIprMeVCst58HYpFDdVX9IASz1MwbrCxAR4LCyezhUNwHWHg27F43UOBjvRhpjSBTFzvcjJlH3Lba4xvmfTFCqDJdBW4JfqPOo5fZjztjLvd28HRNfn36pmaTO5RkfoCwmcrrAIKy7r11cVMbTXPcx7xhDY2YtB6ou/g2hw4RvI2/SSRbNr3tiTBxJkRNUpc60g6famlmEAKDf1PV+Dg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mDz+NfLQgztxNqSif3/SAzIRuUKSIyCaYh1C9Sh3E6k=;
+ b=MJ7Fyn9g7ppRqyLUoW/crBV4UE2TN+ULvkqaTnEy1QfabAdHkJlNBWaqpMcXEzWtHDiSJJOuxgFvSHYwc8D6vjXVqQpwz2yAlGXQYq4A2e+R4DG4aJ0zgUpCzsKMXbTEbaAA6JzV7gid/aGsOydJtfd+RlOzAPRXqFOeFFTPb8id4pxlVr9PsPp3QD6v24pZRIp38OxkfCc7E7OTGExOAbW26yFVjpXJu1DWf40vTp5kH2fWcthtOEiRc1DileOaUBU5CNARoxVZMscy7fFKSt3K/FJPFrGIe4NvnhDiSHtOWpaBtjOAdnSsAhodal9p8ZK8TONJF9ac25smr53drA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mDz+NfLQgztxNqSif3/SAzIRuUKSIyCaYh1C9Sh3E6k=;
+ b=cIIzoentExQg6RbDenMttXF/E52BAoojecz7elmaaQBciu65SNyHMqm7ml5aP8yaYaXiJS87VF+XONj95CX+2nIwlhPBlYJM1hRXyeeOEF1T5iTbEP4HhE08XBlJirLYFlKXG3DGRKnZOMEAqNcP40wM0MTCjyCzNsv6L4n458o=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by IA0PR12MB7626.namprd12.prod.outlook.com (2603:10b6:208:438::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.36; Fri, 7 Oct
+ 2022 06:11:31 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::805b:58b6:1f27:d644]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::805b:58b6:1f27:d644%6]) with mapi id 15.20.5676.032; Fri, 7 Oct 2022
+ 06:11:30 +0000
+Message-ID: <d6f082eb-8948-8dde-6813-371cf6b1c7a3@amd.com>
+Date:   Fri, 7 Oct 2022 08:11:26 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [git pull] drm for 6.1-rc1
 Content-Language: en-US
-In-Reply-To: <f23494b5-b4ea-a32a-e260-4541039dedc8@alu.unizg.hr>
+To:     Dave Airlie <airlied@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Arvind.Yadav@amd.com
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+References: <CAPM=9tzs4n8dDQ_XVVPS_5jrBgsNkhDQvf-B_XmUg+EG_M2i4Q@mail.gmail.com>
+ <CAHk-=whUp5Ufur6Bmv=H-rDDTNJJ-KVqOKkL+5FmR01jp0dbcA@mail.gmail.com>
+ <CADnq5_Of-8ZyBxee0fZ=0x-eV-2NX_+e9sd-9nmuHdLugSHp2g@mail.gmail.com>
+ <CAHk-=wi43xD06UgO2McDT3R=ze_aHgOGjcDOoggSwmQRv2kA+A@mail.gmail.com>
+ <CADnq5_N0Ef+1VUoDLdpHfJXqZFuPYbx5Lq+94NWciHcQC+VrMg@mail.gmail.com>
+ <CAPM=9tyAOnzwXyyPuoceZ1mimAkzxR-63YmKfVtcQX=swywNvg@mail.gmail.com>
+ <CAHk-=wgghR4N-4XWjoK18NDkvjBL7i00ab8+otQg955pNGG_dQ@mail.gmail.com>
+ <CAPM=9txE+0EH2Tv_0toDD52j0JO7iDZoJap6qmvMAnRaDRwJNg@mail.gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <CAPM=9txE+0EH2Tv_0toDD52j0JO7iDZoJap6qmvMAnRaDRwJNg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: FR0P281CA0095.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a9::12) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|IA0PR12MB7626:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8e688b5f-e2df-40be-b43c-08daa82ac6dc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3O8e89Mshd0KoYiHowPyIcIpmKqt53W2WnOEYc+ruoMCXCywzC2mf+mi8C3XGHtp6XRi9HTU/vSzkhsjeYoEmj8ReisK5B2VW0WtrytE8SfOD/CEr3ueB+bPLpp+vYu90fMl4Y9WXWxUt8iq3GomJmnEQ/kqHd0d4tA9hm9xd2Bgzv01g7Z4safY1j0vLYMEoSOmxNGFPOBoyuSy0PYqGyw/X+3lmDnwr8Hd7bxkjmEDZiC8dYF0Rch2geFoYEXWGFCVsAMYPtc2ggpTWdge73tbDXzwtUE6s9YTAtVci1xFl06mHzjE5uIuqAY/tYhQJQI/5BKpYxHIsjHTwKHCILoCJGCxlMOrdWyVXHao+H/pYU99zBy2mGslxf61GtLDNb9L48iWDfQn4m06ngeJhWO5v3Tkw3a/luU/jwGyjRNLjD6z4+1hUPS6WgOOo6mrO5VscLgVWq5/bIBewR+Kw0dDy86dFrkHUrKumbK3MyaaE3fic/vp14dYlWukdJd7DXPWEAp/UBvqQ2bfGfbPBv8f3AfMHvqeYYlOHMpeWxIS/sh+kbwRLSzTxECnH9GiSUbXPt3AXMhHAhOTmM02WbRFqh6VJrxEmq6MS15TqkGRNuaDbJCSU+XJWM7DmZI8V2uArW6LMaoqzBUmtq8RRoVjtIWo2qD5COLcFqMNXAnqqbb5Uc/TCJWWdVk+xA8KIcjWjR5R8Go4Xy+LLAtOLpuM3AaptsxF6HnOCWh9HIBtuSvglfDKhnsKhZ8hCXv2
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(346002)(136003)(39860400002)(366004)(451199015)(66556008)(66476007)(4326008)(8676002)(66946007)(6486002)(966005)(86362001)(45080400002)(110136005)(316002)(54906003)(36756003)(6636002)(8936002)(41300700001)(5660300002)(2906002)(31686004)(38100700002)(6512007)(6666004)(6506007)(478600001)(31696002)(53546011)(83380400001)(2616005)(186003)(66574015)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZHJ0elp0Yy84eEVRWWNIWTN5TERrSDFLb3A5VWZudHdyekF4TGlKdURuclRo?=
+ =?utf-8?B?bTFJenFIYjI5MVJqWExkQ1ZTZzdVRnFQRVQ3RCtiZFcvWmNTdEp3c2Vydi9R?=
+ =?utf-8?B?RjlydWhyM3NyMGhETE5Ua2o4S2l2Umtick83V21GdFdwVTNRbmM0RGwwblVN?=
+ =?utf-8?B?ZjE2YnBpWWJLZ2huL2dIMWplQ3AwY2xTRlc1N3NRcW51Y0s5Y05pQWdydlU0?=
+ =?utf-8?B?SlJhWFJJZEVscnhEMUFTTGlxaS9iS0xTSUE0SHJFVm5La0tMTjRjNDBpdDlE?=
+ =?utf-8?B?VC9RM3d4anpCTGM3VmpCZlJGbWQ2ZjBLSzI0d1lzc0FhemdSWE9NZ2d3ZmUv?=
+ =?utf-8?B?bDVsYTMvd0t4QjRudDljeGFXUVZFKzU0eWtwMURNVFZVMGVPakJWMnBGaXRU?=
+ =?utf-8?B?K1NURE10cWsyR1N5TnovdW42RHdMOWZrcWtzZFdadFlJRHI2SVIwdWNZd3hJ?=
+ =?utf-8?B?LzRGNWt4VFJqOEZhZnB5eHlQRmxpLzFZUnVMUFJLeHZNcWtobUluelorZ1F2?=
+ =?utf-8?B?cDNqb0RjdGVncE80eWEwektML3M0dDVpUXZ5akN1cVdGNFZ1djYwMFpmeUVO?=
+ =?utf-8?B?bXJCUWViYUl2eXptRkRRY3AxSDY4L0lqNnI0dHJMZzE0SDFQMkpvVGtnWXp3?=
+ =?utf-8?B?Qno0T2lBQklBTTh4QzdBU21KREZ2YWt0QmxTc3V5RkF2bVVjMGVlWm9qUXFt?=
+ =?utf-8?B?MUpVZmJmU1JxdG9DVS9MRDdSOHRxZnF2M3JZTm1GUG8yTStiU0xCeVg0aTBt?=
+ =?utf-8?B?TlBwMFhDbkZkek9iRkFjeVg4TVJ3c1dpNWNTdllOMDEyN09jZGVVVDdhbkRC?=
+ =?utf-8?B?R3Y4TlFEbW1uMlVMM2REeXlscHhTMGlkS2drSzVNQjJHMVovd3kzdGs0TGIy?=
+ =?utf-8?B?THZSNmlNaU9sUW9JVm9sR2xRWm5vZ2VjdkhXWjBvOTc4RFRXOEorcVJVWWlx?=
+ =?utf-8?B?clhWKzIvWWgxWVFidTBCM3pJZkYwRmQweG1aekxtRUJGL1VGR3Bpc3BIb3JO?=
+ =?utf-8?B?MXlOem96aE1jVk9JSXV4ajIvK1ZFMDZ0bjJQY2JNS3pta2dFbzUxRVBHT3Rj?=
+ =?utf-8?B?VC9scnJ3K0RuNmNFVGpLK2ZMYm5Pd09tVUwvc1c2Q1JnVFBXWk5Bbk1GdmpV?=
+ =?utf-8?B?RUtoOUVCbWJLQkhSSXFzdGVwZFBQT0RXSkVCRHhXQndzVmVydGtBckR4b3d3?=
+ =?utf-8?B?eHcwOTBoS3R3aUh6ZU9pRW1PbXBXc1RUSm1VZW1PSVRldTZ0cE1aK1BwSGVB?=
+ =?utf-8?B?aVl4SHhCKzNxdzl2eWNqT0c3TWNEdGxoNEtrU2ZnUEswb08yanpWeC91N1dx?=
+ =?utf-8?B?bVRlR1FyN3djNmRHTDBOUjdSWkloaU0rRW9vaUFZc2NkVmxIT1pBYndseU9G?=
+ =?utf-8?B?elR0WkUyM0JRWGIwcGFxUXJlNzM3a0ZmNDFqT05RWGphTTQxdFJpUFVhUCsz?=
+ =?utf-8?B?NGF4SUtBSzc0WkwzNXB1NVZzRHNHSWVOeUE4aXdMWWhkSnBjOHh3WEsxeDhm?=
+ =?utf-8?B?MHJyY3ljM2FEYThXKzdTbUc4ekkwaGMrUEhMbXcyWVB2NFZpWWEzTkVqQ1RQ?=
+ =?utf-8?B?YzdZaU1kbWw5YVRhRUhGYndyTjhhYTE5aXNwd0ZiRGE0M2I3QjV3aTFYZTdB?=
+ =?utf-8?B?TCtycXF6T3lIVE40VHNRTHBzTjNxK0dMbWt1WHAxaFg1UVd5eC9JNW0wd0xH?=
+ =?utf-8?B?dWI1cVlKYVdPK09VOHRDSmFVdkF2Q1NPY3o1TmI1VG9TODlVL2hNdFBJblg3?=
+ =?utf-8?B?R2o4QTJGeU52aXkzSU5DRzA2SVZtM0s1ajhycXR6WGd2d2ZzRWxJYklDa1Jl?=
+ =?utf-8?B?VkpEM1Rnc2h5RkRXODFzeXJNQXIzZzluS0FFcVVXV242anJKMmpKTW9hNmtm?=
+ =?utf-8?B?YTRuckI5ck1XVStNaDFFSEc0M04wOEYvZlc4TXNYSzhIZUFFaVVhQ0VjVSs2?=
+ =?utf-8?B?ZGY3MjhVanJKZWlkUkJRVncyeU81OTBQdW5uMWJDaGhUVHhkQUlCTlpxOXFz?=
+ =?utf-8?B?VGNKVEZwdWRlZFBDRDdiNEIzUDgwZWxuYXQ1dFRjdWdkUnVEV1F2L2NMWWFX?=
+ =?utf-8?B?YUNWa0pTbjFqbDl4d2ZZb0tyRTZWOHJ2c3dxWStKUlhBQkpOYUlxS0NadXNZ?=
+ =?utf-8?B?U0hnM1kzY2RRY0QwRUZMSGVmckVlTGJkOVZscFVSdW1QRlAvMGRlUHF0R3lr?=
+ =?utf-8?Q?rfc9HnKHCcRROvxHUJGoEctKa7xkZoCBbuoAlokRm+mv?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e688b5f-e2df-40be-b43c-08daa82ac6dc
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2022 06:11:30.7916
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FblHLhk1PMpd/4HYR8m3jWsO0BOeb+0UlQxCCmllruT/+Ej4THwfLK76Q+KT0CIc
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7626
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06. 10. 2022. 19:13, Mirsad Goran Todorovac wrote:
-
-> On 06. 10. 2022. 18:58, Thorsten Leemhuis wrote:
->
->> On 06.10.22 18:43, Mirsad Goran Todorovac wrote:
+Am 07.10.22 um 04:45 schrieb Dave Airlie:
+> On Fri, 7 Oct 2022 at 09:45, Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+>> On Thu, Oct 6, 2022 at 1:25 PM Dave Airlie <airlied@gmail.com> wrote:
+>>>
+>>> [ 1234.778760] BUG: kernel NULL pointer dereference, address: 0000000000000088
+>>> [ 1234.778813] RIP: 0010:drm_sched_job_done.isra.0+0xc/0x140 [gpu_sched]
+>> As far as I can tell, that's the line
 >>
->> On 06. 10. 2022. 15:23, Thorsten Leemhuis wrote:
->>>> On 06.10.22 14:43, Mirsad Todorovac wrote:
->>>>> On 10/6/22 14:25, Thorsten Leemhuis wrote:
->>>>>
->>>>>> One more question:
->>>>>>
->>>>>> On 06.10.22 14:00, Thorsten Leemhuis wrote:
->>>>>> Were those two vanilla kernels? I asked in #snappy on IRC and was told
->>>>>> that "snapd simply expects some ubuntu bit in patched into the kernel if
->>>>>> it detects that it runs on an official ubuntu install...". This was also
->>>>>> suggested "it probably makes sense to file a but in LP to make the
->>>>>> kernel team aware".
->>>>>>
->>>>> Yes, last time I tried it with git clone from linux_stable on kernel.org
->>>>> and
->>>>> config-6.0.0-060000-generic from the official Ubuntu mainline build
->>>> You don't want to do that. Better take the config used to build a
->>>> working kernel (say 5.19.y) and then build 6.0 with it (after running
->>>> "make olddefconfig"), because it might be a new kernel option (say for a
->>>> new security technique) that might cause the problem, as explained here:
->>>> https://docs.kernel.org/admin-guide/reporting-regressions.html
->>> If I understood well, that would mean buildingwww.kernel.org  git
->>> linux_stable
->>> source with Ubuntu's config-5.9.13-051903?
->> I meant "please download Linux 6.0 (ideally through git, that you have
->> everything to perform a bisection), add the config from a working kernel
->> (if config-5.9.13-051903 is one, yeah, then take that) as .config and
->> then run "make olddefconfig" before compiling and installing the kernel
->> to see if 6.0 fails with that config that was working.
+>>          struct drm_gpu_scheduler *sched = s_fence->sched;
+>>
+>> where 's_fence' is NULL. The code is
+>>
+>>     0: 0f 1f 44 00 00        nopl   0x0(%rax,%rax,1)
+>>     5: 41 54                push   %r12
+>>     7: 55                    push   %rbp
+>>     8: 53                    push   %rbx
+>>     9: 48 89 fb              mov    %rdi,%rbx
+>>     c:* 48 8b af 88 00 00 00 mov    0x88(%rdi),%rbp <-- trapping instruction
+>>    13: f0 ff 8d f0 00 00 00 lock decl 0xf0(%rbp)
+>>    1a: 48 8b 85 80 01 00 00 mov    0x180(%rbp),%rax
+>>
+>> and that next 'lock decl' instruction would have been the
+>>
+>>          atomic_dec(&sched->hw_rq_count);
+>>
+>> at the top of drm_sched_job_done().
+>>
+>> Now, as to *why* you'd have a NULL s_fence, it would seem that
+>> drm_sched_job_cleanup() was called with an active job. Looking at that
+>> code, it does
+>>
+>>          if (kref_read(&job->s_fence->finished.refcount)) {
+>>                  /* drm_sched_job_arm() has been called */
+>>                  dma_fence_put(&job->s_fence->finished);
+>>          ...
+>>
+>> but then it does
+>>
+>>          job->s_fence = NULL;
+>>
+>> anyway, despite the job still being active. The logic of that kind of
+>> "fake refcount" escapes me. The above looks fundamentally racy, not to
+>> say pointless and wrong (a refcount is a _count_, not a flag, so there
+>> could be multiple references to it, what says that you can just
+>> decrement one of them and say "I'm done").
+>>
+>> Now, _why_ any of that happens, I have no idea. I'm just looking at
+>> the immediate "that pointer is NULL" thing, and reacting to what looks
+>> like a completely bogus refcount pattern.
+>>
+>> But that odd refcount pattern isn't new, so it's presumably some user
+>> on the amd gpu side that changed.
+>>
+>> The problem hasn't happened again for me, but that's not saying a lot,
+>> since it was very random to begin with.
+> I chased down the culprit to a drm sched patch, I'll send you a pull
+> with a revert in it.
 >
-> Thank you for all your instructions.
+> commit e4dc45b1848bc6bcac31eb1b4ccdd7f6718b3c86
+> Author: Arvind Yadav <Arvind.Yadav@amd.com>
+> Date:   Wed Sep 14 22:13:20 2022 +0530
 >
-> Yes, I can confirm I already did a git pull from 
-> git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-> and a `git checkout linux6.0.y' with Ubuntu's config-5.19.13-051903, 
-> for that will, being a
-> generic build, surely cover all my devices.
+>      drm/sched: Use parent fence instead of finished
 >
-> The build is already in progress, but it may take a couple of hours 
-> for the bud to show with
-> Firefox "tabs crashed" and consequential Verneed record mismatch, 
-> provided it hath not been
-> fixed already by something else.
+>      Using the parent fence instead of the finished fence
+>      to get the job status. This change is to avoid GPU
+>      scheduler timeout error which can cause GPU reset.
 >
-> Still, I would be the happier version of myself if we could pinpoint 
-> the exact line of kernel source
-> that caused this. (And yes, all my builds were from kernel.org repos, 
-> whether Mr. Torvalds's or
-> the linux_stable line.)
+>      Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
+>      Reviewed-by: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+>      Link: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpatchwork.freedesktop.org%2Fpatch%2Fmsgid%2F20220914164321.2156-6-Arvind.Yadav%40amd.com&amp;data=05%7C01%7Cchristian.koenig%40amd.com%7C516db37183e84489e1aa08daa80e087e%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638007075495101336%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=JWT8R205jIPQu87K7a1T0UJ0iKNO8smHhosijAA0%2BNk%3D&amp;reserved=0
+>      Signed-off-by: Christian König <christian.koenig@amd.com>
 >
-Hi Thorsten, Marc,
+> I'll let Arvind and Christian maybe work out what is going wrong there.
 
-I can confirm that the "Firefox tab crashed" problem with Verneed record 
-version mismatch persisted in the
-official Ubuntu's 6.0.0-06000 mainline build:
+That's a known issue Arvind is already investigating for a while.
 
-marvin@marvin-IdeaPad-3-15ITL6:~$ uname -rms
-Linux 6.0.0-060000-generic x86_64
-marvin@marvin-IdeaPad-3-15ITL6:~$ /snap/bin/firefox &
-[1] 45245
-marvin@marvin-IdeaPad-3-15ITL6:~$ /bin/bash: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verdef record
-/bin/bash: error while loading shared libraries: 
-/lib/x86_64-linux-gnu/libdl.so.2: unsupported version 0 of Verneed record
+Any idea how you triggered it on boot? We have only be able to trigger 
+it very sporadic.
 
-[1]+  Exit 127                /snap/bin/firefox
-marvin@marvin-IdeaPad-3-15ITL6:~$
+Reverting the patch for now sounds like a good idea to me, it's only a 
+cleanup anyway.
 
-The build with the Ubuntu's config-5.19.3-051903-generic config file an 
-linux_stable 6.0.0 source
-is currently in testing. To repeat, it usually took a couple of hours of 
-work in Firefox (especially playing Youtube
-videos in a tab) before the bug manifested.
+Thanks,
+Christian.
 
-Regards,
--mt
-
--- 
-
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
--- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
-tel. +385 (0)1 3711 451
-mob. +385 91 57 88 355
+>
+> Dave.
+>
+>>                   Linus
 
