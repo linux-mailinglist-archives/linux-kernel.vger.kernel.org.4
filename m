@@ -2,74 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BDA5F7D93
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 20:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1C55F7D99
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 21:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbiJGS7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 14:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40058 "EHLO
+        id S229513AbiJGTE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 15:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiJGS7w (ORCPT
+        with ESMTP id S229511AbiJGTEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 14:59:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918771FCC5
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 11:59:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665169188;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sQGHWYEn+LWtlygubAjFbTrPolfuQ9vkB0zrJq+x8Yk=;
-        b=NiXHjNYaqhAcOvntctWI/Tv601NWka0YtpjI/u6BXp1qpsoIl4cl32yht4C0XjiONzUfAH
-        ph7BoX4y1lJuNdXOgNwdur4tkw5RlwC8NtnmkkvGCwOYKmsT2Hvik4tNRc+pSTuZIg8Mx1
-        /BJ9KKMal4DvArxauRCh6tIdspBKIdU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-14-G0jtj07VPp-GbuKeqEGRlw-1; Fri, 07 Oct 2022 14:59:45 -0400
-X-MC-Unique: G0jtj07VPp-GbuKeqEGRlw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E51AD882821;
-        Fri,  7 Oct 2022 18:59:44 +0000 (UTC)
-Received: from [10.22.18.97] (unknown [10.22.18.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9EDA740EFB3A;
-        Fri,  7 Oct 2022 18:59:42 +0000 (UTC)
-Message-ID: <463d3d8d-5d6c-6c83-561b-199ab1bd8887@redhat.com>
-Date:   Fri, 7 Oct 2022 14:59:42 -0400
+        Fri, 7 Oct 2022 15:04:25 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BAA94E401
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 12:04:24 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id c24so5367205plo.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 12:04:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=21A6ZjPuJYw0WXuNQnO8404OZpL79Fxvlo9cifFtwEE=;
+        b=OgjwR2mpvL7at1QiCptYJGYayigIS2Mnch4J2YrXJaQ42rnGB/rkvrX9a67tle7xCW
+         DV71jD5VbMXXT2fc+6W0GIBPw1RiWVdwt6xGnnYBPGuFo/EzsOy/rYI7EuOCIe3RPp6f
+         Yl/EYakcL4uTGWudHHVZseK0jFW5qg1nLAG4ilXwFF+7zrcOlHvO6YaFMLo01IDsHNMz
+         /aLxG6AryM6U/BcZnz6+L5Z7priSsJeGNyF5GYnJIqCU0z3nnctU3XBYqlY72vmrxcCm
+         oD+C6JsVYJXXYXNb2pFrfb5IRNVRWQy7LL3JjivtxT2cs4CraTszZRiSB9sC+s0w6SnG
+         3gmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=21A6ZjPuJYw0WXuNQnO8404OZpL79Fxvlo9cifFtwEE=;
+        b=6sBu8/gLqzzqd/XEkdBY5uqEjXfiECD6ESocIaikR7P4Sq/nVCaAKVYBerX/Apg+Ar
+         9lmfc4hqFlChWxXB7y0NE1Xo9gQb1Wmqva3xQFcQ2n6bT2PVShtTvfDkkz+AcWRPI4qZ
+         IGtx+WniPFXCoX/iamOrGTI/hFNO3OUEEbEHKREIs10FVb+8OXc5sl9D5cFhkYZOL6e8
+         shwgRUDp4js0VX/rCc+ItW71KqKnKArdftat2vGHkYDQK0BoqKPVdmtKRDjpLXf1/km9
+         KNE5Ej7tr/cIq7VBkWtNYz8UYR6l228zJXsAd/3VR9f2B/V3B5HHbr4suiXQyU/T9D0b
+         xKqw==
+X-Gm-Message-State: ACrzQf23LOeOnSauUeCxNaN5s1xxxtwDTfRWktM3PS0m983Ttrga6f2p
+        YdKqArErVaWZ+L8+WiLBVvJtAbYKXqE2JaOEYTZHWQ==
+X-Google-Smtp-Source: AMsMyM4sNQYpMbZ9f/4CGWZVJyb3GZQElKXVzVQNQlRukk6gLIsS/wsrK2rtho4EMPQYRyH3dy8QJ4ruM6l9u5XKLvo=
+X-Received: by 2002:a17:90b:3a88:b0:209:f35d:ad53 with SMTP id
+ om8-20020a17090b3a8800b00209f35dad53mr17920889pjb.102.1665169463422; Fri, 07
+ Oct 2022 12:04:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v10 4/5] sched: Handle set_cpus_allowed_ptr(),
- sched_setaffinity() & other races
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-References: <20220922180041.1768141-1-longman@redhat.com>
- <20220922180041.1768141-5-longman@redhat.com>
- <Y0Af1zT1QQrMo8hf@hirez.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Y0Af1zT1QQrMo8hf@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20190307090146.1874906-1-arnd@arndb.de> <20221006222124.aabaemy7ofop7ccz@google.com>
+ <c646ea1e-c860-41cf-9a8e-9abe541034ff@app.fastmail.com>
+In-Reply-To: <c646ea1e-c860-41cf-9a8e-9abe541034ff@app.fastmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 7 Oct 2022 12:04:11 -0700
+Message-ID: <CAKwvOdkEied8hf6Oid0sGf0ybF2WqrzOvtRiXa=j7Ms-Rc6uBA@mail.gmail.com>
+Subject: Re: [PATCH] fs/select: avoid clang stack usage warning
+To:     Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>
+Cc:     linux-fsdevel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Paul Kirth <paulkirth@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,40 +77,204 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/7/22 08:47, Peter Zijlstra wrote:
-> On Thu, Sep 22, 2022 at 02:00:40PM -0400, Waiman Long wrote:
->> Racing is possible between set_cpus_allowed_ptr() and sched_setaffinity()
->> or between multiple sched_setaffinity() calls from different
->> CPUs. To resolve these race conditions, we need to update both
->> user_cpus_ptr and cpus_mask in a single lock critical section instead
->> of separated ones. This requires moving the user_cpus_ptr update
->> to set_cpus_allowed_common() by putting the user_mask into a new
->> affinity_context structure and using it to pass information around
->> various functions.
->>
->> This patch also changes the handling of the race between the
->> sched_setaffinity() call and the changing of cpumask of the current
->> cpuset. In case the new mask conflicts with newly updated cpuset,
->> the cpus_mask will be reset to the cpuset cpumask and an error value
->> of -EINVAL will be returned. If a previous user_cpus_ptr value exists,
->> it will be swapped back in and the new_mask will be further restricted
->> to what is allowed in the cpumask pointed to by the old user_cpus_ptr.
->>
->> The potential race between sched_setaffinity() and a fork/clone()
->> syscall calling dup_user_cpus_ptr() is also being handled.
-> This is still arse-backwards... You're still fixing races you've
-> introduced earlier in the series.
->
-> Since I don't think telling you again is going to help; I've done it for
-> you :/ How's this then?
->
->    https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/log/?h=sched/affinity
->
-Thank you very much for updating the patch series. Beside the minor nit 
-that I talked about in the previous mail, the result looks good to me. 
-Do you mind if I send another patch on top of your branch to make the 
-adjustment or you want to do it yourself?
++ Kees, Paul
 
-Cheers,
-Longman
+On Fri, Oct 7, 2022 at 1:28 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Fri, Oct 7, 2022, at 12:21 AM, Nick Desaulniers wrote:
+> > On Thu, Mar 07, 2019 at 10:01:36AM +0100, Arnd Bergmann wrote:
+> >> The select() implementation is carefully tuned to put a sensible amount
+> >> of data on the stack for holding a copy of the user space fd_set,
+> >> but not too large to risk overflowing the kernel stack.
+> >>
+> >> When building a 32-bit kernel with clang, we need a little more space
+> >> than with gcc, which often triggers a warning:
+> >>
+> >> fs/select.c:619:5: error: stack frame size of 1048 bytes in function 'core_sys_select' [-Werror,-Wframe-larger-than=]
+> >> int core_sys_select(int n, fd_set __user *inp, fd_set __user *outp,
+> >>
+> >> I experimentally found that for 32-bit ARM, reducing the maximum
+> >> stack usage by 64 bytes keeps us reliably under the warning limit
+> >> again.
+> >>
+> >> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> >> ---
+> >>  include/linux/poll.h | 4 ++++
+> >>  1 file changed, 4 insertions(+)
+> >>
+> >> diff --git a/include/linux/poll.h b/include/linux/poll.h
+> >> index 7e0fdcf905d2..1cdc32b1f1b0 100644
+> >> --- a/include/linux/poll.h
+> >> +++ b/include/linux/poll.h
+> >> @@ -16,7 +16,11 @@
+> >>  extern struct ctl_table epoll_table[]; /* for sysctl */
+> >>  /* ~832 bytes of stack space used max in sys_select/sys_poll before allocating
+> >>     additional memory. */
+> >> +#ifdef __clang__
+> >> +#define MAX_STACK_ALLOC 768
+> >
+> > Hi Arnd,
+> > Upon a toolchain upgrade for Android, our 32b x86 image used for
+> > first-party developer VMs started tripping -Wframe-larger-than= again
+> > (thanks -Werror) which is blocking our ability to upgrade our toolchain.
+> >
+> > I've attached the zstd compressed .config file that reproduces with ToT
+> > LLVM:
+> >
+> > $ cd linux
+> > $ zstd -d path/to/config.zst -o .config
+> > $ make ARCH=i386 LLVM=1 -j128 fs/select.o
+> > fs/select.c:625:5: error: stack frame size (1028) exceeds limit (1024)
+> > in 'core_sys_select' [-Werror,-Wframe-larger-than]
+> > int core_sys_select(int n, fd_set __user *inp, fd_set __user *outp,
+> >     ^
+> >
+> > As you can see, we're just barely tipping over the limit.  Should I send
+> > a patch to reduce this again? If so, any thoughts by how much?
+> > Decrementing the current value by 4 builds the config in question, but
+> > seems brittle.
+> >
+> > Do we need to only do this if !CONFIG_64BIT?
+> > commit ad312f95d41c ("fs/select: avoid clang stack usage warning")
+> > seems to allude to this being more problematic on 32b targets?
+>
+> I think we should keep the limit consistent between 32 bit and 64 bit
+> kernels. Lowering the allocation a bit more would of course have a
+> performance impact for users that are just below the current limit,
+> so I think it would be best to first look at what might be going
+> wrong in the compiler.
+>
+> I managed to reproduce the issue and had a look at what happens
+> here. A few random observations:
+>
+> - the kernel is built with -fsanitize=local-bounds, dropping this
+>   option reduces the stack allocation for this function by around
+>   100 bytes, which would be the easiest change for you to build
+>   those kernels again without any source changes, but it may also
+>   be possible to change the core_sys_select function in a way that
+>   avoids the insertion of runtime bounds checks.
 
+Thanks for taking a look Arnd; ++beers_owed;
+
+I'm not sure we'd want to disable CONFIG_UBSAN_LOCAL_BOUNDS=y for this
+particular configuration of the kernel over this, or remove
+-fsanitize=local-bounds for this translation unit (even if we did so
+specifically for 32b targets).  FWICT, the parameter n of function
+core_sys_select() is used to index into the stack allocated stack_fds,
+which is what -fsanitize=local-bounds is inserting runtime guards for.
+
+If I dump the compiler IR (before register allocation), the only
+explicit stack allocations I observe once the middle end optimizations
+have run are:
+
+1. a single 64b value...looks like the ktime_t passed to
+poll_schedule_timeout IIUC.
+2. a struct poll_wqueues inlined from do_select.
+3. 64x32b array, probably stack_fds.
+
+(oh, yeah, those are correct, if I rebuild with `KCFLAGS="-g0
+-fno-discard-value-names"` the IR retains identifiers for locals. I
+should send a patch for that for kbuild).
+
+I think that implies that the final stack slots emitted are a result
+of the register allocator failing to keep all temporary values live in
+registers; they are spilled to the stack.
+
+Paul has been playing with visualizing stack slots recently, and might
+be able to provide more color.
+
+I worry that the back end might do tail duplication or if conversion
+and potentially split large stack values into two distinct
+(non-overlapping) stack slots, but haven't seen that yet in reality.
+
+We've also seen poor stack slot reuse with KASAN with clang as well...
+
+>
+> - If I mark 'do_select' as noinline_for_stack, the reported frame
+>   size is decreased a lot and is suddenly independent of
+>   -fsanitize=local-bounds:
+>   fs/select.c:625:5: error: stack frame size (336) exceeds limit (100) in 'core_sys_select' [-Werror,-Wframe-larger-than]
+> int core_sys_select(int n, fd_set __user *inp, fd_set __user *outp,
+>   fs/select.c:479:21: error: stack frame size (684) exceeds limit (100) in 'do_select' [-Werror,-Wframe-larger-than]
+> static noinline int do_select(int n, fd_set_bits *fds, struct timespec64 *end_time)
+
+I think this approach makes the most sense to me; the caller
+core_sys_select() has a large stack allocation `stack_fds`, and so
+does the callee do_select with `table`.  Add in inlining and long live
+ranges and it makes sense that stack spills are going to tip us over
+the threshold set by -Wframe-larger-than.
+
+Whether you make do_select() `noinline_for_stack` conditional on
+additional configs like CC_IS_CLANG or CONFIG_UBSAN_LOCAL_BOUNDS is
+perhaps also worth considering.
+
+How would you feel about a patch that:
+1. reverts commit ad312f95d41c ("fs/select: avoid clang stack usage warning")
+2. marks do_select noinline_for_stack
+
+?
+
+I assume the point of "small string optimization" going on with
+`stack_fds` in core_sys_select() is that the potential overhead for
+kmalloc is much much higher than the cost of not inlining do_select()
+into core_sys_select().  The above approach does solve this .config's
+instance, and seems slightly less brittle to me.
+
+>   However, I don't even see how this makes sense at all, given that
+>   the actual frame size should be at least SELECT_STACK_ALLOC!
+
+I think the math checks out:
+
+#define FRONTEND_STACK_ALLOC  256
+#define SELECT_STACK_ALLOC  FRONTEND_STACK_ALLOC
+long stack_fds[SELECT_STACK_ALLOC/sizeof(long)];
+
+sizeof(long) == 4; // i386 ilp32
+sizeof(stack_fds) == sizeof(long) * 256 / sizeof(long) == 256
+
+>
+> - The behavior of -ftrivial-auto-var-init= is a bit odd here: with =zero or
+>   =pattern, the stack usage is just below the limit (1020), without the
+>   option it is up to 1044. It looks like your .config picks =zero, which
+>   was dropped in the latest clang version, so it falls back to not
+
+Huh? What do you mean by "was dropped?"
+
+The config I sent has:
+CONFIG_CC_HAS_AUTO_VAR_INIT_PATTERN=y
+CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO_BARE=y
+CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO=y
+# CONFIG_INIT_STACK_NONE is not set
+CONFIG_INIT_STACK_ALL_ZERO=y
+
+Disabling INIT_STACK_ALL_ZERO from the config provided doesn't elide
+the diagnostic.
+Enabling INIT_STACK_ALL_PATTERN does... explicit stack allocations in
+IR haven't changed. In the generated assembly we're pushing 3x 4B
+GPRs, subtracting 8B from the stack pointer, then another 1008B.
+(Filed: https://github.com/llvm/llvm-project/issues/58237)
+So that's 3 * 4B + 8B + 1008B == 1028.  But CONFIG_FRAME_WARN is set
+to 1024.  I wonder if this diagnostic is not as precise as it could
+be, or my math is wrong?
+
+It looks like for arrays INIT_STACK_ALL_PATTERN uses memset to fill
+the array with 0xFF rather than 0x00 used by INIT_STACK_ALL_ZERO. Not
+sure why that would make a difference, but curious that it does.
+Looking at the delta in the (massive) IR between the two, it looks
+like the second for loop preheader and body differ. That's going to
+result in different choices by the register allocator.  The second
+loop is referencing `can_busy_loop`, `busy_flag`, and `retval1` FWICT
+when looking at IR. That looks like one of the loops in do_select.
+
+>   initializing. Setting it to =pattern should give you the old
+>   behavior, but I don't understand why clang uses more stack without
+>   the initialization, rather than using less, as it would likely cause
+>   fewer spills
+>
+>        Arnd
+
+
+
+-- 
+Thanks,
+~Nick Desaulniers
