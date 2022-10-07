@@ -2,102 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4285F7603
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CAD95F760A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiJGJSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 05:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42910 "EHLO
+        id S229643AbiJGJT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 05:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJGJSw (ORCPT
+        with ESMTP id S229459AbiJGJTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 05:18:52 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7796C972
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 02:18:49 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1ogjVF-000618-UU; Fri, 07 Oct 2022 11:18:45 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jisheng Zhang <jszhang@kernel.org>
-Subject: Re: [PATCH 1/8] riscv: move riscv_noncoherent_supported() out of ZICBOM probe
-Date:   Fri, 07 Oct 2022 11:18:45 +0200
-Message-ID: <4842439.0VBMTVartN@diego>
-In-Reply-To: <20221006070818.3616-2-jszhang@kernel.org>
-References: <20221006070818.3616-1-jszhang@kernel.org> <20221006070818.3616-2-jszhang@kernel.org>
+        Fri, 7 Oct 2022 05:19:25 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7236C972;
+        Fri,  7 Oct 2022 02:19:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665134364; x=1696670364;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hoHyGOlZw7mT9PchNcyohGTzSrqH9AYZczrdE0VAU4M=;
+  b=kyCvqBubOBZezdH4TXrbtP66CK3UlyUQMU9C7cPYB3JOtRsdCM8vWUvb
+   oILIO7/RWD0qYRN4H792aarVY8yq7XVBGxNmdQgCUOE8PIYvkXcJ0IcXO
+   XTafkxrVhl4nrw6KrxEy0d4gMDqqyPGd5Zx9JmtDuojcliTB/QhLKpNPc
+   FJ8t4TjaxfgAmZ0o0L1CGGzcWubBo9s96B7go8eLTiBUcFcxoUsiUdliQ
+   Dxzkolt3zaGPSq2rKE4r9h6waaXg831bN6KrnmjI/21yqwdL6v8zTBc9B
+   A7nNHU6DjvqFwAbgQmlLTAI4ldbsPVqOazJWaZeGhOI9jpBFmlaCSdIHi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="303672950"
+X-IronPort-AV: E=Sophos;i="5.95,166,1661842800"; 
+   d="scan'208";a="303672950"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 02:19:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="620197894"
+X-IronPort-AV: E=Sophos;i="5.95,166,1661842800"; 
+   d="scan'208";a="620197894"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 07 Oct 2022 02:19:20 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ogjVm-003Xxs-1k;
+        Fri, 07 Oct 2022 12:19:18 +0300
+Date:   Fri, 7 Oct 2022 12:19:18 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        jic23@kernel.org, lars@metafoo.de, chiaen_wu@richtek.com,
+        alice_chen@richtek.com, cy_huang@richtek.com,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, szunichen@gmail.com
+Subject: Re: [PATCH v13 5/5] leds: flash: mt6370: Add MediaTek MT6370
+ flashlight support
+Message-ID: <Yz/vFml0mwaF0+f9@smile.fi.intel.com>
+References: <cover.1664991040.git.chiaen_wu@richtek.com>
+ <1bcd19dbd09650ddac7b96b0fe2932698be2731e.1664991040.git.chiaen_wu@richtek.com>
+ <Yz11bkxz9lK4wOHE@smile.fi.intel.com>
+ <CABtFH5J2r=Qq1kNb=yp6Hf7=oKJH9qeiwsO+4ejy5m9N+ZODXg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABtFH5J2r=Qq1kNb=yp6Hf7=oKJH9qeiwsO+4ejy5m9N+ZODXg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Oct 07, 2022 at 09:28:17AM +0800, ChiaEn Wu wrote:
+> On Wed, Oct 5, 2022 at 8:15 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
 
-Am Donnerstag, 6. Oktober 2022, 09:08:11 CEST schrieb Jisheng Zhang:
-> It's a bit wired to call riscv_noncoherent_supported() once when
-> insmod a module. Move the calling out of feature patch func.
+...
+
+> > > +config LEDS_MT6370_FLASH
+> > > +     tristate "Flash LED Support for MediaTek MT6370 PMIC"
+> >
+> > > +     depends on LEDS_CLASS && OF
+> >
+> > Why do you have OF dependency?
+> >
 > 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  arch/riscv/kernel/cpufeature.c | 7 +------
->  arch/riscv/kernel/setup.c      | 4 ++++
->  2 files changed, 5 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 3b5583db9d80..03611b3ef45e 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -272,12 +272,7 @@ static bool __init_or_module cpufeature_probe_zicbom(unsigned int stage)
->  	case RISCV_ALTERNATIVES_EARLY_BOOT:
->  		return false;
->  	default:
-> -		if (riscv_isa_extension_available(NULL, ZICBOM)) {
-> -			riscv_noncoherent_supported();
-> -			return true;
-> -		} else {
-> -			return false;
-> -		}
-> +		return riscv_isa_extension_available(NULL, ZICBOM);
->  	}
->  #endif
->  
-> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> index 2dfc463b86bb..1a055c3f5d9d 100644
-> --- a/arch/riscv/kernel/setup.c
-> +++ b/arch/riscv/kernel/setup.c
-> @@ -299,6 +299,10 @@ void __init setup_arch(char **cmdline_p)
->  	riscv_init_cbom_blocksize();
->  	riscv_fill_hwcap();
->  	apply_boot_alternatives();
-> +#ifdef CONFIG_RISCV_DMA_NONCOHERENT
-> +	if (riscv_isa_extension_available(NULL, ZICBOM))
-> +		riscv_noncoherent_supported();
-> +#endif
+> Hi Andy,
+> The original idea is to use the "fwnode_property_*" related function.
+> But this side may only consider just "Build Pass" (?)
 
-The nice thing about doing this in cpufeature_probe_zicbom is that
-you keep all the "ifs" in one place, where now you have 2 places that
-check the existence of the extension.
+Yes, you increase a compile test coverage by dropping that dependency.
 
-The overhead is one "x = true" setting on each call to _probe() and with
-this change things are now also handled differently between the main
-implementation and the deviants.
+> I will remove "OF" in the v14 patch.
 
-Though I guess, I'll let others do the judgement call on what is the
-desired way to go ;-) .
-
-
-Heiko
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
