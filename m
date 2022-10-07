@@ -2,128 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 265675F7738
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 13:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6ECC5F7741
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 13:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbiJGLOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 07:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58140 "EHLO
+        id S229725AbiJGLPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 07:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiJGLOK (ORCPT
+        with ESMTP id S229547AbiJGLPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 07:14:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1519A223C;
-        Fri,  7 Oct 2022 04:14:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8372961C4E;
-        Fri,  7 Oct 2022 11:14:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FF19C433C1;
-        Fri,  7 Oct 2022 11:14:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665141248;
-        bh=iGUUEynvCAjegBrsy6JU4OD39853Ax+NThhfisNR9Vo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fmKEzZfv+NcFm5KZPC8vC7ZMGO+4smagpqxidG4f8sTZ/z8q2aoMCJSNtysPorB+u
-         kk9P97XlyfQbbtnFo8LHPNJFX9dz+rglzxIJfihqhOEfRZ95SMPj67dZ/fvnuNbSqC
-         jqfHkAdl/kZOqmVgzI+rs0S1M/uPV1KhYkYw7RvKkChyMhuiR2/2wEETdeyyy8vdL+
-         xSn8DoYpH/zTYYkmMvP9NOyVC0t2HvDfp9uL80OcPykiAatvUGYg8ebg5q6VkchIVf
-         DXvK7t9XwhCTk3XnR5NXjkt3/qkelWVMPuwnPC3EPAwGRYke53ktd+UBomw4T2mbx6
-         O0+yu62YgKnxg==
-Date:   Fri, 7 Oct 2022 14:14:03 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v8 2/8] KVM: Extend the memslot to support fd-based
- private memory
-Message-ID: <Y0AJ++m/TxoscOZg@kernel.org>
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-3-chao.p.peng@linux.intel.com>
- <Yz7s+JIexAHJm5dc@kernel.org>
- <Yz7vHXZmU3EpmI0j@kernel.org>
- <Yz71ogila0mSHxxJ@google.com>
+        Fri, 7 Oct 2022 07:15:31 -0400
+Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FF3AE209;
+        Fri,  7 Oct 2022 04:15:29 -0700 (PDT)
+Received: from mx0.riseup.net (mx0-pn.riseup.net [10.0.1.42])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mx0.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4MkQhd1BdCzDs0G;
+        Fri,  7 Oct 2022 11:15:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1665141329; bh=ZeojxkKR8glYm7+VvnPQLktuz8n8YHSN+KZs3axH5YA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NvfhQAwHzrug7MRuqbsSgNu8hYtzMxkmSW+voHLecUqerdho8HgmmJLwsMlW4EZQw
+         9Nh3QX3sFn9JE8kzt1741R7g1+ev2+hVr7AlcP+NmA2H7TP+74lUpQAmwUtKpoNLyt
+         3PG/SbRZu5p0DUGyOaCIrsBWkTH1kobiNIEkRf1Y=
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4MkQhb4D5Vz9t2L;
+        Fri,  7 Oct 2022 11:15:27 +0000 (UTC)
+X-Riseup-User-ID: 5C5D09C6D4573B5476A2F60EF092E2F9B852A9EB55C810406BBF89C1073B3968
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4MkQhX75BLz5vRK;
+        Fri,  7 Oct 2022 11:15:24 +0000 (UTC)
+From:   Nia Espera <a5b6@riseup.net>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
+        Nia Espera <a5b6@riseup.net>
+Subject: [PATCH v2 0/2] Samsung s6e3fc2x01 panel driver for OnePlus 6T
+Date:   Fri,  7 Oct 2022 13:14:41 +0200
+Message-Id: <20221007111442.51481-1-a5b6@riseup.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yz71ogila0mSHxxJ@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 03:34:58PM +0000, Sean Christopherson wrote:
-> On Thu, Oct 06, 2022, Jarkko Sakkinen wrote:
-> > On Thu, Oct 06, 2022 at 05:58:03PM +0300, Jarkko Sakkinen wrote:
-> > > On Thu, Sep 15, 2022 at 10:29:07PM +0800, Chao Peng wrote:
-> > > > This new extension, indicated by the new flag KVM_MEM_PRIVATE, adds two
-> > > > additional KVM memslot fields private_fd/private_offset to allow
-> > > > userspace to specify that guest private memory provided from the
-> > > > private_fd and guest_phys_addr mapped at the private_offset of the
-> > > > private_fd, spanning a range of memory_size.
-> > > > 
-> > > > The extended memslot can still have the userspace_addr(hva). When use, a
-> > > > single memslot can maintain both private memory through private
-> > > > fd(private_fd/private_offset) and shared memory through
-> > > > hva(userspace_addr). Whether the private or shared part is visible to
-> > > > guest is maintained by other KVM code.
-> > > 
-> > > What is anyway the appeal of private_offset field, instead of having just
-> > > 1:1 association between regions and files, i.e. one memfd per region?
-> 
-> Modifying memslots is slow, both in KVM and in QEMU (not sure about Google's VMM).
-> E.g. if a vCPU converts a single page, it will be forced to wait until all other
-> vCPUs drop SRCU, which can have severe latency spikes, e.g. if KVM is faulting in
-> memory.  KVM's memslot updates also hold a mutex for the entire duration of the
-> update, i.e. conversions on different vCPUs would be fully serialized, exacerbating
-> the SRCU problem.
-> 
-> KVM also has historical baggage where it "needs" to zap _all_ SPTEs when any
-> memslot is deleted.
-> 
-> Taking both a private_fd and a shared userspace address allows userspace to convert
-> between private and shared without having to manipulate memslots.
+This patch series adds proper support for the panel used in OnePlus 6T
+smartphones (s6e3fc2x01). Previously, the panel relied on the driver
+used by the sofef00 panel which failed to properly initialise it after
+a reset.
 
-Right, this was really good explanation, thank you.
+Nia Espera (2):
+  drivers: gpu: drm: add driver for samsung s6e3fc2x01 cmd mode panel
+  drivers: gpu: drm: remove support for sofef00 driver on s6e3fc2x01
+    panel
 
-Still wondering could this possibly work (or not):
+ MAINTAINERS                                   |   5 +
+ drivers/gpu/drm/panel/Kconfig                 |  17 +-
+ drivers/gpu/drm/panel/Makefile                |   1 +
+ .../gpu/drm/panel/panel-samsung-s6e3fc2x01.c  | 396 ++++++++++++++++++
+ drivers/gpu/drm/panel/panel-samsung-sofef00.c |  18 -
+ 5 files changed, 416 insertions(+), 21 deletions(-)
+ create mode 100644 drivers/gpu/drm/panel/panel-samsung-s6e3fc2x01.c
 
-1. Union userspace_addr and private_fd.
-2. Instead of introducing private_offset, use guest_phys_addr as the
-   offset.
-  
-BR, Jarkko
+-- 
+2.38.0
+
