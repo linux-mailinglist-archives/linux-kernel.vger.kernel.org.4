@@ -2,44 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1655F74D6
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 09:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3A65F74E3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 09:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiJGHqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 03:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35502 "EHLO
+        id S229935AbiJGHuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 03:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJGHp5 (ORCPT
+        with ESMTP id S229826AbiJGHuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 03:45:57 -0400
+        Fri, 7 Oct 2022 03:50:22 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E041FDED23
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 00:45:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D575465800;
+        Fri,  7 Oct 2022 00:50:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74971B82257
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 07:45:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7152C433C1;
-        Fri,  7 Oct 2022 07:45:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665128751;
-        bh=v3W+9woTOyWr+h+GLkBHGsbn6uXHtGbXReW29Eyy4KQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fNCl1vNSXeLFeIzr7wcvI4XMSIPIqMLIGlqbBHZA+JKctJhXZ60RNNW8B9A2lIeBr
-         mnjdHLliHpTQhOk3EnpR8efvlubpsG6eszA/bKfkq1/5PKICUQeJktyO2UZAnsY132
-         GukOXm3EVmkWcyBWjQnop0n/uhYCeHku7XUAEkQQ=
-Date:   Fri, 7 Oct 2022 09:46:32 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Kaiwan N Billimoria <kaiwan.billimoria@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Reg the next LTS kernel (6.1?)
-Message-ID: <Yz/ZWBeNZvKenEVM@kroah.com>
-References: <CAPDLWs-Z8pYkwQ13dEgHXqSCjiq4xVnjuAXTy26H3=8NZCpV_g@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 73AA3B8227C;
+        Fri,  7 Oct 2022 07:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 12243C433B5;
+        Fri,  7 Oct 2022 07:50:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665129016;
+        bh=Bm56kxZ27RQcBV4DYK1HN3UysfXiivTacJ96G6koVj0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=s4kIW3GGCZa48N9n1MGqiGdXcmexk7wlvYwEIAHbjNyYW7AB8fX3WScyHTTQVXJSW
+         nY8O+6MT+M/tLu5XhqPWOPFEorvkaWdfthj136SZi0M2L/nGyO0k0YkCybLweGp8s4
+         /ejlWxdkYuoLa55u8J+xYwc6R7xiFU9UF7GsqGCjlauMnxWffSPQqO4BOKmzDn8TqN
+         TQg/v9zQfnPNUN9uetAZb5cEu6ITMyAYhR50R66vqAVavqwCBZWD/dBbNStvSvlz9i
+         KQtJXmhRRJ1hTqBvq68IPWxinu4qmtgw1KC/Ax5NIcxPYvJrbwGlrUpDCdHnqQTv9u
+         oxidpr8vSl45Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E873AE21ED6;
+        Fri,  7 Oct 2022 07:50:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDLWs-Z8pYkwQ13dEgHXqSCjiq4xVnjuAXTy26H3=8NZCpV_g@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH -next] net: enetc: Remove duplicated include in enetc_qos.c
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166512901594.847.4665975253807189579.git-patchwork-notify@kernel.org>
+Date:   Fri, 07 Oct 2022 07:50:15 +0000
+References: <20221006120136.27020-1-yang.lee@linux.alibaba.com>
+In-Reply-To: <20221006120136.27020-1-yang.lee@linux.alibaba.com>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     claudiu.manoil@nxp.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, abaci@linux.alibaba.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -49,27 +57,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 01:07:54PM +0530, Kaiwan N Billimoria wrote:
-> Greetings!
-> I'm working on the 2nd edition of the Linux Kernel Programming book
-> (https://www.amazon.com/gp/product/B07RW915K4/ref=dbs_a_def_rwt_bibl_vppi_i0)
-> and request your help...
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu,  6 Oct 2022 20:01:36 +0800 you wrote:
+> net/pkt_sched.h is included twice in enetc_qos.c,
+> remove one of them.
 > 
-> I'd like to base the book upon as recent a kernel version as is
-> feasible, of course, with the caveat that it's a long-term (LTS) one
-> that will be around for a while. Currently, the 5.10 LTS kernel's EOL
-> date - Dec 2026 - makes it an ideal candidate.
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2334
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 > 
-> However, if possible, I'd (also) like to use a 6.x kernel; so, my
-> question comes down to this: will a 6.1 kernel release occur soon (I
-> heard it should be around Dec this year)? Will it be an LTS kernel
-> (again, should be I guess), and, if so, very important for me, what's
-> the likely EOL date?
+> [...]
 
-I usually pick the "last kernel of the year", and based on the normal
-release cycle, yes, 6.1 will be that kernel.  But I can't promise
-anything until it is released, for obvious reasons.
+Here is the summary with links:
+  - [-next] net: enetc: Remove duplicated include in enetc_qos.c
+    https://git.kernel.org/netdev/net/c/3030cbff67a7
 
-thanks,
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-greg k-h
+
