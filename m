@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A775F745F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 08:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D28675F745E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 08:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiJGGv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 02:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
+        id S229749AbiJGGv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 02:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiJGGvU (ORCPT
+        with ESMTP id S229729AbiJGGvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 7 Oct 2022 02:51:20 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F7E1176F3
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 23:51:19 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id k11-20020a5b038b000000b006bbf786c30aso3867463ybp.8
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420E41176F6
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 23:51:18 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id pc10-20020a17090b3b8a00b00202be8d81d2so4313364pjb.1
         for <linux-kernel@vger.kernel.org>; Thu, 06 Oct 2022 23:51:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YShywGeqIZDpcBEaSHQ5rYoxj4sM6AIZww6UQ+coyfI=;
-        b=NVl8BmpUMOw/A1G0cyJiZmnVpArIC5Pr6feGlbuFl5GAERbU3SfKIPOuzwU93ca7YX
-         o2nDHDgZ5Ce66+0hVn11ujpHD5ao8wq0YQpIQjZVVzSJXNUv5r4HluF5P7Fx2UYcd0qU
-         ix3fiLS75nyCVZBiDPsaey5whGmnyfGnxGOVIVpS+2QM+ebDldRI26GKrmoEkoQDrqDw
-         hwFX0PtxPizrhtgdloHLvMGcSxKDT+RQrAwq/EADlJP4xt6+6t4fKmfjOPobcHhTVJs7
-         jSTl7MLqhLAnyT7jqv6+vOrMx+laOTq/qVWujC1JgXJCnTE3aK+Mx3NJiutXwGKe1FjE
-         Ecww==
+        bh=O8RGq8MFx6yg4rvWL2LsrEdijzeVAuwua99jyz3WuY0=;
+        b=F6dW5mLyZy3KMwXGdnG0uw0vgxq5BEd+oBP42as46H5qvUK9UUtnPoEFvqRjcLp2it
+         3rrZO+tOIKDyRV9cO0K8eFfD5qE0aq8/pOQ1qMjNT2kuDlzCxmiyNiNu8smEUUxWgXir
+         qvanrdH44yXvkeRzWz2qggoyZsuAiESRGspyhTjmq550BG4iXCYue3thQoCeKJtWKbIn
+         dnbBOuqYHUOo6fDvehxnSRx67QyOOhZO1IO0evxROS53XAX9T5qFE5eBmA1HILs/WX54
+         xB6v9SfRbaoumFZK56o7t8VI47GxqtaTq9n1KZwEY5Ykc/WSe0t3090uQjFbndtU1jh/
+         0d8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YShywGeqIZDpcBEaSHQ5rYoxj4sM6AIZww6UQ+coyfI=;
-        b=m/uXR97/rSmtEmhHQ/xaZ+pJuP7JnKQpTH6gWyVUEKmcWnw+Y8btrhuxqQefx5K1Un
-         UVrxg4KuP7Z//C4O/+lx4XRL3ZKstLR8elL6kL/QVCImZKZSnQs1qcf/RRNLItjd0gOd
-         nrJKP8xHfZMUZeIUuBCCF5uKERl/dvdn7v74YmsOTvugeQSD9wyrqDg+Hosxirc826mF
-         KiCtaWkkRWOmBTPEDmehY5nzdyW80ygWb8d2QwOAUz8Weo+NBH4UQNAL0BM6fepeBHgx
-         9+kDpfNZof2hH/StsySFNfgO/uk2nskatPzceW1zlBTPVsywbEnWOPNkya6CgiHI/1+I
-         it2A==
-X-Gm-Message-State: ACrzQf3aeGTF8xIvaMlXXFJgVV2qJM6zBQKFb8fOFbdETmBNqOCkUcHV
-        FN+bHh8Sbkxwut+eGW8Ye+1cgl/0d5Tj
-X-Google-Smtp-Source: AMsMyM6cNDQNaZMU03HNe/9QS6jTwDRBFkooH0PAZ/5Aq9cH5UQ27ALHUr4mGbrsMjzz8BwoPo2couSFuy4z
+        bh=O8RGq8MFx6yg4rvWL2LsrEdijzeVAuwua99jyz3WuY0=;
+        b=GBPhsOw+KxZZW2e5iLuGcxnuFSk9bWLaTXsLxcTZYbrswVFzAnOukd5qB1rGJVj8Ku
+         g70aYpGsqG6/q2J9yBNJxSntVHK/UwlwcXVt/oCsdOQeeWD1TaDP1DH8MPXeeL2zzIvo
+         5Qmvv4MV1ZEjr+3mQg/lZ6GM18BNOqOSC+fSL3fxADPO9rchjtH9z/EyvuK/T5ybAyXZ
+         VQU5GaafRdY8T+PPbTAdZGtBaf+ki9GqALojm5xXFI9+bGRKjmkQrORS4ib+NW58yOq8
+         Ibog4/SudmKwKLnsg6iOn5CLIvWeXE6I2Pnwb8F1fiY2aCa/ctEcPqvU5BS6nVM0cPQz
+         WF0Q==
+X-Gm-Message-State: ACrzQf3MpsFcvWKfDl9nEtYpWxQbbXDjR5ftIU6wjV6iT74TigF7rZ5o
+        OyFoUvke+elHVVAeGX2jMTGdZDMUeIUZ
+X-Google-Smtp-Source: AMsMyM6SBWhzRurstP/chVETSQSz8yWa44PhYa3t6INGan3rp4//jh+O5/UVex4A60beBfyt1HRxiZPKB3n9
 X-Received: from sgzhang.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3d89])
- (user=sgzhang job=sendgmr) by 2002:a25:3790:0:b0:6be:7476:e7c5 with SMTP id
- e138-20020a253790000000b006be7476e7c5mr3031715yba.389.1665125457291; Thu, 06
- Oct 2022 23:50:57 -0700 (PDT)
-Date:   Fri,  7 Oct 2022 06:50:41 +0000
+ (user=sgzhang job=sendgmr) by 2002:a05:6a00:134d:b0:545:4d30:eebf with SMTP
+ id k13-20020a056a00134d00b005454d30eebfmr3430107pfu.32.1665125459940; Thu, 06
+ Oct 2022 23:50:59 -0700 (PDT)
+Date:   Fri,  7 Oct 2022 06:50:42 +0000
 In-Reply-To: <20221007065042.700761-1-sgzhang@google.com>
 Mime-Version: 1.0
 References: <20221007065042.700761-1-sgzhang@google.com>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221007065042.700761-3-sgzhang@google.com>
-Subject: [PATCH v2 2/3] mtd: mtdoops: add mtdoops_erase function and move
- mtdoops_inc_counter to after it
+Message-ID: <20221007065042.700761-4-sgzhang@google.com>
+Subject: [PATCH v2 3/3] mtd: mtdoops: panic caused mtdoops to call
+ mtdoops_erase function immediately
 From:   Ray Zhang <sgzhang@google.com>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
@@ -71,83 +71,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Preparing for next patch with minimal code difference, add mtdoops_erase
-function and move mtdoops_inc_counter to after it, with no functional
-change.
+The panic function disables the local interrupts, preemption, and all
+other processors. When the invoked mtdoops needs to erase a used page,
+calling schedule_work() to do it will not work. Instead, just call
+mtdoops_erase function immediately.
+
+Tested:
+~# echo c > /proc/sysrq-trigger
+[  171.654759] sysrq: Trigger a crash
+[  171.658325] Kernel panic - not syncing: sysrq triggered crash
+......
+[  172.406423] mtdoops: not ready 34, 35 (erase immediately)
+[  172.432285] mtdoops: ready 34, 35
+[  172.435633] Rebooting in 10 seconds..
 
 Signed-off-by: Ray Zhang <sgzhang@google.com>
 ---
- drivers/mtd/mtdoops.c | 49 ++++++++++++++++++++++++-------------------
- 1 file changed, 27 insertions(+), 22 deletions(-)
+ drivers/mtd/mtdoops.c | 24 ++++++++++++++++--------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/mtd/mtdoops.c b/drivers/mtd/mtdoops.c
-index 84b21be347f6..eca48dff9b53 100644
+index eca48dff9b53..eccb7dea892f 100644
 --- a/drivers/mtd/mtdoops.c
 +++ b/drivers/mtd/mtdoops.c
-@@ -106,29 +106,8 @@ static int mtdoops_erase_block(struct mtdoops_context *cxt, int offset)
- 	return 0;
+@@ -168,7 +168,7 @@ static void mtdoops_workfunc_erase(struct work_struct *work)
+ 	mtdoops_erase(cxt);
  }
  
 -static void mtdoops_inc_counter(struct mtdoops_context *cxt)
--{
--	cxt->nextpage++;
--	if (cxt->nextpage >= cxt->oops_pages)
--		cxt->nextpage = 0;
--	cxt->nextcount++;
--	if (cxt->nextcount == 0xffffffff)
--		cxt->nextcount = 0;
--
--	if (page_is_used(cxt, cxt->nextpage)) {
++static void mtdoops_inc_counter(struct mtdoops_context *cxt, int panic)
+ {
+ 	cxt->nextpage++;
+ 	if (cxt->nextpage >= cxt->oops_pages)
+@@ -178,12 +178,20 @@ static void mtdoops_inc_counter(struct mtdoops_context *cxt)
+ 		cxt->nextcount = 0;
+ 
+ 	if (page_is_used(cxt, cxt->nextpage)) {
 -		schedule_work(&cxt->work_erase);
 -		return;
--	}
++		pr_debug("mtdoops: not ready %d, %d (erase %s)\n",
++			 cxt->nextpage, cxt->nextcount,
++			 panic ? "immediately" : "scheduled");
++		if (panic) {
++			/* In case of panic, erase immediately */
++			mtdoops_erase(cxt);
++		} else {
++			/* Otherwise, schedule work to erase it "nicely" */
++			schedule_work(&cxt->work_erase);
++		}
++	} else {
++		pr_debug("mtdoops: ready %d, %d (no erase)\n",
++			 cxt->nextpage, cxt->nextcount);
+ 	}
 -
 -	pr_debug("mtdoops: ready %d, %d (no erase)\n",
 -		 cxt->nextpage, cxt->nextcount);
--}
--
--/* Scheduled work - when we can't proceed without erasing a block */
--static void mtdoops_workfunc_erase(struct work_struct *work)
-+static void mtdoops_erase(struct mtdoops_context *cxt)
- {
--	struct mtdoops_context *cxt =
--			container_of(work, struct mtdoops_context, work_erase);
- 	struct mtd_info *mtd = cxt->mtd;
- 	int i = 0, j, ret, mod;
- 
-@@ -181,6 +160,32 @@ static void mtdoops_workfunc_erase(struct work_struct *work)
- 	goto badblock;
  }
  
-+/* Scheduled work - when we can't proceed without erasing a block */
-+static void mtdoops_workfunc_erase(struct work_struct *work)
-+{
-+	struct mtdoops_context *cxt =
-+			container_of(work, struct mtdoops_context, work_erase);
-+	mtdoops_erase(cxt);
-+}
-+
-+static void mtdoops_inc_counter(struct mtdoops_context *cxt)
-+{
-+	cxt->nextpage++;
-+	if (cxt->nextpage >= cxt->oops_pages)
-+		cxt->nextpage = 0;
-+	cxt->nextcount++;
-+	if (cxt->nextcount == 0xffffffff)
-+		cxt->nextcount = 0;
-+
-+	if (page_is_used(cxt, cxt->nextpage)) {
-+		schedule_work(&cxt->work_erase);
-+		return;
-+	}
-+
-+	pr_debug("mtdoops: ready %d, %d (no erase)\n",
-+		 cxt->nextpage, cxt->nextcount);
-+}
-+
  static void mtdoops_write(struct mtdoops_context *cxt, int panic)
- {
- 	struct mtd_info *mtd = cxt->mtd;
+@@ -219,7 +227,7 @@ static void mtdoops_write(struct mtdoops_context *cxt, int panic)
+ 	mark_page_used(cxt, cxt->nextpage);
+ 	memset(cxt->oops_buf, 0xff, record_size);
+ 
+-	mtdoops_inc_counter(cxt);
++	mtdoops_inc_counter(cxt, panic);
+ out:
+ 	clear_bit(0, &cxt->oops_buf_busy);
+ }
+@@ -284,7 +292,7 @@ static void find_next_position(struct mtdoops_context *cxt)
+ 		cxt->nextcount = maxcount;
+ 	}
+ 
+-	mtdoops_inc_counter(cxt);
++	mtdoops_inc_counter(cxt, 0);
+ }
+ 
+ static void mtdoops_do_dump(struct kmsg_dumper *dumper,
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
