@@ -2,187 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB825F7581
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 10:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 634535F7586
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 10:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbiJGIuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 04:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
+        id S229691AbiJGIvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 04:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiJGIuC (ORCPT
+        with ESMTP id S229472AbiJGIvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 04:50:02 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178992656F;
-        Fri,  7 Oct 2022 01:50:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665132601; x=1696668601;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=CNNiQJ0jvcJk580eA851dG+WgC8+tA465upvwZmefVk=;
-  b=luOLotz+Gi8L6n68r6YDy8ARb0G+zDjVaSwuVgAyL9ySxlsbciGnvbOP
-   sn6aiwjAr7bF4r4Ut6ttCBnkB6UmcQjfqg2Toems3yHJYEKKqhNgFPcPo
-   xJw6Mz4Ui64SBHS90dHwHXv79jGC2+Mdn++ytl/nhFu7NPq07jIlM6hAw
-   C4VDkcIwkhkeqNnfFUfUxWBLCk3BFainqP2g6Kps9eOdPmMxAU77Q1x9W
-   xTZp639JUi5rVLpuoASkQUsjhHqhvauLSz+QwFsojmoQV/7Lxc3NpFsJs
-   6K6AxrZqfgWPyrjqrOhpsXE5HcEDdC3zH17e8+HxPkk8wGSxVc8wiZhke
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="286914342"
-X-IronPort-AV: E=Sophos;i="5.95,166,1661842800"; 
-   d="scan'208";a="286914342"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 01:50:00 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="714204628"
-X-IronPort-AV: E=Sophos;i="5.95,166,1661842800"; 
-   d="scan'208";a="714204628"
-Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.241.18]) ([10.99.241.18])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 01:49:58 -0700
-Message-ID: <6730eda1-7a7a-3660-ebe4-e9e42de421a3@linux.intel.com>
-Date:   Fri, 7 Oct 2022 10:49:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v2 2/4] ALSA: hda: Rework snd_hdac_stream_reset() to use
- macros
-Content-Language: en-US
-To:     Jon Hunter <jonathanh@nvidia.com>, Takashi Iwai <tiwai@suse.de>
-Cc:     alsa-devel@alsa-project.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Mohan Kumar D <mkumard@nvidia.com>
-References: <20220818141517.109280-1-amadeuszx.slawinski@linux.intel.com>
- <20220818141517.109280-3-amadeuszx.slawinski@linux.intel.com>
- <657d2418-0c3e-296f-8f4a-dc10ced2dffe@nvidia.com>
- <87a66av4gk.wl-tiwai@suse.de>
- <86947512-33c8-4e22-5329-a41735c6b1ef@nvidia.com>
-From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-In-Reply-To: <86947512-33c8-4e22-5329-a41735c6b1ef@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 7 Oct 2022 04:51:16 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3B6A4877;
+        Fri,  7 Oct 2022 01:51:15 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id m3so6054355eda.12;
+        Fri, 07 Oct 2022 01:51:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cLFQR3kf1OGc7RQtWTzli/pg6vzYR5MtvqkuvoSq10U=;
+        b=D11I+OvztMi9pekoUUOm09LpYiyz+HrZJYT/FygLFpJ9/PXxr88+u4y/Heyji+CS9S
+         KGSPYRzX6tmi/TNrWJhGYuruka01TsLnnZOyfk7eoGF7xLWHsYM/rUliQqg1W90uTP9H
+         NtdCAH061CrucF7V8dkPlF0e62nePZxXxqWhMD6Xjz3BJv4A1Pgz5HvYOyRPdcAkwVRN
+         V00OaOxgZaVHlxAgSJnxVP27diOZZ+luJ0qrkccCoUmrRgVPyVDPEJ6GhANNyQrGBG6v
+         ROswcdZDsZK2ft5QzvPplwZcLJzb/xckycHCOyS6GCx6Nx9AslT6qK/hIL/+9e8QWxb6
+         Y4AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cLFQR3kf1OGc7RQtWTzli/pg6vzYR5MtvqkuvoSq10U=;
+        b=nHahbqRZRYNWBFXNd3c1x8jC5sS4GLqetRxlcYPgCCwUyl8EnYa9s6EOlpu5/JjWIK
+         njw0+M3S+7PmABzfK/qv4D01GIoMXu1hblE4jn/j2iY8tARhKLDQrcLhDa0wx2wTTkjo
+         Jad+k9nC56FSp7HEqyofytGV3K7JpR8XnXgnObvM44F0MAWrX1iErgnzMhd8ufc1GWuV
+         zVh5b0WKM1W+aZTzb0ofxUUHa69fBJndX0dnJOC5AtnRCDoknuS+dfyrQxVSXGC9fgAr
+         b462oUIIgkm213HIKpRSiabaYeJfKVoVzkRHWkk3pTh2SKMFC0ahxpqHFxBf9XGm1tQ0
+         UWgg==
+X-Gm-Message-State: ACrzQf0e4lfJc25xwhQiX+2nnXmkKZBjnERiP9FWKHoYOOq0XI73kusY
+        fO2JLILD99MvD8aNxdx30a8EbtR7QK8=
+X-Google-Smtp-Source: AMsMyM4TdfDLjqMXqmX4Onf8iCVlyu0YZh3B46wR6fYKNu0PV5e+5E58d2my43J26fSS+FeMbP8ZIA==
+X-Received: by 2002:a05:6402:357:b0:458:5cb6:f587 with SMTP id r23-20020a056402035700b004585cb6f587mr3586230edw.183.1665132673923;
+        Fri, 07 Oct 2022 01:51:13 -0700 (PDT)
+Received: from felia.fritz.box (200116b826e52a0050a02ad37da10fc5.dip.versatel-1u1.de. [2001:16b8:26e5:2a00:50a0:2ad3:7da1:fc5])
+        by smtp.gmail.com with ESMTPSA id p21-20020a170906a01500b0072f112a6ad2sm882806ejy.97.2022.10.07.01.51.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 01:51:13 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] mm/shmem: remove unneeded assignments in shmem_get_folio_gfp()
+Date:   Fri,  7 Oct 2022 10:50:27 +0200
+Message-Id: <20221007085027.6309-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/6/2022 10:45 AM, Jon Hunter wrote:
-> 
-> On 05/10/2022 13:29, Takashi Iwai wrote:
-> 
-> ...
-> 
->>> HDA playback is failing on -next for various Tegra boards. Bisect is
->>> point to this commit and reverting it fixes the problem. I was a bit
->>> puzzled why this change is causing a problem, but looking closer there
->>> is a difference between the previous code that was calling
->>> snd_hdac_stream_readb() and the new code that is calling
->>> snd_hdac_stream_readb_poll(). The function snd_hdac_stream_readb()
->>> calls snd_hdac_aligned_mmio() is see if the device has an aligned MMIO
->>> which Tegra does and then would call snd_hdac_aligned_read(). However,
->>> now the code always call readb() and this is breaking Tegra.
->>>
->>> So it is either necessary to update snd_hdac_stream_readb_poll() to
->>> handle this or revert this change.
->>
->> Does the patch below work?
->>
->>
->> thanks,
->>
->> Takashi
->>
->> -- 8< --
->> --- a/include/sound/hdaudio.h
->> +++ b/include/sound/hdaudio.h
->> @@ -592,8 +592,8 @@ int snd_hdac_get_stream_stripe_ctl(struct hdac_bus 
->> *bus,
->>   #define snd_hdac_stream_readb(dev, reg) \
->>       snd_hdac_reg_readb((dev)->bus, (dev)->sd_addr + AZX_REG_ ## reg)
->>   #define snd_hdac_stream_readb_poll(dev, reg, val, cond, delay_us, 
->> timeout_us) \
->> -    readb_poll_timeout((dev)->sd_addr + AZX_REG_ ## reg, val, cond, \
->> -               delay_us, timeout_us)
->> +    read_poll_timeout(snd_hdac_reg_readb, val, cond, delay_us, 
->> timeout_us,\
->> +              false, (dev)->bus, (dev)->sd_addr + AZX_REG_ ## reg)
->>   #define snd_hdac_stream_readl_poll(dev, reg, val, cond, delay_us, 
->> timeout_us) \
->>       readl_poll_timeout((dev)->sd_addr + AZX_REG_ ## reg, val, cond, \
->>                  delay_us, timeout_us)
-> 
-> 
-> So looking at this a bit more I see ...
-> 
-> [  199.422773] bad: scheduling from the idle thread!
-> [  199.427610] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G      D  
-> C         6.0.0-rc7-next-20220930-00007-gd6ae4ed0a78f-dirty #23
-> [  199.438880] Hardware name: NVIDIA Jetson Nano Developer Kit (DT)
-> [  199.444899] Call trace:
-> [  199.447357]  dump_backtrace.part.7+0xe8/0xf8
-> [  199.451680]  show_stack+0x14/0x38
-> [  199.455024]  dump_stack_lvl+0x64/0x7c
-> [  199.458715]  dump_stack+0x14/0x2c
-> [  199.462067]  dequeue_task_idle+0x2c/0x58
-> [  199.466038]  dequeue_task+0x38/0x98
-> [  199.469565]  __schedule+0x4a4/0x6d8
-> [  199.473104]  schedule+0x58/0xc0
-> [  199.476292]  schedule_hrtimeout_range_clock+0x98/0x108
-> [  199.481472]  schedule_hrtimeout_range+0x10/0x18
-> [  199.486039]  usleep_range_state+0x7c/0xb0
-> [  199.490084]  snd_hdac_stream_reset+0xe8/0x328 [snd_hda_core]
-> [  199.495913]  snd_hdac_stream_sync+0xe4/0x190 [snd_hda_core]
-> [  199.501627]  azx_pcm_trigger+0x1d8/0x250 [snd_hda_codec]
-> [  199.507109]  snd_pcm_do_stop+0x54/0x70
-> [  199.510904]  snd_pcm_action_single+0x44/0xa0
-> [  199.515215]  snd_pcm_drain_done+0x20/0x28
-> [  199.519267]  snd_pcm_update_state+0x114/0x128
-> [  199.523670]  snd_pcm_update_hw_ptr0+0x22c/0x3a0
-> [  199.528246]  snd_pcm_period_elapsed_under_stream_lock+0x44/0x88
-> [  199.534216]  snd_pcm_period_elapsed+0x24/0x48
-> [  199.538617]  stream_update+0x3c/0x50 [snd_hda_codec]
-> [  199.543737]  snd_hdac_bus_handle_stream_irq+0xe8/0x150 [snd_hda_core]
-> [  199.550320]  azx_interrupt+0xb4/0x1b0 [snd_hda_codec]
-> [  199.555524]  __handle_irq_event_percpu+0x74/0x140
-> [  199.560281]  handle_irq_event_percpu+0x14/0x48
-> [  199.564772]  handle_irq_event+0x44/0x88
-> [  199.568653]  handle_fasteoi_irq+0xa8/0x130
-> [  199.572788]  generic_handle_domain_irq+0x28/0x40
-> [  199.577452]  gic_handle_irq+0x9c/0xb8
-> [  199.581168]  call_on_irq_stack+0x2c/0x40
-> [  199.585129]  do_interrupt_handler+0x7c/0x80
-> [  199.589355]  el1_interrupt+0x34/0x68
-> [  199.592969]  el1h_64_irq_handler+0x14/0x20
-> [  199.597107]  el1h_64_irq+0x64/0x68
-> [  199.600540]  cpuidle_enter_state+0x130/0x2f8
-> [  199.604853]  cpuidle_enter+0x38/0x50
-> [  199.608463]  call_cpuidle+0x18/0x38
-> [  199.611991]  do_idle+0x1f8/0x248
-> [  199.615259]  cpu_startup_entry+0x20/0x28
-> [  199.619224]  kernel_init+0x0/0x128
-> [  199.622669]  arch_post_acpi_subsys_init+0x0/0x8
-> [  199.627240]  start_kernel+0x630/0x668
-> [  199.630933]  __primary_switched+0xb4/0xbc
-> 
-> 
-> If I change your patch to be read_poll_timeout_atomic, then it works \o/
-> 
-> Can we make that update?
-> 
-> Jon
-> 
+After the rework of shmem_get_folio_gfp() to use a folio, the local
+variable hindex is only needed to be set once before passing it to
+shmem_add_to_page_cache().
 
-Yes, it makes sense, as it uses udelay instead of usleep, same as 
-original code.
+Remove the unneeded initialization and assignments of the variable hindex
+before the actual effective assignment and first use.
 
-I've send patch which updates the macros. It passed validation on our side.
+No functional change. No change in object code.
 
-Thanks for report!
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ mm/shmem.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Amadeusz
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 8280a5cb48df..5577c3e72e0f 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -1833,7 +1833,7 @@ static int shmem_get_folio_gfp(struct inode *inode, pgoff_t index,
+ 	struct shmem_sb_info *sbinfo;
+ 	struct mm_struct *charge_mm;
+ 	struct folio *folio;
+-	pgoff_t hindex = index;
++	pgoff_t hindex;
+ 	gfp_t huge_gfp;
+ 	int error;
+ 	int once = 0;
+@@ -1871,7 +1871,6 @@ static int shmem_get_folio_gfp(struct inode *inode, pgoff_t index,
+ 	}
+ 
+ 	if (folio) {
+-		hindex = folio->index;
+ 		if (sgp == SGP_WRITE)
+ 			folio_mark_accessed(folio);
+ 		if (folio_test_uptodate(folio))
+-- 
+2.17.1
+
