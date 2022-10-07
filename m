@@ -2,82 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF71D5F7660
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2295F766D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbiJGJiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 05:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
+        id S229527AbiJGJpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 05:45:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiJGJiQ (ORCPT
+        with ESMTP id S229506AbiJGJpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 05:38:16 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA792F670
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 02:38:14 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1ogjo0-0006Ah-NY; Fri, 07 Oct 2022 11:38:08 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jisheng Zhang <jszhang@kernel.org>
-Subject: Re: [PATCH 2/8] riscv: cpufeature: detect RISCV_ALTERNATIVES_EARLY_BOOT earlier
-Date:   Fri, 07 Oct 2022 11:38:08 +0200
-Message-ID: <2057655.bB369e8A3T@diego>
-In-Reply-To: <20221006070818.3616-3-jszhang@kernel.org>
-References: <20221006070818.3616-1-jszhang@kernel.org> <20221006070818.3616-3-jszhang@kernel.org>
+        Fri, 7 Oct 2022 05:45:42 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3A148C9D;
+        Fri,  7 Oct 2022 02:45:40 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id j7so6455666wrr.3;
+        Fri, 07 Oct 2022 02:45:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EQkrLmzT3Pvs6KFi5WAH9SS4PAeF6bOPV5uy+VMuFaU=;
+        b=URWhMdnZurrj0JGkaHhZWS1Hb/wxi0oCu8/3WD0OIL65EtHWMnklxQ5XqxkIjTL/B5
+         N7xpNnpQ+M8rKHRQFHYb+paRvh0EyNlN4EEUzu9CCRmTeHiVRNU/OwCXr2YchUlcof3e
+         fevesm1nDkiNOXckaZO9/J4RT0wSUXaEGoKREPrlJBPo0O8082l8MKf8Zb49/PjF2TCS
+         m2snA09tMpIoKXLCQu7c9iuXj9PTan9gdlQ79UdkKAuaUxrqaxr1wDmC1s7cx7mgfsCY
+         9E5AIUFXpoRWDapYlzKFqxkuhPMThRplkkW2XHoJO+wUa9ssFtuP1EPwk82oxDc6HA2T
+         jbBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EQkrLmzT3Pvs6KFi5WAH9SS4PAeF6bOPV5uy+VMuFaU=;
+        b=UAzdWD32NFubJe0yYDj2QicvoB2ZVXHvTH0wudZZ2jj9avxgvad0yvgBbcrTLer4lC
+         AAuiQMdEzxJnZdfR4iY95M7M9BBkYJfiY24FbyhcPt/0Kr8TKlBoor46s+ypuAHsr6nY
+         KlH0bsDKBVeQCGJ1p4ULwM+YfxWVFE5XEasXvSjlqVKZu1gB8pmvzHO6o2/ku/KnrBww
+         oDkr2KjSKPS7AaVGu7BzCB8gHCjtoEBr0XUt6MBw/sLGL22MrB/4w26yXi2a8vFp6YtP
+         GHl69IrRDLkhPlsTZIyMPCiZUWqWsBh4rIwKR1yRAVahG9i9J/nMzc8eS902bILCp2lG
+         vM6A==
+X-Gm-Message-State: ACrzQf1R9vDNsxdanz+m0how/d+oAnY69wL0UTdepOpqAkGUkspkufvl
+        w2WDFiZlVXozPcwoUCWkoaY=
+X-Google-Smtp-Source: AMsMyM7n+NI3gVVcc2w9u29r2TQ7mzmd/4mQneSIxf8PvyH/zA3P6p6aUGX9oUN4sLE6BbdJqjQapw==
+X-Received: by 2002:adf:f90d:0:b0:20c:de32:4d35 with SMTP id b13-20020adff90d000000b0020cde324d35mr2603406wrr.583.1665135939037;
+        Fri, 07 Oct 2022 02:45:39 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id j39-20020a05600c48a700b003a5537bb2besm1686541wmp.25.2022.10.07.02.45.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 02:45:38 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Fri, 7 Oct 2022 11:45:36 +0200
+To:     Sumanth Korikkar <sumanthk@linux.ibm.com>, peterz@infradead.org
+Cc:     olsajiri@gmail.com, bpf@vger.kernel.org, gor@linux.ibm.com,
+        hca@linux.ibm.com, iii@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-tip-commits@vger.kernel.org, namhyung@kernel.org,
+        svens@linux.ibm.com, tip-bot2@linutronix.de, tmricht@linux.ibm.com,
+        x86@kernel.org
+Subject: Re: [PATCH] bpf: fix sample_flags for bpf_perf_event_output
+Message-ID: <Yz/1QNGfO39Y7dOJ@krava>
+References: <Yz8lbkx3HYQpnvIB@krava>
+ <20221007081327.1047552-1-sumanthk@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221007081327.1047552-1-sumanthk@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, 6. Oktober 2022, 09:08:12 CEST schrieb Jisheng Zhang:
-> Now, the riscv_cpufeature_patch_func() do nothing in the stage of
-> RISCV_ALTERNATIVES_EARLY_BOOT. We can move the detection of "early
-> boot" stage earlier.
+On Fri, Oct 07, 2022 at 10:13:27AM +0200, Sumanth Korikkar wrote:
+> * Raw data is also filled by bpf_perf_event_output.
+> * Add sample_flags to indicate raw data.
+> * This eliminates the segfaults as shown below:
+>   Run ./samples/bpf/trace_output
+>   BUG pid 9 cookie 1001000000004 sized 4
+>   BUG pid 9 cookie 1001000000004 sized 4
+>   BUG pid 9 cookie 1001000000004 sized 4
+>   Segmentation fault (core dumped)
 > 
-> In following patch, we will make riscv_cpufeature_patch_func() scans
-> all ISA extensions.
-> 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> Fixes: 838d9bb62d13 ("perf: Use sample_flags for raw_data")
+> Acked-by: Namhyung Kim <namhyung@kernel.org>
+> Signed-off-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
+
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+
+Peter,
+I think this should go through your tree again?
+bpf-next/master does not have sample_flags merged yet
+
+thanks,
+jirka
+
 > ---
->  arch/riscv/kernel/cpufeature.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  kernel/trace/bpf_trace.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 03611b3ef45e..afa54635c180 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -307,6 +307,9 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
->  	struct alt_entry *alt;
->  	u32 tmp;
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 49fb9ec8366d..1ed08967fb97 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -687,6 +687,7 @@ BPF_CALL_5(bpf_perf_event_output, struct pt_regs *, regs, struct bpf_map *, map,
 >  
-> +	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-> +		return;
-> +
-
-This will work as long as no extension needs early patching,
-but we can cross that bridge when this happens :-)
-
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-
->  	for (alt = begin; alt < end; alt++) {
->  		if (alt->vendor_id != 0)
->  			continue;
+>  	perf_sample_data_init(sd, 0, 0);
+>  	sd->raw = &raw;
+> +	sd->sample_flags |= PERF_SAMPLE_RAW;
+>  
+>  	err = __bpf_perf_event_output(regs, map, flags, sd);
+>  
+> @@ -745,6 +746,7 @@ u64 bpf_event_output(struct bpf_map *map, u64 flags, void *meta, u64 meta_size,
+>  	perf_fetch_caller_regs(regs);
+>  	perf_sample_data_init(sd, 0, 0);
+>  	sd->raw = &raw;
+> +	sd->sample_flags |= PERF_SAMPLE_RAW;
+>  
+>  	ret = __bpf_perf_event_output(regs, map, flags, sd);
+>  out:
+> -- 
+> 2.36.1
 > 
-
-
-
-
