@@ -2,167 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D655D5F744A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 08:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 031305F7453
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 08:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbiJGGmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 02:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S229516AbiJGGqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 02:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbiJGGmH (ORCPT
+        with ESMTP id S229445AbiJGGqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 02:42:07 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F281176D5
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 23:42:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 49B921F8A8;
-        Fri,  7 Oct 2022 06:42:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1665124923; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=S7rX4NNfG5xbGtkfHQ3yryrnm26fT7MI5fpGm+XeZVo=;
-        b=StxRIPs7AKtt4D0aOz64z0LpwokqK4ZWIDpbns1hmPaE3IuoSO6t7p30tXIYHDHYMDSIve
-        eSdTcsGlR/qc2tGcmsUYg/Ya6wjb4gLkx9+rmMkxmAEKGMsR80426ZF+eyUYbCclA2gsKE
-        b9KQmEMxe5EKcqEuSNSMSFbWYWlYwRg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BF47A13A3D;
-        Fri,  7 Oct 2022 06:42:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id rb3eLDrKP2P+SQAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 07 Oct 2022 06:42:02 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        xen-devel@lists.xenproject.org
-Subject: [PATCH v2 3/3] xen/virtio: enable grant based virtio on x86
-Date:   Fri,  7 Oct 2022 08:41:43 +0200
-Message-Id: <20221007064143.10049-4-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20221007064143.10049-1-jgross@suse.com>
-References: <20221007064143.10049-1-jgross@suse.com>
+        Fri, 7 Oct 2022 02:46:35 -0400
+Received: from smtpout1.mo3004.mail-out.ovh.net (smtpout1.mo3004.mail-out.ovh.net [79.137.123.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86982C1DB0;
+        Thu,  6 Oct 2022 23:46:33 -0700 (PDT)
+Received: from pro2.mail.ovh.net (unknown [10.109.146.13])
+        by mo3004.mail-out.ovh.net (Postfix) with ESMTPS id 33DC223D5F4;
+        Fri,  7 Oct 2022 06:46:32 +0000 (UTC)
+Received: from [192.168.1.41] (88.161.25.233) by DAG1EX1.emp2.local
+ (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Fri, 7 Oct
+ 2022 08:46:31 +0200
+Message-ID: <7ecb85d2-5e6b-b706-2ac2-3e56bf2b89aa@traphandler.com>
+Date:   Fri, 7 Oct 2022 08:46:31 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RESEND PATCH v3 4/4] leds: Add a multicolor LED driver to group
+ monochromatic LEDs
+Content-Language: en-US
+To:     Jacek Anaszewski <jacek.anaszewski@gmail.com>, <pavel@ucw.cz>,
+        <robh+dt@kernel.org>, <sven.schwermer@disruptive-technologies.com>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <johan+linaro@kernel.org>, <marijn.suijten@somainline.org>,
+        <bjorn.andersson@linaro.org>, <andy.shevchenko@gmail.com>,
+        <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sha@pengutronix.de>
+References: <20220917081339.3354075-1-jjhiblot@traphandler.com>
+ <20220917081339.3354075-5-jjhiblot@traphandler.com>
+ <6f8e986d-6835-ae9a-bba7-074e822c25f5@gmail.com>
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+In-Reply-To: <6f8e986d-6835-ae9a-bba7-074e822c25f5@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [88.161.25.233]
+X-ClientProxiedBy: CAS2.emp2.local (172.16.1.2) To DAG1EX1.emp2.local
+ (172.16.2.1)
+X-Ovh-Tracer-Id: 14647957792190904599
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeiiedgudduvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpedvfeekudegkeeuuedvueeuveejffdtvdethfelkefhfefftdetteffiefgvddtieenucfkpheptddrtddrtddrtddpkeekrdduiedurddvhedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhrohdvrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepjhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtohepshhhrgesphgvnhhguhhtrhhonhhigidruggvpdfovfetjfhoshhtpehmoheftddtge
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use an x86-specific virtio_check_mem_acc_cb() for Xen in order to setup
-the correct DMA ops.
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
-V2:
-- add missing PV check in xen_virtio_mem_acc() (Oleksandr Tyshchenko)
-- add xen_virtio_restricted_mem_acc() stub (Oleksandr Tyshchenko)
----
- arch/x86/xen/enlighten_hvm.c |  2 +-
- arch/x86/xen/enlighten_pv.c  |  2 +-
- drivers/xen/grant-dma-ops.c  | 12 +++++++++++-
- include/xen/xen-ops.h        |  6 ++++++
- 4 files changed, 19 insertions(+), 3 deletions(-)
+On 18/09/2022 16:54, Jacek Anaszewski wrote:
+> Hi Jean,
+>
+> General question to this driver: since it seems that it is allowed to
+> have duplicate LEDs of the same color, then it will be impossible to
+> distinguish which of the two same colors in multi_index file will refer
+> to which physical LED. Are you aware of this shortcoming?
 
-diff --git a/arch/x86/xen/enlighten_hvm.c b/arch/x86/xen/enlighten_hvm.c
-index 1c1ac418484b..c1cd28e915a3 100644
---- a/arch/x86/xen/enlighten_hvm.c
-+++ b/arch/x86/xen/enlighten_hvm.c
-@@ -212,7 +212,7 @@ static void __init xen_hvm_guest_init(void)
- 		return;
- 
- 	if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT))
--		virtio_set_mem_acc_cb(virtio_require_restricted_mem_acc);
-+		virtio_set_mem_acc_cb(xen_virtio_restricted_mem_acc);
- 
- 	init_hvm_pv_info();
- 
-diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
-index 9b1a58dda935..45b24c1b646a 100644
---- a/arch/x86/xen/enlighten_pv.c
-+++ b/arch/x86/xen/enlighten_pv.c
-@@ -112,7 +112,7 @@ static void __init xen_pv_init_platform(void)
- {
- 	/* PV guests can't operate virtio devices without grants. */
- 	if (IS_ENABLED(CONFIG_XEN_VIRTIO))
--		virtio_set_mem_acc_cb(virtio_require_restricted_mem_acc);
-+		virtio_set_mem_acc_cb(xen_virtio_restricted_mem_acc);
- 
- 	populate_extra_pte(fix_to_virt(FIX_PARAVIRT_BOOTMAP));
- 
-diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-index c703b77b33c9..63c3f0dac066 100644
---- a/drivers/xen/grant-dma-ops.c
-+++ b/drivers/xen/grant-dma-ops.c
-@@ -297,7 +297,7 @@ bool xen_is_grant_dma_device(struct device *dev)
- 
- bool xen_virtio_mem_acc(struct virtio_device *dev)
- {
--	if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT))
-+	if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT) || xen_pv_domain())
- 		return true;
- 
- 	return xen_is_grant_dma_device(dev->dev.parent);
-@@ -372,6 +372,16 @@ void xen_grant_setup_dma_ops(struct device *dev)
- 	dev_err(dev, "Cannot set up Xen grant DMA ops, retain platform DMA ops\n");
- }
- 
-+bool xen_virtio_restricted_mem_acc(struct virtio_device *dev)
-+{
-+	bool ret = xen_virtio_mem_acc(dev);
-+
-+	if (ret)
-+		xen_grant_setup_dma_ops(dev->dev.parent);
-+
-+	return ret;
-+}
-+
- MODULE_DESCRIPTION("Xen grant DMA-mapping layer");
- MODULE_AUTHOR("Juergen Gross <jgross@suse.com>");
- MODULE_LICENSE("GPL");
-diff --git a/include/xen/xen-ops.h b/include/xen/xen-ops.h
-index dae0f350c678..a34f4271a2e9 100644
---- a/include/xen/xen-ops.h
-+++ b/include/xen/xen-ops.h
-@@ -219,6 +219,7 @@ static inline void xen_preemptible_hcall_end(void) { }
- void xen_grant_setup_dma_ops(struct device *dev);
- bool xen_is_grant_dma_device(struct device *dev);
- bool xen_virtio_mem_acc(struct virtio_device *dev);
-+bool xen_virtio_restricted_mem_acc(struct virtio_device *dev);
- #else
- static inline void xen_grant_setup_dma_ops(struct device *dev)
- {
-@@ -234,6 +235,11 @@ static inline bool xen_virtio_mem_acc(struct virtio_device *dev)
- {
- 	return false;
- }
-+
-+static inline bool xen_virtio_restricted_mem_acc(struct virtio_device *dev)
-+{
-+	return false;
-+}
- #endif /* CONFIG_XEN_GRANT_DMA_OPS */
- 
- #endif /* INCLUDE_XEN_OPS_H */
--- 
-2.35.3
+Hi Jacek,
 
+yes I'm aware of this, but I don't think it can be a problem in a real 
+environment. There will probably few cases were multiple leds of the 
+same color are used and even fewer were those leds need to be controlled 
+differently.
+
+>
+> Besides that I have two remarks below.
+>
+> On 9/17/22 10:13, Jean-Jacques Hiblot wrote:
+>> By allowing to group multiple monochrome LED into multicolor LEDs,
+>> all involved LEDs can be controlled in-sync. This enables using effects
+>> using triggers, etc.
+>>
+>> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+>> ---
+>>   drivers/leds/rgb/Kconfig                 |   6 +
+>>   drivers/leds/rgb/Makefile                |   1 +
+>>   drivers/leds/rgb/leds-group-multicolor.c | 153 +++++++++++++++++++++++
+>>   3 files changed, 160 insertions(+)
+>>   create mode 100644 drivers/leds/rgb/leds-group-multicolor.c
+>>
+>> diff --git a/drivers/leds/rgb/Kconfig b/drivers/leds/rgb/Kconfig
+>> index 204cf470beae..c2610c47a82d 100644
+>> --- a/drivers/leds/rgb/Kconfig
+>> +++ b/drivers/leds/rgb/Kconfig
+>> @@ -2,6 +2,12 @@
+>>     if LEDS_CLASS_MULTICOLOR
+>>   +config LEDS_GRP_MULTICOLOR
+>> +    tristate "Multi-color LED grouping support"
+>> +    help
+>> +      This option enables support for monochrome LEDs that are
+>> +      grouped into multicolor LEDs.
+>> +
+>>   config LEDS_PWM_MULTICOLOR
+>>       tristate "PWM driven multi-color LED Support"
+>>       depends on PWM
+>> diff --git a/drivers/leds/rgb/Makefile b/drivers/leds/rgb/Makefile
+>> index 0675bc0f6e18..4de087ad79bc 100644
+>> --- a/drivers/leds/rgb/Makefile
+>> +++ b/drivers/leds/rgb/Makefile
+>> @@ -1,4 +1,5 @@
+>>   # SPDX-License-Identifier: GPL-2.0
+>>   +obj-$(CONFIG_LEDS_GRP_MULTICOLOR)    += leds-group-multicolor.o
+>>   obj-$(CONFIG_LEDS_PWM_MULTICOLOR)    += leds-pwm-multicolor.o
+>>   obj-$(CONFIG_LEDS_QCOM_LPG)        += leds-qcom-lpg.o
+>> diff --git a/drivers/leds/rgb/leds-group-multicolor.c 
+>> b/drivers/leds/rgb/leds-group-multicolor.c
+>> new file mode 100644
+>> index 000000000000..61f9e1954fc4
+>> --- /dev/null
+>> +++ b/drivers/leds/rgb/leds-group-multicolor.c
+>> @@ -0,0 +1,153 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * multi-color LED built with monochromatic LED devices
+>> + *
+>> + * Copyright 2022 Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+>> + */
+>> +
+>> +#include <linux/err.h>
+>> +#include <linux/leds.h>
+>> +#include <linux/led-class-multicolor.h>
+>> +#include <linux/math.h>
+>> +#include <linux/module.h>
+>> +#include <linux/mod_devicetable.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/property.h>
+>> +
+>> +struct led_mcg_priv {
+>> +    struct led_classdev_mc mc_cdev;
+>> +    struct led_classdev **monochromatics;
+>> +};
+>> +
+>> +static int led_mcg_set(struct led_classdev *cdev,
+>> +              enum led_brightness brightness)
+>> +{
+>> +    struct led_classdev_mc *mc_cdev = lcdev_to_mccdev(cdev);
+>> +    struct led_mcg_priv *priv =
+>> +        container_of(mc_cdev, struct led_mcg_priv, mc_cdev);
+>> +    int i;
+>> +
+>> +    led_mc_calc_color_components(mc_cdev, brightness);
+>> +
+>> +    for (i = 0; i < mc_cdev->num_colors; i++) {
+>> +        struct led_classdev *mono = priv->monochromatics[i];
+>> +        int actual_led_brightness;
+>> +
+>> +        /*
+>> +         * Scale the intensity according the max brightness of the
+>> +         * monochromatic LED
+> s/according the/according to the/
+>
+>> +         */
+>> +        actual_led_brightness = DIV_ROUND_CLOSEST(
+>> +            mono->max_brightness * mc_cdev->subled_info[i].brightness,
+>> +            mc_cdev->led_cdev.max_brightness);
+>
+> How about dropping above usage of led_mc_calc_color_components()
+> helper in favour of doing all required calculations here?
+> It would be easier for the reader to grasp the idea then.
+
+>
+>> +
+>> +        led_set_brightness(mono, actual_led_brightness);
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static int led_mcg_probe(struct platform_device *pdev)
+>> +{
+>> +    struct device *dev = &pdev->dev;
+>> +    struct led_init_data init_data = {};
+>> +    struct led_classdev *cdev;
+>> +    struct mc_subled *subled;
+>> +    struct led_mcg_priv *priv;
+>> +    int i, count, ret;
+>> +    unsigned int max_brightness;
+>> +
+>> +    priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+>> +    if (!priv)
+>> +        return -ENOMEM;
+>> +
+>> +    count = 0;
+>> +    max_brightness = 0;
+>> +    for (;;) {
+>> +        struct led_classdev *led_cdev;
+>> +
+>> +        led_cdev = devm_of_led_get(dev, count);
+>> +        if (IS_ERR(led_cdev)) {
+>> +            /* Reached the end of the list ? */
+>> +            if (PTR_ERR(led_cdev) == -ENOENT)
+>> +                break;
+>> +            return dev_err_probe(dev, PTR_ERR(led_cdev),
+>> +                         "Unable to get led #%d", count);
+>> +        }
+>> +        count++;
+>> +
+>> +        priv->monochromatics = devm_krealloc(dev, priv->monochromatics,
+>> +                    count * sizeof(*priv->monochromatics),
+>> +                    GFP_KERNEL);
+>> +        if (!priv->monochromatics)
+>> +            return -ENOMEM;
+>> +
+>> +        priv->monochromatics[count - 1] = led_cdev;
+>> +
+>> +        max_brightness = max(max_brightness, led_cdev->max_brightness);
+>> +    }
+>> +
+>> +    subled = devm_kzalloc(dev, count * sizeof(*subled), GFP_KERNEL);
+>> +    if (!subled)
+>> +        return -ENOMEM;
+>> +    priv->mc_cdev.subled_info = subled;
+>> +
+>> +    for (i = 0; i < count; i++) {
+>> +        struct led_classdev *led_cdev = priv->monochromatics[i];
+>> +
+>> +        subled[i].color_index = led_cdev->color;
+>> +        /* configure the LED intensity to its maximum */
+>> +        subled[i].intensity = max_brightness;
+>> +    }
+>> +
+>> +    /* init the multicolor's LED class device */
+>> +    cdev = &priv->mc_cdev.led_cdev;
+>> +    cdev->flags = LED_CORE_SUSPENDRESUME;
+>> +    cdev->brightness_set_blocking = led_mcg_set;
+>> +    cdev->max_brightness = max_brightness;
+>> +    cdev->color = LED_COLOR_ID_MULTI;
+>> +    priv->mc_cdev.num_colors = count;
+>> +
+>> +    init_data.fwnode = dev_fwnode(dev);
+>> +    ret = devm_led_classdev_multicolor_register_ext(dev, 
+>> &priv->mc_cdev,
+>> +                            &init_data);
+>> +    if (ret)
+>> +        return dev_err_probe(dev, ret,
+>> +            "failed to register multicolor led for %s.\n",
+>> +            cdev->name);
+>> +
+>> +    ret = led_mcg_set(cdev, cdev->brightness);
+>> +    if (ret)
+>> +        return dev_err_probe(dev, ret,
+>> +                     "failed to set led value for %s.",
+>> +                     cdev->name);
+>> +
+>> +    for (i = 0; i < count; i++) {
+>> +        struct led_classdev *led_cdev = priv->monochromatics[i];
+>> +
+>> +        /* Make the sysfs of the monochromatic LED read-only */
+>> +        led_cdev->flags |= LED_SYSFS_DISABLE;
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static const struct of_device_id of_led_mcg_match[] = {
+>> +    { .compatible = "leds-group-multicolor" },
+>> +    {}
+>> +};
+>> +MODULE_DEVICE_TABLE(of, of_led_mcg_match);
+>> +
+>> +static struct platform_driver led_mcg_driver = {
+>> +    .probe        = led_mcg_probe,
+>> +    .driver        = {
+>> +        .name    = "leds_group_multicolor",
+>> +        .of_match_table = of_led_mcg_match,
+>> +    }
+>> +};
+>> +module_platform_driver(led_mcg_driver);
+>> +
+>> +MODULE_AUTHOR("Jean-Jacques Hiblot <jjhiblot@traphandler.com>");
+>> +MODULE_DESCRIPTION("multi-color LED group driver");
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_ALIAS("platform:leds-group-multicolor");
+>
