@@ -2,45 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71DCE5F72A5
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 03:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3CE5F72AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 04:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231977AbiJGB5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 21:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52450 "EHLO
+        id S232016AbiJGCK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 22:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiJGB5M (ORCPT
+        with ESMTP id S231984AbiJGCKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 21:57:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E21B48BC;
-        Thu,  6 Oct 2022 18:57:11 -0700 (PDT)
+        Thu, 6 Oct 2022 22:10:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F18A4BAE;
+        Thu,  6 Oct 2022 19:10:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D269B8213D;
-        Fri,  7 Oct 2022 01:57:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0C43C433D6;
-        Fri,  7 Oct 2022 01:57:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5E37B821FA;
+        Fri,  7 Oct 2022 02:10:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69602C433C1;
+        Fri,  7 Oct 2022 02:10:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665107829;
-        bh=Nbtxh6Kp8eMH/KHQ/XdCwo6T8ahCTWFYnsV8cpTj8/s=;
+        s=k20201202; t=1665108648;
+        bh=/2L93yu9h4AM1NVI3+iOZO/MK68ZsD8Z/BzSgx4lnvo=;
         h=From:To:Cc:Subject:Date:From;
-        b=q3CWFFaX4XTUrQ3Ha+k7KN+7SbFkb20lut0sFzGSKEfeSBCCeipcLczM9CiUO8NUi
-         oQyzQZ29RvgSUZVLtKTwqTgfjuwmWo7soyqSPHMDN29XMztcTtZLap+MlxqMhXXGP/
-         fU9n/Bnge6cgQr43ibXE5Ub3C8XfyGYkNIOKWPLrerQYuWXUOyan0dfa17ecH4rBrl
-         sN5KrAkwJML0F90GeVpSpnW61HpjGpogkWtpWZzNYZXQuKprjSBupcg5OxXG1ENKiM
-         2W4l/7/wUKC3keWxx2g4GW0u2Np0PPQMU/gpqadJI2ya36lHfqhEm7uupap6h+ypIj
-         sH1WufNjqGJnw==
+        b=edRQ1UqbsgxfquW31+Nhl/w4FAqE3jI2HFgYSxyz1H8liiYlf5IAW0EdpW9qh6hf1
+         N5r8Ya9MDH50lJBVOJs5sdJP3Yic6dS1KF+6e72M2qY771LxMGADU93HBLyD7inMFA
+         +njuXLjuAjxlYjgyWyDHDt9iQBWmjALIfVMREWQec/bcvwA2daf/dn44l6N11d/164
+         dUBbK+2+vTWbTJ2O5bH9mcZMr0806BMCuECuVGZUH+zD/wmFZgnzQFHzWTfBmzs5Qt
+         4K1yhWy8xKEPerbNdm0G7CrFj5LqOU89VOqupdTu1Kg6cm2HAumB+YEAXlUbgDPKMF
+         GgyLMVYg2bt7A==
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Shengjiu Wang <shengjiu.wang@nxp.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>
-Subject: [GIT PULL] rpmsg updates for v6.1
-Date:   Thu,  6 Oct 2022 20:57:07 -0500
-Message-Id: <20221007015707.2583858-1-andersson@kernel.org>
+        wangjianli <wangjianli@cdjrlc.com>
+Subject: [GIT PULL] remoteproc updates for v6.1
+Date:   Thu,  6 Oct 2022 21:10:46 -0500
+Message-Id: <20221007021046.2585078-1-andersson@kernel.org>
 X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -59,24 +64,58 @@ The following changes since commit 1c23f9e627a7b412978b4e852793c5e3c3efc555:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rpmsg-v6.1
+  https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rproc-v6.1
 
-for you to fetch changes up to 467233a4ac29b215d492843d067a9f091e6bf0c5:
+for you to fetch changes up to ccf22a48cc8789a35befea783448c259463a5eef:
 
-  rpmsg: char: Avoid double destroy of default endpoint (2022-09-21 11:21:33 -0600)
-
-----------------------------------------------------------------
-rpmsg updates for v6.1
-
-This fixes a double free/destroy and drops an unnecessary local variable
-in the rpmsg char driver.
+  remoteproc: virtio: Fix warning on bindings by removing the of_match_table (2022-10-05 09:20:44 -0600)
 
 ----------------------------------------------------------------
+remoteproc updates for v6.1
+
+Support for remoteprocs that will perform recovery without help from
+Linux is introduced.
+
+The virtio integration is transitioned towards remoteproc_virtio.c and
+represented by a platform_device, in preparation for instantiating
+virtio instances from DeviceTree.
+
+The iMX remoteproc driver has a couple of sparse warnings corrected and
+a couple of error message printouts are cleaned up. The keystone driver
+is transitioned to use the gpiod API.
+
+----------------------------------------------------------------
+Arnaud Pouliquen (5):
+      remoteproc: core: Introduce rproc_rvdev_add_device function
+      remoteproc: core: Introduce rproc_add_rvdev function
+      remoteproc: Move rproc_vdev management to remoteproc_virtio.c
+      remoteproc: virtio: Create platform device for the remoteproc_virtio
+      remoteproc: virtio: Fix warning on bindings by removing the of_match_table
+
+Christophe JAILLET (1):
+      remoteproc: imx_rproc: Simplify some error message
+
+Dan Carpenter (1):
+      remoteproc: Harden rproc_handle_vdev() against integer overflow
+
+Dmitry Torokhov (1):
+      remoteproc/keystone: Switch to using gpiod API
+
+Peng Fan (2):
+      remoteproc: Introduce rproc features
+      remoteproc: Support attach recovery after rproc crash
+
 Shengjiu Wang (1):
-      rpmsg: char: Avoid double destroy of default endpoint
+      remoteproc: imx_dsp_rproc: fix argument 2 of rproc_mem_entry_init
 
-ye xingchen (1):
-      rpmsg: char: Remove the unneeded result variable
+wangjianli (1):
+      drivers/remoteproc: Fix repeated words in comments
 
- drivers/rpmsg/rpmsg_char.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/remoteproc/imx_dsp_rproc.c       |   4 +-
+ drivers/remoteproc/imx_rproc.c           |  14 +-
+ drivers/remoteproc/keystone_remoteproc.c |  16 ++-
+ drivers/remoteproc/remoteproc_core.c     | 223 +++++++++----------------------
+ drivers/remoteproc/remoteproc_internal.h |  38 +++++-
+ drivers/remoteproc/remoteproc_virtio.c   | 183 ++++++++++++++++++++++---
+ include/linux/remoteproc.h               |  22 ++-
+ 7 files changed, 298 insertions(+), 202 deletions(-)
