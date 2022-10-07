@@ -2,137 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5955F7615
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7D05F7619
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 11:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiJGJWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 05:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50276 "EHLO
+        id S229538AbiJGJWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 05:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiJGJWR (ORCPT
+        with ESMTP id S229731AbiJGJWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 05:22:17 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB59CA8BB
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 02:22:15 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1ogjYY-00063C-EQ; Fri, 07 Oct 2022 11:22:10 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jisheng Zhang <jszhang@kernel.org>
-Subject: Re: [PATCH 3/8] riscv: hwcap: make ISA extension ids can be used in asm
-Date:   Fri, 07 Oct 2022 11:22:09 +0200
-Message-ID: <13539612.RDIVbhacDa@diego>
-In-Reply-To: <20221006070818.3616-4-jszhang@kernel.org>
-References: <20221006070818.3616-1-jszhang@kernel.org> <20221006070818.3616-4-jszhang@kernel.org>
+        Fri, 7 Oct 2022 05:22:30 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FECCA8BB;
+        Fri,  7 Oct 2022 02:22:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665134549; x=1696670549;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Y6QovZnXopByWxgIdjW4Tq1EYB20Z0xAuPpsuOHfho8=;
+  b=hiJ13tI+3/e3P42NHs/q2OWrkofHkTZbq4V69KiKn0G4iq2R2Aw3Vsst
+   sPoeyJLe+GvjzHgNk9YyeU1d24i8j3o43+tQqG0QzSGvquPVk9HDX8znL
+   8iJWWgwczGD0L0QZXJDW9RWmtaGAEddtJSbA0loJ1dC6ZHv1rz4Be9Y0Y
+   HpXz65HwAs0627oAUYqSoOQDUp7wyhWr+mAmD1cWSrIDGwSQHorf9ZMT3
+   N+f7SRqHjh4xr3d0NVazCMZ1ahxvFANe4ufMb4/w8iQkWhNfPrKfZIiO+
+   bIOkfJz52iXLHSgbTCZPMDKrTVv3xwU0qt7I8I1xxuBusMVI+3nHGLF5a
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="305275186"
+X-IronPort-AV: E=Sophos;i="5.95,166,1661842800"; 
+   d="scan'208";a="305275186"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 02:22:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="767518301"
+X-IronPort-AV: E=Sophos;i="5.95,166,1661842800"; 
+   d="scan'208";a="767518301"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Oct 2022 02:22:23 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ogjYj-003Y19-1q;
+        Fri, 07 Oct 2022 12:22:21 +0300
+Date:   Fri, 7 Oct 2022 12:22:21 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Joe Perches <joe@perches.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jagath Jog J <jagathjog1996@gmail.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 4/5] iio: accel: Support Kionix/ROHM KX022A
+ accelerometer
+Message-ID: <Yz/vzV038AA1UUD1@smile.fi.intel.com>
+References: <cover.1665066397.git.mazziesaccount@gmail.com>
+ <88e24b01da9f44ebf5fcd8344ded0b75ff742fbf.1665066397.git.mazziesaccount@gmail.com>
+ <Yz8fK7j8pxlU76xt@smile.fi.intel.com>
+ <c83f7ad5b5f67da86bec222f970305a1990e8181.camel@perches.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c83f7ad5b5f67da86bec222f970305a1990e8181.camel@perches.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, 6. Oktober 2022, 09:08:13 CEST schrieb Jisheng Zhang:
-> We will make use of ISA extension in asm files, so make the multi-letter
-> RISC-V ISA extension IDs macros rather than enums and move them and
-> those base ISA extension IDs to suitable place.
+On Fri, Oct 07, 2022 at 12:04:20AM -0700, Joe Perches wrote:
+> On Thu, 2022-10-06 at 21:32 +0300, Andy Shevchenko wrote:
+> > On Thu, Oct 06, 2022 at 05:38:14PM +0300, Matti Vaittinen wrote:
+> > > KX022A is a 3-axis accelerometer from ROHM/Kionix. The senosr features
+> > > include variable ODRs, I2C and SPI control, FIFO/LIFO with watermark IRQ,
+> > > tap/motion detection, wake-up & back-to-sleep events, four acceleration
+> > > ranges (2, 4, 8 and 16g) and probably some other cool features.
+> []
+> > > +/*
+> > > + * Threshold for deciding our HW fifo is unrecoverably corrupt and should be
+> > > + * cleared
+> > 
+> > Multi-line comments have to follow English grammar and punctuation,
+> > i.e. trailing period.
 > 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  arch/riscv/include/asm/hwcap.h | 45 +++++++++++++++++-----------------
->  1 file changed, 23 insertions(+), 22 deletions(-)
-> 
-> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-> index 6f59ec64175e..6cf445653911 100644
-> --- a/arch/riscv/include/asm/hwcap.h
-> +++ b/arch/riscv/include/asm/hwcap.h
-> @@ -12,20 +12,6 @@
->  #include <linux/bits.h>
->  #include <uapi/asm/hwcap.h>
->  
-> -#ifndef __ASSEMBLY__
-> -#include <linux/jump_label.h>
-> -/*
-> - * This yields a mask that user programs can use to figure out what
-> - * instruction set this cpu supports.
-> - */
-> -#define ELF_HWCAP		(elf_hwcap)
-> -
-> -enum {
-> -	CAP_HWCAP = 1,
-> -};
-> -
-> -extern unsigned long elf_hwcap;
-> -
->  #define RISCV_ISA_EXT_a		('a' - 'a')
->  #define RISCV_ISA_EXT_c		('c' - 'a')
->  #define RISCV_ISA_EXT_d		('d' - 'a')
-> @@ -46,21 +32,36 @@ extern unsigned long elf_hwcap;
->  #define RISCV_ISA_EXT_BASE 26
->  
->  /*
-> - * This enum represent the logical ID for each multi-letter RISC-V ISA extension.
-> + * These macros represent the logical ID for each multi-letter RISC-V ISA extension.
->   * The logical ID should start from RISCV_ISA_EXT_BASE and must not exceed
->   * RISCV_ISA_EXT_MAX. 0-25 range is reserved for single letter
->   * extensions while all the multi-letter extensions should define the next
->   * available logical extension id.
->   */
-> -enum riscv_isa_ext_id {
-> -	RISCV_ISA_EXT_SSCOFPMF = RISCV_ISA_EXT_BASE,
-> -	RISCV_ISA_EXT_SVPBMT,
-> -	RISCV_ISA_EXT_ZICBOM,
-> -	RISCV_ISA_EXT_ZIHINTPAUSE,
-> -	RISCV_ISA_EXT_SSTC,
-> -	RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
-> +#define RISCV_ISA_EXT_SSCOFPMF 		26
-> +#define RISCV_ISA_EXT_SVPBMT		27
-> +#define RISCV_ISA_EXT_ZICBOM		28
-> +#define RISCV_ISA_EXT_ZIHINTPAUSE	29
-> +#define RISCV_ISA_EXT_SSTC		30
-> +
-> +#define RISCV_ISA_EXT_ID_MAX		RISCV_ISA_EXT_MAX
-> +
-> +
+> I disagree.  I think that would be a silly rule to enforce.
 
-nit: double empty line
+https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#coding-style-notes
 
-> +#ifndef __ASSEMBLY__
-> +#include <linux/jump_label.h>
-> +/*
-> + * This yields a mask that user programs can use to figure out what
-> + * instruction set this cpu supports.
-> + */
-> +#define ELF_HWCAP		(elf_hwcap)
-> +
-> +enum {
-> +	CAP_HWCAP = 1,
->  };
->  
-> +extern unsigned long elf_hwcap;
-> +
-> +
-
-nit: double empty line, otherwise
-
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-
->  /*
->   * This enum represents the logical ID for each RISC-V ISA extension static
->   * keys. We can use static key to optimize code path if some ISA extensions
-> 
-
-
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
