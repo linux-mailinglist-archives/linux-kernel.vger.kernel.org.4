@@ -2,116 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727715F752B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 10:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 237F55F7536
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 10:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiJGITT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 04:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
+        id S229776AbiJGIVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 04:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiJGITP (ORCPT
+        with ESMTP id S229572AbiJGIVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 04:19:15 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BF6FF8ED
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 01:19:11 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id s2so6017691edd.2
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 01:19:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=udkgoVMMA5qGbuXwnYE/eKPj+LvvtolwfIl/3ldzyn8=;
-        b=BU3DgN9ojN4fnIKsF6QsBtoyMrfq8O9Py0mfCVx6JI2ZEIaKHFJMv2pZP1VsOUcBLF
-         zrx/yhiW7cRqC19iuxCH3vQjBmcsuMeh577ADRjZGpVLnmIoD7OadqnTQzmgqXdTXOju
-         YobWc2uBd15s7pTtA+Edyfc8bX+4Zc3OlfNHSOc4gPSJXPC8FdVxv/P0Wi/cX0p9IaX/
-         jCebQqqeMK/boGwoThHdMYEvzMtT3/hMdk5h5Dv5tDMnUnjng8g0rvDGAV9+NvbDXY0N
-         JbSvkD3LX4+rQUvhwhvFzfPhJNOqX2CZIXcN6Y0l8+jHN8k40hnPLz0zhQdSOt+7IT3E
-         0XYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=udkgoVMMA5qGbuXwnYE/eKPj+LvvtolwfIl/3ldzyn8=;
-        b=AK4C1Ldanzr0elmcY8PFwpk77fK57PD9s3vykvt0NiyKu1B2uqo9AZnw8Ye3VixgzI
-         hfMAUGUiC4Mv3N2bJv7kpG0zK2Y2pJH75fuPuPlCCzFpUpsocBifJljDvTA+T2PzwPxJ
-         gSagvUzUXPBVDKsKUM1rJcE3P6p917MupJFPg7dPDdPG+pwSmSjK/eQ8BI8oNXf6Ug7Q
-         TbTF3uqsEUjNkbLPmAyl6IsxYzMgM3QrIkuPcDCv7NFJfBfduVfiToe7uYIijsGHA5P+
-         XKl54SaeD3k31G7g5KQ/toRqBA5p7bQFgvmdMTEpLGW3l6i20HuZJyrOEflgFgbziM35
-         TyYg==
-X-Gm-Message-State: ACrzQf2cEGTn5fEnUMglOi8en2j4QQIkLVrj4I+cCihi7hExComkUGO2
-        1GSk8CENFlB4gtmdF6+/ymVPP1mcbJ0=
-X-Google-Smtp-Source: AMsMyM6gCfsIbBv1JnV4ph6IJRAeV8Q2G2C7q1RdAJBmx0jmZCU72VZwyw0fNeL7A9KOieYDTSsqYA==
-X-Received: by 2002:a05:6402:2b8b:b0:43a:5475:f1ae with SMTP id fj11-20020a0564022b8b00b0043a5475f1aemr3362549edb.363.1665130749604;
-        Fri, 07 Oct 2022 01:19:09 -0700 (PDT)
-Received: from gmail.com (1F2EF191.nat.pool.telekom.hu. [31.46.241.145])
-        by smtp.gmail.com with ESMTPSA id v17-20020a1709067d9100b0073ddff7e432sm887994ejo.14.2022.10.07.01.19.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 01:19:09 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Fri, 7 Oct 2022 10:19:07 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Borislav Petkov <bp@alien8.de>
-Subject: [GIT PULL] Objtool updates for v6.1
-Message-ID: <Yz/g+0Ar/1z1d7Uh@gmail.com>
+        Fri, 7 Oct 2022 04:21:18 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02107B0B01
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 01:21:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665130877; x=1696666877;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DAETs5P/Uqo8ED6WU+3FVFAUbNP8iAmq1+SJzIX/O9M=;
+  b=Lrpt5YE7hcRpRWrD24hffwPn8ii24ZU6fYySl1Ufy8qSV+Dv76flgxL5
+   ZW2c/QM40m9kT3V7wRJnEib+9FL05pU641evDxDxlTmqgZd9NYZGROKzI
+   IBg7+1qWYRUjC5zjS6W40esmKX21NtpOYSXlxRp2kD4hNO+bV6vciFEfN
+   Ns0WH08Mbgt0vMJgi2HBLRvOulsMh/J0YaEY2l6/vBWprPZbRpfQ8Mz+3
+   DnN00twKL2Rffq4V7kEHpHXKp8JDSrGFIIgxqd9/BxSGcJEuiJYJxCnoa
+   Je6CxIYCobDCoBoX9PS/kjaLAv42o/TrBF3UDWfUTcZJfwzQZWYlpOi/+
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="305263812"
+X-IronPort-AV: E=Sophos;i="5.95,166,1661842800"; 
+   d="scan'208";a="305263812"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 01:21:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="800226071"
+X-IronPort-AV: E=Sophos;i="5.95,166,1661842800"; 
+   d="scan'208";a="800226071"
+Received: from lkp-server01.sh.intel.com (HELO 3c15167049b7) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 07 Oct 2022 01:21:16 -0700
+Received: from kbuild by 3c15167049b7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ogibb-0000vq-2Z;
+        Fri, 07 Oct 2022 08:21:15 +0000
+Date:   Fri, 07 Oct 2022 16:20:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:lazy.2022.10.06a] BUILD SUCCESS
+ 12712ae0200147e018aa7854f21cc7bfd95ba96e
+Message-ID: <633fe149.2BlTB92PiksagG7/%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git lazy.2022.10.06a
+branch HEAD: 12712ae0200147e018aa7854f21cc7bfd95ba96e  workqueue: Make queue_rcu_work() use call_rcu_flush()
 
-Please pull the latest objtool/core git tree from:
+elapsed time: 722m
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git objtool-core-2022-10-07
+configs tested: 57
+configs skipped: 2
 
-   # HEAD: 7a7621dfa417aa3715d2a3bd1bdd6cf5018274d0 objtool,x86: Teach decode about LOOP* instructions
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Fairly small batch of changes:
+gcc tested configs:
+powerpc                           allnoconfig
+x86_64                              defconfig
+arc                                 defconfig
+x86_64                               rhel-8.3
+alpha                               defconfig
+sh                               allmodconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+m68k                             allmodconfig
+powerpc                          allmodconfig
+s390                                defconfig
+i386                 randconfig-a011-20221003
+mips                             allyesconfig
+x86_64                           rhel-8.3-syz
+i386                 randconfig-a012-20221003
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+i386                 randconfig-a013-20221003
+alpha                            allyesconfig
+arm                                 defconfig
+m68k                             allyesconfig
+x86_64                           allyesconfig
+arc                              allyesconfig
+x86_64                           rhel-8.3-kvm
+i386                                defconfig
+x86_64                    rhel-8.3-kselftests
+s390                             allmodconfig
+s390                             allyesconfig
+i386                 randconfig-a015-20221003
+i386                 randconfig-a016-20221003
+i386                 randconfig-a014-20221003
+i386                             allyesconfig
+riscv                randconfig-r042-20221003
+arc                  randconfig-r043-20221003
+arc                  randconfig-r043-20221002
+arm64                            allyesconfig
+s390                 randconfig-r044-20221003
+arm                              allyesconfig
+x86_64               randconfig-a011-20221003
+x86_64               randconfig-a013-20221003
+x86_64               randconfig-a012-20221003
+x86_64               randconfig-a014-20221003
+x86_64               randconfig-a015-20221003
+x86_64               randconfig-a016-20221003
+ia64                             allmodconfig
 
-Objtool changes for v6.1:
+clang tested configs:
+i386                 randconfig-a004-20221003
+i386                 randconfig-a005-20221003
+i386                 randconfig-a003-20221003
+i386                 randconfig-a002-20221003
+hexagon              randconfig-r041-20221003
+i386                 randconfig-a001-20221003
+i386                 randconfig-a006-20221003
+hexagon              randconfig-r041-20221002
+hexagon              randconfig-r045-20221002
+hexagon              randconfig-r045-20221003
+riscv                randconfig-r042-20221002
+s390                 randconfig-r044-20221002
 
- - Remove the "ANNOTATE_NOENDBR on ENDBR" warning: it's not
-   really useful and only found a non-bug false positive so far.
-
- - Properly decode LOOP/LOOPE/LOOPNE, which were missing from
-   the x86 decoder. Because these instructions are rather
-   ineffective, they never showed up in compiler output,
-   but they are simple enough to support, so add them for
-   completeness.
-
- - A bit more cross-arch preparatory work.
-
- Thanks,
-
-	Ingo
-
------------------->
-Chen Zhongjin (1):
-      objtool: Use arch_jump_destination() in read_intra_function_calls()
-
-Josh Poimboeuf (1):
-      objtool: Remove "ANNOTATE_NOENDBR on ENDBR" warning
-
-Peter Zijlstra (1):
-      objtool,x86: Teach decode about LOOP* instructions
-
-
- tools/objtool/arch/x86/decode.c | 6 ++++++
- tools/objtool/check.c           | 5 +----
- 2 files changed, 7 insertions(+), 4 deletions(-)
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
