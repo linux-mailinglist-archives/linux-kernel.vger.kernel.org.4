@@ -2,53 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B15C5F7A57
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1075F5F7A5A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbiJGPM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 11:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
+        id S229983AbiJGPPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 11:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiJGPM5 (ORCPT
+        with ESMTP id S229950AbiJGPPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 11:12:57 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59F1102525
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 08:12:54 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1ogp1q-000850-95; Fri, 07 Oct 2022 17:12:46 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jisheng Zhang <jszhang@kernel.org>
-Subject: Re: [PATCH 8/8] riscv: remove riscv_isa_ext_keys[] array and related usage
-Date:   Fri, 07 Oct 2022 17:12:44 +0200
-Message-ID: <16326987.geO5KgaWL5@diego>
-In-Reply-To: <20221006070818.3616-9-jszhang@kernel.org>
-References: <20221006070818.3616-1-jszhang@kernel.org> <20221006070818.3616-9-jszhang@kernel.org>
+        Fri, 7 Oct 2022 11:15:01 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA2227177
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 08:15:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CKFD/oTGOiFxEu/pZAva19bWJWF96VfyiRYYlHNKNGI=; b=e1AiAsgug4Glx7OLuStb9Haz1Y
+        fJMgJLn3/bjf87Ej8JIIZ8Wh6GwMJzf10H2WMm6cIw/OrJ51TlqdJ5vLDFLSzHhdbj50cKPoyNbPu
+        oPkvwQYqqIi9xnUA3WkBB7TFcx3IdXaP0FcknUoU1TjsJIO1KkuoPSTGasjmK2CD2UgFWfJVIvpjh
+        Pbvr9oMIGyNvMAsGy/5++uDsRd4xL9qY6ggTU1et1g/C0n4S69Vd+QOEof4KfaU+UgOnhWMxn3yEH
+        qyjiJ7CYgaCyEHlMB5fU9vYxPzLo9eZy003cObPe5UmqJS8li2MecbULjIZLDg/e0kbeTvoROw54j
+        /P4gB3VQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ogp3w-001UU5-CJ; Fri, 07 Oct 2022 15:14:56 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E816C30006D;
+        Fri,  7 Oct 2022 17:14:55 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D05C82BD95FCB; Fri,  7 Oct 2022 17:14:55 +0200 (CEST)
+Date:   Fri, 7 Oct 2022 17:14:55 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     x86@kernel.org, Jann Horn <jannh@google.com>,
+        Natalie Silvanovich <natashenka@google.com>,
+        Seth Jenkins <sethjenkins@google.com>,
+        Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
+Subject: Re: x86/mm: Randomize per-cpu entry area
+Message-ID: <Y0BCb7mkLv75BqYK@hirez.programming.kicks-ass.net>
+References: <Yz/mfJ1gjgshF19t@hirez.programming.kicks-ass.net>
+ <Y0A7ZAjtDcq2PJaX@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0A7ZAjtDcq2PJaX@zx2c4.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, 6. Oktober 2022, 09:08:18 CEST schrieb Jisheng Zhang:
-> All users have switched to riscv_has_extension_*, removed unused
-> definitions, vars and related setting code.
+On Fri, Oct 07, 2022 at 08:44:52AM -0600, Jason A. Donenfeld wrote:
+> On Fri, Oct 07, 2022 at 10:42:36AM +0200, Peter Zijlstra wrote:
+> > +	max_cea = (CPU_ENTRY_AREA_MAP_SIZE - PAGE_SIZE) / CPU_ENTRY_AREA_SIZE;
+> > +
+> > +	/* O(sodding terrible) */
+> > +	for_each_possible_cpu(i) {
+> > +		unsigned int cea;
+> > +
+> > +again:
+> > +		cea = prandom_u32_max(max_cea);
 > 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> Just FYI, max_cea is 2274876 (at least in my test rig), which means the
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Yeah, that sounds about right, just over 21 bits.
 
+> values returned from prandom_u32_max() won't be uniformly distributed.
+> Right now the kernel doesn't have a function that does rejection
+> sampling to get uniform distribution, but I could add one if you need.
 
+I figured it was better than '% max_cea'.
+
+> Alternatively, maybe you don't actually *need* this to be perfectly
+> distributed -- which seems to be a common perspective -- and so this is
+> good enough. Your call, but just wanted to make you aware.
+
+First iteration had a LFSR to 'uniformly' and uniquely distribute the
+CEAs around, but someone took offence to that :-). Anyway, I think
+anything non-obvious is good enough in this case.
