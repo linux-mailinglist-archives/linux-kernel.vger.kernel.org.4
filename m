@@ -2,122 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 059AC5F72A0
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 03:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 249635F72A3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 03:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbiJGBxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Oct 2022 21:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
+        id S231967AbiJGByh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Oct 2022 21:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiJGBxN (ORCPT
+        with ESMTP id S229505AbiJGBye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Oct 2022 21:53:13 -0400
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EC5AA3CC
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 18:53:11 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTPS id 2971r3ga065216
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Fri, 7 Oct 2022 09:53:03 +0800 (CST)
-        (envelope-from zhaoyang.huang@unisoc.com)
-Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Fri, 7 Oct 2022 09:53:02 +0800
-From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Marco Elver <elver@google.com>,
-        Imran Khan <imran.f.khan@oracle.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <ke.wang@unisoc.com>,
-        <steve.kang@unisoc.com>
-Subject: [Resend PATCH] mm: add stackdepot information on page->private for tracking
-Date:   Fri, 7 Oct 2022 09:52:41 +0800
-Message-ID: <1665107561-23030-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Thu, 6 Oct 2022 21:54:34 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A568AA3CC;
+        Thu,  6 Oct 2022 18:54:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665107673; x=1696643673;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9OVOm9eDtKJN7qyZMh1z05mjjfPmqKiVIGSFHi9feuU=;
+  b=SoZMLfNma5N2zXgMTCnGX+roMi247f4X8fMUTAPU7HdIm0q98gVTvu+5
+   lgIoYQet8xYiUdpzLibyhtu3BPyjEz0SUvu5QL/qVPmOBway66LrH7kJ5
+   vk0olUvF4zBU+XOFgcQjcKzbHU0rScZ6U5yrWAcY7GQZJi3trOoXNUxnW
+   JoMUgOdqncczTsyDL3gCnVDd6xM0D6yGvhp5DVjNyizeoPhEiKUewb5g3
+   WwLjnfmUEJjrwX0hqvJlCu3prAhdZ9i0Ms6t1Umvt9YyARmeg8sPC/B2u
+   J3ODCKVEcqajmu/Yo+KY1kThtmtR7J0+LlLb1wC47Ev4vjUGC/xLBt6Dm
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="305206852"
+X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
+   d="scan'208";a="305206852"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 18:54:32 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="800118233"
+X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
+   d="scan'208";a="800118233"
+Received: from spvenkat-mobl.amr.corp.intel.com (HELO desk) ([10.209.50.56])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 18:54:32 -0700
+Date:   Thu, 6 Oct 2022 18:54:31 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Suraj Jitindar Singh <surajjs@amazon.com>
+Cc:     kvm@vger.kernel.org, sjitindarsingh@gmail.com,
+        linux-kernel@vger.kernel.org, x86@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@suse.de, dave.hansen@linux.intel.com,
+        seanjc@google.com, pbonzini@redhat.com, peterz@infradead.org,
+        jpoimboe@kernel.org, daniel.sneddon@linux.intel.com,
+        benh@kernel.crashing.org, stable@vger.kernel.org
+Subject: Re: [PATCH] x86/speculation: Mitigate eIBRS PBRSB predictions with
+ WRMSR
+Message-ID: <20221007015431.i4k4d3cxnhirnpgc@desk>
+References: <20221005220227.1959-1-surajjs@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.65]
-X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 2971r3ga065216
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20221005220227.1959-1-surajjs@amazon.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+Hi Suraj,
 
-Private is vacant for most of Non-LRU pages while the user has explicitly
-operation on page->private via set_page_private, I would like introduce
-stackdepot information on page->private for a simplified tracking mechanism
-which could be help for kernel driver's memory leak.
+On Wed, Oct 05, 2022 at 03:02:27PM -0700, Suraj Jitindar Singh wrote:
+>tl;dr: The existing mitigation for eIBRS PBRSB predictions uses an INT3 to
+>ensure a call instruction retires before a following unbalanced RET. Replace
+>this with a WRMSR serialising instruction which has a lower performance
+>penalty.
+>
+>== Background ==
+>
+>eIBRS (enhanced indirect branch restricted speculation) is used to prevent
+>predictor addresses from one privilege domain from being used for prediction
+>in a higher privilege domain.
+>
+>== Problem ==
+>
+>On processors with eIBRS protections there can be a case where upon VM exit
+>a guest address may be used as an RSB prediction for an unbalanced RET if a
+>CALL instruction hasn't yet been retired. This is termed PBRSB (Post-Barrier
+>Return Stack Buffer).
+>
+>A mitigation for this was introduced in:
+>(2b1299322016731d56807aa49254a5ea3080b6b3 x86/speculation: Add RSB VM Exit protections)
+>
+>This mitigation [1] has a ~1% performance impact on VM exit compared to without
+>it [2].
+>
+>== Solution ==
+>
+>The WRMSR instruction can be used as a speculation barrier and a serialising
+>instruction. Use this on the VM exit path instead to ensure that a CALL
+>instruction (in this case the call to vmx_spec_ctrl_restore_host) has retired
+>before the prediction of a following unbalanced RET.
+>
+>This mitigation [3] has a negligible performance impact.
+>
+>== Testing ==
+>
+>Run the outl_to_kernel kvm-unit-tests test 200 times per configuration which
+>counts the cycles for an exit to kernel mode.
+>
+>[1] With existing mitigation:
+>Average: 2026 cycles
+>[2] With no mitigation:
+>Average: 2008 cycles
 
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
----
- mm/page_alloc.c | 28 +++++++++++++++++++++++++++-
- 1 file changed, 27 insertions(+), 1 deletion(-)
+During these tests was the value of MSR SPEC_CTRL for host and guest different?
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index e5486d4..b79a503 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -75,6 +75,7 @@
- #include <linux/khugepaged.h>
- #include <linux/buffer_head.h>
- #include <linux/delayacct.h>
-+#include <linux/stackdepot.h>
- #include <asm/sections.h>
- #include <asm/tlbflush.h>
- #include <asm/div64.h>
-@@ -2464,6 +2465,25 @@ static inline bool should_skip_init(gfp_t flags)
- 	return (flags & __GFP_SKIP_ZERO);
- }
- 
-+#ifdef CONFIG_STACKDEPOT
-+static noinline depot_stack_handle_t set_track_prepare(void)
-+{
-+       depot_stack_handle_t trace_handle;
-+       unsigned long entries[16];
-+       unsigned int nr_entries;
-+
-+       nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 3);
-+       trace_handle = stack_depot_save(entries, nr_entries, GFP_NOWAIT);
-+
-+       return trace_handle;
-+}
-+#else
-+static inline depot_stack_handle_t set_track_prepare(void)
-+{
-+       return 0;
-+}
-+#endif
-+
- inline void post_alloc_hook(struct page *page, unsigned int order,
- 				gfp_t gfp_flags)
- {
-@@ -2471,8 +2491,14 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
- 			!should_skip_init(gfp_flags);
- 	bool init_tags = init && (gfp_flags & __GFP_ZEROTAGS);
- 	int i;
-+	depot_stack_handle_t stack_handle = set_track_prepare();
- 
--	set_page_private(page, 0);
-+	/*
-+	 * Don't worry, user will cover private directly without checking
-+	 * this field and has ability to trace the page. This also will not
-+	 * affect expected state when freeing
-+	 */
-+	set_page_private(page, stack_handle);
- 	set_page_refcounted(page);
- 
- 	arch_alloc_page(page, order);
--- 
-1.9.1
-
+>[3] With proposed mitigation:
+>Average: 2008 cycles
