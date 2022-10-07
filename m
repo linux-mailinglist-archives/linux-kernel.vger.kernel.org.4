@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2CB5F7869
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 14:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A175F7870
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 15:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiJGM7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 08:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
+        id S229773AbiJGM7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 08:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiJGM7k (ORCPT
+        with ESMTP id S229729AbiJGM7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 7 Oct 2022 08:59:40 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203081082;
-        Fri,  7 Oct 2022 05:59:37 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id u10so7205941wrq.2;
-        Fri, 07 Oct 2022 05:59:37 -0700 (PDT)
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56C3262D;
+        Fri,  7 Oct 2022 05:59:38 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id w18so7193653wro.7;
+        Fri, 07 Oct 2022 05:59:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uM8Nu9TmydtHxxHyCRFHEwcP9qh/lbeNGXh9Me0s3WY=;
-        b=UayFlbTHQyH39G2geEKKMjf7ErZvT0CWj+MP2JMdCMWjqrmSxSPmnbItg69T/JTUek
-         Br6PWhYKAFppnX2F8lTkShSZTJ1PzFMqY87+vkpFQt5K3PhqKMraPRT0Ah3wzydrK+q5
-         3KILQJcvsSjXNzBggPu5PTipoUzC03LHqqmsJU2BivTQvWXB0AHeHnrGFfoEI3SynHr3
-         gCMYBdzslZiGreEnlInuQwohFdlsqRKdkjNGkXrrreX89MnC/tVWYfsk5jnETibAE2ky
-         edtgkuGUWyeyIKSpXGkJjwJsY1Y8pvpgTnzt6QRRqaJW24ln1JAQt3Y/IqprKUYG8hIg
-         6f3w==
+        bh=jv44eLn5NBzZ2l/C4c+X3coz25UlOTpTrzr64+4VaYk=;
+        b=MuM8hM0nbyOrg3KeHbDFTuBIVsEMcTbFBl6MDZlnYZfE1cH2RDEBOCUIIs9PzwILfe
+         0qmHo135P+i68z8BqCVo5YIagRtqrQ4T0O0/NbCnspkfhkkJG0QEBIPtpGVqiQsSVQur
+         dwK/bRvofOCPoSnfC3q81V2r7/6/3SK5VwLphlHm1MTKlLkA0eEqLjef5vRXIrAkb1w1
+         ZXG6LFvL5dc5SFHMhMlpjlEv7cAB6bgwVEqfGUd/EkkxqSbC6xoq/OdNh1biFcUpOiMi
+         KoYMjfkhavw1NfP64RTHH9GajbdNN+xmCB8v1iouXT38KSm6KyWhcZXMnAp/f2watLBs
+         y0EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uM8Nu9TmydtHxxHyCRFHEwcP9qh/lbeNGXh9Me0s3WY=;
-        b=My8TZcRK70tneVtHBc0YuccjdxoJ/P++iX+mlWDr2AcOXOwZP0iXR+DIQr2Ng3xRrY
-         Bq+F/tkgAMHcGrmaKWoj2bosb//j+Xzf60hTa10coTrIa8CDuILp2lB3C/QTBS0nFOGD
-         B8pxW25XHXcITAyYLDxwfS3ALjmQ+2Qwoy9We+/TwtyiNaWbl93Hpz3DUxBYqGWaG4ka
-         DdfeeTGpBcoNTFySPlMmQAA+oGIauzv1ckk6W8XTfr9Z2JnOCwh+dOod50g5wLItySpK
-         Dj41+JN/aDXhvGUYq/t55EQZegqled++ubOQAzhxH9K5d8YgGKuLM3BitB+URAjHCXcH
-         RSbA==
-X-Gm-Message-State: ACrzQf3KMeXcNQikDyF168Xj66vEDTbXQ4q2kQffEwMwtC3WrfGhpd0w
-        rZfeIrzehNOaonCquLcWiQGEgAxpXK+i6Q==
-X-Google-Smtp-Source: AMsMyM7vRJlGfejIvx+TmqyrjdUCwPe4WDimT9tPv8ja63b0eB0KKV95LL096zQ/z4T00xXP0AA3+w==
-X-Received: by 2002:a05:6000:1a8e:b0:22a:f55a:94d6 with SMTP id f14-20020a0560001a8e00b0022af55a94d6mr2997464wry.606.1665147575437;
-        Fri, 07 Oct 2022 05:59:35 -0700 (PDT)
+        bh=jv44eLn5NBzZ2l/C4c+X3coz25UlOTpTrzr64+4VaYk=;
+        b=7RB7b4Jt0BKSQ02jPtyJRXOljIVIuo5jTdqRddc9fXTKnaO/OF9phSzzRu6JV1rLME
+         wtKlajYJ6WLvaar3EXfd7EiOGPW05Yrg7q6MqbZahRZpxHBDXx/OdfWzJhg4gIaJBU4X
+         c3eUdo8+YUYiqIG9fZZiYW+3O+mbyWROjmpmWyNB9oiGoWaRfVZ3A6kTo+vddqPE8lEe
+         jk6eBR1sc3Te9JuO304yz4K0DbkNA9NqhN1jwtuwQbEKQAiV+kQ1vt+44UOyMd7ENS2g
+         5YnrLnyb9I6LHZkT+az251Ic0CfAMnIPZ7Tg83XuJbiSYj7mq3i4m5EdKM99krbVqVF7
+         1AgA==
+X-Gm-Message-State: ACrzQf0Hak8KeBbEJTYdvD2UQUjmrrdDoo9hUarT3xmIT8cBahyRd7uN
+        bsRbROKmTxxToqu9QDazIu4=
+X-Google-Smtp-Source: AMsMyM4vYCnsY6VSZkZ7UNJcM2dG96KmQJwNtCghn8lQjzSQLCois44HVHDEtx86+WJ3fAo9gkEmmQ==
+X-Received: by 2002:a5d:5012:0:b0:22e:4e0e:f4c3 with SMTP id e18-20020a5d5012000000b0022e4e0ef4c3mr3115829wrt.187.1665147577264;
+        Fri, 07 Oct 2022 05:59:37 -0700 (PDT)
 Received: from localhost.localdomain ([95.183.227.98])
-        by smtp.gmail.com with ESMTPSA id i15-20020adffdcf000000b00223b8168b15sm2008243wrs.66.2022.10.07.05.59.33
+        by smtp.gmail.com with ESMTPSA id i15-20020adffdcf000000b00223b8168b15sm2008243wrs.66.2022.10.07.05.59.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 05:59:35 -0700 (PDT)
+        Fri, 07 Oct 2022 05:59:36 -0700 (PDT)
 From:   Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
 To:     Linus Walleij <linus.walleij@linaro.org>,
@@ -65,9 +65,9 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: [PATCH v3 01/10] arm64: dts: mediatek: mt6779: Remove syscon compatible from pin controller
-Date:   Fri,  7 Oct 2022 15:58:55 +0300
-Message-Id: <20221007125904.55371-2-y.oudjana@protonmail.com>
+Subject: [PATCH v3 02/10] dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Improve description
+Date:   Fri,  7 Oct 2022 15:58:56 +0300
+Message-Id: <20221007125904.55371-3-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221007125904.55371-1-y.oudjana@protonmail.com>
 References: <20221007125904.55371-1-y.oudjana@protonmail.com>
@@ -85,34 +85,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Remove syscon compatible string from pin controller to follow
-DT bindings and pass checks. Adding the syscon compatible to
-the DT bindings documentation instead causes a different check
-error due to the syscon document specifying a maximum of 1 item
-in the reg property, while this has 9. This pin controller has
-never been, and will never be, used as a syscon, hence it is
-safe to drop this compatible.
+The current description mentions having to put the pin controller
+node under a syscon node, but this is not the case in the current
+MT6779 device tree. This is not actually needed, so replace the
+current description with something more generic that describes
+the use of the hardware block.
 
 Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- arch/arm64/boot/dts/mediatek/mt6779.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../bindings/pinctrl/mediatek,mt6779-pinctrl.yaml          | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt6779.dtsi b/arch/arm64/boot/dts/mediatek/mt6779.dtsi
-index 9bdf5145966c..a6fa5212da4e 100644
---- a/arch/arm64/boot/dts/mediatek/mt6779.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt6779.dtsi
-@@ -160,7 +160,7 @@ infracfg_ao: clock-controller@10001000 {
- 		};
+diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
+index 8c79fcef7c52..c6290bcdded6 100644
+--- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
+@@ -9,10 +9,9 @@ title: Mediatek MT6779 Pin Controller
+ maintainers:
+   - Andy Teng <andy.teng@mediatek.com>
  
- 		pio: pinctrl@10005000 {
--			compatible = "mediatek,mt6779-pinctrl", "syscon";
-+			compatible = "mediatek,mt6779-pinctrl";
- 			reg = <0 0x10005000 0 0x1000>,
- 			      <0 0x11c20000 0 0x1000>,
- 			      <0 0x11d10000 0 0x1000>,
+-description: |+
+-  The pin controller node should be the child of a syscon node with the
+-  required property:
+-  - compatible: "syscon"
++description:
++  The MediaTek pin controller on MT6779 is used to control pin
++  functions, pull up/down resistance and drive strength options.
+ 
+ properties:
+   compatible:
 -- 
 2.38.0
 
