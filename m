@@ -2,121 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5435F73E8
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 07:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5B95F73EC
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 07:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiJGFV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 01:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
+        id S229581AbiJGF2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 01:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiJGFVy (ORCPT
+        with ESMTP id S229472AbiJGF2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 01:21:54 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2055.outbound.protection.outlook.com [40.107.255.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325CB115C1B
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Oct 2022 22:21:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QnbUFFdKqIVfXkamwe3IZNxt41Iqz1wopzHLAfJFNe2FgbpVMv+xVVt8Z4F2vOIry6qTZzqNLzf3ieemUK7U9tMCFaiWF22WuUhtPr3jrXbdZphFXi2PdMUkFxjBLVA1OdZPnaiJkn95wSJK7V+yAbwu3he+CHyA+Og82IqU13Wd5w6bo7rQDYS8pAcc0njOd1WpWXcpWOKUql4+mVuTR0nOAiQC0CP+nXK1yV3JdxGnkMcglaFoYBNzMzCxoG3+mXhZ1sc/bXN+06GqAvAevk56VQZscO7bXBaCjVkgU3U7e3FdYOjH5o5+rdvdSjK248keX/vjoq0r8vF2Sn/cLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cDSABVANcvQU8Z1+8dkqGsyl6Sw+lcenc1+fwuUqXsQ=;
- b=mm39cGfeD+y8NVQniT4FZWlm+R0puDnb5Hw7snaMOWbWWXmFNL80MVSwIG8Jhgzfhver4TuQ3SWFWsdkAM8FRNx4RdBcEkhNlqesp/OfSfs9BCJkJ2AbZGxN6JYOk7Kdu15KN2QpQFjGQiFWqyRGB3CWhWhNaNn8gSYH8t2+Wcd93PIQEozx6iWtiwPZ4RzzJ5vVW5/wWpw33XrKNz8D6vP3n+gYz7e9qztf5vO7vVmLMEsBI7dY8UJCpL2SlqhQqAKxDFwgoCa4egS5tk1SL3/bKTuZsLG3AKn4+SWUTSz1zeQxx+JbSUwARw7Mxq7qzCIUQ4TTkjBuZc/FUIjcYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 211.20.1.79) smtp.rcpttodomain=walle.cc smtp.mailfrom=wiwynn.com; dmarc=fail
- (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=wiwynn.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cDSABVANcvQU8Z1+8dkqGsyl6Sw+lcenc1+fwuUqXsQ=;
- b=oJHWW+fAaaec8LiSqnLPD5v0lJRTUrhGqYxsqduSvMCzNWsnIHyR9n9aDGWrY+lhrSY9KNWGrNKmtPGtZSf72DMPUClb+jwB2TJSIvgaFKZ5jk0y3Rwm4Lb4DFiqQCW2Xk4raPGIkOTBCBjXE7oBQWcJifAVDjYcQuxnXIKRF2LnG1/6/7i9chWKP3Kf+zlIYJOeHOQLZYqlo8Fr3e39zou7Y4ZLQeDXLSGoVsNvb2fiVCYpgP/lko+TJpcQgIyixGJQJM7vFe1CjFEwpWRHzkcreEkFfotlMKv4cq2SbdxUVOEDV469Q/xrWE1y0VOyhBrscYSX0In1WImSRFGFNA==
-Received: from PS2PR01CA0056.apcprd01.prod.exchangelabs.com
- (2603:1096:300:57::20) by SEYPR04MB6773.apcprd04.prod.outlook.com
- (2603:1096:101:da::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.34; Fri, 7 Oct
- 2022 05:21:48 +0000
-Received: from PSAAPC01FT024.eop-APC01.prod.protection.outlook.com
- (2603:1096:300:57:cafe::79) by PS2PR01CA0056.outlook.office365.com
- (2603:1096:300:57::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.38 via Frontend
- Transport; Fri, 7 Oct 2022 05:21:48 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
- smtp.mailfrom=Wiwynn.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=Wiwynn.com;
-Received-SPF: Fail (protection.outlook.com: domain of Wiwynn.com does not
- designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
- client-ip=211.20.1.79; helo=localhost.localdomain;
-Received: from localhost.localdomain (211.20.1.79) by
- PSAAPC01FT024.mail.protection.outlook.com (10.13.38.118) with Microsoft SMTP
- Server id 15.20.5709.10 via Frontend Transport; Fri, 7 Oct 2022 05:21:47
- +0000
-From:   Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-To:     michael@walle.cc
-Cc:     patrick@stwcx.xyz, garnermic@fb.com,
-        Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mtd: spi-nor: winbond: add support for w25q01jv-im
-Date:   Fri,  7 Oct 2022 13:21:08 +0800
-Message-Id: <20221007052108.3339266-1-Delphine_CC_Chiu@Wiwynn.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PSAAPC01FT024:EE_|SEYPR04MB6773:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: fbf5c7b5-9d12-4e87-d913-08daa823d50f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DHtE3Z4L0x8lsgPBvexC7IhpPVWvV6VUNn9ErcUTPOmwTEsOPItMYWkj2IwFHpMcx2Ga//2w+no/jDJc7nt0/YMUkoRr8ot7c2bz/ta2KhtFz5RZkq9M3yp9fkLs+GQ/WRLjjfC1HN8ln88AHSgUDtBH053i/MHln2pp5vzsZLc4Ws/dbTWg4TzZH61cxwOTrj9rBLWx+fyMokVsUUSXDQjPVaHZwCXeRzrzHteqJxwX0SDCKwwTzhCrJDx1Hdb0USV9AFWB3ORmzN6lxybf0FJJAozwt/xlhl7N9O59uStZtrDDcIKc30QvVfz5Mks+U60P/Z2IGJhUaYfftx/alWhRZ3Oigy5GaTtuVK0ZQY1p+9JduQ7EcrBkeHJvVrFAl7apKQmtTZJ+ifqKhMWvb9z3pckxA6e5JCLeNC0gqMTsv3WrpzNL72R7k+i07SYg9cOMvzKMhJf/0yEMTeJ/1yNMfJGBR54VV2Cu0GfU0gFlJ6ErFZVev+Oq7cwHcLkZP4ZgKw/ry9pIziK2eq9m4QygkyrplA7+8hO2nZKWu5GbcEGyQEPLkH0wqYoZFde7YymHDUkwgdpI3e97Afe5Ys8u3wluLr70BU4avKXBdXgPgn4eYYD7uGdx3B/x1BRr713vt554pke85I7nFIeZbKEfOy/tUnWe92WCpUQnLcba8sqOX2upeH1cqdLJQWonW5MRSfiGTJGjceooSy+ZB8w9NIzHobZNbLU3J7rM1vM=
-X-Forefront-Antispam-Report: CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230022)(6069001)(4636009)(136003)(396003)(346002)(39860400002)(376002)(451199015)(46966006)(36840700001)(1076003)(336012)(956004)(2616005)(186003)(6506007)(6512007)(6666004)(26005)(4326008)(6486002)(36906005)(36736006)(478600001)(47076005)(6916009)(8676002)(316002)(70206006)(54906003)(70586007)(41300700001)(8936002)(7416002)(36756003)(356005)(2906002)(82740400003)(5660300002)(4744005)(36860700001)(81166007)(86362001)(9316004)(82310400005)(40480700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: wiwynn.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2022 05:21:47.1535
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fbf5c7b5-9d12-4e87-d913-08daa823d50f
-X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
-X-MS-Exchange-CrossTenant-AuthSource: PSAAPC01FT024.eop-APC01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR04MB6773
+        Fri, 7 Oct 2022 01:28:12 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13D1C459F;
+        Thu,  6 Oct 2022 22:28:10 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id h8-20020a17090a054800b00205ccbae31eso6259834pjf.5;
+        Thu, 06 Oct 2022 22:28:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VbISlDL7a0iQ4bQybEAlot/T7BI00UirHULEdvMSrkQ=;
+        b=NUAdajHBG0yY30wE54051yrpose3kT4Bwzwz1tK5Z/jeBgPrgRTrLOUn4WWf3vB47E
+         ENfHyBP+1pLqm0Mx5YuFBfE1Fv9wsyQy3mIqG4cpyr+X3EO434mBTyGbD3xfiTL9ynI5
+         rz1uHTtvHx/6oZZ/hqQ9DAuBtEzzmRWvyvdUTsR6GAMg5yzl8g4MaopU4rbsvdThMoZK
+         YrYY3Rdsp+M6cYnqPpFEUm7IGnymt4iG8jfgsdZcmBtl9qv82tbwoT8IDXjB1iUEekSt
+         1FM4M0kmbE0EHEl9K5mUKEaAzkfq/QR/wzgKUMevbFH0VwOuROTqXL35yY+E1j3HBl/A
+         i13Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VbISlDL7a0iQ4bQybEAlot/T7BI00UirHULEdvMSrkQ=;
+        b=nJpMisDX4jfoIe5qKo2yOhDOUVOl8jr64JT5XUAwYBsTZI682V9iKsPcUPNzxSZp9s
+         hTV6AHE5jEQHuLHZO7z2Vb+iP9Rm4hzZ7y2XgEXELEyh0DoY48MW7VcGIoP4HRKvuMBC
+         8CEjH/4/ThCGiCZkTAzldJJ8iVHaNs7+VYq+wXEB53zOEhz56Iox8DEWqvw4L9HiFzmQ
+         VAF4SouP4nijgfjMKoVvSVGX6x4nRk5D7mFgjJZmL6pHJijrpEkr0Dw6nvIjkhjHR+cS
+         cOCdhkGliRKptHF3vVGdfWtoiSq4++pzVFBF0TB9Xy8EnzTAejgF3R48HHl2jcN7eyDl
+         i2mA==
+X-Gm-Message-State: ACrzQf3nOMM5qRtKVXLDXMInLNpARzcQwAnMdRmne+J1rm6tfaYfX/1Y
+        0RGpVOjC4vWtC4UWJ20uXgXNzM7Flg==
+X-Google-Smtp-Source: AMsMyM6FzEoQFzWruQ0JdpAWR+SdhRjwzLZpDsqIVcc4tqin5C3A7aip80SRCBGYOzUuDG0C+Yj13g==
+X-Received: by 2002:a17:903:22d1:b0:178:3d35:dfce with SMTP id y17-20020a17090322d100b001783d35dfcemr3422556plg.16.1665120490410;
+        Thu, 06 Oct 2022 22:28:10 -0700 (PDT)
+Received: from localhost.localdomain ([106.104.115.142])
+        by smtp.gmail.com with ESMTPSA id f12-20020a170902860c00b00176c0e055f8sm579480plo.64.2022.10.06.22.28.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 22:28:09 -0700 (PDT)
+From:   chengwei <foxfly.lai.tw@gmail.com>
+X-Google-Original-From: chengwei <larry.lai@yunjingtech.com>
+To:     pavel@ucw.cz, lee@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        GaryWang@aaeon.com.tw, musa.lin@yunjingtech.com,
+        jack.chang@yunjingtech.com, chengwei <larry.lai@yunjingtech.com>
+Subject: [PATCH v2 0/2] Add support control UP board CPLD onboard LEDS
+Date:   Fri,  7 Oct 2022 13:25:28 +0800
+Message-Id: <20221007052530.31621-1-larry.lai@yunjingtech.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SCC_THREE_WORD_MONTY,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for winbond w25q01jv-im chip.
+The UP board <http://www.upboard.com> is the computer board for 
+Professional Makers and Industrial Applications. We want to upstream 
+the UP board 40-pin GP-bus Kernel driver for giving the users better 
+experience on the software release. (not just download from UP board 
+github)
 
-Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
----
- drivers/mtd/spi-nor/winbond.c | 2 ++
- 1 file changed, 2 insertions(+)
+These patches are generated from the Linux kernel mainline tag v6.0.
 
-diff --git a/drivers/mtd/spi-nor/winbond.c b/drivers/mtd/spi-nor/winbond.c
-index ffaa24055259..850f2fd867aa 100644
---- a/drivers/mtd/spi-nor/winbond.c
-+++ b/drivers/mtd/spi-nor/winbond.c
-@@ -139,6 +139,8 @@ static const struct flash_info winbond_nor_parts[] = {
- 	{ "w25q512jvq", INFO(0xef4020, 0, 64 * 1024, 1024)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
- 			      SPI_NOR_QUAD_READ) },
-+	{ "w25q01jvm", INFO(0xef7021, 0, 64 * 1024, 2048)
-+		PARSE_SFDP },
- };
- 
- /**
+chengwei (2):
+  mfd: Add support for UP board CPLD/FPGA
+  leds: Add support for UP board CPLD onboard LEDS
+
+ drivers/leds/Kconfig             |  10 +
+ drivers/leds/Makefile            |   1 +
+ drivers/leds/leds-upboard.c      |  78 +++++
+ drivers/mfd/Kconfig              |  11 +
+ drivers/mfd/Makefile             |   1 +
+ drivers/mfd/upboard-fpga.c       | 482 +++++++++++++++++++++++++++++++
+ include/linux/mfd/upboard-fpga.h |  49 ++++
+ 7 files changed, 632 insertions(+)
+ create mode 100644 drivers/leds/leds-upboard.c
+ create mode 100644 drivers/mfd/upboard-fpga.c
+ create mode 100644 include/linux/mfd/upboard-fpga.h
+
+
+base-commit: 4fe89d07dcc2804c8b562f6c7896a45643d34b2f
 -- 
-2.25.1
+2.17.1
 
