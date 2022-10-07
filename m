@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03FFB5F7A5E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BDE95F7A5F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbiJGPQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 11:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45662 "EHLO
+        id S230043AbiJGPQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 11:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiJGPQZ (ORCPT
+        with ESMTP id S230007AbiJGPQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 11:16:25 -0400
+        Fri, 7 Oct 2022 11:16:26 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D162CE05;
-        Fri,  7 Oct 2022 08:16:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BFA95E51;
+        Fri,  7 Oct 2022 08:16:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1665155784; x=1696691784;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=xvS2h3424DyB5DP3ehn441lqaYukYwiMe+ZbFqe9uds=;
-  b=F82tsH1wtW2Pb1jF7XGHFhYtnv4h2cTNVSe3966tDlmD6cAg5XNJYt1+
-   PPtvosf0kGR1dvptKexYgyQCnM7vq7+0q9WPT9sBlUFNZcS1SCd11tUz9
-   kt0JuTopd+eNQdq58D5BlKmg9zw1Z8Ov2n+mFLs/wJ6BNMbq6iza80d8m
-   HLMRyy6dFJXIeCgZZ/t20+rNyXWyeLmXl9s0WFxhP1pcOT5xtrxXRt8GK
-   xLYYDC3juiQK9JhnC4A2yWpkEgkxlKehoC0Tcsc+oPucVDvQao9w7/YvH
-   a7cNykbrnOjQVOg22Fr4iEzQzygme0fXZmrGRn3R/y78axfvmmAmYxSIf
+  t=1665155785; x=1696691785;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=MftuM8BEvNJXATFrd61V1+1XsawZc1H6WdLWix2XKxk=;
+  b=MPWQtEPEm4atqrJLAnzOrhOIuvhlJZpCZ8I+ukbBfQKpNDMRQNrtkCDE
+   3HIt1LMgQx8G+pkfA6pSg/VyP1sSLkEFvfBc9MTH2IJBF0m25hp40rGic
+   E/kzZlGww/NZA+1HK/PEVbk6s5vjUekc8dcr1/XdphdN+uVRAvwXH+uek
+   ceTJJbObCtc7mJAdNZeD+AyeRQCMLAmJcwqh+lN4Egr5yfjMiqklfL8xc
+   xsmtXWUQxjtoAJHOb/0FW+A+ypiyDCGV1RoC/6BqhB4zgf7QIa4h2fQkt
+   F/tRDYXMjnVzfplKbNVgCBXjmAFB3qXzHSUZwICfFf+x/aM+2GqVzYaiJ
    w==;
 X-IronPort-AV: E=Sophos;i="5.95,167,1661842800"; 
-   d="scan'208";a="194275888"
+   d="scan'208";a="194275889"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
   by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Oct 2022 08:16:23 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
@@ -46,10 +46,12 @@ To:     <ludovic.desroches@microchip.com>, <linus.walleij@linaro.org>,
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Ryan Wanner <Ryan.Wanner@microchip.com>
-Subject: [PATCH 0/2] pinctrl:at91-pio4:add support for pullup/down
-Date:   Fri, 7 Oct 2022 08:16:45 -0700
-Message-ID: <20221007151647.98222-1-Ryan.Wanner@microchip.com>
+Subject: [PATCH 1/2] pinctrl: at91-pio4: Add configuration to userspace
+Date:   Fri, 7 Oct 2022 08:16:46 -0700
+Message-ID: <20221007151647.98222-2-Ryan.Wanner@microchip.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221007151647.98222-1-Ryan.Wanner@microchip.com>
+References: <20221007151647.98222-1-Ryan.Wanner@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -64,36 +66,67 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-This patch set adds support for pull up/down pinctl configuration.
-The implementation is based off of other pinctl drivers that have
-implemented line bias configurations.
+Adding support for line bias flags that have been implented in gpio API.
+There are functions in the gpiod library that can control line bias from
+userspace this adds that functionality to this driver.
 
-The second patch addes a case for PIN_CONFIG_PERSIST_STATE
-this shows up becuse the gpiod api passes this into the new config_set
-function that was just implemented. Looking at other drivers like TI
-driver, added the ENOTSUPP to the switch case for that state flag.
+Adding .pin_config_set allows the driver's pin configuration to be
+accessed from userspace. The general idea for this as been taken from
+stm32, intel, and rockchip drivers that have userspace access for bias
+flags.
 
-How this was tested was by using a gpio program that I created to test
-configuration from userspace. This program was run in the
-background using & then using gpioinfo function checked if the change
-has been detected by the gpiod api. Then using devmem reading the
-regester making sure that the correct bit was set. The registers where
-checked before and during the program is being run, making sure the
-change happens.
+Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+---
+ drivers/pinctrl/pinctrl-at91-pio4.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-In the program Pin 127 would be passed into the test program. Before
-the program was ran devmem for pin 127 config register. After
-the progam is running in the background devmem for the same status
-register is called, the result is showing the change in pinconfig.
-The device used to test was the SAMA5D27_som1_ek.
-
-Ryan Wanner (2):
-  pinctrl: at91-pio4: Add configuration to userspace
-  pinctrl: at91-pio4: Add persist state case in config
-
- drivers/pinctrl/pinctrl-at91-pio4.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
-
+diff --git a/drivers/pinctrl/pinctrl-at91-pio4.c b/drivers/pinctrl/pinctrl-at91-pio4.c
+index 517f2a6330ad..13b77f1eb6e2 100644
+--- a/drivers/pinctrl/pinctrl-at91-pio4.c
++++ b/drivers/pinctrl/pinctrl-at91-pio4.c
+@@ -902,6 +902,25 @@ static int atmel_conf_pin_config_group_set(struct pinctrl_dev *pctldev,
+ 	return 0;
+ }
+ 
++static int atmel_conf_pin_config_set(struct pinctrl_dev *pctldev,
++				     unsigned pin,
++				     unsigned long *configs,
++				     unsigned num_configs)
++{
++	struct atmel_group *grp = atmel_pctl_find_group_by_pin(pctldev, pin);
++
++	return atmel_conf_pin_config_group_set(pctldev, grp->pin, configs, num_configs);
++}
++
++static int atmel_conf_pin_config_get(struct pinctrl_dev *pctldev,
++				     unsigned pin,
++				     unsigned long *configs)
++{
++	struct atmel_group *grp = atmel_pctl_find_group_by_pin(pctldev, pin);
++
++	return atmel_conf_pin_config_group_get(pctldev, grp->pin, configs);
++}
++
+ static void atmel_conf_pin_config_dbg_show(struct pinctrl_dev *pctldev,
+ 					   struct seq_file *s,
+ 					   unsigned int pin_id)
+@@ -949,6 +968,8 @@ static const struct pinconf_ops atmel_confops = {
+ 	.pin_config_group_get	= atmel_conf_pin_config_group_get,
+ 	.pin_config_group_set	= atmel_conf_pin_config_group_set,
+ 	.pin_config_dbg_show	= atmel_conf_pin_config_dbg_show,
++	.pin_config_set	        = atmel_conf_pin_config_set,
++	.pin_config_get	        = atmel_conf_pin_config_get,
+ };
+ 
+ static struct pinctrl_desc atmel_pinctrl_desc = {
+@@ -1139,6 +1160,7 @@ static int atmel_pinctrl_probe(struct platform_device *pdev)
+ 	atmel_pioctrl->gpio_chip->label = dev_name(dev);
+ 	atmel_pioctrl->gpio_chip->parent = dev;
+ 	atmel_pioctrl->gpio_chip->names = atmel_pioctrl->group_names;
++	atmel_pioctrl->gpio_chip->set_config = gpiochip_generic_config;
+ 
+ 	atmel_pioctrl->pm_wakeup_sources = devm_kcalloc(dev,
+ 			atmel_pioctrl->nbanks,
 -- 
 2.34.1
 
