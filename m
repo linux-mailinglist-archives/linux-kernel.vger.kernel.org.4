@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7205F76CB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 12:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A9D25F76D2
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 12:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229454AbiJGKWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 06:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42954 "EHLO
+        id S229730AbiJGKZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 06:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJGKW3 (ORCPT
+        with ESMTP id S229547AbiJGKZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 06:22:29 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B833DBED;
-        Fri,  7 Oct 2022 03:22:27 -0700 (PDT)
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 297AMEvQ026718;
-        Fri, 7 Oct 2022 19:22:15 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 297AMEvQ026718
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1665138135;
-        bh=v6R9VW9CvNnIPxZU2kpYVPvJFCqUvYSumQarCG0Cerk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=zLSJjHLIQJAkeagXnGYLwewIgt97fZLTzOId4Oe8VaS10oWFyd9D+CNgzkwUOlRVc
-         JEegGYepg822P00bA0N/ktpVz7Od6lVius4h4rtoHWlOyeCjUr5oe1C+457OTZMnH6
-         QpW6iUVrYSxr6ZVPRf9Q70yrdcFpTo9/FOMR94tiJQzy6ffL7ZhTV3Alj8dKKyMVEO
-         QZ/hH9OaK0hEKBFTCMTRouTa0vWlvOIqhjj4/mp0hoTjOwrtCiOTw3S+mVoNi9UTlR
-         AroDM6GIpTyuc9c4CJ50gO+3diiSvj1ja4wW9v2V1Cu8p4dyVdfKWUepyeXpj49acI
-         6K0wXPsNUgySQ==
-X-Nifty-SrcIP: [209.85.160.44]
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-132fb4fd495so5076569fac.12;
-        Fri, 07 Oct 2022 03:22:15 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2nYq3OFkh3JYTwcuc+uyA9Vw1fzimcAUwgm1YcYBxlcmWV11V7
-        HCEOSdddAx0zpIS6Ro9B8aMY0ypJhJMeCOxv7RA=
-X-Google-Smtp-Source: AMsMyM6p4RmVl0lWCJhJ6LJiYVBZr+poUdbCGiq93ZYl33z69uioaMPeZvHhvZHGTn59a1RuLFsTqu2SZdyREGXDS0k=
-X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
- ba11-20020a056870c58b00b0010bd21dad5emr2087845oab.287.1665138134138; Fri, 07
- Oct 2022 03:22:14 -0700 (PDT)
+        Fri, 7 Oct 2022 06:25:21 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD60B642EF;
+        Fri,  7 Oct 2022 03:25:19 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id s10so5199338ljp.5;
+        Fri, 07 Oct 2022 03:25:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yDaLz05Q12Kw8BNKIwG6b+0mlwsTp6ntRFoc6GuHvLg=;
+        b=Lz2lu8nAjo0jFAi1PWeGe1mBwxOH7WLTNOAVT65hCjwkgXHOXuMmlaLzLH0j+46OLG
+         B4sVA1/AfoLvf8Vm2uZJr1natq+uLC5HD58h95hW9kgcA1CQrdAdf0F4ZsZbHBf+TbvY
+         fZfN56yB3XEYiK6gxXnw5FcdweSgYFxRoitBAEw8WlvbDTs4WXoKKfg7WwxGlZI1IMgY
+         e+bh3WwL3svVHsEDPoITCYvWX61VbpY1gSCVxIWkj+I7vZoxRfJIv+wXNZK8aDtc1GTm
+         4KqTfig8REI4A+krfyDAZn5++frNPEjZTBj0vJw0VpdTjyKZTii5c7NemR14ar9alvVH
+         K6rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yDaLz05Q12Kw8BNKIwG6b+0mlwsTp6ntRFoc6GuHvLg=;
+        b=R2Ajksh/7VToRUwildIc3Fa+ed3+KE0uqmVHZmgXoyStB1BBIQR8tG6Bst6hTOKazg
+         y7JSVcKJrkHdlXAxFFpBUs9NnKM5IgQBD03DJ/mEXVr8WIf6/JKE+91P5xHZ+Q3dwtuN
+         yZiCHYvw9XvnuhTUvzwU6QMap57BWKXQWfCixKIKmUgXYeKfq5NFP+B6ZqJXsMZq0tBJ
+         v8glUW0qgRbm0EQVoyl4Apx/TD4+YpEbAY1H6/VO1X6dq0t8SViZEcpkyooeNfjuqQIH
+         n5XE8aJX0moS0Cp3ZgpyZ5cVbEREmzrv8Wxdy61eMyGyZB5Px/DkRK2hatKycWfQH3O2
+         Rqmw==
+X-Gm-Message-State: ACrzQf0QN6iejimWTWAvtpWt/MZSJvJxgWmsRgItepi5UvaJCKEEx4cI
+        YhRX8Q1G6UmKEc2vT1bv3WJ26fHRSvY=
+X-Google-Smtp-Source: AMsMyM6beC/6ng/3+Z4qK6rhhjuV5EDj+R7iDlS4JH5CEEgDdVgF0PXSixcBUCNQDnstIbzB0WXr6A==
+X-Received: by 2002:a2e:9d05:0:b0:26d:cef7:bced with SMTP id t5-20020a2e9d05000000b0026dcef7bcedmr1461190lji.41.1665138317596;
+        Fri, 07 Oct 2022 03:25:17 -0700 (PDT)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id q16-20020a05651232b000b00494791fbd80sm232840lfe.307.2022.10.07.03.25.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 03:25:16 -0700 (PDT)
+Date:   Fri, 7 Oct 2022 12:25:14 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Prathamesh Shete <pshete@nvidia.com>
+Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        jonathanh@nvidia.com, linux-gpio@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        smangipudi@nvidia.com, kyarlagadda@nvidia.com,
+        Manish Bhardwaj <mbhardwaj@nvidia.com>
+Subject: Re: [PATCH v3] gpio: tegra186: Check GPIO pin permission before
+ access.
+Message-ID: <Yz/+ijx/QbUMzqHV@orome>
+References: <Yz62XmiH8YG3Dtsf@orome>
+ <20221007055936.5446-1-pshete@nvidia.com>
 MIME-Version: 1.0
-References: <20221003222133.20948-1-aliraza@bu.edu> <20221003222133.20948-11-aliraza@bu.edu>
- <d2089a89-21a9-1e05-5d58-91b8411f7141@gmail.com> <53c84c25-31ff-29d5-c6fb-85cb307f1704@bu.edu>
-In-Reply-To: <53c84c25-31ff-29d5-c6fb-85cb307f1704@bu.edu>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 7 Oct 2022 19:21:37 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT-Q=sS-9L1eRuOnomqqDNyRp2knZh+2SYLqB2Gn8ekHg@mail.gmail.com>
-Message-ID: <CAK7LNAT-Q=sS-9L1eRuOnomqqDNyRp2knZh+2SYLqB2Gn8ekHg@mail.gmail.com>
-Subject: Re: [RFC UKL 10/10] Kconfig: Add config option for enabling and
- sample for testing UKL
-To:     Ali Raza <aliraza@bu.edu>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, michal.lkml@markovi.net, ndesaulniers@google.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, luto@kernel.org,
-        ebiederm@xmission.com, keescook@chromium.org, peterz@infradead.org,
-        viro@zeniv.linux.org.uk, arnd@arndb.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, pbonzini@redhat.com,
-        jpoimboe@kernel.org, linux-doc@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        x86@kernel.org, rjones@redhat.com, munsoner@bu.edu, tommyu@bu.edu,
-        drepper@redhat.com, lwoodman@redhat.com, mboydmcse@gmail.com,
-        okrieg@bu.edu, rmancuso@bu.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ApYiFk6+lskJE3RH"
+Content-Disposition: inline
+In-Reply-To: <20221007055936.5446-1-pshete@nvidia.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,47 +79,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 7, 2022 at 6:29 AM Ali Raza <aliraza@bu.edu> wrote:
->
-> On 10/3/22 22:11, Bagas Sanjaya wrote:
-> > On 10/4/22 05:21, Ali Raza wrote:
-> >> Add the KConfig file that will enable building UKL. Documentation
-> >> introduces the technical details for how UKL works and the motivations
-> >> behind why it is useful. Sample provides a simple program that still uses
-> >> the standard system call interface, but does not require a modified C
-> >> library.
-> >>
-> > <snipped>
-> >>  Documentation/index.rst   |   1 +
-> >>  Documentation/ukl/ukl.rst | 104 ++++++++++++++++++++++++++++++++++++++
-> >>  Kconfig                   |   2 +
-> >>  kernel/Kconfig.ukl        |  41 +++++++++++++++
-> >>  samples/ukl/Makefile      |  16 ++++++
-> >>  samples/ukl/README        |  17 +++++++
-> >>  samples/ukl/syscall.S     |  28 ++++++++++
-> >>  samples/ukl/tcp_server.c  |  99 ++++++++++++++++++++++++++++++++++++
-> >>  8 files changed, 308 insertions(+)
-> >>  create mode 100644 Documentation/ukl/ukl.rst
-> >>  create mode 100644 kernel/Kconfig.ukl
-> >>  create mode 100644 samples/ukl/Makefile
-> >>  create mode 100644 samples/ukl/README
-> >>  create mode 100644 samples/ukl/syscall.S
-> >>  create mode 100644 samples/ukl/tcp_server.c
-> >
-> > Shouldn't the documentation be split into its own patch?
-> >
-> Thanks for pointing that out.
->
-> --Ali
->
 
+--ApYiFk6+lskJE3RH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The commit subject "Kconfig:" is used for changes
-under scripts/kconfig/.
+On Fri, Oct 07, 2022 at 11:29:36AM +0530, Prathamesh Shete wrote:
+> This change checks if we have the necessary permission to
+> access the GPIO. For devices that have support for virtualisation
+> we need to check both the TEGRA186_GPIO_VM_REG and the
+> TEGRA186_GPIO_SCR_REG registers. For device that do not have
+> virtualisation support for GPIOs we only need to check the
+> TEGRA186_GPIO_SCR_REG register.
+>=20
+> Signed-off-by: Manish Bhardwaj <mbhardwaj@nvidia.com>
+> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
+> ---
+>  drivers/gpio/gpio-tegra186.c | 78 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 78 insertions(+)
 
-Please use something else.
+I like it, thanks!
 
+Acked-by: Thierry Reding <treding@nvidia.com>
 
--- 
-Best Regards
-Masahiro Yamada
+--ApYiFk6+lskJE3RH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmM//okACgkQ3SOs138+
+s6HTlRAAqp3IuKkRh2nsqMofRgcg/VSlgx7GJ6SNjs906+WRNWjXXCzlIcepJi2H
+BKUB+9eQmtYSxp/dtvivrr07BpLQAAdSiLKN0BaDdbytmfZeCo3P7NndFGWN3ilj
+865+nutmPgoindb+tC3y0jlN4jxJv3YhZVfDFMIA8vNxUXhn++bzWWFl7kgLzR6K
+bcNDasurDDnwCO4W0ss+FaZCGdbwH4DGvGPUe2oVJT+EHJMKWtNOkClwnR+4Aa94
+joqqH5eKdqlpOQPs/GJHUbWnEEQzzyHTUWdwmBSWqRPsoWpfizt7kFUKAjvFjbh2
+/xoMOet3DgDNjP76fT9pW+VOMH7/PEbIl9DkeN42KkjVE5Jc0xbMmYIcxTB7c3sU
+vItbdpVTnH8dPiMojTKJMYsBtNXXcXeoy7CxvK37fKuHK5+u+qV44U4fl2fAsPa6
+gpIL6sF2FYt5g3x/wdWXRUhXE8tHGjlCXz+s4KSBlMvbTmSUK2wZrV6iOvY7PAnO
+gCBphsuZNUJRqhsMhvlav75SaB2gug587OWfgIeozA/W2mYEilYqYC9JXhlu/uEl
+ClUIprnVsZoVgugYQQ+3OMlap43gAFpk/rZgmNy3AwoJUxJR1YSb40qYF9DQIcM6
+h8u7cln6o8T2zy1HBHsA2Jx1x34l+1d6saJyZiXQnoBWcVu5sO0=
+=Ci/Q
+-----END PGP SIGNATURE-----
+
+--ApYiFk6+lskJE3RH--
