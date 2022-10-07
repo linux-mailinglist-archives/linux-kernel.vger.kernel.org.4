@@ -2,136 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3435F7917
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 15:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 692A25F7918
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 15:37:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiJGNfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 09:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
+        id S229981AbiJGNhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 09:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbiJGNfi (ORCPT
+        with ESMTP id S229975AbiJGNhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 09:35:38 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAEC9D51B
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 06:35:34 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id b4so7369366wrs.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 06:35:34 -0700 (PDT)
+        Fri, 7 Oct 2022 09:37:19 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DAFA5988
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 06:37:05 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id 204so4894031pfx.10
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 06:37:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JplDCaPdcpXfop1zb7dVxKPrP4e+os7PmJQXzlx7wCo=;
-        b=flc9tV3iMOC8TfetLbTT2j8mQyS5wRTjK0EwEH9vjMD+FD35yMTwlZ5IXeBe77kbA+
-         NFpgip93XtId5kSzqsgNaf7YnS9/GfZAIRbs4grhqDxUfv3bEcxtbtIMLCACXDqNLFA1
-         KxaOJlj2U3Ma9F7FXZfRuSqSOTdYjofIBLNoA/FeP9aZ3izTzbZDTbHRAB7exR/2lxev
-         LMswoGrSTD/quyClc4sUW7x7JGcHuZE1DcIXbOlkkMsSNjs5B2/e14kO4l3wfIhMTZSn
-         VVFDHA0IoVqmQSyBJdv4aaU/lHeojgyyuRHlGBUUzsEAcyO95YB0W/OlBVt2aUg9F74J
-         sjzQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qfzoSLkcHG9LxhIC2H734DevtfkcO6HZr+TJXAPvmGk=;
+        b=qUb1WBEen0IFaBR9zTn1HDyMj4phtCAgJuAI40CPrxUlU3/zNLqoyUFIyh7ELug1wx
+         nyJMPwmRpwtgw3iWk+pWNKGEYxVxf6lyjNBNMYzy/poT9C92afc91s8mI+IFxVPKizBt
+         vQ+H4F2XHAA+AVd+YacaqaGAzYkMx/fcKzCK7Ffi+DtNvdirYDO/puKqCRfwZPrHTcUX
+         4MU29UWhx9RNoIvgFD66R9idAscwie0/Gc7y9OIXe2cqjHIgAe0+BfYNMbdp/omhnGO9
+         DBRWVoeW+6xoZ+EnDZA+Supp4abp2puEC2LVRs/smwVGP/R/zn6CkrUfkJpqDwNfRfGj
+         yO0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JplDCaPdcpXfop1zb7dVxKPrP4e+os7PmJQXzlx7wCo=;
-        b=17dOSj1OQuqikLxqtf0bOHdxCVE6gE+ruXZKyuZwtpbLa4FW4JufNCXNa7zjrFEL7O
-         8T7waInzvyylI2M9vfwJE2xoEy5YF5lj/FudVjy1+w/iLxbECv+DGfN8jKryqljWjEam
-         FhG8W5xOFcq3MV/mBPXdJOzyiKw4gvj0NMXfp/PclLlzcYoRcBjUV0Nh25wETE9AgNkf
-         HfZiRtE+r+c+RMfY/LwmxJGvoURxZF9FQomcpsN+MAH1wrWeq9gXKaLvngWGrdFZCHb2
-         AgMsl0xY2zWSN6TvNHjRZQDPyve3M1MiAe48/PlE5yV/+Fj7p3KLHPW/askjCsyV2MNH
-         t9Lw==
-X-Gm-Message-State: ACrzQf2TSdMz7cySc0vbXAtGqXBp2SFHewjE3YvAYKcEnbCax0gYbahd
-        fr4aE83DD/GaUiFPgy6cjTCMyy6sHn2oxA==
-X-Google-Smtp-Source: AMsMyM65pNVwULiHDFr2eV6y7VReXSdQyfBqvSHWuh/61HSW/y0sk3hbc7VMwJq3hwgVZ2MD+1UAIQ==
-X-Received: by 2002:a5d:5a05:0:b0:22e:5b81:c295 with SMTP id bq5-20020a5d5a05000000b0022e5b81c295mr3273956wrb.588.1665149733086;
-        Fri, 07 Oct 2022 06:35:33 -0700 (PDT)
-Received: from localhost ([2a01:cb19:85e6:1900:5f1e:d910:dd1e:5b09])
-        by smtp.gmail.com with ESMTPSA id fc19-20020a05600c525300b003a342933727sm8375178wmb.3.2022.10.07.06.35.32
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qfzoSLkcHG9LxhIC2H734DevtfkcO6HZr+TJXAPvmGk=;
+        b=EiPPBBeg40/E/rIf+ytS3jK4dlCE8cITvl8ikXhaXllU94fVHPQxv9MG+e+nNHTLrv
+         1wt5idps0BW0WfA9lgPveioycaQNWX6gk1/zXa8ZAuDj4/LhKfl5v5G7Utny1PvMmWpv
+         nE4DM/iarOTArpZ66NwkogCGbTrIFAVTo9bYmpKq/HxDA1LzXRP615dQCZ5Jd1j5uPhs
+         Nuz8hrlTEddCXr1RMDBEgUkpWUuigRBrhRzBlYCNphyQyP1y6eqLPdUuucjJckEJ+liA
+         nBtuBrF+H+pu/ysxZAYrisrovkBPizv2ZjFQsB5oTdxggA8X0L04rp/OydIJU0bAUn4d
+         ZlJA==
+X-Gm-Message-State: ACrzQf1nBEA14aXnD7LnZNNzuRNdb0KkCCTBW3EjVTy3syeJ/SHBPkV/
+        KOxqNXk8Ggrpi0eGHW7kkNY=
+X-Google-Smtp-Source: AMsMyM5GBGDJNZNzlcj466Gh/G4aXMY7ytb7E7CFnygImq45porGxQNgcdfzAv6nWyPfK9FxrISKlQ==
+X-Received: by 2002:a05:6a00:1ace:b0:546:94a3:b235 with SMTP id f14-20020a056a001ace00b0054694a3b235mr5459442pfv.50.1665149824567;
+        Fri, 07 Oct 2022 06:37:04 -0700 (PDT)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id u13-20020a170902e5cd00b0017f7819732dsm1041459plf.77.2022.10.07.06.36.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 06:35:32 -0700 (PDT)
-From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
-To:     Eirin Nya <nyanpasu256@gmail.com>, linux-input@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] Input: Remove redundant field elantech_data::width
-In-Reply-To: <20220929082119.22112-3-nyanpasu256@gmail.com>
-References: <20220929082119.22112-1-nyanpasu256@gmail.com>
- <20220929082119.22112-3-nyanpasu256@gmail.com>
-Date:   Fri, 07 Oct 2022 15:35:31 +0200
-Message-ID: <87fsfz7o4c.fsf@mkorpershoek-xps-13-9370.home>
+        Fri, 07 Oct 2022 06:37:03 -0700 (PDT)
+Date:   Fri, 7 Oct 2022 22:36:56 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Marco Elver <elver@google.com>
+Subject: Re: [PATCH] mm: move PG_slab flag to page_type
+Message-ID: <Y0AreJczk6FdiKxr@hyeyoo>
+References: <20220919125708.276864-1-42.hyeyoo@gmail.com>
+ <Yy+NCJ525S+HzP4k@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yy+NCJ525S+HzP4k@casper.infradead.org>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 01:21, Eirin Nya <nyanpasu256@gmail.com> wrote:
+On Sun, Sep 25, 2022 at 12:04:40AM +0100, Matthew Wilcox wrote:
+> On Mon, Sep 19, 2022 at 09:57:08PM +0900, Hyeonggon Yoo wrote:
+> > For now, only SLAB uses _mapcount field as a number of active objects in
+> > a slab, and other slab allocators do not use it. As 16 bits are enough
+> > for that, use remaining 16 bits of _mapcount as page_type even when
+> > SLAB is used. And then move PG_slab flag to page_type!
+> > 
+> > Note that page_type is always placed in upper 16 bits of _mapcount to
+> > avoid confusing normal _mapcount as page_type. As underflow (actually
+> > I mean, yeah, overflow) is not a concern anymore, use more lower bits
+> > except bit zero.
+> > 
+> > Add more folio helpers for PAGE_TYPE_OPS() not to break existing
+> > slab implementations.
+> > 
+> > Remove PG_slab check from PAGE_FLAGS_CHECK_AT_FREE. buddy will still
+> > check if _mapcount is properly set at free.
+> > 
+> > Exclude PG_slab from hwpoison and show_page_flags() for now.
+> > 
+> > Note that with this patch, page_mapped() and folio_mapped() always return
+> > false for slab page.
+> 
+> This is an interesting approach.  It raises some questions.
 
-> elantech_data::width is copied from elantech_device_info::width, and
-> neither is mutated after initialization. So remove the redundant
-> variable to prevent future bugs.
->
-> Signed-off-by: Eirin Nya <nyanpasu256@gmail.com>
+Hello Matthew, sorry for late reply and I didn't mean to ignore your
+feedback. I realized compound pages and folio stuffs are my weak side and
+needed some time to learn :)
 
-Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+> First, you say that folio_mapped() returns false for slab pages.  That's
+> only true for order-0 slab pages.  For larger pages,
+> 
+>         if (!folio_test_large(folio))
+>                 return atomic_read(&folio->_mapcount) >= 0;
+>         if (atomic_read(folio_mapcount_ptr(folio)) >= 0)
+>                 return true;
+> 
+> so that's going to depend what folio_mapcount_ptr() aliases with.
 
-ps: please consider using the proper subject line for input subsystem if
-you need to send again.
+IIUC it's true for order > 0 slab too.
 
-It should be "Input: elantech - Remove redundant field elantech_data::width"
+As slab pages are not mapped to userspace at all,
+entire compound page nor base pages are not mapped to userspace.
 
-$ git log --oneline drivers/input/mouse/elantech.c shows:
-1d72d9f960cc Input: elantech - fix stack out of bound access in elantech_change_report_id()
-be896bd3b72b Input: elantench - fix misreporting trackpoint coordinates
-9d383e96448d Input: elantech - Prepare a complete software node for the device
+AFAIK followings are true for order > 0 slab:
+        - (first tail page)->compound_mapcount is -1
+        - _mapcount of base pages are -1
 
-(this is a minor remark, so no need to send a v2 to just change the
-subject line)
+So:
+        folio_mapped() and page_mapped() (if applied to head page)
+        returns false for larger pages with this patch.
 
-Cheers
-Mattijs
+I wrote simple testcase and did check that folio_mapped() and page_mapped()
+returns false for both order-0 page and larger pages. (and SLAB
+returned true for them before)
 
-> ---
->  drivers/input/mouse/elantech.c | 4 +---
->  drivers/input/mouse/elantech.h | 1 -
->  2 files changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/drivers/input/mouse/elantech.c b/drivers/input/mouse/elantech.c
-> index 79e31611fc..263779c031 100644
-> --- a/drivers/input/mouse/elantech.c
-> +++ b/drivers/input/mouse/elantech.c
-> @@ -691,7 +691,7 @@ static void process_packet_head_v4(struct psmouse *psmouse)
->  	input_report_abs(dev, ABS_MT_POSITION_X, etd->mt[id].x);
->  	input_report_abs(dev, ABS_MT_POSITION_Y, etd->mt[id].y);
->  	input_report_abs(dev, ABS_MT_PRESSURE, pres);
-> -	input_report_abs(dev, ABS_MT_TOUCH_MAJOR, traces * etd->width);
-> +	input_report_abs(dev, ABS_MT_TOUCH_MAJOR, traces * etd->info.width);
->  	/* report this for backwards compatibility */
->  	input_report_abs(dev, ABS_TOOL_WIDTH, traces);
->  
-> @@ -1253,8 +1253,6 @@ static int elantech_set_input_params(struct psmouse *psmouse)
->  		input_abs_set_res(dev, ABS_MT_POSITION_Y, info->y_res);
->  	}
->  
-> -	etd->width = width;
-> -
->  	return 0;
->  }
->  
-> diff --git a/drivers/input/mouse/elantech.h b/drivers/input/mouse/elantech.h
-> index 1ec004f72d..fb093134ea 100644
-> --- a/drivers/input/mouse/elantech.h
-> +++ b/drivers/input/mouse/elantech.h
-> @@ -180,7 +180,6 @@ struct elantech_data {
->  	unsigned char reg_25;
->  	unsigned char reg_26;
->  	unsigned int single_finger_reports;
-> -	unsigned int width;
->  	struct finger_pos mt[ETP_MAX_FINGERS];
->  	unsigned char parity[256];
->  	struct elantech_device_info info;
-> -- 
-> 2.37.3
+> Second, this patch changes the behaviour of PageSlab() when applied to
+> tail pages.
+
+Altough it changes the way it checks the flag,
+
+it does not change behavior when applied to tail pages - PageSlab() on tail
+page returns false with or without this patch.
+
+If PageSlab() need to return true for tail pages too,
+we may make it check page_type at head page.
+
+But I'm not sure when it the behavior is needed.
+Can you please share your insight on this?
+
+> Which raises the further question of what PageBuddy(),
+> PageTable(), PageGuard() and PageIsolated() should do for multi-page
+> folios, if that is even possible.
+
+For users that uses real compound page like slab, we can make it check
+page_type of head page. (if needed)
+
+But for cases David described, there isn't much thing we can do
+except making them to use real compound pages.
+
+> Third, can we do this without that awkward __u16 thing?  Perhaps
+> 
+> -#define PG_buddy        0x00000080
+> -#define PG_offline      0x00000100
+> -#define PG_table        0x00000200
+> -#define PG_guard        0x00000400
+> +#define PG_buddy        0x00010000
+> +#define PG_offline      0x00020000
+> +#define PG_table        0x00040000
+> +#define PG_guard        0x00080000
+> +#define PG_slab         0x00100000
+> 
+> ... and then use wrappers in slab.c to access the bottom 16 bits?
+
+Definitely! I prefer that way and will adjust in RFC v2.
+
+Thank you for precious feedback.
+
+-- 
+Hyeonggon
