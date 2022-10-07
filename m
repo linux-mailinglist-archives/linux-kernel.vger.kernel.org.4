@@ -2,82 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7DB5F7AC3
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 562F15F7AC5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbiJGPnr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Oct 2022 11:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
+        id S229888AbiJGPn5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Oct 2022 11:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiJGPnp (ORCPT
+        with ESMTP id S229785AbiJGPnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 11:43:45 -0400
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A685D73C8
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 08:43:44 -0700 (PDT)
-Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay02.hostedemail.com (Postfix) with ESMTP id 13EF712131A;
-        Fri,  7 Oct 2022 15:43:43 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf06.hostedemail.com (Postfix) with ESMTPA id 8BFEC20012;
-        Fri,  7 Oct 2022 15:43:20 +0000 (UTC)
-Message-ID: <62acd27e418ff202ef2ffedd2474ae7f53f93368.camel@perches.com>
-Subject: Re: [PATCH v2 1/3] mtd: mtdoops: change printk() to counterpart pr_
- functions
-From:   Joe Perches <joe@perches.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Ray Zhang <sgzhang@google.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Fri, 07 Oct 2022 08:43:39 -0700
-In-Reply-To: <20221007095236.37113034@xps-13>
-References: <20221007065042.700761-1-sgzhang@google.com>
-         <20221007065042.700761-2-sgzhang@google.com>
-         <070d253e718c1a6d72fb52c1d2f02ec461d825a1.camel@perches.com>
-         <20221007095236.37113034@xps-13>
-Content-Type: text/plain; charset="ISO-8859-1"
+        Fri, 7 Oct 2022 11:43:55 -0400
+Received: from mail4.swissbit.com (mail4.swissbit.com [176.95.1.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901DAD73D2;
+        Fri,  7 Oct 2022 08:43:54 -0700 (PDT)
+Received: from mail4.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id D48DF12328B;
+        Fri,  7 Oct 2022 17:43:52 +0200 (CEST)
+Received: from mail4.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id C5BCA122E4A;
+        Fri,  7 Oct 2022 17:43:52 +0200 (CEST)
+X-TM-AS-ERS: 10.149.2.42-127.5.254.253
+X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
+X-DDEI-TLS-USAGE: Used
+Received: from ex.swissbit.com (unknown [10.149.2.42])
+        by mail4.swissbit.com (Postfix) with ESMTPS;
+        Fri,  7 Oct 2022 17:43:52 +0200 (CEST)
+Received: from sbdeex04.sbitdom.lan (10.149.2.42) by sbdeex04.sbitdom.lan
+ (10.149.2.42) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Fri, 7 Oct 2022
+ 17:43:52 +0200
+Received: from sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818]) by
+ sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818%9]) with mapi id
+ 15.02.1118.009; Fri, 7 Oct 2022 17:43:52 +0200
+From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCHv2 2/2] mmc: queue: Cancel recovery work on cleanup
+Thread-Topic: [PATCHv2 2/2] mmc: queue: Cancel recovery work on cleanup
+Thread-Index: AdjaY4mpUK63rShYSiuVsWPm2cpIvA==
+Date:   Fri, 7 Oct 2022 15:43:52 +0000
+Message-ID: <c865c0c9789d428494b67b820a78923e@hyperstone.com>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.242.2.22]
+Content-Type: text/plain;
+        charset="iso-8859-1"
 Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 8BFEC20012
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: za138si87dtfybssdp7nwo3qnip19zdb
-X-Rspamd-Server: rspamout04
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18P8E5dDtrUnR65WTaWOg4rMOxd5qzw2vI=
-X-HE-Tag: 1665157400-298926
+X-TMASE-Version: DDEI-5.1-9.0.1002-27188.000
+X-TMASE-Result: 10--3.999400-10.000000
+X-TMASE-MatchedRID: mIinBA9F1pwt1HmDlgaHMkrOO5m0+0gE9LMB0hXFSejAuQ0xDMaXkH4q
+        tYI9sRE/o5C9bTTxaUZasG44azv9echFlF8jsIKhEhGH3CRdKUVqYquCrLrVwq0ke9m+oOm00c8
+        aNDRHFani8zVgXoAltnS4vQrt84k3IAcCikR3vq+mz1UsKPZv+AN9GFoDz2U6okUd4RWzj9V36u
+        Ku+GTRipRRD7VMDAIa
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: 06cddc11-3c48-4b79-a805-7e64a9b8e299-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-10-07 at 09:52 +0200, Miquel Raynal wrote:
-> Hi Joe, Ray,
-> 
-> joe@perches.com wrote on Fri, 07 Oct 2022 00:09:26 -0700:
-> 
-> > On Fri, 2022-10-07 at 06:50 +0000, Ray Zhang wrote:
-> > > To comply with latest kernel code requirement, change printk() to
-> > > counterpart pr_ functions in mtdoops driver:
-> > > - change printk(INFO) to pr_info()
-> > > - change printk(DEBUG) to pr_debug()  
-> > 
-> > There is a different behavior with printk(KERN_DEBUG to pr_debug(
-> > as pr_debug is a no-op unless dynamic debugging is enabled or
-> > DEBUG is defined.
-> 
-> I didn't know about this difference. I was expecting printk(KERN_DEBUG)
-> to behave the same as pr_debug/dev_dbg.
+To prevent any recovery work running after the queue cleanup cancel it.
+Any recovery running post-cleanup dereferenced mq->card as NULL
+and was not meaningful to begin with.
 
-No worries.  Most people do not know this trivia.
+Cc: stable@vger.kernel.org
 
-I just wanted to inform in case it matters here.
-Likely it does not matter.
+Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+---
+-v2: Use cancel instead of flush
 
-> But honestly in this driver I feel fine changing the printk(KERN_DEBUG)
-> into pr_debug().
+ drivers/mmc/core/queue.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Your choice...
+diff --git a/drivers/mmc/core/queue.c b/drivers/mmc/core/queue.c
+index fefaa901b50f..86be55d7cf55 100644
+--- a/drivers/mmc/core/queue.c
++++ b/drivers/mmc/core/queue.c
+@@ -493,6 +493,13 @@ void mmc_cleanup_queue(struct mmc_queue *mq)
+ 	if (blk_queue_quiesced(q))
+ 		blk_mq_unquiesce_queue(q);
+ 
++	/*
++	 * If the recovery completes the last (and only remaining) request in
++	 * the queue, and the card has been removed, we could end up here with
++	 * the recovery not quite finished yet, so cancel it.
++	 */
++	cancel_work_sync(&mq->recovery_work);
++
+ 	blk_mq_free_tag_set(&mq->tag_set);
+ 
+ 	/*
+-- 
+2.37.3
+
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
+
