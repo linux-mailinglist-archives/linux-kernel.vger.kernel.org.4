@@ -2,148 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2600B5F7A34
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814E65F7A36
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 17:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbiJGPDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 11:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46638 "EHLO
+        id S229921AbiJGPES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 11:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbiJGPDq (ORCPT
+        with ESMTP id S229539AbiJGPEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 11:03:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC26EDD88C
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 08:03:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665155025;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G8ttGtE2a2pTgoA/DqN+azedYAoX3sBGph+P0+5Qq/M=;
-        b=WDKng4SfpMwQctJO1joseSzf02e3hIWfQisCKzp3ivLH6Pg5kouzktGJJrgopqB3J4oI7y
-        69s5z4zzta+pkhmM1P6KD06xiRirTFFg7ZH7tEU3WrZNHplZvgiHbBym1yydqnmiUbcQKk
-        DyFEUvqocOtD37RBwKGfeRjC327sI8k=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-500-_W7al9XuO-m-9MJk3OAWhw-1; Fri, 07 Oct 2022 11:03:43 -0400
-X-MC-Unique: _W7al9XuO-m-9MJk3OAWhw-1
-Received: by mail-qk1-f200.google.com with SMTP id h8-20020a05620a284800b006b5c98f09fbso3981044qkp.21
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 08:03:43 -0700 (PDT)
+        Fri, 7 Oct 2022 11:04:16 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BABDD88D
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 08:04:15 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 129so4896938pgc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 08:04:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=lhpQtxQPreKPextix6gPpSleYRkKFNce+PIqc6irMr8=;
+        b=dQMffJGUZJxJA4sQ8Y5dwws2hkZgcwRnzVzz5olQpBNjAJUZ3cfD2ZWgRPV5EbORgL
+         lTIq7iEkz/6Xcj6qVBmu9DF7xnpHSUIljS/2RJIYWHfyJH73CNgGQdO4cH4QH2yYG3Kw
+         nQE6T5t4srqsVoLjQUOFqqWEtjfwiOoQPjJP3qynYimUgIV41UX2AJHM/Qka9uXG8jft
+         f8s0/DQTltKB6RVxEYjACj4prqaLip0yxe2vV7ZxQah64n9ctJ65oKE0mQp3QtlYaKR5
+         6OSjlBEtuwPdF67dHFLfgE1No4+4Kr5QPrZFuFNLL0UWToJPwibsvts1XUFSOd35VW9W
+         gbEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G8ttGtE2a2pTgoA/DqN+azedYAoX3sBGph+P0+5Qq/M=;
-        b=wK46LuNJ/W31V9w+tMD4ELTL3PIfVths5aD2INhQxXrUHOERttVQY2rt/7yOz0hYzI
-         ei+MkHUcl2KgaC62EWY2imXu3DDoG8qXvw0woZW88n8XAO0DJzCt3gBOluqp67pcNrDU
-         AXUxSg3glKxmoCs+noS4mu1oXV54d99U4rl0mbMXAumzw5IXIGNvol+t3Be2g+uFL77Y
-         ORWbMV5sxf6TlRtd4EN8F4SKHTalTFBI2mTG65kJ9g82r2ByQHUkcvukrGzjqMnV2Vae
-         Ja6WQauYNR/N6O7OWDgxKlcwly2DqyfaZ7lVwN6PraYhw4UTHydHXePjvWjyFal612wo
-         KpQQ==
-X-Gm-Message-State: ACrzQf25al9xjIiNyyE+2iuC+Q6PJn+B+GUPkGp8hUO7BsjAoaWI154k
-        O7amJjF+eNxb+q52YSOxwNoGGBOSIBp2ulcmcQGRcJoSFIxYtue7SRMK1rfaiqA+ApeC6fhan/S
-        NE5IzyWFXyXWD8m69BVbzDPym
-X-Received: by 2002:a05:622a:5cb:b0:394:8a8c:7063 with SMTP id d11-20020a05622a05cb00b003948a8c7063mr4558080qtb.330.1665155023532;
-        Fri, 07 Oct 2022 08:03:43 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6rKdQz36a0mgxBntg7slDBs/JqYYsZlFJrYaDVhGwd+e+Z7Fl4Xv1Pf4YaXvUgtvGqcQ2Dsg==
-X-Received: by 2002:a05:622a:5cb:b0:394:8a8c:7063 with SMTP id d11-20020a05622a05cb00b003948a8c7063mr4558054qtb.330.1665155023292;
-        Fri, 07 Oct 2022 08:03:43 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id v1-20020a05620a0f0100b006bb8b5b79efsm2339333qkl.129.2022.10.07.08.03.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 08:03:42 -0700 (PDT)
-Date:   Fri, 7 Oct 2022 11:03:41 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        Linux MM Mailing List <linux-mm@kvack.org>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH v3 2/3] kvm: Add new pfn error KVM_PFN_ERR_SIGPENDING
-Message-ID: <Y0A/zTD/KhiyLkcg@x1n>
-References: <20220817003614.58900-1-peterx@redhat.com>
- <20220817003614.58900-3-peterx@redhat.com>
- <Yz+DRTfdFGmSR7Mq@google.com>
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lhpQtxQPreKPextix6gPpSleYRkKFNce+PIqc6irMr8=;
+        b=TAHmJzANskCwo2qpNvBg5EEQC1x4nm6WIMASsFvlQ/jhDXXK1/l5S07g1oyBlUB0Zr
+         7maF2SUjN6LmWUQUbC/bwnotwaChHVkjnL4G8Y8qKwLAiRmPv6Qk7sCbmJMy2lxNqnVg
+         meI7DmQzT7cArCmQQht5B66LHMWzoqxwisAMzLMjotu/4Ug69S7BtBEP7tdUxrUWQt0q
+         skQPak7oOUwRoi+CI+NryimIWLIgGmnIghtLoH2BsM+haJONG++vpt5QVY0txkfG7Z/s
+         6Tv2URnOAznp9lzsN+0cBxvMR29cCnLnRv7zHZXda4x7OiiQpz1w3qYyrXaJzBbq/LUM
+         jbnw==
+X-Gm-Message-State: ACrzQf08gP6v1Ch3n75mRFQFf0spigS7eqCo9KUDMvDkRJxDd2LZKuXz
+        KZoV1s8GIBaL5wJZ+IgqeW0zBcwuJYT7H1YkUSE=
+X-Google-Smtp-Source: AMsMyM7jzpv9ewSpj2GwsSRt6+Nd3hLEwyLgcPtWbX+6OHk2iAK6e1sRmqjzt+YZioG23NrLz+7CVEEdSqFpaj01BJI=
+X-Received: by 2002:aa7:9a09:0:b0:562:64cc:94e0 with SMTP id
+ w9-20020aa79a09000000b0056264cc94e0mr5391346pfj.60.1665155055001; Fri, 07 Oct
+ 2022 08:04:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yz+DRTfdFGmSR7Mq@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+From:   Carl Dasantas <dasantas2020@gmail.com>
+Date:   Fri, 7 Oct 2022 11:04:04 -0400
+Message-ID: <CANNVxH_uwnz31kak4fKAVuj8UP4wbWcFiDQ+kFwTametBvixGA@mail.gmail.com>
+Subject: Re: Reg the next LTS kernel (6.1?)
+To:     gregkh@linuxfoundation.org
+Cc:     kaiwan.billimoria@gmail.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 01:39:17AM +0000, Sean Christopherson wrote:
-> On Tue, Aug 16, 2022, Peter Xu wrote:
-> > Since at it, renaming kvm_handle_bad_page to kvm_handle_error_pfn assuming
-> 
-> Please put parantheses after function names, e.g. kvm_handle_bad_page().
-> 
-> > that'll match better with what it does, e.g. KVM_PFN_ERR_SIGPENDING is not
-> > accurately a bad page but just one kind of errors.
-> 
-> ...
-> 
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 3e1317325e1f..23dc46da2f18 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -3134,8 +3134,13 @@ static void kvm_send_hwpoison_signal(unsigned long address, struct task_struct *
-> >  	send_sig_mceerr(BUS_MCEERR_AR, (void __user *)address, PAGE_SHIFT, tsk);
-> >  }
-> >  
-> > -static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
-> > +static int kvm_handle_error_pfn(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
-> >  {
-> > +	if (is_sigpending_pfn(pfn)) {
-> > +		kvm_handle_signal_exit(vcpu);
-> > +		return -EINTR;
-> > +	}
-> 
-> ...
-> 
-> > @@ -2648,9 +2651,12 @@ kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool *async,
-> >  	if (atomic)
-> >  		return KVM_PFN_ERR_FAULT;
-> >  
-> > -	npages = hva_to_pfn_slow(addr, async, write_fault, writable, &pfn);
-> > +	npages = hva_to_pfn_slow(addr, async, write_fault, interruptible,
-> > +				 writable, &pfn);
-> >  	if (npages == 1)
-> >  		return pfn;
-> > +	if (npages == -EINTR)
-> > +		return KVM_PFN_ERR_SIGPENDING;
-> 
-> This patch should be split into 3 parts:
-> 
->   1. Add KVM_PFN_ERR_SIGPENDING and the above code
->   2. Add the interruptible flag
->   3. Add handling in x86 and rename kvm_handle_bad_page()
-> 
-> With #3 merged with patch 3.
-> 
-> That was if there's oddball arch code that reacts poorly to KVM_PFN_ERR_SIGPENDING,
-> those errors will bisect to #1.
-> 
-> And if there's a typo in the plumbing, that bisects to #2.
-> 
-> And if something goes sideways in x86, those bugs bisect to #3 (patch 3), and it's
-> easy to revert just the x86 changes (though I can't imagine that's likely).
+Please reconsidrer using 6.1 as the next LTS.
 
-Yeah the x86 change in this patch is indeed a bit weird with the generic
-subject.  All points taken, thanks.
+6.0 or 5.19 is much more fitting due to not having Rust support, a
+major  change. A lot of the community is hesitant on how Rust will
+work and it would be nice to have a non-Rust capable LTS besides 5.15
+since that is already one year old. Having a more recent non-Rust
+capable LTS would make the transition more smooth as it provides a
+couple years for those of us that are hesitant to see if it goes down
+well or who knows, gets ejected altogether.
 
--- 
-Peter Xu
+Thank you for your consideration,
 
+Carl
