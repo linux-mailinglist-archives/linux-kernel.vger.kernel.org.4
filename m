@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB215F7A1C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 16:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FDFC5F7A20
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 16:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiJGO45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 10:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S229948AbiJGO5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 10:57:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbiJGO4y (ORCPT
+        with ESMTP id S229832AbiJGO4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 7 Oct 2022 10:56:54 -0400
 Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07BDB03E3;
-        Fri,  7 Oct 2022 07:56:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B3BDB03EA;
+        Fri,  7 Oct 2022 07:56:52 -0700 (PDT)
 Received: from pro2.mail.ovh.net (unknown [10.109.146.13])
-        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id 358BC12E155B8;
+        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id 86FAD12E155BB;
         Fri,  7 Oct 2022 16:56:50 +0200 (CEST)
 Received: from localhost.localdomain (88.161.25.233) by DAG1EX1.emp2.local
  (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
@@ -31,9 +31,9 @@ CC:     <johan+linaro@kernel.org>, <marijn.suijten@somainline.org>,
         <jacek.anaszewski@gmail.com>, <linux-leds@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Subject: [PATCH v4 1/6] devres: provide devm_krealloc_array()
-Date:   Fri, 7 Oct 2022 16:56:36 +0200
-Message-ID: <20221007145641.3307075-2-jjhiblot@traphandler.com>
+Subject: [PATCH v4 2/6] leds: class: simplify the implementation of devm_of_led_get()
+Date:   Fri, 7 Oct 2022 16:56:37 +0200
+Message-ID: <20221007145641.3307075-3-jjhiblot@traphandler.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221007145641.3307075-1-jjhiblot@traphandler.com>
 References: <20221007145641.3307075-1-jjhiblot@traphandler.com>
@@ -43,7 +43,7 @@ Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [88.161.25.233]
 X-ClientProxiedBy: CAS1.emp2.local (172.16.1.1) To DAG1EX1.emp2.local
  (172.16.2.1)
-X-Ovh-Tracer-Id: 4481644581150144987
+X-Ovh-Tracer-Id: 4481644579311991259
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: 0
 X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeijedgkeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpeduteevleevvefggfdvueffffejhfehheeuiedtgedtjeeghfehueduudegfeefueenucfkpheptddrtddrtddrtddpkeekrdduiedurddvhedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhrohdvrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepjhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehvdek
@@ -56,42 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement the managed variant of krealloc_array().
-This internally uses devm_krealloc() and as such is usable with all memory
-allocated by devm_kmalloc() (or devres functions using it implicitly like
-devm_kmemdup(), devm_kstrdup() etc.)
-
-Managed realloc'ed chunks can be manually released with devm_kfree().
+Use the devm_add_action_or_reset() helper.
 
 Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 ---
- include/linux/device.h | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/leds/led-class.c | 20 ++++++--------------
+ 1 file changed, 6 insertions(+), 14 deletions(-)
 
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 424b55df0272..3b472df6c6cd 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -223,6 +223,19 @@ static inline void *devm_kcalloc(struct device *dev,
- {
- 	return devm_kmalloc_array(dev, n, size, flags | __GFP_ZERO);
+diff --git a/drivers/leds/led-class.c b/drivers/leds/led-class.c
+index 6a8ea94834fa..2c0d979d0c8a 100644
+--- a/drivers/leds/led-class.c
++++ b/drivers/leds/led-class.c
+@@ -258,11 +258,9 @@ void led_put(struct led_classdev *led_cdev)
  }
-+static inline void *devm_krealloc_array(struct device *dev,
-+					void *p,
-+					size_t new_n,
-+					size_t new_size,
-+					gfp_t flags)
-+{
-+	size_t bytes;
-+
-+	if (unlikely(check_mul_overflow(new_n, new_size, &bytes)))
-+		return NULL;
-+
-+	return devm_krealloc(dev, p, bytes, flags);
-+}
- void devm_kfree(struct device *dev, const void *p);
- char *devm_kstrdup(struct device *dev, const char *s, gfp_t gfp) __malloc;
- const char *devm_kstrdup_const(struct device *dev, const char *s, gfp_t gfp);
+ EXPORT_SYMBOL_GPL(led_put);
+ 
+-static void devm_led_release(struct device *dev, void *res)
++static void devm_led_release(void *cdev)
+ {
+-	struct led_classdev **p = res;
+-
+-	led_put(*p);
++	led_put(cdev);
+ }
+ 
+ /**
+@@ -280,7 +278,7 @@ struct led_classdev *__must_check devm_of_led_get(struct device *dev,
+ 						  int index)
+ {
+ 	struct led_classdev *led;
+-	struct led_classdev **dr;
++	int ret;
+ 
+ 	if (!dev)
+ 		return ERR_PTR(-EINVAL);
+@@ -289,15 +287,9 @@ struct led_classdev *__must_check devm_of_led_get(struct device *dev,
+ 	if (IS_ERR(led))
+ 		return led;
+ 
+-	dr = devres_alloc(devm_led_release, sizeof(struct led_classdev *),
+-			  GFP_KERNEL);
+-	if (!dr) {
+-		led_put(led);
+-		return ERR_PTR(-ENOMEM);
+-	}
+-
+-	*dr = led;
+-	devres_add(dev, dr);
++	ret = devm_add_action_or_reset(dev, devm_led_release, led);
++	if (ret)
++		return ERR_PTR(ret);
+ 
+ 	return led;
+ }
 -- 
 2.25.1
 
