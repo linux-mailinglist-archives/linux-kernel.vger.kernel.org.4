@@ -2,139 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7C75F7722
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 12:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 265675F7738
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Oct 2022 13:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbiJGK7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 06:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
+        id S229712AbiJGLOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 07:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiJGK7Y (ORCPT
+        with ESMTP id S229643AbiJGLOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 06:59:24 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C14F4716;
-        Fri,  7 Oct 2022 03:59:21 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id e18so2655555wmq.3;
-        Fri, 07 Oct 2022 03:59:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4xuYpdOCao3sDT55XW73n6bDSmtjOmU2U3ZcDnvfdKE=;
-        b=BIvfQq4idd3t691vh764uDJKOGb49pL/7opERG7wAs1b2yCS8bC8clOM5yNVVAMA92
-         sFG47oFvt6U6o1JTvGCovCBxey4SUPq4vKSDhIehfSSN9c3Pf1jTmlYXoZFg4PB9619P
-         AuysXMHBKLFmjLthaRtzacjUkoFypr6PLVmXwMFNtapGdOAYeQj7CVnB/sgwPBy8AZ1X
-         OyMmWPjzRN6t5dE6yScJD8nzj99aYXvRuhmNpAIEIXGHMHd8t6hxsXx1G2wkRIxhLLL5
-         xBDMoJu+ZfQ4T162O9A70HAEB0Cm5uq7ABVrv1Aiw9RrRLuH84iwmzsVolm/sK46fAav
-         4Hlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4xuYpdOCao3sDT55XW73n6bDSmtjOmU2U3ZcDnvfdKE=;
-        b=1JTK5jBeVrdyEs736yo1PbSI40GApkZspqtt2csLOU4x+P2lbJUOhVCtw7iUR5WtGq
-         WRBiE9iCSMi2J+3i3zB3npNIBsThFfrBKzcmtAxRQNMQd1FWQgUsq2yWh6F8bcgsN51I
-         arOSWpJp94cFQJlt3Pm8xoIFE709UVkHL0C5tuq9sayovCM9jLTl2uyMC2B9wzX6MB74
-         PgCrDxRpPMFfjm+XQwT0YnGvLMCb/+z54Gq/y+jbcithhbR7dolAOQm/wf/hi7Mit5Fb
-         6FS3rkMmd0vXkrOs7txUFjuzQ8MXHo43lCmMACuW6ygqp9Phjja7NTCyeY+bCyfXhLHv
-         eeUQ==
-X-Gm-Message-State: ACrzQf1xFJdEZ0JYMYSbhTSi+9OuYjTH90rQWTqfuN2yK6GAe1Vn3Gzv
-        jrkvjVEGCLDUH6WrvVJx6F8=
-X-Google-Smtp-Source: AMsMyM6aannlvXhQfW2nf2R4CZXzYUqAGhcL33fsPjx5d4IL3jxsSgAUsY38N2ek1YjKVADlFetQmQ==
-X-Received: by 2002:a05:600c:4e4d:b0:3b4:7659:38c with SMTP id e13-20020a05600c4e4d00b003b47659038cmr9886765wmq.176.1665140360286;
-        Fri, 07 Oct 2022 03:59:20 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id p16-20020a1c5450000000b003c00203fb81sm6542310wmi.7.2022.10.07.03.59.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 03:59:20 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 7 Oct 2022 12:59:17 +0200
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, mykolal@fb.com, shuah@kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v2 0/6] Add _opts variant for bpf_*_get_fd_by_id()
-Message-ID: <Y0AGhW4USeB4sHU3@krava>
-References: <20221006110736.84253-1-roberto.sassu@huaweicloud.com>
+        Fri, 7 Oct 2022 07:14:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1519A223C;
+        Fri,  7 Oct 2022 04:14:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8372961C4E;
+        Fri,  7 Oct 2022 11:14:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FF19C433C1;
+        Fri,  7 Oct 2022 11:14:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665141248;
+        bh=iGUUEynvCAjegBrsy6JU4OD39853Ax+NThhfisNR9Vo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fmKEzZfv+NcFm5KZPC8vC7ZMGO+4smagpqxidG4f8sTZ/z8q2aoMCJSNtysPorB+u
+         kk9P97XlyfQbbtnFo8LHPNJFX9dz+rglzxIJfihqhOEfRZ95SMPj67dZ/fvnuNbSqC
+         jqfHkAdl/kZOqmVgzI+rs0S1M/uPV1KhYkYw7RvKkChyMhuiR2/2wEETdeyyy8vdL+
+         xSn8DoYpH/zTYYkmMvP9NOyVC0t2HvDfp9uL80OcPykiAatvUGYg8ebg5q6VkchIVf
+         DXvK7t9XwhCTk3XnR5NXjkt3/qkelWVMPuwnPC3EPAwGRYke53ktd+UBomw4T2mbx6
+         O0+yu62YgKnxg==
+Date:   Fri, 7 Oct 2022 14:14:03 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v8 2/8] KVM: Extend the memslot to support fd-based
+ private memory
+Message-ID: <Y0AJ++m/TxoscOZg@kernel.org>
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-3-chao.p.peng@linux.intel.com>
+ <Yz7s+JIexAHJm5dc@kernel.org>
+ <Yz7vHXZmU3EpmI0j@kernel.org>
+ <Yz71ogila0mSHxxJ@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221006110736.84253-1-roberto.sassu@huaweicloud.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yz71ogila0mSHxxJ@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 01:07:30PM +0200, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On Thu, Oct 06, 2022 at 03:34:58PM +0000, Sean Christopherson wrote:
+> On Thu, Oct 06, 2022, Jarkko Sakkinen wrote:
+> > On Thu, Oct 06, 2022 at 05:58:03PM +0300, Jarkko Sakkinen wrote:
+> > > On Thu, Sep 15, 2022 at 10:29:07PM +0800, Chao Peng wrote:
+> > > > This new extension, indicated by the new flag KVM_MEM_PRIVATE, adds two
+> > > > additional KVM memslot fields private_fd/private_offset to allow
+> > > > userspace to specify that guest private memory provided from the
+> > > > private_fd and guest_phys_addr mapped at the private_offset of the
+> > > > private_fd, spanning a range of memory_size.
+> > > > 
+> > > > The extended memslot can still have the userspace_addr(hva). When use, a
+> > > > single memslot can maintain both private memory through private
+> > > > fd(private_fd/private_offset) and shared memory through
+> > > > hva(userspace_addr). Whether the private or shared part is visible to
+> > > > guest is maintained by other KVM code.
+> > > 
+> > > What is anyway the appeal of private_offset field, instead of having just
+> > > 1:1 association between regions and files, i.e. one memfd per region?
 > 
-> Add the _opts variant for bpf_*_get_fd_by_id() functions, to be able to
-> pass to the kernel more options, when requesting a fd of an eBPF object.
+> Modifying memslots is slow, both in KVM and in QEMU (not sure about Google's VMM).
+> E.g. if a vCPU converts a single page, it will be forced to wait until all other
+> vCPUs drop SRCU, which can have severe latency spikes, e.g. if KVM is faulting in
+> memory.  KVM's memslot updates also hold a mutex for the entire duration of the
+> update, i.e. conversions on different vCPUs would be fully serialized, exacerbating
+> the SRCU problem.
 > 
-> Pass the options through a newly introduced structure,
-> bpf_get_fd_by_id_opts, which currently contains open_flags (the other two
-> members are for compatibility and for padding).
+> KVM also has historical baggage where it "needs" to zap _all_ SPTEs when any
+> memslot is deleted.
 > 
-> open_flags allows the caller to request specific permissions to access a
-> map (e.g. read-only). This is useful for example in the situation where a
-> map is write-protected.
-> 
-> Besides patches 2-6, which introduce the new variants and the data
-> structure, patch 1 fixes the LIBBPF_1.0.0 declaration in libbpf.map.
-> 
-> Changelog
-> 
-> v1:
->  - Don't CC stable kernel mailing list for patch 1 (suggested by Andrii)
->  - Rename bpf_get_fd_opts struct to bpf_get_fd_by_id_opts (suggested by
->    Andrii)
->  - Move declaration of _opts variants after non-opts variants (suggested by
->    Andrii)
->  - Correctly initialize bpf_map_info, fix style issues, use map from
->    skeleton, check valid fd in the test (suggested by Andrii)
->  - Rename libbpf_get_fd_opts test to libbpf_get_fd_by_id_opts
-> 
-> Roberto Sassu (6):
->   libbpf: Fix LIBBPF_1.0.0 declaration in libbpf.map
->   libbpf: Introduce bpf_get_fd_by_id_opts and
->     bpf_map_get_fd_by_id_opts()
->   libbpf: Introduce bpf_prog_get_fd_by_id_opts()
->   libbpf: Introduce bpf_btf_get_fd_by_id_opts()
->   libbpf: Introduce bpf_link_get_fd_by_id_opts()
->   selftests/bpf: Add tests for _opts variants of bpf_*_get_fd_by_id()
+> Taking both a private_fd and a shared userspace address allows userspace to convert
+> between private and shared without having to manipulate memslots.
 
-it's not marked, but I'm assuming this goes to bpf-next, right?
+Right, this was really good explanation, thank you.
 
-anyway, lgtm
+Still wondering could this possibly work (or not):
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-
-thanks,
-jirka
-
-> 
->  tools/lib/bpf/bpf.c                           | 48 +++++++++-
->  tools/lib/bpf/bpf.h                           | 16 ++++
->  tools/lib/bpf/libbpf.map                      |  6 +-
->  tools/testing/selftests/bpf/DENYLIST.s390x    |  1 +
->  .../bpf/prog_tests/libbpf_get_fd_by_id_opts.c | 87 +++++++++++++++++++
->  .../bpf/progs/test_libbpf_get_fd_by_id_opts.c | 36 ++++++++
->  6 files changed, 189 insertions(+), 5 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_by_id_opts.c
->  create mode 100644 tools/testing/selftests/bpf/progs/test_libbpf_get_fd_by_id_opts.c
-> 
-> -- 
-> 2.25.1
-> 
+1. Union userspace_addr and private_fd.
+2. Instead of introducing private_offset, use guest_phys_addr as the
+   offset.
+  
+BR, Jarkko
