@@ -1,108 +1,98 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 288F55F84AE
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 11:58:49 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 677265F84CC
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 12:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiJHJ6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 05:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36736 "EHLO
+        id S229511AbiJHKid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 06:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiJHJ6n (ORCPT
+        with ESMTP id S229445AbiJHKi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 05:58:43 -0400
-Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C5548EB5
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 02:58:41 -0700 (PDT)
-Received: by mail-vs1-xe44.google.com with SMTP id a2so1488257vsc.13
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 02:58:41 -0700 (PDT)
+        Sat, 8 Oct 2022 06:38:29 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70422237FF;
+        Sat,  8 Oct 2022 03:38:27 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id w2so7000757pfb.0;
+        Sat, 08 Oct 2022 03:38:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X7t8yKUhnw51esVO0cP0SMDySLRVgCalW/fw1JsiZpI=;
-        b=alS2y9ZhkYX/b0cEbVqLJaBg8KF5F0mRyBNHJlRQ0RBTi01L+OeZhCJHyvaP82t8wn
-         mNSEWLRX0ezyP/moCxr/A4TKigGa3Rn5DlUXTa0d/E88YJmOVEFcamoFhw6xi1COHUOe
-         qM9hF0m7Zud0tmrPicNEpAgCeivEeELj28PBE1JxXUziEmyNvKcx+dsLpiXsk+8bBYZP
-         IQUKMWkvLG5lDr3B/23Pn5bAYCho3jCO3hPgbqyJl/Roi+mXZjG+JS4LNAIBVAps8AlA
-         TsqNdbWrfQNAp7C/q+BYRvIaoTA05LAnwXDNwoKvwyp3TUl5hkRhhRJu3g1aIqannvu1
-         BLPQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w4I7VQ2qzFTnaQe2ImZXDnGAkGARSRETXPdcvTfuia8=;
+        b=M+KUsnbZfJKABTg1mXfD+fm5DPieUOtpokG/3KvxijKkDHZKpkP6uJPpoQwlOGWBPb
+         75nKimDRonlvfKgVfap8TsoG7FMeAPPD/Z6d98cUKDgRIFSW9f6JlzKB+9juyHCGjGm+
+         KJFAHE43CMzlsyjj3CkbhHK0azWL0afAax68Li4/w6N7jPoBSNC+seiMF8fNM7LWHIlW
+         E3Pb1n8mvCH54wBoSccKwDmQ0DADRtMOnqgsBdZ2ExEqthh16QQ/y2NL0Jrpl4ksyjod
+         r6UmmOpUFjYDLcsb0WrHTWzCR49iYuvA2byK+jxJwvYfpiAu5TBIpq5RS/tCIY0+0uvX
+         p30Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X7t8yKUhnw51esVO0cP0SMDySLRVgCalW/fw1JsiZpI=;
-        b=dx4snMRldLopwsNIdPuE+SouHz1i2mP0m6QZvorowEyc38C4ubuQ8O8eQGfTfDtPsM
-         bYHk4pQK06cAyMyYEWZwXdaZotCItiML0g7wyEoIGPSAXYokLzWRzNeWriWC/6oOkVtz
-         iV1OFhYHpZSBJ3xjNERA/WCcm6ey5Hpjps9EPbZ+vGPb9HBFXbIzJ1v/vOPMJTZNtOSx
-         Co+qC54yJxuieUEM2hnrZfnvsBLnPVEGAO88AfMd2nOL/ZW2Ix2Z8h8Xi4o+k4pQh6tO
-         6oj+4NsvKLV3JvO3z2mBq21ZhI6ZtEAmaxdjsXrqGAgkFBi3LE1+ug3908gmk9QatWs0
-         UL4g==
-X-Gm-Message-State: ACrzQf21QtAOQhs49//DTk0IWf5FqIXEJy2VyGawEbiSoWY6RuaCDgNb
-        XCn/K2Bm+0FTGKMH/HpzXQJct0t77yt2pxfJPfU=
-X-Google-Smtp-Source: AMsMyM7w6OMd8Jb03d4KgOWo0keOv5a04FMc3KDrN/PkZQCICy1L+lpCM6ZuuO4nsZ3wsGN43O1AA4IizKVeEwrUGGA=
-X-Received: by 2002:a05:6102:f92:b0:3a7:6b2f:8c59 with SMTP id
- e18-20020a0561020f9200b003a76b2f8c59mr108797vsv.54.1665223120529; Sat, 08 Oct
- 2022 02:58:40 -0700 (PDT)
+        bh=w4I7VQ2qzFTnaQe2ImZXDnGAkGARSRETXPdcvTfuia8=;
+        b=syM7TJJGZASpe4euEwnyjMQF2myYDdsZOREzcQQQ3QEjApIgSZLNTb2YxZ5G/NewqR
+         8O+Oun08dzJJYPXsvjYYiTZazeKGGiQwVXfbxlpRQdj14fsVqdmBBYL3KOjvapQgznbS
+         Tx/znBz1RaXBIqOBfogKscCtg14fPRh3sQ0NL8PmUU1Un0Y8ulV1IykDhCdAIED3aR+S
+         g3vyt7ndIsE28wjerzHyIqmyzwsmC0FHyzbX85U18WflyZJVugkoKve0z0O/sGVfR4HP
+         9IC572LybKMSpIs4aH9HvCvjca6DKffpnZ6xZ53oFb8Xzf+R2XcRX/M+zxEW0HmabjvQ
+         nMZg==
+X-Gm-Message-State: ACrzQf2W69u78pO+TSy53OhJgRRhOw06QJUPGJ51p8qXnhisxttSK7Ut
+        OLNnuqz6fD1uYrkMpWMDVl8=
+X-Google-Smtp-Source: AMsMyM60egt59KBnICKg3vHD9t3DBOeWSqDpsmU7bwk1uZGPTodGV5Q0GF1FHtw4tRrOfloKXjvkIw==
+X-Received: by 2002:a62:b501:0:b0:557:d887:20ee with SMTP id y1-20020a62b501000000b00557d88720eemr9502990pfe.8.1665225506899;
+        Sat, 08 Oct 2022 03:38:26 -0700 (PDT)
+Received: from [192.168.0.141] (c-71-202-83-242.hsd1.ca.comcast.net. [71.202.83.242])
+        by smtp.gmail.com with ESMTPSA id n2-20020aa79842000000b00561ac9b1376sm3135315pfq.133.2022.10.08.03.38.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 08 Oct 2022 03:38:26 -0700 (PDT)
+Message-ID: <e4438675-d7f6-02f1-79c0-aa9917db8997@gmail.com>
+Date:   Sat, 8 Oct 2022 03:38:25 -0700
 MIME-Version: 1.0
-Received: by 2002:a05:6124:3289:b0:320:3f85:e8e4 with HTTP; Sat, 8 Oct 2022
- 02:58:39 -0700 (PDT)
-Reply-To: financialdepartment9811@gmail.com
-From:   "Financial Department U.S" <walterhuxley7@gmail.com>
-Date:   Sat, 8 Oct 2022 10:58:39 +0100
-Message-ID: <CAGiYPmA1c9d+uWLBFz6zVgAcHotL5Xg_LP4tOree7fk0NWh_vg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 3/3] Input: Fix incorrectly halved touchpad range on ELAN
+ v3 touchpads
+Content-Language: en-US
+To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-input@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220929082119.22112-1-nyanpasu256@gmail.com>
+ <20220929082119.22112-4-nyanpasu256@gmail.com>
+ <87czb37mpb.fsf@mkorpershoek-xps-13-9370.home>
+From:   Eirin Nya <nyanpasu256@gmail.com>
+In-Reply-To: <87czb37mpb.fsf@mkorpershoek-xps-13-9370.home>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e44 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5024]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [financialdepartment9811[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [walterhuxley7[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [walterhuxley7[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Dear friend,
+On 10/7/22 6:35 AM, Mattijs Korpershoek wrote:
+> Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+> 
+> ps: please consider using the proper subject line for input subsystem if
+> you need to send again.
+> 
+> It should be "Input: elantech - Remove redundant field elantech_data::width
+On 10/7/22 7:06 AM, Mattijs Korpershoek wrote:
+> This seems like a candidate patch for stable kernels as well.
+> 
+> Maybe consider adding the following in the commit message footer:
+> Fixes: 28f49616113f ("Input: elantech - add v3 hardware support")
+> 
+> Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
 
-I have an important message just get back for more details .
-
-Sincerely,
-
-Mr Jones Moore
-
-Deputy department of the tresury
-
-United States.
+Should I submit a v2 where I change the subject line for all commits
+and add a Fixes: tag to patch 3/3 (or 0/3, not sure), but not change
+the code? Sorry, I'm new to kernel development.
