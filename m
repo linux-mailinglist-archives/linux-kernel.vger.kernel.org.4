@@ -2,77 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B04A5F83F7
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 09:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5AC35F83FB
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 09:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiJHHRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 03:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56380 "EHLO
+        id S229634AbiJHHYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 03:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiJHHRB (ORCPT
+        with ESMTP id S229458AbiJHHYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 03:17:01 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DEB7E82B
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 00:16:59 -0700 (PDT)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 2987GOQM3985778
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Sat, 8 Oct 2022 00:16:25 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 2987GOQM3985778
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022100601; t=1665213392;
-        bh=fhsXwqOn6b7OJ4kSMbUUmVMeTMqoVOHsJM7L8Vxq3pw=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=p+VVkC2QpkaEn2sAmG8VpSGUUZT9K81/evsGs+IEGWkBCu19B2lMGCZG4uGEl61AH
-         H6lsumeVbJVUE7ggiJW+ngxf5m1Mid9DX3SXO1+QAyTiVjv1qKISPmYtZbqcwubeeF
-         tP6PS5b/ijOl+HHsrzajHCsdBXYcVc0ztPQgzTGg56pAuR1uhXHK3vvCRA7gQM57wQ
-         wAwbUHBU/CIlFzHR5X4fNpgiuu1XMw4h7dWM6DjwxUnrCSPeBDcdtkSqzB8K/5hhLH
-         sIQkOPtc+t3B4HnO6J+8SHkyJtwnmfFMvHPv+6QdsT4HLRZLEiQZj2KgAQ30oa9og2
-         3LphUUSuTJ3cA==
-Date:   Sat, 08 Oct 2022 00:16:22 -0700
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     "Li, Xin3" <xin3.li@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-Subject: =?US-ASCII?Q?RE=3A_=5BPATCH_6/6=5D_x86/gsseg=3A_use_the_LKGS_in?= =?US-ASCII?Q?struction_if_available_for_load=5Fgs=5Findex=28=29?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <BN6PR1101MB21617D356343204482EFD1F6A85E9@BN6PR1101MB2161.namprd11.prod.outlook.com>
-References: <20221006154041.13001-1-xin3.li@intel.com> <20221006154041.13001-7-xin3.li@intel.com> <Y0A77RLAgXQyrVPq@hirez.programming.kicks-ass.net> <BN6PR1101MB21611798953AADA4DFD71719A85F9@BN6PR1101MB2161.namprd11.prod.outlook.com> <Y0B83cSSwJnRtGAn@hirez.programming.kicks-ass.net> <80AC2E90-D842-4EA2-A413-3CC5CFF088BC@zytor.com> <Y0CKz/wjvYYYgH3P@hirez.programming.kicks-ass.net> <b2943f49-41ba-59c9-2592-d1a91a151138@zytor.com> <BN6PR1101MB21617D356343204482EFD1F6A85E9@BN6PR1101MB2161.namprd11.prod.outlook.com>
-Message-ID: <F4064514-E927-4FBD-BE49-AA83E8453ACA@zytor.com>
+        Sat, 8 Oct 2022 03:24:51 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444A9E0F2;
+        Sat,  8 Oct 2022 00:24:49 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-345528ceb87so61807297b3.11;
+        Sat, 08 Oct 2022 00:24:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iWyKaMDISXeONSvEckpZKdFY0ruOeKzT3+3B4I6Kdl0=;
+        b=hAntufvWWxh4y9Kq/xnf6e6DkuinIarFJBkCnuMRaRhyfUcUIlhFRG+hKtUd8XlOGj
+         JEzmyfbG5geG6DOcIN3stenWNVbG1ueCi6YsjeyJuFCD2/vzZ50+Axumh6iQzFSlPGpv
+         1Y5GeZozwriCqigZ1xs1kjXM9hEbqhVNbqYDopI8Fzkt5xCvZevSylqQhnR2083SeCPg
+         Ji9dsLbs8lkyd1HewLhH7DgiAxl0++0W39zRpqJxVyfUjcMSDHrmjNdPFzogmPkW9xpZ
+         356Tjt3wvFQwsPqbpI/eMCfxYMu7ApB/TtGDE3D/9hrQ75fz4Jz3fnGAIBMQZMqZXsS/
+         qkUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iWyKaMDISXeONSvEckpZKdFY0ruOeKzT3+3B4I6Kdl0=;
+        b=2Yp5Xqe7wFJE9OhgWDS2VSukvQHpb+VUbGe0LoBXK4XfSGIjV78f7nXgPPzYVn6rTo
+         mGJ+vPcWaA6MjOIAK/4zkBEsXGRRAF1P4BsrWWNUdCvr/TNsJt7yE7qrRhCi5xFPi85v
+         2JlObIxE/Mgial4Jve9sIvxMMP1C+DcsCK5M2tK4W6URgX9Rsiorc7aTfN2zlGoIrTi0
+         +nelZ+fLvSSS+gyJ5ApvOGOtW035LhcwXMSeR9cFGOa5++xwtxW2oxVCufoGo5e+iNfY
+         OgiW9ccpgZRvfs5ZJQhKRpGDbx/gqUBngx3V2UORcIJUIxh2PPbWloG+oX2R8uZsU/Nr
+         +plw==
+X-Gm-Message-State: ACrzQf2qGCBlVW+W2xWs88s4PbZ45SgK9lW8Z6xBbKYWOCGv3LGZFH3U
+        fvWTimGkIjY/maZSLX8XxF1vidV1n6q0/TwpP2I=
+X-Google-Smtp-Source: AMsMyM7pcLcPfOdPXDuXPTm1G/LluYlawMFLzdGgaUJBksW476ZEt5+VZwvwIWiFEdBWyUKsUxCQES8dELrh/av7cDg=
+X-Received: by 2002:a0d:fdc1:0:b0:349:c82b:b142 with SMTP id
+ n184-20020a0dfdc1000000b00349c82bb142mr7709579ywf.431.1665213889042; Sat, 08
+ Oct 2022 00:24:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <CANXV_XwgZMCGXijfoUyZ9+KyM6Rgeqiq-sCfubyj_16d-2CN=A@mail.gmail.com>
+ <20220815013317.26121-1-dmitrii.bundin.a@gmail.com> <CAKwvOdnnSAozX8bQ9HeSw12BV9OjpzyDmXk_BGczjVVQNN+7tQ@mail.gmail.com>
+ <CANXV_Xw2wzwDdJkyV1nHPQm2JTt48SLrNc7YwrfcxOwuFA-z3w@mail.gmail.com>
+ <CAKwvOdkiq_byi1QeCvSGb2fd+0AJ1k9WNnsHJMeaaQcPRy1Wxg@mail.gmail.com>
+ <CAKwvOdkPwbD-c0V-up2Ufzb-Uh7LLyD12X0FKeBa=hn+cSPA9Q@mail.gmail.com>
+ <CANXV_XzdTTYc2w7Ur8zY=ijOofg91yfF7RLhedbVH0rmi3c2yA@mail.gmail.com>
+ <CAK7LNATeW+c5+Kxnj9M4N+yNSv+7ot7bLTHzO3Z0Xb_XEW_6Nw@mail.gmail.com> <CAK7LNATqfCxwvYMUtoQZkoTk5yqZ_q+HJgcf934ib3NEG91oiw@mail.gmail.com>
+In-Reply-To: <CAK7LNATqfCxwvYMUtoQZkoTk5yqZ_q+HJgcf934ib3NEG91oiw@mail.gmail.com>
+From:   Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
+Date:   Sat, 8 Oct 2022 10:24:37 +0300
+Message-ID: <CANXV_XzmRiU2AT5r4GO0pNXCPFnZx4PZ3qbN37_rPkp=H1iWcQ@mail.gmail.com>
+Subject: Re: [PATCH v3] kbuild: add debug level and macro defs options
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Fangrui Song <maskray@google.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On October 7, 2022 10:32:31 PM PDT, "Li, Xin3" <xin3=2Eli@intel=2Ecom> wrot=
-e:
->> > Andrew Cooper suggested upgrading the orphan section warning to a har=
-d
->> > link error, orphan sections are bad regardless=2E
->> >
->>=20
->> Agreed 1000%=2E This is a no-brainer=2E From IRC:
->>=20
->>=20
->> <andyhhp> -LDFLAGS_vmlinux +=3D --orphan-handling=3Dwarn <andyhhp>
->> +LDFLAGS_vmlinux +=3D --orphan-handling=3Derror
->
->Who is going to make the change?
->
+Hi Masahiro,
 
-Why don't you?
+> On top of that, it is easier to add CONFIG_DEBUG_INFO_FULL or whatever.
+As per the prior discussion, Nick has convinced me that configuring an
+additional choice for a full debug info might cause more problems that
+it solves in general.
+
+>And, -g1 for CONFIG_DEBUG_INFO_REDUCED if you think it is worthwhile.
+This indeed would shrink the image size, but with this option enabled
+there would be no information about local variables which might
+surprise users of the option. So I don't really think it is
+worthwhile.
+
+Regards,
+Dmitrii.
