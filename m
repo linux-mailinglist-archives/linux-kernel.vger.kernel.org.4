@@ -2,115 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB94E5F83F3
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 09:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2B6D5F83F5
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 09:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiJHHJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 03:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
+        id S229495AbiJHHNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 03:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiJHHJR (ORCPT
+        with ESMTP id S229458AbiJHHN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 03:09:17 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28CCBC60E;
-        Sat,  8 Oct 2022 00:09:13 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mkx4H3h6hzHtvW;
-        Sat,  8 Oct 2022 15:04:15 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 8 Oct 2022 15:09:11 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 8 Oct 2022 15:09:10 +0800
-Subject: Re: [PATCH v6 11/11] kallsyms: Add self-test facility
-To:     kernel test robot <lkp@intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Ingo Molnar" <mingo@redhat.com>
-CC:     <kbuild-all@lists.01.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-References: <20220924122051.362-12-thunder.leizhen@huawei.com>
- <202210060828.LgrzwmRo-lkp@intel.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <1f7e5ebd-8345-41cd-ba9e-c4cef28c5574@huawei.com>
-Date:   Sat, 8 Oct 2022 15:09:10 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Sat, 8 Oct 2022 03:13:29 -0400
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF3CD2CC6;
+        Sat,  8 Oct 2022 00:13:28 -0700 (PDT)
+Received: by mail-pf1-f180.google.com with SMTP id v186so6673342pfv.11;
+        Sat, 08 Oct 2022 00:13:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m+klTj2/mlx7Mga/ycT4nkAx+qlxuiGFXHdfKazDA2Y=;
+        b=hlv47i7NtlVK5jy5c4tlQgKRi8BJDrtNlFukhSrR8o5dexC3Vuh7cdQtM05UQDXHYk
+         KGK/F15FEG+urkjsmAX3LYqi9cxWokRz4tPPby2pMGNslJphp4jwl2lCSikSTL0dUt+8
+         a+ywNJfQbPuwEqTevW6DxA6FxI5rgZLlxdvH/ca8X8bYKBQcb9wdOc04UQH5Drb70sui
+         Vlk9gSqULh7BHI7rqQUGGvhLPtrcd30NT4BUPqSI4fzYtiACglb66O/j7O7dYBqrl35A
+         myFZjbZmnjWgG5mh2tB2lmZVOzkevBbm5Dr7mggVi68Zm/qpS+OJN3ypakJIsMYL6Oyd
+         OSqg==
+X-Gm-Message-State: ACrzQf3ixlGTQvszZz5NaBg2Oq1GYjZQz28SjwnZVYN+9Jwr1NnDC8vL
+        Bcs1VruE+4u5qipshzwso2i2W/9iWdE=
+X-Google-Smtp-Source: AMsMyM4tMN7CS8DohNeQAXQC8BN9Z65QJyb7vvSjI/ItPcvHePllqanpoul1+t6U9sxSANShVr1NIA==
+X-Received: by 2002:a62:1a8d:0:b0:544:1309:19f3 with SMTP id a135-20020a621a8d000000b00544130919f3mr8975776pfa.37.1665213208313;
+        Sat, 08 Oct 2022 00:13:28 -0700 (PDT)
+Received: from sk-Yoga-14sARH-2021.lan (144.34.241.68.16clouds.com. [144.34.241.68])
+        by smtp.gmail.com with ESMTPSA id pc14-20020a17090b3b8e00b0020a28156e11sm4292101pjb.26.2022.10.08.00.13.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Oct 2022 00:13:27 -0700 (PDT)
+From:   Ke Sun <sunke@kylinos.cn>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org
+Cc:     Ke Sun <sunke@kylinos.cn>, linux-kernel@vger.kernel.org,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: [RESEND] rtc: rv3028: Fix codestyle errors
+Date:   Sat,  8 Oct 2022 15:13:21 +0800
+Message-Id: <20221008071321.1799971-1-sunke@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <202210060828.LgrzwmRo-lkp@intel.com>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Compiler warnings：
 
+drivers/rtc/rtc-rv3028.c: In function 'rv3028_param_set':
+drivers/rtc/rtc-rv3028.c:559:20: warning: statement will never be executed [-Wswitch-unreachable]
+  559 |                 u8 mode;
+      |                    ^~~~
+drivers/rtc/rtc-rv3028.c: In function 'rv3028_param_get':
+drivers/rtc/rtc-rv3028.c:526:21: warning: statement will never be executed [-Wswitch-unreachable]
+  526 |                 u32 value;
+      |                     ^~~~~
 
-On 2022/10/6 8:24, kernel test robot wrote:
-> Hi Zhen,
-> 
-> Thank you for the patch! Yet something to improve:
-> 
-> [auto build test ERROR on mcgrof/modules-next]
-> [also build test ERROR on rostedt-trace/for-next v6.0]
-> [cannot apply to linus/master next-20221005]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20220924-202522
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
-> config: i386-allyesconfig
-> compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-> reproduce (this is a W=1 build):
->         # https://github.com/intel-lab-lkp/linux/commit/43e45bdbf95415fc26a9d55e7db43a75bdb8e99a
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20220924-202522
->         git checkout 43e45bdbf95415fc26a9d55e7db43a75bdb8e99a
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->    ld: kernel/kallsyms_selftest.o: in function `test_perf_kallsyms_lookup_name':
->>> kallsyms_selftest.c:(.text.unlikely+0x5e3): undefined reference to `__udivdi3'
->    ld: kernel/kallsyms_selftest.o: in function `test_kallsyms_compression_ratio':
->    kallsyms_selftest.c:(.text.unlikely+0x771): undefined reference to `__udivdi3'
-> 
+Fix it by moving the variable declaration to the beginning of the function.
 
-OK, thanks, I should use do_div() to calculate percentage.
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-rtc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: Ke Sun <sunke@kylinos.cn>
+---
+ drivers/rtc/rtc-rv3028.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-
+diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
+index cdc623b3e365b..dd170e3efd83e 100644
+--- a/drivers/rtc/rtc-rv3028.c
++++ b/drivers/rtc/rtc-rv3028.c
+@@ -521,10 +521,9 @@ static int rv3028_param_get(struct device *dev, struct rtc_param *param)
+ {
+ 	struct rv3028_data *rv3028 = dev_get_drvdata(dev);
+ 	int ret;
++	u32 value;
+ 
+ 	switch(param->param) {
+-		u32 value;
+-
+ 	case RTC_PARAM_BACKUP_SWITCH_MODE:
+ 		ret = regmap_read(rv3028->regmap, RV3028_BACKUP, &value);
+ 		if (ret < 0)
+@@ -554,9 +553,9 @@ static int rv3028_param_get(struct device *dev, struct rtc_param *param)
+ static int rv3028_param_set(struct device *dev, struct rtc_param *param)
+ {
+ 	struct rv3028_data *rv3028 = dev_get_drvdata(dev);
++	u8 mode;
+ 
+ 	switch(param->param) {
+-		u8 mode;
+ 	case RTC_PARAM_BACKUP_SWITCH_MODE:
+ 		switch (param->uvalue) {
+ 		case RTC_BSM_DISABLED:
 -- 
-Regards,
-  Zhen Lei
+2.25.1
+
