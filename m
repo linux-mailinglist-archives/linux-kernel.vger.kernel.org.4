@@ -2,49 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1C65F8618
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 18:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97DE5F861E
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 18:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiJHQsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 12:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46550 "EHLO
+        id S230117AbiJHQ4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 12:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiJHQsN (ORCPT
+        with ESMTP id S229902AbiJHQ4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 12:48:13 -0400
-Received: from mxout1.routing.net (mxout1.routing.net [IPv6:2a03:2900:1:a::a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0828F33377
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 09:48:11 -0700 (PDT)
-Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
-        by mxout1.routing.net (Postfix) with ESMTP id 03C8940111;
-        Sat,  8 Oct 2022 16:48:10 +0000 (UTC)
+        Sat, 8 Oct 2022 12:56:34 -0400
+Received: from mxout2.routing.net (mxout2.routing.net [IPv6:2a03:2900:1:a::b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E00111D;
+        Sat,  8 Oct 2022 09:56:33 -0700 (PDT)
+Received: from mxbox4.masterlogin.de (unknown [192.168.10.79])
+        by mxout2.routing.net (Postfix) with ESMTP id 697236045F;
+        Sat,  8 Oct 2022 16:56:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1665247690;
+        s=20200217; t=1665248191;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=DxNxzdYg2Gd1UoiiK/RSd/MZ7RJMS/NxPqm3JHVevEI=;
-        b=v05q0/shnTZpdt0ltREShkAQJu6etlGixgI+/hhmxQIWaT/YqZ1mSi9NJEIMdFzf6gXmGa
-        PTHY4Q1bBLvau9HM1pvOswnfX0ZljX4ShI35/jIgzr/6sY/zKi1qTywF+xQgOGfxhXr/U+
-        oAQZbmiepXphvtQ3pEiZNfaCgTwKdbo=
+        bh=05laW2U2aanX1BnyvNjeBV2y8hpKydG+cBolNRJxwCM=;
+        b=vqT4Hf95SJowAj4HZsWr9ud9xmbd7UHIfIQ615bWtpsYUSzYjYiRO4zOTHNGzLq5TiqoiH
+        wTDgh2Kp6fkquj8gKwQkIoPHrGYFWTXmYWP6+6KVr8Qa6hp5IwmdeyP61LxNUjgfAIyODK
+        VxRZ2a/pIm/u35nhx2FvJN2SaYZz5jY=
 Received: from frank-G5.. (fttx-pool-217.61.149.60.bambit.de [217.61.149.60])
-        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 3B9F310042C;
-        Sat,  8 Oct 2022 16:48:09 +0000 (UTC)
+        by mxbox4.masterlogin.de (Postfix) with ESMTPSA id 86A5F80098;
+        Sat,  8 Oct 2022 16:56:30 +0000 (UTC)
 From:   Frank Wunderlich <linux@fw-web.de>
 To:     linux-mediatek@lists.infradead.org
-Cc:     Sam Shih <sam.shih@mediatek.com>, Sean Wang <sean.wang@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Frank Wunderlich <frank-w@public-files.de>
-Subject: [PATCH] pinctrl: mediatek: allow configuring uart rx/tx and rts/cts separately
-Date:   Sat,  8 Oct 2022 18:48:06 +0200
-Message-Id: <20221008164807.113590-1-linux@fw-web.de>
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] Add mmc-support for mt7986
+Date:   Sat,  8 Oct 2022 18:56:25 +0200
+Message-Id: <20221008165627.114782-1-linux@fw-web.de>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Mail-ID: 9c542c94-e206-4f0b-99de-2c03d23c5142
+X-Mail-ID: 58070d61-a93b-4ada-813c-c801ba3c1945
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -54,90 +57,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sam Shih <sam.shih@mediatek.com>
+From: Frank Wunderlich <frank-w@public-files.de>
 
-Some mt7986 boards use uart rts/cts pins as gpio,
-This patch allows to change rts/cts to gpio mode, but keep
-rx/tx as UART function.
+This small series adds dt-binding and driver change for supporting
+mmc-controller of mt7986.
 
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-Signed-off-by: Sam Shih <sam.shih@mediatek.com>
----
- drivers/pinctrl/mediatek/pinctrl-mt7986.c | 32 ++++++++++++++++++-----
- 1 file changed, 25 insertions(+), 7 deletions(-)
+Sam Shih (2):
+  dt-bindings: mmc: Add compatible for Mediatek MT7986
+  mmc: mediatek: add support for MT7986 SoC
 
-diff --git a/drivers/pinctrl/mediatek/pinctrl-mt7986.c b/drivers/pinctrl/mediatek/pinctrl-mt7986.c
-index f26869f1a367..95f32e62e02f 100644
---- a/drivers/pinctrl/mediatek/pinctrl-mt7986.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-mt7986.c
-@@ -675,11 +675,17 @@ static int mt7986_uart1_1_funcs[] = { 4, 4, 4, 4, };
- static int mt7986_spi1_2_pins[] = { 29, 30, 31, 32, };
- static int mt7986_spi1_2_funcs[] = { 1, 1, 1, 1, };
- 
--static int mt7986_uart1_2_pins[] = { 29, 30, 31, 32, };
--static int mt7986_uart1_2_funcs[] = { 3, 3, 3, 3, };
-+static int mt7986_uart1_2_rx_tx_pins[] = { 29, 30, };
-+static int mt7986_uart1_2_rx_tx_funcs[] = { 3, 3, };
- 
--static int mt7986_uart2_0_pins[] = { 29, 30, 31, 32, };
--static int mt7986_uart2_0_funcs[] = { 4, 4, 4, 4, };
-+static int mt7986_uart1_2_cts_rts_pins[] = { 31, 32, };
-+static int mt7986_uart1_2_cts_rts_funcs[] = { 3, 3, };
-+
-+static int mt7986_uart2_0_rx_tx_pins[] = { 29, 30, };
-+static int mt7986_uart2_0_rx_tx_funcs[] = { 4, 4, };
-+
-+static int mt7986_uart2_0_cts_rts_pins[] = { 31, 32, };
-+static int mt7986_uart2_0_cts_rts_funcs[] = { 4, 4, };
- 
- static int mt7986_spi0_pins[] = { 33, 34, 35, 36, };
- static int mt7986_spi0_funcs[] = { 1, 1, 1, 1, };
-@@ -708,6 +714,12 @@ static int mt7986_pcie_reset_funcs[] = { 1, };
- static int mt7986_uart1_pins[] = { 42, 43, 44, 45, };
- static int mt7986_uart1_funcs[] = { 1, 1, 1, 1, };
- 
-+static int mt7986_uart1_rx_tx_pins[] = { 42, 43, };
-+static int mt7986_uart1_rx_tx_funcs[] = { 1, 1, };
-+
-+static int mt7986_uart1_cts_rts_pins[] = { 44, 45, };
-+static int mt7986_uart1_cts_rts_funcs[] = { 1, 1, };
-+
- static int mt7986_uart2_pins[] = { 46, 47, 48, 49, };
- static int mt7986_uart2_funcs[] = { 1, 1, 1, 1, };
- 
-@@ -749,6 +761,8 @@ static const struct group_desc mt7986_groups[] = {
- 	PINCTRL_PIN_GROUP("wifi_led", mt7986_wifi_led),
- 	PINCTRL_PIN_GROUP("i2c", mt7986_i2c),
- 	PINCTRL_PIN_GROUP("uart1_0", mt7986_uart1_0),
-+	PINCTRL_PIN_GROUP("uart1_rx_tx", mt7986_uart1_rx_tx),
-+	PINCTRL_PIN_GROUP("uart1_cts_rts", mt7986_uart1_cts_rts),
- 	PINCTRL_PIN_GROUP("pcie_clk", mt7986_pcie_clk),
- 	PINCTRL_PIN_GROUP("pcie_wake", mt7986_pcie_wake),
- 	PINCTRL_PIN_GROUP("spi1_0", mt7986_spi1_0),
-@@ -760,8 +774,10 @@ static const struct group_desc mt7986_groups[] = {
- 	PINCTRL_PIN_GROUP("spi1_1", mt7986_spi1_1),
- 	PINCTRL_PIN_GROUP("uart1_1", mt7986_uart1_1),
- 	PINCTRL_PIN_GROUP("spi1_2", mt7986_spi1_2),
--	PINCTRL_PIN_GROUP("uart1_2", mt7986_uart1_2),
--	PINCTRL_PIN_GROUP("uart2_0", mt7986_uart2_0),
-+	PINCTRL_PIN_GROUP("uart1_2_rx_tx", mt7986_uart1_2_rx_tx),
-+	PINCTRL_PIN_GROUP("uart1_2_cts_rts", mt7986_uart1_2_cts_rts),
-+	PINCTRL_PIN_GROUP("uart2_0_rx_tx", mt7986_uart2_0_rx_tx),
-+	PINCTRL_PIN_GROUP("uart2_0_cts_rts", mt7986_uart2_0_cts_rts),
- 	PINCTRL_PIN_GROUP("spi0", mt7986_spi0),
- 	PINCTRL_PIN_GROUP("spi0_wp_hold", mt7986_spi0_wp_hold),
- 	PINCTRL_PIN_GROUP("uart2_1", mt7986_uart2_1),
-@@ -800,7 +816,9 @@ static const char *mt7986_pwm_groups[] = { "pwm0", "pwm1_0", "pwm1_1", };
- static const char *mt7986_spi_groups[] = {
- 	"spi0", "spi0_wp_hold", "spi1_0", "spi1_1", "spi1_2", "spi1_3", };
- static const char *mt7986_uart_groups[] = {
--	"uart1_0", "uart1_1", "uart1_2", "uart1_3_rx_tx", "uart1_3_cts_rts",
-+	"uart1_0", "uart1_1", "uart1_rx_tx", "uart1_cts_rts",
-+	"uart1_2_rx_tx", "uart1_2_cts_rts",
-+	"uart1_3_rx_tx", "uart1_3_cts_rts", "uart2_0_rx_tx", "uart2_0_cts_rts",
- 	"uart2_0", "uart2_1", "uart0", "uart1", "uart2",
- };
- static const char *mt7986_wdt_groups[] = { "watchdog", };
+ Documentation/devicetree/bindings/mmc/mtk-sd.yaml |  1 +
+ drivers/mmc/host/mtk-sd.c                         | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+)
+
 -- 
 2.34.1
 
