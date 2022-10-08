@@ -1,98 +1,188 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 677265F84CC
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 12:38:56 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 4410E5F84CE
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 12:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbiJHKid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 06:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
+        id S229586AbiJHKok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 06:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiJHKi3 (ORCPT
+        with ESMTP id S229445AbiJHKog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 06:38:29 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70422237FF;
-        Sat,  8 Oct 2022 03:38:27 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id w2so7000757pfb.0;
-        Sat, 08 Oct 2022 03:38:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=w4I7VQ2qzFTnaQe2ImZXDnGAkGARSRETXPdcvTfuia8=;
-        b=M+KUsnbZfJKABTg1mXfD+fm5DPieUOtpokG/3KvxijKkDHZKpkP6uJPpoQwlOGWBPb
-         75nKimDRonlvfKgVfap8TsoG7FMeAPPD/Z6d98cUKDgRIFSW9f6JlzKB+9juyHCGjGm+
-         KJFAHE43CMzlsyjj3CkbhHK0azWL0afAax68Li4/w6N7jPoBSNC+seiMF8fNM7LWHIlW
-         E3Pb1n8mvCH54wBoSccKwDmQ0DADRtMOnqgsBdZ2ExEqthh16QQ/y2NL0Jrpl4ksyjod
-         r6UmmOpUFjYDLcsb0WrHTWzCR49iYuvA2byK+jxJwvYfpiAu5TBIpq5RS/tCIY0+0uvX
-         p30Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w4I7VQ2qzFTnaQe2ImZXDnGAkGARSRETXPdcvTfuia8=;
-        b=syM7TJJGZASpe4euEwnyjMQF2myYDdsZOREzcQQQ3QEjApIgSZLNTb2YxZ5G/NewqR
-         8O+Oun08dzJJYPXsvjYYiTZazeKGGiQwVXfbxlpRQdj14fsVqdmBBYL3KOjvapQgznbS
-         Tx/znBz1RaXBIqOBfogKscCtg14fPRh3sQ0NL8PmUU1Un0Y8ulV1IykDhCdAIED3aR+S
-         g3vyt7ndIsE28wjerzHyIqmyzwsmC0FHyzbX85U18WflyZJVugkoKve0z0O/sGVfR4HP
-         9IC572LybKMSpIs4aH9HvCvjca6DKffpnZ6xZ53oFb8Xzf+R2XcRX/M+zxEW0HmabjvQ
-         nMZg==
-X-Gm-Message-State: ACrzQf2W69u78pO+TSy53OhJgRRhOw06QJUPGJ51p8qXnhisxttSK7Ut
-        OLNnuqz6fD1uYrkMpWMDVl8=
-X-Google-Smtp-Source: AMsMyM60egt59KBnICKg3vHD9t3DBOeWSqDpsmU7bwk1uZGPTodGV5Q0GF1FHtw4tRrOfloKXjvkIw==
-X-Received: by 2002:a62:b501:0:b0:557:d887:20ee with SMTP id y1-20020a62b501000000b00557d88720eemr9502990pfe.8.1665225506899;
-        Sat, 08 Oct 2022 03:38:26 -0700 (PDT)
-Received: from [192.168.0.141] (c-71-202-83-242.hsd1.ca.comcast.net. [71.202.83.242])
-        by smtp.gmail.com with ESMTPSA id n2-20020aa79842000000b00561ac9b1376sm3135315pfq.133.2022.10.08.03.38.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Oct 2022 03:38:26 -0700 (PDT)
-Message-ID: <e4438675-d7f6-02f1-79c0-aa9917db8997@gmail.com>
-Date:   Sat, 8 Oct 2022 03:38:25 -0700
+        Sat, 8 Oct 2022 06:44:36 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90ECD4C60E
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 03:44:33 -0700 (PDT)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_2uPVEFjsHEoAA--.14870S3;
+        Sat, 08 Oct 2022 18:44:32 +0800 (CST)
+Subject: Re: [PATCH] LoongArch: Do not create sysfs control file for io master
+ CPUs
+To:     WANG Xuerui <kernel@xen0n.name>,
+        Huacai Chen <chenhuacai@kernel.org>
+References: <1665219579-2501-1-git-send-email-yangtiezhu@loongson.cn>
+ <922e6d73-78e5-8852-788b-017d0dbe4df5@xen0n.name>
+ <75f1aa18-2e84-107a-f0b6-3e4b753ab8b1@loongson.cn>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <b4803250-e66c-0c0e-15c9-35d8fdfb09ea@loongson.cn>
+Date:   Sat, 8 Oct 2022 18:44:31 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 3/3] Input: Fix incorrectly halved touchpad range on ELAN
- v3 touchpads
-Content-Language: en-US
-To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-input@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220929082119.22112-1-nyanpasu256@gmail.com>
- <20220929082119.22112-4-nyanpasu256@gmail.com>
- <87czb37mpb.fsf@mkorpershoek-xps-13-9370.home>
-From:   Eirin Nya <nyanpasu256@gmail.com>
-In-Reply-To: <87czb37mpb.fsf@mkorpershoek-xps-13-9370.home>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <75f1aa18-2e84-107a-f0b6-3e4b753ab8b1@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8Dx_2uPVEFjsHEoAA--.14870S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxWF4kCr43JrWkCryfJF1UJrb_yoWrWw1rpr
+        yIkF4UKF48Wr1kGay0q34Y9ryjv3s8Gw1fZFsFk348Ga4DZrnIgFn5trn5uF1UCFW8CFWF
+        vryFkrZa9Fy5J3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv2b7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l
+        c2xSY4AK67AK6r4DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
+        AVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+        CY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IU5GhF3UUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/7/22 6:35 AM, Mattijs Korpershoek wrote:
-> Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
-> 
-> ps: please consider using the proper subject line for input subsystem if
-> you need to send again.
-> 
-> It should be "Input: elantech - Remove redundant field elantech_data::width
-On 10/7/22 7:06 AM, Mattijs Korpershoek wrote:
-> This seems like a candidate patch for stable kernels as well.
-> 
-> Maybe consider adding the following in the commit message footer:
-> Fixes: 28f49616113f ("Input: elantech - add v3 hardware support")
-> 
-> Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
 
-Should I submit a v2 where I change the subject line for all commits
-and add a Fixes: tag to patch 3/3 (or 0/3, not sure), but not change
-the code? Sorry, I'm new to kernel development.
+
+On 10/08/2022 05:51 PM, Tiezhu Yang wrote:
+>
+>
+> On 10/08/2022 05:27 PM, WANG Xuerui wrote:
+>> On 2022/10/8 16:59, Tiezhu Yang wrote:
+>>> Now io master CPUs are not hotpluggable on LoongArch, in the current
+>>> code,
+>>> only /sys/devices/system/cpu/cpu0/online is not created, let us set the
+>>> hotpluggable field of all the io master CPUs as 0, then prevent to
+>>> create
+>>> sysfs control file for the other io master CPUs which confuses some user
+>>> space tools. This is similar with commit 9cce844abf07 ("MIPS: CPU#0 is
+>>> not
+>>> hotpluggable").
+>>>
+>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>>> ---
+>>>   arch/loongarch/kernel/smp.c      |  8 --------
+>>>   arch/loongarch/kernel/topology.c | 12 +++++++++++-
+>>>   2 files changed, 11 insertions(+), 9 deletions(-)
+>>>
+>>> diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+>>> index b5fab30..ef89292 100644
+>>> --- a/arch/loongarch/kernel/smp.c
+>>> +++ b/arch/loongarch/kernel/smp.c
+>>> @@ -240,19 +240,11 @@ void loongson3_smp_finish(void)
+>>>     #ifdef CONFIG_HOTPLUG_CPU
+>>>   -static bool io_master(int cpu)
+>>> -{
+>>> -    return test_bit(cpu, &loongson_sysconf.cores_io_master);
+>>> -}
+>>> -
+>>>   int loongson3_cpu_disable(void)
+>>>   {
+>>>       unsigned long flags;
+>>>       unsigned int cpu = smp_processor_id();
+>>>   -    if (io_master(cpu))
+>>> -        return -EBUSY;
+>>> -
+>>
+>> Could this get invoked from somewhere other than the sysfs entries that
+>> "confuse user-space tools", e.g. from somewhere else in kernel land? If
+>> so (or if we can't rule out the possibility) keeping the guard here
+>> might prove more prudent.
+>>
+
+takedown_cpu()  kernel/cpu.c
+take_cpu_down()  kernel/cpu.c
+__cpu_disable()  arch/loongarch/include/asm/smp.h
+loongson3_cpu_disable()  arch/loongarch/kernel/smp.c
+
+So I think you are right, keeping the guard here might prove more 
+prudent, then it is better move io_master() to a header file that
+can be used in smp.c and topology.c.
+
+Let us wait for more review comments, thank you.
+
+>
+> If c->hotpluggable is 0, it will not generate a control file in sysfs
+> for this CPU, for example:
+>
+> [root@linux loongson]# cat /sys/devices/system/cpu/cpu0/online
+> cat: /sys/devices/system/cpu/cpu0/online: No such file or directory
+> [root@linux loongson]# echo 0 > /sys/devices/system/cpu/cpu0/online
+> bash: /sys/devices/system/cpu/cpu0/online: Permission denied
+>
+> So no need to check it here, just remove the code.
+>
+> This was done in commit cbab54d9c2b2 ("MIPS: No need to check CPU 0 in
+> {loongson3,bmips,octeon}_cpu_disable()").
+>
+>>>   #ifdef CONFIG_NUMA
+>>>       numa_remove_cpu(cpu);
+>>>   #endif
+>>> diff --git a/arch/loongarch/kernel/topology.c
+>>> b/arch/loongarch/kernel/topology.c
+>>> index ab1a75c..7e7a77f 100644
+>>> --- a/arch/loongarch/kernel/topology.c
+>>> +++ b/arch/loongarch/kernel/topology.c
+>>> @@ -5,6 +5,7 @@
+>>>   #include <linux/node.h>
+>>>   #include <linux/nodemask.h>
+>>>   #include <linux/percpu.h>
+>>> +#include <asm/bootinfo.h>
+>>>     static DEFINE_PER_CPU(struct cpu, cpu_devices);
+>>>   @@ -33,6 +34,11 @@ void arch_unregister_cpu(int cpu)
+>>>   EXPORT_SYMBOL(arch_unregister_cpu);
+>>>   #endif
+>>>   +static bool io_master(int cpu)
+>>> +{
+>>> +    return test_bit(cpu, &loongson_sysconf.cores_io_master);
+>>> +}
+>>> +
+>>>   static int __init topology_init(void)
+>>>   {
+>>>       int i, ret;
+>>> @@ -40,7 +46,11 @@ static int __init topology_init(void)
+>>>       for_each_present_cpu(i) {
+>>>           struct cpu *c = &per_cpu(cpu_devices, i);
+>>>   -        c->hotpluggable = !!i;
+>>> +        if (io_master(i))
+>>> +            c->hotpluggable = 0;
+>>> +        else
+>>> +            c->hotpluggable = 1;
+>>> +
+>>
+>> This is just "c->hotpluggable = !io_master(i);".
+>>
+>
+> Yes, I am OK either way, if it is necessary to send v2,
+> please let me know.
+>
+>>>           ret = register_cpu(c, i);
+>>>           if (ret < 0)
+>>>               pr_warn("topology_init: register_cpu %d failed (%d)\n",
+>>> i, ret);
+>> Other changes should be okay as they are in line with the previous MIPS
+>> change you referenced, but let's see what Huacai thinks.
+>>
+>
+> Thanks,
+> Tiezhu
+
