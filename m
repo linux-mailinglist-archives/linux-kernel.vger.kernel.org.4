@@ -2,161 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F335F8510
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 13:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5DCB5F84F3
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 13:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbiJHLmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 07:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35554 "EHLO
+        id S229791AbiJHLPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 07:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiJHLmj (ORCPT
+        with ESMTP id S229623AbiJHLP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 07:42:39 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84E847B85;
-        Sat,  8 Oct 2022 04:42:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
-         in-reply-to:references;
-        bh=Btkb2gtW6RKewRf9IoFqqlzQlwIj6C4A6/4lF9dHJ4A=;
-        b=l5dAPNgrvCo7vGhGb9h3bk+B2VHAZieU04UEdznvKO91rBBD04NAO9GXWUcZVQfmG6k7TKjJe7JtK
-         +G8R4ZfbqVqbEZ+v8RU/qqBztHZgpFMjRbXYDQxyAVkvjm4KqskzYTXJ3bU6g1HDp3LQRgOHy9RlbG
-         tTN3eSupX5P92/HLLJ0Vw0yUWxjMgUe5vwtzw73PDzz5UOkQ6NZGAyiF8mtHoPgN59FnoteMAskjvW
-         Q/QUaHS5U39KrjGPCJ/tItGDQ9Ry0RbTeoLh17sIWjml3egzZH/1Q1sPj8ttfjFTPZmGYL8pbRby4X
-         9wNrlKdhl5IOb+8wRMnrBDMSkMAjZ7Q==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.4.1445, Stamp: 3], Multi: [Enabled, t: (0.000013,0.013095)], BW: [Enabled, t: (0.000022,0.000001)], RTDA: [Enabled, t: (0.078530), Hit: No, Details: v2.42.0; Id: 15.52k8bv.1germeqff.93rot; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from localhost.localdomain ([92.100.86.33])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Sat, 8 Oct 2022 14:42:27 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, dg@emlix.com, j.zink@pengutronix.de,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     Ivan Bornyakov <brnkv.i1@gmail.com>, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, system@metrotek.ru,
-        Ivan Bornyakov <i.bornyakov@metrotek.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v15 2/2] dt-bindings: fpga: document Lattice sysCONFIG FPGA manager
-Date:   Sat,  8 Oct 2022 14:14:19 +0300
-Message-Id: <20221008111419.21245-3-i.bornyakov@metrotek.ru>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221008111419.21245-1-i.bornyakov@metrotek.ru>
-References: <20221008111419.21245-1-i.bornyakov@metrotek.ru>
+        Sat, 8 Oct 2022 07:15:26 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC69740E33
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 04:15:24 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id l18-20020a056e02067200b002f6af976994so5625480ilt.16
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 04:15:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fVaL+aZWzivfpOiU0dZXdxkJSJjGpfDw5+EVyLzqpcs=;
+        b=4aSoNR5da+EfjTryZr8NxPRha8Rn4X2MzPoJrfEMbLW9Ich71xC3LPyLQaAwUepEfr
+         TcmDK3wyd6Dw0IjbQ0IWBXeluCsp9DUjhtXvQl7UW8U1w3eaVsyGY3awanIGLeGgLZTd
+         8duy4SQ77pODyPvudlcE1ahknD7T7Ffk5Qz2O6J1rBQNjlEmUKmZShjxHdZWTFFEpVQz
+         5Ib61BQNf4ruwKiRTK5uYkIAPov1drvRApIE0kpcnaC/cjclxVjYafy7MkWmmM2BBqWm
+         nFXDjjuHyPQE8Y84cV+kJuEkkPwCzMpFxvCHb7qzSHqkQgO0l9K/0iC3FzhfwaqOIKeW
+         Shug==
+X-Gm-Message-State: ACrzQf3PMpw9GX+HvPZ05H/8C7Rj1GN2prhiOORDaiBpl6yYaleZZARw
+        jlV+Uw6ECwkVKY4lc1MgS5kAd9OcUp+1byNX8o+VC/Mqc5rr
+X-Google-Smtp-Source: AMsMyM5nf4R4TbJCrbM9nU0nsafe8IeY2XAp5fFs5XUArq9iTFWM6QlLIdpXPQZufIChFL9PZl6xpPcD+t0xYllgvniMO2g/R4R9
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6638:349f:b0:363:95e0:ea52 with SMTP id
+ t31-20020a056638349f00b0036395e0ea52mr3040718jal.157.1665227724028; Sat, 08
+ Oct 2022 04:15:24 -0700 (PDT)
+Date:   Sat, 08 Oct 2022 04:15:24 -0700
+In-Reply-To: <20221008055133.jqreizhg5k23umgp@wittgenstein>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f6073905ea840a2a@google.com>
+Subject: Re: [syzbot] general protection fault in kernfs_get_inode
+From:   syzbot <syzbot+534ee3d24c37c411f37f@syzkaller.appspotmail.com>
+To:     brauner@kernel.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Device Tree Binding doc for configuring Lattice ECP5 FPGA over
-Slave SPI sysCONFIG interface.
+Hello,
 
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/fpga/lattice,sysconfig.yaml      | 81 +++++++++++++++++++
- 1 file changed, 81 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+syzbot tried to test the proposed patch but the build/boot failed:
 
-diff --git a/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-new file mode 100644
-index 000000000000..4fb05eb84e2a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-@@ -0,0 +1,81 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/fpga/lattice,sysconfig.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Lattice Slave SPI sysCONFIG FPGA manager
-+
-+maintainers:
-+  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
-+
-+description: |
-+  Lattice sysCONFIG port, which is used for FPGA configuration, among others,
-+  have Slave Serial Peripheral Interface. Only full reconfiguration is
-+  supported.
-+
-+  Programming of ECP5 is done by writing uncompressed bitstream image in .bit
-+  format into FPGA's SRAM configuration memory.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - lattice,sysconfig-ecp5
-+
-+  reg:
-+    maxItems: 1
-+
-+  program-gpios:
-+    description:
-+      A GPIO line connected to PROGRAMN (active low) pin of the device.
-+      Initiates configuration sequence.
-+    maxItems: 1
-+
-+  init-gpios:
-+    description:
-+      A GPIO line connected to INITN (active low) pin of the device.
-+      Indicates that the FPGA is ready to be configured.
-+    maxItems: 1
-+
-+  done-gpios:
-+    description:
-+      A GPIO line connected to DONE (active high) pin of the device.
-+      Indicates that the configuration sequence is complete.
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: lattice,sysconfig-ecp5
-+    then:
-+      properties:
-+        spi-max-frequency:
-+          maximum: 60000000
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        fpga-mgr@0 {
-+            compatible = "lattice,sysconfig-ecp5";
-+            reg = <0>;
-+            spi-max-frequency = <20000000>;
-+            program-gpios = <&gpio3 4 GPIO_ACTIVE_LOW>;
-+            init-gpios = <&gpio3 3 GPIO_ACTIVE_LOW>;
-+            done-gpios = <&gpio3 2 GPIO_ACTIVE_HIGH>;
-+        };
-+    };
--- 
-2.35.1
+failed to checkout kernel repo git@gitlab.com:brauner/linux.git/kernel.cgroup_may_write.fix: failed to run ["git" "fetch" "--force" "81e322358ba96b4e95306c1d79b01e0c61095de5" "kernel.cgroup_may_write.fix"]: exit status 128
+Host key verification failed.
+fatal: Could not read from remote repository.
 
+Please make sure you have the correct access rights
+and the repository exists.
+
+
+
+Tested on:
+
+commit:         [unknown 
+git tree:       git@gitlab.com:brauner/linux.git kernel.cgroup_may_write.fix
+dashboard link: https://syzkaller.appspot.com/bug?extid=534ee3d24c37c411f37f
+compiler:       
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=13ae1c42880000
 
