@@ -2,127 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6EF15F829F
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 05:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C72175F82A7
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 05:10:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbiJHDAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 23:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
+        id S229624AbiJHDKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 23:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiJHDAH (ORCPT
+        with ESMTP id S229452AbiJHDKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 23:00:07 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B9933AB03;
-        Fri,  7 Oct 2022 20:00:03 -0700 (PDT)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxTWus50BjQyEoAA--.19966S2;
-        Sat, 08 Oct 2022 10:59:56 +0800 (CST)
-Subject: Re: [PATCH v1 1/2] clocksource: loongson2_hpet: add hpet driver
- support
-To:     WANG Xuerui <kernel@xen0n.name>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yun Liu <liuyun@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        loongarch@lists.linux.dev, zhuyinbo@loongson.cn
-References: <20220930093510.10781-1-zhuyinbo@loongson.cn>
- <bc62d053-1e26-d7b7-3611-f0c9237d86f3@xen0n.name>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <1b1f167f-a9be-fc1c-ffe7-0fb1bdf7c429@loongson.cn>
-Date:   Sat, 8 Oct 2022 10:59:56 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Fri, 7 Oct 2022 23:10:42 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16160A2222;
+        Fri,  7 Oct 2022 20:10:38 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MkqnW5LF8zlXhx;
+        Sat,  8 Oct 2022 11:06:07 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 8 Oct 2022 11:10:36 +0800
+Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 8 Oct
+ 2022 11:10:36 +0800
+Message-ID: <6b4ccb6b-c6c2-e0cc-1670-1776877ecf46@huawei.com>
+Date:   Sat, 8 Oct 2022 11:10:36 +0800
 MIME-Version: 1.0
-In-Reply-To: <bc62d053-1e26-d7b7-3611-f0c9237d86f3@xen0n.name>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [PATCH v3] ARM: kprobes: move __kretprobe_trampoline to out of
+ line assembler
 Content-Language: en-US
+To:     Nick Desaulniers <ndesaulniers@google.com>
+CC:     "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        sparkhuang <huangshaobo6@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <llvm@lists.linux.dev>, Naresh Kamboju <naresh.kamboju@linaro.org>,
+        <regressions@lists.linux.dev>, <lkft-triage@lists.linaro.org>,
+        "Linux Kernel Functional Testing" <lkft@linaro.org>,
+        Logan Chien <loganchien@google.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>
+References: <202209291607.0MlscIht-lkp@intel.com>
+ <20220930211505.209939-1-ndesaulniers@google.com>
+ <CAKwvOd=0p31f-Yya6S-9xKEv6CtUWpOCRxHO=jG2uk-hZgZ1bQ@mail.gmail.com>
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <CAKwvOd=0p31f-Yya6S-9xKEv6CtUWpOCRxHO=jG2uk-hZgZ1bQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxTWus50BjQyEoAA--.19966S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1fJw4xXrW7GFWfAw15XFb_yoW8tFy3pF
-        4xG3Z8KrWDXr4fZwsxXryDCF98Cw1xJw15G3W7t3WkArykJF1jqr4jqa4Yg3W7Xr4rJ342
-        vFZYqr1UuFyDAF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9K14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
-        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
-        WUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl42xK82IYc2Ij64vIr4
-        1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK
-        67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI
-        8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAv
-        wI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
-        v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+Sorry for late reply because I just found this thread before the long 
+vacation so I didn't have much time to deal with it.
 
-在 2022/9/30 下午10:43, WANG Xuerui 写道:
-> Hi,
-> 
-> On 9/30/22 17:35, Yinbo Zhu wrote:
->> HPET (High Precision Event Timer) defines a new set of timers, which
->> are used by the operating system to schedule threads, interrupt the
->> kernel and interrupt the multimedia timer server. The operating
->> system can assign different timers to different applications. By
->> configuration, each timer can generate interrupt independently.
+On 2022/10/7 4:35, Nick Desaulniers wrote:
+> On Fri, Sep 30, 2022 at 2:15 PM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+>> commit 1069c1dd20a3 ("ARM: 9231/1: Recover kretprobes return address for
+>> EABI stack unwinder")
+>> tickled a bug in clang's integrated assembler where the .save and .pad
+>> directives must have corresponding .fnstart directives. The integrated
+>> assembler is unaware that the compiler will be generating the .fnstart
+>> directive.
 >>
->> The loongson2 HPET module includes a main count and three comparators
->> , all of which are 32 bits wide. Among the three comparators, only
->> one comparator supports periodic interrupt, all three comparators
->> support non periodic interrupts.
+>>    arch/arm/probes/kprobes/core.c:409:30: error: .fnstart must precede
+>>    .save or .vsave directives
+>>    <inline asm>:3:2: note: instantiated into assembly here
+>>    .save   {sp, lr, pc}
+>>    ^
+>>    arch/arm/probes/kprobes/core.c:412:29: error: .fnstart must precede
+>>    .pad directive
+>>    <inline asm>:6:2: note: instantiated into assembly here
+>>    .pad    #52
+>>    ^
 >>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> ---
->>   MAINTAINERS                          |   6 +
->>   arch/loongarch/kernel/time.c         |   3 +
->>   drivers/clocksource/Kconfig          |   9 +
->>   drivers/clocksource/Makefile         |   1 +
->>   drivers/clocksource/loongson2_hpet.c | 332 +++++++++++++++++++++++++++
->>   5 files changed, 351 insertions(+)
->>   create mode 100644 drivers/clocksource/loongson2_hpet.c
-> 
-> Thanks for the contribution, but as HPET is a fairly common peripheral 
-> that have well standardized behavior, why not simply add DT support to 
-> the drivers/char/hpet.c and be done with it?
-At present, the drivers/char/hpet.c doesn't support DT(dts parse) and
-loongson2 soc wasn't belong to X86 or IA64 architecture, Although it is
-an option to add DT support for this driver, I consider that the hpet
-design of loongson2 series socs may not be universal. In addition, I
-notice that mips and x86 have their own hpet drivers. In order to reduce
-the impact on the public driver and make more flexible modifications to
-the loongson2 hpet driver under its own architecture, a separate
-loongson2 hpet driver was submitted.
+> Chen, I noticed that your patch was discarded; it's not in linux-next today.
+> https://lore.kernel.org/linux-arm-kernel/YzHPGvhLkdQcDYzx@shell.armlinux.org.uk/
+> https://www.arm.linux.org.uk/developer/patches/viewpatch.php?id=9231/1
+> How would you like to proceed here?
 
-config HPET
-         bool "HPET - High Precision Event Timer" if (X86 || IA64)
-         default n
-         depends on ACPI
-         help
-           If you say Y here, you will have a miscdevice named 
-"/dev/hpet/".  Each
-           open selects one of the timers supported by the HPET.  The 
-timers are
-           non-periodic and/or periodic.
+Since 6.1 is closing now. Let's reorganize everything and queue it up 
+for -next for 6.2
+
+> I think moving this out of line, incorporating Ard's feedback, then
+> putting the UNWIND directives on top might be the way to go. What do
+> you think?
+
+This way looks good to me.
+
+How about making a set for this,  to make everything more clear:
+
+1. Move this out of line
+
+2. Apply the feature, test with gcc & clang
+
+3. Other cleaning, or merge with 2 if the cleaning is tiny.
+
+I'll send another version for this, rebased to 6.1-rc1
+
+Thanks for your time!
 
 
-BRs
-Yinbo Zhu.
+Best,
 
-> 
+Chen
+
 
