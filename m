@@ -2,214 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE225F85FF
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 18:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A6F5F8605
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 18:15:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiJHQHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 12:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
+        id S229843AbiJHQPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 12:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJHQHU (ORCPT
+        with ESMTP id S229609AbiJHQPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 12:07:20 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84673DF13;
-        Sat,  8 Oct 2022 09:07:18 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id p5so8798521ljc.13;
-        Sat, 08 Oct 2022 09:07:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=v0N63sBfYbQ4IqLEp4sJ/2Jp1eqaNK7T4OvQMkYPXA0=;
-        b=D0qoTCGGEtoBmAVhE7GQxh2SReMtsZ3I+DW6q9fUsKC+Enr941Zzu84fPxfPixeHSN
-         cCM/iAnEPfTGQQ22tMQbTjJuOfgbIeXKCztbJ5rJORnps4DilxKcXB0zQ0bZogy9bSqo
-         bGY+EVWeU1hWhIO5XzRklt7mji/CwTUB8F5HI/MUxmdHHZalVIew8sdSMio4pdhrdz9s
-         LnisJUARt4xBBzrX3R/H0EljM59MLRIo9ctfjQAa6WPszW64ln3jHG6VGiZJE1uA1+tV
-         UMiwZ2N/6HHUxAgDJ+vpR8FfGwikQEpSfFeih5FkpOrOrn0iXOHkzeP6rVuwyHurPc2X
-         NJvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v0N63sBfYbQ4IqLEp4sJ/2Jp1eqaNK7T4OvQMkYPXA0=;
-        b=PyKEV++xwoq+BoFZcifF2Ip6trcu1lEcHU/j7A9rIT/AhLefmh70fs1Ez4IPG0eNo/
-         VNp+g2G3EamXtiHGJzCFSTvBGccK/u0vZmCeZ+BUPMri6S5/hlCwNJkI/xVRCK47MHqf
-         xMxrzrAwp1E3Wx36/lgfjSaXktXgN4fI2IOrUmdAoSBX3rejdBjju3aMew5DiucuoeTs
-         iSkz+V5d5NyoZZoFPPiPV1eAgG3ZUtCagkryZbRSktoStamnMM0l/LED3QjC4s5g4yj4
-         5qAQHxBSkF/Bzf4WOpLrS+63NkjywhRxWzPOqvVyYK181lssTXI83POVB/OvHSkB6+d5
-         PPnA==
-X-Gm-Message-State: ACrzQf3Wpw853cwbDcfjRfdNQ8SjnIb4DLTplLN7NL8cfBgINwCJxbXP
-        1JqmbFzfjVLgjWOnyf4NM0g=
-X-Google-Smtp-Source: AMsMyM4fjtCZiN+ykmEf4ZZI/RJolYDdqNq3EZzr/SkEqPNrNnfmuZv5kH0JwR5IRxBafZz6boMqAQ==
-X-Received: by 2002:a2e:9181:0:b0:26e:91d8:5796 with SMTP id f1-20020a2e9181000000b0026e91d85796mr158462ljg.398.1665245236284;
-        Sat, 08 Oct 2022 09:07:16 -0700 (PDT)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id u1-20020a2e9f01000000b0026dfd1fb1aesm777910ljk.25.2022.10.08.09.07.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Oct 2022 09:07:15 -0700 (PDT)
-Date:   Sat, 8 Oct 2022 19:07:13 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     Peter Rosin <peda@axentia.se>, robh@kernel.org,
-        laurent.pinchart@ideasonboard.com, wsa@kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [v9 4/4] i2c: muxes: pca954x: Add regulator support
-Message-ID: <20221008160713.2io5awbmeakiuou3@mobilestation>
-References: <20221007075354.568752-1-patrick.rudolph@9elements.com>
- <20221007075354.568752-5-patrick.rudolph@9elements.com>
+        Sat, 8 Oct 2022 12:15:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED1431DC7;
+        Sat,  8 Oct 2022 09:15:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34BE160A37;
+        Sat,  8 Oct 2022 16:15:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A207C433D6;
+        Sat,  8 Oct 2022 16:15:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665245719;
+        bh=NIgNigZexN067z2ad+UvtpUHM+JSZc0JYM0evS6yNx0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VAGeVVDf6KIOhTWVugZOJTuKPzDIFSGBDrGjIzZCQaYbWM1BU4NBt3yHdh/p+QB8Z
+         Mx6iHaLe+DEGh+bDFLK83w/Rr0LUpsfWq5pCWNpvvFsJhEEnvolwGToq7kVMYm16C7
+         QcypgNRE4zg87Wqm9iJT8rOYJDbQxSGv57JHugrmcHqPoIxRdFRiHZJqRPFSyCDMtn
+         VuP1L+Zw3IgC/rMVlFF4fXoapnhUapUQB/vBk7S49rXo0meL1hSUbsDRuB/MFvpsc1
+         IrKiCJ6IemXXuaxmEzEV+cS22e0yEOJl6KXc6pQBJg1bl7a6cOxdRgEbitVsWeCajN
+         r4dGxRV6nD9YQ==
+Date:   Sat, 8 Oct 2022 19:15:13 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v8 2/8] KVM: Extend the memslot to support fd-based
+ private memory
+Message-ID: <Y0GiEW0cYCNx5jyK@kernel.org>
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-3-chao.p.peng@linux.intel.com>
+ <Yz7s+JIexAHJm5dc@kernel.org>
+ <Yz7vHXZmU3EpmI0j@kernel.org>
+ <Yz71ogila0mSHxxJ@google.com>
+ <Y0AJ++m/TxoscOZg@kernel.org>
+ <Y0A+rogB6TRDtbyE@google.com>
+ <Y0CgFIq6JnHmdWrL@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221007075354.568752-5-patrick.rudolph@9elements.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y0CgFIq6JnHmdWrL@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 09:53:53AM +0200, Patrick Rudolph wrote:
-> Add a vdd regulator and enable it for boards that have the
-> mux powered off by default.
+On Sat, Oct 08, 2022 at 12:54:32AM +0300, Jarkko Sakkinen wrote:
+> On Fri, Oct 07, 2022 at 02:58:54PM +0000, Sean Christopherson wrote:
+> > On Fri, Oct 07, 2022, Jarkko Sakkinen wrote:
+> > > On Thu, Oct 06, 2022 at 03:34:58PM +0000, Sean Christopherson wrote:
+> > > > On Thu, Oct 06, 2022, Jarkko Sakkinen wrote:
+> > > > > On Thu, Oct 06, 2022 at 05:58:03PM +0300, Jarkko Sakkinen wrote:
+> > > > > > On Thu, Sep 15, 2022 at 10:29:07PM +0800, Chao Peng wrote:
+> > > > > > > This new extension, indicated by the new flag KVM_MEM_PRIVATE, adds two
+> > > > > > > additional KVM memslot fields private_fd/private_offset to allow
+> > > > > > > userspace to specify that guest private memory provided from the
+> > > > > > > private_fd and guest_phys_addr mapped at the private_offset of the
+> > > > > > > private_fd, spanning a range of memory_size.
+> > > > > > > 
+> > > > > > > The extended memslot can still have the userspace_addr(hva). When use, a
+> > > > > > > single memslot can maintain both private memory through private
+> > > > > > > fd(private_fd/private_offset) and shared memory through
+> > > > > > > hva(userspace_addr). Whether the private or shared part is visible to
+> > > > > > > guest is maintained by other KVM code.
+> > > > > > 
+> > > > > > What is anyway the appeal of private_offset field, instead of having just
+> > > > > > 1:1 association between regions and files, i.e. one memfd per region?
+> > > > 
+> > > > Modifying memslots is slow, both in KVM and in QEMU (not sure about Google's VMM).
+> > > > E.g. if a vCPU converts a single page, it will be forced to wait until all other
+> > > > vCPUs drop SRCU, which can have severe latency spikes, e.g. if KVM is faulting in
+> > > > memory.  KVM's memslot updates also hold a mutex for the entire duration of the
+> > > > update, i.e. conversions on different vCPUs would be fully serialized, exacerbating
+> > > > the SRCU problem.
+> > > > 
+> > > > KVM also has historical baggage where it "needs" to zap _all_ SPTEs when any
+> > > > memslot is deleted.
+> > > > 
+> > > > Taking both a private_fd and a shared userspace address allows userspace to convert
+> > > > between private and shared without having to manipulate memslots.
+> > > 
+> > > Right, this was really good explanation, thank you.
+> > > 
+> > > Still wondering could this possibly work (or not):
+> > > 
+> > > 1. Union userspace_addr and private_fd.
+> > 
+> > No, because userspace needs to be able to provide both userspace_addr (shared
+> > memory) and private_fd (private memory) for a single memslot.
 > 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Reviewed-by: Peter Rosin <peda@axentia.se>
-> ---
->  drivers/i2c/muxes/i2c-mux-pca954x.c | 34 ++++++++++++++++++++++++-----
->  1 file changed, 29 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
-> index 992976fa6798..857a4ec387be 100644
-> --- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-> +++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-> @@ -49,6 +49,7 @@
->  #include <linux/module.h>
->  #include <linux/pm.h>
->  #include <linux/property.h>
-> +#include <linux/regulator/consumer.h>
->  #include <linux/slab.h>
->  #include <linux/spinlock.h>
->  #include <dt-bindings/mux/mux.h>
-> @@ -133,6 +134,7 @@ struct pca954x {
->  	struct irq_domain *irq;
->  	unsigned int irq_mask;
->  	raw_spinlock_t lock;
-> +	struct regulator *supply;
->  };
->  
->  /* Provide specs for the MAX735x, PCA954x and PCA984x types we know about */
-> @@ -473,6 +475,9 @@ static void pca954x_cleanup(struct i2c_mux_core *muxc)
->  	struct pca954x *data = i2c_mux_priv(muxc);
->  	int c, irq;
->  
+> Got it, thanks for clearing my misunderstandings on this topic, and it
+> is quite obviously visible in 5/8 and 7/8. I.e. if I got it right,
+> memblock can be partially private, and you dig the shared holes with
+> KVM_MEMORY_ENCRYPT_UNREG_REGION. We have (in Enarx) ATM have memblock
+> per host mmap, I was looking into this dilated by that mindset but makes
+> definitely sense to support that.
 
-> +	if (!IS_ERR_OR_NULL(data->supply))
+For me the most useful reference with this feature is kvm_set_phys_mem()
+implementation in privmem-v8 branch. Took while to find it because I did
+not have much experience with QEMU code base. I'd even recommend to mention
+that function in the cover letter because it is really good reference on
+how this feature is supposed to be used.
 
-First of all AFAICS the data->supply pointer will never be null on the
-pca954x_cleanup() invocations in your current implementation. So
-IS_ERR() would be enough here. Second in the next comment I'll suggest
-to you to implement the optional regulator semantic, which implies
-initializing the data->supply pointer with NULL if the get-regulator
-function returns -ENODEV. That shall look easier than the IS_ERR()
-macro. So checking the data->supply pointer for being not-null would
-be enough here.
-
-> +		regulator_disable(data->supply);
-> +
->  	if (data->irq) {
->  		for (c = 0; c < data->chip->nchans; c++) {
->  			irq = irq_find_mapping(data->irq, c);
-> @@ -531,15 +536,32 @@ static int pca954x_probe(struct i2c_client *client,
->  			     pca954x_select_chan, pca954x_deselect_mux);
->  	if (!muxc)
->  		return -ENOMEM;
-
-> +
-
-unrelated change...
-
->  	data = i2c_mux_priv(muxc);
->  
->  	i2c_set_clientdata(client, muxc);
->  	data->client = client;
->  
-
-> +	data->supply = devm_regulator_get(dev, "vdd");
-> +	if (IS_ERR(data->supply)) {
-
-Judging by the DT-bindings the power-supply is supposed to be
-optional. Isn't it?  AFAICS from the _regulator_get() semantic if no
-vdd-supply is specified and a regulator request method with the
-non-optional semantic is called an ugly warning will be printed to the
-system log. Most of the users of the driver don't have the
-power-supply specified for the device. You don't want to have their
-logs polluted with the false warning, do you? If so you should use
-the devm_regulator_get_optional() method here. If it returns the
--ENODEV error just overwrite the data->supply with NULL. In case of
-any other error halt the device probe procedure.
-
-> +		ret = PTR_ERR(data->supply);
-> +		if (ret != -EPROBE_DEFER)
-> +			dev_err(dev, "Failed to request regulator: %d\n", ret);
-> +		return ret;
-
-dev_err_probe() ?
-
--Sergey
-
-> +	}
-> +
-> +	ret = regulator_enable(data->supply);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to enable regulator: %d\n", ret);
-> +		return ret;
-> +	}
-> +
->  	/* Reset the mux if a reset GPIO is specified. */
->  	gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
-> -	if (IS_ERR(gpio))
-> -		return PTR_ERR(gpio);
-> +	if (IS_ERR(gpio)) {
-> +		ret = PTR_ERR(gpio);
-> +		goto fail_cleanup;
-> +	}
->  	if (gpio) {
->  		udelay(1);
->  		gpiod_set_value_cansleep(gpio, 0);
-> @@ -556,7 +578,7 @@ static int pca954x_probe(struct i2c_client *client,
->  
->  		ret = i2c_get_device_id(client, &id);
->  		if (ret && ret != -EOPNOTSUPP)
-> -			return ret;
-> +			goto fail_cleanup;
->  
->  		if (!ret &&
->  		    (id.manufacturer_id != data->chip->id.manufacturer_id ||
-> @@ -564,7 +586,8 @@ static int pca954x_probe(struct i2c_client *client,
->  			dev_warn(dev, "unexpected device id %03x-%03x-%x\n",
->  				 id.manufacturer_id, id.part_id,
->  				 id.die_revision);
-> -			return -ENODEV;
-> +			ret = -ENODEV;
-> +			goto fail_cleanup;
->  		}
->  	}
->  
-> @@ -583,7 +606,8 @@ static int pca954x_probe(struct i2c_client *client,
->  	ret = pca954x_init(client, data);
->  	if (ret < 0) {
->  		dev_warn(dev, "probe failed\n");
-> -		return -ENODEV;
-> +		ret = -ENODEV;
-> +		goto fail_cleanup;
->  	}
->  
->  	ret = pca954x_irq_setup(muxc);
-> -- 
-> 2.37.3
-> 
+BR, Jarkko
