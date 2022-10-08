@@ -2,89 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D29BE5F8628
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 19:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A46975F862C
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 19:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbiJHRIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 13:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45748 "EHLO
+        id S229711AbiJHRL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 13:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiJHRIG (ORCPT
+        with ESMTP id S229710AbiJHRLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 13:08:06 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BDF3BC56;
-        Sat,  8 Oct 2022 10:08:05 -0700 (PDT)
-Received: from [192.168.1.138] ([37.4.248.18]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MgNpJ-1pOFgQ41uh-00hucE; Sat, 08 Oct 2022 19:07:26 +0200
-Message-ID: <bce9efac-15a8-75e5-6f3f-bc62e33d0184@i2se.com>
-Date:   Sat, 8 Oct 2022 19:07:24 +0200
+        Sat, 8 Oct 2022 13:11:24 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2733F46614
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 10:11:23 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id z3so9824519edc.10
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 10:11:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b5FO62lWuXXjkWadjwalneNxwoveR/Ow6np6vHDk1vM=;
+        b=oWmrc0xeK3r0LS7Q41Ku+pVzay4ZN+XZH9XIUbYo2sYhFHyFSWj77seJdaRe1OyWXX
+         UozxQJIgbO26Mf+sbSZjoGAHdAXqsKAs5PbzfAX6lVn4SiieeyuSdzRNq01GA+O71E45
+         mc5v9n4H603c20glqu+DeAtTb0w9H6Q8bWylXo48TUKYPWuT+oebyrkCGeAyPjAj47Cs
+         338LFZLbsavKpsRJVX8vrZZgtTolj1AOtXXYcNOfpP9cvqFC33VQfoQL+8wmgUCXkcum
+         8l1r6OjMNQG6zw8EGkyCTbnXp65V/ZtVWesL8lk98h+pOvxF0t8JyTDq403Qa5BRcBld
+         lRZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b5FO62lWuXXjkWadjwalneNxwoveR/Ow6np6vHDk1vM=;
+        b=vxNaonjgV+RkcJRsWlfNfmpPvKvfqi2PJ8i1OKsSa6JEcGFseqhWrNjexaECCAXiXQ
+         F+QcATlynizUamGfCN3CmImm2VTwAi1KeUD5DoZa0ei9gz8/PkNjZAY1jQYpzpsrYueG
+         VslV74Ra+VTjwP7SYfq6zP8pSiU0IsxVbM6oEYxE3n3agiMnU9l5KspnS8/z4r7amr0W
+         nAs3MQZG6y4B9h2dfBs/Eg5udfIYynBqS40ENuwfhjPyWTZKGExp4EChgMT2+rzPWP1Y
+         TquJJjlavN/UVLgezqr7e+PA81tADDZbnBdPG+e+p51CcLymliiCvIrh8tAieX/BB7JN
+         8aqQ==
+X-Gm-Message-State: ACrzQf2XM0detHobV5HOsyorkwpQbEdgRA2ry4MoR/m5wg/bwcrsLQ1A
+        gXmN2qR69baapYuoukrw+CopnM0h4BzzNaKWjIk=
+X-Google-Smtp-Source: AMsMyM7O7x2niW6Ou65IfxEfKdq+oD3JSwWJvD1qNxlLTCyM+1NRgwPoi2IF2yIJVLOoNCJclVEd02DDz4rkuFdC6NM=
+X-Received: by 2002:a05:6402:430a:b0:459:a049:76da with SMTP id
+ m10-20020a056402430a00b00459a04976damr9459254edc.272.1665249081668; Sat, 08
+ Oct 2022 10:11:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] clk: bcm: rpi: Fix an out-of-bound access to
- raspberrypi_clk_variants
-To:     Xu Kuohai <xukuohai@huaweicloud.com>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Xu Kuohai <xukuohai@huawei.com>
-References: <20221008144544.283945-1-xukuohai@huaweicloud.com>
-Content-Language: en-US
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20221008144544.283945-1-xukuohai@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:AZmXji+Ie9jYHOzIlgRs0gDX/oNVksZ7yKBebF95ZMrkMz8LTTw
- Hy9D2+qykIRrldaHtJy4bV990ESxz3bpUi36so0Fh8jzYGAtQnqKQZu8W62Of3j4ZaKBieV
- DJ4fVy1baJLERCQTxXL5lYi8pry+dUUywkbPjDrs/q7SPYMK2mIEuTSRCFqBerKWC1/jyR+
- ECGHfxuEsXwRKi3wXPq+w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:19cskiiydFc=:6tsc4x3Utxa7k8gtI3IAd6
- wNgLrQIpDTY5nr2vfR7PrggjpagVpdjqcpTUzLL81bdhB9HjqZsxxeSoi5dIe42fOWWyRVIbM
- UwehcSqpngKNRAaP9dAWzzStkw3TouTK2dOw08nfwHX2EiQ/nLt0hTVTguKssPhT1dY+qjp9F
- PFfcmz0cwOcvJa2+doA6rO2X7/Oz8lE9wol04DdydEw++QRLh+DQJqYyhQCtdGF3sEvKNGsrh
- tS/tJJoy+uWT6e9D7hf4wvcuqlryelRI9mOANsj5XLXHqK2M1XdMu6XeE7wL2XsrK+6gjmc9q
- FA+rD5xA2RGVW+PhInygZYWKmq11LG3Q3X+fKHIM510PfX3A9ZkiLD3zy9KAf2ji4SnN43OaX
- Q9pzjfqCOibGLvSg4Aj7eq1LZatvztu5i70u9jA6hvoVykPPi7+k9iZlnZzXMcjb0GPBwYPiD
- 4DLZF7mGkmiRqTd8ehLPrjNI2e7wqwDKM02bvwUAOGhYu1d6P4mVXFtDHETO4PzNT+MKT6A9M
- 4XPhEE/QDFNLUZty/m4hqo1gj0VAjxZUc3yxawx5N3skARebYJuwBdaM3Fh9GLLwqb36pJ5Nx
- fHhAYjPLqGYstTJfcglSRhJjVx7l0ShHfQ2LPXtmNuNjzJPVuWhfjDM7AjaHTGuRcmsl/LPqU
- V+Sq/Xo4DuSXk+G5LQUAUHOQbNK5GhhDAfTd9GpuDa8Z9Ca0I2xrgVA5DItx0KTH+Mhd1UUNb
- upFU2MzxRlKChR9a3h6uywEm+3UJwpp20bp4tEkNYCZ0Y9m6wxRR3GVDHgWZMKyazNK9jyoac
- Y2Xqw7MPvs4ATNDES0N2meqhj8VBg==
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: mohamadohamad60@gmail.com
+Received: by 2002:a17:906:7d4e:b0:781:83bc:483c with HTTP; Sat, 8 Oct 2022
+ 10:11:20 -0700 (PDT)
+From:   Sawadogo Mahama <sawadogomahama801@gmail.com>
+Date:   Sat, 8 Oct 2022 18:11:20 +0100
+X-Google-Sender-Auth: C6ncKqifvA4M2aUfD-qjadbZIhk
+Message-ID: <CAOiY58UTAeY77=xgqv=m-fbbD1HecJUbOGrHTrNBhqBbE0x+eg@mail.gmail.com>
+Subject: YOUR URGENT RESPOND NEEDED
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.8 required=5.0 tests=BAYES_50,DEAR_FRIEND,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:544 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5010]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mohamadohamad60[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [sawadogomahama801[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  2.6 DEAR_FRIEND BODY: Dear Friend? That's not very dear!
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xu,
+Dear Friend,
 
-Am 08.10.22 um 16:45 schrieb Xu Kuohai:
-> From: Xu Kuohai <xukuohai@huawei.com>
->
-> KASAN reports an out-of-bound access to raspberrypi_clk_variants[]:
->
-> ==================================================================
-> BUG: KASAN: global-out-of-bounds in raspberrypi_clk_probe+0x1dc/0x690
-> Read of size 1 at addr ffffcc7116d615a0 by task kworker/u8:0/8
->
-> CPU: 1 PID: 8 Comm: kworker/u8:0 Not tainted 6.0.0-rc3-00900-g08f4df4a3c53 raspberrypi#10
+My Name is Mr.Sawadogo Mahama; I am a banker by profession. My reason
+forcontacting you is to transfer an abandoned $25.3 Million United States
+Dollars to your account.
 
-this kernel is a little bit older and doesn't contain bc163555603e 
-("clk: bcm: rpi: Prevent out-of-bounds access").
+Further details of the transaction shall be forwarded to you as soonas I
+receive your return mail indicating your interest.
 
-Can you please check Linux 6.0?
+Thanks and hoping to hear from you soon.
 
-Best regards
-
+Mr.Sawadogo Mahama
