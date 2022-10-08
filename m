@@ -2,122 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C7F5F8701
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 21:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 105115F8702
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 21:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiJHTGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 15:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
+        id S229817AbiJHTHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 15:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJHTF6 (ORCPT
+        with ESMTP id S229459AbiJHTHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 15:05:58 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2243740C
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 12:05:53 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id fw14so6874161pjb.3
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 12:05:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GKva1pFsfuqgoIJb+srIILrjXqoJtPS42tfHzEkNmrc=;
-        b=CekR7HaUaBPxfQ7jIF3CdVMYLrp3EIW/Nv4aOnq6ugjdifExc4l1670DEpXlb7J1el
-         oTum84aSYvNN3vIOC+8qPw8+axphBiFvfIX4G8Wnwci1VPuVg+K6YN/tBUPzybMIKnhk
-         z+p3AilNoTy9XqurCjJBK/3g5vTiI0NOEMjoE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GKva1pFsfuqgoIJb+srIILrjXqoJtPS42tfHzEkNmrc=;
-        b=XHRwEjXi6bTyeXnMZE7cyI71ULnGFBfivEk6YcyMFB+3KzFvJ0o+GexZfrlAzsWeBW
-         qJsRauUcQ867Onhw2kNDZMqY5Beu0CgEV+LCdN6hEChHKVUE5n17U7JK9HBN/mxPvKR9
-         hZRAGhBK0uKFFFnjfmkgsThF9oOroOzUWMvU429X02MtTSFvi5f34FzplgZIe5PyabX0
-         g3fm5tehNBPu5souM8KZJBw1HvXK6vxz511N83gQBuy0UaQ35SqJlQTPe1B9b/HV+CDj
-         f9SmCkoei7k5x4/3/OPAjhsyfn2k0fmkqqdj+2gi1ZOABpxVCbW4jC9+mZKOeCWDjoNs
-         eofg==
-X-Gm-Message-State: ACrzQf0+5P7ux+Zh2rMEuSVE9IacXh+JlpF7az31NPWzTnmCwc9fG1dE
-        jw6D0W1RZvdi2dQx7EeZYAgmYg==
-X-Google-Smtp-Source: AMsMyM4UBsuJabmxb5/cuTD/P98spHaqugs9ZabVRImOU1a77F2+tRJxGpP88jsl5skt4oeD745W3A==
-X-Received: by 2002:a17:902:ec89:b0:178:3ea4:2960 with SMTP id x9-20020a170902ec8900b001783ea42960mr11228973plg.160.1665255953317;
-        Sat, 08 Oct 2022 12:05:53 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b19-20020a170902d41300b001754cfb5e21sm3651784ple.96.2022.10.08.12.05.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Oct 2022 12:05:52 -0700 (PDT)
-Date:   Sat, 8 Oct 2022 12:05:49 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH] NFSD: Avoid clashing function prototypes
-Message-ID: <202210081204.BE88541@keescook>
-References: <20221007235406.2951724-1-keescook@chromium.org>
- <7AC81CF2-2D64-452D-83FC-33E5BEA82209@oracle.com>
+        Sat, 8 Oct 2022 15:07:42 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10F13740E
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 12:07:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665256061; x=1696792061;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4kB/2FdBRDRaObqrdIgUdVFwdTU9bXgQ20I+d3z2XxA=;
+  b=djKvaRrf74SsUFebxUlvFaLhdWrIJQFeqUu6XCSTt/Aq1qiL+qDX7m9R
+   zTOPn0PKp/WLwL8yyrNV6cH2vSQu+WubVFOhYcUAXd/Mf/qojB8DffbvF
+   rEoS8q85JFJa6L/hDEZdjOYyCQOhK4mR+sHvLWEzd+nIwieWJKKttJY3H
+   SlNiMG9j36enJiwLoxaFqRMkAiGSAAMxcpizZ+rTHqvNZ48UXokwHcjAJ
+   3vqulA8EgcBtyn7vJHsxKxpINJHdSJaYCFwHiupTCRW4t23iwYZOvx85R
+   3wVXYY9ZW1VNmmJNdxwWrHX0fcbIcfLYs8du9h5FX9p1UJKJNREoP79va
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10494"; a="287207991"
+X-IronPort-AV: E=Sophos;i="5.95,170,1661842800"; 
+   d="scan'208";a="287207991"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2022 12:07:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10494"; a="767946994"
+X-IronPort-AV: E=Sophos;i="5.95,170,1661842800"; 
+   d="scan'208";a="767946994"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Oct 2022 12:07:39 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ohFAg-0049dZ-0g;
+        Sat, 08 Oct 2022 22:07:38 +0300
+Date:   Sat, 8 Oct 2022 22:07:37 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, arnd@arndb.de,
+        lee@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Revert "mfd: syscon: Remove repetition of the
+ regmap_get_val_endian()"
+Message-ID: <Y0HKeTWneX12OP+Y@smile.fi.intel.com>
+References: <Y0GZwkDwnak2ReTt@zx2c4.com>
+ <20221008154700.404837-1-Jason@zx2c4.com>
+ <CAHk-=wiqN9EJ6zKXh21EQ2CV-B7_oDJKy73+yhRwtbNMWCzfVA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7AC81CF2-2D64-452D-83FC-33E5BEA82209@oracle.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAHk-=wiqN9EJ6zKXh21EQ2CV-B7_oDJKy73+yhRwtbNMWCzfVA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 08, 2022 at 03:49:45PM +0000, Chuck Lever III wrote:
-> > On Oct 7, 2022, at 7:54 PM, Kees Cook <keescook@chromium.org> wrote:
-> > 
-> > When built with Control Flow Integrity, function prototypes between
-> > caller and function declaration must match. These mismatches are visible
-> > at compile time with the new -Wcast-function-type-strict in Clang[1].
-> > 
-> > There were 97 warnings produced by NFS. For example:
-> > 
-> > fs/nfsd/nfs4xdr.c:2228:17: warning: cast from '__be32 (*)(struct nfsd4_compoundargs *, struct nfsd4_access *)' (aka 'unsigned int (*)(struct nfsd4_compoundargs *, struct nfsd4_access *)') to 'nfsd4_dec' (aka 'unsigned int (*)(struct nfsd4_compoundargs *, void *)') converts to incompatible function type [-Wcast-function-type-strict]
-> >        [OP_ACCESS]             = (nfsd4_dec)nfsd4_decode_access,
-> >                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > 
-> > The enc/dec callbacks were defined as passing "void *" as the second
-> > argument, but were being implicitly cast to a new type. Replace the
-> > argument with a variable the desired to perform the casting in the
-> > function body. There are no resulting binary differences.
+On Sat, Oct 08, 2022 at 09:45:16AM -0700, Linus Torvalds wrote:
+> On Sat, Oct 8, 2022 at 8:47 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> >
+> > This reverts commit 72a95859728a7866522e6633818bebc1c2519b17. It broke
+> > reboots on big-endian MIPS and MIPS64 malta QEMU instances, which use
+> > the syscon driver. Little-endian is not effected, which means likely
+> > it's important to handle regmap_get_val_endian() in this function after
+> > all.
 > 
-> Hi Kees, thanks for the patch. I agree this internal API could be
-> cleaner and more type-safe. A few things I noticed:
+> Hmm. The revert may indeed be the right thing to do, but we're still
+> early in the release process, so let's go through the channels.
 > 
-> - Your patch does not apply to HEAD probably because it conflicts with
-> 3fdc54646234 ("NFSD: Reduce amount of struct nfsd4_compoundargs that
-> needs clearing")
+> I do note that commit 72a95859728a points to commit 0dbdb76c0ca8
+> ("regmap: mmio: Parse endianness definitions from DT") as the reason
+> why it's not necessary any more, but that commit
+> 
+>  (a) doesn't seem to set config->val_format_endian (which somebody may
+> care about). It does set the operation pointers etc, but doesn't set
+> that field.
 
-Ah! Thanks, I will refresh.
+It should.
 
-> - A union type might be a better fit for this application, as that
-> would avoid casting through an anonymous pointer. NFSD has a union
-> type, union nfsd4_op_u, that is ideal for this.
+of_syscon_register() calls to regmap_init_mmio() with syscon_config data
+structure as a parameter.
 
-Perfect, yes. There are similar conversions that used similar.
+Before 72a95859728a the of_syscon_register() fills the val_format_endian with
+something it parses from DT. After that commit the default value (0) is
+REGMAP_ENDIAN_DEFAULT. Now when __regmap_init_mmio_clk() is called it
+creates a context base on DT since the field is 0.
 
-> Would it make sense to use "union nfsd4_op_u *", such as is done in
-> fs/nfsd/current_stateid.h, in the definition of nfsd4_dec and nfsd4_enc ?
+>  (b) it uses regmap_get_val_endian(), which doesn't actually even look
+> at the OF properties unless config->val_format_endian is
+> REGMAP_ENDIAN_DEFAULT
 
-Yup; I think that'll be perfect.
+Which is 0!
 
-> With regard to timing, I would prefer to queue this change for the
-> v6.2 merge window through the nfsd tree, if that's OK with you?
+> so the code that commit 72a95859728a removed was actually quite a bit
+> different from the code in commit 0dbdb76c0ca8.
+> 
+> Maybe the problem is related to those semantic differences, and is
+> easy to fix for somebody who knows what the heck that stuff is doing.
 
-Yeah, for sure. No rush. :)
+But while looking into this, I think I know what is going on,
+of_syscon_register() calls regmap API with dev == NULL, hence
+fwnode == NULL, hence nothing to read from DT.
+
+But default (via regmap bus configuration) is LE and LE works fine.
+
+> And if not, please just send me the revert through the normal channels. Ok?
+
+Yeah, revert is a good move here.
+
+For real deduplication we need to either add a regmap_get_val_endian() kind
+that takes fwnode as a parameter and call it explicitly or propagate fwnode
+to __regmap_init_mmio_clk() somehow.
 
 -- 
-Kees Cook
+With Best Regards,
+Andy Shevchenko
+
+
