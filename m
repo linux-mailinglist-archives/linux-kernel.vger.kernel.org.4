@@ -2,104 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6852A5F8469
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 10:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0925F846D
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 10:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbiJHIt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 04:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
+        id S229668AbiJHIxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 04:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiJHIt0 (ORCPT
+        with ESMTP id S229445AbiJHIx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 04:49:26 -0400
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5E74D159;
-        Sat,  8 Oct 2022 01:49:25 -0700 (PDT)
-Received: by mail-vk1-xa2d.google.com with SMTP id a6so1253145vkm.9;
-        Sat, 08 Oct 2022 01:49:25 -0700 (PDT)
+        Sat, 8 Oct 2022 04:53:26 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1527852444
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 01:53:26 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id n73so425403iod.13
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 01:53:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4DaO/Q3O3pM/djsRG+MNdNULYgwU9KBFaAmYTttXdHc=;
-        b=dRslYHH8QTFf2Iw+zTIu+Q4WkHOU2/sFSeY3EnJSGS+1RpzwrO6nDDcPg8aqKnINmO
-         izLshd83P/0VzibFdJSUB5RYb1teXMmGkJrEb4UU+Obdn/5RR+n1Bhs0vjPdLVF5L7Fm
-         25zCP8LANRlln7zh857Hd9cLhCfYOqjAxz2DQYyT1fShAydIxxOh7mz11ym2hLduwUb9
-         L6DF0YzVoDidKWaumYaeuRpgml/++x9dcoa0h50c6uyKKAUCkcxYDMy2CzvKmS6JLTkS
-         +1gjdQpF4sU/WqF+N+qYoeQf0ZR9cCYyX5SO5HaulMQJpryFvo4jlTtlem0mneFIb47B
-         v/3A==
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fq/FMo3N2YZ5gAL5l22vJq0j+A2OZhZuCvLwNurrkgc=;
+        b=aaTfdR2A1aElUlREfwUs/lIpawZOqbq2bmCM9q3LdcayzLq8yAkB2c1cG34xphe0Cs
+         0Ag5b0YcbWUYkI/UBaL02al3Duy9MUwY2pDktxMWnWsDz5zDX11wQkzcKUKPt9WqLlCy
+         JWUJUS7lOY8SrXqPDPlkTLO8EHEyGOws7TsYYIYhj3aaY5HHl4jB4msCZ9a5XM59vkgK
+         bLbdiVO/dfaR5PqVBR2EjCZ6NrEjzPHHf0C2zScQF8Z819WqS/UoikH0jDFEhZDG6oJx
+         HwL2yD4ZKkvoz96bUGt482OsPxOlxW5BhEhWjELUldqd9SWy+aiWV/N+ONIoA7mLJaVk
+         kD/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4DaO/Q3O3pM/djsRG+MNdNULYgwU9KBFaAmYTttXdHc=;
-        b=7kQpaBmQzN1bNirc27szaN2IUQlt5JzAK3Fz5/i1MBNvAnClJNzAuvt4N0RCh3h3Gc
-         KTstz9Kw+jY4/dOZeIDXsaAYIt9BOtb9GL5O+jS7KdpGu0fZKjngvwtybiSwKwm7TcKZ
-         Vk0PsvVbMWtnM+nlMrP6PTUNMaWS2fMIJpKvJ4WGesboS3L6rwo2gy1Rk0RAxDdQSbhj
-         b5ivqAXJBPkTlaN6c2w/y8OKR/qCC3naEgBDWANMQVlQoNyB/YPnFyZQfZEhiHfXYiZt
-         B3dVzENmBNBY5K7+BeIE7zJhocoNqTV5ImVmosrGmP1A7GwB+F0XUEgvHIG+YYrT0wzD
-         q9jA==
-X-Gm-Message-State: ACrzQf1vODiqhxBB9T2u9kFK1aHAAIgzhhYjIhcv+u3TB4l2XPQ1vWXu
-        Ih66FqCUyH8HLHVzkOnvVWVAU/Cr7Yk3dNki
-X-Google-Smtp-Source: AMsMyM4i13fzonaL3MlgrnsTY5dGhhnQM1mbsMGe4VNycJu3g30Sc7G+KFCDy/rdXSTA2KqKvaP4YA==
-X-Received: by 2002:a17:902:e74f:b0:179:fdfd:2c84 with SMTP id p15-20020a170902e74f00b00179fdfd2c84mr8738374plf.41.1665218953809;
-        Sat, 08 Oct 2022 01:49:13 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id a16-20020a170902b59000b0017e232b6724sm2822573pls.69.2022.10.08.01.49.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Oct 2022 01:49:13 -0700 (PDT)
-From:   yexingchen116@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     martin.petersen@oracle.com
-Cc:     hare@kernel.org, jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>
-Subject: [PATCH linux-next] scsi: myrb: replace !strcmp with sysfs_streq
-Date:   Sat,  8 Oct 2022 08:49:07 +0000
-Message-Id: <20221008084907.309320-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fq/FMo3N2YZ5gAL5l22vJq0j+A2OZhZuCvLwNurrkgc=;
+        b=I1gWSBmSdYHUi1r/8Q1mVCUWolUybwNU17VVpuNYjQq/9G2GoVCJsUwnlm8Pa5AUdu
+         8Rae5ZwbWl49obh9hpUP3JtkW7Ukl6HztbJ2ygrPk5jpL3ZdB0bixQYV84vMqOL8MMae
+         1A5YjWcboP6Iuk+deMajXrKCRNCuKYfEEqtypP/vxbXCO+Gh0owPx+fD7hi/6FtRfj/I
+         dpzXIv/Fw3xL9KbDISHB5NmZo73RWQWMxSRtDv9rBu1RaTvPH2RgERb2fxT98cGjXxwF
+         hs8krbST/4IQVlyxzwxRdWS0G5p0RHxyrYekPUL49ddro61kLp2Y2U1Tl0UjvAMB0R4s
+         nb2g==
+X-Gm-Message-State: ACrzQf34ZbcImYcvedk59lW8l6HP1vnu05VVWlj4fdiO02B+gC3O1/v2
+        ck+OLU+PMwuWQ7gnbP4WM9iEXykP3KCzORsMk9A=
+X-Google-Smtp-Source: AMsMyM556YALLSoPOAYf9n97JeOaCCTSnYFoq/N64HCBWoeTR6HEk1uJSTQJFEuirNFTC2BuXtx8CTg3NwG1VqDYXKo=
+X-Received: by 2002:a05:6638:22ce:b0:363:5f6a:b736 with SMTP id
+ j14-20020a05663822ce00b003635f6ab736mr4827121jat.278.1665219205231; Sat, 08
+ Oct 2022 01:53:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Sender: sandarmohamed@gmail.com
+Received: by 2002:a05:6622:340f:0:0:0:0 with HTTP; Sat, 8 Oct 2022 01:53:24
+ -0700 (PDT)
+From:   "Mrs.Yu  Ging" <yuging9567@gmail.com>
+Date:   Sat, 8 Oct 2022 08:53:24 +0000
+X-Google-Sender-Auth: vFmBDiYgDFc72Ya8reXxXO-qhJg
+Message-ID: <CAAzhOZS1jcR9Nmbmu5zbWQfg=JE+8TKv6_gLtP_TDNi_jm_vtg@mail.gmail.com>
+Subject: Hello!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+hello
+I am Mrs Yu. Ging Yunnan, and i have Covid-19 and the doctor said I
+will not survive it because all vaccines has been given to me but to
+no avian, am a China
 
-Replace the open-code with sysfs_streq().
+woman but I base here in France because am married here and I have no
+child for my late husband and now am a widow.
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/scsi/myrb.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+My reason of communicating you is that i have $9.2million USD which
+was deposited in BNP Paribas Bank here in France by my late husband
+which am the next of
 
-diff --git a/drivers/scsi/myrb.c b/drivers/scsi/myrb.c
-index e885c1dbf61f..7f269b90c9e4 100644
---- a/drivers/scsi/myrb.c
-+++ b/drivers/scsi/myrb.c
-@@ -1813,12 +1813,12 @@ static ssize_t raid_state_store(struct device *dev,
- 	enum myrb_devstate new_state;
- 	unsigned short status;
- 
--	if (!strncmp(buf, "kill", 4) ||
--	    !strncmp(buf, "offline", 7))
-+	if (sysfs_streq(buf, "kill") ||
-+	    sysfs_streq(buf, "offline"))
- 		new_state = MYRB_DEVICE_DEAD;
--	else if (!strncmp(buf, "online", 6))
-+	else if (sysfs_streq(buf, "online"))
- 		new_state = MYRB_DEVICE_ONLINE;
--	else if (!strncmp(buf, "standby", 7))
-+	else if (sysfs_streq(buf, "standby"))
- 		new_state = MYRB_DEVICE_STANDBY;
- 	else
- 		return -EINVAL;
--- 
-2.25.1
+kin to and I want you to stand as the beneficiary for the claim now
+that am about to end my race according to my doctor.
 
+I will want you to use the fund to build an orphanage home in my name
+there in your country, please kindly reply to this message urgently if
+willing to handle this project.
+
+Mrs Yu. Ging Yunnan.
