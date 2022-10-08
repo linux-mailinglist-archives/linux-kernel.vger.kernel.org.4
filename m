@@ -2,132 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF5D15F8401
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 09:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB155F8415
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 09:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbiJHHd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 03:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
+        id S229739AbiJHHmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 03:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiJHHdZ (ORCPT
+        with ESMTP id S229458AbiJHHmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 03:33:25 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F264A67447;
-        Sat,  8 Oct 2022 00:33:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=zZQ88pPgtouR86lBpg+x1aw/csf1v9uxp8peXKk1cb0=;
-  b=j3ST7SGnTYT/Y5wi6lWHZVyoTN6fTohW3n4oD0o9maLZmdhUccDAwXNB
-   CrIK4oBY5dqegOsWJRE3rrwkzrofbuFPsdX2RZ0LPGmouitc76P+QhHmS
-   HaFrH+aHq9cCtdo04t374NKt8+gA8QS7/hDJOozImMV5dxKm1CxmPsJ2W
-   U=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.95,169,1661810400"; 
-   d="scan'208";a="56593050"
-Received: from 51.123.68.85.rev.sfr.net (HELO hadrien) ([85.68.123.51])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2022 09:33:09 +0200
-Date:   Sat, 8 Oct 2022 09:33:08 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Kees Cook <keescook@chromium.org>
-cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        =?ISO-8859-15?Q?Christoph_B=F6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Dave Airlie <airlied@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Westphal <fw@strlen.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E. J. Bottomley" <jejb@linux.ibm.com>,
-        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        KP Singh <kpsingh@kernel.org>, Marco Elver <elver@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Graf <tgraf@suug.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>,
-        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
-        kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        loongarch@lists.linux.dev, netdev@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org, Jan Kara <jack@suse.cz>
-Subject: Re: [PATCH v4 2/6] treewide: use prandom_u32_max() when possible
-In-Reply-To: <53DD0148-ED15-4294-8496-9E4B4C7AD061@chromium.org>
-Message-ID: <alpine.DEB.2.22.394.2210080925390.2928@hadrien>
-References: <53DD0148-ED15-4294-8496-9E4B4C7AD061@chromium.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Sat, 8 Oct 2022 03:42:15 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FC854CB9;
+        Sat,  8 Oct 2022 00:42:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665214934; x=1696750934;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1M19IrZ4xTILfMAp70C9Y4qf+AOJN3zmJP4Md3FiyYI=;
+  b=cqg9IQwVVg21CNZ/XvIb/+1i2cDN816BjrulNA3w1iS3AYUERJZJFcH7
+   wplounLOUi4HLA3KmD8ljWT0H8QMpctwLVQAc2oOBhxTxMuoXY5LZpWg+
+   jCw01EVJT73+BfT2OYJfSTc58/VQNGFZj3fwCaUUqSfZExb6xPv/9Evdc
+   9JHXBNNIHgy+CYiDP5Ws5J/n5qXTjJwRI7HEbyMURpEHOoUt9sbdgdHyK
+   gvy9RZkwZNwepZw2CpRTNIrRTAYubKFivtIHiB3H0F806GeRlgYFf8Dga
+   LYcZsrdLd63t34Nm3xVbxPwprepRdUgXvPqzjPoC8ViUUtmPoR4al8hQu
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10493"; a="305498125"
+X-IronPort-AV: E=Sophos;i="5.95,169,1661842800"; 
+   d="scan'208";a="305498125"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2022 00:42:02 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10493"; a="954338271"
+X-IronPort-AV: E=Sophos;i="5.95,169,1661842800"; 
+   d="scan'208";a="954338271"
+Received: from zhoufuro-mobl.ccr.corp.intel.com (HELO [10.255.30.218]) ([10.255.30.218])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2022 00:41:55 -0700
+Message-ID: <4cb5e7eb-1571-ed91-e1da-b4223a26f41c@linux.intel.com>
+Date:   Sat, 8 Oct 2022 15:41:53 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v4 14/14] tty: gunyah: Add tty console driver for RM
+ Console Services
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Elliot Berman <quic_eberman@quicinc.com>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220928195633.2348848-1-quic_eberman@quicinc.com>
+ <20220928195633.2348848-15-quic_eberman@quicinc.com>
+ <YzbePxTF8hRbWNRU@kroah.com>
+From:   Zhou Furong <furong.zhou@linux.intel.com>
+In-Reply-To: <YzbePxTF8hRbWNRU@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >> @minus_one@
-> >> expression FULL;
-> >> @@
-> >>
-> >> - (get_random_int() & ((FULL) - 1)
-> >> + prandom_u32_max(FULL)
-> >
-> >Ahh, well, okay, this is the example I mentioned above. Only works if
-> >FULL is saturated. Any clever way to get coccinelle to prove that? Can
-> >it look at the value of constants?
->
-> I'm not sure if Cocci will do that without a lot of work. The literals trick I used below would need a lot of fanciness. :)
 
-If FULL is an arbitrary expression, it would not be easy to automate.  If
-it is a constant then you can use python/ocaml to analyze its value.  But
-if it's a #define constant then you would need a previous rule to match the
-#define and find that value.
+>> +
+>> +/*
+>> + * The Linux TTY code does not support dynamic addition of tty derived devices so we need to know
+>> + * how many tty devices we might need when space is allocated for the tty device. Since VMs might be
+>> + * added/removed dynamically, we need to make sure we have enough allocated.
+> 
+> Wrap comments at 80 columns please.
+> 
 
-For LITERAL, I think you could just do constant int LITERAL; for the
-metavariable declaration.
-
-julia
+checkpatch has extend LINE MAX to 100,do we still suggest wrap to 80?
