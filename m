@@ -2,51 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB3F5F852A
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 14:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30D85F852D
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 14:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbiJHMCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 08:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
+        id S229778AbiJHMMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 08:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiJHMC3 (ORCPT
+        with ESMTP id S229722AbiJHMMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 08:02:29 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D144D149;
-        Sat,  8 Oct 2022 05:02:28 -0700 (PDT)
-Received: from localhost.localdomain (unknown [46.242.14.200])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 10AC842291E6;
-        Sat,  8 Oct 2022 12:02:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 10AC842291E6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1665230546;
-        bh=lh1fDmDbBWWTc5FPmPSP3bZMDfd3R6jleaq8AKJxaUQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CXJz1pxO8wpna9Uy6hZQKLaPC8uTipflJ4W+UI0A8pZy6hbuZTi11/EocqliqJFZa
-         klvO1yV53cC+/Lau+ntvdRus4P9Zm30IxYfg6IZNKtuBpUdTXD6SwyTGN1L8ZZk+1o
-         YBBMgDN1eCUJhQNzCe66xyjUFOWRCPiddJbXogSE=
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <kvalo@kernel.org>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH v4] ath9k: verify the expected usb_endpoints are present
-Date:   Sat,  8 Oct 2022 15:02:11 +0300
-Message-Id: <20221008120211.24764-1-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <87v8oushax.fsf@toke.dk>
-References: 
+        Sat, 8 Oct 2022 08:12:03 -0400
+Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E804316E;
+        Sat,  8 Oct 2022 05:12:00 -0700 (PDT)
+Message-ID: <8e84786d-8ae9-0f51-3438-24fb340199c6@manjaro.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
+        t=1665231118;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ddNkVrba/EFnig8p208wtNiaW3ykO4vqSHsplkdSsys=;
+        b=SIFz4p0heRVDbNoYwzEyMdHzCn2skoSPucuMOhWOQyJHiOyjGAvZAIElgwjOVA/6KgDx71
+        SxzKTcvB3wq4/0U3/S6Q5nmvxm+X3VOwgmP57H5L9jtC98YzRiwZWWzdea9+bEF9wH0pfG
+        cgUprXzVknoFR1bbOuphLa6B+a9TYyyk9/jiRZdgY2uuK2jrPBnqF0JKzEjCkDX7ApoJYv
+        bd0nRfdVhMCoW1RH50YK4B0+mM/rhc+oOFFniGEPUZdi3WN9jcS9ZIQ80CDHpSGwAh7Xrw
+        em3rxP9g2JC7xQDIjEleHIC/vOh+6qTgYFfyYlUPOEheKw51aSkGaINOjZ0GQQ==
+Date:   Sat, 8 Oct 2022 14:11:56 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3 00/13] Add support for the Hardkernel ODROID-M1 board
+Content-Language: da-DK
+To:     Aurelien Jarno <aurelien@aurel32.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Rockchip SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     Dongjin Kim <tobetter@gmail.com>
+References: <20220930051246.391614-1-aurelien@aurel32.net>
+From:   Dan Johansen <strit@manjaro.org>
+Organization: Manjaro ARM
+In-Reply-To: <20220930051246.391614-1-aurelien@aurel32.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Authentication-Results: ORIGINATING;
+        auth=pass smtp.auth=strit@manjaro.org smtp.mailfrom=strit@manjaro.org
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -56,71 +61,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bug arises when a USB device claims to be an ATH9K but doesn't
-have the expected endpoints. (In this case there was an interrupt
-endpoint where the driver expected a bulk endpoint.) The kernel
-needs to be able to handle such devices without getting an internal error.
 
-usb 1-1: BOGUS urb xfer, pipe 3 != type 1
-WARNING: CPU: 3 PID: 500 at drivers/usb/core/urb.c:493 usb_submit_urb+0xce2/0x1430 drivers/usb/core/urb.c:493
-Modules linked in:
-CPU: 3 PID: 500 Comm: kworker/3:2 Not tainted 5.10.135-syzkaller #0
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
-Workqueue: events request_firmware_work_func
-RIP: 0010:usb_submit_urb+0xce2/0x1430 drivers/usb/core/urb.c:493
-Call Trace:
- ath9k_hif_usb_alloc_rx_urbs drivers/net/wireless/ath/ath9k/hif_usb.c:908 [inline]
- ath9k_hif_usb_alloc_urbs+0x75e/0x1010 drivers/net/wireless/ath/ath9k/hif_usb.c:1019
- ath9k_hif_usb_dev_init drivers/net/wireless/ath/ath9k/hif_usb.c:1109 [inline]
- ath9k_hif_usb_firmware_cb+0x142/0x530 drivers/net/wireless/ath/ath9k/hif_usb.c:1242
- request_firmware_work_func+0x12e/0x240 drivers/base/firmware_loader/main.c:1097
- process_one_work+0x9af/0x1600 kernel/workqueue.c:2279
- worker_thread+0x61d/0x12f0 kernel/workqueue.c:2425
- kthread+0x3b4/0x4a0 kernel/kthread.c:313
- ret_from_fork+0x22/0x30 arch/x86/entry/entry_64.S:299
+Den 30.09.2022 kl. 07.12 skrev Aurelien Jarno:
+> On the ODROID forum, Dongjin Kim said he is not planning to submit a new
+> version of the patchset adding support for the Hardkernel ODROID-M1
+> board. I therefore decided to address the issues reported during the
+> initial review, and I also did some small fixes either because some
+> things changed in the meantime on the kernel side or because I noticed
+> some warning or issues when using the hardware.
+>
+> I continued writing some additional patches to complete the ODROID M1
+> DTS to almost fully support the hardware, the drivers being already
+> present in the kernel.
+>
+> This new version includes feedback from the linux-rockchip mailing list
+> and from the Odroid forum.
+>
+> Changes since v2:
+> * Renamed "Rockchip RK3568 Hardkernel ODROID-M1" into "Hardkernel Odroid
+>    M1" and fix the sorting.
+> * Fix sorting of arch/arm64/boot/dts/rockchip/Makefile
+> * Collected Acked-by and Tested-by
 
-Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+Even though I added my Tested-by to this series, it seems I didn't test 
+it on eMMC.
 
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
----
-v1->v2: use reverse x-mas tree ordering of the variable definitions
-v2->v3: fix tab
-v3->v4: fix patch apply error
+This fails to boot for me on eMMC, but works on SD card and NVMe.
 
- drivers/net/wireless/ath/ath9k/hif_usb.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+Sorry about that.
 
-diff --git a/drivers/net/wireless/ath/ath9k/hif_usb.c b/drivers/net/wireless/ath/ath9k/hif_usb.c
-index 4d9002a9d082..b359a9d382e2 100644
---- a/drivers/net/wireless/ath/ath9k/hif_usb.c
-+++ b/drivers/net/wireless/ath/ath9k/hif_usb.c
-@@ -1329,10 +1329,24 @@ static int send_eject_command(struct usb_interface *interface)
- static int ath9k_hif_usb_probe(struct usb_interface *interface,
- 			       const struct usb_device_id *id)
- {
-+	struct usb_endpoint_descriptor *bulk_in, *bulk_out, *int_in, *int_out;
- 	struct usb_device *udev = interface_to_usbdev(interface);
-+	struct usb_host_interface *alt;
- 	struct hif_device_usb *hif_dev;
- 	int ret = 0;
- 
-+	/* Verify the expected endpoints are present */
-+	alt = interface->cur_altsetting;
-+	if (usb_find_common_endpoints(alt, &bulk_in, &bulk_out, &int_in, &int_out) < 0 ||
-+			usb_endpoint_num(bulk_in) != USB_WLAN_RX_PIPE ||
-+			usb_endpoint_num(bulk_out) != USB_WLAN_TX_PIPE ||
-+			usb_endpoint_num(int_in) != USB_REG_IN_PIPE ||
-+			usb_endpoint_num(int_out) != USB_REG_OUT_PIPE) {
-+			dev_err(&udev->dev,
-+					"ath9k_htc: Device endpoint numbers are not the expected ones\n");
-+		return -ENODEV;
-+	}
-+
- 	if (id->driver_info == STORAGE_DEVICE)
- 		return send_eject_command(interface);
- 
+> * Switched the NOR flash to dual I/O from quad I/O to solve a pin
+>    conflicts with the EMMC.
+> * Added a comment about the pull-up on the IR receiver GPIO
+>
+> Changes since v1 (patches 1 & 2):
+> * Added Acked-by to the first patch
+> * Fixed indentation
+> * Removed unneeded labels
+> * Renamed labels to not use underscore
+> * Renamed regulator nodes
+> * Added -pin to pinctrl bindings
+> * Changed GPU related regulators to always on (see 2cda380102ff)
+> * Added phy-supply to gmac0
+> * Added supplies to sdhci
+> * Changed SD card speed to SDR50 from SDR104 (see 1ea90b2d293f)
+> * Fixed power LED polarity and set the default-state to "keep"
+>
+> Aurelien Jarno (11):
+>    arm64: dts: rockchip: add thermal support to ODROID-M1
+>    arm64: dts: rockchip: Add NOR flash to ODROID-M1
+>    arm64: dts: rockchip: Add analog audio on ODROID-M1
+>    arm64: dts: rockchip: Enable vop2 and hdmi tx on ODROID-M1
+>    arm64: dts: rockchip: Enable HDMI audio on ODROID-M1.
+>    arm64: dts: rockchip: Enable the GPU on ODROID-M1
+>    arm64: dts: rockchip: Enable the USB 2.0 ports on ODROID-M1
+>    arm64: dts: rockchip: Enable the USB 3.0 ports on ODROID-M1
+>    arm64: dts: rockchip: Add SATA support to ODROID-M1
+>    arm64: dts: rockchip: Add PCIEe v3 nodes to ODROID-M1
+>    arm64: dts: rockchip: Add IR receiver node to ODROID-M1
+>
+> Dongjin Kim (2):
+>    dt-bindings: rockchip: Add Hardkernel ODROID-M1 board
+>    arm64: dts: rockchip: Add Hardkernel ODROID-M1 board
+>
+>   .../devicetree/bindings/arm/rockchip.yaml     |   5 +
+>   arch/arm64/boot/dts/rockchip/Makefile         |   1 +
+>   .../boot/dts/rockchip/rk3568-odroid-m1.dts    | 744 ++++++++++++++++++
+>   3 files changed, 750 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-odroid-m1.dts
+>
 -- 
-2.25.1
-
+Kind regards
+*Dan Johansen*
+Project lead of the *Manjaro ARM* project
+Manjaro-ARM <https://manjaro.org>
