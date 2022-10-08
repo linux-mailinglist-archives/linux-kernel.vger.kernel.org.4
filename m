@@ -2,87 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D7E5F8312
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 07:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B7B5F8303
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 06:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbiJHFOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 01:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38266 "EHLO
+        id S229470AbiJHEzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 00:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiJHFOQ (ORCPT
+        with ESMTP id S229472AbiJHEzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 01:14:16 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E68B282;
-        Fri,  7 Oct 2022 22:14:13 -0700 (PDT)
-Date:   Sat, 8 Oct 2022 13:13:43 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1665206051;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vc2U3Kve2XhOvrPk6EOsiW40rvA4chvu6C1WjVQRXVU=;
-        b=LH0KkydAnUjcj/4zKY0JZG6OBKymdrt9HYFx23i18WeUWSm8WhV773uc+T/msWSm8lUp31
-        CONkXJpXHlAC89M72h/U5Vy52jKEzdDPoWOQoSJTdvQSwXf4r1fYomVTJW0wECgtCRimbc
-        6nT8p09JK3D0aDC33YHCmX6LrLhgi7s=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Wu XiangCheng <wu.xiangcheng@linux.dev>
-To:     Yanteng Si <siyanteng@loongson.cn>
-Cc:     Alex Shi <alexs@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        chenhuacai@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] docs/zh_CN: Rewrite the zh_CN/index.rst
-Message-ID: <Y0EHBw9C1UpVA49k@bobwxc.mipc>
-References: <cover.1664945550.git.bobwxc@email.cn>
- <6afa9f74-8c92-4246-17e7-c40bdd622639@loongson.cn>
+        Sat, 8 Oct 2022 00:55:44 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5022F9C7D4;
+        Fri,  7 Oct 2022 21:55:41 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Mkt936ccczkXvT;
+        Sat,  8 Oct 2022 12:53:11 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 8 Oct 2022 12:55:39 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 8 Oct 2022 12:55:38 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        <linux-clk@vger.kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH] clk: at91: fix the build with binutils 2.27
+Date:   Sat, 8 Oct 2022 13:15:34 +0800
+Message-ID: <20221008051534.151392-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6afa9f74-8c92-4246-17e7-c40bdd622639@loongson.cn>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022-10-08 (六) 12:11:06 +0800 Yanteng Si 曰：
-> 
-> On 10/5/22 13:13, Wu XiangCheng wrote:
-> > Follow Jonathan's steps[1], rewrite the entry point of kernel's Chinese
-> > translation documentation.
-> > 
-> > Thanks,
-> > 
-> > [1]: https://lore.kernel.org/linux-doc/20220927160559.97154-1-corbet@lwn.net/T
-> > 
-> > Wu XiangCheng (4):
-> >    docs/zh_CN: promote the title of zh_CN/process/index.rst
-> >    docs/zh_CN: add zh_CN/arch.rst
-> >    docs/zh_CN: Rewrite the Chinsese translation front page
-> >    docs/zh_CN: add a man-pages link to zh_CN/index.rst
-> 
-> When I apply your patch set, Git says:
-> 
-> 
-> Applying: docs/zh_CN: promote the title of zh_CN/process/index.rst
-> Applying: docs/zh_CN: add zh_CN/arch.rst
-> .git/rebase-apply/patch:41: new blank line at EOF.
-> +
-> warning: 1 line adds whitespace errors.
-> Applying: docs/zh_CN: Rewrite the Chinsese translation front page
-> Applying: docs/zh_CN: add a man-pages link to zh_CN/index.rst
-> 
+There is an issue when build with older versions of binutils 2.27.0,
 
-OK. Will be fixed in v2.
+arch/arm/mach-at91/pm_suspend.S: Assembler messages:
+arch/arm/mach-at91/pm_suspend.S:1086: Error: garbage following instruction -- `ldr tmp1,=0x00020010UL'
 
-Thanks,
+Use UL() macro to fix the issue in assembly file.
 
+Fixes: 4fd36e458392 ("ARM: at91: pm: add plla disable/enable support for sam9x60")
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ include/linux/clk/at91_pmc.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/clk/at91_pmc.h b/include/linux/clk/at91_pmc.h
+index 3484309b59bf..4fc387d0335d 100644
+--- a/include/linux/clk/at91_pmc.h
++++ b/include/linux/clk/at91_pmc.h
+@@ -12,6 +12,8 @@
+ #ifndef AT91_PMC_H
+ #define AT91_PMC_H
+ 
++#include <vdso/bits.h>
++
+ #define AT91_PMC_V1		(1)			/* PMC version 1 */
+ #define AT91_PMC_V2		(2)			/* PMC version 2 [SAM9X60] */
+ 
+@@ -45,8 +47,8 @@
+ #define	AT91_PMC_PCSR		0x18			/* Peripheral Clock Status Register */
+ 
+ #define AT91_PMC_PLL_ACR	0x18			/* PLL Analog Control Register [for SAM9X60] */
+-#define		AT91_PMC_PLL_ACR_DEFAULT_UPLL	0x12020010UL	/* Default PLL ACR value for UPLL */
+-#define		AT91_PMC_PLL_ACR_DEFAULT_PLLA	0x00020010UL	/* Default PLL ACR value for PLLA */
++#define		AT91_PMC_PLL_ACR_DEFAULT_UPLL	UL(0x12020010)	/* Default PLL ACR value for UPLL */
++#define		AT91_PMC_PLL_ACR_DEFAULT_PLLA	UL(0x00020010)	/* Default PLL ACR value for PLLA */
+ #define		AT91_PMC_PLL_ACR_UTMIVR		(1 << 12)	/* UPLL Voltage regulator Control */
+ #define		AT91_PMC_PLL_ACR_UTMIBG		(1 << 13)	/* UPLL Bandgap Control */
+ 
 -- 
-Wu XiangCheng	0x32684A40BCA7AEA7
+2.35.3
 
