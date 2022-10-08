@@ -2,148 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A6F5F8605
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 18:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D85F5F8607
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 18:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiJHQPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 12:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
+        id S229865AbiJHQSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 12:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiJHQPV (ORCPT
+        with ESMTP id S229791AbiJHQSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 12:15:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED1431DC7;
-        Sat,  8 Oct 2022 09:15:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 34BE160A37;
-        Sat,  8 Oct 2022 16:15:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A207C433D6;
-        Sat,  8 Oct 2022 16:15:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665245719;
-        bh=NIgNigZexN067z2ad+UvtpUHM+JSZc0JYM0evS6yNx0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VAGeVVDf6KIOhTWVugZOJTuKPzDIFSGBDrGjIzZCQaYbWM1BU4NBt3yHdh/p+QB8Z
-         Mx6iHaLe+DEGh+bDFLK83w/Rr0LUpsfWq5pCWNpvvFsJhEEnvolwGToq7kVMYm16C7
-         QcypgNRE4zg87Wqm9iJT8rOYJDbQxSGv57JHugrmcHqPoIxRdFRiHZJqRPFSyCDMtn
-         VuP1L+Zw3IgC/rMVlFF4fXoapnhUapUQB/vBk7S49rXo0meL1hSUbsDRuB/MFvpsc1
-         IrKiCJ6IemXXuaxmEzEV+cS22e0yEOJl6KXc6pQBJg1bl7a6cOxdRgEbitVsWeCajN
-         r4dGxRV6nD9YQ==
-Date:   Sat, 8 Oct 2022 19:15:13 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v8 2/8] KVM: Extend the memslot to support fd-based
- private memory
-Message-ID: <Y0GiEW0cYCNx5jyK@kernel.org>
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-3-chao.p.peng@linux.intel.com>
- <Yz7s+JIexAHJm5dc@kernel.org>
- <Yz7vHXZmU3EpmI0j@kernel.org>
- <Yz71ogila0mSHxxJ@google.com>
- <Y0AJ++m/TxoscOZg@kernel.org>
- <Y0A+rogB6TRDtbyE@google.com>
- <Y0CgFIq6JnHmdWrL@kernel.org>
+        Sat, 8 Oct 2022 12:18:00 -0400
+Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E424198E
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 09:18:00 -0700 (PDT)
+Received: by mail-vs1-xe41.google.com with SMTP id l127so7722851vsc.3
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 09:18:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EY4qOPHf7RYg8ix6/iJMuNMtc57OSN/VOcyt7Dw0D/k=;
+        b=EK39j1vC3L3tQzP1OqhXnAQx4jR4xtJ2ma13bzhukaklHG2eYCCVxipg0CQAZdnuio
+         jSklCUigE/WvuKGZ04HhGlr/esPZBUEoaeil0Evfd4lJQ9QKXQ1MErMM1XNojEhzGOmK
+         +y+FARfnC4Zf9DsTchrMJhlC7zZVoVHWfrv1mBz0kbBzApRQ6o1T5j7BUhi7BkN2WLM1
+         yBpZjn0tye2w0wozgLJ8UVTl/iY8D+hqswdayh6TDuWKFD1G8Xot5KCzMne8uNwlWeEi
+         +vpx4qSeZJEHYEeQkU1FJtZIFaKidfydCKfwcdQGGeQl3qgnSomgTdII81RbEplUWqnk
+         hjPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EY4qOPHf7RYg8ix6/iJMuNMtc57OSN/VOcyt7Dw0D/k=;
+        b=OswPJGHuA6XkczM3zCBhE80MzIDgNrfLwPmQtYFxY+3E7cgMCKTQi/iEFprERHL7tk
+         MbR6junorN/sHOXgJ/SGLl/y8Raar3zRl3N4KA4/dmnNoATVZaGOvm1sTNXI+ZTUvex7
+         Yupg0khPipmelrYFe+rDMx+Y2KfcL2ZRHdMakhqH3cIQ+JimLm+tXmpwt5XT+Z/6Tar2
+         8W1tKqJiHU5quu4k99tLcuZ62Iq11ahfgnOI3QP9EsGXHxjt4vA41fcAhYpism1QAslK
+         cKgPHuTG1axUyIIRLuODqhMGX48YyRHryKr3GozPUihtdVWB2EZcd4G6mVCQfg9H2MIa
+         dwbg==
+X-Gm-Message-State: ACrzQf3cgaUuF1Wdh8TPCHuOSg02Dk76JcPMhF6QNC02Cs543S4NwjqB
+        ygYMfN4BouH2UsGOBC7T7H8Dnl/6L4UgeIgboSk=
+X-Google-Smtp-Source: AMsMyM5prAmiCjXlmDn0919vjVqoACxg4xsXb39On762h063Axxo/JIMYB1vFT0Oxnwp/kP1K37h6e9y8r5LQeWy/1E=
+X-Received: by 2002:a05:6102:3ec7:b0:356:cbdf:122d with SMTP id
+ n7-20020a0561023ec700b00356cbdf122dmr5154827vsv.9.1665245879340; Sat, 08 Oct
+ 2022 09:17:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0CgFIq6JnHmdWrL@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6124:2415:b0:31e:b5b0:9dcf with HTTP; Sat, 8 Oct 2022
+ 09:17:58 -0700 (PDT)
+Reply-To: financialdepartment094@gmail.com
+From:   "Financial Department U.S" <meekwilson77@gmail.com>
+Date:   Sat, 8 Oct 2022 17:17:58 +0100
+Message-ID: <CAEBQFkfsotdKDDOhSor0FjJ9nEQnH1AMhGZB5dc7Oh9WWnjskQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e41 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [financialdepartment094[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [meekwilson77[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [meekwilson77[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 08, 2022 at 12:54:32AM +0300, Jarkko Sakkinen wrote:
-> On Fri, Oct 07, 2022 at 02:58:54PM +0000, Sean Christopherson wrote:
-> > On Fri, Oct 07, 2022, Jarkko Sakkinen wrote:
-> > > On Thu, Oct 06, 2022 at 03:34:58PM +0000, Sean Christopherson wrote:
-> > > > On Thu, Oct 06, 2022, Jarkko Sakkinen wrote:
-> > > > > On Thu, Oct 06, 2022 at 05:58:03PM +0300, Jarkko Sakkinen wrote:
-> > > > > > On Thu, Sep 15, 2022 at 10:29:07PM +0800, Chao Peng wrote:
-> > > > > > > This new extension, indicated by the new flag KVM_MEM_PRIVATE, adds two
-> > > > > > > additional KVM memslot fields private_fd/private_offset to allow
-> > > > > > > userspace to specify that guest private memory provided from the
-> > > > > > > private_fd and guest_phys_addr mapped at the private_offset of the
-> > > > > > > private_fd, spanning a range of memory_size.
-> > > > > > > 
-> > > > > > > The extended memslot can still have the userspace_addr(hva). When use, a
-> > > > > > > single memslot can maintain both private memory through private
-> > > > > > > fd(private_fd/private_offset) and shared memory through
-> > > > > > > hva(userspace_addr). Whether the private or shared part is visible to
-> > > > > > > guest is maintained by other KVM code.
-> > > > > > 
-> > > > > > What is anyway the appeal of private_offset field, instead of having just
-> > > > > > 1:1 association between regions and files, i.e. one memfd per region?
-> > > > 
-> > > > Modifying memslots is slow, both in KVM and in QEMU (not sure about Google's VMM).
-> > > > E.g. if a vCPU converts a single page, it will be forced to wait until all other
-> > > > vCPUs drop SRCU, which can have severe latency spikes, e.g. if KVM is faulting in
-> > > > memory.  KVM's memslot updates also hold a mutex for the entire duration of the
-> > > > update, i.e. conversions on different vCPUs would be fully serialized, exacerbating
-> > > > the SRCU problem.
-> > > > 
-> > > > KVM also has historical baggage where it "needs" to zap _all_ SPTEs when any
-> > > > memslot is deleted.
-> > > > 
-> > > > Taking both a private_fd and a shared userspace address allows userspace to convert
-> > > > between private and shared without having to manipulate memslots.
-> > > 
-> > > Right, this was really good explanation, thank you.
-> > > 
-> > > Still wondering could this possibly work (or not):
-> > > 
-> > > 1. Union userspace_addr and private_fd.
-> > 
-> > No, because userspace needs to be able to provide both userspace_addr (shared
-> > memory) and private_fd (private memory) for a single memslot.
-> 
-> Got it, thanks for clearing my misunderstandings on this topic, and it
-> is quite obviously visible in 5/8 and 7/8. I.e. if I got it right,
-> memblock can be partially private, and you dig the shared holes with
-> KVM_MEMORY_ENCRYPT_UNREG_REGION. We have (in Enarx) ATM have memblock
-> per host mmap, I was looking into this dilated by that mindset but makes
-> definitely sense to support that.
+-- 
+Dear friend,
 
-For me the most useful reference with this feature is kvm_set_phys_mem()
-implementation in privmem-v8 branch. Took while to find it because I did
-not have much experience with QEMU code base. I'd even recommend to mention
-that function in the cover letter because it is really good reference on
-how this feature is supposed to be used.
+I have an important just get back for more details .
 
-BR, Jarkko
+Sincerely,
+
+Mr Jones Moore
+
+Deputy department of the tresury
+
+United States.
