@@ -2,122 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22BA65F83DE
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 08:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E97D45F83E1
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 08:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbiJHGhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 02:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51216 "EHLO
+        id S229611AbiJHGqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 02:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiJHGhg (ORCPT
+        with ESMTP id S229563AbiJHGqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 02:37:36 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567C786F8D;
-        Fri,  7 Oct 2022 23:37:34 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MkwQd0X1gzkXvX;
-        Sat,  8 Oct 2022 14:35:05 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 8 Oct 2022 14:37:32 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 8 Oct 2022 14:37:32 +0800
-Message-ID: <28b5713f-6379-ef36-5139-6c3f0cbf27e8@huawei.com>
-Date:   Sat, 8 Oct 2022 14:37:31 +0800
+        Sat, 8 Oct 2022 02:46:34 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DE8A3F44
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 23:46:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665211592; x=1696747592;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zjNvzvgY/cZwAvbfdgymUVlA0IAlagC/PeDAs05ZyPA=;
+  b=LGi7Hz+7fycOMD8S4GY4pYiC+5shiVbur8wrDlsOLz8UIajO7gURPiAm
+   NwxXM5Ci96nLtwz9rV49z3zZldPgSvfa7tFM7wWhulOe6+P+m59/vfWlK
+   Ge0dsascwTCNg0wLGLx70koUERNNkVctCwkdCwFfAqMTpYlAaQFu9I8jM
+   r3EGXguUmu7bZSxLlfWyNttTfrldxFOXxtH+lQincRWt+eXYsVNB670lz
+   bc0M4Sv7lBTXVE8IV95AVLpGgrR7/5h+uAamI+ttDpgZ07o/itl8hREwS
+   eNgY6sIyCBq4M7VfAs+hSrR/N7Ey0HQSGXySM/ivKl7Xx5TxQ1RjBG7zm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10493"; a="291182401"
+X-IronPort-AV: E=Sophos;i="5.95,169,1661842800"; 
+   d="scan'208";a="291182401"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 23:46:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10493"; a="658590234"
+X-IronPort-AV: E=Sophos;i="5.95,169,1661842800"; 
+   d="scan'208";a="658590234"
+Received: from lkp-server01.sh.intel.com (HELO 3c15167049b7) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 07 Oct 2022 23:46:31 -0700
+Received: from kbuild by 3c15167049b7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oh3bS-0001uh-1j;
+        Sat, 08 Oct 2022 06:46:30 +0000
+Date:   Sat, 08 Oct 2022 14:45:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:lazy.2022.10.07a] BUILD SUCCESS
+ 2373c5a1033a43f83bb287ac2bac29dc8865a555
+Message-ID: <63411c90.fyz2OYWA054Q/65a%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] efi/arm: dump UEFI runtime page tables for ARM
-Content-Language: en-US
-To:     Russell King <linux@armlinux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>
-References: <20220930101024.118394-1-wangkefeng.wang@huawei.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <20220930101024.118394-1-wangkefeng.wang@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry, forget to Cc Ard and efi maillist, do it now.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git lazy.2022.10.07a
+branch HEAD: 2373c5a1033a43f83bb287ac2bac29dc8865a555  workqueue: Make queue_rcu_work() use call_rcu_flush()
 
-On 2022/9/30 18:10, Kefeng Wang wrote:
-> UEFI runtime page tables dump only for ARM64 at present,
-> but ARM support EFI and ARM_PTDUMP_DEBUGFS now. Since
-> ARM could potentially execute with a 1G/3G user/kernel
-> split, choosing 1G as the upper limit for UEFI runtime
-> end, with this, we could enable UEFI runtime page tables.
->
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
-> v2: update upper limit for ARM, only build test due to
->      my qemu without UEFI boot support.
->   arch/arm/include/asm/ptdump.h      | 1 +
->   arch/arm64/include/asm/ptdump.h    | 1 +
->   drivers/firmware/efi/arm-runtime.c | 4 ++--
->   3 files changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm/include/asm/ptdump.h b/arch/arm/include/asm/ptdump.h
-> index 0c2d3d0d4cc6..aad1d034136c 100644
-> --- a/arch/arm/include/asm/ptdump.h
-> +++ b/arch/arm/include/asm/ptdump.h
-> @@ -21,6 +21,7 @@ struct ptdump_info {
->   
->   void ptdump_walk_pgd(struct seq_file *s, struct ptdump_info *info);
->   #ifdef CONFIG_ARM_PTDUMP_DEBUGFS
-> +#define EFI_RUNTIME_MAP_END	SZ_1G
->   void ptdump_debugfs_register(struct ptdump_info *info, const char *name);
->   #else
->   static inline void ptdump_debugfs_register(struct ptdump_info *info,
-> diff --git a/arch/arm64/include/asm/ptdump.h b/arch/arm64/include/asm/ptdump.h
-> index b1dd7ecff7ef..581caac525b0 100644
-> --- a/arch/arm64/include/asm/ptdump.h
-> +++ b/arch/arm64/include/asm/ptdump.h
-> @@ -23,6 +23,7 @@ struct ptdump_info {
->   
->   void ptdump_walk(struct seq_file *s, struct ptdump_info *info);
->   #ifdef CONFIG_PTDUMP_DEBUGFS
-> +#define EFI_RUNTIME_MAP_END	DEFAULT_MAP_WINDOW_64
->   void __init ptdump_debugfs_register(struct ptdump_info *info, const char *name);
->   #else
->   static inline void ptdump_debugfs_register(struct ptdump_info *info,
-> diff --git a/drivers/firmware/efi/arm-runtime.c b/drivers/firmware/efi/arm-runtime.c
-> index 3359ae2adf24..8f8ae479061b 100644
-> --- a/drivers/firmware/efi/arm-runtime.c
-> +++ b/drivers/firmware/efi/arm-runtime.c
-> @@ -25,14 +25,14 @@
->   #include <asm/mmu.h>
->   #include <asm/pgalloc.h>
->   
-> -#if defined(CONFIG_PTDUMP_DEBUGFS) && defined(CONFIG_ARM64)
-> +#if defined(CONFIG_PTDUMP_DEBUGFS) || defined(CONFIG_ARM_PTDUMP_DEBUGFS)
->   #include <asm/ptdump.h>
->   
->   static struct ptdump_info efi_ptdump_info = {
->   	.mm		= &efi_mm,
->   	.markers	= (struct addr_marker[]){
->   		{ 0,				"UEFI runtime start" },
-> -		{ DEFAULT_MAP_WINDOW_64,	"UEFI runtime end" },
-> +		{ EFI_RUNTIME_MAP_END,		"UEFI runtime end" },
->   		{ -1,				NULL }
->   	},
->   	.base_addr	= 0,
+elapsed time: 725m
+
+configs tested: 83
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+i386                                defconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+x86_64                              defconfig
+alpha                            allyesconfig
+arc                                 defconfig
+s390                             allmodconfig
+powerpc                           allnoconfig
+m68k                             allyesconfig
+alpha                               defconfig
+i386                 randconfig-a014-20221003
+powerpc                          allmodconfig
+x86_64                           rhel-8.3-syz
+s390                             allyesconfig
+m68k                             allmodconfig
+s390                                defconfig
+i386                 randconfig-a011-20221003
+mips                             allyesconfig
+x86_64                               rhel-8.3
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+sh                               allmodconfig
+arc                              allyesconfig
+x86_64                           allyesconfig
+x86_64               randconfig-a011-20221003
+riscv                randconfig-r042-20221007
+arm                                 defconfig
+i386                 randconfig-a012-20221003
+arc                  randconfig-r043-20221007
+x86_64               randconfig-a015-20221003
+i386                 randconfig-a013-20221003
+x86_64               randconfig-a014-20221003
+riscv                randconfig-r042-20221003
+i386                             allyesconfig
+arm                              allyesconfig
+arc                  randconfig-r043-20221003
+i386                 randconfig-a015-20221003
+i386                 randconfig-a016-20221003
+x86_64               randconfig-a012-20221003
+x86_64               randconfig-a013-20221003
+arm64                            allyesconfig
+x86_64               randconfig-a016-20221003
+s390                 randconfig-r044-20221007
+s390                 randconfig-r044-20221003
+ia64                             allmodconfig
+arc                               allnoconfig
+arc                  randconfig-r043-20221002
+alpha                             allnoconfig
+riscv                             allnoconfig
+csky                              allnoconfig
+powerpc                     taishan_defconfig
+arm                       imx_v6_v7_defconfig
+sh                          landisk_defconfig
+powerpc                         wii_defconfig
+m68k                        m5272c3_defconfig
+csky                                defconfig
+sh                           se7750_defconfig
+xtensa                  cadence_csp_defconfig
+
+clang tested configs:
+i386                 randconfig-a004-20221003
+hexagon              randconfig-r041-20221003
+x86_64               randconfig-a003-20221003
+x86_64               randconfig-a002-20221003
+x86_64               randconfig-a001-20221003
+i386                 randconfig-a003-20221003
+x86_64               randconfig-a004-20221003
+x86_64               randconfig-a006-20221003
+x86_64               randconfig-a005-20221003
+i386                 randconfig-a002-20221003
+i386                 randconfig-a001-20221003
+i386                 randconfig-a006-20221003
+i386                 randconfig-a005-20221003
+hexagon              randconfig-r045-20221007
+hexagon              randconfig-r041-20221007
+hexagon              randconfig-r045-20221003
+hexagon              randconfig-r041-20221002
+hexagon              randconfig-r045-20221002
+riscv                randconfig-r042-20221002
+s390                 randconfig-r044-20221002
+powerpc                 mpc8315_rdb_defconfig
+powerpc                     pseries_defconfig
+mips                          ath25_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
