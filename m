@@ -1,108 +1,98 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1D75F874C
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 22:14:53 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id BD4BC5F874E
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 22:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbiJHUOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 16:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
+        id S229901AbiJHUSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 16:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiJHUOp (ORCPT
+        with ESMTP id S229627AbiJHUSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 16:14:45 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747902720
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 13:14:44 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-132b8f6f1b2so8886188fac.11
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 13:14:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XHx3X9LziObAexksOpffeVkKG/1z7y76WbQ1Tlfnt2g=;
-        b=lQsDaLFr2MJET6QUQfFYg6DA1rhd1TQaqaGTdbplgOkyYZ6oHI6V18W2n+Qrz3tF8g
-         0+bXzUHsOoLBXHOiWsNRHP2i3GrOPUROYE5ZTcxJwbGGQKBBz0ibv0DzXot1H+fBaSU1
-         Y1QYNaPL3xfkGVUZe5lhfTsne4uKiWt0feiHV+MQ7/ayCLXzNZgkFSXS7M8Cv+YOIVmT
-         IXI0o4UXTxTz6Egvs/a7+pmvRTQeZRwLYGuVCR8WhVtj8ZjhjkBqGtZBUX/0UHHwTUbz
-         Ca8gDI+H9uxLzIeaQfTCxVGkhFmjQZZXRubPm0O4Qvz+5RR/9DgGZ9EtTqG3fJ0Ns0Rv
-         CkLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XHx3X9LziObAexksOpffeVkKG/1z7y76WbQ1Tlfnt2g=;
-        b=FYlxMWKNsyX4UAqsQ8XYsjPGgAvwrkWeS7MHsfcrBKZUrgDbNqXPY4ZxGLHl8yWSvI
-         dmamzSYIQpXTmFJqgTrylvfklxCjXPOtMkOWm2AUsjOD6VWv68oEIGGYi1EcAqiWmdbe
-         anZY2Exq0XdTCys1NiwCW72lQ5OpcGfBXVfnKCRAOeRG4HOAo+i3cdMOjSiN8GwyUwjS
-         TyrO2SmrzIroC2d1Hc97j2paOQ8LvaBi1xXinqMrXBNKJXNZGmG+SHyrxhSFfSwiKuV0
-         3N+kIvTiPpER2YHm2VAO+ydnY5DhrqjB+RocIyS6uZxH8X9AzhmVJGQ5DTuFwQxsGBZ1
-         u+lg==
-X-Gm-Message-State: ACrzQf3peeiuSOWM62FjQVvAleXBxOBb1pEc1MqEOS1sCp3lXhXI6pTe
-        E5RnLGhLXDnKxDbsxvVdEwO1NAiBkA==
-X-Google-Smtp-Source: AMsMyM5yhL9nyMMOMNpMmuqDdfBMdWQVI6cohRBMzCGy/ChoOi9tS2/Gjq4k8goMcjTXutUFh147yg==
-X-Received: by 2002:a05:6870:d626:b0:132:9149:dc8a with SMTP id a38-20020a056870d62600b001329149dc8amr10940767oaq.141.1665260083642;
-        Sat, 08 Oct 2022 13:14:43 -0700 (PDT)
-Received: from citadel.. (075-134-122-108.res.spectrum.com. [75.134.122.108])
-        by smtp.gmail.com with ESMTPSA id az14-20020a056808164e00b0034f684ca159sm2437919oib.29.2022.10.08.13.14.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Oct 2022 13:14:43 -0700 (PDT)
-From:   Brian Gerst <brgerst@gmail.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Brian Gerst <brgerst@gmail.com>
-Subject: [PATCH] x86/alternatives: Remove double patching in ALTERNATIVE_TERNARY
-Date:   Sat,  8 Oct 2022 16:14:29 -0400
-Message-Id: <20221008201429.102040-1-brgerst@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Sat, 8 Oct 2022 16:18:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6385032058
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 13:18:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D8DEB80BED
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 20:18:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AEC6C433C1;
+        Sat,  8 Oct 2022 20:18:10 +0000 (UTC)
+Date:   Sat, 8 Oct 2022 16:18:06 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] ring-buffer: Fix kernel-doc
+Message-ID: <20221008161806.62d8dec9@rorschach.local.home>
+In-Reply-To: <20221008065624.40998-1-jiapeng.chong@linux.alibaba.com>
+References: <20221008065624.40998-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use ALT_NOT(feature) instead of X86_FEATURE_ALWAYS to avoid patching the
-code twice when the feature is present.
+On Sat,  8 Oct 2022 14:56:24 +0800
+Jiapeng Chong <jiapeng.chong@linux.alibaba.com> wrote:
 
-Signed-off-by: Brian Gerst <brgerst@gmail.com>
----
- arch/x86/include/asm/alternative.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> kernel/trace/ring_buffer.c:895: warning: expecting prototype for ring_buffer_nr_pages_dirty(). Prototype was for ring_buffer_nr_dirty_pages() instead.
+> kernel/trace/ring_buffer.c:5313: warning: expecting prototype for ring_buffer_reset_cpu(). Prototype was for ring_buffer_reset_online_cpus() instead.
+> kernel/trace/ring_buffer.c:5382: warning: expecting prototype for rind_buffer_empty(). Prototype was for ring_buffer_empty() instead.
+> 
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2340
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  kernel/trace/ring_buffer.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+> index c3f354cfc5ba..89fb203b04b3 100644
+> --- a/kernel/trace/ring_buffer.c
+> +++ b/kernel/trace/ring_buffer.c
+> @@ -885,7 +885,7 @@ size_t ring_buffer_nr_pages(struct trace_buffer *buffer, int cpu)
+>  }
+>  
+>  /**
+> - * ring_buffer_nr_pages_dirty - get the number of used pages in the ring buffer
+> + * ring_buffer_nr_dirty_pages() - get the number of use_ pages in the ring buffer
 
-diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/alternative.h
-index 9542c582d546..f4efce972277 100644
---- a/arch/x86/include/asm/alternative.h
-+++ b/arch/x86/include/asm/alternative.h
-@@ -181,7 +181,7 @@ static inline int alternatives_text_reserved(void *start, void *end)
- 
- /* If @feature is set, patch in @newinstr_yes, otherwise @newinstr_no. */
- #define ALTERNATIVE_TERNARY(oldinstr, feature, newinstr_yes, newinstr_no) \
--	ALTERNATIVE_2(oldinstr, newinstr_no, X86_FEATURE_ALWAYS,	\
-+	ALTERNATIVE_2(oldinstr, newinstr_no, ALT_NOT(feature),		\
- 		      newinstr_yes, feature)
- 
- #define ALTERNATIVE_3(oldinsn, newinsn1, feat1, newinsn2, feat2, newinsn3, feat3) \
-@@ -386,7 +386,7 @@ static inline int alternatives_text_reserved(void *start, void *end)
- 
- /* If @feature is set, patch in @newinstr_yes, otherwise @newinstr_no. */
- #define ALTERNATIVE_TERNARY(oldinstr, feature, newinstr_yes, newinstr_no) \
--	ALTERNATIVE_2 oldinstr, newinstr_no, X86_FEATURE_ALWAYS,	\
-+	ALTERNATIVE_2 oldinstr, newinstr_no, ALT_NOT(feature),		\
- 	newinstr_yes, feature
- 
- #endif /* __ASSEMBLY__ */
--- 
-2.37.3
+Get rid of the parenthesis, that's not how kernel doc works.
+
+-- Steve
+
+
+>   * @buffer: The ring_buffer to get the number of pages from
+>   * @cpu: The cpu of the ring_buffer to get the number of pages from
+>   *
+> @@ -5305,7 +5305,7 @@ void ring_buffer_reset_cpu(struct trace_buffer *buffer, int cpu)
+>  EXPORT_SYMBOL_GPL(ring_buffer_reset_cpu);
+>  
+>  /**
+> - * ring_buffer_reset_cpu - reset a ring buffer per CPU buffer
+> + * ring_buffer_reset_online_cpus() - reset a ring buffer per CPU buffer
+>   * @buffer: The ring buffer to reset a per cpu buffer of
+>   * @cpu: The CPU buffer to be reset
+>   */
+> @@ -5375,7 +5375,7 @@ void ring_buffer_reset(struct trace_buffer *buffer)
+>  EXPORT_SYMBOL_GPL(ring_buffer_reset);
+>  
+>  /**
+> - * rind_buffer_empty - is the ring buffer empty?
+> + * ring_buffer_empty() - is the ring buffer empty?
+>   * @buffer: The ring buffer to test
+>   */
+>  bool ring_buffer_empty(struct trace_buffer *buffer)
 
