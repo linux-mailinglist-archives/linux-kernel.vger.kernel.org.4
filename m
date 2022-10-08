@@ -2,97 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D445F843F
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 10:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA84A5F8445
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 10:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiJHIVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 04:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
+        id S229628AbiJHIcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 04:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiJHIVj (ORCPT
+        with ESMTP id S229487AbiJHIcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 04:21:39 -0400
-Received: from mail.nfschina.com (unknown [124.16.136.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28828564CF;
-        Sat,  8 Oct 2022 01:21:37 -0700 (PDT)
+        Sat, 8 Oct 2022 04:32:16 -0400
+Received: from mail.nfschina.com (mail.nfschina.com [124.16.136.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5845B520B3;
+        Sat,  8 Oct 2022 01:32:15 -0700 (PDT)
 Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 623C51E80D9F;
-        Sat,  8 Oct 2022 16:15:33 +0800 (CST)
+        by mail.nfschina.com (Postfix) with ESMTP id 2CFAB1E80D72;
+        Sat,  8 Oct 2022 16:26:28 +0800 (CST)
 X-Virus-Scanned: amavisd-new at test.com
 Received: from mail.nfschina.com ([127.0.0.1])
         by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id MHHnS3oqJkSU; Sat,  8 Oct 2022 16:15:30 +0800 (CST)
+        with ESMTP id Epqull-euYaK; Sat,  8 Oct 2022 16:26:25 +0800 (CST)
 Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: kunyu@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 5AB221E80D9D;
-        Sat,  8 Oct 2022 16:15:29 +0800 (CST)
-From:   Li kunyu <kunyu@nfschina.com>
-To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Li kunyu <kunyu@nfschina.com>
-Subject: [PATCH] lib: bpf: Optimized variable usage in the btf_parse_elf function
-Date:   Sat,  8 Oct 2022 16:21:00 +0800
-Message-Id: <20221008082100.4323-1-kunyu@nfschina.com>
+        (Authenticated sender: zeming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 5B1CB1E80D4D;
+        Sat,  8 Oct 2022 16:26:25 +0800 (CST)
+From:   Li zeming <zeming@nfschina.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com
+Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Li zeming <zeming@nfschina.com>
+Subject: [PATCH] hv: Remove unnecessary (void*) conversions
+Date:   Sat,  8 Oct 2022 16:32:06 +0800
+Message-Id: <20221008083206.4486-1-zeming@nfschina.com>
 X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes were made in the btf_parse_elf function:
-1. The initialization assignments of err, fd, scn and elf variables are
-removed, and they do not affect function security after analysis.
-2. Remove unnecessary assignments to err variable (-error).
+addrp is a void pointer and does not require a cast type.
 
-Signed-off-by: Li kunyu <kunyu@nfschina.com>
+Signed-off-by: Li zeming <zeming@nfschina.com>
 ---
- tools/lib/bpf/btf.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ tools/hv/hv_kvp_daemon.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 2d14f1a52d7a..fa9d5fa03da4 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -910,10 +910,10 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
- 				 struct btf_ext **btf_ext)
- {
- 	Elf_Data *btf_data = NULL, *btf_ext_data = NULL;
--	int err = 0, fd = -1, idx = 0;
-+	int err, fd, idx = 0;
- 	struct btf *btf = NULL;
--	Elf_Scn *scn = NULL;
--	Elf *elf = NULL;
-+	Elf_Scn *scn;
-+	Elf *elf;
- 	GElf_Ehdr ehdr;
- 	size_t shstrndx;
+diff --git a/tools/hv/hv_kvp_daemon.c b/tools/hv/hv_kvp_daemon.c
+index 1e6fd6ca513b..445abb53bf0d 100644
+--- a/tools/hv/hv_kvp_daemon.c
++++ b/tools/hv/hv_kvp_daemon.c
+@@ -772,11 +772,11 @@ static int kvp_process_ip_address(void *addrp,
+ 	const char *str;
  
-@@ -924,9 +924,8 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
- 
- 	fd = open(path, O_RDONLY | O_CLOEXEC);
- 	if (fd < 0) {
--		err = -errno;
- 		pr_warn("failed to open %s: %s\n", path, strerror(errno));
--		return ERR_PTR(err);
-+		return ERR_PTR(-errno);
+ 	if (family == AF_INET) {
+-		addr = (struct sockaddr_in *)addrp;
++		addr = addrp;
+ 		str = inet_ntop(family, &addr->sin_addr, tmp, 50);
+ 		addr_length = INET_ADDRSTRLEN;
+ 	} else {
+-		addr6 = (struct sockaddr_in6 *)addrp;
++		addr6 = addrp;
+ 		str = inet_ntop(family, &addr6->sin6_addr.s6_addr, tmp, 50);
+ 		addr_length = INET6_ADDRSTRLEN;
  	}
- 
- 	err = -LIBBPF_ERRNO__FORMAT;
-@@ -987,8 +986,6 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
- 		}
- 	}
- 
--	err = 0;
--
- 	if (!btf_data) {
- 		err = -ENOENT;
- 		goto done;
 -- 
 2.18.2
 
