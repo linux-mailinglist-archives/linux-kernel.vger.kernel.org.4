@@ -2,147 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8705F8705
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 21:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE9995F8707
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 21:12:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbiJHTLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 15:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38926 "EHLO
+        id S229849AbiJHTMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 15:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiJHTK6 (ORCPT
+        with ESMTP id S229531AbiJHTMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 15:10:58 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21392F643;
-        Sat,  8 Oct 2022 12:10:56 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id bv10so8062585wrb.4;
-        Sat, 08 Oct 2022 12:10:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1wbrHIINWpNtq1uT4Jf3QIYAe/wvpMtUNlJq6URPo7Y=;
-        b=gWoU7Rx2ibfkGptoYG9FDbP0gxfTtzkWf1ilHfG+T3uESHxU32ANZzJ2JF4sWQOVkk
-         YWv7mQdLwAOueULcAyuZ7rg1cuEGPUU5G5OI+h7Oecpc2SHWAVQFt4jIZDAeIJfp4INL
-         yo3kk5sPu0gHjkXJZAXXeHRaI+/zBx4wpgiFeacC1YQ3JCnpyeks6ZC9++/XuAzbDdq0
-         6IazpEkmbbMePGeovpcOoVKtC9kjCUthFH35UiasyExZtoKbf/C3h0L8lEV184dDtPOG
-         aJz/+FTM5IHHqapZ8bYyBvOa0w44qIWy191BzoxLKE4NIgGuKQkqK42tWrl6E/1JyqQ3
-         oq1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1wbrHIINWpNtq1uT4Jf3QIYAe/wvpMtUNlJq6URPo7Y=;
-        b=bkqEjnrPPzWWB2cLMx/bCgioaI9Om8sON+zYXgqv9WRBZ2Pcn0be1Ce++m2F4deRGk
-         hdwW54mm0JjNh6kp3KNxNL+c5iE629QMrfDFaSxT5fvKGptHoDE9aafJCZa5N7EfxX4e
-         ORKxyUVeIAJuEGpTVMUwxeJ8cA6Aulbc9XrEtbOgn2jmj6wc75IflI0Huk7Ca/fJlQbb
-         Vai+38Vv5daTNY72qnKXJiXwtPsC0SGfuwhE2KTQv4AXF/vdAPPZi4NaQ+RuFiwe5pek
-         o6how6Sw3mMyH85iyBcmHR5jmGtFozC2XHSXGFC1g94cT/GTmCdOn/rrlhyWBP21sk4y
-         OLlw==
-X-Gm-Message-State: ACrzQf0I1zixsqkLDf0MGksTXBbuVYQZUYeVLEafiBOT22zUIIbk2F/m
-        TotVdUSOqumyEU62Un4Ubw==
-X-Google-Smtp-Source: AMsMyM7ds93yz+i63Lvzrb/741kz+lZLJ7NheYdFKnuCQPCx1YGqA/LKhss9WIikPqnthopYaei6UA==
-X-Received: by 2002:a5d:5552:0:b0:22e:6941:81f8 with SMTP id g18-20020a5d5552000000b0022e694181f8mr6563177wrw.521.1665256255039;
-        Sat, 08 Oct 2022 12:10:55 -0700 (PDT)
-Received: from octinomon ([2a00:23c8:2f02:3b01:3ea1:40:8650:189])
-        by smtp.gmail.com with ESMTPSA id q3-20020a1c4303000000b003b4bd18a23bsm10912968wma.12.2022.10.08.12.10.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Oct 2022 12:10:54 -0700 (PDT)
-From:   Jules Irenge <jbi.octave@gmail.com>
-X-Google-Original-From: Jules Irenge <jules.irenge@postgrad.manchester.ac.uk>
-Date:   Sat, 8 Oct 2022 20:10:52 +0100
-To:     erazor_de@users.sourceforge.net
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] HID: roccat: Convert snprintf() to sysfs_emit()
-Message-ID: <Y0HLPBTodPxVRbe4@octinomon>
+        Sat, 8 Oct 2022 15:12:34 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C787B2F64D;
+        Sat,  8 Oct 2022 12:12:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jltrTTngI5+i4SrxqnMducvxr3z9ztoNRgWqy5Yg5Vc=; b=FRd/EQ0pfESUdqddbaFYYHkSOB
+        knXxf8NqJUPmkij9EHZ/XMf1uihqgy6aFxGatF2c2c+MPn2VjCzjrauucZ3vvc4c6CRVWHuLvm2tn
+        9TzuHyTdj81e4OhdbxFP66MtBMudFWz6UC0AF1pPvbv1lnSQThfunqLZ7SZXlSxFlwFJSXF+X+Uju
+        c4ganqrcx6NWXJMGsCJNKV8yrJT4xNALl0T0kaR3I0xoDUCh2jc6/PMlvcpVoKO5PQi7WhNx88LFe
+        dQVbBEhO8W+0GqaA5MZutsAT4xuSEe+M4y0s3/hku4/n6Vr371DyP1UbUuYTIJdaG0RATIcBgwKqb
+        W5L2d3/Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ohFFO-002tNm-Nv; Sat, 08 Oct 2022 19:12:30 +0000
+Date:   Sat, 8 Oct 2022 20:12:30 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     syzbot <syzbot+5867885efe39089b339b@syzkaller.appspotmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
+        Vishal Moola <vishal.moola@gmail.com>
+Subject: Re: [syzbot] UBSAN: array-index-out-of-bounds in
+ truncate_inode_pages_range
+Message-ID: <Y0HLnmzlmJRK/tHF@casper.infradead.org>
+References: <000000000000117c7505e7927cb4@google.com>
+ <20220901162459.431c49b3925e99ddb448e1b3@linux-foundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220901162459.431c49b3925e99ddb448e1b3@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Coccinnelle reports a warning
-Warning: Use scnprintf or sprintf
+On Thu, Sep 01, 2022 at 04:24:59PM -0700, Andrew Morton wrote:
+> On Wed, 31 Aug 2022 17:13:36 -0700 syzbot <syzbot+5867885efe39089b339b@syzkaller.appspotmail.com> wrote:
+> 
+> > Hello,
+> > 
+> > syzbot found the following issue on:
+> > 
+> > HEAD commit:    89b749d8552d Merge tag 'fbdev-for-6.0-rc3' of git://git.ke..
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=14b9661b080000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=911efaff115942bb
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=5867885efe39089b339b
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > userspace arch: i386
+> > 
+> > Unfortunately, I don't have any reproducer for this issue yet.
+> > 
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+5867885efe39089b339b@syzkaller.appspotmail.com
+> > 
+> > ntfs3: loop0: Different NTFS' sector size (1024) and media sector size (512)
+> > ntfs3: loop0: RAW NTFS volume: Filesystem size 0.00 Gb > volume size 0.00 Gb. Mount in read-only
+> > ================================================================================
+> > UBSAN: array-index-out-of-bounds in mm/truncate.c:366:18
+> > index 254 is out of range for type 'long unsigned int [15]'
+> 
+> That's
+> 
+> 		index = indices[folio_batch_count(&fbatch) - 1] + 1;
+> 
+> I looked.  I see no way in which fbatch.nr got a value of 255.
 
-Following the advice on kernel documentation
-https://www.kernel.org/doc/html/latest/filesystems/sysfs.html
+NTFS is involved.  I stopped looking at that point; it seems to be
+riddled with buffer overflows.
 
-For show(device *...) functions we should only use sysfs_emit() or sysfs_emit_at()
-especially when formatting the value to be returned to user space.
+> I must say, the the code looks rather hacky.  Isn't there a more
+> type-friendly way of doing this?
 
-Convert snprintf() to sysfs_emit()
+Looking at the three callers, they all want to advance index.  We
+should probably pass &index instead of index and have find_lock_entries
+advance it for them.
 
-Signed-off-by: Jules Irenge <jules.irenge@postgrad.manchester.ac.uk>
----
- drivers/hid/hid-roccat-kone.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/hid/hid-roccat-kone.c b/drivers/hid/hid-roccat-kone.c
-index 76da04801ca9..f0c35c05e702 100644
---- a/drivers/hid/hid-roccat-kone.c
-+++ b/drivers/hid/hid-roccat-kone.c
-@@ -403,7 +403,7 @@ static ssize_t kone_sysfs_show_actual_profile(struct device *dev,
- {
- 	struct kone_device *kone =
- 			hid_get_drvdata(dev_get_drvdata(dev->parent->parent));
--	return snprintf(buf, PAGE_SIZE, "%d\n", kone->actual_profile);
-+	return sysfs_emit(buf, "%d\n", kone->actual_profile);
- }
- static DEVICE_ATTR(actual_profile, 0440, kone_sysfs_show_actual_profile, NULL);
- 
-@@ -412,7 +412,7 @@ static ssize_t kone_sysfs_show_actual_dpi(struct device *dev,
- {
- 	struct kone_device *kone =
- 			hid_get_drvdata(dev_get_drvdata(dev->parent->parent));
--	return snprintf(buf, PAGE_SIZE, "%d\n", kone->actual_dpi);
-+	return sysfs_emit(buf, "%d\n", kone->actual_dpi);
- }
- static DEVICE_ATTR(actual_dpi, 0440, kone_sysfs_show_actual_dpi, NULL);
- 
-@@ -435,7 +435,7 @@ static ssize_t kone_sysfs_show_weight(struct device *dev,
- 
- 	if (retval)
- 		return retval;
--	return snprintf(buf, PAGE_SIZE, "%d\n", weight);
-+	return sysfs_emit(buf, "%d\n", weight);
- }
- static DEVICE_ATTR(weight, 0440, kone_sysfs_show_weight, NULL);
- 
-@@ -444,7 +444,7 @@ static ssize_t kone_sysfs_show_firmware_version(struct device *dev,
- {
- 	struct kone_device *kone =
- 			hid_get_drvdata(dev_get_drvdata(dev->parent->parent));
--	return snprintf(buf, PAGE_SIZE, "%d\n", kone->firmware_version);
-+	return sysfs_emit(buf, "%d\n", kone->firmware_version);
- }
- static DEVICE_ATTR(firmware_version, 0440, kone_sysfs_show_firmware_version,
- 		   NULL);
-@@ -454,7 +454,7 @@ static ssize_t kone_sysfs_show_tcu(struct device *dev,
- {
- 	struct kone_device *kone =
- 			hid_get_drvdata(dev_get_drvdata(dev->parent->parent));
--	return snprintf(buf, PAGE_SIZE, "%d\n", kone->settings.tcu);
-+	return sysfs_emit(buf, "%d\n", kone->settings.tcu);
- }
- 
- static int kone_tcu_command(struct usb_device *usb_dev, int number)
-@@ -556,7 +556,7 @@ static ssize_t kone_sysfs_show_startup_profile(struct device *dev,
- {
- 	struct kone_device *kone =
- 			hid_get_drvdata(dev_get_drvdata(dev->parent->parent));
--	return snprintf(buf, PAGE_SIZE, "%d\n", kone->settings.startup_profile);
-+	return sysfs_emit(buf, "%d\n", kone->settings.startup_profile);
- }
- 
- static ssize_t kone_sysfs_set_startup_profile(struct device *dev,
--- 
-2.37.3
-
+Vishal, want to take this on?
