@@ -2,160 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA5E5F851C
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 13:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7CC5F851F
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 13:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbiJHLt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 07:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
+        id S229734AbiJHLub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 07:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiJHLty (ORCPT
+        with ESMTP id S229547AbiJHLuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 07:49:54 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A87193FD;
-        Sat,  8 Oct 2022 04:49:53 -0700 (PDT)
-Received: from localhost.localdomain (unknown [46.242.14.200])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 002464077AE4;
-        Sat,  8 Oct 2022 11:49:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 002464077AE4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1665229790;
-        bh=eGhQBNtLRT/iMFU1ypAtNfUplajfF0B7mQZ1FqvKb6I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OmsIvw93BGjxV+uEf5ZUFZFc5MwdQyTTCo+AYcHXk2UF/PRppEVBUidOkzG2sqKPy
-         gWT/IJbrkjOSfe4NGHUF/VNU5W93l1zjr+UmfvevwkdKICcfvlEYDVMrHUI8GQSlcA
-         W6AkJ8cEXeqT94el3yHCbNHMaEBgUW5T+HP21fME=
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <kvalo@kernel.org>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org
-Subject: [PATCH v2] ath9k: hif_usb: Fix use-after-free in ath9k_hif_usb_reg_in_cb()
-Date:   Sat,  8 Oct 2022 14:49:17 +0300
-Message-Id: <20221008114917.21404-1-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <87ilkvcys7.fsf@toke.dk>
-References: 
+        Sat, 8 Oct 2022 07:50:25 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770551C117;
+        Sat,  8 Oct 2022 04:50:24 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id b1so5632723lfs.7;
+        Sat, 08 Oct 2022 04:50:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dji2Yw3SxEqIXHoPCkkOxGjvaONXRxPb3yOPhNs389g=;
+        b=pcr8plzA5CjmEreaQB9NbfeIgWGA26IPHwvzgpWz8IqLAM8QW4AfwD7/PpJq8geUsw
+         PFfuJp8MAM1B180Rrt8Hp4MXNa8G0QPTN2/EFHVN5yxhxedf8VHY0m+bUlkrNY0g2Y5s
+         8ppvQvzGIP1TcpMXT1mIv8LCd9XaPxsh8eiSqJ+x8lP7JIsq0K8GAVjj80QI6/dtOVPp
+         FWGJfnbpn0e+jRi5v6qPC2NxzDcsCuw1miGB3po+adJ4HTpe2y/kY/GRToshN9E/Y4+V
+         5WYiwvN+BWPNjtkvmjXN7v4D3WI0bkqsWKu6coU73BEkqSB9dHG6tjMR/gy41cPHoCfg
+         LqBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dji2Yw3SxEqIXHoPCkkOxGjvaONXRxPb3yOPhNs389g=;
+        b=Pa3Qxqntl8pxSbop8HZEs8dWjK2pTJPFZQLNhHha//3Yzzn0kuCR2ARSK2gyFMmzbD
+         leKrHuGaLNg8YEF+EjiHAbcCth7WbMcw5+OYLWrOht4qA7LBmNlp2Gp4sreLIqcjtzOO
+         D7vPW98Zj4mcz00b/JKmF5xafMKL7TcWLnKqmUKA6BWpWYPsxXxoJbY5VCy7hxstB+Dk
+         Ac0+KT+DOwsZV2SycfyJlVSsvDG5mgrM5s9CjTbBviqHDJ2CI3ti3qc1ubty+BjVpAXb
+         BfNAoHLGwzqAknfTelhM5QWCl8Y+6C/u2cCBmupxV/rH37gOIKlFVerrFdZzlWITRa77
+         qZtQ==
+X-Gm-Message-State: ACrzQf0n3OIlQQGOHoYkZTHL3nt7ADRBlkkvlickUScK9ndbDoLLAP51
+        s5W5+zP3EqRW9tJbxpit33E=
+X-Google-Smtp-Source: AMsMyM6Nil25Amkth0D58wMtsIVBBye5sPIdEv2BPNWT4MRn2Fzuyxvfn6ISWfxb1bacB6OckC6fKA==
+X-Received: by 2002:a05:6512:224d:b0:4a2:7710:9b8b with SMTP id i13-20020a056512224d00b004a277109b8bmr3137394lfu.128.1665229822628;
+        Sat, 08 Oct 2022 04:50:22 -0700 (PDT)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id v18-20020a05651203b200b00494813c689dsm657418lfp.219.2022.10.08.04.50.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Oct 2022 04:50:21 -0700 (PDT)
+Date:   Sat, 8 Oct 2022 14:50:19 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Peter Rosin <peda@axentia.se>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        robh@kernel.org, wsa@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [v9 1/4] dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
+Message-ID: <20221008115019.6jxsbawtye7cdkfh@mobilestation>
+References: <20221007075354.568752-1-patrick.rudolph@9elements.com>
+ <20221007075354.568752-2-patrick.rudolph@9elements.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221007075354.568752-2-patrick.rudolph@9elements.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is possible that skb is freed in ath9k_htc_rx_msg(), then
-usb_submit_urb() fails and we try to free skb again. It causes
-use-after-free bug. Moreover, if alloc_skb() fails, urb->context becomes
-NULL but rx_buf is not freed and there can be a memory leak.
+On Fri, Oct 07, 2022 at 09:53:50AM +0200, Patrick Rudolph wrote:
+> Update the pca954x bindings to add support for the Maxim MAX735x/MAX736x
+> chips. The functionality will be provided by the exisintg pca954x driver.
+> 
+> While on it make the interrupts support conditionally as not all of the
+> existing chips have interrupts.
+> 
+> For chips that are powered off by default add an optional regulator
+> called vdd-supply.
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> ---
+>  .../bindings/i2c/i2c-mux-pca954x.yaml         | 39 ++++++++++++++++---
+>  1 file changed, 34 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> index 9f1726d0356b..efad0a95806f 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> @@ -4,21 +4,25 @@
+>  $id: http://devicetree.org/schemas/i2c/i2c-mux-pca954x.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: NXP PCA954x I2C bus switch
+> +title: NXP PCA954x I2C and compatible bus switches
+>  
+>  maintainers:
+>    - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>  
+>  description:
+> -  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
+> -
 
-The patch removes unnecessary nskb and makes skb processing more clear: it
-is supposed that ath9k_htc_rx_msg() either frees old skb or passes its
-managing to another callback function.
+> -allOf:
+> -  - $ref: /schemas/i2c/i2c-mux.yaml#
 
-Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+Why do you move the allOf statement to the bottom of the schema?
 
-Fixes: 3deff76095c4 ("ath9k_htc: Increase URB count for REG_IN pipe")
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
----
-v1->v2: add comment about freeing an skb and remove double blank line
+> +  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices,
+> +  and the Maxim MAX735x and MAX736x I2C mux/switch devices.
 
- drivers/net/wireless/ath/ath9k/hif_usb.c | 28 +++++++++++++-----------
- 1 file changed, 15 insertions(+), 13 deletions(-)
+What about combining the sentence: "The binding supports NXP
+PCA954x/PCA984x and Maxim MAX735x/MAX736x I2C mux/switch devices." ?
+Currently it does look a bit bulky.
 
-diff --git a/drivers/net/wireless/ath/ath9k/hif_usb.c b/drivers/net/wireless/ath/ath9k/hif_usb.c
-index 4d9002a9d082..401b408cb7a4 100644
---- a/drivers/net/wireless/ath/ath9k/hif_usb.c
-+++ b/drivers/net/wireless/ath/ath9k/hif_usb.c
-@@ -708,14 +708,13 @@ static void ath9k_hif_usb_reg_in_cb(struct urb *urb)
- 	struct rx_buf *rx_buf = (struct rx_buf *)urb->context;
- 	struct hif_device_usb *hif_dev = rx_buf->hif_dev;
- 	struct sk_buff *skb = rx_buf->skb;
--	struct sk_buff *nskb;
- 	int ret;
- 
- 	if (!skb)
- 		return;
- 
- 	if (!hif_dev)
--		goto free;
-+		goto free_skb;
- 
- 	switch (urb->status) {
- 	case 0:
-@@ -724,7 +723,7 @@ static void ath9k_hif_usb_reg_in_cb(struct urb *urb)
- 	case -ECONNRESET:
- 	case -ENODEV:
- 	case -ESHUTDOWN:
--		goto free;
-+		goto free_skb;
- 	default:
- 		skb_reset_tail_pointer(skb);
- 		skb_trim(skb, 0);
-@@ -735,25 +734,27 @@ static void ath9k_hif_usb_reg_in_cb(struct urb *urb)
- 	if (likely(urb->actual_length != 0)) {
- 		skb_put(skb, urb->actual_length);
- 
--		/* Process the command first */
-+		/*
-+		 * Process the command first.
-+		 * skb is either freed here or passed to be
-+		 * managed to another callback function.
-+		 */
- 		ath9k_htc_rx_msg(hif_dev->htc_handle, skb,
- 				 skb->len, USB_REG_IN_PIPE);
- 
--
--		nskb = alloc_skb(MAX_REG_IN_BUF_SIZE, GFP_ATOMIC);
--		if (!nskb) {
-+		skb = alloc_skb(MAX_REG_IN_BUF_SIZE, GFP_ATOMIC);
-+		if (!skb) {
- 			dev_err(&hif_dev->udev->dev,
- 				"ath9k_htc: REG_IN memory allocation failure\n");
--			urb->context = NULL;
--			return;
-+			goto free_rx_buf;
- 		}
- 
--		rx_buf->skb = nskb;
-+		rx_buf->skb = skb;
- 
- 		usb_fill_int_urb(urb, hif_dev->udev,
- 				 usb_rcvintpipe(hif_dev->udev,
- 						 USB_REG_IN_PIPE),
--				 nskb->data, MAX_REG_IN_BUF_SIZE,
-+				 skb->data, MAX_REG_IN_BUF_SIZE,
- 				 ath9k_hif_usb_reg_in_cb, rx_buf, 1);
- 	}
- 
-@@ -762,12 +763,13 @@ static void ath9k_hif_usb_reg_in_cb(struct urb *urb)
- 	ret = usb_submit_urb(urb, GFP_ATOMIC);
- 	if (ret) {
- 		usb_unanchor_urb(urb);
--		goto free;
-+		goto free_skb;
- 	}
- 
- 	return;
--free:
-+free_skb:
- 	kfree_skb(skb);
-+free_rx_buf:
- 	kfree(rx_buf);
- 	urb->context = NULL;
- }
--- 
-2.25.1
+>  
+>  properties:
+>    compatible:
+>      oneOf:
+>        - enum:
+> +          - maxim,max7356
+> +          - maxim,max7357
+> +          - maxim,max7358
+> +          - maxim,max7367
+> +          - maxim,max7368
+> +          - maxim,max7369
+>            - nxp,pca9540
+>            - nxp,pca9542
+>            - nxp,pca9543
+> @@ -59,10 +63,33 @@ properties:
+>      description: if present, overrides i2c-mux-idle-disconnect
+>      $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
+>  
+> +  vdd-supply:
+> +    description: A voltage regulator supplying power to the chip.
+> +
+>  required:
+>    - compatible
+>    - reg
+>  
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-mux.yaml#
+> +  - if:
+> +      not:
+> +        properties:
+> +          compatible:
+> +            contains:
+> +              enum:
+> +                - maxim,max7367
+> +                - maxim,max7369
+> +                - nxp,pca9542
+> +                - nxp,pca9543
+> +                - nxp,pca9544
+> +                - nxp,pca9545
+> +    then:
 
+> +      properties:
+> +        interrupts: false
+> +        "#interrupt-cells": false
+> +        interrupt-controller: false
+
+I'd suggest to add an opposite definition. Evaluate the properties for
+the devices which expect them being evaluated instead of falsing their
+existence for the devices which don't support the interrupts.
+
+-Sergey
+
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
+> @@ -79,6 +106,8 @@ examples:
+>              #size-cells = <0>;
+>              reg = <0x74>;
+>  
+> +            vdd-supply = <&p3v3>;
+> +
+>              interrupt-parent = <&ipic>;
+>              interrupts = <17 IRQ_TYPE_LEVEL_LOW>;
+>              interrupt-controller;
+> -- 
+> 2.37.3
+> 
