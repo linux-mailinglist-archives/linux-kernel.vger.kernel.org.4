@@ -2,79 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C48C5F854D
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 15:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 839045F8548
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 14:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiJHNAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 09:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60440 "EHLO
+        id S229575AbiJHM7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 08:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiJHNAF (ORCPT
+        with ESMTP id S229486AbiJHM7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 09:00:05 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9922240B0;
-        Sat,  8 Oct 2022 05:59:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1665233992;
-        bh=qrpcnZxITGbZei+xLfbvqkVyHPNnR/BSDOsSK0zO6P0=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=CHzSv8KvtCejsdTYaURl0B4YLAH1Ns0BhuOm7XgOujVaWG64jOiKvv93dYIutuiOq
-         PymjVARPeU2rG/o1+IpjsJW0Jz5RurP8SZpXYu+ELBO/g3T2b0aV6DGPB7QNionUcC
-         mKBxWOJBr9TzHlsNUqKOZJrGIUSUYNkXbUX5tKxo=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from probook ([78.35.76.13]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mjj8D-1pRjrg3bsR-00lB8e; Sat, 08
- Oct 2022 14:59:51 +0200
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] i2c: npcm7xx: Annotate register field definitions with longer names
-Date:   Sat,  8 Oct 2022 14:59:24 +0200
-Message-Id: <20221008125924.1220203-2-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221008125924.1220203-1-j.neuschaefer@gmx.net>
-References: <20221008125924.1220203-1-j.neuschaefer@gmx.net>
+        Sat, 8 Oct 2022 08:59:47 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F250DE99
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 05:59:45 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id d26so9334506eje.10
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 05:59:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xfjlFhbPvAiZaDtCTy2aYvhAArjEPm1WFxaHbT8nyHI=;
+        b=cSRqO2nAuD4hdK6rSHRMxiXIlZRmuejx2sU72K+cUUQ7e/Ity03/COx2Z1qjYGRr+7
+         5ZBvfphK2rxoxH1V+AHKvVGZYWivc4x6oa/DKTZ5RboqAd5Bn71/D9SE/EcuHqIjKn91
+         OhBAWL4hS4AHYSYzCb4ZEiCWnfxDyhm/AgSatPGnu3Tb14g08odyUU+elq1/ErUpGaaE
+         4uKZCESNwtyWWnqoOFrYOygojUVr3a6/qHquBeNmrC8rHlW5vFuPnxyq//ZJvggewhcZ
+         HIMtdMYlvIiTSpqiMiQ5ItFJQ7kzkIpEs+s5jAvtGsp821Tu49wHdhRS3zw2IHDq8Dnb
+         XOjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xfjlFhbPvAiZaDtCTy2aYvhAArjEPm1WFxaHbT8nyHI=;
+        b=EA76e52ZaWiM7HEY2rQ29Ds4JCQttOeUkQgno8/dMoEAeh3MH3JX3Po82zu/mclsP3
+         j0RTEjo+wHBXBaDAoCESEbm3Xf1a4iIynAtaxdlgfPn+lolbZDYoacOza68NWiAopOun
+         jEOflH9IeXQl9GD0N37b6K33+lq+aUcIxmuGRGUcmSVqQNE/IAqnbtwHH9O472PddmXP
+         Xzu7c9TFVNzmZhperC4PxIZGdOPjXsaNuRxbvNXjAOBliaPIw7VhPpkrioEALJ+UMuKA
+         9I2emhvJ4rbDweBt2/NQIIQ+nfP7A4q3kuEL9JpduygkDqAXHK3qTgOYdVyg/swuTA+g
+         x9KA==
+X-Gm-Message-State: ACrzQf34Bh7HxGH6QzwfK5hEX3LubkXeuPf72WTML+tAdqD0uVu1BsbK
+        Jn2Q05ej2cfBsYY+Nk0/Hd4=
+X-Google-Smtp-Source: AMsMyM7oiakATrF7MhnyVQEC0+Xhi6onoKuUCwkbFQlI+p1wkIG2VNiKLh4wCbA0UAEsWU0CM7UjhQ==
+X-Received: by 2002:a17:907:760f:b0:78c:336b:d8bd with SMTP id jx15-20020a170907760f00b0078c336bd8bdmr7340909ejc.685.1665233984014;
+        Sat, 08 Oct 2022 05:59:44 -0700 (PDT)
+Received: from [192.168.1.93] (adsl-75.176.58.241.tellas.gr. [176.58.241.75])
+        by smtp.gmail.com with ESMTPSA id bx10-20020a0564020b4a00b00456cbd8c65bsm3458103edb.6.2022.10.08.05.59.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 08 Oct 2022 05:59:43 -0700 (PDT)
+Message-ID: <cb6e650f-d8ad-037d-8c35-8a786650b02f@gmail.com>
+Date:   Sat, 8 Oct 2022 15:59:41 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:BVtpz2qNRzS11sDXJa30qP9mr0ckzThAxnYrxv7n1H2dEoJLclV
- BuzJm+d0AejkXL/UEHU2yt2T/1zEjWR5U8Kw+FbEtEh2fepQg+1MRKEWuqrH5wXkfH1fgmg
- iNHi3fSrEVnv/k/l99t/fCq4bZGLEb4trtgeulf47VlRFoEX5Rf4Sfoo4uY42nxUKxTqbkm
- /YFt7f2Df1o8aRD27dmBg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+vQchtdoOnM=:psMX5yb5Bp6IaRHBHmENO+
- 7rN82ANHYiW7VgnJPPlXey2OrHPyAiCHeIgcnxe0NEeaq7H5iYPp+5gQcWqczx/EcTvHMlQrU
- N246N3LdBOnu4wRa5Rs07iDskEgD8hnIvff0RVZACaFHN9MT6KVdH3ymmtI5tSAk0h7rmS9Xw
- LcARCVjaUpzHxwG3QkB57+LadGNx/PMonE93JTWTgp1foFwkGbz0kKkLw9qx/tzkfpxrSdnfS
- UDrKmmbFIGoEQ4ajLlm6uNzDbL1BHBs4mLU/RpxED31epakAC/PPQJVUksz4pbef0RYW0xgOD
- TM4Do+2z6mB3SseCyxg2UJDYxUiDo4K5QAaX3uIfjwnixzfxKXUrD6Tuws5f103Y50uJ1Izia
- Myxlz7zcd8Cg1d3s0+gJtJJZ0Qpf6MdOzKHCimwe9FzUDmelA73KaQNihbf2N3PyQtjdS7FX4
- DXJ0hyT/K3H9m4qA+yoo1dwvxrvdgY4UAG6SbEoYt5ZBVXsKk383we4IJJZIwASvXlmAKC0S8
- WOsuVIt05ebz8sZ9URf2vE5NSi3bwhdCN+sk9HzDfv63BtbsBEzEXeQke4SfVKSchpSewDA3V
- yHiVz9RfQWX2uM8bLjRutRRKUKyOdlxygryf75bJ+r/fPzuyxf73ZeqQ+8HFHix+lxxyuiVtp
- eUJU5p0NDHm9vqomMtn/Kw2u7a611EBnZyKr2fZTZNwjX/yFPxCJxAT6n20ViWSP76ZGzZMQC
- wnQhOgKjXpGGutUTGuXwPtiMmT7AxIvdHwRQMnWPQhnJoyRVZ0xdyFQEW0mmCp9ZSGP/bhkLZ
- E/CFoveT5TX0eGhGC6rfsV4UvXdlsjbBNCw1fmTSBDNxDptZ2QAroDBEL9iCPe6yOcpxhocKP
- NHhb529guCKtGb0eekh3JBGcGw4RbFfGMs0uil+lDNYJkki1BAiZJG14C8Kn7315mkAdc4qSW
- P4VEpeJFHaSDieP56+1Dph8b9TNWa5ncZOJF3ca6Kr6pZPBJTDInghzr+LD/RtcwKZvwufxXX
- +JFcOn6VPhjj/FibgmTxOlGGeLZ8tcdnXeiP9AFEBrdu7D1vmG0oiCG5mZTIAU1rX4nAD5L6b
- c6XWsSTovOchwdDrUDwzDn0Mr5fkv0YvLIvjotloYW20djEdMf79VGAtzt4DzIamnP8d1Q97f
- 8hUgjidch7lm8fiyl4eUnK+Ym2AglCScvMb+uSjzgePzs3pZKflJRqPiJQQ6i2CnbbXtub/cZ
- F76fs70SSCe/Y8UzZs3C1ILaellYJF8nkDQ0zqXrRJO1FsWm7a4NB2B/6cj+EDZQKIFThUrSs
- N7UcvCgKrynf4n5nIoWyhDoC/bkzKygWRjCc+AGiQW9F6n44nic8Us3QEWdIbFSujRK3jqvHR
- TASt8Lc9EaFWL1bFzekPpP2O7uBIEMXZ8AuBwpvRdwUr5W/WpnvWLhOL7wJZ63dqiJnnw/8xw
- L32qUyzPn+DM4Z38GPCuwrndqKBHHYMvXchgfOlDzNSQIDjesyygL9QuyPPiFennFSuekNJgC
- cRAWCXwLn/57RPw5gSny1gPW1m5pPxv5I/lAcc1M5rSRK
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] xen/virtio: Handle cases when page offset > PAGE_SIZE
+ properly
+Content-Language: en-US
+To:     Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Oleksandr Tyshchenko <olekstysh@gmail.com>
+References: <20221007132736.2275574-1-olekstysh@gmail.com>
+ <6e33b687-8862-d208-a707-77a95c61525e@gmail.com>
+ <d6ec5092-8d93-22c2-7b6e-944ad88ad582@epam.com>
+From:   Xenia Ragiadakou <burzalodowa@gmail.com>
+In-Reply-To: <d6ec5092-8d93-22c2-7b6e-944ad88ad582@epam.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,103 +81,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To make the code easier to understand, add longer names to the
-definitions of register fields. These longer names are based on source
-code published by DELL/AESS for WPCM450, but should apply just as well
-to NPCM7xx and NPCM8xx.
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
- drivers/i2c/busses/i2c-npcm7xx.c | 56 ++++++++++++++++----------------
- 1 file changed, 28 insertions(+), 28 deletions(-)
+On 10/8/22 15:52, Oleksandr Tyshchenko wrote:
+> 
+> On 08.10.22 14:08, Xenia Ragiadakou wrote:
+> 
+> Hello Xenia
+> 
+>>
+>> On 10/7/22 16:27, Oleksandr Tyshchenko wrote:
+>>
+>> Hi Oleksandr
+>>
+>>> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+>>>
+>>> Passed to xen_grant_dma_map_page() offset in the page
+>>> can be > PAGE_SIZE even if the guest uses the same page granularity
+>>> as Xen (4KB).
+>>>
+>>> Before current patch, if such case happened we ended up providing
+>>> grants for the whole region in xen_grant_dma_map_page() which
+>>> was really unnecessary. The more, we ended up not releasing all
+>>> grants which represented that region in xen_grant_dma_unmap_page().
+>>>
+>>> Current patch updates the code to be able to deal with such cases.
+>>>
+>>> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+>>> ---
+>>> Cc: Juergen Gross <jgross@suse.com>
+>>> Cc: Xenia Ragiadakou <burzalodowa@gmail.com>
+>>>
+>>> Depens on:
+>>> https://urldefense.com/v3/__https://lore.kernel.org/xen-devel/20221005174823.1800761-1-olekstysh@gmail.com/__;!!GF_29dbcQIUBPA!xnkNaKpfZ4LssQJcJs_J91KERZKMP2Rd-xEdBqXNXJ8GyCXJ0gkRer1elVYfxOWtwN_FOl9tVieDWlfN-UZaHQsyLMhA$
+>>> [lore[.]kernel[.]org]
+>>>
+>>> Should go in only after that series.
+>>> ---
+>>>    drivers/xen/grant-dma-ops.c | 8 +++++---
+>>>    1 file changed, 5 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
+>>> index c66f56d24013..1385f0e686fe 100644
+>>> --- a/drivers/xen/grant-dma-ops.c
+>>> +++ b/drivers/xen/grant-dma-ops.c
+>>> @@ -168,7 +168,9 @@ static dma_addr_t xen_grant_dma_map_page(struct
+>>> device *dev, struct page *page,
+>>>                         unsigned long attrs)
+>>>    {
+>>>        struct xen_grant_dma_data *data;
+>>> -    unsigned int i, n_pages = PFN_UP(offset + size);
+>>> +    unsigned long dma_offset = offset_in_page(offset),
+>>> +            gfn_offset = PFN_DOWN(offset);
+>>> +    unsigned int i, n_pages = PFN_UP(dma_offset + size);
+>>
+>> IIUC, the above with a later patch will become:
+>>
+>> dma_offset = xen_offset_in_page(offset)
+>> gfn_offset = XEN_PFN_DOWN(offset)
+>> n_pages = XEN_PFN_UP(dma_offset + size)
+> 
+> 
+> If saying "later" patch you meant "xen/virtio: Convert
+> PAGE_SIZE/PAGE_SHIFT/PFN_UP to Xen counterparts" then yes, exactly.
 
-diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npc=
-m7xx.c
-index 9a7a2d0bf5765..bbc7359e67f74 100644
-=2D-- a/drivers/i2c/busses/i2c-npcm7xx.c
-+++ b/drivers/i2c/busses/i2c-npcm7xx.c
-@@ -146,50 +146,50 @@ static const int npcm_i2caddr[I2C_NUM_OWN_ADDR] =3D =
-{
- #endif
+Ah ok, I see.
 
- /* NPCM_I2CST reg fields */
--#define NPCM_I2CST_XMIT			BIT(0)
--#define NPCM_I2CST_MASTER		BIT(1)
--#define NPCM_I2CST_NMATCH		BIT(2)
--#define NPCM_I2CST_STASTR		BIT(3)
--#define NPCM_I2CST_NEGACK		BIT(4)
--#define NPCM_I2CST_BER			BIT(5)
--#define NPCM_I2CST_SDAST		BIT(6)
--#define NPCM_I2CST_SLVSTP		BIT(7)
-+#define NPCM_I2CST_XMIT			BIT(0)	/* Transmit mode */
-+#define NPCM_I2CST_MASTER		BIT(1)	/* Master mode */
-+#define NPCM_I2CST_NMATCH		BIT(2)	/* New match */
-+#define NPCM_I2CST_STASTR		BIT(3)	/* Stall after start */
-+#define NPCM_I2CST_NEGACK		BIT(4)	/* Negative ACK */
-+#define NPCM_I2CST_BER			BIT(5)	/* Bus error */
-+#define NPCM_I2CST_SDAST		BIT(6)	/* SDA status */
-+#define NPCM_I2CST_SLVSTP		BIT(7)	/* Slave stop */
+>>
+>>
+>>>        grant_ref_t grant;
+>>>        dma_addr_t dma_handle;
+>>>    @@ -187,10 +189,10 @@ static dma_addr_t
+>>> xen_grant_dma_map_page(struct device *dev, struct page *page,
+>>>          for (i = 0; i < n_pages; i++) {
+>>>            gnttab_grant_foreign_access_ref(grant + i,
+>>> data->backend_domid,
+>>> -                xen_page_to_gfn(page) + i, dir == DMA_TO_DEVICE);
+>>> +                xen_page_to_gfn(page) + i + gfn_offset, dir ==
+>>> DMA_TO_DEVICE);
+>>
+>> Here, why the pfn is not calculated before passing it to pfn_to_gfn()?
+>> I mean sth like pfn_to_gfn(page_to_xen_pfn(page) + gfn_offset + i)
+> 
+> The gfn_offset is just a const value here, which just means how many
+> gfns we should skip. But ...
+> 
+> ... I think, I get your point. So, if the region which is contiguous in
+> pfn might be non-contiguous in gfn (which seems to be the case for x86's
+> PV, but I may mistake) we should indeed use open-coded
+> 
+> construction "pfn_to_gfn(page_to_xen_pfn(page) + gfn_offset + i)".  And
+> the gfn_offset should be renamed to pfn_offset then.
+> 
+> 
+> Correct?
 
- /* NPCM_I2CCST reg fields */
--#define NPCM_I2CCST_BUSY		BIT(0)
--#define NPCM_I2CCST_BB			BIT(1)
--#define NPCM_I2CCST_MATCH		BIT(2)
--#define NPCM_I2CCST_GCMATCH		BIT(3)
--#define NPCM_I2CCST_TSDA		BIT(4)
--#define NPCM_I2CCST_TGSCL		BIT(5)
--#define NPCM_I2CCST_MATCHAF		BIT(6)
--#define NPCM_I2CCST_ARPMATCH		BIT(7)
-+#define NPCM_I2CCST_BUSY		BIT(0)	/* Busy */
-+#define NPCM_I2CCST_BB			BIT(1)	/* Bus busy */
-+#define NPCM_I2CCST_MATCH		BIT(2)	/* Address match */
-+#define NPCM_I2CCST_GCMATCH		BIT(3)	/* Global call match */
-+#define NPCM_I2CCST_TSDA		BIT(4)	/* Test SDA line */
-+#define NPCM_I2CCST_TGSCL		BIT(5)	/* Toggle SCL line */
-+#define NPCM_I2CCST_MATCHAF		BIT(6)	/* Match address field */
-+#define NPCM_I2CCST_ARPMATCH		BIT(7)	/* ARP address match */
+Yes, that 's what I had in mind unless I 'm missing sth.
 
- /* NPCM_I2CCTL1 reg fields */
--#define NPCM_I2CCTL1_START		BIT(0)
--#define NPCM_I2CCTL1_STOP		BIT(1)
--#define NPCM_I2CCTL1_INTEN		BIT(2)
-+#define NPCM_I2CCTL1_START		BIT(0)	/* Generate start condition */
-+#define NPCM_I2CCTL1_STOP		BIT(1)	/* Generate stop condition */
-+#define NPCM_I2CCTL1_INTEN		BIT(2)	/* Interrupt enable */
- #define NPCM_I2CCTL1_EOBINTE		BIT(3)
- #define NPCM_I2CCTL1_ACK		BIT(4)
--#define NPCM_I2CCTL1_GCMEN		BIT(5)
--#define NPCM_I2CCTL1_NMINTE		BIT(6)
--#define NPCM_I2CCTL1_STASTRE		BIT(7)
-+#define NPCM_I2CCTL1_GCMEN		BIT(5)	/* Global call match enable */
-+#define NPCM_I2CCTL1_NMINTE		BIT(6)	/* New match interrupt enable */
-+#define NPCM_I2CCTL1_STASTRE		BIT(7)	/* Stall after start enable */
+>>
+>>>        }
+>>>    -    dma_handle = grant_to_dma(grant) + offset;
+>>> +    dma_handle = grant_to_dma(grant) + dma_offset;
+>>>          return dma_handle;
+>>>    }
+>>
 
- /* RW1S fields (inside a RW reg): */
- #define NPCM_I2CCTL1_RWS   \
- 	(NPCM_I2CCTL1_START | NPCM_I2CCTL1_STOP | NPCM_I2CCTL1_ACK)
-
- /* npcm_i2caddr reg fields */
--#define NPCM_I2CADDR_A			GENMASK(6, 0)
--#define NPCM_I2CADDR_SAEN		BIT(7)
-+#define NPCM_I2CADDR_A			GENMASK(6, 0)	/* Address */
-+#define NPCM_I2CADDR_SAEN		BIT(7)		/* Slave address enable */
-
- /* NPCM_I2CCTL2 reg fields */
--#define I2CCTL2_ENABLE			BIT(0)
--#define I2CCTL2_SCLFRQ6_0		GENMASK(7, 1)
-+#define I2CCTL2_ENABLE			BIT(0)		/* Module enable */
-+#define I2CCTL2_SCLFRQ6_0		GENMASK(7, 1)	/* Bits 0:6 of frequency divisor=
- */
-
- /* NPCM_I2CCTL3 reg fields */
--#define I2CCTL3_SCLFRQ8_7		GENMASK(1, 0)
--#define I2CCTL3_ARPMEN			BIT(2)
-+#define I2CCTL3_SCLFRQ8_7		GENMASK(1, 0)	/* Bits 7:8 of frequency divisor=
- */
-+#define I2CCTL3_ARPMEN			BIT(2)	/* ARP match enable */
- #define I2CCTL3_IDL_START		BIT(3)
- #define I2CCTL3_400K_MODE		BIT(4)
- #define I2CCTL3_BNK_SEL			BIT(5)
-=2D-
-2.35.1
-
+-- 
+Xenia
