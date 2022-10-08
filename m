@@ -2,147 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D2B5F85AB
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 16:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B85095F85B6
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 17:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiJHOvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 10:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
+        id S229605AbiJHPES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 11:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiJHOvK (ORCPT
+        with ESMTP id S229463AbiJHPEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 10:51:10 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A504DB08;
-        Sat,  8 Oct 2022 07:51:08 -0700 (PDT)
-Received: from nazgul.tnic (unknown [46.183.103.8])
+        Sat, 8 Oct 2022 11:04:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928BA4DF3A
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 08:04:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EDA941EC0432;
-        Sat,  8 Oct 2022 16:51:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1665240663;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=gzxjyBK9Q/UjuOE0iJjf/g3i6ZX6Y8Nq+z1WQ+83Uyo=;
-        b=gOtTmpSigCUq8gf4Pca0lcVR2vP+iOd5khO9+zByVM4nuK02dCZfdmYOpf8iciVtZMORWn
-        ZVGJ88CW46ErTCIFzL9KB5gqxrJuxRbbuiuGP5G7XiDVS0P3yQOTxlXwT8hkH70Ml+dXgI
-        VtinO09v6mUu+H6i01uatw95ltd/Zo4=
-Date:   Sat, 8 Oct 2022 16:51:05 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-efi@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] efi: x86: Make the deprecated EFI handover protocol
- optional
-Message-ID: <Y0GOKnD89SOjGzCf@nazgul.tnic>
-References: <20221007172918.3131811-1-ardb@kernel.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D84DB80B6E
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 15:04:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B4FCC433C1;
+        Sat,  8 Oct 2022 15:04:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665241452;
+        bh=J+gfA2GKcuRxn0BEYcHVwUZ7oMqdte5iqfeI/xohk88=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Jf2DOxvz9yFjX1VXkMwTAfJE15c8TB2RlK0FcletkolNdtbcf7zekJ4zE2BOmuXQp
+         QlMfgcuPHuPsqtcQxuTK7McBdDwBa03K0WTPjxfpWUyBD7TsKyuj1mmU336oKMOclJ
+         hD2N/j2/rXQwOoMfPqWdpBslW8A39vf4NNb4IpNx/nwYeMPpimtM8Ndt//ofpWWY6i
+         GIe5dStefpbt9BlLRqduIuFuRTXRIzBQMzFOIp7is/ULxf2rQpt47Cd3KM99t4uuYp
+         7DPaGl1uAlFPQ9WwzzrHbRJNo2T3cm8dFcYMZ5HYQ1ht1qrCD7K+AQfVURhKhcObU0
+         E6sm2v844bAEQ==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Samuel Holland <samuel@sholland.org>,
+        Andrew Jones <ajones@ventanamicro.com>
+Subject: [PATCH v2] riscv: jump_label: mark arguments as const to satisfy asm constraints
+Date:   Sat,  8 Oct 2022 22:54:37 +0800
+Message-Id: <20221008145437.491-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221007172918.3131811-1-ardb@kernel.org>
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 07:29:18PM +0200, Ard Biesheuvel wrote:
-> Given that loaders such as GRUB already carried the bootparams handling
-> in order to implement non-EFI boot, retaining that code and just passing
-> bootparams to the EFI stub was a reasonable choice (although defining an
-> alternate entrypoint could have been avoided.) However, the GRUB side
-> changes never made it upstream, and are only shipped by some of the
-	  ^^^^^^^^^^^^^^^^^^^^^^^
+Samuel reported that the static branch usage in cpu_relax() breaks
+building with CONFIG_CC_OPTIMIZE_FOR_SIZE:
 
-> distros in their downstream versions.
+In file included from <command-line>:
+./arch/riscv/include/asm/jump_label.h: In function 'cpu_relax':
+././include/linux/compiler_types.h:285:33: warning: 'asm' operand 0
+probably does not match constraints
+  285 | #define asm_volatile_goto(x...) asm goto(x)
+      |                                 ^~~
+./arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro
+'asm_volatile_goto'
+   41 |         asm_volatile_goto(
+      |         ^~~~~~~~~~~~~~~~~
+././include/linux/compiler_types.h:285:33: error: impossible constraint
+in 'asm'
+  285 | #define asm_volatile_goto(x...) asm goto(x)
+      |                                 ^~~
+./arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro
+'asm_volatile_goto'
+   41 |         asm_volatile_goto(
+      |         ^~~~~~~~~~~~~~~~~
+make[1]: *** [scripts/Makefile.build:249:
+arch/riscv/kernel/vdso/vgettimeofday.o] Error 1
+make: *** [arch/riscv/Makefile:128: vdso_prepare] Error 2
 
-Gotta love that bit particularly. :-(
+Maybe "-Os" prevents GCC from detecting that the key/branch arguments
+can be treated as constants and used as immediate operands. Inspired
+by x86's commit 864b435514b2("x86/jump_label: Mark arguments as const to
+satisfy asm constraints"), and as pointed out by Steven: "The "i"
+constraint needs to be a constant.", let's do similar modifications to
+riscv.
 
-> In the meantime, EFI support has been added to other Linux architecture
-> ports, as well as to U-boot and systemd, including arch-agnostic methods
-> for passing initrd images in memory [1], and for doing mixed mode boot
-> [2], none of them requiring anything like the EFI handover protocol. So
-> given that only out-of-tree distro GRUB relies on this, let's permit it
-> to be omitted from the build, in preparation for retiring it completely
-> at a later date. (Note that systemd-boot does have an implementation as
-> well, but only uses it as a fallback for booting images that do not
-> implement the LoadFile2 based initrd loading method, i.e., v5.8 or older)
-> 
-> [0] https://lore.kernel.org/all/20220927085842.2860715-1-ardb@kernel.org/
-> [1] ec93fc371f01 ("efi/libstub: Add support for loading the initrd ...")
-> [2] 97aa276579b2 ("efi/x86: Add true mixed mode entry point into ...")
-> 
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  arch/x86/Kconfig                   | 12 ++++++++++++
->  arch/x86/boot/compressed/head_64.S |  4 +++-
->  arch/x86/boot/header.S             |  2 +-
->  arch/x86/boot/tools/build.c        |  2 ++
->  4 files changed, 18 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index f9920f1341c8..0c8fcb090232 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -1964,6 +1964,18 @@ config EFI_STUB
->  
->  	  See Documentation/admin-guide/efi-stub.rst for more information.
->  
-> +config EFI_HANDOVER_PROTOCOL
-> +	bool "EFI handover protocol (DEPRECATED)"
-> +	depends on EFI_STUB
-> +	default y
+Tested by CC_OPTIMIZE_FOR_SIZE + gcc and CC_OPTIMIZE_FOR_SIZE + clang.
 
-I'd say "default n" here.
+Link: https://lore.kernel.org/linux-riscv/20220922060958.44203-1-samuel@sholland.org/
+Link: https://lore.kernel.org/all/20210212094059.5f8d05e8@gandalf.local.home/
+Fixes: 8eb060e10185 ("arch/riscv: add Zihintpause support")
+Reported-by: Samuel Holland <samuel@sholland.org>
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+---
 
-> +	help
-> +	  Whether to include support for the deprecated EFI handover protocol,
+since v1:
+ - add Reported-by, Reviewed-by, Fixes and Link tag
 
-"Select this in order to include..."
+ arch/riscv/include/asm/jump_label.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> +	  which defines alternative entry points into the EFI stub. This is a
-> +	  practice that has no basis in the UEFI specification, and requires
-> +	  a priori knowledge on the part of the bootloader about Linux/x86
-> +	  specific ways of passing the command line and initrd, and where in
-> +	  memory those assets may be loaded.
-
-	"If in doubt, say N. This option and accompanying code will disappear
-	in some future kernel as the corresponding GRUB support is not even
-	present in upstream GRUB but only in some distros' versions."
-
-> +
->  config EFI_MIXED
->  	bool "EFI mixed-mode support"
->  	depends on EFI_STUB && X86_64
-> diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
-> index 6ba2c2142c33..7bcc50c6cdcc 100644
-> --- a/arch/x86/boot/compressed/head_64.S
-> +++ b/arch/x86/boot/compressed/head_64.S
-> @@ -286,7 +286,7 @@ SYM_FUNC_START(startup_32)
->  	lret
->  SYM_FUNC_END(startup_32)
->  
-> -#ifdef CONFIG_EFI_MIXED
-> +#if defined(CONFIG_EFI_MIXED) && defined(CONFIG_EFI_HANDOVER_PROTOCOL)
-
-...
-
-Can we use IS_ENABLED() in all that instead, in order to improve
-readability?
-
-In any case, looks good. I'm thinking I'll take it into tip after -rc1
-and see who cries and why...
-
-Thx.
-
+diff --git a/arch/riscv/include/asm/jump_label.h b/arch/riscv/include/asm/jump_label.h
+index 38af2ec7b9bf..6d58bbb5da46 100644
+--- a/arch/riscv/include/asm/jump_label.h
++++ b/arch/riscv/include/asm/jump_label.h
+@@ -14,8 +14,8 @@
+ 
+ #define JUMP_LABEL_NOP_SIZE 4
+ 
+-static __always_inline bool arch_static_branch(struct static_key *key,
+-					       bool branch)
++static __always_inline bool arch_static_branch(struct static_key * const key,
++					       const bool branch)
+ {
+ 	asm_volatile_goto(
+ 		"	.option push				\n\t"
+@@ -35,8 +35,8 @@ static __always_inline bool arch_static_branch(struct static_key *key,
+ 	return true;
+ }
+ 
+-static __always_inline bool arch_static_branch_jump(struct static_key *key,
+-						    bool branch)
++static __always_inline bool arch_static_branch_jump(struct static_key * const key,
++						    const bool branch)
+ {
+ 	asm_volatile_goto(
+ 		"	.option push				\n\t"
 -- 
-Regards/Gruss,
-    Boris.
+2.37.2
 
-https://people.kernel.org/tglx/notes-about-netiquette
