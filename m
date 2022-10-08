@@ -2,102 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 211315F82EB
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 06:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C515F82ED
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 06:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbiJHELa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 00:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40870 "EHLO
+        id S229544AbiJHEVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 00:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiJHEL2 (ORCPT
+        with ESMTP id S229481AbiJHEVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 00:11:28 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE71D89AFA;
-        Fri,  7 Oct 2022 21:11:26 -0700 (PDT)
-Received: from [192.168.100.127] (unknown [223.106.24.89])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxYOJa+EBjTCsoAA--.17025S3;
-        Sat, 08 Oct 2022 12:11:21 +0800 (CST)
-Message-ID: <6afa9f74-8c92-4246-17e7-c40bdd622639@loongson.cn>
-Date:   Sat, 8 Oct 2022 12:11:06 +0800
+        Sat, 8 Oct 2022 00:21:38 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C81D77D7
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 21:21:35 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 78so6187106pgb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 21:21:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rsvYzD8csLN9IeUNf2gCwuuY/70zke74chneBqizKgo=;
+        b=lp4jNDBitdbT9aePSHmYfAaSqV3KlCf7y2QCVnKCc3jJerXBN5vwCB4ybkFwT8xVNF
+         195yOEGEjaBCegUejYUOprOMEC3Nz6NoD8FrLgVQuWyuKruzZs70Yvgx+Fo0Jlx8HwsS
+         zXH/mZigE04VRmcW27jGTz2zyYaDWtrjZj2Lfaa/Z7xUGK4iGV69Mom/oqywJAPCb/HE
+         tr7KHt0Wzq8EXqBBp47oaksmPJoJgcPVSl0vzmeRyBhloD6clHwSAlM9/UgXMsRPit2V
+         nRwoh8Kk7rIt5u02TgIeNmF14jfANYioXcOur/RMC9WjWl7bEa/03YBabDQyxiRYdChl
+         4+JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rsvYzD8csLN9IeUNf2gCwuuY/70zke74chneBqizKgo=;
+        b=uY1P7ZakgxLabcEXEHGiFAmN/uxNFrvYF07ewIIAbybQbjxmhirico/d0L6NzbTqyL
+         71vLZRClGC/+ChJSM/7St6nsy57HjGsjknR73y6YcLdT4AOI1Dxd+zNt1HuljFtPnPx6
+         J8XLV9vPaSQCN6dkf2YzWnEqwdhA/av7MfyCBnB2WATrzM9WFLjx/QbpnnFhoLqcaOHe
+         VboPPyGYvmF/V6Va9j2oMUCewYnY7xBTay09bhYdGka+iLw0vmfGpsi5mElJ8xq2XbjT
+         1ZiRg0iJ9ec3XxWYU/cMAq81UxOh8X1dRlIkh5xOn4vE0EhCs+7kYoYC8XWp6QA3gvHQ
+         C0GQ==
+X-Gm-Message-State: ACrzQf3MbyvtZXua/CIbnYytg34tt1J3FroHPn2tJHVmuzGVgDPFL2zH
+        K4oZAF1l8qaDoywyNTqdcitsni4F41H3TADm
+X-Google-Smtp-Source: AMsMyM792XUEFcT/zqSQkc6cMxM+d6PeGOQAzMh/85CMbv96hC9zRkzrqumLaO7VTDZsVvb8oiep2Q==
+X-Received: by 2002:a65:6e9a:0:b0:44c:2476:12e0 with SMTP id bm26-20020a656e9a000000b0044c247612e0mr7583515pgb.159.1665202894812;
+        Fri, 07 Oct 2022 21:21:34 -0700 (PDT)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id b24-20020aa79518000000b00560bb4a57f7sm2533696pfp.179.2022.10.07.21.21.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 21:21:33 -0700 (PDT)
+Date:   Sat, 8 Oct 2022 13:21:26 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Marco Elver <elver@google.com>
+Subject: Re: [PATCH] mm: move PG_slab flag to page_type
+Message-ID: <Y0D6xi0HBqfLBvvK@hyeyoo>
+References: <20220919125708.276864-1-42.hyeyoo@gmail.com>
+ <Yy+NCJ525S+HzP4k@casper.infradead.org>
+ <Y0AreJczk6FdiKxr@hyeyoo>
+ <Y0BpuxUb+Y8BKHIM@casper.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 0/4] docs/zh_CN: Rewrite the zh_CN/index.rst
-Content-Language: en-US
-To:     Wu XiangCheng <wu.xiangcheng@linux.dev>,
-        Alex Shi <alexs@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, chenhuacai@kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1664945550.git.bobwxc@email.cn>
-From:   Yanteng Si <siyanteng@loongson.cn>
-In-Reply-To: <cover.1664945550.git.bobwxc@email.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8CxYOJa+EBjTCsoAA--.17025S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kry8Xr1fKFykKw4rWw15Arb_yoW8JF4fpF
-        9akr97K3ZYyw15uw4xW3yUGF18WF4xWa98t340qw1FqF1kZr4rArZrtryIgayjqFWSva43
-        XF4fKFyDWr1UCrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvFb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l
-        c2xSY4AK67AK6r45MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
-        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
-        AVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
-        CY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvj
-        xUxf-PUUUUU
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0BpuxUb+Y8BKHIM@casper.infradead.org>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Oct 07, 2022 at 07:02:35PM +0100, Matthew Wilcox wrote:
+> On Fri, Oct 07, 2022 at 10:36:56PM +0900, Hyeonggon Yoo wrote:
+> > > First, you say that folio_mapped() returns false for slab pages.  That's
+> > > only true for order-0 slab pages.  For larger pages,
+> > > 
+> > >         if (!folio_test_large(folio))
+> > >                 return atomic_read(&folio->_mapcount) >= 0;
+> > >         if (atomic_read(folio_mapcount_ptr(folio)) >= 0)
+> > >                 return true;
+> > > 
+> > > so that's going to depend what folio_mapcount_ptr() aliases with.
+> > 
+> > IIUC it's true for order > 0 slab too.
+> > 
+> > As slab pages are not mapped to userspace at all,
+> > entire compound page nor base pages are not mapped to userspace.
+> > 
+> > AFAIK followings are true for order > 0 slab:
+> >         - (first tail page)->compound_mapcount is -1
+> 
+> That's the part I wasn't sure of.  I think we do, in
+> prep_compound_head().
 
-On 10/5/22 13:13, Wu XiangCheng wrote:
-> Follow Jonathan's steps[1], rewrite the entry point of kernel's Chinese
-> translation documentation.
+Right, exactly!
+
+> 
+> >         - _mapcount of base pages are -1
+> > 
+> > So:
+> >         folio_mapped() and page_mapped() (if applied to head page)
+> >         returns false for larger pages with this patch.
+> > 
+> > I wrote simple testcase and did check that folio_mapped() and page_mapped()
+> > returns false for both order-0 page and larger pages. (and SLAB
+> > returned true for them before)
+
+FYI, This is still true even after fixing my mistaken test case (see below)
+
+> > 
+> > > Second, this patch changes the behaviour of PageSlab() when applied to
+> > > tail pages.
+> > 
+> > Altough it changes the way it checks the flag,
+> > 
+> > it does not change behavior when applied to tail pages - PageSlab() on tail
+> > page returns false with or without this patch.
+> 
+> Really?  It seems to me that it returns true at the moment.  Look:
+> 
+> __PAGEFLAG(Slab, slab, PF_NO_TAIL)
+> 
+> #define PF_NO_TAIL(page, enforce) ({                                    \
+>                 VM_BUG_ON_PGFLAGS(enforce && PageTail(page), page);     \
+>                 PF_POISONED_CHECK(compound_head(page)); })
+> 
+> so AFAICS, PageSlab checks the Slab bit on the head page, not the
+> tail page.
+
+You are right. I misunderstood it due to my mistakenly written test case
+(without passing __GFP_COMP... how silly of me :D)
+
+Hmm okay, then I will implement PF_NO_TAIL policy that works on page_type.
+
+> 
+> > If PageSlab() need to return true for tail pages too,
+> > we may make it check page_type at head page.
+> > 
+> > But I'm not sure when it the behavior is needed.
+> > Can you please share your insight on this?
+> 
+> There are tools like tools/vm/page-types.c which expect PageSlab to
+> return true for tail pages.
 >
-> Thanks,
->
-> [1]: https://lore.kernel.org/linux-doc/20220927160559.97154-1-corbet@lwn.net/T
->
-> Wu XiangCheng (4):
->    docs/zh_CN: promote the title of zh_CN/process/index.rst
->    docs/zh_CN: add zh_CN/arch.rst
->    docs/zh_CN: Rewrite the Chinsese translation front page
->    docs/zh_CN: add a man-pages link to zh_CN/index.rst
+> > > Which raises the further question of what PageBuddy(),
+> > > PageTable(), PageGuard() and PageIsolated() should do for multi-page
+> > > folios, if that is even possible.
+> > 
+> > For users that uses real compound page like slab, we can make it check
+> > page_type of head page. (if needed)
+> > 
+> > But for cases David described, there isn't much thing we can do
+> > except making them to use real compound pages.
+> > 
+> > > Third, can we do this without that awkward __u16 thing?  Perhaps
+> > > 
+> > > -#define PG_buddy        0x00000080
+> > > -#define PG_offline      0x00000100
+> > > -#define PG_table        0x00000200
+> > > -#define PG_guard        0x00000400
+> > > +#define PG_buddy        0x00010000
+> > > +#define PG_offline      0x00020000
+> > > +#define PG_table        0x00040000
+> > > +#define PG_guard        0x00080000
+> > > +#define PG_slab         0x00100000
+> > > 
+> > > ... and then use wrappers in slab.c to access the bottom 16 bits?
+> > 
+> > Definitely! I prefer that way and will adjust in RFC v2.
+> > 
+> > Thank you for precious feedback.
+> 
+> No problem.  I suggested (in an off-list email) that you consider counting
+> 'active' by subtraction rather than addition because I have a feeling that
+> 
+> int active(struct slab *slab)
+> {
+> 	return ~(slab->page_type | PG_slab);
+> }
+> 
+> would be better than
+> 
+> int active(struct slab *slab)
+> {
+> 	return slab->page_type & 0xffff;
+> }
+> 
+> at least in part because you don't have to clear the bottom 16 bits of
+> page_type when you clear PG_slab, and you don't have to re-set them
+> when you set PG_slab.
 
-When I apply your patch set, Git says:
+Yeah, I was wondering what is the benefit of the that approach. 
+After implementing both approach, your suggestion seems better to me too.
 
+Many thanks, Matthew!
 
-Applying: docs/zh_CN: promote the title of zh_CN/process/index.rst
-Applying: docs/zh_CN: add zh_CN/arch.rst
-.git/rebase-apply/patch:41: new blank line at EOF.
-+
-warning: 1 line adds whitespace errors.
-Applying: docs/zh_CN: Rewrite the Chinsese translation front page
-Applying: docs/zh_CN: add a man-pages link to zh_CN/index.rst
-
-
-Thanks,
-
-Yanteng
-
->
->   Documentation/translations/zh_CN/arch.rst     |  30 ++++
->   Documentation/translations/zh_CN/index.rst    | 169 ++++++------------
->   .../translations/zh_CN/process/index.rst      |   1 +
->   3 files changed, 83 insertions(+), 117 deletions(-)
->   create mode 100644 Documentation/translations/zh_CN/arch.rst
->
->
-> base-commit: 05fff6ba04eef8b88bb94734b66731bef3d8d34b
-
+-- 
+Hyeonggon
