@@ -2,144 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED00F5F8252
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 04:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF1BC5F8264
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 04:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbiJHCQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 22:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
+        id S229879AbiJHCVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 22:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiJHCQx (ORCPT
+        with ESMTP id S229379AbiJHCVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 22:16:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3659A8285B;
-        Fri,  7 Oct 2022 19:16:52 -0700 (PDT)
+        Fri, 7 Oct 2022 22:21:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD8EA59B1;
+        Fri,  7 Oct 2022 19:21:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2958B8245F;
-        Sat,  8 Oct 2022 02:16:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90EEBC43144;
-        Sat,  8 Oct 2022 02:16:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665195409;
-        bh=fJZiXIczXHKWSWOJREIPZZI4lyDP1osRfKH0d9gMG9w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XJdre88GuzkyX8miOvR5lz7t5nMrVg+RdgltnzIt7wijp9gBMVTJ5Ugj94xyDWOvT
-         R7UFdbISnUHuUSzaVN1xGm8DM8NQ2SA76723qzSFI6O2mVqcAXL0E1P7kRCR+qH8UR
-         yQXckh7ShWuPweU1ibuRee4wrAHXyPfhH8rL7ts5yP505HgqsGK2HFNvQj0akqKl0/
-         gY8Ls0GkczDGLnRi/9nl/29QrOhsVIiSwCoJuylivZHNb7lLUXG0I/K0eMAwaXLNmr
-         YafuAPSA2CNX7ychb2j3Pu9FOXHJIoT3dBu4skrfit9fXonENb7AJxXaH8q56IOB74
-         kPYBqli3C+Zmg==
-Received: by mail-oi1-f180.google.com with SMTP id t79so7511218oie.0;
-        Fri, 07 Oct 2022 19:16:49 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3MtAb5vPqJtOiPBsmbvrLOlQ4VgKAH1wxRMSgK7KmnxYsXXYY6
-        RuAmmbDbjHvSzzIQE3Hf6N6bBn5G+7L3Khgjqgo=
-X-Google-Smtp-Source: AMsMyM4WITxFNS7eyExidUgQiJ5ich4TeNeqmzLVzbaZ1CMDMKDcOXm1GjRQmdAu1Nym8En0zhJcdL3W8uqF1Vnen3U=
-X-Received: by 2002:a05:6808:151f:b0:350:1b5e:2380 with SMTP id
- u31-20020a056808151f00b003501b5e2380mr9188426oiw.112.1665195408646; Fri, 07
- Oct 2022 19:16:48 -0700 (PDT)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8D75B8248A;
+        Sat,  8 Oct 2022 02:21:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81D33C433D6;
+        Sat,  8 Oct 2022 02:21:37 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LYfvW0ZZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1665195696;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nQirwEB0hjkXJ9U2/sbrNj05mdvuwOBFqUHuwVO4sG4=;
+        b=LYfvW0ZZotjDZYmfwIZkWFUFDyYpgMRwAWVX2JvCBhFxkdcWSY4heC+P4NafHqVMXos9Os
+        X55SDeqSwLcvh7du7K0mwM7oFaeooOuKphMBXjwa5+cWkm5M7Lw/CNc9Lsedwil4GkYjvj
+        DyNZVuxi8QwYy5I4cUKNk3Gtf9+RSyY=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 897978b7 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sat, 8 Oct 2022 02:21:35 +0000 (UTC)
+Date:   Fri, 7 Oct 2022 20:21:28 -0600
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph =?utf-8?Q?B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dave Airlie <airlied@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        KP Singh <kpsingh@kernel.org>, Marco Elver <elver@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Graf <tgraf@suug.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
+        kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        loongarch@lists.linux.dev, netdev@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH v4 2/6] treewide: use prandom_u32_max() when possible
+Message-ID: <Y0DeqDC3EnA4b6ZB@zx2c4.com>
+References: <20221007180107.216067-1-Jason@zx2c4.com>
+ <20221007180107.216067-3-Jason@zx2c4.com>
+ <202210071241.445289C5@keescook>
 MIME-Version: 1.0
-References: <20221002012451.2351127-1-guoren@kernel.org> <20221002012451.2351127-6-guoren@kernel.org>
- <YzrKQkK4Kfbd7Wik@FVFF77S0Q05N>
-In-Reply-To: <YzrKQkK4Kfbd7Wik@FVFF77S0Q05N>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 8 Oct 2022 10:16:36 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQTWAGwdOta4_QQx0Q6h2OKjJuz43a_OWt0R9XVe3Rzbw@mail.gmail.com>
-Message-ID: <CAJF2gTQTWAGwdOta4_QQx0Q6h2OKjJuz43a_OWt0R9XVe3Rzbw@mail.gmail.com>
-Subject: Re: [PATCH V6 05/11] riscv: traps: Add noinstr to prevent
- instrumentation inserted
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
-        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, zouyipeng@huawei.com,
-        bigeasy@linutronix.de, David.Laight@aculab.com,
-        chenzhongjin@huawei.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202210071241.445289C5@keescook>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 3, 2022 at 7:41 PM Mark Rutland <mark.rutland@arm.com> wrote:
->
-> On Sat, Oct 01, 2022 at 09:24:45PM -0400, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Without noinstr the compiler is free to insert instrumentation (think
-> > all the k*SAN, KCov, GCov, ftrace etc..) which can call code we're not
-> > yet ready to run this early in the entry path, for instance it could
-> > rely on RCU which isn't on yet, or expect lockdep state. (by peterz)
-> >
-> > Link: https://lore.kernel.org/linux-riscv/YxcQ6NoPf3AH0EXe@hirez.programming.kicks-ass.net/raw
-> > Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > ---
-> >  arch/riscv/kernel/traps.c | 4 ++--
-> >  arch/riscv/mm/fault.c     | 2 +-
-> >  2 files changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> > index 635e6ec26938..588e17c386c6 100644
-> > --- a/arch/riscv/kernel/traps.c
-> > +++ b/arch/riscv/kernel/traps.c
-> > @@ -92,9 +92,9 @@ static void do_trap_error(struct pt_regs *regs, int signo, int code,
-> >  }
-> >
-> >  #if defined(CONFIG_XIP_KERNEL) && defined(CONFIG_RISCV_ALTERNATIVE)
-> > -#define __trap_section               __section(".xip.traps")
-> > +#define __trap_section __noinstr_section(".xip.traps")
->
-> I assume that for CONFIG_XIP_KERNEL, KPROBES is not possible, and so functions
-> marked with __trap_section don't need to be excluded from kprobes.
->
-> Is that assumption correct, or does something need to be done to inhibit that?
-Correct!
+On Fri, Oct 07, 2022 at 03:47:44PM -0700, Kees Cook wrote:
+> On Fri, Oct 07, 2022 at 12:01:03PM -0600, Jason A. Donenfeld wrote:
+> > Rather than incurring a division or requesting too many random bytes for
+> > the given range, use the prandom_u32_max() function, which only takes
+> > the minimum required bytes from the RNG and avoids divisions.
+> 
+> I actually meant splitting the by-hand stuff by subsystem, but nearly
+> all of these can be done mechanically too, so it shouldn't be bad. Notes
+> below...
 
-In riscv, "we select HAVE_KPROBES if !XIP_KERNEL", so don't worry
-about that. I don't think we could enable kprobe for XIP_KERNEL in the
-future.
+Oh, cool, more coccinelle. You're basically giving me a class on these
+recipes. Much appreciated.
 
->
-> Thanks,
-> Mark.
->
-> >  #else
-> > -#define __trap_section
-> > +#define __trap_section noinstr
-> >  #endif
-> >  #define DO_ERROR_INFO(name, signo, code, str)                                \
-> >  asmlinkage __visible __trap_section void name(struct pt_regs *regs)  \
-> > diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-> > index f2fbd1400b7c..c7829289e806 100644
-> > --- a/arch/riscv/mm/fault.c
-> > +++ b/arch/riscv/mm/fault.c
-> > @@ -203,7 +203,7 @@ static inline bool access_error(unsigned long cause, struct vm_area_struct *vma)
-> >   * This routine handles page faults.  It determines the address and the
-> >   * problem, and then passes it off to one of the appropriate routines.
-> >   */
-> > -asmlinkage void do_page_fault(struct pt_regs *regs)
-> > +asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
+> > [...]
+> > diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+> > index 92bcc1768f0b..87203429f802 100644
+> > --- a/arch/arm64/kernel/process.c
+> > +++ b/arch/arm64/kernel/process.c
+> > @@ -595,7 +595,7 @@ unsigned long __get_wchan(struct task_struct *p)
+> >  unsigned long arch_align_stack(unsigned long sp)
 > >  {
-> >       struct task_struct *tsk;
-> >       struct vm_area_struct *vma;
-> > --
-> > 2.36.1
-> >
+> >  	if (!(current->personality & ADDR_NO_RANDOMIZE) && randomize_va_space)
+> > -		sp -= get_random_int() & ~PAGE_MASK;
+> > +		sp -= prandom_u32_max(PAGE_SIZE);
+> >  	return sp & ~0xf;
+> >  }
+> >  
+> 
+> @mask@
+> expression MASK;
+> @@
+> 
+> - (get_random_int() & ~(MASK))
+> + prandom_u32_max(MASK)
+
+Not quite! PAGE_MASK != PAGE_SIZE. In this case, things get a litttttle
+more complicated where you can do:
+
+get_random_int() & MASK == prandom_u32_max(MASK + 1)
+*only if all the top bits of MASK are set* That is, if MASK one less
+than a power of two. Or if MASK & (MASK + 1) == 0.
+
+(If those top bits aren't set, you can technically do
+prandom_u32_max(MASK >> n + 1) << n. That'd be a nice thing to work out.
+But yeesh, maybe a bit much for the time being and probably a bit beyond
+coccinelle.)
+
+This case here, though, is a bit more special, where we can just rely on
+an obvious given kernel identity. Namely, PAGE_MASK == ~(PAGE_SIZE - 1).
+So ~PAGE_MASK == PAGE_SIZE - 1.
+So get_random_int() & ~PAGE_MASK == prandom_u32_max(PAGE_SIZE - 1 + 1).
+So get_random_int() & ~PAGE_MASK == prandom_u32_max(PAGE_SIZE).
+
+And most importantly, this makes the code more readable, since everybody
+knows what bounding by PAGE_SIZE means, where as what on earth is
+happening with the &~PAGE_MASK thing. So it's a good change. I'll try to
+teach coccinelle about that special case.
 
 
 
--- 
-Best Regards
- Guo Ren
+> > diff --git a/arch/loongarch/kernel/vdso.c b/arch/loongarch/kernel/vdso.c
+> > index f32c38abd791..8c9826062652 100644
+> > --- a/arch/loongarch/kernel/vdso.c
+> > +++ b/arch/loongarch/kernel/vdso.c
+> > @@ -78,7 +78,7 @@ static unsigned long vdso_base(void)
+> >  	unsigned long base = STACK_TOP;
+> >  
+> >  	if (current->flags & PF_RANDOMIZE) {
+> > -		base += get_random_int() & (VDSO_RANDOMIZE_SIZE - 1);
+> > +		base += prandom_u32_max(VDSO_RANDOMIZE_SIZE);
+> >  		base = PAGE_ALIGN(base);
+> >  	}
+> >  
+> 
+> @minus_one@
+> expression FULL;
+> @@
+> 
+> - (get_random_int() & ((FULL) - 1)
+> + prandom_u32_max(FULL)
+
+Ahh, well, okay, this is the example I mentioned above. Only works if
+FULL is saturated. Any clever way to get coccinelle to prove that? Can
+it look at the value of constants?
+
+> 
+> > diff --git a/arch/parisc/kernel/vdso.c b/arch/parisc/kernel/vdso.c
+> > index 63dc44c4c246..47e5960a2f96 100644
+> > --- a/arch/parisc/kernel/vdso.c
+> > +++ b/arch/parisc/kernel/vdso.c
+> > @@ -75,7 +75,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm,
+> >  
+> >  	map_base = mm->mmap_base;
+> >  	if (current->flags & PF_RANDOMIZE)
+> > -		map_base -= (get_random_int() & 0x1f) * PAGE_SIZE;
+> > +		map_base -= prandom_u32_max(0x20) * PAGE_SIZE;
+> >  
+> >  	vdso_text_start = get_unmapped_area(NULL, map_base, vdso_text_len, 0, 0);
+> >  
+> 
+> These are more fun, but Coccinelle can still do them with a little
+> Pythonic help:
+> 
+> // Find a potential literal
+> @literal_mask@
+> expression LITERAL;
+> identifier randfunc =~ "get_random_int|prandom_u32|get_random_u32";
+> position p;
+> @@
+> 
+>         (randfunc()@p & (LITERAL))
+> 
+> // Add one to the literal.
+> @script:python add_one@
+> literal << literal_mask.LITERAL;
+> RESULT;
+> @@
+> 
+> if literal.startswith('0x'):
+>         value = int(literal, 16) + 1
+>         coccinelle.RESULT = cocci.make_expr("0x%x" % (value))
+> elif literal[0] in '123456789':
+>         value = int(literal, 10) + 1
+>         coccinelle.RESULT = cocci.make_expr("%d" % (value))
+> else:
+>         print("I don't know how to handle: %s" % (literal))
+> 
+> // Replace the literal mask with the calculated result.
+> @plus_one@
+> expression literal_mask.LITERAL;
+> position literal_mask.p;
+> expression add_one.RESULT;
+> identifier FUNC;
+> @@
+> 
+> -       (FUNC()@p & (LITERAL))
+> +       prandom_u32_max(RESULT)
+
+Oh that's pretty cool. I can do the saturation check in python, since
+`value` holds the parsed result. Neat.
+
+> > diff --git a/fs/ext2/ialloc.c b/fs/ext2/ialloc.c
+> > index 998dd2ac8008..f4944c4dee60 100644
+> > --- a/fs/ext2/ialloc.c
+> > +++ b/fs/ext2/ialloc.c
+> > @@ -277,8 +277,7 @@ static int find_group_orlov(struct super_block *sb, struct inode *parent)
+> >  		int best_ndir = inodes_per_group;
+> >  		int best_group = -1;
+> >  
+> > -		group = prandom_u32();
+> > -		parent_group = (unsigned)group % ngroups;
+> > +		parent_group = prandom_u32_max(ngroups);
+> >  		for (i = 0; i < ngroups; i++) {
+> >  			group = (parent_group + i) % ngroups;
+> >  			desc = ext2_get_group_desc (sb, group, NULL);
+> 
+> Okay, that one is too much for me -- checking that group is never used
+> after the assignment removal is likely possible, but beyond my cocci
+> know-how. :)
+
+Yea this is a tricky one, which I initially didn't do by hand, but Jan
+seemed fine with it, and it's clear if you look at it. Trixy cocci
+indeed.
+
+> > diff --git a/lib/test_hexdump.c b/lib/test_hexdump.c
+> > index 0927f44cd478..41a0321f641a 100644
+> > --- a/lib/test_hexdump.c
+> > +++ b/lib/test_hexdump.c
+> > @@ -208,7 +208,7 @@ static void __init test_hexdump_overflow(size_t buflen, size_t len,
+> >  static void __init test_hexdump_overflow_set(size_t buflen, bool ascii)
+> >  {
+> >  	unsigned int i = 0;
+> > -	int rs = (prandom_u32_max(2) + 1) * 16;
+> > +	int rs = prandom_u32_max(2) + 1 * 16;
+> >  
+> >  	do {
+> >  		int gs = 1 << i;
+> 
+> This looks wrong. Cocci says:
+> 
+> -       int rs = (get_random_int() % 2 + 1) * 16;
+> +       int rs = (prandom_u32_max(2) + 1) * 16;
+
+!! Nice catch.
+
+Alright, I'll give this a try with more cocci. The big difficulty at the
+moment is the power of 2 constant checking thing. If you have any
+pointers on that, would be nice.
+
+Thanks a bunch for the guidance.
+
+Jason
