@@ -2,71 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D745F85EE
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 17:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C4B5F85F0
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 17:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbiJHPnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 11:43:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
+        id S229470AbiJHPr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 11:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiJHPn3 (ORCPT
+        with ESMTP id S229459AbiJHPrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 11:43:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC154D271;
-        Sat,  8 Oct 2022 08:43:28 -0700 (PDT)
+        Sat, 8 Oct 2022 11:47:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EC94316E
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 08:47:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 889F3B80B8E;
-        Sat,  8 Oct 2022 15:43:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B039C433D6;
-        Sat,  8 Oct 2022 15:43:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665243806;
-        bh=sDbtbSBEwlPcqKBCDGmCUP5vci73/2jmERn/cTwYIVM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0iLdtjrPzaxRhvIhuQWhMsEnmR7QXzm4+YYyj0+e+8LGnxc/Q41CY0oRfsrkatqwt
-         fFiEfyJyVDNFuw8HTYQwve0vNKcFlO9t6AzdFSLQqC8xtyZ2VXXgYgXaVXH+hC6brt
-         hE5R2yBlSoSOjS1UWL5SdvZpx0AXj53AQHk9tSJU=
-Date:   Sat, 8 Oct 2022 17:44:07 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     justinpopo6@gmail.com
-Cc:     alcooperx@gmail.com, balbi@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, justin.chen@broadcom.com,
-        f.fainelli@gmail.com
-Subject: Re: [PATCH] usb: bdc: change state when port disconnected
-Message-ID: <Y0Gax8SUoq59hdoF@kroah.com>
-References: <1664997235-18198-1-git-send-email-justinpopo6@gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7A94B80B8D
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 15:47:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE704C433C1;
+        Sat,  8 Oct 2022 15:47:19 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="C3VRJb88"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1665244037;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kHGPZI9TAFZXuftbhzouX4C1DXmHG0LSAvVwmxpYbHQ=;
+        b=C3VRJb886fi2tZ+NaC9z2isSA5lG+x1IDF4DY/b+R9zp79b5EpIwINsffyKW21plsC8sXT
+        5adlDd4+qGFgocfiYe+ta1U6AyDTFrMeDunoU7dF7Xua9v2EZNdjlUQ7EzDayZQbCUHIU0
+        ktht4Z7SP/ct6D0yhCC4GQziOqNZv7o=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8f6f8318 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sat, 8 Oct 2022 15:47:16 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     arnd@arndb.de, lee@kernel.org, linux-kernel@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, torvalds@linux-foundation.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH] Revert "mfd: syscon: Remove repetition of the regmap_get_val_endian()"
+Date:   Sat,  8 Oct 2022 09:47:00 -0600
+Message-Id: <20221008154700.404837-1-Jason@zx2c4.com>
+In-Reply-To: <Y0GZwkDwnak2ReTt@zx2c4.com>
+References: <Y0GZwkDwnak2ReTt@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1664997235-18198-1-git-send-email-justinpopo6@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 05, 2022 at 12:13:55PM -0700, justinpopo6@gmail.com wrote:
-> From: Justin Chen <justinpopo6@gmail.com>
-> 
-> When port is connected and then disconnected, the state stays as
-> configured. Which is incorrect as the port is no longer configured,
-> but in a not attached state.
-> 
-> Signed-off-by: Justin Chen <justinpopo6@gmail.com>
-> ---
->  drivers/usb/gadget/udc/bdc/bdc_udc.c | 1 +
->  1 file changed, 1 insertion(+)
+This reverts commit 72a95859728a7866522e6633818bebc1c2519b17. It broke
+reboots on big-endian MIPS and MIPS64 malta QEMU instances, which use
+the syscon driver. Little-endian is not effected, which means likely
+it's important to handle regmap_get_val_endian() in this function after
+all.
 
-What commit id does this fix?  Should it go to older kernels?  If so,
-how far back?
+Cc: Lee Jones <lee@kernel.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Fixes: 72a95859728a ("mfd: syscon: Remove repetition of the regmap_get_val_endian()")
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/mfd/syscon.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-thanks,
+diff --git a/drivers/mfd/syscon.c b/drivers/mfd/syscon.c
+index 9489e80e905a..bdb2ce7ff03b 100644
+--- a/drivers/mfd/syscon.c
++++ b/drivers/mfd/syscon.c
+@@ -66,6 +66,14 @@ static struct syscon *of_syscon_register(struct device_node *np, bool check_clk)
+ 		goto err_map;
+ 	}
+ 
++	/* Parse the device's DT node for an endianness specification */
++	if (of_property_read_bool(np, "big-endian"))
++		syscon_config.val_format_endian = REGMAP_ENDIAN_BIG;
++	else if (of_property_read_bool(np, "little-endian"))
++		syscon_config.val_format_endian = REGMAP_ENDIAN_LITTLE;
++	else if (of_property_read_bool(np, "native-endian"))
++		syscon_config.val_format_endian = REGMAP_ENDIAN_NATIVE;
++
+ 	/*
+ 	 * search for reg-io-width property in DT. If it is not provided,
+ 	 * default to 4 bytes. regmap_init_mmio will return an error if values
+-- 
+2.37.3
 
-greg k-h
