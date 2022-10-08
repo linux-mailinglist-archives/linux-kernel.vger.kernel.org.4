@@ -2,133 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4BCF5F8674
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 20:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6415F8677
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 20:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbiJHSIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 14:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
+        id S230390AbiJHSNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 14:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbiJHSIe (ORCPT
+        with ESMTP id S229916AbiJHSNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 14:08:34 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D7D3FEF3;
-        Sat,  8 Oct 2022 11:08:32 -0700 (PDT)
-X-QQ-mid: bizesmtp80t1665252455teb5lj67
-Received: from [192.168.0.179] ( [113.85.219.225])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 09 Oct 2022 02:07:32 +0800 (CST)
-X-QQ-SSF: 0100000000000070B000B00A0000000
-X-QQ-FEAT: jbaoaN/hLKIC5Yj0V619849HMTLVRPFKWybSzNavB7OliimAOyl1ZwZtGg9e8
-        qwWewiQWj4ugjzP4iZ12K1krk/nn6bbb+Ux+60fHDpHJM/NUhqM+kKexBclIBdU89f1f3OE
-        73escGs/FVIiTvhkD34943Am9PYMQz3B6NZViXJ4ZhpmLBLK6tOUXEtKoTIHQnfE/cKuZZS
-        r38BoyBxUZeLJ3PtCiJTg718u3cK0WWXtfO6zmuj/OCuzK8BaSuD3IFd4znibi33aAM7tzz
-        uEb7iiBfn6JzoYVED9oKy4CqhzNzlsFDdF84vKrNmOlDX8CyCz70DLtbLIYfZ02W355lSGY
-        v9s88bVWo1NYpOWs8N/yQAA+I+C6SXNGXBsIdx/
-X-QQ-GoodBg: 0
-Message-ID: <D431E7AF8892354C+5445265a-92e0-59eb-b0ab-98c053543015@linux.starfivetech.com>
-Date:   Sun, 9 Oct 2022 02:07:31 +0800
+        Sat, 8 Oct 2022 14:13:06 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1364F3A14D;
+        Sat,  8 Oct 2022 11:13:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=TNYuzkx0DGl3YY6akP9WyoKTqZEYCLgGMvwC1YP1f64=; b=r5/3dX3zF7a8uN5Kl+ACSNY7+Y
+        K1LkEsk20Z3soFvyj7DObMgWbKDraV5UTMKJGyS66DQ3tmD/yRDci/EXB0rkPuqNWCTKrFIqnmeHg
+        42jKGSlx35qXM/Infto9WGwr6lsh0iEop8rrUCby1wYU1SIGpZHLEcJUZqweJmA7YjKKas1LoNBtS
+        mpL1KF7aT/mDVw1cv6NPKzquRjNjXUmOnr2A9gcywj0TwLw5Tq81/8MYamsb/6QwsOcLPPTpFSgTr
+        9boC0N//x3X1rlOd5RDQd2DhDAf4Kjc+AOfxttrO/b4eaNSq/Ygv2IuXtSnfTMj7hkL1JzPrehN+g
+        upwMqbKg==;
+Received: from 201-43-120-40.dsl.telesp.net.br ([201.43.120.40] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1ohEJk-00Elx8-5F; Sat, 08 Oct 2022 20:12:56 +0200
+Message-ID: <ebbaebc5-24e9-2787-843a-414ea286e35b@igalia.com>
+Date:   Sat, 8 Oct 2022 15:12:40 -0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v1 05/30] soc: sifive: l2 cache: Convert to platform
- driver
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 5/8] pstore: Fix long-term implicit conversions in the
+ compression routines
 Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Ben Dooks <ben.dooks@codethink.co.uk>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        linux-kernel@vger.kernel.org, Zong Li <zong.li@sifive.com>
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
- <20220929143225.17907-6-hal.feng@linux.starfivetech.com>
- <40d0abb6-88dc-d315-f768-27a623f60986@sifive.com>
- <CAJM55Z-PzvM_-_6jTWX+Jyy2FQ3TJdh4uYj0evpktnEENHL6WA@mail.gmail.com>
- <4d8a199b-f22a-a421-aae4-64e538cb97f4@codethink.co.uk>
- <CAJM55Z8QN1CeknrP9nyh9ei4EFQT_VKfTTi6uH5ssE3rqW5OdA@mail.gmail.com>
- <Yz2PDy9dkuwqyrR4@spud>
-From:   Hal Feng <hal.feng@linux.starfivetech.com>
-In-Reply-To: <Yz2PDy9dkuwqyrR4@spud>
+To:     Ard Biesheuvel <ardb@kernel.org>, Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, anton@enomsg.org,
+        ccross@android.com, tony.luck@intel.com
+References: <20221006224212.569555-1-gpiccoli@igalia.com>
+ <20221006224212.569555-6-gpiccoli@igalia.com>
+ <202210061634.758D083D5@keescook>
+ <CAMj1kXF27wZYzXm1u3kKSBtbG=tcK7wOwq6YTwpFg+Z7ic4siQ@mail.gmail.com>
+ <202210071234.D289C8C@keescook>
+ <11e03e8d-7711-330d-e0d4-808ef9acec3a@igalia.com>
+ <CAMj1kXHSSSZ59tihHDNDamczxFCRH8NHzT-eKaZ7xNyqVXW1Hw@mail.gmail.com>
+ <dbe57a5e-7486-649f-7093-6da6312a71ee@igalia.com>
+ <CAMj1kXHjS+gywpoZ26_Bn76Z_5ohhtoD7ruH0bBYaAQzBY9tuw@mail.gmail.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <CAMj1kXHjS+gywpoZ26_Bn76Z_5ohhtoD7ruH0bBYaAQzBY9tuw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
-        NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Oct 2022 15:05:03 +0100, Conor Dooley wrote:
-> On Wed, Oct 05, 2022 at 03:55:17PM +0200, Emil Renner Berthing wrote:
-> > On Wed, 5 Oct 2022 at 15:48, Ben Dooks <ben.dooks@codethink.co.uk> wrote:
-> > >
-> > > On 05/10/2022 14:44, Emil Renner Berthing wrote:
-> > > > On Thu, 29 Sept 2022 at 19:59, Ben Dooks <ben.dooks@sifive.com> wrote:
-> > > >>
-> > > >> On 29/09/2022 15:32, Hal Feng wrote:
-> > > >>> From: Emil Renner Berthing <kernel@esmil.dk>
-> > > >>>
-> > > >>> This converts the driver to use the builtin_platform_driver_probe macro
-> > > >>> to initialize the driver. This macro ends up calling device_initcall as
-> > > >>> was used previously, but also allocates a platform device which gives us
-> > > >>> access to much nicer APIs such as platform_ioremap_resource,
-> > > >>> platform_get_irq and dev_err_probe.
-> > > >>
-> > > >> This is useful, but also there are other changes currently being sorted
-> > > >> out by Zong Li (cc'd into this message) which have already been reviewed
-> > > >> and are hopefully queued for the next kernel release.
-> > > >>
-> > > >>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> > > >>> Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
-> > > >
-> > > > I'm ok with something like this being merged, but please note that if
-> > > > we ever want to support the JH7100 which uses registers in this
-> > > > peripheral to flush the cache for its non-coherent DMAs then this
-> > > > driver needs to be loaded before other peripherals or we will trigger
-> > > > the 2nd warning in arch/riscv/mm/dma-noncoherent.c. I'm not sure we
-> > > > can do that when it's a platform driver. See this patch for an
-> > > > alternative to support the JH71x0s:
-> > > > https://github.com/esmil/linux/commit/9c5b29da56ae29159c9572c5bb195fe3a1b535c5
-> > > >
-> > > > /Emil
-> > >
-> > > Are you replying to your own patch that does the conversion to
-> > > platform driver and then saying that it could actually cause
-> > > issues?
-> > 
-> > Yes, I can see it seems odd, but this patch lived for a while in the
-> > kernel repo for the JH7100 until I rebased on 6.0-rc1 and realized the
-> > above.
-> > Hal Feng must have based his patches on a version of the code before
-> > that when preparing this series.
-> > 
-> > > I'm all for dropping this for the moment and keeping the old
-> > > early init for the ccache.
-> > 
-> > Cool.
+On 08/10/2022 14:52, Ard Biesheuvel wrote:
+> [...]
+>> This is exactly what 842 (sw compress) is doing now. If that's
+>> interesting and Kees agrees, and if nobody else plans on doing that, I
+>> could work on it.
+>>
+>> Extra question (maybe silly on my side?): is it possible that
+>> _compressed_ data is bigger than the original one? Isn't there any
+>> "protection" on the compress APIs for that? In that case, it'd purely
+>> waste of time / CPU cycles heheh
+>>
 > 
-> FWIW, if converting to a platform driver will inhibit using the driver
-> for doing non-coherent stuff I would like to NAK the patch :)
+> No, this is the whole point of those helper routines, as far as I can
+> tell. Basically, if you put data that cannot be compressed losslessly
+> (e.g., a H264 video) through a lossless compression routine, the
+> resulting data will be bigger due to the overhead of the compression
+> metadata.
 > 
+> However, we are compressing ASCII text here, so using the uncompressed
+> size as an upper bound for the compressed size is reasonable for any
+> compression algorithm. And if dmesg output is not compressible, there
+> must be something seriously wrong with it.
+> 
+> So we could either just drop such input, or simply not bother
+> compressing it if doing so would only take up more space. Given the
+> low likelihood that we will ever hit this case, I'd say we just ignore
+> those.
+> 
+> Again, please correct me if I am missing something here (Kees?). Are
+> there cases where we compress data that may be compressed already?
 
-Yeah, I agree, and this patch will be dropped on the next version.
+This is an interesting point of view, thanks for sharing! And it's
+possible to kinda test it - I did in the past to test maximum size of
+ramoops buffers, but I didn't output the values to compare compressed
+vs. uncompressed size (given I didn't need the info at the time).
 
+The trick I used was: suppose I'm using lz4, I polluted dmesg with lz4
+already compressed garbage, a huge amount of it, then provoked a crash.
+I'll try it again to grab the sizes heheh
