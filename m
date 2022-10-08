@@ -2,203 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B0A5F820D
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 03:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 971225F8212
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 03:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbiJHBkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 21:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
+        id S229689AbiJHBlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 21:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiJHBkb (ORCPT
+        with ESMTP id S229854AbiJHBlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 21:40:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292553C171;
-        Fri,  7 Oct 2022 18:40:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE307B8242E;
-        Sat,  8 Oct 2022 01:40:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F81CC433D6;
-        Sat,  8 Oct 2022 01:40:20 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="m7dkF4Qq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1665193218;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vNH2mnpIcj00WUdnQLlhiavniZvHilK6oGwgWIcL7uw=;
-        b=m7dkF4QqvbJypdgEAbc35NBJnnqvQzB21sgNt0EURJQOR1FGkUsyi73yIMXgdPHVIIUlOg
-        5CTO5f2vbWzw/vm/odmtp7dHuxfMwfhY9ZkhyfcncvX8HsEngEbDzs4FmPwfNkPExdyoZz
-        X0uIWOW2Vu+MHRe3zl9le1EOdBfLqFs=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f0b17dc7 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sat, 8 Oct 2022 01:40:18 +0000 (UTC)
-Date:   Fri, 7 Oct 2022 19:40:07 -0600
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Rolf Eike Beer <eike-kernel@sf-tec.de>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        andreas.noever@gmail.com, akpm@linux-foundation.org,
-        andriy.shevchenko@linux.intel.com, bp@alien8.de,
-        catalin.marinas@arm.com, christoph.boehmwalder@linbit.com,
-        hch@lst.de, christophe.leroy@csgroup.eu, daniel@iogearbox.net,
-        airlied@redhat.com, dave.hansen@linux.intel.com,
-        davem@davemloft.net, edumazet@google.com, fw@strlen.de,
-        gregkh@linuxfoundation.org, hpa@zytor.com, hca@linux.ibm.com,
-        deller@gmx.de, herbert@gondor.apana.org.au, chenhuacai@kernel.org,
-        hughd@google.com, kuba@kernel.org, jejb@linux.ibm.com,
-        jack@suse.com, jgg@ziepe.ca, axboe@kernel.dk,
-        johannes@sipsolutions.net, corbet@lwn.net, kadlec@netfilter.org,
-        kpsingh@kernel.org, keescook@chromium.org, elver@google.com,
-        mchehab@kernel.org, mpe@ellerman.id.au, pablo@netfilter.org,
-        pabeni@redhat.com, peterz@infradead.org, richard@nod.at,
-        linux@armlinux.org.uk, tytso@mit.edu, tsbogend@alpha.franken.de,
-        tglx@linutronix.de, tgraf@suug.ch, ulf.hansson@linaro.org,
-        vigneshr@ti.com, kernel@xen0n.name, will@kernel.org,
-        yury.norov@gmail.com, dri-devel@lists.freedesktop.org,
-        kasan-dev@googlegroups.com, kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        loongarch@lists.linux.dev, netdev@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org, toke@toke.dk,
-        chuck.lever@oracle.com, jack@suse.cz,
-        mika.westerberg@linux.intel.com
-Subject: Re: [PATCH v4 4/6] treewide: use get_random_u32() when possible
-Message-ID: <Y0DU93wMsDwlLmMP@zx2c4.com>
-References: <20221007180107.216067-1-Jason@zx2c4.com>
- <20221007180107.216067-5-Jason@zx2c4.com>
- <3216619.44csPzL39Z@daneel.sf-tec.de>
+        Fri, 7 Oct 2022 21:41:06 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AE340005;
+        Fri,  7 Oct 2022 18:40:57 -0700 (PDT)
+Received: from canpemm100005.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MknpC0vKtzVj0L;
+        Sat,  8 Oct 2022 09:36:35 +0800 (CST)
+Received: from canpemm500005.china.huawei.com (7.192.104.229) by
+ canpemm100005.china.huawei.com (7.192.105.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 8 Oct 2022 09:40:55 +0800
+Received: from canpemm500005.china.huawei.com ([7.192.104.229]) by
+ canpemm500005.china.huawei.com ([7.192.104.229]) with mapi id 15.01.2375.031;
+ Sat, 8 Oct 2022 09:40:55 +0800
+From:   zhaogongyi <zhaogongyi@huawei.com>
+To:     David Hildenbrand <david@redhat.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+CC:     "akinobu.mita@gmail.com" <akinobu.mita@gmail.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "osalvador@suse.de" <osalvador@suse.de>,
+        "shuah@kernel.org" <shuah@kernel.org>
+Subject: Re: [PATCH -next v5 2/4] selftests/memory-hotplug: Restore memory
+ before exit
+Thread-Topic: [PATCH -next v5 2/4] selftests/memory-hotplug: Restore memory
+ before exit
+Thread-Index: AdjatvepmxHH4sO5SHuE6BL6lEWgMA==
+Date:   Sat, 8 Oct 2022 01:40:55 +0000
+Message-ID: <f83730eec0b1445fa92d4cf0397d886b@huawei.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.67.110.209]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3216619.44csPzL39Z@daneel.sf-tec.de>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 10:34:47PM +0200, Rolf Eike Beer wrote:
-> > diff --git a/arch/parisc/kernel/process.c b/arch/parisc/kernel/process.c
-> > index 7c37e09c92da..18c4f0e3e906 100644
-> > --- a/arch/parisc/kernel/process.c
-> > +++ b/arch/parisc/kernel/process.c
-> > @@ -288,7 +288,7 @@ __get_wchan(struct task_struct *p)
-> > 
-> >  static inline unsigned long brk_rnd(void)
-> >  {
-> > -	return (get_random_int() & BRK_RND_MASK) << PAGE_SHIFT;
-> > +	return (get_random_u32() & BRK_RND_MASK) << PAGE_SHIFT;
-> >  }
-> 
-> Can't this be
-> 
->   prandom_u32_max(BRK_RND_MASK + 1) << PAGE_SHIFT
-> 
-> ? More similar code with other masks follows below.
-
-I guess it can, because BRK_RND_MASK happens to have all its lower bits
-set. But as a "_MASK" maybe this isn't a given, and I don't want to
-change intended semantics in this patchset. It's also not more
-efficient, because BRK_RND_MASK is actually an expression:
-
-    #define BRK_RND_MASK        (is_32bit_task() ? 0x07ffUL : 0x3ffffUL)
-
-So at compile-time, the compiler can't prove that it's <= U16_MAX, since
-it isn't always the case, so it'll use get_random_u32() anyway.
-
-[Side note: maybe that compile-time check should become a runtime check,
- but I'll need to do some benchmarking before changing that and
- introducing two added branches to every non-constant invocation, so for
- now it's a compile-time check. Fortunately the vast majority of uses
- are done on inputs the compiler can prove something about.]
-
-> 
-> > diff --git a/drivers/gpu/drm/i915/i915_gem_gtt.c
-> > b/drivers/gpu/drm/i915/i915_gem_gtt.c index 329ff75b80b9..7bd1861ddbdf
-> > 100644
-> > --- a/drivers/gpu/drm/i915/i915_gem_gtt.c
-> > +++ b/drivers/gpu/drm/i915/i915_gem_gtt.c
-> > @@ -137,12 +137,12 @@ static u64 random_offset(u64 start, u64 end, u64 len,
-> > u64 align) range = round_down(end - len, align) - round_up(start, align);
-> >  	if (range) {
-> >  		if (sizeof(unsigned long) == sizeof(u64)) {
-> > -			addr = get_random_long();
-> > +			addr = get_random_u64();
-> >  		} else {
-> > -			addr = get_random_int();
-> > +			addr = get_random_u32();
-> >  			if (range > U32_MAX) {
-> >  				addr <<= 32;
-> > -				addr |= get_random_int();
-> > +				addr |= get_random_u32();
-> >  			}
-> >  		}
-> >  		div64_u64_rem(addr, range, &addr);
-> 
-> How about 
-> 
->  		if (sizeof(unsigned long) == sizeof(u64) || range > 
-> U32_MAX)
-> 			addr = get_random_u64();
->  		else
-> 			addr = get_random_u32();
-> 
-
-Yes, maybe, probably, indeed... But I don't want to go wild and start
-fixing all the weird algorithms everywhere. My goal is to only make
-changes that are "obviously right". But maybe after this lands this is
-something that you or I can submit to the i915 people as an
-optimization.
-
-> > diff --git a/drivers/infiniband/hw/cxgb4/cm.c
-> > b/drivers/infiniband/hw/cxgb4/cm.c index 14392c942f49..499a425a3379 100644
-> > --- a/drivers/infiniband/hw/cxgb4/cm.c
-> > +++ b/drivers/infiniband/hw/cxgb4/cm.c
-> > @@ -734,7 +734,7 @@ static int send_connect(struct c4iw_ep *ep)
-> >  				   &ep->com.remote_addr;
-> >  	int ret;
-> >  	enum chip_type adapter_type = ep->com.dev->rdev.lldi.adapter_type;
-> > -	u32 isn = (prandom_u32() & ~7UL) - 1;
-> > +	u32 isn = (get_random_u32() & ~7UL) - 1;
-> >  	struct net_device *netdev;
-> >  	u64 params;
-> > 
-> > @@ -2469,7 +2469,7 @@ static int accept_cr(struct c4iw_ep *ep, struct
-> > sk_buff *skb, }
-> > 
-> >  	if (!is_t4(adapter_type)) {
-> > -		u32 isn = (prandom_u32() & ~7UL) - 1;
-> > +		u32 isn = (get_random_u32() & ~7UL) - 1;
-> 
-> u32 isn = get_random_u32() | 0x7;
-
-Again, maybe so, but same rationale as above.
-
-> >  static void ns_do_bit_flips(struct nandsim *ns, int num)
-> >  {
-> > -	if (bitflips && prandom_u32() < (1 << 22)) {
-> > +	if (bitflips && get_random_u32() < (1 << 22)) {
-> 
-> Doing "get_random_u16() < (1 << 6)" should have the same probability with only 
-> 2 bytes of random, no?
-
-That's very clever. (1<<22)/(1<<32) == (1<<6)/(1<<16). But also, same
-rationale as above for not doing that.
-
-Anyway, I realize this is probably disappointing to read. But also, we
-can come back to those optimization cases later pretty easily.
-
-Jason
+SGkhDQoNCj4gDQo+IE9uIDMwLjA5LjIyIDEwOjUyLCB6aGFvZ29uZ3lpIHdyb3RlOg0KPiA+IEhp
+IQ0KPiA+DQo+ID4+DQo+ID4+IE9uIDMwLjA5LjIyIDA4OjM1LCBaaGFvIEdvbmd5aSB3cm90ZToN
+Cj4gPj4+IFNvbWUgbW9tb3J5IHdpbGwgYmUgbGVmdCBpbiBvZmZsaW5lIHN0YXRlIHdoZW4gY2Fs
+bGluZw0KPiA+Pj4gb2ZmbGluZV9tZW1vcnlfZXhwZWN0X2ZhaWwoKSBmYWlsZWQuIFJlc3RvcmUg
+aXQgYmVmb3JlIGV4aXQuDQo+ID4+Pg0KPiA+Pj4gU2lnbmVkLW9mZi1ieTogWmhhbyBHb25neWkg
+PHpoYW9nb25neWlAaHVhd2VpLmNvbT4NCj4gPj4+IC0tLQ0KPiA+Pj4gICAgLi4uL21lbW9yeS1o
+b3RwbHVnL21lbS1vbi1vZmYtdGVzdC5zaCAgICAgICAgIHwgMjENCj4gPj4gKysrKysrKysrKysr
+KystLS0tLQ0KPiA+Pj4gICAgMSBmaWxlIGNoYW5nZWQsIDE2IGluc2VydGlvbnMoKyksIDUgZGVs
+ZXRpb25zKC0pDQo+ID4+Pg0KPiA+Pj4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRl
+c3RzL21lbW9yeS1ob3RwbHVnL21lbS1vbi1vZmYtdGVzdC5zaA0KPiA+PiBiL3Rvb2xzL3Rlc3Rp
+bmcvc2VsZnRlc3RzL21lbW9yeS1ob3RwbHVnL21lbS1vbi1vZmYtdGVzdC5zaA0KPiA+Pj4gaW5k
+ZXggMWQ4NzYxMWE3ZDUyLi45MWE3NDU3NjE2YmIgMTAwNzU1DQo+ID4+PiAtLS0gYS90b29scy90
+ZXN0aW5nL3NlbGZ0ZXN0cy9tZW1vcnktaG90cGx1Zy9tZW0tb24tb2ZmLXRlc3Quc2gNCj4gPj4+
+ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL21lbW9yeS1ob3RwbHVnL21lbS1vbi1vZmYt
+dGVzdC5zaA0KPiA+Pj4gQEAgLTEzNCw2ICsxMzQsMTYgQEAgb2ZmbGluZV9tZW1vcnlfZXhwZWN0
+X2ZhaWwoKQ0KPiA+Pj4gICAgCXJldHVybiAwDQo+ID4+PiAgICB9DQo+ID4+Pg0KPiA+Pj4gK29u
+bGluZV9hbGxfb2ZmbGluZV9tZW1vcnkoKQ0KPiA+Pj4gK3sNCj4gPj4+ICsJZm9yIG1lbW9yeSBp
+biBgaG90cGx1Z2dhYmxlX29mZmxpbmVfbWVtb3J5YDsgZG8NCj4gPj4+ICsJCWlmICEgb25saW5l
+X21lbW9yeV9leHBlY3Rfc3VjY2VzcyAkbWVtb3J5OyB0aGVuDQo+ID4+PiArCQkJZWNobyAiJEZV
+TkNOQU1FICRtZW1vcnk6IHVuZXhwZWN0ZWQgZmFpbCIgPiYyDQo+ID4+DQo+ID4+IERvIHdlIG5l
+ZWQgdGhhdCBvdXRwdXQ/DQo+ID4NCj4gPiBJbiBteSBvcGluaW9uLCBpZiBvbmxpbmUgYSBtZW1v
+cnkgbm9kZSBmYWlsZWQgLGl0IHNob3VsZCBiZSBhIGtlcm5lbCBidWcNCj4gY2F0Y2hlZCwgc28s
+IEkgdGhpbmsgdGhlIG91dHB1dCBoZXJlIGlzIG5lZWRlZC4NCj4gDQo+IEJ1dCBvbmxpbmVfbWVt
+b3J5X2V4cGVjdF9zdWNjZXNzKCkgYWxyZWFkeSBwcmludHMgYSB3YXJuaW5nLCBubz8NCg0KWWVz
+LCBvbmxpbmVfbWVtb3J5X2V4cGVjdF9zdWNjZXNzKCkgYWxyZWFkeSBwcmludHMgYSB3YXJuaW5n
+LCByZW1vdmUgdGhlIHdhcm5pbmcgaW4gb25saW5lX2FsbF9vZmZsaW5lX21lbW9yeSgpIHNlZW1z
+IG9rLA0KDQpNeSBwcmV2aW91cyBjb25zaWRlcmF0aW9uIHdhcyB0aGF0IG9uZSBtb3JlIGxvZyBp
+bmZvcm1hdGlvbiB3b3VsZCBtYWtlIGl0IGVhc2llciB0byBsb2NhdGUgdGhlIHdyb25nIGxvY2F0
+aW9uLg0KDQpCZXN0IFJlZ2FyZHMsDQpHb25neWkNCg==
