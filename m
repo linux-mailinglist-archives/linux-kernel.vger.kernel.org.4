@@ -1,90 +1,118 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 971225F8212
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 03:41:19 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 52B7C5F821C
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 03:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiJHBlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 21:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
+        id S229720AbiJHBqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 21:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbiJHBlG (ORCPT
+        with ESMTP id S229582AbiJHBqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 21:41:06 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AE340005;
-        Fri,  7 Oct 2022 18:40:57 -0700 (PDT)
-Received: from canpemm100005.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MknpC0vKtzVj0L;
-        Sat,  8 Oct 2022 09:36:35 +0800 (CST)
-Received: from canpemm500005.china.huawei.com (7.192.104.229) by
- canpemm100005.china.huawei.com (7.192.105.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 8 Oct 2022 09:40:55 +0800
-Received: from canpemm500005.china.huawei.com ([7.192.104.229]) by
- canpemm500005.china.huawei.com ([7.192.104.229]) with mapi id 15.01.2375.031;
- Sat, 8 Oct 2022 09:40:55 +0800
-From:   zhaogongyi <zhaogongyi@huawei.com>
-To:     David Hildenbrand <david@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-CC:     "akinobu.mita@gmail.com" <akinobu.mita@gmail.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "osalvador@suse.de" <osalvador@suse.de>,
-        "shuah@kernel.org" <shuah@kernel.org>
-Subject: Re: [PATCH -next v5 2/4] selftests/memory-hotplug: Restore memory
- before exit
-Thread-Topic: [PATCH -next v5 2/4] selftests/memory-hotplug: Restore memory
- before exit
-Thread-Index: AdjatvepmxHH4sO5SHuE6BL6lEWgMA==
-Date:   Sat, 8 Oct 2022 01:40:55 +0000
-Message-ID: <f83730eec0b1445fa92d4cf0397d886b@huawei.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.67.110.209]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 7 Oct 2022 21:46:51 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000936292E;
+        Fri,  7 Oct 2022 18:46:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665193610; x=1696729610;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=oQxjNLOcMJZGWcwR/V6EOum5AghG2IhHdI8FHMASetQ=;
+  b=aOUd2Xdtt+WypifyPR7E7aQjzFpAa/ckBXpEJ04HxdRh/irT9cHvg327
+   q+DQW+ic1MSFNFLeQGvK2XAvRxiXM3UikskWj5+ladF3Qqeq7nbwwoSWA
+   6MrrSfnu3kpYlEWhw+Ez7mpmkxjR1BDTgohDiCaWgF2ZVkNdWrBAH/9fr
+   +V0mne6+O3yi6cYsms0nM3mgzvRoOHNute8PvrkTXFktCSyZasqgGgTnt
+   oH0tzWOpE8+W6BvHiOlOAa8Pcdk0VPmSUeKJDGsxTF0zyYGiTwzHNGGjs
+   S3KJ1sXQsdKnHWY5oT8+RwR+s7SlRVqxgGIvLmwum74rK5Izw+0P/4yni
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10493"; a="365826650"
+X-IronPort-AV: E=Sophos;i="5.95,168,1661842800"; 
+   d="scan'208";a="365826650"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 18:46:49 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10493"; a="625358200"
+X-IronPort-AV: E=Sophos;i="5.95,168,1661842800"; 
+   d="scan'208";a="625358200"
+Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.212.234.20]) ([10.212.234.20])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 18:46:49 -0700
+Message-ID: <f0dbc406-11b4-90f7-52fd-ce79f842c356@linux.intel.com>
+Date:   Fri, 7 Oct 2022 18:46:48 -0700
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] fs/select: avoid clang stack usage warning
+Content-Language: en-US
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-fsdevel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20190307090146.1874906-1-arnd@arndb.de>
+ <20221006222124.aabaemy7ofop7ccz@google.com>
+From:   Andi Kleen <ak@linux.intel.com>
+In-Reply-To: <20221006222124.aabaemy7ofop7ccz@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkhDQoNCj4gDQo+IE9uIDMwLjA5LjIyIDEwOjUyLCB6aGFvZ29uZ3lpIHdyb3RlOg0KPiA+IEhp
-IQ0KPiA+DQo+ID4+DQo+ID4+IE9uIDMwLjA5LjIyIDA4OjM1LCBaaGFvIEdvbmd5aSB3cm90ZToN
-Cj4gPj4+IFNvbWUgbW9tb3J5IHdpbGwgYmUgbGVmdCBpbiBvZmZsaW5lIHN0YXRlIHdoZW4gY2Fs
-bGluZw0KPiA+Pj4gb2ZmbGluZV9tZW1vcnlfZXhwZWN0X2ZhaWwoKSBmYWlsZWQuIFJlc3RvcmUg
-aXQgYmVmb3JlIGV4aXQuDQo+ID4+Pg0KPiA+Pj4gU2lnbmVkLW9mZi1ieTogWmhhbyBHb25neWkg
-PHpoYW9nb25neWlAaHVhd2VpLmNvbT4NCj4gPj4+IC0tLQ0KPiA+Pj4gICAgLi4uL21lbW9yeS1o
-b3RwbHVnL21lbS1vbi1vZmYtdGVzdC5zaCAgICAgICAgIHwgMjENCj4gPj4gKysrKysrKysrKysr
-KystLS0tLQ0KPiA+Pj4gICAgMSBmaWxlIGNoYW5nZWQsIDE2IGluc2VydGlvbnMoKyksIDUgZGVs
-ZXRpb25zKC0pDQo+ID4+Pg0KPiA+Pj4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRl
-c3RzL21lbW9yeS1ob3RwbHVnL21lbS1vbi1vZmYtdGVzdC5zaA0KPiA+PiBiL3Rvb2xzL3Rlc3Rp
-bmcvc2VsZnRlc3RzL21lbW9yeS1ob3RwbHVnL21lbS1vbi1vZmYtdGVzdC5zaA0KPiA+Pj4gaW5k
-ZXggMWQ4NzYxMWE3ZDUyLi45MWE3NDU3NjE2YmIgMTAwNzU1DQo+ID4+PiAtLS0gYS90b29scy90
-ZXN0aW5nL3NlbGZ0ZXN0cy9tZW1vcnktaG90cGx1Zy9tZW0tb24tb2ZmLXRlc3Quc2gNCj4gPj4+
-ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL21lbW9yeS1ob3RwbHVnL21lbS1vbi1vZmYt
-dGVzdC5zaA0KPiA+Pj4gQEAgLTEzNCw2ICsxMzQsMTYgQEAgb2ZmbGluZV9tZW1vcnlfZXhwZWN0
-X2ZhaWwoKQ0KPiA+Pj4gICAgCXJldHVybiAwDQo+ID4+PiAgICB9DQo+ID4+Pg0KPiA+Pj4gK29u
-bGluZV9hbGxfb2ZmbGluZV9tZW1vcnkoKQ0KPiA+Pj4gK3sNCj4gPj4+ICsJZm9yIG1lbW9yeSBp
-biBgaG90cGx1Z2dhYmxlX29mZmxpbmVfbWVtb3J5YDsgZG8NCj4gPj4+ICsJCWlmICEgb25saW5l
-X21lbW9yeV9leHBlY3Rfc3VjY2VzcyAkbWVtb3J5OyB0aGVuDQo+ID4+PiArCQkJZWNobyAiJEZV
-TkNOQU1FICRtZW1vcnk6IHVuZXhwZWN0ZWQgZmFpbCIgPiYyDQo+ID4+DQo+ID4+IERvIHdlIG5l
-ZWQgdGhhdCBvdXRwdXQ/DQo+ID4NCj4gPiBJbiBteSBvcGluaW9uLCBpZiBvbmxpbmUgYSBtZW1v
-cnkgbm9kZSBmYWlsZWQgLGl0IHNob3VsZCBiZSBhIGtlcm5lbCBidWcNCj4gY2F0Y2hlZCwgc28s
-IEkgdGhpbmsgdGhlIG91dHB1dCBoZXJlIGlzIG5lZWRlZC4NCj4gDQo+IEJ1dCBvbmxpbmVfbWVt
-b3J5X2V4cGVjdF9zdWNjZXNzKCkgYWxyZWFkeSBwcmludHMgYSB3YXJuaW5nLCBubz8NCg0KWWVz
-LCBvbmxpbmVfbWVtb3J5X2V4cGVjdF9zdWNjZXNzKCkgYWxyZWFkeSBwcmludHMgYSB3YXJuaW5n
-LCByZW1vdmUgdGhlIHdhcm5pbmcgaW4gb25saW5lX2FsbF9vZmZsaW5lX21lbW9yeSgpIHNlZW1z
-IG9rLA0KDQpNeSBwcmV2aW91cyBjb25zaWRlcmF0aW9uIHdhcyB0aGF0IG9uZSBtb3JlIGxvZyBp
-bmZvcm1hdGlvbiB3b3VsZCBtYWtlIGl0IGVhc2llciB0byBsb2NhdGUgdGhlIHdyb25nIGxvY2F0
-aW9uLg0KDQpCZXN0IFJlZ2FyZHMsDQpHb25neWkNCg==
+
+On 10/6/2022 3:21 PM, Nick Desaulniers wrote:
+> On Thu, Mar 07, 2019 at 10:01:36AM +0100, Arnd Bergmann wrote:
+>> The select() implementation is carefully tuned to put a sensible amount
+>> of data on the stack for holding a copy of the user space fd_set,
+>> but not too large to risk overflowing the kernel stack.
+>>
+>> When building a 32-bit kernel with clang, we need a little more space
+>> than with gcc, which often triggers a warning:
+>>
+>> fs/select.c:619:5: error: stack frame size of 1048 bytes in function 'core_sys_select' [-Werror,-Wframe-larger-than=]
+>> int core_sys_select(int n, fd_set __user *inp, fd_set __user *outp,
+>>
+>> I experimentally found that for 32-bit ARM, reducing the maximum
+>> stack usage by 64 bytes keeps us reliably under the warning limit
+>> again.
+>>
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>> ---
+>>   include/linux/poll.h | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/include/linux/poll.h b/include/linux/poll.h
+>> index 7e0fdcf905d2..1cdc32b1f1b0 100644
+>> --- a/include/linux/poll.h
+>> +++ b/include/linux/poll.h
+>> @@ -16,7 +16,11 @@
+>>   extern struct ctl_table epoll_table[]; /* for sysctl */
+>>   /* ~832 bytes of stack space used max in sys_select/sys_poll before allocating
+>>      additional memory. */
+>> +#ifdef __clang__
+>> +#define MAX_STACK_ALLOC 768
+> Hi Arnd,
+> Upon a toolchain upgrade for Android, our 32b x86 image used for
+> first-party developer VMs started tripping -Wframe-larger-than= again
+> (thanks -Werror) which is blocking our ability to upgrade our toolchain.
+
+
+I wonder if there is a way to disable the warning or increase the 
+threshold just for this function. I don't think attribute optimize would 
+work, but perhaps some pragma?
+
+
+-Andi
+
+
