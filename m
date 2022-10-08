@@ -2,228 +2,343 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6AA5F82CF
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 05:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A29B65F82E5
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 05:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiJHDpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 23:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60352 "EHLO
+        id S229590AbiJHDvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 23:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiJHDpL (ORCPT
+        with ESMTP id S229539AbiJHDuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 23:45:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF4731236;
-        Fri,  7 Oct 2022 20:45:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB8A061E42;
-        Sat,  8 Oct 2022 03:45:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 246B6C433D7;
-        Sat,  8 Oct 2022 03:45:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665200708;
-        bh=CidgckRE/rITAyWzJcIVoxhtJQzc15342nf0NzfanHU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nNbo69GGiD7jCUnyYpkws7ehx8cxDqd78vCaV5EnIXSs+KwsK/qFu4zonIuvrCdwr
-         dYLw1/jIkqrajkupbaH1+dSzObqY3IyAXzzScdTyM2biOmF9iIOeTF6S9HD8OWI30S
-         NrjkTQTIvNWqt23TU3dBQwSXc+60FLxH8NtURhtw0nuid4khKqFIhjFTQN+tuvWCLb
-         b25K+j6/FOHgoPdo/SaCMnfBrXIpa9G4OCOdSDuAA6y8SihrjIstr3JsVhJnvL3t1Z
-         YvmVgGPI6JbZYJ8OL+gW6n/coyAOSpZ+zEY/bXhEZCuopm0lz1VprYQB5C6q8Az2Zw
-         7HV/qB0Urb6ZQ==
-Received: by mail-oo1-f49.google.com with SMTP id c17-20020a4aa4d1000000b0047653e7c5f3so4724614oom.1;
-        Fri, 07 Oct 2022 20:45:08 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0leHBv696ertreyoNZKM9MnE3DJU+H7cjzklbB8gbm9cBD0XsH
-        RuU1/4rxa85sqb6W5vrbP36kP6cvOt8aaY/eeI4=
-X-Google-Smtp-Source: AMsMyM74kb12G7SMJMq44zEjDz1laVyTTWQHqT/rGEu4Q2XXpYNT+XvOqLDMujZ4G9MKSqTYjMTfJic3MMLpoClz8aA=
-X-Received: by 2002:a9d:70c3:0:b0:65c:55fb:a153 with SMTP id
- w3-20020a9d70c3000000b0065c55fba153mr3322172otj.308.1665200707209; Fri, 07
- Oct 2022 20:45:07 -0700 (PDT)
+        Fri, 7 Oct 2022 23:50:50 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699EA50FAD
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 20:50:46 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id 204so6449560pfx.10
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 20:50:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/+M2MWnKezzvwUdnzvMnzBe5u7rJCxF/Jt+qZLDkYO0=;
+        b=FTiUCKipmqUFH72GOvNGAiS4z04PbOMknPHSePECxyT+NR1MKehdmNkDokls+RTwtz
+         36ZKjqvAgPt8zH/PagzHgUWgsK7jRV+Fodw+XGTQ49lxGfaN2UCRznQ1vjEUvfGAJQxE
+         GFWrUL9ion4oE/GNeI8pk6ab24JqoBKXYgp6c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/+M2MWnKezzvwUdnzvMnzBe5u7rJCxF/Jt+qZLDkYO0=;
+        b=UoSsBfxl2YQ06UBWyJx37n7xUML+UVjEyChO3cYSK0bSyKE2mk6+xzRSHkvsRRe/JE
+         qTAdyENf344YOPuBgwUq4DmE7PyUvcd6CjvmyGzD8D8RYAoyngV4N+w/vYESqaGsMCH7
+         qgw+1PgXNGHBNQD9JuK2zzTno2vEYAhX0ljpuLBj+cPLMmfaNISNvJDmrDhANcFCbUbc
+         4XnMDJbjQNANIP18+/+n++Up77OrZFrohF1Vyen9fNn1STnUl8fhNs1Cnl1qHyfqd/W1
+         USQef+q4Kg505ATLRqeVRUEhUfM2DDc6SJZGEZ6RWk8f69VdKouBKYN+aVC3Bul8os74
+         ZQqA==
+X-Gm-Message-State: ACrzQf1fbiAy4H2kYQY8jZd5WF75OmU3TJdRU1a5XKJfqiFnJDcPf10W
+        CWXIPiZSLxYSvpHac4m1XJbAmA==
+X-Google-Smtp-Source: AMsMyM4INOCYNV6QQEtiLxqiwgdjxt33WIim/WmJWLMb2Koq8s6fKC3bMA6hT6FDEf46oKUeZwL22Q==
+X-Received: by 2002:a05:6a00:1d83:b0:561:d2f8:b86d with SMTP id z3-20020a056a001d8300b00561d2f8b86dmr8148626pfw.57.1665201045445;
+        Fri, 07 Oct 2022 20:50:45 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id i11-20020a17090332cb00b00174c235e1fdsm2288651plr.199.2022.10.07.20.50.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 20:50:44 -0700 (PDT)
+Date:   Fri, 7 Oct 2022 20:50:43 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dave Airlie <airlied@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E. J. Bottomley" <jejb@linux.ibm.com>,
+        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        KP Singh <kpsingh@kernel.org>, Marco Elver <elver@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Graf <tgraf@suug.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
+        kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        loongarch@lists.linux.dev, netdev@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH v4 2/6] treewide: use prandom_u32_max() when possible
+Message-ID: <53DD0148-ED15-4294-8496-9E4B4C7AD061@chromium.org>
 MIME-Version: 1.0
-References: <20221002012451.2351127-1-guoren@kernel.org> <20221002012451.2351127-10-guoren@kernel.org>
- <YzrI1QFMpHnhvDnI@FVFF77S0Q05N> <CAJF2gTRU21=SrEEVrPo5YaYB7k-H8St14DV=Q1YK-1Oev_89Cg@mail.gmail.com>
-In-Reply-To: <CAJF2gTRU21=SrEEVrPo5YaYB7k-H8St14DV=Q1YK-1Oev_89Cg@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 8 Oct 2022 11:44:55 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ0qxOZ=Xc3-tLWPU867wrmewMEMtR8nL6fGN0-QK5BrQ@mail.gmail.com>
-Message-ID: <CAJF2gTQ0qxOZ=Xc3-tLWPU867wrmewMEMtR8nL6fGN0-QK5BrQ@mail.gmail.com>
-Subject: Re: [PATCH V6 09/11] riscv: Add support for STACKLEAK gcc plugin
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
-        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, zouyipeng@huawei.com,
-        bigeasy@linutronix.de, David.Laight@aculab.com,
-        chenzhongjin@huawei.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Dao Lu <daolu@rivosinc.com>,
-        Xianting Tian <xianting.tian@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+[resending because I failed to CC]
 
-Here is the test result with stackleak_erase_on_task_stack.
+On October 7, 2022 7:21:28 PM PDT, "Jason A. Donenfeld" <Jason@zx2c4.com> wrote:
+>On Fri, Oct 07, 2022 at 03:47:44PM -0700, Kees Cook wrote:
+>> On Fri, Oct 07, 2022 at 12:01:03PM -0600, Jason A. Donenfeld wrote:
+>> > Rather than incurring a division or requesting too many random bytes for
+>> > the given range, use the prandom_u32_max() function, which only takes
+>> > the minimum required bytes from the RNG and avoids divisions.
+>> 
+>> I actually meant splitting the by-hand stuff by subsystem, but nearly
+>> all of these can be done mechanically too, so it shouldn't be bad. Notes
+>> below...
+>
+>Oh, cool, more coccinelle. You're basically giving me a class on these
+>recipes. Much appreciated.
 
-# echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT
-[   53.110405] lkdtm: Performing direct entry STACKLEAK_ERASING
-[   53.111630] lkdtm: stackleak stack usage:
-[   53.111630]   high offset: 288 bytes
-[   53.111630]   current:     592 bytes
-[   53.111630]   lowest:      1136 bytes
-[   53.111630]   tracked:     1136 bytes
-[   53.111630]   untracked:   576 bytes
-[   53.111630]   poisoned:    14376 bytes
-[   53.111630]   low offset:  8 bytes
-[   53.115078] lkdtm: OK: the rest of the thread stack is properly erased
+You're welcome! This was a fun exercise. :)
 
-On Sat, Oct 8, 2022 at 11:26 AM Guo Ren <guoren@kernel.org> wrote:
 >
-> On Mon, Oct 3, 2022 at 7:34 PM Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > On Sat, Oct 01, 2022 at 09:24:49PM -0400, guoren@kernel.org wrote:
-> > > From: Dao Lu <daolu@rivosinc.com>
-> > >
-> > > Add support for STACKLEAK gcc plugin to riscv by implementing
-> > > stackleak_check_alloca, based heavily on the arm64 version, and
-> > > modifying the entry.S. Additionally, this disables the plugin for EFI
-> > > stub code for riscv. All modifications base on generic_entry.
-> >
-> > I think this commit message is stale; `stackleak_check_alloca` doesn't exist
-> > any more.
-> >
-> > > Link: https://lore.kernel.org/linux-riscv/20220615213834.3116135-1-daolu@rivosinc.com/
-> > > Signed-off-by: Dao Lu <daolu@rivosinc.com>
-> > > Co-developed-by: Xianting Tian <xianting.tian@linux.alibaba.com>
-> > > Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
-> > > Co-developed-by: Guo Ren <guoren@kernel.org>
-> > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > Cc: Conor Dooley <Conor.Dooley@microchip.com>
-> > > Cc: Mark Rutland <mark.rutland@arm.com>
-> > > ---
-> > >  arch/riscv/Kconfig                    | 1 +
-> > >  arch/riscv/kernel/entry.S             | 8 +++++++-
-> > >  drivers/firmware/efi/libstub/Makefile | 2 +-
-> > >  3 files changed, 9 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > index dfe600f3526c..76bde12d9f8c 100644
-> > > --- a/arch/riscv/Kconfig
-> > > +++ b/arch/riscv/Kconfig
-> > > @@ -81,6 +81,7 @@ config RISCV
-> > >       select HAVE_ARCH_MMAP_RND_BITS if MMU
-> > >       select HAVE_ARCH_MMAP_RND_COMPAT_BITS if COMPAT
-> > >       select HAVE_ARCH_SECCOMP_FILTER
-> > > +     select HAVE_ARCH_STACKLEAK
-> > >       select HAVE_ARCH_TRACEHOOK
-> > >       select HAVE_ARCH_TRANSPARENT_HUGEPAGE if 64BIT && MMU
-> > >       select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
-> > > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> > > index 5f49517cd3a2..39097c1474a0 100644
-> > > --- a/arch/riscv/kernel/entry.S
-> > > +++ b/arch/riscv/kernel/entry.S
-> > > @@ -130,7 +130,6 @@ END(handle_exception)
-> > >  ENTRY(ret_from_exception)
-> > >       REG_L s0, PT_STATUS(sp)
-> > >
-> > > -     csrc CSR_STATUS, SR_IE
-> > >  #ifdef CONFIG_RISCV_M_MODE
-> > >       /* the MPP value is too large to be used as an immediate arg for addi */
-> > >       li t0, SR_MPP
-> > > @@ -139,6 +138,9 @@ ENTRY(ret_from_exception)
-> > >       andi s0, s0, SR_SPP
-> > >  #endif
-> > >       bnez s0, 1f
-> > > +#ifdef CONFIG_GCC_PLUGIN_STACKLEAK
-> > > +     call stackleak_erase
-> > > +#endif
-> >
-> > I assume this can happen on an arbitrary stack, and so you can't use the
-> > stackleak_erase_{on,off}_task_stack variants?
-> I misunderstood before.
+>> > [...]
+>> > diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+>> > index 92bcc1768f0b..87203429f802 100644
+>> > --- a/arch/arm64/kernel/process.c
+>> > +++ b/arch/arm64/kernel/process.c
+>> > @@ -595,7 +595,7 @@ unsigned long __get_wchan(struct task_struct *p)
+>> >  unsigned long arch_align_stack(unsigned long sp)
+>> >  {
+>> >  	if (!(current->personality & ADDR_NO_RANDOMIZE) && randomize_va_space)
+>> > -		sp -= get_random_int() & ~PAGE_MASK;
+>> > +		sp -= prandom_u32_max(PAGE_SIZE);
+>> >  	return sp & ~0xf;
+>> >  }
+>> >  
+>> 
+>> @mask@
+>> expression MASK;
+>> @@
+>> 
+>> - (get_random_int() & ~(MASK))
+>> + prandom_u32_max(MASK)
 >
-> Yes, riscv could use stackleak_erase_on_task_stack. Because the sp has
-> changed to task_stack, even when irq/soft_irq.
+>Not quite! PAGE_MASK != PAGE_SIZE. In this case, things get a litttttle
+>more complicated where you can do:
 >
-> >
-> > Just to check, have you given this a spin with LKDTM and the STACKLEAK_ERASING
-> > test? If not, it'd be good to test that (and ideally, put some sample output
-> > from that into the commit message).
-> >
-> > For example, as per:
-> >
-> >   https://lore.kernel.org/all/20220427173128.2603085-1-mark.rutland@arm.com/
-> >
-> > ... on arm64 this looks something like:
-> >
-> > | # uname -a
-> > | Linux buildroot 5.18.0-rc1-00013-g26f638ab0d7c #3 SMP PREEMPT Wed Apr 27 16:21:37 BST 2022 aarch64 GNU/Linux
-> > | # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT
-> > | lkdtm: Performing direct entry STACKLEAK_ERASING
-> > | lkdtm: stackleak stack usage:
-> > |   high offset: 336 bytes
-> > |   current:     688 bytes
-> > |   lowest:      1232 bytes
-> > |   tracked:     1232 bytes
-> > |   untracked:   672 bytes
-> > |   poisoned:    14136 bytes
-> > |   low offset:  8 bytes
-> > | lkdtm: OK: the rest of the thread stack is properly erased
-> >
-> > Thanks,
-> > Mark.
-> >
-> > >
-> > >       /* Save unwound kernel stack pointer in thread_info */
-> > >       addi s0, sp, PT_SIZE_ON_STACK
-> > > @@ -148,8 +150,12 @@ ENTRY(ret_from_exception)
-> > >        * Save TP into the scratch register , so we can find the kernel data
-> > >        * structures again.
-> > >        */
-> > > +     csrc CSR_STATUS, SR_IE
-> > >       csrw CSR_SCRATCH, tp
-> > > +     j 2f
-> > >  1:
-> > > +     csrc CSR_STATUS, SR_IE
-> > > +2:
-> > >       /*
-> > >        * The current load reservation is effectively part of the processor's
-> > >        * state, in the sense that load reservations cannot be shared between
-> > > diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-> > > index d0537573501e..5e1fc4f82883 100644
-> > > --- a/drivers/firmware/efi/libstub/Makefile
-> > > +++ b/drivers/firmware/efi/libstub/Makefile
-> > > @@ -25,7 +25,7 @@ cflags-$(CONFIG_ARM)                := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
-> > >                                  -fno-builtin -fpic \
-> > >                                  $(call cc-option,-mno-single-pic-base)
-> > >  cflags-$(CONFIG_RISCV)               := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
-> > > -                                -fpic
-> > > +                                -fpic $(DISABLE_STACKLEAK_PLUGIN)
-> > >
-> > >  cflags-$(CONFIG_EFI_GENERIC_STUB) += -I$(srctree)/scripts/dtc/libfdt
-> > >
-> > > --
-> > > 2.36.1
-> > >
+>get_random_int() & MASK == prandom_u32_max(MASK + 1)
+>*only if all the top bits of MASK are set* That is, if MASK one less
+
+Oh whoops! Yes, right, I totally misread SIZE as MASK.
+
+>than a power of two. Or if MASK & (MASK + 1) == 0.
+>
+>(If those top bits aren't set, you can technically do
+>prandom_u32_max(MASK >> n + 1) << n. That'd be a nice thing to work out.
+>But yeesh, maybe a bit much for the time being and probably a bit beyond
+>coccinelle.)
+>
+>This case here, though, is a bit more special, where we can just rely on
+>an obvious given kernel identity. Namely, PAGE_MASK == ~(PAGE_SIZE - 1).
+>So ~PAGE_MASK == PAGE_SIZE - 1.
+>So get_random_int() & ~PAGE_MASK == prandom_u32_max(PAGE_SIZE - 1 + 1).
+>So get_random_int() & ~PAGE_MASK == prandom_u32_max(PAGE_SIZE).
+>
+>And most importantly, this makes the code more readable, since everybody
+>knows what bounding by PAGE_SIZE means, where as what on earth is
+>happening with the &~PAGE_MASK thing. So it's a good change. I'll try to
+>teach coccinelle about that special case.
+
+Yeah, it should be possible to just check for the literal.
+
 >
 >
 >
-> --
-> Best Regards
->  Guo Ren
+>> > diff --git a/arch/loongarch/kernel/vdso.c b/arch/loongarch/kernel/vdso.c
+>> > index f32c38abd791..8c9826062652 100644
+>> > --- a/arch/loongarch/kernel/vdso.c
+>> > +++ b/arch/loongarch/kernel/vdso.c
+>> > @@ -78,7 +78,7 @@ static unsigned long vdso_base(void)
+>> >  	unsigned long base = STACK_TOP;
+>> >  
+>> >  	if (current->flags & PF_RANDOMIZE) {
+>> > -		base += get_random_int() & (VDSO_RANDOMIZE_SIZE - 1);
+>> > +		base += prandom_u32_max(VDSO_RANDOMIZE_SIZE);
+>> >  		base = PAGE_ALIGN(base);
+>> >  	}
+>> >  
+>> 
+>> @minus_one@
+>> expression FULL;
+>> @@
+>> 
+>> - (get_random_int() & ((FULL) - 1)
+>> + prandom_u32_max(FULL)
+>
+>Ahh, well, okay, this is the example I mentioned above. Only works if
+>FULL is saturated. Any clever way to get coccinelle to prove that? Can
+>it look at the value of constants?
+
+I'm not sure if Cocci will do that without a lot of work. The literals trick I used below would need a lot of fanciness. :)
+
+>
+>> 
+>> > diff --git a/arch/parisc/kernel/vdso.c b/arch/parisc/kernel/vdso.c
+>> > index 63dc44c4c246..47e5960a2f96 100644
+>> > --- a/arch/parisc/kernel/vdso.c
+>> > +++ b/arch/parisc/kernel/vdso.c
+>> > @@ -75,7 +75,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm,
+>> >  
+>> >  	map_base = mm->mmap_base;
+>> >  	if (current->flags & PF_RANDOMIZE)
+>> > -		map_base -= (get_random_int() & 0x1f) * PAGE_SIZE;
+>> > +		map_base -= prandom_u32_max(0x20) * PAGE_SIZE;
+>> >  
+>> >  	vdso_text_start = get_unmapped_area(NULL, map_base, vdso_text_len, 0, 0);
+>> >  
+>> 
+>> These are more fun, but Coccinelle can still do them with a little
+>> Pythonic help:
+>> 
+>> // Find a potential literal
+>> @literal_mask@
+>> expression LITERAL;
+>> identifier randfunc =~ "get_random_int|prandom_u32|get_random_u32";
+>> position p;
+>> @@
+>> 
+>>         (randfunc()@p & (LITERAL))
+>> 
+>> // Add one to the literal.
+>> @script:python add_one@
+>> literal << literal_mask.LITERAL;
+>> RESULT;
+>> @@
+>> 
+>> if literal.startswith('0x'):
+>>         value = int(literal, 16) + 1
+>>         coccinelle.RESULT = cocci.make_expr("0x%x" % (value))
+>> elif literal[0] in '123456789':
+>>         value = int(literal, 10) + 1
+>>         coccinelle.RESULT = cocci.make_expr("%d" % (value))
+>> else:
+>>         print("I don't know how to handle: %s" % (literal))
+>> 
+>> // Replace the literal mask with the calculated result.
+>> @plus_one@
+>> expression literal_mask.LITERAL;
+>> position literal_mask.p;
+>> expression add_one.RESULT;
+>> identifier FUNC;
+>> @@
+>> 
+>> -       (FUNC()@p & (LITERAL))
+>> +       prandom_u32_max(RESULT)
+>
+>Oh that's pretty cool. I can do the saturation check in python, since
+>`value` holds the parsed result. Neat.
+
+It is (at least how I have it here) just the string, so YMMV.
+
+>
+>> > diff --git a/fs/ext2/ialloc.c b/fs/ext2/ialloc.c
+>> > index 998dd2ac8008..f4944c4dee60 100644
+>> > --- a/fs/ext2/ialloc.c
+>> > +++ b/fs/ext2/ialloc.c
+>> > @@ -277,8 +277,7 @@ static int find_group_orlov(struct super_block *sb, struct inode *parent)
+>> >  		int best_ndir = inodes_per_group;
+>> >  		int best_group = -1;
+>> >  
+>> > -		group = prandom_u32();
+>> > -		parent_group = (unsigned)group % ngroups;
+>> > +		parent_group = prandom_u32_max(ngroups);
+>> >  		for (i = 0; i < ngroups; i++) {
+>> >  			group = (parent_group + i) % ngroups;
+>> >  			desc = ext2_get_group_desc (sb, group, NULL);
+>> 
+>> Okay, that one is too much for me -- checking that group is never used
+>> after the assignment removal is likely possible, but beyond my cocci
+>> know-how. :)
+>
+>Yea this is a tricky one, which I initially didn't do by hand, but Jan
+>seemed fine with it, and it's clear if you look at it. Trixy cocci
+>indeed.
+
+I asked on the Cocci list[1], since by the time I got to the end of your "by hand" patch I *really* wanted to have it work. I was so close!
 
 
+>
+>> > diff --git a/lib/test_hexdump.c b/lib/test_hexdump.c
+>> > index 0927f44cd478..41a0321f641a 100644
+>> > --- a/lib/test_hexdump.c
+>> > +++ b/lib/test_hexdump.c
+>> > @@ -208,7 +208,7 @@ static void __init test_hexdump_overflow(size_t buflen, size_t len,
+>> >  static void __init test_hexdump_overflow_set(size_t buflen, bool ascii)
+>> >  {
+>> >  	unsigned int i = 0;
+>> > -	int rs = (prandom_u32_max(2) + 1) * 16;
+>> > +	int rs = prandom_u32_max(2) + 1 * 16;
+>> >  
+>> >  	do {
+>> >  		int gs = 1 << i;
+>> 
+>> This looks wrong. Cocci says:
+>> 
+>> -       int rs = (get_random_int() % 2 + 1) * 16;
+>> +       int rs = (prandom_u32_max(2) + 1) * 16;
+>
+>!! Nice catch.
+>
+>Alright, I'll give this a try with more cocci. The big difficulty at the
+>moment is the power of 2 constant checking thing. If you have any
+>pointers on that, would be nice.
+>
+>Thanks a bunch for the guidance.
+
+Sure thing! I was pleased to figure out how to do the python bit.
+
+-Kees
+
+[1] actually, I don't see it on lore... I will resend it
 
 -- 
-Best Regards
- Guo Ren
+Kees Cook
