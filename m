@@ -2,124 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BCE15F8733
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 21:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1BC5F8734
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 21:45:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbiJHTow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 15:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50588 "EHLO
+        id S229926AbiJHTpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 15:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbiJHTop (ORCPT
+        with ESMTP id S229769AbiJHTpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 15:44:45 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7E2E0D3;
-        Sat,  8 Oct 2022 12:44:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665258284; x=1696794284;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9lmz04rN+kLTMcQl6akRYapYbLeumDWgsbmmCsC6CtU=;
-  b=WwLoRxANyePd6/AGKdL1KfiF92b/LIthMsuLpQ0WJcc7DG7Fu4ni3sTl
-   sNETUMCieVwsPuUWdABqjin5uym3LOtv+Qi1bnmGhZUqKczh9NZnzvoGJ
-   mb/AzvfCaeNkZjXJadTTpeMtNErWvWkQpmCZXewFERUPqPse05hcaitb4
-   teRizaUltkxjnmv24RH8yFG/82CV3TEYKMjZ3+ocFp5a7MrQcs68ALe0y
-   ALh9SPjQdorLQyKr5jGDpiBPQyiRoLZ6icAjwBEdxazDlxC6U40T+foFS
-   JUb41YP4KtOWmT9hM+jVlXYO4atPSMUS+7MZUSsAu5Kh7UucoCaOdIW3k
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10494"; a="303961674"
-X-IronPort-AV: E=Sophos;i="5.95,170,1661842800"; 
-   d="scan'208";a="303961674"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2022 12:44:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10494"; a="730041067"
-X-IronPort-AV: E=Sophos;i="5.95,170,1661842800"; 
-   d="scan'208";a="730041067"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Oct 2022 12:44:41 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 1C797D0; Sat,  8 Oct 2022 22:45:02 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] thunderbolt: Use str_enabled_disabled() helper
-Date:   Sat,  8 Oct 2022 22:45:01 +0300
-Message-Id: <20221008194501.38157-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Sat, 8 Oct 2022 15:45:18 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287B527CD0
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 12:45:16 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id y1so4735820qky.12
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 12:45:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GBNv3V0erEK+/2QXyy7fs/uhoul4IsfLdOV72goUPVc=;
+        b=J2aIktJLvs0iI0qEiy4ajWp/oNGsLZiV7UVqr7PHaM36a024v+n0LHQBY7NtNwrLQM
+         iuWeC0Klb9zIJz3up9PpUkAU+fRiFOcjRF7OX5zbmizqpcNrRKwmwfXEdKzx4mAfZvtC
+         JP3HgkMircSvvzMXi48sVRgenPO4jYNBadWAZZzNT1PBfS/KDAQOKRSTPmTRFokR9Uaf
+         EiBslHoUMEn/Uk+eZmifP7BcR60g2t4Sie4hi9KGYfhVHXBTpFRlQIjzJhKa5Jym0xYa
+         nys86eigJ0BO+H7c/624S46oggn5xSTVmvPfeBHlU8OSbpx6KaY2CCJvvCnzI7uF2IXv
+         WIqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GBNv3V0erEK+/2QXyy7fs/uhoul4IsfLdOV72goUPVc=;
+        b=0RQlo2EyFJoHMASbXV3EhFDz0TmeYA+gcgeiPdZYit8jlf0dZPO+xmrENo5T9fC+i7
+         FNDSgMIGv+kCuNs/484CUJi4bhGR+jQKrrv9+R+jJ5wlIZdpP6DbBG+YaDDDlv0N8xF+
+         DNML/MH4yd7i6CXkmamMgY6u2h4TKoZR34bFWq2YZA0la8A3AT5sheHHogCEZVZgsRiU
+         tsS3wec2YV8SYJPvOa1yz93OqasDJWHPlZNP1coCpdiGNXZCyi7CzwMDXGA6BUpaMHOV
+         VozB5adXVE5qTcfWXWrtqXI2V2NfGaAm37jpqhealyP3waF421HF2kf/vUW2z73NxFXR
+         1NKQ==
+X-Gm-Message-State: ACrzQf2qhrlrwGdCp7yu+37Dbwr+gIuUwPL1DwIrVDmp4Ocf6Q0DESA9
+        AkuBFTK+P3qeN/m8pnqwW3I=
+X-Google-Smtp-Source: AMsMyM66C2NGiqEnjLWwy1uKCSZL6Sc9EUrI5Bm7QTlcrqN4P5aX7fH9mH8X1tW/XyZXde8TBN2QlQ==
+X-Received: by 2002:a05:620a:404c:b0:6d9:9fa1:535e with SMTP id i12-20020a05620a404c00b006d99fa1535emr8050814qko.509.1665258315923;
+        Sat, 08 Oct 2022 12:45:15 -0700 (PDT)
+Received: from localhost ([2601:4c1:c100:2270:4fea:6b67:9485:addd])
+        by smtp.gmail.com with ESMTPSA id t21-20020a05620a451500b006b60d5a7205sm5874377qkp.51.2022.10.08.12.45.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Oct 2022 12:45:15 -0700 (PDT)
+Date:   Sat, 8 Oct 2022 12:45:14 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: bitmap patches for v6.1-rc1
+Message-ID: <Y0HTSi6iU+1KhrQs@yury-laptop>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use str_enabled_disabled() helper instead of open coding the same.
+The following changes since commit 7e18e42e4b280c85b76967a9106a13ca61c16179:
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/thunderbolt/switch.c  | 5 +++--
- drivers/thunderbolt/xdomain.c | 3 ++-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+  Linux 6.0-rc4 (2022-09-04 13:10:01 -0700)
 
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index 60da5c23ccaf..363d712aa364 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -8,12 +8,13 @@
- 
- #include <linux/delay.h>
- #include <linux/idr.h>
-+#include <linux/module.h>
- #include <linux/nvmem-provider.h>
- #include <linux/pm_runtime.h>
- #include <linux/sched/signal.h>
- #include <linux/sizes.h>
- #include <linux/slab.h>
--#include <linux/module.h>
-+#include <linux/string_helpers.h>
- 
- #include "tb.h"
- 
-@@ -644,7 +645,7 @@ static int __tb_port_enable(struct tb_port *port, bool enable)
- 	if (ret)
- 		return ret;
- 
--	tb_port_dbg(port, "lane %sabled\n", enable ? "en" : "dis");
-+	tb_port_dbg(port, "lane %s\n", str_enabled_disabled(enable));
- 	return 0;
- }
- 
-diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
-index f00b2f62d8e3..ddd8fd2d06f8 100644
---- a/drivers/thunderbolt/xdomain.c
-+++ b/drivers/thunderbolt/xdomain.c
-@@ -13,6 +13,7 @@
- #include <linux/module.h>
- #include <linux/pm_runtime.h>
- #include <linux/prandom.h>
-+#include <linux/string_helpers.h>
- #include <linux/utsname.h>
- #include <linux/uuid.h>
- #include <linux/workqueue.h>
-@@ -1344,7 +1345,7 @@ static int tb_xdomain_bond_lanes_uuid_high(struct tb_xdomain *xd)
- 	tb_port_update_credits(port);
- 	tb_xdomain_update_link_attributes(xd);
- 
--	dev_dbg(&xd->dev, "lane bonding %sabled\n", width == 2 ? "en" : "dis");
-+	dev_dbg(&xd->dev, "lane bonding %s\n", str_enabled_disabled(width == 2));
- 	return 0;
- }
- 
--- 
-2.35.1
+are available in the Git repository at:
 
+  https://github.com/norov/linux.git tags/bitmap-6.1-rc1
+
+for you to fetch changes up to 585463f0d58aa4d29b744c7c53b222b8028de87f:
+
+  sched/core: Merge cpumask_andnot()+for_each_cpu() into for_each_cpu_andnot() (2022-10-06 05:57:36 -0700)
+
+----------------------------------------------------------------
+bitmap patches for v6.1-rc1
+
+Hi Linus,
+
+Please pull this patches. They spent more than a week in -next without
+major problems.
+
+The only problem with warnings generated by cpumask_check(), when robots
+do bisection, is fixed by moving the patch "cpumask: fix checking valid
+cpu range" to the very end of the sub-series.
+
+I decided to include Valentin's series because it matches with the rest
+of the work very well.
+
+The patch "lib/bitmap: remove bitmap_ord_to_pos" conflicts with 
+"lib/nodemask: optimize node_random for nodemask with single NUMA node"
+from Aneesh Kumar K.V. The patch is in Andrew Morton's tree, and as of
+today is not merged in mainline. Correct merge of the chunk that conflicts
+should look like this:
+
+  static inline int node_random(const nodemask_t *maskp)
+  {
+  #if defined(CONFIG_NUMA) && (MAX_NUMNODES > 1)
+          int w, bit;
+  
+          w = nodes_weight(*maskp);
+          switch (w) {
+          case 0:
+                  bit = NUMA_NO_NODE;
+                  break;
+          case 1:
+                  bit = first_node(*maskp);
+                  break;
+          default:
+                  bit = find_nth_bit(maskp->bits, MAX_NUMNODES, get_random_int() % w);
+                  break;
+          }
+          return bit;
+  #else
+          return 0;
+  #endif
+  }
+
+Also, it looks like Phil's patch is already in master, merged through
+Greg's tree.
+
+Thanks,
+Yury
+
+
+From Phil Auld:
+drivers/base: Fix unsigned comparison to -1 in CPUMAP_FILE_MAX_BYTES
+
+From me:
+cpumask: cleanup nr_cpu_ids vs nr_cpumask_bits mess
+
+This series cleans that mess and adds new config FORCE_NR_CPUS that
+allows to optimize cpumask subsystem if the number of CPUs is known
+at compile-time.
+
+From me:
+lib: optimize find_bit() functions
+
+Reworks find_bit() functions based on new FIND_{FIRST,NEXT}_BIT() macros.
+
+From me:
+lib/find: add find_nth_bit()
+
+Adds find_nth_bit(), which is ~70 times faster than bitcounting with
+for_each() loop:
+        for_each_set_bit(bit, mask, size)
+                if (n-- == 0)
+                        return bit;
+
+Also adds bitmap_weight_and() to let people replace this pattern:
+	tmp = bitmap_alloc(nbits);
+	bitmap_and(tmp, map1, map2, nbits);
+	weight = bitmap_weight(tmp, nbits);
+	bitmap_free(tmp);
+with a single bitmap_weight_and() call.
+
+From me:
+cpumask: repair cpumask_check()
+
+After switching cpumask to use nr_cpu_ids, cpumask_check() started
+generating many false-positive warnings. This series fixes it.
+
+From Valentin Schneider:
+bitmap,cpumask: Add for_each_cpu_andnot() and for_each_cpu_andnot()
+
+Extends the API with one more function and applies it in sched/core.
+
+----------------------------------------------------------------
+Phil Auld (1):
+      drivers/base: Fix unsigned comparison to -1 in CPUMAP_FILE_MAX_BYTES
+
+Valentin Schneider (4):
+      lib/find_bit: Introduce find_next_andnot_bit()
+      cpumask: Introduce for_each_cpu_andnot()
+      lib/test_cpumask: Add for_each_cpu_and(not) tests
+      sched/core: Merge cpumask_andnot()+for_each_cpu() into for_each_cpu_andnot()
+
+Yury Norov (23):
+      smp: don't declare nr_cpu_ids if NR_CPUS == 1
+      smp: add set_nr_cpu_ids()
+      lib/cpumask: delete misleading comment
+      lib/cpumask: deprecate nr_cpumask_bits
+      powerpc/64: don't refer nr_cpu_ids in asm code when it's undefined
+      lib/cpumask: add FORCE_NR_CPUS config option
+      lib/find_bit: introduce FIND_FIRST_BIT() macro
+      lib/find_bit: create find_first_zero_bit_le()
+      lib/find_bit: optimize find_next_bit() functions
+      tools: sync find_bit() implementation
+      lib/bitmap: don't call __bitmap_weight() in kernel code
+      lib/bitmap: add bitmap_weight_and()
+      lib: add find_nth{,_and,_andnot}_bit()
+      lib/bitmap: add tests for find_nth_bit()
+      lib/bitmap: remove bitmap_ord_to_pos
+      cpumask: add cpumask_nth_{,and,andnot}
+      net: fix cpu_max_bits_warn() usage in netif_attrmask_next{,_and}
+      cpumask: switch for_each_cpu{,_not} to use for_each_bit()
+      lib/find_bit: add find_next{,_and}_bit_wrap
+      lib/bitmap: introduce for_each_set_bit_wrap() macro
+      lib/find: optimize for_each() macros
+      lib/bitmap: add tests for for_each() loops
+      cpumask: fix checking valid cpu range
+
+ arch/loongarch/kernel/setup.c |   2 +-
+ arch/mips/kernel/setup.c      |   2 +-
+ arch/powerpc/kernel/head_64.S |   4 +
+ arch/x86/kernel/smpboot.c     |   4 +-
+ arch/x86/xen/smp_pv.c         |   2 +-
+ fs/ntfs3/bitmap.c             |   4 +-
+ include/linux/bitmap.h        |  13 +-
+ include/linux/bitops.h        |  19 +++
+ include/linux/cpumask.h       | 137 ++++++++++++++-----
+ include/linux/find.h          | 310 ++++++++++++++++++++++++++++++++++++------
+ include/linux/netdevice.h     |  10 +-
+ include/linux/nodemask.h      |   3 +-
+ kernel/sched/core.c           |   5 +-
+ kernel/smp.c                  |   6 +-
+ lib/Kconfig                   |   9 ++
+ lib/bitmap.c                  |  68 ++++-----
+ lib/cpumask.c                 |  40 +++---
+ lib/cpumask_kunit.c           |  19 +++
+ lib/find_bit.c                | 233 +++++++++++++++++++++----------
+ lib/find_bit_benchmark.c      |  18 +++
+ lib/test_bitmap.c             | 291 ++++++++++++++++++++++++++++++++++++++-
+ tools/include/linux/find.h    |  61 ++-------
+ tools/lib/find_bit.c          | 149 ++++++++++----------
+ 23 files changed, 1038 insertions(+), 371 deletions(-)
