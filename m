@@ -2,124 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 295E25F858B
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 16:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 505F95F8593
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 16:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiJHOIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 10:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42686 "EHLO
+        id S229707AbiJHOSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 10:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiJHOI3 (ORCPT
+        with ESMTP id S229470AbiJHOSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 10:08:29 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8747648E88;
-        Sat,  8 Oct 2022 07:08:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wD6pqrT2g8oCJelnKZKJ0EZlxxhJxKsk3kEfOiAnIBA=; b=Tc+b8pBy+p0jfrJ4FvsAuhuCTH
-        Q0BbwH8M3eKR2MAcvigxuuPESqFY32yKT34AsAnaHJzczYwzmSLKfGKQuJfdKXI6BmFYo+b+bwKtD
-        0EP6jmilk89BUtUcAlAMEfI6WkAiHioABd91oEBIEdYh0PZXBxT+dDstrwHrcc8iyPO4huUihsH/5
-        5Vh3z1U/47oKVFw7eq9WR29raH2BoYOYcVamJrrgy+2Rg7EUndcHc5vnEN10YHjvNXI5T4UO3WYgw
-        FVGT2jqCLGW5WcD8tOZJmzAh7+mxtS9oRsunfTnU93YT0QCai4QhLd8cJyA4U5TkcRPCvtS5S8fEu
-        QGXFwYCw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ohAV5-002jXU-Jy; Sat, 08 Oct 2022 14:08:24 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2E6C630007E;
-        Sat,  8 Oct 2022 16:08:19 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id DB4AC209DB0E9; Sat,  8 Oct 2022 16:08:18 +0200 (CEST)
-Date:   Sat, 8 Oct 2022 16:08:18 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, Dmitry Vyukov <dvyukov@google.com>
-Subject: Re: [PATCH] perf: Fix missing SIGTRAPs
-Message-ID: <Y0GEUkLWDvU34h9f@hirez.programming.kicks-ass.net>
-References: <20220927121322.1236730-1-elver@google.com>
- <Yz7ZLaT4jW3Y9EYS@hirez.programming.kicks-ass.net>
- <Yz7fWw8duIOezSW1@elver.google.com>
- <Yz78MMMJ74tBw0gu@hirez.programming.kicks-ass.net>
- <Yz/zXpF1yLshrJm/@elver.google.com>
- <Y0Ak/D05KhJeKaed@hirez.programming.kicks-ass.net>
- <Y0AwaxcJNOWhMKXP@elver.google.com>
- <Y0GAXJkwK5nXeFfG@hirez.programming.kicks-ass.net>
+        Sat, 8 Oct 2022 10:18:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D23437F9
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 07:18:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6DE0FB80AEE
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 14:18:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA66EC433D6;
+        Sat,  8 Oct 2022 14:18:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665238714;
+        bh=AUMnXmbKs1i6Qjt6RJif9g0nKBuFWpjAIMlUnXBwHyo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Irj53r5uh7JKLsWfaz00Ted8G5G2Tt7pcty8UZq4h7/Jpk+wBzjHUVLekcTLkn36W
+         O4zWBJBk08z2J0loe125SXUpth+SEu8HIkH1yg202CXqZuUeBLl7jJGo2S1KvdHWcf
+         dVAKBRTveXwkkCDJfHFADfvUfPYGko93SYsxZR8XqJGhTq3rFP6Nz1m8p9r2L03X/w
+         3Z2whHQ/Ek+cGbBY2T8rOlVPDkbQc4jS3EUTjEsDZLusRxCsh4Q9cmTBFhhg2PYwsX
+         Ukk9a9rjTJHNiWurLcXbMaLg4jupPxedc6/Wtuqca76vtstbfQjMh9TMs+GZ4aRiLB
+         t57KtBm+dxC3g==
+Date:   Sat, 8 Oct 2022 22:08:59 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Conor.Dooley@microchip.com, peterz@infradead.org,
+        jpoimboe@kernel.org, jbaron@akamai.com, ajones@ventanamicro.com,
+        ardb@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com, samuel@sholland.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] riscv: jump_label: mark arguments as const to satisfy
+ asm constraints
+Message-ID: <Y0GEe8K7V81r5yhe@xhacker>
+References: <20221006064028.548-1-jszhang@kernel.org>
+ <20221006124144.abaz74g7nxrb5hxj@kamzik>
+ <4c8fa16a-8463-ee32-7307-0383fa94403c@microchip.com>
+ <Y0GBO77e2Lu/khkI@xhacker>
+ <20221008100748.1078fb3f@rorschach.local.home>
+ <20221008100902.0bbbc1cc@rorschach.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y0GAXJkwK5nXeFfG@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221008100902.0bbbc1cc@rorschach.local.home>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 08, 2022 at 03:51:24PM +0200, Peter Zijlstra wrote:
-> On Fri, Oct 07, 2022 at 03:58:03PM +0200, Marco Elver wrote:
-> > diff --git a/kernel/events/core.c b/kernel/events/core.c
-> > index 9319af6013f1..7de83c42d312 100644
-> > --- a/kernel/events/core.c
-> > +++ b/kernel/events/core.c
-> > @@ -2285,9 +2285,10 @@ event_sched_out(struct perf_event *event,
-> >  			 */
-> >  			local_dec(&event->ctx->nr_pending);
-> >  		} else {
-> > -			WARN_ON_ONCE(event->pending_work);
-> > -			event->pending_work = 1;
-> > -			task_work_add(current, &event->pending_task, TWA_RESUME);
-> > +			if (!event->pending_work) {
-> > +				event->pending_work = 1;
-> > +				task_work_add(current, &event->pending_task, TWA_RESUME);
-> > +			}
-> 			  else {
-> 				local_dec(&event->ctx->nr_pending);
-> 			}
-> >  		}
-> >  	}
+On Sat, Oct 08, 2022 at 10:09:02AM -0400, Steven Rostedt wrote:
+> On Sat, 8 Oct 2022 10:07:48 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
 > 
-> That whole thing can be written much saner like:
+> > Link: https://lore.kernel.org/linux-riscv/20220922060958.44203-1-samuel@sholland.org/
+> > Link: https://lore.kernel.org/all/20210212094059.5f8d05e8@gandalf.local.home/
+> > 
 > 
-> 	if (event->pending_sigtrap) {
-> 		event->pending_sigtrap = 0;
-> 		if (state != PERF_EVENT_STATE_OFF &&
-> 		    !event->pending_work) {
-> 			event->pending_work = 1;
-> 			local_inc(&event->ctx->nr_pending);
-> 			task_work_add(current, &event->pending_task, TWA_RESUME);
-> 		}
-> 		local_dec(&event->ctx->nr_pending);
-> 	}
-> 
-> Except now we have two nr_pending ops -- I'm torn.
+> This way tools can be used to map commits to links relevant to them.
+> They key off the "Link:" tag keyword.
 
-I've settled for:
-
-+       if (event->pending_sigtrap) {
-+               bool dec = true;
-+
-+               event->pending_sigtrap = 0;
-+               if (state != PERF_EVENT_STATE_OFF &&
-+                   !event->pending_work) {
-+                       event->pending_work = 1;
-+                       dec = false;
-+                       task_work_add(current, &event->pending_task, TWA_RESUME);
-+               }
-+               if (dec)
-+                       local_dec(&event->ctx->nr_pending);
-+	}
+Thank you so much!
