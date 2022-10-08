@@ -2,71 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C56BF5F85C8
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 17:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC8D5F85CA
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 17:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiJHPPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 11:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53740 "EHLO
+        id S229647AbiJHPRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 11:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiJHPPJ (ORCPT
+        with ESMTP id S229459AbiJHPRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 11:15:09 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A636832046;
-        Sat,  8 Oct 2022 08:15:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1665242101;
-        bh=pT+YvmFx86ZSRazUbQ1khlHAbFup4jFsua+nZ8coxrQ=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=UrhWtuMt+NOPatqC2vk5zYLOGlFAGvGulPCWC3+yC3rzdFSjYiQ7gX8aJ0Jzd++x9
-         0zrGoooR6NaQ4hNEbUILdxytE7uN1MkvuetC05mvf7bKt5VmbQGvOtX78Rm/25Yy3Q
-         aCmD3rx6Xy9R/ojOPL14sY+r4fnXiDcuVmWkSCew=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from probook ([78.35.76.13]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MZTmO-1oeWTz32la-00WWv9; Sat, 08
- Oct 2022 17:15:01 +0200
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-spi@vger.kernel.org
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: spi-mem: Fix typo (of -> or)
-Date:   Sat,  8 Oct 2022 17:14:59 +0200
-Message-Id: <20221008151459.1421406-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.35.1
+        Sat, 8 Oct 2022 11:17:34 -0400
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [IPv6:2a0c:5a00:149::26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297E145F6E
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 08:17:32 -0700 (PDT)
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+        by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <m.v.b@runbox.com>)
+        id 1ohBZv-005sgY-HQ; Sat, 08 Oct 2022 17:17:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
+         s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+        bh=ckAECo5Hee38U9yD/vQmVIvkFJ4wx3mMw6mzw2eeuNs=; b=GVKxVqd1VDdL3NEIDagwkT/XCi
+        nEiN9yuacrMjamKgdY8KNWopW2T4AzZOMgtNvSIWoputKNbJMv70Uleuuk5h6lydCTEM0VSfvHkRT
+        YyaTUSnPil/DQ6TaYQhaFoBuz5Ynb+Cf3UU/+ZMyQ17CRRUrbWXedkyghC4jr3aKANysDeaYRBPOg
+        +bnyhkZuyHmO0q892RGRn7GYCMss8Nt7vNgnUp+Gxco9DdTf5NKPjhT+5fsWTDqxnwBlL+ZagkkmH
+        1KX8OgyYuq9DsuCDvOdA0+/PCs9ZVUj8YqaJ8D10C3ya2n3o/CT8e4Cad2Lz/6bs0Km3Y5CxDoI6n
+        Cb89UNUQ==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+        by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+        (envelope-from <m.v.b@runbox.com>)
+        id 1ohBZu-0007DE-Sw; Sat, 08 Oct 2022 17:17:27 +0200
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        id 1ohBZr-00088a-QG; Sat, 08 Oct 2022 17:17:23 +0200
+Message-ID: <9cdb37b7-b4c0-3bc3-ecdc-643ddc2fbcc5@runbox.com>
+Date:   Sat, 8 Oct 2022 11:17:20 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:3X7soPc5ep5h8tcmlIxudQ3P+PHqn5AR9HKGPFe6swFMv99XAWe
- TdNhHN0HxKJFfG4MvSuRoes5vDx47Aog1DeoKitZab/IVxPpt8sStlgkfRKoNVOwq7xcEUA
- uOW3l96HmyIKACRiw2hJMx7iAhwdgAzaTDcUofZ9gCznraXZtrHjUCRFL0y8xyGh6qLtQzQ
- OaHXewSlPsfLpEwNW24QA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:in96Q6H9iZg=:WFmEWPlapNPaX6/nPPh59S
- uh7bH0rMuPU+MH+Ue7miLk0R+rr0MDaL/EJW8g3LGjBkcKk1wphikf3cZs7nBjcAgUaRlw48N
- 54aM3PbIxOU1H9L/FdTLA75WFSmPewZir038hhJFl3aYUSUTr7IfoVd7dZ55thtRfV6/M/xz5
- V40cn7aAIWMaXV+dDPIB8h1ts3Oe2r1CM8wKa0FnvbIfqTzr9DO1GSxWVHeQRaEdDNv97sklS
- NHtditeDT5OFcYBw7fIqVfcGCcVW+r13PB0pzWxl/8wpOKWb7FVoCEluvQ5QrAbg2RIZI8oVb
- 700mprWLiDlmSxxzcE97RD+XZrq8/aGysQ+JrstU8IC+Tfz8No8BF09B8PtIgiyJIdGz/bASi
- HNDwl56w5TC+C33s51t3PKVVIL9Og1s30LFZL/VqcL4DHS5iWENJFwGou5ohowtDa36A0Psjx
- +3WiCse9bTHJclhigEEF+UdmkNAaW4CVA9hyhmsRWbMI+zdE7pZQQbtXYM3sV1mRk+njeBrRl
- jm4FYq4zSIROOjABoHavAkwysmx9v68jWeqjk8tSbNfvZ79y5Q+HMAPH99JoXMQMZ2mYnHv95
- G9+HVfrhVqfcScsEMNgHoO+lJCpS+kqbD0QggxAa9L7NYYDXMD9LFhFWXvJu9+tCsaUrsyoi6
- OD27eRCe2W+lSRV7yZWY71+4+Wm4fESEeVyxtg3auHkv+aeo7GO82ebrOvEQXXbmaFz1nxgky
- DYg4LHPdC5uXk7b5Hda8u7I0u/bnPYEgubbG6SIZr4MPEaq0OZ5tEB09LLYZf5USUIICoufq3
- knJ7z0hznxbt9ULbAYKhCDrAuqL0++0TFYgzcTMjCooYq90W8v8DkKXH9KkiWJEqyk6wvT54R
- wbvutA4FKU3oSgqeYRzWE5BZrJGsaJBv66a+7pWEfhZWNpOAhxzG9ZzHj4D2tKLG6h/4P9fru
- los5OaHrTIuqjU7IY83qt/sIJ+OF1KRANv9bkTxqnyBHTlJqNT1YC1H12jcKxagSla0uCJXUC
- r0TVPVtHpAD3BAYaXrUzIYcVF874LoL6pgm/oJBFzeYVnTU/vJDGbHz/KJTGTPhqQ3tnbNcXE
- qOIRRY1R+ZYbYPXy4L5+XlKFy1IZ/v6GCqFBUa5p/PXDb4f2/6xFcQFJyL7t9b9cgmic/f1Dg
- M5crk8m0VeauLWJStN6U4nthJ1ivWiSc3eJqFgKU9FY8Q8z3aTaRxH5R1ZSs/2RoM9Mw8djDA
- zsqLPjAF3MOD1meJ4T7VU7+mh0KAoPu+CrbxsS2HpcKfL6VT3o4TNmCnOMNRilaTsybg4E+2j
- YuxNF7s9rLjV19Y80YNeaFWFiuM8Z2yx07yKUJCAZWmE9utLUsROUopmRuF+/l9Efel/W7Dxz
- KBGNjk812EXYngRdw7Ncinl1P9Shd/TMUBsI1KJA2H1Ij8viDP/5eM1f9XZNEcLpvaUe4RL9+
- d8IgYgvtbaqMccJ+ocMvDPQXaMoR9GjQIiQsF3XhzAbGaqdd+NK6NL6eQSqDsUOMvOCIFnCpZ
- mz/d+hxqtlg0I92brkZg5yuo0JqEPxddN5Fk7EA2FL5bh
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 0/2] xen/gntdev: Fixes for leaks and VMA splitting
+To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org
+Cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Demi Marie Obenour <demi@invisiblethingslab.com>,
+        Gerd Hoffmann <kraxel@redhat.com>
+References: <20221002222006.2077-1-m.v.b@runbox.com>
+ <9aa1e6ba-a153-8dfa-ce28-3ab78b26c6e4@suse.com>
+Content-Language: en-CA
+From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
+In-Reply-To: <9aa1e6ba-a153-8dfa-ce28-3ab78b26c6e4@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,29 +65,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In this instance, "or" makes more sense than "of", so I guess that "or"
-was intended and "of" was a typo.
+On 2022-10-07 01:17, Juergen Gross wrote:
+> On 03.10.22 00:20, M. Vefa Bicakci wrote:
+>> Hi all,
+>>
+>> First of all, sorry for the delay!
+>>
+>> These patches continue the code review for the following patches:
+>>    https://lore.kernel.org/xen-devel/20220912040002.198191-1-m.v.b@runbox.com/t/#u
+>>
+>> The original description of the patch set is as follows:
+>>
+>>    "The changes in this patch series intend to fix the Xen grant device
+>>    driver, so that grant mapping leaks caused by partially failed grant
+>>    mapping operations are avoided with the first patch, and so that the
+>>    splitting of VMAs does not result in incorrectly unmapped grant pages
+>>    with the second patch. The second patch also prevents a similar issue
+>>    in a double-mapping scenario, where mmap() is used with MAP_FIXED to
+>>    map grants over an existing mapping created with the same grants, and
+>>    where grant pages are unmapped incorrectly as well."
+>>
+>> A summary of the changes from v1 is as follows:
+>> - Addressed Juergen's code review comment regarding the first patch.
+>> - Amended the description of the second patch to note that the described
+>>    issues are encountered with PV domains.
+>>
+>> Verification notes:
+>>
+>> - I have tested these commits on top of Linux v5.15.70 and v5.15.71, and
+>>    I verified that they compile successfully on top of the tag
+>>    "next-20220930", which corresponds to the base commit ID included at
+>>    the bottom of this e-mail.
+>>
+>> - My tests consist of using a kernel with Qubes OS v4.1's patches and
+>>    these patches on my main computer for day-to-day tasks, in conjunction
+>>    with Qubes OS's version of the Xen hypervisor v4.14.5, with the latter
+>>    custom-compiled with CONFIG_DEBUG.
+>>
+>> - I used a test program that verifies the following scenarios with an
+>>    unprivileged paravirtualized (PV) Xen domain:
+>>
+>>    - A program mmap()s two pages from another Xen domain and munmap()s
+>>      the pages one by one. This used to result in implicit unmap errors
+>>      to be reported by Xen and a general protection fault to be triggered
+>>      by Xen in the affected domain, but now works as expected.
+>>    - A program mmap()s two pages from another Xen domain and then
+>>      attempts to remap (via MAP_FIXED) the same mapping again over the
+>>      same virtual address. This used to result in similar issues
+>>      (implicit unmap errors and general protection fault), but now is
+>>      rejected by the kernel.
+>>    - A program mmap()s two pages from another Xen domain and then
+>>      attempts to mmap() the same mapping again to a different virtual
+>>      address, by passing NULL as mmap()'s first argument. This used to be
+>>      rejected by the kernel, and it continues to be rejected by the
+>>      kernel.
+>>
+>> - Unprivileged PVH Xen domains were also sanity tested with the same
+>>    test program. I should note that PVH domains worked as expected
+>>    without these patches too.
+>>
+>> - Finally, I have verified that the original "g.e. 0x1234 still pending"
+>>    issue does not appear after rapidly resizing GUI windows in Qubes OS
+>>    v4.1.
+> 
+> Series pushed to xen/tip.git for-linus-6.1
+> 
+> 
+> Juergen
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
- include/linux/spi/spi-mem.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I am a bit late, but thank you for reviewing the changes and merging them!
 
-diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-index 2ba044d0d5e5b..8e984d75f5b6c 100644
-=2D-- a/include/linux/spi/spi-mem.h
-+++ b/include/linux/spi/spi-mem.h
-@@ -225,7 +225,7 @@ static inline void *spi_mem_get_drvdata(struct spi_mem=
- *mem)
- /**
-  * struct spi_controller_mem_ops - SPI memory operations
-  * @adjust_op_size: shrink the data xfer of an operation to match control=
-ler's
-- *		    limitations (can be alignment of max RX/TX size
-+ *		    limitations (can be alignment or max RX/TX size
-  *		    limitations)
-  * @supports_op: check if an operation is supported by the controller
-  * @exec_op: execute a SPI memory operation
-=2D-
-2.35.1
-
+Vefa
