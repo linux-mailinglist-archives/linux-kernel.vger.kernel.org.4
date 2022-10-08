@@ -2,54 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1872E5F831C
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 07:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 007B15F8320
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 07:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbiJHFWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 01:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51308 "EHLO
+        id S229606AbiJHFYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 01:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiJHFWk (ORCPT
+        with ESMTP id S229379AbiJHFYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 01:22:40 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C86180F43;
-        Fri,  7 Oct 2022 22:22:38 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mktjq2zsZzlXdR;
-        Sat,  8 Oct 2022 13:18:07 +0800 (CST)
-Received: from [10.174.179.191] (10.174.179.191) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 8 Oct 2022 13:22:35 +0800
-Message-ID: <e2f2b01a-1f0e-a862-c3df-96f61dbdbaf6@huawei.com>
-Date:   Sat, 8 Oct 2022 13:22:35 +0800
+        Sat, 8 Oct 2022 01:24:31 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A500B80F43
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 22:24:30 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id j7so9904743wrr.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 22:24:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/wiztzuOtCEU0Qby3b+Cjeapd1qrW2PKoKDkQzm29WU=;
+        b=RcbW3GVtlnHb05sjjXDPAtbaHE2bUV0gUQ+qdGkL/3DfBMSyhZq02EpY/OU65jQXYC
+         CfDvhaG/pDkAwsXPEkoAesBN3CapZZU0HssG60cEL33syEEoRHG+U+QpQdsfr8EF4fA9
+         ecbP4bA7ievotCrf+0pL6izpuFBav/HIcinVZ0imW9SkFHoMQD+pyLWFsEXWfmoUBRUW
+         D8dtLZRaCWU/YH1ipiZkCNy1U/snEqyGvk3i2A8652v/JmUDF3Usg7ze6UmKlZsDIvs3
+         b3V3xQg9KDwiQvLPdZgrXsHx5Eyj8PrDFbBy+3Bv72trEpYH+G6VBGu88T6fmR83kCpz
+         iY2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/wiztzuOtCEU0Qby3b+Cjeapd1qrW2PKoKDkQzm29WU=;
+        b=Hf72NKYwX6ix6coqwdgShhvV3P9rLwGJpMBaz+ddVxqBUJB2vSkfdAbOI/LcejkV6q
+         otiOmMOZj3HzcJVbZj43XfNvd0cvo88BI5dcaAXyD8Dt+dDDhOme846yO6e7GVrCaWGJ
+         mIKmhQ67rGyLRlvdgUaoPx60ajSZsB9wZGJ0IB8/ZF1l/5g/CcT5z2OBNTVxmuIBrBNx
+         T2GBljrL51hG4josrKTzhuVIqMfk1Wn8IgGyBJkVwCjvpoCdyixkDMWQ0p1woIHyLArh
+         hJKKTTqsrgr165SXBdtPzB/1hD7vKgOeGHDMjVbYVnLplswvFTh0BM+Er6rQsY/mwKI6
+         wRrw==
+X-Gm-Message-State: ACrzQf30KNnwih4K0x5r1kTs/YzS+U0ey8Gv6KsAvbbOYtU7W8Z5B9RN
+        I9HJaBgZPaT+4E9mWnZ6jk5pRVzbxLw=
+X-Google-Smtp-Source: AMsMyM6+sI0N/LOg+PomLfgsupYRT76OkFfck2VOI4p2vwVvqWetsIPnWTbBQEKKEHdKqU36eDO10Q==
+X-Received: by 2002:a5d:6c6f:0:b0:22e:3fdf:4b27 with SMTP id r15-20020a5d6c6f000000b0022e3fdf4b27mr5224179wrz.150.1665206668299;
+        Fri, 07 Oct 2022 22:24:28 -0700 (PDT)
+Received: from localhost ([88.83.123.243])
+        by smtp.gmail.com with ESMTPSA id iv14-20020a05600c548e00b003b4c40378casm10513537wmb.39.2022.10.07.22.24.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 22:24:27 -0700 (PDT)
+From:   Stafford Horne <shorne@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     openrisc@lists.librecores.org, Jann Horn <jannh@google.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Steven Price <steven.price@arm.com>
+Subject: [PATCH] openrisc: Fix pagewalk usage in arch_dma_{clear, set}_uncached
+Date:   Sat,  8 Oct 2022 06:24:21 +0100
+Message-Id: <20221008052422.29695-1-shorne@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [bpf-next v7 1/3] bpftool: Add auto_attach for bpf prog
- load|loadall
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     <quentin@isovalent.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <sdf@google.com>, <haoluo@google.com>, <jolsa@kernel.org>,
-        <davem@davemloft.net>, <kuba@kernel.org>, <hawk@kernel.org>,
-        <nathan@kernel.org>, <ndesaulniers@google.com>, <trix@redhat.com>,
-        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <llvm@lists.linux.dev>
-References: <1664277676-2228-1-git-send-email-wangyufen@huawei.com>
- <CAEf4BzaBPpZvxD6sDMWWRXVqKYTgwaxsggye0CRbv7q5_4jrPA@mail.gmail.com>
-From:   wangyufen <wangyufen@huawei.com>
-In-Reply-To: <CAEf4BzaBPpZvxD6sDMWWRXVqKYTgwaxsggye0CRbv7q5_4jrPA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.191]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,58 +72,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Jann Horn <jannh@google.com>
 
-在 2022/10/1 4:55, Andrii Nakryiko 写道:
-> On Tue, Sep 27, 2022 at 4:00 AM Wang Yufen <wangyufen@huawei.com> wrote:
->> Add auto_attach optional to support one-step load-attach-pin_link.
->>
->> For example,
->>     $ bpftool prog loadall test.o /sys/fs/bpf/test autoattach
->>
->>     $ bpftool link
->>     26: tracing  name test1  tag f0da7d0058c00236  gpl
->>          loaded_at 2022-09-09T21:39:49+0800  uid 0
->>          xlated 88B  jited 55B  memlock 4096B  map_ids 3
->>          btf_id 55
->>     28: kprobe  name test3  tag 002ef1bef0723833  gpl
->>          loaded_at 2022-09-09T21:39:49+0800  uid 0
->>          xlated 88B  jited 56B  memlock 4096B  map_ids 3
->>          btf_id 55
->>     57: tracepoint  name oncpu  tag 7aa55dfbdcb78941  gpl
->>          loaded_at 2022-09-09T21:41:32+0800  uid 0
->>          xlated 456B  jited 265B  memlock 4096B  map_ids 17,13,14,15
->>          btf_id 82
->>
->>     $ bpftool link
->>     1: tracing  prog 26
->>          prog_type tracing  attach_type trace_fentry
->>     3: perf_event  prog 28
->>     10: perf_event  prog 57
->>
->> The autoattach optional can support tracepoints, k(ret)probes,
->> u(ret)probes.
->>
->> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
->> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
->> ---
-> For next revision, please also attach cover letter describing the
-> overall goal of the patch set (and that's where the version log
-> between revisions is put as well).
+Since commit 8782fb61cc848 ("mm: pagewalk: Fix race between unmap and page
+walker"), walk_page_range() on kernel ranges won't work anymore,
+walk_page_range_novma() must be used instead.
 
-Thanks, will add a cover letter in v8.
+Note: I don't have an openrisc development setup, so this is completely
+untested.
 
->
->
->> v6 -> v7: add info msg print and update doc for the skip program
->> v5 -> v6: skip the programs not supporting auto-attach,
->>            and change optional name from "auto_attach" to "autoattach"
->> v4 -> v5: some formatting nits of doc
->> v3 -> v4: rename functions, update doc, bash and do_help()
->> v2 -> v3: switch to extend prog load command instead of extend perf
->> v2: https://patchwork.kernel.org/project/netdevbpf/patch/20220824033837.458197-1-weiyongjun1@huawei.com/
->> v1: https://patchwork.kernel.org/project/netdevbpf/patch/20220816151725.153343-1-weiyongjun1@huawei.com/
->>   tools/bpf/bpftool/prog.c | 81 ++++++++++++++++++++++++++++++++++++++++++++++--
->>   1 file changed, 79 insertions(+), 2 deletions(-)
->>
-> [...]
->
+Fixes: 8782fb61cc848 ("mm: pagewalk: Fix race between unmap and page walker")
+Signed-off-by: Jann Horn <jannh@google.com>
+Signed-off-by: Stafford Horne <shorne@gmail.com>
+---
+Since v1:
+ - Repost to include LKML.
+ - Added my SOB
+ - I tested this by booking this on the qemu virt platform and it works fine.
+
+ arch/openrisc/kernel/dma.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/arch/openrisc/kernel/dma.c b/arch/openrisc/kernel/dma.c
+index a82b2caaa560..b3edbb33b621 100644
+--- a/arch/openrisc/kernel/dma.c
++++ b/arch/openrisc/kernel/dma.c
+@@ -74,10 +74,10 @@ void *arch_dma_set_uncached(void *cpu_addr, size_t size)
+ 	 * We need to iterate through the pages, clearing the dcache for
+ 	 * them and setting the cache-inhibit bit.
+ 	 */
+-	mmap_read_lock(&init_mm);
+-	error = walk_page_range(&init_mm, va, va + size, &set_nocache_walk_ops,
+-			NULL);
+-	mmap_read_unlock(&init_mm);
++	mmap_write_lock(&init_mm);
++	error = walk_page_range_novma(&init_mm, va, va + size,
++			&set_nocache_walk_ops, NULL, NULL);
++	mmap_write_unlock(&init_mm);
+ 
+ 	if (error)
+ 		return ERR_PTR(error);
+@@ -88,11 +88,11 @@ void arch_dma_clear_uncached(void *cpu_addr, size_t size)
+ {
+ 	unsigned long va = (unsigned long)cpu_addr;
+ 
+-	mmap_read_lock(&init_mm);
++	mmap_write_lock(&init_mm);
+ 	/* walk_page_range shouldn't be able to fail here */
+-	WARN_ON(walk_page_range(&init_mm, va, va + size,
+-			&clear_nocache_walk_ops, NULL));
+-	mmap_read_unlock(&init_mm);
++	WARN_ON(walk_page_range_novma(&init_mm, va, va + size,
++			&clear_nocache_walk_ops, NULL, NULL));
++	mmap_write_unlock(&init_mm);
+ }
+ 
+ void arch_sync_dma_for_device(phys_addr_t addr, size_t size,
+-- 
+2.37.2
+
