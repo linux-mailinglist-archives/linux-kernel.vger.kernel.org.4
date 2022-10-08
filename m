@@ -2,100 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B645C5F8275
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 04:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C805F8277
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 04:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbiJHChA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 22:37:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47704 "EHLO
+        id S229506AbiJHCid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 22:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiJHCg4 (ORCPT
+        with ESMTP id S229486AbiJHCia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 22:36:56 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBB3127BEA
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 19:36:54 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id i6so988629pli.12
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Oct 2022 19:36:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=BhwPrOuYUwoWzRSktEsVhVADMKFqjhqc+NN8M06UFVQ=;
-        b=X2+wqrrC1epfsfjZd6c945cE5qsFPLh2kXOPBFlPs4d+maA1HHm84N4prBkJ+mRwUQ
-         R5U8jBYHa0pzXG3r2xBpIpz8jnWAStmK7d8UAn0nKTje3jtPDAhyBls9fgLb13LQkJtr
-         DaJbiIKTYYtQGpmyRed+VjffyPfBecFwXYU5I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BhwPrOuYUwoWzRSktEsVhVADMKFqjhqc+NN8M06UFVQ=;
-        b=M1nvT/A7fmpdrCI0tBFbmi68YoW1P9cv0z+j2IOas5MmoQEgUhLvg2EktSypJ1RzGZ
-         mRD2h0qOucWQ57Ne4rqgG9gvZTqKmU2ncEfymdAC9JXn5dM4nzRx3gAM5UiQggQH+oOE
-         snsSlm4uRVypUWQmyYBAGNKoQOF52+XiE3gcRNo5vGEKOS/7jfBIk7O3b7ASZ2WPZbnF
-         o+nkg0LfBPxi+NKFRrtOsqSLtApf5pptR4cYhOPGazWx42SxeE/1iKaXiDYLEuYS7djE
-         Ixtpt+WChPgInbrJj11y7QMd/0DqnL5kXWX1JP+M+Oew8+b6CYJzhKyu0hM/Kfd1sCQt
-         evOA==
-X-Gm-Message-State: ACrzQf2cIOwNhKSZCk3PGGNdBfVQCXIsrm2AM7+OP6OZlzkRQlbZyHxU
-        DIsWeWs/9GnQ70+fHHwp/FeE/A==
-X-Google-Smtp-Source: AMsMyM70GenZvtpj/9K5xkd2D0aAutcWDIhWfx1adPycILvsyUBR8+KQtJUnl4JpYz7kYGjr7GL5Ng==
-X-Received: by 2002:a17:90b:1e46:b0:20a:c49f:9929 with SMTP id pi6-20020a17090b1e4600b0020ac49f9929mr8303651pjb.221.1665196613803;
-        Fri, 07 Oct 2022 19:36:53 -0700 (PDT)
-Received: from [127.0.0.1] (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z11-20020a63190b000000b0042aca53b4cesm2365872pgl.70.2022.10.07.19.36.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Oct 2022 19:36:53 -0700 (PDT)
-Date:   Fri, 07 Oct 2022 19:36:51 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-CC:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, anton@enomsg.org, ccross@android.com,
-        tony.luck@intel.com, linux-efi@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_8/8=5D_efi=3A_pstore=3A_Add_modul?= =?US-ASCII?Q?e_parameter_for_setting_the_record_size?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <cc5945c8-3aa6-980d-902f-ac72f1f3902c@igalia.com>
-References: <20221006224212.569555-1-gpiccoli@igalia.com> <20221006224212.569555-9-gpiccoli@igalia.com> <202210061614.8AA746094A@keescook> <CAMj1kXF4UyRMh2Y_KakeNBHvkHhTtavASTAxXinDO1rhPe_wYg@mail.gmail.com> <f857b97c-9fb5-8ef6-d1cb-3b8a02d0e655@igalia.com> <CAMj1kXFy-2KddGu+dgebAdU9v2sindxVoiHLWuVhqYw+R=kqng@mail.gmail.com> <2a341c4d-763e-cfa4-0537-93451d8614fa@igalia.com> <202210071230.63CF832@keescook> <cc5945c8-3aa6-980d-902f-ac72f1f3902c@igalia.com>
-Message-ID: <A9E81CC6-089A-42E4-AFD6-588F2E015946@chromium.org>
+        Fri, 7 Oct 2022 22:38:30 -0400
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA776127BED
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 19:38:28 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-03 (Coremail) with SMTP id rQCowABHTbWc4kBjvPCNAw--.12816S2;
+        Sat, 08 Oct 2022 10:38:20 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     qiang.zhao@nxp.com, leoyang.li@nxp.com
+Cc:     linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] soc: fsl: qe: Add check for ioremap
+Date:   Sat,  8 Oct 2022 10:38:18 +0800
+Message-Id: <20221008023819.47679-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowABHTbWc4kBjvPCNAw--.12816S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFW5KFWDuF1UJr48Zr17Awb_yoW8trW3p3
+        yDJFy5Ary5KFZ7W397Jw1kXF15uayIkas3GrWvg3s3uwnxJ34DCwsaqFyYvFsxKrWFkryr
+        tF47J3W5uF1UtF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
+        JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbYhF7UUUUU==
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As ioremap can return NULL pointer, it should
+be better to check the return value return error
+if fails.
+Moreover, the return value of qe_reset should be
+checked by cascade.
 
+Fixes: 68f047e3d62e ("fsl/qe: add rx_sync and tx_sync for TDM mode")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/soc/fsl/qe/qe.c | 23 ++++++++++++++++++-----
+ include/soc/fsl/qe/qe.h |  4 ++--
+ 2 files changed, 20 insertions(+), 7 deletions(-)
 
-On October 7, 2022 4:29:55 PM PDT, "Guilherme G=2E Piccoli" <gpiccoli@igal=
-ia=2Ecom> wrote:
->On 07/10/2022 16:32, Kees Cook wrote:
->> [=2E=2E=2E]
->> Given OVMF showing this as a max, it doesn't seem right to also make
->> this a minimum? Perhaps choose a different minimum to be enforced=2E
->
->Hi Kees! Through my tests, I've noticed low values tend to cause issues
->(didn't go further in the investigation), IIRC even 512 caused problems
->on "deflate" (worked in the others)=2E
->
->I'll try again 512 to see how it goes, but I'm not so sure what would be
->the use of such low values, it does truncate a lot and "pollute" the
->pstore fs with many small files=2E But I can go with any value you/Ard
->think is appropriate (given it works with all compression algorithms
->heh) - currently the minimum of 1024 is enforced in the patch=2E
+diff --git a/drivers/soc/fsl/qe/qe.c b/drivers/soc/fsl/qe/qe.c
+index b3c226eb5292..88e335e8eef7 100644
+--- a/drivers/soc/fsl/qe/qe.c
++++ b/drivers/soc/fsl/qe/qe.c
+@@ -83,10 +83,13 @@ static phys_addr_t get_qe_base(void)
+ 	return qebase;
+ }
+ 
+-void qe_reset(void)
++int qe_reset(void)
+ {
+-	if (qe_immr == NULL)
++	if (qe_immr == NULL) {
+ 		qe_immr = ioremap(get_qe_base(), QE_IMMAP_SIZE);
++		if (qe_immr == NULL)
++			return -ENOMEM;
++	}
+ 
+ 	qe_snums_init();
+ 
+@@ -98,6 +101,8 @@ void qe_reset(void)
+ 
+ 	if (qe_sdma_init())
+ 		panic("sdma init failed!");
++
++	return 0;
+ }
+ 
+ int qe_issue_cmd(u32 cmd, u32 device, u8 mcn_protocol, u32 cmd_input)
+@@ -640,11 +645,14 @@ EXPORT_SYMBOL(qe_get_num_of_snums);
+ static int __init qe_init(void)
+ {
+ 	struct device_node *np;
++	int ret;
+ 
+ 	np = of_find_compatible_node(NULL, NULL, "fsl,qe");
+ 	if (!np)
+ 		return -ENODEV;
+-	qe_reset();
++	ret = qe_reset();
++	if (ret)
++		return ret;
+ 	of_node_put(np);
+ 	return 0;
+ }
+@@ -653,8 +661,13 @@ subsys_initcall(qe_init);
+ #if defined(CONFIG_SUSPEND) && defined(CONFIG_PPC_85xx)
+ static int qe_resume(struct platform_device *ofdev)
+ {
+-	if (!qe_alive_during_sleep())
+-		qe_reset();
++	int ret;
++
++	if (!qe_alive_during_sleep()) {
++		ret = qe_reset();
++		if (ret)
++			return ret;
++	}
+ 	return 0;
+ }
+ 
+diff --git a/include/soc/fsl/qe/qe.h b/include/soc/fsl/qe/qe.h
+index b02e9fe69146..71129b8a5807 100644
+--- a/include/soc/fsl/qe/qe.h
++++ b/include/soc/fsl/qe/qe.h
+@@ -84,9 +84,9 @@ extern spinlock_t cmxgcr_lock;
+ 
+ /* Export QE common operations */
+ #ifdef CONFIG_QUICC_ENGINE
+-extern void qe_reset(void);
++extern int qe_reset(void);
+ #else
+-static inline void qe_reset(void) {}
++static inline int qe_reset(void) {}
+ #endif
+ 
+ int cpm_muram_init(void);
+-- 
+2.25.1
 
-Right, but not everyone uses compression=2E On the other hand, this was ne=
-ver configurable before, so, sure, let's do 1k as a minimum=2E (And a comme=
-nt in the source=2E)
-
-
---=20
-Kees Cook
