@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23BBE5F83EF
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 09:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8331E5F83F0
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 09:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbiJHHHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 03:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
+        id S229614AbiJHHJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 03:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiJHHHM (ORCPT
+        with ESMTP id S229668AbiJHHJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 03:07:12 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314A4BC60E
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 00:07:08 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so6469472pjk.2
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 00:07:07 -0700 (PDT)
+        Sat, 8 Oct 2022 03:09:07 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8443BB043
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 00:09:02 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id 3so5150480pfw.4
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 00:09:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=egU+pR1mu0fbwNOlCXxgUzq7eQbUYmzREvrHjyDBDLQ=;
-        b=GCLrh81Q8BMsf/xFgK/vL+6CrEoKNCw9UdiEuxw25yIGphTObD36x0dLFYVlVR7GOV
-         mR32kmjJyEpYA2B4oaSUD9R2Iiy3c4MDfBsxxaGqEh/FawOGokUamFhme8kAN/eBb7WA
-         isgPT/9okXWWL6sPCfZ8/Amnd1dgR0wAj1gyXZs2bBvCiLxRn4PixDSpqtfPJI2zuk0h
-         lfvvAbMexpk+H6PLk75/+tSMKmcMzMxzFi6wbWA/adtSNCPYFFtgJIe7m00u49YMjVD9
-         QNrbLWYxIab29YLMFZ8QU8U04+0JTr+Z85icPXZ3OQKQHMlys82pWCbEZwixUjtwrMnf
-         YMIA==
+        bh=vwgE5luutAnRT+PkK5v8g5jEsmfaMaq0PpMbhLvP0lE=;
+        b=KJH9tcBDp0sap3/a+uZB7MoB+le+Hj9E/RTZw8cXEhbev7uOO9m7VY6/LSqyjHSoWi
+         vXFWcFDRVI4HnN2FfCyepXKx7Mm91gWvEe+682mOpaoxrqv2PHpP81rIZORMZACTcD2J
+         88NwHLa/ZTvZQcaMOoR4VA70825G9cVEGkPTfXkSf659eBsxTRT7WO0kYuEEd2PsBDUB
+         hIJSykq3f1G2O0UB8I3QSl7do5Os+9lJAnvlS+GdJqi6yrk/pm3SLlFDeyugOo+MEngk
+         s7/ahbIa17kdYFWZdMuq0F7DRE82lOWFnfoEBNSX3HpZBeLG1uTSPYPEAsOYCF9WKTsu
+         OCrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=egU+pR1mu0fbwNOlCXxgUzq7eQbUYmzREvrHjyDBDLQ=;
-        b=lw3CZwsFS7Qze8LgICQqeOQ1Al5sZC26wdQ8mzaMiig1BEDlPywmtV6mdnjZNTA3bZ
-         aa3Pa17vC3LNMDrSDRR7IRUmu+TQs0lqXXgO74W3A8Hrz33FAAY5AwyMkRt5wNbIVWPE
-         +jBieghNbtgnaVCyEbRXkp+rzZ8H0/rCUtcmZWKXWwzabKSCBcVwvcwwDdir2XVQBKMZ
-         Z1Dx3rl06RIyFy+7iopv2MVkY3tKFQpqe7V1r0Z5V8dBuAhRBj+c7FyI3wg6wa12MosC
-         PrhjavhLBtMOpRmwk3WLrDi3QTB6mU5CnY1OmCInqho5P8t/+zhPa7TDhfg8Fq7J+mQ+
-         XYzg==
-X-Gm-Message-State: ACrzQf1UqNYyvuNHOJbgpPIUgaRnZSwdfTX/Icjh6uAU/L6/jEhhtIwn
-        Ot8JUuw/UoG/ymXZkPu381g=
-X-Google-Smtp-Source: AMsMyM580/WE7K2J+FERsSfMBW9Alh5kTunQhUorLRTAyVYTY4npo87/H8JMIX2EgmHypeztFjSsig==
-X-Received: by 2002:a17:902:dad2:b0:17f:8290:fce0 with SMTP id q18-20020a170902dad200b0017f8290fce0mr8449772plx.168.1665212827179;
-        Sat, 08 Oct 2022 00:07:07 -0700 (PDT)
+        bh=vwgE5luutAnRT+PkK5v8g5jEsmfaMaq0PpMbhLvP0lE=;
+        b=hh/e+RUZB01KFtQjcXLiikzcv7Gye2UeEfa2EvQkvJNqS2/EvEvFyFwfdZe0nNmkGh
+         Ro2TJKI7bXkUq8uZQZRSDBYq7+KdoWKb99wJUPVamIhd20rb/F8lrWaS5A57jnQa3+ZN
+         ErYCDZJDVxSQYZ5FtBDZMqj0g7mA3dslIcvkESFClh6BdNfNwYnlllCJzwPLNcaV03H4
+         sB1TZfu/9jMHVmKYjhiDM0Tn4wT0bsOYE5RcJ0x32/KCgAxg+KwT82te+zr1UVe8/eqQ
+         npVAL43NrHR/8jVm6c8+T0JzEKyDxGgsGlQEVYZqqcXf7AbE7n8ixzFKNVShFFzKw086
+         aOPw==
+X-Gm-Message-State: ACrzQf3r3paDRS17aR3xxDAj4avOL/uPFHye5JKrFhgf06jsDOTmyQpI
+        VI9BcuctvLFEvAEj+Nb5J1I=
+X-Google-Smtp-Source: AMsMyM7XNpyJYi8+xXQI7TAFwE3wq3DKHhs27o0T2vzkkVChvR32huCVWy4yr1IJOdVca1qkQz1HwQ==
+X-Received: by 2002:a05:6a00:2c98:b0:553:e926:c47a with SMTP id ef24-20020a056a002c9800b00553e926c47amr8991912pfb.14.1665212942508;
+        Sat, 08 Oct 2022 00:09:02 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id x20-20020aa79ad4000000b00562a5f29ac1sm2772054pfp.100.2022.10.08.00.07.04
+        by smtp.gmail.com with ESMTPSA id ij24-20020a170902ab5800b0017f49b41c12sm2593722plb.173.2022.10.08.00.08.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Oct 2022 00:07:06 -0700 (PDT)
+        Sat, 08 Oct 2022 00:09:01 -0700 (PDT)
 From:   xu.xin.sc@gmail.com
 X-Google-Original-From: xu.xin16@zte.com.cn
 To:     akpm@linux-foundation.org
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         xu xin <xu.xin16@zte.com.cn>,
-        Xiaokai Ran <ran.xiaokai@zte.com.cn>,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Jiang Xuexin <jiang.xuexin@zte.com.cn>,
         Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: [PATCH 5/5] ksm: add zero_pages_sharing documentation
-Date:   Sat,  8 Oct 2022 07:07:01 +0000
-Message-Id: <20221008070701.308747-1-xu.xin16@zte.com.cn>
+        David Hildenbrand <david@redhat.com>,
+        Xuexin Jiang <jiang.xuexin@zte.com.cn>,
+        Xiaokai Ran <ran.xiaokai@zte.com.cn>,
+        Yang Yang <yang.yang29@zte.com.cn>
+Subject: [PATCH 1/5] ksm: abstract the function try_to_get_old_rmap_item
+Date:   Sat,  8 Oct 2022 07:08:53 +0000
+Message-Id: <20221008070854.308851-1-xu.xin16@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221008070156.308465-1-xu.xin16@zte.com.cn>
 References: <20221008070156.308465-1-xu.xin16@zte.com.cn>
@@ -80,48 +80,66 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: xu xin <xu.xin16@zte.com.cn>
 
-When enabling use_zero_pages, pages_sharing cannot represent how
-much memory saved indeed. zero_pages_sharing + pages_sharing does.
-add the description of zero_pages_sharing.
+A new function try_to_get_old_rmap_item is abstracted from
+get_next_rmap_item. This function will be reused by the subsequent
+patches about counting ksm_zero_pages.
 
-Cc: Xiaokai Ran <ran.xiaokai@zte.com.cn>
-Cc: Yang Yang <yang.yang29@zte.com.cn>
-Cc: Jiang Xuexin <jiang.xuexin@zte.com.cn>
+The patch improves the readability and reusability of KSM code.
+
+Signed-off-by: xu xin <xu.xin16@zte.com.cn>
 Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
 Cc: David Hildenbrand <david@redhat.com>
-Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
+Cc: Xiaokai Ran <ran.xiaokai@zte.com.cn>
+Cc: Yang Yang <yang.yang29@zte.com.cn>
 ---
- Documentation/admin-guide/mm/ksm.rst | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ mm/ksm.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-guide/mm/ksm.rst
-index fb6ba2002a4b..484665aa7418 100644
---- a/Documentation/admin-guide/mm/ksm.rst
-+++ b/Documentation/admin-guide/mm/ksm.rst
-@@ -162,7 +162,7 @@ The effectiveness of KSM and MADV_MERGEABLE is shown in ``/sys/kernel/mm/ksm/``:
- pages_shared
-         how many shared pages are being used
- pages_sharing
--        how many more sites are sharing them i.e. how much saved
-+        how many more sites are sharing them
- pages_unshared
-         how many pages unique but repeatedly checked for merging
- pages_volatile
-@@ -173,6 +173,14 @@ stable_node_chains
-         the number of KSM pages that hit the ``max_page_sharing`` limit
- stable_node_dups
-         number of duplicated KSM pages
-+zero_pages_sharing
-+        how many empty pages are sharing kernel zero page(s) instead of
-+        with each other as it would happen normally. only effective when
-+        enabling ``use_zero_pages`` knob.
-+
-+If ``use_zero_pages`` is 0, only ``pages_sharing`` can represents how
-+much saved. Otherwise, ``pages_sharing`` + ``zero_pages_sharing``
-+represents how much saved actually.
+diff --git a/mm/ksm.c b/mm/ksm.c
+index c19fcca9bc03..5b68482d2b3b 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -2187,14 +2187,11 @@ static void cmp_and_merge_page(struct page *page, struct ksm_rmap_item *rmap_ite
+ 	}
+ }
  
- A high ratio of ``pages_sharing`` to ``pages_shared`` indicates good
- sharing, but a high ratio of ``pages_unshared`` to ``pages_sharing``
+-static struct ksm_rmap_item *get_next_rmap_item(struct ksm_mm_slot *mm_slot,
+-					    struct ksm_rmap_item **rmap_list,
+-					    unsigned long addr)
++static struct ksm_rmap_item *try_to_get_old_rmap_item(unsigned long addr,
++					 struct ksm_rmap_item **rmap_list)
+ {
+-	struct ksm_rmap_item *rmap_item;
+-
+ 	while (*rmap_list) {
+-		rmap_item = *rmap_list;
++		struct ksm_rmap_item *rmap_item = *rmap_list;
+ 		if ((rmap_item->address & PAGE_MASK) == addr)
+ 			return rmap_item;
+ 		if (rmap_item->address > addr)
+@@ -2204,6 +2201,21 @@ static struct ksm_rmap_item *get_next_rmap_item(struct ksm_mm_slot *mm_slot,
+ 		free_rmap_item(rmap_item);
+ 	}
+ 
++	return NULL;
++}
++
++static struct ksm_rmap_item *get_next_rmap_item(struct ksm_mm_slot *mm_slot,
++					    struct ksm_rmap_item **rmap_list,
++					    unsigned long addr)
++{
++	struct ksm_rmap_item *rmap_item;
++
++	/* lookup if we have a old rmap_item matching the addr*/
++	rmap_item = try_to_get_old_rmap_item(addr, rmap_list);
++	if (rmap_item)
++		return rmap_item;
++
++	/* Need to allocate a new rmap_item */
+ 	rmap_item = alloc_rmap_item();
+ 	if (rmap_item) {
+ 		/* It has already been zeroed */
 -- 
 2.25.1
 
