@@ -2,92 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 755835F8295
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 04:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BED925F829D
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 04:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbiJHCwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 22:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
+        id S229565AbiJHC6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 22:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiJHCwL (ORCPT
+        with ESMTP id S229510AbiJHC6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 22:52:11 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B1D4BBE28;
-        Fri,  7 Oct 2022 19:52:09 -0700 (PDT)
-Received: from loongson-pc.loongson.cn (unknown [10.20.42.32])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxTWvG5UBjIB8oAA--.19935S4;
-        Sat, 08 Oct 2022 10:51:51 +0800 (CST)
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Len Brown <lenb@kernel.org>, rafael@kernel.org,
-        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: [PATCH V2 2/2] irqchip/loongson-liointc: Support to set irq type for ACPI path
-Date:   Sat,  8 Oct 2022 10:51:50 +0800
-Message-Id: <20221008025150.10734-3-lvjianmin@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221008025150.10734-1-lvjianmin@loongson.cn>
-References: <20221008025150.10734-1-lvjianmin@loongson.cn>
+        Fri, 7 Oct 2022 22:58:15 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336685F991;
+        Fri,  7 Oct 2022 19:58:14 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id ot12so14894304ejb.1;
+        Fri, 07 Oct 2022 19:58:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ajMDfq9ox0mU2sX/ueFv0xaV5X0UEUZFKaNpdeAj+T8=;
+        b=WQe/X+SvTNp/8WqHmhmGQWHM75qZNgoD+YWKgIwzfMFKe0iB6OiIi5Veg/KWZraj5+
+         v9TyA/C0Q/tir4IsW4+Jf2lkIM2Dp56OmYFp0eqpaKqraNypL/UAJtsIZpB5wQPltYir
+         0tnT5GQ8ApmWeFf04mj/clQ6Y7fRsk+omxChV7MptymxVTUjplqFxap180KFTiX7irzJ
+         VwV67kDtxjoUIiLBJ+fXgYkLuWXbIaNye9h4oNO7gEL26Fpx2icUMCTeRUUI7Gvt6cSi
+         svX/9gIDbjhj/e5ZsdHHVFpvUrQsmrU0hwVy2Oz2Wwooyo1cD7YfqvsQS0ACYYOTQaVz
+         B1fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ajMDfq9ox0mU2sX/ueFv0xaV5X0UEUZFKaNpdeAj+T8=;
+        b=xbhmsuYipNSxgIdqUn5LbDX68s//iaPa4iZutltE4kNsPQG3wCZ7Yy3TYUMUtyklUn
+         htt9k7DBAhPFdIKCIFpXcFTcS3xtBH+PEX24IaTjDTnO1Cj5WS+yU4Bdco42yYHjPf0p
+         RAmuJNHAwCXaezZjeP3R8uHFaCnmt8gD3ih+xFulJO6vpp1Swl08jrOjS2skdIiU5fH7
+         5jiEX2Zh6oslzHGOXFS7AU1zR2EMAeO/UTiQ+l9hZbk108KqZSmEj+3OFn+200qvdKkf
+         aQ1Kw1Pzp8VbDwOJtvRxbxTzLx0hXliIdz6gt2MvsfoEV+M6WI7bJxXGjw88C/jCZQcH
+         LZNA==
+X-Gm-Message-State: ACrzQf3qlX9p/ySL3yScsGkv2IYRKPAJ1QLEHi9HkEwKpZvxwNK0n6o5
+        w203ogXZuxRX877gtm7MvNtSKkP5cDq75Bzdcdlo++r69eY=
+X-Google-Smtp-Source: AMsMyM4gVGrEmWFLMnMMldsV0FjyqGtDZKHHoLhezKAMdGOnHaIInFDeNevoM2F2Z2wjD8/sUPiZWdheLTAI8/bHJpk=
+X-Received: by 2002:a17:907:7dab:b0:782:fe13:6102 with SMTP id
+ oz43-20020a1709077dab00b00782fe136102mr6296796ejc.617.1665197892671; Fri, 07
+ Oct 2022 19:58:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxTWvG5UBjIB8oAA--.19935S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7JrWUCF17WFW5CFy5Zw4UCFg_yoWfKwc_u3
-        yIg3Z3Ga4rZF1xJr97uw1YvrWv9aykW3Wv9F45uasav3y8X343urW7Zw13Ga97Kr10vF97
-        AF1S9rySya47tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbaAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
-        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
-        vE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
-        87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4
-        CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-        Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x
-        0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc2xS
-        Y4AK6svPMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_XrWUJr1UMxC20s026x
-        CaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_
-        JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r
-        1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_
-        Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8Jr
-        UvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220930082405.1761-1-zhang.lyra@gmail.com> <20220930082405.1761-3-zhang.lyra@gmail.com>
+ <727a540d-0ca9-ade3-894d-f1774d10a681@linaro.org>
+In-Reply-To: <727a540d-0ca9-ade3-894d-f1774d10a681@linaro.org>
+From:   Chunyan Zhang <zhang.lyra@gmail.com>
+Date:   Sat, 8 Oct 2022 10:57:35 +0800
+Message-ID: <CAAfSe-u4y84kjjksv-Y7=zyosV=34M-=_wrDQC9884znvx9V4Q@mail.gmail.com>
+Subject: Re: [PATCH V2 2/3] dt-bindings: gpio: Convert Unisoc EIC controller
+ binding to yaml
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For ACPI path, the xlate callback used IRQ_TYPE_NONE and ignored
-the irq type in intspec[1]. For supporting to set type for
-irqs of the irqdomain, intspec[1] should be used to get irq
-type.
+On Fri, 30 Sept 2022 at 19:09, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 30/09/2022 10:24, Chunyan Zhang wrote:
+> > From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> >
+> > Convert the Unisoc EIC controller binding to DT schema format.
+> > Update the maxItems of 'reg' property, since the current gpio-eic-sprd
+> > driver supports 3 reg items. Also remove three redundant examples.
+> >
+> > Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> > ---
+> >  .../bindings/gpio/gpio-eic-sprd.txt           |  97 --------------
+> >  .../bindings/gpio/sprd,gpio-eic.yaml          | 119 ++++++++++++++++++
+> >  2 files changed, 119 insertions(+), 97 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-eic-sprd.txt
+> >  create mode 100644 Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml
 
-Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
----
- drivers/irqchip/irq-loongson-liointc.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+[snip]
 
-diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
-index 0da8716f8f24..838c8fa2d868 100644
---- a/drivers/irqchip/irq-loongson-liointc.c
-+++ b/drivers/irqchip/irq-loongson-liointc.c
-@@ -167,7 +167,12 @@ static int liointc_domain_xlate(struct irq_domain *d, struct device_node *ctrlr,
- 	if (WARN_ON(intsize < 1))
- 		return -EINVAL;
- 	*out_hwirq = intspec[0] - GSI_MIN_CPU_IRQ;
--	*out_type = IRQ_TYPE_NONE;
-+
-+	if (intsize > 1)
-+		*out_type = intspec[1] & IRQ_TYPE_SENSE_MASK;
-+	else
-+		*out_type = IRQ_TYPE_NONE;
-+
- 	return 0;
- }
- 
--- 
-2.31.1
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +
+> > +    soc {
+> > +        #address-cells = <2>;
+> > +        #size-cells = <2>;
+> > +
+> > +        eic_debounce: gpio@40210000 {
+> > +            compatible = "sprd,sc9860-eic-debounce";
+> > +            reg = <0 0x40210000 0 0x80>;
+> > +            gpio-controller;
+> > +            #gpio-cells = <2>;
+> > +            interrupt-controller;
+> > +            #interrupt-cells = <2>;
+> > +            interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
+> > +        };
+> > +    };
+> > +
+> > +    sc2730_pmic {
+>
+> If you insisted to keep it, at least should be correct, so just pmic.
+>
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        pmic_eic: gpio@300 {
+>
+> It's exactly the same example as above - all same properties. Drop it or
+> bring some differences.
 
+The differences are on #address-cells and #size-cells.
+
+Thanks for the review,
+Chunyan
