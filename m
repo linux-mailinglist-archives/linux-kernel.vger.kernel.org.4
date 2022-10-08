@@ -2,68 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5085F8766
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 22:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74E1A5F8775
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 23:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiJHUpK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 8 Oct 2022 16:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
+        id S229695AbiJHVL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 17:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiJHUpH (ORCPT
+        with ESMTP id S229590AbiJHVLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 16:45:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5DE1C426;
-        Sat,  8 Oct 2022 13:45:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 289E9B80BEA;
-        Sat,  8 Oct 2022 20:45:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6834CC433D7;
-        Sat,  8 Oct 2022 20:44:57 +0000 (UTC)
-Date:   Sat, 8 Oct 2022 16:44:51 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Ingo Molnar <mingo@redhat.com>, linux-watchdog@vger.kernel.org,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] watchdog: Add tracing events for the most usual
- watchdog events
-Message-ID: <20221008164451.738c912c@rorschach.local.home>
-In-Reply-To: <20221008174602.3972859-1-u.kleine-koenig@pengutronix.de>
-References: <20221008174602.3972859-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sat, 8 Oct 2022 17:11:24 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20513741D
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 14:11:21 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-147-t6CPbisBOIOcGiX5wD9joQ-1; Sat, 08 Oct 2022 22:11:18 +0100
+X-MC-Unique: t6CPbisBOIOcGiX5wD9joQ-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Sat, 8 Oct
+ 2022 22:11:17 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Sat, 8 Oct 2022 22:11:17 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>,
+        Andrew Chernyakov <acherniakov@astralinux.ru>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>
+Subject: RE: [PATCH 5.10 1/1] rpmsg: qcom: glink: replace strncpy() with
+ strscpy_pad()
+Thread-Topic: [PATCH 5.10 1/1] rpmsg: qcom: glink: replace strncpy() with
+ strscpy_pad()
+Thread-Index: AQHY2mtsv76/5V4qLkGo5JA5B025Q64E/zsA
+Date:   Sat, 8 Oct 2022 21:11:16 +0000
+Message-ID: <36f776cbc16f4e988d96b7bcb77cd559@AcuMS.aculab.com>
+References: <20221007132931.123755-1-acherniakov@astralinux.ru>
+ <20221007132931.123755-2-acherniakov@astralinux.ru>
+ <Y0BWc6A8C++M9TWP@kroah.com>
+In-Reply-To: <Y0BWc6A8C++M9TWP@kroah.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat,  8 Oct 2022 19:46:02 +0200
-Uwe Kleine-König <u.kleine-koenig@pengutronix.de> wrote:
-
-> To simplify debugging which process touches a watchdog and when, add
-> tracing events for .start(), .set_timeout(), .ping() and .stop().
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
-> Changes since v2 sent with Message-Id:
-> 20221004091950.3419662-1-u.kleine-koenig@pengutronix.de:
-> 
->  - Reorder events in the header to have all DEFINE_EVENTS near their
->    DECLARE_EVENT_CLASS.
-> 
-
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
--- Steve
+RnJvbTogR3JlZyBLcm9haC1IYXJ0bWFuDQo+IFNlbnQ6IDA3IE9jdG9iZXIgMjAyMiAxNzo0MA0K
+PiANCj4gT24gRnJpLCBPY3QgMDcsIDIwMjIgYXQgMDQ6Mjk6MzFQTSArMDMwMCwgQW5kcmV3IENo
+ZXJueWFrb3Ygd3JvdGU6DQo+ID4gRnJvbTogS3J6eXN6dG9mIEtvemxvd3NraSA8a3J6eXN6dG9m
+Lmtvemxvd3NraUBsaW5hcm8ub3JnPg0KPiA+DQo+ID4gY29tbWl0IDc2NjI3OWE4Zjg1ZGYzMjM0
+NWRiZGEwM2IxMDJjYTFlZTNkNWRkZWEgdXBzdHJlYW0uDQo+ID4NCj4gPiBUaGUgdXNlIG9mIHN0
+cm5jcHkoKSBpcyBjb25zaWRlcmVkIGRlcHJlY2F0ZWQgZm9yIE5VTC10ZXJtaW5hdGVkDQo+ID4g
+c3RyaW5nc1sxXS4gUmVwbGFjZSBzdHJuY3B5KCkgd2l0aCBzdHJzY3B5X3BhZCgpLCB0byBrZWVw
+IGV4aXN0aW5nDQo+ID4gcGFkLWJlaGF2aW9yIG9mIHN0cm5jcHksIHNpbWlsYXJseSB0byBjb21t
+aXQgMDhkZTQyMGE4MDE0ICgicnBtc2c6DQo+ID4gZ2xpbms6IFJlcGxhY2Ugc3RybmNweSgpIHdp
+dGggc3Ryc2NweV9wYWQoKSIpLiAgVGhpcyBmaXhlcyBXPTEgd2FybmluZzoNCj4gPg0KPiA+ICAg
+SW4gZnVuY3Rpb24g4oCYcWNvbV9nbGlua19yeF9jbG9zZeKAmSwNCj4gPiAgICAgaW5saW5lZCBm
+cm9tIOKAmHFjb21fZ2xpbmtfd29ya+KAmSBhdCAuLi9kcml2ZXJzL3JwbXNnL3Fjb21fZ2xpbmtf
+bmF0aXZlLmM6MTYzODo0Og0KPiA+ICAgZHJpdmVycy9ycG1zZy9xY29tX2dsaW5rX25hdGl2ZS5j
+OjE1NDk6MTc6IHdhcm5pbmc6IOKAmHN0cm5jcHnigJkgc3BlY2lmaWVkIGJvdW5kIDMyIGVxdWFs
+cw0KPiBkZXN0aW5hdGlvbiBzaXplIFstV3N0cmluZ29wLXRydW5jYXRpb25dDQo+ID4gICAgMTU0
+OSB8ICAgICAgICAgICAgICAgICBzdHJuY3B5KGNoaW5mby5uYW1lLCBjaGFubmVsLT5uYW1lLCBz
+aXplb2YoY2hpbmZvLm5hbWUpKTsNCj4gPg0KPiA+IFsxXSBodHRwczovL3d3dy5rZXJuZWwub3Jn
+L2RvYy9odG1sL2xhdGVzdC9wcm9jZXNzL2RlcHJlY2F0ZWQuaHRtbCNzdHJuY3B5LW9uLW51bC10
+ZXJtaW5hdGVkLXN0cmluZ3MNCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IEtyenlzenRvZiBLb3ps
+b3dza2kgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9yZz4NCj4gPiBSZXZpZXdlZC1ieTog
+U3RlcGhlbiBCb3lkIDxzYm95ZEBrZXJuZWwub3JnPg0KPiA+IFNpZ25lZC1vZmYtYnk6IEJqb3Ju
+IEFuZGVyc3NvbiA8Ympvcm4uYW5kZXJzc29uQGxpbmFyby5vcmc+DQo+ID4gTGluazogaHR0cHM6
+Ly9sb3JlLmtlcm5lbC5vcmcvci8yMDIyMDUxOTA3MzMzMC43MTg3LTEta3J6eXN6dG9mLmtvemxv
+d3NraUBsaW5hcm8ub3JnDQo+ID4gU2lnbmVkLW9mZi1ieTogQW5kcmV3IENoZXJueWFrb3YgPGFj
+aGVybmlha292QGFzdHJhbGludXgucnU+DQo+ID4gLS0tDQo+ID4gIGRyaXZlcnMvcnBtc2cvcWNv
+bV9nbGlua19uYXRpdmUuYyB8IDIgKy0NCj4gPiAgZHJpdmVycy9ycG1zZy9xY29tX3NtZC5jICAg
+ICAgICAgIHwgNCArKy0tDQo+ID4gIDIgZmlsZXMgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAz
+IGRlbGV0aW9ucygtKQ0KPiANCj4gV2h5IGp1c3QgdGhpcyBzcGVjaWZpYyBrZXJuZWwgYnJhbmNo
+PyAgV2UgY2FuJ3QgYWRkIHBhdGNoZXMgdG8gYW4gb2xkZXINCj4gdHJlZSBhbmQgaGF2ZSBzb21l
+b25lIHVwZ3JhZGUgdG8gYSBuZXdlciBvbmUgYW5kIGhpdCB0aGUgc2FtZSBpc3N1ZS4NCj4gDQo+
+IFNvIHBsZWFzZSBwcm92aWRlIGJhY2twb3J0cyBmb3IgYWxsIGFjdGl2ZSB2ZXJzaW9ucy4gIElu
+IHRoaXMgY2FzZSB0aGF0DQo+IHdvdWxkIGJlIDUuMTUueSBhbmQgNS4xOS55Lg0KDQpJZiBpdCBp
+cyBvbmx5IGZpeGluZyBhIGNvbXBpbGUgd2FybmluZyBpcyBpdCBldmVuIHN0YWJsZSBtYXRlcmlh
+bD8NClRoZSBnZW5lcmljIGNvbW1pdCBtZXNzYWdlIGRvZXNuJ3Qgc2F5IHdoZXRoZXIgdGhlIG9s
+ZCBjb2RlIHdhcw0KYWN0dWFsbHkgcmlnaHQgb3Igd3JvbmcuDQoNCkF0IGxlYXN0IG9uZSBvZiB0
+aGVzZSAncmVwbGFjZSBzdHJuY3B5KCknIGNoYW5nZXMgd2FzIGRlZmluaXRlbHkNCmJyb2tlbiAo
+dGhlIGNvcHkgbmVlZGVkIHRvIGJlIGVxdWl2YWxlbnQgdG8gbWVtY3B5KCkpLg0KDQpTbyBhcHBs
+eWluZyBBTlkgb2YgdGhlbSB0byBzdGFibGUgdW5sZXNzIHRoZXkgYWN0dWFsbHkgZml4DQphIHJl
+YWwgYnVnIHNlZW1zIGR1YmlvdXMuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3Mg
+TGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQ
+VCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
