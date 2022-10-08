@@ -2,67 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2BE5F83E5
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 08:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 850555F83E7
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 09:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbiJHG7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 02:59:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52186 "EHLO
+        id S229514AbiJHHCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 03:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJHG7l (ORCPT
+        with ESMTP id S229452AbiJHHCN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 02:59:41 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C4B26CD;
-        Fri,  7 Oct 2022 23:59:40 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id 10so6401264pli.0;
-        Fri, 07 Oct 2022 23:59:40 -0700 (PDT)
+        Sat, 8 Oct 2022 03:02:13 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE421A87AD
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 00:02:11 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id r18so6370165pgr.12
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 00:02:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bSvlYX8e1v8IcVa7ZdS+LbOU2TiaIvYeSlxWuVBo8Oo=;
-        b=H1fGSKe7R4b/cSt8qy60T/JfI3VvuIYnGsruIlFvA3rf0J67og4dQBHcOWlTaNMEz9
-         0IwD9Y7v7uPTotHLciTOh0CXxusBke6aSf8ZCqJqY14HlqDEk+uk3ZS7Wmh685NPXkQN
-         p0CNXzHxzPupiI763vpRxS8UgjaZECKx2RX+AG8h36qE091YzbIHi4nghzS7Mc1xTgMv
-         Cl7mrFn4ygGu2xkJUQsjsrU27rnwr7WNjJLv4n5G0CV03BuQTctgurRu8Bh7Ypnd/b5e
-         LP7XgDe1iaATog4PWqBc6STToO6MT6vzXWCvdX9qyrXg8sbe2VGsL5g1E9qFJ7OM+i7y
-         3Ouw==
+        bh=b9N5RbcXNeHRQoNQNCKxlzUZ9H+RkGCubTDWVE1lNM8=;
+        b=K6xslpaQm12IfNE9utx1q9cy5IMiP9iK/yybo0lEVo6aeCAghlYhYnYeepo3Ra/Nc8
+         Ut05uHV/8T3k+mWTswCtJtBOS5SXV/CVmSpccrJEVdHPganNHibOtBs03zdCH6QOdNUc
+         yzzdVA4KzcbQroZu9/a6ZrGPRgqc+UUo/HMK83g1kjYDdu7QJONtu//EyckiCMDuKimI
+         P1LvoWPHNqzQ+ov8pYjR3QCRt5ilB6u1oT0R/+bQUE2oSqkSnsyR35IA+y7cw2KJvK+E
+         Yb2EsjLvXB08pph9MnMYCvl7CjhNpnt5bnQ7feWmaypfGCYjh8RF2Pq7+bx/e0bO2ly9
+         BTFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=bSvlYX8e1v8IcVa7ZdS+LbOU2TiaIvYeSlxWuVBo8Oo=;
-        b=t43CP4x+l975Nkx7yz2+xEc8p0r1l25NPIHBSqJlZFdNJEY6yu557/aJx6kCV83OK4
-         JWCujtzrBhGfutsY/NtZMdLfPbE76lwtx+0Rh+ggsjI/OBHLsefAtALihvVTtb42hTt8
-         HTROXu/Qz4j5pJyEvIgjazMyV/LX1A4l20kO63gPHC+/yFU2W65y2/tNpj2gRvA2mkxQ
-         bt0cs8ohOQk6X3QNDVOdZrGj2LKmJw7Qr4mh+OBVFJbLo0A6UmjiWQVM51Sk8F2dN5Qm
-         D1Z/719PPx+bmKN6IPGUT3tEYv4Zuc2CMzH7VOhaPZuRO7NpgwJz8RSR6LsiM7CQ2nNZ
-         FJRg==
-X-Gm-Message-State: ACrzQf0OkVxpNvnHXleXx1SVFD+CnBCqaiSxmaPb3UfLd9FDoKITMrnQ
-        inwhWVWFH8J8zi8l1lhBSDW44vm1H5Q=
-X-Google-Smtp-Source: AMsMyM7ksHv23h9s5VSaF0uLKlsI143oa9T5yDfVaU7PTsLPVlqJzDIZo07Thv4oZf8D1XppCj6w5g==
-X-Received: by 2002:a17:90b:4c45:b0:202:6308:d9c4 with SMTP id np5-20020a17090b4c4500b002026308d9c4mr9406978pjb.40.1665212379990;
-        Fri, 07 Oct 2022 23:59:39 -0700 (PDT)
+        bh=b9N5RbcXNeHRQoNQNCKxlzUZ9H+RkGCubTDWVE1lNM8=;
+        b=eM+T1A+tCbhNigmwrkbx8Gy7AT+KoSg5Ia4R3WfKwO/uYr4FzgBaXSsTl+swGc5nUv
+         VpxIIcQsEoyceA3BCILhjJA6ofasvdK3vHsJw+Scj5PEi74ripsV0zrJ5gzRfBDltFOf
+         PBcg8eAwP0OcQygaDK7Okab2TUwm4GdvvI7RoUueF6nkPgi8gtvU4DWSfAVyCpSSIROE
+         u0UDeIW2YKwIBkGIHJ4vfqhFfEYjiFlZ3NFqz91khM82skoTRsATep1h32qEWnSWrz4D
+         x2qEN/awtbwmogZYdJlfVVD3wqiGxAR8u7I4EI3VGg0yCHPL3kG0P90YNyd6T9sYGuZc
+         KMVw==
+X-Gm-Message-State: ACrzQf1GluQsRlGblEldF49Hv89LtdQWytzTvt8b4vLASwEinwpNMECQ
+        W60dL1Fi+0H93RqoL1JYhKc=
+X-Google-Smtp-Source: AMsMyM7J+etiNelbRnm852vp9JCNZ1MD2yn70pGzDcgK6o+ADrXnsfe1G/Hi+DN8AxFrJLsEr9UBpg==
+X-Received: by 2002:a63:2155:0:b0:455:7b5b:c2d7 with SMTP id s21-20020a632155000000b004557b5bc2d7mr7708186pgm.309.1665212531485;
+        Sat, 08 Oct 2022 00:02:11 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id c6-20020a170903234600b0017f9147983asm2598996plh.175.2022.10.07.23.59.38
+        by smtp.gmail.com with ESMTPSA id x9-20020a170902a38900b0017f9db0236asm2618726pla.82.2022.10.08.00.02.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 23:59:39 -0700 (PDT)
-From:   yexingchen116@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     pavel@ucw.cz
-Cc:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ye xingchen <ye.xingchen@zte.com.cn>
-Subject: [PATCH linux-next] leds: leds-bd2802: replace strcmp with sysfs_streq
-Date:   Sat,  8 Oct 2022 06:59:34 +0000
-Message-Id: <20221008065934.308408-1-ye.xingchen@zte.com.cn>
+        Sat, 08 Oct 2022 00:02:10 -0700 (PDT)
+From:   xu.xin.sc@gmail.com
+X-Google-Original-From: xu.xin16@zte.com.cn
+To:     akpm@linux-foundation.org
+Cc:     ran.xiaokai@zte.com.cn, yang.yang29@zte.com.cn,
+        jiang.xuexin@zte.com.cn, imbrenda@linux.ibm.com, david@redhat.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        xu xin <xu.xin16@zte.com.cn>
+Subject: [PATCH 0/5] ksm: support tracking KSM-placed zero-pages
+Date:   Sat,  8 Oct 2022 07:01:56 +0000
+Message-Id: <20221008070156.308465-1-xu.xin16@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,31 +72,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+From: xu xin <xu.xin16@zte.com.cn>
 
-Replace the open-code with sysfs_streq().
+Before enabling use_zero_pages by setting /sys/kernel/mm/ksm/
+use_zero_pages to 1, pages_sharing of KSM is basically accurate. But
+when enabling use_zero_pages, all empty pages that are merged with
+kernel zero page are not counted in pages_sharing or pages_shared.
+That is because these empty pages are merged with zero-pages then no
+longer managed by KSM, which leads to two issues at least:
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/leds/leds-bd2802.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+1) MADV_UNMERGEABLE and other ways to trigger unsharing will *not*
+   unshare the shared zeropage as placed by KSM (which is against the 
+   MADV_UNMERGEABLE documentation at least); see the link:
+   https://lore.kernel.org/lkml/4a3daba6-18f9-d252-697c-197f65578c44@redhat.com/
 
-diff --git a/drivers/leds/leds-bd2802.c b/drivers/leds/leds-bd2802.c
-index 2b6678f6bd56..cbbda0cccf46 100644
---- a/drivers/leds/leds-bd2802.c
-+++ b/drivers/leds/leds-bd2802.c
-@@ -451,9 +451,9 @@ static ssize_t bd2802_store_adv_conf(struct device *dev,
- 		return -EINVAL;
- 
- 	down_write(&led->rwsem);
--	if (!led->adf_on && !strncmp(buf, "on", 2))
-+	if (!led->adf_on && sysfs_streq(buf, "on"))
- 		bd2802_enable_adv_conf(led);
--	else if (led->adf_on && !strncmp(buf, "off", 3))
-+	else if (led->adf_on && sysfs_streq(buf, "off"))
- 		bd2802_disable_adv_conf(led);
- 	up_write(&led->rwsem);
- 
+2) we cannot know how many pages are zero pages placed by KSM when
+   enabling use_zero_pages, which leads to KSM not being transparent
+   with all actual merged pages by KSM.
+
+With the patch series, we can unshare zero-pages(KSM-placed) accurately
+and count ksm zero pages.
+
+
+*** BLURB HERE ***
+
+xu xin (5):
+  ksm: abstract the function try_to_get_old_rmap_item
+  ksm: support unsharing zero pages placed by KSM
+  ksm: count all zero pages placed by KSM
+  ksm: count zero pages for each process
+  ksm: add zero_pages_sharing documentation
+
+ Documentation/admin-guide/mm/ksm.rst |  10 +-
+ fs/proc/base.c                       |   1 +
+ include/linux/mm_types.h             |   7 +-
+ mm/ksm.c                             | 177 +++++++++++++++++++++------
+ 4 files changed, 157 insertions(+), 38 deletions(-)
+
 -- 
 2.25.1
 
