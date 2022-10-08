@@ -2,112 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1BC5F8264
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 04:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6345E5F8269
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 04:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbiJHCVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 22:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51912 "EHLO
+        id S229602AbiJHCZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 22:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiJHCVs (ORCPT
+        with ESMTP id S229379AbiJHCY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 22:21:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD8EA59B1;
-        Fri,  7 Oct 2022 19:21:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8D75B8248A;
-        Sat,  8 Oct 2022 02:21:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81D33C433D6;
-        Sat,  8 Oct 2022 02:21:37 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LYfvW0ZZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1665195696;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nQirwEB0hjkXJ9U2/sbrNj05mdvuwOBFqUHuwVO4sG4=;
-        b=LYfvW0ZZotjDZYmfwIZkWFUFDyYpgMRwAWVX2JvCBhFxkdcWSY4heC+P4NafHqVMXos9Os
-        X55SDeqSwLcvh7du7K0mwM7oFaeooOuKphMBXjwa5+cWkm5M7Lw/CNc9Lsedwil4GkYjvj
-        DyNZVuxi8QwYy5I4cUKNk3Gtf9+RSyY=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 897978b7 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sat, 8 Oct 2022 02:21:35 +0000 (UTC)
-Date:   Fri, 7 Oct 2022 20:21:28 -0600
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Andreas Noever <andreas.noever@gmail.com>,
+        Fri, 7 Oct 2022 22:24:59 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59C532DAD
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 19:24:58 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2981hj4K030525;
+        Sat, 8 Oct 2022 02:24:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=uqeBAiWjmUTqL2Qle75/wzuSglXcaqQQLgfPjjchQsU=;
+ b=3FvkGBoLjJjAaDxQPI411vNmpcajBFZQ/Jkrtdo9Eb8DJIqEABoioLZyZJ/qUoMbkEdy
+ CPy0C6cBMnc7q+OgYrX6gfGCzLHlZWrN5DJhmFaHELbugYT3k3/uURpRyhBTL7i1UCgi
+ CI5CMDkdYr4bfneuHt+NpMnkb7BFb4hrFQiXzgFb0goWBuCI06OjAQmmeEvqG9f7frcb
+ BIaD1kPJcXSEsqVcmkX1Ay73ZjKO/+vFMbd7pj1iImoDxo+CZjDu6sdE0boHCo7nrKyE
+ S7bZEI6h1dh//3zqX9CmYQHoZX8OTyPz5DIas9VZrao/BKNuys+9ZkQpu/Nol+/IMpW/ sA== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k2yt1815v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 08 Oct 2022 02:24:53 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2981XWNP022181;
+        Sat, 8 Oct 2022 02:24:52 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2172.outbound.protection.outlook.com [104.47.56.172])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3k2yn80mrk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 08 Oct 2022 02:24:52 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KrXkDjJgjbqR0ofS96GzB1NoP1EqwSzOdZpQbBc7REktTRjYmrkeNAvNlQKGLzBFN6Fd0zDFlr4+AA1HFK+UQJajn+0kW+zOcm2Xuim4Jqu9vqDu6VzddlzZ7/jc1I/YdUNVxkimptcgPsIb8SPZZjtDSAt1X4uh4/rBnmw8SnnqGpycYRcUz0WPRjsLtng+DuvCoBnBt8xGTmTh6jxvqYyJUm9sad/v5CPV1KYFWNek5EiKICseJkLzoopXrYRt+CJcrrA1URwGS/Q9UsDTe5y4OILNYHtKrGuBYwEYz2ZPcLorCu6BzDA8GnyxVtCj+6pr+ijiCwyUOnGAG3U1hg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uqeBAiWjmUTqL2Qle75/wzuSglXcaqQQLgfPjjchQsU=;
+ b=csgKEwMPQcmVlkH0hX7PwwSmyj4PvEbEVtbHGi8UNNdFK/E6vLTZuVs9L01+h3YlQHQlYOBYe8VCz9aoGr4bfd7UP43/Lx+K77P11jwmHYyV7/Z+ro5EaMOe+kiJA5pDYPB2M0RW3LtGAQ63B0sIw95oawXcQoRUPoeZbUA5Ou3CU9WyQFFG72sz6L5URayC2tMawm4G+OExTDYeZ3LpLClQgkZml5fQDhQcmAU82m5/V0mOncULRCzK/312aNNbLlV5g+wTBcPhLYb5TIpVSqnLSqgK7KfA6HD/iTTA5KgvSEJBbE2p0Rox5Yt3fuQFzCz6ulkSUvLc/wTDrHod+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uqeBAiWjmUTqL2Qle75/wzuSglXcaqQQLgfPjjchQsU=;
+ b=FGv6fYZu2Sva6HWpkVxTKRcHPwUNx7CMmEPg6n+CnKXe/g3mMz6HfTxVC8kczRBWzIXLQABAGXJmMK66+edxA35sTlYQ+rviFP9blaMU1MecR/CbtdJmAi/NwvJoRPOOoscxvzIzZsdNaNHPrkvZn2gH5ycaEjLlnD0tak79E4M=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by DS7PR10MB5309.namprd10.prod.outlook.com (2603:10b6:5:3a8::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23; Sat, 8 Oct
+ 2022 02:24:49 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::dfde:308:42fe:6c5a]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::dfde:308:42fe:6c5a%3]) with mapi id 15.20.5676.040; Sat, 8 Oct 2022
+ 02:24:49 +0000
+Date:   Fri, 7 Oct 2022 19:24:46 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     kernel test robot <lkp@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph =?utf-8?Q?B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Dave Airlie <airlied@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Westphal <fw@strlen.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        KP Singh <kpsingh@kernel.org>, Marco Elver <elver@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Graf <tgraf@suug.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
-        Yury Norov <yury.norov@gmail.com>,
-        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
-        kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        loongarch@lists.linux.dev, netdev@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org, Jan Kara <jack@suse.cz>
-Subject: Re: [PATCH v4 2/6] treewide: use prandom_u32_max() when possible
-Message-ID: <Y0DeqDC3EnA4b6ZB@zx2c4.com>
-References: <20221007180107.216067-1-Jason@zx2c4.com>
- <20221007180107.216067-3-Jason@zx2c4.com>
- <202210071241.445289C5@keescook>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Muchun Song <songmuchun@bytedance.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [linux-next:master 12548/12775] mm/hugetlb.c:6835:6: sparse:
+ sparse: symbol '__hugetlb_vma_unlock_write_put' was not declared. Should it
+ be static?
+Message-ID: <Y0DfbjPdpdECTHUT@monkey>
+References: <202210080448.1cB176kW-lkp@intel.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202210071241.445289C5@keescook>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <202210080448.1cB176kW-lkp@intel.com>
+X-ClientProxiedBy: SN4PR0501CA0046.namprd05.prod.outlook.com
+ (2603:10b6:803:41::23) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|DS7PR10MB5309:EE_
+X-MS-Office365-Filtering-Correlation-Id: 25d0f41b-352a-4f82-7184-08daa8d4467d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +BMVG1FuVbBamYK9MEdvcYAup0AcAWePTuKCtiZPYRW5dJfFBsj5AWpslP6blnliwZgQ7wQ/MtYafZvYjp6vsOt1QLtzKejxvpQxcZ8G+5d2kheCNYsdQr3ieU98f9vUa+tr9rBrzxPs12r077WGflKmZagIvX39CTCqEbt/O7IZC1H7urjW6tOEKdcj9NB2kdt1cQqlniBpTAqeYYSdg6zHuGX9hzlEvQx+Ng5oPJbyhOt6SQvBVVdyYZS2Ys0JElZEt0akqENQCsblifEJH2m+oHr8iJr/96a9zIZ+rxwIMMIFEY06haVPkW0/HRbTcA/fEm3g0E+/iZcWzPbuW+PRLuIeSiaKPqNP8p9vWtiycaaIwyF7gHAUHZtyFp9R5OtGEJIlDTAKRvnPAMW14OpimixcVMMLekAMDoLjiPrRMLOFx91aeK9FngMIHHjqNsf/IhHVGwZVraewKj5E/ktHJQzPTJIksfabMLvWbrujc63vlO+8OvzruoHoPDEdyVp6izVlIXx+eGtpXHHELyYxOic2gXSkeZcfQczQtemoYhhvfRelC0699eurViVaxBdsKVagTf+q2hkRGHdAhnT3cI06meiU+0Ayew+BYTAhSQaxkkKs6+x3WvYYmn75rQkupBF2eJIg/mu70zL53VU5n5BNn6sCdVJL9sHNxU7bP0+WF1UsYwAktpzyVIxTNkV+WuOJtNM+wWMrr4Bef/QqRNl4Ma7m9+/Ckgo7hPIRGu7qLrvMfWA+jAJ3Asz+qdWnwwnKy1wuR1MZLJrAVQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(136003)(39860400002)(396003)(366004)(376002)(346002)(451199015)(6506007)(53546011)(6666004)(38100700002)(478600001)(6486002)(966005)(2906002)(5660300002)(4326008)(8676002)(66476007)(66556008)(66946007)(86362001)(41300700001)(8936002)(33716001)(316002)(54906003)(110136005)(44832011)(186003)(83380400001)(6512007)(9686003)(26005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?duWz0I1SJPez5t1baG/myRhNrPorl2yGZacP7N5C8E7bv0LqgVSMWgL8XJ/j?=
+ =?us-ascii?Q?TCHRXdgMXZ11c6vCxHYfwVGymgoHYuG91CyhHcqwx7FSQEJCI8c5NjjKUr81?=
+ =?us-ascii?Q?33snO+l4nkxjNE0CLNCfqKG7QiR2MSMBst7zzbesn25darmrF5PokebMBKJA?=
+ =?us-ascii?Q?rX+MPBGq/3yWqMR0xwTLC4MMkUGMyR8Bb7eAV9hOCXHoN31NTbbtYuZ4SyC/?=
+ =?us-ascii?Q?M612OGRO/svUapTyjMGVHuvj5KY/i8Zf8189EUFNJ1pylzZI66B0HBywpxnA?=
+ =?us-ascii?Q?Sfk66DozxJHvrCGg3HRCAYjKfc7+HoAVL6xfwiceZGgvEmSCsbSgWyY33FmL?=
+ =?us-ascii?Q?JaCfiAmJxKWzLr9ZOpgTauYkFa8/fWe2aclEMeGcPNgLJA6N78VchnR6KB/r?=
+ =?us-ascii?Q?8WxF1wABvm5KxZJI43J2D+2ufPj5KHSkJDT3xy/PGKb6DAOeBNcsG2a9TU+N?=
+ =?us-ascii?Q?scogc/EOl07WYvz6y2Gj5kK8co0W02Olmd21BDOXtsoKwwP+jirYT+EcW4Ve?=
+ =?us-ascii?Q?DFnKuSt74rUQmCdqwdkFFitbD4Osf0zFVWY+XCy877/W+1TFi/0/p+fYgLHO?=
+ =?us-ascii?Q?ZPauZjSS9uJjtngaG5NVX+Dfx01vvGnkNeaGAqvFE5meIkQkQLGkfhryaljU?=
+ =?us-ascii?Q?TPpVGOZa8xnEEVWzWW2Iu+Q3pV1AiWuh50R6Qrai/RbJkqQwuF1NcTxFeMwA?=
+ =?us-ascii?Q?4njDU9u83q9yBYXf/gRGdz5R8U9mZqtDrl7ZhS/22uQgOu6KrOqsWJTjPIYd?=
+ =?us-ascii?Q?FJF/T7mJSq9a6l83DqW1+RZTRvvTN7xqy/yMIx0NEAGM+8TILGJOmCTkY11p?=
+ =?us-ascii?Q?Z8gja8w98vVIf0WKQzQdfuw9zQPgSlCOyPPBa1A/7xO+rTnZ8z/U+OUMWfgK?=
+ =?us-ascii?Q?gzW3OzCcvh6m3OP2DukXMmIjnK+I78NCUvWxMghEV/iCMAWEt56TRNKX1j3C?=
+ =?us-ascii?Q?HXuPWPuLGYACGA7yDjcAVW2MpL1nXSZFMaHJuy7KMUaaDCctPS/rdOKsFx2b?=
+ =?us-ascii?Q?ro6OA3UxOkDVz0YF/QHeWX2NVjGshDu9qOKiVp3flDe0vZh8sE0KgBW6muBd?=
+ =?us-ascii?Q?WaFE4qRaprgFcpVrCwDkfp8C+0xcT9uTfA/QIHBLYS1yiH/9798csQcuhnT5?=
+ =?us-ascii?Q?/4SuH2bZDUMOuYHBNtZyo/0VHS33IEBzhpdTfOSUu0lqBdCJhFL1wDcTeZBr?=
+ =?us-ascii?Q?ZA2hEXxChDCQGXfPtB1JxeWEOpg1BAnktwdgSK3brZyb0Hi0PhXMCL33tAVu?=
+ =?us-ascii?Q?HDQ7DrO6HRutY+AFHGr4dXkIFoNIyGzSNAp9JMoBaGVNSClTXSDgi7BBE5Ty?=
+ =?us-ascii?Q?E/WqpLYhysy2wEAj7D+itHPxyDIrvB8Ud7L+hwYk7OL/PoKD7qUPfN9PTPXe?=
+ =?us-ascii?Q?1CLj0clDNl8O/BbHn5XTpbkwFp+hKXRpuJVzm6zfgWwLKGYSoEQRQxUST8dJ?=
+ =?us-ascii?Q?slnL4mauTkjI1akgKxqV4EDKo0z5e4dBlp3wMDeTVpAPHoBJ7jPuT/mjKf1S?=
+ =?us-ascii?Q?WxCZlWCLbI/jXEKp0uyw5RU0GsGXVHASZI2JlUfrqTARNWH3uW8iwk6dZ3fT?=
+ =?us-ascii?Q?hWlBN1qbisme6DZSs6ZAkbkYIvcRCcajNxBxTt8W?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25d0f41b-352a-4f82-7184-08daa8d4467d
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Oct 2022 02:24:49.7380
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tLx65CVWBhzSrkhpXuNrxdpj5N3jI9kI5E39EmiJDK8Of3280E1aKbEZVLhHvz7CLkXAUlZ1OnZK+X9kPL8+5A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5309
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-07_04,2022-10-07_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0
+ malwarescore=0 suspectscore=0 mlxscore=0 adultscore=0 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210080013
+X-Proofpoint-GUID: FW51MDaspY8B2REH6RFQMIDr2FYz-e8W
+X-Proofpoint-ORIG-GUID: FW51MDaspY8B2REH6RFQMIDr2FYz-e8W
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,195 +149,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 03:47:44PM -0700, Kees Cook wrote:
-> On Fri, Oct 07, 2022 at 12:01:03PM -0600, Jason A. Donenfeld wrote:
-> > Rather than incurring a division or requesting too many random bytes for
-> > the given range, use the prandom_u32_max() function, which only takes
-> > the minimum required bytes from the RNG and avoids divisions.
+On 10/08/22 05:00, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   082fce125e57cff60687181c97f3a8ee620c38f5
+> commit: 95b61bfed8291e54f65e1fc836c5f9b49f74068c [12548/12775] hugetlb: take hugetlb vma_lock when clearing vma_lock->vma pointer
+> config: x86_64-randconfig-s022
+> compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+> reproduce:
+>         # apt-get install sparse
+>         # sparse version: v0.6.4-39-gce1a6720-dirty
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=95b61bfed8291e54f65e1fc836c5f9b49f74068c
+>         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>         git fetch --no-tags linux-next master
+>         git checkout 95b61bfed8291e54f65e1fc836c5f9b49f74068c
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
 > 
-> I actually meant splitting the by-hand stuff by subsystem, but nearly
-> all of these can be done mechanically too, so it shouldn't be bad. Notes
-> below...
-
-Oh, cool, more coccinelle. You're basically giving me a class on these
-recipes. Much appreciated.
-
-> > [...]
-> > diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-> > index 92bcc1768f0b..87203429f802 100644
-> > --- a/arch/arm64/kernel/process.c
-> > +++ b/arch/arm64/kernel/process.c
-> > @@ -595,7 +595,7 @@ unsigned long __get_wchan(struct task_struct *p)
-> >  unsigned long arch_align_stack(unsigned long sp)
-> >  {
-> >  	if (!(current->personality & ADDR_NO_RANDOMIZE) && randomize_va_space)
-> > -		sp -= get_random_int() & ~PAGE_MASK;
-> > +		sp -= prandom_u32_max(PAGE_SIZE);
-> >  	return sp & ~0xf;
-> >  }
-> >  
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
 > 
-> @mask@
-> expression MASK;
-> @@
-> 
-> - (get_random_int() & ~(MASK))
-> + prandom_u32_max(MASK)
+> sparse warnings: (new ones prefixed by >>)
+> >> mm/hugetlb.c:6835:6: sparse: sparse: symbol '__hugetlb_vma_unlock_write_put' was not declared. Should it be static?
+>    mm/hugetlb.c:459:12: sparse: sparse: context imbalance in 'allocate_file_region_entries' - wrong count at exit
+>    mm/hugetlb.c:530:13: sparse: sparse: context imbalance in 'region_add' - wrong count at exit
+>    mm/hugetlb.c:597:13: sparse: sparse: context imbalance in 'region_chg' - wrong count at exit
+>    mm/hugetlb.c: note: in included file:
+>    include/linux/mm.h:1282:17: sparse: sparse: context imbalance in 'demote_free_huge_page' - unexpected unlock
+>    mm/hugetlb.c:4969:20: sparse: sparse: context imbalance in 'move_huge_pte' - different lock contexts for basic block
+>    mm/hugetlb.c:5340:17: sparse: sparse: context imbalance in 'hugetlb_wp' - unexpected unlock
+>    mm/hugetlb.c:6221:25: sparse: sparse: context imbalance in 'follow_hugetlb_page' - different lock contexts for basic block
 
-Not quite! PAGE_MASK != PAGE_SIZE. In this case, things get a litttttle
-more complicated where you can do:
+Apologies for missing this in the previous fix!
 
-get_random_int() & MASK == prandom_u32_max(MASK + 1)
-*only if all the top bits of MASK are set* That is, if MASK one less
-than a power of two. Or if MASK & (MASK + 1) == 0.
+From cabb47237ecc48fceba767eee90f9b311876b329 Mon Sep 17 00:00:00 2001
+From: Mike Kravetz <mike.kravetz@oracle.com>
+Date: Fri, 7 Oct 2022 19:15:08 -0700
+Subject: [PATCH] hugetlb: fix sparse warning for
+ __hugetlb_vma_unlock_write_put
 
-(If those top bits aren't set, you can technically do
-prandom_u32_max(MASK >> n + 1) << n. That'd be a nice thing to work out.
-But yeesh, maybe a bit much for the time being and probably a bit beyond
-coccinelle.)
+Declare __hugetlb_vma_unlock_write_put as static.
 
-This case here, though, is a bit more special, where we can just rely on
-an obvious given kernel identity. Namely, PAGE_MASK == ~(PAGE_SIZE - 1).
-So ~PAGE_MASK == PAGE_SIZE - 1.
-So get_random_int() & ~PAGE_MASK == prandom_u32_max(PAGE_SIZE - 1 + 1).
-So get_random_int() & ~PAGE_MASK == prandom_u32_max(PAGE_SIZE).
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+---
+ mm/hugetlb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-And most importantly, this makes the code more readable, since everybody
-knows what bounding by PAGE_SIZE means, where as what on earth is
-happening with the &~PAGE_MASK thing. So it's a good change. I'll try to
-teach coccinelle about that special case.
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index ac10d7d1a3ab..7cbe4f7c9baf 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -6832,7 +6832,7 @@ void hugetlb_vma_lock_release(struct kref *kref)
+ 	kfree(vma_lock);
+ }
+ 
+-void __hugetlb_vma_unlock_write_put(struct hugetlb_vma_lock *vma_lock)
++static void __hugetlb_vma_unlock_write_put(struct hugetlb_vma_lock *vma_lock)
+ {
+ 	struct vm_area_struct *vma = vma_lock->vma;
+ 
+-- 
+2.37.3
 
-
-
-> > diff --git a/arch/loongarch/kernel/vdso.c b/arch/loongarch/kernel/vdso.c
-> > index f32c38abd791..8c9826062652 100644
-> > --- a/arch/loongarch/kernel/vdso.c
-> > +++ b/arch/loongarch/kernel/vdso.c
-> > @@ -78,7 +78,7 @@ static unsigned long vdso_base(void)
-> >  	unsigned long base = STACK_TOP;
-> >  
-> >  	if (current->flags & PF_RANDOMIZE) {
-> > -		base += get_random_int() & (VDSO_RANDOMIZE_SIZE - 1);
-> > +		base += prandom_u32_max(VDSO_RANDOMIZE_SIZE);
-> >  		base = PAGE_ALIGN(base);
-> >  	}
-> >  
-> 
-> @minus_one@
-> expression FULL;
-> @@
-> 
-> - (get_random_int() & ((FULL) - 1)
-> + prandom_u32_max(FULL)
-
-Ahh, well, okay, this is the example I mentioned above. Only works if
-FULL is saturated. Any clever way to get coccinelle to prove that? Can
-it look at the value of constants?
-
-> 
-> > diff --git a/arch/parisc/kernel/vdso.c b/arch/parisc/kernel/vdso.c
-> > index 63dc44c4c246..47e5960a2f96 100644
-> > --- a/arch/parisc/kernel/vdso.c
-> > +++ b/arch/parisc/kernel/vdso.c
-> > @@ -75,7 +75,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm,
-> >  
-> >  	map_base = mm->mmap_base;
-> >  	if (current->flags & PF_RANDOMIZE)
-> > -		map_base -= (get_random_int() & 0x1f) * PAGE_SIZE;
-> > +		map_base -= prandom_u32_max(0x20) * PAGE_SIZE;
-> >  
-> >  	vdso_text_start = get_unmapped_area(NULL, map_base, vdso_text_len, 0, 0);
-> >  
-> 
-> These are more fun, but Coccinelle can still do them with a little
-> Pythonic help:
-> 
-> // Find a potential literal
-> @literal_mask@
-> expression LITERAL;
-> identifier randfunc =~ "get_random_int|prandom_u32|get_random_u32";
-> position p;
-> @@
-> 
->         (randfunc()@p & (LITERAL))
-> 
-> // Add one to the literal.
-> @script:python add_one@
-> literal << literal_mask.LITERAL;
-> RESULT;
-> @@
-> 
-> if literal.startswith('0x'):
->         value = int(literal, 16) + 1
->         coccinelle.RESULT = cocci.make_expr("0x%x" % (value))
-> elif literal[0] in '123456789':
->         value = int(literal, 10) + 1
->         coccinelle.RESULT = cocci.make_expr("%d" % (value))
-> else:
->         print("I don't know how to handle: %s" % (literal))
-> 
-> // Replace the literal mask with the calculated result.
-> @plus_one@
-> expression literal_mask.LITERAL;
-> position literal_mask.p;
-> expression add_one.RESULT;
-> identifier FUNC;
-> @@
-> 
-> -       (FUNC()@p & (LITERAL))
-> +       prandom_u32_max(RESULT)
-
-Oh that's pretty cool. I can do the saturation check in python, since
-`value` holds the parsed result. Neat.
-
-> > diff --git a/fs/ext2/ialloc.c b/fs/ext2/ialloc.c
-> > index 998dd2ac8008..f4944c4dee60 100644
-> > --- a/fs/ext2/ialloc.c
-> > +++ b/fs/ext2/ialloc.c
-> > @@ -277,8 +277,7 @@ static int find_group_orlov(struct super_block *sb, struct inode *parent)
-> >  		int best_ndir = inodes_per_group;
-> >  		int best_group = -1;
-> >  
-> > -		group = prandom_u32();
-> > -		parent_group = (unsigned)group % ngroups;
-> > +		parent_group = prandom_u32_max(ngroups);
-> >  		for (i = 0; i < ngroups; i++) {
-> >  			group = (parent_group + i) % ngroups;
-> >  			desc = ext2_get_group_desc (sb, group, NULL);
-> 
-> Okay, that one is too much for me -- checking that group is never used
-> after the assignment removal is likely possible, but beyond my cocci
-> know-how. :)
-
-Yea this is a tricky one, which I initially didn't do by hand, but Jan
-seemed fine with it, and it's clear if you look at it. Trixy cocci
-indeed.
-
-> > diff --git a/lib/test_hexdump.c b/lib/test_hexdump.c
-> > index 0927f44cd478..41a0321f641a 100644
-> > --- a/lib/test_hexdump.c
-> > +++ b/lib/test_hexdump.c
-> > @@ -208,7 +208,7 @@ static void __init test_hexdump_overflow(size_t buflen, size_t len,
-> >  static void __init test_hexdump_overflow_set(size_t buflen, bool ascii)
-> >  {
-> >  	unsigned int i = 0;
-> > -	int rs = (prandom_u32_max(2) + 1) * 16;
-> > +	int rs = prandom_u32_max(2) + 1 * 16;
-> >  
-> >  	do {
-> >  		int gs = 1 << i;
-> 
-> This looks wrong. Cocci says:
-> 
-> -       int rs = (get_random_int() % 2 + 1) * 16;
-> +       int rs = (prandom_u32_max(2) + 1) * 16;
-
-!! Nice catch.
-
-Alright, I'll give this a try with more cocci. The big difficulty at the
-moment is the power of 2 constant checking thing. If you have any
-pointers on that, would be nice.
-
-Thanks a bunch for the guidance.
-
-Jason
