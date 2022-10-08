@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1BC5F8734
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 21:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A743D5F8736
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 21:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiJHTpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 15:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
+        id S229935AbiJHTrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 15:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiJHTpS (ORCPT
+        with ESMTP id S229769AbiJHTq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 15:45:18 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287B527CD0
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 12:45:16 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id y1so4735820qky.12
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 12:45:16 -0700 (PDT)
+        Sat, 8 Oct 2022 15:46:57 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A99326DE;
+        Sat,  8 Oct 2022 12:46:55 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id j16so11699104wrh.5;
+        Sat, 08 Oct 2022 12:46:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=GBNv3V0erEK+/2QXyy7fs/uhoul4IsfLdOV72goUPVc=;
-        b=J2aIktJLvs0iI0qEiy4ajWp/oNGsLZiV7UVqr7PHaM36a024v+n0LHQBY7NtNwrLQM
-         iuWeC0Klb9zIJz3up9PpUkAU+fRiFOcjRF7OX5zbmizqpcNrRKwmwfXEdKzx4mAfZvtC
-         JP3HgkMircSvvzMXi48sVRgenPO4jYNBadWAZZzNT1PBfS/KDAQOKRSTPmTRFokR9Uaf
-         EiBslHoUMEn/Uk+eZmifP7BcR60g2t4Sie4hi9KGYfhVHXBTpFRlQIjzJhKa5Jym0xYa
-         nys86eigJ0BO+H7c/624S46oggn5xSTVmvPfeBHlU8OSbpx6KaY2CCJvvCnzI7uF2IXv
-         WIqA==
+        bh=ug3lOc6jfgPHpJPdL4UNADTEvLPCskKFnlfe0HCOmbw=;
+        b=n0tI/K/Z7QZYmn1JsfkgpNVg6VscSyMimstyBK/nL8weDKMf56DUqs5z98GR9R6l5f
+         TUw0aMsDkzGqOwoS12y4GI2dXLv2vlzqU4FudQz+ntgGnjOyoja+QMFmYj/seDjI9Xb0
+         +d9aNHS5QWbeBLe/EupmqE+NsCcHvA01YPRvbJaLATdlW6Je8M/Sz7MKpHD9xylE3LH8
+         QbM/VVAAGHORkCuLA4y2ZLWytZVkW7hvyQXnzwrhPkoje+JUbzcawbIIf3eLOOBJ2oxm
+         UvGVvbtCej2VOaLl1kRas+ETQ/X2A1fhpaZbwUfhdmlzePrndmNQ6XlZ2owoBYkVTYFD
+         PO6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GBNv3V0erEK+/2QXyy7fs/uhoul4IsfLdOV72goUPVc=;
-        b=0RQlo2EyFJoHMASbXV3EhFDz0TmeYA+gcgeiPdZYit8jlf0dZPO+xmrENo5T9fC+i7
-         FNDSgMIGv+kCuNs/484CUJi4bhGR+jQKrrv9+R+jJ5wlIZdpP6DbBG+YaDDDlv0N8xF+
-         DNML/MH4yd7i6CXkmamMgY6u2h4TKoZR34bFWq2YZA0la8A3AT5sheHHogCEZVZgsRiU
-         tsS3wec2YV8SYJPvOa1yz93OqasDJWHPlZNP1coCpdiGNXZCyi7CzwMDXGA6BUpaMHOV
-         VozB5adXVE5qTcfWXWrtqXI2V2NfGaAm37jpqhealyP3waF421HF2kf/vUW2z73NxFXR
-         1NKQ==
-X-Gm-Message-State: ACrzQf2qhrlrwGdCp7yu+37Dbwr+gIuUwPL1DwIrVDmp4Ocf6Q0DESA9
-        AkuBFTK+P3qeN/m8pnqwW3I=
-X-Google-Smtp-Source: AMsMyM66C2NGiqEnjLWwy1uKCSZL6Sc9EUrI5Bm7QTlcrqN4P5aX7fH9mH8X1tW/XyZXde8TBN2QlQ==
-X-Received: by 2002:a05:620a:404c:b0:6d9:9fa1:535e with SMTP id i12-20020a05620a404c00b006d99fa1535emr8050814qko.509.1665258315923;
-        Sat, 08 Oct 2022 12:45:15 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:2270:4fea:6b67:9485:addd])
-        by smtp.gmail.com with ESMTPSA id t21-20020a05620a451500b006b60d5a7205sm5874377qkp.51.2022.10.08.12.45.15
+        bh=ug3lOc6jfgPHpJPdL4UNADTEvLPCskKFnlfe0HCOmbw=;
+        b=AkNrECdGuLIfkLpmbkkToa3zDJ2i16TMBZLvw/QBjURkb2PRxV+VCNE1zumGcimB/c
+         2GZtGr4Nbugnb0M/5nf/uEsxjZXFWUE/aQx1oy73jxg39ovTpYebRVHaproPXjyQhqwr
+         esI1JI0OJovIE6j3SThZaBcjBBgtP3M2RM97tFFqWq01b7X8uQ2+jkBaJ0E+Az/d2ptu
+         gCKbb+BBR0X8KgOllcaJNz8vNwBtD7YjL7XfBRmd0cT3gE8voAin0fdmqBna1e9sNUO8
+         EUHfX+pvLcKIlt+ySYYSiJOxzkktmxpnXplaa49HrIH1QYZMNSf+Im2nlZSpGWU7srdg
+         RIgg==
+X-Gm-Message-State: ACrzQf2PDr/wutkQx+SSwQfekpDg9bmhRq3Og7iJlWPXwfp3XVPpdGmP
+        FO31k1f1ZYu1qnJUUOjk1w5n4npauQ==
+X-Google-Smtp-Source: AMsMyM4ZQVOmT+WW0nvOmRqYLse5zaWyiRiDBLMoBNS9Q5QfykkWHl66eY+4fgW8C/vvPTxoNHLn1w==
+X-Received: by 2002:adf:f9c9:0:b0:22e:3581:2422 with SMTP id w9-20020adff9c9000000b0022e35812422mr7006215wrr.592.1665258414357;
+        Sat, 08 Oct 2022 12:46:54 -0700 (PDT)
+Received: from octinomon ([2a00:23c8:2f02:3b01:3ea1:40:8650:189])
+        by smtp.gmail.com with ESMTPSA id i129-20020a1c3b87000000b003b50428cf66sm2291828wma.33.2022.10.08.12.46.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Oct 2022 12:45:15 -0700 (PDT)
-Date:   Sat, 8 Oct 2022 12:45:14 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: bitmap patches for v6.1-rc1
-Message-ID: <Y0HTSi6iU+1KhrQs@yury-laptop>
+        Sat, 08 Oct 2022 12:46:54 -0700 (PDT)
+From:   Jules Irenge <jbi.octave@gmail.com>
+X-Google-Original-From: Jules Irenge <jules.irenge@postgrad.manchester.ac.uk>
+Date:   Sat, 8 Oct 2022 20:46:52 +0100
+To:     erazor_de@users.sourceforge.net
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] HID: roccat: Convert snprintf() to sysfs_emit()
+Message-ID: <Y0HTrCgAQ+wc4yGj@octinomon>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -70,167 +69,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 7e18e42e4b280c85b76967a9106a13ca61c16179:
+Coccinnelle reports a warning
+Warning: Use scnprintf or sprintf
 
-  Linux 6.0-rc4 (2022-09-04 13:10:01 -0700)
+Following the advice on kernel documentation
+https://www.kernel.org/doc/html/latest/filesystems/sysfs.html
 
-are available in the Git repository at:
+For show(device *...) functions we should only use sysfs_emit() or sysfs_emit_at()
+especially when formatting the value to be returned to user space.
 
-  https://github.com/norov/linux.git tags/bitmap-6.1-rc1
+Convert snprintf() to sysfs_emit()
 
-for you to fetch changes up to 585463f0d58aa4d29b744c7c53b222b8028de87f:
+Signed-off-by: Jules Irenge <jules.irenge@postgrad.manchester.ac.uk>
+---
+ drivers/hid/hid-roccat-koneplus.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-  sched/core: Merge cpumask_andnot()+for_each_cpu() into for_each_cpu_andnot() (2022-10-06 05:57:36 -0700)
+diff --git a/drivers/hid/hid-roccat-koneplus.c b/drivers/hid/hid-roccat-koneplus.c
+index 1896c69ea512..1635ddc7c3cf 100644
+--- a/drivers/hid/hid-roccat-koneplus.c
++++ b/drivers/hid/hid-roccat-koneplus.c
+@@ -244,7 +244,7 @@ static ssize_t koneplus_sysfs_show_actual_profile(struct device *dev,
+ {
+ 	struct koneplus_device *koneplus =
+ 			hid_get_drvdata(dev_get_drvdata(dev->parent->parent));
+-	return snprintf(buf, PAGE_SIZE, "%d\n", koneplus->actual_profile);
++	return sysfs_emit(buf, "%d\n", koneplus->actual_profile);
+ }
+ 
+ static ssize_t koneplus_sysfs_set_actual_profile(struct device *dev,
+@@ -311,7 +311,7 @@ static ssize_t koneplus_sysfs_show_firmware_version(struct device *dev,
+ 			&info, KONEPLUS_SIZE_INFO);
+ 	mutex_unlock(&koneplus->koneplus_lock);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n", info.firmware_version);
++	return sysfs_emit(buf, "%d\n", info.firmware_version);
+ }
+ static DEVICE_ATTR(firmware_version, 0440,
+ 		   koneplus_sysfs_show_firmware_version, NULL);
+-- 
+2.37.3
 
-----------------------------------------------------------------
-bitmap patches for v6.1-rc1
-
-Hi Linus,
-
-Please pull this patches. They spent more than a week in -next without
-major problems.
-
-The only problem with warnings generated by cpumask_check(), when robots
-do bisection, is fixed by moving the patch "cpumask: fix checking valid
-cpu range" to the very end of the sub-series.
-
-I decided to include Valentin's series because it matches with the rest
-of the work very well.
-
-The patch "lib/bitmap: remove bitmap_ord_to_pos" conflicts with 
-"lib/nodemask: optimize node_random for nodemask with single NUMA node"
-from Aneesh Kumar K.V. The patch is in Andrew Morton's tree, and as of
-today is not merged in mainline. Correct merge of the chunk that conflicts
-should look like this:
-
-  static inline int node_random(const nodemask_t *maskp)
-  {
-  #if defined(CONFIG_NUMA) && (MAX_NUMNODES > 1)
-          int w, bit;
-  
-          w = nodes_weight(*maskp);
-          switch (w) {
-          case 0:
-                  bit = NUMA_NO_NODE;
-                  break;
-          case 1:
-                  bit = first_node(*maskp);
-                  break;
-          default:
-                  bit = find_nth_bit(maskp->bits, MAX_NUMNODES, get_random_int() % w);
-                  break;
-          }
-          return bit;
-  #else
-          return 0;
-  #endif
-  }
-
-Also, it looks like Phil's patch is already in master, merged through
-Greg's tree.
-
-Thanks,
-Yury
-
-
-From Phil Auld:
-drivers/base: Fix unsigned comparison to -1 in CPUMAP_FILE_MAX_BYTES
-
-From me:
-cpumask: cleanup nr_cpu_ids vs nr_cpumask_bits mess
-
-This series cleans that mess and adds new config FORCE_NR_CPUS that
-allows to optimize cpumask subsystem if the number of CPUs is known
-at compile-time.
-
-From me:
-lib: optimize find_bit() functions
-
-Reworks find_bit() functions based on new FIND_{FIRST,NEXT}_BIT() macros.
-
-From me:
-lib/find: add find_nth_bit()
-
-Adds find_nth_bit(), which is ~70 times faster than bitcounting with
-for_each() loop:
-        for_each_set_bit(bit, mask, size)
-                if (n-- == 0)
-                        return bit;
-
-Also adds bitmap_weight_and() to let people replace this pattern:
-	tmp = bitmap_alloc(nbits);
-	bitmap_and(tmp, map1, map2, nbits);
-	weight = bitmap_weight(tmp, nbits);
-	bitmap_free(tmp);
-with a single bitmap_weight_and() call.
-
-From me:
-cpumask: repair cpumask_check()
-
-After switching cpumask to use nr_cpu_ids, cpumask_check() started
-generating many false-positive warnings. This series fixes it.
-
-From Valentin Schneider:
-bitmap,cpumask: Add for_each_cpu_andnot() and for_each_cpu_andnot()
-
-Extends the API with one more function and applies it in sched/core.
-
-----------------------------------------------------------------
-Phil Auld (1):
-      drivers/base: Fix unsigned comparison to -1 in CPUMAP_FILE_MAX_BYTES
-
-Valentin Schneider (4):
-      lib/find_bit: Introduce find_next_andnot_bit()
-      cpumask: Introduce for_each_cpu_andnot()
-      lib/test_cpumask: Add for_each_cpu_and(not) tests
-      sched/core: Merge cpumask_andnot()+for_each_cpu() into for_each_cpu_andnot()
-
-Yury Norov (23):
-      smp: don't declare nr_cpu_ids if NR_CPUS == 1
-      smp: add set_nr_cpu_ids()
-      lib/cpumask: delete misleading comment
-      lib/cpumask: deprecate nr_cpumask_bits
-      powerpc/64: don't refer nr_cpu_ids in asm code when it's undefined
-      lib/cpumask: add FORCE_NR_CPUS config option
-      lib/find_bit: introduce FIND_FIRST_BIT() macro
-      lib/find_bit: create find_first_zero_bit_le()
-      lib/find_bit: optimize find_next_bit() functions
-      tools: sync find_bit() implementation
-      lib/bitmap: don't call __bitmap_weight() in kernel code
-      lib/bitmap: add bitmap_weight_and()
-      lib: add find_nth{,_and,_andnot}_bit()
-      lib/bitmap: add tests for find_nth_bit()
-      lib/bitmap: remove bitmap_ord_to_pos
-      cpumask: add cpumask_nth_{,and,andnot}
-      net: fix cpu_max_bits_warn() usage in netif_attrmask_next{,_and}
-      cpumask: switch for_each_cpu{,_not} to use for_each_bit()
-      lib/find_bit: add find_next{,_and}_bit_wrap
-      lib/bitmap: introduce for_each_set_bit_wrap() macro
-      lib/find: optimize for_each() macros
-      lib/bitmap: add tests for for_each() loops
-      cpumask: fix checking valid cpu range
-
- arch/loongarch/kernel/setup.c |   2 +-
- arch/mips/kernel/setup.c      |   2 +-
- arch/powerpc/kernel/head_64.S |   4 +
- arch/x86/kernel/smpboot.c     |   4 +-
- arch/x86/xen/smp_pv.c         |   2 +-
- fs/ntfs3/bitmap.c             |   4 +-
- include/linux/bitmap.h        |  13 +-
- include/linux/bitops.h        |  19 +++
- include/linux/cpumask.h       | 137 ++++++++++++++-----
- include/linux/find.h          | 310 ++++++++++++++++++++++++++++++++++++------
- include/linux/netdevice.h     |  10 +-
- include/linux/nodemask.h      |   3 +-
- kernel/sched/core.c           |   5 +-
- kernel/smp.c                  |   6 +-
- lib/Kconfig                   |   9 ++
- lib/bitmap.c                  |  68 ++++-----
- lib/cpumask.c                 |  40 +++---
- lib/cpumask_kunit.c           |  19 +++
- lib/find_bit.c                | 233 +++++++++++++++++++++----------
- lib/find_bit_benchmark.c      |  18 +++
- lib/test_bitmap.c             | 291 ++++++++++++++++++++++++++++++++++++++-
- tools/include/linux/find.h    |  61 ++-------
- tools/lib/find_bit.c          | 149 ++++++++++----------
- 23 files changed, 1038 insertions(+), 371 deletions(-)
