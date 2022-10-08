@@ -2,98 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7DFE5F8421
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 09:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 349495F8428
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 09:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiJHHqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 03:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42510 "EHLO
+        id S229733AbiJHHyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 03:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiJHHqu (ORCPT
+        with ESMTP id S229454AbiJHHyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 03:46:50 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866E159246
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 00:46:49 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id r18so6419536pgr.12
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 00:46:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yy1hrG2GpPBkvn2HfQINffR+3hxzGXt2IgtYJPN1P7E=;
-        b=auD42bYp121ROiFoAixlBntsidbY1hawD9jksLlHUfCGs+g1S33boZlc8IG52tq3LN
-         DX3zkFHJMskR9WbEfqaIU3wWP2PYec++sWTNaxJ+jm/6Sc/mlQCL57/xC3g6z8bdDGzp
-         EqRUliodvHvnOoW98Z6z+P8C9u0UOxm965lxZO0jk3o0DBucSnhvgc/Noh0foIWdCPo1
-         IpDQTDjQ1Xb46qq47hdQJsExw1k6iJAlOma49I3UhOIkTQqVIW3vnwh2GfMB+HZKRAC9
-         YNZ+9lFYEDDf82yOzWn7uDWc+lc0U/2O7VNLesgUBHl+ixcvrRL2tAfsnNKxAG71wtVg
-         J12Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yy1hrG2GpPBkvn2HfQINffR+3hxzGXt2IgtYJPN1P7E=;
-        b=Z2nPZ034H9TlITr7Be9SHs9DbWFeNLfX/Hexk7zNpLWu9OZlGfj/JGCZ1WCj3M6NaP
-         6C38e5wYcwiM2ec2v10P8Md7AIziI0Xs6B823ZeOnhc0MjEtNsw9CuRCKwvSni6fJ2Hh
-         T8Lx7rGpE3kCYKswyojQN6qrSLMqI8FbwKFbtkqb0Vx5428C+rkvaYCSY11ZIa3lA+VY
-         bD7H+ZALPFSv4izpnT2IfBKSdx5NSZzvF9lSuuiuvM5oZhdF9M/GZ4qC7faBfdoTP59l
-         IOtjAY3rW5c3uEhppwSsdHHR0jvTcNdqErnzwXrYW9NJ81P51Swc8C+hewpcX0LRbOdA
-         Ia1w==
-X-Gm-Message-State: ACrzQf3GND6otX0YPR+aFPVfQ02dUQnSqIIb6cHaAlE8NQFPOYSaQyWC
-        CAIflQoQ2F9IT06CTt5QWHk=
-X-Google-Smtp-Source: AMsMyM5rC5UzbfGyUKVwo477N415VnISLNMlKqnEO7xakBGPSl2Z3+N74oa8uaYCPuiv4SH83PF1mw==
-X-Received: by 2002:a63:581e:0:b0:43c:29a0:6390 with SMTP id m30-20020a63581e000000b0043c29a06390mr8029983pgb.552.1665215209070;
-        Sat, 08 Oct 2022 00:46:49 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id x16-20020aa79a50000000b005365aee486bsm2852880pfj.192.2022.10.08.00.46.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Oct 2022 00:46:48 -0700 (PDT)
-From:   yexingchen116@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     miquel.raynal@bootlin.com
-Cc:     richard@nod.at, vigneshr@ti.com, wsa+renesas@sang-engineering.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        ye xingchen <ye.xingchen@zte.com.cn>
-Subject: [PATCH linux-next] mtd: replace strcmp with sysfs_streq
-Date:   Sat,  8 Oct 2022 07:46:43 +0000
-Message-Id: <20221008074643.308969-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Sat, 8 Oct 2022 03:54:19 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3D91704F;
+        Sat,  8 Oct 2022 00:54:16 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R311e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VRbCdPJ_1665215644;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VRbCdPJ_1665215644)
+          by smtp.aliyun-inc.com;
+          Sat, 08 Oct 2022 15:54:14 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     dhowells@redhat.com
+Cc:     dwmw2@infradead.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] KEYS: Fix kernel-doc
+Date:   Sat,  8 Oct 2022 15:50:25 +0800
+Message-Id: <20221008075025.107906-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+certs/system_keyring.c:45: warning: expecting prototype for restrict_link_to_builtin_trusted(). Prototype was for restrict_link_by_builtin_trusted() instead.
 
-Replace the open-code with sysfs_streq().
-
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2342
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- drivers/mtd/parsers/cmdlinepart.c | 2 +-
+ certs/system_keyring.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/parsers/cmdlinepart.c
-b/drivers/mtd/parsers/cmdlinepart.c
-index b34856def816..6a401e0b1b95 100644
---- a/drivers/mtd/parsers/cmdlinepart.c
-+++ b/drivers/mtd/parsers/cmdlinepart.c
-@@ -154,7 +154,7 @@ static struct mtd_partition * newpart(char *s,
- 	}
+diff --git a/certs/system_keyring.c b/certs/system_keyring.c
+index 5042cc54fa5e..659f1881d0e3 100644
+--- a/certs/system_keyring.c
++++ b/certs/system_keyring.c
+@@ -33,7 +33,7 @@ extern __initconst const unsigned long system_certificate_list_size;
+ extern __initconst const unsigned long module_cert_size;
  
- 	/* if slc is found use emulated SLC mode on this partition*/
--	if (!strncmp(s, "slc", 3)) {
-+	if (sysfs_streq(s, "slc")) {
- 		add_flags |= MTD_SLC_ON_MLC_EMULATION;
- 		s += 3;
- 	}
+ /**
+- * restrict_link_to_builtin_trusted - Restrict keyring addition by built in CA
++ * restrict_link_by_builtin_trusted() - Restrict keyring addition by built in CA
+  *
+  * Restrict the addition of keys into a keyring based on the key-to-be-added
+  * being vouched for by a key in the built in system keyring.
 -- 
-2.25.1
+2.20.1.7.g153144c
 
