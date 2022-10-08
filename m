@@ -2,86 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57CC35F83E3
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 08:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2BE5F83E5
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 08:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiJHG6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 02:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
+        id S229641AbiJHG7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 02:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJHG6K (ORCPT
+        with ESMTP id S229452AbiJHG7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 02:58:10 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFE874E2E
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Oct 2022 23:58:08 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R821e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VRZwHym_1665212282;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VRZwHym_1665212282)
-          by smtp.aliyun-inc.com;
-          Sat, 08 Oct 2022 14:58:05 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     rostedt@goodmis.org
-Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] ring-buffer: Fix kernel-doc
-Date:   Sat,  8 Oct 2022 14:56:24 +0800
-Message-Id: <20221008065624.40998-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Sat, 8 Oct 2022 02:59:41 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C4B26CD;
+        Fri,  7 Oct 2022 23:59:40 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id 10so6401264pli.0;
+        Fri, 07 Oct 2022 23:59:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bSvlYX8e1v8IcVa7ZdS+LbOU2TiaIvYeSlxWuVBo8Oo=;
+        b=H1fGSKe7R4b/cSt8qy60T/JfI3VvuIYnGsruIlFvA3rf0J67og4dQBHcOWlTaNMEz9
+         0IwD9Y7v7uPTotHLciTOh0CXxusBke6aSf8ZCqJqY14HlqDEk+uk3ZS7Wmh685NPXkQN
+         p0CNXzHxzPupiI763vpRxS8UgjaZECKx2RX+AG8h36qE091YzbIHi4nghzS7Mc1xTgMv
+         Cl7mrFn4ygGu2xkJUQsjsrU27rnwr7WNjJLv4n5G0CV03BuQTctgurRu8Bh7Ypnd/b5e
+         LP7XgDe1iaATog4PWqBc6STToO6MT6vzXWCvdX9qyrXg8sbe2VGsL5g1E9qFJ7OM+i7y
+         3Ouw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bSvlYX8e1v8IcVa7ZdS+LbOU2TiaIvYeSlxWuVBo8Oo=;
+        b=t43CP4x+l975Nkx7yz2+xEc8p0r1l25NPIHBSqJlZFdNJEY6yu557/aJx6kCV83OK4
+         JWCujtzrBhGfutsY/NtZMdLfPbE76lwtx+0Rh+ggsjI/OBHLsefAtALihvVTtb42hTt8
+         HTROXu/Qz4j5pJyEvIgjazMyV/LX1A4l20kO63gPHC+/yFU2W65y2/tNpj2gRvA2mkxQ
+         bt0cs8ohOQk6X3QNDVOdZrGj2LKmJw7Qr4mh+OBVFJbLo0A6UmjiWQVM51Sk8F2dN5Qm
+         D1Z/719PPx+bmKN6IPGUT3tEYv4Zuc2CMzH7VOhaPZuRO7NpgwJz8RSR6LsiM7CQ2nNZ
+         FJRg==
+X-Gm-Message-State: ACrzQf0OkVxpNvnHXleXx1SVFD+CnBCqaiSxmaPb3UfLd9FDoKITMrnQ
+        inwhWVWFH8J8zi8l1lhBSDW44vm1H5Q=
+X-Google-Smtp-Source: AMsMyM7ksHv23h9s5VSaF0uLKlsI143oa9T5yDfVaU7PTsLPVlqJzDIZo07Thv4oZf8D1XppCj6w5g==
+X-Received: by 2002:a17:90b:4c45:b0:202:6308:d9c4 with SMTP id np5-20020a17090b4c4500b002026308d9c4mr9406978pjb.40.1665212379990;
+        Fri, 07 Oct 2022 23:59:39 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id c6-20020a170903234600b0017f9147983asm2598996plh.175.2022.10.07.23.59.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 23:59:39 -0700 (PDT)
+From:   yexingchen116@gmail.com
+X-Google-Original-From: ye.xingchen@zte.com.cn
+To:     pavel@ucw.cz
+Cc:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ye xingchen <ye.xingchen@zte.com.cn>
+Subject: [PATCH linux-next] leds: leds-bd2802: replace strcmp with sysfs_streq
+Date:   Sat,  8 Oct 2022 06:59:34 +0000
+Message-Id: <20221008065934.308408-1-ye.xingchen@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel/trace/ring_buffer.c:895: warning: expecting prototype for ring_buffer_nr_pages_dirty(). Prototype was for ring_buffer_nr_dirty_pages() instead.
-kernel/trace/ring_buffer.c:5313: warning: expecting prototype for ring_buffer_reset_cpu(). Prototype was for ring_buffer_reset_online_cpus() instead.
-kernel/trace/ring_buffer.c:5382: warning: expecting prototype for rind_buffer_empty(). Prototype was for ring_buffer_empty() instead.
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2340
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Replace the open-code with sysfs_streq().
+
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- kernel/trace/ring_buffer.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/leds/leds-bd2802.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index c3f354cfc5ba..89fb203b04b3 100644
---- a/kernel/trace/ring_buffer.c
-+++ b/kernel/trace/ring_buffer.c
-@@ -885,7 +885,7 @@ size_t ring_buffer_nr_pages(struct trace_buffer *buffer, int cpu)
- }
+diff --git a/drivers/leds/leds-bd2802.c b/drivers/leds/leds-bd2802.c
+index 2b6678f6bd56..cbbda0cccf46 100644
+--- a/drivers/leds/leds-bd2802.c
++++ b/drivers/leds/leds-bd2802.c
+@@ -451,9 +451,9 @@ static ssize_t bd2802_store_adv_conf(struct device *dev,
+ 		return -EINVAL;
  
- /**
-- * ring_buffer_nr_pages_dirty - get the number of used pages in the ring buffer
-+ * ring_buffer_nr_dirty_pages() - get the number of use_ pages in the ring buffer
-  * @buffer: The ring_buffer to get the number of pages from
-  * @cpu: The cpu of the ring_buffer to get the number of pages from
-  *
-@@ -5305,7 +5305,7 @@ void ring_buffer_reset_cpu(struct trace_buffer *buffer, int cpu)
- EXPORT_SYMBOL_GPL(ring_buffer_reset_cpu);
+ 	down_write(&led->rwsem);
+-	if (!led->adf_on && !strncmp(buf, "on", 2))
++	if (!led->adf_on && sysfs_streq(buf, "on"))
+ 		bd2802_enable_adv_conf(led);
+-	else if (led->adf_on && !strncmp(buf, "off", 3))
++	else if (led->adf_on && sysfs_streq(buf, "off"))
+ 		bd2802_disable_adv_conf(led);
+ 	up_write(&led->rwsem);
  
- /**
-- * ring_buffer_reset_cpu - reset a ring buffer per CPU buffer
-+ * ring_buffer_reset_online_cpus() - reset a ring buffer per CPU buffer
-  * @buffer: The ring buffer to reset a per cpu buffer of
-  * @cpu: The CPU buffer to be reset
-  */
-@@ -5375,7 +5375,7 @@ void ring_buffer_reset(struct trace_buffer *buffer)
- EXPORT_SYMBOL_GPL(ring_buffer_reset);
- 
- /**
-- * rind_buffer_empty - is the ring buffer empty?
-+ * ring_buffer_empty() - is the ring buffer empty?
-  * @buffer: The ring buffer to test
-  */
- bool ring_buffer_empty(struct trace_buffer *buffer)
 -- 
-2.20.1.7.g153144c
+2.25.1
 
