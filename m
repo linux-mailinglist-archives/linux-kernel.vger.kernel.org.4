@@ -2,133 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BED925F829D
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 04:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6EF15F829F
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 05:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiJHC6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Oct 2022 22:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49408 "EHLO
+        id S229618AbiJHDAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Oct 2022 23:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiJHC6P (ORCPT
+        with ESMTP id S229510AbiJHDAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Oct 2022 22:58:15 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336685F991;
-        Fri,  7 Oct 2022 19:58:14 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id ot12so14894304ejb.1;
-        Fri, 07 Oct 2022 19:58:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ajMDfq9ox0mU2sX/ueFv0xaV5X0UEUZFKaNpdeAj+T8=;
-        b=WQe/X+SvTNp/8WqHmhmGQWHM75qZNgoD+YWKgIwzfMFKe0iB6OiIi5Veg/KWZraj5+
-         v9TyA/C0Q/tir4IsW4+Jf2lkIM2Dp56OmYFp0eqpaKqraNypL/UAJtsIZpB5wQPltYir
-         0tnT5GQ8ApmWeFf04mj/clQ6Y7fRsk+omxChV7MptymxVTUjplqFxap180KFTiX7irzJ
-         VwV67kDtxjoUIiLBJ+fXgYkLuWXbIaNye9h4oNO7gEL26Fpx2icUMCTeRUUI7Gvt6cSi
-         svX/9gIDbjhj/e5ZsdHHVFpvUrQsmrU0hwVy2Oz2Wwooyo1cD7YfqvsQS0ACYYOTQaVz
-         B1fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ajMDfq9ox0mU2sX/ueFv0xaV5X0UEUZFKaNpdeAj+T8=;
-        b=xbhmsuYipNSxgIdqUn5LbDX68s//iaPa4iZutltE4kNsPQG3wCZ7Yy3TYUMUtyklUn
-         htt9k7DBAhPFdIKCIFpXcFTcS3xtBH+PEX24IaTjDTnO1Cj5WS+yU4Bdco42yYHjPf0p
-         RAmuJNHAwCXaezZjeP3R8uHFaCnmt8gD3ih+xFulJO6vpp1Swl08jrOjS2skdIiU5fH7
-         5jiEX2Zh6oslzHGOXFS7AU1zR2EMAeO/UTiQ+l9hZbk108KqZSmEj+3OFn+200qvdKkf
-         aQ1Kw1Pzp8VbDwOJtvRxbxTzLx0hXliIdz6gt2MvsfoEV+M6WI7bJxXGjw88C/jCZQcH
-         LZNA==
-X-Gm-Message-State: ACrzQf3qlX9p/ySL3yScsGkv2IYRKPAJ1QLEHi9HkEwKpZvxwNK0n6o5
-        w203ogXZuxRX877gtm7MvNtSKkP5cDq75Bzdcdlo++r69eY=
-X-Google-Smtp-Source: AMsMyM4gVGrEmWFLMnMMldsV0FjyqGtDZKHHoLhezKAMdGOnHaIInFDeNevoM2F2Z2wjD8/sUPiZWdheLTAI8/bHJpk=
-X-Received: by 2002:a17:907:7dab:b0:782:fe13:6102 with SMTP id
- oz43-20020a1709077dab00b00782fe136102mr6296796ejc.617.1665197892671; Fri, 07
- Oct 2022 19:58:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220930082405.1761-1-zhang.lyra@gmail.com> <20220930082405.1761-3-zhang.lyra@gmail.com>
- <727a540d-0ca9-ade3-894d-f1774d10a681@linaro.org>
-In-Reply-To: <727a540d-0ca9-ade3-894d-f1774d10a681@linaro.org>
-From:   Chunyan Zhang <zhang.lyra@gmail.com>
-Date:   Sat, 8 Oct 2022 10:57:35 +0800
-Message-ID: <CAAfSe-u4y84kjjksv-Y7=zyosV=34M-=_wrDQC9884znvx9V4Q@mail.gmail.com>
-Subject: Re: [PATCH V2 2/3] dt-bindings: gpio: Convert Unisoc EIC controller
- binding to yaml
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Fri, 7 Oct 2022 23:00:07 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B9933AB03;
+        Fri,  7 Oct 2022 20:00:03 -0700 (PDT)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxTWus50BjQyEoAA--.19966S2;
+        Sat, 08 Oct 2022 10:59:56 +0800 (CST)
+Subject: Re: [PATCH v1 1/2] clocksource: loongson2_hpet: add hpet driver
+ support
+To:     WANG Xuerui <kernel@xen0n.name>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yun Liu <liuyun@loongson.cn>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        loongarch@lists.linux.dev, zhuyinbo@loongson.cn
+References: <20220930093510.10781-1-zhuyinbo@loongson.cn>
+ <bc62d053-1e26-d7b7-3611-f0c9237d86f3@xen0n.name>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <1b1f167f-a9be-fc1c-ffe7-0fb1bdf7c429@loongson.cn>
+Date:   Sat, 8 Oct 2022 10:59:56 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <bc62d053-1e26-d7b7-3611-f0c9237d86f3@xen0n.name>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxTWus50BjQyEoAA--.19966S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1fJw4xXrW7GFWfAw15XFb_yoW8tFy3pF
+        4xG3Z8KrWDXr4fZwsxXryDCF98Cw1xJw15G3W7t3WkArykJF1jqr4jqa4Yg3W7Xr4rJ342
+        vFZYqr1UuFyDAF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9K14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl42xK82IYc2Ij64vIr4
+        1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK
+        67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI
+        8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAv
+        wI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
+        v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Sept 2022 at 19:09, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 30/09/2022 10:24, Chunyan Zhang wrote:
-> > From: Chunyan Zhang <chunyan.zhang@unisoc.com>
-> >
-> > Convert the Unisoc EIC controller binding to DT schema format.
-> > Update the maxItems of 'reg' property, since the current gpio-eic-sprd
-> > driver supports 3 reg items. Also remove three redundant examples.
-> >
-> > Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
-> > ---
-> >  .../bindings/gpio/gpio-eic-sprd.txt           |  97 --------------
-> >  .../bindings/gpio/sprd,gpio-eic.yaml          | 119 ++++++++++++++++++
-> >  2 files changed, 119 insertions(+), 97 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-eic-sprd.txt
-> >  create mode 100644 Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml
 
-[snip]
 
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +
-> > +    soc {
-> > +        #address-cells = <2>;
-> > +        #size-cells = <2>;
-> > +
-> > +        eic_debounce: gpio@40210000 {
-> > +            compatible = "sprd,sc9860-eic-debounce";
-> > +            reg = <0 0x40210000 0 0x80>;
-> > +            gpio-controller;
-> > +            #gpio-cells = <2>;
-> > +            interrupt-controller;
-> > +            #interrupt-cells = <2>;
-> > +            interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
-> > +        };
-> > +    };
-> > +
-> > +    sc2730_pmic {
->
-> If you insisted to keep it, at least should be correct, so just pmic.
->
-> > +        #address-cells = <1>;
-> > +        #size-cells = <0>;
-> > +
-> > +        pmic_eic: gpio@300 {
->
-> It's exactly the same example as above - all same properties. Drop it or
-> bring some differences.
+在 2022/9/30 下午10:43, WANG Xuerui 写道:
+> Hi,
+> 
+> On 9/30/22 17:35, Yinbo Zhu wrote:
+>> HPET (High Precision Event Timer) defines a new set of timers, which
+>> are used by the operating system to schedule threads, interrupt the
+>> kernel and interrupt the multimedia timer server. The operating
+>> system can assign different timers to different applications. By
+>> configuration, each timer can generate interrupt independently.
+>>
+>> The loongson2 HPET module includes a main count and three comparators
+>> , all of which are 32 bits wide. Among the three comparators, only
+>> one comparator supports periodic interrupt, all three comparators
+>> support non periodic interrupts.
+>>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> ---
+>>   MAINTAINERS                          |   6 +
+>>   arch/loongarch/kernel/time.c         |   3 +
+>>   drivers/clocksource/Kconfig          |   9 +
+>>   drivers/clocksource/Makefile         |   1 +
+>>   drivers/clocksource/loongson2_hpet.c | 332 +++++++++++++++++++++++++++
+>>   5 files changed, 351 insertions(+)
+>>   create mode 100644 drivers/clocksource/loongson2_hpet.c
+> 
+> Thanks for the contribution, but as HPET is a fairly common peripheral 
+> that have well standardized behavior, why not simply add DT support to 
+> the drivers/char/hpet.c and be done with it?
+At present, the drivers/char/hpet.c doesn't support DT(dts parse) and
+loongson2 soc wasn't belong to X86 or IA64 architecture, Although it is
+an option to add DT support for this driver, I consider that the hpet
+design of loongson2 series socs may not be universal. In addition, I
+notice that mips and x86 have their own hpet drivers. In order to reduce
+the impact on the public driver and make more flexible modifications to
+the loongson2 hpet driver under its own architecture, a separate
+loongson2 hpet driver was submitted.
 
-The differences are on #address-cells and #size-cells.
+config HPET
+         bool "HPET - High Precision Event Timer" if (X86 || IA64)
+         default n
+         depends on ACPI
+         help
+           If you say Y here, you will have a miscdevice named 
+"/dev/hpet/".  Each
+           open selects one of the timers supported by the HPET.  The 
+timers are
+           non-periodic and/or periodic.
 
-Thanks for the review,
-Chunyan
+
+BRs
+Yinbo Zhu.
+
+> 
+
