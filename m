@@ -2,113 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850555F83E7
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 09:02:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6D15F83E8
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 09:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiJHHCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 03:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58684 "EHLO
+        id S229663AbiJHHDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 03:03:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJHHCN (ORCPT
+        with ESMTP id S229452AbiJHHD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 03:02:13 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE421A87AD
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 00:02:11 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id r18so6370165pgr.12
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 00:02:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=b9N5RbcXNeHRQoNQNCKxlzUZ9H+RkGCubTDWVE1lNM8=;
-        b=K6xslpaQm12IfNE9utx1q9cy5IMiP9iK/yybo0lEVo6aeCAghlYhYnYeepo3Ra/Nc8
-         Ut05uHV/8T3k+mWTswCtJtBOS5SXV/CVmSpccrJEVdHPganNHibOtBs03zdCH6QOdNUc
-         yzzdVA4KzcbQroZu9/a6ZrGPRgqc+UUo/HMK83g1kjYDdu7QJONtu//EyckiCMDuKimI
-         P1LvoWPHNqzQ+ov8pYjR3QCRt5ilB6u1oT0R/+bQUE2oSqkSnsyR35IA+y7cw2KJvK+E
-         Yb2EsjLvXB08pph9MnMYCvl7CjhNpnt5bnQ7feWmaypfGCYjh8RF2Pq7+bx/e0bO2ly9
-         BTFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b9N5RbcXNeHRQoNQNCKxlzUZ9H+RkGCubTDWVE1lNM8=;
-        b=eM+T1A+tCbhNigmwrkbx8Gy7AT+KoSg5Ia4R3WfKwO/uYr4FzgBaXSsTl+swGc5nUv
-         VpxIIcQsEoyceA3BCILhjJA6ofasvdK3vHsJw+Scj5PEi74ripsV0zrJ5gzRfBDltFOf
-         PBcg8eAwP0OcQygaDK7Okab2TUwm4GdvvI7RoUueF6nkPgi8gtvU4DWSfAVyCpSSIROE
-         u0UDeIW2YKwIBkGIHJ4vfqhFfEYjiFlZ3NFqz91khM82skoTRsATep1h32qEWnSWrz4D
-         x2qEN/awtbwmogZYdJlfVVD3wqiGxAR8u7I4EI3VGg0yCHPL3kG0P90YNyd6T9sYGuZc
-         KMVw==
-X-Gm-Message-State: ACrzQf1GluQsRlGblEldF49Hv89LtdQWytzTvt8b4vLASwEinwpNMECQ
-        W60dL1Fi+0H93RqoL1JYhKc=
-X-Google-Smtp-Source: AMsMyM7J+etiNelbRnm852vp9JCNZ1MD2yn70pGzDcgK6o+ADrXnsfe1G/Hi+DN8AxFrJLsEr9UBpg==
-X-Received: by 2002:a63:2155:0:b0:455:7b5b:c2d7 with SMTP id s21-20020a632155000000b004557b5bc2d7mr7708186pgm.309.1665212531485;
-        Sat, 08 Oct 2022 00:02:11 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id x9-20020a170902a38900b0017f9db0236asm2618726pla.82.2022.10.08.00.02.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Oct 2022 00:02:10 -0700 (PDT)
-From:   xu.xin.sc@gmail.com
-X-Google-Original-From: xu.xin16@zte.com.cn
-To:     akpm@linux-foundation.org
-Cc:     ran.xiaokai@zte.com.cn, yang.yang29@zte.com.cn,
-        jiang.xuexin@zte.com.cn, imbrenda@linux.ibm.com, david@redhat.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        xu xin <xu.xin16@zte.com.cn>
-Subject: [PATCH 0/5] ksm: support tracking KSM-placed zero-pages
-Date:   Sat,  8 Oct 2022 07:01:56 +0000
-Message-Id: <20221008070156.308465-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Sat, 8 Oct 2022 03:03:28 -0400
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5599A7A98
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 00:03:26 -0700 (PDT)
+Received: from [192.168.1.101] (95.49.30.201.neoplus.adsl.tpnet.pl [95.49.30.201])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 6AE3D3F265;
+        Sat,  8 Oct 2022 09:03:24 +0200 (CEST)
+Message-ID: <06a1b6fa-d179-97c7-995e-91d93123a5de@somainline.org>
+Date:   Sat, 8 Oct 2022 09:03:23 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v4 2/2] irqchip/apple-aic: Add support for A7-A11 SoCs
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, asahi@lists.linux.dev,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221007200022.22844-1-konrad.dybcio@somainline.org>
+ <20221007200022.22844-3-konrad.dybcio@somainline.org>
+ <37c075fc9aa9624d65b8fdda3cb5ae96@kernel.org>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <37c075fc9aa9624d65b8fdda3cb5ae96@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
-
-Before enabling use_zero_pages by setting /sys/kernel/mm/ksm/
-use_zero_pages to 1, pages_sharing of KSM is basically accurate. But
-when enabling use_zero_pages, all empty pages that are merged with
-kernel zero page are not counted in pages_sharing or pages_shared.
-That is because these empty pages are merged with zero-pages then no
-longer managed by KSM, which leads to two issues at least:
-
-1) MADV_UNMERGEABLE and other ways to trigger unsharing will *not*
-   unshare the shared zeropage as placed by KSM (which is against the 
-   MADV_UNMERGEABLE documentation at least); see the link:
-   https://lore.kernel.org/lkml/4a3daba6-18f9-d252-697c-197f65578c44@redhat.com/
-
-2) we cannot know how many pages are zero pages placed by KSM when
-   enabling use_zero_pages, which leads to KSM not being transparent
-   with all actual merged pages by KSM.
-
-With the patch series, we can unshare zero-pages(KSM-placed) accurately
-and count ksm zero pages.
 
 
-*** BLURB HERE ***
+On 8.10.2022 01:17, Marc Zyngier wrote:
+> On 2022-10-07 21:00, Konrad Dybcio wrote:
+>> Add support for A7-A11 SoCs by if-ing out some features only present
+>> on A11 & newer (implementation-defined IPI & UNCORE registers).
+>>
+>> Also, annotate IPI regs support in the aic struct so that the driver
+>> can tell whether the SoC supports these, as they are written to,
+>> even if fast IPI is disabled. This in turn causes a crash on older
+>> platforms, as the implemention-defined registers either do
+>> something else or are not supposed to be touched - definitely not a
+>> NOP though.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>> ---
+>> Changes since v3:
+>> - Replace use_fast_ipi with has_uncore_ipi_regs in aic_init_cpu
+>> (logic error, this was written to regardless of FIPI usage before,
+>> but touching Sn_... regs on SoCs that don't explicitly use them for
+>> IPIs makes them sepuku..)
+>> - Drop A11 compatible
+>>
+>>  drivers/irqchip/irq-apple-aic.c | 47 ++++++++++++++++++++++-----------
+>>  1 file changed, 32 insertions(+), 15 deletions(-)
+> 
+> Since you cannot be bothered to read the review comments on
+> the previous versions of this series, I'll do the same with
+> these patches. Feel free to stop Cc-ing me.
+> 
+>         M.
+I'm sorry, I'm working on a lot of stuff right now and I was almost sure
+your email only concerned adding a cover letter and affirming the discussion
+on the fallback compatible, so I did not go through it again - but that was
+obviously incorrect. If you don't mind, I can respin another version of this
+patchset, addressing your comments.
 
-xu xin (5):
-  ksm: abstract the function try_to_get_old_rmap_item
-  ksm: support unsharing zero pages placed by KSM
-  ksm: count all zero pages placed by KSM
-  ksm: count zero pages for each process
-  ksm: add zero_pages_sharing documentation
-
- Documentation/admin-guide/mm/ksm.rst |  10 +-
- fs/proc/base.c                       |   1 +
- include/linux/mm_types.h             |   7 +-
- mm/ksm.c                             | 177 +++++++++++++++++++++------
- 4 files changed, 157 insertions(+), 38 deletions(-)
-
--- 
-2.25.1
-
+Konrad
