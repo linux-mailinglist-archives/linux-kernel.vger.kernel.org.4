@@ -2,71 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C85EE5F8615
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 18:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FAC5F8616
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 18:47:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbiJHQpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 12:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
+        id S230044AbiJHQqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 12:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbiJHQpg (ORCPT
+        with ESMTP id S229879AbiJHQqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 12:45:36 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07D731DDB
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 09:45:35 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id l5so8782735oif.7
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 09:45:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ODoHg5S3SuWdWoJ04bn/rz8Q86Z7eQzXH4hoNj/6ZPg=;
-        b=FVRUmZJ/JriUCZtTJOtMIMUHW51yML8vYpd3bRYsft2feuDeVyGOs8qBEUfdy3PSMZ
-         /O+Fg0rQEcvU2DETmQIbPvzWQIxoit1mX6XJQqQ8coDBp9UqQauqMq8LggrzHs9OmXJS
-         Wx68eO3avN3h0ddfR8njxb23yXD4PcEIrfM3w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ODoHg5S3SuWdWoJ04bn/rz8Q86Z7eQzXH4hoNj/6ZPg=;
-        b=qNBOHjyZ0ROZhVL22flHVJc/OWxJXWSkM35dNuX4f6npfttDd5fj3RIKjIqwAsVVpg
-         nZxfJpEVNQEmFZMDAScxE+ojEzi5x7+86e1pPerrfoquWGkgqiJtnevy4VMioXmumgbh
-         aaNuMKtBGX22JCNsuFdMKmdy6XnKlPP/Bq6eiGWYODsc618Ol/Bzt0VFtWWQP/T/qM7f
-         Mbsbvs3mopDK3V7srBj/t8thLOZQC6Sc8gdz5G0wJWyzjrfXOX2n5OGR/94QHcnsJk3f
-         rP2pwCEUWePL4Jxo7XPBL+1/pcBnIU7rXWIYrpuUpt0CfG+nmesCCyuaS/bQJmd2dB4v
-         Punw==
-X-Gm-Message-State: ACrzQf3fA+Z+YzAZWzR/pC2wZYahGdbNnXXoNULC9UQnB+qYzybHYYEC
-        2WWsTIQkrmMxFv/fMCJ9hsq5PjpUJUiq7Q==
-X-Google-Smtp-Source: AMsMyM4FUBDf7T4mjpXOEN9cUC+HqEuGiMB90z/NZ7aPR7zIP0tIpGvuYBx+7703kgxVBtUc1Shdag==
-X-Received: by 2002:a05:6808:1708:b0:351:728b:3a03 with SMTP id bc8-20020a056808170800b00351728b3a03mr5296924oib.275.1665247533926;
-        Sat, 08 Oct 2022 09:45:33 -0700 (PDT)
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com. [209.85.160.49])
-        by smtp.gmail.com with ESMTPSA id u19-20020a056870441300b0010d7242b623sm2865223oah.21.2022.10.08.09.45.32
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Oct 2022 09:45:33 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1324e7a1284so8593769fac.10
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 09:45:32 -0700 (PDT)
-X-Received: by 2002:a05:6870:c0c9:b0:127:c4df:5b50 with SMTP id
- e9-20020a056870c0c900b00127c4df5b50mr5350757oad.126.1665247532694; Sat, 08
- Oct 2022 09:45:32 -0700 (PDT)
+        Sat, 8 Oct 2022 12:46:02 -0400
+Received: from mxout4.routing.net (mxout4.routing.net [IPv6:2a03:2900:1:a::9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C369FD2
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 09:45:59 -0700 (PDT)
+Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
+        by mxout4.routing.net (Postfix) with ESMTP id CDE6E1008F7;
+        Sat,  8 Oct 2022 16:45:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1665247557;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ukf4dE615x0DESNVVTZIQKgBm7oCRLwwO/K4NDp2D4U=;
+        b=RGW/fnkVu099eEytt5RqUWDS3UiEsoxLt9uwoxVrN+7FkATC4gQCslUR3Hyiwhv+FNxbSc
+        0H9+ektC1+w/udzgxvx9wZJlGN4HOe1SG1ml5kjdU132rGAaf1evJ4Th8sgibOJL4aT1Wx
+        UfQBUZvuro6h4BYmiN6jTCsYsIS9U0I=
+Received: from frank-G5.. (fttx-pool-217.61.149.60.bambit.de [217.61.149.60])
+        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 1421710042C;
+        Sat,  8 Oct 2022 16:45:57 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-mediatek@lists.infradead.org
+Cc:     "Mingming.Su" <Mingming.Su@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Olivia Mackall <olivia@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Frank Wunderlich <frank-w@public-files.de>
+Subject: [PATCH] hwrng: mediatek: add mt7986 support
+Date:   Sat,  8 Oct 2022 18:45:53 +0200
+Message-Id: <20221008164553.113260-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <Y0GZwkDwnak2ReTt@zx2c4.com> <20221008154700.404837-1-Jason@zx2c4.com>
-In-Reply-To: <20221008154700.404837-1-Jason@zx2c4.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 8 Oct 2022 09:45:16 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiqN9EJ6zKXh21EQ2CV-B7_oDJKy73+yhRwtbNMWCzfVA@mail.gmail.com>
-Message-ID: <CAHk-=wiqN9EJ6zKXh21EQ2CV-B7_oDJKy73+yhRwtbNMWCzfVA@mail.gmail.com>
-Subject: Re: [PATCH] Revert "mfd: syscon: Remove repetition of the regmap_get_val_endian()"
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     arnd@arndb.de, lee@kernel.org, linux-kernel@vger.kernel.org,
-        andriy.shevchenko@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: 955c1372-43fb-49a3-a48a-2ecb07b1de5f
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,35 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 8, 2022 at 8:47 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> This reverts commit 72a95859728a7866522e6633818bebc1c2519b17. It broke
-> reboots on big-endian MIPS and MIPS64 malta QEMU instances, which use
-> the syscon driver. Little-endian is not effected, which means likely
-> it's important to handle regmap_get_val_endian() in this function after
-> all.
+From: "Mingming.Su" <Mingming.Su@mediatek.com>
 
-Hmm. The revert may indeed be the right thing to do, but we're still
-early in the release process, so let's go through the channels.
+1. Add trng compatible name for MT7986
+2. Fix mtk_rng_wait_ready() function
 
-I do note that commit 72a95859728a points to commit 0dbdb76c0ca8
-("regmap: mmio: Parse endianness definitions from DT") as the reason
-why it's not necessary any more, but that commit
+Signed-off-by: Mingming.Su <Mingming.Su@mediatek.com>
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+---
+ drivers/char/hw_random/mtk-rng.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
- (a) doesn't seem to set config->val_format_endian (which somebody may
-care about). It does set the operation pointers etc, but doesn't set
-that field.
+diff --git a/drivers/char/hw_random/mtk-rng.c b/drivers/char/hw_random/mtk-rng.c
+index 6c00ea008555..aa993753ab12 100644
+--- a/drivers/char/hw_random/mtk-rng.c
++++ b/drivers/char/hw_random/mtk-rng.c
+@@ -22,7 +22,7 @@
+ #define RNG_AUTOSUSPEND_TIMEOUT		100
+ 
+ #define USEC_POLL			2
+-#define TIMEOUT_POLL			20
++#define TIMEOUT_POLL			60
+ 
+ #define RNG_CTRL			0x00
+ #define RNG_EN				BIT(0)
+@@ -77,7 +77,7 @@ static bool mtk_rng_wait_ready(struct hwrng *rng, bool wait)
+ 		readl_poll_timeout_atomic(priv->base + RNG_CTRL, ready,
+ 					  ready & RNG_READY, USEC_POLL,
+ 					  TIMEOUT_POLL);
+-	return !!ready;
++	return !!(ready & RNG_READY);
+ }
+ 
+ static int mtk_rng_read(struct hwrng *rng, void *buf, size_t max, bool wait)
+@@ -179,6 +179,7 @@ static const struct dev_pm_ops mtk_rng_pm_ops = {
+ #endif	/* CONFIG_PM */
+ 
+ static const struct of_device_id mtk_rng_match[] = {
++	{ .compatible = "mediatek,mt7986-rng" },
+ 	{ .compatible = "mediatek,mt7623-rng" },
+ 	{},
+ };
+-- 
+2.34.1
 
- (b) it uses regmap_get_val_endian(), which doesn't actually even look
-at the OF properties unless config->val_format_endian is
-REGMAP_ENDIAN_DEFAULT
-
-so the code that commit 72a95859728a removed was actually quite a bit
-different from the code in commit 0dbdb76c0ca8.
-
-Maybe the problem is related to those semantic differences, and is
-easy to fix for somebody who knows what the heck that stuff is doing.
-
-And if not, please just send me the revert through the normal channels. Ok?
-
-                    Linus
