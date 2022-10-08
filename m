@@ -2,96 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D705F8492
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 11:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2040B5F8496
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 11:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbiJHJPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 05:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34090 "EHLO
+        id S229826AbiJHJ12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 05:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiJHJPv (ORCPT
+        with ESMTP id S229819AbiJHJ10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 05:15:51 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16F450526;
-        Sat,  8 Oct 2022 02:15:50 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id n7so6515810plp.1;
-        Sat, 08 Oct 2022 02:15:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9QRuG6Uw2j9y9wt/YE1ELKRrBpnYSjy91D1kGeKSbxU=;
-        b=f5IbGaEPqIwsAKicABoTcOEUuIvps29DIK//+bLUMriHWBywhTPTf/VbjmoQoaIRu4
-         NA9wcATwghB0LNLb3cKBZbiwAVnna2RygvLJltHB8kePO1wvfQaGtF8J1TTFQLFXYYsh
-         8F4LA7M+FvH/9IZg8LH4LwZCuGl01jDFymHnCGNbcJmcOf97YGTY4NxAB/arphlzF0q9
-         n9mSW4M6tVTArTu4OX/7+Haw+8r8UjXevapZHFmBNst5Bxc4hcm+shyZc4q/uWcarClX
-         BaDT8l5GzhgpszwwHRI/cUlqRrw2T0G41EKcomrhOAzbDtjYa1KTTIW9Fvxocxbtye/1
-         JnlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9QRuG6Uw2j9y9wt/YE1ELKRrBpnYSjy91D1kGeKSbxU=;
-        b=eagIBEl+tT4t0x6box1I8s3fvw5vLg3vHwA+KFGjHOMnVL1+l+YiknP8ygWMjrEB0Z
-         8wmHWxcwa7+JNyFA/S6HVxqrNTHJenDpZe3l+PMNcgE9hK8IYbAq51Cww5WtBuWGhVw0
-         xagix4UuMmzptMqf4xU0RJQ2ibXuYd4CJ2oGha+H++ckTKan5+Qp/66LT6xlYMZfdPZo
-         Qg52hnVwppc3mVfqKEKTecuQQM2Fk+1lqpEWYXmEh1GDlqeqnTSN1OLF9a0hg+mR0G4W
-         jDKey5IbhaXVWMSb5hTAZjgnRrC6W40j02W64JVxNM1DWx3lDdb2A7Zei37mZgfHPyZD
-         oriA==
-X-Gm-Message-State: ACrzQf2Q0uPilWtXSDDxu5Koe6qNhRgsLBJC33CiZv9MlpjQkxoxw8lM
-        XqgrVpnhoIA3xXO/GJ//pO4=
-X-Google-Smtp-Source: AMsMyM7MbfLVOeXiYxHvfjvUhra8RY5xKrdFerhFcjQ4v/272v1aPmB0K8sx8bT/n+prkUJozaYTkw==
-X-Received: by 2002:a17:902:d2cf:b0:17f:7b65:862f with SMTP id n15-20020a170902d2cf00b0017f7b65862fmr8672542plc.168.1665220550427;
-        Sat, 08 Oct 2022 02:15:50 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id a11-20020a170902900b00b00179c99eb815sm2883600plp.33.2022.10.08.02.15.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Oct 2022 02:15:49 -0700 (PDT)
-From:   yexingchen116@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     martin.petersen@oracle.com
-Cc:     brking@us.ibm.com, jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>
-Subject: [PATCH linux-next] scsi: ipr: replace !strcmp with sysfs_streq
-Date:   Sat,  8 Oct 2022 09:15:43 +0000
-Message-Id: <20221008091543.309401-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Sat, 8 Oct 2022 05:27:26 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EDC52E4D
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 02:27:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1665221240; bh=4RXWvHOEFN+CAwbA4Tw1ZvFjHe9LQrVJ2duQJHKG17k=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=q3mjswVrpBCbTNjcTk3Yd3hwbrYITzgEg53yTepRDEBTKw4FRC/Z9auWZC0lkwlAN
+         2mU0wwLGUHrU6cRBBKXT9vOAynSizu62c9XRn0R3SHhngWk6B29Yh7Q7YXtdLQOOW5
+         mPlghUjUCe6Rei+jwxYxD4HmC+Pij0gJbj+9/03E=
+Received: from [100.100.35.204] (unknown [58.34.185.106])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 9BA07600CE;
+        Sat,  8 Oct 2022 17:27:20 +0800 (CST)
+Message-ID: <922e6d73-78e5-8852-788b-017d0dbe4df5@xen0n.name>
+Date:   Sat, 8 Oct 2022 17:27:20 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:107.0)
+ Gecko/20100101 Thunderbird/107.0a1
+Subject: Re: [PATCH] LoongArch: Do not create sysfs control file for io master
+ CPUs
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <1665219579-2501-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Language: en-US
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <1665219579-2501-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On 2022/10/8 16:59, Tiezhu Yang wrote:
+> Now io master CPUs are not hotpluggable on LoongArch, in the current code,
+> only /sys/devices/system/cpu/cpu0/online is not created, let us set the
+> hotpluggable field of all the io master CPUs as 0, then prevent to create
+> sysfs control file for the other io master CPUs which confuses some user
+> space tools. This is similar with commit 9cce844abf07 ("MIPS: CPU#0 is not
+> hotpluggable").
+> 
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>   arch/loongarch/kernel/smp.c      |  8 --------
+>   arch/loongarch/kernel/topology.c | 12 +++++++++++-
+>   2 files changed, 11 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+> index b5fab30..ef89292 100644
+> --- a/arch/loongarch/kernel/smp.c
+> +++ b/arch/loongarch/kernel/smp.c
+> @@ -240,19 +240,11 @@ void loongson3_smp_finish(void)
+>   
+>   #ifdef CONFIG_HOTPLUG_CPU
+>   
+> -static bool io_master(int cpu)
+> -{
+> -	return test_bit(cpu, &loongson_sysconf.cores_io_master);
+> -}
+> -
+>   int loongson3_cpu_disable(void)
+>   {
+>   	unsigned long flags;
+>   	unsigned int cpu = smp_processor_id();
+>   
+> -	if (io_master(cpu))
+> -		return -EBUSY;
+> -
 
-Replace the open-code with sysfs_streq().
+Could this get invoked from somewhere other than the sysfs entries that 
+"confuse user-space tools", e.g. from somewhere else in kernel land? If 
+so (or if we can't rule out the possibility) keeping the guard here 
+might prove more prudent.
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/scsi/ipr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>   #ifdef CONFIG_NUMA
+>   	numa_remove_cpu(cpu);
+>   #endif
+> diff --git a/arch/loongarch/kernel/topology.c b/arch/loongarch/kernel/topology.c
+> index ab1a75c..7e7a77f 100644
+> --- a/arch/loongarch/kernel/topology.c
+> +++ b/arch/loongarch/kernel/topology.c
+> @@ -5,6 +5,7 @@
+>   #include <linux/node.h>
+>   #include <linux/nodemask.h>
+>   #include <linux/percpu.h>
+> +#include <asm/bootinfo.h>
+>   
+>   static DEFINE_PER_CPU(struct cpu, cpu_devices);
+>   
+> @@ -33,6 +34,11 @@ void arch_unregister_cpu(int cpu)
+>   EXPORT_SYMBOL(arch_unregister_cpu);
+>   #endif
+>   
+> +static bool io_master(int cpu)
+> +{
+> +	return test_bit(cpu, &loongson_sysconf.cores_io_master);
+> +}
+> +
+>   static int __init topology_init(void)
+>   {
+>   	int i, ret;
+> @@ -40,7 +46,11 @@ static int __init topology_init(void)
+>   	for_each_present_cpu(i) {
+>   		struct cpu *c = &per_cpu(cpu_devices, i);
+>   
+> -		c->hotpluggable = !!i;
+> +		if (io_master(i))
+> +			c->hotpluggable = 0;
+> +		else
+> +			c->hotpluggable = 1;
+> +
 
-diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
-index 9d01a3e3c26a..f892ff74d56a 100644
---- a/drivers/scsi/ipr.c
-+++ b/drivers/scsi/ipr.c
-@@ -3685,7 +3685,7 @@ static ssize_t ipr_store_adapter_state(struct device *dev,
- 
- 	spin_lock_irqsave(ioa_cfg->host->host_lock, lock_flags);
- 	if (ioa_cfg->hrrq[IPR_INIT_HRRQ].ioa_is_dead &&
--	    !strncmp(buf, "online", 6)) {
-+	    sysfs_streq(buf, "online")) {
- 		for (i = 0; i < ioa_cfg->hrrq_num; i++) {
- 			spin_lock(&ioa_cfg->hrrq[i]._lock);
- 			ioa_cfg->hrrq[i].ioa_is_dead = 0;
+This is just "c->hotpluggable = !io_master(i);".
+
+>   		ret = register_cpu(c, i);
+>   		if (ret < 0)
+>   			pr_warn("topology_init: register_cpu %d failed (%d)\n", i, ret);
+Other changes should be okay as they are in line with the previous MIPS 
+change you referenced, but let's see what Huacai thinks.
+
 -- 
-2.25.1
+WANG "xen0n" Xuerui
+
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
