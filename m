@@ -2,102 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 968E65F8517
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 13:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA5E5F851C
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 13:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbiJHLtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 07:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
+        id S229672AbiJHLt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 07:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiJHLtH (ORCPT
+        with ESMTP id S229379AbiJHLty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 07:49:07 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC744F69D
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 04:49:06 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id x13so1792012qkg.11
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 04:49:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ei9aPoTjAFXtz7ySkdPtJBjwdA7Np2ZW0Z506IUrl/Y=;
-        b=NM//rUNuBpWNdqTDE1r/6bln9Ou3lkFmb31SRWJO8E6gmn2amnmQonFybF7IQJebat
-         3v2vFnewU527o0CR1al2r0fRdXsoiJdC8z9nyLwv6CyqTkxVFb9xrCZJr5ZeKhybqPWZ
-         GaWhWfjVbkGuV9aHJuCc7qXwvkoSFYM1EyM8ze7T3bQEN+CtBAYS20dyhuI4EQ3G5Bfx
-         3iy1xXwkO642+c2FPc8CZDgp+Wegb/LoraSigXYOXRLOUInlwKepkgCtrAmaF+VAbwuT
-         KHUAFTp+xYO3424TmdzS5vhwYB+M4t56U8x2CCDVGqJkHexQQKVPw2l83FqKSpTqdDhK
-         ZuJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ei9aPoTjAFXtz7ySkdPtJBjwdA7Np2ZW0Z506IUrl/Y=;
-        b=1u+axwPASI9ApWCao4Q7VkKXyYgF6A7W3hDRfUGEyMPHkEL7J2iXSNk/UwZ2WjHnFj
-         uSqVgHMv0wooIdtQzBoUW4TGrJM3yuY1biCJE17wUC7Oa/hJzY4rrPbIfWZ4a692C3Xb
-         tByTCpRHaRIZ/CtK7ZHQUie2A9qiASUeqtkakc83FnEBmkre28vhR4+hJYuSUdUB5vQN
-         LKUNRzIwo26PhE6f0dW6NFOJ8JFRipNe/cPINDOZmcxu6pc1f3k84HjCXYZlrR7opxkE
-         cK1LQzroxncQnUWzctB2bO/I3TIGkofo1jj/0piAny9M5yFnxV6u/azTtpD1wnEab7Dg
-         dhOQ==
-X-Gm-Message-State: ACrzQf30v2oRQknbIM4UvQ1KUwuvItJZ6U4ZmLPVgvc+fvOxkIfsLhRZ
-        Z5v2SuJjqRcM6bdRQsVAa/Vka1TVcQ==
-X-Google-Smtp-Source: AMsMyM7aJ+sdGXP5JBDH2sX+xn98tk34jx4U8BCngNe+k17V8QX2GnRHhdXRoW4aeN9glGYKcUwl5A==
-X-Received: by 2002:a05:620a:1272:b0:6cd:f04f:f114 with SMTP id b18-20020a05620a127200b006cdf04ff114mr6780664qkl.581.1665229745476;
-        Sat, 08 Oct 2022 04:49:05 -0700 (PDT)
-Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
-        by smtp.gmail.com with ESMTPSA id bv12-20020a05622a0a0c00b00393c2067ca6sm4217905qtb.16.2022.10.08.04.49.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Oct 2022 04:49:04 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:8d1e:92ef:1fae:f206])
-        by serve.minyard.net (Postfix) with ESMTPSA id 93ED1180015;
-        Sat,  8 Oct 2022 11:49:03 +0000 (UTC)
-Date:   Sat, 8 Oct 2022 06:49:02 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Yuchen Zhang <zhangyuchen.lcr@bytedance.com>
-Cc:     openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, qi.zheng@linux.dev
-Subject: Re: [PATCH 1/3] ipmi: fix msg stack when IPMI is disconnected
-Message-ID: <Y0FjriRusk0H4Fxp@minyard.net>
-Reply-To: minyard@acm.org
-References: <20221007092617.87597-1-zhangyuchen.lcr@bytedance.com>
- <20221007092617.87597-2-zhangyuchen.lcr@bytedance.com>
- <Y0CBbRqGPDU3g9hQ@minyard.net>
- <28367829-10e1-1a74-5572-ba01b8f8b716@bytedance.com>
+        Sat, 8 Oct 2022 07:49:54 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A87193FD;
+        Sat,  8 Oct 2022 04:49:53 -0700 (PDT)
+Received: from localhost.localdomain (unknown [46.242.14.200])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 002464077AE4;
+        Sat,  8 Oct 2022 11:49:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 002464077AE4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1665229790;
+        bh=eGhQBNtLRT/iMFU1ypAtNfUplajfF0B7mQZ1FqvKb6I=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=OmsIvw93BGjxV+uEf5ZUFZFc5MwdQyTTCo+AYcHXk2UF/PRppEVBUidOkzG2sqKPy
+         gWT/IJbrkjOSfe4NGHUF/VNU5W93l1zjr+UmfvevwkdKICcfvlEYDVMrHUI8GQSlcA
+         W6AkJ8cEXeqT94el3yHCbNHMaEBgUW5T+HP21fME=
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Kalle Valo <kvalo@kernel.org>
+Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org
+Subject: [PATCH v2] ath9k: hif_usb: Fix use-after-free in ath9k_hif_usb_reg_in_cb()
+Date:   Sat,  8 Oct 2022 14:49:17 +0300
+Message-Id: <20221008114917.21404-1-pchelkin@ispras.ru>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <87ilkvcys7.fsf@toke.dk>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <28367829-10e1-1a74-5572-ba01b8f8b716@bytedance.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 08, 2022 at 09:36:16AM +0800, Yuchen Zhang wrote:
-> > Also, the following is in start_kcs_transaction():
-> > 
-> > 	if ((kcs->state != KCS_IDLE) && (kcs->state != KCS_HOSED)) {
-> > 		dev_warn(kcs->io->dev, "KCS in invalid state %d\n", kcs->state);
-> > 		return IPMI_NOT_IN_MY_STATE_ERR;
-> > 	}
-> > 
-> > You probably need to remove the (kcs->state != KCS_HOSED) part of this
-> > now.  Would you agree?
-> > 
-> > -corey
-> > 
-> I agree. KCS_HOSED state should be an invalid state.
+It is possible that skb is freed in ath9k_htc_rx_msg(), then
+usb_submit_urb() fails and we try to free skb again. It causes
+use-after-free bug. Moreover, if alloc_skb() fails, urb->context becomes
+NULL but rx_buf is not freed and there can be a memory leak.
 
-Can you make this change, run a quick test, and re-submit this one
-patch?  With that, I can include this.
+The patch removes unnecessary nskb and makes skb processing more clear: it
+is supposed that ath9k_htc_rx_msg() either frees old skb or passes its
+managing to another callback function.
 
-Thanks,
+Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
 
--corey
+Fixes: 3deff76095c4 ("ath9k_htc: Increase URB count for REG_IN pipe")
+Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+---
+v1->v2: add comment about freeing an skb and remove double blank line
+
+ drivers/net/wireless/ath/ath9k/hif_usb.c | 28 +++++++++++++-----------
+ 1 file changed, 15 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/net/wireless/ath/ath9k/hif_usb.c b/drivers/net/wireless/ath/ath9k/hif_usb.c
+index 4d9002a9d082..401b408cb7a4 100644
+--- a/drivers/net/wireless/ath/ath9k/hif_usb.c
++++ b/drivers/net/wireless/ath/ath9k/hif_usb.c
+@@ -708,14 +708,13 @@ static void ath9k_hif_usb_reg_in_cb(struct urb *urb)
+ 	struct rx_buf *rx_buf = (struct rx_buf *)urb->context;
+ 	struct hif_device_usb *hif_dev = rx_buf->hif_dev;
+ 	struct sk_buff *skb = rx_buf->skb;
+-	struct sk_buff *nskb;
+ 	int ret;
+ 
+ 	if (!skb)
+ 		return;
+ 
+ 	if (!hif_dev)
+-		goto free;
++		goto free_skb;
+ 
+ 	switch (urb->status) {
+ 	case 0:
+@@ -724,7 +723,7 @@ static void ath9k_hif_usb_reg_in_cb(struct urb *urb)
+ 	case -ECONNRESET:
+ 	case -ENODEV:
+ 	case -ESHUTDOWN:
+-		goto free;
++		goto free_skb;
+ 	default:
+ 		skb_reset_tail_pointer(skb);
+ 		skb_trim(skb, 0);
+@@ -735,25 +734,27 @@ static void ath9k_hif_usb_reg_in_cb(struct urb *urb)
+ 	if (likely(urb->actual_length != 0)) {
+ 		skb_put(skb, urb->actual_length);
+ 
+-		/* Process the command first */
++		/*
++		 * Process the command first.
++		 * skb is either freed here or passed to be
++		 * managed to another callback function.
++		 */
+ 		ath9k_htc_rx_msg(hif_dev->htc_handle, skb,
+ 				 skb->len, USB_REG_IN_PIPE);
+ 
+-
+-		nskb = alloc_skb(MAX_REG_IN_BUF_SIZE, GFP_ATOMIC);
+-		if (!nskb) {
++		skb = alloc_skb(MAX_REG_IN_BUF_SIZE, GFP_ATOMIC);
++		if (!skb) {
+ 			dev_err(&hif_dev->udev->dev,
+ 				"ath9k_htc: REG_IN memory allocation failure\n");
+-			urb->context = NULL;
+-			return;
++			goto free_rx_buf;
+ 		}
+ 
+-		rx_buf->skb = nskb;
++		rx_buf->skb = skb;
+ 
+ 		usb_fill_int_urb(urb, hif_dev->udev,
+ 				 usb_rcvintpipe(hif_dev->udev,
+ 						 USB_REG_IN_PIPE),
+-				 nskb->data, MAX_REG_IN_BUF_SIZE,
++				 skb->data, MAX_REG_IN_BUF_SIZE,
+ 				 ath9k_hif_usb_reg_in_cb, rx_buf, 1);
+ 	}
+ 
+@@ -762,12 +763,13 @@ static void ath9k_hif_usb_reg_in_cb(struct urb *urb)
+ 	ret = usb_submit_urb(urb, GFP_ATOMIC);
+ 	if (ret) {
+ 		usb_unanchor_urb(urb);
+-		goto free;
++		goto free_skb;
+ 	}
+ 
+ 	return;
+-free:
++free_skb:
+ 	kfree_skb(skb);
++free_rx_buf:
+ 	kfree(rx_buf);
+ 	urb->context = NULL;
+ }
+-- 
+2.25.1
+
