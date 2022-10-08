@@ -2,116 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBA95F8546
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 14:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A5C5F854B
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 15:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbiJHM5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 08:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
+        id S229597AbiJHNAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 09:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiJHM5m (ORCPT
+        with ESMTP id S229605AbiJHNAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 08:57:42 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809E24F383;
-        Sat,  8 Oct 2022 05:57:41 -0700 (PDT)
+        Sat, 8 Oct 2022 09:00:01 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5368620193;
+        Sat,  8 Oct 2022 05:59:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1665233855;
-        bh=s+2+2kycVD9oyxcdU/CavIImGGRGVwDZHztfoj8Vdes=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=S+P6QkFtEtGR/I6BUlypr84qpccLaw6XNLi91ooKExguq1dKpjAnIL811mH1iafSn
-         IR4Z958MhMmrMYFkj6f0/bfQtRntyfAjRPTrYLXMe4q3uDGnm5DTOZO1L4HL23IU7y
-         DnMXFRZ67va38yYViA3v6y4etal2BW2wBcfgp2wU=
+        s=badeba3b8450; t=1665233991;
+        bh=wzkOTYnJQKJYkJPxnzoMHSSdhcxZrVekKaBn/Bl517U=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=jfO4Bz9BadsN2h/gVBAIYdevJ6yX7eIooph61TA5UAEvfaNlMiGmB4NIYcL16Yemk
+         x1Jn03lTvopT1nCsUJlxMhRAA/wdmVORhAwJ7DmBEfC19CwnEjV8oOpXQbMW5VBLzW
+         r98QGcOEFgzDNy6TD7st3ZEbag6WZx91yiILfV3I=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.144.139]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MNKm0-1oWccP05He-00OquB; Sat, 08
- Oct 2022 14:57:35 +0200
-Message-ID: <061577e4-418a-62f5-0d96-f66c9e53ae27@gmx.de>
-Date:   Sat, 8 Oct 2022 14:57:34 +0200
+Received: from probook ([78.35.76.13]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MoO6M-1pVqL10f8a-00ojil; Sat, 08
+ Oct 2022 14:59:51 +0200
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] i2c: npcm7xx: Group bank 0/1 registers together for readability
+Date:   Sat,  8 Oct 2022 14:59:23 +0200
+Message-Id: <20221008125924.1220203-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] video: fbdev: mb862xx: Replace NO_IRQ by 0
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <58bf3cab7a6a7797f109ea40490cf5520c4b565d.1665034339.git.christophe.leroy@csgroup.eu>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <58bf3cab7a6a7797f109ea40490cf5520c4b565d.1665034339.git.christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:FH56TXrZlbSdrpLmwtbkT9cBWXgZNBLcTpb5BJh9gv7c5tUsMtZ
- hbV9GzMN1OW5oK2Wc77JFgdv9GXYH/BrxrbrJB01JE9CLQjIg4jj3FI9LWNR8VOn1jEJajd
- KSwU4O4u1MsHM+6bv1+qxDF9M86gDSL9gs3BuduL0f3ff/0qqkxBR486zIalt2EPwuUDxBg
- 9Gz+Bomaa1SYf9SpjV0MA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:z61PNc56Pmw=:Gy7kftq1Dg2MKWyWB3g8dq
- dP2Qma40SOmW7R4G9LylhiOFRPWUQ+51m6cELbZY6iZ81Uk2I3QASQGJDr0yzlj/9Xt/4oFgv
- Of46S5jdskSV3ooZKpotxH+PreKYbxbjw72wtV7K1jb7N6x6fwGGq8B0HLwme7O9DwNOZ0TmU
- je0CK9aYEtuVSulmM0Xlo+lQh+AUp25qnXhsjApecjZNlxAi7ssMSo60ZYkacQPcSFs9pbap9
- OoYwMRnLkkDvbkceArK/XT9fBXtOztOuKtJWEvj7PFF5Fp/mVDvT8PT0T13B004tWKO9PF9pZ
- Fke5DgqcKOeuyPg7Skhm4veSQK7VT2gczGIGFr7ISCk2bt0GXc3IJYA/Ai6irTwUUT36jELcc
- GI6OzDDxAHoWgabPgWolBjRcSanlfISdakWToHiQtjQbXaOO1UQBqReRnX/X+4uf1yEzX1c/q
- rKxNf1G7ZTM5MotIh7nt4V4DViQYjtbGCK1rCJJqskm2+s2RqAXOmGg8Tiinj+eEzKeUoaxRf
- ER+ZKhoVjRg9iQluGxW2ArZbdv1fetawXhuD9A9cG+lGlNXnYhngBN8C+VpUx9xsY7UYvNRTv
- GfQobjP4mVcAs6TPn5CZFAAJ1C61VMNtL7cpLMfOz6FWLLSdogl36wA9H4DbhtBxO0Rzn+zSR
- +js4Bhu57byQHdbSCT0bwhULt/uD4ugGCbqXf6y+PbaQUA01F2/qI17mdR8kW7ytm0MbLoEgu
- MJ35VLUZuPhkK9CAjcMVmBviTblt47lpARbpY9l6d9DbcdF0ws5wT4TjaxgqYksljBHkcYfqH
- xFhcaCpJfPJIJiFAg6juYKABNFLNs8Xeot3vSwC7FmCJLh/XtpxL8Jz2/ZIySeT74k7cHizs5
- kB17uqKc+C1QFX87mgJ+rh22VNCJ1gY5ZyD3DtYEUR3YEle/yh5AlmA6FZeMToh3I91Lp79Br
- bdjP12XK4Tqe3qR7LmrbVmZvs2u6/by9hsoO576MWDJwEP60zz2HfMs88zYubn1T1+Fx+FzAd
- vEDX/WemziWuPGsyP9IrHp0hTk+9YN7m3jVT2h0UhekpNkrhRZoYNdv3dzbmuPjVZOZj7j/Hv
- VZ2UUXS0EHbECsgPgkqT3fiAy96eCEfK4IEzFUJbggFRbfCfjQggSmPzcMgmZWcEHTXIatK4p
- GTqJePg0PxkJdEcRHKXDfzShvWNPEifUXzbxuj/vkYSedZ/IUiRQFFQb9XZsxyrvKo4GUSVsr
- /dRRSkzOxATs0jt7cMNfUrP5wZkDnRFz+ksa3hZtfwhTsjZOjsXJkXNWJZDalXshX0/+ZGkph
- 5IbrY0CLr3x25mxJfP4vPPbswjp6iguOBXF4WyFYyB0TJGHVKtf7BRUgmDBZyG3Zgxy4xZmZ+
- twOLBLVSGgQS0YwhVcozWRyprAgoEV6fZnN4iGQRz6viBBli7/t43q4z2jt+5IFLqx8w6gC9P
- yYxJGolit1ksaj2bhwGOGRUUoLXBpTqgHDVzGEOsNLkSjG0EpXNuYTNabkTtcrxBNVpWGQ0jP
- 4DToTQhK36J12rm7N/jSrdT55+feVvK7F2lL/3BVkkpYS
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:vLFtaXSUpnsPqk8nKHwmrlqL/rgkq/uCsXKdEwerEcLTrnaAezt
+ QaPocI9atXsckbUe1sgysEnMY0VSdrGd+NeMe0OSOZ0x0lZi9BMLozPbX0uQXwLohCg4+7O
+ sh2oY6fXBamsjeGn2VUX9pODlG0oKE/9MbiuKeCjTh3oYMcwupZ9rQcNrVZjtRIlaxizon/
+ 5Lp5h1HIJ5Ron8U6Av+YA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Qpyn37DlYkk=:7mKvHz2SWowFMhZgWrWs1o
+ wthtQf/+ql3h9F+stipNW6AXa07KjIpomD3pEu6KpPXTPacmwB6A01s+ultXDcQHoYi9YRMS4
+ ONzx8B5T7oeqXfsxzbIiP4S6vNCBdqm7jHsDhEaH+IVa+dbHztzl55kuVhgLn6ruO+SkrBci/
+ 6yVY3AqRLQYM+ovmf1+dknsmpi7N+SlAJLQo11n5uTzluSU47Wd5BC2vgubM3UWEUtUA4EtkD
+ 9Y4xeDotYeZZBiQ/0apDHIFasio9DCoAnvWpPY5ajFYl8zzM7WhB675LCNE0IDL4gyrGkX3Fl
+ OIIoH/0CrYN7q8Bsm4MuY5KKsJ6hDatJiw8jyq1vdR4EwdwhSw8gzGuluJ9lLfpDLpTHed1et
+ r8rhlRWKkivEqcLfaB5J6l4dJjn4idmSbFvaDBxMOlDrsw7h3oGnLd8I2LCcUevYp/HJIunav
+ aYV0NKFJqovnJOPWozE7/kKSJ2ag5xVkf58+0cWTaNEjKpumrE1ZdVkmeyaxaVuwYzQev8anG
+ 9mQKRznuGeyrMYVqEqgXN4nBIhoi4IcPr3UNCgYibTGWfjPiQwOJuurclCc3jWLwlOtsfbFgD
+ cA41xsjmms/a4QxxatQE7bFrZugYNPq+whQkPcn2Z0AmknJSvmkR4cm+nI/9NGr+uWtjqEF22
+ YFcEGL11Anm4pSnWCr/QfbMnJR4EOpkRt6d+yNAqvMp5r9aeA66nUdxrqS4nMeWB41LiQaH3a
+ oD6ZUZQJe34aRjp1K8qs1OXDJq1EHGy1ZRSVODfd0JDQJvP+tDZxdBwWiOkUI1u7x9vw//Ode
+ z/7ZyNDdnTIMBQKSYWr19zu4NJNSQ8Po/9IuRXCjK3UR52HSlRkaNAno0nEYLqoqgVrLjq0b6
+ xh49ugXk3Q/XGf+oIzz9Q1FKGXExXs5nOxTCQOUvuJuCRFK9vGVhMdW7COiBxlFVO2BW1NOJL
+ K4dObjlCkt75anGzjsmb1U6RCFoc7NpU+E3v27yJKVvO4oZjp4Wn2882XKNxl/XD41C6TU+ez
+ eilhHt4gx1Z+vQM9+sGHn5PEQg9EO0lAXrt/dyzROR0aPlFPZIefUbuWrkdhLolnQYvwDvLxw
+ OdQZWahevg2evAoPLv5f54HeTKqm+QVdru+tIEwJDWu26xvtV4C9b6jOHe801/65i15/CBvsT
+ qHpd/zhgOdozlKRfhbQr7ROYJq4Tz4ZLwu/1dC+vgAX+L9JMsfE5INxegQfmqHTOsGMH4d5aQ
+ pElUn7gbBt07M+C40VhInln754bgriEfX/HksKyF8kT4wWN184pYSxNdHzOGQLEvEzFpPzcPN
+ PYbfUE7W+O3Gdrd0LExPcv4EB5WkVGFBCGnB6mE6Ge0hKbMwSS2xOI0sZg0SW6t5uiymvEq9R
+ 0Y1OQHCVEAOBqbW6hhpzciOTOL4NUVLVehSn/HDYNVmlxs5VwHQzdypbjb+Mm4lxjPiplPSSf
+ J/yA1K0sbhfxsuTlxc0rVQ0y/IQ3HgXE5/N6pwgc0Nv/ftUsHC5HwvddbG6OJQXjAAlW6Gjw2
+ fsASkysiyLNjGV3Wl/AtlToGhY6mIhUM80FRa+I8GPSzZ
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/6/22 07:33, Christophe Leroy wrote:
-> NO_IRQ is used to check the return of irq_of_parse_and_map().
->
-> On some architecture NO_IRQ is 0, on other architectures it is -1.
->
-> irq_of_parse_and_map() returns 0 on error, independent of NO_IRQ.
->
-> So use 0 instead of using NO_IRQ.
->
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+The unlabelled registers NPCM_I2CCTL4 to NPCM_I2CSCLHT overlap with the
+bank 1 registers below, and they are accessed after selecting bank 0, so
+they clearly belong to bank 0.
 
-applied.
-Thanks!
+Move them together with the other bank 0 registers, and move the
+unrelated definition of npcm_i2caddr down to keep the banked registers
+in one piece.
 
-Helge
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ drivers/i2c/busses/i2c-npcm7xx.c | 31 +++++++++++++++----------------
+ 1 file changed, 15 insertions(+), 16 deletions(-)
 
+diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npc=
+m7xx.c
+index 0c365b57d9572..9a7a2d0bf5765 100644
+=2D-- a/drivers/i2c/busses/i2c-npcm7xx.c
++++ b/drivers/i2c/busses/i2c-npcm7xx.c
+@@ -106,7 +106,7 @@ enum i2c_addr {
+ #define NPCM_I2CCST3			0x19
+ #define I2C_VER				0x1F
 
-> ---
->   drivers/video/fbdev/mb862xx/mb862xxfbdrv.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/video/fbdev/mb862xx/mb862xxfbdrv.c b/drivers/video/=
-fbdev/mb862xx/mb862xxfbdrv.c
-> index a7508f5be343..3f605d2d8f0c 100644
-> --- a/drivers/video/fbdev/mb862xx/mb862xxfbdrv.c
-> +++ b/drivers/video/fbdev/mb862xx/mb862xxfbdrv.c
-> @@ -692,7 +692,7 @@ static int of_platform_mb862xx_probe(struct platform=
-_device *ofdev)
->   	par->dev =3D dev;
->
->   	par->irq =3D irq_of_parse_and_map(np, 0);
-> -	if (par->irq =3D=3D NO_IRQ) {
-> +	if (!par->irq) {
->   		dev_err(dev, "failed to map irq\n");
->   		ret =3D -ENODEV;
->   		goto fbrel;
+-/*BANK0 regs*/
++/* BANK 0 regs */
+ #define NPCM_I2CADDR3			0x10
+ #define NPCM_I2CADDR7			0x11
+ #define NPCM_I2CADDR4			0x12
+@@ -115,6 +115,20 @@ enum i2c_addr {
+ #define NPCM_I2CADDR9			0x15
+ #define NPCM_I2CADDR6			0x16
+ #define NPCM_I2CADDR10			0x17
++#define NPCM_I2CCTL4			0x1A
++#define NPCM_I2CCTL5			0x1B
++#define NPCM_I2CSCLLT			0x1C /* SCL Low Time */
++#define NPCM_I2CFIF_CTL			0x1D /* FIFO Control */
++#define NPCM_I2CSCLHT			0x1E /* SCL High Time */
++
++/* BANK 1 regs */
++#define NPCM_I2CFIF_CTS			0x10 /* Both FIFOs Control and Status */
++#define NPCM_I2CTXF_CTL			0x12 /* Tx-FIFO Control */
++#define NPCM_I2CT_OUT			0x14 /* Bus T.O. */
++#define NPCM_I2CPEC			0x16 /* PEC Data */
++#define NPCM_I2CTXF_STS			0x1A /* Tx-FIFO Status */
++#define NPCM_I2CRXF_STS			0x1C /* Rx-FIFO Status */
++#define NPCM_I2CRXF_CTL			0x1E /* Rx-FIFO Control */
+
+ #if IS_ENABLED(CONFIG_I2C_SLAVE)
+ /*
+@@ -131,21 +145,6 @@ static const int npcm_i2caddr[I2C_NUM_OWN_ADDR] =3D {
+ };
+ #endif
+
+-#define NPCM_I2CCTL4			0x1A
+-#define NPCM_I2CCTL5			0x1B
+-#define NPCM_I2CSCLLT			0x1C /* SCL Low Time */
+-#define NPCM_I2CFIF_CTL			0x1D /* FIFO Control */
+-#define NPCM_I2CSCLHT			0x1E /* SCL High Time */
+-
+-/* BANK 1 regs */
+-#define NPCM_I2CFIF_CTS			0x10 /* Both FIFOs Control and Status */
+-#define NPCM_I2CTXF_CTL			0x12 /* Tx-FIFO Control */
+-#define NPCM_I2CT_OUT			0x14 /* Bus T.O. */
+-#define NPCM_I2CPEC			0x16 /* PEC Data */
+-#define NPCM_I2CTXF_STS			0x1A /* Tx-FIFO Status */
+-#define NPCM_I2CRXF_STS			0x1C /* Rx-FIFO Status */
+-#define NPCM_I2CRXF_CTL			0x1E /* Rx-FIFO Control */
+-
+ /* NPCM_I2CST reg fields */
+ #define NPCM_I2CST_XMIT			BIT(0)
+ #define NPCM_I2CST_MASTER		BIT(1)
+=2D-
+2.35.1
 
