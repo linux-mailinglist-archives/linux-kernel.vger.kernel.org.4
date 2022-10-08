@@ -2,104 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0675F85FC
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 18:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE225F85FF
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 18:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbiJHQEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 12:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
+        id S229768AbiJHQHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 12:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJHQEE (ORCPT
+        with ESMTP id S229459AbiJHQHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 12:04:04 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A056B4B9B8;
-        Sat,  8 Oct 2022 09:04:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=zaZ/mPgscZeTQBmEdnlzf830pxwenjFv4EmShpxkNCM=; b=CNLJk1cfHuQZRS/GsXZHrioG9h
-        IvJkfnKvVjzRd4gTdXicEMqn6Ge0QY3MmDv2vVtEXGgo9UZMznHySO91rUlJUodKNJRSJdeplpnK7
-        itqyR2AsSJF65034vXt7rB/yLZo/yh9lwaL32fBX2aUAYuzDNqIrGiKWkuX+lN33kE1zmBRZ19qXx
-        tXKfbPZMPJaNvocHD6Ri3m0thkOkn6MaCqL2jiMNBgE9kH3wlYtW4l4Cb2C+UrnaieENoncts+7QS
-        FQpiw+Yltx+kAJpzdS5h5k91x4QYyCxWA8ljgT6Tc6bEawErEY1iQrwF/gN4lCyfDhvqKP/oL1MJM
-        BJflD2Jw==;
-Received: from 201-43-120-40.dsl.telesp.net.br ([201.43.120.40] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1ohCIt-00Ee7g-G9; Sat, 08 Oct 2022 18:03:55 +0200
-Message-ID: <dbe57a5e-7486-649f-7093-6da6312a71ee@igalia.com>
-Date:   Sat, 8 Oct 2022 13:03:38 -0300
+        Sat, 8 Oct 2022 12:07:20 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84673DF13;
+        Sat,  8 Oct 2022 09:07:18 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id p5so8798521ljc.13;
+        Sat, 08 Oct 2022 09:07:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=v0N63sBfYbQ4IqLEp4sJ/2Jp1eqaNK7T4OvQMkYPXA0=;
+        b=D0qoTCGGEtoBmAVhE7GQxh2SReMtsZ3I+DW6q9fUsKC+Enr941Zzu84fPxfPixeHSN
+         cCM/iAnEPfTGQQ22tMQbTjJuOfgbIeXKCztbJ5rJORnps4DilxKcXB0zQ0bZogy9bSqo
+         bGY+EVWeU1hWhIO5XzRklt7mji/CwTUB8F5HI/MUxmdHHZalVIew8sdSMio4pdhrdz9s
+         LnisJUARt4xBBzrX3R/H0EljM59MLRIo9ctfjQAa6WPszW64ln3jHG6VGiZJE1uA1+tV
+         UMiwZ2N/6HHUxAgDJ+vpR8FfGwikQEpSfFeih5FkpOrOrn0iXOHkzeP6rVuwyHurPc2X
+         NJvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v0N63sBfYbQ4IqLEp4sJ/2Jp1eqaNK7T4OvQMkYPXA0=;
+        b=PyKEV++xwoq+BoFZcifF2Ip6trcu1lEcHU/j7A9rIT/AhLefmh70fs1Ez4IPG0eNo/
+         VNp+g2G3EamXtiHGJzCFSTvBGccK/u0vZmCeZ+BUPMri6S5/hlCwNJkI/xVRCK47MHqf
+         xMxrzrAwp1E3Wx36/lgfjSaXktXgN4fI2IOrUmdAoSBX3rejdBjju3aMew5DiucuoeTs
+         iSkz+V5d5NyoZZoFPPiPV1eAgG3ZUtCagkryZbRSktoStamnMM0l/LED3QjC4s5g4yj4
+         5qAQHxBSkF/Bzf4WOpLrS+63NkjywhRxWzPOqvVyYK181lssTXI83POVB/OvHSkB6+d5
+         PPnA==
+X-Gm-Message-State: ACrzQf3Wpw853cwbDcfjRfdNQ8SjnIb4DLTplLN7NL8cfBgINwCJxbXP
+        1JqmbFzfjVLgjWOnyf4NM0g=
+X-Google-Smtp-Source: AMsMyM4fjtCZiN+ykmEf4ZZI/RJolYDdqNq3EZzr/SkEqPNrNnfmuZv5kH0JwR5IRxBafZz6boMqAQ==
+X-Received: by 2002:a2e:9181:0:b0:26e:91d8:5796 with SMTP id f1-20020a2e9181000000b0026e91d85796mr158462ljg.398.1665245236284;
+        Sat, 08 Oct 2022 09:07:16 -0700 (PDT)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id u1-20020a2e9f01000000b0026dfd1fb1aesm777910ljk.25.2022.10.08.09.07.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Oct 2022 09:07:15 -0700 (PDT)
+Date:   Sat, 8 Oct 2022 19:07:13 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Peter Rosin <peda@axentia.se>, robh@kernel.org,
+        laurent.pinchart@ideasonboard.com, wsa@kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [v9 4/4] i2c: muxes: pca954x: Add regulator support
+Message-ID: <20221008160713.2io5awbmeakiuou3@mobilestation>
+References: <20221007075354.568752-1-patrick.rudolph@9elements.com>
+ <20221007075354.568752-5-patrick.rudolph@9elements.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 5/8] pstore: Fix long-term implicit conversions in the
- compression routines
-Content-Language: en-US
-To:     Ard Biesheuvel <ardb@kernel.org>, Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, anton@enomsg.org,
-        ccross@android.com, tony.luck@intel.com
-References: <20221006224212.569555-1-gpiccoli@igalia.com>
- <20221006224212.569555-6-gpiccoli@igalia.com>
- <202210061634.758D083D5@keescook>
- <CAMj1kXF27wZYzXm1u3kKSBtbG=tcK7wOwq6YTwpFg+Z7ic4siQ@mail.gmail.com>
- <202210071234.D289C8C@keescook>
- <11e03e8d-7711-330d-e0d4-808ef9acec3a@igalia.com>
- <CAMj1kXHSSSZ59tihHDNDamczxFCRH8NHzT-eKaZ7xNyqVXW1Hw@mail.gmail.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <CAMj1kXHSSSZ59tihHDNDamczxFCRH8NHzT-eKaZ7xNyqVXW1Hw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221007075354.568752-5-patrick.rudolph@9elements.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/10/2022 12:53, Ard Biesheuvel wrote:
-> [...]
-> So one thing I don't understand about these changes is why we need
-> them in the first place.
+On Fri, Oct 07, 2022 at 09:53:53AM +0200, Patrick Rudolph wrote:
+> Add a vdd regulator and enable it for boards that have the
+> mux powered off by default.
 > 
-> The zbufsize routines are all worst case routines, which means each
-> one of those will return a value that exceeds the size parameter.
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Reviewed-by: Peter Rosin <peda@axentia.se>
+> ---
+>  drivers/i2c/muxes/i2c-mux-pca954x.c | 34 ++++++++++++++++++++++++-----
+>  1 file changed, 29 insertions(+), 5 deletions(-)
 > 
-> We only use compression for dmesg, which compresses quite well. If it
-> doesn't compress well, there is probably something wrong with the
-> input data, so preserving it may not be as critical. And if
-> compressing the data makes it bigger, can't we just omit the
-> compression for that particular record?
+> diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
+> index 992976fa6798..857a4ec387be 100644
+> --- a/drivers/i2c/muxes/i2c-mux-pca954x.c
+> +++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
+> @@ -49,6 +49,7 @@
+>  #include <linux/module.h>
+>  #include <linux/pm.h>
+>  #include <linux/property.h>
+> +#include <linux/regulator/consumer.h>
+>  #include <linux/slab.h>
+>  #include <linux/spinlock.h>
+>  #include <dt-bindings/mux/mux.h>
+> @@ -133,6 +134,7 @@ struct pca954x {
+>  	struct irq_domain *irq;
+>  	unsigned int irq_mask;
+>  	raw_spinlock_t lock;
+> +	struct regulator *supply;
+>  };
+>  
+>  /* Provide specs for the MAX735x, PCA954x and PCA984x types we know about */
+> @@ -473,6 +475,9 @@ static void pca954x_cleanup(struct i2c_mux_core *muxc)
+>  	struct pca954x *data = i2c_mux_priv(muxc);
+>  	int c, irq;
+>  
+
+> +	if (!IS_ERR_OR_NULL(data->supply))
+
+First of all AFAICS the data->supply pointer will never be null on the
+pca954x_cleanup() invocations in your current implementation. So
+IS_ERR() would be enough here. Second in the next comment I'll suggest
+to you to implement the optional regulator semantic, which implies
+initializing the data->supply pointer with NULL if the get-regulator
+function returns -ENODEV. That shall look easier than the IS_ERR()
+macro. So checking the data->supply pointer for being not-null would
+be enough here.
+
+> +		regulator_disable(data->supply);
+> +
+>  	if (data->irq) {
+>  		for (c = 0; c < data->chip->nchans; c++) {
+>  			irq = irq_find_mapping(data->irq, c);
+> @@ -531,15 +536,32 @@ static int pca954x_probe(struct i2c_client *client,
+>  			     pca954x_select_chan, pca954x_deselect_mux);
+>  	if (!muxc)
+>  		return -ENOMEM;
+
+> +
+
+unrelated change...
+
+>  	data = i2c_mux_priv(muxc);
+>  
+>  	i2c_set_clientdata(client, muxc);
+>  	data->client = client;
+>  
+
+> +	data->supply = devm_regulator_get(dev, "vdd");
+> +	if (IS_ERR(data->supply)) {
+
+Judging by the DT-bindings the power-supply is supposed to be
+optional. Isn't it?  AFAICS from the _regulator_get() semantic if no
+vdd-supply is specified and a regulator request method with the
+non-optional semantic is called an ugly warning will be printed to the
+system log. Most of the users of the driver don't have the
+power-supply specified for the device. You don't want to have their
+logs polluted with the false warning, do you? If so you should use
+the devm_regulator_get_optional() method here. If it returns the
+-ENODEV error just overwrite the data->supply with NULL. In case of
+any other error halt the device probe procedure.
+
+> +		ret = PTR_ERR(data->supply);
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(dev, "Failed to request regulator: %d\n", ret);
+> +		return ret;
+
+dev_err_probe() ?
+
+-Sergey
+
+> +	}
+> +
+> +	ret = regulator_enable(data->supply);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to enable regulator: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+>  	/* Reset the mux if a reset GPIO is specified. */
+>  	gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
+> -	if (IS_ERR(gpio))
+> -		return PTR_ERR(gpio);
+> +	if (IS_ERR(gpio)) {
+> +		ret = PTR_ERR(gpio);
+> +		goto fail_cleanup;
+> +	}
+>  	if (gpio) {
+>  		udelay(1);
+>  		gpiod_set_value_cansleep(gpio, 0);
+> @@ -556,7 +578,7 @@ static int pca954x_probe(struct i2c_client *client,
+>  
+>  		ret = i2c_get_device_id(client, &id);
+>  		if (ret && ret != -EOPNOTSUPP)
+> -			return ret;
+> +			goto fail_cleanup;
+>  
+>  		if (!ret &&
+>  		    (id.manufacturer_id != data->chip->id.manufacturer_id ||
+> @@ -564,7 +586,8 @@ static int pca954x_probe(struct i2c_client *client,
+>  			dev_warn(dev, "unexpected device id %03x-%03x-%x\n",
+>  				 id.manufacturer_id, id.part_id,
+>  				 id.die_revision);
+> -			return -ENODEV;
+> +			ret = -ENODEV;
+> +			goto fail_cleanup;
+>  		}
+>  	}
+>  
+> @@ -583,7 +606,8 @@ static int pca954x_probe(struct i2c_client *client,
+>  	ret = pca954x_init(client, data);
+>  	if (ret < 0) {
+>  		dev_warn(dev, "probe failed\n");
+> -		return -ENODEV;
+> +		ret = -ENODEV;
+> +		goto fail_cleanup;
+>  	}
+>  
+>  	ret = pca954x_irq_setup(muxc);
+> -- 
+> 2.37.3
 > 
-> In summary, while adding zbufsize to the crypto API seems a reasonable
-> thing to do, I don't see why we'd want to make use of it in pstore -
-> can't we just use the decompressed size as the worst case compressed
-> size for all algorithms, and skip the compression if it doesn't fit?
-> 
-> Or am I missing something here?
-
-In a way (and if I understand you correctly - please let me know if not)
-you are making lot of sense: why not just use the maximum size (which is
-the full decompressed size + header) as the worst case in pstore and
-skip these highly specialized routines that calculate the worst case for
-each algorithm, right?
-
-This is exactly what 842 (sw compress) is doing now. If that's
-interesting and Kees agrees, and if nobody else plans on doing that, I
-could work on it.
-
-Extra question (maybe silly on my side?): is it possible that
-_compressed_ data is bigger than the original one? Isn't there any
-"protection" on the compress APIs for that? In that case, it'd purely
-waste of time / CPU cycles heheh
-
-Cheers,
-
-
-Guilherme
