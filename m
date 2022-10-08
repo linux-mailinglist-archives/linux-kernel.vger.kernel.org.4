@@ -2,102 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5AC35F83FB
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 09:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A17D5F83FD
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 09:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiJHHYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 03:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
+        id S229669AbiJHHZT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 8 Oct 2022 03:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiJHHYv (ORCPT
+        with ESMTP id S229642AbiJHHZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 03:24:51 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444A9E0F2;
-        Sat,  8 Oct 2022 00:24:49 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-345528ceb87so61807297b3.11;
-        Sat, 08 Oct 2022 00:24:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iWyKaMDISXeONSvEckpZKdFY0ruOeKzT3+3B4I6Kdl0=;
-        b=hAntufvWWxh4y9Kq/xnf6e6DkuinIarFJBkCnuMRaRhyfUcUIlhFRG+hKtUd8XlOGj
-         JEzmyfbG5geG6DOcIN3stenWNVbG1ueCi6YsjeyJuFCD2/vzZ50+Axumh6iQzFSlPGpv
-         1Y5GeZozwriCqigZ1xs1kjXM9hEbqhVNbqYDopI8Fzkt5xCvZevSylqQhnR2083SeCPg
-         Ji9dsLbs8lkyd1HewLhH7DgiAxl0++0W39zRpqJxVyfUjcMSDHrmjNdPFzogmPkW9xpZ
-         356Tjt3wvFQwsPqbpI/eMCfxYMu7ApB/TtGDE3D/9hrQ75fz4Jz3fnGAIBMQZMqZXsS/
-         qkUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iWyKaMDISXeONSvEckpZKdFY0ruOeKzT3+3B4I6Kdl0=;
-        b=2Yp5Xqe7wFJE9OhgWDS2VSukvQHpb+VUbGe0LoBXK4XfSGIjV78f7nXgPPzYVn6rTo
-         mGJ+vPcWaA6MjOIAK/4zkBEsXGRRAF1P4BsrWWNUdCvr/TNsJt7yE7qrRhCi5xFPi85v
-         2JlObIxE/Mgial4Jve9sIvxMMP1C+DcsCK5M2tK4W6URgX9Rsiorc7aTfN2zlGoIrTi0
-         +nelZ+fLvSSS+gyJ5ApvOGOtW035LhcwXMSeR9cFGOa5++xwtxW2oxVCufoGo5e+iNfY
-         OgiW9ccpgZRvfs5ZJQhKRpGDbx/gqUBngx3V2UORcIJUIxh2PPbWloG+oX2R8uZsU/Nr
-         +plw==
-X-Gm-Message-State: ACrzQf2qGCBlVW+W2xWs88s4PbZ45SgK9lW8Z6xBbKYWOCGv3LGZFH3U
-        fvWTimGkIjY/maZSLX8XxF1vidV1n6q0/TwpP2I=
-X-Google-Smtp-Source: AMsMyM7pcLcPfOdPXDuXPTm1G/LluYlawMFLzdGgaUJBksW476ZEt5+VZwvwIWiFEdBWyUKsUxCQES8dELrh/av7cDg=
-X-Received: by 2002:a0d:fdc1:0:b0:349:c82b:b142 with SMTP id
- n184-20020a0dfdc1000000b00349c82bb142mr7709579ywf.431.1665213889042; Sat, 08
- Oct 2022 00:24:49 -0700 (PDT)
+        Sat, 8 Oct 2022 03:25:16 -0400
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B930827FEE
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 00:25:12 -0700 (PDT)
+Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay07.hostedemail.com (Postfix) with ESMTP id 05AC3160B3B;
+        Sat,  8 Oct 2022 07:25:10 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf10.hostedemail.com (Postfix) with ESMTPA id D2DD435;
+        Sat,  8 Oct 2022 07:24:38 +0000 (UTC)
+Message-ID: <0d4febb49ddbae9cd99606a89573a7c832ed0965.camel@perches.com>
+Subject: Re: [PATCH v3 1/3] mtd: mtdoops: change printk() to counterpart pr_
+ functions
+From:   Joe Perches <joe@perches.com>
+To:     Ray Zhang <sgzhang@google.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Sat, 08 Oct 2022 00:25:07 -0700
+In-Reply-To: <20221007215027.918507-2-sgzhang@google.com>
+References: <20221007215027.918507-1-sgzhang@google.com>
+         <20221007215027.918507-2-sgzhang@google.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-References: <CANXV_XwgZMCGXijfoUyZ9+KyM6Rgeqiq-sCfubyj_16d-2CN=A@mail.gmail.com>
- <20220815013317.26121-1-dmitrii.bundin.a@gmail.com> <CAKwvOdnnSAozX8bQ9HeSw12BV9OjpzyDmXk_BGczjVVQNN+7tQ@mail.gmail.com>
- <CANXV_Xw2wzwDdJkyV1nHPQm2JTt48SLrNc7YwrfcxOwuFA-z3w@mail.gmail.com>
- <CAKwvOdkiq_byi1QeCvSGb2fd+0AJ1k9WNnsHJMeaaQcPRy1Wxg@mail.gmail.com>
- <CAKwvOdkPwbD-c0V-up2Ufzb-Uh7LLyD12X0FKeBa=hn+cSPA9Q@mail.gmail.com>
- <CANXV_XzdTTYc2w7Ur8zY=ijOofg91yfF7RLhedbVH0rmi3c2yA@mail.gmail.com>
- <CAK7LNATeW+c5+Kxnj9M4N+yNSv+7ot7bLTHzO3Z0Xb_XEW_6Nw@mail.gmail.com> <CAK7LNATqfCxwvYMUtoQZkoTk5yqZ_q+HJgcf934ib3NEG91oiw@mail.gmail.com>
-In-Reply-To: <CAK7LNATqfCxwvYMUtoQZkoTk5yqZ_q+HJgcf934ib3NEG91oiw@mail.gmail.com>
-From:   Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
-Date:   Sat, 8 Oct 2022 10:24:37 +0300
-Message-ID: <CANXV_XzmRiU2AT5r4GO0pNXCPFnZx4PZ3qbN37_rPkp=H1iWcQ@mail.gmail.com>
-Subject: Re: [PATCH v3] kbuild: add debug level and macro defs options
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Isabella Basso <isabbasso@riseup.net>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Fangrui Song <maskray@google.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Stat-Signature: rdikuhra3hm9gs98uoatqnofhgfoncdf
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: D2DD435
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19E8nTRCD3VMc7PJ9/fiVjjdDZbWqk09gY=
+X-HE-Tag: 1665213878-381622
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masahiro,
+On Fri, 2022-10-07 at 21:50 +0000, Ray Zhang wrote:
+> To comply with latest kernel code requirement, change printk() to
+> counterpart pr_ functions in mtdoops driver:
+> - change printk(INFO) to pr_info()
+> - change printk(DEBUG) to pr_debug()
+> - change printk(WARNING) to pr_warn()
+> - change printk(ERR) to pr_err()
+> 
+> Note that only if dynamic debugging is enabled or DEBUG is defined,
+> printk(KERN_DEBUG) and pr_debug() are equivalent; Otherwise pr_debug()
+> is no-op, causing different behavior.
 
-> On top of that, it is easier to add CONFIG_DEBUG_INFO_FULL or whatever.
-As per the prior discussion, Nick has convinced me that configuring an
-additional choice for a full debug info might cause more problems that
-it solves in general.
+Another thing possible is to add
 
->And, -g1 for CONFIG_DEBUG_INFO_REDUCED if you think it is worthwhile.
-This indeed would shrink the image size, but with this option enabled
-there would be no information about local variables which might
-surprise users of the option. So I don't really think it is
-worthwhile.
+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
-Regards,
-Dmitrii.
+before any #include
+
+> diff --git a/drivers/mtd/mtdoops.c b/drivers/mtd/mtdoops.c
+[]
+> @@ -93,9 +93,9 @@ static int mtdoops_erase_block(struct mtdoops_context *cxt, int offset)
+>  
+>  	ret = mtd_erase(mtd, &erase);
+>  	if (ret) {
+> -		printk(KERN_WARNING "mtdoops: erase of region [0x%llx, 0x%llx] on \"%s\" failed\n",
+> -		       (unsigned long long)erase.addr,
+> -		       (unsigned long long)erase.len, mtddev);
+> +		pr_warn("mtdoops: erase of region [0x%llx, 0x%llx] on \"%s\" failed\n",
+> +			(unsigned long long)erase.addr,
+> +			(unsigned long long)erase.len, mtddev);
+
+And remove the "mtdoops: " prefixes from all the output formats
+
+		pr_warn("erase of region [0x%llx, 0x%llx] on \"%s\" failed\n",
+			(unsigned long long)erase.addr,
+			(unsigned long long)erase.len, mtddev);
+
+> @@ -120,8 +120,8 @@ static void mtdoops_inc_counter(struct mtdoops_context *cxt)
+>  		return;
+>  	}
+>  
+> -	printk(KERN_DEBUG "mtdoops: ready %d, %d (no erase)\n",
+> -	       cxt->nextpage, cxt->nextcount);
+> +	pr_debug("mtdoops: ready %d, %d (no erase)\n",
+> +		 cxt->nextpage, cxt->nextcount);
+
+	pr_debug("ready %d, %d (no erase)\n", cxt->nextpage, cxt->nextcount);
+
+etc...
+
