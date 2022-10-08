@@ -2,129 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 440BA5F8478
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 10:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4CD35F847C
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 11:00:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiJHI7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 04:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34470 "EHLO
+        id S229745AbiJHJAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 05:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiJHI7r (ORCPT
+        with ESMTP id S229845AbiJHJAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 04:59:47 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1B2F7671
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 01:59:40 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxPGv7O0FjQlooAA--.21044S2;
-        Sat, 08 Oct 2022 16:59:39 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] LoongArch: Do not create sysfs control file for io master CPUs
-Date:   Sat,  8 Oct 2022 16:59:39 +0800
-Message-Id: <1665219579-2501-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8DxPGv7O0FjQlooAA--.21044S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJr4kGFy5tw4DArWDurWxWFg_yoW8tr4fpr
-        yIkFyUKrWrWF1kJay0q34q9ryYy3srW347Za12kayrCa9rJrn8ZF1ktFn3XF15Jay0gFWF
-        vF95A3yS9F45Jw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkFb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVW8ZwCF04k2
-        0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07bw89_UUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 8 Oct 2022 05:00:39 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F945A8B8;
+        Sat,  8 Oct 2022 02:00:22 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VRcD6Ms_1665219618;
+Received: from 30.221.130.66(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VRcD6Ms_1665219618)
+          by smtp.aliyun-inc.com;
+          Sat, 08 Oct 2022 17:00:19 +0800
+Message-ID: <514c06f7-017d-bca5-6a87-0dae54c0d83d@linux.alibaba.com>
+Date:   Sat, 8 Oct 2022 17:00:18 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.0
+Subject: Re: [RFC PATCH 5/5] cachefiles: add restore command to recover
+ inflight ondemand read requests
+Content-Language: en-US
+To:     Jia Zhu <zhujia.zj@bytedance.com>, dhowells@redhat.com,
+        xiang@kernel.org
+Cc:     linux-cachefs@redhat.com, linux-erofs@lists.ozlabs.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com, Gao Xiang <hsiangkao@linux.alibaba.com>
+References: <20220818135204.49878-1-zhujia.zj@bytedance.com>
+ <20220818135204.49878-6-zhujia.zj@bytedance.com>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <20220818135204.49878-6-zhujia.zj@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-13.5 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now io master CPUs are not hotpluggable on LoongArch, in the current code,
-only /sys/devices/system/cpu/cpu0/online is not created, let us set the
-hotpluggable field of all the io master CPUs as 0, then prevent to create
-sysfs control file for the other io master CPUs which confuses some user
-space tools. This is similar with commit 9cce844abf07 ("MIPS: CPU#0 is not
-hotpluggable").
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/loongarch/kernel/smp.c      |  8 --------
- arch/loongarch/kernel/topology.c | 12 +++++++++++-
- 2 files changed, 11 insertions(+), 9 deletions(-)
 
-diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
-index b5fab30..ef89292 100644
---- a/arch/loongarch/kernel/smp.c
-+++ b/arch/loongarch/kernel/smp.c
-@@ -240,19 +240,11 @@ void loongson3_smp_finish(void)
- 
- #ifdef CONFIG_HOTPLUG_CPU
- 
--static bool io_master(int cpu)
--{
--	return test_bit(cpu, &loongson_sysconf.cores_io_master);
--}
--
- int loongson3_cpu_disable(void)
- {
- 	unsigned long flags;
- 	unsigned int cpu = smp_processor_id();
- 
--	if (io_master(cpu))
--		return -EBUSY;
--
- #ifdef CONFIG_NUMA
- 	numa_remove_cpu(cpu);
- #endif
-diff --git a/arch/loongarch/kernel/topology.c b/arch/loongarch/kernel/topology.c
-index ab1a75c..7e7a77f 100644
---- a/arch/loongarch/kernel/topology.c
-+++ b/arch/loongarch/kernel/topology.c
-@@ -5,6 +5,7 @@
- #include <linux/node.h>
- #include <linux/nodemask.h>
- #include <linux/percpu.h>
-+#include <asm/bootinfo.h>
- 
- static DEFINE_PER_CPU(struct cpu, cpu_devices);
- 
-@@ -33,6 +34,11 @@ void arch_unregister_cpu(int cpu)
- EXPORT_SYMBOL(arch_unregister_cpu);
- #endif
- 
-+static bool io_master(int cpu)
-+{
-+	return test_bit(cpu, &loongson_sysconf.cores_io_master);
-+}
-+
- static int __init topology_init(void)
- {
- 	int i, ret;
-@@ -40,7 +46,11 @@ static int __init topology_init(void)
- 	for_each_present_cpu(i) {
- 		struct cpu *c = &per_cpu(cpu_devices, i);
- 
--		c->hotpluggable = !!i;
-+		if (io_master(i))
-+			c->hotpluggable = 0;
-+		else
-+			c->hotpluggable = 1;
-+
- 		ret = register_cpu(c, i);
- 		if (ret < 0)
- 			pr_warn("topology_init: register_cpu %d failed (%d)\n", i, ret);
+On 8/18/22 9:52 PM, Jia Zhu wrote:
+> Previously, in ondemand read scenario, if the anonymous fd was closed by
+> user daemon, inflight and subsequent read requests would return EIO.
+> As long as the device connection is not released, user daemon can hold
+> and restore inflight requests by setting the request flag to
+> CACHEFILES_REQ_NEW.
+> 
+> Suggested-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
+> Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
+> ---
+>  fs/cachefiles/daemon.c   |  1 +
+>  fs/cachefiles/internal.h |  3 +++
+>  fs/cachefiles/ondemand.c | 23 +++++++++++++++++++++++
+>  3 files changed, 27 insertions(+)
+> 
+> diff --git a/fs/cachefiles/daemon.c b/fs/cachefiles/daemon.c
+> index c74bd1f4ecf5..014369266cb2 100644
+> --- a/fs/cachefiles/daemon.c
+> +++ b/fs/cachefiles/daemon.c
+> @@ -77,6 +77,7 @@ static const struct cachefiles_daemon_cmd cachefiles_daemon_cmds[] = {
+>  	{ "tag",	cachefiles_daemon_tag		},
+>  #ifdef CONFIG_CACHEFILES_ONDEMAND
+>  	{ "copen",	cachefiles_ondemand_copen	},
+> +	{ "restore",	cachefiles_ondemand_restore	},
+>  #endif
+>  	{ "",		NULL				}
+>  };
+> diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
+> index b4af67f1cbd6..d504c61a5f03 100644
+> --- a/fs/cachefiles/internal.h
+> +++ b/fs/cachefiles/internal.h
+> @@ -303,6 +303,9 @@ extern ssize_t cachefiles_ondemand_daemon_read(struct cachefiles_cache *cache,
+>  extern int cachefiles_ondemand_copen(struct cachefiles_cache *cache,
+>  				     char *args);
+>  
+> +extern int cachefiles_ondemand_restore(struct cachefiles_cache *cache,
+> +					char *args);
+> +
+>  extern int cachefiles_ondemand_init_object(struct cachefiles_object *object);
+>  extern void cachefiles_ondemand_clean_object(struct cachefiles_object *object);
+>  
+> diff --git a/fs/cachefiles/ondemand.c b/fs/cachefiles/ondemand.c
+> index 79ffb19380cd..5b1c447da976 100644
+> --- a/fs/cachefiles/ondemand.c
+> +++ b/fs/cachefiles/ondemand.c
+> @@ -178,6 +178,29 @@ int cachefiles_ondemand_copen(struct cachefiles_cache *cache, char *args)
+>  	return ret;
+>  }
+>  
+> +int cachefiles_ondemand_restore(struct cachefiles_cache *cache, char *args)
+> +{
+> +	struct cachefiles_req *req;
+> +
+> +	XA_STATE(xas, &cache->reqs, 0);
+> +
+> +	if (!test_bit(CACHEFILES_ONDEMAND_MODE, &cache->flags))
+> +		return -EOPNOTSUPP;
+> +
+> +	/*
+> +	 * Search the requests which being processed before
+> +	 * the user daemon crashed.
+> +	 * Set the CACHEFILES_REQ_NEW flag and user daemon will reprocess it.
+> +	 */
+
+The comment can be improved as:
+
+	Reset the requests to CACHEFILES_REQ_NEW state, so that the
+        requests have been processed halfway before the crash of the
+        user daemon could be reprocessed after the recovery.
+
+
+> +	xas_lock(&xas);
+> +	xas_for_each(&xas, req, ULONG_MAX)
+> +		xas_set_mark(&xas, CACHEFILES_REQ_NEW);
+> +	xas_unlock(&xas);
+> +
+> +	wake_up_all(&cache->daemon_pollwq);
+> +	return 0;
+> +}
+> +
+>  static int cachefiles_ondemand_get_fd(struct cachefiles_req *req)
+>  {
+>  	struct cachefiles_object *object;
+
 -- 
-2.1.0
-
+Thanks,
+Jingbo
