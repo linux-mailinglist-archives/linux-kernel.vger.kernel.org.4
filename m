@@ -2,104 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A17D5F83FD
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 09:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5D15F8401
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Oct 2022 09:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiJHHZT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 8 Oct 2022 03:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
+        id S229687AbiJHHd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 03:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiJHHZQ (ORCPT
+        with ESMTP id S229379AbiJHHdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 03:25:16 -0400
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B930827FEE
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 00:25:12 -0700 (PDT)
-Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay07.hostedemail.com (Postfix) with ESMTP id 05AC3160B3B;
-        Sat,  8 Oct 2022 07:25:10 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf10.hostedemail.com (Postfix) with ESMTPA id D2DD435;
-        Sat,  8 Oct 2022 07:24:38 +0000 (UTC)
-Message-ID: <0d4febb49ddbae9cd99606a89573a7c832ed0965.camel@perches.com>
-Subject: Re: [PATCH v3 1/3] mtd: mtdoops: change printk() to counterpart pr_
- functions
-From:   Joe Perches <joe@perches.com>
-To:     Ray Zhang <sgzhang@google.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sat, 8 Oct 2022 03:33:25 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F264A67447;
+        Sat,  8 Oct 2022 00:33:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=zZQ88pPgtouR86lBpg+x1aw/csf1v9uxp8peXKk1cb0=;
+  b=j3ST7SGnTYT/Y5wi6lWHZVyoTN6fTohW3n4oD0o9maLZmdhUccDAwXNB
+   CrIK4oBY5dqegOsWJRE3rrwkzrofbuFPsdX2RZ0LPGmouitc76P+QhHmS
+   HaFrH+aHq9cCtdo04t374NKt8+gA8QS7/hDJOozImMV5dxKm1CxmPsJ2W
+   U=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.95,169,1661810400"; 
+   d="scan'208";a="56593050"
+Received: from 51.123.68.85.rev.sfr.net (HELO hadrien) ([85.68.123.51])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2022 09:33:09 +0200
+Date:   Sat, 8 Oct 2022 09:33:08 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Kees Cook <keescook@chromium.org>
+cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        =?ISO-8859-15?Q?Christoph_B=F6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dave Airlie <airlied@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E. J. Bottomley" <jejb@linux.ibm.com>,
+        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        KP Singh <kpsingh@kernel.org>, Marco Elver <elver@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Sat, 08 Oct 2022 00:25:07 -0700
-In-Reply-To: <20221007215027.918507-2-sgzhang@google.com>
-References: <20221007215027.918507-1-sgzhang@google.com>
-         <20221007215027.918507-2-sgzhang@google.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Russell King <linux@armlinux.org.uk>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Graf <tgraf@suug.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
+        kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-parisc@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        loongarch@lists.linux.dev, netdev@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH v4 2/6] treewide: use prandom_u32_max() when possible
+In-Reply-To: <53DD0148-ED15-4294-8496-9E4B4C7AD061@chromium.org>
+Message-ID: <alpine.DEB.2.22.394.2210080925390.2928@hadrien>
+References: <53DD0148-ED15-4294-8496-9E4B4C7AD061@chromium.org>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Stat-Signature: rdikuhra3hm9gs98uoatqnofhgfoncdf
-X-Rspamd-Server: rspamout02
-X-Rspamd-Queue-Id: D2DD435
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19E8nTRCD3VMc7PJ9/fiVjjdDZbWqk09gY=
-X-HE-Tag: 1665213878-381622
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-10-07 at 21:50 +0000, Ray Zhang wrote:
-> To comply with latest kernel code requirement, change printk() to
-> counterpart pr_ functions in mtdoops driver:
-> - change printk(INFO) to pr_info()
-> - change printk(DEBUG) to pr_debug()
-> - change printk(WARNING) to pr_warn()
-> - change printk(ERR) to pr_err()
-> 
-> Note that only if dynamic debugging is enabled or DEBUG is defined,
-> printk(KERN_DEBUG) and pr_debug() are equivalent; Otherwise pr_debug()
-> is no-op, causing different behavior.
+> >> @minus_one@
+> >> expression FULL;
+> >> @@
+> >>
+> >> - (get_random_int() & ((FULL) - 1)
+> >> + prandom_u32_max(FULL)
+> >
+> >Ahh, well, okay, this is the example I mentioned above. Only works if
+> >FULL is saturated. Any clever way to get coccinelle to prove that? Can
+> >it look at the value of constants?
+>
+> I'm not sure if Cocci will do that without a lot of work. The literals trick I used below would need a lot of fanciness. :)
 
-Another thing possible is to add
+If FULL is an arbitrary expression, it would not be easy to automate.  If
+it is a constant then you can use python/ocaml to analyze its value.  But
+if it's a #define constant then you would need a previous rule to match the
+#define and find that value.
 
-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+For LITERAL, I think you could just do constant int LITERAL; for the
+metavariable declaration.
 
-before any #include
-
-> diff --git a/drivers/mtd/mtdoops.c b/drivers/mtd/mtdoops.c
-[]
-> @@ -93,9 +93,9 @@ static int mtdoops_erase_block(struct mtdoops_context *cxt, int offset)
->  
->  	ret = mtd_erase(mtd, &erase);
->  	if (ret) {
-> -		printk(KERN_WARNING "mtdoops: erase of region [0x%llx, 0x%llx] on \"%s\" failed\n",
-> -		       (unsigned long long)erase.addr,
-> -		       (unsigned long long)erase.len, mtddev);
-> +		pr_warn("mtdoops: erase of region [0x%llx, 0x%llx] on \"%s\" failed\n",
-> +			(unsigned long long)erase.addr,
-> +			(unsigned long long)erase.len, mtddev);
-
-And remove the "mtdoops: " prefixes from all the output formats
-
-		pr_warn("erase of region [0x%llx, 0x%llx] on \"%s\" failed\n",
-			(unsigned long long)erase.addr,
-			(unsigned long long)erase.len, mtddev);
-
-> @@ -120,8 +120,8 @@ static void mtdoops_inc_counter(struct mtdoops_context *cxt)
->  		return;
->  	}
->  
-> -	printk(KERN_DEBUG "mtdoops: ready %d, %d (no erase)\n",
-> -	       cxt->nextpage, cxt->nextcount);
-> +	pr_debug("mtdoops: ready %d, %d (no erase)\n",
-> +		 cxt->nextpage, cxt->nextcount);
-
-	pr_debug("ready %d, %d (no erase)\n", cxt->nextpage, cxt->nextcount);
-
-etc...
-
+julia
