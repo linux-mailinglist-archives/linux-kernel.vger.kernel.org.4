@@ -2,83 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373EB5F8B89
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 15:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64EB25F8B85
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 15:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiJINNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 09:13:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48080 "EHLO
+        id S229925AbiJINKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 09:10:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiJINNi (ORCPT
+        with ESMTP id S229886AbiJINKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 09:13:38 -0400
-X-Greylist: delayed 564 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 09 Oct 2022 06:13:36 PDT
-Received: from mail-200163.simplelogin.co (mail-200163.simplelogin.co [176.119.200.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D94C2182C
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 06:13:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lirui.org; s=dkim;
-        t=1665320650;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=l5bv8JJTWrUbMLpWEm/kLrumWiCr7L4/4GhcnsQX1hw=;
-        b=hdbPh73bwnYtjv7Rz1SJZWiHAfhw2zsANgr5874Za3l7K5Jka4nzDdh9Q1fZyr9GjN2Uj4
-        ZeKedi9eFgp9x6s80s9j4xP/AcmtValhYg0M3eDk/CCfkzqtBIi+ZUoryui1i+IELwJ7R3
-        NLV/0CjpNs/Shq/kZnSBOojn/wrx1eg=
-Subject: [PATCH] bpf: Replace strlcpy with strscpy in preload module
-Date:   Sun,  9 Oct 2022 21:03:27 +0800
+        Sun, 9 Oct 2022 09:10:39 -0400
+Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9B1B19024
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 06:10:37 -0700 (PDT)
+Received: by cae.in-ulm.de (Postfix, from userid 1000)
+        id A7DCE14026A; Sun,  9 Oct 2022 15:10:36 +0200 (CEST)
+Date:   Sun, 9 Oct 2022 15:10:36 +0200
+From:   "Christian A. Ehrhardt" <lk@c--e.de>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Tejun Heo <tj@kernel.org>,
+        syzbot <syzbot+534ee3d24c37c411f37f@syzkaller.appspotmail.com>,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        Yosry Ahmed <yosryahmed@google.com>
+Subject: [PATCH] cgroup: Fix crash with CLONE_INTO_CGROUP and v1 cgroups
+Message-ID: <Y0LITEA/22Z7YVSa@cae.in-ulm.de>
+References: <000000000000385cbf05ea3f1862@google.com>
+ <00000000000028a44005ea40352b@google.com>
+ <Y0CbtVwW6+QIYJdQ@slm.duckdns.org>
+ <Y0HBlJ4AoZba93Uf@cae.in-ulm.de>
+ <20221009084039.cw6meqbvy4362lsa@wittgenstein>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-From:   Rui Li <me@lirui.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <166532064978.9.18239510123131509626.67790627@lirui.org>
-X-SimpleLogin-Type: Reply
-X-SimpleLogin-EmailLog-ID: 67790634
-X-SimpleLogin-Want-Signing: yes
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM28,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221009084039.cw6meqbvy4362lsa@wittgenstein>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use strscpy instead of strlcpy as the former one checks the size
-of source. Especially for this case, source strings are less than
-dst size.
 
-Signed-off-by: Rui Li <me@lirui.org>
+Since commit f3a2aebdd6, Version 1 cgroups no longer cause an
+error when used with CLONE_INTO_CGROUP. However, the permission
+checks performed during clone assume a Version 2 cgroup.
+
+Restore the error check for V1 cgroups in the clone() path.
+
+Reported-by: syzbot+534ee3d24c37c411f37f@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/lkml/000000000000385cbf05ea3f1862@google.com/
+Fixes: f3a2aebdd6 ("cgroup: enable cgroup_get_from_file() on cgroup1")
+Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
 ---
- kernel/bpf/preload/bpf_preload_kern.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/cgroup/cgroup.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/kernel/bpf/preload/bpf_preload_kern.c b/kernel/bpf/preload/bpf_preload_kern.c
-index 5106b5372f0c..af8dd3a7c928 100644
---- a/kernel/bpf/preload/bpf_preload_kern.c
-+++ b/kernel/bpf/preload/bpf_preload_kern.c
-@@ -19,9 +19,9 @@ static void free_links_and_skel(void)
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index b6e3110b3ea7..f7fc3afa88c1 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -6244,6 +6244,11 @@ static int cgroup_css_set_fork(struct kernel_clone_args *kargs)
+ 		goto err;
+ 	}
  
- static int preload(struct bpf_preload_info *obj)
- {
--	strlcpy(obj[0].link_name, "maps.debug", sizeof(obj[0].link_name));
-+	strscpy(obj[0].link_name, "maps.debug", sizeof(obj[0].link_name));
- 	obj[0].link = maps_link;
--	strlcpy(obj[1].link_name, "progs.debug", sizeof(obj[1].link_name));
-+	strscpy(obj[1].link_name, "progs.debug", sizeof(obj[1].link_name));
- 	obj[1].link = progs_link;
- 	return 0;
- }
++	if (!cgroup_on_dfl(dst_cgrp)) {
++		ret = -EBADF;
++		goto err;
++	}
++
+ 	if (cgroup_is_dead(dst_cgrp)) {
+ 		ret = -ENODEV;
+ 		goto err;
 -- 
-2.30.2
-
+2.34.1
 
