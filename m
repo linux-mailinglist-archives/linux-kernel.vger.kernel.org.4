@@ -2,58 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C985F8998
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 08:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F64F5F899A
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 08:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiJIGNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 02:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39520 "EHLO
+        id S229895AbiJIGOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 02:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJIGNo (ORCPT
+        with ESMTP id S229808AbiJIGOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 02:13:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2631F9DD
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 23:13:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9BAF9B80C85
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 06:13:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33ED2C433C1
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 06:13:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665296018;
-        bh=nGBC93MowSDU0u0exT1yFjmxGsBuy5ubnjjtDzl6fuk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nZI233A3r7vtIAeIXUXTH9137z0hdLi9haktz0Fz53tvnyVCAl6yx46CL1J6HQPMB
-         zgp5tRaIqt54zd7I4j9w5s6CTe4GrA8FkeV1N/ykGxwJqbt9p5CkN7lpY+9K7ZBsIp
-         xeBVKKgycwnyhW/4Wzjj+5CCu9C01OzuHmlg7Qm9QvYTOO1/buD6XFuf/1XkrLBUEn
-         G3HffqJV1/zNdLfscSv9QleLvRClCdOtGzD5QWq6dn2H3DJHpc+vzv0TUrOXuxWg9u
-         ZprxRVdywjg7lKJJMc0Cfe7YjcKlw+vUniOfquDolv0mJ/9VPtYwqkFQno48eOGHR2
-         mt06kYy5r98Ow==
-Received: by mail-ej1-f50.google.com with SMTP id nb11so19044422ejc.5
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 23:13:38 -0700 (PDT)
-X-Gm-Message-State: ACrzQf32rh1L2WhCLUFmkeL+3/E/vtjSuR6PMG1GtGx6AAE831TOS5i+
-        zFtTJHkaAa68pE61J9umLvj09E9N76MsU6ZSG3M=
-X-Google-Smtp-Source: AMsMyM5iMHmI9aJwCtbDagcj/2qipPBnbSG54Nql5jQ4/PxJt67addHuxJ/LnJfSb9cBaO5eE8M9qjmjb2FXrtL/v7A=
-X-Received: by 2002:a17:906:fe45:b0:788:15a5:7495 with SMTP id
- wz5-20020a170906fe4500b0078815a57495mr10163814ejb.633.1665296016240; Sat, 08
- Oct 2022 23:13:36 -0700 (PDT)
+        Sun, 9 Oct 2022 02:14:14 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4613E2FC2D;
+        Sat,  8 Oct 2022 23:14:12 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MlWsR6RgGzKDcs;
+        Sun,  9 Oct 2022 14:11:55 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgBnJ4etZkJjBhoCCA--.24524S3;
+        Sun, 09 Oct 2022 14:14:07 +0800 (CST)
+Subject: Re: [LKP] Re: [blk] 8c5035dfbb: fio.read_iops -10.6% regression
+To:     Yin Fengwei <fengwei.yin@intel.com>,
+        Yu Kuai <yukuai1@huaweicloud.com>,
+        kernel test robot <yujie.liu@intel.com>
+Cc:     lkp@lists.01.org, lkp@intel.com, Jens Axboe <axboe@kernel.dk>,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <202210081045.77ddf59b-yujie.liu@intel.com>
+ <d5279fc2-38b3-6d20-4404-604d5c7277e2@huaweicloud.com>
+ <de2cc259-727a-3707-6738-1c5ab41075a2@intel.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <e6d191e7-eda6-2511-1764-221b6f868cc8@huaweicloud.com>
+Date:   Sun, 9 Oct 2022 14:14:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20221004140230.748788-1-wangrui@loongson.cn>
-In-Reply-To: <20221004140230.748788-1-wangrui@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sun, 9 Oct 2022 14:13:27 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6e9ZyC8TkpWK3Etgz4-kEEEU4Hj=i5obMFk=URgCwrgw@mail.gmail.com>
-Message-ID: <CAAhV-H6e9ZyC8TkpWK3Etgz4-kEEEU4Hj=i5obMFk=URgCwrgw@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: mm: Refactor TLB handlers
-To:     Rui Wang <wangrui@loongson.cn>
-Cc:     loongarch@lists.linux.dev, WANG Xuerui <kernel@xen0n.name>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <de2cc259-727a-3707-6738-1c5ab41075a2@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBnJ4etZkJjBhoCCA--.24524S3
+X-Coremail-Antispam: 1UD129KBjvJXoWfGw15WrW5ZryUJFy7ZrWfAFb_yoWkJw4fpr
+        n3tFyxJry5Gr1kJr1jyr1UJryUGr1UJ3WUJry8GF18JrWjyF1jgr4UXryqgryDJrW8Ar1U
+        Jr15Gr1UZr1UJF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
+        Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UU
+        UUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,500 +67,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Queued for loongarch-next, thanks.
+Hi,
 
-Huacai
+在 2022/10/09 13:47, Yin Fengwei 写道:
+> Hi Kuai,
+> 
+> On 10/8/22 16:00, Yu Kuai wrote:
+>> Hi,
+>>
+>> 在 2022/10/08 10:50, kernel test robot 写道:
+>>> Greeting,
+>>>
+>>> FYI, we noticed a -10.6% regression of fio.read_iops due to commit:
+>>
+>> I don't know how this is working but I'm *sure* this commit won't affect
+>> performance. Please take a look at the commit, only wbt initialization
+>> is touched, which is done while creating the device:
+>>
+>> device_add_disk
+>>   blk_register_queue
+>>    wbt_enable_default
+>>     wbt_init
+>>
+>> And io path is the same with or without this commit.
+>>
+>> By the way, wbt should only work for write.
+> Some information here:
+> It looks like the line
+>      wbt_set_write_cache(q, test_bit(QUEUE_FLAG_WC, &q->queue_flags));
+> matters.
+> 
+> If move only this line to original position based on 8c5035dfbb,
+> the regression is gone.
+> 
+> If move only this line before ret = rq_qos_add() (just like your patch
+> did, but only with this line) based on 8c5035dfbb, the regression can
+> be reproduced.
+> 
 
-On Tue, Oct 4, 2022 at 10:02 PM Rui Wang <wangrui@loongson.cn> wrote:
->
-> This patch simplifies TLB load, store and modify exception handlers:
->
-> 1. Reduce instructions. such as alu/csr and memory access
-> 2. Execute tlbsrch only in the fast path.
-> 3. Return directly from the fast path for huge pages.
->
-> And fixes the concurrent modification issue of fast path for huge pages.
-> This issue will occur in the following steps:
->
->    CPU-1 (In TLB exception)         CPU-2 (In THP)
-> 1: Load PMD entry (HUGE=1)
-> 2: Goto huge path
-> 3:                                  Store PMD entry (HUGE=0)
-> 4: Reload PMD entry (HUGE=0)
-> 5: Fill TLB entry (PA is incorrect)
->
-> This also slightly improves the TLB processing performance:
->
-> * Normal pages: 2.15%
-> * Huge pages:   1.70%
->
->   #include <stdio.h>
->   #include <stdlib.h>
->   #include <unistd.h>
->   #include <sys/mman.h>
->
->   int main(int argc, char *argv[])
->   {
->         size_t page_size;
->         size_t mem_size;
->         size_t off;
->         void *base;
->         int flags;
->         int i;
->
->         if (argc < 2) {
->                 fprintf(stderr, "%s MEM_SIZE [HUGE]\n", argv[0]);
->                 return -1;
->         }
->
->         page_size = sysconf(_SC_PAGESIZE);
->         flags = MAP_PRIVATE | MAP_ANONYMOUS;
->         mem_size = strtoul(argv[1], NULL, 10);
->         if (argc > 2)
->                 flags |= MAP_HUGETLB;
->
->         for (i = 0; i < 10; i++) {
->                 base = mmap(NULL, mem_size, PROT_READ, flags, -1, 0);
->                 if (base == MAP_FAILED) {
->                         fprintf(stderr, "Map memory failed!\n");
->                         return -1;
->                 }
->
->                 for (off = 0; off < mem_size; off += page_size)
->                         *(volatile int *)(base + off);
->
->                 munmap(base, mem_size);
->         }
->
->         return 0;
->   }
->
-> Signed-off-by: Rui Wang <wangrui@loongson.cn>
-> ---
->  arch/loongarch/mm/tlbex.S | 223 ++++++++++++++++----------------------
->  1 file changed, 93 insertions(+), 130 deletions(-)
->
-> diff --git a/arch/loongarch/mm/tlbex.S b/arch/loongarch/mm/tlbex.S
-> index 39743337999e..c97bcaad2ff4 100644
-> --- a/arch/loongarch/mm/tlbex.S
-> +++ b/arch/loongarch/mm/tlbex.S
-> @@ -10,6 +10,11 @@
->  #include <asm/regdef.h>
->  #include <asm/stackframe.h>
->
-> +#define PTRS_PER_PGD_BITS      (PAGE_SHIFT - 3)
-> +#define PTRS_PER_PUD_BITS      (PAGE_SHIFT - 3)
-> +#define PTRS_PER_PMD_BITS      (PAGE_SHIFT - 3)
-> +#define PTRS_PER_PTE_BITS      (PAGE_SHIFT - 3)
-> +
->         .macro tlb_do_page_fault, write
->         SYM_FUNC_START(tlb_do_page_fault_\write)
->         SAVE_ALL
-> @@ -52,25 +57,17 @@ SYM_FUNC_START(handle_tlb_load)
->
->  vmalloc_done_load:
->         /* Get PGD offset in bytes */
-> -       srli.d  t0, t0, PGDIR_SHIFT
-> -       andi    t0, t0, (PTRS_PER_PGD - 1)
-> -       slli.d  t0, t0, 3
-> -       add.d   t1, t1, t0
-> +       bstrpick.d      ra, t0, PTRS_PER_PGD_BITS + PGDIR_SHIFT - 1, PGDIR_SHIFT
-> +       alsl.d          t1, ra, t1, 3
->  #if CONFIG_PGTABLE_LEVELS > 3
-> -       csrrd   t0, LOONGARCH_CSR_BADV
->         ld.d    t1, t1, 0
-> -       srli.d  t0, t0, PUD_SHIFT
-> -       andi    t0, t0, (PTRS_PER_PUD - 1)
-> -       slli.d  t0, t0, 3
-> -       add.d   t1, t1, t0
-> +       bstrpick.d      ra, t0, PTRS_PER_PUD_BITS + PUD_SHIFT - 1, PUD_SHIFT
-> +       alsl.d          t1, ra, t1, 3
->  #endif
->  #if CONFIG_PGTABLE_LEVELS > 2
-> -       csrrd   t0, LOONGARCH_CSR_BADV
->         ld.d    t1, t1, 0
-> -       srli.d  t0, t0, PMD_SHIFT
-> -       andi    t0, t0, (PTRS_PER_PMD - 1)
-> -       slli.d  t0, t0, 3
-> -       add.d   t1, t1, t0
-> +       bstrpick.d      ra, t0, PTRS_PER_PMD_BITS + PMD_SHIFT - 1, PMD_SHIFT
-> +       alsl.d          t1, ra, t1, 3
->  #endif
->         ld.d    ra, t1, 0
->
-> @@ -79,27 +76,20 @@ vmalloc_done_load:
->          * instead contains the tlb pte. Check the PAGE_HUGE bit and
->          * see if we need to jump to huge tlb processing.
->          */
-> -       andi    t0, ra, _PAGE_HUGE
-> -       bnez    t0, tlb_huge_update_load
-> +       rotri.d ra, ra, _PAGE_HUGE_SHIFT + 1
-> +       bltz    ra, tlb_huge_update_load
->
-> -       csrrd   t0, LOONGARCH_CSR_BADV
-> -       srli.d  t0, t0, PAGE_SHIFT
-> -       andi    t0, t0, (PTRS_PER_PTE - 1)
-> -       slli.d  t0, t0, _PTE_T_LOG2
-> -       add.d   t1, ra, t0
-> +       rotri.d ra, ra, 64 - (_PAGE_HUGE_SHIFT + 1)
-> +       bstrpick.d      t0, t0, PTRS_PER_PTE_BITS + PAGE_SHIFT - 1, PAGE_SHIFT
-> +       alsl.d  t1, t0, ra, _PTE_T_LOG2
->
->  #ifdef CONFIG_SMP
->  smp_pgtable_change_load:
-> -#endif
-> -#ifdef CONFIG_SMP
->         ll.d    t0, t1, 0
->  #else
->         ld.d    t0, t1, 0
->  #endif
-> -       tlbsrch
-> -
-> -       srli.d  ra, t0, _PAGE_PRESENT_SHIFT
-> -       andi    ra, ra, 1
-> +       andi    ra, t0, _PAGE_PRESENT
->         beqz    ra, nopage_tlb_load
->
->         ori     t0, t0, _PAGE_VALID
-> @@ -109,8 +99,8 @@ smp_pgtable_change_load:
->  #else
->         st.d    t0, t1, 0
->  #endif
-> -       ori     t1, t1, 8
-> -       xori    t1, t1, 8
-> +       tlbsrch
-> +       bstrins.d       t1, zero, 3, 3
->         ld.d    t0, t1, 0
->         ld.d    t1, t1, 8
->         csrwr   t0, LOONGARCH_CSR_TLBELO0
-> @@ -133,23 +123,22 @@ vmalloc_load:
->          */
->  tlb_huge_update_load:
->  #ifdef CONFIG_SMP
-> -       ll.d    t0, t1, 0
-> -#else
-> -       ld.d    t0, t1, 0
-> +       ll.d    ra, t1, 0
->  #endif
-> -       srli.d  ra, t0, _PAGE_PRESENT_SHIFT
-> -       andi    ra, ra, 1
-> -       beqz    ra, nopage_tlb_load
-> -       tlbsrch
-> +       andi    t0, ra, _PAGE_PRESENT
-> +       beqz    t0, nopage_tlb_load
->
-> -       ori     t0, t0, _PAGE_VALID
->  #ifdef CONFIG_SMP
-> +       ori     t0, ra, _PAGE_VALID
->         sc.d    t0, t1, 0
->         beqz    t0, tlb_huge_update_load
-> -       ld.d    t0, t1, 0
-> +       ori     t0, ra, _PAGE_VALID
->  #else
-> +       rotri.d ra, ra, 64 - (_PAGE_HUGE_SHIFT + 1)
-> +       ori     t0, ra, _PAGE_VALID
->         st.d    t0, t1, 0
->  #endif
-> +       tlbsrch
->         addu16i.d       t1, zero, -(CSR_TLBIDX_EHINV >> 16)
->         addi.d          ra, t1, 0
->         csrxchg         ra, t1, LOONGARCH_CSR_TLBIDX
-> @@ -173,9 +162,8 @@ tlb_huge_update_load:
->         srli.d  t1, t1, (_PAGE_HGLOBAL_SHIFT - _PAGE_GLOBAL_SHIFT)
->         or      t0, t0, t1
->
-> -       addi.d  ra, t0, 0
-> -       csrwr   t0, LOONGARCH_CSR_TLBELO0
-> -       addi.d  t0, ra, 0
-> +       move    ra, t0
-> +       csrwr   ra, LOONGARCH_CSR_TLBELO0
->
->         /* Convert to entrylo1 */
->         addi.d  t1, zero, 1
-> @@ -193,6 +181,11 @@ tlb_huge_update_load:
->         addu16i.d       t0, zero, (CSR_TLBIDX_PS >> 16)
->         addu16i.d       t1, zero, (PS_DEFAULT_SIZE << (CSR_TLBIDX_PS_SHIFT - 16))
->         csrxchg         t1, t0, LOONGARCH_CSR_TLBIDX
-> +leave_huge_load:
-> +       csrrd   t0, EXCEPTION_KS0
-> +       csrrd   t1, EXCEPTION_KS1
-> +       csrrd   ra, EXCEPTION_KS2
-> +       ertn
->
->  nopage_tlb_load:
->         dbar    0
-> @@ -215,26 +208,17 @@ SYM_FUNC_START(handle_tlb_store)
->
->  vmalloc_done_store:
->         /* Get PGD offset in bytes */
-> -       srli.d  t0, t0, PGDIR_SHIFT
-> -       andi    t0, t0, (PTRS_PER_PGD - 1)
-> -       slli.d  t0, t0, 3
-> -       add.d   t1, t1, t0
-> -
-> +       bstrpick.d      ra, t0, PTRS_PER_PGD_BITS + PGDIR_SHIFT - 1, PGDIR_SHIFT
-> +       alsl.d          t1, ra, t1, 3
->  #if CONFIG_PGTABLE_LEVELS > 3
-> -       csrrd   t0, LOONGARCH_CSR_BADV
->         ld.d    t1, t1, 0
-> -       srli.d  t0, t0, PUD_SHIFT
-> -       andi    t0, t0, (PTRS_PER_PUD - 1)
-> -       slli.d  t0, t0, 3
-> -       add.d   t1, t1, t0
-> +       bstrpick.d      ra, t0, PTRS_PER_PUD_BITS + PUD_SHIFT - 1, PUD_SHIFT
-> +       alsl.d          t1, ra, t1, 3
->  #endif
->  #if CONFIG_PGTABLE_LEVELS > 2
-> -       csrrd   t0, LOONGARCH_CSR_BADV
->         ld.d    t1, t1, 0
-> -       srli.d  t0, t0, PMD_SHIFT
-> -       andi    t0, t0, (PTRS_PER_PMD - 1)
-> -       slli.d  t0, t0, 3
-> -       add.d   t1, t1, t0
-> +       bstrpick.d      ra, t0, PTRS_PER_PMD_BITS + PMD_SHIFT - 1, PMD_SHIFT
-> +       alsl.d          t1, ra, t1, 3
->  #endif
->         ld.d    ra, t1, 0
->
-> @@ -243,28 +227,21 @@ vmalloc_done_store:
->          * instead contains the tlb pte. Check the PAGE_HUGE bit and
->          * see if we need to jump to huge tlb processing.
->          */
-> -       andi    t0, ra, _PAGE_HUGE
-> -       bnez    t0, tlb_huge_update_store
-> +       rotri.d ra, ra, _PAGE_HUGE_SHIFT + 1
-> +       bltz    ra, tlb_huge_update_store
->
-> -       csrrd   t0, LOONGARCH_CSR_BADV
-> -       srli.d  t0, t0, PAGE_SHIFT
-> -       andi    t0, t0, (PTRS_PER_PTE - 1)
-> -       slli.d  t0, t0, _PTE_T_LOG2
-> -       add.d   t1, ra, t0
-> +       rotri.d ra, ra, 64 - (_PAGE_HUGE_SHIFT + 1)
-> +       bstrpick.d      t0, t0, PTRS_PER_PTE_BITS + PAGE_SHIFT - 1, PAGE_SHIFT
-> +       alsl.d  t1, t0, ra, _PTE_T_LOG2
->
->  #ifdef CONFIG_SMP
->  smp_pgtable_change_store:
-> -#endif
-> -#ifdef CONFIG_SMP
->         ll.d    t0, t1, 0
->  #else
->         ld.d    t0, t1, 0
->  #endif
-> -       tlbsrch
-> -
-> -       srli.d  ra, t0, _PAGE_PRESENT_SHIFT
-> -       andi    ra, ra, ((_PAGE_PRESENT | _PAGE_WRITE) >> _PAGE_PRESENT_SHIFT)
-> -       xori    ra, ra, ((_PAGE_PRESENT | _PAGE_WRITE) >> _PAGE_PRESENT_SHIFT)
-> +       andi    ra, t0, _PAGE_PRESENT | _PAGE_WRITE
-> +       xori    ra, ra, _PAGE_PRESENT | _PAGE_WRITE
->         bnez    ra, nopage_tlb_store
->
->         ori     t0, t0, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
-> @@ -274,9 +251,8 @@ smp_pgtable_change_store:
->  #else
->         st.d    t0, t1, 0
->  #endif
-> -
-> -       ori     t1, t1, 8
-> -       xori    t1, t1, 8
-> +       tlbsrch
-> +       bstrins.d       t1, zero, 3, 3
->         ld.d    t0, t1, 0
->         ld.d    t1, t1, 8
->         csrwr   t0, LOONGARCH_CSR_TLBELO0
-> @@ -299,25 +275,23 @@ vmalloc_store:
->          */
->  tlb_huge_update_store:
->  #ifdef CONFIG_SMP
-> -       ll.d    t0, t1, 0
-> -#else
-> -       ld.d    t0, t1, 0
-> +       ll.d    ra, t1, 0
->  #endif
-> -       srli.d  ra, t0, _PAGE_PRESENT_SHIFT
-> -       andi    ra, ra, ((_PAGE_PRESENT | _PAGE_WRITE) >> _PAGE_PRESENT_SHIFT)
-> -       xori    ra, ra, ((_PAGE_PRESENT | _PAGE_WRITE) >> _PAGE_PRESENT_SHIFT)
-> -       bnez    ra, nopage_tlb_store
-> -
-> -       tlbsrch
-> -       ori     t0, t0, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
-> +       andi    t0, ra, _PAGE_PRESENT | _PAGE_WRITE
-> +       xori    t0, t0, _PAGE_PRESENT | _PAGE_WRITE
-> +       bnez    t0, nopage_tlb_store
->
->  #ifdef CONFIG_SMP
-> +       ori     t0, ra, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
->         sc.d    t0, t1, 0
->         beqz    t0, tlb_huge_update_store
-> -       ld.d    t0, t1, 0
-> +       ori     t0, ra, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
->  #else
-> +       rotri.d ra, ra, 64 - (_PAGE_HUGE_SHIFT + 1)
-> +       ori     t0, ra, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
->         st.d    t0, t1, 0
->  #endif
-> +       tlbsrch
->         addu16i.d       t1, zero, -(CSR_TLBIDX_EHINV >> 16)
->         addi.d          ra, t1, 0
->         csrxchg         ra, t1, LOONGARCH_CSR_TLBIDX
-> @@ -340,9 +314,8 @@ tlb_huge_update_store:
->         srli.d  t1, t1, (_PAGE_HGLOBAL_SHIFT - _PAGE_GLOBAL_SHIFT)
->         or      t0, t0, t1
->
-> -       addi.d  ra, t0, 0
-> -       csrwr   t0, LOONGARCH_CSR_TLBELO0
-> -       addi.d  t0, ra, 0
-> +       move    ra, t0
-> +       csrwr   ra, LOONGARCH_CSR_TLBELO0
->
->         /* Convert to entrylo1 */
->         addi.d  t1, zero, 1
-> @@ -361,6 +334,11 @@ tlb_huge_update_store:
->         addu16i.d       t0, zero, (CSR_TLBIDX_PS >> 16)
->         addu16i.d       t1, zero, (PS_DEFAULT_SIZE << (CSR_TLBIDX_PS_SHIFT - 16))
->         csrxchg         t1, t0, LOONGARCH_CSR_TLBIDX
-> +leave_huge_store:
-> +       csrrd   t0, EXCEPTION_KS0
-> +       csrrd   t1, EXCEPTION_KS1
-> +       csrrd   ra, EXCEPTION_KS2
-> +       ertn
->
->  nopage_tlb_store:
->         dbar    0
-> @@ -383,25 +361,17 @@ SYM_FUNC_START(handle_tlb_modify)
->
->  vmalloc_done_modify:
->         /* Get PGD offset in bytes */
-> -       srli.d  t0, t0, PGDIR_SHIFT
-> -       andi    t0, t0, (PTRS_PER_PGD - 1)
-> -       slli.d  t0, t0, 3
-> -       add.d   t1, t1, t0
-> +       bstrpick.d      ra, t0, PTRS_PER_PGD_BITS + PGDIR_SHIFT - 1, PGDIR_SHIFT
-> +       alsl.d          t1, ra, t1, 3
->  #if CONFIG_PGTABLE_LEVELS > 3
-> -       csrrd   t0, LOONGARCH_CSR_BADV
->         ld.d    t1, t1, 0
-> -       srli.d  t0, t0, PUD_SHIFT
-> -       andi    t0, t0, (PTRS_PER_PUD - 1)
-> -       slli.d  t0, t0, 3
-> -       add.d   t1, t1, t0
-> +       bstrpick.d      ra, t0, PTRS_PER_PUD_BITS + PUD_SHIFT - 1, PUD_SHIFT
-> +       alsl.d          t1, ra, t1, 3
->  #endif
->  #if CONFIG_PGTABLE_LEVELS > 2
-> -       csrrd   t0, LOONGARCH_CSR_BADV
->         ld.d    t1, t1, 0
-> -       srli.d  t0, t0, PMD_SHIFT
-> -       andi    t0, t0, (PTRS_PER_PMD - 1)
-> -       slli.d  t0, t0, 3
-> -       add.d   t1, t1, t0
-> +       bstrpick.d      ra, t0, PTRS_PER_PMD_BITS + PMD_SHIFT - 1, PMD_SHIFT
-> +       alsl.d          t1, ra, t1, 3
->  #endif
->         ld.d    ra, t1, 0
->
-> @@ -410,27 +380,20 @@ vmalloc_done_modify:
->          * instead contains the tlb pte. Check the PAGE_HUGE bit and
->          * see if we need to jump to huge tlb processing.
->          */
-> -       andi    t0, ra, _PAGE_HUGE
-> -       bnez    t0, tlb_huge_update_modify
-> +       rotri.d ra, ra, _PAGE_HUGE_SHIFT + 1
-> +       bltz    ra, tlb_huge_update_modify
->
-> -       csrrd   t0, LOONGARCH_CSR_BADV
-> -       srli.d  t0, t0, PAGE_SHIFT
-> -       andi    t0, t0, (PTRS_PER_PTE - 1)
-> -       slli.d  t0, t0, _PTE_T_LOG2
-> -       add.d   t1, ra, t0
-> +       rotri.d ra, ra, 64 - (_PAGE_HUGE_SHIFT + 1)
-> +       bstrpick.d      t0, t0, PTRS_PER_PTE_BITS + PAGE_SHIFT - 1, PAGE_SHIFT
-> +       alsl.d  t1, t0, ra, _PTE_T_LOG2
->
->  #ifdef CONFIG_SMP
->  smp_pgtable_change_modify:
-> -#endif
-> -#ifdef CONFIG_SMP
->         ll.d    t0, t1, 0
->  #else
->         ld.d    t0, t1, 0
->  #endif
-> -       tlbsrch
-> -
-> -       srli.d  ra, t0, _PAGE_WRITE_SHIFT
-> -       andi    ra, ra, 1
-> +       andi    ra, t0, _PAGE_WRITE
->         beqz    ra, nopage_tlb_modify
->
->         ori     t0, t0, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
-> @@ -440,8 +403,8 @@ smp_pgtable_change_modify:
->  #else
->         st.d    t0, t1, 0
->  #endif
-> -       ori     t1, t1, 8
-> -       xori    t1, t1, 8
-> +       tlbsrch
-> +       bstrins.d       t1, zero, 3, 3
->         ld.d    t0, t1, 0
->         ld.d    t1, t1, 8
->         csrwr   t0, LOONGARCH_CSR_TLBELO0
-> @@ -464,23 +427,19 @@ vmalloc_modify:
->          */
->  tlb_huge_update_modify:
->  #ifdef CONFIG_SMP
-> -       ll.d    t0, t1, 0
-> -#else
-> -       ld.d    t0, t1, 0
-> +       ll.d    ra, t1, 0
->  #endif
-> -
-> -       srli.d  ra, t0, _PAGE_WRITE_SHIFT
-> -       andi    ra, ra, 1
-> -       beqz    ra, nopage_tlb_modify
-> -
-> -       tlbsrch
-> -       ori     t0, t0, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
-> +       andi    t0, ra, _PAGE_WRITE
-> +       beqz    t0, nopage_tlb_modify
->
->  #ifdef CONFIG_SMP
-> +       ori     t0, ra, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
->         sc.d    t0, t1, 0
->         beqz    t0, tlb_huge_update_modify
-> -       ld.d    t0, t1, 0
-> +       ori     t0, ra, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
->  #else
-> +       rotri.d ra, ra, 64 - (_PAGE_HUGE_SHIFT + 1)
-> +       ori     t0, ra, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
->         st.d    t0, t1, 0
->  #endif
->         /*
-> @@ -499,9 +458,8 @@ tlb_huge_update_modify:
->         srli.d  t1, t1, (_PAGE_HGLOBAL_SHIFT - _PAGE_GLOBAL_SHIFT)
->         or      t0, t0, t1
->
-> -       addi.d  ra, t0, 0
-> -       csrwr   t0, LOONGARCH_CSR_TLBELO0
-> -       addi.d  t0, ra, 0
-> +       move    ra, t0
-> +       csrwr   ra, LOONGARCH_CSR_TLBELO0
->
->         /* Convert to entrylo1 */
->         addi.d  t1, zero, 1
-> @@ -520,6 +478,11 @@ tlb_huge_update_modify:
->         addu16i.d       t0, zero, (CSR_TLBIDX_PS >> 16)
->         addu16i.d       t1, zero, (PS_DEFAULT_SIZE << (CSR_TLBIDX_PS_SHIFT - 16))
->         csrxchg         t1, t0, LOONGARCH_CSR_TLBIDX
-> +leave_huge_modify:
-> +       csrrd   t0, EXCEPTION_KS0
-> +       csrrd   t1, EXCEPTION_KS1
-> +       csrrd   ra, EXCEPTION_KS2
-> +       ertn
->
->  nopage_tlb_modify:
->         dbar    0
-> --
-> 2.37.3
->
+Thanks for the information, but I still don't understand if there is any
+difference after wbt_init() is done, and how does read is afftected by
+wbt. 🙁
+> 
+> Regards
+> Yin, Fengwei
+> 
+>>
+>> Thanks,
+>> Kuai
+>>>
+>>> commit: 8c5035dfbb9475b67c82b3fdb7351236525bf52b ("blk-wbt: call rq_qos_add() after wb_normal is initialized")
+>>> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+>>>
+>>> in testcase: fio-basic
+>>> on test machine: 192 threads 4 sockets Intel(R) Xeon(R) Platinum 9242 CPU @ 2.30GHz (Cascade Lake) with 192G memory
+>>> with following parameters:
+>>>
+>>>      runtime: 300s
+>>>      nr_task: 8t
+>>>      disk: 1SSD
+>>>      fs: btrfs
+>>>      rw: randread
+>>>      bs: 2M
+>>>      ioengine: sync
+>>>      test_size: 256g
+>>>      cpufreq_governor: performance
+>>>
+>>> test-description: Fio is a tool that will spawn a number of threads or processes doing a particular type of I/O action as specified by the user.
+>>> test-url: https://github.com/axboe/fio
+>>>
+>>>
+>>> Details are as below:
+>>>
+>>> =========================================================================================
+>>> bs/compiler/cpufreq_governor/disk/fs/ioengine/kconfig/nr_task/rootfs/runtime/rw/tbox_group/test_size/testcase:
+>>>     2M/gcc-11/performance/1SSD/btrfs/sync/x86_64-rhel-8.3/8t/debian-11.1-x86_64-20220510.cgz/300s/randread/lkp-csl-2ap4/256g/fio-basic
+>>>
+>>> commit:
+>>>     f7de4886fe ("rnbd-srv: remove struct rnbd_dev")
+>>>     8c5035dfbb ("blk-wbt: call rq_qos_add() after wb_normal is initialized")
+>>>
+>>> f7de4886fe8f008a 8c5035dfbb9475b67c82b3fdb73
+>>> ---------------- ---------------------------
+>>>            %stddev     %change         %stddev
+>>>                \          |                \
+>>>         0.03 ±106%      +0.2        0.22 ± 80%  fio.latency_20ms%
+>>>         0.02 ± 33%      -0.0        0.01 ± 12%  fio.latency_4ms%
+>>>         2508           -10.6%       2243        fio.read_bw_MBps
+>>>      6717440           +17.6%    7897088        fio.read_clat_90%_us
+>>>      6892202           +19.0%    8202922        fio.read_clat_95%_us
+>>>      7602176 ±  4%     +18.4%    9000277 ±  3%  fio.read_clat_99%_us
+>>>      6374238           +11.8%    7127450        fio.read_clat_mean_us
+>>>       363825 ± 10%     +74.9%     636378 ±  5%  fio.read_clat_stddev
+>>>         1254           -10.6%       1121        fio.read_iops
+>>>       104.97           +11.8%     117.32        fio.time.elapsed_time
+>>>       104.97           +11.8%     117.32        fio.time.elapsed_time.max
+>>>        13731            +5.6%      14498 ±  4%  fio.time.maximum_resident_set_size
+>>>       116.00            -8.2%     106.50        fio.time.percent_of_cpu_this_job_got
+>>>    1.998e+10           +11.4%  2.226e+10        cpuidle..time
+>>>         3.27 ±  3%      +4.6%       3.42        iostat.cpu.iowait
+>>>         4.49 ± 68%      -2.1        2.38 ±152%  perf-profile.children.cycles-pp.number
+>>>         4.49 ± 68%      -2.5        1.98 ±175%  perf-profile.self.cycles-pp.number
+>>>       557763            +5.4%     587781        proc-vmstat.pgfault
+>>>        25488            +3.1%      26274        proc-vmstat.pgreuse
+>>>      2459048           -10.1%    2209482        vmstat.io.bi
+>>>       184649 ±  5%     -10.4%     165526 ±  7%  vmstat.system.cs
+>>>       111733 ± 30%     +61.8%     180770 ± 21%  numa-meminfo.node0.AnonPages
+>>>       113221 ± 30%     +60.2%     181416 ± 21%  numa-meminfo.node0.Inactive(anon)
+>>>        11301 ± 24%    +164.5%      29888 ±117%  numa-meminfo.node2.Active(file)
+>>>       104911 ± 39%     -80.5%      20456 ±100%  numa-meminfo.node3.AnonHugePages
+>>>       131666 ± 27%     -67.9%      42297 ± 82%  numa-meminfo.node3.AnonPages
+>>>       132698 ± 26%     -67.5%      43158 ± 81%  numa-meminfo.node3.Inactive(anon)
+>>>        27934 ± 30%     +61.8%      45196 ± 21%  numa-vmstat.node0.nr_anon_pages
+>>>        28306 ± 30%     +60.2%      45358 ± 21%  numa-vmstat.node0.nr_inactive_anon
+>>>        28305 ± 30%     +60.2%      45357 ± 21%  numa-vmstat.node0.nr_zone_inactive_anon
+>>>         6291 ± 24%     +68.0%      10567 ± 26%  numa-vmstat.node2.workingset_nodes
+>>>        32925 ± 27%     -67.9%      10571 ± 82%  numa-vmstat.node3.nr_anon_pages
+>>>        33182 ± 26%     -67.5%      10786 ± 81%  numa-vmstat.node3.nr_inactive_anon
+>>>        33182 ± 26%     -67.5%      10786 ± 81%  numa-vmstat.node3.nr_zone_inactive_anon
+>>>       161.78 ±  4%     -28.2%     116.10 ± 30%  sched_debug.cfs_rq:/.runnable_avg.avg
+>>>       161.46 ±  4%     -28.2%     115.85 ± 30%  sched_debug.cfs_rq:/.util_avg.avg
+>>>       426382           +11.0%     473345 ±  6%  sched_debug.cpu.clock.avg
+>>>       426394           +11.0%     473357 ±  6%  sched_debug.cpu.clock.max
+>>>       426370           +11.0%     473331 ±  6%  sched_debug.cpu.clock.min
+>>>       426139           +10.9%     472586 ±  6%  sched_debug.cpu.clock_task.avg
+>>>       426368           +11.0%     473130 ±  6%  sched_debug.cpu.clock_task.max
+>>>       416196           +11.1%     462228 ±  6%  sched_debug.cpu.clock_task.min
+>>>         1156 ±  7%     -10.8%       1031 ±  6%  sched_debug.cpu.curr->pid.stddev
+>>>       426372           +11.0%     473334 ±  6%  sched_debug.cpu_clk
+>>>       425355           +11.0%     472318 ±  6%  sched_debug.ktime
+>>>       426826           +11.0%     473787 ±  6%  sched_debug.sched_clk
+>>>    1.263e+09            -7.9%  1.164e+09 ±  3%  perf-stat.i.branch-instructions
+>>>       190886 ±  5%     -10.8%     170290 ±  7%  perf-stat.i.context-switches
+>>>    1.979e+09            -8.8%  1.804e+09 ±  2%  perf-stat.i.dTLB-loads
+>>>    8.998e+08            -8.2%  8.257e+08 ±  2%  perf-stat.i.dTLB-stores
+>>>    6.455e+09            -8.0%  5.938e+09 ±  3%  perf-stat.i.instructions
+>>>        21.78            -8.4%      19.95        perf-stat.i.metric.M/sec
+>>>      7045315 ±  4%     -14.0%    6057863 ±  6%  perf-stat.i.node-load-misses
+>>>      2658563 ±  7%     -21.9%    2077647 ± 12%  perf-stat.i.node-loads
+>>>       414822 ±  4%     -12.9%     361455 ±  3%  perf-stat.i.node-store-misses
+>>>    1.251e+09            -7.8%  1.154e+09 ±  3%  perf-stat.ps.branch-instructions
+>>>       189082 ±  5%     -10.7%     168849 ±  7%  perf-stat.ps.context-switches
+>>>     1.96e+09            -8.8%  1.789e+09 ±  2%  perf-stat.ps.dTLB-loads
+>>>    8.912e+08            -8.1%  8.187e+08 ±  2%  perf-stat.ps.dTLB-stores
+>>>    6.393e+09            -7.9%  5.888e+09 ±  3%  perf-stat.ps.instructions
+>>>      6978485 ±  4%     -13.9%    6006510 ±  6%  perf-stat.ps.node-load-misses
+>>>      2633627 ±  7%     -21.8%    2060033 ± 12%  perf-stat.ps.node-loads
+>>>       410822 ±  4%     -12.8%     358289 ±  3%  perf-stat.ps.node-store-misses
+>>>
+>>>
+>>> If you fix the issue, kindly add following tag
+>>> | Reported-by: kernel test robot <yujie.liu@intel.com>
+>>> | Link: https://lore.kernel.org/r/202210081045.77ddf59b-yujie.liu@intel.com
+>>>
+>>>
+>>> To reproduce:
+>>>
+>>>           git clone https://github.com/intel/lkp-tests.git
+>>>           cd lkp-tests
+>>>           sudo bin/lkp install job.yaml           # job file is attached in this email
+>>>           bin/lkp split-job --compatible job.yaml # generate the yaml file for lkp run
+>>>           sudo bin/lkp run generated-yaml-file
+>>>
+>>>           # if come across any failure that blocks the test,
+>>>           # please remove ~/.lkp and /lkp dir to run from a clean state.
+>>>
+>>>
+>>> Disclaimer:
+>>> Results have been estimated based on internal Intel analysis and are provided
+>>> for informational purposes only. Any difference in system hardware or software
+>>> design or configuration may affect actual performance.
+>>>
+>>>
+>> _______________________________________________
+>> LKP mailing list -- lkp@lists.01.org
+>> To unsubscribe send an email to lkp-leave@lists.01.org
+> 
+> .
+> 
+
