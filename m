@@ -2,106 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C32325F8A62
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 11:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C92505F8A64
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 11:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbiJIJcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 05:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
+        id S229970AbiJIJdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 05:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiJIJcl (ORCPT
+        with ESMTP id S229699AbiJIJdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 05:32:41 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0432CCA8;
-        Sun,  9 Oct 2022 02:32:39 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MlcGQ57rhzKDny;
-        Sun,  9 Oct 2022 17:30:22 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgAHzYwzlUJjegAJCA--.61104S3;
-        Sun, 09 Oct 2022 17:32:36 +0800 (CST)
-Subject: Re: [blk] 8c5035dfbb: fio.read_iops -10.6% regression
-To:     Ming Lei <ming.lei@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     kernel test robot <yujie.liu@intel.com>, lkp@lists.01.org,
-        lkp@intel.com, Jens Axboe <axboe@kernel.dk>,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        ying.huang@intel.com, feng.tang@intel.com,
-        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <202210081045.77ddf59b-yujie.liu@intel.com>
- <d5279fc2-38b3-6d20-4404-604d5c7277e2@huaweicloud.com>
- <Y0KJmODYOh83OtGa@T590>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <e81ea0fe-dcd2-1e5d-9b78-3c79751b3097@huaweicloud.com>
-Date:   Sun, 9 Oct 2022 17:32:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sun, 9 Oct 2022 05:33:11 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CB2B1CF;
+        Sun,  9 Oct 2022 02:33:10 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id x59so12302385ede.7;
+        Sun, 09 Oct 2022 02:33:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SM1SogZHsHwwBQI3iIbZedPPqwmTQ+KRvC2VAQyUbPA=;
+        b=Of+z6LhARiAntBoz9T7hEugcQmN5BzMj0e6bKs/9mrHrhlN/Re7047RhkIxQQlNTw6
+         PJLwIpTY1Ue8qLxe9FdzycNVaUXP4dWLt+q1tpujXCVluj6RLOY3Xo2BtBR3/SbgW/ej
+         to9DNxa+sQo8MbgBndHvwR53D+7IjVKY6nAWvgIqendz7zHCinzlNrVaIE4SY9omMYyA
+         jmb0QbZ2Em6ZW9ylyWJWd0FdgFAsEGoE0y05alVBH+O4YJKBt0FPJ4h1cEkrA/b5bhn9
+         PH0rbwzQzhC6wOwv9zELV9aiCliiarXcgPteaqy4Da+3Jj00N5HmQ5ZMZ1Tb3IYRc66+
+         EjxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SM1SogZHsHwwBQI3iIbZedPPqwmTQ+KRvC2VAQyUbPA=;
+        b=la+IH82Ej/mZp0LZnI5TQx702DQkEYiw2ZtGW1++qVFKjbwH1/L5f0KDVsBS/epw1l
+         b21iwxkeSXm8crkOFZ16m1iSpw3W+YXhhNBp+YFNEZEmNBzzLq8fwmhsRrZbS7/O3aSK
+         j3Iph3m2uDbCXI7+XHIuK5NmLweFjkOmXxU1FPdNV8pPuTHpSsbXVo5Nw0oOIhlMPi2o
+         M6BLfgBe1UYBd9MxAVHRhD8XYQNfKHZQYjPGxQ/3349V5jna6HvZuKKSnjwJYMHXSypo
+         kxFyOBg9Wn8L7GQVaMk3zI/t3lmOw+vc1lNXBLLozVOMs9EgL8qvRMVMykLoYAi/megZ
+         qpcQ==
+X-Gm-Message-State: ACrzQf32vGgEoYHKZ0MQu9CvxYk+Bd1n4RxPH+lD0ek9yHbOnSOoKqri
+        DfR/MqMbXkwknat49FxeOt4HHMxaszE=
+X-Google-Smtp-Source: AMsMyM51AHV3UF1r/gaSTuMo5hWYAWm+HElEtGRuP7LZ/V0dv9ZpuQvpVQbq9hXDXszQXUFgRaeZ8g==
+X-Received: by 2002:a05:6402:3552:b0:45c:e4c:e6db with SMTP id f18-20020a056402355200b0045c0e4ce6dbmr801153edd.403.1665307989080;
+        Sun, 09 Oct 2022 02:33:09 -0700 (PDT)
+Received: from masalkhi.. (p5ddb3af6.dip0.t-ipconnect.de. [93.219.58.246])
+        by smtp.gmail.com with ESMTPSA id l26-20020a170906415a00b0078116c361d9sm3861013ejk.10.2022.10.09.02.33.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Oct 2022 02:33:08 -0700 (PDT)
+From:   Abd-Alrhman Masalkhi <abd.masalkhi@gmail.com>
+To:     viro@zeniv.linux.org.uk
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: RE: A field in files_struct has been used without initialization
+Date:   Sun,  9 Oct 2022 11:33:06 +0200
+Message-Id: <20221009093306.24598-1-abd.masalkhi@gmail.com>
+X-Mailer: git-send-email 2.29.0.rc1.dirty
+In-Reply-To: <Y0B6+0MLZI/nv1aC@ZenIV>
+References: <Y0B6+0MLZI/nv1aC@ZenIV>
 MIME-Version: 1.0
-In-Reply-To: <Y0KJmODYOh83OtGa@T590>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHzYwzlUJjegAJCA--.61104S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7JFy7XF13Zw43tw4fuF1rWFg_yoW3uwb_Zw
-        1vvF1xCrn8Gan2vrsFkr4agr4kX34xGFy7JF4rJa17X3sIgrn8ZFyDWFy8W3s8Ww1rtF4a
-        krWFy343Xrs2kjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb3AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
-        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello Al Viro
 
-在 2022/10/09 16:43, Ming Lei 写道:
-> On Sat, Oct 08, 2022 at 04:00:10PM +0800, Yu Kuai wrote:
->> Hi,
->>
->> 在 2022/10/08 10:50, kernel test robot 写道:
->>> Greeting,
->>>
->>> FYI, we noticed a -10.6% regression of fio.read_iops due to commit:
->>
->> I don't know how this is working but I'm *sure* this commit won't affect
-> 
-> Looks it is wrong to move
-> 
-> 	wbt_set_write_cache(q, test_bit(QUEUE_FLAG_WC, &q->queue_flags));
-> 
-> before rq_qos_add() in wbt_init().
-> 
-> Without adding wbt rq_qos, wbt_set_write_cache is just a nop.
+> close_on_exec_init is an array, and this assignment stores the address
+> of its first (and only) element into newf->fdtab.close_on_exec.  So it's
+> basically
+>      newf->fdtab.close_on_exec = &newf->close_on_exec_init[0];
+>
+> ->fdtab and ->close_on_exec_init are to be used only if we need no more than
+> BITS_PER_LONG descriptors.  It's common enough to make avoiding a separate
+> allocation (and separate cacheline on following the pointer chain) worth
+> the trouble
+> ...
+> ...
 
-Yes, I got it now, I'm being foolish here.
-
-I missed that "rwb->wc" is got by rq_qos in wbt_set_write_cache(), which
-is NULL before rq_qos_add(). By the way, it's interesting that how read
-performance is affected, I still don't know why yet...
-
-Thanks,
-Kuai
-> 
-> 
-> thanks,
-> Ming
-> 
-> .
-> 
-
+Fascinating, thank you for this very informative response. I have learned a
+lot from it.
