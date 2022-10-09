@@ -2,69 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8D55F88A8
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 02:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF605F88AC
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 03:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiJIA5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 20:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
+        id S229795AbiJIBJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 21:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiJIA5s (ORCPT
+        with ESMTP id S229772AbiJIBJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 20:57:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04EAEAE64
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 17:57:46 -0700 (PDT)
+        Sat, 8 Oct 2022 21:09:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A922417897;
+        Sat,  8 Oct 2022 18:09:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4007B80C2E
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 00:57:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 415DCC433D6;
-        Sun,  9 Oct 2022 00:57:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65DDC60A39;
+        Sun,  9 Oct 2022 01:09:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B545EC433D6;
+        Sun,  9 Oct 2022 01:09:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665277064;
-        bh=kMOKD59f4KaUW+9KnwqjenV3cMWROfUTbCFt6uFlQvA=;
+        s=k20201202; t=1665277784;
+        bh=E9QLgyhF+lPn4P5xm5K5n9w5uHxiziXWKS7iOyG0cW4=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MGpIPMwFJuSFht5MaTwrAuYeN3xVv1eL1pQclczyKBL27moceZ0qx9mD+B9PiadD2
-         TZan66BlBY4i3Pg9OaIXjAJmJsBXgV8bb1ztMQTlXPJNALmgbC431te0tJQ1mqL82M
-         QMobhH9hWXz6hkjxoHamHviOLaXCwgcC2JbMmZIz5W6uk5hHFcY+927DhNX2CWXtxh
-         2LMFiqptS8F9D7ts7FLLZsMufK32bXItk+CyYQcoR3DXwkekVbZLvB0TdAcZ+mt7rE
-         4We1hI0Z57OqYWocSoSbncH6YT8rPMUZhOGL0XEzGKusttQpAQFp/WWgve8zVDzleb
-         yXlsKvJaJnNiQ==
+        b=hwAmqKIfojx4wr26MeIMDWqVB0ar+6+frmSVNpty9vQR+Bn8OIjO5AzrqbhC/FcPK
+         iCYRonHuTBfJyULP1a/makgBv2be7XqNcblAV5V/N9CP+zi9Qw1ZogTXlNndJnCFrD
+         zTQq8mrhfeBwi1edNZk9aKpaaNbAxxA7mQ2Jkn4BKNoTx/TQg0jInaSqP3XCuha2M8
+         3EDLUIAzy/p9iU1UHsYrCshQ/yj4wU3kIQR1RNWgJcweaidFbB2rFhAcPpwcLaSSez
+         YrhCBPbpWQ9EdYGdGNMeFaEfuQcT23HzBrXL1lW7ddqqguN6gPogvWW51GWauf2evr
+         nMPiCRlcI8M3w==
 Received: from [156.39.10.100] (helo=wait-a-minute.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <maz@kernel.org>)
-        id 1ohKdR-00FKj4-LB;
-        Sun, 09 Oct 2022 01:57:42 +0100
-Date:   Sun, 09 Oct 2022 01:56:43 +0100
-Message-ID: <87wn99hl10.wl-maz@kernel.org>
+        id 1ohKp4-00FKmf-BG;
+        Sun, 09 Oct 2022 02:09:42 +0100
+Date:   Sun, 09 Oct 2022 02:08:44 +0100
+Message-ID: <87v8othkgz.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, asahi@lists.linux.dev,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] irqchip/apple-aic: Add support for A7-A11 SoCs
-In-Reply-To: <06a1b6fa-d179-97c7-995e-91d93123a5de@somainline.org>
-References: <20221007200022.22844-1-konrad.dybcio@somainline.org>
-        <20221007200022.22844-3-konrad.dybcio@somainline.org>
-        <37c075fc9aa9624d65b8fdda3cb5ae96@kernel.org>
-        <06a1b6fa-d179-97c7-995e-91d93123a5de@somainline.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Len Brown <lenb@kernel.org>, rafael@kernel.org,
+        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH V2 1/2] irqchip/loongson-pch-pic: Support to set irq type for ACPI path
+In-Reply-To: <20221008025150.10734-2-lvjianmin@loongson.cn>
+References: <20221008025150.10734-1-lvjianmin@loongson.cn>
+        <20221008025150.10734-2-lvjianmin@loongson.cn>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 156.39.10.100
-X-SA-Exim-Rcpt-To: konrad.dybcio@somainline.org, ~postmarketos/upstreaming@lists.sr.ht, asahi@lists.linux.dev, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, martin.botka@somainline.org, angelogioacchino.delregno@somainline.org, marijn.suijten@somainline.org, jamipkettunen@somainline.org, tglx@linutronix.de, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn, bhelgaas@google.com, lenb@kernel.org, rafael@kernel.org, linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -76,62 +70,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 08 Oct 2022 08:03:23 +0100,
-Konrad Dybcio <konrad.dybcio@somainline.org> wrote:
->=20
->=20
->=20
-> On 8.10.2022 01:17, Marc Zyngier wrote:
-> > On 2022-10-07 21:00, Konrad Dybcio wrote:
-> >> Add support for A7-A11 SoCs by if-ing out some features only present
-> >> on A11 & newer (implementation-defined IPI & UNCORE registers).
-> >>
-> >> Also, annotate IPI regs support in the aic struct so that the driver
-> >> can tell whether the SoC supports these, as they are written to,
-> >> even if fast IPI is disabled. This in turn causes a crash on older
-> >> platforms, as the implemention-defined registers either do
-> >> something else or are not supposed to be touched - definitely not a
-> >> NOP though.
-> >>
-> >> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> >> ---
-> >> Changes since v3:
-> >> - Replace use_fast_ipi with has_uncore_ipi_regs in aic_init_cpu
-> >> (logic error, this was written to regardless of FIPI usage before,
-> >> but touching Sn_... regs on SoCs that don't explicitly use them for
-> >> IPIs makes them sepuku..)
-> >> - Drop A11 compatible
-> >>
-> >> =C2=A0drivers/irqchip/irq-apple-aic.c | 47 ++++++++++++++++++++++-----=
-------
-> >> =C2=A01 file changed, 32 insertions(+), 15 deletions(-)
-> >=20
-> > Since you cannot be bothered to read the review comments on
-> > the previous versions of this series, I'll do the same with
-> > these patches. Feel free to stop Cc-ing me.
-> >=20
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 M.
-> I'm sorry, I'm working on a lot of stuff right now and I was almost sure
-> your email only concerned adding a cover letter
+On Sat, 08 Oct 2022 03:51:49 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> 
+> For ACPI path, the translate callback used IRQ_TYPE_NONE and ignored
+> the irq type in fwspec->param[1]. For supporting to set type for
+> irqs of the irqdomain, fwspec->param[1] should be used to get irq
+> type.
+> 
+> On Loongson platform, the irq trigger type of PCI devices is
+> high level, so high level triggered type is inputed to acpi_register_gsi
+> when create irq mapping for PCI devices.
+> 
+> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> ---
+>  drivers/acpi/pci_irq.c                 | 6 ++++--
+>  drivers/irqchip/irq-loongson-pch-pic.c | 9 ++++++++-
+>  2 files changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/acpi/pci_irq.c b/drivers/acpi/pci_irq.c
+> index 08e15774fb9f..ff30ceca2203 100644
+> --- a/drivers/acpi/pci_irq.c
+> +++ b/drivers/acpi/pci_irq.c
+> @@ -387,13 +387,15 @@ int acpi_pci_irq_enable(struct pci_dev *dev)
+>  	u8 pin;
+>  	int triggering = ACPI_LEVEL_SENSITIVE;
+>  	/*
+> -	 * On ARM systems with the GIC interrupt model, level interrupts
+> +	 * On ARM systems with the GIC interrupt model, or LoongArch
+> +	 * systems with the LPIC interrupt model, level interrupts
+>  	 * are always polarity high by specification; PCI legacy
+>  	 * IRQs lines are inverted before reaching the interrupt
+>  	 * controller and must therefore be considered active high
+>  	 * as default.
+>  	 */
+> -	int polarity = acpi_irq_model == ACPI_IRQ_MODEL_GIC ?
+> +	int polarity = acpi_irq_model == ACPI_IRQ_MODEL_GIC ||
+> +		       acpi_irq_model == ACPI_IRQ_MODEL_LPIC ?
+>  				      ACPI_ACTIVE_HIGH : ACPI_ACTIVE_LOW;
+>  	char *link = NULL;
+>  	char link_desc[16];
 
-And yet you ignored it again.
+This is one patch adding support for the LPIC model.
 
-> and affirming the discussion on the fallback compatible,
+> diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
+> index c01b9c257005..5576c97fec85 100644
+> --- a/drivers/irqchip/irq-loongson-pch-pic.c
+> +++ b/drivers/irqchip/irq-loongson-pch-pic.c
+> @@ -159,11 +159,18 @@ static int pch_pic_domain_translate(struct irq_domain *d,
+>  		return -EINVAL;
+>  
+>  	if (of_node) {
+> +		if (fwspec->param_count < 2)
+> +			return -EINVAL;
+> +
 
-I couldn't care less about that, but I admire your ability to guess
-what an email may or may not contain!
+This is another patch fixing a regression introduced by bcdd75c596c8.
 
-> so I did not go through it again - but that was
-> obviously incorrect. If you don't mind, I can respin another version of t=
-his
-> patchset, addressing your comments.
+>  		*hwirq = fwspec->param[0] + priv->ht_vec_base;
+>  		*type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
+>  	} else {
+>  		*hwirq = fwspec->param[0] - priv->gsi_base;
+> -		*type = IRQ_TYPE_NONE;
+> +
+> +		if (fwspec->param_count > 1)
+> +			*type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
+> +		else
+> +			*type = IRQ_TYPE_NONE;
 
-That's pretty pointless at the moment, as I'm not queuing anything
-other than fixes (and one week between versions is a sensible
-pace). Come back after -rc1 with a cover letter and the various
-comments addressed.
+This is yet another patch fixing PCI INTx handling. You can also move
+the check against 'param_count < 1' in this block.
+
+>  	}
+>  
+>  	return 0;
 
 	M.
 
---=20
+-- 
 Without deviation from the norm, progress is not possible.
