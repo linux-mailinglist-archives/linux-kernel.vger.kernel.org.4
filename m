@@ -2,61 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 834455F8D10
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 20:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D43755F8D11
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 20:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbiJISSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 14:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
+        id S230156AbiJISSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 14:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiJISRh (ORCPT
+        with ESMTP id S230233AbiJISSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 14:17:37 -0400
+        Sun, 9 Oct 2022 14:18:15 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8639CE1A;
-        Sun,  9 Oct 2022 11:17:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AC923B
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 11:18:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C35D9B80D13;
-        Sun,  9 Oct 2022 18:17:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 093F1C433D6;
-        Sun,  9 Oct 2022 18:17:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D137AB80D13
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 18:18:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47301C433D6;
+        Sun,  9 Oct 2022 18:18:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665339428;
-        bh=WlUVYWcv0RSfNrnisKDi/OW/RV7h0cjuQQ19bFBOoog=;
+        s=korg; t=1665339492;
+        bh=iqQq41+17rFhUiR/5kPv3GL3DyNm2+qz9wuHcaMPe+w=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rw38q9pBwLqsPyZDDYNCUJVBM/wQdBpInwfKXrazRDvratMB1+6APuHPbMdcHL+tR
-         alh1uFrcM2QaDGYEEa9Ik0BNxthXgmQq9lBiv8sDxOxB4YOspqrAFf70S0yVAsH5yg
-         DoiwdVTyLl225YVSwhFR/J3E6MuPtUqjH3skq9iE=
-Date:   Sun, 9 Oct 2022 20:17:51 +0200
-From:   'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Andrew Chernyakov <acherniakov@astralinux.ru>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH 5.10 1/1] rpmsg: qcom: glink: replace strncpy() with
- strscpy_pad()
-Message-ID: <Y0MQT2z+nc8+0WPY@kroah.com>
-References: <20221007132931.123755-1-acherniakov@astralinux.ru>
- <20221007132931.123755-2-acherniakov@astralinux.ru>
- <Y0BWc6A8C++M9TWP@kroah.com>
- <36f776cbc16f4e988d96b7bcb77cd559@AcuMS.aculab.com>
- <e829329e-ac55-e04a-c8ab-4eeeec6217ab@linaro.org>
+        b=cx3QoND2P6onLWlv8CbxTpmDlX7tLfTZf5CLAeOGQY4GAH7x+DJCGHuWHRyLHu1lU
+         5kqneydhaLOkWij4CeaFqWzsrDQVg22gDnN0Ol33aIoTyNHyIwRs9iu41q4GluUfPv
+         mruSn1QLaCcC4xTE56VyGe79nxxN58ZzQ6vv5MFo=
+Date:   Sun, 9 Oct 2022 20:18:55 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rui Li <me@lirui.org>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: rtl8192e: Fix braces/tabs/number/OOM warnings
+Message-ID: <Y0MQj3omqYwNHAZ2@kroah.com>
+References: <166528776854.9.8249842126243786800.67724771@lirui.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e829329e-ac55-e04a-c8ab-4eeeec6217ab@linaro.org>
+In-Reply-To: <166528776854.9.8249842126243786800.67724771@lirui.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,38 +49,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 05:23:06PM +0200, Krzysztof Kozlowski wrote:
-> On 08/10/2022 23:11, David Laight wrote:
-> >>> ---
-> >>>  drivers/rpmsg/qcom_glink_native.c | 2 +-
-> >>>  drivers/rpmsg/qcom_smd.c          | 4 ++--
-> >>>  2 files changed, 3 insertions(+), 3 deletions(-)
-> >>
-> >> Why just this specific kernel branch?  We can't add patches to an older
-> >> tree and have someone upgrade to a newer one and hit the same issue.
-> >>
-> >> So please provide backports for all active versions.  In this case that
-> >> would be 5.15.y and 5.19.y.
-> > 
-> > If it is only fixing a compile warning is it even stable material?
-> > The generic commit message doesn't say whether the old code was
-> > actually right or wrong.
-> > 
-> > At least one of these 'replace strncpy()' changes was definitely
-> > broken (the copy needed to be equivalent to memcpy()).
-> > 
-> > So applying ANY of them to stable unless they actually fix
-> > a real bug seems dubious.
+On Sun, Oct 09, 2022 at 11:55:36AM +0800, Rui Li wrote:
+> Fix warnings generated by checkpatch.pl: unnecessary braces after
+> if, too many leading tabs, int type conversion before number,
+> OOM message ourput.
 > 
-> Except the warning from GCC, there was no bug to fix. The warning is
-> about discouraged and risky practice, but no actual real risk was
-> identified, so for me it matches stable rules poorly.
+> Signed-off-by: Rui Li <me@lirui.org>
+> ---
+>  .../staging/rtl8192e/rtl8192e/r8192E_dev.c    |  3 +-
+>  .../staging/rtl8192e/rtl8192e/r8192E_phy.c    |  9 ++----
+>  drivers/staging/rtl8192e/rtl8192e/rtl_core.c  |  3 --
+>  drivers/staging/rtl8192e/rtl8192e/rtl_dm.c    | 30 +++++++------------
+>  drivers/staging/rtl8192e/rtl819x_BAProc.c     |  5 ++--
+>  drivers/staging/rtl8192e/rtl819x_HTProc.c     |  1 +
+>  drivers/staging/rtl8192e/rtllib_rx.c          |  8 ++---
+>  drivers/staging/rtl8192e/rtllib_softmac_wx.c  |  7 ++---
+>  8 files changed, 25 insertions(+), 41 deletions(-)
 > 
-> It's basically backporting to silence automated code checkers...
 
-Are you sure?  Look at the code path here, there might be a way to
-overflow the string, from the virtio interface, but I might be wrong...
+Hi,
 
-Anyway, I need all the backports before I can take this one, sorry.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-greg k-h
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- Your patch did many different things all at once, making it difficult
+  to review.  All Linux kernel patches need to only do one thing at a
+  time.  If you need to do multiple things (such as clean up all coding
+  style issues in a file/driver), do it in a sequence of patches, each
+  one doing only one thing.  This will make it easier to review the
+  patches to ensure that they are correct, and to help alleviate any
+  merge issues that larger patches can cause.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
