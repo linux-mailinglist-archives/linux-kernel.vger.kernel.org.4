@@ -2,92 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02A8B5F89C0
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 08:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F055F89CA
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 08:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbiJIGoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 02:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58482 "EHLO
+        id S229988AbiJIGqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 02:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiJIGov (ORCPT
+        with ESMTP id S229968AbiJIGqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 02:44:51 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACA956451;
-        Sat,  8 Oct 2022 23:44:48 -0700 (PDT)
-Received: from loongson-pc.loongson.cn (unknown [10.20.42.32])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxX+DPbUJjsykpAA--.19711S6;
-        Sun, 09 Oct 2022 14:44:32 +0800 (CST)
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Len Brown <lenb@kernel.org>, rafael@kernel.org,
-        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: [PATCH V3 4/4] irqchip/loongson-liointc: Support to set irq type for ACPI path
-Date:   Sun,  9 Oct 2022 14:44:31 +0800
-Message-Id: <20221009064431.18839-5-lvjianmin@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221009064431.18839-1-lvjianmin@loongson.cn>
-References: <20221009064431.18839-1-lvjianmin@loongson.cn>
+        Sun, 9 Oct 2022 02:46:03 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F4332073
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 23:45:39 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1ohQ3v-0005dm-5X; Sun, 09 Oct 2022 08:45:23 +0200
+Message-ID: <021de720-4a57-1a88-f456-fcaeaa3653de@leemhuis.info>
+Date:   Sun, 9 Oct 2022 08:45:22 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: BUG reproduced: 6.0.0-RC kernels trigger Firefox snap bug with
+ 6.0.0-rc3 through 6.0.0-rc7
+Content-Language: en-US, de-DE
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        linux-kernel@vger.kernel.org
+Cc:     Marc Miltenberger <marcmiltenberger@gmail.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Slade Watkins <srw@sladewatkins.net>
+References: <b0c258c3-6dcf-aade-efc4-d62a8b3a1ce2@alu.unizg.hr>
+ <5bb75cbc-a0db-537b-12d0-889230c865d8@leemhuis.info>
+ <0fb2a9ff-df76-8af9-e54a-c2dc6bfd9478@leemhuis.info>
+ <bdab45d3-c893-42ff-dbb9-5fa93d0dff55@alu.unizg.hr>
+ <dd62210d-d095-f971-2b7b-0ec54fd189a9@leemhuis.info>
+ <c05134cc-92fa-dac2-e738-cf6fae194521@alu.unizg.hr>
+ <6ba15505-1c04-df2b-237f-b3060f26d2e6@leemhuis.info>
+ <25cd0e21-ed8e-1836-b0ec-c052c2276cd8@alu.unizg.hr>
+ <c40786ab-8b3b-9b64-683f-dac589c024df@alu.unizg.hr>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <c40786ab-8b3b-9b64-683f-dac589c024df@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxX+DPbUJjsykpAA--.19711S6
-X-Coremail-Antispam: 1UD129KBjvdXoW7JrWUCF17WFW5CFy5Zw4UCFg_yoWfKwc_u3
-        yIg3Z3Ga4rZF1xJr97uw1YvrWv9aykW3Wv9F45uasav3y8X343urW7Zw13Ga97Kr10vF97
-        AF1S9rySya47tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbakFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
-        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
-        vE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
-        87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
-        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxE
-        wVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26ryrJr1UJwCFx2IqxVCFs4
-        IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1r
-        MI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJV
-        WUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWU
-        JVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJb
-        IYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1665297939;36b1353a;
+X-HE-SMSGID: 1ohQ3v-0005dm-5X
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For ACPI path, the xlate callback used IRQ_TYPE_NONE and ignored
-the irq type in intspec[1]. For supporting to set type for
-irqs of the irqdomain, intspec[1] should be used to get irq
-type.
+On 08.10.22 18:43, Mirsad Goran Todorovac wrote:
+> On 08. 10. 2022. 15:41, Mirsad Goran Todorovac wrote:
+>> On 06. 10. 2022. 18:58, Thorsten Leemhuis wrote:
+>>> On 06.10.22 18:43, Mirsad Goran Todorovac wrote:
+>>>> On 06. 10. 2022. 15:23, Thorsten Leemhuis wrote:
+>>>>> On 06.10.22 14:43, Mirsad Todorovac wrote:
+>>>>>> On 10/6/22 14:25, Thorsten Leemhuis wrote:
+>>>>>>
+>>>>>>> One more question:
+>>>>>>>
+>>>>>>> On 06.10.22 14:00, Thorsten Leemhuis wrote:
+>>>>>>> Were those two vanilla kernels? I asked in #snappy on IRC and was
+>>>>>>> told
+>>>>>>> that "snapd simply expects some ubuntu bit in patched into the
+>>>>>>> kernel if
+>>>>>>> it detects that it runs on an official ubuntu install...". This
+>>>>>>> was also
+>>>>>>> suggested "it probably makes sense to file a but in LP to make the
+>>>>>>> kernel team aware".
+>>>>>> Yes, last time I tried it with git clone from linux_stable on
+>>>>>> kernel.org
+>>>>>> and
+>>>>>> config-6.0.0-060000-generic from the official Ubuntu mainline build
+>>>>> You don't want to do that. Better take the config used to build a
+>>>>> working kernel (say 5.19.y) and then build 6.0 with it (after running
+>>>>> "make olddefconfig"), because it might be a new kernel option (say
+>>>>> for a
+>>>>> new security technique) that might cause the problem, as explained
+>>>>> here:
+>>>>> https://docs.kernel.org/admin-guide/reporting-regressions.html
+>>>> If I understood well, that would mean building www.kernel.org git
+>>>> linux_stable
+>>>> source with Ubuntu's config-5.9.13-051903?
+>>> I meant "please download Linux 6.0 (ideally through git, that you have
+>>> everything to perform a bisection), add the config from a working kernel
+>>> (if config-5.9.13-051903 is one, yeah, then take that) as .config and
+>>> then run "make olddefconfig" before compiling and installing the kernel
+>>> to see if 6.0 fails with that config that was working.
+>>
+>> Having done this build with mentioned config-5.19.13-051903-config from
+>> Ubuntu's mainline build and your recommended make option
+>> had produced a kernel that so far did not exhibit the Firefox snap
+>> "tab crash/wrong Verneed record version" bug.
+>>
+>> However, the uptime is 1d 18h50min, so it might be too early to draw
+>> a definite general conclusion.
+>>
+>> Now, the brave conlusion seems to be that the culprit is one of the
+>> modules
+>> added in config-6.0.0-060000-generic.
+>> [...]
 
-Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
----
- drivers/irqchip/irq-loongson-liointc.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+A new module might be one possible explanation for such a situations,
+but there are others that are more likely.
 
-diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
-index 0da8716f8f24..838c8fa2d868 100644
---- a/drivers/irqchip/irq-loongson-liointc.c
-+++ b/drivers/irqchip/irq-loongson-liointc.c
-@@ -167,7 +167,12 @@ static int liointc_domain_xlate(struct irq_domain *d, struct device_node *ctrlr,
- 	if (WARN_ON(intsize < 1))
- 		return -EINVAL;
- 	*out_hwirq = intspec[0] - GSI_MIN_CPU_IRQ;
--	*out_type = IRQ_TYPE_NONE;
-+
-+	if (intsize > 1)
-+		*out_type = intspec[1] & IRQ_TYPE_SENSE_MASK;
-+	else
-+		*out_type = IRQ_TYPE_NONE;
-+
- 	return 0;
- }
- 
--- 
-2.31.1
+> I know that it is uncool to reply one's own email,
 
+No, it's not. At least not in the land of the Linux kernel. :-D
+
+> but this is new development:
+> 
+> After starting a zoom spawned session, the Firefox snap tab crash
+> reappeared.
+> 
+> I will reinstate that if was done with the config-5.19.13-generic and
+> "make olddefconfig"
+> followed by a "make -j 10 deb-pkg" build.
+> 
+> Here is the exact log of my actions:
+> 
+>   678  10/06/2022 06:44:58 PM  vi config-5.19.13-051913-generic
+>   679  10/06/2022 06:45:21 PM  time rm -rf linux_stable_build/
+>   680  10/06/2022 06:45:31 PM  time cp -rp linux_stable linux_stable_build
+>   681  10/06/2022 06:46:39 PM  time diff -ur linux_stable linux_stable_build
+>   682  10/06/2022 06:47:38 PM  cp config-5.19.13-051913-generic
+> linux_stable_build/.config
+>   683  10/06/2022 06:47:46 PM  cd linux_stable_build
+>   684  10/06/2022 06:47:51 PM  make olddefconfig
+>   685  10/06/2022 06:48:05 PM  time nice make -j10 deb-pkg
+
+Yeah, then it's pretty certain that his is a regression. But it could be
+caused by all sorts of things and I have no idea where to start. We thus
+really could need a bisection to find the root of the problem. This will
+be hard, as this crash only happens infrequently. Thing is: the Ubuntu
+developers likely have a strong interest in this particular issue and
+due to their knowledge of snap have way better chances to pin-point the
+root case quickly. So submitting a bug report to them might be the best
+way forward in this situation, even if the kernel is likely at fault here.
+
+Ciao, Thorsten
