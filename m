@@ -2,198 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7635F888D
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 02:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68CE85F889E
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 02:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbiJIASm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 20:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
+        id S229750AbiJIA0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 20:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiJIASj (ORCPT
+        with ESMTP id S229563AbiJIA0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 20:18:39 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163892F660
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 17:18:39 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id i6so2500551pli.12
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 17:18:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=kA0HUMgJdt2O8o8SG2VJ7q/PSPreCGT8pIhZWTT7H7M=;
-        b=jfzgUwpRyLto7mRdV23aSgE7IWBpIGaZqOV2k76H3oqtg+pbd+uxXwk8ocGLWGGHmi
-         ZOxYkloG5psC7MF+uZ6uqNUM+sjcSbL9avc27DLRGK0sMODzwqzYVL4K14C4usM4DZvZ
-         rxVHWG+HNFoTUZvBY71yzfLJjYvpODLuJFWkk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kA0HUMgJdt2O8o8SG2VJ7q/PSPreCGT8pIhZWTT7H7M=;
-        b=io6MoP6SqcY8KYIR3RbSIdJQbJnM9ucbLtLFBcWlJJGUZmIz1xnTpzNmg/K0UjD1/C
-         H57r10B/x5ef1YJogs2d1zH1foES1LoXq2IQGhK3RXHAhz3tBvNoWbSFpv/F1qaPWVHt
-         2f49KcjdL89UtibCkxbgCoi+xCr7uhmgfr0VoixWV8MhElMbefeGGuruzp5CkNo+G7w0
-         0mIt9pP+UeMX3pyuwTkA+D8wlYbsNrB6h48yHAxJW2159YKSFkmY1G5MaFm+nRV1Qa0M
-         KDoI5kVW/ylDVgEau+YMMJW8xxHgx5J2bu34nwMubl0Tobj6/09Clyux2r8Eh2nVhlPW
-         WhSA==
-X-Gm-Message-State: ACrzQf0vA2BPtLsFJrRem/Oa1fMuTYyXmvfJhrM1RetBqsr2UhaMrw4u
-        7eP5pltBFC04DZ0ennqsLnaAWQ==
-X-Google-Smtp-Source: AMsMyM6OprtZR9DEBnCoqhxK/4A16BNErCSxZZW+JRdGni+bZY3KMwPDYi2OmP3iaFAYzhdquX7Gbw==
-X-Received: by 2002:a17:902:e883:b0:17f:5e7f:2bbf with SMTP id w3-20020a170902e88300b0017f5e7f2bbfmr11845201plg.150.1665274717912;
-        Sat, 08 Oct 2022 17:18:37 -0700 (PDT)
-Received: from ?IPv6:::1? ([2607:fb90:338b:87a3:6e32:4dc5:2126:f18e])
-        by smtp.gmail.com with ESMTPSA id f1-20020a625101000000b00561b53512b0sm3986475pfb.195.2022.10.08.17.18.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Oct 2022 17:18:37 -0700 (PDT)
-Date:   Sat, 08 Oct 2022 17:18:35 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
-        Christine Caulfield <ccaulfie@redhat.com>,
-        David Teigland <teigland@redhat.com>, cluster-devel@redhat.com
-CC:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        paulo.miguel.almeida.rodenas@gmail.com
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2=5D=5Bnext=5D_dlm=3A_Replace_one-e?= =?US-ASCII?Q?lement_array_with_flexible-array_member?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Y0IFEUjwXGZFf7bB@mail.google.com>
-References: <Y0IFEUjwXGZFf7bB@mail.google.com>
-Message-ID: <378C6BDE-0A68-4938-86CD-495BD5F35BE6@chromium.org>
+        Sat, 8 Oct 2022 20:26:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5D22E9FB;
+        Sat,  8 Oct 2022 17:26:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA4A960B29;
+        Sun,  9 Oct 2022 00:26:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A7A8C43142;
+        Sun,  9 Oct 2022 00:26:21 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="PX4nnIOK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1665275176;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7zZXtzJcFLYkSrXJJYKIVFffp4v7t60F00p3NU1sSks=;
+        b=PX4nnIOKh3FHa9d1G132kBTXFxz7qYQBOTukTgSGG6fc4aKl+1ua8ttlw/vsoBqgsW+CHC
+        NTGzZbQmolIFuqf8+kDGOqJtdV61Oxsts7vNgF2zGCk6Fi2PVF9YyHTL3BJyD+I6xXQNse
+        S5HVOwfe+G2V37JJFP20h8mZS0WLTwM=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 9a9a9268 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sun, 9 Oct 2022 00:26:15 +0000 (UTC)
+Received: by mail-ua1-f42.google.com with SMTP id i20so2853853ual.4;
+        Sat, 08 Oct 2022 17:26:12 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3Wjg3OFrVFWd3xt6aGIRFkt/c9uMxhTuPtcyIAkwN2yc3FLGiN
+        2KRFuspzQ4ilrmTnT6wNLAZnPPKKcFMMdZKoRuc=
+X-Google-Smtp-Source: AMsMyM7Ghd+rNLLkdUe772S1SZ8rADl1G6UAF0aO2TFON1i86eRArx6SOwts50zdZDWmmLpyXWt8nLKkLulPCRn4G5w=
+X-Received: by 2002:ab0:70b9:0:b0:3d7:84d8:35ae with SMTP id
+ q25-20020ab070b9000000b003d784d835aemr6771029ual.24.1665275171232; Sat, 08
+ Oct 2022 17:26:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221007180107.216067-1-Jason@zx2c4.com> <20221007180107.216067-5-Jason@zx2c4.com>
+ <f1ca1b53bc104065a83da60161a4c7b6@AcuMS.aculab.com> <Y0H7rcJ3/JOyDYU8@zx2c4.com>
+In-Reply-To: <Y0H7rcJ3/JOyDYU8@zx2c4.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Sat, 8 Oct 2022 18:26:00 -0600
+X-Gmail-Original-Message-ID: <CAHmME9ojgUnrp+Mys3pzJZ=0C7RHbgsm-wOkWk-GdW2dnJwf8g@mail.gmail.com>
+Message-ID: <CAHmME9ojgUnrp+Mys3pzJZ=0C7RHbgsm-wOkWk-GdW2dnJwf8g@mail.gmail.com>
+Subject: Re: [PATCH v4 4/6] treewide: use get_random_u32() when possible
+To:     David Laight <David.Laight@aculab.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        =?UTF-8?Q?Christoph_B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Christoph Hellwig <hch@lst.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dave Airlie <airlied@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Jan Kara <jack@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Graf <tgraf@suug.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
+        Chuck Lever <chuck.lever@oracle.com>, Jan Kara <jack@suse.cz>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On October 8, 2022 4:17:37 PM PDT, Paulo Miguel Almeida <paulo=2Emiguel=2E=
-almeida=2Erodenas@gmail=2Ecom> wrote:
->One-element arrays are deprecated, and we are replacing them with
->flexible array members instead=2E So, replace one-element array with
->flexible-array member in struct dlm_ls, and refactor the rest of the
->code, accordingly=2E
-
-Thanks for working on this!
-
+On Sat, Oct 8, 2022 at 4:37 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
 >
->We strive to make changes that don't produce any before/after binary
->output differeces as that makes it easier for the reviewer to accept the
->patch=2E In this particular instance, it wasn't possible to achieve this
->due to the fact that the ls_name[1] size, which is used as the
->NUL-terminator space, was hidden within the struct's padding as shown
->below=2E
+> On Sat, Oct 08, 2022 at 10:18:45PM +0000, David Laight wrote:
+> > From: Jason A. Donenfeld
+> > > Sent: 07 October 2022 19:01
+> > >
+> > > The prandom_u32() function has been a deprecated inline wrapper around
+> > > get_random_u32() for several releases now, and compiles down to the
+> > > exact same code. Replace the deprecated wrapper with a direct call to
+> > > the real function. The same also applies to get_random_int(), which is
+> > > just a wrapper around get_random_u32().
+> > >
+> > ...
+> > > diff --git a/net/802/garp.c b/net/802/garp.c
+> > > index f6012f8e59f0..c1bb67e25430 100644
+> > > --- a/net/802/garp.c
+> > > +++ b/net/802/garp.c
+> > > @@ -407,7 +407,7 @@ static void garp_join_timer_arm(struct garp_applicant *app)
+> > >  {
+> > >     unsigned long delay;
+> > >
+> > > -   delay = (u64)msecs_to_jiffies(garp_join_time) * prandom_u32() >> 32;
+> > > +   delay = (u64)msecs_to_jiffies(garp_join_time) * get_random_u32() >> 32;
+> > >     mod_timer(&app->join_timer, jiffies + delay);
+> > >  }
+> > >
+> > > diff --git a/net/802/mrp.c b/net/802/mrp.c
+> > > index 35e04cc5390c..3e9fe9f5d9bf 100644
+> > > --- a/net/802/mrp.c
+> > > +++ b/net/802/mrp.c
+> > > @@ -592,7 +592,7 @@ static void mrp_join_timer_arm(struct mrp_applicant *app)
+> > >  {
+> > >     unsigned long delay;
+> > >
+> > > -   delay = (u64)msecs_to_jiffies(mrp_join_time) * prandom_u32() >> 32;
+> > > +   delay = (u64)msecs_to_jiffies(mrp_join_time) * get_random_u32() >> 32;
+> > >     mod_timer(&app->join_timer, jiffies + delay);
+> > >  }
+> > >
+> >
+> > Aren't those:
+> >       delay = prandom_u32_max(msecs_to_jiffies(xxx_join_time));
 >
->$ diff <(objdump -M intel -j =2Etext -D dlm=2Eold) <(objdump -M intel -j
->=2Etext -D dlm=2Enew)
-
-I'd suggest different options here, this is harder to map back to the sour=
-ce line=2E
-See https://outflux=2Enet/blog/archives/2022/06/24/finding-binary-differen=
-ces/
-for lots of details=2E :)
-
+> Probably, but too involved and peculiar for this cleanup.
 >
->13778c13778
-><     c693:	49 8d bc 24 c0 08 00 	lea    rdi,[r12+0x8c0]
->---
->>     c693:	49 8d bc 24 c1 08 00 	lea    rdi,[r12+0x8c1]
+> Feel free to send a particular patch to that maintainer.
 
-This implies something unexpected changed=2E
+I guess the cocci patch looks like this, so maybe I'll put that in 1/7
+if I respin this.
 
->
->$ pahole dlm=2Eold -C dlm_ls
->=2E=2E=2E
->	int                        ls_namelen;           /*  2232     4 */
->	char                       ls_name[1];           /*  2236     1 */
->
->	/* size: 2240, cachelines: 35, members: 90 */
->	/* sum members: 2166, holes: 17, sum holes: 71 */
->	/* padding: 3 */
->	/* paddings: 3, sum paddings: 17 */
->	/* forced alignments: 1 */
->} __attribute__((__aligned__(8)));
->
->$ pahole dlm=2Enew -C dlm_ls
->=2E=2E=2E
->	int                        ls_namelen;           /*  2232     4 */
->	char                       ls_name[];            /*  2236     0 */
->
->	/* size: 2240, cachelines: 35, members: 90 */
->	/* sum members: 2165, holes: 17, sum holes: 71 */
->	/* padding: 4 */
->	/* paddings: 3, sum paddings: 17 */
->	/* forced alignments: 1 */
->} __attribute__((__aligned__(8)));
-
-This has trailing padding, so the struct size didn't actually change=2E
-
->This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
->routines on memcpy() and help us make progress towards globally
->enabling -fstrict-flex-arrays=3D3 [1]=2E
->
->Link: https://github=2Ecom/KSPP/linux/issues/79
->Link: https://github=2Ecom/KSPP/linux/issues/228
->Link: https://gcc=2Egnu=2Eorg/bugzilla/show_bug=2Ecgi?id=3D101836 [1]
->
->Signed-off-by: Paulo Miguel Almeida <paulo=2Emiguel=2Ealmeida=2Erodenas@g=
-mail=2Ecom>
->---
->My apologies for v2, there was an accidental <Cr> I added on
->the CC line which messed up the body of my previus email=2E=20
->
->This patch sets it right=2E
->
->---
-> fs/dlm/dlm_internal=2Eh | 2 +-
-> fs/dlm/lockspace=2Ec    | 2 +-
-> 2 files changed, 2 insertions(+), 2 deletions(-)
->
->diff --git a/fs/dlm/dlm_internal=2Eh b/fs/dlm/dlm_internal=2Eh
->index e34c3d2639a5=2E=2Ece2e32ed2ede 100644
->--- a/fs/dlm/dlm_internal=2Eh
->+++ b/fs/dlm/dlm_internal=2Eh
->@@ -670,7 +670,7 @@ struct dlm_ls {
-> 	void			*ls_ops_arg;
->=20
-> 	int			ls_namelen;
->-	char			ls_name[1];
->+	char			ls_name[];
-> };
->=20
-> /*
->diff --git a/fs/dlm/lockspace=2Ec b/fs/dlm/lockspace=2Ec
->index bae050df7abf=2E=2Ec3a36f3197da 100644
->--- a/fs/dlm/lockspace=2Ec
->+++ b/fs/dlm/lockspace=2Ec
->@@ -473,7 +473,7 @@ static int new_lockspace(const char *name, const char=
- *cluster,
->=20
-> 	error =3D -ENOMEM;
->=20
->-	ls =3D kzalloc(sizeof(struct dlm_ls) + namelen, GFP_NOFS);
->+	ls =3D kzalloc(sizeof(struct dlm_ls) + namelen + 1, GFP_NOFS);
-
-This is allocating 1 more byte than before, since the struct size didn't c=
-hange=2E But this has always allocated too much space, due to the struct pa=
-dding=2E For a "no binary changes" patch, the above "+ 1" needs to be left =
-off=2E
-
-I would expect the correct allocation size to be:
-offsetof(typeof(*ls), ls_name) + namelen
-
-Question, though: is ls_name _expected_ to be %NUL terminated, and was the=
- prior 3 bytes of extra allocation accidentally required?
-
--Kees
-
---=20
-Kees Cook
+@@
+expression E;
+identifier get_random_u32 =~ "get_random_int|prandom_u32|get_random_u32";
+typedef u64;
+@@
+- ((u64)(E) * get_random_u32() >> 32)
++ prandom_u32_max(E)
