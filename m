@@ -2,81 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED9D5F88E7
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 04:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9EFF5F88E8
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 04:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbiJICdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 22:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34348 "EHLO
+        id S229871AbiJICeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 22:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbiJICdc (ORCPT
+        with ESMTP id S229787AbiJICeK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 22:33:32 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED14367AE;
-        Sat,  8 Oct 2022 19:33:31 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id y4so1695461iof.3;
-        Sat, 08 Oct 2022 19:33:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eKgMiGJ4xMxKYE+sQjNHKzDaMNVrm+oHUpyMXCSQTDs=;
-        b=NYxjOsB+i0Q2ncUgRrwdIlyCeHGXDiDQMmC2QhU/GxeAdvqZz4Jqs83TVFyc/xxPHF
-         xoxeAcjCNNk9cT36I2UsTNFh1MpzMgFw2RqsKQP1t9QKQfWaF0oQFKYuULT+bPNb1ULK
-         olXhHsfMph/NoI5REHcWMZwWXYzwhSec67GlMSVFje4mN5bn1i/18t/EQl2LTQPy5372
-         Dcs3UhVWPx01WuR08asoh6m4cksqAs92QVS7BkG9wHbGdNS9kcSRc31yPGsMdTjFkINi
-         pyG1PqaxlVn2HM/r2L5klq1kOrBxlJvCN1+E29HNVzNNUff5699oF8Z/C7MNgI+vRbyN
-         lmUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eKgMiGJ4xMxKYE+sQjNHKzDaMNVrm+oHUpyMXCSQTDs=;
-        b=u5lO+knmXDvYyNdHFrFQhUCgmi0mrQY3naYW6H6lg/gKesn3SN7llBhxGXbABN2WdA
-         qC8miME9oBHzoQhTakrbO1Qi5ybPSbzsG1eO+iWwZ3cnxxxAgfMaPaXbiEGAmhmfojBU
-         u5KYxrtBPNT/ZXiE+D3VfUk5qYzJmhaneCBNIhR7ek2YVMjcM7GPz46qoZvAvk14ULLS
-         TYPVuL0MaNTlC4xO8S3pFmOwO8fJtud/aWL++R+mJCVMZ8bp7AYnMlq4tI0bqYf7zBjo
-         7ccjmK3ALlv2VhKoPYb9bmmvHpwAyZfRKSpuQu2YDeeC5vjNNzVq8vWciZVayphD3Ljg
-         VvWA==
-X-Gm-Message-State: ACrzQf0dP2vIxzN55AW2nsu6NYubxeFwtazdGbPWFKwlxMZYwAHFJOhj
-        3CdRePqtNfUufFYrvy2Mw2M=
-X-Google-Smtp-Source: AMsMyM5GzbjwHI/Y3eo0drTr+O2Tna+hX32qEn8v3GHuwVNW5h74J0HM80QYq2XPcO73lKQxp6N5LQ==
-X-Received: by 2002:a05:6602:98:b0:6a2:1723:bee1 with SMTP id h24-20020a056602009800b006a21723bee1mr5195402iob.58.1665282810832;
-        Sat, 08 Oct 2022 19:33:30 -0700 (PDT)
-Received: from ?IPV6:2604:2d80:4d87:cd00:9f51:32d7:1177:67d? ([2604:2d80:4d87:cd00:9f51:32d7:1177:67d])
-        by smtp.gmail.com with ESMTPSA id v14-20020a92ab0e000000b002faa9fe86bfsm2449714ilh.56.2022.10.08.19.33.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Oct 2022 19:33:30 -0700 (PDT)
-Message-ID: <f488fa30-a307-96f6-fe85-271cdc48faa3@gmail.com>
-Date:   Sat, 8 Oct 2022 21:33:28 -0500
+        Sat, 8 Oct 2022 22:34:10 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2061.outbound.protection.outlook.com [40.107.20.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B25367B7
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 19:34:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R6GHEabDm31QvdmB0BjXp3pHgnuyrmOpEjEPztv2lqkBdIQN5BW0QtnShDjuNF6I4wzHK0dDhis2rj6PvZTikjq21nSny/q/y1FcrX0DXTdYNOkcGIpGFP+uijYHc6ZIFOb7NrUk81zqzolEyOxpGUxzcFSKqG/NLn/GwbheDg1q2C676KrZdpLTXj6QXVwm/OgMoVxb4vKXx4D6NtnBn2cQsTCAmbsNL3upQG7oRxW2B1p2qJrUIglaSW5ZouabdV4eWYZUBKfwDYcJJwKFensf5m6xPcAgp/kKz2z0rp/tPY6I1zkrCkBnuN1JejfLefAvB1RrWEAdvPcbpD5hYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+X6/GXy1Llzv/9ki8+XdQOhq+ONYkO4HR3wJ1puQ/J4=;
+ b=kKU3v49zj790UeOa+X1gqH5RGfiOXzn7/dqDP5btm2mbX+Kk6txzxgQR2J1tpbvCGDBJ4ppFqtt0zEVccG9mdTPn5PBfqksxEBLxNZeHkRzwGDji0Y304ce2Rfpn0EN6Zlu0tYBIJ1LhBQbcpNWicAwJcoARipeDzEukIRquuVafxt6XpfDB5KEjPxIM6h3I564s6NP+p5O7cv0hI6FQQfxBiluLPIPuTFnT4pk3dhQW2zH2pumVnntsbVXKy9bbSM6d9Rny3X3jEFxlEIOBl0Iu7E6HJF5VdM5a+p218kfXhnf6l+fWMRn/SC5a5V/wh3/KjmykKWverNUi+pXeJw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+X6/GXy1Llzv/9ki8+XdQOhq+ONYkO4HR3wJ1puQ/J4=;
+ b=bw2thLH8IozThbfc7hj41douWXX8Ke8BDLy3XvRxhFTQ8SnX9Zcmo3v8CqOJG1f7todvKUWSD0PYo36FV8LHYrCVyjUDhzH73gkU6oN8OiYDOTM2TICn4ayAdSxYTRKTv70DRigq+FRygGpvA/ItIox0aICx5lxZ0K1CO1dJPX4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+ by AM0PR04MB6833.eurprd04.prod.outlook.com (2603:10a6:208:17d::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.32; Sun, 9 Oct
+ 2022 02:34:07 +0000
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::181b:75f7:dbc8:b4bc]) by AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::181b:75f7:dbc8:b4bc%7]) with mapi id 15.20.5709.015; Sun, 9 Oct 2022
+ 02:34:07 +0000
+From:   Liu Ying <victor.liu@nxp.com>
+To:     dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, tzimmermann@suse.de
+Subject: [PATCH] drm/imx: Kconfig: Remove duplicated 'select DRM_KMS_HELPER' line
+Date:   Sun,  9 Oct 2022 10:35:27 +0800
+Message-Id: <20221009023527.3669647-1-victor.liu@nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR03CA0085.apcprd03.prod.outlook.com
+ (2603:1096:4:7c::13) To AM7PR04MB7046.eurprd04.prod.outlook.com
+ (2603:10a6:20b:113::22)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v6 1/2] power: supply: add Qualcomm PMI8998 SMB2 Charger
- driver
-Content-Language: en-US
-To:     Caleb Connolly <caleb.connolly@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <20221008183753.249514-1-caleb.connolly@linaro.org>
- <20221008183753.249514-2-caleb.connolly@linaro.org>
-From:   Joel Selvaraj <joelselvaraj.oss@gmail.com>
-In-Reply-To: <20221008183753.249514-2-caleb.connolly@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|AM0PR04MB6833:EE_
+X-MS-Office365-Filtering-Correlation-Id: e8ace01f-fb4f-4272-416b-08daa99ebd14
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SCqVYGCsIb5Ul8yw6xpPCJ4FVxgwHRL/97oH8oXMVRz95KQuLWdXW7jhIifHyFsLgAyXXdsStTXW6WAVF8Ei2EaezzIq9uihkULSCBlL8+MIrTyXLucWJps2CehYGnXXGqFj1nTXE8iXeNOQ1Bczz+1CTm1vSjW4RFl/SVeGHi7kNojGj4HkdEILaixYxTzZEp6C+6Jj8HoS/YOhpVlA+aFg/FOiXXN29THNXSMyFhSYImiT6DE1C6UYWO5sD9f6EZ9GrdWrE1uk+H5/1jic2KRqWQspPAuTK6uW/pwIko/wKbrD+kwRrQHtTJ0BsDMXaMAA+YpSsUrwa5ODxEsmY+6qWb4EtQcGFAEa3D16P+OiQ8iVgDCuDnQbIdtTQ9OYk0egxIp2PkX6U8JaSMDK4a/zCJGJFnEJqc8EXIhxlZJgYJAfqbq4MClVZNLxPSDoIo41HjrCt9dZ+d+SJCc+aXDugqsooQms/f2uhLRCX2B3lMtqevTc/OS/htkE8r459EsCbxa+SKv0eU4R0rGECe/FsEfkJ19iA0jQWk43galnPyTT/Qg5e28Eb2e7/LvMQCwNT2mtWZH3NpMQr5Gek33Qq5zGinS57eSmrfpDpemBTwCe72+dd8pyDD0ADCjCSuK5S2JxU+gmfmmBdJlbEJY3kCLWoSF6xg7RfhMTxKQmsTM4DZrvV+lX8FhxcmNHLEPC4nlb06TtpULOp92J2yfI3bi/xaUA5rdNIDcRwFkGtFgbFMa/DJiX4DUw6sUsUiszTzHlMNAiuqb3xcz2xQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(346002)(396003)(136003)(39860400002)(451199015)(1076003)(66476007)(41300700001)(66946007)(8676002)(36756003)(4744005)(316002)(7416002)(66556008)(5660300002)(2906002)(4326008)(86362001)(6486002)(38100700002)(83380400001)(26005)(8936002)(478600001)(186003)(6666004)(52116002)(6512007)(38350700002)(6506007)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?C6o1PxAIRloFRHqRjGWCP6jk3JR+Mhs1OBOZwpP7aNf2VodrpNJXRiQ69yev?=
+ =?us-ascii?Q?UDTAclfV0so7y5Lr5QtJp3gRZdouV+ijRrZHjXyxA90dOLRn8e4yte8ozNzp?=
+ =?us-ascii?Q?hvfsaGOv1yfSumrBDcPnSzqf0VQhcTKkQS0kajBDpAUDkx615B6JB36R5hnQ?=
+ =?us-ascii?Q?dBZ9w//k8htMO6cgNAyZuw3vi6v3Cp31e71IAuluujmNG3wWrdKy4T5HrDTJ?=
+ =?us-ascii?Q?4SuYPUUTMCn1rG7NZk6lmMrPN3YkaJernooliJuXfQ1/bRpzDpa97S79h3YB?=
+ =?us-ascii?Q?naf+eGF54HvVg4OS1+kdV+QqElPmxqp/pt2MWAirsiMZZbHSfhxwyglSWDKa?=
+ =?us-ascii?Q?tDi7QX1HnBIkeMqMl4XYd1mcp3n2kSmiI7kdsQ7+Lf1oAYLd41WeEnekKXxx?=
+ =?us-ascii?Q?GtYfh1xnb7uE6ielRfebyS4jcfnqC94cQNS8fGAimuEtTWQJEKFBX5JKqO9i?=
+ =?us-ascii?Q?7tmWBe+OaxeYFcsuZWvYNn5MzdIhbbvpsQ5xmiksBf8mcp8D944D9F+kmJWa?=
+ =?us-ascii?Q?qcTeWEFQzF24XRx/pnoWwQ2Vh0wnHJJhI88jm4QdBD0dQTz2f9jRmadAtCHt?=
+ =?us-ascii?Q?rTV64BJaOqegHFkUUU6ffuXa4uuRCeq/ns0+Mb9k1Di2wpVtzAWREuMVuFBm?=
+ =?us-ascii?Q?ljrXh/MZtdcn6XsIGVpQecFImjOAuNwiGieuIr+r1/U+AckPag9+8qJJOEIc?=
+ =?us-ascii?Q?yb3rdhSwa7A7mMudU7lIAejjpwIa1zkyiS56iCS+A3dRUaYePh+BRcpjVmqZ?=
+ =?us-ascii?Q?E5HTbvaytVfc/+hWw+7qNESAr3gnoiH3PgZxgNnE9zRCOFEy5ad6BeafpHpa?=
+ =?us-ascii?Q?87AUGCgXKpiy2/j1ZEQRFq8DL5DbuT2SZBZIlCiFfdqnO/iJrnTUmy9T1Hny?=
+ =?us-ascii?Q?KI5rN0eTUqALcmyqgZAJ1hXbJtSdKIdBrbGl3o3usoGjRuJzyAh0Y+OhB23S?=
+ =?us-ascii?Q?7gYzWkqQ7vU1jhFiMfek4ULV95YpktTSWI4KygVgPXR2fS975cZi5OSiAERg?=
+ =?us-ascii?Q?GXIiw3l4qOpTqmplCrlKKUR2n1thWqWfYfxh3KrxpFyJIyd2tfgBhjN7AGwK?=
+ =?us-ascii?Q?8umDx8tyIsakvFwhQoBlR1DZybCNz5PpH3gBe6GZAxju9FYOyZj85raHzMHJ?=
+ =?us-ascii?Q?Ba0DCZwgpYpDlD53i75o+9+9aRi7jzeyZaThLSMfgPFAaPhPg/9Kz3MfOc6a?=
+ =?us-ascii?Q?nUYrqwQxhU1dE9p89Zd1BiXYiNPLhiB4oQBfXLKMhyG4QAxGa1lRlZLO5oUs?=
+ =?us-ascii?Q?Uz27tKzkKnEANUrtfK8WJ1P9BqeO0LosGXgJ1k9sfiRm+9BeCzaVyFCemCGX?=
+ =?us-ascii?Q?K50egAq4EyzRH7Zeg+5nIYnbmCNAX/N0hg0XYgs6mJRFviFkf3LVbhwueo3Z?=
+ =?us-ascii?Q?AaCzuhDBy83Uqm7NHig07Ej3a1QECxPYvJDxNrx9oe0AgcdcG2P+mZwR5jbh?=
+ =?us-ascii?Q?aVkAPQk4shv6lOVbEYBxKYTh6fo9kRO6x9x3BNVrzbFQXSVJ+6mbSy120Iji?=
+ =?us-ascii?Q?jW4PGYZNj1R+T8ESZroVrrtbrA7yGhp9bb3kLGQ+oZCOzh9bTmj2Ut43EeAv?=
+ =?us-ascii?Q?TwtEgh+8r4xXiVeH/z1fz4Dn39hrqRFQ3g1RG+E7?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e8ace01f-fb4f-4272-416b-08daa99ebd14
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2022 02:34:07.1931
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tOZl639Ck9fJV8y0UW3a44KaF2W6hMpXiFDSnvF8UD2bs0y/Lq1VL5TpXpWNoO83TgDnyLDXZb95DFKxtvOvrA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6833
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,20 +113,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+A duplicated line 'select DRM_KMS_HELPER' was introduced in Kconfig file
+by commit 09717af7d13d ("drm: Remove CONFIG_DRM_KMS_CMA_HELPER option"),
+so remove it.
 
-On 08/10/22 13:37, Caleb Connolly wrote:
-> Add a driver for the SMB2 charger block found in the Qualcomm PMI8998
-> and PM660.
-> This driver adds initial support for detecting USB cables and managing
-> basic battery charging.
-> 
-> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+Fixes: 09717af7d13d ("drm: Remove CONFIG_DRM_KMS_CMA_HELPER option")
+Signed-off-by: Liu Ying <victor.liu@nxp.com>
+---
+ drivers/gpu/drm/imx/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-I can confirm that this driver works as expected on boot and when
-suspended/resumed. Tested in my Xiaomi Poco F1 running postmarketOS.
+diff --git a/drivers/gpu/drm/imx/Kconfig b/drivers/gpu/drm/imx/Kconfig
+index 975de4ff7313..fd5b2471fdf0 100644
+--- a/drivers/gpu/drm/imx/Kconfig
++++ b/drivers/gpu/drm/imx/Kconfig
+@@ -4,7 +4,6 @@ config DRM_IMX
+ 	select DRM_KMS_HELPER
+ 	select VIDEOMODE_HELPERS
+ 	select DRM_GEM_DMA_HELPER
+-	select DRM_KMS_HELPER
+ 	depends on DRM && (ARCH_MXC || ARCH_MULTIPLATFORM || COMPILE_TEST)
+ 	depends on IMX_IPUV3_CORE
+ 	help
+-- 
+2.37.1
 
-Tested-by: Joel Selvaraj <joelselvaraj.oss@gmail.com>
-
-Regards
-Joel Selvaraj
