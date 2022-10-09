@@ -2,191 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E24F5F8DBB
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 21:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A16A5F8DBC
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 21:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbiJITde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 15:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56266 "EHLO
+        id S230150AbiJITlV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 9 Oct 2022 15:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbiJITdb (ORCPT
+        with ESMTP id S229854AbiJITlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 15:33:31 -0400
-X-Greylist: delayed 533 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 09 Oct 2022 12:33:29 PDT
-Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B351DF26;
-        Sun,  9 Oct 2022 12:33:29 -0700 (PDT)
-From:   Furkan Kardame <f.kardame@manjaro.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
-        t=1665343474;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=0RGT+cnc5KlanDi6/VZkIBN/8bGM2fw81AiU1VLnLLs=;
-        b=Rr81dPcznea03FX/A8ZzAZZVJp9cQsRCOU4yt2tcGuNtGC+PRPtGwZqnyT5lw02Oafwr4L
-        N0TJQ/EB7myu4NWUK7f8ABn4+3v9AE3mfDfma23LKJViZsztHgSHK+JKyvXoVTTBxvTiSs
-        ky7fhyR3MgLeYnnCG50xcPnoAiW6s8hBYKgWik8WBolaOF8CJTpWuIngpntJB6L93OK9Rz
-        vFLx0bqefFoIm7CTfdWVNQSic0RaRnUdqvvvHl6SOT1HrkLHKTtShLrrOz5PmfoXvz4A8h
-        VEW1s9MIMnMy2yqQQSrJTrmZMpxaLzklpn8f+07kePobPgRJ4tqtU0yFekc6BQ==
-To:     pgwipeout@gmail.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Furkan Kardame <f.kardame@manjaro.org>
-Subject: [PATCH] net: phy: add support for Motorcomm yt8531C phy
-Date:   Sun,  9 Oct 2022 22:24:05 +0300
-Message-Id: <20221009192405.97118-1-f.kardame@manjaro.org>
+        Sun, 9 Oct 2022 15:41:17 -0400
+X-Greylist: delayed 978 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 09 Oct 2022 12:41:09 PDT
+Received: from symantec6.comsats.net.pk (symantec6.comsats.net.pk [203.124.39.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860D02317C
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 12:41:09 -0700 (PDT)
+X-AuditID: cb7c27aa-21bff70000006b5f-52-63430dd55563
+Received: from host201505.comsatshosting.com (host201505.comsatshosting.com [210.56.11.66])
+        (using TLS with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        by symantec6.comsats.net.pk (Symantec Messaging Gateway) with SMTP id B5.8B.27487.5DD03436; Sun,  9 Oct 2022 23:07:17 +0500 (PKT)
+Received: from [103.145.253.52] (UnknownHost [103.145.253.52]) by host201505.comsatshosting.com with SMTP;
+   Mon, 10 Oct 2022 00:29:29 +0500
+Message-ID: <B5.8B.27487.5DD03436@symantec6.comsats.net.pk>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Authentication-Results: ORIGINATING;
-        auth=pass smtp.auth=f.kardame@manjaro.org smtp.mailfrom=f.kardame@manjaro.org
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Re; Interest,riazeda.com.pk aft
+To:     linux-kernel@vger.kernel.org
+From:   "Chen Yun" <imrank@riazeda.com.pk>
+Date:   Sun, 09 Oct 2022 12:24:31 -0700
+Reply-To: chyyncn@gmail.com
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SW0gUURjHOzujjqsnx/F2XDVi0axErdAQ1DTtIqZQYUES5LiO7ua6qzuj
+        uerDPqSE4CWyi4uaXRWDHrTEFCuXyFQoM42Nwls3UsNu0kPXM+uuOy/Dx++b7///zv8cimBq
+        3BSURidwBh2rVbrKyYk4j5TIKZiq2nZjOCzuRX+LazJI+9694SDIlifkcVpNGWeI3pUjV1+/
+        PU4WDxDlNQ1XSRN4K6sF7hSiY9CPjgFCrBn6sQz1mffVAjmu6wGyTky5ig1Ix6OB16/cxJqg
+        o5D1fJOde6OR5nfkKo9AN68sYiEK15vQSq0gYh96M7J+HgZi7UtvRD11H1zE2hXzW6Yhmy9J
+        h6GazjkXcZShg9DgmLoRQLPEzCwxM0vMzE6zdkB2AcQbi1gcjWpnlEpfxLMCH6XjhKjiwm6A
+        gxqrCu/qA7OtrAXQFFB6QvXdFBXjwpbhKQs4QMmUfvB4Akbrc/V5RjXLq08YSrUcr/SFbShV
+        xcA1nFuqLVQqoCkEU581quNO8VpOwDdjAYgi8Bi4jNVgHmus4Az6VTELCKJIZQDMK4nOZugC
+        VuAKOa6YMzi6WRSlRHBPIFb2NnAFXHm+Ris42ngusxtL0tKObZkQGDqMG/7ShnQfGeVuAWmU
+        J15q8o+4FF/MFvGaAruuD7wnntDTQW2agXDpDf6VcUCn3ijQU231DwYJamZyHH9XemsfEgyp
+        0+s4RQBs3oClaHFKXapb213hDy++x3JekoZoowiGX2Yw95Nwp5PjgS+AvfjKfGCPqO2Jn79z
+        dwaOivfgYYe21RF8JjJvO3PqLeAQZDiEkSlbCAIrSENwGU0RQ7BTewi/R2wh2KFTSmECTWWN
+        SU/N90NLptVZ3peWyKPpHWcCdnR3JgU3nP7Yh761eZ20RmR3HaqIVyw/ujYNk/OXMsa3rBzT
+        1CQut1wI/plf0AKrc2Jifz2Jjaw7235Yk75u9uV8ZSth1BuJr7vndX/vZBxBicG9sn/n9vtZ
+        l6qfL85mfpoLr6zIGeKq+k1Kklez27cSBp79D5Gd+zYZBAAA
+X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_SOFTFAIL
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Geis <pgwipeout@gmail.com>
+Re; Interest,
 
-This patch adds support for Motorcomm YT8531C which is
-used in OrangePi 3 LTS, OrangePi 4 LTS and OrangePi 800
-Currently being used by Manjaro Arm kernel
+I am interested in discussing the Investment proposal as I explained
+in my previous mail. May you let me know your interest and the
+possibility of a cooperation aimed for mutual interest.
 
-Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-Signed-off-by: Furkan Kardame <f.kardame@manjaro.org>
----
- drivers/net/phy/motorcomm.c | 90 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 90 insertions(+)
+Looking forward to your mail for further discussion.
 
-diff --git a/drivers/net/phy/motorcomm.c b/drivers/net/phy/motorcomm.c
-index 7e6ac2c5e..cbc8ef15d 100644
---- a/drivers/net/phy/motorcomm.c
-+++ b/drivers/net/phy/motorcomm.c
-@@ -10,6 +10,7 @@
- #include <linux/phy.h>
- 
- #define PHY_ID_YT8511		0x0000010a
-+#define PHY_ID_YT8531		0x4f51e91b
- 
- #define YT8511_PAGE_SELECT	0x1e
- #define YT8511_PAGE		0x1f
-@@ -38,6 +39,38 @@
- #define YT8511_DELAY_FE_TX_EN	(0xf << 12)
- #define YT8511_DELAY_FE_TX_DIS	(0x2 << 12)
- 
-+#define YT8531_RGMII_CONFIG1	0xa003
-+
-+/* TX Gig-E Delay is bits 3:0, default 0x1
-+ * TX Fast-E Delay is bits 7:4, default 0xf
-+ * RX Delay is bits 13:10, default 0x0
-+ * Delay = 150ps * N
-+ * On = 2000ps, off = 50ps
-+ */
-+#define YT8531_DELAY_GE_TX_EN	(0xd << 0)
-+#define YT8531_DELAY_GE_TX_DIS	(0x0 << 0)
-+#define YT8531_DELAY_FE_TX_EN	(0xd << 4)
-+#define YT8531_DELAY_FE_TX_DIS	(0x0 << 4)
-+#define YT8531_DELAY_RX_EN	(0xd << 10)
-+#define YT8531_DELAY_RX_DIS	(0x0 << 10)
-+#define YT8531_DELAY_MASK	(GENMASK(13, 10) | GENMASK(7, 0))
-+
-+#define YT8531_SYNCE_CFG	0xa012
-+
-+/* Clk src config is bits 3:1
-+ * 3b000 src from pll
-+ * 3b001 src from rx_clk
-+ * 3b010 src from serdes
-+ * 3b011 src from ptp_in
-+ * 3b100 src from 25mhz refclk *default*
-+ * 3b101 src from 25mhz ssc
-+ * Clk rate select is bit 4
-+ * 1b0 25mhz clk output *default*
-+ * 1b1 125mhz clk output
-+ * Clkout enable is bit 6
-+ */
-+#define YT8531_CLKCFG_125M	(BIT(6) | BIT(4) | (0x0 < 1))
-+
- static int yt8511_read_page(struct phy_device *phydev)
- {
- 	return __phy_read(phydev, YT8511_PAGE_SELECT);
-@@ -111,6 +145,51 @@ static int yt8511_config_init(struct phy_device *phydev)
- 	return phy_restore_page(phydev, oldpage, ret);
- }
- 
-+static int yt8531_config_init(struct phy_device *phydev)
-+{
-+	int oldpage, ret = 0;
-+	unsigned int val;
-+
-+	oldpage = phy_select_page(phydev, YT8531_RGMII_CONFIG1);
-+	if (oldpage < 0)
-+		goto err_restore_page;
-+
-+	/* set rgmii delay mode */
-+	switch (phydev->interface) {
-+	case PHY_INTERFACE_MODE_RGMII:
-+		val = YT8531_DELAY_RX_DIS | YT8531_DELAY_GE_TX_DIS | YT8531_DELAY_FE_TX_DIS;
-+		break;
-+	case PHY_INTERFACE_MODE_RGMII_RXID:
-+		val = YT8531_DELAY_RX_EN | YT8531_DELAY_GE_TX_DIS | YT8531_DELAY_FE_TX_DIS;
-+		break;
-+	case PHY_INTERFACE_MODE_RGMII_TXID:
-+		val = YT8531_DELAY_RX_DIS | YT8531_DELAY_GE_TX_EN | YT8531_DELAY_FE_TX_EN;
-+		break;
-+	case PHY_INTERFACE_MODE_RGMII_ID:
-+		val = YT8531_DELAY_RX_EN | YT8531_DELAY_GE_TX_EN | YT8531_DELAY_FE_TX_EN;
-+		break;
-+	default: /* do not support other modes */
-+		ret = -EOPNOTSUPP;
-+		goto err_restore_page;
-+	}
-+
-+	ret = __phy_modify(phydev, YT8511_PAGE, YT8531_DELAY_MASK, val);
-+	if (ret < 0)
-+		goto err_restore_page;
-+
-+	/* set clock mode to 125mhz */
-+	ret = __phy_write(phydev, YT8511_PAGE_SELECT, YT8531_SYNCE_CFG);
-+	if (ret < 0)
-+		goto err_restore_page;
-+
-+	ret = __phy_write(phydev, YT8511_PAGE, YT8531_CLKCFG_125M);
-+	if (ret < 0)
-+		goto err_restore_page;
-+
-+err_restore_page:
-+	return phy_restore_page(phydev, oldpage, ret);
-+}
-+
- static struct phy_driver motorcomm_phy_drvs[] = {
- 	{
- 		PHY_ID_MATCH_EXACT(PHY_ID_YT8511),
-@@ -120,7 +200,16 @@ static struct phy_driver motorcomm_phy_drvs[] = {
- 		.resume		= genphy_resume,
- 		.read_page	= yt8511_read_page,
- 		.write_page	= yt8511_write_page,
-+	}, {
-+		PHY_ID_MATCH_EXACT(PHY_ID_YT8531),
-+		.name		= "YT8531 Gigabit Ethernet",
-+		.config_init	= yt8531_config_init,
-+		.suspend	= genphy_suspend,
-+		.resume		= genphy_resume,
-+		.read_page	= yt8511_read_page,
-+		.write_page	= yt8511_write_page,
- 	},
-+
- };
- 
- module_phy_driver(motorcomm_phy_drvs);
-@@ -131,6 +220,7 @@ MODULE_LICENSE("GPL");
- 
- static const struct mdio_device_id __maybe_unused motorcomm_tbl[] = {
- 	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8511) },
-+	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8531) },
- 	{ /* sentinal */ }
- };
- 
--- 
-2.37.3
+Regards
+
+------
+Chen Yun - Chairman of CREC
+China Railway Engineering Corporation - CRECG
+China Railway Plaza, No.69 Fuxing Road, Haidian District, Beijing, P.R.
+China
 
