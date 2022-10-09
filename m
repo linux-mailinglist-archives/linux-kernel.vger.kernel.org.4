@@ -2,64 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 107F15F88CE
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 04:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7AD75F88D1
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 04:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiJICPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 22:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38672 "EHLO
+        id S229459AbiJICSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 22:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiJICPQ (ORCPT
+        with ESMTP id S229849AbiJICSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 22:15:16 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634F527FCD
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 19:15:15 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id n73so1448616iod.13
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 19:15:15 -0700 (PDT)
+        Sat, 8 Oct 2022 22:18:31 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE56357FB
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 19:18:31 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id 10so7749786pli.0
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 19:18:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JpkrynInBk4Gig68d82GDSuRNyz+N99lUi3tPpqQn1Y=;
-        b=KUBfVvEt03ilQTj5FK8GWOnIjci2oqtZdj15FaXJERjrMf8jRDPzUAqqmZV1tLO4gM
-         M6PY1EQogYxy2bbzRSOZB2vELb/ehxzCXwUp7qKAZSKNryXSA43UqQhOtjlQj1owlQqX
-         cTEjL3mjTEvtpaJ+hBMwTRMynyWhjsNjXTjVvAG5nIfk1PdMTu0TwOYWz3PtoPR2pVcn
-         wWbjNOWLe2m5JfgESdOzTLT5C+CIN1q+Djn41ezD1TlQ82HMRy1ngxURJJelY5VylGdR
-         hB61xPCEi2jpPc0d489v6o2jpxTX/wn2YnsbWoUko9ZzooRMr4f/3Zvdb72N3y83wQYc
-         +mKw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5a/DovPCD12eZJTVKdniqOPRiNNYGTTOdUFZS0hw8WI=;
+        b=iAVupyDZOWfN+dPvM/5OKfpMjx92BJ53/PhY5wJaaqL/cPKG7czwPdubp/uV/hQPH1
+         ZmeIH1XI/gX6y/M0aXE/h6gQrsNH9yHEIX+xwLVEcXEZmWkeZ3p3F2rIzSKpoNSh2LDF
+         Jz4xwn/yJG8UHDRgf9Db80aSfy19GDU4kcRuno1grEos/JRZ3JGsDOPI4qXO6kvyeAHo
+         gp6fGfKr5i2Y5Y0LF1K7JAOrB3dWP9M3Nz6CTjGlo0E+U4BQfQQX8Xc0nEo+ZbiYcNb5
+         blLJ+BfhKtr/66vQ7IAnyvd0ZYJ+wFo9W5IGApFoumqjESaVQ2By2BprhlURH96WUBvO
+         vi9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JpkrynInBk4Gig68d82GDSuRNyz+N99lUi3tPpqQn1Y=;
-        b=kDeUAAde9H5o3zB56uvIaEuTSA53Yjuic0NQhwoQp5lDrSuP/bG3hR8gRN20qLK5Vf
-         z5LNyeq8OacgiJTORUXFi4IeNfDy/sQRGDG4kz+pLJTgHA91vG40Xf1G0htcvMRwNRDY
-         UzFILrmf/nxjxu7YJGS2w3BLah6nnf5gE1hZcG+/pFXWoIbG9ftnF9JQqoPjzeUw4UZN
-         QS4so2Yvrm8jS5hY4A/VhNzkANXuQ+s4O5fa714ZLVcWqdt4EK9eKriBWVVJ4srdF7Nn
-         hq3wKJcg0SUIE2Srqe+wl7J44BgSYnaiCAQocfiaDVm/nU8MYOLs3LKjD0dLg3QoNmXh
-         tGYA==
-X-Gm-Message-State: ACrzQf1QEuaA6XxEN0fpEl2POqtO0jJ+huJzRFy4Z8RTgdR57cZdAgWY
-        Vq33xONSXGFMam6+2SJHRJUJjrA25CzUcniS5zM=
-X-Google-Smtp-Source: AMsMyM5vG7sqy2eAPyqqAVTb/Ry1BFCa6AaLshQqgXZYNF8utqWbUUFQSIhAymSpj5T7j475tUW6Nn0dVCSEMDMPQHs=
-X-Received: by 2002:a05:6638:2385:b0:35a:623b:b2ca with SMTP id
- q5-20020a056638238500b0035a623bb2camr6145496jat.24.1665281714718; Sat, 08 Oct
- 2022 19:15:14 -0700 (PDT)
+        bh=5a/DovPCD12eZJTVKdniqOPRiNNYGTTOdUFZS0hw8WI=;
+        b=JzZB/3yEetbAH5LJF3G4UPpIaPhGhFi3Egl4MaD9UazUnTgerfGPeXOt4YMStakas4
+         2tlpcfja75hpXex4DkRsQ3Sc85jJ2JZjtFccqdSDlvf9lOATB8eBr/wKcp9dMmwBhF99
+         vtDk+N3Px2CzJHw4lwbnNroDIEnq+WXL68hmsx7lnjTrRF2+EDtiSzfiF2j6Cln31/bR
+         aGEPlqhqsgDrFrKiUZ5Eh7TDERBKSA6L2gmuQjCZSqtQp70SOa0l3SkQV+t0pzDZimbc
+         j/WcwFjMHSA5hhFu8vcGot/ss4prXfE83O8i4e2wreVIHNm843m+l9AnreLo3McLlvtW
+         aiIA==
+X-Gm-Message-State: ACrzQf3pNkiefsqbM7mJZIy+D69V40Q/TsKLPqUq3Uci2a7Cg5X6NY13
+        mVrs7gdMQvrF6TeYytDCB8A=
+X-Google-Smtp-Source: AMsMyM7lqrOf8pZtc3CkeRa6rrH75Q2UE5YymHX6vWFwtpN52RnxJsbKP1beXYpak+vSGKRU0nMQSQ==
+X-Received: by 2002:a17:903:2445:b0:17c:f033:92f5 with SMTP id l5-20020a170903244500b0017cf03392f5mr12371293pls.31.1665281910753;
+        Sat, 08 Oct 2022 19:18:30 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id v8-20020a1709029a0800b001708c4ebbaesm3823607plp.309.2022.10.08.19.18.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Oct 2022 19:18:30 -0700 (PDT)
+From:   xu.xin.sc@gmail.com
+X-Google-Original-From: xu.xin16@zte.com.cn
+To:     akpm@linux-foundation.org
+Cc:     ran.xiaokai@zte.com.cn, yang.yang29@zte.com.cn,
+        jiang.xuexin@zte.com.cn, imbrenda@linux.ibm.com, david@redhat.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        xu xin <xu.xin16@zte.com.cn>
+Subject: [PATCH v2 0/5] ksm: support tracking KSM-placed zero-pages
+Date:   Sun,  9 Oct 2022 02:18:16 +0000
+Message-Id: <20221009021816.315205-1-xu.xin16@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220928093103.64014-1-khalid.masum.92@gmail.com> <CACRpkdbZWMk9+wH8ndFEzZyUwKecjNfgT2xJnZEQx0ACPzLWbw@mail.gmail.com>
-In-Reply-To: <CACRpkdbZWMk9+wH8ndFEzZyUwKecjNfgT2xJnZEQx0ACPzLWbw@mail.gmail.com>
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-Date:   Sun, 9 Oct 2022 08:15:03 +0600
-Message-ID: <CAABMjtGFKK2EJojFMqzMPmRfcJzo1yzdOqDVT804WnhOQ1O79Q@mail.gmail.com>
-Subject: Re: [PATCH] drm/tve200: Use drm_* variants for logging
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,34 +72,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 4, 2022 at 12:54 AM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Wed, Sep 28, 2022 at 11:31 AM Khalid Masum <khalid.masum.92@gmail.com> wrote:
->
-> > We have routines like drm_info/warn/err for logging. Use them instead
-> > of dev_* variants to get drm-formatted log messages.
-> >
-> > Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
->
-> So is this the new thing? We've been through:
-> - DRM_INFO_ETC BIG CAPITAL LETTER MACROS
-> - Just use dev_info() & friends like everyone else
-> - Now drm_info() & co
->
-> Note I don't wanna bikeshed about this, just tell me there is
-> consensus now so we know what to do.
+From: xu xin <xu.xin16@zte.com.cn>
 
-Hi,
+Before enabling use_zero_pages by setting /sys/kernel/mm/ksm/
+use_zero_pages to 1, pages_sharing of KSM is basically accurate. But
+when enabling use_zero_pages, all empty pages that are merged with
+kernel zero page are not counted in pages_sharing or pages_shared.
+That is because these empty pages are merged with zero-pages then no
+longer managed by KSM, which leads to two issues at least:
 
-I was working on a TODO described here:
-https://github.com/torvalds/linux/blob/master/Documentation/gpu/todo.rst#convert-logging-to-drm_-functions-with-drm_device-paramater
+1) MADV_UNMERGEABLE and other ways to trigger unsharing will *not*
+   unshare the shared zeropage as placed by KSM (which is against the 
+   MADV_UNMERGEABLE documentation at least); see the link:
+   https://lore.kernel.org/lkml/4a3daba6-18f9-d252-697c-197f65578c44@redhat.com/
 
-"Convert logging to drm_* functions with drm_device paramater". I do not
-know of any consensus by the way.
+2) we cannot know how many pages are zero pages placed by KSM when
+   enabling use_zero_pages, which leads to KSM not being transparent
+   with all actual merged pages by KSM.
 
->
-> Yours,
-> Linus Walleij
+With the patch series, we can unshare zero-pages(KSM-placed) accurately
+and count ksm zero pages.
 
-Thanks,
-  -- Khalid Masum
+---
+v1->v2:
+
+[patch 4/5] fix build warning, mm/ksm.c:550, misleading indentation; statement 
+'rmap_item->mm->ksm_zero_pages_sharing--;' is not part of the previous 'if'.
+
+
+
+*** BLURB HERE ***
+
+xu xin (5):
+  ksm: abstract the function try_to_get_old_rmap_item
+  ksm: support unsharing zero pages placed by KSM
+  ksm: count all zero pages placed by KSM
+  ksm: count zero pages for each process
+  ksm: add zero_pages_sharing documentation
+
+ Documentation/admin-guide/mm/ksm.rst |  10 +-
+ fs/proc/base.c                       |   1 +
+ include/linux/mm_types.h             |   7 +-
+ mm/ksm.c                             | 177 +++++++++++++++++++++------
+ 4 files changed, 157 insertions(+), 38 deletions(-)
+
+-- 
+2.25.1
+
