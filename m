@@ -2,85 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FA15F8D1B
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 20:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A5BB5F8D18
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 20:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiJISVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 14:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58884 "EHLO
+        id S230214AbiJISVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 14:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiJISVe (ORCPT
+        with ESMTP id S230150AbiJISVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 14:21:34 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224DE1EC58;
-        Sun,  9 Oct 2022 11:21:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+AaABv0hnIsqqTipsqFB7AVqiOczhOfVeqHTIhhaPVY=; b=iVMv0UR9j1bsWPk6t8l844mGtC
-        YJPYSoBKRpDjz0PG1/SAEo8M7RFrsiMRxiJs/e6mof9kCbZ5lw/ENf1uOx64KXM4iGZlqk6K72M1Y
-        cRckbxMxS6OwS3ejmhNX8tNERFqm+r2JOcZy4Y5fXq4eMy3tfGEs1n1ogHyGwqZIL1c+sd5AS5qkX
-        tyyjV4O7RKZAVCnsMaN8MK0Shxr03FzFcjYHA5YNZAD7wqs3gMoaGbIa2L03Ry9BB5oVnfllhgBUe
-        YNFppwUex9IQ9A3ZrZOypol+ev//WAryemRHnWDileixTL29sMcl3epXtisCjCLy6GCMtffYhCn2k
-        sxC51rvg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1ohavX-008xAc-0a;
-        Sun, 09 Oct 2022 18:21:27 +0000
-Date:   Sun, 9 Oct 2022 19:21:27 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Abd-Alrhman Masalkhi <abd.masalkhi@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: A field in files_struct has been used without initialization
-Message-ID: <Y0MRJ8scLUZyeC4V@ZenIV>
-References: <20221006104439.46235-1-abd.masalkhi@gmail.com>
- <20221006105728.47115-1-abd.masalkhi@gmail.com>
- <Y0B6+0MLZI/nv1aC@ZenIV>
+        Sun, 9 Oct 2022 14:21:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3B0167D6
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 11:21:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84606B80D13
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 18:21:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5F43C433D6;
+        Sun,  9 Oct 2022 18:21:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665339664;
+        bh=xeS8rOSNzyiOZUIlZl5WMMdsuP7zC5c7jALt4Demauo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NHuY0IL5jxbmLLEvPQnGKM5KSKaMZjwvy0/GeSX50AR4GfUiCDNUJOYGZ5llR7fNe
+         VMSeL+tKP0FrYZeNLAL9dQqYiqGpaE33RG+oIUelUBfS9KCVYNR/YmpfI9e/9b7+Xj
+         31QNkSVtepNYVORKwgdLab5FktSJ6kVtyUaenXlU=
+Date:   Sun, 9 Oct 2022 20:21:46 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiangshan Yi <13667453960@163.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jiangshan Yi <yijiangshan@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: Re: [PATCH] staging: rtl8723bs: fix spelling typo in comment
+Message-ID: <Y0MROo7YMrVoYyZ8@kroah.com>
+References: <20221009065647.2635700-1-13667453960@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y0B6+0MLZI/nv1aC@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221009065647.2635700-1-13667453960@163.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 08:16:11PM +0100, Al Viro wrote:
+On Sun, Oct 09, 2022 at 02:56:47PM +0800, Jiangshan Yi wrote:
+> From: Jiangshan Yi <yijiangshan@kylinos.cn>
 
-> array of pointers (from first kvmalloc() in alloc_fdtable()): contains file pointers
-> array of unsigned long (from the second kmvalloc() there): hosts the bitmaps
-> fdtable (allocated in alloc_fdtable()):
-> 	open_fds		points to the beginning of bitmap-hosting array
-> 	close_on_exec		points to the middle third of the same array
-> 	full_fd_bits		points to the last third of the same array
+Then why is this being sent from a 163.com address?
 
-Rereading that... a bit of clarification: the wording would seem to imply
-that these 3 bitmaps are of equal size; they are not - the third one is
-smaller.
+What is wrong with using your real mail server?
 
-If fdt->max_fds (table capacity) is equal to N, we have
-	* N struct file pointers in fdt->fd[]
-	* N bits in fdt->open_fds[] (i.e. N/BITS_PER_LONG unsigned long)
-	* N bits in fdt->close_on_exec[] (ditto)
-	* N/BITS_PER_LONG bits in fdt->full_fd_bits[]
+> 
+> Fix spelling typo in comment.
+> 
+> K2ci (Kylin Continuous Integration) is a code pre-verification tool
+> independently developed by KylinSoft, which is used for ensuring the
+> code quality of code submission. K2ci includes the comment check tool
+> notes_check.
+> 
+> This spelling typo was found using notes_check tool.
+> 
+> Reported-by: k2ci <kernel-bot@kylinos.cn>
+> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+> ---
+>  drivers/staging/rtl8723bs/core/rtw_cmd.c     | 2 +-
+>  drivers/staging/rtl8723bs/core/rtw_efuse.c   | 2 +-
+>  drivers/staging/rtl8723bs/include/sta_info.h | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8723bs/core/rtw_cmd.c b/drivers/staging/rtl8723bs/core/rtw_cmd.c
+> index d3f10a3cf972..a421c430164a 100644
+> --- a/drivers/staging/rtl8723bs/core/rtw_cmd.c
+> +++ b/drivers/staging/rtl8723bs/core/rtw_cmd.c
+> @@ -1656,7 +1656,7 @@ u8 rtw_c2h_packet_wk_cmd(struct adapter *padapter, u8 *pbuf, u16 length)
+>  	return res;
+>  }
+>  
+> -/* dont call R/W in this function, beucase SDIO interrupt have claim host */
+> +/* don't call R/W in this function, because SDIO interrupt have claim host */
 
-The meaning of bitmaps:
-	bit k set in open_fds[] - descriptor k is in use
-	bit k set in close_on_exec[] - descriptor k is to be closed on exec()
-	bit k set in full_fd_bits[] - all descriptors covered by open_fds[k]
-(i.e. BITS_PER_LONG of them,, starting from k * BITS_PER_LONG) are in use.
-In other words, "don't even bother looking for clear bits in open_fds[k];
-there won't be any".
+That is not a spelling fix, but rather a "punctuation" fix if you want
+to be picky :)
 
-->full_fd_bits[] is there purely as a way to speed finding unused descriptors,
-along with ->next_fd.  Some processes have an obscene amount of opened
-descriptors and linear search through the mostly full bitmap can get painful.
-E.g. 4 millions of descriptors would mean half megabyte worth of bitmap
-(in ->open_fds[]).  Cheaper to search through 8Kb of ->full_fd_bits, then
-check one 64bit word in ->open_fds[]; kinder on the cache as well...
+>  /* or deadlock will happen and cause special-systemserver-died in android */
+>  u8 rtw_c2h_wk_cmd(struct adapter *padapter, u8 *c2h_evt)
+>  {
+> diff --git a/drivers/staging/rtl8723bs/core/rtw_efuse.c b/drivers/staging/rtl8723bs/core/rtw_efuse.c
+> index 06e727ce9cc2..71800917d132 100644
+> --- a/drivers/staging/rtl8723bs/core/rtw_efuse.c
+> +++ b/drivers/staging/rtl8723bs/core/rtw_efuse.c
+> @@ -277,7 +277,7 @@ bool		bPseudoTest)
+>  	return bResult;
+>  }
+>  
+> -/*  11/16/2008 MH Write one byte to reald Efuse. */
+> +/*  11/16/2008 MH Write one byte to real Efuse. */
+
+The date should just be removed entirely, right?
+
+>  u8 efuse_OneByteWrite(struct adapter *padapter, u16 addr, u8 data, bool bPseudoTest)
+>  {
+>  	u8 tmpidx = 0;
+> diff --git a/drivers/staging/rtl8723bs/include/sta_info.h b/drivers/staging/rtl8723bs/include/sta_info.h
+> index 69c377eeeaf0..1c3f83867cb0 100644
+> --- a/drivers/staging/rtl8723bs/include/sta_info.h
+> +++ b/drivers/staging/rtl8723bs/include/sta_info.h
+> @@ -190,7 +190,7 @@ struct sta_info {
+>  
+>  	/* ODM_STA_INFO_T */
+>  	/*  ================ODM Relative Info ======================= */
+> -	/*  Please be care, dont declare too much structure here. It will cost memory * STA support num. */
+> +	/*  Please be care, don't declare too much structure here. It will cost memory * STA support num. */
+
+Same here.
+
+thanks,
+
+greg k-h
