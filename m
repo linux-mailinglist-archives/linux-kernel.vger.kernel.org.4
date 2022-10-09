@@ -2,170 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9645F8985
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 07:50:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 311785F898C
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 07:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiJIFuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 01:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43938 "EHLO
+        id S229726AbiJIFzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 01:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbiJIFur (ORCPT
+        with ESMTP id S229798AbiJIFzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 01:50:47 -0400
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6242E9C9;
-        Sat,  8 Oct 2022 22:50:45 -0700 (PDT)
-Received: by mail-vk1-xa32.google.com with SMTP id a66so1370033vkc.3;
-        Sat, 08 Oct 2022 22:50:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=V1eiS68Fna3XVtle3ljC6ptDGXbn5f8WPlsRS8C/bwU=;
-        b=pedmXNz53LmeXcJq514EG22VILLTADVPAl7yYDUSNFZcQ/2MqYeggAIPQDHE/QJfU1
-         +ZtYlXn/4aIJ9V8W2DthebXAs+quxLZFv+zf8yEtYv61iIS6Ylcdr5zynSGhDZxGrpMq
-         fulY84ebwnatZBR8qPvaOjfH79CbdDDC7r/IfITWaIvsltU1c9KLxVe59xM/HIXIFicb
-         H6MewrduUB91mCDj++i5Sv27NPmXVZaSjCXetwaPafhIRY1XT4CRI6hETHwoWZjkToIx
-         mpUCvH30AnVXTTm3CXVhW+A6wMxEgt6d1mp6iB3yFBQbla1neI70clsV7wOJfgk6dnRm
-         uhXQ==
+        Sun, 9 Oct 2022 01:55:40 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CA12F02E
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 22:55:35 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id l18-20020a056e02067200b002f6af976994so6674386ilt.16
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 22:55:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=V1eiS68Fna3XVtle3ljC6ptDGXbn5f8WPlsRS8C/bwU=;
-        b=Pklpx+YKWVZxaJu3TuoV9wSz1AgxvXYnRofBcIAerUbu31dHoIna7up2Z4ESxvOD5G
-         lXSo1agRSkYclsGXGauUJgyfAXidm9P18ZVFzZda+NyMYNTB8dgGXPkeCVb3U2q9dHo8
-         IySteh3K0dnDd8IDV+1pqNlYMaUp4p5zLrcLG0TpGw7MWja+gK7LlSOd1Npg57bHcfRa
-         tks7vMpDMhs1VT5zPKPcIyUB4ggxeM093lTfVRWzuCo1dCmqzAUT1i0Te5LYdnhOTjtX
-         5TBMzHPiChkW9yNSiJreVmZBHdjewrcon2eVsrmvQxBhyves7yCD+R0GNP47xIyMCvEe
-         /1Sg==
-X-Gm-Message-State: ACrzQf0F1i7b0hrRJwZ1kSPIjEBXm6ZAb5+aLzBDQOcKTtQX8nxK8+La
-        ZLbJODtjpVQ0BHIkcxFtT8EV8saVwLCPKYKl2N3UAL04ARo=
-X-Google-Smtp-Source: AMsMyM49N55i8Gu1+pXkvUTtaFi7lZuK7rZI5SAB/frAmC6Rbg2hwZJ1zXJJv7Y6JVSLMI+7FHzm8AtpdLZXIWNaTWM=
-X-Received: by 2002:ac5:c7b0:0:b0:3ab:2056:3bad with SMTP id
- d16-20020ac5c7b0000000b003ab20563badmr6007614vkn.24.1665294644309; Sat, 08
- Oct 2022 22:50:44 -0700 (PDT)
+        bh=1e49F6pdV+AWMuuc3KbRnlfX9XsIRyk9pFi0eLPFLzI=;
+        b=EaiIQHnHLyfQiT4DUT5UJiYxaaio/OLZPBJee2F1sVoj0/wxb+7CQG2lyJZkM1fjFV
+         iHUWJGlSPA7FJRkInhkcuSCm2JjeffcjFiTAAK1jluT0l107YmpVl5uDVFzKO8HMi+26
+         pETPksdkqHorU3eRGniOmVTCpgctJaKkGo9FQumagmIFHRkEwRZchzGYNG4clGgefIXq
+         Uw/JPP+CRDMP0GbZZZo3ax42zfQbM8WAwwx0eab3cDa0hSjkjHXBAz1aBarLiyZku6rB
+         cZj0JNKRn17ydB3U83wu9fKHb6dUdwVJxyAnCroFyFH9DB6PC06jDLtlEBL4WoCGY6hf
+         D25w==
+X-Gm-Message-State: ACrzQf3Gl8rEhoqO1bHI1nXTPKZTGXFkGNqoKThPXrI5FF5iQXVWedSZ
+        CqQlFIZljN9KMyNDwYTQvuVFA9RwsC+Lk2A13iU+iV6Kfn99
+X-Google-Smtp-Source: AMsMyM7JfrVM7uYLXXaZRLXDOALw+Kpkyol8U8DnxEbbYe9HVN1B+TnzFqpzH2lUNzmB0rplo6I1/rKLlVBTw/ge+E0EUV1PfVVX
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Sun, 9 Oct 2022 00:50:33 -0500
-Message-ID: <CAH2r5muHt_9eBuE7GOHNvV+9zHH8X=+sVmK3Qj1R8uEWNydn_Q@mail.gmail.com>
-Subject: [GIT PULL] smb3 client fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+X-Received: by 2002:a05:6602:1592:b0:6a2:1feb:4809 with SMTP id
+ e18-20020a056602159200b006a21feb4809mr5943533iow.214.1665294934647; Sat, 08
+ Oct 2022 22:55:34 -0700 (PDT)
+Date:   Sat, 08 Oct 2022 22:55:34 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000006aa2405ea93b166@google.com>
+Subject: [syzbot] BUG: scheduling while atomic in exit_to_user_mode_loop
+From:   syzbot <syzbot+cceb1394467dba9c62d9@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-f76349cf41451c5c42a99f18a9163377e4b364ff:
+Hello,
 
-  Linux 6.0-rc7 (2022-09-25 14:01:02 -0700)
+syzbot found the following issue on:
 
-are available in the Git repository at:
+HEAD commit:    0326074ff465 Merge tag 'net-next-6.1' of git://git.kernel...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15b1382a880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d323d85b1f8a4ed7
+dashboard link: https://syzkaller.appspot.com/bug?extid=cceb1394467dba9c62d9
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1755e8b2880000
 
-  git://git.samba.org/sfrench/cifs-2.6.git tags/6.1-rc-smb3-client-fixes-part1
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/c40d70ae7512/disk-0326074f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/3603ce065271/vmlinux-0326074f.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/738016e3c6ba/mount_1.gz
 
-for you to fetch changes up to 958553d13478ad0e35fa09fecad3ce73277ccaf5:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cceb1394467dba9c62d9@syzkaller.appspotmail.com
 
-  smb3: fix oops in calculating shash_setkey (2022-10-07 23:08:41 -0500)
-
-----------------------------------------------------------------
-21 cifs/smb3 fixes, including 4 for stable
-- data corruption fix when cache disabled
-- four RDMA (smbdirect) improvements, including enabling support for SoftiWARP
-- four signing improvements
-- three directory lease improvements
-- four cleanup fixes
-- minor security fix
-- two debugging improvements
-
-Additional security improvements including enabling GMAC signing, and
-patches to extend use of directory leases (improved safe metadata and
-directory entry caching) and improvements to symlink handling are
-still being tested and are not included in this P/R.
-----------------------------------------------------------------
-Enzo Matsumiya (4):
-      cifs: return correct error in ->calc_signature()
-      cifs: replace kfree() with kfree_sensitive() for sensitive data
-      smb3: rename encryption/decryption TFMs
-      cifs: secmech: use shash_desc directly, remove sdesc
-
-Gustavo A. R. Silva (1):
-      cifs: Replace a couple of one-element arrays with flexible-array members
-
-Jiangshan Yi (1):
-      cifs: misc: fix spelling typo in comment
-
-Muhammad Usama Anjum (1):
-      cifs: remove initialization value
-
-Ronnie Sahlberg (4):
-      cifs: destage dirty pages before re-reading them for cache=none
-      cifs: Make tcon contain a wrapper structure cached_fids instead
-of cached_fid
-      cifs: improve handlecaching
-      cifs: store a pointer to a fid in the cfid structure instead of the struct
-
-Steve French (5):
-      MAINTAINERS: Add Tom Talpey as cifs.ko reviewer
-      smb3: add dynamic trace points for tree disconnect
-      smb3: define missing create contexts
-      smb3: do not log confusing message when server returns no
-network interfaces
-      smb3: fix oops in calculating shash_setkey
-
-Tom Talpey (4):
-      Decrease the number of SMB3 smbdirect client SGEs
-      Reduce client smbdirect max receive segment size
-      Handle variable number of SGEs in client smbdirect send.
-      Fix formatting of client smbdirect RDMA logging
-
-Zhang Xiaoxu (1):
-      cifs: Fix the error length of VALIDATE_NEGOTIATE_INFO message
-
- MAINTAINERS               |   1 +
- fs/cifs/cached_dir.c      |  92 ++++++++++++++++++++++++++++---------
- fs/cifs/cached_dir.h      |  10 ++++-
- fs/cifs/cifs_debug.c      |   4 +-
- fs/cifs/cifs_debug.h      |   6 +--
- fs/cifs/cifs_swn.c        |  12 ++---
- fs/cifs/cifsencrypt.c     | 100 ++++++++++++++---------------------------
- fs/cifs/cifsglob.h        |  30 +++++--------
- fs/cifs/cifspdu.h         |   7 +--
- fs/cifs/cifsproto.h       |   7 ++-
- fs/cifs/cifssmb.c         |   2 +-
- fs/cifs/connect.c         |  21 ++++-----
- fs/cifs/dfs_cache.c       |   2 +-
- fs/cifs/dir.c             |   8 ++--
- fs/cifs/file.c            |   9 ++++
- fs/cifs/fs_context.c      |  12 ++++-
- fs/cifs/fscache.c         |   2 +-
- fs/cifs/inode.c           |   2 +-
- fs/cifs/link.c            |  13 +++---
- fs/cifs/misc.c            |  63 +++++++++++++-------------
- fs/cifs/sess.c            |  24 ++++++----
- fs/cifs/smb2inode.c       |   2 +-
- fs/cifs/smb2misc.c        |  13 +++---
- fs/cifs/smb2ops.c         |  38 ++++++++++------
- fs/cifs/smb2pdu.c         |  41 +++++++++++------
- fs/cifs/smb2transport.c   |  98 +++++++++++++++++-----------------------
- fs/cifs/smbdirect.c       | 227
-+++++++++++++++++++++++++++++++++++++++-----------------------------------------------------
- fs/cifs/smbdirect.h       |  14 +++---
- fs/cifs/trace.h           |   3 ++
- fs/smbfs_common/smb2pdu.h |   6 ++-
- 30 files changed, 445 insertions(+), 424 deletions(-)
+ntfs3: loop2: Different NTFS' sector size (1024) and media sector size (512)
+BUG: scheduling while atomic: syz-executor.2/9901/0x00000002
+2 locks held by syz-executor.2/9901:
+ #0: ffff888075f880e0 (&type->s_umount_key#47/1){+.+.}-{3:3}, at: alloc_super+0x212/0x920 fs/super.c:228
+ #1: ffff8880678e78f0 (&sb->s_type->i_lock_key#33){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:349 [inline]
+ #1: ffff8880678e78f0 (&sb->s_type->i_lock_key#33){+.+.}-{2:2}, at: _atomic_dec_and_lock+0x9d/0x110 lib/dec_and_lock.c:28
+Modules linked in:
+Preemption disabled at:
+[<0000000000000000>] 0x0
+Kernel panic - not syncing: scheduling while atomic
+CPU: 1 PID: 9901 Comm: syz-executor.2 Not tainted 6.0.0-syzkaller-02734-g0326074ff465 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ panic+0x2d6/0x715 kernel/panic.c:274
+ __schedule_bug+0x1ff/0x250 kernel/sched/core.c:5725
+ schedule_debug+0x1d3/0x3c0 kernel/sched/core.c:5754
+ __schedule+0xfb/0xdf0 kernel/sched/core.c:6389
+ schedule+0xcb/0x190 kernel/sched/core.c:6571
+ exit_to_user_mode_loop+0xe5/0x150 kernel/entry/common.c:157
+ exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:201
+ irqentry_exit_to_user_mode+0x5/0x30 kernel/entry/common.c:307
+ asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
+RIP: 000f:lock_acquire+0x1e1/0x3c0
+RSP: 0018:ffffc9000563f900 EFLAGS: 00000206
+RAX: 1ffff92000ac7f28 RBX: 0000000000000001 RCX: ffff8880753be2f0
+RDX: dffffc0000000000 RSI: ffffffff8a8d9060 RDI: ffffffff8aecb5e0
+RBP: ffffc9000563fa28 R08: dffffc0000000000 R09: fffffbfff1fc4229
+R10: fffffbfff1fc4229 R11: 1ffffffff1fc4228 R12: dffffc0000000000
+R13: 1ffff92000ac7f24 R14: ffffc9000563f940 R15: 0000000000000246
+ </TASK>
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
 
--- 
-Thanks,
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Steve
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
