@@ -2,84 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4794E5F8C49
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 18:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E83AA5F8C4D
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 18:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbiJIQXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 12:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53460 "EHLO
+        id S230152AbiJIQXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 12:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbiJIQWs (ORCPT
+        with ESMTP id S230114AbiJIQXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 12:22:48 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CB92B19D
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 09:22:45 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1665332553tg3dgxz5
+        Sun, 9 Oct 2022 12:23:36 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57422B25E;
+        Sun,  9 Oct 2022 09:23:34 -0700 (PDT)
+X-QQ-mid: bizesmtp62t1665332593trylp2zl
 Received: from localhost.localdomain ( [58.247.70.42])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 10 Oct 2022 00:22:32 +0800 (CST)
+        id ; Mon, 10 Oct 2022 00:22:58 +0800 (CST)
 X-QQ-SSF: 01100000002000G0Z000B00A0000000
-X-QQ-FEAT: xqT8U4SkSphFgcFPh5JRStQ/GKaIUXNKUgQ68cyZGIRbaqdoULKWb5GOFKtg3
-        cIxNITCqwXcs2VsfBb/8vGApOIm4U/q4iBSp4mnq580tWgEyhuNcM467J2T2LbqZIGr2LDd
-        r8gOhflJ9f5AWNhMgGTlC+Vsvht1MO5wG/fdSV9ZPLt8DxrrRBLCPZVPoz2MvhuNCjLM7ub
-        SU3BswYGhbXsOkGIe28jEHuduxNT1hd8xCuFaD3TYmGN0yjj7y8JjxPxkQrnE/zdXV45b7v
-        iSugb/5UZ1tITubb34afvTMkCYAy7Aejtd3s9MBxgyjbQxFeN5vL2mkUFhvmm6CNXOKnq24
-        M3kLYO9wu89Vq6zgnk/39flVPvR2IW9mxUZaCWG6wqRPUdfKnmpcco43mrsfA==
+X-QQ-FEAT: /w8MRS8X6cfmlBBC5LshJPI0I3TMu0ig5IXzTnJN+KXfAenCSPdSpnrqk246V
+        wX/KLp8UC0Nc8fVYMIkgqFlKByQuMeK47vuWGy8gi/emwSp31/4vxIaFbXvAM7qerf/uMrY
+        pgvK1qWH2YnbVb+56NrTzcW1iUeGyvF4D74XDp5jI19lTCBDddktaayv3U02o/wkc0oXMjc
+        9c+yEzRQw0W9YxLp67cGYpMyCagm/92kMaAvrsmYRC1qFYi+cyQD95HFIjmMx1f5qyFYltM
+        n2R8egWl6Tr44PvmSw49gr83FVYgt8xqIoUtqx03MCLYaFOKmSk3sXVQcsv1aai3xSQ+fHF
+        DwckXSiIf/OO+cxI5nLpHWSXreVst+5pSRnmGt1LNFnjL5jyWdX+ZccBVi21Q==
 X-QQ-GoodBg: 0
 From:   Soha Jin <soha@lohu.info>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Yangyu Chen <cyy@cyyself.name>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, Soha Jin <soha@lohu.info>
-Subject: [PATCH 3/3] device property: add fwnode_is_compatible() for compatible match
-Date:   Mon, 10 Oct 2022 00:21:55 +0800
-Message-Id: <20221009162155.1318-4-soha@lohu.info>
+Subject: [PATCH 0/3] net: stmmac: probing config with fwnode instead of of
+Date:   Mon, 10 Oct 2022 00:22:44 +0800
+Message-Id: <20221009162247.1336-1-soha@lohu.info>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221009162155.1318-1-soha@lohu.info>
-References: <20221009162155.1318-1-soha@lohu.info>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:lohu.info:qybglogicsvr:qybglogicsvr3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fwnode_is_compatible is a shortcut to check if a device is compatible with
-a compat string in fwnode property "compatible". This function is similar
-to of_device_is_compatible.
+These patches depend on two other patches:
+- net: mdiobus: add fwnode_phy_is_fixed_link()
+  https://lore.kernel.org/lkml/20221009162006.1289-1-soha@lohu.info/
+- device property: add fwnode_is_compatible() for compatible match
+  https://lore.kernel.org/lkml/20221009162155.1318-1-soha@lohu.info/
 
-Signed-off-by: Soha Jin <soha@lohu.info>
----
- include/linux/property.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+Patch 1 changes the stmmac's configuration probing from `of` to `fwnode`,
+which enables the compatibility of stmmac devices described by ACPI.
 
-diff --git a/include/linux/property.h b/include/linux/property.h
-index dbe747f3e3be..776e4a8bc379 100644
---- a/include/linux/property.h
-+++ b/include/linux/property.h
-@@ -252,6 +252,13 @@ fwnode_property_string_array_count(const struct fwnode_handle *fwnode,
- 	return fwnode_property_read_string_array(fwnode, propname, NULL, 0);
- }
- 
-+static inline bool fwnode_is_compatible(const struct fwnode_handle *fwnode,
-+					const char *compat)
-+{
-+	return fwnode_property_match_string_nocase(fwnode, "compatible",
-+						   compat) >= 0;
-+}
-+
- struct software_node;
- 
- /**
+Patch 2 adds Phytium's GMAC (ACPI HID PHYT0004) to the dwmac-generic
+driver, this is also the device I used to test Patch 1.
+
+Patch 3 changes all `stmmac_{probe,remove}_config_dt` to
+`stmmac_platform_{probe,remove}_config`, since the function is renamed in
+Patch 1.
+
+Soha Jin (3):
+  net: stmmac: use fwnode instead of of to configure driver
+  net: stmmac: add Phytium's PHYT0004 to dwmac-generic compatible
+    devices
+  net: stmmac: switch to stmmac_platform_{probe,remove}_config
+
+ .../ethernet/stmicro/stmmac/dwmac-anarion.c   |   4 +-
+ .../stmicro/stmmac/dwmac-dwc-qos-eth.c        |   6 +-
+ .../ethernet/stmicro/stmmac/dwmac-generic.c   |  30 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-imx.c   |   4 +-
+ .../ethernet/stmicro/stmmac/dwmac-ingenic.c   |   4 +-
+ .../stmicro/stmmac/dwmac-intel-plat.c         |   4 +-
+ .../ethernet/stmicro/stmmac/dwmac-ipq806x.c   |   4 +-
+ .../ethernet/stmicro/stmmac/dwmac-lpc18xx.c   |   4 +-
+ .../ethernet/stmicro/stmmac/dwmac-mediatek.c  |   4 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-meson.c |   4 +-
+ .../ethernet/stmicro/stmmac/dwmac-meson8b.c   |   4 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-oxnas.c |   4 +-
+ .../stmicro/stmmac/dwmac-qcom-ethqos.c        |   4 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-rk.c    |  13 +-
+ .../ethernet/stmicro/stmmac/dwmac-socfpga.c   |   4 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-sti.c   |   4 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-stm32.c |   4 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-sun8i.c |   6 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-sunxi.c |   4 +-
+ .../ethernet/stmicro/stmmac/dwmac-visconti.c  |   6 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c |   7 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_mdio.c |  14 +-
+ .../ethernet/stmicro/stmmac/stmmac_platform.c | 409 ++++++++++--------
+ .../ethernet/stmicro/stmmac/stmmac_platform.h |  10 +-
+ include/linux/stmmac.h                        |   7 +-
+ 25 files changed, 320 insertions(+), 248 deletions(-)
+
 -- 
 2.30.2
 
