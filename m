@@ -2,118 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57DE95F8B9F
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 15:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F78B5F8BA2
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 15:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbiJINqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 09:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
+        id S230167AbiJINsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 09:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbiJINqO (ORCPT
+        with ESMTP id S230050AbiJINsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 09:46:14 -0400
-Received: from m12-16.163.com (m12-16.163.com [220.181.12.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F5AF27CD8
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 06:46:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=y0Va6
-        t7IEzPneZZtRuTxgWXS6wlUeWN5JX4PCoeBRrs=; b=XXMM4mRU1nmydeADv4Tpq
-        R8j78WlAfg3csIkBDlNUklZ+KXjVHjZJKdujhc2V9QI/82ab+Px4bdlrwV0GmiDi
-        MYyg2C8LPCJVyzXAxcv+PUJ4qHKTHpIAchqkXz1ty9J9VngaJ2Vaf4H36INHo1c0
-        TNK8HIMTeLQcvsmmVZd2ys=
-Received: from whoami-VirtualBox.. (unknown [223.72.43.15])
-        by smtp12 (Coremail) with SMTP id EMCowAD3G8Rh0EJjxxnCCw--.433S2;
-        Sun, 09 Oct 2022 21:45:08 +0800 (CST)
-From:   Jinyu Tang <tjytimi@163.com>
-To:     Conor.Dooley@microchip.com, ajones@ventanamicro.com,
-        anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, alexandre.ghiti@canonical.com,
-        guoren@kernel.org, akpm@linux-foundation.org,
-        tongtiangen@huawei.com, panqinglin2020@iscas.ac.cn,
-        maobibo@loongson.cn
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        falcon@tinylab.org, Jinyu Tang <tjytimi@163.com>
-Subject: [PATCH v3] riscv: support update_mmu_tlb()
-Date:   Sun,  9 Oct 2022 21:45:03 +0800
-Message-Id: <20221009134503.18783-1-tjytimi@163.com>
-X-Mailer: git-send-email 2.30.2
+        Sun, 9 Oct 2022 09:48:43 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93440275E8
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 06:48:42 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id f140so8773210pfa.1
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 06:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IkNfwa52J7sMrLHZ8QvF0WkiVrf7CKgOKzcDQJ9/luI=;
+        b=k1m17xlTOhme5LjnFHKgn+i6FDJf1/xcwuohDL5UtMkB761MepQ/yAEfb8Vu2qwdt4
+         QqpKlms3H9ASE6pAkgt/UR6ZOvmQ9g2Gf/KQV8SXwCLfUEgt6Xs+vswmLnsjankLpP1I
+         2qnFNwZIk0NxQXqUfKcOlwpcLOXJLXED0Oi2Q6cpGOSJpb3ouXuEg53gy21L982u3kzm
+         IRqumO28nEn9zaXXFeyCJC1U4u27cPK1XXdU8Hx0+r4u+oWxICi2xB8Kpks+Z/R5NdHN
+         aMUtLxynywtPa5fMF0SB7rDrKzvc3WE+/KG1KKxNnYwAcB4VVuY4jYA8/Jv2gPMoodIA
+         hAWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IkNfwa52J7sMrLHZ8QvF0WkiVrf7CKgOKzcDQJ9/luI=;
+        b=PvVn59KpVUPSRQ8scOH3yCuXVEUOxJv05jaQDVDm7XPeSskRoHCyIZ33FOLIE4W7tp
+         7OSpG8JhTv1fzWg8CL9s/7kgKqzXeET8uI9wgqmZfg1Dan3tfV9F7otJTh9pSZ5wRgew
+         ULZENTuLTn1iqlT1s54neD4zYYCJFb4DUYQQ2e9IKruDymApLmLhsG037zdp1HloXQ6/
+         +h1f1Y9/fQ+UbcI9lrn5ziOMqijc9BpEZXlM+JXc9sTFD4BIzEWzlrI8ZHFHqHp/LND2
+         TzPYbyN5w4m+xT0Og839vpGOEQfGjDY5NOpl6N29kctfqgiYCGhLzD5JzedWimYFr1mw
+         4pSA==
+X-Gm-Message-State: ACrzQf0cUn6p3+FthnSnVCUe+HfX7ZlRLjGOIhk+rLZURqpFgUj3V1Id
+        7PYhWpbFsPI9/qkN+NTiAl4pWg==
+X-Google-Smtp-Source: AMsMyM4a6Z/RTEnbk7OiUCFaWLzKQzrmrN4JMt/asnxx6nbq0RCO/svzV1FCFxRUYVbmbDgniR502g==
+X-Received: by 2002:a05:6a00:430c:b0:562:6897:7668 with SMTP id cb12-20020a056a00430c00b0056268977668mr14652393pfb.23.1665323321833;
+        Sun, 09 Oct 2022 06:48:41 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id i72-20020a639d4b000000b0044ed37dbca8sm4601703pgd.2.2022.10.09.06.48.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Oct 2022 06:48:41 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Yu Kuai <yukuai1@huaweicloud.com>, fengwei.yin@intel.com,
+        yukuai3@huawei.com, ming.lei@redhat.com
+Cc:     yi.zhang@huawei.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221009101038.1692875-1-yukuai1@huaweicloud.com>
+References: <20221009101038.1692875-1-yukuai1@huaweicloud.com>
+Subject: Re: [PATCH] blk-wbt: fix that 'rwb->wc' is always set to 1 in wbt_init()
+Message-Id: <166532332067.4035.10826406194481023090.b4-ty@kernel.dk>
+Date:   Sun, 09 Oct 2022 07:48:40 -0600
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: EMCowAD3G8Rh0EJjxxnCCw--.433S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7trW7Cw17AFWkAr4fCr1UGFg_yoW8KFWfpF
-        ZrCF1kGrZrKw1IkFWxAw17ur48X3ykKa4Utryayr98CanFgr1vyFZ5Ka95Zr18CFZag3Wx
-        uFWYgr15u398Aw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUwTm3UUUUU=
-X-Originating-IP: [223.72.43.15]
-X-CM-SenderInfo: xwm13xlpl6il2tof0z/1tbiZQuVeF8ZU3hMLwABsM
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: b4 0.11.0-dev-d9ed3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add macro definition to support update_mmu_tlb() for riscv,
-this function is from commit:7df676974359 ("mm/memory.c:Update
-local TLB if PTE entry exists").
+On Sun, 9 Oct 2022 18:10:38 +0800, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> commit 8c5035dfbb94 ("blk-wbt: call rq_qos_add() after wb_normal is
+> initialized") moves wbt_set_write_cache() before rq_qos_add(), which
+> is wrong because wbt_rq_qos() is still NULL.
+> 
+> Fix the problem by removing wbt_set_write_cache() and setting 'rwb->wc'
+> directly. Noted that this patch also remove the redundant setting of
+> 'rab->wc'.
+> 
+> [...]
 
-update_mmu_tlb() is used when a thread notice that other cpu thread
-has handled the fault and changed the PTE. For MIPS, it's worth to
-do that,this cpu thread will trap in tlb fault again otherwise.
+Applied, thanks!
 
-For RISCV, it's also better to flush local tlb than do nothing in
-update_mmu_tlb(). There are two kinds of page fault that have
-update_mmu_tlb() inside:
+[1/1] blk-wbt: fix that 'rwb->wc' is always set to 1 in wbt_init()
+      commit: 285febabac4a16655372d23ff43e89ff6f216691
 
-1.page fault which PTE is NOT none, only protection check error,
-like write protection fault. If updata_mmu_tlb() is empty, after
-finsh page fault this time and re-execute, cpu will find address
-but protection checked error in tlb again. So this will cause
-another page fault. PTE in memory is good now,so update_mmu_cache()
-in handle_pte_fault() will be executed. If updata_mmu_tlb() is not
-empty flush local tlb, cpu won't find this address in tlb next time,
-and get entry in physical memory, so it won't cause another page
-fault.
-
-2.page fault which PTE is none or swapped.
-For this case, this cpu thread won't cause another page fault,cpu
-will have tlb miss when re-execute, and get entry in memory
-directly. But "set pte in phycial memory and flush local tlb" is
-pratice in Linux, it's better to flush local tlb if it find entry
-in phycial memory has changed.
-
-Maybe it's same for other ARCH which can't detect PTE changed and
-update it in local tlb automatically.
-
-Signed-off-by: Jinyu Tang <tjytimi@163.com>
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
----
-v2 -> v3:
-Explain why it should do this.Thanks for Conor Dooley's Advice.
-
-v1 -> v2:
-Change the format with the help from Andrew Jones and Conor Dooley
- 
- arch/riscv/include/asm/pgtable.h | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-index 7ec936910a96..c61ae83aadee 100644
---- a/arch/riscv/include/asm/pgtable.h
-+++ b/arch/riscv/include/asm/pgtable.h
-@@ -418,6 +418,9 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
- 	local_flush_tlb_page(address);
- }
- 
-+#define __HAVE_ARCH_UPDATE_MMU_TLB
-+#define update_mmu_tlb update_mmu_cache
-+
- static inline void update_mmu_cache_pmd(struct vm_area_struct *vma,
- 		unsigned long address, pmd_t *pmdp)
- {
+Best regards,
 -- 
-2.30.2
+Jens Axboe
+
 
