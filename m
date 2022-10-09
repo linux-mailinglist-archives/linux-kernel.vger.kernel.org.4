@@ -2,30 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 965D95F8D5E
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 20:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC185F8D69
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 20:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbiJIStJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 14:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
+        id S229964AbiJISvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 14:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230367AbiJISs5 (ORCPT
+        with ESMTP id S229590AbiJISvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 14:48:57 -0400
-Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E402C64B;
-        Sun,  9 Oct 2022 11:48:48 -0700 (PDT)
+        Sun, 9 Oct 2022 14:51:49 -0400
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C4429835;
+        Sun,  9 Oct 2022 11:51:48 -0700 (PDT)
 Received: from localhost.localdomain (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 0FB301F963;
-        Sun,  9 Oct 2022 20:48:46 +0200 (CEST)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id B9CBA1F986;
+        Sun,  9 Oct 2022 20:51:30 +0200 (CEST)
 From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
+To:     phone-devel@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@somainline.org>,
@@ -33,22 +30,25 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         Martin Botka <martin.botka@somainline.org>,
         Jami Kettunen <jami.kettunen@somainline.org>,
         Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
         Douglas Anderson <dianders@chromium.org>,
         Vladimir Lypak <vladimir.lypak@gmail.com>,
         linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
 Subject: [PATCH v3 06/10] drm/msm/dsi: Migrate to drm_dsc_compute_rc_parameters()
-Date:   Sun,  9 Oct 2022 20:48:20 +0200
-Message-Id: <20221009184824.457416-7-marijn.suijten@somainline.org>
+Date:   Sun,  9 Oct 2022 20:50:54 +0200
+Message-Id: <20221009185058.460688-1-marijn.suijten@somainline.org>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221009184824.457416-1-marijn.suijten@somainline.org>
 References: <20221009184824.457416-1-marijn.suijten@somainline.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
