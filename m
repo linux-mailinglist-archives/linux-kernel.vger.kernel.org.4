@@ -2,254 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72FB65F8DDC
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 22:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 287845F8DE4
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 22:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbiJIUYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 16:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
+        id S229964AbiJIUl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 16:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbiJIUYp (ORCPT
+        with ESMTP id S229607AbiJIUl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 16:24:45 -0400
-X-Greylist: delayed 179 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 09 Oct 2022 13:24:42 PDT
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C605F92;
-        Sun,  9 Oct 2022 13:24:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1665346716;
-    s=strato-dkim-0002; d=iokpp.de;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=jsfljzW+YMyuvK6mAEkDcZMs8Sze5R+zKumLODmC4Qo=;
-    b=D024j9bBfZG+xEV9UYALQSkS4eb6UqesupGVRaroiSOI+6rQdAvlcUN2KBlf3FO/kZ
-    UtqdfJTBLfquRpGVnY7S1Vhqq1JjnrE6bIzWCjS4VEXRp6K4N6oZcfK+lTv18DTTTebq
-    SD2ubNQLIB6GLy22d1gorsMeLG/bu/oq7brf83YidecJukHMk/Dwp1AwRhnlnGNlyCE2
-    qgw6FhSomphithAg2wL8m7H9JxZYi9VyYAOlzGZfBmMDvLMUqOKf3yrE7nsBTuXimM+y
-    W+Tek2938Qn4aoSvnPULv0iI8J2sbpanT5GUOjRlpk883grM05WY7lXpvQK5lnJadp7j
-    B5xw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSedrgBzPc9DUyubU4DD1QLj68UeUr1+U1h3Wv4Xa/LRChhKO/8hvJt7KzgdI0oSHjzSB"
-X-RZG-CLASS-ID: mo02
-Received: from linux.speedport.ip
-    by smtp.strato.de (RZmta 48.1.3 AUTH)
-    with ESMTPSA id z90a05y99KIadXx
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sun, 9 Oct 2022 22:18:36 +0200 (CEST)
-From:   Bean Huo <beanhuo@iokpp.de>
-To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        cang@codeaurora.org, daejun7.park@samsung.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] scsi: ufs: core: Cleanup ufshcd_slave_alloc()
-Date:   Sun,  9 Oct 2022 22:18:09 +0200
-Message-Id: <20221009201809.495207-3-beanhuo@iokpp.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221009201809.495207-1-beanhuo@iokpp.de>
-References: <20221009201809.495207-1-beanhuo@iokpp.de>
+        Sun, 9 Oct 2022 16:41:57 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8391C126
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 13:41:55 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1322fa1cf6fso10683432fac.6
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 13:41:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tvaot2L15NY1QUpSajE/jgPmRugZzKKTWuvwSu4wnMI=;
+        b=bK7HmiQjmO4dSo5b7wHYga7E610PKTFoUB3bEyEy/8+nbyN9WwPP9DeVd16OFiMjU8
+         ufgzyQWLqpAjSYrnbK4kP6bQgYxG9wmcAORtTCQaKpV18LAbrL9J6kJ0lzJAyX1Svf+W
+         dK1S7BadL1d2E4QpzliZr2T4WE44tC1oePd20=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tvaot2L15NY1QUpSajE/jgPmRugZzKKTWuvwSu4wnMI=;
+        b=CDx4V8XdV14FP+AEmy0kObcoNY+oS5M+My9J3k9aqNxBM2Iv3VOyeFAFWeobw5CfNz
+         +SoPvB4NE2iQO6vtUvK7+RemwJyNvN2pb8+c2WSfNgoUFVJe+4b/ptx4BjC5B1a+Sc6e
+         SDdlRMt5c0hYL4/FwrHNmK5dCQDu6Y/ViErxE0oFz9nrQ1nesZWDDV5c9KNtAx7x7fd3
+         ZmSH+/+nvbxm6iM8WXgvKiulQ/NHMJStPIYMWEqrfxSKsCQxFQi8dTrMZuj+nRwjbGdq
+         /4Wj2euYmkTPnLn6v9fOcQG3ZWTtyRw6ufPEdfBsAP1jzs8KSfe7XsOWnMCJMughXFIs
+         XTFw==
+X-Gm-Message-State: ACrzQf3+YDZgNTOyjjjuzXywfTGjlu7JokXP76DoSMZT1HNaJs4z539r
+        Q2w49GNdRWIhHwJnguD5lu+nzlm9ydzA/Q==
+X-Google-Smtp-Source: AMsMyM7+eQW+sXDymfySWy17zZrdntU0O6L6amGqY0/MmilZSrWBHV6Tc6PuvPJ50Up7eEhibSc08g==
+X-Received: by 2002:a05:6870:f2a6:b0:136:8a4d:f183 with SMTP id u38-20020a056870f2a600b001368a4df183mr1245440oap.193.1665348114312;
+        Sun, 09 Oct 2022 13:41:54 -0700 (PDT)
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com. [209.85.160.47])
+        by smtp.gmail.com with ESMTPSA id z3-20020a056808064300b0034fbbce2932sm3567546oih.42.2022.10.09.13.41.51
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Oct 2022 13:41:52 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-12c8312131fso10699952fac.4
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 13:41:51 -0700 (PDT)
+X-Received: by 2002:a05:6870:c0c9:b0:127:c4df:5b50 with SMTP id
+ e9-20020a056870c0c900b00127c4df5b50mr7800531oad.126.1665348111500; Sun, 09
+ Oct 2022 13:41:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221003203129.GA2767725-robh@kernel.org> <CAL_JsqLR=9czyHPngjKczSxK8icw1=vBFHKgiRNz2AdvVRKC2A@mail.gmail.com>
+In-Reply-To: <CAL_JsqLR=9czyHPngjKczSxK8icw1=vBFHKgiRNz2AdvVRKC2A@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 9 Oct 2022 13:41:35 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjNaJWvvUKTk43H-OtdP+wnM31tw8v4oz5t1TzfO4x+TQ@mail.gmail.com>
+Message-ID: <CAHk-=wjNaJWvvUKTk43H-OtdP+wnM31tw8v4oz5t1TzfO4x+TQ@mail.gmail.com>
+Subject: Re: [GIT PULL] Devicetree updates for v6.1
+To:     Rob Herring <robh@kernel.org>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
+On Sun, Oct 9, 2022 at 11:32 AM Rob Herring <robh@kernel.org> wrote:
+>
+> Linus, Did you miss this?
 
-Combine ufshcd_get_lu_power_on_wp_status() and ufshcd_set_queue_depth()
-into one single ufshcd_lu_init(), so that we only need to read the LUN
-descriptor once to replace the original twice.
+No, it's still in my queue.
 
-Signed-off-by: Bean Huo <beanhuo@micron.com>
----
- drivers/ufs/core/ufshcd.c | 153 ++++++++++++++------------------------
- 1 file changed, 56 insertions(+), 97 deletions(-)
+Right now I'm doing merges (very slowly) on my laptop, while waiting
+for new ECC memory DIMMs to arrive.
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 7c15cbc737b4..77dc5cba2b94 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -4862,100 +4862,6 @@ static int ufshcd_verify_dev_init(struct ufs_hba *hba)
- 	return err;
- }
- 
--/**
-- * ufshcd_set_queue_depth - set lun queue depth
-- * @sdev: pointer to SCSI device
-- *
-- * Read bLUQueueDepth value and activate scsi tagged command
-- * queueing. For WLUN, queue depth is set to 1. For best-effort
-- * cases (bLUQueueDepth = 0) the queue depth is set to a maximum
-- * value that host can queue.
-- */
--static void ufshcd_set_queue_depth(struct scsi_device *sdev)
--{
--	int ret = 0;
--	u8 lun_qdepth;
--	struct ufs_hba *hba;
--
--	hba = shost_priv(sdev->host);
--
--	lun_qdepth = hba->nutrs;
--	ret = ufshcd_read_unit_desc_param(hba,
--					  ufshcd_scsi_to_upiu_lun(sdev->lun),
--					  UNIT_DESC_PARAM_LU_Q_DEPTH,
--					  &lun_qdepth,
--					  sizeof(lun_qdepth));
--
--	/* Some WLUN doesn't support unit descriptor */
--	if (ret == -EOPNOTSUPP)
--		lun_qdepth = 1;
--	else if (!lun_qdepth)
--		/* eventually, we can figure out the real queue depth */
--		lun_qdepth = hba->nutrs;
--	else
--		lun_qdepth = min_t(int, lun_qdepth, hba->nutrs);
--
--	dev_dbg(hba->dev, "%s: activate tcq with queue depth %d\n",
--			__func__, lun_qdepth);
--	scsi_change_queue_depth(sdev, lun_qdepth);
--}
--
--/*
-- * ufshcd_get_lu_wp - returns the "b_lu_write_protect" from UNIT DESCRIPTOR
-- * @hba: per-adapter instance
-- * @lun: UFS device lun id
-- * @b_lu_write_protect: pointer to buffer to hold the LU's write protect info
-- *
-- * Returns 0 in case of success and b_lu_write_protect status would be returned
-- * @b_lu_write_protect parameter.
-- * Returns -ENOTSUPP if reading b_lu_write_protect is not supported.
-- * Returns -EINVAL in case of invalid parameters passed to this function.
-- */
--static int ufshcd_get_lu_wp(struct ufs_hba *hba,
--			    u8 lun,
--			    u8 *b_lu_write_protect)
--{
--	int ret;
--
--	if (!b_lu_write_protect)
--		ret = -EINVAL;
--	/*
--	 * According to UFS device spec, RPMB LU can't be write
--	 * protected so skip reading bLUWriteProtect parameter for
--	 * it. For other W-LUs, UNIT DESCRIPTOR is not available.
--	 */
--	else if (lun >= hba->dev_info.max_lu_supported)
--		ret = -ENOTSUPP;
--	else
--		ret = ufshcd_read_unit_desc_param(hba,
--					  lun,
--					  UNIT_DESC_PARAM_LU_WR_PROTECT,
--					  b_lu_write_protect,
--					  sizeof(*b_lu_write_protect));
--	return ret;
--}
--
--/**
-- * ufshcd_get_lu_power_on_wp_status - get LU's power on write protect
-- * status
-- * @hba: per-adapter instance
-- * @sdev: pointer to SCSI device
-- *
-- */
--static inline void ufshcd_get_lu_power_on_wp_status(struct ufs_hba *hba,
--						    const struct scsi_device *sdev)
--{
--	if (hba->dev_info.f_power_on_wp_en &&
--	    !hba->dev_info.is_lu_power_on_wp) {
--		u8 b_lu_write_protect;
--
--		if (!ufshcd_get_lu_wp(hba, ufshcd_scsi_to_upiu_lun(sdev->lun),
--				      &b_lu_write_protect) &&
--		    (b_lu_write_protect == UFS_LU_POWER_ON_WP))
--			hba->dev_info.is_lu_power_on_wp = true;
--	}
--}
--
- /**
-  * ufshcd_setup_links - associate link b/w device wlun and other luns
-  * @sdev: pointer to SCSI device
-@@ -4993,6 +4899,61 @@ static void ufshcd_setup_links(struct ufs_hba *hba, struct scsi_device *sdev)
- 	}
- }
- 
-+/**
-+ * ufshcd_lu_power_on_wp_init - Initialize LU's power on write protect state
-+ * @hba: per-adapter instance
-+ * @sdev: pointer to SCSI device
-+ * @b_lu_write_protect: bLUWriteProtect value read from LU descriptor
-+ */
-+static inline void ufshcd_lu_power_on_wp_init(struct ufs_hba *hba, const struct scsi_device *sdev,
-+					      u8 b_lu_write_protect)
-+{
-+	if (hba->dev_info.f_power_on_wp_en && !hba->dev_info.is_lu_power_on_wp &&
-+	    b_lu_write_protect == UFS_LU_POWER_ON_WP)
-+		hba->dev_info.is_lu_power_on_wp = true;
-+}
-+
-+static void ufshcd_lu_init(struct ufs_hba *hba, struct scsi_device *sdev)
-+{
-+	int ret;
-+	int len;
-+	u8 lun;
-+	u8 lun_qdepth;
-+	u8 *desc_buf;
-+
-+	lun_qdepth = hba->nutrs;
-+	len = hba->desc_size[QUERY_DESC_IDN_UNIT];
-+
-+	desc_buf = kmalloc(len, GFP_KERNEL);
-+	if (!desc_buf)
-+		goto set_qdepth;
-+
-+	lun_qdepth = hba->nutrs;
-+	lun = ufshcd_scsi_to_upiu_lun(sdev->lun);
-+
-+	ret = ufshcd_read_unit_desc_param(hba, lun, 0, desc_buf, len);
-+	if (ret == -EOPNOTSUPP)
-+		/* If LU doesn't support unit descriptor, its queue depth is set to 1 */
-+		lun_qdepth = 1;
-+	else if (desc_buf[UNIT_DESC_PARAM_LU_Q_DEPTH])
-+		lun_qdepth = min_t(int, desc_buf[UNIT_DESC_PARAM_LU_Q_DEPTH], hba->nutrs);
-+	/*
-+	 * According to UFS device spec, The write protection mode is only supported by normal LU,
-+	 * not supported by WLUN.
-+	 */
-+	if (!ret && lun < hba->dev_info.max_lu_supported)
-+		ufshcd_lu_power_on_wp_init(hba, sdev, desc_buf[UNIT_DESC_PARAM_LU_WR_PROTECT]);
-+
-+	kfree(desc_buf);
-+set_qdepth:
-+	/*
-+	 * For WLUNs that don't support unit descriptor, queue depth is set to 1. For LUs whose
-+	 * bLUQueueDepth == 0, the queue depth is set to a maximum value that host can queue.
-+	 */
-+	dev_dbg(hba->dev, "Set LU %x queue depth %d\n", lun, lun_qdepth);
-+	scsi_change_queue_depth(sdev, lun_qdepth);
-+}
-+
- /**
-  * ufshcd_slave_alloc - handle initial SCSI device configurations
-  * @sdev: pointer to SCSI device
-@@ -5020,9 +4981,7 @@ static int ufshcd_slave_alloc(struct scsi_device *sdev)
- 	/* WRITE_SAME command is not supported */
- 	sdev->no_write_same = 1;
- 
--	ufshcd_set_queue_depth(sdev);
--
--	ufshcd_get_lu_power_on_wp_status(hba, sdev);
-+	ufshcd_lu_init(hba, sdev);
- 
- 	ufshcd_setup_links(hba, sdev);
- 
--- 
-2.34.1
+I have had some instability on my main desktop the last couple of
+days, with random memory corruption in user space resulting in my
+allmodconfig builds randomly failing with internal compiler errors
+etc.
 
+When that happens during the merge window, it's obviously a new kernel
+bug causing problems, which is never a great thing.
+
+Except this time it wasn't - it was literally a DIMM going bad in my
+machine randomly after 2.5 years of it being perfectly stable. Go
+figure. Verified first by booting an old kernel, and then with
+memtest86+ overnight.
+
+My new memory is "out for delivery", so hopefully I'll be back up to
+full speed by this evening, but I'll probably leave memtest86+ for
+another overnight with the new DIMMs just because this wasn't the
+greatest experience ever. A fair amount of wasted time blaming all the
+wrong things, because _obviously_ it wasn't my hardware suddenly going
+bad.
+
+              Linus
+
+PS. And yes, my system is all set up for ECC - except I built it
+during the early days of COVID when there wasn't any ECC memory
+available at any sane prices. And then I never got around to fixing
+it, until I had to detect errors the hard wat. I absolutely *detest*
+the crazy industry politics and bad vendors that have made ECC memory
+so "special".
