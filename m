@@ -2,120 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C962C5F8AD5
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 13:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E64F95F8ADA
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 13:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbiJILOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 07:14:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
+        id S229909AbiJILPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 07:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiJILN5 (ORCPT
+        with ESMTP id S229959AbiJILPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 07:13:57 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D9027141;
-        Sun,  9 Oct 2022 04:13:55 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MlfSg0MX3z1P75B;
-        Sun,  9 Oct 2022 19:09:23 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sun, 9 Oct 2022 19:13:53 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sun, 9 Oct 2022 19:13:52 +0800
-Message-ID: <10ada8f0-0931-b6a6-e240-fc8b500e578d@huawei.com>
-Date:   Sun, 9 Oct 2022 19:13:52 +0800
+        Sun, 9 Oct 2022 07:15:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4777E2B24C;
+        Sun,  9 Oct 2022 04:15:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48064B80CB9;
+        Sun,  9 Oct 2022 11:15:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF917C433C1;
+        Sun,  9 Oct 2022 11:15:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665314133;
+        bh=wccPJLuH2DYbLdfSoyHm5U/6vyVfxSEwO2LCbBJoTmI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZAkjhh3wUFCs0GYGGZ9pZ1dsGpWfE69dKhRZTTCMzzjAx+079DTo1wkrqXH5yiKPe
+         bN+W3QxzOWnvM8UsuY/qkgLD+xwwZbyFEV4JpBHfvdVgNnSo69wnyAqcr/Hg3XhgSl
+         Z2TFiosUqGaNAOSopU7przq4zwTXZ3AZIrDUDWByqDW67BNt2/I+Ty8nVfu1vkmWAx
+         urKUZQ6beZoqbfW+HZR9W+9N+pzCiQ7mij4K8IRXb+0pSmet1b4MtahQWEqDHaA2PR
+         uLYbf8VXptd28KvqFbB+AHry00Q2EaLwX5s6tl7LVvTwJy+qIh5YYIIQmp/gKM2yIm
+         SGln/Ve6gFTYg==
+Received: by pali.im (Postfix)
+        id E03897C1; Sun,  9 Oct 2022 13:15:29 +0200 (CEST)
+Date:   Sun, 9 Oct 2022 13:15:29 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Gregory Clement <gregory.clement@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+Subject: Re: [PATCH 0/6] ARM: dts: pci-mvebu: Fix assigned-addresses for
+ every PCIe Root Port
+Message-ID: <20221009111529.2eo2mwca3ywfkajy@pali>
+References: <20220817223053.31141-1-pali@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 03/11] mm/ioremap: change the return value of
- io[re|un]map_allowed and rename
-Content-Language: en-US
-To:     Baoquan He <bhe@redhat.com>, <linux-kernel@vger.kernel.org>
-CC:     <linux-mm@kvack.org>, <akpm@linux-foundation.org>,
-        <hch@infradead.org>, <agordeev@linux.ibm.com>,
-        <christophe.leroy@csgroup.eu>, <schnelle@linux.ibm.com>,
-        <David.Laight@ACULAB.COM>, <shorne@gmail.com>,
-        "Arnd Bergmann" <arnd@arndb.de>, <linux-arch@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20221009103114.149036-1-bhe@redhat.com>
- <20221009103114.149036-4-bhe@redhat.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <20221009103114.149036-4-bhe@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220817223053.31141-1-pali@kernel.org>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Gregory, ping?
 
-On 2022/10/9 18:31, Baoquan He wrote:
-> Currently, hooks ioremap_allowed() and iounmap_allowed() are used to
-> check if it's qualified to do ioremap, and now this is done on ARM64.
-> However, in oder to convert more architectures to take GENERIC_IOREMAP
-> method, several more things need be done in those two hooks:
->   1) The io address mapping need be handled specifically on architectures,
->      e.g arc, ia64, s390;
->   2) The original physical address passed into ioremap_prot() need be
->      fixed up, e.g arc;
->   3) The 'prot' passed into ioremap_prot() need be adjusted, e.g on arc
->      and xtensa.
->
-> To handle these three issues,
->
->   1) Rename ioremap_allowed() and iounmap_allowed() to arch_ioremap()
->      and arch_iounmap() since the old name can't reflect their
->      functionality after change;
->   2) Change the return value of arch_ioremap() so that arch can add
->      specifical io address mapping handling inside and return the maped
->      address. Now their returned value means:
->      ===
->      arch_ioremap() return a bool,
-pointer?
->        - IS_ERR means return an error
->        - 0 means continue to remap
->        - a non-zero, non-IS_ERR pointer is returned directly
->      arch_iounmap() return a bool,
->        - true means continue to vunmap
->        - false means skip vunmap and return directly
-...
->   /*
-> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-> index a68f8fbf423b..2ae16906f3be 100644
-> --- a/include/asm-generic/io.h
-> +++ b/include/asm-generic/io.h
-> @@ -1049,25 +1049,26 @@ static inline void iounmap(volatile void __iomem *addr)
->   
->   /*
->    * Arch code can implement the following two hooks when using GENERIC_IOREMAP
-> - * ioremap_allowed() return a bool,
-> - *   - true means continue to remap
-> - *   - false means skip remap and return directly
-> - * iounmap_allowed() return a bool,
-> + * arch_ioremap() return a bool,
-ditto...
->   	area = get_vm_area_caller(size, VM_IOREMAP,
->   			__builtin_return_address(0));
->   	if (!area)
-> @@ -52,7 +57,7 @@ void iounmap(volatile void __iomem *addr)
->   {
->   	void *vaddr = (void *)((unsigned long)addr & PAGE_MASK);
->   
-> -	if (!iounmap_allowed(vaddr))
-> +	if (!arch_iounmap((void __iomem *)addr))
-vaddr?
->   		return;
->   
->   	if (is_vmalloc_addr(vaddr))
+On Thursday 18 August 2022 00:30:47 Pali Rohár wrote:
+> Per IEEE Std 1275-1994 bindings documentation (to which kernel DT
+> bindings refers), DT property assigned-addresses contains BDF address
+> of resource. Currently more PCIe Root Port nodes have BDF address in
+> assigned-addresses which points to different PCIe Root Port nodes. This
+> obviously does not make sense as the address resource specified in
+> assigned-addresses of every PCIe Root Port describes address range of
+> internal registers which are specific for corresponding Marvell PCIe
+> Root Port. Fix this issue and align all BDF addresses in
+> assigned-addresses DT property to specify correct BDF address of the
+> current PCIe Root Port.
+> 
+> Note that current version of pci-mvebu.c controller driver, which
+> registers Marvell PCIe Root Ports, ignores BDF value in DT property
+> assigned-addresses. It expects that Root Port's assigned-addresses
+> contains address range of that root port. That is why driver currently
+> works without any issue and nobody spotted it. But if driver or
+> something else would do device tree validation then this issue should be
+> spotted and throws error. Also device tree files may be used by other
+> projects where drivers may require correct values.
+> 
+> This patch series aligns BDF address of every Marvell PCIe Root Port in
+> node name, config space in reg property and mem in assigned-address
+> property of internal registers resource.
+> 
+> Pali Rohár (6):
+>   ARM: dts: dove: Fix assigned-addresses for every PCIe Root Port
+>   ARM: dts: armada-370: Fix assigned-addresses for every PCIe Root Port
+>   ARM: dts: armada-xp: Fix assigned-addresses for every PCIe Root Port
+>   ARM: dts: armada-375: Fix assigned-addresses for every PCIe Root Port
+>   ARM: dts: armada-38x: Fix assigned-addresses for every PCIe Root Port
+>   ARM: dts: armada-39x: Fix assigned-addresses for every PCIe Root Port
+> 
+>  arch/arm/boot/dts/armada-370.dtsi        |  2 +-
+>  arch/arm/boot/dts/armada-375.dtsi        |  2 +-
+>  arch/arm/boot/dts/armada-380.dtsi        |  4 ++--
+>  arch/arm/boot/dts/armada-385.dtsi        |  6 +++---
+>  arch/arm/boot/dts/armada-39x.dtsi        |  6 +++---
+>  arch/arm/boot/dts/armada-xp-mv78230.dtsi |  8 ++++----
+>  arch/arm/boot/dts/armada-xp-mv78260.dtsi | 16 ++++++++--------
+>  arch/arm/boot/dts/dove.dtsi              |  2 +-
+>  8 files changed, 23 insertions(+), 23 deletions(-)
+> 
+> -- 
+> 2.20.1
+> 
