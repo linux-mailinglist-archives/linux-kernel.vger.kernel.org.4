@@ -2,252 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F2C5F8C8B
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 19:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35B805F8CC2
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 20:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbiJIRhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 13:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42102 "EHLO
+        id S229996AbiJISDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 14:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiJIRhi (ORCPT
+        with ESMTP id S229849AbiJISDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 13:37:38 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE03A29C90;
-        Sun,  9 Oct 2022 10:37:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665337056; x=1696873056;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/bS9EuXzTvdWITntg7bxDrCvG53j3Owo6te+hpo9OzE=;
-  b=dEs+l2KgdO2/44/JKWXWi+0LrEBfd4FFVcn4OmgPTV797AmjCfWfvxWK
-   ONOF0cWxZ6ia5O7mrllN4Kgb7eak/W7UL5/3deYnMKAA9m3uzvQ9vVkSO
-   FnJBI89oXhog5TITNqAEbJfeO6EMYbXR/3w3RVdMe3F3XN5yLG9xBZLl8
-   8r1lcRPRN0zkSlcbS3zhGmKVaYIBtg7VrwLJhZEmEsupmxxvsFTl2cC6N
-   ycTct4AlX20IA0N966TRfXjSAtbMpMMsCqglTH54+dnQ1Z0FshUCGU/rF
-   kf2MDHH0jUpItHBLLjgZfOF0ZyD0balq6NeBadTTPvL/YlB0VD1spbAHM
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10495"; a="304067496"
-X-IronPort-AV: E=Sophos;i="5.95,172,1661842800"; 
-   d="scan'208";a="304067496"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2022 10:37:36 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10495"; a="628040116"
-X-IronPort-AV: E=Sophos;i="5.95,172,1661842800"; 
-   d="scan'208";a="628040116"
-Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.55])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2022 10:37:34 -0700
-From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-To:     jic23@kernel.org, lars@metafoo.de
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rajat.khandelwal@intel.com,
-        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Subject: [PATCH v5] iio: pressure: mpl115: Implementing low power mode by shutdown gpio
-Date:   Mon, 10 Oct 2022 23:07:20 +0530
-Message-Id: <20221010173720.568916-1-rajat.khandelwal@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 9 Oct 2022 14:03:46 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401D31F9E3;
+        Sun,  9 Oct 2022 11:03:45 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id bu25so13756752lfb.3;
+        Sun, 09 Oct 2022 11:03:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZeTfTjXc7OkReoe4FpCa6GFYv1CghAHRNl32tJkSPto=;
+        b=KsOMvriaP/nr6gLbljzJr9NTpBaUUezCDxJSRMoFRdKWSjf8rWxghNbzjAdbqMFxtk
+         N6cGR1m6HcIdxLdJ+ZDXk2N+iyZxVa9HacsMpAKIz36pUlyXThcybhL6cVNPnN6BEOGf
+         D7ASV8DMXvMBU9zt68o+CmL+O49OJwVKAUIFstzEkhrnzwAtoYZ8VCMRXW4uEhFt/1MS
+         YpMY6fYbu2IqT0yml0hVQv9MRvjKiixxBT+9IKyBecG1dHWvBW/Qfi5GsYuqtvAc623u
+         wMNUj64FT2vPG5G0lqF35uo6lU22VpSAy5Owrun2SxmacOlDezSOdmE3+BEE4UhFbhrp
+         l6Ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZeTfTjXc7OkReoe4FpCa6GFYv1CghAHRNl32tJkSPto=;
+        b=28QQSx/g9aX3jKNf08PjNWN5nGM1unui5p1iXuBY9X7aobQ+VvxnawMc0zd4EGgJnh
+         6pOA5wyyBI7S1zLDlDi3T8U/c133v1gEkRptFM7KPS+pA64dAoitBYD2KsxrrIe1CWTb
+         O1vHTnBDF6fiNZULdapT/U2Fjs85bBsKrVqZoXXbp90svKCz8vTixipPLbhYKNjvBzTE
+         7YvUVDQ+KekqCl0ZzgEV9q41fi9TGQkyFbYUmaIR2zjcob+U00qTtGCkaD6OQ5sV2H/O
+         LxGoeCn6wvMiSvc6uI4Ocb/cDSUUP8hBm/wVlBw7vWdMJuVpmSigxGOIU7ne0+32fK2m
+         26jw==
+X-Gm-Message-State: ACrzQf1fEfEOha2xAUTFz7xqAxf5hLDFj25H+2aFLE+6HpTF2Urk+SXw
+        MVz9u51IDhyLGPf/yjeyW97Ya0Nulng=
+X-Google-Smtp-Source: AMsMyM72vRsZKj/IdSM0xPwtFDEtbGqD+BvgCUNRiZj1DDZDZvnTKJAzqx6K7IoGmtZ7ySMqd4cYJQ==
+X-Received: by 2002:a05:6512:2207:b0:4a2:6b5d:8afc with SMTP id h7-20020a056512220700b004a26b5d8afcmr4736942lfu.261.1665338623397;
+        Sun, 09 Oct 2022 11:03:43 -0700 (PDT)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id j13-20020a056512344d00b00497a41b3a42sm1100000lfr.88.2022.10.09.11.03.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Oct 2022 11:03:42 -0700 (PDT)
+Date:   Sun, 9 Oct 2022 21:03:40 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Peter Rosin <peda@axentia.se>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        robh@kernel.org, wsa@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [v9 1/4] dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
+Message-ID: <20221009180340.hqt3ngp5d26g3euw@mobilestation>
+References: <20221007075354.568752-1-patrick.rudolph@9elements.com>
+ <20221007075354.568752-2-patrick.rudolph@9elements.com>
+ <20221008115019.6jxsbawtye7cdkfh@mobilestation>
+ <68327197-6835-1ec4-e8f1-217b5d2ef947@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <68327197-6835-1ec4-e8f1-217b5d2ef947@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MPL115 supports shutdown gpio which can be used to set the state
-to low power mode. Power from all internal circuits and
-registers is removed. This is done by pulling the SHDN pin to low.
-This patch enables runtime PM on MPL115 to increase power savings.
+On Sun, Oct 09, 2022 at 05:25:22PM +0200, Krzysztof Kozlowski wrote:
+> On 08/10/2022 13:50, Serge Semin wrote:
+> > On Fri, Oct 07, 2022 at 09:53:50AM +0200, Patrick Rudolph wrote:
+> >> Update the pca954x bindings to add support for the Maxim MAX735x/MAX736x
+> >> chips. The functionality will be provided by the exisintg pca954x driver.
+> >>
+> >> While on it make the interrupts support conditionally as not all of the
+> >> existing chips have interrupts.
+> >>
+> >> For chips that are powered off by default add an optional regulator
+> >> called vdd-supply.
+> >>
+> >> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> >> ---
+> >>  .../bindings/i2c/i2c-mux-pca954x.yaml         | 39 ++++++++++++++++---
+> >>  1 file changed, 34 insertions(+), 5 deletions(-)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> >> index 9f1726d0356b..efad0a95806f 100644
+> >> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> >> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> >> @@ -4,21 +4,25 @@
+> >>  $id: http://devicetree.org/schemas/i2c/i2c-mux-pca954x.yaml#
+> >>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>  
+> >> -title: NXP PCA954x I2C bus switch
+> >> +title: NXP PCA954x I2C and compatible bus switches
+> >>  
+> >>  maintainers:
+> >>    - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> >>  
+> >>  description:
+> >> -  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
+> >> -
+> > 
+> >> -allOf:
+> >> -  - $ref: /schemas/i2c/i2c-mux.yaml#
+> > 
+> > Why do you move the allOf statement to the bottom of the schema?
+> 
 
-According to spec., a wakeup time period of ~5 ms exists between
-waking up and actually communicating with the device. This is
-implemented using sleep delay.
+> Because it goes with 'ifs' at the bottom of the schema...
 
-Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
----
+Is there a requirement to move the allOf array to the bottom of the
+schema if it contains the 'if' statement? If only there were some
+kernel doc with all such implicit conventions...
 
-v5:
-1. Removing build error by exporting EXPORT_NS_RUNTIME_DEV_PM_OPS
-2. Using runtime PM for low power mode and not forcing shutdown pin
-3. Changing patch comment
-4. Increasing autosuspend timeout to 2 sec to make the driver more
-responsive to user
+> 
+> > 
+> >> +  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices,
+> >> +  and the Maxim MAX735x and MAX736x I2C mux/switch devices.
+> > 
+> > What about combining the sentence: "The binding supports NXP
+> > PCA954x/PCA984x and Maxim MAX735x/MAX736x I2C mux/switch devices." ?
+> > Currently it does look a bit bulky.
+> 
+> Drop "The binding supports". Instead describe the hardware.
+> 
+> > 
+> >>  
+> >>  properties:
+> >>    compatible:
+> >>      oneOf:
+> >>        - enum:
+> >> +          - maxim,max7356
+> >> +          - maxim,max7357
+> >> +          - maxim,max7358
+> >> +          - maxim,max7367
+> >> +          - maxim,max7368
+> >> +          - maxim,max7369
+> >>            - nxp,pca9540
+> >>            - nxp,pca9542
+> >>            - nxp,pca9543
+> >> @@ -59,10 +63,33 @@ properties:
+> >>      description: if present, overrides i2c-mux-idle-disconnect
+> >>      $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
+> >>  
+> >> +  vdd-supply:
+> >> +    description: A voltage regulator supplying power to the chip.
+> >> +
+> >>  required:
+> >>    - compatible
+> >>    - reg
+> >>  
+> >> +allOf:
+> >> +  - $ref: /schemas/i2c/i2c-mux.yaml#
+> >> +  - if:
+> >> +      not:
+> >> +        properties:
+> >> +          compatible:
+> >> +            contains:
+> >> +              enum:
+> >> +                - maxim,max7367
+> >> +                - maxim,max7369
+> >> +                - nxp,pca9542
+> >> +                - nxp,pca9543
+> >> +                - nxp,pca9544
+> >> +                - nxp,pca9545
+> >> +    then:
+> > 
+> >> +      properties:
+> >> +        interrupts: false
+> >> +        "#interrupt-cells": false
+> >> +        interrupt-controller: false
+> > 
+> > I'd suggest to add an opposite definition. Evaluate the properties for
+> > the devices which expect them being evaluated instead of falsing their
+> > existence for the devices which don't support the interrupts.
+> 
 
- drivers/iio/pressure/mpl115.c     | 61 ++++++++++++++++++++++++++++++-
- drivers/iio/pressure/mpl115.h     |  5 +++
- drivers/iio/pressure/mpl115_i2c.c |  1 +
- drivers/iio/pressure/mpl115_spi.c |  1 +
- 4 files changed, 67 insertions(+), 1 deletion(-)
+> The properties rather should be defined in top-level than in "if", so I
+> am not sure how would you want to achieve opposite way.
 
-diff --git a/drivers/iio/pressure/mpl115.c b/drivers/iio/pressure/mpl115.c
-index 5bf5b9abe6f1..ec7527161844 100644
---- a/drivers/iio/pressure/mpl115.c
-+++ b/drivers/iio/pressure/mpl115.c
-@@ -4,12 +4,13 @@
-  *
-  * Copyright (c) 2014 Peter Meerwald <pmeerw@pmeerw.net>
-  *
-- * TODO: shutdown pin
-+ * TODO: synchronization with system suspend
-  */
- 
- #include <linux/module.h>
- #include <linux/iio/iio.h>
- #include <linux/delay.h>
-+#include <linux/gpio/consumer.h>
- 
- #include "mpl115.h"
- 
-@@ -27,6 +28,7 @@ struct mpl115_data {
- 	s16 a0;
- 	s16 b1, b2;
- 	s16 c12;
-+	struct gpio_desc *shutdown;
- 	const struct mpl115_ops *ops;
- };
- 
-@@ -102,16 +104,24 @@ static int mpl115_read_raw(struct iio_dev *indio_dev,
- 
- 	switch (mask) {
- 	case IIO_CHAN_INFO_PROCESSED:
-+		pm_runtime_get_sync(data->dev);
- 		ret = mpl115_comp_pressure(data, val, val2);
- 		if (ret < 0)
- 			return ret;
-+		pm_runtime_mark_last_busy(data->dev);
-+		pm_runtime_put_autosuspend(data->dev);
-+
- 		return IIO_VAL_INT_PLUS_MICRO;
- 	case IIO_CHAN_INFO_RAW:
-+		pm_runtime_get_sync(data->dev);
- 		/* temperature -5.35 C / LSB, 472 LSB is 25 C */
- 		ret = mpl115_read_temp(data);
- 		if (ret < 0)
- 			return ret;
-+		pm_runtime_mark_last_busy(data->dev);
-+		pm_runtime_put_autosuspend(data->dev);
- 		*val = ret >> 6;
-+
- 		return IIO_VAL_INT;
- 	case IIO_CHAN_INFO_OFFSET:
- 		*val = -605;
-@@ -168,6 +178,8 @@ int mpl115_probe(struct device *dev, const char *name,
- 	if (ret)
- 		return ret;
- 
-+	dev_set_drvdata(dev, indio_dev);
-+
- 	ret = data->ops->read(data->dev, MPL115_A0);
- 	if (ret < 0)
- 		return ret;
-@@ -185,10 +193,58 @@ int mpl115_probe(struct device *dev, const char *name,
- 		return ret;
- 	data->c12 = ret;
- 
-+	data->shutdown = devm_gpiod_get_optional(dev, "shutdown",
-+						 GPIOD_OUT_LOW);
-+	if (IS_ERR(data->shutdown))
-+		return dev_err_probe(dev, PTR_ERR(data->shutdown),
-+				     "cannot get shutdown gpio\n");
-+
-+	if (data->shutdown) {
-+		/* Enable runtime PM */
-+		pm_runtime_get_noresume(dev);
-+		pm_runtime_set_active(dev);
-+		pm_runtime_enable(dev);
-+
-+		/*
-+		 * As the device takes 3 ms to come up with a fresh
-+		 * reading after power-on and 5 ms to actually power-on,
-+		 * do not shut it down unnecessarily. Set autosuspend to
-+		 * 2000 ms.
-+		 */
-+		pm_runtime_set_autosuspend_delay(dev, 2000);
-+		pm_runtime_use_autosuspend(dev);
-+		pm_runtime_put(dev);
-+
-+		dev_dbg(dev, "low-power mode enabled");
-+	} else
-+		dev_dbg(dev, "low-power mode disabled");
-+
- 	return devm_iio_device_register(dev, indio_dev);
- }
- EXPORT_SYMBOL_NS_GPL(mpl115_probe, IIO_MPL115);
- 
-+static int mpl115_runtime_suspend(struct device *dev)
-+{
-+	struct mpl115_data *data = iio_priv(dev_get_drvdata(dev));
-+
-+	gpiod_set_value(data->shutdown, 1);
-+
-+	return 0;
-+}
-+
-+static int mpl115_runtime_resume(struct device *dev)
-+{
-+	struct mpl115_data *data = iio_priv(dev_get_drvdata(dev));
-+
-+	gpiod_set_value(data->shutdown, 0);
-+	usleep_range(5000, 6000);
-+
-+	return 0;
-+}
-+
-+EXPORT_NS_RUNTIME_DEV_PM_OPS(mpl115_dev_pm_ops, mpl115_runtime_suspend,
-+			  mpl115_runtime_resume, NULL, IIO_MPL115);
-+
- MODULE_AUTHOR("Peter Meerwald <pmeerw@pmeerw.net>");
- MODULE_DESCRIPTION("Freescale MPL115 pressure/temperature driver");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/iio/pressure/mpl115.h b/drivers/iio/pressure/mpl115.h
-index 57d55eb8e661..78a0068a17bb 100644
---- a/drivers/iio/pressure/mpl115.h
-+++ b/drivers/iio/pressure/mpl115.h
-@@ -6,6 +6,8 @@
-  * Copyright (c) 2016 Akinobu Mita <akinobu.mita@gmail.com>
-  */
- 
-+#include <linux/pm_runtime.h>
-+
- #ifndef _MPL115_H_
- #define _MPL115_H_
- 
-@@ -18,4 +20,7 @@ struct mpl115_ops {
- int mpl115_probe(struct device *dev, const char *name,
- 			const struct mpl115_ops *ops);
- 
-+/*PM ops */
-+extern const struct dev_pm_ops mpl115_dev_pm_ops;
-+
- #endif
-diff --git a/drivers/iio/pressure/mpl115_i2c.c b/drivers/iio/pressure/mpl115_i2c.c
-index 099ab1c6832c..555bda1146fb 100644
---- a/drivers/iio/pressure/mpl115_i2c.c
-+++ b/drivers/iio/pressure/mpl115_i2c.c
-@@ -53,6 +53,7 @@ MODULE_DEVICE_TABLE(i2c, mpl115_i2c_id);
- static struct i2c_driver mpl115_i2c_driver = {
- 	.driver = {
- 		.name	= "mpl115",
-+		.pm = pm_ptr(&mpl115_dev_pm_ops),
- 	},
- 	.probe = mpl115_i2c_probe,
- 	.id_table = mpl115_i2c_id,
-diff --git a/drivers/iio/pressure/mpl115_spi.c b/drivers/iio/pressure/mpl115_spi.c
-index 7feec87e2704..58d218fd90dc 100644
---- a/drivers/iio/pressure/mpl115_spi.c
-+++ b/drivers/iio/pressure/mpl115_spi.c
-@@ -92,6 +92,7 @@ MODULE_DEVICE_TABLE(spi, mpl115_spi_ids);
- static struct spi_driver mpl115_spi_driver = {
- 	.driver = {
- 		.name   = "mpl115",
-+		.pm = pm_ptr(&mpl115_dev_pm_ops),
- 	},
- 	.probe = mpl115_spi_probe,
- 	.id_table = mpl115_spi_ids,
--- 
-2.34.1
+With one more implicit convention like "preferably define the
+properties in the top-level than in if" of course I can't. Otherwise I
+thought something like this would work:
++allOf:
++  - ...
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum: [...]
++    then:
++      properties:
++        interrupts: ...
++        "#interrupt-cells": ...
++        interrupt-controller: ...
+...
+-  interrupts:
+-  "#interrupt-cells":
+-  interrupt-controller: ...
 
+With unevaluatedProperties set to false and evaluation performed for
+the particular compatibles such schema shall work with the same
+semantic.
+
+-Sergey
+
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
