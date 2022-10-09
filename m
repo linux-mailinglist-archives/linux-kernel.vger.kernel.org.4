@@ -2,121 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD2C5F8ABC
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 12:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 672825F8ABD
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 12:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbiJIKpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 06:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33190 "EHLO
+        id S230038AbiJIKrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 06:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiJIKpr (ORCPT
+        with ESMTP id S229711AbiJIKq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 06:45:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1F928711
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 03:45:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665312345;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=sBnuKOP8ea+z2pRs5J0bRVL8ZB6FmqEXDAXcvtpc13U=;
-        b=OAOkiSzy3ZfIqQShoirZQv2Tez7Ky7Lx2BsVRwx3AjD9JjJ59+a3ZD6L/7WsCl1t9qgXW9
-        GZ4eC/5ZNhH14fW78GtJMpp6MuteOBM/mNKbPicRUiaaBkqi+fBECqBtZP67m/NiyW21Aj
-        Dp4DFiV60J0giHTvxt+uKuY8G+Lqt2Q=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-349-8kRDczUcNO6ufuVmQqjbXg-1; Sun, 09 Oct 2022 06:45:42 -0400
-X-MC-Unique: 8kRDczUcNO6ufuVmQqjbXg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E812F95D682;
-        Sun,  9 Oct 2022 10:45:41 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.192.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 96007A9FBE;
-        Sun,  9 Oct 2022 10:45:40 +0000 (UTC)
-From:   Andreas Gruenbacher <agruenba@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
-        cluster-devel@redhat.com, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] gfs2 fixes
-Date:   Sun,  9 Oct 2022 12:45:39 +0200
-Message-Id: <20221009104539.368110-1-agruenba@redhat.com>
+        Sun, 9 Oct 2022 06:46:59 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF752871A
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 03:46:57 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id nb11so19651299ejc.5
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 03:46:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mg0CdsvLmV9Rwot9nVVcMOOotbr3MkEB/vCQ+EikYMM=;
+        b=YDjpOduObMEML4tvLACPHAdviK73+0C8GgZaz8HAcprPvKn6yLhk0wFtapQNLlAaHb
+         Wi5ffZvFn+tvmURYdu4K0iHNTXpGnRL35CG4LVvOWi0RMpCHONDBRW+3Cpc1eqsITSxs
+         GXdO0+YP/QJPxCC52DdZUkRGCC/dDYgnwOTYQBqABgWIi9syQdtIEE7IrHFF5OUb2GUE
+         YKMt21sxf5e99mj4DQQCFs8C5EnfdZUd9Fih2DjU8KyAdfrbLWwhHWYlTK5ZCwdKCdPw
+         N/869o8XGSagKfiELOORl4WYTdAMDBvncsYKzG9Ko5ylP42D6BpBzAJBChoU5Vbw/StZ
+         q4Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Mg0CdsvLmV9Rwot9nVVcMOOotbr3MkEB/vCQ+EikYMM=;
+        b=TtV1A9c7MuM6aXu/29FJj3ol8RrRm4ieT1urUWmWQRgRijaI3HhwCZ7SVFDX8NsWQb
+         8D8tUu3OWi7h0d8eDDO4ocaoYr4V0GB6zCAhKzJI+QTVZ7mwoY5tg2aTSHht0RqnmZhi
+         b2EW1w/iZso+5doiA2jWGO0PESrpePIGxL3KLB9dsJSGzuX0qwuxGrjbmeM/IYXv3bna
+         2eMfTBHpFy7QwF43JWZ+0/Obepn6IFTiABM6P8UpkMYrUqBARdo+mwu60CddaFzW2UcG
+         JQaw2ZTJL/iLSEl4nbwEufw5gd+LaLpP0BndDOpPMKiMggSTkLdY808sR+DsDe9qEHGc
+         4WoQ==
+X-Gm-Message-State: ACrzQf36DuDiPZHQkG/1LVQPpHmoFpX/LWzKmAu3sZ28mfnoRhrZHy7C
+        kehoSVL8pcuyxnjqlbi6R+k=
+X-Google-Smtp-Source: AMsMyM7YgFTC4XbRkzbOErEpurl2VcjRyAxSuybl2nM2jqGA4XKdwWB+eUEsMLCyrDrRtBkrlmT49w==
+X-Received: by 2002:a17:907:72d2:b0:78d:4c16:a68d with SMTP id du18-20020a17090772d200b0078d4c16a68dmr10735347ejc.401.1665312416315;
+        Sun, 09 Oct 2022 03:46:56 -0700 (PDT)
+Received: from nam-dell (ip-217-105-46-158.ip.prioritytelecom.net. [217.105.46.158])
+        by smtp.gmail.com with ESMTPSA id r7-20020a170906280700b0078907275a44sm3840750ejc.42.2022.10.09.03.46.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Oct 2022 03:46:55 -0700 (PDT)
+Date:   Sun, 9 Oct 2022 12:46:44 +0200
+From:   Nam Cao <namcaov@gmail.com>
+To:     Rui Li <me@lirui.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: rtl8192e: Fix braces/tabs/number/OOM warnings
+Message-ID: <20221009104644.GA49790@nam-dell>
+References: <166528776854.9.8249842126243786800.67724771@lirui.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <166528776854.9.8249842126243786800.67724771@lirui.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Sun, Oct 09, 2022 at 11:55:36AM +0800, Rui Li wrote:
+> Fix warnings generated by checkpatch.pl: unnecessary braces after
+> if, too many leading tabs, int type conversion before number,
+> OOM message ourput.
+> 
+> Signed-off-by: Rui Li <me@lirui.org>
+> ---
+>  .../staging/rtl8192e/rtl8192e/r8192E_dev.c    |  3 +-
+>  .../staging/rtl8192e/rtl8192e/r8192E_phy.c    |  9 ++----
+>  drivers/staging/rtl8192e/rtl8192e/rtl_core.c  |  3 --
+>  drivers/staging/rtl8192e/rtl8192e/rtl_dm.c    | 30 +++++++------------
+>  drivers/staging/rtl8192e/rtl819x_BAProc.c     |  5 ++--
+>  drivers/staging/rtl8192e/rtl819x_HTProc.c     |  1 +
+>  drivers/staging/rtl8192e/rtllib_rx.c          |  8 ++---
+>  drivers/staging/rtl8192e/rtllib_softmac_wx.c  |  7 ++---
+>  8 files changed, 25 insertions(+), 41 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+> index 18e4e5d84878..8d20b0deca37 100644
+> --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+> +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+> @@ -1112,9 +1112,8 @@ void  rtl92e_fill_tx_desc(struct net_device *dev, struct tx_desc *pdesc,
+>  	if (cb_desc->bHwSec) {
+>  		static u8 tmp;
+>  
+> -		if (!tmp) {
+> +		if (!tmp)
+>  			tmp = 1;
+> -		}
+>  		switch (priv->rtllib->pairwise_key_type) {
+>  		case KEY_TYPE_WEP40:
+>  		case KEY_TYPE_WEP104:
+> diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+> index 1b592258e640..4e3d183be0f2 100644
+> --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+> +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+> @@ -522,9 +522,8 @@ static bool _rtl92e_bb_config_para_file(struct net_device *dev)
+>  		rtStatus  = rtl92e_check_bb_and_rf(dev,
+>  						   (enum hw90_block)eCheckItem,
+>  						   (enum rf90_radio_path)0);
+> -		if (!rtStatus) {
+> +		if (!rtStatus)
+>  			return rtStatus;
+> -		}
+>  	}
+>  	rtl92e_set_bb_reg(dev, rFPGA0_RFMOD, bCCKEn|bOFDMEn, 0x0);
+>  	_rtl92e_phy_config_bb(dev, BaseBand_Config_PHY_REG);
+> @@ -1379,9 +1378,8 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
+>  					i++;
+>  				}
+>  
+> -				if (i >= MAX_DOZE_WAITING_TIMES_9x) {
+> +				if (i >= MAX_DOZE_WAITING_TIMES_9x)
+>  					break;
+> -				}
+>  			}
+>  			rtl92e_set_rf_off(dev);
+>  			break;
+> @@ -1398,9 +1396,8 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
+>  					i++;
+>  				}
+>  
+> -				if (i >= MAX_DOZE_WAITING_TIMES_9x) {
+> +				if (i >= MAX_DOZE_WAITING_TIMES_9x)
+>  					break;
+> -				}
+>  			}
+>  
+>  			if (pPSC->RegRfPsLevel & RT_RF_OFF_LEVL_HALT_NIC &&
+> diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+> index 89bc989cffba..b2facb273474 100644
+> --- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+> +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+> @@ -908,9 +908,6 @@ static void _rtl92e_init_priv_variable(struct net_device *dev)
+>  	priv->card_type = PCI;
+>  
+>  	priv->pFirmware = vzalloc(sizeof(struct rt_firmware));
+> -	if (!priv->pFirmware)
+> -		netdev_err(dev,
+> -			   "rtl8192e: Unable to allocate space for firmware\n");
+>  
+>  	skb_queue_head_init(&priv->skb_queue);
+>  
+> diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+> index 702551056227..32494ad2298b 100644
+> --- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+> +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+> @@ -267,9 +267,8 @@ static void _rtl92e_dm_check_ac_dc_power(struct net_device *dev)
+>  			"PATH=/usr/bin:/bin",
+>  			 NULL};
+>  
+> -	if (priv->ResetProgress == RESET_TYPE_SILENT) {
+> +	if (priv->ResetProgress == RESET_TYPE_SILENT)
+>  		return;
+> -	}
+>  
+>  	if (priv->rtllib->state != RTLLIB_LINKED)
+>  		return;
+> @@ -330,9 +329,8 @@ static void _rtl92e_dm_check_rate_adaptive(struct net_device *dev)
+>  	bool bshort_gi_enabled = false;
+>  	static u8 ping_rssi_state;
+>  
+> -	if (!priv->up) {
+> +	if (!priv->up)
+>  		return;
+> -	}
+>  
+>  	if (pra->rate_adaptive_disabled)
+>  		return;
+> @@ -777,9 +775,8 @@ static void _rtl92e_dm_tx_power_tracking_cb_thermal(struct net_device *dev)
+>  		tmpRegA = rtl92e_get_bb_reg(dev, rOFDM0_XATxIQImbalance,
+>  					    bMaskDWord);
+>  		for (i = 0; i < OFDM_Table_Length; i++) {
+> -			if (tmpRegA == OFDMSwingTable[i]) {
+> +			if (tmpRegA == OFDMSwingTable[i])
+>  				priv->OFDM_index[0] = i;
+> -			}
+>  		}
+>  
+>  		TempCCk = rtl92e_get_bb_reg(dev, rCCK0_TxFilter1, bMaskByte2);
+> @@ -1066,9 +1063,8 @@ void rtl92e_dm_restore_state(struct net_device *dev)
+>  	u32	reg_ratr = priv->rate_adaptive.last_ratr;
+>  	u32 ratr_value;
+>  
+> -	if (!priv->up) {
+> +	if (!priv->up)
+>  		return;
+> -	}
+>  
+>  	if (priv->rate_adaptive.rate_adaptive_disabled)
+>  		return;
+> @@ -1877,20 +1873,16 @@ static void _rtl92e_dm_rx_path_sel_byrssi(struct net_device *dev)
+>  						tmp_cck_sec_pwdb = cur_cck_pwdb;
+>  						cck_rx_ver2_sec_index = i;
+>  					} else if (cur_cck_pwdb ==
+> -						   tmp_cck_sec_pwdb) {
+> -						if (tmp_cck_sec_pwdb ==
+> -						    tmp_cck_min_pwdb) {
+> -							tmp_cck_sec_pwdb =
+> -								 cur_cck_pwdb;
+> -							cck_rx_ver2_sec_index =
+> -								 i;
+> -						}
+> +							tmp_cck_sec_pwdb &&
+> +							tmp_cck_sec_pwdb == tmp_cck_min_pwdb) {
+> +						tmp_cck_sec_pwdb = cur_cck_pwdb;
+> +						cck_rx_ver2_sec_index = i;
 
-please consider pulling the following gfs2 fixes.
+This is not functionally equivalent. Are you sure the entire if else
+chain still behaves correctly?
 
-We have a second small set of changes queued up on top of these fixes [*]; second
-pull request to follow.
+>  					} else if ((cur_cck_pwdb < tmp_cck_sec_pwdb) &&
+>  						   (cur_cck_pwdb > tmp_cck_min_pwdb)) {
+>  						;
+> -					} else if (cur_cck_pwdb == tmp_cck_min_pwdb) {
+> -						if (tmp_cck_sec_pwdb == tmp_cck_min_pwdb)
+> -							tmp_cck_min_pwdb = cur_cck_pwdb;
+> +					} else if (cur_cck_pwdb == tmp_cck_min_pwdb &&
+> +						tmp_cck_sec_pwdb == tmp_cck_min_pwdb) {
+> +						tmp_cck_min_pwdb = cur_cck_pwdb;
 
-[*] https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git/log/?h=for-next.nopid
+Same story as above.
 
-Thank you very much,
-Andreas
+>  					} else if (cur_cck_pwdb < tmp_cck_min_pwdb) {
+>  						tmp_cck_min_pwdb = cur_cck_pwdb;
+>  					}
+> diff --git a/drivers/staging/rtl8192e/rtl819x_BAProc.c b/drivers/staging/rtl8192e/rtl819x_BAProc.c
+> index 19d13b3fcecf..e932ad1a9e96 100644
+> --- a/drivers/staging/rtl8192e/rtl819x_BAProc.c
+> +++ b/drivers/staging/rtl8192e/rtl819x_BAProc.c
+> @@ -180,11 +180,10 @@ static void rtllib_send_ADDBAReq(struct rtllib_device *ieee, u8 *dst,
+>  
+>  	skb = rtllib_ADDBA(ieee, dst, pBA, 0, ACT_ADDBAREQ);
+>  
+> -	if (skb) {
+> +	if (skb)
+>  		softmac_mgmt_xmit(skb, ieee);
+> -	} else {
+> +	else
+>  		netdev_dbg(ieee->dev, "Failed to generate ADDBAReq packet.\n");
+> -	}
+>  }
+>  
+>  static void rtllib_send_ADDBARsp(struct rtllib_device *ieee, u8 *dst,
+> diff --git a/drivers/staging/rtl8192e/rtl819x_HTProc.c b/drivers/staging/rtl8192e/rtl819x_HTProc.c
+> index ef3dca51cf99..b763cf0ba356 100644
+> --- a/drivers/staging/rtl8192e/rtl819x_HTProc.c
+> +++ b/drivers/staging/rtl8192e/rtl819x_HTProc.c
+> @@ -70,6 +70,7 @@ static u8 LINKSYS_MARVELL_4400N[3] = {0x00, 0x14, 0xa4};
+>  void HTUpdateDefaultSetting(struct rtllib_device *ieee)
+>  {
+>  	struct rt_hi_throughput *pHTInfo = ieee->pHTInfo;
+> +
+>  	pHTInfo->bRegShortGI20MHz = 1;
+>  	pHTInfo->bRegShortGI40MHz = 1;
+>  
+> diff --git a/drivers/staging/rtl8192e/rtllib_rx.c b/drivers/staging/rtl8192e/rtllib_rx.c
+> index 46d75e925ee9..ca7eba826ece 100644
+> --- a/drivers/staging/rtl8192e/rtllib_rx.c
+> +++ b/drivers/staging/rtl8192e/rtllib_rx.c
+> @@ -454,14 +454,14 @@ static bool AddReorderEntry(struct rx_ts_record *pTS,
+>  	while (pList->next != &pTS->rx_pending_pkt_list) {
+>  		if (SN_LESS(pReorderEntry->SeqNum, ((struct rx_reorder_entry *)
+>  		    list_entry(pList->next, struct rx_reorder_entry,
+> -		    List))->SeqNum))
+> +		    List))->SeqNum)) {
+>  			pList = pList->next;
+> -		else if (SN_EQUAL(pReorderEntry->SeqNum,
+> +			continue;
+> +		} else if (SN_EQUAL(pReorderEntry->SeqNum,
+>  			((struct rx_reorder_entry *)list_entry(pList->next,
+>  			struct rx_reorder_entry, List))->SeqNum))
+>  			return false;
+> -		else
+> -			break;
+> +		break;
+>  	}
+>  	pReorderEntry->List.next = pList->next;
+>  	pReorderEntry->List.next->prev = &pReorderEntry->List;
+> diff --git a/drivers/staging/rtl8192e/rtllib_softmac_wx.c b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+> index f9589c5b62ba..4fc4fb25d8d6 100644
+> --- a/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+> +++ b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+> @@ -41,8 +41,8 @@ int rtllib_wx_set_freq(struct rtllib_device *ieee, struct iw_request_info *a,
+>  
+>  	/* if setting by freq convert to channel */
+>  	if (fwrq->e == 1) {
+> -		if ((fwrq->m >= (int)2.412e8 &&
+> -		     fwrq->m <= (int)2.487e8)) {
+> +		if ((fwrq->m >= 2.412e8 &&
+> +		     fwrq->m <= 2.487e8)) {
 
-The following changes since commit 1c23f9e627a7b412978b4e852793c5e3c3efc555:
+This turns integer conversions into floating point conversions. I don't
+this floating point operations are allowed in the kernel.
 
-  Linux 6.0-rc2 (2022-08-21 17:32:54 -0700)
+>  			int f = fwrq->m / 100000;
+>  			int c = 0;
+>  
+> @@ -571,9 +571,8 @@ int rtllib_wx_set_power(struct rtllib_device *ieee,
+>  		ieee->ps = RTLLIB_PS_DISABLED;
+>  		goto exit;
+>  	}
+> -	if (wrqu->power.flags & IW_POWER_TIMEOUT) {
+> +	if (wrqu->power.flags & IW_POWER_TIMEOUT)
+>  		ieee->ps_timeout = wrqu->power.value / 1000;
+> -	}
+>  
+>  	if (wrqu->power.flags & IW_POWER_PERIOD)
+>  		ieee->ps_period = wrqu->power.value / 1000;
 
-are available in the Git repository at:
+Your patch does too many things at once. Please try to break it into
+smallers patches that only do one (logical) change.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git tags/gfs2-v6.0-rc2-fixes
-
-for you to fetch changes up to 74b1b10e29b1f25e1a081fa82733baea65429d53:
-
-  gfs2: Register fs after creating workqueues (2022-09-20 17:53:54 +0200)
-
-----------------------------------------------------------------
-gfs2 fixes
-
-- Make sure to initialize the filesystem work queues before registering
-  the filesystem; this prevents them from being used uninitialized.
-
-- On filesystem withdraw: prevent a a double iput() and immediately
-  reject pending locking requests that can no longer succeed.
-
-- Use TRY lock in gfs2_inode_lookup() to prevent a rare glock hang
-  during evict.
-
-- During filesystem mount, explicitly make sure that the sb_bsize and
-  sb_bsize_shift super block fields are consistent with each other.
-  This prevents messy error messages during fuzz testing.
-
-- Switch from strlcpy to strscpy.
-
-----------------------------------------------------------------
-Andreas Gruenbacher (1):
-      gfs2: Switch from strlcpy to strscpy
-
-Andrew Price (1):
-      gfs2: Check sb_bsize_shift after reading superblock
-
-Bob Peterson (5):
-      gfs2: Use TRY lock in gfs2_inode_lookup for UNLINKED inodes
-      gfs2: Prevent double iput for journal on error
-      gfs2: Dequeue waiters when withdrawn
-      gfs2: Clear flags when withdraw prevents xmote
-      gfs2: Register fs after creating workqueues
-
- fs/gfs2/glock.c      | 44 +++++++++++++++++++++++++++++++++++++++-----
- fs/gfs2/glock.h      |  1 +
- fs/gfs2/inode.c      | 10 ++++++++--
- fs/gfs2/main.c       | 24 ++++++++++++------------
- fs/gfs2/ops_fstype.c | 17 +++++++++++------
- fs/gfs2/util.c       |  6 ++++++
- 6 files changed, 77 insertions(+), 25 deletions(-)
-
+Best regards,
+Nam
