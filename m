@@ -2,72 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 272FC5F8922
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 05:26:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E31B5F8924
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 05:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbiJIDZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 23:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
+        id S229658AbiJIDcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 23:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiJIDZm (ORCPT
+        with ESMTP id S229459AbiJIDcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 23:25:42 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC715286DA;
-        Sat,  8 Oct 2022 20:25:40 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VRgUfzb_1665285934;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VRgUfzb_1665285934)
-          by smtp.aliyun-inc.com;
-          Sun, 09 Oct 2022 11:25:37 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     tytso@mit.edu
-Cc:     adilger.kernel@dilger.ca, nathan@kernel.org,
-        ndesaulniers@google.com, trix@redhat.com,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] ext4: remove deprecated_msg
-Date:   Sun,  9 Oct 2022 11:25:20 +0800
-Message-Id: <20221009032520.108294-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Sat, 8 Oct 2022 23:32:20 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88952FFE2;
+        Sat,  8 Oct 2022 20:32:18 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MlSDC1JpTzVhr8;
+        Sun,  9 Oct 2022 11:27:55 +0800 (CST)
+Received: from kwepemm600007.china.huawei.com (7.193.23.208) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sun, 9 Oct 2022 11:32:16 +0800
+Received: from DESKTOP-8RFUVS3.china.huawei.com (10.174.185.179) by
+ kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sun, 9 Oct 2022 11:32:15 +0800
+From:   Zenghui Yu <yuzenghui@huawei.com>
+To:     <kvmarm@lists.linux.dev>, <kvmarm@lists.cs.columbia.edu>,
+        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <maz@kernel.org>, <andrew.jones@linux.dev>, <james.morse@arm.com>,
+        <alexandru.elisei@arm.com>, <suzuki.poulose@arm.com>,
+        <oliver.upton@linux.dev>, <pbonzini@redhat.com>,
+        <seanjc@google.com>, <wanghaibin.wang@huawei.com>,
+        Zenghui Yu <yuzenghui@huawei.com>
+Subject: [PATCH] KVM: arm64: selftests: Fix multiple versions of GIC creation
+Date:   Sun, 9 Oct 2022 11:31:31 +0800
+Message-ID: <20221009033131.365-1-yuzenghui@huawei.com>
+X-Mailer: git-send-email 2.23.0.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.185.179]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600007.china.huawei.com (7.193.23.208)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fs/ext4/super.c:1744:19: warning: ‘deprecated_msg’ defined but not used.
+Commit 98f94ce42ac6 ("KVM: selftests: Move KVM_CREATE_DEVICE_TEST code to
+separate helper") wrongly converted a "real" GIC device creation to
+__kvm_test_create_device() and caused the test failure on my D05 (which
+supports v2 emulation). Fix it.
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2346
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Fixes: 98f94ce42ac6 ("KVM: selftests: Move KVM_CREATE_DEVICE_TEST code to separate helper")
+Signed-off-by: Zenghui Yu <yuzenghui@huawei.com>
 ---
- fs/ext4/super.c | 4 ----
- 1 file changed, 4 deletions(-)
+ tools/testing/selftests/kvm/aarch64/vgic_init.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index 989365b878a6..7950904fbf04 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -1741,10 +1741,6 @@ static const struct fs_parameter_spec ext4_param_specs[] = {
+diff --git a/tools/testing/selftests/kvm/aarch64/vgic_init.c b/tools/testing/selftests/kvm/aarch64/vgic_init.c
+index e05ecb31823f..9c131d977a1b 100644
+--- a/tools/testing/selftests/kvm/aarch64/vgic_init.c
++++ b/tools/testing/selftests/kvm/aarch64/vgic_init.c
+@@ -662,8 +662,8 @@ int test_kvm_device(uint32_t gic_dev_type)
+ 					     : KVM_DEV_TYPE_ARM_VGIC_V2;
  
- #define DEFAULT_JOURNAL_IOPRIO (IOPRIO_PRIO_VALUE(IOPRIO_CLASS_BE, 3))
+ 	if (!__kvm_test_create_device(v.vm, other)) {
+-		ret = __kvm_test_create_device(v.vm, other);
+-		TEST_ASSERT(ret && (errno == EINVAL || errno == EEXIST),
++		ret = __kvm_create_device(v.vm, other);
++		TEST_ASSERT(ret < 0 && (errno == EINVAL || errno == EEXIST),
+ 				"create GIC device while other version exists");
+ 	}
  
--static const char deprecated_msg[] =
--	"Mount option \"%s\" will be removed by %s\n"
--	"Contact linux-ext4@vger.kernel.org if you think we should keep it.\n";
--
- #define MOPT_SET	0x0001
- #define MOPT_CLEAR	0x0002
- #define MOPT_NOSUPPORT	0x0004
 -- 
-2.20.1.7.g153144c
+2.33.0
 
