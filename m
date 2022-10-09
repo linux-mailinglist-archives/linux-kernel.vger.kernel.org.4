@@ -2,101 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C95A05F8B92
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 15:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D13E5F8B94
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 15:36:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiJINel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 09:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
+        id S229595AbiJINgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 09:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiJINej (ORCPT
+        with ESMTP id S230060AbiJINg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 09:34:39 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C39CF9;
-        Sun,  9 Oct 2022 06:34:36 -0700 (PDT)
-Received: from kwepemi500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mljb75P7VzVhqF;
-        Sun,  9 Oct 2022 21:30:11 +0800 (CST)
-Received: from [10.67.111.83] (10.67.111.83) by kwepemi500022.china.huawei.com
- (7.221.188.64) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sun, 9 Oct
- 2022 21:34:33 +0800
-Message-ID: <b725c6eb-1026-a010-1e93-50af9a96a0a4@huawei.com>
-Date:   Sun, 9 Oct 2022 21:34:33 +0800
+        Sun, 9 Oct 2022 09:36:29 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7240D2A277;
+        Sun,  9 Oct 2022 06:36:27 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 2so8374672pgl.7;
+        Sun, 09 Oct 2022 06:36:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BPRUb5fXBvpUrUoLBXNgAFQk1VijQRqMyh2TnAMTGtg=;
+        b=beTouj+LzjAy8bHGQMDqKT9uxR7+7XKjjMVtkF5HUjZjFOyWy5MDeNI0sbikopgIIR
+         b853xvaVfPCinMZcjhK3cK9ZxbH48csvVi4Q+kS9WXDK2k6+72s0hGK1qNUUK05AjBaE
+         jZBiYyaQbnQyHvOCjpcpD0mxGfUNbrEZH2YwoOVVEPtvu+MBqiUINPqUVhyO9wuQsfHO
+         4oG4OHGOG6DSnGHTk918cYqYMXiOHOjL45kdhlgEbPtr8lW0f8WjdidP1pmcZkibX89d
+         iov0kHe+ZZa0qBmA042j2VMWtIS6apB+vSd6m2sgkXzzUOeiJshDMDHL1VLdE4c6IEws
+         QJNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BPRUb5fXBvpUrUoLBXNgAFQk1VijQRqMyh2TnAMTGtg=;
+        b=e+tHrEJdasVyp4iCx9ibiRP3tX+eiWvKv362kHHXYwnMDIwrl0Mu1Wk93rlEPlicmI
+         iRwyhZYsKq09bxzA0CXuKEfABIIYmoSct6yvkXK12a0KGyP5zLuNiJlFTyxEDCEYgfsf
+         ob2dA01DREA5LR0B+iRYvTamtf+CytbVp7MwPdYWGIiS2d76B0qfsora9svlfIH2Fkln
+         aJqmNtidQEFKOZ8ooEqtwzyCZh/ExRYGVm85j81hG7HoVZ81LMebfXOu7E5SW0KQR2p8
+         wIMafByIq1MpSrhPVPAVwoXqYvN5VLHjKqcvKs09jgT6/zRLnToh/il6YyjwS/MHzNLD
+         HN4w==
+X-Gm-Message-State: ACrzQf1cObvNro71WNr2SoUZFN4qOpEHjLc7jTyb31s5wZ8gnJSrboF2
+        oyGYAEB6bHG9TpEj5YCnXcN2mpH1wAWr7A==
+X-Google-Smtp-Source: AMsMyM7qirq+CTtzxgDgLaxC/gCx4mvSFpalSIjpkC4n504fPbAnHr170mHWnY2T6hWKZyD6AXF5JA==
+X-Received: by 2002:a05:6a00:179c:b0:561:64fc:3037 with SMTP id s28-20020a056a00179c00b0056164fc3037mr14842409pfg.76.1665322586893;
+        Sun, 09 Oct 2022 06:36:26 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-66.three.co.id. [180.214.233.66])
+        by smtp.gmail.com with ESMTPSA id u1-20020a17090ae00100b0020a7d076bfesm4469527pjy.2.2022.10.09.06.36.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Oct 2022 06:36:26 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id ED98F1039BF; Sun,  9 Oct 2022 20:36:22 +0700 (WIB)
+Date:   Sun, 9 Oct 2022 20:36:22 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Jiangshan Yi <13667453960@163.com>
+Cc:     sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
+        gregkh@linuxfoundation.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jiangshan Yi <yijiangshan@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: Re: [PATCH] staging: sm750fb: fix spelling typo in comment
+Message-ID: <Y0LOVuL8uNJ19bjV@debian.me>
+References: <20221009094809.3171319-1-13667453960@163.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH -next] power: supply: mt6370: Fix Kconfig dependency
-To:     ChiaEn Wu <peterwu.pub@gmail.com>, <sre@kernel.org>,
-        <andy.shevchenko@gmail.com>, <chiaen_wu@richtek.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220922023337.15609-1-renzhijie2@huawei.com>
- <904af4cb-147f-a7ba-63e3-c27cad0350f2@gmail.com>
-From:   Ren Zhijie <renzhijie2@huawei.com>
-In-Reply-To: <904af4cb-147f-a7ba-63e3-c27cad0350f2@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.83]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500022.china.huawei.com (7.221.188.64)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="dZhQDIkS5gtuuN7K"
+Content-Disposition: inline
+In-Reply-To: <20221009094809.3171319-1-13667453960@163.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-just a friendly ping...
+--dZhQDIkS5gtuuN7K
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Ren
+On Sun, Oct 09, 2022 at 05:48:09PM +0800, Jiangshan Yi wrote:
+> From: Jiangshan Yi <yijiangshan@kylinos.cn>
+>=20
+> Fix spelling typo in comment.
+>=20
 
-在 2022/9/22 17:58, ChiaEn Wu 写道:
-> On 9/22/2022 10:33 AM, Ren Zhijie wrote:
->> If CONFIG_IIO is not set,
->> make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-,
->> will be failed, like this:
->>
->> drivers/power/supply/mt6370-charger.o: In function 
->> `mt6370_chg_mivr_dwork_func':
->> mt6370-charger.c:(.text+0x670): undefined reference to 
->> `iio_read_channel_processed'
->> drivers/power/supply/mt6370-charger.o: In function `mt6370_chg_probe':
->> mt6370-charger.c:(.text+0xb43): undefined reference to 
->> `devm_iio_channel_get_all'
->> make: *** [vmlinux] Error 1
->>
->> To fix this build error, add depends on IIO to config CHARGER_MT6370 
->> dependency.
->>
->> Fixes: 233cb8a47d65 ("power: supply: mt6370: Add MediaTek MT6370 
->> charger driver")
->> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
->> ---
->>   drivers/power/supply/Kconfig | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
->> index 591deb82e2c6..62111f4bb093 100644
->> --- a/drivers/power/supply/Kconfig
->> +++ b/drivers/power/supply/Kconfig
->> @@ -623,6 +623,7 @@ config CHARGER_MT6370
->>       tristate "MediaTek MT6370 Charger Driver"
->>       depends on MFD_MT6370
->>       depends on REGULATOR
->> +    depends on IIO
->>       select LINEAR_RANGES
->>       help
->>         Say Y here to enable MT6370 Charger Part.
->
-> Hi Ren,
->
-> Thanks for catching this!
->
-> Reviewed-by: ChiaEn Wu <chiaen_wu@richtek.com>
->
+What comment are you trying to do this typofix? Even seeing the diff
+below, I can't figure out that due to insufficient context.
+
+> K2CI (Kylin Kernel Continuous Integration) is a code pre-verification tool
+> independently developed by KylinSoft, which is used for ensuring the
+> code quality of code submission. K2CI includes the comment check tool
+> notes_check.
+>=20
+> This spelling typo was found using notes_check tool.
+>=20
+
+For CI bot like this, I'd like to see publicly-accessible reports (like
+build status), just like what kernel test robot (aka LKP aka 01-DAY CI)
+does (try searching LKML for recent report by it). Don't forget to add
+Link: tag to the report.
+
+> Reported-by: k2ci <kernel-bot@kylinos.cn>
+> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+> ---
+>  drivers/staging/sm750fb/ddk750_dvi.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/staging/sm750fb/ddk750_dvi.h b/drivers/staging/sm750=
+fb/ddk750_dvi.h
+> index c2518b73bdbd..afdfdb17ffce 100644
+> --- a/drivers/staging/sm750fb/ddk750_dvi.h
+> +++ b/drivers/staging/sm750fb/ddk750_dvi.h
+> @@ -2,7 +2,7 @@
+>  #ifndef DDK750_DVI_H__
+>  #define DDK750_DVI_H__
+> =20
+> -/* dvi chip stuffs structros */
+> +/* dvi chip stuffs structures */
+> =20
+>  typedef long (*PFN_DVICTRL_INIT)(unsigned char edge_select,
+>  				 unsigned char bus_select,
+
+Are the structures really plural (many instances of the struct)?
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--dZhQDIkS5gtuuN7K
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY0LOUgAKCRD2uYlJVVFO
+o5abAQDCCPg+8fcvsOLmLonB7xsYw1IuPRjkPfOSqr/8ap6WEwEAn5L6/13EPykf
+a2SW0VQuhr/iphjQnmqDUEb/ftTmHgM=
+=zi0w
+-----END PGP SIGNATURE-----
+
+--dZhQDIkS5gtuuN7K--
