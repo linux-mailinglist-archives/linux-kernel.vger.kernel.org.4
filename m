@@ -2,144 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D13E5F8B94
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 15:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 200945F8B95
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 15:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiJINgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 09:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
+        id S230092AbiJINgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 09:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbiJINg3 (ORCPT
+        with ESMTP id S230175AbiJINgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 09:36:29 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7240D2A277;
-        Sun,  9 Oct 2022 06:36:27 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 2so8374672pgl.7;
-        Sun, 09 Oct 2022 06:36:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BPRUb5fXBvpUrUoLBXNgAFQk1VijQRqMyh2TnAMTGtg=;
-        b=beTouj+LzjAy8bHGQMDqKT9uxR7+7XKjjMVtkF5HUjZjFOyWy5MDeNI0sbikopgIIR
-         b853xvaVfPCinMZcjhK3cK9ZxbH48csvVi4Q+kS9WXDK2k6+72s0hGK1qNUUK05AjBaE
-         jZBiYyaQbnQyHvOCjpcpD0mxGfUNbrEZH2YwoOVVEPtvu+MBqiUINPqUVhyO9wuQsfHO
-         4oG4OHGOG6DSnGHTk918cYqYMXiOHOjL45kdhlgEbPtr8lW0f8WjdidP1pmcZkibX89d
-         iov0kHe+ZZa0qBmA042j2VMWtIS6apB+vSd6m2sgkXzzUOeiJshDMDHL1VLdE4c6IEws
-         QJNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BPRUb5fXBvpUrUoLBXNgAFQk1VijQRqMyh2TnAMTGtg=;
-        b=e+tHrEJdasVyp4iCx9ibiRP3tX+eiWvKv362kHHXYwnMDIwrl0Mu1Wk93rlEPlicmI
-         iRwyhZYsKq09bxzA0CXuKEfABIIYmoSct6yvkXK12a0KGyP5zLuNiJlFTyxEDCEYgfsf
-         ob2dA01DREA5LR0B+iRYvTamtf+CytbVp7MwPdYWGIiS2d76B0qfsora9svlfIH2Fkln
-         aJqmNtidQEFKOZ8ooEqtwzyCZh/ExRYGVm85j81hG7HoVZ81LMebfXOu7E5SW0KQR2p8
-         wIMafByIq1MpSrhPVPAVwoXqYvN5VLHjKqcvKs09jgT6/zRLnToh/il6YyjwS/MHzNLD
-         HN4w==
-X-Gm-Message-State: ACrzQf1cObvNro71WNr2SoUZFN4qOpEHjLc7jTyb31s5wZ8gnJSrboF2
-        oyGYAEB6bHG9TpEj5YCnXcN2mpH1wAWr7A==
-X-Google-Smtp-Source: AMsMyM7qirq+CTtzxgDgLaxC/gCx4mvSFpalSIjpkC4n504fPbAnHr170mHWnY2T6hWKZyD6AXF5JA==
-X-Received: by 2002:a05:6a00:179c:b0:561:64fc:3037 with SMTP id s28-20020a056a00179c00b0056164fc3037mr14842409pfg.76.1665322586893;
-        Sun, 09 Oct 2022 06:36:26 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-66.three.co.id. [180.214.233.66])
-        by smtp.gmail.com with ESMTPSA id u1-20020a17090ae00100b0020a7d076bfesm4469527pjy.2.2022.10.09.06.36.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 06:36:26 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id ED98F1039BF; Sun,  9 Oct 2022 20:36:22 +0700 (WIB)
-Date:   Sun, 9 Oct 2022 20:36:22 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Jiangshan Yi <13667453960@163.com>
-Cc:     sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
-        gregkh@linuxfoundation.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: Re: [PATCH] staging: sm750fb: fix spelling typo in comment
-Message-ID: <Y0LOVuL8uNJ19bjV@debian.me>
-References: <20221009094809.3171319-1-13667453960@163.com>
+        Sun, 9 Oct 2022 09:36:41 -0400
+Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A811D8
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 06:36:38 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id hWTooUbCztk1ahWTooKyQb; Sun, 09 Oct 2022 15:36:36 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 09 Oct 2022 15:36:36 +0200
+X-ME-IP: 86.243.100.34
+Message-ID: <bde17d7f-21f8-3a53-c104-31baf1c8e3d2@wanadoo.fr>
+Date:   Sun, 9 Oct 2022 15:36:32 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="dZhQDIkS5gtuuN7K"
-Content-Disposition: inline
-In-Reply-To: <20221009094809.3171319-1-13667453960@163.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2] PCI: Assign PCI domain by ida_alloc()
+Content-Language: fr
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        =?UTF-8?Q?Marek_Beh=c3=ban?= <marek.behun@nic.cz>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220702204737.7719-1-pali@kernel.org>
+ <20220714184130.5436-1-pali@kernel.org>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220714184130.5436-1-pali@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le 14/07/2022 à 20:41, Pali Rohár a écrit :
+> Replace assignment of PCI domain from atomic_inc_return() to ida_alloc().
+> 
+> Use two IDAs, one for static domain allocations (those which are defined in
+> device tree) and second for dynamic allocations (all other).
+> 
+> During removal of root bus / host bridge release also allocated domain id.
+> So released id can be reused again, for example in situation when
+> dynamically loading and unloading native PCI host bridge drivers.
+> 
+> This change also allows to mix static device tree assignment and dynamic by
+> kernel as all static allocations are reserved in dynamic pool.
+> 
 
---dZhQDIkS5gtuuN7K
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-On Sun, Oct 09, 2022 at 05:48:09PM +0800, Jiangshan Yi wrote:
-> From: Jiangshan Yi <yijiangshan@kylinos.cn>
->=20
-> Fix spelling typo in comment.
->=20
+A few comments below related to error handling.
+Take them as a naive review from s.o. with limited knowledge of PCI ;-)
 
-What comment are you trying to do this typofix? Even seeing the diff
-below, I can't figure out that due to insufficient context.
+CJ
 
-> K2CI (Kylin Kernel Continuous Integration) is a code pre-verification tool
-> independently developed by KylinSoft, which is used for ensuring the
-> code quality of code submission. K2CI includes the comment check tool
-> notes_check.
->=20
-> This spelling typo was found using notes_check tool.
->=20
-
-For CI bot like this, I'd like to see publicly-accessible reports (like
-build status), just like what kernel test robot (aka LKP aka 01-DAY CI)
-does (try searching LKML for recent report by it). Don't forget to add
-Link: tag to the report.
-
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+> Signed-off-by: Pali Rohár <pali@kernel.org>
 > ---
->  drivers/staging/sm750fb/ddk750_dvi.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/staging/sm750fb/ddk750_dvi.h b/drivers/staging/sm750=
-fb/ddk750_dvi.h
-> index c2518b73bdbd..afdfdb17ffce 100644
-> --- a/drivers/staging/sm750fb/ddk750_dvi.h
-> +++ b/drivers/staging/sm750fb/ddk750_dvi.h
-> @@ -2,7 +2,7 @@
->  #ifndef DDK750_DVI_H__
->  #define DDK750_DVI_H__
-> =20
-> -/* dvi chip stuffs structros */
-> +/* dvi chip stuffs structures */
-> =20
->  typedef long (*PFN_DVICTRL_INIT)(unsigned char edge_select,
->  				 unsigned char bus_select,
+> Idea of this patch comes from the following discussion:
+> https://lore.kernel.org/linux-pci/20210412123936.25555-1-pali@kernel.org/t/#u
+> 
+> Changes in v2:
+> * Fix broken compilation
+> ---
+>   drivers/pci/pci.c    | 103 +++++++++++++++++++++++++------------------
+>   drivers/pci/probe.c  |   5 +++
+>   drivers/pci/remove.c |   6 +++
+>   include/linux/pci.h  |   1 +
+>   4 files changed, 72 insertions(+), 43 deletions(-)
+> 
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index cfaf40a540a8..34fdcee6634a 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -6762,60 +6762,70 @@ static void pci_no_domains(void)
+>   }
+>   
+>   #ifdef CONFIG_PCI_DOMAINS_GENERIC
+> -static atomic_t __domain_nr = ATOMIC_INIT(-1);
+> +static DEFINE_IDA(pci_domain_nr_static_ida);
+> +static DEFINE_IDA(pci_domain_nr_dynamic_ida);
+>   
+> -static int pci_get_new_domain_nr(void)
+> +static void of_pci_reserve_static_domain_nr(void)
+>   {
+> -	return atomic_inc_return(&__domain_nr);
+> +	struct device_node *np;
+> +	int domain_nr;
+> +
+> +	for_each_node_by_type(np, "pci") {
+> +		domain_nr = of_get_pci_domain_nr(np);
+> +		if (domain_nr < 0)
+> +			continue;
+> +		/*
+> +		 * Permanently allocate domain_nr in dynamic_ida
+> +		 * to prevent it from dynamic allocation.
+> +		 */
+> +		ida_alloc_range(&pci_domain_nr_dynamic_ida,
+> +				domain_nr, domain_nr, GFP_KERNEL);
 
-Are the structures really plural (many instances of the struct)?
+IIUC, if the DT is broken, 'domain_nr' could have several times the same 
+value. In such a case ida_alloc_range() would return -ENOSPC.
 
---=20
-An old man doll... just what I always wanted! - Clara
+Should this be handled here, maybe at least with a error message?
 
---dZhQDIkS5gtuuN7K
-Content-Type: application/pgp-signature; name="signature.asc"
+> +	}
+>   }
+>   
+>   static int of_pci_bus_find_domain_nr(struct device *parent)
+>   {
+> -	static int use_dt_domains = -1;
+> -	int domain = -1;
+> +	static bool static_domains_reserved = false;
+> +	int domain_nr;
+>   
+> -	if (parent)
+> -		domain = of_get_pci_domain_nr(parent->of_node);
+> +	/* On the first call scan device tree for static allocations. */
+> +	if (!static_domains_reserved) {
+> +		of_pci_reserve_static_domain_nr();
+> +		static_domains_reserved = true;
+> +	}
+> +
+> +	if (parent) {
+> +		/*
+> +		 * If domain is in DT then allocate it in static IDA.
+> +		 * This prevent duplicate static allocations in case
+> +		 * of errors in DT.
+> +		 */
+> +		domain_nr = of_get_pci_domain_nr(parent->of_node);
+> +		if (domain_nr >= 0)
+> +			return ida_alloc_range(&pci_domain_nr_static_ida,
+> +					       domain_nr, domain_nr,
+> +					       GFP_KERNEL);
 
------BEGIN PGP SIGNATURE-----
+Same here. Can ida_alloc_range() fail with -ENOSPC?
+If yes, what should be done in such a case?
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY0LOUgAKCRD2uYlJVVFO
-o5abAQDCCPg+8fcvsOLmLonB7xsYw1IuPRjkPfOSqr/8ap6WEwEAn5L6/13EPykf
-a2SW0VQuhr/iphjQnmqDUEb/ftTmHgM=
-=zi0w
------END PGP SIGNATURE-----
+> +	}
+>   
+>   	/*
+> -	 * Check DT domain and use_dt_domains values.
+> -	 *
+> -	 * If DT domain property is valid (domain >= 0) and
+> -	 * use_dt_domains != 0, the DT assignment is valid since this means
+> -	 * we have not previously allocated a domain number by using
+> -	 * pci_get_new_domain_nr(); we should also update use_dt_domains to
+> -	 * 1, to indicate that we have just assigned a domain number from
+> -	 * DT.
+> -	 *
+> -	 * If DT domain property value is not valid (ie domain < 0), and we
+> -	 * have not previously assigned a domain number from DT
+> -	 * (use_dt_domains != 1) we should assign a domain number by
+> -	 * using the:
+> -	 *
+> -	 * pci_get_new_domain_nr()
+> -	 *
+> -	 * API and update the use_dt_domains value to keep track of method we
+> -	 * are using to assign domain numbers (use_dt_domains = 0).
+> -	 *
+> -	 * All other combinations imply we have a platform that is trying
+> -	 * to mix domain numbers obtained from DT and pci_get_new_domain_nr(),
+> -	 * which is a recipe for domain mishandling and it is prevented by
+> -	 * invalidating the domain value (domain = -1) and printing a
+> -	 * corresponding error.
+> +	 * If domain was not specified in DT then choose free id from dynamic
+> +	 * allocations. All domain numbers from DT are permanently in dynamic
+> +	 * allocations to prevent assigning them to other DT nodes without
+> +	 * static domain.
+>   	 */
+> -	if (domain >= 0 && use_dt_domains) {
+> -		use_dt_domains = 1;
+> -	} else if (domain < 0 && use_dt_domains != 1) {
+> -		use_dt_domains = 0;
+> -		domain = pci_get_new_domain_nr();
+> -	} else {
+> -		if (parent)
+> -			pr_err("Node %pOF has ", parent->of_node);
+> -		pr_err("Inconsistent \"linux,pci-domain\" property in DT\n");
+> -		domain = -1;
+> -	}
+> +	return ida_alloc(&pci_domain_nr_dynamic_ida, GFP_KERNEL);
 
---dZhQDIkS5gtuuN7K--
+Same here, even if un-likelly.
+
+
+> +}
+>   
+> -	return domain;
+> +static void of_pci_bus_release_domain_nr(struct pci_bus *bus, struct device *parent)
+> +{
+> +	if (bus->domain_nr < 0)
+> +		return;
+> +
+> +	/* Release domain from ida in which was it allocated. */
+> +	if (of_get_pci_domain_nr(parent->of_node) == bus->domain_nr)
+> +		ida_free(&pci_domain_nr_static_ida, bus->domain_nr);
+> +	else
+> +		ida_free(&pci_domain_nr_dynamic_ida, bus->domain_nr);
+>   }
+>   
+>   int pci_bus_find_domain_nr(struct pci_bus *bus, struct device *parent)
+> @@ -6823,6 +6833,13 @@ int pci_bus_find_domain_nr(struct pci_bus *bus, struct device *parent)
+>   	return acpi_disabled ? of_pci_bus_find_domain_nr(parent) :
+>   			       acpi_pci_bus_find_domain_nr(bus);
+>   }
+> +
+> +void pci_bus_release_domain_nr(struct pci_bus *bus, struct device *parent)
+> +{
+> +	if (!acpi_disabled)
+> +		return;
+> +	of_pci_bus_release_domain_nr(bus, parent);
+> +}
+>   #endif
+>   
+>   /**
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index 17a969942d37..12092d238403 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -906,6 +906,8 @@ static int pci_register_host_bridge(struct pci_host_bridge *bridge)
+>   		bus->domain_nr = pci_bus_find_domain_nr(bus, parent);
+>   	else
+>   		bus->domain_nr = bridge->domain_nr;
+> +	if (bus->domain_nr < 0)
+> +		goto free;
+>   #endif
+>   
+>   	b = pci_find_bus(pci_domain_nr(bus), bridge->busnr);
+> @@ -1030,6 +1032,9 @@ static int pci_register_host_bridge(struct pci_host_bridge *bridge)
+>   	device_del(&bridge->dev);
+>   
+>   free:
+> +#ifdef CONFIG_PCI_DOMAINS_GENERIC
+> +	pci_bus_release_domain_nr(bus, parent);
+> +#endif
+>   	kfree(bus);
+>   	return err;
+>   }
+> diff --git a/drivers/pci/remove.c b/drivers/pci/remove.c
+> index 4c54c75050dc..0145aef1b930 100644
+> --- a/drivers/pci/remove.c
+> +++ b/drivers/pci/remove.c
+> @@ -160,6 +160,12 @@ void pci_remove_root_bus(struct pci_bus *bus)
+>   	pci_remove_bus(bus);
+>   	host_bridge->bus = NULL;
+>   
+> +#ifdef CONFIG_PCI_DOMAINS_GENERIC
+> +	/* Release domain_nr if it was dynamically allocated */
+> +	if (host_bridge->domain_nr == PCI_DOMAIN_NR_NOT_SET)
+> +		pci_bus_release_domain_nr(bus, host_bridge->dev.parent);
+> +#endif
+> +
+>   	/* remove the host bridge */
+>   	device_del(&host_bridge->dev);
+>   }
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 81a57b498f22..6c7f27e62bcc 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -1723,6 +1723,7 @@ static inline int acpi_pci_bus_find_domain_nr(struct pci_bus *bus)
+>   { return 0; }
+>   #endif
+>   int pci_bus_find_domain_nr(struct pci_bus *bus, struct device *parent);
+> +void pci_bus_release_domain_nr(struct pci_bus *bus, struct device *parent);
+>   #endif
+>   
+>   /* Some architectures require additional setup to direct VGA traffic */
+
