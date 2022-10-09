@@ -2,106 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 851575F8CC8
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 20:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D08565F8D09
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 20:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbiJISNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 14:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
+        id S230287AbiJISRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 14:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbiJISNs (ORCPT
+        with ESMTP id S230284AbiJISQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 14:13:48 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767CB248C4;
-        Sun,  9 Oct 2022 11:13:46 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id bu25so13776881lfb.3;
-        Sun, 09 Oct 2022 11:13:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=64cKJ1bXkuhfZtUIYbnBluC3FPEMFT8rqd0uaD8eans=;
-        b=K4cQq6cyD+k42i7tzU0BYFT0WMpfPUjVqKnUynBg9KgsCylBM17N0rzP7qscv9J1GM
-         n3hh23N7SR474rk3VT9NtA/UtXxjYD+H00vuJKRGjYvokiZBzkToJXOAcg/9h5UDkI4L
-         zEaSJWY7VpjsqKu5Jsq1xlzRbVAcx6QqkELhuwIpgBm8kNR6HfgWEpVyyjs6gJ0oLvWk
-         69erTDwe/yZD3YeA6uEY4wwiE93MVpd6b58S9bS0Lsa6wz6+h8KF/F91BB61QxjfhPmB
-         O/LtbNgVSKqprSu+6T3Xn8tXIM4lgd+FhKd/ZBBuRvUqjhTuh2MZJslq2umrxBOIN3qu
-         hZmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=64cKJ1bXkuhfZtUIYbnBluC3FPEMFT8rqd0uaD8eans=;
-        b=a5/zmd7/ZssqLLtaJrFu3yHuQn2DeGGOkqpfi5yP0kf6p1Z+0LTtV5jr9GUjsVJCXU
-         rvUyQmy6fFJ4HrKduaudyihyGzuhlnTR71+pxe9dilNNLLM/84Lj2v2P79f2R6i4Db50
-         cVyxO8V4MnVL/HckHsn5IpOszr9xTG21plciK0aojv+N4DyA3ZpVVXlLPK9XlRbBVWGY
-         +r1/xovH15jx2gI6rSDLkLW+ZYfr9Z2yOIFJTl2KCTyIsH7LS9GEHjpeYZ3havlSdFXu
-         Zo2xafc7nLnz0uWLF6a+6moxKN7MshNRgbUOboO30ilcow6M0mFyu8k1AFrNy99+x+IY
-         aDGQ==
-X-Gm-Message-State: ACrzQf3/yyk6ppweRXqLhWl+cQ6q4Y5RjuwERRUUV57HdFpxtnT/26RS
-        Ipp0mL1ojX/Pu3o6H0ZefpHZpVM/tww=
-X-Google-Smtp-Source: AMsMyM6L/q++zCXe4GWeBrAPIwqG39fFbfBAIKnPh6MuiuyxdztOz8g4AVli9P9bJHXVMfV/21m3+g==
-X-Received: by 2002:a05:6512:1309:b0:492:e273:d800 with SMTP id x9-20020a056512130900b00492e273d800mr5018765lfu.93.1665339224546;
-        Sun, 09 Oct 2022 11:13:44 -0700 (PDT)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id s1-20020a056512314100b00494a27500c1sm1101006lfi.163.2022.10.09.11.13.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 11:13:43 -0700 (PDT)
-Date:   Sun, 9 Oct 2022 21:13:41 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>, robh@kernel.org,
-        laurent.pinchart@ideasonboard.com, wsa@kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [v9 3/4] i2c: muxes: pca954x: Configure MAX7357 in enhanced mode
-Message-ID: <20221009181341.z4j6vcf3ncwi7q5i@mobilestation>
-References: <20221007075354.568752-1-patrick.rudolph@9elements.com>
- <20221007075354.568752-4-patrick.rudolph@9elements.com>
- <20221008125436.ndj2nwesx5lgppsf@mobilestation>
- <386fe4ae-0fae-0822-f86d-f5903369b424@axentia.se>
+        Sun, 9 Oct 2022 14:16:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BCC2CE00
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 11:15:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB03F60C38
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 18:15:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FEACC433D7;
+        Sun,  9 Oct 2022 18:15:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665339347;
+        bh=dIhWemmhcrJkEADi3PjUFTm4lR2Lw6gcZBBCTCbrmH0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o6zh19Z/xp2MfjX73mR8DSMb3M8LuCfWKR1yM147gYran8K+l8G/D/M5OKo+5Y/jF
+         okm7hvGpCZcjAS2bvg///YvLVRcAcu036rFvxmMNazU4JB4gdekgjDIOjBGyOBw8HG
+         PASVT6GVDXw4eSg0fAwl7h6VqP099Ph4MfIg9LqU=
+Date:   Sun, 9 Oct 2022 20:16:29 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     "Christian A. Ehrhardt" <lk@c--e.de>, Tejun Heo <tj@kernel.org>,
+        syzbot <syzbot+534ee3d24c37c411f37f@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        Yosry Ahmed <yosryahmed@google.com>
+Subject: Re: [PATCH] cgroup: Fix crash with CLONE_INTO_CGROUP and v1 cgroups
+Message-ID: <Y0MP/errn3nJ+9WQ@kroah.com>
+References: <000000000000385cbf05ea3f1862@google.com>
+ <00000000000028a44005ea40352b@google.com>
+ <Y0CbtVwW6+QIYJdQ@slm.duckdns.org>
+ <Y0HBlJ4AoZba93Uf@cae.in-ulm.de>
+ <20221009084039.cw6meqbvy4362lsa@wittgenstein>
+ <Y0LITEA/22Z7YVSa@cae.in-ulm.de>
+ <20221009173519.jwuissylg5haicie@wittgenstein>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <386fe4ae-0fae-0822-f86d-f5903369b424@axentia.se>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221009173519.jwuissylg5haicie@wittgenstein>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 06:36:52PM +0200, Peter Rosin wrote:
-> 2022-10-08 at 14:54, Serge Semin wrote:
-> > On Fri, Oct 07, 2022 at 09:53:52AM +0200, Patrick Rudolph wrote:
-> >> +	u8 maxim_enhanced_mode;
+On Sun, Oct 09, 2022 at 07:35:19PM +0200, Christian Brauner wrote:
+> On Sun, Oct 09, 2022 at 03:10:36PM +0200, Christian A. Ehrhardt wrote:
 > > 
-
-> > So long name.( What about a shorter version, i.e. max(im)?_enh ?
+> > Since commit f3a2aebdd6, Version 1 cgroups no longer cause an
+> > error when used with CLONE_INTO_CGROUP. However, the permission
+> > checks performed during clone assume a Version 2 cgroup.
+> > 
+> > Restore the error check for V1 cgroups in the clone() path.
+> > 
+> > Reported-by: syzbot+534ee3d24c37c411f37f@syzkaller.appspotmail.com
+> > Link: https://lore.kernel.org/lkml/000000000000385cbf05ea3f1862@google.com/
+> > Fixes: f3a2aebdd6 ("cgroup: enable cgroup_get_from_file() on cgroup1")
+> > Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
+> > ---
 > 
-> No thank you, please keep the long name as is. This is a corner
-> case and the name is not repeated that many times. Spelling it
-> out makes the code more readable.
+> Thanks for fixing this,
+> Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
 
-I don't insist. It was just a suggestion.
+No cc: stable?  :(
 
-Anyway seeing there are going to be two variables with the flag
-semantic (has_irq and maxim_enhanced_mode) it would be better to
-convert them to a single quirk field. Moreover it will be useful
-taking into account that a single maxim_enhanced_mode flag can't be
-used to distinguish the Maxim I2C-muxes with the enhanced mode
-disabled by default. Thus another flag will be needed for such
-devices.
-
-One more thing. Using u8 type for the flag variables isn't that
-descriptive. It should be of the boolean type.
-
--Sergey
-
-> 
-> Cheers,
-> Peter
