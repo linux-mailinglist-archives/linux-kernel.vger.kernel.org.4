@@ -2,90 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5060E5F8AFA
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 13:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF37F5F8AFD
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 13:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbiJILsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 07:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
+        id S230089AbiJILuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 07:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiJILsm (ORCPT
+        with ESMTP id S229849AbiJILuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 07:48:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75C72D74F;
-        Sun,  9 Oct 2022 04:48:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 626AF60B9E;
-        Sun,  9 Oct 2022 11:48:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6786C433C1;
-        Sun,  9 Oct 2022 11:48:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665316120;
-        bh=RNdMc/upqP/HYJ68heIn2uj20s8Dh7LI83jmdVsUqQY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AZ5xZ6ARsO2+lgGO0XIhGF+DcKU5XmGYroe3bkUgrjpHzhRQlMjr67ipvsQT8O9S+
-         rbFfzIU2zpvzjWzBYstka3bthUJtk13BYsvHYvnmyhXgfIXD+jJGBkG+0vj/08gJog
-         q5vynTIGFBkdmuoLwRauWe/+FS8RuB5qd4KNHv7wgQtvt2cJTnvndL02PqiZpjkajF
-         Z5/rI+q/PGmtc48QTdXpyFj+Kw9uJj545VmU4e6E/pGISnearvw22uOZYlsauACM+H
-         xcEDumiky/Ch50ka9IxHEP8G/JmzcNuCXZcLtvmmE8ieWttBm03W5V3dVYpsirqCVV
-         KbHpPBgzc+u8w==
-Received: by pali.im (Postfix)
-        id 37E697C1; Sun,  9 Oct 2022 13:48:38 +0200 (CEST)
-Date:   Sun, 9 Oct 2022 13:48:38 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Gregory Clement <gregory.clement@bootlin.com>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: armada-3720-turris-mox: Add missing
- interrupt for RTC
-Message-ID: <20221009114838.fsw5xqa3dtntejde@pali>
-References: <20220924115826.7891-1-pali@kernel.org>
+        Sun, 9 Oct 2022 07:50:04 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A096140D6;
+        Sun,  9 Oct 2022 04:50:03 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id bk15so13286486wrb.13;
+        Sun, 09 Oct 2022 04:50:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VUFLsuyuk9+p4OU7Z1hSP0ZO4o7UzZGIf41czrn5Hng=;
+        b=A4W4gzNDpE6q/HlxRYLYDvLMmAqbfo53B9Enec3SWu7Fzm1hbPNo0odjnFkT9Kt17s
+         kgBch7zi16JDMtvHW6Mv5cBrebn2e+sCmdr4i9ejHvDOMS1dbibuzZwD8nFEifIdTk1r
+         1N2dtVxAxJO+kk4znwp/wElU+Whuc5Bh8YZLVoLUiCuorbhyqlJZzPssfRgOi2m9wiK5
+         m8zV8w1G/ht7itJg10kMujTuoRM+xJQ5+ft+3IH+eCHouqwMaEeYNdWVX1nARpcaI3qZ
+         giRwMozoFMSU51yGNzPIngGpan2a0i6KKHSdZ+q2cAwpiB4L1g9c8yzmhhGuem/YHVPo
+         jAzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VUFLsuyuk9+p4OU7Z1hSP0ZO4o7UzZGIf41czrn5Hng=;
+        b=MdwuijuOGoR5fQetjTWf0iNjWbZu2u6KZscWL5ucfCeQ0KPTEre7ZUgJQcsflRJ4Ar
+         H1ZigIN0K2oUBsGBwIpYwWU2DYxGhLLvBXMTOWpCxQIGMKiwCIVLBeULBZTHbXYF9d1D
+         H9e38C8tvL5WNZ87VMHNvLve7bvLLRTpAHXefTVpEfPJzRVxBs3Q1eGX5rjsDS4lRW6C
+         3CmNjOp5r+r7EghKonoBXHygfQtBq0usL0+taFcdwYoiYhPzaqR7Bqyw18xeeRRz7F8A
+         sB4k9je7Ulihu/12H5qwGRm+eEqdCFE94f7HHw3srJWTbR0GcrkMB/6ToyW9sIE0WYAL
+         7NSQ==
+X-Gm-Message-State: ACrzQf2OlMWcXCiEvDYYob04ZFQgptortaa/x7hnLkFyuRUXNDAUqGyJ
+        R72SLMvMjQ/Uxees7uOB9Ck5XojaRNrJivZCN4DmMPNBCaQrxA==
+X-Google-Smtp-Source: AMsMyM4HqdIClTx5IiJd6h6WSoougptHbMCx1FH2dNTqSLIvmGCDZWzym0oefWVFhm7GkaGhc7JTPY3E7Xy6oc+NOT0=
+X-Received: by 2002:a5d:588f:0:b0:22a:fe0c:afb8 with SMTP id
+ n15-20020a5d588f000000b0022afe0cafb8mr9016525wrf.431.1665316201699; Sun, 09
+ Oct 2022 04:50:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220924115826.7891-1-pali@kernel.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Hao Peng <flyingpenghao@gmail.com>
+Date:   Sun, 9 Oct 2022 19:49:50 +0800
+Message-ID: <CAPm50aKGuxUfedpkPDpTZyGiLC1YFn3Wz+=5axzyBA9o2rd0XA@mail.gmail.com>
+Subject: [PATCH v2] kvm: x86: Keep the lock order consistent
+To:     pbonzini@redhat.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gregory: PING
+From: Peng Hao <flyingpeng@tencent.com>
 
-On Saturday 24 September 2022 13:58:26 Pali Rohár wrote:
-> MCP7940MT-I/MNY RTC has connected interrupt line to GPIO2_5.
-> 
-> Fixes: 7109d817db2e ("arm64: dts: marvell: add DTS for Turris Mox")
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> ---
->  arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-> index 5840ed129309..802862fe2060 100644
-> --- a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-> +++ b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-> @@ -125,9 +125,12 @@
->  	/delete-property/ mrvl,i2c-fast-mode;
->  	status = "okay";
->  
-> +	/* MCP7940MT-I/MNY RTC */
->  	rtc@6f {
->  		compatible = "microchip,mcp7940x";
->  		reg = <0x6f>;
-> +		interrupt-parent = <&gpiosb>;
-> +		interrupts = <5 0>; /* GPIO2_5 */
->  	};
->  };
->  
-> -- 
-> 2.20.1
-> 
+ Acquire SRCU before taking the gpc spinlock in wait_pending_event() so as
+  to be consistent with all other functions that acquire both locks.  It's
+  not illegal to acquire SRCU inside a spinlock, nor is there deadlock
+  potential, but in general it's preferable to order locks from least
+  restrictive to most restrictive, e.g. if wait_pending_event() needed to
+  sleep for whatever reason, it could do so while holding SRCU, but would
+  need to drop the spinlock.
+
+Thanks Sean Christopherson for the comment.
+
+Signed-off-by: Peng Hao <flyingpeng@tencent.com>
+---
+ arch/x86/kvm/xen.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+index 280cb5dc7341..fa6e54b13afb 100644
+--- a/arch/x86/kvm/xen.c
++++ b/arch/x86/kvm/xen.c
+@@ -965,8 +965,8 @@ static bool wait_pending_event(struct kvm_vcpu
+*vcpu, int nr_ports,
+        bool ret = true;
+        int idx, i;
+
+-       read_lock_irqsave(&gpc->lock, flags);
+        idx = srcu_read_lock(&kvm->srcu);
++       read_lock_irqsave(&gpc->lock, flags);
+        if (!kvm_gfn_to_pfn_cache_check(kvm, gpc, gpc->gpa, PAGE_SIZE))
+                goto out_rcu;
+
+@@ -987,9 +987,8 @@ static bool wait_pending_event(struct kvm_vcpu
+*vcpu, int nr_ports,
+        }
+
+  out_rcu:
+-       srcu_read_unlock(&kvm->srcu, idx);
+        read_unlock_irqrestore(&gpc->lock, flags);
+-
++       srcu_read_unlock(&kvm->srcu, idx);
+        return ret;
+ }
+
+--
+2.27.0
