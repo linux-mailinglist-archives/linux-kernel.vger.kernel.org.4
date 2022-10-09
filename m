@@ -2,109 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D485B5F8BF6
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 17:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDAA05F8BFD
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 17:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbiJIPUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 11:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48864 "EHLO
+        id S230143AbiJIPWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 11:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiJIPT4 (ORCPT
+        with ESMTP id S230030AbiJIPWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 11:19:56 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FD4BE012;
-        Sun,  9 Oct 2022 08:19:53 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 299FJifX028312;
-        Sun, 9 Oct 2022 17:19:44 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Willy Tarreau <w@1wt.eu>
-Subject: tools/nolibc: fix missing strlen() definition and infinite loop with gcc-12
-Date:   Sun,  9 Oct 2022 17:19:39 +0200
-Message-Id: <20221009151939.28270-1-w@1wt.eu>
-X-Mailer: git-send-email 2.17.5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 9 Oct 2022 11:22:17 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A90193D8
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 08:22:16 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id cn9so5327816qtb.11
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 08:22:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Gi30W6qO/QQQISv8PyR3uP8MA6T/Qkq2eAnyNWkaPQo=;
+        b=fsIhbyW+5LNxRUzfAm5uDLNs5RL1XrhuBUaER46mnIrpINGRiHQEtOrFksaO0mC+mr
+         hdaW5Ixjo3ypZ6ITLqz5MMq9sfvMr0JsxnK8xmnyMqRcD6I+nwnJ90cj2o0nfIwGSOKv
+         zJgXmu565F0ZkyD3iIoxRyy5mj4VEWfPy/eJShSnqQRX2izpOIHySyiOHeWWfoE4WmOK
+         6V8X9pA7KmWzvugqfTbJPwE0sOnXhlJ7czlGNpu56/Xh6rL5RHIo/imZyqaLdagL2iRO
+         cqOKLnO73l+FtSDG3uxXMWfBNHpOFSFQpOt3jMuVXFlBdhgcO5dPiEWZb3yyJJhPCdUi
+         lJjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gi30W6qO/QQQISv8PyR3uP8MA6T/Qkq2eAnyNWkaPQo=;
+        b=rmHCSwBZhvW1fq0kM5seDmVzWITLzkaNX6L9g250rbCte0GEgfsvxckkchS+1XecQX
+         FD8CQTFsELUHYUhyngF06eazs6hVeZdkaAnuIl4teMVmKcuFP1tF/NAUIcu5f8CWTpPj
+         r1Ts4Ykt5pWZp/hvUS2QMK+cuKZYUWTzZRfbhnh1pRElMwOXJyVFvtzH0x0IuCcTSavE
+         +tXPpB/DxIf+YQcN5Ide1rASBWqgF7qVA1nm6pVnp9x9pCrdCoHkXbzFAvwCaQEKCDZo
+         2WFrTeLQyV7003/2+k7ss+qYOktaM9H/mC59iVYM5jk6yoUT5QEZ4VSzbSAu3ZOoIGJE
+         ULug==
+X-Gm-Message-State: ACrzQf12+RuA78eFq3XKrJcmktrabGPwj0AEnVojAnI13SqYpdaC0bFp
+        XW+b2MYF5rniymoHZll1iltg7A==
+X-Google-Smtp-Source: AMsMyM77qc2qXgZ3zI7eVyqJTBsbEuOolRRKQMmDBZCGvXmo38imssALA4dp/8f9g+G6wgTdYPaxaA==
+X-Received: by 2002:ac8:7e82:0:b0:35b:b24e:2159 with SMTP id w2-20020ac87e82000000b0035bb24e2159mr11961830qtj.623.1665328935853;
+        Sun, 09 Oct 2022 08:22:15 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id y11-20020ac8128b000000b0039a275607c3sm536833qti.55.2022.10.09.08.22.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Oct 2022 08:22:15 -0700 (PDT)
+Message-ID: <e49eb069-c66b-532c-0e8e-43575304187b@linaro.org>
+Date:   Sun, 9 Oct 2022 17:20:03 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [net-next][PATCH v4] dt-bindings: dsa: Add lan9303 yaml
+Content-Language: en-US
+To:     Vladimir Oltean <olteanv@gmail.com>,
+        Jerry Ray <jerry.ray@microchip.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        UNGLinuxDriver@microchip.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221003164624.4823-1-jerry.ray@microchip.com>
+ <20221003164624.4823-1-jerry.ray@microchip.com>
+ <20221008225628.pslsnwilrpvg3xdf@skbuf>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221008225628.pslsnwilrpvg3xdf@skbuf>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When built at -Os, gcc-12 recognizes an strlen() pattern in nolibc_strlen()
-and replaces it with a jump to strlen(), which is not defined as a symbol
-and breaks compilation. Worse, when the function is called strlen(), the
-function is simply replaced with a jump to itself, hence becomes an
-infinite loop.
+On 09/10/2022 00:56, Vladimir Oltean wrote:
+>>  
+>> +MICROCHIP LAN9303/LAN9354 ETHERNET SWITCH DRIVER
+>> +M:	Jerry Ray <jerry.ray@microchip.com>
+>> +M:	UNGLinuxDriver@microchip.com
+>> +L:	netdev@vger.kernel.org
+>> +S:	Maintained
+>> +F:	Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml
+>> +F:	drivers/net/dsa/lan9303*
+>> +
+> 
+> Separate patch please? Changes to the MAINTAINERS file get applied to
+> the "net" tree.
 
-One way to avoid this is to always set -ffreestanding, but the calling
-code doesn't know this and there's no way (either via attributes or
-pragmas) to globally enable it from include files, effectively leaving
-a painful situation for the caller.
+This will also go via net tree, so there is no real need to split it.
 
-It turns out that -fno-tree-loop-distribute-patterns disables replacement
-of strlen-like loops with calls to strlen and that this option is accepted
-in the optimize() function attribute. Thus at least it allows us to make
-sure our local definition is not replaced with a self jump. The function
-only needs to be renamed back to strlen() so that the symbol exists, which
-implies that nolibc_strlen() which is used on variable strings has to be
-declared as a macro that points back to it before the strlen() macro is
-redifined.
-
-It was verified to produce valid code with gcc 3.4 to 12.1 at different
-optimization levels, and both with constant and variable strings.
-
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Link: https://lore.kernel.org/r/202210081618.754a77db-yujie.liu@intel.com
-Fixes: 66b6f755ad45 ("rcutorture: Import a copy of nolibc")
-Fixes: 96980b833a21 ("tools/nolibc/string: do not use __builtin_strlen() at -O0")
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Signed-off-by: Willy Tarreau <w@1wt.eu>
----
- tools/include/nolibc/string.h | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/tools/include/nolibc/string.h b/tools/include/nolibc/string.h
-index bef35bee9c44..5ef8778cd16f 100644
---- a/tools/include/nolibc/string.h
-+++ b/tools/include/nolibc/string.h
-@@ -125,10 +125,16 @@ char *strcpy(char *dst, const char *src)
- }
- 
- /* this function is only used with arguments that are not constants or when
-- * it's not known because optimizations are disabled.
-+ * it's not known because optimizations are disabled. Note that gcc 12
-+ * recognizes an strlen() pattern and replaces it with a jump to strlen(),
-+ * thus itself, hence the optimize() attribute below that's meant to disable
-+ * this confusing practice.
-  */
-+#if defined(__GNUC__) && (__GNUC__ >= 12)
-+__attribute__((optimize("no-tree-loop-distribute-patterns")))
-+#endif
- static __attribute__((unused))
--size_t nolibc_strlen(const char *str)
-+size_t strlen(const char *str)
- {
- 	size_t len;
- 
-@@ -140,13 +146,12 @@ size_t nolibc_strlen(const char *str)
-  * the two branches, then will rely on an external definition of strlen().
-  */
- #if defined(__OPTIMIZE__)
-+#define nolibc_strlen(x) strlen(x)
- #define strlen(str) ({                          \
- 	__builtin_constant_p((str)) ?           \
- 		__builtin_strlen((str)) :       \
- 		nolibc_strlen((str));           \
- })
--#else
--#define strlen(str) nolibc_strlen((str))
- #endif
- 
- static __attribute__((unused))
--- 
-2.35.3
+Best regards,
+Krzysztof
 
