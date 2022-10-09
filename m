@@ -2,68 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF0FD5F8D9B
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 20:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 836085F8D9E
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 21:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbiJIS6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 14:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
+        id S230060AbiJITAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 15:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbiJIS6K (ORCPT
+        with ESMTP id S229996AbiJITAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 14:58:10 -0400
-Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [5.144.164.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF2E2EF3B
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 11:58:08 -0700 (PDT)
-Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Sun, 9 Oct 2022 15:00:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B524619297;
+        Sun,  9 Oct 2022 12:00:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 5E60F1F969;
-        Sun,  9 Oct 2022 20:58:06 +0200 (CEST)
-Date:   Sun, 9 Oct 2022 20:58:04 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     phone-devel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 06/10] drm/msm/dsi: Migrate to
- drm_dsc_compute_rc_parameters()
-Message-ID: <20221009185804.si22xuo4rs6qxicc@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221009184824.457416-1-marijn.suijten@somainline.org>
- <20221009185058.460688-1-marijn.suijten@somainline.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5747E60C6E;
+        Sun,  9 Oct 2022 19:00:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A4330C433D7;
+        Sun,  9 Oct 2022 19:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665342014;
+        bh=5oaT6cRjV0u69+2ayKlnvYUhASoH5qRDauJkOK0L8NQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=EpFwq0khgbmOQS+SqdLnwvjh0m62CUG2xc3Pn20O/ZyiYYFN/tOMYDxSaBLv3tgmh
+         cml3Rzwy0FjTQ/r+GaDsMqMC7K4OXrl8ZrnQ+HEn9WcqN25BBec3/5NasaYXWSH1sU
+         6dz2DUWRt7UXo7sJvUhjg4twDgFehpLvYwRGq/Dzt8R+rDBqfNFV9qAMbR4Bd2jhKe
+         WfRrBumCoBedKdruYDOKfoUJbhQPq6EwjOwwnBNSrkzbhGHr8or/0UQ0VMR6gT5wFS
+         VNpxvwlZdCH3gRSXQuDyWIeo6yHyBtlPUAQGhtGUClAtG3mDU7cz8si32j/N5oT8bO
+         A/A/rfbSv462A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 895ACE21EC5;
+        Sun,  9 Oct 2022 19:00:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221009185058.460688-1-marijn.suijten@somainline.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] mISDN: hfcpci: Fix use-after-free bug in hfcpci_softirq
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166534201455.6058.9588339706087338743.git-patchwork-notify@kernel.org>
+Date:   Sun, 09 Oct 2022 19:00:14 +0000
+References: <20221009063731.22733-1-duoming@zju.edu.cn>
+In-Reply-To: <20221009063731.22733-1-duoming@zju.edu.cn>
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     linux-kernel@vger.kernel.org, isdn@linux-pingi.de, kuba@kernel.org,
+        andrii@kernel.org, gregkh@linuxfoundation.org, axboe@kernel.dk,
+        davem@davemloft.net, netdev@vger.kernel.org, zou_wei@huawei.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,133 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-09 20:50:54, Marijn Suijten wrote:
+Hello:
 
-Apologies.  After attempting to recover from an unexpected interruption
-_right as I was sending this series_, this patch got sent twice as it
-only later appeared to also have made its way through in the first round
-[1], together with the cover letter and first five patches.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-[1]: https://lore.kernel.org/linux-arm-msm/20221009184824.457416-7-marijn.suijten@somainline.org/
+On Sun,  9 Oct 2022 14:37:31 +0800 you wrote:
+> The function hfcpci_softirq() is a timer handler. If it
+> is running, the timer_pending() will return 0 and the
+> del_timer_sync() in HFC_cleanup() will not be executed.
+> As a result, the use-after-free bug will happen. The
+> process is shown below:
+> 
+>     (cleanup routine)          |        (timer handler)
+> HFC_cleanup()                  | hfcpci_softirq()
+>  if (timer_pending(&hfc_tl))   |
+>    del_timer_sync()            |
+>  ...                           | ...
+>  pci_unregister_driver(hc)     |
+>   driver_unregister            |  driver_for_each_device
+>    bus_remove_driver           |   _hfcpci_softirq
+>     driver_detach              |   ...
+>      put_device(dev) //[1]FREE |
+>                                |    dev_get_drvdata(dev) //[2]USE
+> 
+> [...]
 
-- Marijn
+Here is the summary with links:
+  - mISDN: hfcpci: Fix use-after-free bug in hfcpci_softirq
+    https://git.kernel.org/netdev/net/c/175302f6b79e
 
-> As per the FIXME this code is entirely duplicate with what is already
-> provided inside drm_dsc_compute_rc_parameters(), and it is yet unknown
-> why this comment was put in place instead of resolved from the get-go.
-> Not only does it save on duplication, it would have also spared certain
-> issues.
-> 
-> For example, this code from downstream assumed dsc->bits_per_pixel to
-> contain an integer value, whereas the upstream drm_dsc_config struct has
-> it with 4 fractional bits.  drm_dsc_compute_rc_parameters() already
-> accounts for this feat, and the sole remaining use of
-> dsc->bits_per_pixel inside dsi_populate_dsc_params() will be addressed
-> in a separate patch.
-> 
-> Fixes: b9080324d6ca ("drm/msm/dsi: add support for dsc data")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->  drivers/gpu/drm/msm/dsi/dsi_host.c | 64 +++---------------------------
->  1 file changed, 6 insertions(+), 58 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index 83cde4d62b68..68c39debc22f 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -21,6 +21,7 @@
->  
->  #include <video/mipi_display.h>
->  
-> +#include <drm/display/drm_dsc_helper.h>
->  #include <drm/drm_of.h>
->  
->  #include "dsi.h"
-> @@ -1771,14 +1772,6 @@ static char bpg_offset[DSC_NUM_BUF_RANGES] = {
->  
->  static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
->  {
-> -	int mux_words_size;
-> -	int groups_per_line, groups_total;
-> -	int min_rate_buffer_size;
-> -	int hrd_delay;
-> -	int pre_num_extra_mux_bits, num_extra_mux_bits;
-> -	int slice_bits;
-> -	int data;
-> -	int final_value, final_scale;
->  	int i;
->  
->  	dsc->rc_model_size = 8192;
-> @@ -1804,11 +1797,11 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
->  	if (dsc->bits_per_pixel != 8)
->  		dsc->initial_offset = 2048;	/* bpp = 12 */
->  
-> -	mux_words_size = 48;		/* bpc == 8/10 */
-> -	if (dsc->bits_per_component == 12)
-> -		mux_words_size = 64;
-> +	if (dsc->bits_per_component <= 10)
-> +		dsc->mux_word_size = DSC_MUX_WORD_SIZE_8_10_BPC;
-> +	else
-> +		dsc->mux_word_size = DSC_MUX_WORD_SIZE_12_BPC;
->  
-> -	dsc->mux_word_size = mux_words_size;
->  	dsc->initial_xmit_delay = 512;
->  	dsc->initial_scale_value = 32;
->  	dsc->first_line_bpg_offset = 12;
-> @@ -1820,52 +1813,7 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
->  	dsc->rc_quant_incr_limit0 = 11;
->  	dsc->rc_quant_incr_limit1 = 11;
->  
-> -	/* FIXME: need to call drm_dsc_compute_rc_parameters() so that rest of
-> -	 * params are calculated
-> -	 */
-> -	groups_per_line = DIV_ROUND_UP(dsc->slice_width, 3);
-> -	dsc->slice_chunk_size = DIV_ROUND_UP(dsc->slice_width * dsc->bits_per_pixel, 8);
-> -
-> -	/* rbs-min */
-> -	min_rate_buffer_size =  dsc->rc_model_size - dsc->initial_offset +
-> -				dsc->initial_xmit_delay * dsc->bits_per_pixel +
-> -				groups_per_line * dsc->first_line_bpg_offset;
-> -
-> -	hrd_delay = DIV_ROUND_UP(min_rate_buffer_size, dsc->bits_per_pixel);
-> -
-> -	dsc->initial_dec_delay = hrd_delay - dsc->initial_xmit_delay;
-> -
-> -	dsc->initial_scale_value = 8 * dsc->rc_model_size /
-> -				       (dsc->rc_model_size - dsc->initial_offset);
-> -
-> -	slice_bits = 8 * dsc->slice_chunk_size * dsc->slice_height;
-> -
-> -	groups_total = groups_per_line * dsc->slice_height;
-> -
-> -	data = dsc->first_line_bpg_offset * 2048;
-> -
-> -	dsc->nfl_bpg_offset = DIV_ROUND_UP(data, (dsc->slice_height - 1));
-> -
-> -	pre_num_extra_mux_bits = 3 * (mux_words_size + (4 * dsc->bits_per_component + 4) - 2);
-> -
-> -	num_extra_mux_bits = pre_num_extra_mux_bits - (mux_words_size -
-> -			     ((slice_bits - pre_num_extra_mux_bits) % mux_words_size));
-> -
-> -	data = 2048 * (dsc->rc_model_size - dsc->initial_offset + num_extra_mux_bits);
-> -	dsc->slice_bpg_offset = DIV_ROUND_UP(data, groups_total);
-> -
-> -	data = dsc->initial_xmit_delay * dsc->bits_per_pixel;
-> -	final_value =  dsc->rc_model_size - data + num_extra_mux_bits;
-> -	dsc->final_offset = final_value;
-> -
-> -	final_scale = 8 * dsc->rc_model_size / (dsc->rc_model_size - final_value);
-> -
-> -	data = (final_scale - 9) * (dsc->nfl_bpg_offset + dsc->slice_bpg_offset);
-> -	dsc->scale_increment_interval = (2048 * dsc->final_offset) / data;
-> -
-> -	dsc->scale_decrement_interval = groups_per_line / (dsc->initial_scale_value - 8);
-> -
-> -	return 0;
-> +	return drm_dsc_compute_rc_parameters(dsc);
->  }
->  
->  static int dsi_host_parse_dt(struct msm_dsi_host *msm_host)
-> -- 
-> 2.38.0
-> 
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
