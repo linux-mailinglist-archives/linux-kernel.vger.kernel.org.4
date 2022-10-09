@@ -2,68 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D31E5F8C43
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 18:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15BBF5F8C48
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 18:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiJIQVr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 9 Oct 2022 12:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S230133AbiJIQWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 12:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiJIQVp (ORCPT
+        with ESMTP id S230101AbiJIQWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 12:21:45 -0400
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E0C27140;
-        Sun,  9 Oct 2022 09:21:43 -0700 (PDT)
-Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay04.hostedemail.com (Postfix) with ESMTP id 45D5E1A0930;
-        Sun,  9 Oct 2022 16:21:42 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id 1D92720023;
-        Sun,  9 Oct 2022 16:21:13 +0000 (UTC)
-Message-ID: <9ff662d738612f0ed2cea39266768a2eff21edc3.camel@perches.com>
-Subject: kernel style preference trivia: '* const' vs '*const' ?
-From:   Joe Perches <joe@perches.com>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-doc <linux-doc@vger.kernel.org>
-Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sun, 09 Oct 2022 09:21:39 -0700
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Sun, 9 Oct 2022 12:22:44 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D6E275FD
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 09:22:42 -0700 (PDT)
+X-QQ-mid: bizesmtp63t1665332545tg35vcz9
+Received: from localhost.localdomain ( [58.247.70.42])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 10 Oct 2022 00:22:18 +0800 (CST)
+X-QQ-SSF: 01100000002000G0Z000B00A0000000
+X-QQ-FEAT: DoD8xN2rKozHQmBqd9LmJAE/V3dv05ZHImZ5xKfTLc1VocmPYmpKo4QlQsheE
+        OyZJL84jjHBGKcRPR6jT54Kb5KyCiqdUQL8gLRQfFFd5Ih+IA0WAvoi2haKK2HvaheaMOfS
+        Gl3k5Rmk4oMKHRTPX1+U03xPnK5tlW8fw08Tk3nTxG+RoJ7QDk+coAn/+mKZgI+Gq0qXYsv
+        HJgqwU9ea9FOCuoOOvHxHnsY5dhrPw1BBxNMid7EpRXKpnlM9KHAuwMWxt2dIlfMWnmqku+
+        jp1eFfur0XzAjJ5aV2viU9ndrr6CkJW7lYTxwhktrSAyydGEE32ttRFZlYORZQvZMJx2ZAi
+        MToX6H8AQCw7xPyYf5rZGpQAcp7VtrXGiKve7sC7qj3MuytKrI=
+X-QQ-GoodBg: 0
+From:   Soha Jin <soha@lohu.info>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Soha Jin <soha@lohu.info>
+Subject: [PATCH 0/3] Case-insensitive match_string and fwnode_is_compatible()
+Date:   Mon, 10 Oct 2022 00:21:52 +0800
+Message-Id: <20221009162155.1318-1-soha@lohu.info>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Stat-Signature: f7kky6c3eq77h4mcji14he9g4r95z8eo
-X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: 1D92720023
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/54rzZQ8/w8+gpKyhVqiTMLzTvdQeQyYQ=
-X-HE-Tag: 1665332473-117259
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:lohu.info:qybglogicsvr:qybglogicsvr3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kernel uses '* const' about 10:1 over '*const'
+I am introducing these patches for the patch for ethernet driver which I
+will send later.
 
-coding_style and checkpatch don't care one way or another.
+In Patch 1, I abstract `match_string` to `__match_string` with a comparison
+function, make the original name calling it with `strcmp` and add
+`match_string_nocase` calling it with `strcasecmp`.
 
-Does anyone care if there should be some kernel style preference?
+In Patch 2 & 3, I implement `{device,fwnode}_property_match_string_nocase`
+and `fwnode_is_compatible` for compatible property matching.
 
-$ git grep -P -oh '\b(?:char|u8)\s*\*\s*const\b' -- '*.[ch]' | \
-  sort | uniq -c | sort -rn
-  12450 char * const
-   1357 char *const
-     41 u8 * const
-     17 char* const
-      9 u8 *const
-      5 char		*const
-      2 char      * const
-      2 char			*const
-      1 char  * const
-      1 char	*const
-      1 char		* const
+Soha Jin (3):
+  string: add match_string_nocase() for case-insensitive match
+  device property: add {device,fwnode}_property_match_string_nocase()
+  device property: add fwnode_is_compatible() for compatible match
+
+ drivers/base/property.c  | 92 ++++++++++++++++++++++++++++++++--------
+ include/linux/property.h | 13 ++++++
+ include/linux/string.h   | 31 +++++++++++++-
+ lib/string_helpers.c     | 10 +++--
+ 4 files changed, 123 insertions(+), 23 deletions(-)
+
+-- 
+2.30.2
 
