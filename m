@@ -2,62 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77C15F8ACC
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 13:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB5C5F8ACE
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 13:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiJILHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 07:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
+        id S229976AbiJILIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 07:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiJILG5 (ORCPT
+        with ESMTP id S229550AbiJILIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 07:06:57 -0400
+        Sun, 9 Oct 2022 07:08:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79AD28733
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 04:06:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7004B29C8C
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 04:08:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4214660AE9
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 11:06:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78E01C433C1;
-        Sun,  9 Oct 2022 11:06:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0D1160B36
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 11:08:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DC68C433C1;
+        Sun,  9 Oct 2022 11:08:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665313615;
-        bh=bDQO5nPf+lVMNKr0A9V63/VARoFUePFNmz0paVann+U=;
+        s=k20201202; t=1665313691;
+        bh=16d6kv40ojI7bColT0X9A2Alxf9DIIOwFKAPNQvY80Q=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lh6KNRlMUBJMDhKijORUgTjeqq0c1vtkL5x0vLvbTNwERqVEdWnCGu2FxlEkBGcn+
-         xjiiFHa+CJx9o7faJ1WRwSTfYSQ7wQsHG7b70vo1BVmv6kdMZAlOwXNzkQ0rIxMTLa
-         boh8I6USg2O6ZZFNH5rzTt7ozAbyRWsyu3UliSlaXhG6/EP9MnB/qf7XnEhZ3WrbTN
-         73iMNQ8c9V389d6Do3fGdUG8a4Lttp4rwHfOQliOAz9wyt/9bhX9AB2NM0MUv9SXPP
-         bSmnI4zfT58B0fmLz7ozMrVvAaQ7RgQy0Keyq4I1pPNbwLyYFEoIj5GveAT/nPVB7n
-         ZPcx0pvvZm0vQ==
+        b=Wmu0c5pJbWT6qRl7oiu2V7ydwDJK5uZhRlACcvjtqsXDFR+GFMltU1BPxv13PvRDa
+         ThSGoLrGODMDsGgeCytuKWDdSnVfO1fFSKoNQ74vU1FyDXiXez7zdYGYu/IipyHs8x
+         jtZ9lFG2uoiMGyd86VnaNsryDIQEv9q7EEGqdt/cUiLimSsJK6BHYri+0m8D8xtZmo
+         to7GSNJ0y2gNHRp3V7R1CEv6a5jl3OZgFdTzicEVaZs+U1raeFi2urJGzo5eCQGOVj
+         FxnIKeaJDOJH7PqN6mymbsvn3H4YSs8RNPOsjmDAgiHD0EQ3Hr1jtmCvvqpIHu3lxO
+         Vu3ZShQlW/nHw==
 Received: by pali.im (Postfix)
-        id 52B8A7C1; Sun,  9 Oct 2022 13:06:52 +0200 (CEST)
-Date:   Sun, 9 Oct 2022 13:06:52 +0200
+        id 60DEB7C1; Sun,  9 Oct 2022 13:08:08 +0200 (CEST)
+Date:   Sun, 9 Oct 2022 13:08:08 +0200
 From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Joel Stanley <joel@jms.id.au>,
+To:     Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] powerpc/boot: Don't always pass -mcpu=powerpc when
- building 32-bit uImage
-Message-ID: <20221009110652.h7senqesk7nabxmn@pali>
-References: <20220820105200.30425-1-pali@kernel.org>
- <20220828095659.4061-1-pali@kernel.org>
- <e3cb2642-20e4-6c26-104d-329a04260946@csgroup.eu>
- <c8d657db-02da-7840-5b40-755e47277a2c@csgroup.eu>
- <20220828174135.rcql4uiunqbnn5gh@pali>
- <d49c5905-ff68-00e9-ddaf-d60d5e5ebe65@csgroup.eu>
- <20220829085451.upubyo5e7uop72lb@pali>
+        Paul Mackerras <paulus@samba.org>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] powerpc/fsl-pci: Choose PCI host bridge with alias pci0
+ as the primary
+Message-ID: <20221009110808.agfixtgneshui47o@pali>
+References: <20220820123327.20551-1-pali@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220829085451.upubyo5e7uop72lb@pali>
+In-Reply-To: <20220820123327.20551-1-pali@kernel.org>
 User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -68,70 +59,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 29 August 2022 10:54:51 Pali Rohár wrote:
-> On Sunday 28 August 2022 17:43:53 Christophe Leroy wrote:
-> > Le 28/08/2022 à 19:41, Pali Rohár a écrit :
-> > > On Sunday 28 August 2022 17:39:25 Christophe Leroy wrote:
-> > >> Le 28/08/2022 à 19:33, Christophe Leroy a écrit :
-> > >>>
-> > >>>
-> > >>> Le 28/08/2022 à 11:56, Pali Rohár a écrit :
-> > >>>> When CONFIG_TARGET_CPU is specified then pass its value to the compiler
-> > >>>> -mcpu option. This fixes following build error when building kernel with
-> > >>>> powerpc e500 SPE capable cross compilers:
-> > >>>>
-> > >>>>       BOOTAS  arch/powerpc/boot/crt0.o
-> > >>>>     powerpc-linux-gnuspe-gcc: error: unrecognized argument in option
-> > >>>> ‘-mcpu=powerpc’
-> > >>>>     powerpc-linux-gnuspe-gcc: note: valid arguments to ‘-mcpu=’ are:
-> > >>>> 8540 8548 native
-> > >>>>     make[1]: *** [arch/powerpc/boot/Makefile:231:
-> > >>>> arch/powerpc/boot/crt0.o] Error 1
-> > >>>
-> > >>> corenet64_smp_defconfig :
-> > >>>
-> > >>>     BOOTAS  arch/powerpc/boot/crt0.o
-> > >>> powerpc64-linux-gcc: error: missing argument to '-mcpu='
-> > >>> make[1]: *** [arch/powerpc/boot/Makefile:237 : arch/powerpc/boot/crt0.o]
-> > >>> Erreur 1
-> > >>> make: *** [arch/powerpc/Makefile:253 : uImage] Erreur 2
-> > >>>
-> > >>>
-> > >>
-> > >> Seems like in fact, E5500_CPU and E6500_CPU are not taken into account
-> > >> in CONFIG_TARGET_CPU, and get special treatment directly in
-> > >> arch/powerpc/Makefile.
-> > >>
-> > >> This goes unnoticed because of CFLAGS-$(CONFIG_TARGET_CPU_BOOL) +=
-> > >> $(call cc-option,-mcpu=$(CONFIG_TARGET_CPU))
-> > >>
-> > >> I think we need to fix that prior to your patch.
-> > > 
-> > > It looks like that CONFIG_TARGET_CPU is broken.
-> > > 
-> > >    $ make ARCH=powerpc corenet64_smp_defconfig CROSS_COMPILE=powerpc64-linux-gnu-
-> > >    ...
-> > >    # configuration written to .config
-> > > 
-> > >    $ grep CONFIG_TARGET_CPU .config
-> > >    CONFIG_TARGET_CPU_BOOL=y
-> > > 
-> > > CONFIG_TARGET_CPU_BOOL is set but CONFIG_TARGET_CPU not!
-> > 
-> > Yes, because there is no default value for E5500_CPU and E6500_CPU. We 
-> > need to add one for each.
-> 
-> I see... Will you prepare this fixup for your previous patch?
-> 
-> And I think that following construct
-> 
->   $(call cc-option,-mcpu=$(CONFIG_TARGET_CPU))
-> 
-> should be changed just to
-> 
->   -mcpu=$(CONFIG_TARGET_CPU)
-> 
-> Because if user specified that want build for specific target CPU, it
-> should not be silently ignored.
+Hello! Any opinion on this patch?
 
-Christophe, should I do something in this area?
+On Saturday 20 August 2022 14:33:27 Pali Rohár wrote:
+> If there's no PCI host bridge with ISA then check for PCI host bridge with
+> alias "pci0" (first PCI host bridge) and if it exists then choose it as the
+> primary PCI host bridge.
+> 
+> This makes choice of primary PCI host bridge more stable across boots and
+> updates as the last fallback candidate for primary PCI host bridge (if
+> there is no choice) is selected arbitrary.
+> 
+> Signed-off-by: Pali Rohár <pali@kernel.org>
+> ---
+>  arch/powerpc/sysdev/fsl_pci.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/arch/powerpc/sysdev/fsl_pci.c b/arch/powerpc/sysdev/fsl_pci.c
+> index 1011cfea2e32..e4b703943dd3 100644
+> --- a/arch/powerpc/sysdev/fsl_pci.c
+> +++ b/arch/powerpc/sysdev/fsl_pci.c
+> @@ -1125,6 +1125,19 @@ void __init fsl_pci_assign_primary(void)
+>  			return;
+>  	}
+>  
+> +	/*
+> +	 * If there's no PCI host bridge with ISA then check for
+> +	 * PCI host bridge with alias "pci0" (first PCI host bridge).
+> +	 */
+> +	np = of_find_node_by_path("pci0");
+> +	if (np && of_match_node(pci_ids, np) && of_device_is_available(np)) {
+> +		fsl_pci_primary = np;
+> +		of_node_put(np);
+> +		return;
+> +	}
+> +	if (np)
+> +		of_node_put(np);
+> +
+>  	/*
+>  	 * If there's no PCI host bridge with ISA, arbitrarily
+>  	 * designate one as primary.  This can go away once
+> -- 
+> 2.20.1
+> 
