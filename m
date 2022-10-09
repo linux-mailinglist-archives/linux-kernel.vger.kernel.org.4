@@ -2,83 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CE25F89CE
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 08:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 897815F89D3
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 08:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiJIGtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 02:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40308 "EHLO
+        id S229973AbiJIGvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 02:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiJIGth (ORCPT
+        with ESMTP id S229927AbiJIGvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 02:49:37 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96DA191
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 23:49:34 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id 13so19111350ejn.3
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 23:49:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ZLfh/kJniA0SsDArOwtDJ/ZRi0BuiUdpe++i/ajh6o=;
-        b=fZfiGufQQshb7+Pel1YdxHFn0kuiiQg+LQo7JfynFTNca1yj3Q5JPSqnGQ8k7iYGBb
-         pV/vL7MW8rrisN01RF+EdpJGjhwu2D0hwZC+2KG2fckSwXoCoYeIIbteLi7+ybu98YNb
-         zsO5YcK5T45hXYJTaOMW7o2JHrjT0dcgKTixOZE4gKzG8LUXd49qtHe+65wZ9Urs6+J6
-         n6inPPDvYzxbpokD2AoFX6gskwdQ+cY4CuWcc0WUUnODV7h/76tuKsfSceBveAToYi65
-         R7bC5UHDhD5RzfNt/PxEGf+i+79gGxe440nmkew6sdlAs9CAX+iedW9sdQotybWxsGSP
-         y/dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1ZLfh/kJniA0SsDArOwtDJ/ZRi0BuiUdpe++i/ajh6o=;
-        b=669lzR6xczKo6+c9Oh52xbHVGIU2h4+RkVxrDKq6xZcnkGoidi5CE9vqoFt4iEOpkM
-         84Dbpa4vu3K7luqe/yHIws5Ie3hvTY6VRLROEkZ6pQds8t5cV7tZHS3opH1HBq31v/lK
-         eDKejSHRx5l2J57m0xj4pRiXzW18O2FHEcHvN97/U0niD/96zUZWbkMsgtYQn/jbGM+m
-         8dA90GWhtz2abYjhbH5HxbFTFiLNN1hkc+BdKMm2IZe23gwVnYtABSVUOlw06JPPtk5b
-         5mfik7K7wJ4zGowcb509DwIYaqnTGtxBzJ8h0vKfN1YPfmIgDsMJ+2I19ID9X7G8zEJf
-         SIVQ==
-X-Gm-Message-State: ACrzQf2iwEDQDzFePt4d5eBq4eYDIj0ZxZcdybJ5EJrkZNGwKfMJk8Bg
-        lMHLRafPTHYh8r0Gw+LMQGoQxxg9FF84TsXICpdlvg==
-X-Google-Smtp-Source: AMsMyM6ouWinsTaRGvOfpoqS+hMn/fYxvHX7lpgdiZ2lzKXkmaY1hziY4YGjX7yXGTpOSHHPXr9bgoogFgcLdAZf5eo=
-X-Received: by 2002:a17:907:25c5:b0:782:978d:c3da with SMTP id
- ae5-20020a17090725c500b00782978dc3damr9999283ejc.623.1665298171163; Sat, 08
- Oct 2022 23:49:31 -0700 (PDT)
+        Sun, 9 Oct 2022 02:51:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782EB2A43B;
+        Sat,  8 Oct 2022 23:51:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1553F60B86;
+        Sun,  9 Oct 2022 06:51:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F278C433C1;
+        Sun,  9 Oct 2022 06:51:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665298274;
+        bh=cBUWUX/wKjFbBTSR4Zh5FNhzEenYZ+ABG2uNJqaEQsw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=frDCiFn3Jr7P510TeiwpjOyrNMYrkiSGac06hyTwM+eGqjB2U2ZU/Gsxn4mMmhLPI
+         5Tc/Fzr3dEC/ePBprRXHbkDyBP1BAP2lnr7vZIkJU683aDhx3YKwYkKYpNoBBTY/SG
+         ZjfTUs42t0SfoomAz8pZIVERgvbyI4HNthe+mm0Y=
+Date:   Sun, 9 Oct 2022 08:51:56 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+Cc:     Christine Caulfield <ccaulfie@redhat.com>,
+        David Teigland <teigland@redhat.com>, cluster-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] dlm: Replace one-element array with flexible-array
+ member
+Message-ID: <Y0JvjAfnOB13y2wL@kroah.com>
+References: <Y0ICbf8tCtXMn+W0@mail.google.com>
 MIME-Version: 1.0
-References: <20220927120857.639461-1-max.kellermann@ionos.com> <88f8941f-82bf-5152-b49a-56cb2e465abb@redhat.com>
-In-Reply-To: <88f8941f-82bf-5152-b49a-56cb2e465abb@redhat.com>
-From:   Max Kellermann <max.kellermann@ionos.com>
-Date:   Sun, 9 Oct 2022 08:49:19 +0200
-Message-ID: <CAKPOu+88FT1SeFDhvnD_NC7aEJBxd=-T99w67mA-s4SXQXjQNw@mail.gmail.com>
-Subject: Re: [PATCH] fs/ceph/super: add mount options "snapdir{mode,uid,gid}"
-To:     Xiubo Li <xiubli@redhat.com>
-Cc:     idryomov@gmail.com, jlayton@kernel.org, ceph-devel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0ICbf8tCtXMn+W0@mail.google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 9, 2022 at 8:23 AM Xiubo Li <xiubli@redhat.com> wrote:
-> I don't think this is a good place to implement this in client side.
-> Should this be a feature in cephx.
+On Sun, Oct 09, 2022 at 12:06:21PM +1300, Paulo Miguel Almeida wrote:
+> paulo.miguel.almeida.rodenas@gmail.com
+> Bcc: 
+> Subject: [PATCH][next] dlm: Replace one-element array with flexible-array
+>  member
+> Reply-To: 
 
-What's cephx? "git grep cephx" didn't reveal anything that looked useful to me.
+Something went wrong here :(
 
-> With this for the same directories in different mounts will behave
-> differently. Isn't that odd ?
-
-Just like different mounts can have different snapdir names currently.
-That's just as odd, and I tried to imitate what's already there.
-
-I don't have an opinion on how this should be implemented, all I want
-is restrict who gets access to cephfs snapshots. Please explain how
-you want it, and I'll send an amended patch.
