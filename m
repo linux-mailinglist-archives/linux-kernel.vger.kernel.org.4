@@ -2,83 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB4E5F8AC4
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 12:50:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B7B5F8AC2
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 12:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiJIKuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 06:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
+        id S230057AbiJIKuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 06:50:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiJIKt7 (ORCPT
+        with ESMTP id S229788AbiJIKt5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 06:49:59 -0400
-Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C47310FE2
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 03:49:56 -0700 (PDT)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id hTsWoW2X5OizNhTsWoCyhu; Sun, 09 Oct 2022 12:49:54 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 09 Oct 2022 12:49:54 +0200
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH] powerpc/sysdev: Remove some duplicate prefix in some messages
-Date:   Sun,  9 Oct 2022 12:49:50 +0200
-Message-Id: <7b8b5915a2c7c1616b33e8433ebe0a0bf07070a2.1665312579.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 9 Oct 2022 06:49:57 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB95410569
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 03:49:55 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-32-AZdfbNVcP-2xXHI9wdH94Q-1; Sun, 09 Oct 2022 11:49:53 +0100
+X-MC-Unique: AZdfbNVcP-2xXHI9wdH94Q-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Sun, 9 Oct
+ 2022 11:49:52 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Sun, 9 Oct 2022 11:49:52 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Nick Desaulniers' <ndesaulniers@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>
+CC:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "Alexander Viro" <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        Paul Kirth <paulkirth@google.com>
+Subject: RE: [PATCH] fs/select: avoid clang stack usage warning
+Thread-Topic: [PATCH] fs/select: avoid clang stack usage warning
+Thread-Index: AQHY2n+hcGcBonK1M0KmZt3TrrNRoK4F47gg
+Date:   Sun, 9 Oct 2022 10:49:52 +0000
+Message-ID: <b211e3a2549844fa957ca84b9257872d@AcuMS.aculab.com>
+References: <20190307090146.1874906-1-arnd@arndb.de>
+ <20221006222124.aabaemy7ofop7ccz@google.com>
+ <c646ea1e-c860-41cf-9a8e-9abe541034ff@app.fastmail.com>
+ <CAKwvOdkEied8hf6Oid0sGf0ybF2WqrzOvtRiXa=j7Ms-Rc6uBA@mail.gmail.com>
+In-Reply-To: <CAKwvOdkEied8hf6Oid0sGf0ybF2WqrzOvtRiXa=j7Ms-Rc6uBA@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At the beginning of the file, we have:
-   #define pr_fmt(fmt) "xive: " fmt
-
-So, there is no need to duplicate "XIVE:" in debug and error messages.
-
-For the records, these useless prefix have been added in commit
-5af50993850a ("KVM: PPC: Book3S HV: Native usage of the XIVE interrupt
-controller")
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- arch/powerpc/sysdev/xive/native.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/powerpc/sysdev/xive/native.c b/arch/powerpc/sysdev/xive/native.c
-index 3925825954bc..19d880ebc5e6 100644
---- a/arch/powerpc/sysdev/xive/native.c
-+++ b/arch/powerpc/sysdev/xive/native.c
-@@ -535,13 +535,13 @@ static bool __init xive_parse_provisioning(struct device_node *np)
- static void __init xive_native_setup_pools(void)
- {
- 	/* Allocate a pool big enough */
--	pr_debug("XIVE: Allocating VP block for pool size %u\n", nr_cpu_ids);
-+	pr_debug("Allocating VP block for pool size %u\n", nr_cpu_ids);
- 
- 	xive_pool_vps = xive_native_alloc_vp_block(nr_cpu_ids);
- 	if (WARN_ON(xive_pool_vps == XIVE_INVALID_VP))
--		pr_err("XIVE: Failed to allocate pool VP, KVM might not function\n");
-+		pr_err("Failed to allocate pool VP, KVM might not function\n");
- 
--	pr_debug("XIVE: Pool VPs allocated at 0x%x for %u max CPUs\n",
-+	pr_debug("Pool VPs allocated at 0x%x for %u max CPUs\n",
- 		 xive_pool_vps, nr_cpu_ids);
- }
- 
--- 
-2.34.1
+RnJvbTogTmljayBEZXNhdWxuaWVycw0KPiBTZW50OiAwNyBPY3RvYmVyIDIwMjIgMjA6MDQNCi4u
+Lg0KPiBJdCBsb29rcyBsaWtlIGZvciBhcnJheXMgSU5JVF9TVEFDS19BTExfUEFUVEVSTiB1c2Vz
+IG1lbXNldCB0byBmaWxsDQo+IHRoZSBhcnJheSB3aXRoIDB4RkYgcmF0aGVyIHRoYW4gMHgwMCB1
+c2VkIGJ5IElOSVRfU1RBQ0tfQUxMX1pFUk8uIE5vdA0KPiBzdXJlIHdoeSB0aGF0IHdvdWxkIG1h
+a2UgYSBkaWZmZXJlbmNlLCBidXQgY3VyaW91cyB0aGF0IGl0IGRvZXMuDQoNCkhvdyBtdWNoIHBl
+cmZvcm1hbmNlIGRvZXMgZmlsbGluZyB0aGUgYXJyYXkgY29zdD8NCkknZCBzdXNwZWN0IGl0IGlz
+IGVub3VnaCB0byBiZSBtZWFzdXJhYmxlLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRy
+ZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1L
+MSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
