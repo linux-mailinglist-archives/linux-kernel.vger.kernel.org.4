@@ -2,151 +2,1219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0A6A5F894C
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 06:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBCFE5F8950
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 06:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbiJIEDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 00:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39640 "EHLO
+        id S229755AbiJIEXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 00:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiJIEDb (ORCPT
+        with ESMTP id S229463AbiJIEXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 00:03:31 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8BD2C138
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 21:03:30 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id h10so7787760plb.2
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 21:03:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lGcANlxwwAoMV2yYuqmWVwlrAW36ZFrUJRQgUMMRe4U=;
-        b=gRnfSz3W7cd+YWPYek/6AId3fc/Ne6mR0yCBLDN8d87c7zrFVIkgLBWdAPuEEGp1Hw
-         e8SCJ0un44FP95xt8dHchQSalUd35CG4vhSnWcimwklP01o8phVipH0OJr4fBtqcTbhd
-         HvTYXv2Th6sj80FrvNKrEf8tCpyGhaKbp8C3I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lGcANlxwwAoMV2yYuqmWVwlrAW36ZFrUJRQgUMMRe4U=;
-        b=LqFkB2PfYp3p6a+I39+GYHWOGdmmTiEfzQz8oagW8XR2QQ1xCK/x+4/IiZ2vmLIgl5
-         +6wbmUMpIynU9hENAvVEw4EJZ03yUEbTC9l909HamaDFden5VnPpoYy4EfbD9ygL+GOe
-         mn8cAlcxa7RrnZPKmA7qFs2X4onu2XEhwOfUsuJ/OlW6Fv68uUN19ov95Ftqq1S9auzd
-         2sHJJiYVOVheZtrCl3dBG4eY9fKRA66zJtkt9qw700WnAxg1QjioZ0b6KNN61AqlowVu
-         2AbbnftdGjCRFF1j6jYNKLYv4ZrOAoqdVAOSxe6KGUGvdqdX0Zv3OhLBq5GeG8fx4Mjf
-         YugQ==
-X-Gm-Message-State: ACrzQf0C7M06gpDZDmWM4XxD6nX55McsMHFrdswmQyGd0T6YWgadHwJ2
-        wOH0qp5gRg6uL0E8xYNirYoR8w==
-X-Google-Smtp-Source: AMsMyM4wxlo6Eqvw98xHCVgZjF9QkQXjx7TiytIor/82u/00GrEhO16CVKVF/xw7v1ToUcMCP8llZw==
-X-Received: by 2002:a17:902:b20a:b0:178:6f5b:f903 with SMTP id t10-20020a170902b20a00b001786f5bf903mr13070468plr.39.1665288209694;
-        Sat, 08 Oct 2022 21:03:29 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x6-20020a628606000000b005629b6a8b53sm4384256pfd.15.2022.10.08.21.03.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Oct 2022 21:03:29 -0700 (PDT)
-Date:   Sat, 8 Oct 2022 21:03:28 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-Cc:     Christine Caulfield <ccaulfie@redhat.com>,
-        David Teigland <teigland@redhat.com>, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2][next] dlm: Replace one-element array with
- flexible-array member
-Message-ID: <202210082044.51106145BD@keescook>
-References: <Y0IFEUjwXGZFf7bB@mail.google.com>
- <378C6BDE-0A68-4938-86CD-495BD5F35BE6@chromium.org>
- <Y0IsXXYnS4DnWkMW@mail.google.com>
+        Sun, 9 Oct 2022 00:23:46 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D8E19039
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 21:23:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665289424; x=1696825424;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LTnQ2FIYbzThWdGne4l9YH7Q1OXimpJC+CG+5zORWfw=;
+  b=Q3xdDyePVGTYxQtFQcZ0lzIIvCqavaUnGPqLFeoUQzwRtHl9IK9HmThI
+   1jKuZJ0jy/SBlSzvoIPYJpSoCmxM2sREN/J9H8emBPzVvXIzIH2rUnjk6
+   jPEFIAR5hix7p3YuIEoTKjONp3eOp7nRI/tUO2rARf7MoWyi08GKZPK+m
+   myQ/4iu7ZwGNX9yuaG3LeWTTMePH9Wq1w1Po8si1OkR1JhfDuUYHAiGE5
+   d+G9pAJ59WRjEATIR/IzjXnyw3zzFpU3wEhk5zlYvkZgzAWyulC0zDbtl
+   bu1Uyi8fxY7cm1Uw0pGIkwnYPSUOUzaj6tL/fHEiciukIG9UHLyvpinPj
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10494"; a="284395886"
+X-IronPort-AV: E=Sophos;i="5.95,170,1661842800"; 
+   d="scan'208";a="284395886"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2022 21:23:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10494"; a="603338688"
+X-IronPort-AV: E=Sophos;i="5.95,170,1661842800"; 
+   d="scan'208";a="603338688"
+Received: from lkp-server01.sh.intel.com (HELO 2af0a69ca4e0) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 08 Oct 2022 21:23:42 -0700
+Received: from kbuild by 2af0a69ca4e0 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ohNqo-0000ky-0X;
+        Sun, 09 Oct 2022 04:23:42 +0000
+Date:   Sun, 9 Oct 2022 12:22:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [djbw-nvdimm:libnvdimm-pending 14/20] include/linux/dax.h:330:24:
+ error: 'PMD_SHIFT' undeclared; did you mean 'PUD_SHIFT'?
+Message-ID: <202210091230.HvoN3fuJ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/mixed; boundary="+Rprm4lyQMMrThvi"
 Content-Disposition: inline
-In-Reply-To: <Y0IsXXYnS4DnWkMW@mail.google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,UPPERCASE_50_75 autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 03:05:17PM +1300, Paulo Miguel Almeida wrote:
-> On Sat, Oct 08, 2022 at 05:18:35PM -0700, Kees Cook wrote:
-> > This is allocating 1 more byte than before, since the struct size didn't change. But this has always allocated too much space, due to the struct padding. For a "no binary changes" patch, the above "+ 1" needs to be left off.
-> 
-> That's true. I agree that leaving "+ 1" would work and produce a
-> no-binary-changes patch due to the existing padding that the structure
-> has. OTOH, I thought that relying on that space could bite us in the
-> future if anyone tweaks the struct again...so my reaction was to ensure 
-> that the NUL-terminator space was always guaranteed to be there.
-> Hence, the change on c693 (objdump above).
-> 
-> What do you think? Should we keep or leave the above
-> "+ 1" after the rationale above?
 
-I think it depends on what's expected from this allocation. Christine or
-David, can you speak to this?
+--+Rprm4lyQMMrThvi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> > I would expect the correct allocation size to be:
-> > offsetof(typeof(*ls), ls_name) + namelen
-> 
-> Fair point, I will make this change.
+Hi Dan,
 
-Well, only do that if we don't depend on the padding nor a trailing
-%NUL. :)
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-> > Question, though: is ls_name _expected_ to be %NUL terminated
-> 
-> Yes, it is. I tracked down ls_name's utilisations and it is passed down to 
-> a bunch of routines that expects it to be NUL-terminated such as
-> snprintf and vsnprintf.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git libnvdimm-pending
+head:   911d658201acc386472f976e5fd2d48b9e45fdce
+commit: 13b7b0af2665d99f48a1888edb2636a222523f04 [14/20] devdax: Move address_space helpers to the DAX core
+config: m68k-allnoconfig
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git/commit/?id=13b7b0af2665d99f48a1888edb2636a222523f04
+        git remote add djbw-nvdimm https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git
+        git fetch --no-tags djbw-nvdimm libnvdimm-pending
+        git checkout 13b7b0af2665d99f48a1888edb2636a222523f04
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
-Agreed: I see the string functions it gets passed to. So, then the next
-question I have is does "namelen" take into account the %NUL, and is
-"name" %NUL terminated? Those answers appear to be "no" and "yes",
-respectively:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-static int new_lockspace(const char *name, ...)
-{
-	...
-        int namelen = strlen(name);
+All errors (new ones prefixed by >>):
+
+   In file included from mm/readahead.c:118:
+   include/linux/dax.h: In function 'pe_order':
+>> include/linux/dax.h:330:24: error: 'PMD_SHIFT' undeclared (first use in this function); did you mean 'PUD_SHIFT'?
+     330 |                 return PMD_SHIFT - PAGE_SHIFT;
+         |                        ^~~~~~~~~
+         |                        PUD_SHIFT
+   include/linux/dax.h:330:24: note: each undeclared identifier is reported only once for each function it appears in
+   In file included from include/asm-generic/pgtable-nopud.h:7,
+                    from arch/m68k/include/asm/pgtable_no.h:5,
+                    from arch/m68k/include/asm/pgtable.h:3,
+                    from include/linux/pgtable.h:6,
+                    from include/linux/mm.h:29,
+                    from arch/m68k/include/asm/cacheflush_no.h:8,
+                    from arch/m68k/include/asm/cacheflush.h:3,
+                    from include/linux/cacheflush.h:5,
+                    from include/linux/highmem.h:8,
+                    from include/linux/bvec.h:10,
+                    from include/linux/blk_types.h:10,
+                    from include/linux/blkdev.h:9,
+                    from mm/readahead.c:116:
+>> include/asm-generic/pgtable-nop4d.h:11:33: error: 'PGDIR_SHIFT' undeclared (first use in this function); did you mean 'PUD_SHIFT'?
+      11 | #define P4D_SHIFT               PGDIR_SHIFT
+         |                                 ^~~~~~~~~~~
+   include/asm-generic/pgtable-nopud.h:18:25: note: in expansion of macro 'P4D_SHIFT'
+      18 | #define PUD_SHIFT       P4D_SHIFT
+         |                         ^~~~~~~~~
+   include/linux/dax.h:332:24: note: in expansion of macro 'PUD_SHIFT'
+     332 |                 return PUD_SHIFT - PAGE_SHIFT;
+         |                        ^~~~~~~~~
 
 
-The comparisons for ls->ls_namelen are all done without the %NUL count:
+vim +330 include/linux/dax.h
 
-                if (ls->ls_namelen != namelen)
-                        continue;
-                if (memcmp(ls->ls_name, name, namelen))
-                        continue;
-
-> >, and was the prior 3 bytes of extra allocation accidentally required?
-> > 
-> 
-> I am assuming that you are refering to ls_namelen in the struct dlm_ls
-> (please correct me if this isn't what you meant).
-
-No, I meant ls_name (the pahole output shows the trailing 3 bytes of
-padding before. And with your patch it becomes 4 bytes of trailing
-padding.
-
-So I think this is "accidentally correct", since it's so carefully using
-memcmp() and not strcmp().
-
-Given the existing padding on the structure, through, it likely needs
-to keep a certain amount of minimum padding.
-
-original size was actually this, so you could use this for the new
-calculation to get the same values as before:
-
-	offsetof(typeof(*ls), ls_name) + 4 + namelen;
-
-In reality, it may be possible to do this to get exactly what is needed,
-but no less than the struct itself:
-
-	max(offsetof(typeof(*ls), ls_name) + 1 + namelen, sizeof(*ls));
-
--Kees
+   324	
+   325	static inline unsigned int pe_order(enum page_entry_size pe_size)
+   326	{
+   327		if (pe_size == PE_SIZE_PTE)
+   328			return PAGE_SHIFT - PAGE_SHIFT;
+   329		if (pe_size == PE_SIZE_PMD)
+ > 330			return PMD_SHIFT - PAGE_SHIFT;
+   331		if (pe_size == PE_SIZE_PUD)
+   332			return PUD_SHIFT - PAGE_SHIFT;
+   333		return ~0;
+   334	}
+   335	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://01.org/lkp
+
+--+Rprm4lyQMMrThvi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename=config
+
+#
+# Automatically generated file; DO NOT EDIT.
+# Linux/m68k 6.0.0-rc3 Kernel Configuration
+#
+CONFIG_CC_VERSION_TEXT="m68k-linux-gcc (GCC) 12.1.0"
+CONFIG_CC_IS_GCC=y
+CONFIG_GCC_VERSION=120100
+CONFIG_CLANG_VERSION=0
+CONFIG_AS_IS_GNU=y
+CONFIG_AS_VERSION=23800
+CONFIG_LD_IS_BFD=y
+CONFIG_LD_VERSION=23800
+CONFIG_LLD_VERSION=0
+CONFIG_CC_HAS_ASM_INLINE=y
+CONFIG_CC_HAS_NO_PROFILE_FN_ATTR=y
+CONFIG_PAHOLE_VERSION=123
+CONFIG_IRQ_WORK=y
+
+#
+# General setup
+#
+CONFIG_BROKEN_ON_SMP=y
+CONFIG_INIT_ENV_ARG_LIMIT=32
+# CONFIG_COMPILE_TEST is not set
+# CONFIG_WERROR is not set
+CONFIG_LOCALVERSION=""
+# CONFIG_LOCALVERSION_AUTO is not set
+CONFIG_BUILD_SALT=""
+CONFIG_DEFAULT_INIT=""
+CONFIG_DEFAULT_HOSTNAME="(none)"
+# CONFIG_SYSVIPC is not set
+# CONFIG_WATCH_QUEUE is not set
+# CONFIG_USELIB is not set
+
+#
+# IRQ subsystem
+#
+CONFIG_GENERIC_IRQ_SHOW=y
+# end of IRQ subsystem
+
+CONFIG_GENERIC_CLOCKEVENTS=y
+
+#
+# Timers subsystem
+#
+CONFIG_HZ_PERIODIC=y
+# CONFIG_NO_HZ_IDLE is not set
+# CONFIG_NO_HZ is not set
+# CONFIG_HIGH_RES_TIMERS is not set
+# end of Timers subsystem
+
+#
+# BPF subsystem
+#
+# CONFIG_BPF_SYSCALL is not set
+# end of BPF subsystem
+
+CONFIG_PREEMPT_NONE_BUILD=y
+CONFIG_PREEMPT_NONE=y
+# CONFIG_PREEMPT_VOLUNTARY is not set
+# CONFIG_PREEMPT is not set
+
+#
+# CPU/Task time and stats accounting
+#
+CONFIG_TICK_CPU_ACCOUNTING=y
+# CONFIG_BSD_PROCESS_ACCT is not set
+# CONFIG_PSI is not set
+# end of CPU/Task time and stats accounting
+
+#
+# RCU Subsystem
+#
+CONFIG_TINY_RCU=y
+# CONFIG_RCU_EXPERT is not set
+CONFIG_SRCU=y
+CONFIG_TINY_SRCU=y
+# end of RCU Subsystem
+
+# CONFIG_IKCONFIG is not set
+# CONFIG_IKHEADERS is not set
+CONFIG_LOG_BUF_SHIFT=17
+CONFIG_PRINTK_SAFE_LOG_BUF_SHIFT=13
+
+#
+# Scheduler features
+#
+# end of Scheduler features
+
+CONFIG_CC_IMPLICIT_FALLTHROUGH="-Wimplicit-fallthrough=5"
+CONFIG_GCC12_NO_ARRAY_BOUNDS=y
+CONFIG_CC_NO_ARRAY_BOUNDS=y
+# CONFIG_CGROUPS is not set
+CONFIG_NAMESPACES=y
+# CONFIG_UTS_NS is not set
+# CONFIG_USER_NS is not set
+# CONFIG_PID_NS is not set
+# CONFIG_CHECKPOINT_RESTORE is not set
+# CONFIG_SCHED_AUTOGROUP is not set
+# CONFIG_SYSFS_DEPRECATED is not set
+# CONFIG_RELAY is not set
+# CONFIG_BLK_DEV_INITRD is not set
+# CONFIG_BOOT_CONFIG is not set
+# CONFIG_INITRAMFS_PRESERVE_MTIME is not set
+CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=y
+# CONFIG_CC_OPTIMIZE_FOR_SIZE is not set
+CONFIG_SYSCTL=y
+CONFIG_HAVE_UID16=y
+# CONFIG_EXPERT is not set
+CONFIG_UID16=y
+CONFIG_MULTIUSER=y
+CONFIG_SGETMASK_SYSCALL=y
+CONFIG_SYSFS_SYSCALL=y
+CONFIG_FHANDLE=y
+CONFIG_POSIX_TIMERS=y
+CONFIG_PRINTK=y
+CONFIG_BUG=y
+CONFIG_ELF_CORE=y
+CONFIG_BASE_FULL=y
+CONFIG_FUTEX=y
+CONFIG_FUTEX_PI=y
+CONFIG_EPOLL=y
+CONFIG_SIGNALFD=y
+CONFIG_TIMERFD=y
+CONFIG_EVENTFD=y
+CONFIG_AIO=y
+CONFIG_IO_URING=y
+CONFIG_ADVISE_SYSCALLS=y
+CONFIG_MEMBARRIER=y
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+# CONFIG_EMBEDDED is not set
+
+#
+# Kernel Performance Events And Counters
+#
+# end of Kernel Performance Events And Counters
+
+# CONFIG_PROFILING is not set
+# end of General setup
+
+CONFIG_M68K=y
+CONFIG_CPU_BIG_ENDIAN=y
+CONFIG_GENERIC_HWEIGHT=y
+CONFIG_GENERIC_CALIBRATE_DELAY=y
+CONFIG_GENERIC_CSUM=y
+CONFIG_TIME_LOW_RES=y
+CONFIG_NO_IOPORT_MAP=y
+CONFIG_HZ=100
+CONFIG_PGTABLE_LEVELS=2
+# CONFIG_MMU is not set
+
+#
+# Platform setup
+#
+
+#
+# Processor Type
+#
+# CONFIG_M68KCLASSIC is not set
+CONFIG_COLDFIRE=y
+# CONFIG_M5206 is not set
+# CONFIG_M5206e is not set
+CONFIG_M520x=y
+# CONFIG_M523x is not set
+# CONFIG_M5249 is not set
+# CONFIG_M525x is not set
+# CONFIG_M5271 is not set
+# CONFIG_M5272 is not set
+# CONFIG_M5275 is not set
+# CONFIG_M528x is not set
+# CONFIG_M5307 is not set
+# CONFIG_M532x is not set
+# CONFIG_M537x is not set
+# CONFIG_M5407 is not set
+# CONFIG_M547x is not set
+# CONFIG_M548x is not set
+# CONFIG_M5441x is not set
+CONFIG_COLDFIRE_PIT_TIMER=y
+
+#
+# Processor Specific Options
+#
+CONFIG_ARCH_FORCE_MAX_ORDER=11
+CONFIG_CPU_HAS_NO_BITFIELDS=y
+CONFIG_CPU_HAS_NO_CAS=y
+CONFIG_CPU_HAS_NO_MULDIV64=y
+CONFIG_HAVE_CACHE_SPLIT=y
+CONFIG_CLOCK_FREQ=166666666
+CONFIG_CACHE_I=y
+# CONFIG_CACHE_D is not set
+# CONFIG_CACHE_BOTH is not set
+
+#
+# Machine Types
+#
+
+#
+# Machine Options
+#
+# CONFIG_UBOOT is not set
+# CONFIG_4KSTACKS is not set
+
+#
+# RAM configuration
+#
+CONFIG_RAMBASE=0
+CONFIG_RAMSIZE=0x400000
+CONFIG_VECTORBASE=0
+CONFIG_KERNELBASE=0x400
+
+#
+# ROM configuration
+#
+# CONFIG_ROM is not set
+CONFIG_RAMKERNEL=y
+# end of Platform setup
+
+#
+# Kernel Features
+#
+# end of Kernel Features
+
+#
+# Power management options
+#
+# CONFIG_PM is not set
+# end of Power management options
+
+#
+# General architecture-dependent options
+#
+CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS=y
+CONFIG_ARCH_32BIT_OFF_T=y
+CONFIG_HAVE_ASM_MODVERSIONS=y
+CONFIG_ARCH_WANT_IPC_PARSE_VERSION=y
+CONFIG_LTO_NONE=y
+CONFIG_HAVE_MOD_ARCH_SPECIFIC=y
+CONFIG_MODULES_USE_ELF_RELA=y
+CONFIG_MODULES_USE_ELF_REL=y
+CONFIG_PAGE_SIZE_LESS_THAN_64KB=y
+CONFIG_PAGE_SIZE_LESS_THAN_256KB=y
+CONFIG_OLD_SIGSUSPEND3=y
+CONFIG_OLD_SIGACTION=y
+# CONFIG_COMPAT_32BIT_TIME is not set
+
+#
+# GCOV-based kernel profiling
+#
+# end of GCOV-based kernel profiling
+# end of General architecture-dependent options
+
+CONFIG_RT_MUTEXES=y
+CONFIG_BASE_SMALL=0
+# CONFIG_MODULES is not set
+CONFIG_BLOCK=y
+# CONFIG_BLOCK_LEGACY_AUTOLOAD is not set
+# CONFIG_BLK_DEV_BSGLIB is not set
+# CONFIG_BLK_DEV_INTEGRITY is not set
+# CONFIG_BLK_DEV_ZONED is not set
+# CONFIG_BLK_WBT is not set
+# CONFIG_BLK_SED_OPAL is not set
+# CONFIG_BLK_INLINE_ENCRYPTION is not set
+
+#
+# Partition Types
+#
+# CONFIG_PARTITION_ADVANCED is not set
+CONFIG_MSDOS_PARTITION=y
+CONFIG_EFI_PARTITION=y
+# end of Partition Types
+
+#
+# IO Schedulers
+#
+# CONFIG_MQ_IOSCHED_DEADLINE is not set
+# CONFIG_MQ_IOSCHED_KYBER is not set
+# CONFIG_IOSCHED_BFQ is not set
+# end of IO Schedulers
+
+CONFIG_INLINE_SPIN_UNLOCK_IRQ=y
+CONFIG_INLINE_READ_UNLOCK=y
+CONFIG_INLINE_READ_UNLOCK_IRQ=y
+CONFIG_INLINE_WRITE_UNLOCK=y
+CONFIG_INLINE_WRITE_UNLOCK_IRQ=y
+
+#
+# Executable file formats
+#
+# CONFIG_BINFMT_ELF_FDPIC is not set
+# CONFIG_BINFMT_SCRIPT is not set
+CONFIG_ARCH_HAS_BINFMT_FLAT=y
+# CONFIG_BINFMT_FLAT is not set
+CONFIG_BINFMT_FLAT_ARGVP_ENVP_ON_STACK=y
+# CONFIG_BINFMT_MISC is not set
+CONFIG_COREDUMP=y
+# end of Executable file formats
+
+#
+# Memory Management options
+#
+
+#
+# SLAB allocator options
+#
+# CONFIG_SLAB is not set
+CONFIG_SLUB=y
+# CONFIG_SLAB_MERGE_DEFAULT is not set
+# CONFIG_SLAB_FREELIST_RANDOM is not set
+# CONFIG_SLAB_FREELIST_HARDENED is not set
+# CONFIG_SLUB_STATS is not set
+# end of SLAB allocator options
+
+# CONFIG_SHUFFLE_PAGE_ALLOCATOR is not set
+# CONFIG_COMPAT_BRK is not set
+CONFIG_FLATMEM=y
+CONFIG_EXCLUSIVE_SYSTEM_RAM=y
+CONFIG_SPLIT_PTLOCK_CPUS=999999
+# CONFIG_PAGE_REPORTING is not set
+CONFIG_NOMMU_INITIAL_TRIM_EXCESS=1
+CONFIG_NEED_PER_CPU_KM=y
+CONFIG_ARCH_HAS_CURRENT_STACK_POINTER=y
+CONFIG_ZONE_DMA=y
+CONFIG_VM_EVENT_COUNTERS=y
+# CONFIG_PERCPU_STATS is not set
+
+#
+# GUP_TEST needs to have DEBUG_FS enabled
+#
+
+#
+# Data Access Monitoring
+#
+# CONFIG_DAMON is not set
+# end of Data Access Monitoring
+# end of Memory Management options
+
+# CONFIG_NET is not set
+
+#
+# Device Drivers
+#
+# CONFIG_PCCARD is not set
+
+#
+# Generic Driver Options
+#
+# CONFIG_UEVENT_HELPER is not set
+# CONFIG_DEVTMPFS is not set
+# CONFIG_STANDALONE is not set
+# CONFIG_PREVENT_FIRMWARE_BUILD is not set
+
+#
+# Firmware loader
+#
+CONFIG_FW_LOADER=y
+CONFIG_EXTRA_FIRMWARE=""
+# CONFIG_FW_LOADER_USER_HELPER is not set
+# CONFIG_FW_LOADER_COMPRESS is not set
+# CONFIG_FW_UPLOAD is not set
+# end of Firmware loader
+
+CONFIG_ALLOW_DEV_COREDUMP=y
+CONFIG_GENERIC_CPU_DEVICES=y
+# end of Generic Driver Options
+
+#
+# Bus devices
+#
+# CONFIG_MHI_BUS is not set
+# CONFIG_MHI_BUS_EP is not set
+# end of Bus devices
+
+#
+# Firmware Drivers
+#
+
+#
+# ARM System Control and Management Interface Protocol
+#
+# end of ARM System Control and Management Interface Protocol
+
+# CONFIG_GOOGLE_FIRMWARE is not set
+
+#
+# Tegra firmware driver
+#
+# end of Tegra firmware driver
+# end of Firmware Drivers
+
+# CONFIG_GNSS is not set
+# CONFIG_MTD is not set
+# CONFIG_OF is not set
+# CONFIG_PARPORT is not set
+# CONFIG_BLK_DEV is not set
+
+#
+# NVME Support
+#
+# CONFIG_NVME_FC is not set
+# end of NVME Support
+
+#
+# Misc devices
+#
+# CONFIG_DUMMY_IRQ is not set
+# CONFIG_ENCLOSURE_SERVICES is not set
+# CONFIG_SRAM is not set
+# CONFIG_XILINX_SDFEC is not set
+# CONFIG_C2PORT is not set
+
+#
+# EEPROM support
+#
+# CONFIG_EEPROM_93CX6 is not set
+# end of EEPROM support
+
+#
+# Texas Instruments shared transport line discipline
+#
+# end of Texas Instruments shared transport line discipline
+
+#
+# Altera FPGA firmware download module (requires I2C)
+#
+# CONFIG_ECHO is not set
+# CONFIG_PVPANIC is not set
+# end of Misc devices
+
+#
+# SCSI device support
+#
+CONFIG_SCSI_MOD=y
+# CONFIG_RAID_ATTRS is not set
+# CONFIG_SCSI is not set
+# end of SCSI device support
+
+# CONFIG_ATA is not set
+# CONFIG_MD is not set
+# CONFIG_TARGET_CORE is not set
+
+#
+# Input device support
+#
+CONFIG_INPUT=y
+# CONFIG_INPUT_FF_MEMLESS is not set
+# CONFIG_INPUT_SPARSEKMAP is not set
+# CONFIG_INPUT_MATRIXKMAP is not set
+
+#
+# Userland interfaces
+#
+# CONFIG_INPUT_MOUSEDEV is not set
+# CONFIG_INPUT_JOYDEV is not set
+# CONFIG_INPUT_EVDEV is not set
+# CONFIG_INPUT_EVBUG is not set
+
+#
+# Input Device Drivers
+#
+# CONFIG_INPUT_KEYBOARD is not set
+# CONFIG_INPUT_MOUSE is not set
+# CONFIG_INPUT_JOYSTICK is not set
+# CONFIG_INPUT_TABLET is not set
+# CONFIG_INPUT_TOUCHSCREEN is not set
+# CONFIG_INPUT_MISC is not set
+# CONFIG_RMI4_CORE is not set
+
+#
+# Hardware I/O ports
+#
+# CONFIG_SERIO is not set
+# CONFIG_GAMEPORT is not set
+# end of Hardware I/O ports
+# end of Input device support
+
+#
+# Character devices
+#
+CONFIG_TTY=y
+CONFIG_VT=y
+CONFIG_CONSOLE_TRANSLATIONS=y
+CONFIG_VT_CONSOLE=y
+CONFIG_HW_CONSOLE=y
+# CONFIG_VT_HW_CONSOLE_BINDING is not set
+CONFIG_UNIX98_PTYS=y
+# CONFIG_LEGACY_PTYS is not set
+# CONFIG_LDISC_AUTOLOAD is not set
+
+#
+# Serial drivers
+#
+# CONFIG_SERIAL_8250 is not set
+
+#
+# Non-8250 serial port support
+#
+# CONFIG_SERIAL_UARTLITE is not set
+# CONFIG_SERIAL_MCF is not set
+# CONFIG_SERIAL_SCCNXP is not set
+# CONFIG_SERIAL_ALTERA_JTAGUART is not set
+# CONFIG_SERIAL_ALTERA_UART is not set
+# CONFIG_SERIAL_ARC is not set
+# CONFIG_SERIAL_FSL_LPUART is not set
+# CONFIG_SERIAL_FSL_LINFLEXUART is not set
+# end of Serial drivers
+
+# CONFIG_SERIAL_NONSTANDARD is not set
+# CONFIG_NULL_TTY is not set
+# CONFIG_SERIAL_DEV_BUS is not set
+# CONFIG_VIRTIO_CONSOLE is not set
+# CONFIG_IPMI_HANDLER is not set
+# CONFIG_HW_RANDOM is not set
+# CONFIG_DEVMEM is not set
+# CONFIG_TCG_TPM is not set
+# CONFIG_RANDOM_TRUST_CPU is not set
+# CONFIG_RANDOM_TRUST_BOOTLOADER is not set
+# end of Character devices
+
+#
+# I2C support
+#
+# CONFIG_I2C is not set
+# end of I2C support
+
+# CONFIG_I3C is not set
+# CONFIG_SPI is not set
+# CONFIG_SPMI is not set
+# CONFIG_HSI is not set
+# CONFIG_PPS is not set
+
+#
+# PTP clock support
+#
+CONFIG_PTP_1588_CLOCK_OPTIONAL=y
+
+#
+# Enable PHYLIB and NETWORK_PHY_TIMESTAMPING to see the additional clocks.
+#
+# end of PTP clock support
+
+# CONFIG_PINCTRL is not set
+CONFIG_ARCH_HAVE_CUSTOM_GPIO_H=y
+CONFIG_GPIOLIB=y
+CONFIG_GPIOLIB_FASTPATH_LIMIT=512
+CONFIG_GPIO_CDEV=y
+# CONFIG_GPIO_CDEV_V1 is not set
+
+#
+# Memory mapped GPIO drivers
+#
+# CONFIG_GPIO_DWAPB is not set
+# CONFIG_GPIO_GENERIC_PLATFORM is not set
+# CONFIG_GPIO_MB86S7X is not set
+# CONFIG_GPIO_AMD_FCH is not set
+# end of Memory mapped GPIO drivers
+
+#
+# MFD GPIO expanders
+#
+# end of MFD GPIO expanders
+
+#
+# Virtual GPIO drivers
+#
+# CONFIG_GPIO_AGGREGATOR is not set
+# CONFIG_GPIO_MOCKUP is not set
+# CONFIG_GPIO_SIM is not set
+# end of Virtual GPIO drivers
+
+# CONFIG_W1 is not set
+# CONFIG_POWER_RESET is not set
+# CONFIG_POWER_SUPPLY is not set
+# CONFIG_HWMON is not set
+# CONFIG_THERMAL is not set
+# CONFIG_WATCHDOG is not set
+CONFIG_SSB_POSSIBLE=y
+# CONFIG_SSB is not set
+CONFIG_BCMA_POSSIBLE=y
+# CONFIG_BCMA is not set
+
+#
+# Multifunction device drivers
+#
+# CONFIG_MFD_MADERA is not set
+# CONFIG_HTC_PASIC3 is not set
+# CONFIG_MFD_KEMPLD is not set
+# CONFIG_MFD_MT6397 is not set
+# CONFIG_MFD_SM501 is not set
+# CONFIG_MFD_SYSCON is not set
+# CONFIG_MFD_TI_AM335X_TSCADC is not set
+# CONFIG_MFD_TQMX86 is not set
+# end of Multifunction device drivers
+
+# CONFIG_REGULATOR is not set
+# CONFIG_RC_CORE is not set
+
+#
+# CEC support
+#
+# CONFIG_MEDIA_CEC_SUPPORT is not set
+# end of CEC support
+
+# CONFIG_MEDIA_SUPPORT is not set
+
+#
+# Graphics support
+#
+# CONFIG_DRM is not set
+
+#
+# ARM devices
+#
+# end of ARM devices
+
+#
+# Frame buffer Devices
+#
+# CONFIG_FB is not set
+# end of Frame buffer Devices
+
+#
+# Backlight & LCD device support
+#
+# CONFIG_LCD_CLASS_DEVICE is not set
+# CONFIG_BACKLIGHT_CLASS_DEVICE is not set
+# end of Backlight & LCD device support
+
+#
+# Console display driver support
+#
+CONFIG_DUMMY_CONSOLE=y
+CONFIG_DUMMY_CONSOLE_COLUMNS=80
+CONFIG_DUMMY_CONSOLE_ROWS=25
+# end of Console display driver support
+# end of Graphics support
+
+# CONFIG_SOUND is not set
+
+#
+# HID support
+#
+# CONFIG_HID is not set
+# end of HID support
+
+CONFIG_USB_OHCI_LITTLE_ENDIAN=y
+# CONFIG_USB_SUPPORT is not set
+# CONFIG_MMC is not set
+# CONFIG_MEMSTICK is not set
+# CONFIG_NEW_LEDS is not set
+# CONFIG_ACCESSIBILITY is not set
+# CONFIG_RTC_CLASS is not set
+# CONFIG_DMADEVICES is not set
+
+#
+# DMABUF options
+#
+# CONFIG_SYNC_FILE is not set
+# CONFIG_DMABUF_HEAPS is not set
+# end of DMABUF options
+
+# CONFIG_AUXDISPLAY is not set
+# CONFIG_VFIO is not set
+# CONFIG_VIRT_DRIVERS is not set
+# CONFIG_VIRTIO_MENU is not set
+# CONFIG_VHOST_MENU is not set
+
+#
+# Microsoft Hyper-V guest support
+#
+# end of Microsoft Hyper-V guest support
+
+# CONFIG_GREYBUS is not set
+# CONFIG_COMEDI is not set
+# CONFIG_STAGING is not set
+# CONFIG_GOLDFISH is not set
+CONFIG_HAVE_CLK=y
+CONFIG_HAVE_LEGACY_CLK=y
+# CONFIG_HWSPINLOCK is not set
+
+#
+# Clock Source drivers
+#
+# end of Clock Source drivers
+
+# CONFIG_MAILBOX is not set
+
+#
+# Remoteproc drivers
+#
+# CONFIG_REMOTEPROC is not set
+# end of Remoteproc drivers
+
+#
+# Rpmsg drivers
+#
+# CONFIG_RPMSG_VIRTIO is not set
+# end of Rpmsg drivers
+
+#
+# SOC (System On Chip) specific Drivers
+#
+
+#
+# Amlogic SoC drivers
+#
+# end of Amlogic SoC drivers
+
+#
+# Broadcom SoC drivers
+#
+# end of Broadcom SoC drivers
+
+#
+# NXP/Freescale QorIQ SoC drivers
+#
+# end of NXP/Freescale QorIQ SoC drivers
+
+#
+# fujitsu SoC drivers
+#
+# end of fujitsu SoC drivers
+
+#
+# i.MX SoC drivers
+#
+# end of i.MX SoC drivers
+
+#
+# Enable LiteX SoC Builder specific drivers
+#
+# end of Enable LiteX SoC Builder specific drivers
+
+#
+# Qualcomm SoC drivers
+#
+# end of Qualcomm SoC drivers
+
+# CONFIG_SOC_TI is not set
+
+#
+# Xilinx SoC drivers
+#
+# end of Xilinx SoC drivers
+# end of SOC (System On Chip) specific Drivers
+
+# CONFIG_PM_DEVFREQ is not set
+# CONFIG_EXTCON is not set
+# CONFIG_MEMORY is not set
+# CONFIG_IIO is not set
+# CONFIG_PWM is not set
+
+#
+# IRQ chip support
+#
+# end of IRQ chip support
+
+# CONFIG_IPACK_BUS is not set
+# CONFIG_RESET_CONTROLLER is not set
+
+#
+# PHY Subsystem
+#
+# CONFIG_GENERIC_PHY is not set
+# CONFIG_PHY_CAN_TRANSCEIVER is not set
+
+#
+# PHY drivers for Broadcom platforms
+#
+# CONFIG_BCM_KONA_USB2_PHY is not set
+# end of PHY drivers for Broadcom platforms
+
+# CONFIG_PHY_PXA_28NM_HSIC is not set
+# CONFIG_PHY_PXA_28NM_USB2 is not set
+# end of PHY Subsystem
+
+# CONFIG_POWERCAP is not set
+# CONFIG_MCB is not set
+# CONFIG_RAS is not set
+
+#
+# Android
+#
+# end of Android
+
+# CONFIG_NVMEM is not set
+
+#
+# HW tracing support
+#
+# CONFIG_STM is not set
+# CONFIG_INTEL_TH is not set
+# end of HW tracing support
+
+# CONFIG_FPGA is not set
+# CONFIG_SIOX is not set
+# CONFIG_SLIMBUS is not set
+# CONFIG_INTERCONNECT is not set
+# CONFIG_COUNTER is not set
+# CONFIG_PECI is not set
+# CONFIG_HTE is not set
+# end of Device Drivers
+
+#
+# File systems
+#
+# CONFIG_VALIDATE_FS_PARSER is not set
+# CONFIG_EXT2_FS is not set
+# CONFIG_EXT3_FS is not set
+# CONFIG_EXT4_FS is not set
+# CONFIG_REISERFS_FS is not set
+# CONFIG_JFS_FS is not set
+# CONFIG_XFS_FS is not set
+# CONFIG_GFS2_FS is not set
+# CONFIG_BTRFS_FS is not set
+# CONFIG_NILFS2_FS is not set
+# CONFIG_F2FS_FS is not set
+CONFIG_EXPORTFS=y
+# CONFIG_EXPORTFS_BLOCK_OPS is not set
+CONFIG_FILE_LOCKING=y
+# CONFIG_FS_ENCRYPTION is not set
+# CONFIG_FS_VERITY is not set
+# CONFIG_DNOTIFY is not set
+# CONFIG_INOTIFY_USER is not set
+# CONFIG_FANOTIFY is not set
+# CONFIG_QUOTA is not set
+# CONFIG_AUTOFS4_FS is not set
+# CONFIG_AUTOFS_FS is not set
+# CONFIG_FUSE_FS is not set
+# CONFIG_OVERLAY_FS is not set
+
+#
+# Caches
+#
+# CONFIG_FSCACHE is not set
+# end of Caches
+
+#
+# CD-ROM/DVD Filesystems
+#
+# CONFIG_ISO9660_FS is not set
+# CONFIG_UDF_FS is not set
+# end of CD-ROM/DVD Filesystems
+
+#
+# DOS/FAT/EXFAT/NT Filesystems
+#
+# CONFIG_MSDOS_FS is not set
+# CONFIG_VFAT_FS is not set
+# CONFIG_EXFAT_FS is not set
+# CONFIG_NTFS_FS is not set
+# CONFIG_NTFS3_FS is not set
+# end of DOS/FAT/EXFAT/NT Filesystems
+
+#
+# Pseudo filesystems
+#
+CONFIG_PROC_FS=y
+CONFIG_PROC_SYSCTL=y
+# CONFIG_PROC_CHILDREN is not set
+CONFIG_KERNFS=y
+CONFIG_SYSFS=y
+# CONFIG_CONFIGFS_FS is not set
+# end of Pseudo filesystems
+
+# CONFIG_MISC_FILESYSTEMS is not set
+# CONFIG_NLS is not set
+# CONFIG_UNICODE is not set
+CONFIG_IO_WQ=y
+# end of File systems
+
+#
+# Security options
+#
+# CONFIG_KEYS is not set
+# CONFIG_SECURITY_DMESG_RESTRICT is not set
+# CONFIG_SECURITY is not set
+# CONFIG_SECURITYFS is not set
+CONFIG_HAVE_HARDENED_USERCOPY_ALLOCATOR=y
+# CONFIG_HARDENED_USERCOPY is not set
+# CONFIG_STATIC_USERMODEHELPER is not set
+CONFIG_DEFAULT_SECURITY_DAC=y
+CONFIG_LSM="landlock,lockdown,yama,loadpin,safesetid,integrity,bpf"
+
+#
+# Kernel hardening options
+#
+
+#
+# Memory initialization
+#
+CONFIG_CC_HAS_AUTO_VAR_INIT_PATTERN=y
+CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO=y
+# CONFIG_INIT_STACK_NONE is not set
+# CONFIG_INIT_STACK_ALL_PATTERN is not set
+CONFIG_INIT_STACK_ALL_ZERO=y
+# CONFIG_INIT_ON_ALLOC_DEFAULT_ON is not set
+# CONFIG_INIT_ON_FREE_DEFAULT_ON is not set
+CONFIG_CC_HAS_ZERO_CALL_USED_REGS=y
+# CONFIG_ZERO_CALL_USED_REGS is not set
+# end of Memory initialization
+
+CONFIG_RANDSTRUCT_NONE=y
+# end of Kernel hardening options
+# end of Security options
+
+# CONFIG_CRYPTO is not set
+
+#
+# Library routines
+#
+# CONFIG_PACKING is not set
+CONFIG_BITREVERSE=y
+CONFIG_GENERIC_STRNCPY_FROM_USER=y
+CONFIG_GENERIC_STRNLEN_USER=y
+# CONFIG_CORDIC is not set
+# CONFIG_PRIME_NUMBERS is not set
+CONFIG_GENERIC_PCI_IOMAP=y
+CONFIG_GENERIC_IOMAP=y
+
+#
+# Crypto library routines
+#
+CONFIG_CRYPTO_LIB_BLAKE2S_GENERIC=y
+# CONFIG_CRYPTO_LIB_CURVE25519 is not set
+CONFIG_CRYPTO_LIB_POLY1305_RSIZE=1
+# CONFIG_CRYPTO_LIB_POLY1305 is not set
+# end of Crypto library routines
+
+# CONFIG_CRC_CCITT is not set
+# CONFIG_CRC16 is not set
+# CONFIG_CRC_T10DIF is not set
+# CONFIG_CRC64_ROCKSOFT is not set
+# CONFIG_CRC_ITU_T is not set
+CONFIG_CRC32=y
+# CONFIG_CRC32_SELFTEST is not set
+CONFIG_CRC32_SLICEBY8=y
+# CONFIG_CRC32_SLICEBY4 is not set
+# CONFIG_CRC32_SARWATE is not set
+# CONFIG_CRC32_BIT is not set
+# CONFIG_CRC64 is not set
+# CONFIG_CRC4 is not set
+# CONFIG_CRC7 is not set
+# CONFIG_LIBCRC32C is not set
+# CONFIG_CRC8 is not set
+# CONFIG_RANDOM32_SELFTEST is not set
+# CONFIG_XZ_DEC is not set
+CONFIG_HAS_IOMEM=y
+CONFIG_HAS_DMA=y
+CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE=y
+CONFIG_DMA_NONCOHERENT_MMAP=y
+# CONFIG_DMA_API_DEBUG is not set
+CONFIG_GENERIC_ATOMIC64=y
+# CONFIG_IRQ_POLL is not set
+CONFIG_UACCESS_MEMCPY=y
+CONFIG_SBITMAP=y
+# end of Library routines
+
+#
+# Kernel hacking
+#
+
+#
+# printk and dmesg options
+#
+# CONFIG_PRINTK_TIME is not set
+# CONFIG_PRINTK_CALLER is not set
+# CONFIG_STACKTRACE_BUILD_ID is not set
+CONFIG_CONSOLE_LOGLEVEL_DEFAULT=7
+CONFIG_CONSOLE_LOGLEVEL_QUIET=4
+CONFIG_MESSAGE_LOGLEVEL_DEFAULT=4
+# CONFIG_DYNAMIC_DEBUG is not set
+# CONFIG_DYNAMIC_DEBUG_CORE is not set
+# CONFIG_SYMBOLIC_ERRNAME is not set
+CONFIG_DEBUG_BUGVERBOSE=y
+# end of printk and dmesg options
+
+# CONFIG_DEBUG_KERNEL is not set
+
+#
+# Compile-time checks and compiler options
+#
+CONFIG_FRAME_WARN=1024
+# CONFIG_STRIP_ASM_SYMS is not set
+# CONFIG_HEADERS_INSTALL is not set
+CONFIG_DEBUG_SECTION_MISMATCH=y
+CONFIG_SECTION_MISMATCH_WARN_ONLY=y
+# end of Compile-time checks and compiler options
+
+#
+# Generic Kernel Debugging Instruments
+#
+# CONFIG_MAGIC_SYSRQ is not set
+# CONFIG_DEBUG_FS is not set
+# CONFIG_UBSAN is not set
+CONFIG_HAVE_KCSAN_COMPILER=y
+# end of Generic Kernel Debugging Instruments
+
+#
+# Networking Debugging
+#
+# end of Networking Debugging
+
+#
+# Memory Debugging
+#
+# CONFIG_PAGE_EXTENSION is not set
+CONFIG_SLUB_DEBUG=y
+# CONFIG_SLUB_DEBUG_ON is not set
+# CONFIG_PAGE_POISONING is not set
+CONFIG_DEBUG_MEMORY_INIT=y
+CONFIG_CC_HAS_WORKING_NOSANITIZE_ADDRESS=y
+# end of Memory Debugging
+
+#
+# Debug Oops, Lockups and Hangs
+#
+# CONFIG_PANIC_ON_OOPS is not set
+CONFIG_PANIC_ON_OOPS_VALUE=0
+CONFIG_PANIC_TIMEOUT=0
+# end of Debug Oops, Lockups and Hangs
+
+#
+# Scheduler Debugging
+#
+# end of Scheduler Debugging
+
+# CONFIG_DEBUG_TIMEKEEPING is not set
+
+#
+# Lock Debugging (spinlocks, mutexes, etc...)
+#
+# CONFIG_WW_MUTEX_SELFTEST is not set
+# end of Lock Debugging (spinlocks, mutexes, etc...)
+
+# CONFIG_DEBUG_IRQFLAGS is not set
+# CONFIG_WARN_ALL_UNSEEDED_RANDOM is not set
+CONFIG_HAVE_DEBUG_BUGVERBOSE=y
+
+#
+# Debug kernel data structures
+#
+# CONFIG_BUG_ON_DATA_CORRUPTION is not set
+# end of Debug kernel data structures
+
+#
+# RCU Debugging
+#
+# end of RCU Debugging
+
+# CONFIG_SAMPLES is not set
+
+#
+# m68k Debugging
+#
+# CONFIG_BOOTPARAM is not set
+# CONFIG_FULLDEBUG is not set
+# CONFIG_HIGHPROFILE is not set
+# CONFIG_NO_KERNEL_MSG is not set
+# CONFIG_BDM_DISABLE is not set
+# end of m68k Debugging
+
+#
+# Kernel Testing and Coverage
+#
+# CONFIG_KUNIT is not set
+CONFIG_CC_HAS_SANCOV_TRACE_PC=y
+# CONFIG_RUNTIME_TESTING_MENU is not set
+# end of Kernel Testing and Coverage
+# end of Kernel hacking
+
+--+Rprm4lyQMMrThvi--
