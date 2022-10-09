@@ -2,89 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A92515F88CD
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 04:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B361E5F88CC
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 04:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiJICOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 22:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
+        id S229586AbiJICOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 22:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiJICOj (ORCPT
+        with ESMTP id S229553AbiJICOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 22:14:39 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B16B79
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 19:14:37 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R411e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VRgG7Hn_1665281594;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VRgG7Hn_1665281594)
-          by smtp.aliyun-inc.com;
-          Sun, 09 Oct 2022 10:14:35 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     rostedt@goodmis.org
-Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH v2] ring-buffer: Fix kernel-doc
-Date:   Sun,  9 Oct 2022 10:06:42 +0800
-Message-Id: <20221009020642.12506-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 8 Oct 2022 22:14:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2022B19B
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 19:14:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 776CD60B07
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 02:14:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C50BFC433C1;
+        Sun,  9 Oct 2022 02:14:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665281670;
+        bh=dy7V4eNdrmZ4tTaUF44dYavFWUVrwzovs1/Ad2ilers=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IfMej96wgNeEnWoFEIYz4j8Eg1S+4MmdNWVVRl659cp/KSHQboDsmpWTUYbQKZq4L
+         S3AZY0oiC1NIBH7CkYaELR89DqvSMkSfpol8U4ZhaPTYokzTPkI8g1mez240ApzFAu
+         K3AxrH2DpAHvb5+DXV1LWVSUmjhDKxjobUlHk9WKFpImBPgXiVt8VdtF3h5rvCYz5g
+         oahPu+qwqLjfWpxx3pbtHkZWA+3FhRdREjYwcuv7anhIreLBuJuRmuX/6hx8bXNeqB
+         Nk8m8oVdKJHcv4p3RXtBEQch12Hpk1XVCpy0XBVBixAEPaEmATWH10kUg8P7Atdh7t
+         UCpIxFVR+b/RA==
+Received: from [156.39.10.100] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ohLpk-00FL7T-7Q;
+        Sun, 09 Oct 2022 03:14:28 +0100
+Date:   Sun, 09 Oct 2022 03:13:29 +0100
+Message-ID: <87tu4dhhh2.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "=?utf-8?B?WmhhbmcgWGluY2hlbmc=?=" <zhangxincheng@uniontech.com>
+Cc:     "=?utf-8?B?dGdseA==?=" <tglx@linutronix.de>,
+        "=?utf-8?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>,
+        "=?utf-8?B?b2xla3NhbmRy?=" <oleksandr@natalenko.name>,
+        "=?utf-8?B?SGFucyBkZSBHb2VkZQ==?=" <hdegoede@redhat.com>,
+        "=?utf-8?B?YmlnZWFzeQ==?=" <bigeasy@linutronix.de>,
+        "=?utf-8?B?bWFyay5ydXRsYW5k?=" <mark.rutland@arm.com>,
+        "=?utf-8?B?bWljaGFlbA==?=" <michael@walle.cc>
+Subject: Re: [PATCH] interrupt: discover and disable very frequent interrupts
+In-Reply-To: <tencent_48EE20EE67D50AC81A28CAAF@qq.com>
+References: <20220930064042.14564-1-zhangxincheng@uniontech.com>
+        <86bkqx6wrd.wl-maz@kernel.org>
+        <tencent_7C4E401B708789BC3A26F57C@qq.com>
+        <868rm16tbu.wl-maz@kernel.org>
+        <tencent_48EE20EE67D50AC81A28CAAF@qq.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 156.39.10.100
+X-SA-Exim-Rcpt-To: zhangxincheng@uniontech.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, oleksandr@natalenko.name, hdegoede@redhat.com, bigeasy@linutronix.de, mark.rutland@arm.com, michael@walle.cc
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel/trace/ring_buffer.c:895: warning: expecting prototype for ring_buffer_nr_pages_dirty(). Prototype was for ring_buffer_nr_dirty_pages() instead.
-kernel/trace/ring_buffer.c:5313: warning: expecting prototype for ring_buffer_reset_cpu(). Prototype was for ring_buffer_reset_online_cpus() instead.
-kernel/trace/ring_buffer.c:5382: warning: expecting prototype for rind_buffer_empty(). Prototype was for ring_buffer_empty() instead.
+On Sun, 09 Oct 2022 02:31:36 +0100,
+"=?utf-8?B?WmhhbmcgWGluY2hlbmc=?=" <zhangxincheng@uniontech.com> wrote:
+> 
+> > Again: what makes you think that it is better to kill the interrupt
+> > than suffering a RCU stall? Yes, that's a lot of interrupts. But
+> > killing it and risking the whole system isn't an acceptable outcome.
+> 
+> It's really not good to kill interrupts directly.
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2340
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
-Changes in v2:
-  -Get rid of the parenthesis.
+I'm glad you finally agree, (202210081220.9da0a329-yujie.liu@intel.com
+has a good example of a perfectly working machine that your patch
+kills for no reason).
 
- kernel/trace/ring_buffer.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> Perhaps a better way is
+> to report it and let the system administrator decide what to do with it.
+> 
+> + if((desc->gap_count & 0xffff0000) == 0)
+> + desc->gap_time = get_jiffies_64();
+> +
+> + desc->gap_count ++;
+> +
+> + if((desc->gap_count & 0x0000ffff) >= 2000) {
+> + if((get_jiffies_64() - desc->gap_time) < HZ) {
+> + desc->gap_count += 0x00010000;
+> + desc->gap_count &= 0xffff0000;
+> + } else {
+> + desc->gap_count = 0;
+> + }
+> +
+> + if((desc->gap_count >> 16) > 30) {
+> + __report_bad_irq(desc, action_ret, KERN_ERR "irq %d: triggered too frequently\n");
+> + }
+> + }
+> +
 
-diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index c3f354cfc5ba..199759c73519 100644
---- a/kernel/trace/ring_buffer.c
-+++ b/kernel/trace/ring_buffer.c
-@@ -885,7 +885,7 @@ size_t ring_buffer_nr_pages(struct trace_buffer *buffer, int cpu)
- }
- 
- /**
-- * ring_buffer_nr_pages_dirty - get the number of used pages in the ring buffer
-+ * ring_buffer_nr_dirty_pages - get the number of used pages in the ring buffer
-  * @buffer: The ring_buffer to get the number of pages from
-  * @cpu: The cpu of the ring_buffer to get the number of pages from
-  *
-@@ -5305,7 +5305,7 @@ void ring_buffer_reset_cpu(struct trace_buffer *buffer, int cpu)
- EXPORT_SYMBOL_GPL(ring_buffer_reset_cpu);
- 
- /**
-- * ring_buffer_reset_cpu - reset a ring buffer per CPU buffer
-+ * ring_buffer_reset_online_cpus - reset a ring buffer per CPU buffer
-  * @buffer: The ring buffer to reset a per cpu buffer of
-  * @cpu: The CPU buffer to be reset
-  */
-@@ -5375,7 +5375,7 @@ void ring_buffer_reset(struct trace_buffer *buffer)
- EXPORT_SYMBOL_GPL(ring_buffer_reset);
- 
- /**
-- * rind_buffer_empty - is the ring buffer empty?
-+ * ring_buffer_empty - is the ring buffer empty?
-  * @buffer: The ring buffer to test
-  */
- bool ring_buffer_empty(struct trace_buffer *buffer)
+I don't think this is much better. You hardcode values that only make
+sense on your HW, and for nobody else. And what can the user do with
+this message? Nothing at all. The message itself only contributes to
+problem. As it is, this patch is only a nuisance.
+
+As I said before, this would be much better as a rate-limiter, with
+configurable limits, and behind a debug option.
+
+	M.
+
 -- 
-2.20.1.7.g153144c
-
+Without deviation from the norm, progress is not possible.
