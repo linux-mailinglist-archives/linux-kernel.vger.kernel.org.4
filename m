@@ -2,90 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8505F8A40
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 10:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DED045F8A42
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 11:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbiJII6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 04:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
+        id S230014AbiJIJH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 05:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbiJII6c (ORCPT
+        with ESMTP id S229995AbiJIJH1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 04:58:32 -0400
-Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21921303D4
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 01:58:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=b0MMs
-        s7QsMlVIzDQCA4Ez6OQ7gh+DTYZigg0JBslxso=; b=MWEDcK3a5nJmAXt/Xadgs
-        vujfjpzKTnqtuIgL89DhIyoVYKkEElgqG44TBe6p1nRXMv1DEA8x0Gyr5HYqlfH9
-        0GIOy0uDMmiXIpxGFcgN6tIys+Fir9zJrNPpgvSDy86UBiLdq15/Z1DjMZZW76fK
-        TYrUejTHXvEmdg0I2oHdTM=
-Received: from localhost.localdomain (unknown [116.128.244.169])
-        by smtp2 (Coremail) with SMTP id GtxpCgCXGKUhjUJjFCHAjw--.47996S2;
-        Sun, 09 Oct 2022 16:58:10 +0800 (CST)
-From:   Jiangshan Yi <13667453960@163.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH] staging: rtl8192u: fix spelling typo in comment
-Date:   Sun,  9 Oct 2022 16:57:46 +0800
-Message-Id: <20221009085746.3149599-1-13667453960@163.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 9 Oct 2022 05:07:27 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9762167EB
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 02:07:26 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id c7so8069699pgt.11
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 02:07:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OmNZ7Fvou49eeIhvfz5hM/EsgwFjPxztP9XU1GE9RsE=;
+        b=FexyzJTrCIszuDKNIyZmrwHuOIeMpJ2NrZxAGtH8ix/tVqOAo8HGuSefr2oSApIHns
+         vskIoS7yhfRz4RxCpIaU6cfjkMvun80zZuoPJi7BjV6129r0CzUu3Gee8cgfFBrhnCZn
+         f26mrzo6T62wBh+UPbUO11ZTcQ0jlCSuXu55M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OmNZ7Fvou49eeIhvfz5hM/EsgwFjPxztP9XU1GE9RsE=;
+        b=R7ezwQxVBOjfNvaveJ+ZD2K6UAAgwPHfOj0Hndb8olR7PtSOZpLKj7JEQKB+j30Upc
+         0pnubIEt+Vn5o3OSY1ifkdUTkxxZcrvumD4+V+obHJr1WQ34Kv+7V2OkKFxH6rNoSDli
+         1HtauLS16Zk7Q4dIh2og/TaeJzWAv2RaB7EFUGhiqEB+rhHvGELKc5o/MZD8HoDaEnJu
+         wWDPEwScMtKPtUzFfZRz/4nnPOvOGqMb/4W/Sp39OaVgUkumwMr8XUbpeA+vbcJKmfHr
+         H25tbfLcJAfpq+2A4cQdoMsU9LA4SC83Tm2pe48pSC0FB7txNArjl1T+px3EJrUP5VjP
+         TZkg==
+X-Gm-Message-State: ACrzQf1nlVPa36MYxs5/crcZs4I0NR++MrTV9S1UEcU+boRSPHB0y6Z7
+        4dojHiVfUhtZXYDKsCoMO4UsbA==
+X-Google-Smtp-Source: AMsMyM6i0znQqZ8p7YT6afOgbTg5EelaP7ZkWjPWVpm3n6Jk5WRvk6lpR70aeaG4k8u8dn6EmCDNxg==
+X-Received: by 2002:a63:5656:0:b0:446:8eb5:a2c5 with SMTP id g22-20020a635656000000b004468eb5a2c5mr12032763pgm.336.1665306446391;
+        Sun, 09 Oct 2022 02:07:26 -0700 (PDT)
+Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:8517:d51e:5fe9:9be7])
+        by smtp.gmail.com with ESMTPSA id q194-20020a632acb000000b00439d071c110sm4335148pgq.43.2022.10.09.02.07.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Oct 2022 02:07:25 -0700 (PDT)
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [PATCHv3 0/8] zram: Support multiple compression streams
+Date:   Sun,  9 Oct 2022 18:07:12 +0900
+Message-Id: <20221009090720.1040633-1-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GtxpCgCXGKUhjUJjFCHAjw--.47996S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWrury3GFWUXr4kJFW3Zw4fZrb_yoW8Jr4DpF
-        s7C39rCrWrKF17u3Wjyay8Ary3C34kWrWkKF1j934rXrZ3W3Z7Xrn0yFWjyF43Jr4Fk34a
-        vFW09r45Zw4DGrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UGtCcUUUUU=
-X-Originating-IP: [116.128.244.169]
-X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbivgKV+1Zce8IfVQAAsr
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiangshan Yi <yijiangshan@kylinos.cn>
+Hello,
 
-Fix spelling typo in comment.
+        This series adds support for multiple (per-CPU)
+compression streams (at point only 2). The main idea is that
+different compression algorithms have different characteristics
+and zram may benefit when it uses a combination of algorithms:
+a default algorithm that is faster but have lower compression
+rate and a secondary algorithm that can use higher compression
+rate at a price of slower compression/decompression.
 
-K2ci (Kylin Continuous Integration) is a code pre-verification tool
-independently developed by KylinSoft, which is used for ensuring the
-code quality of code submission. K2ci includes the comment check tool
-notes_check.
+        There are several use-case for this functionality:
 
-This spelling typo was found using notes_check tool.
+- huge pages re-compression: zstd or deflate can successfully
+compress huge pages (~50% of huge pages on my synthetic ChromeOS
+tests), IOW pages that lzo was not able to compress.
 
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
----
- drivers/staging/rtl8192u/r8192U_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+- idle pages re-compression: idle/cold pages sit in the memory
+and we may reduce zsmalloc memory usage if we recompress those
+idle pages.
 
-diff --git a/drivers/staging/rtl8192u/r8192U_core.c b/drivers/staging/rtl8192u/r8192U_core.c
-index 0a60ef20107c..f6a0992b059b 100644
---- a/drivers/staging/rtl8192u/r8192U_core.c
-+++ b/drivers/staging/rtl8192u/r8192U_core.c
-@@ -4574,7 +4574,7 @@ static int rtl8192_usb_probe(struct usb_interface *intf,
- 	return ret;
- }
- 
--/* detach all the work and timer structure declared or inititialize
-+/* detach all the work and timer structure declared or initialize
-  * in r8192U_init function.
-  */
- static void rtl8192_cancel_deferred_work(struct r8192_priv *priv)
+        User-space has a number of ways to control the behavior
+and impact of zram recompression: what type of pages should be
+recompressed, size watermarks, etc. Please refer to documentation
+patch.
+
+v3:
+-- conditionally reschedule during recompression loop so that
+   we don't stall RCU grace periods
+-- fixed a false-positive WARN_ON
+
+v2:
+-- rebased
+-- mark completely incompressible pages (neither default nor secondary
+   algorithm can compress them) with a new flag so that we don't attempt
+   to recompress them all the time
+
+Sergey Senozhatsky (8):
+  zram: Preparation for multi-zcomp support
+  zram: Add recompression algorithm sysfs knob
+  zram: Factor out WB and non-WB zram read functions
+  zram: Introduce recompress sysfs knob
+  documentation: Add recompression documentation
+  zram: Add recompression algorithm choice to Kconfig
+  zram: Add recompress flag to read_block_state()
+  zram: correct typos
+
+ Documentation/admin-guide/blockdev/zram.rst |  64 ++-
+ drivers/block/zram/Kconfig                  |  52 +++
+ drivers/block/zram/zcomp.c                  |   6 +-
+ drivers/block/zram/zcomp.h                  |   2 +-
+ drivers/block/zram/zram_drv.c               | 441 +++++++++++++++++---
+ drivers/block/zram/zram_drv.h               |  16 +-
+ 6 files changed, 510 insertions(+), 71 deletions(-)
+
 -- 
-2.25.1
-
-
-No virus found
-		Checked by Hillstone Network AntiVirus
+2.38.0.rc1.362.ged0d419d3c-goog
 
