@@ -2,56 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E64F95F8ADA
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 13:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9CA5F8ADF
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 13:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiJILPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 07:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
+        id S229973AbiJIL0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 07:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbiJILPl (ORCPT
+        with ESMTP id S229771AbiJIL0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 07:15:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4777E2B24C;
-        Sun,  9 Oct 2022 04:15:36 -0700 (PDT)
+        Sun, 9 Oct 2022 07:26:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440DF29C96
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 04:26:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48064B80CB9;
-        Sun,  9 Oct 2022 11:15:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF917C433C1;
-        Sun,  9 Oct 2022 11:15:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6B7260B10
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 11:25:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB9EEC433C1;
+        Sun,  9 Oct 2022 11:25:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665314133;
-        bh=wccPJLuH2DYbLdfSoyHm5U/6vyVfxSEwO2LCbBJoTmI=;
+        s=k20201202; t=1665314759;
+        bh=RWoJ+HRthYPnrVlUIvWl8qMmgExuYuB6N7cI/vjyLRU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZAkjhh3wUFCs0GYGGZ9pZ1dsGpWfE69dKhRZTTCMzzjAx+079DTo1wkrqXH5yiKPe
-         bN+W3QxzOWnvM8UsuY/qkgLD+xwwZbyFEV4JpBHfvdVgNnSo69wnyAqcr/Hg3XhgSl
-         Z2TFiosUqGaNAOSopU7przq4zwTXZ3AZIrDUDWByqDW67BNt2/I+Ty8nVfu1vkmWAx
-         urKUZQ6beZoqbfW+HZR9W+9N+pzCiQ7mij4K8IRXb+0pSmet1b4MtahQWEqDHaA2PR
-         uLYbf8VXptd28KvqFbB+AHry00Q2EaLwX5s6tl7LVvTwJy+qIh5YYIIQmp/gKM2yIm
-         SGln/Ve6gFTYg==
+        b=cXn92ofM+CfvPdOP+V3wZ+fWBf6l8krxgob4WFEG4J8tmT3inLDRGso1fftOVNL8F
+         5TNiXZvpaxb0yj7Gdg1RkXF3kL0zuTmjj1A9u8btrDRo8jd87Neebdvqf5OhgnmaNJ
+         Dha7MMCtjnaWf25LgrTNvhrtybpImWmTvIpxxaqKf1l40rhkP/UUFEqwOOgzrhe9qC
+         0jZcfgNkZY1sA5AVPaX/GHSB+sYAgG5uabTnnxZfmHA5OPVZmqW1+5qtKAJkmu4JqV
+         K0xbD6rXBlqrd144QkwDvJLzdIJEl9IfoJyqzq62l8UFM/A6SIfETeKsDblliq3l9K
+         YgDbLjk1dNEzA==
 Received: by pali.im (Postfix)
-        id E03897C1; Sun,  9 Oct 2022 13:15:29 +0200 (CEST)
-Date:   Sun, 9 Oct 2022 13:15:29 +0200
+        id CFF5E7C1; Sun,  9 Oct 2022 13:25:55 +0200 (CEST)
+Date:   Sun, 9 Oct 2022 13:25:55 +0200
 From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Gregory Clement <gregory.clement@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-Subject: Re: [PATCH 0/6] ARM: dts: pci-mvebu: Fix assigned-addresses for
- every PCIe Root Port
-Message-ID: <20221009111529.2eo2mwca3ywfkajy@pali>
-References: <20220817223053.31141-1-pali@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] powerpc/pci: Allow to disable filling deprecated
+ pci-OF-bus-map
+Message-ID: <20221009112555.spnwid27r4rwi67q@pali>
+References: <20220817163927.24453-1-pali@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220817223053.31141-1-pali@kernel.org>
+In-Reply-To: <20220817163927.24453-1-pali@kernel.org>
 User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -62,51 +59,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gregory, ping?
+Hello! Any comments on this? It would be nice to take these two patches
+(or at least patch 2) to finally enable PPC_PCI_BUS_NUM_DOMAIN_DEPENDENT
+by default where possible.
 
-On Thursday 18 August 2022 00:30:47 Pali Rohár wrote:
-> Per IEEE Std 1275-1994 bindings documentation (to which kernel DT
-> bindings refers), DT property assigned-addresses contains BDF address
-> of resource. Currently more PCIe Root Port nodes have BDF address in
-> assigned-addresses which points to different PCIe Root Port nodes. This
-> obviously does not make sense as the address resource specified in
-> assigned-addresses of every PCIe Root Port describes address range of
-> internal registers which are specific for corresponding Marvell PCIe
-> Root Port. Fix this issue and align all BDF addresses in
-> assigned-addresses DT property to specify correct BDF address of the
-> current PCIe Root Port.
+Per following comment there can be an issue with early powermac so seems
+that PPC_PCI_OF_BUS_MAP_FILL still has to be by default enabled (which
+implies that PPC_PCI_BUS_NUM_DOMAIN_DEPENDENT is disabled) on powermac:
+https://lore.kernel.org/linuxppc-dev/575f239205e8635add81c9f902b7d9db7beb83ea.camel@kernel.crashing.org/
+
+On Wednesday 17 August 2022 18:39:26 Pali Rohár wrote:
+> Creating or filling pci-OF-bus-map property in the device-tree is
+> deprecated since May 2006 [1]. Allow to disable filling this property by
+> unsetting config option CONFIG_PPC_PCI_OF_BUS_MAP_FILL for remaining chrp
+> and powermac code.
 > 
-> Note that current version of pci-mvebu.c controller driver, which
-> registers Marvell PCIe Root Ports, ignores BDF value in DT property
-> assigned-addresses. It expects that Root Port's assigned-addresses
-> contains address range of that root port. That is why driver currently
-> works without any issue and nobody spotted it. But if driver or
-> something else would do device tree validation then this issue should be
-> spotted and throws error. Also device tree files may be used by other
-> projects where drivers may require correct values.
+> Disabling of pci-OF-bus-map property allows to enable new option
+> CONFIG_PPC_PCI_BUS_NUM_DOMAIN_DEPENDENT also for chrp and powermac.
 > 
-> This patch series aligns BDF address of every Marvell PCIe Root Port in
-> node name, config space in reg property and mem in assigned-address
-> property of internal registers resource.
+> [1] - https://lore.kernel.org/linuxppc-dev/1148016268.13249.14.camel@localhost.localdomain/
 > 
-> Pali Rohár (6):
->   ARM: dts: dove: Fix assigned-addresses for every PCIe Root Port
->   ARM: dts: armada-370: Fix assigned-addresses for every PCIe Root Port
->   ARM: dts: armada-xp: Fix assigned-addresses for every PCIe Root Port
->   ARM: dts: armada-375: Fix assigned-addresses for every PCIe Root Port
->   ARM: dts: armada-38x: Fix assigned-addresses for every PCIe Root Port
->   ARM: dts: armada-39x: Fix assigned-addresses for every PCIe Root Port
+> Signed-off-by: Pali Rohár <pali@kernel.org>
+> ---
+>  arch/powerpc/Kconfig         | 12 +++++++++++-
+>  arch/powerpc/kernel/pci_32.c |  6 ++++++
+>  2 files changed, 17 insertions(+), 1 deletion(-)
 > 
->  arch/arm/boot/dts/armada-370.dtsi        |  2 +-
->  arch/arm/boot/dts/armada-375.dtsi        |  2 +-
->  arch/arm/boot/dts/armada-380.dtsi        |  4 ++--
->  arch/arm/boot/dts/armada-385.dtsi        |  6 +++---
->  arch/arm/boot/dts/armada-39x.dtsi        |  6 +++---
->  arch/arm/boot/dts/armada-xp-mv78230.dtsi |  8 ++++----
->  arch/arm/boot/dts/armada-xp-mv78260.dtsi | 16 ++++++++--------
->  arch/arm/boot/dts/dove.dtsi              |  2 +-
->  8 files changed, 23 insertions(+), 23 deletions(-)
-> 
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> index 5881441f7672..df2696c406ad 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -373,9 +373,19 @@ config PPC_DCR
+>  	depends on PPC_DCR_NATIVE || PPC_DCR_MMIO
+>  	default y
+>  
+> +config PPC_PCI_OF_BUS_MAP_FILL
+> +	bool "Fill pci-OF-bus-map property in the device-tree"
+> +	depends on PPC32
+> +	depends on PPC_PMAC || PPC_CHRP
+> +	default y
+> +	help
+> +	  This option creates and fills pci-OF-bus-map property in the
+> +	  device-tree which is deprecated and is needed only for old
+> +	  platforms.
+> +
+>  config PPC_PCI_BUS_NUM_DOMAIN_DEPENDENT
+>  	depends on PPC32
+> -	depends on !PPC_PMAC && !PPC_CHRP
+> +	depends on !PPC_PCI_OF_BUS_MAP_FILL
+>  	bool "Assign PCI bus numbers from zero individually for each PCI domain"
+>  	help
+>  	  By default on PPC32 were PCI bus numbers unique across all PCI domains.
+> diff --git a/arch/powerpc/kernel/pci_32.c b/arch/powerpc/kernel/pci_32.c
+> index 433965bf37b4..ffc4e1928c80 100644
+> --- a/arch/powerpc/kernel/pci_32.c
+> +++ b/arch/powerpc/kernel/pci_32.c
+> @@ -64,6 +64,8 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_IBM,	PCI_DEVICE_ID_IBM_CPC710_PCI64,	fixu
+>  
+>  #if defined(CONFIG_PPC_PMAC) || defined(CONFIG_PPC_CHRP)
+>  
+> +#ifdef CONFIG_PPC_PCI_OF_BUS_MAP_FILL
+> +
+>  static u8* pci_to_OF_bus_map;
+>  static int pci_bus_count;
+>  
+> @@ -223,6 +225,8 @@ pci_create_OF_bus_map(void)
+>  }
+>  #endif
+>  
+> +#endif /* CONFIG_PPC_PCI_OF_BUS_MAP_FILL */
+> +
+>  #endif /* defined(CONFIG_PPC_PMAC) || defined(CONFIG_PPC_CHRP) */
+>  
+>  void pcibios_setup_phb_io_space(struct pci_controller *hose)
+> @@ -264,6 +268,7 @@ static int __init pcibios_init(void)
+>  	}
+>  
+>  #if defined(CONFIG_PPC_PMAC) || defined(CONFIG_PPC_CHRP)
+> +#ifdef CONFIG_PPC_PCI_OF_BUS_MAP_FILL
+>  	pci_bus_count = next_busno;
+>  
+>  	/* OpenFirmware based machines need a map of OF bus
+> @@ -272,6 +277,7 @@ static int __init pcibios_init(void)
+>  	 */
+>  	if (pci_assign_all_buses)
+>  		pcibios_make_OF_bus_map();
+> +#endif
+>  #endif
+>  
+>  	/* Call common code to handle resource allocation */
 > -- 
 > 2.20.1
 > 
