@@ -2,94 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F335F9182
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 00:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 211F95F903B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 00:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232827AbiJIWdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 18:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39724 "EHLO
+        id S231806AbiJIWWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 18:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232578AbiJIW3y (ORCPT
+        with ESMTP id S231701AbiJIWVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 18:29:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F2D3ECDB;
-        Sun,  9 Oct 2022 15:19:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 9 Oct 2022 18:21:20 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 775221CB1B;
+        Sun,  9 Oct 2022 15:17:13 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C9A0B80D33;
-        Sun,  9 Oct 2022 22:19:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6CB3C433C1;
-        Sun,  9 Oct 2022 22:19:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665353950;
-        bh=Q7nL0WEUtaTUZsGTu8PhNbsvfvjXK7qqWWgILZtc6rQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RwfAWhGJuYwu+3BKOvINLc3hcYX2DPycT6eq3QhxOdC/rXj7dhzSEbr5CP8+fht6v
-         Ykb1u3qV2+nCruVjehhoxwwowBtrmWrJoEGLlYt7E4g6AbDwE/YLKpaYwc4pdCjXq7
-         +HHYX70tpV+VJFDLI1qEdppkg9lyZLS1bDc87S9u0H3f2iE2XRNl1/jaFvZsndPyjh
-         xfIqsiwxpqeZKovy/caIYoKhgC/mgjbwUNd2pu8EouYi+QYuuwWoTkbIVGVDjrSY3b
-         ySEs5uLutD7m+5BaxYmRSEm7cGp46CHnkAADyUlnx9xSdDvLfexCttVIRDfWaxRYMy
-         I7w5RVGUomgyw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrew Gaul <gaul@gaul.org>, Andrew Gaul <gaul@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, hayeswang@realtek.com,
-        aaron.ma@canonical.com, jflf_kernel@gmx.com, git@apitzsch.eu,
-        dober6023@gmail.com, svenva@chromium.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.19 73/73] r8152: Rate limit overflow messages
-Date:   Sun,  9 Oct 2022 18:14:51 -0400
-Message-Id: <20221009221453.1216158-73-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221009221453.1216158-1-sashal@kernel.org>
-References: <20221009221453.1216158-1-sashal@kernel.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MlxGS5W22z4wgv;
+        Mon, 10 Oct 2022 09:16:32 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1665353793;
+        bh=5JXiyZ2rBUBWg3NdZnRUOBYGxdaJVI3zNREgAnnnSGE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RVxnEoNnLYmLN/XeKRBBN0MbOXQ7XdNGTwIFR7MAqcDRQC+OXtn6AWacO5gOP8gJP
+         pairn8Mfsct4dLSrLqwliTM9oUgUXDPB2m04UNsCzJncJ9IUO6xkSqOLJj2qfCIFnj
+         5w2iCiFpfYsFHYY4KCHtxRQ//JycHRaIsKMKx+PAPPBdMsWizVTQu9cfsAO8reCMp6
+         SJMo7QCx3AKrCy+OT91tXDROL4CJMvHvAZZ5KfPsVTGb5LRepEisAPHmuQVDfLo1hI
+         8RvipvyxQorPHaOXKeGeqvacFqTPPAlzRZ9nLR7VGKgepxnV7rN0SvmxCUnDJ0xmJF
+         0gXpZ1KGBKcbA==
+Date:   Mon, 10 Oct 2022 09:16:14 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the powerpc tree with the kbuild
+ tree
+Message-ID: <20221010091614.20a89f56@canb.auug.org.au>
+In-Reply-To: <20221004091205.2677b823@canb.auug.org.au>
+References: <20221004091205.2677b823@canb.auug.org.au>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/.km7qOSO.2uHzBoxFdOk.nC";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Gaul <gaul@gaul.org>
+--Sig_/.km7qOSO.2uHzBoxFdOk.nC
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-[ Upstream commit 93e2be344a7db169b7119de21ac1bf253b8c6907 ]
+Hi all,
 
-My system shows almost 10 million of these messages over a 24-hour
-period which pollutes my logs.
+On Tue, 4 Oct 2022 09:12:05 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>=20
+> Today's linux-next merge of the powerpc tree got a conflict in:
+>=20
+>   arch/powerpc/kernel/Makefile
+>=20
+> between commit:
+>=20
+>   321648455061 ("kbuild: use obj-y instead extra-y for objects placed at =
+the head")
+>=20
+> from the kbuild tree and commit:
+>=20
+>   dfc3095cec27 ("powerpc: Remove CONFIG_FSL_BOOKE")
+>=20
+> from the powerpc tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc arch/powerpc/kernel/Makefile
+> index ad3decb9f20b,1f121c188805..000000000000
+> --- a/arch/powerpc/kernel/Makefile
+> +++ b/arch/powerpc/kernel/Makefile
+> @@@ -118,12 -116,12 +116,12 @@@ obj-$(CONFIG_PPC_E500)		+=3D cpu_setup_e5
+>   obj-$(CONFIG_PPC_DOORBELL)	+=3D dbell.o
+>   obj-$(CONFIG_JUMP_LABEL)	+=3D jump_label.o
+>  =20
+>  -extra-$(CONFIG_PPC64)		:=3D head_64.o
+>  -extra-$(CONFIG_PPC_BOOK3S_32)	:=3D head_book3s_32.o
+>  -extra-$(CONFIG_40x)		:=3D head_40x.o
+>  -extra-$(CONFIG_44x)		:=3D head_44x.o
+>  -extra-$(CONFIG_PPC_85xx)	:=3D head_85xx.o
+>  -extra-$(CONFIG_PPC_8xx)		:=3D head_8xx.o
+>  +obj-$(CONFIG_PPC64)		+=3D head_64.o
+>  +obj-$(CONFIG_PPC_BOOK3S_32)	+=3D head_book3s_32.o
+>  +obj-$(CONFIG_40x)		+=3D head_40x.o
+>  +obj-$(CONFIG_44x)		+=3D head_44x.o
+> - obj-$(CONFIG_FSL_BOOKE)		+=3D head_fsl_booke.o
+> ++obj-$(CONFIG_PPC_85xx)		:=3D head_85xx.o
+>  +obj-$(CONFIG_PPC_8xx)		+=3D head_8xx.o
+>   extra-y				+=3D vmlinux.lds
+>  =20
+>   obj-$(CONFIG_RELOCATABLE)	+=3D reloc_$(BITS).o
 
-Signed-off-by: Andrew Gaul <gaul@google.com>
-Link: https://lore.kernel.org/r/20221002034128.2026653-1-gaul@google.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/r8152.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+This is now a conflict between the kbuild tree and Linus' tree.
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 688905ea0a6d..e7b0b59e2bc8 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -1874,7 +1874,9 @@ static void intr_callback(struct urb *urb)
- 			   "Stop submitting intr, status %d\n", status);
- 		return;
- 	case -EOVERFLOW:
--		netif_info(tp, intr, tp->netdev, "intr status -EOVERFLOW\n");
-+		if (net_ratelimit())
-+			netif_info(tp, intr, tp->netdev,
-+				   "intr status -EOVERFLOW\n");
- 		goto resubmit;
- 	/* -EPIPE:  should clear the halt */
- 	default:
--- 
-2.35.1
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/.km7qOSO.2uHzBoxFdOk.nC
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNDSC8ACgkQAVBC80lX
+0Gy6egf8CKc2goJR5uR31lWy7MtzaXaEXtSJhagzpfue8Ykt1sikkbMLJt+i2WVt
+zK2/ehfB9wV6o37xfSdeL3slBnX7bkhqEI6oolypnozHXRArTYbtCO1uVs0cO2kR
++vR1h/TzNcApDlPnZ6DKEjpVDAv3uQyFFuMy9CrTR8lq4ZR7xL/5l9ksfcd02vOO
++aSrN0UDZ05BeFF5AzQs7wBl4iBrDqr+1atpqtxxSmyAJqs+yT2w8mjov8+u2x2p
+HUL/F+PepQhGYLFY+M1x56VYH8BLx2SPBc1wM+LZtfGPIYCV/Aw8Ma8i6VKhV2a1
+hnOJqR8ie93KM+zhra1hgZrxlurK+g==
+=ID1k
+-----END PGP SIGNATURE-----
+
+--Sig_/.km7qOSO.2uHzBoxFdOk.nC--
