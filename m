@@ -2,119 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1E25F8BE9
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 17:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A5C85F8BED
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 17:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiJIPRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 11:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
+        id S229977AbiJIPR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 11:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiJIPRH (ORCPT
+        with ESMTP id S230030AbiJIPRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 11:17:07 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9855E29CB6
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 08:17:05 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id y1so5496590qky.12
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 08:17:05 -0700 (PDT)
+        Sun, 9 Oct 2022 11:17:23 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C432A26A
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 08:17:22 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 2so8482139pgl.7
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 08:17:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BL4JcwH1BlRKSaTgiWa7XnjgnxHiKgi2LESv8tz4pQc=;
-        b=S9qa8hsBVXQ5Wa9ivzeKnrF+utOFKYvTcRw5ht9qe1pf33nZkeHef7bOPazbUoM4Z1
-         L1U2VI1+NovXH2sWunMrQW+a4sGbroPvBlYrHuuybNMOxluCnxSarwAFvZr7K1B9TZKJ
-         7XB6VDvHfYd6OLci8MfKV7a0y/c5tBBuDd7Wc1dIntKr78vhgdqcVvUnG58df1HA0LrX
-         i83xYrRE7iI/u7HGNFtICWvlTudnlRqtMQC71sZYFzMzrl71fjK0P8P3kLNV5izPEyFr
-         TePLTVZLHBkKc2IIX9WmHOkg1h3e87nTNYrKnZf6oQOq9oM9KYpogZry6LdEkkKAMzFR
-         66gA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tw9gcqaowP+TMgv0PBW1Mu3ng2vA1GWaG7qFwpGpykQ=;
+        b=AU6dM8S8LJprNlJaUChKe1QftOAnSYLh0lARFWLQE3JooNJjTdUnEKR7ICBvzLkiAF
+         ZwX+3OR4gIkgCeiBPUZGZef0FLJfYi6rYY15g8NOzhKRzCFntlmfWxuXs5/Yk7DtWNx+
+         kxeAvlZWbyd2bO3212Gq87eePxTLXiqUS+DhE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BL4JcwH1BlRKSaTgiWa7XnjgnxHiKgi2LESv8tz4pQc=;
-        b=FsR7HHRheBkD9/xaq0/OyFAJDTXPbv30ZBa6O+4P46uexiqp7dfeLn2gO9mrxI0FmP
-         fKJDrP1HshdiZxx0j1jt4GfeQmj/CTrNf+qBe1B/5w+u/qvy/Dh41N1DSsMsJcOEjlL0
-         2ML0R0Wgih3g7e3Hu6v7caY5qTaud6FGHLjeQbAgF9H2vayZC0uZ8obDRyB73auvmion
-         XeYoCgwkIRZaqwuGFRKrRPM/+g/rSN6Dspep8qLweAGS3gkmqe2O2Tfbp5S4t9YOFgHq
-         vWqJUcDUSjkIgof42NfosxN1Yn41g18/JLumxBSHVb1AXWAjQLTJ6ucn8gbhXLBWQEzc
-         JkhQ==
-X-Gm-Message-State: ACrzQf2L+cx9gd4R6ChzsCxGgL69MJTHt4ha+n2WTVtNwkVehjOMb6dS
-        +meBHzYghFYftGDE5Oyn2cIOag==
-X-Google-Smtp-Source: AMsMyM48598dwVSzpKD3PGz7P0JYzUO8QVxlhEllywy9x1o+yQGHTuYmtfTS71hXXXsBsbNKrlZ+5w==
-X-Received: by 2002:a05:620a:254f:b0:6bc:5763:de4b with SMTP id s15-20020a05620a254f00b006bc5763de4bmr9889170qko.207.1665328624785;
-        Sun, 09 Oct 2022 08:17:04 -0700 (PDT)
-Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id 1-20020ac85741000000b003998bb7b83asm1383567qtx.90.2022.10.09.08.17.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Oct 2022 08:17:03 -0700 (PDT)
-Message-ID: <e0d69843-4b37-2e0d-66c7-fc8fd09ed385@linaro.org>
-Date:   Sun, 9 Oct 2022 17:14:51 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Tw9gcqaowP+TMgv0PBW1Mu3ng2vA1GWaG7qFwpGpykQ=;
+        b=0H313l5LdjzGMIlwjFGjPXnh8sG2b9wSTQH4ydMvbLd2WuVmZk0Ddg88naekKv4S9N
+         bUhf3LxlDZ024X17DmrRWCsWFyDAkI4wIwn8S4wy5wZJOOR5/IaBXpW3cSxP0q6Z1D71
+         F9KBgKLH/QcEkO31bM8jKVs7fq4denqvAX0SFclWq686+/lpzuUkXWbzFaC5/Ae1lHdM
+         aO3BIjLABkMKmZd1SHShQehuxrsH1xVCKBRSWqOrW151IG4HWdqCxYH/rT1qGCldzMeK
+         IhJaRQKJFEn/I1UL7i/p8Rq8jQBhHEcYM6iz4MM03z6M4B+vDOsqZ/qp8vuK4fVnUDi7
+         VcYA==
+X-Gm-Message-State: ACrzQf2kZjvQIBo5g3I6Ix8ZoDN2Pc/Na5XL0VvamCq5nOSRTuU7oC6n
+        IEBosais758SAThJo1zJePhhCQ==
+X-Google-Smtp-Source: AMsMyM4PsSYVHPiS4hhVGx24VmAVXK3O/DaEUG3mJLjweG47ZL12Dhyt0NjoVUe6x6HwLKShp2pTJA==
+X-Received: by 2002:a05:6a00:1907:b0:557:e83b:1671 with SMTP id y7-20020a056a00190700b00557e83b1671mr15260472pfi.65.1665328641487;
+        Sun, 09 Oct 2022 08:17:21 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n14-20020a170902e54e00b001782580ce9csm4847952plf.249.2022.10.09.08.17.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Oct 2022 08:17:20 -0700 (PDT)
+Date:   Sun, 9 Oct 2022 08:17:20 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Li Zetao <lizetao1@huawei.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        kirill.shutemov@linux.intel.com, akpm@linux-foundation.org,
+        michael.roth@amd.com, nathan@kernel.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, masahiroy@kernel.org,
+        ndesaulniers@google.com, brijesh.singh@amd.com,
+        peterz@infradead.org, venu.busireddy@oracle.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: Ping: [PATCH -next v3 0/2] Remove unused variables in x86/boot
+Message-ID: <202210090815.526C76396@keescook>
+References: <20220927081512.2456624-1-lizetao1@huawei.com>
+ <20220930032727.3451619-1-lizetao1@huawei.com>
+ <43ebb21e-a445-748f-f78b-51535a8384c1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH V2 2/3] dt-bindings: gpio: Convert Unisoc EIC controller
- binding to yaml
-Content-Language: en-US
-To:     Chunyan Zhang <zhang.lyra@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220930082405.1761-1-zhang.lyra@gmail.com>
- <20220930082405.1761-3-zhang.lyra@gmail.com>
- <727a540d-0ca9-ade3-894d-f1774d10a681@linaro.org>
- <CAAfSe-u4y84kjjksv-Y7=zyosV=34M-=_wrDQC9884znvx9V4Q@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAAfSe-u4y84kjjksv-Y7=zyosV=34M-=_wrDQC9884znvx9V4Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <43ebb21e-a445-748f-f78b-51535a8384c1@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/10/2022 04:57, Chunyan Zhang wrote:
->>> +        eic_debounce: gpio@40210000 {
->>> +            compatible = "sprd,sc9860-eic-debounce";
->>> +            reg = <0 0x40210000 0 0x80>;
->>> +            gpio-controller;
->>> +            #gpio-cells = <2>;
->>> +            interrupt-controller;
->>> +            #interrupt-cells = <2>;
->>> +            interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
->>> +        };
->>> +    };
->>> +
->>> +    sc2730_pmic {
->>
->> If you insisted to keep it, at least should be correct, so just pmic.
->>
->>> +        #address-cells = <1>;
->>> +        #size-cells = <0>;
->>> +
->>> +        pmic_eic: gpio@300 {
->>
->> It's exactly the same example as above - all same properties. Drop it or
->> bring some differences.
-> 
-> The differences are on #address-cells and #size-cells.
-> 
+On Sat, Oct 08, 2022 at 09:41:59PM +0800, Li Zetao wrote:
+> On 2022/9/30 11:27, Li Zetao wrote:
+> > This series removes some unused variables in x86/boot, and add the
+> > "-Wall" flag to Makefile, which is the old problem of x86 not sharing
+> > makefiles.
+> > 
+> > Changes since v2:
+> > - Add "frame-address" flag and "-std=gnu11" to
+> >    x86/boot/compressed/Makefile to fix warnings when "-Wall" flag added.
+> > - Declare the variable "i" within the for loop to reslove unused
+> >    variable warning.
+> > - Delete __efi_get_rsdp_addr function when CONFIG_EFI is disabled to
+> >    resolve unused function warning.
 
-Which don't really matter...
+Nathan suggested earlier (and I agree): please re-order these patches so
+the fixes for the new warnings are first, and then turn on the compiler
+flags in a final patch. This will keep the build "warning free" at all
+steps.
 
-Best regards,
-Krzysztof
-
+-- 
+Kees Cook
