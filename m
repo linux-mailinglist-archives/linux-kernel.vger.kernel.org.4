@@ -2,128 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B35A5F8D33
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 20:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 659075F8D3F
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 20:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbiJISgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 14:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56762 "EHLO
+        id S229935AbiJIShb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 14:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbiJISgN (ORCPT
+        with ESMTP id S230319AbiJISh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 14:36:13 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C8D8120A5;
-        Sun,  9 Oct 2022 11:36:12 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 299Ia4uU029192;
-        Sun, 9 Oct 2022 20:36:04 +0200
-Date:   Sun, 9 Oct 2022 20:36:04 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     lkp@intel.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: tools/nolibc: fix missing strlen() definition and infinite loop
- with gcc-12
-Message-ID: <20221009183604.GA29069@1wt.eu>
-References: <Y0LsreRGq3nbe2xC@localhost.localdomain>
- <20221009175920.GA28685@1wt.eu>
+        Sun, 9 Oct 2022 14:37:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCC425C53;
+        Sun,  9 Oct 2022 11:37:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A526460C4E;
+        Sun,  9 Oct 2022 18:37:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83DC8C433D6;
+        Sun,  9 Oct 2022 18:37:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665340646;
+        bh=M0mi6LfeSn8FwBMP19KWbu57PYG5br5TQcEO1ena5k0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pSA3vwpcaowqE4AZasllzneNUD3fOtths/0Gjy3og9D25SOeCcssgw4Vflzq3yhdw
+         C+yLMRl1hKGas6R4ijMMJd1ScRykqtmn4h4KWe35FkSe0R3A5mkn5BU5/i5iuYMMRQ
+         lfpGpkHcFR65TO9JqT5ZyCM09kpaU4jU7u0nmwms1ciF6D3nFu54HHOJ8HUn9SreXo
+         rfg72LR62xM7zPDMygve/JFAQpzyTsSuELt17w8MGejp6qmwFOD9iS1xf7Cpkc+7TS
+         ka+EAs/cQWfv6AaLl3wEE2+RDV264Qx4pws4qSGEjTP+2wRdWqD8gPyXK2+PXk9kFM
+         sjEeY/lM1feJg==
+From:   SeongJae Park <sj@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     SeongJae Park <sj@kernel.org>, corbet@lwn.net,
+        linux-doc@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] docs/memory-barriers.txt: Add a missed closing parenthesis
+Date:   Sun,  9 Oct 2022 18:37:23 +0000
+Message-Id: <20221009183723.52037-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221009111000.GQ4196@paulmck-ThinkPad-P17-Gen-1>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221009175920.GA28685@1wt.eu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 07:59:20PM +0200, Willy Tarreau wrote:
-> Hi Alexey,
-> 
-> On Sun, Oct 09, 2022 at 06:45:49PM +0300, Alexey Dobriyan wrote:
-> > Willy Tarreau wrote:
-> > > +#if defined(__GNUC__) && (__GNUC__ >= 12)
-> > > +__attribute__((optimize("no-tree-loop-distribute-patterns")))
-> > > +#endif
-> > >  static __attribute__((unused))
-> > > -size_t nolibc_strlen(const char *str
+Hi Paul,
+
+On Sun, 9 Oct 2022 04:10:00 -0700 "Paul E. McKenney" <paulmck@kernel.org> wrote:
+
+> On Sat, Oct 08, 2022 at 10:49:25AM -0700, SeongJae Park wrote:
+> > Description of io_stop_wc(), which added by commit d5624bb29f49
+> > ("asm-generic: introduce io_stop_wc() and add implementation for
+> > ARM64"), have unclosed parenthesis.  This commit closes it.
 > > 
-> > I'd suggest to use asm("") in the loop body. It worked in the past
-> > to prevent folding division loop back into division instruction.
+> > Fixes: d5624bb29f49 ("asm-generic: introduce io_stop_wc() and add implementation for ARM64")
+> > Signed-off-by: SeongJae Park <sj@kernel.org>
 > 
-> Ah excellent idea! I initially thought about using asm() to hide a
-> variable provenance but didn't like it much because it undermines
-> code optimization. But you're right, with an empty asm() statement
-> alone, the loop will not look like an strlen() anymore. Just tried
-> and it works like a charm, I'll resend a patch so that we can get
-> rid of the ugly ifdef.
+> I have pulled this in, good eyes, and thank you!
+
+Thank you for quick reply :)
+
 > 
-> > Or switch to 
-> > 
-> > 	size_t f(const char *s)
-> > 	{
-> > 		const char *s0 = s;
-> > 		while (*s++)
-> > 			;
-> > 		return s - s0 - 1;
-> > 	}
-> > 
-> > which compiles to 1 branch, not 2.
-> 
-> In fact it depends. In the original code that approach was part of
-> the ones I had considered, but it doesn't always in better code due
-> to the prologue and epilogue being larger. It's only better at -O1,
-> and -O2, but not -Os, and once you add asm() into it, only -O1
-> remains better:
-> 
->   $ nm --size len.o|grep O|rev|sort|rev
->   000000000000001a T len_while_O1
->   0000000000000022 T len_while_asm_O1
->   0000000000000026 T len_for_O1
->   000000000000001a T len_while_O2
->   000000000000002b T len_while_asm_O2
->   0000000000000021 T len_for_O2
->   0000000000000013 T len_while_Os
->   0000000000000015 T len_while_asm_Os
->   000000000000000e T len_for_Os
-> 
-> This observation seems consistent for me on x86_64, i386, arm and arm64.
+> On the other three, we have traditionally asked for an ack from a
+> Korean speaker.  Do we still feel the need to do this?
 
-By the way, just for the sake of completeness, the one that consistently
-gives me a better output is this one:
+I have asked review of the patches to my friend.  I'm unsure if my friend could
+do that in a timely manner, as my friend could also be busy.  Let's wait and
+see.
 
-  size_t strlen(const char *str)
-  {
-          const char *s0 = str--;
-  
-          while (*++str)
-  		;
-          return str - s0;
-  }
-
-Which gives me this:
+IMHO, such review is not essential for this kind of incremental document
+updates, as I'd prefer making the doc up-to-date even if it contains some
+trivial errors, as long as the history is well manged and therefore such errors
+could be fixed later with good explanations.
 
 
-  0000000000000000 <strlen>:
-     0:   48 8d 47 ff             lea    -0x1(%rdi),%rax
-     4:   48 ff c0                inc    %rax
-     7:   80 38 00                cmpb   $0x0,(%rax)
-     a:   75 f8                   jne    4 <len+0x4>
-     c:   48 29 f8                sub    %rdi,%rax
-     f:   c3                      ret    
+Thanks,
+SJ
 
-But this is totally ruined by the addition of asm() in the loop. However
-I suspect that the construct is difficult to match against a real strlen()
-since it starts on an extra character, thus placing the asm() statement
-before the loop could durably preserve it. It does work here (the code
-remains the exact same one), but for how long, that's the question. Maybe
-we can revisit the various loop-based functions in the future with this in
-mind.
-
-Cheers,
-Willy
+[...]
