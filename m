@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F5A5F88D9
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 04:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C179F5F88DA
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 04:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiJICXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 22:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
+        id S229772AbiJICX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 22:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiJICX2 (ORCPT
+        with ESMTP id S229801AbiJICXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 22:23:28 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDEF33056E
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 19:23:27 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id h13so6628380pfr.7
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 19:23:27 -0700 (PDT)
+        Sat, 8 Oct 2022 22:23:47 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E923642A
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 19:23:44 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id h10so7695054plb.2
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 19:23:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IBN6huPdGpKqKhIAKLLkaRuR3gOgGOPhsRbsJyWYIRI=;
-        b=XAM200tElyyWyP4GFtgU07tj8DP41cBE6Jr/D2kKGZQS47KOTs70HLvvrDFZ0vQYmE
-         XWUAAYh0ItKz+yYjLgzElI4Isid9D9OBcUb0fVZTdTnb/r7gOBi9b1qZcIWvDN++Xb06
-         4bz8nkLMLMMTW2yxu3Bd59NlsdTWOgzrigJNJB3cTfGO1gmHwxSJ+OvxyOuKiHs0EKT2
-         Rx9fX6/B6me420ELRJ1oLiIpvI9P54g/+uGrPrRYdjINHIsPKMteAyWOD16wiFaRI/4W
-         1FmDlBiAvtpeDGFbLJs7IuP7j9JZGMZG53OtYOdT+RUfEnlGReZ1QSA1qcN6GpmtI31r
-         RFbA==
+        bh=RoDnBFDHVA7LU5T0eht7qIcxVf5BHA7MxEN+oTzlcX0=;
+        b=ofCcVhUEDdNXNttt6XZggV43bk1949OnzTBSrXtuZcJcps0cu2XwVVz6ksK9cV74m+
+         Ta2GaV5wrtZWb5wpawvNbHLTiT95mPnnX/yBm3ErBO+AVXBdWFhQDeoxvUSH59k1PU3u
+         IGtk3nC1csD38ozpWW24RtpPRl35romwjkmD+tZpABFsdK2ACdW/6wMqagcJxl9rWkW6
+         vhCCFF2S0ucKwCd7HOE8EscU085BQf4QpHm9C+PYDiV9ITerSaIZtzJSswOnAjU8vBjy
+         kYGBVBbJSu3aznrKX5wbXkUvRNWGUMmKqWKdwYD405pTUoqT7J8uMHj84NJ1JcX1M2D2
+         fw3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IBN6huPdGpKqKhIAKLLkaRuR3gOgGOPhsRbsJyWYIRI=;
-        b=Z+necq1tW32sEabfrk9jKskCLoR20bSLaO2JK97EX75mIMK1NPwaJ6M/rGHFpkvXag
-         vMl/5FAN2XWZM3cX0o2jm/qA7p2rpvFGk3F39QULpUKyb3jtf72Z/lou5F6oLTg8BUwU
-         tzy9VxIOvZje9/zEWJm68dFSTl+P7vFJMn2ExpFd+quZ8kPszwZG/ii8n+GFgpXAemFC
-         f8fY1YqZmi0zBMkXvqrQ4AVJmudNMMaklltyJ/BbqKV9r30J9tQdmvzNB6Z7IaOt0BJ/
-         6wy3MLFM0/TTCVeq4EvPQx1SjOH7chHhXUI3emvxT0+T7qTYPQIjBHHq3sTZeBN5+iJi
-         302Q==
-X-Gm-Message-State: ACrzQf12WDpH4LFF7qJVai85pXJJwdLUZE+N+izjo7dGtOPXubrQuMQh
-        61qkk/bSm68x1OXU1Oeh7do=
-X-Google-Smtp-Source: AMsMyM6y79bKyw1UWc6p/gUgr0Ws8By8/oW6O0JhPjmAErRjz/PWawklzQiLVCrXJdD+Jqf/+FLiTQ==
-X-Received: by 2002:a63:450c:0:b0:443:94a1:3703 with SMTP id s12-20020a63450c000000b0044394a13703mr10648210pga.565.1665282207477;
-        Sat, 08 Oct 2022 19:23:27 -0700 (PDT)
+        bh=RoDnBFDHVA7LU5T0eht7qIcxVf5BHA7MxEN+oTzlcX0=;
+        b=Hi2y8oMEigp6VVoNqWjQtQLA5gXThmXM3udOG38ZF15sbV6YtOmBR4XGQZcdOiWuVE
+         lbrvvNF03jaTjZcNE2qGZhtzH8HTx9FliPpRE2Q9HcoUSlQaE4xP+AEVwHW2jG9BdPLX
+         Odd1dwIDzSf2je+RcLEfAEU9Nyc+pYu4g26sjf4bNppIfn68BauZxVKpGLWYYNI3PRKD
+         dpXV+j4CDRU/Fmh9heIm7nVZ/h+K3qnhGokK+0+TSVXqvZk/iaTGysNhuSAZ29YvnVd4
+         p2/e7naoSmlbHjQfo0x59z3Sy50/4itFhjJkBsFNbIl5ba9FZ3HmUG47gwfpt2FmhBl1
+         0Oew==
+X-Gm-Message-State: ACrzQf3HOwmNfHbUPYCZ2HurzAlw/4frtvJs6FU4lCFzEtMrkiLy1ZA9
+        Hs2BM5tPMRcoH72+vOxaXA4=
+X-Google-Smtp-Source: AMsMyM7SvcN37Jq7m3iuPnNHgqj3NFAaHIJhjx0KT7J46cKR6I1fV87kmBd2iajvV+IMG3jvXDdU1w==
+X-Received: by 2002:a17:90a:1b43:b0:203:70c0:9f60 with SMTP id q61-20020a17090a1b4300b0020370c09f60mr23779368pjq.184.1665282224445;
+        Sat, 08 Oct 2022 19:23:44 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id i14-20020a170902cf0e00b0017cc29a5536sm3976353plg.17.2022.10.08.19.23.25
+        by smtp.gmail.com with ESMTPSA id u64-20020a17090a51c600b00200a85fa777sm6826951pjh.1.2022.10.08.19.23.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Oct 2022 19:23:26 -0700 (PDT)
+        Sat, 08 Oct 2022 19:23:43 -0700 (PDT)
 From:   xu.xin.sc@gmail.com
 X-Google-Original-From: xu.xin16@zte.com.cn
 To:     akpm@linux-foundation.org
@@ -60,9 +60,9 @@ Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Xuexin Jiang <jiang.xuexin@zte.com.cn>,
         Xiaokai Ran <ran.xiaokai@zte.com.cn>,
         Yang Yang <yang.yang29@zte.com.cn>
-Subject: [PATCH v2 3/5] ksm: count all zero pages placed by KSM
-Date:   Sun,  9 Oct 2022 02:23:21 +0000
-Message-Id: <20221009022321.315374-1-xu.xin16@zte.com.cn>
+Subject: [PATCH v2 4/5] ksm: count zero pages for each process
+Date:   Sun,  9 Oct 2022 02:23:38 +0000
+Message-Id: <20221009022338.315428-1-xu.xin16@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221009021816.315205-1-xu.xin16@zte.com.cn>
 References: <20221009021816.315205-1-xu.xin16@zte.com.cn>
@@ -80,21 +80,18 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: xu xin <xu.xin16@zte.com.cn>
 
-As pages_sharing and pages_shared don't include the number of zero pages
-merged by KSM, we cannot know how many pages are zero pages placed by KSM
-when enabling use_zero_pages, which leads to KSM not being transparent with
-all actual merged pages by KSM. In the early days of use_zero_pages,
-zero-pages was unable to get unshared by the ways like MADV_UNMERGEABLE so
-it's hard to count how many times one of those zeropages was then unmerged.
+As the number of ksm zero pages is not included in ksm_merging_pages per
+process when enabling use_zero_pages, it's unclear of how many actual
+pages are merged by KSM. To let users accurately estimate their memory
+demands when unsharing KSM zero-pages, it's necessary to show KSM zero-
+pages per process.
 
-But now, unsharing KSM-placed zero page accurately has been achieved, so we
-can easily count both how many times a page full of zeroes was merged with
-zero-page and how many times one of those pages was then unmerged. and so,
-it helps to estimate memory demands when each and every shared page could
-get unshared.
+since unsharing zero pages placed by KSM accurately is achieved, then
+tracking empty pages merging and unmerging is not a difficult thing any
+longer.
 
-So we add zero_pages_sharing under /sys/kernel/mm/ksm/ to show the number
-of all zero pages placed by KSM.
+Since we already have /proc/<pid>/ksm_stat, just add the information of
+zero_pages_sharing in it.
 
 Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
 Cc: David Hildenbrand <david@redhat.com>
@@ -103,78 +100,80 @@ Cc: Xiaokai Ran <ran.xiaokai@zte.com.cn>
 Cc: Yang Yang <yang.yang29@zte.com.cn>
 Signed-off-by: xu xin <xu.xin16@zte.com.cn>
 ---
- mm/ksm.c | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+ fs/proc/base.c           | 1 +
+ include/linux/mm_types.h | 7 ++++++-
+ mm/ksm.c                 | 6 +++++-
+ 3 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/mm/ksm.c b/mm/ksm.c
-index e988a17b837e..80672325f179 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -275,6 +275,9 @@ static unsigned int zero_checksum __read_mostly;
- /* Whether to merge empty (zeroed) pages with actual zero pages */
- static bool ksm_use_zero_pages __read_mostly;
- 
-+/* The number of zero pages placed by KSM use_zero_pages */
-+static unsigned long ksm_zero_pages_sharing;
-+
- #ifdef CONFIG_NUMA
- /* Zeroed when merging across nodes is not allowed */
- static unsigned int ksm_merge_across_nodes = 1;
-@@ -541,8 +544,10 @@ static inline int unshare_zero_pages(struct ksm_rmap_item *rmap_item)
- 
- static inline void free_rmap_item(struct ksm_rmap_item *rmap_item)
- {
--	if (rmap_item->address & ZERO_PAGE_FLAG)
--		unshare_zero_pages(rmap_item);
-+	if (rmap_item->address & ZERO_PAGE_FLAG) {
-+		if (!unshare_zero_pages(rmap_item))
-+			ksm_zero_pages_sharing--;
-+	}
- 	ksm_rmap_items--;
- 	rmap_item->mm->ksm_rmap_items--;
- 	rmap_item->mm = NULL;   /* debug safety */
-@@ -2074,8 +2079,10 @@ static int try_to_merge_with_kernel_zero_page(struct mm_struct *mm,
- 		 * In case of failure, the page was not really empty, so we
- 		 * need to continue. Otherwise we're done.
- 		 */
--		if (!err)
-+		if (!err) {
- 			rmap_item->address |= ZERO_PAGE_FLAG;
-+			ksm_zero_pages_sharing++;
-+		}
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index 9e479d7d202b..ac9ebe972be0 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -3207,6 +3207,7 @@ static int proc_pid_ksm_stat(struct seq_file *m, struct pid_namespace *ns,
+ 	mm = get_task_mm(task);
+ 	if (mm) {
+ 		seq_printf(m, "ksm_rmap_items %lu\n", mm->ksm_rmap_items);
++		seq_printf(m, "zero_pages_sharing %lu\n", mm->ksm_zero_pages_sharing);
+ 		mmput(mm);
  	}
  
- 	return err;
-@@ -2177,6 +2184,7 @@ static void cmp_and_merge_page(struct page *page, struct ksm_rmap_item *rmap_ite
- 			 * to reset the flag and update the corresponding count.
- 			 */
- 			rmap_item->address &= PAGE_MASK;
-+			ksm_zero_pages_sharing--;
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 500e536796ca..78a4ee264645 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -691,7 +691,7 @@ struct mm_struct {
+ #ifdef CONFIG_KSM
+ 		/*
+ 		 * Represent how many pages of this process are involved in KSM
+-		 * merging.
++		 * merging (not including ksm_zero_pages_sharing).
+ 		 */
+ 		unsigned long ksm_merging_pages;
+ 		/*
+@@ -699,6 +699,11 @@ struct mm_struct {
+ 		 * including merged and not merged.
+ 		 */
+ 		unsigned long ksm_rmap_items;
++		/*
++		 * Represent how many empty pages are merged with kernel zero
++		 * pages when enabling KSM use_zero_pages.
++		 */
++		unsigned long ksm_zero_pages_sharing;
+ #endif
+ #ifdef CONFIG_LRU_GEN
+ 		struct {
+diff --git a/mm/ksm.c b/mm/ksm.c
+index 80672325f179..c1cc3cd370aa 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -545,8 +545,10 @@ static inline int unshare_zero_pages(struct ksm_rmap_item *rmap_item)
+ static inline void free_rmap_item(struct ksm_rmap_item *rmap_item)
+ {
+ 	if (rmap_item->address & ZERO_PAGE_FLAG) {
+-		if (!unshare_zero_pages(rmap_item))
++		if (!unshare_zero_pages(rmap_item)) {
+ 			ksm_zero_pages_sharing--;
++			rmap_item->mm->ksm_zero_pages_sharing--;
++		}
+ 	}
+ 	ksm_rmap_items--;
+ 	rmap_item->mm->ksm_rmap_items--;
+@@ -2082,6 +2084,7 @@ static int try_to_merge_with_kernel_zero_page(struct mm_struct *mm,
+ 		if (!err) {
+ 			rmap_item->address |= ZERO_PAGE_FLAG;
+ 			ksm_zero_pages_sharing++;
++			rmap_item->mm->ksm_zero_pages_sharing++;
  		}
  	}
  
-@@ -3189,6 +3197,13 @@ static ssize_t pages_volatile_show(struct kobject *kobj,
- }
- KSM_ATTR_RO(pages_volatile);
+@@ -2185,6 +2188,7 @@ static void cmp_and_merge_page(struct page *page, struct ksm_rmap_item *rmap_ite
+ 			 */
+ 			rmap_item->address &= PAGE_MASK;
+ 			ksm_zero_pages_sharing--;
++			rmap_item->mm->ksm_zero_pages_sharing--;
+ 		}
+ 	}
  
-+static ssize_t zero_pages_sharing_show(struct kobject *kobj,
-+				     struct kobj_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%ld\n", ksm_zero_pages_sharing);
-+}
-+KSM_ATTR_RO(zero_pages_sharing);
-+
- static ssize_t stable_node_dups_show(struct kobject *kobj,
- 				     struct kobj_attribute *attr, char *buf)
- {
-@@ -3249,6 +3264,7 @@ static struct attribute *ksm_attrs[] = {
- 	&merge_across_nodes_attr.attr,
- #endif
- 	&max_page_sharing_attr.attr,
-+	&zero_pages_sharing_attr.attr,
- 	&stable_node_chains_attr.attr,
- 	&stable_node_dups_attr.attr,
- 	&stable_node_chains_prune_millisecs_attr.attr,
 -- 
 2.25.1
 
