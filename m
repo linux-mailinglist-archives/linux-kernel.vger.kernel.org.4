@@ -2,64 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD3C5F8D96
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 20:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0FD5F8D9B
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 20:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbiJIS53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 14:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34334 "EHLO
+        id S230241AbiJIS6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 14:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiJIS51 (ORCPT
+        with ESMTP id S230251AbiJIS6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 14:57:27 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCA71A228
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 11:57:25 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id d24so6884640ljl.9
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 11:57:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WDDeNedlMFreEkFqdCoxqyamH5eFrq2g19d8reIB7Ls=;
-        b=WeThPWRXkwpZfJsWoWGSVb4uWG4PHezAIA37BaqNXSNIVx1dbJNzDf2VsdmdR+8HqF
-         f6cRHKZoEjwZtxzNyXnM0ke1R9FfMvLXyrn3xXpKN4fWgINYQPNuDnqDH2IqWPDLR+8y
-         XHoBNraba3Od7sWAq3DB3FXN3RmmTGXZcPnR6J8vv3tgC4Z+D4No6vUU5cQ6b10uHq4e
-         MI8qejIcGDMT8YWYpfl3K+bAEt3HWch5vnJYWXMKTtoiIcRtE7AqaurW8rI87tZVeZPs
-         D75m4rqncv1XQdFmXIcFQ4nLrY2nn+98c4j7bSvTuGFTTRu3sLzAcPmgl/gYq+IUWtHj
-         iUYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WDDeNedlMFreEkFqdCoxqyamH5eFrq2g19d8reIB7Ls=;
-        b=j4gxsgptKZvTwC4W26u7cWawabT4oDYDvRH/JYI4eF0v4hGR5zC/mp3pNHT5aKb0DH
-         N4s+J2pZ3gH0IaEd1aEQS7I4nvk5CEBv6Rvupa/HfcGRH9aw5uMPnxzSRGcuQHZ+vNih
-         zmILd0jRRczEPd/viNHshXId7v0qO13La9+ecyB6NNVjpP0N3Fne0Qf03fjq7zzKBJAv
-         OWyo/r/Bhi77fJcLJtxwEAPUKkwxYsBLMGZ/O1DYb5kwHkoLDlclt5oEagK03lEbgBkl
-         L8+5Y0nomwPgVrVhQ8LgPAGFg8nU4vsgEc+9yUB81bxprO9jOn7Cd0UZtoRCeorRJbqt
-         QHuw==
-X-Gm-Message-State: ACrzQf2onUDaClSgs2MPx3ugcn81oYsnmx9itLtpmwTa1YTxohzjtaKv
-        HJve1FuAwFTIzvHYCX1kYt6WuA==
-X-Google-Smtp-Source: AMsMyM6fBnWKqL2m8+7OmLJdVQRJBD+PLD6fsTbPQKaR/ZodrumStMsrSZTw2rU8z7gB/eEeIjRerQ==
-X-Received: by 2002:a05:651c:210a:b0:26e:ea0b:26ad with SMTP id a10-20020a05651c210a00b0026eea0b26admr1445510ljq.149.1665341843459;
-        Sun, 09 Oct 2022 11:57:23 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id c10-20020a056512324a00b00492d7a7b4e3sm1122940lfr.4.2022.10.09.11.57.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Oct 2022 11:57:23 -0700 (PDT)
-Message-ID: <b2bdf59e-abeb-2828-ae05-8cdb34c27c9c@linaro.org>
-Date:   Sun, 9 Oct 2022 21:57:22 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v3 07/10] drm/msm/dsi: Disallow 8 BPC DSC configuration
- for alternative BPC values
-Content-Language: en-GB
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org
+        Sun, 9 Oct 2022 14:58:10 -0400
+Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [5.144.164.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF2E2EF3B
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 11:58:08 -0700 (PDT)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 5E60F1F969;
+        Sun,  9 Oct 2022 20:58:06 +0200 (CEST)
+Date:   Sun, 9 Oct 2022 20:58:04 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@somainline.org>,
@@ -68,6 +32,25 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         Jami Kettunen <jami.kettunen@somainline.org>,
         Rob Clark <robdclark@gmail.com>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 06/10] drm/msm/dsi: Migrate to
+ drm_dsc_compute_rc_parameters()
+Message-ID: <20221009185804.si22xuo4rs6qxicc@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
         Douglas Anderson <dianders@chromium.org>,
@@ -75,13 +58,12 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
 References: <20221009184824.457416-1-marijn.suijten@somainline.org>
- <20221009185150.461323-1-marijn.suijten@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221009185150.461323-1-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+ <20221009185058.460688-1-marijn.suijten@somainline.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221009185058.460688-1-marijn.suijten@somainline.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,22 +71,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/10/2022 21:51, Marijn Suijten wrote:
-> According to the `/* bpc 8 */` comment below only values for a
-> bits_per_component of 8 are currently hardcoded in place.  This is
-> further confirmed by downstream sources [1] containing different
-> constants for other BPC values (and different initial_offset too,
-> with an extra dependency on bits_per_pixel).  Prevent future mishaps by
-> explicitly disallowing any other bits_per_component value until the
-> right parameters are put in place and tested.
+On 2022-10-09 20:50:54, Marijn Suijten wrote:
+
+Apologies.  After attempting to recover from an unexpected interruption
+_right as I was sending this series_, this patch got sent twice as it
+only later appeared to also have made its way through in the first round
+[1], together with the cover letter and first five patches.
+
+[1]: https://lore.kernel.org/linux-arm-msm/20221009184824.457416-7-marijn.suijten@somainline.org/
+
+- Marijn
+
+> As per the FIXME this code is entirely duplicate with what is already
+> provided inside drm_dsc_compute_rc_parameters(), and it is yet unknown
+> why this comment was put in place instead of resolved from the get-go.
+> Not only does it save on duplication, it would have also spared certain
+> issues.
 > 
-> [1]: https://git.codelinaro.org/clo/la/platform/vendor/opensource/display-drivers/-/blob/DISPLAY.LA.2.0.r1-08000-WAIPIO.0/msm/sde_dsc_helper.c#L110-139
+> For example, this code from downstream assumed dsc->bits_per_pixel to
+> contain an integer value, whereas the upstream drm_dsc_config struct has
+> it with 4 fractional bits.  drm_dsc_compute_rc_parameters() already
+> accounts for this feat, and the sole remaining use of
+> dsc->bits_per_pixel inside dsi_populate_dsc_params() will be addressed
+> in a separate patch.
 > 
+> Fixes: b9080324d6ca ("drm/msm/dsi: add support for dsc data")
 > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
--- 
-With best wishes
-Dmitry
-
+> ---
+>  drivers/gpu/drm/msm/dsi/dsi_host.c | 64 +++---------------------------
+>  1 file changed, 6 insertions(+), 58 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> index 83cde4d62b68..68c39debc22f 100644
+> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> @@ -21,6 +21,7 @@
+>  
+>  #include <video/mipi_display.h>
+>  
+> +#include <drm/display/drm_dsc_helper.h>
+>  #include <drm/drm_of.h>
+>  
+>  #include "dsi.h"
+> @@ -1771,14 +1772,6 @@ static char bpg_offset[DSC_NUM_BUF_RANGES] = {
+>  
+>  static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
+>  {
+> -	int mux_words_size;
+> -	int groups_per_line, groups_total;
+> -	int min_rate_buffer_size;
+> -	int hrd_delay;
+> -	int pre_num_extra_mux_bits, num_extra_mux_bits;
+> -	int slice_bits;
+> -	int data;
+> -	int final_value, final_scale;
+>  	int i;
+>  
+>  	dsc->rc_model_size = 8192;
+> @@ -1804,11 +1797,11 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
+>  	if (dsc->bits_per_pixel != 8)
+>  		dsc->initial_offset = 2048;	/* bpp = 12 */
+>  
+> -	mux_words_size = 48;		/* bpc == 8/10 */
+> -	if (dsc->bits_per_component == 12)
+> -		mux_words_size = 64;
+> +	if (dsc->bits_per_component <= 10)
+> +		dsc->mux_word_size = DSC_MUX_WORD_SIZE_8_10_BPC;
+> +	else
+> +		dsc->mux_word_size = DSC_MUX_WORD_SIZE_12_BPC;
+>  
+> -	dsc->mux_word_size = mux_words_size;
+>  	dsc->initial_xmit_delay = 512;
+>  	dsc->initial_scale_value = 32;
+>  	dsc->first_line_bpg_offset = 12;
+> @@ -1820,52 +1813,7 @@ static int dsi_populate_dsc_params(struct drm_dsc_config *dsc)
+>  	dsc->rc_quant_incr_limit0 = 11;
+>  	dsc->rc_quant_incr_limit1 = 11;
+>  
+> -	/* FIXME: need to call drm_dsc_compute_rc_parameters() so that rest of
+> -	 * params are calculated
+> -	 */
+> -	groups_per_line = DIV_ROUND_UP(dsc->slice_width, 3);
+> -	dsc->slice_chunk_size = DIV_ROUND_UP(dsc->slice_width * dsc->bits_per_pixel, 8);
+> -
+> -	/* rbs-min */
+> -	min_rate_buffer_size =  dsc->rc_model_size - dsc->initial_offset +
+> -				dsc->initial_xmit_delay * dsc->bits_per_pixel +
+> -				groups_per_line * dsc->first_line_bpg_offset;
+> -
+> -	hrd_delay = DIV_ROUND_UP(min_rate_buffer_size, dsc->bits_per_pixel);
+> -
+> -	dsc->initial_dec_delay = hrd_delay - dsc->initial_xmit_delay;
+> -
+> -	dsc->initial_scale_value = 8 * dsc->rc_model_size /
+> -				       (dsc->rc_model_size - dsc->initial_offset);
+> -
+> -	slice_bits = 8 * dsc->slice_chunk_size * dsc->slice_height;
+> -
+> -	groups_total = groups_per_line * dsc->slice_height;
+> -
+> -	data = dsc->first_line_bpg_offset * 2048;
+> -
+> -	dsc->nfl_bpg_offset = DIV_ROUND_UP(data, (dsc->slice_height - 1));
+> -
+> -	pre_num_extra_mux_bits = 3 * (mux_words_size + (4 * dsc->bits_per_component + 4) - 2);
+> -
+> -	num_extra_mux_bits = pre_num_extra_mux_bits - (mux_words_size -
+> -			     ((slice_bits - pre_num_extra_mux_bits) % mux_words_size));
+> -
+> -	data = 2048 * (dsc->rc_model_size - dsc->initial_offset + num_extra_mux_bits);
+> -	dsc->slice_bpg_offset = DIV_ROUND_UP(data, groups_total);
+> -
+> -	data = dsc->initial_xmit_delay * dsc->bits_per_pixel;
+> -	final_value =  dsc->rc_model_size - data + num_extra_mux_bits;
+> -	dsc->final_offset = final_value;
+> -
+> -	final_scale = 8 * dsc->rc_model_size / (dsc->rc_model_size - final_value);
+> -
+> -	data = (final_scale - 9) * (dsc->nfl_bpg_offset + dsc->slice_bpg_offset);
+> -	dsc->scale_increment_interval = (2048 * dsc->final_offset) / data;
+> -
+> -	dsc->scale_decrement_interval = groups_per_line / (dsc->initial_scale_value - 8);
+> -
+> -	return 0;
+> +	return drm_dsc_compute_rc_parameters(dsc);
+>  }
+>  
+>  static int dsi_host_parse_dt(struct msm_dsi_host *msm_host)
+> -- 
+> 2.38.0
+> 
