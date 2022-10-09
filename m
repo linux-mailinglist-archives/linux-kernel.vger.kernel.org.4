@@ -2,103 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2315F8A85
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 12:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 170565F8A88
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 12:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiJIKQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 06:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
+        id S229976AbiJIKR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 06:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiJIKQo (ORCPT
+        with ESMTP id S230002AbiJIKRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 06:16:44 -0400
-Received: from mxout2.routing.net (mxout2.routing.net [IPv6:2a03:2900:1:a::b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A029514029;
-        Sun,  9 Oct 2022 03:16:42 -0700 (PDT)
-Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
-        by mxout2.routing.net (Postfix) with ESMTP id 0F4C25FF91;
-        Sun,  9 Oct 2022 10:16:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1665310601;
+        Sun, 9 Oct 2022 06:17:16 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527DA2CE0C
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 03:17:15 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4ED1760003;
+        Sun,  9 Oct 2022 10:17:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1665310634;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UvX5JZ3bRps1L5sLKCfsTQTlmDO/mXO5YN2RtdaxIBM=;
-        b=MOdHhfKXcvq4XKXfTBYUtQIVY8JT5DNuGCzThIZ4oxr311CtMPUbYozvXeGiWbpVX/01dF
-        iYHVXAWanNasveWEuBgthHPS5D73E2LQJgKaGA+mT+7a9bQv50gBET3+8A9/yaAHYJiQAb
-        QsePUUY3LBmUHTm2krLE2XgpbhzA41Q=
-Received: from frank-G5.. (fttx-pool-217.61.145.235.bambit.de [217.61.145.235])
-        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 646791005FA;
-        Sun,  9 Oct 2022 10:16:40 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Qii Wang <qii.wang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] i2c: mediatek: add mt7986 support
-Date:   Sun,  9 Oct 2022 12:16:31 +0200
-Message-Id: <20221009101631.82380-3-linux@fw-web.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221009101631.82380-1-linux@fw-web.de>
-References: <20221009101631.82380-1-linux@fw-web.de>
+        bh=EJbLySeJ2z0oLQnlb4jRyOMMn4QDACjqzur2LSX6plA=;
+        b=e8GYXYi6DqNrSikRmR9wFPZudo6rG+g63ExcWLTFxUPbEwFEfSXvLNiTmYMnNL56jyZhos
+        e03vGjIvuZaHvQHKIari555v279PtvGdbTiA3daaan0cIQhl6Ef/afLLjNOsEkCrbSD7aX
+        kZAL7cvqlj0qD7hhTWWLtW70ISoR6X6eqCTkdw1n4hudswYE/1SDKLV7ac94el2XjTxaVT
+        rm+f/N/4f8HLsm1BZyLXgnvTgi6hvxB5D4MH8OUVPhUvVEt9wqRzBb1xVfCfop0a5mq2qr
+        WqLKwy5DG/f37uRkNO5nI7057tzmgAodgA6RzXd1DHSA5mdz3MZNdVCHSY59jg==
+Date:   Sun, 9 Oct 2022 12:17:10 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Joe Perches <joe@perches.com>
+Cc:     Ray Zhang <sgzhang@google.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] mtd: mtdoops: change printk() to counterpart pr_
+ functions
+Message-ID: <20221009121710.2ebf951c@xps-13>
+In-Reply-To: <0d4febb49ddbae9cd99606a89573a7c832ed0965.camel@perches.com>
+References: <20221007215027.918507-1-sgzhang@google.com>
+        <20221007215027.918507-2-sgzhang@google.com>
+        <0d4febb49ddbae9cd99606a89573a7c832ed0965.camel@perches.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mail-ID: a3c6661a-5cf1-4138-9773-e2eb642628db
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+Hi Joe,
 
-Add i2c support for MT7986 SoC.
+joe@perches.com wrote on Sat, 08 Oct 2022 00:25:07 -0700:
 
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
----
- drivers/i2c/busses/i2c-mt65xx.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+> On Fri, 2022-10-07 at 21:50 +0000, Ray Zhang wrote:
+> > To comply with latest kernel code requirement, change printk() to
+> > counterpart pr_ functions in mtdoops driver:
+> > - change printk(INFO) to pr_info()
+> > - change printk(DEBUG) to pr_debug()
+> > - change printk(WARNING) to pr_warn()
+> > - change printk(ERR) to pr_err()
+> >=20
+> > Note that only if dynamic debugging is enabled or DEBUG is defined,
+> > printk(KERN_DEBUG) and pr_debug() are equivalent; Otherwise pr_debug()
+> > is no-op, causing different behavior. =20
+>=20
+> Another thing possible is to add
+>=20
+> #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>=20
+> before any #include
 
-diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
-index fc7bfd98156b..d80e59340d97 100644
---- a/drivers/i2c/busses/i2c-mt65xx.c
-+++ b/drivers/i2c/busses/i2c-mt65xx.c
-@@ -431,6 +431,19 @@ static const struct mtk_i2c_compatible mt8168_compat = {
- 	.max_dma_support = 33,
- };
- 
-+static const struct mtk_i2c_compatible mt7986_compat = {
-+	.quirks = &mt7622_i2c_quirks,
-+	.regs = mt_i2c_regs_v1,
-+	.pmic_i2c = 0,
-+	.dcm = 1,
-+	.auto_restart = 1,
-+	.aux_len_reg = 1,
-+	.timing_adjust = 0,
-+	.dma_sync = 1,
-+	.ltiming_adjust = 0,
-+	.max_dma_support = 32,
-+};
-+
- static const struct mtk_i2c_compatible mt8173_compat = {
- 	.regs = mt_i2c_regs_v1,
- 	.pmic_i2c = 0,
-@@ -503,6 +516,7 @@ static const struct of_device_id mtk_i2c_of_match[] = {
- 	{ .compatible = "mediatek,mt6577-i2c", .data = &mt6577_compat },
- 	{ .compatible = "mediatek,mt6589-i2c", .data = &mt6589_compat },
- 	{ .compatible = "mediatek,mt7622-i2c", .data = &mt7622_compat },
-+	{ .compatible = "mediatek,mt7986-i2c", .data = &mt7986_compat },
- 	{ .compatible = "mediatek,mt8168-i2c", .data = &mt8168_compat },
- 	{ .compatible = "mediatek,mt8173-i2c", .data = &mt8173_compat },
- 	{ .compatible = "mediatek,mt8183-i2c", .data = &mt8183_compat },
--- 
-2.34.1
+Good point.
 
+> > diff --git a/drivers/mtd/mtdoops.c b/drivers/mtd/mtdoops.c =20
+> []
+> > @@ -93,9 +93,9 @@ static int mtdoops_erase_block(struct mtdoops_context=
+ *cxt, int offset)
+> > =20
+> >  	ret =3D mtd_erase(mtd, &erase);
+> >  	if (ret) {
+> > -		printk(KERN_WARNING "mtdoops: erase of region [0x%llx, 0x%llx] on \"=
+%s\" failed\n",
+> > -		       (unsigned long long)erase.addr,
+> > -		       (unsigned long long)erase.len, mtddev);
+> > +		pr_warn("mtdoops: erase of region [0x%llx, 0x%llx] on \"%s\" failed\=
+n",
+> > +			(unsigned long long)erase.addr,
+> > +			(unsigned long long)erase.len, mtddev); =20
+>=20
+> And remove the "mtdoops: " prefixes from all the output formats
+>=20
+> 		pr_warn("erase of region [0x%llx, 0x%llx] on \"%s\" failed\n",
+> 			(unsigned long long)erase.addr,
+> 			(unsigned long long)erase.len, mtddev);
+>=20
+> > @@ -120,8 +120,8 @@ static void mtdoops_inc_counter(struct mtdoops_cont=
+ext *cxt)
+> >  		return;
+> >  	}
+> > =20
+> > -	printk(KERN_DEBUG "mtdoops: ready %d, %d (no erase)\n",
+> > -	       cxt->nextpage, cxt->nextcount);
+> > +	pr_debug("mtdoops: ready %d, %d (no erase)\n",
+> > +		 cxt->nextpage, cxt->nextcount); =20
+>=20
+> 	pr_debug("ready %d, %d (no erase)\n", cxt->nextpage, cxt->nextcount);
+>=20
+> etc...
+>=20
+
+
+Thanks,
+Miqu=C3=A8l
