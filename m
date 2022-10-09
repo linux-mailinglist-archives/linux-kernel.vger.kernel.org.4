@@ -2,43 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 280D35F8B8A
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 15:13:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9795F8B8E
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 15:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbiJINNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 09:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48198 "EHLO
+        id S230052AbiJINRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 09:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiJINNq (ORCPT
+        with ESMTP id S229749AbiJINRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 09:13:46 -0400
-Received: from mail.galaxycrow.de (mail.galaxycrow.de [162.55.242.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D874927B30
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 06:13:43 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D3D85621F5;
-        Sun,  9 Oct 2022 15:13:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=galaxycrow.de;
-        s=dkim; t=1665321220; h=from:subject:date:message-id:to:mime-version:content-type;
-        bh=gG3hMKGT5zMsFTXzJUA7f6NuykxZjEN3ciFuYY+hf48=;
-        b=kCs8EbW8rZpAQN1OHbubUKTg/z45I7b1I96SHQOaGbjRpZCDuyyH3sYN71c95caRoyp2ip
-        QCoKVUfVTJpd8k9k7KLcsVGLKBpd7K2XEWUOweAuswoWwfiphsV1tHn2edj/kQ121E52f0
-        ysVAwYbZTJ21uydYkwPWyMvJjN66i5w9heoodpwM0cHzGFptkw0G8wAlIvzDBPm57jqX9K
-        qRCHiXZGRY0eIZ2TTmx0CsXRe8z6ON/RdGBpHVGv+jH5yQGp+H8gqfcbO8S2aGl1UMaOBA
-        z6R+g1EhiwWeIBhIXWsHnjWZ9x5ZYRSFCF+Un7FjNJ8vHQLDS57ZVnrwrDOA2Q==
-Date:   Sun, 9 Oct 2022 15:13:27 +0200
-From:   Cleo John <waterdev@galaxycrow.de>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] riscv: fix styling in ucontext header
-Message-ID: <20221009131327.GA50929@watet-ms7b87>
+        Sun, 9 Oct 2022 09:17:42 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77338237F3
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 06:17:40 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id l4so8303685plb.8
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 06:17:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o8DJS0Bp8z45upCAfsSfSsEEeWWUheV9TXrd7HE4E5Q=;
+        b=HabQFMpeWkb0G9twyGKYTxVx3VK2Y0/WFt2RsmoBIsBD6hPeQylWAWegVnix/khHbi
+         gOrS2QCBvW2qK5mQ2Q6R4zhju5Xli6bItriGACBPMtq5pujMzxEvkROCVd2EGeUQhwrg
+         Z+Rl49ecGsI/JbmleX02H77azPRiQZOqHOWqL6Kzw+hejCkOf6AecvQmlegwua2AAZwA
+         aIp4Df7dKKJDn5H9fODP68s1Pi3rSA+BybbK82HeJKVf46IjMktDe3XVds4ZOQV7QDhL
+         uHo1jYQfLH1jHhfxQHorpl18sS+gfXa+EiL3AC25/oUk6CRNggNrHl6fKgiGqtIUuGAi
+         Q+ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o8DJS0Bp8z45upCAfsSfSsEEeWWUheV9TXrd7HE4E5Q=;
+        b=Il6EfUFlNdwUVeMZUjyeGWqqWh1jWwm6umN44Qw+2fEO7WPWUH6QN6WlQyNR0cCtPZ
+         IjOR3zrxaehpu4A0NxhyHN9sU0d4nUzK2Wirfx4OPTCKZrOMmNhX0SDJRJtBW0XSPOmm
+         OcfgbkYWnUJCCGxbylbwPI+qlaJ/ihBBAi+FH7jZdqFL7dyLY651QXtnzxTfT9ThvQ5s
+         8e3tonpga0XvoZZw/qRG/s19R7SYbbS8kCfSxyZayGh8ZFTZbgCB+i3EjY3G5y3MlIJj
+         HlUzqGJKLVF0TErO8NoNxf9irKxg+AyZIE9XPWkz1QcxBRJ2mix2cFreEjxoDurE5Bne
+         LDTQ==
+X-Gm-Message-State: ACrzQf0OPQjxuasH4UjfbtTe1hBIeB9pj5bgYcaSLiqFknEpF3AEjKSO
+        ZUHlO1lVB/FEzx/IyP0VDRxhzA==
+X-Google-Smtp-Source: AMsMyM7Lv/jvgPK2zEH9j3o0xXv6dFpXCCN53f8L0eM0CaGfsvbD6ewAA3iuiiP7yT43P0kLYIAjtw==
+X-Received: by 2002:a17:902:b945:b0:181:c6b6:abc with SMTP id h5-20020a170902b94500b00181c6b60abcmr3524401pls.75.1665321459931;
+        Sun, 09 Oct 2022 06:17:39 -0700 (PDT)
+Received: from [10.70.253.98] ([139.177.225.246])
+        by smtp.gmail.com with ESMTPSA id g5-20020aa796a5000000b00561d79f1064sm4958765pfk.57.2022.10.09.06.17.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Oct 2022 06:17:38 -0700 (PDT)
+Message-ID: <ff2addac-5a6c-1aa5-5f1c-d62b0444ae4c@bytedance.com>
+Date:   Sun, 9 Oct 2022 21:17:34 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.1
+Subject: Re: PSI idle-shutoff
+Content-Language: en-US
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     Suren Baghdasaryan <surenb@google.com>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Charan Teja Kalla <quic_charante@quicinc.com>
+References: <20220913140817.GA9091@hu-pkondeti-hyd.qualcomm.com>
+ <20220915062027.GA14713@hu-pkondeti-hyd.qualcomm.com>
+ <CAJuCfpE_nM2uqixnds0d6wbsz4=OQ3KPoJ5HOqDhQXaxFGxwXQ@mail.gmail.com>
+ <CAJuCfpEeNzDQ-CvMN3fP5LejOzpnfgUgvkzpPj1CLF-8NqNoww@mail.gmail.com>
+ <CAJuCfpFr3JfwkWbDqkU=NUJbCYuCWGySwNusMCdmS3z95WD2AQ@mail.gmail.com>
+ <43f4d1c3-52fe-5254-7d50-c420de6d11a6@bytedance.com>
+In-Reply-To: <43f4d1c3-52fe-5254-7d50-c420de6d11a6@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,53 +81,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change the two comments in ucontext.h by getting them up to
-the coding style proposed by torvalds.
+On 2022/10/9 20:41, Chengming Zhou wrote:
+> Hello,
+> 
+> I just saw these emails, sorry for late.
+> 
+> On 2022/10/6 00:32, Suren Baghdasaryan wrote:
+>> On Sun, Oct 2, 2022 at 11:11 PM Suren Baghdasaryan <surenb@google.com> wrote:
+>>>
+>>> On Fri, Sep 16, 2022 at 10:45 PM Suren Baghdasaryan <surenb@google.com> wrote:
+>>>>
+>>>> On Wed, Sep 14, 2022 at 11:20 PM Pavan Kondeti
+>>>> <quic_pkondeti@quicinc.com> wrote:
+>>>>>
+>>>>> On Tue, Sep 13, 2022 at 07:38:17PM +0530, Pavan Kondeti wrote:
+>>>>>> Hi
+>>>>>>
+>>>>>> The fact that psi_avgs_work()->collect_percpu_times()->get_recent_times()
+>>>>>> run from a kworker thread, PSI_NONIDLE condition would be observed as
+>>>>>> there is a RUNNING task. So we would always end up re-arming the work.
+>>>>>>
+>>>>>> If the work is re-armed from the psi_avgs_work() it self, the backing off
+>>>>>> logic in psi_task_change() (will be moved to psi_task_switch soon) can't
+>>>>>> help. The work is already scheduled. so we don't do anything there.
+>>>>
+>>>> Hi Pavan,
+>>>> Thanks for reporting the issue. IIRC [1] was meant to fix exactly this
+>>>> issue. At the time it was written I tested it and it seemed to work.
+>>>> Maybe I missed something or some other change introduced afterwards
+>>>> affected the shutoff logic. I'll take a closer look next week when I'm
+>>>> back at my computer and will consult with Johannes.
+>>>
+>>> Sorry for the delay. I had some time to look into this and test psi
+>>> shutoff on my device and I think you are right. The patch I mentioned
+>>> prevents new psi_avgs_work from being scheduled when the only non-idle
+>>> task is psi_avgs_work itself, however the regular 2sec averaging work
+>>> will still go on. I think we could record the fact that the only
+>>> active task is psi_avgs_work in record_times() using a new
+>>> psi_group_cpu.state_mask flag and then prevent psi_avgs_work() from
+>>> rescheduling itself if that flag is set for all non-idle cpus. I'll
+>>> test this approach and will post a patch for review if that works.
+>>
+>> Hi Pavan,
+>> Testing PSI shutoff on Android proved more difficult than I expected.
+>> Lots of tasks to silence and I keep encountering new ones.
+>> The approach I was thinking about is something like this:
+>>
+>> ---
+>>  include/linux/psi_types.h |  3 +++
+>>  kernel/sched/psi.c        | 12 +++++++++---
+>>  2 files changed, 12 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+>> index c7fe7c089718..8d936f22cb5b 100644
+>> --- a/include/linux/psi_types.h
+>> +++ b/include/linux/psi_types.h
+>> @@ -68,6 +68,9 @@ enum psi_states {
+>>          NR_PSI_STATES = 7,
+>>  };
+>>
+>> +/* state_mask flag to keep re-arming averaging work */
+>> +#define PSI_STATE_WAKE_CLOCK        (1 << NR_PSI_STATES)
+>> +
+>>  enum psi_aggregators {
+>>          PSI_AVGS = 0,
+>>          PSI_POLL,
+>> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+>> index ecb4b4ff4ce0..dd62ad28bacd 100644
+>> --- a/kernel/sched/psi.c
+>> +++ b/kernel/sched/psi.c
+>> @@ -278,6 +278,7 @@ static void get_recent_times(struct psi_group
+>> *group, int cpu,
+>>                  if (delta)
+>>                          *pchanged_states |= (1 << s);
+>>          }
+>> +        *pchanged_states |= (state_mask & PSI_STATE_WAKE_CLOCK);
+> 
+> If the avgs_work kworker is running on this CPU, it will still see
+> PSI_STATE_WAKE_CLOCK set in state_mask? So the work will be re-armed?
+> 
+> Maybe I missed something... but I have another different idea which
+> I want to implement later only for discussion.
 
-Signed-off-by: Cleo John <waterdev@galaxycrow.de>
----
-In my opinion this also improves the readability so I think
-this is a useful change to do.
-Please also tell me if you have a different opinion.
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index ee2ecc081422..f322e8fd8d41 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -241,11 +241,13 @@ static void get_recent_times(struct psi_group *group, int cpu,
+                             enum psi_aggregators aggregator, u32 *times,
+                             u32 *pchanged_states)
+ {
++       int current_cpu = raw_smp_processor_id();
+        struct psi_group_cpu *groupc = per_cpu_ptr(group->pcpu, cpu);
+        u64 now, state_start;
+        enum psi_states s;
+        unsigned int seq;
+        u32 state_mask;
++       bool only_avgs_work = false;
 
-Changes in v2:
- - change opening comments too
+        *pchanged_states = 0;
 
- arch/riscv/include/uapi/asm/ucontext.h | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+@@ -256,6 +258,14 @@ static void get_recent_times(struct psi_group *group, int cpu,
+                memcpy(times, groupc->times, sizeof(groupc->times));
+                state_mask = groupc->state_mask;
+                state_start = groupc->state_start;
++               /*
++                * This CPU has only avgs_work kworker running, snapshot the
++                * newest times then don't need to re-arm work for this groupc.
++                * Normally this kworker will sleep soon and won't
++                * wake_clock in psi_group_change().
++                */
++               if (current_cpu == cpu && groupc->tasks[NR_RUNNING] == 1)
++                       only_avgs_work = true;
+        } while (read_seqcount_retry(&groupc->seq, seq));
 
-diff --git a/arch/riscv/include/uapi/asm/ucontext.h b/arch/riscv/include/uapi/asm/ucontext.h
-index 44eb993950e5..516bd0bb0da5 100644
---- a/arch/riscv/include/uapi/asm/ucontext.h
-+++ b/arch/riscv/include/uapi/asm/ucontext.h
-@@ -15,19 +15,23 @@ struct ucontext {
- 	struct ucontext	 *uc_link;
- 	stack_t		  uc_stack;
- 	sigset_t	  uc_sigmask;
--	/* There's some padding here to allow sigset_t to be expanded in the
-+	/*
-+	 * There's some padding here to allow sigset_t to be expanded in the
- 	 * future.  Though this is unlikely, other architectures put uc_sigmask
- 	 * at the end of this structure and explicitly state it can be
--	 * expanded, so we didn't want to box ourselves in here. */
-+	 * expanded, so we didn't want to box ourselves in here.
-+	 */
- 	__u8		  __unused[1024 / 8 - sizeof(sigset_t)];
--	/* We can't put uc_sigmask at the end of this structure because we need
-+	/*
-+	 * We can't put uc_sigmask at the end of this structure because we need
- 	 * to be able to expand sigcontext in the future.  For example, the
- 	 * vector ISA extension will almost certainly add ISA state.  We want
- 	 * to ensure all user-visible ISA state can be saved and restored via a
- 	 * ucontext, so we're putting this at the end in order to allow for
- 	 * infinite extensibility.  Since we know this will be extended and we
- 	 * assume sigset_t won't be extended an extreme amount, we're
--	 * prioritizing this. */
-+	 * prioritizing this.
-+	 */
- 	struct sigcontext uc_mcontext;
- };
- 
--- 
-2.25.1
+        /* Calculate state time deltas against the previous snapshot */
+@@ -280,6 +290,10 @@ static void get_recent_times(struct psi_group *group, int cpu,
+                if (delta)
+                        *pchanged_states |= (1 << s);
+        }
++
++       /* Clear PSI_NONIDLE so avgs_work won't be re-armed for this groupc */
++       if (only_avgs_work)
++               *pchanged_states &= ~(1 << PSI_NONIDLE);
+ }
 
+ static void calc_avgs(unsigned long avg[3], int missed_periods,
+
+
+> 
+> Thanks.
+> 
+>>  }
+>>
+>>  static void calc_avgs(unsigned long avg[3], int missed_periods,
+>> @@ -413,7 +414,7 @@ static void psi_avgs_work(struct work_struct *work)
+>>          struct delayed_work *dwork;
+>>          struct psi_group *group;
+>>          u32 changed_states;
+>> -        bool nonidle;
+>> +        bool wake_clock;
+>>          u64 now;
+>>
+>>          dwork = to_delayed_work(work);
+>> @@ -424,7 +425,7 @@ static void psi_avgs_work(struct work_struct *work)
+>>          now = sched_clock();
+>>
+>>          collect_percpu_times(group, PSI_AVGS, &changed_states);
+>> -        nonidle = changed_states & (1 << PSI_NONIDLE);
+>> +        wake_clock = changed_states & PSI_STATE_WAKE_CLOCK;
+>>          /*
+>>           * If there is task activity, periodically fold the per-cpu
+>>           * times and feed samples into the running averages. If things
+>> @@ -435,7 +436,7 @@ static void psi_avgs_work(struct work_struct *work)
+>>          if (now >= group->avg_next_update)
+>>                  group->avg_next_update = update_averages(group, now);
+>>
+>> -        if (nonidle) {
+>> +        if (wake_clock) {
+>>                  schedule_delayed_work(dwork, nsecs_to_jiffies(
+>>                                  group->avg_next_update - now) + 1);
+>>          }
+>> @@ -742,6 +743,11 @@ static void psi_group_change(struct psi_group
+>> *group, int cpu,
+>>          if (unlikely(groupc->tasks[NR_ONCPU] && cpu_curr(cpu)->in_memstall))
+>>                  state_mask |= (1 << PSI_MEM_FULL);
+>>
+>> +        if (wake_clock || test_state(groupc->tasks, PSI_NONIDLE)) {
+>> +                /* psi_avgs_work was not the only task on the CPU */
+>> +                state_mask |= PSI_STATE_WAKE_CLOCK;
+>> +        }
+>> +
+>>          groupc->state_mask = state_mask;
+>>
+>>          write_seqcount_end(&groupc->seq);
