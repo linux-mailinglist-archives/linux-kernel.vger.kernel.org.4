@@ -2,123 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED345F8B7F
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 15:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C95A05F8B92
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 15:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbiJINBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 09:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
+        id S230136AbiJINel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 09:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbiJINBA (ORCPT
+        with ESMTP id S229950AbiJINej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 09:01:00 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E26A29812;
-        Sun,  9 Oct 2022 06:00:58 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Mlhtn4HtWzKFTc;
-        Sun,  9 Oct 2022 20:58:41 +0800 (CST)
-Received: from k01.huawei.com (unknown [10.67.174.197])
-        by APP2 (Coremail) with SMTP id Syh0CgDHX9T6xUJjwRQEAA--.16593S7;
-        Sun, 09 Oct 2022 21:00:55 +0800 (CST)
-From:   Xu Kuohai <xukuohai@huaweicloud.com>
-To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Hou Tao <houtao1@huawei.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Kui-Feng Lee <kuifeng@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next 5/5] selftest/bpf: Fix error usage of ASSERT_OK in xdp_adjust_tail.c
-Date:   Sun,  9 Oct 2022 09:18:30 -0400
-Message-Id: <20221009131830.395569-6-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221009131830.395569-1-xukuohai@huaweicloud.com>
-References: <20221009131830.395569-1-xukuohai@huaweicloud.com>
+        Sun, 9 Oct 2022 09:34:39 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C39CF9;
+        Sun,  9 Oct 2022 06:34:36 -0700 (PDT)
+Received: from kwepemi500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mljb75P7VzVhqF;
+        Sun,  9 Oct 2022 21:30:11 +0800 (CST)
+Received: from [10.67.111.83] (10.67.111.83) by kwepemi500022.china.huawei.com
+ (7.221.188.64) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sun, 9 Oct
+ 2022 21:34:33 +0800
+Message-ID: <b725c6eb-1026-a010-1e93-50af9a96a0a4@huawei.com>
+Date:   Sun, 9 Oct 2022 21:34:33 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH -next] power: supply: mt6370: Fix Kconfig dependency
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, <sre@kernel.org>,
+        <andy.shevchenko@gmail.com>, <chiaen_wu@richtek.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220922023337.15609-1-renzhijie2@huawei.com>
+ <904af4cb-147f-a7ba-63e3-c27cad0350f2@gmail.com>
+From:   Ren Zhijie <renzhijie2@huawei.com>
+In-Reply-To: <904af4cb-147f-a7ba-63e3-c27cad0350f2@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgDHX9T6xUJjwRQEAA--.16593S7
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFyfur4UArW5ZFWDCFy8Xwb_yoW8WF43pa
-        4UJw1qya4Fvr1UXF1UJFy29ry8K3WxWw1fCa9F9r45Ar47XF97JF1xKayaq3ZYgFWrXw1r
-        Z345Krn5Zw45J3JanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-        xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-        z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2
-        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0x
-        vE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAI
-        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUFgAwUUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-Originating-IP: [10.67.111.83]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500022.china.huawei.com (7.221.188.64)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Kuohai <xukuohai@huawei.com>
+Hi,
 
-xdp_adjust_tail.c calls ASSERT_OK() to check the return value of
-bpf_prog_test_load(), but the condition is not correct. Fix it.
+just a friendly ping...
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Ren
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-index 9b9cf8458adf..29f0194e6170 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-@@ -18,7 +18,7 @@ static void test_xdp_adjust_tail_shrink(void)
- 	);
- 
- 	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
--	if (ASSERT_OK(err, "test_xdp_adjust_tail_shrink"))
-+	if (!ASSERT_OK(err, "test_xdp_adjust_tail_shrink"))
- 		return;
- 
- 	err = bpf_prog_test_run_opts(prog_fd, &topts);
-@@ -53,7 +53,7 @@ static void test_xdp_adjust_tail_grow(void)
- 	);
- 
- 	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
--	if (ASSERT_OK(err, "test_xdp_adjust_tail_grow"))
-+	if (!ASSERT_OK(err, "test_xdp_adjust_tail_grow"))
- 		return;
- 
- 	err = bpf_prog_test_run_opts(prog_fd, &topts);
-@@ -89,7 +89,7 @@ static void test_xdp_adjust_tail_grow2(void)
- 	);
- 
- 	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
--	if (ASSERT_OK(err, "test_xdp_adjust_tail_grow"))
-+	if (!ASSERT_OK(err, "test_xdp_adjust_tail_grow"))
- 		return;
- 
- 	/* Test case-64 */
--- 
-2.25.1
-
+在 2022/9/22 17:58, ChiaEn Wu 写道:
+> On 9/22/2022 10:33 AM, Ren Zhijie wrote:
+>> If CONFIG_IIO is not set,
+>> make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-,
+>> will be failed, like this:
+>>
+>> drivers/power/supply/mt6370-charger.o: In function 
+>> `mt6370_chg_mivr_dwork_func':
+>> mt6370-charger.c:(.text+0x670): undefined reference to 
+>> `iio_read_channel_processed'
+>> drivers/power/supply/mt6370-charger.o: In function `mt6370_chg_probe':
+>> mt6370-charger.c:(.text+0xb43): undefined reference to 
+>> `devm_iio_channel_get_all'
+>> make: *** [vmlinux] Error 1
+>>
+>> To fix this build error, add depends on IIO to config CHARGER_MT6370 
+>> dependency.
+>>
+>> Fixes: 233cb8a47d65 ("power: supply: mt6370: Add MediaTek MT6370 
+>> charger driver")
+>> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+>> ---
+>>   drivers/power/supply/Kconfig | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+>> index 591deb82e2c6..62111f4bb093 100644
+>> --- a/drivers/power/supply/Kconfig
+>> +++ b/drivers/power/supply/Kconfig
+>> @@ -623,6 +623,7 @@ config CHARGER_MT6370
+>>       tristate "MediaTek MT6370 Charger Driver"
+>>       depends on MFD_MT6370
+>>       depends on REGULATOR
+>> +    depends on IIO
+>>       select LINEAR_RANGES
+>>       help
+>>         Say Y here to enable MT6370 Charger Part.
+>
+> Hi Ren,
+>
+> Thanks for catching this!
+>
+> Reviewed-by: ChiaEn Wu <chiaen_wu@richtek.com>
+>
