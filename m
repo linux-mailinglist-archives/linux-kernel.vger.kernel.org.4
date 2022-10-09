@@ -2,50 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87075F8AAF
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 12:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DEB5F8AB2
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 12:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbiJIKhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 06:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
+        id S230032AbiJIKif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 06:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiJIKhe (ORCPT
+        with ESMTP id S229711AbiJIKib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 06:37:34 -0400
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA9EB36
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 03:37:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1665311851;
-        bh=J54On5AUhcm4ClBxiTcpnPQn1WKK6Rp1zpMkD36rdaU=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Sd1p8jg6QFSVuFZ44YwupxEOOZ02rhipzEXlOZDyx3ZaKSjhiWn8TjJSfQtN902vk
-         z6YpjdIGDxd/H1WMblzbIfT7qa9tdAsRb1xJN/K0zHiR3HsTfVRpvgKv3vIdmwelO3
-         Z3mqkTztUDiOCylqnajFBFWxV7w3rzhAeBd8dqwI=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 139206680B;
-        Sun,  9 Oct 2022 06:37:29 -0400 (EDT)
-Message-ID: <19415767029b479a508378abaf8c6c5a1d048add.camel@xry111.site>
-Subject: Re: [PATCH] LoongArch: mm: Refactor TLB handlers
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     Huacai Chen <chenhuacai@kernel.org>, Rui Wang <wangrui@loongson.cn>
-Cc:     loongarch@lists.linux.dev, WANG Xuerui <kernel@xen0n.name>,
-        linux-kernel@vger.kernel.org
-Date:   Sun, 09 Oct 2022 18:37:28 +0800
-In-Reply-To: <CAAhV-H6e9ZyC8TkpWK3Etgz4-kEEEU4Hj=i5obMFk=URgCwrgw@mail.gmail.com>
-References: <20221004140230.748788-1-wangrui@loongson.cn>
-         <CAAhV-H6e9ZyC8TkpWK3Etgz4-kEEEU4Hj=i5obMFk=URgCwrgw@mail.gmail.com>
+        Sun, 9 Oct 2022 06:38:31 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301F3B36;
+        Sun,  9 Oct 2022 03:38:31 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id g130so10110170oia.13;
+        Sun, 09 Oct 2022 03:38:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nWvhnVzPYFvs5pSg57txecq8CLlBbSop8yXnsSTys3A=;
+        b=ZC2PllSsRBAEa7KzF+tHhQsTHPlV7cJsXuqY/c3gleLpbTXesyWSVHnQKwCGnL9+xj
+         +8cEodhhpQ+6og0w7xtcM9Qv3SXllRSaPRaTkO6UackfVw9uB9I8qVtAl5zCBmDrJY74
+         NEy6qd7sEtPvfjJ+oPLBU1KFeZvAYiJIxFamPUikCdkHVuTGdanxMfM0efVneere5NRD
+         snCymbzEZ0jqP4ONGOXOC0KBdAaKnlmiUCfh+vwcEMVEmlugLuYHGguew5YuB8EQGD9X
+         QmRQJiyE5nBJQEQjUuiSFNF2yRomy+Q/8yf2xPdMT3H5zbHBvcPwdzfDhoP0NPlRy39t
+         aUuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nWvhnVzPYFvs5pSg57txecq8CLlBbSop8yXnsSTys3A=;
+        b=JkkQ5+SXBP5xsYwDO5GO0lvrTMI9sD/SPs3CQUt+2gONamz7WEA53r14J6CvxOKCR+
+         zx6osdgwgbKelVJhNe7M+z11uJWObehmsZpch3NEAU9+dkj6zzaVExEFf3iWm2/rJ0hv
+         TRpoXe2ollsgm3sDst02jsBQ/7AoYP+r4LCwKm6Oi6uSuwFSgp9wD8FcyWwyA44APR42
+         7J3TEEWzujB+UmycgMIyAxBiM33lSGlDnrwS8kESxLS9HBdExtrcKpELyc02qeucKcLq
+         oLQaPo89+6fBoUfAO+AeZ6RdEVORQDGgHrOIdgRonbphdqXEP0OlvyV/anZwtJRPXiXD
+         epLA==
+X-Gm-Message-State: ACrzQf1Bkql5VHAwTOld8tfCnAkVdE1YB5DumIw9abH+iP5LM3+E7Rvy
+        v5lPdQ6bcF1ZrYXh7SbE9dP7XNxcEMVSPXLoDq8=
+X-Google-Smtp-Source: AMsMyM7UKkIQ/57B7LP5SutSXYYsVj/iDA3foIuY201VGVWeO5D7kx7nsQYaitzvNyd20/CPCf69RXCxFK3XZIZGk88=
+X-Received: by 2002:a05:6808:e8e:b0:34d:7829:135 with SMTP id
+ k14-20020a0568080e8e00b0034d78290135mr6499786oil.252.1665311910417; Sun, 09
+ Oct 2022 03:38:30 -0700 (PDT)
+MIME-Version: 1.0
+References: <YzN+ZYLjK6HI1P1C@ZenIV> <YzSSl1ItVlARDvG3@ZenIV>
+ <YzpcXU2WO8e22Cmi@iweiny-desk3> <7714.1664794108@jrobl> <Yzs4mL3zrrC0/vN+@iweiny-mobl>
+ <YztfvaAFOe2kGvDz@ZenIV> <4011.1664837894@jrobl> <YztyLFZJKKTWcMdO@ZenIV>
+ <CAHk-=whsOyuRhjmUQ5c1dBQYt1E4ANhObAbEspWtUyt+Pq=Kmw@mail.gmail.com> <CA+icZUVXvMM-sK41oz_Ne4HyRGxXHNz=fPqy+1AYXmXPiE_=Rw@mail.gmail.com>
+In-Reply-To: <CA+icZUVXvMM-sK41oz_Ne4HyRGxXHNz=fPqy+1AYXmXPiE_=Rw@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sun, 9 Oct 2022 12:37:54 +0200
+Message-ID: <CA+icZUVBFo3v6L8Y4HNMR3XxsBb9YoMw9j+ehXpkWov9EeM59A@mail.gmail.com>
+Subject: Re: [PATCH][CFT] [coredump] don't use __kernel_write() on kmap_local_page()
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        "J. R. Okajima" <hooanon05g@gmail.com>,
+        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ren Zhijie <renzhijie2@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.0 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        SPF_HELO_PASS,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,23 +77,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-10-09 at 14:13 +0800, Huacai Chen wrote:
-> Queued for loongarch-next, thanks.
+On Tue, Oct 4, 2022 at 8:18 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Tue, Oct 4, 2022 at 2:51 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > On Mon, Oct 3, 2022 at 4:37 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> > >
+> > > One variant would be to revert the original patch, put its
+> > > (hopefully) fixed variant into -next and let it sit there for
+> > > a while.  Another is to put this incremental into -next and
+> > > merge it into mainline once it gets a sane amount of testing.
+> >
+> > Just do the incremental fix. It looks obvious enough ("oops, we need
+> > to get the pos _after_ we've done any skip-lseeks on the core file")
+> > that I think it would be just harder to follow a "revert and follow up
+> > with a fix".
+> >
+> > I don't think it needs a ton of extra testing, with Okajima having
+> > already confirmed it fixes his problem case..
+> >
+> >                 Linus
+>
+> [ CC Geert ]
+>
+> There was another patch from Geert concerning the same coredump changes:
+>
+> [PATCH] coredump: Move dump_emit_page() to kill unused warning
+>
+> If CONFIG_ELF_CORE is not set:
+>
+>     fs/coredump.c:835:12: error: =E2=80=98dump_emit_page=E2=80=99 defined=
+ but not used
+> [-Werror=3Dunused-function]
+>       835 | static int dump_emit_page(struct coredump_params *cprm,
+> struct page *page)
+>           |            ^~~~~~~~~~~~~~
+>
+> Fix this by moving dump_emit_page() inside the existing section
+> protected by #ifdef CONFIG_ELF_CORE.
+>
+> Fixes: 06bbaa6dc53cb720 ("[coredump] don't use __kernel_write() on
+> kmap_local_page()")
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>
+> Please, check yourself!
+>
+> Best regards,
+> -Sedat-
+>
+> [1] https://lore.kernel.org/all/20221003090657.2053236-1-geert@linux-m68k=
+.org/
 
-> And fixes the concurrent modification issue of fast path for huge
-> pages.
-> This issue will occur in the following steps:
->=20
->    CPU-1 (In TLB exception)         CPU-2 (In THP)
-> 1: Load PMD entry (HUGE=3D1)
-> 2: Goto huge path
-> 3:                                  Store PMD entry (HUGE=3D0)
-> 4: Reload PMD entry (HUGE=3D0)
-> 5: Fill TLB entry (PA is incorrect)
+[ CC Ren Zhijie <renzhijie2@huawei.com> ]
 
-Is this issue causing problems in practice?  If true should we pick this
-for loongarch-fixes and backport into 5.19 & 6.0 too?
+Looks like the same patch as of Geert.
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+-Sedat-
+
+[1] https://lore.kernel.org/all/20221009092420.32850-1-renzhijie2@huawei.co=
+m/
