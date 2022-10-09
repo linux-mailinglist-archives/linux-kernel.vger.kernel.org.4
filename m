@@ -2,127 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB9C5F88E1
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 04:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E69705F88E4
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 04:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbiJIC26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 22:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
+        id S229862AbiJICcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 22:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiJIC24 (ORCPT
+        with ESMTP id S229787AbiJICci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 22:28:56 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE04B3642A
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 19:28:51 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MlQrP4jKZzpVbf;
-        Sun,  9 Oct 2022 10:25:41 +0800 (CST)
-Received: from [10.67.109.61] (10.67.109.61) by canpemm500006.china.huawei.com
- (7.192.105.130) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sun, 9 Oct
- 2022 10:28:48 +0800
-Message-ID: <d41afbd5-6040-50ec-c0a5-c52ae48f6515@huawei.com>
-Date:   Sun, 9 Oct 2022 10:28:43 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH -next] sched/cputime: Fix the time backward issue about
- /proc/stat
-To:     Frederic Weisbecker <frederic@kernel.org>
-CC:     Peter Zijlstra <peterz@infradead.org>, <mingo@redhat.com>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <hucool.lihua@huawei.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20220928033402.181530-1-zhengzucheng@huawei.com>
- <YzQB8afi2rCPvuC1@hirez.programming.kicks-ass.net>
- <20220928121134.GA233658@lothringen>
- <5126b2dc-8624-babc-2e1e-58ac27927c31@huawei.com>
- <20220930121634.GA266766@lothringen>
-From:   zhengzucheng <zhengzucheng@huawei.com>
-In-Reply-To: <20220930121634.GA266766@lothringen>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.109.61]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 8 Oct 2022 22:32:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCC72EF2A;
+        Sat,  8 Oct 2022 19:32:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46F31B80B8E;
+        Sun,  9 Oct 2022 02:32:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEF9DC433C1;
+        Sun,  9 Oct 2022 02:32:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665282754;
+        bh=PsyHGvzuTaze5Ppuq373alLCShMikDx1lFtmDWHBuR4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nBEw6E4Ebe7MkBaHFPDkKiy63w2vWvWDhrKir7AKlKygFp7C1rJem8W3OMLZv6OQV
+         6hydFNB9hcisgSjn7du0bFZBjuHMoDMwXWe59/371KloUgTOSf+WqoDtj6TBVpG1yy
+         EGER0zStWtQKQ3ep/YyAJwNEXfsZFZCoHZLLdMFWuplBeD6FjcpljLYDixiQz3gfIg
+         Kb1m357YrDSw9t8SQrJ4vrK2NUk1+jqtFqidkpA6DKNA+aF81wdivhk0ET2HyY8BuN
+         eEdmZlqFT+1QMAY8R/H95VDveFEMg7VFLzcoTfF8UEUey7C/pRN+sXZadH9ELTkrqO
+         4M5DglohVPSlQ==
+Received: from [156.39.10.100] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ohM7E-00FLF6-6k;
+        Sun, 09 Oct 2022 03:32:32 +0100
+Date:   Sun, 09 Oct 2022 03:31:33 +0100
+Message-ID: <87r0zhhgmy.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Len Brown <lenb@kernel.org>, rafael@kernel.org,
+        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH V2 1/2] irqchip/loongson-pch-pic: Support to set irq type for ACPI path
+In-Reply-To: <7d3894f9-9708-0b4f-b485-f167408feede@loongson.cn>
+References: <20221008025150.10734-1-lvjianmin@loongson.cn>
+        <20221008025150.10734-2-lvjianmin@loongson.cn>
+        <87v8othkgz.wl-maz@kernel.org>
+        <7d3894f9-9708-0b4f-b485-f167408feede@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 156.39.10.100
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn, bhelgaas@google.com, lenb@kernel.org, rafael@kernel.org, linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 09 Oct 2022 03:26:21 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> 
+> Ok, thanks, I'll separate this patch, so we have to make the patch
+> fixing PCI INTx handling to be after the patch supporting for the LPIC
+> model to avoid kernel hang, yes?
 
-在 2022/9/30 20:16, Frederic Weisbecker 写道:
-> On Fri, Sep 30, 2022 at 10:43:58AM +0800, zhengzucheng wrote:
->> 在 2022/9/28 20:11, Frederic Weisbecker 写道:
->>> @@ -1024,20 +1045,20 @@ static int kcpustat_cpu_fetch_vtime(struct kernel_cpustat *dst,
->>>    		 * add pending nohz time to the right place.
->>>    		 */
->>>    		if (state == VTIME_SYS) {
->>> -			cpustat[CPUTIME_SYSTEM] += vtime->stime + delta;
->>> +			cpustat[CPUTIME_SYSTEM] += delta;
->>>    		} else if (state == VTIME_USER) {
->>>    			if (task_nice(tsk) > 0)
->>> -				cpustat[CPUTIME_NICE] += vtime->utime + delta;
->>> +				cpustat[CPUTIME_NICE] += delta;
->>>    			else
->>> -				cpustat[CPUTIME_USER] += vtime->utime + delta;
->>> +				cpustat[CPUTIME_USER] += delta;
->> “delta” has the same problem as vtime->utime, which varies with different
->> tasks. switching between different tasks may cause time statistics to be
->> reversed.
-> I'm a bit confused, can you provide an example?
-Chinese National Day holiday, sorry for not replying to you in time.
+Pick whatever order fits your system, really. But don't mix generic
+ACPI changes and irqchip code in the same patch, that's just wrong.
 
-CONFIG_HZ=100
-const struct kernel_cpustat *src = &kcpustat_cpu(cpu);
-struct vtime *vtime = &tsk->vtime;
-cpustat[CPUTIME_USER] += vtime->utime + delta;
+Thanks,
 
-first：
-cat /proc/stat | grep cpu1
-cpu1 319 0 496 41665 0 0 0 0 0 0
-Task A is running on CPU 1，so vtime is A->vtime and delta is A's delta.
-kcpustat_cpu_fetch_vtime: cpu=1 src->cpustat[CPUTIME_USER]=3189000000 
-vtime->utime=900000 delta=100001
-cpustat[CPUTIME_USER] = 3189000000 + 900000 + 100001 is 3,190,000,001, 
-319 ticks
+	M.
 
-again：
-cat /proc/stat | grep cpu1
-cpu1 318 0 497 41674 0 0 0 0 0 0
-Task B is running on CPU 1，so vtime is B->vtime and delta is B's delta.
-kcpustat_cpu_fetch_vtime: cpu=1 src->cpustat[CPUTIME_USER]=3189000000 
-vtime->utime=900000 delta=90000
-cpustat[CPUTIME_USER] = 3189000000 + 900000 + 90000 is 3,189,990,000, 
-318 ticks
-
-The root cause is that the value of task B's "vtime->utime + delta" may 
-be smaller than task A.
->
-> Thanks.
->
->>>    		} else {
->>>    			WARN_ON_ONCE(state != VTIME_GUEST);
->>>    			if (task_nice(tsk) > 0) {
->>> -				cpustat[CPUTIME_GUEST_NICE] += vtime->gtime + delta;
->>> -				cpustat[CPUTIME_NICE] += vtime->gtime + delta;
->>> +				cpustat[CPUTIME_GUEST_NICE] += delta;
->>> +				cpustat[CPUTIME_NICE] += delta;
->>>    			} else {
->>> -				cpustat[CPUTIME_GUEST] += vtime->gtime + delta;
->>> -				cpustat[CPUTIME_USER] += vtime->gtime + delta;
->>> +				cpustat[CPUTIME_GUEST] += delta;
->>> +				cpustat[CPUTIME_USER] += delta;
->>>    			}
->>>    		}
->>>    	} while (read_seqcount_retry(&vtime->seqcount, seq));
->>> .
-> .
+-- 
+Without deviation from the norm, progress is not possible.
