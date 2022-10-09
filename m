@@ -2,84 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4A45F8A09
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 09:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A665F8A05
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 09:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbiJIHtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 03:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
+        id S229948AbiJIHs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 03:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiJIHtD (ORCPT
+        with ESMTP id S229463AbiJIHs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 03:49:03 -0400
-Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9EF7E31EF2
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 00:49:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=lzHsQ
-        7uRE+Ob5IFFnxNujLW+JYw21myg9+tk4e/ZuAE=; b=EUZdAIYq5yYcAo9B3YYso
-        +9E9cdA6IGsSaFM/58vOakxP5F4Dv2FVHhLX6KgnH0QWNlq7D2ED2nTQRTTKMWpc
-        7ilHNxxHUJqunTt0V8+qTSUFPrsZCGYKlK/m8/F/vMHZD8KSJ9VAhzV4eM9Ep5FR
-        OatTLHv2pwxcuOKQvfxNGY=
-Received: from localhost.localdomain (unknown [116.128.244.169])
-        by smtp3 (Coremail) with SMTP id G9xpCgBX2mvHfEJj6n2Gjw--.45155S2;
-        Sun, 09 Oct 2022 15:48:24 +0800 (CST)
-From:   Jiangshan Yi <13667453960@163.com>
-To:     perex@perex.cz, tiwai@suse.com
-Cc:     lgirdwood@gmail.com, broonie@kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH] ASoC: cx2072x: fix spelling typo in comment
-Date:   Sun,  9 Oct 2022 15:48:16 +0800
-Message-Id: <20221009074816.2641162-1-13667453960@163.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 9 Oct 2022 03:48:56 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280AF31EE4
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 00:48:54 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MlYw53VsFzmV6b;
+        Sun,  9 Oct 2022 15:44:21 +0800 (CST)
+Received: from huawei.com (10.175.104.170) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sun, 9 Oct
+ 2022 15:48:51 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>
+CC:     <hpa@zytor.com>, <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>
+Subject: [PATCH] x86/alternative: fix undefined reference to __ibt_endbr_seal[_end]
+Date:   Sun, 9 Oct 2022 23:45:32 +0800
+Message-ID: <20221009154532.1100121-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: G9xpCgBX2mvHfEJj6n2Gjw--.45155S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrury7Jr47ZFy5Jw48urykKrg_yoW3ZrX_Ww
-        18W3y5Z3yqqFWSkr1jyrWjyF4Fv3Z5Cry8Crn5tr4UA3y5uayYyayvyF13C3W5Gr4vgasx
-        XanxKr1aq34kKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU1Tmh3UUUUU==
-X-Originating-IP: [116.128.244.169]
-X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbiyAiV+1p7H8T2DwAAst
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.170]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiangshan Yi <yijiangshan@kylinos.cn>
+When I compile the kernel bzImage, there are several compile errors:
 
-Fix spelling typo in comment.
+ld: arch/x86/kernel/alternative.o: in function
+`alternative_instructions':
+alternative.c:(.init.text+0x15d): undefined reference to
+`__ibt_endbr_seal_end'
+ld: alternative.c:(.init.text+0x164): undefined reference to
+`__ibt_endbr_seal'
 
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+It's because __ibt_endbr_seal and __ibt_endbr_seal_end are not optimized
+away when CONFIG_X86_KERNEL_IBT isn't enabled. Remove noinline attribute
+to help gcc optimize them away.
+
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- sound/soc/codecs/cx2072x.h | 2 +-
+ arch/x86/kernel/alternative.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/cx2072x.h b/sound/soc/codecs/cx2072x.h
-index ebdd567fa225..09e3a92b184f 100644
---- a/sound/soc/codecs/cx2072x.h
-+++ b/sound/soc/codecs/cx2072x.h
-@@ -177,7 +177,7 @@
- #define CX2072X_PLBK_DRC_PARM_LEN	9
- #define CX2072X_CLASSD_AMP_LEN		6
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index 5cadcea035e0..beaf9fc44e2f 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -624,7 +624,7 @@ void __init_or_module noinline apply_ibt_endbr(s32 *start, s32 *end)
  
--/* DAI interfae type */
-+/* DAI interface type */
- #define CX2072X_DAI_HIFI	1
- #define CX2072X_DAI_DSP		2
- #define CX2072X_DAI_DSP_PWM	3 /* 4 ch, including mic and AEC */
+ #else
+ 
+-void __init_or_module noinline apply_ibt_endbr(s32 *start, s32 *end) { }
++void __init_or_module apply_ibt_endbr(s32 *start, s32 *end) { }
+ 
+ #endif /* CONFIG_X86_KERNEL_IBT */
+ 
 -- 
-2.25.1
-
-
-No virus found
-		Checked by Hillstone Network AntiVirus
+2.23.0
 
