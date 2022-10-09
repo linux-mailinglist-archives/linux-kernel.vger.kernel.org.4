@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE565F89E9
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 09:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF725F89EE
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 09:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbiJIHLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 03:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41322 "EHLO
+        id S230054AbiJIHLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 03:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiJIHLa (ORCPT
+        with ESMTP id S229602AbiJIHLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 03:11:30 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2042.outbound.protection.outlook.com [40.107.244.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF45CBC18;
-        Sun,  9 Oct 2022 00:11:27 -0700 (PDT)
+        Sun, 9 Oct 2022 03:11:32 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2078.outbound.protection.outlook.com [40.107.93.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5396E95BE;
+        Sun,  9 Oct 2022 00:11:30 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LWGdRIpaUhoZlNZ3u2IIYJurYIurv3XdV9+Jf8/q3D/3TEzPYTFdj9D+G/uCdisNCbLDqQ/X1zFsyFxc+ATptxrn5viN/uhKIHQgxlAriCuGRFTpDBi2V9++7O6zwx9lRhLolrYxPxrH0gX28n+5t31iWD5Dm6Tr1TK4CJ/uQEoc4JKCYkrXVocXqwEsDamad6/9T/Dc9VpaQSFUJeX6VYsFDU13PhiO3aI2wEWX3+ECAgo277TGptUDu8zm3IkNGon7rYOH7bphJFXR1H28tX185inWAEeaanZTKc82ysVyTzBrLeNWhSzn6w2l/Fc6icR70TFCZQixyeIH4nOXuQ==
+ b=iUeDUjPFT8GvtmQtEBDXxa/1JHaKvniWIB7FN56zLIZ3pu2RLot5VWGE1ZjjYTd1MZGFZJwFruLf4GAgKUpTgm5FEenmo5AFjvpezmImuqd1VkxKHWKHeidfP1m4U3+oCZt7joN2VEXGJUUBrt5tzZYqMgm8e9nv8IcZek7qvixirUhsGJ/laLG2HRiMuW5wAqInqfZNSnSWklMjGTxBPmUi3iSMcPCO5xJM2MQGKsrTnvJ6PHK0K7lJj8Te5MU6IKyqdAAofZFxH6eXsiDXkv/iqRBh9A8Po8mSOmYlfPCPCxm+sJt/pp4QjZg9uO2Ka+ZPlCuRF226/BHYv7DYtA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=03C9op1n5fZ/qooFNpjk00Vq5l6wlYlZhZ7syfuLNsY=;
- b=VJD9lZfxfnNvjj16Fd7JirN0HurtD0Y54XrPyc32QZbJk/Is64JlC/wLoAaMmIDa3pK9RVgHkl+Zv8CBeEDl/uxm2ess4k7P6n/xUK3x5Kp4ZDewGe0PgLMcFgmYb51t2PtrGuQNiZ+BozyqL2Y2LMzu2ih/FzSo3tcDj4PLxgJRuX9IM4l9Tvy2DibMk03QyJ1gkYWNZ1lgW6YddxNpFc7oDgvfnxyfcswN6rQvXWBxmBpBSBMKdHfEgzxkIPY7jFv7drky2cnGhPlAHUJPfmtR6/iSJzziWpjsc3a7C5KOfOZU9EOn9SnJvvTD1S4XpkIapepr9OcVpNdglrc7IA==
+ bh=wqlCWw7oz/MsSLARugtCt+Q5U57P8YdPwEm8C2mIUVg=;
+ b=Z7N8I4IaJHIR0hyw2nuZdQDzQomyhnWujGqB0+HYu49/v+9TYqO1nQg7uVbqdT1iXrbKahqEkVgSnlnyyl9NMntFbl3vmKWfPzvzQWf21rVWhia1YAY43Gr3at6mUgPLJOccZVZZEeYUVC8Xl4q1eUpeWg3fg0NV2J8ANPxMAFk/B77CV/A3JosOqD8m4ZCN55h/pVHNUyYixJ0xnOZjbnl1HD+kvNeHUkc4JOdrBusutO+BRln3g7PAGpiFkDrCtEPppY5tN+Ck4CjDZzWe4Z8wXiVdk5okWWl8rPcRod+QUEomlxTimxYxkJ8d5gRZfZbYxD0pBDX2JPPwblxaZQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=03C9op1n5fZ/qooFNpjk00Vq5l6wlYlZhZ7syfuLNsY=;
- b=dSjxGAdVrme5FVdpM5vVaFlm/fn8avEhBX+fVUy2XiBA1WeqO7jNp9gEMGHwCTBUEm7VHJxpGkdaFKt2ba4MNLcpIi55kWeJMZ9X1RzVyGq6xto0d3eiDnF6FncDovULw9ojVtqHi52yocFyWIwOMXuAXHD29Ts2TKc3YwQxVzs=
-Received: from DM6PR03CA0086.namprd03.prod.outlook.com (2603:10b6:5:333::19)
- by MN2PR12MB4048.namprd12.prod.outlook.com (2603:10b6:208:1d5::8) with
+ bh=wqlCWw7oz/MsSLARugtCt+Q5U57P8YdPwEm8C2mIUVg=;
+ b=4c6rpB2jzKma9Ds1IsndDxi9BJZR71jA4zGFzzYsVavZ5ie/bQUhUEwqf76Hc2Se0S4QFznBw1Vbdb+wdDet9ns2w23wyTEfq5qk34IliLyUPJaiDzNk37Hq2/y8hte0GpG/FBtfAi9u+t2x3gkNf2I7ewpGap+VYiS5ZlFGOLU=
+Received: from DM6PR03CA0077.namprd03.prod.outlook.com (2603:10b6:5:333::10)
+ by DS7PR12MB6046.namprd12.prod.outlook.com (2603:10b6:8:85::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15; Sun, 9 Oct
- 2022 07:11:24 +0000
+ 2022 07:11:25 +0000
 Received: from DM6NAM11FT018.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:333:cafe::9) by DM6PR03CA0086.outlook.office365.com
- (2603:10b6:5:333::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.26 via Frontend
- Transport; Sun, 9 Oct 2022 07:11:24 +0000
+ (2603:10b6:5:333:cafe::8b) by DM6PR03CA0077.outlook.office365.com
+ (2603:10b6:5:333::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15 via Frontend
+ Transport; Sun, 9 Oct 2022 07:11:25 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -49,11 +49,11 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  DM6NAM11FT018.mail.protection.outlook.com (10.13.172.110) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5709.10 via Frontend Transport; Sun, 9 Oct 2022 07:11:24 +0000
+ 15.20.5709.10 via Frontend Transport; Sun, 9 Oct 2022 07:11:25 +0000
 Received: from pyuan-Cloudripper.amd.com (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Sun, 9 Oct 2022 02:11:04 -0500
+ 15.1.2375.28; Sun, 9 Oct 2022 02:11:07 -0500
 From:   Perry Yuan <Perry.Yuan@amd.com>
 To:     <rafael.j.wysocki@intel.com>, <ray.huang@amd.com>,
         <viresh.kumar@linaro.org>
@@ -62,35 +62,37 @@ CC:     <Deepak.Sharma@amd.com>, <Mario.Limonciello@amd.com>,
         <Shimmer.Huang@amd.com>, <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
         <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Perry Yuan <Perry.Yuan@amd.com>
-Subject: [PATCH v2 0/9] Implement AMD Pstate EPP Driver
-Date:   Sun, 9 Oct 2022 15:10:24 +0800
-Message-ID: <20221009071033.21170-1-Perry.Yuan@amd.com>
+Subject: [PATCH v2 1/9] ACPI: CPPC: Add AMD pstate energy performance preference cppc control
+Date:   Sun, 9 Oct 2022 15:10:25 +0800
+Message-ID: <20221009071033.21170-2-Perry.Yuan@amd.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221009071033.21170-1-Perry.Yuan@amd.com>
+References: <20221009071033.21170-1-Perry.Yuan@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Originating-IP: [10.180.168.240]
 X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT018:EE_|MN2PR12MB4048:EE_
-X-MS-Office365-Filtering-Correlation-Id: b68852cd-d4b0-4d78-7bbc-08daa9c579ff
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT018:EE_|DS7PR12MB6046:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4b150c31-2339-4075-27ed-08daa9c57a4e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: E/TOSNMkZnCKGchjFWimwiuFYdyFd0HxFKzqfzXTmdNRmPa2Ps1daPRFWV2AV40CZJ4ay2PQ3v2Pm5/jWsCmzcINdqlT+6k4mnDL13FT1cpsRGJI0m8WaiHi+G/XYARVjOfylcqCQODVW16jvEVcfR5EHA2KQ7DqJK6b4TzN9LDSNVkiXx9rF1ftLNf4b/lD86OETLyk7egUWwgIq8j+AkIAXxJ/Z8vfxxGwThexiOnbMIwxJGOyqI8f5unhF72r6C4uCuYnecQA30NWlxkeTsy/Ppu8C5+8AyupPa5o+txxoZROWQfayYUxX4VixHBWoUwnjQK43yBBg7A1xQoP26uDtEArgoj9ulROOhM7Shd/Z6LhGxZEWLs0K249BxjvVg8WORzQKzFeOYqlHsMt9tdhpLC9IlE7AIrKvceuryCwtnIA1ObviW92AzHdKUpTOEJYqScmYUVLUNR2eyZ5n7kmKq4p10Qfy6KVzhF4wEx+Qo/daLsSGfCKUpBHPmDzmboypoIJyQ0+CzTT03CwA/PgD3+EpZYXtSoaqW1+qTT8caRsd9PHpm7VlHvCmllXLHXyRA6vsuLP3RPd12GHWAYqdFz5wZNJzuy/ovodCl9px1D53LQy22uU10oyX2MOpg10GZa9n2pnZJ/ObD+FUzyxod7f4FnnBvH+SoVv0Mfjr4MsKlA/jKCu1s1Vx48YbPxcG7aJQEbTogECjKIu64TXy8D4KdhpnahPk5jRC0cy9j5GtQHSPOBfvif35AK504mgPkgYvq+Fe7hHA8znGlSsmZyKeYHP+sOzbGMyuQ11Wm3yCDZ0FaDFmqV0s0wfxOpjF+zDvikEBtT5WrzE4Qlj42UGx7sOdUjeqVfKqBQ=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(346002)(396003)(376002)(451199015)(36840700001)(46966006)(40470700004)(54906003)(6666004)(110136005)(45080400002)(966005)(86362001)(82310400005)(8936002)(36756003)(5660300002)(41300700001)(316002)(4326008)(70586007)(70206006)(8676002)(36860700001)(186003)(82740400003)(26005)(40480700001)(40460700003)(356005)(81166007)(336012)(426003)(478600001)(2616005)(7696005)(47076005)(16526019)(83380400001)(1076003)(2906002)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: WIqa5QQ67E08LspUkaY3A5y9nmvqNbgH2rmiPzQV5zcVtmpq4UMyqg2msRHlod3SpaJqIEoeQj53rsB44FBBnyoxLS21RjxBeB59jJJ9vPr6mg+kpox8heVWAEPgNuOpsi7xiB0tvqUobX1pUSpG0D12bQGqXn9NtYSwdP7gszm6Ton71wrWzqcbkCMMwkBiZ/F7U/m54BSc/se1wMPuqljU01SThaCswXBYwj3iAfzFLyYk/ULfEcB00sE0G8MsKXVIZSvGILiCC5Zshpe/OrtN2wg9mSxpckij5zIdCXTCyNyHCHEZsCfhp1Tcyb73xteMnaypK1cFFpxtqEIixR5jZllMh8DTuJ4ivFb1LAviBIAYFNn0KCwP2J7Amjc7R6gT7DEtGlwQIbZMEqrvKgytTZfdEshEreAf/p06Jv4j6aao5vgwmnAze8KjAMUZ9xv1WmmB0STB1PolYG0nK5ATIB9bxxpUMd8IccmNGTx2tqhmbn6ipZAWv8/Ifmj1XrCpjUnaVjGM1yjFEai1mfFXIBa+jg2wUI1ndodXk/1P7vrRF8hUHRcweytVmwTFPRwJq0ZDod9odShj7VAdtyXmMZyYyChoajghYsIb6PCsoObBDwsMo2fvsIEN2WOn/k8CigLeW7GDComMKLdcoOhqj8v1lmtVg67kqhj8zYZCXU2K3+yf/zzl5hh4gMdI6oczmkVf4I6NaIK3eAKpIgkMX3hnQQhBOmsb54dv+QfKjob8RCZCMAcyJOFE2fG7w25Y2rcUrSsHnLEJv02BrY48GLqmdO83oLbNhm8P/aqlrHn5x2lBpRCc/Lp0YkzU5w0l+0xWC/FcAP2cpb8lOA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(346002)(396003)(136003)(451199015)(40470700004)(36840700001)(46966006)(36860700001)(86362001)(40460700003)(36756003)(356005)(82740400003)(110136005)(40480700001)(316002)(54906003)(81166007)(5660300002)(8936002)(8676002)(4326008)(16526019)(70586007)(70206006)(41300700001)(478600001)(2906002)(82310400005)(336012)(47076005)(426003)(83380400001)(7696005)(6666004)(186003)(1076003)(2616005)(26005)(36900700001)(2101003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2022 07:11:24.6003
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2022 07:11:25.1315
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b68852cd-d4b0-4d78-7bbc-08daa9c579ff
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b150c31-2339-4075-27ed-08daa9c57a4e
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT018.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4048
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6046
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -101,118 +103,215 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Add the EPP(Energy Performance Preference) support for the
+AMD SoCs without the dedicated CPPC MSR, those SoCs need to add this
+cppc acpi functions to update EPP values and desired perf value.
 
-This patchset implements one new AMD CPU frequency driver
-"amd-pstate-epp” instance for better performance and power control.
-CPPC has a parameter called energy preference performance (EPP).
-The EPP is used in the CCLK DPM controller to drive the frequency that a core
-is going to operate during short periods of activity.
-EPP values will be utilized for different OS profiles (balanced, performance, power savings).
+In order to get EPP worked, cppc_get_epp_caps() will query EPP preference
+value and cppc_set_epp_perf() will set EPP new value.
+Before the EPP works, pstate driver will use cppc_set_auto_epp() to
+enable EPP function from firmware firstly.
 
-AMD Energy Performance Preference (EPP) provides a hint to the hardware
-if software wants to bias toward performance (0x0) or energy efficiency (0xff)
-The lowlevel power firmware will calculate the runtime frequency according to the EPP preference 
-value. So the EPP hint will impact the CPU cores frequency responsiveness.
+Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+---
+ drivers/acpi/cppc_acpi.c | 128 ++++++++++++++++++++++++++++++++++++++-
+ include/acpi/cppc_acpi.h |  17 ++++++
+ 2 files changed, 144 insertions(+), 1 deletion(-)
 
-We use the RAPL interface with "perf" tool to get the energy data of the package power.
-Performance Per Watt (PPW) Calculation:
-
-The PPW calculation is referred by below paper:
-https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fsoftware.intel.com%2Fcontent%2Fdam%2Fdevelop%2Fexternal%2Fus%2Fen%2Fdocuments%2Fperformance-per-what-paper.pdf&amp;data=04%7C01%7CPerry.Yuan%40amd.com%7Cac66e8ce98044e9b062708d9ab47c8d8%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637729147708574423%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=TPOvCE%2Frbb0ptBreWNxHqOi9YnVhcHGKG88vviDLb00%3D&amp;reserved=0
-
-Below formula is referred from below spec to measure the PPW:
-
-(F / t) / P = F * t / (t * E) = F / E,
-
-"F" is the number of frames per second.
-"P" is power measured in watts.
-"E" is energy measured in joules.
-
-Gitsouce Benchmark Data on ROME Server CPU
-+------------------------------+------------------------------+------------+------------------+
-| Kernel Module                | PPW (1 / s * J)              | Energy(J)  | Improvement (%)  |
-+==============================+==============================+============+==================+
-| acpi-cpufreq:schedutil       | 5.85658E-05                  | 17074.8    | base             |
-+------------------------------+------------------------------+------------+------------------+
-| acpi-cpufreq:ondemand        | 5.03079E-05                  | 19877.6    | -14.10%          |
-+------------------------------+------------------------------+------------+------------------+
-| acpi-cpufreq:performance     | 5.88132E-05                  | 17003      | 0.42%            |
-+------------------------------+------------------------------+------------+------------------+
-| amd-pstate:ondemand          | 4.60295E-05                  | 21725.2    | -21.41%          |
-+------------------------------+------------------------------+------------+------------------+
-| amd-pstate:schedutil         | 4.70026E-05                  | 21275.4    | -19.7%           |
-+------------------------------+------------------------------+------------+------------------+
-| amd-pstate:performance       | 5.80094E-05                  | 17238.6    | -0.95%           |
-+------------------------------+------------------------------+------------+------------------+
-| EPP:performance              | 5.8292E-05                   | 17155      | -0.47%           |
-+------------------------------+------------------------------+------------+------------------+
-| EPP: balance performance:    | 6.71709E-05                  | 14887.4    | 14.69%           |
-+------------------------------+------------------------------+------------+------------------+
-| EPP:power                    | 6.66951E-05                  | 4993.6     | 13.88%           |
-+------------------------------+------------------------------+------------+------------------+
-
-Tbench Benchmark Data one ROME Server CPU
-+---------------------------------------------+-------------------+--------------+-------------+------------------+
-| Kernel Module                               | PPW MB / (s * J)  |Throughput(MB/s)| Energy (J)  | Improvement (%)|
-+=============================================+===================+==============+=============+==================+
-| acpi_cpufreq: schedutil                     | 46.39             | 17191        | 37057.3     | base             |
-+---------------------------------------------+-------------------+--------------+-------------+------------------+
-| acpi_cpufreq: ondemand                      | 51.51             | 19269.5      | 37406.5     | 11.04 %          |
-+---------------------------------------------+-------------------+--------------+-------------+------------------+
-| acpi_cpufreq: performance                   | 45.96             | 17063.7      | 37123.7     | -0.74 %          |
-+---------------------------------------------+-------------------+--------------+-------------+------------------+
-| EPP:powersave: performance(0)               | 54.46             | 20263.1      | 37205       | 17.87 %          |
-+---------------------------------------------+-------------------+--------------+-------------+------------------+
-| EPP:powersave: balance performance          | 55.03             | 20481.9      | 37221.5     | 19.14 %          |
-+---------------------------------------------+-------------------+--------------+-------------+------------------+
-| EPP:powersave: balance_power                | 54.43             | 20245.9      | 37194.2     | 17.77 %          |
-+---------------------------------------------+-------------------+--------------+-------------+------------------+
-| EPP:powersave: power(255)                   | 54.26             | 20181.7      | 37197.4     | 17.40 %          |
-+---------------------------------------------+-------------------+--------------+-------------+------------------+
-| amd-pstate: schedutil                       | 48.22             | 17844.9      | 37006.6     | 3.80 %           |
-+---------------------------------------------+-------------------+--------------+-------------+------------------+
-| amd-pstate: ondemand                        | 61.30             | 22988        | 37503.4     | 33.72 %          |
-+---------------------------------------------+-------------------+--------------+-------------+------------------+
-| amd-pstate: performance                     | 54.52             | 20252.6      | 37147.8     | 17.81 %          |
-+---------------------------------------------+-------------------+--------------+-------------+------------------+
-
-changes from v1:
- * rebased to v6.0
- * drive feedbacks from Mario for the suspend/resume patch
- * drive feedbacks from Nathan for the EPP support on msr type
- * fix some typos and code style indent problems
- * update commit comments for patch 4/7
- * change the `epp_enabled` module param name to `epp`
- * set the default epp mode to be false
- * try to move energy_perf_strings[] and epp_values[] into `msr-index.h`,
-   but this change will cause compiler errors "no such instruction...",
- * add testing for the x86_energy_perf_policy utility patchset(will
-   send that utility patchset with another thread)
-
-Perry Yuan (9):
-  ACPI: CPPC: Add AMD pstate energy performance preference cppc control
-  cpufreq: amd_pstate: add module parameter to load amd pstate EPP
-    driver
-  cpufreq: cpufreq: export cpufreq cpu release and acquire
-  x86/msr: Add the MSR definition for AMD CPPC boost state
-  Documentation: amd-pstate: add EPP profiles introduction
-  cpufreq: amd_pstate: add AMD pstate EPP support for shared memory type
-    processor
-  cpufreq: amd_pstate: add AMD Pstate EPP support for the MSR based
-    processors
-  cpufreq: amd_pstate: implement amd pstate cpu online and offline
-    callback
-  cpufreq: amd-pstate: implement suspend and resume callbacks
-
- Documentation/admin-guide/pm/amd-pstate.rst |  19 +
- arch/x86/include/asm/msr-index.h            |   7 +
- drivers/acpi/cppc_acpi.c                    | 128 ++-
- drivers/cpufreq/amd-pstate.c                | 950 +++++++++++++++++++-
- drivers/cpufreq/cpufreq.c                   |   2 +
- include/acpi/cppc_acpi.h                    |  17 +
- 6 files changed, 1116 insertions(+), 7 deletions(-)
-
+diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+index 093675b1a1ff..b0e7817cb97f 100644
+--- a/drivers/acpi/cppc_acpi.c
++++ b/drivers/acpi/cppc_acpi.c
+@@ -1365,6 +1365,132 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
+ }
+ EXPORT_SYMBOL_GPL(cppc_get_perf_ctrs);
+ 
++/**
++ * cppc_get_epp_caps - Get the energy preference register value.
++ * @cpunum: CPU from which to get epp preference level.
++ * @perf_caps: Return address.
++ *
++ * Return: 0 for success, -EIO otherwise.
++ */
++int cppc_get_epp_caps(int cpunum, struct cppc_perf_caps *perf_caps)
++{
++	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpunum);
++	struct cpc_register_resource *energy_perf_reg;
++	u64 energy_perf;
++
++	if (!cpc_desc) {
++		pr_warn("No CPC descriptor for CPU:%d\n", cpunum);
++		return -ENODEV;
++	}
++
++	energy_perf_reg = &cpc_desc->cpc_regs[ENERGY_PERF];
++
++	if (!CPC_SUPPORTED(energy_perf_reg))
++		pr_warn("energy perf reg update is unsupported!\n");
++
++	if (CPC_IN_PCC(energy_perf_reg)) {
++		int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpunum);
++		struct cppc_pcc_data *pcc_ss_data = NULL;
++		int ret = 0;
++
++		if (pcc_ss_id < 0)
++			return -EIO;
++
++		pcc_ss_data = pcc_data[pcc_ss_id];
++
++		down_write(&pcc_ss_data->pcc_lock);
++
++		if (send_pcc_cmd(pcc_ss_id, CMD_READ) >= 0) {
++			cpc_read(cpunum, energy_perf_reg, &energy_perf);
++			perf_caps->energy_perf = energy_perf;
++		} else {
++			ret = -EIO;
++		}
++
++		up_write(&pcc_ss_data->pcc_lock);
++
++		return ret;
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(cppc_get_epp_caps);
++
++int cppc_set_auto_epp(int cpu, bool enable)
++{
++	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
++	struct cpc_register_resource *auto_sel_reg;
++	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
++	struct cppc_pcc_data *pcc_ss_data = NULL;
++	int ret = -EINVAL;
++
++	if (!cpc_desc) {
++		pr_warn("No CPC descriptor for CPU:%d\n", cpu);
++		return -EINVAL;
++	}
++
++	auto_sel_reg = &cpc_desc->cpc_regs[AUTO_SEL_ENABLE];
++
++	if (CPC_IN_PCC(auto_sel_reg)) {
++		if (pcc_ss_id < 0)
++			return -EIO;
++
++		ret = cpc_write(cpu, auto_sel_reg, enable);
++		if (ret)
++			return ret;
++
++		pcc_ss_data = pcc_data[pcc_ss_id];
++
++		down_write(&pcc_ss_data->pcc_lock);
++		/* after writing CPC, transfer the ownership of PCC to platform */
++		ret = send_pcc_cmd(pcc_ss_id, CMD_WRITE);
++		up_write(&pcc_ss_data->pcc_lock);
++		return ret;
++	}
++
++	return cpc_write(cpu, auto_sel_reg, enable);
++}
++EXPORT_SYMBOL_GPL(cppc_set_auto_epp);
++
++/*
++ * Set Energy Performance Preference Register value through
++ * Performance Controls Interface
++ */
++int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
++{
++	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
++	struct cpc_register_resource *epp_set_reg;
++	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
++	struct cppc_pcc_data *pcc_ss_data = NULL;
++	int ret = -EINVAL;
++
++	if (!cpc_desc) {
++		pr_warn("No CPC descriptor for CPU:%d\n", cpu);
++		return -EINVAL;
++	}
++
++	epp_set_reg = &cpc_desc->cpc_regs[ENERGY_PERF];
++
++	if (CPC_IN_PCC(epp_set_reg)) {
++		if (pcc_ss_id < 0)
++			return -EIO;
++
++		ret = cpc_write(cpu, epp_set_reg, perf_ctrls->energy_perf);
++		if (ret)
++			return ret;
++
++		pcc_ss_data = pcc_data[pcc_ss_id];
++
++		down_write(&pcc_ss_data->pcc_lock);
++		/* after writing CPC, transfer the ownership of PCC to platform */
++		ret = send_pcc_cmd(pcc_ss_id, CMD_WRITE);
++		up_write(&pcc_ss_data->pcc_lock);
++	}
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(cppc_set_epp_perf);
++
+ /**
+  * cppc_set_enable - Set to enable CPPC on the processor by writing the
+  * Continuous Performance Control package EnableRegister field.
+@@ -1400,7 +1526,7 @@ int cppc_set_enable(int cpu, bool enable)
+ 		pcc_ss_data = pcc_data[pcc_ss_id];
+ 
+ 		down_write(&pcc_ss_data->pcc_lock);
+-		/* after writing CPC, transfer the ownership of PCC to platfrom */
++		/* after writing CPC, transfer the ownership of PCC to platform */
+ 		ret = send_pcc_cmd(pcc_ss_id, CMD_WRITE);
+ 		up_write(&pcc_ss_data->pcc_lock);
+ 		return ret;
+diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+index c5614444031f..10d91aeedaca 100644
+--- a/include/acpi/cppc_acpi.h
++++ b/include/acpi/cppc_acpi.h
+@@ -108,12 +108,14 @@ struct cppc_perf_caps {
+ 	u32 lowest_nonlinear_perf;
+ 	u32 lowest_freq;
+ 	u32 nominal_freq;
++	u32 energy_perf;
+ };
+ 
+ struct cppc_perf_ctrls {
+ 	u32 max_perf;
+ 	u32 min_perf;
+ 	u32 desired_perf;
++	u32 energy_perf;
+ };
+ 
+ struct cppc_perf_fb_ctrs {
+@@ -149,6 +151,9 @@ extern bool cpc_ffh_supported(void);
+ extern bool cpc_supported_by_cpu(void);
+ extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
+ extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
++extern int cppc_set_auto_epp(int cpu, bool enable);
++extern int cppc_get_epp_caps(int cpunum, struct cppc_perf_caps *perf_caps);
++extern int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
+ #else /* !CONFIG_ACPI_CPPC_LIB */
+ static inline int cppc_get_desired_perf(int cpunum, u64 *desired_perf)
+ {
+@@ -202,6 +207,18 @@ static inline int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val)
+ {
+ 	return -ENOTSUPP;
+ }
++static inline int cppc_set_auto_epp(int cpu, bool enable)
++{
++	return -ENOTSUPP;
++}
++static inline int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
++{
++	return -ENOTSUPP;
++}
++static inline int cppc_get_epp_caps(int cpunum, struct cppc_perf_caps *perf_caps)
++{
++	return -ENOTSUPP;
++}
+ #endif /* !CONFIG_ACPI_CPPC_LIB */
+ 
+ #endif /* _CPPC_ACPI_H*/
 -- 
 2.34.1
 
