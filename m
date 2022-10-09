@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 372355F8A44
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 11:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8038F5F8A46
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 11:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbiJIJHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 05:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
+        id S229490AbiJIJHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 05:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbiJIJHd (ORCPT
+        with ESMTP id S230033AbiJIJHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 05:07:33 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2852723390
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 02:07:32 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id i6so8465202pfb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 02:07:32 -0700 (PDT)
+        Sun, 9 Oct 2022 05:07:35 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808A131214
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 02:07:34 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id r18so8058191pgr.12
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 02:07:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sxrqiw0cbhfXN4+OelLD9+srPRQcNc3GlNvIAj2f+tU=;
-        b=oe5qxBC1H4qUilQPWPy/moxJ4w1ln70cLpRc/Wk8jkmt3TBM5d7VJNyft5SpWN8+Hr
-         V+SK/9WSNTNYqY8WLXByi/u6h7gRuxPzVFGafKEyR+Y8/tLdczZTPqNCD93xhD5PTkaY
-         XKLkVqBfhhtAFrvw7K6Y4FSE3vUclNw6hsVzk=
+        bh=NpDlcwWZSRK+GLE9jeOjGHO/GXqOD7ElWxbYUhdOrA4=;
+        b=m/pPO/9xut56toEBoPrxZZRoR2qK004hf4UOkxTjnrozUXN7IvLCcvwk7FCrdEbtmv
+         UcUpkQjZZdv77JkrcOn3KRTs/KPJaMi8J2NEQtT0vQZnwdZa00RA9gESYlF10wu7FW3W
+         CsuaSVfjOrbsPVaazJib/NqDbLehCZx6rr5/A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sxrqiw0cbhfXN4+OelLD9+srPRQcNc3GlNvIAj2f+tU=;
-        b=g0aHrsQ8Sx2+UH2uUrcdJWBbqNrYMD4sZ6G0EOBfpVk+YwCa0bUXiq+5/EoMKSKAYA
-         BX/ScaDybuRseS9KkygbrK4g24TGDfJL3RpMbKz2S86iENoOe1R7kzNGUYZJGArAd6De
-         8re994jQLC6KJ+olegbuA6IVDmjaer8PfPE+LKuJFqz0wscaxEqwVpLNkEMJJuWeirbU
-         sCVIqcppX+y4L7TDqkKbkI0hz/Ux34cvFOJNmDSJaembkzWtmL4Nmln5IZMYh9AY/Ml4
-         1jpHr+Dh/GlPtDAvI0DGrZWdJmyGydV9oTQHlDGtBkVu5H5X/XiJJLM6ua29Bc8/E4i8
-         j39Q==
-X-Gm-Message-State: ACrzQf15bv9pb7BvY77pPwPB24bzcsb6kgpJHPIfFEkKTGJAFeG1WqiK
-        X6uoTuAHAh3sk5jUjMpJeIFbQA==
-X-Google-Smtp-Source: AMsMyM6C8IGN2Dj12wvsCAFdbafvyBhEfZJPCUlA+MTMr1Fg8ofJtLAKdkOUiWQsDUoA0tspOCcD7g==
-X-Received: by 2002:a63:b4d:0:b0:454:d8b4:285 with SMTP id a13-20020a630b4d000000b00454d8b40285mr11989075pgl.410.1665306451631;
-        Sun, 09 Oct 2022 02:07:31 -0700 (PDT)
+        bh=NpDlcwWZSRK+GLE9jeOjGHO/GXqOD7ElWxbYUhdOrA4=;
+        b=erL2V4CAH8u56JydQ/4UH1Fo245kcnLYK3hodUPZJYJGCenkSSRHRPYH5uW4NMVq3s
+         MjjaFWAAm2Rj4iRmjlwxOlSSgxGivCPZ2GJiW4bl3pfOcKglJk7OHxcWXH8QCWIu8f7H
+         kd+DdpiV9mMxLtol246tKWbdR0Z4zCdzqeoAm62wAI36nLSxYXVY1ycXdhG6QunkvSpq
+         HIk1xgZ5Adlg3N0+WpUxRuy6UCNrMY4p9P5SrBrcOExyVJ6hEGkqckUapLqS6mVYyy/9
+         d+paaejQ/QxN+xMXVByoUBQ84iBikjz6FGxRAS8Cdnw05cYq+kIHufCY/+856W48H+Tq
+         mrhA==
+X-Gm-Message-State: ACrzQf0t3iq28vSZferZjM+nSFTw6iQmmYjpVXTb4ore8NSkUB+n+VPV
+        J8VB0rDmdz1a5rST8MHL7C0pHg==
+X-Google-Smtp-Source: AMsMyM5O6XJLSh+H0wcf7xO6063i9Fd43x32Eg2ntgvjKRu11pYf1BZfHPExCSvDcr2/A0Gi6aZQfg==
+X-Received: by 2002:a63:1944:0:b0:455:bea0:97ee with SMTP id 4-20020a631944000000b00455bea097eemr12190033pgz.258.1665306454057;
+        Sun, 09 Oct 2022 02:07:34 -0700 (PDT)
 Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:8517:d51e:5fe9:9be7])
-        by smtp.gmail.com with ESMTPSA id q194-20020a632acb000000b00439d071c110sm4335148pgq.43.2022.10.09.02.07.29
+        by smtp.gmail.com with ESMTPSA id q194-20020a632acb000000b00439d071c110sm4335148pgq.43.2022.10.09.02.07.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 02:07:31 -0700 (PDT)
+        Sun, 09 Oct 2022 02:07:33 -0700 (PDT)
 From:   Sergey Senozhatsky <senozhatsky@chromium.org>
 To:     Minchan Kim <minchan@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
 Cc:     Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCHv3 2/8] zram: Add recompression algorithm sysfs knob
-Date:   Sun,  9 Oct 2022 18:07:14 +0900
-Message-Id: <20221009090720.1040633-3-senozhatsky@chromium.org>
+Subject: [PATCHv3 3/8] zram: Factor out WB and non-WB zram read functions
+Date:   Sun,  9 Oct 2022 18:07:15 +0900
+Message-Id: <20221009090720.1040633-4-senozhatsky@chromium.org>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 In-Reply-To: <20221009090720.1040633-1-senozhatsky@chromium.org>
 References: <20221009090720.1040633-1-senozhatsky@chromium.org>
@@ -69,192 +69,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce recomp_algorithm sysfs knob that controls
-secondary algorithm selection used for recompression.
-This device attribute works in a similar way with
-comp_algorithm attribute.
+We will use non-WB variant in ZRAM page recompression path.
 
 Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 ---
- drivers/block/zram/zram_drv.c | 111 +++++++++++++++++++++++++++-------
- 1 file changed, 90 insertions(+), 21 deletions(-)
+ drivers/block/zram/zram_drv.c | 73 ++++++++++++++++++++++++-----------
+ 1 file changed, 50 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index 770ea3489eb6..a8ef3c0c3dae 100644
+index a8ef3c0c3dae..94c62d7ea818 100644
 --- a/drivers/block/zram/zram_drv.c
 +++ b/drivers/block/zram/zram_drv.c
-@@ -41,7 +41,12 @@ static DEFINE_IDR(zram_index_idr);
- static DEFINE_MUTEX(zram_index_mutex);
- 
- static int zram_major;
--static const char *default_compressor = CONFIG_ZRAM_DEF_COMP;
-+static const char *default_comp_algs[ZRAM_MAX_ZCOMPS] = {
-+	CONFIG_ZRAM_DEF_COMP,
-+#ifdef CONFIG_ZRAM_MULTI_COMP
-+	"zstd",
-+#endif
-+};
- 
- /* Module params (documentation at end) */
- static unsigned int num_devices = 1;
-@@ -1000,31 +1005,37 @@ static ssize_t max_comp_streams_store(struct device *dev,
- 	return len;
+@@ -1314,8 +1314,30 @@ static void zram_free_page(struct zram *zram, size_t index)
+ 		~(1UL << ZRAM_LOCK | 1UL << ZRAM_UNDER_WB));
  }
  
--static ssize_t comp_algorithm_show(struct device *dev,
--		struct device_attribute *attr, char *buf)
-+static void comp_algorithm_set(struct zram *zram, u32 idx, const char *alg)
- {
--	size_t sz;
--	struct zram *zram = dev_to_zram(dev);
-+	bool default_alg = false;
-+	int i;
- 
--	down_read(&zram->init_lock);
--	sz = zcomp_available_show(zram->comp_algs[ZRAM_PRIMARY_ZCOMP], buf);
--	up_read(&zram->init_lock);
-+	/* Do not kfree() algs that we didn't allocate, IOW the default ones */
-+	for (i = 0; i < ZRAM_MAX_ZCOMPS; i++) {
-+		if (zram->comp_algs[idx] == default_comp_algs[i]) {
-+			default_alg = true;
-+			break;
-+		}
-+	}
- 
--	return sz;
-+	if (!default_alg)
-+		kfree(zram->comp_algs[idx]);
-+	zram->comp_algs[idx] = alg;
- }
- 
--static void comp_algorithm_set(struct zram *zram, u32 idx, const char *alg)
-+static ssize_t __comp_algorithm_show(struct zram *zram, u32 idx, char *buf)
- {
--	/* Do not kfree() algs that we didn't allocate, IOW the default ones */
--	if (zram->comp_algs[idx] != default_compressor)
--		kfree(zram->comp_algs[idx]);
--	zram->comp_algs[idx] = alg;
-+	ssize_t sz;
+-static int __zram_bvec_read(struct zram *zram, struct page *page, u32 index,
+-				struct bio *bio, bool partial_io)
++/*
++ * Reads a page from the writeback devices. Corresponding ZRAM slot
++ * should be unlocked.
++ */
++static int zram_read_from_writeback(struct zram *zram, struct page *page,
++				    u32 index, struct bio *bio,
++				    bool partial_io)
++{
++	struct bio_vec bvec;
 +
-+	down_read(&zram->init_lock);
-+	sz = zcomp_available_show(zram->comp_algs[idx], buf);
-+	up_read(&zram->init_lock);
++	bvec.bv_page = page;
++	bvec.bv_len = PAGE_SIZE;
++	bvec.bv_offset = 0;
++	return read_from_bdev(zram, &bvec,
++			      zram_get_element(zram, index),
++			      bio, partial_io);
++}
 +
-+	return sz;
- }
- 
--static ssize_t comp_algorithm_store(struct device *dev,
--		struct device_attribute *attr, const char *buf, size_t len)
-+static int __comp_algorithm_store(struct zram *zram, u32 idx, const char *buf)
++/*
++ * Reads (decompresses if needed) a page from zspool (zsmalloc).
++ * Corresponding ZRAM slot should be locked.
++ */
++static int zram_read_from_zspool(struct zram *zram, struct page *page,
++				 u32 index)
  {
--	struct zram *zram = dev_to_zram(dev);
- 	char *compressor;
- 	size_t sz;
+ 	struct zcomp_strm *zstrm;
+ 	unsigned long handle;
+@@ -1323,23 +1345,6 @@ static int __zram_bvec_read(struct zram *zram, struct page *page, u32 index,
+ 	void *src, *dst;
+ 	int ret;
  
-@@ -1053,11 +1064,55 @@ static ssize_t comp_algorithm_store(struct device *dev,
- 		return -EBUSY;
+-	zram_slot_lock(zram, index);
+-	if (zram_test_flag(zram, index, ZRAM_WB)) {
+-		struct bio_vec bvec;
+-
+-		zram_slot_unlock(zram, index);
+-		/* A null bio means rw_page was used, we must fallback to bio */
+-		if (!bio)
+-			return -EOPNOTSUPP;
+-
+-		bvec.bv_page = page;
+-		bvec.bv_len = PAGE_SIZE;
+-		bvec.bv_offset = 0;
+-		return read_from_bdev(zram, &bvec,
+-				zram_get_element(zram, index),
+-				bio, partial_io);
+-	}
+-
+ 	handle = zram_get_handle(zram, index);
+ 	if (!handle || zram_test_flag(zram, index, ZRAM_SAME)) {
+ 		unsigned long value;
+@@ -1349,7 +1354,6 @@ static int __zram_bvec_read(struct zram *zram, struct page *page, u32 index,
+ 		mem = kmap_atomic(page);
+ 		zram_fill_page(mem, PAGE_SIZE, value);
+ 		kunmap_atomic(mem);
+-		zram_slot_unlock(zram, index);
+ 		return 0;
  	}
  
--	comp_algorithm_set(zram, ZRAM_PRIMARY_ZCOMP, compressor);
-+	comp_algorithm_set(zram, idx, compressor);
- 	up_write(&zram->init_lock);
--	return len;
-+	return 0;
+@@ -1371,17 +1375,40 @@ static int __zram_bvec_read(struct zram *zram, struct page *page, u32 index,
+ 		zcomp_stream_put(zram->comps[ZRAM_PRIMARY_ZCOMP]);
+ 	}
+ 	zs_unmap_object(zram->mem_pool, handle);
+-	zram_slot_unlock(zram, index);
++	return ret;
 +}
 +
-+static ssize_t comp_algorithm_show(struct device *dev,
-+				   struct device_attribute *attr,
-+				   char *buf)
++static int __zram_bvec_read(struct zram *zram, struct page *page, u32 index,
++			    struct bio *bio, bool partial_io)
 +{
-+	struct zram *zram = dev_to_zram(dev);
-+
-+	return __comp_algorithm_show(zram, ZRAM_PRIMARY_ZCOMP, buf);
-+}
-+
-+static ssize_t comp_algorithm_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf,
-+				    size_t len)
-+{
-+	struct zram *zram = dev_to_zram(dev);
 +	int ret;
 +
-+	ret = __comp_algorithm_store(zram, ZRAM_PRIMARY_ZCOMP, buf);
-+	return ret ? ret : len;
++	zram_slot_lock(zram, index);
++	if (!zram_test_flag(zram, index, ZRAM_WB)) {
++		/* Slot should be locked through out the function call */
++		ret = zram_read_from_zspool(zram, page, index);
++		zram_slot_unlock(zram, index);
++	} else {
++		/* Slot should be unlocked before the function call */
++		zram_slot_unlock(zram, index);
++
++		/* A null bio means rw_page was used, we must fallback to bio */
++		if (!bio)
++			return -EOPNOTSUPP;
++
++		ret = zram_read_from_writeback(zram, page, index, bio,
++					       partial_io);
++	}
+ 
+ 	/* Should NEVER happen. Return bio error if it does. */
+-	if (WARN_ON(ret))
++	if (WARN_ON(ret < 0))
+ 		pr_err("Decompression failed! err=%d, page=%u\n", ret, index);
+ 
+ 	return ret;
  }
  
-+#ifdef CONFIG_ZRAM_MULTI_COMP
-+static ssize_t recomp_algorithm_show(struct device *dev,
-+				     struct device_attribute *attr,
-+				     char *buf)
-+{
-+	struct zram *zram = dev_to_zram(dev);
-+
-+	return __comp_algorithm_show(zram, ZRAM_SECONDARY_ZCOMP, buf);
-+}
-+
-+static ssize_t recomp_algorithm_store(struct device *dev,
-+				      struct device_attribute *attr,
-+				      const char *buf,
-+				      size_t len)
-+{
-+	struct zram *zram = dev_to_zram(dev);
-+	int ret;
-+
-+	ret = __comp_algorithm_store(zram, ZRAM_SECONDARY_ZCOMP, buf);
-+	return ret ? ret : len;
-+}
-+#endif
-+
- static ssize_t compact_store(struct device *dev,
- 		struct device_attribute *attr, const char *buf, size_t len)
+ static int zram_bvec_read(struct zram *zram, struct bio_vec *bvec,
+-				u32 index, int offset, struct bio *bio)
++			  u32 index, int offset, struct bio *bio)
  {
-@@ -1762,7 +1817,11 @@ static void zram_reset_device(struct zram *zram)
- 	memset(&zram->stats, 0, sizeof(zram->stats));
- 	reset_bdev(zram);
- 
--	comp_algorithm_set(zram, ZRAM_PRIMARY_ZCOMP, default_compressor);
-+	comp_algorithm_set(zram, ZRAM_PRIMARY_ZCOMP,
-+			   default_comp_algs[ZRAM_PRIMARY_ZCOMP]);
-+	if (IS_ENABLED(CONFIG_ZRAM_MULTI_COMP))
-+		comp_algorithm_set(zram, ZRAM_SECONDARY_ZCOMP,
-+				   default_comp_algs[ZRAM_SECONDARY_ZCOMP]);
- 	up_write(&zram->init_lock);
- }
- 
-@@ -1895,6 +1954,9 @@ static DEVICE_ATTR_WO(writeback);
- static DEVICE_ATTR_RW(writeback_limit);
- static DEVICE_ATTR_RW(writeback_limit_enable);
- #endif
-+#ifdef CONFIG_ZRAM_MULTI_COMP
-+static DEVICE_ATTR_RW(recomp_algorithm);
-+#endif
- 
- static struct attribute *zram_disk_attrs[] = {
- 	&dev_attr_disksize.attr,
-@@ -1918,6 +1980,9 @@ static struct attribute *zram_disk_attrs[] = {
- 	&dev_attr_bd_stat.attr,
- #endif
- 	&dev_attr_debug_stat.attr,
-+#ifdef CONFIG_ZRAM_MULTI_COMP
-+	&dev_attr_recomp_algorithm.attr,
-+#endif
- 	NULL,
- };
- 
-@@ -1997,7 +2062,11 @@ static int zram_add(void)
- 	if (ret)
- 		goto out_cleanup_disk;
- 
--	zram->comp_algs[ZRAM_PRIMARY_ZCOMP] = default_compressor;
-+	zram->comp_algs[ZRAM_PRIMARY_ZCOMP] =
-+		default_comp_algs[ZRAM_PRIMARY_ZCOMP];
-+	if (IS_ENABLED(CONFIG_ZRAM_MULTI_COMP))
-+		zram->comp_algs[ZRAM_SECONDARY_ZCOMP] =
-+			default_comp_algs[ZRAM_SECONDARY_ZCOMP];
- 
- 	zram_debugfs_register(zram);
- 	pr_info("Added device: %s\n", zram->disk->disk_name);
+ 	int ret;
+ 	struct page *page;
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
