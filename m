@@ -2,107 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2139C5F8D25
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 20:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B745F8D27
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 20:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbiJIS2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 14:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
+        id S229986AbiJISaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 14:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiJIS17 (ORCPT
+        with ESMTP id S229716AbiJISaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 14:27:59 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606BA252A9;
-        Sun,  9 Oct 2022 11:27:57 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id bi26-20020a05600c3d9a00b003c1e11f54d2so4096501wmb.2;
-        Sun, 09 Oct 2022 11:27:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PS7csLc85uEKkCZYUniKkURfmvYd6XN26COmZB1Jdxk=;
-        b=bR5211TQJ7TQMkrPhLKq4irYkXEil3oZDmp8K0EJ0hNJFXV6CIAbLe5DRrgMxrJtwm
-         DFZ1F21o8t8l3mwsh3tV22Q4QBsPF/XbFkMQedPI4miubgUHH7zyyuOnR1NXhKDnkzZe
-         Q2HBbMBd579Fx3qHI7NcuGAfQmfybaATC8GQcYKdcRNKns/rBPQV55a7R42OwyvUNUdp
-         Ms1FZAG+gq+AEFp2q/BOwfCUv/+4YdzbkS4stiqY4Vpeip0TVSY1BOxeSYjrdr3yIAcr
-         hKGA/v6PR6Grcq4lmsouBTO5L5nWzzQdP6cXno0aosv9YVHL23npmXS61OXSC+EQ5OYj
-         +0uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PS7csLc85uEKkCZYUniKkURfmvYd6XN26COmZB1Jdxk=;
-        b=7X+efpA8gHYXywZW2JzaQdhudlwgx8v5RHNFMSgQY4MsC98/2Hsyj8YMThSzPVG8nX
-         jzSYNV1jvXpThCmMzgEKQl1MUgevg94AfRYDbdvdSAAGtBn2LosDZ19kgbhn+2ZasSuj
-         hnvTQKu/TzNBrJ9P8WuKawr0ZOM2pupGnjvbibqOlEOuVp8QZwvcten6XldN24L31XH1
-         6DHOdTYTTFROS2/5Jisr7iOc1Q7GpgaFj9M7gtJ5mcheZb6dXlAQGEXZv2yEiqxcJ0dr
-         Np/wIikkru7keoyojh6V7Ti04Ypyj9pXexEfd1Xe4wYqMOX7UQ/OEjGHZ53bR68R8pdk
-         Z9sA==
-X-Gm-Message-State: ACrzQf0tGHB6GSLJXNWC6aNGRxvqvQwPpNFxEWYeF0YEskxxOcy7h1e6
-        0b2F0zbhpXiSfW7IAlC/kHM=
-X-Google-Smtp-Source: AMsMyM4sjir9Eplbd3FQlMDGgseBl8zuuuGLQ1QMLcdPsExCTuKr+1d1D3drsc50TeflxBp8GlJpdA==
-X-Received: by 2002:a05:600c:221a:b0:3b4:75b8:3f7f with SMTP id z26-20020a05600c221a00b003b475b83f7fmr9927436wml.175.1665340075581;
-        Sun, 09 Oct 2022 11:27:55 -0700 (PDT)
-Received: from localhost.localdomain ([94.73.35.102])
-        by smtp.gmail.com with ESMTPSA id d16-20020adf9c90000000b0022dd3aab6bfsm6909438wre.57.2022.10.09.11.27.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 11:27:55 -0700 (PDT)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     jikos@kernel.org
-Cc:     benjamin.tissoires@redhat.com, rydberg@bitmath.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        Nulo <git@nulo.in>
-Subject: [PATCH] HID: magicmouse: Do not set BTN_MOUSE on double report
-Date:   Sun,  9 Oct 2022 20:27:47 +0200
-Message-Id: <20221009182747.90730-1-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        Sun, 9 Oct 2022 14:30:10 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B3E9167DB;
+        Sun,  9 Oct 2022 11:30:08 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 299ITsUH029168;
+        Sun, 9 Oct 2022 20:29:54 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
+        kernel test robot <lkp@intel.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Willy Tarreau <w@1wt.eu>
+Subject: [PATCH v2] tools/nolibc: fix missing strlen() definition and infinite loop with gcc-12
+Date:   Sun,  9 Oct 2022 20:29:36 +0200
+Message-Id: <20221009182936.29125-1-w@1wt.eu>
+X-Mailer: git-send-email 2.17.5
+In-Reply-To: <20221009151939.28270-1-w@1wt.eu>
+References: <20221009151939.28270-1-w@1wt.eu>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Under certain conditions the Magic Trackpad can group 2 reports in a
-single packet. The packet is split and the raw event function is
-invoked recursively for each part.
+When built at -Os, gcc-12 recognizes an strlen() pattern in nolibc_strlen()
+and replaces it with a jump to strlen(), which is not defined as a symbol
+and breaks compilation. Worse, when the function is called strlen(), the
+function is simply replaced with a jump to itself, hence becomes an
+infinite loop.
 
-However, after processing each part, the BTN_MOUSE status is updated,
-sending multiple click events. [1]
+One way to avoid this is to always set -ffreestanding, but the calling
+code doesn't know this and there's no way (either via attributes or
+pragmas) to globally enable it from include files, effectively leaving
+a painful situation for the caller.
 
-Return after processing double reports to avoid this issue.
+Alexey suggested to place an empty asm() statement inside the loop to
+stop gcc from recognizing a well-known pattern, which happens to work
+pretty fine. At least it allows us to make sure our local definition
+is not replaced with a self jump.
 
-Link: https://gitlab.freedesktop.org/libinput/libinput/-/issues/811  # [1]
-Fixes: a462230e16ac ("HID: magicmouse: enable Magic Trackpad support")
-Reported-by: Nulo <git@nulo.in>
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+The function only needs to be renamed back to strlen() so that the symbol
+exists, which implies that nolibc_strlen() which is used on variable
+strings has to be declared as a macro that points back to it before the
+strlen() macro is redifined.
+
+It was verified to produce valid code with gcc 3.4 to 12.1 at different
+optimization levels, and both with constant and variable strings.
+
+In case this problem surfaces again in the future, an alternate approach
+consisting in adding an optimize("no-tree-loop-distribute-patterns")
+function attribute for gcc>=12 worked as well but is less pretty.
+
+Reported-by: kernel test robot <yujie.liu@intel.com>
+Link: https://lore.kernel.org/r/202210081618.754a77db-yujie.liu@intel.com
+Fixes: 66b6f755ad45 ("rcutorture: Import a copy of nolibc")
+Fixes: 96980b833a21 ("tools/nolibc/string: do not use __builtin_strlen() at -O0")
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Alexey Dobriyan <adobriyan@gmail.com>
+Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- drivers/hid/hid-magicmouse.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2: dropped the attribute(optimize) in favor of an empty asm() statement
 
-diff --git a/drivers/hid/hid-magicmouse.c b/drivers/hid/hid-magicmouse.c
-index 664a624a363d..c9c968d4b36a 100644
---- a/drivers/hid/hid-magicmouse.c
-+++ b/drivers/hid/hid-magicmouse.c
-@@ -480,7 +480,7 @@ static int magicmouse_raw_event(struct hid_device *hdev,
- 		magicmouse_raw_event(hdev, report, data + 2, data[1]);
- 		magicmouse_raw_event(hdev, report, data + 2 + data[1],
- 			size - 2 - data[1]);
--		break;
-+		return 0;
- 	default:
- 		return 0;
- 	}
+---
+ tools/include/nolibc/string.h | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/tools/include/nolibc/string.h b/tools/include/nolibc/string.h
+index bef35bee9c44..718a405ffbc3 100644
+--- a/tools/include/nolibc/string.h
++++ b/tools/include/nolibc/string.h
+@@ -125,14 +125,18 @@ char *strcpy(char *dst, const char *src)
+ }
+ 
+ /* this function is only used with arguments that are not constants or when
+- * it's not known because optimizations are disabled.
++ * it's not known because optimizations are disabled. Note that gcc 12
++ * recognizes an strlen() pattern and replaces it with a jump to strlen(),
++ * thus itself, hence the asm() statement below that's meant to disable this
++ * confusing practice.
+  */
+ static __attribute__((unused))
+-size_t nolibc_strlen(const char *str)
++size_t strlen(const char *str)
+ {
+ 	size_t len;
+ 
+-	for (len = 0; str[len]; len++);
++	for (len = 0; str[len]; len++)
++		asm("");
+ 	return len;
+ }
+ 
+@@ -140,13 +144,12 @@ size_t nolibc_strlen(const char *str)
+  * the two branches, then will rely on an external definition of strlen().
+  */
+ #if defined(__OPTIMIZE__)
++#define nolibc_strlen(x) strlen(x)
+ #define strlen(str) ({                          \
+ 	__builtin_constant_p((str)) ?           \
+ 		__builtin_strlen((str)) :       \
+ 		nolibc_strlen((str));           \
+ })
+-#else
+-#define strlen(str) nolibc_strlen((str))
+ #endif
+ 
+ static __attribute__((unused))
 -- 
-2.25.1
+2.35.3
 
