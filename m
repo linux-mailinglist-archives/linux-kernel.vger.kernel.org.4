@@ -2,139 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAABD5F8B4D
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 14:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 647595F8B4B
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 14:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbiJIMmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 08:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60710 "EHLO
+        id S230084AbiJIMmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 08:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbiJIMmr (ORCPT
+        with ESMTP id S229716AbiJIMmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 08:42:47 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D4D2E681;
-        Sun,  9 Oct 2022 05:42:46 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 78so8272570pgb.13;
-        Sun, 09 Oct 2022 05:42:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7OLqkk8/7TR7bcVpCw07PeB/AEHPG8uMPNz4yLkdUC0=;
-        b=D5Ct5XYeRJf8KqSlA79lx6ZoBHRS87zyEcdDZEzSz6LhBBNmx694oQfENUfLSJKK9r
-         rcGMHDbYfQpYnp0jaEicsbtv2ynsNhuyC/w778dGgfAAqFGEsC7ib2ORma0mew+1FvEm
-         ZlXUwsiLqVgeUCF54cvnl1IUkqqWi42wCWyc0OMxuO8WGx6vl/XnZRYiJop5C9Ltez9S
-         /HhCHRWjRj/IgEIjDtdeOW0p48AZp9/3xLfBzS8kOjllu6Gdo803OUVI9URo/Vo6bQx0
-         TIRsOLIf94KAaFjcjaxSvaZRUWoHE8le1QLQYtntJPFBjyufrtuvQm8vf17rrZzSx4N6
-         jsew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7OLqkk8/7TR7bcVpCw07PeB/AEHPG8uMPNz4yLkdUC0=;
-        b=sBcAdTKsvJVNSNzUQN02sMLFn/E0/X/5vEkkVj+TNQIO+mlWCpgDyTK+gPUCmUcuUv
-         UhrErIyxSGAVTX0phwbu3RkVuQ+U/HLHrGpCQdlqJYTBQJCLRcM8AHVjQWOP8RdLBRhK
-         Jz/VznYm2nDJXMZEeNskhRkeylNp88ZVa6LHrIZcLrl0TjCHsrd7BtnZxn0M0uEBI3OI
-         d254u+uR++TE22wom9OC5fVyoG6/WV35p3DEU9CZUA3ty6BetWOqDI9Tn9aoWRT7PjwR
-         C9ggzNmlR1pEe0exUWJEA90EDsNz1N/gFmcXDYUzC755An8M2IRlzi4Ubql7x6ckVkeO
-         VKnw==
-X-Gm-Message-State: ACrzQf0jEPhAyUXnowVWS1xpr+TiUDUT9ioZWSAaviJylzW8Rn4zp3YK
-        7hkxK763XuotEs+YJFu0ko8=
-X-Google-Smtp-Source: AMsMyM73OUboZjqeQR6HfjGWD4U6YNPZ3ecayau6gTg4ME2ViEYnV3zK8tJSYWjIa0MnHdRyKNfQDQ==
-X-Received: by 2002:a63:6909:0:b0:41c:9f4f:a63c with SMTP id e9-20020a636909000000b0041c9f4fa63cmr12958871pgc.76.1665319365996;
-        Sun, 09 Oct 2022 05:42:45 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-80.three.co.id. [180.214.232.80])
-        by smtp.gmail.com with ESMTPSA id p2-20020a170902a40200b001750792f20asm4643851plq.238.2022.10.09.05.42.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 05:42:45 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id E15061039BF; Sun,  9 Oct 2022 19:42:41 +0700 (WIB)
-Date:   Sun, 9 Oct 2022 19:42:41 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Jiangshan Yi <13667453960@163.com>
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        giovanni.cabiddu@intel.com, qat-linux@intel.com,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: Re: [PATCH] crypto: qat - fix spelling typo in comment
-Message-ID: <Y0LBwe4/K2hnchRC@debian.me>
-References: <20221009091519.3152948-1-13667453960@163.com>
+        Sun, 9 Oct 2022 08:42:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9438FFB;
+        Sun,  9 Oct 2022 05:42:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79F1CB80D2A;
+        Sun,  9 Oct 2022 12:42:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFAB2C433C1;
+        Sun,  9 Oct 2022 12:42:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665319352;
+        bh=f+mosKCYImVjf5AY2/cBN3jgVGzwj8LSrp7eU/MOFg4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=N7LKrwOdUGnlYeoUU0LVlhBi005V35WwkiVkWZ8iiLSsbA56VeiIhSPLaQl2WGzuW
+         w89wOBey4yI/Nv6EqXwU36cMc7apcX5Uf9B2TGRzEXGMyLMXtpxWzigThXXwk8ymWG
+         0PyPUfA3HHJeAO7z5YHpAh7D2t8YlmwkCGdQbFsXI6AaoDZtBQCJa0YnwPbbRnkcb0
+         8AQpkbOB56CbaVDO8fhtNWXbyALhLkGTIwSBvWJxFaGAD9fJDI0PnyJm42+tQfLVSL
+         yjEXuVd5XJV7H8igsKVNx6/+x7At2UcLA81rzCG5xix/uqbrnkgwMA/i7BDOPJ/HDa
+         KOucznWY74CHg==
+Date:   Sun, 9 Oct 2022 13:42:52 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Olivier Moysan <olivier.moysan@foss.st.com>
+Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        <nuno.sa@analog.com>, Paul Cercueil <paul@crapouillou.net>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        Yannick Brosseau <yannick.brosseau@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+Subject: Re: [PATCH v3 1/8] iio: adc: stm32-adc: fix channel sampling time
+ init
+Message-ID: <20221009134252.2b636e0a@jic23-huawei>
+In-Reply-To: <20221005161424.4537-2-olivier.moysan@foss.st.com>
+References: <20221005161424.4537-1-olivier.moysan@foss.st.com>
+        <20221005161424.4537-2-olivier.moysan@foss.st.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="FF6OHtQv1OVujNNT"
-Content-Disposition: inline
-In-Reply-To: <20221009091519.3152948-1-13667453960@163.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 5 Oct 2022 18:14:17 +0200
+Olivier Moysan <olivier.moysan@foss.st.com> wrote:
 
---FF6OHtQv1OVujNNT
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Fix channel init for ADC generic channel bindings.
+> In generic channel initialization, stm32_adc_smpr_init() is called
+> to initialize channel sampling time. The "st,min-sample-time-ns"
+> property is an optional property. If it is not defined,
+> stm32_adc_smpr_init() is currently skipped.
+> However stm32_adc_smpr_init() must always be called,
+> to force a minimum sampling time for the internal channels,
+> as the minimum sampling time is known.
+> Make stm32_adc_smpr_init() call unconditional.
 
-On Sun, Oct 09, 2022 at 05:15:19PM +0800, Jiangshan Yi wrote:
-> From: Jiangshan Yi <yijiangshan@kylinos.cn>
->=20
-> Fix spelling typo in comment.
->=20
+Hi Olivier.  Andy commented on this in v2... 
 
-What comment are you referring? I have to see the actual diff below.
+Line lengths in patch description are rather random and no where near the typical
+72-75 chars.  Should look more like:
 
-Anyways, for similar typofixes patches, you need to describe what words
-you are correcting and where you do the fix.
+Fix channel init for ADC generic channel bindings. In generic channel
+initialization, stm32_adc_smpr_init() is called > to initialize channel
+sampling time. The "st,min-sample-time-ns" property is an optional
+property. If it is not defined, stm32_adc_smpr_init() is currently
+skipped. However stm32_adc_smpr_init() must always be called, to force a
+minimum sampling time for the internal channels, as the minimum sampling
+time is known. Make stm32_adc_smpr_init() call unconditional.
 
-Also, if you send the patch from a different address than From: line
-in the patch, you need to have Signed-off-by for the sender address.
+Fine to have multiple paragraphs, but within each one, don't wrap too early.
 
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+> 
+> Fixes: 796e5d0b1e9b ("iio: adc: stm32-adc: use generic binding for sample-time")
+> Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
 > ---
->  drivers/crypto/qat/qat_common/adf_transport_access_macros.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/crypto/qat/qat_common/adf_transport_access_macros.h =
-b/drivers/crypto/qat/qat_common/adf_transport_access_macros.h
-> index 3b6b0267bbec..d3667dbd9826 100644
-> --- a/drivers/crypto/qat/qat_common/adf_transport_access_macros.h
-> +++ b/drivers/crypto/qat/qat_common/adf_transport_access_macros.h
-> @@ -37,7 +37,7 @@
->  #define ADF_SIZE_TO_RING_SIZE_IN_BYTES(SIZE) ((1 << (SIZE - 1)) << 7)
->  #define ADF_RING_SIZE_IN_BYTES_TO_SIZE(SIZE) ((1 << (SIZE - 1)) >> 7)
-> =20
-> -/* Minimum ring bufer size for memory allocation */
-> +/* Minimum ring buffer size for memory allocation */
->  #define ADF_RING_SIZE_BYTES_MIN(SIZE) \
->  	((SIZE < ADF_SIZE_TO_RING_SIZE_IN_BYTES(ADF_RING_SIZE_4K)) ? \
->  		ADF_SIZE_TO_RING_SIZE_IN_BYTES(ADF_RING_SIZE_4K) : SIZE)
-=20
-Oh, you refer to comment for ADF_RING_SIZE_BYTES_MIN() macro.
-The patch does s/bufer/buffer/.
+>  drivers/iio/adc/stm32-adc.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
+> index 6256977eb7f7..3cda529f081d 100644
+> --- a/drivers/iio/adc/stm32-adc.c
+> +++ b/drivers/iio/adc/stm32-adc.c
+> @@ -2086,18 +2086,19 @@ static int stm32_adc_generic_chan_init(struct iio_dev *indio_dev,
+>  		stm32_adc_chan_init_one(indio_dev, &channels[scan_index], val,
+>  					vin[1], scan_index, differential);
+>  
+> +		val = 0;
+>  		ret = fwnode_property_read_u32(child, "st,min-sample-time-ns", &val);
+>  		/* st,min-sample-time-ns is optional */
+> -		if (!ret) {
+> -			stm32_adc_smpr_init(adc, channels[scan_index].channel, val);
+> -			if (differential)
+> -				stm32_adc_smpr_init(adc, vin[1], val);
+> -		} else if (ret != -EINVAL) {
+> +		if (ret && ret != -EINVAL) {
+>  			dev_err(&indio_dev->dev, "Invalid st,min-sample-time-ns property %d\n",
+>  				ret);
+>  			goto err;
+>  		}
+>  
+> +		stm32_adc_smpr_init(adc, channels[scan_index].channel, val);
+> +		if (differential)
+> +			stm32_adc_smpr_init(adc, vin[1], val);
+> +
+>  		scan_index++;
+>  	}
+>  
 
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---FF6OHtQv1OVujNNT
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY0LBuwAKCRD2uYlJVVFO
-o3aFAP9y3fTmuQN/W+GzjlLzAAHPgHIU2nnTRWW2oB5BrrZWhAD+OIqszJ8iFlg7
-GEHhezJNyBZOyYJCVvFXL9yOr3uWRwY=
-=MU34
------END PGP SIGNATURE-----
-
---FF6OHtQv1OVujNNT--
