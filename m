@@ -2,120 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8FF5F88B5
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 03:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 220B35F88BA
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 03:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiJIBXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 21:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
+        id S229799AbiJIBkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 21:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiJIBXH (ORCPT
+        with ESMTP id S229526AbiJIBkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 21:23:07 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9558B1572E
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 18:23:05 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx5OF3IkJjsvkoAA--.18413S2;
-        Sun, 09 Oct 2022 09:23:04 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] LoongArch: Do not create sysfs control file for io master CPUs
-Date:   Sun,  9 Oct 2022 09:23:02 +0800
-Message-Id: <1665278582-16038-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8Bx5OF3IkJjsvkoAA--.18413S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJr4kGFy5Kr15JF4Dtry3XFb_yoW8KF4rpF
-        97Cr1kKrZ5WFn5Gayqq34q9rWUA3sxGw12ga12kay8CFW7Xrn8XF1ktF1kZF15JayrKFWF
-        qryrK39a9F15J3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk2b7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
-        vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
-        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVWkMxAI
-        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
-        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
-        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
-        CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
-        z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUg9mRDUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 8 Oct 2022 21:40:09 -0400
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E1A18B24
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 18:40:05 -0700 (PDT)
+X-QQ-GoodBg: 1
+X-QQ-SSF: 00400000000000F0
+X-QQ-FEAT: 4PzXER4Bulfq0lrlokHYkaAlRismpaZmHnrwZevtPiH5Y/EuzG1Vt8Qj4JFdL
+        rEThIe+lIKwCNHugkmY5/5rgjA6aXUD8dS0rYDWbbLU+/J2Qgay0Gb3xtomLEtxnbPKTkrm
+        T5P2WP73rQgiM6pvmqiGwzyCm6mXQNNvB4Wr30FYtkhKPzDJkqhSAx60wlMWKtr4UMqqJ/v
+        2PTiggSdngesYVWPYFmRy4nf5FqTpW+XXZUgvfLcY8TW4lQYVAuIpw52kO8Fu4VT7UrpAqR
+        V2KBzzjwm7PQyC28EO56tTX4fYhr8hU7gMEFp03Dt7AIXD9TxrGZygOyvfKBrGySvadfVbd
+        BdQlC3MFFIhT7++N3GR3Qs3aYp8+Kiw3VUW4AEgijBF2kTLNLg=
+X-QQ-BUSINESS-ORIGIN: 2
+X-Originating-IP: 113.57.13.187
+X-QQ-STYLE: 
+X-QQ-mid: logic637t1665279096t2157815
+From:   "=?utf-8?B?WmhhbmcgWGluY2hlbmc=?=" <zhangxincheng@uniontech.com>
+To:     "=?utf-8?B?bWF6?=" <maz@kernel.org>
+Cc:     "=?utf-8?B?dGdseA==?=" <tglx@linutronix.de>,
+        "=?utf-8?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>,
+        "=?utf-8?B?b2xla3NhbmRy?=" <oleksandr@natalenko.name>,
+        "=?utf-8?B?SGFucyBkZSBHb2VkZQ==?=" <hdegoede@redhat.com>,
+        "=?utf-8?B?YmlnZWFzeQ==?=" <bigeasy@linutronix.de>,
+        "=?utf-8?B?bWFyay5ydXRsYW5k?=" <mark.rutland@arm.com>,
+        "=?utf-8?B?bWljaGFlbA==?=" <michael@walle.cc>
+Subject: Re: [PATCH] interrupt: discover and disable very frequent interrupts
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: base64
+Date:   Sun, 9 Oct 2022 09:31:36 +0800
+X-Priority: 3
+Message-ID: <tencent_48EE20EE67D50AC81A28CAAF@qq.com>
+X-QQ-MIME: TCMime 1.0 by Tencent
+X-Mailer: QQMail 2.x
+X-QQ-Mailer: QQMail 2.x
+References: <20220930064042.14564-1-zhangxincheng@uniontech.com>
+        <86bkqx6wrd.wl-maz@kernel.org>
+        <tencent_7C4E401B708789BC3A26F57C@qq.com>
+        <868rm16tbu.wl-maz@kernel.org>
+In-Reply-To: <868rm16tbu.wl-maz@kernel.org>
+X-QQ-ReplyHash: 682764619
+X-QQ-SENDSIZE: 520
+Received: from qq.com (unknown [127.0.0.1])
+        by smtp.qq.com (ESMTP) with SMTP
+        id ; Sun, 09 Oct 2022 09:31:37 +0800 (CST)
+Feedback-ID: logic:uniontech.com:qybglogicsvr:qybglogicsvr5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
+        MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now io master CPUs are not hotpluggable on LoongArch, in the current code,
-only /sys/devices/system/cpu/cpu0/online is not created, let us set the
-hotpluggable field of all the io master CPUs as 0, then prevent to create
-sysfs control file for the other io master CPUs which confuses some user
-space tools. This is similar with commit 9cce844abf07 ("MIPS: CPU#0 is not
-hotpluggable").
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/loongarch/include/asm/bootinfo.h | 5 +++++
- arch/loongarch/kernel/smp.c           | 5 -----
- arch/loongarch/kernel/topology.c      | 3 ++-
- 3 files changed, 7 insertions(+), 6 deletions(-)
-
-diff --git a/arch/loongarch/include/asm/bootinfo.h b/arch/loongarch/include/asm/bootinfo.h
-index 8e5881b..ed0910e 100644
---- a/arch/loongarch/include/asm/bootinfo.h
-+++ b/arch/loongarch/include/asm/bootinfo.h
-@@ -40,4 +40,9 @@ extern unsigned long fw_arg0, fw_arg1, fw_arg2;
- extern struct loongson_board_info b_info;
- extern struct loongson_system_configuration loongson_sysconf;
- 
-+static inline bool io_master(int cpu)
-+{
-+	return test_bit(cpu, &loongson_sysconf.cores_io_master);
-+}
-+
- #endif /* _ASM_BOOTINFO_H */
-diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
-index b5fab30..781a4d4 100644
---- a/arch/loongarch/kernel/smp.c
-+++ b/arch/loongarch/kernel/smp.c
-@@ -240,11 +240,6 @@ void loongson3_smp_finish(void)
- 
- #ifdef CONFIG_HOTPLUG_CPU
- 
--static bool io_master(int cpu)
--{
--	return test_bit(cpu, &loongson_sysconf.cores_io_master);
--}
--
- int loongson3_cpu_disable(void)
- {
- 	unsigned long flags;
-diff --git a/arch/loongarch/kernel/topology.c b/arch/loongarch/kernel/topology.c
-index ab1a75c..caa7cd8 100644
---- a/arch/loongarch/kernel/topology.c
-+++ b/arch/loongarch/kernel/topology.c
-@@ -5,6 +5,7 @@
- #include <linux/node.h>
- #include <linux/nodemask.h>
- #include <linux/percpu.h>
-+#include <asm/bootinfo.h>
- 
- static DEFINE_PER_CPU(struct cpu, cpu_devices);
- 
-@@ -40,7 +41,7 @@ static int __init topology_init(void)
- 	for_each_present_cpu(i) {
- 		struct cpu *c = &per_cpu(cpu_devices, i);
- 
--		c->hotpluggable = !!i;
-+		c->hotpluggable = !io_master(i);
- 		ret = register_cpu(c, i);
- 		if (ret < 0)
- 			pr_warn("topology_init: register_cpu %d failed (%d)\n", i, ret);
--- 
-2.1.0
+PiBBZ2Fpbjogd2hhdCBtYWtlcyB5b3UgdGhpbmsgdGhhdCBpdCBpcyBiZXR0ZXIgdG8ga2ls
+bCB0aGUgaW50ZXJydXB0DQo+IHRoYW4gc3VmZmVyaW5nIGEgUkNVIHN0YWxsPyBZZXMsIHRo
+YXQncyBhIGxvdCBvZiBpbnRlcnJ1cHRzLiBCdXQNCj4ga2lsbGluZyBpdCBhbmQgcmlza2lu
+ZyB0aGUgd2hvbGUgc3lzdGVtIGlzbid0IGFuIGFjY2VwdGFibGUgb3V0Y29tZS4NCg0KSXQn
+cyByZWFsbHkgbm90IGdvb2QgdG8ga2lsbCBpbnRlcnJ1cHRzIGRpcmVjdGx5LiBQZXJoYXBz
+IGEgYmV0dGVyIHdheSBpcw0KdG8gcmVwb3J0IGl0IGFuZCBsZXQgdGhlIHN5c3RlbSBhZG1p
+bmlzdHJhdG9yIGRlY2lkZSB3aGF0IHRvIGRvIHdpdGggaXQuDQoNCisgaWYoKGRlc2MtPmdh
+cF9jb3VudCAmIDB4ZmZmZjAwMDApID09IDApDQorIGRlc2MtPmdhcF90aW1lID0gZ2V0X2pp
+ZmZpZXNfNjQoKTsNCisNCisgZGVzYy0+Z2FwX2NvdW50ICsrOw0KKw0KKyBpZigoZGVzYy0+
+Z2FwX2NvdW50ICYgMHgwMDAwZmZmZikgPj0gMjAwMCkgew0KKyBpZigoZ2V0X2ppZmZpZXNf
+NjQoKSAtIGRlc2MtPmdhcF90aW1lKSA8IEhaKSB7DQorIGRlc2MtPmdhcF9jb3VudCArPSAw
+eDAwMDEwMDAwOw0KKyBkZXNjLT5nYXBfY291bnQgJj0gMHhmZmZmMDAwMDsNCisgfSBlbHNl
+IHsNCisgZGVzYy0+Z2FwX2NvdW50ID0gMDsNCisgfQ0KKw0KKyBpZigoZGVzYy0+Z2FwX2Nv
+dW50ID4+IDE2KSA+IDMwKSB7DQorIF9fcmVwb3J0X2JhZF9pcnEoZGVzYywgYWN0aW9uX3Jl
+dCwgS0VSTl9FUlIgImlycSAlZDogdHJpZ2dlcmVkIHRvbyBmcmVxdWVudGx5XG4iKTsNCisg
+fQ0KKyB9DQorDQoNCg0KVGhhbmtzLA0KDQogICAgICAgICAgICAgWmhhbmcgWGluY2hlbmc=
 
