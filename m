@@ -2,138 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DEB5F8AB2
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 12:38:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD2C5F8ABC
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 12:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbiJIKif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 06:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
+        id S229989AbiJIKpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 06:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiJIKib (ORCPT
+        with ESMTP id S229711AbiJIKpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 06:38:31 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301F3B36;
-        Sun,  9 Oct 2022 03:38:31 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id g130so10110170oia.13;
-        Sun, 09 Oct 2022 03:38:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=nWvhnVzPYFvs5pSg57txecq8CLlBbSop8yXnsSTys3A=;
-        b=ZC2PllSsRBAEa7KzF+tHhQsTHPlV7cJsXuqY/c3gleLpbTXesyWSVHnQKwCGnL9+xj
-         +8cEodhhpQ+6og0w7xtcM9Qv3SXllRSaPRaTkO6UackfVw9uB9I8qVtAl5zCBmDrJY74
-         NEy6qd7sEtPvfjJ+oPLBU1KFeZvAYiJIxFamPUikCdkHVuTGdanxMfM0efVneere5NRD
-         snCymbzEZ0jqP4ONGOXOC0KBdAaKnlmiUCfh+vwcEMVEmlugLuYHGguew5YuB8EQGD9X
-         QmRQJiyE5nBJQEQjUuiSFNF2yRomy+Q/8yf2xPdMT3H5zbHBvcPwdzfDhoP0NPlRy39t
-         aUuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nWvhnVzPYFvs5pSg57txecq8CLlBbSop8yXnsSTys3A=;
-        b=JkkQ5+SXBP5xsYwDO5GO0lvrTMI9sD/SPs3CQUt+2gONamz7WEA53r14J6CvxOKCR+
-         zx6osdgwgbKelVJhNe7M+z11uJWObehmsZpch3NEAU9+dkj6zzaVExEFf3iWm2/rJ0hv
-         TRpoXe2ollsgm3sDst02jsBQ/7AoYP+r4LCwKm6Oi6uSuwFSgp9wD8FcyWwyA44APR42
-         7J3TEEWzujB+UmycgMIyAxBiM33lSGlDnrwS8kESxLS9HBdExtrcKpELyc02qeucKcLq
-         oLQaPo89+6fBoUfAO+AeZ6RdEVORQDGgHrOIdgRonbphdqXEP0OlvyV/anZwtJRPXiXD
-         epLA==
-X-Gm-Message-State: ACrzQf1Bkql5VHAwTOld8tfCnAkVdE1YB5DumIw9abH+iP5LM3+E7Rvy
-        v5lPdQ6bcF1ZrYXh7SbE9dP7XNxcEMVSPXLoDq8=
-X-Google-Smtp-Source: AMsMyM7UKkIQ/57B7LP5SutSXYYsVj/iDA3foIuY201VGVWeO5D7kx7nsQYaitzvNyd20/CPCf69RXCxFK3XZIZGk88=
-X-Received: by 2002:a05:6808:e8e:b0:34d:7829:135 with SMTP id
- k14-20020a0568080e8e00b0034d78290135mr6499786oil.252.1665311910417; Sun, 09
- Oct 2022 03:38:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <YzN+ZYLjK6HI1P1C@ZenIV> <YzSSl1ItVlARDvG3@ZenIV>
- <YzpcXU2WO8e22Cmi@iweiny-desk3> <7714.1664794108@jrobl> <Yzs4mL3zrrC0/vN+@iweiny-mobl>
- <YztfvaAFOe2kGvDz@ZenIV> <4011.1664837894@jrobl> <YztyLFZJKKTWcMdO@ZenIV>
- <CAHk-=whsOyuRhjmUQ5c1dBQYt1E4ANhObAbEspWtUyt+Pq=Kmw@mail.gmail.com> <CA+icZUVXvMM-sK41oz_Ne4HyRGxXHNz=fPqy+1AYXmXPiE_=Rw@mail.gmail.com>
-In-Reply-To: <CA+icZUVXvMM-sK41oz_Ne4HyRGxXHNz=fPqy+1AYXmXPiE_=Rw@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sun, 9 Oct 2022 12:37:54 +0200
-Message-ID: <CA+icZUVBFo3v6L8Y4HNMR3XxsBb9YoMw9j+ehXpkWov9EeM59A@mail.gmail.com>
-Subject: Re: [PATCH][CFT] [coredump] don't use __kernel_write() on kmap_local_page()
+        Sun, 9 Oct 2022 06:45:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1F928711
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 03:45:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665312345;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=sBnuKOP8ea+z2pRs5J0bRVL8ZB6FmqEXDAXcvtpc13U=;
+        b=OAOkiSzy3ZfIqQShoirZQv2Tez7Ky7Lx2BsVRwx3AjD9JjJ59+a3ZD6L/7WsCl1t9qgXW9
+        GZ4eC/5ZNhH14fW78GtJMpp6MuteOBM/mNKbPicRUiaaBkqi+fBECqBtZP67m/NiyW21Aj
+        Dp4DFiV60J0giHTvxt+uKuY8G+Lqt2Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-349-8kRDczUcNO6ufuVmQqjbXg-1; Sun, 09 Oct 2022 06:45:42 -0400
+X-MC-Unique: 8kRDczUcNO6ufuVmQqjbXg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E812F95D682;
+        Sun,  9 Oct 2022 10:45:41 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.192.38])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 96007A9FBE;
+        Sun,  9 Oct 2022 10:45:40 +0000 (UTC)
+From:   Andreas Gruenbacher <agruenba@redhat.com>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        "J. R. Okajima" <hooanon05g@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Ren Zhijie <renzhijie2@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
+        cluster-devel@redhat.com, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] gfs2 fixes
+Date:   Sun,  9 Oct 2022 12:45:39 +0200
+Message-Id: <20221009104539.368110-1-agruenba@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 4, 2022 at 8:18 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Tue, Oct 4, 2022 at 2:51 AM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > On Mon, Oct 3, 2022 at 4:37 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> > >
-> > > One variant would be to revert the original patch, put its
-> > > (hopefully) fixed variant into -next and let it sit there for
-> > > a while.  Another is to put this incremental into -next and
-> > > merge it into mainline once it gets a sane amount of testing.
-> >
-> > Just do the incremental fix. It looks obvious enough ("oops, we need
-> > to get the pos _after_ we've done any skip-lseeks on the core file")
-> > that I think it would be just harder to follow a "revert and follow up
-> > with a fix".
-> >
-> > I don't think it needs a ton of extra testing, with Okajima having
-> > already confirmed it fixes his problem case..
-> >
-> >                 Linus
->
-> [ CC Geert ]
->
-> There was another patch from Geert concerning the same coredump changes:
->
-> [PATCH] coredump: Move dump_emit_page() to kill unused warning
->
-> If CONFIG_ELF_CORE is not set:
->
->     fs/coredump.c:835:12: error: =E2=80=98dump_emit_page=E2=80=99 defined=
- but not used
-> [-Werror=3Dunused-function]
->       835 | static int dump_emit_page(struct coredump_params *cprm,
-> struct page *page)
->           |            ^~~~~~~~~~~~~~
->
-> Fix this by moving dump_emit_page() inside the existing section
-> protected by #ifdef CONFIG_ELF_CORE.
->
-> Fixes: 06bbaa6dc53cb720 ("[coredump] don't use __kernel_write() on
-> kmap_local_page()")
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
->
-> Please, check yourself!
->
-> Best regards,
-> -Sedat-
->
-> [1] https://lore.kernel.org/all/20221003090657.2053236-1-geert@linux-m68k=
-.org/
+Hi Linus,
 
-[ CC Ren Zhijie <renzhijie2@huawei.com> ]
+please consider pulling the following gfs2 fixes.
 
-Looks like the same patch as of Geert.
+We have a second small set of changes queued up on top of these fixes [*]; second
+pull request to follow.
 
--Sedat-
+[*] https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git/log/?h=for-next.nopid
 
-[1] https://lore.kernel.org/all/20221009092420.32850-1-renzhijie2@huawei.co=
-m/
+Thank you very much,
+Andreas
+
+The following changes since commit 1c23f9e627a7b412978b4e852793c5e3c3efc555:
+
+  Linux 6.0-rc2 (2022-08-21 17:32:54 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git tags/gfs2-v6.0-rc2-fixes
+
+for you to fetch changes up to 74b1b10e29b1f25e1a081fa82733baea65429d53:
+
+  gfs2: Register fs after creating workqueues (2022-09-20 17:53:54 +0200)
+
+----------------------------------------------------------------
+gfs2 fixes
+
+- Make sure to initialize the filesystem work queues before registering
+  the filesystem; this prevents them from being used uninitialized.
+
+- On filesystem withdraw: prevent a a double iput() and immediately
+  reject pending locking requests that can no longer succeed.
+
+- Use TRY lock in gfs2_inode_lookup() to prevent a rare glock hang
+  during evict.
+
+- During filesystem mount, explicitly make sure that the sb_bsize and
+  sb_bsize_shift super block fields are consistent with each other.
+  This prevents messy error messages during fuzz testing.
+
+- Switch from strlcpy to strscpy.
+
+----------------------------------------------------------------
+Andreas Gruenbacher (1):
+      gfs2: Switch from strlcpy to strscpy
+
+Andrew Price (1):
+      gfs2: Check sb_bsize_shift after reading superblock
+
+Bob Peterson (5):
+      gfs2: Use TRY lock in gfs2_inode_lookup for UNLINKED inodes
+      gfs2: Prevent double iput for journal on error
+      gfs2: Dequeue waiters when withdrawn
+      gfs2: Clear flags when withdraw prevents xmote
+      gfs2: Register fs after creating workqueues
+
+ fs/gfs2/glock.c      | 44 +++++++++++++++++++++++++++++++++++++++-----
+ fs/gfs2/glock.h      |  1 +
+ fs/gfs2/inode.c      | 10 ++++++++--
+ fs/gfs2/main.c       | 24 ++++++++++++------------
+ fs/gfs2/ops_fstype.c | 17 +++++++++++------
+ fs/gfs2/util.c       |  6 ++++++
+ 6 files changed, 77 insertions(+), 25 deletions(-)
+
