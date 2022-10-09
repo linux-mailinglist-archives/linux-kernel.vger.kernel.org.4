@@ -2,72 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3B55F89D5
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 08:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 117AC5F89DA
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 08:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbiJIGwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 02:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
+        id S229980AbiJIG5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 02:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiJIGw2 (ORCPT
+        with ESMTP id S229553AbiJIG5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 02:52:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B732A426;
-        Sat,  8 Oct 2022 23:52:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53813B80B02;
-        Sun,  9 Oct 2022 06:52:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F405C433C1;
-        Sun,  9 Oct 2022 06:52:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665298345;
-        bh=hY2moWN7aawBvjhYz3VFmMcafpGLPLpnIUUqaC4drow=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fHNCuCS+gEepH4lsAV9JqYFZIn/NCllLjIpdUjNP0iOxVlrodnLjY9xleiEM1vNJw
-         SohQbjKkag8Tb6GxJhyT+sPdBi1aItTWHMCZjY2MXFp1zPw/byzs5IKh3AbOWGo0fW
-         O6j2I0Q4qCl0XhCHhS3LwEwTtuXyHINnlsMye1zk=
-Date:   Sun, 9 Oct 2022 08:53:07 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Dongliang Mu <dzm91@hust.edu.cn>
-Cc:     Pawel Laszczak <pawell@cadence.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: cdns3: adjust the partial logic of cdnsp_pci_remove
-Message-ID: <Y0Jv0zkDYM9nuPol@kroah.com>
-References: <20221009053245.154922-1-dzm91@hust.edu.cn>
+        Sun, 9 Oct 2022 02:57:34 -0400
+Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8FF4232D94
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 23:57:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=RcghD
+        WYzgvMfXfRNOLSMfcqJhdEfHB/sYxeh9QBDNLI=; b=RlGIJJoz7Rk8HPPqmRhjP
+        mnpek6Znis36z/OrovgFgYO6xql0Ggg+RuOX+rzOVbGb0H+2w0Nsj/F2AtnCJcNy
+        yfWXjQevNaqINEYZp8J7FOOvxpZps0QZap5ZOMe9coSX/mArYYBy5Jg+eTzzmvYH
+        zNSwuxJplS1zrzk4ryxbTQ=
+Received: from localhost.localdomain (unknown [116.128.244.169])
+        by smtp3 (Coremail) with SMTP id G9xpCgBngWXFcEJjIWR5jw--.46830S2;
+        Sun, 09 Oct 2022 14:57:10 +0800 (CST)
+From:   Jiangshan Yi <13667453960@163.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jiangshan Yi <yijiangshan@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: [PATCH] staging: rtl8723bs: fix spelling typo in comment
+Date:   Sun,  9 Oct 2022 14:56:47 +0800
+Message-Id: <20221009065647.2635700-1-13667453960@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221009053245.154922-1-dzm91@hust.edu.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: G9xpCgBngWXFcEJjIWR5jw--.46830S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxJF4rWw1UKw1ktry7uF15Arb_yoW5GFWfpF
+        4kJ3s7Cw18KFW7u3WUtFs7uryrW3yxWFykG3s2qw1FqFykZa4rZrn8KFyUAws8WrWrCw1a
+        qFsrK3W5uayUGrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UXa9fUUUUU=
+X-Originating-IP: [116.128.244.169]
+X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbi8AaV+1uoiZofKwAAsM
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 01:32:45PM +0800, Dongliang Mu wrote:
-> From: Dongliang Mu <mudongliangabcd@gmail.com>
-> 
-> In cdnsp_pci_remove, if pci_is_enabled returns true, it will
-> call cdns_remove; else it will call kfree. Then both control flow
-> goes to pci_dev_put.
-> 
-> Adjust this logic by modifying it to an if else.
-> 
-> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Jiangshan Yi <yijiangshan@kylinos.cn>
 
-Your email address does not match your From: address, and your From:
-address is saying it is being spoofed and not correct :(
+Fix spelling typo in comment.
 
-Please work with your school to fix your email system and do not use
-gmail to hide it.
+K2ci (Kylin Continuous Integration) is a code pre-verification tool
+independently developed by KylinSoft, which is used for ensuring the
+code quality of code submission. K2ci includes the comment check tool
+notes_check.
 
-thanks,
+This spelling typo was found using notes_check tool.
 
-greg k-h
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+---
+ drivers/staging/rtl8723bs/core/rtw_cmd.c     | 2 +-
+ drivers/staging/rtl8723bs/core/rtw_efuse.c   | 2 +-
+ drivers/staging/rtl8723bs/include/sta_info.h | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/staging/rtl8723bs/core/rtw_cmd.c b/drivers/staging/rtl8723bs/core/rtw_cmd.c
+index d3f10a3cf972..a421c430164a 100644
+--- a/drivers/staging/rtl8723bs/core/rtw_cmd.c
++++ b/drivers/staging/rtl8723bs/core/rtw_cmd.c
+@@ -1656,7 +1656,7 @@ u8 rtw_c2h_packet_wk_cmd(struct adapter *padapter, u8 *pbuf, u16 length)
+ 	return res;
+ }
+ 
+-/* dont call R/W in this function, beucase SDIO interrupt have claim host */
++/* don't call R/W in this function, because SDIO interrupt have claim host */
+ /* or deadlock will happen and cause special-systemserver-died in android */
+ u8 rtw_c2h_wk_cmd(struct adapter *padapter, u8 *c2h_evt)
+ {
+diff --git a/drivers/staging/rtl8723bs/core/rtw_efuse.c b/drivers/staging/rtl8723bs/core/rtw_efuse.c
+index 06e727ce9cc2..71800917d132 100644
+--- a/drivers/staging/rtl8723bs/core/rtw_efuse.c
++++ b/drivers/staging/rtl8723bs/core/rtw_efuse.c
+@@ -277,7 +277,7 @@ bool		bPseudoTest)
+ 	return bResult;
+ }
+ 
+-/*  11/16/2008 MH Write one byte to reald Efuse. */
++/*  11/16/2008 MH Write one byte to real Efuse. */
+ u8 efuse_OneByteWrite(struct adapter *padapter, u16 addr, u8 data, bool bPseudoTest)
+ {
+ 	u8 tmpidx = 0;
+diff --git a/drivers/staging/rtl8723bs/include/sta_info.h b/drivers/staging/rtl8723bs/include/sta_info.h
+index 69c377eeeaf0..1c3f83867cb0 100644
+--- a/drivers/staging/rtl8723bs/include/sta_info.h
++++ b/drivers/staging/rtl8723bs/include/sta_info.h
+@@ -190,7 +190,7 @@ struct sta_info {
+ 
+ 	/* ODM_STA_INFO_T */
+ 	/*  ================ODM Relative Info ======================= */
+-	/*  Please be care, dont declare too much structure here. It will cost memory * STA support num. */
++	/*  Please be care, don't declare too much structure here. It will cost memory * STA support num. */
+ 	/*  */
+ 	/*  */
+ 	/*  2011/10/20 MH Add for ODM STA info. */
+-- 
+2.25.1
+
+
+No virus found
+		Checked by Hillstone Network AntiVirus
+
