@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B8E5F8A19
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 10:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9775F8A20
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 10:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiJIILk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 04:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42050 "EHLO
+        id S229992AbiJII26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 04:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiJIILi (ORCPT
+        with ESMTP id S229916AbiJII2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 04:11:38 -0400
-Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BD0F2E9C9;
-        Sun,  9 Oct 2022 01:11:34 -0700 (PDT)
+        Sun, 9 Oct 2022 04:28:55 -0400
+Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA99F2CDE6
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 01:28:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=vsWH7
-        IkxtHbChJdSNgFucJQ2WMShYDa2SxxjSkF8E2M=; b=Vku5RKwYh4r0uR9d4lxXt
-        EUI9ZaTELqphKO0wZSEoWVyeE5HTWS7VAzxg5c1U7cXj4NheCvHu9EqQ2RP07xbF
-        cMzuBsSAOJO08e8pi6QwhplpruiyB5F1KKicuRqI7AUKU+ML70NmCf18NmWbGwPs
-        NK9kkB1HeIrZAWT5FuoYUs=
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=4eL9r
+        8jw9Yc+LnW3t0PByM/D4ZUtGdkfbKKYzje1sCA=; b=clnd2V0pDxGd98xbfqBm5
+        d9IpbX8HB9PqZS6420ndPFdvvR3edqgTSSTbQHgnMhkUffnTsBp0j70Fo1zHvUQH
+        zYqUOrZD8BLGq1vt2CU3H4eQDcrcMLat36fUa96IVVfQbtKtmoUH2tIh/4eNgAuD
+        0ZP5q8M/ZuZaeRBJqFTdDk=
 Received: from localhost.localdomain (unknown [116.128.244.169])
-        by smtp2 (Coremail) with SMTP id GtxpCgB3ttMtgkJjdr25jw--.48799S2;
-        Sun, 09 Oct 2022 16:11:26 +0800 (CST)
+        by smtp4 (Coremail) with SMTP id HNxpCgD3ba4whkJj26drjQ--.45619S2;
+        Sun, 09 Oct 2022 16:28:33 +0800 (CST)
 From:   Jiangshan Yi <13667453960@163.com>
-To:     jgg@ziepe.ca, leon@kernel.org
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     srinivas.kandagatla@linaro.org, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com
+Cc:     linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Jiangshan Yi <yijiangshan@kylinos.cn>,
         k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH] include/rdma/opa_vnic.h: fix spelling typo in comment
-Date:   Sun,  9 Oct 2022 16:10:47 +0800
-Message-Id: <20221009081047.2643471-1-13667453960@163.com>
+Subject: [PATCH] nvmem: stm32: fix spelling typo in comment
+Date:   Sun,  9 Oct 2022 16:28:19 +0800
+Message-Id: <20221009082819.2662964-1-13667453960@163.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GtxpCgB3ttMtgkJjdr25jw--.48799S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrury7Jr47ZFy5GryxtF1kZrb_yoW3Wrg_Z3
-        y7ta1jg34DJFZavr4Y9F4FqryUKan0ka95Wwn8Xr4DGa97W3yDJ3yDJrn29a47WrZ0qa43
-        W3Z3GryUJ3WYqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUby8B5UUUUU==
+X-CM-TRANSID: HNxpCgD3ba4whkJj26drjQ--.45619S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrury7Jr47ZFy5Gw4xArWUArb_yoW3AFb_t3
+        W0qrWDWr129asakr18Cr1avryYyFs8G3yDArn0grs5J3srZw4DX34DZrnaya47Ar4YgFZ3
+        Wwn5tr9xGa9rJjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUbuOJ7UUUUU==
 X-Originating-IP: [116.128.244.169]
-X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbi8A6V+1uoiZrgYwAAsz
+X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbiVxGV+1etohKRzAAAs-
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
@@ -59,22 +61,22 @@ Fix spelling typo in comment.
 Reported-by: k2ci <kernel-bot@kylinos.cn>
 Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
 ---
- include/rdma/opa_vnic.h | 2 +-
+ drivers/nvmem/stm32-romem.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/rdma/opa_vnic.h b/include/rdma/opa_vnic.h
-index f3d5377b217a..d297f084001a 100644
---- a/include/rdma/opa_vnic.h
-+++ b/include/rdma/opa_vnic.h
-@@ -51,7 +51,7 @@ static inline void *opa_vnic_dev_priv(const struct net_device *dev)
- 	return oparn->dev_priv;
- }
+diff --git a/drivers/nvmem/stm32-romem.c b/drivers/nvmem/stm32-romem.c
+index 354be526897f..0c206ad05be7 100644
+--- a/drivers/nvmem/stm32-romem.c
++++ b/drivers/nvmem/stm32-romem.c
+@@ -19,7 +19,7 @@
+ #define STM32_SMC_WRITE_SHADOW		0x03
+ #define STM32_SMC_READ_OTP		0x04
  
--/* opa_vnic skb meta data structrue */
-+/* opa_vnic skb meta data structure */
- struct opa_vnic_skb_mdata {
- 	u8 vl;
- 	u8 entropy;
+-/* shadow registers offest */
++/* shadow registers offset */
+ #define STM32MP15_BSEC_DATA0		0x200
+ 
+ /* 32 (x 32-bits) lower shadow registers */
 -- 
 2.25.1
 
