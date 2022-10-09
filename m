@@ -2,91 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7845F8CAD
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 19:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3B05F8CB0
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 19:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiJIRtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 13:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
+        id S230177AbiJIRuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 13:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbiJIRtm (ORCPT
+        with ESMTP id S230101AbiJIRuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 13:49:42 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD9ED46
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 10:49:41 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id sc25so14635950ejc.12
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 10:49:41 -0700 (PDT)
+        Sun, 9 Oct 2022 13:50:20 -0400
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BC5DFB4;
+        Sun,  9 Oct 2022 10:50:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nZejLgz2KhY9qLr7ifuLCXoUfoCiZZhSwHm/qMEzGqc=;
-        b=lJdQtW8Cft4FLGQkC30bXvrSKFFr1T9Otds+XTl7N/Hrg7APAuLUINc28ugYpC9xqb
-         XKoS1UnYh63VInfYA3m/Ul6fr1pFicO+7BlQaVDYAlC6g5LeJ+jIAK/JhgJQP9T1QcGV
-         z8PoWxIzH1lTqJiJcCj+ZzSORIRrONGS7LIV/REAfR0ozq9s2FrGQja7v6nCaGYcUDJF
-         k7dtHbXF+VjIsfNHAB+wlnmVTE4IVXn5BaLrygrC64shw2cqQcysxNH+hd2By0zaJiNC
-         WkPGkC23Uw1ovjOl+vkJJ/Hnrggh23ZZqWisd2RzNp5nOGc2MnRG3stAycDjCBfTGOcN
-         0KeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nZejLgz2KhY9qLr7ifuLCXoUfoCiZZhSwHm/qMEzGqc=;
-        b=pns/F0x5N+L/siU51stUGRq6W9f1SVrfEvhN5yDPsl0Vj/Eua/QtiIcT89NqsgFm0v
-         D94fU4xyEQ22rT1sECzHyE+DkJWqRaY6B6XpXvzI/gjPeaBLYjy7jIqGYgJftkW+Ctm5
-         WH8iOMAHywgCJn+AAd9PbOrr1URRvnT+J9SiJpjZxhGH38UJv0rLUStyM0khmfMxNn8x
-         W8H4YuycKuPyCmRWRfAJOydGxrXB6Ral7cXQ1XUHP3PdsEddRlDGkflmuXpCtwFlZB4M
-         XMV/GtmmSz+IK7nuOL+GsrXWdZVkOXGlhN7cVAWdB2YloX1Tzsf8PlIQrXIrkYTMQgAe
-         6Low==
-X-Gm-Message-State: ACrzQf3GRv3bci171yWVzgJDGchKB7Hsz+rTLUjWwJwEN/dfNUJxy/RG
-        yiMqCJ/NHU8N+aob1I/qsUt5lklyTvs=
-X-Google-Smtp-Source: AMsMyM69T9Sm1c3Oc3V3smOQxTUTnJHlN6nIA2lMu6COU5Ee5zNy51hO2/yOm9YfryUSNG+rypjMWw==
-X-Received: by 2002:a17:907:2cea:b0:78d:4e84:778d with SMTP id hz10-20020a1709072cea00b0078d4e84778dmr11011773ejc.246.1665337780002;
-        Sun, 09 Oct 2022 10:49:40 -0700 (PDT)
-Received: from nam-dell ([131.155.245.44])
-        by smtp.gmail.com with ESMTPSA id bo1-20020a170906d04100b0077b2b0563f4sm4248453ejb.173.2022.10.09.10.49.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 10:49:39 -0700 (PDT)
-Date:   Sun, 9 Oct 2022 19:49:25 +0200
-From:   Nam Cao <namcaov@gmail.com>
-To:     Rui Li <me@lirui.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: rtl8192e: remove necessary braces for single
- statement blocks
-Message-ID: <20221009174925.GA17573@nam-dell>
-References: <166532561205.8.1223417525390189864.67805880@lirui.org>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1665337818; x=1696873818;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1w/EVmNT7psEnsmxWuhy+bUOj1fiP2N+jrdt5vLYEOY=;
+  b=QAJxXejz1Peoqowrf4/LrE4r8LlcIUyiXtieCZpilCGL1nVWbmNrlxEr
+   mDGQaDAdXqnboGyjTlYJu0S4NNouinoLQVRy0gT76Z6yiHY6Z3fByImb7
+   RfCn4HLz190FfZ76zp8yH2y4Z5TtWkOpHdm4tHhsvsqkZVggCwmFr77VS
+   E=;
+X-IronPort-AV: E=Sophos;i="5.95,172,1661817600"; 
+   d="scan'208";a="1062316103"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-7d0c7241.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2022 17:50:18 +0000
+Received: from EX13MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2c-7d0c7241.us-west-2.amazon.com (Postfix) with ESMTPS id E582B45618;
+        Sun,  9 Oct 2022 17:50:17 +0000 (UTC)
+Received: from EX19D002UWC004.ant.amazon.com (10.13.138.186) by
+ EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Sun, 9 Oct 2022 17:50:17 +0000
+Received: from [192.168.22.91] (10.43.160.95) by EX19D002UWC004.ant.amazon.com
+ (10.13.138.186) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12; Sun, 9 Oct 2022
+ 17:50:16 +0000
+Message-ID: <e35b7856-138c-a255-a32e-41f57ad6f76d@amazon.com>
+Date:   Sun, 9 Oct 2022 10:50:15 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <166532561205.8.1223417525390189864.67805880@lirui.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.2
+Subject: Re: [PATCH 0/6] IRQ handling patches backport to 4.14 stable
+Content-Language: en-US
+To:     "Herrenschmidt, Benjamin" <benh@amazon.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "sashal@kernel.org" <sashal@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Bacco, Mike" <mbacco@amazon.com>
+References: <20220929210651.12308-1-risbhat@amazon.com>
+ <YzmujBxtwUxHexem@kroah.com>
+ <58294d242fc256a48abb31926232565830197f02.camel@amazon.com>
+From:   "Bhatnagar, Rishabh" <risbhat@amazon.com>
+In-Reply-To: <58294d242fc256a48abb31926232565830197f02.camel@amazon.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.43.160.95]
+X-ClientProxiedBy: EX13D03UWA004.ant.amazon.com (10.43.160.250) To
+ EX19D002UWC004.ant.amazon.com (10.13.138.186)
+X-Spam-Status: No, score=-15.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 10:26:31PM +0800, Rui Li wrote:
-> This commit cleans up checkpatch warning as follows:
-> braces {} are not necessary for single statement blocks
-> 
-> Signed-off-by: Rui Li <me@lirui.org>
-> ---
->  drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c |  3 +--
->  drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c |  9 +++------
->  drivers/staging/rtl8192e/rtl8192e/rtl_dm.c     | 12 ++++--------
->  3 files changed, 8 insertions(+), 16 deletions(-)
 
-Greg expects a change log describing what has changed compared to the
-last version. You should send a v3 with a changelog.
-
-Additionally, did you mean "unnecessary" in the title?
-
-Best regards,
-Nam
+On 10/6/22 8:07 PM, Herrenschmidt, Benjamin wrote:
+> (putting my @amazon.com hat on)
+>
+> On Sun, 2022-10-02 at 17:30 +0200, Greg KH wrote:
+>
+>
+>> On Thu, Sep 29, 2022 at 09:06:45PM +0000, Rishabh Bhatnagar wrote:
+>>> This patch series backports a bunch of patches related IRQ handling
+>>> with respect to freeing the irq line while IRQ is in flight at CPU
+>>> or at the hardware level.
+>>> Recently we saw this issue in serial 8250 driver where the IRQ was
+>>> being
+>>> freed while the irq was in flight or not yet delivered to the CPU.
+>>> As a
+>>> result the irqchip was going into a wedged state and IRQ was not
+>>> getting
+>>> delivered to the cpu. These patches helped fixed the issue in 4.14
+>>> kernel.
+>> Why is the serial driver freeing an irq while the system is running?
+>> Ah, this could happen on a tty hangup, right?
+> Right. Rishabh answered that separately.
+>
+>>> Let us know if more patches need backporting.
+>> What hardware platform were these patches tested on to verify they
+>> work properly?  And why can't they move to 4.19 or newer if they
+>> really need this fix?  What's preventing that?
+>>
+>> As Amazon doesn't seem to be testing 4.14.y -rc releases, I find it
+>> odd that you all did this backport.  Is this a kernel that you all
+>> care about?
+> These were tested on a collection of EC2 instances, virtual and metal I
+> believe (Rishabh, please confirm).
+Yes these patches were tested on multiple virt/metal EC2 instances.
+>
+> Amazon Linux 2 runs 4.14 or 5.10. Unfortunately we still have to
+> support customers running the former.
+>
+> We'll be including these patches in our releases, we thought it would
+> be nice to have them in -stable as well for the sake of whoever else
+> might be still using this kernel. No huge deal if they don't.
+>
+> As for testing -rc's, yes, we need to get better at that (and publish
+> what we test). Point taken :-)
+>
+> Cheers,
+> Ben.
+>
