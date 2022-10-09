@@ -2,98 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 415AE5F8A04
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 09:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4A45F8A09
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 09:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiJIHeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 03:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
+        id S229965AbiJIHtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 03:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiJIHeV (ORCPT
+        with ESMTP id S229970AbiJIHtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 03:34:21 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158573386C;
-        Sun,  9 Oct 2022 00:34:20 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id bj12so19099217ejb.13;
-        Sun, 09 Oct 2022 00:34:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TcltXX1LdWoOAyefprBIZA4YErGm5XD+4QXIrmFx73U=;
-        b=Mf1Rn9gLGA6iv8vxQbOOODoJJCL/sBVy+ZOQflKcDqjO6kFJ2WeSvKrFRjqjhabGdl
-         55sETv4Dqd8VVhjwlxVCkhDL9qXAJTfSWUZL4c1VgBv67+ivy4RPiZc1DdyAiZoloq2V
-         cFLTAjcLWx6m2Ph0q5ZOnk5WEK7fMmPwUucrZHseo/7iRc2P2tZhoLAe/9/ezIzKnRXa
-         a73BN8lRoE5cXAEXY2jYVOAuMWOCDi3T1hTXTX2VCcRQzUyWeCFGBO0liAHAstQN4Ian
-         gi9lqdiFaLqfx9N7ZAvkkKf4pjBtjxpLV3AA9+3SBWt4kpINDyIZmR0cCg1RytRO9Cwb
-         pokQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TcltXX1LdWoOAyefprBIZA4YErGm5XD+4QXIrmFx73U=;
-        b=01lgSw0nXb+bY9I2+b2237UIFDk9U81o7Gbvl3sAdRB70GyMMtYGUvcguCjYH7zWpM
-         olOh//n8H21gr98u9lDg79to5+sUC7V333i3UEyR9d9scQH1NEbfApxGqXx/ZaSJr8tC
-         NSYQ26i2e/a2e7m8ZzDKJRP7bIuwmscqi3T05eRmE/Rm+gGuwdRha/x7qLqU66xKCRt+
-         qJGGtkT4QOb42V7Ky59S8O0u9Q7aAjG/565jXuL/oV7uQrGO2wI+Iiwhkft5TWm7dUT5
-         Lq6ukNrUBGt/FHMbIJpy2Ka+aw8ikSYMWN5odjAgoVQZo9EIqOdteRgP2z+MybbesScH
-         RV1Q==
-X-Gm-Message-State: ACrzQf2TdivI8DR4xIbRDzq2HpBg9nnuoFHfY3/boYoG/j0fRCbtCZke
-        Sj3AepKthnAf7FNSlDLAIhXVyw/uVJh7wGyE9jo=
-X-Google-Smtp-Source: AMsMyM5eel8bBb92o0PnLkdYxvua+NJAD7IPlPSX97TIlrOLGp4WigSjsxkTvYyQfCLwehPv8Hx5xRnt3ySPBTakMxE=
-X-Received: by 2002:a17:906:7310:b0:782:cfd4:9c07 with SMTP id
- di16-20020a170906731000b00782cfd49c07mr10841307ejc.708.1665300858584; Sun, 09
- Oct 2022 00:34:18 -0700 (PDT)
+        Sun, 9 Oct 2022 03:49:03 -0400
+Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9EF7E31EF2
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 00:49:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=lzHsQ
+        7uRE+Ob5IFFnxNujLW+JYw21myg9+tk4e/ZuAE=; b=EUZdAIYq5yYcAo9B3YYso
+        +9E9cdA6IGsSaFM/58vOakxP5F4Dv2FVHhLX6KgnH0QWNlq7D2ED2nTQRTTKMWpc
+        7ilHNxxHUJqunTt0V8+qTSUFPrsZCGYKlK/m8/F/vMHZD8KSJ9VAhzV4eM9Ep5FR
+        OatTLHv2pwxcuOKQvfxNGY=
+Received: from localhost.localdomain (unknown [116.128.244.169])
+        by smtp3 (Coremail) with SMTP id G9xpCgBX2mvHfEJj6n2Gjw--.45155S2;
+        Sun, 09 Oct 2022 15:48:24 +0800 (CST)
+From:   Jiangshan Yi <13667453960@163.com>
+To:     perex@perex.cz, tiwai@suse.com
+Cc:     lgirdwood@gmail.com, broonie@kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Jiangshan Yi <yijiangshan@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: [PATCH] ASoC: cx2072x: fix spelling typo in comment
+Date:   Sun,  9 Oct 2022 15:48:16 +0800
+Message-Id: <20221009074816.2641162-1-13667453960@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221009053245.154922-1-dzm91@hust.edu.cn> <Y0Jv0zkDYM9nuPol@kroah.com>
-In-Reply-To: <Y0Jv0zkDYM9nuPol@kroah.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Sun, 9 Oct 2022 15:33:51 +0800
-Message-ID: <CAD-N9QW8jpdHv71eCQvRb6g1oZHBPH6y39V=5fuvcVPgtZJN-Q@mail.gmail.com>
-Subject: Re: [PATCH] usb: cdns3: adjust the partial logic of cdnsp_pci_remove
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Pawel Laszczak <pawell@cadence.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: G9xpCgBX2mvHfEJj6n2Gjw--.45155S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrury7Jr47ZFy5Jw48urykKrg_yoW3ZrX_Ww
+        18W3y5Z3yqqFWSkr1jyrWjyF4Fv3Z5Cry8Crn5tr4UA3y5uayYyayvyF13C3W5Gr4vgasx
+        XanxKr1aq34kKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU1Tmh3UUUUU==
+X-Originating-IP: [116.128.244.169]
+X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbiyAiV+1p7H8T2DwAAst
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 9, 2022 at 2:52 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Sun, Oct 09, 2022 at 01:32:45PM +0800, Dongliang Mu wrote:
-> > From: Dongliang Mu <mudongliangabcd@gmail.com>
-> >
-> > In cdnsp_pci_remove, if pci_is_enabled returns true, it will
-> > call cdns_remove; else it will call kfree. Then both control flow
-> > goes to pci_dev_put.
-> >
-> > Adjust this logic by modifying it to an if else.
-> >
-> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
->
-> Your email address does not match your From: address, and your From:
-> address is saying it is being spoofed and not correct :(
->
-> Please work with your school to fix your email system and do not use
-> gmail to hide it.
+From: Jiangshan Yi <yijiangshan@kylinos.cn>
 
-My git config uses Gmail. I forget to change this after I joined the
-new school and changed sendmail configuration.
+Fix spelling typo in comment.
 
-I sent a new version several minutes ago.
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+---
+ sound/soc/codecs/cx2072x.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> thanks,
->
-> greg k-h
+diff --git a/sound/soc/codecs/cx2072x.h b/sound/soc/codecs/cx2072x.h
+index ebdd567fa225..09e3a92b184f 100644
+--- a/sound/soc/codecs/cx2072x.h
++++ b/sound/soc/codecs/cx2072x.h
+@@ -177,7 +177,7 @@
+ #define CX2072X_PLBK_DRC_PARM_LEN	9
+ #define CX2072X_CLASSD_AMP_LEN		6
+ 
+-/* DAI interfae type */
++/* DAI interface type */
+ #define CX2072X_DAI_HIFI	1
+ #define CX2072X_DAI_DSP		2
+ #define CX2072X_DAI_DSP_PWM	3 /* 4 ch, including mic and AEC */
+-- 
+2.25.1
+
+
+No virus found
+		Checked by Hillstone Network AntiVirus
+
