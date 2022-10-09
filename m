@@ -2,94 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4AE5F8B33
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 14:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE735F8B37
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 14:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbiJIM2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 08:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35664 "EHLO
+        id S230086AbiJIMdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 08:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiJIM2w (ORCPT
+        with ESMTP id S229728AbiJIMde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 08:28:52 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE26E2CC85
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 05:28:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NgAqYrZYqyV6fTVG0gpB572W+SdYs1uSeMEMFpJCuYY=; b=HqMktaDbRarPLJOHIPV0Dno0wN
-        UaFRe9Yi0bwuLjL63zkn14gynuR7wna9qsYjWac5OkXaK9EXQVCyU6bHt+VNKS7dx42O0vULWAFFr
-        YsoDgixPUUZtvQrh0REnc57B+3/pGfbY2yrRgR0W4vL3pBrgnuKmJ23+su/S8fT4jRNKeCmjepiVC
-        tQb1xDQoknc/lVK5nGJi3eeI1udPHwoBvZIaZCUjCUFkvn/JuRFmHyjkeKOCkcz5VyX8ntH9Tnd9F
-        9oPPNSeoiLU1VyICkFKvmNfgKG2TvnlDaIKF2jD+guApE5wuT+UHJmLDj2xFt+XWbhqv9owqOxSkb
-        1psA6iQQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ohVPr-003PR3-MF; Sun, 09 Oct 2022 12:28:23 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F1CFE300023;
-        Sun,  9 Oct 2022 14:28:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id CA06A2C189412; Sun,  9 Oct 2022 14:28:17 +0200 (CEST)
-Date:   Sun, 9 Oct 2022 14:28:17 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        Sun, 9 Oct 2022 08:33:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F2E22B07;
+        Sun,  9 Oct 2022 05:33:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E23B8B80D19;
+        Sun,  9 Oct 2022 12:33:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE19DC433D6;
+        Sun,  9 Oct 2022 12:33:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665318810;
+        bh=9WyCokWSQ+YPo9bet+5rKNeJq50AKYj52DF+Ejp3zSY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VhIE7ZX6bvCAMvLCfiTxs2711lzx+ADlYUD7YVVTTFrZdjCxgqc8GTEHic/JE+W7d
+         yj7Wtfcm3anovQseN1Kif2qsLA78Or+kWC2wg6zQNnfsXnmWZ3K6HguSlX6PK2mw7D
+         RTdYJmUYTTEW7FqtwIqYCw1ceA31QBG9YckYxvURkeukotwI4yQWXiHJfQ+37UsCGy
+         8V4kMsOuv96o9t9+PC9NRXWwVxEiJsPnFY4f+Z3ZNxQ95MpzBJEXdeId5GnQhh3GI5
+         vE3It7kegVzCe2EAyPGUPpF9QPYjMtbfFlDwuEZiTscf1a7drJS+a4kAaZaMkPP0z8
+         gq9djqm7WPoAQ==
+Date:   Sun, 9 Oct 2022 13:33:51 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jagath Jog J <jagathjog1996@gmail.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/alternative: fix undefined reference to
- __ibt_endbr_seal[_end]
-Message-ID: <Y0K+YbcwyLJg9Iwr@hirez.programming.kicks-ass.net>
-References: <20221009154532.1100121-1-linmiaohe@huawei.com>
+Subject: Re: [RFC PATCH v2 4/5] iio: accel: Support Kionix/ROHM KX022A
+ accelerometer
+Message-ID: <20221009133351.6ff4894b@jic23-huawei>
+In-Reply-To: <Yz8fK7j8pxlU76xt@smile.fi.intel.com>
+References: <cover.1665066397.git.mazziesaccount@gmail.com>
+        <88e24b01da9f44ebf5fcd8344ded0b75ff742fbf.1665066397.git.mazziesaccount@gmail.com>
+        <Yz8fK7j8pxlU76xt@smile.fi.intel.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221009154532.1100121-1-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 11:45:32PM +0800, Miaohe Lin wrote:
-> When I compile the kernel bzImage, there are several compile errors:
-> 
-> ld: arch/x86/kernel/alternative.o: in function
-> `alternative_instructions':
-> alternative.c:(.init.text+0x15d): undefined reference to
-> `__ibt_endbr_seal_end'
-> ld: alternative.c:(.init.text+0x164): undefined reference to
-> `__ibt_endbr_seal'
-> 
-> It's because __ibt_endbr_seal and __ibt_endbr_seal_end are not optimized
-> away when CONFIG_X86_KERNEL_IBT isn't enabled. Remove noinline attribute
-> to help gcc optimize them away.
-> 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  arch/x86/kernel/alternative.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-> index 5cadcea035e0..beaf9fc44e2f 100644
-> --- a/arch/x86/kernel/alternative.c
-> +++ b/arch/x86/kernel/alternative.c
-> @@ -624,7 +624,7 @@ void __init_or_module noinline apply_ibt_endbr(s32 *start, s32 *end)
->  
->  #else
->  
-> -void __init_or_module noinline apply_ibt_endbr(s32 *start, s32 *end) { }
-> +void __init_or_module apply_ibt_endbr(s32 *start, s32 *end) { }
->  
->  #endif /* CONFIG_X86_KERNEL_IBT */
->  
+On Thu, 6 Oct 2022 21:32:11 +0300
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-None of this makes any sense...
+> On Thu, Oct 06, 2022 at 05:38:14PM +0300, Matti Vaittinen wrote:
+> > KX022A is a 3-axis accelerometer from ROHM/Kionix. The senosr features
+> > include variable ODRs, I2C and SPI control, FIFO/LIFO with watermark IRQ,
+> > tap/motion detection, wake-up & back-to-sleep events, four acceleration
+> > ranges (2, 4, 8 and 16g) and probably some other cool features.
+> > 
+> > Add support for the basic accelerometer features such as getting the
+> > acceleration data via IIO. (raw reads, triggered buffer [data-ready] or
+> > using the WMI IRQ).
+> > 
+> > Important things to be added include the double-tap, motion
+> > detection and wake-up as well as the runtime power management.
+> > 
+> > NOTE: Filling-up the hardware FIFO should be avoided. During my testing
+> > I noticed that filling up the hardware FIFO might mess-up the sample
+> > count. My sensor ended up in a state where the amount of data in FIFO was
+> > reported to be 0xff bytes, which equals to 42,5 samples. Specification
+> > says the FIFO can hold a maximum of 41 samples in HiRes mode. Also, at
+> > least once the FIFO was stuck in a state where reading data from
+> > hardware FIFO did not decrease the amount of data reported to be in the
+> > FIFO - eg. FIFO was "stuck". The code has now an error count and 10
+> > reads with invalid FIFO data count will cause the fifo contents to be
+> > dropped.  
+> 
+
+> ...
+...
+
+
+
+> ...
+> 
+> > +module_param(g_kx022a_use_buffer, bool, 0);
+> > +MODULE_PARM_DESC(g_kx022a_use_buffer,
+> > +		 "Buffer samples. Use at own risk. Fifo must not overflow");  
+> 
+> Why?! We usually do not allow module parameters in the new code.
+> 
+
+Badly broken hardware - was my suggestion.  Alternatives if there are usecases
+that need to use the fifo, but it can wedge hard in a fashion that is impossible
+to prevent from the driver?  My gut feeling is still drop the support entirely
+with a strong comment in the code that the hardware is broken in a fashion we don't
+know how to work around.
+
+Jonathan
+
+
