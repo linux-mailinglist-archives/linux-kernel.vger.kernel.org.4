@@ -2,79 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 902EF5F8B9A
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 15:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7E15F8B97
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 15:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiJINmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 09:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
+        id S230104AbiJINjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 09:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiJINmH (ORCPT
+        with ESMTP id S229974AbiJINjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 09:42:07 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE0A21837;
-        Sun,  9 Oct 2022 06:42:05 -0700 (PDT)
-Received: from kwepemi500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mljlc5l0QzlXYb;
-        Sun,  9 Oct 2022 21:37:32 +0800 (CST)
-Received: from huawei.com (10.67.175.34) by kwepemi500022.china.huawei.com
- (7.221.188.64) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sun, 9 Oct
- 2022 21:42:03 +0800
-From:   Ren Zhijie <renzhijie2@huawei.com>
-To:     <kblaiech@nvidia.com>, <asmaa@nvidia.com>, <vadimp@mellanox.com>,
-        <wsa@kernel.org>
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Ren Zhijie <renzhijie2@huawei.com>
-Subject: [PATCH -next] i2c: mlxbf: Fix unused-variable warning
-Date:   Sun, 9 Oct 2022 13:38:22 +0000
-Message-ID: <20221009133822.254122-1-renzhijie2@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Sun, 9 Oct 2022 09:39:19 -0400
+Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C532B1BD
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 06:39:17 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id hWWNoACihnj75hWWNob5V0; Sun, 09 Oct 2022 15:39:15 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 09 Oct 2022 15:39:15 +0200
+X-ME-IP: 86.243.100.34
+Message-ID: <54096629-fef0-8952-6a84-c1a12e38a442@wanadoo.fr>
+Date:   Sun, 9 Oct 2022 15:39:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2] PCI: Assign PCI domain by ida_alloc()
+Content-Language: fr
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?Q?Marek_Beh=c3=ban?= <marek.behun@nic.cz>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220818163756.qmyopspdn5xywe5s@pali>
+ <20220818165220.GA2378685@bhelgaas> <20221009112910.ycwrwzogws2dtnaq@pali>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20221009112910.ycwrwzogws2dtnaq@pali>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.175.34]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500022.china.huawei.com (7.221.188.64)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If CONFIG_ACPI is not set,
-gcc warns about unused variable:
+Le 09/10/2022 à 13:29, Pali Rohár a écrit :
+> On Thursday 18 August 2022 11:52:20 Bjorn Helgaas wrote:
+>> On Thu, Aug 18, 2022 at 06:37:56PM +0200, Pali Rohár wrote:
+>>> On Thursday 18 August 2022 16:59:33 Andrew Lunn wrote:
+>>>> On Thu, Aug 18, 2022 at 03:50:09PM +0200, Pali Rohár wrote:
+>>>>> PING?
+>>>>
+>>>> Pretty much anything sent during the merge window, and just before the
+>>>> merge window gets thrown away. Please rebase onto the current pci tree
+>>>> and repost.
+>>>
+>>> Please write it pretty clear that you are not interested in those
+>>> patches, and not hiding this info behind asking me after month of
+>>> waiting for another work of rebase with sending them at eight o'clock
+>>> during full moon. It is pretty ridiculous how to say "go away". Thanks.
+>>
+>> Nobody is saying "go away".  I apologize that I haven't had time to
+>> look at this yet.
+>>
+>> It's still in patchwork [1], and if it still applies cleanly to
+>> v6.0-rc1, you don't need to do anything.  If it requires rebasing to
+>> apply cleanly, it will expedite things if you do that.
+>>
+>> Bjorn
+>>
+>> [1] https://patchwork.kernel.org/project/linux-pci/patch/20220714184130.5436-1-pali@kernel.org/
+> 
+> It applies cleanly on v6.0-rc1.
+> 
 
-drivers/i2c/busses/i2c-mlxbf.c:2206:35: error: ‘mlxbf_i2c_chip’ defined but not used [-Werror=unused-variable]
- static struct mlxbf_i2c_chip_info mlxbf_i2c_chip[] = {
-                                   ^~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+On linux-next, the diff applies, but with offsets on pci.c and pci.h.
 
-Mark these variables as __maybe_unused  to fix this.
-
-Fixes: b5b5b32081cd ("i2c: mlxbf: I2C SMBus driver for Mellanox BlueField SoC")
-Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
----
- drivers/i2c/busses/i2c-mlxbf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-mlxbf.c b/drivers/i2c/busses/i2c-mlxbf.c
-index e68e775f187e..087df1a53797 100644
---- a/drivers/i2c/busses/i2c-mlxbf.c
-+++ b/drivers/i2c/busses/i2c-mlxbf.c
-@@ -2203,7 +2203,7 @@ static u32 mlxbf_i2c_functionality(struct i2c_adapter *adap)
- 	return MLXBF_I2C_FUNC_ALL;
- }
- 
--static struct mlxbf_i2c_chip_info mlxbf_i2c_chip[] = {
-+static struct mlxbf_i2c_chip_info __maybe_unused mlxbf_i2c_chip[] = {
- 	[MLXBF_I2C_CHIP_TYPE_1] = {
- 		.type = MLXBF_I2C_CHIP_TYPE_1,
- 		.shared_res = {
--- 
-2.17.1
-
+CJ
