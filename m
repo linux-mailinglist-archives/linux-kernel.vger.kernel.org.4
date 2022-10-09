@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B975F8A55
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 11:18:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76FEE5F8A56
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 11:18:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbiJIJSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 05:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
+        id S229979AbiJIJSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 05:18:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiJIJSZ (ORCPT
+        with ESMTP id S229923AbiJIJS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 05:18:25 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5164129C91
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 02:18:24 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id h10so8080978plb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 02:18:24 -0700 (PDT)
+        Sun, 9 Oct 2022 05:18:28 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF272B1AA
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 02:18:27 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id p14so4122006pfq.5
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 02:18:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zzW8eZ7a7hfTNZL5FpK7RIdYTP8PmTGim0k673uis3U=;
-        b=vLWtU1/9k302WJB1R1VTrd+dZzHdZaWXm75UGvq+XOhcUTNQs1q+gO9JDPy2/QGYSa
-         /UTrDI1Q9CSViqHTafA2Y7H+ha77O6fOq1lV0t9+19gXEUGImOzCWJCqvOVLt7vyDL+E
-         UTilFJb4p6nXPWL7ntw8FQaeB0nJHFGOacrDU4ligDURcGUJcUFflz1GoJPDR1aL8vGx
-         uzmpSowMh4Wd4tTNd+e7/mvxFVGb8eojyslp7UqN6NKPiKo6jMuOEba9MeLdA0MD8X0p
-         Dh7s6RUf1qjYH4NXj+furAKRluoFagRteWRlGUbsh3QTLVXI3j3LNZwvMlumbWNo2D9Q
-         4+4Q==
+        bh=kKFjny/9mWuO/iG0Kxc5VvaxquxrAamtdUptPDp0d74=;
+        b=ojQqKCdE1xWnmbi41ppc32d+eOC7AWp0Z8fAmyiBCoOubBhyz21Z9rC7wh21wSzkWr
+         Blh98iWF76sGUhTbkD20/++kK597nR3eZKk9Q8+XUaTP7xZWD+znQoJva6NviowPO09E
+         rEpoKXUyqJ3MHO0Zmx9VAIwUuW0LiY/5kEQeOzzmcCSEUys8Csa4jrUuW+b0vbCDKoTd
+         B7A6LKNJo6lZbsYaWcq92O+uPUk7yXDvOYXzCeNlYNSkM0ozVwAc+oBtCrGpyQcsKa3S
+         yIIVa5FTtlLaIPL6tZhecGJu8mYNLn+v+46/m1iBsAely7nOeCqkxF6hZPFePoY1G1wm
+         bw2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zzW8eZ7a7hfTNZL5FpK7RIdYTP8PmTGim0k673uis3U=;
-        b=hTbV+PLqqLozNpPL04js9x5E8Nex7Pn42T0ABP9ynqmRS0LjPfm2NxmIN76u4oA3pb
-         coxMQNO4teFASwHmI3C/u+GWb8+iDoBJvvyNzu2p0PmeB9sv7ryIDU2bcbw6BrZkcIXe
-         bJAiCrBlPolGFAu75u1CDq5Chgzm4ETiC0Jr31OPscXncVcIB9JwfP4qwOvXxUPWoisH
-         r/NejSHtgAbYWVMSznldNtCGmfhZgMQJnAQHahcYDMAKz2Wi3ZBrDipdWBCDHHkdQeeP
-         9RgMtqBJ451DiytFZl70PmM6zEI7K23tFiy2kcUyddpw9Ogor0PX8t/HicaRRSf3itqV
-         IzHg==
-X-Gm-Message-State: ACrzQf2QS+uLeIIUVNlhud6TpHH8u+XZlw49leIPTCSrZJZaWI07vBID
-        +KFQjW6o8vpoo7c2S4HUqsZ3ufHDHxiDwA==
-X-Google-Smtp-Source: AMsMyM5Pq0fzYL4VXG6ZwI5yV+7ecYkkOYUa+FglI4AO5zX1l3VL+AZd/uxM77w9Qja4hkIUEJ0VoQ==
-X-Received: by 2002:a17:902:9a8b:b0:17a:455:d967 with SMTP id w11-20020a1709029a8b00b0017a0455d967mr13415545plp.52.1665307103775;
-        Sun, 09 Oct 2022 02:18:23 -0700 (PDT)
+        bh=kKFjny/9mWuO/iG0Kxc5VvaxquxrAamtdUptPDp0d74=;
+        b=vz8MWcb5W1CpWDFkXXWyPP4vLAE22bFb/OkP3KJf7JRJT3dsHINcNywOrZ9Z+OEUvK
+         ShaG2sr3dp/q2Etbf/9gLXlQxB71QL7ZrFX7onqdU4gdEWD+B3bcehUMBFzzRNb1ou0y
+         3m7f7GtOxQKnvdmHUhWmhTTDoAN4ILUzTbSoJUKizEzNxge7ZRxKbSfeJkIRN4CTZmYw
+         gc+/pxwUhfD5KlhOF2xw1oHbyCux3Th4EBLczRxbi106V29wPCa+kmCfknEq7z+YWKD2
+         Ij8xZz42I1SBbmvbQBAF7/0s1lWR/Aq2OrPyxaVVTy5W0qe8YtzcJkJqtxlPp0Yc5jZ8
+         iptw==
+X-Gm-Message-State: ACrzQf1pXmU5gW9jOLnDPRny9w45cMudGd8Lc2VshCOZl6CuQknoD5DJ
+        WLOOyjW4vLtRuXpAdQKZqb+QFw==
+X-Google-Smtp-Source: AMsMyM4tSxYbXYtzOq11CTZtT49IL2PjNyOj9GZtNR3Z8wRpNJP4JMMrmFnExO9hOFCydmTujtOhIA==
+X-Received: by 2002:a63:ff1b:0:b0:43c:e4ee:e5e0 with SMTP id k27-20020a63ff1b000000b0043ce4eee5e0mr11382651pgi.540.1665307107095;
+        Sun, 09 Oct 2022 02:18:27 -0700 (PDT)
 Received: from localhost.localdomain ([139.177.225.234])
-        by smtp.gmail.com with ESMTPSA id f38-20020a635566000000b004405c6eb962sm4328711pgm.4.2022.10.09.02.18.20
+        by smtp.gmail.com with ESMTPSA id f38-20020a635566000000b004405c6eb962sm4328711pgm.4.2022.10.09.02.18.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 02:18:23 -0700 (PDT)
+        Sun, 09 Oct 2022 02:18:26 -0700 (PDT)
 From:   Zhang Yuchen <zhangyuchen.lcr@bytedance.com>
 To:     minyard@acm.org
 Cc:     openipmi-developer@lists.sourceforge.net,
         linux-kernel@vger.kernel.org, qi.zheng@linux.dev,
         Zhang Yuchen <zhangyuchen.lcr@bytedance.com>
-Subject: [PATCH v2 1/3] ipmi: fix msg stack when IPMI is disconnected
-Date:   Sun,  9 Oct 2022 17:18:09 +0800
-Message-Id: <20221009091811.40240-2-zhangyuchen.lcr@bytedance.com>
+Subject: [PATCH v2 2/3] ipmi: fix long wait in unload when IPMI disconnect
+Date:   Sun,  9 Oct 2022 17:18:10 +0800
+Message-Id: <20221009091811.40240-3-zhangyuchen.lcr@bytedance.com>
 X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 In-Reply-To: <20221009091811.40240-1-zhangyuchen.lcr@bytedance.com>
 References: <20221009091811.40240-1-zhangyuchen.lcr@bytedance.com>
@@ -72,186 +72,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If you continue to access and send messages at a high frequency (once
-every 55s) when the IPMI is disconnected, messages will accumulate in
-intf->[hp_]xmit_msg. If it lasts long enough, it takes up a lot of
-memory.
+When fixing the problem mentioned in PATCH1, we also found
+the following problem:
 
-The reason is that if IPMI is disconnected, each message will be set to
-IDLE after it returns to HOSED through IDLE->ERROR0->HOSED. The next
-message goes through the same process when it comes in. This process
-needs to wait for IBF_TIMEOUT * (MAX_ERROR_RETRIES + 1) = 55s.
+If the IPMI is disconnected and in the sending process, the
+uninstallation driver will be stuck for a long time.
 
-Each message takes 55S to destroy. This results in a continuous increase
-in memory.
+The main problem is that uninstalling the driver waits for curr_msg to
+be sent or HOSED. After stopping tasklet, the only place to trigger the
+timeout mechanism is the circular poll in shutdown_smi.
 
-I find that if I wait 5 seconds after the first message fails, the
-status changes to ERROR0 in smi_timeout(). The next message will return
-the error code IPMI_NOT_IN_MY_STATE_ERR directly without wait.
+The poll function delays 10us and calls smi_event_handler(smi_info,10).
+Smi_event_handler deducts 10us from kcs->ibf_timeout.
 
-This is more in line with our needs.
+But the poll func is followed by schedule_timeout_uninterruptible(1).
+The time consumed here is not counted in kcs->ibf_timeout.
 
-So instead of setting each message state to IDLE after it reaches the
-state HOSED, set state to ERROR0.
+So when 10us is deducted from kcs->ibf_timeout, at least 1 jiffies has
+actually passed. The waiting time has increased by more than a
+hundredfold.
 
-After testing, the problem has been solved, no matter how many
-consecutive sends, will not cause continuous memory growth. It also
-returns to normal immediately after the IPMI is restored.
+Now instead of calling poll(). call smi_event_handler() directly and
+calculate the elapsed time.
 
-In addition, the HOSED state should also count as invalid. So the HOSED
-is removed from the invalid judgment in start_kcs_transaction().
+For verification, you can directly use ebpf to check the kcs->
+ibf_timeout for each call to kcs_event() when IPMI is disconnected.
+Decrement at normal rate before unloading. The decrement rate becomes
+very slow after unloading.
 
-The verification operations are as follows:
-
-1. Use BPF to record the ipmi_alloc/free_smi_msg().
-
-  $ bpftrace -e 'kretprobe:ipmi_alloc_recv_msg {printf("alloc
-      %p\n",retval);} kprobe:free_recv_msg {printf("free  %p\n",arg0)}'
-
-2. Exec `date; time for x in $(seq 1 2); do ipmitool mc info; done`.
-3. Record the output of `time` and when free all msgs.
-
-Before:
-
-`time` takes 120s, This is because `ipmitool mc info` send 4 msgs and
-waits only 15 seconds for each message. Last msg is free after 440s.
-
-  $ bpftrace -e 'kretprobe:ipmi_alloc_recv_msg {printf("alloc
-      %p\n",retval);} kprobe:free_recv_msg {printf("free  %p\n",arg0)}'
-  Oct 05 11:40:55 Attaching 2 probes...
-  Oct 05 11:41:12 alloc 0xffff9558a05f0c00
-  Oct 05 11:41:27 alloc 0xffff9558a05f1a00
-  Oct 05 11:41:42 alloc 0xffff9558a05f0000
-  Oct 05 11:41:57 alloc 0xffff9558a05f1400
-  Oct 05 11:42:07 free  0xffff9558a05f0c00
-  Oct 05 11:42:07 alloc 0xffff9558a05f7000
-  Oct 05 11:42:22 alloc 0xffff9558a05f2a00
-  Oct 05 11:42:37 alloc 0xffff9558a05f5a00
-  Oct 05 11:42:52 alloc 0xffff9558a05f3a00
-  Oct 05 11:43:02 free  0xffff9558a05f1a00
-  Oct 05 11:43:57 free  0xffff9558a05f0000
-  Oct 05 11:44:52 free  0xffff9558a05f1400
-  Oct 05 11:45:47 free  0xffff9558a05f7000
-  Oct 05 11:46:42 free  0xffff9558a05f2a00
-  Oct 05 11:47:37 free  0xffff9558a05f5a00
-  Oct 05 11:48:32 free  0xffff9558a05f3a00
-
-  $ root@dc00-pb003-t106-n078:~# date;time for x in $(seq 1 2); do
-  ipmitool mc info; done
-
-  Wed Oct  5 11:41:12 CST 2022
-  No data available
-  Get Device ID command failed
-  No data available
-  No data available
-  No valid response received
-  Get Device ID command failed: Unspecified error
-  No data available
-  Get Device ID command failed
-  No data available
-  No data available
-  No valid response received
-  No data available
-  Get Device ID command failed
-
-  real        1m55.052s
-  user        0m0.001s
-  sys        0m0.001s
-
-After:
-
-`time` takes 55s, all msgs is returned and free after 55s.
-
-  $ bpftrace -e 'kretprobe:ipmi_alloc_recv_msg {printf("alloc
-      %p\n",retval);} kprobe:free_recv_msg {printf("free  %p\n",arg0)}'
-
-  Oct 07 16:30:35 Attaching 2 probes...
-  Oct 07 16:30:45 alloc 0xffff955943aa9800
-  Oct 07 16:31:00 alloc 0xffff955943aacc00
-  Oct 07 16:31:15 alloc 0xffff955943aa8c00
-  Oct 07 16:31:30 alloc 0xffff955943aaf600
-  Oct 07 16:31:40 free  0xffff955943aa9800
-  Oct 07 16:31:40 free  0xffff955943aacc00
-  Oct 07 16:31:40 free  0xffff955943aa8c00
-  Oct 07 16:31:40 free  0xffff955943aaf600
-  Oct 07 16:31:40 alloc 0xffff9558ec8f7e00
-  Oct 07 16:31:40 free  0xffff9558ec8f7e00
-  Oct 07 16:31:40 alloc 0xffff9558ec8f7800
-  Oct 07 16:31:40 free  0xffff9558ec8f7800
-  Oct 07 16:31:40 alloc 0xffff9558ec8f7e00
-  Oct 07 16:31:40 free  0xffff9558ec8f7e00
-  Oct 07 16:31:40 alloc 0xffff9558ec8f7800
-  Oct 07 16:31:40 free  0xffff9558ec8f7800
-
-  root@dc00-pb003-t106-n078:~# date;time for x in $(seq 1 2); do
-  ipmitool mc info; done
-  Fri Oct  7 16:30:45 CST 2022
-  No data available
-  Get Device ID command failed
-  No data available
-  No data available
-  No valid response received
-  Get Device ID command failed: Unspecified error
-  Get Device ID command failed: 0xd5 Command not supported in present state
-  Get Device ID command failed: Command not supported in present state
-
-  real        0m55.038s
-  user        0m0.001s
-  sys        0m0.001s
+  $ bpftrace -e 'kprobe:kcs_event {printf("kcs->ibftimeout : %d\n",
+      *(arg0+584));}'
 
 Signed-off-by: Zhang Yuchen <zhangyuchen.lcr@bytedance.com>
 ---
- drivers/char/ipmi/ipmi_kcs_sm.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+ drivers/char/ipmi/ipmi_si_intf.c | 27 +++++++++++++++++++--------
+ 1 file changed, 19 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/char/ipmi/ipmi_kcs_sm.c b/drivers/char/ipmi/ipmi_kcs_sm.c
-index efda90dcf5b3..ecfcb50302f6 100644
---- a/drivers/char/ipmi/ipmi_kcs_sm.c
-+++ b/drivers/char/ipmi/ipmi_kcs_sm.c
-@@ -122,10 +122,10 @@ struct si_sm_data {
- 	unsigned long  error0_timeout;
- };
- 
--static unsigned int init_kcs_data(struct si_sm_data *kcs,
--				  struct si_sm_io *io)
-+static unsigned int init_kcs_data_with_state(struct si_sm_data *kcs,
-+				  struct si_sm_io *io, enum kcs_states state)
- {
--	kcs->state = KCS_IDLE;
-+	kcs->state = state;
- 	kcs->io = io;
- 	kcs->write_pos = 0;
- 	kcs->write_count = 0;
-@@ -140,6 +140,12 @@ static unsigned int init_kcs_data(struct si_sm_data *kcs,
- 	return 2;
+diff --git a/drivers/char/ipmi/ipmi_si_intf.c b/drivers/char/ipmi/ipmi_si_intf.c
+index 6e357ad76f2e..abddd7e43a9a 100644
+--- a/drivers/char/ipmi/ipmi_si_intf.c
++++ b/drivers/char/ipmi/ipmi_si_intf.c
+@@ -2153,6 +2153,20 @@ static int __init init_ipmi_si(void)
  }
+ module_init(init_ipmi_si);
  
-+static unsigned int init_kcs_data(struct si_sm_data *kcs,
-+				  struct si_sm_io *io)
++static void wait_msg_processed(struct smi_info *smi_info)
 +{
-+	return init_kcs_data_with_state(kcs, io, KCS_IDLE);
++	unsigned long jiffies_now;
++	long time_diff;
++
++	while (smi_info->curr_msg || (smi_info->si_state != SI_NORMAL)) {
++		jiffies_now = jiffies;
++		time_diff = (((long)jiffies_now - (long)smi_info->last_timeout_jiffies)
++		     * SI_USEC_PER_JIFFY);
++		smi_event_handler(smi_info, time_diff);
++		schedule_timeout_uninterruptible(1);
++	}
 +}
 +
- static inline unsigned char read_status(struct si_sm_data *kcs)
+ static void shutdown_smi(void *send_info)
  {
- 	return kcs->io->inputb(kcs->io, 1);
-@@ -270,7 +276,7 @@ static int start_kcs_transaction(struct si_sm_data *kcs, unsigned char *data,
- 	if (size > MAX_KCS_WRITE_SIZE)
- 		return IPMI_REQ_LEN_EXCEEDED_ERR;
- 
--	if ((kcs->state != KCS_IDLE) && (kcs->state != KCS_HOSED)) {
-+	if (kcs->state != KCS_IDLE) {
- 		dev_warn(kcs->io->dev, "KCS in invalid state %d\n", kcs->state);
- 		return IPMI_NOT_IN_MY_STATE_ERR;
- 	}
-@@ -495,7 +501,7 @@ static enum si_sm_result kcs_event(struct si_sm_data *kcs, long time)
- 	}
- 
- 	if (kcs->state == KCS_HOSED) {
--		init_kcs_data(kcs, kcs->io);
-+		init_kcs_data_with_state(kcs, kcs->io, KCS_ERROR0);
- 		return SI_SM_HOSED;
- 	}
+ 	struct smi_info *smi_info = send_info;
+@@ -2187,16 +2201,13 @@ static void shutdown_smi(void *send_info)
+ 	 * in the BMC.  Note that timers and CPU interrupts are off,
+ 	 * so no need for locks.
+ 	 */
+-	while (smi_info->curr_msg || (smi_info->si_state != SI_NORMAL)) {
+-		poll(smi_info);
+-		schedule_timeout_uninterruptible(1);
+-	}
++	wait_msg_processed(smi_info);
++
+ 	if (smi_info->handlers)
+ 		disable_si_irq(smi_info);
+-	while (smi_info->curr_msg || (smi_info->si_state != SI_NORMAL)) {
+-		poll(smi_info);
+-		schedule_timeout_uninterruptible(1);
+-	}
++
++	wait_msg_processed(smi_info);
++
+ 	if (smi_info->handlers)
+ 		smi_info->handlers->cleanup(smi_info->si_sm);
  
 -- 
 2.30.2
