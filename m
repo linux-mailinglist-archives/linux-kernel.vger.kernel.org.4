@@ -2,90 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7FE5F8A38
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 10:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8505F8A40
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 10:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiJIIn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 04:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
+        id S229853AbiJII6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 04:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiJIInX (ORCPT
+        with ESMTP id S229820AbiJII6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 04:43:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59FD2B263
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 01:43:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665305000;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JYS4uJjG8NOAqQO/6mCNiUr/KBmDt3on4NuOsmdeooA=;
-        b=YqPLVR5JSOVlZoZz/oSZ9gXqe/shgBXmZcN8CSBmHZ+Vzb0jQ6xXMAu7iwdqbkOw7NB1FW
-        vnKcxBfFUrGDsWpm505KpCqk47aZZuR5TPHzIWCE0rDC9NoP1Qdm1ot6cRPaBvo9fRnK6g
-        I6H3QyOQekOZ2Oez6bMgwoanFnnX/Is=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-612-lKnXu4bsPLK-M9Mw6MG34A-1; Sun, 09 Oct 2022 04:43:17 -0400
-X-MC-Unique: lKnXu4bsPLK-M9Mw6MG34A-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B6F6C29AA3BD;
-        Sun,  9 Oct 2022 08:43:16 +0000 (UTC)
-Received: from T590 (ovpn-8-25.pek2.redhat.com [10.72.8.25])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id EB9D82166B4D;
-        Sun,  9 Oct 2022 08:43:09 +0000 (UTC)
-Date:   Sun, 9 Oct 2022 16:43:04 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     kernel test robot <yujie.liu@intel.com>, lkp@lists.01.org,
-        lkp@intel.com, Jens Axboe <axboe@kernel.dk>,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        ying.huang@intel.com, feng.tang@intel.com,
-        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-Subject: Re: [blk] 8c5035dfbb: fio.read_iops -10.6% regression
-Message-ID: <Y0KJmODYOh83OtGa@T590>
-References: <202210081045.77ddf59b-yujie.liu@intel.com>
- <d5279fc2-38b3-6d20-4404-604d5c7277e2@huaweicloud.com>
+        Sun, 9 Oct 2022 04:58:32 -0400
+Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21921303D4
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 01:58:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=b0MMs
+        s7QsMlVIzDQCA4Ez6OQ7gh+DTYZigg0JBslxso=; b=MWEDcK3a5nJmAXt/Xadgs
+        vujfjpzKTnqtuIgL89DhIyoVYKkEElgqG44TBe6p1nRXMv1DEA8x0Gyr5HYqlfH9
+        0GIOy0uDMmiXIpxGFcgN6tIys+Fir9zJrNPpgvSDy86UBiLdq15/Z1DjMZZW76fK
+        TYrUejTHXvEmdg0I2oHdTM=
+Received: from localhost.localdomain (unknown [116.128.244.169])
+        by smtp2 (Coremail) with SMTP id GtxpCgCXGKUhjUJjFCHAjw--.47996S2;
+        Sun, 09 Oct 2022 16:58:10 +0800 (CST)
+From:   Jiangshan Yi <13667453960@163.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jiangshan Yi <yijiangshan@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: [PATCH] staging: rtl8192u: fix spelling typo in comment
+Date:   Sun,  9 Oct 2022 16:57:46 +0800
+Message-Id: <20221009085746.3149599-1-13667453960@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <d5279fc2-38b3-6d20-4404-604d5c7277e2@huaweicloud.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: GtxpCgCXGKUhjUJjFCHAjw--.47996S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWrury3GFWUXr4kJFW3Zw4fZrb_yoW8Jr4DpF
+        s7C39rCrWrKF17u3Wjyay8Ary3C34kWrWkKF1j934rXrZ3W3Z7Xrn0yFWjyF43Jr4Fk34a
+        vFW09r45Zw4DGrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UGtCcUUUUU=
+X-Originating-IP: [116.128.244.169]
+X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbivgKV+1Zce8IfVQAAsr
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 08, 2022 at 04:00:10PM +0800, Yu Kuai wrote:
-> Hi,
-> 
-> 在 2022/10/08 10:50, kernel test robot 写道:
-> > Greeting,
-> > 
-> > FYI, we noticed a -10.6% regression of fio.read_iops due to commit:
-> 
-> I don't know how this is working but I'm *sure* this commit won't affect
+From: Jiangshan Yi <yijiangshan@kylinos.cn>
 
-Looks it is wrong to move 
+Fix spelling typo in comment.
 
-	wbt_set_write_cache(q, test_bit(QUEUE_FLAG_WC, &q->queue_flags));
+K2ci (Kylin Continuous Integration) is a code pre-verification tool
+independently developed by KylinSoft, which is used for ensuring the
+code quality of code submission. K2ci includes the comment check tool
+notes_check.
 
-before rq_qos_add() in wbt_init().
+This spelling typo was found using notes_check tool.
 
-Without adding wbt rq_qos, wbt_set_write_cache is just a nop.
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+---
+ drivers/staging/rtl8192u/r8192U_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/staging/rtl8192u/r8192U_core.c b/drivers/staging/rtl8192u/r8192U_core.c
+index 0a60ef20107c..f6a0992b059b 100644
+--- a/drivers/staging/rtl8192u/r8192U_core.c
++++ b/drivers/staging/rtl8192u/r8192U_core.c
+@@ -4574,7 +4574,7 @@ static int rtl8192_usb_probe(struct usb_interface *intf,
+ 	return ret;
+ }
+ 
+-/* detach all the work and timer structure declared or inititialize
++/* detach all the work and timer structure declared or initialize
+  * in r8192U_init function.
+  */
+ static void rtl8192_cancel_deferred_work(struct r8192_priv *priv)
+-- 
+2.25.1
 
 
-thanks,
-Ming
+No virus found
+		Checked by Hillstone Network AntiVirus
 
