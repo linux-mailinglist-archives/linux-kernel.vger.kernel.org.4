@@ -2,160 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9AC5F8B9B
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 15:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57DE95F8B9F
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 15:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbiJINn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 09:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
+        id S230111AbiJINqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 09:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiJINn4 (ORCPT
+        with ESMTP id S230127AbiJINqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 09:43:56 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DFAF79
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 06:43:55 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id 67so8709826pfz.12
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 06:43:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M/lTQ0ECNC3oK37T953kXua5zG5HMxyVr5V/xIfmkn0=;
-        b=MQyMLWRQPEWRFY/nFk6S/xhxuudLKI+Sm0PFzSfHdBbO32ROUxlcMPMOw0PdUn0Rd0
-         IpARQEbQHn4RNsQKocGVt8X/6SMf7SuhwSHTU+WoMxTF25aTN3H8mJLzvry4V9X7qNi1
-         9akAigGnK7YOk2ryapzriCAuEAydeH/YyJWMjg6+8NPAmMbMmJmVZtpbA1oKk+E+DbBM
-         feM5HQOzgsWtdb68AKzPe7WkVWMWu2soZ1ZceLtHKlcZWYz+axZK8tO97BDNZOwvJ3t4
-         SY4tPgPbgj7DA+eK0oeCePfzJ821NZViDhcIFIpBfGZPvRhd/7kzET7BKYwJ+zOOvhrP
-         xqxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M/lTQ0ECNC3oK37T953kXua5zG5HMxyVr5V/xIfmkn0=;
-        b=I2hFvU+w7zOHmwcpTKsM8xWji5Nwj2Z9GESVtRBPFWfPVdovl+ECLL+mP7FV73sm7+
-         YhPRGLR5FMEVAZNRvbZ7AdawBxTAIkEma3W+c1ekhWr2/P5yBuctCx052Mu+Ni2zHCNt
-         yJ1voCZC5kAwGZaNmMdl9P3c/I38AsQfQrX13IK3XYKDPGC6w0NaKTOPRywkZNQJ1Tqj
-         oVmbbR7nFix7kviPW3rGJU7d++H0/CblrQkCKN35iQMdm15UdB+/XyjAwDz+ZSFlfxHB
-         ell5UCOtpqdcXWVGweZusYsVMSw9fMacNcr+QUwNDkGl+FYhFNnP7MVre2NAqRb6Ns3u
-         2dDA==
-X-Gm-Message-State: ACrzQf0cbgau0lb5wVxrBs9hrxgrNDafn0Ms6rifnWZSL61SR0M4zBMj
-        v91xtiLXnw8E45VaZg17jua5CNC8rDnlqw==
-X-Google-Smtp-Source: AMsMyM4k4J/QjWx5A7FH69byuVDvsLl4j/CjsQHTMtPNJhDrG/R93TXwFxSJq8wM0mv7XdqxGvfs2Q==
-X-Received: by 2002:a62:144b:0:b0:562:38de:9a0e with SMTP id 72-20020a62144b000000b0056238de9a0emr14858223pfu.78.1665323035247;
-        Sun, 09 Oct 2022 06:43:55 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-66.three.co.id. [180.214.233.66])
-        by smtp.gmail.com with ESMTPSA id y15-20020a17090264cf00b00178b06fea7asm4757208pli.148.2022.10.09.06.43.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 06:43:54 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id CC85D1039BF; Sun,  9 Oct 2022 20:43:51 +0700 (WIB)
-Date:   Sun, 9 Oct 2022 20:43:51 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH v2] ring-buffer: Fix kernel-doc
-Message-ID: <Y0LQF02sKheWtkD8@debian.me>
-References: <20221009020642.12506-1-jiapeng.chong@linux.alibaba.com>
+        Sun, 9 Oct 2022 09:46:14 -0400
+Received: from m12-16.163.com (m12-16.163.com [220.181.12.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F5AF27CD8
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 06:46:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=y0Va6
+        t7IEzPneZZtRuTxgWXS6wlUeWN5JX4PCoeBRrs=; b=XXMM4mRU1nmydeADv4Tpq
+        R8j78WlAfg3csIkBDlNUklZ+KXjVHjZJKdujhc2V9QI/82ab+Px4bdlrwV0GmiDi
+        MYyg2C8LPCJVyzXAxcv+PUJ4qHKTHpIAchqkXz1ty9J9VngaJ2Vaf4H36INHo1c0
+        TNK8HIMTeLQcvsmmVZd2ys=
+Received: from whoami-VirtualBox.. (unknown [223.72.43.15])
+        by smtp12 (Coremail) with SMTP id EMCowAD3G8Rh0EJjxxnCCw--.433S2;
+        Sun, 09 Oct 2022 21:45:08 +0800 (CST)
+From:   Jinyu Tang <tjytimi@163.com>
+To:     Conor.Dooley@microchip.com, ajones@ventanamicro.com,
+        anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, alexandre.ghiti@canonical.com,
+        guoren@kernel.org, akpm@linux-foundation.org,
+        tongtiangen@huawei.com, panqinglin2020@iscas.ac.cn,
+        maobibo@loongson.cn
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        falcon@tinylab.org, Jinyu Tang <tjytimi@163.com>
+Subject: [PATCH v3] riscv: support update_mmu_tlb()
+Date:   Sun,  9 Oct 2022 21:45:03 +0800
+Message-Id: <20221009134503.18783-1-tjytimi@163.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="YH9GWmnykX8Ccsn+"
-Content-Disposition: inline
-In-Reply-To: <20221009020642.12506-1-jiapeng.chong@linux.alibaba.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EMCowAD3G8Rh0EJjxxnCCw--.433S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7trW7Cw17AFWkAr4fCr1UGFg_yoW8KFWfpF
+        ZrCF1kGrZrKw1IkFWxAw17ur48X3ykKa4Utryayr98CanFgr1vyFZ5Ka95Zr18CFZag3Wx
+        uFWYgr15u398Aw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUwTm3UUUUU=
+X-Originating-IP: [223.72.43.15]
+X-CM-SenderInfo: xwm13xlpl6il2tof0z/1tbiZQuVeF8ZU3hMLwABsM
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add macro definition to support update_mmu_tlb() for riscv,
+this function is from commit:7df676974359 ("mm/memory.c:Update
+local TLB if PTE entry exists").
 
---YH9GWmnykX8Ccsn+
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+update_mmu_tlb() is used when a thread notice that other cpu thread
+has handled the fault and changed the PTE. For MIPS, it's worth to
+do that,this cpu thread will trap in tlb fault again otherwise.
 
-On Sun, Oct 09, 2022 at 10:06:42AM +0800, Jiapeng Chong wrote:
-> kernel/trace/ring_buffer.c:895: warning: expecting prototype for ring_buf=
-fer_nr_pages_dirty(). Prototype was for ring_buffer_nr_dirty_pages() instea=
-d.
-> kernel/trace/ring_buffer.c:5313: warning: expecting prototype for ring_bu=
-ffer_reset_cpu(). Prototype was for ring_buffer_reset_online_cpus() instead.
-> kernel/trace/ring_buffer.c:5382: warning: expecting prototype for rind_bu=
-ffer_empty(). Prototype was for ring_buffer_empty() instead.
->=20
+For RISCV, it's also better to flush local tlb than do nothing in
+update_mmu_tlb(). There are two kinds of page fault that have
+update_mmu_tlb() inside:
 
-Describe what this patch does to fix these warnings. Remember to write
-in imperative mood. (Actually I figured out what you are doing, see
-below).
+1.page fault which PTE is NOT none, only protection check error,
+like write protection fault. If updata_mmu_tlb() is empty, after
+finsh page fault this time and re-execute, cpu will find address
+but protection checked error in tlb again. So this will cause
+another page fault. PTE in memory is good now,so update_mmu_cache()
+in handle_pte_fault() will be executed. If updata_mmu_tlb() is not
+empty flush local tlb, cpu won't find this address in tlb next time,
+and get entry in physical memory, so it won't cause another page
+fault.
 
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D2340
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
-> Changes in v2:
->   -Get rid of the parenthesis.
->=20
->  kernel/trace/ring_buffer.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-> index c3f354cfc5ba..199759c73519 100644
-> --- a/kernel/trace/ring_buffer.c
-> +++ b/kernel/trace/ring_buffer.c
-> @@ -885,7 +885,7 @@ size_t ring_buffer_nr_pages(struct trace_buffer *buff=
-er, int cpu)
->  }
-> =20
->  /**
-> - * ring_buffer_nr_pages_dirty - get the number of used pages in the ring=
- buffer
-> + * ring_buffer_nr_dirty_pages - get the number of used pages in the ring=
- buffer
->   * @buffer: The ring_buffer to get the number of pages from
->   * @cpu: The cpu of the ring_buffer to get the number of pages from
->   *
-> @@ -5305,7 +5305,7 @@ void ring_buffer_reset_cpu(struct trace_buffer *buf=
-fer, int cpu)
->  EXPORT_SYMBOL_GPL(ring_buffer_reset_cpu);
-> =20
->  /**
-> - * ring_buffer_reset_cpu - reset a ring buffer per CPU buffer
-> + * ring_buffer_reset_online_cpus - reset a ring buffer per CPU buffer
->   * @buffer: The ring buffer to reset a per cpu buffer of
->   * @cpu: The CPU buffer to be reset
->   */
-> @@ -5375,7 +5375,7 @@ void ring_buffer_reset(struct trace_buffer *buffer)
->  EXPORT_SYMBOL_GPL(ring_buffer_reset);
-> =20
->  /**
-> - * rind_buffer_empty - is the ring buffer empty?
-> + * ring_buffer_empty - is the ring buffer empty?
->   * @buffer: The ring buffer to test
->   */
->  bool ring_buffer_empty(struct trace_buffer *buffer)
+2.page fault which PTE is none or swapped.
+For this case, this cpu thread won't cause another page fault,cpu
+will have tlb miss when re-execute, and get entry in memory
+directly. But "set pte in phycial memory and flush local tlb" is
+pratice in Linux, it's better to flush local tlb if it find entry
+in phycial memory has changed.
 
-Oh, these warnings above are due to mismatched function name, right?
+Maybe it's same for other ARCH which can't detect PTE changed and
+update it in local tlb automatically.
 
-Thanks.
+Signed-off-by: Jinyu Tang <tjytimi@163.com>
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+---
+v2 -> v3:
+Explain why it should do this.Thanks for Conor Dooley's Advice.
 
---=20
-An old man doll... just what I always wanted! - Clara
+v1 -> v2:
+Change the format with the help from Andrew Jones and Conor Dooley
+ 
+ arch/riscv/include/asm/pgtable.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
---YH9GWmnykX8Ccsn+
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+index 7ec936910a96..c61ae83aadee 100644
+--- a/arch/riscv/include/asm/pgtable.h
++++ b/arch/riscv/include/asm/pgtable.h
+@@ -418,6 +418,9 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
+ 	local_flush_tlb_page(address);
+ }
+ 
++#define __HAVE_ARCH_UPDATE_MMU_TLB
++#define update_mmu_tlb update_mmu_cache
++
+ static inline void update_mmu_cache_pmd(struct vm_area_struct *vma,
+ 		unsigned long address, pmd_t *pmdp)
+ {
+-- 
+2.30.2
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY0LQFwAKCRD2uYlJVVFO
-o8HKAP460IufdwWV8co3egGjt7J15uH6orDk7k2t8ftPF74EBwEAhS8C1XK/9ihJ
-CVgn1cZRCN39cfVjldh6jYnG4tu5nAQ=
-=3LtU
------END PGP SIGNATURE-----
-
---YH9GWmnykX8Ccsn+--
