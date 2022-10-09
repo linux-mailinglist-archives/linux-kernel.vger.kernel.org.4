@@ -2,79 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2725F89AB
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 08:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED195F89B4
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 08:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbiJIGXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 02:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52988 "EHLO
+        id S229820AbiJIGbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 02:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiJIGXf (ORCPT
+        with ESMTP id S229665AbiJIGbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 02:23:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC22F2B27B
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 23:23:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665296612;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZeEFM2g1KPCSHqVKEIXgHCa1SGCHP1tlBoS23cVoXoQ=;
-        b=bM0p4Vz8w4piyVps0bLCWd25no6z6G2J61MOdbt1Y8MfmUcxCHn8xt+5MtfP79kMy6z0aM
-        q2UEdEttEh1CozTH+uxrop2V5ilkjivzck1K05L9rZStEph3tSAeTdBLhtk8A9b0sOObZG
-        Ib3Lpvx36rkxJP4k3RVBm+2Wjmc42kk=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-641-07-ntwK_NEmzZPpoQ4p_Ng-1; Sun, 09 Oct 2022 02:23:31 -0400
-X-MC-Unique: 07-ntwK_NEmzZPpoQ4p_Ng-1
-Received: by mail-pj1-f72.google.com with SMTP id lk8-20020a17090b33c800b0020a8e908e98so7304854pjb.9
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 23:23:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZeEFM2g1KPCSHqVKEIXgHCa1SGCHP1tlBoS23cVoXoQ=;
-        b=Ahs+FTkT4wpJ4s7RAfKhuWkb9dkHFBSFIzydAHzZWo8pN6FabOQfGi89vzHNsc20AX
-         6+zFq4swXza6b/9ZKnpXIpFwmG0JgXvt4krmPT7CDJdaBgM/Ucag0CYMAXJS98xae2Q1
-         RqVNgHiSZzHqAuMaNKT3d6jLXh/DMEYBFd794tcY4wNBzwp0+nXYVuvnFFQX+inGkMIb
-         sxaLDpf8e1/euuSmVdsbbAP+LKnCvcFD/RXDqr65e2R2B3+NSUhM4hYwKfPZJ/MBVLc7
-         A9ygh7FmoGu9WSroU5stgFR8WhKPC/QmCR/oDaf3h57CWgqiJwF+en7Kio8NypEjVhKc
-         3/nQ==
-X-Gm-Message-State: ACrzQf3Mz2ywdEm45LDJQn5Pd6oavKWVSPHYd+ktMVL48oJSSTXt/qm/
-        J3VHn7hS9EaPDQhpiAFHJLXY3fkFWXeRUTlxXqg5DQz46VmiLc6vroA3Vu/32HnUf7ERGpfJ1Nf
-        VnBiFbf8MN7GzYL71SwsOaTn9899Lbq314QO4/QP27lzG+jXfCAnb3vS59Md0jTKmzU31tcYHmA
-        ==
-X-Received: by 2002:a63:4a0f:0:b0:44e:4323:e884 with SMTP id x15-20020a634a0f000000b0044e4323e884mr11426602pga.225.1665296609695;
-        Sat, 08 Oct 2022 23:23:29 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7xp0jYYr9UUcKpw1u8A7gU32yhxwFcwpyRvW1olwP3TFl33ABl90NqKJXeWXBAkcER/Mpt0g==
-X-Received: by 2002:a63:4a0f:0:b0:44e:4323:e884 with SMTP id x15-20020a634a0f000000b0044e4323e884mr11426575pga.225.1665296609275;
-        Sat, 08 Oct 2022 23:23:29 -0700 (PDT)
-Received: from [10.72.12.247] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id d5-20020a17090a2a4500b001f2ef3c7956sm6994409pjg.25.2022.10.08.23.23.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Oct 2022 23:23:28 -0700 (PDT)
-Subject: Re: [PATCH] fs/ceph/super: add mount options "snapdir{mode,uid,gid}"
-To:     Max Kellermann <max.kellermann@ionos.com>, idryomov@gmail.com,
-        jlayton@kernel.org, ceph-devel@vger.kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220927120857.639461-1-max.kellermann@ionos.com>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <88f8941f-82bf-5152-b49a-56cb2e465abb@redhat.com>
-Date:   Sun, 9 Oct 2022 14:23:22 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Sun, 9 Oct 2022 02:31:37 -0400
+Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A972FC0C
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 23:31:35 -0700 (PDT)
+Received: from pop-os.home ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id hPqWoUhz7OizNhPqWoCaRp; Sun, 09 Oct 2022 08:31:33 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 09 Oct 2022 08:31:33 +0200
+X-ME-IP: 86.243.100.34
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Vishal Bhakta <vbhakta@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Cathy Avery <cavery@redhat.com>,
+        "Ewan D. Milne" <emilne@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Zheyu Ma <zheyuma97@gmail.com>, linux-scsi@vger.kernel.org
+Subject: [PATCH] scsi: vmw_pvscsi: Fix an error handling path in pvscsi_probe()
+Date:   Sun,  9 Oct 2022 08:31:24 +0200
+Message-Id: <ed31652626b0d8133e90f6888ef2b56cbc46ee57.1665297058.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <20220927120857.639461-1-max.kellermann@ionos.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,159 +48,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Max,
+In all paths that end to "out_release_resources_and_disable", neither
+pci_alloc_irq_vectors() nor request_irq() have been called yet. So, there
+is no point in calling pvscsi_shutdown_intr() which undoes these calls.
 
-Sorry for late and just back from a long vocation.
+Remove this erroneous call.
 
-On 27/09/2022 20:08, Max Kellermann wrote:
-> By default, the ".snap" directory inherits the parent's permissions
-> and ownership, which allows all users to create new cephfs snapshots
-> in arbitrary directories they have write access on.
->
-> In some environments, giving everybody this capability is not
-> desirable, but there is currently no way to disallow only some users
-> to create snapshots.  It is only possible to revoke the permission to
-> the whole client (i.e. all users on the computer which mounts the
-> cephfs).
->
-> This patch allows overriding the permissions and ownership of all
-> virtual ".snap" directories in a cephfs mount, which allows
-> restricting (read and write) access to snapshots.
->
-> For example, the mount options:
->
->   snapdirmode=0751,snapdiruid=0,snapdirgid=4
->
-> ... allows only user "root" to create or delete snapshots, and group
-> "adm" (gid=4) is allowed to get a list of snapshots.  All others are
-> allowed to read the contents of existing snapshots (if they know the
-> name).
+This should fix the bug report in [1].
 
-I don't think this is a good place to implement this in client side. 
-Should this be a feature in cephx.
+[1]: https://lore.kernel.org/all/CAMhUBjnDdk7_bBzqgFhZ=xf-obJYMbsJf10wC_bsUeTzxXLK6A@mail.gmail.com/
 
-With this for the same directories in different mounts will behave 
-differently. Isn't that odd ?
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Fixes: 02f425f811ce ("scsi: vmw_pscsi: Rearrange code to avoid multiple calls to free_irq during unload")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+The Fixes: tag is maybe not optimal, the issue was there even before.
+But I think that this commit reference should help in case of backport
+(and it makes git-mail add Dan automagically in copy :) )
+---
+ drivers/scsi/vmw_pvscsi.c | 1 -
+ 1 file changed, 1 deletion(-)
 
--- Xiubo
-
-> Signed-off-by: Max Kellermann <max.kellermann@ionos.com>
-> ---
->   fs/ceph/inode.c |  7 ++++---
->   fs/ceph/super.c | 33 +++++++++++++++++++++++++++++++++
->   fs/ceph/super.h |  4 ++++
->   3 files changed, 41 insertions(+), 3 deletions(-)
->
-> diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
-> index 56c53ab3618e..0e9388af2821 100644
-> --- a/fs/ceph/inode.c
-> +++ b/fs/ceph/inode.c
-> @@ -80,6 +80,7 @@ struct inode *ceph_get_snapdir(struct inode *parent)
->   	};
->   	struct inode *inode = ceph_get_inode(parent->i_sb, vino);
->   	struct ceph_inode_info *ci = ceph_inode(inode);
-> +	struct ceph_mount_options *const fsopt = ceph_inode_to_client(parent)->mount_options;
->   
->   	if (IS_ERR(inode))
->   		return inode;
-> @@ -96,9 +97,9 @@ struct inode *ceph_get_snapdir(struct inode *parent)
->   		goto err;
->   	}
->   
-> -	inode->i_mode = parent->i_mode;
-> -	inode->i_uid = parent->i_uid;
-> -	inode->i_gid = parent->i_gid;
-> +	inode->i_mode = fsopt->snapdir_mode == (umode_t)-1 ? parent->i_mode : fsopt->snapdir_mode;
-> +	inode->i_uid = uid_eq(fsopt->snapdir_uid, INVALID_UID) ? parent->i_uid : fsopt->snapdir_uid;
-> +	inode->i_gid = gid_eq(fsopt->snapdir_gid, INVALID_GID) ? parent->i_gid : fsopt->snapdir_gid;
->   	inode->i_mtime = parent->i_mtime;
->   	inode->i_ctime = parent->i_ctime;
->   	inode->i_atime = parent->i_atime;
-> diff --git a/fs/ceph/super.c b/fs/ceph/super.c
-> index 40140805bdcf..5e5713946f7b 100644
-> --- a/fs/ceph/super.c
-> +++ b/fs/ceph/super.c
-> @@ -143,6 +143,9 @@ enum {
->   	Opt_readdir_max_entries,
->   	Opt_readdir_max_bytes,
->   	Opt_congestion_kb,
-> +	Opt_snapdirmode,
-> +	Opt_snapdiruid,
-> +	Opt_snapdirgid,
->   	/* int args above */
->   	Opt_snapdirname,
->   	Opt_mds_namespace,
-> @@ -200,6 +203,9 @@ static const struct fs_parameter_spec ceph_mount_parameters[] = {
->   	fsparam_flag_no ("require_active_mds",		Opt_require_active_mds),
->   	fsparam_u32	("rsize",			Opt_rsize),
->   	fsparam_string	("snapdirname",			Opt_snapdirname),
-> +	fsparam_u32oct	("snapdirmode",			Opt_snapdirmode),
-> +	fsparam_u32	("snapdiruid",			Opt_snapdiruid),
-> +	fsparam_u32	("snapdirgid",			Opt_snapdirgid),
->   	fsparam_string	("source",			Opt_source),
->   	fsparam_string	("mon_addr",			Opt_mon_addr),
->   	fsparam_u32	("wsize",			Opt_wsize),
-> @@ -414,6 +420,22 @@ static int ceph_parse_mount_param(struct fs_context *fc,
->   		fsopt->snapdir_name = param->string;
->   		param->string = NULL;
->   		break;
-> +	case Opt_snapdirmode:
-> +		fsopt->snapdir_mode = result.uint_32;
-> +		if (fsopt->snapdir_mode & ~0777)
-> +			return invalfc(fc, "Invalid snapdirmode");
-> +		fsopt->snapdir_mode |= S_IFDIR;
-> +		break;
-> +	case Opt_snapdiruid:
-> +		fsopt->snapdir_uid = make_kuid(current_user_ns(), result.uint_32);
-> +		if (!uid_valid(fsopt->snapdir_uid))
-> +			return invalfc(fc, "Invalid snapdiruid");
-> +		break;
-> +	case Opt_snapdirgid:
-> +		fsopt->snapdir_gid = make_kgid(current_user_ns(), result.uint_32);
-> +		if (!gid_valid(fsopt->snapdir_gid))
-> +			return invalfc(fc, "Invalid snapdirgid");
-> +		break;
->   	case Opt_mds_namespace:
->   		if (!namespace_equals(fsopt, param->string, strlen(param->string)))
->   			return invalfc(fc, "Mismatching mds_namespace");
-> @@ -734,6 +756,14 @@ static int ceph_show_options(struct seq_file *m, struct dentry *root)
->   		seq_printf(m, ",readdir_max_bytes=%u", fsopt->max_readdir_bytes);
->   	if (strcmp(fsopt->snapdir_name, CEPH_SNAPDIRNAME_DEFAULT))
->   		seq_show_option(m, "snapdirname", fsopt->snapdir_name);
-> +	if (fsopt->snapdir_mode != (umode_t)-1)
-> +		seq_printf(m, ",snapdirmode=%o", fsopt->snapdir_mode);
-> +	if (!uid_eq(fsopt->snapdir_uid, INVALID_UID))
-> +		seq_printf(m, ",snapdiruid=%o",
-> +			   from_kuid_munged(&init_user_ns, fsopt->snapdir_uid));
-> +	if (!gid_eq(fsopt->snapdir_gid, INVALID_GID))
-> +		seq_printf(m, ",snapdirgid=%o",
-> +			   from_kgid_munged(&init_user_ns, fsopt->snapdir_gid));
->   
->   	return 0;
->   }
-> @@ -1335,6 +1365,9 @@ static int ceph_init_fs_context(struct fs_context *fc)
->   	fsopt->wsize = CEPH_MAX_WRITE_SIZE;
->   	fsopt->rsize = CEPH_MAX_READ_SIZE;
->   	fsopt->rasize = CEPH_RASIZE_DEFAULT;
-> +	fsopt->snapdir_mode = (umode_t)-1;
-> +	fsopt->snapdir_uid = INVALID_UID;
-> +	fsopt->snapdir_gid = INVALID_GID;
->   	fsopt->snapdir_name = kstrdup(CEPH_SNAPDIRNAME_DEFAULT, GFP_KERNEL);
->   	if (!fsopt->snapdir_name)
->   		goto nomem;
-> diff --git a/fs/ceph/super.h b/fs/ceph/super.h
-> index d44a366b2f1b..3c930816078d 100644
-> --- a/fs/ceph/super.h
-> +++ b/fs/ceph/super.h
-> @@ -85,6 +85,10 @@ struct ceph_mount_options {
->   	unsigned int max_readdir;       /* max readdir result (entries) */
->   	unsigned int max_readdir_bytes; /* max readdir result (bytes) */
->   
-> +	umode_t snapdir_mode;
-> +	kuid_t snapdir_uid;
-> +	kgid_t snapdir_gid;
-> +
->   	bool new_dev_syntax;
->   
->   	/*
+diff --git a/drivers/scsi/vmw_pvscsi.c b/drivers/scsi/vmw_pvscsi.c
+index f88ecdb93a8a..1c8a72520e5b 100644
+--- a/drivers/scsi/vmw_pvscsi.c
++++ b/drivers/scsi/vmw_pvscsi.c
+@@ -1555,7 +1555,6 @@ static int pvscsi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	return error;
+ 
+ out_release_resources_and_disable:
+-	pvscsi_shutdown_intr(adapter);
+ 	pvscsi_release_resources(adapter);
+ 	goto out_disable_device;
+ }
+-- 
+2.34.1
 
