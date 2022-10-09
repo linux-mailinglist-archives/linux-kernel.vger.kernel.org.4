@@ -2,123 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1706E5F8A58
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 11:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C005F8A5E
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 11:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbiJIJSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 05:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
+        id S229931AbiJIJ2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 05:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiJIJSd (ORCPT
+        with ESMTP id S229699AbiJIJ2L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 05:18:33 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64342B63D
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 02:18:30 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id c24so8081372plo.3
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 02:18:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=260/9mSp6N4PpoN+t1d8Szrje/MbRn7Uh6Ecn3s2qCU=;
-        b=zJER6xqZquJ/D6Jn6QCwMKJQKP0O8vuTCfztN0u7I4uVIW8F9fysfOJhyloKWH03b9
-         rT1mwwjyFDrbMIk6uUuB1va9N6qkz6dfHnKLsvX36Om4cILlHvh90JnI3/MkIE27+DOL
-         BVbKeCLk/OOHz0qYSWO1VFVV6nesf2YOzWHOGfZLlRMESh6eoBzCM5KbiMfHHTkisquB
-         0BYHKDWu+REcQozKfAcqNSxNxhE0WsLoRKsObc9YQHBXAvutEY6JJirtUxzvzzyYQOHJ
-         CIinOXqVH5g1dPDi20DbS5k6XJnXdmwUuUcB11dN7OPMld8FztoBkSd3NmpyPj1sjkcq
-         Q+bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=260/9mSp6N4PpoN+t1d8Szrje/MbRn7Uh6Ecn3s2qCU=;
-        b=5QMUeXdckoJy0cDIwg5Xqedxb7lWUuABVdZqt3W3xbMC57Qzj4mJDIFX8IphTfDNJL
-         SKvet/4gxCtSviJLPlfpW+GOarUT03/9nSDEi802dmrCzrdk3WiktZmqvgskXCPmk/hW
-         j7u1CVmKyGf9Yfpl+jhTyXDCQec8dDrn9nRR4JjAApxtZuAhSZioBCEHqMN7y/gYQpT+
-         f/8aGUtNcLnlYN2lazfiGg961zHIWzOd+tpIaa86VAQWVGv/cYEFTZRGCWXnP/JWJljf
-         YnjSPCWVeGMyd7JvgFj3OCAtZ9pyHPh6WX53oqsWUkRw2qj2f2TwZxKSPYB5Q0oPpRp7
-         UcgA==
-X-Gm-Message-State: ACrzQf2YDJeXkDVbU58kpbfbZUvO7kCjZ/ky/YIAB9PCnR39FjOfso+F
-        xc2i6rnBm4dhhy8S8vuaoQjIGw==
-X-Google-Smtp-Source: AMsMyM7rJdAD6jzLSqpd5byQGnIXhnyu1XJxY73dndrP6nl4twcAIGjdUQT+yuvVkQdugSwgSiCLSg==
-X-Received: by 2002:a17:902:bb96:b0:17d:9ed7:e9af with SMTP id m22-20020a170902bb9600b0017d9ed7e9afmr13013182pls.15.1665307110193;
-        Sun, 09 Oct 2022 02:18:30 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.234])
-        by smtp.gmail.com with ESMTPSA id f38-20020a635566000000b004405c6eb962sm4328711pgm.4.2022.10.09.02.18.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 02:18:29 -0700 (PDT)
-From:   Zhang Yuchen <zhangyuchen.lcr@bytedance.com>
-To:     minyard@acm.org
-Cc:     openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, qi.zheng@linux.dev,
-        Zhang Yuchen <zhangyuchen.lcr@bytedance.com>
-Subject: [PATCH v2 3/3] ipmi: fix memleak when unload ipmi driver
-Date:   Sun,  9 Oct 2022 17:18:11 +0800
-Message-Id: <20221009091811.40240-4-zhangyuchen.lcr@bytedance.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
-In-Reply-To: <20221009091811.40240-1-zhangyuchen.lcr@bytedance.com>
-References: <20221009091811.40240-1-zhangyuchen.lcr@bytedance.com>
+        Sun, 9 Oct 2022 05:28:11 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E2C2CC90;
+        Sun,  9 Oct 2022 02:28:08 -0700 (PDT)
+Received: from kwepemi500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Mlc6c1Qxqz1P75R;
+        Sun,  9 Oct 2022 17:23:36 +0800 (CST)
+Received: from huawei.com (10.67.175.34) by kwepemi500022.china.huawei.com
+ (7.221.188.64) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sun, 9 Oct
+ 2022 17:28:06 +0800
+From:   Ren Zhijie <renzhijie2@huawei.com>
+To:     <viro@zeniv.linux.org.uk>
+CC:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Ren Zhijie <renzhijie2@huawei.com>
+Subject: [PATCH -next] coredump: fix unused-function warning
+Date:   Sun, 9 Oct 2022 09:24:20 +0000
+Message-ID: <20221009092420.32850-1-renzhijie2@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.175.34]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500022.china.huawei.com (7.221.188.64)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After the IPMI disconnect problem, the memory kept rising and we tried
-to unload the driver to free the memory. However, only part of the
-free memory is recovered after the driver is uninstalled. Using
-ebpf to hook free functions, we find that neither ipmi_user nor
-ipmi_smi_msg is free, only ipmi_recv_msg is free.
+If CONFIG_ELF_CORE is not set,
+gcc warns about unused function:
 
-We find that the deliver_smi_err_response call in clean_smi_msgs does
-the destroy processing on each message from the xmit_msg queue without
-checking the return value and free ipmi_smi_msg.
+fs/coredump.c:839:12: error: ‘dump_emit_page’ defined but not used [-Werror=unused-function]
+ static int dump_emit_page(struct coredump_params *cprm, struct page *page)
+            ^~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-deliver_smi_err_response is called only at this location. Adding the
-free handling has no effect.
+dump_emit_page() only be called by dump_user_range(),
+so move it under the CONFIG_ELF_CORE.
 
-To verify, try using ebpf to trace the free function.
-
-  $ bpftrace -e 'kretprobe:ipmi_alloc_recv_msg {printf("alloc rcv
-      %p\n",retval);} kprobe:free_recv_msg {printf("free recv %p\n",
-      arg0)} kretprobe:ipmi_alloc_smi_msg {printf("alloc smi %p\n",
-        retval);} kprobe:free_smi_msg {printf("free smi  %p\n",arg0)}'
-
-Signed-off-by: Zhang Yuchen <zhangyuchen.lcr@bytedance.com>
+Fixes: 06bbaa6dc53c ("[coredump] don't use __kernel_write() on kmap_local_page()")
+Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
 ---
- drivers/char/ipmi/ipmi_msghandler.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ fs/coredump.c | 48 ++++++++++++++++++++++++------------------------
+ 1 file changed, 24 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/char/ipmi/ipmi_msghandler.c b/drivers/char/ipmi/ipmi_msghandler.c
-index c8a3b208f923..bd522868efef 100644
---- a/drivers/char/ipmi/ipmi_msghandler.c
-+++ b/drivers/char/ipmi/ipmi_msghandler.c
-@@ -3710,12 +3710,15 @@ static void deliver_smi_err_response(struct ipmi_smi *intf,
- 				     struct ipmi_smi_msg *msg,
- 				     unsigned char err)
- {
-+	int rv;
- 	msg->rsp[0] = msg->data[0] | 4;
- 	msg->rsp[1] = msg->data[1];
- 	msg->rsp[2] = err;
- 	msg->rsp_size = 3;
--	/* It's an error, so it will never requeue, no need to check return. */
--	handle_one_recv_msg(intf, msg);
-+
-+	rv = handle_one_recv_msg(intf, msg);
-+	if (rv == 0)
-+		ipmi_free_smi_msg(msg);
+diff --git a/fs/coredump.c b/fs/coredump.c
+index 3e8630c8d627..dc1cb8440bc9 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -836,6 +836,30 @@ static int __dump_skip(struct coredump_params *cprm, size_t nr)
+ 	}
  }
  
- static void cleanup_smi_msgs(struct ipmi_smi *intf)
++int dump_emit(struct coredump_params *cprm, const void *addr, int nr)
++{
++	if (cprm->to_skip) {
++		if (!__dump_skip(cprm, cprm->to_skip))
++			return 0;
++		cprm->to_skip = 0;
++	}
++	return __dump_emit(cprm, addr, nr);
++}
++EXPORT_SYMBOL(dump_emit);
++
++void dump_skip_to(struct coredump_params *cprm, unsigned long pos)
++{
++	cprm->to_skip = pos - cprm->pos;
++}
++EXPORT_SYMBOL(dump_skip_to);
++
++void dump_skip(struct coredump_params *cprm, size_t nr)
++{
++	cprm->to_skip += nr;
++}
++EXPORT_SYMBOL(dump_skip);
++
++#ifdef CONFIG_ELF_CORE
+ static int dump_emit_page(struct coredump_params *cprm, struct page *page)
+ {
+ 	struct bio_vec bvec = {
+@@ -869,30 +893,6 @@ static int dump_emit_page(struct coredump_params *cprm, struct page *page)
+ 	return 1;
+ }
+ 
+-int dump_emit(struct coredump_params *cprm, const void *addr, int nr)
+-{
+-	if (cprm->to_skip) {
+-		if (!__dump_skip(cprm, cprm->to_skip))
+-			return 0;
+-		cprm->to_skip = 0;
+-	}
+-	return __dump_emit(cprm, addr, nr);
+-}
+-EXPORT_SYMBOL(dump_emit);
+-
+-void dump_skip_to(struct coredump_params *cprm, unsigned long pos)
+-{
+-	cprm->to_skip = pos - cprm->pos;
+-}
+-EXPORT_SYMBOL(dump_skip_to);
+-
+-void dump_skip(struct coredump_params *cprm, size_t nr)
+-{
+-	cprm->to_skip += nr;
+-}
+-EXPORT_SYMBOL(dump_skip);
+-
+-#ifdef CONFIG_ELF_CORE
+ int dump_user_range(struct coredump_params *cprm, unsigned long start,
+ 		    unsigned long len)
+ {
 -- 
-2.30.2
+2.17.1
 
