@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2385F88DB
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 04:24:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 449975F88DD
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 04:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbiJICYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Oct 2022 22:24:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48358 "EHLO
+        id S229845AbiJIC0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Oct 2022 22:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiJICX4 (ORCPT
+        with ESMTP id S229463AbiJIC0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Oct 2022 22:23:56 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98C636093
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 19:23:55 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id f140so8088777pfa.1
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 19:23:55 -0700 (PDT)
+        Sat, 8 Oct 2022 22:26:14 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E941F3641E
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 19:26:12 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id s10so9775835ljp.5
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Oct 2022 19:26:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=egU+pR1mu0fbwNOlCXxgUzq7eQbUYmzREvrHjyDBDLQ=;
-        b=FdWJE/6vRDAn8HvbajJRjlWuKGPVVZTR6WsylqPO2APZ8f1RcKp5K9kqCiARH3Xq9U
-         V5EnxnOTuyjLZ7nraOZ4hJL9HFQLuXXTypF7DuSg78Hcl7eB2DQNVtm+VEsqbLqrScXj
-         bqfp0HFPy7pjoofF2hiOk6+zjPrkxK2WWrVo08cy6Kso9D7Jpt84VbaHa4i/ZFRw28hr
-         4bswpnvPHNEPsOAIFef/2tH3zUYktDeBjOuFnxLHWuduMLfLYK5iTU6Gvd7Ycf7Gt80x
-         cKmq/IlFz6SJSzpOfSDUEsLvV/45SjvobCKXVcHSPntydwzKr+D82DPMsZtbETHh1mbN
-         5Acw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=F4Ndqn8mcqwaJbQaI8C5dwRVGTyPE8l0jxeXirt3rHc=;
+        b=GOy6ht1b3z6Nch5I+lxTYiokqV19xJ5XrFL7Mfhqc/yl19vQ+uscITbHA3XQblsySp
+         iwA2YhzOQAM443abCWu7kffIfL9oJQJFlLtwFso0Hs9RqG7Rq3y3d4X2LYqQNB92WEhe
+         Fm2Q431j5QjeI0SQ7tuxzeW0N+5CYFtpySDYq0UVWZuF5xF9qwdhmI6CCCJUMp2jNLYa
+         fh2Ke5z4hPEIdsb6vZ0cCGDmFenxRxR0CXBXv5lZzJpWNdAp0B7y7wipEdth7p4wQbLh
+         kXur6B5POLW2u/t+FCBQaexERlqfXNDiXwSUE8A+1wwgMJla3u3YCRDisz8kMWJCZoWh
+         9OQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=egU+pR1mu0fbwNOlCXxgUzq7eQbUYmzREvrHjyDBDLQ=;
-        b=D1CaahxHlEjp8+MLpvnfywQuAeqeYAKgEwQq+F6z3vVN36uXPuLCurOqiptNARpJcg
-         IltkVBXXlX3tiOd26mmcB4Mi/Hw9GbvJG1eDO8VJineJHzIqEo91BTMPsoVXoLABk/ya
-         7vb6sg2l1rfFuBV7mDlgkTZX5FXGbSU3YLx1cD6tJc8Tu5JnsQALicVsCZAPi/55HzVb
-         qbyT3PLI1EAwjMQxo4VU/EnteZ+Rg2c9mOUE0tCkncQiL7FprYBb4QcK1D/uXz52Nyji
-         gCjofBWepDtTi+vPnNp6Ag0ePVIKc4OL4/IMyJFnFjTMFkFRIpS8du0gb+vwpDVEDjxr
-         BTNA==
-X-Gm-Message-State: ACrzQf0ZANZedcfyTtyjlzjejjahIiKVstzrMwQo1TawN6MYJjL2xU3X
-        JRZjXM3CuT3JSacuY0WhfAbGyropogI=
-X-Google-Smtp-Source: AMsMyM7o7JzcVNgFATm6Jdoddk7BfGlH243B6v/ltjwvoqVHJMMH9h0GiNCq1I8FeHbulnNpJtrPyA==
-X-Received: by 2002:a63:ed0a:0:b0:442:2514:95f5 with SMTP id d10-20020a63ed0a000000b00442251495f5mr11113497pgi.402.1665282235332;
-        Sat, 08 Oct 2022 19:23:55 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id e17-20020a17090301d100b00177f4ef7970sm4018521plh.11.2022.10.08.19.23.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Oct 2022 19:23:54 -0700 (PDT)
-From:   xu.xin.sc@gmail.com
-X-Google-Original-From: xu.xin16@zte.com.cn
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        xu xin <xu.xin16@zte.com.cn>,
-        Xiaokai Ran <ran.xiaokai@zte.com.cn>,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Jiang Xuexin <jiang.xuexin@zte.com.cn>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: [PATCH v2 5/5] ksm: add zero_pages_sharing documentation
-Date:   Sun,  9 Oct 2022 02:23:49 +0000
-Message-Id: <20221009022349.315482-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221009021816.315205-1-xu.xin16@zte.com.cn>
-References: <20221009021816.315205-1-xu.xin16@zte.com.cn>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F4Ndqn8mcqwaJbQaI8C5dwRVGTyPE8l0jxeXirt3rHc=;
+        b=ADoDVA6LBRiateQKXWPsXU+rH2q5uIHfYNDWHL6fy3YLBIm+pw0MXZk23fwy9B1i1p
+         4DhCd1quGfwL/kw5xhM2gH0XeM93e9V7skeTAOPgI9je2oTiw7zgJ5EmBTTSzAYSzAPJ
+         Y/38e550qyGY3B9onkBJvjPQmzGgVTofC+IpMAFc7HoIqIIdidZcqG/25se21RW/lOFq
+         rI/mTYOckz+jgDY30Qeb9CPRQc38YjbvaBu3xxp4pcbRtPj6WsLBvj664ubcqm0ASR2Z
+         pToyRG5gykuh1PkmOXm27mB2FV26e/BYn9/8gIzTWaNCbJViQIJ7ITcoXKDsmJ8CD221
+         RZLQ==
+X-Gm-Message-State: ACrzQf3CjfaPVwIvmMdENg7No/bnr+hWjdp8ChNDmX22e44eWrq0Yuei
+        GPU/ALA+gDWe2F/DjKezKpWvFlJOpzeQpD/pm16/5Abh
+X-Google-Smtp-Source: AMsMyM6JjeD9ChTGv/mp2MLb0Cib5y9fxexHwwynGKJXjBwMxjRXk9IF2L+0HUCgRg66Bpy8msUBITmU63rSxRb6QvQ=
+X-Received: by 2002:a05:651c:222c:b0:26b:dec5:a4f0 with SMTP id
+ y44-20020a05651c222c00b0026bdec5a4f0mr4652013ljq.359.1665282370836; Sat, 08
+ Oct 2022 19:26:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <1665026390-16096-1-git-send-email-zhaoyang.huang@unisoc.com> <cd103df8-d0da-ab15-5755-c20631055986@suse.cz>
+In-Reply-To: <cd103df8-d0da-ab15-5755-c20631055986@suse.cz>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Sun, 9 Oct 2022 10:25:42 +0800
+Message-ID: <CAGWkznHSyT59Ca57EnYu+zY+tkTE=p8LKaJqS0Y7TC4s+aZ8iA@mail.gmail.com>
+Subject: Re: [PATCH] mm: add stackdepot information on page->private for tracking
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Marco Elver <elver@google.com>,
+        Imran Khan <imran.f.khan@oracle.com>,
+        Dmitry Vyukov <dvyukov@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
+        steve.kang@unisoc.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -78,50 +74,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+On Fri, Oct 7, 2022 at 6:08 PM Vlastimil Babka <vbabka@suse.cz> wrote:
+>
+> On 10/6/22 05:19, zhaoyang.huang wrote:
+> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> >
+> > Private is vacant for most of Non-LRU pages while the user has explicitly
+> > operation on page->private via set_page_private, I would like introduce
+> > stackdepot information on page->private for a simplified tracking mechanism
+> > which could be help for kernel driver's memory leak.
+> >
+> > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+>
+> This duplicates the existing page_owner functionality in a way that
+> unconditionally adds overhead to all kernels that have CONFIG_STACKDEPOT
+> enabled build-time (and also misses the need to initialize stackdepot properly).
+Sure. This patch could be deemed as a light and complement of the page
+owner which depends on proc fs in lived system for showing the result.
+This patch could be mainly helpful on RAM dump as it is hard to find
+page_ext for page owners. I also would like to make this optional via
+defconfig item.
+>
+> Also wouldn't be suprised if some existing page->private users were actually
+> confused by the field suddenly being non-zero without their own action.
+IMO, the existing page->private users will cover this field directly
+without distrubed by handle.
 
-When enabling use_zero_pages, pages_sharing cannot represent how
-much memory saved indeed. zero_pages_sharing + pages_sharing does.
-add the description of zero_pages_sharing.
-
-Cc: Xiaokai Ran <ran.xiaokai@zte.com.cn>
-Cc: Yang Yang <yang.yang29@zte.com.cn>
-Cc: Jiang Xuexin <jiang.xuexin@zte.com.cn>
-Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc: David Hildenbrand <david@redhat.com>
-Signed-off-by: xu xin <xu.xin16@zte.com.cn>
----
- Documentation/admin-guide/mm/ksm.rst | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-guide/mm/ksm.rst
-index fb6ba2002a4b..484665aa7418 100644
---- a/Documentation/admin-guide/mm/ksm.rst
-+++ b/Documentation/admin-guide/mm/ksm.rst
-@@ -162,7 +162,7 @@ The effectiveness of KSM and MADV_MERGEABLE is shown in ``/sys/kernel/mm/ksm/``:
- pages_shared
-         how many shared pages are being used
- pages_sharing
--        how many more sites are sharing them i.e. how much saved
-+        how many more sites are sharing them
- pages_unshared
-         how many pages unique but repeatedly checked for merging
- pages_volatile
-@@ -173,6 +173,14 @@ stable_node_chains
-         the number of KSM pages that hit the ``max_page_sharing`` limit
- stable_node_dups
-         number of duplicated KSM pages
-+zero_pages_sharing
-+        how many empty pages are sharing kernel zero page(s) instead of
-+        with each other as it would happen normally. only effective when
-+        enabling ``use_zero_pages`` knob.
-+
-+If ``use_zero_pages`` is 0, only ``pages_sharing`` can represents how
-+much saved. Otherwise, ``pages_sharing`` + ``zero_pages_sharing``
-+represents how much saved actually.
- 
- A high ratio of ``pages_sharing`` to ``pages_shared`` indicates good
- sharing, but a high ratio of ``pages_unshared`` to ``pages_sharing``
--- 
-2.25.1
-
+>
+> > ---
+> >  mm/page_alloc.c | 28 +++++++++++++++++++++++++++-
+> >  1 file changed, 27 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index e5486d4..b79a503 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -75,6 +75,7 @@
+> >  #include <linux/khugepaged.h>
+> >  #include <linux/buffer_head.h>
+> >  #include <linux/delayacct.h>
+> > +#include <linux/stackdepot.h>
+> >  #include <asm/sections.h>
+> >  #include <asm/tlbflush.h>
+> >  #include <asm/div64.h>
+> > @@ -2464,6 +2465,25 @@ static inline bool should_skip_init(gfp_t flags)
+> >       return (flags & __GFP_SKIP_ZERO);
+> >  }
+> >
+> > +#ifdef CONFIG_STACKDEPOT
+> > +static noinline depot_stack_handle_t set_track_prepare(void)
+> > +{
+> > +       depot_stack_handle_t trace_handle;
+> > +       unsigned long entries[16];
+> > +       unsigned int nr_entries;
+> > +
+> > +       nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 3);
+> > +       trace_handle = stack_depot_save(entries, nr_entries, GFP_NOWAIT);
+> > +
+> > +       return trace_handle;
+> > +}
+> > +#else
+> > +static inline depot_stack_handle_t set_track_prepare(void)
+> > +{
+> > +       return 0;
+> > +}
+> > +#endif
+> > +
+> >  inline void post_alloc_hook(struct page *page, unsigned int order,
+> >                               gfp_t gfp_flags)
+> >  {
+> > @@ -2471,8 +2491,14 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
+> >                       !should_skip_init(gfp_flags);
+> >       bool init_tags = init && (gfp_flags & __GFP_ZEROTAGS);
+> >       int i;
+> > +     depot_stack_handle_t stack_handle = set_track_prepare();
+> >
+> > -     set_page_private(page, 0);
+> > +     /*
+> > +      * Don't worry, user will cover private directly without checking
+> > +      * this field and has ability to trace the page. This also will not
+> > +      * affect expected state when freeing
+> > +      */
+> > +     set_page_private(page, stack_handle);
+> >       set_page_refcounted(page);
+> >
+> >       arch_alloc_page(page, order);
+>
