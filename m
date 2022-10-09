@@ -2,85 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED195F89B4
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 08:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 223455F89B6
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 08:38:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbiJIGbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 02:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
+        id S229731AbiJIGiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 02:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiJIGbh (ORCPT
+        with ESMTP id S229665AbiJIGiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 02:31:37 -0400
-Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A972FC0C
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 23:31:35 -0700 (PDT)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id hPqWoUhz7OizNhPqWoCaRp; Sun, 09 Oct 2022 08:31:33 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 09 Oct 2022 08:31:33 +0200
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Vishal Bhakta <vbhakta@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Cathy Avery <cavery@redhat.com>,
-        "Ewan D. Milne" <emilne@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zheyu Ma <zheyuma97@gmail.com>, linux-scsi@vger.kernel.org
-Subject: [PATCH] scsi: vmw_pvscsi: Fix an error handling path in pvscsi_probe()
-Date:   Sun,  9 Oct 2022 08:31:24 +0200
-Message-Id: <ed31652626b0d8133e90f6888ef2b56cbc46ee57.1665297058.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 9 Oct 2022 02:38:09 -0400
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [20.232.28.96])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id F198F31EEE
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Oct 2022 23:38:03 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [211.90.237.214])
+        by mail-app2 (Coremail) with SMTP id by_KCgBXCWosbEJjh9O9Bg--.26141S2;
+        Sun, 09 Oct 2022 14:37:41 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     isdn@linux-pingi.de, kuba@kernel.org, andrii@kernel.org,
+        gregkh@linuxfoundation.org, axboe@kernel.dk, davem@davemloft.net,
+        netdev@vger.kernel.org, zou_wei@huawei.com,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH] mISDN: hfcpci: Fix use-after-free bug in hfcpci_softirq
+Date:   Sun,  9 Oct 2022 14:37:31 +0800
+Message-Id: <20221009063731.22733-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgBXCWosbEJjh9O9Bg--.26141S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7WF1UWr43Xr4xurWUWw4Durg_yoW8XFy8pa
+        y5GFyIyr4rZa10kr48X3WDZF95Za1kArW0kF1kGw13Z3Z8XFy5tr1UtryvvFW5GrZ0gF9F
+        yF48XFWfGFs8AFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4U
+        JVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCY02Avz4vE14v_GF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
+        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
+        17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+        C0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvj
+        DU0xZFpf9x0JU-J5rUUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgYSAVZdtb0jdQAGsE
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In all paths that end to "out_release_resources_and_disable", neither
-pci_alloc_irq_vectors() nor request_irq() have been called yet. So, there
-is no point in calling pvscsi_shutdown_intr() which undoes these calls.
+The function hfcpci_softirq() is a timer handler. If it
+is running, the timer_pending() will return 0 and the
+del_timer_sync() in HFC_cleanup() will not be executed.
+As a result, the use-after-free bug will happen. The
+process is shown below:
 
-Remove this erroneous call.
+    (cleanup routine)          |        (timer handler)
+HFC_cleanup()                  | hfcpci_softirq()
+ if (timer_pending(&hfc_tl))   |
+   del_timer_sync()            |
+ ...                           | ...
+ pci_unregister_driver(hc)     |
+  driver_unregister            |  driver_for_each_device
+   bus_remove_driver           |   _hfcpci_softirq
+    driver_detach              |   ...
+     put_device(dev) //[1]FREE |
+                               |    dev_get_drvdata(dev) //[2]USE
 
-This should fix the bug report in [1].
+The device is deallocated is position [1] and used in
+position [2].
 
-[1]: https://lore.kernel.org/all/CAMhUBjnDdk7_bBzqgFhZ=xf-obJYMbsJf10wC_bsUeTzxXLK6A@mail.gmail.com/
+Fix by removing the "timer_pending" check in HFC_cleanup(),
+which makes sure that the hfcpci_softirq() have finished
+before the resource is deallocated.
 
-Reported-by: Zheyu Ma <zheyuma97@gmail.com>
-Fixes: 02f425f811ce ("scsi: vmw_pscsi: Rearrange code to avoid multiple calls to free_irq during unload")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Fixes: 009fc857c5f6 ("mISDN: fix possible use-after-free in HFC_cleanup()")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
 ---
-The Fixes: tag is maybe not optimal, the issue was there even before.
-But I think that this commit reference should help in case of backport
-(and it makes git-mail add Dan automagically in copy :) )
----
- drivers/scsi/vmw_pvscsi.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/isdn/hardware/mISDN/hfcpci.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/vmw_pvscsi.c b/drivers/scsi/vmw_pvscsi.c
-index f88ecdb93a8a..1c8a72520e5b 100644
---- a/drivers/scsi/vmw_pvscsi.c
-+++ b/drivers/scsi/vmw_pvscsi.c
-@@ -1555,7 +1555,6 @@ static int pvscsi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	return error;
+diff --git a/drivers/isdn/hardware/mISDN/hfcpci.c b/drivers/isdn/hardware/mISDN/hfcpci.c
+index af17459c1a5..e964a8dd851 100644
+--- a/drivers/isdn/hardware/mISDN/hfcpci.c
++++ b/drivers/isdn/hardware/mISDN/hfcpci.c
+@@ -2345,8 +2345,7 @@ HFC_init(void)
+ static void __exit
+ HFC_cleanup(void)
+ {
+-	if (timer_pending(&hfc_tl))
+-		del_timer_sync(&hfc_tl);
++	del_timer_sync(&hfc_tl);
  
- out_release_resources_and_disable:
--	pvscsi_shutdown_intr(adapter);
- 	pvscsi_release_resources(adapter);
- 	goto out_disable_device;
+ 	pci_unregister_driver(&hfc_driver);
  }
 -- 
-2.34.1
+2.17.1
 
