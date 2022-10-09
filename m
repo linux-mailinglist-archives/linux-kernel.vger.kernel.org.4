@@ -2,105 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDAA05F8BFD
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 17:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 065835F8C02
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 17:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiJIPWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 11:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
+        id S229797AbiJIPZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 11:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbiJIPWR (ORCPT
+        with ESMTP id S230115AbiJIPZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 11:22:17 -0400
+        Sun, 9 Oct 2022 11:25:20 -0400
 Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A90193D8
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 08:22:16 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id cn9so5327816qtb.11
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 08:22:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206B31D66D
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 08:25:19 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id c23so1341597qtw.8
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 08:25:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Gi30W6qO/QQQISv8PyR3uP8MA6T/Qkq2eAnyNWkaPQo=;
-        b=fsIhbyW+5LNxRUzfAm5uDLNs5RL1XrhuBUaER46mnIrpINGRiHQEtOrFksaO0mC+mr
-         hdaW5Ixjo3ypZ6ITLqz5MMq9sfvMr0JsxnK8xmnyMqRcD6I+nwnJ90cj2o0nfIwGSOKv
-         zJgXmu565F0ZkyD3iIoxRyy5mj4VEWfPy/eJShSnqQRX2izpOIHySyiOHeWWfoE4WmOK
-         6V8X9pA7KmWzvugqfTbJPwE0sOnXhlJ7czlGNpu56/Xh6rL5RHIo/imZyqaLdagL2iRO
-         cqOKLnO73l+FtSDG3uxXMWfBNHpOFSFQpOt3jMuVXFlBdhgcO5dPiEWZb3yyJJhPCdUi
-         lJjw==
+        bh=zMWBP42bcqYR/9/IcRRsvCkgoPBmDNpE4tq769Q64oI=;
+        b=hzPt6d3JeW0Footcf5s588X/R44BO81hmMDQLXWaFZJY5KbRKNCumivhg/rE96IjH2
+         Kw0XoDHKhAOlIOhvgoIrD7k8SILH88ecSk16n/o8Wg6aV25QILm+OGF1vXYxAT3e77FQ
+         Ew7GlZ/QGNq7w36LYmKwZFNscIEGwPkYA1qgHpBf1koWgvgZeM03ZIm1rqptWbZIAsE/
+         X1tYIXazKHgCvi13Dvhr3XD2f/0oLPr2loqEQJOBzPUwJ1svmyqKy6wL1eE8l80zrIPj
+         lN6u8JkgPlyu1zkDaYukKKjsJ1xvIbxYYq+bQhQ91CFCjJmBB5gE+lKOgF7WYjGjPIDX
+         0Atg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gi30W6qO/QQQISv8PyR3uP8MA6T/Qkq2eAnyNWkaPQo=;
-        b=rmHCSwBZhvW1fq0kM5seDmVzWITLzkaNX6L9g250rbCte0GEgfsvxckkchS+1XecQX
-         FD8CQTFsELUHYUhyngF06eazs6hVeZdkaAnuIl4teMVmKcuFP1tF/NAUIcu5f8CWTpPj
-         r1Ts4Ykt5pWZp/hvUS2QMK+cuKZYUWTzZRfbhnh1pRElMwOXJyVFvtzH0x0IuCcTSavE
-         +tXPpB/DxIf+YQcN5Ide1rASBWqgF7qVA1nm6pVnp9x9pCrdCoHkXbzFAvwCaQEKCDZo
-         2WFrTeLQyV7003/2+k7ss+qYOktaM9H/mC59iVYM5jk6yoUT5QEZ4VSzbSAu3ZOoIGJE
-         ULug==
-X-Gm-Message-State: ACrzQf12+RuA78eFq3XKrJcmktrabGPwj0AEnVojAnI13SqYpdaC0bFp
-        XW+b2MYF5rniymoHZll1iltg7A==
-X-Google-Smtp-Source: AMsMyM77qc2qXgZ3zI7eVyqJTBsbEuOolRRKQMmDBZCGvXmo38imssALA4dp/8f9g+G6wgTdYPaxaA==
-X-Received: by 2002:ac8:7e82:0:b0:35b:b24e:2159 with SMTP id w2-20020ac87e82000000b0035bb24e2159mr11961830qtj.623.1665328935853;
-        Sun, 09 Oct 2022 08:22:15 -0700 (PDT)
+        bh=zMWBP42bcqYR/9/IcRRsvCkgoPBmDNpE4tq769Q64oI=;
+        b=mr4Kii0ihiBMpOSnS1fHmJ5M0i9rZa9ppx2+ELGX62yFG5/eVGZMg+XGPcLlgES0j2
+         E10vlUsHdKLppSaU+6PPwn4Sxeps/8UoubLalJJdjmSVZAIC6lak2iarBvqMUe1n+Och
+         FF8SAk0PnegmH9qBthxY146E9VeeMrJTmhr6Y7OUmd/sVL7QkWeqHF5oI4i8XkESfam9
+         IKCFnrFpq1OGC5gkbPWgODyhQSBw91Udd+qyh99hacrBi5U30dzCw7jIxv6fs8NM5KLL
+         wHRlZzoXoLeVW1I91DHLAumgWEXulcU8m2E6nP0U4p4vmAz9YyHGzFxshg2xzAbmbBkY
+         nRxQ==
+X-Gm-Message-State: ACrzQf2erh+D6ozkNlYUVQmwf36I3g8HXKfrt/Swqw42ib6OGSLCrGwL
+        cfOo9/eK7fdyM0fEtfi7ap4vQQ==
+X-Google-Smtp-Source: AMsMyM6WOzEKoFOz4nRaUQLwSDLVPIGwcjJ8aEcuHay/BBUrycXh6QCMWv6+memfJTEi64NCDRE5Tw==
+X-Received: by 2002:ac8:7e94:0:b0:38e:2bea:9dd9 with SMTP id w20-20020ac87e94000000b0038e2bea9dd9mr11825064qtj.67.1665329118301;
+        Sun, 09 Oct 2022 08:25:18 -0700 (PDT)
 Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id y11-20020ac8128b000000b0039a275607c3sm536833qti.55.2022.10.09.08.22.14
+        by smtp.gmail.com with ESMTPSA id fp25-20020a05622a509900b0034305a91aaesm6549834qtb.83.2022.10.09.08.25.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Oct 2022 08:22:15 -0700 (PDT)
-Message-ID: <e49eb069-c66b-532c-0e8e-43575304187b@linaro.org>
-Date:   Sun, 9 Oct 2022 17:20:03 +0200
+        Sun, 09 Oct 2022 08:25:17 -0700 (PDT)
+Message-ID: <e829329e-ac55-e04a-c8ab-4eeeec6217ab@linaro.org>
+Date:   Sun, 9 Oct 2022 17:23:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.1
-Subject: Re: [net-next][PATCH v4] dt-bindings: dsa: Add lan9303 yaml
+Subject: Re: [PATCH 5.10 1/1] rpmsg: qcom: glink: replace strncpy() with
+ strscpy_pad()
 Content-Language: en-US
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Jerry Ray <jerry.ray@microchip.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        UNGLinuxDriver@microchip.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221003164624.4823-1-jerry.ray@microchip.com>
- <20221003164624.4823-1-jerry.ray@microchip.com>
- <20221008225628.pslsnwilrpvg3xdf@skbuf>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>,
+        Andrew Chernyakov <acherniakov@astralinux.ru>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20221007132931.123755-1-acherniakov@astralinux.ru>
+ <20221007132931.123755-2-acherniakov@astralinux.ru>
+ <Y0BWc6A8C++M9TWP@kroah.com>
+ <36f776cbc16f4e988d96b7bcb77cd559@AcuMS.aculab.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221008225628.pslsnwilrpvg3xdf@skbuf>
+In-Reply-To: <36f776cbc16f4e988d96b7bcb77cd559@AcuMS.aculab.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/10/2022 00:56, Vladimir Oltean wrote:
->>  
->> +MICROCHIP LAN9303/LAN9354 ETHERNET SWITCH DRIVER
->> +M:	Jerry Ray <jerry.ray@microchip.com>
->> +M:	UNGLinuxDriver@microchip.com
->> +L:	netdev@vger.kernel.org
->> +S:	Maintained
->> +F:	Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml
->> +F:	drivers/net/dsa/lan9303*
->> +
+On 08/10/2022 23:11, David Laight wrote:
+>>> ---
+>>>  drivers/rpmsg/qcom_glink_native.c | 2 +-
+>>>  drivers/rpmsg/qcom_smd.c          | 4 ++--
+>>>  2 files changed, 3 insertions(+), 3 deletions(-)
+>>
+>> Why just this specific kernel branch?  We can't add patches to an older
+>> tree and have someone upgrade to a newer one and hit the same issue.
+>>
+>> So please provide backports for all active versions.  In this case that
+>> would be 5.15.y and 5.19.y.
 > 
-> Separate patch please? Changes to the MAINTAINERS file get applied to
-> the "net" tree.
+> If it is only fixing a compile warning is it even stable material?
+> The generic commit message doesn't say whether the old code was
+> actually right or wrong.
+> 
+> At least one of these 'replace strncpy()' changes was definitely
+> broken (the copy needed to be equivalent to memcpy()).
+> 
+> So applying ANY of them to stable unless they actually fix
+> a real bug seems dubious.
 
-This will also go via net tree, so there is no real need to split it.
+Except the warning from GCC, there was no bug to fix. The warning is
+about discouraged and risky practice, but no actual real risk was
+identified, so for me it matches stable rules poorly.
+
+It's basically backporting to silence automated code checkers...
 
 Best regards,
 Krzysztof
