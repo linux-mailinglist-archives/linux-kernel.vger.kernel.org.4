@@ -2,123 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0765F8C8E
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 19:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3B65F8C96
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 19:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiJIRin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 13:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42776 "EHLO
+        id S230104AbiJIRlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 13:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiJIRik (ORCPT
+        with ESMTP id S229605AbiJIRl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 13:38:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2760F2983E;
-        Sun,  9 Oct 2022 10:38:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1729B80D86;
-        Sun,  9 Oct 2022 17:38:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25840C433D6;
-        Sun,  9 Oct 2022 17:38:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665337116;
-        bh=vG5xxQ1IE0ZAYCWj1ElLNJKIb8J8PN1GvB54lauAKwE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bh2yMMhMkI8SEUwxNLcyHdG5SEy7DEiJOwrPI/O0VSoAfJdlKTHLQUrDG/7yk1G/G
-         Xj2AH+M2R1JNlSupbQhiYl9J4vJHp+9jz4ruLZ6ALoFNEHmQXlvIMEZtE0ImGLlLai
-         CvtReFwAYXxqF+o6TpnODLqgnjGAUq8SMelY5b0A+tFrFy4cfJ4BJ0JLWay733ZxxJ
-         6tLWwp0P8eZfSVYQbfnhsDsw2eJM7xEvpSLxlHoUyJt4aVea/sJmcHHJQZfUm/E2U1
-         ezKAY2tGKI0HKj7Fpo81SvEtgb1HgS+Az+b0WBPuCQNcM7cbd27yR8hp0hufwkb5Hn
-         y9o4OVdp09DZw==
-Date:   Sun, 9 Oct 2022 18:38:54 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Claudiu.Beznea@microchip.com, matti.vaittinen@fi.rohmeurope.com,
-        lars@metafoo.de, Michael.Hennerich@analog.com,
-        cosmin.tanislav@analog.com, Eugen.Hristev@microchip.com,
-        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
-        bleung@chromium.org, groeck@chromium.org,
-        alexandru.ardelean@analog.com, nathan@kernel.org,
-        miquel.raynal@bootlin.com, linmq006@gmail.com,
-        u.kleine-koenig@pengutronix.de, paul@crapouillou.net,
-        mihail.chindris@analog.com, gwendal@chromium.org,
-        andriy.shevchenko@linux.intel.com, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev
-Subject: Re: [RFT PATCH v3 10/10] iio: Don't silently expect attribute types
-Message-ID: <20221009183854.690e2780@jic23-huawei>
-In-Reply-To: <8ef99012-4959-a674-13c1-186b9c1c2cd4@gmail.com>
-References: <cover.1664782676.git.mazziesaccount@gmail.com>
-        <63f54787a684eb1232f1c5d275a09c786987fe4a.1664782676.git.mazziesaccount@gmail.com>
-        <c163203c-d87b-7e71-f582-964a99e37efb@microchip.com>
-        <8ef99012-4959-a674-13c1-186b9c1c2cd4@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sun, 9 Oct 2022 13:41:29 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA33B6305;
+        Sun,  9 Oct 2022 10:41:24 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id AC8BE18843E0;
+        Sun,  9 Oct 2022 17:41:22 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 9E18225052CE;
+        Sun,  9 Oct 2022 17:41:22 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 8C6E99EC0005; Sun,  9 Oct 2022 17:41:22 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id AC4469120FED;
+        Sun,  9 Oct 2022 17:41:21 +0000 (UTC)
+From:   "Hans J. Schultz" <netdev@kapio-technology.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org,
+        "Hans J. Schultz" <netdev@kapio-technology.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v7 net-next 0/9] Extend locked port feature with FDB locked flag (MAC-Auth/MAB)
+Date:   Sun,  9 Oct 2022 19:40:43 +0200
+Message-Id: <20221009174052.1927483-1-netdev@kapio-technology.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Organization: Westermo Network Technologies AB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Oct 2022 15:53:52 +0300
-Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+This patch set extends the locked port feature for devices
+that are behind a locked port, but do not have the ability to
+authorize themselves as a supplicant using IEEE 802.1X.
+Such devices can be printers, meters or anything related to
+fixed installations. Instead of 802.1X authorization, devices
+can get access based on their MAC addresses being whitelisted.
 
-> Hi Claudiu,
-> 
-> On 10/6/22 11:35, Claudiu.Beznea@microchip.com wrote:
-> > On 03.10.2022 11:13, Matti Vaittinen wrote:  
-> >> The iio_triggered_buffer_setup_ext() and the
-> >> devm_iio_kfifo_buffer_setup_ext() were changed by
-> >> commit 15097c7a1adc ("iio: buffer: wrap all buffer attributes into iio_dev_attr")
-> >> to silently expect that all attributes given in buffer_attrs array are
-> >> device-attributes. This expectation was not forced by the API - and some
-> >> drivers did register attributes created by IIO_CONST_ATTR().
-> >>
-> >> When using IIO_CONST_ATTRs the added attribute "wrapping" does not copy
-> >> the pointer to stored string constant and when the sysfs file is read the
-> >> kernel will access to invalid location.
-> >>
-> >> Change the function signatures to expect an array of iio_dev_attrs to
-> >> avoid similar errors in the future.
-> >>
-> >> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>  
-> > 
-> > Tested-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> > 
-> > on SAMA5D2
-> >   
-> 
-> Thanks a ton for the testing! I do _really_ appreciate it :) I am now 
-> slightly more confident regarding the fix here - and a lot more 
-> confident that we do have an actual bug (as you explained in the reply 
-> to the first RFT) :)
+For an authorization daemon to detect that a device is trying
+to get access through a locked port, the bridge will add the
+MAC address of the device to the FDB with a locked flag to it.
+Thus the authorization daemon can catch the FDB add event and
+check if the MAC address is in the whitelist and if so replace
+the FDB entry without the locked flag enabled, and thus open
+the port for the device.
 
-You analysis was sound, so I've long been convinced ;)
+This feature is known as MAC-Auth or MAC Authentication Bypass
+(MAB) in Cisco terminology, where the full MAB concept involves
+additional Cisco infrastructure for authorization. There is no
+real authentication process, as the MAC address of the device
+is the only input the authorization daemon, in the general
+case, has to base the decision if to unlock the port or not.
 
-Anyhow, one more coming through...
-AD4130 v9 patch had same issue and so will also need updating with this
-patch if it lands before yours.
+With this patch set, an implementation of the offloaded case is
+supplied for the mv88e6xxx driver. When a packet ingresses on
+a locked port, an ATU miss violation event will occur. When
+handling such ATU miss violation interrupts, the MAC address of
+the device is added to the FDB with a zero destination port
+vector (DPV) and the MAC address is communicated through the
+switchdev layer to the bridge, so that a FDB entry with the
+locked flag enabled can be added.
 
-Other than that static macro being ugly (which I can't improve on!)
-all looks good to me, but I'll let it sit a while longer. If nothing
-else I want to rebase the fixes-togreg tree on rc1 before putting the first
-part of this series on top of it then letting them soak in next for
-a few days,
+Log:
+        v3:     Added timers and lists in the driver (mv88e6xxx)
+                to keep track of and remove locked entries.
 
-Thanks,
+        v4:     Leave out enforcing a limit to the number of
+                locked entries in the bridge.
+                Removed the timers in the driver and use the
+                worker only. Add locked FDB flag to all drivers
+                using port_fdb_add() from the dsa api and let
+                all drivers ignore entries with this flag set.
+                Change how to get the ageing timeout of locked
+                entries. See global1_atu.c and switchdev.c.
+                Use struct mv88e6xxx_port for locked entries
+                variables instead of struct dsa_port.
 
-Jonathan
+        v5:     Added 'mab' flag to enable MAB/MacAuth feature,
+                in a similar way to the locked feature flag.
 
+                In these implementations for the mv88e6xxx, the
+                switchport must be configured with learning on.
 
-> 
-> Yours
-> 	-- Matti
-> 
+                To tell userspace about the behavior of the
+                locked entries in the driver, a 'blackhole'
+                FDB flag has been added, which locked FDB
+                entries coming from the driver gets. Also the
+                'sticky' flag comes with those locked entries,
+                as the drivers locked entries cannot roam.
+
+                Fixed issues with taking mutex locks, and added
+                a function to read the fid, that supports all
+                versions of the chipset family.
+
+        v6:     Added blackhole FDB flag instead of using sticky
+                flag, as the blackhole flag corresponds to the
+                behaviour of the zero-DPV locked entries in the
+                driver.
+
+                Userspace can add blackhole FDB entries with:
+                # bridge fdb add MAC dev br0 blackhole
+
+                Added FDB flags towards driver in DSA layer as u16.
+
+	v7:	Remove locked port and mab flags from DSA flags
+		inherit list as it messes with the learning
+		setting and those flags are not naturally meant
+		for enheriting, but should be set explicitly.
+
+		Fix blackhole implementation, selftests a.o small
+		fixes.
+
+Hans J. Schultz (9):
+  net: bridge: add locked entry fdb flag to extend locked port feature
+  net: bridge: add blackhole fdb entry flag
+  net: switchdev: add support for offloading of the FDB locked flag
+  net: switchdev: support offloading of the FDB blackhole flag
+  drivers: net: dsa: add fdb entry flags to drivers
+  net: dsa: mv88e6xxx: allow reading FID when handling ATU violations
+  net: dsa: mv88e6xxx: mac-auth/MAB implementation
+  net: dsa: mv88e6xxx: add blackhole ATU entries
+  selftests: forwarding: add test of MAC-Auth Bypass to locked port
+    tests
+
+ drivers/net/dsa/b53/b53_common.c              |  12 +-
+ drivers/net/dsa/b53/b53_priv.h                |   4 +-
+ drivers/net/dsa/hirschmann/hellcreek.c        |  12 +-
+ drivers/net/dsa/lan9303-core.c                |  12 +-
+ drivers/net/dsa/lantiq_gswip.c                |  12 +-
+ drivers/net/dsa/microchip/ksz9477.c           |   8 +-
+ drivers/net/dsa/microchip/ksz9477.h           |   8 +-
+ drivers/net/dsa/microchip/ksz_common.c        |  14 +-
+ drivers/net/dsa/mt7530.c                      |  12 +-
+ drivers/net/dsa/mv88e6xxx/Makefile            |   1 +
+ drivers/net/dsa/mv88e6xxx/chip.c              | 140 ++++++++-
+ drivers/net/dsa/mv88e6xxx/chip.h              |  19 ++
+ drivers/net/dsa/mv88e6xxx/global1.h           |   1 +
+ drivers/net/dsa/mv88e6xxx/global1_atu.c       |  72 ++++-
+ drivers/net/dsa/mv88e6xxx/port.c              |  15 +-
+ drivers/net/dsa/mv88e6xxx/port.h              |   6 +
+ drivers/net/dsa/mv88e6xxx/switchdev.c         | 284 ++++++++++++++++++
+ drivers/net/dsa/mv88e6xxx/switchdev.h         |  37 +++
+ drivers/net/dsa/ocelot/felix.c                |  12 +-
+ drivers/net/dsa/qca/qca8k-common.c            |  12 +-
+ drivers/net/dsa/qca/qca8k.h                   |   4 +-
+ drivers/net/dsa/sja1105/sja1105_main.c        |  18 +-
+ include/linux/if_bridge.h                     |   1 +
+ include/net/dsa.h                             |   7 +-
+ include/net/switchdev.h                       |   2 +
+ include/uapi/linux/if_link.h                  |   1 +
+ include/uapi/linux/neighbour.h                |  11 +-
+ net/bridge/br.c                               |   5 +-
+ net/bridge/br_fdb.c                           |  77 ++++-
+ net/bridge/br_input.c                         |  20 +-
+ net/bridge/br_netlink.c                       |  12 +-
+ net/bridge/br_private.h                       |   5 +-
+ net/bridge/br_switchdev.c                     |   4 +-
+ net/core/rtnetlink.c                          |   9 +
+ net/dsa/dsa_priv.h                            |  10 +-
+ net/dsa/port.c                                |  32 +-
+ net/dsa/slave.c                               |  16 +-
+ net/dsa/switch.c                              |  24 +-
+ .../selftests/drivers/net/dsa/Makefile        |   1 +
+ .../testing/selftests/net/forwarding/Makefile |   1 +
+ .../net/forwarding/bridge_blackhole_fdb.sh    | 134 +++++++++
+ .../net/forwarding/bridge_locked_port.sh      | 101 ++++++-
+ tools/testing/selftests/net/forwarding/lib.sh |  17 ++
+ 43 files changed, 1086 insertions(+), 119 deletions(-)
+ create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.c
+ create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.h
+ create mode 100755 tools/testing/selftests/net/forwarding/bridge_blackhole_fdb.sh
+
+-- 
+2.34.1
 
