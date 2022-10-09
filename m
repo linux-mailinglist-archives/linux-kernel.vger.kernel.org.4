@@ -2,46 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A415F8B54
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 14:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6823A5F8B55
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 14:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbiJIMuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 08:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
+        id S230132AbiJIMuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 08:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbiJIMt5 (ORCPT
+        with ESMTP id S230104AbiJIMuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 08:49:57 -0400
-Received: from mail.galaxycrow.de (mail.galaxycrow.de [162.55.242.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1F0F588
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 05:49:54 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 90A8D620F9;
-        Sun,  9 Oct 2022 14:49:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=galaxycrow.de;
-        s=dkim; t=1665319791;
-        h=from:subject:date:message-id:to:cc:mime-version:content-type:
-         in-reply-to:references; bh=g/8euF14dUerCEvnwg7lRGoe8cSv4brGLbH1WKfEZUQ=;
-        b=YyL1S3v9UPX9sTsy0IpwqWdW58b5Z2W/EA98dHHq3zIO6bC1CepBEFAqR/W/0DWtizYmXh
-        aY8zBfM9vaOSXrr0QAKt1VNpVrwVF9omF5UPuEi/sXPYUQ6OTtMRQAXket6ft6HI2JiedJ
-        XzS/Hz5aZeE/5TTTyaxQ8OwxO5PetRU/OBiHgjbsXz/Wgr8F+NGMn4UKuSD6kDiY7O4aVP
-        LUPCG+wchfPNdw3webS4qYYe2K7Wmz+CFNnExfAes7TXQbtM7RkdIaGRXBmwymYOS0/pBO
-        BZwbcB+bTWRDN9EdVXQ9NNYtwoqppt2oBvLGweHXm0m1nQSifqdJnArhwDJ9yA==
-From:   Cleo John <waterdev@galaxycrow.de>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Fixed styling in riscv ucontext header
-Date:   Sun, 09 Oct 2022 14:49:40 +0200
-Message-ID: <3473110.iIbC2pHGDl@watet-ms7b87>
-In-Reply-To: <Y0LB1oLuVIytgKI/@spud>
-References: <20221009120340.GA41243@watet-ms7b87> <1923489.PYKUYFuaPT@watet-ms7b87> <Y0LB1oLuVIytgKI/@spud>
+        Sun, 9 Oct 2022 08:50:00 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AA813E83
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 05:49:57 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id h185so1273050pgc.10
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 05:49:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P6urVoNrsZ3xK9TTBedmkBiGA8HxDh2mm40ljL3bOKM=;
+        b=pq/4RfUrUoPRHxYYsIO3qsins+f7aijUS9Smc+k9NuASiOHf3eAr8xByAnM9F9sDHy
+         BhEj38M3ifTSsNkOM0G+bHojP+PB/URgDCdwCbDrkZIexZYO7xCMJyvRgRXedwYNOm0Q
+         0M0qj5ChYI5gL23sjzZxyrt/o1Z/Nr/paJnO2oE19RN+LVz9UNjV3ebHzQLi4Uz26uZY
+         k4CXzkpv9udFFtlwXvjc/I+kMMhbN5/wD/Hy8H/G2fca+VvRQuqRQhVHmCgtn8M9LFO0
+         rzfUWm1XFzMvYjrxadTi13QNk6BRmyCsyY3QC3AzFLweOhPER4HAD2HWh3JrznT5AApg
+         jqzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=P6urVoNrsZ3xK9TTBedmkBiGA8HxDh2mm40ljL3bOKM=;
+        b=XmiYPweNkqzNSnP1AjbGHx6/u0KvEhJFi5Dpx1otKeGnlZ7fO8Z0jw+l589VcoTFAx
+         chx6nAOdm6DE73GkkmwxWzT1EC9PjDJSEwxKU4hbtR7s8o/Afqg0q1me8DMnO2PKz7vr
+         V7Vk6eJ5b+m8DKJq4WsaP272Di+yYShoaYMhy6cHL9tjqymCUZPGpEx2hWgAx9hldtm+
+         f1sP17cJWiEeIbrFdvT6qi9ZnrQZ5CW5oABCISq8HQD569Trr9Llu80WIzL0OfAcNh7M
+         gdY2fL9npL/BY5Qpj8IC7+VSvke1qaVLcRC4iWQhgdZfGHagVNLhnSM18j9CU63Gz9+T
+         Eh3Q==
+X-Gm-Message-State: ACrzQf15Vfq5eQ+bySEBptNBk5R9/T+0hE/mRwvIE8NwN94p+Vf+4UBe
+        UHqNnq+E0pKo7MHdP+MrzxnMsQ==
+X-Google-Smtp-Source: AMsMyM6TMEJOGeopAX1WHu2EFpazDEUo6VXOzDLqfIE+spUe2oERt7fQpueMN3Vy3k3bUkjIoAqyLA==
+X-Received: by 2002:a05:6a00:18a6:b0:563:4655:2966 with SMTP id x38-20020a056a0018a600b0056346552966mr1883772pfh.1.1665319796431;
+        Sun, 09 Oct 2022 05:49:56 -0700 (PDT)
+Received: from [10.3.156.122] ([63.216.146.184])
+        by smtp.gmail.com with ESMTPSA id n32-20020a634d60000000b0044e8d66ae05sm4537244pgl.22.2022.10.09.05.49.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Oct 2022 05:49:55 -0700 (PDT)
+Message-ID: <672939d2-e556-f9a5-d0f6-3f0b73edf0c9@bytedance.com>
+Date:   Sun, 9 Oct 2022 20:49:49 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart9019818.CDJkKcVGEf"; micalg="pgp-sha512"; protocol="application/pgp-signature"
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.0
+Subject: Re: [External] Re: [RFC PATCH 3/5] cachefiles: resend an open request
+ if the read request's object is closed
+To:     JeffleXu <jefflexu@linux.alibaba.com>, dhowells@redhat.com,
+        xiang@kernel.org
+Cc:     linux-cachefs@redhat.com, linux-erofs@lists.ozlabs.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com
+References: <20220818135204.49878-1-zhujia.zj@bytedance.com>
+ <20220818135204.49878-4-zhujia.zj@bytedance.com>
+ <206e172c-5ba0-1233-f46d-edb828df53ad@linux.alibaba.com>
+From:   Jia Zhu <zhujia.zj@bytedance.com>
+In-Reply-To: <206e172c-5ba0-1233-f46d-edb828df53ad@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,130 +78,260 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart9019818.CDJkKcVGEf
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
-From: Cleo John <waterdev@galaxycrow.de>
-To: Conor Dooley <conor@kernel.org>
-Subject: Re: [PATCH] Fixed styling in riscv ucontext header
-Date: Sun, 09 Oct 2022 14:49:40 +0200
-Message-ID: <3473110.iIbC2pHGDl@watet-ms7b87>
-In-Reply-To: <Y0LB1oLuVIytgKI/@spud>
-MIME-Version: 1.0
 
-On Sun, 9. October 2022, 14:43:02 CEST, Conor Dooley wrote:
-> On Sun, Oct 09, 2022 at 02:38:43PM +0200, Cleo John wrote:
-> > Hey Connor,
-> > 
-> > On Sun, 9. October 2022, 14:14:52 CEST, Conor Dooley wrote:
-> > > Hey Cleo,
-> > > 
-> > > On Sun, Oct 09, 2022 at 02:03:40PM +0200, Cleo John wrote:
-> > > > Fixed styling in riscv ucontext header
-> > > 
-> > > This should probably be "riscv: fix styling..."
-> > 
-> > okay yea, I will change this in a second patch.
-> > 
-> > > > This patch changes the two comments in ucontext.h by getting them up
-> > > > to
-> > > > the cody style proposed by torwalds.
-> > > 
-> > > s/This patch changes/Change
-> > > 
-> > > Looks like some typos here too & your lines need to be wrapped at 72
-> > > characters for commit messages. git usually enforces that automatically
-> > > when you do a `git commit`.
-> > 
-> > I will wrap the lines, but where are the typos if I may ask?
+
+在 2022/10/8 17:05, JeffleXu 写道:
 > 
-> "cody style" & s/w/v/ in Linus' name.
 > 
-
-okay, this is.. embarrassing.
-
-> > > > In my opinion this also improves the readability so I think this is a
-> > > > useful change to do. Please also tell me if you have a different
-> > > > opinion.
-> > > 
-> > > FYI commentary on the patch should go below the ---.
-> > 
-> > will note
-> > 
-> > > > Signed-off-by: Cleo John <waterdev@galaxycrow.de>
-> > > > ---
-> > > > 
-> > > >  arch/riscv/include/uapi/asm/ucontext.h | 6 ++++--
-> > > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > > > 
-> > > > diff --git a/arch/riscv/include/uapi/asm/ucontext.h
-> > > > b/arch/riscv/include/uapi/asm/ucontext.h index
-> > > > 44eb993950e5..0cd6f8616985
-> > > > 100644
-> > > > --- a/arch/riscv/include/uapi/asm/ucontext.h
-> > > > +++ b/arch/riscv/include/uapi/asm/ucontext.h
-> > > > @@ -18,7 +18,8 @@ struct ucontext {
-> > > > 
-> > > >  	/* There's some padding here to allow sigset_t to be expanded in the
-> > 
-> > > Why fix the closing comment but leave the opening ones incorrect?
-> > > 
-> > > Thanks,
-> > > Conor.
-> > 
-> > I mixed the code style up with the one in net/ -will fix
-> > 
-> > Thanks,
-> > Cleo.
-> > 
-> > > >  	 * future.  Though this is unlikely, other architectures put uc_sigmask 
-> > > >  	 * at the end of this structure and explicitly state it can be
-> > > > 
-> > > > -	 * expanded, so we didn't want to box ourselves in here. */
-> > > > +	 * expanded, so we didn't want to box ourselves in here.
-> > > > +	 */
-> > > > 
-> > > >  	__u8		  __unused[1024 / 8 - sizeof(sigset_t)];
-> > > >  	/* We can't put uc_sigmask at the end of this structure because we need
-> > > >  	 * to be able to expand sigcontext in the future.  For example, the
-> > > > @@ -27,7 +28,8 @@ struct ucontext {
-> > > > 
-> > > >  	 * ucontext, so we're putting this at the end in order to allowb for
-> > > >  	 * infinite extensibility.  Since we know this will be extended and we
-> > > >  	 * assume sigset_t won't be extended an extreme amount, we're
-> > > > 
-> > > > -	 * prioritizing this. */
-> > > > +	 * prioritizing this.
-> > > > +	 */
-> > > > 
-> > > >  	struct sigcontext uc_mcontext;
-> > > >  
-> > > >  };
-
-
---nextPart9019818.CDJkKcVGEf
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE2nzORJA3JEiNR015AnApHozuxisFAmNCw2QACgkQAnApHozu
-xivgeA/8CEbHVKvn7Ale6zxrrgmkXPz+lpaN2tndBSoaje/hzS2U3JMQdZXbwv3h
-40CmbX0lLslwCZVl0wysDMkdEnjZSdqiIOaFJOrkrvp1YnVU9G7WkdnIqgxJr8Qu
-KuJXgBGp2XvorE3bbP03idG2UYfpMJnHbN1kJ8/fOkEc3Q6b0BCEHpHKGLZYV7fO
-Me6ipbi4oHtLBK91MKzp+LC71EON0+Ih50P+EPcLlO31wWeck8lh8ICXkd5dFWPQ
-GC7Jf5VkkbV1CgjkOFqitsLYcUzdc+02WypHZ5+TjioEux/263V/25pJs+zhg1pS
-KhFfXDrPOEdOHgVIkG1S358M4tOCWj/QZOZ5lFleDkuhrGpXAY2j1LZMbOE0zcVn
-fmAWbg1POSO9/ISiBr7diuPk9Vg+GvoARUR8GTiTDFGXGaJ0YV7Y7T/eQJdtaqff
-FODFSjMkzLMZEnog574ZgY7BxP4RELElU1fKp+b2c2Qom0w2eU9j12pplxcELq+3
-4jGe6R1L5If8EFuvMUJdDo8YjpBc7sU6YCoojf70SGMudJEtrI8RwGti+RzpIYMd
-76IXpjqNpWwMVikpGYfusT9fI3XLm7THh2KSlyl1LYhB07mY7AsGjsp1bUMs6FqH
-yM9IxaqIlyZR4vHaz7rE0+TiO66IWGSbYtOq0w+/AlmMPHy70s0=
-=HuMm
------END PGP SIGNATURE-----
-
---nextPart9019818.CDJkKcVGEf--
-
-
-
+> On 8/18/22 9:52 PM, Jia Zhu wrote:
+>> When an anonymous fd is closed by user daemon, if there is a new read
+>> request for this file comes up, the anonymous fd should be re-opened
+>> to handle that read request rather than fail it directly.
+>>
+>> 1. Introduce reopening state for objects that are closed but have
+>>     inflight/subsequent read requests.
+>> 2. No longer flush READ requests but only CLOSE requests when anonymous
+>>     fd is closed.
+>> 3. Enqueue the reopen work to workqueue, thus user daemon could get rid
+>>     of daemon_read context and handle that request smoothly. Otherwise,
+>>     the user daemon will send a reopen request and wait for itself to
+>>     process the request.
+>>
+>> Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
+>> Reviewed-by: Xin Yin <yinxin.x@bytedance.com>
+>> ---
+>>   fs/cachefiles/internal.h |  3 ++
+>>   fs/cachefiles/ondemand.c | 79 +++++++++++++++++++++++++++-------------
+>>   2 files changed, 56 insertions(+), 26 deletions(-)
+>>
+>> diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
+>> index cdf4ec781933..66bbd4f1d22a 100644
+>> --- a/fs/cachefiles/internal.h
+>> +++ b/fs/cachefiles/internal.h
+>> @@ -48,9 +48,11 @@ struct cachefiles_volume {
+>>   enum cachefiles_object_state {
+>>   	CACHEFILES_ONDEMAND_OBJSTATE_close, /* Anonymous fd closed by daemon or initial state */
+>>   	CACHEFILES_ONDEMAND_OBJSTATE_open, /* Anonymous fd associated with object is available */
+>> +	CACHEFILES_ONDEMAND_OBJSTATE_reopening, /* Object that was closed and is being reopened. */
+>>   };
+>>   
+>>   struct cachefiles_ondemand_info {
+>> +	struct work_struct		work;
+>>   	int				ondemand_id;
+>>   	enum cachefiles_object_state	state;
+>>   	struct cachefiles_object	*object;
+>> @@ -341,6 +343,7 @@ cachefiles_ondemand_set_object_##_state(struct cachefiles_object *object) \
+>>   
+>>   CACHEFILES_OBJECT_STATE_FUNCS(open);
+>>   CACHEFILES_OBJECT_STATE_FUNCS(close);
+>> +CACHEFILES_OBJECT_STATE_FUNCS(reopening);
+>>   #else
+>>   #define CACHEFILES_ONDEMAND_OBJINFO(object)	NULL
+>>   
+>> diff --git a/fs/cachefiles/ondemand.c b/fs/cachefiles/ondemand.c
+>> index f51266554e4d..79ffb19380cd 100644
+>> --- a/fs/cachefiles/ondemand.c
+>> +++ b/fs/cachefiles/ondemand.c
+>> @@ -18,14 +18,10 @@ static int cachefiles_ondemand_fd_release(struct inode *inode,
+>>   	info->ondemand_id = CACHEFILES_ONDEMAND_ID_CLOSED;
+>>   	cachefiles_ondemand_set_object_close(object);
+>>   
+>> -	/*
+>> -	 * Flush all pending READ requests since their completion depends on
+>> -	 * anon_fd.
+>> -	 */
+>> -	xas_for_each(&xas, req, ULONG_MAX) {
+>> +	/* Only flush CACHEFILES_REQ_NEW marked req to avoid race with daemon_read */
+>> +	xas_for_each_marked(&xas, req, ULONG_MAX, CACHEFILES_REQ_NEW) {
+> 
+> Could you please add a more detailed comment here, explaing why flushing
+> CLOSE requests when anony fd gets closed is needed, and why the original
+> xas_for_each() would race with daemon_read()? There are some refs at [1]
+> and [2].
+> 
+> [1]
+> https://hackmd.io/YNsTQqLcQYOZ4gAlFWrNcA#flush-CLOSE-requests-when-anon-fd-is-closed
+> [2]
+> https://hackmd.io/YNsTQqLcQYOZ4gAlFWrNcA#race-between-readingflush-requests
+> 
+> The sequence chart is welcome to be added into the comment to explain
+> the race, or the code will be difficult to understand since the subtlety
+> of the race.
+OK, I'd like to do that.
+> 
+> 
+>>   		if (req->msg.object_id == object_id &&
+>> -		    req->msg.opcode == CACHEFILES_OP_READ) {
+>> -			req->error = -EIO;
+>> +		    req->msg.opcode == CACHEFILES_OP_CLOSE) {
+>>   			complete(&req->done);
+>>   			xas_store(&xas, NULL);
+>>   		}
+>> @@ -175,6 +171,7 @@ int cachefiles_ondemand_copen(struct cachefiles_cache *cache, char *args)
+>>   	trace_cachefiles_ondemand_copen(req->object, id, size);
+>>   
+>>   	cachefiles_ondemand_set_object_open(req->object);
+>> +	wake_up_all(&cache->daemon_pollwq);
+>>   
+>>   out:
+>>   	complete(&req->done);
+>> @@ -234,6 +231,14 @@ static int cachefiles_ondemand_get_fd(struct cachefiles_req *req)
+>>   	return ret;
+>>   }
+>>   
+>> +static void ondemand_object_worker(struct work_struct *work)
+>> +{
+>> +	struct cachefiles_object *object =
+>> +		((struct cachefiles_ondemand_info *)work)->object;
+>> +
+>> +	cachefiles_ondemand_init_object(object);
+>> +}
+>> +
+>>   ssize_t cachefiles_ondemand_daemon_read(struct cachefiles_cache *cache,
+>>   					char __user *_buffer, size_t buflen)
+>>   {
+>> @@ -249,7 +254,27 @@ ssize_t cachefiles_ondemand_daemon_read(struct cachefiles_cache *cache,
+>>   	 * requests from being processed repeatedly.
+>>   	 */
+>>   	xa_lock(&cache->reqs);
+>> -	req = xas_find_marked(&xas, UINT_MAX, CACHEFILES_REQ_NEW);
+>> +	xas_for_each_marked(&xas, req, UINT_MAX, CACHEFILES_REQ_NEW) {
+>> +		/*
+>> +		 * Reopen the closed object with associated read request.
+>> +		 * Skip read requests whose related object are reopening.
+>> +		 */
+>> +		if (req->msg.opcode == CACHEFILES_OP_READ) {
+>> +			ret = cmpxchg(&CACHEFILES_ONDEMAND_OBJINFO(req->object)->state,
+>> +						  CACHEFILES_ONDEMAND_OBJSTATE_close,
+>> +						  CACHEFILES_ONDEMAND_OBJSTATE_reopening);
+>> +			if (ret == CACHEFILES_ONDEMAND_OBJSTATE_close) {
+>> +				INIT_WORK(&CACHEFILES_ONDEMAND_OBJINFO(req->object)->work,
+>> +						ondemand_object_worker);
+> 
+> How about initializing @work in cachefiles_ondemand_init_obj_info(), so
+> that the work_struct of each object only needs to be initialized once?
+> 
+SGTM.
+> 
+>> +				queue_work(fscache_wq,
+>> +					&CACHEFILES_ONDEMAND_OBJINFO(req->object)->work);
+>> +				continue;
+>> +			} else if (ret == CACHEFILES_ONDEMAND_OBJSTATE_reopening) {
+>> +				continue;
+>> +			}
+>> +		}
+>> +		break;
+>> +	}
+>>   	if (!req) {
+>>   		xa_unlock(&cache->reqs);
+>>   		return 0;
+>> @@ -267,14 +292,18 @@ ssize_t cachefiles_ondemand_daemon_read(struct cachefiles_cache *cache,
+>>   	xa_unlock(&cache->reqs);
+>>   
+>>   	id = xas.xa_index;
+>> -	msg->msg_id = id;
+>>   
+>>   	if (msg->opcode == CACHEFILES_OP_OPEN) {
+>>   		ret = cachefiles_ondemand_get_fd(req);
+>> -		if (ret)
+>> +		if (ret) {
+>> +			cachefiles_ondemand_set_object_close(req->object);
+>>   			goto error;
+>> +		}
+>>   	}
+>>   
+>> +	msg->msg_id = id;
+>> +	msg->object_id = CACHEFILES_ONDEMAND_OBJINFO(req->object)->ondemand_id;
+>> +
+>>   	if (copy_to_user(_buffer, msg, n) != 0) {
+>>   		ret = -EFAULT;
+>>   		goto err_put_fd;
+>> @@ -307,19 +336,23 @@ static int cachefiles_ondemand_send_req(struct cachefiles_object *object,
+>>   					void *private)
+>>   {
+>>   	struct cachefiles_cache *cache = object->volume->cache;
+>> -	struct cachefiles_req *req;
+>> +	struct cachefiles_req *req = NULL;
+>>   	XA_STATE(xas, &cache->reqs, 0);
+>>   	int ret;
+>>   
+>>   	if (!test_bit(CACHEFILES_ONDEMAND_MODE, &cache->flags))
+>>   		return 0;
+>>   
+>> -	if (test_bit(CACHEFILES_DEAD, &cache->flags))
+>> -		return -EIO;
+>> +	if (test_bit(CACHEFILES_DEAD, &cache->flags)) {
+>> +		ret = -EIO;
+>> +		goto out;
+>> +	}
+>>   
+>>   	req = kzalloc(sizeof(*req) + data_len, GFP_KERNEL);
+>> -	if (!req)
+>> -		return -ENOMEM;
+>> +	if (!req) {
+>> +		ret = -ENOMEM;
+>> +		goto out;
+>> +	}
+>>   
+>>   	req->object = object;
+>>   	init_completion(&req->done);
+>> @@ -357,7 +390,7 @@ static int cachefiles_ondemand_send_req(struct cachefiles_object *object,
+>>   		/* coupled with the barrier in cachefiles_flush_reqs() */
+>>   		smp_mb();
+>>   
+>> -		if (opcode != CACHEFILES_OP_OPEN &&
+>> +		if (opcode == CACHEFILES_OP_CLOSE &&
+>>   			!cachefiles_ondemand_object_is_open(object)) {
+>>   			WARN_ON_ONCE(CACHEFILES_ONDEMAND_OBJINFO(object)->ondemand_id == 0);
+>>   			xas_unlock(&xas);
+>> @@ -382,8 +415,12 @@ static int cachefiles_ondemand_send_req(struct cachefiles_object *object,
+>>   	wake_up_all(&cache->daemon_pollwq);
+>>   	wait_for_completion(&req->done);
+>>   	ret = req->error;
+>> +	kfree(req);
+>> +	return ret;
+>>   out:
+>>   	kfree(req);
+>> +	if (opcode == CACHEFILES_OP_OPEN)
+>> +		cachefiles_ondemand_set_object_close(req->object);
+> 
+> Could you please add a comment here explaining why we need to set the
+> object state back to CLOSE state for OPEN (espectially reopening)
+> requests when error occured, and why we only set it back to CLOSE state
+> when error occured before the anony fd gets initialized? (That's because
+> when the error occures after the anony fd has been initialized, the
+> object will be reset to CLOSE state through
+> cachefiles_ondemand_fd_release() triggered by close_fd().) Or the code
+> is quite difficult to comprehend.
+> 
+Thanks for the suggestion. I'll do it.
+> 
+>>   	return ret;
+>>   }
+>>   
+>> @@ -435,7 +472,6 @@ static int cachefiles_ondemand_init_close_req(struct cachefiles_req *req,
+>>   	if (!cachefiles_ondemand_object_is_open(object))
+>>   		return -ENOENT;
+>>   
+>> -	req->msg.object_id = CACHEFILES_ONDEMAND_OBJINFO(object)->ondemand_id;
+>>   	trace_cachefiles_ondemand_close(object, &req->msg);
+>>   	return 0;
+>>   }
+>> @@ -451,16 +487,7 @@ static int cachefiles_ondemand_init_read_req(struct cachefiles_req *req,
+>>   	struct cachefiles_object *object = req->object;
+>>   	struct cachefiles_read *load = (void *)req->msg.data;
+>>   	struct cachefiles_read_ctx *read_ctx = private;
+>> -	int object_id = CACHEFILES_ONDEMAND_OBJINFO(object)->ondemand_id;
+>>   
+>> -	/* Stop enqueuing requests when daemon has closed anon_fd. */
+>> -	if (!cachefiles_ondemand_object_is_open(object)) {
+>> -		WARN_ON_ONCE(object_id == 0);
+>> -		pr_info_once("READ: anonymous fd closed prematurely.\n");
+>> -		return -EIO;
+>> -	}
+>> -
+>> -	req->msg.object_id = object_id;
+>>   	load->off = read_ctx->off;
+>>   	load->len = read_ctx->len;
+>>   	trace_cachefiles_ondemand_read(object, &req->msg, load);
+> 
