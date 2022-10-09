@@ -2,124 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8985F8CFD
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 20:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 818D85F8CC6
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 20:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbiJISPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 14:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36190 "EHLO
+        id S230150AbiJISNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 14:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbiJISOj (ORCPT
+        with ESMTP id S229570AbiJISNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 14:14:39 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27B625585;
-        Sun,  9 Oct 2022 11:14:29 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id e10-20020a05600c4e4a00b003b4eff4ab2cso7314849wmq.4;
-        Sun, 09 Oct 2022 11:14:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=neMO/Xv6+/M8nxm7VBGkm586LqlZgH70RZd7S709kIk=;
-        b=KwDJ6RXnWX8FBRYCwyMKFMioyd7aKSjSZbTr0pdA8dRLrBqv/LVTf4eFz9VdbZgHPY
-         aNhWuOV0ExDv8xAszdAjmAsxQCVuTrA38c1sFTxo2lDeCIuPh4dpND/7//rqn6UyLSpb
-         DjjgRZxJhCT/y9Q3iob9eRxg0ZxokdBp9fSxFICfcVucyh5YSFhDTUuSFo21quWKt1jB
-         +PWCjwA4gqNurBrAVEoxl2C6wAjgwNBOhf9kSlg0btd00ASzAnkyZxYNS0kFbBZAcq1n
-         eG1y9/oiiCL6D+eN/lJreruvvJQgnZw9EdOx5hq7fj/6GqbBesBnk/KnFbujzqx8HU0o
-         aP1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=neMO/Xv6+/M8nxm7VBGkm586LqlZgH70RZd7S709kIk=;
-        b=uPv61sl3ESESKo0G/Kuf7inZhkf6D4tPWQ08kLv+zNrvCh/PZxTi/R5wsxg4meYNLE
-         Tgl53s8sTpq6iTliRzMG3NNTVIrPZn7ge2RfHko4dpmjy5vaQX+uwagWAAiMyHOONuYA
-         wVpHWbCwk3ycWLrfLbf07cNKhFH/dP6crf1dmmXGiAxqbf21uvocXq6f7j/6SxiEC5pC
-         VW0QU9eZ7YbEg/HLjUmCIU/1NHFpXUloauufcW3zO+EwmLbHoxE0qrDYhjJzfmCOVks5
-         SxJlzFVyGZowPBIack/H6U46MVv4xTGZLGINnHnfR9aqvE9HZvm7e8XRfhdnW5IrOw7l
-         csEw==
-X-Gm-Message-State: ACrzQf296hA53wF7eiZT3dEe5qbLtiiyn4B/IEcOus7HJ4xsyaepraAg
-        Rico78UWZXZiC/7x6/VUCAI=
-X-Google-Smtp-Source: AMsMyM7HqocwrUtk98mJbiSx2PpDDdWbQLQCvcQ2JoyZhMGa1/R6iNMH5wbDT1jn7fOGaTTnYA5n8A==
-X-Received: by 2002:a05:600c:2104:b0:3c6:b7f0:cfd0 with SMTP id u4-20020a05600c210400b003c6b7f0cfd0mr310489wml.128.1665339267904;
-        Sun, 09 Oct 2022 11:14:27 -0700 (PDT)
-Received: from hp-power-15.localdomain (mm-190-37-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.37.190])
-        by smtp.gmail.com with ESMTPSA id k16-20020adfe8d0000000b0022cd0c8c696sm6860581wrn.103.2022.10.09.11.14.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 11:14:27 -0700 (PDT)
-From:   Siarhei Volkau <lis8215@gmail.com>
-Cc:     Siarhei Volkau <lis8215@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: [PATCH 6/8] dmaengine: JZ4780: Add support for the JZ4755.
-Date:   Sun,  9 Oct 2022 21:13:35 +0300
-Message-Id: <20221009181338.2896660-7-lis8215@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221009181338.2896660-1-lis8215@gmail.com>
-References: <20221009181338.2896660-1-lis8215@gmail.com>
+        Sun, 9 Oct 2022 14:13:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B60023BF4;
+        Sun,  9 Oct 2022 11:13:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66AD760C38;
+        Sun,  9 Oct 2022 18:13:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11CD3C433D6;
+        Sun,  9 Oct 2022 18:13:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665339219;
+        bh=GQErVvLD+yTmsxHoJjsw2fsJ8p3oi70DsLzpF/U9rBM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=BZ7soU0Ul+4LmuAFEufAvMqTyV44vzFaHEMLctzrZZApuIySJSli2RZmwSnJqKvFq
+         toZV6V3+cQI297dtpGMLTk+RnXbWsSSMpE5fo3Hj+dj3Q2oDff/SusUqWVvcB4ZaWY
+         iJ6Mwe2WYPEn25F085AVMOuK0D8QyfysB3xHMeK8G6h6jXdzWWLXgx8N2mCIKLmVY+
+         DNC+ZYou661ZGgMYG2AH8sPf3wxmkldq3N3F25SvbRWy8bLe2nyyZk1Iw6GKtt040j
+         EAk3Mas69AQynhRmWoS/U4JCH5jlemOG8tDfFt7qeQuhGXaG0wVMYrjMy3QoC9BjI8
+         79FegUVsWeSaQ==
+Date:   Sun, 9 Oct 2022 20:13:35 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c-for-6.1-rc1-batch2
+Message-ID: <Y0MPT6Mso6cD0mfN@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Ru4GaAzhnxfo7JvS"
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The JZ4755 has 4 DMA channels per DMA unit, two idential DMA units.
 
-The JZ4755 has the similar DMA engine to JZ4725b, so I assume it has the
-same bug as JZ4725b, see commit a40c94be2336.
+--Ru4GaAzhnxfo7JvS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
----
- drivers/dma/dma-jz4780.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+The following changes since commit 2bca25eaeba6190efbfcb38ed169bd7ee43b5aaf:
 
-diff --git a/drivers/dma/dma-jz4780.c b/drivers/dma/dma-jz4780.c
-index 2a483802d..9c1a6e9a9 100644
---- a/drivers/dma/dma-jz4780.c
-+++ b/drivers/dma/dma-jz4780.c
-@@ -1038,6 +1038,13 @@ static const struct jz4780_dma_soc_data jz4725b_dma_soc_data = {
- 		 JZ_SOC_DATA_BREAK_LINKS,
- };
- 
-+static const struct jz4780_dma_soc_data jz4755_dma_soc_data = {
-+	.nb_channels = 4,
-+	.transfer_ord_max = 5,
-+	.flags = JZ_SOC_DATA_PER_CHAN_PM | JZ_SOC_DATA_NO_DCKES_DCKEC |
-+		 JZ_SOC_DATA_BREAK_LINKS,
-+};
-+
- static const struct jz4780_dma_soc_data jz4760_dma_soc_data = {
- 	.nb_channels = 5,
- 	.transfer_ord_max = 6,
-@@ -1101,6 +1108,7 @@ static const struct jz4780_dma_soc_data x1830_dma_soc_data = {
- static const struct of_device_id jz4780_dma_dt_match[] = {
- 	{ .compatible = "ingenic,jz4740-dma", .data = &jz4740_dma_soc_data },
- 	{ .compatible = "ingenic,jz4725b-dma", .data = &jz4725b_dma_soc_data },
-+	{ .compatible = "ingenic,jz4755-dma", .data = &jz4755_dma_soc_data },
- 	{ .compatible = "ingenic,jz4760-dma", .data = &jz4760_dma_soc_data },
- 	{ .compatible = "ingenic,jz4760-mdma", .data = &jz4760_mdma_soc_data },
- 	{ .compatible = "ingenic,jz4760-bdma", .data = &jz4760_bdma_soc_data },
--- 
-2.36.1
+  Merge tag 'spi-v6.1' of git://git.kernel.org/pub/scm/linux/kernel/git/bro=
+onie/spi (2022-10-04 19:36:53 -0700)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-=
+6.1-rc1-batch2
+
+for you to fetch changes up to fd66bd74afe880de4f008f96a795fedee887ff44:
+
+  i2c: aspeed: Assert NAK when slave is busy (2022-10-05 21:06:46 +0200)
+
+----------------------------------------------------------------
+- correct a variable type in the new pci1xxxx driver
+- add a new SoC to the qcom-cci driver
+- fix an issue with the designware driver which now got enough testing
+- the aspeed driver handles now busy target backends better
+
+----------------------------------------------------------------
+Colin Ian King (1):
+      i2c: microchip: pci1xxxx: Fix comparison of -EPERM against an unsigne=
+d variable
+
+Jarkko Nikula (1):
+      i2c: designware: Fix handling of real but unexpected device interrupts
+
+Matti Lehtim=C3=A4ki (2):
+      dt-bindings: i2c: qcom,i2c-cci: Document MSM8226 compatible
+      dt-bindings: i2c: qcom,i2c-cci: Document clocks for MSM8974
+
+Quan Nguyen (1):
+      i2c: aspeed: Assert NAK when slave is busy
+
+Rayyan Ansari (1):
+      i2c: qcom-cci: Add MSM8226 compatible
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      (Rev.) i2c: designware: Fix handling of real but unexpected device in=
+terrupts
+
+Krzysztof Kozlowski (2):
+      (Rev.) dt-bindings: i2c: qcom,i2c-cci: Document clocks for MSM8974
+      (Rev.) dt-bindings: i2c: qcom,i2c-cci: Document MSM8226 compatible
+
+Loic Poulain (1):
+      (Rev.) i2c: qcom-cci: Add MSM8226 compatible
+
+ .../devicetree/bindings/i2c/qcom,i2c-cci.yaml      | 23 ++++++++++++++++++=
+++--
+ drivers/i2c/busses/i2c-aspeed.c                    |  9 ++++++++-
+ drivers/i2c/busses/i2c-designware-core.h           |  7 +++++--
+ drivers/i2c/busses/i2c-designware-master.c         | 13 ++++++++++++
+ drivers/i2c/busses/i2c-mchp-pci1xxxx.c             |  2 +-
+ drivers/i2c/busses/i2c-qcom-cci.c                  |  1 +
+ 6 files changed, 49 insertions(+), 6 deletions(-)
+
+--Ru4GaAzhnxfo7JvS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNDD0sACgkQFA3kzBSg
+KbY3yA/+Kf9xLzPPyXq63N4x/FcmGGarGV+acLY2wC/Gn8bZO275VXbx8JpmqY61
+XzyUhr3enJp9SAlBo2e2oFJz+9wGissvqa6lmKuLH4XrnI837s92DtiLyT+9GZnP
+EuzILJ6m9Fh5fmK4RskMiakg4ksnqbwNDLJ/aDTac8QTrjH2PtPPwVR5WkFY01HQ
+ezUrb1UPvFiDvuCVFhRpJEKlAX+Cj5E2LgJocqSYp0Mb4xjr2IPXhlJMDgXkLJ7m
+maOe3hi8AOlvo8KWTl+CaH/8KRXIb0DmDsPVL4Xm+FBF+RM3TQkDByqAxpBS2ZDx
+S0LlyiigDXkb56iTouyCHsA8yRWGMVD6mcHzoR6O9LiqW88d0o2CZWBCt1AtUeIF
+hf5gPfaDb/+Ygpks4UUUQvZrHuA8hzYRRom8J4/f0UwQtIEMRuN8xPy0d+Ud4cc7
+UmRCnrLSw2lK86AuAw4XuonZbjiLtO7mV6YVQS3q25mx3y00iJrSzeVGHPdm3eXV
+9ITCfEaMmgQXTEvkXaYfbClcK4F8FEB0UnC5qfhneKng8/9JpTe5T/z6ziQgdkcA
+Qam5n9yOLP+o6X1uBjTxD0s+76/UUHxi6ZESJdB6EniU9Ntu1bq8XBmchjiiKZby
+JpAwZhP3RhuiLub3FWT/c9uWPgmyYdocg5wdqdvoGntl5lH60OM=
+=aCZx
+-----END PGP SIGNATURE-----
+
+--Ru4GaAzhnxfo7JvS--
