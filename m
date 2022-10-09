@@ -2,132 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB445F8DEF
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 22:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C06905F8DF4
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 22:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbiJIUqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 16:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38348 "EHLO
+        id S230086AbiJIUvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 16:51:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiJIUqh (ORCPT
+        with ESMTP id S229607AbiJIUvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 16:46:37 -0400
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC5B248C0;
-        Sun,  9 Oct 2022 13:46:36 -0700 (PDT)
-Received: by mail-wr1-f49.google.com with SMTP id a10so14380113wrm.12;
-        Sun, 09 Oct 2022 13:46:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8aw+71CytpGk0aa1LMaSDXWBT629GJafQ2n8JcZFAks=;
-        b=6lvs7B/Su132jEE0rPmbnBcanNWUHHxX2X/BGc5JxgA0Mtm5IlToIWfm2BB7nhjVd5
-         N7fdP1tqYE4wQpy6nVZTL2bl6fI79MLYmRBs5WS3GgSJ6/bWha9RkU/qNKADtUD01t6O
-         uiBWdgmqOIVsfQbobwbkdWGC6dc/jcHTJdW4haaD4Ym+2Yx3WsGhUnFgNpVaklNgJ/+N
-         PBO9nQYTQyIbGNWbFcjgAF5Ae5WjsCdYO7bd2SaRTJ6Y9gXyVsxchSJPMRE/v5CFaI7I
-         ErH8IDyVmih8Pe12Fc5Jb7jV1PVmKrOUjM5W05EKuZzwyzsCTI5gTJyMzSpOaYwCC0dY
-         NAyg==
-X-Gm-Message-State: ACrzQf0HC59NlMprFUjlFUn3j+yGUL42dx3sx4ikTFqFgrfGTM4HwYKk
-        1FOQOPIajVS5CTCByDBRj/Y=
-X-Google-Smtp-Source: AMsMyM4Mt2Uwocpva1GM/HMR8gajgdLfsws6PMbLFJB1tZVyRvvylo8SP/uCTea7NMgq6iBpYOwnFg==
-X-Received: by 2002:a05:6000:170b:b0:22e:44d0:6bae with SMTP id n11-20020a056000170b00b0022e44d06baemr9347156wrc.99.1665348395186;
-        Sun, 09 Oct 2022 13:46:35 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id q18-20020a05600c2e5200b003c65c9a36dfsm1767119wmf.48.2022.10.09.13.46.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 13:46:34 -0700 (PDT)
-Date:   Sun, 9 Oct 2022 20:46:33 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Zhao Liu <zhao1.liu@linux.intel.com>
-Cc:     Wei Liu <wei.liu@kernel.org>, Ira Weiny <ira.weiny@intel.com>,
-        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
-        "K . Y . Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>
-Subject: Re: [PATCH] x86/hyperv: Replace kmap() with kmap_local_page()
-Message-ID: <Y0MzKa1nzfP+mhtX@liuwe-devbox-debian-v2>
-References: <20220928095640.626350-1-zhao1.liu@linux.intel.com>
- <YzRVaJA0EyfcVisW@liuwe-devbox-debian-v2>
- <YzqiSK/s/oExlSrb@liuwe-devbox-debian-v2>
- <Yz7kd9oTs2Zn4YD3@liuzhao-OptiPlex-7080>
+        Sun, 9 Oct 2022 16:51:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15EF71A38E;
+        Sun,  9 Oct 2022 13:51:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 994AF60C85;
+        Sun,  9 Oct 2022 20:51:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22813C433C1;
+        Sun,  9 Oct 2022 20:51:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665348698;
+        bh=/sSVDk38i6IX0EUR76GfCtC4FXi07BSGvo1EG+db8yY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VXRPv3fbB+GLqxKnFXs8uGkTsxWYcorn+APxB1sd/p1vfx+0E0F8KQ0q93tCRIuNi
+         hsnvo5RGdZZf/gG/YL/GkOea25i/TB6IfYp+tFBrDc3ZXuUZhtP7qliK4I+RGcSVHc
+         eaSWgZm315UFMEYWLbCGXpKNG5wP/mJiHdNJ87oHruSDwqxI3kaexd89uz+J64k+95
+         XGrGSOzNTLZbaOkRtDxxTDeu4mp3v1rcZVvbt4Iv0qsJwL7MTaAFLZ0UMr0w02GW6M
+         t9VU9gR/Egw+DuRw98CyJIMBGlTGn2/Km2X9vzmLy2pJWajw3RE93D5Is3c3Q021aj
+         V/HHtIiqfynhA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Alexander Aring <aahringo@redhat.com>,
+        David Teigland <teigland@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, ccaulfie@redhat.com,
+        cluster-devel@redhat.com
+Subject: [PATCH AUTOSEL 6.0 01/18] fs: dlm: fix race in lowcomms
+Date:   Sun,  9 Oct 2022 16:51:18 -0400
+Message-Id: <20221009205136.1201774-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yz7kd9oTs2Zn4YD3@liuzhao-OptiPlex-7080>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 10:21:43PM +0800, Zhao Liu wrote:
-> On Mon, Oct 03, 2022 at 08:50:16AM +0000, Wei Liu wrote:
-> > Date: Mon, 3 Oct 2022 08:50:16 +0000
-> > From: Wei Liu <wei.liu@kernel.org>
-> > Subject: Re: [PATCH] x86/hyperv: Replace kmap() with kmap_local_page()
-> > 
-> > On Wed, Sep 28, 2022 at 02:08:40PM +0000, Wei Liu wrote:
-> > > On Wed, Sep 28, 2022 at 05:56:40PM +0800, Zhao Liu wrote:
-> > > > From: Zhao Liu <zhao1.liu@intel.com>
-> > > > 
-> > > > kmap() is being deprecated in favor of kmap_local_page()[1].
-> > > > 
-> > > > There are two main problems with kmap(): (1) It comes with an overhead as
-> > > > mapping space is restricted and protected by a global lock for
-> > > > synchronization and (2) it also requires global TLB invalidation when the
-> > > > kmap's pool wraps and it might block when the mapping space is fully
-> > > > utilized until a slot becomes available.
-> > > > 
-> > > > With kmap_local_page() the mappings are per thread, CPU local, can take
-> > > > page faults, and can be called from any context (including interrupts).
-> > > > It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-> > > > the tasks can be preempted and, when they are scheduled to run again, the
-> > > > kernel virtual addresses are restored and are still valid.
-> > > > 
-> > > > In the fuction hyperv_init() of hyperv/hv_init.c, the mapping is used in a
-> > > > single thread and is short live. So, in this case, it's safe to simply use
-> > > > kmap_local_page() to create mapping, and this avoids the wasted cost of
-> > > > kmap() for global synchronization.
-> > > > 
-> > > 
-> > > The kmap call in that function is not performance critical in any way,
-> > > and at this point in the initialization process I don't expect there to
-> > > be any contention, so the downside of kmap is not really a concern here.
-> > > 
-> > > That being said, kmap getting deprecated is a good enough reason to
-> > > switch to kmap_local_page. And I appreciate this well-written,
-> > > well-reasoned commit message.
-> > > 
-> > > I will apply it to hyperv-next later -- I doubt people will object to
-> > > this change, but just in case.
-> > 
-> > Applied to hyperv-next. Thanks.
-> 
-> Sorry Wei, based on Ira and Fabio's comments, do you agree me to send a
-> follow on patch to remove that BUG_ON()? Or send the v2 patch?
-> 
+From: Alexander Aring <aahringo@redhat.com>
 
-I just sent a PR to Linus. That PR includes your v1 patch.
+[ Upstream commit 30ea3257e8766027c4d8d609dcbd256ff9a76073 ]
 
-While the code can be improved, BUG_ON that does nothing is harmless.
-You can send a follow-up patch to remove the BUG_ON.
+This patch fixes a race between queue_work() in
+_dlm_lowcomms_commit_msg() and srcu_read_unlock(). The queue_work() can
+take the final reference of a dlm_msg and so msg->idx can contain
+garbage which is signaled by the following warning:
 
-Thanks,
-Wei.
+[  676.237050] ------------[ cut here ]------------
+[  676.237052] WARNING: CPU: 0 PID: 1060 at include/linux/srcu.h:189 dlm_lowcomms_commit_msg+0x41/0x50
+[  676.238945] Modules linked in: dlm_locktorture torture rpcsec_gss_krb5 intel_rapl_msr intel_rapl_common iTCO_wdt iTCO_vendor_support qxl kvm_intel drm_ttm_helper vmw_vsock_virtio_transport kvm vmw_vsock_virtio_transport_common ttm irqbypass crc32_pclmul joydev crc32c_intel serio_raw drm_kms_helper vsock virtio_scsi virtio_console virtio_balloon snd_pcm drm syscopyarea sysfillrect sysimgblt snd_timer fb_sys_fops i2c_i801 lpc_ich snd i2c_smbus soundcore pcspkr
+[  676.244227] CPU: 0 PID: 1060 Comm: lock_torture_wr Not tainted 5.19.0-rc3+ #1546
+[  676.245216] Hardware name: Red Hat KVM/RHEL-AV, BIOS 1.16.0-2.module+el8.7.0+15506+033991b0 04/01/2014
+[  676.246460] RIP: 0010:dlm_lowcomms_commit_msg+0x41/0x50
+[  676.247132] Code: fe ff ff ff 75 24 48 c7 c6 bd 0f 49 bb 48 c7 c7 38 7c 01 bd e8 00 e7 ca ff 89 de 48 c7 c7 60 78 01 bd e8 42 3d cd ff 5b 5d c3 <0f> 0b eb d8 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 55 48
+[  676.249253] RSP: 0018:ffffa401c18ffc68 EFLAGS: 00010282
+[  676.249855] RAX: 0000000000000001 RBX: 00000000ffff8b76 RCX: 0000000000000006
+[  676.250713] RDX: 0000000000000000 RSI: ffffffffbccf3a10 RDI: ffffffffbcc7b62e
+[  676.251610] RBP: ffffa401c18ffc70 R08: 0000000000000001 R09: 0000000000000001
+[  676.252481] R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000005
+[  676.253421] R13: ffff8b76786ec370 R14: ffff8b76786ec370 R15: ffff8b76786ec480
+[  676.254257] FS:  0000000000000000(0000) GS:ffff8b7777800000(0000) knlGS:0000000000000000
+[  676.255239] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  676.255897] CR2: 00005590205d88b8 CR3: 000000017656c003 CR4: 0000000000770ee0
+[  676.256734] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[  676.257567] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[  676.258397] PKRU: 55555554
+[  676.258729] Call Trace:
+[  676.259063]  <TASK>
+[  676.259354]  dlm_midcomms_commit_mhandle+0xcc/0x110
+[  676.259964]  queue_bast+0x8b/0xb0
+[  676.260423]  grant_pending_locks+0x166/0x1b0
+[  676.261007]  _unlock_lock+0x75/0x90
+[  676.261469]  unlock_lock.isra.57+0x62/0xa0
+[  676.262009]  dlm_unlock+0x21e/0x330
+[  676.262457]  ? lock_torture_stats+0x80/0x80 [dlm_locktorture]
+[  676.263183]  torture_unlock+0x5a/0x90 [dlm_locktorture]
+[  676.263815]  ? preempt_count_sub+0xba/0x100
+[  676.264361]  ? complete+0x1d/0x60
+[  676.264777]  lock_torture_writer+0xb8/0x150 [dlm_locktorture]
+[  676.265555]  kthread+0x10a/0x130
+[  676.266007]  ? kthread_complete_and_exit+0x20/0x20
+[  676.266616]  ret_from_fork+0x22/0x30
+[  676.267097]  </TASK>
+[  676.267381] irq event stamp: 9579855
+[  676.267824] hardirqs last  enabled at (9579863): [<ffffffffbb14e6f8>] __up_console_sem+0x58/0x60
+[  676.268896] hardirqs last disabled at (9579872): [<ffffffffbb14e6dd>] __up_console_sem+0x3d/0x60
+[  676.270008] softirqs last  enabled at (9579798): [<ffffffffbc200349>] __do_softirq+0x349/0x4c7
+[  676.271438] softirqs last disabled at (9579897): [<ffffffffbb0d54c0>] irq_exit_rcu+0xb0/0xf0
+[  676.272796] ---[ end trace 0000000000000000 ]---
 
-> Thanks,
-> Zhao
+I reproduced this warning with dlm_locktorture test which is currently
+not upstream. However this patch fix the issue by make a additional
+refcount between dlm_lowcomms_new_msg() and dlm_lowcomms_commit_msg().
+In case of the race the kref_put() in dlm_lowcomms_commit_msg() will be
+the final put.
+
+Signed-off-by: Alexander Aring <aahringo@redhat.com>
+Signed-off-by: David Teigland <teigland@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/dlm/lowcomms.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/fs/dlm/lowcomms.c b/fs/dlm/lowcomms.c
+index a4e84e8d94c8..59f64c596233 100644
+--- a/fs/dlm/lowcomms.c
++++ b/fs/dlm/lowcomms.c
+@@ -1336,6 +1336,8 @@ struct dlm_msg *dlm_lowcomms_new_msg(int nodeid, int len, gfp_t allocation,
+ 		return NULL;
+ 	}
+ 
++	/* for dlm_lowcomms_commit_msg() */
++	kref_get(&msg->ref);
+ 	/* we assume if successful commit must called */
+ 	msg->idx = idx;
+ 	return msg;
+@@ -1375,6 +1377,8 @@ void dlm_lowcomms_commit_msg(struct dlm_msg *msg)
+ {
+ 	_dlm_lowcomms_commit_msg(msg);
+ 	srcu_read_unlock(&connections_srcu, msg->idx);
++	/* because dlm_lowcomms_new_msg() */
++	kref_put(&msg->ref, dlm_msg_release);
+ }
+ #endif
+ 
+-- 
+2.35.1
+
