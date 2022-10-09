@@ -2,101 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9865F8C3F
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 18:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D50B5F8C45
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 18:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbiJIQQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 12:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
+        id S230058AbiJIQWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 12:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiJIQQZ (ORCPT
+        with ESMTP id S230037AbiJIQWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 12:16:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B285D2B265;
-        Sun,  9 Oct 2022 09:15:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45661B80D6F;
-        Sun,  9 Oct 2022 16:15:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D6F9C433C1;
-        Sun,  9 Oct 2022 16:15:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665332146;
-        bh=4cm2c0fOvu9nkij3uX1+ze9n1lMXyfLq2WBLGR1H5wo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EcJLppsNNuahtyuUcfoXT+8pjXqwSxL/2UEBG+kfkXIEv0S6/CphyUb5XUmPvA7DX
-         PpLNJoBzaRlyAJ73xUnsC7b3WTKIiSNJkBwLyl3d/tQb/5sqVVqPJ93ScoHEbTpvVw
-         opgdc6R7zX79avXxV5t0OIY5+UgZI5TA36WGvVN5PrfW19cgzU0dJoNcZzDbXkVKXx
-         OaWaQUlXr/I9bM1TygJqg3TiHuHwsOS/R2rgYAPsBv+lGmNRRFW/n2/vC4S7Zk9ESC
-         9ifG1cSJ1OKWmjHPFGmG//Hg0/4VjwDM+2jtjvuEVa//6FUwEZnNpCwjT8zFfrBzLX
-         mfoVnbCInvnQg==
-Date:   Sun, 9 Oct 2022 17:16:05 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Matheus Tavares <matheus.bernardino@usp.br>,
-        linux-iio@vger.kernel.org,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Nuno Sa <nuno.sa@analog.com>, linux-kernel@vger.kernel.org,
-        Nishant Malpani <nish.malpani25@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Tomasz Duszynski <tduszyns@gmail.com>,
-        Cristian Pop <cristian.pop@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Antoniu Miclaus <antoniu.miclaus@analog.com>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 1/8] dt-bindings: iio: addac: adi,ad74413r: use
- spi-peripheral-props.yaml
-Message-ID: <20221009171605.12017856@jic23-huawei>
-In-Reply-To: <166497632690.3268685.6335632613671776795.robh@kernel.org>
-References: <20221004115642.63749-1-krzysztof.kozlowski@linaro.org>
-        <166497632690.3268685.6335632613671776795.robh@kernel.org>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sun, 9 Oct 2022 12:22:14 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56EA2717D;
+        Sun,  9 Oct 2022 09:22:09 -0700 (PDT)
+X-QQ-mid: bizesmtp62t1665332493t5gjuh9h
+Received: from localhost.localdomain ( [58.247.70.42])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 10 Oct 2022 00:20:36 +0800 (CST)
+X-QQ-SSF: 01100000002000G0Z000B00A0000000
+X-QQ-FEAT: xnbq7qFd8vqZdqkibScLhfQ/E6NQoDNYE6JBi1e5CRjyesSFeDluUoRL8yAoN
+        sn5YLZEiEkl2FtEwRxFGzn8PnZBEAzGIf0EdCR9jLuYQsy/hwPXqcSfvkDAmOmmeaJxotsI
+        I4W/JGhjXwxicfZPluWIEp4hbAuvsCE996mcoBj7hnJFnTgWBcwrtHvUzmYb2NkCSNSC5Vz
+        MnG/4Ped2nfSaXYfQrrJ65iG5oa/O0FxHULT3ehzHyg41JE3CEFmktGTOSKJh76g9+M06KW
+        1fjLIvvx1Aga1Jp4XSIwq5scsjtSfLefyLsn0QQ4d4RvF0YzQAY4d4HBt+2KyybPKN0SVs9
+        +tL6oeG7dBfGyTb7mEvqTCyao/tsw==
+X-QQ-GoodBg: 0
+From:   Soha Jin <soha@lohu.info>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Soha Jin <soha@lohu.info>
+Subject: [PATCH] net: mdiobus: add fwnode_phy_is_fixed_link()
+Date:   Mon, 10 Oct 2022 00:20:06 +0800
+Message-Id: <20221009162006.1289-1-soha@lohu.info>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:lohu.info:qybglogicsvr:qybglogicsvr3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Oct 2022 08:25:27 -0500
-Rob Herring <robh@kernel.org> wrote:
+A helper function to check if PHY is fixed link with fwnode properties.
+This is similar to of_phy_is_fixed_link.
 
-> On Tue, 04 Oct 2022 13:56:35 +0200, Krzysztof Kozlowski wrote:
-> > Reference the spi-peripheral-props.yaml schema to allow using all
-> > properties typical for SPI-connected devices, even these which device
-> > bindings author did not tried yet.
-> > 
-> > While changing additionalProperties->unevaluatedProperties, put it in
-> > typical place, just before example DTS.
-> > 
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > ---
-> >  .../devicetree/bindings/iio/addac/adi,ad74413r.yaml        | 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
-> >   
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Soha Jin <soha@lohu.info>
+---
+ drivers/net/mdio/fwnode_mdio.c | 30 +++++++++++++++++++++++++++++-
+ include/linux/fwnode_mdio.h    |  2 ++
+ 2 files changed, 31 insertions(+), 1 deletion(-)
 
-Series applied,.
+diff --git a/drivers/net/mdio/fwnode_mdio.c b/drivers/net/mdio/fwnode_mdio.c
+index 689e728345ce..8e1773e4d304 100644
+--- a/drivers/net/mdio/fwnode_mdio.c
++++ b/drivers/net/mdio/fwnode_mdio.c
+@@ -6,8 +6,9 @@
+  * out of the fwnode and using it to populate an mii_bus.
+  */
+ 
+-#include <linux/acpi.h>
+ #include <linux/fwnode_mdio.h>
++#include <linux/property.h>
++#include <linux/acpi.h>
+ #include <linux/of.h>
+ #include <linux/phy.h>
+ #include <linux/pse-pd/pse.h>
+@@ -183,3 +184,30 @@ int fwnode_mdiobus_register_phy(struct mii_bus *bus,
+ 	return rc;
+ }
+ EXPORT_SYMBOL(fwnode_mdiobus_register_phy);
++
++bool fwnode_phy_is_fixed_link(struct fwnode_handle *fwnode)
++{
++	struct fwnode_handle *dn;
++	int err;
++	const char *managed;
++
++	/* New binding: 'fixed-link' is a sub-node of the Ethernet device. */
++	dn = fwnode_get_named_child_node(fwnode, "fixed-link");
++	if (dn) {
++		fwnode_handle_put(dn);
++		return true;
++	}
++
++	err = fwnode_property_read_string(fwnode, "managed", &managed);
++	if (err == 0 && strcmp(managed, "auto") != 0)
++		return true;
++
++	/* Old binding: 'fixed-link' was a property with 5 cells encoding
++	 * various information about the fixed PHY.
++	 */
++	if (fwnode_property_count_u32(fwnode, "fixed-link") == 5)
++		return true;
++
++	return false;
++}
++EXPORT_SYMBOL(fwnode_phy_is_fixed_link);
+diff --git a/include/linux/fwnode_mdio.h b/include/linux/fwnode_mdio.h
+index faf603c48c86..f35e447e524a 100644
+--- a/include/linux/fwnode_mdio.h
++++ b/include/linux/fwnode_mdio.h
+@@ -32,4 +32,6 @@ static inline int fwnode_mdiobus_register_phy(struct mii_bus *bus,
+ }
+ #endif
+ 
++bool fwnode_phy_is_fixed_link(struct fwnode_handle *fwnode);
++
+ #endif /* __LINUX_FWNODE_MDIO_H */
+-- 
+2.30.2
 
-Kryzsztof, thanks for your continuing work to clean this stuff up.
-One small request for future similar series. Please add a cover
-letter with a very minimal intro. If nothing else it gives me an
-obviously place to reply to in order to say I applied them all!
-
-Also works for anyone who wants to give series wide tags.
-
-Thanks,
-
-Jonathan
