@@ -2,51 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A995F8B1F
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 14:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D595F8BA6
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 16:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiJIMPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 08:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
+        id S229863AbiJIOCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 10:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbiJIMPK (ORCPT
+        with ESMTP id S229464AbiJIOCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 08:15:10 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5FA1D673
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 05:15:05 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MlgqP5nvzzVhtg;
-        Sun,  9 Oct 2022 20:10:41 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sun, 9 Oct 2022 20:15:04 +0800
-Received: from localhost.localdomain (10.67.175.61) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sun, 9 Oct 2022 20:15:03 +0800
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-To:     <zyytlz.wz@163.com>
-CC:     <alex000young@gmail.com>, <arnd@arndb.de>,
-        <dimitri.sivanich@hpe.com>, <gregkh@linuxfoundation.org>,
-        <hackerzheng666@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <security@kernel.org>, <zhengyejian1@huawei.com>
-Subject: re: [PATCH v2] misc: sgi-gru: fix use-after-free error in gru_set_context_option, gru_fault and gru_handle_user_call_os
-Date:   Sun, 9 Oct 2022 20:14:18 +0000
-Message-ID: <20221009201418.509417-1-zhengyejian1@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221006152643.1694235-1-zyytlz.wz@163.com>
-References: <20221006152643.1694235-1-zyytlz.wz@163.com>
+        Sun, 9 Oct 2022 10:02:09 -0400
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0345428E04
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 07:02:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1665324121;
+        bh=Qoxu0zAR0UJSTIFx9IuD3CJgh0F7dmV1Jfk/aUCgYI8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=OM48/voJLBUV8H/ECXKiGjsjYVrUFMeKnn46q9qfPBGNOso3yeyI7IAScOGDYWOw4
+         D7XFMhND0au76Wfe43/Uy1DQyQifyvrl3i3dkhniDeK8HGFmGVeq4xCoAG222S/tNq
+         AyXyk0dCrwaD2YR9g4vTWGVJIvVhvG9IcIsdzxIE=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id B792465B5F;
+        Sun,  9 Oct 2022 10:01:59 -0400 (EDT)
+Message-ID: <6ef6686dea98a65176af01f518d30727bde9b2b7.camel@xry111.site>
+Subject: Re: [PATCH v3] checksyscalls: Ignore fstat to silence build warning
+ on LoongArch
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, Arnd Bergmann <arnd@arndb.de>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Date:   Sun, 09 Oct 2022 22:01:57 +0800
+In-Reply-To: <f794e452-eb04-88df-afa8-991bd40eb3d6@loongson.cn>
+References: <1661830021-8643-1-git-send-email-yangtiezhu@loongson.cn>
+         <f794e452-eb04-88df-afa8-991bd40eb3d6@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.0 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.61]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        SPF_HELO_PASS,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,147 +56,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  6 Oct 2022 23:26:43 +0800
-Zheng Wang <zyytlz.wz@163.com> wrote:
-> Gts may be freed in gru_check_chiplet_assignment.
-> The caller still use it after that, UAF happens.
-> 
-> Fix it by introducing a return value to see if it's in error path or not.
-> Free the gts in caller if gru_check_chiplet_assignment check failed.
-> 
-> Fixes: 55484c45dbec ("gru: allow users to specify gru chiplet 2")
-> Reported-by: Zheng Wang <hackerzheng666@gmail.com>
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> ---
-> v2:
-> - commit message changes suggested by Greg
-> 
-> v1: https://lore.kernel.org/lkml/CAJedcCzY72jqgF-pCPtx66vXXwdPn-KMagZnqrxcpWw1NxTLaA@mail.gmail.com/
-> ---
->  drivers/misc/sgi-gru/grufault.c  | 15 ++++++++++++---
->  drivers/misc/sgi-gru/grumain.c   | 17 +++++++++++++----
->  drivers/misc/sgi-gru/grutables.h |  2 +-
->  3 files changed, 26 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
-> index d7ef61e602ed..f1e5b96fef4b 100644
-> --- a/drivers/misc/sgi-gru/grufault.c
-> +++ b/drivers/misc/sgi-gru/grufault.c
-> @@ -656,7 +656,9 @@ int gru_handle_user_call_os(unsigned long cb)
->  	if (ucbnum >= gts->ts_cbr_au_count * GRU_CBR_AU_SIZE)
->  		goto exit;
->  
-> -	gru_check_context_placement(gts);
-> +	ret = gru_check_context_placement(gts);
-> +	if (ret)
-> +		goto err;
->  
->  	/*
->  	 * CCH may contain stale data if ts_force_cch_reload is set.
-> @@ -677,6 +679,10 @@ int gru_handle_user_call_os(unsigned long cb)
->  exit:
->  	gru_unlock_gts(gts);
->  	return ret;
-> +err:
-> +	gru_unlock_gts(gts);
-> +	gru_unload_context(gts, 1);
-> +	return -EINVAL;
->  }
->  
->  /*
-> @@ -874,7 +880,7 @@ int gru_set_context_option(unsigned long arg)
->  		} else {
->  			gts->ts_user_blade_id = req.val1;
->  			gts->ts_user_chiplet_id = req.val0;
-> -			gru_check_context_placement(gts);
-> +			ret = gru_check_context_placement(gts);
->  		}
->  		break;
->  	case sco_gseg_owner:
-> @@ -889,6 +895,9 @@ int gru_set_context_option(unsigned long arg)
->  		ret = -EINVAL;
->  	}
->  	gru_unlock_gts(gts);
-> -
-> +	if (ret) {
-> +		gru_unload_context(gts, 1);
-> +		ret = -EINVAL;
-> +	}
->  	return ret;
->  }
-> diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
-> index 9afda47efbf2..79903cf7e706 100644
-> --- a/drivers/misc/sgi-gru/grumain.c
-> +++ b/drivers/misc/sgi-gru/grumain.c
-> @@ -716,9 +716,10 @@ static int gru_check_chiplet_assignment(struct gru_state *gru,
->   * chiplet. Misassignment can occur if the process migrates to a different
->   * blade or if the user changes the selected blade/chiplet.
->   */
-> -void gru_check_context_placement(struct gru_thread_state *gts)
-> +int gru_check_context_placement(struct gru_thread_state *gts)
->  {
->  	struct gru_state *gru;
-> +	int ret = 0;
->  
->  	/*
->  	 * If the current task is the context owner, verify that the
-> @@ -727,14 +728,16 @@ void gru_check_context_placement(struct gru_thread_state *gts)
->  	 */
->  	gru = gts->ts_gru;
->  	if (!gru || gts->ts_tgid_owner != current->tgid)
-> -		return;
-> +		return ret;
->  
->  	if (!gru_check_chiplet_assignment(gru, gts)) {
->  		STAT(check_context_unload);
-> -		gru_unload_context(gts, 1);
-> +		ret = -EINVAL;
->  	} else if (gru_retarget_intr(gts)) {
->  		STAT(check_context_retarget_intr);
->  	}
-> +
-> +	return ret;
->  }
->  
->  
-> @@ -919,6 +922,7 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
->  	struct gru_thread_state *gts;
->  	unsigned long paddr, vaddr;
->  	unsigned long expires;
-> +	int ret;
->  
->  	vaddr = vmf->address;
->  	gru_dbg(grudev, "vma %p, vaddr 0x%lx (0x%lx)\n",
-> @@ -934,7 +938,12 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
->  	mutex_lock(&gts->ts_ctxlock);
->  	preempt_disable();
->  
-> -	gru_check_context_placement(gts);
-> +	ret = gru_check_context_placement(gts);
-> +	if (ret) {
-> +		mutex_unlock(&gts->ts_ctxlock);
-> +		gru_unload_context(gts, 1);
-> +		return ret;
+On Sun, 2022-10-09 at 12:33 +0800, Tiezhu Yang wrote:
+>=20
+>=20
+> On 08/30/2022 11:27 AM, Tiezhu Yang wrote:
+> > fstat is replaced by statx on the new architecture, so an exception
+> > is added to the checksyscalls script to silence the following build
+> > warning on LoongArch:
+> >=20
+> > =C2=A0 CALL=C2=A0=C2=A0=C2=A0 scripts/checksyscalls.sh
+> > <stdin>:569:2: warning: #warning syscall fstat not implemented [-
+> > Wcpp]
+>=20
+> Hi all,
+>=20
+> The above warning still exists when build the latest loongarch-next.
+>=20
+> Do you know which tree this patch will go through?
+>=20
+> Could you please pick it up via your tree in this merge window?
 
-Return VM_FAULT_NOPAGE or some other VM_FAULT_xxx code may be better?
-Since return -EINVAL may confuse upper user
+A similar change 3ef6ca4f354c ("checksyscalls: Unconditionally ignore
+fstat{,at}64") was merged through RISC-V tree, so it should be OK to
+merge this from loongarch-next.
 
-> +	}
->  
->  	if (!gts->ts_gru) {
->  		STAT(load_user_context);
-> diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
-> index 5efc869fe59a..f4a5a787685f 100644
-> --- a/drivers/misc/sgi-gru/grutables.h
-> +++ b/drivers/misc/sgi-gru/grutables.h
-> @@ -632,7 +632,7 @@ extern int gru_user_flush_tlb(unsigned long arg);
->  extern int gru_user_unload_context(unsigned long arg);
->  extern int gru_get_exception_detail(unsigned long arg);
->  extern int gru_set_context_option(unsigned long address);
-> -extern void gru_check_context_placement(struct gru_thread_state *gts);
-> +extern int gru_check_context_placement(struct gru_thread_state *gts);
->  extern int gru_cpu_fault_map_id(void);
->  extern struct vm_area_struct *gru_find_vma(unsigned long vaddr);
->  extern void gru_flush_all_tlb(struct gru_state *gru);
-> -- 
-> 2.25.1
+Not sure if we need to get an Ack from someone first though.
+
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
