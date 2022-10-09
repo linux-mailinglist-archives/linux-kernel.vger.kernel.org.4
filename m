@@ -2,327 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 672825F8ABD
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 12:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6CC5F8ABF
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 12:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbiJIKrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 06:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33596 "EHLO
+        id S230010AbiJIKtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 06:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiJIKq7 (ORCPT
+        with ESMTP id S229711AbiJIKtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 06:46:59 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF752871A
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 03:46:57 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id nb11so19651299ejc.5
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 03:46:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mg0CdsvLmV9Rwot9nVVcMOOotbr3MkEB/vCQ+EikYMM=;
-        b=YDjpOduObMEML4tvLACPHAdviK73+0C8GgZaz8HAcprPvKn6yLhk0wFtapQNLlAaHb
-         Wi5ffZvFn+tvmURYdu4K0iHNTXpGnRL35CG4LVvOWi0RMpCHONDBRW+3Cpc1eqsITSxs
-         GXdO0+YP/QJPxCC52DdZUkRGCC/dDYgnwOTYQBqABgWIi9syQdtIEE7IrHFF5OUb2GUE
-         YKMt21sxf5e99mj4DQQCFs8C5EnfdZUd9Fih2DjU8KyAdfrbLWwhHWYlTK5ZCwdKCdPw
-         N/869o8XGSagKfiELOORl4WYTdAMDBvncsYKzG9Ko5ylP42D6BpBzAJBChoU5Vbw/StZ
-         q4Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Mg0CdsvLmV9Rwot9nVVcMOOotbr3MkEB/vCQ+EikYMM=;
-        b=TtV1A9c7MuM6aXu/29FJj3ol8RrRm4ieT1urUWmWQRgRijaI3HhwCZ7SVFDX8NsWQb
-         8D8tUu3OWi7h0d8eDDO4ocaoYr4V0GB6zCAhKzJI+QTVZ7mwoY5tg2aTSHht0RqnmZhi
-         b2EW1w/iZso+5doiA2jWGO0PESrpePIGxL3KLB9dsJSGzuX0qwuxGrjbmeM/IYXv3bna
-         2eMfTBHpFy7QwF43JWZ+0/Obepn6IFTiABM6P8UpkMYrUqBARdo+mwu60CddaFzW2UcG
-         JQaw2ZTJL/iLSEl4nbwEufw5gd+LaLpP0BndDOpPMKiMggSTkLdY808sR+DsDe9qEHGc
-         4WoQ==
-X-Gm-Message-State: ACrzQf36DuDiPZHQkG/1LVQPpHmoFpX/LWzKmAu3sZ28mfnoRhrZHy7C
-        kehoSVL8pcuyxnjqlbi6R+k=
-X-Google-Smtp-Source: AMsMyM7YgFTC4XbRkzbOErEpurl2VcjRyAxSuybl2nM2jqGA4XKdwWB+eUEsMLCyrDrRtBkrlmT49w==
-X-Received: by 2002:a17:907:72d2:b0:78d:4c16:a68d with SMTP id du18-20020a17090772d200b0078d4c16a68dmr10735347ejc.401.1665312416315;
-        Sun, 09 Oct 2022 03:46:56 -0700 (PDT)
-Received: from nam-dell (ip-217-105-46-158.ip.prioritytelecom.net. [217.105.46.158])
-        by smtp.gmail.com with ESMTPSA id r7-20020a170906280700b0078907275a44sm3840750ejc.42.2022.10.09.03.46.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 03:46:55 -0700 (PDT)
-Date:   Sun, 9 Oct 2022 12:46:44 +0200
-From:   Nam Cao <namcaov@gmail.com>
-To:     Rui Li <me@lirui.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: rtl8192e: Fix braces/tabs/number/OOM warnings
-Message-ID: <20221009104644.GA49790@nam-dell>
-References: <166528776854.9.8249842126243786800.67724771@lirui.org>
+        Sun, 9 Oct 2022 06:49:14 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DEF28715;
+        Sun,  9 Oct 2022 03:49:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1665312548;
+        bh=9tw62jkaAE/5DMhlb+Rw7nroAjqsuNfhkDb8JdXGWvE=;
+        h=X-UI-Sender-Class:Date:From:To:Subject;
+        b=iHk0Ob5tM1qvUvtSlCKiOCwNSC3E86rsM1kbhVEcoKADKjr1VIay3F1F08WAiRpoT
+         wDY9e14ESxt+gBZNNcC2sk7R9oPIERl70Mu6aRqy+hNBW4XR8ODOyFLJNcUQQvQx6+
+         qNeEVwijjsF8mfbl9YUKsFWKmjx0TvPKxwIUaLGc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from ls3530 ([92.116.161.163]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MIdeR-1ow23a3qQn-00EaM9; Sun, 09
+ Oct 2022 12:49:08 +0200
+Date:   Sun, 9 Oct 2022 12:49:05 +0200
+From:   Helge Deller <deller@gmx.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [GIT PULL] fbdev fixes and updates for v6.1-rc1
+Message-ID: <Y0KnIfLe8WxtXc5c@ls3530>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <166528776854.9.8249842126243786800.67724771@lirui.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:kcrKBWACIMSXc8WglLRPxZtDvjATmQ7cjs3+tSAEoE2QImM2Y+6
+ afhnoNl4jlBUZnz0ZNZFy6P6PdrWenJyNhNs+Ftrq/WTrz8FbFEKNWB3wdk0jZqKm8cbsyV
+ HN59fKCj4KSFRAdJ7rEDkbf+1JRXdoyb+vsOIulugU81NlfLZf8P29C9/yOn2EFl7vrityo
+ t760sa4DV6bTHkwoTVPKw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:g3nhewARNMg=:VhaddTOXN1ntXfBhvCxPI2
+ nmPLLtH3/s+TkMmOQoy7QDH7DEzhGso2RUF2/R3WoEOIIsvVhKpVCR/e/jNT6IwxDwbes4y7D
+ xJ6nXhnpwG+TCt0y4Dr5e++41cNL39EotY5V9TmcvJZTOa+t35+XgwnxZDi22iNYuPUCtD7R1
+ B6UVtZeAP3ORciJiNL6zl5dPpKCTdebqwVQSCT/z4Fx2DZ3M5H72d2l7wMS5lwrhNgbzdrSIs
+ LuqkOjyU2oGcFm9JnUea0sA5x/G3N1p/wlM4OGcG20zdgKNb10l3fWRgcZ3EK+siQqprPs85E
+ T2cl/aA51pcMmQNfAhig5RBsnfRZbBGIcTXnPm3IkpeQvuZpA8HzB13tD1IfsKuBKtydiLRmr
+ QM8Hkok2s0awjTZsxnbCzGHa3ceDlZwRgRz3WA62fkdOmbNZrIMTb/e3wy+V4Kn6ojq7NxqC0
+ Je54H6zGsf9I/I5sRtAbr9r5KDXdiW5XIPH2apbYGwMCNciNK+dZksiugKXqI84R8snFqzF7v
+ yCZG5YlCU/GCPCZnyUBVyqgj+g/00bk+FrX1pSLgsOEFNQTDQezyONJ1AFY/mQUCe0v/sXFPM
+ gD3horUZk+sfycHIViBEPQfV9w0H9w3uVd+KU7U8JDmfxJPsWaNCWyyzjItsTJw2yxjW+3K9q
+ b60/PXwgJlPFHhTztN2+tucLSjI6dk4tkrk8osPKjy2DLC4h0GDn8BAgVC0NYh+cDt9ZV8RDx
+ 5bVx9zdTpO8wox+3sLueMqggSKmiF12M5K8PGqJRyoldiOlXfwa9TK3pQleAX04dxSQ0znOt6
+ Hiew0qzhDYKVyut2hulQUTdsXPFDrVRlEvdQryRLnWhwbUUwP2UQ5JbTh5wSb8sgJe/immNmO
+ gNx6iSAua16rOLD9/4QXtKnxLbY4nTwVqVJc9Y8SxoZbJFt3HEwb6lzvZDFsCAixNQoI2H58n
+ FcIoF4jPYcqAcGi4qrL3nf5NZ2foqomFjvdAAi2uihHP5AamEaTM68ocNebdWYYgGSWowkSaL
+ D9Q/ccPUPC4ry9T93hrxgdYn700cByFkHXCkn4ul71lIaHglgEQuG7s/KjmJFCRKpml/l0Y52
+ 4GztVET2XX2msz7K9gspAvPG08kEAsAYIyoY+pJGm0qaCXYA6h7SbIhALRuavasb0ZRiJGVpc
+ 3SHFw0bSZgHbdHso09XPq2mDSQg3AaeXhKVLpIqFjB5NULl/286d1qc/DFbRKqnII6q9T1OCI
+ 6+QPxUelzivrDnrt6DijkM6HYd1K3jzxPz33Zdz2KaLl/TwJjrtRoQx2sp+O1VCNSBm2DYNRZ
+ JYoP4tx8gBgBpds1ygcErpLEc2s1QMIKArqCimANBbzJoCnUUroW6AMFxyeHDDjpUDflzfLIK
+ drSO4a9sDk8t/o+SAkTuUBr59dlYx7WFRVvKQpFGPoLV2HZCWpukNJR/dpldQUZWCuKoNrtXD
+ hB3VNNFHbSuEg0op5lXH9d2MyJqzNKIVEvIAPVi1LcnIlWZ+hwrUuZULwUo+38BETneov3mDn
+ brV01I6wWRN/4hPKS/mr9AU212Twjo7mRXaCNmVNKrTkv
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 11:55:36AM +0800, Rui Li wrote:
-> Fix warnings generated by checkpatch.pl: unnecessary braces after
-> if, too many leading tabs, int type conversion before number,
-> OOM message ourput.
-> 
-> Signed-off-by: Rui Li <me@lirui.org>
-> ---
->  .../staging/rtl8192e/rtl8192e/r8192E_dev.c    |  3 +-
->  .../staging/rtl8192e/rtl8192e/r8192E_phy.c    |  9 ++----
->  drivers/staging/rtl8192e/rtl8192e/rtl_core.c  |  3 --
->  drivers/staging/rtl8192e/rtl8192e/rtl_dm.c    | 30 +++++++------------
->  drivers/staging/rtl8192e/rtl819x_BAProc.c     |  5 ++--
->  drivers/staging/rtl8192e/rtl819x_HTProc.c     |  1 +
->  drivers/staging/rtl8192e/rtllib_rx.c          |  8 ++---
->  drivers/staging/rtl8192e/rtllib_softmac_wx.c  |  7 ++---
->  8 files changed, 25 insertions(+), 41 deletions(-)
-> 
-> diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-> index 18e4e5d84878..8d20b0deca37 100644
-> --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-> +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-> @@ -1112,9 +1112,8 @@ void  rtl92e_fill_tx_desc(struct net_device *dev, struct tx_desc *pdesc,
->  	if (cb_desc->bHwSec) {
->  		static u8 tmp;
->  
-> -		if (!tmp) {
-> +		if (!tmp)
->  			tmp = 1;
-> -		}
->  		switch (priv->rtllib->pairwise_key_type) {
->  		case KEY_TYPE_WEP40:
->  		case KEY_TYPE_WEP104:
-> diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-> index 1b592258e640..4e3d183be0f2 100644
-> --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-> +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-> @@ -522,9 +522,8 @@ static bool _rtl92e_bb_config_para_file(struct net_device *dev)
->  		rtStatus  = rtl92e_check_bb_and_rf(dev,
->  						   (enum hw90_block)eCheckItem,
->  						   (enum rf90_radio_path)0);
-> -		if (!rtStatus) {
-> +		if (!rtStatus)
->  			return rtStatus;
-> -		}
->  	}
->  	rtl92e_set_bb_reg(dev, rFPGA0_RFMOD, bCCKEn|bOFDMEn, 0x0);
->  	_rtl92e_phy_config_bb(dev, BaseBand_Config_PHY_REG);
-> @@ -1379,9 +1378,8 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
->  					i++;
->  				}
->  
-> -				if (i >= MAX_DOZE_WAITING_TIMES_9x) {
-> +				if (i >= MAX_DOZE_WAITING_TIMES_9x)
->  					break;
-> -				}
->  			}
->  			rtl92e_set_rf_off(dev);
->  			break;
-> @@ -1398,9 +1396,8 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
->  					i++;
->  				}
->  
-> -				if (i >= MAX_DOZE_WAITING_TIMES_9x) {
-> +				if (i >= MAX_DOZE_WAITING_TIMES_9x)
->  					break;
-> -				}
->  			}
->  
->  			if (pPSC->RegRfPsLevel & RT_RF_OFF_LEVL_HALT_NIC &&
-> diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-> index 89bc989cffba..b2facb273474 100644
-> --- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-> +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-> @@ -908,9 +908,6 @@ static void _rtl92e_init_priv_variable(struct net_device *dev)
->  	priv->card_type = PCI;
->  
->  	priv->pFirmware = vzalloc(sizeof(struct rt_firmware));
-> -	if (!priv->pFirmware)
-> -		netdev_err(dev,
-> -			   "rtl8192e: Unable to allocate space for firmware\n");
->  
->  	skb_queue_head_init(&priv->skb_queue);
->  
-> diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-> index 702551056227..32494ad2298b 100644
-> --- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-> +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-> @@ -267,9 +267,8 @@ static void _rtl92e_dm_check_ac_dc_power(struct net_device *dev)
->  			"PATH=/usr/bin:/bin",
->  			 NULL};
->  
-> -	if (priv->ResetProgress == RESET_TYPE_SILENT) {
-> +	if (priv->ResetProgress == RESET_TYPE_SILENT)
->  		return;
-> -	}
->  
->  	if (priv->rtllib->state != RTLLIB_LINKED)
->  		return;
-> @@ -330,9 +329,8 @@ static void _rtl92e_dm_check_rate_adaptive(struct net_device *dev)
->  	bool bshort_gi_enabled = false;
->  	static u8 ping_rssi_state;
->  
-> -	if (!priv->up) {
-> +	if (!priv->up)
->  		return;
-> -	}
->  
->  	if (pra->rate_adaptive_disabled)
->  		return;
-> @@ -777,9 +775,8 @@ static void _rtl92e_dm_tx_power_tracking_cb_thermal(struct net_device *dev)
->  		tmpRegA = rtl92e_get_bb_reg(dev, rOFDM0_XATxIQImbalance,
->  					    bMaskDWord);
->  		for (i = 0; i < OFDM_Table_Length; i++) {
-> -			if (tmpRegA == OFDMSwingTable[i]) {
-> +			if (tmpRegA == OFDMSwingTable[i])
->  				priv->OFDM_index[0] = i;
-> -			}
->  		}
->  
->  		TempCCk = rtl92e_get_bb_reg(dev, rCCK0_TxFilter1, bMaskByte2);
-> @@ -1066,9 +1063,8 @@ void rtl92e_dm_restore_state(struct net_device *dev)
->  	u32	reg_ratr = priv->rate_adaptive.last_ratr;
->  	u32 ratr_value;
->  
-> -	if (!priv->up) {
-> +	if (!priv->up)
->  		return;
-> -	}
->  
->  	if (priv->rate_adaptive.rate_adaptive_disabled)
->  		return;
-> @@ -1877,20 +1873,16 @@ static void _rtl92e_dm_rx_path_sel_byrssi(struct net_device *dev)
->  						tmp_cck_sec_pwdb = cur_cck_pwdb;
->  						cck_rx_ver2_sec_index = i;
->  					} else if (cur_cck_pwdb ==
-> -						   tmp_cck_sec_pwdb) {
-> -						if (tmp_cck_sec_pwdb ==
-> -						    tmp_cck_min_pwdb) {
-> -							tmp_cck_sec_pwdb =
-> -								 cur_cck_pwdb;
-> -							cck_rx_ver2_sec_index =
-> -								 i;
-> -						}
-> +							tmp_cck_sec_pwdb &&
-> +							tmp_cck_sec_pwdb == tmp_cck_min_pwdb) {
-> +						tmp_cck_sec_pwdb = cur_cck_pwdb;
-> +						cck_rx_ver2_sec_index = i;
+Hi Linus,
 
-This is not functionally equivalent. Are you sure the entire if else
-chain still behaves correctly?
+please pull the fbdev fixes and updates for kernel 6.1-rc1.
 
->  					} else if ((cur_cck_pwdb < tmp_cck_sec_pwdb) &&
->  						   (cur_cck_pwdb > tmp_cck_min_pwdb)) {
->  						;
-> -					} else if (cur_cck_pwdb == tmp_cck_min_pwdb) {
-> -						if (tmp_cck_sec_pwdb == tmp_cck_min_pwdb)
-> -							tmp_cck_min_pwdb = cur_cck_pwdb;
-> +					} else if (cur_cck_pwdb == tmp_cck_min_pwdb &&
-> +						tmp_cck_sec_pwdb == tmp_cck_min_pwdb) {
-> +						tmp_cck_min_pwdb = cur_cck_pwdb;
+Included is a fix for the smscufx USB graphics card to prevent a kernel crash
+if it's plugged in/out too fast.  The other patches are mostly small cleanups,
+fixes in failure paths and code removal.
 
-Same story as above.
+More details are in the commit tag.
 
->  					} else if (cur_cck_pwdb < tmp_cck_min_pwdb) {
->  						tmp_cck_min_pwdb = cur_cck_pwdb;
->  					}
-> diff --git a/drivers/staging/rtl8192e/rtl819x_BAProc.c b/drivers/staging/rtl8192e/rtl819x_BAProc.c
-> index 19d13b3fcecf..e932ad1a9e96 100644
-> --- a/drivers/staging/rtl8192e/rtl819x_BAProc.c
-> +++ b/drivers/staging/rtl8192e/rtl819x_BAProc.c
-> @@ -180,11 +180,10 @@ static void rtllib_send_ADDBAReq(struct rtllib_device *ieee, u8 *dst,
->  
->  	skb = rtllib_ADDBA(ieee, dst, pBA, 0, ACT_ADDBAREQ);
->  
-> -	if (skb) {
-> +	if (skb)
->  		softmac_mgmt_xmit(skb, ieee);
-> -	} else {
-> +	else
->  		netdev_dbg(ieee->dev, "Failed to generate ADDBAReq packet.\n");
-> -	}
->  }
->  
->  static void rtllib_send_ADDBARsp(struct rtllib_device *ieee, u8 *dst,
-> diff --git a/drivers/staging/rtl8192e/rtl819x_HTProc.c b/drivers/staging/rtl8192e/rtl819x_HTProc.c
-> index ef3dca51cf99..b763cf0ba356 100644
-> --- a/drivers/staging/rtl8192e/rtl819x_HTProc.c
-> +++ b/drivers/staging/rtl8192e/rtl819x_HTProc.c
-> @@ -70,6 +70,7 @@ static u8 LINKSYS_MARVELL_4400N[3] = {0x00, 0x14, 0xa4};
->  void HTUpdateDefaultSetting(struct rtllib_device *ieee)
->  {
->  	struct rt_hi_throughput *pHTInfo = ieee->pHTInfo;
-> +
->  	pHTInfo->bRegShortGI20MHz = 1;
->  	pHTInfo->bRegShortGI40MHz = 1;
->  
-> diff --git a/drivers/staging/rtl8192e/rtllib_rx.c b/drivers/staging/rtl8192e/rtllib_rx.c
-> index 46d75e925ee9..ca7eba826ece 100644
-> --- a/drivers/staging/rtl8192e/rtllib_rx.c
-> +++ b/drivers/staging/rtl8192e/rtllib_rx.c
-> @@ -454,14 +454,14 @@ static bool AddReorderEntry(struct rx_ts_record *pTS,
->  	while (pList->next != &pTS->rx_pending_pkt_list) {
->  		if (SN_LESS(pReorderEntry->SeqNum, ((struct rx_reorder_entry *)
->  		    list_entry(pList->next, struct rx_reorder_entry,
-> -		    List))->SeqNum))
-> +		    List))->SeqNum)) {
->  			pList = pList->next;
-> -		else if (SN_EQUAL(pReorderEntry->SeqNum,
-> +			continue;
-> +		} else if (SN_EQUAL(pReorderEntry->SeqNum,
->  			((struct rx_reorder_entry *)list_entry(pList->next,
->  			struct rx_reorder_entry, List))->SeqNum))
->  			return false;
-> -		else
-> -			break;
-> +		break;
->  	}
->  	pReorderEntry->List.next = pList->next;
->  	pReorderEntry->List.next->prev = &pReorderEntry->List;
-> diff --git a/drivers/staging/rtl8192e/rtllib_softmac_wx.c b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
-> index f9589c5b62ba..4fc4fb25d8d6 100644
-> --- a/drivers/staging/rtl8192e/rtllib_softmac_wx.c
-> +++ b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
-> @@ -41,8 +41,8 @@ int rtllib_wx_set_freq(struct rtllib_device *ieee, struct iw_request_info *a,
->  
->  	/* if setting by freq convert to channel */
->  	if (fwrq->e == 1) {
-> -		if ((fwrq->m >= (int)2.412e8 &&
-> -		     fwrq->m <= (int)2.487e8)) {
-> +		if ((fwrq->m >= 2.412e8 &&
-> +		     fwrq->m <= 2.487e8)) {
+Thanks,
+Helge
 
-This turns integer conversions into floating point conversions. I don't
-this floating point operations are allowed in the kernel.
 
->  			int f = fwrq->m / 100000;
->  			int c = 0;
->  
-> @@ -571,9 +571,8 @@ int rtllib_wx_set_power(struct rtllib_device *ieee,
->  		ieee->ps = RTLLIB_PS_DISABLED;
->  		goto exit;
->  	}
-> -	if (wrqu->power.flags & IW_POWER_TIMEOUT) {
-> +	if (wrqu->power.flags & IW_POWER_TIMEOUT)
->  		ieee->ps_timeout = wrqu->power.value / 1000;
-> -	}
->  
->  	if (wrqu->power.flags & IW_POWER_PERIOD)
->  		ieee->ps_period = wrqu->power.value / 1000;
+The following changes since commit e8bc52cb8df80c31c73c726ab58ea9746e9ff734:
 
-Your patch does too many things at once. Please try to break it into
-smallers patches that only do one (logical) change.
+  Merge tag 'driver-core-6.1-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core (2022-10-07 17:04:10 -0700)
 
-Best regards,
-Nam
+are available in the Git repository at:
+
+  http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git tags/fbdev-for-6.1-rc1
+
+for you to fetch changes up to 29926f1cd3535f565f200430d5b6a794543fe130:
+
+  fbdev: mb862xx: Fix check of return value from irq_of_parse_and_map() (2022-10-08 15:20:09 +0200)
+
+----------------------------------------------------------------
+fbdev fixes and updates for kernel 6.1-rc1:
+
+- fixes an use-after-free in smscufx USB graphics driver,
+- adds missing pci_disable_device() in tridentfb failure paths,
+- correctly handle irq detection failure in mb862xx driver,
+- fixes resume code in omapfb/dss,
+- drops unused code in controlfb, tridentfb, arkfb, imxfb and udlfb,
+- converts uvesafb to use scnprintf() instead of snprintf(),
+- converts gbefb to use dev_groups,
+- adds MODULE_DEVICE_TABLE() entry to vga16fb
+
+----------------------------------------------------------------
+Christophe Leroy (1):
+      fbdev: mb862xx: Fix check of return value from irq_of_parse_and_map()
+
+Colin Ian King (1):
+      fbdev: udlfb: Remove redundant initialization to variable identical
+
+Hyunwoo Kim (1):
+      fbdev: smscufx: Fix use-after-free in ufx_ops_open()
+
+Jiapeng Chong (3):
+      fbdev: controlfb: Remove the unused function VAR_MATCH()
+      fbdev: tridentfb: Remove the unused function shadowmode_off()
+      fbdev: arkfb: Remove the unused function dac_read_reg()
+
+Jiasheng Jiang (1):
+      fbdev: gbefb: Convert to use dev_groups
+
+Jules Irenge (1):
+      fbdev: uvesafb: Convert snprintf to scnprintf
+
+Ruan Jinjie (1):
+      fbdev: tridentfb: Fix missing pci_disable_device() in probe and remove
+
+Shang XiaoJing (1):
+      fbdev: imxfb: Remove redundant dev_err() call
+
+Zeng Heng (1):
+      fbdev: vga16fb: Add missing MODULE_DEVICE_TABLE() entry
+
+Zhang Qilong (1):
+      fbdev: omapfb/dss: Use pm_runtime_resume_and_get() instead of pm_runtime_get_sync()
+
+ drivers/video/fbdev/arkfb.c                  |  8 --------
+ drivers/video/fbdev/controlfb.c              |  7 -------
+ drivers/video/fbdev/gbefb.c                  | 20 +++++++-------------
+ drivers/video/fbdev/imxfb.c                  |  1 -
+ drivers/video/fbdev/mb862xx/mb862xxfbdrv.c   |  2 +-
+ drivers/video/fbdev/omap2/omapfb/dss/dispc.c |  6 ++----
+ drivers/video/fbdev/omap2/omapfb/dss/dsi.c   |  6 ++----
+ drivers/video/fbdev/omap2/omapfb/dss/dss.c   |  6 ++----
+ drivers/video/fbdev/omap2/omapfb/dss/hdmi4.c |  6 ++----
+ drivers/video/fbdev/omap2/omapfb/dss/hdmi5.c |  6 ++----
+ drivers/video/fbdev/omap2/omapfb/dss/venc.c  |  6 ++----
+ drivers/video/fbdev/smscufx.c                | 14 +++++++++++++-
+ drivers/video/fbdev/tridentfb.c              | 11 +----------
+ drivers/video/fbdev/udlfb.c                  |  2 +-
+ drivers/video/fbdev/uvesafb.c                | 10 +++++-----
+ drivers/video/fbdev/vga16fb.c                |  1 +
+ 16 files changed, 41 insertions(+), 71 deletions(-)
