@@ -2,122 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D50B5F8C45
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 18:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D31E5F8C43
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 18:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbiJIQWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 12:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
+        id S229992AbiJIQVr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 9 Oct 2022 12:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbiJIQWO (ORCPT
+        with ESMTP id S229728AbiJIQVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 12:22:14 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56EA2717D;
-        Sun,  9 Oct 2022 09:22:09 -0700 (PDT)
-X-QQ-mid: bizesmtp62t1665332493t5gjuh9h
-Received: from localhost.localdomain ( [58.247.70.42])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 10 Oct 2022 00:20:36 +0800 (CST)
-X-QQ-SSF: 01100000002000G0Z000B00A0000000
-X-QQ-FEAT: xnbq7qFd8vqZdqkibScLhfQ/E6NQoDNYE6JBi1e5CRjyesSFeDluUoRL8yAoN
-        sn5YLZEiEkl2FtEwRxFGzn8PnZBEAzGIf0EdCR9jLuYQsy/hwPXqcSfvkDAmOmmeaJxotsI
-        I4W/JGhjXwxicfZPluWIEp4hbAuvsCE996mcoBj7hnJFnTgWBcwrtHvUzmYb2NkCSNSC5Vz
-        MnG/4Ped2nfSaXYfQrrJ65iG5oa/O0FxHULT3ehzHyg41JE3CEFmktGTOSKJh76g9+M06KW
-        1fjLIvvx1Aga1Jp4XSIwq5scsjtSfLefyLsn0QQ4d4RvF0YzQAY4d4HBt+2KyybPKN0SVs9
-        +tL6oeG7dBfGyTb7mEvqTCyao/tsw==
-X-QQ-GoodBg: 0
-From:   Soha Jin <soha@lohu.info>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Soha Jin <soha@lohu.info>
-Subject: [PATCH] net: mdiobus: add fwnode_phy_is_fixed_link()
-Date:   Mon, 10 Oct 2022 00:20:06 +0800
-Message-Id: <20221009162006.1289-1-soha@lohu.info>
-X-Mailer: git-send-email 2.35.1
+        Sun, 9 Oct 2022 12:21:45 -0400
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E0C27140;
+        Sun,  9 Oct 2022 09:21:43 -0700 (PDT)
+Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay04.hostedemail.com (Postfix) with ESMTP id 45D5E1A0930;
+        Sun,  9 Oct 2022 16:21:42 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id 1D92720023;
+        Sun,  9 Oct 2022 16:21:13 +0000 (UTC)
+Message-ID: <9ff662d738612f0ed2cea39266768a2eff21edc3.camel@perches.com>
+Subject: kernel style preference trivia: '* const' vs '*const' ?
+From:   Joe Perches <joe@perches.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-doc <linux-doc@vger.kernel.org>
+Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sun, 09 Oct 2022 09:21:39 -0700
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:lohu.info:qybglogicsvr:qybglogicsvr3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Stat-Signature: f7kky6c3eq77h4mcji14he9g4r95z8eo
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 1D92720023
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/54rzZQ8/w8+gpKyhVqiTMLzTvdQeQyYQ=
+X-HE-Tag: 1665332473-117259
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A helper function to check if PHY is fixed link with fwnode properties.
-This is similar to of_phy_is_fixed_link.
+The kernel uses '* const' about 10:1 over '*const'
 
-Signed-off-by: Soha Jin <soha@lohu.info>
----
- drivers/net/mdio/fwnode_mdio.c | 30 +++++++++++++++++++++++++++++-
- include/linux/fwnode_mdio.h    |  2 ++
- 2 files changed, 31 insertions(+), 1 deletion(-)
+coding_style and checkpatch don't care one way or another.
 
-diff --git a/drivers/net/mdio/fwnode_mdio.c b/drivers/net/mdio/fwnode_mdio.c
-index 689e728345ce..8e1773e4d304 100644
---- a/drivers/net/mdio/fwnode_mdio.c
-+++ b/drivers/net/mdio/fwnode_mdio.c
-@@ -6,8 +6,9 @@
-  * out of the fwnode and using it to populate an mii_bus.
-  */
- 
--#include <linux/acpi.h>
- #include <linux/fwnode_mdio.h>
-+#include <linux/property.h>
-+#include <linux/acpi.h>
- #include <linux/of.h>
- #include <linux/phy.h>
- #include <linux/pse-pd/pse.h>
-@@ -183,3 +184,30 @@ int fwnode_mdiobus_register_phy(struct mii_bus *bus,
- 	return rc;
- }
- EXPORT_SYMBOL(fwnode_mdiobus_register_phy);
-+
-+bool fwnode_phy_is_fixed_link(struct fwnode_handle *fwnode)
-+{
-+	struct fwnode_handle *dn;
-+	int err;
-+	const char *managed;
-+
-+	/* New binding: 'fixed-link' is a sub-node of the Ethernet device. */
-+	dn = fwnode_get_named_child_node(fwnode, "fixed-link");
-+	if (dn) {
-+		fwnode_handle_put(dn);
-+		return true;
-+	}
-+
-+	err = fwnode_property_read_string(fwnode, "managed", &managed);
-+	if (err == 0 && strcmp(managed, "auto") != 0)
-+		return true;
-+
-+	/* Old binding: 'fixed-link' was a property with 5 cells encoding
-+	 * various information about the fixed PHY.
-+	 */
-+	if (fwnode_property_count_u32(fwnode, "fixed-link") == 5)
-+		return true;
-+
-+	return false;
-+}
-+EXPORT_SYMBOL(fwnode_phy_is_fixed_link);
-diff --git a/include/linux/fwnode_mdio.h b/include/linux/fwnode_mdio.h
-index faf603c48c86..f35e447e524a 100644
---- a/include/linux/fwnode_mdio.h
-+++ b/include/linux/fwnode_mdio.h
-@@ -32,4 +32,6 @@ static inline int fwnode_mdiobus_register_phy(struct mii_bus *bus,
- }
- #endif
- 
-+bool fwnode_phy_is_fixed_link(struct fwnode_handle *fwnode);
-+
- #endif /* __LINUX_FWNODE_MDIO_H */
--- 
-2.30.2
+Does anyone care if there should be some kernel style preference?
+
+$ git grep -P -oh '\b(?:char|u8)\s*\*\s*const\b' -- '*.[ch]' | \
+  sort | uniq -c | sort -rn
+  12450 char * const
+   1357 char *const
+     41 u8 * const
+     17 char* const
+      9 u8 *const
+      5 char		*const
+      2 char      * const
+      2 char			*const
+      1 char  * const
+      1 char	*const
+      1 char		* const
 
