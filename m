@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE705F93C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 01:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D64BE5F9390
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 01:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232228AbiJIXpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 19:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
+        id S231969AbiJIXgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 19:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231974AbiJIXok (ORCPT
+        with ESMTP id S230380AbiJIXgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 19:44:40 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8A04199F;
-        Sun,  9 Oct 2022 16:16:23 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id g1so14288978lfu.12;
-        Sun, 09 Oct 2022 16:16:23 -0700 (PDT)
+        Sun, 9 Oct 2022 19:36:31 -0400
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF426301;
+        Sun,  9 Oct 2022 16:08:01 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id j16so14655127wrh.5;
+        Sun, 09 Oct 2022 16:08:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QSnKs0zKiN+ItvIpVEFcwhPejaXQcH+vaJ+axtSNRYA=;
-        b=WpLlvWsTU9DQy/fHX4L578cEdOecpJI3SAEDtO95Ke1gWFx4VNRLzH/5w1DK6Sgna9
-         YuJ99aoQJANags/XhUF+V6fTdPSOCf8fIPw+17wpHMtDQG2AgRvVcyis7jRKOpfKAslL
-         GPMBZZHeQ543hYH3oGWIP9Cf5OQf6RTcAGX0msqFmCU6tgHHfKxyTPR955RE0R711u2T
-         q/qBTMwuDJ/kt2+NDkvvTFnvgyXHLRirbKHTe7ZTsqi3onkmvHPs5Oem9pheJpr6c4rj
-         9v7YBAQ8SoiCdjRUiy2x0bl3RIGRFTCxC2KIPhxHcDsD7iW6hwHtsWRKPXFsaCDhIRUC
-         Ilhg==
+        bh=Y1k8ExoMgrE+90/H+Qb7B7JrKHLRNmY/hLhdAbvuUyE=;
+        b=WaYUEZXDeGG+pRnum0F8XUyzTglhDgJumMaK6mqxk2OgXZRSg39P5ykguGnEH5EObj
+         GzY3kVDD2G/BLV+6IFrRM2BSXHmvuY8X2//pPUwWH7H3o4rzgksEx/IHrMGG2jlIrnop
+         jElgqKuZgYPkvMRSUQBsrlibNikj4EPYfhcgs3yGO6FEjLoIiPGtuV4TlM/L2FQwtJUb
+         mNW3VtElfNshT2cK/QEBUs4zq9Qjvny4HGfxMroRZy8uJ0Ni8OZHQRPjBZ7r4bq4w0Qx
+         ucclPOliGYsXYrx3vDm2DKDq3GV41x21e5PXZh5PyRggyew9Tf62+iwgDTPvVEQ/g3CC
+         LLlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QSnKs0zKiN+ItvIpVEFcwhPejaXQcH+vaJ+axtSNRYA=;
-        b=kTmBGnWAaViSYVZK+rypqM3k/8RnNC65VgjF9CAt3T1156Ij6WnucL3UEjMJ1O6QFc
-         uvSbyjZF1TvUawoZIzuT6apEkdcFKxO1HhvMCoJR0dPB4XCX9WWo4b6+YzVQXgivrkna
-         PeLPADTVoVkTpVW/X+V8vD7kOIW3Zwmisvh9Gigy/Reibr6gWjd9MgT3zRsQgqTv2zTp
-         NBo9f8ZBoTlyQN39Aeejrcu5Tq6GZ1qIVSP/tjft4lEB9OMT6sy9MAxDrPbWvf85UjMp
-         Wzn9PcBJYASsTw3U92XERgu4LbLEAFx6pKeYp4Sv5M8FFIkFc0bX6FqgccfQKYRD8Db6
-         imBw==
-X-Gm-Message-State: ACrzQf14KKOfe20gHWM7Yih6yIyv6sX5013hdSVFMKEQ1ApkieT15U5u
-        MDfkNb8+Ya2YQNgPt51RiZ9rY/14VeOtSA==
-X-Google-Smtp-Source: AMsMyM48dKtxGsLdUbiAwPcvmczwRpmVgjGpgAkGC/va6UYs5oIhnp68pJ1r5wfr6ox2dyVcXcFmmA==
-X-Received: by 2002:adf:cf0a:0:b0:22e:3f43:a5f7 with SMTP id o10-20020adfcf0a000000b0022e3f43a5f7mr9737278wrj.634.1665356461865;
-        Sun, 09 Oct 2022 16:01:01 -0700 (PDT)
+        bh=Y1k8ExoMgrE+90/H+Qb7B7JrKHLRNmY/hLhdAbvuUyE=;
+        b=aHjzTAnzApsx7wNbtm7wOMKms4oihDmKHVRVvNBuvJCAwFwAXhHkx8tnOAgN4ca5Md
+         AvzlxX0NSN2xx5qeKaazN8xh5hi4pgGOoGMvD0VM1TPvwOOe5DIevhoTI8636i+e1uNu
+         PRX3tGykdL5kZnBRr9/TbvF+zPf/T+TqmEO/SeTLy9rxM2J8TMIT/RqV3ENOvEaBA0ek
+         zJRLx/9/VJ+ZsBu6F9Uld/lRiwuuI4IFKeN3vRC0a/OauKIGr++ibZDJQ5B29AgE3dwM
+         E0eeJExjiUmWATxZm75JPbsgoRVTSZ5DoxJGXUgWvTe+5VIdlBvKoVGgsOW6vK/HBpF/
+         bKZw==
+X-Gm-Message-State: ACrzQf3li1s2iIldR2yVuZndZWUyr9wOAq7nWp6ObRaxKZJ0bsYU16Ek
+        NAwu67rSFPlvGCoyx+JQhOo=
+X-Google-Smtp-Source: AMsMyM4FZCJpgj1UrHoG5gIC4RReB0T1U7XDnLsp1tIzpDgY/qGNTdqFCvr+985hJo4NwGTGUU0XPA==
+X-Received: by 2002:adf:dd8d:0:b0:22e:4675:86c9 with SMTP id x13-20020adfdd8d000000b0022e467586c9mr9326722wrl.643.1665356462907;
+        Sun, 09 Oct 2022 16:01:02 -0700 (PDT)
 Received: from prasmi.home ([2a00:23c8:2501:c701:e4:5cde:80ab:dfd4])
-        by smtp.gmail.com with ESMTPSA id r16-20020adff710000000b0022afbd02c69sm7239689wrp.56.2022.10.09.16.01.00
+        by smtp.gmail.com with ESMTPSA id r16-20020adff710000000b0022afbd02c69sm7239689wrp.56.2022.10.09.16.01.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 16:01:01 -0700 (PDT)
+        Sun, 09 Oct 2022 16:01:02 -0700 (PDT)
 From:   Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -61,9 +61,9 @@ Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 3/5] arm64: dts: renesas: r9a07g044: Drop WDT2 node
-Date:   Mon, 10 Oct 2022 00:00:42 +0100
-Message-Id: <20221009230044.10961-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 4/5] arm64: dts: renesas: r9a07g054: Drop WDT2 node
+Date:   Mon, 10 Oct 2022 00:00:43 +0100
+Message-Id: <20221009230044.10961-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221009230044.10961-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20221009230044.10961-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -71,8 +71,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,38 +83,38 @@ From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
 WDT CH2 is specifically to check the operation of Cortex-M33 CPU and if
 used from CA55 CPU would result in an unexpected behaviour. Hence drop
-WDT2 node from RZ/G2L SoC DTSI.
+WDT2 node from RZ/V2L SoC DTSI.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
- arch/arm64/boot/dts/renesas/r9a07g044.dtsi | 15 ---------------
+ arch/arm64/boot/dts/renesas/r9a07g054.dtsi | 15 ---------------
  1 file changed, 15 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-index 2283d4fb8736..c606d9ef5991 100644
---- a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-@@ -994,21 +994,6 @@ wdt1: watchdog@12800c00 {
+diff --git a/arch/arm64/boot/dts/renesas/r9a07g054.dtsi b/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
+index 358d4c34465f..7c7bbe377699 100644
+--- a/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
+@@ -1000,21 +1000,6 @@ wdt1: watchdog@12800c00 {
  			status = "disabled";
  		};
  
 -		wdt2: watchdog@12800400 {
--			compatible = "renesas,r9a07g044-wdt",
+-			compatible = "renesas,r9a07g054-wdt",
 -				     "renesas,rzg2l-wdt";
 -			reg = <0 0x12800400 0 0x400>;
--			clocks = <&cpg CPG_MOD R9A07G044_WDT2_PCLK>,
--				 <&cpg CPG_MOD R9A07G044_WDT2_CLK>;
+-			clocks = <&cpg CPG_MOD R9A07G054_WDT2_PCLK>,
+-				 <&cpg CPG_MOD R9A07G054_WDT2_CLK>;
 -			clock-names = "pclk", "oscclk";
 -			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>,
 -				     <GIC_SPI 54 IRQ_TYPE_LEVEL_HIGH>;
 -			interrupt-names = "wdt", "perrout";
--			resets = <&cpg R9A07G044_WDT2_PRESETN>;
+-			resets = <&cpg R9A07G054_WDT2_PRESETN>;
 -			power-domains = <&cpg>;
 -			status = "disabled";
 -		};
 -
  		ostm0: timer@12801000 {
- 			compatible = "renesas,r9a07g044-ostm",
+ 			compatible = "renesas,r9a07g054-ostm",
  				     "renesas,ostm";
 -- 
 2.25.1
