@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA5C5FA89A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 01:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC2E5FA89E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 01:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiJJXWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 19:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
+        id S229683AbiJJXWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 19:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiJJXWA (ORCPT
+        with ESMTP id S229544AbiJJXWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 19:22:00 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B54A7CB64
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 16:21:59 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id r3-20020a05600c35c300b003b4b5f6c6bdso7187378wmq.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 16:21:59 -0700 (PDT)
+        Mon, 10 Oct 2022 19:22:36 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DFB7CB65;
+        Mon, 10 Oct 2022 16:22:35 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id u10so6366770ilm.5;
+        Mon, 10 Oct 2022 16:22:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FYCVY1jSWriLX0/dt1Sm4C0QAeI0aHsl2mcuPeWXDXE=;
-        b=Ss5+xcfNOCPRXY5jRGOy5YgOINzc3BSSNcmwW9Lj7kbYWFGrqfmA/ZsO5dCr4cFeeA
-         2Zye4jgMpfu0Bee+OUxh/vuSz+nDl4RV7YvH9+CaPq82bG6Igv5thXFuWf58lJJ0tCiD
-         3/RWg/rLtSEZ8YhNdxJW/ggFLxCDl4LckvyD79nFzL+ii+hy1sorqTVHaYmOaLl48FYq
-         q3qNWBt/N2GIp25LalZLNTWPEZCmpVqhAPe96W4+hGBDv0p4bIxIDNkW3mQ94KI8M3ZF
-         lKyBKXQDVWo6IxKoDfyuuI7UbzG0jRzuEWSzFhHE52sTwb5JQ6iFM2ziXLQ3+WoAJuNb
-         CGZg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xXda3aTJALziQd8LZ4HyvmpbEN2s8N724Nf4X7JuxXw=;
+        b=DiCdkPM3ayZgQGw1oFuPR+4CcnJaM+6jx805hFxp2dG/evzVYwc9uJGBEMQw9hKuPq
+         jET16b5fYgzd8HR197N65zcF5rT20s0WAAbGdvymCm35MsSdRnafDNob5dvU0FVwWfHn
+         y3A1GONfWWf7HIdBBekyJWNoM0cRyhzdEuypCmSW5jo6HJMnPXSGokfRN8GZp0BH24i3
+         y8srnBDgwJlaQeZJEp3tPcWel4/OA0W4WuCntjouXcTKhx96LxBAV1F/VkzR1aBib6Hb
+         jgqiJ+S2efWODcW/SpUbbfURA15rqAPmIMwQ1MCDbJqmc69kewk86UNQznnW3KQGKoS9
+         NgNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FYCVY1jSWriLX0/dt1Sm4C0QAeI0aHsl2mcuPeWXDXE=;
-        b=O0g+j7PRzBqYq50/4qmSRXLXCqqYS+eqD0fCXp3YQfCRtkAZGHgCDifivkKWn+H12D
-         RB8F5Jm3IJFkO1pHMlDximBQS4mI/FnaLIq4J5VaH+AF+u8TkTkbUAJJB//uuY5iARl2
-         rtz4Mr7LGQQ6duxv2isnF28tzjM+fCfT5dvZ1ydvNXIuDgqlXYVFpuizr28SkLIbIX/x
-         H0Dnn0eez7Ha0xOw330x01ZMZQcg9n/ppqnttIy+SeGRRhIxTuf6HYU33hPa9SHNVm6G
-         3uengR/TnOnRVPKAG2AtQFpIEexqtziCQmmR3hIAQ4jElGvV4CIB9xxcutt19AeC2XAZ
-         V+Ag==
-X-Gm-Message-State: ACrzQf3O4w39rdsbcCOaCfDWdZaOeHfGc3hLGBkN1n3HipuFloSimF/+
-        hvExC0GX750ivgLEjjpln7l+CrI679yeFng73SgfEg==
-X-Google-Smtp-Source: AMsMyM7lU4DMUSzHo8u2zvOo9/J/BYOC7xLpBbHhbZqlF8UIzOhWc/O/o1rGaYIM0t8QWPxlrmNKmJ6g/e3d1KVc0fQ=
-X-Received: by 2002:a05:600c:4e94:b0:3b4:b416:46c3 with SMTP id
- f20-20020a05600c4e9400b003b4b41646c3mr14620205wmq.149.1665444118102; Mon, 10
- Oct 2022 16:21:58 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xXda3aTJALziQd8LZ4HyvmpbEN2s8N724Nf4X7JuxXw=;
+        b=Rjl28wIrIeXNNCc6rHFkShSwgqW9UkcsTZ1Q8JVxPlHUmv+nQIQXB4F9zmebrdWTk0
+         cxil0yh4qaBcOEc/e1f5pxVauiDkYwAg+O3D6J3vmePuMiVQfV+lsHgpm7NvS1pg+qag
+         afB9z9Sd2Nyj1tCLZG/sdvWPSygp31AIgWQwY22gWJn7RPi1HHf9cFHM+HaOCm9HzuCF
+         MxSkjem9ESVt7S+SSNDEJZrCjsCsRJ8RQFDqBIzHVNqtglXKB3CpDSgps4WOD/JMrq/x
+         lUVK7LaYod0+T8DTgg2z54kq/rcy/BkJrTPF+VWVVyHhvmkr9W9VCxjcE+C9XtXl6hav
+         4z1w==
+X-Gm-Message-State: ACrzQf0AJlTWD9zfrZGQMTmAmDXOMfor/+8XL+So4DXO7eYgMYe0jhB2
+        JmoKRhQ5YUd9pW05lbYrq7ggCqVgTw2yKA==
+X-Google-Smtp-Source: AMsMyM6czbGTLFOK8h5xrObQR2p50k9F6EeWMjxD0SKBxhkM17PfkoMsy3Ks6dj7cIpjBmV3+OJFGg==
+X-Received: by 2002:a92:ca4d:0:b0:2f9:3e9e:e566 with SMTP id q13-20020a92ca4d000000b002f93e9ee566mr10533363ilo.165.1665444154326;
+        Mon, 10 Oct 2022 16:22:34 -0700 (PDT)
+Received: from localhost ([2607:fea8:a2e2:2d00::deb2])
+        by smtp.gmail.com with UTF8SMTPSA id d3-20020a056e020be300b002f584a19a79sm4207450ilu.34.2022.10.10.16.22.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Oct 2022 16:22:33 -0700 (PDT)
+From:   Richard Acayan <mailingradian@gmail.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Richard Acayan <mailingradian@gmail.com>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH v9 0/3] SDM670 Pin Control Driver
+Date:   Mon, 10 Oct 2022 19:22:25 -0400
+Message-Id: <20221010232225.209700-1-mailingradian@gmail.com>
+X-Mailer: git-send-email 2.38.0
+In-Reply-To: <Y0POmQ+xrQ/HT7RF@google.com>
+References: <20221007213241.84962-1-mailingradian@gmail.com> <Y0POmQ+xrQ/HT7RF@google.com>
 MIME-Version: 1.0
-References: <20221010053600.272854-1-namhyung@kernel.org> <20221010053600.272854-14-namhyung@kernel.org>
-In-Reply-To: <20221010053600.272854-14-namhyung@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 10 Oct 2022 16:21:46 -0700
-Message-ID: <CAP-5=fWbDKFJJc7044rs-EDFf6PR156cFAtjrRduVOK9M3zYwA@mail.gmail.com>
-Subject: Re: [PATCH 13/19] perf stat: Split process_counters()
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,85 +79,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 9, 2022 at 10:36 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> It'd do more processing with aggregation.  Let's split the function so that it
-> can be shared with by process_stat_round_event() too.
->
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> On Fri, 07 Oct 2022, Richard Acayan wrote:
+> > Richard Acayan (3):
+> >   dt-bindings: pinctrl: qcom: add sdm670 pinctrl
+> >   pinctrl: qcom: do not reinitialize gpio valid mask
+> >   pinctrl: qcom: add sdm670 pinctrl
+> > 
+> >  .../bindings/pinctrl/qcom,sdm670-tlmm.yaml    |  127 ++
+> >  drivers/pinctrl/qcom/Kconfig                  |    9 +
+> >  drivers/pinctrl/qcom/Makefile                 |    1 +
+> >  drivers/pinctrl/qcom/pinctrl-msm.c            |    3 +-
+> >  drivers/pinctrl/qcom/pinctrl-sdm670.c         | 1345 +++++++++++++++++
+> 
+> And I'm receiving this because ... ?
 
-Acked-by: Ian Rogers <irogers@google.com>
+You wrote a patch a few years ago, then supposedly changed your email, and I
+wanted to know if there's anything we should consider before removing some of
+the code you wrote for it (in patch 2). After I added you as a recipient, it got
+a review tag, so I don't know what input you can give now (unless it's
+important). My bad for not removing you yet.
 
-Thanks,
-Ian
+Link: https://lore.kernel.org/all/20190610084213.1052-3-lee.jones@linaro.org/
 
-> ---
->  tools/perf/builtin-stat.c | 22 +++++++++++++---------
->  1 file changed, 13 insertions(+), 9 deletions(-)
->
-> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> index 38036f40e993..49a7e290d778 100644
-> --- a/tools/perf/builtin-stat.c
-> +++ b/tools/perf/builtin-stat.c
-> @@ -465,15 +465,19 @@ static int read_bpf_map_counters(void)
->         return 0;
->  }
->
-> -static void read_counters(struct timespec *rs)
-> +static int read_counters(struct timespec *rs)
->  {
-> -       struct evsel *counter;
-> -
->         if (!stat_config.stop_read_counter) {
->                 if (read_bpf_map_counters() ||
->                     read_affinity_counters(rs))
-> -                       return;
-> +                       return -1;
->         }
-> +       return 0;
-> +}
-> +
-> +static void process_counters(void)
-> +{
-> +       struct evsel *counter;
->
->         evlist__for_each_entry(evsel_list, counter) {
->                 if (counter->err)
-> @@ -494,7 +498,8 @@ static void process_interval(void)
->         perf_stat__reset_shadow_per_stat(&rt_stat);
->         evlist__reset_aggr_stats(evsel_list);
->
-> -       read_counters(&rs);
-> +       if (read_counters(&rs) == 0)
-> +               process_counters();
->
->         if (STAT_RECORD) {
->                 if (WRITE_STAT_ROUND_EVENT(rs.tv_sec * NSEC_PER_SEC + rs.tv_nsec, INTERVAL))
-> @@ -980,7 +985,8 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
->          * avoid arbitrary skew, we must read all counters before closing any
->          * group leaders.
->          */
-> -       read_counters(&(struct timespec) { .tv_nsec = t1-t0 });
-> +       if (read_counters(&(struct timespec) { .tv_nsec = t1-t0 }) == 0)
-> +               process_counters();
->
->         /*
->          * We need to keep evsel_list alive, because it's processed
-> @@ -2098,13 +2104,11 @@ static int process_stat_round_event(struct perf_session *session,
->                                     union perf_event *event)
->  {
->         struct perf_record_stat_round *stat_round = &event->stat_round;
-> -       struct evsel *counter;
->         struct timespec tsh, *ts = NULL;
->         const char **argv = session->header.env.cmdline_argv;
->         int argc = session->header.env.nr_cmdline;
->
-> -       evlist__for_each_entry(evsel_list, counter)
-> -               perf_stat_process_counter(&stat_config, counter);
-> +       process_counters();
->
->         if (stat_round->type == PERF_STAT_ROUND_TYPE__FINAL)
->                 update_stats(&walltime_nsecs_stats, stat_round->time);
-> --
-> 2.38.0.rc1.362.ged0d419d3c-goog
->
+> 
+> >  5 files changed, 1483 insertions(+), 2 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml
+> >  create mode 100644 drivers/pinctrl/qcom/pinctrl-sdm670.c
+> > 
