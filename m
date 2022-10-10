@@ -2,143 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D6685FA2F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15565FA2F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbiJJRvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 13:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
+        id S229910AbiJJRwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 13:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiJJRvn (ORCPT
+        with ESMTP id S229768AbiJJRwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 13:51:43 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1721B15800
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:51:43 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id o4-20020a258d84000000b006bcfc1aafbdso11341580ybl.14
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:51:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fBlnd4XOswp/sg9aQW3gv5szg86tXu6TkQ8l/Mwzfog=;
-        b=nk/3rxvqJoK9SyUHQWL4FrcBRa1u5cO4vRwonLiomf+mwgVgWWJI1zDI2WrsG4X70S
-         nmYcNaaINMTJvz4X+rhldlAAsnDEIdQ1m/0le3N3a4jcmuJBnx7ADpYTD37EtiIQ8Ek4
-         UdZRVtpQ9jRuCSlVU0a7FPDzhLIVxEVRtxg1As+928YvNnSFB/ebJx9BGRXZ+TqF7Yvx
-         1RE2jxe2d5hBME089OeAg4k07EJx1sEL1FXum8kBR1LYise8GCM5CrRWtjtenaTYKGO8
-         7ToFnDGrUdgCeG5TNXYr09gkPBJU4y/mo/PCaw7hg1fsyCBRDaiMRFl5EKrZexrFlMpB
-         5aaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fBlnd4XOswp/sg9aQW3gv5szg86tXu6TkQ8l/Mwzfog=;
-        b=6QGaUOqdvG3ITk7OeMKQbH1x2MtEyONPXZdUOj/CgBxacVcZdO3+kykbmb1gz2IfT5
-         zxR9MYSVYNwSfpfd3HWBnbyZrvQw0Rta87EKRzOt5Rn0B04T94fZ70faaYATFKCXGO4M
-         JBjAjPQG23PUosIXsNFj3RiVR2AFC9mPaAK7l0HMSuczbBGyDbeiHoYZCUArQ6l3Y52J
-         29JhG1DxEAM4/5+2LmmvuIRKKzZ3S9QVMWrLbp2O70Doldim6M3wSNJzFRtEzZzNeWI8
-         5E3FNqTMjcmAW1qSkumdDvezZyuI9TetO7JGLDi5p0M5c6Z5Kc7FFTL/tVKZov2OY73E
-         2YNQ==
-X-Gm-Message-State: ACrzQf2i88HR0Xlj12lWUKhH/JN/v1fzLwUDGnWOb4DSSGgMNiOJkMwM
-        nHOJDxH78TdKPB9KJQCZeATOEJ5QPm1Rxnr/HRI=
-X-Google-Smtp-Source: AMsMyM5jkqv1zz43050m6pWEovXCAiaua+rKQiGXBtEfN0TkeuKfcUR3yW7cLziDOqKL4IlVFs/66K0FaURGRe5s6Ow=
-X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:0:100e:712:883d:1c60:2d47:598d])
- (user=ndesaulniers job=sendgmr) by 2002:a81:d45:0:b0:356:d50d:d010 with SMTP
- id 66-20020a810d45000000b00356d50dd010mr18174102ywn.437.1665424302401; Mon,
- 10 Oct 2022 10:51:42 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 10:51:34 -0700
-In-Reply-To: <202210072120.V1O2SuKY-lkp@intel.com>
+        Mon, 10 Oct 2022 13:52:35 -0400
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339CE13E14;
+        Mon, 10 Oct 2022 10:52:34 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 85BC52B06F1B;
+        Mon, 10 Oct 2022 13:52:31 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Mon, 10 Oct 2022 13:52:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1665424351; x=1665427951; bh=eIM+MeuDgl
+        5z58nSOwcRux9xgNdpNXrzM2SeDZwQsd8=; b=oYZS5cu/Rsvl0KB8JTLsGB3saF
+        kHTxa5Fkfk+2YZuUmW9S023XW9o0XZ0SDkanDwFAcRrfnfQSmXsoo5P3Ges1zjBL
+        xfvxLGE/PIRL1hIfssvk3zHIJO5gYIpw1Hq6FsGy6STG1EjMUm9xPrf7SoN0TbcM
+        lW+Pmrs07xyj6QAHa9a4A47TC+EdrpYC4ECJp1POmEvis5e7t0l4oRjLdzWpE/+5
+        huVbsRcM8F2DYQ/eWtpk1cO+0hEV+8sBDdZnEPKEY+8mR+FQsBIlQLr7ia0I79Yd
+        dx5VnCYxMOOy7K6aAa4zQAHfR+qG4OTopY2xqj0nZ6JexpQYsNFTfI+kIXDw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665424351; x=1665427951; bh=eIM+MeuDgl5z58nSOwcRux9xgNdp
+        NXrzM2SeDZwQsd8=; b=U9A8Pr/nhJN0fRLBk0x5nsQOv7x3e+NiaeXMGoKz2X8C
+        yQizTYenqakkepNspG883KFpigUTTBod0GP0z/+BJxxLiGU15sBrf4DmuFOrB5pk
+        tZxoT7wGtBG/fZ0YVC+OysEa7hll+3SyB+TxTPCvtAPrpskNkj5QTzlCSC3k9q6A
+        ZoUONN2LuxiqmrA/hwV/Rn094kcd8rKbbbdNRghnqU3fEEXT86vBPrqf2i0KTOcC
+        zKbvN05lgLt0E8O6aiqU1FAunw7EKsjNbMzAxpi9HwBXV6KwODbKyvwEjeub96px
+        qKdbKSnAzV+joiEs4L4uLyufFYzCkEvf55D0zq+FcQ==
+X-ME-Sender: <xms:3ltEY_8b39mNjScYLdR4EksI10Dmr9dCKLpvYm0EqLHlUzUwYrVQEg>
+    <xme:3ltEY7shMHCvjx9dhS_CDkTBNypGWkHRDgUEBy8O590its7J_gEj6K6S0giUkpAxZ
+    wSvMi7sMKZIRecmb4Y>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejgedgudduvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeelhfejffehveevjeduffegieffhfeihfekteetffdujedufeeghfekuedt
+    heetgeenucffohhmrghinhepthhugigsuhhilhgurdgtohhmpdhkvghrnhgvlhdrohhrgh
+    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhn
+    ugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:3ltEY9C2kDz3h37uVXomDacWmOvYYCjaELqRJgTzUtWZvHe_jBpX7Q>
+    <xmx:3ltEY7cigPoef-_K5NZhRVno0hk_IX7XGhKORG3mGpkbz6fDrvav1Q>
+    <xmx:3ltEY0P2trZKuLHGNKQ8enQ6dPvU7dVmK_jFfzTAbeHtGlKUXyeoqQ>
+    <xmx:3ltEYzpfzxKrcwSazZHRW6cp90WKwAXb278VbPYcPIlYN2rn4Q9OjnNW0SA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 933A0B60086; Mon, 10 Oct 2022 13:52:30 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
 Mime-Version: 1.0
-References: <202210072120.V1O2SuKY-lkp@intel.com>
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1665424294; l=2791;
- i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=79P/bvbEb7lOxoUitL3cE1zzO5WZPlSo0wty3dVeQAY=;
- b=B5zs5846RZppHTs/CE8/c+09IEq445Jvsd3Vdr73h8bHw68EC4yYmabbF1udsPYDDSop/Y6KuyI3
- Q9t55mKQDsfxtPXBKw7hoZQJMbxVuxixwsIYFa/HaIIjtnJ9joA3
-X-Mailer: git-send-email 2.38.0.rc2.412.g84df46c1b4-goog
-Message-ID: <20221010175134.2671410-1-ndesaulniers@google.com>
-Subject: [PATCH] lib/xor: use r10 rather than r7 in xor_arm4regs_{2|3}
-From:   Nick Desaulniers <ndesaulniers@google.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-Id: <158e9f4f-9929-4244-b040-78f2e54bc028@app.fastmail.com>
+In-Reply-To: <87ilkrpqka.fsf@kernel.org>
+References: <CA+G9fYsZ_qypa=jHY_dJ=tqX4515+qrV9n2SWXVDHve826nF7Q@mail.gmail.com>
+ <87ilkrpqka.fsf@kernel.org>
+Date:   Mon, 10 Oct 2022 19:52:09 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Kalle Valo" <kvalo@kernel.org>,
+        "Naresh Kamboju" <naresh.kamboju@linaro.org>
+Cc:     Netdev <netdev@vger.kernel.org>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        linux-wireless@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>, ath11k@lists.infradead.org,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org
+Subject: Re: drivers/net/wireless/ath/ath11k/mac.c:2238:29: warning:
+ 'ath11k_peer_assoc_h_he_limit' reading 16 bytes from a region of size 0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kbuild test robot reports:
-In file included from crypto/xor.c:17:
-./arch/arm/include/asm/xor.h:61:3: error: write to reserved register 'R7'
-                GET_BLOCK_4(p1);
-                ^
-./arch/arm/include/asm/xor.h:20:10: note: expanded from macro 'GET_BLOCK_4'
-        __asm__("ldmia  %0, {%1, %2, %3, %4}" \
-                ^
-./arch/arm/include/asm/xor.h:63:3: error: write to reserved register 'R7'
-                PUT_BLOCK_4(p1);
-                ^
-./arch/arm/include/asm/xor.h:42:23: note: expanded from macro 'PUT_BLOCK_4'
-        __asm__ __volatile__("stmia     %0!, {%2, %3, %4, %5}" \
-                             ^
-./arch/arm/include/asm/xor.h:83:3: error: write to reserved register 'R7'
-                GET_BLOCK_4(p1);
-                ^
-./arch/arm/include/asm/xor.h:20:10: note: expanded from macro 'GET_BLOCK_4'
-        __asm__("ldmia  %0, {%1, %2, %3, %4}" \
-                ^
-./arch/arm/include/asm/xor.h:86:3: error: write to reserved register 'R7'
-                PUT_BLOCK_4(p1);
-                ^
-./arch/arm/include/asm/xor.h:42:23: note: expanded from macro 'PUT_BLOCK_4'
-        __asm__ __volatile__("stmia     %0!, {%2, %3, %4, %5}" \
-                             ^
-Thumb2 uses r7 rather than r11 as the frame pointer. Let's use r10
-rather than r7 for these temporaries.
+On Mon, Oct 10, 2022, at 6:54 PM, Kalle Valo wrote:
+> Naresh Kamboju <naresh.kamboju@linaro.org> writes:
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1732
-Link: https://lore.kernel.org/llvm/202210072120.V1O2SuKY-lkp@intel.com/
-Reported-by: kernel test robot <lkp@intel.com>
-Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- arch/arm/include/asm/xor.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> Build log: https://builds.tuxbuild.com/2F4W7nZHNx3T88RB0gaCZ9hBX6c/
+>
+> Thanks, I was able to reproduce it now and submitted a patch:
+>
+> https://patchwork.kernel.org/project/linux-wireless/patch/20221010160638.20152-1-kvalo@kernel.org/
+>
+> But it's strange that nobody else (myself included) didn't see this
+> earlier. Nor later for that matter, this is the only report I got about
+> this. Arnd, any ideas what could cause this only to happen on GCC 11?
+>
+> -- 
+> https://patchwork.kernel.org/project/linux-wireless/list/
+>
+> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
-diff --git a/arch/arm/include/asm/xor.h b/arch/arm/include/asm/xor.h
-index 669cad5194d3..934b549905f5 100644
---- a/arch/arm/include/asm/xor.h
-+++ b/arch/arm/include/asm/xor.h
-@@ -51,7 +51,7 @@ xor_arm4regs_2(unsigned long bytes, unsigned long * __restrict p1,
- 	register unsigned int a1 __asm__("r4");
- 	register unsigned int a2 __asm__("r5");
- 	register unsigned int a3 __asm__("r6");
--	register unsigned int a4 __asm__("r7");
-+	register unsigned int a4 __asm__("r10");
- 	register unsigned int b1 __asm__("r8");
- 	register unsigned int b2 __asm__("r9");
- 	register unsigned int b3 __asm__("ip");
-@@ -73,7 +73,7 @@ xor_arm4regs_3(unsigned long bytes, unsigned long * __restrict p1,
- 	register unsigned int a1 __asm__("r4");
- 	register unsigned int a2 __asm__("r5");
- 	register unsigned int a3 __asm__("r6");
--	register unsigned int a4 __asm__("r7");
-+	register unsigned int a4 __asm__("r10");
- 	register unsigned int b1 __asm__("r8");
- 	register unsigned int b2 __asm__("r9");
- 	register unsigned int b3 __asm__("ip");
--- 
-2.38.0.rc2.412.g84df46c1b4-goog
+No idea here, though I have not tried to reproduce it. This looks
+like a false positive to me, which might be the result of some
+missed optimization in the compiler when building with certain
+options. I see in the .config that KASAN is enabled, and this sometimes
+causes odd behavior like this. If it does not happen without KASAN,
+maybe report it as a bug against the compiler.
 
+     Arnd
