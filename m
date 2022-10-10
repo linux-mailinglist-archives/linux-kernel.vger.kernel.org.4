@@ -2,89 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4949A5F9810
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 08:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C49A5F9811
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 08:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiJJGFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 02:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53328 "EHLO
+        id S231569AbiJJGF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 02:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbiJJGFA (ORCPT
+        with ESMTP id S230230AbiJJGFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 02:05:00 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7784A2251C
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 23:04:58 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id l4so9486499plb.8
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 23:04:58 -0700 (PDT)
+        Mon, 10 Oct 2022 02:05:24 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9538201AB
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 23:05:23 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id y1so2780337pfr.3
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 23:05:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ze6sWpLp4OvIIrfkLpb2+ilcLI2WvN54fOLaHJtyJQ0=;
-        b=brojRUA4twJZbhunUPYWOqEG3kEV1+Dt5K34DHoxqPqdRk7/m1oig7e/E3ZrIjKEm5
-         WwwJX5MD/Tt2CNOhQx1slrOGSRpTWRQ0f5og5wJMxA9qRP8OatdepajU6lGlQvTerV5t
-         +tGum6VU5yOzWqdv6V7W4E55U6C3LWAassuBs+1VQ4B7Dr46mCY0LmkLZY6QWglhSo1h
-         mPq+5W/QRslkKQ8rJajiRu3rIVgS9hAzw5Wvbcs4BQApO4SkRr58PBNmDxLvHT9/zbIX
-         zEPNQ3juQycV/tbNxi/ike8VJIfzIxKRdykkRfET/wR/yBJahqydktty3iFLaOmKp4Up
-         cdlw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=nm7YKL49tk7wRZ/a00qBsDIN6e5MXIummpQ4woA5c14=;
+        b=aQKkENST6CPEq0eO3HKe4qKzPkPrnjeUPOrb5SdGU2Ra0Gvhw4P3PWtN5kaLi8/TqI
+         L8+PLC5sVLeEJwdGUwQvvYZHN+rzSdvK8Vjg22Kmn2Xrur8aE9yia3RWe3+y8O/4d/Z+
+         rGaUijoc659F133JvbySVKEufaxvBy2rEbQoSwq6IRxPRW0D/cr9s5ZraJ1m2F695Bye
+         Cphlv/J5fGJY+jpfT/DoVJeZ0jEg1EkRccyf1PVnqhsUxvmxpjoVjaW4mKftnN452UIv
+         gVZcQmUVBffXXlZOX96tF23slqg+TSF3StTblLue5arE0WPYfAFy35sJDgwUx+xRNhoR
+         ZXNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ze6sWpLp4OvIIrfkLpb2+ilcLI2WvN54fOLaHJtyJQ0=;
-        b=qt3IeQJDQ8/VJf1bg+t2c5Wgb/vUPHg6vZCjo3VYpWydOAKKmibFGl97M6FMMQ7HGC
-         6uSXukcNwiIYbJgiMvpEdX0Uk/ZKRNFU5UC4jr/ze6xdSAtqCmYbfb3z28T+WcqZi5VT
-         KAdk4wmnbJuFUDCHyKOCfZj9iFw+UeqdwRrUloFLm5m9By3DVWSqYSSnimNV6l1iRFVd
-         M+gmeEsQfBxkW4ny3I2zpQxkTicDekbXalut83gyOyZ9rrm9GZZN946/WXvTy/k284Gc
-         300g6KpiVrZ1GDhTNemU68HYWU60AMXVGp0uqJ+Ic886U4Hlxz1hnLa2Xp/Dpj6jFFIq
-         VVvw==
-X-Gm-Message-State: ACrzQf2ooi0O98ZWmD2SApKxtBVg9dpeNt8YMsu68epu/YiZkK6beF5W
-        EWEK/Ka/F+QUv8YZV1PZvUwMyw==
-X-Google-Smtp-Source: AMsMyM4Dw8vuxf5zlXz41FyIpJmGE5/yHcnIZmYyUCdgOIk9PW8Q4pogshvbi2TUcY/YN/hvkrBz0A==
-X-Received: by 2002:a17:902:ea0c:b0:181:61d1:ac1c with SMTP id s12-20020a170902ea0c00b0018161d1ac1cmr9048198plg.120.1665381897930;
-        Sun, 09 Oct 2022 23:04:57 -0700 (PDT)
-Received: from localhost ([122.172.86.128])
-        by smtp.gmail.com with ESMTPSA id e10-20020a170902784a00b0017dd839f2a5sm5691051pln.38.2022.10.09.23.04.56
+        bh=nm7YKL49tk7wRZ/a00qBsDIN6e5MXIummpQ4woA5c14=;
+        b=V2PW+3rrjF00FkuVfup4RnmRuMb0/zulXkmUvvl/2zZn972wcJLHylICUAYkPQ3LQs
+         +oo3CZOj7Inl4t8pXGBCA0/oSXuSMgo9YlUSU3oiTMft5IyAHTLDBNSfBdRRW+/iAqUu
+         VWgs/oElHTTyMzsK0PVenxb0KOzVswKlzMha5qBbVJ/1GrgBrkRGg5XsYrubtgKu+rSz
+         qU30Lx7X9ptBlrwv8i/xaKnDVno2hZbmQeVwC/M//5k1tMT7AgbYe61sjd+916H0vwpw
+         KCfqpr6Fa4gq8WF8Y/rbqk7K69NvQiY5qIq24aB7N3UkdlikIUDNBwhrdLuSsXY2SH6M
+         uaSA==
+X-Gm-Message-State: ACrzQf01a7KpH2HiaVMDrVcT8m8JbN+mDU20tXUcMeru5oqpI+am0ltb
+        6ASveKNgfx1mC4GSZxHQoXoueqxtYCj4Iw==
+X-Google-Smtp-Source: AMsMyM5eqpRu3hcShDlRN0xT43nRbWeP6tnG5AhlUAtINev9Y4zNBPEifY6RuMia1cixXaChZEvSnQ==
+X-Received: by 2002:a05:6a00:10cf:b0:563:34ce:4138 with SMTP id d15-20020a056a0010cf00b0056334ce4138mr6542532pfu.6.1665381923244;
+        Sun, 09 Oct 2022 23:05:23 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a5-20020a63e405000000b00462ae17a1c4sm803759pgi.33.2022.10.09.23.05.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 23:04:57 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 11:34:55 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sumit Gupta <sumitg@nvidia.com>, Rob Herring <robh@kernel.org>
-Cc:     rafael@kernel.org, treding@nvidia.com, jonathanh@nvidia.com,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bbasu@nvidia.com, sanjayc@nvidia.com,
-        ksitaraman@nvidia.com
-Subject: Re: [Patch v2] cpufreq: tegra194: Add support for Tegra239
-Message-ID: <20221010060455.o3mnc5fx2xm34wpb@vireshk-i7>
-References: <20220920110646.27837-1-sumitg@nvidia.com>
- <20221004152714.GA1524940-robh@kernel.org>
+        Sun, 09 Oct 2022 23:05:22 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     amd-gfx@lists.freedesktop.org
+Cc:     regressions@lists.linux.dev,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Xinhui.Pan@amd.com, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>
+Subject: [PATCH] drm/amd/display: fix array-bounds error in dc_stream_remove_writeback() [take 2]
+Date:   Sun,  9 Oct 2022 23:05:12 -0700
+Message-Id: <20221010060512.3064524-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.36.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221004152714.GA1524940-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04-10-22, 10:27, Rob Herring wrote:
-> On Tue, Sep 20, 2022 at 04:36:46PM +0530, Sumit Gupta wrote:
-> > @@ -586,6 +586,7 @@ static int tegra194_cpufreq_remove(struct platform_device *pdev)
-> >  static const struct of_device_id tegra194_cpufreq_of_match[] = {
-> >  	{ .compatible = "nvidia,tegra194-ccplex", .data = &tegra194_cpufreq_soc },
-> >  	{ .compatible = "nvidia,tegra234-ccplex-cluster", .data = &tegra234_cpufreq_soc },
-> > +	{ .compatible = "nvidia,tegra239-ccplex-cluster", .data = &tegra239_cpufreq_soc },
-> 
-> Not documented.
+Commit 5d8c3e836fc2 ("drm/amd/display: fix array-bounds error in
+dc_stream_remove_writeback()") tried to fix an array bounds error seen
+with gcc 12.0. Unfortunately, that results in another array bounds error,
+seen with older versions of gcc.
 
-Sumit, can you please send a patch to document this in bindings ?
+Building csky:allmodconfig ... failed
+--------------
+Error log:
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c:
+	In function 'dc_stream_remove_writeback':
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c:527:83:
+	error: array subscript 1 is above array bounds of 'struct dc_writeback_info[1]' [-Werror=array-bounds]
+  527 |                                 stream->writeback_info[j] = stream->writeback_info[i];
+      |                                                             ~~~~~~~~~~~~~~~~~~~~~~^~~
+In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dc.h:1269,
+                 from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:29,
+                 from drivers/gpu/drm/amd/amdgpu/../display/dc/basics/dc_common.h:29,
+                 from drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c:27:
+drivers/gpu/drm/amd/amdgpu/../display/dc/dc_stream.h:241:34: note: while referencing 'writeback_info'
+  241 |         struct dc_writeback_info writeback_info[MAX_DWB_PIPES];
 
+We could check both i and j for overflow to fix the problem. That would,
+however, be not make much sense since it is known and provable that j <= i.
+Also, the check introduced with commit 5d8c3e836fc2 does not really add
+value since it checks if j < MAX_DWB_PIPES. Since it is known that j <= i,
+it would make more sense to check if i < MAX_DWB_PIPES. Unfortunately, that
+does not help to solve the problem observed here: gcc still complains.
+
+To solve the problem, replace the subsequent check for 'i != j' with
+'j < i'. This is identical to the original check since we know that j <= i,
+and it makes all versions of gcc happy. Drop the check introduced with
+commit 5d8c3e836fc2 since it is not really useful and does not solve the
+problem.
+
+Cc: Aurabindo Pillai <aurabindo.pillai@amd.com>
+Cc: Hamza Mahfooz <hamza.mahfooz@amd.com>
+Fixes: 5d8c3e836fc2 ("drm/amd/display: fix array-bounds error in dc_stream_remove_writeback()")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/gpu/drm/amd/display/dc/core/dc_stream.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
+index ae13887756bf..9f568d618cd0 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
+@@ -520,9 +520,9 @@ bool dc_stream_remove_writeback(struct dc *dc,
+ 	}
+ 
+ 	/* remove writeback info for disabled writeback pipes from stream */
+-	for (i = 0, j = 0; i < stream->num_wb_info && j < MAX_DWB_PIPES; i++) {
++	for (i = 0, j = 0; i < stream->num_wb_info; i++) {
+ 		if (stream->writeback_info[i].wb_enabled) {
+-			if (i != j)
++			if (j < i)
+ 				/* trim the array */
+ 				stream->writeback_info[j] = stream->writeback_info[i];
+ 			j++;
 -- 
-viresh
+2.36.2
+
