@@ -2,128 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C985FA2E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A4D5FA2E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229458AbiJJRrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 13:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
+        id S229796AbiJJRtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 13:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJJRro (ORCPT
+        with ESMTP id S229464AbiJJRtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 13:47:44 -0400
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5343E69184;
-        Mon, 10 Oct 2022 10:47:43 -0700 (PDT)
-Received: by mail-qv1-f53.google.com with SMTP id i9so7576526qvo.0;
-        Mon, 10 Oct 2022 10:47:43 -0700 (PDT)
+        Mon, 10 Oct 2022 13:49:01 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6B06AE93
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:49:00 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id l5so13437736oif.7
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:49:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=t6AnctMq6jcWU65azFD7ujfCqCgsVowVLieEc9E+DWw=;
+        b=QOeVBRQN+Q6/JVqyQ1QSzTDGyA0KnWKs7yemkDcgaOGwHMfi1On4bqzJeZSoaaimYK
+         gv0mf2riBtms9yQCuXGaCIhu/kcuwGiWIlB/jUOQHSEFVboYF5I32sx5XlbRIGvJ6jeF
+         TA9b8h4qpdaohbQvOvC9NjNY0CQu1ikEyfa+4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jv86Vf+p1vocEHP4ncmuBlZBjtxstd5HAmslvFY0pLg=;
-        b=yixWe+3cCe8KmtUEFfL/J7lJAfbYmd4xSGWfgV//8i/JiqMjilUOlkk+AZczIF1mal
-         RtBfmFNVCiQoHmEdlopyQPky9WqPk5lsDp3dVpphjWVd/KZ/Rx/fZDQSuJAsGqRWPX/o
-         hTcFj2P5CCxaThGs47d3LwLdqCumPNl0eav+dmd/HE4ckJ9p1ILMCgTQmZajuxx3zhgK
-         hlON1zM1WGFYMsj931Ssh8zsVmyw9MOAz0g9LfCpHbWf0UM4kAJrJIb8EuHtuilLhhm8
-         dNRVtqTbY0/AKDJ695dHA3lfXdZu1RXL7cLh+y7udZ5AzfLHeA/a43FWzYhOgQPbKKCF
-         hKbg==
-X-Gm-Message-State: ACrzQf2eIEcnhZGdV8vPvpGX5QPT+unJ1OhQAVYVB3Q2O6syTgZ+T+oA
-        1tXdkZKJPQnm6YyNucVGaCrYyKQ4FxtpUBujf1L9Ze41MLQ=
-X-Google-Smtp-Source: AMsMyM4ts/yrVkZ/rwo1rX5dF+U9YbdwmlS+g6Emy1R6Ka4W26Z9PtrVHLaHRvmePk+CdJhX0Jhu5QXzR4yU/x9b6dQ=
-X-Received: by 2002:ad4:5d48:0:b0:4b4:12a4:8a2f with SMTP id
- jk8-20020ad45d48000000b004b412a48a2fmr3179433qvb.85.1665424062417; Mon, 10
- Oct 2022 10:47:42 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t6AnctMq6jcWU65azFD7ujfCqCgsVowVLieEc9E+DWw=;
+        b=VuZNDFSdScT7GnZgvM1qPgTJAQ1qWNguDpWksXO/5ApPbuQ5N9Ogqi7M3Hr6rWf76I
+         PPEiS49ivdpcwr8K0MEng7V996WdyvtUxZc1Feb7N41ElQMALtUapQ42yCnefD1px6PQ
+         cBdoSl+EyCB0t0yiqRU67qDeA1dEBaGEaZ0ojqPQYfJsnuoeZUAI4GO/ZdLrzH7WkPlM
+         llfLKA/VOSI0ahxmxQfCHpjnXKvvHkYsq81LEHpwHNZ8tK30Fv23TE3vnC8iodwk0+CH
+         ttLjAAq3SnD2CcTX5OLL34QLWv8b3tPZbl4lmzYC9FOTw1kJHgaG3Rgxgd5TBCVMeANO
+         I0yQ==
+X-Gm-Message-State: ACrzQf26LC7Xfz990pv9qrasj5TchO80JYWg/8O8kdb9akyXYMKOE7fG
+        3eqSyZoa0o8f2hitdGrGKpNOAB/aEtWTqA==
+X-Google-Smtp-Source: AMsMyM6wz/HimEOFlTYIHxvs9J/TIl5wGoRzQgMEG8u7lbf0OG7E1XXyRxRMx1Lzi1Ezvqcv7u5K0w==
+X-Received: by 2002:aca:be8b:0:b0:353:b991:398 with SMTP id o133-20020acabe8b000000b00353b9910398mr10141500oif.17.1665424139651;
+        Mon, 10 Oct 2022 10:48:59 -0700 (PDT)
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com. [209.85.167.181])
+        by smtp.gmail.com with ESMTPSA id g36-20020a9d12a7000000b006619fe836f9sm1116327otg.55.2022.10.10.10.48.58
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Oct 2022 10:48:58 -0700 (PDT)
+Received: by mail-oi1-f181.google.com with SMTP id o64so13420928oib.12
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:48:58 -0700 (PDT)
+X-Received: by 2002:a54:4899:0:b0:354:add8:52ab with SMTP id
+ r25-20020a544899000000b00354add852abmr1323762oic.229.1665424138521; Mon, 10
+ Oct 2022 10:48:58 -0700 (PDT)
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 10 Oct 2022 19:47:31 +0200
-Message-ID: <CAJZ5v0i_sK86N5i3sVRE1cdb7TgHOCGnMV5+5JuQewwwLBEp0Q@mail.gmail.com>
-Subject: [GIT PULL] Thermal control fixes for v6.1-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20221003174431.1189919-1-Jason@zx2c4.com>
+In-Reply-To: <20221003174431.1189919-1-Jason@zx2c4.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 10 Oct 2022 10:48:42 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgGc7MYRW=vXyY-m_r9c7-_i8k1nsHM0RuJw_9qZWWP9g@mail.gmail.com>
+Message-ID: <CAHk-=wgGc7MYRW=vXyY-m_r9c7-_i8k1nsHM0RuJw_9qZWWP9g@mail.gmail.com>
+Subject: Re: [GIT PULL] random number generator updates for 6.1-rc1
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Mon, Oct 3, 2022 at 10:45 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> - The original jitter algorithm intended (I believe) to schedule the timer for
+>   the next jiffy, not the next-next jiffy, yet it used mod_timer(jiffies + 1),
+>   which will fire on the next-next jiffy, instead of what I believe was
+>   intended, mod_timer(jiffies), which will fire on the next jiffy. So fix
+>   that. (If you did actually intend the next-next jiffy for this voodoo, let
+>   me know and I'll happily send you a new pull.)
 
-Please pull from the tag
+Just as long as you verified that yes, it will actually do the next timer.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-6.1-rc1-2
+At some point we had timer logic that went "trigger timer callback
+immediately if it was in the past". I didn't want to have to worry
+about that, this the "jiffies + 1".
 
-with top-most commit e021563fd09e1fd4041a6a573ec10fb5b5d275b0
+I suspect we long ago got rid of that "trigger immediately" because of
+deadlocks, and that I was just being a worry-wart about behavior that
+we haven't had for decades, so your patch looks fine. But you might
+want to make sure.
 
- Merge tag 'thermal-v6.1-rc1-2' of
-https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux
-
-on top of commit a5088ee7251e5106a4efa9588a73866eb4b4154e
-
- Merge tag 'thermal-6.1-rc1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
-
-to receive thermal control fixes for 6.1-rc1.
-
-These fix assorted issues in the thermal core and ARM thermal drivers.
-
-Specifics:
-
- - Use platform data to get the sensor ID instead of parsing the device
-   in imx_sc thermal driver and remove the dedicated OF function from
-   the core code (Daniel Lezcano).
-
- - Fix Kconfig dependency for the QCom tsens thermal driver (Jonathan
-   Cameron).
-
- - Add missing const annotation to the RCar ops thermal driver (Lad
-   Prabhakar).
-
- - Drop duplicate parameter check from
-   thermal_zone_device_register_with_trips() (Lad Prabhakar).
-
- - Fix NULL pointer dereference in trip_point_temp_store() by making it
-   check if the ->set_trip_temp() operation is present (Lad Prabhakar).
-
- - Fix the MSM8939 fourth sensor hardware ID in the QCom tsens thermal
-   driver (Vincent Knecht).
-
-Thanks!
-
-
----------------
-
-Daniel Lezcano (2):
-      thermal/drivers/imx_sc: Rely on the platform data to get the resource id
-      thermal/of: Remove the thermal_zone_of_get_sensor_id() function
-
-Jonathan Cameron (1):
-      thermal/drivers/qcom: Drop false build dependency of all QCOM
-drivers on QCOM_TSENS
-
-Lad Prabhakar (3):
-      thermal/drivers/rcar_thermal: Constify static thermal_zone_device_ops
-      thermal/core: Drop valid pointer check for type
-      thermal/core: Add a check before calling set_trip_temp()
-
-Vincent Knecht (1):
-      thermal/drivers/qcom/tsens-v0_1: Fix MSM8939 fourth sensor hw_id
-
----------------
-
- drivers/thermal/Makefile          |  2 +-
- drivers/thermal/imx_sc_thermal.c  | 68 +++++++++++++++++++--------------------
- drivers/thermal/qcom/tsens-v0_1.c |  2 +-
- drivers/thermal/rcar_thermal.c    |  2 +-
- drivers/thermal/thermal_core.c    |  2 +-
- drivers/thermal/thermal_of.c      | 44 -------------------------
- drivers/thermal/thermal_sysfs.c   |  8 +++--
- include/linux/thermal.h           | 10 ------
- 8 files changed, 42 insertions(+), 96 deletions(-)
+                   Linus
