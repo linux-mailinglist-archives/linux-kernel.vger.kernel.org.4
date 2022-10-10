@@ -2,95 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2BB5FA304
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F395FA309
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiJJR4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 13:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50808 "EHLO
+        id S229822AbiJJR5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 13:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiJJR4l (ORCPT
+        with ESMTP id S229459AbiJJR5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 13:56:41 -0400
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EA178581
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:56:35 -0700 (PDT)
-Received: by mail-oo1-xc36.google.com with SMTP id u19-20020a4a9e93000000b004757198549cso8494767ook.0
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:56:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0jsc05F5cszgl+0lYID8794ncmh/vleAv7LDJHo+sNI=;
-        b=fzyyftKvkZ514BTtpUG2Q3csmZOLSVUbnAwyOdFVE2HX5OWT+mBQyzaftfrHQPttgO
-         Q/4Ghrbpd2U/xCd2sqVo5cz6e4jbwooDTBla7ub6jjXM0pnC0eJW8jch/LuxVMPygwIe
-         uLUboTQOgLowdrabz9WOSX31hOCH/XaRq8Diw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0jsc05F5cszgl+0lYID8794ncmh/vleAv7LDJHo+sNI=;
-        b=Qd72mX5na/lmcRs0XKH+Zb8pzhI3+AHA9OYhLgY4tTgMq2FNccbk78K+y1vc8UcMLR
-         wk/YWszqhHSIbCy3HN05XvhRdIyLm/QQm6Uya4DeY+TxE/VLJxY0elYErBjWpfpz7max
-         MagTuu9FX1uJAmS5xHqskDKmNqmpAb+MtCkL+pwgZ5tOcTVwBN/l2lceywFBmGwoGl62
-         IH5JwR9gLgXA5e1JpaOlyTyMaQCFDWXOOCU5sRD4vVNK8oKd91RiwPphBKa9HzF1qjGC
-         s8PI0isx5ZT1VRkV8rHH6Jrtm2cFC5uX1vR1AEY3AybrfoVvYi4XZTHGMBwkZm9FBYcO
-         04vA==
-X-Gm-Message-State: ACrzQf1CEP8JHnWs5VLf8AQXI5iBorwIT4cBQg0ityH7hUYLc0tPtDvZ
-        7asmG/Gw9Sfeo8jwE0FgEdzdrjPYa1eQGQ==
-X-Google-Smtp-Source: AMsMyM7tAvTu1i4jZ9M0Ut+uvt/IOeQltDpwn5XH4SZht0d3tx+wRWkHAT6qJ05N9BSVODjuRRT8wQ==
-X-Received: by 2002:a05:6830:d02:b0:661:9466:dfc3 with SMTP id bu2-20020a0568300d0200b006619466dfc3mr4137162otb.333.1665424593920;
-        Mon, 10 Oct 2022 10:56:33 -0700 (PDT)
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com. [209.85.161.48])
-        by smtp.gmail.com with ESMTPSA id k23-20020a544697000000b003507c386a4asm4545385oic.40.2022.10.10.10.56.32
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 10:56:33 -0700 (PDT)
-Received: by mail-oo1-f48.google.com with SMTP id x6-20020a4ac586000000b0047f8cc6dbe4so8473714oop.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:56:32 -0700 (PDT)
-X-Received: by 2002:a05:6830:4421:b0:661:8fdd:81e9 with SMTP id
- q33-20020a056830442100b006618fdd81e9mr5016787otv.69.1665424592620; Mon, 10
- Oct 2022 10:56:32 -0700 (PDT)
+        Mon, 10 Oct 2022 13:57:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C74F77E8C;
+        Mon, 10 Oct 2022 10:57:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1BD760AFE;
+        Mon, 10 Oct 2022 17:57:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 124E7C433D6;
+        Mon, 10 Oct 2022 17:57:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665424631;
+        bh=M7074iTkISJ9LZPDfVJMFnThIn/SiCbzfEecQjj1gX8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iHHSQuNIjuhNfzwXDqX4y6wVGUARVjPgaMXSpcDwbQg6wd1xcBPk8tUn+23GqWF0a
+         HBRYrsSUShKP5LhuxNbclbJRMbkDTqwcYUR7xiw5Mu2JT+2z3LUCD0mUAnerLzWzLb
+         7GIVoEEQgIawZLEBtvxdk5Vs7e22tpI8HMc0XHFXMcwJiahqMpLXPSJ7Y6DXZD1U/i
+         TegnKNLRcIqr9A6Xk40RW89Dg3RQKg4f48t52B0ZcECoJa6IymRyLFHF8RshVqCMZ7
+         cXs5WgkCScM/laaRTMpOFr+UQqAeuu2LlZfo9FVLU4/bL91NekNHWvikAleJnM549y
+         vYfki7gdqcFjw==
+Date:   Mon, 10 Oct 2022 10:57:10 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     linux-xfs@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][V2] xfs: remove redundant pointer lip
+Message-ID: <Y0Rc9ulPUJb77up6@magnolia>
+References: <20221010160515.3199641-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-References: <20221003174431.1189919-1-Jason@zx2c4.com>
-In-Reply-To: <20221003174431.1189919-1-Jason@zx2c4.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 10 Oct 2022 10:56:16 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whoPebQJqtSb+8by4o5pHKCPaUzMkbFp5_EjKuo3dxBUg@mail.gmail.com>
-Message-ID: <CAHk-=whoPebQJqtSb+8by4o5pHKCPaUzMkbFp5_EjKuo3dxBUg@mail.gmail.com>
-Subject: Re: [GIT PULL] random number generator updates for 6.1-rc1
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221010160515.3199641-1-colin.i.king@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 3, 2022 at 10:45 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
->   Merge tag 'net-6.0-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-09-22 10:58:13 -0700)
->
-> for you to fetch changes up to d687772e6d2cbffd91fdda64812f79192c1e7ca0:
->
->   random: fix typos in get_random_bytes() comment (2022-10-01 23:37:51 +0200)
+On Mon, Oct 10, 2022 at 05:05:15PM +0100, Colin Ian King wrote:
+> The assignment to pointer lip is not really required, the pointer lip
+> is redundant and can be removed.
+> 
+> Cleans up clang-scan warning:
+> warning: Although the value stored to 'lip' is used in the enclosing
+> expression, the value is never actually read from 'lip'
+> [deadcode.DeadStores]
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Oh, and I notice that since you sent your pull request, you've updated
-that tag with a new commit for a fix.
+Looks good!
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 
-That's fine, and hey, it took me a while to get to this pull request.
+--D
 
-But I do wish you had notified me (a follow-up email just saying "hey,
-that tag got updated for a fix" is fine for a small change like this,
-a new pull request saying "this supercedes the previous one is
-preferred for anything bigger), if only because the difference in what
-I pull and what gets described makes me then go back and lok "what
-exactly happened here?".
-
-              Linus
+> ---
+> 
+> V2: Keep != NULL comparison for stylistic reasons, as suggested by
+>     Darrick J. Wong
+> ---
+>  fs/xfs/xfs_trans_ail.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/fs/xfs/xfs_trans_ail.c b/fs/xfs/xfs_trans_ail.c
+> index 16fbf2a1144c..87db72758d1f 100644
+> --- a/fs/xfs/xfs_trans_ail.c
+> +++ b/fs/xfs/xfs_trans_ail.c
+> @@ -730,11 +730,10 @@ void
+>  xfs_ail_push_all_sync(
+>  	struct xfs_ail  *ailp)
+>  {
+> -	struct xfs_log_item	*lip;
+>  	DEFINE_WAIT(wait);
+>  
+>  	spin_lock(&ailp->ail_lock);
+> -	while ((lip = xfs_ail_max(ailp)) != NULL) {
+> +	while (xfs_ail_max(ailp) != NULL) {
+>  		prepare_to_wait(&ailp->ail_empty, &wait, TASK_UNINTERRUPTIBLE);
+>  		wake_up_process(ailp->ail_task);
+>  		spin_unlock(&ailp->ail_lock);
+> -- 
+> 2.37.3
+> 
