@@ -2,105 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 832AE5FA359
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 20:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F555FA360
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 20:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbiJJS0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 14:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43712 "EHLO
+        id S229714AbiJJS3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 14:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiJJS0i (ORCPT
+        with ESMTP id S229538AbiJJS3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 14:26:38 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0816E13CDF;
-        Mon, 10 Oct 2022 11:26:37 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id d13so832746qko.5;
-        Mon, 10 Oct 2022 11:26:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AKoZhuu3E5SAsgI7oUky3IaJgpIEJ40e2SZVdy8gII0=;
-        b=h5Pm9+hx3SH8L5RFEw+71QgQL6FYHhbZpklTFH/a9E1Qyspls9FfvNCFwPMXaaaJI6
-         gRCpSNzjtO/Vndzhyjsn1vODuTcZAnpBLfGMej9RpZ5bK/wiiBH3oz6/nNLfDw4oAUNc
-         +WQr2souXiBEDdzCxSNISgl/pI1Lz8AvFD/DZfl9/9bno1L4FBpKDVP3x5TdgOcicneB
-         iGL2Ww03SUf/AGdsu6eBktQm1jD0t0YlWVdx6zEL5BQ1Y0GmwetDk/N7dsI8rdcKeixf
-         AT3fvTyAoA8zpo7UXsde6wVnFPAPfLIA/3GQDY7glJixmzpwkONsFVWxAkGR5l9XPsjx
-         cl2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AKoZhuu3E5SAsgI7oUky3IaJgpIEJ40e2SZVdy8gII0=;
-        b=4xSzSS4do7Vuuz3cXI4GKe7L7hdnxbxX6BWq4uTo6/bQX468KSJjeD8Xig/t0fUd7E
-         U6uALjmIeKB+0eEpxZsRWIGJN1pBWVpQBSS5TvjvmtC5ei446A2EIU4mam+qGsQtgZEk
-         MNyyT0l7E8vQkfoNe2/FEXg6CA6InJfaCuMrQ8B8d6toieAkUPdiEB6OGejZf2Z8tR3g
-         OTsIeKWJfChUD7jy4ONMsOWUTA4JTUmPIfmElEs462quQCehutaxE1VtuDw7v6aRAIiV
-         b4J0VABzQIvq1Muevc4FqvLranCuyEuzmSnVdbIe5qjYbGDqlofS05v/+u8p2hwO9EDZ
-         ocXA==
-X-Gm-Message-State: ACrzQf0tQOHu0CRQsKCmBMtGeVXr9eE0qIZSJiLnYOVTJB4BLssz4AKp
-        Sg2la3dV0b0rDPBbWFT6FoR6cL3Mrqg=
-X-Google-Smtp-Source: AMsMyM6IKacdxq/07ukv50SSLOjif5AjMKhjrahT90N2D90Oab/hMH0qh5kFquaXMwPPnwTJ8jcT3w==
-X-Received: by 2002:a37:6942:0:b0:6cf:22d6:a887 with SMTP id e63-20020a376942000000b006cf22d6a887mr13842815qkc.0.1665426396092;
-        Mon, 10 Oct 2022 11:26:36 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id i19-20020a05620a249300b006cf3592cc20sm11367416qkn.55.2022.10.10.11.26.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 11:26:35 -0700 (PDT)
-Message-ID: <bea13f81-7033-e242-1de0-6b7b4a9b98c7@gmail.com>
-Date:   Mon, 10 Oct 2022 11:26:33 -0700
+        Mon, 10 Oct 2022 14:29:39 -0400
+Received: from mail.galaxycrow.de (mail.galaxycrow.de [162.55.242.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D835774DC3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 11:29:33 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0242F61814;
+        Mon, 10 Oct 2022 20:28:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=galaxycrow.de;
+        s=dkim; t=1665426568; h=from:subject:date:message-id:to:mime-version:content-type;
+        bh=W58bxFwAIOUlrrxGdC8NPXHPCJ1U+6GxUQe5dss0k0g=;
+        b=hvdsZm1ZY5PR2kFWcGYAB2YisZiNaIU08YIIdTDhmaArKJ+yczVlzi9WVqmwiklRZYqKPS
+        5C26dbKJLJvt1QyX/GLM6LMZRmvO4ycOQLAehZVGWcFMJXPmk3E+qitfe1ZTtpPTZcymAS
+        xFWIdrYcnaYxZZSx7U0sSYxc77I4NdGXlofCmcXeJJ8IZ7Vs5Su8L8VRTWgwp4a+hdiQ+N
+        1jICrU2GdGAUVW1+wO43jKX7Xm/CER07V0EQdx7eo97d6iwUhADUG3dLjlf4WESmtlJEQ0
+        9LproF4XdVh/CPEJyLZyuFuKRVLrMZE1cjlvG/Fso/tlQCcWBFQiAvbv/gosug==
+Date:   Mon, 10 Oct 2022 20:28:48 +0200
+From:   Cleo John <waterdev@galaxycrow.de>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] riscv: fix styling in ucontext header
+Message-ID: <20221010182848.GA28029@watet-ms7b87>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5.15 00/37] 5.15.73-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-References: <20221010070331.211113813@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221010070331.211113813@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/10/22 00:05, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.73 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 12 Oct 2022 07:03:19 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.73-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Change the two comments in ucontext.h by getting them up to
+the coding style proposed by torvalds.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+Signed-off-by: Cleo John <waterdev@galaxycrow.de>
+---
+In my opinion this also improves the readability so I think this is a useful change to do.
+Please also tell me if you have a different opinion.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Changes in v2:
+ - change the styling of the top comments too
+
+ arch/riscv/include/uapi/asm/ucontext.h | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/arch/riscv/include/uapi/asm/ucontext.h b/arch/riscv/include/uapi/asm/ucontext.h
+index 44eb993950e5..516bd0bb0da5 100644
+--- a/arch/riscv/include/uapi/asm/ucontext.h
++++ b/arch/riscv/include/uapi/asm/ucontext.h
+@@ -15,19 +15,23 @@ struct ucontext {
+ 	struct ucontext	 *uc_link;
+ 	stack_t		  uc_stack;
+ 	sigset_t	  uc_sigmask;
+-	/* There's some padding here to allow sigset_t to be expanded in the
++	/*
++	 * There's some padding here to allow sigset_t to be expanded in the
+ 	 * future.  Though this is unlikely, other architectures put uc_sigmask
+ 	 * at the end of this structure and explicitly state it can be
+-	 * expanded, so we didn't want to box ourselves in here. */
++	 * expanded, so we didn't want to box ourselves in here.
++	 */
+ 	__u8		  __unused[1024 / 8 - sizeof(sigset_t)];
+-	/* We can't put uc_sigmask at the end of this structure because we need
++	/*
++	 * We can't put uc_sigmask at the end of this structure because we need
+ 	 * to be able to expand sigcontext in the future.  For example, the
+ 	 * vector ISA extension will almost certainly add ISA state.  We want
+ 	 * to ensure all user-visible ISA state can be saved and restored via a
+ 	 * ucontext, so we're putting this at the end in order to allow for
+ 	 * infinite extensibility.  Since we know this will be extended and we
+ 	 * assume sigset_t won't be extended an extreme amount, we're
+-	 * prioritizing this. */
++	 * prioritizing this.
++	 */
+ 	struct sigcontext uc_mcontext;
+ };
+ 
 -- 
-Florian
+2.25.1
+
