@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE135FA780
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 00:05:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EDEF5FA782
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 00:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiJJWFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 18:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
+        id S229617AbiJJWF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 18:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJJWFs (ORCPT
+        with ESMTP id S229530AbiJJWFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 18:05:48 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8565A3FA
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 15:05:43 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id u5-20020a170902e5c500b0018280f6745dso2159575plf.12
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 15:05:43 -0700 (PDT)
+        Mon, 10 Oct 2022 18:05:51 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8276112B
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 15:05:45 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id n56-20020a056a000d7800b00562b27194d1so4732842pfv.19
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 15:05:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=kFMAmFqP24s+wNJU6nadYvqB6k/Y/68Nq9OPzf9rX9k=;
-        b=JENqDTIl5HZBAFN8s0Ygiktu+sJGC9lZrY28uqglYNNBlDXG0SuuLkWftrPKFs8qB5
-         lRVF+WRFtH8zMjrf2zmg1EWKDMAi6J3Y19q5QpO7IMAvpBxC7iIRfXKgnS+VA2vTua4Q
-         X8zLKYn9VaqPm9P2thPaeQmx5AUoFoVOiAbrBZUFPP6rA4gs4DuauOmId9arfugBkHmE
-         dzEhqrHll6dUva+yOxHMCemB/uRDC8c1buMCKYeHaiHDzHcGdjSEUUL1zwAH1L00uMrn
-         hYnfqrULDbJmGWKellT8Redapj/hyD4wDHVNIh/pXQe3UUM3DEd9wtYtPTLH+Sum8hAO
-         pPrw==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mLExz0EMZSyuFB8Q/Foo73cV0V2iUxH9jl6FjrHgHuA=;
+        b=MkaNzqUg6OQAS3KXi/d3EbVRp+bK/mHHYYU7YS4eEOcwCnxft2bx4VYtxVPSxLKiwC
+         fQ7Tw1l+vwPqb+QLM/2zYNjyrfI3p/HNNpyYmPzjk0HMovr2yeCwxe4dmKj8eNjaAqlK
+         mAL3alJu+IyzyVhVzBZifiCqjtB43ANoyE2nRCVK8unJoXM/kkEgyo+1fdj7ZLwmbf+M
+         7wF1YLY42oeGeT5iPsipXNXuxmyszTUnbfQjfZTu9C51ffB0Tn5nffKn1sANITjR4Sg1
+         CIFjcb0yQf3xwNvje8haD83ZeMqbmdUO9SvYNgoBdjcyDfzdR5VOi5XQSSZNHZzBVf7W
+         ZrHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kFMAmFqP24s+wNJU6nadYvqB6k/Y/68Nq9OPzf9rX9k=;
-        b=4PfMcpK1CC9lYz3vU3MekjC/L8KnbHGEFyPZoTPmnYS5eljqKmf1zlp9jW6b6gAHx1
-         7pFbUOrIJVUxMomYDcPs0B9v2fcHSe9HWIwTgBEIjm5ok0K9+kx8BVLeFmdgsfbHirkg
-         eXZ4SFhAnBjauW4/vP087jkHj1YAeyo/iQymODKPizYfsC+7i6GZl6b7PpCgSck8mOrM
-         4TFRQ4PaVLyYtbYyKSLWue1W615nCn5DfCb8PMXLzlho+oQnXTWvXrtHVOm5SRfjZe6+
-         2ZfHLZdJM58TwckyswYPwlQWTL7dty2QiE7sVlbV7qR6I175C++5VVFN68svua2HJSp4
-         kZcw==
-X-Gm-Message-State: ACrzQf2EzXsooDmDsO5ZsksNOLE20GYwN321C+WtZldqAlkiJFpmK3ny
-        vHniKS1Nglh2rCPPFiW6vv7AxwcJF3PK
-X-Google-Smtp-Source: AMsMyM6C9jlDdYKMer8KBxXB5EtELhc3potAK7HKuVoUQhBwKfZhKPkYmRKl8nvlNwOnce28DfSZAV/BWU/P
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mLExz0EMZSyuFB8Q/Foo73cV0V2iUxH9jl6FjrHgHuA=;
+        b=6Lwo9rW4vSAsuOO2Og2ThBHSPiQAvRiPPZMJWkulso5Dkly5/g+V7mIB5EotvjUt2+
+         mdpV/LVE8lG7KD3SpWR4JV4a/Q3FiShsXxndFFojZwRKjk6ZX2u2Snkujirai3Z8Ue9b
+         89d1pQKL37/ABJZ0PcY+idRqrLKAgnHryQ1VRMK1xylpIyY/XAwz2gk9PDBqqCRt0HxP
+         qssfW3n4FpIDFCUXPt/90qAJAjo7ZwzOMCl2S97ullGw3EJMAUWjFmUK3vVhGQXnEMTD
+         pNW4/YEPSGC6XSbHnwKVeBqS9OT8NrImS5qXtFI9Z9KK9C1za150F3CIw2R7XCaDUscU
+         czEA==
+X-Gm-Message-State: ACrzQf0GvNR86UfF+wGJFADwCahm09ASzMzNM8qhVSbQKUMtz1LLox5T
+        /71He7A80hwWB8TdiHkKHsfvMpeK2Z1R
+X-Google-Smtp-Source: AMsMyM4seMxlZd3QKtALD3XcVrNvAyFwyzsTklJg8t92jVWY9SS0eoPi2DPJxddWEJzfefZiARsvcz1CeL54
 X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:a17:90a:cd06:b0:203:ae0e:6a21 with SMTP id
- d6-20020a17090acd0600b00203ae0e6a21mr1863639pju.0.1665439542737; Mon, 10 Oct
- 2022 15:05:42 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 15:05:33 -0700
+ (user=vipinsh job=sendgmr) by 2002:a05:6a00:e09:b0:563:69ac:5633 with SMTP id
+ bq9-20020a056a000e0900b0056369ac5633mr6808226pfb.54.1665439544947; Mon, 10
+ Oct 2022 15:05:44 -0700 (PDT)
+Date:   Mon, 10 Oct 2022 15:05:34 -0700
+In-Reply-To: <20221010220538.1154054-1-vipinsh@google.com>
 Mime-Version: 1.0
+References: <20221010220538.1154054-1-vipinsh@google.com>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221010220538.1154054-1-vipinsh@google.com>
-Subject: [PATCH v5 0/5] dirty_log_perf_test vCPU pinning
+Message-ID: <20221010220538.1154054-2-vipinsh@google.com>
+Subject: [PATCH v5 1/5] KVM: selftests: Add missing break between -e and -g
+ option in dirty_log_perf_test
 From:   Vipin Sharma <vipinsh@google.com>
 To:     seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com
 Cc:     andrew.jones@linux.dev, kvm@vger.kernel.org,
@@ -66,73 +69,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pin vCPUs to a host physical CPUs (pCPUs) in dirty_log_perf_test and
-optionally pin the main application thread to a physical cpu if
-provided. All tests based on perf_test_util framework can take advantage
-of it if needed.
+Passing -e option (Run VCPUs while dirty logging is being disabled) in
+dirty_log_perf_test also unintentionally enables -g (Do not enable
+KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2). Add break between two switch case
+logic.
 
-While at it, I changed atoi() to atoi_paranoid(), atoi_positive,
-atoi_non_negative() in other tests, sorted command line options
-alphabetically in dirty_log_perf_test, and added break between -e and -g
-which was missed in original commit when -e was introduced.
+Fixes: cfe12e64b065 ("KVM: selftests: Add an option to run vCPUs while disabling dirty logging")
+Signed-off-by: Vipin Sharma <vipinsh@google.com>
 
-v5:
-- Added atoi_postive() and atoi_non_negative() APIs for string parsing.
-- Using sched_getaffinity() to verify if a pCPU is allowed or not.
-- Changed Suggested-by to add only person came up with original idea of
-  pinning.
-- Updated strings and commit messages.
+---
+ tools/testing/selftests/kvm/dirty_log_perf_test.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-v4: https://lore.kernel.org/lkml/20221006171133.372359-1-vipinsh@google.com/
-- Moved boolean to check vCPUs pinning from perf_test_vcpu_args to
-  perf_test_args.
-- Changed assert statements to make error more descriptive.
-- Modified break statement between 'e' and 'g' option in v3 by not copying
-  dirty_log_manual_caps = 0 to 'e'.
-
-v3: https://lore.kernel.org/lkml/20220826184500.1940077-1-vipinsh@google.com
-- Moved atoi_paranoid() to test_util.c and replaced all atoi() usage
-  with atoi_paranoid()
-- Sorted command line options alphabetically.
-- Instead of creating a vcpu thread on a specific pcpu the thread will
-  migrate to the provided pcpu after its creation.
-- Decoupled -e and -g option.
-
-v2: https://lore.kernel.org/lkml/20220819210737.763135-1-vipinsh@google.com/
-- Removed -d option.
-- One cpu list passed as option, cpus for vcpus, followed by
-  application thread cpu.
-- Added paranoid cousin of atoi().
-
-v1: https://lore.kernel.org/lkml/20220817152956.4056410-1-vipinsh@google.com
-
-Vipin Sharma (5):
-  KVM: selftests: Add missing break between -e and -g option in
-    dirty_log_perf_test
-  KVM: selftests: Put command line options in alphabetical order in
-    dirty_log_perf_test
-  KVM: selftests: Add atoi_paranoid() to catch errors missed by atoi()
-  KVM: selftests: Add atoi_positive() and atoi_non_negative() for input
-    validation
-  KVM: selftests: Run dirty_log_perf_test on specific CPUs
-
- .../selftests/kvm/aarch64/arch_timer.c        | 25 ++-----
- .../testing/selftests/kvm/aarch64/vgic_irq.c  |  6 +-
- .../selftests/kvm/access_tracking_perf_test.c |  2 +-
- .../selftests/kvm/demand_paging_test.c        |  4 +-
- .../selftests/kvm/dirty_log_perf_test.c       | 62 ++++++++++++------
- .../selftests/kvm/include/perf_test_util.h    |  6 ++
- .../testing/selftests/kvm/include/test_util.h |  4 ++
- .../selftests/kvm/kvm_page_table_test.c       |  4 +-
- .../selftests/kvm/lib/perf_test_util.c        | 65 ++++++++++++++++++-
- tools/testing/selftests/kvm/lib/test_util.c   | 35 ++++++++++
- .../selftests/kvm/max_guest_memory_test.c     |  7 +-
- .../kvm/memslot_modification_stress_test.c    |  6 +-
- .../testing/selftests/kvm/memslot_perf_test.c | 24 ++-----
- .../selftests/kvm/set_memory_region_test.c    |  2 +-
- .../selftests/kvm/x86_64/nx_huge_pages_test.c |  4 +-
- 15 files changed, 178 insertions(+), 78 deletions(-)
-
+diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+index f99e39a672d3..56e08da3a87f 100644
+--- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
++++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+@@ -411,6 +411,7 @@ int main(int argc, char *argv[])
+ 		case 'e':
+ 			/* 'e' is for evil. */
+ 			run_vcpus_while_disabling_dirty_logging = true;
++			break;
+ 		case 'g':
+ 			dirty_log_manual_caps = 0;
+ 			break;
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
