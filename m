@@ -2,121 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 758C55F9F13
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF29D5F9F0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiJJNFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 09:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
+        id S229638AbiJJNEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 09:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiJJNE5 (ORCPT
+        with ESMTP id S229530AbiJJNEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 09:04:57 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B262918B31;
-        Mon, 10 Oct 2022 06:04:55 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id l22so15796940edj.5;
-        Mon, 10 Oct 2022 06:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=o50QyVu8VAyHCqxIQn18V0Uq7O5eBhLw3GUeXgpdKJc=;
-        b=f6wdkHeSX5/FAdwUcsbSOithHLIndjQ/1E5YB4+iZW/mobFMkcPtGlSUQL8tD51+wg
-         NolyFKZmr4qOb7E6rOBd3wEi0Ibbvt7CjkpPPkEmMtJv+zMkv6GBHTqfXeAM/0usICTG
-         NxHHgw0R3XDfHIwBrJPaIBDheSCCcqUbFJdhAZD05pVNFYnOMHCL+DSl8JNWM7Vqo2DO
-         6Lvp/7n/h1Cr/Ot9tJiWBph3SAnbh6W9zoU3eS9Dq86TfZ2bArTk5BPunBzLTEKqSWKV
-         rqxWUWk44Om7uME28dheyMwXaL2uhglSxJq3SaZZxPLDYxlUfm4Gi6ISk4gMdXlc6fnG
-         lk9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o50QyVu8VAyHCqxIQn18V0Uq7O5eBhLw3GUeXgpdKJc=;
-        b=G1x7NEgr2vq8h+lvuX81RqxCEVvhQ4v/kVqphbLBOv/lyIFYcYPw91Lz7kNuEu35K5
-         OR8GgBonzKi/jAB9jmCsvez385RwV1U/OX7lwGOtWTA+xtDFpkzmcoskuJdESYjEcWdV
-         s1wXxEjuwsCqldE/JtyNRWc/lebsU0/t8h4RkRLtdZ28rde7qYhaAqC6QQ4eD2uUWJ0D
-         xvx1npR6YfZ/Qrt3yJzGsX6K44+q32N3yECwu7pHz08AwyQPCy9HmhzuWhXphomRMGya
-         GWW1ObfmIgFf65K+RC3Ya1mGAAl0zoZfseLqM97G0V2GOE5IdemU3OUMnISU5XcXwAmg
-         OA9Q==
-X-Gm-Message-State: ACrzQf3dhO9ACEyaLlBZGePgpWHExzsOI5XmQPMh8CEMk9UfLvTURv94
-        YiIP+/pKWPq1WRy6uf0TnqN1MmS9f44nKW99ec9760tPaxY=
-X-Google-Smtp-Source: AMsMyM6NVXe2NhyS3YjPCg6wGuxDKO/94eHw9JxQKYjhfldBZFW1mQ+cAP9dKb/QY9W6/uIbn4FqByXcUcbdT+p3u0Q=
-X-Received: by 2002:a05:6402:5291:b0:45c:3f6a:d4bc with SMTP id
- en17-20020a056402529100b0045c3f6ad4bcmr2069155edb.285.1665407093609; Mon, 10
- Oct 2022 06:04:53 -0700 (PDT)
+        Mon, 10 Oct 2022 09:04:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA21D2BFD
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 06:04:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665407076;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/EKUr7eRGSpHO08SnSJlFsYYLyW7vfd3DLTPqPH/Gog=;
+        b=QNwWTs/MfUy2Ain8+c9ws+IVzxXxjqBP35c1YCIE0rzcJgC5IXiQjKKgGq+hdqP9sCwO7F
+        zTHXLU58sh8F8xl1m0tb1O6saBNHZqHCqAgk6cbQVkxVJPTYh+POI5WfpyiETco9shamod
+        Jad3c96xHkLgZD7q9Xg05ew/VdZ0xaw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-448-pcK5r2phP4KyPBixilkzJw-1; Mon, 10 Oct 2022 09:04:35 -0400
+X-MC-Unique: pcK5r2phP4KyPBixilkzJw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D6C30101CC6B;
+        Mon, 10 Oct 2022 13:04:34 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.192.124])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D60D42157F41;
+        Mon, 10 Oct 2022 13:04:30 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+        David.Laight@ACULAB.COM, carlos@redhat.com,
+        Peter Oskolkov <posk@posk.io>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>
+Subject: Re: [PATCH v4 00/25] RSEQ node id and virtual cpu id extensions
+References: <20220922105941.237830-1-mathieu.desnoyers@efficios.com>
+Date:   Mon, 10 Oct 2022 15:04:29 +0200
+In-Reply-To: <20220922105941.237830-1-mathieu.desnoyers@efficios.com> (Mathieu
+        Desnoyers's message of "Thu, 22 Sep 2022 06:59:15 -0400")
+Message-ID: <8735bv25k2.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Mon, 10 Oct 2022 21:04:19 +0800
-Message-ID: <CAO4mrffEL_fAJ3TPr7gM7yPtEZ-w4dNrro5a_E=G3XSGvHEm8w@mail.gmail.com>
-Subject: WARNING: refcount bug in del_gendisk
-To:     axboe@kernel.dk, linux-block@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux Developer,
+* Mathieu Desnoyers:
 
-Recently when using our tool to fuzz kernel, the following crash was triggered:
+> Extend the rseq ABI to expose a NUMA node ID and a vm_vcpu_id field.
+>
+> The NUMA node ID field allows implementing a faster getcpu(2) in libc.
+>
+> The virtual cpu id allows ideal scaling (down or up) of user-space
+> per-cpu data structures. The virtual cpu ids allocated within a memory
+> space are tracked by the scheduler, which takes into account the number
+> of concurrently running threads, thus implicitly considering the number
+> of threads, the cpu affinity, the cpusets applying to those threads, and
+> the number of logical cores on the system.
 
-HEAD commit: 64570fbc14f8 Linux 5.15-rc5
-git tree: upstream
-compiler: clang 12.0.0
-console output:
-https://drive.google.com/file/d/1rRIA8DQuvuMXcFn2VKCXJaijxHGIVRRm/view?usp=sharing
-kernel config: https://drive.google.com/file/d/1lNwvovjLNrcuyFGrg05IoSmgO5jaKBBJ/view?usp=sharing
+Do you have some code that shows how the userspace application handshake
+is supposed to work with the existing three __rseq_* symbols?  Maybe I'm
+missing something.
 
-Unfortunately, I don't have any reproducer for this crash yet.
+From an application perspective, it would be best to add 8 more shared
+bytes in use, to push the new feature size over 32.  This would be
+clearly visible in __rseq_size, helping applications a lot.
 
-refcount_t: underflow; use-after-free.
-WARNING: CPU: 0 PID: 26667 at lib/refcount.c:28
-refcount_warn_saturate+0x186/0x1d0
-Modules linked in:
-CPU: 0 PID: 26667 Comm: syz-executor Not tainted 5.15.0-rc5+ #14
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-RIP: 0010:refcount_warn_saturate+0x186/0x1d0
-Code: c7 a0 0d 15 8b 31 c0 e8 48 33 21 fd 0f 0b eb 80 e8 4f f9 57 fd
-c6 05 23 e7 fb 09 01 48 c7 c7 00 0e 15 8b 31 c0 e8 2a 33 21 fd <0f> 0b
-e9 5f ff ff ff e8 2e f9 57 fd c6 05 03 e7 fb 09 01 48 c7 c7
-RSP: 0018:ffffc9000c47fd90 EFLAGS: 00010246
-RAX: 2c799da371900300 RBX: 0000000000000003 RCX: 0000000000040000
-RDX: ffffc90008d39000 RSI: 000000000003ffff RDI: 0000000000040000
-RBP: 0000000000000003 R08: ffffffff816a2ede R09: ffffed100c7857a8
-R10: ffffed100c7857a8 R11: 0000000000000000 R12: ffff88810504c150
-R13: 1ffff11020a09810 R14: ffff888103d93b38 R15: ffff888103d93b00
-FS:  00007f74c6c90700(0000) GS:ffff888063c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000556503c79d68 CR3: 00000000460bb000 CR4: 0000000000752ef0
-DR0: 0000000020000080 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000600
-PKRU: 55555554
-Call Trace:
- kobject_put+0x10d/0x130
- kobject_put+0xce/0x130
- del_gendisk+0x3c9/0x710
- loop_control_ioctl+0x5d7/0x770
- __se_sys_ioctl+0x10a/0x190
- do_syscall_64+0x3d/0xb0
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f74c9727c4d
-Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f74c6c8fc58 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f74c984e0a0 RCX: 00007f74c9727c4d
-RDX: 0000000000000000 RSI: 0000000000004c81 RDI: 0000000000000006
-RBP: 00007f74c97a0d80 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f74c984e0a0
-R13: 00007fffe21bf5cf R14: 00007fffe21bf770 R15: 00007f74c6c8fdc0
+Alternatively, we could sacrifice a bit to indicate that the this round
+of extensions is present.  But we'll need another bit to indicate that
+the last remaining 4 bytes are in use, for consistency.  Or come up with
+something to put their today.  The TID seems like an obvious choice.
 
-Best,
-Wei
+If we want to the 8 more bytes route, TID and PID should be
+uncontroversal?  The PID cache is clearly something that userspace
+likes, not just as a defeat device for the old BYTE benchmark.
+
+Thanks,
+Florian
+
