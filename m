@@ -2,104 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2395F9D97
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E735F9D9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231416AbiJJLaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 07:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35474 "EHLO
+        id S232080AbiJJLad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 07:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230508AbiJJLaK (ORCPT
+        with ESMTP id S231400AbiJJLaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 07:30:10 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2434C025
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:30:08 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id by36so12897287ljb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:30:08 -0700 (PDT)
+        Mon, 10 Oct 2022 07:30:20 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349B55141F;
+        Mon, 10 Oct 2022 04:30:17 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id bg9-20020a05600c3c8900b003bf249616b0so6213450wmb.3;
+        Mon, 10 Oct 2022 04:30:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PIqnGOnuCdILHCjBRH2XyEMbuxERKZxFFNMV5qYWuuE=;
-        b=V07BKUaPdd1W4UWVBVCu8dymfp738G1JxtbFalUXVHIoI3lvFcPE9dcdebmr+OUx+U
-         Q94qRLyUTjJJEyaGk1wR5n3fWra9/vTzVSmTeu0iW0a52rhJzKh9BdhDRANOJUYdKISg
-         U04YYaZ45SSkEojQAXThUhKSJBWD069Sr4pqqtbT6Iz92vKSYhdItk2is4AyqkG6Dbb8
-         jRu6BPOCwlVDkx+xYz0UY51PtR8f3j/ekBENUBnZnkdi1bO0V+sVTKFmLQgSvJAIvXzH
-         jCvTEsZaQ6SgornDRkuRXbCQGw4ZJnSRwbaSXnV2nKo/OXlo9Bl4rKNsZBYAyvHQ3gU/
-         vSAw==
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=K3gXHoOtP/G7cPHnJm5sliNg7u+93Tq1/waVlo7q5Aw=;
+        b=Dc2nT/4q8/jBUtQ7KRFrVaRYynz7726UdERw2EVrft35KrVuLTb7nmRSMT8vSSO+0r
+         WvZEzNZUg7yVN9JxcxHbahdTc3OVbtvsQM3OuvdXpC2zXIPZJW8MibYM79tnGacCUh/h
+         7Key3Bbpt8SVl9iwM3aFWGrDBcRRMOH3sOP1NkH1zLNWa1h+4YSro/BoBW+/JWDE5f/G
+         Y3dyaUck1t05h/fAKhiO8YXgwSpEbumBxWY7aQ2C6YWY+nex5rqsUrGnJdY2fo+HC6zd
+         d/E+rGpVFGHE9C+B7PHpunITjgA3qIfup5hP028D9qDgCRbAt+y7G8ewp6ZHnl20xs77
+         S7jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PIqnGOnuCdILHCjBRH2XyEMbuxERKZxFFNMV5qYWuuE=;
-        b=w2AMJcnTVNke5u4YC/kxJ41hTirfa+icwf5zhfprgPFg0ucAOMg152VcVqWtn1JDMe
-         S99Qa+JQbhrmWrq5VXzE+XH/AHXSM/sYaJToINiym5vgDtyT80MBWJDCv1SwaV+HgvA7
-         Qm2NkSjgv4+jU/zjnF0ZEbR+hYzniXgqhFxXfKWVskQXoloeCjLX0Rb3C6NWgFZATOC0
-         YZfNpTB0sE+832hDRdxsfTFsw2hG2Rrs1qou5aQ2NhJFw4KzN+/rBf9hdQKbjhd5GGnJ
-         X2Ypi2RYLhyu0O5Ulmg+vVoS+7Vg76Q/fVKhauY2EFxZ67fBYgxO1ajSqZl+OemjcKk+
-         DOgQ==
-X-Gm-Message-State: ACrzQf2ikL1SkwEOP3gWmjrgzVfTsqQNoaTVXs9fdY0w1xVb+6MlVDVS
-        PASu3kLBcoFaXWZ6pZeHESvkgqhMXZAMuB+1xAs=
-X-Google-Smtp-Source: AMsMyM4l6/B51uhcPweKFwRxdZin1gHlKdLtnHF60XlWCkT1bnDuVtxZkBVuZouXWgGslLkgN5mQg297prS/KimJu10=
-X-Received: by 2002:a2e:8552:0:b0:26f:b0c6:f1b with SMTP id
- u18-20020a2e8552000000b0026fb0c60f1bmr486479ljj.165.1665401406258; Mon, 10
- Oct 2022 04:30:06 -0700 (PDT)
+        bh=K3gXHoOtP/G7cPHnJm5sliNg7u+93Tq1/waVlo7q5Aw=;
+        b=Iz/7UoE1PgjY8YVkc+Di8r57X6YfF5O7QQJWl8IBJTnjsxB/O3BDj1SsTJ/VAyMp4M
+         t6Ejcl9yydI7Wat36rOq0V8kKksIcISdV/9j2ACseKZAhusgI+990Xo55irbt+Klhxll
+         4bXZAKIH3lJ0zODZVKcDLAlrOSf2MA4yZsGB/J6VvTgqgam2mPvih+QlnzphiEPQqM78
+         VHe1bCkSMLyPA/NlNEestrFo0KfeDGSovzGBRfEk5KP//ViXl52M/oHygNWDPgNNcbtO
+         +Oo6nsbmOAtduCxMZ+stQi+Z2j5IqUTAe0Ml1OcfbmcnkpP1zygQiTfkGd05unZknUFi
+         yYoA==
+X-Gm-Message-State: ACrzQf2ebSK5SRSICK0BLdZ1fQfxypafha6qFT/QLzZQk7ZCxFk04DAQ
+        zCvL8TpTaVNbuBEHp1ErxXg=
+X-Google-Smtp-Source: AMsMyM7tOmkCJQGYoo8JZxnb/78cJD3WnQS0D3xmyynREYxFhKOPx4l/iKu4rWoyju7dzol8rwaPGQ==
+X-Received: by 2002:a05:600c:221a:b0:3b4:75b8:3f7f with SMTP id z26-20020a05600c221a00b003b475b83f7fmr11998187wml.175.1665401416375;
+        Mon, 10 Oct 2022 04:30:16 -0700 (PDT)
+Received: from [192.168.42.102] (sm4-84-91-228-85.netvisao.pt. [84.91.228.85])
+        by smtp.gmail.com with ESMTPSA id t128-20020a1c4686000000b003b4a699ce8esm7713297wma.6.2022.10.10.04.30.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Oct 2022 04:30:16 -0700 (PDT)
+Message-ID: <51c60bcf-82a0-efbf-438d-4925c905503e@gmail.com>
+Date:   Mon, 10 Oct 2022 12:30:15 +0100
 MIME-Version: 1.0
-Received: by 2002:aa6:c60b:0:b0:226:b06f:3371 with HTTP; Mon, 10 Oct 2022
- 04:30:04 -0700 (PDT)
-Reply-To: financialdepartment0112@gmail.com
-From:   "Financial Department U.S" <jt2044189@gmail.com>
-Date:   Mon, 10 Oct 2022 12:30:04 +0100
-Message-ID: <CAHgQp6VwuVBKrcBWsqbseP6rKA47_KX5nC76CkWKp7qhhLxH2A@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: [PATCH v2 1/5] fs/ntfs3: fix hidedotfiles mount option by reversing
+ behaviour
+Content-Language: pt-PT
+From:   Daniel Pinto <danielpinto52@gmail.com>
+To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        ntfs3@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <9c404576-856b-6935-f2e3-c4d0749f16ea@gmail.com>
+In-Reply-To: <9c404576-856b-6935-f2e3-c4d0749f16ea@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:242 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [jt2044189[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [financialdepartment0112[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [jt2044189[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Dear Friend,
+Currently, the hidedotfiles mount option is behaving in the reverse
+way of what would be expected: enabling it disables setting the
+hidden attribute on files or directories with names starting with a
+dot and disabling it enables the setting.
 
-I have an important message just get back for more details.
+Reverse the behaviour of the hidedotfiles mount option so it matches
+what is expected.
 
-Sincerely,
-Mr Robert Liam
-Deputy department of the treasury
-United State.
+Signed-off-by: Daniel Pinto <danielpinto52@gmail.com>
+---
+ fs/ntfs3/super.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
+index 1e2c04e48f98..c6fd2afde172 100644
+--- a/fs/ntfs3/super.c
++++ b/fs/ntfs3/super.c
+@@ -359,7 +359,7 @@ static int ntfs_fs_parse_param(struct fs_context *fc,
+ 		opts->nohidden = result.negated ? 1 : 0;
+ 		break;
+ 	case Opt_hide_dot_files:
+-		opts->hide_dot_files = result.negated ? 1 : 0;
++		opts->hide_dot_files = result.negated ? 0 : 1;
+ 		break;
+ 	case Opt_acl:
+ 		if (!result.negated)
