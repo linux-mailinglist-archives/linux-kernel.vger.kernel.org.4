@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0AE65F99A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29EA5F99AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232127AbiJJHO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
+        id S232197AbiJJHPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232030AbiJJHMh (ORCPT
+        with ESMTP id S232094AbiJJHNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:12:37 -0400
+        Mon, 10 Oct 2022 03:13:10 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE2F5EDD3;
-        Mon, 10 Oct 2022 00:08:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937D524084;
+        Mon, 10 Oct 2022 00:08:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 989E6B80E60;
-        Mon, 10 Oct 2022 07:08:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00DF7C433D6;
-        Mon, 10 Oct 2022 07:08:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6DB93B80E62;
+        Mon, 10 Oct 2022 07:07:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFDD0C433C1;
+        Mon, 10 Oct 2022 07:07:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665385686;
-        bh=U1YIBTobLGPtIEpiy0QykVj1EC6xjgv8Bd2UL63hik0=;
+        s=korg; t=1665385647;
+        bh=E44DQ4Za03GQzbvMam2sCoX3jPZyCievlyAL0u9o1Zc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WsvgI2j7AMvFBSSQdnJfNnxtVUgyqsfas02dz/OoXNUpMc2VizpzHHXRNPetM2+gI
-         05TPr/uv8XT4cgSTCFKOyZPyCZkeNB86F7omzhFqtTVdlE98Fqd/+ZqzjfDh5zqQ5e
-         WTYRsf3tXyCDiixYQyb99LNdnolqxoGT8cO/pqxo=
+        b=S+PC0lsL2MmrWcbIreLDOVjjuO5I8x/e12TEPXB1ZjTPllAOcCqeDj+yzBSXzIGuc
+         N7My4T2OfHjg3RF1qtJ+6majQMaqSBy6KHKxAD8TsYPlNDZXahj1Y3SvUPpJ+hhq7V
+         2J9zuMQSzGhdrl3n58pUsz2q+k1eEiZAcGFHLhww=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 06/37] wait_on_bit: add an acquire memory barrier
-Date:   Mon, 10 Oct 2022 09:05:25 +0200
-Message-Id: <20221010070331.442847347@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 28/48] KVM: s390: Pass initialized arg even if unused
+Date:   Mon, 10 Oct 2022 09:05:26 +0200
+Message-Id: <20221010070334.431830252@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221010070331.211113813@linuxfoundation.org>
-References: <20221010070331.211113813@linuxfoundation.org>
+In-Reply-To: <20221010070333.676316214@linuxfoundation.org>
+References: <20221010070333.676316214@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,177 +58,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
 
-commit 8238b4579866b7c1bb99883cfe102a43db5506ff upstream.
+[ Upstream commit b3cefd6bf16e7234ffbd4209f6083060f4e35f59 ]
 
-There are several places in the kernel where wait_on_bit is not followed
-by a memory barrier (for example, in drivers/md/dm-bufio.c:new_read).
+This silences smatch warnings reported by kbuild bot:
+arch/s390/kvm/gaccess.c:859 guest_range_to_gpas() error: uninitialized symbol 'prot'.
+arch/s390/kvm/gaccess.c:1064 access_guest_with_key() error: uninitialized symbol 'prot'.
 
-On architectures with weak memory ordering, it may happen that memory
-accesses that follow wait_on_bit are reordered before wait_on_bit and
-they may return invalid data.
+This is because it cannot tell that the value is not used in this case.
+The trans_exc* only examine prot if code is PGM_PROTECTION.
+Pass a dummy value for other codes.
 
-Fix this class of bugs by introducing a new function "test_bit_acquire"
-that works like test_bit, but has acquire memory ordering semantics.
-
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Acked-by: Will Deacon <will@kernel.org>
-Cc: stable@vger.kernel.org
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220825192540.1560559-1-scgl@linux.ibm.com
+Signed-off-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+Signed-off-by: Janosch Frank <frankja@linux.ibm.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/include/asm/bitops.h                        |   21 +++++++++++++++++++
- include/asm-generic/bitops/instrumented-non-atomic.h |   12 ++++++++++
- include/asm-generic/bitops/non-atomic.h              |   14 ++++++++++++
- include/linux/buffer_head.h                          |    2 -
- include/linux/wait_bit.h                             |    8 +++----
- kernel/sched/wait_bit.c                              |    2 -
- 6 files changed, 53 insertions(+), 6 deletions(-)
+ arch/s390/kvm/gaccess.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
---- a/arch/x86/include/asm/bitops.h
-+++ b/arch/x86/include/asm/bitops.h
-@@ -207,6 +207,20 @@ static __always_inline bool constant_tes
- 		(addr[nr >> _BITOPS_LONG_SHIFT])) != 0;
- }
+diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
+index 227ed0009354..0e82bf85e59b 100644
+--- a/arch/s390/kvm/gaccess.c
++++ b/arch/s390/kvm/gaccess.c
+@@ -489,6 +489,8 @@ enum prot_type {
+ 	PROT_TYPE_ALC  = 2,
+ 	PROT_TYPE_DAT  = 3,
+ 	PROT_TYPE_IEP  = 4,
++	/* Dummy value for passing an initialized value when code != PGM_PROTECTION */
++	PROT_NONE,
+ };
  
-+static __always_inline bool constant_test_bit_acquire(long nr, const volatile unsigned long *addr)
-+{
-+	bool oldbit;
-+
-+	asm volatile("testb %2,%1"
-+		     CC_SET(nz)
-+		     : CC_OUT(nz) (oldbit)
-+		     : "m" (((unsigned char *)addr)[nr >> 3]),
-+		       "i" (1 << (nr & 7))
-+		     :"memory");
-+
-+	return oldbit;
-+}
-+
- static __always_inline bool variable_test_bit(long nr, volatile const unsigned long *addr)
- {
- 	bool oldbit;
-@@ -224,6 +238,13 @@ static __always_inline bool variable_tes
- 	 ? constant_test_bit((nr), (addr))	\
- 	 : variable_test_bit((nr), (addr)))
+ static int trans_exc_ending(struct kvm_vcpu *vcpu, int code, unsigned long gva, u8 ar,
+@@ -504,6 +506,10 @@ static int trans_exc_ending(struct kvm_vcpu *vcpu, int code, unsigned long gva,
+ 	switch (code) {
+ 	case PGM_PROTECTION:
+ 		switch (prot) {
++		case PROT_NONE:
++			/* We should never get here, acts like termination */
++			WARN_ON_ONCE(1);
++			break;
+ 		case PROT_TYPE_IEP:
+ 			tec->b61 = 1;
+ 			fallthrough;
+@@ -968,8 +974,10 @@ static int guest_range_to_gpas(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
+ 				return rc;
+ 		} else {
+ 			gpa = kvm_s390_real_to_abs(vcpu, ga);
+-			if (kvm_is_error_gpa(vcpu->kvm, gpa))
++			if (kvm_is_error_gpa(vcpu->kvm, gpa)) {
+ 				rc = PGM_ADDRESSING;
++				prot = PROT_NONE;
++			}
+ 		}
+ 		if (rc)
+ 			return trans_exc(vcpu, rc, ga, ar, mode, prot);
+@@ -1112,8 +1120,6 @@ int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
+ 		if (rc == PGM_PROTECTION && try_storage_prot_override)
+ 			rc = access_guest_page_with_key(vcpu->kvm, mode, gpas[idx],
+ 							data, fragment_len, PAGE_SPO_ACC);
+-		if (rc == PGM_PROTECTION)
+-			prot = PROT_TYPE_KEYC;
+ 		if (rc)
+ 			break;
+ 		len -= fragment_len;
+@@ -1123,6 +1129,10 @@ int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
+ 	if (rc > 0) {
+ 		bool terminate = (mode == GACC_STORE) && (idx > 0);
  
-+static __always_inline bool
-+arch_test_bit_acquire(unsigned long nr, const volatile unsigned long *addr)
-+{
-+	return __builtin_constant_p(nr) ? constant_test_bit_acquire(nr, addr) :
-+					  variable_test_bit(nr, addr);
-+}
-+
- /**
-  * __ffs - find first set bit in word
-  * @word: The word to search
---- a/include/asm-generic/bitops/instrumented-non-atomic.h
-+++ b/include/asm-generic/bitops/instrumented-non-atomic.h
-@@ -135,4 +135,16 @@ static inline bool test_bit(long nr, con
- 	return arch_test_bit(nr, addr);
- }
- 
-+/**
-+ * _test_bit_acquire - Determine, with acquire semantics, whether a bit is set
-+ * @nr: bit number to test
-+ * @addr: Address to start counting from
-+ */
-+static __always_inline bool
-+test_bit_acquire(unsigned long nr, const volatile unsigned long *addr)
-+{
-+	instrument_atomic_read(addr + BIT_WORD(nr), sizeof(long));
-+	return arch_test_bit_acquire(nr, addr);
-+}
-+
- #endif /* _ASM_GENERIC_BITOPS_INSTRUMENTED_NON_ATOMIC_H */
---- a/include/asm-generic/bitops/non-atomic.h
-+++ b/include/asm-generic/bitops/non-atomic.h
-@@ -3,6 +3,7 @@
- #define _ASM_GENERIC_BITOPS_NON_ATOMIC_H_
- 
- #include <asm/types.h>
-+#include <asm/barrier.h>
- 
- /**
-  * arch___set_bit - Set a bit in memory
-@@ -119,4 +120,17 @@ arch_test_bit(unsigned int nr, const vol
- }
- #define test_bit arch_test_bit
- 
-+/**
-+ * arch_test_bit_acquire - Determine, with acquire semantics, whether a bit is set
-+ * @nr: bit number to test
-+ * @addr: Address to start counting from
-+ */
-+static __always_inline bool
-+arch_test_bit_acquire(unsigned long nr, const volatile unsigned long *addr)
-+{
-+	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-+	return 1UL & (smp_load_acquire(p) >> (nr & (BITS_PER_LONG-1)));
-+}
-+#define test_bit_acquire arch_test_bit_acquire
-+
- #endif /* _ASM_GENERIC_BITOPS_NON_ATOMIC_H_ */
---- a/include/linux/buffer_head.h
-+++ b/include/linux/buffer_head.h
-@@ -166,7 +166,7 @@ static __always_inline int buffer_uptoda
- 	 * make it consistent with folio_test_uptodate
- 	 * pairs with smp_mb__before_atomic in set_buffer_uptodate
- 	 */
--	return (smp_load_acquire(&bh->b_state) & (1UL << BH_Uptodate)) != 0;
-+	return test_bit_acquire(BH_Uptodate, &bh->b_state);
- }
- 
- #define bh_offset(bh)		((unsigned long)(bh)->b_data & ~PAGE_MASK)
---- a/include/linux/wait_bit.h
-+++ b/include/linux/wait_bit.h
-@@ -71,7 +71,7 @@ static inline int
- wait_on_bit(unsigned long *word, int bit, unsigned mode)
- {
- 	might_sleep();
--	if (!test_bit(bit, word))
-+	if (!test_bit_acquire(bit, word))
- 		return 0;
- 	return out_of_line_wait_on_bit(word, bit,
- 				       bit_wait,
-@@ -96,7 +96,7 @@ static inline int
- wait_on_bit_io(unsigned long *word, int bit, unsigned mode)
- {
- 	might_sleep();
--	if (!test_bit(bit, word))
-+	if (!test_bit_acquire(bit, word))
- 		return 0;
- 	return out_of_line_wait_on_bit(word, bit,
- 				       bit_wait_io,
-@@ -123,7 +123,7 @@ wait_on_bit_timeout(unsigned long *word,
- 		    unsigned long timeout)
- {
- 	might_sleep();
--	if (!test_bit(bit, word))
-+	if (!test_bit_acquire(bit, word))
- 		return 0;
- 	return out_of_line_wait_on_bit_timeout(word, bit,
- 					       bit_wait_timeout,
-@@ -151,7 +151,7 @@ wait_on_bit_action(unsigned long *word,
- 		   unsigned mode)
- {
- 	might_sleep();
--	if (!test_bit(bit, word))
-+	if (!test_bit_acquire(bit, word))
- 		return 0;
- 	return out_of_line_wait_on_bit(word, bit, action, mode);
- }
---- a/kernel/sched/wait_bit.c
-+++ b/kernel/sched/wait_bit.c
-@@ -47,7 +47,7 @@ __wait_on_bit(struct wait_queue_head *wq
- 		prepare_to_wait(wq_head, &wbq_entry->wq_entry, mode);
- 		if (test_bit(wbq_entry->key.bit_nr, wbq_entry->key.flags))
- 			ret = (*action)(&wbq_entry->key, mode);
--	} while (test_bit(wbq_entry->key.bit_nr, wbq_entry->key.flags) && !ret);
-+	} while (test_bit_acquire(wbq_entry->key.bit_nr, wbq_entry->key.flags) && !ret);
- 
- 	finish_wait(wq_head, &wbq_entry->wq_entry);
- 
++		if (rc == PGM_PROTECTION)
++			prot = PROT_TYPE_KEYC;
++		else
++			prot = PROT_NONE;
+ 		rc = trans_exc_ending(vcpu, rc, ga, ar, mode, prot, terminate);
+ 	}
+ out_unlock:
+-- 
+2.35.1
+
 
 
