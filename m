@@ -2,103 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020865FA3D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 20:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7532B5FA3DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 21:00:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiJJS5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 14:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
+        id S229470AbiJJTAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 15:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiJJS5t (ORCPT
+        with ESMTP id S229490AbiJJTAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 14:57:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2165C9C2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 11:57:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665428263;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=H4dEUyv/GvCvxwPuE1Ie3nHYJS0AqpfIYFkaqAHSeuo=;
-        b=fJ0ayOjzOKDkYQBO4Tyr6kBo0V+kqVFS06kvJidvncSzGmCbKPulXxXBUEkQFotJhTglxb
-        kzq1dGShVblJwf+wCeKgSREryB+6ESpUr43ry4fqpJiyTpvDtQ7xtiDS5BmDjHUkxFpldD
-        qHpQ6A51nslOEjj9DLBDS8t584tOn7A=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-249-MY5qqIKMPgq09hgnSUIhyw-1; Mon, 10 Oct 2022 14:57:42 -0400
-X-MC-Unique: MY5qqIKMPgq09hgnSUIhyw-1
-Received: by mail-oi1-f198.google.com with SMTP id o12-20020a056808124c00b00353f308fb4bso6717844oiv.22
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 11:57:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H4dEUyv/GvCvxwPuE1Ie3nHYJS0AqpfIYFkaqAHSeuo=;
-        b=HX3/SL9T01MJFJtFxcEE251n+i62EMurEMp+ZniKU0GEq7HLEysJRn1O4shAdY40kz
-         4gLuSh8w4aHD1ghENW/Rs4kbdB2va9/vCqFvL0TpciHGncX9r04ii8U4Gt3J1sKIg21U
-         nKxLVPvvySCSWcOXrE9lrfacDJ7N15fDv/PcJ56NtLGiakJTrxoJOMlvLjFIzof51g2D
-         PtHDj38mgnyhPeip/CsM2CXjWmGsvm1Xh46Zb/DQci5ctAAG61eWRNDwmYdr2D4E0jsa
-         qr8efSRqTdF/F75TLhtmM0nZX+yZFeMSWuzAErTuCjiuUe9X0J/iF41h3HxzfZRaA2ga
-         xcbA==
-X-Gm-Message-State: ACrzQf23MTdZdhcYn3uFK0B45ne60XBKybb8KBRGQ9vYRTZ2wnAVdP7O
-        maO1CKQP3LFvgSlJfABqeJ1nI6MII59o4L+9OejwB8i5S/y6Y+Y1r3E+nSjrFLrSKOgLxHXzmwL
-        m6VS6YP4sSEo+8czZdinCtpO8
-X-Received: by 2002:a05:6870:a9a0:b0:12b:45b6:80e1 with SMTP id ep32-20020a056870a9a000b0012b45b680e1mr16577370oab.209.1665428261313;
-        Mon, 10 Oct 2022 11:57:41 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7C9JHqJuNrM8W7+RXHF7LmED4/MlJ8xMRXffGkYhrIzx6UVWlsYjFqQf0d7gpMSh3AOcEVEQ==
-X-Received: by 2002:a05:6870:a9a0:b0:12b:45b6:80e1 with SMTP id ep32-20020a056870a9a000b0012b45b680e1mr16577359oab.209.1665428261137;
-        Mon, 10 Oct 2022 11:57:41 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id s63-20020acac242000000b0035173c2fddasm4579112oif.51.2022.10.10.11.57.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 11:57:40 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 11:57:39 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Christoph Hellwig <hch@lst.de>, Robin Murphy <robin.murphy@arm.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, iommu@lists.linux.dev,
+        Mon, 10 Oct 2022 15:00:43 -0400
+Received: from qproxy4-pub.mail.unifiedlayer.com (qproxy4-pub.mail.unifiedlayer.com [66.147.248.250])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280056BD49
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 12:00:41 -0700 (PDT)
+Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
+        by qproxy4.mail.unifiedlayer.com (Postfix) with ESMTP id BD6848035B01
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 19:00:30 +0000 (UTC)
+Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
+        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id AD9CE1003F00E
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 18:59:58 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id hy0Loy2Cf9t3Uhy0Mo2wki; Mon, 10 Oct 2022 18:59:58 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=R/vGpfdX c=1 sm=1 tr=0 ts=63446bae
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=Qawa6l4ZSaYA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=pHmFqU1MfZqmF2wH4HA5mBKkgOLwVlHajjT+9iaqM0I=; b=BTRK/tNtffeV/9tfFuP2TL29X4
+        X8GPirEaPokyrQD4v1c5hHWG1vydQZw00x8cDhd4jhDmjkBTsNmxqHkhlcsGu7tmQxMkemsYVF+pJ
+        jgHnbaFk3C/gbDDHr2321Xf5yiwdZlxAjZpo6B2nuLNYPZNgrv4aaaopvBYJqlCDuIwh+KtM3jZJ5
+        5itjbdHF4H7URv1T4Wmd6PGZ0l/JVW89SkrW8PsqIJ/FMFOPLYNMq3xgC1y6aKK8xBKzpIB/lW+dx
+        s8CuDGA0L2Cojv9SWod2JE7sl1iy7IYMvWknDDkLt7JfR4JDrKy4bYz/0dq8LE97HbcbA9AyHjNIt
+        V0eZBl1w==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:53274 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1ohy0J-000Mbp-Rl;
+        Mon, 10 Oct 2022 12:59:55 -0600
+Subject: Re: [PATCH 5.15 00/37] 5.15.73-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-Subject: Issue seen since commit f5ff79fddf0e ("dma-mapping: remove
- CONFIG_DMA_REMAP")
-Message-ID: <20221010185739.vgw27m7fpmftly3q@cantor>
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+References: <20221010070331.211113813@linuxfoundation.org>
+In-Reply-To: <20221010070331.211113813@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <26bfea6d-4470-6329-f216-541fe615f536@w6rz.net>
+Date:   Mon, 10 Oct 2022 11:59:48 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1ohy0J-000Mbp-Rl
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:53274
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I've been looking at an odd issue that shows up with commit
-f5ff79fddf0e ("dma-mapping: remove CONFIG_DMA_REMAP").  What is being
-seen is the bnx2fc driver calling dma_free_coherent(), and eventually
-hits the BUG_ON() in vunmap().  bnx2fc_free_session_resc() does a
-spin_lock_bh() around the dma_free_coherent() calls, and looking at
-preempt.h that will trigger in_interrupt() to return positive, so that
-makes sense. The really odd part is this only happens with the
-shutdown of the kernel after a system install. Reboots after that do not
-hit the BUG_ON() in vunmap().
+On 10/10/22 12:05 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.73 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 12 Oct 2022 07:03:19 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.73-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-I still need to grab a system and try to see what it is doing on the
-subsequent shutdowns, because it seems to me that any time
-bnx2fc_free_session_resc() is called it will end up there, unless the
-allocs are not coming from vmalloc() in the later boots. Between the
-comments in dma_free_attrs(), and preempt.h, dma_free_coherent()
-shouldn't be called under a spin_lock_bh(), yes? I think the comments
-in dma_free_attrs() might be out of date with commit f5ff79fddf0e
-("dma-mapping: remove CONFIG_DMA_REMAP") in place since now it is more
-general that you can land in vunmap(). Also, should that WARN_ON() in
-dma_free_attrs() trigger as well for the BH disabled case?
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-It was also reproduced with a 6.0-rc5 kernel build[1].
-
-Regards,
-Jerry
-
-
-[1] https://koji.fedoraproject.org/koji/buildinfo?buildID=2061881
+Tested-by: Ron Economos <re@w6rz.net>
 
