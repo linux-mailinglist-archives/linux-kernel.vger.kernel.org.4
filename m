@@ -2,72 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2285FA212
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 18:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFA05FA214
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 18:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiJJQla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 12:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
+        id S229808AbiJJQmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 12:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiJJQlZ (ORCPT
+        with ESMTP id S229761AbiJJQmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 12:41:25 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA50631F1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 09:41:25 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id c24so10875962plo.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 09:41:25 -0700 (PDT)
+        Mon, 10 Oct 2022 12:42:45 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069BE6DFB3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 09:42:43 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id z20so10846064plb.10
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 09:42:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kBInphdFTXa+77vEzA8kMD40VeRTtiaezhjgTdUa2c8=;
-        b=Ioiculmaz1YAb5NVneZFkhzIt6X3SGkkzMsJwSvkJM6hcobICfyHe8TyvymAj0qT6b
-         ZUTFM5KCdpQ44aCQ6ZLyNYfcp7TdGyBlm6MHHCa9Xva8V7nYYCsWlnlGomhQ4vjy3ISU
-         fofiNRh3k1oPiS7NFLW3+NnTgREVsoOmZgqppbAUpof32omJtwTC9CDvpj/rq5Uef4ea
-         TrFijDKYWipyHQC0rTUk9udh11czrQEaL9YvVRs2irIIdadWKHS7KgNC0GeptcqF7p6+
-         Az+Ht15iu3F4rgLfUy7OPBt3a6yh596fLSnKYBNDCWdRz1C67Mv05ysWrHYEgtGUi+kP
-         IHFA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=f+X0dPUNTzvXsxSJGYhvGB/UduBVQg8zNVHQH+Kp9jQ=;
+        b=eVCfkkkCkVgQuSb4QlPgq/2erp2lpWi8z0RZhA7C/aNm1ryA2KL2HGi2tJdq6mOpSO
+         WuXGAjiirI7U10uM01RcSKJh8syoKd80r4J9HjkukfdWHJdmIwxIQuPiFOgB+eIBVopK
+         jBeWUolzRg2C11i9Zy4jhkAKGDVPBE+oz3FhXEZ4GYVX20ZlHL6h53UAvoKZm4ckMPkZ
+         +DbTFd9cYNC8CSOF4i3zIOg+40YGb8f1lE52HMat42SH/4mOSV0cEPSuPFHx4TwYaegO
+         3f346LPCE4dJK9Wc1VYUZ13QEKKdlGshSU8Rilx20RzdPiYfXu6qE8068aTIWcnzOc82
+         55TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kBInphdFTXa+77vEzA8kMD40VeRTtiaezhjgTdUa2c8=;
-        b=waJDjNMqgoYuaVbPvlWbdLNkig/eTSqDxxFXjQL1lXkRFaLcXcW8qjXVs2FkWSKKP3
-         iyZANkwygKFR9rEfg11fgdrGHdwuFViJOGWumohXyiCX3jrm26B8rEMtW3rPPicDkuBT
-         66UdZ8VtSTF4v2sRbRNR4z1aTnrYiWzOeDLZg5XHOTMjqKBC06dYi9y+hdkXS0zzmLV8
-         VLoqBjfH9VXsZwd4qop26LGVxEwVjsn19AvLdImbS34wvcMvDazqjW+wt3H/9xktVqpb
-         7KCdyRnwLPWrNQfhNisiJHk6zdLeka6nnFd0bawCll5N4yGwZjm/huS/mW5lRxNNCNxT
-         eirA==
-X-Gm-Message-State: ACrzQf3NjmoA3g1NQS+BbFf8dnIJUK/gidtjaMv4vTpAenYivxq94cw6
-        Ff7rty40i4+xZXLu5UWp+MQQOw==
-X-Google-Smtp-Source: AMsMyM4hWhFMlChYX1VJsTIrwqLA5NexCdb9SNtPs67uwYmXA6KlZ7sCtrOQtTR2AySyoPBQZhFe3Q==
-X-Received: by 2002:a17:902:eb87:b0:180:dfae:553a with SMTP id q7-20020a170902eb8700b00180dfae553amr14133045plg.114.1665420084555;
-        Mon, 10 Oct 2022 09:41:24 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id g12-20020a170902868c00b0017f7f8bb718sm6818970plo.232.2022.10.10.09.41.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 09:41:24 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 16:41:20 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     kernel test robot <yujie.liu@intel.com>
-Cc:     lkp@lists.01.org, lkp@intel.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [KVM] 21d4c575eb: perf-sanity-tests.Test_event_parsing.fail
-Message-ID: <Y0RLMJW27AmKTgLQ@google.com>
-References: <202210091636.2f13027d-yujie.liu@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f+X0dPUNTzvXsxSJGYhvGB/UduBVQg8zNVHQH+Kp9jQ=;
+        b=XOHVNSpExy78+MNso6QazbLStChdkL7ASQYIfLFOUJ6gHrp61O+z3UZ2upCQZUpt/D
+         PV7Gepk6biA6idateuK8t+3E6+hgVpZ91Dcl53Py/sEgRbVRmw9gJY39qSe27RB0CYMo
+         ZLcqy6QS6H2LsMi6SuWTv68Y6jpAW0Hc8tTjqRqG/I09Z29NI7yrAOGUlXQJzTJzuVxf
+         0vte0NTMGgEcJs7HiIYZXU66xmCEcbhTDqAogVLtFmf3v0/2BLAr8IxHqm+zBhggM0oh
+         uTkVDZq3jqTXpq/oesCWN3hXyfk7P3hLS5unmUMdPX/gADduBSdoh7rcj8CWObyDwwNn
+         tAMw==
+X-Gm-Message-State: ACrzQf32NspJQvPzrCgURHZZuTkORfxkMEH/Z7X4c49/xW0AFzuCjllg
+        3tb6fUhM0heWQ+QVNnMfYY0LimbzRE5moTc4jurbww==
+X-Google-Smtp-Source: AMsMyM5dNVNTY7K3+ncFOHk+OeTpeT8OH00IQspK/gDrewkWzjoXpQQCcmk0OWiDXIO2CGOxDrblgnKbzMTHV98NIUI=
+X-Received: by 2002:a17:90b:3a88:b0:209:f35d:ad53 with SMTP id
+ om8-20020a17090b3a8800b00209f35dad53mr32777961pjb.102.1665420163240; Mon, 10
+ Oct 2022 09:42:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202210091636.2f13027d-yujie.liu@intel.com>
+References: <CAKwvOdkEied8hf6Oid0sGf0ybF2WqrzOvtRiXa=j7Ms-Rc6uBA@mail.gmail.com>
+ <20221007201140.1744961-1-ndesaulniers@google.com> <20221010074409.GA20998@lst.de>
+In-Reply-To: <20221010074409.GA20998@lst.de>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 10 Oct 2022 09:42:31 -0700
+Message-ID: <CAKwvOdm1yMbUUHGeqnKYBptBEqSO0T4k=sUy5i0Bhy3g41+nDg@mail.gmail.com>
+Subject: Re: [PATCH] fs/select: mark do_select noinline_for_stack for 32b
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, Xiaoming Ni <nixiaoming@huawei.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Eric Dumazet <edumazet@google.com>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,73 +78,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 09, 2022, kernel test robot wrote:
-> Greeting,
-> 
-> FYI, we noticed the following commit (built with gcc-11):
-> 
-> commit: 21d4c575eb4a1e6d956b61b5e9c162895fa7d4ba ("KVM: x86: Print error code in exception injection tracepoint iff valid")
-> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-> 
-> in testcase: perf-sanity-tests
-> version: 
-> with following parameters:
-> 
-> 	perf_compiler: gcc
-> 
-> on test machine: 4 threads Intel(R) Core(TM) i5-6500 CPU @ 3.20GHz (Skylake) with 32G memory
-> 
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+On Mon, Oct 10, 2022 at 12:44 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> On Fri, Oct 07, 2022 at 01:11:40PM -0700, Nick Desaulniers wrote:
+> > Effectively a revert of
+> > commit ad312f95d41c ("fs/select: avoid clang stack usage warning")
+> >
+> > Various configs can still push the stack useage of core_sys_select()
+> > over the CONFIG_FRAME_WARN threshold (1024B on 32b targets).
+> >
+> >   fs/select.c:619:5: error: stack frame size of 1048 bytes in function
+> >   'core_sys_select' [-Werror,-Wframe-larger-than=]
+>
+> Btw, I also see a warning here with all my KASAN x86_64 gcc builds.
 
-What exactly is changing?  I see some "FAILED!" entries, but I don't see how a
-commit that only affects tracepoint string output can be related to things like
-"Lookup mmap thread".  If the issue is that the output change caused
-"Parse event definition strings" to fail, and that propagated to everything else,
-then this is effectively "working as intended".
+Thanks for the report.  That might be another interesting data point;
+I haven't been able to reproduce that locally though:
 
-diff --git a/arch/x86/kvm/trace.h b/arch/x86/kvm/trace.h
-index d07428e660e3..385436d12024 100644
---- a/arch/x86/kvm/trace.h
-+++ b/arch/x86/kvm/trace.h
-@@ -376,10 +376,11 @@ TRACE_EVENT(kvm_inj_exception,
-                __entry->reinjected     = reinjected;
-        ),
- 
--       TP_printk("%s (0x%x)%s",
-+       TP_printk("%s%s%s%s%s",
-                  __print_symbolic(__entry->exception, kvm_trace_sym_exc),
--                 /* FIXME: don't print error_code if not present */
--                 __entry->has_error ? __entry->error_code : 0,
-+                 !__entry->has_error ? "" : " (",
-+                 !__entry->has_error ? "" : __print_symbolic(__entry->error_code, { }),
-+                 !__entry->has_error ? "" : ")",
-                  __entry->reinjected ? " [reinjected]" : "")
- );
+$ make -j$(nproc) defconfig
+$ ./scripts/config -e KASAN
+$ make -j$(nproc) olddefconfig fs/select.o
+$ gcc --version | head -n1
+gcc (Debian 12.2.0-1) 12.2.0
 
-> 2022-10-08 04:47:24 sudo /usr/src/perf_selftests-x86_64-rhel-8.3-func-21d4c575eb4a1e6d956b61b5e9c162895fa7d4ba/tools/perf/perf test 6
->   6: Parse event definition strings                                  :
->   6.1: Test event parsing                                            : FAILED!
-
-> 2022-10-08 04:48:12 sudo /usr/src/perf_selftests-x86_64-rhel-8.3-func-21d4c575eb4a1e6d956b61b5e9c162895fa7d4ba/tools/perf/perf test 19
->  19: 'import perf' in python                                         : FAILED!
-
-> 2022-10-08 04:48:36 sudo /usr/src/perf_selftests-x86_64-rhel-8.3-func-21d4c575eb4a1e6d956b61b5e9c162895fa7d4ba/tools/perf/perf test 31
->  31: Lookup mmap thread                                              : FAILED!
-
-> 2022-10-08 04:48:45 sudo /usr/src/perf_selftests-x86_64-rhel-8.3-func-21d4c575eb4a1e6d956b61b5e9c162895fa7d4ba/tools/perf/perf test 72
->  72: dlfilter C API                                                  : FAILED!
-
-> 2022-10-08 04:48:46 sudo /usr/src/perf_selftests-x86_64-rhel-8.3-func-21d4c575eb4a1e6d956b61b5e9c162895fa7d4ba/tools/perf/perf test 75
->  75: Test dwarf unwind                                               : FAILED!
-
-> 2022-10-08 04:48:47 sudo /usr/src/perf_selftests-x86_64-rhel-8.3-func-21d4c575eb4a1e6d956b61b5e9c162895fa7d4ba/tools/perf/perf test 80
->  80: build id cache operations                                       : FAILED!
-
-> 2022-10-08 04:49:27 sudo /usr/src/perf_selftests-x86_64-rhel-8.3-func-21d4c575eb4a1e6d956b61b5e9c162895fa7d4ba/tools/perf/perf test 89
->  89: perf stat CSV output linter                                     : FAILED!
-
-> 2022-10-08 04:49:51 sudo /usr/src/perf_selftests-x86_64-rhel-8.3-func-21d4c575eb4a1e6d956b61b5e9c162895fa7d4ba/tools/perf/perf test 94
->  94: perf all metrics test                                           : FAILED!
-
-> 2022-10-08 04:56:05 sudo /usr/src/perf_selftests-x86_64-rhel-8.3-func-21d4c575eb4a1e6d956b61b5e9c162895fa7d4ba/tools/perf/perf test 101
-> 101: Miscellaneous Intel PT testing                                  : FAILED!
+I also tried enabling CONFIG_KASAN_INLINE=y but couldn't reproduce.
+Mind sending me your .config that reproduces this?
+-- 
+Thanks,
+~Nick Desaulniers
