@@ -2,128 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 360115F9B64
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 10:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 629825F9B76
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 10:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231360AbiJJIvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 04:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
+        id S231223AbiJJIzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 04:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbiJJIvD (ORCPT
+        with ESMTP id S231139AbiJJIzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 04:51:03 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8757C4DF20
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 01:51:02 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id C64F532005C1;
-        Mon, 10 Oct 2022 04:51:00 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 10 Oct 2022 04:51:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1665391860; x=1665478260; bh=F465zH3QC/
-        AbnVw6vk1lOdg6PlWTj/fhAYUsOOtabSo=; b=V3CyrMEXGFQc8Xc05yin7R5KnI
-        sKizRXnWMm2L4rbFdDyhhJQhF0trLKJo2g1hxkA3k8SLo+MEejGN0Yy362ULe1Ag
-        J8Kpxew+ONtKrwUksKtT8aBHOs7L85m4OyPzYdBZczTeTAWQShwmRXAAhePLRjmE
-        mkrkMvtKl2wDLfmxjGiQrgiYQj0wJt7foO7afBXhZsVoMsdwNjWEiVIuds++gcuv
-        LgkTaKQ4kstrAaO3C8TTuPLpgixpgjcqOrHiEIjfXrb2a3q/fnDt5nLt0npVCSv3
-        dC45SFLwlkia/PWZLn7q1k+I508R+Z2NGSlu6anp7KDIJeXln4NtKwks2V4A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665391860; x=1665478260; bh=F465zH3QC/AbnVw6vk1lOdg6PlWT
-        j/fhAYUsOOtabSo=; b=n0SUXrJ+OHBSg04YiOa/xVQj5jjIn80uLRkcn1c/SZSC
-        qZvMjbx3NZ1yztxJCuESVa9Os/3HQtky3zH1NGEqce6QLmEaPYpBikX6+vQEf5dB
-        Htk1v4kPxx8kFArrIUFyg22ZfVzdUkV0wwUo+SHYAO0FpTqsA12W4BjaATfLpc+O
-        NN60AAmBBvpYB1DI7vRuGvk2egm9RGPRgaMWvSssCNrGpeCux6//SPEjmNutJtu4
-        /4XJTNoHCmtFdSkn+ptRl8wmd+xdbxHByAhY3OfHd5McgnFdrxAv6YAWon0393ZJ
-        K65QEjlficBzQEQuXH9FOTfu5ognrjJFvrI/Lf567g==
-X-ME-Sender: <xms:9NxDY6BbLy5mCOWeC6b1ej3HaXmZObqTegmSDihGdJNYIIvx3gzn5A>
-    <xme:9NxDY0jf8bXZU72JyzxBSg6T9vvkiK6jxyYnuapiSj1RA8v6vwatF2E68N1OaEpF7
-    FXTLGgHnj43B1lAyh0>
-X-ME-Received: <xmr:9NxDY9kZVwSEi6Fc2acRqDeT-sTszJe1Q1_bq_b8T37LHU3_3mhOEPzY5lOU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejgedgtdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
-    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:9NxDY4xjPmETpSe3kx2rP3pRKgRO5_VMnp5JLbzdddK1LNBy-yXOOA>
-    <xmx:9NxDY_TuU94A5Fos0y7Xw94qLYDlj9AKy1lOAxDqrUtkA1l8Pv1xYA>
-    <xmx:9NxDYzaSQnRZ2sEU5WQ9C7DMVtHn8PbYfprmfq-u1OWzgW6G6EvlBA>
-    <xmx:9NxDYwDoPrGVKuCz0eiBB6pWglgJtWi19EajeREjUB32IKAwzKekAA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 10 Oct 2022 04:50:59 -0400 (EDT)
-Date:   Mon, 10 Oct 2022 10:50:58 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: Re: [PATCH 0/2] drm/vc4: hdmi: Fixes for the RaspberryPi 0-3 stalls
-Message-ID: <20221010085058.dvf4o6tsr55kmw7f@houat>
-References: <20220929-rpi-pi3-unplugged-fixes-v1-0-cd22e962296c@cerno.tech>
+        Mon, 10 Oct 2022 04:55:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA31263F3E
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 01:55:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665392138;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7VBUmb4ja5WOJbdR8MKHyKOR+fG8UZ7OpOGyA2nFsWI=;
+        b=JFb+5SrOyYkwx5ABUwSFcP+CFf7m8CZoH4UKvlKwSD4TrtdsjSQexci/eCLmUgsBZ/NyC7
+        JxcvyBiz7/TRDMChG63M8acdoi5XPve+iwAWj8sPCu2tzjFfbipv2ViiD5FQXLVxPqS+MG
+        UNRzSctLatxbk137CFhwGybrOsoQ/wE=
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
+ [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-237-MA2UObCSO6aH5iX28EVrsw-1; Mon, 10 Oct 2022 04:55:36 -0400
+X-MC-Unique: MA2UObCSO6aH5iX28EVrsw-1
+Received: by mail-io1-f70.google.com with SMTP id n23-20020a056602341700b00689fc6dbfd6so6853428ioz.8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 01:55:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7VBUmb4ja5WOJbdR8MKHyKOR+fG8UZ7OpOGyA2nFsWI=;
+        b=HUVWWJ01iPaxS2nu7kkwfl7ek77djsJLKFsEVlmSZWCzfAIUOUvftuAQOKoDMjslGk
+         DMTk7jVDWK45GV7N2T/5N5bxzdWzecEfdjPY7TKug59iaJzggbGN1kPrltr2bfO5L7FR
+         wn5vSXxvlkWmUhRQ1hPuk9ueq3Y0uOWKOynrLrUDq6sRgLC5APFiK4CbZHnH6e0ksrt+
+         NkoayiGgw1e3gKR5BIEQFyYn4nbRMCK8+iX/HQ2BY2/Lk21XVBiKTYqFPU9cpTbtIZNn
+         cisan+BLuSKFBERRAZSJ8dCduKUlMPtQDbFgFQlUn777luTCEWqjF8bpCgvLFmD/e4Ea
+         Cevg==
+X-Gm-Message-State: ACrzQf00DxThvFxtgxKZR0eofsgEvMBYcaOrsve69mJ7719iko6troBD
+        x0vJc51njAeemUxFN8SNzF8pkKcRoT3EoNxRZMLkw11HYhKYAPcMc4DRhH2GfHUYOCzb1B8EsHn
+        nyyynanal1Y/1aLDA9klMrIUwc9n0CqKywFC3C6GG
+X-Received: by 2002:a05:6638:168a:b0:35a:6acf:f94 with SMTP id f10-20020a056638168a00b0035a6acf0f94mr8962195jat.106.1665392136092;
+        Mon, 10 Oct 2022 01:55:36 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4PHdnCU+yVqYk4GQszXGKtAsj7Pa3fmjdjqARIJdJVw3uJqtDfqp9TnL+w+ERkrPwDqcN3at+nRjtLn8DTGag=
+X-Received: by 2002:a05:6638:168a:b0:35a:6acf:f94 with SMTP id
+ f10-20020a056638168a00b0035a6acf0f94mr8962164jat.106.1665392135182; Mon, 10
+ Oct 2022 01:55:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bthjslvleo7iysnz"
-Content-Disposition: inline
-In-Reply-To: <20220929-rpi-pi3-unplugged-fixes-v1-0-cd22e962296c@cerno.tech>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Y0HLPBTodPxVRbe4@octinomon>
+In-Reply-To: <Y0HLPBTodPxVRbe4@octinomon>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Mon, 10 Oct 2022 10:55:24 +0200
+Message-ID: <CAO-hwJJebdHvb-JA18XnLAP0LVfvZ6QvOVbskpJ0ZRxPCBmetw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] HID: roccat: Convert snprintf() to sysfs_emit()
+To:     Jules Irenge <jbi.octave@gmail.com>
+Cc:     erazor_de@users.sourceforge.net, jikos@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jules,
 
---bthjslvleo7iysnz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Sat, Oct 8, 2022 at 9:11 PM Jules Irenge <jbi.octave@gmail.com> wrote:
+>
+> Coccinnelle reports a warning
+> Warning: Use scnprintf or sprintf
+>
+> Following the advice on kernel documentation
+> https://www.kernel.org/doc/html/latest/filesystems/sysfs.html
+>
+> For show(device *...) functions we should only use sysfs_emit() or sysfs_emit_at()
+> especially when formatting the value to be returned to user space.
+>
+> Convert snprintf() to sysfs_emit()
+>
+> Signed-off-by: Jules Irenge <jules.irenge@postgrad.manchester.ac.uk>
 
-Hi Mark, Stefan,
+Thanks for the submission, however I see that you sent 5 different
+patches with the exact same commit messages, touching 4 different
+files.
+I suspect 3/3 and 2/2 are the same, so I am a little bit puzzled...
 
-On Thu, Sep 29, 2022 at 11:21:16AM +0200, Maxime Ripard wrote:
-> Here's a series addressing the current bug that has been reported for the
-> RaspberryPi3, where booting without an HDMI monitor attached and with vc4
-> compiled as a module will lead to a stuck system when the module is loade=
-d.
->=20
-> This is due to the HSM clock not being initialized by anyone, and thus not
-> being functional once we start accessing the HDMI registers.
->=20
-> The first patch will fix this, and the second will make sure we avoid that
-> situation entirely in the future. This has been tested with 5.19.12. Earl=
-ier
-> versions might need a backport of 88110a9f6209 ("clk: bcm2835: fix
-> bcm2835_clock_choose_div").
+Would you mind sending a v2 with everything squashed into just one
+patch targeting all of hid-roccat-*?
 
-Could you test/review this?
+I think I'll empty the queue regarding all of those sysfs_emit
+conversions in 6.2.
 
-Thanks
-Maxime
+But please be aware that I can not apply anything 6.2 related right
+now, we are in the merge window of 6.1 and I can not push anything to
+for-next that is 6.2.
 
---bthjslvleo7iysnz
-Content-Type: application/pgp-signature; name="signature.asc"
+Cheers,
+Benjamin
 
------BEGIN PGP SIGNATURE-----
+> ---
+>  drivers/hid/hid-roccat-kone.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/hid/hid-roccat-kone.c b/drivers/hid/hid-roccat-kone.c
+> index 76da04801ca9..f0c35c05e702 100644
+> --- a/drivers/hid/hid-roccat-kone.c
+> +++ b/drivers/hid/hid-roccat-kone.c
+> @@ -403,7 +403,7 @@ static ssize_t kone_sysfs_show_actual_profile(struct device *dev,
+>  {
+>         struct kone_device *kone =
+>                         hid_get_drvdata(dev_get_drvdata(dev->parent->parent));
+> -       return snprintf(buf, PAGE_SIZE, "%d\n", kone->actual_profile);
+> +       return sysfs_emit(buf, "%d\n", kone->actual_profile);
+>  }
+>  static DEVICE_ATTR(actual_profile, 0440, kone_sysfs_show_actual_profile, NULL);
+>
+> @@ -412,7 +412,7 @@ static ssize_t kone_sysfs_show_actual_dpi(struct device *dev,
+>  {
+>         struct kone_device *kone =
+>                         hid_get_drvdata(dev_get_drvdata(dev->parent->parent));
+> -       return snprintf(buf, PAGE_SIZE, "%d\n", kone->actual_dpi);
+> +       return sysfs_emit(buf, "%d\n", kone->actual_dpi);
+>  }
+>  static DEVICE_ATTR(actual_dpi, 0440, kone_sysfs_show_actual_dpi, NULL);
+>
+> @@ -435,7 +435,7 @@ static ssize_t kone_sysfs_show_weight(struct device *dev,
+>
+>         if (retval)
+>                 return retval;
+> -       return snprintf(buf, PAGE_SIZE, "%d\n", weight);
+> +       return sysfs_emit(buf, "%d\n", weight);
+>  }
+>  static DEVICE_ATTR(weight, 0440, kone_sysfs_show_weight, NULL);
+>
+> @@ -444,7 +444,7 @@ static ssize_t kone_sysfs_show_firmware_version(struct device *dev,
+>  {
+>         struct kone_device *kone =
+>                         hid_get_drvdata(dev_get_drvdata(dev->parent->parent));
+> -       return snprintf(buf, PAGE_SIZE, "%d\n", kone->firmware_version);
+> +       return sysfs_emit(buf, "%d\n", kone->firmware_version);
+>  }
+>  static DEVICE_ATTR(firmware_version, 0440, kone_sysfs_show_firmware_version,
+>                    NULL);
+> @@ -454,7 +454,7 @@ static ssize_t kone_sysfs_show_tcu(struct device *dev,
+>  {
+>         struct kone_device *kone =
+>                         hid_get_drvdata(dev_get_drvdata(dev->parent->parent));
+> -       return snprintf(buf, PAGE_SIZE, "%d\n", kone->settings.tcu);
+> +       return sysfs_emit(buf, "%d\n", kone->settings.tcu);
+>  }
+>
+>  static int kone_tcu_command(struct usb_device *usb_dev, int number)
+> @@ -556,7 +556,7 @@ static ssize_t kone_sysfs_show_startup_profile(struct device *dev,
+>  {
+>         struct kone_device *kone =
+>                         hid_get_drvdata(dev_get_drvdata(dev->parent->parent));
+> -       return snprintf(buf, PAGE_SIZE, "%d\n", kone->settings.startup_profile);
+> +       return sysfs_emit(buf, "%d\n", kone->settings.startup_profile);
+>  }
+>
+>  static ssize_t kone_sysfs_set_startup_profile(struct device *dev,
+> --
+> 2.37.3
+>
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY0Pc8gAKCRDj7w1vZxhR
-xZn/AP94RF6lqgwflNPDMX8dl3wXFOH7iQb0gQWvAODp7AHGHgEA+m2fHtdGFiGn
-z3lHqKdgvIpoXD4XtywFBQLeLT5Z2gc=
-=KvOl
------END PGP SIGNATURE-----
-
---bthjslvleo7iysnz--
