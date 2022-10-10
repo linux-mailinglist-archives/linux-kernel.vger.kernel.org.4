@@ -2,98 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B8A85FA271
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC8E5FA27C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiJJRHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 13:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
+        id S229947AbiJJRL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 13:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiJJRHI (ORCPT
+        with ESMTP id S229919AbiJJRLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 13:07:08 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6EB1838C
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:07:06 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id l5so13324458oif.7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4ntCwspxSc8LnMTN9iQjHe9rnrb4f7GqTeok1p/IVIs=;
-        b=Z1eFprVKT4JR2lBn3chsr0sIll43RjdzXviSEqySwZ/1DaNZBDpajhGITmLWWAUh7x
-         RLdLg3IatsK5kTNtSUJbGHFsKlJRunPoQJfhMMy9eHPiBeMZIQGPNP93K19QBML7Vmue
-         7B1oVRWnzyw1eAMCqia+KeU2a12blcGLJuvrQ=
+        Mon, 10 Oct 2022 13:11:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C7766A72
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:11:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665421913;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ihtPTRwtIx7/JivDxGqfc0yBndE/NMthdx5dSqwVLUk=;
+        b=AkhAMw7VmT71I1wN0WBWAN5wZO1g8+8F3g1zpkBvr0JDLMa6u6N0WLmyBEZlrtBI7YJbCZ
+        kOP7vomkR5lfj7VESqTWtQiNoj70ePQeGPUaVJF8195t8KpvT0hoGlRb9ZoVK/ZOyhvqj5
+        wPyh11RPGC9lr3N80P6Eu4NgfblU4Zo=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-46-k6BAnQDnOdqiAB-K4r42yw-1; Mon, 10 Oct 2022 13:11:44 -0400
+X-MC-Unique: k6BAnQDnOdqiAB-K4r42yw-1
+Received: by mail-wm1-f71.google.com with SMTP id bg21-20020a05600c3c9500b003c2acbff422so3949348wmb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:11:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4ntCwspxSc8LnMTN9iQjHe9rnrb4f7GqTeok1p/IVIs=;
-        b=gt/WWXaxCN6gVaTX6KyR7K1BejvQpjazlmMgbvdXn4kpIL6U/q5XGikPA2xKdlT7Jv
-         f7qFNjfU6dvYbg3j+O5iV9KMe302BsakZgXbox50MdybA/cw8DuMFL85zX/4IVoVglMI
-         KzR8eRg15vEV9LAlrnIVS0qRVteSFIyMKJAUhI9tYKLZd7eaTSGJ4ocLhh1H4qldw9c7
-         UacPAMf4IdjvP88dQzXIW4zTbeqAt6Z33xFlRuQcqWpqLnYXyExr4Mt3hxOuYIK1OT9K
-         uXjW89cWDZ6id8vlv5aWpClUWfM4/jW0JphkIH4t9Ztf6mBvBlpX1BOSr7oJKWzZvKx/
-         OZAw==
-X-Gm-Message-State: ACrzQf3jWPbGUXWQzea3sADne0mdQNDtix7Ikx3sn7FfO9uST+Y1Gv9p
-        NlAdeNBwI7rielMqW9VzzEAr8g==
-X-Google-Smtp-Source: AMsMyM40pd0T9Fq//cbZ5cuv+ImM5zGJk7FqRm21LC4rjA3W1yhqyc+lnzY4mfR2SQYdN5/7flvWsA==
-X-Received: by 2002:a05:6808:1441:b0:350:861c:68a2 with SMTP id x1-20020a056808144100b00350861c68a2mr9744380oiv.204.1665421625260;
-        Mon, 10 Oct 2022 10:07:05 -0700 (PDT)
-Received: from fedora64.linuxtx.org ([99.47.93.78])
-        by smtp.gmail.com with ESMTPSA id 190-20020a4a01c7000000b00476989d42ebsm23269oor.8.2022.10.10.10.07.04
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ihtPTRwtIx7/JivDxGqfc0yBndE/NMthdx5dSqwVLUk=;
+        b=aq884x7llrkOMbaZZa9jnRlIe6od/FlvpF3Cn2ULrcKdbuedJTxHmHN9NvLu7Ekh2P
+         Bf157lSfp6pujgBe/KiwCPeX3DM7AsyayN/REpLZVFT5+QjtUZmNCX0kPJh0QFQZzy6u
+         v3asv1Oh5Mj5RQCitOgS/yq6LeomMv/tcfyvX6VkCIorHAm4u9XRa8LNFeiLn7cSp1GP
+         QUu0xrf0Q+0uhb8MtFJp7Dwv4v3WhHSV0IqImznFprBNY/1V6pOZVtsBfpuj7pIXsdwb
+         JwrHQo/FN0kdQYBmAC289MTLR2k6JhCDeHI/Eo0kzvp5+o24qmPZoFMQgqMSHhtgJOEn
+         sl/g==
+X-Gm-Message-State: ACrzQf0aXoQikUbHuNu/cl0zDe4hxsET9iPZAsLBQldj9w/fo9zy2Rz3
+        kw0rygZJvqZAE0/+F8AytGzyuNi6eCy/ENX4+Fp2QV2tpmE12aP1EKwPuH2SW4lEvohDDAQKw47
+        gtM5Ci5ppcofvzEEQyLzIrDwh
+X-Received: by 2002:a05:600c:2255:b0:3c4:6c57:3d19 with SMTP id a21-20020a05600c225500b003c46c573d19mr9236226wmm.92.1665421903385;
+        Mon, 10 Oct 2022 10:11:43 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5Pt1iCxXK/D/7OXuLbmKUR4GbwjfQKEwoqRrCp9NsMmehZvd3bh1vqeEQ9Oqps/BNVAHHBkw==
+X-Received: by 2002:a05:600c:2255:b0:3c4:6c57:3d19 with SMTP id a21-20020a05600c225500b003c46c573d19mr9236197wmm.92.1665421903113;
+        Mon, 10 Oct 2022 10:11:43 -0700 (PDT)
+Received: from redhat.com ([2.55.183.131])
+        by smtp.gmail.com with ESMTPSA id o19-20020a05600c511300b003b95ed78275sm11264457wms.20.2022.10.10.10.11.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 10:07:04 -0700 (PDT)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Mon, 10 Oct 2022 12:07:02 -0500
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: Re: [PATCH 6.0 00/17] 6.0.1-rc1 review
-Message-ID: <Y0RRNgL0wULzAFJM@fedora64.linuxtx.org>
-References: <20221010070330.159911806@linuxfoundation.org>
+        Mon, 10 Oct 2022 10:11:42 -0700 (PDT)
+Date:   Mon, 10 Oct 2022 13:11:35 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Gautam Dawar <gautam.dawar@xilinx.com>,
+        davem <davem@davemloft.net>
+Subject: Re: [PATCH net] virtio-net: add cond_resched() to the command
+ waiting loop
+Message-ID: <20221009160520-mutt-send-email-mst@kernel.org>
+References: <20220905045341.66191-1-jasowang@redhat.com>
+ <20220905031405-mutt-send-email-mst@kernel.org>
+ <CACGkMEtjQ0Jfok-gcRW+kuinsua2X0TscyTNfBJoXHny0Yob+g@mail.gmail.com>
+ <056ba905a2579903a372258383afdf6579767ad0.camel@redhat.com>
+ <CACGkMEuiDqqOEKUWRN9LvQKv8Jz4mi3aSZMwbhUsJkZp=C-0RQ@mail.gmail.com>
+ <c9180ac41b00543e3531a343afae8f5bdca64d8d.camel@redhat.com>
+ <20220907034407-mutt-send-email-mst@kernel.org>
+ <d32101bb-783f-dbd1-545a-be291c27cb63@redhat.com>
+ <20220908011858-mutt-send-email-mst@kernel.org>
+ <c8cd9a2e-3480-6ca5-96fa-4b5bd2c1174a@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221010070330.159911806@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c8cd9a2e-3480-6ca5-96fa-4b5bd2c1174a@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 09:04:23AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.1 release.
-> There are 17 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Sun, Oct 09, 2022 at 01:58:53PM +0800, Jason Wang wrote:
 > 
-> Responses should be made by Wed, 12 Oct 2022 07:03:19 +0000.
-> Anything received after that time might be too late.
+> 在 2022/9/8 13:19, Michael S. Tsirkin 写道:
+> > On Thu, Sep 08, 2022 at 10:21:45AM +0800, Jason Wang wrote:
+> > > 在 2022/9/7 15:46, Michael S. Tsirkin 写道:
+> > > > On Wed, Sep 07, 2022 at 09:07:20AM +0200, Paolo Abeni wrote:
+> > > > > On Wed, 2022-09-07 at 10:09 +0800, Jason Wang wrote:
+> > > > > > On Tue, Sep 6, 2022 at 6:56 PM Paolo Abeni <pabeni@redhat.com> wrote:
+> > > > > > > On Mon, 2022-09-05 at 15:49 +0800, Jason Wang wrote:
+> > > > > > > > On Mon, Sep 5, 2022 at 3:15 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > > > > > On Mon, Sep 05, 2022 at 12:53:41PM +0800, Jason Wang wrote:
+> > > > > > > > > > Adding cond_resched() to the command waiting loop for a better
+> > > > > > > > > > co-operation with the scheduler. This allows to give CPU a breath to
+> > > > > > > > > > run other task(workqueue) instead of busy looping when preemption is
+> > > > > > > > > > not allowed.
+> > > > > > > > > > 
+> > > > > > > > > > What's more important. This is a must for some vDPA parent to work
+> > > > > > > > > > since control virtqueue is emulated via a workqueue for those parents.
+> > > > > > > > > > 
+> > > > > > > > > > Fixes: bda324fd037a ("vdpasim: control virtqueue support")
+> > > > > > > > > That's a weird commit to fix. so it fixes the simulator?
+> > > > > > > > Yes, since the simulator is using a workqueue to handle control virtueue.
+> > > > > > > Uhmm... touching a driver for a simulator's sake looks a little weird.
+> > > > > > Simulator is not the only one that is using a workqueue (but should be
+> > > > > > the first).
+> > > > > > 
+> > > > > > I can see  that the mlx5 vDPA driver is using a workqueue as well (see
+> > > > > > mlx5_vdpa_kick_vq()).
+> > > > > > 
+> > > > > > And in the case of VDUSE, it needs to wait for the response from the
+> > > > > > userspace, this means cond_resched() is probably a must for the case
+> > > > > > like UP.
+> > > > > > 
+> > > > > > > Additionally, if the bug is vdpasim, I think it's better to try to
+> > > > > > > solve it there, if possible.
+> > > > > > > 
+> > > > > > > Looking at vdpasim_net_work() and vdpasim_blk_work() it looks like
+> > > > > > > neither needs a process context, so perhaps you could rework it to run
+> > > > > > > the work_fn() directly from vdpasim_kick_vq(), at least for the control
+> > > > > > > virtqueue?
+> > > > > > It's possible (but require some rework on the simulator core). But
+> > > > > > considering we have other similar use cases, it looks better to solve
+> > > > > > it in the virtio-net driver.
+> > > > > I see.
+> > > > > 
+> > > > > > Additionally, this may have better behaviour when using for the buggy
+> > > > > > hardware (e.g the control virtqueue takes too long to respond). We may
+> > > > > > consider switching to use interrupt/sleep in the future (but not
+> > > > > > suitable for -net).
+> > > > > Agreed. Possibly a timeout could be useful, too.
+> > > > > 
+> > > > > Cheers,
+> > > > > 
+> > > > > Paolo
+> > > > Hmm timeouts are kind of arbitrary.
+> > > > regular drivers basically derive them from hardware
+> > > > behaviour but with a generic driver like virtio it's harder.
+> > > > I guess we could add timeout as a config field, have
+> > > > device make a promise to the driver.
+> > > > 
+> > > > Making the wait interruptible seems more reasonable.
+> > > 
+> > > Yes, but I think we still need this patch for -net and -stable.
+> > > 
+> > > Thanks
+> > I was referring to Paolo's idea of having a timeout.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.1-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
 > 
-> thanks,
+> Ok, I think we're fine with this patch. Any chance to merge this or do I
+> need to resend?
 > 
-> greg k-h
+> Thanks
 
-Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+Last question: do we want cpu_relax here now? Or is cond_resched
+sufficient?
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+> 
+> > 
+
