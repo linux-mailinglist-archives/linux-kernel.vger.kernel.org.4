@@ -2,69 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D52E5FA106
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 17:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AA0B5FA110
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 17:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiJJPUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 11:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
+        id S229480AbiJJPWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 11:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiJJPUi (ORCPT
+        with ESMTP id S229779AbiJJPWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 11:20:38 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6120A5EDF1;
-        Mon, 10 Oct 2022 08:20:36 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id 137so4445989iou.9;
-        Mon, 10 Oct 2022 08:20:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AcKHzg1i2Me8EqhKFtNfioe60y1iB3hPVRhH6rIJCT4=;
-        b=TBb+j24Tql7lMGBRzux71qaHiImguWET6ioHZwhlZ4PdQUXhkEUgc9YOW2brTKqdnU
-         8zTdhhtE7FUBVfXd1p7V5o1v4uCOYImJzPziLfaBNtDjB6Lrev5IY7SQNgg3pn5bQSMo
-         wLW9nC2azr6mXZPGtkuHgN7gGw8TMPg79Qe0VkSK8fjyc7/4zb1PCeDnQBZmDTzglw8j
-         /X5XK38i7eIYFwkLSxF6OUHXkgi42yJ8QQcXEtPTdKVOm+4NKMB8BmKaGRvvfzn+j3Hz
-         zSDOr32ibJj4YfXyruWXwLovx8aJxum1btItTe2ySVpLb3/D8dHAF3u1P9O+GaFv+WqJ
-         Feuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AcKHzg1i2Me8EqhKFtNfioe60y1iB3hPVRhH6rIJCT4=;
-        b=Le1Y94NW+uPgQTR+714NpkpyKOibwOKtbURteqZzZcsudGtM0V3zVweUezY+Tz+GtL
-         DssTu8d+NNt7zKFVoAT4rFXfREFrh2qfi9r84bLvdALYR6A2q16IEWW0eN2JfKNvIm4M
-         xgG45He4SWTGGP1TtT1P0SVz2+BP67+WoGzTzKzRBn1CMCJHyJ3vKKR45fLCxLdYRRZs
-         fShxJL//pe3+CKqFHvrbhP9745FxBNjJ63CvUKhkXxuUuFlSCvHeNRW3NezB8zb/UILy
-         sViRLIQvzcjlkXB1lwbs+n/QonX8RAZOFZgqzRd6TeQ2jKyZ88rKLKj6UBXPEeCynYex
-         SsBg==
-X-Gm-Message-State: ACrzQf2ZBU+8ETk3Pr2EzQHta+1Y9xTFngObGltU0rAVvBDktNJx7usn
-        m6QCOzTBJJSbwK2tXt2ZtNYmG/Nyr5s2fXR0i8U=
-X-Google-Smtp-Source: AMsMyM7BgrMi5isfnHCX6JolmakAtvlRr3ULiJstScINCNYrgAduBakCoqPks5lDMlMfN79tBnKa/M8p1ql8Zm59T9A=
-X-Received: by 2002:a6b:6f02:0:b0:6bc:15d8:3446 with SMTP id
- k2-20020a6b6f02000000b006bc15d83446mr3512864ioc.108.1665415235626; Mon, 10
- Oct 2022 08:20:35 -0700 (PDT)
+        Mon, 10 Oct 2022 11:22:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2D772FD8;
+        Mon, 10 Oct 2022 08:22:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 18A6EB80F9C;
+        Mon, 10 Oct 2022 15:22:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC74AC433D6;
+        Mon, 10 Oct 2022 15:22:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665415323;
+        bh=no8M4HUxUtn5Brrmm9/Iz2cSzyV90e+SLK8FcxAraaQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R2tYg+5KCSYc6jNCKReLmD6NGukEbLxjOw6Ke9/ZGGzU6X0QkmgPVG7y8QDl5PdDH
+         A6/eBBN0s91iP9x57tXd0mgu+JbObaMe679zYY64fKSllcg1Yp9NT5KUKaAWSkxps/
+         WQN8v9qzBdTAR5Zwb2sN1xZCjegHDRX/Ck7UkOe0NVV7/N43RVWA1Nz7iPgk0jl6cb
+         l2U0A/7uDEXYEnNXCCu37Z8bosr1ZywkOAQpj8qj12dmsQpHIkDda3KkaS+Iy17XXR
+         Pvn2BXARrTdcMrMCXuV/xDh7yhRcnMBZIl2BKXEmnmmPHOg4EHte7ZTfQjKGpoqLU6
+         mqCUxVAhSe09A==
+Date:   Mon, 10 Oct 2022 08:22:03 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Alejandro Colomar <alx.manpages@gmail.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-man@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org
+Subject: Re: [man-pages PATCH v3] statx.2, open.2: document STATX_DIOALIGN
+Message-ID: <Y0Q4m9mj3DUZEkrW@magnolia>
+References: <20221004174307.6022-1-ebiggers@kernel.org>
+ <26cafc28-e63a-6f13-df70-8ccec85a4ef0@gmail.com>
 MIME-Version: 1.0
-References: <20221008181655.2747857-1-lis8215@gmail.com> <Y0P/u4pJT8rup8Za@sirena.org.uk>
-In-Reply-To: <Y0P/u4pJT8rup8Za@sirena.org.uk>
-From:   Siarhei Volkau <lis8215@gmail.com>
-Date:   Mon, 10 Oct 2022 18:20:24 +0300
-Message-ID: <CAKNVLfZhH3s=jBWAoSppXSotY9giRRJbub9MqxCtjdZKh4fprg@mail.gmail.com>
-Subject: Re: [PATCH] ASoC: codecs: jz4725b: Various improvements and fixes
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <26cafc28-e63a-6f13-df70-8ccec85a4ef0@gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,30 +59,225 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=D0=BF=D0=BD, 10 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 14:19, Mark Brown =
-<broonie@kernel.org>:
-> As covered in submitting-patches.rst this should really be split up into
-> multiple patches, with one change per patch.  This is especially the
-> case here since you have a mix of fixes and new features which should be
-> applied differently.
+On Sat, Oct 08, 2022 at 03:56:22AM +0200, Alejandro Colomar wrote:
+> Hi Eric,
+> 
+> On 10/4/22 19:43, Eric Biggers wrote:
+> > From: Eric Biggers <ebiggers@google.com>
+> > 
+> > Document the STATX_DIOALIGN support for statx()
+> > (https://git.kernel.org/linus/725737e7c21d2d25).
+> > 
+> > Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+> > Signed-off-by: Eric Biggers <ebiggers@google.com>
+> 
+> Please see some formatting comments below.
+> 
+> > ---
+> > 
+> > I'm resending this now that support for STATX_DIOALIGN has been merged
+> > upstream.
+> 
+> Thanks.
+> 
+> Cheers,
+> Alex
+> 
+> > 
+> > v3: updated mentions of Linux version, fixed some punctuation, and added
+> >      a Reviewed-by
+> > 
+> > v2: rebased onto man-pages master branch, mentioned xfs, and updated
+> >      link to patchset
+> > 
+> >   man2/open.2  | 43 ++++++++++++++++++++++++++++++++-----------
+> >   man2/statx.2 | 29 +++++++++++++++++++++++++++++
+> >   2 files changed, 61 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/man2/open.2 b/man2/open.2
+> > index deba7e4ea..b8617e0d2 100644
+> > --- a/man2/open.2
+> > +++ b/man2/open.2
+> > @@ -1732,21 +1732,42 @@ of user-space buffers and the file offset of I/Os.
+> >   In Linux alignment
+> >   restrictions vary by filesystem and kernel version and might be
+> >   absent entirely.
+> > -However there is currently no filesystem\-independent
+> > -interface for an application to discover these restrictions for a given
+> > -file or filesystem.
+> > -Some filesystems provide their own interfaces
+> > -for doing so, for example the
+> > +The handling of misaligned
+> > +.B O_DIRECT
+> > +I/Os also varies; they can either fail with
+> > +.B EINVAL
+> > +or fall back to buffered I/O.
+> > +.PP
+> > +Since Linux 6.1,
+> > +.B O_DIRECT
+> > +support and alignment restrictions for a file can be queried using
+> > +.BR statx (2),
+> > +using the
+> > +.B STATX_DIOALIGN
+> > +flag.
+> > +Support for
+> > +.B STATX_DIOALIGN
+> > +varies by filesystem; see
+> > +.BR statx (2).
+> > +.PP
+> > +Some filesystems provide their own interfaces for querying
+> > +.B O_DIRECT
+> > +alignment restrictions, for example the
+> >   .B XFS_IOC_DIOINFO
+> >   operation in
+> >   .BR xfsctl (3).
+> > +.B STATX_DIOALIGN
+> > +should be used instead when it is available.
+> >   .PP
+> > -Under Linux 2.4, transfer sizes, the alignment of the user buffer,
+> > -and the file offset must all be multiples of the logical block size
+> > -of the filesystem.
+> > -Since Linux 2.6.0, alignment to the logical block size of the
+> > -underlying storage (typically 512 bytes) suffices.
+> > -The logical block size can be determined using the
 
-Got it, will rework.
+I'm not so familiar with semantic newlines-- is there an automated
+reflow program that fixes these problems mechanically, or is this
+expected to be performed manually by manpage authors?
 
-> > -     SOC_DOUBLE_R_TLV("Master Capture Volume",
-> > +     SOC_DOUBLE_TLV("Master Capture Volume",
-> > +                    JZ4725B_CODEC_REG_CGR10,
-> > +                    REG_CGR10_GIL_OFFSET,
-> > +                    REG_CGR10_GIR_OFFSET,
-> > +                    0xf, 0, jz4725b_adc_tlv),
-> > +     SOC_DOUBLE_R_TLV("Mixer Line In Bypass Playback Volume",
-> >                        JZ4725B_CODEC_REG_CGR3,
->
-> This doesn't appear to correspond to what your patch description said
+If manually, do the items in a comma-separated list count as clauses?
 
-I forgot to mention that in the description, thanks.
+Would the next two paragraphs of this email reformat into semantic
+newlines like so?
 
-> and will presumably cause problems for any existing configurations...
+	In the source of a manual page,
+	new sentences should  be started on new lines,
+	long sentences should be split into lines at clause breaks
+	(commas, semicolons, colons, and so on),
+	and long clauses should be split at phrase boundaries.
+	This convention,
+	sometimes known as "semantic newlines",
+	makes it easier to see the effect of patches,
+	which often operate at the level of individual sentences, clauses, or phrases.
 
-I'm curious why this didn't cause problems earlier, as the wrong
-control was used
-for the Master Capture Volume.
+Do we still line-wrap at 72^W74^W78^W80 columns?
+
+and would the proposed manpage text read:
+
+	If none of the above is available,
+	then direct I/O support and alignment restrictions can only be assumed
+	from known characteristics of the filesystem,
+	the individual file,
+	the underlying storage device(s),
+	and the kernel version.
+	In Linux 2.4,
+	most block device based filesystems require that the file offset and the
+	length and memory address of all I/O segments be multiples of the
+	filesystem block size
+	(typically 4096 bytes).
+	In Linux 2.6.0,
+	this was relaxed to the logical block size of the block device
+	(typically 512 bytes).
+	A block device's logical block size can be determined using the
+	.BR ioctl (2)
+	.B BLKSSZGET
+	operation or from the shell using the command:
+
+--D
+
+> > +If none of the above is available, then direct I/O support and alignment
+> 
+> Please use semantic newlines.
+> 
+> See man-pages(7):
+>    Use semantic newlines
+>        In the source of a manual page, new sentences  should  be
+>        started on new lines, long sentences should be split into
+>        lines  at  clause breaks (commas, semicolons, colons, and
+>        so on), and long clauses should be split at phrase bound‐
+>        aries.  This convention,  sometimes  known  as  "semantic
+>        newlines",  makes it easier to see the effect of patches,
+>        which often operate at the level of individual sentences,
+>        clauses, or phrases.
+> 
+> 
+> > +restrictions can only be assumed from known characteristics of the filesystem,
+> > +the individual file, the underlying storage device(s), and the kernel version.
+> > +In Linux 2.4, most block device based filesystems require that the file offset
+> > +and the length and memory address of all I/O segments be multiples of the
+> > +filesystem block size (typically 4096 bytes).
+> > +In Linux 2.6.0, this was relaxed to the logical block size of the block device
+> > +(typically 512 bytes).
+> > +A block device's logical block size can be determined using the
+> >   .BR ioctl (2)
+> >   .B BLKSSZGET
+> >   operation or from the shell using the command:
+> > diff --git a/man2/statx.2 b/man2/statx.2
+> > index 0d1b4591f..50397057d 100644
+> > --- a/man2/statx.2
+> > +++ b/man2/statx.2
+> > @@ -61,7 +61,12 @@ struct statx {
+> >          containing the filesystem where the file resides */
+> >       __u32 stx_dev_major;   /* Major ID */
+> >       __u32 stx_dev_minor;   /* Minor ID */
+> > +
+> >       __u64 stx_mnt_id;      /* Mount ID */
+> > +
+> > +    /* Direct I/O alignment restrictions */
+> > +    __u32 stx_dio_mem_align;
+> > +    __u32 stx_dio_offset_align;
+> >   };
+> >   .EE
+> >   .in
+> > @@ -247,6 +252,8 @@ STATX_BTIME	Want stx_btime
+> >   STATX_ALL	The same as STATX_BASIC_STATS | STATX_BTIME.
+> >   	It is deprecated and should not be used.
+> >   STATX_MNT_ID	Want stx_mnt_id (since Linux 5.8)
+> > +STATX_DIOALIGN	Want stx_dio_mem_align and stx_dio_offset_align
+> > +	(since Linux 6.1; support varies by filesystem)
+> >   .TE
+> >   .in
+> >   .PP
+> > @@ -407,6 +414,28 @@ This is the same number reported by
+> >   .BR name_to_handle_at (2)
+> >   and corresponds to the number in the first field in one of the records in
+> >   .IR /proc/self/mountinfo .
+> > +.TP
+> > +.I stx_dio_mem_align
+> > +The alignment (in bytes) required for user memory buffers for direct I/O
+> > +.BR "" ( O_DIRECT )
+> 
+> .RB and remove the "".
+> 
+> > +on this file, or 0 if direct I/O is not supported on this file.
+> > +.IP
+> > +.B STATX_DIOALIGN
+> > +.IR "" ( stx_dio_mem_align
+> 
+> .RI
+> 
+> > +and
+> > +.IR stx_dio_offset_align )
+> > +is supported on block devices since Linux 6.1.
+> > +The support on regular files varies by filesystem; it is supported by ext4,
+> > +f2fs, and xfs since Linux 6.1.
+> > +.TP
+> > +.I stx_dio_offset_align
+> > +The alignment (in bytes) required for file offsets and I/O segment lengths for
+> > +direct I/O
+> > +.BR "" ( O_DIRECT )
+> > +on this file, or 0 if direct I/O is not supported on this file.
+> > +This will only be nonzero if
+> > +.I stx_dio_mem_align
+> > +is nonzero, and vice versa.
+> >   .PP
+> >   For further information on the above fields, see
+> >   .BR inode (7).
+> > 
+> > base-commit: bc28d289e5066fc626df260bafc249846a0f6ae6
+> 
+> -- 
+> <http://www.alejandro-colomar.es/>
+
+
+
