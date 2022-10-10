@@ -2,103 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 389565FA25E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F11FE5FA254
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiJJRCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 13:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
+        id S229892AbiJJRCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 13:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbiJJRCg (ORCPT
+        with ESMTP id S229682AbiJJRCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 13:02:36 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6713FA19
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:02:31 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id 137so4675838iou.9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:02:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Sku5J7PyxwEr729i9MgpltbFTlOLk2agD7q4nskSz/8=;
-        b=GfZe1er7asCP0ALA4xE6quMC5DxOFhh/7LbUYi1cC7lbaczkr2bHNyRdEFHjv207Vn
-         Wiqxjkj1oviICRGEGXz7Mcg6Awz7FctKFrN1vYbsEPlnEa06eG1DIgm3v2oSHEgptcur
-         spkpD/4M/kpmoHV9rtcTZJr2HLtXnkPJPYdPs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sku5J7PyxwEr729i9MgpltbFTlOLk2agD7q4nskSz/8=;
-        b=g7er5wijrSK7RVZPYTHldmSXNuD5rtbYdQW+4xpYA7vxfC0JMTbXQ6FVqxSpL1daSt
-         i3vTLK+QAaoy/8FJofg2iaSLUT7uRTSN5sRKEWtX/vJlaS0wZGAUjg5NSKISd0rpKc4X
-         11zKxRfJOIl65Fe36zvxthp5mxejqbOVsD2ulioFQFN93COwAEV7Qx0H2cszMXRz+hjG
-         2YjKzu+zjNEvyaE4nPVs7thorQhMsF+PqEyt09rrxeRpl69w3qfbLu3KDKEWkQBTZfuK
-         VLSBl2hdSwHNqEUsb9YWI5y0MMsFUp4IiqjgthNvOqxtyn58lRj6/iTDN/tJk4B6GHI7
-         iuZw==
-X-Gm-Message-State: ACrzQf20rCTGqaG+WUgQo32h+EbFYVMeeIxOKvqyl9C7b97Tkv042AZq
-        Xjc4MbWDfuOAcONHSkGWKHzNQA==
-X-Google-Smtp-Source: AMsMyM5MdoRFlHdN/oWlHzW5c6TiU0d91kNy2sJnAp7PMUFFDAN10eFKJ+CZjzZGIA+MbGA7ivOSYw==
-X-Received: by 2002:a05:6638:2491:b0:35a:53dd:f98e with SMTP id x17-20020a056638249100b0035a53ddf98emr10571658jat.261.1665421350124;
-        Mon, 10 Oct 2022 10:02:30 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id v2-20020a02b082000000b0036378e4747esm4096449jah.114.2022.10.10.10.02.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 10:02:29 -0700 (PDT)
-Message-ID: <e26efc62-327f-946e-6a0a-151151485589@linuxfoundation.org>
-Date:   Mon, 10 Oct 2022 11:02:29 -0600
+        Mon, 10 Oct 2022 13:02:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508C72CDFA
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:02:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA94260F7B
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 17:02:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AAD8C433C1;
+        Mon, 10 Oct 2022 17:02:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665421322;
+        bh=olIi+YMItqG/0/E5CfQ3WkfdBfThnHS42hOtO0yZ/Ao=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xCZZuKEzkzhFcWMDP1QPOjn2O7iCMq/qYcH9cXbgExs1IlxyHle0RMBOIk6FAfa+M
+         lMM95GYfmiG9sv6VxWJPm1ntJ4hGlfGLCbyngIiehPQuLWXClRpRwbLGmX0DlmFwGp
+         0EvWwrwrhp+BFwUww2+1qNkLStX4ntlZ5yWnb8Ww=
+Date:   Mon, 10 Oct 2022 19:02:46 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Mushahid Hussain <mushi.shar@gmail.com>
+Cc:     samuel.thibault@ens-lyon.org, speakup@linux-speakup.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Speakup: fix a segfault caused by switching consoles
+Message-ID: <Y0RQNt80BnQjozZC@kroah.com>
+References: <20221010165720.397042-1-mushi.shar@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH -next v5 2/4] selftests/memory-hotplug: Restore memory
- before exit
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        zhaogongyi <zhaogongyi@huawei.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Cc:     "akinobu.mita@gmail.com" <akinobu.mita@gmail.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "osalvador@suse.de" <osalvador@suse.de>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <f83730eec0b1445fa92d4cf0397d886b@huawei.com>
- <b0ae9fcc-7e2b-dae9-30be-4b6ee248bf97@redhat.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <b0ae9fcc-7e2b-dae9-30be-4b6ee248bf97@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221010165720.397042-1-mushi.shar@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/10/22 00:54, David Hildenbrand wrote:
-> On 08.10.22 03:40, zhaogongyi wrote:
-
->>
->> Yes, online_memory_expect_success() already prints a warning, remove the warning in online_all_offline_memory() seems ok,
->>
->> My previous consideration was that one more log information would make it easier to locate the wrong location.
+On Mon, Oct 10, 2022 at 09:57:20PM +0500, Mushahid Hussain wrote:
+> This patch fixes a segfault by adding a null check on synth in
+> speakup_con_update(). The segfault can be reproduced as follows:
 > 
-> Let's keep it simple unless there is real reason to warn twice.
+> 	- Login into a text console
 > 
+> 	- Load speakup and speakup_soft modules
+> 
+> 	- Remove speakup_soft
+> 
+> 	- Switch to a graphics console
+> 
+> This is caused by lack of a null check on `synth` in
+> speakup_con_update().
+> 
+> Here's the sequence that causes the segfault:
+> 
+> 	- When we remove the speakup_soft, synth_release() sets the synth
+> 	  to null.
+> 
+> 	- After that, when we change the virtual console to graphics
+> 	  console, vt_notifier_call() is fired, which then calls
+> 	  speakup_con_update().
+> 
+> 	- Inside speakup_con_update() there's no null check on synth,
+> 	  so it calls synth_printf().
+> 
+> 	- Inside synth_printf(), synth_buffer_add() and synth_start(),
+> 	  both access synth, when it is null and causing a segfault.
+> 
+> Therefore adding a null check on synth solves the issue.
+> 
+> Signed-off-by: Mushahid Hussain <mushi.shar@gmail.com>
+> Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+> ---
+>  drivers/accessibility/speakup/main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-zhaogongyi,
-
-Please note that I already applied the patches to linux-kselftest
-next for my second pull request before the merge window. Please
-send the change David requested in a separate patch on top of
-next as a fix.
+What commit id does this fix?  Should it go to stable kernels?
 
 thanks,
--- Shuah
+
+greg k-h
