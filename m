@@ -2,121 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B715F97F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 07:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C28ED5F97FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 07:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbiJJFzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 01:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
+        id S231470AbiJJF51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 01:57:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbiJJFzi (ORCPT
+        with ESMTP id S230435AbiJJF5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 01:55:38 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77A81C934
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 22:55:33 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id b5so9490976pgb.6
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 22:55:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KuJs/6I+cN8TE2/6QkPMYCE4khGiwZOavYjTwbehxuU=;
-        b=oJQSUhOY41s4B4a5RIRgnQyLQDX5ZdWQabFA8tjd157D0kcEfoz+mrJb02795fSz1U
-         v/8YOvuNw/4ZwwhOGH0rnT97Hzbeu2OUgEC0eZNRVtrHeXAjlxc9WVOcxeALpumO4Swi
-         yTuk7U3DJQop54GqVbmbHnmKkFSw/aBhpucDHzb5d9IjKGnX3LUSzqhgSkvWLdggFpei
-         wiFIAH+ABO7JL6Sr+ALGdUFC15iNsx2qYJJsV0dZqp4L3OrbJEmGPjgZV1+4eBBQFnoN
-         TcEk0KNUxWAMX1SBlHLKN7gybqOQPMReYefd+Sgo/QTTQx/Nn2idmjhXLmzbkmZSaxNL
-         nWew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KuJs/6I+cN8TE2/6QkPMYCE4khGiwZOavYjTwbehxuU=;
-        b=3iDv14hTj+CEtF3iAUt1ytIama8MHbuGRn3e8nctt+r1IBX6oWGdEW9b42POKr2OjO
-         W64EcAGHTQmK0RaWDr56y3cOLcAS8i9Mhe4lgsHTsSWcVnZdbVRX0xUWfFjFuQqz/0sQ
-         O8I2hCq+954EStA+nMgJEY0wmO+sktmBP160IKxH7cK3zKGQrPbjUKnL1QdSvVQWH6By
-         /FfNfRggxLw/5e1fjxzjS6hJpn1NKR1+zRw9TIooWp6rA/Alfg4rXgcuWEKlJctXBiMc
-         WIywRDzJFIx17XV4gliZqZZ9WX/H0C7YHnPCRw908wGJ18huiM5bjsrfHnDf3nuM2I2t
-         tkWg==
-X-Gm-Message-State: ACrzQf2OFqUv6cpxqTztpOHjLQhe5TwTSXrBbaD/bebVW8bOXBBYp8Ec
-        2QbhnYB8TCfQoqJBV49TAux6FQO1nYEXjA==
-X-Google-Smtp-Source: AMsMyM5SRJNrvGYj1V4EedkIj4QZPS8xER6LRPxu2Ofd5vGxJrAifc97ZTOl/4hKrZ38fLgluMrqgw==
-X-Received: by 2002:a05:6a00:1814:b0:563:6bd7:f9e0 with SMTP id y20-20020a056a00181400b005636bd7f9e0mr2553668pfa.33.1665381333058;
-        Sun, 09 Oct 2022 22:55:33 -0700 (PDT)
-Received: from localhost ([122.172.86.128])
-        by smtp.gmail.com with ESMTPSA id a29-20020a631a1d000000b0045c5a749a8fsm5410093pga.61.2022.10.09.22.55.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 22:55:32 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 11:25:30 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Fabien Parent <fabien.parent@linaro.org>
-Cc:     ilia.lin@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
-        rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] cpufreq: qcom: fix memory leak in error path
-Message-ID: <20221010055530.2mf6lq4mn6zfdkzt@vireshk-i7>
-References: <20221001171027.2101923-1-fabien.parent@linaro.org>
+        Mon, 10 Oct 2022 01:57:24 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840FD51A04
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 22:57:23 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29A4UHUI025543;
+        Mon, 10 Oct 2022 05:57:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=nI0KDHpRqxcEgXThQ0ftfTnqusKOnSOB3o1TNaJEVjA=;
+ b=EGdWSbDXgRnM9HQFMBJOFUboUk8AhT+wQbQaUyJW6EDrP24mdxbhpVw0Lh4X8CrPqAeu
+ OCdAJUpoWm2pyJohJcHukxW4adqNH7AwpBCwB3Wk52CSmMdHn9/VP4cnAqatpDFlMw6q
+ J+n2fE0XH5cBTMooxvsd5S1eijzHPIreALSmD3NBiauvh3ViAUjU3XDg5kqsGC4NgieL
+ N9ZeoB/GMZV8B9Ir4GNGo/szWUPfNwu9pz0+Z+7PFp3gW6jiP5osITsdfIT15M3Fq4fq
+ QLcYCVe/gTEKKP5JdethnjC+Gc1XDHuyxVDU6AqbAjWRwr3gH8NGaKq+5X/VhFe6jMIq cQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k32gekb3u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 05:57:21 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29A5vKGs000818
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 05:57:20 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Sun, 9 Oct 2022 22:57:18 -0700
+Date:   Mon, 10 Oct 2022 11:27:14 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Charan Teja Kalla <quic_charante@quicinc.com>
+Subject: Re: PSI idle-shutoff
+Message-ID: <20221010055714.GA1474@hu-pkondeti-hyd.qualcomm.com>
+References: <20220913140817.GA9091@hu-pkondeti-hyd.qualcomm.com>
+ <20220915062027.GA14713@hu-pkondeti-hyd.qualcomm.com>
+ <CAJuCfpE_nM2uqixnds0d6wbsz4=OQ3KPoJ5HOqDhQXaxFGxwXQ@mail.gmail.com>
+ <CAJuCfpEeNzDQ-CvMN3fP5LejOzpnfgUgvkzpPj1CLF-8NqNoww@mail.gmail.com>
+ <CAJuCfpFr3JfwkWbDqkU=NUJbCYuCWGySwNusMCdmS3z95WD2AQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20221001171027.2101923-1-fabien.parent@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAJuCfpFr3JfwkWbDqkU=NUJbCYuCWGySwNusMCdmS3z95WD2AQ@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: fYVEwInpr9-FJM1Zi3hYoauXKftvKyUU
+X-Proofpoint-ORIG-GUID: fYVEwInpr9-FJM1Zi3hYoauXKftvKyUU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-07_04,2022-10-07_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ malwarescore=0 mlxlogscore=999 clxscore=1015 adultscore=0
+ lowpriorityscore=0 bulkscore=0 phishscore=0 priorityscore=1501
+ suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210100035
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01-10-22, 19:10, Fabien Parent wrote:
-> If for some reason the speedbin length is incorrect, then there is a
-> memory leak in the error path because we never free the speedbin buffer.
-> This commit fixes the error path to always free the speedbin buffer.
+On Wed, Oct 05, 2022 at 09:32:44AM -0700, Suren Baghdasaryan wrote:
+> On Sun, Oct 2, 2022 at 11:11 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > On Fri, Sep 16, 2022 at 10:45 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> > >
+> > > On Wed, Sep 14, 2022 at 11:20 PM Pavan Kondeti
+> > > <quic_pkondeti@quicinc.com> wrote:
+> > > >
+> > > > On Tue, Sep 13, 2022 at 07:38:17PM +0530, Pavan Kondeti wrote:
+> > > > > Hi
+> > > > >
+> > > > > The fact that psi_avgs_work()->collect_percpu_times()->get_recent_times()
+> > > > > run from a kworker thread, PSI_NONIDLE condition would be observed as
+> > > > > there is a RUNNING task. So we would always end up re-arming the work.
+> > > > >
+> > > > > If the work is re-armed from the psi_avgs_work() it self, the backing off
+> > > > > logic in psi_task_change() (will be moved to psi_task_switch soon) can't
+> > > > > help. The work is already scheduled. so we don't do anything there.
+> > >
+> > > Hi Pavan,
+> > > Thanks for reporting the issue. IIRC [1] was meant to fix exactly this
+> > > issue. At the time it was written I tested it and it seemed to work.
+> > > Maybe I missed something or some other change introduced afterwards
+> > > affected the shutoff logic. I'll take a closer look next week when I'm
+> > > back at my computer and will consult with Johannes.
+> >
+> > Sorry for the delay. I had some time to look into this and test psi
+> > shutoff on my device and I think you are right. The patch I mentioned
+> > prevents new psi_avgs_work from being scheduled when the only non-idle
+> > task is psi_avgs_work itself, however the regular 2sec averaging work
+> > will still go on. I think we could record the fact that the only
+> > active task is psi_avgs_work in record_times() using a new
+> > psi_group_cpu.state_mask flag and then prevent psi_avgs_work() from
+> > rescheduling itself if that flag is set for all non-idle cpus. I'll
+> > test this approach and will post a patch for review if that works.
 > 
-> Signed-off-by: Fabien Parent <fabien.parent@linaro.org>
+> Hi Pavan,
+> Testing PSI shutoff on Android proved more difficult than I expected.
+> Lots of tasks to silence and I keep encountering new ones.
+> The approach I was thinking about is something like this:
+> 
 > ---
->  drivers/cpufreq/qcom-cpufreq-nvmem.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
+>  include/linux/psi_types.h |  3 +++
+>  kernel/sched/psi.c        | 12 +++++++++---
+>  2 files changed, 12 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> index 863548f59c3e..3bd38acde4b9 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> @@ -213,6 +213,7 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
->  	int speed = 0, pvs = 0, pvs_ver = 0;
->  	u8 *speedbin;
->  	size_t len;
-> +	int ret = 0;
->  
->  	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
->  
-> @@ -230,7 +231,8 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
->  		break;
->  	default:
->  		dev_err(cpu_dev, "Unable to read nvmem data. Defaulting to 0!\n");
-> -		return -ENODEV;
-> +		ret = -ENODEV;
-> +		goto len_error;
->  	}
->  
->  	snprintf(*pvs_name, sizeof("speedXX-pvsXX-vXX"), "speed%d-pvs%d-v%d",
-> @@ -238,8 +240,9 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
->  
->  	drv->versions = (1 << speed);
->  
-> +len_error:
->  	kfree(speedbin);
-> -	return 0;
-> +	return ret;
+> diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+> index c7fe7c089718..8d936f22cb5b 100644
+> --- a/include/linux/psi_types.h
+> +++ b/include/linux/psi_types.h
+> @@ -68,6 +68,9 @@ enum psi_states {
+>          NR_PSI_STATES = 7,
+>  };
+> 
+> +/* state_mask flag to keep re-arming averaging work */
+> +#define PSI_STATE_WAKE_CLOCK        (1 << NR_PSI_STATES)
+> +
+>  enum psi_aggregators {
+>          PSI_AVGS = 0,
+>          PSI_POLL,
+> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> index ecb4b4ff4ce0..dd62ad28bacd 100644
+> --- a/kernel/sched/psi.c
+> +++ b/kernel/sched/psi.c
+> @@ -278,6 +278,7 @@ static void get_recent_times(struct psi_group
+> *group, int cpu,
+>                  if (delta)
+>                          *pchanged_states |= (1 << s);
+>          }
+> +        *pchanged_states |= (state_mask & PSI_STATE_WAKE_CLOCK);
 >  }
->  
->  static const struct qcom_cpufreq_match_data match_data_kryo = {
+> 
+>  static void calc_avgs(unsigned long avg[3], int missed_periods,
+> @@ -413,7 +414,7 @@ static void psi_avgs_work(struct work_struct *work)
+>          struct delayed_work *dwork;
+>          struct psi_group *group;
+>          u32 changed_states;
+> -        bool nonidle;
+> +        bool wake_clock;
+>          u64 now;
+> 
+>          dwork = to_delayed_work(work);
+> @@ -424,7 +425,7 @@ static void psi_avgs_work(struct work_struct *work)
+>          now = sched_clock();
+> 
+>          collect_percpu_times(group, PSI_AVGS, &changed_states);
+> -        nonidle = changed_states & (1 << PSI_NONIDLE);
+> +        wake_clock = changed_states & PSI_STATE_WAKE_CLOCK;
+>          /*
+>           * If there is task activity, periodically fold the per-cpu
+>           * times and feed samples into the running averages. If things
+> @@ -435,7 +436,7 @@ static void psi_avgs_work(struct work_struct *work)
+>          if (now >= group->avg_next_update)
+>                  group->avg_next_update = update_averages(group, now);
+> 
+> -        if (nonidle) {
+> +        if (wake_clock) {
+>                  schedule_delayed_work(dwork, nsecs_to_jiffies(
+>                                  group->avg_next_update - now) + 1);
+>          }
+> @@ -742,6 +743,11 @@ static void psi_group_change(struct psi_group
+> *group, int cpu,
+>          if (unlikely(groupc->tasks[NR_ONCPU] && cpu_curr(cpu)->in_memstall))
+>                  state_mask |= (1 << PSI_MEM_FULL);
+> 
+> +        if (wake_clock || test_state(groupc->tasks, PSI_NONIDLE)) {
+> +                /* psi_avgs_work was not the only task on the CPU */
+> +                state_mask |= PSI_STATE_WAKE_CLOCK;
+> +        }
+> +
 
-Applied. Thanks.
+Thanks Suren for taking a look. I was not at work last week, so could not
+reply earlier. 
 
--- 
-viresh
+As chengming pointed out already, when kworker is woken up (some tasks ran in
+the last window, so we scheudled a work. now kworker woke up when system is
+idle), PSI_NONIDLE condition will be true here,  we end up setting the
+PSI_STATE_WAKE_CLOCK flag. Correct? Any ways, I am going to test this patch and
+report my observations.
+
+Thanks,
+Pavan
