@@ -2,90 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 871E05FA151
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 17:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE115FA158
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 17:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiJJPm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 11:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35554 "EHLO
+        id S229767AbiJJPou convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Oct 2022 11:44:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJJPmU (ORCPT
+        with ESMTP id S229507AbiJJPop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 11:42:20 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9817B733C1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 08:42:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6F03312FC;
-        Mon, 10 Oct 2022 08:42:25 -0700 (PDT)
-Received: from wubuntu (unknown [10.57.35.2])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 391FD3F67D;
-        Mon, 10 Oct 2022 08:42:18 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 16:42:16 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     John Stultz <jstultz@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        Connor O'Brien <connoro@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [RFC PATCH v4 2/3] sched: Avoid placing RT threads on cores
- handling long softirqs
-Message-ID: <20221010154216.6mw7fszdaoajurvm@wubuntu>
-References: <20221003232033.3404802-3-jstultz@google.com>
- <20221004013611.1822-1-hdanton@sina.com>
- <CANDhNCoVzJ_MSyAigMkE-TMgfRQRkiK=G0_S3OwPfnXPuKu1iA@mail.gmail.com>
- <20221005002149.1876-1-hdanton@sina.com>
- <20221005060155.1571-1-hdanton@sina.com>
+        Mon, 10 Oct 2022 11:44:45 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61401274B;
+        Mon, 10 Oct 2022 08:44:42 -0700 (PDT)
+X-QQ-mid: bizesmtpipv601t1665416647ta8q
+Received: from SJRobe ( [255.42.121.1])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 10 Oct 2022 23:44:06 +0800 (CST)
+X-QQ-SSF: 01100000002000G0Z000B00A0000000
+X-QQ-FEAT: D6RqbDSxuq4iBYyaYVDZrXYqb+RP52SdFAuHQ/mOMUEnz1R6tS6Xji8Mojn7c
+        A/ErJX+BhX2Ke8jt3huafuXPmwcFpKortZ58JqYXFFiCH84q0fhM2XT6uoheKIV2FxR/mqS
+        3RJ1nTfpz5YXwWDf4NE3ATtKIuKxm5j/qgccKz0V0Yi2MvOG4vAnl+RlSZBX12z9o27xrZ+
+        +BKileqxTCkvhZ7HGAUaV1QSpdVE7/V0tr8WR/6RrOc1yylHMcZ3uqH4v4FMyXjbaUvoOeH
+        mW4q23Q+j5rkTAJN3Bv6oMuKlSlsn1wu1Pu3S3AKdup84Rbwg+YLCi3j8y6f4ReviX34IoF
+        64G512UvwVohWN5yjsvxx9dm5KdN1NL2fqY5XBV7zKkwDzp81mqptMwuxcQ0meGrDNVPb8O
+X-QQ-GoodBg: 0
+From:   "Soha Jin" <soha@lohu.info>
+To:     "'Andrew Lunn'" <andrew@lunn.ch>
+Cc:     "'Heiner Kallweit'" <hkallweit1@gmail.com>,
+        "'David S. Miller'" <davem@davemloft.net>,
+        "'Eric Dumazet'" <edumazet@google.com>,
+        "'Jakub Kicinski'" <kuba@kernel.org>,
+        "'Paolo Abeni'" <pabeni@redhat.com>,
+        "'Russell King'" <linux@armlinux.org.uk>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221009162006.1289-1-soha@lohu.info> <Y0Q0P4MlTXmzkJSG@lunn.ch>
+In-Reply-To: <Y0Q0P4MlTXmzkJSG@lunn.ch>
+Subject: RE: [PATCH] net: mdiobus: add fwnode_phy_is_fixed_link()
+Date:   Mon, 10 Oct 2022 23:44:06 +0800
+Message-ID: <08616A924F416E8E+327e01d8dcbf$2237dbe0$66a793a0$@lohu.info>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221005060155.1571-1-hdanton@sina.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQFoC3KVUqWpiwX+Soe/1lfFTeyGBQNmLtDwrs40JzA=
+Content-Language: fr
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpipv:lohu.info:qybglogicsvr:qybglogicsvr3
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,RCVD_ILLEGAL_IP,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/22 14:01, Hillf Danton wrote:
-> On 4 Oct 2022 18:13:52 -0700 John Stultz <jstultz@google.com>
-> > On Tue, Oct 4, 2022 at 5:22 PM Hillf Danton <hdanton@sina.com> wrote:
-> > > On 3 Oct 2022 19:29:36 -0700 John Stultz <jstultz@google.com>
-> > > >
-> > > > Why would ksoftirqd preempt the rt task?
-> > > >
-> > > For example the kthread becomes sensitive to latency.
-> > 
-> > Is it the case where
-> > the ksoftirqd thread is configured to run at higher rtprio?
-> > 
-> Yes, you are right.
+Hello Andrew,
 
-I don't see a problem here. If a sys-admin configures their ksoftirqds to be
-a higher priority RT tasks than the audio threads, then they better know what
-they're doing :-)
+> From: Andrew Lunn <andrew@lunn.ch>
+> Sent: Monday, October 10, 2022 11:03 PM
+> 
+> On Mon, Oct 10, 2022 at 12:20:06AM +0800, Soha Jin wrote:
+> > A helper function to check if PHY is fixed link with fwnode properties.
+> > This is similar to of_phy_is_fixed_link.
+> 
+> You need to include a user of this new function.
 
-The issue at hand here is that the softirqs boundedness is hard to control. And
-the scheduling delays ensued are hard to deal with by any sys-admin.
+Greg already notified me about this. I was thinking this patch and my
+driver patches are on different trees, so I split the patches into
+different parts. I will include this patch in my driver patch's v2 later
+and ask you to review then. Sorry for the mistake.
 
-Networking has actually introduced some knobs to help control that - but the
-tricky bit of still being able to deliver high throughput networking while
-keeping the softirq bounded to minimize scheduling delays/latencies. I think
-even for PREEMPT_RT, high performance networking could be impacted to achieve
-the required low latency.
+> Also, not that ACPI only defines the 'new binding' for fixed-link.  If this is
+> being called on a device which is ACPI underneath, it should only return true
+> for the 'new binding', not the old binding.
 
-See this paper which explores this duality:
+Thanks for the information, I will correct this.
 
-	https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.702.7571&rep=rep1&type=pdf
+Regards,
+Soha
 
-
-With WiFi 6 and 5G mobile networks, phones are actually expected to deliver
-multi-gigabit network throughputs.
-
-
-Cheers
-
---
-Qais Yousef
