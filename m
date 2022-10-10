@@ -2,112 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25555F9DA7
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F221D5F9DA9
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232203AbiJJLdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 07:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40652 "EHLO
+        id S231512AbiJJLeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 07:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232149AbiJJLd0 (ORCPT
+        with ESMTP id S231430AbiJJLeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 07:33:26 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048636F567
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:33:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665401590; x=1696937590;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=VOeaJcpwzZJ0pJxWdJglMMEshugCfS9igKMdjRFdHpY=;
-  b=jdgK3qAvy9zp8VPJfmi5KoCYRsqrWOpYHaOxQIHDmx50oFkaffCavhZr
-   qM9SA/+6ooM9e0vU9MqRKzlzxlzkcKnTWRn5PM7TKfuO+KA+KS1j7v9Bi
-   FwiyBBeGbPtdeQqZx3YV9KWLUzHjCIC6diP9X7XKoT+HQbY1UXl/QeVhC
-   /1EJ/KOM8DbLUrnyGQ6LlRImzj+5uyx0Jthw8c6M5quRU6yzkLUKduZPR
-   XBMLzwKro+8+e19d3z4QVr+K34GAHMQGO3eGDWbc4trwxjkKHJu7uluaS
-   myqVnVQllHw+dWI60YolJhvjbzc5AIHQvTS8U4tNql3nPF90JeNxFYRim
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10495"; a="287440646"
-X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="287440646"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 04:32:47 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10495"; a="688754888"
-X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="688754888"
-Received: from jbai-mobl.ccr.corp.intel.com (HELO [10.254.211.42]) ([10.254.211.42])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 04:32:45 -0700
-Message-ID: <35cf84fb-7672-671a-4354-0fb66bd2f8e7@linux.intel.com>
-Date:   Mon, 10 Oct 2022 19:32:43 +0800
+        Mon, 10 Oct 2022 07:34:11 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C0A51417;
+        Mon, 10 Oct 2022 04:34:09 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id bp11so3826780wrb.9;
+        Mon, 10 Oct 2022 04:34:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TeL0o0yVihRehcTsidItMwxwi4VSKF8819s3pNgUkoA=;
+        b=bJkgt8XBMOYlvYMRd60SqsD5SsRRa2mD22nqQul7gLCyl3sVtJGeJak1zQE8e3Q5H/
+         PMxmIeeit7bbDDmaasHyMKxQZPJ9NKiT2JVaaudImql6n0GSX98F35GMJt4q0ydiW0TA
+         txD86vwQ4TRMmumInbvulZ+h0TjgEF270O6YZDGxhIH/yQCoL69sgNtp60v+dBFiYdtt
+         7CuNjbJdSV/41sveFiN1ZfAM9M//seU6iBDwSx/0pH/QkPr8NDVcw9ZKloJ7NYxs3QQc
+         2BgWyytVHjFQ6u9KC4jd6FBTGRS2lEpquLHkHEyMNl571mVNiEAq/yHSCvHohXGPvfbr
+         wJCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TeL0o0yVihRehcTsidItMwxwi4VSKF8819s3pNgUkoA=;
+        b=XslQ7I7VpogQzVnhJK7yI2g/HZ4SLx8B4O912iC7jgeLlHtZynF2px9IJmYvqSSns8
+         YeV4crRgPXGvF7uviisdUB7EzvJp0OprKENDUaCgbrHh2pL3jppYBAN0+Kj/s7c7TMKH
+         +hnkd2vfVc89z1Mu9XyIc/oAQene5uMV6KLOgHKtWqgxeJz77R3kyJCoY2pVBjSDsSpx
+         eE2fITBk1k13lVy6FwhiILdFemgnMGrjlweaT94sKP3LrnaFaFRHfmxC5VPeHR7KIrZ+
+         yMSbRa+AUvdI5ux+OQEzUZZUHpvuqlgm84Xk3M+LoJwZ85Ofs4piG+NIgRHO+a8riopQ
+         zKcQ==
+X-Gm-Message-State: ACrzQf21pQ7VEbnS+vyfwkmCJ5s8peQPd9xjowA0e9OTCzKBOjctFPGD
+        gd+UoyjgJHjJrNUBrpg+Yn4=
+X-Google-Smtp-Source: AMsMyM6tGY6fRMNDLA/tSbtiGWuEd/ro4K+ih7XhEt3DRhNSFFITKmTKqGjonek1rDh8nRYdI/DpjQ==
+X-Received: by 2002:a5d:490c:0:b0:22e:6545:996e with SMTP id x12-20020a5d490c000000b0022e6545996emr10729516wrq.523.1665401647825;
+        Mon, 10 Oct 2022 04:34:07 -0700 (PDT)
+Received: from [192.168.42.102] (sm4-84-91-228-85.netvisao.pt. [84.91.228.85])
+        by smtp.gmail.com with ESMTPSA id h5-20020a5d4305000000b0022ac1be009esm8680012wrq.16.2022.10.10.04.34.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Oct 2022 04:34:07 -0700 (PDT)
+Message-ID: <d9a3544f-fa02-e232-f1f1-4317138a245b@gmail.com>
+Date:   Mon, 10 Oct 2022 12:34:06 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [PATCH] iommu/vt-d: Clean up si_domain in the init_dmars() error
- path
-To:     Jerry Snitselaar <jsnitsel@redhat.com>, iommu@lists.linux.dev,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: [PATCH v2 3/5] fs/ntfs3: add hidedotfiles to the list of enabled
+ mount options
+Content-Language: pt-PT
+From:   Daniel Pinto <danielpinto52@gmail.com>
+To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        ntfs3@lists.linux.dev, linux-fsdevel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221010065608.281860-1-jsnitsel@redhat.com>
-Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20221010065608.281860-1-jsnitsel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <9c404576-856b-6935-f2e3-c4d0749f16ea@gmail.com>
+In-Reply-To: <9c404576-856b-6935-f2e3-c4d0749f16ea@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/10 14:56, Jerry Snitselaar wrote:
-> A splat from kmem_cache_destroy() was seen with a kernel prior to
-> commit ee2653bbe89d ("iommu/vt-d: Remove domain and devinfo mempool")
-> when there was a failure in init_dmars(), because the iommu_domain
-> cache still had objects. While the mempool code is now gone, there
-> still is a leak of the si_domain memory if init_dmars() fails. So
-> clean up si_domain in the init_dmars() error path.
-> 
-> Cc: Lu Baolu <baolu.lu@linux.intel.com>
-> Cc: Joerg Roedel <joro@8bytes.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Robin Murphy <robin.murphy@arm.com>
-> Fixes: 86080ccc223a ("iommu/vt-d: Allocate si_domain in init_dmars()")
-> Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> ---
->   drivers/iommu/intel/iommu.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> index 31bc50e538a3..8f1f80a4d0c5 100644
-> --- a/drivers/iommu/intel/iommu.c
-> +++ b/drivers/iommu/intel/iommu.c
-> @@ -3042,6 +3042,8 @@ static int __init init_dmars(void)
->   		disable_dmar_iommu(iommu);
->   		free_dmar_iommu(iommu);
->   	}
-> +	if (si_domain)
-> +		domain_exit(si_domain);
+Currently, the ntfs3 driver does return the hidedotfiles mount
+option in the list of enabled mount options. This can confuse
+users who may doubt they enabled the option when not seeing in
+the list provided by the mount command.
 
-Thank you for the patch.
+Add hidedotfiles mount option to the list of enabled options
+provided by the mount command when it is enabled.
 
-Above requires si_domain to be NULL or a valid pointer. So do you also
-need to add the following change?
+Signed-off-by: Daniel Pinto <danielpinto52@gmail.com>
+---
+ fs/ntfs3/super.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -2410,6 +2410,7 @@ static int __init si_domain_init(int hw)
-
-         if (md_domain_init(si_domain, DEFAULT_DOMAIN_ADDRESS_WIDTH)) {
-                 domain_exit(si_domain);
-+               si_domain = NULL;
-                 return -EFAULT;
-         }
-
-Best regards,
-baolu
+diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
+index c6fd2afde172..d796541e2a67 100644
+--- a/fs/ntfs3/super.c
++++ b/fs/ntfs3/super.c
+@@ -561,6 +561,8 @@ static int ntfs_show_options(struct seq_file *m, struct dentry *root)
+ 		seq_puts(m, ",showmeta");
+ 	if (opts->nohidden)
+ 		seq_puts(m, ",nohidden");
++	if (opts->hide_dot_files)
++		seq_puts(m, ",hidedotfiles");
+ 	if (opts->force)
+ 		seq_puts(m, ",force");
+ 	if (opts->noacsrules)
