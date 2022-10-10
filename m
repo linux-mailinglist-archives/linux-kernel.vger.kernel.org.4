@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A20BA5F9972
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE7A35F9998
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbiJJHM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
+        id S232010AbiJJHOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231853AbiJJHLX (ORCPT
+        with ESMTP id S231981AbiJJHMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:11:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FB722B3C;
-        Mon, 10 Oct 2022 00:07:39 -0700 (PDT)
+        Mon, 10 Oct 2022 03:12:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05D121273;
+        Mon, 10 Oct 2022 00:08:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16E89B80E53;
-        Mon, 10 Oct 2022 07:07:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86B33C433D6;
-        Mon, 10 Oct 2022 07:07:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1FBD60AB4;
+        Mon, 10 Oct 2022 07:07:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6DC2C433C1;
+        Mon, 10 Oct 2022 07:07:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665385654;
-        bh=kKTfcun+D2/TQmby9X/mcS8O2NICvVceYFEmpFt3mjk=;
+        s=korg; t=1665385634;
+        bh=qBwQs3ScO9mSEiaUzW1hR+6DZafv70x1M0qGHdT/LRw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZD/YhdsaJsf8V5O8xcWyZ9YFXcb0DnYvbkwYaV2ZZGTKMF7qhgeRXwsllvpCHWX+L
-         d/ypvZtEoOTiSaHrwtdZ1lKy+UfaFaQo8wH5RiqkiwoSv8ipdwi/dMc/AIaKkWIurF
-         6rdezk4nmHsKJ6ei/S024AQkdZCglPGAr2eIvND4=
+        b=eo4vjLx7ANL3Eg/esM+cwxtk1D4ItxGlJSox/rH4WS89sWCwHPyjXAk2aOkeXUVJx
+         pKL8Fcqgnr4EmxUPFgx4j+HKfacmB/vvpfKK7HV+9ZfwotCykyLTG66cknByeWKe9y
+         YFmiYxA8EXTRKI3bFRM+STTqmxLUG/xJqFWFWzbg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
+        stable@vger.kernel.org, Jun Lei <Jun.Lei@amd.com>,
+        Wayne Lin <wayne.lin@amd.com>,
+        Cruise Hung <Cruise.Hung@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 11/37] firmware: arm_scmi: Add SCMI PM driver remove routine
-Date:   Mon, 10 Oct 2022 09:05:30 +0200
-Message-Id: <20221010070331.578617573@linuxfoundation.org>
+Subject: [PATCH 5.19 33/48] drm/amd/display: Fix DP MST timeslot issue when fallback happened
+Date:   Mon, 10 Oct 2022 09:05:31 +0200
+Message-Id: <20221010070334.554937962@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221010070331.211113813@linuxfoundation.org>
-References: <20221010070331.211113813@linuxfoundation.org>
+In-Reply-To: <20221010070333.676316214@linuxfoundation.org>
+References: <20221010070333.676316214@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,79 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cristian Marussi <cristian.marussi@arm.com>
+From: Cruise Hung <Cruise.Hung@amd.com>
 
-[ Upstream commit dea796fcab0a219830831c070b8dc367d7e0f708 ]
+[ Upstream commit 20c6168b3c8aadef7d2853c925d99eb546bd5e1c ]
 
-Currently, when removing the SCMI PM driver not all the resources
-registered with genpd subsystem are properly de-registered.
+[Why]
+When USB4 DP link training failed and fell back to lower link rate,
+the time slot calculation uses the verified_link_cap.
+And the verified_link_cap was not updated to the new one.
+It caused the wrong VC payload time-slot was allocated.
 
-As a side effect of this after a driver unload/load cycle you get a
-splat with a few warnings like this:
+[How]
+Updated verified_link_cap with the new one from cur_link_settings
+after the LT completes successfully.
 
- | debugfs: Directory 'BIG_CPU0' with parent 'pm_genpd' already present!
- | debugfs: Directory 'BIG_CPU1' with parent 'pm_genpd' already present!
- | debugfs: Directory 'LITTLE_CPU0' with parent 'pm_genpd' already present!
- | debugfs: Directory 'LITTLE_CPU1' with parent 'pm_genpd' already present!
- | debugfs: Directory 'LITTLE_CPU2' with parent 'pm_genpd' already present!
- | debugfs: Directory 'LITTLE_CPU3' with parent 'pm_genpd' already present!
- | debugfs: Directory 'BIG_SSTOP' with parent 'pm_genpd' already present!
- | debugfs: Directory 'LITTLE_SSTOP' with parent 'pm_genpd' already present!
- | debugfs: Directory 'DBGSYS' with parent 'pm_genpd' already present!
- | debugfs: Directory 'GPUTOP' with parent 'pm_genpd' already present!
-
-Add a proper scmi_pm_domain_remove callback to the driver in order to
-take care of all the needed cleanups not handled by devres framework.
-
-Link: https://lore.kernel.org/r/20220817172731.1185305-7-cristian.marussi@arm.com
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+Reviewed-by: Jun Lei <Jun.Lei@amd.com>
+Acked-by: Wayne Lin <wayne.lin@amd.com>
+Signed-off-by: Cruise Hung <Cruise.Hung@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/arm_scmi/scmi_pm_domain.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/firmware/arm_scmi/scmi_pm_domain.c b/drivers/firmware/arm_scmi/scmi_pm_domain.c
-index d5dee625de78..0e05a79de82d 100644
---- a/drivers/firmware/arm_scmi/scmi_pm_domain.c
-+++ b/drivers/firmware/arm_scmi/scmi_pm_domain.c
-@@ -112,9 +112,28 @@ static int scmi_pm_domain_probe(struct scmi_device *sdev)
- 	scmi_pd_data->domains = domains;
- 	scmi_pd_data->num_domains = num_domains;
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+index 0c52506b367d..b4203a812c4b 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+@@ -2857,8 +2857,14 @@ bool perform_link_training_with_retries(
+ 						skip_video_pattern);
  
-+	dev_set_drvdata(dev, scmi_pd_data);
-+
- 	return of_genpd_add_provider_onecell(np, scmi_pd_data);
- }
- 
-+static void scmi_pm_domain_remove(struct scmi_device *sdev)
-+{
-+	int i;
-+	struct genpd_onecell_data *scmi_pd_data;
-+	struct device *dev = &sdev->dev;
-+	struct device_node *np = dev->of_node;
-+
-+	of_genpd_del_provider(np);
-+
-+	scmi_pd_data = dev_get_drvdata(dev);
-+	for (i = 0; i < scmi_pd_data->num_domains; i++) {
-+		if (!scmi_pd_data->domains[i])
-+			continue;
-+		pm_genpd_remove(scmi_pd_data->domains[i]);
-+	}
-+}
-+
- static const struct scmi_device_id scmi_id_table[] = {
- 	{ SCMI_PROTOCOL_POWER, "genpd" },
- 	{ },
-@@ -124,6 +143,7 @@ MODULE_DEVICE_TABLE(scmi, scmi_id_table);
- static struct scmi_driver scmi_power_domain_driver = {
- 	.name = "scmi-power-domain",
- 	.probe = scmi_pm_domain_probe,
-+	.remove = scmi_pm_domain_remove,
- 	.id_table = scmi_id_table,
- };
- module_scmi_driver(scmi_power_domain_driver);
+ 				/* Transmit idle pattern once training successful. */
+-				if (status == LINK_TRAINING_SUCCESS && !is_link_bw_low)
++				if (status == LINK_TRAINING_SUCCESS && !is_link_bw_low) {
+ 					dp_set_hw_test_pattern(link, &pipe_ctx->link_res, DP_TEST_PATTERN_VIDEO_MODE, NULL, 0);
++					/* Update verified link settings to current one
++					 * Because DPIA LT might fallback to lower link setting.
++					 */
++					link->verified_link_cap.link_rate = link->cur_link_settings.link_rate;
++					link->verified_link_cap.lane_count = link->cur_link_settings.lane_count;
++				}
+ 			} else {
+ 				status = dc_link_dp_perform_link_training(link,
+ 						&pipe_ctx->link_res,
 -- 
 2.35.1
 
