@@ -2,115 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E82215F98E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C073A5F98F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbiJJHCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
+        id S231217AbiJJHEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiJJHCf (ORCPT
+        with ESMTP id S230522AbiJJHE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:02:35 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF5BF3B713;
-        Mon, 10 Oct 2022 00:02:31 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B193F1480;
-        Mon, 10 Oct 2022 00:02:37 -0700 (PDT)
-Received: from [192.168.99.12] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2F0E03F766;
-        Mon, 10 Oct 2022 00:02:30 -0700 (PDT)
-Message-ID: <0b3afc5d-c4a1-8a50-45c3-20c706c3ecfd@foss.arm.com>
-Date:   Mon, 10 Oct 2022 08:02:29 +0100
+        Mon, 10 Oct 2022 03:04:26 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5C056BAD
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 00:04:09 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 1B32E5C00D7;
+        Mon, 10 Oct 2022 03:04:08 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 10 Oct 2022 03:04:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; t=1665385448; x=1665471848; bh=jr/yrDrSj6WhzrDOCLLva7Gql
+        0cAfGglhZZtqKViZwk=; b=ipZmpqFbboo8JPmqzwOv679nDMC68l9ItOktHU7o7
+        9NdGluL2TtJ2OvCzXUvNtIXldSMfe9lXPi7oDLiA03SNIGNFH7UkfM/zgC4y88dP
+        ybuFD6jjYJW7nOsTKzHvq/G4fvuQmx5Dc1ugbDr08+I4PBSaDPxSdRG4Z6HvyCuV
+        trZxdIrw4ZeW+HdUBix5Ka7e3WjpP19GdzBPfXWPZfbUn1Spht84Tr8tOLVrtHS1
+        fwmzdjOJuqVECT5w42bG46CUtrzsLegOvHfcKAfd+PqymOD6LBihiPnERCL0s/ah
+        rg50tz7obKXLbqZVTGvIwoyhbs5nOU4dnxWMgzCSOz/Pg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1665385448; x=1665471848; bh=jr/yrDrSj6WhzrDOCLLva7Gql0cAfGglhZZ
+        tqKViZwk=; b=HynA1yT7x4gi6h/VTUnjaiCCgG3bkNm5Q6PBEjkFy7Fkk2cYVPP
+        ObOtkPZV0WpIj+HmC6i4G/sGruW1IckEOXWLnLGWGlg3vmODy9P93r4QmUTvSvWQ
+        e+8ixQQv6bxGfyikxbK4Lb2IMSYpUbXIXVxVCWlFFi9OQjTaDZ2a7FJFvMVSvkeA
+        odLMn+mxEyxBEr16SYhhzj+AJVwBY3aKbHqkw83kMtBEdcOOkEdp4RA1xu3uFYSV
+        Rtjm66502vHSUIa5cEFmSTF2ji6UyfeVO/Y9837Wn0GCEoAwo70Ie+R0Zqe3wB7/
+        WKYa0vFL2QLlcvExeZty9hwNEmGO6OvOTIg==
+X-ME-Sender: <xms:58NDY7NMJPpvFvoEcYFS5byrEHtqk13yy5ss91SgUCu9g64VaefSyg>
+    <xme:58NDY1-WV1Vb2psYgsWTXJFnezT93HwhkPLJjgq529ITJOISitmkHBtu4ZkaM45EJ
+    mWSEfHINaH5plqnAxA>
+X-ME-Received: <xmr:58NDY6S4WAAM3MAb-iJ7duk4B_OdKzvdjMVtut8u6mm1qVE5-lOBmfAV3XCp>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejfedgtdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehljhho
+    nhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfdujedthfduudekffefkeeiffdttd
+    dvhfegudduueffuefhfefggeefteevvdegnecuvehluhhsthgvrhfuihiivgeptdenucfr
+    rghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
+X-ME-Proxy: <xmx:58NDY_thvY9PVEYr3jAJMmrlKdafWqwpmsrzmWsptCt5iaMWTTIcEA>
+    <xmx:58NDYzf-UZOpuiwzKyzlFP1eKKBGHX0VbmLgyp9Ku4GYNkedDhxkWw>
+    <xmx:58NDY71D6fGEKsE7TpRIiTWKuWoti5NSESkuj1hRpW8Xx56CXAk4ow>
+    <xmx:6MNDY0r7M47rU4YPNwDjAMdtlhmUqfctyu1fUSN97c_nMoyN6Ac5uQ>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 10 Oct 2022 03:04:04 -0400 (EDT)
+From:   "Luke D. Jones" <luke@ljones.dev>
+To:     linux-kernel@vger.kernel.org
+Cc:     alsa-devel@alsa-project.org, tiwai@suse.com, perex@perex.cz,
+        "Luke D. Jones" <luke@ljones.dev>
+Subject: [PATCH]  ALSA: hda/realtek: Add quirk for ASUS GV601R laptop
+Date:   Mon, 10 Oct 2022 20:03:47 +1300
+Message-Id: <20221010070347.36883-1-luke@ljones.dev>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v9 02/13] perf test: Add build infra for perf test tools
- for CoreSight tests
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Leo Yan <leo.yan@linaro.org>, Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
-        mike.leach@linaro.org, linux-perf-users@vger.kernel.org
-References: <20220909152803.2317006-1-carsten.haitzler@foss.arm.com>
- <20220909152803.2317006-3-carsten.haitzler@foss.arm.com>
- <Yz67SHpIN5NggKEk@kernel.org> <Yz6/zlchVnNsVlzJ@kernel.org>
- <Yz7RAgMN6WGnD3OZ@leoy-yangtze.lan>
- <e9f980a7-fba8-4610-a058-b74e51d6ab24@foss.arm.com>
- <Y0AfK7sVphNkQA4q@kernel.org>
-Content-Language: en-US
-From:   Carsten Haitzler <carsten.haitzler@foss.arm.com>
-Organization: Arm Ltd.
-In-Reply-To: <Y0AfK7sVphNkQA4q@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The ASUS ROG X16 (GV601R) series laptop has the same node-to-DAC pairs
+as early models and the G14, this includes bass speakers which are by
+default mapped incorrectly to the 0x06 node.
 
+Add a quirk to use the same DAC pairs as the G14.
 
-On 10/7/22 13:44, Arnaldo Carvalho de Melo wrote:
-> Em Fri, Oct 07, 2022 at 12:34:51PM +0100, Carsten Haitzler escreveu:
->> On 10/6/22 13:58, Leo Yan wrote:
->>> On Thu, Oct 06, 2022 at 08:45:18AM -0300, Arnaldo Carvalho de Melo wrote:
->>>> Em Thu, Oct 06, 2022 at 08:26:00AM -0300, Arnaldo Carvalho de Melo escreveu:
->>>> Also had to remove:
-> 
->>>> 		$(INSTALL) tests/shell/coresight/*.sh -m 644 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/coresight'
-> 
->>>> from this patch, as it makes install fail at this point in the patchset:
-> 
->>> Thanks a lot!
-> 
->>> James and me had found the merging conflict and planned to send out
->>> email for reminding it, the right change for above section would be:
-> 
->>> @@ -1006,7 +1014,10 @@ install-tests: all install-gtk
->>>                   $(INSTALL) tests/shell/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell'; \
->>>                   $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
->>>                   $(INSTALL) tests/shell/lib/*.sh -m 644 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
->>> -               $(INSTALL) tests/shell/lib/*.py -m 644 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'
->>> +               $(INSTALL) tests/shell/lib/*.py -m 644 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
->>> +               $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/coresight'; \
->>> +               $(INSTALL) tests/shell/coresight/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/coresight'
->>> +       $(Q)$(MAKE) -C tests/shell/coresight install-tests
-> 
->>> It's deliberately to not add '-m 644' when install coresight test
->>> shell scripts under the folder tests/shell/coresight/ so that we can
->>> keep the executable permission for these scripts.  On the other
->>> flip, we set 644 mode for the scripts under tests/shell/lib/ so
->>> these scripts will not be executed directly by perf test framework.
-> 
->>> @Carsten, if have chance could you confirm for above change?
-> 
->>>>     DESCEND plugins
->>>>     GEN     /tmp/build/perf/python/perf.so
->>>>     INSTALL trace_plugins
->>>>     INSTALL binaries
->>>>     INSTALL tests
->>>> install: cannot stat 'tests/shell/coresight/*.sh': No such file or directory
->>>> make[2]: *** [Makefile.perf:1007: install-tests] Error 1
->>>> make[2]: *** Waiting for unfinished jobs....
-> 
->>>> I'll add it back when the first .sh gets added to tests/shell/coresight/
-> 
->>> Sorry for introducing extra efforts for you and thanks!
->   
->> oh sorry - indeed i didn't see this problem coming after fixing the
->> conflicts. i've got an update of the patches that fix that. should i just
->> send through the 2 updates patches as a v10 or the whole series?
-> 
-> No need, I did some fixes taking into account the comments on this
-> thread, we can go on and fix things from what I have now at
-> acme/perf/core, which I'll send to Linus today.
+Signed-off-by: Luke D. Jones <luke@ljones.dev>
+---
+ sound/pci/hda/patch_realtek.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-oh cool. i'll let patches sit for now - let me know if there's anything 
-you want/need from me.
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index bce82b834cec..1ffea762ba57 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9422,6 +9422,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1043, 0x1e8e, "ASUS Zephyrus G15", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x1c52, "ASUS Zephyrus G15 2022", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x1f11, "ASUS Zephyrus G14", ALC289_FIXUP_ASUS_GA401),
++	SND_PCI_QUIRK(0x1043, 0x1f92, "ASUS ROG Flow X16", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x3030, "ASUS ZN270IE", ALC256_FIXUP_ASUS_AIO_GPIO2),
+ 	SND_PCI_QUIRK(0x1043, 0x831a, "ASUS P901", ALC269_FIXUP_STEREO_DMIC),
+ 	SND_PCI_QUIRK(0x1043, 0x834a, "ASUS S101", ALC269_FIXUP_STEREO_DMIC),
+-- 
+2.37.3
 
