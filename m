@@ -2,356 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B385F8CBE
-	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 20:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F2C5F8C8B
+	for <lists+linux-kernel@lfdr.de>; Sun,  9 Oct 2022 19:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiJISBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 14:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48642 "EHLO
+        id S229983AbiJIRhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 13:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiJISB3 (ORCPT
+        with ESMTP id S229965AbiJIRhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 14:01:29 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683CC5F71;
-        Sun,  9 Oct 2022 11:01:26 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id b4so14105661wrs.1;
-        Sun, 09 Oct 2022 11:01:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=n99A3q0vdZacrnfN3PCEdSpNctLMduW2xm95LHyptA0=;
-        b=C5nFNc1BnMOoT3JZLr33ch54blndfvT9IZQfoYKN6R6x0a4eYBRSeGyc5rZRYpmyyk
-         6pWQMzyIOOqF8QVP91J+wS/hRtRcsiUFUapkg+p7uqtS5R3SOWMFTqZl+VlgRKO4ncHR
-         szT9xmrrKl09wuP+8PF+oOJ7sGCjY84lJaa6Bueup62GHSOG5Mxw/Ezpbvbg3qNixV51
-         VCoRK8XZfJZH7lizWcUTFcUXzUyEqda/ylldBF7DA6GlPHIuTdPjfRXFZ7xx5+OfA2x5
-         8Q+Rwos8/cufBzoYD9Ull26iv50Sp7BaZlc0qKm4KvGG+7vCvOKDWbmfHJLZhhXmKYNU
-         3SAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n99A3q0vdZacrnfN3PCEdSpNctLMduW2xm95LHyptA0=;
-        b=YkTKjCQdwgpAhUcZfcmIB3ztLAMElAfN15m7ZnAphk1ye7L8tEOHIu6Lf07JDBudTw
-         4KTGSj9DLMW8xFKEg0rbyYZT0UEBhvAi7cjA+zmkiiepgJZY9NmwGrB1YFTlZkVpVkmm
-         7bqvdRoszu9yzr2FdiKxBZdbcMT+nXFr7Oz14YB6HDqoETEky0n+FGIL/ObZsFYwB9fF
-         b86HgK7VlnjTmAElV5HG6FjU5XvEH1PYHR0yLqKLjUOtvjqgMOvKCuzrDBfkBD7eAgUn
-         oJWDEzmMg6wHZWRcRkTLoGDpLt6HlZUMibMzNOOgvpk9JtQc/hXdnQMWBFMTWiLRocxQ
-         J0JQ==
-X-Gm-Message-State: ACrzQf1IiOwe65WxOG7tTrpdltEtU5mszHrPPqhHfT7DZy0A/HUsHp10
-        dZWnobvfSe8wu/Fv7Uj7k7M=
-X-Google-Smtp-Source: AMsMyM6tMyJdNfA5rk/B1f+dtBvIv8qTclWXqcIzWEvWbBQmiH2akth0I4eXu8UJP7xYqUnDHXhNkQ==
-X-Received: by 2002:a5d:5942:0:b0:225:7425:4e39 with SMTP id e2-20020a5d5942000000b0022574254e39mr8981633wri.566.1665338484738;
-        Sun, 09 Oct 2022 11:01:24 -0700 (PDT)
-Received: from [192.168.0.160] ([170.253.36.171])
-        by smtp.gmail.com with ESMTPSA id z17-20020a1c4c11000000b003b7b36dcb8dsm13192588wmf.31.2022.10.09.11.01.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Oct 2022 11:01:24 -0700 (PDT)
-Message-ID: <364ecc74-4e97-a1a3-7480-7914f28dcba3@gmail.com>
-Date:   Sun, 9 Oct 2022 20:01:22 +0200
+        Sun, 9 Oct 2022 13:37:38 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE03A29C90;
+        Sun,  9 Oct 2022 10:37:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665337056; x=1696873056;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/bS9EuXzTvdWITntg7bxDrCvG53j3Owo6te+hpo9OzE=;
+  b=dEs+l2KgdO2/44/JKWXWi+0LrEBfd4FFVcn4OmgPTV797AmjCfWfvxWK
+   ONOF0cWxZ6ia5O7mrllN4Kgb7eak/W7UL5/3deYnMKAA9m3uzvQ9vVkSO
+   FnJBI89oXhog5TITNqAEbJfeO6EMYbXR/3w3RVdMe3F3XN5yLG9xBZLl8
+   8r1lcRPRN0zkSlcbS3zhGmKVaYIBtg7VrwLJhZEmEsupmxxvsFTl2cC6N
+   ycTct4AlX20IA0N966TRfXjSAtbMpMMsCqglTH54+dnQ1Z0FshUCGU/rF
+   kf2MDHH0jUpItHBLLjgZfOF0ZyD0balq6NeBadTTPvL/YlB0VD1spbAHM
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10495"; a="304067496"
+X-IronPort-AV: E=Sophos;i="5.95,172,1661842800"; 
+   d="scan'208";a="304067496"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2022 10:37:36 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10495"; a="628040116"
+X-IronPort-AV: E=Sophos;i="5.95,172,1661842800"; 
+   d="scan'208";a="628040116"
+Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.55])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2022 10:37:34 -0700
+From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+To:     jic23@kernel.org, lars@metafoo.de
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rajat.khandelwal@intel.com,
+        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Subject: [PATCH v5] iio: pressure: mpl115: Implementing low power mode by shutdown gpio
+Date:   Mon, 10 Oct 2022 23:07:20 +0530
+Message-Id: <20221010173720.568916-1-rajat.khandelwal@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Michael Kerrisk <mtk.manpages@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        GNU C Library <libc-alpha@sourceware.org>,
-        linux-man <linux-man@vger.kernel.org>, groff <groff@gnu.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        "Dr. Tobias Quathamer" <toddy@debian.org>
-From:   Alejandro Colomar <alx.manpages@gmail.com>
-Subject: man-pages-6.00 released
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------ieCm0OHLXJ3hegoszqGEmRB4"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------ieCm0OHLXJ3hegoszqGEmRB4
-Content-Type: multipart/mixed; boundary="------------xYKZz3yKxQ9rLeuBo6I2OkaN";
- protected-headers="v1"
-From: Alejandro Colomar <alx.manpages@gmail.com>
-To: Michael Kerrisk <mtk.manpages@gmail.com>,
- LKML <linux-kernel@vger.kernel.org>,
- GNU C Library <libc-alpha@sourceware.org>,
- linux-man <linux-man@vger.kernel.org>, groff <groff@gnu.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, "Dr. Tobias Quathamer"
- <toddy@debian.org>
-Message-ID: <364ecc74-4e97-a1a3-7480-7914f28dcba3@gmail.com>
-Subject: man-pages-6.00 released
+MPL115 supports shutdown gpio which can be used to set the state
+to low power mode. Power from all internal circuits and
+registers is removed. This is done by pulling the SHDN pin to low.
+This patch enables runtime PM on MPL115 to increase power savings.
 
---------------xYKZz3yKxQ9rLeuBo6I2OkaN
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+According to spec., a wakeup time period of ~5 ms exists between
+waking up and actually communicating with the device. This is
+implemented using sleep delay.
 
-R2lkZGF5IQ0KDQpJJ20gcHJvdWQgdG8gYW5ub3VuY2U6DQoNCiAgICAgbWFuLXBhZ2VzLTYu
-MDAgLSBtYW51YWwgcGFnZXMgZm9yIEdOVS9MaW51eA0KDQpUaGlzIHJlbGVhc2UgcmVzdWx0
-ZWQgZnJvbSBwYXRjaGVzLCBidWcgcmVwb3J0cywgcmV2aWV3cywgYW5kIGNvbW1lbnRzDQpm
-cm9tIGFyb3VuZCAxNDUgY29udHJpYnV0b3JzLiAgVGhlIHJlbGVhc2UgaW5jbHVkZXMgYXJv
-dW5kIDEyNDUNCmNvbW1pdHMsIGFuZCBjaGFuZ2VkIGFsbCBvZiB0aGUgcGFnZXMuDQoNClRh
-cmJhbGwgZG93bmxvYWQ6DQogICAgIFRCRCAtIEhvd2V2ZXIsIHlvdSBzaG91bGQgYmUgYWJs
-ZSB0byBnZW5lcmF0ZSBsb2NhbGx5DQogICAgIGEgc2V0IG9mIHRhcmJhbGxzIGZyb20gdGhl
-IGdpdCByZXBvc2l0b3J5IHdpdGggYG1ha2UgZGlzdGAsDQogICAgIHdoaWNoIHdpbGwgZ2Vu
-ZXJhdGUgLnRhciwgLnRhci5neiwgYW5kIC50YXIueHogYXJjaGl2ZXMuDQpHaXQgcmVwb3Np
-dG9yeToNCiAgICAgaHR0cHM6Ly9naXQua2VybmVsLm9yZy9jZ2l0L2RvY3MvbWFuLXBhZ2Vz
-L21hbi1wYWdlcy5naXQvDQoNClRoZSBtb3N0IG5vdGFibGUgb2YgdGhlIGNoYW5nZXMgaW4g
-bWFuLXBhZ2VzLTYuMDAgYXJlIHRoZSBmb2xsb3dpbmc6DQoNCi0gQSBuZXcgc2V0IG9mIG1h
-biBkaXJzOiBtYW4ydHlwZS8sIG1hbjNjb25zdC8sIG1hbjNoZWFkLywgYW5kIG1hbjN0eXBl
-Lg0KICAgVGhlc2UgaG9sZCBuZXcgcGFnZXMgYW5kIHBhZ2VzIHNwbGl0dGVkIGZyb20gc3lz
-dGVtX2RhdGFfdHlwZXMoNyksDQogICB3aGljaCBoYWQgYmVjb21lIHRvbyBiaWcgaW4gdGhl
-IHJlY2VudCByZWxlYXNlcy4NCg0KLSBBbiBpbXByb3ZlZCBidWlsZCBzeXN0ZW0sIHdoaWNo
-IGFsbG93cyBydW5uaW5nIGxpbnRlciBwcm9ncmFtcyB0aGF0DQogICBjaGVjayB0aGUgY29y
-cmVjdG5lc3Mgb2YgYm90aCB0aGUgbWFuKDcpIHNvdXJjZSBhbmQgdGhlIEMgcHJvZ3JhbXMg
-aW4NCiAgIEVYQU1QTEVTLg0KDQotIEEgbmV3IExJQlJBUlkgc2VjdGlvbiAobW9zdGx5IGlu
-IHNlY3Rpb25zIDIgYW5kIDMpLiAgVGhlcmUgaGF2ZSBhbHNvDQogICBiZWVuIG90aGVyIGlt
-cG9ydGFudCBjaGFuZ2VzIHRvIHRoZSB0aXRsZSBhbmQgb3RoZXIgc2VjdGlvbnMsIHN1Y2gg
-YXMNCiAgIHRoZSByZW1vdmFsIG9mIHRoZSBDT0xPUEhPTi4NCg0KLSBXZSBoYXZlIGFkZGVk
-IHNldmVyYWwgbmV3IHBhZ2VzIGRvY3VtZW50aW5nIG5ldyBrZXJuZWwgZmVhdHVyZXMsIHN1
-Y2gNCiAgIGFzIGxhbmRsb2NrKDcpIGFuZCBtZW1mZF9zZWNyZXQoMikuDQoNCkVzcGVjaWFs
-IG1lbnRpb24gdG8g0L3QsNCxLCB3aXRoIDU4IGNvbW1pdHMgdG8gdGhpcyByZWxlYXNlLg0K
-DQpUaGFuayB5b3UgYWxsIGZvciBjb250cmlidXRpbmcuICBFc3BlY2lhbGx5IHRvIHRob3Nl
-IGluIHRoZSBncm9mZkANCm1haWxpbmcgbGlzdCB3aG8gaGVscGVkIG1lIGEgbG90IGluIHRo
-aXMgcmVsZWFzZSwgYW5kIHRvIE1pY2hhZWwgKG10aykuDQoNCkNoZWVycywNCg0KQWxleA0K
-DQo9PT09PT09PT09PT09PT09PT09PSBDaGFuZ2VzIGluIG1hbi1wYWdlcy02LjAwID09PT09
-PT09PT09PT09PT09PT09DQoNClJlbGVhc2VkOiAyMDIyLTEwLTA5LCBWYWzDqG5jaWENCg0K
-DQpDb250cmlidXRvcnMNCi0tLS0tLS0tLS0tLQ0KDQpUaGUgZm9sbG93aW5nIHBlb3BsZSBj
-b250cmlidXRlZCBwYXRjaGVzL2ZpeGVzLCByZXBvcnRzLCBub3RlcywNCmlkZWFzLCBhbmQg
-ZGlzY3Vzc2lvbnMgdGhhdCBoYXZlIGJlZW4gaW5jb3Jwb3JhdGVkIGluIGNoYW5nZXMgaW4N
-CnRoaXMgcmVsZWFzZToNCg0KDQoiRGFycmljayBKLiBXb25nIiA8ZGFycmljay53b25nQG9y
-YWNsZS5jb20+DQoiRHIuIErDvHJnZW4gU2F1ZXJtYW5uIiA8bWFpbEB4bi0tanJnZW4tc2F1
-ZXJtYW5uLXp2Yi5kZT4NCiJEci4gV29sZmdhbmcgQXJtYnJ1c3RlciIgPGRyLncuZS5hcm1i
-cnVzdGVyQGdtYWlsLmNvbT4NCiJHLiBCcmFuZGVuIFJvYmluc29uIiA8Zy5icmFuZGVuLnJv
-Ymluc29uQGdtYWlsLmNvbT4NCiJNLiBXZWxpbmRlciIgPG13ZWxpbmRlckBnbWFpbC5jb20+
-DQoiVGhlb2RvcmUgVHMnbyIgPHR5dHNvQG1pdC5lZHU+DQoiVG9kZCBDLiBNaWxsZXIiIDxU
-b2RkLk1pbGxlckBzdWRvLndzPg0KIlZhbGVudGluIFYuIEJhcnRlbmV2IiA8dmJhcnRAbmdp
-bnguY29tPg0KPHBlbGx1Y2lkYUB0dXRhbm90YS5jb20+DQpBZGhlbWVydmFsIFphbmVsbGEg
-PGFkaGVtZXJ2YWwuemFuZWxsYUBsaW5hcm8ub3JnPg0KQWhlbGVuaWEgWmllbWlhxYRza2Eg
-KNC90LDQsSkgPG5hYmlqYWN6bGV3ZWxpQG5hYmlqYWN6bGV3ZWxpLnh5ej4NCkFsZWphbmRy
-byBDb2xvbWFyIDxhbHhAa2VybmVsLm9yZz4NCkFsZWtzYW5kZXIgQmFyYW5vd3NraSA8YWxl
-eEBldXJvLWxpbnV4LmNvbT4NCkFsZXhhbmRlciBWaXJvIDx2aXJvQHplbml2LmxpbnV4Lm9y
-Zy51az4NCkFsZXhlaSBTdGFyb3ZvaXRvdiA8YXN0QGtlcm5lbC5vcmc+DQpBbWlyIEdvbGRz
-dGVpbiA8YW1pcjczaWxAZ21haWwuY29tPg0KQW5kcmVhIENlcnZlc2F0byA8YW5kcmVhLmNl
-cnZlc2F0b0BzdXNlLmNvbT4NCkFuZHJlYXMgRGlsZ2VyIDxhZGlsZ2VyQGRpbGdlci5jYT4N
-CkFuZHJldyBNb3J0b24gPGFrcG1AbGludXgtZm91bmRhdGlvbi5vcmc+DQpBbmRyZXcgTW9y
-dG9uIDxha3BtQG9zZGwub3JnPg0KQW5kcmV3IFBlcnNvbnMgPGFuZHJld3Njb3R0cGVyc29u
-c0BnbWFpbC5jb20+DQpBbmRyZXcgV29jayA8YWp3b2NrQGdtYWlsLmNvbT4NCkFubmEgU2No
-dW1ha2VyIDxhbm5hLnNjaHVtYWtlckBuZXRhcHAuY29tPg0KQXJuZCBCZXJnbWFubiA8YXJu
-ZEBhcm5kYi5kZT4NCkF2aW5hc2ggU29uYXdhbmUgPHJvb3RrZWFAZ21haWwuY29tPg0KQXhl
-bCBSYXNtdXNzZW4gPGF4ZWxyYXNtdXNzZW5AZ29vZ2xlLmNvbT4NCkJlbmphbWluIFBldGVy
-c29uIDxiZW5qYW1pbkBweXRob24ub3JnPg0KQmVub2l0IExlY29jcSA8YmVub2l0QG9wZW5i
-c2Qub3JnPg0KQmphcm5pIEluZ2kgR2lzbGFzb24gPGJqYXJuaWlnQHZvcnRleC5pcz4NCkJy
-ZXR0IEhvbG1hbiA8YmhvbG1hbi5kZXZlbEBnbWFpbC5jb20+DQpDYXJsb3MgTydEb25lbGwg
-PGNhcmxvc0ByZWRoYXQuY29tPg0KQ2hhcmFuIFRlamEgUmVkZHkgPHF1aWNfY2hhcmFudGVA
-cXVpY2luYy5jb20+DQpDaHJpc3RpYW4gQWlzdGxlaXRuZXIgPGNocmlzdGlhbkBxdWVsbHRl
-eHRsaWNoLmF0Pg0KQ2hyaXN0aWFuIEJyYXVuZXIgPGJyYXVuZXJAa2VybmVsLm9yZz4NCkNo
-cmlzdG9waCBIZWxsd2lnIDxoY2hAaW5mcmFkZWFkLm9yZz4NCkN5cmlsIEhydWJpcyA8Y2hy
-dWJpc0BzdXNlLmN6Pg0KRGFuaWVsIEJvcmttYW5uIDxkYW5pZWxAaW9nZWFyYm94Lm5ldD4N
-CkRhdmUgQ2hpbm5lciA8ZGNoaW5uZXJAcmVkaGF0LmNvbT4NCkRhdmUgS2VtcGVyIDxzYWlu
-dC5zbml0QGdtYWlsLmNvbT4NCkRhdmlkIEhpbGRlbmJyYW5kIDxkYXZpZEByZWRoYXQuY29t
-Pg0KRGF2aWQgSG93ZWxscyA8ZGhvd2VsbHNAcmVkaGF0LmNvbT4NCkRhdmlkIExhaWdodCA8
-RGF2aWQuTGFpZ2h0QEFDVUxBQi5DT00+DQpEYXZpZCBTbGV0dGVuIDxkYXZpZC5wYXVsLnNs
-ZXR0ZW5AZ21haWwuY29tPg0KRGF2aWQgV2FyZCA8ZGF2aWQud2FyZEBnYXRlY2guZWR1Pg0K
-RGF2aWRlIEJlbmluaSA8ZGF2aWRlLmJlbmluaUBnbWFpbC5jb20+DQpEb25hbGQgQnVjemVr
-IDxidWN6ZWtAbW9sZ2VuLm1wZy5kZT4NCkVsbGlvdHQgSHVnaGVzIDxlbmhAZ29vZ2xlLmNv
-bT4NCkVyaWMgQmlnZ2VycyA8ZWJpZ2dlcnNAa2VybmVsLm9yZz4NCkVyaWMgRHVtYXpldCA8
-ZWR1bWF6ZXRAZ29vZ2xlLmNvbT4NCkV1Z2VuZSBTeXJvbXlhdG5pa292IDxldmdzeXJAZ21h
-aWwuY29tPg0KRmFiaWFuIDxmYWJpYW5Acml0dGVyLXZvZ3QuZGU+DQpGbG9yaWFuIFdlaW1l
-ciA8ZndlaW1lckByZWRoYXQuY29tPg0KR1VPIFppaHVhIDxndW96aWh1YUBodWF3ZWkuY29t
-Pg0KR2FicmllbCBLcmlzbWFuIEJlcnRhemkgPGtyaXNtYW5AY29sbGFib3JhLmNvbT4NCkdy
-ZWcgQmFua3MgPGdiYW5rc0BsaW5rZWRpbi5jb20+DQpHcmVnIEtyb2FoLUhhcnRtYW4gPGdy
-ZWdraEBsaW51eGZvdW5kYXRpb24ub3JnPg0KR3J6ZWdvcnogU3pwZXRrb3dza2kgPGdzenBl
-dGtvd3NraUBnbWFpbC5jb20+DQpHw7xudGhlciBOb2FjayA8Z3VlbnRoZXJAdW5peC1hZy51
-bmkta2wuZGU+DQpIZWlucmljaCBTY2h1Y2hhcmR0IDx4eXByb24uZ2xwa0BnbXguZGU+DQpI
-dWFuZyBQZWkgPGh1YW5ncGVpQGxvb25nc29uLmNuPg0KSWFuIEFiYm90dCA8YWJib3R0aUBt
-ZXYuY28udWs+DQpJYW4gTGFuY2UgVGF5bG9yIDxpYW50QGdvb2dsZS5jb20+DQpJbmdvIFNj
-aHdhcnplIDxzY2h3YXJ6ZUBvcGVuYnNkLm9yZz4NCkpha3ViIFNpdG5pY2tpIDxqYWt1YkBj
-bG91ZGZsYXJlLmNvbT4NCkpha3ViIFdpbGsgPGp3aWxrQGp3aWxrLm5ldD4NCkphbiBLYXJh
-IDxqYWNrQHN1c2UuY3o+DQpKYW5uIEhvcm4gPGphbm5oQGdvb2dsZS5jb20+DQpKYXlwcmFr
-YXNoIFJheSA8ci5qYXkzMjgzQGdtYWlsLmNvbT4NCkplYW5IZXlkIE1lbmVpZGUgPHdnMTRA
-c29hc2lzLm9yZz4NCkplZmYgTGF5dG9uIDxqbGF5dG9uQGtlcm5lbC5vcmc+DQpKZW5zIEd1
-c3RlZHQgPGplbnMuZ3VzdGVkdEBpbnJpYS5mcj4NCkplcmVteSBLZXJyIDxqa0Bjb2RlY29u
-c3RydWN0LmNvbS5hdT4NCkplc3NlIFJvc2Vuc3RvY2sgPGptckBnb29nbGUuY29tPg0KSm9z
-ZXBoIE15ZXJzIDxqb3NlcGhAY29kZXNvdXJjZXJ5LmNvbT4NCktpciBLb2x5c2hraW4gPGtv
-bHlzaGtpbkBnbWFpbC5jb20+DQpLbGVtZW5zIE5hbm5pIDxrbkBvcGVuYnNkLm9yZz4NCkt1
-bml5dWtpIEl3YXNoaW1hIDxrdW5peXVAYW1hem9uLmNvLmpwPg0KTGludXMgVG9ydmFsZHMg
-PHRvcnZhbGRzQGxpbnV4Zm91bmRhdGlvbi5vcmc+DQpMdWNpZW4gR2VudGlzIDxsdWNpZW4u
-Z2VudGlzQHdhaWthOS5jb20+DQpMdWlzIEhlbnJpcXVlcyA8bGhlbnJpcXVlc0BzdXNlLmRl
-Pg0KTHVpcyBMb3phbm8gPGxsb3phbm9AY2hyb21pdW0ub3JnPg0KTWFyY28gQm9uZWxsaSA8
-bWFyY29AbWViZWltLm5ldD4NCk1hc2F0YWtlIFlBTUFUTyA8eWFtYXRvQHJlZGhhdC5jb20+
-DQpNYXRoZXVzIFRhdmFyZXMgPG1hdGhldXMuYmVybmFyZGlub0B1c3AuYnI+DQpNYXRobmVy
-ZDMxNCA8bWF0aG5lcmQzMTQuZ3BoQGdtYWlsLmNvbT4NCk1hdHRoZXcgQm9icm93c2tpIDxy
-ZXBub3BAZ29vZ2xlLmNvbT4NCk1hdHRoZXcgV2lsY294IDx3aWxseUBpbmZyYWRlYWQub3Jn
-Pg0KTWVsa2VyIE5hcmlra2EgPG1la2x1QG1la2x1Lm9yZz4NCk1pY2hhZWwgS2Vhcm5leSA8
-bWlrZWtlYXJuZXk4NUBob3RtYWlsLmNvbT4NCk1pY2hhZWwgS2VycmlzayA8bXRrLm1hbnBh
-Z2VzQGdtYWlsLmNvbT4NCk1pY2hhbCBIb2NrbyA8bWhvY2tvQHN1c2UuY29tPg0KTWlja2HD
-q2wgU2FsYcO8biA8bWljQGxpbnV4Lm1pY3Jvc29mdC5jb20+DQpNaWtlIEZyeXNpbmdlciA8
-dmFwaWVyQGdlbnRvby5vcmc+DQpNaWtlIEtyYXZldHogPG1pa2Uua3JhdmV0ekBvcmFjbGUu
-Y29tPg0KTWlrZSBSYXBvcG9ydCA8cnBwdEBsaW51eC5pYm0uY29tPg0KTWlrbG9zIFN6ZXJl
-ZGkgPG1pa2xvc0BzemVyZWRpLmh1Pg0KTmFkYXYgQW1pdCA8bmFkYXYuYW1pdEBnbWFpbC5j
-b20+DQpOZWlsQnJvd24gPG5laWxiQHN1c2UuZGU+DQpOaWNvbGFzIEJvaWNoYXQgPGRyaW5r
-Y2F0QGNocm9taXVtLm9yZz4NCk5pa29sYSBGb3Jyw7MgPG5mb3Jyb0ByZWRoYXQuY29tPg0K
-T2xnYSBLb3JuaWV2c2thaWEgPGFnbG9AdW1pY2guZWR1Pg0KT3NjYXIgU2FsdmFkb3IgPG9z
-YWx2YWRvckBzdXNlLmRlPg0KUGFsaSBSb2jDoXIgPHBhbGlAa2VybmVsLm9yZz4NClBhbmth
-aiBHdXB0YSA8cGFua2FqLmd1cHRhQGlvbm9zLmNvbT4NClBhdHJpY2sgUmVhZGVyIDxfQHB4
-ZWdlci5jb20+DQpQYXVsIEVnZ2VydCA8ZWdnZXJ0QGNzLnVjbGEuZWR1Pg0KUGV0ZXIgWHUg
-PHBldGVyeEByZWRoYXQuY29tPg0KUGV0ciBWb3JlbCA8cHZvcmVsQHN1c2UuY3o+DQpQw6Fk
-cmFpZyBCcmFkeSA8UEBkcmFpZ0JyYWR5LmNvbT4NClF1ZW50aW4gTW9ubmV0IDxxdWVudGlu
-Lm1vbm5ldEBuZXRyb25vbWUuY29tPg0KUmFsZiBCYWVjaGxlIDxyYWxmQGxpbnV4LW1pcHMu
-b3JnPg0KUmFscGggQ29yZGVyb3kgPHJhbHBoQGlucHV0cGx1cy5jby51az4NClJhbmRhbGwg
-PHJzYmVja2VyQG5leGJyaWRnZS5jb20+DQpSaWNoIEZlbGtlciA8ZGFsaWFzQGxpYmMub3Jn
-Pg0KUm9iZXJ0IFNjaG5laWRlciA8cm9iZXJ0LnNjaG5laWRlcjAzQHNhcC5jb20+DQpSdW1l
-biBUZWxiaXpvdiA8cnVtZW4udGVsYml6b3ZAbWVubG9zZWN1cml0eS5jb20+DQpTYW0gSmFt
-ZXMgPHNhbUBnZW50b28ub3JnPg0KU2FtYW50YSBOYXZhcnJvIDxmZXJpdm96QHJpc2V1cC5u
-ZXQ+DQpTZWFuIFlvdW5nIDxzZWFuQG1lc3Mub3JnPg0KU2ltb24gQnJhbmNoIDxzaW1vbm1i
-cmFuY2hAZ21haWwuY29tPg0KU3RlZmFuIFB1aXUgPHN0ZWZhbi5wdWl1QGdtYWlsLmNvbT4N
-ClN0ZXBoZW4gS2l0dCA8c3RldmVAc2syLm9yZz4NClN0ZXZlIEZyZW5jaCA8c2ZyZW5jaEBz
-YW1iYS5vcmc+DQpTdXJlbiBCYWdoZGFzYXJ5YW4gPHN1cmVuYkBnb29nbGUuY29tPg0KVGhl
-byBkZSBSYWFkdCA8ZGVyYWFkdEBvcGVuYnNkLm9yZz4NClRoZW9kb3JlIER1Ym9pcyA8dGJv
-ZHRAZ29vZ2xlLmNvbT4NClRpbG1hbiBTY2htaWR0IDx0aWxtYW5AaW1hcC5jYz4NClRvYmlh
-cyBTdG9lY2ttYW5uIDx0b2JpYXNAc3RvZWNrbWFubi5vcmc+DQpUb3BpIE1pZXR0aW5lbiA8
-dG9pd290b25AZ21haWwuY29tPg0KVHJldm9yIFdvZXJuZXIgPHR3b2VybmVyQGdtYWlsLmNv
-bT4NClRyb25kIE15a2xlYnVzdCA8dHJvbmQubXlrbGVidXN0QGhhbW1lcnNwYWNlLmNvbT4N
-ClZpbmNlbnQgTGVmZXZyZSA8dmluY2VudEB2aW5jMTcubmV0Pg0KVml0byBDYXB1dG8gPHZj
-YXB1dG9AcGVuZ2FydS5jb20+DQpXYWx0ZXIgSGFybXMgPHdoYXJtc0BiZnMuZGU+DQpXZWkg
-V2FuZyA8d2Vpd2FuQGdvb2dsZS5jb20+DQpZYW5nIFh1IDx4dXlhbmcyMDE4Lmp5QGZ1aml0
-c3UuY29tPg0KWXVjaHVuZyBDaGVuZyA8eWNoZW5nQGdvb2dsZS5jb20+DQpaYWNrIFdlaW5i
-ZXJnIDx6YWNrQG93bGZvbGlvLm9yZz4NCmVuaCA8ZW5oQGdvb2dsZS5jb20+DQpnbGliZzEw
-YiA8cHVnb25maXJleXRAZ21haWwuY29tPg0KbmljayBibGFjayA8bmlja2JsYWNrQGxpbnV4
-LmNvbT4NCnpoYW5na3VpIDx6aGFuZ2t1aUBvcHBvLmNvbT4NCsOGdmFyIEFybmZqw7Zyw7Ag
-Qmphcm1hc29uIDxhdmFyYWJAZ21haWwuY29tPg0KxaB0xJtww6FuIE7Em21lYyA8c3RlcG5l
-bUBzbXJrLm5ldD4NCg0KQXBvbG9naWVzIGlmIEkgbWlzc2VkIGFueW9uZSENCg0KDQpOZXcg
-YW5kIHJld3JpdHRlbiBwYWdlcw0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCg0KbWFuMi8N
-CiAgICAgbGFuZGxvY2tfYWRkX3J1bGUuMg0KICAgICBsYW5kbG9ja19jcmVhdGVfcnVsZXNl
-dC4yDQogICAgIGxhbmRsb2NrX3Jlc3RyaWN0X3NlbGYuMg0KICAgICBtZW1mZF9zZWNyZXQu
-Mg0KDQptYW4ydHlwZS8NCiAgICAgb3Blbl9ob3cuMnR5cGUNCg0KbWFuMy8NCiAgICAgX0dl
-bmVyaWMuMw0KDQptYW4zY29uc3QvDQogICAgIE5VTEwuM2NvbnN0DQoNCm1hbjNoZWFkLw0K
-ICAgICBzeXNleGl0cy5oLjNoZWFkDQoNCm1hbjN0eXBlLw0KICAgICBhaW9jYi4zdHlwZQ0K
-ICAgICBibGtjbnRfdC4zdHlwZQ0KICAgICBibGtzaXplX3QuM3R5cGUNCiAgICAgY2NfdC4z
-dHlwZQ0KICAgICBjbG9ja190LjN0eXBlDQogICAgIGNsb2NraWRfdC4zdHlwZQ0KICAgICBk
-ZXZfdC4zdHlwZQ0KICAgICBkaXZfdC4zdHlwZQ0KICAgICBkb3VibGVfdC4zdHlwZQ0KICAg
-ICBlcG9sbF9ldmVudC4zdHlwZQ0KICAgICBmZW52X3QuM3R5cGUNCiAgICAgaWRfdC4zdHlw
-ZQ0KICAgICBpbnROX3QuM3R5cGUNCiAgICAgaW50bWF4X3QuM3R5cGUNCiAgICAgaW50cHRy
-X3QuM3R5cGUNCiAgICAgaW92ZWMuM3R5cGUNCiAgICAgaXRpbWVyc3BlYy4zdHlwZQ0KICAg
-ICBsY29udi4zdHlwZQ0KICAgICBtb2RlX3QuM3R5cGUNCiAgICAgb2ZmX3QuM3R5cGUNCiAg
-ICAgcHRyZGlmZl90LjN0eXBlDQogICAgIHJlZ2V4X3QuM3R5cGUNCiAgICAgc2l6ZV90LjN0
-eXBlDQogICAgIHNvY2thZGRyLjN0eXBlDQogICAgIHN0YXQuM3R5cGUNCiAgICAgdGltZV90
-LjN0eXBlDQogICAgIHRpbWVyX3QuM3R5cGUNCiAgICAgdGltZXNwZWMuM3R5cGUNCiAgICAg
-dGltZXZhbC4zdHlwZQ0KICAgICB0bS4zdHlwZQ0KICAgICB2YV9saXN0LjN0eXBlDQogICAg
-IHZvaWQuM3R5cGUNCg0KbWFuNy8NCiAgICAgbGFuZGxvY2suNw0KDQoNCk5ld2x5IGRvY3Vt
-ZW50ZWQgaW50ZXJmYWNlcyBpbiBleGlzdGluZyBwYWdlcw0KLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQoNCmVwb2xsX3dhaXQuMg0KICAgICBlcG9s
-bF9wd2FpdDIoMikNCg0KZmFub3RpZnlfaW5pdC4yDQogICAgIEZBTl9SRVBPUlRfUElERkQN
-Cg0KZmFub3RpZnlfbWFyay4yDQogICAgIEZBTl9GU19FUlJPUg0KICAgICBGQU5fTUFSS19F
-VklDVEFCTEUNCiAgICAgRkFOX1JFTkFNRQ0KICAgICBGQU5fUkVQT1JUX1RBUkdFVF9GSUQN
-Cg0KbWFkdmlzZS4yDQogICAgIE1BRFZfUE9QVUxBVEVfUkVBRA0KICAgICBNQURWX1BPUFVM
-QVRFX1dSSVRFDQoNCnBpcGUuMg0KICAgICBPX05PVElGSUNBVElPTl9QSVBFDQoNCnByb2Nl
-c3NfbWFkdmlzZS4yDQogICAgIE1BRFZfV0lMTE5FRUQNCg0Kc2VuZC4yDQogICAgIE1TR19G
-QVNUT1BFTg0KDQp1c2VyZmF1bHRmZC4yDQogICAgIFVGRkRfVVNFUl9NT0RFX09OTFkNCg0K
-cHJvYy41DQogICAgIC9wcm9jL1twaWRdL3BhZ2VtYXAgICAgYml0IDU3DQoNCmZhbm90aWZ5
-LjcNCiAgICAgL3Byb2Mvc3lzL2ZzL2Zhbm90aWZ5L21heF9xdWV1ZWRfZXZlbnRzDQogICAg
-IC9wcm9jL3N5cy9mcy9mYW5vdGlmeS9tYXhfdXNlcl9ncm91cA0KICAgICAvcHJvYy9zeXMv
-ZnMvZmFub3RpZnkvbWF4X3VzZXJfbWFya3MNCg0KdGNwLjcNCiAgICAgVENQX0ZBU1RPUEVO
-DQogICAgIFRDUF9GQVNUT1BFTl9DT05ORUNUDQoNCg0KTmV3IGFuZCBjaGFuZ2VkIGxpbmtz
-DQotLS0tLS0tLS0tLS0tLS0tLS0tLS0NCg0KbWFuMy8NCiAgICAgc3RyZnRpbWVfbC4zDQoN
-Cm1hbjN0eXBlLw0KICAgICBlcG9sbF9kYXRhLjN0eXBlDQogICAgIGVwb2xsX2RhdGFfdC4z
-dHlwZQ0KICAgICBmZXhjZXB0X3QuM3R5cGUNCiAgICAgZmxvYXRfdC4zdHlwZQ0KICAgICBn
-aWRfdC4zdHlwZQ0KICAgICBpbWF4ZGl2X3QuM3R5cGUNCiAgICAgaW42X2FkZHIuM3R5cGUN
-CiAgICAgaW5fYWRkci4zdHlwZQ0KICAgICBpbl9hZGRyX3QuM3R5cGUNCiAgICAgaW5fcG9y
-dF90LjN0eXBlDQogICAgIGludDE2X3QuM3R5cGUNCiAgICAgaW50MzJfdC4zdHlwZQ0KICAg
-ICBpbnQ2NF90LjN0eXBlDQogICAgIGludDhfdC4zdHlwZQ0KICAgICBsZGl2X3QuM3R5cGUN
-CiAgICAgbGxkaXZfdC4zdHlwZQ0KICAgICBsb2ZmX3QuM3R5cGUNCiAgICAgb2ZmNjRfdC4z
-dHlwZQ0KICAgICBwaWRfdC4zdHlwZQ0KICAgICByZWdtYXRjaF90LjN0eXBlDQogICAgIHJl
-Z29mZl90LjN0eXBlDQogICAgIHNhX2ZhbWlseV90LjN0eXBlDQogICAgIHNvY2thZGRyX2lu
-LjN0eXBlDQogICAgIHNvY2thZGRyX2luNi4zdHlwZQ0KICAgICBzb2NrYWRkcl9zdG9yYWdl
-LjN0eXBlDQogICAgIHNvY2thZGRyX3VuLjN0eXBlDQogICAgIHNvY2tsZW5fdC4zdHlwZQ0K
-ICAgICBzcGVlZF90LjN0eXBlDQogICAgIHNzaXplX3QuM3R5cGUNCiAgICAgc3VzZWNvbmRz
-X3QuM3R5cGUNCiAgICAgdGNmbGFnX3QuM3R5cGUNCiAgICAgdWlkX3QuM3R5cGUNCiAgICAg
-dWludDE2X3QuM3R5cGUNCiAgICAgdWludDMyX3QuM3R5cGUNCiAgICAgdWludDY0X3QuM3R5
-cGUNCiAgICAgdWludDhfdC4zdHlwZQ0KICAgICB1aW50Tl90LjN0eXBlDQogICAgIHVpbnRt
-YXhfdC4zdHlwZQ0KICAgICB1aW50cHRyX3QuM3R5cGUNCiAgICAgdXNlY29uZHNfdC4zdHlw
-ZQ0KDQoNCkdsb2JhbCBjaGFuZ2VzDQotLS0tLS0tLS0tLS0tLQ0KDQotIE1hbiBkaXJzOg0K
-DQogICAtIE1vdmUgZGVmaW5pdGlvbnMgb2YgdHlwZXMgdG8gc2VwYXJhdGUgcGFnZXMgaW4g
-bWFuMnR5cGUvIGFuZA0KICAgICBtYW4zdHlwZS8uICBQcmV2aW91c2x5LCB0aGV5IHdlcmUg
-c3ByZWFkZWQgKGFuZCBkdXBsaWNhdGVkKSBpbiBvdGhlcg0KICAgICBwYWdlcywgb3IgaW4g
-c3lzdGVtX2RhdGFfdHlwZXMuNyAod2l0aCBsaW5rcyBpbiBtYW4zLykuDQoNCiAgIC0gQWRk
-IG1hbjNoZWFkLyBmb3IgcGFnZXMgdGhhdCBkb2N1bWVudCBoZWFkZXIgZmlsZXMuDQoNCiAg
-IC0gQWRkIG1hbjNjb25zdC8gZm9yIHBhZ2VzIHRoYXQgZG9jdW1lbnQgY29uc3RhbnRzLg0K
-DQotIExpY2Vuc2VzOg0KDQogICAtIFVzZSBTUERYLUxpY2Vuc2UtSW5kZW50aWZmaWVyIGZv
-ciBsaWNlbnNlcyBzcGVjaWZpZWQgYnkgU1BEWA0KICAgICAoaW5jbHVkaW5nIHRoZSBuZXds
-eS1hZGRlZCBMaW51eC1tYW4tcGFnZXMtY29weWxlZnQpLiAgVGhpcyByZWR1Y2VzDQogICAg
-IHRoZSBvdmVyaGVhZCB0ZXh0IGF0IHRoZSB0b3Agb2YgbW9zdCBtYW51YWwgcGFnZSBzb3Vy
-Y2UgZmlsZXMuDQogICAgIExpY2Vuc2UgdGV4dHMgaGF2ZSBiZWVuIG1vdmVkIHRvIExJQ0VO
-U0VTLy4NCg0KLSBCdWlsZCBzeXN0ZW06DQoNCiAgIC0gQWRkIHNldmVyYWwgbWFrZSgxKSB0
-YXJnZXRzIHRvIGxpbnQgdGhlIG1hbnVhbCBwYWdlcywgYW5kIGFsc28gbGludA0KICAgICBh
-bmQgYnVpbGQgdGhlIEMgcHJvZ3JhbXMgY29udGFpbmVkIGluIHRoZW0uICBVc2Ugb2YgdGhl
-c2UgdGFyZ2V0cw0KICAgICByZXF1aXJlcyB1bnJlbGVhc2VkIHZlcnNpb25zIG9mIHNvZnR3
-YXJlLCBzdWNoIGFzIGdyb2ZmLTEuMjMuMCwgc28NCiAgICAgaXQncyBub3QgeWV0IGludGVu
-ZGVkIHRvIGJlIHVzZWQgYnkgdGhlIHB1YmxpYy4NCg0KICAgLSBBZGQgdGFyZ2V0cyB0byBi
-dWlsZCB0YXJiYWxscyBvZiB0aGUgcmVwb3NpdG9yeS4NCg0KLSBtYW4oNykgc291cmNlOg0K
-DQogICAtIEltcHJvdmUgY29uc2lzdGVuY3kgb2YgbWFuKDcpIHNvdXJjZS4gIEFsc28sIHJl
-ZHVjZSB0aGUgbnVtYmVyIG9mDQogICAgIHdhcm5pbmdzIHRoYXQgZ3JvZmYoMSkgYW5kIG1h
-bmRvYyg3KSBlbWl0IHdoZW4gcGFyc2luZyB0aGUgcGFnZXMNCiAgICAgd2l0aCB0aGUgaGln
-aGVzdCB3YXJuaW5nIGxldmVsLiAgTW9zdCBvZiB0aGVzZSBmaXhlcyB3ZXJlIGZvdW5kDQog
-ICAgIHRoYW5rcyB0byB0aGUgbmV3IGBtYWtlIGxpbnQtbWFuYCB0YXJnZXQuDQoNCi0gTWFu
-dWFsIHBhZ2VzIHNlY3Rpb25zOg0KDQogICAtIFRpdGxlICguVEgpOg0KDQogICAgIC0gUmVt
-b3ZlIDV0aCBhcmd1bWVudCB0byBUSCAobWlkZGxlLWhlYWRlcikuDQoNCiAgICAgLSBTcGVj
-aWZ5ICJMaW51eCBtYW4tcGFnZXMiIGFuZCB0aGUgdmVyc2lvbiBpbiB0aGUgNHRoIGFyZ3Vt
-ZW50DQogICAgICAgKGxlZnQtZm9vdGVyKS4NCg0KICAgLSBBZGQgdGhlIExJQlJBUlkgc2Vj
-dGlvbi4gIFRoaXMgc2VjdGlvbiBzdGFuZGFyZGl6ZXMgYSB3YXkgdG8NCiAgICAgZG9jdW1l
-bnQgdGhlIGxpYnJhcnkgdGhhdCBwcm92aWRlcyBhIGdpdmVuIGludGVyZmFjZS4NCg0KICAg
-LSBBZGQgdGhlIENBVkVBVFMgc2VjdGlvbi4gIEJVR1MgYW5kIE5PVEVTIHdlcmUgc2Vydmlu
-ZyB0aGF0IHB1cnBvc2UNCiAgICAgYmVmb3JlLCBidXQgQ0FWRUFUUyBpcyBtb3JlIGFwcHJv
-cHJpYXRlLg0KDQogICAtIFJlbmFtZSB0aGUgQ09ORk9STUlORyBUTyBzZWN0aW9uIHRvIFNU
-QU5EQVJEUyBmb3IgY29uc2lzdGVuY3kgd2l0aA0KICAgICBvdGhlciBwcm9qZWN0cywgc3Vj
-aCBhcyB0aGUgQlNEcy4NCg0KICAgLSBTWU5PUFNJUzogIEFkZCB0aGUgSVNPIEMyWCBbW2Rl
-cHJlY2F0ZWRdXSBhdHRyaWJ1dGUgZm9yIGZ1bmN0aW9ucw0KICAgICB0aGF0IGhhdmUgYmVl
-biBkZXByZWNhdGVkIG9yIHJlbW92ZWQuDQoNCiAgIC0gRVhBTVBMRVM6ICBJbXByb3ZlIGNv
-bnNpc3RlbmN5IG9mIEMgc291cmNlIGNvZGUuICBBbHNvLCByZWR1Y2UgdGhlDQogICAgIG51
-bWJlciBvZiB3YXJuaW5ncyB0aGF0IHNldmVyYWwgbGludGluZyB0b29scyBlbWl0Lg0KDQog
-ICAtIENPTE9QSE9OOiAgUmVtb3ZlIHNlY3Rpb24gKGl0cyBwdXJwb3NlIGlzIG5vdyBzZXJ2
-ZWQgYnkgdGhlIHRpdGxlKS4NCg0KLSBSZXBvc2l0b3J5Og0KDQogICAtIENPTlRSSUJVVElO
-RywgUkVBRE1FLCBJTlNUQUxMOiAgRG9jdW1lbnQgaW1wb3J0YW50IGNoYW5nZXMgaW4gdGhl
-DQogICAgIHByb2plY3Qgb3JnYW5pemF0aW9uLg0KDQoNCkNoYW5nZXMgdG8gaW5kaXZpZHVh
-bCBwYWdlcw0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQoNClRoZSBtYW51YWwgcGFn
-ZXMgKGFuZCBvdGhlciBmaWxlcyBpbiB0aGUgcmVwb3NpdG9yeSkgaGF2ZSBiZWVuIGltcHJv
-dmVkDQpiZXlvbmQgd2hhdCB0aGlzIGNoYW5nZWxvZyBjb3ZlcnMuICBUbyBsZWFybiBtb3Jl
-IGFib3V0IGNoYW5nZXMgYXBwbGllZA0KdG8gaW5kaXZpZHVhbCBwYWdlcywgdXNlIGdpdCgx
-KS4NCg0KDQotLSANCkFsZWphbmRybyBDb2xvbWFyOyA8aHR0cDovL3d3dy5hbGVqYW5kcm8t
-Y29sb21hci5lcy8+DQpMaW51eCBtYW4tcGFnZXMgbWFpbnRhaW5lcjsgPGh0dHA6Ly93d3cu
-a2VybmVsLm9yZy9kb2MvbWFuLXBhZ2VzLz4NCg==
+Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+---
 
---------------xYKZz3yKxQ9rLeuBo6I2OkaN--
+v5:
+1. Removing build error by exporting EXPORT_NS_RUNTIME_DEV_PM_OPS
+2. Using runtime PM for low power mode and not forcing shutdown pin
+3. Changing patch comment
+4. Increasing autosuspend timeout to 2 sec to make the driver more
+responsive to user
 
---------------ieCm0OHLXJ3hegoszqGEmRB4
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+ drivers/iio/pressure/mpl115.c     | 61 ++++++++++++++++++++++++++++++-
+ drivers/iio/pressure/mpl115.h     |  5 +++
+ drivers/iio/pressure/mpl115_i2c.c |  1 +
+ drivers/iio/pressure/mpl115_spi.c |  1 +
+ 4 files changed, 67 insertions(+), 1 deletion(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/drivers/iio/pressure/mpl115.c b/drivers/iio/pressure/mpl115.c
+index 5bf5b9abe6f1..ec7527161844 100644
+--- a/drivers/iio/pressure/mpl115.c
++++ b/drivers/iio/pressure/mpl115.c
+@@ -4,12 +4,13 @@
+  *
+  * Copyright (c) 2014 Peter Meerwald <pmeerw@pmeerw.net>
+  *
+- * TODO: shutdown pin
++ * TODO: synchronization with system suspend
+  */
+ 
+ #include <linux/module.h>
+ #include <linux/iio/iio.h>
+ #include <linux/delay.h>
++#include <linux/gpio/consumer.h>
+ 
+ #include "mpl115.h"
+ 
+@@ -27,6 +28,7 @@ struct mpl115_data {
+ 	s16 a0;
+ 	s16 b1, b2;
+ 	s16 c12;
++	struct gpio_desc *shutdown;
+ 	const struct mpl115_ops *ops;
+ };
+ 
+@@ -102,16 +104,24 @@ static int mpl115_read_raw(struct iio_dev *indio_dev,
+ 
+ 	switch (mask) {
+ 	case IIO_CHAN_INFO_PROCESSED:
++		pm_runtime_get_sync(data->dev);
+ 		ret = mpl115_comp_pressure(data, val, val2);
+ 		if (ret < 0)
+ 			return ret;
++		pm_runtime_mark_last_busy(data->dev);
++		pm_runtime_put_autosuspend(data->dev);
++
+ 		return IIO_VAL_INT_PLUS_MICRO;
+ 	case IIO_CHAN_INFO_RAW:
++		pm_runtime_get_sync(data->dev);
+ 		/* temperature -5.35 C / LSB, 472 LSB is 25 C */
+ 		ret = mpl115_read_temp(data);
+ 		if (ret < 0)
+ 			return ret;
++		pm_runtime_mark_last_busy(data->dev);
++		pm_runtime_put_autosuspend(data->dev);
+ 		*val = ret >> 6;
++
+ 		return IIO_VAL_INT;
+ 	case IIO_CHAN_INFO_OFFSET:
+ 		*val = -605;
+@@ -168,6 +178,8 @@ int mpl115_probe(struct device *dev, const char *name,
+ 	if (ret)
+ 		return ret;
+ 
++	dev_set_drvdata(dev, indio_dev);
++
+ 	ret = data->ops->read(data->dev, MPL115_A0);
+ 	if (ret < 0)
+ 		return ret;
+@@ -185,10 +193,58 @@ int mpl115_probe(struct device *dev, const char *name,
+ 		return ret;
+ 	data->c12 = ret;
+ 
++	data->shutdown = devm_gpiod_get_optional(dev, "shutdown",
++						 GPIOD_OUT_LOW);
++	if (IS_ERR(data->shutdown))
++		return dev_err_probe(dev, PTR_ERR(data->shutdown),
++				     "cannot get shutdown gpio\n");
++
++	if (data->shutdown) {
++		/* Enable runtime PM */
++		pm_runtime_get_noresume(dev);
++		pm_runtime_set_active(dev);
++		pm_runtime_enable(dev);
++
++		/*
++		 * As the device takes 3 ms to come up with a fresh
++		 * reading after power-on and 5 ms to actually power-on,
++		 * do not shut it down unnecessarily. Set autosuspend to
++		 * 2000 ms.
++		 */
++		pm_runtime_set_autosuspend_delay(dev, 2000);
++		pm_runtime_use_autosuspend(dev);
++		pm_runtime_put(dev);
++
++		dev_dbg(dev, "low-power mode enabled");
++	} else
++		dev_dbg(dev, "low-power mode disabled");
++
+ 	return devm_iio_device_register(dev, indio_dev);
+ }
+ EXPORT_SYMBOL_NS_GPL(mpl115_probe, IIO_MPL115);
+ 
++static int mpl115_runtime_suspend(struct device *dev)
++{
++	struct mpl115_data *data = iio_priv(dev_get_drvdata(dev));
++
++	gpiod_set_value(data->shutdown, 1);
++
++	return 0;
++}
++
++static int mpl115_runtime_resume(struct device *dev)
++{
++	struct mpl115_data *data = iio_priv(dev_get_drvdata(dev));
++
++	gpiod_set_value(data->shutdown, 0);
++	usleep_range(5000, 6000);
++
++	return 0;
++}
++
++EXPORT_NS_RUNTIME_DEV_PM_OPS(mpl115_dev_pm_ops, mpl115_runtime_suspend,
++			  mpl115_runtime_resume, NULL, IIO_MPL115);
++
+ MODULE_AUTHOR("Peter Meerwald <pmeerw@pmeerw.net>");
+ MODULE_DESCRIPTION("Freescale MPL115 pressure/temperature driver");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/iio/pressure/mpl115.h b/drivers/iio/pressure/mpl115.h
+index 57d55eb8e661..78a0068a17bb 100644
+--- a/drivers/iio/pressure/mpl115.h
++++ b/drivers/iio/pressure/mpl115.h
+@@ -6,6 +6,8 @@
+  * Copyright (c) 2016 Akinobu Mita <akinobu.mita@gmail.com>
+  */
+ 
++#include <linux/pm_runtime.h>
++
+ #ifndef _MPL115_H_
+ #define _MPL115_H_
+ 
+@@ -18,4 +20,7 @@ struct mpl115_ops {
+ int mpl115_probe(struct device *dev, const char *name,
+ 			const struct mpl115_ops *ops);
+ 
++/*PM ops */
++extern const struct dev_pm_ops mpl115_dev_pm_ops;
++
+ #endif
+diff --git a/drivers/iio/pressure/mpl115_i2c.c b/drivers/iio/pressure/mpl115_i2c.c
+index 099ab1c6832c..555bda1146fb 100644
+--- a/drivers/iio/pressure/mpl115_i2c.c
++++ b/drivers/iio/pressure/mpl115_i2c.c
+@@ -53,6 +53,7 @@ MODULE_DEVICE_TABLE(i2c, mpl115_i2c_id);
+ static struct i2c_driver mpl115_i2c_driver = {
+ 	.driver = {
+ 		.name	= "mpl115",
++		.pm = pm_ptr(&mpl115_dev_pm_ops),
+ 	},
+ 	.probe = mpl115_i2c_probe,
+ 	.id_table = mpl115_i2c_id,
+diff --git a/drivers/iio/pressure/mpl115_spi.c b/drivers/iio/pressure/mpl115_spi.c
+index 7feec87e2704..58d218fd90dc 100644
+--- a/drivers/iio/pressure/mpl115_spi.c
++++ b/drivers/iio/pressure/mpl115_spi.c
+@@ -92,6 +92,7 @@ MODULE_DEVICE_TABLE(spi, mpl115_spi_ids);
+ static struct spi_driver mpl115_spi_driver = {
+ 	.driver = {
+ 		.name   = "mpl115",
++		.pm = pm_ptr(&mpl115_dev_pm_ops),
+ 	},
+ 	.probe = mpl115_spi_probe,
+ 	.id_table = mpl115_spi_ids,
+-- 
+2.34.1
 
-iQIzBAEBCgAdFiEE6jqH8KTroDDkXfJAnowa+77/2zIFAmNDDHIACgkQnowa+77/
-2zKIqg/+I5pdpra9wIecGf+gnHJZ7kLtlBB4kITxuTgAT12XEOx+gpAaoE8lQCca
-/rOJWX7EADllLMW/dEIdt3QogHnGHR24K1g6md65zxqBPd2lgErQKSJlo+mNXrVH
-szdoUkPyoatBSlK3POjK9fVgV9V1RJwrsYfkZHDKHQVPbY9YcF7UZhLdwM5Wp3Rp
-0aHtt4WmqmG2RR/cPjk9rTvStV4io/XU+07/uKPdC7SJlnmk0wkZUMT3BJc5zO+d
-GEcNfvpABcyJ0J+FLsvE1MdganvO3nQHl0qtcqdNFG2utdsAEK5Z5J45UPzFl+wA
-ZHyZfvasVQh5BdXCi2QRg+HYGjz/jzV2uPqZ97e/dHxP1p1z9vn+oU/Q9bFQ7VYi
-nNg6M2kSk3DgEfnJNkAOIKR11fU6jh/gH5EYywZiQE9q87H28ggGGdOpJx9k/fG7
-LgQ8MdACYqC8gHlmmRCz3cbiWw2Ak5YD//nY9rKmEIWOvbrF69Sxt/rbsLp/Ibej
-EbAOCMgCfhYXVDc1ad5/Yzkb4qh+who9tG7IMPA7o5eD44t4HKNinWWdd71tNvXI
-IVqzirhx+vy/83iYiAVc6cf3rz9z4thF8nPWYK9BRNT+BETlmRn80N543DQcWsYn
-POidWWDlpYL6eoWVZE5PkpHsdlbOLQVtY7MUZhl8Fg8tlkB9x/I=
-=TyLp
------END PGP SIGNATURE-----
-
---------------ieCm0OHLXJ3hegoszqGEmRB4--
