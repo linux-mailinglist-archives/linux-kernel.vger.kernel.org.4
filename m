@@ -2,72 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C05C5FA3B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 20:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A135A5FA3C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 20:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbiJJSxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 14:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36718 "EHLO
+        id S229837AbiJJSy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 14:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiJJSxP (ORCPT
+        with ESMTP id S229600AbiJJSyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 14:53:15 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00522786E5;
-        Mon, 10 Oct 2022 11:53:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=mQOcbgqlc7YWpQLopbZ7qox0JJ82m+Wb0DJKAyjCUZA=; b=y14sdLtWMIQwI8Ff8AWvJCr39k
-        4rC1V6N7RyYWmjQadNm1cDcVtxErCQ4NZJGXFTwPMydS3R4YskDUFX4eUVTkFYLzM42D1OyCBhY35
-        TuJMX63oSz2MGChjQs/0wO1+5DuV0cCpgdm4W5+dMrvvpmY0ztEl3EbRHII8Q4D8vCjc=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ohxtd-001e6Y-Pl; Mon, 10 Oct 2022 20:53:01 +0200
-Date:   Mon, 10 Oct 2022 20:53:01 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pawel Dembicki <paweldembicki@gmail.com>,
-        Lech Perczak <lech.perczak@gmail.com>
-Subject: Re: [net PATCH 1/2] net: dsa: qca8k: fix inband mgmt for big-endian
- systems
-Message-ID: <Y0RqDd/P3XkrSzc3@lunn.ch>
-References: <20221010111459.18958-1-ansuelsmth@gmail.com>
+        Mon, 10 Oct 2022 14:54:53 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719D11277D;
+        Mon, 10 Oct 2022 11:54:50 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id l8so7347981wmi.2;
+        Mon, 10 Oct 2022 11:54:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gVHRCzHetDvm9wFuZO6DUfd6buOnzVOKnDaUC6gkHgg=;
+        b=jfbUGf2qG4IgfJsaHgHZk8iGMLIN7QzdQ/644DGpNwElmy8Ne41kJG5u6avyUwAw/e
+         QkdXRLRFzTF3RA/3jIMsSU+zWhasOwQBYtt62fwn+qQiDcRaEPaNKn0zkkSy8jG/JnVD
+         mQWkXSJG82oCEtGSutcz43dCXX4Pn86SrHAb/dr4tOCDe4Fborpfhu7uQcfZaoMLAn5u
+         YsABV+V4e7bDt06q3JHnizc1nQtkMLiSjM3m6HlUwhUI97Gh57HrRdfkC5VoLdgzE0MA
+         OILLU5nM5VKsgLd/CfaS1gGn0oFi7gBLY0GinTUjjMwW6cwib/zxvZRAViXo5Xr7Gg8s
+         0xJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gVHRCzHetDvm9wFuZO6DUfd6buOnzVOKnDaUC6gkHgg=;
+        b=2lBmrM+pWLX9VkvKAMWYDOX0x8c01l2s2/LpDDU3HsQL+d1YQDOagLvzqHXkIgGcVj
+         vkV2L3NRz/m6On9/gHfejtD5r0yrn/ppOzKwxrAS/pvFZaT9QtsW0eHglmqLmFWfaytD
+         lTidFqisSPP3/99jDkHQJMqfxQK5dhxExKU/Exl708RqpifCjA3uacszE+5RLmdqpF9N
+         ZRT/2ejUynqB0xqYUV3ieqKzS5xos79LmuFYTdKq66QTLvWnFA2+fOy25//84NpPpQR7
+         YzCggwjvAqx4OM+VbnG7shqClLo/MJQOZs06fhiNpxMuMNN3ZPkIC//ocJ22FmydJs9U
+         eXTg==
+X-Gm-Message-State: ACrzQf1rf0p1EmPRXbAIfhvRQ2itlj+G1haxzhCrDIwpxOeYC6n3GsHC
+        oR4P1AUuRe6ZBfPZeP4Jpwo=
+X-Google-Smtp-Source: AMsMyM4tdgFZLMNaM0VNDRNGTFwZOVm1CPhn49eMPbP9JTq/VNtHdoJKIa/pN5LXqjpWz6uZYjqq8Q==
+X-Received: by 2002:a05:600c:4f01:b0:3b4:a8c8:2523 with SMTP id l1-20020a05600c4f0100b003b4a8c82523mr20678176wmq.199.1665428089025;
+        Mon, 10 Oct 2022 11:54:49 -0700 (PDT)
+Received: from hp-power-15.localdomain (mm-126-34-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.34.126])
+        by smtp.gmail.com with ESMTPSA id y2-20020a5d6142000000b00230c9d427f9sm2082272wrt.53.2022.10.10.11.54.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 11:54:48 -0700 (PDT)
+From:   Siarhei Volkau <lis8215@gmail.com>
+Cc:     Siarhei Volkau <lis8215@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/6] ASoC: codecs: jz4725b: Various improvements and fixes
+Date:   Mon, 10 Oct 2022 21:54:17 +0300
+Message-Id: <20221010185423.3167208-1-lis8215@gmail.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <Y0P/u4pJT8rup8Za@sirena.org.uk>
+References: <Y0P/u4pJT8rup8Za@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221010111459.18958-1-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->  /* Special struct emulating a Ethernet header */
->  struct qca_mgmt_ethhdr {
-> -	u32 command;		/* command bit 31:0 */
-> -	u32 seq;		/* seq 63:32 */
-> -	u32 mdio_data;		/* first 4byte mdio */
-> +	__le32 command;		/* command bit 31:0 */
-> +	__le32 seq;		/* seq 63:32 */
-> +	__le32 mdio_data;		/* first 4byte mdio */
->  	__be16 hdr;		/* qca hdr */
->  } __packed;
+The patchset fixes:
+ - Line In path stays powered off during capturing or
+   bypass to mixer.
+ - incorrectly represented dB values in alsamixer, et al.
+ - incorrect represented Capture input selector in alsamixer
+   in Playback tab.
+ - wrong control selected as Capture Master
 
-It looks odd that hdr is BE while the rest are LE. Did you check this?
+The patchset improves:
+ - Exposes output stage (post mixer) gain control and makes it new
+   Master playback gain, DAC gain was the previous master.
+   However, no Master mute now.
+ - Exposes all mixer inputs (both Mics, LineIn and DAC) with their
+   gain controls.
 
-   Andrew
+Known issues:
+ - Bypass path enablement isn't applied immediately, for make
+   things going bit clock needs to be triggered for a bit,
+   e.g. by aplay dummy.wav
+   It might be a hardware bug, since the bit clock isn't
+   declared as required for codec operation.
+
+Tested on:
+ - Ritmix RZX-27 (jz4725b).
+ - Ritmix RZX-50 (jz4755).
+
+Diff from v1:
+ - each change in a separate patch
+
+Tested-by: Siarhei Volkau <lis8215@gmail.com>
+Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+
+Siarhei Volkau (6):
+  ASoC: codecs: jz4725b: add missed Line In power control bit
+  ASoC: codecs: jz4725b: fix reported volume for Master ctl
+  ASoC: codecs: jz4725b: use right control for Capture Volume
+  ASoC: codecs: jz4725b: fix capture selector naming
+  ASoC: codecs: jz4725b: use right control for Master Playback
+  ASoC: codecs: jz4725b: add missed Mixer inputs
+
+ sound/soc/codecs/jz4725b.c | 81 ++++++++++++++++++++++++++++++++------
+ 1 file changed, 70 insertions(+), 11 deletions(-)
+
+-- 
+2.36.1
+
