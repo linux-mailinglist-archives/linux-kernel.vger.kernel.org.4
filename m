@@ -2,116 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8F05F9C50
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 11:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E779E5F9C53
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 11:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231326AbiJJJ5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 05:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56652 "EHLO
+        id S230410AbiJJJ7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 05:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbiJJJ5k (ORCPT
+        with ESMTP id S229596AbiJJJ7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 05:57:40 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F39B60685
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 02:57:36 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 0FCAB2B06732;
-        Mon, 10 Oct 2022 05:57:33 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Mon, 10 Oct 2022 05:57:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1665395853; x=1665399453; bh=AmCAIAyh/t
-        b4Tia73jc031lB07lXjb9ab6ibTSy0AQM=; b=oTXnu2D7K0I/sed2RJeUoRaeiZ
-        2SXb4MZ7RpFMCv56QmuG9QyEugdUyQ67pID4QlLCVEtumMpLwiX6Zc6l6KzfRfZ/
-        Gc4DHmMCn+T8f85d69yO73wmOQc+eph9pnVbaTCVJUQQQgP9/nt291IemR01VMS9
-        6ob9s3mCSASOBGAH9Z9do4iSbXiQyO8vhMftKtAXGw4Gh7kCEAWsEW0RADtOGHRe
-        foh2uYYPXiRrZa6f8S6ENCWiEY1YT6qb6Bx8leaH1H7IPXrlnFAheJFommaMy6T/
-        ldEt+6BFrzKNlCdY3ZwJQjjg+oLSW9Y/ZTgJAvdDhNUdLpS6UGAHjBbxCumA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665395853; x=1665399453; bh=AmCAIAyh/tb4Tia73jc031lB07lX
-        jb9ab6ibTSy0AQM=; b=KU50sjpD3UnjhIOGYhbxsL1mkLXgQpwL3B0SI71etnO/
-        NQDWkvNXM2QsN3C2WQ5dB9g+lFdKRsUDOeenbve7l1mHjKn60P4ULuzfQtokWmXW
-        j+bnid64ff58jn274Umv0q1GVQoHCXoiab4RJlWia4q565B9KqWajhWjIVtDXn4v
-        S+fYg3Pl3GVB+dOY7amVngjEpvfSSAXd9yAyd8bjWIkHv2plDZg9GMfG3y4vUUA6
-        /Yd+kcMNIzbat5jrRbWf+frkjdtWlf80/+qqYoDtxkMM26+p4X6/u8eK3QMizFuT
-        nOR5Y1tutg4IXuWrd3dN+fKMkMbc/en6Gu9oNSfIOg==
-X-ME-Sender: <xms:jOxDY6OlbqIQOJaya7aNvYdNgDlIZWLTCqzOPvwGRhlTUmB8zkyqwg>
-    <xme:jOxDY48UJ-ZRVPCk1HiWgcykgiidECAHkffAXcTRHGY-h-I4N4CuU8TXSYy7YkqA9
-    qTI119AVDGmJi-T_5g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejgedgudejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:jOxDYxSTUAgSaKy2JzTOvjcu90YRSgyTeCWArZVh9jadzVC5lZ35MA>
-    <xmx:jOxDY6sDxiGqQjZFYxJKbhx6cxN9W1NSWJuthja9XrCyt2-qtSX2UQ>
-    <xmx:jOxDYyf2gjANeVMSrbgY53TYn2PdiMqQF5edkdZRYjPShzfIJFl_TA>
-    <xmx:jexDYx7WTnOTcA9oEvRZTx_bxTyIUbudIb4r6lp5GreghEn-edpuq4ulaSk>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C133CB60086; Mon, 10 Oct 2022 05:57:32 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
-Mime-Version: 1.0
-Message-Id: <8ded6196-009e-4a85-b4f2-bea5d0b49ec4@app.fastmail.com>
-In-Reply-To: <202210101659.LTN2etmy-lkp@intel.com>
-References: <202210101659.LTN2etmy-lkp@intel.com>
-Date:   Mon, 10 Oct 2022 11:57:11 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "kernel test robot" <lkp@intel.com>,
-        "Krzysztof Kozlowski" <krzk@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, "Mark Brown" <broonie@kernel.org>,
-        "Charles Keepax" <ckeepax@opensource.cirrus.com>
-Subject: Re: sound/soc/codecs/lochnagar-sc.c:247:34: warning: unused variable
- 'lochnagar_of_match'
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 10 Oct 2022 05:59:32 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669A75F226
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 02:59:30 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id q12-20020a5d834c000000b006bc2cb1994aso1113160ior.15
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 02:59:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sVvRetvU66viZg03zt42J481swUWQOVgkFgrLPfYY/8=;
+        b=vwVuusa48Bf00hkH8KIzio+6GNm/I4NSa57Jq3pxpq3Z3/46elAGtvRhb4Z2oPv84K
+         r1zp9HX6zMZGih8L/YwqSZKlpQmqUo0qZh8stvoFA/H5aWK8ZeqI4D8yYwwAf8E3hQHQ
+         XOg8pXR2akAmatVbNca6pV7TtILetI3A9oXnIgDYZAcT3d6KtHu8J8QjekLUWm5ZZ7Vw
+         5I+vbi8JEPirSYFLjEKpDffbCp1BKvy6IubCC2g3hWqNN9KSkZ+309Xwjm6kj1qMnUvf
+         p7IYVPsLG0OV5xar7zZ6Ef87WaS62pGlm+B6/6nJsOILngCOiPjw9MKV7DPMh2JNaF1k
+         C+aw==
+X-Gm-Message-State: ACrzQf34VHXIMX+wG1xS2g/3xuC0NrYdyiUSdtuueJorL0UPtX1UlvNC
+        EGAT89Yy3TAu9Q3FDZJgl9QOUB9WWT/cXH9G5zMIjbC57n33
+X-Google-Smtp-Source: AMsMyM4yrhDnAJ+RQ4M/4ccm9QtbXKSwTqDl6yjCMHTveuHcHQ+jdCXpVDG7RmOV5kTWEmw7usIes59PTlTl8S9qk3pZnc2CJ3k0
+MIME-Version: 1.0
+X-Received: by 2002:a05:6602:c9:b0:6a1:4e25:8b0b with SMTP id
+ z9-20020a05660200c900b006a14e258b0bmr8074876ioe.188.1665395969843; Mon, 10
+ Oct 2022 02:59:29 -0700 (PDT)
+Date:   Mon, 10 Oct 2022 02:59:29 -0700
+In-Reply-To: <000000000000b960c00594598949@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003166d005eaab3790@google.com>
+Subject: Re: KASAN: use-after-free Read in tc_chain_fill_node
+From:   syzbot <syzbot+5f229e48cccc804062c0@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, gregkh@linuxfoundation.org, jiri@mellanox.com,
+        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        stable-commits@vger.kernel.org, stable@vger.kernel.org,
+        syzkaller-lts-bugs@googlegroups.com, vladbu@mellanox.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022, at 10:45 AM, kernel test robot wrote:
->
-> tree:   
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 
-> master
-> head:   493ffd6605b2d3d4dc7008ab927dba319f36671f
-> commit: 5b7f4e5de61ba8c44317718936864da29eeba62a ASoC: codecs: allow 
-> compile testing without MFD drivers
->
->>> sound/soc/codecs/lochnagar-sc.c:247:34: warning: unused variable 'lochnagar_of_match' [-Wunused-const-variable]
->    static const struct of_device_id lochnagar_of_match[] = {
-
-The 'of_match_ptr()' macro usage should be removed here, since
-the array is defined unconditionally:
-
---- a/sound/soc/codecs/lochnagar-sc.c
-+++ b/sound/soc/codecs/lochnagar-sc.c
-@@ -253,7 +253,7 @@ MODULE_DEVICE_TABLE(of, lochnagar_of_match);
- static struct platform_driver lochnagar_sc_codec_driver = {
-        .driver = {
-                .name = "lochnagar-soundcard",
--               .of_match_table = of_match_ptr(lochnagar_of_match),
-+               .of_match_table = lochnagar_of_match,
-        },
- 
-        .probe = lochnagar_sc_probe,
-
-
-
-    Arnd
+This bug is marked as fixed by commit:
+net: core: netlink: add helper refcount dec and lock function
+net: sched: add helper function to take reference to Qdisc
+net: sched: extend Qdisc with rcu
+net: sched: rename qdisc_destroy() to qdisc_put()
+net: sched: use Qdisc rcu API instead of relying on rtnl lock
+But I can't find it in any tested tree for more than 90 days.
+Is it a correct commit? Please update it by replying:
+#syz fix: exact-commit-title
+Until then the bug is still considered open and
+new crashes with the same signature are ignored.
