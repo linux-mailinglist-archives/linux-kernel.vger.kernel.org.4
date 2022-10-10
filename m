@@ -2,111 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850DB5F98A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 08:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7FF5F98A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 08:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbiJJGyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 02:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50302 "EHLO
+        id S230367AbiJJGy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 02:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231435AbiJJGx6 (ORCPT
+        with ESMTP id S230508AbiJJGyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 02:53:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15DFE5D;
-        Sun,  9 Oct 2022 23:53:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 705E960E06;
-        Mon, 10 Oct 2022 06:53:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ADBFC433D6;
-        Mon, 10 Oct 2022 06:53:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665384835;
-        bh=tr01/efgaCaoUSBggOvZZJW7MCJvMC5iJrs/iNEFtts=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cZwsLoe9mf5z5Az/uf0pnC0/JteRNDhDvYBrsO0CFaqLemKErkQhKenUdaJaMPC2i
-         1MOvm5almu+nMzHdyX7W+IwIIO4d+4lgA4UJR4ist3TjS8TstEF4wc7xUu94IxNyk0
-         lRH9y7bUftBGdh4fkLq+ryA72Ihq29tOnlhi5XWtZRMqRmJQUIfyim3JOk+hAmIf1h
-         RudrlUQJsx3JeLNdjhMay1qnfBZeMbRmrMdU5PTiGOkH69vK3gg1ANnjVheY7x50x2
-         si3AOpFNNDpTnsNITPXhSpm8jUOe91vPUJsBBNet2k4NSrCjG77ZcIg51uW1mt+AS4
-         mLby1v7qdawRw==
-Date:   Mon, 10 Oct 2022 08:53:52 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 2/5] arm64: dts: renesas: rzg2lc-smarc-som: Drop enabling
- WDT2
-Message-ID: <Y0PBgP3fq6jJYKyk@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20221009230044.10961-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221009230044.10961-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Mon, 10 Oct 2022 02:54:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5542BE5D
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 23:54:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665384848;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Pg5G9VL5CpW466Qb5kzC3fS+GraPCe+CdwnleWArycc=;
+        b=PxqPPj6WRP4DACQ8tvnw2PYYjSoCKyuLHpkaU4f7Vuddu1GfYlbPcodz3czGEZ08T7NxRJ
+        mxLmzwj8Q4Z8Gkb56uwQdUKkOe6W/C0FDqApEq05bGEHJDQvEuMfek7ckKsryWzxPdsP0l
+        CuKdUewKnvy2Snj6y4QM2pd1Ef7ODRk=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-436-1Bf1vX7QN6WnlYmLnK9pHQ-1; Mon, 10 Oct 2022 02:54:06 -0400
+X-MC-Unique: 1Bf1vX7QN6WnlYmLnK9pHQ-1
+Received: by mail-wm1-f71.google.com with SMTP id d5-20020a05600c34c500b003b4fb42ccdeso8536259wmq.8
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 23:54:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Pg5G9VL5CpW466Qb5kzC3fS+GraPCe+CdwnleWArycc=;
+        b=gC9SrNz0cqO0FPOMKQJzOznFGRDZg3xNw20NdP9v1AFPnZA6MpWNuwsUgApalVLSbL
+         qI/3YtiQe+VOYqGjclVW0yKwq1+SPb61leV3IHnvPRgFZVOj2ZsWC8zLrlslgcWRD5ot
+         x7/dQBVoLl9Jd4DV/wFcVrD1Lx0XaOULrSpnKzibZOmtVxxSpXfsYec9NwA8ux+efCBT
+         v/vSdApESJC3xb/9OeNLUL7L1FPCD85rCGm1fwLf+rxhTVVO2AFmn5F170IsR6rZdo+N
+         bHDFIclr0FY11afy39L8faN6HGkcoDWLQMi4r9HYrBUVEGtIrcXAt+TCQ6PHSZaQVTXt
+         1PgA==
+X-Gm-Message-State: ACrzQf0U0SE00EPMmyyFotLkMipP/KZgnQDCSYbb+ZEHtlLrKA0B5hBY
+        SL6VH281fdHENXfsBxsZTrEvfEp2F5MAQ18GSsjNymNYCGOOVso9EzBBvFXBxR6ky0oqRDQHxmr
+        eQ4u4g95mIW7B+SGIWD9GfZ8V
+X-Received: by 2002:a05:600c:4186:b0:3b4:a660:1d29 with SMTP id p6-20020a05600c418600b003b4a6601d29mr18631481wmh.120.1665384845741;
+        Sun, 09 Oct 2022 23:54:05 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7V2dlW9YbkCCzqACXYKambIlk713mlq6z7oXm6nZyP2WjnrSh/2V7hTzCymmXg6z+PUAe1lg==
+X-Received: by 2002:a05:600c:4186:b0:3b4:a660:1d29 with SMTP id p6-20020a05600c418600b003b4a6601d29mr18631464wmh.120.1665384845488;
+        Sun, 09 Oct 2022 23:54:05 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:e600:3a4a:f000:b085:4839? (p200300cbc704e6003a4af000b0854839.dip0.t-ipconnect.de. [2003:cb:c704:e600:3a4a:f000:b085:4839])
+        by smtp.gmail.com with ESMTPSA id j5-20020a05600c1c0500b003b477532e66sm35460629wms.2.2022.10.09.23.54.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Oct 2022 23:54:05 -0700 (PDT)
+Message-ID: <b0ae9fcc-7e2b-dae9-30be-4b6ee248bf97@redhat.com>
+Date:   Mon, 10 Oct 2022 08:54:03 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="J1Yl7VJUe5ZsivnH"
-Content-Disposition: inline
-In-Reply-To: <20221009230044.10961-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH -next v5 2/4] selftests/memory-hotplug: Restore memory
+ before exit
+Content-Language: en-US
+To:     zhaogongyi <zhaogongyi@huawei.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Cc:     "akinobu.mita@gmail.com" <akinobu.mita@gmail.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "osalvador@suse.de" <osalvador@suse.de>,
+        "shuah@kernel.org" <shuah@kernel.org>
+References: <f83730eec0b1445fa92d4cf0397d886b@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <f83730eec0b1445fa92d4cf0397d886b@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 08.10.22 03:40, zhaogongyi wrote:
+> Hi!
+> 
+>>
+>> On 30.09.22 10:52, zhaogongyi wrote:
+>>> Hi!
+>>>
+>>>>
+>>>> On 30.09.22 08:35, Zhao Gongyi wrote:
+>>>>> Some momory will be left in offline state when calling
+>>>>> offline_memory_expect_fail() failed. Restore it before exit.
+>>>>>
+>>>>> Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
+>>>>> ---
+>>>>>     .../memory-hotplug/mem-on-off-test.sh         | 21
+>>>> ++++++++++++++-----
+>>>>>     1 file changed, 16 insertions(+), 5 deletions(-)
+>>>>>
+>>>>> diff --git a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
+>>>> b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
+>>>>> index 1d87611a7d52..91a7457616bb 100755
+>>>>> --- a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
+>>>>> +++ b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
+>>>>> @@ -134,6 +134,16 @@ offline_memory_expect_fail()
+>>>>>     	return 0
+>>>>>     }
+>>>>>
+>>>>> +online_all_offline_memory()
+>>>>> +{
+>>>>> +	for memory in `hotpluggable_offline_memory`; do
+>>>>> +		if ! online_memory_expect_success $memory; then
+>>>>> +			echo "$FUNCNAME $memory: unexpected fail" >&2
+>>>>
+>>>> Do we need that output?
+>>>
+>>> In my opinion, if online a memory node failed ,it should be a kernel bug
+>> catched, so, I think the output here is needed.
+>>
+>> But online_memory_expect_success() already prints a warning, no?
+> 
+> Yes, online_memory_expect_success() already prints a warning, remove the warning in online_all_offline_memory() seems ok,
+> 
+> My previous consideration was that one more log information would make it easier to locate the wrong location.
 
---J1Yl7VJUe5ZsivnH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Let's keep it simple unless there is real reason to warn twice.
 
-On Mon, Oct 10, 2022 at 12:00:41AM +0100, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->=20
-> WDT CH2 is specifically to check the operation of Cortex-M33 CPU and if
-> used from CA55 CPU would result in an unexpected behaviour. Hence drop
-> enabling WDT2.
->=20
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+-- 
+Thanks,
 
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+David / dhildenb
 
-
---J1Yl7VJUe5ZsivnH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNDwYAACgkQFA3kzBSg
-KbYPOw//doJaSfvlyaJIrPGSEiYiUnQRw+jDwsR7jcpEcgjrboMPeW0KbalvyuhV
-CHw3om/9jjjUE7+1N5lfnI5S+azgwFSP4V9WVjD/teMZtlJkw3wnFnK6FP4JQ3E7
-u8/+b5kUZdB1PG5CWeUa9okU8AxmAVUrF57Osm5RjfULldXe9J4qLjgnPt84aroE
-FM9h0JUlPYnCZplRWcG8L3lWnpdi/+Ot3t5t8cT29CgyPkE9nNBNX8CU3lJ2Mhwx
-GvFYKMATFJ4gGPoQTH/HUE9P4R/OUfEbHHpoFQQgISrCWi71wiprgq+4EXZe5vLg
-cjFIi69mowHBdBUyZkhyJErg9onhKcHJ/s1c4Aomm0/shX2nQnBlXN3hcyNnA0g8
-MvJ6ZK383TKIZz09AITWKNlgH8YVOywO1oHodD3EfEul0URvN6+Z63El/5cFSR9i
-iWLSd+QUzf7Lb9xiAzeUH1Xq/7WH3mOoNxeQuUMpkMrE6DLU5Pmf1ZaUqvyjx+2m
-s3OxQzYxOvbM16OpsOXlFKvdLnoO8GTyT569dDZ2zWwEgpprQEIqxMUGqzc9LQsK
-SMqub5UmX4a8n+SJDP4emSUZoKMyQvCmNQJntRji6NpRU3aVfEEu+mW6Up83iZRl
-1vz1JvpDmJkkFqM6uaPezJcxFcTNV8FZGv2tSgA9AugmgW+Hr24=
-=FVuz
------END PGP SIGNATURE-----
-
---J1Yl7VJUe5ZsivnH--
