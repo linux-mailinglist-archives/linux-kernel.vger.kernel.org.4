@@ -2,213 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB73E5F9C9F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 12:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2673B5F9CB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 12:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231381AbiJJKWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 06:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45162 "EHLO
+        id S231904AbiJJKXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 06:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiJJKWQ (ORCPT
+        with ESMTP id S231886AbiJJKXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 06:22:16 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C947352810
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 03:22:14 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id d24so8481963ljl.9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 03:22:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/7OEKRydiYl1hqZojelyfNN7OBVdX2Lk2P+2dBRiKA8=;
-        b=Vi8lwV/z6WXHeWKghQLWqjIS1aFWbDjlFJKF2u+tSYPo4hHKfambgDeyjc1psW+o7f
-         Lh5d4N4EZ/ALGEVzrzIYSlNt8lCs4S8J+lTTw/KlIurUDFT0uquQcaeEZPTLNp+zXSVT
-         aHmmH8OVpRrht5+V0GQJ8k/h7F00LhpztYLrey4Ccun3fl83rMIN8PyVhPuDP6eHNTqr
-         YQPLxtkFu87ojWDjOM8DfqMhXU+PByVQl65yUjzLWTRCS5HQd8KYC/htS6mdbk6Umv6a
-         qief0mTUr/SXyISjCt/qk9Vk5AAD/0DjOXDJ0oTsY9Oi0OmhbqxyZyI5C9SS413woeP1
-         pdHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/7OEKRydiYl1hqZojelyfNN7OBVdX2Lk2P+2dBRiKA8=;
-        b=DNQrt74Qseg1SJi4AcMw8jCoaP99nPXD+LSF/7fQxlCu+wdkcFa7OKedbHb1sfx9hP
-         wGORF0qU/M3Jh5npuhBmIc0J0SjZQFGI9SQ3nHAPlvrCOWdrKxjSbUVkppx7wMUXbFCO
-         DbL0RHItxx7sDBQwpyNycyLQ02iM/aaevUuAJuGZdYDmWzPb2HZIzU/koYEBfRDf84yn
-         l0Cn9j1YOaHX1XmfZ8nvkYXAVMLdQJsHqTKMQHnQ9pko5mO1Ajk+X81wkYvXrIVOLjJt
-         1kHERYJl77/czCvZ+NRRj5uOdpnnmN97dZB4XdUkIpZqOKhWfIyGgmItwK3rS5zyqZqS
-         v67w==
-X-Gm-Message-State: ACrzQf2O3ImqOrnZIfFAT98eacdoH/VxweA4JRuDqGoloAh6bn7UMZey
-        7w+PDgVhOw9TlLRE0DH0cTpyQLxCw2ZvMAet+ApecpRjSYs=
-X-Google-Smtp-Source: AMsMyM6bzxaqr6pjg9eNUIe7WlwnJuuxCYXBkBMbvvRrWf1XSHgscttll+17nChy0fhYg6/avGhFyd/a6ZZo/xqMnIg=
-X-Received: by 2002:a2e:7204:0:b0:26f:a7c8:d75 with SMTP id
- n4-20020a2e7204000000b0026fa7c80d75mr1387185ljc.383.1665397333076; Mon, 10
- Oct 2022 03:22:13 -0700 (PDT)
+        Mon, 10 Oct 2022 06:23:47 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78B852E76;
+        Mon, 10 Oct 2022 03:23:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=PwC8Ko8ExloPOXLLOvDYQPBx8XQllNZ4yCha6ElpxdQ=; b=UePuHnVsJtFRhZgctGBQoYPgOV
+        RciNxCEgZnd32TL1YJC6DBwI9vKLnBA9U8XGrOYLaNbuzIYNqCIYh3AYV4/wnxActoxvXS3cLhK0P
+        QNSYgKSNtsIu9wh0M64ol6REId3RcuPGLj1QDka1ndjJgDTncRLv5uz8S7eXR+QJEC0WfSYP1Rvbf
+        RQldgMUm0NucL9j4hwmgQvHWoDWjAGHvADY/3MYGQtKOBufGM/YgurPKans6xIMamHhCQ4XluXZ80
+        4sYWVooCiNyi6vHJH4m5YpnqFFclbdlB28wSbrzou5cHNwvJ8QxmWL7HC2ZyAfKnLUixH+sFKg/fB
+        U3qXJSWA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ohpwH-002GBJ-Uc; Mon, 10 Oct 2022 10:23:14 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B50AB30045D;
+        Mon, 10 Oct 2022 12:23:12 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9E4C12022F86C; Mon, 10 Oct 2022 12:23:12 +0200 (CEST)
+Date:   Mon, 10 Oct 2022 12:23:12 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
+        eranian@google.com, ak@linux.intel.com, mark.rutland@arm.com,
+        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
+        will@kernel.org, robh@kernel.org, mingo@redhat.com,
+        catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
+        santosh.shukla@amd.com
+Subject: Re: [PATCH] perf: Rewrite core context handling
+Message-ID: <Y0PykAbq/SLjUqhO@hirez.programming.kicks-ass.net>
+References: <20220829113347.295-1-ravi.bangoria@amd.com>
+ <9d7a9f37-f037-00b8-afd3-72bb840a90df@amd.com>
 MIME-Version: 1.0
-References: <20220930094821.31665-1-lukasz.luba@arm.com> <20220930094821.31665-2-lukasz.luba@arm.com>
- <20221010053902.5rofnpzvyynumw3e@vireshk-i7> <3f9a4123-171b-5fa7-f506-341355f71483@arm.com>
- <CAKfTPtBPqcTm5_-M_Ka3y46yQ2322TmH8KS-QyDbAiKk5B6hEQ@mail.gmail.com>
- <8a7968c2-dbf7-5316-ef36-6d45143e0605@arm.com> <CAKfTPtB3Lk5bc9k634O+Yi8wwP=MVeKS5NPbpaqwhX1F4t5EbA@mail.gmail.com>
- <9611971c-d8dd-7877-6f50-c5afbf38b171@arm.com>
-In-Reply-To: <9611971c-d8dd-7877-6f50-c5afbf38b171@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 10 Oct 2022 12:22:01 +0200
-Message-ID: <CAKfTPtBvs-nWKipwXfMDpg+W4Ui1L4HNUXUpmHgm=qxPLFSMfQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] cpufreq: Update CPU capacity reduction in store_scaling_max_freq()
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        linux-pm@vger.kernel.org, Dietmar.Eggemann@arm.com,
-        peterz@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9d7a9f37-f037-00b8-afd3-72bb840a90df@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Oct 2022 at 12:12, Lukasz Luba <lukasz.luba@arm.com> wrote:
->
->
->
-> On 10/10/22 10:32, Vincent Guittot wrote:
-> > On Mon, 10 Oct 2022 at 11:30, Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >>
-> >>
-> >>
-> >> On 10/10/22 10:15, Vincent Guittot wrote:
-> >>> On Mon, 10 Oct 2022 at 11:02, Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >>>>
-> >>>>
-> >>>>
-> >>>> On 10/10/22 06:39, Viresh Kumar wrote:
-> >>>>> Would be good to always CC Scheduler maintainers for such a patch.
-> >>>>
-> >>>> Agree, I'll do that.
-> >>>>
-> >>>>>
-> >>>>> On 30-09-22, 10:48, Lukasz Luba wrote:
-> >>>>>> When the new max frequency value is stored, the task scheduler must
-> >>>>>> know about it. The scheduler uses the CPUs capacity information in the
-> >>>>>> task placement. Use the existing mechanism which provides information
-> >>>>>> about reduced CPU capacity to the scheduler due to thermal capping.
-> >>>>>>
-> >>>>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> >>>>>> ---
-> >>>>>>     drivers/cpufreq/cpufreq.c | 18 +++++++++++++++++-
-> >>>>>>     1 file changed, 17 insertions(+), 1 deletion(-)
-> >>>>>>
-> >>>>>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> >>>>>> index 1f8b93f42c76..205d9ea9c023 100644
-> >>>>>> --- a/drivers/cpufreq/cpufreq.c
-> >>>>>> +++ b/drivers/cpufreq/cpufreq.c
-> >>>>>> @@ -27,6 +27,7 @@
-> >>>>>>     #include <linux/slab.h>
-> >>>>>>     #include <linux/suspend.h>
-> >>>>>>     #include <linux/syscore_ops.h>
-> >>>>>> +#include <linux/thermal.h>
-> >>>>>>     #include <linux/tick.h>
-> >>>>>>     #include <linux/units.h>
-> >>>>>>     #include <trace/events/power.h>
-> >>>>>> @@ -718,6 +719,8 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
-> >>>>>>     static ssize_t store_scaling_max_freq
-> >>>>>>     (struct cpufreq_policy *policy, const char *buf, size_t count)
-> >>>>>>     {
-> >>>>>> +    unsigned int frequency;
-> >>>>>> +    struct cpumask *cpus;
-> >>>>>>        unsigned long val;
-> >>>>>>        int ret;
-> >>>>>>
-> >>>>>> @@ -726,7 +729,20 @@ static ssize_t store_scaling_max_freq
-> >>>>>>                return -EINVAL;
-> >>>>>>
-> >>>>>>        ret = freq_qos_update_request(policy->max_freq_req, val);
-> >>>>>> -    return ret >= 0 ? count : ret;
-> >>>>>> +    if (ret >= 0) {
-> >>>>>> +            /*
-> >>>>>> +             * Make sure that the task scheduler sees these CPUs
-> >>>>>> +             * capacity reduction. Use the thermal pressure mechanism
-> >>>>>> +             * to propagate this information to the scheduler.
-> >>>>>> +             */
-> >>>>>> +            cpus = policy->related_cpus;
-> >>>>>
-> >>>>> No need of this, just use related_cpus directly.
-> >>>>>
-> >>>>>> +            frequency = __resolve_freq(policy, val, CPUFREQ_RELATION_HE);
-> >>>>>> +            arch_update_thermal_pressure(cpus, frequency);
-> >>>>>
-> >>>>> I wonder if using the thermal-pressure API here is the right thing to
-> >>>>> do. It is a change coming from User, which may or may not be
-> >>>>> thermal-related.
-> >>>>
-> >>>> Yes, I thought the same. Thermal-pressure name might be not the
-> >>>> best for covering this use case. I have been thinking about this
-> >>>> thermal pressure mechanism for a while, since there are other
-> >>>> use cases like PowerCap DTPM which also reduces CPU capacity
-> >>>> because of power policy from user-space. We don't notify
-> >>>> the scheduler about it. There might be also an issue with virtual
-> >>>> guest OS and how that kernel 'sees' the capacity of CPUs.
-> >>>> We might try to use this 'thermal-pressure' in the guest kernel
-> >>>> to notify about available CPU capacity (just a proposal, not
-> >>>> even an RFC, since we are missing requirements, but issues where
-> >>>> discussed on LPC 2022 on ChromeOS+Android_guest)
-> >>>
-> >>> The User space setting scaling_max_freq is a long scale event and it
-> >>> should be considered as a new running environnement instead of a
-> >>> transient event. I would suggest updating the EM is and capacity orig
-> >>> of the system in this case. Similarly, we rebuild sched_domain with a
-> >>> cpu hotplug. scaling_max_freq interface should not be used to do any
-> >>> kind of dynamic scaling.
-> >>
-> >> I tend to agree, but the EM capacity would be only used in part of EAS
-> >> code. The whole fair.c view to the capacity_of() (RT + DL + irq +
-> >> thermal_pressure) would be still wrong in other parts, e.g.
-> >> select_idle_sibling() and load balance.
-> >>
-> >> When we get this powerhint we might be already in overutilied state
-> >> so EAS is disabled. IMO other mechanisms in the task scheduler
-> >> should be also aware of that capacity reduction.
-> >
-> > That's why I also mentioned the capacity_orig
->
-> Well, I think this is a bit more complex. Thermal framework governor
-> reduces the perf IDs from top in the freq asc table and keeps that
-> in the statistics in sysfs. It also updates the thermal pressure signal.
-> When we rebuild the capacity of CPUs and make the capacity_orig smaller,
-> the capacity_of would still have the thermal framework reduced capacity
-> in there. We would end up with too small CPU capacity due to this
-> subtraction in capacity_of.
+On Tue, Sep 06, 2022 at 11:20:53AM +0530, Ravi Bangoria wrote:
 
-That's why using user space interface should not be used to do dynamic scaling.
-I still think that user space interface is not the right interface
+> This one was simple enough so I prepared a patch for this. Let
+> me know if you see any issues with below diff.
 
->
-> Ideally, I would see a mechanism which is aware of this performance
-> reduction reason:
-> 1. thermal capping
-> 2. power capping (from DTPM)
-> 3. max freq reduction by user space
+I've extraed this as a separate patch since it's not strictly required
+for correctness and the patch is a quite large enough.
 
-Yes for thermal and power capping  but no for user space
-
->
-> That common place would figure and maintain the context for the
-> requested capacity reduction.
->
-> BTW, those Android user space max freq requests are not that long,
-> mostly due to camera capturing (you can see a few in this file,
-> e.g. [1]).
-
-Why are they doing this ?
-This doesn't seem to be the correct interface to use. It seems to do
-some power budget and they should use the right interface for this
-
->
->
-> [1]
-> https://android.googlesource.com/device/google/gs101/+/refs/heads/android12-qpr1-d-release/powerhint.json#441
+> ---
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index 820c56c66b26..e0232e0bb74e 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -9807,6 +9807,44 @@ static struct pmu perf_swevent = {
+>  
+>  #ifdef CONFIG_EVENT_TRACING
+>  
+> +static void tp_perf_event_destroy(struct perf_event *event)
+> +{
+> +	perf_trace_destroy(event);
+> +}
+> +
+> +static int perf_tp_event_init(struct perf_event *event)
+> +{
+> +	int err;
+> +
+> +	if (event->attr.type != PERF_TYPE_TRACEPOINT)
+> +		return -ENOENT;
+> +
+> +	/*
+> +	 * no branch sampling for tracepoint events
+> +	 */
+> +	if (has_branch_stack(event))
+> +		return -EOPNOTSUPP;
+> +
+> +	err = perf_trace_init(event);
+> +	if (err)
+> +		return err;
+> +
+> +	event->destroy = tp_perf_event_destroy;
+> +
+> +	return 0;
+> +}
+> +
+> +static struct pmu perf_tracepoint = {
+> +	.task_ctx_nr	= perf_sw_context,
+> +
+> +	.event_init	= perf_tp_event_init,
+> +	.add		= perf_trace_add,
+> +	.del		= perf_trace_del,
+> +	.start		= perf_swevent_start,
+> +	.stop		= perf_swevent_stop,
+> +	.read		= perf_swevent_read,
+> +};
+> +
+>  static int perf_tp_filter_match(struct perf_event *event,
+>  				struct perf_sample_data *data)
+>  {
+> @@ -9856,6 +9894,49 @@ void perf_trace_run_bpf_submit(void *raw_data, int size, int rctx,
+>  }
+>  EXPORT_SYMBOL_GPL(perf_trace_run_bpf_submit);
+>  
+> +
+> +static void __perf_tp_event_target_task(u64 count, void *record,
+> +					struct pt_regs *regs,
+> +					struct perf_sample_data *data,
+> +					struct perf_event *event)
+> +{
+> +	struct trace_entry *entry = record;
+> +
+> +	if (event->attr.config != entry->type)
+> +		return;
+> +	/* Cannot deliver synchronous signal to other task. */
+> +	if (event->attr.sigtrap)
+> +		return;
+> +	if (perf_tp_event_match(event, data, regs))
+> +		perf_swevent_event(event, count, data, regs);
+> +}
+> +
+> +static void perf_tp_event_target_task(u64 count, void *record,
+> +				      struct pt_regs *regs,
+> +				      struct perf_sample_data *data,
+> +				      struct perf_event_context *ctx)
+> +{
+> +	struct perf_event *event, *sibling;
+> +
+> +	event = perf_event_groups_first(&ctx->pinned_groups, smp_processor_id(),
+> +					&perf_tracepoint, NULL);
+> +	for (; event; event = perf_event_groups_next(event, &perf_tracepoint)) {
+> +		__perf_tp_event_target_task(count, record, regs, data, event);
+> +		for_each_sibling_event(sibling, event) {
+> +			__perf_tp_event_target_task(count, record, regs, data, sibling);
+> +		}
+> +	}
+> +
+> +	event = perf_event_groups_first(&ctx->flexible_groups, smp_processor_id(),
+> +					&perf_tracepoint, NULL);
+> +	for (; event; event = perf_event_groups_next(event, &perf_tracepoint)) {
+> +		__perf_tp_event_target_task(count, record, regs, data, event);
+> +		for_each_sibling_event(sibling, event) {
+> +			__perf_tp_event_target_task(count, record, regs, data, sibling);
+> +		}
+> +	}
+> +}
+> +
+>  void perf_tp_event(u16 event_type, u64 count, void *record, int entry_size,
+>  		   struct pt_regs *regs, struct hlist_head *head, int rctx,
+>  		   struct task_struct *task)
+> @@ -9886,29 +9967,15 @@ void perf_tp_event(u16 event_type, u64 count, void *record, int entry_size,
+>  	 */
+>  	if (task && task != current) {
+>  		struct perf_event_context *ctx;
+> -		struct trace_entry *entry = record;
+>  
+>  		rcu_read_lock();
+>  		ctx = rcu_dereference(task->perf_event_ctxp);
+>  		if (!ctx)
+>  			goto unlock;
+>  
+> -		// XXX iterate groups instead, we should be able to
+> -		// find the subtree for the perf_tracepoint pmu and CPU.
+> -
+> -		list_for_each_entry_rcu(event, &ctx->event_list, event_entry) {
+> -			if (event->cpu != smp_processor_id())
+> -				continue;
+> -			if (event->attr.type != PERF_TYPE_TRACEPOINT)
+> -				continue;
+> -			if (event->attr.config != entry->type)
+> -				continue;
+> -			/* Cannot deliver synchronous signal to other task. */
+> -			if (event->attr.sigtrap)
+> -				continue;
+> -			if (perf_tp_event_match(event, &data, regs))
+> -				perf_swevent_event(event, count, &data, regs);
+> -		}
+> +		raw_spin_lock(&ctx->lock);
+> +		perf_tp_event_target_task(count, record, regs, &data, ctx);
+> +		raw_spin_unlock(&ctx->lock);
+>  unlock:
+>  		rcu_read_unlock();
+>  	}
+> @@ -9917,44 +9984,6 @@ void perf_tp_event(u16 event_type, u64 count, void *record, int entry_size,
+>  }
+>  EXPORT_SYMBOL_GPL(perf_tp_event);
+>  
+> -static void tp_perf_event_destroy(struct perf_event *event)
+> -{
+> -	perf_trace_destroy(event);
+> -}
+> -
+> -static int perf_tp_event_init(struct perf_event *event)
+> -{
+> -	int err;
+> -
+> -	if (event->attr.type != PERF_TYPE_TRACEPOINT)
+> -		return -ENOENT;
+> -
+> -	/*
+> -	 * no branch sampling for tracepoint events
+> -	 */
+> -	if (has_branch_stack(event))
+> -		return -EOPNOTSUPP;
+> -
+> -	err = perf_trace_init(event);
+> -	if (err)
+> -		return err;
+> -
+> -	event->destroy = tp_perf_event_destroy;
+> -
+> -	return 0;
+> -}
+> -
+> -static struct pmu perf_tracepoint = {
+> -	.task_ctx_nr	= perf_sw_context,
+> -
+> -	.event_init	= perf_tp_event_init,
+> -	.add		= perf_trace_add,
+> -	.del		= perf_trace_del,
+> -	.start		= perf_swevent_start,
+> -	.stop		= perf_swevent_stop,
+> -	.read		= perf_swevent_read,
+> -};
+> -
+>  #if defined(CONFIG_KPROBE_EVENTS) || defined(CONFIG_UPROBE_EVENTS)
+>  /*
+>   * Flags in config, used by dynamic PMU kprobe and uprobe
+> 
+> ---
