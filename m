@@ -2,128 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA805F9B5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 10:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 360115F9B64
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 10:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbiJJItd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 04:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
+        id S231360AbiJJIvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 04:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbiJJIt3 (ORCPT
+        with ESMTP id S230127AbiJJIvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 04:49:29 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A60785EDE3;
-        Mon, 10 Oct 2022 01:49:28 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E73F106F;
-        Mon, 10 Oct 2022 01:49:34 -0700 (PDT)
-Received: from [10.57.5.39] (unknown [10.57.5.39])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 48B523F792;
-        Mon, 10 Oct 2022 01:49:27 -0700 (PDT)
-Message-ID: <2bc19b09-ea9b-46f6-dd11-27eadb7cd5da@arm.com>
-Date:   Mon, 10 Oct 2022 09:49:26 +0100
+        Mon, 10 Oct 2022 04:51:03 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8757C4DF20
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 01:51:02 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id C64F532005C1;
+        Mon, 10 Oct 2022 04:51:00 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 10 Oct 2022 04:51:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1665391860; x=1665478260; bh=F465zH3QC/
+        AbnVw6vk1lOdg6PlWTj/fhAYUsOOtabSo=; b=V3CyrMEXGFQc8Xc05yin7R5KnI
+        sKizRXnWMm2L4rbFdDyhhJQhF0trLKJo2g1hxkA3k8SLo+MEejGN0Yy362ULe1Ag
+        J8Kpxew+ONtKrwUksKtT8aBHOs7L85m4OyPzYdBZczTeTAWQShwmRXAAhePLRjmE
+        mkrkMvtKl2wDLfmxjGiQrgiYQj0wJt7foO7afBXhZsVoMsdwNjWEiVIuds++gcuv
+        LgkTaKQ4kstrAaO3C8TTuPLpgixpgjcqOrHiEIjfXrb2a3q/fnDt5nLt0npVCSv3
+        dC45SFLwlkia/PWZLn7q1k+I508R+Z2NGSlu6anp7KDIJeXln4NtKwks2V4A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665391860; x=1665478260; bh=F465zH3QC/AbnVw6vk1lOdg6PlWT
+        j/fhAYUsOOtabSo=; b=n0SUXrJ+OHBSg04YiOa/xVQj5jjIn80uLRkcn1c/SZSC
+        qZvMjbx3NZ1yztxJCuESVa9Os/3HQtky3zH1NGEqce6QLmEaPYpBikX6+vQEf5dB
+        Htk1v4kPxx8kFArrIUFyg22ZfVzdUkV0wwUo+SHYAO0FpTqsA12W4BjaATfLpc+O
+        NN60AAmBBvpYB1DI7vRuGvk2egm9RGPRgaMWvSssCNrGpeCux6//SPEjmNutJtu4
+        /4XJTNoHCmtFdSkn+ptRl8wmd+xdbxHByAhY3OfHd5McgnFdrxAv6YAWon0393ZJ
+        K65QEjlficBzQEQuXH9FOTfu5ognrjJFvrI/Lf567g==
+X-ME-Sender: <xms:9NxDY6BbLy5mCOWeC6b1ej3HaXmZObqTegmSDihGdJNYIIvx3gzn5A>
+    <xme:9NxDY0jf8bXZU72JyzxBSg6T9vvkiK6jxyYnuapiSj1RA8v6vwatF2E68N1OaEpF7
+    FXTLGgHnj43B1lAyh0>
+X-ME-Received: <xmr:9NxDY9kZVwSEi6Fc2acRqDeT-sTszJe1Q1_bq_b8T37LHU3_3mhOEPzY5lOU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejgedgtdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
+    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:9NxDY4xjPmETpSe3kx2rP3pRKgRO5_VMnp5JLbzdddK1LNBy-yXOOA>
+    <xmx:9NxDY_TuU94A5Fos0y7Xw94qLYDlj9AKy1lOAxDqrUtkA1l8Pv1xYA>
+    <xmx:9NxDYzaSQnRZ2sEU5WQ9C7DMVtHn8PbYfprmfq-u1OWzgW6G6EvlBA>
+    <xmx:9NxDYwDoPrGVKuCz0eiBB6pWglgJtWi19EajeREjUB32IKAwzKekAA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 10 Oct 2022 04:50:59 -0400 (EDT)
+Date:   Mon, 10 Oct 2022 10:50:58 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Emma Anholt <emma@anholt.net>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: Re: [PATCH 0/2] drm/vc4: hdmi: Fixes for the RaspberryPi 0-3 stalls
+Message-ID: <20221010085058.dvf4o6tsr55kmw7f@houat>
+References: <20220929-rpi-pi3-unplugged-fixes-v1-0-cd22e962296c@cerno.tech>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] cpufreq: Change macro for store scaling min/max
- frequency
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org,
-        linux-pm@vger.kernel.org, Dietmar.Eggemann@arm.com
-References: <20220930094821.31665-1-lukasz.luba@arm.com>
- <20221010053614.zu2f3btjlh7woxbj@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20221010053614.zu2f3btjlh7woxbj@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bthjslvleo7iysnz"
+Content-Disposition: inline
+In-Reply-To: <20220929-rpi-pi3-unplugged-fixes-v1-0-cd22e962296c@cerno.tech>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Viresh,
 
+--bthjslvleo7iysnz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 10/10/22 06:36, Viresh Kumar wrote:
-> On 30-09-22, 10:48, Lukasz Luba wrote:
->> In order to prepare extension to the store_scaling_max_freq() remove
->> the macro and use two normal functions. The set value for max frequency
->> is important for the task scheduler.
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   drivers/cpufreq/cpufreq.c | 47 ++++++++++++++++++++++-----------------
->>   1 file changed, 27 insertions(+), 20 deletions(-)
->>
->> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->> index 69b3d61852ac..1f8b93f42c76 100644
->> --- a/drivers/cpufreq/cpufreq.c
->> +++ b/drivers/cpufreq/cpufreq.c
->> @@ -715,26 +715,33 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
->>   	return ret;
->>   }
->>   
->> -/*
->> - * cpufreq_per_cpu_attr_write() / store_##file_name() - sysfs write access
->> - */
->> -#define store_one(file_name, object)			\
->> -static ssize_t store_##file_name					\
->> -(struct cpufreq_policy *policy, const char *buf, size_t count)		\
->> -{									\
->> -	unsigned long val;						\
->> -	int ret;							\
->> -									\
->> -	ret = sscanf(buf, "%lu", &val);					\
->> -	if (ret != 1)							\
->> -		return -EINVAL;						\
->> -									\
->> -	ret = freq_qos_update_request(policy->object##_freq_req, val);\
->> -	return ret >= 0 ? count : ret;					\
->> -}
->> -
->> -store_one(scaling_min_freq, min);
->> -store_one(scaling_max_freq, max);
->> +static ssize_t store_scaling_max_freq
->> +(struct cpufreq_policy *policy, const char *buf, size_t count)
-> 
-> I thought we can't break right after function's name according to
-> kernel's coding guidelines. Did you run checkpatch on this ?
+Hi Mark, Stefan,
 
-The checkpatch didn't capture this, but you are right. I'll change this.
+On Thu, Sep 29, 2022 at 11:21:16AM +0200, Maxime Ripard wrote:
+> Here's a series addressing the current bug that has been reported for the
+> RaspberryPi3, where booting without an HDMI monitor attached and with vc4
+> compiled as a module will lead to a stuck system when the module is loade=
+d.
+>=20
+> This is due to the HSM clock not being initialized by anyone, and thus not
+> being functional once we start accessing the HDMI registers.
+>=20
+> The first patch will fix this, and the second will make sure we avoid that
+> situation entirely in the future. This has been tested with 5.19.12. Earl=
+ier
+> versions might need a backport of 88110a9f6209 ("clk: bcm2835: fix
+> bcm2835_clock_choose_div").
 
------------------------------------------------
-/tmp/cpufreq//0001-cpufreq-Change-macro-for-store-scaling-min-max-frequ.patch
-WARNING: Prefer kstrto<type> to single variable sscanf
-#49: FILE: drivers/cpufreq/cpufreq.c:724:
-+	ret = sscanf(buf, "%lu", &val);
+Could you test/review this?
 
-WARNING: Prefer kstrto<type> to single variable sscanf
-#63: FILE: drivers/cpufreq/cpufreq.c:738:
-+	ret = sscanf(buf, "%lu", &val);
+Thanks
+Maxime
 
-total: 0 errors, 2 warnings, 53 lines checked
+--bthjslvleo7iysnz
+Content-Type: application/pgp-signature; name="signature.asc"
 
-NOTE: For some of the reported defects, checkpatch may be able to
-       mechanically convert to the typical style using --fix or 
---fix-inplace.
+-----BEGIN PGP SIGNATURE-----
 
-/tmp/cpufreq//0001-cpufreq-Change-macro-for-store-scaling-min-max-frequ.patch 
-has style problems, please review.
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY0Pc8gAKCRDj7w1vZxhR
+xZn/AP94RF6lqgwflNPDMX8dl3wXFOH7iQb0gQWvAODp7AHGHgEA+m2fHtdGFiGn
+z3lHqKdgvIpoXD4XtywFBQLeLT5Z2gc=
+=KvOl
+-----END PGP SIGNATURE-----
 
-NOTE: If any of the errors are false positives, please report
-       them to the maintainer, see CHECKPATCH in MAINTAINERS.
-==============================================================
-/tmp/cpufreq//0002-cpufreq-Update-CPU-capacity-reduction-in-store_scali.patch
-total: 0 errors, 0 warnings, 36 lines checked
-
-/tmp/cpufreq//0002-cpufreq-Update-CPU-capacity-reduction-in-store_scali.patch 
-has no obvious style problems and is ready for submission.
-==============================================================
-
------------------------------------------------
+--bthjslvleo7iysnz--
