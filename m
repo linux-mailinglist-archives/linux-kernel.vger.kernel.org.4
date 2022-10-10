@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A5D5FA2E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C985FA2E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiJJRqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 13:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57358 "EHLO
+        id S229458AbiJJRrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 13:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiJJRqU (ORCPT
+        with ESMTP id S229484AbiJJRro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 13:46:20 -0400
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A5521241;
-        Mon, 10 Oct 2022 10:46:20 -0700 (PDT)
-Received: by mail-qv1-f54.google.com with SMTP id z18so7545966qvn.6;
-        Mon, 10 Oct 2022 10:46:19 -0700 (PDT)
+        Mon, 10 Oct 2022 13:47:44 -0400
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5343E69184;
+        Mon, 10 Oct 2022 10:47:43 -0700 (PDT)
+Received: by mail-qv1-f53.google.com with SMTP id i9so7576526qvo.0;
+        Mon, 10 Oct 2022 10:47:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=7C7u5e8Nz2IfRy9TOym9gQsgg5xXFj4Ow9Lf1Pj+L5I=;
-        b=qAwoHIY/e1VXUPeQWAKd9LOiyBgT+GXbZeoCCnuiLuidrz8FkQ39Gnp+M0lJPDstT1
-         3PwFisj9/dJfQna4L5eTbmc/Ghi/wkbpSZnGGCnPnndrIshQwKPpooOTcu/1K/OXhy9U
-         Mi4E3g1OWMiBABaN3rNpa3+4kXrjmVeDb4jvPm6iwIYTqnxis3c+wbuivUxydLqhn7VT
-         QWtmRNWne4WDgKNwrdyTriOKB9a6CrNpeeSdiX8WQfMMJ6/LDHw9rHOd7zbkPABkwrjc
-         pTmI78areaklDwGx0H4xqvPw/XCtifSHXpJVNmVdqhUODII2KPma8+r4kejVVpHrnEK+
-         DLSw==
-X-Gm-Message-State: ACrzQf0Qkq7R1paqClezhRzHzCg9+v7J+llsROtruYX9MAUcCbsto+zS
-        Ijw8+mO+BvrX79Pn/svL/35FvWTvw2BTjq1xu6N8l3pe6xE=
-X-Google-Smtp-Source: AMsMyM546pfja/b0CWkFvfxrzY7+i6/eLda8E521XucTawcATjGGbeRx9gorSH3nBCO0CuPTgGtTjCYfuIb7oqscoc4=
-X-Received: by 2002:a05:6214:f24:b0:4b3:efeb:d800 with SMTP id
- iw4-20020a0562140f2400b004b3efebd800mr7389878qvb.15.1665423979107; Mon, 10
- Oct 2022 10:46:19 -0700 (PDT)
+        bh=jv86Vf+p1vocEHP4ncmuBlZBjtxstd5HAmslvFY0pLg=;
+        b=yixWe+3cCe8KmtUEFfL/J7lJAfbYmd4xSGWfgV//8i/JiqMjilUOlkk+AZczIF1mal
+         RtBfmFNVCiQoHmEdlopyQPky9WqPk5lsDp3dVpphjWVd/KZ/Rx/fZDQSuJAsGqRWPX/o
+         hTcFj2P5CCxaThGs47d3LwLdqCumPNl0eav+dmd/HE4ckJ9p1ILMCgTQmZajuxx3zhgK
+         hlON1zM1WGFYMsj931Ssh8zsVmyw9MOAz0g9LfCpHbWf0UM4kAJrJIb8EuHtuilLhhm8
+         dNRVtqTbY0/AKDJ695dHA3lfXdZu1RXL7cLh+y7udZ5AzfLHeA/a43FWzYhOgQPbKKCF
+         hKbg==
+X-Gm-Message-State: ACrzQf2eIEcnhZGdV8vPvpGX5QPT+unJ1OhQAVYVB3Q2O6syTgZ+T+oA
+        1tXdkZKJPQnm6YyNucVGaCrYyKQ4FxtpUBujf1L9Ze41MLQ=
+X-Google-Smtp-Source: AMsMyM4ts/yrVkZ/rwo1rX5dF+U9YbdwmlS+g6Emy1R6Ka4W26Z9PtrVHLaHRvmePk+CdJhX0Jhu5QXzR4yU/x9b6dQ=
+X-Received: by 2002:ad4:5d48:0:b0:4b4:12a4:8a2f with SMTP id
+ jk8-20020ad45d48000000b004b412a48a2fmr3179433qvb.85.1665424062417; Mon, 10
+ Oct 2022 10:47:42 -0700 (PDT)
 MIME-Version: 1.0
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 10 Oct 2022 19:46:08 +0200
-Message-ID: <CAJZ5v0gMNxqYjxnWXweqAyc2BQgY0i0QKS60fm6CcYkRNdsh9A@mail.gmail.com>
-Subject: [GIT PULL] More power management updates for v6.1-rc1
+Date:   Mon, 10 Oct 2022 19:47:31 +0200
+Message-ID: <CAJZ5v0i_sK86N5i3sVRE1cdb7TgHOCGnMV5+5JuQewwwLBEp0Q@mail.gmail.com>
+Subject: [GIT PULL] Thermal control fixes for v6.1-rc1
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
@@ -58,63 +58,72 @@ Hi Linus,
 Please pull from the tag
 
  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.1-rc1-2
+ thermal-6.1-rc1-2
 
-with top-most commit f7e6b99f22f22f3630139aeaeecb83d77e47bf9b
+with top-most commit e021563fd09e1fd4041a6a573ec10fb5b5d275b0
 
- Merge branches 'pm-domains' and 'pm-core'
+ Merge tag 'thermal-v6.1-rc1-2' of
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux
 
-on top of commit c79e6fa98ca8628556a01fe277022bda64829fdf
+on top of commit a5088ee7251e5106a4efa9588a73866eb4b4154e
 
- Merge tag 'pm-6.1-rc1' of
+ Merge tag 'thermal-6.1-rc1' of
 git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
 
-to receive more power management updates for 6.1-rc1.
+to receive thermal control fixes for 6.1-rc1.
 
-These update the turbostat utility, extend the macros used for defining
-device power management callbacks and add a diagnostic message to the
-generic power domains code.
+These fix assorted issues in the thermal core and ARM thermal drivers.
 
 Specifics:
 
- - Add an error message to be printed when a power domain marked as
-   "always on" is not actually on during initialization (Johan Hovold).
+ - Use platform data to get the sensor ID instead of parsing the device
+   in imx_sc thermal driver and remove the dedicated OF function from
+   the core code (Daniel Lezcano).
 
- - Extend macros used for defining power management callbacks to allow
-   conditional exporting of noirq and late/early suspend/resume PM
-   callbacks (Paul Cercueil).
+ - Fix Kconfig dependency for the QCom tsens thermal driver (Jonathan
+   Cameron).
 
- - Update the turbostat utility:
-   * Add support for two new platforms (Zhang Rui).
-   * Adjust energy unit for Sapphire Rapids (Zhang Rui).
-   * Do not dump TRL if turbo is not supported (Artem Bityutskiy).
+ - Add missing const annotation to the RCar ops thermal driver (Lad
+   Prabhakar).
+
+ - Drop duplicate parameter check from
+   thermal_zone_device_register_with_trips() (Lad Prabhakar).
+
+ - Fix NULL pointer dereference in trip_point_temp_store() by making it
+   check if the ->set_trip_temp() operation is present (Lad Prabhakar).
+
+ - Fix the MSM8939 fourth sensor hardware ID in the QCom tsens thermal
+   driver (Vincent Knecht).
 
 Thanks!
 
 
 ---------------
 
-Artem Bityutskiy (1):
-      tools/power turbostat: Do not dump TRL if turbo is not supported
+Daniel Lezcano (2):
+      thermal/drivers/imx_sc: Rely on the platform data to get the resource id
+      thermal/of: Remove the thermal_zone_of_get_sensor_id() function
 
-Johan Hovold (1):
-      PM: domains: log failures to register always-on domains
+Jonathan Cameron (1):
+      thermal/drivers/qcom: Drop false build dependency of all QCOM
+drivers on QCOM_TSENS
 
-Len Brown (1):
-      tools/power turbostat: version 2022.10.04
+Lad Prabhakar (3):
+      thermal/drivers/rcar_thermal: Constify static thermal_zone_device_ops
+      thermal/core: Drop valid pointer check for type
+      thermal/core: Add a check before calling set_trip_temp()
 
-Paul Cercueil (1):
-      PM: Improve EXPORT_*_DEV_PM_OPS macros
-
-Zhang Rui (3):
-      tools/power turbostat: Add support for RPL-S
-      tools/power turbostat: Add support for MeteorLake platforms
-      tools/power turbostat: Use standard Energy Unit for SPR Dram RAPL domain
+Vincent Knecht (1):
+      thermal/drivers/qcom/tsens-v0_1: Fix MSM8939 fourth sensor hw_id
 
 ---------------
 
- drivers/base/power/domain.c           |  4 +++-
- include/linux/pm.h                    | 37 ++++++++++++++++++++++-------------
- include/linux/pm_runtime.h            | 20 +++++++++++--------
- tools/power/x86/turbostat/turbostat.c | 22 ++++++++++++++-------
- 4 files changed, 53 insertions(+), 30 deletions(-)
+ drivers/thermal/Makefile          |  2 +-
+ drivers/thermal/imx_sc_thermal.c  | 68 +++++++++++++++++++--------------------
+ drivers/thermal/qcom/tsens-v0_1.c |  2 +-
+ drivers/thermal/rcar_thermal.c    |  2 +-
+ drivers/thermal/thermal_core.c    |  2 +-
+ drivers/thermal/thermal_of.c      | 44 -------------------------
+ drivers/thermal/thermal_sysfs.c   |  8 +++--
+ include/linux/thermal.h           | 10 ------
+ 8 files changed, 42 insertions(+), 96 deletions(-)
