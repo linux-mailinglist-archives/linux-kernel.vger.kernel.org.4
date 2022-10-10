@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F505FA06D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CDA75FA06F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbiJJOr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 10:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46388 "EHLO
+        id S229919AbiJJOsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 10:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiJJOrw (ORCPT
+        with ESMTP id S229634AbiJJOrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 10:47:52 -0400
+        Mon, 10 Oct 2022 10:47:55 -0400
 Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F24647DE;
-        Mon, 10 Oct 2022 07:47:51 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 3ACA532007BE;
-        Mon, 10 Oct 2022 10:47:50 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F64871708;
+        Mon, 10 Oct 2022 07:47:54 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 4A5BD32008FE;
+        Mon, 10 Oct 2022 10:47:53 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 10 Oct 2022 10:47:50 -0400
+  by compute4.internal (MEProxy); Mon, 10 Oct 2022 10:47:53 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1665413268; x=
-        1665499668; bh=9sqFsZNNl51RhUWDFFlTZugs83JAbNTW+MguCcEIsH0=; b=R
-        wXAGvxeGYuGznb+t5u66uyzl7wfOu5fA7zC1AjsAejrvAM0nLM+zmT6G+qEvLctf
-        FQFeqFqo6w9GRs/gSyvT/WrP1gYQYZMV/PqjehqtrgyX2Dyu9UrE32fS84egV9UU
-        o0Kh6rAPOmzLthZIRaRC4DqYirWJo+WFyyxBjxgszEg/Ddp8MG1NHkB3jTd6TTUw
-        aQGn3jBAaM9yRNBX5zLxzepl6GurR3q1UL6acV9Q685QK6KcP4jMk2//dCBAYmfG
-        gPAP2g9UUcmJYWTwjup8QGoJF5fXDieWE63wQduPYkt4xHDxcqtkBHDmVdX3x2PO
-        WjQTtbAHVnRg3z7d8UvzQ==
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1665413272; x=
+        1665499672; bh=VYzEzYyl82dyfftA+WmV6ia0U2mNve7T+OIZKjpk+VI=; b=a
+        jXQKRMH7wE5HCdF56J1sigTi3wHAH6k5wPE/t2u30MKW781Hk0sHDAx72mtBC5tr
+        LLvGte/WUbbmSxQdCKkn+1O41POODy7Y50vS4JKpQcv/xhfNcsS0nbR2pseSdoJQ
+        jqqXioYeMfrBzn7W46KEeh/+r7L+WY0TlT1wb3vsDJ+ayHbfj1EqNH+jfyPDIffk
+        l4m01PLMSV+A6TXBwEjYZPSP1njavIRchEzljt9vXkN3ed/R9RaNZnfeOOmhdXHT
+        tLtTp7qSGgNw3MP/p8stPESEq7aT1bsVHd4WOeFbjk367+OXxstP+NK348olB1k/
+        uj2x3uWx4KWJnD37yP//A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1665413268; x=
-        1665499668; bh=9sqFsZNNl51RhUWDFFlTZugs83JAbNTW+MguCcEIsH0=; b=o
-        39NGHgyFpPHHvz3+Jx6udxEoub0JqoGQ8egJP4tZA3baYizTnoIPu4EaBWE9i2Uu
-        tDvOGk3rQPgyMR2XoMr2jLcWiGtW7KcGeiU+Aa+3O6PiFefC7jmxPfgEnSXUr4sC
-        wQT83nlsYVoGJ1+QJNaAFAJClWueiy9LI5myzvimDQVvjuXU/H7oIQkKwViiOJsL
-        LhqD4pWDgU8g/VbAr3dESz+Jd2gTOqQBmghxpGLmzUYEnFJxfK2I2p44+pKJCzhe
-        Nq8132pZ/7iZnPB7Z5Zurptcqjv10RVjH7sbUKaElAxphFRL9ZnwK1sJXe0Ol2h/
-        S093IMGTaa+ItMBLTyy7g==
-X-ME-Sender: <xms:lDBEY8Hf7Uabw9xfWCqDkjSf3D_aLq0lr8dGkxqJOpMFMJ55K0b1MQ>
-    <xme:lDBEY1XHMdalWt-5aiUoDiDeNpQiD81lgU7PLOUCZaFxj9tZZ-j4DhyQMP9dc-rOG
-    reRo4bBMcvU6bF2O6E>
-X-ME-Received: <xmr:lDBEY2KVBFxaD6wd9t8-t1DuoLCu-36FpQc0EVhZvuPDEG2zxSjyulnNVl2o>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1665413272; x=
+        1665499672; bh=VYzEzYyl82dyfftA+WmV6ia0U2mNve7T+OIZKjpk+VI=; b=q
+        savttqCZcIebpZoRbGJVNbvadUG/QBI7aASNETuE7pBFp82xCt5/iax6iz0wnFql
+        LRYsv9bVUTbgMvIofP9b6KatN5QLN2QZn7Ppl7tSoyX+03tzPxZ3LRgy2uUC2Gqs
+        iD4K7r4hwXeZhHesYwDX2jfwhGuOCzvc1rlCYGgfCOW0mzGjXbMnW0rKzV+2K8B+
+        HAL+E4uRj1HLLP3O0dwWnLLrfV1BRGhx3m5lmKAFO44xx7StK3Hcy33J7cXE1I6E
+        9iHOtOCQXbSIZudRuPvQjiMdK5dCVCurjc7+TuzALGVP6mNsr7y9Z127MYG19CEx
+        +w3/gtfnWAkUoEY3DjJxg==
+X-ME-Sender: <xms:mDBEYy5AYmFMF91wYJvwSjbV4SsShgIIQEfFs1SUcaApu-UP-hfhQg>
+    <xme:mDBEY77D3BJnAlbHFg5Qcp5m57dOuqA1BISW0bHI8Ail04_flXu_f-kf4v6ks_iSd
+    8FO99eaV30a_uSTVUs>
+X-ME-Received: <xmr:mDBEYxdkZI5np61LBiy9TxArBnM4DOFsBY7yWaWTuPokpPC9g0cLRYghIXzZ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejgedgjeehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephfffufggtgfgkfhfjgfvvefosehtkeertdertdejnecuhfhrohhmpeforgig
     ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnheplefhjedthedtgfdvgeetkeegfeeggfeifedvtdegffekteeivdehveef
-    geekffejnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
-    tghh
-X-ME-Proxy: <xmx:lDBEY-ESZUPeeqVbvSHlfsGq6z383fhrpKvA4m4f2mXmupObrfwzhA>
-    <xmx:lDBEYyX0rkLDkMp0rDSRWWR6KMz-O1dxDMI3dRPfH-4sb4nTfMIuPg>
-    <xmx:lDBEYxPO2TwgkgietOPjJSD1PzAxFilyHmj5fxjcWLW51c1v6rojTg>
-    <xmx:lDBEY0feflghHESyWi_A1eIcpkvtqijjUs64eL0OZTBLWB91ot7vTw>
+    grthhtvghrnhepudduudfhveejteefgedvffdvvedvjedugedukeejhedtlefhffevtefh
+    jeeltdevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:mDBEY_Kzwk6F82-S7gcMimsdl_opARjRV49NLEVOtoGD3mdiyY6JYw>
+    <xmx:mDBEY2LO7XG5a4-A8OYL3HsUY_qlUIW4cE51JwEctpr5ENrSe5zRog>
+    <xmx:mDBEYwyI6-gcZfn1XcglAt_TjTvh426dzSKsM_St-GRTlN7Uv1ZstQ>
+    <xmx:mDBEY4iCAIw5ba6AiEyDW9KhbEmJ-IaBxTYqp994QvIkVxUSiYfQpQ>
 Feedback-ID: i8771445c:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 10 Oct 2022 10:47:48 -0400 (EDT)
+ 10 Oct 2022 10:47:52 -0400 (EDT)
 From:   Maxime Ripard <maxime@cerno.tech>
-Date:   Mon, 10 Oct 2022 16:47:38 +0200
-Subject: [PATCH 1/2] clk: Update req_rate on __clk_recalc_rates()
+Date:   Mon, 10 Oct 2022 16:47:39 +0200
+Subject: [PATCH 2/2] clk: tests: Add tests for notifiers
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20221010-rpi-clk-fixes-again-v1-1-d87ba82ac404@cerno.tech>
+Message-Id: <20221010-rpi-clk-fixes-again-v1-2-d87ba82ac404@cerno.tech>
 References: <20221010-rpi-clk-fixes-again-v1-0-d87ba82ac404@cerno.tech>
 In-Reply-To: <20221010-rpi-clk-fixes-again-v1-0-d87ba82ac404@cerno.tech>
 To:     Stephen Boyd <sboyd@kernel.org>,
@@ -80,11 +79,11 @@ Cc:     linux-clk@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Maxime Ripard <maxime@cerno.tech>
 X-Mailer: b4 0.11.0-dev-7da52
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5969; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=Ks0lq0K5/EYAMogpYjI5VVgAh5118kcALUO3PZkjYvk=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMkuBn3HNypNM5xaOKe9d+nf7nsGbilnb0fb/1F7HsumzHxz
- Th9HRykLgxgXg6yYIkuMsPmSuFOzXney8c2DmcPKBDKEgYtTACbi95uR4ZXVxAZBp3npd6S+51ccv6
- PYfWd9bpbh7yl8996ZR79X3srIMPtRJW+02Z8t8iHxfW83Ldit8uqgueyep3t2bdjhzM/nyggA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5977; i=maxime@cerno.tech;
+ h=from:subject:message-id; bh=qsUxVzjg5I8tBKGM4PNlOQk2kkZdya2meK9l7sVQtUI=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMkuBn31dyqmtCwuvjFBJdd4Ss7h9sXaL9fnPHixcEXlihT5
+ eetmd5SyMIhxMciKKbLECJsviTs163UnG988mDmsTCBDGLg4BWAi9qsY/pnWyK1i2Jub/cHE2OX/tT
+ MJ6+66Mx1eIOlVuNy2zWBD3W9GhuV7qiM38h+Ufxkd9nXFe725co94Xq5+FMK4cHNi1vF5dzgB
 X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -96,160 +95,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit cb1b1dd96241 ("clk: Set req_rate on reparenting") introduced a
-new function, clk_core_update_orphan_child_rates(), that updates the
-req_rate field on reparenting.
+We're recently encountered a regression due to the rates reported
+through the clk_notifier_data being off when changing parents.
 
-It turns out that that function will interfere with the clock notifying
-done by __clk_recalc_rates(). This ends up reporting the new rate in
-both the old_rate and new_rate fields of struct clk_notifier_data.
+Let's add a test suite and a test to make sure that we do get notified
+and with the proper rates.
 
-Since clk_core_update_orphan_child_rates() is basically
-__clk_recalc_rates() without the notifiers, and with the req_rate field
-update, we can drop clk_core_update_orphan_child_rates() entirely, and
-make __clk_recalc_rates() update req_rate.
-
-However, __clk_recalc_rates() is being called in several code paths:
-when retrieving a rate (most likely through clk_get_rate()), when changing
-parents (through clk_set_rate() or clk_hw_reparent()), or when updating
-the orphan status (through clk_core_reparent_orphans_nolock(), called at
-registration).
-
-Updating req_rate on reparenting or initialisation makes sense, but we
-shouldn't do it on clk_get_rate(). Thus an extra flag has been added to
-update or not req_rate depending on the context.
-
-Fixes: cb1b1dd96241 ("clk: Set req_rate on reparenting")
-Link: https://lore.kernel.org/linux-clk/0acc7217-762c-7c0d-45a0-55c384824ce4@samsung.com/
-Link: https://lore.kernel.org/linux-clk/Y0QNSx+ZgqKSvPOC@sirena.org.uk/
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Reported-by: Mark Brown <broonie@kernel.org>
 Suggested-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 ---
- drivers/clk/clk.c | 39 +++++++++++----------------------------
- 1 file changed, 11 insertions(+), 28 deletions(-)
+ drivers/clk/clk_test.c | 156 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 156 insertions(+)
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index dee5f39bfa90..c3c3f8c07258 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -1759,6 +1759,7 @@ static unsigned long clk_recalc(struct clk_core *core,
- /**
-  * __clk_recalc_rates
-  * @core: first clk in the subtree
-+ * @update_req: Whether req_rate should be updated with the new rate
-  * @msg: notification type (see include/linux/clk.h)
-  *
-  * Walks the subtree of clks starting with clk and recalculates rates as it
-@@ -1768,7 +1769,8 @@ static unsigned long clk_recalc(struct clk_core *core,
-  * clk_recalc_rates also propagates the POST_RATE_CHANGE notification,
-  * if necessary.
-  */
--static void __clk_recalc_rates(struct clk_core *core, unsigned long msg)
-+static void __clk_recalc_rates(struct clk_core *core, bool update_req,
-+			       unsigned long msg)
- {
- 	unsigned long old_rate;
- 	unsigned long parent_rate = 0;
-@@ -1782,6 +1784,8 @@ static void __clk_recalc_rates(struct clk_core *core, unsigned long msg)
- 		parent_rate = core->parent->rate;
+diff --git a/drivers/clk/clk_test.c b/drivers/clk/clk_test.c
+index 509256c5567a..f9a5c2964c65 100644
+--- a/drivers/clk/clk_test.c
++++ b/drivers/clk/clk_test.c
+@@ -2239,10 +2239,166 @@ static struct kunit_suite clk_leaf_mux_set_rate_parent_test_suite = {
+ 	.test_cases = clk_leaf_mux_set_rate_parent_test_cases,
+ };
  
- 	core->rate = clk_recalc(core, parent_rate);
-+	if (update_req)
-+		core->req_rate = core->rate;
- 
- 	/*
- 	 * ignore NOTIFY_STOP and NOTIFY_BAD return values for POST_RATE_CHANGE
-@@ -1791,13 +1795,13 @@ static void __clk_recalc_rates(struct clk_core *core, unsigned long msg)
- 		__clk_notify(core, msg, old_rate, core->rate);
- 
- 	hlist_for_each_entry(child, &core->children, child_node)
--		__clk_recalc_rates(child, msg);
-+		__clk_recalc_rates(child, update_req, msg);
- }
- 
- static unsigned long clk_core_get_rate_recalc(struct clk_core *core)
- {
- 	if (core && (core->flags & CLK_GET_RATE_NOCACHE))
--		__clk_recalc_rates(core, 0);
-+		__clk_recalc_rates(core, false, 0);
- 
- 	return clk_core_get_rate_nolock(core);
- }
-@@ -1900,23 +1904,6 @@ static void clk_core_update_orphan_status(struct clk_core *core, bool is_orphan)
- 		clk_core_update_orphan_status(child, is_orphan);
- }
- 
--/*
-- * Update the orphan rate and req_rate of @core and all its children.
-- */
--static void clk_core_update_orphan_child_rates(struct clk_core *core)
--{
--	struct clk_core *child;
--	unsigned long parent_rate = 0;
--
--	if (core->parent)
--		parent_rate = core->parent->rate;
--
--	core->rate = core->req_rate = clk_recalc(core, parent_rate);
--
--	hlist_for_each_entry(child, &core->children, child_node)
--		clk_core_update_orphan_child_rates(child);
--}
--
- static void clk_reparent(struct clk_core *core, struct clk_core *new_parent)
- {
- 	bool was_orphan = core->orphan;
-@@ -1986,8 +1973,6 @@ static struct clk_core *__clk_set_parent_before(struct clk_core *core,
- 	clk_reparent(core, parent);
- 	clk_enable_unlock(flags);
- 
--	clk_core_update_orphan_child_rates(core);
--
- 	return old_parent;
- }
- 
-@@ -2033,7 +2018,6 @@ static int __clk_set_parent(struct clk_core *core, struct clk_core *parent,
- 		clk_reparent(core, old_parent);
- 		clk_enable_unlock(flags);
- 
--		clk_core_update_orphan_child_rates(core);
- 		__clk_set_parent_after(core, old_parent, parent);
- 
- 		return ret;
-@@ -2657,9 +2641,8 @@ static void clk_core_reparent(struct clk_core *core,
- 				  struct clk_core *new_parent)
- {
- 	clk_reparent(core, new_parent);
--	clk_core_update_orphan_child_rates(core);
- 	__clk_recalc_accuracies(core);
--	__clk_recalc_rates(core, POST_RATE_CHANGE);
-+	__clk_recalc_rates(core, true, POST_RATE_CHANGE);
- }
- 
- void clk_hw_reparent(struct clk_hw *hw, struct clk_hw *new_parent)
-@@ -2743,9 +2726,9 @@ static int clk_core_set_parent_nolock(struct clk_core *core,
- 
- 	/* propagate rate an accuracy recalculation accordingly */
- 	if (ret) {
--		__clk_recalc_rates(core, ABORT_RATE_CHANGE);
-+		__clk_recalc_rates(core, true, ABORT_RATE_CHANGE);
- 	} else {
--		__clk_recalc_rates(core, POST_RATE_CHANGE);
-+		__clk_recalc_rates(core, true, POST_RATE_CHANGE);
- 		__clk_recalc_accuracies(core);
- 	}
- 
-@@ -3642,7 +3625,7 @@ static void clk_core_reparent_orphans_nolock(void)
- 			__clk_set_parent_before(orphan, parent);
- 			__clk_set_parent_after(orphan, parent, NULL);
- 			__clk_recalc_accuracies(orphan);
--			__clk_recalc_rates(orphan, 0);
-+			__clk_recalc_rates(orphan, true, 0);
- 
- 			/*
- 			 * __clk_init_parent() will set the initial req_rate to
++struct clk_mux_notifier_rate_change {
++	bool done;
++	unsigned long old_rate;
++	unsigned long new_rate;
++	wait_queue_head_t wq;
++};
++
++struct clk_mux_notifier_ctx {
++	struct clk_multiple_parent_ctx mux_ctx;
++	struct clk *clk;
++	struct notifier_block clk_nb;
++	struct clk_mux_notifier_rate_change pre_rate_change;
++	struct clk_mux_notifier_rate_change post_rate_change;
++};
++
++#define NOTIFIER_TIMEOUT_MS 100
++
++static int clk_mux_notifier_callback(struct notifier_block *nb,
++				     unsigned long action, void *data)
++{
++	struct clk_notifier_data *clk_data = data;
++	struct clk_mux_notifier_ctx *ctx = container_of(nb,
++							struct clk_mux_notifier_ctx,
++							clk_nb);
++
++	if (action & PRE_RATE_CHANGE) {
++		ctx->pre_rate_change.old_rate = clk_data->old_rate;
++		ctx->pre_rate_change.new_rate = clk_data->new_rate;
++		ctx->pre_rate_change.done = true;
++		wake_up_interruptible(&ctx->pre_rate_change.wq);
++	}
++
++	if (action & POST_RATE_CHANGE) {
++		ctx->post_rate_change.old_rate = clk_data->old_rate;
++		ctx->post_rate_change.new_rate = clk_data->new_rate;
++		ctx->post_rate_change.done = true;
++		wake_up_interruptible(&ctx->post_rate_change.wq);
++	}
++
++	return 0;
++}
++
++static int clk_mux_notifier_test_init(struct kunit *test)
++{
++	struct clk_mux_notifier_ctx *ctx;
++	const char *top_parents[2] = { "parent-0", "parent-1" };
++	int ret;
++
++	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
++	if (!ctx)
++		return -ENOMEM;
++	test->priv = ctx;
++	ctx->clk_nb.notifier_call = clk_mux_notifier_callback;
++	init_waitqueue_head(&ctx->pre_rate_change.wq);
++	init_waitqueue_head(&ctx->post_rate_change.wq);
++
++	ctx->mux_ctx.parents_ctx[0].hw.init = CLK_HW_INIT_NO_PARENT("parent-0",
++								    &clk_dummy_rate_ops,
++								    0);
++	ctx->mux_ctx.parents_ctx[0].rate = DUMMY_CLOCK_RATE_1;
++	ret = clk_hw_register(NULL, &ctx->mux_ctx.parents_ctx[0].hw);
++	if (ret)
++		return ret;
++
++	ctx->mux_ctx.parents_ctx[1].hw.init = CLK_HW_INIT_NO_PARENT("parent-1",
++								    &clk_dummy_rate_ops,
++								    0);
++	ctx->mux_ctx.parents_ctx[1].rate = DUMMY_CLOCK_RATE_2;
++	ret = clk_hw_register(NULL, &ctx->mux_ctx.parents_ctx[1].hw);
++	if (ret)
++		return ret;
++
++	ctx->mux_ctx.current_parent = 0;
++	ctx->mux_ctx.hw.init = CLK_HW_INIT_PARENTS("test-mux", top_parents,
++						   &clk_multiple_parents_mux_ops,
++						   0);
++	ret = clk_hw_register(NULL, &ctx->mux_ctx.hw);
++	if (ret)
++		return ret;
++
++	ctx->clk = clk_hw_get_clk(&ctx->mux_ctx.hw, NULL);
++	ret = clk_notifier_register(ctx->clk, &ctx->clk_nb);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static void clk_mux_notifier_test_exit(struct kunit *test)
++{
++	struct clk_mux_notifier_ctx *ctx = test->priv;
++	struct clk *clk = ctx->clk;
++
++	clk_notifier_unregister(clk, &ctx->clk_nb);
++	clk_put(clk);
++
++	clk_hw_unregister(&ctx->mux_ctx.hw);
++	clk_hw_unregister(&ctx->mux_ctx.parents_ctx[0].hw);
++	clk_hw_unregister(&ctx->mux_ctx.parents_ctx[1].hw);
++}
++
++/*
++ * Test that if the we have a notifier registered on a mux, the core
++ * will notify us when we switch to another parent, and with the proper
++ * old and new rates.
++ */
++static void clk_mux_notifier_set_parent_test(struct kunit *test)
++{
++	struct clk_mux_notifier_ctx *ctx = test->priv;
++	struct clk_hw *hw = &ctx->mux_ctx.hw;
++	struct clk *clk = clk_hw_get_clk(hw, NULL);
++	struct clk *new_parent = clk_hw_get_clk(&ctx->mux_ctx.parents_ctx[1].hw, NULL);
++	int ret;
++
++	ret = clk_set_parent(clk, new_parent);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	ret = wait_event_interruptible_timeout(ctx->pre_rate_change.wq,
++					       ctx->pre_rate_change.done,
++					       msecs_to_jiffies(NOTIFIER_TIMEOUT_MS));
++	KUNIT_ASSERT_GT(test, ret, 0);
++
++	KUNIT_EXPECT_EQ(test, ctx->pre_rate_change.old_rate, DUMMY_CLOCK_RATE_1);
++	KUNIT_EXPECT_EQ(test, ctx->pre_rate_change.new_rate, DUMMY_CLOCK_RATE_2);
++
++	ret = wait_event_interruptible_timeout(ctx->post_rate_change.wq,
++					       ctx->post_rate_change.done,
++					       msecs_to_jiffies(NOTIFIER_TIMEOUT_MS));
++	KUNIT_ASSERT_GT(test, ret, 0);
++
++	KUNIT_EXPECT_EQ(test, ctx->post_rate_change.old_rate, DUMMY_CLOCK_RATE_1);
++	KUNIT_EXPECT_EQ(test, ctx->post_rate_change.new_rate, DUMMY_CLOCK_RATE_2);
++
++	clk_put(new_parent);
++	clk_put(clk);
++}
++
++static struct kunit_case clk_mux_notifier_test_cases[] = {
++	KUNIT_CASE(clk_mux_notifier_set_parent_test),
++	{}
++};
++
++/*
++ * Test suite for a mux with multiple parents, and a notifier registered
++ * on the mux.
++ *
++ * These tests exercise the behaviour of notifiers.
++ */
++static struct kunit_suite clk_mux_notifier_test_suite = {
++	.name = "clk-mux-notifier",
++	.init = clk_mux_notifier_test_init,
++	.exit = clk_mux_notifier_test_exit,
++	.test_cases = clk_mux_notifier_test_cases,
++};
++
+ kunit_test_suites(
+ 	&clk_leaf_mux_set_rate_parent_test_suite,
+ 	&clk_test_suite,
+ 	&clk_multiple_parents_mux_test_suite,
++	&clk_mux_notifier_test_suite,
+ 	&clk_orphan_transparent_multiple_parent_mux_test_suite,
+ 	&clk_orphan_transparent_single_parent_test_suite,
+ 	&clk_orphan_two_level_root_last_test_suite,
 
 -- 
 b4 0.11.0-dev-7da52
