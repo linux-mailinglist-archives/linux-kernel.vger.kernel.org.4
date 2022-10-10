@@ -2,98 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F395FA309
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9E25FA310
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbiJJR5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 13:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51486 "EHLO
+        id S229450AbiJJR6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 13:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJJR5M (ORCPT
+        with ESMTP id S229459AbiJJR6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 13:57:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C74F77E8C;
-        Mon, 10 Oct 2022 10:57:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1BD760AFE;
-        Mon, 10 Oct 2022 17:57:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 124E7C433D6;
-        Mon, 10 Oct 2022 17:57:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665424631;
-        bh=M7074iTkISJ9LZPDfVJMFnThIn/SiCbzfEecQjj1gX8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iHHSQuNIjuhNfzwXDqX4y6wVGUARVjPgaMXSpcDwbQg6wd1xcBPk8tUn+23GqWF0a
-         HBRYrsSUShKP5LhuxNbclbJRMbkDTqwcYUR7xiw5Mu2JT+2z3LUCD0mUAnerLzWzLb
-         7GIVoEEQgIawZLEBtvxdk5Vs7e22tpI8HMc0XHFXMcwJiahqMpLXPSJ7Y6DXZD1U/i
-         TegnKNLRcIqr9A6Xk40RW89Dg3RQKg4f48t52B0ZcECoJa6IymRyLFHF8RshVqCMZ7
-         cXs5WgkCScM/laaRTMpOFr+UQqAeuu2LlZfo9FVLU4/bL91NekNHWvikAleJnM549y
-         vYfki7gdqcFjw==
-Date:   Mon, 10 Oct 2022 10:57:10 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     linux-xfs@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][V2] xfs: remove redundant pointer lip
-Message-ID: <Y0Rc9ulPUJb77up6@magnolia>
-References: <20221010160515.3199641-1-colin.i.king@gmail.com>
+        Mon, 10 Oct 2022 13:58:00 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE4C77EAB
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:57:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gXJyMs2OSPDhCkEvqWP7QOCysCbcI9dfM5n2nlK7y4M=; b=vMY7Y5qYn1dGkFns1uBGhntDcK
+        yDpsX0cqCD0d+X9Umyj7Z3jQkSlN87bNdzXHyeXIKFetvG4lpL+XZx902eLFPYna7CytqZkV7cGbq
+        1Ak+WtZbwAIM2HzV+TFYSUkuihsb2REcusx+G0Z1pu1Z8wVvPdALGIYBgeJq+57qml4x1xrD+sf1v
+        3HJ5qqRw2OlPPlhIWbubWHQRJFuvxInMXHEHQH2qXqXJdd8hoP0ar7ia0QPFv/lhXalckdgiilKZ0
+        /4VyOYQQ+bkg5O1L3q5tWFnWA6x4BkeuS1GySPbUhpErtYIHg08fjLeyCDzdHfmlmE1HpbS2fvXbS
+        ate7Zqyw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1ohx26-009G76-1k;
+        Mon, 10 Oct 2022 17:57:42 +0000
+Date:   Mon, 10 Oct 2022 18:57:42 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Sumit Garg <sumit.garg@linaro.org>,
+        Phil Chang =?utf-8?B?KOW8teS4luWLsyk=?= 
+        <Phil.Chang@mediatek.com>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [PATCH 2/4] tee: Remove vmalloc page support
+Message-ID: <Y0RdFni5N6rMsxuM@ZenIV>
+References: <20221002002326.946620-1-ira.weiny@intel.com>
+ <20221002002326.946620-3-ira.weiny@intel.com>
+ <CAFA6WYOGT1sJLA4c_B88NaXgxv4fm-idi5QMYvXdXB0acCF3sw@mail.gmail.com>
+ <TYZPR03MB65279558CC22F5130B710EA8FB5D9@TYZPR03MB6527.apcprd03.prod.outlook.com>
+ <CAFA6WYMT9S1Di6DN_UXc823f0ZTkqerE1PB=oG6wmfx28vEbDg@mail.gmail.com>
+ <CAHk-=whVyH-wSWLd=Zn4rwo+91T+qzRvfMPC2yFX98GxykOqOw@mail.gmail.com>
+ <20221010074234.GA20788@lst.de>
+ <CAHk-=whvmR98OHdYf4yOJgp86hq0VMVXJ9b1Qk7P_Rjq_=HU+A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221010160515.3199641-1-colin.i.king@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHk-=whvmR98OHdYf4yOJgp86hq0VMVXJ9b1Qk7P_Rjq_=HU+A@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 05:05:15PM +0100, Colin Ian King wrote:
-> The assignment to pointer lip is not really required, the pointer lip
-> is redundant and can be removed.
+On Mon, Oct 10, 2022 at 10:20:15AM -0700, Linus Torvalds wrote:
+> On Mon, Oct 10, 2022 at 12:42 AM Christoph Hellwig <hch@lst.de> wrote:
+> >
+> > I suspect the best long term option would be to just pass an iov_iter..
 > 
-> Cleans up clang-scan warning:
-> warning: Although the value stored to 'lip' is used in the enclosing
-> expression, the value is never actually read from 'lip'
-> [deadcode.DeadStores]
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Hmm. Yeah, that sounds like a workable model, and solves the problem
+> JensW pointed out with my simplistic "just pass a page array" approach
+> where you also need to keep track of how to release things.
 
-Looks good!
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-
---D
-
-> ---
-> 
-> V2: Keep != NULL comparison for stylistic reasons, as suggested by
->     Darrick J. Wong
-> ---
->  fs/xfs/xfs_trans_ail.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/fs/xfs/xfs_trans_ail.c b/fs/xfs/xfs_trans_ail.c
-> index 16fbf2a1144c..87db72758d1f 100644
-> --- a/fs/xfs/xfs_trans_ail.c
-> +++ b/fs/xfs/xfs_trans_ail.c
-> @@ -730,11 +730,10 @@ void
->  xfs_ail_push_all_sync(
->  	struct xfs_ail  *ailp)
->  {
-> -	struct xfs_log_item	*lip;
->  	DEFINE_WAIT(wait);
->  
->  	spin_lock(&ailp->ail_lock);
-> -	while ((lip = xfs_ail_max(ailp)) != NULL) {
-> +	while (xfs_ail_max(ailp) != NULL) {
->  		prepare_to_wait(&ailp->ail_empty, &wait, TASK_UNINTERRUPTIBLE);
->  		wake_up_process(ailp->ail_task);
->  		spin_unlock(&ailp->ail_lock);
-> -- 
-> 2.37.3
-> 
+Except that then you need to get iov_iter_get_pages analogue that would
+work for ITER_KVEC, which is exact same problem right back.
