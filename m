@@ -2,80 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31F05FA216
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 18:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE5D5FA219
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 18:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiJJQn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 12:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
+        id S229817AbiJJQn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 12:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJJQn1 (ORCPT
+        with ESMTP id S229436AbiJJQn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 12:43:27 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2CE6DFA2;
-        Mon, 10 Oct 2022 09:43:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=cGEQmAa8ji6opcjFIYfT1uk+V/cyOC7gsmXvKvJSS/E=; b=Ms2m7gABBRShFZYFT08LjwGRcb
-        wz48iA3GsfiiooqEY5jwTxP1Na/X+8/4xw8EkoRm8Sjfnq6cob4RqCk80weLS3AOy/wnqOxgPg7lf
-        AaRb20y0HKFivWHXH4gO+uDAvCnDec/7P1DNb4P8Eje1k12u66QUnqG+0ivzFk6bFJnlK4sqET34b
-        mxIctOB52ruTkbsoezvOVMx2sO8Wl5kiSDOz1g/T1wK0xYd9jfdTZZcqbZiMNNPSIgrEVkENzKjz5
-        XC2mxihjuJ5cdeKfvTHVuUJ1TIbootCoRfo/8oD7p3A7FDiESvml4IHxET9W0GBZAPvtQHzd+rn9k
-        lPklXtvA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34674)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1ohvs0-0004u8-UT; Mon, 10 Oct 2022 17:43:12 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1ohvrv-00020K-HH; Mon, 10 Oct 2022 17:43:07 +0100
-Date:   Mon, 10 Oct 2022 17:43:07 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Soha Jin <soha@lohu.info>, Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: mdiobus: add fwnode_phy_is_fixed_link()
-Message-ID: <Y0RLm0qU8MwGt40d@shell.armlinux.org.uk>
-References: <20221009162006.1289-1-soha@lohu.info>
- <Y0Q0P4MlTXmzkJSG@lunn.ch>
+        Mon, 10 Oct 2022 12:43:56 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B481D6DFA2;
+        Mon, 10 Oct 2022 09:43:55 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-131dda37dddso13122952fac.0;
+        Mon, 10 Oct 2022 09:43:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5myLNmhoucYx5sLzIgfFeipy2y94xnDcGd39sjhkYms=;
+        b=AcaA5y/ZjDNeDlTKW5EepUXm5ZR4XinlM9+t2mIuqdnUxDp/YeiRgKzhFfCFzngKAM
+         XsAbqld5Iu/KbgMdAZcQwDW/P8gmhh89rEjlqPv5y1ch2UjUy/bcR8e3iT9TbmTrCxA6
+         cftP70YKsmkCQANAUcyqYHEBusGKIQBEb76ikwWRE9QHMXhGQOm/5JtNxR93kKXF3rqj
+         /JdPx+3UotfC3mr7+WZrlnUiVtF8o1Thamd11i/ktpGsjdT+b0rbYJ/pny5pg4EWwyXX
+         IPGXqbJ0NB45vfxdcdkZ40JsPGqHDlEJ9tBlTgf36vHIWZ9BO4gsi4l8COOZR684K2nD
+         dT7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5myLNmhoucYx5sLzIgfFeipy2y94xnDcGd39sjhkYms=;
+        b=lacV1164IdKFUP9ZMgn6k6aikFn9Lg5jz+PST+yKBapR8W4TdsZ9GRQ1w9vhWAizhf
+         V4oKaTZ30vOo0+8dtc9E+GHJt1VTHTeqbxL2Lyw8wKurVSR6fjG32WRZ8J0k+/WMYRzO
+         ShtOYsTxsYiEzgUCcGMtN49rQJN5HeXhaJFWgfzQ19E/Ac0F5lLEHl1mDIkabhUfxzYS
+         0lxIn5+nRwXuyTBprj+1fj2KluaJXoHQb36hq64iCyg/Vc19pU+5R++TXx1KPQ1DAbVQ
+         Y8nFoX+iq3j8zYD70ptgQaaabIgQEc2wSMAABjSic8s8nTp/MFkc9V+bqXn+gKrALzCW
+         5y8A==
+X-Gm-Message-State: ACrzQf1m3MUZ4Ukur7BbIsryIe9qN65t7iyID7764Z3I2irl9x2f5aXU
+        0Kh1M8V1NeTGI2EA+N7H1aR0OU/4W3VQXYrdWE4=
+X-Google-Smtp-Source: AMsMyM6oTserZCSUFYyfuBgccLh2Gw/HZPJXcfzUrw/gXloHQlyD1RF/O1o3fo5G1nwSPVRLGSXuxLlK8NSFySnFR48=
+X-Received: by 2002:a05:6870:c0d5:b0:136:375f:3131 with SMTP id
+ e21-20020a056870c0d500b00136375f3131mr7739727oad.75.1665420235114; Mon, 10
+ Oct 2022 09:43:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0Q0P4MlTXmzkJSG@lunn.ch>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+References: <20220617110130.2300438-1-dsankouski@gmail.com> <9bf584a1-bab9-33f3-02b6-6b10a7cfb043@linaro.org>
+In-Reply-To: <9bf584a1-bab9-33f3-02b6-6b10a7cfb043@linaro.org>
+From:   Dzmitry Sankouski <dsankouski@gmail.com>
+Date:   Mon, 10 Oct 2022 19:43:44 +0300
+Message-ID: <CABTCjFBneTPT=PoCh=c8hyxfgvCr=14pJYA+11sQ0ooyf6Ri1g@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: dts: qcom: starqltechn: add initial device tree
+ for starqltechn
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 05:03:27PM +0200, Andrew Lunn wrote:
-> On Mon, Oct 10, 2022 at 12:20:06AM +0800, Soha Jin wrote:
-> > A helper function to check if PHY is fixed link with fwnode properties.
-> > This is similar to of_phy_is_fixed_link.
-> 
-> You need to include a user of this new function.
-> 
-> Also, not that ACPI only defines the 'new binding' for fixed-link.  If
-> this is being called on a device which is ACPI underneath, it should
-> only return true for the 'new binding', not the old binding.
-
-Do we want to support the "managed" property in the fwnode variant,
-or persuade people to switch to phylink if they want that?
+(...)
+>
+> Why do you have DTSI for one DTS?
+Samsung has several devices on sdm845 SoC (at least 3 phones:
+starqltechn, starq2ltechn, crownltechn). I don't have plans to
+introduce support for any new Samsung sdm845 device except
+starqltechn, but I guess we should extract common dtsi now to make
+future contributions easier. I think I should rename common dtsi file
+to '$soc-$vendor-common.dtsi', like others device trees doing now
+>
+(...)
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+
+Best regards,
+Dzmitry
