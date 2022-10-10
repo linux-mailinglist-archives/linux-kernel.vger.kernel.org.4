@@ -2,233 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535B65F9CC2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 12:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B85425F9CC6
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 12:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbiJJK2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 06:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
+        id S231841AbiJJK3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 06:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231817AbiJJK2e (ORCPT
+        with ESMTP id S231337AbiJJK3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 06:28:34 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410B71AF2F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 03:28:32 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id a5so1350338qkl.6
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 03:28:32 -0700 (PDT)
+        Mon, 10 Oct 2022 06:29:06 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116466164
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 03:29:05 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id o67so6427847qvo.13
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 03:29:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=mrUwBNnbqd4ksk/FmUIV1AB6T9m45SMvhXf0F8HKU5I=;
-        b=xqD0qMsTR9VP3gwWUCR5g70s4AZojnbDrPy5m1C+Iv93XOLUncuIAcb4fDca1cAOKh
-         +6qsfkS1Uito0MzSemkYyh4IJwRLvnXcAgcI49RS1I1cgRNTvoUYP1ALnRJUSFt0LqUP
-         2jm09DApo5685+hakOwf78NX/hFgmBFahtzFbxKAG2fNrf1gxqyPo7E89oE282o4XU8O
-         6ZTnyaGg2W37Gjiqkz312cWf8IFeTUvtn04GWdGXUsjQ8u4XVS51WYtzD5mj/kdU8YT2
-         KLQe9OzOVObKx9zuIuuP62K6cprOhSTtWF6HDkNHLRoV1CQj0+qPDadZhGAe5uwiIzKS
-         ty7w==
+        bh=+Ty/SQ7ZQb5ub5WO9P8Lo7LRFzcBze++LmcsjSK0IUs=;
+        b=SbUTQwNXF6cpHzOUKB1Eotm+CoeI6DGaiOBfiJR4e3h/fAZDpIg7aILfdKMDA7cuZ2
+         lVgKfsv1H2ABJopnsyON6w/78z9cAG6qCBDxeb+xv+qsH5Ae5hM9/zYYhjDmZXtVvHmT
+         cjwJ1yl/iiaIam9sgblVmhCopRSn343SeiRhqXlevol+G4H7qZxKe5/P27SoylDLb7TY
+         uSbwxOcqb1DQdZHWDar/g+e0SMWVS8pBHiWlYMyzpysuKRekYoo+JYTMHbYOWD0VGtFV
+         ws85HrSHx8Chltg2HsfdtngDRSJi71AD3GraHpDqJ/kp62kGFUZKNFpUHuYeNsAomiI3
+         5O1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mrUwBNnbqd4ksk/FmUIV1AB6T9m45SMvhXf0F8HKU5I=;
-        b=KVLhVD3lWOJO9D9iiBvAPfUYwK/PAClC+ajDZWdxsAfwS7xiERvd7hiB65VGsmkoD4
-         ILSIqMv5ZzMtS/+782mBcXuH8deBZ/dp9FnPar2XZKGKsgH9xZhPKKgk7lVPXjzAAUtY
-         3BkLIeJMNgikEF/VBcmcoeJ5nWmjqNvG9enlfV0x9iRJlgvUxcKowBmKv1f7Xeyy/n+l
-         IrOM16mi/I1YFYIfeh3x1gQvjIwoxdlYtOlodt0nWxreSampt3q+ggRLlz0hpy90Skw/
-         IT/2We0fEVU/ONj+aedcfpP5DEHCukGa0cto7JF4e9GPBODFhJyHLUMLcEBkgQl0NEMu
-         B+iQ==
-X-Gm-Message-State: ACrzQf3BTZaMUGM8toocGGaYjFJo6pfKJADlBN2gUkBmmcQbHkyEnOFs
-        ab+osNhgkX5QTF7zYrGPh2u4jw==
-X-Google-Smtp-Source: AMsMyM6zubrft+MZXIieNYHeZnBqAdduX1ndvw0Bw4fd77NNY1ToPzGUXv6vQgeKKs4tO1OUIFNb5Q==
-X-Received: by 2002:a05:620a:284a:b0:6ab:9cc5:cb4c with SMTP id h10-20020a05620a284a00b006ab9cc5cb4cmr12163260qkp.609.1665397711394;
-        Mon, 10 Oct 2022 03:28:31 -0700 (PDT)
+        bh=+Ty/SQ7ZQb5ub5WO9P8Lo7LRFzcBze++LmcsjSK0IUs=;
+        b=TGRYH/l+PyQlWvhFHUr1IALgVvtxy3BSG5ws3i5eYBi+YRdd5I94e2Jwg0Lqq+brUm
+         L2iXgR1VD3viQuN7pT0CiOaJXsIZhm957BPO2maFCruqx31+rAoWP4c8KASF/IaXO/ep
+         vhKEyFz1Lp344SqbO8cy32PqYy0JzdP5P+Zz0C5qzaECUyWyYgBZPjtep0cuJiAfWITJ
+         WG/BlgRl8sEP6y/mopeZ9j8frhI5/eyGuwaLC5W4PK/hpoa60FQoMMdTFb0ew7KyYYza
+         K30x/RDT/5YUp9D7pTgGZVfPFqyZxK2c+kAQU7Fcxs/5DwVW1mh7TttsC2TbkX+LDH6c
+         377A==
+X-Gm-Message-State: ACrzQf216vg40xpsoRRMK24jwtYNGBheJpyiWV8EFfYrwZn+NJSfa1wg
+        id9y974brr65YKX/u8u0WYu/lA==
+X-Google-Smtp-Source: AMsMyM4UpI8bhDJqFqWEygDw1Ur2ePekgUCEnUAFdHhbnnGN696lz2RnVs4cGmw1vQYo2W2/TttGqw==
+X-Received: by 2002:a05:6214:2b05:b0:4b1:d595:3a24 with SMTP id jx5-20020a0562142b0500b004b1d5953a24mr14514640qvb.71.1665397744246;
+        Mon, 10 Oct 2022 03:29:04 -0700 (PDT)
 Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id bl23-20020a05620a1a9700b006ce30a5f892sm5732273qkb.102.2022.10.10.03.28.30
+        by smtp.gmail.com with ESMTPSA id h3-20020a05620a244300b006d94c499d8fsm9930615qkn.50.2022.10.10.03.29.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 03:28:30 -0700 (PDT)
-Message-ID: <fa7feb67-9ad0-2cff-a1f2-4c204d3995fc@linaro.org>
-Date:   Mon, 10 Oct 2022 06:26:20 -0400
+        Mon, 10 Oct 2022 03:29:03 -0700 (PDT)
+Message-ID: <d97b7d32-6e27-5a04-336b-0af6bd92c83c@linaro.org>
+Date:   Mon, 10 Oct 2022 06:26:52 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.1
-Subject: Re: [v9 1/4] dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
+Subject: Re: [PATCH v2 34/40] arm64: dts: qcom: sm6125: align TLMM pin
+ configuration with DT schema
 Content-Language: en-US
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Peter Rosin <peda@axentia.se>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        robh@kernel.org, wsa@kernel.org, Rob Herring <robh+dt@kernel.org>,
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        Iskren Chernev <iskren.chernev@gmail.com>,
+        Martin Botka <martin.botka@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221007075354.568752-1-patrick.rudolph@9elements.com>
- <20221007075354.568752-2-patrick.rudolph@9elements.com>
- <20221008115019.6jxsbawtye7cdkfh@mobilestation>
- <68327197-6835-1ec4-e8f1-217b5d2ef947@linaro.org>
- <20221009180340.hqt3ngp5d26g3euw@mobilestation>
+References: <20220912061746.6311-1-krzysztof.kozlowski@linaro.org>
+ <20220912061746.6311-35-krzysztof.kozlowski@linaro.org>
+ <20221009174621.ecamh76faoibuykv@SoMainline.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221009180340.hqt3ngp5d26g3euw@mobilestation>
+In-Reply-To: <20221009174621.ecamh76faoibuykv@SoMainline.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/10/2022 14:03, Serge Semin wrote:
-> On Sun, Oct 09, 2022 at 05:25:22PM +0200, Krzysztof Kozlowski wrote:
->> On 08/10/2022 13:50, Serge Semin wrote:
->>> On Fri, Oct 07, 2022 at 09:53:50AM +0200, Patrick Rudolph wrote:
->>>> Update the pca954x bindings to add support for the Maxim MAX735x/MAX736x
->>>> chips. The functionality will be provided by the exisintg pca954x driver.
->>>>
->>>> While on it make the interrupts support conditionally as not all of the
->>>> existing chips have interrupts.
->>>>
->>>> For chips that are powered off by default add an optional regulator
->>>> called vdd-supply.
->>>>
->>>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->>>> ---
->>>>  .../bindings/i2c/i2c-mux-pca954x.yaml         | 39 ++++++++++++++++---
->>>>  1 file changed, 34 insertions(+), 5 deletions(-)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
->>>> index 9f1726d0356b..efad0a95806f 100644
->>>> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
->>>> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
->>>> @@ -4,21 +4,25 @@
->>>>  $id: http://devicetree.org/schemas/i2c/i2c-mux-pca954x.yaml#
->>>>  $schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>  
->>>> -title: NXP PCA954x I2C bus switch
->>>> +title: NXP PCA954x I2C and compatible bus switches
->>>>  
->>>>  maintainers:
->>>>    - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->>>>  
->>>>  description:
->>>> -  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
->>>> -
->>>
->>>> -allOf:
->>>> -  - $ref: /schemas/i2c/i2c-mux.yaml#
->>>
->>> Why do you move the allOf statement to the bottom of the schema?
->>
+On 09/10/2022 13:46, Marijn Suijten wrote:
+>> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+>> index 8c582a9e4ada..1fe3fa3ad877 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+>> @@ -387,19 +387,19 @@ tlmm: pinctrl@500000 {
+>>  			#interrupt-cells = <2>;
+>>  
+>>  			sdc2_off_state: sdc2-off-state {
+>> -				clk {
+>> +				clk-pins {
+>>  					pins = "sdc2_clk";
+>>  					drive-strength = <2>;
+>>  					bias-disable;
+>>  				};
+>>  
+>> -				cmd {
+>> +				cmd-pins {
+>>  					pins = "sdc2_cmd";
+>>  					drive-strength = <2>;
+>>  					bias-pull-up;
+>>  				};
+>>  
+>> -				data {
+>> +				data-pins {
+>>  					pins = "sdc2_data";
+>>  					drive-strength = <2>;
+>>  					bias-pull-up;
+>> @@ -413,13 +413,13 @@ clk {
+>>  					bias-disable;
+>>  				};
+>>  
+>> -				cmd {
+>> +				cmd-pins-pins {
 > 
->> Because it goes with 'ifs' at the bottom of the schema...
+> Is this double -pins-pins suffix intended?
 > 
-> Is there a requirement to move the allOf array to the bottom of the
-> schema if it contains the 'if' statement? If only there were some
-> kernel doc with all such implicit conventions...
 
-It's just a convention, although quite logical because "ifs" can grow
-significantly, so putting it before properties is outside of context.
-Reader does not know yet to what this if applies.
-
-> 
->>
->>>
->>>> +  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices,
->>>> +  and the Maxim MAX735x and MAX736x I2C mux/switch devices.
->>>
->>> What about combining the sentence: "The binding supports NXP
->>> PCA954x/PCA984x and Maxim MAX735x/MAX736x I2C mux/switch devices." ?
->>> Currently it does look a bit bulky.
->>
->> Drop "The binding supports". Instead describe the hardware.
->>
->>>
->>>>  
->>>>  properties:
->>>>    compatible:
->>>>      oneOf:
->>>>        - enum:
->>>> +          - maxim,max7356
->>>> +          - maxim,max7357
->>>> +          - maxim,max7358
->>>> +          - maxim,max7367
->>>> +          - maxim,max7368
->>>> +          - maxim,max7369
->>>>            - nxp,pca9540
->>>>            - nxp,pca9542
->>>>            - nxp,pca9543
->>>> @@ -59,10 +63,33 @@ properties:
->>>>      description: if present, overrides i2c-mux-idle-disconnect
->>>>      $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
->>>>  
->>>> +  vdd-supply:
->>>> +    description: A voltage regulator supplying power to the chip.
->>>> +
->>>>  required:
->>>>    - compatible
->>>>    - reg
->>>>  
->>>> +allOf:
->>>> +  - $ref: /schemas/i2c/i2c-mux.yaml#
->>>> +  - if:
->>>> +      not:
->>>> +        properties:
->>>> +          compatible:
->>>> +            contains:
->>>> +              enum:
->>>> +                - maxim,max7367
->>>> +                - maxim,max7369
->>>> +                - nxp,pca9542
->>>> +                - nxp,pca9543
->>>> +                - nxp,pca9544
->>>> +                - nxp,pca9545
->>>> +    then:
->>>
->>>> +      properties:
->>>> +        interrupts: false
->>>> +        "#interrupt-cells": false
->>>> +        interrupt-controller: false
->>>
->>> I'd suggest to add an opposite definition. Evaluate the properties for
->>> the devices which expect them being evaluated instead of falsing their
->>> existence for the devices which don't support the interrupts.
->>
-> 
->> The properties rather should be defined in top-level than in "if", so I
->> am not sure how would you want to achieve opposite way.
-> 
-> With one more implicit convention like "preferably define the
-> properties in the top-level than in if" of course I can't. Otherwise I
-> thought something like this would work:
-> +allOf:
-> +  - ...
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum: [...]
-> +    then:
-> +      properties:
-> +        interrupts: ...
-> +        "#interrupt-cells": ...
-> +        interrupt-controller: ...
-> ...
-> -  interrupts:
-> -  "#interrupt-cells":
-> -  interrupt-controller: ...
-> 
-> With unevaluatedProperties set to false and evaluation performed for
-> the particular compatibles such schema shall work with the same
-> semantic.
-
-Yes, this will work, but defining properties inside "if" is usually not
-readable.
+No, thanks for noticing it.
 
 Best regards,
 Krzysztof
