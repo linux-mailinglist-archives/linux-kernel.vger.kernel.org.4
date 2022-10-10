@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F1C5FA7DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 00:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A76595FA7E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 00:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbiJJWx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 18:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56002 "EHLO
+        id S229757AbiJJW5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 18:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiJJWxx (ORCPT
+        with ESMTP id S229446AbiJJW5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 18:53:53 -0400
+        Mon, 10 Oct 2022 18:57:50 -0400
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83107A53E
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 15:53:51 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3579d28ffd6so117625657b3.18
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 15:53:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6640821E07
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 15:57:49 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-349423f04dbso118297487b3.13
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 15:57:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=35T83bsZ4xGPTaOlyecWSoUgFUedgbH6BlUxlOUBlR8=;
-        b=oTutQm7Zb4sdm6oN3sN1aqtG9kDMiU7ItlRnISemwBS9t48mFyaPD6rfBkSxPsg5MP
-         v+uAW4w+skMr8tqJESJ8HFSR8MfGgIPd8LFPNMJW8vWFnhx2Vu0AUiVJam3kOfWdAVdf
-         QZpdTCS1rI1IY6gKaQlNlbqZzj4wDR8spjrOjq2YOuKCOdC2R4Ooaevctw5xKr+0kawn
-         BRzg1g45r2R3f/XcFo/pc4gVT9clpnMN7wC7ahzTdEV2M6iYIevOesE7ZfULdGUg5UYX
-         Tru+SL61avsmaetlHsZJTD8pk4dUTVGIvTSIggYlVaNqRlZ1oyCGMUmT0PLUkvZt2x0O
-         Gx8A==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZOGfuJwXRj12fO3BljnUi1xO+5sJG5ZEdUnatRMgzws=;
+        b=o7pcdVU0htkuRrTFLLOe2e+a5lVBDRa6RxWuow7evJJTfE2Xgzv1CiLIJiN+CRp44U
+         DusSUzL258D5xV4DvXT/lv6iJN1XwuPkAY13KirA9dz7I35HBry03uN8byrPoRhQMS+R
+         BmFr2JLlMGfptQoh5PFQBsZzDPYmVSdFlrrudNSg/OEKDGtN3kOyXHIaF9f1jlGef5FI
+         UDYWfjmHnegrAmTDcRdeoqY/03eDmUkkj4oWIYgVzqhsH6zhcN5w3GjuRYupBt2+aWD9
+         T+PW8vObHEMsRicSW6VRZcrEuB04iHDXar0v38eFTaoGTMomSYAyNosbi0TT9JlIGGLh
+         KIZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=35T83bsZ4xGPTaOlyecWSoUgFUedgbH6BlUxlOUBlR8=;
-        b=TgQKyrT5DBWufqplc27TCIafoQmAezaqZ7LwQKLbgk+IKqCNwe4YjDu14DqD+EPFYC
-         02KCYJQMUPjasZ3xn2NBOrN7pSPh0Q6co/5YAB/L9kY3ai5rHRL/hUkHZQAM2cANuhmr
-         PKjnW9ydfz0bAHSyun6+1NWifizz5Zumsr6V+7COr+tSxiIitzBIrwe8yPNMsp58UIpR
-         0PYV4cx/CfU4WUtf61Ch1t0XwQ9MERve6vXyMQ/5uDZ7MfxXmYPNF2KBrsRtrdDtcvBe
-         /pz6lUK5N2IOyT4VQ4W2lwdOfkUNgQXbu5130LLsNelVNO6Lc/HuS6emZRLDTgxFlZkX
-         9j4g==
-X-Gm-Message-State: ACrzQf0ijvkCXkZzuOoEiKRy93vupY7l5rTeUnKH0XKiI/QY9Hgv0PRK
-        s9ynfVOIhvbbIqWHPpMJ2g87Bnm8y7YpozEE4R4=
-X-Google-Smtp-Source: AMsMyM6q9jQ47MmC0Y/IsHY+Z0OQ3TlY1am07kfC8geRQ5Kno2DnoQbRAI62yZ3QiVelIrmwkSBy+pufO7a+InhVzBI=
-X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:0:100e:712:283b:bbf5:938:fb2d])
- (user=ndesaulniers job=sendgmr) by 2002:a25:9e83:0:b0:6be:ebbb:9d8b with SMTP
- id p3-20020a259e83000000b006beebbb9d8bmr20756154ybq.333.1665442431236; Mon,
- 10 Oct 2022 15:53:51 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 15:53:42 -0700
-In-Reply-To: <CAKwvOdnQ-tWa0oY0CKAwJD5WQDgVBvxDtf6=E3hS8Ytz5J1OKg@mail.gmail.com>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZOGfuJwXRj12fO3BljnUi1xO+5sJG5ZEdUnatRMgzws=;
+        b=cE0zVddEWQOz3M5gcr9cc/rZvzpY0aGYZihKe918Zle0x3du+I0ipJiKOXjudBNzlf
+         nZtOL4r/1C4Gyq1957HNr9J251yavBqiuU43tBkCvQ6TEw8Ujeol/OO6PuY+n9aISrJ7
+         ElE4CldE4DUQJOxlm7jFI6DDKks53zsCMTAYEOwQR/pq6KuhgD7S4/9GDjari/IdM1N4
+         63fZoPU0ilyf5bTQXrP66DYzzUC0DYWVTYVTxj5K4OgTEpbGVyF2dlpEpJeVqVBDCpXb
+         EEociyT4AwSZWfde6Q7msEKxRhOSoAHEwWS7FSGGOL13U83V85Mm/gL1xQGdKEC9jex7
+         LWNg==
+X-Gm-Message-State: ACrzQf2c5azrtAYUoUK9l8yuO96Dcu3Qb0CrFI7R1eKoSYtEzT+n4GD+
+        sS/kUUeJws5jXDUxQIzr1FCCZE+ew0I=
+X-Google-Smtp-Source: AMsMyM4k3yfQD01vLbzRI6tebk2S0oMcUQfElSBZCO2Jz7yjnkXKSkJ74yp0g6hgyBod2XWH6Moj8vJ9Oeo=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:32c:a73b:234e:d836])
+ (user=surenb job=sendgmr) by 2002:a25:3416:0:b0:6c0:c042:954e with SMTP id
+ b22-20020a253416000000b006c0c042954emr8311756yba.521.1665442668669; Mon, 10
+ Oct 2022 15:57:48 -0700 (PDT)
+Date:   Mon, 10 Oct 2022 15:57:44 -0700
 Mime-Version: 1.0
-References: <CAKwvOdnQ-tWa0oY0CKAwJD5WQDgVBvxDtf6=E3hS8Ytz5J1OKg@mail.gmail.com>
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1665442422; l=2033;
- i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=rZfNaR/aBwwpz1oPD+ZP2XMfcjdSORrzwrlR54g5esk=;
- b=+6wxScJxIKR3muVDZdynqydUM7ayvYaD10gSryPI/aKJaULM14Ikux1pjsPpQqfnmjRkAmi1dbwX
- zuTFcpdnC/vxxB97Gl2PE6kLYI17zVZxk/7LEp0vT7OK1OoWAzaP
-X-Mailer: git-send-email 2.38.0.rc2.412.g84df46c1b4-goog
-Message-ID: <20221010225342.3903590-1-ndesaulniers@google.com>
-Subject: [PATCH] ARM: NWFPE: avoid compiler-generated __aeabi_uldivmod
-From:   Nick Desaulniers <ndesaulniers@google.com>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Tom Rix <trix@redhat.com>, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>, Gary Guo <gary@garyguo.net>,
-        Craig Topper <craig.topper@sifive.com>,
-        Philip Reames <listmail@philipreames.com>, jh@jhauser.us,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+Message-ID: <20221010225744.101629-1-surenb@google.com>
+Subject: [RESEND PATCH v4 1/1] psi: stop relying on timer_pending for
+ poll_work rescheduling
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     peterz@infradead.org
+Cc:     hannes@cmpxchg.org, mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, matthias.bgg@gmail.com, minchan@google.com,
+        yt.chang@mediatek.com, wenju.xu@mediatek.com,
+        jonathan.jmchen@mediatek.com, show-hong.chen@mediatek.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel-team@android.com,
+        surenb@google.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -80,53 +74,220 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang-15's ability to elide loops completely became more aggressive when
-it can deduce how a variable is being updated in a loop. Counting down
-one variable by an increment of another can be replaced by a modulo
-operation.
+Psi polling mechanism is trying to minimize the number of wakeups to
+run psi_poll_work and is currently relying on timer_pending() to detect
+when this work is already scheduled. This provides a window of opportunity
+for psi_group_change to schedule an immediate psi_poll_work after
+poll_timer_fn got called but before psi_poll_work could reschedule itself.
+Below is the depiction of this entire window:
 
-For 64b variables on 32b ARM EABI targets, this can result in the
-compiler generating calls to __aeabi_uldivmod, which it does for a do
-while loop in float64_rem().
+poll_timer_fn
+  wake_up_interruptible(&group->poll_wait);
 
-For the kernel, we'd generally prefer that developers not open code 64b
-division via binary / operators and instead use the more explicit
-helpers from div64.h. On arm-linux-gnuabi targets, failure to do so can
-result in linkage failures due to undefined references to
-__aeabi_uldivmod().
+psi_poll_worker
+  wait_event_interruptible(group->poll_wait, ...)
+  psi_poll_work
+    psi_schedule_poll_work
+      if (timer_pending(&group->poll_timer)) return;
+      ...
+      mod_timer(&group->poll_timer, jiffies + delay);
 
-While developers can avoid open coding divisions on 64b variables, the
-compiler doesn't know that the Linux kernel has a partial implementation
-of a compiler runtime (--rtlib) to enforce this convention.
+Prior to 461daba06bdc we used to rely on poll_scheduled atomic which was
+reset and set back inside psi_poll_work and therefore this race window
+was much smaller.
+The larger window causes increased number of wakeups and our partners
+report visible power regression of ~10mA after applying 461daba06bdc.
+Bring back the poll_scheduled atomic and make this race window even
+narrower by resetting poll_scheduled only when we reach polling expiration
+time. This does not completely eliminate the possibility of extra wakeups
+caused by a race with psi_group_change however it will limit it to the
+worst case scenario of one extra wakeup per every tracking window (0.5s
+in the worst case).
+This patch also ensures correct ordering between clearing poll_scheduled
+flag and obtaining changed_states using memory barrier. Correct ordering
+between updating changed_states and setting poll_scheduled is ensured by
+atomic_xchg operation.
+By tracing the number of immediate rescheduling attempts performed by
+psi_group_change and the number of these attempts being blocked due to
+psi monitor being already active, we can assess the effects of this change:
 
-It's also undecidable for the compiler whether the code in question
-would be faster to execute the loop vs elide it and do the 64b division.
+Before the patch:
+                                           Run#1    Run#2      Run#3
+Immediate reschedules attempted:           684365   1385156    1261240
+Immediate reschedules blocked:             682846   1381654    1258682
+Immediate reschedules (delta):             1519     3502       2558
+Immediate reschedules (% of attempted):    0.22%    0.25%      0.20%
 
-While I actively avoid using the internal -mllvm command line flags, I
-think we get better code than using barrier() here, which will force
-reloads+spills in the loop for all toolchains.
+After the patch:
+                                           Run#1    Run#2      Run#3
+Immediate reschedules attempted:           882244   770298    426218
+Immediate reschedules blocked:             881996   769796    426074
+Immediate reschedules (delta):             248      502       144
+Immediate reschedules (% of attempted):    0.03%    0.07%     0.03%
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1666
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+The number of non-blocked immediate reschedules dropped from 0.22-0.25%
+to 0.03-0.07%. The drop is attributed to the decrease in the race window
+size and the fact that we allow this race only when psi monitors reach
+polling window expiration time.
+
+Fixes: 461daba06bdc ("psi: eliminate kthread_worker from psi trigger scheduling mechanism")
+Reported-by: Kathleen Chang <yt.chang@mediatek.com>
+Reported-by: Wenju Xu <wenju.xu@mediatek.com>
+Reported-by: Jonathan Chen <jonathan.jmchen@mediatek.com>
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+Tested-by: SH Chen <show-hong.chen@mediatek.com>
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 ---
- arch/arm/nwfpe/Makefile | 6 ++++++
- 1 file changed, 6 insertions(+)
+This patch somehow slipped through the cracks after being acked by Johannes in
+[1] and I didn't notice it until now because we cherry-picked it into Android
+kernel trees due to the urgency at that time. On the bright side, this change
+has been tested for about a year in the field by millions of devices.
+Resending v4 of this patch previously posted at [2], rebased on the latest
+Linus' TOT.
 
-diff --git a/arch/arm/nwfpe/Makefile b/arch/arm/nwfpe/Makefile
-index 303400fa2cdf..2aec85ab1e8b 100644
---- a/arch/arm/nwfpe/Makefile
-+++ b/arch/arm/nwfpe/Makefile
-@@ -11,3 +11,9 @@ nwfpe-y				+= fpa11.o fpa11_cpdo.o fpa11_cpdt.o \
- 				   entry.o
+[1] https://lore.kernel.org/lkml/YOdwxh3487PeMHRX@cmpxchg.org/
+[2] https://lore.kernel.org/lkml/20210708203648.2399667-1-surenb@google.com/
+
+ include/linux/psi_types.h |  1 +
+ kernel/sched/psi.c        | 60 +++++++++++++++++++++++++++++++++------
+ 2 files changed, 52 insertions(+), 9 deletions(-)
+
+diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+index c7fe7c089718..3f78c9bf7bb1 100644
+--- a/include/linux/psi_types.h
++++ b/include/linux/psi_types.h
+@@ -170,6 +170,7 @@ struct psi_group {
+ 	struct timer_list poll_timer;
+ 	wait_queue_head_t poll_wait;
+ 	atomic_t poll_wakeup;
++	atomic_t poll_scheduled;
  
- nwfpe-$(CONFIG_FPE_NWFPE_XP)	+= extended_cpdo.o
+ 	/* Protects data used by the monitor */
+ 	struct mutex trigger_lock;
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index 7f6030091aee..2f548beeae50 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -188,6 +188,7 @@ static void group_init(struct psi_group *group)
+ 	INIT_DELAYED_WORK(&group->avgs_work, psi_avgs_work);
+ 	mutex_init(&group->avgs_lock);
+ 	/* Init trigger-related members */
++	atomic_set(&group->poll_scheduled, 0);
+ 	mutex_init(&group->trigger_lock);
+ 	INIT_LIST_HEAD(&group->triggers);
+ 	group->poll_min_period = U32_MAX;
+@@ -561,18 +562,17 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+ 	return now + group->poll_min_period;
+ }
+ 
+-/* Schedule polling if it's not already scheduled. */
+-static void psi_schedule_poll_work(struct psi_group *group, unsigned long delay)
++/* Schedule polling if it's not already scheduled or forced. */
++static void psi_schedule_poll_work(struct psi_group *group, unsigned long delay,
++				   bool force)
+ {
+ 	struct task_struct *task;
+ 
+ 	/*
+-	 * Do not reschedule if already scheduled.
+-	 * Possible race with a timer scheduled after this check but before
+-	 * mod_timer below can be tolerated because group->polling_next_update
+-	 * will keep updates on schedule.
++	 * atomic_xchg should be called even when !force to provide a
++	 * full memory barrier (see the comment inside psi_poll_work).
+ 	 */
+-	if (timer_pending(&group->poll_timer))
++	if (atomic_xchg(&group->poll_scheduled, 1) && !force)
+ 		return;
+ 
+ 	rcu_read_lock();
+@@ -584,12 +584,15 @@ static void psi_schedule_poll_work(struct psi_group *group, unsigned long delay)
+ 	 */
+ 	if (likely(task))
+ 		mod_timer(&group->poll_timer, jiffies + delay);
++	else
++		atomic_set(&group->poll_scheduled, 0);
+ 
+ 	rcu_read_unlock();
+ }
+ 
+ static void psi_poll_work(struct psi_group *group)
+ {
++	bool force_reschedule = false;
+ 	u32 changed_states;
+ 	u64 now;
+ 
+@@ -597,6 +600,43 @@ static void psi_poll_work(struct psi_group *group)
+ 
+ 	now = sched_clock();
+ 
++	if (now > group->polling_until) {
++		/*
++		 * We are either about to start or might stop polling if no
++		 * state change was recorded. Resetting poll_scheduled leaves
++		 * a small window for psi_group_change to sneak in and schedule
++		 * an immegiate poll_work before we get to rescheduling. One
++		 * potential extra wakeup at the end of the polling window
++		 * should be negligible and polling_next_update still keeps
++		 * updates correctly on schedule.
++		 */
++		atomic_set(&group->poll_scheduled, 0);
++		/*
++		 * A task change can race with the poll worker that is supposed to
++		 * report on it. To avoid missing events, ensure ordering between
++		 * poll_scheduled and the task state accesses, such that if the poll
++		 * worker misses the state update, the task change is guaranteed to
++		 * reschedule the poll worker:
++		 *
++		 * poll worker:
++		 *   atomic_set(poll_scheduled, 0)
++		 *   smp_mb()
++		 *   LOAD states
++		 *
++		 * task change:
++		 *   STORE states
++		 *   if atomic_xchg(poll_scheduled, 1) == 0:
++		 *     schedule poll worker
++		 *
++		 * The atomic_xchg() implies a full barrier.
++		 */
++		smp_mb();
++	} else {
++		/* Polling window is not over, keep rescheduling */
++		force_reschedule = true;
++	}
 +
-+# Try really hard to avoid generating calls to __aeabi_uldivmod() from
-+# float64_rem() due to loop elision.
-+ifdef CONFIG_CC_IS_CLANG
-+CFLAGS_softfloat.o	+= -mllvm -replexitval=never
-+endif
++
+ 	collect_percpu_times(group, PSI_POLL, &changed_states);
+ 
+ 	if (changed_states & group->poll_states) {
+@@ -622,7 +662,8 @@ static void psi_poll_work(struct psi_group *group)
+ 		group->polling_next_update = update_triggers(group, now);
+ 
+ 	psi_schedule_poll_work(group,
+-		nsecs_to_jiffies(group->polling_next_update - now) + 1);
++		nsecs_to_jiffies(group->polling_next_update - now) + 1,
++		force_reschedule);
+ 
+ out:
+ 	mutex_unlock(&group->trigger_lock);
+@@ -747,7 +788,7 @@ static void psi_group_change(struct psi_group *group, int cpu,
+ 	write_seqcount_end(&groupc->seq);
+ 
+ 	if (state_mask & group->poll_states)
+-		psi_schedule_poll_work(group, 1);
++		psi_schedule_poll_work(group, 1, false);
+ 
+ 	if (wake_clock && !delayed_work_pending(&group->avgs_work))
+ 		schedule_delayed_work(&group->avgs_work, PSI_FREQ);
+@@ -1223,6 +1264,7 @@ void psi_trigger_destroy(struct psi_trigger *t)
+ 		 * can no longer be found through group->poll_task.
+ 		 */
+ 		kthread_stop(task_to_destroy);
++		atomic_set(&group->poll_scheduled, 0);
+ 	}
+ 	kfree(t);
+ }
 -- 
-2.38.0.rc2.412.g84df46c1b4-goog
+2.38.0.rc1.362.ged0d419d3c-goog
 
