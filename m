@@ -2,186 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC925F9B7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 10:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2225F5F9B82
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 10:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiJJI5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 04:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
+        id S231522AbiJJI6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 04:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231534AbiJJI5l (ORCPT
+        with ESMTP id S231129AbiJJI6n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 04:57:41 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853A567161
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 01:57:39 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 33456218B5;
-        Mon, 10 Oct 2022 08:57:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1665392258; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/GJeMJcm8hXSrZyUxyPGtmH7w1EUbF6JJHgm6aL826Q=;
-        b=XpVEPQNr4JpLchfnbWg/yC9QA8+wVWd8pRuDeCS9EIS4vwxsGXp45yDRs3cN0xs6YQZbE3
-        HOgHIIvtfTwMpoeb1MsKJHUsMcS3Gdj/j6L53VRpzHt7I9OJjU1a2vCiZpivNOpOiuOOOp
-        oUoNGreoz47/JgubDCG976QTm6nSk9A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1665392258;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/GJeMJcm8hXSrZyUxyPGtmH7w1EUbF6JJHgm6aL826Q=;
-        b=2Jygt+R11U9FYm7wJOkr8oW8YTM2YBHqrLO246w8R0cYNWocaqBocj8qw88WOYjZb/wxIn
-        KPVH8XeXJpbA33AQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E32B413479;
-        Mon, 10 Oct 2022 08:57:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id C2doNoHeQ2OxfAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 10 Oct 2022 08:57:37 +0000
-Message-ID: <5f7aafae-4761-3031-7a7d-963e813e73c3@suse.cz>
-Date:   Mon, 10 Oct 2022 10:57:37 +0200
+        Mon, 10 Oct 2022 04:58:43 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AFE6715C;
+        Mon, 10 Oct 2022 01:58:42 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MmCPf51DlzHv53;
+        Mon, 10 Oct 2022 16:53:42 +0800 (CST)
+Received: from [10.174.179.191] (10.174.179.191) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 10 Oct 2022 16:58:39 +0800
+Message-ID: <b5094513-d4b7-05f2-1ed7-fed682fb9ac7@huawei.com>
+Date:   Mon, 10 Oct 2022 16:58:39 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] mm: add stackdepot information on page->private for
- tracking
-To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
-Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Marco Elver <elver@google.com>,
-        Imran Khan <imran.f.khan@oracle.com>,
-        Dmitry Vyukov <dvyukov@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
-        steve.kang@unisoc.com, Suren Baghdasaryan <surenb@google.com>,
-        Kent Overstreet <kent.overstreet@gmail.com>
-References: <1665026390-16096-1-git-send-email-zhaoyang.huang@unisoc.com>
- <cd103df8-d0da-ab15-5755-c20631055986@suse.cz>
- <CAGWkznHSyT59Ca57EnYu+zY+tkTE=p8LKaJqS0Y7TC4s+aZ8iA@mail.gmail.com>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <CAGWkznHSyT59Ca57EnYu+zY+tkTE=p8LKaJqS0Y7TC4s+aZ8iA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [bpf-next v7 1/3] bpftool: Add auto_attach for bpf prog
+ load|loadall
+To:     Quentin Monnet <quentin@isovalent.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <hawk@kernel.org>, <nathan@kernel.org>,
+        <ndesaulniers@google.com>, <trix@redhat.com>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <llvm@lists.linux.dev>
+References: <1664277676-2228-1-git-send-email-wangyufen@huawei.com>
+ <83307f48-bef0-bff8-e3b5-f8df7a592678@isovalent.com>
+ <0242ccfe-53e5-5b9d-9fd9-73fa8bd0d7a4@huawei.com>
+ <5f26a827-0220-da23-f2fb-08f35ee7412e@isovalent.com>
+From:   wangyufen <wangyufen@huawei.com>
+In-Reply-To: <5f26a827-0220-da23-f2fb-08f35ee7412e@isovalent.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.191]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/9/22 04:25, Zhaoyang Huang wrote:
-> On Fri, Oct 7, 2022 at 6:08 PM Vlastimil Babka <vbabka@suse.cz> wrote:
+
+在 2022/10/10 16:40, Quentin Monnet 写道:
+> Sat Oct 08 2022 06:16:42 GMT+0100 ~ wangyufen <wangyufen@huawei.com>
+>> 在 2022/10/1 0:26, Quentin Monnet 写道:
+>>> Tue Sep 27 2022 12:21:14 GMT+0100 ~ Wang Yufen <wangyufen@huawei.com>
+>>>> Add auto_attach optional to support one-step load-attach-pin_link.
+>>> Nit: Now "autoattach" instead of "auto_attach". Same in commit title.
+>> will change in v8, thanks.
+>>>> For example,
+>>>>      $ bpftool prog loadall test.o /sys/fs/bpf/test autoattach
+>>>>
+>>>>      $ bpftool link
+>>>>      26: tracing  name test1  tag f0da7d0058c00236  gpl
+>>>>          loaded_at 2022-09-09T21:39:49+0800  uid 0
+>>>>          xlated 88B  jited 55B  memlock 4096B  map_ids 3
+>>>>          btf_id 55
+>>>>      28: kprobe  name test3  tag 002ef1bef0723833  gpl
+>>>>          loaded_at 2022-09-09T21:39:49+0800  uid 0
+>>>>          xlated 88B  jited 56B  memlock 4096B  map_ids 3
+>>>>          btf_id 55
+>>>>      57: tracepoint  name oncpu  tag 7aa55dfbdcb78941  gpl
+>>>>          loaded_at 2022-09-09T21:41:32+0800  uid 0
+>>>>          xlated 456B  jited 265B  memlock 4096B  map_ids 17,13,14,15
+>>>>          btf_id 82
+>>>>
+>>>>      $ bpftool link
+>>>>      1: tracing  prog 26
+>>>>          prog_type tracing  attach_type trace_fentry
+>>>>      3: perf_event  prog 28
+>>>>      10: perf_event  prog 57
+>>>>
+>>>> The autoattach optional can support tracepoints, k(ret)probes,
+>>>> u(ret)probes.
+>>>>
+>>>> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+>>>> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+>>>> ---
+>>>> v6 -> v7: add info msg print and update doc for the skip program
+>>>> v5 -> v6: skip the programs not supporting auto-attach,
+>>>>        and change optional name from "auto_attach" to "autoattach"
+>>>> v4 -> v5: some formatting nits of doc
+>>>> v3 -> v4: rename functions, update doc, bash and do_help()
+>>>> v2 -> v3: switch to extend prog load command instead of extend perf
+>>>> v2:
+>>>> https://patchwork.kernel.org/project/netdevbpf/patch/20220824033837.458197-1-weiyongjun1@huawei.com/
+>>>> v1:
+>>>> https://patchwork.kernel.org/project/netdevbpf/patch/20220816151725.153343-1-weiyongjun1@huawei.com/
+>>>>    tools/bpf/bpftool/prog.c | 81
+>>>> ++++++++++++++++++++++++++++++++++++++++++++++--
+>>>>    1 file changed, 79 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+>>>> index c81362a..84eced8 100644
+>>>> --- a/tools/bpf/bpftool/prog.c
+>>>> +++ b/tools/bpf/bpftool/prog.c
+>>>> @@ -1453,6 +1453,72 @@ static int do_run(int argc, char **argv)
+>>>>        return ret;
+>>>>    }
+>>>>    +static int
+>>>> +auto_attach_program(struct bpf_program *prog, const char *path)
+>>>> +{
+>>>> +    struct bpf_link *link;
+>>>> +    int err;
+>>>> +
+>>>> +    link = bpf_program__attach(prog);
+>>>> +    if (!link)
+>>>> +        return -1;
+>>>> +
+>>>> +    err = bpf_link__pin(link, path);
+>>>> +    if (err) {
+>>>> +        bpf_link__destroy(link);
+>>>> +        return err;
+>>>> +    }
+>>>> +    return 0;
+>>>> +}
+>>>> +
+>>>> +static int pathname_concat(const char *path, const char *name, char
+>>>> *buf)
+>>>> +{
+>>>> +    int len;
+>>>> +
+>>>> +    len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
+>>>> +    if (len < 0)
+>>>> +        return -EINVAL;
+>>>> +    if (len >= PATH_MAX)
+>>>> +        return -ENAMETOOLONG;
+>>>> +
+>>>> +    return 0;
+>>>> +}
+>>>> +
+>>>> +static int
+>>>> +auto_attach_programs(struct bpf_object *obj, const char *path)
+>>>> +{
+>>>> +    struct bpf_program *prog;
+>>>> +    char buf[PATH_MAX];
+>>>> +    int err;
+>>>> +
+>>>> +    bpf_object__for_each_program(prog, obj) {
+>>>> +        err = pathname_concat(path, bpf_program__name(prog), buf);
+>>>> +        if (err)
+>>>> +            goto err_unpin_programs;
+>>>> +
+>>>> +        err = auto_attach_program(prog, buf);
+>>>> +        if (!err)
+>>>> +            continue;
+>>>> +        if (errno == EOPNOTSUPP)
+>>>> +            p_info("Program %s does not support autoattach",
+>>>> +                   bpf_program__name(prog));
+>>>> +        else
+>>>> +            goto err_unpin_programs
+>>> With this code, if auto-attach fails, then we skip this program and move
+>>> on to the next. That's an improvement, but in that case the program
+>>> won't remain loaded in the kernel after bpftool exits. My suggestion in
+>>> my previous message (sorry if it was not clear) was to fall back to
+>>> regular pinning in that case (bpf_obj_pin()), along with the p_info()
+>>> message, so we can have the program pinned but not attached and let the
+>>> user know. If regular pinning fails as well, then we should unpin all
+>>> and error out, for consistency with bpf_object__pin_programs().
+>>>
+>>> And in that case, the (errno == EOPNOTSUPP) with fallback to regular
+>>> pinning could maybe be moved into auto_attach_program(), so that
+>>> auto-attaching single programs can use the fallback too?
+>>>
+>>> Thanks,
+>>> Quentin
+>> If I understand correctly, can we just check link?  as following:
+> Yes, this is exactly what I meant
+>
+>> --- a/tools/bpf/bpftool/prog.c
+>> +++ b/tools/bpf/bpftool/prog.c
+>> @@ -1460,9 +1460,10 @@ static int do_run(int argc, char **argv)
+>>          int err;
+>>   
+>>          link = bpf_program__attach(prog);
+>> -       if (!link)
+>> -               return -1;
+>> -
+>> +       if (!link) {
+>> +               p_info("Program %s attach failed",
+>> bpf_program__name(prog));
+>> +               return bpf_obj_pin(bpf_program__fd(prog), path);
+>> +       }
+>>          err = bpf_link__pin(link, path);
+>>          if (err) {
+>>                  bpf_link__destroy(link);
+>> @@ -1499,9 +1500,6 @@ static int pathname_concat(const char *path, const
+>> char *name, char *buf)
+>>                  err = auto_attach_program(prog, buf);
+>>                  if (!err)
+>>                          continue;
+>> -               if (errno == EOPNOTSUPP)
+>> -                       p_info("Program %s does not support autoattach",
+> p_info("Program %s does not support autoattach, falling back to pinning"
+>
+>> -                              bpf_program__name(prog));
+>>                  else
+>>                          goto err_unpin_programs;
+>>          }
 >>
->> On 10/6/22 05:19, zhaoyang.huang wrote:
->> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
->> >
->> > Private is vacant for most of Non-LRU pages while the user has explicitly
->> > operation on page->private via set_page_private, I would like introduce
->> > stackdepot information on page->private for a simplified tracking mechanism
->> > which could be help for kernel driver's memory leak.
->> >
->> > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 >>
->> This duplicates the existing page_owner functionality in a way that
->> unconditionally adds overhead to all kernels that have CONFIG_STACKDEPOT
->> enabled build-time (and also misses the need to initialize stackdepot properly).
-> Sure. This patch could be deemed as a light and complement of the page
-> owner which depends on proc fs in lived system for showing the result.
-> This patch could be mainly helpful on RAM dump as it is hard to find
-> page_ext for page owners. I also would like to make this optional via
-> defconfig item.
-
-I'm still not convinced we need this, between existing page_owner and the
-proposed code tagging framework.
-
-https://lore.kernel.org/all/20220830214919.53220-1-surenb@google.com/
-
-For finding page_ext in crash dumps, it's possible with a scriptable
-debugger like drgn or crash-python.
-
+>> and the doc is modified as follows:
 >>
->> Also wouldn't be suprised if some existing page->private users were actually
->> confused by the field suddenly being non-zero without their own action.
-> IMO, the existing page->private users will cover this field directly
-> without distrubed by handle.
+>> If the program does not support autoattach, will do regular pin along
+>> with an
+>> info message such as "Program %s attach failed". If the *OBJ* contains
+>> multiple
+>> programs and **loadall** is used, if the program A in these programs
+>> does not
+>> support autoattach, the program A will do regular pin along with an info
+>> message,
+>> and continue to autoattach the next program.
+> Not sure the "program A" designation helps too much, I'd simply write this:
+>
+> "If a program does not support autoattach, bpftool falls back to regular
+> pinning for that program instead."
+>
+> Which should be enough for both the "load" and "loadall" behaviours? I
+> wouldn't mention the help message in the docs (the p_info() won't show
+> up in the JSON output for example).
 
-Well the bot wasn't happy so far
-https://lore.kernel.org/all/202210072204.cfea59d3-oliver.sang@intel.com/
+I got it. Thanks!
 
->>
->> > ---
->> >  mm/page_alloc.c | 28 +++++++++++++++++++++++++++-
->> >  1 file changed, 27 insertions(+), 1 deletion(-)
->> >
->> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
->> > index e5486d4..b79a503 100644
->> > --- a/mm/page_alloc.c
->> > +++ b/mm/page_alloc.c
->> > @@ -75,6 +75,7 @@
->> >  #include <linux/khugepaged.h>
->> >  #include <linux/buffer_head.h>
->> >  #include <linux/delayacct.h>
->> > +#include <linux/stackdepot.h>
->> >  #include <asm/sections.h>
->> >  #include <asm/tlbflush.h>
->> >  #include <asm/div64.h>
->> > @@ -2464,6 +2465,25 @@ static inline bool should_skip_init(gfp_t flags)
->> >       return (flags & __GFP_SKIP_ZERO);
->> >  }
->> >
->> > +#ifdef CONFIG_STACKDEPOT
->> > +static noinline depot_stack_handle_t set_track_prepare(void)
->> > +{
->> > +       depot_stack_handle_t trace_handle;
->> > +       unsigned long entries[16];
->> > +       unsigned int nr_entries;
->> > +
->> > +       nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 3);
->> > +       trace_handle = stack_depot_save(entries, nr_entries, GFP_NOWAIT);
->> > +
->> > +       return trace_handle;
->> > +}
->> > +#else
->> > +static inline depot_stack_handle_t set_track_prepare(void)
->> > +{
->> > +       return 0;
->> > +}
->> > +#endif
->> > +
->> >  inline void post_alloc_hook(struct page *page, unsigned int order,
->> >                               gfp_t gfp_flags)
->> >  {
->> > @@ -2471,8 +2491,14 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
->> >                       !should_skip_init(gfp_flags);
->> >       bool init_tags = init && (gfp_flags & __GFP_ZEROTAGS);
->> >       int i;
->> > +     depot_stack_handle_t stack_handle = set_track_prepare();
->> >
->> > -     set_page_private(page, 0);
->> > +     /*
->> > +      * Don't worry, user will cover private directly without checking
->> > +      * this field and has ability to trace the page. This also will not
->> > +      * affect expected state when freeing
->> > +      */
->> > +     set_page_private(page, stack_handle);
->> >       set_page_refcounted(page);
->> >
->> >       arch_alloc_page(page, order);
->>
-
+>
+> Looks good otherwise, thanks!
