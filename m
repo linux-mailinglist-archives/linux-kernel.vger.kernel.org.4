@@ -2,142 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531EC5F9DC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C225F9DD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232143AbiJJLoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 07:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
+        id S231961AbiJJLqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 07:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231588AbiJJLoa (ORCPT
+        with ESMTP id S231438AbiJJLqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 07:44:30 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DD76F25E;
-        Mon, 10 Oct 2022 04:44:29 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id a3so16677254wrt.0;
-        Mon, 10 Oct 2022 04:44:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sXX5hX07BGx/rUvDQD47pclnXvdWt2TdZfsk0DmyS1o=;
-        b=QexsQ6NvWngVUCHCUdnqWXuh8RZErinzEE4b3IjlzZ03MmM1SmxA4a84dqAhvaBgzQ
-         eKM9/cPYLiS1VWKZ0UsZ1zIIzjOLuD4izjOLHh8mZ8uO9q8ExiSM7Ef+AYKefqt8Qs2e
-         M1hNR+FcptTA1OUk0gJNi6M+MjHlQKgTy6BEAqHS5F8com8gJGUuN/00wRoIjYviBBBK
-         tozKSitImOhpjJjHnobV4hxFWD9G5bjVLFqzfP/rGDatO2kL+4k28zPr/v5G3u3bCNRg
-         lJeuauoIq+M8ZFyzjqSbjU5sNI0Nh3PmosNakz4WhtzCBv30A6l8uzs8WpykRHMQf3Y2
-         HRaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sXX5hX07BGx/rUvDQD47pclnXvdWt2TdZfsk0DmyS1o=;
-        b=A+ihMttF6ftTjhotD7gsJhQkf+yiob1ctCs0Nt4Jn+SgkDmPuvsUtk8z7gFOgHcX1z
-         X9QpYJjRTqmGr+jfv26i118Nn7gCDQOrz9pST56D+xVRi5bVjZJKwrEe3fSwcMIL3nA9
-         TrZhMUM5z46jSPqQzLwEivnsuT49V8+vtH+//c3E2ZdLfy/ynGNi9RxwyJA/Q84H2BN+
-         rtxyf529p+WNIK35ZH6z0GbQLfMg8gOXBiMwjtw59JEOkS4OdsoXEX+wKpTY5pAV3k5F
-         LulGw44dVny5C1JkMyFsqrsL1lo4e6yGVNPUCjVp7vSQKwsmC4wNJLej7uOMpasUJmkh
-         hhsQ==
-X-Gm-Message-State: ACrzQf3MHxww3SZOUyxfWAJflyd4m2huc8CPAoQhiGCZc6vhNoEE8ChI
-        KiV8Q3UXqABBqwhrX/3B86E8NS2hstU=
-X-Google-Smtp-Source: AMsMyM4sebHFxp5Jj63tGNP0OMsIxa0DrvD6ZYUsc5f/20a2jtYEL8Ih5nU0TwPAkZujH9oIODxA6g==
-X-Received: by 2002:a05:6000:1688:b0:22e:58cd:5a2b with SMTP id y8-20020a056000168800b0022e58cd5a2bmr11111660wrd.365.1665402268389;
-        Mon, 10 Oct 2022 04:44:28 -0700 (PDT)
-Received: from [192.168.42.102] (sm4-84-91-228-85.netvisao.pt. [84.91.228.85])
-        by smtp.gmail.com with ESMTPSA id l15-20020adfe58f000000b0022ac119fcc5sm8451711wrm.60.2022.10.10.04.44.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 04:44:28 -0700 (PDT)
-Message-ID: <75c2aaa4-1e4d-ae30-3207-f6d88f8e55a0@gmail.com>
-Date:   Mon, 10 Oct 2022 12:44:27 +0100
+        Mon, 10 Oct 2022 07:46:02 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BD6578A1;
+        Mon, 10 Oct 2022 04:46:01 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29AB5YN9003340;
+        Mon, 10 Oct 2022 11:46:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=zoe3dbF7hMJPPdpuOS+siZVnRLpogAqf5CJXltqDyU0=;
+ b=CtN7SCtoHLeN6Q6DrpXuUHKZGC96GJLHYPpU7beA0nxRmsZe6khSdF5cSM+ilJRFXL95
+ MNjPk41xnLDdg4U0D0OHGcR/fIuz9HvRiNiHql3G5IGOmkB1FnKl7/SzxR45A3SecrTJ
+ 4WDEXVA8jDPLNP8LeqmpsXFn5CiH1eDPhSM8JWLMJTWD2yWH5YhGJQ8AXhfIloQiPGGS
+ +MnJ5HdGEXaHHrz8HRWElf71Gu7lcYEzNQXP+WsyJL0e/vJ3R8uS6GyjJMRT24dukBLC
+ PJyHgK0Lr+aLO2y5GPxaNqtxuoMr2siJ1GmxPk5Bz/kVibceJGVaHA23LcZaaSfzM2KG 6A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3jgwu4xt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 11:46:01 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29ABfaUP014385;
+        Mon, 10 Oct 2022 11:46:00 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3jgwu4wp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 11:46:00 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29ABbjPS005960;
+        Mon, 10 Oct 2022 11:45:58 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma02fra.de.ibm.com with ESMTP id 3k30u920cq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 11:45:58 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29ABjtTD39912186
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 10 Oct 2022 11:45:55 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2B88011C04C;
+        Mon, 10 Oct 2022 11:45:55 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A42FE11C04A;
+        Mon, 10 Oct 2022 11:45:54 +0000 (GMT)
+Received: from [9.171.5.210] (unknown [9.171.5.210])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 10 Oct 2022 11:45:54 +0000 (GMT)
+Message-ID: <748d07b8-1746-c12a-ccfb-89c8b15901d9@linux.ibm.com>
+Date:   Mon, 10 Oct 2022 13:45:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: [PATCH v2 1/2] fs/ntfs3: add system.ntfs_attrib_be extended attribute
-Content-Language: pt-PT
-From:   Daniel Pinto <danielpinto52@gmail.com>
-To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        ntfs3@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <c9b467dd-9294-232b-b808-48f62c3c2186@gmail.com>
-In-Reply-To: <c9b467dd-9294-232b-b808-48f62c3c2186@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v14 3/6] KVM: s390: pv: add
+ KVM_CAP_S390_PROTECTED_ASYNC_DISABLE
+Content-Language: en-US
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     borntraeger@de.ibm.com, thuth@redhat.com, david@redhat.com,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        scgl@linux.ibm.com, seiden@linux.ibm.com, nrb@linux.ibm.com
+References: <20220930140150.37463-1-imbrenda@linux.ibm.com>
+ <20220930140150.37463-4-imbrenda@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20220930140150.37463-4-imbrenda@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: OJ6F4DTEkzYYPz3S9qFPzC0oeXdeRm-Z
+X-Proofpoint-ORIG-GUID: CpHSoJQIEYWf6lD7_0G4sErc3Duo2ppV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-10_06,2022-10-10_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 adultscore=0 clxscore=1015 spamscore=0 impostorscore=0
+ mlxlogscore=876 lowpriorityscore=0 mlxscore=0 bulkscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210100069
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NTFS-3G provides the system.ntfs_attrib_be extended attribute, which
-has the same value as system.ntfs_attrib but represented in big-endian.
-Some utilities rely on the existence of this extended attribute.
+On 9/30/22 16:01, Claudio Imbrenda wrote:
+> Add KVM_CAP_S390_PROTECTED_ASYNC_DISABLE to signal that the
+> KVM_PV_ASYNC_DISABLE and KVM_PV_ASYNC_DISABLE_PREPARE commands for the
+> KVM_S390_PV_COMMAND ioctl are available.
+> 
+> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Reviewed-by: Nico Boehr <nrb@linux.ibm.com>
+> ---
+>   arch/s390/kvm/kvm-s390.c | 3 +++
+>   include/uapi/linux/kvm.h | 1 +
+>   2 files changed, 4 insertions(+)
+> 
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index d0027964a6f5..7a3bd68efd85 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -618,6 +618,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>   	case KVM_CAP_S390_BPB:
+>   		r = test_facility(82);
+>   		break;
+> +	case KVM_CAP_S390_PROTECTED_ASYNC_DISABLE:
+> +		r = async_destroy && is_prot_virt_host();
+> +		break;
+>   	case KVM_CAP_S390_PROTECTED:
+>   		r = is_prot_virt_host();
+>   		break;
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 02602c5c1975..9afe0084b2c5 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -1177,6 +1177,7 @@ struct kvm_ppc_resize_hpt {
+>   #define KVM_CAP_VM_DISABLE_NX_HUGE_PAGES 220
+>   #define KVM_CAP_S390_ZPCI_OP 221
+>   #define KVM_CAP_S390_CPU_TOPOLOGY 222
+> +#define KVM_CAP_S390_PROTECTED_ASYNC_DISABLE 225
 
-Improves compatibility with NTFS-3G by adding the system.ntfs_attrib_be
-extended attribute.
+I can see 223 in Paolo's next, is there a 224 that I've missed?
 
-Signed-off-by: Daniel Pinto <danielpinto52@gmail.com>
----
- fs/ntfs3/xattr.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
 
-diff --git a/fs/ntfs3/xattr.c b/fs/ntfs3/xattr.c
-index aeee5fb12092..8620a7b4b3e6 100644
---- a/fs/ntfs3/xattr.c
-+++ b/fs/ntfs3/xattr.c
-@@ -15,9 +15,10 @@
- #include "ntfs_fs.h"
- 
- // clang-format off
--#define SYSTEM_DOS_ATTRIB    "system.dos_attrib"
--#define SYSTEM_NTFS_ATTRIB   "system.ntfs_attrib"
--#define SYSTEM_NTFS_SECURITY "system.ntfs_security"
-+#define SYSTEM_DOS_ATTRIB     "system.dos_attrib"
-+#define SYSTEM_NTFS_ATTRIB    "system.ntfs_attrib"
-+#define SYSTEM_NTFS_ATTRIB_BE "system.ntfs_attrib_be"
-+#define SYSTEM_NTFS_SECURITY  "system.ntfs_security"
- // clang-format on
- 
- static inline size_t unpacked_ea_size(const struct EA_FULL *ea)
-@@ -796,7 +797,8 @@ static int ntfs_getxattr(const struct xattr_handler *handler, struct dentry *de,
- 		goto out;
- 	}
- 
--	if (!strcmp(name, SYSTEM_NTFS_ATTRIB)) {
-+	if (!strcmp(name, SYSTEM_NTFS_ATTRIB) ||
-+	    !strcmp(name, SYSTEM_NTFS_ATTRIB_BE)) {
- 		/* system.ntfs_attrib */
- 		if (!buffer) {
- 			err = sizeof(u32);
-@@ -805,6 +807,8 @@ static int ntfs_getxattr(const struct xattr_handler *handler, struct dentry *de,
- 		} else {
- 			err = sizeof(u32);
- 			*(u32 *)buffer = le32_to_cpu(ni->std_fa);
-+			if (!strcmp(name, SYSTEM_NTFS_ATTRIB_BE))
-+				*(u32 *)buffer = cpu_to_be32(*(u32 *)buffer);
- 		}
- 		goto out;
- 	}
-@@ -889,10 +893,14 @@ static noinline int ntfs_setxattr(const struct xattr_handler *handler,
- 		goto set_new_fa;
- 	}
- 
--	if (!strcmp(name, SYSTEM_NTFS_ATTRIB)) {
-+	if (!strcmp(name, SYSTEM_NTFS_ATTRIB) ||
-+	    !strcmp(name, SYSTEM_NTFS_ATTRIB_BE)) {
- 		if (size != sizeof(u32))
- 			goto out;
--		new_fa = cpu_to_le32(*(u32 *)value);
-+		if (!strcmp(name, SYSTEM_NTFS_ATTRIB_BE))
-+			new_fa = cpu_to_le32(be32_to_cpu(*(u32 *)value));
-+		else
-+			new_fa = cpu_to_le32(*(u32 *)value);
- 
- 		if (S_ISREG(inode->i_mode)) {
- 			/* Process compressed/sparsed in special way. */
+>   
+>   #ifdef KVM_CAP_IRQ_ROUTING
+>   
+
