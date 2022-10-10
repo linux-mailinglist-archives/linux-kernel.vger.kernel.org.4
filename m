@@ -2,99 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B612D5F9DD3
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D4B5F9DEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232109AbiJJLqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 07:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
+        id S231573AbiJJLsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 07:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232213AbiJJLqR (ORCPT
+        with ESMTP id S231422AbiJJLsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 07:46:17 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441FD57E2C;
-        Mon, 10 Oct 2022 04:46:15 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id r13so16603684wrj.11;
-        Mon, 10 Oct 2022 04:46:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NsnSeVEjMZcjnL6/NlJDc2TDG47KOTr9/3jGBVyFfu4=;
-        b=V4koQH5PfgZ4cfQzB+jfdUrdh2P5AxTeXhG0JeIMZtmhW6ST47raSZ4v6hBWyakPNp
-         jFNSeAVYH8dgzTUJT1T67SRGndIeKurUd6PDIhJ5iMyP8zIsyEWtYFHrAn1jH9zne6vI
-         rDg4S+hg6vaRrJUoNNM6+zHQikWQ7nQZHpUIJAmOHwZG5wNFP4624lYUgN9xUM5C93gx
-         xAkepZHstu0yPmjx5KmQNLi543GMYwLjinaG1Tv8l/6vNZfyno465u0vdTEIthf6rTHy
-         3muBYw61N+X4tny8LZ6dFG9SOFP2JudrkcAnmwxsWTHPobocKwNeJENq6NGpxKFltYIl
-         yZzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NsnSeVEjMZcjnL6/NlJDc2TDG47KOTr9/3jGBVyFfu4=;
-        b=NXUt4+/QDAQrbcgfxpvCAUL/5Yurjj74JZJPZsyC9ty2NCk/BHSaQIvZ4Aj0kx12/n
-         cSDrQR1R+kfr9NKuQjsKP/YV0YHWtmmOb+RLy5FwgWG2r3K+yrHRuxPWiff85GpwA+NQ
-         sLpUg6C+fCTDZHkWHdFXJXq2bsF5gdeUh9ycHJxEf8dsXyvEN9aKEWmILXE3XZ+jfHhr
-         Ibt/THB75NSiB1QW0WOLvpYUEQ5ZMtcwrkpFE94s3Ojf5mviXEYcZ6sUBtc1nX8d9ecC
-         g1rspcpnCBdwTVu042d5Qpn4Qm1GYeB1yiZzExaS2LRSCtXKAfkE4GujzhY1YeiXawZk
-         vlyQ==
-X-Gm-Message-State: ACrzQf3nRTcd9JYRIyORSyYNzAn6sjV46DVqvcpyPynQlfeAXybLocOq
-        5H+Rc2xwHrEB6Q66HUk1j7wK4p2EgwY=
-X-Google-Smtp-Source: AMsMyM4WZX71Z8e4s4reevWN6BC4ev4WUdvCd7/gogkoF7ELZ7KnKY7RCatXSa7DbyX05e43x8a9dQ==
-X-Received: by 2002:a5d:4f10:0:b0:231:1c7b:e42 with SMTP id c16-20020a5d4f10000000b002311c7b0e42mr432011wru.568.1665402373719;
-        Mon, 10 Oct 2022 04:46:13 -0700 (PDT)
-Received: from [192.168.42.102] (sm4-84-91-228-85.netvisao.pt. [84.91.228.85])
-        by smtp.gmail.com with ESMTPSA id k13-20020adff28d000000b0022ac672654dsm8500759wro.58.2022.10.10.04.46.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 04:46:13 -0700 (PDT)
-Message-ID: <54400493-6179-c702-90b4-665b7e93467f@gmail.com>
-Date:   Mon, 10 Oct 2022 12:46:12 +0100
+        Mon, 10 Oct 2022 07:48:02 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3577199C;
+        Mon, 10 Oct 2022 04:47:51 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 23B6966022A5;
+        Mon, 10 Oct 2022 12:47:21 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1665402441;
+        bh=7tuh7nNoMmOTC8qASx41d6YAap5Q04ANum0eL2sT7cg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=K/FhvlBlG72ChQicSlXdO8lwTUkOREPEwjtokn6anOxhxLmFaeEz5VtF9F44pbpwU
+         kaQHKZaYgD43S0I0lmkC084+gORg1sNtW7mcHyQD4Cv/pJl/y5dpmskHblM7egL4XK
+         WZoUEpORhFb2flqRsO421UkWnJ8EPtuourLcqSwITMhP1FIMEvv54IpzLkK98NfiqC
+         hiaZXxtsKV4aX53M/aLzt+COaE7KK0lARzWbkw1Epo/b2/mN5pwtLE+UO3bBxOtG0U
+         lCaGiTAzPlF/FVSlx6AMuohJ3YkHGXjV8NsGTz8BCzThnLvn/POE+Ofebr3ooN91sN
+         +/nps6Ggx09NA==
+Message-ID: <6c889c7e-4c5a-a201-e37c-bf95b6826584@collabora.com>
+Date:   Mon, 10 Oct 2022 13:47:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: [PATCH v2 2/2] fs/ntfs3: document system.ntfs_attrib_be extended
- attribute
-Content-Language: pt-PT
-From:   Daniel Pinto <danielpinto52@gmail.com>
-To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        ntfs3@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v3 05/10] dt-bindings: pinctrl: mediatek,pinctrl-mt6795:
+ Fix interrupt count
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Andy Teng <andy.teng@mediatek.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-References: <c9b467dd-9294-232b-b808-48f62c3c2186@gmail.com>
-In-Reply-To: <c9b467dd-9294-232b-b808-48f62c3c2186@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+References: <20221007125904.55371-1-y.oudjana@protonmail.com>
+ <20221007125904.55371-6-y.oudjana@protonmail.com>
+ <0769c6c8-567d-68c0-323a-9aaee1241e13@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <0769c6c8-567d-68c0-323a-9aaee1241e13@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for system.ntfs_attrib_be extended attribute.
+Il 10/10/22 13:13, Krzysztof Kozlowski ha scritto:
+> On 07/10/2022 08:58, Yassine Oudjana wrote:
+>> From: Yassine Oudjana <y.oudjana@protonmail.com>
+>>
+>> The document currently states a maximum of 1 interrupt, but the DT
+>> has 2 specified causing a dtbs_check error. Replace the maximum limit
+>> with a minimum and add per-interrupt descriptions to pass the check.
+>>
+>> Suggested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+>> ---
+>>   .../devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
+>> index 73ae6e11410b..a3a3f7fb9605 100644
+>> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
+>> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
+>> @@ -47,7 +47,10 @@ properties:
+>>   
+>>     interrupts:
+>>       description: The interrupt outputs to sysirq.
+>> -    maxItems: 1
+>> +    minItems: 1
+>> +    items:
+>> +      - description: EINT interrupt
+>> +      - description: EINT event_b interrupt
+> 
+> Is second interrupt really optional or you just wanted to silence the
+> warning?
+> 
 
-Signed-off-by: Daniel Pinto <danielpinto52@gmail.com>
----
- Documentation/filesystems/ntfs3.rst | 5 +++++
- 1 file changed, 5 insertions(+)
+The event_b interrupt exists (and fires on certain events, if configured to do so),
+but it's currently unused.
 
-diff --git a/Documentation/filesystems/ntfs3.rst b/Documentation/filesystems/ntfs3.rst
-index d67ccd22c63b..fa6ca1babc60 100644
---- a/Documentation/filesystems/ntfs3.rst
-+++ b/Documentation/filesystems/ntfs3.rst
-@@ -25,6 +25,11 @@ versions up to 3.1. File system type to use on mount is *ntfs3*.
- 	  Note: Applied to empty files, this allows to switch type between
- 	  sparse(0x200), compressed(0x800) and normal.
- 
-+	- *system.ntfs_attrib_be* gets/sets ntfs file/dir attributes.
-+
-+	  Same value as system.ntfs_attrib but always represent as big-endian
-+	  (endianness of system.ntfs_attrib is the same as of the CPU).
-+
- Mount Options
- =============
+It's really optional.
+
+> Best regards,
+> Krzysztof
+> 
+
+
