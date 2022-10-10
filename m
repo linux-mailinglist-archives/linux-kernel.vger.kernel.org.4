@@ -2,125 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E71A5FA0A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 412D75FA0C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiJJOzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 10:55:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
+        id S229783AbiJJO6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 10:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiJJOyy (ORCPT
+        with ESMTP id S229501AbiJJO5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 10:54:54 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31996FF8;
-        Mon, 10 Oct 2022 07:54:52 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29AEesAl025507;
-        Mon, 10 Oct 2022 14:54:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=tVzF3OnfiJmIRl2NMjESrl/0+Lw3fClzEhm6Xcc9cK8=;
- b=N3eEAED+kzaK/0wjvcCrM5dZFQ62p7O79WhT9vas25Dcd8hUPohuI1q9Yul9JGNynmdr
- lx85dDD2XMV/ku837yUogBck8qr4+ZFvdKWxtBWZE9a89UL0D0/oOj+2QFp6V0fLGhnO
- zPJFN1WtD0C1XzraHvpx53mJxu/7JDyIypVfyL8O3Eb8IsG0vypssjBcazbc90raNElJ
- 7T6fxDyzREfstfan8UTMBTQRzre2+k38U8h0S7ae2ER3UBtw1kCt/3NYneFM9JCSgTtw
- CuNUxYLIRkExUdFPedcRtuwIqHc6tRyd8/3IAKJHS60MgLaau5g+2wbxW0OUaEaz7pAl lg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3k7vg612-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Oct 2022 14:54:51 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29AEWjAv017752;
-        Mon, 10 Oct 2022 14:54:50 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3k7vg60f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Oct 2022 14:54:50 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29AEowR0023153;
-        Mon, 10 Oct 2022 14:54:48 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma05fra.de.ibm.com with ESMTP id 3k30u9j657-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Oct 2022 14:54:48 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29AEsjN84194820
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Oct 2022 14:54:45 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 32D7C52051;
-        Mon, 10 Oct 2022 14:54:45 +0000 (GMT)
-Received: from p-imbrenda.boeblingen.de.ibm.com (unknown [9.152.224.242])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id D186952052;
-        Mon, 10 Oct 2022 14:54:44 +0000 (GMT)
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     kvm@vger.kernel.org
-Cc:     borntraeger@de.ibm.com, frankja@linux.ibm.com, thuth@redhat.com,
-        david@redhat.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
-        seiden@linux.ibm.com, nrb@linux.ibm.com
-Subject: [PATCH v15 6/6] KVM: s390: pv: module parameter to fence asynchronous destroy
-Date:   Mon, 10 Oct 2022 16:54:42 +0200
-Message-Id: <20221010145442.85867-7-imbrenda@linux.ibm.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221010145442.85867-1-imbrenda@linux.ibm.com>
-References: <20221010145442.85867-1-imbrenda@linux.ibm.com>
+        Mon, 10 Oct 2022 10:57:41 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A036130563
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 07:57:16 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id l28so1086994qtv.4
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 07:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/TqmOJgo5WeQh0yrg49gDDHKn/XdEuTDlUHCBrMIYvg=;
+        b=DWeVbGlurVIlmFpRkDglTwWvoCPyX6C2yepr7RJq2skttu3h/Y3Vcf6aYCk8ovS+xl
+         /iC4ty4wXUBchVGftaQVR7E8StAW75HzqNHJd7jQ9sQpi4VuYOF/8LLuvwTOACa6b0CA
+         cUo4unE4ktaLiMUPDSC0v8VLHasfsQZM6HS3gfDoHXPk2y9NqJtQ/DN6j4orFCfKafC0
+         5iZqYgicR7Paun72B3mLCTliv6t6b5fEX0M48PYp2x7ljBxLb54e4wQiUHOPAWpT+Zg1
+         IS4pTX+A0f6XkrM5Ab+mu/Dwo3tVpyemagfJ7gV5XXLT14F5Wod348D1/zwydx0Myt0L
+         cEGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/TqmOJgo5WeQh0yrg49gDDHKn/XdEuTDlUHCBrMIYvg=;
+        b=h5OPvO0rHaDT99P8DiYGxI0YdJQob19f0aWa9Xofq2P9maZT7mTmCpp1CfDWinALDX
+         IhAcvH3blXSjkMjLBSngkzGu5FWgQybKsmINmYnk8K8x7oriPJI0BL5zFe0OqSN5YFWb
+         KWIyfi7BDSQbOCSpwBvJvFYAhWJFxY1NeeEU317mu7Op00Ra7Nc5HmSe6tTO03yJNFfU
+         jNknhnrKhOV4rYpZD3ECVlRNjMlGG5g5DYwHR7g5Jm0qoTpZ2JDaRwVLKOYIpC5k7k/5
+         G4zhHCEoLHt5voXtrS0Bp+2qb/TV/CUyreQzqcPUDl7sFcCthKpdpbAKr7Hwge63Mz3k
+         3N9A==
+X-Gm-Message-State: ACrzQf2PA3mSbrHXL3z9P6RXeCPKhs3xiPPqutLTTUdSKxrXRS3r2eP7
+        vNkXUvYGRa+UY+5rkw2oo3XrgA==
+X-Google-Smtp-Source: AMsMyM7HpA4Y/zi55GTte5bpmkf2QgWTmHeH3+E6fKGv5WzzlEH5yQGtbUDRMpQqUEvklfWPcPL1Rg==
+X-Received: by 2002:a05:622a:547:b0:399:b22a:de4d with SMTP id m7-20020a05622a054700b00399b22ade4dmr5191285qtx.115.1665413815789;
+        Mon, 10 Oct 2022 07:56:55 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id s187-20020ae9dec4000000b006ce76811a07sm9952409qkf.75.2022.10.10.07.56.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Oct 2022 07:56:54 -0700 (PDT)
+Message-ID: <2e89fc3a-bc54-17e7-d352-25db877172ff@linaro.org>
+Date:   Mon, 10 Oct 2022 10:54:43 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: fDybC6RGejcEVCMgjVxAKuWmKwDwhSY7
-X-Proofpoint-GUID: KvY1zL-FxOMBuAvJmAGPtfw1qqE5Nn1N
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-10_08,2022-10-10_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 phishscore=0 adultscore=0 bulkscore=0 mlxlogscore=999
- mlxscore=0 priorityscore=1501 suspectscore=0 impostorscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210100086
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 8/8] MIPS: DTS: Ingenic: Add support for the JZ4755 SoC
+Content-Language: en-US
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org
+References: <20221009181338.2896660-1-lis8215@gmail.com>
+ <20221009181338.2896660-9-lis8215@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221009181338.2896660-9-lis8215@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the module parameter "async_destroy", to allow the asynchronous
-destroy mechanism to be switched off. This might be useful for
-debugging purposes.
+On 09/10/2022 14:13, Siarhei Volkau wrote:
+> Add preliminary support for boards based on the JZ4755 SoC from
+> Ingenic.
+> 
+> It is a low-power SoC with a MIPS32r1 SoC running at ~432 MHz, and no
+> FPU.
+> 
+> The JZ4755 SoC is supposed to be newer than the JZ4725B SoC, but its
+> internals are very close to each other. So JZ4755 DT is reusing many
+> JZ4725b drivers because JZ4725b support in the kernel appears earlier.
+> 
+> Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+> ---
+>  arch/mips/boot/dts/ingenic/jz4755.dtsi | 439 +++++++++++++++++++++++++
 
-The parameter is enabled by default since the feature is opt-in anyway.
+How do you build it? How do you test it? It's basically non-compillable,
+dead code. You need a board.
 
-Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
-Reviewed-by: Steffen Eiden <seiden@linux.ibm.com>
----
- arch/s390/kvm/kvm-s390.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index 372230b92448..c75754215c8e 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -209,7 +209,13 @@ unsigned int diag9c_forwarding_hz;
- module_param(diag9c_forwarding_hz, uint, 0644);
- MODULE_PARM_DESC(diag9c_forwarding_hz, "Maximum diag9c forwarding per second, 0 to turn off");
- 
--static int async_destroy;
-+/*
-+ * allow asynchronous deinit for protected guests; enable by default since
-+ * the feature is opt-in anyway
-+ */
-+static int async_destroy = 1;
-+module_param(async_destroy, int, 0444);
-+MODULE_PARM_DESC(async_destroy, "Asynchronous destroy for protected guests");
- 
- /*
-  * For now we handle at most 16 double words as this is what the s390 base
--- 
-2.37.3
+Best regards,
+Krzysztof
 
