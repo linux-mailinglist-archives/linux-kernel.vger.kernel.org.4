@@ -2,292 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EB45FA349
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 20:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9745FA351
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 20:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbiJJSSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 14:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
+        id S229531AbiJJSW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 14:22:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiJJSSh (ORCPT
+        with ESMTP id S229591AbiJJSWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 14:18:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963076D56D;
-        Mon, 10 Oct 2022 11:18:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24A4BB8105C;
-        Mon, 10 Oct 2022 18:18:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B25BCC433C1;
-        Mon, 10 Oct 2022 18:18:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665425911;
-        bh=FsaNCIokmh4G9yeY3yvNAYmujF1JxvQEpziOw+09JTk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=e9FT2NwvMQa3PKxHhmRlPWCgD+BGusGqo9uBsWvCIgwzeEhOaIfV9LOQNBl+zHxCa
-         qCbS9WfwHxRxLITzwaJWx7HOYc+QgqWrSnDSx4A59sk2dkKsQg/iStrr/ZyDVdjzAB
-         0Nu4Mopx9UbphsW087KX0U8UKcs+u7Z6kiC7CkhC85ozuhtw5lxQjAIlOwcgENqz1Y
-         WrRj6yHpWZ7LrlykRqwLAmSnauYSlIfW+nogizqI+RMVXbDRwhXNgmvJ801oRYnrM8
-         sEV/hAY5xh/pjMqmF6vw94CaiY3LmLE/p3rUT/Mu5dPUXpTuFo3BFbHZstODFDn1gW
-         r/+SQIQCm8CCA==
-Received: by mail-ed1-f46.google.com with SMTP id r14so2689948edc.7;
-        Mon, 10 Oct 2022 11:18:31 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1Uz3JyW2orAu9HmV0riEaKZr6IkJ1Mxap7HwRc4KNv0nKKyus9
-        jFYaxTcEazcXIyOMfRL1Z5uI4iCduxgp65EWSg0=
-X-Google-Smtp-Source: AMsMyM4DoVn+ZscFaodr4r1FEfn3P9tYC/3iZctoYq1PmuN+331RxxvkaPDV1787aIK0eIrackWNsaePocFONBVoAGU=
-X-Received: by 2002:aa7:da03:0:b0:458:e117:28d8 with SMTP id
- r3-20020aa7da03000000b00458e11728d8mr19253934eds.387.1665425909893; Mon, 10
- Oct 2022 11:18:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221006220840.275-1-jonathan.derrick@linux.dev>
- <20221006220840.275-4-jonathan.derrick@linux.dev> <CAPhsuW6Ur8ic_u3nj9-TSpZ96jWqBa3GLEnw207sN8eJECYwZg@mail.gmail.com>
- <226b8745-6406-070a-6b08-a265b57a7242@linux.dev>
-In-Reply-To: <226b8745-6406-070a-6b08-a265b57a7242@linux.dev>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 10 Oct 2022 11:18:18 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4Sxr3b=aZye_drJL+sqcwkQceQ-CEZMNjCwV-bquvZ9A@mail.gmail.com>
-Message-ID: <CAPhsuW4Sxr3b=aZye_drJL+sqcwkQceQ-CEZMNjCwV-bquvZ9A@mail.gmail.com>
-Subject: Re: [PATCH 2/2] md/bitmap: Add chunk-count-based bitmap flushing
-To:     Jonathan Derrick <jonathan.derrick@linux.dev>
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jonathan.derrick@solidigm.com, jonathanx.sk.derrick@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 10 Oct 2022 14:22:23 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EDA647F5
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 11:22:22 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id e129so10876741pgc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 11:22:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fastly.com; s=google;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+bSxSJqNb+sqoNTXSt8Ye05VUAgMzhi/zgUSPCGgMEc=;
+        b=n/8VHYiA7PJrbHwJIQGtT8aJdABS3/DM5tlhlN+UkXerEmjBV7g962mdOrOsnsFT0Z
+         oKIpOF3iS/VaLfq79VOaHWcjnEGmtPNYaUtINafZ8N+Asxq+MC3qgBTt2Sh6iTREKXQQ
+         0N5G//kY1te3/PKLi1pL5hwN5Ju4eFQlJ88RA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+bSxSJqNb+sqoNTXSt8Ye05VUAgMzhi/zgUSPCGgMEc=;
+        b=mH9DFQvngM0C2QEfdhgXB3sWw2UpNTCYMx9D4S0R5thOK8Tmlgc1aUk0avPOzYoprK
+         Btehz8FFsA2eUjWUngeAhxqXFnj/tT4VxML5QE4e2/4bto4UziJABqXbGJQdG/8CxJW2
+         tUiM/W1nLqsHmK+CdSpXklc+WSyPt1icjvhUOjeiEKn2T7vXvZnevA+N/dTQcM9DCAW4
+         Kp/S3tYECL6+qQzGBhs57hWsJ455+6B0aLQs1Ly9KPmPee+CwRNW9eMNl4nV2nmrUlNe
+         0sHBsOWCeGH2hoMDmpjzsgGDed1OtFiFnQPgS0YVyqNx4XV/rqSLdmIabnVENZz4InZ5
+         CsCQ==
+X-Gm-Message-State: ACrzQf0OgW7oKlqQf7LUNH0vgFKO3VHYHxqHwDEk6T26yAEg69OZQ5bw
+        PWgdmCGECXIqt6pdXXSEKoGH4/7gi8bwPA==
+X-Google-Smtp-Source: AMsMyM4mprkW/0gEZ0uddLZDAnuC3PC2QmjdN6vWo+03MtObwNsStMpdQpOumTxOgNHkjhMX5aI4Mw==
+X-Received: by 2002:a63:186:0:b0:442:ee11:48a5 with SMTP id 128-20020a630186000000b00442ee1148a5mr17565584pgb.284.1665426142330;
+        Mon, 10 Oct 2022 11:22:22 -0700 (PDT)
+Received: from localhost.localdomain (c-24-6-151-244.hsd1.ca.comcast.net. [24.6.151.244])
+        by smtp.gmail.com with ESMTPSA id z18-20020aa79e52000000b005632d3b5c9csm3460195pfq.211.2022.10.10.11.22.21
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 10 Oct 2022 11:22:22 -0700 (PDT)
+From:   Joe Damato <jdamato@fastly.com>
+To:     netdev@vger.kernel.org
+Cc:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
+        linux-kernel@vger.kernel.org, Joe Damato <jdamato@fastly.com>
+Subject: [net-next PATCH] net: core: Add napi_complete_done tracepoint
+Date:   Mon, 10 Oct 2022 11:21:34 -0700
+Message-Id: <1665426094-88160-1-git-send-email-jdamato@fastly.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 7, 2022 at 11:58 AM Jonathan Derrick
-<jonathan.derrick@linux.dev> wrote:
->
->
->
-> On 10/7/2022 11:50 AM, Song Liu wrote:
-> > On Thu, Oct 6, 2022 at 3:09 PM Jonathan Derrick
-> > <jonathan.derrick@linux.dev> wrote:
-> >
-> > [...]
-> >
-> >> diff --git a/drivers/md/md-bitmap.h b/drivers/md/md-bitmap.h
-> >> index cfd7395de8fd..e0aeedbdde17 100644
-> >> --- a/drivers/md/md-bitmap.h
-> >> +++ b/drivers/md/md-bitmap.h
-> >> @@ -11,10 +11,12 @@
-> >>  /* version 4 insists the bitmap is in little-endian order
-> >>   * with version 3, it is host-endian which is non-portable
-> >>   * Version 5 is currently set only for clustered devices
-> >> ++ * Version 6 supports the flush-chunks threshold
-> >>   */
-> >>  #define BITMAP_MAJOR_HI 4
-> >>  #define BITMAP_MAJOR_CLUSTERED 5
-> >>  #define        BITMAP_MAJOR_HOSTENDIAN 3
-> >> +#define BITMAP_MAJOR_CHUNKFLUSH 6
-> >>
-> >>  /*
-> >>   * in-memory bitmap:
-> >> @@ -135,7 +137,8 @@ typedef struct bitmap_super_s {
-> >>                                   * reserved for the bitmap. */
-> >>         __le32 nodes;        /* 68 the maximum number of nodes in cluster. */
-> >>         __u8 cluster_name[64]; /* 72 cluster name to which this md belongs */
-> >> -       __u8  pad[256 - 136]; /* set to zero */
-> >> +       __le32 daemon_flush_chunks; /* 136 dirty chunks between flushes */
-> >> +       __u8  pad[256 - 140]; /* set to zero */
-> >>  } bitmap_super_t;
-> >
-> > Do we really need this to be persistent? How about we configure it at run
-> > time via a sysfs file?
-> >
-> > Also, please share more data on the performance benefit of the set.
-> >
-> > Thanks,
-> > Song
-> >
-> Hi Song,
->
-> Patch 1/2 changes default behavior, which patch 2/2 tries to address.
+Add a tracepoint to help debug napi_complete_done. Users who set
+defer_hard_irqs and the GRO timer can use this tracepoint to better
+understand what impact these options have when their NIC driver calls
+napi_complete_done.
 
-Have you tried to evaluate the impact on the accuracy of the bitmap?
-Specifically, if we power off the system during writes, do we see data
-or parity mismatch that is not covered by the bitmap?
+perf trace can be used to enable the tracepoint and the output can be
+examined to determine which settings should be adjusted.
 
-> I can change it to be configurable via sysfs instead.
-> Should there be a default?
+$ sudo perf trace -e napi:napi_complete_done -a --call-graph=fp --libtraceevent_print
 
-If there is any impact on bitmap accuracy. I think the default should
-work identical as before the set. IOW, we should not delay the bitmap
-update.
+356.774 :0/0 napi:napi_complete_done(napi_complete_done on napi struct 0xffff88e052f02010 dev vlan100 irq_defers_remaining 2 timeout 20000 work_done 0 ret 0)
+	napi_complete_done ([kernel.kallsyms])
+	napi_complete_done ([kernel.kallsyms])
+	i40e_napi_poll ([i40e])
+	__napi_poll ([kernel.kallsyms])
+	net_rx_action ([kernel.kallsyms])
+	__do_softirq ([kernel.kallsyms])
+	sysvec_apic_timer_interrupt ([kernel.kallsyms])
+	asm_sysvec_apic_timer_interrupt ([kernel.kallsyms])
+	intel_idle_irq ([kernel.kallsyms])
+	cpuidle_enter_state ([kernel.kallsyms])
+	cpuidle_enter ([kernel.kallsyms])
+	do_idle ([kernel.kallsyms])
+	cpu_startup_entry ([kernel.kallsyms])
+	[0x243d98] ([kernel.kallsyms])
+	secondary_startup_64_no_verify ([kernel.kallsyms])
 
-Thanks,
-Song
+Signed-off-by: Joe Damato <jdamato@fastly.com>
+---
+ include/trace/events/napi.h | 29 +++++++++++++++++++++++++++++
+ net/core/dev.c              |  2 ++
+ 2 files changed, 31 insertions(+)
 
->
->
-> Here are my observations via biosnoop and RAID1, 4M chunksize, 238436 chunks, bitmap=internal
-> fio --name=test --direct=1 --filename=/dev/md0 --rw=randwrite --runtime=60
->  --percentile_list=1.0:25.0:50.0:75.0:90.0:95.0:99.0:99.9:99.99:99..999999:100.0
->
->
-> Default, bitmap updates happened concurrently with I/O:
->    bw (  KiB/s): min=18690, max=30618, per=99.94%, avg=23822.07, stdev=2522.73, samples=119
->    iops        : min= 4672, max= 7654, avg=5955.20, stdev=630.71, samples=119
->
-> TIME(s)     COMM           PID     DISK      T SECTOR     BYTES  LAT(ms)
-> 38.090366   md0_raid1      4800    nvme6n1   W 40         4096      0.01
-> 38.090423   md0_raid1      4800    nvme3n1   W 40         4096      0.07
-> 38.090442   md0_raid1      4800    nvme3n1   W 1016633184 4096      0.01
-> 38.090439   md0_raid1      4800    nvme6n1   W 1016633184 4096      0.01
-> 38.090479   md0_raid1      4800    nvme6n1   W 56         4096      0.01
-> 38.090493   md0_raid1      4800    nvme6n1   W 1449894256 4096      0.01
-> 38.090477   md0_raid1      4800    nvme3n1   W 56         4096      0.01
-> 38.090496   md0_raid1      4800    nvme3n1   W 1449894256 4096      0.01
-> 38.090530   md0_raid1      4800    nvme3n1   W 16         4096      0.01
-> 38.090555   md0_raid1      4800    nvme3n1   W 110493568  4096      0.01
-> 38.090538   md0_raid1      4800    nvme6n1   W 16         4096      0.01
-> 38.090551   md0_raid1      4800    nvme6n1   W 110493568  4096      0.01
-> 38.090596   md0_raid1      4800    nvme6n1   W 56         4096      0.01
-> 38.090647   md0_raid1      4800    nvme3n1   W 56         4096      0.06
-> 38.090666   md0_raid1      4800    nvme3n1   W 1455846976 4096      0.01
-> 38.090663   md0_raid1      4800    nvme6n1   W 1455846976 4096      0.01
-> 38.090707   md0_raid1      4800    nvme6n1   W 64         4096      0.01
-> 38.090699   md0_raid1      4800    nvme3n1   W 64         4096      0.01
-> 38.090723   md0_raid1      4800    nvme3n1   W 1665013728 4096      0.01
-> 38.090720   md0_raid1      4800    nvme6n1   W 1665013728 4096      0.01
-> 38.090764   md0_raid1      4800    nvme6n1   W 64         4096      0.01
-> 38.090812   md0_raid1      4800    nvme3n1   W 64         4096      0.06
-> 38.090832   md0_raid1      4800    nvme3n1   W 1637994296 4096      0.01
-> 38.090828   md0_raid1      4800    nvme6n1   W 1637994296 4096      0.01
->
->
->
->
-> With patch 1/2, bitmaps only update on the 'delay' parameter (default 5s):
->    bw (  KiB/s): min=135712, max=230938, per=100.00%, avg=209308.56, stdev=29254.31, samples=119
->    iops        : min=33928, max=57734, avg=52326.78, stdev=7313.57, samples=119
->
-> TIME(s)     COMM           PID     DISK      T SECTOR     BYTES  LAT(ms)
-> 16.292235   md0_raid1      4841    nvme6n1   W 297367432  4096      0.01
-> 16.292258   md0_raid1      4841    nvme6n1   W 16         4096      0.01
-> 16.292266   md0_raid1      4841    nvme6n1   W 24         4096      0.01
-> 16.292277   md0_raid1      4841    nvme6n1   W 32         4096      0.01
-> 16.292259   md0_raid1      4841    nvme3n1   W 16         4096      0.01
-> 16.292280   md0_raid1      4841    nvme3n1   W 32         4096      0.01
-> 16.292305   md0_raid1      4841    nvme3n1   W 56         4096      0.01
-> 16.292286   md0_raid1      4841    nvme6n1   W 40         4096      0.01
-> 16.292295   md0_raid1      4841    nvme6n1   W 48         4096      0.01
-> 16.292326   md0_raid1      4841    nvme3n1   W 72         1536      0.01
-> 16.292323   md0_raid1      4841    nvme6n1   W 64         4096      0.02
-> 16.292326   md0_raid1      4841    nvme6n1   W 56         4096      0.03
-> 16.292334   md0_raid1      4841    nvme6n1   W 72         1536      0.02
-> 16.300697   md0_raid1      4841    nvme3n1   W 1297533744 4096      0.01
-> 16.300702   md0_raid1      4841    nvme6n1   W 1297533744 4096      0.01
-> 16.300803   md0_raid1      4841    nvme6n1   W 1649080856 4096      0.01
-> 16.300798   md0_raid1      4841    nvme3n1   W 1649080856 4096      0.01
-> 16.300823   md0_raid1      4841    nvme3n1   W 1539317792 4096      0.01
-> 16.300845   md0_raid1      4841    nvme3n1   W 1634570232 4096      0.01
-> 16.300867   md0_raid1      4841    nvme3n1   W 579232208  4096      0.01
-> 16.300889   md0_raid1      4841    nvme3n1   W 1818140424 4096      0.01
-> 16.300922   md0_raid1      4841    nvme3n1   W 412971920  4096      0.02
-> ...
-> 21.293225   md0_raid1      4841    nvme3n1   W 1279122360 4096      0.01
-> 21.293242   md0_raid1      4841    nvme3n1   W 40326272   4096      0.01
-> 21.293223   md0_raid1      4841    nvme6n1   W 1279122360 4096      0.01
-> 21.293243   md0_raid1      4841    nvme6n1   W 40326272   4096      0.01
-> 21.293261   md0_raid1      4841    nvme6n1   W 16         4096      0.01
-> 21.293266   md0_raid1      4841    nvme6n1   W 24         4096      0.01
-> 21.293271   md0_raid1      4841    nvme6n1   W 32         4096      0.01
-> 21.293275   md0_raid1      4841    nvme3n1   W 32         4096      0.01
-> 21.293292   md0_raid1      4841    nvme3n1   W 48         4096      0.01
-> 21.293296   md0_raid1      4841    nvme3n1   W 56         4096      0.01
-> 21.293309   md0_raid1      4841    nvme3n1   W 72         1536      0.01
-> 21.293266   md0_raid1      4841    nvme3n1   W 24         4096      0.01
-> 21.293326   md0_raid1      4841    nvme6n1   W 48         4096      0.05
-> 21.293328   md0_raid1      4841    nvme6n1   W 40         4096      0.06
-> 21.293331   md0_raid1      4841    nvme6n1   W 72         1536      0.03
-> 21.293333   md0_raid1      4841    nvme6n1   W 64         4096      0.04
-> 21.293334   md0_raid1      4841    nvme6n1   W 56         4096      0.05
-> 21.298526   md0_raid1      4841    nvme3n1   W 681973000  4096      0.01
->
->
->
->
-> Good, but with the granularity of N seconds, it might be too infrequent.
-> Here is chunk-flush=512 (2GB threshold in 4MB chunk size):
->    bw (  KiB/s): min=92692, max=134904, per=100.00%, avg=125127.43, stdev=6758.51, samples=119
->    iops        : min=23173, max=33726, avg=31281.55, stdev=1689.63, samples=119
->
-> TIME(s)     COMM           PID     DISK      T SECTOR     BYTES  LAT(ms)
-> 13.193339   md0_raid1      5972    nvme6n1   W 16         4096      0.01
-> 13.193344   md0_raid1      5972    nvme6n1   W 32         4096      0.01
-> 13.193346   md0_raid1      5972    nvme6n1   W 24         4096      0.01
-> 13.193350   md0_raid1      5972    nvme6n1   W 40         4096      0.01
-> 13.193356   md0_raid1      5972    nvme6n1   W 48         4096      0.01
-> 13.193361   md0_raid1      5972    nvme6n1   W 64         4096      0.01
-> 13.193363   md0_raid1      5972    nvme6n1   W 56         4096      0.01
-> 13.193555   md0_raid1      5972    nvme6n1   W 72         1536      0.20
-> 13.193289   md0_raid1      5972    nvme3n1   W 1912285848 4096      0.01
-> 13.193306   md0_raid1      5972    nvme3n1   W 836455896  4096      0.01
-> 13.193323   md0_raid1      5972    nvme3n1   W 233728136  4096      0.01
-> 13.193339   md0_raid1      5972    nvme3n1   W 16         4096      0.01
-> 13.193344   md0_raid1      5972    nvme3n1   W 24         4096      0.01
-> 13.193362   md0_raid1      5972    nvme3n1   W 48         4096      0.01
-> 13.193365   md0_raid1      5972    nvme3n1   W 64         4096      0.01
-> 13.193366   md0_raid1      5972    nvme3n1   W 56         4096      0.01
-> 13.193574   md0_raid1      5972    nvme3n1   W 72         1536      0.21
-> 13.196759   md0_raid1      5972    nvme3n1   W 89571592   4096      0.01
-> 13.196810   md0_raid1      5972    nvme6n1   W 89571592   4096      0.06
-> 13.196913   md0_raid1      5972    nvme6n1   W 16         4096      0.01
-> 13.196910   md0_raid1      5972    nvme3n1   W 16         4096      0.01
-> 13.199444   md0_raid1      5972    nvme3n1   W 64         4096      0.01
-> 13.199447   md0_raid1      5972    nvme3n1   W 137126232  4096      0.01
-> 13.199515   md0_raid1      5972    nvme6n1   W 137126232  4096      0.08
-> 13.199519   md0_raid1      5972    nvme6n1   W 64         4096      0.08
-> 13.199617   md0_raid1      5972    nvme6n1   W 1216062808 4096      0.01
-> ... (508 ios later)
-> 13.208764   md0_raid1      5972    nvme6n1   W 16         4096      0.01
-> 13.208768   md0_raid1      5972    nvme6n1   W 32         4096      0.01
-> 13.208770   md0_raid1      5972    nvme6n1   W 24         4096      0.01
-> 13.208775   md0_raid1      5972    nvme6n1   W 40         4096      0.01
-> 13.208781   md0_raid1      5972    nvme6n1   W 48         4096      0.01
-> 13.208786   md0_raid1      5972    nvme6n1   W 56         4096      0.01
-> 13.208790   md0_raid1      5972    nvme6n1   W 64         4096      0.01
-> 13.208729   md0_raid1      5972    nvme3n1   W 1607847808 4096      0.01
-> 13.208747   md0_raid1      5972    nvme3n1   W 371214368  4096      0.01
-> 13.208770   md0_raid1      5972    nvme3n1   W 32         4096      0.01
-> 13.208789   md0_raid1      5972    nvme3n1   W 64         4096      0.01
-> 13.208952   md0_raid1      5972    nvme6n1   W 72         1536      0.17
-> 13.209079   md0_raid1      5972    nvme3n1   W 72         1536      0.29
-> 13.212216   md0_raid1      5972    nvme3n1   W 1146106480 4096      0.01
-> 13.212269   md0_raid1      5972    nvme6n1   W 1146106480 4096      0.06
-> 13.212368   md0_raid1      5972    nvme6n1   W 16         4096      0.01
-> 13.212365   md0_raid1      5972    nvme3n1   W 16         4096      0.01
->
->
-> Without 1/2: 6k iops
-> With 1/2: 52k iops
-> With 2/2 params as above: 31k iops
->
-> The count calculation could use some improvement to close the iops gap to delay-based flushing
->
-> >>
-> >>  /* notes:
-> >> diff --git a/drivers/md/md.h b/drivers/md/md.h
-> >> index b4e2d8b87b61..d25574e46283 100644
-> >> --- a/drivers/md/md.h
-> >> +++ b/drivers/md/md.h
-> >> @@ -497,6 +497,7 @@ struct mddev {
-> >>                 struct mutex            mutex;
-> >>                 unsigned long           chunksize;
-> >>                 unsigned long           daemon_sleep; /* how many jiffies between updates? */
-> >> +               unsigned int            daemon_flush_chunks; /* how many dirty chunks between updates */
-> >>                 unsigned long           max_write_behind; /* write-behind mode */
-> >>                 int                     external;
-> >>                 int                     nodes; /* Maximum number of nodes in the cluster */
-> >> --
-> >> 2.31.1
-> >>
+diff --git a/include/trace/events/napi.h b/include/trace/events/napi.h
+index 6678cf8..e8473d3 100644
+--- a/include/trace/events/napi.h
++++ b/include/trace/events/napi.h
+@@ -11,6 +11,35 @@
+ 
+ #define NO_DEV "(no_device)"
+ 
++TRACE_EVENT(napi_complete_done,
++	TP_PROTO(struct napi_struct *napi, int hard_irq_defer, unsigned long timeout,
++		int work_done, bool ret),
++
++	TP_ARGS(napi, hard_irq_defer, timeout, work_done, ret),
++
++	TP_STRUCT__entry(
++		__field(	struct napi_struct *,	napi)
++		__string(	dev_name,  napi->dev ? napi->dev->name : NO_DEV)
++		__field(	int,			hard_irq_defer)
++		__field(	unsigned long,		timeout)
++		__field(	int,			work_done)
++		__field(	int,			ret)
++	),
++
++	TP_fast_assign(
++		__entry->napi = napi;
++		__assign_str(dev_name, napi->dev ? napi->dev->name : NO_DEV);
++		__entry->hard_irq_defer = hard_irq_defer;
++		__entry->timeout = timeout;
++		__entry->work_done = work_done;
++		__entry->ret = ret;
++	),
++
++	TP_printk("napi_complete_done on napi struct %p dev %s irq_defers_remaining %d timeout %lu work_done %d ret %d",
++		__entry->napi, __get_str(dev_name), __entry->hard_irq_defer,
++		__entry->timeout, __entry->work_done, __entry->ret)
++);
++
+ TRACE_EVENT(napi_poll,
+ 
+ 	TP_PROTO(struct napi_struct *napi, int work, int budget),
+diff --git a/net/core/dev.c b/net/core/dev.c
+index fa53830..e601f97 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -6091,6 +6091,8 @@ bool napi_complete_done(struct napi_struct *n, int work_done)
+ 	if (timeout)
+ 		hrtimer_start(&n->timer, ns_to_ktime(timeout),
+ 			      HRTIMER_MODE_REL_PINNED);
++
++	trace_napi_complete_done(n, n->defer_hard_irqs_count, timeout, work_done, ret);
+ 	return ret;
+ }
+ EXPORT_SYMBOL(napi_complete_done);
+-- 
+2.7.4
+
