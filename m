@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A80EB5F99B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 043D55F9969
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbiJJHPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35808 "EHLO
+        id S231829AbiJJHMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232137AbiJJHNc (ORCPT
+        with ESMTP id S231897AbiJJHLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:13:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDBEDA;
-        Mon, 10 Oct 2022 00:08:26 -0700 (PDT)
+        Mon, 10 Oct 2022 03:11:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BBF2317A;
+        Mon, 10 Oct 2022 00:07:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D84E860E08;
-        Mon, 10 Oct 2022 07:07:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F21DDC433D6;
-        Mon, 10 Oct 2022 07:07:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 336C2B80E60;
+        Mon, 10 Oct 2022 07:07:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ED94C433C1;
+        Mon, 10 Oct 2022 07:07:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665385639;
-        bh=wECgCqn284g2WLAFZTD5CT6LRDXaFqK+ZymroE7rTwA=;
+        s=korg; t=1665385641;
+        bh=YoajUM20gTB4qwbFyiuAFKO4hfeAyGhn+vIsU9/vtJA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lGL5u8/hucUCP+Gf4NgHBu9V6oOJwSIPgBWOcjAgDjCI35mSwGtKijqs9ZMS3Np1y
-         llHM38NwDNJdPslPaSBZ/Mj565gBYTeCNaNYcd9XrmwDF8KrsqmfHKnM4NtArJURrM
-         V1lvJZQdWeDSOqxnxKi9Qbm0FIjIP9BfpVJs/290=
+        b=l1nSo6a2FEKSf1dwCrlPpH9n11YbskN8kNiN+TiUGpFSUXhohA0CCs1PmNNm+lEwO
+         iix9/pHknO09RA3+9zoFXfGtrYIi8yVTAPdgb43Xgx1585Gc6r5SEm7KAQmQxSE174
+         4pOtxNb8v7nKsJsG+6TjzotCAwRm0mTn7Yn8zK94=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jianfeng Gao <jianfeng.gao@intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
+        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 35/48] perf/x86/intel: Fix unchecked MSR access error for Alder Lake N
-Date:   Mon, 10 Oct 2022 09:05:33 +0200
-Message-Id: <20221010070334.605467137@linuxfoundation.org>
+Subject: [PATCH 5.19 36/48] [coredump] dont use __kernel_write() on kmap_local_page()
+Date:   Mon, 10 Oct 2022 09:05:34 +0200
+Message-Id: <20221010070334.630261714@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221010070333.676316214@linuxfoundation.org>
 References: <20221010070333.676316214@linuxfoundation.org>
@@ -55,161 +53,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+From: Al Viro <viro@zeniv.linux.org.uk>
 
-[ Upstream commit 24919fdea6f8b31d7cdf32ac291bc5dd0b023878 ]
+[ Upstream commit 06bbaa6dc53cb72040db952053432541acb9adc7 ]
 
-For some Alder Lake N machine, the below unchecked MSR access error may be
-triggered.
+passing kmap_local_page() result to __kernel_write() is unsafe -
+random ->write_iter() might (and 9p one does) get unhappy when
+passed ITER_KVEC with pointer that came from kmap_local_page().
 
-[ 0.088017] rcu: Hierarchical SRCU implementation.
-[ 0.088017] unchecked MSR access error: WRMSR to 0x38f (tried to write
-0x0001000f0000003f) at rIP: 0xffffffffb5684de8 (native_write_msr+0x8/0x30)
-[ 0.088017] Call Trace:
-[ 0.088017] <TASK>
-[ 0.088017] __intel_pmu_enable_all.constprop.46+0x4a/0xa0
+Fix by providing a variant of __kernel_write() that takes an iov_iter
+from caller (__kernel_write() becomes a trivial wrapper) and adding
+dump_emit_page() that parallels dump_emit(), except that instead of
+__kernel_write() it uses __kernel_write_iter() with ITER_BVEC source.
 
-The Alder Lake N only has e-cores. The X86_FEATURE_HYBRID_CPU flag is
-not set. The perf cannot retrieve the correct CPU type via
-get_this_hybrid_cpu_type(). The model specific get_hybrid_cpu_type() is
-hardcode to p-core. The wrong CPU type is given to the PMU of the
-Alder Lake N.
-
-Since Alder Lake N isn't in fact a hybrid CPU, remove ALDERLAKE_N from
-the rest of {ALDER,RAPTOP}LAKE and create a non-hybrid PMU setup.
-
-The differences between Gracemont and the previous Tremont are,
-- Number of GP counters
-- Load and store latency Events
-- PEBS event_constraints
-- Instruction Latency support
-- Data source encoding
-- Memory access latency encoding
-
-Fixes: c2a960f7c574 ("perf/x86: Add new Alder Lake and Raptor Lake support")
-Reported-by: Jianfeng Gao <jianfeng.gao@intel.com>
-Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220831142702.153110-1-kan.liang@linux.intel.com
+Fixes: 3159ed57792b "fs/coredump: use kmap_local_page()"
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/events/intel/core.c | 40 +++++++++++++++++++++++++++++++++++-
- arch/x86/events/intel/ds.c   |  9 ++++++--
- arch/x86/events/perf_event.h |  2 ++
- 3 files changed, 48 insertions(+), 3 deletions(-)
+ fs/coredump.c   | 38 +++++++++++++++++++++++++++++++++-----
+ fs/internal.h   |  3 +++
+ fs/read_write.c | 22 ++++++++++++++--------
+ 3 files changed, 50 insertions(+), 13 deletions(-)
 
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index bd8b98857609..8d6befb24b8e 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -2101,6 +2101,15 @@ static struct extra_reg intel_tnt_extra_regs[] __read_mostly = {
- 	EVENT_EXTRA_END
- };
- 
-+EVENT_ATTR_STR(mem-loads,	mem_ld_grt,	"event=0xd0,umask=0x5,ldlat=3");
-+EVENT_ATTR_STR(mem-stores,	mem_st_grt,	"event=0xd0,umask=0x6");
-+
-+static struct attribute *grt_mem_attrs[] = {
-+	EVENT_PTR(mem_ld_grt),
-+	EVENT_PTR(mem_st_grt),
-+	NULL
-+};
-+
- static struct extra_reg intel_grt_extra_regs[] __read_mostly = {
- 	/* must define OFFCORE_RSP_X first, see intel_fixup_er() */
- 	INTEL_UEVENT_EXTRA_REG(0x01b7, MSR_OFFCORE_RSP_0, 0x3fffffffffull, RSP_0),
-@@ -5874,6 +5883,36 @@ __init int intel_pmu_init(void)
- 		name = "Tremont";
- 		break;
- 
-+	case INTEL_FAM6_ALDERLAKE_N:
-+		x86_pmu.mid_ack = true;
-+		memcpy(hw_cache_event_ids, glp_hw_cache_event_ids,
-+		       sizeof(hw_cache_event_ids));
-+		memcpy(hw_cache_extra_regs, tnt_hw_cache_extra_regs,
-+		       sizeof(hw_cache_extra_regs));
-+		hw_cache_event_ids[C(ITLB)][C(OP_READ)][C(RESULT_ACCESS)] = -1;
-+
-+		x86_pmu.event_constraints = intel_slm_event_constraints;
-+		x86_pmu.pebs_constraints = intel_grt_pebs_event_constraints;
-+		x86_pmu.extra_regs = intel_grt_extra_regs;
-+
-+		x86_pmu.pebs_aliases = NULL;
-+		x86_pmu.pebs_prec_dist = true;
-+		x86_pmu.pebs_block = true;
-+		x86_pmu.lbr_pt_coexist = true;
-+		x86_pmu.flags |= PMU_FL_HAS_RSP_1;
-+		x86_pmu.flags |= PMU_FL_INSTR_LATENCY;
-+
-+		intel_pmu_pebs_data_source_grt();
-+		x86_pmu.pebs_latency_data = adl_latency_data_small;
-+		x86_pmu.get_event_constraints = tnt_get_event_constraints;
-+		x86_pmu.limit_period = spr_limit_period;
-+		td_attr = tnt_events_attrs;
-+		mem_attr = grt_mem_attrs;
-+		extra_attr = nhm_format_attr;
-+		pr_cont("Gracemont events, ");
-+		name = "gracemont";
-+		break;
-+
- 	case INTEL_FAM6_WESTMERE:
- 	case INTEL_FAM6_WESTMERE_EP:
- 	case INTEL_FAM6_WESTMERE_EX:
-@@ -6216,7 +6255,6 @@ __init int intel_pmu_init(void)
- 
- 	case INTEL_FAM6_ALDERLAKE:
- 	case INTEL_FAM6_ALDERLAKE_L:
--	case INTEL_FAM6_ALDERLAKE_N:
- 	case INTEL_FAM6_RAPTORLAKE:
- 	case INTEL_FAM6_RAPTORLAKE_P:
- 		/*
-diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
-index 9b48d957d2b3..139204aea94e 100644
---- a/arch/x86/events/intel/ds.c
-+++ b/arch/x86/events/intel/ds.c
-@@ -110,13 +110,18 @@ void __init intel_pmu_pebs_data_source_skl(bool pmem)
- 	__intel_pmu_pebs_data_source_skl(pmem, pebs_data_source);
+diff --git a/fs/coredump.c b/fs/coredump.c
+index ebc43f960b64..f1355e52614a 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -832,6 +832,38 @@ static int __dump_skip(struct coredump_params *cprm, size_t nr)
+ 	}
  }
  
--static void __init intel_pmu_pebs_data_source_grt(u64 *data_source)
-+static void __init __intel_pmu_pebs_data_source_grt(u64 *data_source)
- {
- 	data_source[0x05] = OP_LH | P(LVL, L3) | LEVEL(L3) | P(SNOOP, HIT);
- 	data_source[0x06] = OP_LH | P(LVL, L3) | LEVEL(L3) | P(SNOOP, HITM);
- 	data_source[0x08] = OP_LH | P(LVL, L3) | LEVEL(L3) | P(SNOOPX, FWD);
- }
- 
-+void __init intel_pmu_pebs_data_source_grt(void)
++static int dump_emit_page(struct coredump_params *cprm, struct page *page)
 +{
-+	__intel_pmu_pebs_data_source_grt(pebs_data_source);
++	struct bio_vec bvec = {
++		.bv_page	= page,
++		.bv_offset	= 0,
++		.bv_len		= PAGE_SIZE,
++	};
++	struct iov_iter iter;
++	struct file *file = cprm->file;
++	loff_t pos = file->f_pos;
++	ssize_t n;
++
++	if (cprm->to_skip) {
++		if (!__dump_skip(cprm, cprm->to_skip))
++			return 0;
++		cprm->to_skip = 0;
++	}
++	if (cprm->written + PAGE_SIZE > cprm->limit)
++		return 0;
++	if (dump_interrupted())
++		return 0;
++	iov_iter_bvec(&iter, WRITE, &bvec, 1, PAGE_SIZE);
++	n = __kernel_write_iter(cprm->file, &iter, &pos);
++	if (n != PAGE_SIZE)
++		return 0;
++	file->f_pos = pos;
++	cprm->written += PAGE_SIZE;
++	cprm->pos += PAGE_SIZE;
++
++	return 1;
 +}
 +
- void __init intel_pmu_pebs_data_source_adl(void)
+ int dump_emit(struct coredump_params *cprm, const void *addr, int nr)
  {
- 	u64 *data_source;
-@@ -127,7 +132,7 @@ void __init intel_pmu_pebs_data_source_adl(void)
+ 	if (cprm->to_skip) {
+@@ -863,7 +895,6 @@ int dump_user_range(struct coredump_params *cprm, unsigned long start,
  
- 	data_source = x86_pmu.hybrid_pmu[X86_HYBRID_PMU_ATOM_IDX].pebs_data_source;
- 	memcpy(data_source, pebs_data_source, sizeof(pebs_data_source));
--	intel_pmu_pebs_data_source_grt(data_source);
-+	__intel_pmu_pebs_data_source_grt(data_source);
+ 	for (addr = start; addr < start + len; addr += PAGE_SIZE) {
+ 		struct page *page;
+-		int stop;
+ 
+ 		/*
+ 		 * To avoid having to allocate page tables for virtual address
+@@ -874,10 +905,7 @@ int dump_user_range(struct coredump_params *cprm, unsigned long start,
+ 		 */
+ 		page = get_dump_page(addr);
+ 		if (page) {
+-			void *kaddr = kmap_local_page(page);
+-
+-			stop = !dump_emit(cprm, kaddr, PAGE_SIZE);
+-			kunmap_local(kaddr);
++			int stop = !dump_emit_page(cprm, page);
+ 			put_page(page);
+ 			if (stop)
+ 				return 0;
+diff --git a/fs/internal.h b/fs/internal.h
+index 87e96b9024ce..3e206d3e317c 100644
+--- a/fs/internal.h
++++ b/fs/internal.h
+@@ -16,6 +16,7 @@ struct shrink_control;
+ struct fs_context;
+ struct user_namespace;
+ struct pipe_inode_info;
++struct iov_iter;
+ 
+ /*
+  * block/bdev.c
+@@ -221,3 +222,5 @@ ssize_t do_getxattr(struct user_namespace *mnt_userns,
+ int setxattr_copy(const char __user *name, struct xattr_ctx *ctx);
+ int do_setxattr(struct user_namespace *mnt_userns, struct dentry *dentry,
+ 		struct xattr_ctx *ctx);
++
++ssize_t __kernel_write_iter(struct file *file, struct iov_iter *from, loff_t *pos);
+diff --git a/fs/read_write.c b/fs/read_write.c
+index 397da0236607..a0a3d35e2c0f 100644
+--- a/fs/read_write.c
++++ b/fs/read_write.c
+@@ -509,14 +509,9 @@ static ssize_t new_sync_write(struct file *filp, const char __user *buf, size_t
  }
  
- static u64 precise_store_data(u64 status)
-diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
-index 821098aebf78..84f6f947ddef 100644
---- a/arch/x86/events/perf_event.h
-+++ b/arch/x86/events/perf_event.h
-@@ -1513,6 +1513,8 @@ void intel_pmu_pebs_data_source_skl(bool pmem);
+ /* caller is responsible for file_start_write/file_end_write */
+-ssize_t __kernel_write(struct file *file, const void *buf, size_t count, loff_t *pos)
++ssize_t __kernel_write_iter(struct file *file, struct iov_iter *from, loff_t *pos)
+ {
+-	struct kvec iov = {
+-		.iov_base	= (void *)buf,
+-		.iov_len	= min_t(size_t, count, MAX_RW_COUNT),
+-	};
+ 	struct kiocb kiocb;
+-	struct iov_iter iter;
+ 	ssize_t ret;
  
- void intel_pmu_pebs_data_source_adl(void);
+ 	if (WARN_ON_ONCE(!(file->f_mode & FMODE_WRITE)))
+@@ -532,8 +527,7 @@ ssize_t __kernel_write(struct file *file, const void *buf, size_t count, loff_t
  
-+void intel_pmu_pebs_data_source_grt(void);
+ 	init_sync_kiocb(&kiocb, file);
+ 	kiocb.ki_pos = pos ? *pos : 0;
+-	iov_iter_kvec(&iter, WRITE, &iov, 1, iov.iov_len);
+-	ret = file->f_op->write_iter(&kiocb, &iter);
++	ret = file->f_op->write_iter(&kiocb, from);
+ 	if (ret > 0) {
+ 		if (pos)
+ 			*pos = kiocb.ki_pos;
+@@ -543,6 +537,18 @@ ssize_t __kernel_write(struct file *file, const void *buf, size_t count, loff_t
+ 	inc_syscw(current);
+ 	return ret;
+ }
 +
- int intel_pmu_setup_lbr_filter(struct perf_event *event);
- 
- void intel_pt_interrupt(void);
++/* caller is responsible for file_start_write/file_end_write */
++ssize_t __kernel_write(struct file *file, const void *buf, size_t count, loff_t *pos)
++{
++	struct kvec iov = {
++		.iov_base	= (void *)buf,
++		.iov_len	= min_t(size_t, count, MAX_RW_COUNT),
++	};
++	struct iov_iter iter;
++	iov_iter_kvec(&iter, WRITE, &iov, 1, iov.iov_len);
++	return __kernel_write_iter(file, &iter, pos);
++}
+ /*
+  * This "EXPORT_SYMBOL_GPL()" is more of a "EXPORT_SYMBOL_DONTUSE()",
+  * but autofs is one of the few internal kernel users that actually
 -- 
 2.35.1
 
