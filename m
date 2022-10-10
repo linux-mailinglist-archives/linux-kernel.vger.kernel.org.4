@@ -2,283 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7355F99A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9365F99E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:19:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231846AbiJJHOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:14:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38208 "EHLO
+        id S232141AbiJJHTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231814AbiJJHMy (ORCPT
+        with ESMTP id S232679AbiJJHSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:12:54 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCA658DFC
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 00:08:27 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id l18-20020a056e02067200b002f6af976994so8216834ilt.16
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 00:08:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1XH0yyO3BR/osWfXsCix/tWyf7A4qlGMNIuVchnVOEE=;
-        b=WBeI1Acn6c90xfpey35O2GXDvaUxnIAkWr2GlNzFJ7BEN9SypM3g3cP8nz+Efw1EZs
-         5abbynjkr0R0YRLK5XupvmjWkORG+pZBawhibZmKrls0ZfaZ0qSmGwl/CzXnpnyKw/Xr
-         F4WWqM0OVRPGd6Rl54PI48uP5sPtfR2M1B/eIKV981AERVGu5qcwM5fSSJm+SnelhZql
-         drCRmWbTf+1Nm9t+5NR6xnnlAU2RfGcYGuHdEakcVBXEzdkEv06ZvctRl+0FrOUunRxn
-         RRc+GJTpLD/vvqjN8gD6iylyQYo0D7kfiskYDLTfAIUIA/vxmlW0SCEiCmr7SfetxPa5
-         T1Rw==
-X-Gm-Message-State: ACrzQf38iSXWQ0Ssux/YRK6PiDFBDkHDsnkTTdwWLBQC/f9Ea629jwXb
-        cIYt3USa6xEUkLtGpH+bGF6QYubcsRYjC2HlhqI2d+wJqNVL
-X-Google-Smtp-Source: AMsMyM7M/a3s1vw1iqUlUi/1SwrsqpAWOatRilGT5kkk9UVKfh565z/bc8dggODma9WxSZfjHQaUdKS5jmkTBZfgLBEWJLoz/zNR
+        Mon, 10 Oct 2022 03:18:45 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6285763F39;
+        Mon, 10 Oct 2022 00:13:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665385999; x=1696921999;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HKEWtJctxYEfqje53CBekXZxJ+dZd98yO90P5ZQ0vT4=;
+  b=cgPYJ06TPV1YTIYWJKhSazsuRjLo7hnH9d3aX/FzWVASP9T7MOXWhOKb
+   QetFA+b/Y+fMAmlzwY8aq2XwfT3+dno7goJzKDf93OoOia5keelT9Sr/e
+   KN0B8HT/NpEHUFdu0wXK/9STJFGSZ7iaemJofl0BlyCBhrMCcXeGJCnwz
+   rwlH/JjEddpnrMiFDzQvV5oiCiPMqIv1dM4VDntUw+0uFVEs3WL7IlHj7
+   PkLyr+xw6SlLwYP/IMWhjKJ0Zvs0yp6ScGTV2HKkHKznVL+75CFjFHPbk
+   z/zADjPbQ93I2+GS3fvB2PuOEfO9h6XBPSk5faNCr6bBhk2f4bnnn4s+u
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10495"; a="366123853"
+X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
+   d="scan'208";a="366123853"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 00:12:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10495"; a="954818916"
+X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
+   d="scan'208";a="954818916"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP; 10 Oct 2022 00:10:30 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ohmvk-004lLT-2M;
+        Mon, 10 Oct 2022 10:10:28 +0300
+Date:   Mon, 10 Oct 2022 10:10:28 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     Ferry Toth <fntoth@gmail.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
+ if extcon is present"
+Message-ID: <Y0PFZGLaREQUazVP@smile.fi.intel.com>
+References: <20221003215734.7l3cnb2zy57nrxkk@synopsys.com>
+ <YzvusOI89ju9e5+0@smile.fi.intel.com>
+ <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com>
+ <20221005021212.qwnbmq6p7t26c3a4@synopsys.com>
+ <2886b82d-a1f6-d288-e8d1-edae54046b4f@gmail.com>
+ <20221006021204.hz7iteao65dgsev6@synopsys.com>
+ <d52cc102-6a4f-78e9-6176-b33e2813fd1d@gmail.com>
+ <20221007021122.nnwmqc6sq43e5xbn@synopsys.com>
+ <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com>
+ <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3818:b0:35a:8cf5:e007 with SMTP id
- i24-20020a056638381800b0035a8cf5e007mr9000718jav.227.1665385656648; Mon, 10
- Oct 2022 00:07:36 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 00:07:36 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007a8f9705eaa8d07c@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in nilfs_load_inode_block
-From:   syzbot <syzbot+4c7f4fefd5b2716a11ee@syzkaller.appspotmail.com>
-To:     konishi.ryusuke@gmail.com, linux-kernel@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, Oct 09, 2022 at 10:02:26PM -0700, Andrey Smirnov wrote:
+> On Fri, Oct 7, 2022 at 6:07 AM Ferry Toth <fntoth@gmail.com> wrote:
 
-syzbot found the following issue on:
+Thank you for the testing on your side!
 
-HEAD commit:    a6afa4199d3d Merge tag 'mailbox-v6.1' of git://git.linaro...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1507bb68880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
-dashboard link: https://syzkaller.appspot.com/bug?extid=4c7f4fefd5b2716a11ee
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+...
 
-Unfortunately, I don't have any reproducer for this issue yet.
+> OK, Ferry, I think I'm going to need clarification on specifics on
+> your test setup. Can you share your kernel config, maybe your
+> "/proc/config.gz", somewhere? When you say you are running vanilla
+> Linux, do you mean it or do you mean vanilla tree + some patch delta?
+> 
+> The reason I'm asking is because I'm having a hard time reproducing
+> the problem on my end. In fact, when I build v6.0
+> (4fe89d07dcc2804c8b562f6c7896a45643d34b2f) and then do a
+> 
+> git revert 8bd6b8c4b100 0f0101719138 (original revert proposed by Andy)
+> 
+> I get an infinite loop of reprobing that looks something like (some
+> debug tracing, function name + line number, included):
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/12e24d042ff9/disk-a6afa419.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/4862ae4e2edf/vmlinux-a6afa419.xz
+Yes, this is (one of) known drawback(s) of deferred probe hack. I think
+the kernel that Ferry runs has a patch that basically reverts one from
+2014 [1] and allows to have extcon as a module. (1)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4c7f4fefd5b2716a11ee@syzkaller.appspotmail.com
+[1]: 58b116bce136 ("drivercore: deferral race condition fix")
 
-==================================================================
-BUG: KASAN: use-after-free in nilfs_load_inode_block+0x124/0x290 fs/nilfs2/inode.c:995
-Read of size 8 at addr ffff8880254e0830 by task syz-executor.2/3637
+> which renders the system completely unusable, but USB host is
+> definitely going to be broken too. Now, ironically, with my patch
+> in-place, an attempt to probe extcon that ends up deferring the probe
+> happens before the ULPI driver failure (which wasn't failing driver
+> probe prior to https://lore.kernel.org/all/20220213130524.18748-7-hdegoede@redhat.com/),
+> there no "driver binding" event that re-triggers deferred probe
+> causing the loop, so the system progresses to a point where extcon is
+> available and dwc3 driver eventually loads.
+> 
+> After that, and I don't know if I'm doing the same test, USB host
+> seems to work as expected. lsusb works, my USB stick enumerates as
+> expected. Switching the USB mux to micro-USB and back shuts the host
+> functionality down and brings it up as expected. Now I didn't try to
+> load any gadgets to make sure USB gadget works 100%, but since you
+> were saying it was USB host that was broken, I wasn't concerned with
+> that. Am I doing the right test?
 
-CPU: 1 PID: 3637 Comm: syz-executor.2 Not tainted 6.0.0-syzkaller-09039-ga6afa4199d3d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- print_address_description+0x65/0x4b0 mm/kasan/report.c:317
- print_report+0x108/0x1f0 mm/kasan/report.c:433
- kasan_report+0xc3/0xf0 mm/kasan/report.c:495
- nilfs_load_inode_block+0x124/0x290 fs/nilfs2/inode.c:995
- __nilfs_mark_inode_dirty+0x82/0x250 fs/nilfs2/inode.c:1072
- nilfs_mark_inode_dirty fs/nilfs2/nilfs.h:288 [inline]
- nilfs_evict_inode+0x162/0x3d0 fs/nilfs2/inode.c:917
- evict+0x2a4/0x620 fs/inode.c:664
- nilfs_dispose_list+0x554/0x610 fs/nilfs2/segment.c:795
- nilfs_detach_log_writer+0xb0e/0xbd0 fs/nilfs2/segment.c:2824
- nilfs_put_super+0x4b/0x150 fs/nilfs2/super.c:468
- generic_shutdown_super+0x130/0x310 fs/super.c:491
- kill_block_super+0x79/0xd0 fs/super.c:1427
- deactivate_locked_super+0xa7/0xf0 fs/super.c:331
- cleanup_mnt+0x4ce/0x560 fs/namespace.c:1186
- task_work_run+0x146/0x1c0 kernel/task_work.c:177
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop+0x124/0x150 kernel/entry/common.c:169
- exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:294
- do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f6d8ba8ba17
-Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe20b71b08 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f6d8ba8ba17
-RDX: 00007ffe20b71bdc RSI: 000000000000000a RDI: 00007ffe20b71bd0
-RBP: 00007ffe20b71bd0 R08: 00000000ffffffff R09: 00007ffe20b719a0
-R10: 0000555555f2b8b3 R11: 0000000000000246 R12: 00007f6d8bae45f6
-R13: 00007ffe20b72c90 R14: 0000555555f2b810 R15: 00007ffe20b72cd0
- </TASK>
+Hmm... What you described above sounds more like a yet another attempt to
+workaround (1). _If_ this is the case, we probably can discuss how to fix
+it in generic way (somewhere in dd.c, rather than in the certain driver).
 
-Allocated by task 10634:
- kasan_save_stack mm/kasan/common.c:38 [inline]
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:437 [inline]
- ____kasan_kmalloc+0xcd/0x100 mm/kasan/common.c:516
- kasan_kmalloc include/linux/kasan.h:234 [inline]
- kmem_cache_alloc_trace+0x97/0x310 mm/slub.c:3289
- kmalloc include/linux/slab.h:600 [inline]
- kzalloc include/linux/slab.h:733 [inline]
- nilfs_find_or_create_root+0x142/0x4f0 fs/nilfs2/the_nilfs.c:747
- nilfs_attach_checkpoint+0xcd/0x4a0 fs/nilfs2/super.c:519
- nilfs_fill_super+0x2e8/0x5d0 fs/nilfs2/super.c:1064
- nilfs_mount+0x613/0x9b0 fs/nilfs2/super.c:1317
- legacy_get_tree+0xea/0x180 fs/fs_context.c:610
- vfs_get_tree+0x88/0x270 fs/super.c:1530
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+That said, the real test case should be performed on top of clean kernel
+before judging if it's good or bad.
 
-Freed by task 3637:
- kasan_save_stack mm/kasan/common.c:38 [inline]
- kasan_set_track+0x3d/0x60 mm/kasan/common.c:45
- kasan_set_free_info+0x1f/0x40 mm/kasan/generic.c:370
- ____kasan_slab_free+0xd8/0x120 mm/kasan/common.c:367
- kasan_slab_free include/linux/kasan.h:200 [inline]
- slab_free_hook mm/slub.c:1759 [inline]
- slab_free_freelist_hook+0x12e/0x1a0 mm/slub.c:1785
- slab_free mm/slub.c:3539 [inline]
- kfree+0xda/0x210 mm/slub.c:4567
- nilfs_segctor_destroy fs/nilfs2/segment.c:2747 [inline]
- nilfs_detach_log_writer+0x8d5/0xbd0 fs/nilfs2/segment.c:2810
- nilfs_put_super+0x4b/0x150 fs/nilfs2/super.c:468
- generic_shutdown_super+0x130/0x310 fs/super.c:491
- kill_block_super+0x79/0xd0 fs/super.c:1427
- deactivate_locked_super+0xa7/0xf0 fs/super.c:331
- cleanup_mnt+0x4ce/0x560 fs/namespace.c:1186
- task_work_run+0x146/0x1c0 kernel/task_work.c:177
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop+0x124/0x150 kernel/entry/common.c:169
- exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:294
- do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> For the reference what I test with is:
+>  - vanilla kernel, no patch delta (sans minor debug tracing) + initrd
+> built with Buildroot 2022.08.1
+>  - Initrd is using systemd (don't think that really matters, but who knows)
+>  - U-Boot 2022.04 (built with Buildroot as well)
+>  - kernel config is x86_64_defconfig + whatever I gathered from *.cfg
+> files in https://github.com/edison-fw/meta-intel-edison/tree/master/meta-intel-edison-bsp/recipes-kernel/linux/files
 
-Last potentially related work creation:
- kasan_save_stack+0x2b/0x50 mm/kasan/common.c:38
- __kasan_record_aux_stack+0xaf/0xc0 mm/kasan/generic.c:348
- kvfree_call_rcu+0x112/0x880 kernel/rcu/tree.c:3341
- drop_sysctl_table+0x307/0x480 fs/proc/proc_sysctl.c:1716
- drop_sysctl_table+0x319/0x480 fs/proc/proc_sysctl.c:1719
- unregister_sysctl_table+0x87/0x140 fs/proc/proc_sysctl.c:1754
- neigh_sysctl_unregister+0x74/0x90 net/core/neighbour.c:3871
- devinet_sysctl_unregister net/ipv4/devinet.c:2638 [inline]
- inetdev_destroy net/ipv4/devinet.c:327 [inline]
- inetdev_event+0x7f9/0x14a0 net/ipv4/devinet.c:1602
- notifier_call_chain kernel/notifier.c:87 [inline]
- raw_notifier_call_chain+0xe7/0x170 kernel/notifier.c:455
- call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
- call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
- call_netdevice_notifiers net/core/dev.c:1997 [inline]
- unregister_netdevice_many+0x107e/0x1aa0 net/core/dev.c:10843
- default_device_exit_batch+0x570/0x5e0 net/core/dev.c:11337
- ops_exit_list net/core/net_namespace.c:167 [inline]
- cleanup_net+0x80c/0xc50 net/core/net_namespace.c:594
- process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-
-The buggy address belongs to the object at ffff8880254e0800
- which belongs to the cache kmalloc-256 of size 256
-The buggy address is located 48 bytes inside of
- 256-byte region [ffff8880254e0800, ffff8880254e0900)
-
-The buggy address belongs to the physical page:
-page:ffffea0000953800 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x254e0
-head:ffffea0000953800 order:1 compound_mapcount:0 compound_pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 ffffea00009f7680 dead000000000003 ffff888012041b40
-raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 1, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 3639, tgid 3639 (syz-executor.5), ts 112861784086, free_ts 112850605269
- prep_new_page mm/page_alloc.c:2532 [inline]
- get_page_from_freelist+0x742/0x7c0 mm/page_alloc.c:4283
- __alloc_pages+0x259/0x560 mm/page_alloc.c:5549
- alloc_slab_page+0x70/0xf0 mm/slub.c:1829
- allocate_slab+0x5e/0x520 mm/slub.c:1974
- new_slab mm/slub.c:2034 [inline]
- ___slab_alloc+0x3ee/0xc40 mm/slub.c:3036
- __slab_alloc mm/slub.c:3123 [inline]
- slab_alloc_node mm/slub.c:3214 [inline]
- slab_alloc mm/slub.c:3256 [inline]
- __kmalloc+0x2bd/0x370 mm/slub.c:4425
- kmalloc include/linux/slab.h:605 [inline]
- kzalloc include/linux/slab.h:733 [inline]
- new_dir fs/proc/proc_sysctl.c:978 [inline]
- get_subdir fs/proc/proc_sysctl.c:1022 [inline]
- __register_sysctl_table+0xb63/0x11e0 fs/proc/proc_sysctl.c:1373
- __devinet_sysctl_register+0x1db/0x2a0 net/ipv4/devinet.c:2586
- devinet_sysctl_register+0x139/0x1a0 net/ipv4/devinet.c:2626
- inetdev_init+0x28f/0x4c0 net/ipv4/devinet.c:279
- inetdev_event+0x282/0x14a0 net/ipv4/devinet.c:1534
- notifier_call_chain kernel/notifier.c:87 [inline]
- raw_notifier_call_chain+0xe7/0x170 kernel/notifier.c:455
- call_netdevice_notifiers_info net/core/dev.c:1945 [inline]
- call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
- call_netdevice_notifiers+0x14e/0x1d0 net/core/dev.c:1997
- register_netdevice+0x1316/0x1790 net/core/dev.c:10086
- ipcaif_newlink+0x1e7/0x4c0 net/caif/chnl_net.c:455
- rtnl_newlink_create net/core/rtnetlink.c:3364 [inline]
- __rtnl_newlink net/core/rtnetlink.c:3581 [inline]
- rtnl_newlink+0x147d/0x1fa0 net/core/rtnetlink.c:3594
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1449 [inline]
- free_pcp_prepare+0x812/0x900 mm/page_alloc.c:1499
- free_unref_page_prepare mm/page_alloc.c:3380 [inline]
- free_unref_page+0x7d/0x5f0 mm/page_alloc.c:3476
- free_slab mm/slub.c:2073 [inline]
- discard_slab mm/slub.c:2079 [inline]
- __unfreeze_partials+0x1ab/0x200 mm/slub.c:2553
- put_cpu_partial+0x106/0x170 mm/slub.c:2629
- qlist_free_all+0x2b/0x70 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x169/0x180 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0x2f/0xd0 mm/kasan/common.c:447
- kasan_slab_alloc include/linux/kasan.h:224 [inline]
- slab_post_alloc_hook mm/slab.h:727 [inline]
- slab_alloc_node mm/slub.c:3248 [inline]
- slab_alloc mm/slub.c:3256 [inline]
- kmem_cache_alloc_trace+0x1de/0x310 mm/slub.c:3287
- kmalloc include/linux/slab.h:600 [inline]
- kzalloc include/linux/slab.h:733 [inline]
- kobject_uevent_env+0x33a/0x8e0 lib/kobject_uevent.c:524
- __kobject_del+0xcd/0x300 lib/kobject.c:585
- kobject_cleanup+0x25d/0x470 lib/kobject.c:664
- net_rx_queue_update_kobjects+0x455/0x4c0 net/core/net-sysfs.c:1128
- netif_set_real_num_rx_queues+0xf9/0x1d0 net/core/dev.c:2941
- veth_init_queues+0x108/0x170 drivers/net/veth.c:1692
- veth_newlink+0xa6f/0xd10 drivers/net/veth.c:1813
- rtnl_newlink_create net/core/rtnetlink.c:3364 [inline]
- __rtnl_newlink net/core/rtnetlink.c:3581 [inline]
- rtnl_newlink+0x147d/0x1fa0 net/core/rtnetlink.c:3594
-
-Memory state around the buggy address:
- ffff8880254e0700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff8880254e0780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff8880254e0800: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                     ^
- ffff8880254e0880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff8880254e0900: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
