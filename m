@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B3B75FA243
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 18:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B9B5FA246
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 18:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbiJJQ5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 12:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
+        id S229814AbiJJQ5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 12:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiJJQ47 (ORCPT
+        with ESMTP id S229451AbiJJQ5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 12:56:59 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593541A3B7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 09:56:57 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id y100so16742654ede.6
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 09:56:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=F7Lu1f1l8aXMTq6jYWIMcge3Ms0HY5uTYXjKT0lkG14=;
-        b=LdYp7um8bF6F6J2/ysqRXdpaB/GcUaACZwguVsd/lWFeKR5yqORlsqxo6VVPuIdbZX
-         8MzHwUbPmzzcc7CmQMUnPdA4nuBBdYe0g/oi4UkUQi1l9o7AYYrjOlYtKZslj+a5AYWm
-         7AJIlTxmecC0t1wLZEDQALOBCWDzg2io6FNoRFO+u2cy48X/SzgJo1Z3y+eGGm5MbSUx
-         CqW3pcwbDyA+j1aVP83PhOHJldBExhBhzDnFl3WpkRFzgjvw3kLIkyTKpRsRrDJQFzHm
-         1Tn0PxLKnZlgvj65SIi3Jo2jJ4CjKOmnworW807rhEzXV73FU8/v2QA7fJShX5iprBwc
-         Adeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F7Lu1f1l8aXMTq6jYWIMcge3Ms0HY5uTYXjKT0lkG14=;
-        b=CJLcBZqLck9M6N8+9ghsMXVX9v2g4QcUaXtjP2D5/LZHyuXXLC28Bx/kaVBmVev5fO
-         OmwJk0rHSrJTETfvs9h3WVfycKsfl2SIrrn3XPv92+ESrIrxb+mIVr4VucsmG0c3nmy+
-         zQJJZ3ScaxfKoBEXMEseab3rTEi3/zo9o6glikTO9hHaMN4DR1w6S1eEiHxdyajAuFRU
-         vKJhmT5HzS1xCW8ejxtyr9KMxN1Sv5i/sVUmF62Hw8hfAcXTugAklUvNIjdq8NZE96Ja
-         inkJ3Adidc1Su4dpKTx29PJ+EHImULWKtkRKb05cv3MY5k+JVKUYHjIgIma07V314UvS
-         fn/A==
-X-Gm-Message-State: ACrzQf3dancX2u3juMqM+zJvmdGreDoAg8H/H4L2g2zfIDUhnP6U/sBD
-        +3Dkvg1VCAEv7FMFeuKjbiw/5idE4c/cHA==
-X-Google-Smtp-Source: AMsMyM58qI4dbIReL01Jn7Qnhfzbiwj1Ich+dGPNyfXeeRhnC8kqCfu5V3IuGczHks/A+CaU1+u/Tw==
-X-Received: by 2002:aa7:cc8e:0:b0:457:23db:f0cc with SMTP id p14-20020aa7cc8e000000b0045723dbf0ccmr18818781edt.122.1665421015814;
-        Mon, 10 Oct 2022 09:56:55 -0700 (PDT)
-Received: from arch.localdomain ([111.119.183.43])
-        by smtp.gmail.com with ESMTPSA id a1-20020a50c301000000b004580b26e32esm7421429edb.81.2022.10.10.09.56.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 09:56:55 -0700 (PDT)
-From:   Mushahid Hussain <mushi.shar@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     samuel.thibault@ens-lyon.org, speakup@linux-speakup.org,
-        linux-kernel@vger.kernel.org,
-        Mushahid Hussain <mushi.shar@gmail.com>
-Subject: [PATCH] Speakup: fix a segfault caused by switching consoles
-Date:   Mon, 10 Oct 2022 21:57:20 +0500
-Message-Id: <20221010165720.397042-1-mushi.shar@gmail.com>
-X-Mailer: git-send-email 2.38.0
+        Mon, 10 Oct 2022 12:57:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4154661C
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 09:57:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665421063;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5S+BNyIeJIXqDBwU61BSD8ffgXS2PZduRFuxFNybg6Q=;
+        b=K87v/b9Tb3Fw8nYNAnVBY2BF2MVvASpCUm8N0oH8v0AXWmgxCH68LFi5iqcGr865GYaUUD
+        id3+M5p1t0b8DOYMCFG3LvN0xLg/iyh6PYwXiY4HsIGS3RnroD8EPJlHV7LpO4EJRocRZw
+        qYbbyjsiIPWUA7Uso2FCVKhuGUf0XGE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-481-pq7lrMkpOVyOwIR4Qn4_QA-1; Mon, 10 Oct 2022 12:57:37 -0400
+X-MC-Unique: pq7lrMkpOVyOwIR4Qn4_QA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1CC57101A528;
+        Mon, 10 Oct 2022 16:57:37 +0000 (UTC)
+Received: from [10.22.33.72] (unknown [10.22.33.72])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 71CDF40252A9;
+        Mon, 10 Oct 2022 16:57:36 +0000 (UTC)
+Message-ID: <4c4e5208-ddf5-6191-64b0-54ae0bed1af6@redhat.com>
+Date:   Mon, 10 Oct 2022 12:57:36 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] locking/rwsem: Prevent non-first waiter from spinning in
+ down_write() slowpath
+Content-Language: en-US
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
+        Hillf Danton <hdanton@sina.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>
+References: <20220929180413.107374-1-longman@redhat.com>
+ <6530f135-e8ac-bb6c-4715-1ea8f76cf4c4@redhat.com>
+ <7cbf49c9-d122-30e6-68b3-c61eca63e5dc@quicinc.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <7cbf49c9-d122-30e6-68b3-c61eca63e5dc@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,56 +71,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes a segfault by adding a null check on synth in
-speakup_con_update(). The segfault can be reproduced as follows:
+On 10/10/22 06:24, Mukesh Ojha wrote:
+> Hi Waiman,
+>
+>
+> On 9/29/2022 11:36 PM, Waiman Long wrote:
+>> On 9/29/22 14:04, Waiman Long wrote:
+>>> A non-first waiter can potentially spin in the for loop of
+>>> rwsem_down_write_slowpath() without sleeping but fail to acquire the
+>>> lock even if the rwsem is free if the following sequence happens:
+>>>
+>>>    Non-first waiter       First waiter      Lock holder
+>>>    ----------------       ------------      -----------
+>>>    Acquire wait_lock
+>>>    rwsem_try_write_lock():
+>>>      Set handoff bit if RT or
+>>>        wait too long
+>>>      Set waiter->handoff_set
+>>>    Release wait_lock
+>>>                           Acquire wait_lock
+>>>                           Inherit waiter->handoff_set
+>>>                           Release wait_lock
+>>>                        Clear owner
+>>>                                             Release lock
+>>>    if (waiter.handoff_set) {
+>>>      rwsem_spin_on_owner(();
+>>>      if (OWNER_NULL)
+>>>        goto trylock_again;
+>>>    }
+>>>    trylock_again:
+>>>    Acquire wait_lock
+>>>    rwsem_try_write_lock():
+>>>       if (first->handoff_set && (waiter != first))
+>>>           return false;
+>>>    Release wait_lock
+>>>
+>>> It is especially problematic if the non-first waiter is an RT task and
+>>> it is running on the same CPU as the first waiter as this can lead to
+>>> live lock.
+>>>
+>>> Fixes: d257cc8cb8d5 ("locking/rwsem: Make handoff bit handling more 
+>>> consistent")
+>>> Signed-off-by: Waiman Long <longman@redhat.com>
+>>> ---
+>>>   kernel/locking/rwsem.c | 13 ++++++++++---
+>>>   1 file changed, 10 insertions(+), 3 deletions(-)
+>>
+>> Mukesh, can you test if this patch can fix the RT task lockup problem?
+>>
+>
+> Looks like, There is still a window for a race.
+>
+> There is a chance when a reader who came first added it's BIAS and 
+> goes to slowpath and before it gets added to wait list it got 
+> preempted by RT task which  goes to slowpath as well and being the 
+> first waiter gets its hand-off bit set and not able to get the lock 
+> due to following condition in rwsem_try_write_lock()
+>
+>  630                 if (count & RWSEM_LOCK_MASK) {  ==> reader has 
+> sets its bias
+> ..
+> ...
+>
+>  634
+>  635                         new |= RWSEM_FLAG_HANDOFF;
+>  636                 } else {
+>  637                         new |= RWSEM_WRITER_LOCKED;
+>
+>
+> ---------------------->----------------------->-------------------------
+>
+> First reader (1)          writer(2) RT task             Lock holder(3)
+>
+> It sets
+> RWSEM_READER_BIAS.
+> while it is going to
+> slowpath(as the lock
+> was held by (3)) and
+> before it got added
+> to the waiters list
+> it got preempted
+> by (2).
+>                         RT task also takes
+>                         the slowpath and add              release the
+>                         itself into waiting list          rwsem lock
+>             and since it is the first         clear the
+>                         it is the next one to get         owner.
+>                         the lock but it can not
+>                         get the lock as (count &
+>                         RWSEM_LOCK_MASK) is set
+>                         as (1) has added it but
+>                         not able to remove its
+>             adjustment.
+>
+Good catch!
 
-	- Login into a text console
+It is indeed a possible livelock scenario. Will update the patch to 
+address that.
 
-	- Load speakup and speakup_soft modules
-
-	- Remove speakup_soft
-
-	- Switch to a graphics console
-
-This is caused by lack of a null check on `synth` in
-speakup_con_update().
-
-Here's the sequence that causes the segfault:
-
-	- When we remove the speakup_soft, synth_release() sets the synth
-	  to null.
-
-	- After that, when we change the virtual console to graphics
-	  console, vt_notifier_call() is fired, which then calls
-	  speakup_con_update().
-
-	- Inside speakup_con_update() there's no null check on synth,
-	  so it calls synth_printf().
-
-	- Inside synth_printf(), synth_buffer_add() and synth_start(),
-	  both access synth, when it is null and causing a segfault.
-
-Therefore adding a null check on synth solves the issue.
-
-Signed-off-by: Mushahid Hussain <mushi.shar@gmail.com>
-Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
----
- drivers/accessibility/speakup/main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/accessibility/speakup/main.c b/drivers/accessibility/speakup/main.c
-index f52265293482..73db0cb44fc7 100644
---- a/drivers/accessibility/speakup/main.c
-+++ b/drivers/accessibility/speakup/main.c
-@@ -1778,7 +1778,7 @@ static void speakup_con_update(struct vc_data *vc)
- {
- 	unsigned long flags;
- 
--	if (!speakup_console[vc->vc_num] || spk_parked)
-+	if (!speakup_console[vc->vc_num] || spk_parked || !synth)
- 		return;
- 	if (!spin_trylock_irqsave(&speakup_info.spinlock, flags))
- 		/* Speakup output, discard */
--- 
-2.38.0
+Thanks,
+Longman
 
