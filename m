@@ -2,199 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A4F35FA183
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 18:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A07E05FA185
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 18:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiJJQAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 12:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S229739AbiJJQCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 12:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiJJQAi (ORCPT
+        with ESMTP id S229587AbiJJQCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 12:00:38 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2044.outbound.protection.outlook.com [40.107.96.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11006D9EE;
-        Mon, 10 Oct 2022 09:00:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T8KgtWk8l0QlMRg8Z6NXfYmBgPNlyornxOlrhSWT/x1v261HBwoAvDKcVMe4xkdTe3W3iIF/xbSDsdKr2uNHVyrLzFpJ0gtmbrb5nFILm/Qr20UgiYjew7miyFpdjR7reS3a47+8vrmbe/GLnPA5lNfyhMzY1FN23DLg8ocojwboJNMWXIu1Gq8c6TEzwR3BPssyrOE4LCliX/+kvgRXQ+Rd+BhZxh1KPJrxUB0oycQjS4jKVTv/0fOFNhN3aUl4Z3alssO0isSueDogHraYhIbmUjhhUQZQtl5+t8Or39TjTk6Uf9X5aE2OHS3dJiHfs13y3bqu+MRJx1vuX059mg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SV+wn+X2s5GRpVWUuxyaAkArdgW+3m7DhWGOZactC/k=;
- b=Uyk9lP9ZeN64oZmgDw48znuOtWHOTn7V4lRbbFYe2j9hPIEhrBekgiGjBVjMv4DmEfWbY/c44wLN1nROXA8w49NcvqH1VMRKn4Vfk/M5j1XVEUU8nbgQp8oxNhg7LNEg76csIrXHl+BrwJ3jnE/D149tPCYXWMKVUJRkx4/3S4onVT6VKQoDwy70FMjaXwqFXYkl3u1wOowmtccf7kEmPLgL2gw4XGH8hwuHSIohPphdydTD7a3Hg48z0Q5+1+J6eBR/qkNm08uBlOSEUhfhauA4adyk5iA8Uoq9NBAPkv6THtzMB9GMhGcqyH37pCPqKxkICXMhaG0RcR45Q0PKnA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SV+wn+X2s5GRpVWUuxyaAkArdgW+3m7DhWGOZactC/k=;
- b=qsXf5Iy5sbXU98a6smJpTWQ605M1STzDaSh+ZT2yEcHzwQzg2goCSwsvvXFKP1+bR2ISrY2Jh7DB+cL88lbTl8y+M2t2Xh8wjrjhZPzmyl6o4BFFLs4qL1D2/07l0jn/8yhcD+IfK19uMpyCr6X19NKyOOLCxoeK0SX2dykUnuQ=
-Received: from MW4PR03CA0203.namprd03.prod.outlook.com (2603:10b6:303:b8::28)
- by CY5PR12MB6623.namprd12.prod.outlook.com (2603:10b6:930:41::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Mon, 10 Oct
- 2022 16:00:33 +0000
-Received: from CO1NAM11FT109.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:b8:cafe::e8) by MW4PR03CA0203.outlook.office365.com
- (2603:10b6:303:b8::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15 via Frontend
- Transport; Mon, 10 Oct 2022 16:00:33 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT109.mail.protection.outlook.com (10.13.174.176) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5709.10 via Frontend Transport; Mon, 10 Oct 2022 16:00:33 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 10 Oct
- 2022 11:00:32 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     <mario.limonciello@amd.com>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC:     Mehta Sanju <Sanju.Mehta@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] xhci-pci: Set runtime PM as default policy on all xHC 1.2 or later devices
-Date:   Mon, 10 Oct 2022 11:00:21 -0500
-Message-ID: <20221010160022.647-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 10 Oct 2022 12:02:10 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3419D63FF4
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 09:02:09 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id y14so8679211ejd.9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 09:02:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nwq4bMhUMj88l332uILPVv/eaSX1xTBS7cLpnqsyXvQ=;
+        b=xSPe7cYNg+MpTivVRwY6eRBn/8r3s+sulx3x4zNf6jErlq3gMQUIXAGAfjtdYJBNPb
+         THGXlsKqrvDrrsgMXBo36/ngZwyQ2eCifi2S6GgkAqw8j8AurmrSRpo3jUu/j8HyRW7j
+         fY7qoF9PxYDYHrzPqg7XrKJbeqf6POxyPlflRoKS5FTQnynir00M+5fxngI4TDk2o1dE
+         dAG/X2+zfedDTeT+veHDiMPaqQ4G1r2xAW84m6RVL/lJmd4nSr/qijy/s3XZoCUS1yi5
+         mFOB52AYjQQscyA+xUInf1HD+x3iLxNl09kC/X6m/QthoTqsPFi5Sx9IQZt9XMV5USGk
+         yWeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Nwq4bMhUMj88l332uILPVv/eaSX1xTBS7cLpnqsyXvQ=;
+        b=6eRdKjTdX8yR7HMMtttbXaF3PM13RSx3rWzCqQESsMZG66tYorPdYyoWVKevpRqlnL
+         Xu4TFB6g/SRZFQBnifsGdbZ3YP4+B1+sG7Mup98yFeX4JloGlcbP0p2EIasGEpBTVSuF
+         RvF5EZFm6Xo5PWNfyQ+Txz20bJlNCCnBAPkuvDa4cT+2oMWlCHPZTr3fpdCFKJ38QYj5
+         AQNPxTI5+RPw1YTKGlLWpJk6Qpe1f9wuah8Fiey7Y/UNN92IkA0uqaetI8chO5Lm/Vh0
+         SdoUp3pD3OkedbTWBgng13qtmqUoMiwAdvYJBwcC5qAGLclCQLE3vH19NjQIhvRWX0cv
+         EQ8w==
+X-Gm-Message-State: ACrzQf1WVssSmVeUFO+Jk6S22qjlIYZu5ZKkNnSdurOxgTJLpwsEKsq0
+        nnQBFQGUd1YbZubaHwqpYOxAXUICQiyj7ioFGyV6yA==
+X-Google-Smtp-Source: AMsMyM6UjqlmiGIqHRFrDacODsmCwKujwrsZhqJHxSFg09qxg4AhOfSzBLdpmJ57AvjVGnWGz9+4flmBBDcH+iziw8A=
+X-Received: by 2002:a17:907:3188:b0:741:4bf7:ec1a with SMTP id
+ xe8-20020a170907318800b007414bf7ec1amr15730725ejb.448.1665417727159; Mon, 10
+ Oct 2022 09:02:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT109:EE_|CY5PR12MB6623:EE_
-X-MS-Office365-Filtering-Correlation-Id: 81ae6342-f737-4ec1-81d7-08daaad8901c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AYWyvjCUdG1GWCOTy3ZZPspvCxq5ddcAfl84hXdIUUUpoDGHu3AKbv7CIJVzlQuYSQEwdlQZrO3+aVwhrJqyBzeFU5b99vsTE/rvAbQZ/1OjbaOHHcnyL9ldkYvLGIjy/1VXPT0e9SFholpop03cn1kDDn+taTLsuvtRJ/kgLhx66EcDpdgkR3d88EaIyNLwq5Iup7uqr788Ep5g8SCY2c4Dvs5Sx25TeWChsMi1FLzaewPoG4m6oG6dz1Jjrb5Kdjb6lp4H1uYamTq1UrwPcMZ3s2KtoPEg908XZGi/YcMduwLn0s4kfmfEimInSW8i058EzsHO6Vb94/uI9fWgkAqx6Io2sIE+Seduf2nUkxV1gGvz9rmq2h0IngWSfc+bshcNgdIs9+7YkyLpILf4Ev3BChI3v4GjCgmyAiKZdxMFNcrucqOCb8SmTSicR62bWnZCuEY09H7CwQZqXE4PxnHr0kEq+oQwUFg8AFJn0w6GGsfJn0RZE7DhyQ6wXNdbPeUOnZCH9sgImf3RkAOU1DyzdBWRN1bv+8Sqz9G0JCpyI3PZjJJLjVOZZ3cvLrHQK0WG6U6y0stTXmzvkyEnToY+TZGL9HEVM+V3PwJDA7WnvAC/lj5VhC82jwXU160dBPSvO5CXAvNcHZI0mp/YatjfO908vnI4956r7GFAhWlFvC3zWOnf5JEgfN29HGa/svgXAAi2azGGWaaFWIe/HxFHK+XT43XSoLm6s7sbpwoaZ8cyKv2/Rp5XvQiBiSEL0TDtanLve83+q6aeJ5aL+DppUvjaXTSGVuVaiigunTWPX8HTy2Nvt6+inR37VgsJ93F9jlIe50cDNsGQ+6ABew==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(396003)(136003)(376002)(451199015)(40470700004)(36840700001)(46966006)(316002)(70206006)(4326008)(8676002)(7696005)(2906002)(70586007)(41300700001)(5660300002)(966005)(82310400005)(44832011)(40460700003)(110136005)(8936002)(36756003)(6666004)(86362001)(478600001)(186003)(26005)(54906003)(83380400001)(16526019)(356005)(40480700001)(47076005)(81166007)(82740400003)(336012)(36860700001)(426003)(2616005)(1076003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Oct 2022 16:00:33.1604
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 81ae6342-f737-4ec1-81d7-08daaad8901c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT109.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6623
+References: <20221010070333.676316214@linuxfoundation.org>
+In-Reply-To: <20221010070333.676316214@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 10 Oct 2022 21:31:55 +0530
+Message-ID: <CA+G9fYvQHA-dfeFNQ8xcqSi46mdzPQeXbyXPR62m_BgS90aj9g@mail.gmail.com>
+Subject: Re: [PATCH 5.19 00/48] 5.19.15-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For optimal power consumption of USB4 routers the XHCI PCIe endpoint
-used for tunneling must be in D3.  Historically this is accomplished
-by a long list of PCIe IDs that correspond to these endpoints because
-the xhci_hcd driver will not default to allowing runtime PM for all
-devices.
+On Mon, 10 Oct 2022 at 12:36, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.19.15 release.
+> There are 48 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 12 Oct 2022 07:03:19 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.15-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-As both AMD and Intel have released new products with new XHCI controllers
-this list continues to grow. In reviewing the XHCI specification v1.2 on
-page 607 there is already a requirement that the PCI power management
-states D3hot and D3cold must be supported.
 
-In the quirk list, use this to indicate that runtime PM should be allowed
-on XHCI controllers. The following controllers are known to be xHC 1.2 and
-dropped explicitly:
-* AMD Yellow Carp
-* Intel Alder Lake
-* Intel Meteor Lake
-* Intel Raptor Lake
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/extensible-host-controler-interface-usb-xhci.pdf
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v2->v3:
- * Add a comment for future discovery (Mika)
- * Correct version from 0x102 to 0x120 (Mathias)
- * Drop some Intel controllers too (Mathias)
- * Drop second patch (Mathias)
----
- drivers/usb/host/xhci-pci.c | 31 +++----------------------------
- 1 file changed, 3 insertions(+), 28 deletions(-)
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index dce6c0ec8d340..fd6f2698b3ea4 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -58,25 +58,12 @@
- #define PCI_DEVICE_ID_INTEL_CML_XHCI			0xa3af
- #define PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI		0x9a13
- #define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
--#define PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI		0x461e
--#define PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_XHCI		0x464e
--#define PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI	0x51ed
--#define PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_XHCI		0xa71e
--#define PCI_DEVICE_ID_INTEL_METEOR_LAKE_XHCI		0x7ec0
- 
- #define PCI_DEVICE_ID_AMD_RENOIR_XHCI			0x1639
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_2			0x43bb
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_1			0x43bc
--#define PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_1		0x161a
--#define PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_2		0x161b
--#define PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_3		0x161d
--#define PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_4		0x161e
--#define PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_5		0x15d6
--#define PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_6		0x15d7
--#define PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_7		0x161c
--#define PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_8		0x161f
- 
- #define PCI_DEVICE_ID_ASMEDIA_1042_XHCI			0x1042
- #define PCI_DEVICE_ID_ASMEDIA_1042A_XHCI		0x1142
-@@ -268,12 +255,7 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI ||
--	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI ||
--	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI ||
--	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_XHCI ||
--	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI ||
--	     pdev->device == PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_XHCI ||
--	     pdev->device == PCI_DEVICE_ID_INTEL_METEOR_LAKE_XHCI))
-+	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI))
- 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
- 
- 	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
-@@ -336,15 +318,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	     pdev->device == PCI_DEVICE_ID_AMD_PROMONTORYA_4))
- 		xhci->quirks |= XHCI_NO_SOFT_RETRY;
- 
--	if (pdev->vendor == PCI_VENDOR_ID_AMD &&
--	    (pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_1 ||
--	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_2 ||
--	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_3 ||
--	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_4 ||
--	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_5 ||
--	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_6 ||
--	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_7 ||
--	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_8))
-+	/* xHC spec requires PCI devices to support D3hot and D3cold */
-+	if (xhci->hci_version >= 0x120)
- 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
- 
- 	if (xhci->quirks & XHCI_RESET_ON_RESUME)
--- 
-2.34.1
+NOTE:
+1) Build warning which were reported on last round of stable rc review
 
+Following build warning found on few arm configs which do not set Kconfig
+# CONFIG_ELF_CORE is not set
+
+- powerpc: tqm8xx_defconfig
+- arm: keystone_defconfig and omap1_defconfig
+- mips: ar7_defconfig
+fs/coredump.c:835:12: warning: 'dump_emit_page' defined but not used
+[-Wunused-function]
+  835 | static int dump_emit_page(struct coredump_params *cprm, struct
+page *page)
+      |            ^~~~~~~~~~~~~~
+
+## Build
+* kernel: 5.19.15-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.19.y
+* git commit: 2e79dbde2710b3939943c5d2ea3028329b820e9f
+* git describe: v5.19.14-49-g2e79dbde2710
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.19.y/build/v5.19.14-49-g2e79dbde2710
+
+## Test Regressions (compared to v5.19.12-110-g30c780ac0f9f)
+
+## Metric Regressions (compared to v5.19.12-110-g30c780ac0f9f)
+
+## Test Fixes (compared to v5.19.12-110-g30c780ac0f9f)
+
+## Metric Fixes (compared to v5.19.12-110-g30c780ac0f9f)
+
+## Test result summary
+total: 112321, pass: 100742, fail: 732, skip: 10568, xfail: 279
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 339 total, 336 passed, 3 failed
+* arm64: 72 total, 70 passed, 2 failed
+* i386: 61 total, 55 passed, 6 failed
+* mips: 62 total, 59 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 75 total, 66 passed, 9 failed
+* riscv: 32 total, 27 passed, 5 failed
+* s390: 26 total, 24 passed, 2 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x86_64: 65 total, 63 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
