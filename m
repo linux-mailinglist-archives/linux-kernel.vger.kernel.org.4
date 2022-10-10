@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF705FA4B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD3E5FA4CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiJJUPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 16:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
+        id S229780AbiJJUP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 16:15:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiJJUPN (ORCPT
+        with ESMTP id S229699AbiJJUPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 16:15:13 -0400
+        Mon, 10 Oct 2022 16:15:20 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9695858B5D;
-        Mon, 10 Oct 2022 13:15:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D346526A;
+        Mon, 10 Oct 2022 13:15:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665432911; x=1696968911;
+  t=1665432914; x=1696968914;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=kjXzGbYDAGDzUThAUri+8VVRFkkuppwpSy0/gaNxk3U=;
-  b=C/1i3ob18WW0WH6wswTHjghMprYU7CCRv45ZDeNZtklGyEjmA6el03JI
-   +l+m2NnHOhQHmVLJb1c2Qwwy8ru33X3pnYd9P449+zkMZLWRmizaOX/1E
-   kuEgyM5henKnRlof5MEwoa7wt5WoxwZYeg3VPIeHlVl9BMWcygd1IuIMv
-   VfcZ2CClOedlAZuwKqPEV/znjF//yHkyKxVaSLUENaBdM1Gx7B3Dz9J3j
-   lC2bZfNxpuN8PkzN/coLvEUSiG062IQUjra8A+/Iahq8+FSc1AehDXZI2
-   NDM/NgZQ/KO2pvAZ3uQOstq7XmeU13eg3FVFKQTApDDB58BPKp3FXS+lq
+  bh=5aMlx8MjwRboHF89NLa+7LtdxT0Jr0b4GEWJm8cGkaQ=;
+  b=LsncFeUo5wotK0cPs2Rnn/hI2rvC6OYPVKsPENCbtaI74iMUPJ6sxbob
+   xx2tS4RCTTIyo5jJhAf+CzdoQQ/wveA3eVTdHCs/JYvn6wZRcPGFRnOO9
+   fHZRy5V/+aEj6FsoMQl1rXKnnsqzsQzmWixwz3z+EGx4Q1DMkMyVJJGJO
+   EHG7BJT3d5l3o4oxdn/0MdpwQpRVYisZRDK1mBlPppXHkvEKnwsHWNjkY
+   ZtRPA4/OQ8JUbod/rPcw8Wne380YpryQvtITLNlV7IMNBsyxsPjGN++aq
+   ucf/GcwcIzWWtkL+FGZnJp3tIZgvmlQprA5YYt/AEngXVTclbOZBMbvt7
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="301936360"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="301936364"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="301936360"
+   d="scan'208";a="301936364"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:10 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:11 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603862769"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603862772"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="603862769"
+   d="scan'208";a="603862772"
 Received: from black.fi.intel.com ([10.237.72.28])
   by orsmga006.jf.intel.com with ESMTP; 10 Oct 2022 13:14:59 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 778C82B0; Mon, 10 Oct 2022 23:15:11 +0300 (EEST)
+        id 8B04A30B; Mon, 10 Oct 2022 23:15:11 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Marc Zyngier <maz@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -132,9 +132,9 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Emil Renner Berthing <kernel@esmil.dk>,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v2 02/36] gpiolib: cdev: Add missed header(s)
-Date:   Mon, 10 Oct 2022 23:14:18 +0300
-Message-Id: <20221010201453.77401-3-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 03/36] media: c8sectpfe: Add missed header(s)
+Date:   Mon, 10 Oct 2022 23:14:19 +0300
+Message-Id: <20221010201453.77401-4-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
@@ -156,38 +156,35 @@ While at it, sort headers alphabetically.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/gpio/gpiolib-cdev.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-index f8041d4898d1..60a60e2d60c5 100644
---- a/drivers/gpio/gpiolib-cdev.c
-+++ b/drivers/gpio/gpiolib-cdev.c
-@@ -10,8 +10,9 @@
- #include <linux/device.h>
- #include <linux/err.h>
- #include <linux/file.h>
--#include <linux/gpio.h>
- #include <linux/gpio/driver.h>
-+#include <linux/gpio.h>
-+#include <linux/hte.h>
- #include <linux/interrupt.h>
- #include <linux/irqreturn.h>
- #include <linux/kernel.h>
-@@ -20,11 +21,12 @@
- #include <linux/mutex.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/poll.h>
-+#include <linux/seq_file.h>
- #include <linux/spinlock.h>
- #include <linux/timekeeping.h>
- #include <linux/uaccess.h>
- #include <linux/workqueue.h>
--#include <linux/hte.h>
-+
- #include <uapi/linux/gpio.h>
+diff --git a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
+index cefe6b7bfdc4..4c5027a0480d 100644
+--- a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
++++ b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
+@@ -24,16 +24,18 @@
+ #include <linux/module.h>
+ #include <linux/of_gpio.h>
+ #include <linux/of_platform.h>
++#include <linux/pinctrl/consumer.h>
++#include <linux/pinctrl/pinctrl.h>
+ #include <linux/platform_device.h>
+-#include <linux/usb.h>
+ #include <linux/slab.h>
+ #include <linux/time.h>
++#include <linux/usb.h>
+ #include <linux/wait.h>
+-#include <linux/pinctrl/pinctrl.h>
  
- #include "gpiolib.h"
+-#include "c8sectpfe-core.h"
+ #include "c8sectpfe-common.h"
++#include "c8sectpfe-core.h"
+ #include "c8sectpfe-debugfs.h"
++
+ #include <media/dmxdev.h>
+ #include <media/dvb_demux.h>
+ #include <media/dvb_frontend.h>
 -- 
 2.35.1
 
