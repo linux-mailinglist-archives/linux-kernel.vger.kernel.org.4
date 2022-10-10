@@ -2,154 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 549DF5F97CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 07:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 302135F97D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 07:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbiJJFes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 01:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46412 "EHLO
+        id S231266AbiJJFgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 01:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231270AbiJJFec (ORCPT
+        with ESMTP id S231245AbiJJFgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 01:34:32 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D4A50FAA;
-        Sun,  9 Oct 2022 22:34:29 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id f140so9901839pfa.1;
-        Sun, 09 Oct 2022 22:34:29 -0700 (PDT)
+        Mon, 10 Oct 2022 01:36:06 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE42AC61;
+        Sun,  9 Oct 2022 22:36:03 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id gf8so8965407pjb.5;
+        Sun, 09 Oct 2022 22:36:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=VhtwD/Hk+4MmxWjIA7ioMhD4KoMl+0rYDVzSC0gMCyo=;
-        b=RmjJoHRY0sT+7aPKDElNCqDaPnPxEpgrpU3JZTWY6f+f9D+LGqjUCR+yjOjO0YrabX
-         uT+OKOJNlI2FLR4cTDTehEv4wvjbEcbjFtrSOa/E1bRnMTzbOCicaUi0SPwH8cWHwLmU
-         ufr7YTl+OhrncTg6TD84HiRwOwVea8Ag0GYLdPJC1LdaLSLb4Y5D2EdXq/M2ZTVR638N
-         4waPlF1JNiWjECmL4z60RHzc7rTBkozr5QHmg9YM6yvGkl4z3lgP4THcn+dFiqQQR5ix
-         DpOZcrj+MGlzMrEwZJJDS2ADseD8hkPZLwfEVEvIZYvaflRkj2ILvWmsPkL+zx3GLreV
-         Bd6A==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=RVA4JJdT2Z+v9/KhnhYIqf9xYvMnR3eukQaugJJM+U8=;
+        b=bLIZ3d3eHeOaDGt1urkqoq2g6Y78PHAGlXq567mdLeHoXSw9+xhGdENQk8DLp9edDc
+         KoNvuys7RZq0/9yG+zMr0l/LQv153dOBNC076WuOqN+qG3tr1xb0pUgOdo3YMBUdlQZP
+         iGDRIUhP6LOYW/b6Vn9ZmMF34KKUfcKYRL00GQVKNGbD9Ybxtwx5o6Q8WVF/PAsoMGar
+         L525d1qKjmkL6/gRWikKKDcCp8h21yKImRZ9+dHcGobbgrYiXceFx5IpzJ6ORuqHdxe+
+         GSMutzSbZh85lbfyiDFZDJ9kwTqAop7F+ZxoBNZFtFCVZpmubk75s+HrxTYHdO0xNDHY
+         VJsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VhtwD/Hk+4MmxWjIA7ioMhD4KoMl+0rYDVzSC0gMCyo=;
-        b=s0HmdXlAsKZQFBpj5PaPJl+1MLeaeQkGD+bTBKkRD0jDlDO7vhZmAi3qXDkcefGj1N
-         KOTUhv6QmsFcGFV7UDWlx76uv6NsElv6zL52oXLUuExfnwzWeZuhJlNr3eNUOHUqLCyE
-         t5avUpFu+PhEml+E7qmoB0IV99iXkc/Nerg87LHIRrgfpXCNRAkRD94hoeOyu5YqqbP/
-         sEso6TLCJagGMv+oO5bfodzL8Hsv43+TW87d3pO4BDBl6qaHt0cylu5NWUxC2H5Mx7RV
-         Ste6mAMLzwFfisJVvFGMAGKQ3YgCIWp3ghbE9RvVG5mP0zywa90ELf6kEp3K/GW+hJ2T
-         /dtw==
-X-Gm-Message-State: ACrzQf20WQ61nJ41vJkVQRW7rEoewH7a/m4KGXr96VYxi3XB35eHC2AD
-        hPeBuZzvlqLwtSak/NIHjCYbip/6dFw=
-X-Google-Smtp-Source: AMsMyM70wYHt4G5bUNXTnIFDsYYiQX6qWlQoyTI0no4LU55Mcvt1m1GjIYkVxKzPRznXafnSOWSKnw==
-X-Received: by 2002:aa7:9af5:0:b0:562:a65f:ec81 with SMTP id y21-20020aa79af5000000b00562a65fec81mr18327527pfp.16.1665380068287;
-        Sun, 09 Oct 2022 22:34:28 -0700 (PDT)
-Received: from xm06403pcu.spreadtrum.com ([117.18.48.102])
-        by smtp.gmail.com with ESMTPSA id 126-20020a620584000000b00562519cad97sm5891920pff.19.2022.10.09.22.34.23
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RVA4JJdT2Z+v9/KhnhYIqf9xYvMnR3eukQaugJJM+U8=;
+        b=AekTw1mfelHnTZPEKHqtSUla85QsloSM/z+HA9bcL2LU/0OHCk4h0tRJJJa1ffQw0d
+         le9OBj/EG3t1Xhxu9aZuU6oJSfaL/HuxO3Mv5taDTr1gSD1HaQ8s77Jllswm4UKV/A3h
+         OXk5yT7owBLQu7eEOyavR5GQkGI43x7N2i7ijhOSChIbh/sZsUcNVfzWTSPpOqQcQNZ0
+         aXrswnFGv1ioD30xwxRL2eJG+yJunuXLEVFOPgv6kO8S54pDFeUio9hJ9UX4UyBxXdSZ
+         xZDjxTu1YkEVk7j62psAMWyBn9PZ3M2uoq1L6HZD4aWnerNBAqDrvk9Pl5KITIjsWkTs
+         WYWw==
+X-Gm-Message-State: ACrzQf1nuuRe6gdQB9cvsRw3+IXZEUqfDlaxf1PShNrxqmGvHGo9zmcf
+        U46ubXmZEmFBnWckg8nGFmk=
+X-Google-Smtp-Source: AMsMyM4NNv/w6yg8VVoGSh7fu9xHl5THSzfo/1bKk08Wadsu5JPji3guNF7tPdYTqXigfsWpcih45g==
+X-Received: by 2002:a17:90b:4b87:b0:202:d760:9b00 with SMTP id lr7-20020a17090b4b8700b00202d7609b00mr29997403pjb.194.1665380163139;
+        Sun, 09 Oct 2022 22:36:03 -0700 (PDT)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:862f:cd0e:bf30:6d69])
+        by smtp.gmail.com with ESMTPSA id u13-20020a170902e80d00b0017f7e0f4a4esm5667594plg.35.2022.10.09.22.36.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 22:34:27 -0700 (PDT)
-From:   Chunyan Zhang <zhang.lyra@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        Cixi Geng <cixi.geng1@unisoc.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH V3 3/3] dt-bindings: gpio: Add compatible string for Unisoc UMS512
-Date:   Mon, 10 Oct 2022 13:33:38 +0800
-Message-Id: <20221010053338.22580-4-zhang.lyra@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221010053338.22580-1-zhang.lyra@gmail.com>
-References: <20221010053338.22580-1-zhang.lyra@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 09 Oct 2022 22:36:02 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>
+Subject: [RFC/PATCHSET 00/19] perf stat: Cleanup counter aggregation (v1)
+Date:   Sun,  9 Oct 2022 22:35:41 -0700
+Message-Id: <20221010053600.272854-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+Hello,
 
-UMS512 use the same GPIO and EIC controller with SC9860.
+Current perf stat code is somewhat hard to follow since it handles
+many combinations of PMUs/events for given display and aggregation
+options.  This is my attempt to clean it up a little. ;-)
 
-Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
----
- .../bindings/gpio/sprd,gpio-eic.yaml          | 33 +++++++++++++++----
- .../devicetree/bindings/gpio/sprd,gpio.yaml   |  7 +++-
- 2 files changed, 33 insertions(+), 7 deletions(-)
+My first concern is that aggregation and display routines are intermixed
+and processed differently depends on the aggregation mode.  I'd like to
+separate them apart and make the logic clearer.
 
-diff --git a/Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml b/Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml
-index a21350bd0f2c..99fcf970773a 100644
---- a/Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml
-+++ b/Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml
-@@ -42,12 +42,33 @@ description: |
- 
- properties:
-   compatible:
--    enum:
--      - sprd,sc9860-eic-debounce
--      - sprd,sc9860-eic-latch
--      - sprd,sc9860-eic-async
--      - sprd,sc9860-eic-sync
--      - sprd,sc2731-eic
-+    oneOf:
-+      - enum:
-+          - sprd,sc9860-eic-debounce
-+          - sprd,sc9860-eic-latch
-+          - sprd,sc9860-eic-async
-+          - sprd,sc9860-eic-sync
-+          - sprd,sc2731-eic
-+      - items:
-+          - enum:
-+              - sprd,ums512-eic-debounce
-+          - const: sprd,sc9860-eic-debounce
-+      - items:
-+          - enum:
-+              - sprd,ums512-eic-latch
-+          - const: sprd,sc9860-eic-latch
-+      - items:
-+          - enum:
-+              - sprd,ums512-eic-async
-+          - const: sprd,sc9860-eic-async
-+      - items:
-+          - enum:
-+              - sprd,ums512-eic-sync
-+          - const: sprd,sc9860-eic-sync
-+      - items:
-+          - enum:
-+              - sprd,sc2730-eic
-+          - const: sprd,sc2731-eic
- 
-   reg:
-     minItems: 1
-diff --git a/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml b/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml
-index 40924123d184..483168838128 100644
---- a/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml
-+++ b/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml
-@@ -19,7 +19,12 @@ description: |
- 
- properties:
-   compatible:
--    const: sprd,sc9860-gpio
-+    oneOf:
-+      - const: sprd,sc9860-gpio
-+      - items:
-+          - enum:
-+              - sprd,ums512-gpio
-+          - const: sprd,sc9860-gpio
- 
-   reg:
-     maxItems: 1
+To do that, I added struct perf_stat_aggr to save the aggregated counter
+values and other info.  It'll be allocated and processed according to
+the aggr_mode and display logic will use it.
+
+The code is available at 'perf/stat-aggr-v1' branch in
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+
+Thanks,
+Namhyung
+
+
+Namhyung Kim (19):
+  perf tools: Save evsel->pmu in parse_events()
+  perf tools: Use pmu info in evsel__is_hybrid()
+  perf stat: Use evsel__is_hybrid() more
+  perf stat: Add aggr id for global mode
+  perf stat: Add cpu aggr id for no aggregation mode
+  perf stat: Add 'needs_sort' argument to cpu_aggr_map__new()
+  perf stat: Add struct perf_stat_aggr to perf_stat_evsel
+  perf stat: Allocate evsel->stats->aggr properly
+  perf stat: Aggregate events using evsel->stats->aggr
+  perf stat: Aggregate per-thread stats using evsel->stats->aggr
+  perf stat: Allocate aggr counts for recorded data
+  perf stat: Reset aggr counts for each interval
+  perf stat: Split process_counters()
+  perf stat: Add perf_stat_merge_counters()
+  perf stat: Add perf_stat_process_percore()
+  perf stat: Add perf_stat_process_shadow_stats()
+  perf stat: Display event stats using aggr counts
+  perf stat: Display percore events properly
+  perf stat: Remove unused perf_counts.aggr field
+
+ tools/perf/builtin-script.c                   |   4 +-
+ tools/perf/builtin-stat.c                     | 177 +++++--
+ tools/perf/tests/parse-metric.c               |   2 +-
+ tools/perf/tests/pmu-events.c                 |   2 +-
+ tools/perf/util/counts.c                      |   1 -
+ tools/perf/util/counts.h                      |   1 -
+ tools/perf/util/cpumap.c                      |  16 +-
+ tools/perf/util/cpumap.h                      |   8 +-
+ tools/perf/util/evsel.c                       |  13 +-
+ tools/perf/util/parse-events.c                |   1 +
+ tools/perf/util/pmu.c                         |   4 +
+ .../scripting-engines/trace-event-python.c    |   6 -
+ tools/perf/util/stat-display.c                | 472 +++---------------
+ tools/perf/util/stat.c                        | 383 +++++++++++---
+ tools/perf/util/stat.h                        |  29 +-
+ 15 files changed, 590 insertions(+), 529 deletions(-)
+
+
+base-commit: d79310700590b8b40d8c867012d6c899ea6fd505
 -- 
-2.25.1
+2.38.0.rc1.362.ged0d419d3c-goog
 
