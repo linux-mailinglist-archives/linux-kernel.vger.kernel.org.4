@@ -2,83 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C56DE5F9F12
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE56B5F9F14
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbiJJNFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 09:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
+        id S229580AbiJJNFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 09:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiJJNEy (ORCPT
+        with ESMTP id S229916AbiJJNE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 09:04:54 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23EE112D35;
-        Mon, 10 Oct 2022 06:04:52 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id n83so12594545oif.11;
-        Mon, 10 Oct 2022 06:04:52 -0700 (PDT)
+        Mon, 10 Oct 2022 09:04:59 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9434419C28
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 06:04:58 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 203so12902120ybc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 06:04:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rfebC1hNG9FGT+3Pe0PgBda4mQUCoivjL2qFGZ8lp7A=;
+        b=dFPRnKW8OTYUCMy95MAyNvGuQxuL3tx/3eHKJ36wQBKxDPUn2u3Tc22+Xu8wlXiWy5
+         mssecKUfs7XypZkVo8rJwYpyuWpX8B3ZvdecqO7r11YAxcbEXknHSF0DBNSGyvMC0mww
+         7x4NgncrgjcSaSctUuRDnJboMRcggVsaoJB2cHItMxEQq1iQIU5hZoLZnbM30hEkqmF6
+         7emlN0eBIGNHskTVf4co7W4C1r3oOAikov3NRplcpEgX73aR8bsfIGk2Br7b4EjXvrJt
+         isycCVKsqz0O0kSQz0VX4tdS4iiGgapZaau7e87PGfxci1bstJwEYjeZQE1R2IiY6VnP
+         Hn7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6lm2S6p7VPlLo+Kc/ZQ+8NqMDhlla7JGgp2wlIKkBks=;
-        b=ltzx3ChxlhBKXI2o5f2P0yckhlG0QGOLi8l/fTg+571xEhFlGqZvnnKq4qQ4f1ADsU
-         Dz2PAAN5HDtlkVD4KaCROliAkiGkWq93mJlh0uMl2o2Kx4jdiuDFpfKq7iluXc0lhm+A
-         fnydMKjviW8lcQo6JQ53krtE81Xe8hFCOQItRmYs3Lg1NveVLW/CBbaCP6HQsP5LAw3M
-         xqmORyp2NIo10Xme3nqdYu0HIxCo6XEgGbxw7HLDhTxNzt8SUMVTO58J9m8e59349Klg
-         ajwEy3nPPGPkY39m1R0aeEwtmlAcKwyETcK/XN3AvVQQ+tlunGBvf/IOv+4GRy3fO0Vb
-         Ky1Q==
-X-Gm-Message-State: ACrzQf2Hkj0sohYKclMDDa0hyOBRuIgorC/UC8CNJ92LQjpWM18EfKdN
-        Ep686l+Y5sVVtgHFVdO59A==
-X-Google-Smtp-Source: AMsMyM5J/JuIjQl3C0ten6ocXj1sk6nbEOlYNykegpDE87fe//pDYjb5k9JFQmxrNWu/mJy0Q73TfQ==
-X-Received: by 2002:a05:6808:1648:b0:347:b631:cc80 with SMTP id az8-20020a056808164800b00347b631cc80mr9059217oib.238.1665407092143;
-        Mon, 10 Oct 2022 06:04:52 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r10-20020a056870e98a00b001327e6f230bsm4922004oao.27.2022.10.10.06.04.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 06:04:49 -0700 (PDT)
-Received: (nullmailer pid 488759 invoked by uid 1000);
-        Mon, 10 Oct 2022 13:04:49 -0000
-Date:   Mon, 10 Oct 2022 08:04:49 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Qii Wang <qii.wang@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/2] dt-bindings: i2c: update bindings for mt7986 soc
-Message-ID: <166540708908.488703.4873523437218276438.robh@kernel.org>
-References: <20221009101631.82380-1-linux@fw-web.de>
- <20221009101631.82380-2-linux@fw-web.de>
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rfebC1hNG9FGT+3Pe0PgBda4mQUCoivjL2qFGZ8lp7A=;
+        b=H8tDwKTcByF1xaL/rtLpCnjo1lUJp4kKcRBrJisXzDCVSfKNj2bAlrMK62zs8K1RiJ
+         NFBwRGBtHxPo1Gule1hbgxe9jCSfDhk3jXDrEeOSTarsRZgez78RjT2F0ifd058Zc3Sy
+         s1y50Cd8UTArHd02PzvP/gOr++chTKyG3OueHJ+63ZzkySotaAdgRy026eFh+hsjFii1
+         mtWnG6gelrdKcO0X5PgbldSDxjdaUNVPJqMpDOwAdbVPpOrhzZoYrTwpO7CPuzPfupEK
+         7LMETebgFLkvIuiFyPSDN5oeZyUMCKl/vkfw2A42i66F7P1VPJTTTtVF/W9OGNtWzFhX
+         5OUA==
+X-Gm-Message-State: ACrzQf19sMbpr3vFjGsKinAoTNf9LfPDYcyLxy0mKl3wZgpALwpwIEut
+        btAlFhBgB3xI4noFhFqgDm5TV8wmBZGa3LMHUa0=
+X-Google-Smtp-Source: AMsMyM4LclOS9EUwQwLWg2yno0no/woM/n3BfCQi8F5O1ezS1mcipm1ErkWvNBJVppRDVEhklxdlou8PuKo9o4sQdhc=
+X-Received: by 2002:a25:e7c2:0:b0:6be:f56a:bfcc with SMTP id
+ e185-20020a25e7c2000000b006bef56abfccmr17998125ybh.126.1665407097382; Mon, 10
+ Oct 2022 06:04:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221009101631.82380-2-linux@fw-web.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a05:7000:af29:0:0:0:0 with HTTP; Mon, 10 Oct 2022 06:04:57
+ -0700 (PDT)
+Reply-To: contact@ammico.it
+From:   =?UTF-8?Q?Mrs=2E_Monika_Everenov=C3=A1?= <kassadoctoro@gmail.com>
+Date:   Mon, 10 Oct 2022 14:04:57 +0100
+Message-ID: <CAHp58ihMpRO_K9tsSjhJnG_aPMea6qq3Hbhaym+D_fTAwGf-sg@mail.gmail.com>
+Subject: Re:
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.3 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 09 Oct 2022 12:16:30 +0200, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> Add i2c compatible for MT7986 SOC.
-> 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
->  Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-
-Acked-by: Rob Herring <robh@kernel.org>
+Tere ja kuidas l=C3=A4heb?
+Minu nimi on proua Evereen, saadan selle s=C3=B5numi suure lootusega
+kohese vastuse, kuna pean l=C3=A4bima s=C3=BCdame kordusoperatsiooni
+praegune kehv tervis ja v=C3=A4heste elluj=C3=A4=C3=A4misv=C3=B5imalustega.=
+ Aga enne kui ma
+tehke teine ohtlik operatsioon, annan teile selle
+Mul on USA pangakontol 6 550 000 dollarit, et h=C3=A4sti investeerida,
+hallata ja kasutada
+kasum heategevusprojekti juhtimiseks. Ma arvan haigete aitamist
+ja vaesed on mu viimane soov maa peal, sest mul pole kedagi
+kellelt raha p=C3=A4rima.
+Palun vastake mulle kiiresti
+tervitustega
+Proua Monika Evereen
+Florida, Ameerika =C3=9Chendriigid
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+Hi and how are you?
+My name is Mrs. Evereen, I am sending this message with great hope for
+an immediate response, as I have to undergo heart reoperation in my
+current poor health with little chance of survival. But before I
+undertake the second dangerous operation, I will give you the
+$6,550,000 I have in my US bank account to invest well, manage and use
+the profits to run a charity project for me. I count helping the sick
+and the poor as my last wish on earth, because I have no one to
+inherit money from.
+Please give me a quick reply
+regards
+Mrs. Monika Evereen
+Florida, United States of America
