@@ -2,97 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2073B5F964B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 02:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D96085F966A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 02:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232982AbiJJAaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 20:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
+        id S230012AbiJJA7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 20:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233340AbiJJA3U (ORCPT
+        with ESMTP id S230371AbiJJA6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 20:29:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5131B136;
-        Sun,  9 Oct 2022 17:04:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 9 Oct 2022 20:58:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE13CBD063
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 17:43:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665362538;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VDShjrzwK1jKnCnAs96UVbaV43RvPyzhTgdsrfXV+I8=;
+        b=I22ABh3APGFcbDIJU8poyJ54tCLaX6DIh7KLj+nULmZwQMWuMQ6SQQHHn1A7Z3+tATG2zI
+        wTi9Yvp/dactxKX7Z+sjjnjr5EQtA22jEhoBxvVA0/KceK2RYqCci3Xi/dTG317+0e4woS
+        Ilusxu7jcHHzmNVwC9J0HqzcQOSSbXE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-369-j3XBEPeTPN2bfQw2tWweCg-1; Sun, 09 Oct 2022 20:17:09 -0400
+X-MC-Unique: j3XBEPeTPN2bfQw2tWweCg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D9DD960C2B;
-        Mon, 10 Oct 2022 00:04:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A1AAC433D6;
-        Mon, 10 Oct 2022 00:04:14 +0000 (UTC)
-Message-ID: <f16e5bde-0560-9306-be82-d5a825485fb1@linux-m68k.org>
-Date:   Mon, 10 Oct 2022 10:04:11 +1000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-From:   Greg Ungerer <gerg@linux-m68k.org>
-Subject: [git pull] m68knommu changes for v6.1
-To:     torvalds@linux-foundation.org
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 44DBA849415;
+        Mon, 10 Oct 2022 00:17:08 +0000 (UTC)
+Received: from localhost (ovpn-12-34.pek2.redhat.com [10.72.12.34])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8FD8640FF656;
+        Mon, 10 Oct 2022 00:17:06 +0000 (UTC)
+Date:   Mon, 10 Oct 2022 08:17:02 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
 Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux/m68k <linux-m68k@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>, gerg@kernel.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
+        "schnelle@linux.ibm.com" <schnelle@linux.ibm.com>,
+        "David.Laight@ACULAB.COM" <David.Laight@aculab.com>,
+        "shorne@gmail.com" <shorne@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>
+Subject: Re: [PATCH v3 01/11] hexagon: mm: Convert to GENERIC_IOREMAP
+Message-ID: <Y0NkfggJTI1q/Yvy@MiWiFi-R3L-srv>
+References: <20221009103114.149036-1-bhe@redhat.com>
+ <20221009103114.149036-2-bhe@redhat.com>
+ <83f292b8-0639-56b2-6dac-0475c34f623c@csgroup.eu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <83f292b8-0639-56b2-6dac-0475c34f623c@csgroup.eu>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 10/09/22 at 04:39pm, Christophe Leroy wrote:
+> 
+> 
+> Le 09/10/2022 à 12:31, Baoquan He a écrit :
+> > By taking GENERIC_IOREMAP method, the generic ioremap_prot() and
+> > iounmap() are visible and available to arch. Arch only needs to
+> > provide implementation of arch_ioremap() or arch_iounmap() if there's
+> > arch specific handling needed in its ioremap() or iounmap(). This
+> > change will simplify implementation by removing duplicated codes with
+> > generic ioremap() and iounmap(), and has the equivalent functioality.
+> > 
+> > For hexagon, the current ioremap() and iounmap() are the same as
+> > generic version. After taking GENERIC_IOREMAP way, the old ioremap()
+> > and iounmap() can be completely removed.
+> > 
+> > Signed-off-by: Baoquan He <bhe@redhat.com>
+> > Cc: Brian Cain <bcain@quicinc.com>
+> > Cc: Mark Brown <broonie@kernel.org>
+> > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > Cc: linux-hexagon@vger.kernel.org
+> > ---
+> > v2->v3:
+> >    Rewrite patch log.
+> >    Put it at the beginning of patchset since it doesn't introduce new
+> >    arch_ioremap()/arch_iounmap().
+> > 
+> >   arch/hexagon/Kconfig          |  1 +
+> >   arch/hexagon/include/asm/io.h |  9 +++++--
+> >   arch/hexagon/mm/ioremap.c     | 44 -----------------------------------
+> >   3 files changed, 8 insertions(+), 46 deletions(-)
+> >   delete mode 100644 arch/hexagon/mm/ioremap.c
+> > 
+> > diff --git a/arch/hexagon/Kconfig b/arch/hexagon/Kconfig
+> > index 54eadf265178..17afffde1a7f 100644
+> > --- a/arch/hexagon/Kconfig
+> > +++ b/arch/hexagon/Kconfig
+> > @@ -25,6 +25,7 @@ config HEXAGON
+> >   	select NEED_SG_DMA_LENGTH
+> >   	select NO_IOPORT_MAP
+> >   	select GENERIC_IOMAP
+> > +	select GENERIC_IOREMAP
+> >   	select GENERIC_SMP_IDLE_THREAD
+> >   	select STACKTRACE_SUPPORT
+> >   	select GENERIC_CLOCKEVENTS_BROADCAST
+> > diff --git a/arch/hexagon/include/asm/io.h b/arch/hexagon/include/asm/io.h
+> > index 46a099de85b7..dcd9cbbf5934 100644
+> > --- a/arch/hexagon/include/asm/io.h
+> > +++ b/arch/hexagon/include/asm/io.h
+> > @@ -170,8 +170,13 @@ static inline void writel(u32 data, volatile void __iomem *addr)
+> >   #define writew_relaxed __raw_writew
+> >   #define writel_relaxed __raw_writel
+> >   
+> > -void __iomem *ioremap(unsigned long phys_addr, unsigned long size);
+> > -#define ioremap_uc(X, Y) ioremap((X), (Y))
+> > +/*
+> > + * I/O memory mapping functions.
+> > + */
+> > +#define _PAGE_IOREMAP (_PAGE_PRESENT | _PAGE_READ | _PAGE_WRITE | \
+> > +		       (__HEXAGON_C_DEV << 6))
+> > +
+> > +#define ioremap_uc(addr, size) ioremap((addr), (size))
+> 
+> Why do you need to change this macro ?
 
-Please pull the m68knommu changes for v6.1.
+I don't like the X, Y since they look meaningless. I can change back if
+you like the old one. Thanks for checking.
 
-Just a couple of changes. Fixes to compilation of the old/legacy Freescale
-68328 targets in some kernel configurations, and some default configuration
-updates.
-
-Regards
-Greg
-
-
-
-
-The following changes since commit f76349cf41451c5c42a99f18a9163377e4b364ff:
-
-   Linux 6.0-rc7 (2022-09-25 14:01:02 -0700)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/gerg/m68knommu.git tags/m68knommu-for-v6.1
-
-for you to fetch changes up to 404b7577cee2dc302ae259604b163cabd9bfd4f3:
-
-   m68k: update config files (2022-09-30 10:12:10 +1000)
-
-----------------------------------------------------------------
-m68knommu: updates and fixes for v6.1
-
-Fixes include:
-. fix build problems for legacy 68328 targets
-. clean out configs of removed options
-
-----------------------------------------------------------------
-Greg Ungerer (2):
-       m68knommu: fix non-specific 68328 choice interrupt build failure
-       m68knommu: fix non-mmu classic 68000 legacy timer tick selection
-
-Lukas Bulwahn (1):
-       m68k: update config files
-
-  arch/m68k/68000/ints.c               | 6 +++---
-  arch/m68k/Kconfig.cpu                | 4 +---
-  arch/m68k/configs/amcore_defconfig   | 4 ----
-  arch/m68k/configs/m5208evb_defconfig | 3 ---
-  arch/m68k/configs/m5249evb_defconfig | 3 ---
-  arch/m68k/configs/m5272c3_defconfig  | 3 ---
-  arch/m68k/configs/m5275evb_defconfig | 3 ---
-  arch/m68k/configs/m5307c3_defconfig  | 3 ---
-  arch/m68k/configs/m5407c3_defconfig  | 3 ---
-  9 files changed, 4 insertions(+), 28 deletions(-)
