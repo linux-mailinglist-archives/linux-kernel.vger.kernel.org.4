@@ -2,84 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E805FA6DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 23:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E2FB5FA6DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 23:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiJJVGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 17:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40418 "EHLO
+        id S229672AbiJJVMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 17:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJJVGl (ORCPT
+        with ESMTP id S229459AbiJJVMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 17:06:41 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF93B550B5;
-        Mon, 10 Oct 2022 14:06:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1665435975;
-        bh=mG5hDYjGUYAZucACN+q5mdCx5qkd2+FAlcrpCEe1Ons=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=cZ22GLwjIarQYehCa5elFzUJzmEJup6luc0PVqyuhAyEDX9cIFW9qEFaX7BN0Wa49
-         WOiO4+FEHzffDFgo2UCGD+fXWs2FpV5LrLo6ljV+gcEu6U8ud5WpNmO1mmSdFJGyqr
-         hP2vBn+guPKXXAgr2NBlua+6uSPq0lKu5LEtZNjU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [157.180.224.224] ([157.180.224.224]) by web-mail.gmx.net
- (3c-app-gmx-bap21.server.lan [172.19.172.91]) (via HTTP); Mon, 10 Oct 2022
- 23:06:14 +0200
+        Mon, 10 Oct 2022 17:12:49 -0400
+Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C592C6DAFC
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 14:12:48 -0700 (PDT)
+Received: by mail-oo1-xc31.google.com with SMTP id s1-20020a4a81c1000000b0047d5e28cdc0so8767031oog.12
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 14:12:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nqvSz48L0AQ7i/lklY25gA7KA/pc5dUDrWtx/8mqzEY=;
+        b=UvvNKdI3/AgQN/UyKQSR7DjAEcKiSAAziHJZF2zH2zv/DCjCP1VdYaT2dCgJDchB+a
+         CiGVorhEX5sWkZ0r5dAh5t9aZrtwcd9ZlEo3szWMdTZLKSkLnU/zDl8ICyyG7dft32GR
+         Cu/H00UHmX1OyJyWGZkC59/ei8pF2Q+r4fcxs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nqvSz48L0AQ7i/lklY25gA7KA/pc5dUDrWtx/8mqzEY=;
+        b=SV5CLxngULLLozxRmlsGoAtohl/6VzPEmD3u8sS+mH+mov7T8OFsoZGNeajRUNF/wu
+         abtQCq23eRX81OTElkoqcjtOIPCy5jXytsP0amFTM7KNfPFpgcQp81vh+CowSK56I9Ud
+         KX0s3O4FYFu3gCnY3/fQ/Roh6m0lQxpArV8NoPw3mbOpT3hD5ivbZWqiHNSlXLC8tW1Y
+         DTtAw0P6ck3ZUPUatrQceFvJ1K9d8vkT/KhqhclmMPSodc4TeZ0CDdAs9qeAr4itGAxJ
+         /PqSURAs1OZEAWaAaK6Mkg60ZCjUJVkDFh4vqfbq5PLlmMCKCx6H52t1rGFFnyr76uaY
+         cN8A==
+X-Gm-Message-State: ACrzQf3mHlE55lCSpNS44a8+XWquM9H7hsn1S6LWigkb0bZrLT+pL7uG
+        7t9AbaMaVekYQ4ZOSyOGH/GwfSuy5IQ5Tw==
+X-Google-Smtp-Source: AMsMyM6PvompOQHHZfO6mpVC73rby6cMKaMqxzOGSm26l6nEKHJORCZqHHwV9xaueKCB7IejUbIHmQ==
+X-Received: by 2002:a9d:19ca:0:b0:655:bcdc:f546 with SMTP id k68-20020a9d19ca000000b00655bcdcf546mr9322044otk.304.1665436367009;
+        Mon, 10 Oct 2022 14:12:47 -0700 (PDT)
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com. [209.85.160.46])
+        by smtp.gmail.com with ESMTPSA id 93-20020a9d04e6000000b00637032a39a3sm5292132otm.6.2022.10.10.14.12.45
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Oct 2022 14:12:45 -0700 (PDT)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-132b8f6f1b2so13755613fac.11
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 14:12:45 -0700 (PDT)
+X-Received: by 2002:a05:6870:c0c9:b0:127:c4df:5b50 with SMTP id
+ e9-20020a056870c0c900b00127c4df5b50mr10632726oad.126.1665436364960; Mon, 10
+ Oct 2022 14:12:44 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <trinity-8fc2e212-180a-4605-9c39-89bb5546c51f-1665435974865@3c-app-gmx-bap21>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org, Felix Fietkau <nbd@nbd.name>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Aw: Re: [PATCH] PCI: mediatek-gen3: change driver name to
- mtk-pcie-gen3
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 10 Oct 2022 23:06:14 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <20221010205342.GA2935945@bhelgaas>
-References: <20221008164211.112944-1-linux@fw-web.de>
- <20221010205342.GA2935945@bhelgaas>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:Jx6+QA/TzAAp7cAAp5KC4UM/18L2dnjb7TuI78HUc8K6HSTrfJHmGC/akuTHvGm+Rehtc
- PKRrVpAj+GAbQnYSJxUTmONrbqIBj8kwEY1y6SyZw/LNBM2bP7Mb+fAwH48aTST54Wyv+6vz8jqa
- yEo8kabekshiV9Dkzrqrm5vVgksR/08ONXLvwOvbS8mD0YZ5CyFdzeIDWUNp9kOm2EF5JRw/pCfH
- 9xMc9WpWsWTIAxba129ePjMdMAFR8+RfpcH3XHIQCRlEz3EDALjf8NWy+Z3N9M6u8D/r8+/E0a6I
- 68=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0dnFND4pJMc=:AChKLLwdlOarbzd4q5MP4b
- 4T7xuwyUlI2EVf1smEMgMq/E0GjH2yOxUu46V2Q4Mt7p9nym26a8ga9QyJoHmWoTfWnGIVwV/
- U1X8KO6zJJGbM6NSaAEfT2gr25yxh3Xz7IviaGFGZGLtxZirXhn/nmF5YhowjxmQ97gVEoI3a
- Hs/+sq/wx9BikL7/zvcz6fdLz8jPsrkM45G2ngZ1lqZNBt+Z0n9d5lj6PU79Ry3dnrPCYqJoY
- jWzpXu+0Q89+L6fvg8eEm3Z8BvwwLCuWE6FUJ7o83zEdsdiHmgWw6l4bUThPVBdMx55dI/jhl
- J1mH46WdyzO//A22NZFweR34Bfk/klinSmoDRffGkFzv5VmW1HBTtqc1N57PriO74djOvcXXA
- zP1ieUn9cCyTsrxO0DPGRjMSa6CLXPTT253uZmGawnfuLJk9D75Q61cb9dJNY6FAqlFFLPdqn
- wPbhZlugDnUOTueBGYHlNsGJUuHazDoZFSV+r7mKQVHApNx9OJK5AgNCbGOaF890dmdVTVPoH
- 2/4iQ5xzySRAoulxUsr6JggDck5cmfd6EDUOCHOGjG+tlvjnSKTCblflf5UVtZXWQmkiMOIZ9
- 622ts5HjdtcRSnenhzyZQCvFhYqkFek34YkLzXELCxN0puxNSsWJq4sy/bbltN6/Zd539AcU8
- 4f9heA6/DNr/i07HqOpGw2OAOkjZ/du9IMJDa6tE2pbRR5RNc24GX+HRnl9Ocyeo2l2p/hjHI
- 4Gw4V0Yjfgblre2boYnLkvdXgkURM3Dhi6pRRAqLznwM4BVGU6bMZDZjQ0tiKjQ8HFZcfKSMd
- SAxFXovzqnyWBZkTMUskABAtz29U6WsaZn/3mJk3Pymorf1bbhss6qGll9d12CU2Z8LG8H7I6
- YcHjnFkKU+LrrpB9c+dfpyT489AKcEstY7gtEB7lE+YuhMOS61rXWtEDmfkZ17Mb6f7Fh6uOX
- gkOwMSeisjb5ScYCCfCHun79r7hWjcKdPcksBeivYBdjy1rbua5KmodTXxGBNep54/kLiqbEO
- eGSXknvFYdcfO7r7l8Km2/WfbgfSvUW2pIECgTRMzEW5Rc3xcXaSRpcpEWMqGOgPjIifUcKi3
- SGEPzzoiZF7zFTLQgspkMv607sEKQQBqojks2bZIjKzqJZCzH5XSqpxnIYBTf2YZ8RK8NZBMa
- kGu1yuCbwjlVWLwSJabHW5TO96tqxh1uG/vbve5MEHA0KeiiWtXx5+3eDka8tKzueClXu3JfA
- jSjkwfFXExjtBSmdGVXyz1vTXz2Dr3P5zS7LvB+pR/v/4/CZ4ybsPX+4aSlRIytjeFUb0GLFb
- b4Qo8jd1
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <YzpC+uJlYq1nbcIw@yury-laptop>
+In-Reply-To: <YzpC+uJlYq1nbcIw@yury-laptop>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 10 Oct 2022 14:12:28 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgO5YjyPRz9dfP8AyZ8kKZPSQ78xyEbi8WmuHe09R36Hg@mail.gmail.com>
+Message-ID: <CAHk-=wgO5YjyPRz9dfP8AyZ8kKZPSQ78xyEbi8WmuHe09R36Hg@mail.gmail.com>
+Subject: Re: [GIT PULL] bitmap changes for v6.0-rc1
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,30 +75,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Gesendet: Montag, 10. Oktober 2022 um 22:53 Uhr
-> Von: "Bjorn Helgaas" <helgaas@kernel.org>
-> Betreff: Re: [PATCH] PCI: mediatek-gen3: change driver name to mtk-pcie-=
-gen3
+On Sun, Oct 2, 2022 at 7:03 PM Yury Norov <yury.norov@gmail.com> wrote:
 >
-> On Sat, Oct 08, 2022 at 06:42:11PM +0200, Frank Wunderlich wrote:
-> > From: Felix Fietkau <nbd@nbd.name>
-> >
-> > This allows it to coexist with the other mtk pcie driver in the same
-> > kernel.
-> >
-> > Signed-off-by: Felix Fietkau <nbd@nbd.name>
-> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
->
-> Looks like Lorenzo already applied this:
->
-> https://lore.kernel.org/all/166125958529.60702.17839683437013330997.b4-t=
-y@kernel.org/#t
+>       lib/cpumask: add FORCE_NR_CPUS config option
 
-ok, thx for pointing out
+Side note: I think we should make this option depend on EXPERT.
 
-have rebased my tree to torvalds/master from yesterday and it was not yet =
-in...but i see it in next with commit-date from august 23th
+It doesn't make much sense in any generic kernel, so it's mostly an
+embedded thing. And the question is very confusing.
 
-i guess pcie-part is not yet merged...sorry for the noise
-
-regards Frank
+                 Linus
