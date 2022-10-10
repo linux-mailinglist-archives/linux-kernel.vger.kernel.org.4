@@ -2,133 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F055FA194
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 18:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D74D5FA195
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 18:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229454AbiJJQH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 12:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52986 "EHLO
+        id S229731AbiJJQHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 12:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiJJQHY (ORCPT
+        with ESMTP id S229953AbiJJQHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 12:07:24 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCCD2C7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 09:07:23 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 0888A1F91B;
-        Mon, 10 Oct 2022 16:07:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1665418042; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2Dpv3pp/cMCr8DV605wKdnaAFOw2tNw2Yu9T2b2jb1M=;
-        b=pEeP09Htm0edHdjNdQi+4i6fnKU6U6vR2uIzVk/bvqMT2+mRHLaZhAHMQ8WoreUXe7vXwu
-        B2ecnd3q+1Njlss115C/JtoEjlyvve8Tp11UszHL7PxQROPdTWdfDHpcqabE1fpCsoqsjz
-        G9KvatXN4bJPoXvm90KQunw2nPmav4s=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B6E4B2C141;
-        Mon, 10 Oct 2022 16:07:21 +0000 (UTC)
-Date:   Mon, 10 Oct 2022 18:07:18 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk 18/18] printk: Handle dropped message smarter
-Message-ID: <Y0RDNjyYh0BpDiIQ@alley>
-References: <20220924000454.3319186-1-john.ogness@linutronix.de>
- <20220924000454.3319186-19-john.ogness@linutronix.de>
- <YzEoYPSC5Qf2aL92@google.com>
- <87leq6d0zn.fsf@jogness.linutronix.de>
+        Mon, 10 Oct 2022 12:07:39 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4566E27CE4
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 09:07:38 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id y13-20020a056e021bed00b002faba3c4afbso6814861ilv.13
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 09:07:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+JfzesporW3/wV2SjF9C/3yeWXgu8SD7CLNHBasWr2M=;
+        b=zshwyktoMCMx2YLLKTzBU3BrM7nCAt4H+e8Gft1CecX8921ZUDiGoaA7bVgbcFO2q6
+         AIzoYl9w9YTMIOfstKmIBDtGCTs0RXKOUp5nGTMy3l/slUwwkJvolmvThfye7teivbAw
+         zSudCgh21smq3JZnSka9h3iDasnHfkiOAuEV7AkOYUDGg/Q++Sevc7GAX43n56g/2KFA
+         GQBYK2SMRd22Z16i3TguDLlb+W4XZm2BSxXbIfDtNwyBW4tw3GINO/BT+P8I1I+sAoOv
+         kaNU/YnKRJNFvcciv8oxrDomtIAe04GeQ4ckB/ld1D+Sx7F5pWUxhq/4VgKo83Y/nNJv
+         ev8Q==
+X-Gm-Message-State: ACrzQf34tjFM1o+/jCjlQIDbyiB//0ct9RSs0Ovg4Bh3FS6blrOcOQng
+        CIK72bcIAagMX4sIMIpbUdl+vCa55sjQoKogdTgaPSK/zyMI
+X-Google-Smtp-Source: AMsMyM7ssHdf16GamXtUfRxFDrf884xxM3HU/9YWBjJ/x6r4QH1Z7QtfrQOEPuVICc/Czt9Wc8UMHz1lvSddhJ48pY+0Tt61tJZJ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87leq6d0zn.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:419c:b0:363:c0fb:3a64 with SMTP id
+ az28-20020a056638419c00b00363c0fb3a64mr1720540jab.193.1665418057564; Mon, 10
+ Oct 2022 09:07:37 -0700 (PDT)
+Date:   Mon, 10 Oct 2022 09:07:37 -0700
+In-Reply-To: <000000000000b9fad405b179289b@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b94e9e05eab05b00@google.com>
+Subject: Re: [syzbot] WARNING in udf_truncate_extents
+From:   syzbot <syzbot+43fc5ba6dcb33e3261ca@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, bvanassche@acm.org, chaitanya.kulkarni@wdc.com,
+        jack@suse.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-09-26 10:00:36, John Ogness wrote:
-> On 2022-09-26, Sergey Senozhatsky <senozhatsky@chromium.org> wrote:
-> > On (22/09/24 02:10), John Ogness wrote:
-> >> +/**
-> >> + * cons_print_dropped - Print 'dropped' message if required
-> >> + * @desc:	Pointer to the output descriptor
-> >> + *
-> >> + * Prints the 'dropped' message info the output buffer if @desc->dropped is
-> >> + * not 0 and the regular format is requested. Extended format does not
-> >> + * need this message because it prints the sequence numbers.
-> >> + *
-> >> + * In regular format the extended message buffer is not in use.
-> >> + * So print into it at the beginning and move the resulting string
-> >> + * just in front of the regular text buffer so that the message can
-> >> + * be printed in one go.
-> >> + *
-> >> + * In case of a message this returns with @desc->outbuf and @desc->len
-> >> + * updated. If no message is required then @desc is not modified.
-> >> + */
-> >> +static void cons_print_dropped(struct cons_outbuf_desc *desc)
-> >> +{
-> >> +	struct cons_text_buf *txtbuf = desc->txtbuf;
-> >> +	size_t len;
-> >> +
-> >> +	if (!desc->dropped || desc->extmsg)
-> >> +		return;
-> >> +
-> >> +	if (WARN_ON_ONCE(desc->outbuf != txtbuf->text))
-> >> +		return;
-> >> +
-> >> +	/* Print it into ext_text which is unused */
-> >> +	len = snprintf(txtbuf->ext_text, DROPPED_TEXT_MAX,
-> >> +		       "** %lu printk messages dropped **\n", desc->dropped);
-> >> +	desc->dropped = 0;
-> >> +
-> >> +	/* Copy it just below text so it goes out with one write */
-> >> +	memcpy(txtbuf->text - len, txtbuf->ext_text, len);
-> >> +
-> >> +	/* Update the descriptor */
-> >> +	desc->len += len;
-> >> +	desc->outbuf -= len;
-> >
-> > Oh, hmm. This does not look to me as a simplification. Quite
-> > the opposite, moving cons_text_buf::text pointer to point to
-> > cons_text_buf::text - strlen("... dropped messages...") looks
-> > somewhat fragile.
-> 
-> It relies on @ext_text and @text being packed together, which yes, may
-> be fragile.
+syzbot has found a reproducer for the following issue on:
 
-Yes, it is a nasty hack ;-)
+HEAD commit:    4899a36f91a9 Merge tag 'powerpc-6.1-1' of git://git.kernel..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=10260ea4880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e2021a61197ebe02
+dashboard link: https://syzkaller.appspot.com/bug?extid=43fc5ba6dcb33e3261ca
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=154bdf0a880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1548ca78880000
 
-I suggest to increase CONSOLE_LOG_MAX to 2048,
-define LOG_LINE_MAX as 1024, and use the buffer for both
-dropped message and normal message.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/1a98722ff83f/disk-4899a36f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7a31d6690395/vmlinux-4899a36f.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/a6d9d98c8bd8/mount_0.gz
 
-It would simplify the code. Also it would make enough
-space for more potential line headers needed by more
-lines in one record.
+The issue was bisected to:
 
-It would require moving the normal message to make a space for
-the dropped messages. But the dropping should be rare. And we
-do a lot of moving in record_print_text() anyway.
+commit 2004bfdef945fe55196db6b9cdf321fbc75bb0de
+Author: Bart Van Assche <bvanassche@acm.org>
+Date:   Tue Mar 10 04:26:21 2020 +0000
 
-I think that I was against increasing the buffer size some time ago.
-I was worried about small devices. But I think that the patch
-just increased the buffer size without any bug report so that
-the justification was weak.
+    null_blk: Fix the null_add_dev() error path
 
-But simplifying the code looks like a good justification to me.
-And I really like the removal of the extra buffer.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10110920500000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=12110920500000
+console output: https://syzkaller.appspot.com/x/log.txt?x=14110920500000
 
-Best Regards,
-Petr
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+43fc5ba6dcb33e3261ca@syzkaller.appspotmail.com
+Fixes: 2004bfdef945 ("null_blk: Fix the null_add_dev() error path")
+
+loop0: detected capacity change from 0 to 2048
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 3622 at fs/udf/truncate.c:226 udf_truncate_extents+0x844/0x930 fs/udf/truncate.c:226
+Modules linked in:
+CPU: 1 PID: 3622 Comm: syz-executor198 Not tainted 6.0.0-syzkaller-09413-g4899a36f91a9 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+RIP: 0010:udf_truncate_extents+0x844/0x930 fs/udf/truncate.c:226
+Code: 84 d2 74 05 e8 bd db f2 fe 8b 44 24 20 be 07 00 00 00 48 89 df 89 83 cc fe ff ff e8 56 ec 0d ff e9 a5 fd ff ff e8 0c c5 a5 fe <0f> 0b e9 1f fe ff ff e8 00 c5 a5 fe 0f 0b 48 8b 7c 24 18 e8 24 db
+RSP: 0018:ffffc900040ef9d8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff88806fc3d4a0 RCX: 0000000000000000
+RDX: ffff88801dc10000 RSI: ffffffff82d58224 RDI: 0000000000000007
+RBP: ffffc900040efac0 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000200 R11: 000000000008c07c R12: ffffc900040efa80
+R13: 0000000000000200 R14: 00000000000000ff R15: ffff88807e738000
+FS:  000055555697f300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000002000e000 CR3: 000000001bebe000 CR4: 0000000000350ee0
+Call Trace:
+ <TASK>
+ udf_write_failed.isra.0+0x173/0x1c0 fs/udf/inode.c:179
+ udf_write_begin+0x7f/0xa0 fs/udf/inode.c:214
+ generic_perform_write+0x246/0x560 mm/filemap.c:3745
+ __generic_file_write_iter+0x2aa/0x4d0 mm/filemap.c:3873
+ udf_file_write_iter+0x2cc/0x650 fs/udf/file.c:170
+ call_write_iter include/linux/fs.h:2190 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x9e9/0xdd0 fs/read_write.c:584
+ ksys_write+0x127/0x250 fs/read_write.c:637
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f305ad3c8f9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff2d740688 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00000000200001c0 RCX: 00007f305ad3c8f9
+RDX: 000000000208e24b RSI: 0000000020000040 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 00007fff2d7406b0 R09: 00007fff2d7406b0
+R10: 00007fff2d740560 R11: 0000000000000246 R12: 00007fff2d7406ac
+R13: 00007fff2d7406e0 R14: 00007fff2d7406c0 R15: 0000000000000009
+ </TASK>
+
