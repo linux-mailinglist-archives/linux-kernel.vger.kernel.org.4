@@ -2,131 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 607225F9D3E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C69F45F9D48
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbiJJLCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 07:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
+        id S231994AbiJJLFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 07:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231979AbiJJLCL (ORCPT
+        with ESMTP id S231966AbiJJLE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 07:02:11 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4424862929;
-        Mon, 10 Oct 2022 04:02:10 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29A9EpM6029113;
-        Mon, 10 Oct 2022 11:01:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- content-transfer-encoding : mime-version; s=pp1;
- bh=LNNRl1HMes1A3TXj5gRJGVjvRGGUQaqDkYr6eTBzjY0=;
- b=KKHezVlSYgFSJxJa+A7mlK/keSrGKQdDoVERyYoNZu4LdFZPgPNHovsL36bRSkKhKBDh
- QfioSpIV17BORYZHxVvvjZ20XYqIPf+G1ItydXMrxuSB5wzIh65/MWx7wx1Qw6VUSdpg
- /PDL4ETr7X+4Bl6np8WRM1v9noS9NM4Zzn7uK25NUevAz+Nf+lOJ5QOpNx9Q+iy/dtPy
- xfNgFaUMyNeyguWIN3fNIKry0zSenoW6gBsDZUYZeMRtSKgDc+gYJBh8ZJVc3x+uXS/Z
- JUPs9Ei+GKpAOj+O+RgustbWUugoql0VOibRN4LV06biPO3XZ158cIg0jmvxqETyBVYW gw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3k7v8ys1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Oct 2022 11:01:56 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29AAxrhi006353;
-        Mon, 10 Oct 2022 11:01:55 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3k7v8yqn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Oct 2022 11:01:55 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29AAqp1O011332;
-        Mon, 10 Oct 2022 11:01:53 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3k30u92nmk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Oct 2022 11:01:53 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29AAvA6e45154760
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Oct 2022 10:57:10 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4B234A405F;
-        Mon, 10 Oct 2022 11:01:51 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0622FA405C;
-        Mon, 10 Oct 2022 11:01:48 +0000 (GMT)
-Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.59.13])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 10 Oct 2022 11:01:47 +0000 (GMT)
-Date:   Mon, 10 Oct 2022 16:31:44 +0530
-From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, nathan@kernel.org,
-        ndesaulniers@google.com, trix@redhat.com,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] ext4: remove deprecated_msg
-Message-ID: <Y0P7mLFrS1ESZHqu@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-References: <20221009032520.108294-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221009032520.108294-1-jiapeng.chong@linux.alibaba.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: RspSoh1UrtrwZsVY0UdEtdi1vkIrtMjj
-X-Proofpoint-GUID: ogxP67BBhI1AWc8jzbvX-KnnXKpigqiv
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 10 Oct 2022 07:04:57 -0400
+Received: from radex-web.radex.nl (smtp.radex.nl [178.250.146.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5ECD51A042;
+        Mon, 10 Oct 2022 04:04:54 -0700 (PDT)
+Received: from [192.168.1.35] (cust-178-250-146-69.breedbanddelft.nl [178.250.146.69])
+        by radex-web.radex.nl (Postfix) with ESMTPS id 9AD542406A;
+        Mon, 10 Oct 2022 13:04:53 +0200 (CEST)
+Message-ID: <4e73bbb9-eae1-6a90-d716-c721a1eeced3@gmail.com>
+Date:   Mon, 10 Oct 2022 13:04:53 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-10_06,2022-10-10_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 phishscore=0 adultscore=0 bulkscore=0 mlxlogscore=999
- mlxscore=0 priorityscore=1501 suspectscore=0 impostorscore=0 clxscore=1011
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210100063
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
+ if extcon is present"
+Content-Language: en-US
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <20220927155332.10762-1-andriy.shevchenko@linux.intel.com>
+ <20220927155332.10762-3-andriy.shevchenko@linux.intel.com>
+ <20221003215734.7l3cnb2zy57nrxkk@synopsys.com>
+ <YzvusOI89ju9e5+0@smile.fi.intel.com>
+ <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com>
+ <20221005021212.qwnbmq6p7t26c3a4@synopsys.com>
+ <2886b82d-a1f6-d288-e8d1-edae54046b4f@gmail.com>
+ <20221006021204.hz7iteao65dgsev6@synopsys.com>
+ <d52cc102-6a4f-78e9-6176-b33e2813fd1d@gmail.com>
+ <20221007021122.nnwmqc6sq43e5xbn@synopsys.com>
+ <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com>
+ <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
+From:   Ferry Toth <fntoth@gmail.com>
+In-Reply-To: <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NICE_REPLY_A,NML_ADSP_CUSTOM_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 11:25:20AM +0800, Jiapeng Chong wrote:
-> fs/ext4/super.c:1744:19: warning: ‘deprecated_msg’ defined but not used.
-> 
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2346
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  fs/ext4/super.c | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index 989365b878a6..7950904fbf04 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -1741,10 +1741,6 @@ static const struct fs_parameter_spec ext4_param_specs[] = {
->  
->  #define DEFAULT_JOURNAL_IOPRIO (IOPRIO_PRIO_VALUE(IOPRIO_CLASS_BE, 3))
->  
-> -static const char deprecated_msg[] =
-> -	"Mount option \"%s\" will be removed by %s\n"
-> -	"Contact linux-ext4@vger.kernel.org if you think we should keep it.\n";
-> -
->  #define MOPT_SET	0x0001
->  #define MOPT_CLEAR	0x0002
->  #define MOPT_NOSUPPORT	0x0004
-> -- 
-> 2.20.1.7.g153144c
-> 
+Hi
 
-Hi,
+On 10-10-2022 07:02, Andrey Smirnov wrote:
+> On Fri, Oct 7, 2022 at 6:07 AM Ferry Toth <fntoth@gmail.com> wrote:
+>>
+>> On 07-10-2022 04:11, Thinh Nguyen wrote:
+>>> On Thu, Oct 06, 2022, Ferry Toth wrote:
+>>>> Hi
+>>>>
+>>>> On 06-10-2022 04:12, Thinh Nguyen wrote:
+>>>>> On Wed, Oct 05, 2022, Ferry Toth wrote:
+>>>>>> Hi,
+>>>>>>
+>>>>>>        Thanks!
+>>>>>>
+>>>>>>        Does the failure only happen the first time host is initialized? Or can
+>>>>>>        it recover after switching to device then back to host mode?
+>>>>>>
+>>>>>> I can switch back and forth and device mode works each time, host mode remains
+>>>>>> dead.
+>>>>> Ok.
+>>>>>
+>>>>>>        Probably the failure happens if some step(s) in dwc3_core_init() hasn't
+>>>>>>        completed.
+>>>>>>
+>>>>>>        tusb1210 is a phy driver right? The issue is probably because we didn't
+>>>>>>        initialize the phy yet. So, I suspect placing dwc3_get_extcon() after
+>>>>>>        initializing the phy will probably solve the dependency problem.
+>>>>>>
+>>>>>>        You can try something for yourself or I can provide something to test
+>>>>>>        later if you don't mind (maybe next week if it's ok).
+>>>>>>
+>>>>>> Yes, the code move I mentioned above "moves dwc3_get_extcon() until after
+>>>>>> dwc3_core_init() but just before dwc3_core_init_mode(). AFAIU initially
+>>>>>> dwc3_get_extcon() was called from within dwc3_core_init_mode() but only for
+>>>>>> case USB_DR_MODE_OTG. So with this change order of events is more or less
+>>>>>> unchanged" solves the issue.
+>>>>>>
+>>>>> I saw the experiment you did from the link you provided. We want to also
+>>>>> confirm exactly which step in dwc3_core_init() was needed.
+>>>> Ok. I first tried the code move suggested by Andrey (didn't work). Then
+>>>> after reading the actual code I moved a bit further.
+>>>>
+>>>> This move was on top of -rc6 without any reverts. I did not make additional
+>>>> changes to dwc3_core_init()
+>>>>
+>>>> So current v6.0 has: dwc3_get_extcon - dwc3_get_dr_mode - ... -
+>>>> dwc3_core_init - .. - dwc3_core_init_mode (not working)
+>>>>
+>>>> I changed to: dwc3_get_dr_mode - dwc3_get_extcon - .. - dwc3_core_init - ..
+>>>> - dwc3_core_init_mode (no change)
+>>>>
+>>>> Then to: dwc3_get_dr_mode - .. - dwc3_core_init - .. - dwc3_get_extcon -
+>>>> dwc3_core_init_mode (works)
+>>>>
+>>>> .. are what I believe for this issue irrelevant calls to
+>>>> dwc3_alloc_scratch_buffers, dwc3_check_params and dwc3_debugfs_init.
+>>>>
+>>> Right. Thanks for narrowing it down. There are still many steps in
+>>> dwc3_core_init(). We have some suspicion, but we still haven't confirmed
+>>> the exact cause of the failure. We can write a proper patch once we know
+>>> the reason.
+>> If you would like me to test your suspicion, just tell me what to do :-)
+>
+> OK, Ferry, I think I'm going to need clarification on specifics on
+> your test setup. Can you share your kernel config, maybe your
+> "/proc/config.gz", somewhere? When you say you are running vanilla
+> Linux, do you mean it or do you mean vanilla tree + some patch delta?
 
-I believe this is a duplicate of:
-https://lore.kernel.org/all/20221004112114.101799-1-colin.i.king@gmail.com/
+For v6.0 I can get the exacts tonight. But earlier I had this for v5.17:
 
-Regards,
-ojaswin
+https://github.com/htot/meta-intel-edison/blob/master/meta-intel-edison-bsp/recipes-kernel/linux/linux-yocto_5.17.bb
+
+There are 2 patches referred in #67 and #68. One is related to the 
+infinite loop. The other is I believe also needed to get dwc3 to work.
+
+All the kernel config are applied as .cfg.
+
+Patches and cfs's here:
+
+https://github.com/htot/meta-intel-edison/tree/master/meta-intel-edison-bsp/recipes-kernel/linux/files
+
+> The reason I'm asking is because I'm having a hard time reproducing
+> the problem on my end. In fact, when I build v6.0
+> (4fe89d07dcc2804c8b562f6c7896a45643d34b2f) and then do a
+>
+> git revert 8bd6b8c4b100 0f0101719138 (original revert proposed by Andy)
+>
+> I get an infinite loop of reprobing that looks something like (some
+> debug tracing, function name + line number, included):
+>
+> [    6.160732] tusb1210 dwc3.0.auto.ulpi: error -110 writing val 0x41
+> to reg 0x80
+> [    6.172299] XXXXXXXXXXX: dwc3_probe 1834
+> [    6.172426] XXXXXXXXXXX: dwc3_core_init_mode 1386
+> [    6.176391] XXXXXXXXXXX: dwc3_drd_init 593
+> [    6.181573] dwc3 dwc3.0.auto: Driver dwc3 requests probe deferral
+> [    6.191886] platform dwc3.0.auto: Added to deferred list
+> [    6.197249] platform dwc3.0.auto: Retrying from deferred list
+> [    6.203057] bus: 'platform': __driver_probe_device: matched device
+> dwc3.0.auto with driver dwc3
+> [    6.211783] bus: 'platform': really_probe: probing driver dwc3 with
+> device dwc3.0.auto
+> [    6.219935] XXXXXXXXXXX: dwc3_probe 1822
+> [    6.219952] XXXXXXXXXXX: dwc3_core_init 1092
+> [    6.223903] XXXXXXXXXXX: dwc3_core_init 1095
+> [    6.234839] bus: 'ulpi': __driver_probe_device: matched device
+> dwc3.0.auto.ulpi with driver tusb1210
+> [    6.248335] bus: 'ulpi': really_probe: probing driver tusb1210 with
+> device dwc3.0.auto.ulpi
+> [    6.257039] driver: 'tusb1210': driver_bound: bound to device
+> 'dwc3.0.auto.ulpi'
+> [    6.264501] bus: 'ulpi': really_probe: bound device
+> dwc3.0.auto.ulpi to driver tusb1210
+> [    6.272553] debugfs: Directory 'dwc3.0.auto' with parent 'ulpi'
+> already present!
+> [    6.279978] XXXXXXXXXXX: dwc3_core_init 1099
+> [    6.279991] XXXXXXXXXXX: dwc3_core_init 1103
+> [    6.345769] tusb1210 dwc3.0.auto.ulpi: error -110 writing val 0x41
+> to reg 0x80
+> [    6.357316] XXXXXXXXXXX: dwc3_probe 1834
+> [    6.357447] XXXXXXXXXXX: dwc3_core_init_mode 1386
+> [    6.361402] XXXXXXXXXXX: dwc3_drd_init 593
+> [    6.366589] dwc3 dwc3.0.auto: Driver dwc3 requests probe deferral
+> [    6.376901] platform dwc3.0.auto: Added to deferred list
+>
+> which renders the system completely unusable, but USB host is
+> definitely going to be broken too. Now, ironically, with my patch
+> in-place, an attempt to probe extcon that ends up deferring the probe
+> happens before the ULPI driver failure (which wasn't failing driver
+> probe prior to https://lore.kernel.org/all/20220213130524.18748-7-hdegoede@redhat.com/),
+> there no "driver binding" event that re-triggers deferred probe
+> causing the loop, so the system progresses to a point where extcon is
+> available and dwc3 driver eventually loads.
+>
+> After that, and I don't know if I'm doing the same test, USB host
+> seems to work as expected. lsusb works, my USB stick enumerates as
+> expected. Switching the USB mux to micro-USB and back shuts the host
+> functionality down and brings it up as expected. Now I didn't try to
+> load any gadgets to make sure USB gadget works 100%, but since you
+> were saying it was USB host that was broken, I wasn't concerned with
+> that. Am I doing the right test?
+>
+> For the reference what I test with is:
+>   - vanilla kernel, no patch delta (sans minor debug tracing) + initrd
+> built with Buildroot 2022.08.1
+>   - Initrd is using systemd (don't think that really matters, but who knows)
+>   - U-Boot 2022.04 (built with Buildroot as well)
+>   - kernel config is x86_64_defconfig + whatever I gathered from *.cfg
+> files in https://github.com/edison-fw/meta-intel-edison/tree/master/meta-intel-edison-bsp/recipes-kernel/linux/files
