@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A245F997B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 887595F9982
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232058AbiJJHMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
+        id S231953AbiJJHNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:13:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231735AbiJJHLY (ORCPT
+        with ESMTP id S231939AbiJJHLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:11:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5551F63F;
-        Mon, 10 Oct 2022 00:07:47 -0700 (PDT)
+        Mon, 10 Oct 2022 03:11:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850D55E64E;
+        Mon, 10 Oct 2022 00:07:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F222B80E28;
-        Mon, 10 Oct 2022 07:06:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF315C433C1;
-        Mon, 10 Oct 2022 07:06:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1ED49B80E59;
+        Mon, 10 Oct 2022 07:07:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87295C433C1;
+        Mon, 10 Oct 2022 07:07:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665385618;
-        bh=wWIt7W38r1172jhSxno5+FW8NgxPwz1Fi0FdN/Yqt7M=;
+        s=korg; t=1665385620;
+        bh=N+KfCRxX1t/yyKxANDtaUUgj6VN8/odcAxx/cAj/G0s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YjirBdYgNdTSrj+EGX0RteJ0PGFdedEwYKTMftKQ05clN0YucebRKgjiLLaPk3VEb
-         SOajAWcD2uxhehCK+SUzZ/eQfUsWmN+RDNr52njNp8PLVbxuIwG1dUaW6jRrhcKEjH
-         C7z2eXh3zjSfvmkuS2ZCoDimlmOfqffeoxzMwS3s=
+        b=SYr94tcQnyLidiaVFZmnpYyw4/idDA8j18vthyeK4e6EV2bLmogT4m5y2+jwZpZvp
+         evSowVLqCQ60FOLGwvPSNVIG7NDvBxasmiQrS+gFdLBYsUgRq1YcP8DsHqc+8tNs7+
+         YYw7iGpJHSP8TduapCQ8Ph59dWvNDVv8X5ABcuVs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.19 46/48] net: ethernet: mtk_eth_soc: fix state in __mtk_foe_entry_clear
-Date:   Mon, 10 Oct 2022 09:05:44 +0200
-Message-Id: <20221010070334.889462162@linuxfoundation.org>
+        stable@vger.kernel.org, Jules Irenge <jbi.octave@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>
+Subject: [PATCH 5.19 47/48] bpf: Fix resetting logic for unreferenced kptrs
+Date:   Mon, 10 Oct 2022 09:05:45 +0200
+Message-Id: <20221010070334.914562306@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221010070333.676316214@linuxfoundation.org>
 References: <20221010070333.676316214@linuxfoundation.org>
@@ -54,41 +53,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Golle <daniel@makrotopia.org>
+From: Jules Irenge <jbi.octave@gmail.com>
 
-commit ae3ed15da5889263de372ff9df2e83e16acca4cb upstream.
+commit 9fad7fe5b29803584c7f17a2abe6c2936fec6828 upstream.
 
-Setting ib1 state to MTK_FOE_STATE_UNBIND in __mtk_foe_entry_clear
-routine as done by commit 0e80707d94e4c8 ("net: ethernet: mtk_eth_soc:
-fix typo in __mtk_foe_entry_clear") breaks flow offloading, at least
-on older MTK_NETSYS_V1 SoCs, OpenWrt users have confirmed the bug on
-MT7622 and MT7621 systems.
-Felix Fietkau suggested to use MTK_FOE_STATE_INVALID instead which
-works well on both, MTK_NETSYS_V1 and MTK_NETSYS_V2.
+Sparse reported a warning at bpf_map_free_kptrs()
+"warning: Using plain integer as NULL pointer"
+During the process of fixing this warning, it was discovered that the current
+code erroneously writes to the pointer variable instead of deferencing and
+writing to the actual kptr. Hence, Sparse tool accidentally helped to uncover
+this problem. Fix this by doing WRITE_ONCE(*p, 0) instead of WRITE_ONCE(p, 0).
 
-Tested on MT7622 (Linksys E8450) and MT7986 (BananaPi BPI-R3).
+Note that the effect of this bug is that unreferenced kptrs will not be cleared
+during check_and_free_fields. It is not a problem if the clearing is not done
+during map_free stage, as there is nothing to free for them.
 
-Suggested-by: Felix Fietkau <nbd@nbd.name>
-Fixes: 0e80707d94e4c8 ("net: ethernet: mtk_eth_soc: fix typo in __mtk_foe_entry_clear")
-Fixes: 33fc42de33278b ("net: ethernet: mtk_eth_soc: support creating mac address based offload entries")
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-Link: https://lore.kernel.org/r/YzY+1Yg0FBXcnrtc@makrotopia.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 14a324f6a67e ("bpf: Wire up freeing of referenced kptr")
+Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
+Link: https://lore.kernel.org/r/Yxi3pJaK6UDjVJSy@playground
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mediatek/mtk_ppe.c |    2 +-
+ kernel/bpf/syscall.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/mediatek/mtk_ppe.c
-+++ b/drivers/net/ethernet/mediatek/mtk_ppe.c
-@@ -412,7 +412,7 @@ __mtk_foe_entry_clear(struct mtk_ppe *pp
- 	if (entry->hash != 0xffff) {
- 		ppe->foe_table[entry->hash].ib1 &= ~MTK_FOE_IB1_STATE;
- 		ppe->foe_table[entry->hash].ib1 |= FIELD_PREP(MTK_FOE_IB1_STATE,
--							      MTK_FOE_STATE_UNBIND);
-+							      MTK_FOE_STATE_INVALID);
- 		dma_wmb();
- 	}
- 	entry->hash = 0xffff;
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -578,7 +578,7 @@ void bpf_map_free_kptrs(struct bpf_map *
+ 		if (off_desc->type == BPF_KPTR_UNREF) {
+ 			u64 *p = (u64 *)btf_id_ptr;
+ 
+-			WRITE_ONCE(p, 0);
++			WRITE_ONCE(*p, 0);
+ 			continue;
+ 		}
+ 		old_ptr = xchg(btf_id_ptr, 0);
 
 
