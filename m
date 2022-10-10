@@ -2,62 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9E25FA310
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3A45FA313
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229450AbiJJR6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 13:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51918 "EHLO
+        id S229446AbiJJR7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 13:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJJR6A (ORCPT
+        with ESMTP id S229445AbiJJR7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 13:58:00 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE4C77EAB
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:57:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gXJyMs2OSPDhCkEvqWP7QOCysCbcI9dfM5n2nlK7y4M=; b=vMY7Y5qYn1dGkFns1uBGhntDcK
-        yDpsX0cqCD0d+X9Umyj7Z3jQkSlN87bNdzXHyeXIKFetvG4lpL+XZx902eLFPYna7CytqZkV7cGbq
-        1Ak+WtZbwAIM2HzV+TFYSUkuihsb2REcusx+G0Z1pu1Z8wVvPdALGIYBgeJq+57qml4x1xrD+sf1v
-        3HJ5qqRw2OlPPlhIWbubWHQRJFuvxInMXHEHQH2qXqXJdd8hoP0ar7ia0QPFv/lhXalckdgiilKZ0
-        /4VyOYQQ+bkg5O1L3q5tWFnWA6x4BkeuS1GySPbUhpErtYIHg08fjLeyCDzdHfmlmE1HpbS2fvXbS
-        ate7Zqyw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1ohx26-009G76-1k;
-        Mon, 10 Oct 2022 17:57:42 +0000
-Date:   Mon, 10 Oct 2022 18:57:42 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christoph Hellwig <hch@lst.de>, Sumit Garg <sumit.garg@linaro.org>,
-        Phil Chang =?utf-8?B?KOW8teS4luWLsyk=?= 
-        <Phil.Chang@mediatek.com>,
-        "ira.weiny@intel.com" <ira.weiny@intel.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Subject: Re: [PATCH 2/4] tee: Remove vmalloc page support
-Message-ID: <Y0RdFni5N6rMsxuM@ZenIV>
-References: <20221002002326.946620-1-ira.weiny@intel.com>
- <20221002002326.946620-3-ira.weiny@intel.com>
- <CAFA6WYOGT1sJLA4c_B88NaXgxv4fm-idi5QMYvXdXB0acCF3sw@mail.gmail.com>
- <TYZPR03MB65279558CC22F5130B710EA8FB5D9@TYZPR03MB6527.apcprd03.prod.outlook.com>
- <CAFA6WYMT9S1Di6DN_UXc823f0ZTkqerE1PB=oG6wmfx28vEbDg@mail.gmail.com>
- <CAHk-=whVyH-wSWLd=Zn4rwo+91T+qzRvfMPC2yFX98GxykOqOw@mail.gmail.com>
- <20221010074234.GA20788@lst.de>
- <CAHk-=whvmR98OHdYf4yOJgp86hq0VMVXJ9b1Qk7P_Rjq_=HU+A@mail.gmail.com>
+        Mon, 10 Oct 2022 13:59:30 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B4A78230;
+        Mon, 10 Oct 2022 10:59:30 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id f140so11415104pfa.1;
+        Mon, 10 Oct 2022 10:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zN/KjsCEx2zMtEPwS1BKpAmSphZD0IO6nl7YyDXtL7I=;
+        b=fXqfedqDgMytgQwcbHuYJGLHuxZEy/2DeKE1BMP/BK7EE8oS6TfYEqNPVIyhccsp/l
+         LUlusXsTq9E2Ee2ia5OV3eHfC+28hTurg5cErnPhMRmfAmLWsTrt+Bdg1pXJ6WMEXTmv
+         KaMiGz9iIvUV5CzTiGzZr2gUV2KBq8lt8zITykuIuU/FlsoHhrKPEpFFUq/I19wFxjn3
+         RzZTDCYcVo1NkapqwtvsbbpER0pJkuyat96JdDk8/LPZ4ptMUJay4/jxN4KZthYsRSQw
+         2IufrFfGB0edloAJcxBhv7jzYJGoolZmjPXy1+NxUc2YJhq/BcHLrypgFeQeBEPpj44F
+         Xlyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zN/KjsCEx2zMtEPwS1BKpAmSphZD0IO6nl7YyDXtL7I=;
+        b=NSrR3B7rSfKcQ+ILrYLbYAizITmgCbatd3AWfHOW9orwG+tUznUNyXoOP0sV5XAzlW
+         pqRH7gLH58DbZ4kCYYJmKsvBQY8x377TZFSFg5fi2j7VSWHfp9UQPbMQ0Zz76fRQo25Y
+         5tATXFLPHHmm/i8Vv5yxDS8GYRnbHmLUCNkxgfciQAiVBgOSlgnSDJkeEc5zrDeNXs2+
+         OvJFNNoZGpQ48gPhZggYjHvdlKe6hblzJZILNC1H0LlQV3Cyp5+ub6og7//QFNOznxVd
+         49R9KyyYUrLDDlbdDleyt+ovbLUnF2F9ST2tx9AR3ebfGmTfIzA+AenZboH0JETUlR0O
+         wNeQ==
+X-Gm-Message-State: ACrzQf0DGCy1p2Wk5j8nfNQ9yeoPb9aZaw89I87ItTjnLLO5ssg2fVPv
+        H/iGcPpnuanFOtc40LRzVXA=
+X-Google-Smtp-Source: AMsMyM5T1heBkPii4UShM09nkXeqTs9kRM0l2fFArAYuUIGT76FaBWaRlltgwohNj//2CUSAPg83dg==
+X-Received: by 2002:a63:814a:0:b0:460:9253:bf8e with SMTP id t71-20020a63814a000000b004609253bf8emr10193428pgd.469.1665424769299;
+        Mon, 10 Oct 2022 10:59:29 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:bff:9bd3:c2da:5f42])
+        by smtp.gmail.com with ESMTPSA id z4-20020aa79e44000000b0054223a0185asm7237591pfq.161.2022.10.10.10.59.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 10:59:28 -0700 (PDT)
+Date:   Mon, 10 Oct 2022 10:59:25 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Patrice Chotard <patrice.chotard@foss.st.com>
+Subject: Re: [PATCH v1 1/1] pinctrl: st: Switch to use fwnode instead of
+ of_node
+Message-ID: <Y0RdfcC5FVRX/XI9@google.com>
+References: <20221010075615.43244-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=whvmR98OHdYf4yOJgp86hq0VMVXJ9b1Qk7P_Rjq_=HU+A@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <20221010075615.43244-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,14 +74,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 10:20:15AM -0700, Linus Torvalds wrote:
-> On Mon, Oct 10, 2022 at 12:42 AM Christoph Hellwig <hch@lst.de> wrote:
-> >
-> > I suspect the best long term option would be to just pass an iov_iter..
+On Mon, Oct 10, 2022 at 10:56:15AM +0300, Andy Shevchenko wrote:
+> The OF node in the GPIO library is deprecated and soon
+> will be removed.
 > 
-> Hmm. Yeah, that sounds like a workable model, and solves the problem
-> JensW pointed out with my simplistic "just pass a page array" approach
-> where you also need to keep track of how to release things.
+> GPIO library now accepts fwnode as a firmware node, so
+> switch the driver to use it.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Except that then you need to get iov_iter_get_pages analogue that would
-work for ITER_KVEC, which is exact same problem right back.
+Reviewed-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+
+> ---
+>  drivers/pinctrl/pinctrl-st.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pinctrl/pinctrl-st.c b/drivers/pinctrl/pinctrl-st.c
+> index cf7f9cbe6044..987878c83349 100644
+> --- a/drivers/pinctrl/pinctrl-st.c
+> +++ b/drivers/pinctrl/pinctrl-st.c
+> @@ -1175,7 +1175,7 @@ static int st_pctl_dt_calculate_pin(struct st_pinctrl *info,
+>  
+>  	for (i = 0; i < info->nbanks; i++) {
+>  		chip = &info->banks[i].gpio_chip;
+> -		if (chip->of_node == np) {
+> +		if (chip->fwnode == of_fwnode_handle(np)) {
+>  			if (offset < chip->ngpio)
+>  				retval = chip->base + offset;
+>  			break;
+> @@ -1518,7 +1518,7 @@ static int st_gpiolib_register_bank(struct st_pinctrl *info,
+>  	bank->gpio_chip = st_gpio_template;
+>  	bank->gpio_chip.base = bank_num * ST_GPIO_PINS_PER_BANK;
+>  	bank->gpio_chip.ngpio = ST_GPIO_PINS_PER_BANK;
+> -	bank->gpio_chip.of_node = np;
+> +	bank->gpio_chip.fwnode = of_fwnode_handle(np);
+>  	bank->gpio_chip.parent = dev;
+>  	spin_lock_init(&bank->lock);
+>  
+> -- 
+> 2.35.1
+> 
+
+Thanks.
+
+-- 
+Dmitry
