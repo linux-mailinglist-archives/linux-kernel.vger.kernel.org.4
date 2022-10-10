@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467965F99AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 980245F99AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbiJJHPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
+        id S232171AbiJJHOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbiJJHNN (ORCPT
+        with ESMTP id S231929AbiJJHNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:13:13 -0400
+        Mon, 10 Oct 2022 03:13:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE0B5F109;
-        Mon, 10 Oct 2022 00:08:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8571A5EDC2;
+        Mon, 10 Oct 2022 00:08:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19D4F60E75;
-        Mon, 10 Oct 2022 07:07:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E4A2C433D6;
-        Mon, 10 Oct 2022 07:07:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EE1560E83;
+        Mon, 10 Oct 2022 07:07:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 638B2C433D6;
+        Mon, 10 Oct 2022 07:07:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665385657;
-        bh=YQdDdJ2wBIObSkIQqBsYU0YvqiqEvaVtU7QUzxUfiEM=;
+        s=korg; t=1665385636;
+        bh=a9bbk+n0W6zEVK5wtX4ovn8t+np19o3n6a3wg1jiUlE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GQh56L1k6+7tV5RKGYk7cfLISZ6BFn39lIulBytXrBSQzv2ciaknCOUuSFFL5u5p+
-         KuL89aTFxlV2tyDVb+YxWMN+FZEJ5c0IQw7jv23b5VY1TIHcdFjoBkDwH0UMt1/cXg
-         /iE/7NyI3Kp5LPqJ1vuGgytiSS/9gD0gMVPSte3Y=
+        b=IrTWebEBC6Mv83AYdPLHht6X/eDq5LDro/AVoh3akg4MgBWbFbemQ9dss2OM5P+fU
+         27L5G9CdV9Zuf0DnZGhKzR8rX8Pys5nSMvIEkP1IT/9I23UED5w5KgvRG8sVqN/Bdt
+         4HcUlSA5lz0kxVnkmGRJ6G+O6QVF0AdrbMITwo3s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Swati Agarwal <swati.agarwal@xilinx.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 12/37] dmaengine: xilinx_dma: Fix devm_platform_ioremap_resource error handling
-Date:   Mon, 10 Oct 2022 09:05:31 +0200
-Message-Id: <20221010070331.603599308@linuxfoundation.org>
+        stable@vger.kernel.org, Jun Lei <Jun.Lei@amd.com>,
+        Wayne Lin <wayne.lin@amd.com>,
+        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 34/48] drm/amd/display: increase dcn315 pstate change latency
+Date:   Mon, 10 Oct 2022 09:05:32 +0200
+Message-Id: <20221010070334.579591246@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221010070331.211113813@linuxfoundation.org>
-References: <20221010070331.211113813@linuxfoundation.org>
+In-Reply-To: <20221010070333.676316214@linuxfoundation.org>
+References: <20221010070333.676316214@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,64 +57,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Swati Agarwal <swati.agarwal@xilinx.com>
+From: Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>
 
-[ Upstream commit 91df7751eb890e970afc08f50b8f0fa5ea39e03d ]
+[ Upstream commit dcc2527df918edfe297c5074ccc1f05eae361ca6 ]
 
-Add missing cleanup in devm_platform_ioremap_resource().
-When probe fails remove dma channel resources and disable clocks in
-accordance with the order of resources allocated .
+[Why & How]
+Update after new measurment came in
 
-Signed-off-by: Swati Agarwal <swati.agarwal@xilinx.com>
-Link: https://lore.kernel.org/r/20220817061125.4720-2-swati.agarwal@xilinx.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Reviewed-by: Jun Lei <Jun.Lei@amd.com>
+Acked-by: Wayne Lin <wayne.lin@amd.com>
+Signed-off-by: Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/xilinx/xilinx_dma.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ .../dc/clk_mgr/dcn315/dcn315_clk_mgr.c        | 22 ++++++++++++-------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/dma/xilinx/xilinx_dma.c b/drivers/dma/xilinx/xilinx_dma.c
-index a4450bc95466..d3556b00a672 100644
---- a/drivers/dma/xilinx/xilinx_dma.c
-+++ b/drivers/dma/xilinx/xilinx_dma.c
-@@ -3037,9 +3037,10 @@ static int xilinx_dma_probe(struct platform_device *pdev)
+diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c
+index f4381725b210..c3d7712e9fd0 100644
+--- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c
++++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c
+@@ -46,6 +46,9 @@
+ #define TO_CLK_MGR_DCN315(clk_mgr)\
+ 	container_of(clk_mgr, struct clk_mgr_dcn315, base)
  
- 	/* Request and map I/O memory */
- 	xdev->regs = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(xdev->regs))
--		return PTR_ERR(xdev->regs);
--
-+	if (IS_ERR(xdev->regs)) {
-+		err = PTR_ERR(xdev->regs);
-+		goto disable_clks;
-+	}
- 	/* Retrieve the DMA engine properties from the device tree */
- 	xdev->max_buffer_len = GENMASK(XILINX_DMA_MAX_TRANS_LEN_MAX - 1, 0);
- 	xdev->s2mm_chan_id = xdev->dma_config->max_channels / 2;
-@@ -3134,7 +3135,7 @@ static int xilinx_dma_probe(struct platform_device *pdev)
- 	for_each_child_of_node(node, child) {
- 		err = xilinx_dma_child_probe(xdev, child);
- 		if (err < 0)
--			goto disable_clks;
-+			goto error;
++#define UNSUPPORTED_DCFCLK 10000000
++#define MIN_DPP_DISP_CLK     100000
++
+ static int dcn315_get_active_display_cnt_wa(
+ 		struct dc *dc,
+ 		struct dc_state *context)
+@@ -146,6 +149,9 @@ static void dcn315_update_clocks(struct clk_mgr *clk_mgr_base,
+ 		}
  	}
  
- 	if (xdev->dma_config->dmatype == XDMA_TYPE_VDMA) {
-@@ -3169,12 +3170,12 @@ static int xilinx_dma_probe(struct platform_device *pdev)
++	/* Lock pstate by requesting unsupported dcfclk if change is unsupported */
++	if (!new_clocks->p_state_change_support)
++		new_clocks->dcfclk_khz = UNSUPPORTED_DCFCLK;
+ 	if (should_set_clock(safe_to_lower, new_clocks->dcfclk_khz, clk_mgr_base->clks.dcfclk_khz)) {
+ 		clk_mgr_base->clks.dcfclk_khz = new_clocks->dcfclk_khz;
+ 		dcn315_smu_set_hard_min_dcfclk(clk_mgr, clk_mgr_base->clks.dcfclk_khz);
+@@ -159,10 +165,10 @@ static void dcn315_update_clocks(struct clk_mgr *clk_mgr_base,
  
- 	return 0;
+ 	// workaround: Limit dppclk to 100Mhz to avoid lower eDP panel switch to plus 4K monitor underflow.
+ 	if (!IS_DIAG_DC(dc->ctx->dce_environment)) {
+-		if (new_clocks->dppclk_khz < 100000)
+-			new_clocks->dppclk_khz = 100000;
+-		if (new_clocks->dispclk_khz < 100000)
+-			new_clocks->dispclk_khz = 100000;
++		if (new_clocks->dppclk_khz < MIN_DPP_DISP_CLK)
++			new_clocks->dppclk_khz = MIN_DPP_DISP_CLK;
++		if (new_clocks->dispclk_khz < MIN_DPP_DISP_CLK)
++			new_clocks->dispclk_khz = MIN_DPP_DISP_CLK;
+ 	}
  
--disable_clks:
--	xdma_disable_allclks(xdev);
- error:
- 	for (i = 0; i < xdev->dma_config->max_channels; i++)
- 		if (xdev->chan[i])
- 			xilinx_dma_chan_remove(xdev->chan[i]);
-+disable_clks:
-+	xdma_disable_allclks(xdev);
- 
- 	return err;
- }
+ 	if (should_set_clock(safe_to_lower, new_clocks->dppclk_khz, clk_mgr->base.clks.dppclk_khz)) {
+@@ -272,7 +278,7 @@ static struct wm_table ddr5_wm_table = {
+ 		{
+ 			.wm_inst = WM_A,
+ 			.wm_type = WM_TYPE_PSTATE_CHG,
+-			.pstate_latency_us = 64.0,
++			.pstate_latency_us = 129.0,
+ 			.sr_exit_time_us = 11.5,
+ 			.sr_enter_plus_exit_time_us = 14.5,
+ 			.valid = true,
+@@ -280,7 +286,7 @@ static struct wm_table ddr5_wm_table = {
+ 		{
+ 			.wm_inst = WM_B,
+ 			.wm_type = WM_TYPE_PSTATE_CHG,
+-			.pstate_latency_us = 64.0,
++			.pstate_latency_us = 129.0,
+ 			.sr_exit_time_us = 11.5,
+ 			.sr_enter_plus_exit_time_us = 14.5,
+ 			.valid = true,
+@@ -288,7 +294,7 @@ static struct wm_table ddr5_wm_table = {
+ 		{
+ 			.wm_inst = WM_C,
+ 			.wm_type = WM_TYPE_PSTATE_CHG,
+-			.pstate_latency_us = 64.0,
++			.pstate_latency_us = 129.0,
+ 			.sr_exit_time_us = 11.5,
+ 			.sr_enter_plus_exit_time_us = 14.5,
+ 			.valid = true,
+@@ -296,7 +302,7 @@ static struct wm_table ddr5_wm_table = {
+ 		{
+ 			.wm_inst = WM_D,
+ 			.wm_type = WM_TYPE_PSTATE_CHG,
+-			.pstate_latency_us = 64.0,
++			.pstate_latency_us = 129.0,
+ 			.sr_exit_time_us = 11.5,
+ 			.sr_enter_plus_exit_time_us = 14.5,
+ 			.valid = true,
 -- 
 2.35.1
 
