@@ -2,152 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9745FA351
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 20:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 832AE5FA359
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 20:26:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbiJJSW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 14:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S229741AbiJJS0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 14:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiJJSWX (ORCPT
+        with ESMTP id S229538AbiJJS0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 14:22:23 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EDA647F5
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 11:22:22 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id e129so10876741pgc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 11:22:22 -0700 (PDT)
+        Mon, 10 Oct 2022 14:26:38 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0816E13CDF;
+        Mon, 10 Oct 2022 11:26:37 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id d13so832746qko.5;
+        Mon, 10 Oct 2022 11:26:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+bSxSJqNb+sqoNTXSt8Ye05VUAgMzhi/zgUSPCGgMEc=;
-        b=n/8VHYiA7PJrbHwJIQGtT8aJdABS3/DM5tlhlN+UkXerEmjBV7g962mdOrOsnsFT0Z
-         oKIpOF3iS/VaLfq79VOaHWcjnEGmtPNYaUtINafZ8N+Asxq+MC3qgBTt2Sh6iTREKXQQ
-         0N5G//kY1te3/PKLi1pL5hwN5Ju4eFQlJ88RA=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AKoZhuu3E5SAsgI7oUky3IaJgpIEJ40e2SZVdy8gII0=;
+        b=h5Pm9+hx3SH8L5RFEw+71QgQL6FYHhbZpklTFH/a9E1Qyspls9FfvNCFwPMXaaaJI6
+         gRCpSNzjtO/Vndzhyjsn1vODuTcZAnpBLfGMej9RpZ5bK/wiiBH3oz6/nNLfDw4oAUNc
+         +WQr2souXiBEDdzCxSNISgl/pI1Lz8AvFD/DZfl9/9bno1L4FBpKDVP3x5TdgOcicneB
+         iGL2Ww03SUf/AGdsu6eBktQm1jD0t0YlWVdx6zEL5BQ1Y0GmwetDk/N7dsI8rdcKeixf
+         AT3fvTyAoA8zpo7UXsde6wVnFPAPfLIA/3GQDY7glJixmzpwkONsFVWxAkGR5l9XPsjx
+         cl2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+bSxSJqNb+sqoNTXSt8Ye05VUAgMzhi/zgUSPCGgMEc=;
-        b=mH9DFQvngM0C2QEfdhgXB3sWw2UpNTCYMx9D4S0R5thOK8Tmlgc1aUk0avPOzYoprK
-         Btehz8FFsA2eUjWUngeAhxqXFnj/tT4VxML5QE4e2/4bto4UziJABqXbGJQdG/8CxJW2
-         tUiM/W1nLqsHmK+CdSpXklc+WSyPt1icjvhUOjeiEKn2T7vXvZnevA+N/dTQcM9DCAW4
-         Kp/S3tYECL6+qQzGBhs57hWsJ455+6B0aLQs1Ly9KPmPee+CwRNW9eMNl4nV2nmrUlNe
-         0sHBsOWCeGH2hoMDmpjzsgGDed1OtFiFnQPgS0YVyqNx4XV/rqSLdmIabnVENZz4InZ5
-         CsCQ==
-X-Gm-Message-State: ACrzQf0OgW7oKlqQf7LUNH0vgFKO3VHYHxqHwDEk6T26yAEg69OZQ5bw
-        PWgdmCGECXIqt6pdXXSEKoGH4/7gi8bwPA==
-X-Google-Smtp-Source: AMsMyM4mprkW/0gEZ0uddLZDAnuC3PC2QmjdN6vWo+03MtObwNsStMpdQpOumTxOgNHkjhMX5aI4Mw==
-X-Received: by 2002:a63:186:0:b0:442:ee11:48a5 with SMTP id 128-20020a630186000000b00442ee1148a5mr17565584pgb.284.1665426142330;
-        Mon, 10 Oct 2022 11:22:22 -0700 (PDT)
-Received: from localhost.localdomain (c-24-6-151-244.hsd1.ca.comcast.net. [24.6.151.244])
-        by smtp.gmail.com with ESMTPSA id z18-20020aa79e52000000b005632d3b5c9csm3460195pfq.211.2022.10.10.11.22.21
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 10 Oct 2022 11:22:22 -0700 (PDT)
-From:   Joe Damato <jdamato@fastly.com>
-To:     netdev@vger.kernel.org
-Cc:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
-        linux-kernel@vger.kernel.org, Joe Damato <jdamato@fastly.com>
-Subject: [net-next PATCH] net: core: Add napi_complete_done tracepoint
-Date:   Mon, 10 Oct 2022 11:21:34 -0700
-Message-Id: <1665426094-88160-1-git-send-email-jdamato@fastly.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AKoZhuu3E5SAsgI7oUky3IaJgpIEJ40e2SZVdy8gII0=;
+        b=4xSzSS4do7Vuuz3cXI4GKe7L7hdnxbxX6BWq4uTo6/bQX468KSJjeD8Xig/t0fUd7E
+         U6uALjmIeKB+0eEpxZsRWIGJN1pBWVpQBSS5TvjvmtC5ei446A2EIU4mam+qGsQtgZEk
+         MNyyT0l7E8vQkfoNe2/FEXg6CA6InJfaCuMrQ8B8d6toieAkUPdiEB6OGejZf2Z8tR3g
+         OTsIeKWJfChUD7jy4ONMsOWUTA4JTUmPIfmElEs462quQCehutaxE1VtuDw7v6aRAIiV
+         b4J0VABzQIvq1Muevc4FqvLranCuyEuzmSnVdbIe5qjYbGDqlofS05v/+u8p2hwO9EDZ
+         ocXA==
+X-Gm-Message-State: ACrzQf0tQOHu0CRQsKCmBMtGeVXr9eE0qIZSJiLnYOVTJB4BLssz4AKp
+        Sg2la3dV0b0rDPBbWFT6FoR6cL3Mrqg=
+X-Google-Smtp-Source: AMsMyM6IKacdxq/07ukv50SSLOjif5AjMKhjrahT90N2D90Oab/hMH0qh5kFquaXMwPPnwTJ8jcT3w==
+X-Received: by 2002:a37:6942:0:b0:6cf:22d6:a887 with SMTP id e63-20020a376942000000b006cf22d6a887mr13842815qkc.0.1665426396092;
+        Mon, 10 Oct 2022 11:26:36 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id i19-20020a05620a249300b006cf3592cc20sm11367416qkn.55.2022.10.10.11.26.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Oct 2022 11:26:35 -0700 (PDT)
+Message-ID: <bea13f81-7033-e242-1de0-6b7b4a9b98c7@gmail.com>
+Date:   Mon, 10 Oct 2022 11:26:33 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 5.15 00/37] 5.15.73-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+References: <20221010070331.211113813@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221010070331.211113813@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a tracepoint to help debug napi_complete_done. Users who set
-defer_hard_irqs and the GRO timer can use this tracepoint to better
-understand what impact these options have when their NIC driver calls
-napi_complete_done.
+On 10/10/22 00:05, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.73 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 12 Oct 2022 07:03:19 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.73-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-perf trace can be used to enable the tracepoint and the output can be
-examined to determine which settings should be adjusted.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-$ sudo perf trace -e napi:napi_complete_done -a --call-graph=fp --libtraceevent_print
-
-356.774 :0/0 napi:napi_complete_done(napi_complete_done on napi struct 0xffff88e052f02010 dev vlan100 irq_defers_remaining 2 timeout 20000 work_done 0 ret 0)
-	napi_complete_done ([kernel.kallsyms])
-	napi_complete_done ([kernel.kallsyms])
-	i40e_napi_poll ([i40e])
-	__napi_poll ([kernel.kallsyms])
-	net_rx_action ([kernel.kallsyms])
-	__do_softirq ([kernel.kallsyms])
-	sysvec_apic_timer_interrupt ([kernel.kallsyms])
-	asm_sysvec_apic_timer_interrupt ([kernel.kallsyms])
-	intel_idle_irq ([kernel.kallsyms])
-	cpuidle_enter_state ([kernel.kallsyms])
-	cpuidle_enter ([kernel.kallsyms])
-	do_idle ([kernel.kallsyms])
-	cpu_startup_entry ([kernel.kallsyms])
-	[0x243d98] ([kernel.kallsyms])
-	secondary_startup_64_no_verify ([kernel.kallsyms])
-
-Signed-off-by: Joe Damato <jdamato@fastly.com>
----
- include/trace/events/napi.h | 29 +++++++++++++++++++++++++++++
- net/core/dev.c              |  2 ++
- 2 files changed, 31 insertions(+)
-
-diff --git a/include/trace/events/napi.h b/include/trace/events/napi.h
-index 6678cf8..e8473d3 100644
---- a/include/trace/events/napi.h
-+++ b/include/trace/events/napi.h
-@@ -11,6 +11,35 @@
- 
- #define NO_DEV "(no_device)"
- 
-+TRACE_EVENT(napi_complete_done,
-+	TP_PROTO(struct napi_struct *napi, int hard_irq_defer, unsigned long timeout,
-+		int work_done, bool ret),
-+
-+	TP_ARGS(napi, hard_irq_defer, timeout, work_done, ret),
-+
-+	TP_STRUCT__entry(
-+		__field(	struct napi_struct *,	napi)
-+		__string(	dev_name,  napi->dev ? napi->dev->name : NO_DEV)
-+		__field(	int,			hard_irq_defer)
-+		__field(	unsigned long,		timeout)
-+		__field(	int,			work_done)
-+		__field(	int,			ret)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->napi = napi;
-+		__assign_str(dev_name, napi->dev ? napi->dev->name : NO_DEV);
-+		__entry->hard_irq_defer = hard_irq_defer;
-+		__entry->timeout = timeout;
-+		__entry->work_done = work_done;
-+		__entry->ret = ret;
-+	),
-+
-+	TP_printk("napi_complete_done on napi struct %p dev %s irq_defers_remaining %d timeout %lu work_done %d ret %d",
-+		__entry->napi, __get_str(dev_name), __entry->hard_irq_defer,
-+		__entry->timeout, __entry->work_done, __entry->ret)
-+);
-+
- TRACE_EVENT(napi_poll,
- 
- 	TP_PROTO(struct napi_struct *napi, int work, int budget),
-diff --git a/net/core/dev.c b/net/core/dev.c
-index fa53830..e601f97 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -6091,6 +6091,8 @@ bool napi_complete_done(struct napi_struct *n, int work_done)
- 	if (timeout)
- 		hrtimer_start(&n->timer, ns_to_ktime(timeout),
- 			      HRTIMER_MODE_REL_PINNED);
-+
-+	trace_napi_complete_done(n, n->defer_hard_irqs_count, timeout, work_done, ret);
- 	return ret;
- }
- EXPORT_SYMBOL(napi_complete_done);
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.7.4
-
+Florian
