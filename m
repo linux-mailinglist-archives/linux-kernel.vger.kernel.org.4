@@ -2,137 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4585FA046
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF885FA058
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiJJOfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 10:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58684 "EHLO
+        id S229840AbiJJOnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 10:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiJJOfp (ORCPT
+        with ESMTP id S229458AbiJJOnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 10:35:45 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10F3E02F;
-        Mon, 10 Oct 2022 07:35:44 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MmLxP0jLszwPKp;
-        Mon, 10 Oct 2022 22:33:13 +0800 (CST)
-Received: from [10.174.179.14] (10.174.179.14) by
- canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 10 Oct 2022 22:35:42 +0800
-Subject: Re: [PATCH -next] jbd2: use the correct print format
-To:     Bixuan Cui <cuibixuan@linux.alibaba.com>, <rostedt@goodmis.org>,
-        <mhiramat@kernel.org>, <bvanassche@acm.org>, <axboe@kernel.dk>,
-        <tytso@mit.edu>, <linux-kernel@vger.kernel.org>,
-        <linux-ext4@vger.kernel.org>
-References: <1665389343-35572-1-git-send-email-cuibixuan@linux.alibaba.com>
-From:   Jason Yan <yanaijie@huawei.com>
-Message-ID: <c30377f7-f9b8-5774-b509-a4285210b40f@huawei.com>
-Date:   Mon, 10 Oct 2022 22:35:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Mon, 10 Oct 2022 10:43:37 -0400
+X-Greylist: delayed 304 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 10 Oct 2022 07:43:34 PDT
+Received: from mail-200161.simplelogin.co (mail-200161.simplelogin.co [176.119.200.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7496F278
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 07:43:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lirui.org; s=dkim;
+        t=1665412709;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=X6F4ocx+qrtRke2RwY23Bo84cVUEo/S+1zJTOfDrqP8=;
+        b=pxcVDIibuLdX1H0wE3Uwl1YRawPJMnL3kf9sSG1t3Jbmuxz+31K7o8F9c7haCAX90W0AW5
+        rvYP2H4SncJR15pc09nHJ5OQdqeMTmiwKO/89N5m9Y2FvE+dOVxiU0IsBZ8gspO9L/2Mr3
+        SLhyfqakAqgVU+ZtQvhOjUC8pP9yvyc=
+Subject: [PATCH] bpf: fix checkpatch POINTER_LOCATION, SPACING,
+ ASSIGN_IN_IF error
+Date:   Mon, 10 Oct 2022 22:37:32 +0800
 MIME-Version: 1.0
-In-Reply-To: <1665389343-35572-1-git-send-email-cuibixuan@linux.alibaba.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.14]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+From:   Rui Li <me@lirui.org>
+To:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <166541270808.7.8609812300412049909.67986182@lirui.org>
+X-SimpleLogin-Type: Reply
+X-SimpleLogin-EmailLog-ID: 67986195
+X-SimpleLogin-Want-Signing: yes
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM28,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bixuan,
+This commit cleans up checkpatch errors as follows:
+ERROR:POINTER_LOCATION: "foo* bar" should be "foo *bar"
+ERROR:ASSIGN_IN_IF: do not use assignment in if condition
+ERROR:SPACING: space required after that ',' (ctx:VxV)
 
-On 2022/10/10 16:09, Bixuan Cui wrote:
-> The print format error was found when using ftrace event:
->      <...>-1406 [000] .... 23599442.895823: jbd2_end_commit: dev 252,8 transaction -1866216965 sync 0 head -1866217368
->      <...>-1406 [000] .... 23599442.896299: jbd2_start_commit: dev 252,8 transaction -1866216964 sync 0
-> 
-> Print transaction and head with the unsigned format "%u" instead.
-> 
-> Fixes: 879c5e6b7cb4 ('jbd2: convert instrumentation from markers to tracepoints')
-> Signed-off-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
-> ---
->   include/trace/events/jbd2.h | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/trace/events/jbd2.h b/include/trace/events/jbd2.h
-> index 99f783c..ce9accb 100644
-> --- a/include/trace/events/jbd2.h
-> +++ b/include/trace/events/jbd2.h
-> @@ -40,7 +40,7 @@
->   	TP_STRUCT__entry(
->   		__field(	dev_t,	dev			)
->   		__field(	char,	sync_commit		  )
-> -		__field(	int,	transaction		  )
-> +		__field(	tid_t,	transaction		  )
+There still are some false positive errors like spaces required.
 
-While you are at it, can you make all the tid tracing consistent. Some 
-tracing points using unsigned long such as:
+Signed-off-by: Rui Li <me@lirui.org>
+---
+ kernel/bpf/arraymap.c | 10 ++++++----
+ kernel/bpf/btf.c      |  2 +-
+ kernel/bpf/core.c     |  8 +++++---
+ 3 files changed, 12 insertions(+), 8 deletions(-)
 
-TRACE_EVENT(jbd2_handle_extend,
-	TP_PROTO(dev_t dev, unsigned long tid, unsigned int type,
-		 unsigned int line_no, int buffer_credits,
-		 int requested_blocks),
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 832b2659e96e..271af4b934d4 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -154,7 +154,7 @@ static struct bpf_map *array_map_alloc(union bpf_attr *attr)
+ 	return &array->map;
+ }
+ 
+-static void *array_map_elem_ptr(struct bpf_array* array, u32 index)
++static void *array_map_elem_ptr(struct bpf_array *array, u32 index)
+ {
+ 	return array->value + (u64)array->elem_size * index;
+ }
+@@ -814,9 +814,11 @@ int bpf_fd_array_map_lookup_elem(struct bpf_map *map, void *key, u32 *value)
+ 
+ 	rcu_read_lock();
+ 	elem = array_map_lookup_elem(map, key);
+-	if (elem && (ptr = READ_ONCE(*elem)))
+-		*value = map->ops->map_fd_sys_lookup_elem(ptr);
+-	else
++	if (elem) {
++		ptr = READ_ONCE(*elem);
++		if (ptr)
++			*value = map->ops->map_fd_sys_lookup_elem(ptr);
++	} else
+ 		ret = -ENOENT;
+ 	rcu_read_unlock();
+ 
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index eba603cec2c5..a31e31951d60 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -5482,7 +5482,7 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 
+ 		if (ctx_arg_info->offset == off) {
+ 			if (!ctx_arg_info->btf_id) {
+-				bpf_log(log,"invalid btf_id for context argument offset %u\n", off);
++				bpf_log(log, "invalid btf_id for context argument offset %u\n", off);
+ 				return false;
+ 			}
+ 
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 711fd293b6de..3a63787598c5 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -467,9 +467,11 @@ struct bpf_prog *bpf_patch_insn_single(struct bpf_prog *prog, u32 off,
+ 	 * We need to probe here before we do any reallocation where
+ 	 * we afterwards may not fail anymore.
+ 	 */
+-	if (insn_adj_cnt > cnt_max &&
+-	    (err = bpf_adj_branches(prog, off, off + 1, off + len, true)))
+-		return ERR_PTR(err);
++	if (insn_adj_cnt > cnt_max) {
++		err = bpf_adj_branches(prog, off, off + 1, off + len, true);
++		if (err)
++			return ERR_PTR(err);
++	}
+ 
+ 	/* Several new instructions need to be inserted. Make room
+ 	 * for them. Likely, there's no need for a new allocation as
+-- 
+2.30.2
 
-	TP_ARGS(dev, tid, type, line_no, buffer_credits, requested_blocks),
 
-
-and the caller passing transaction->t_tid which is tid_t(unsigned int).
-
-	trace_jbd2_handle_extend(journal->j_fs_dev->bd_dev,
-				 transaction->t_tid,
-				 handle->h_type, handle->h_line_no,
-				 handle->h_total_credits,
-				 nblocks);
-
-Thanks,
-Jason
-
->   	),
->   
->   	TP_fast_assign(
-> @@ -49,7 +49,7 @@
->   		__entry->transaction	= commit_transaction->t_tid;
->   	),
->   
-> -	TP_printk("dev %d,%d transaction %d sync %d",
-> +	TP_printk("dev %d,%d transaction %u sync %d",
-
-
-
-
->   		  MAJOR(__entry->dev), MINOR(__entry->dev),
->   		  __entry->transaction, __entry->sync_commit)
->   );
-> @@ -97,8 +97,8 @@
->   	TP_STRUCT__entry(
->   		__field(	dev_t,	dev			)
->   		__field(	char,	sync_commit		  )
-> -		__field(	int,	transaction		  )
-> -		__field(	int,	head		  	  )
-> +		__field(	tid_t,	transaction		  )
-> +		__field(	tid_t,	head		  	  )
->   	),
->   
->   	TP_fast_assign(
-> @@ -108,7 +108,7 @@
->   		__entry->head		= journal->j_tail_sequence;
->   	),
->   
-> -	TP_printk("dev %d,%d transaction %d sync %d head %d",
-> +	TP_printk("dev %d,%d transaction %u sync %d head %u",
->   		  MAJOR(__entry->dev), MINOR(__entry->dev),
->   		  __entry->transaction, __entry->sync_commit, __entry->head)
->   );
-> 
