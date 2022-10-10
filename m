@@ -2,285 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B456F5F9A21
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC545F9A24
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231917AbiJJHkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
+        id S232377AbiJJHlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbiJJHkL (ORCPT
+        with ESMTP id S231765AbiJJHkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:40:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91FF66A78
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 00:35:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665387333;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3QIAgch2Vqve53ZyvQLAWpmF39hyanv1cw0cewhoByo=;
-        b=KZ6Qc6dwTqfskVY3ru8HIbV+Zd4XjWhq9+eJTUJ8QLWokAcRWBdkwWr4vYGrFhbJsgiAh6
-        AvSUjW81HCuRBoKG/5WIwbCKikjDgAIHM3shV7bLRmXfUizuuyrbd0LvLHrt2ijwdT/Gzl
-        wPfe1dzFCexLM9cPSbddvPPjiOCtGJo=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-437-7w771RpYODG2U4XROMlClg-1; Mon, 10 Oct 2022 03:35:32 -0400
-X-MC-Unique: 7w771RpYODG2U4XROMlClg-1
-Received: by mail-ej1-f72.google.com with SMTP id gn33-20020a1709070d2100b00787e6fbcb72so4044567ejc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 00:35:32 -0700 (PDT)
+        Mon, 10 Oct 2022 03:40:12 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BF0659D8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 00:35:39 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id x21-20020a5d9455000000b006bc1172e639so1441500ior.18
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 00:35:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3QIAgch2Vqve53ZyvQLAWpmF39hyanv1cw0cewhoByo=;
-        b=RIhRQOA8Pel+qhgNYQsVE56iTkjnNJf6IPDDKoHQyaE0tF99T1RY1pc4gkf1+CHj+p
-         91HrUyx6t49+DwOYGLvsQQPT86BQuMRLA1PXMSLE+kcem1EivNuzg7xd5c3NEc5arqzW
-         BZtkMud/mSwdkM2Wl8Ee5JAVRSr53B903M4SW9mUGDqFmsTvbpI9Hcm1j2iniNwZFcyB
-         RfwC8yC8JmjvNiAGVYZOFe5kWEP5UMRqqUviRjsWGAt1wWmW8NtLEZhwW5z+74Y83VKq
-         Dxi0RtImwOwRrdEko/K5Ci6koQ6O2AZxbFvsD8tT0oy+dSD37g3jlP/xUj7DeOEW+fQK
-         zajQ==
-X-Gm-Message-State: ACrzQf053+CoYQjcJjs8fyRGKX/tQQmnLKRrYOq9h9wAq56hR02boD4V
-        khE6B4rFpYL5iOsuwjf3Drtg20yEwEiyVOpS4VNEXN2BkwCS6dGYTCTOTJDiSt1Xq0pClhn9KHF
-        ZXX1T+JYAtxeUx/gI57jWMtAM
-X-Received: by 2002:a17:906:794b:b0:783:8db0:95a5 with SMTP id l11-20020a170906794b00b007838db095a5mr14042337ejo.728.1665387331477;
-        Mon, 10 Oct 2022 00:35:31 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5F/2X/X+E9o/yd1IvsplzS/Hm3omeXJR5MasiXAbZwOkZM3gtl5OeVms5nEIitUjPm1pyD8A==
-X-Received: by 2002:a17:906:794b:b0:783:8db0:95a5 with SMTP id l11-20020a170906794b00b007838db095a5mr14042323ejo.728.1665387331248;
-        Mon, 10 Oct 2022 00:35:31 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id kx6-20020a170907774600b00738795e7d9bsm4999789ejc.2.2022.10.10.00.35.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 00:35:30 -0700 (PDT)
-Message-ID: <22a37743-a9d4-c59a-a602-19eb00d3d90c@redhat.com>
-Date:   Mon, 10 Oct 2022 09:35:29 +0200
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B3PuK6BkkpDeeSeKboKKuamEJPG6dqd6D3eivM/BEN8=;
+        b=1SgXBOcnsI1jgdLVkcAI2P3rgXiugPx0KIqj0OS1xzs1wzUVtz7RoS26DJRP4xxyT9
+         goaEtvM6Nsx8p+zVZb5es+wwp8lb5e/7IaMoRfDc42UQ7ZVPmL5EHrENhh3/FG/LpyyP
+         zOpNNLXd6jKQrGDvZGDiUVWh4R3W7txyBtU9vQ7H7vdo74XV0SaDcmtWY4ftf8Ra2SG0
+         1iJgPHmIddi/P2zU31NeRASgfs22c4CDphDBDJxIVEir64Xr/hzvFhnUQpdfLCHxSbpk
+         vy7/XvGFunuvOgBkkwXwUgXq5wAU7xUCs6s20v9O/NDDeNJhIAQdWuJIZj/mKwsrvxKX
+         aq+g==
+X-Gm-Message-State: ACrzQf1hoEY3xftxwKQPo+k6BPoxTbqmg+g0QyXZ6fZU6XZAlvQspe0d
+        5IHYqw0gVMGdXoOn4AloYlKzIVHhgTAY7BSHFLbXSiCE2J0D
+X-Google-Smtp-Source: AMsMyM4lQhWf7VIxsfea2/gNVGnioYJiG5PEBVy+2SHEyZRVewARjbmNNF+CrR9TdC58JEJqCh+Qf73qMPw0qDqdc2PAOvTf3cHg
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH AUTOSEL 5.19 16/36] ACPI: video: Change
- disable_backlight_sysfs_if quirks to acpi_backlight=native
-Content-Language: en-US
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Arvid Norlander <lkml@vorpal.se>, rafael@kernel.org,
-        linux-acpi@vger.kernel.org
-References: <20221009235222.1230786-1-sashal@kernel.org>
- <20221009235222.1230786-16-sashal@kernel.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221009235222.1230786-16-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c514:0:b0:2f9:2b06:6283 with SMTP id
+ r20-20020a92c514000000b002f92b066283mr8254283ilg.287.1665387338571; Mon, 10
+ Oct 2022 00:35:38 -0700 (PDT)
+Date:   Mon, 10 Oct 2022 00:35:38 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000baa88c05eaa934bb@google.com>
+Subject: [syzbot] stack segment fault in truncate_inode_pages_final
+From:   syzbot <syzbot+0f7dd5852be940800ca4@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-On 10/10/22 01:52, Sasha Levin wrote:
-> From: Hans de Goede <hdegoede@redhat.com>
-> 
-> [ Upstream commit c5b94f5b7819348c59f9949b2b75c341a114cdd4 ]
-> 
-> Some Toshibas have a broken acpi-video interface for brightness control
-> and need a special firmware call on resume to turn the panel back on.
-> So far these have been using the disable_backlight_sysfs_if workaround
-> to deal with this.
-> 
-> The recent x86/acpi backlight refactoring has broken this workaround:
-> 1. This workaround relies on acpi_video_get_backlight_type() returning
->    acpi_video so that the acpi_video code actually runs; and
-> 2. this relies on the actual native GPU driver to offer the sysfs
->    backlight interface to userspace.
-> 
-> After the refactor this breaks since the native driver will no
-> longer register its backlight-device if acpi_video_get_backlight_type()
-> does not return native and making it return native breaks 1.
-> 
-> Keeping the acpi_video backlight handling on resume active, while not
-> using it to set the brightness, is necessary because it does a _BCM
-> call on resume which is necessary to turn the panel back on on resume.
-> 
-> Looking at the DSDT shows that this _BCM call results in a Toshiba
-> HCI_SET HCI_LCD_BRIGHTNESS call, which turns the panel back on.
-> 
-> This kind of special vendor specific handling really belongs in
-> the vendor specific acpi driver. An earlier patch in this series
-> modifies toshiba_acpi to make the necessary HCI_SET call on resume
-> on affected models.
-> 
-> With toshiba_acpi taking care of the HCI_SET call on resume,
-> the acpi_video code no longer needs to call _BCM on resume.
-> 
-> So instead of using the (now broken) disable_backlight_sysfs_if
-> workaround, simply setting acpi_backlight=native to disable
-> the broken apci-video interface is sufficient fix things now.
-> 
-> After this there are no more users of the disable_backlight_sysfs_if
-> flag and as discussed above the flag also no longer works as intended,
-> so remove the disable_backlight_sysfs_if flag entirely.
-> 
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Tested-by: Arvid Norlander <lkml@vorpal.se>
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+syzbot found the following issue on:
 
-This patch goes hand in hand with:
+HEAD commit:    833477fce7a1 Merge tag 'sound-6.1-rc1' of git://git.kernel..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17cae158880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=676645938ad4c02f
+dashboard link: https://syzkaller.appspot.com/bug?extid=0f7dd5852be940800ca4
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-commit 3cb1f40dfdc3 ("drivers/platform: toshiba_acpi: Call HCI_PANEL_POWER_ON on resume on some models")
+Unfortunately, I don't have any reproducer for this issue yet.
 
-and without that commit also being present it will cause a regression on
-the quirkes Toshiba models.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f66757bbae28/disk-833477fc.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/50ec5a2788dd/vmlinux-833477fc.xz
 
-This really is part of the big x86/ACPI backlight handling refactor which 
-has landed in 6.1 and as such is not intended for older kernels, please
-drop this from the stable series.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0f7dd5852be940800ca4@syzkaller.appspotmail.com
 
-Regards,
+stack segment: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 22407 Comm: syz-executor.5 Not tainted 6.0.0-syzkaller-05118-g833477fce7a1 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+RIP: 0010:trace_lock_release include/trace/events/lock.h:69 [inline]
+RIP: 0010:lock_release+0x55f/0x780 kernel/locking/lockdep.c:5677
+Code: 48 c7 c0 40 e8 ca 8d 48 ba 00 00 00 00 00 fc ff df 48 c1 e8 03 80 3c 10 00 0f 85 e0 01 00 00 48 8b 05 65 42 6d 0c e8 80 2e 06 <00> 85 c0 74 17 65 ff 0d 55 c9 a4 7e 0f 85 3e fb ff ff e8 ec ce a2
+RSP: 0018:ffffc90005367a10 EFLAGS: 00010002
+RAX: 0000000000000001 RBX: 0000000000000001 RCX: 0000000000000001
+RDX: 0000000000000000 RSI: 0000000000000002 RDI: 0000000000000000
+RBP: 1ffff92000a6cf44 R08: 0000000000000000 R09: ffffffff8ddf9957
+R10: fffffbfff1bbf32a R11: 0000000000000000 R12: ffff888093973498
+R13: ffff888093973278 R14: ffffffff8a22b140 R15: ffff8880478d8a00
+FS:  00007f9ae3bb2700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b2e927000 CR3: 000000003f6b9000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:157 [inline]
+ _raw_spin_unlock_irq+0x12/0x40 kernel/locking/spinlock.c:202
+ spin_unlock_irq include/linux/spinlock.h:399 [inline]
+ truncate_inode_pages_final+0x5f/0x80 mm/truncate.c:484
+ ntfs_evict_inode+0x16/0xa0 fs/ntfs3/inode.c:1741
+ evict+0x2ed/0x6b0 fs/inode.c:665
+ iput_final fs/inode.c:1748 [inline]
+ iput.part.0+0x55d/0x810 fs/inode.c:1774
+ iput+0x58/0x70 fs/inode.c:1764
+ ntfs_fill_super+0x2e89/0x37f0 fs/ntfs3/super.c:1190
+ get_tree_bdev+0x440/0x760 fs/super.c:1323
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1530
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1326/0x1e20 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f9ae2a8bada
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f9ae3bb1f88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f9ae2a8bada
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f9ae3bb1fe0
+RBP: 00007f9ae3bb2020 R08: 00007f9ae3bb2020 R09: 0000000020000000
+R10: 0000000000000000 R11: 0000000000000202 R12: 0000000020000000
+R13: 0000000020000100 R14: 00007f9ae3bb1fe0 R15: 0000000020000140
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:trace_lock_release include/trace/events/lock.h:69 [inline]
+RIP: 0010:lock_release+0x55f/0x780 kernel/locking/lockdep.c:5677
+Code: 48 c7 c0 40 e8 ca 8d 48 ba 00 00 00 00 00 fc ff df 48 c1 e8 03 80 3c 10 00 0f 85 e0 01 00 00 48 8b 05 65 42 6d 0c e8 80 2e 06 <00> 85 c0 74 17 65 ff 0d 55 c9 a4 7e 0f 85 3e fb ff ff e8 ec ce a2
+RSP: 0018:ffffc90005367a10 EFLAGS: 00010002
+RAX: 0000000000000001 RBX: 0000000000000001 RCX: 0000000000000001
+RDX: 0000000000000000 RSI: 0000000000000002 RDI: 0000000000000000
+RBP: 1ffff92000a6cf44 R08: 0000000000000000 R09: ffffffff8ddf9957
+R10: fffffbfff1bbf32a R11: 0000000000000000 R12: ffff888093973498
+R13: ffff888093973278 R14: ffffffff8a22b140 R15: ffff8880478d8a00
+FS:  00007f9ae3bb2700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b2e927000 CR3: 000000003f6b9000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-Hans
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-
-> ---
->  drivers/acpi/acpi_video.c   | 48 -------------------------------------
->  drivers/acpi/video_detect.c | 35 +++++++++++++++++++++++++++
->  2 files changed, 35 insertions(+), 48 deletions(-)
-> 
-> diff --git a/drivers/acpi/acpi_video.c b/drivers/acpi/acpi_video.c
-> index eaea733b368a..bd972d28df5d 100644
-> --- a/drivers/acpi/acpi_video.c
-> +++ b/drivers/acpi/acpi_video.c
-> @@ -47,9 +47,6 @@ module_param(brightness_switch_enabled, bool, 0644);
->  static bool allow_duplicates;
->  module_param(allow_duplicates, bool, 0644);
->  
-> -static int disable_backlight_sysfs_if = -1;
-> -module_param(disable_backlight_sysfs_if, int, 0444);
-> -
->  #define REPORT_OUTPUT_KEY_EVENTS		0x01
->  #define REPORT_BRIGHTNESS_KEY_EVENTS		0x02
->  static int report_key_events = -1;
-> @@ -382,14 +379,6 @@ static int video_set_bqc_offset(const struct dmi_system_id *d)
->  	return 0;
->  }
->  
-> -static int video_disable_backlight_sysfs_if(
-> -	const struct dmi_system_id *d)
-> -{
-> -	if (disable_backlight_sysfs_if == -1)
-> -		disable_backlight_sysfs_if = 1;
-> -	return 0;
-> -}
-> -
->  static int video_set_device_id_scheme(const struct dmi_system_id *d)
->  {
->  	device_id_scheme = true;
-> @@ -462,40 +451,6 @@ static const struct dmi_system_id video_dmi_table[] = {
->  		},
->  	},
->  
-> -	/*
-> -	 * Some machines have a broken acpi-video interface for brightness
-> -	 * control, but still need an acpi_video_device_lcd_set_level() call
-> -	 * on resume to turn the backlight power on.  We Enable backlight
-> -	 * control on these systems, but do not register a backlight sysfs
-> -	 * as brightness control does not work.
-> -	 */
-> -	{
-> -	 /* https://bugzilla.kernel.org/show_bug.cgi?id=21012 */
-> -	 .callback = video_disable_backlight_sysfs_if,
-> -	 .ident = "Toshiba Portege R700",
-> -	 .matches = {
-> -		DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
-> -		DMI_MATCH(DMI_PRODUCT_NAME, "PORTEGE R700"),
-> -		},
-> -	},
-> -	{
-> -	 /* https://bugs.freedesktop.org/show_bug.cgi?id=82634 */
-> -	 .callback = video_disable_backlight_sysfs_if,
-> -	 .ident = "Toshiba Portege R830",
-> -	 .matches = {
-> -		DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
-> -		DMI_MATCH(DMI_PRODUCT_NAME, "PORTEGE R830"),
-> -		},
-> -	},
-> -	{
-> -	 /* https://bugzilla.kernel.org/show_bug.cgi?id=21012 */
-> -	 .callback = video_disable_backlight_sysfs_if,
-> -	 .ident = "Toshiba Satellite R830",
-> -	 .matches = {
-> -		DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
-> -		DMI_MATCH(DMI_PRODUCT_NAME, "SATELLITE R830"),
-> -		},
-> -	},
->  	/*
->  	 * Some machine's _DOD IDs don't have bit 31(Device ID Scheme) set
->  	 * but the IDs actually follow the Device ID Scheme.
-> @@ -1767,9 +1722,6 @@ static void acpi_video_dev_register_backlight(struct acpi_video_device *device)
->  	if (result)
->  		return;
->  
-> -	if (disable_backlight_sysfs_if > 0)
-> -		return;
-> -
->  	name = kasprintf(GFP_KERNEL, "acpi_video%d", count);
->  	if (!name)
->  		return;
-> diff --git a/drivers/acpi/video_detect.c b/drivers/acpi/video_detect.c
-> index 5d7f38016a24..c370de174fd3 100644
-> --- a/drivers/acpi/video_detect.c
-> +++ b/drivers/acpi/video_detect.c
-> @@ -514,6 +514,41 @@ static const struct dmi_system_id video_detect_dmi_table[] = {
->  		DMI_MATCH(DMI_BOARD_NAME, "PF5LUXG"),
->  		},
->  	},
-> +	/*
-> +	 * These Toshibas have a broken acpi-video interface for brightness
-> +	 * control. They also have an issue where the panel is off after
-> +	 * suspend until a special firmware call is made to turn it back
-> +	 * on. This is handled by the toshiba_acpi kernel module, so that
-> +	 * module must be enabled for these models to work correctly.
-> +	 */
-> +	{
-> +	 /* https://bugzilla.kernel.org/show_bug.cgi?id=21012 */
-> +	 .callback = video_detect_force_native,
-> +	 /* Toshiba Portégé R700 */
-> +	 .matches = {
-> +		DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
-> +		DMI_MATCH(DMI_PRODUCT_NAME, "PORTEGE R700"),
-> +		},
-> +	},
-> +	{
-> +	 /* Portégé: https://bugs.freedesktop.org/show_bug.cgi?id=82634 */
-> +	 /* Satellite: https://bugzilla.kernel.org/show_bug.cgi?id=21012 */
-> +	 .callback = video_detect_force_native,
-> +	 /* Toshiba Satellite/Portégé R830 */
-> +	 .matches = {
-> +		DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
-> +		DMI_MATCH(DMI_PRODUCT_NAME, "R830"),
-> +		},
-> +	},
-> +	{
-> +	 .callback = video_detect_force_native,
-> +	 /* Toshiba Satellite/Portégé Z830 */
-> +	 .matches = {
-> +		DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
-> +		DMI_MATCH(DMI_PRODUCT_NAME, "Z830"),
-> +		},
-> +	},
-> +
->  	/*
->  	 * Desktops which falsely report a backlight and which our heuristics
->  	 * for this do not catch.
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
