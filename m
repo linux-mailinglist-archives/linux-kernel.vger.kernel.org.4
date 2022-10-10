@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC255FA7BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 00:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD6AD5FA7BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 00:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbiJJWkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 18:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
+        id S229461AbiJJWkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 18:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiJJWkL (ORCPT
+        with ESMTP id S229795AbiJJWkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 18:40:11 -0400
+        Mon, 10 Oct 2022 18:40:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFE8792D8
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 15:40:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA4B79A6D
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 15:40:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 427C96103C
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 22:40:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9056FC433B5;
-        Mon, 10 Oct 2022 22:40:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B953C61041
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 22:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 208B9C433C1;
+        Mon, 10 Oct 2022 22:40:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665441608;
-        bh=XFR+M/R3+wFhDpWoVbJrYDu/lEAVmEd53JiYagAL0oA=;
+        s=k20201202; t=1665441610;
+        bh=H2YGNl94EtWVuEFBnke9BVCHAd1Iq68IOesSFyDAWlE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M1ET6V/RBZaGLJmpfjTtejr+hrnMuiZqX0d1YmG6A+OJD9fQvCrDSTrHPQC8K31A/
-         h5yPARGNvpoXmuLCvVEnmr1yJaKkUtal1d9ho5GYQKA2IYVpMcovTOubyRwxBtY0vo
-         7u1SLvMTeBmgTvBShxOF813QHyZw9Tv5Nk2Ilm2sUt/dZa0dj2kUNyuPjCgOGillmd
-         YYEsS7fKUuI6EVs+p+BL8ucb78mZr/j2FOnqgxoiIEhRhlgRzYwcsotK3Y0cuTdm22
-         T52T4FiZbXO2PhEgGcdb1rtqPV8TsjI7PKFNFIiDZ3aVd07yH4RT3AAYMyfoh4KEUh
-         NJ7YCgFDuVHPw==
+        b=pKh4RZXIaZu+R1xYeRxw5KG0EqoPARcV1Z7Ul3FCtn9+fCoSsOsRPM2CienfrsSOj
+         pE3yp4bxygcIkR0Choxn+edOsKx9gNiBDVidxle4LuNgwJlVjqeXZJQUhXlTj3IyMY
+         AqO/v5vrTxfq/fRrD/FCH7BWYjqI/Fmi7QImwXojtFotv3IYzpi3CuTByYxiAfm0Ct
+         klvlNGW2KY/FKJEIY+KkDHEIeJo0UNxiVaqhvtJ0nOS355Nv5FkqfkELIyhNCJAbWQ
+         eAobLO9eE5RSjYhdEQTluxyvM9o3AGqHsW5AfAOGIa2lRkDhapuB66ayei1lhxVNHr
+         ywcjA3SOa7Rgw==
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Frederic Weisbecker <frederic@kernel.org>,
         Joel Fernandes <joel@joelfernandes.org>
-Subject: [PATCH 1/2] rcu: Fix missing nocb gp wake on rcu_barrier()
-Date:   Tue, 11 Oct 2022 00:39:55 +0200
-Message-Id: <20221010223956.1041247-2-frederic@kernel.org>
+Subject: [PATCH 2/2] rcu/nocb: Spare bypass locking upon normal enqueue
+Date:   Tue, 11 Oct 2022 00:39:56 +0200
+Message-Id: <20221010223956.1041247-3-frederic@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221010223956.1041247-1-frederic@kernel.org>
 References: <20221010223956.1041247-1-frederic@kernel.org>
@@ -54,95 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Upon entraining a callback to a NOCB CPU, no further wake up is
-issued on the corresponding nocb_gp kthread. As a result, the callback
-and all the subsequent ones on that CPU may be ignored, at least until
-an RCU_NOCB_WAKE_FORCE timer is ever armed or another NOCB CPU belonging
-to the same group enqueues a callback on an empty queue.
+When a callback is to be enqueued to the normal queue and not the bypass
+one, a flush to the bypass queue is always tried anyway. This attempt
+involves locking the bypass lock unconditionally. Although it is
+guaranteed not to be contended at this point, because only call_rcu()
+can lock the bypass lock without holding the nocb lock, it's still not
+free and the operation can easily be spared most of the time by just
+checking if the bypass list is empty. The check is safe as nobody can
+queue nor flush the bypass concurrently.
 
-Here is a possible bad scenario:
-
-1) CPU 0 is NOCB unlike all other CPUs.
-2) CPU 0 queues a callback
-2) The grace period related to that callback elapses
-3) The callback is moved to the done list (but is not invoked yet),
-   there are no more pending callbacks for CPU 0
-4) CPU 1 calls rcu_barrier() and sends an IPI to CPU 0
-5) CPU 0 entrains the callback but doesn't wake up nocb_gp
-6) CPU 1 blocks forever, unless CPU 0 ever queues enough further
-   callbacks to arm an RCU_NOCB_WAKE_FORCE timer.
-
-Make sure the necessary wake up is produced whenever necessary.
-
-Reported-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-Fixes: 5d6742b37727 ("rcu/nocb: Use rcu_segcblist for no-CBs CPUs")
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 ---
- kernel/rcu/tree.c      | 6 ++++++
- kernel/rcu/tree.h      | 1 +
- kernel/rcu/tree_nocb.h | 5 +++++
- 3 files changed, 12 insertions(+)
+ kernel/rcu/tree_nocb.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 96d678c9cfb6..025f59f6f97f 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -3914,6 +3914,8 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
- {
- 	unsigned long gseq = READ_ONCE(rcu_state.barrier_sequence);
- 	unsigned long lseq = READ_ONCE(rdp->barrier_seq_snap);
-+	bool wake_nocb = false;
-+	bool was_alldone = false;
- 
- 	lockdep_assert_held(&rcu_state.barrier_lock);
- 	if (rcu_seq_state(lseq) || !rcu_seq_state(gseq) || rcu_seq_ctr(lseq) != rcu_seq_ctr(gseq))
-@@ -3922,6 +3924,7 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
- 	rdp->barrier_head.func = rcu_barrier_callback;
- 	debug_rcu_head_queue(&rdp->barrier_head);
- 	rcu_nocb_lock(rdp);
-+	was_alldone = rcu_rdp_is_offloaded(rdp) && !rcu_segcblist_pend_cbs(&rdp->cblist);
- 	WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies));
- 	if (rcu_segcblist_entrain(&rdp->cblist, &rdp->barrier_head)) {
- 		atomic_inc(&rcu_state.barrier_cpu_count);
-@@ -3929,7 +3932,10 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
- 		debug_rcu_head_unqueue(&rdp->barrier_head);
- 		rcu_barrier_trace(TPS("IRQNQ"), -1, rcu_state.barrier_sequence);
- 	}
-+	wake_nocb = was_alldone && rcu_segcblist_pend_cbs(&rdp->cblist);
- 	rcu_nocb_unlock(rdp);
-+	if (wake_nocb)
-+		wake_nocb_gp(rdp, false);
- 	smp_store_release(&rdp->barrier_seq_snap, gseq);
- }
- 
-diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-index d4a97e40ea9c..925dd98f8b23 100644
---- a/kernel/rcu/tree.h
-+++ b/kernel/rcu/tree.h
-@@ -439,6 +439,7 @@ static void zero_cpu_stall_ticks(struct rcu_data *rdp);
- static struct swait_queue_head *rcu_nocb_gp_get(struct rcu_node *rnp);
- static void rcu_nocb_gp_cleanup(struct swait_queue_head *sq);
- static void rcu_init_one_nocb(struct rcu_node *rnp);
-+static bool wake_nocb_gp(struct rcu_data *rdp, bool force);
- static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
- 				  unsigned long j);
- static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
 diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index f77a6d7e1356..094fd454b6c3 100644
+index 094fd454b6c3..30c3d473ffd8 100644
 --- a/kernel/rcu/tree_nocb.h
 +++ b/kernel/rcu/tree_nocb.h
-@@ -1558,6 +1558,11 @@ static void rcu_init_one_nocb(struct rcu_node *rnp)
- {
- }
+@@ -423,8 +423,10 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+ 		if (*was_alldone)
+ 			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
+ 					    TPS("FirstQ"));
+-		WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j));
+-		WARN_ON_ONCE(rcu_cblist_n_cbs(&rdp->nocb_bypass));
++		if (rcu_cblist_n_cbs(&rdp->nocb_bypass)) {
++			WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j));
++			WARN_ON_ONCE(rcu_cblist_n_cbs(&rdp->nocb_bypass));
++		}
+ 		return false; // Caller must enqueue the callback.
+ 	}
  
-+static bool wake_nocb_gp(struct rcu_data *rdp, bool force)
-+{
-+	return false;
-+}
-+
- static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
- 				  unsigned long j)
- {
 -- 
 2.25.1
 
