@@ -2,149 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F4A5F9D58
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:13:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0BAD5F9D67
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbiJJLNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 07:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
+        id S232043AbiJJLPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 07:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232007AbiJJLNT (ORCPT
+        with ESMTP id S231753AbiJJLPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 07:13:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5465C36E
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:13:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665400398;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cjfm8RmJkrxBn+xSALMff74eWGCgI/d+h1W88CDZ86U=;
-        b=cSvZNVXeuzXb/kcVPzXqeNh520fZx2W4vsXg5Z8EtFIUioLb2jBEwi/yKUm+/58eir4PKd
-        aIX6MCq0UO7KkXc645WZqAFy12lR8Pw1WRMqWIwnj8joe2r7F3iNxZAiSiHqwqRxiGTasA
-        c9bat5lmAwQwUSDYkdFGL1UusMIMy4c=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-500-utO26pQtPQSNb1oVWV2XLg-1; Mon, 10 Oct 2022 07:13:16 -0400
-X-MC-Unique: utO26pQtPQSNb1oVWV2XLg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6CCC585A583;
-        Mon, 10 Oct 2022 11:13:14 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.39.192.124])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 656F2B279E;
-        Mon, 10 Oct 2022 11:13:07 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com
-Subject: Re: [PATCH v2 28/39] x86/cet/shstk: Introduce map_shadow_stack syscall
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
-        <20220929222936.14584-29-rick.p.edgecombe@intel.com>
-Date:   Mon, 10 Oct 2022 13:13:05 +0200
-In-Reply-To: <20220929222936.14584-29-rick.p.edgecombe@intel.com> (Rick
-        Edgecombe's message of "Thu, 29 Sep 2022 15:29:25 -0700")
-Message-ID: <87r0zg0w5a.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Mon, 10 Oct 2022 07:15:48 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013E14DB6A
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:15:47 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id z18so6922016qvn.6
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:15:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=x/A6R+RaVI+GYMUHqfwCFuqrzI7fApq42tphdgeMu9w=;
+        b=IzKZElHr3hNBLx0hm/iEZcUDMQ8P/NijsVO5z0aXgNyALMc5OgTk1tQcCp0lg7CxD+
+         ij0o5NWtvWwvqoIsHtigAn3hjgql9+Ltoc83gr1eK6YhfTWBbNjqeMo0a+zXcy5DImUj
+         qjm2+xKo4lgD7PXEZBor1mxBynsOZpHUgKDqTED5SvdBBBTUzB4WbfMOfFjvmnYMzOrQ
+         lonzVSVgq+unAwps4QJNgyVzeM8zowvAVAZo89CnsVLTa2R8TgLQn5LDhIVyJ/4yUGwR
+         l3oqMpXH6zm6xkSRY+gI50OHmOjM3GkK2ZRGYLS52nxAwWeCH5TGAc1LtSGglNiGKRsN
+         5KQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x/A6R+RaVI+GYMUHqfwCFuqrzI7fApq42tphdgeMu9w=;
+        b=2LmtNnvYGDB773Oc85fHZHnOjkHK5Z0arX08vGLOQB8Krjfb21xydWkWTbKpolWN9Y
+         g6RxqR3+WswaqXZXkgRQi2OiQDDNQ5cmFxEi0dNh+bi8JGmyIQS2B7P7FKiBtrRnYqbv
+         7n4RFk1zpcmTlpCax8FlNhC6zKozY5fjEINBBiEnKCREaj+ljmuLkxZzRQ5JtrdpxSDa
+         OQKXNSTEEPMfW1/xa7t64FeVk18aCGeVgTBI/mC0Cp1aZa9F5eGazgot9GPFKisW0EGW
+         1xdu0C1FaaB6ZutOuZBYx61Jeid9ZEwFaKZYKV9DO4xFwAzKN27nyLqT7pyLVfoLoxat
+         j80w==
+X-Gm-Message-State: ACrzQf0+0cd8/cbsC15G9TkAG/b33BgBWtxcm3Tlv3UIrcp3QBIJYbU1
+        bU2ejfZGLB+IylPCtpOyljesoQ==
+X-Google-Smtp-Source: AMsMyM7o6XnoIw0wUDhjjvlAG6mgUAlZ5OTgVKjitQKpM0nAdGJU7XSZcBOAsYZHvvTETJPLXfdbtQ==
+X-Received: by 2002:a05:6214:d8c:b0:4b1:7bfa:1f93 with SMTP id e12-20020a0562140d8c00b004b17bfa1f93mr14530080qve.70.1665400546182;
+        Mon, 10 Oct 2022 04:15:46 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id s4-20020a05620a254400b006bbc09af9f5sm9727164qko.101.2022.10.10.04.15.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Oct 2022 04:15:45 -0700 (PDT)
+Message-ID: <0769c6c8-567d-68c0-323a-9aaee1241e13@linaro.org>
+Date:   Mon, 10 Oct 2022 07:13:34 -0400
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v3 05/10] dt-bindings: pinctrl: mediatek,pinctrl-mt6795:
+ Fix interrupt count
+Content-Language: en-US
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Andy Teng <andy.teng@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20221007125904.55371-1-y.oudjana@protonmail.com>
+ <20221007125904.55371-6-y.oudjana@protonmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221007125904.55371-6-y.oudjana@protonmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Rick Edgecombe:
+On 07/10/2022 08:58, Yassine Oudjana wrote:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
+> 
+> The document currently states a maximum of 1 interrupt, but the DT
+> has 2 specified causing a dtbs_check error. Replace the maximum limit
+> with a minimum and add per-interrupt descriptions to pass the check.
+> 
+> Suggested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> ---
+>  .../devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
+> index 73ae6e11410b..a3a3f7fb9605 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
+> @@ -47,7 +47,10 @@ properties:
+>  
+>    interrupts:
+>      description: The interrupt outputs to sysirq.
+> -    maxItems: 1
+> +    minItems: 1
+> +    items:
+> +      - description: EINT interrupt
+> +      - description: EINT event_b interrupt
 
-> When operating with shadow stacks enabled, the kernel will automatically
-> allocate shadow stacks for new threads, however in some cases userspace
-> will need additional shadow stacks. The main example of this is the
-> ucontext family of functions, which require userspace allocating and
-> pivoting to userspace managed stacks.
->
-> Unlike most other user memory permissions, shadow stacks need to be
-> provisioned with special data in order to be useful. They need to be setup
-> with a restore token so that userspace can pivot to them via the RSTORSSP
-> instruction. But, the security design of shadow stack's is that they
-> should not be written to except in limited circumstances. This presents a
-> problem for userspace, as to how userspace can provision this special
-> data, without allowing for the shadow stack to be generally writable.
->
-> Previously, a new PROT_SHADOW_STACK was attempted, which could be
-> mprotect()ed from RW permissions after the data was provisioned. This was
-> found to not be secure enough, as other thread's could write to the
-> shadow stack during the writable window.
->
-> The kernel can use a special instruction, WRUSS, to write directly to
-> userspace shadow stacks. So the solution can be that memory can be mapped
-> as shadow stack permissions from the beginning (never generally writable
-> in userspace), and the kernel itself can write the restore token.
->
-> First, a new madvise() flag was explored, which could operate on the
-> PROT_SHADOW_STACK memory. This had a couple downsides:
-> 1. Extra checks were needed in mprotect() to prevent writable memory from
->    ever becoming PROT_SHADOW_STACK.
-> 2. Extra checks/vma state were needed in the new madvise() to prevent
->    restore tokens being written into the middle of pre-used shadow stacks.
->    It is ideal to prevent restore tokens being added at arbitrary
->    locations, so the check was to make sure the shadow stack had never been
->    written to.
-> 3. It stood out from the rest of the madvise flags, as more of direct
->    action than a hint at future desired behavior.
->
-> So rather than repurpose two existing syscalls (mmap, madvise) that don't
-> quite fit, just implement a new map_shadow_stack syscall to allow
-> userspace to map and setup new shadow stacks in one step. While ucontext
-> is the primary motivator, userspace may have other unforeseen reasons to
-> setup it's own shadow stacks using the WRSS instruction. Towards this
-> provide a flag so that stacks can be optionally setup securely for the
-> common case of ucontext without enabling WRSS. Or potentially have the
-> kernel set up the shadow stack in some new way.
->
-> The following example demonstrates how to create a new shadow stack with
-> map_shadow_stack:
-> void *shstk = map_shadow_stack(adrr, stack_size, SHADOW_STACK_SET_TOKEN);
+Is second interrupt really optional or you just wanted to silence the
+warning?
 
-Jason has recently been working on vDSO-based getrandom acceleration.
-It needs a way for a userspace thread to allocate userspace memory in a
-specific way.  Jason proposed to use a vDSO call as the interface, not a
-system call.
-
-Maybe this approach is applicable here as well?  Or we can come up with
-a more general interface for such per-thread allocations?
-
-Thanks,
-Florian
+Best regards,
+Krzysztof
 
