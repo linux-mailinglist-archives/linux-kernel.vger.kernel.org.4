@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01EC5F996F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:12:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1725F995C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231995AbiJJHMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
+        id S231915AbiJJHL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbiJJHLT (ORCPT
+        with ESMTP id S231861AbiJJHKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:11:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D9E5E575;
-        Mon, 10 Oct 2022 00:07:32 -0700 (PDT)
+        Mon, 10 Oct 2022 03:10:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0E25E561;
+        Mon, 10 Oct 2022 00:07:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF66DB80E5D;
-        Mon, 10 Oct 2022 07:07:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3367BC433C1;
-        Mon, 10 Oct 2022 07:07:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E24E360E8D;
+        Mon, 10 Oct 2022 07:06:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3481C433C1;
+        Mon, 10 Oct 2022 07:06:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665385644;
-        bh=ChhT3O4/jVJQsfuVPoIwoEQwBds6ECYEVClaA463q7w=;
+        s=korg; t=1665385597;
+        bh=xxDHkhWXn9LWoUKnTOuFYR63Zphxmul0hUMh47XisPY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ST1Y3aEv+5ZIjc5GbWz/sVllqqa3xZVpkYT25+1e/yXOs+fj+VcpHF9Qp1GQMGv2X
-         19KVXMV5HFShWewp3RsR6KpJt/6yWcNuVM5Ds2C6w8hyCzNjl0nBRtOFVhV7sHXFQe
-         O3iWyEhuLI9sa3QC/Yp3QjoxN7VNOiNERO1tioS8=
+        b=W8fhaA6jRT6jXhXu4s0jWe9JkJm12b/Xay8c5MxggkgRo3WmBTfV8h5LP1berUzQH
+         D5KeCZvBZHQALq7+oywxmIPRVcfoeoBJ+bRY4q3sH8dxnQW2qddX4Vb9QOCpOype2b
+         0sel6qyRCQBQXwaCSg5TI8YpxSORhSQVIu71qGxM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhang Qilong <zhangqilong3@huawei.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 37/48] i2c: davinci: fix PM disable depth imbalance in davinci_i2c_probe
-Date:   Mon, 10 Oct 2022 09:05:35 +0200
-Message-Id: <20221010070334.656210536@linuxfoundation.org>
+        stable@vger.kernel.org, "Dmitry Vyukov" <dvyukov@google.com>,
+        stable <stable@kernel.org>,
+        syzbot+23f57c5ae902429285d7@syzkaller.appspotmail.com,
+        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        PaX Team <pageexec@freemail.hu>
+Subject: [PATCH 5.19 38/48] usb: mon: make mmapped memory read only
+Date:   Mon, 10 Oct 2022 09:05:36 +0200
+Message-Id: <20221010070334.682322724@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221010070333.676316214@linuxfoundation.org>
 References: <20221010070333.676316214@linuxfoundation.org>
@@ -54,46 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Qilong <zhangqilong3@huawei.com>
+From: Tadeusz Struk <tadeusz.struk@linaro.org>
 
-[ Upstream commit e2062df704dea47efe16edcaa2316d7b5ecca64f ]
+commit a659daf63d16aa883be42f3f34ff84235c302198 upstream.
 
-The pm_runtime_enable will increase power disable depth. Thus a
-pairing decrement is needed on the error handling path to keep
-it balanced according to context.
+Syzbot found an issue in usbmon module, where the user space client can
+corrupt the monitor's internal memory, causing the usbmon module to
+crash the kernel with segfault, UAF, etc.
 
-Fixes: 17f88151ff190 ("i2c: davinci: Add PM Runtime Support")
-Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
-Reviewed-by: Bartosz Golaszewski <brgl@bgdev.pl>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The reproducer mmaps the /dev/usbmon memory to user space, and
+overwrites it with arbitrary data, which causes all kinds of issues.
+
+Return an -EPERM error from mon_bin_mmap() if the flag VM_WRTIE is set.
+Also clear VM_MAYWRITE to make it impossible to change it to writable
+later.
+
+Cc: "Dmitry Vyukov" <dvyukov@google.com>
+Cc: stable <stable@kernel.org>
+Fixes: 6f23ee1fefdc ("USB: add binary API to usbmon")
+Suggested-by: PaX Team <pageexec@freemail.hu>	# for the VM_MAYRITE portion
+Link: https://syzkaller.appspot.com/bug?id=2eb1f35d6525fa4a74d75b4244971e5b1411c95a
+Reported-by: syzbot+23f57c5ae902429285d7@syzkaller.appspotmail.com
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+Link: https://lore.kernel.org/r/20220919215957.205681-1-tadeusz.struk@linaro.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/i2c/busses/i2c-davinci.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/usb/mon/mon_bin.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-davinci.c b/drivers/i2c/busses/i2c-davinci.c
-index 9e09db31a937..5343c82c8594 100644
---- a/drivers/i2c/busses/i2c-davinci.c
-+++ b/drivers/i2c/busses/i2c-davinci.c
-@@ -823,7 +823,7 @@ static int davinci_i2c_probe(struct platform_device *pdev)
- 	r = pm_runtime_resume_and_get(dev->dev);
- 	if (r < 0) {
- 		dev_err(dev->dev, "failed to runtime_get device: %d\n", r);
--		return r;
-+		goto err_pm;
- 	}
- 
- 	i2c_davinci_init(dev);
-@@ -882,6 +882,7 @@ static int davinci_i2c_probe(struct platform_device *pdev)
- err_unuse_clocks:
- 	pm_runtime_dont_use_autosuspend(dev->dev);
- 	pm_runtime_put_sync(dev->dev);
-+err_pm:
- 	pm_runtime_disable(dev->dev);
- 
- 	return r;
--- 
-2.35.1
-
+--- a/drivers/usb/mon/mon_bin.c
++++ b/drivers/usb/mon/mon_bin.c
+@@ -1268,6 +1268,11 @@ static int mon_bin_mmap(struct file *fil
+ {
+ 	/* don't do anything here: "fault" will set up page table entries */
+ 	vma->vm_ops = &mon_bin_vm_ops;
++
++	if (vma->vm_flags & VM_WRITE)
++		return -EPERM;
++
++	vma->vm_flags &= ~VM_MAYWRITE;
+ 	vma->vm_flags |= VM_DONTEXPAND | VM_DONTDUMP;
+ 	vma->vm_private_data = filp->private_data;
+ 	mon_bin_vma_open(vma);
 
 
