@@ -2,92 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8985F96CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 04:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DFCF5F96D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 04:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbiJJC3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 22:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56028 "EHLO
+        id S230469AbiJJCa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 22:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbiJJC26 (ORCPT
+        with ESMTP id S230217AbiJJCa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 22:28:58 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985822BE3F
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 19:28:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=bW00+3CNMe4I7RwtZMffKEyycBp1VFQ01aFjOTkzmCc=; b=TFadtXSx5e8TK+GkPBm3cRbAP/
-        QO5L999z2KcZ6BXBlH1ztfy2uR/T/zWT0H4HSXGPnCK2gHQXJyqHWCNhj6Y7+rIdQKEudS1ul8/yk
-        vL3CMe0gXDHK7SvcjUEYc13a2/wGjmlDmUsL5F41knHs9mgtcrAd7eQe2v9q+EvFRVHbrK5Vx8Ofk
-        Xen52aKkZQt2SvkTCkQ2KLOxE6gPbEYJR5ahggCliramY9Q1dpDW0ViiR3hZoERz6FE8/WrTq6uK2
-        nvggi/siXcFTO7d3pRPoMDkEqb2eUMwxSg37MsDAJSY07rhOfUvY3+q1awyRkFSuECK25JuGEMFK7
-        LLbKTP2g==;
-Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ohiXG-003sr6-Gg; Mon, 10 Oct 2022 02:28:54 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Vineet Gupta <vgupta@kernel.org>,
-        linux-snps-arc@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v2] arc: iounmap() arg is volatile
-Date:   Sun,  9 Oct 2022 19:28:46 -0700
-Message-Id: <20221010022846.20101-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.37.3
+        Sun, 9 Oct 2022 22:30:57 -0400
+Received: from m1374.mail.163.com (m1374.mail.163.com [220.181.13.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D02B525EA9
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 19:30:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=2YhiT
+        nPIQ4MDIZ3nx9WHggkgfBvqFh2UA8aSL+N9Vew=; b=a0jGYpuoyaHCPrGDV1HrX
+        XOSK9y1T3ngLCUIhPFNeIDDTuQ1knhg3UgJlX0+KIlSMQiQ0YwJ4tmemlegUj9hh
+        S00OPEKOjJ2he2EWu3o/p2sD3ZOlpe8NxuXpGG+jOeSQTbWV4unjc1Q91qkv3luh
+        wu68sZ3GQL7GUtWvU6hscg=
+Received: from 13667453960$163.com ( [111.48.58.12] ) by
+ ajax-webmail-wmsvr74 (Coremail) ; Mon, 10 Oct 2022 10:30:36 +0800 (CST)
+X-Originating-IP: [111.48.58.12]
+Date:   Mon, 10 Oct 2022 10:30:36 +0800 (CST)
+From:   "Yi Jiangshan" <13667453960@163.com>
+To:     "Greg KH" <gregkh@linuxfoundation.org>
+Cc:     sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
+        linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        "Jiangshan Yi" <yijiangshan@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: Re:Re: [PATCH] staging: sm750fb: fix spelling typo in comment
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 163com
+In-Reply-To: <Y0MRcIyBtLlzjRzi@kroah.com>
+References: <20221009094809.3171319-1-13667453960@163.com>
+ <Y0MRcIyBtLlzjRzi@kroah.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <f427e25.1615.183bfbad6a1.Coremail.13667453960@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: SsGowACnLW_Mg0NjhYxMAA--.59363W
+X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbivguV+1Zce8Xw2gACsH
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add 'volatile' to iounmap()'s argument to prevent build warnings.
-This make it the same as other major architectures.
-
-Placates these warnings: (12 such warnings)
-
-../drivers/video/fbdev/riva/fbdev.c: In function 'rivafb_probe':
-../drivers/video/fbdev/riva/fbdev.c:2067:42: error: passing argument 1 of 'iounmap' discards 'volatile' qualifier from pointer target type [-Werror=discarded-qualifiers]
- 2067 |                 iounmap(default_par->riva.PRAMIN);
-
-Fixes: 1162b0701b14b ("ARC: I/O and DMA Mappings")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Vineet Gupta <vgupta@kernel.org>
-Cc: linux-snps-arc@lists.infradead.org
-Cc: Arnd Bergmann <arnd@arndb.de>
----
-v2: add Arnd to Cc: list
-
- arch/arc/include/asm/io.h |    2 +-
- arch/arc/mm/ioremap.c     |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
---- a/arch/arc/include/asm/io.h
-+++ b/arch/arc/include/asm/io.h
-@@ -32,7 +32,7 @@ static inline void ioport_unmap(void __i
- {
- }
- 
--extern void iounmap(const void __iomem *addr);
-+extern void iounmap(const volatile void __iomem *addr);
- 
- /*
-  * io{read,write}{16,32}be() macros
---- a/arch/arc/mm/ioremap.c
-+++ b/arch/arc/mm/ioremap.c
-@@ -94,7 +94,7 @@ void __iomem *ioremap_prot(phys_addr_t p
- EXPORT_SYMBOL(ioremap_prot);
- 
- 
--void iounmap(const void __iomem *addr)
-+void iounmap(const volatile void __iomem *addr)
- {
- 	/* weird double cast to handle phys_addr_t > 32 bits */
- 	if (arc_uncached_addr_space((phys_addr_t)(u32)addr))
+CkF0IDIwMjItMTAtMTAgMDI6MjI6NDAsICJHcmVnIEtIIiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlv
+bi5vcmc+IHdyb3RlOgo+T24gU3VuLCBPY3QgMDksIDIwMjIgYXQgMDU6NDg6MDlQTSArMDgwMCwg
+SmlhbmdzaGFuIFlpIHdyb3RlOgo+PiBGcm9tOiBKaWFuZ3NoYW4gWWkgPHlpamlhbmdzaGFuQGt5
+bGlub3MuY24+Cj4KPkFnYWluLCB3aHkgMTYzLmNvbT8KPgoKCgpUaGVyZSBpcyBhIHByb2JsZW0g
+d2l0aCB0aGUgY29tcGFueSdzIG1haWxib3gsIGFuZCBzb21ldGltZXMgSSBjYW4ndCByZWNlaXZl
+IGVtYWlscy4gU28gSSB0ZW1wb3JhcmlseSB1c2UgbXkgcGVyc29uYWwgZW1haWwgdG8gc2VuZCBw
+YXRjaGVzLCBzbyB0aGF0IEkgY2FuIHJlY2VpdmUgZmVlZGJhY2sgZnJvbSB0aGUgY29tbXVuaXR5
+IGluIGEgdGltZWx5IG1hbm5lci4KCgp0aGFua3OjrAoKCkppYW5nc2hhbiBZaQ==
