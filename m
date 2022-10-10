@@ -2,74 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0DF5FA22E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 18:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2E55FA234
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 18:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiJJQwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 12:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
+        id S229656AbiJJQxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 12:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbiJJQwS (ORCPT
+        with ESMTP id S229731AbiJJQxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 12:52:18 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420E04B49F;
-        Mon, 10 Oct 2022 09:52:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=1QxMbzayslkAE1FFMCUkmewOyzbrMACaLMR3Ux2vqSU=; b=MUwKN4rNxmFOwMVQ2P0LdFmQh0
-        CdCPVdGAJpee59Ei8wFHGD6UBuWKFMiZ2VrJnBPeURURDuPJVcobicUIztKWitAUJrmnzm+tIm9BS
-        NZzLWpO1Enqpdk7IDVTjZtB1Dx+pmXKYV5t1u08CMZTKrBGAyh5E6QJ4cF3GGLh08UfY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ohw0X-001dZw-IC; Mon, 10 Oct 2022 18:52:01 +0200
-Date:   Mon, 10 Oct 2022 18:52:01 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Soha Jin <soha@lohu.info>, Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: mdiobus: add fwnode_phy_is_fixed_link()
-Message-ID: <Y0RNsZUnV0GJqIlO@lunn.ch>
-References: <20221009162006.1289-1-soha@lohu.info>
- <Y0Q0P4MlTXmzkJSG@lunn.ch>
- <Y0RLm0qU8MwGt40d@shell.armlinux.org.uk>
+        Mon, 10 Oct 2022 12:53:11 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1994A4C61B;
+        Mon, 10 Oct 2022 09:53:09 -0700 (PDT)
+Received: from [192.168.1.138] ([37.4.248.18]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MWiUg-1ofi0u2rqS-00X4lf; Mon, 10 Oct 2022 18:52:40 +0200
+Message-ID: <dad7dc1b-c94a-4547-260f-5efe50d959e8@i2se.com>
+Date:   Mon, 10 Oct 2022 18:52:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0RLm0qU8MwGt40d@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 3/7] firmware: raspberrypi: Provide a helper to query a
+ clock max rate
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Stephen Boyd <sboyd@kernel.org>, Emma Anholt <emma@anholt.net>,
+        Ray Jui <rjui@broadcom.com>, Maxime Ripard <mripard@kernel.org>
+Cc:     linux-rpi-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dom Cobley <popcornmix@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220815-rpi-fix-4k-60-v2-0-983276b83f62@cerno.tech>
+ <20220815-rpi-fix-4k-60-v2-3-983276b83f62@cerno.tech>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <20220815-rpi-fix-4k-60-v2-3-983276b83f62@cerno.tech>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:xVuX/w3ngCM1Xs7bP8l36ga2yBUkRfiC5SZVOLDFVuhbEbaUOi8
+ Ht7lb7ZE0v89ORFIUFBR3EcZ9hByi6Wj9zTVx7WihMoqFLggY4vIEi3SRcUo5lzctKBWVDl
+ L8Gov+ZguoxDyaPpHg1BGnNdtyuV4Hhzy7JnX503K6i9Kqtpfv8Rh3VcY1VLf7i3vxUW7kD
+ FfUhE94nGdfGvl/vyyTZg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:5jfDTjv99BA=:IqmBkuyekdtld/M89dBtQF
+ Re7hifvYF4SBrKs+GlGnEcCgnpAL27uhTcZxU6FwVTA1Atb1kKb3c6KYguBswF3V+LHTMFIE8
+ iKC/Z25dkIn6jUSZcg+W8T5FLEat5RkJbiUpFM/YyWHDc1hG4ujgoLK9LuurOH7uiFdwIw2bw
+ HizfQ8BBCHTJlpBNxhLDv9igdI3GKH3En7g6MXgd0q0Dtb+xFFS8luEGgozvqQXgIa1Yxufpr
+ 3RV8WkouAR7J1uqEDaJrPGHPxFIsmvn3PYzaL0DZQr04PCKdFHq9nZWDWv+atNLguhDzPY4Ox
+ Q8/P4OhVfdSuAVD2dKtPVB+RHOK3PbeQX5PXUTnd5c8oZueCeG9AFZeblw/9S6xX0yecvr1Zn
+ NsfpxZTGks4bNSTtS49ngIgIVvCa8VBTVG7N/QRNNVmJof5lLPQoxzpPneg8zr+1cPql7B/Xe
+ 3pBjaefrK4IfV+omLR/Y5WM7u0AtLKTjsKPFcR5J/CtBQGnoQ1NOjIXdWLVrHZ2lhdCaSFUzD
+ a0eWFkkh5fsYlNdY3em51JWS0ZpllGLqZlFCiBHsonj53esckRkG/xtXWrSoCRPBJwrpYjO/Q
+ 6QW3BLaXZNvNd7eXY7+jMAOwxF+sh5qEJo8xdixvnvwki7jZqmXfTJASGhjVi7NrQg85mDKge
+ Dj7HStZnsIgmNFYivHIjF5zCbnNkwk2qoEO7AmJ5EuoAd7ti9p3t6TuFcwr8B4aupReULQszC
+ yp/oR6C1WX6AzW6Lco3hq4duehQwPdrVXCIntIJALv9JkZs3IfSXbeDD5mYKnC9z5eDzf4t9d
+ 0Z/ASLcbS5dnvytm4o+eTp6AuRPqw==
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 05:43:07PM +0100, Russell King (Oracle) wrote:
-> On Mon, Oct 10, 2022 at 05:03:27PM +0200, Andrew Lunn wrote:
-> > On Mon, Oct 10, 2022 at 12:20:06AM +0800, Soha Jin wrote:
-> > > A helper function to check if PHY is fixed link with fwnode properties.
-> > > This is similar to of_phy_is_fixed_link.
-> > 
-> > You need to include a user of this new function.
-> > 
-> > Also, not that ACPI only defines the 'new binding' for fixed-link.  If
-> > this is being called on a device which is ACPI underneath, it should
-> > only return true for the 'new binding', not the old binding.
-> 
-> Do we want to support the "managed" property in the fwnode variant,
-> or persuade people to switch to phylink if they want that?
+Hi Maxime,
 
-managed has been documented in
-Documentation/firmware-guide/acpi/dsd/phy.rst so i think we need to
-support it.
-
-	Andrew
+Am 20.09.22 um 14:50 schrieb Maxime Ripard:
+> The firmware allows to query for its clocks the operating range of a
+> given clock. We'll need this for some drivers (KMS, in particular) to
+> infer the state of some configuration options, so let's create a
+> function to do so.
+>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+>
+> diff --git a/drivers/firmware/raspberrypi.c b/drivers/firmware/raspberrypi.c
+> index b916e1e171f8..c4b9ea70f5a7 100644
+> --- a/drivers/firmware/raspberrypi.c
+> +++ b/drivers/firmware/raspberrypi.c
+> @@ -228,6 +228,21 @@ static void rpi_register_clk_driver(struct device *dev)
+>   						-1, NULL, 0);
+>   }
+>   
+> +unsigned int rpi_firmware_clk_get_max_rate(struct rpi_firmware *fw, unsigned int id)
+> +{
+> +	struct rpi_firmware_clk_rate_request msg =
+> +		RPI_FIRMWARE_CLK_RATE_REQUEST(id);
+> +	int ret;
+> +
+> +	ret = rpi_firmware_property(fw, RPI_FIRMWARE_GET_MAX_CLOCK_RATE,
+> +				    &msg, sizeof(msg));
+> +	if (ret)
+> +		return 0;
+> +
+> +	return le32_to_cpu(msg.rate);
+> +}
+> +EXPORT_SYMBOL_GPL(rpi_firmware_clk_get_max_rate);
+> +
+>   static void rpi_firmware_delete(struct kref *kref)
+>   {
+>   	struct rpi_firmware *fw = container_of(kref, struct rpi_firmware,
+> diff --git a/include/soc/bcm2835/raspberrypi-firmware.h b/include/soc/bcm2835/raspberrypi-firmware.h
+> index 74c7bcc1ac2a..10248c370229 100644
+> --- a/include/soc/bcm2835/raspberrypi-firmware.h
+> +++ b/include/soc/bcm2835/raspberrypi-firmware.h
+> @@ -154,12 +154,32 @@ enum rpi_firmware_clk_id {
+>   	RPI_FIRMWARE_NUM_CLK_ID,
+>   };
+>   
+> +/**
+> + * struct rpi_firmware_clk_rate_request - Firmware Request for a rate
+> + * @id:	ID of the clock being queried
+> + * @rate: Rate in Hertz. Set by the firmware.
+> + *
+> + * Used by @RPI_FIRMWARE_GET_CLOCK_RATE, @RPI_FIRMWARE_GET_CLOCK_MEASURED,
+> + * @RPI_FIRMWARE_GET_MAX_CLOCK_RATE and @RPI_FIRMWARE_GET_MIN_CLOCK_RATE.
+> + */
+> +struct rpi_firmware_clk_rate_request {
+> +	__le32 id;
+> +	__le32 rate;
+> +} __packed;
+> +
+> +#define RPI_FIRMWARE_CLK_RATE_REQUEST(_id)	\
+> +	{					\
+> +		.id = _id,			\
+> +	}
+> +
+>   #if IS_ENABLED(CONFIG_RASPBERRYPI_FIRMWARE)
+>   int rpi_firmware_property(struct rpi_firmware *fw,
+>   			  u32 tag, void *data, size_t len);
+>   int rpi_firmware_property_list(struct rpi_firmware *fw,
+>   			       void *data, size_t tag_size);
+>   void rpi_firmware_put(struct rpi_firmware *fw);
+> +unsigned int rpi_firmware_clk_get_max_rate(struct rpi_firmware *fw,
+> +					   unsigned int id);
+>   struct device_node *rpi_firmware_find_node(void);
+>   struct rpi_firmware *rpi_firmware_get(struct device_node *firmware_node);
+>   struct rpi_firmware *devm_rpi_firmware_get(struct device *dev,
+> @@ -179,6 +199,12 @@ static inline int rpi_firmware_property_list(struct rpi_firmware *fw,
+>   
+>   static inline void rpi_firmware_put(struct rpi_firmware *fw) { }
+>   
+> +static inline unsigned int rpi_firmware_clk_get_max_rate(struct rpi_firmware *fw,
+> +							 unsigned int id)
+> +{
+> +	return UINT_MAX;
+In case the driver is disabled the function return UINT_MAX, but in case 
+the firmware doesn't support RPI_FIRMWARE_GET_MAX_CLOCK_RATE it returns 
+0. This looks a little bit inconsistent to me.
+> +}
+> +
+>   static inline struct device_node *rpi_firmware_find_node(void)
+>   {
+>   	return NULL;
+>
