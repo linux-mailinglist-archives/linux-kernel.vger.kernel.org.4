@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 702E35F9FF5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 769C75F9FF7
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbiJJOMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 10:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
+        id S229910AbiJJOM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 10:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiJJOMv (ORCPT
+        with ESMTP id S229779AbiJJOMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 10:12:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7618DBE11;
-        Mon, 10 Oct 2022 07:12:50 -0700 (PDT)
+        Mon, 10 Oct 2022 10:12:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3BCBE11;
+        Mon, 10 Oct 2022 07:12:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 379F3B80E4F;
-        Mon, 10 Oct 2022 14:12:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46D18C433C1;
-        Mon, 10 Oct 2022 14:12:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0746860F67;
+        Mon, 10 Oct 2022 14:12:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77F16C433D7;
+        Mon, 10 Oct 2022 14:12:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665411168;
-        bh=j7Wfnake3CJ3homudSZKv7HyVaELWmzOCCH9FfeINig=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=jhlZB+rpP0P2vdZqSbtV86fLC5gKgh6jeqFWgV6mxdBfzh9VvS3SepdYYQl9nqgIt
-         SVYSBI/km42cAt2WMzGEp1aExOLcacMJZRY2aR6NXHwCgXtpCcQOawvF01Wk28PdM1
-         7ido+ZWuj4RUoH5QqaYjUzLzUfMq9/lQ3227vtiXyv5+a7hxIQNAQmgcJCCEmBlyeM
-         WVr+zlo64af9vingfC2oNBUzA0wpnj02y5c/D8okCBmAljpiscwWPWmdxzeV09YQqr
-         v8ijD7RDMaK4EIx7LKIM9zJOfAg7b9EpgbsrWnw6HAqo6qvA+bvXSldzYG/nksAb8e
-         ZfNZ0JmeWnjLw==
+        s=k20201202; t=1665411170;
+        bh=i+nTuecqo88xOxtIonJejeCxD46J/wAXbJ3XX3wP5tw=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=rS+ol3nlPgDNrGzZR/PNfnMdXZvGHsaHmgOA1Gz93bGvDnK2IhTxXPVHnLnqDMUE9
+         o3/AC4GtBt9o1NJGSx4URHMVdqxp45kb0Ts2HUSv6v9J2UC5ZH/BTwnx3jJ8hjjAOG
+         +7lITAlCddVy7QUyGqcJ62avRFPaI2Ou3ftEyKoCUBWarFM3c4+Bo1U5lxkUzDYVRQ
+         2Hd05bSUnsor230vY1GU7p/eMlUiVRbLpT2+ftdoKumEnRv+u3jBcOq25Djgd7iVCj
+         yDkZhLDnD4XDs8gdt65kMgMkSH9cP9HkzwBdz1mLpXGITPL1rGoVOjFudiqGbUvsJK
+         YfK5xEFuNf1rg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <f41e09d710879726eacb98daedf16d0847303b9b.1665034444.git.christophe.leroy@csgroup.eu>
-References: <f41e09d710879726eacb98daedf16d0847303b9b.1665034444.git.christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH] spi: mpc52xx: Replace NO_IRQ by 0
-Message-Id: <166541116698.121778.4088773863978498893.b4-ty@kernel.org>
-Date:   Mon, 10 Oct 2022 15:12:46 +0100
+To:     linux-spi@vger.kernel.org, clg@kaod.org, joel@jms.id.au,
+        steven_lee@aspeedtech.com, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, andrew@aj.id.au,
+        linux-kernel@vger.kernel.org, BMC-SW@aspeedtech.com,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+In-Reply-To: <20221005083209.222272-1-chin-ting_kuo@aspeedtech.com>
+References: <20221005083209.222272-1-chin-ting_kuo@aspeedtech.com>
+Subject: Re: [v2] spi: aspeed: Fix typo in mode_bits field for AST2600 platform
+Message-Id: <166541116820.121778.9566592036880610465.b4-ty@kernel.org>
+Date:   Mon, 10 Oct 2022 15:12:48 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -53,16 +56,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Oct 2022 07:35:12 +0200, Christophe Leroy wrote:
-> NO_IRQ is used to check the return of irq_of_parse_and_map().
+On Wed, 5 Oct 2022 16:32:09 +0800, Chin-Ting Kuo wrote:
+> Both quad SPI TX and RX modes can be supported on AST2600.
+> Correct typo in mode_bits field in both ast2600_fmc_data
+> and ast2600_spi_data structs.
 > 
-> On some architecture NO_IRQ is 0, on other architectures it is -1.
 > 
-> irq_of_parse_and_map() returns 0 on error, independent of NO_IRQ.
-> 
-> So use 0 instead of using NO_IRQ.
-> 
-> [...]
 
 Applied to
 
@@ -70,8 +69,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: mpc52xx: Replace NO_IRQ by 0
-      commit: b25fe93ff705cdd8e98ad8d0435c621ea5462c82
+[1/1] spi: aspeed: Fix typo in mode_bits field for AST2600 platform
+      commit: 5302e1ff315b40dfc9bb3f08911f5a788cc1de01
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
