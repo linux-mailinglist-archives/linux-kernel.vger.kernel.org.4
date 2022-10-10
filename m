@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D13DA5F9D06
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 12:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7DC5F9D08
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 12:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbiJJKqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 06:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
+        id S231278AbiJJKqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 06:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbiJJKq1 (ORCPT
+        with ESMTP id S231218AbiJJKqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 06:46:27 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573985C9F1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 03:46:26 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MmFpc6h1yzVhsM;
-        Mon, 10 Oct 2022 18:42:00 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 10 Oct 2022 18:46:24 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 10 Oct 2022 18:46:24 +0800
-Subject: Re: [PATCH v2 2/2] ARM: Make the dumped instructions are consistent
- with the disassembled ones
-To:     Ard Biesheuvel <ardb@kernel.org>
-CC:     Russell King <linux@armlinux.org.uk>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221010095346.1957-1-thunder.leizhen@huawei.com>
- <20221010095346.1957-3-thunder.leizhen@huawei.com>
- <CAMj1kXFHGPpoSvt3J2XN4tAf2QZ--Lp8KpsuyufSjx+HuRfz0A@mail.gmail.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <08054412-06de-3c3e-48b8-1a7eb327a2d0@huawei.com>
-Date:   Mon, 10 Oct 2022 18:46:12 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Mon, 10 Oct 2022 06:46:34 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1C1D67C95;
+        Mon, 10 Oct 2022 03:46:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E548E1480;
+        Mon, 10 Oct 2022 03:46:38 -0700 (PDT)
+Received: from [10.57.5.39] (unknown [10.57.5.39])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 50A333F792;
+        Mon, 10 Oct 2022 03:46:31 -0700 (PDT)
+Message-ID: <7ded9241-6c21-6631-8910-9f1150db6724@arm.com>
+Date:   Mon, 10 Oct 2022 11:46:29 +0100
 MIME-Version: 1.0
-In-Reply-To: <CAMj1kXFHGPpoSvt3J2XN4tAf2QZ--Lp8KpsuyufSjx+HuRfz0A@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/2] cpufreq: Update CPU capacity reduction in
+ store_scaling_max_freq()
 Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-kernel@vger.kernel.org, rafael@kernel.org,
+        linux-pm@vger.kernel.org, Dietmar.Eggemann@arm.com,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
+References: <20220930094821.31665-1-lukasz.luba@arm.com>
+ <20220930094821.31665-2-lukasz.luba@arm.com>
+ <20221010053902.5rofnpzvyynumw3e@vireshk-i7>
+ <3f9a4123-171b-5fa7-f506-341355f71483@arm.com>
+ <CAKfTPtBPqcTm5_-M_Ka3y46yQ2322TmH8KS-QyDbAiKk5B6hEQ@mail.gmail.com>
+ <8a7968c2-dbf7-5316-ef36-6d45143e0605@arm.com>
+ <CAKfTPtB3Lk5bc9k634O+Yi8wwP=MVeKS5NPbpaqwhX1F4t5EbA@mail.gmail.com>
+ <9611971c-d8dd-7877-6f50-c5afbf38b171@arm.com>
+ <Y0Py/Ol9t+LMM1pI@hirez.programming.kicks-ass.net>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <Y0Py/Ol9t+LMM1pI@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,90 +58,32 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
++CC Daniel, since I have mentioned a few times DTPM
 
-On 2022/10/10 18:10, Ard Biesheuvel wrote:
-> On Mon, 10 Oct 2022 at 11:56, Zhen Lei <thunder.leizhen@huawei.com> wrote:
->>
->> In ARM, the mapping of instruction memory is always little-endian, except
->> some BE-32 supported ARM architectures. Such as ARMv7-R, its instruction
->> endianness may be BE-32. Of course, its data endianness will also be BE-32
->> mode. Due to two negatives make a positive, the instruction stored in the
->> register after reading is in little-endian format. But for the case of
->> BE-8, the instruction endianness is LE, the instruction stored in the
->> register after reading is in big-endian format, which is inconsistent
->> with the disassembled one.
->>
->> For example:
->> The content of disassembly:
->> c0429ee8:       e3500000        cmp     r0, #0
->> c0429eec:       159f2044        ldrne   r2, [pc, #68]
->> c0429ef0:       108f2002        addne   r2, pc, r2
->> c0429ef4:       1882000a        stmne   r2, {r1, r3}
->> c0429ef8:       e7f000f0        udf     #0
->>
->> The output of undefined instruction exception:
->> Internal error: Oops - undefined instruction: 0 [#1] SMP ARM
->> ... ...
->> Code: 000050e3 44209f15 02208f10 0a008218 (f000f0e7)
->>
->> This inconveniences the checking of instructions. What's worse is that,
->> for somebody who don't know about this, might think the instructions are
->> all broken.
->>
->> So, when CONFIG_CPU_ENDIAN_BE8=y, let's convert the instructions to
->> little-endian format before they are printed. The conversion result is
->> as follows:
->> Code: e3500000 159f2044 108f2002 1882000a (e7f000f0)
->>
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->> ---
->>  arch/arm/kernel/traps.c | 7 +++++++
->>  1 file changed, 7 insertions(+)
->>
->> diff --git a/arch/arm/kernel/traps.c b/arch/arm/kernel/traps.c
->> index 34aa80c09c508c1..50b00c9091f079d 100644
->> --- a/arch/arm/kernel/traps.c
->> +++ b/arch/arm/kernel/traps.c
->> @@ -193,6 +193,13 @@ static void dump_instr(const char *lvl, struct pt_regs *regs)
->>                                 bad = get_user(val, &((u32 __user *)addr)[i]);
->>                 }
->>
->> +               if (IS_ENABLED(CONFIG_CPU_ENDIAN_BE8)) {
->> +                       if (thumb)
->> +                               val = (__force unsigned int)cpu_to_le16(val);
+On 10/10/22 11:25, Peter Zijlstra wrote:
+> On Mon, Oct 10, 2022 at 11:12:06AM +0100, Lukasz Luba wrote:
+>> BTW, those Android user space max freq requests are not that long,
+>> mostly due to camera capturing (you can see a few in this file,
+>> e.g. [1]).
 > 
-> Better use swab16() here instead of the ugly __force cast, given that
-> the swab is going to occur unconditionally here.
+> It does what now ?!? Why is Android using this *at*all* ?
 
-Good idea.
+It tries to balance the power budget, before bad things happen
+randomly (throttling different devices w/o a good context what's
+going on). Please keep in mind that we have ~3 Watts total power
+budget in a phone, while several devices might be suddenly used:
+1. big CPU with max power ~3-3.5 Watts (and we have 2 cores on pixel6)
+2. GPU with max power ~6Watts (normally ~1-2Watts when lightly used)
+3. ISP (Image Signal Processor) up to ~2Watts
+4. DSP also up to 1-2Watts
 
-> 
-> 
->> +                       else
->> +                               val = (__force unsigned int)cpu_to_le32(val);
-> 
-> and swab32() here
+We don't have currently a good mechanism which could be aware
+of the total power/thermal budget and relations between those
+devices. Vendors and OEMs run experiments on devices and profile
+them to work more predictable in those 'important to users' scenarios.
 
-OK
-
-> 
-> 
->> +               }
->> +
->>                 if (!bad)
->>                         p += sprintf(p, i == 0 ? "(%0*x) " : "%0*x ",
->>                                         width, val);
->> --
->> 2.25.1
->>
->>
->> _______________________________________________
->> linux-arm-kernel mailing list
->> linux-arm-kernel@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> .
-> 
-
--- 
-Regards,
-  Zhen Lei
+AFAIK Daniel Lescano is trying to help with this new interface
+for PowerCap: DTMP. It might be use as a new interface for those known
+scenarios like the camera snapshot. But that interface is on the list
+that I have also mentioned - it's missing the notification mechanism
+for the scheduler reduced capacity due to user-space new scenario.
