@@ -2,69 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738B95F9FB0
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2835F9FBC
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbiJJNzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 09:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37300 "EHLO
+        id S229675AbiJJN75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 09:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiJJNzk (ORCPT
+        with ESMTP id S229452AbiJJN7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 09:55:40 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CD61705D;
-        Mon, 10 Oct 2022 06:55:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665410139; x=1696946139;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=63AqhZ1NN7VkSoHrngZpGWaoS9MDx7lPInsGe5LmJzg=;
-  b=iQiVJtUI/HK0HyaqtnyzqGKb75+85SW2WZ0EgU+1tcKbF9yDe+CiORBQ
-   m60DqF9fzRNSxw1KcbW0N1eXTIdbh8amyVHt5LrI4BijFtA6WPBAmc9Mq
-   93wnCAAfX/M+m5OqjK4p1Pt8yA3WcRK/M4n0zm18JNfMeAD7D9HSTN9Gm
-   s5SgSnoTM7too7Np7x0/qXWABylMmz7vNvDoGCyHJMmNao0o+Zy9LtJ2w
-   Q5wW7MQEQRVeFDMROpSWLzT6ZBnngrj0MBaTThGYzIxrVvWTWSCM6pDSW
-   5UPW1zfQXxj8zGda/VNwte4mGxVVbAK8H2ln3k+pfVxMjs7j0aMlvHpxV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="366194028"
-X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="366194028"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 06:55:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="871107137"
-X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="871107137"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga006.fm.intel.com with ESMTP; 10 Oct 2022 06:55:36 -0700
-Message-ID: <a4849cea-c49f-06a1-4dc2-d619f106bbc9@intel.com>
-Date:   Mon, 10 Oct 2022 16:57:03 +0300
+        Mon, 10 Oct 2022 09:59:54 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1730B7FA;
+        Mon, 10 Oct 2022 06:59:52 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id b2so25103609eja.6;
+        Mon, 10 Oct 2022 06:59:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HclpZajJBvcaS2petPU7S046g6kuIpoJyWAhtDsfxkg=;
+        b=o+W0oJzdg3tdjkFqY3rNUegk/H0RCDYkUXSGmwQnVq1oZgMlycZvBnSKslU0qOZwG/
+         je/7wbDkb5d/Jm/5dSqVOggi1f+yS5EA+lK6Y2VaylnqPqHXMcXQ2/h0Gu62QsXYMf4c
+         UqJ/OlKBPlA8gO+XvtQp2lgqDgITxmUfQkwgl8TQwp45T2rGuBbjKNfiNWJc8Kfo4xIY
+         xpIOiViPkGOF6ltRlDkULsseOPIGWp7NV+5XOrp8AzDyr/4T97i2oc+LpwCDzXrmo2H1
+         wrQIpvELdphczlfAKX7sba8wCUupaLezZEOYsaG6RQJaDs2bAk46KVA06yY1tlsTgLLn
+         F3xA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HclpZajJBvcaS2petPU7S046g6kuIpoJyWAhtDsfxkg=;
+        b=OftRGRnJdYWPvL/smioFP82qMmW+ggkAq36n8dwFGljzeTdmZz4nRy1hhdiTSMuIlT
+         jUvwV6JHVNYbrfGwR6uufg0s0f7AmUGBDfDe3XZQruakZ7jYEf8v5m+rOj9SPS6Wbseq
+         KqjBzmYLeppV/DLMYDrX5CkVj2tmC3AmJzJflELvEJrrKREFwKeRgc2kcMUnLLBTbQ4j
+         9gZVk7MMhOIvKfjvA0LsG5/NsfPeXZG1z311TjaxtKtjCWiCcrMoeeEkdvFccmQUurup
+         etO4+k/wogcuta2L41qD0HXnjX7RqK9yqFiROfPPi5rVsBGiETbTo8IdhxahRKixNuEI
+         +liw==
+X-Gm-Message-State: ACrzQf1XMkb+9AeShnOCIzH2g91euU2FphY7fTUW9I6XOAFuDgT6pRu+
+        2TvuPM9+ncezlm+fRpZP3CRUmDDuHtBPBHdC1GE=
+X-Google-Smtp-Source: AMsMyM7l6207dNZz3cbDzgOZFUJRiPyebJVrntD5gCwALxo4FD4Ef3DIyil0j9CUgUB1BV1Kgeuvm0u2ahfSvCFf9Co=
+X-Received: by 2002:a17:907:2d06:b0:78d:50db:130e with SMTP id
+ gs6-20020a1709072d0600b0078d50db130emr13767461ejc.371.1665410391144; Mon, 10
+ Oct 2022 06:59:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/2] xhci-pci: Set runtime PM as default policy on all
- xHC 1.2 or later devices
-Content-Language: en-US
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     "Mehta, Sanju" <Sanju.Mehta@amd.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221006211529.1858-1-mario.limonciello@amd.com>
- <20221006211529.1858-2-mario.limonciello@amd.com>
- <Yz/3eeVjx8v6/MJe@black.fi.intel.com>
- <MN0PR12MB61013B3B55D21A49C2450B1AE25F9@MN0PR12MB6101.namprd12.prod.outlook.com>
-From:   Mathias Nyman <mathias.nyman@intel.com>
-In-Reply-To: <MN0PR12MB61013B3B55D21A49C2450B1AE25F9@MN0PR12MB6101.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+From:   Wei Chen <harperchen1110@gmail.com>
+Date:   Mon, 10 Oct 2022 21:59:15 +0800
+Message-ID: <CAO4mrfeU0kTbu2FMJ0DSt_XaQj9yEd1w0eNCdAxkK3JnvqgqAA@mail.gmail.com>
+Subject: BUG: unable to handle kernel NULL pointer dereference in start_motor
+To:     axboe@kernel.dk, linux-block@vger.kernel.org
+Cc:     efremov@linux.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,48 +63,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7.10.2022 19.42, Limonciello, Mario wrote:
-> [Public]
-> 
-> 
-> 
->> -----Original Message-----
->> From: Mika Westerberg <mika.westerberg@linux.intel.com>
->> Sent: Friday, October 7, 2022 04:55
->> To: Limonciello, Mario <Mario.Limonciello@amd.com>
->> Cc: Mathias Nyman <mathias.nyman@intel.com>; Mehta, Sanju
->> <Sanju.Mehta@amd.com>; Mathias Nyman
->> <mathias.nyman@linux.intel.com>; Greg Kroah-Hartman
->> <gregkh@linuxfoundation.org>; linux-usb@vger.kernel.org; linux-
->> kernel@vger.kernel.org
->> Subject: Re: [PATCH v2 1/2] xhci-pci: Set runtime PM as default policy on all
->> xHC 1.2 or later devices
->>
->> On Thu, Oct 06, 2022 at 04:15:28PM -0500, Mario Limonciello wrote:
->>> -	if (pdev->vendor == PCI_VENDOR_ID_AMD &&
->>> -	    (pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_1 ||
->>> -	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_2 ||
->>> -	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_3 ||
->>> -	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_4 ||
->>> -	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_5 ||
->>> -	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_6 ||
->>> -	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_7 ||
->>> -	    pdev->device == PCI_DEVICE_ID_AMD_YELLOW_CARP_XHCI_8))
->>
->> Can you add a comment here explaining why this is OK? I think it is
->> easier that way to find out why this is here in the future instead of
->> going through the git blame history.
-> 
-> Sure, no problem.
-> 
-> I'll hold off sending a v3 though until you and Mathias can double check
-> everything in patch 2/2 is OK to take out and agree with that secondary logic
-> change.
-> 
->>
->>> +	if (xhci->hci_version >= 0x102)
+Dear Linux Developer,
 
-Shouldn't this be ">= 0x120"
+Recently when using our tool to fuzz kernel, the following crash was triggered:
 
-Thanks
-Mathias
+HEAD commit: 64570fbc14f8 Linux 5.15-rc5
+git tree: upstream
+compiler: clang 12.0.0
+console output:
+https://drive.google.com/file/d/1uCdjFTp2Xv6bJKVrjgr7-TyTZaM3Veb5/view?usp=sharing
+kernel config: https://drive.google.com/file/d/1lNwvovjLNrcuyFGrg05IoSmgO5jaKBBJ/view?usp=sharing
+
+Unfortunately, I don't have any reproducer for this crash yet.
+
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 10cc9b067 P4D 10cc9b067 PUD 10cc9c067 PMD 0
+Oops: 0000 [#1] PREEMPT SMP
+CPU: 0 PID: 6765 Comm: kworker/u4:2 Not tainted 5.15.0-rc5 #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
+Workqueue: floppy fd_timer_workfn
+RIP: 0010:start_motor+0x4d/0x200 drivers/block/floppy.c:1905
+Code: 0f b6 1d 76 8b 3d 06 4b 8d 04 a4 44 0f b6 3c c5 2d 8e 98 88 89
+d9 48 8b 05 d8 9d 3d 06 83 e1 03 41 d3 e6 44 0f b6 e9 45 21 f7 <f6> 00
+04 0f 85 fb 00 00 00 e8 35 14 db fe 49 83 fc 01 0f 87 24 01
+RSP: 0018:ffffc90002253dd0 EFLAGS: 00010202
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88810b2e0000 RSI: ffffffff825b026c RDI: ffffffff825b6710
+RBP: ffffffff825b6710 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffc90002253e70 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000010 R15: 0000000000000010
+FS:  0000000000000000(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 000000010cc9a000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ floppy_ready+0x4c/0xc60 drivers/block/floppy.c:1932
+ process_one_work+0x34e/0x810 kernel/workqueue.c:2297
+ worker_thread+0x42/0x4c0 kernel/workqueue.c:2444
+ kthread+0x178/0x1b0 kernel/kthread.c:319
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+Modules linked in:
+Dumping ftrace buffer:
+   (ftrace buffer empty)
+CR2: 0000000000000000
+---[ end trace 5df88fd80b74c734 ]---
+RIP: 0010:start_motor+0x4d/0x200 drivers/block/floppy.c:1905
+Code: 0f b6 1d 76 8b 3d 06 4b 8d 04 a4 44 0f b6 3c c5 2d 8e 98 88 89
+d9 48 8b 05 d8 9d 3d 06 83 e1 03 41 d3 e6 44 0f b6 e9 45 21 f7 <f6> 00
+04 0f 85 fb 00 00 00 e8 35 14 db fe 49 83 fc 01 0f 87 24 01
+RSP: 0018:ffffc90002253dd0 EFLAGS: 00010202
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88810b2e0000 RSI: ffffffff825b026c RDI: ffffffff825b6710
+RBP: ffffffff825b6710 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffc90002253e70 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000010 R15: 0000000000000010
+FS:  0000000000000000(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 000000010cc9a000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0: 0f b6 1d 76 8b 3d 06 movzbl 0x63d8b76(%rip),%ebx        # 0x63d8b7d
+   7: 4b 8d 04 a4          lea    (%r12,%r12,4),%rax
+   b: 44 0f b6 3c c5 2d 8e movzbl -0x776771d3(,%rax,8),%r15d
+  12: 98 88
+  14: 89 d9                mov    %ebx,%ecx
+  16: 48 8b 05 d8 9d 3d 06 mov    0x63d9dd8(%rip),%rax        # 0x63d9df5
+  1d: 83 e1 03              and    $0x3,%ecx
+  20: 41 d3 e6              shl    %cl,%r14d
+  23: 44 0f b6 e9          movzbl %cl,%r13d
+  27: 45 21 f7              and    %r14d,%r15d
+* 2a: f6 00 04              testb  $0x4,(%rax) <-- trapping instruction
+  2d: 0f 85 fb 00 00 00    jne    0x12e
+  33: e8 35 14 db fe        callq  0xfedb146d
+  38: 49 83 fc 01          cmp    $0x1,%r12
+  3c: 0f                    .byte 0xf
+  3d: 87 24 01              xchg   %esp,(%rcx,%rax,1)
+
+Best,
+Wei
