@@ -1,116 +1,113 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 036695F9820
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 08:13:32 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 686E95F9822
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 08:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231604AbiJJGM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 02:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
+        id S231610AbiJJGNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 02:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbiJJGMz (ORCPT
+        with ESMTP id S231218AbiJJGNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 02:12:55 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4504598D;
-        Sun,  9 Oct 2022 23:12:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665382374; x=1696918374;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=H643CzjwglCD2im/BP3mUFP7xikWejGDiUrJCN9KSGM=;
-  b=UICwrgI9KMC7XsFLPs4rv4XatylgUPvcfJsIHpiEOYNaVdo+2V9BUodl
-   yVDVPPJiAPXKUPwdb8S0csl4bc5Er+prujU1jBSN9D04VUVeAjBiMncrs
-   JeacW6olu+40/yTZyr4a/YZAR0b0f5ruFt4a1fraLHqQLc8Zas73qAvQa
-   H6cfQ34DhqPPBA5ifGIdadsHzUa3OOJurboeMjVgJA3Q4UebJhVZfAZ6N
-   r2jOqR7orWzG01orb4TjF+Rhr5bEI7CSU6tYKHfRWUXWnyQ+yb/F2QW56
-   6z0uY/A5I07dknwzm8s7UzS0K80BBst/mobxVMmdd2s3JLhDxAQF8CMrH
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10495"; a="301760176"
-X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="301760176"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2022 23:12:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10495"; a="800971680"
-X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="800971680"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 09 Oct 2022 23:12:51 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ohm1x-004kBY-1y;
-        Mon, 10 Oct 2022 09:12:49 +0300
-Date:   Mon, 10 Oct 2022 09:12:49 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jagath Jog J <jagathjog1996@gmail.com>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 1/5] regulator: Add devm helpers for get and enable
-Message-ID: <Y0O34dRPc0ri74b3@smile.fi.intel.com>
-References: <cover.1665066397.git.mazziesaccount@gmail.com>
- <fa667d6870976a2cf2d60f06e262982872349d74.1665066397.git.mazziesaccount@gmail.com>
- <Yz7/o1q7p8NmGKMe@smile.fi.intel.com>
- <c25ce92b-ea93-1bd8-11ba-4812b040724d@gmail.com>
+        Mon, 10 Oct 2022 02:13:49 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4046A459AC;
+        Sun,  9 Oct 2022 23:13:48 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id l4so9501308plb.8;
+        Sun, 09 Oct 2022 23:13:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IhWqAlOQ1Ib05UjQgojKX40zCXEZnCLvPLBoyVNageI=;
+        b=kjigfCI8ygwI9K6sw4UUlfNvfYY380KEUPPG9SO+NUjOpAHhFuN3H1UBb/3gSboykG
+         MENs8yd8Gj1j32oJnBYQ+g+XPTR32dbqLIkMtwBbrQMltuVKqxpCNV7zutL9qnY7MQqc
+         TjvjLYET57TNYCp1C57hh3pXVVH+XBEkrPgkIvJmuxkvMMvRr+Grx8EJf012c0Chln/v
+         M3Kam4mOpTAc40MwAVaXMnO6BSWtUrkkU9J4QQGD6zmCFdryu29UN0v4N81+ABXDI5ln
+         w68WMxk6aQtvtFBHnCspCcKStV6NR3ya5/nOb+U3dkVmEz46glP7hy7m2+WvISe67FoT
+         VXSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IhWqAlOQ1Ib05UjQgojKX40zCXEZnCLvPLBoyVNageI=;
+        b=uU+1hXjMz09I0fP+xpPWUhozWlH6b5seehq2uUPPiHmxvkx1NtGqxJgLkeTdahxZFx
+         TD7snt+sC1XJWYVHL+QSUsJWrc63mNAL5ANGX65dYO2vrshV5kWiLvYOfT5U1ij23Ixw
+         l4aIek8B/4tMTx1ffWI2aPM1dlrOj+7fPafDh1ThwKLdMcKxXCubVW57ylTuGIShU3x1
+         YMK5+wLjAo6UWw8qR6O2rf9Fekq/HrG3WAENYFawrbr/C2z5EJIsf1fWUZ1EBjZXueYN
+         XSiZtPr2DNnWzHx3uCAiYYxFftcbaCaB2Q2uiAevTk/ncW8tilonP8Nc4N7Lq0PYkm/y
+         8jEw==
+X-Gm-Message-State: ACrzQf2MobRv8hzCqGsJSrnrLbhkJu85KAHtqBYYvoKjLUpehTdQUhod
+        q42XvcGh+mRD6M22PPNL1NM=
+X-Google-Smtp-Source: AMsMyM6mN9mpz9/C+uvfagQWUa9LTCCuanPyMBADfesmZvTjgzvlQpzQ8YHyDYUtCSYE0/bfGg9duw==
+X-Received: by 2002:a17:90b:38c5:b0:20d:2938:8123 with SMTP id nn5-20020a17090b38c500b0020d29388123mr8024780pjb.59.1665382427633;
+        Sun, 09 Oct 2022 23:13:47 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:1bd8:541a:735e:92d5])
+        by smtp.gmail.com with ESMTPSA id o10-20020a170902d4ca00b001709b9d292esm5712579plg.268.2022.10.09.23.13.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Oct 2022 23:13:46 -0700 (PDT)
+Date:   Sun, 9 Oct 2022 23:13:44 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v1 1/1] pinctrl: st: Avoid using of_node member of struct
+ gpio_chip
+Message-ID: <Y0O4GNR28kSOR1Iu@google.com>
+References: <20221004125449.67679-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c25ce92b-ea93-1bd8-11ba-4812b040724d@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221004125449.67679-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 07:13:23AM +0300, Matti Vaittinen wrote:
-> On 10/6/22 19:17, Andy Shevchenko wrote:
-> > On Thu, Oct 06, 2022 at 05:36:52PM +0300, Matti Vaittinen wrote:
-> > > A few regulator consumer drivers seem to be just getting a regulator,
-> > > enabling it and registering a devm-action to disable the regulator at
-> > > the driver detach and then forget about it.
-> > > 
-> > > We can simplify this a bit by adding a devm-helper for this pattern.
-> > > Add devm_regulator_get_enable() and devm_regulator_get_enable_optional()
+Hi Andy,
 
-...
-
-> > > (cherry picked from commit b6058e052b842a19c8bb639798d8692cd0e7589f)
-> > 
-> > Not sure:
-> >   - why this is in the commit message
-> >   - what it points to, since
-> > $ git show b6058e052b842a19c8bb639798d8692cd0e7589f
-> >   fatal: bad object b6058e052b842a19c8bb639798d8692cd0e7589f
-> > 
-> > > Already in Mark's regulator tree. Not to be merged. Included just for
-> > > the sake of the completeness. Will be dropped when series is rebased on
-> > > top of the 6.1-rc1
-> > 
-> > Ah, I see, but does it mean the commit has been rebased or you used wrong SHA?
+On Tue, Oct 04, 2022 at 03:54:49PM +0300, Andy Shevchenko wrote:
+> The of_node member of the struct gpio_chip is obsoleted and
+> shouldn't be used. It will be removed in the future.
 > 
-> I did probably cherry-pick this from my local development branch and not
-> from Mark's tree. Sorry for the confusion. I thought people would ignore
-> these first two patches when reviewing as was requested in cover-letter.
+> Replace its use in st_pctl_dt_calculate_pin() by comparing
+> the fwnode pointers.
+> 
+> Fixes: e75729b2f63f ("pinctrl: st: stop abusing of_get_named_gpio()")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/pinctrl/pinctrl-st.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pinctrl/pinctrl-st.c b/drivers/pinctrl/pinctrl-st.c
+> index cf7f9cbe6044..ac24d07338a4 100644
+> --- a/drivers/pinctrl/pinctrl-st.c
+> +++ b/drivers/pinctrl/pinctrl-st.c
+> @@ -1175,7 +1175,7 @@ static int st_pctl_dt_calculate_pin(struct st_pinctrl *info,
+>  
+>  	for (i = 0; i < info->nbanks; i++) {
+>  		chip = &info->banks[i].gpio_chip;
+> -		if (chip->of_node == np) {
+> +		if (chip->fwnode == of_fwnode_handle(np)) {
 
-The solution as pointed out by LKP and which will removes the need of the noise
-in email and a lot of confusions is to use --base parameter to the patch(es).
+Are you sure chip's fwnode is properly set here (without your other
+patch)? I don't believe the driver sets it up, and I don't think gpiolib
+maps it from the gpio_chip->of_node.
+
+Actually, there is another reference to of_node in gpio chip in
+st_gpiolib_register_bank()...
+
+Thanks.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Dmitry
