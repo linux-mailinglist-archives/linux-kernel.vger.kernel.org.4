@@ -2,102 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3262B5FA37B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 20:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079E35FA37D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 20:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiJJSkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 14:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39336 "EHLO
+        id S229808AbiJJSky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 14:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiJJSkf (ORCPT
+        with ESMTP id S229800AbiJJSkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 14:40:35 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66C61276D
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 11:40:32 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id m6so2080128qkm.4
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 11:40:32 -0700 (PDT)
+        Mon, 10 Oct 2022 14:40:43 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1483126106
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 11:40:40 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id l6so1393078pgu.7
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 11:40:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=09B2lIfMW5FCv/PYhSBROv85IU3XYzHTU0Y/zt/18Vc=;
-        b=xJIKm4xbDTHtlD/6nmZeJ0m4F0qWhqvcIK/AcJdYzLFhm/yTP3goZYKQo89gG7WSfM
-         9Gh+carIFB8Ex+vfQQhoXMU0k697vtnSSvhsiPNEEZAmCzzoQb3d86fORJwNzNJksxa+
-         zVNM8JQEskJyAu4PxM8IGg4dXuGUk+YNT98pbiW0Wl04KulYxTip5GMxI1AfEfhiuAZ4
-         Lf8zGCIHuxmpP0If3aKNwVJmDOrUYd2Z4NZ4XKn3LnUaBsVrQesZcsdf9jE/5rCCk9Uc
-         1ulHp7U06Hi8MIjR8ymYMV0ibx5nga+dhG3v78L92KWJCQuype/VDn9WaeiK7xfFVByE
-         xblA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=73IFEj8UKp21a0lUf+7fHKRgxbCrQEXIzggPWAc8GZk=;
+        b=s7kXX/Nzrao9i8oAWjJPJfckPVhA9J/dx0H9OvPpYn8EN3YVFYh1+K8N8nCs/YRoxb
+         xdBl5kox7WPHUktOMOCjrH8sv6Ibzevz1nG94J5UKZjYoXYej2XtK1sVrgAJu2i1N3lz
+         DeJ8aNpK0+pZxx5AoJb7TSoPl8CNQzRG9Hcj2n5iymm5KMujta82Kk5mytZZ0LozcXH5
+         aBCWhm1d/e9/LBR7cS96NQ6f9z/GAyOrGyr6/BAHiIhAZ3RZixfHzKNyKZtBdaPJJbnx
+         Xicf+/S5cz+hcjBzR/rbmbt/KCZL8xRGbGFvvNIZUXXer/Vj1cWzy0ZPnSErrz7DmdWm
+         vp8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=09B2lIfMW5FCv/PYhSBROv85IU3XYzHTU0Y/zt/18Vc=;
-        b=VY6GKdUiVDVIS0wAAD/Lp2DiIGIPLxgDIqQOgctWJPdIhVHZ9puZH6KMyEnrKrRTvs
-         sW5kELFApBJJSKZJJxyTLObQL8/lFPoDdWU+VUQYNbyuxBrxti8y2cvADscMDmf6UDt0
-         ZjfTs4YDUPlBK4/nyp3oPoXh+WxePHoEg1xYHQhSr3IpTQNvejPfbYk5sI/FWu4NnBa5
-         wWZLiZgebPUF6aA+4Dd+wgdLhxMEQ9WHHcSMEoC0bdnIZAo1PwxZSqXzRSNo4nvX41GR
-         OselvbYtFttAjm3XUJzRWji+qH5F5RQSd97VlxfS+sI+sr39O+DOdwdqowmlczKiFSuZ
-         fZfQ==
-X-Gm-Message-State: ACrzQf2nwNLmwJBxoVZj7Qbm2ECZjh1llP/78ltufHh1ZDRmQRzfyiG3
-        2Ili159MOew5I2xCf415nSJjxg==
-X-Google-Smtp-Source: AMsMyM50RUj/Zs5jIlJ1Ia0KMBQ2dFhE/Svrs294KEyNiV4K5xJk+7tGEEKmPzUEBZXHKqaQbVPPrQ==
-X-Received: by 2002:a05:620a:2808:b0:6bc:5d4a:a01a with SMTP id f8-20020a05620a280800b006bc5d4aa01amr13704079qkp.371.1665427231283;
-        Mon, 10 Oct 2022 11:40:31 -0700 (PDT)
-Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id t19-20020ac865d3000000b0035ba48c032asm8849457qto.25.2022.10.10.11.40.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 11:40:29 -0700 (PDT)
-Message-ID: <af4655e9-d1a0-fbd2-0724-ab358366532d@linaro.org>
-Date:   Mon, 10 Oct 2022 14:40:27 -0400
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=73IFEj8UKp21a0lUf+7fHKRgxbCrQEXIzggPWAc8GZk=;
+        b=S44XEEUFPYcucMFK8fLDTfdRFcVtQA3cRmBp7nUmIi0jB416aYUhQPKI7nbQ8hAYqf
+         vDKLK4tRiaMbS627Q8kd6U3kvbLuZExt8huJl4rbdVzle3QhSyNDPqwQlVrHwlxRIaly
+         8OPKWAkvO5yhcJKJ/G4/NNQfWsYr9fRBWjo4qDYRLvu2k3/HVgNuyo97qF9XVOchpq8+
+         so13F5TmWKoqBAPwt9BX07cMy7BzvVVvrctVEa28the0FqHfQBpUffjmXm5lr/KAN7yE
+         y96g4UPCYoVqrh1b75G9THeWtbabh9rC3WTyE9uPNU9CMZX/cOkxoABsnd8t5/pe76op
+         N7xA==
+X-Gm-Message-State: ACrzQf0li7mhWbRKcXor4DR6EIrPzYwylvcsk/8Y8sZtgvMv362C6oO8
+        tp0qhI6zhNZpjh43KQne7eZ2n7e3tupbhkxKRYCyYw==
+X-Google-Smtp-Source: AMsMyM6EDBQwGEdbN7Wbm0jiIRVw6lRI/YWSkiDGiSLzkecxw2vOElVi8XDqpQstg5QnBVRXM9TymdvbvkMuf480wKk=
+X-Received: by 2002:aa7:83cd:0:b0:563:5f54:d78c with SMTP id
+ j13-20020aa783cd000000b005635f54d78cmr7096497pfn.66.1665427239975; Mon, 10
+ Oct 2022 11:40:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2] arm64: dts: qcom: starqltechn: add initial device tree
- for starqltechn
-Content-Language: en-US
-To:     Dzmitry Sankouski <dsankouski@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220617110130.2300438-1-dsankouski@gmail.com>
- <9bf584a1-bab9-33f3-02b6-6b10a7cfb043@linaro.org>
- <CABTCjFBneTPT=PoCh=c8hyxfgvCr=14pJYA+11sQ0ooyf6Ri1g@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CABTCjFBneTPT=PoCh=c8hyxfgvCr=14pJYA+11sQ0ooyf6Ri1g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20190307090146.1874906-1-arnd@arndb.de> <20221006222124.aabaemy7ofop7ccz@google.com>
+ <c646ea1e-c860-41cf-9a8e-9abe541034ff@app.fastmail.com> <CAKwvOdkEied8hf6Oid0sGf0ybF2WqrzOvtRiXa=j7Ms-Rc6uBA@mail.gmail.com>
+ <e554eb3c-d065-4aad-b6d2-a12469eaf49c@app.fastmail.com> <CAKwvOdmNiSok3sAMJs2PQLs0yVzOfMTaQTWjyW8q2oc3VF60sw@mail.gmail.com>
+In-Reply-To: <CAKwvOdmNiSok3sAMJs2PQLs0yVzOfMTaQTWjyW8q2oc3VF60sw@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 10 Oct 2022 11:40:28 -0700
+Message-ID: <CAKwvOdmWvDBw9MnO==dZ8i=gqbVPSUuiuRtwKmWuV8uXzJYNww@mail.gmail.com>
+Subject: Re: [PATCH] fs/select: avoid clang stack usage warning
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Kees Cook <keescook@chromium.org>, linux-fsdevel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Paul Kirth <paulkirth@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/10/2022 12:43, Dzmitry Sankouski wrote:
-> (...)
->>
->> Why do you have DTSI for one DTS?
-> Samsung has several devices on sdm845 SoC (at least 3 phones:
-> starqltechn, starq2ltechn, crownltechn). I don't have plans to
-> introduce support for any new Samsung sdm845 device except
-> starqltechn, but I guess we should extract common dtsi now to make
-> future contributions easier. I think I should rename common dtsi file
-> to '$soc-$vendor-common.dtsi', like others device trees doing now
+On Fri, Oct 7, 2022 at 3:54 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> This seems to be affected by -fno-conserve-stack, a currently gcc-only
+> command line flag. If I remove that, then i386 defconfig will inline
+> do_select but x86_64 defconfig will not.
+>
+> I have a sneaking suspicion that -fno-conserve-stack and
+> -Wframe-larger-than conspire in GCC to avoid inlining when doing so
+> would trip `-Wframe-larger-than` warnings, but it's just a conspiracy
+> theory; I haven't read the source.  Probably should implement exactly
+> that behavior in LLVM.
 
-File can be easily renamed later, but if additional devices are not
-mainlined we will always need to deal with almost empty DTS.
+Sorry, that should have read `-fconserve-stack` (not `-fno-conserve-stack`).
 
-Best regards,
-Krzysztof
+Playing with:
+https://godbolt.org/z/hE67j1Y9G
+experimentally, it looks like irrespective of -Wframe-larger-than,
+-fconserve-stack will try to avoid inlining callees if their frame
+size is 512B or greater for x86-64 targets, and 410B or greater for
+32b targets. aarch64 is 410B though, perhaps that's leftover from the
+32b ARM port.  There's probably more to the story there though.
 
+> I'll triple check 32b+64b arm configs next week to verify.  But if GCC
+> is not inlining do_select into core_sys_select then I think my patch
+> https://lore.kernel.org/llvm/20221007201140.1744961-1-ndesaulniers@google.com/
+> is on the right track; probably could drop the 32b-only condition and
+> make a note of GCC in the commit message.
+
+arm64 does not inline do_select into core_sys_select with
+aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110
+for defconfig.
+
+$ CROSS_COMPILE=aarch64-linux-gnu- ARCH=arm64 make -j128 defconfig fs/select.o
+$ llvm-objdump -Dr --disassemble-symbols=core_sys_select fs/select.o |
+grep do_select
+    1a48: 2e fb ff 97  bl 0x700 <do_select>
+
+Same for 32b ARM.
+arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110
+
+$ CROSS_COMPILE=arm-linux-gnueabi- ARCH=arm make -j128 defconfig fs/select.o
+$ llvm-objdump -Dr --disassemble-symbols=core_sys_select fs/select.o |
+grep do_select
+    1620: 07 fc ff eb  bl #-4068 <do_select>
+
+Is there a set of configs or different compiler version for which
+that's not the case? Perhaps. But it doesn't look like marking
+do_select noinline_for_stack changes the default behavior for GCC
+builds, which is good.
+
+So it looks like it's just clang being aggressive with inlining since
+it doesn't have -fconserve-stack.  I think
+https://lore.kernel.org/lkml/20221007201140.1744961-1-ndesaulniers@google.com/
+is still on the right track, though I'd remove the 32b only guard for
+v2.
+
+Christophe mentioned something about KASAN and GCC. I failed to
+reproduce, and didn't see any reports on lore that seemed relevant.
+https://lore.kernel.org/lkml/20221010074409.GA20998@lst.de/
+I'll wait a day to see if there's more info (a config that reproduces)
+before sending a v2 though.
+
+> Also, my colleague Paul just whipped up a neat tool to help debug
+> -Wframe-larger-than.
+> https://reviews.llvm.org/D135488
+> See the output from my run here:
+> https://paste.debian.net/1256338/
+> It's a very early WIP, but I think it would be incredibly helpful to
+> have this, and will probably help us improve Clang's stack usage.
+
+Paul also mentioned that -finline-max-stacksize is a thing, at least for clang.
+https://clang.llvm.org/docs/ClangCommandLineReference.html#cmdoption-clang-finline-max-stacksize
+Though this only landed recently
+https://reviews.llvm.org/rG8564e2fea559 and wont ship until clang-16.
+That feels like a large hammer for core_sys_select/do_select; I think
+we can use a fine scalpel.  But it might be interesting to use that
+with KASAN.
+-- 
+Thanks,
+~Nick Desaulniers
