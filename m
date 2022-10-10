@@ -2,118 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A485FA100
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 17:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0AB5FA101
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 17:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbiJJPQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 11:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
+        id S229624AbiJJPQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 11:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiJJPP5 (ORCPT
+        with ESMTP id S229483AbiJJPQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 11:15:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B85DC5756D;
-        Mon, 10 Oct 2022 08:15:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C89660F7B;
-        Mon, 10 Oct 2022 15:15:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49220C433C1;
-        Mon, 10 Oct 2022 15:15:53 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="edLZ0aGR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1665414951;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nXnY72mFsROmabRvf0J+Pa5RaskNobc+nX3HeIF4L9E=;
-        b=edLZ0aGRKciBgrABCWwLTufhUStuvzwDRVkxkjKFePW+lIvwIpj0q6oKVCBECn48iexD0q
-        f7ldV0FN6C5s9vl2nK7StLKdvr8cL1OjlA2j46fZFDVa+UAmKdnQOqkv/DyQDLX+HIniGg
-        DvENCbC1YiSe+oWCytb5/z0zOJAMvXA=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b7dc69e1 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 10 Oct 2022 15:15:51 +0000 (UTC)
-Date:   Mon, 10 Oct 2022 09:15:48 -0600
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Pankaj Gupta <pankaj.gupta@nxp.com>
-Cc:     'Herbert Xu' <herbert@gondor.apana.org.au>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "a.fatoum@pengutronix.de" <a.fatoum@pengutronix.de>,
-        "gilad@benyossef.com" <gilad@benyossef.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
-        "david@sigma-star.at" <david@sigma-star.at>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "john.ernberg@actia.se" <john.ernberg@actia.se>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "j.luebbe@pengutronix.de" <j.luebbe@pengutronix.de>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "richard@nod.at" <richard@nod.at>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        Sahil Malhotra <sahil.malhotra@nxp.com>,
-        Kshitiz Varshney <kshitiz.varshney@nxp.com>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Varun Sethi <V.Sethi@nxp.com>
-Subject: Re: [EXT] Re: [PATCH v0 3/8] crypto: hbk flags & info added to the
- tfm
-Message-ID: <Y0Q3JKnWSNIC4Xlu@zx2c4.com>
-References: <20221006130837.17587-1-pankaj.gupta@nxp.com>
- <20221006130837.17587-4-pankaj.gupta@nxp.com>
- <Yz/OEwDtyTm+VH0p@gondor.apana.org.au>
- <DU2PR04MB8630CBBB8ABDC3768320C18195209@DU2PR04MB8630.eurprd04.prod.outlook.com>
+        Mon, 10 Oct 2022 11:16:37 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DF76C12F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 08:16:36 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id 63so11561300vse.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 08:16:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gixYlXXeGIaF334dRye1m0Z433fh8kxpeDMk8/39luc=;
+        b=aROlY8KnlcE3y1QbojvBEENrPj9NMwKdZrbCNZIxttxaVZmSPZAjROejKTCfeF0+UZ
+         391+2Ca+4AaCphJQKf1ei7CYoez4StuhN/uYIEJUVQjvlWItWXLF0tYFxp+Lag9hc9WO
+         +lNjx/VbK5N/gWqDlq+5hpJViDVXa6bTVj+216g9H548tQ/hkS63xlfyM8jNxGUREeyC
+         hBdxtT9WtfvIylyMJJDhEkQKnVcOzX401xIMDtYeuC+fV1INCT9TVS3+URUanL/LY+ZU
+         0mne2UKUXumxRDH/JiG2E2EwlS6Cm3Z8RGkVp1/Lv4wig9f1uduDTtuEU75zXoi96jF7
+         FvTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gixYlXXeGIaF334dRye1m0Z433fh8kxpeDMk8/39luc=;
+        b=GtZTMifx4ddY84J7Mjzey4F41D6SQe86doLmTaGKwNBmxuHjUaxYO9ZKnm4gEo3NSq
+         dpN9dBZFyNpbfwMJ7eEr0DR4nBV3WGLiEZ01I5V2pblHzj5o1N9ZR0+2iitRWdBVNX5h
+         OiLuCcv1zaLvinXB7o7scIJJLYoCzZDOk7oixZ4ZEZ8ZulQhSMX3UjbL+3NxDon8SKHb
+         2Nec1iBAt+tOPnmh1hx3oeRvrtxb6RTfp9vYc1j3qdvUKG7ia3O7gJEhb3qAd74nqFMK
+         Apmm8ai1DWzGC39QSKKMNfD1gi1QuTdQocEK4g5TGEeu+LPJPrGJKKbn0YMPuxryTyYI
+         xMCw==
+X-Gm-Message-State: ACrzQf2d5GgTAP1btIAW7ATTWG5p7FnLXyCmCb/uN8X3Cm5OIlJd6XRa
+        P4xk8MEBO0s796mYdZnABGw5xqdzfH7MV/4TSQTLTwhNNTA=
+X-Google-Smtp-Source: AMsMyM51N0wJ6zcDz4uVTuaWLVHXakB6Zmn9vso4jKlsvO3jZPdf2OLJle3yugadCeksjEPWUu1mchcUCXnap/sKYjI=
+X-Received: by 2002:a17:902:ea03:b0:180:b53f:6da with SMTP id
+ s3-20020a170902ea0300b00180b53f06damr13793062plg.69.1665414984602; Mon, 10
+ Oct 2022 08:16:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <DU2PR04MB8630CBBB8ABDC3768320C18195209@DU2PR04MB8630.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Sender: ukabore83@gmail.com
+Received: by 2002:a05:7300:4349:b0:80:2ab4:c0ea with HTTP; Mon, 10 Oct 2022
+ 08:16:24 -0700 (PDT)
+From:   "Mr. Musa Ahmed" <ma3352506@gmail.com>
+Date:   Mon, 10 Oct 2022 15:16:24 +0000
+X-Google-Sender-Auth: ldJXryd44hRuUejakT1GIDVr3RY
+Message-ID: <CALpcmOUwExD9KXNWRDzk6Ht-3pphTOFXitUjpka=oo07Vf0Mcw@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_95,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e29 listed in]
+        [list.dnswl.org]
+        *  3.0 BAYES_95 BODY: Bayes spam probability is 95 to 99%
+        *      [score: 0.9728]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ukabore83[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ukabore83[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 11:15:00AM +0000, Pankaj Gupta wrote:
-> > Nack.  You still have not provided a convincing argument why this is necessary
-> > since there are plenty of existing drivers in the kernel already providing similar
-> > features.
-> > 
-> CAAM is used as a trusted source for trusted keyring. CAAM can expose
-> these keys either as plain key or HBK(hardware bound key- managed by
-> the hardware only and never visible in plain outside of hardware).
-> 
-> Thus, Keys that are inside CAAM-backed-trusted-keyring, can either be
-> plain key or HBK. So the trusted-key-payload requires additional flag
-> & info(key-encryption-protocol)  to help differentiate it from each
-> other. Now when CAAM trusted-key is presented to the kernel crypto
-> framework, the additional information associated with the key, needs
-> to be passed to the hardware driver. Currently the kernel keyring and
-> kernel crypto frameworks are associated for plain key, but completely
-> dis-associated for HBK. This patch addresses this problem.
-> 
-> Similar capabilities (trusted source), are there in other crypto
-> accelerators on NXP SoC(s). Having hardware specific crypto algorithm
-> name, does not seems to be a scalable solution.
+Greetings,
 
-Do you mean to say that other drivers that use hardware-backed keys do
-so by setting "cra_name" to something particular? Like instead of "aes"
-it'd be "aes-but-special-for-this-driver"? If so, that would seem to
-break the design of the crypto API. Which driver did you see that does
-this? Or perhaps, more generally, what are the drivers that Herbert is
-talking about when he mentions the "plenty of existing drivers" that
-already do this?
+I am Mr. Musa Ahmed, a banker by profession from Burkina Faso. I have
+a very confidential business proposition involving transfer of $
+18,500,000.00 United State Dollars that will be of great benefit to
+both of us. Contact me via my private email below for more details.
 
-Jason
+Email: ma3352506@gmail.com
+
+Best Regards
+Musa Ahmed.
