@@ -2,141 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F3E5F9D62
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C3F5F9D69
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232055AbiJJLPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 07:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
+        id S231893AbiJJLQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 07:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232007AbiJJLPH (ORCPT
+        with ESMTP id S232056AbiJJLQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 07:15:07 -0400
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2078.outbound.protection.outlook.com [40.107.247.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E14F24F1A;
-        Mon, 10 Oct 2022 04:15:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m09Gewqo1zVk7FoyG3oWUUNPwKFO8PFO9nsooaSemIJQe5iNZszDl0aLLYC9OlIuTMsLo2jSZG1V7UQafHXgVW/QzwS2RNYYLK2L+S8LuxIV/1i+UuQ41XUXrOfwWSreKd1VjMEF5E8Ye1sJYEMYoCPRvWnbtU6MVVnzZOyNHP7riGRUNUmJxDfqr8D2gzUo2SYNxn/F8h1ES8ZX5GA0oFjc6fdT2OCbN34UaVRRqHO4zXYb75sx3IIyxMaIQJPigqBa9D8hUQNfOux4QzlgbQ20DTBY7YXbITpBmM0DI0FwS1b8OcYgcINPaRM9ttKNa2xRr7V7d1h5CEoml1Pc9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2+RfPYVBqvc9pJ13abS6KcXYSuQrIOlOqXydVCgrtAQ=;
- b=htJElYNoWh/ooMbFWhXlTC0zJjHyoXsMc5O0Lr7ChB9U9jqwcSzBTvd3PJvQNV7sQqYNPuiS+6SvtUxA9/A7mHWlpRRuUoq0LAgy84icewY7Zo3ZTzz5poveDoHQIIHUd43fzQtrkStH0OoocZRhylAcJq14ak++9ZUOk0yF9pM2cUY8FaZfkOesInQFlPZqd7PsTc8tJB1Wdc7IzD+x+0088gTpn7wz9Ftp24eZ3pgOvK2J4A74P/5GwGuOhupvvVrkhDYaNdY1bFUj09uvwlPRJYCMXfumyY0wSgFTS5qRiGZczV43maPYFFgdJSySo6fysJzWwSRtv4KcRrkNEQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2+RfPYVBqvc9pJ13abS6KcXYSuQrIOlOqXydVCgrtAQ=;
- b=QuBo/MnyjoSN863bsGy/wOK4lhdxMkva0rhI6Iu1T5XVO+u6Sqm4rhuzgZcDQ7aCMZEj5aLUYUqog2Au32Z+9ckVlLs+PPu6yiqksAYk8rTsXzZ/m2xvXUIuyVF8+aLQNPCVlFGL5Mku0Tp0vbJUgltfIq3I8rtncZfjKuFAotE=
-Received: from DU2PR04MB8630.eurprd04.prod.outlook.com (2603:10a6:10:2dd::15)
- by PAXPR04MB9422.eurprd04.prod.outlook.com (2603:10a6:102:2b4::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Mon, 10 Oct
- 2022 11:15:00 +0000
-Received: from DU2PR04MB8630.eurprd04.prod.outlook.com
- ([fe80::d551:6af4:bca4:88ea]) by DU2PR04MB8630.eurprd04.prod.outlook.com
- ([fe80::d551:6af4:bca4:88ea%9]) with mapi id 15.20.5709.015; Mon, 10 Oct 2022
- 11:15:00 +0000
-From:   Pankaj Gupta <pankaj.gupta@nxp.com>
-To:     'Herbert Xu' <herbert@gondor.apana.org.au>
-CC:     "jarkko@kernel.org" <jarkko@kernel.org>,
-        "a.fatoum@pengutronix.de" <a.fatoum@pengutronix.de>,
-        "gilad@benyossef.com" <gilad@benyossef.com>,
-        "Jason@zx2c4.com" <Jason@zx2c4.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
-        "david@sigma-star.at" <david@sigma-star.at>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "john.ernberg@actia.se" <john.ernberg@actia.se>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "j.luebbe@pengutronix.de" <j.luebbe@pengutronix.de>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "richard@nod.at" <richard@nod.at>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        Sahil Malhotra <sahil.malhotra@nxp.com>,
-        Kshitiz Varshney <kshitiz.varshney@nxp.com>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Varun Sethi <V.Sethi@nxp.com>
-Subject: RE: [EXT] Re: [PATCH v0 3/8] crypto: hbk flags & info added to the
- tfm
-Thread-Topic: [EXT] Re: [PATCH v0 3/8] crypto: hbk flags & info added to the
- tfm
-Thread-Index: AQHY2XuZ7wDJr0j14EOJG/A0UWusR64CgW+AgAT+i0A=
-Date:   Mon, 10 Oct 2022 11:15:00 +0000
-Message-ID: <DU2PR04MB8630CBBB8ABDC3768320C18195209@DU2PR04MB8630.eurprd04.prod.outlook.com>
-References: <20221006130837.17587-1-pankaj.gupta@nxp.com>
- <20221006130837.17587-4-pankaj.gupta@nxp.com>
- <Yz/OEwDtyTm+VH0p@gondor.apana.org.au>
-In-Reply-To: <Yz/OEwDtyTm+VH0p@gondor.apana.org.au>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU2PR04MB8630:EE_|PAXPR04MB9422:EE_
-x-ms-office365-filtering-correlation-id: a7cade18-a2ba-4202-b6d9-08daaab0ac53
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Dj/k1z1cF/BdIRrDJRKank8C3pXQXEnEgL5AaCb8C9Ulesvo32gc1WdnREEGysY1pAtNnU+u5JySCpnz8MBG0MHx+a8Zn2a0J5aKhNoBItXuxxbk6C3Whka1581G42eHo18pkt/qdIbzs26Zfln0ddeXYeYzoWdNpkct1+rmnPe/gm7rsXlqyAkAYjoIYG9Oj6evnlLrRNdS3tGnFldeRlymDWx79QjLzI/dxY/WsoNOUKsLXp4bNwvAucYYEG+SGiqrwJR8hhyKfKZXJjv5deEWLS+kfLL/9z8y+hoRMD9XD4msh8zlr7SEgzlR5cr9+GI/W6GbY9KIlS+SAAaxAMIn0ucsbDGESsA+vhkfyasYuCygEDtj9EGu2R2wmKAQSY85TAD6IuQJ9ciAHnxA8/vIdyh1FhkJ3YTyd6/jRebbMbdhYtEAiuPz7vOIFzky+ruT9CEDb/DiT/FppJ7ZkvMM+Hmr+tIzS4ckJtBU3MuqAz5f/+482KKWzm+tr/xkQv4y/OHSHeV1v7pfoyNn9AhAVhUNkoiGZdGCtzcUNY2yS41eaTLjJHy20iAuIgm/GnC2bi3ob7FKcmxB+7VuyRKDO8MBeVmDHf+UVZJB3buj35GFrFdGDJR89txG9ku12v/bcDmVxauT12y1lxdKx3uwfyvHYPcqRU8guM3WmTqxm35CekkshJZygn2ODlVwDF8bBmupKJkSmHok4/HnwKKy9VPY3ocaXHq66+PygWi0ARFtRRReSacWKKwVxKu7XiIAaImm3Q5mmoBRahYejaeA/FIH/Vlix+cjXYZ8nCT/ArLTiRqPsHMVgYUpifs7
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8630.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(396003)(376002)(39860400002)(366004)(451199015)(55016003)(7416002)(26005)(9686003)(7696005)(6506007)(83380400001)(186003)(8936002)(53546011)(44832011)(52536014)(38100700002)(122000001)(41300700001)(5660300002)(33656002)(38070700005)(316002)(76116006)(71200400001)(6916009)(54906003)(2906002)(966005)(86362001)(45080400002)(4326008)(66946007)(66446008)(66556008)(478600001)(64756008)(66476007)(8676002)(21314003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?LU83z1Y91X6sEzh/HVTCIib7OEq8wUdFq1wiirkQqN/Jma+EfBlwHnpJ8dch?=
- =?us-ascii?Q?VlMpkiWHFeMyNxuXyHGbhGlT/wdIxL8bTLALh4knHJzVyYEkm+Oz2271r1yN?=
- =?us-ascii?Q?mSf0jJQ7G3GdRhxaXcCxJDraEOZc/uFZYOEXp/dtioLdVF02ilbLgaITT78R?=
- =?us-ascii?Q?IJnbD57V9WJIMvRH1Xq241Esys7zkGj3p1K5BMhopDNk+HbP6EaDB6RBoNZa?=
- =?us-ascii?Q?Ezy9AG/bNRVMTCo9a2peRL9YDyEUzuvvxDgCuJPFJiUhR6TB0znQ816DwtJ7?=
- =?us-ascii?Q?7mH9FRjqgIkG0YRV40rI/cjnwu/XSdr1PmbWSwr6kUVSKGx+pK2zp98eeIzf?=
- =?us-ascii?Q?MmlgkdpZQTfLkkzbjRsSiH4tkzNwtjkU1sPTG73yPP0WYisku6A7T9TVhUyG?=
- =?us-ascii?Q?Vdf7L0m8Igs8TTWOvswDESUZVNkjd2yNXou408P+o3DKw7Hpjp1wlVIDKhJl?=
- =?us-ascii?Q?Zn/oT4ayMApK4ylaSP4uJXCO5NI0P/2rQ7HqowxpDEUh9sHt7PWvvAtHdwwo?=
- =?us-ascii?Q?dsFjo3fm5wRGUJdovJt71OcsprwSVjGOXXhj8417L2i3+ch7T17En41/i/eX?=
- =?us-ascii?Q?iF2+GXC5RwsLGKecnPZdJXu/1R9zmVFsCHHGTTpA/J49ej3mXnz6W13EfCFE?=
- =?us-ascii?Q?MeNe8E2ZkQAxL//BDjFs70WnLnsS59sbJCouYAID/KYy45Zg3DXBksfIwBZS?=
- =?us-ascii?Q?2l+ZuVM/02FQ9ee5/NJ2do2Q0fjb6n4NhSqvOhXvynTKqfyzBdmewy1+Kn40?=
- =?us-ascii?Q?FFqueFRdrv9D4OzVKTYnRaPTH2YpUiSh7XTo9IYDX289yucN030IKcBk+cty?=
- =?us-ascii?Q?lAkzR/FBOBTFY3vkOSO0G4Sk15EhYfObGDe0Ybs/4zHc+gfWSjp5XIHah49T?=
- =?us-ascii?Q?x87sf19YNIY/Gx24Jslxg7d/sKaQzBU4psZbeUAKDYoPyWtiMm+Z5h3xS2tU?=
- =?us-ascii?Q?r/slbhbP4JqylHd4jSvPE7nro8O4rBIBLEOG8OgskUNXcDzrGJfPsThcih97?=
- =?us-ascii?Q?ZqOsd8tHRHoI8BviY23oT7GyW7vA+3rew8ffYZnbIToKOC6cxf1ceAG5mKOm?=
- =?us-ascii?Q?Oj/CZW8D1m1+BG5mwvoiJZZ+t2DvANYB4brAhOKzzQfIBjGpSNKyTBJ+zbrr?=
- =?us-ascii?Q?eV8dCLcihCPd+7ndV9B/6G25STgd1jnfS8ctHzJAMr3lSQA9Dh/FTUF/DaGw?=
- =?us-ascii?Q?+PamrJtK1Ms0tb/Eq/1iQ4CBI+vSt+2GNIdFn7wWSN2XziXx24Bdz85qcKqR?=
- =?us-ascii?Q?iSxiqvJ63YwaF8kBGmQlaNxv8fkUBvUQsHGKA1+qiEilPFi0vVkbVODMHxTc?=
- =?us-ascii?Q?OLlFCBodeBhRPkEa1HXXr8tp3C7CWay7LF6U4y7DI/WXp0h0yj8ByL5JBcLs?=
- =?us-ascii?Q?pE26nLygcJc2KTw0FaDY3QjLqZ/Kg0MFLkJI6SMO0rgzrRDMeqQWy9XJslmo?=
- =?us-ascii?Q?Z7nglLz0q7pSK3l7XTtPZDfo5IZPVFdot5Tvdhtg+AyQFtikmFBIJYbajUWq?=
- =?us-ascii?Q?Q8MLWI8wfae0f+k7dy/LmolZRjgCwl4kIgQLrG+0wU/c3L+Yn3RxH3cGHu41?=
- =?us-ascii?Q?U6jIZpWokr9ZnMWNKlD+xTnBHxKXJxQ3JENOFCxe?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 10 Oct 2022 07:16:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEF74F66B
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:16:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665400567;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uAnZYCx+crWb7x49Ic4rELwDm5XffixZvlKcyuXXQ4Y=;
+        b=GF4k4kIU1NHvQPgPar2P4nkPo6AHoe51qHuBxjq3SaaMCqFlM89wCHdTQOEV7cCWKBrWQy
+        O3Rv/tvw0X3dQOz6IJziIE1s9lHzKATviO1ddQOM77yNqGHvRgScIKECzvd0nDrQQ4UN9w
+        8cALmKEqJtUE3CrY35GAxAfCGWTnKJA=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-611-WWxRRlBcOD6bK5QMq6Au9A-1; Mon, 10 Oct 2022 07:16:06 -0400
+X-MC-Unique: WWxRRlBcOD6bK5QMq6Au9A-1
+Received: by mail-wm1-f70.google.com with SMTP id q14-20020a7bce8e000000b003c6b7debf22so398215wmj.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:16:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uAnZYCx+crWb7x49Ic4rELwDm5XffixZvlKcyuXXQ4Y=;
+        b=ZDfHWMytlGVOo5VrJRrkOpIEmqmU8WF5/Fe2AH6AX+drjvI6gKhiMnCVB+m9YGUNT7
+         itKr9DofN9m/1rS32cCMeRWI6aIImimTiXks21CNh+hBO7MuPQyuAhO4h71s9odf/Gj9
+         2eNRZUH/SRVsjJaO74GJmWblKUU/8QdL49XVoV8KhyJsyY/dUgrqQg7WYZaeIUdU2Nig
+         hn8hVI6dpFtpoNFcU1Tgjds+IQOXGyNIjYU9B478rFgMsM2YcL6RYXkbhp1K5KtToI7L
+         ypW/Q9U3bj+K8XgD+tDe6cpoMxQeOSHFnXyMkgk2yl0pkr5hCZN2Ni0eLZ/qQBGV7GfB
+         onpQ==
+X-Gm-Message-State: ACrzQf3LtgQwrX75l/IDIwHKA6KLAq5qrd1po56hI5lPtuUzsc3FyMcE
+        nMJgkMLG0tp6rQpujuVoyF+xdxY8UyGECOKUVKhEAGkDKcxLM2z66Tbfmj+Cve8NlZ3AuGHqEVe
+        /7e4tLvtPFn3xKywKCqK+w83K
+X-Received: by 2002:a5d:65c4:0:b0:22c:dbdd:7177 with SMTP id e4-20020a5d65c4000000b0022cdbdd7177mr10711824wrw.470.1665400564962;
+        Mon, 10 Oct 2022 04:16:04 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4otAEdTe/UjaWjkb49+axzaI+LAv0GYApqsg/Kk3ETzL985evO+gl2SP6SjjSQgGLyYl2Dlw==
+X-Received: by 2002:a5d:65c4:0:b0:22c:dbdd:7177 with SMTP id e4-20020a5d65c4000000b0022cdbdd7177mr10711808wrw.470.1665400564697;
+        Mon, 10 Oct 2022 04:16:04 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:e600:3a4a:f000:b085:4839? (p200300cbc704e6003a4af000b0854839.dip0.t-ipconnect.de. [2003:cb:c704:e600:3a4a:f000:b085:4839])
+        by smtp.gmail.com with ESMTPSA id j38-20020a05600c1c2600b003b3365b38f9sm9628042wms.10.2022.10.10.04.16.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Oct 2022 04:16:04 -0700 (PDT)
+Message-ID: <b44eee1a-0d61-f5bb-7b0c-a01f13a0b297@redhat.com>
+Date:   Mon, 10 Oct 2022 13:16:03 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8630.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a7cade18-a2ba-4202-b6d9-08daaab0ac53
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Oct 2022 11:15:00.8167
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7tgujxo83cKlYgYZZ/PQSHo5JRTaO2ZcwSOfHz3cfy3fCVjCN2b5T44g0R9RTSBtUBzp19anLobMhIAFjXaalQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9422
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2 1/5] memblock tests: add range tests for
+ memblock_alloc_exact_nid_raw
+Content-Language: en-US
+To:     Rebecca Mckeever <remckee0@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1664753534.git.remckee0@gmail.com>
+ <c73a6fd7fc3fa4529a6e444b9602d9c63ded91fd.1664753534.git.remckee0@gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <c73a6fd7fc3fa4529a6e444b9602d9c63ded91fd.1664753534.git.remckee0@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -144,87 +84,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 03.10.22 01:41, Rebecca Mckeever wrote:
+> Add tests for memblock_alloc_exact_nid_raw() that are very similar to
+> the range tests for memblock_alloc_try_nid_raw().
+> 
+> Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
+> ---
+>   tools/testing/memblock/Makefile               |    2 +-
+>   tools/testing/memblock/main.c                 |    2 +
+>   .../memblock/tests/alloc_exact_nid_api.c      | 1208 +++++++++++++++++
+>   .../memblock/tests/alloc_exact_nid_api.h      |    9 +
+>   4 files changed, 1220 insertions(+), 1 deletion(-)
+>   create mode 100644 tools/testing/memblock/tests/alloc_exact_nid_api.c
+>   create mode 100644 tools/testing/memblock/tests/alloc_exact_nid_api.h
+> 
+> diff --git a/tools/testing/memblock/Makefile b/tools/testing/memblock/Makefile
+> index 246f7ac8489b..2310ac4d080e 100644
+> --- a/tools/testing/memblock/Makefile
+> +++ b/tools/testing/memblock/Makefile
+> @@ -7,7 +7,7 @@ CFLAGS += -I. -I../../include -Wall -O2 -fsanitize=address \
+>   LDFLAGS += -fsanitize=address -fsanitize=undefined
+>   TARGETS = main
+>   TEST_OFILES = tests/alloc_nid_api.o tests/alloc_helpers_api.o tests/alloc_api.o \
+> -		  tests/basic_api.o tests/common.o
+> +		  tests/basic_api.o tests/common.o tests/alloc_exact_nid_api.o
+>   DEP_OFILES = memblock.o lib/slab.o mmzone.o slab.o
+>   OFILES = main.o $(DEP_OFILES) $(TEST_OFILES)
+>   EXTR_SRC = ../../../mm/memblock.c
+> diff --git a/tools/testing/memblock/main.c b/tools/testing/memblock/main.c
+> index 4ca1024342b1..278f9dec5008 100644
+> --- a/tools/testing/memblock/main.c
+> +++ b/tools/testing/memblock/main.c
+> @@ -3,6 +3,7 @@
+>   #include "tests/alloc_api.h"
+>   #include "tests/alloc_helpers_api.h"
+>   #include "tests/alloc_nid_api.h"
+> +#include "tests/alloc_exact_nid_api.h"
+>   #include "tests/common.h"
+>   
+>   int main(int argc, char **argv)
+> @@ -12,6 +13,7 @@ int main(int argc, char **argv)
+>   	memblock_alloc_checks();
+>   	memblock_alloc_helpers_checks();
+>   	memblock_alloc_nid_checks();
+> +	memblock_alloc_exact_nid_checks();
+>   
+>   	return 0;
+>   }
 
 
-> -----Original Message-----
-> From: Herbert Xu <herbert@gondor.apana.org.au>
-> Sent: Friday, October 7, 2022 12:28 PM
-> To: Pankaj Gupta <pankaj.gupta@nxp.com>
-> Cc: jarkko@kernel.org; a.fatoum@pengutronix.de; gilad@benyossef.com;
-> Jason@zx2c4.com; jejb@linux.ibm.com; zohar@linux.ibm.com;
-> dhowells@redhat.com; sumit.garg@linaro.org; david@sigma-star.at;
-> michael@walle.cc; john.ernberg@actia.se; jmorris@namei.org;
-> serge@hallyn.com; davem@davemloft.net; j.luebbe@pengutronix.de;
-> ebiggers@kernel.org; richard@nod.at; keyrings@vger.kernel.org; linux-
-> crypto@vger.kernel.org; linux-integrity@vger.kernel.org; linux-
-> kernel@vger.kernel.org; linux-security-module@vger.kernel.org; Sahil Malh=
-otra
-> <sahil.malhotra@nxp.com>; Kshitiz Varshney <kshitiz.varshney@nxp.com>;
-> Horia Geanta <horia.geanta@nxp.com>; Varun Sethi <V.Sethi@nxp.com>
-> Subject: [EXT] Re: [PATCH v0 3/8] crypto: hbk flags & info added to the t=
-fm
->=20
-> Caution: EXT Email
->=20
-> On Thu, Oct 06, 2022 at 06:38:32PM +0530, Pankaj Gupta wrote:
-> > Consumer of the kernel crypto api, after allocating the transformation
-> > (tfm), sets the:
-> > - flag 'is_hbk'
-> > - structure 'struct hw_bound_key_info hbk_info'
-> > based on the type of key, the consumer is using.
-> >
-> > This helps:
-> >
-> > - This helps to influence the core processing logic
-> >   for the encapsulated algorithm.
-> > - This flag is set by the consumer after allocating
-> >   the tfm and before calling the function crypto_xxx_setkey().
-> >
-> > Signed-off-by: Pankaj Gupta <pankaj.gupta@nxp.com>
-> > ---
-> >  include/linux/crypto.h | 5 +++++
-> >  1 file changed, 5 insertions(+)
->=20
-> Nack.  You still have not provided a convincing argument why this is nece=
-ssary
-> since there are plenty of existing drivers in the kernel already providin=
-g similar
-> features.
->=20
-CAAM is used as a trusted source for trusted keyring. CAAM can expose these=
- keys either as plain key or HBK(hardware bound key- managed by the hardwar=
-e only and never visible in plain outside of hardware).
+memblock_alloc_exact_nid_raw(NUMA_NO_NODE) behaves exactly the way 
+memblock_alloc_try_nid_raw(NUMA_NO_NODE) behaves -- which is essentially 
+memblock_alloc_raw().
 
-Thus, Keys that are inside CAAM-backed-trusted-keyring, can either be plain=
- key or HBK. So the trusted-key-payload requires additional flag & info(key=
--encryption-protocol)  to help differentiate it from each other. Now when C=
-AAM trusted-key is presented to the kernel crypto framework, the additional=
- information associated with the key, needs to be passed to the hardware dr=
-iver. Currently the kernel keyring and kernel crypto frameworks are associa=
-ted for plain key, but completely dis-associated for HBK. This patch addres=
-ses this problem.
+So do we really need a separate set of tests for these?
 
-Similar capabilities (trusted source), are there in other crypto accelerato=
-rs on NXP SoC(s). Having hardware specific crypto algorithm name, does not =
-seems to be a scalable solution.
+-- 
+Thanks,
 
-> Cheers,
-> --
-> Email: Herbert Xu <herbert@gondor.apana.org.au> Home Page:
-> https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fgondor=
-.ap
-> ana.org.au%2F~herbert%2F&amp;data=3D05%7C01%7Cpankaj.gupta%40nxp.com
-> %7C33055110772a4d4bb97508daa8317e93%7C686ea1d3bc2b4c6fa92cd99c5c3
-> 01635%7C0%7C0%7C638007227793511347%7CUnknown%7CTWFpbGZsb3d8ey
-> JWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C
-> 3000%7C%7C%7C&amp;sdata=3DH0fzzxQhsV%2FyPphBAHBDmzQfTFnjDE7jYstTM
-> ok%2F09I%3D&amp;reserved=3D0
-> PGP Key:
-> https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fgondor=
-.ap
-> ana.org.au%2F~herbert%2Fpubkey.txt&amp;data=3D05%7C01%7Cpankaj.gupta%4
-> 0nxp.com%7C33055110772a4d4bb97508daa8317e93%7C686ea1d3bc2b4c6fa9
-> 2cd99c5c301635%7C0%7C0%7C638007227793667554%7CUnknown%7CTWFpb
-> GZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6M
-> n0%3D%7C3000%7C%7C%7C&amp;sdata=3DSclJ9G7jBWhOW%2Fm3Gt0jP1oicqVp
-> 5ghH%2BDT8Vd5maag%3D&amp;reserved=3D0
+David / dhildenb
+
