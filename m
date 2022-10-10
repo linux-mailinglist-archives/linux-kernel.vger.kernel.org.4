@@ -2,83 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 310FE5FA686
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A8D5FA687
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbiJJUqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 16:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
+        id S229865AbiJJUq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 16:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJJUqd (ORCPT
+        with ESMTP id S229552AbiJJUq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 16:46:33 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E30772846;
-        Mon, 10 Oct 2022 13:46:32 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id l1so11343436pld.13;
-        Mon, 10 Oct 2022 13:46:32 -0700 (PDT)
+        Mon, 10 Oct 2022 16:46:57 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B2472EF7
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 13:46:55 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id i7-20020a17090a65c700b0020ad9666a86so14111795pjs.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 13:46:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gl/r2XlBZtmovVwTwtEi9D/8Ulu8vofHlm05R8t3sQ8=;
-        b=pOv3CPXqKos+Pw68meIAmxXp/DHXaEWU2T9TZCY5zosET3hv4COttdn+ktanl1I0mn
-         6mLdn56TRj/matP0enlF16iCNO3fcQM61D8tohbgQLKYsqUxhFzs64T8Eywq7ITfz+H7
-         Av3NIP/jkIO8fftYOl9iuTfs5EKqX8KTFhts/J95H5G94aAdOEjTSnwsxqWDjLEvRItd
-         f+SjpyIEjq/avggn2dG1IM4LrC5iUud4Y4lrM4VRHFW9/HavuTMx9YpXTXSAecH5A1bl
-         phkXSxhzsPVcjcxM6zV3EIzTN/tP0i36WVXwMX8wdqk2+Nuot0WwpyHqzQWB4jZPQUqt
-         GRgA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=K6vWhNkXYIMcCDi2L3E2bfLP3W7gblcGN9nVooZSDqI=;
+        b=P4SlCefcjq2GAAR5BVF6kBdMyLJhLLzKg9RG0K1CA2ksWzV8hrUORHa2feV6Mzaz7S
+         EWi5VKGdMyvmHfaA8rR3kfVAPcVEOHE+q7WcBM8pVENuht4DriW7s5v/VaRNPuW0NXHT
+         eu7qvZ9owvp+YEEisvyhIQAtjc+1fSA/1mrvAt6/KFo/wNBdoTng+94PS+KwUu/S6KvF
+         Pky+LbRFjwQ7Fo39neY2VTlAGDvbR2YRTjddgtQrQRjpDHhNT1i1XaLrukUXKxz5Ui1Q
+         DRKd1/q3IRvkXvTzIMhC0M73FHOf11iCo2YrCfF7HtC84OMjFWYMurwlW5Hx6jcnnIYr
+         vKXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gl/r2XlBZtmovVwTwtEi9D/8Ulu8vofHlm05R8t3sQ8=;
-        b=TMT1/OzJBjC+MeXNu43eHzw35NIdt4zw/NMpDQJdU0P0oqTcu1a0RVIBexsM4LRegc
-         rrfEjmfGumIkitlZ+OK3Wjm8hAslWORGFS/nf/3KN1jamr3BOyT447vYD6tsdL8kTRnC
-         9Dxd9bQezWRk8Ei9p5zaL2KbJMaoU9g2TM+HWqRvxk36nNfY+8U30hEu2rmOxGyoekHT
-         CEhkmNS2/Za21uqxm4ssAwdCYygsDWBkTpgOYn4wBTl99kKs3t9SEOJJRkfVF6+kbnXv
-         5as70+Ina999gkCmun71gR6AIjMFgfZch32WDhXCJLMfRo8txnVKrd3RiPPLAl/WCwOG
-         ifqg==
-X-Gm-Message-State: ACrzQf0795Fe0mpYC4Grs3Z5gls3JYsOaNNY3Fd61zkelu0P3DmD95Qd
-        pr6Q9m5qj0W3cU9eorU7Rl61Gg3FnPwWPzhyCl8=
-X-Google-Smtp-Source: AMsMyM57rndDymb+Zd08xP+YZqIzHMNd4xpXeUjxkzXE9wqwVVzVe+XwTi7AnO3WCPardrABeiBficWCJILmvBuWhow=
-X-Received: by 2002:a17:902:8549:b0:178:6399:3e0f with SMTP id
- d9-20020a170902854900b0017863993e0fmr21276014plo.35.1665434791984; Mon, 10
- Oct 2022 13:46:31 -0700 (PDT)
+        bh=K6vWhNkXYIMcCDi2L3E2bfLP3W7gblcGN9nVooZSDqI=;
+        b=Oc+QGqbwrQJm+rVAiHh6xbVdgdbagVi9xb/jUuh+truU2HI69YQm+IX85nTvwszl9i
+         +dlgL1/Zat2t3fjWqsJx8cV9FSZ3FrfCmYKLEwTaqGVCHcxTXEemUyvBn1c5rcnDN+nX
+         gxkY+Q00ljpDqZ5Tr3V4QqB2WfmK+AggYWj08K4qN7yMrrmVb/5Juc7pFFnOY5suQR8G
+         Cx2LUyP3wQbA78ElqbSVONjGUnCosWU248m1MWu/Udzty7+7EsE6J/9MMApZVEV+vBJV
+         Nl8S013fikaXAZtL0apmt9S6aJA32PCpOpcCBhOApYULicNEfN/MtmA/wXkjvzE3tUAv
+         A+ng==
+X-Gm-Message-State: ACrzQf0qDiZ8XiWfZ2SFdXVaBdBPiOUuWc8t76pnbpcYXQnrUAPSToN8
+        J/Q+ca/lPbhuz6Rs8HnHLSU=
+X-Google-Smtp-Source: AMsMyM5J0Ppa2C71JmfxiUOyjXtemeQogMkvzi8wJvUIwaI/kdIg0ttKPBT22X99Y/+6U2M8nIW4oQ==
+X-Received: by 2002:a17:90b:4c46:b0:203:7c2a:defe with SMTP id np6-20020a17090b4c4600b002037c2adefemr33752109pjb.40.1665434814748;
+        Mon, 10 Oct 2022 13:46:54 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:f802:67c2:7f9a:bf3c])
+        by smtp.gmail.com with ESMTPSA id w21-20020a634755000000b0045751ef6423sm6578085pgk.87.2022.10.10.13.46.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 13:46:54 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PULL 0/2] xtensa updates for v6.1
+Date:   Mon, 10 Oct 2022 13:46:30 -0700
+Message-Id: <20221010204630.2383703-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <CABXGCsMmvxi9kCZ+sUm+Vb_jxaPXE308GAwkUmiduuJXh_o2fg@mail.gmail.com>
- <ad6a722a0caa50c3f369e97b0f03180f62806fa7.camel@sipsolutions.net>
-In-Reply-To: <ad6a722a0caa50c3f369e97b0f03180f62806fa7.camel@sipsolutions.net>
-From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Date:   Tue, 11 Oct 2022 01:46:20 +0500
-Message-ID: <CABXGCsOceHUhinSO6CwMEfx4akUXiOFiCpdqf9beNpWH82RXZw@mail.gmail.com>
-Subject: Re: [bug][6.1] Enable run-time checking of dynamic memcpy() and
- memmove() lengths causes warning on every boot at net/wireless/wext-core.c:623
- (size 4)
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        linville@tuxdriver.com, Kees Cook <keescook@chromium.org>,
-        Linux List Kernel Mailing <linux-wireless@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 12:45 PM Johannes Berg
-<johannes@sipsolutions.net> wrote:
->
->> https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless.git/commit/?id=e3e6e1d16a4cf7b63159ec71774e822194071954
+Hi Linus,
 
-Thanks, the issue is solved.
-Tested-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+please pull the following updates for the xtensa architecture.
+
+The following changes since commit 80e78fcce86de0288793a0ef0f6acf37656ee4cf:
+
+  Linux 6.0-rc5 (2022-09-11 16:22:01 -0400)
+
+are available in the Git repository at:
+
+  https://github.com/jcmvbkbc/linux-xtensa.git tags/xtensa-20221010
+
+for you to fetch changes up to e3ddb8bbe0f8cc994748c81e17acc58fda6f8abe:
+
+  xtensa: add FDPIC and static PIE support for noMMU (2022-09-13 18:28:00 -0700)
+
+----------------------------------------------------------------
+Xtensa updates for v6.1
+
+- add support for FDPIC and static PIE executable formats for noMMU
+
+----------------------------------------------------------------
+Max Filippov (2):
+      xtensa: clean up ELF_PLAT_INIT macro
+      xtensa: add FDPIC and static PIE support for noMMU
+
+ arch/xtensa/include/asm/elf.h         | 24 ++++++++++++++++++++----
+ arch/xtensa/include/asm/processor.h   |  3 +++
+ arch/xtensa/include/uapi/asm/ptrace.h |  4 ++++
+ fs/Kconfig.binfmt                     |  2 +-
+ 4 files changed, 28 insertions(+), 5 deletions(-)
 
 -- 
-Best Regards,
-Mike Gavrilov.
+Thanks.
+-- Max
