@@ -2,101 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE56B5F9F14
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA54A5F9F1C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbiJJNFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 09:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33204 "EHLO
+        id S230155AbiJJNFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 09:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiJJNE7 (ORCPT
+        with ESMTP id S229831AbiJJNF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 09:04:59 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9434419C28
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 06:04:58 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 203so12902120ybc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 06:04:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rfebC1hNG9FGT+3Pe0PgBda4mQUCoivjL2qFGZ8lp7A=;
-        b=dFPRnKW8OTYUCMy95MAyNvGuQxuL3tx/3eHKJ36wQBKxDPUn2u3Tc22+Xu8wlXiWy5
-         mssecKUfs7XypZkVo8rJwYpyuWpX8B3ZvdecqO7r11YAxcbEXknHSF0DBNSGyvMC0mww
-         7x4NgncrgjcSaSctUuRDnJboMRcggVsaoJB2cHItMxEQq1iQIU5hZoLZnbM30hEkqmF6
-         7emlN0eBIGNHskTVf4co7W4C1r3oOAikov3NRplcpEgX73aR8bsfIGk2Br7b4EjXvrJt
-         isycCVKsqz0O0kSQz0VX4tdS4iiGgapZaau7e87PGfxci1bstJwEYjeZQE1R2IiY6VnP
-         Hn7A==
+        Mon, 10 Oct 2022 09:05:29 -0400
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD015A179;
+        Mon, 10 Oct 2022 06:05:20 -0700 (PDT)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1322d768ba7so12387753fac.5;
+        Mon, 10 Oct 2022 06:05:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rfebC1hNG9FGT+3Pe0PgBda4mQUCoivjL2qFGZ8lp7A=;
-        b=H8tDwKTcByF1xaL/rtLpCnjo1lUJp4kKcRBrJisXzDCVSfKNj2bAlrMK62zs8K1RiJ
-         NFBwRGBtHxPo1Gule1hbgxe9jCSfDhk3jXDrEeOSTarsRZgez78RjT2F0ifd058Zc3Sy
-         s1y50Cd8UTArHd02PzvP/gOr++chTKyG3OueHJ+63ZzkySotaAdgRy026eFh+hsjFii1
-         mtWnG6gelrdKcO0X5PgbldSDxjdaUNVPJqMpDOwAdbVPpOrhzZoYrTwpO7CPuzPfupEK
-         7LMETebgFLkvIuiFyPSDN5oeZyUMCKl/vkfw2A42i66F7P1VPJTTTtVF/W9OGNtWzFhX
-         5OUA==
-X-Gm-Message-State: ACrzQf19sMbpr3vFjGsKinAoTNf9LfPDYcyLxy0mKl3wZgpALwpwIEut
-        btAlFhBgB3xI4noFhFqgDm5TV8wmBZGa3LMHUa0=
-X-Google-Smtp-Source: AMsMyM4LclOS9EUwQwLWg2yno0no/woM/n3BfCQi8F5O1ezS1mcipm1ErkWvNBJVppRDVEhklxdlou8PuKo9o4sQdhc=
-X-Received: by 2002:a25:e7c2:0:b0:6be:f56a:bfcc with SMTP id
- e185-20020a25e7c2000000b006bef56abfccmr17998125ybh.126.1665407097382; Mon, 10
- Oct 2022 06:04:57 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VruSYQjKdMW+9AMlTXLz+TveQk1ca9C/k1+WiztK+/I=;
+        b=EbZipuHk8TAvoakJ/gV8l9R/eIftQb6NyPPl/eaPKgzSAGDOXhkey0qiv/iBJnRhQX
+         QfeesXB2iffBHZwPbsGxzgiHkJC7C4LZ9TNbTh7Mnxx9ChBGZhOyFmf/RpmdHQYAOdDV
+         vayQoOdljZaoFuXocw3npU/rhs4PeNsk1r2utOOjReEpKCXzUoKLAKt1zzndjXZnuaol
+         Pqzr3NrlC2GnRsYnQp1UHYaR+0MX0HUsjw3aF1GsiGp6IdJ61ybLPBCsuilcv+HNeyuL
+         ELtXpi/H+iaZOHxmieqvtRczjLi82RWLya2aH6bhSusPfY/wENaRMJ/I7BlIlnbES+MW
+         k6rw==
+X-Gm-Message-State: ACrzQf1VF7ikArZbrduNcg5RmHI3ZeL6k1CN/uTfDA3TG94lZj2uLRIm
+        3tkhuJEjyIVNm6HTaYQ9nA==
+X-Google-Smtp-Source: AMsMyM75zf+8TClOT4cW/V7W8q/hu0USA4JeuORJpzDvRkM7YoHsWw73tnh6JVor2AZBpVPgMznlJA==
+X-Received: by 2002:a05:6870:5808:b0:128:afd5:491f with SMTP id r8-20020a056870580800b00128afd5491fmr10232253oap.136.1665407119374;
+        Mon, 10 Oct 2022 06:05:19 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bo7-20020a056808228700b0035465a615e1sm2282821oib.30.2022.10.10.06.05.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 06:05:18 -0700 (PDT)
+Received: (nullmailer pid 493117 invoked by uid 1000);
+        Mon, 10 Oct 2022 13:05:19 -0000
+Date:   Mon, 10 Oct 2022 08:05:19 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH 3/8] dt-bindings: clock: Add Ingenic JZ4755 CGU header
+Message-ID: <20221010130519.GA488861-robh@kernel.org>
+References: <20221009181338.2896660-1-lis8215@gmail.com>
+ <20221009181338.2896660-4-lis8215@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7000:af29:0:0:0:0 with HTTP; Mon, 10 Oct 2022 06:04:57
- -0700 (PDT)
-Reply-To: contact@ammico.it
-From:   =?UTF-8?Q?Mrs=2E_Monika_Everenov=C3=A1?= <kassadoctoro@gmail.com>
-Date:   Mon, 10 Oct 2022 14:04:57 +0100
-Message-ID: <CAHp58ihMpRO_K9tsSjhJnG_aPMea6qq3Hbhaym+D_fTAwGf-sg@mail.gmail.com>
-Subject: Re:
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.3 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221009181338.2896660-4-lis8215@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tere ja kuidas l=C3=A4heb?
-Minu nimi on proua Evereen, saadan selle s=C3=B5numi suure lootusega
-kohese vastuse, kuna pean l=C3=A4bima s=C3=BCdame kordusoperatsiooni
-praegune kehv tervis ja v=C3=A4heste elluj=C3=A4=C3=A4misv=C3=B5imalustega.=
- Aga enne kui ma
-tehke teine ohtlik operatsioon, annan teile selle
-Mul on USA pangakontol 6 550 000 dollarit, et h=C3=A4sti investeerida,
-hallata ja kasutada
-kasum heategevusprojekti juhtimiseks. Ma arvan haigete aitamist
-ja vaesed on mu viimane soov maa peal, sest mul pole kedagi
-kellelt raha p=C3=A4rima.
-Palun vastake mulle kiiresti
-tervitustega
-Proua Monika Evereen
-Florida, Ameerika =C3=9Chendriigid
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-Hi and how are you?
-My name is Mrs. Evereen, I am sending this message with great hope for
-an immediate response, as I have to undergo heart reoperation in my
-current poor health with little chance of survival. But before I
-undertake the second dangerous operation, I will give you the
-$6,550,000 I have in my US bank account to invest well, manage and use
-the profits to run a charity project for me. I count helping the sick
-and the poor as my last wish on earth, because I have no one to
-inherit money from.
-Please give me a quick reply
-regards
-Mrs. Monika Evereen
-Florida, United States of America
+On Sun, Oct 09, 2022 at 09:13:32PM +0300, Siarhei Volkau wrote:
+> This will be used from the devicetree bindings to specify the clocks
+> that should be obtained from the jz4755-cgu driver.
+> 
+> Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+> ---
+>  .../dt-bindings/clock/ingenic,jz4755-cgu.h    | 49 +++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+>  create mode 100644 include/dt-bindings/clock/ingenic,jz4755-cgu.h
+> 
+> diff --git a/include/dt-bindings/clock/ingenic,jz4755-cgu.h b/include/dt-bindings/clock/ingenic,jz4755-cgu.h
+> new file mode 100644
+> index 000000000..32307f68c
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/ingenic,jz4755-cgu.h
+> @@ -0,0 +1,49 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+
+Dual license please.
+
+> +/*
+> + * This header provides clock numbers for the ingenic,jz4755-cgu DT binding.
+> + */
+> +
+> +#ifndef __DT_BINDINGS_CLOCK_JZ4755_CGU_H__
+> +#define __DT_BINDINGS_CLOCK_JZ4755_CGU_H__
+> +
+> +#define JZ4755_CLK_EXT		0
+> +#define JZ4755_CLK_OSC32K	1
+> +#define JZ4755_CLK_PLL		2
+> +#define JZ4755_CLK_PLL_HALF	3
+> +#define JZ4755_CLK_EXT_HALF	4
+> +#define JZ4755_CLK_CCLK		5
+> +#define JZ4755_CLK_H0CLK	6
+> +#define JZ4755_CLK_PCLK		7
+> +#define JZ4755_CLK_MCLK		8
+> +#define JZ4755_CLK_H1CLK	9
+> +#define JZ4755_CLK_UDC		10
+> +#define JZ4755_CLK_LCD		11
+> +#define JZ4755_CLK_UART0	12
+> +#define JZ4755_CLK_UART1	13
+> +#define JZ4755_CLK_UART2	14
+> +#define JZ4755_CLK_DMA		15
+> +#define JZ4755_CLK_MMC		16
+> +#define JZ4755_CLK_MMC0		17
+> +#define JZ4755_CLK_MMC1		18
+> +#define JZ4755_CLK_EXT512	19
+> +#define JZ4755_CLK_RTC		20
+> +#define JZ4755_CLK_UDC_PHY	21
+> +#define JZ4755_CLK_I2S		22
+> +#define JZ4755_CLK_SPI		23
+> +#define JZ4755_CLK_AIC		24
+> +#define JZ4755_CLK_ADC		25
+> +#define JZ4755_CLK_TCU		26
+> +#define JZ4755_CLK_BCH		27
+> +#define JZ4755_CLK_I2C		28
+> +#define JZ4755_CLK_TVE		29
+> +#define JZ4755_CLK_CIM		30
+> +#define JZ4755_CLK_AUX_CPU	31
+> +#define JZ4755_CLK_AHB1		32
+> +#define JZ4755_CLK_IDCT		33
+> +#define JZ4755_CLK_DB		34
+> +#define JZ4755_CLK_ME		35
+> +#define JZ4755_CLK_MC		36
+> +#define JZ4755_CLK_TSSI		37
+> +#define JZ4755_CLK_IPU		38
+> +
+> +#endif /* __DT_BINDINGS_CLOCK_JZ4755_CGU_H__ */
+> -- 
+> 2.36.1
+> 
+> 
