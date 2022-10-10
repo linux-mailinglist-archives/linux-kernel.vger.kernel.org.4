@@ -2,94 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47BC15F9DEE
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D45335F9DEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbiJJLsr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Oct 2022 07:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47150 "EHLO
+        id S230507AbiJJLtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 07:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbiJJLsN (ORCPT
+        with ESMTP id S230164AbiJJLta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 07:48:13 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEC86F277
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:48:07 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-104-_xiXV8pPO3q2P3nNSl8MOQ-1; Mon, 10 Oct 2022 12:48:04 +0100
-X-MC-Unique: _xiXV8pPO3q2P3nNSl8MOQ-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Mon, 10 Oct
- 2022 12:48:02 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Mon, 10 Oct 2022 12:48:02 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Joe Perches' <joe@perches.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-doc <linux-doc@vger.kernel.org>
-CC:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Subject: RE: kernel style preference trivia: '* const' vs '*const' ?
-Thread-Topic: kernel style preference trivia: '* const' vs '*const' ?
-Thread-Index: AQHY2/s8FXznyZAmrEihOrCH1Mc++a4HgnJg
-Date:   Mon, 10 Oct 2022 11:48:01 +0000
-Message-ID: <58121da1f2ec4d04b939a368bba47f02@AcuMS.aculab.com>
-References: <9ff662d738612f0ed2cea39266768a2eff21edc3.camel@perches.com>
-In-Reply-To: <9ff662d738612f0ed2cea39266768a2eff21edc3.camel@perches.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 10 Oct 2022 07:49:30 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE2157BFC
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:49:28 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29AB0fhJ025316;
+        Mon, 10 Oct 2022 11:49:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : message-id : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=vlit3mspGcQoltaUL4UUslQlY6RHR+R4ZqT6iqVkgvM=;
+ b=gXSOkUdPOcBAKdk5JKbdjAPT4hbl8tqTT2o1urKT6RShnEhT3WFDAyKMCNQ8QSnZWBBu
+ iibnQmk5RUF9XCtd2u8y+ph0u1VRYr4SST0FB032DUt5RQ+Cea9WQoDi1s8HngngZSyN
+ V4zQv0uLyG1tAOAzElprXzLRwnQzk7C4AwsfkFnyp3/x/iphqf0wsdDnSWEeMyPnM45s
+ MmH9WMpLMtJ+X8LuZnnHj2X3CFJODwhdv9C8AMSR5aRZFhrNbI/Sv0ALQq6KsjXAfzoW
+ cZJb5ZMUQovhxfzrs5oITJgzfd0DIelgojBycRBf8m3qWu262GdfwM/Ve3wzclsOXwJr WQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3k0tasx0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 11:49:10 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29ABJKkt028413;
+        Mon, 10 Oct 2022 11:49:09 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3k0tasvn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 11:49:09 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29ABdELx011911;
+        Mon, 10 Oct 2022 11:49:06 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04fra.de.ibm.com with ESMTP id 3k30u9a0e2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 11:49:06 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29ABn45o66650580
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 10 Oct 2022 11:49:04 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 28D5642042;
+        Mon, 10 Oct 2022 11:49:04 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AD57642041;
+        Mon, 10 Oct 2022 11:49:03 +0000 (GMT)
+Received: from localhost (unknown [9.43.23.98])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 10 Oct 2022 11:49:03 +0000 (GMT)
+Date:   Mon, 10 Oct 2022 17:19:02 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH v4 00/16] objtool: Enable and implement --mcount option on
+ powerpc
+To:     linuxppc-dev@lists.ozlabs.org,
+        Sathvika Vasireddy <sv@linux.ibm.com>, jpoimboe@redhat.com
+Cc:     aik@ozlabs.ru, chenzhongjin@huawei.com,
+        christophe.leroy@csgroup.eu, linux-kernel@vger.kernel.org,
+        mbenes@suse.cz, mingo@redhat.com, mpe@ellerman.id.au,
+        npiggin@gmail.com, peterz@infradead.org, rostedt@goodmis.org
+References: <20221002104240.1316480-1-sv@linux.ibm.com>
+In-Reply-To: <20221002104240.1316480-1-sv@linux.ibm.com>
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1665401892.qmrp2qjj9t.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 6yW98v4FKCZoy1E5uTe0Z3Mne64MmS_O
+X-Proofpoint-ORIG-GUID: 2WBNXd8FziDxka69AQh5-sT2jj99ugWY
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-10_06,2022-10-10_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 malwarescore=0 bulkscore=0 mlxlogscore=626
+ suspectscore=0 mlxscore=0 adultscore=0 spamscore=0 phishscore=0
+ impostorscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2210100069
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joe Perches
-> Sent: 09 October 2022 17:22
-> 
-> The kernel uses '* const' about 10:1 over '*const'
-> 
-> coding_style and checkpatch don't care one way or another.
-> 
-> Does anyone care if there should be some kernel style preference?
+Sathvika Vasireddy wrote:
+> This patchset enables and implements objtool --mcount
+> option on powerpc. This applies atop powerpc/merge branch.
+>=20
+> Changelog:
+>=20
+> ----
+> v4:
+>=20
+> * Patch 11/16 - Introduce a new config option
+> 		CONFIG_HAVE_OBJTOOL_NOP_MCOUNT as a means for
+> 		architectures to enable nop'ing ftrace locations.
+>=20
+> 	      - Remove Acked-by tag from Peter Zijlstra (Intel),
+> 		and Reviewed-by tag from Christophe Leroy.=20
+> 		[This is done because I reworked the patch to add
+> 		a new config option to objtool. Please let me know
+> 		if you want me to retain the tags. Thanks!]
+>=20
+> * Patch 16/16 - Rework the patch to handle only 'bl' instruction
+> 		decoding.=20
 
-I see a wave of patches to 'correct' all the uses...
+With changes to the two patches in this series that I have described,=20
+and with my patch to have ftrace ignore weak symbols (*) applied, I=20
+built a ppc64le config.
 
-> $ git grep -P -oh '\b(?:char|u8)\s*\*\s*const\b' -- '*.[ch]' | \
->   sort | uniq -c | sort -rn
->   12450 char * const
->    1357 char *const
->      41 u8 * const
->      17 char* const
+(*) http://lkml.kernel.org/r/20220809105425.424045-1-naveen.n.rao@linux.vne=
+t.ibm.com
 
-That one should be an error.
-Consider:
-	char* const foo, bar;
+I then used the below diff to disable objtool and to build with=20
+recordmcount:
 
-Fortunately the compiler will find those.
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index 7e28a8fd4c24fa..81c9f895d69012 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -238,8 +238,6 @@ config PPC
+        select HAVE_MOD_ARCH_SPECIFIC
+        select HAVE_NMI                         if PERF_EVENTS || (PPC64 &&=
+ PPC_BOOK3S)
+        select HAVE_OPTPROBES
+-       select HAVE_OBJTOOL                     if PPC32 || MPROFILE_KERNEL
+-       select HAVE_OBJTOOL_MCOUNT              if HAVE_OBJTOOL
+        select HAVE_PERF_EVENTS
+        select HAVE_PERF_EVENTS_NMI             if PPC64
+        select HAVE_PERF_REGS
 
-I'd guess 'char* foo' is already an error?
+Comparing available_filter_functions across the two builds showed the=20
+below differences:
+  $ diff ftrace_funcs_recordmcount_20221010.sort.out ftrace_funcs_objtool_2=
+0221010.sort.out=20
+  6799d6798
+  < __dev_alloc_name
+  6800a6800
+  > dev_alloc_name_ns
+  11680d11679
+  < find_zone.isra.0
+  22396a22396
+  > ns_capable_common.part.0
 
-Which makes me think the * ought to be as close as possible
-to the variable/field name.
-So perhaps 'char *const foo' should be ok.
+All the above changes are down to compiler optimizations and shuffling=20
+due to CONFIG_OBJTOOL being enabled and changing annotate_unreachable().
 
-	David
+As such, for this series:
+Reviewed-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+Tested-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
 
+Josh,
+Are you ok if this series is taken in through the powerpc tree?
+
+
+- Naveen
