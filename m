@@ -2,112 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D4B5F9DEC
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BC15F9DEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbiJJLsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 07:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
+        id S231274AbiJJLsr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Oct 2022 07:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbiJJLsC (ORCPT
+        with ESMTP id S230164AbiJJLsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 07:48:02 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3577199C;
-        Mon, 10 Oct 2022 04:47:51 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 23B6966022A5;
-        Mon, 10 Oct 2022 12:47:21 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1665402441;
-        bh=7tuh7nNoMmOTC8qASx41d6YAap5Q04ANum0eL2sT7cg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=K/FhvlBlG72ChQicSlXdO8lwTUkOREPEwjtokn6anOxhxLmFaeEz5VtF9F44pbpwU
-         kaQHKZaYgD43S0I0lmkC084+gORg1sNtW7mcHyQD4Cv/pJl/y5dpmskHblM7egL4XK
-         WZoUEpORhFb2flqRsO421UkWnJ8EPtuourLcqSwITMhP1FIMEvv54IpzLkK98NfiqC
-         hiaZXxtsKV4aX53M/aLzt+COaE7KK0lARzWbkw1Epo/b2/mN5pwtLE+UO3bBxOtG0U
-         lCaGiTAzPlF/FVSlx6AMuohJ3YkHGXjV8NsGTz8BCzThnLvn/POE+Ofebr3ooN91sN
-         +/nps6Ggx09NA==
-Message-ID: <6c889c7e-4c5a-a201-e37c-bf95b6826584@collabora.com>
-Date:   Mon, 10 Oct 2022 13:47:18 +0200
+        Mon, 10 Oct 2022 07:48:13 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEC86F277
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:48:07 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-104-_xiXV8pPO3q2P3nNSl8MOQ-1; Mon, 10 Oct 2022 12:48:04 +0100
+X-MC-Unique: _xiXV8pPO3q2P3nNSl8MOQ-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Mon, 10 Oct
+ 2022 12:48:02 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Mon, 10 Oct 2022 12:48:02 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Joe Perches' <joe@perches.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-doc <linux-doc@vger.kernel.org>
+CC:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Subject: RE: kernel style preference trivia: '* const' vs '*const' ?
+Thread-Topic: kernel style preference trivia: '* const' vs '*const' ?
+Thread-Index: AQHY2/s8FXznyZAmrEihOrCH1Mc++a4HgnJg
+Date:   Mon, 10 Oct 2022 11:48:01 +0000
+Message-ID: <58121da1f2ec4d04b939a368bba47f02@AcuMS.aculab.com>
+References: <9ff662d738612f0ed2cea39266768a2eff21edc3.camel@perches.com>
+In-Reply-To: <9ff662d738612f0ed2cea39266768a2eff21edc3.camel@perches.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3 05/10] dt-bindings: pinctrl: mediatek,pinctrl-mt6795:
- Fix interrupt count
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Yassine Oudjana <yassine.oudjana@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Andy Teng <andy.teng@mediatek.com>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20221007125904.55371-1-y.oudjana@protonmail.com>
- <20221007125904.55371-6-y.oudjana@protonmail.com>
- <0769c6c8-567d-68c0-323a-9aaee1241e13@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <0769c6c8-567d-68c0-323a-9aaee1241e13@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/10/22 13:13, Krzysztof Kozlowski ha scritto:
-> On 07/10/2022 08:58, Yassine Oudjana wrote:
->> From: Yassine Oudjana <y.oudjana@protonmail.com>
->>
->> The document currently states a maximum of 1 interrupt, but the DT
->> has 2 specified causing a dtbs_check error. Replace the maximum limit
->> with a minimum and add per-interrupt descriptions to pass the check.
->>
->> Suggested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
->> ---
->>   .../devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
->> index 73ae6e11410b..a3a3f7fb9605 100644
->> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
->> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
->> @@ -47,7 +47,10 @@ properties:
->>   
->>     interrupts:
->>       description: The interrupt outputs to sysirq.
->> -    maxItems: 1
->> +    minItems: 1
->> +    items:
->> +      - description: EINT interrupt
->> +      - description: EINT event_b interrupt
+From: Joe Perches
+> Sent: 09 October 2022 17:22
 > 
-> Is second interrupt really optional or you just wanted to silence the
-> warning?
+> The kernel uses '* const' about 10:1 over '*const'
 > 
-
-The event_b interrupt exists (and fires on certain events, if configured to do so),
-but it's currently unused.
-
-It's really optional.
-
-> Best regards,
-> Krzysztof
+> coding_style and checkpatch don't care one way or another.
 > 
+> Does anyone care if there should be some kernel style preference?
 
+I see a wave of patches to 'correct' all the uses...
+
+> $ git grep -P -oh '\b(?:char|u8)\s*\*\s*const\b' -- '*.[ch]' | \
+>   sort | uniq -c | sort -rn
+>   12450 char * const
+>    1357 char *const
+>      41 u8 * const
+>      17 char* const
+
+That one should be an error.
+Consider:
+	char* const foo, bar;
+
+Fortunately the compiler will find those.
+
+I'd guess 'char* foo' is already an error?
+
+Which makes me think the * ought to be as close as possible
+to the variable/field name.
+So perhaps 'char *const foo' should be ok.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
