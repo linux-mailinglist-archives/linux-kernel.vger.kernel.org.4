@@ -2,342 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9C75F9F82
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7BB75F9F8E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbiJJNhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 09:37:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35380 "EHLO
+        id S229541AbiJJNkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 09:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJJNh3 (ORCPT
+        with ESMTP id S229513AbiJJNkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 09:37:29 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B708B5AA12
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 06:37:27 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id c23so2450624qtw.8
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 06:37:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vkuK5BKe2xjQkr/RcXbg8y9N+ayQn7NQBCiNKHV/VJ4=;
-        b=Cc9dsYY3Ns5gpbAsjA9eoNHsK/PdkfsTRAQYm4d7Yxa28pltyytcsPDOyAbjEb4Vfy
-         fV9CvxhHZ+QohzNZCH40PwvqEKQpZ/DBQHFHR2r+NsS1/GU9rCLfuGykRtsjkBYpittF
-         4sUiieWnV2SpWKMy/6umjJ1sx6XQH88UXKtgi4jhNTsr2YrNTdoEEqIvteHJk/AnIvbe
-         Se1g7yK7eKDoyaUJ6zXRjsTMJMDKqmAoe8A2dVsbVTpITeHV7bDerqUzdhU0uMzAXucq
-         BWT6u7k1zoX21YeXr1VSSo3FEKteHLUx8EL2micF0LUjCBuK6DUIj1UM7AobCdNRbqas
-         p4lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vkuK5BKe2xjQkr/RcXbg8y9N+ayQn7NQBCiNKHV/VJ4=;
-        b=evItgWfTt7I06nxUEfyCPPATT1ezIeRMI5xgBPEk5IuLOl+QZaVIS+rSEcp/QlYoN5
-         SqdSDN0oOYZlZgaB/dEtWcgM+F43q0n/DhOXl2IiL5S4IFeSiTGlatNIARHVI7THgNaN
-         SmC1SHyXyoKTQhW9tWTYia001dClCJs398CFrXFDomD2iEBKn5YuUbX8tWgt0/WrLnp4
-         vJkZB+fEwPpooPpF3sI/3MJAFQxeDMZCKmO26Ko4R2beKmHnKYIGlXHDxV/vFj66n6lE
-         ihsLhj7kIeignDj3BkF7F5oVrILw6gFXHev0zhaZSMBMxGgLauPtLgRM2QSmlNbWr3KY
-         BiuA==
-X-Gm-Message-State: ACrzQf1F7/8Ka0QamIgPeLSrE6adFo+HwfBUWtaLk+HQa9YWq0KFvP4I
-        h8S268aeAiGt42h4z/X35NaaKA==
-X-Google-Smtp-Source: AMsMyM5B2PMSgTHUQeRVmWgnVQAXgXXfhmXI03btwQHLLUhnuKk8abdqNAj1w+SE3UvwJDKnlBB8eA==
-X-Received: by 2002:ac8:580d:0:b0:35c:3fcc:2442 with SMTP id g13-20020ac8580d000000b0035c3fcc2442mr14849984qtg.501.1665409046788;
-        Mon, 10 Oct 2022 06:37:26 -0700 (PDT)
-Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id x14-20020a05620a448e00b006b949afa980sm10390657qkp.56.2022.10.10.06.37.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 06:37:26 -0700 (PDT)
-Message-ID: <d27d7740-bf35-b8d4-d68c-bb133513fa19@linaro.org>
-Date:   Mon, 10 Oct 2022 09:37:23 -0400
+        Mon, 10 Oct 2022 09:40:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55DEF54667
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 06:40:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665409236;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uRewDE0rZn6hJgooSIadeEW16yLPv94UEqowboDO7Tg=;
+        b=Cvs8g1e+2AaPLynfK/jcOx5eSdCTrBfJqAOhlkf7o2KF6GfZhOnFQsl0DwM2syquZ4X027
+        cw7dngx91MM7Sc0LJ430XP/Ww+LqELEhTmfg4E4MPHadlo4Rg8YP15Qhf6CSAJ2E6AyX85
+        56BVMsQJafdt6a6bm03kwHd2db20v6s=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-290-1jG5H1LFPHOCdfbzFg3Vtg-1; Mon, 10 Oct 2022 09:40:29 -0400
+X-MC-Unique: 1jG5H1LFPHOCdfbzFg3Vtg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9A3E01C05157;
+        Mon, 10 Oct 2022 13:40:27 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.192.124])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E2C5EC210E;
+        Mon, 10 Oct 2022 13:40:19 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Andrew Cooper <Andrew.Cooper3@citrix.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "joao.moreira@intel.com" <joao.moreira@intel.com>,
+        John Allen <john.allen@amd.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "eranian@google.com" <eranian@google.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 18/39] mm: Add guard pages around a shadow stack.
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+        <20220929222936.14584-19-rick.p.edgecombe@intel.com>
+        <202210031127.C6CF796@keescook>
+        <37ef8d93-8bd2-ae5e-4508-9be090231d06@citrix.com>
+        <87bkqj26zp.fsf@oldenburg.str.redhat.com>
+        <6e75eb27-c16b-ccfe-08b9-856edeff51eb@citrix.com>
+Date:   Mon, 10 Oct 2022 15:40:18 +0200
+In-Reply-To: <6e75eb27-c16b-ccfe-08b9-856edeff51eb@citrix.com> (Andrew
+        Cooper's message of "Mon, 10 Oct 2022 13:32:51 +0000")
+Message-ID: <87tu4bztj1.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v3 net-next 12/14] dt-bindings: net: dsa: ocelot: add
- ocelot-ext documentation
-Content-Language: en-US
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Colin Foster <colin.foster@in-advantage.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-References: <20220926002928.2744638-1-colin.foster@in-advantage.com>
- <20220926002928.2744638-13-colin.foster@in-advantage.com>
- <ec63b5aa-3dec-3c27-e987-25e36b1632ba@linaro.org>
- <YzzLCYHmTcrHbZcH@colin-ia-desktop>
- <455e31be-dc87-39b3-c7fe-22384959c556@linaro.org>
- <Yz2mSOXf68S16Xg/@colin-ia-desktop>
- <28b4d9f9-f41a-deca-aa61-26fb65dcc873@linaro.org>
- <20221008000014.vs2m3vei5la2r2nd@skbuf>
- <c9ce1d83-d1ca-4640-bba2-724e18e6e56b@linaro.org>
- <20221010130707.6z63hsl43ipd5run@skbuf>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221010130707.6z63hsl43ipd5run@skbuf>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/10/2022 09:07, Vladimir Oltean wrote:
-> On Sun, Oct 09, 2022 at 12:14:22PM -0400, Krzysztof Kozlowski wrote:
->> On 08/10/2022 02:00, Vladimir Oltean wrote:
->>> On Wed, Oct 05, 2022 at 06:09:59PM +0200, Krzysztof Kozlowski wrote:
->>>>>> I don't understand how your answer relates to "reg=<0 0>;". How is it
->>>>>> going to become 0x71010000 if there is no other reg/ranges set in parent
->>>>>> nodes. The node has only one IO address, but you say the switch has 20
->>>>>> addresses...
->>>>>>
->>>>>> Are we talking about same hardware?
->>>>>
->>>>> Yes. The switch driver for both the VSC7512 and VSC7514 use up to ~20 regmaps
->>>>> depending on what capabilities it is to have. In the 7514 they are all
->>>>> memory-mapped from the device tree. While the 7512 does need these
->>>>> regmaps, they are managed by the MFD, not the device tree. So there
->>>>> isn't a _need_ for them to be here, since at the end of the day they're
->>>>> ignored.
->>>>>
->>>>> The "reg=<0 0>;" was my attempt to indicate that they are ignored, but I
->>>>> understand that isn't desired. So moving forward I'll add all the
->>>>> regmaps back into the device tree.
->>>>
->>>> You need to describe the hardware. If hardware has IO address space, how
->>>> does it matter that some driver needs or needs not something?
+* Andrew Cooper:
+
+> On 10/10/2022 13:33, Florian Weimer wrote:
+>> * Andrew Cooper:
+>>
+>>> You don't actually need a hole to create a guard.=C2=A0 Any mapping of =
+type
+>>> !=3D shstk will do.
 >>>
->>> What do you mean by IO address space exactly? It is a SPI device with registers.
->>> Does that constitute an IO address space to you?
->>
->> By IO I meant MMIO (or similar) which resides in reg (thus in unit
->> address). The SPI devices have only chip-select as reg, AFAIR.
-> 
-> Again, the SPI device (soc@0) has a unit address that describes the chip
-> select, yes. The children of the SPI device have a unit address that
-> describes the address space of the SPI registers of the mini-peripherals
-> within that SPI device.
-> 
->>> The driver need matters because you don't usually see DT nodes of SPI,
->>> I2C, MDIO devices describing the address space of their registers, and
->>> having child nodes with unit addresses in that address space. Only when
->>> those devices are so complex that the need arises to identify smaller
->>> building blocks is when you will end up needing that. And this is an
->>> implementation detail which shapes how the dt-bindings will look like.
->>
->> So probably I misunderstood here. If this is I2C or SPI device, then of
->> course reg and unit address do not represent registers.
-> 
-> Except we're not talking about the SPI device, I'm reminding you that we
-> are talking about "reg = <0 0>" which Colin used to describe the
-> /spi/soc@0/ethernet-switch node.
-> 
-> Colin made the incorrect decision to describe "reg = <0 0>" for the
-> switch OF node in an attempt to point out that "reg" will *not* be used
-> by his implementation, whatever value it has. You may want to revisit
-> some of the things that were said.
-> 
-> What *is* used in the implementation is the array of resources from
-> struct mfd_cell vsc7512_devs[] in drivers/mfd/ocelot-core.c, because MFD
-> allows you to do this (and I suppose because it is more convenient than
-> to rely on the DT). Colin's entire confusion comes from the fact that he
-> thought it wouldn't be necessary to describe the unit addresses of MFD
-> children if those addresses won't be retrieved from DT.
-> 
->>>> You mentioned that address space is mapped to regmaps. Regmap is Linux
->>>> specific implementation detail, so this does not answer at all about
->>>> hardware.
->>>>
->>>> On the other hand, if your DTS design requires this is a child of
->>>> something else and by itself it does not have address space, it would be
->>>> understandable to skip unit address entirely... but so far it is still
->>>> confusing, especially that you use arguments related to implementation
->>>> to justify the DTS.
->>>
->>> If Colin skips the unit address entirely, then how could he distinguish
->>> between the otherwise identical MDIO controllers mdio@7107009c and
->>> mdio@710700c0 from Documentation/devicetree/bindings/mfd/mscc,ocelot.yaml?
->>> The ethernet-switch node added here is on the same hierarchical level
->>> with the MDIO controller nodes, so it must have a unit address just like
->>> them.
->>
->> So what is @710700c0?
-> 
-> @710700c0 is VSC7512_MIIM1_RES_START, i.e. the base address of the
-> second MDIO controller embedded within the SoC (accessed over whatever;
-> SPI or MMIO).
-> 
->> It's not chip-select, but MMIO or some other bus (specific to the
->> device), right?
-> 
-> Yes, it is not chip select. Think of the /spi/soc@0 node as an AHB to
-> SPI bridge (it is possibly not quite that, but for the sake of imagination
-> it's a good enough description), and the children of /spi/soc@0 are
-> nodes whose registers are accessed through that AHB to SPI bridge.
-> The same addresses can also be accessed via direct MMIO by the processor
-> *inside* the switch SoC, which in some cases can also run Linux
-> (although not here in VSC7512, but in VSC7514).
-> 
->> The mscc,ocelot.yaml has a soc@0 SPI device. Children of soc@0 use unit
->> addresses/reg meaningful for that soc@0.
-> 
-> Which they do.
-> 
->>> But I don't support Colin's choice of "reg=<0 0>;" either. A choice must
->>> be made between 2 options:
->>> - mapping all 20 regions of the SPI address space into "reg" values
->>> - mapping a single region from the smallest until the largest address of
->>>   those 20, and hope nothing overlaps with some other peripheral, or
->>>   worse, that this region will never need to be expanded to the left.
->>
->> Yeah, at least to my limited knowledge of this hardware.
-> 
-> Yeah what? That a decision must be made?
+>>> If you've got a load of threads, you can tightly pack stack / shstk /
+>>> stack / shstk with no holes, and they each act as each other guard page=
+s.
+>> Can userspace read the shadow stack directly?  Writing is obviously
+>> blocked, but reading?
+>
+> Yes - regular reads are permitted to shstk memory.
+>
+> It's actually a great way to get backtraces with no extra metadata
+> needed.
 
-Yep. That's it. You ask me to learn this hardware, read datasheet and
-design it instead of Colin or other people working on it. I can give you
-generic guidelines how it should look, but that's it.
+Indeed, I hope shadow stacks can be used to put the discussion around
+frame pointers to a rest, at least when it comes to profiling. 8-)
 
-> 
->>> What information do you need to provide some best practices that can be
->>> applied here and are more useful than "you need to describe the
->>> hardware"? 
->>
->> Describe the hardware properties in terms of it fit in to the whole
->> system - so some inputs (clocks, GPIOs), outputs (interrupts),
->> characteristics of a device (e.g. clock provider -> clock cells) and
->> properties configuring hardware per specific implementation.
->>
->> But mostly this argument "describe hardware" should be understood like:
->> do not describe software (Linux drivers) and software policies (driver
->> choices)...
-> 
-> Let's bring this back on track. The discussion started with you saying:
-> 
-> | soc in spi is a bit confusing.
-> 
-> which I completely agree with, it really is. But it's also not wrong
-> (or at least you didn't point out reasons why it would be, despite being
-> asked to), and very descriptive of what actually takes place here:
-> SoC registers are being accessed over SPI by an external host.
+>> POSIX does not appear to require PROT_NONE mappings
+>> for the stack guard region, either.  However, the
+>> pthread_attr_setguardsize manual page pretty clearly says that it's got
+>> to be unreadable and unwriteable.  Hence my question.
+>
+> Hmm.=C2=A0 If that's what the manuals say, then fine.
+>
+> But honestly, you don't get very far at all without faulting on a
+> read-only stack.
 
-My comment was not only about this. My comment was about soc@0 not
-having reg. And then having ethernet@0 with reg=<0,0> which is unusual,
-because - as you explained - it is not a SPI device.
+I guess we can update the manual page proactively.  It does look like a
+tempting optimization.
 
-> 
-> If you're going to keep giving mechanical review to this, my fear is
-> that a very complex set of schemas is going to fall through the cracks
-> of bureaucracy, and while it will end up being formally correct,
-> absolutely no one will understand what is actually required when
-> piecing everything together.
-> 
-> In your review of the example provided by Colin here, you first have
-> this comment about "soc in spi" being confusing, then you seem to forget
-> everything about that, and ask "How is this example different than
-> previous one (existing soc example)?"
-
-That one was a different topic, but we stopped discussing it. You
-explained the differences and its fine.
-
-> 
-> There are more things to unpack in order to answer that.
-> 
-> The main point is that we wanted to reuse the existing MMIO-based
-> drivers when accessing the devices over SPI. So the majority of
-> peripherals have the same dt-bindings whether they are on /soc or on
-> /spi/soc. Linux also provides us with the mfd and regmap abstractions,
-> so all is good there. So you are not completely wrong to expect that an
-> ethernet-switch with the "mscc,vsc7512-switch" compatible string should
-> have the same bindings regardless of whatever its parent is.
-> 
-> Except this is not actually true, and the risk is that this will appear
-> as seamless as just that when it actually isn't.
-> 
-> First (and here Colin is also wrong), the switch Colin adds support for
-> is not directly comparable with "the existing soc example" (vsc9953).
-> That is different (NXP) hardware which just happens to be supported by
-> the same driver (drivers/net/dsa/ocelot). 
-
-If it is different hardware, then you have different compatible, so why
-this is a problem?
-
-> It's worth reiterating that
-> dissimilar hardware driven by a common driver should not necessarily
-> have the same dt-bindings.
-
-Which is obvious...
-
-> Case in point, the NXP switches have a single
-> (larger) "reg", because the SoC integration was tidier and the switch
-> doesn't have 20 regions spread out through the SoC's guts, which overlap
-> with other peripherals as in the case of VSC7512/VSC7514.
-> 
-> Anyway, Colin's SPI-controlled VSC7512 switch is most similar to
-> mscc,vsc7514-switch.yaml (to the point of the hardware being identical),
-> and I believe that this is the schema he should append his information to,
-> rather than what he's currently proposing in his patches.
-> 
-> *But* accessing an Ethernet switch over SPI is not functionally
-> identical to accessing it over MMIO, unless you want to have an Ethernet
-> throughput in the order of tens of bits per second.
-> 
-> This is where implementation starts to matter, and while mscc,vsc7514-switch.yaml
-
-Not really, implementation still does not matter to the bindings and
-that argument proves nothing. No one forces you to model it as SPI in
-bindings...
-
-> describes a switch where packets are sent and received over MMIO (which
-> wouldn't be feasible over SPI), Colin's VSC7512 schema describes a
-> switch used in DSA mode (packets are sent/received over a host Ethernet
-> port, fact which helps overcome the bandwidth limitations of SPI).
-> To make matters worse, even VSC7514 can be used in DSA mode. When used
-> in DSA mode, a *different* driver, with *different* dt-bindings (because
-> of different histories) controls it.
-
-The histories also do not matter here - you can deprecate bindings, e.g.
-with a new compatible, and write everything a bit more generic (to cover
-different setups).
-
-> 
-> So what must be done is that mscc,vsc7514-switch.yaml must incorporate
-> *elements* of dsa.yaml, but *only* when it is not accessed using MMIO
-> (i.e. the Linux on the MIPS VSC7514 doesn't support an external host
-> driving the switch in DSA mode).
-
-Yes and? You write such stuff like there was any objection from my side...
-
-> 
-> I was kind of expecting this discussion to converge towards ways in
-> which we can modify mscc,vsc7514-switch.yaml to support a switch used
-> in DSA mode or in switchdev mode. Most notable in dsa-port.yaml is the
-> presence of an 'ethernet' phandle, but there are also other subtle
-> differences, like the 'label' property which mscc,vsc7514-switch.yaml
-> does not have (and which in the switchdev implementation at
-> drivers/net/ethernet/mscc/ does not support, either).
-
-What stops you from doing that? What do you need from me?
-
-
-Best regards,
-Krzysztof
+Thanks,
+Florian
 
