@@ -2,168 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07ACB5F9FA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B55D55F9FAC
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiJJNxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 09:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
+        id S229637AbiJJNyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 09:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiJJNxq (ORCPT
+        with ESMTP id S229563AbiJJNys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 09:53:46 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD4F5509F;
-        Mon, 10 Oct 2022 06:53:45 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a26so25040011ejc.4;
-        Mon, 10 Oct 2022 06:53:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=G/dWkZH/lcZFThQ5CYaiL4o71iPPfb4HHLZtOwpAOpQ=;
-        b=IyMDWqzBFEoqxjiqXo5pp1MSzPOPqbHsmHStcHIiPmMyRhKznQf8IQoQHsfQtRYbjk
-         S+qbQRqjxGyN8jkqoQVAGmNvmEl+6dCdRxE0lud4UuDeZdd5ycNSvs7Meh4zagm839WE
-         Gwy+ZLuogHQsSN3NBQ242raRFay3NSwmJp/67TV1PKbHKzf4/GN7fhzV1imv94IbsAjm
-         ZYop5MOjXahfBX+utKLglhQKtkAnhAAh3fGHDd74dVEptZX2WunlXWVGH4DUwZBOAFYz
-         0WUlHA9w18JT8fb7dU/WyiiSgS/Hstk3lzcK19P6IDQxOF8dSzbTw3WcZzxXJwt3L72n
-         ZAwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G/dWkZH/lcZFThQ5CYaiL4o71iPPfb4HHLZtOwpAOpQ=;
-        b=FYdi4V+4YxNWYPeMKkxBDUREx5QRm/FD/3fJIIk7z+swEsByTeIx2sk0PP4HkA/CZw
-         t2oZ1SYxXmTKZtRsKq0+NCSViqlZHWscNwnmqwfUsv3Sj4zdyGEPUL0eckgeSk3jOBET
-         C2RcIZ+Op5lyVwSgLxB++n6cQs/lVBI9VkSMDTVh9yVnBN7brgnMqERnn/kiHsCVmtBX
-         zrNWQWcSOYX3ie1YBhLy04Q9mmpA/LNx6anQo04RNPeW8UYefNA7q6gltdSinewdqYVz
-         ygiApsy4C1U9x2w2HTvO4a8ZmtAZHa+uYNlV0K5L0RkgnylMo1JbR0l8mVrSgKMGNTF8
-         iGaA==
-X-Gm-Message-State: ACrzQf0fehWk3KPVgjN+LtPCDOrh/UMowIOaBPAiqe5zbg2/EZnwL0LK
-        5O6VTOh58RNl+V2XuynZtb84AUbTb9qyMe+xpuY/gXDJE8yjwQ==
-X-Google-Smtp-Source: AMsMyM5Obm79nPTvVozOOwA1HntH8OU44ldvrUCW7EjQd9Idov8c+JaplIuTV4+O5Qt338v1RR/ZEgAKz61SQfHCGgs=
-X-Received: by 2002:a17:907:75ed:b0:78d:97ed:2894 with SMTP id
- jz13-20020a17090775ed00b0078d97ed2894mr8992282ejc.739.1665410023250; Mon, 10
- Oct 2022 06:53:43 -0700 (PDT)
+        Mon, 10 Oct 2022 09:54:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C87CE36;
+        Mon, 10 Oct 2022 06:54:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1854E60F5E;
+        Mon, 10 Oct 2022 13:54:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C212C433C1;
+        Mon, 10 Oct 2022 13:54:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665410085;
+        bh=XrcN3iuKei+dF8KsfhLx+HbbjgjNclIPzqcHPB0qUX0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jJan9Qq/0mIMAdxo0+hFMn2TOc+2W1FoZEJX5LebHM+BylOh9m3OKmweAuEOxANa/
+         QQ1QPkZLLswReQhwA5aK1BnxDnH7kvuPF4X6coEXzuLJqG3M3tmhn+koeQB4DdjoNh
+         lXZ2cZHby/2RQVGsRQ7uxNKC6uSVLknidjkjE7e4eBD76pM2Jbsnl/IezeQat0F2j1
+         jZVMnxI7uC3MK3kcBbvy7TvCw7msG6CkkeehCkoAGZ2eC3ro9tZ/leZ9aMNxgWURkI
+         cbVrDuwyFFokPMc9Kunw7uuJShVnoDdoIBdScowi8ZhXMcE5VLptU0HIboPVB5O3d4
+         Xyo4Kd1C6Lu9w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 274274062C; Mon, 10 Oct 2022 10:54:42 -0300 (-03)
+Date:   Mon, 10 Oct 2022 10:54:42 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Carsten Haitzler <carsten.haitzler@foss.arm.com>
+Cc:     Leo Yan <leo.yan@linaro.org>, Jiri Slaby <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
+        mike.leach@linaro.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v9 02/13] perf test: Add build infra for perf test tools
+ for CoreSight tests
+Message-ID: <Y0QkIjO4pvPuzeMB@kernel.org>
+References: <20220909152803.2317006-1-carsten.haitzler@foss.arm.com>
+ <20220909152803.2317006-3-carsten.haitzler@foss.arm.com>
+ <Yz67SHpIN5NggKEk@kernel.org>
+ <Yz6/zlchVnNsVlzJ@kernel.org>
+ <Yz7RAgMN6WGnD3OZ@leoy-yangtze.lan>
+ <e9f980a7-fba8-4610-a058-b74e51d6ab24@foss.arm.com>
+ <Y0AfK7sVphNkQA4q@kernel.org>
+ <0b3afc5d-c4a1-8a50-45c3-20c706c3ecfd@foss.arm.com>
 MIME-Version: 1.0
-From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Mon, 10 Oct 2022 21:53:07 +0800
-Message-ID: <CAO4mrfcEivHWx3Ch3VA4tMWC3nVi7Nv1XR4WZ5XLxyKS9mZxYQ@mail.gmail.com>
-Subject: general protection fault in fuse_test_super
-To:     linux-fsdevel@vger.kernel.org, miklos@szeredi.hu
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0b3afc5d-c4a1-8a50-45c3-20c706c3ecfd@foss.arm.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux Developer,
+Em Mon, Oct 10, 2022 at 08:02:29AM +0100, Carsten Haitzler escreveu:
+> On 10/7/22 13:44, Arnaldo Carvalho de Melo wrote:
+> > Em Fri, Oct 07, 2022 at 12:34:51PM +0100, Carsten Haitzler escreveu:
+> > > On 10/6/22 13:58, Leo Yan wrote:
+> > > oh sorry - indeed i didn't see this problem coming after fixing the
+> > > conflicts. i've got an update of the patches that fix that. should i just
+> > > send through the 2 updates patches as a v10 or the whole series?
 
-Recently when using our tool to fuzz kernel, the following crash was triggered:
+> > No need, I did some fixes taking into account the comments on this
+> > thread, we can go on and fix things from what I have now at
+> > acme/perf/core, which I'll send to Linus today.
+ 
+> oh cool. i'll let patches sit for now - let me know if there's anything you
+> want/need from me.
 
-HEAD commit: 64570fbc14f8 Linux 5.15-rc5
-git tree: upstream
-compiler: clang 12.0.0
-console output:
-https://drive.google.com/file/d/1EV0R2yutxfhDNK7k-qzCsfy0Y7cRjSxK/view?usp=sharing
-kernel config: https://drive.google.com/file/d/1lNwvovjLNrcuyFGrg05IoSmgO5jaKBBJ/view?usp=sharing
+Not right now, I'm now just waiting for Linus to merge what I sent, then
+you can continue from upstream.
 
-Unfortunately, I don't have any reproducer for this crash yet.
-
-general protection fault, probably for non-canonical address
-0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-CPU: 0 PID: 580 Comm: syz-executor Not tainted 5.15.0-rc5 #4
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-RIP: 0010:get_fuse_conn_super fs/fuse/fuse_i.h:844 [inline]
-RIP: 0010:fuse_test_super+0x68/0xa0 fs/fuse/inode.c:1633
-Code: 00 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 75 3a 48 8b 9b
-78 06 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 da 48 c1 ea 03 <80> 3c
-02 00 75 12 31 c0 48 39 2b 5b 5d 0f 94 c0 c3 e8 b2 0d 0a ff
-RSP: 0018:ffffc90008bdfca0 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000040000
-RDX: 0000000000000000 RSI: ffff88802329a380 RDI: ffff88800ec68678
-RBP: ffff88802a2fc800 R08: ffffffff82b3dfbd R09: fffff5200117bf8a
-R10: 0000000000000003 R11: fffff5200117bf89 R12: dffffc0000000000
-R13: ffffffff82b3dfb0 R14: 0000000000000000 R15: 0000000000000002
-FS:  00007ff8f37f0700(0000) GS:ffff888063e00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055d548d9cbf0 CR3: 000000004d5c6000 CR4: 0000000000752ef0
-DR0: 0000000020000080 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-PKRU: 55555554
-Call Trace:
- sget_fc+0x1ff/0x7e0 fs/super.c:525
- fuse_get_tree+0x201/0x3f0 fs/fuse/inode.c:1664
- vfs_get_tree+0x89/0x2f0 fs/super.c:1498
- do_new_mount fs/namespace.c:2988 [inline]
- path_mount+0x1228/0x1cb0 fs/namespace.c:3318
- do_mount+0xf3/0x110 fs/namespace.c:3331
- __do_sys_mount fs/namespace.c:3539 [inline]
- __se_sys_mount fs/namespace.c:3516 [inline]
- __x64_sys_mount+0x18f/0x230 fs/namespace.c:3516
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7ff8f62cc5de
-Code: 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f
-84 00 00 00 00 00 90 f3 0f 1e fa 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ff8f37efa68 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007ff8f62cc5de
-RDX: 00000000200075c0 RSI: 0000000020007600 RDI: 0000000000000000
-RBP: 00007ff8f37efb00 R08: 00007ff8f37efb00 R09: 00000000200075c0
-R10: 0000000000000004 R11: 0000000000000202 R12: 00000000200075c0
-R13: 0000000020007600 R14: 00007ff8f37efac0 R15: 0000000020007600
-Modules linked in:
-Dumping ftrace buffer:
-   (ftrace buffer empty)
----[ end trace 361dd1df065c6dad ]---
-RIP: 0010:get_fuse_conn_super fs/fuse/fuse_i.h:844 [inline]
-RIP: 0010:fuse_test_super+0x68/0xa0 fs/fuse/inode.c:1633
-Code: 00 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 75 3a 48 8b 9b
-78 06 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 da 48 c1 ea 03 <80> 3c
-02 00 75 12 31 c0 48 39 2b 5b 5d 0f 94 c0 c3 e8 b2 0d 0a ff
-RSP: 0018:ffffc90008bdfca0 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000040000
-RDX: 0000000000000000 RSI: ffff88802329a380 RDI: ffff88800ec68678
-RBP: ffff88802a2fc800 R08: ffffffff82b3dfbd R09: fffff5200117bf8a
-R10: 0000000000000003 R11: fffff5200117bf89 R12: dffffc0000000000
-R13: ffffffff82b3dfb0 R14: 0000000000000000 R15: 0000000000000002
-FS:  00007ff8f37f0700(0000) GS:ffff888063e00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055d548d9cbf0 CR3: 000000004d5c6000 CR4: 0000000000752ef0
-DR0: 0000000020000080 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-PKRU: 55555554
-----------------
-Code disassembly (best guess), 4 bytes skipped:
-   0: df 48 89              fisttps -0x77(%rax)
-   3: fa                    cli
-   4: 48 c1 ea 03          shr    $0x3,%rdx
-   8: 80 3c 02 00          cmpb   $0x0,(%rdx,%rax,1)
-   c: 75 3a                jne    0x48
-   e: 48 8b 9b 78 06 00 00 mov    0x678(%rbx),%rbx
-  15: 48 b8 00 00 00 00 00 movabs $0xdffffc0000000000,%rax
-  1c: fc ff df
-  1f: 48 89 da              mov    %rbx,%rdx
-  22: 48 c1 ea 03          shr    $0x3,%rdx
-* 26: 80 3c 02 00          cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2a: 75 12                jne    0x3e
-  2c: 31 c0                xor    %eax,%eax
-  2e: 48 39 2b              cmp    %rbp,(%rbx)
-  31: 5b                    pop    %rbx
-  32: 5d                    pop    %rbp
-  33: 0f 94 c0              sete   %al
-  36: c3                    retq
-  37: e8 b2 0d 0a ff        callq  0xff0a0dee
-
-Best,
-Wei
+- Arnaldo
