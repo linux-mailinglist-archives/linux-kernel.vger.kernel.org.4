@@ -2,115 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3404E5FA1BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 18:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 094295FA1B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 18:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiJJQSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 12:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
+        id S229699AbiJJQSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 12:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiJJQSI (ORCPT
+        with ESMTP id S229552AbiJJQSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 12:18:08 -0400
-Received: from mail-4018.proton.ch (mail-4018.proton.ch [185.70.40.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FF76DAE4
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 09:18:05 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 16:17:54 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
-        s=protonmail; t=1665418683; x=1665677883;
-        bh=v8t2lgopjGAlj4wqpLkRQ1AnOzaZKPh8TfSRmc4oklE=;
-        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID;
-        b=lOxRxmLyaILR+j+bXkejDUmHL1SmEfzt6EeJ4BvN9pTighkdY+YF9dwmwUo/It/jP
-         xt7OYk41es+gckbAfe7lfCvtcidi1vVuYuDlCRSNLzbDFZ/+lZfF2cco2KhZeA8bBh
-         astZAlu0V3026VrhzkQ61BVp+L+cZH+2Oc44keMU=
-To:     caleb@connolly.tech
-From:   Caleb Connolly <caleb@connolly.tech>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        devicetree@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jeff LaBundy <jeff@labundy.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Rob Herring <robh+dt@kernel.org>, Tom Rix <trix@redhat.com>
-Subject: [PATCH v5 0/2] input: introduce support for Qualcomm SPMI haptics
-Message-ID: <20221010161727.1298112-1-caleb@connolly.tech>
-Feedback-ID: 10753939:user:proton
+        Mon, 10 Oct 2022 12:18:02 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86CB5C37F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 09:18:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ahQ+98OF54Kz7CPYTtQaC2pDJITFFBkkmpWlqrKppU8=; b=WgaEd+Du5L9THoK0ff07avq0Vo
+        RBL5BjmiJQI/jpx2btFYE1qY6mVm4kcfQxQTR982Oko7tdLS8pHlcXdXG42GxDcKxsWJE+9kMARv4
+        atu05I6qQDbM6YIgTSw7i4Q7vriDRpCv/tqFtPQ50pKaLsGQKAVdGrfPM/rTNJ6K7wi4MAPjmUnmn
+        /FfGKkUBOZrs8JAdTRFUw63JZKBhwBbcAHAzeeNc1W01puxST/qtjwGBwp+/7f2bfmzGsdU4adrR2
+        RBPBTInxYzfpIQNx4lRk6RXtccKwRHS2oc6p0JyoGgRQO3olLAQynaPh09r8j6+IQasx4QVGdqQWg
+        DDv/zdgw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34670)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1ohvTX-0004sb-W0; Mon, 10 Oct 2022 17:17:56 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1ohvTX-0001zA-DM; Mon, 10 Oct 2022 17:17:55 +0100
+Date:   Mon, 10 Oct 2022 17:17:55 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] ARM: Fix some check warnings of tool sparse
+Message-ID: <Y0RFs6ltJRGWEKZw@shell.armlinux.org.uk>
+References: <20221010095346.1957-1-thunder.leizhen@huawei.com>
+ <20221010095346.1957-2-thunder.leizhen@huawei.com>
+ <CAMj1kXHOv23JY35fZ45k=Pzi=ROd6BOCxqPkfXLh2520qhoFzQ@mail.gmail.com>
+ <1ab4c651-f0ab-1107-1784-ad255dabc33a@huawei.com>
+ <CAMj1kXHn70rRaB=BgCrMoqQxRcq=HzZ0NWFYL+FqV_037PaY3w@mail.gmail.com>
+ <Y0RDblEkJ0h+DfCB@shell.armlinux.org.uk>
+ <CAMj1kXG8ZCQG-Vk1mNwmLX2emUUFqs5b8SWxz26L7FUF5Sjx0A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        TO_EQ_FM_DIRECT_MX autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXG8ZCQG-Vk1mNwmLX2emUUFqs5b8SWxz26L7FUF5Sjx0A@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series introduces a driver for the SPMI haptics hardware block
-found in Qualcomm PMICs. SPMI haptics support LRA (Linear Resonant
-Actuator) style haptics, as well as ERM (Eccentric Rotating Mass).
-It also supports several modes of driving the haptics, e.g. by loading
-the pattern to play into an internal buffer, or using PWM.
+On Mon, Oct 10, 2022 at 06:14:56PM +0200, Ard Biesheuvel wrote:
+> On Mon, 10 Oct 2022 at 18:08, Russell King (Oracle)
+> <linux@armlinux.org.uk> wrote:
+> >
+> > On Mon, Oct 10, 2022 at 01:06:19PM +0200, Ard Biesheuvel wrote:
+> > > On Mon, 10 Oct 2022 at 12:58, Leizhen (ThunderTown)
+> > > <thunder.leizhen@huawei.com> wrote:
+> > > >
+> > > >
+> > > >
+> > > > On 2022/10/10 18:20, Ard Biesheuvel wrote:
+> > > > > On Mon, 10 Oct 2022 at 11:56, Zhen Lei <thunder.leizhen@huawei.com> wrote:
+> > > > >>
+> > > > >> Fix the following warnings:
+> > > > >>  warning: incorrect type in initializer (different address spaces)
+> > > > >>     expected unsigned short [noderef] __user *register __p
+> > > > >>     got unsigned short [usertype] *
+> > > > >>  warning: cast removes address space '__user' of expression
+> > > > >>
+> > > > >> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> > > > >> ---
+> > > > >>  arch/arm/kernel/traps.c | 10 +++++-----
+> > > > >>  1 file changed, 5 insertions(+), 5 deletions(-)
+> > > > >>
+> > > > >> diff --git a/arch/arm/kernel/traps.c b/arch/arm/kernel/traps.c
+> > > > >> index 20b2db6dcd1ced7..34aa80c09c508c1 100644
+> > > > >> --- a/arch/arm/kernel/traps.c
+> > > > >> +++ b/arch/arm/kernel/traps.c
+> > > > >> @@ -188,9 +188,9 @@ static void dump_instr(const char *lvl, struct pt_regs *regs)
+> > > > >>                         }
+> > > > >>                 } else {
+> > > > >>                         if (thumb)
+> > > > >> -                               bad = get_user(val, &((u16 *)addr)[i]);
+> > > > >> +                               bad = get_user(val, &((u16 __user *)addr)[i]);
+> > > > >>                         else
+> > > > >> -                               bad = get_user(val, &((u32 *)addr)[i]);
+> > > > >> +                               bad = get_user(val, &((u32 __user *)addr)[i]);
+> > > > >>                 }
+> > > > >>
+> > > > >>                 if (!bad)
+> > > > >> @@ -455,15 +455,15 @@ asmlinkage void do_undefinstr(struct pt_regs *regs)
+> > > > >>         if (processor_mode(regs) == SVC_MODE) {
+> > > > >>  #ifdef CONFIG_THUMB2_KERNEL
+> > > > >>                 if (thumb_mode(regs)) {
+> > > > >> -                       instr = __mem_to_opcode_thumb16(((u16 *)pc)[0]);
+> > > > >> +                       instr = __mem_to_opcode_thumb16(((__force u16 *)pc)[0]);
+> > > > >
+> > > > > Shouldn't this be __user as well? (and below)
+> > > >
+> > > > unsigned int instr;
+> > > > void __user *pc;
+> > > >
+> > > > The __user can clear the warning, but a new warning will be generated.
+> > > >
+> > > > instr = __mem_to_opcode_thumb16(((u16 *)pc)[0]);
+> > > >       ^new                           ^old
+> > > >
+> > > > arch/arm/kernel/traps.c:473:33: warning: dereference of noderef expression
+> > > >
+> > >
+> > > This is because dereferencing a __user pointer is not permitted.
+> > >
+> > > So this code should be using get_kernel_nofault() here not a plain
+> > > dereference of PC. So better to fix that properly instead of papering
+> > > over it with a __force cast just to make sparse happy.
+> >
+> > Why? We won't get here unless the PC can be dereferenced. If it's not
+> > able to be dereferenced, then we'd be dealing with a prefetch abort.
+> >
+> 
+> If that is guaranteed (i.e., there is no way we might be racing with a
+> module unload on another CPU or something like that), then I agree
+> that dereferencing PC is fine.
 
-More information about the hardware can be found here:
-        https://gitlab.com/sdm845-mainline/linux/-/wikis/PMI8998-QPNP-Hapti=
-cs
+If we get here for an instruction in a module that's being unloaded, we
+have way bigger problems. We shouldn't be executing code in a module
+being unloaded in the first place. That becomes a case of "deserves to
+oops".
 
-This driver has been written based on downstream sources as no public
-documentation is available. It includes initial support for LRA haptics
-in buffer mode, this combination seems to be the most common and will
-enable haptics on the OnePlus 6 and 6T, PocoPhone F1, OnePlus 5 and
-several other Qualcomm devices with mainline kernel support.
+The more likely case would be a prefetch abort when the page is
+unmapped. You'd have to try pretty hard to get an undef to race with
+a module unload.
 
-The driver is implemented using the ff-memless (forcefeedback) input
-framework and makes an attempt to control the strength of vibration relativ=
-e
-to the magnitude set from userspace.
-
-Changes since v4:
- - Significant rewrite and cleanup
- - switch to dev_err_probe()
- - Run through clang-format
-
-Changes since v3:
- - Adjust example DTS to avoid creating new warnings in dt_binding_check
- - Address warnings from kernel test robot.
-
-Changes since v2:
- - Addressed Rob's comments on dt-bindings (I'm not sure what to do
-   about the pmic compatible?)
- - Fixed some typos
-
-Changes since v1:
- - Replace old QPNP naming with SPMI
- - Address Bjorn's comments on the driver, various style and code cleanups
- - Address Bjorn's comments on the DT bindings and DTS
- - Pickup patches from Joel and Jami to enable haptics on the OnePlus 5
-   and Poco F1.
-
-Caleb Connolly (2):
-  dt-bindings: input: add Qualcomm SPMI haptics driver
-  input: add Qualcomm SPMI haptics driver
-
- .../bindings/input/qcom,spmi-haptics.yaml     | 123 ++++
- drivers/input/misc/Kconfig                    |  15 +
- drivers/input/misc/Makefile                   |   1 +
- drivers/input/misc/qcom-spmi-haptics.c        | 674 ++++++++++++++++++
- include/dt-bindings/input/qcom,spmi-haptics.h |  32 +
- 5 files changed, 845 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/input/qcom,spmi-hapti=
-cs.yaml
- create mode 100644 drivers/input/misc/qcom-spmi-haptics.c
- create mode 100644 include/dt-bindings/input/qcom,spmi-haptics.h
-
---
-2.38.0
-
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
