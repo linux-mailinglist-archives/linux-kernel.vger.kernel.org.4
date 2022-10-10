@@ -2,130 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88FD75F9753
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 06:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7513C5F9757
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 06:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbiJJELV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 00:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42256 "EHLO
+        id S231124AbiJJENb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 00:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbiJJELN (ORCPT
+        with ESMTP id S230040AbiJJEN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 00:11:13 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4984F650
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 21:11:12 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id pq16so8879727pjb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 21:11:12 -0700 (PDT)
+        Mon, 10 Oct 2022 00:13:27 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A041350055;
+        Sun,  9 Oct 2022 21:13:26 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id m14so11901625ljg.2;
+        Sun, 09 Oct 2022 21:13:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TRNiX2YBGFaGbEOW9EW2m4IMgeIOR/vpdS0qnuva6kA=;
-        b=XWjcevQXwJ689afJUD94+6DLRPa301SxsBfqSn9+7DNTRD49nXgJJdFOUu8xZK9Pf1
-         DU/KiC0GiL5EylVYuQPsH4Wi/no9QwcRROwZABJJLZPg5pydzhJZBUkuAX3t/H+sI6Fk
-         2pV1a1mhRymiCLqfk6Vh0SbCqG8L0KK8dpxAx8iZCzU7GjHB1DL1R8WfpZwoti/bgrzN
-         JOAUa/LUXLUVy3E02VOmz3YA/ct2YEbCnmuyOPO++eEwc8uu/3Di7EOUTw0xM9ExbRTQ
-         eiFcqr7nMaSGAs5HxMN0MIE/R8vlAAWXKBnscgYa7n4xyzaSsN2BqNUTTsHjOQbozb/Z
-         mrBQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vfmnCF2JkZ212xJuEQBcv/tw0uOJJMilOQ3nQbPwxvU=;
+        b=kdClPiJ/QFimo9CaXWkUw/AJJsojYvRQqSokGBMuvPNppDfZnoHV0cu78Aa48JG1mI
+         9LKqf0UF6T5d+9WiGhVBXGB/6Um8ZKdM/kYE3zXfvdf3Shpvg6fJOLPJUDCkHxWgM4D4
+         jR4RrqNDKzTqc9ckgaLNW1aHzg8xuJSjPrkW8xjvyXAWKsVcZa0xYlJb//6IQAADp1pg
+         8tYI83PH9SXy1lgktSCEZ23cmWux7AgjTBEUTYNJ+GS6FI38bIOZcjKaqeJKq2rtEtjK
+         jygzzGrjLH1yKAdyldNlB0P4iD3z2HOySVkR1y/X5RYBoVxn5hS2oh2zEf4aPZpNXxse
+         79Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TRNiX2YBGFaGbEOW9EW2m4IMgeIOR/vpdS0qnuva6kA=;
-        b=Q9RhAplBUPzfB+loO/tHcx2SE+aHmhoUO5m/AAp+mqeCaP6N+5CqWEXEF3b1c7jbBq
-         3cNu2c4lniW/XYHDIm48xRYdjQ0k38om7scyPhItqTs+0XVESMLLI1Yq0msDX/AUisrz
-         0UsUZc/EQ3xUGSI6JtZHPpdhjA1halnioA49S2xR1dzOTYWKJsk2DbQPypBMoOqUT4As
-         uOL/hoEgGiXj2DUMN4WfdY5BfyoPWNhSG+GmuCOYAi/gFlwnLDL70c6SufEX2qeqfPhG
-         uYOTqEEcQriXYv0pKiX7586f5xvhBb13NMdOdNFFRoX7R3Q/3yE5Qqduy15SirdFx3En
-         8Egg==
-X-Gm-Message-State: ACrzQf00VYtOIH/jAUNPuy4zFO1zHsH27Zr9nwpA0ekvw35NPMuN0IHa
-        tuxhyjig9hIkInebf9aCsZ+b2A==
-X-Google-Smtp-Source: AMsMyM4jJikAaITTAHASRrm9j75yPxdyU/MK6wS0mYulFpYaLBuEsRB9ClYyW3qkQiQDYoluqnSsbQ==
-X-Received: by 2002:a17:90a:e7ce:b0:20a:c658:c183 with SMTP id kb14-20020a17090ae7ce00b0020ac658c183mr18818066pjb.5.1665375071917;
-        Sun, 09 Oct 2022 21:11:11 -0700 (PDT)
-Received: from localhost ([122.172.86.128])
-        by smtp.gmail.com with ESMTPSA id z18-20020a170903019200b00176c6738d13sm1863104plg.169.2022.10.09.21.11.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 21:11:11 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        kernel test robot <lkp@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH] ARM: spear6xx: Staticize few definitions
-Date:   Mon, 10 Oct 2022 09:41:07 +0530
-Message-Id: <bd3872ce5125477ea80b1131ad9a34c98aa1a796.1665375018.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vfmnCF2JkZ212xJuEQBcv/tw0uOJJMilOQ3nQbPwxvU=;
+        b=fKjmPDTwIcYTYcDHPLMuUqVdad7avcuEBacY9AfHX8pNG+4jhCIkevDJWI21nv/ggg
+         Xj7EWBsjg5rX9HggN30kPxl/4p3JLZnfsET+b85FrX9gJmsziHP26PuH0rk1svfUQwTl
+         JdU2Ne8nRJC4OLA1hPtL2qPXczEwFZjjs3wxpK1n4RX7fwHKEHjaXDHzUhCBMsARYFUj
+         ng8EhpQq/3pbU7CUjdrclyc6RAMwlwafPw2jKFyR+PVXzBrA04bBRyX3e2acswqIDxxO
+         2z/sa5a37pQrCPjGX1a02nwgyvMDKeVJ1BME9TxQGbVZyGLHPexqc+LbaJqkHuXK3nf3
+         YR9g==
+X-Gm-Message-State: ACrzQf3MhaOeO6tNY/i6+0Tbdoq5lS3EqdKlbLFbY4IQuqO6VJI8zGyW
+        e2ch9mIGFeGiQaQqKAA7kXgFj0Mc1uI=
+X-Google-Smtp-Source: AMsMyM7ZmXHBUd2X3Kq7Q1+PaPvekcA0qVHbEr4eDwDTWuWCAZLWoIgP2aB5UUzLuHJ8C8ia4m8Tqg==
+X-Received: by 2002:a2e:9b81:0:b0:26e:190:378c with SMTP id z1-20020a2e9b81000000b0026e0190378cmr5812957lji.66.1665375204525;
+        Sun, 09 Oct 2022 21:13:24 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id s5-20020a2e1505000000b0026548b59479sm1435233ljd.64.2022.10.09.21.13.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Oct 2022 21:13:24 -0700 (PDT)
+Message-ID: <c25ce92b-ea93-1bd8-11ba-4812b040724d@gmail.com>
+Date:   Mon, 10 Oct 2022 07:13:23 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [RFC PATCH v2 1/5] regulator: Add devm helpers for get and enable
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jagath Jog J <jagathjog1996@gmail.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1665066397.git.mazziesaccount@gmail.com>
+ <fa667d6870976a2cf2d60f06e262982872349d74.1665066397.git.mazziesaccount@gmail.com>
+ <Yz7/o1q7p8NmGKMe@smile.fi.intel.com>
+Content-Language: en-US
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <Yz7/o1q7p8NmGKMe@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix warnings with clang like:
+Hi Andy,
 
-arch/arm/mach-spear/spear6xx.c:365:13: warning: no previous prototype for function 'spear6xx_map_io' [-Wmissing-prototypes]
+On 10/6/22 19:17, Andy Shevchenko wrote:
+> On Thu, Oct 06, 2022 at 05:36:52PM +0300, Matti Vaittinen wrote:
+>> A few regulator consumer drivers seem to be just getting a regulator,
+>> enabling it and registering a devm-action to disable the regulator at
+>> the driver detach and then forget about it.
+>>
+>> We can simplify this a bit by adding a devm-helper for this pattern.
+>> Add devm_regulator_get_enable() and devm_regulator_get_enable_optional()
+> 
+> ...
+> 
+>> (cherry picked from commit b6058e052b842a19c8bb639798d8692cd0e7589f)
+> 
+> Not sure:
+>   - why this is in the commit message
+>   - what it points to, since
+> $ git show b6058e052b842a19c8bb639798d8692cd0e7589f
+>   fatal: bad object b6058e052b842a19c8bb639798d8692cd0e7589f
+> 
+>> Already in Mark's regulator tree. Not to be merged. Included just for
+>> the sake of the completeness. Will be dropped when series is rebased on
+>> top of the 6.1-rc1
+> 
+> Ah, I see, but does it mean the commit has been rebased or you used wrong SHA?
 
-by making few definitions static.
+I did probably cherry-pick this from my local development branch and not 
+from Mark's tree. Sorry for the confusion. I thought people would ignore 
+these first two patches when reviewing as was requested in cover-letter.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
-Rebased on v6.0.
-
- arch/arm/mach-spear/spear6xx.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm/mach-spear/spear6xx.c b/arch/arm/mach-spear/spear6xx.c
-index 58183493e06d..7a5fff134872 100644
---- a/arch/arm/mach-spear/spear6xx.c
-+++ b/arch/arm/mach-spear/spear6xx.c
-@@ -339,7 +339,7 @@ static struct pl08x_platform_data spear6xx_pl080_plat_data = {
-  * 0xD0000000		0xFD000000
-  * 0xFC000000		0xFC000000
-  */
--struct map_desc spear6xx_io_desc[] __initdata = {
-+static struct map_desc spear6xx_io_desc[] __initdata = {
- 	{
- 		.virtual	= (unsigned long)VA_SPEAR6XX_ML_CPU_BASE,
- 		.pfn		= __phys_to_pfn(SPEAR_ICM3_ML1_2_BASE),
-@@ -359,12 +359,12 @@ struct map_desc spear6xx_io_desc[] __initdata = {
- };
- 
- /* This will create static memory mapping for selected devices */
--void __init spear6xx_map_io(void)
-+static void __init spear6xx_map_io(void)
- {
- 	iotable_init(spear6xx_io_desc, ARRAY_SIZE(spear6xx_io_desc));
- }
- 
--void __init spear6xx_timer_init(void)
-+static void __init spear6xx_timer_init(void)
- {
- 	char pclk_name[] = "pll3_clk";
- 	struct clk *gpt_clk, *pclk;
-@@ -394,7 +394,7 @@ void __init spear6xx_timer_init(void)
- }
- 
- /* Add auxdata to pass platform data */
--struct of_dev_auxdata spear6xx_auxdata_lookup[] __initdata = {
-+static struct of_dev_auxdata spear6xx_auxdata_lookup[] __initdata = {
- 	OF_DEV_AUXDATA("arm,pl080", SPEAR_ICM3_DMA_BASE, NULL,
- 			&spear6xx_pl080_plat_data),
- 	{}
 -- 
-2.31.1.272.g89b43f80a514
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
