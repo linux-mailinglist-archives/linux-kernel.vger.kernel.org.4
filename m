@@ -2,106 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A37AC5F9DC2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4B55F9DD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232250AbiJJLlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 07:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
+        id S232299AbiJJLqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 07:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232224AbiJJLls (ORCPT
+        with ESMTP id S232254AbiJJLq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 07:41:48 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82866F540;
-        Mon, 10 Oct 2022 04:41:42 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29A9NgcP024572;
-        Mon, 10 Oct 2022 11:41:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=9USQ200jqdFb44hpyR5MTzDDPPNAIylIP25hc6N5iCs=;
- b=nZ1AwnBqT7Daf9IKmrMZB7enW+FBtVksbQa6Sjx7BgsYJR18CXTgZ7zvQY4ad+W/2J51
- FXrTMTJOJqbki4EIfJ7CMDB2yyfAZPVtBWphPZEIXibMsWqwlqhoTL/tZG3k9p+3gxY6
- pLB5Ps+GIHdMtQdWaA80urUUQMZE5i0BuSMyIyjMzZWZILj9Gk/1Q2I5HtlU22iHIy3w
- 1UWYSiOqMvxzQkHn2D6DG38CfxCcE0wAUHt4nH2WuSY0EWLw9WfCnell3VIKJY//nphd
- ZFI0710KkVPvlAIrf5EB1ISCi7lNkYh04JGCk3bQq7quTGEyFxh14R8yW4TxalWEaW8Z jg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3ju72fn9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Oct 2022 11:41:41 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29ABfL4j020313;
-        Mon, 10 Oct 2022 11:41:41 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3ju72fmn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Oct 2022 11:41:41 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29ABd384007441;
-        Mon, 10 Oct 2022 11:41:39 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04ams.nl.ibm.com with ESMTP id 3k30u9aq7y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Oct 2022 11:41:39 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29ABfag325559584
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Oct 2022 11:41:36 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 41FA311C04C;
-        Mon, 10 Oct 2022 11:41:36 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C50C711C04A;
-        Mon, 10 Oct 2022 11:41:35 +0000 (GMT)
-Received: from [9.171.5.210] (unknown [9.171.5.210])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 10 Oct 2022 11:41:35 +0000 (GMT)
-Message-ID: <5faebcc6-fa26-bb9b-bbbb-c67401a9443a@linux.ibm.com>
-Date:   Mon, 10 Oct 2022 13:41:35 +0200
+        Mon, 10 Oct 2022 07:46:28 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C38D5809A
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:46:24 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id y1so6465181qky.12
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:46:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GMZcJTRYOrd3F7iZT1AszVcqnx3Byk1q+Y3x6xxN8ow=;
+        b=hnM3nEZ+442OjsNTDkM5sZUoNnVjyHeShP7nciF2wL3jGiGpZX38YYarUJNPILdujN
+         mTGnTdoWBd7OBsIUrkEKmprj9G2IYzluM6509b+gzhkJmPVSvsIATXbVF/Scd1jA+PET
+         eerMv/T/OjIEZVcP6PohwTZLBEOmBVtwKilG/++MZClSEF8DDL4Jmu2U8u3LFidguJlg
+         hE4OAbY/8CDsg/GphW6woi69cZuDhN2QUA4/FoeB5KaGMqoELO9nvN0rEydd7WH4BnMc
+         0ymWRLS1wdzjqDoIKzU8fH8Us7GHDu1PZVwi6Dzzh3w8XEArEnwBAQTlWgH7zwi5+EtR
+         +Zjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GMZcJTRYOrd3F7iZT1AszVcqnx3Byk1q+Y3x6xxN8ow=;
+        b=pQzRI0DTmfod2qBofhJr8+uhwwIskNg+kp2WMwTst5fm3vmsfsxyt92nimDmL9PPlN
+         q7FTZjbKR3JHuZ8DcIr6Y3goU5jDEKNaUlWJoYS7FMlry7hd1Oto5EtwH5l5tSYq85Ix
+         LUmYBsipLs91RMhKyEvndvYxoa6TpGKCGLmHv0y+AtzQc6C8PIC6smn3cyokdkj+z3UC
+         u/NNUCfRuKHvWYeVdU4GIIPmwOd0px5lFe+iXTvMkixO/1sed9m1uHlls79FbsAsmoHQ
+         W04DVL/gdSZ/9fVWDKv1PPQ57LubxcAEBTumnE32AhKzbq+QUdDcQIvD1ebbGrawIfxB
+         d1lg==
+X-Gm-Message-State: ACrzQf07Pc/dYxKSP0gY5v+MwLgtSDk3YHFZpiUCN25InlUp3b9hI6vx
+        A+OTesPo1j/7MXbIgm6raDKL1A==
+X-Google-Smtp-Source: AMsMyM6smuzPSfSeAGr95sYjw2m5FSUruavsvL8hBh5rr9xabNGg5j3Ie0GoffN4wAiNqMpkD7uKfw==
+X-Received: by 2002:a37:9303:0:b0:6ec:5678:8119 with SMTP id v3-20020a379303000000b006ec56788119mr4088916qkd.765.1665402383233;
+        Mon, 10 Oct 2022 04:46:23 -0700 (PDT)
+Received: from krzk-bin.home (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id s12-20020a05622a178c00b003972790deb9sm6698707qtk.84.2022.10.10.04.46.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 04:46:22 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Vinod Koul <vkoul@kernel.org>, Xilin Wu <wuxilin123@gmail.com>,
+        Molly Sophia <mollysophia379@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/6] arm64: dts: qcom: sdm630: fix UART1 pin bias
+Date:   Mon, 10 Oct 2022 07:44:12 -0400
+Message-Id: <20221010114417.29859-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v14 2/6] KVM: s390: pv: api documentation for asynchronous
- destroy
-Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     borntraeger@de.ibm.com, thuth@redhat.com, david@redhat.com,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        scgl@linux.ibm.com, seiden@linux.ibm.com, nrb@linux.ibm.com
-References: <20220930140150.37463-1-imbrenda@linux.ibm.com>
- <20220930140150.37463-3-imbrenda@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20220930140150.37463-3-imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: edJddEvH7M_Z4lJxfV99p-MwmBeLaCdl
-X-Proofpoint-ORIG-GUID: mM_Ei450wcllVXZFsMvJ2phMIfqeiID_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-10_06,2022-10-10_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- lowpriorityscore=0 spamscore=0 bulkscore=0 priorityscore=1501
- clxscore=1015 mlxscore=0 suspectscore=0 malwarescore=0 impostorscore=0
- mlxlogscore=980 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210100067
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/30/22 16:01, Claudio Imbrenda wrote:
-> Add documentation for the new commands added to the KVM_S390_PV_COMMAND
-> ioctl.
-> 
-> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> Reviewed-by: Nico Boehr <nrb@linux.ibm.com>
+There is no "bias-no-pull" property.  Assume intentions were disabling
+bias.
 
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+Fixes: b190fb010664 ("arm64: dts: qcom: sdm630: Add sdm630 dts file")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+
+---
+
+Changes since v1:
+1. Drop cc-stable.
+2. Add tags.
+
+Not tested on hardware.
+---
+ arch/arm64/boot/dts/qcom/sdm630.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+index b51b85f583e5..e119060ac56c 100644
+--- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+@@ -779,7 +779,7 @@ rx-cts-rts {
+ 					pins = "gpio17", "gpio18", "gpio19";
+ 					function = "gpio";
+ 					drive-strength = <2>;
+-					bias-no-pull;
++					bias-disable;
+ 				};
+ 			};
+ 
+-- 
+2.34.1
 
