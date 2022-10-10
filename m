@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7935F99B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3A95F997C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232244AbiJJHPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
+        id S232063AbiJJHMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232135AbiJJHNb (ORCPT
+        with ESMTP id S231918AbiJJHL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:13:31 -0400
+        Mon, 10 Oct 2022 03:11:29 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7ACA59265;
-        Mon, 10 Oct 2022 00:08:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E3657544;
+        Mon, 10 Oct 2022 00:07:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85606B80E5D;
-        Mon, 10 Oct 2022 07:07:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDB25C433C1;
-        Mon, 10 Oct 2022 07:07:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B1F3B80E56;
+        Mon, 10 Oct 2022 07:07:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9898CC433D6;
+        Mon, 10 Oct 2022 07:07:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665385665;
-        bh=snTKj5uUCniAAmOx2ttL6/s1ceXhHSHr5CwfTfYUtug=;
+        s=korg; t=1665385668;
+        bh=Ag4aLuw9wMnLOhH+/uCRkuFV3iWQqUkfEVryUMoqJxM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ilg1x2NmAdmTg45O48wNMp53tCdpx5u/XFVei/PhxmheIe5RhDfpwgHxe8ZiMLr4f
-         2vUyUGBMdNl/mtQNHeEw4OVDqTd9OnzXvpEQx7Gp8Ma37+4OnF84gs6alrksxGPEg4
-         qPDFy+SsAW8Kd6+YPfqwKZidZkHR6wLEWrEj+0Zc=
+        b=QWkSsYJYqCH5aZcskKvhEn8ftOh8WrA9cFcChWN8xBxIjMDY1ybs4E8c2UvnuzVRn
+         uikNfdFmWa0anSWM0uHvK4e9UZ9e+uFapwzAcisYr8j/EqlTm1st9jUmmBoAaggq6S
+         12XMeO/ISFFtnmvQUjyz8PNlGip/sG402/XUjIfI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Sergei Antonov <saproj@gmail.com>,
-        Jonas Jensen <jonas.jensen@gmail.com>,
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Saurav Kashyap <skashyap@marvell.com>,
+        Wende Tan <twd2.me@gmail.com>, Letu Ren <fantasquex@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 15/37] ARM: dts: fix Moxa SDIO compatible, remove sdhci misnomer
-Date:   Mon, 10 Oct 2022 09:05:34 +0200
-Message-Id: <20221010070331.679906729@linuxfoundation.org>
+Subject: [PATCH 5.15 16/37] scsi: qedf: Fix a UAF bug in __qedf_probe()
+Date:   Mon, 10 Oct 2022 09:05:35 +0200
+Message-Id: <20221010070331.705185424@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221010070331.211113813@linuxfoundation.org>
 References: <20221010070331.211113813@linuxfoundation.org>
@@ -55,75 +56,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergei Antonov <saproj@gmail.com>
+From: Letu Ren <fantasquex@gmail.com>
 
-[ Upstream commit 02181e68275d28cab3c3f755852770367f1bc229 ]
+[ Upstream commit fbfe96869b782364caebae0445763969ddb6ea67 ]
 
-Driver moxart-mmc.c has .compatible = "moxa,moxart-mmc".
+In __qedf_probe(), if qedf->cdev is NULL which means
+qed_ops->common->probe() failed, then the program will goto label err1, and
+scsi_host_put() will free lport->host pointer. Because the memory qedf
+points to is allocated by libfc_host_alloc(), it will be freed by
+scsi_host_put(). However, the if statement below label err0 only checks
+whether qedf is NULL but doesn't check whether the memory has been freed.
+So a UAF bug can occur.
 
-But moxart .dts/.dtsi and the documentation file moxa,moxart-dma.txt
-contain compatible = "moxa,moxart-sdhci".
+There are two ways to reach the statements below err0. The first one is
+described as before, "qedf" should be set to NULL. The second one is goto
+"err0" directly. In the latter scenario qedf hasn't been changed and it has
+the initial value NULL. As a result the if statement is not reachable in
+any situation.
 
-Change moxart .dts/.dtsi files and moxa,moxart-dma.txt to match the driver.
+The KASAN logs are as follows:
 
-Replace 'sdhci' with 'mmc' in names too, since SDHCI is a different
-controller from FTSDC010.
+[    2.312969] BUG: KASAN: use-after-free in __qedf_probe+0x5dcf/0x6bc0
+[    2.312969]
+[    2.312969] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+[    2.312969] Call Trace:
+[    2.312969]  dump_stack_lvl+0x59/0x7b
+[    2.312969]  print_address_description+0x7c/0x3b0
+[    2.312969]  ? __qedf_probe+0x5dcf/0x6bc0
+[    2.312969]  __kasan_report+0x160/0x1c0
+[    2.312969]  ? __qedf_probe+0x5dcf/0x6bc0
+[    2.312969]  kasan_report+0x4b/0x70
+[    2.312969]  ? kobject_put+0x25d/0x290
+[    2.312969]  kasan_check_range+0x2ca/0x310
+[    2.312969]  __qedf_probe+0x5dcf/0x6bc0
+[    2.312969]  ? selinux_kernfs_init_security+0xdc/0x5f0
+[    2.312969]  ? trace_rpm_return_int_rcuidle+0x18/0x120
+[    2.312969]  ? rpm_resume+0xa5c/0x16e0
+[    2.312969]  ? qedf_get_generic_tlv_data+0x160/0x160
+[    2.312969]  local_pci_probe+0x13c/0x1f0
+[    2.312969]  pci_device_probe+0x37e/0x6c0
 
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Sergei Antonov <saproj@gmail.com>
-Cc: Jonas Jensen <jonas.jensen@gmail.com>
-Link: https://lore.kernel.org/r/20220907175341.1477383-1-saproj@gmail.com'
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/r/20211112120641.16073-1-fantasquex@gmail.com
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Acked-by: Saurav Kashyap <skashyap@marvell.com>
+Co-developed-by: Wende Tan <twd2.me@gmail.com>
+Signed-off-by: Wende Tan <twd2.me@gmail.com>
+Signed-off-by: Letu Ren <fantasquex@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt | 4 ++--
- arch/arm/boot/dts/moxart-uc7112lx.dts                     | 2 +-
- arch/arm/boot/dts/moxart.dtsi                             | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ drivers/scsi/qedf/qedf_main.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt b/Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt
-index 8a9f3559335b..7e14e26676ec 100644
---- a/Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt
-+++ b/Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt
-@@ -34,8 +34,8 @@ Example:
- Use specific request line passing from dma
- For example, MMC request line is 5
+diff --git a/drivers/scsi/qedf/qedf_main.c b/drivers/scsi/qedf/qedf_main.c
+index 544401f76c07..73c7197081ea 100644
+--- a/drivers/scsi/qedf/qedf_main.c
++++ b/drivers/scsi/qedf/qedf_main.c
+@@ -3686,11 +3686,6 @@ static int __qedf_probe(struct pci_dev *pdev, int mode)
+ err1:
+ 	scsi_host_put(lport->host);
+ err0:
+-	if (qedf) {
+-		QEDF_INFO(&qedf->dbg_ctx, QEDF_LOG_DISC, "Probe done.\n");
+-
+-		clear_bit(QEDF_PROBING, &qedf->flags);
+-	}
+ 	return rc;
+ }
  
--	sdhci: sdhci@98e00000 {
--		compatible = "moxa,moxart-sdhci";
-+	mmc: mmc@98e00000 {
-+		compatible = "moxa,moxart-mmc";
- 		reg = <0x98e00000 0x5C>;
- 		interrupts = <5 0>;
- 		clocks = <&clk_apb>;
-diff --git a/arch/arm/boot/dts/moxart-uc7112lx.dts b/arch/arm/boot/dts/moxart-uc7112lx.dts
-index eb5291b0ee3a..e07b807b4cec 100644
---- a/arch/arm/boot/dts/moxart-uc7112lx.dts
-+++ b/arch/arm/boot/dts/moxart-uc7112lx.dts
-@@ -79,7 +79,7 @@ &clk_pll {
- 	clocks = <&ref12>;
- };
- 
--&sdhci {
-+&mmc {
- 	status = "okay";
- };
- 
-diff --git a/arch/arm/boot/dts/moxart.dtsi b/arch/arm/boot/dts/moxart.dtsi
-index f5f070a87482..764832ddfa78 100644
---- a/arch/arm/boot/dts/moxart.dtsi
-+++ b/arch/arm/boot/dts/moxart.dtsi
-@@ -93,8 +93,8 @@ watchdog: watchdog@98500000 {
- 			clock-names = "PCLK";
- 		};
- 
--		sdhci: sdhci@98e00000 {
--			compatible = "moxa,moxart-sdhci";
-+		mmc: mmc@98e00000 {
-+			compatible = "moxa,moxart-mmc";
- 			reg = <0x98e00000 0x5C>;
- 			interrupts = <5 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&clk_apb>;
 -- 
 2.35.1
 
