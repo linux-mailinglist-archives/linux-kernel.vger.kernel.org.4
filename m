@@ -2,155 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8CD5F9BCD
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 11:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F4025F9BD0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 11:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbiJJJYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 05:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
+        id S231582AbiJJJZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 05:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiJJJYb (ORCPT
+        with ESMTP id S231630AbiJJJZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 05:24:31 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D035D0C8
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 02:24:30 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29A9GNX1029490;
-        Mon, 10 Oct 2022 09:24:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=Hl2tgLNm5lg6VuSf7qo6KRUTP5SpNvEJuGFzq+31vvU=;
- b=Hx8KInzwt224qXVYuHos+x95vB6xdJuwSsMa/ssp7pw+mY2kzhAikNpcnz9t8zhzR5Zl
- 7K7OyeV6rpfcxO80vE7PuG8NQtttRuoVRPJE4Tv6Riyj6hd77yYN8h9Wysi4natN0Sna
- mB5BrdbX4RH4qDfpKgDdgtgN8kUm9cti6RPy1RZR+PtbcLOq6yG3En5UXGrIw50NhCJU
- mD8uATxGbFY6/oJyRyufMTPnCo1HXrqpUeLpvvX/7V0drfq534tDZJvaz63Yzd6kJenv
- L03eCOOVQTec+TQ+R563x3elAKV8P/ctWetSi0z37WiT/41fTUA166tjTCN2kiy6cz/D zA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3k7v6dq0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Oct 2022 09:24:27 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29A8mJ3R020230;
-        Mon, 10 Oct 2022 09:24:27 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3k7v6djf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Oct 2022 09:24:26 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29A9KR99029021;
-        Mon, 10 Oct 2022 09:24:17 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3k30u9aj7a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Oct 2022 09:24:17 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29A9OFq960752272
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Oct 2022 09:24:15 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 64A464C046;
-        Mon, 10 Oct 2022 09:24:15 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0FEDE4C040;
-        Mon, 10 Oct 2022 09:24:15 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.242])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 10 Oct 2022 09:24:15 +0000 (GMT)
-Date:   Mon, 10 Oct 2022 11:24:13 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     xu.xin.sc@gmail.com
-Cc:     akpm@linux-foundation.org, ran.xiaokai@zte.com.cn,
-        yang.yang29@zte.com.cn, jiang.xuexin@zte.com.cn, david@redhat.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        xu xin <xu.xin16@zte.com.cn>
-Subject: Re: [PATCH v2 0/5] ksm: support tracking KSM-placed zero-pages
-Message-ID: <20221010112413.219dc989@p-imbrenda>
-In-Reply-To: <20221009021816.315205-1-xu.xin16@zte.com.cn>
-References: <20221009021816.315205-1-xu.xin16@zte.com.cn>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: hqGr5RA2tO08WTSR8-F74aiZE3fP-9Ht
-X-Proofpoint-GUID: XYvKMfVOoHr7rSfJkFfp6_i-at8BfPfm
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 10 Oct 2022 05:25:01 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1170233;
+        Mon, 10 Oct 2022 02:24:57 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id m19so14353695lfq.9;
+        Mon, 10 Oct 2022 02:24:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l/DdtKBK8Ea5+VN0mXaZrTh/hBVD5+pyM/7jGTjhoig=;
+        b=HujBLzhj+VC8EoLwH8A8tX091NOHhdMVcNKd8PQ3FEfNST49QXU6o816l3ZbldRsF/
+         4DUtXnpznZMN4Ay4Xv3c2NL0czEl/SGVF8LzCMAAw9FCkb6zVcdsZST+baFCQ/lq3QTb
+         02JTQcxNYYglc5BDEs/WK8TgBreC0d6PSq3A2gXSYmAkgmrsNx9JJl7iiXvpJz/X540C
+         frvaxkZkjwkwAV1M8cYSir4+hkeY53apjgd919ctUnLWdh/wqpsqiakMz7tP7h/KSfUb
+         AdQAkLKVbNITv2tgyw5mT/252EXiyS2n5ETCjX0TXyORFG3ZUrHlzu18ivWoCAOGJndE
+         OBpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l/DdtKBK8Ea5+VN0mXaZrTh/hBVD5+pyM/7jGTjhoig=;
+        b=60+EEloKznVsFsVj+WgI0JuAAYb4WMh2PvUZbsj8LsOZo01VPZlHo+Z+Vozis7a9Q4
+         Xj0JELHr2VLrFvSDNrKFC6sjJLXrjv2n+6mKmgN1fa4/ZyFXVJOKr3PktXI9TmlvbNlv
+         M9LefFTp8l8pnwgRmoTZABm3UaJNVkoyr/JyyYPNCtBfBixQR0s/Q2ms54sxKL1GJpRi
+         zgOiKhwglGPUQAPaAaKft6QP5lE0DTJLthCI9sRR829QOj/j8BsvF85Ptrv5iPhROlX0
+         QVMScwRG/jeP/GgjvdVKlHHE8fEj7o3W5V1u3S4N8M1C/f6hQ2hm8viUrea2sEoWg5HX
+         1nHA==
+X-Gm-Message-State: ACrzQf1P5vC80RMHXAo28UhOIY388OIp80qRLzwZ27BE7kR2QroljFMO
+        nR/MECiXR+JjRI1kr01MvhM=
+X-Google-Smtp-Source: AMsMyM7hXXEfiGXMx7nTRbZCTQ2ahfruVzYCndEffrYqy0DrZ2s0U3iE4kjBY3GMh+MaFmbKgIFXoA==
+X-Received: by 2002:a05:6512:557:b0:4a2:7765:3324 with SMTP id h23-20020a056512055700b004a277653324mr6895777lfl.156.1665393896022;
+        Mon, 10 Oct 2022 02:24:56 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id 13-20020a05651c128d00b0026dfdcbccdasm1601331ljc.14.2022.10.10.02.24.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Oct 2022 02:24:55 -0700 (PDT)
+Message-ID: <fc3c70d7-1787-5f7c-7394-2f93b42d56b0@gmail.com>
+Date:   Mon, 10 Oct 2022 12:24:51 +0300
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-07_04,2022-10-07_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 phishscore=0 adultscore=0 bulkscore=0 mlxlogscore=628
- mlxscore=0 priorityscore=1501 suspectscore=0 impostorscore=0 clxscore=1011
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210100055
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Content-Language: en-US
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jagath Jog J <jagathjog1996@gmail.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1665066397.git.mazziesaccount@gmail.com>
+ <fa667d6870976a2cf2d60f06e262982872349d74.1665066397.git.mazziesaccount@gmail.com>
+ <Yz7/o1q7p8NmGKMe@smile.fi.intel.com> <20221009132421.6e472385@jic23-huawei>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [RFC PATCH v2 1/5] regulator: Add devm helpers for get and enable
+In-Reply-To: <20221009132421.6e472385@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun,  9 Oct 2022 02:18:16 +0000
-xu.xin.sc@gmail.com wrote:
+Hi Jonathan,
 
-> From: xu xin <xu.xin16@zte.com.cn>
+On 10/9/22 15:24, Jonathan Cameron wrote:
+> On Thu, 6 Oct 2022 19:17:39 +0300
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 > 
-> Before enabling use_zero_pages by setting /sys/kernel/mm/ksm/
-> use_zero_pages to 1, pages_sharing of KSM is basically accurate. But
-> when enabling use_zero_pages, all empty pages that are merged with
-> kernel zero page are not counted in pages_sharing or pages_shared.
-> That is because these empty pages are merged with zero-pages then no
-> longer managed by KSM, which leads to two issues at least:
+>> On Thu, Oct 06, 2022 at 05:36:52PM +0300, Matti Vaittinen wrote:
+>>> A few regulator consumer drivers seem to be just getting a regulator,
+>>> enabling it and registering a devm-action to disable the regulator at
+>>> the driver detach and then forget about it.
+>>>
+>>> We can simplify this a bit by adding a devm-helper for this pattern.
+>>> Add devm_regulator_get_enable() and devm_regulator_get_enable_optional()
+>>
+>> ...
+>>
+>>> (cherry picked from commit b6058e052b842a19c8bb639798d8692cd0e7589f)
+>>
+>> Not sure:
+>>   - why this is in the commit message
+>>   - what it points to, since
+>> $ git show b6058e052b842a19c8bb639798d8692cd0e7589f
+>>   fatal: bad object b6058e052b842a19c8bb639798d8692cd0e7589f
 > 
-> 1) MADV_UNMERGEABLE and other ways to trigger unsharing will *not*
->    unshare the shared zeropage as placed by KSM (which is against the 
->    MADV_UNMERGEABLE documentation at least); see the link:
->    https://lore.kernel.org/lkml/4a3daba6-18f9-d252-697c-197f65578c44@redhat.com/
-> 
-> 2) we cannot know how many pages are zero pages placed by KSM when
->    enabling use_zero_pages, which leads to KSM not being transparent
->    with all actual merged pages by KSM.
-> 
-> With the patch series, we can unshare zero-pages(KSM-placed) accurately
-> and count ksm zero pages.
+> These are now upstream in Linus' tree and in my testing branch.
+> I'd not normally advocate working on top of that (because I rebase it), but
+> if it is useful for this series go ahead.
 
-why are you trying so hard to fix something that is not broken?
+Thanks for the explanation :)
 
-can't you just avoid using use_zero_pages?
+This series will conflict with my fixup series for triggered-buffer 
+attributes. Hence I though I might combine these two series into one if 
+I need to respin the fixup series. I thought of using the v6.1-rc1 when 
+it is out. (I think the 6.1-rc1 should not be that far away)
 
-why is it so important to know how many zero pages have been merged?
-and why do you want to unmerge them?
+OTOH, I just read your another mail which told that there will be one 
+more driver which will conflict with the fixup coming in during this 
+cycle. If that driver lands in your tree before the fix - then I guess I 
+need to rebase the fixup series (and maybe this too) on top of your tree 
++ add conversion of this new driver. I don't think that would be the 
+testing branch though(?)
 
-the important thing is that the sysadmin knows how much memory would be
-needed to do the unmerge, and that information is already there.
+Yours
+	-- Matti	
 
-> 
-> ---
-> v1->v2:
-> 
-> [patch 4/5] fix build warning, mm/ksm.c:550, misleading indentation; statement 
-> 'rmap_item->mm->ksm_zero_pages_sharing--;' is not part of the previous 'if'.
-> 
-> 
-> 
-> *** BLURB HERE ***
-> 
-> xu xin (5):
->   ksm: abstract the function try_to_get_old_rmap_item
->   ksm: support unsharing zero pages placed by KSM
->   ksm: count all zero pages placed by KSM
->   ksm: count zero pages for each process
->   ksm: add zero_pages_sharing documentation
-> 
->  Documentation/admin-guide/mm/ksm.rst |  10 +-
->  fs/proc/base.c                       |   1 +
->  include/linux/mm_types.h             |   7 +-
->  mm/ksm.c                             | 177 +++++++++++++++++++++------
->  4 files changed, 157 insertions(+), 38 deletions(-)
-> 
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
