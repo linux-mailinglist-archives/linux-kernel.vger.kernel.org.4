@@ -2,162 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2E55FA234
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 18:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 482CA5FA237
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 18:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiJJQxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 12:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
+        id S229696AbiJJQyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 12:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiJJQxL (ORCPT
+        with ESMTP id S229731AbiJJQx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 12:53:11 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1994A4C61B;
-        Mon, 10 Oct 2022 09:53:09 -0700 (PDT)
-Received: from [192.168.1.138] ([37.4.248.18]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MWiUg-1ofi0u2rqS-00X4lf; Mon, 10 Oct 2022 18:52:40 +0200
-Message-ID: <dad7dc1b-c94a-4547-260f-5efe50d959e8@i2se.com>
-Date:   Mon, 10 Oct 2022 18:52:34 +0200
+        Mon, 10 Oct 2022 12:53:58 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C7959248
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 09:53:56 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id c20so1306579plc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 09:53:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PkFKxoPfujtFIL4f5fbXoQ1/V1fCWU98DNuyJHz6LT8=;
+        b=bD2S9D/M4dvEw5nGGGYqaqYB68bsvB+NPHG/sAjf0/nUID9i/YCkYX2t7KQDb74N7H
+         lrbl66zSxErGWzx7zsO/G6qCEaZ4OqexbZ56BXi/YikIVy+xERyiKAWok1hMYZPN+s6t
+         Se6dIVsVzstWZqoRRLSd8AouUmWjugtklyAjJfB+JdBc0YK8EzI4PZexHr4JCPKFz+qM
+         rEFZL+5sU0nwUzql9Yw4Z4HnlepPovGDYNrlsYgJRukEEstJarsWTxJp+adFVqmY84gJ
+         Dclm63H6DAZJyNdQtvgTkWjKJkZgU7neD4H8DpialAlu0rSseTknZNJ/wr0V2OHffgNI
+         Xc/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PkFKxoPfujtFIL4f5fbXoQ1/V1fCWU98DNuyJHz6LT8=;
+        b=d5va+U8D5SN2AvSlzruMyneYE5Dd+RgugKV2St6X2WoQTXFB0/+EOIrUXLhfDDWQdC
+         ehWOGasQMOWtw+BEYdyDIvuuIrx4quAuOKNONMLUOWx4kk1upvXItwIZCUShAISAdycF
+         PZn+5ZOcr8d5ruglab2eTwVeG9+ZGPIswWpK+pHiDROKGZWrANQ5jvbqC9+y45gu9X4d
+         hWL0EB6cRuWhwfLbw9wLHyi+52silaSb8lMroPMAXoypnebVi9X6R2qOh6pl1RVJvqgM
+         zHLHHv60Z6SQiLk6AhwodHeSDgWYUzvc9YokxtbAmHgei+FYPAqz3dP0zB/c9yh3qNem
+         o3Mw==
+X-Gm-Message-State: ACrzQf2HsmAeEDjBctf56OFYQ6einfvN85fJCj7AnPho+fuVfOTYActL
+        IxRFb91/AcvT95bCkhdJckiVsnBprESyBDCi2Rs=
+X-Google-Smtp-Source: AMsMyM5haRe+kF/vTjOFfjmxi7XYqgGZpl8q3oCotZI4XeT+u4uiNm45fcBxp2C3JywKkjyH28coN28Vr6a92DemIM8=
+X-Received: by 2002:a17:90a:5915:b0:20a:d6d5:31bd with SMTP id
+ k21-20020a17090a591500b0020ad6d531bdmr21810660pji.15.1665420835204; Mon, 10
+ Oct 2022 09:53:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 3/7] firmware: raspberrypi: Provide a helper to query a
- clock max rate
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Stephen Boyd <sboyd@kernel.org>, Emma Anholt <emma@anholt.net>,
-        Ray Jui <rjui@broadcom.com>, Maxime Ripard <mripard@kernel.org>
-Cc:     linux-rpi-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Dom Cobley <popcornmix@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220815-rpi-fix-4k-60-v2-0-983276b83f62@cerno.tech>
- <20220815-rpi-fix-4k-60-v2-3-983276b83f62@cerno.tech>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20220815-rpi-fix-4k-60-v2-3-983276b83f62@cerno.tech>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:xVuX/w3ngCM1Xs7bP8l36ga2yBUkRfiC5SZVOLDFVuhbEbaUOi8
- Ht7lb7ZE0v89ORFIUFBR3EcZ9hByi6Wj9zTVx7WihMoqFLggY4vIEi3SRcUo5lzctKBWVDl
- L8Gov+ZguoxDyaPpHg1BGnNdtyuV4Hhzy7JnX503K6i9Kqtpfv8Rh3VcY1VLf7i3vxUW7kD
- FfUhE94nGdfGvl/vyyTZg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:5jfDTjv99BA=:IqmBkuyekdtld/M89dBtQF
- Re7hifvYF4SBrKs+GlGnEcCgnpAL27uhTcZxU6FwVTA1Atb1kKb3c6KYguBswF3V+LHTMFIE8
- iKC/Z25dkIn6jUSZcg+W8T5FLEat5RkJbiUpFM/YyWHDc1hG4ujgoLK9LuurOH7uiFdwIw2bw
- HizfQ8BBCHTJlpBNxhLDv9igdI3GKH3En7g6MXgd0q0Dtb+xFFS8luEGgozvqQXgIa1Yxufpr
- 3RV8WkouAR7J1uqEDaJrPGHPxFIsmvn3PYzaL0DZQr04PCKdFHq9nZWDWv+atNLguhDzPY4Ox
- Q8/P4OhVfdSuAVD2dKtPVB+RHOK3PbeQX5PXUTnd5c8oZueCeG9AFZeblw/9S6xX0yecvr1Zn
- NsfpxZTGks4bNSTtS49ngIgIVvCa8VBTVG7N/QRNNVmJof5lLPQoxzpPneg8zr+1cPql7B/Xe
- 3pBjaefrK4IfV+omLR/Y5WM7u0AtLKTjsKPFcR5J/CtBQGnoQ1NOjIXdWLVrHZ2lhdCaSFUzD
- a0eWFkkh5fsYlNdY3em51JWS0ZpllGLqZlFCiBHsonj53esckRkG/xtXWrSoCRPBJwrpYjO/Q
- 6QW3BLaXZNvNd7eXY7+jMAOwxF+sh5qEJo8xdixvnvwki7jZqmXfTJASGhjVi7NrQg85mDKge
- Dj7HStZnsIgmNFYivHIjF5zCbnNkwk2qoEO7AmJ5EuoAd7ti9p3t6TuFcwr8B4aupReULQszC
- yp/oR6C1WX6AzW6Lco3hq4duehQwPdrVXCIntIJALv9JkZs3IfSXbeDD5mYKnC9z5eDzf4t9d
- 0Z/ASLcbS5dnvytm4o+eTp6AuRPqw==
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Received: by 2002:a05:6a10:6812:b0:2f4:321c:94e4 with HTTP; Mon, 10 Oct 2022
+ 09:53:54 -0700 (PDT)
+Reply-To: lindabenson666666@gmail.com
+From:   Ms Linda Benson <lindaben1456@gmail.com>
+Date:   Mon, 10 Oct 2022 17:53:54 +0100
+Message-ID: <CAOK_GkKngqQoBuh8dmk6CqQpiJN1RWdYZwJdkRMWXMScuSVg0g@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:635 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5018]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [lindaben1456[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [lindabenson666666[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [lindaben1456[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
+Good friend,
 
-Am 20.09.22 um 14:50 schrieb Maxime Ripard:
-> The firmware allows to query for its clocks the operating range of a
-> given clock. We'll need this for some drivers (KMS, in particular) to
-> infer the state of some configuration options, so let's create a
-> function to do so.
->
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
->
-> diff --git a/drivers/firmware/raspberrypi.c b/drivers/firmware/raspberrypi.c
-> index b916e1e171f8..c4b9ea70f5a7 100644
-> --- a/drivers/firmware/raspberrypi.c
-> +++ b/drivers/firmware/raspberrypi.c
-> @@ -228,6 +228,21 @@ static void rpi_register_clk_driver(struct device *dev)
->   						-1, NULL, 0);
->   }
->   
-> +unsigned int rpi_firmware_clk_get_max_rate(struct rpi_firmware *fw, unsigned int id)
-> +{
-> +	struct rpi_firmware_clk_rate_request msg =
-> +		RPI_FIRMWARE_CLK_RATE_REQUEST(id);
-> +	int ret;
-> +
-> +	ret = rpi_firmware_property(fw, RPI_FIRMWARE_GET_MAX_CLOCK_RATE,
-> +				    &msg, sizeof(msg));
-> +	if (ret)
-> +		return 0;
-> +
-> +	return le32_to_cpu(msg.rate);
-> +}
-> +EXPORT_SYMBOL_GPL(rpi_firmware_clk_get_max_rate);
-> +
->   static void rpi_firmware_delete(struct kref *kref)
->   {
->   	struct rpi_firmware *fw = container_of(kref, struct rpi_firmware,
-> diff --git a/include/soc/bcm2835/raspberrypi-firmware.h b/include/soc/bcm2835/raspberrypi-firmware.h
-> index 74c7bcc1ac2a..10248c370229 100644
-> --- a/include/soc/bcm2835/raspberrypi-firmware.h
-> +++ b/include/soc/bcm2835/raspberrypi-firmware.h
-> @@ -154,12 +154,32 @@ enum rpi_firmware_clk_id {
->   	RPI_FIRMWARE_NUM_CLK_ID,
->   };
->   
-> +/**
-> + * struct rpi_firmware_clk_rate_request - Firmware Request for a rate
-> + * @id:	ID of the clock being queried
-> + * @rate: Rate in Hertz. Set by the firmware.
-> + *
-> + * Used by @RPI_FIRMWARE_GET_CLOCK_RATE, @RPI_FIRMWARE_GET_CLOCK_MEASURED,
-> + * @RPI_FIRMWARE_GET_MAX_CLOCK_RATE and @RPI_FIRMWARE_GET_MIN_CLOCK_RATE.
-> + */
-> +struct rpi_firmware_clk_rate_request {
-> +	__le32 id;
-> +	__le32 rate;
-> +} __packed;
-> +
-> +#define RPI_FIRMWARE_CLK_RATE_REQUEST(_id)	\
-> +	{					\
-> +		.id = _id,			\
-> +	}
-> +
->   #if IS_ENABLED(CONFIG_RASPBERRYPI_FIRMWARE)
->   int rpi_firmware_property(struct rpi_firmware *fw,
->   			  u32 tag, void *data, size_t len);
->   int rpi_firmware_property_list(struct rpi_firmware *fw,
->   			       void *data, size_t tag_size);
->   void rpi_firmware_put(struct rpi_firmware *fw);
-> +unsigned int rpi_firmware_clk_get_max_rate(struct rpi_firmware *fw,
-> +					   unsigned int id);
->   struct device_node *rpi_firmware_find_node(void);
->   struct rpi_firmware *rpi_firmware_get(struct device_node *firmware_node);
->   struct rpi_firmware *devm_rpi_firmware_get(struct device *dev,
-> @@ -179,6 +199,12 @@ static inline int rpi_firmware_property_list(struct rpi_firmware *fw,
->   
->   static inline void rpi_firmware_put(struct rpi_firmware *fw) { }
->   
-> +static inline unsigned int rpi_firmware_clk_get_max_rate(struct rpi_firmware *fw,
-> +							 unsigned int id)
-> +{
-> +	return UINT_MAX;
-In case the driver is disabled the function return UINT_MAX, but in case 
-the firmware doesn't support RPI_FIRMWARE_GET_MAX_CLOCK_RATE it returns 
-0. This looks a little bit inconsistent to me.
-> +}
-> +
->   static inline struct device_node *rpi_firmware_find_node(void)
->   {
->   	return NULL;
->
+Greetings of the day, please kindly give me your attention
+
+I am an orphan child and only daughter I am looking for a reliable
+person to help me out of my present predicament, I need your help and
+assistance in the transfer of my inheritance fund to your bank account
+I will give you full details on why I want to do this
+
+Please reply soon, it is urgent
+Ms. Linda Benson
