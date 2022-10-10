@@ -2,312 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EFF15FA286
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C9495FA287
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbiJJRO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 13:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
+        id S229513AbiJJRO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 13:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiJJROZ (ORCPT
+        with ESMTP id S229595AbiJJROv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 13:14:25 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F1D6C74D
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:14:24 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id t21-20020a056a0021d500b0056358536cdeso1505918pfj.22
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:14:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cAwntTht7vvV9oxCOBslJVqo2TXDBUk8x9753HYndRc=;
-        b=S5e8XLnL/nAPaZBH4YN/vmrU9/+uwqw+PYHqxhkgSgK/8SJWcE8TesWfseNrwvy9og
-         oX+zn0ive0lco6fIeB5IOdAwv86s9jee0G79Kq3Y9w7f+QqAnvXF97KPA8JtO5GVOPqk
-         4W9uASCWtSnrlcNHj5SNjWHuzrDaBQp8+6igXdeymP2vxlmnepHYiugbSv7DKF8lRksv
-         Cw99O1ympau0w5gcUkV91/6AJjeXEH5fJP3Xc9rr0PAM33EAYTHTrtNgRzWgNEHAc20I
-         NR8hm2BwYa4LEyPNydKvBOb+DpdjeRCWU4wS4FTUn+YBRAK2sTQ5yvdCbqyamTFTQlOx
-         EniA==
+        Mon, 10 Oct 2022 13:14:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D11DF5AB
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:14:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665422085;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rQRSSqgQ4c9BjxvZpkARxVYPlmmPTB3aVJCaeF1YLPM=;
+        b=RPTEgPwDdjOQ940pCCrQm36grgq8HymtbrGUmwPoVSd9GCkTDNZA1VX3T2cOjbpq4durNl
+        UC4ArzbJ7PXkiBqAo/JAl08mLPHI3MN9DGVyAUv10CvM4JQJd+lVKnM+44iZTJjvfJ6QSc
+        7kVhAHFQk680T6X5T/foe6jVxwWPivk=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-413-WYBvDsrjOk-_4ksh-P4sKA-1; Mon, 10 Oct 2022 13:14:44 -0400
+X-MC-Unique: WYBvDsrjOk-_4ksh-P4sKA-1
+Received: by mail-wm1-f70.google.com with SMTP id t20-20020a7bc3d4000000b003c6bfea856aso464394wmj.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:14:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cAwntTht7vvV9oxCOBslJVqo2TXDBUk8x9753HYndRc=;
-        b=5LQqdfa0m10lQG3OuTXPQAp6208Ba09sLVgmum+RIQIIRIuVr/cJiH55pYXj4iMLDd
-         cy7LymLOyprLm6kCa1Th/si29JWkOxObRyhfE7ZdXa7f/a5zJPOA+mzAIRrePKesW0+Y
-         fpyKU9T2G6pEKvgeBBiayN3w/NFp5LtQoxL7P9jZVl/xtT7B4cQwbyWl5pMzeBLSFTgt
-         N1liol6U9mMwJKUxQOqosU+soOtUuT/Jut8XmVLWyzPmIwmaH92GHYTrydXUfoxLqtOm
-         rUcIuyrHNPUeAy4CjH+mmooqNPyDBjNm8EP4iuOHv798EgZWlOYMK+VcAQBAOZdklCV0
-         5rAw==
-X-Gm-Message-State: ACrzQf0RjxQB4PeLxPlmJHaPs4OntHXfXwoP8CWTgF9U6eeMejXtie/8
-        XoKwZQKNKSkhFV2yq+TlNe2MUhL19RZRNYf6
-X-Google-Smtp-Source: AMsMyM4/KhCeZt7MtQT4H/0WOAC4s2/9IzaROtYHmADdAx7Z/WCoIWYVYcVoGDz3sO9clOrdZB7edA8dVBw/iMsQ
-X-Received: from skazigti.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:411e])
- (user=sadiyakazi job=sendgmr) by 2002:a17:90b:3e81:b0:20a:81b2:bc3 with SMTP
- id rj1-20020a17090b3e8100b0020a81b20bc3mr32327278pjb.60.1665422063531; Mon,
- 10 Oct 2022 10:14:23 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 17:13:53 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221010171353.1106166-1-sadiyakazi@google.com>
-Subject: [PATCH] Documentation: Kunit: Update architecture.rst for minor fixes
-From:   Sadiya Kazi <sadiyakazi@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, corbet@lwn.net,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Sadiya Kazi <sadiyakazi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rQRSSqgQ4c9BjxvZpkARxVYPlmmPTB3aVJCaeF1YLPM=;
+        b=aRiMk9xuuFzMEHRTqzTvn+xNz0DkJsm3fPwM2IQXLUhtgQKC1TCyrrarWr00PhNvmZ
+         BDlxD7eFIeQP2d7QwJh6lCp2SYnRYTvpMaSDmjIl6rJ/EJ1/FU0LWdUL40VNNI0S3n8S
+         Ud4M/y1Zsx5zk/GjNNhjNRbpR8jHyTj0OqZV2uD6++RBPHHhcTzLglfO5DmnWGLBw7XZ
+         2iW6y630FQ2zoJwAjjzKwdmRttExM0xXLjCvcDxTWC1J5udo8lCGHR3IjhSFcUjqsGcT
+         ArWFGbJOewXTjUKv2Bg/a77+EnfePu5vJns3DLe9Av6SlAGeEPCy2SA6y6O/iwZE1bAd
+         XXVg==
+X-Gm-Message-State: ACrzQf134ZAGzM8rjyAer5zE8zTfG5cBZv38j2FFF68RBo656YPgqlvv
+        4xyyQhcPhw2zj3UB/bUS7060T6YxwahQcxvtcRbWEFyFxP6otFAsn74A1he2X2h3tRLmdyBSIBW
+        u0txATGWJxfXTFqtPBNda5EeMhYPDwC5UZU+J0qTVX33/fuUJ1owZFt9rf9QN45B8a+S3zA==
+X-Received: by 2002:a05:6000:16c3:b0:22e:c6fd:2676 with SMTP id h3-20020a05600016c300b0022ec6fd2676mr10451671wrf.141.1665422083135;
+        Mon, 10 Oct 2022 10:14:43 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7OG547EaOYrk728y3uGdJpoAMAokCkwc5CJTaBezE7u5ah4gC7pKsQ+IjfdVwbM924lROjWg==
+X-Received: by 2002:a05:6000:16c3:b0:22e:c6fd:2676 with SMTP id h3-20020a05600016c300b0022ec6fd2676mr10451646wrf.141.1665422082835;
+        Mon, 10 Oct 2022 10:14:42 -0700 (PDT)
+Received: from redhat.com ([2.55.183.131])
+        by smtp.gmail.com with ESMTPSA id p18-20020adf9d92000000b0022afcc11f65sm9238215wre.47.2022.10.10.10.14.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 10:14:42 -0700 (PDT)
+Date:   Mon, 10 Oct 2022 13:14:37 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Hulk Robot <hulkci@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org
+Subject: [PATCH v3 resend] Bluetooth: virtio_bt: fix device removal
+Message-ID: <20220811094542.268519-1-mst@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Updated the architecture.rst page with the following changes:
--Add missing article _the_ across the document.
--Reword content across for style and standard.
--Upate all occurrences of Command Line to Command-line across the document.
--Correct grammatical issues, for example - added _it_wherever missing.
--Update all occurrences of _via_ to either use _through_ or _using_.
--Update the text preceding the external links and pushed the full
-link to a new line for better readability.
--Reword content under the config command to make it more clear and concise.
+Device removal is clearly out of virtio spec: it attempts to remove
+unused buffers from a VQ before invoking device reset. To fix, make
+open/close NOPs and do all cleanup/setup in probe/remove.
 
-Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
+NB: This is a hacky way to handle this - virtbt_{open,close} as NOP is
+not really what a driver is supposed to be doing. These are transport
+enable/disable callbacks from the BT core towards the driver. It maps to
+a device being enabled/disabled by something like bluetoothd for
+example. So if disabled, users expect that no resources/queues are in
+use.  It does work with all other transports like USB, SDIO, UART etc.
+There should be no buffer used if the device is powered off. We also
+don’t have any USB URBs in-flight if the transport is not active.
+
+The way to implement a proper fix would be using vq reset if supported,
+or even using a full device reset.
+
+The cost of the hack is a single skb wasted on an unused bt device.
+
+NB2: with this fix in place driver still suffers from a race condition
+if an interrupt triggers while device is being reset.  To fix, in the
+virtbt_close() callback we should deactivate all interrupts.  To be
+fixed.
+
+squashed fixup: bluetooth: virtio_bt: fix an error code in probe()
+
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Message-Id: <20220811080943.198245-1-mst@redhat.com>
 ---
- .../dev-tools/kunit/architecture.rst          | 86 ++++++++++---------
- 1 file changed, 45 insertions(+), 41 deletions(-)
 
-diff --git a/Documentation/dev-tools/kunit/architecture.rst b/Documentation=
-/dev-tools/kunit/architecture.rst
-index 8efe792bdcb9..1736c37c33f2 100644
---- a/Documentation/dev-tools/kunit/architecture.rst
-+++ b/Documentation/dev-tools/kunit/architecture.rst
-@@ -4,16 +4,17 @@
- KUnit Architecture
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
--The KUnit architecture can be divided into two parts:
-+The KUnit architecture is divided into two parts:
-=20
- - `In-Kernel Testing Framework`_
--- `kunit_tool (Command Line Test Harness)`_
-+- `kunit_tool (Command-line Test Harness)`_
-=20
- In-Kernel Testing Framework
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-=20
- The kernel testing library supports KUnit tests written in C using
--KUnit. KUnit tests are kernel code. KUnit does several things:
-+KUnit. KUnit tests are written in the kernel code. KUnit performs the foll=
-owing
-+tasks:
-=20
- - Organizes tests
- - Reports test results
-@@ -22,8 +23,8 @@ KUnit. KUnit tests are kernel code. KUnit does several th=
-ings:
- Test Cases
- ----------
-=20
--The fundamental unit in KUnit is the test case. The KUnit test cases are
--grouped into KUnit suites. A KUnit test case is a function with type
-+The test case is the fundamental unit in KUnit. KUnit test cases are organ=
-ised
-+into suites. A KUnit test case is a function with type
- signature ``void (*)(struct kunit *test)``.
- These test case functions are wrapped in a struct called
- struct kunit_case.
-@@ -31,8 +32,8 @@ struct kunit_case.
- .. note:
- 	``generate_params`` is optional for non-parameterized tests.
-=20
--Each KUnit test case gets a ``struct kunit`` context
--object passed to it that tracks a running test. The KUnit assertion
-+Each KUnit test case receives a ``struct kunit`` context object that track=
-s a
-+running test. The KUnit assertion
- macros and other KUnit utilities use the ``struct kunit`` context
- object. As an exception, there are two fields:
-=20
-@@ -77,11 +78,12 @@ Executor
-=20
- The KUnit executor can list and run built-in KUnit tests on boot.
- The Test suites are stored in a linker section
--called ``.kunit_test_suites``. For code, see:
-+called ``.kunit_test_suites``. For code, see the following link:
- https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/in=
-clude/asm-generic/vmlinux.lds.h?h=3Dv5.15#n945.
+resending due to v3 having been dropped
+changes from v2:
+	tkeaked commit log to make lines shorter
+changes from v1:
+	fixed error handling
+
+ drivers/bluetooth/virtio_bt.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/bluetooth/virtio_bt.c b/drivers/bluetooth/virtio_bt.c
+index 67c21263f9e0..f6d699fed139 100644
+--- a/drivers/bluetooth/virtio_bt.c
++++ b/drivers/bluetooth/virtio_bt.c
+@@ -50,8 +50,11 @@ static int virtbt_add_inbuf(struct virtio_bluetooth *vbt)
+ 
+ static int virtbt_open(struct hci_dev *hdev)
+ {
+-	struct virtio_bluetooth *vbt = hci_get_drvdata(hdev);
++	return 0;
++}
+ 
++static int virtbt_open_vdev(struct virtio_bluetooth *vbt)
++{
+ 	if (virtbt_add_inbuf(vbt) < 0)
+ 		return -EIO;
+ 
+@@ -61,7 +64,11 @@ static int virtbt_open(struct hci_dev *hdev)
+ 
+ static int virtbt_close(struct hci_dev *hdev)
+ {
+-	struct virtio_bluetooth *vbt = hci_get_drvdata(hdev);
++	return 0;
++}
 +
- The linker section consists of an array of pointers to
- ``struct kunit_suite``, and is populated by the ``kunit_test_suites()``
--macro. To run all tests compiled into the kernel, the KUnit executor
-+macro. To run all the compiled tests into the kernel, the KUnit executor
- iterates over the linker section array.
-=20
- .. kernel-figure:: kunit_suitememorydiagram.svg
-@@ -90,8 +92,8 @@ iterates over the linker section array.
- 	KUnit Suite Memory Diagram
-=20
- On the kernel boot, the KUnit executor uses the start and end addresses
--of this section to iterate over and run all tests. For code, see:
--https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/li=
-b/kunit/executor.c
-+of this section to iterate over and run all tests. For code, see the follo=
-wing link:
-+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/li=
-b/kunit/executor.c.
-=20
- When built as a module, the ``kunit_test_suites()`` macro defines a
- ``module_init()`` function, which runs all the tests in the compilation
-@@ -99,46 +101,48 @@ unit instead of utilizing the executor.
-=20
- In KUnit tests, some error classes do not affect other tests
- or parts of the kernel, each KUnit case executes in a separate thread
--context. For code, see:
-+context. For code, see the following link:
- https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/li=
-b/kunit/try-catch.c?h=3Dv5.15#n58
-=20
- Assertion Macros
- ----------------
-=20
--KUnit tests verify state using expectations/assertions.
-+KUnit tests verify the state using expectations/assertions.
- All expectations/assertions are formatted as:
- ``KUNIT_{EXPECT|ASSERT}_<op>[_MSG](kunit, property[, message])``
-=20
- - ``{EXPECT|ASSERT}`` determines whether the check is an assertion or an
-   expectation.
-=20
--	- For an expectation, if the check fails, marks the test as failed
-+	- For an expectation, if the check fails, it marks the test as failed
- 	  and logs the failure.
-=20
- 	- An assertion, on failure, causes the test case to terminate
- 	  immediately.
-=20
--		- Assertions call function:
-+		- Assertion calls the function:
- 		  ``void __noreturn kunit_abort(struct kunit *)``.
-=20
--		- ``kunit_abort`` calls function:
-+		- ``kunit_abort`` calls the function:
- 		  ``void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_ca=
-tch)``.
-=20
--		- ``kunit_try_catch_throw`` calls function:
-+		- ``kunit_try_catch_throw`` calls the function:
- 		  ``void kthread_complete_and_exit(struct completion *, long) __noreturn=
-;``
- 		  and terminates the special thread context.
-=20
- - ``<op>`` denotes a check with options: ``TRUE`` (supplied property
--  has the boolean value =E2=80=9Ctrue=E2=80=9D), ``EQ`` (two supplied prop=
-erties are
-+  has the boolean value "true"), ``EQ`` (two supplied properties are
-   equal), ``NOT_ERR_OR_NULL`` (supplied pointer is not null and does not
--  contain an =E2=80=9Cerr=E2=80=9D value).
-+  contain an "err" value).
-=20
- - ``[_MSG]`` prints a custom message on failure.
-=20
- Test Result Reporting
- ---------------------
--KUnit prints test results in KTAP format. KTAP is based on TAP14, see:
-+KUnit prints the test results in KTAP format.
-+KTAP is based on TAP14, see:
- https://github.com/isaacs/testanything.github.io/blob/tap14/tap-version-14=
--specification.md.
++static int virtbt_close_vdev(struct virtio_bluetooth *vbt)
++{
+ 	int i;
+ 
+ 	cancel_work_sync(&vbt->rx);
+@@ -354,8 +361,15 @@ static int virtbt_probe(struct virtio_device *vdev)
+ 		goto failed;
+ 	}
+ 
++	virtio_device_ready(vdev);
++	err = virtbt_open_vdev(vbt);
++	if (err)
++		goto open_failed;
 +
- KTAP (yet to be standardized format) works with KUnit and Kselftest.
- The KUnit executor prints KTAP results to dmesg, and debugfs
- (if configured).
-@@ -151,32 +155,32 @@ parameters. The test is invoked multiple times, once =
-for each parameter
- value and the parameter is stored in the ``param_value`` field.
- The test case includes a KUNIT_CASE_PARAM() macro that accepts a
- generator function.
--The generator function is passed the previous parameter and returns the ne=
-xt
--parameter. It also provides a macro to generate common-case generators bas=
-ed on
--arrays.
-+The previous parameter is passed to the generator function, which returns
-+the next parameter. It also includes a macro for generating array-based
-+common-case generators.
-=20
--kunit_tool (Command Line Test Harness)
-+kunit_tool (Command-line Test Harness)
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
--kunit_tool is a Python script ``(tools/testing/kunit/kunit.py)``
--that can be used to configure, build, exec, parse and run (runs other
--commands in order) test results. You can either run KUnit tests using
--kunit_tool or can include KUnit in kernel and parse manually.
-+``kunit_tool`` is a Python script, found in ``tools/testing/kunit/kunit.py=
-``. It
-+is used to configure, build, execute, parse, and run (other commands in or=
-der)
-+test results. You have two options for running KUnit tests: either include=
- KUnit
-+in the kernel and parse manually, or use the ``kunit_tool``.
-=20
- - ``configure`` command generates the kernel ``.config`` from a
-   ``.kunitconfig`` file (and any architecture-specific options).
--  For some architectures, additional config options are specified in the
--  ``qemu_config`` Python script
--  (For example: ``tools/testing/kunit/qemu_configs/powerpc.py``).
-+  The Python script available in ``qemu_configs`` folder
-+  (for example, ``tools/testing/kunit/qemu configs/powerpc.py``) contains
-+  additional configuration options for specific architectures.
-   It parses both the existing ``.config`` and the ``.kunitconfig`` files
--  and ensures that ``.config`` is a superset of ``.kunitconfig``.
--  If this is not the case, it will combine the two and run
--  ``make olddefconfig`` to regenerate the ``.config`` file. It then
--  verifies that ``.config`` is now a superset. This checks if all
--  Kconfig dependencies are correctly specified in ``.kunitconfig``.
--  ``kunit_config.py`` includes the parsing Kconfigs code. The code which
--  runs ``make olddefconfig`` is a part of ``kunit_kernel.py``. You can
--  invoke this command via: ``./tools/testing/kunit/kunit.py config`` and
-+  to ensure that ``.config`` is a superset of ``.kunitconfig``.
-+  If not, it will combine the two and execute ``make olddefconfig`` to reg=
-enerate
-+  the ``.config`` file. It then checks to see if ``.config`` has become a =
-superset.
-+  This verifies that all the Kconfig dependencies are correctly specified =
-in the file
-+  ``.kunitconfig``. The
-+  ``kunit_config.py`` script contains the code for parsing Kconfigs. The c=
-ode which
-+  runs ``make olddefconfig`` is part of the ``kunit_kernel.py`` script. Yo=
-u can
-+  invoke this command through: ``./tools/testing/kunit/kunit.py config`` a=
-nd
-   generate a ``.config`` file.
- - ``build`` runs ``make`` on the kernel tree with required options
-   (depends on the architecture and some options, for example: build_dir)
-@@ -184,8 +188,8 @@ kunit_tool or can include KUnit in kernel and parse man=
-ually.
-   To build a KUnit kernel from the current ``.config``, you can use the
-   ``build`` argument: ``./tools/testing/kunit/kunit.py build``.
- - ``exec`` command executes kernel results either directly (using
--  User-mode Linux configuration), or via an emulator such
--  as QEMU. It reads results from the log via standard
-+  User-mode Linux configuration), or through an emulator such
-+  as QEMU. It reads results from the log using standard
-   output (stdout), and passes them to ``parse`` to be parsed.
-   If you already have built a kernel with built-in KUnit tests,
-   you can run the kernel and display the test results with the ``exec``
---=20
-2.38.0.rc1.362.ged0d419d3c-goog
+ 	return 0;
+ 
++open_failed:
++	hci_free_dev(hdev);
+ failed:
+ 	vdev->config->del_vqs(vdev);
+ 	return err;
+@@ -368,6 +382,7 @@ static void virtbt_remove(struct virtio_device *vdev)
+ 
+ 	hci_unregister_dev(hdev);
+ 	virtio_reset_device(vdev);
++	virtbt_close_vdev(vbt);
+ 
+ 	hci_free_dev(hdev);
+ 	vbt->hdev = NULL;
+-- 
+MST
 
