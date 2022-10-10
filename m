@@ -2,146 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA54A5F9F1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C035F9F1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbiJJNFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 09:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
+        id S229900AbiJJNGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 09:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiJJNF3 (ORCPT
+        with ESMTP id S230003AbiJJNGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 09:05:29 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD015A179;
-        Mon, 10 Oct 2022 06:05:20 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1322d768ba7so12387753fac.5;
-        Mon, 10 Oct 2022 06:05:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VruSYQjKdMW+9AMlTXLz+TveQk1ca9C/k1+WiztK+/I=;
-        b=EbZipuHk8TAvoakJ/gV8l9R/eIftQb6NyPPl/eaPKgzSAGDOXhkey0qiv/iBJnRhQX
-         QfeesXB2iffBHZwPbsGxzgiHkJC7C4LZ9TNbTh7Mnxx9ChBGZhOyFmf/RpmdHQYAOdDV
-         vayQoOdljZaoFuXocw3npU/rhs4PeNsk1r2utOOjReEpKCXzUoKLAKt1zzndjXZnuaol
-         Pqzr3NrlC2GnRsYnQp1UHYaR+0MX0HUsjw3aF1GsiGp6IdJ61ybLPBCsuilcv+HNeyuL
-         ELtXpi/H+iaZOHxmieqvtRczjLi82RWLya2aH6bhSusPfY/wENaRMJ/I7BlIlnbES+MW
-         k6rw==
-X-Gm-Message-State: ACrzQf1VF7ikArZbrduNcg5RmHI3ZeL6k1CN/uTfDA3TG94lZj2uLRIm
-        3tkhuJEjyIVNm6HTaYQ9nA==
-X-Google-Smtp-Source: AMsMyM75zf+8TClOT4cW/V7W8q/hu0USA4JeuORJpzDvRkM7YoHsWw73tnh6JVor2AZBpVPgMznlJA==
-X-Received: by 2002:a05:6870:5808:b0:128:afd5:491f with SMTP id r8-20020a056870580800b00128afd5491fmr10232253oap.136.1665407119374;
-        Mon, 10 Oct 2022 06:05:19 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bo7-20020a056808228700b0035465a615e1sm2282821oib.30.2022.10.10.06.05.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 06:05:18 -0700 (PDT)
-Received: (nullmailer pid 493117 invoked by uid 1000);
-        Mon, 10 Oct 2022 13:05:19 -0000
-Date:   Mon, 10 Oct 2022 08:05:19 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Siarhei Volkau <lis8215@gmail.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH 3/8] dt-bindings: clock: Add Ingenic JZ4755 CGU header
-Message-ID: <20221010130519.GA488861-robh@kernel.org>
-References: <20221009181338.2896660-1-lis8215@gmail.com>
- <20221009181338.2896660-4-lis8215@gmail.com>
+        Mon, 10 Oct 2022 09:06:04 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B7E870E41;
+        Mon, 10 Oct 2022 06:06:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 141E611FB;
+        Mon, 10 Oct 2022 06:06:08 -0700 (PDT)
+Received: from [10.57.5.39] (unknown [10.57.5.39])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 733D13F766;
+        Mon, 10 Oct 2022 06:06:00 -0700 (PDT)
+Message-ID: <9ea98de5-8041-17a9-4ed4-612abed91e76@arm.com>
+Date:   Mon, 10 Oct 2022 14:05:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221009181338.2896660-4-lis8215@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/2] cpufreq: Update CPU capacity reduction in
+ store_scaling_max_freq()
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-kernel@vger.kernel.org, rafael@kernel.org,
+        linux-pm@vger.kernel.org, Dietmar.Eggemann@arm.com,
+        peterz@infradead.org,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
+References: <20220930094821.31665-1-lukasz.luba@arm.com>
+ <20220930094821.31665-2-lukasz.luba@arm.com>
+ <20221010053902.5rofnpzvyynumw3e@vireshk-i7>
+ <3f9a4123-171b-5fa7-f506-341355f71483@arm.com>
+ <CAKfTPtBPqcTm5_-M_Ka3y46yQ2322TmH8KS-QyDbAiKk5B6hEQ@mail.gmail.com>
+ <8a7968c2-dbf7-5316-ef36-6d45143e0605@arm.com>
+ <CAKfTPtB3Lk5bc9k634O+Yi8wwP=MVeKS5NPbpaqwhX1F4t5EbA@mail.gmail.com>
+ <9611971c-d8dd-7877-6f50-c5afbf38b171@arm.com>
+ <CAKfTPtBvs-nWKipwXfMDpg+W4Ui1L4HNUXUpmHgm=qxPLFSMfQ@mail.gmail.com>
+ <077811ea-4b63-870e-d15a-602411c4fdbf@arm.com>
+ <CAKfTPtD0UZz=BHkNQtgNpaOv1pcmQUGX6cAf4MVbyfckZEA=GA@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAKfTPtD0UZz=BHkNQtgNpaOv1pcmQUGX6cAf4MVbyfckZEA=GA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 09:13:32PM +0300, Siarhei Volkau wrote:
-> This will be used from the devicetree bindings to specify the clocks
-> that should be obtained from the jz4755-cgu driver.
-> 
-> Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
-> ---
->  .../dt-bindings/clock/ingenic,jz4755-cgu.h    | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 include/dt-bindings/clock/ingenic,jz4755-cgu.h
-> 
-> diff --git a/include/dt-bindings/clock/ingenic,jz4755-cgu.h b/include/dt-bindings/clock/ingenic,jz4755-cgu.h
-> new file mode 100644
-> index 000000000..32307f68c
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/ingenic,jz4755-cgu.h
-> @@ -0,0 +1,49 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
 
-Dual license please.
 
-> +/*
-> + * This header provides clock numbers for the ingenic,jz4755-cgu DT binding.
-> + */
-> +
-> +#ifndef __DT_BINDINGS_CLOCK_JZ4755_CGU_H__
-> +#define __DT_BINDINGS_CLOCK_JZ4755_CGU_H__
-> +
-> +#define JZ4755_CLK_EXT		0
-> +#define JZ4755_CLK_OSC32K	1
-> +#define JZ4755_CLK_PLL		2
-> +#define JZ4755_CLK_PLL_HALF	3
-> +#define JZ4755_CLK_EXT_HALF	4
-> +#define JZ4755_CLK_CCLK		5
-> +#define JZ4755_CLK_H0CLK	6
-> +#define JZ4755_CLK_PCLK		7
-> +#define JZ4755_CLK_MCLK		8
-> +#define JZ4755_CLK_H1CLK	9
-> +#define JZ4755_CLK_UDC		10
-> +#define JZ4755_CLK_LCD		11
-> +#define JZ4755_CLK_UART0	12
-> +#define JZ4755_CLK_UART1	13
-> +#define JZ4755_CLK_UART2	14
-> +#define JZ4755_CLK_DMA		15
-> +#define JZ4755_CLK_MMC		16
-> +#define JZ4755_CLK_MMC0		17
-> +#define JZ4755_CLK_MMC1		18
-> +#define JZ4755_CLK_EXT512	19
-> +#define JZ4755_CLK_RTC		20
-> +#define JZ4755_CLK_UDC_PHY	21
-> +#define JZ4755_CLK_I2S		22
-> +#define JZ4755_CLK_SPI		23
-> +#define JZ4755_CLK_AIC		24
-> +#define JZ4755_CLK_ADC		25
-> +#define JZ4755_CLK_TCU		26
-> +#define JZ4755_CLK_BCH		27
-> +#define JZ4755_CLK_I2C		28
-> +#define JZ4755_CLK_TVE		29
-> +#define JZ4755_CLK_CIM		30
-> +#define JZ4755_CLK_AUX_CPU	31
-> +#define JZ4755_CLK_AHB1		32
-> +#define JZ4755_CLK_IDCT		33
-> +#define JZ4755_CLK_DB		34
-> +#define JZ4755_CLK_ME		35
-> +#define JZ4755_CLK_MC		36
-> +#define JZ4755_CLK_TSSI		37
-> +#define JZ4755_CLK_IPU		38
-> +
-> +#endif /* __DT_BINDINGS_CLOCK_JZ4755_CGU_H__ */
-> -- 
-> 2.36.1
+On 10/10/22 13:21, Vincent Guittot wrote:
+> On Mon, 10 Oct 2022 at 12:49, Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>>
+>> +CC Daniel
+>>
+>> On 10/10/22 11:22, Vincent Guittot wrote:
+>>> On Mon, 10 Oct 2022 at 12:12, Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>>
+>>>>
+>>>>
+>>>> On 10/10/22 10:32, Vincent Guittot wrote:
+>>>>> On Mon, 10 Oct 2022 at 11:30, Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>> On 10/10/22 10:15, Vincent Guittot wrote:
+>>>>>>> On Mon, 10 Oct 2022 at 11:02, Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> On 10/10/22 06:39, Viresh Kumar wrote:
+>>>>>>>>> Would be good to always CC Scheduler maintainers for such a patch.
+>>>>>>>>
+>>>>>>>> Agree, I'll do that.
+>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> On 30-09-22, 10:48, Lukasz Luba wrote:
+>>>>>>>>>> When the new max frequency value is stored, the task scheduler must
+>>>>>>>>>> know about it. The scheduler uses the CPUs capacity information in the
+>>>>>>>>>> task placement. Use the existing mechanism which provides information
+>>>>>>>>>> about reduced CPU capacity to the scheduler due to thermal capping.
+>>>>>>>>>>
+>>>>>>>>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>>>>>>>>>> ---
+>>>>>>>>>>       drivers/cpufreq/cpufreq.c | 18 +++++++++++++++++-
+>>>>>>>>>>       1 file changed, 17 insertions(+), 1 deletion(-)
+>>>>>>>>>>
+>>>>>>>>>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+>>>>>>>>>> index 1f8b93f42c76..205d9ea9c023 100644
+>>>>>>>>>> --- a/drivers/cpufreq/cpufreq.c
+>>>>>>>>>> +++ b/drivers/cpufreq/cpufreq.c
+>>>>>>>>>> @@ -27,6 +27,7 @@
+>>>>>>>>>>       #include <linux/slab.h>
+>>>>>>>>>>       #include <linux/suspend.h>
+>>>>>>>>>>       #include <linux/syscore_ops.h>
+>>>>>>>>>> +#include <linux/thermal.h>
+>>>>>>>>>>       #include <linux/tick.h>
+>>>>>>>>>>       #include <linux/units.h>
+>>>>>>>>>>       #include <trace/events/power.h>
+>>>>>>>>>> @@ -718,6 +719,8 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
+>>>>>>>>>>       static ssize_t store_scaling_max_freq
+>>>>>>>>>>       (struct cpufreq_policy *policy, const char *buf, size_t count)
+>>>>>>>>>>       {
+>>>>>>>>>> +    unsigned int frequency;
+>>>>>>>>>> +    struct cpumask *cpus;
+>>>>>>>>>>          unsigned long val;
+>>>>>>>>>>          int ret;
+>>>>>>>>>>
+>>>>>>>>>> @@ -726,7 +729,20 @@ static ssize_t store_scaling_max_freq
+>>>>>>>>>>                  return -EINVAL;
+>>>>>>>>>>
+>>>>>>>>>>          ret = freq_qos_update_request(policy->max_freq_req, val);
+>>>>>>>>>> -    return ret >= 0 ? count : ret;
+>>>>>>>>>> +    if (ret >= 0) {
+>>>>>>>>>> +            /*
+>>>>>>>>>> +             * Make sure that the task scheduler sees these CPUs
+>>>>>>>>>> +             * capacity reduction. Use the thermal pressure mechanism
+>>>>>>>>>> +             * to propagate this information to the scheduler.
+>>>>>>>>>> +             */
+>>>>>>>>>> +            cpus = policy->related_cpus;
+>>>>>>>>>
+>>>>>>>>> No need of this, just use related_cpus directly.
+>>>>>>>>>
+>>>>>>>>>> +            frequency = __resolve_freq(policy, val, CPUFREQ_RELATION_HE);
+>>>>>>>>>> +            arch_update_thermal_pressure(cpus, frequency);
+>>>>>>>>>
+>>>>>>>>> I wonder if using the thermal-pressure API here is the right thing to
+>>>>>>>>> do. It is a change coming from User, which may or may not be
+>>>>>>>>> thermal-related.
+>>>>>>>>
+>>>>>>>> Yes, I thought the same. Thermal-pressure name might be not the
+>>>>>>>> best for covering this use case. I have been thinking about this
+>>>>>>>> thermal pressure mechanism for a while, since there are other
+>>>>>>>> use cases like PowerCap DTPM which also reduces CPU capacity
+>>>>>>>> because of power policy from user-space. We don't notify
+>>>>>>>> the scheduler about it. There might be also an issue with virtual
+>>>>>>>> guest OS and how that kernel 'sees' the capacity of CPUs.
+>>>>>>>> We might try to use this 'thermal-pressure' in the guest kernel
+>>>>>>>> to notify about available CPU capacity (just a proposal, not
+>>>>>>>> even an RFC, since we are missing requirements, but issues where
+>>>>>>>> discussed on LPC 2022 on ChromeOS+Android_guest)
+>>>>>>>
+>>>>>>> The User space setting scaling_max_freq is a long scale event and it
+>>>>>>> should be considered as a new running environnement instead of a
+>>>>>>> transient event. I would suggest updating the EM is and capacity orig
+>>>>>>> of the system in this case. Similarly, we rebuild sched_domain with a
+>>>>>>> cpu hotplug. scaling_max_freq interface should not be used to do any
+>>>>>>> kind of dynamic scaling.
+>>>>>>
+>>>>>> I tend to agree, but the EM capacity would be only used in part of EAS
+>>>>>> code. The whole fair.c view to the capacity_of() (RT + DL + irq +
+>>>>>> thermal_pressure) would be still wrong in other parts, e.g.
+>>>>>> select_idle_sibling() and load balance.
+>>>>>>
+>>>>>> When we get this powerhint we might be already in overutilied state
+>>>>>> so EAS is disabled. IMO other mechanisms in the task scheduler
+>>>>>> should be also aware of that capacity reduction.
+>>>>>
+>>>>> That's why I also mentioned the capacity_orig
+>>>>
+>>>> Well, I think this is a bit more complex. Thermal framework governor
+>>>> reduces the perf IDs from top in the freq asc table and keeps that
+>>>> in the statistics in sysfs. It also updates the thermal pressure signal.
+>>>> When we rebuild the capacity of CPUs and make the capacity_orig smaller,
+>>>> the capacity_of would still have the thermal framework reduced capacity
+>>>> in there. We would end up with too small CPU capacity due to this
+>>>> subtraction in capacity_of.
+>>>
+>>> That's why using user space interface should not be used to do dynamic scaling.
+>>> I still think that user space interface is not the right interface
+>>>
+>>>>
+>>>> Ideally, I would see a mechanism which is aware of this performance
+>>>> reduction reason:
+>>>> 1. thermal capping
+>>>> 2. power capping (from DTPM)
+>>>> 3. max freq reduction by user space
+>>>
+>>> Yes for thermal and power capping  but no for user space
+>>>
+>>>>
+>>>> That common place would figure and maintain the context for the
+>>>> requested capacity reduction.
+>>>>
+>>>> BTW, those Android user space max freq requests are not that long,
+>>>> mostly due to camera capturing (you can see a few in this file,
+>>>> e.g. [1]).
+>>>
+>>> Why are they doing this ?
+>>> This doesn't seem to be the correct interface to use. It seems to do
+>>> some power budget and they should use the right interface for this
+>>
+>> Yes, I agree. I have sent explanation with this to Peter's emails.
+>> Daniel tries to give them a better interface: DTPM, but also would
+>> suffer the same issue of capacity reduction for this short time.
 > 
+> The comments in this thread are only about using the userspace
+> interface scale_max_freq to dynamically scale max freq and then to try
+> to report these changes in the thermal_pressure, which is the purpose
+> of this patch.
+
+Fair enough. I think we all see those potential issues but from
+different angle, which is good for progress. We also bring different
+experience. This patch appeared to be useful for sharing those views and
+the issue.
+
 > 
+> As said at LPC, I'm fine to rename thermal_pressure for something more
+> generic but this is not the purpose of this patch. This patch is about
+> connecting userspace scale_max_freq to thermal_pressure and it's not
+> the right things to do
+
+Sounds good, something more generic would be great to have.
+
+I will start a discussion in a new thread that topic then.
+
+Thanks for sharing your opinion!
