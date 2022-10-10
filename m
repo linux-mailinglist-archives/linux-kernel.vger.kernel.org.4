@@ -2,39 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B33BE5F9737
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 05:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE19C5F973A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 05:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbiJJDmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 23:42:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55938 "EHLO
+        id S229925AbiJJDq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 23:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbiJJDms (ORCPT
+        with ESMTP id S230246AbiJJDq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 23:42:48 -0400
-Received: from mail.nfschina.com (mail.nfschina.com [124.16.136.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A12327CD4
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 20:42:47 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 965ED1E80D90;
-        Mon, 10 Oct 2022 11:36:43 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id dBUciL1iuwIY; Mon, 10 Oct 2022 11:36:41 +0800 (CST)
-Received: from localhost.localdomain.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: xupengfei@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 5FD971E80D4B;
-        Mon, 10 Oct 2022 11:36:39 +0800 (CST)
-From:   XU pengfei <xupengfei@nfschina.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        XU pengfei <xupengfei@nfschina.com>
-Subject: [PATCH V2] mm/mmap_lock: Remove unnecessary 'NULL' values from Pointer
-Date:   Mon, 10 Oct 2022 11:42:38 +0800
-Message-Id: <20221010034238.3604-1-xupengfei@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        Sun, 9 Oct 2022 23:46:26 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCF63DF2C
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 20:46:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0RvipzyCwcwCdOuCNQFfFNwYNR5sm1Uw9mApVKX+WO8=; b=MZdqDSH4EfjD25C0qM1EJoYWQM
+        lv2CiLKsO1p4L6g73V9Y45cuO3XMDkMQb5yD411PSkYm3rrEYCHwVI8BoOSw2fXSTnMcmbt/hv2oS
+        rAsAxj3Kjjwk7JQCsAvQIA0G4FfdEkcJ9rqGqhJwRQXxzKFAWGuaKWCkN+V/+ptngFjKKBvfZVr3h
+        2TF9u1g1h0xLA6UgYv1XEXhlA7kJKFSCL5yMOdEpaLOMMNfuediK/e0n+pglh0s6y5aNOiUiIuYTZ
+        YU2bO10QT5yW9X4nS/JpXZt5DA72ZYA6X1ThO7RVvIgbk6nJPu/SSfUQ0ttovkPHt3apbVYCWwP5J
+        kvSkcnzA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ohjkE-003v8q-5p; Mon, 10 Oct 2022 03:46:22 +0000
+Date:   Mon, 10 Oct 2022 04:46:22 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     XU pengfei <xupengfei@nfschina.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] mm/mmap_lock: Remove unnecessary 'NULL' values from
+ Pointer
+Message-ID: <Y0OVjpAMT0OD1q1D@casper.infradead.org>
+References: <20221010034238.3604-1-xupengfei@nfschina.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221010034238.3604-1-xupengfei@nfschina.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,55 +49,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pointer variables allocate memory first, and then judge. There is no
-need to initialize the assignment.
+On Mon, Oct 10, 2022 at 11:42:38AM +0800, XU pengfei wrote:
+> Pointer variables allocate memory first, and then judge. There is no
+> need to initialize the assignment.
 
-Signed-off-by: XU pengfei <xupengfei@nfschina.com>
-Reported-by: kernel test robot <lkp@intel.com>
----
- V2: Remove goto statement
-
- mm/mmap_lock.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
-
-diff --git a/mm/mmap_lock.c b/mm/mmap_lock.c
-index 1854850b4b89..d0c2a5eae341 100644
---- a/mm/mmap_lock.c
-+++ b/mm/mmap_lock.c
-@@ -198,23 +198,24 @@ void trace_mmap_lock_unreg(void)
-  */
- static const char *get_mm_memcg_path(struct mm_struct *mm)
- {
--	char *buf = NULL;
-+	char *buf;
- 	struct mem_cgroup *memcg = get_mem_cgroup_from_mm(mm);
- 
- 	if (memcg == NULL)
--		goto out;
--	if (unlikely(memcg->css.cgroup == NULL))
--		goto out_put;
-+		return NULL;
-+	if (unlikely(memcg->css.cgroup == NULL)) {
-+		css_put(&memcg->css);
-+		return NULL;
-+	}
- 
- 	buf = get_memcg_path_buf();
--	if (buf == NULL)
--		goto out_put;
-+	if (buf == NULL) {
-+		css_put(&memcg->css);
-+		return NULL;
-+	}
- 
- 	cgroup_path(memcg->css.cgroup, buf, MEMCG_PATH_BUF_SIZE);
- 
--out_put:
--	css_put(&memcg->css);
--out:
- 	return buf;
- }
- 
--- 
-2.18.2
-
+This seems worse to me.
