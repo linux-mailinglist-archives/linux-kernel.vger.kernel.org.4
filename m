@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B005D5F9A84
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9C85F9A86
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbiJJHzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55274 "EHLO
+        id S231536AbiJJH4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiJJHzP (ORCPT
+        with ESMTP id S230486AbiJJH4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:55:15 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4031DA70;
-        Mon, 10 Oct 2022 00:55:12 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 21BA768AA6; Mon, 10 Oct 2022 09:55:05 +0200 (CEST)
-Date:   Mon, 10 Oct 2022 09:55:04 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Chaitanya Kulkarni <kch@nvidia.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-scsi@vger.kernel.org, axboe@kernel.dk, efremov@linux.com,
-        josef@toxicpanda.com, idryomov@gmail.com,
-        dongsheng.yang@easystack.cn, haris.iqbal@ionos.com,
-        jinpu.wang@ionos.com, mst@redhat.com, jasowang@redhat.com,
-        pbonzini@redhat.com, stefanha@redhat.com, ohad@wizery.com,
-        andersson@kernel.org, baolin.wang@linux.alibaba.com,
-        ulf.hansson@linaro.org, richard@nod.at, miquel.raynal@bootlin.com,
-        vigneshr@ti.com, marcan@marcan.st, sven@svenpeter.dev,
-        alyssa@rosenzweig.io, kbusch@kernel.org, hch@lst.de,
-        sagi@grimberg.me, sth@linux.ibm.com, hoeppner@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, hare@suse.de, bhelgaas@google.com,
-        john.garry@huawei.com, christophe.jaillet@wanadoo.fr,
-        vaibhavgupta40@gmail.com, wsa+renesas@sang-engineering.com,
-        damien.lemoal@opensource.wdc.com, johannes.thumshirn@wdc.com,
-        bvanassche@acm.org, ming.lei@redhat.com,
-        shinichiro.kawasaki@wdc.com, vincent.fu@samsung.com,
-        christoph.boehmwalder@linbit.com, joel@jms.id.au,
-        vincent.whitchurch@axis.com, nbd@other.debian.org,
-        ceph-devel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, asahi@lists.linux.dev
-Subject: Re: [RFC PATCH 00/21] block: add and use init tagset helper
-Message-ID: <20221010075504.GA21272@lst.de>
-References: <20221005032257.80681-1-kch@nvidia.com> <Y0BvRaVO0iUVmHgB@bombadil.infradead.org>
+        Mon, 10 Oct 2022 03:56:03 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FCC13EA1;
+        Mon, 10 Oct 2022 00:56:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665388562; x=1696924562;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HID0mHHHZgyVwH5oNtP1G2gM2V0I0iEupf35hgDLXWE=;
+  b=Ku7iFvkQshmi5NFsWXovCE9T8N3YrrftUm4omdB+JxYv7KiXdibHFZ6V
+   BqGWfE5HoUEgcVyK40nD0QrwbZRYdU6ET8N1Z4Q3+sbjhKmtxKN+eZG92
+   ckyv8fxXQeIHbBaA7uSmLjdc6Kra9iEuhfO1n90bXrlQ+eiKmX6K6fs8R
+   JqXHmzB19FlqA2F7MHTteT6TU68wI+cyp+tA811ko9QB4liGfca+0igQH
+   +zBX2AfINU2iuA2Ndgn+qc2jhzxMNdy/V96Pxb8zPFaLytepYD1Cuy0Zl
+   UGvJBXvC8hKiQieY/Nc7g/LgyPwCN7tT9q4IMJC0CcdbMQalZQgchgxBi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10495"; a="305762231"
+X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
+   d="scan'208";a="305762231"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 00:56:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10495"; a="694539307"
+X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
+   d="scan'208";a="694539307"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 10 Oct 2022 00:55:59 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 614561E0; Mon, 10 Oct 2022 10:56:20 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH v1 1/1] pinctrl: st: Switch to use fwnode instead of of_node
+Date:   Mon, 10 Oct 2022 10:56:15 +0300
+Message-Id: <20221010075615.43244-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0BvRaVO0iUVmHgB@bombadil.infradead.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,15 +63,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 11:26:13AM -0700, Luis Chamberlain wrote:
-> *If* there were commonalities at init and these could be broken up into
-> common groups, each having their own set of calls, then we simplify and
-> can abstract these. I say this without doing a complete review of the
-> removals, but if there really isn't much of commonalities I tend to
-> agree with Bart that open coding this is better.
+The OF node in the GPIO library is deprecated and soon
+will be removed.
 
-The commonality is that there are various required or optional
-fields to fill out.  I actually have a WIP series to make the tag_set
-dynamically allocated and refcounted to fix some long standing life time
-issues.  That creates a new alloc helper that will take a few mandatory
-arguments and would heavily clash with this series.
+GPIO library now accepts fwnode as a firmware node, so
+switch the driver to use it.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/pinctrl/pinctrl-st.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/pinctrl/pinctrl-st.c b/drivers/pinctrl/pinctrl-st.c
+index cf7f9cbe6044..987878c83349 100644
+--- a/drivers/pinctrl/pinctrl-st.c
++++ b/drivers/pinctrl/pinctrl-st.c
+@@ -1175,7 +1175,7 @@ static int st_pctl_dt_calculate_pin(struct st_pinctrl *info,
+ 
+ 	for (i = 0; i < info->nbanks; i++) {
+ 		chip = &info->banks[i].gpio_chip;
+-		if (chip->of_node == np) {
++		if (chip->fwnode == of_fwnode_handle(np)) {
+ 			if (offset < chip->ngpio)
+ 				retval = chip->base + offset;
+ 			break;
+@@ -1518,7 +1518,7 @@ static int st_gpiolib_register_bank(struct st_pinctrl *info,
+ 	bank->gpio_chip = st_gpio_template;
+ 	bank->gpio_chip.base = bank_num * ST_GPIO_PINS_PER_BANK;
+ 	bank->gpio_chip.ngpio = ST_GPIO_PINS_PER_BANK;
+-	bank->gpio_chip.of_node = np;
++	bank->gpio_chip.fwnode = of_fwnode_handle(np);
+ 	bank->gpio_chip.parent = dev;
+ 	spin_lock_init(&bank->lock);
+ 
+-- 
+2.35.1
+
