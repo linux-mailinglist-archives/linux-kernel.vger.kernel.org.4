@@ -2,89 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D755F970B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 04:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A9405F9715
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 04:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbiJJCjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 22:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49480 "EHLO
+        id S230516AbiJJCqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 22:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbiJJCjH (ORCPT
+        with ESMTP id S230027AbiJJCqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 22:39:07 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E37C4A839;
-        Sun,  9 Oct 2022 19:39:06 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mm2zf5KnMzHv7H;
-        Mon, 10 Oct 2022 10:34:06 +0800 (CST)
-Received: from huawei.com (10.174.178.129) by kwepemi500016.china.huawei.com
- (7.221.188.220) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 10 Oct
- 2022 10:39:03 +0800
-From:   Kemeng Shi <shikemeng@huawei.com>
-To:     <tj@kernel.org>, <axboe@kernel.dk>
-CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <shikemeng@huawei.com>
-Subject: [PATCH 4/4] blk-cgroup: Fix typo in comment
-Date:   Mon, 10 Oct 2022 10:38:59 +0800
-Message-ID: <20221010023859.11896-5-shikemeng@huawei.com>
-X-Mailer: git-send-email 2.14.1.windows.1
-In-Reply-To: <20221010023859.11896-1-shikemeng@huawei.com>
-References: <20221010023859.11896-1-shikemeng@huawei.com>
+        Sun, 9 Oct 2022 22:46:46 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6764B0F9
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 19:46:44 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id C64B22C0746;
+        Mon, 10 Oct 2022 02:46:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1665370000;
+        bh=1brJsjl0xI5L1GkQZfaE8oXErg7ibxkUzqbxER+swKM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KerF0Dgg4+/Z9GKSxw+YXSAHcmrKpGI1le6Ue8uyebW0XnAbdT4RNe03MpWgxQTS0
+         feVAn13TzKaTZM9NlFH+QFgYnR6AmmN6wVajRyACmZljHRW2rG6IbhZzOUgZVFwdcL
+         p2v8+UIw9yDFroAwWix2+T+vwxoB1Hy/imAGAbzu4wJY0JbXn42y5gBPDtso7aY8um
+         DBcrNSZTuyHgpNpP1/mR1aAfhG03/mfeV035Bk6iS+2Mh5GmHJS8GzPcoJKOcPhv06
+         BmIBOT0TZp8MD/o+ke+qma/oCqZfIkEKlMffwGV7Phn9T6h28jDKQYuONEUrNW4J5K
+         oHDILX0Ncveaw==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B634387900000>; Mon, 10 Oct 2022 15:46:40 +1300
+Received: from markto-dl.ws.atlnz.lc (markto-dl.ws.atlnz.lc [10.33.23.25])
+        by pat.atlnz.lc (Postfix) with ESMTP id 99B2713EDD7;
+        Mon, 10 Oct 2022 15:46:40 +1300 (NZDT)
+Received: by markto-dl.ws.atlnz.lc (Postfix, from userid 1155)
+        id 974C5340926; Mon, 10 Oct 2022 15:46:40 +1300 (NZDT)
+From:   Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+To:     jmaloy@redhat.com, ying.xue@windriver.com, davem@davemloft.net
+Cc:     netdev@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org,
+        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+Subject: [PATCH] tipc: Fix recognition of trial period
+Date:   Mon, 10 Oct 2022 15:46:13 +1300
+Message-Id: <20221010024613.2951-1-mark.tomlinson@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.178.129]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500016.china.huawei.com (7.221.188.220)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=UKij4xXy c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=Qawa6l4ZSaYA:10 a=CfVpqal7VN6jvvNFqYUA:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace assocating with associating.
-Replace assocaited with associated.
+The trial period exists until jiffies is after addr_trial_end. But as
+jiffies will eventually overflow, just using time_after will eventually
+give incorrect results. As the node address is set once the trial period
+ends, this can be used to know that we are not in the trial period.
 
-Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
+Fixes: e415577f57f4 ("tipc: correct discovery message handling during add=
+ress trial period")
+Signed-off-by: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
 ---
- block/blk-cgroup.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ net/tipc/discover.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-index fc083c35dc42..f723901ef9b9 100644
---- a/block/blk-cgroup.c
-+++ b/block/blk-cgroup.c
-@@ -205,7 +205,7 @@ static inline struct blkcg *blkcg_parent(struct blkcg *blkcg)
-  * @q: request_queue the new blkg is associated with
-  * @gfp_mask: allocation mask to use
-  *
-- * Allocate a new blkg assocating @blkcg and @q.
-+ * Allocate a new blkg associating @blkcg and @q.
-  */
- static struct blkcg_gq *blkg_alloc(struct blkcg *blkcg, struct request_queue *q,
- 				   gfp_t gfp_mask)
-@@ -602,7 +602,7 @@ EXPORT_SYMBOL_GPL(blkcg_print_blkgs);
-  * @pd: policy private data of interest
-  * @v: value to print
-  *
-- * Print @v to @sf for the device assocaited with @pd.
-+ * Print @v to @sf for the device associated with @pd.
-  */
- u64 __blkg_prfill_u64(struct seq_file *sf, struct blkg_policy_data *pd, u64 v)
+diff --git a/net/tipc/discover.c b/net/tipc/discover.c
+index da69e1abf68f..e8630707901e 100644
+--- a/net/tipc/discover.c
++++ b/net/tipc/discover.c
+@@ -148,8 +148,8 @@ static bool tipc_disc_addr_trial_msg(struct tipc_disc=
+overer *d,
  {
-@@ -802,7 +802,7 @@ EXPORT_SYMBOL_GPL(blkg_conf_prep);
- 
- /**
-  * blkg_conf_finish - finish up per-blkg config update
-- * @ctx: blkg_conf_ctx intiailized by blkg_conf_prep()
-+ * @ctx: blkg_conf_ctx initialized by blkg_conf_prep()
-  *
-  * Finish up after per-blkg config update.  This function must be paired
-  * with blkg_conf_prep().
--- 
-2.30.0
+ 	struct net *net =3D d->net;
+ 	struct tipc_net *tn =3D tipc_net(net);
+-	bool trial =3D time_before(jiffies, tn->addr_trial_end);
+ 	u32 self =3D tipc_own_addr(net);
++	bool trial =3D time_before(jiffies, tn->addr_trial_end) && !self;
+=20
+ 	if (mtyp =3D=3D DSC_TRIAL_FAIL_MSG) {
+ 		if (!trial)
+--=20
+2.38.0
 
