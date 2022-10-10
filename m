@@ -2,181 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870F25F9C78
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 12:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BE35F9C7B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 12:14:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbiJJKMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 06:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
+        id S231618AbiJJKOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 06:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiJJKMK (ORCPT
+        with ESMTP id S231523AbiJJKOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 06:12:10 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77B1167145;
-        Mon, 10 Oct 2022 03:12:09 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7BCD61480;
-        Mon, 10 Oct 2022 03:12:15 -0700 (PDT)
-Received: from [10.57.5.39] (unknown [10.57.5.39])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0DE2D3F792;
-        Mon, 10 Oct 2022 03:12:07 -0700 (PDT)
-Message-ID: <9611971c-d8dd-7877-6f50-c5afbf38b171@arm.com>
-Date:   Mon, 10 Oct 2022 11:12:06 +0100
+        Mon, 10 Oct 2022 06:14:01 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2088.outbound.protection.outlook.com [40.107.243.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D1F40545;
+        Mon, 10 Oct 2022 03:14:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eyVd0FyJLy/qwjQwdrio0XMLoWHUlJG6unp5Il7TG2wAJ3QFRL7EGjR+fCCgWlU1Hbli03GhpIx74X5uNtjUpA2nBpJcXcIx8W29vqKrtErYIznvJGFaJTzkga/hOcCcNh1SvH974M2AN6h+BhtybjGGRWCoDPkhM2egQG7qrpLaqdLFUkc4x1hs0SbFcgGNvNlaUdJPyaLOUHGWWEJ93WoSAckdFqJH9iJ2sjWiGpzENlglwwE7Gp9aUt4pocB9930qGikQTptpwScolzhQCpCNAfzXCOiYFs4lrSYWSyv8UnvluR1Tp1F+yt6NItHxDVLozhA5Zid0yWHgaWmkdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Cfw/kanuJFjErKmiBGqrYlFeRvHr5l6UCSW1OVoyOzU=;
+ b=TH1V6s4IEoaCKwfsW/5Wkh2mG9rmgY1ZMJEm0qj4Boh8tpxTsz3G41pieGEFLIYetkPlLtbJBv9Yad99kAACRTLvIyvJYIOc5xCQ7kttcvZ39IM+k8oi0xBhxlvVmawmFuNIS+WbcqbTi33/PANWRRa1sW8JqVw6FWR1te3fSZLPgVP4rpO2vh0HbpuEOTZCwtaHHTyT32GATN4ZdUL1neFGUmLjwlnWQAaWz+z9l66iEuvGm+Jelwci8Y3Qgnk+3VJjA/dqBdWP1Yn46KDC6ncCq/424gokIn0lGkDoPZjfeW+nIaOYPctsXUKe8wvbw/JOpYho7/CIaaH63XW5hw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Cfw/kanuJFjErKmiBGqrYlFeRvHr5l6UCSW1OVoyOzU=;
+ b=fm7xOhdmyIO+SgtbZTaVXfrSmMr8EQidcKdkhUmULDhQeIYyK5F9vvzxKpJNL/cHod4m+PrjVi0lUsI6ABjDVFNw8b9jxIEw3EkmMpRR67BhBhKPdRGEM9BFnQky3AylVTv8Nt2MWjLeAxk38SIVUXRDnITPrFvqKhX370cbch/bms4VlHLGFYH8NpYiYM/h9staYe5mPnMjGMHMHsqw23sN1FwYP3zfSH53aZLm3LgFH+SxycwOyncaHMeSqsf4lObQhKrt2eus68NWdtZavZtt6Uct3pAVQiq81HsCIym1vZ72lASAPiYlmPXkBjKMZhAw/vJOggsnMAGSNpdwXw==
+Received: from BN9PR03CA0227.namprd03.prod.outlook.com (2603:10b6:408:f8::22)
+ by DM4PR12MB5231.namprd12.prod.outlook.com (2603:10b6:5:39b::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15; Mon, 10 Oct
+ 2022 10:13:59 +0000
+Received: from BN8NAM11FT034.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:f8::4) by BN9PR03CA0227.outlook.office365.com
+ (2603:10b6:408:f8::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.19 via Frontend
+ Transport; Mon, 10 Oct 2022 10:13:59 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT034.mail.protection.outlook.com (10.13.176.139) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5709.10 via Frontend Transport; Mon, 10 Oct 2022 10:13:59 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 10 Oct
+ 2022 03:13:45 -0700
+Received: from sw-mtx-036.mtx.labs.mlnx (10.126.230.35) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Mon, 10 Oct 2022 03:13:43 -0700
+From:   Parav Pandit <parav@nvidia.com>
+To:     <bagasdotme@gmail.com>, <arnd@arndb.de>,
+        <stern@rowland.harvard.edu>, <parri.andrea@gmail.com>,
+        <will@kernel.org>, <peterz@infradead.org>, <boqun.feng@gmail.com>,
+        <npiggin@gmail.com>, <dhowells@redhat.com>, <j.alglave@ucl.ac.uk>,
+        <luc.maranget@inria.fr>, <paulmck@kernel.org>, <akiyks@gmail.com>,
+        <dlustig@nvidia.com>, <joel@joelfernandes.org>, <corbet@lwn.net>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>
+CC:     Parav Pandit <parav@nvidia.com>
+Subject: [PATCH v4] locking/memory-barriers.txt: Improve documentation for writel() example
+Date:   Mon, 10 Oct 2022 13:13:31 +0300
+Message-ID: <20221010101331.29942-1-parav@nvidia.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] cpufreq: Update CPU capacity reduction in
- store_scaling_max_freq()
-Content-Language: en-US
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        linux-pm@vger.kernel.org, Dietmar.Eggemann@arm.com,
-        peterz@infradead.org
-References: <20220930094821.31665-1-lukasz.luba@arm.com>
- <20220930094821.31665-2-lukasz.luba@arm.com>
- <20221010053902.5rofnpzvyynumw3e@vireshk-i7>
- <3f9a4123-171b-5fa7-f506-341355f71483@arm.com>
- <CAKfTPtBPqcTm5_-M_Ka3y46yQ2322TmH8KS-QyDbAiKk5B6hEQ@mail.gmail.com>
- <8a7968c2-dbf7-5316-ef36-6d45143e0605@arm.com>
- <CAKfTPtB3Lk5bc9k634O+Yi8wwP=MVeKS5NPbpaqwhX1F4t5EbA@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAKfTPtB3Lk5bc9k634O+Yi8wwP=MVeKS5NPbpaqwhX1F4t5EbA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT034:EE_|DM4PR12MB5231:EE_
+X-MS-Office365-Filtering-Correlation-Id: 98ed858b-343e-4b62-c30d-08daaaa825d9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GTwzPecCBjG202eu06DrcACGV2+N+UTk4dURy+gglGqYGJIsRk5j/hGW51jLTsngEHC3YoSWm1CD8Ii7Bk86B7N6VeufkzeDyvF9Pow/9oB5WBnjWdgLrFgbUykGuem7WeQu1FRX1Vi7PD4XeCnEM+5BXqDrowLLhn7iYmmIe4uBwAKS0W5MKZ09h8pinnXBV3Z1ivj3gfvUv+Jkq5/H/QidRdmdDvLFL9xB+XBceXgPpA140GkIG6TSHTeNVK8J1XSPSDuBzAZ5/ohlmdoryJq/JmGFXNl9HffK2puCOpZLqsW7zajQLo++zIw0nM5n0LWZnd9mjIMTZJXY01/kg/ShxISa7IIPtpqNIF7firOkqeJiAMlb/lYtR+wOQ5DqL5B4leKNX8sLR2v17lHXS04YC1hjcNx5UbCST2Xoyqw87RjzJ1ShXbIARL1GATRUf0mw8UHnXWK6vp4yGckXPBV/QitJSpME+ujjbANsSB1+rPuiMalMrT35p6kzDi++w98JI4zuh0pON2lXneZl2MLImLG/gWOCq/FR1w5OK6ABIvQPplCTbsDt///C/1DXmzrfD2Wth3ydz9/YZIRiE7NaEHfHFCHT3FmtlriDMG58KwMuOxemmsxhihwV7eHRCs9H2RgAbrNS8MQuc5e7O4S29KIDT5gvFgit48rWP5IgGcbiudKSyUFEVIyMXzMV5/q0tneKZGUetxUG/7s1GJPsr/7prMTX9uWNzEnvKpdPsANAuJ1LQsJ8Hfq/RGaucA9GKsXJcisPKt6mNZNdBl3JnO3G8RR0W1z5KYpA4kY=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(346002)(396003)(39860400002)(451199015)(40470700004)(36840700001)(46966006)(36756003)(110136005)(86362001)(82740400003)(7416002)(5660300002)(36860700001)(47076005)(426003)(1076003)(16526019)(336012)(186003)(921005)(7636003)(2616005)(356005)(83380400001)(8936002)(26005)(107886003)(40460700003)(478600001)(6666004)(8676002)(70586007)(70206006)(316002)(82310400005)(2906002)(41300700001)(4326008)(40480700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Oct 2022 10:13:59.0258
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 98ed858b-343e-4b62-c30d-08daaaa825d9
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT034.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5231
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The cited commit describes that when using writel(), explcit wmb()
+is not needed. wmb() is an expensive barrier. writel() uses the needed
+platform specific barrier instead of expensive wmb().
 
+Hence update the example to be more accurate that matches the current
+implementation.
 
-On 10/10/22 10:32, Vincent Guittot wrote:
-> On Mon, 10 Oct 2022 at 11:30, Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->>
->>
->> On 10/10/22 10:15, Vincent Guittot wrote:
->>> On Mon, 10 Oct 2022 at 11:02, Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>>
->>>>
->>>>
->>>> On 10/10/22 06:39, Viresh Kumar wrote:
->>>>> Would be good to always CC Scheduler maintainers for such a patch.
->>>>
->>>> Agree, I'll do that.
->>>>
->>>>>
->>>>> On 30-09-22, 10:48, Lukasz Luba wrote:
->>>>>> When the new max frequency value is stored, the task scheduler must
->>>>>> know about it. The scheduler uses the CPUs capacity information in the
->>>>>> task placement. Use the existing mechanism which provides information
->>>>>> about reduced CPU capacity to the scheduler due to thermal capping.
->>>>>>
->>>>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->>>>>> ---
->>>>>>     drivers/cpufreq/cpufreq.c | 18 +++++++++++++++++-
->>>>>>     1 file changed, 17 insertions(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->>>>>> index 1f8b93f42c76..205d9ea9c023 100644
->>>>>> --- a/drivers/cpufreq/cpufreq.c
->>>>>> +++ b/drivers/cpufreq/cpufreq.c
->>>>>> @@ -27,6 +27,7 @@
->>>>>>     #include <linux/slab.h>
->>>>>>     #include <linux/suspend.h>
->>>>>>     #include <linux/syscore_ops.h>
->>>>>> +#include <linux/thermal.h>
->>>>>>     #include <linux/tick.h>
->>>>>>     #include <linux/units.h>
->>>>>>     #include <trace/events/power.h>
->>>>>> @@ -718,6 +719,8 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
->>>>>>     static ssize_t store_scaling_max_freq
->>>>>>     (struct cpufreq_policy *policy, const char *buf, size_t count)
->>>>>>     {
->>>>>> +    unsigned int frequency;
->>>>>> +    struct cpumask *cpus;
->>>>>>        unsigned long val;
->>>>>>        int ret;
->>>>>>
->>>>>> @@ -726,7 +729,20 @@ static ssize_t store_scaling_max_freq
->>>>>>                return -EINVAL;
->>>>>>
->>>>>>        ret = freq_qos_update_request(policy->max_freq_req, val);
->>>>>> -    return ret >= 0 ? count : ret;
->>>>>> +    if (ret >= 0) {
->>>>>> +            /*
->>>>>> +             * Make sure that the task scheduler sees these CPUs
->>>>>> +             * capacity reduction. Use the thermal pressure mechanism
->>>>>> +             * to propagate this information to the scheduler.
->>>>>> +             */
->>>>>> +            cpus = policy->related_cpus;
->>>>>
->>>>> No need of this, just use related_cpus directly.
->>>>>
->>>>>> +            frequency = __resolve_freq(policy, val, CPUFREQ_RELATION_HE);
->>>>>> +            arch_update_thermal_pressure(cpus, frequency);
->>>>>
->>>>> I wonder if using the thermal-pressure API here is the right thing to
->>>>> do. It is a change coming from User, which may or may not be
->>>>> thermal-related.
->>>>
->>>> Yes, I thought the same. Thermal-pressure name might be not the
->>>> best for covering this use case. I have been thinking about this
->>>> thermal pressure mechanism for a while, since there are other
->>>> use cases like PowerCap DTPM which also reduces CPU capacity
->>>> because of power policy from user-space. We don't notify
->>>> the scheduler about it. There might be also an issue with virtual
->>>> guest OS and how that kernel 'sees' the capacity of CPUs.
->>>> We might try to use this 'thermal-pressure' in the guest kernel
->>>> to notify about available CPU capacity (just a proposal, not
->>>> even an RFC, since we are missing requirements, but issues where
->>>> discussed on LPC 2022 on ChromeOS+Android_guest)
->>>
->>> The User space setting scaling_max_freq is a long scale event and it
->>> should be considered as a new running environnement instead of a
->>> transient event. I would suggest updating the EM is and capacity orig
->>> of the system in this case. Similarly, we rebuild sched_domain with a
->>> cpu hotplug. scaling_max_freq interface should not be used to do any
->>> kind of dynamic scaling.
->>
->> I tend to agree, but the EM capacity would be only used in part of EAS
->> code. The whole fair.c view to the capacity_of() (RT + DL + irq +
->> thermal_pressure) would be still wrong in other parts, e.g.
->> select_idle_sibling() and load balance.
->>
->> When we get this powerhint we might be already in overutilied state
->> so EAS is disabled. IMO other mechanisms in the task scheduler
->> should be also aware of that capacity reduction.
-> 
-> That's why I also mentioned the capacity_orig
+commit 5846581e3563 ("locking/memory-barriers.txt: Fix broken DMA vs. MMIO ordering example")
 
-Well, I think this is a bit more complex. Thermal framework governor
-reduces the perf IDs from top in the freq asc table and keeps that
-in the statistics in sysfs. It also updates the thermal pressure signal.
-When we rebuild the capacity of CPUs and make the capacity_orig smaller,
-the capacity_of would still have the thermal framework reduced capacity
-in there. We would end up with too small CPU capacity due to this
-subtraction in capacity_of.
+Signed-off-by: Parav Pandit <parav@nvidia.com>
 
-Ideally, I would see a mechanism which is aware of this performance
-reduction reason:
-1. thermal capping
-2. power capping (from DTPM)
-3. max freq reduction by user space
+---
+changelog:
+v3->v4:
+- further trimmed the documentation for redundant description
+v2->v3:
+- removed redundant description for writeX()
+- updated text for alignment and smaller change lines
+- updated commit log with blank line before signed-off-by line
+v1->v2:
+- Further improved description of writel() example
+- changed commit subject from 'usage' to 'example'
+v0->v1:
+- Corrected to mention I/O barrier instead of dma_wmb().
+- removed numbered references in commit log
+- corrected typo 'explcit' to 'explicit' in commit log
+---
+ Documentation/memory-barriers.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-That common place would figure and maintain the context for the
-requested capacity reduction.
+diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
+index 832b5d36e279..4d24d39f5e42 100644
+--- a/Documentation/memory-barriers.txt
++++ b/Documentation/memory-barriers.txt
+@@ -1927,7 +1927,7 @@ There are some more advanced barrier functions:
+      before we read the data from the descriptor, and the dma_wmb() allows
+      us to guarantee the data is written to the descriptor before the device
+      can see it now has ownership.  The dma_mb() implies both a dma_rmb() and
+-     a dma_wmb().  Note that, when using writel(), a prior wmb() is not needed
++     a dma_wmb().  Note that, when using writel(), a prior barrier is not needed
+      to guarantee that the cache coherent memory writes have completed before
+      writing to the MMIO region.  The cheaper writel_relaxed() does not provide
+      this guarantee and must not be used here.
+-- 
+2.26.2
 
-BTW, those Android user space max freq requests are not that long,
-mostly due to camera capturing (you can see a few in this file,
-e.g. [1]).
-
-
-[1] 
-https://android.googlesource.com/device/google/gs101/+/refs/heads/android12-qpr1-d-release/powerhint.json#441
