@@ -2,114 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2355F9BA7
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 11:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9F15F9BAC
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 11:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbiJJJKi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Oct 2022 05:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50986 "EHLO
+        id S229626AbiJJJLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 05:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbiJJJKe (ORCPT
+        with ESMTP id S229523AbiJJJLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 05:10:34 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E42EF019
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 02:10:32 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-139-HFZjivJtMTyYiofjBLboqw-1; Mon, 10 Oct 2022 10:10:29 +0100
-X-MC-Unique: HFZjivJtMTyYiofjBLboqw-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Mon, 10 Oct
- 2022 10:10:26 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Mon, 10 Oct 2022 10:10:26 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Rui Li' <me@lirui.org>, Alexei Starovoitov <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "Martin KaFai Lau" <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] bpf: Replace strlcpy with strscpy in preload module
-Thread-Topic: [PATCH] bpf: Replace strlcpy with strscpy in preload module
-Thread-Index: AQHY2+D0KU3oaE9S1EmQcSEIwnHGPq4HV1Bw
-Date:   Mon, 10 Oct 2022 09:10:26 +0000
-Message-ID: <7d98ed76798d4c52afcd462d694ebb6b@AcuMS.aculab.com>
-References: <166532064978.9.18239510123131509626.67790627@lirui.org>
-In-Reply-To: <166532064978.9.18239510123131509626.67790627@lirui.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 10 Oct 2022 05:11:40 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFD47649;
+        Mon, 10 Oct 2022 02:11:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1665393099; x=1696929099;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4WBG/EEGnGO8x02FwyBxn8tRxeg2BOAXncCbx/12x24=;
+  b=tHo+bqwtyiqdd2CFjDn0JMzqunmIf9VLW1+rgafDjT3VJo4FhU4zNb7v
+   jMOhkqhyDJDtdeR9NFT4KJcd3UXKuL232Bc2xqMfiy63CAKB8jF0upjmU
+   LDsrhko7QRLSGD3WO1VGm+rD8JLb0UkLQXV6Y8OLMFfDr3x3gaW3ejO8y
+   ATUaKEXVkf8zYDKoZ9cKBvw0AyrasVC9AGnsqCdUGTZf5VoMPy5CiiQp2
+   VSFDfgWrLrSfX5BdwA4WkGQ56H5ttnk/onUxAxAHESbBJC4Ajgv8cRCjj
+   1QaMWgO/ORzJjNT3W8qwsAOZOZ6P4v+nFCPndn+iahpiZh60nlY8PWIcD
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
+   d="scan'208";a="181302735"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Oct 2022 02:11:38 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 10 Oct 2022 02:11:38 -0700
+Received: from [10.12.72.60] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Mon, 10 Oct 2022 02:11:36 -0700
+Message-ID: <982997c9-d357-d57c-c2e6-335fd2d7634f@microchip.com>
+Date:   Mon, 10 Oct 2022 11:11:35 +0200
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/2] pinctrl:at91-pio4:add support for pullup/down
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     <Ryan.Wanner@microchip.com>, <ludovic.desroches@microchip.com>,
+        <linus.walleij@linaro.org>, <alexandre.belloni@bootlin.com>,
+        <claudiu.beznea@microchip.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221007151647.98222-1-Ryan.Wanner@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20221007151647.98222-1-Ryan.Wanner@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rui Li
-> Sent: 09 October 2022 14:03
+On 07/10/2022 at 17:16, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
 > 
-> Use strscpy instead of strlcpy as the former one checks the size
-> of source. Especially for this case, source strings are less than
-> dst size.
+> This patch set adds support for pull up/down pinctl configuration.
+> The implementation is based off of other pinctl drivers that have
+> implemented line bias configurations.
+> 
+> The second patch addes a case for PIN_CONFIG_PERSIST_STATE
+> this shows up becuse the gpiod api passes this into the new config_set
+> function that was just implemented. Looking at other drivers like TI
+> driver, added the ENOTSUPP to the switch case for that state flag.
+> 
+> How this was tested was by using a gpio program that I created to test
+> configuration from userspace. This program was run in the
 
-Not relevant.
-The only problem with strlcpy() is the return value when the
-the copy has to be truncated.
-As well as wasting computrons it can fault if the source string
-isn't actually terminated (which might be true for arbitrary pointers).
-In this case the source strings are well formed and short.
+Tested using the ioctl GPIO_V2_GET_LINE_IOCTL and with the configs flags:
+GPIO_V2_LINE_FLAG_BIAS_PULL_DOWN, GPIO_V2_LINE_FLAG_BIAS_PULL_UP and 
+GPIO_V2_LINE_FLAG_BIAS_DISABLED.
 
-While strscpy() might be a preferred function the reason above
-is bogus.
+> background using & then using gpioinfo function checked if the change
+> has been detected by the gpiod api. Then using devmem reading the
+> regester making sure that the correct bit was set. The registers where
+> checked before and during the program is being run, making sure the
+> change happens.
+> 
+> In the program Pin 127 would be passed into the test program. Before
+> the program was ran devmem for pin 127 config register. After
+> the progam is running in the background devmem for the same status
+> register is called, the result is showing the change in pinconfig.
+> The device used to test was the SAMA5D27_som1_ek.
 
-	David
+Same here, on sama5d27 som1 ek board:
+Tested-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+
+Thanks, best regards,
+   Nicolas
 
 > 
-> Signed-off-by: Rui Li <me@lirui.org>
-> ---
->  kernel/bpf/preload/bpf_preload_kern.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Ryan Wanner (2):
+>    pinctrl: at91-pio4: Add configuration to userspace
+>    pinctrl: at91-pio4: Add persist state case in config
 > 
-> diff --git a/kernel/bpf/preload/bpf_preload_kern.c b/kernel/bpf/preload/bpf_preload_kern.c
-> index 5106b5372f0c..af8dd3a7c928 100644
-> --- a/kernel/bpf/preload/bpf_preload_kern.c
-> +++ b/kernel/bpf/preload/bpf_preload_kern.c
-> @@ -19,9 +19,9 @@ static void free_links_and_skel(void)
-> 
->  static int preload(struct bpf_preload_info *obj)
->  {
-> -	strlcpy(obj[0].link_name, "maps.debug", sizeof(obj[0].link_name));
-> +	strscpy(obj[0].link_name, "maps.debug", sizeof(obj[0].link_name));
->  	obj[0].link = maps_link;
-> -	strlcpy(obj[1].link_name, "progs.debug", sizeof(obj[1].link_name));
-> +	strscpy(obj[1].link_name, "progs.debug", sizeof(obj[1].link_name));
->  	obj[1].link = progs_link;
->  	return 0;
->  }
-> --
-> 2.30.2
+>   drivers/pinctrl/pinctrl-at91-pio4.c | 26 ++++++++++++++++++++++++++
+>   1 file changed, 26 insertions(+)
 > 
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
 
+-- 
+Nicolas Ferre
