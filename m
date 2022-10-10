@@ -2,152 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11BD45F9ED7
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 14:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 279135F9EDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 14:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbiJJMqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 08:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55512 "EHLO
+        id S230422AbiJJMwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 08:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiJJMp6 (ORCPT
+        with ESMTP id S229986AbiJJMwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 08:45:58 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D4F6B8F8
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 05:45:57 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id bp15so16397072lfb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 05:45:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZY3VUGhKW8CmP8tRkiumn3t63ZndWcrOVy3NInH/4F8=;
-        b=WfYSNe539shRVw3WcHUUuaSo4y4sxxkTYIo+JJ2wCMAWW2aWI1Eq9mu8QHheZcuj8G
-         Ry+T/Jne36cmdNNXoi9BcZpSv156/ok1H3pu5j2RYmnqpyoSvXXrbFNE4kWXCOPq9sEr
-         AtLTEKdptRqLIylJUqivtWseFoXqJ+k3xxBSz544xUrjyNEIjMcj8s7dO1Fn/r94zogP
-         lYeQzTkfcDqdBWL5FZYMM/6+7yMiLFcqFLtjIBJTEq+ag0t4HbR16ZyChHehVSw80ht5
-         gsgJAZeTec8t+Id5zNmQwvcFy+bXBjP075aOy+6RA3QwMn2KLxxicyO6T33ctGR0rOUn
-         meMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZY3VUGhKW8CmP8tRkiumn3t63ZndWcrOVy3NInH/4F8=;
-        b=2L3nnT/rlXhjWgm2f2hqP/Vno4wTjLp3+ObR4xpovqVpCHwihx7mkp7E2qDs71PCK4
-         D6KZmqwmpML4TQc1s3i66vKpzzRJl441hI4gd56ZDCaoQ0P0wN8ngpj9LixMpo+Qz9uH
-         Y3r1Jn5SRrWlsYXeHZpQN9Ly5ueI/X4SZ8MQWAH/Dz+QLr2jOSXfyj8rsZcM+OQ7BJkn
-         qAwcXEffsLcqS4pY3o55Arezq8ZJLg07ioektezQkNcEP/NM46CwjUDVLdqWaZHFs8QW
-         +Lz+cIE5p2LV0BOD6VMSckGhRUwXkzx6aa1QjWMCU6E8JkqxP31eYqlZ5lfNt5uT+12t
-         qHoQ==
-X-Gm-Message-State: ACrzQf2NWkHc0X+Y8zhOPkJBzkTaFU7cycZBgfr1q5f34F6Vwld35a86
-        /hqIAZ2gPZ+9WiiJ46HljsvGTHq4GAkd7u55zc4E6g==
-X-Google-Smtp-Source: AMsMyM4qRD8FUFL9wvBdJ8LsE/Kv1B22ucAF/oQm3g2adt2U2w+xc8dH7xAKqzwr2z9qiTKLV1eGAUeC/AE3pzclOfA=
-X-Received: by 2002:ac2:5616:0:b0:4a2:61f6:85e9 with SMTP id
- v22-20020ac25616000000b004a261f685e9mr6346865lfd.419.1665405955788; Mon, 10
- Oct 2022 05:45:55 -0700 (PDT)
+        Mon, 10 Oct 2022 08:52:08 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB4C52DC0;
+        Mon, 10 Oct 2022 05:52:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665406327; x=1696942327;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=JHiNEn1VO1XjaqbGRbNtJMKQOanLaGLJSkjjUAgEfvs=;
+  b=jfk/0B2BdOKmb2vCJamDAG+La+k8g438xd4ozEFXIge5jSUNH/WXikGQ
+   Ys4nC1JxN6IUivCZHnHNLt1Ahd5LFHghoiitnvAXxqOO1K+bV9qkZq3xD
+   fzlc4xQ3K0LNMaXgz5O5X+laEd9yj0spT3Moxc6plGYDehuSYAcThdXd+
+   gpajC0fUMHZQf3EHfT1oWFSS9smmlnldu8HafPVcnSRTrrCCu71tVvuGJ
+   Sd6H2EfywBXjmIkY1cTSjB+663nc0+i1g96M0LDlleLFVvC6dMGm/1QP9
+   /uK0p6STU4p34A+YBHiFMUuptM2y6q1ShZb7C+/nZwCv9m7dpWNLfwZtK
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="366181070"
+X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
+   d="scan'208";a="366181070"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 05:52:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="628266211"
+X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
+   d="scan'208";a="628266211"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 10 Oct 2022 05:52:04 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id EA3512B0; Mon, 10 Oct 2022 15:52:24 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/2] pinctrl: cy8c95x0: Extract cy8c95x0_set_mode() helper
+Date:   Mon, 10 Oct 2022 15:52:20 +0300
+Message-Id: <20221010125221.28275-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20221010122726.2405153-1-heiko@sntech.de> <20221010122726.2405153-2-heiko@sntech.de>
-In-Reply-To: <20221010122726.2405153-2-heiko@sntech.de>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Mon, 10 Oct 2022 18:15:45 +0530
-Message-ID: <CAK9=C2VHPBgL208ZHb78Nab1dQjfF6tZuKTRRT5V=vnvfODEGw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] RISC-V: Cache SBI vendor values
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     atishp@atishpatra.org, anup@brainfault.org, will@kernel.org,
-        mark.rutland@arm.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Conor.Dooley@microchip.com,
-        ajones@ventanamicro.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 5:57 PM Heiko Stuebner <heiko@sntech.de> wrote:
->
-> sbi_get_mvendorid(), sbi_get_marchid() and sbi_get_mimpid() might get
-> called multiple times, though the values of these CSRs should not change
-> during the runtime of a specific machine.
->
-> So cache the values in the functions and prevent multiple ecalls
-> to read these values.
->
-> As Andrew Jones noted, at least marchid and mimpid may be negative
-> values when viewed as a long, so we use a separate static bool to
-> indiciate the cached status.
->
-> Suggested-by: Atish Patra <atishp@atishpatra.org>
-> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> ---
->  arch/riscv/kernel/sbi.c | 30 +++++++++++++++++++++++++++---
->  1 file changed, 27 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-> index 775d3322b422..cc618aaa9d11 100644
-> --- a/arch/riscv/kernel/sbi.c
-> +++ b/arch/riscv/kernel/sbi.c
-> @@ -625,17 +625,41 @@ static inline long sbi_get_firmware_version(void)
->
->  long sbi_get_mvendorid(void)
->  {
-> -       return __sbi_base_ecall(SBI_EXT_BASE_GET_MVENDORID);
-> +       static long id;
-> +       static bool cached;
-> +
-> +       if (!cached) {
-> +               id = __sbi_base_ecall(SBI_EXT_BASE_GET_MVENDORID);
-> +               cached = true;
-> +       }
-> +
-> +       return id;
->  }
->
->  long sbi_get_marchid(void)
->  {
-> -       return __sbi_base_ecall(SBI_EXT_BASE_GET_MARCHID);
-> +       static long id;
-> +       static bool cached;
+The code in newly introduced cy8c95x0_set_mode() helper may be
+used later on by another function.
 
-This breaks for heterogeneous SMP systems (similar to big.LITTLE)
-where HARTs will have different marchid even though they belong to
-same CPU Vendor.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/pinctrl/pinctrl-cy8c95x0.c | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
 
-Due to the above rationale, the patch adding marchid, mvendorid, and
-mimpid in /proc/cpuinfo caches these values on a per-CPU basis.
+diff --git a/drivers/pinctrl/pinctrl-cy8c95x0.c b/drivers/pinctrl/pinctrl-cy8c95x0.c
+index 68509a2301b8..33eba7ad87f4 100644
+--- a/drivers/pinctrl/pinctrl-cy8c95x0.c
++++ b/drivers/pinctrl/pinctrl-cy8c95x0.c
+@@ -1124,9 +1124,7 @@ static int cy8c95x0_get_function_groups(struct pinctrl_dev *pctldev, unsigned in
+ 	return 0;
+ }
+ 
+-static int cy8c95x0_pinmux_cfg(struct cy8c95x0_pinctrl *chip,
+-			       unsigned int val,
+-			       unsigned long off)
++static int cy8c95x0_set_mode(struct cy8c95x0_pinctrl *chip, unsigned int off, bool mode)
+ {
+ 	u8 port = cypress_get_port(chip, off);
+ 	u8 bit = cypress_get_pin_mask(chip, off);
+@@ -1137,7 +1135,20 @@ static int cy8c95x0_pinmux_cfg(struct cy8c95x0_pinctrl *chip,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = regmap_write_bits(chip->regmap, CY8C95X0_PWMSEL, bit, val ? bit : 0);
++	return regmap_write_bits(chip->regmap, CY8C95X0_PWMSEL, bit, mode ? bit : 0);
++}
++
++static int cy8c95x0_pinmux_mode(struct cy8c95x0_pinctrl *chip,
++				unsigned int selector, unsigned int group)
++{
++	u8 port = cypress_get_port(chip, group);
++	u8 bit = cypress_get_pin_mask(chip, group);
++	int ret;
++
++	if (selector == 0)
++		return cy8c95x0_set_mode(chip, group, false);
++
++	ret = cy8c95x0_set_mode(chip, group, true);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -1156,7 +1167,7 @@ static int cy8c95x0_set_mux(struct pinctrl_dev *pctldev, unsigned int selector,
+ 	int ret;
+ 
+ 	mutex_lock(&chip->i2c_lock);
+-	ret = cy8c95x0_pinmux_cfg(chip, selector, group);
++	ret = cy8c95x0_pinmux_mode(chip, selector, group);
+ 	mutex_unlock(&chip->i2c_lock);
+ 
+ 	return ret;
+-- 
+2.35.1
 
-Regards,
-Anup
-
-> +
-> +       if (!cached) {
-> +               id = __sbi_base_ecall(SBI_EXT_BASE_GET_MARCHID);
-> +               cached = true;
-> +       }
-> +
-> +       return id;
->  }
->
->  long sbi_get_mimpid(void)
->  {
-> -       return __sbi_base_ecall(SBI_EXT_BASE_GET_MIMPID);
-> +       static long id;
-> +       static bool cached;
-> +
-> +       if (!cached) {
-> +               id = __sbi_base_ecall(SBI_EXT_BASE_GET_MIMPID);
-> +               cached = true;
-> +       }
-> +
-> +       return id;
->  }
->
->  static void sbi_send_cpumask_ipi(const struct cpumask *target)
-> --
-> 2.35.1
->
