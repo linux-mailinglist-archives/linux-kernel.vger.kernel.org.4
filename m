@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A135A5FA3C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 20:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D36CD5FA3C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 20:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbiJJSy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 14:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
+        id S229665AbiJJSzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 14:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiJJSyx (ORCPT
+        with ESMTP id S229651AbiJJSyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 14:54:53 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719D11277D;
-        Mon, 10 Oct 2022 11:54:50 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id l8so7347981wmi.2;
-        Mon, 10 Oct 2022 11:54:50 -0700 (PDT)
+        Mon, 10 Oct 2022 14:54:54 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D0012AC1;
+        Mon, 10 Oct 2022 11:54:52 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id fn10-20020a05600c688a00b003c6c44a1c8eso32891wmb.1;
+        Mon, 10 Oct 2022 11:54:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gVHRCzHetDvm9wFuZO6DUfd6buOnzVOKnDaUC6gkHgg=;
-        b=jfbUGf2qG4IgfJsaHgHZk8iGMLIN7QzdQ/644DGpNwElmy8Ne41kJG5u6avyUwAw/e
-         QkdXRLRFzTF3RA/3jIMsSU+zWhasOwQBYtt62fwn+qQiDcRaEPaNKn0zkkSy8jG/JnVD
-         mQWkXSJG82oCEtGSutcz43dCXX4Pn86SrHAb/dr4tOCDe4Fborpfhu7uQcfZaoMLAn5u
-         YsABV+V4e7bDt06q3JHnizc1nQtkMLiSjM3m6HlUwhUI97Gh57HrRdfkC5VoLdgzE0MA
-         OILLU5nM5VKsgLd/CfaS1gGn0oFi7gBLY0GinTUjjMwW6cwib/zxvZRAViXo5Xr7Gg8s
-         0xJQ==
+        bh=c4lAtcWLfky+loGkaKS25dVBzZnDMU5TT8sW9dTlDsw=;
+        b=DjPiYRx1jqF9zOBa71/gdoTtdLEdU7glIyyTjeakCGpkWNkuc4wy94WyWUGh/q8FoD
+         ui9Hg6+XbKtxxDIsh5NBQBup/GzI1kW+UXe+ADWJamL4odQbQa6Igp5uZv5QclzqQpt1
+         oxCywDlpFuU49l9HcYomPOIqn/HFNPPMNYJpnwdUcnjlMrl4iA9RIo58NVpuYsSFiMtv
+         dR9Fl1Rl+6JqWmVamRWyJ+TeSaRygYLeEOTDGK25z+4SdO8SzNWi1MwNfthDCNGNiGFK
+         29lh63UZeEMCoiJ8czejuo6sfz5H7DczHdudVhpNGuw+8LC9c+vfJvPQZe+D7Gcr/cKQ
+         l+tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gVHRCzHetDvm9wFuZO6DUfd6buOnzVOKnDaUC6gkHgg=;
-        b=2lBmrM+pWLX9VkvKAMWYDOX0x8c01l2s2/LpDDU3HsQL+d1YQDOagLvzqHXkIgGcVj
-         vkV2L3NRz/m6On9/gHfejtD5r0yrn/ppOzKwxrAS/pvFZaT9QtsW0eHglmqLmFWfaytD
-         lTidFqisSPP3/99jDkHQJMqfxQK5dhxExKU/Exl708RqpifCjA3uacszE+5RLmdqpF9N
-         ZRT/2ejUynqB0xqYUV3ieqKzS5xos79LmuFYTdKq66QTLvWnFA2+fOy25//84NpPpQR7
-         YzCggwjvAqx4OM+VbnG7shqClLo/MJQOZs06fhiNpxMuMNN3ZPkIC//ocJ22FmydJs9U
-         eXTg==
-X-Gm-Message-State: ACrzQf1rf0p1EmPRXbAIfhvRQ2itlj+G1haxzhCrDIwpxOeYC6n3GsHC
-        oR4P1AUuRe6ZBfPZeP4Jpwo=
-X-Google-Smtp-Source: AMsMyM4tdgFZLMNaM0VNDRNGTFwZOVm1CPhn49eMPbP9JTq/VNtHdoJKIa/pN5LXqjpWz6uZYjqq8Q==
-X-Received: by 2002:a05:600c:4f01:b0:3b4:a8c8:2523 with SMTP id l1-20020a05600c4f0100b003b4a8c82523mr20678176wmq.199.1665428089025;
-        Mon, 10 Oct 2022 11:54:49 -0700 (PDT)
+        bh=c4lAtcWLfky+loGkaKS25dVBzZnDMU5TT8sW9dTlDsw=;
+        b=R5Dy8cS+M2cOaNKHs/zw/kMnB5LA/r+yXX5OG1xp6+hyYha4suKzmvMpEQ/HfrC9b8
+         2i8CRIaRNPjBBhCrvMNXuQfVOdcnOGAChnWq0wWfx/ZybAIRfrcSXPAnGe3atRpeKFNW
+         G1FabD64JCBpnX9j0L6OAiEnrThTxrlMUJsbx5i0LtYwQ4PtoIBG/CRQZVwsMKsaQWXF
+         +ZFC8+vu/O/cOzbtN8mBunbYfH41r7KhpdNLHxKU0BMd5FVA2emp1o2UR+vEf80sYidQ
+         l6H6MSQGS1hB3shptfevA6mawJXJGUoM258Ya20lgpfJLHqs3b7stMbOkisb9MBz5E79
+         4ERQ==
+X-Gm-Message-State: ACrzQf37dM5VfAlHec+p1mv8jnCRnrBhUUEjc6YVRR8iEhnW+t865jFk
+        wAwduqEfhnfj3QDnVBjr7nE=
+X-Google-Smtp-Source: AMsMyM7l142bKzQq12LOkJeEgnf2eLCqUiQks1Hj80BdQCSYahgVajaEYVsJK2OXu8L+YWEetQQpsQ==
+X-Received: by 2002:a05:600c:1c22:b0:3b4:b2bc:15e4 with SMTP id j34-20020a05600c1c2200b003b4b2bc15e4mr14092275wms.69.1665428090962;
+        Mon, 10 Oct 2022 11:54:50 -0700 (PDT)
 Received: from hp-power-15.localdomain (mm-126-34-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.34.126])
-        by smtp.gmail.com with ESMTPSA id y2-20020a5d6142000000b00230c9d427f9sm2082272wrt.53.2022.10.10.11.54.47
+        by smtp.gmail.com with ESMTPSA id y2-20020a5d6142000000b00230c9d427f9sm2082272wrt.53.2022.10.10.11.54.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 11:54:48 -0700 (PDT)
+        Mon, 10 Oct 2022 11:54:50 -0700 (PDT)
 From:   Siarhei Volkau <lis8215@gmail.com>
 Cc:     Siarhei Volkau <lis8215@gmail.com>,
         Paul Cercueil <paul@crapouillou.net>,
@@ -58,12 +58,13 @@ Cc:     Siarhei Volkau <lis8215@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
         alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/6] ASoC: codecs: jz4725b: Various improvements and fixes
-Date:   Mon, 10 Oct 2022 21:54:17 +0300
-Message-Id: <20221010185423.3167208-1-lis8215@gmail.com>
+Subject: [PATCH v2 1/6] ASoC: codecs: jz4725b: add missed Line In power control bit
+Date:   Mon, 10 Oct 2022 21:54:18 +0300
+Message-Id: <20221010185423.3167208-2-lis8215@gmail.com>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <Y0P/u4pJT8rup8Za@sirena.org.uk>
+In-Reply-To: <20221010185423.3167208-1-lis8215@gmail.com>
 References: <Y0P/u4pJT8rup8Za@sirena.org.uk>
+ <20221010185423.3167208-1-lis8215@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,49 +78,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The patchset fixes:
- - Line In path stays powered off during capturing or
-   bypass to mixer.
- - incorrectly represented dB values in alsamixer, et al.
- - incorrect represented Capture input selector in alsamixer
-   in Playback tab.
- - wrong control selected as Capture Master
+Line In path stayed powered off during capturing or
+bypass to mixer.
 
-The patchset improves:
- - Exposes output stage (post mixer) gain control and makes it new
-   Master playback gain, DAC gain was the previous master.
-   However, no Master mute now.
- - Exposes all mixer inputs (both Mics, LineIn and DAC) with their
-   gain controls.
-
-Known issues:
- - Bypass path enablement isn't applied immediately, for make
-   things going bit clock needs to be triggered for a bit,
-   e.g. by aplay dummy.wav
-   It might be a hardware bug, since the bit clock isn't
-   declared as required for codec operation.
-
-Tested on:
- - Ritmix RZX-27 (jz4725b).
- - Ritmix RZX-50 (jz4755).
-
-Diff from v1:
- - each change in a separate patch
-
-Tested-by: Siarhei Volkau <lis8215@gmail.com>
 Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+---
+ sound/soc/codecs/jz4725b.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Siarhei Volkau (6):
-  ASoC: codecs: jz4725b: add missed Line In power control bit
-  ASoC: codecs: jz4725b: fix reported volume for Master ctl
-  ASoC: codecs: jz4725b: use right control for Capture Volume
-  ASoC: codecs: jz4725b: fix capture selector naming
-  ASoC: codecs: jz4725b: use right control for Master Playback
-  ASoC: codecs: jz4725b: add missed Mixer inputs
-
- sound/soc/codecs/jz4725b.c | 81 ++++++++++++++++++++++++++++++++------
- 1 file changed, 70 insertions(+), 11 deletions(-)
-
+diff --git a/sound/soc/codecs/jz4725b.c b/sound/soc/codecs/jz4725b.c
+index 5201a8f6d..cc7a48c96 100644
+--- a/sound/soc/codecs/jz4725b.c
++++ b/sound/soc/codecs/jz4725b.c
+@@ -236,7 +236,8 @@ static const struct snd_soc_dapm_widget jz4725b_codec_dapm_widgets[] = {
+ 	SND_SOC_DAPM_MIXER("DAC to Mixer", JZ4725B_CODEC_REG_CR1,
+ 			   REG_CR1_DACSEL_OFFSET, 0, NULL, 0),
+ 
+-	SND_SOC_DAPM_MIXER("Line In", SND_SOC_NOPM, 0, 0, NULL, 0),
++	SND_SOC_DAPM_MIXER("Line In", JZ4725B_CODEC_REG_PMR1,
++			   REG_PMR1_SB_LIN_OFFSET, 1, NULL, 0),
+ 	SND_SOC_DAPM_MIXER("HP Out", JZ4725B_CODEC_REG_CR1,
+ 			   REG_CR1_HP_DIS_OFFSET, 1, NULL, 0),
+ 
 -- 
 2.36.1
 
