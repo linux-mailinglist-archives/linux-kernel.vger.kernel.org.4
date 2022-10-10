@@ -2,72 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CDE15F9FC2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4955F9FC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbiJJODV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 10:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48740 "EHLO
+        id S229763AbiJJODr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Oct 2022 10:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJJODT (ORCPT
+        with ESMTP id S229452AbiJJODo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 10:03:19 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5613CBD6;
-        Mon, 10 Oct 2022 07:03:18 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id j23so13248450lji.8;
-        Mon, 10 Oct 2022 07:03:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OGpiz7DrXLbyEGUvGioYWcGeQmimAIgmZsGGAj7dQSA=;
-        b=KNC0x1NT1G6WocYzRu2s+IU+n1bM4+6bJosXAT8XLIRxxeMhehCS4KOIFc7UfpdngH
-         yyObuQ0xQixHHD3+IHjca79034qNpdfqLHPy20QZpOw2hhRR7niqOqzHLNzKWRrV70sx
-         J3vcN2aL8dhHDkQAVZfId41b1j/ecITAxY8wCEh7DzUzx0OPd0/T2wpmhEMHTsXCY10g
-         0joc/M16dU0uY3s6sgWoV5IpAIDjbV0ZaH++IJ47muPyqXCGS777VxrBdwQvfBlFTHdL
-         xEWm+LyqFdQyEYk5Mm4hLLZd+k/KMKVVq0onU2o6Hvmk/CZOj9mERxWLajCMDJInSCxQ
-         qaKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OGpiz7DrXLbyEGUvGioYWcGeQmimAIgmZsGGAj7dQSA=;
-        b=G/UQ3UYP5820WziAqf9gnFDJEs0zAz46zFHa091EIS/RNi5Lo5ApFbuFJbAQO5oXoY
-         KervaAOQnm6pDejzmPu1o+LDM2ozNKxWfCCxWvyPgB0y0pAlKXgCh/RVeBA3KaasilvT
-         bg9BgBNc0BFLMw+73oeDxjPIN9Z5aymRgMIJZi1lty2EwD+8H/WE50ZFlVrbKrXWN7tx
-         ArLb4gvCO//sj1exdXxgtVgAM13fkZg+BgPdGxY2aDEesPYAMLbwRKVmrDHm+mzsZlU7
-         aDix/GKCQ2GgdKMpHu1Cy15vxyhqzft6s6t6NQmtzaTga99eG8vVYBlLpW7cd1bbDuah
-         JYpA==
-X-Gm-Message-State: ACrzQf0Rb4XCgrYZguXZVShts6sUTr8E+4VlPDOkDzYeyyzBkooyZTDF
-        0kYpcAx3YI2s5chqk5FzH/mv8+RI6hKsjjxwrHxdWtd1Gks=
-X-Google-Smtp-Source: AMsMyM6yEXSvGPsBByO/7Xdnom54+8SkD1GMf4I59K6HB7rkrqDLu2vyHPhaVYnHr9usFRYGyvaQoqO0BGPef5r6B+c=
-X-Received: by 2002:a05:651c:1786:b0:26d:aaec:1487 with SMTP id
- bn6-20020a05651c178600b0026daaec1487mr6972005ljb.287.1665410596981; Mon, 10
- Oct 2022 07:03:16 -0700 (PDT)
+        Mon, 10 Oct 2022 10:03:44 -0400
+Received: from mail3.swissbit.com (mail3.swissbit.com [176.95.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538773ED46;
+        Mon, 10 Oct 2022 07:03:42 -0700 (PDT)
+Received: from mail3.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id D8AD646317A;
+        Mon, 10 Oct 2022 16:03:39 +0200 (CEST)
+Received: from mail3.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id C69D4460E71;
+        Mon, 10 Oct 2022 16:03:39 +0200 (CEST)
+X-TM-AS-ERS: 10.149.2.42-127.5.254.253
+X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
+X-DDEI-TLS-USAGE: Used
+Received: from ex.swissbit.com (unknown [10.149.2.42])
+        by mail3.swissbit.com (Postfix) with ESMTPS;
+        Mon, 10 Oct 2022 16:03:39 +0200 (CEST)
+Received: from sbdeex04.sbitdom.lan (10.149.2.42) by sbdeex04.sbitdom.lan
+ (10.149.2.42) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Mon, 10 Oct
+ 2022 16:03:38 +0200
+Received: from sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818]) by
+ sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818%9]) with mapi id
+ 15.02.1118.009; Mon, 10 Oct 2022 16:03:38 +0200
+From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+Subject: [PATCHv3 1/2] mmc: block: Remove error check of hw_reset on reset
+Thread-Topic: [PATCHv3 1/2] mmc: block: Remove error check of hw_reset on
+ reset
+Thread-Index: AdjcrIZ8W48yAN4GQUaGB+oWYInfkQ==
+Date:   Mon, 10 Oct 2022 14:03:38 +0000
+Message-ID: <0d0ef6651ed44fc780e95c8797294708@hyperstone.com>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.153.3.46]
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <20221010070330.159911806@linuxfoundation.org>
-In-Reply-To: <20221010070330.159911806@linuxfoundation.org>
-From:   Fenil Jain <fkjainco@gmail.com>
-Date:   Mon, 10 Oct 2022 19:33:05 +0530
-Message-ID: <CAHokDBmh7NGD5ru9iPwbD4rxL46Vrgtu0KMRJHe_p3a1-3q7kg@mail.gmail.com>
-Subject: Re: [PATCH 6.0 00/17] 6.0.1-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TMASE-Version: DDEI-5.1-9.0.1002-27194.000
+X-TMASE-Result: 10-3.068200-10.000000
+X-TMASE-MatchedRID: dwNgap4H9hhgljMcj2tyXt5x7RpGJf1a0U0UWSZVhAriKUaoIhea7dAY
+        WUo4HSIkSrqDabEvLXFgvuOVbAf7tqGGOyqBK41vEXjPIvKd74BMkOX0UoduuRA7RG59gG0fiv8
+        GLGO2mRMtjQqbqQUNMkIiZV10Im2jw2u1xPaqnyYZgmFGHqyx60fLPdsHmQbn7mKObFAiT2L+8j
+        lqHfykNVml27ZC+eUCfyYDewMOrQC1ULtRjWfrIuJGF26G8SWy8lP6F/raTZj6CxJ5baM0J7H3f
+        YdLnnYjBLdgmKx0ECfREToL1EgKScoDYQE0jYB3CStjCuOR/hg=
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: 61be56cd-a28e-44a4-80bb-8c56dc3dff80-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Greg,
+Before switching back to the right partition in mmc_blk_reset
+there used to be a check if hw_reset was even supported.
+This return value was removed, so there is no reason to check.
+Furthermore ensure part_curr is not falsely set to a valid value
+on reset or partition switch error.
 
-Ran tests and boot tested on my system, no regressions found
+Fixes: fefdd3c91e0a ("mmc: core: Drop superfluous validations in mmc_hw|sw_reset()")
+Cc: stable@vger.kernel.org
 
-Tested-by: Fenil Jain <fkjainco@gmail.com>
+Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+---
+-v3: Ensure invalid part_curr on error
+-v2: Do not attempt to switch partitions if reset failed
+
+ drivers/mmc/core/block.c | 29 ++++++++++++++---------------
+ 1 file changed, 14 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index ce89611a136e..45a44edcc31a 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -134,6 +134,7 @@ struct mmc_blk_data {
+ 	 * track of the current selected device partition.
+ 	 */
+ 	unsigned int	part_curr;
++#define MMC_BLK_PART_INVALID	UINT_MAX	/* Unknown partition active */
+ 	int	area_type;
+ 
+ 	/* debugfs files (only in main mmc_blk_data) */
+@@ -991,29 +992,27 @@ static int mmc_blk_reset(struct mmc_blk_data *md, struct mmc_host *host,
+ 			 int type)
+ {
+ 	int err;
++	struct mmc_blk_data *main_md = dev_get_drvdata(&host->card->dev);
++	int part_err;
+ 
+ 	if (md->reset_done & type)
+ 		return -EEXIST;
+ 
+ 	md->reset_done |= type;
++	main_md->part_curr = MMC_BLK_PART_INVALID;
+ 	err = mmc_hw_reset(host->card);
++	if (err)
++		return err;
+ 	/* Ensure we switch back to the correct partition */
+-	if (err) {
+-		struct mmc_blk_data *main_md =
+-			dev_get_drvdata(&host->card->dev);
+-		int part_err;
+-
+-		main_md->part_curr = main_md->part_type;
+-		part_err = mmc_blk_part_switch(host->card, md->part_type);
+-		if (part_err) {
+-			/*
+-			 * We have failed to get back into the correct
+-			 * partition, so we need to abort the whole request.
+-			 */
+-			return -ENODEV;
+-		}
++	part_err = mmc_blk_part_switch(host->card, md->part_type);
++	if (part_err) {
++		/*
++		 * We have failed to get back into the correct
++		 * partition, so we need to abort the whole request.
++		 */
++		return -ENODEV;
+ 	}
+-	return err;
++	return 0;
+ }
+ 
+ static inline void mmc_blk_reset_success(struct mmc_blk_data *md, int type)
+-- 
+2.37.3
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
+
