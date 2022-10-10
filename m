@@ -2,105 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 299205F9DA1
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED32C5F9C60
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 12:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbiJJLcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 07:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
+        id S231497AbiJJKEC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Oct 2022 06:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbiJJLcM (ORCPT
+        with ESMTP id S231327AbiJJKD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 07:32:12 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F705072E
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:32:08 -0700 (PDT)
-X-UUID: 27a7b7de2b2e41d189d44acd17ab66a2-20221010
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=mx7sXuUBvEE9QAd53CEh8o8OnGbAN1O/srykfC8rXao=;
-        b=pAFpWTm4wjpNMp+wwW5Jf6fYEYvy3oQsrDg5RKnX2SdAzZq/tKnCTcvvY/ZD1MZve+huOHqYBE4RYnQa5f7IbSbq51fH9ShElrt9rrXP3qZkh3segVmC7Qcw2gQJXdV1JgAvaw8VlwSoT9NysldhQHOebQW3RgASz0qzFQ55H+4=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:9c4fd0b1-7676-4f35-a609-b3894749ac08,IP:0,U
-        RL:0,TC:0,Content:32,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:32
-X-CID-META: VersionHash:39a5ff1,CLOUDID:feb7c4fe-ee8c-4ff7-afe9-644435e96625,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:3,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 27a7b7de2b2e41d189d44acd17ab66a2-20221010
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <yongqiang.niu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 11343897; Mon, 10 Oct 2022 19:32:04 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 10 Oct 2022 19:32:02 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs13n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Mon, 10 Oct 2022 19:32:02 +0800
-From:   Yongqiang Niu <yongqiang.niu@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>
-CC:     Jassi Brar <jassisinghbrar@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v10, 4/4] mailbox: mtk-cmdq: add MT8186 support
-Date:   Mon, 10 Oct 2022 16:50:23 +0800
-Message-ID: <20221010085023.7621-5-yongqiang.niu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221010085023.7621-1-yongqiang.niu@mediatek.com>
-References: <20221010085023.7621-1-yongqiang.niu@mediatek.com>
+        Mon, 10 Oct 2022 06:03:59 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1841E1CB0F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 03:03:57 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-321-F5c44r0_NSKo1yZuF9u8Yg-1; Mon, 10 Oct 2022 11:03:55 +0100
+X-MC-Unique: F5c44r0_NSKo1yZuF9u8Yg-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Mon, 10 Oct
+ 2022 11:03:53 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Mon, 10 Oct 2022 11:03:53 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Willy Tarreau' <w@1wt.eu>, Alexey Dobriyan <adobriyan@gmail.com>
+CC:     "lkp@intel.com" <lkp@intel.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: RE: tools/nolibc: fix missing strlen() definition and infinite loop
+ with gcc-12
+Thread-Topic: tools/nolibc: fix missing strlen() definition and infinite loop
+ with gcc-12
+Thread-Index: AQHY3A4FfEAIYReKOkCQTHoqkpVhA64HYvog
+Date:   Mon, 10 Oct 2022 10:03:53 +0000
+Message-ID: <9e16965f1d494084981eaa90d73ca80e@AcuMS.aculab.com>
+References: <Y0LsreRGq3nbe2xC@localhost.localdomain>
+ <20221009175920.GA28685@1wt.eu> <20221009183604.GA29069@1wt.eu>
+In-Reply-To: <20221009183604.GA29069@1wt.eu>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
-        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-add MT8186 cmdq support
+From: Willy Tarreau <w@1wt.eu>
+> Sent: 09 October 2022 19:36
+...
+> By the way, just for the sake of completeness, the one that consistently
+> gives me a better output is this one:
+> 
+>   size_t strlen(const char *str)
+>   {
+>           const char *s0 = str--;
+> 
+>           while (*++str)
+>   		;
+>           return str - s0;
+>   }
+> 
+> Which gives me this:
+> 
+> 
+>   0000000000000000 <strlen>:
+>      0:   48 8d 47 ff             lea    -0x1(%rdi),%rax
+>      4:   48 ff c0                inc    %rax
+>      7:   80 38 00                cmpb   $0x0,(%rax)
+>      a:   75 f8                   jne    4 <len+0x4>
+>      c:   48 29 f8                sub    %rdi,%rax
+>      f:   c3                      ret
+> 
+> But this is totally ruined by the addition of asm() in the loop. However
+> I suspect that the construct is difficult to match against a real strlen()
+> since it starts on an extra character, thus placing the asm() statement
+> before the loop could durably preserve it. It does work here (the code
+> remains the exact same one), but for how long, that's the question. Maybe
+> we can revisit the various loop-based functions in the future with this in
+> mind.
 
-Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/mailbox/mtk-cmdq-mailbox.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+clang wilfully and persistently generates:
 
-diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
-index 53904511598d..c5229f377c5e 100644
---- a/drivers/mailbox/mtk-cmdq-mailbox.c
-+++ b/drivers/mailbox/mtk-cmdq-mailbox.c
-@@ -694,9 +694,18 @@ static const struct gce_plat gce_plat_v6 = {
- 	.gce_num = 2
- };
- 
-+static const struct gce_plat gce_plat_v7 = {
-+	.thread_nr = 24,
-+	.shift = 3,
-+	.control_by_sw = true,
-+	.sw_ddr_en = true,
-+	.gce_num = 1
-+};
-+
- static const struct of_device_id cmdq_of_ids[] = {
- 	{.compatible = "mediatek,mt8173-gce", .data = (void *)&gce_plat_v2},
- 	{.compatible = "mediatek,mt8183-gce", .data = (void *)&gce_plat_v3},
-+	{.compatible = "mediatek,mt8186-gce", .data = (void *)&gce_plat_v7},
- 	{.compatible = "mediatek,mt6779-gce", .data = (void *)&gce_plat_v4},
- 	{.compatible = "mediatek,mt8192-gce", .data = (void *)&gce_plat_v5},
- 	{.compatible = "mediatek,mt8195-gce", .data = (void *)&gce_plat_v6},
--- 
-2.25.1
+strlen:                                 # @strlen
+        movq    $-1, %rax
+.LBB0_1:                                # =>This Inner Loop Header: Depth=1
+        cmpb    $0, 1(%rdi,%rax)
+        leaq    1(%rax), %rax
+        jne     .LBB0_1
+        retq
+
+But feed the C for that into gcc and it generates a 'jmp strlen'
+at everything above -O1.
+I suspect that might run with less clocks/byte than the code above.
+
+Somewhere I hate some complier pessimisations.
+Substituting a call to strlen() is typical.
+strlen() is almost certainly optimised for long strings.
+If the string is short the coded loop will be faster.
+The same is true (and probably more so) for memcpy.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
