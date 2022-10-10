@@ -2,151 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2075F9F2A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 045AC5F9F2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiJJNKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 09:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
+        id S229464AbiJJNMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 09:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiJJNKn (ORCPT
+        with ESMTP id S229461AbiJJNMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 09:10:43 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E103915718;
-        Mon, 10 Oct 2022 06:10:41 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29ACue60011472;
-        Mon, 10 Oct 2022 13:10:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=+P3hQRCynIBxrklRQT3Di9PZqt/NJ+VejWPlet9Qa8Y=;
- b=A6d5Mlk6OxkTbAcJQpFmalG9CuHtwXORcRta4Jwc0LNtx/i6bxdTCsvL7ve8v5ttf2xS
- HyRBkJcVDqBQMHHcz18dw1DqMN7Eb0glMyfuGuz/wQvPBEQTei0+Gf1iB/9IVVyzj9p+
- h/PRaFysvhptQcZnGNjgyg8ZFkQGxP2iiD3Qn0q3LPXenwFyvnYgygjJnrxX5MrOtwOJ
- bXTfFHCdcsOSl5xqI4leNUAOZ/941K72aec8zQPwjprBjkBXFPmzdI66hlqZkn9tCBtc
- BB67BmDzbMcmVZrB8+psf1IBkTZZuoDfF9mmSKKhzgO45GmTS3UuId5FAT2qg9fiAvoO 2w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3k6hn23g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Oct 2022 13:10:41 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29ABpawO019166;
-        Mon, 10 Oct 2022 13:10:41 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3k6hn21p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Oct 2022 13:10:41 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29AD8aiS015820;
-        Mon, 10 Oct 2022 13:10:38 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3k30u9atsy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Oct 2022 13:10:38 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29ADAZsS59179418
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Oct 2022 13:10:35 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 094ED11C04A;
-        Mon, 10 Oct 2022 13:10:35 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8630611C04C;
-        Mon, 10 Oct 2022 13:10:34 +0000 (GMT)
-Received: from [9.171.5.210] (unknown [9.171.5.210])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 10 Oct 2022 13:10:34 +0000 (GMT)
-Message-ID: <0059c67b-3dda-e95d-9b96-8c69af77bbb9@linux.ibm.com>
-Date:   Mon, 10 Oct 2022 15:10:34 +0200
+        Mon, 10 Oct 2022 09:12:18 -0400
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A182815718;
+        Mon, 10 Oct 2022 06:12:14 -0700 (PDT)
+Received: by mail-oi1-f179.google.com with SMTP id x188so3671489oig.5;
+        Mon, 10 Oct 2022 06:12:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=15TAcF8NS+8qj3HRwBKgB2ME6XMr5Q7+Ypj2Gz0CqG8=;
+        b=SFnIGjU6UaCpk6Uj74+pvKIXBPiDSqQ4kxqkbk7O8vJ9pLX0cbGmXaiUE12FZMfz4U
+         iFfQYSNcypgn1vMQPz+cEH/N4vfqimdi3Dt5oZLUBzTMk0PeP0KCSH836PE+ZJCTJO2Y
+         DPjVVbaKcZ9rLdXOV0w1vBoppyALAM9R4+STeV8lYqQovFX3QR3QHADlQvXBSmeKTEnq
+         4p25xhmIFUbOXC+QHtwpqnFsFYxbD8QH9zpTnhS+mezYxXrgVotsQTX934+5W4i0n1E5
+         TukOH/N1ZbysCLDGTkadFuYlAN0rlDiL43r6ts6A683ZeRzFKzEuhExrUSg7sFXbfQtD
+         b1ow==
+X-Gm-Message-State: ACrzQf02t7XibulzKIxPBY59mpkmJqdwUnrYKUNrPosuknn6eadHGU/l
+        mOeZWk+B8Ttg6U61SoW/JkHLyqZYlA==
+X-Google-Smtp-Source: AMsMyM7DJkA6/IcdCMCNjVQg06TdinHfCbleCPCXBUrEl1ZkMm3jMOJkRirkoSin/GpHh11KRUFp8Q==
+X-Received: by 2002:a05:6808:2387:b0:350:28c5:335 with SMTP id bp7-20020a056808238700b0035028c50335mr13639954oib.18.1665407532975;
+        Mon, 10 Oct 2022 06:12:12 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id m26-20020a4ae3da000000b00476995b5f0fsm4129135oov.9.2022.10.10.06.12.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 06:12:12 -0700 (PDT)
+Received: (nullmailer pid 503584 invoked by uid 1000);
+        Mon, 10 Oct 2022 13:12:13 -0000
+Date:   Mon, 10 Oct 2022 08:12:13 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, jun.li@nxp.com,
+        Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH 4/6] dt-bindings: usb: usbmisc-imx: convert to yaml
+Message-ID: <20221010131213.GA498324-robh@kernel.org>
+References: <20221010101816.298334-1-peng.fan@oss.nxp.com>
+ <20221010101816.298334-5-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v14 3/6] KVM: s390: pv: add
- KVM_CAP_S390_PROTECTED_ASYNC_DISABLE
-Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     kvm@vger.kernel.org, borntraeger@de.ibm.com, thuth@redhat.com,
-        david@redhat.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
-        seiden@linux.ibm.com, nrb@linux.ibm.com
-References: <20220930140150.37463-1-imbrenda@linux.ibm.com>
- <20220930140150.37463-4-imbrenda@linux.ibm.com>
- <748d07b8-1746-c12a-ccfb-89c8b15901d9@linux.ibm.com>
- <20221010141511.25eca963@p-imbrenda>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20221010141511.25eca963@p-imbrenda>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: cJ0kc0EUsOhaRT70Ny5FY9WtqjizMOrl
-X-Proofpoint-GUID: kFry-r5W_Zz1dUJHC-EK-gbFzUU3b7Pb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-10_07,2022-10-10_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- mlxscore=0 priorityscore=1501 malwarescore=0 lowpriorityscore=0
- clxscore=1015 suspectscore=0 mlxlogscore=999 phishscore=0 impostorscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210100076
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221010101816.298334-5-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/10/22 14:15, Claudio Imbrenda wrote:
-> On Mon, 10 Oct 2022 13:45:54 +0200
-> Janosch Frank <frankja@linux.ibm.com> wrote:
+On Mon, Oct 10, 2022 at 06:18:14PM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
->> On 9/30/22 16:01, Claudio Imbrenda wrote:
->>> Add KVM_CAP_S390_PROTECTED_ASYNC_DISABLE to signal that the
->>> KVM_PV_ASYNC_DISABLE and KVM_PV_ASYNC_DISABLE_PREPARE commands for the
->>> KVM_S390_PV_COMMAND ioctl are available.
->>>
->>> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
->>> Reviewed-by: Nico Boehr <nrb@linux.ibm.com>
->>> ---
->>>    arch/s390/kvm/kvm-s390.c | 3 +++
->>>    include/uapi/linux/kvm.h | 1 +
->>>    2 files changed, 4 insertions(+)
->>>
->>> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
->>> index d0027964a6f5..7a3bd68efd85 100644
->>> --- a/arch/s390/kvm/kvm-s390.c
->>> +++ b/arch/s390/kvm/kvm-s390.c
->>> @@ -618,6 +618,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->>>    	case KVM_CAP_S390_BPB:
->>>    		r = test_facility(82);
->>>    		break;
->>> +	case KVM_CAP_S390_PROTECTED_ASYNC_DISABLE:
->>> +		r = async_destroy && is_prot_virt_host();
->>> +		break;
->>>    	case KVM_CAP_S390_PROTECTED:
->>>    		r = is_prot_virt_host();
->>>    		break;
->>> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
->>> index 02602c5c1975..9afe0084b2c5 100644
->>> --- a/include/uapi/linux/kvm.h
->>> +++ b/include/uapi/linux/kvm.h
->>> @@ -1177,6 +1177,7 @@ struct kvm_ppc_resize_hpt {
->>>    #define KVM_CAP_VM_DISABLE_NX_HUGE_PAGES 220
->>>    #define KVM_CAP_S390_ZPCI_OP 221
->>>    #define KVM_CAP_S390_CPU_TOPOLOGY 222
->>> +#define KVM_CAP_S390_PROTECTED_ASYNC_DISABLE 225
->>
->> I can see 223 in Paolo's next, is there a 224 that I've missed?
-> 
-> no, I set this to an arbitrarily high value to avoid conficts
-> 
-> seems like I got it more or less right :)
-> 
-> feel free to change the value of the macro when merging, so it's
-> contiguous.
+> Convert usbmisc-imx to yaml format.
 
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+s/yaml/DT schema/
 
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  .../devicetree/bindings/usb/usbmisc-imx.txt   | 18 -------
+>  .../devicetree/bindings/usb/usbmisc-imx.yaml  | 52 +++++++++++++++++++
+>  2 files changed, 52 insertions(+), 18 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/usb/usbmisc-imx.txt
+>  create mode 100644 Documentation/devicetree/bindings/usb/usbmisc-imx.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/usbmisc-imx.txt b/Documentation/devicetree/bindings/usb/usbmisc-imx.txt
+> deleted file mode 100644
+> index b796836d2ce7..000000000000
+> --- a/Documentation/devicetree/bindings/usb/usbmisc-imx.txt
+> +++ /dev/null
+> @@ -1,18 +0,0 @@
+> -* Freescale i.MX non-core registers
+> -
+> -Required properties:
+> -- #index-cells: Cells used to describe usb controller index. Should be <1>
+> -- compatible: Should be one of below:
+> -	"fsl,imx6q-usbmisc" for imx6q
+> -	"fsl,vf610-usbmisc" for Vybrid vf610
+> -	"fsl,imx6sx-usbmisc" for imx6sx
+> -	"fsl,imx7d-usbmisc" for imx7d
+> -	"fsl,imx7ulp-usbmisc" for imx7ulp
+> -- reg: Should contain registers location and length
+> -
+> -Examples:
+> -usbmisc@2184800 {
+> -	#index-cells = <1>;
+> -	compatible = "fsl,imx6q-usbmisc";
+> -	reg = <0x02184800 0x200>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/usb/usbmisc-imx.yaml b/Documentation/devicetree/bindings/usb/usbmisc-imx.yaml
+> new file mode 100644
+> index 000000000000..c0741ce9b523
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/usbmisc-imx.yaml
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/usbmisc-imx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Freescale i.MX non-core registers
+> +
+> +maintainers:
+> +  - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+No, should be someone that knows this h/w, not who applies patches.
+
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - fsl,imx6q-usbmisc
+> +          - fsl,imx7ulp-usbmisc
+> +          - fsl,vf610-usbmisc
+> +      - items:
+> +          - enum:
+> +              - fsl,imx6ul-usbmisc
+> +              - fsl,imx6sx-usbmisc
+> +              - fsl,imx7d-usbmisc
+> +          - const: fsl,imx6q-usbmisc
+> +      - items:
+> +          - enum:
+> +              - fsl,imx7ulp-usbmisc
+> +          - const: fsl,imx7d-usbmisc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#index-cells':
+
+Humm, I doubt this got reviewed...
+
+> +    const: 1
+> +    description: Cells used to describe usb controller index. Should be <1>
+
+Drop 'Should be <1>'. The constraints already say that.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - '#index-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    usbmisc@2184800 {
+> +        #index-cells = <1>;
+> +        compatible = "fsl,imx6q-usbmisc";
+> +        reg = <0x02184800 0x200>;
+> +    };
+> +
+> +...
+> -- 
+> 2.37.1
+> 
+> 
