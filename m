@@ -2,69 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F845F9D02
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 12:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D13DA5F9D06
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 12:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231769AbiJJKmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 06:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60708 "EHLO
+        id S231204AbiJJKqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 06:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbiJJKmT (ORCPT
+        with ESMTP id S230437AbiJJKq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 06:42:19 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462696B159
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 03:42:17 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so12723187pjq.3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 03:42:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TUZiDAkisWsbkBtNg5M6nwdpoi4lUbxssotjHVspO6Y=;
-        b=WPdDsg+OiYrMYfJS2MsBXiS34PyQOxdGD5JhLyqQTW18yljSPBC/IEXw1FU4pE3H4o
-         dYCn+LCpStFUDRXdA7mR8LC/vgermkI1B0CWRbeK0i9f3unj+3MJ0UZyoFWCRS/h70CA
-         p9jw2q1M9357hLm1s6wyM1CKrLZQXWPOnPEaujKyZQCYYNK5FADrjNqErsDSVgxc0wBz
-         gEL21kstaJ6YGuMblsozMNVKevRxbrutvLhYwFAAktwuU/EJraET60Wegfdd9+JCDW3a
-         zirhi7rEyEqki2kZf3gZa0p6+E7dh4TNd1lEG37dKeTdPBZU0pmaWTv/H+caxNY+d/FP
-         xyMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TUZiDAkisWsbkBtNg5M6nwdpoi4lUbxssotjHVspO6Y=;
-        b=y3rS7HQ53bEpqwEkqE6MgPuHnsNAa8zT9x36B4yI0hvqs2iKoBWGyFwC+HLdb4ucwN
-         u2LITHQjpvOugWYykEmnwd0MGop4BAs3C3XikVd3gF6JBgIcVIde35xaNZgTbediTNFM
-         8EguRItoMRPqfq+f6tpzS9Zc/dHf1qjshqNQaBmXVI8ZoWfI+m95Ot6wjsgjRrE1iFg+
-         /0Hz5hV8OLA0V/7ajqiaFoYexcraYN0zAHXCjYWP7tpU0/f5VsLyZRNVO0lnqJZk+4wF
-         fXReDB+vyvAZYCfCOxucW8jGX63qpxZu5GdQMpNLtUaUpUIynnxaJoRCvbcd444fRqPR
-         zKng==
-X-Gm-Message-State: ACrzQf2J5JLDvY2hGTE+lYhTdiwMyl+ifodORzRTwsvq3gyuO3e/zFyy
-        47ccDhtYlU8gf9+ADuUVu84+Hw==
-X-Google-Smtp-Source: AMsMyM5/LBUFoKoGLQ1r7x9N6IFT07r39az9dgmKHu4b3JcvkGLReVVNstDhqx6bqmNwdpT1gMH9Ag==
-X-Received: by 2002:a17:90b:3b47:b0:202:d9d4:23f7 with SMTP id ot7-20020a17090b3b4700b00202d9d423f7mr30792094pjb.56.1665398536696;
-        Mon, 10 Oct 2022 03:42:16 -0700 (PDT)
-Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id y8-20020a17090322c800b00176b63535adsm6327874plg.260.2022.10.10.03.42.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 03:42:16 -0700 (PDT)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     hannes@cmpxchg.org, surenb@google.com, quic_pkondeti@quicinc.com
-Cc:     peterz@infradead.org, quic_charante@quicinc.com,
-        linux-kernel@vger.kernel.org,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH] sched/psi: Fix avgs_work re-arm in psi_avgs_work()
-Date:   Mon, 10 Oct 2022 18:42:06 +0800
-Message-Id: <20221010104206.12184-1-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220913140817.GA9091@hu-pkondeti-hyd.qualcomm.com>
-References: <20220913140817.GA9091@hu-pkondeti-hyd.qualcomm.com>
+        Mon, 10 Oct 2022 06:46:27 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573985C9F1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 03:46:26 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MmFpc6h1yzVhsM;
+        Mon, 10 Oct 2022 18:42:00 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 10 Oct 2022 18:46:24 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 10 Oct 2022 18:46:24 +0800
+Subject: Re: [PATCH v2 2/2] ARM: Make the dumped instructions are consistent
+ with the disassembled ones
+To:     Ard Biesheuvel <ardb@kernel.org>
+CC:     Russell King <linux@armlinux.org.uk>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221010095346.1957-1-thunder.leizhen@huawei.com>
+ <20221010095346.1957-3-thunder.leizhen@huawei.com>
+ <CAMj1kXFHGPpoSvt3J2XN4tAf2QZ--Lp8KpsuyufSjx+HuRfz0A@mail.gmail.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <08054412-06de-3c3e-48b8-1a7eb327a2d0@huawei.com>
+Date:   Mon, 10 Oct 2022 18:46:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <CAMj1kXFHGPpoSvt3J2XN4tAf2QZ--Lp8KpsuyufSjx+HuRfz0A@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,75 +58,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pavan reported a problem that PSI avgs_work idle shutoff is not
-working at all. Because PSI_NONIDLE condition would be observed in
-psi_avgs_work()->collect_percpu_times()->get_recent_times() even if
-only the kworker running avgs_work on the CPU.
 
-Although commit 1b69ac6b40eb ("psi: fix aggregation idle shut-off")
-avoided the ping-pong wake problem when the worker sleep, psi_avgs_work()
-still will always re-arm the avgs_work, so shutoff is not working.
 
-This patch changes to consider current CPU groupc as IDLE if the
-kworker running avgs_work is the only task running and no IOWAIT
-or MEMSTALL sleep tasks, in which case we will shut off the avgs_work
-if other CPUs' groupc are also IDLE.
+On 2022/10/10 18:10, Ard Biesheuvel wrote:
+> On Mon, 10 Oct 2022 at 11:56, Zhen Lei <thunder.leizhen@huawei.com> wrote:
+>>
+>> In ARM, the mapping of instruction memory is always little-endian, except
+>> some BE-32 supported ARM architectures. Such as ARMv7-R, its instruction
+>> endianness may be BE-32. Of course, its data endianness will also be BE-32
+>> mode. Due to two negatives make a positive, the instruction stored in the
+>> register after reading is in little-endian format. But for the case of
+>> BE-8, the instruction endianness is LE, the instruction stored in the
+>> register after reading is in big-endian format, which is inconsistent
+>> with the disassembled one.
+>>
+>> For example:
+>> The content of disassembly:
+>> c0429ee8:       e3500000        cmp     r0, #0
+>> c0429eec:       159f2044        ldrne   r2, [pc, #68]
+>> c0429ef0:       108f2002        addne   r2, pc, r2
+>> c0429ef4:       1882000a        stmne   r2, {r1, r3}
+>> c0429ef8:       e7f000f0        udf     #0
+>>
+>> The output of undefined instruction exception:
+>> Internal error: Oops - undefined instruction: 0 [#1] SMP ARM
+>> ... ...
+>> Code: 000050e3 44209f15 02208f10 0a008218 (f000f0e7)
+>>
+>> This inconveniences the checking of instructions. What's worse is that,
+>> for somebody who don't know about this, might think the instructions are
+>> all broken.
+>>
+>> So, when CONFIG_CPU_ENDIAN_BE8=y, let's convert the instructions to
+>> little-endian format before they are printed. The conversion result is
+>> as follows:
+>> Code: e3500000 159f2044 108f2002 1882000a (e7f000f0)
+>>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>> ---
+>>  arch/arm/kernel/traps.c | 7 +++++++
+>>  1 file changed, 7 insertions(+)
+>>
+>> diff --git a/arch/arm/kernel/traps.c b/arch/arm/kernel/traps.c
+>> index 34aa80c09c508c1..50b00c9091f079d 100644
+>> --- a/arch/arm/kernel/traps.c
+>> +++ b/arch/arm/kernel/traps.c
+>> @@ -193,6 +193,13 @@ static void dump_instr(const char *lvl, struct pt_regs *regs)
+>>                                 bad = get_user(val, &((u32 __user *)addr)[i]);
+>>                 }
+>>
+>> +               if (IS_ENABLED(CONFIG_CPU_ENDIAN_BE8)) {
+>> +                       if (thumb)
+>> +                               val = (__force unsigned int)cpu_to_le16(val);
+> 
+> Better use swab16() here instead of the ugly __force cast, given that
+> the swab is going to occur unconditionally here.
 
-One potential problem is that the brief period of non-idle time
-incurred between the aggregation run and the kworker's dequeue will
-be stranded in the per-cpu buckets until avgs_work run next time.
-The buckets can hold 4s worth of time, and future activity will wake
-the avgs_work with a 2s delay, giving us 2s worth of data we can leave
-behind when shut off the avgs_work. If the kworker run other works after
-avgs_work shut off and doesn't have any scheduler activities for 2s,
-this maybe a problem.
+Good idea.
 
-Reported-by: Pavan Kondeti <quic_pkondeti@quicinc.com>
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
----
- kernel/sched/psi.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+> 
+> 
+>> +                       else
+>> +                               val = (__force unsigned int)cpu_to_le32(val);
+> 
+> and swab32() here
 
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index ee2ecc081422..f4cdf6f184ba 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -242,6 +242,8 @@ static void get_recent_times(struct psi_group *group, int cpu,
- 			     u32 *pchanged_states)
- {
- 	struct psi_group_cpu *groupc = per_cpu_ptr(group->pcpu, cpu);
-+	int current_cpu = raw_smp_processor_id();
-+	bool only_avgs_work = false;
- 	u64 now, state_start;
- 	enum psi_states s;
- 	unsigned int seq;
-@@ -256,6 +258,15 @@ static void get_recent_times(struct psi_group *group, int cpu,
- 		memcpy(times, groupc->times, sizeof(groupc->times));
- 		state_mask = groupc->state_mask;
- 		state_start = groupc->state_start;
-+		/*
-+		 * This CPU has only avgs_work kworker running, snapshot the
-+		 * newest times then don't need to re-arm for this groupc.
-+		 * Normally this kworker will sleep soon and won't wake
-+		 * avgs_work back up in psi_group_change().
-+		 */
-+		if (current_cpu == cpu && groupc->tasks[NR_RUNNING] == 1 &&
-+		    !groupc->tasks[NR_IOWAIT] && !groupc->tasks[NR_MEMSTALL])
-+			only_avgs_work = true;
- 	} while (read_seqcount_retry(&groupc->seq, seq));
- 
- 	/* Calculate state time deltas against the previous snapshot */
-@@ -280,6 +291,10 @@ static void get_recent_times(struct psi_group *group, int cpu,
- 		if (delta)
- 			*pchanged_states |= (1 << s);
- 	}
-+
-+	/* Clear PSI_NONIDLE so avgs_work won't be re-armed for this groupc */
-+	if (only_avgs_work)
-+		*pchanged_states &= ~(1 << PSI_NONIDLE);
- }
- 
- static void calc_avgs(unsigned long avg[3], int missed_periods,
+OK
+
+> 
+> 
+>> +               }
+>> +
+>>                 if (!bad)
+>>                         p += sprintf(p, i == 0 ? "(%0*x) " : "%0*x ",
+>>                                         width, val);
+>> --
+>> 2.25.1
+>>
+>>
+>> _______________________________________________
+>> linux-arm-kernel mailing list
+>> linux-arm-kernel@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> .
+> 
+
 -- 
-2.37.2
-
+Regards,
+  Zhen Lei
