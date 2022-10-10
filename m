@@ -2,156 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2CB5FA007
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E78585FA011
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiJJOQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 10:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53726 "EHLO
+        id S229818AbiJJOSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 10:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiJJOQu (ORCPT
+        with ESMTP id S229481AbiJJOSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 10:16:50 -0400
-Received: from outbound-smtp24.blacknight.com (outbound-smtp24.blacknight.com [81.17.249.192])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D262BE0F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 07:16:47 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
-        by outbound-smtp24.blacknight.com (Postfix) with ESMTPS id 004F1C0F57
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 15:16:45 +0100 (IST)
-Received: (qmail 20666 invoked from network); 10 Oct 2022 14:16:45 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 10 Oct 2022 14:16:45 -0000
-Date:   Mon, 10 Oct 2022 15:16:30 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     linux-rtc@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Intermittent boot failure after 6492fed7d8c9 (v6.0-rc1)
-Message-ID: <20221010141630.zfzi7mk7zvnmclzy@techsingularity.net>
+        Mon, 10 Oct 2022 10:18:10 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B2872FD9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 07:18:08 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id n18-20020a17090ade9200b0020b0012097cso8619489pjv.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 07:18:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WYF5XS2JRFV9RPZlZQCkeQ7ajMqkoP9Kb8xnQ89udwg=;
+        b=fAa2MreMKKkd1H1c0EFMeRSx66lm2KgySkNtomiIctPKLFYqhflzFtRQAtBSFdzAUm
+         TekKZCVMsTgzyqdlfzljUDWlnOuvumJLkC4mZTYcPYCjk2y0PrPuCK7smn9Vbl+mIATD
+         61+Rnkeg5yyh2iLOW8llDxwkC/SAdmiKhv93C68NsmBNraNYBDWPCrEVZAks2JZLlyg5
+         i0XFcf60Tc/k5GNHwVNHLIKDB6P7XLcFh7ISPipmV8ocKSBUPXICn/0gFpyN6T13yXzM
+         g9OWanMfxhDad/haH6p3bn/3EVj8mgiuV4P537sz6zcLMS3CuhG4oCs1cFYUc5SNZ1HT
+         3wag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WYF5XS2JRFV9RPZlZQCkeQ7ajMqkoP9Kb8xnQ89udwg=;
+        b=lbZndeuJ4X1odoAo4BPQotGmH+WPH02E67qfK3POV6af6jPi+7Jp6/oW9vA5tZK8cd
+         i58OjRelyxywzXjAyvr5kgmT8RDDI6M3Mnkx82wwVdHYMJuAc+A25s4pvvYzMPNPummb
+         7+s7D5D4GxMFe6qo31j9De05uQ1OWXdB6GbH7q2tWDmOpPjRmFkYRi7+AamQmPSKRcQf
+         t1+BZ1y/QtupgAfxyWq64LPBP8Vi9UwyFWR0Mp6Kp/qFAXjLS2TEzv1xKE8YHJJxj/EA
+         F3H49Z0GlQLWepS3DoBX2vKj454Ze8FoqICFkihkmUdDC6LbRyvmGog2Io9HYxPuQ+gM
+         DOeg==
+X-Gm-Message-State: ACrzQf2TnbyJOophxEqpJEV1nuodqcoomFEakeUPfdxO1QUa50xfoJLX
+        VnRKhVvKZO6VytksTvKBbePApv9b1yQY45g1GARZdw==
+X-Google-Smtp-Source: AMsMyM4cUhV2VK+DCH3t4qIVuINv2HYwLfI0bQXnnILy2R1uC12MfGL19P8PiNkYgdiH3TS7uOCOjOJ8aStP8SpR6GU=
+X-Received: by 2002:a17:902:d714:b0:17f:5813:1df4 with SMTP id
+ w20-20020a170902d71400b0017f58131df4mr20026551ply.148.1665411488088; Mon, 10
+ Oct 2022 07:18:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <0d0ef6651ed44fc780e95c8797294708@hyperstone.com>
+In-Reply-To: <0d0ef6651ed44fc780e95c8797294708@hyperstone.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 10 Oct 2022 16:17:30 +0200
+Message-ID: <CAPDyKFrxDBnOZXD_e086ODRFthKVrsTTU9jgsWayXXkHby2RLQ@mail.gmail.com>
+Subject: Re: [PATCHv3 1/2] mmc: block: Remove error check of hw_reset on reset
+To:     =?UTF-8?Q?Christian_L=C3=B6hle?= <CLoehle@hyperstone.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael,
+On Mon, 10 Oct 2022 at 16:03, Christian L=C3=B6hle <CLoehle@hyperstone.com>=
+ wrote:
+>
+> Before switching back to the right partition in mmc_blk_reset
+> there used to be a check if hw_reset was even supported.
+> This return value was removed, so there is no reason to check.
+> Furthermore ensure part_curr is not falsely set to a valid value
+> on reset or partition switch error.
+>
+> Fixes: fefdd3c91e0a ("mmc: core: Drop superfluous validations in mmc_hw|s=
+w_reset()")
+> Cc: stable@vger.kernel.org
+>
+> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
 
-I'm seeing intermittent boot failures after 6492fed7d8c9 ("rtc: rtc-cmos:
-Do not check ACPI_FADT_LOW_POWER_S0") due to a NULL pointer exception
-early in boot. It fails to boot 5 times after 10 boot attempts and I've
-only observed it on one machine so far. Either a revert or the patch below
-fixes it but it's unlikely it is the correct fix.
+This looks good to me, however I am awaiting and ack from Adrian
+before applying, to make sure we are all aligned with the approach.
 
---- drivers/rtc/rtc-cmos.c.orig	2022-10-10 15:11:50.335756567 +0200
-+++ drivers/rtc/rtc-cmos.c	2022-10-10 15:11:53.211756691 +0200
-@@ -1209,7 +1209,7 @@
- 	 * Or else, ACPI SCI is enabled during suspend/resume only,
- 	 * update rtc irq in that case.
- 	 */
--	if (cmos_use_acpi_alarm())
-+	if (cmos_use_acpi_alarm() && cmos)
- 		cmos_interrupt(0, (void *)cmos->rtc);
- 	else {
- 		/* Fix me: can we use cmos_interrupt() here as well? */
+Kind regards
+Uffe
 
-Boot failure looks like the below, it's not a vanilla kernel but the
-applied patch is not relevant and it's known to fail on a vanilla kernel.
-The machine has a E5-2698 v4 CPU plugged into a SGI C2112-4GP3 platform
-with a X10DRT-P-Series motherboard.
-
-[   10.924167][    C1] BUG: kernel NULL pointer dereference, address: 0000000000000000
-[   10.928016][    C1] #PF: supervisor read access in kernel mode
-[   10.928016][    C1] #PF: error_code(0x0000) - not-present page
-[   10.928016][    C1] PGD 0 P4D 0 
-[   10.928016][    C1] Oops: 0000 [#1] PREEMPT SMP PTI
-[   10.928016][    C1] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-mm-pcpnoirq-v1r2 #1 6debc4647ebcbe3e91270f1109aebc1e85510e3e
-[   10.928016][    C1] Hardware name: SGI.COM C2112-4GP3/X10DRT-P-Series, BIOS 2.0a 05/09/2016
-[   10.928016][    C1] RIP: 0010:rtc_handler+0x73/0xd0
-[   10.928016][    C1] Code: df e8 41 62 f9 ff bf 04 00 00 00 e8 a3 bf e7 ff 31 f6 bf 04 00 00 00 e8 08 c2 e7 ff b8 01 00 00 00 5b 5d 41 5c c3 cc cc cc cc <48> 8b 75 00 31 ff e8 72 fe ff ff eb c0 bf 0b 00 00 00 e8 56 81 77
-[   10.928016][    C1] RSP: 0000:ffffaf7f8003eec0 EFLAGS: 00010002
-[   10.928016][    C1] RAX: ffffffffad6d0c00 RBX: ffff94049801a000 RCX: 0000000000000000
-[   10.928016][    C1] RDX: 0000000000000040 RSI: ffffffffadf00460 RDI: ffff94049801a000
-[   10.928016][    C1] RBP: 0000000000000000 R08: 0000000000000000 R09: 00000000000004d0
-[   10.928016][    C1] R10: 0000000000000000 R11: ffffaf7f8003eff8 R12: 0000000000000000
-[   10.928016][    C1] R13: ffffffffae228d82 R14: 0000000000000004 R15: 0000000000000000
-[   10.928016][    C1] FS:  0000000000000000(0000) GS:ffff94037ea80000(0000) knlGS:0000000000000000
-[   10.928016][    C1] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   10.928016][    C1] CR2: 0000000000000000 CR3: 00000002c7e26001 CR4: 00000000003706e0
-[   10.928016][    C1] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[   10.928016][    C1] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[   10.928016][    C1] Call Trace:
-[   10.928016][    C1]  <IRQ>
-[   10.928016][    C1]  acpi_ev_fixed_event_detect+0x14a/0x18c
-[   10.928016][    C1]  acpi_ev_sci_xrupt_handler+0x2c/0x6e
-[   10.928016][    C1]  acpi_irq+0x18/0x40
-[   10.928016][    C1]  __handle_irq_event_percpu+0x3e/0x2d0
-[   10.928016][    C1]  handle_irq_event_percpu+0xf/0x40
-[   10.928016][    C1]  handle_irq_event+0x34/0x60
-[   10.928016][    C1]  handle_fasteoi_irq+0x7b/0x140
-[   10.928016][    C1]  __common_interrupt+0x4b/0x100
-[   10.928016][    C1]  common_interrupt+0x58/0xa0
-[   10.928016][    C1]  </IRQ>
-[   10.928016][    C1]  <TASK>
-[   10.928016][    C1]  asm_common_interrupt+0x22/0x40
-[   10.928016][    C1] RIP: 0010:cmos_wake_setup.part.9+0x2f/0x120
-[   10.928016][    C1] Code: 80 3d 65 16 4a 01 00 53 48 89 fb 0f 84 a5 00 00 00 48 89 da 48 c7 c6 00 0c 6d ad bf 04 00 00 00 e8 53 b8 e7 ff bf 04 00 00 00 <e8> 98 c6 e7 ff 31 f6 bf 04 00 00 00 e8 fd c8 e7 ff 0f b6 0d 34 ce
-[   10.928016][    C1] RSP: 0000:ffffaf7f800d7ca8 EFLAGS: 00000246
-[   10.928016][    C1] RAX: 0000000000000000 RBX: ffff94049801a000 RCX: 0000000000000004
-[   10.928016][    C1] RDX: ffffffffadefef10 RSI: ffffffffadefee20 RDI: 0000000000000004
-[   10.928016][    C1] RBP: ffffffffaeaf98a0 R08: 0000000000000000 R09: 0000000000000000
-[   10.928016][    C1] R10: 0000000000000000 R11: 000000000000000a R12: ffffffffad6d1750
-[   10.928016][    C1] R13: 0000000000000000 R14: ffff93c5111191a0 R15: ffffffffaefe47f8
-[   10.928016][    C1]  ? rdinit_setup+0x2f/0x2f
-[   10.928016][    C1]  ? cmos_do_probe+0x570/0x570
-[   10.928016][    C1]  ? cmos_wake_setup.part.9+0x2a/0x120
-[   10.928016][    C1]  cmos_pnp_probe+0x6c/0xa0
-[   10.928016][    C1]  pnp_device_probe+0x5b/0xb0
-[   10.928016][    C1]  ? driver_sysfs_add+0x75/0xe0
-[   10.928016][    C1]  really_probe+0x109/0x3e0
-[   10.928016][    C1]  ? pm_runtime_barrier+0x4f/0xa0
-[   10.928016][    C1]  __driver_probe_device+0x79/0x170
-[   10.928016][    C1]  driver_probe_device+0x1f/0xa0
-[   10.928016][    C1]  __driver_attach+0x11e/0x180
-[   10.928016][    C1]  ? __device_attach_driver+0x110/0x110
-[   10.928016][    C1]  bus_for_each_dev+0x79/0xc0
-[   10.928016][    C1]  bus_add_driver+0x1ba/0x250
-[   10.928016][    C1]  ? rtc_dev_init+0x34/0x34
-[   10.928016][    C1]  driver_register+0x5f/0x100
-[   10.928016][    C1]  ? rtc_dev_init+0x34/0x34
-[   10.928016][    C1]  cmos_init+0x12/0x70
-[   10.928016][    C1]  do_one_initcall+0x5b/0x310
-[   10.928016][    C1]  ? rcu_read_lock_held_common+0xe/0x50
-[   10.928016][    C1]  ? rcu_read_lock_sched_held+0x23/0x80
-[   10.928016][    C1]  kernel_init_freeable+0x2b7/0x319
-[   10.928016][    C1]  ? rest_init+0x1b0/0x1b0
-[   10.928016][    C1]  kernel_init+0x16/0x140
-[   10.928016][    C1]  ret_from_fork+0x22/0x30
-[   10.928016][    C1]  </TASK>
-[   10.928016][    C1] Modules linked in:
-[   10.928016][    C1] CR2: 0000000000000000
-[   10.928016][    C1] ---[ end trace 0000000000000000 ]---
-[   10.928016][    C1] RIP: 0010:rtc_handler+0x73/0xd0
-[   10.928016][    C1] Code: df e8 41 62 f9 ff bf 04 00 00 00 e8 a3 bf e7 ff 31 f6 bf 04 00 00 00 e8 08 c2 e7 ff b8 01 00 00 00 5b 5d 41 5c c3 cc cc cc cc <48> 8b 75 00 31 ff e8 72 fe ff ff eb c0 bf 0b 00 00 00 e8 56 81 77
-[   10.928016][    C1] RSP: 0000:ffffaf7f8003eec0 EFLAGS: 00010002
-[   10.928016][    C1] RAX: ffffffffad6d0c00 RBX: ffff94049801a000 RCX: 0000000000000000
-[   10.928016][    C1] RDX: 0000000000000040 RSI: ffffffffadf00460 RDI: ffff94049801a000
-[   10.928016][    C1] RBP: 0000000000000000 R08: 0000000000000000 R09: 00000000000004d0
-[   10.928016][    C1] R10: 0000000000000000 R11: ffffaf7f8003eff8 R12: 0000000000000000
-[   10.928016][    C1] R13: ffffffffae228d82 R14: 0000000000000004 R15: 0000000000000000
-[   10.928016][    C1] FS:  0000000000000000(0000) GS:ffff94037ea80000(0000) knlGS:0000000000000000
-[   10.928016][    C1] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   10.928016][    C1] CR2: 0000000000000000 CR3: 00000002c7e26001 CR4: 00000000003706e0
-[   10.928016][    C1] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[   10.928016][    C1] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[   10.928016][    C1] Kernel panic - not syncing: Fatal exception in interrupt
-[   10.928016][    C1] Kernel Offset: 0x2be00000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
-[   10.928016][    C1] ---[ end Kernel panic - not syncing: Fatal exception in interrupt ]---
-
--- 
-Mel Gorman
-SUSE Labs
+> ---
+> -v3: Ensure invalid part_curr on error
+> -v2: Do not attempt to switch partitions if reset failed
+>
+>  drivers/mmc/core/block.c | 29 ++++++++++++++---------------
+>  1 file changed, 14 insertions(+), 15 deletions(-)
+>
+> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+> index ce89611a136e..45a44edcc31a 100644
+> --- a/drivers/mmc/core/block.c
+> +++ b/drivers/mmc/core/block.c
+> @@ -134,6 +134,7 @@ struct mmc_blk_data {
+>          * track of the current selected device partition.
+>          */
+>         unsigned int    part_curr;
+> +#define MMC_BLK_PART_INVALID   UINT_MAX        /* Unknown partition acti=
+ve */
+>         int     area_type;
+>
+>         /* debugfs files (only in main mmc_blk_data) */
+> @@ -991,29 +992,27 @@ static int mmc_blk_reset(struct mmc_blk_data *md, s=
+truct mmc_host *host,
+>                          int type)
+>  {
+>         int err;
+> +       struct mmc_blk_data *main_md =3D dev_get_drvdata(&host->card->dev=
+);
+> +       int part_err;
+>
+>         if (md->reset_done & type)
+>                 return -EEXIST;
+>
+>         md->reset_done |=3D type;
+> +       main_md->part_curr =3D MMC_BLK_PART_INVALID;
+>         err =3D mmc_hw_reset(host->card);
+> +       if (err)
+> +               return err;
+>         /* Ensure we switch back to the correct partition */
+> -       if (err) {
+> -               struct mmc_blk_data *main_md =3D
+> -                       dev_get_drvdata(&host->card->dev);
+> -               int part_err;
+> -
+> -               main_md->part_curr =3D main_md->part_type;
+> -               part_err =3D mmc_blk_part_switch(host->card, md->part_typ=
+e);
+> -               if (part_err) {
+> -                       /*
+> -                        * We have failed to get back into the correct
+> -                        * partition, so we need to abort the whole reque=
+st.
+> -                        */
+> -                       return -ENODEV;
+> -               }
+> +       part_err =3D mmc_blk_part_switch(host->card, md->part_type);
+> +       if (part_err) {
+> +               /*
+> +                * We have failed to get back into the correct
+> +                * partition, so we need to abort the whole request.
+> +                */
+> +               return -ENODEV;
+>         }
+> -       return err;
+> +       return 0;
+>  }
+>
+>  static inline void mmc_blk_reset_success(struct mmc_blk_data *md, int ty=
+pe)
+> --
+> 2.37.3
+> Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+> Managing Director: Dr. Jan Peter Berns.
+> Commercial register of local courts: Freiburg HRB381782
+>
