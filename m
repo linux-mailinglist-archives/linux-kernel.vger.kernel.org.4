@@ -2,169 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD945F9BFF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 11:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3505F9C04
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 11:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231887AbiJJJdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 05:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
+        id S231792AbiJJJes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 05:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231770AbiJJJcn (ORCPT
+        with ESMTP id S230455AbiJJJeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 05:32:43 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52304DF3A
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 02:32:41 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id r14so15758966lfm.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 02:32:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ea7flc1qLEOW/awjCpuTynDhYWRL7o5KfNiU6r1reMA=;
-        b=ClbWTbOG/PieuNvLlE0G8V1p7Ssk1QTnuPT3P4vv7KzLmxqt2pAp3iSMIiT/71GCcV
-         tm1QbaAI7VoXFvOB+nNIHzoBzALC5Pf/WXJR9BfDxUfwhmC+sd+Lkte5mb3z4QCJTwp0
-         KsYEsQmDcQmXmK+qE6nE0Ffhu3SaVqECkyY+h65WMqfR/28Vs4jw6JIHmXBO5OzjyxXZ
-         E5ximSQzUL1CDQFkkuSDEYslR6S5DxDTWpWulAGsL9K03tXEBxuvD7CkiwMzHqgbAuO0
-         wLctj/4vmJNVJz61qieYj0zFLQUY3HX6Qw9OIgMifSKoYFILPMaFbD7TMWqjVVwhMG6H
-         X04Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ea7flc1qLEOW/awjCpuTynDhYWRL7o5KfNiU6r1reMA=;
-        b=5kYs/tkp8t5fjDr6FMhsagEZQ0r921ONGy+9g/bog3OVOT9Qn3XRxdGDS0XbXTBRwb
-         my+zfms0Cuu/j7MqFDBOQjQApkHqbM/t3T0b4CmZfwInxWVgXrQDrvK8PVT542zVGTyy
-         i0oao9ibmTnPm0x8FrQuE4fQLH0GZ+toNILEFtsMWqDvvahRMduOgAlWR64roo8CzojY
-         a02Aa4o6Xi2zFO+gnn7uftdHBjUbbAiuEGwlbPkFjHzFfsLEYdxZCibJdIdasWRRQtDZ
-         /ZxXY+9WzsUlcV7VaI3q1Rg8kutu8dmNFMSWryQVIPcAX2xqO+GLbHPDdl48ced1NVDP
-         5mLw==
-X-Gm-Message-State: ACrzQf2Sl5h5poQnHSl5/W/uG7ibRVDPM19uhvOMjDDKUz+Yu38xpt7j
-        CDnz0b1LEB0QX3Eh6eDqfJ2DGPbQM70UK5enOAxwWQ==
-X-Google-Smtp-Source: AMsMyM6oWxS0Z90SLjeRT8QkS0866ZBDyiovsvw9wDUNT5vr76jcip2Ej3aEEkU2q7KCZdQvT/ba0+M3qZ4CXNHqstM=
-X-Received: by 2002:a19:ad03:0:b0:4a0:56ab:7148 with SMTP id
- t3-20020a19ad03000000b004a056ab7148mr6735488lfc.430.1665394359975; Mon, 10
- Oct 2022 02:32:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220930094821.31665-1-lukasz.luba@arm.com> <20220930094821.31665-2-lukasz.luba@arm.com>
- <20221010053902.5rofnpzvyynumw3e@vireshk-i7> <3f9a4123-171b-5fa7-f506-341355f71483@arm.com>
- <CAKfTPtBPqcTm5_-M_Ka3y46yQ2322TmH8KS-QyDbAiKk5B6hEQ@mail.gmail.com> <8a7968c2-dbf7-5316-ef36-6d45143e0605@arm.com>
-In-Reply-To: <8a7968c2-dbf7-5316-ef36-6d45143e0605@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 10 Oct 2022 11:32:28 +0200
-Message-ID: <CAKfTPtB3Lk5bc9k634O+Yi8wwP=MVeKS5NPbpaqwhX1F4t5EbA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] cpufreq: Update CPU capacity reduction in store_scaling_max_freq()
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        linux-pm@vger.kernel.org, Dietmar.Eggemann@arm.com,
-        peterz@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 10 Oct 2022 05:34:44 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29FA710576;
+        Mon, 10 Oct 2022 02:34:41 -0700 (PDT)
+Received: from bogon.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxTWss50Nj6_wpAA--.24724S2;
+        Mon, 10 Oct 2022 17:34:36 +0800 (CST)
+From:   Youling Tang <tangyouling@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>
+Cc:     WANG Xuerui <kernel@xen0n.name>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH 6/7] LoongArch: vmlinux.lds.S: Remove `.fixup` section
+Date:   Mon, 10 Oct 2022 17:34:36 +0800
+Message-Id: <1665394476-14147-1-git-send-email-tangyouling@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8AxTWss50Nj6_wpAA--.24724S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJF4fWw4fGFy7Ww1fJw1fWFg_yoW5Xrykpr
+        17ArnrKa1fGFn7ZasrXryvqryvqFZrGrW2qF47GFyrG3y29r1kZr95A39rJFy7W393Jr40
+        qryfKF4rXF48GwUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvmb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4
+        vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F
+        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kI
+        c2xKxwCY02Avz4vE14v_GFWl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+        z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
+        UI43ZEXa7IU8RyxtUUUUU==
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Oct 2022 at 11:30, Lukasz Luba <lukasz.luba@arm.com> wrote:
->
->
->
-> On 10/10/22 10:15, Vincent Guittot wrote:
-> > On Mon, 10 Oct 2022 at 11:02, Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >>
-> >>
-> >>
-> >> On 10/10/22 06:39, Viresh Kumar wrote:
-> >>> Would be good to always CC Scheduler maintainers for such a patch.
-> >>
-> >> Agree, I'll do that.
-> >>
-> >>>
-> >>> On 30-09-22, 10:48, Lukasz Luba wrote:
-> >>>> When the new max frequency value is stored, the task scheduler must
-> >>>> know about it. The scheduler uses the CPUs capacity information in the
-> >>>> task placement. Use the existing mechanism which provides information
-> >>>> about reduced CPU capacity to the scheduler due to thermal capping.
-> >>>>
-> >>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> >>>> ---
-> >>>>    drivers/cpufreq/cpufreq.c | 18 +++++++++++++++++-
-> >>>>    1 file changed, 17 insertions(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> >>>> index 1f8b93f42c76..205d9ea9c023 100644
-> >>>> --- a/drivers/cpufreq/cpufreq.c
-> >>>> +++ b/drivers/cpufreq/cpufreq.c
-> >>>> @@ -27,6 +27,7 @@
-> >>>>    #include <linux/slab.h>
-> >>>>    #include <linux/suspend.h>
-> >>>>    #include <linux/syscore_ops.h>
-> >>>> +#include <linux/thermal.h>
-> >>>>    #include <linux/tick.h>
-> >>>>    #include <linux/units.h>
-> >>>>    #include <trace/events/power.h>
-> >>>> @@ -718,6 +719,8 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
-> >>>>    static ssize_t store_scaling_max_freq
-> >>>>    (struct cpufreq_policy *policy, const char *buf, size_t count)
-> >>>>    {
-> >>>> +    unsigned int frequency;
-> >>>> +    struct cpumask *cpus;
-> >>>>       unsigned long val;
-> >>>>       int ret;
-> >>>>
-> >>>> @@ -726,7 +729,20 @@ static ssize_t store_scaling_max_freq
-> >>>>               return -EINVAL;
-> >>>>
-> >>>>       ret = freq_qos_update_request(policy->max_freq_req, val);
-> >>>> -    return ret >= 0 ? count : ret;
-> >>>> +    if (ret >= 0) {
-> >>>> +            /*
-> >>>> +             * Make sure that the task scheduler sees these CPUs
-> >>>> +             * capacity reduction. Use the thermal pressure mechanism
-> >>>> +             * to propagate this information to the scheduler.
-> >>>> +             */
-> >>>> +            cpus = policy->related_cpus;
-> >>>
-> >>> No need of this, just use related_cpus directly.
-> >>>
-> >>>> +            frequency = __resolve_freq(policy, val, CPUFREQ_RELATION_HE);
-> >>>> +            arch_update_thermal_pressure(cpus, frequency);
-> >>>
-> >>> I wonder if using the thermal-pressure API here is the right thing to
-> >>> do. It is a change coming from User, which may or may not be
-> >>> thermal-related.
-> >>
-> >> Yes, I thought the same. Thermal-pressure name might be not the
-> >> best for covering this use case. I have been thinking about this
-> >> thermal pressure mechanism for a while, since there are other
-> >> use cases like PowerCap DTPM which also reduces CPU capacity
-> >> because of power policy from user-space. We don't notify
-> >> the scheduler about it. There might be also an issue with virtual
-> >> guest OS and how that kernel 'sees' the capacity of CPUs.
-> >> We might try to use this 'thermal-pressure' in the guest kernel
-> >> to notify about available CPU capacity (just a proposal, not
-> >> even an RFC, since we are missing requirements, but issues where
-> >> discussed on LPC 2022 on ChromeOS+Android_guest)
-> >
-> > The User space setting scaling_max_freq is a long scale event and it
-> > should be considered as a new running environnement instead of a
-> > transient event. I would suggest updating the EM is and capacity orig
-> > of the system in this case. Similarly, we rebuild sched_domain with a
-> > cpu hotplug. scaling_max_freq interface should not be used to do any
-> > kind of dynamic scaling.
->
-> I tend to agree, but the EM capacity would be only used in part of EAS
-> code. The whole fair.c view to the capacity_of() (RT + DL + irq +
-> thermal_pressure) would be still wrong in other parts, e.g.
-> select_idle_sibling() and load balance.
->
-> When we get this powerhint we might be already in overutilied state
-> so EAS is disabled. IMO other mechanisms in the task scheduler
-> should be also aware of that capacity reduction.
+After using the `.L_xxx` lable instead of `.fixup`, we no longer place
+anything into a `.fixup` section, so we no longer need to place those
+sections into the `.text` section in the main kernel Image.
 
-That's why I also mentioned the capacity_orig
+Remove the use of `.fixup`.
+
+Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+---
+
+Using `irp` allows you to easily define multiple lables, provide
+convenience for implementing __{copy, clear}_user_fast in the future.
+
+ arch/loongarch/kernel/vmlinux.lds.S |  1 -
+ arch/loongarch/lib/clear_user.S     | 14 +++++---------
+ arch/loongarch/lib/copy_user.S      | 16 ++++++----------
+ 3 files changed, 11 insertions(+), 20 deletions(-)
+
+diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
+index efecda0c2361..d382c88f47b2 100644
+--- a/arch/loongarch/kernel/vmlinux.lds.S
++++ b/arch/loongarch/kernel/vmlinux.lds.S
+@@ -48,7 +48,6 @@ SECTIONS
+ 		KPROBES_TEXT
+ 		IRQENTRY_TEXT
+ 		SOFTIRQENTRY_TEXT
+-		*(.fixup)
+ 		*(.gnu.warning)
+ 	} :text = 0
+ 	. = ALIGN(PECOFF_SEGMENT_ALIGN);
+diff --git a/arch/loongarch/lib/clear_user.S b/arch/loongarch/lib/clear_user.S
+index 7a066d6a41b8..167823b21def 100644
+--- a/arch/loongarch/lib/clear_user.S
++++ b/arch/loongarch/lib/clear_user.S
+@@ -9,15 +9,11 @@
+ #include <asm/export.h>
+ #include <asm/regdef.h>
+ 
+-.macro fixup_ex from, to, offset, fix
+-.if \fix
+-	.section .fixup, "ax"
+-\to:	addi.d	a0, a1, \offset
++.irp to, 0
++.L_fixup_handle_\to\():
++	addi.d	a0, a1, (\to) * (-8)
+ 	jr	ra
+-	.previous
+-.endif
+-	_asm_extable \from\()b, \to\()b
+-.endm
++.endr
+ 
+ /*
+  * unsigned long __clear_user(void *addr, size_t size)
+@@ -36,7 +32,7 @@ SYM_FUNC_START(__clear_user)
+ 2:	move	a0, a1
+ 	jr	ra
+ 
+-	fixup_ex 1, 3, 0, 1
++	_asm_extable 1, .L_fixup_handle_0
+ SYM_FUNC_END(__clear_user)
+ 
+ EXPORT_SYMBOL(__clear_user)
+diff --git a/arch/loongarch/lib/copy_user.S b/arch/loongarch/lib/copy_user.S
+index f8ace04586c2..5d7bfa8d53d2 100644
+--- a/arch/loongarch/lib/copy_user.S
++++ b/arch/loongarch/lib/copy_user.S
+@@ -9,15 +9,11 @@
+ #include <asm/export.h>
+ #include <asm/regdef.h>
+ 
+-.macro fixup_ex from, to, offset, fix
+-.if \fix
+-	.section .fixup, "ax"
+-\to:	addi.d	a0, a2, \offset
++.irp to, 0
++.L_fixup_handle_\to\():
++	addi.d	a0, a2, (\to) * (-8)
+ 	jr	ra
+-	.previous
+-.endif
+-	_asm_extable \from\()b, \to\()b
+-.endm
++.endr
+ 
+ /*
+  * unsigned long __copy_user(void *to, const void *from, size_t n)
+@@ -39,8 +35,8 @@ SYM_FUNC_START(__copy_user)
+ 3:	move	a0, a2
+ 	jr	ra
+ 
+-	fixup_ex 1, 4, 0, 1
+-	fixup_ex 2, 4, 0, 0
++	_asm_extable 1, .L_fixup_handle_0
++	_asm_extable 2, .L_fixup_handle_0
+ SYM_FUNC_END(__copy_user)
+ 
+ EXPORT_SYMBOL(__copy_user)
+-- 
+2.36.1
+
