@@ -2,167 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 111D75F9BB8
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 11:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 784795F9BC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 11:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbiJJJP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 05:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
+        id S231529AbiJJJVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 05:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbiJJJPY (ORCPT
+        with ESMTP id S230523AbiJJJVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 05:15:24 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEC34A801
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 02:15:21 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id f9so12505619ljk.12
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 02:15:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j3Nc5ybSmm3MUhdS+5MVyvIh/NesSmD7wvi1u6Qup6U=;
-        b=WvK1AiGto8CcgCMoI4sx/iJk9ekcDIyGNkFYy2f2pDxuQOp0q5v+wcrG7IBca2IV1s
-         znSltlhtNZ8+BVPfpKUSFa9tIBmTEEsUHTEfEIYn0IHVjuqjKmbxJo9OAc9ARf8hCQDi
-         jwg9o/Dc8npSCgHL/x5WJNEHdipO5+9NUHk6ekjr97xicnLV4wFisvLghRIgePZgQK38
-         wC/5kHf12eXMbUtv1ecfoslc8iiMRFY/KomLaMHBt4SaPrVl2YDOY0gepcmlT+HwGYTK
-         eThmRHUzAxzvTlSmSEk68nq0aprAxQmgNH9qBnWrri2+LavXZZogk1NFT75YlH6N4Q+d
-         vINQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j3Nc5ybSmm3MUhdS+5MVyvIh/NesSmD7wvi1u6Qup6U=;
-        b=iiaBUKZYAcNcAYumm0CDIycQnD8MhAxpVu2eLobDyAmPyukM97Ub3nRN/gDqXWGAjC
-         C5wZm651O+vV2ASShwKpbMBP9FQNfu4+sVPGYSdNwH++Vo2xy2oXmkk5mM5sGef3B28e
-         omYfmC1wVYS/vkMcEav5PE/HoRiBEn3zgiktUNb2lgLrhd6aIG0MH7D0fvuRtr3qi2S7
-         MjjSbvAQ61ZALMrtYxC0bDxU7LTcEpeFdUeB5CS3zgUSBQWS9pKW0+GbJdQL47HmWR62
-         w5bkgP9iKN5S61MLbkgxDxEPAwaK3Nw46ER2JGmcJ7Hsq6AreAR2pvASMG2h0khHw7Cn
-         r+OA==
-X-Gm-Message-State: ACrzQf0LRfdpxCAzQLNcnf6SPpT/9/pQXJ2pJRw17d65On5IPJw2XHsA
-        lkinwMxbJSKtuPkNOpPp2GM/i/iLSedIZYEJwCqf4w==
-X-Google-Smtp-Source: AMsMyM7XBI1ABDkrZqxzLTRibptq5a/rT9db9D7b8Bn/dCWyKGKlV7NV/NHvtCAM8VXRGDJxyei9o4KLHB6J3JoS1k0=
-X-Received: by 2002:a2e:9919:0:b0:26e:59a:3449 with SMTP id
- v25-20020a2e9919000000b0026e059a3449mr6189634lji.494.1665393319687; Mon, 10
- Oct 2022 02:15:19 -0700 (PDT)
+        Mon, 10 Oct 2022 05:21:50 -0400
+Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BAC422FA
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 02:21:47 -0700 (PDT)
+Received: from pps.filterd (m0250812.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.17.1.19/8.17.1.5) with ESMTP id 29A7v6FF005531;
+        Mon, 10 Oct 2022 09:20:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=PPS06212021;
+ bh=kZ+/a3dZgBVRFPLezszNRFiX+SUtvvzdLqeHNh19s48=;
+ b=bfnMOnEGEz2s1m9Cg0qv+nNRmN7978S3jKa2SXij1JYjAzpgdnRy+CYR/X3WsxXI4hz+
+ hzT9xMZRfYYFn43NrHs6U+S4oBMh/Moi+wknZHibQKDEMO4k+R1X9LXsbliI5fw2vGE9
+ 9jJQv77bQzePtmHMy+LlfpuH7rf3SwYXO4hH5mTncpfyzX4DIkZTmoLE+yhF7QQ6Zmev
+ NZMyUN1Qmjs0ZElw5ofYDHTLZP1vgIzEBv7+8fSsbIgHfSG70Eh4O+URY6jqNUO+0jo3
+ B5nQB/lJvx9EuKUSYiFllDxOlb3ozv4AgFRo7kKEud5ftihW6SwVz3v7VaXrqsWXfXna FQ== 
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3k4feug21u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 09:20:33 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZkRn19bfquejDttNV7QT1vudmlwQiwjoHhPJ5djo4g2bsckaINDWy1T/nsxeflv1gjOlQg+agwSC6PH46fBLpPK32yG4jUbW+2/rsw9an0kxWKGEKT+wJUM8i7tPDobK3tWceHJFiwliQscRqClH2UvonZxSzGe8JCILwEt77Kx1tE54NRHgxee4+gCLyCV+dd/hnMeT41g9dG2xh0gFq73cX4VWyNx/AvGlZS1fVfyewA4EN3cnD1Sq+SpQLMeIxJJ3ZYLpM2i7a7bgS7o2c7sw960AUaxG0ZB32R8cYBCpduME0INbRhD60jQodhdroA64EyhSJUHtf343jeL/Xw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kZ+/a3dZgBVRFPLezszNRFiX+SUtvvzdLqeHNh19s48=;
+ b=aNYygT79MshAQW1W/N6vqeE6URkNsPNvbajUIruGLv2MwV4h06zspALqIe5qGNrZjfwI0lXNLXWbqPb8xELTkLyBS6lIga841YpzRsnVejIX4ZMh34nvMN58x9czmEeDPD3BT1LWNJC18mwq8vpSWdqLlZg4iuSmKxLxEqFn6djmrKmD0gx8ClyoEsLhQ2gdLGYzhUPoxFDybZNbJwEfeYf5UyNtKrXa98QlJy4F4oDR05sIgVSP9r3hsFAF59T3+VTh49xXPur6OC0p81RI1Lc49s0oYLTHqaTRdJqqyrs/WgPIZLv68HNNkNo0qYpJCIlJp74074y8tiXBm+EYew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+Received: from MW5PR11MB5764.namprd11.prod.outlook.com (2603:10b6:303:197::8)
+ by SA2PR11MB4844.namprd11.prod.outlook.com (2603:10b6:806:f9::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Mon, 10 Oct
+ 2022 09:20:30 +0000
+Received: from MW5PR11MB5764.namprd11.prod.outlook.com
+ ([fe80::25b1:ccb:b06c:ee86]) by MW5PR11MB5764.namprd11.prod.outlook.com
+ ([fe80::25b1:ccb:b06c:ee86%4]) with mapi id 15.20.5676.024; Mon, 10 Oct 2022
+ 09:20:30 +0000
+From:   Xiaolei Wang <xiaolei.wang@windriver.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, ckeepax@opensource.cirrus.com, steve@sk2.org,
+        geert+renesas@glider.be, chi.minghao@zte.com.cn, aford173@gmail.com
+Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: wm8962: Add an event handler for TEMP_HP and TEMP_SPK
+Date:   Mon, 10 Oct 2022 17:20:14 +0800
+Message-Id: <20221010092014.2229246-1-xiaolei.wang@windriver.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SL2P216CA0159.KORP216.PROD.OUTLOOK.COM
+ (2603:1096:101:35::10) To MW5PR11MB5764.namprd11.prod.outlook.com
+ (2603:10b6:303:197::8)
 MIME-Version: 1.0
-References: <20220930094821.31665-1-lukasz.luba@arm.com> <20220930094821.31665-2-lukasz.luba@arm.com>
- <20221010053902.5rofnpzvyynumw3e@vireshk-i7> <3f9a4123-171b-5fa7-f506-341355f71483@arm.com>
-In-Reply-To: <3f9a4123-171b-5fa7-f506-341355f71483@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 10 Oct 2022 11:15:07 +0200
-Message-ID: <CAKfTPtBPqcTm5_-M_Ka3y46yQ2322TmH8KS-QyDbAiKk5B6hEQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] cpufreq: Update CPU capacity reduction in store_scaling_max_freq()
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        linux-pm@vger.kernel.org, Dietmar.Eggemann@arm.com,
-        peterz@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW5PR11MB5764:EE_|SA2PR11MB4844:EE_
+X-MS-Office365-Filtering-Correlation-Id: e1121cc9-d45b-4b48-cd6b-08daaaa0ad25
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Z/dv80mAIDGzwpmg5h8e1e5p+a+nL0xTuMo1xQwpGX7pFjzSrzlm9W4cIwjPHg76pAOGtnz3KgBO9/CqJVFZOBJyOwH7Qa6z8kSkiaS+jXlmaX9LN2m16fIa8TalDy6Uev8yZ6slSU/BQ2bEDi4S9E3WXzQZuGKBvI4ZAR665ZAVqEFYTAq5HQjJWAJ3MFBGHotLrfKuHt/OyKOQ38iPmSmvw7M185yWaWM7uASfitUFqZtTdTpqk/UXGi4p1QUPhKmqIStob630kEi1B+OYnBjg6viH+Y8g68XYO1/D17MGNM+aYWelCFe4bjFY4M2KudeZgc8BI+IyTFhpIZ7C3VyGmN4VKotj7gmgHTkm/XhwgUHHTw4Raj/eSHZ1Bqliv5ESilebFjUsgwfe2hKKcXRNHpwrxfqnBHOYQa6LBmKyM1g1NtjjQNzY3f4Vefoj8IDfrGNsqprD431ve9b299Z18zwVhnsrpvSIwSDbnEm9MAb7ZLt0pbNt8hMq2mj+KBZ1R+KYVlm1euxt1q7kbOUxAP2FVjm6dx/aVWV1XG7yDWLXzeoLk7pCfRYpJLQ8OUSCRNhVhyDtwrScSfqWEYvplvJdfizWr1rnZQwMkqbb6FMkz+nsSvMlvzBqGwN/gHoRGwxp/6uuGHc1w4UlRHCoEhI6/Wv1aCaWA5oVGm7ib5quW0vWdkJaiUWRaTmNOFA7fzCrWmZxCcn9p82Ktde9ENKBqJMLSKQ9ZSVv8n85gQCQco8me+GHpt7v6adiHI1W2HHFJHGh8KAyl/ZN8g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5764.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39840400004)(136003)(376002)(396003)(346002)(366004)(451199015)(2616005)(2906002)(316002)(6512007)(26005)(52116002)(36756003)(38350700002)(38100700002)(8936002)(41300700001)(6506007)(86362001)(6666004)(66556008)(66476007)(7416002)(4326008)(8676002)(44832011)(66946007)(6486002)(5660300002)(478600001)(83380400001)(186003)(1076003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1IatmRPpN6iDCcrGRHglv9iOaKzfGyfYevqykM8kfY1/iVRrUzPhGqGsQOHW?=
+ =?us-ascii?Q?0rVnbjBHbjp8DaGZ/WRLP/CYugdzg88NQta4wcohMQZFH0sufs+8nY2xhcfU?=
+ =?us-ascii?Q?nCUVXzkxQB9HXEBdmc/DdhLa8MtpIPXjJC7hPUaBpQRSVneu1wWdegK5WOej?=
+ =?us-ascii?Q?7kAXyBXUblYB30ZqcvtXM313GL9fHccUrnDSd9j/2z4tpVBgDmdBw+XdE0qw?=
+ =?us-ascii?Q?BsXbdxPHWFcOAnqseC/mS+dZWb/VO2RuThZrG8adz15yeWifGOebnN22Bhcn?=
+ =?us-ascii?Q?xy2FOCVH/eodRs43lWgO93eoaE7IhYcjH06+PLz/iAZWwr8ptN5yThuxfLO5?=
+ =?us-ascii?Q?NhRHZ9fnS/Ms8+xZs4gtQ7DRoqgP3fZhdSZ3YMIfBRZN1AahSiQ77Pn66ElN?=
+ =?us-ascii?Q?toGj11rsx7v+v6tp9nCUSeDEdCgaW+Mp938e9T0OENffwd53OlXKe8yx4zPz?=
+ =?us-ascii?Q?emGi71YUeVIPQ9bEtSwYKSCKqlQbsGDo08WCQMrxoJIL+qMmQbqjIu0IAUmG?=
+ =?us-ascii?Q?krxh2Lo0YAT7Zg9ldcgvxGQNCWbpehquCC0XtEzQK03ttX1JVd+R7YNfc+Rk?=
+ =?us-ascii?Q?qCAyY05X7+SQhuX1eLQ5tOMZScMxTDFRhJ3vcwpObL7es+4qoQNnq+HxRMgz?=
+ =?us-ascii?Q?/1eZ1IgylacRxHlHoc+m4eZa53mVl8s31QuoOZMz80l6EVSAeopGVMZWZnza?=
+ =?us-ascii?Q?0XYlJ/nOiZ8+MWaMHgM2u1oXNmAj9YOoEZCw0gQTg2zUW3jmcza0urk0viG4?=
+ =?us-ascii?Q?b25cgn3xYU5Zem/pHalJoI5VhAm+4ylUs5w930XPdbObkCMV9gO6dD1XG7BT?=
+ =?us-ascii?Q?mbq/fV7EEK3rQZ5bcNkx3QfJ+wW1y/eyjym6XaZw1ge25BkhkiC+7dS1ya2t?=
+ =?us-ascii?Q?VwU+ugwz/usXXx9LGUKyuIy2vU1+S3QKD4R63K3EzREPMLd+lUip1s7kwgXP?=
+ =?us-ascii?Q?aTKvU/NRwIrde4BZyMAizFdWij31qIkUXAUIMUhhTtB2mio8CJELGZKQdFTV?=
+ =?us-ascii?Q?PB+dU1v1GCjTUI2Hy/uxns7/Nq+izOr9VS2jt64wJkCdhPPYMOv5imxBbRIF?=
+ =?us-ascii?Q?ph03SKirzZzZcpcpG/CwP+uuUK1TlL5csvrHe8AFJZlHp2lHrLV1rci2I3xr?=
+ =?us-ascii?Q?44dnZrtSmcnr+L8fbSrCrAj+b6KjbxjQMgnSWUoGTZLwShTlwq6QqKvZqYlR?=
+ =?us-ascii?Q?cOoWWiMxLXOhjVNBeJ1Im2JM03bcmfixWSENXw9PkApzw83KIWE0yUyEjs1b?=
+ =?us-ascii?Q?+TYnl7hehpuOAIRp5f8szZjzEup7dyUO6tIx9AEl1ZC/V+MD2cv8YP4PT1iy?=
+ =?us-ascii?Q?TM8RgN0VgG/YuC2M/1a0ydB2C1pwS97yMCtz1n5XdL1ZYoLkN7jy3AHw+Kq/?=
+ =?us-ascii?Q?kd31g+BfnapB2SyBvOC/WNiHTyx1gnL8eRBxX7vEzqNODbZypGKoMnB9oQp+?=
+ =?us-ascii?Q?pSCG1MbKgaaCGpH+rSSqN27/Nvat7pet0PD8YTp6pZGkGJI3sM6G58V/rYzP?=
+ =?us-ascii?Q?oifNU6g5Zdwzy83O4aeql0nIeppDeTsk3iI2KsS+PfTDK7pdbr+VbRKTFg5X?=
+ =?us-ascii?Q?wmuKtdh+F3RdeXzmQvWUlEpXQzbOMedti+aoe4zf5hVYoXiRJz/jXPYPOXz0?=
+ =?us-ascii?Q?IA=3D=3D?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e1121cc9-d45b-4b48-cd6b-08daaaa0ad25
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5764.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Oct 2022 09:20:30.4489
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tewZnQOOulh/TJoCplv3HlhRaMb1DqUaf88WAomItVzModDzx3pu4w56eSkwBMRJDi/AKiPTD37n/3ycDPonq+APEAsLCz4aruJMhFj2obs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4844
+X-Proofpoint-GUID: ZngNdduJcbt3nucQt9cJzW5ZWFsPzz-e
+X-Proofpoint-ORIG-GUID: ZngNdduJcbt3nucQt9cJzW5ZWFsPzz-e
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-07_04,2022-10-07_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ phishscore=0 spamscore=0 clxscore=1011 priorityscore=1501 mlxlogscore=999
+ mlxscore=0 adultscore=0 malwarescore=0 impostorscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210100056
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Oct 2022 at 11:02, Lukasz Luba <lukasz.luba@arm.com> wrote:
->
->
->
-> On 10/10/22 06:39, Viresh Kumar wrote:
-> > Would be good to always CC Scheduler maintainers for such a patch.
->
-> Agree, I'll do that.
->
-> >
-> > On 30-09-22, 10:48, Lukasz Luba wrote:
-> >> When the new max frequency value is stored, the task scheduler must
-> >> know about it. The scheduler uses the CPUs capacity information in the
-> >> task placement. Use the existing mechanism which provides information
-> >> about reduced CPU capacity to the scheduler due to thermal capping.
-> >>
-> >> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> >> ---
-> >>   drivers/cpufreq/cpufreq.c | 18 +++++++++++++++++-
-> >>   1 file changed, 17 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> >> index 1f8b93f42c76..205d9ea9c023 100644
-> >> --- a/drivers/cpufreq/cpufreq.c
-> >> +++ b/drivers/cpufreq/cpufreq.c
-> >> @@ -27,6 +27,7 @@
-> >>   #include <linux/slab.h>
-> >>   #include <linux/suspend.h>
-> >>   #include <linux/syscore_ops.h>
-> >> +#include <linux/thermal.h>
-> >>   #include <linux/tick.h>
-> >>   #include <linux/units.h>
-> >>   #include <trace/events/power.h>
-> >> @@ -718,6 +719,8 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
-> >>   static ssize_t store_scaling_max_freq
-> >>   (struct cpufreq_policy *policy, const char *buf, size_t count)
-> >>   {
-> >> +    unsigned int frequency;
-> >> +    struct cpumask *cpus;
-> >>      unsigned long val;
-> >>      int ret;
-> >>
-> >> @@ -726,7 +729,20 @@ static ssize_t store_scaling_max_freq
-> >>              return -EINVAL;
-> >>
-> >>      ret = freq_qos_update_request(policy->max_freq_req, val);
-> >> -    return ret >= 0 ? count : ret;
-> >> +    if (ret >= 0) {
-> >> +            /*
-> >> +             * Make sure that the task scheduler sees these CPUs
-> >> +             * capacity reduction. Use the thermal pressure mechanism
-> >> +             * to propagate this information to the scheduler.
-> >> +             */
-> >> +            cpus = policy->related_cpus;
-> >
-> > No need of this, just use related_cpus directly.
-> >
-> >> +            frequency = __resolve_freq(policy, val, CPUFREQ_RELATION_HE);
-> >> +            arch_update_thermal_pressure(cpus, frequency);
-> >
-> > I wonder if using the thermal-pressure API here is the right thing to
-> > do. It is a change coming from User, which may or may not be
-> > thermal-related.
->
-> Yes, I thought the same. Thermal-pressure name might be not the
-> best for covering this use case. I have been thinking about this
-> thermal pressure mechanism for a while, since there are other
-> use cases like PowerCap DTPM which also reduces CPU capacity
-> because of power policy from user-space. We don't notify
-> the scheduler about it. There might be also an issue with virtual
-> guest OS and how that kernel 'sees' the capacity of CPUs.
-> We might try to use this 'thermal-pressure' in the guest kernel
-> to notify about available CPU capacity (just a proposal, not
-> even an RFC, since we are missing requirements, but issues where
-> discussed on LPC 2022 on ChromeOS+Android_guest)
+In wm8962 driver, the WM8962_ADDITIONAL_CONTROL_4 is used as a volatile
+register, but this register mixes a bunch of volatile status bits and a
+bunch of non-volatile control bits. The dapm widgets TEMP_HP and
+TEMP_SPK leverages the control bits in this register. After the wm8962
+probe, the regmap will bet set to cache only mode, then a read error
+like below would be triggered when trying to read the initial power
+state of the dapm widgets TEMP_HP and TEMP_SPK.
+  wm8962 0-001a: ASoC: error at soc_component_read_no_lock
+  on wm8962.0-001a: -16
 
-The User space setting scaling_max_freq is a long scale event and it
-should be considered as a new running environnement instead of a
-transient event. I would suggest updating the EM is and capacity orig
-of the system in this case. Similarly, we rebuild sched_domain with a
-cpu hotplug. scaling_max_freq interface should not be used to do any
-kind of dynamic scaling.
+In order to fix this issue, we add event handler to actually power
+up/down these widgets. With this change, we also need to explicitly
+power off these widgets in the wm8962 probe since they are enabled
+by default.
 
->
-> Android middleware has 'powerhits' (IIRC since ~4-5 versions now)
-> but our capacity in task scheduler is not aware of those reductions.
->
-> IMO thermal-pressure mechanism is good, but the naming convention
-> just might be a bit more 'generic' to cover those two users.
->
-> Some proposals of better naming:
-> 1. Performance capping
-> 2. Capacity capping
-> 3. Performance reduction
->
-> What do you think about changing the name of this and cover
-> those two users: PowerCap DTPM and this user-space cpufreq?
+Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
+---
+ sound/soc/codecs/wm8962.c | 54 +++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 52 insertions(+), 2 deletions(-)
+
+diff --git a/sound/soc/codecs/wm8962.c b/sound/soc/codecs/wm8962.c
+index 398c448ea854..6df06fba4377 100644
+--- a/sound/soc/codecs/wm8962.c
++++ b/sound/soc/codecs/wm8962.c
+@@ -1840,6 +1840,49 @@ SOC_SINGLE_TLV("SPKOUTR Mixer DACR Volume", WM8962_SPEAKER_MIXER_5,
+ 	       4, 1, 0, inmix_tlv),
+ };
+ 
++static int tp_event(struct snd_soc_dapm_widget *w,
++		    struct snd_kcontrol *kcontrol, int event)
++{
++	int ret, reg, val, mask;
++	struct snd_soc_component *component = snd_soc_dapm_to_component(w->dapm);
++
++	ret = pm_runtime_resume_and_get(component->dev);
++	if (ret < 0) {
++		dev_err(component->dev, "Failed to resume device: %d\n", ret);
++		return ret;
++	}
++
++	reg = WM8962_ADDITIONAL_CONTROL_4;
++
++	if (!strcmp(w->name, "TEMP_HP")) {
++		mask = WM8962_TEMP_ENA_HP_MASK;
++		val = WM8962_TEMP_ENA_HP;
++	} else if (!strcmp(w->name, "TEMP_SPK")) {
++		mask = WM8962_TEMP_ENA_SPK_MASK;
++		val = WM8962_TEMP_ENA_SPK;
++	} else {
++		pm_runtime_put(component->dev);
++		return -EINVAL;
++	}
++
++	switch (event) {
++	case SND_SOC_DAPM_POST_PMD:
++		val = 0;
++		fallthrough;
++	case SND_SOC_DAPM_POST_PMU:
++		ret = snd_soc_component_update_bits(component, reg, mask, val);
++		break;
++	default:
++		WARN(1, "Invalid event %d\n", event);
++		pm_runtime_put(component->dev);
++		return -EINVAL;
++	}
++
++	pm_runtime_put(component->dev);
++
++	return 0;
++}
++
+ static int cp_event(struct snd_soc_dapm_widget *w,
+ 		    struct snd_kcontrol *kcontrol, int event)
+ {
+@@ -2140,8 +2183,10 @@ SND_SOC_DAPM_SUPPLY("TOCLK", WM8962_ADDITIONAL_CONTROL_1, 0, 0, NULL, 0),
+ SND_SOC_DAPM_SUPPLY_S("DSP2", 1, WM8962_DSP2_POWER_MANAGEMENT,
+ 		      WM8962_DSP2_ENA_SHIFT, 0, dsp2_event,
+ 		      SND_SOC_DAPM_POST_PMU | SND_SOC_DAPM_PRE_PMD),
+-SND_SOC_DAPM_SUPPLY("TEMP_HP", WM8962_ADDITIONAL_CONTROL_4, 2, 0, NULL, 0),
+-SND_SOC_DAPM_SUPPLY("TEMP_SPK", WM8962_ADDITIONAL_CONTROL_4, 1, 0, NULL, 0),
++SND_SOC_DAPM_SUPPLY("TEMP_HP", SND_SOC_NOPM, 0, 0, tp_event,
++		SND_SOC_DAPM_POST_PMU|SND_SOC_DAPM_POST_PMD),
++SND_SOC_DAPM_SUPPLY("TEMP_SPK", SND_SOC_NOPM, 0, 0, tp_event,
++		SND_SOC_DAPM_POST_PMU|SND_SOC_DAPM_POST_PMD),
+ 
+ SND_SOC_DAPM_MIXER("INPGAL", WM8962_LEFT_INPUT_PGA_CONTROL, 4, 0,
+ 		   inpgal, ARRAY_SIZE(inpgal)),
+@@ -3763,6 +3808,11 @@ static int wm8962_i2c_probe(struct i2c_client *i2c)
+ 	if (ret < 0)
+ 		goto err_pm_runtime;
+ 
++	regmap_update_bits(wm8962->regmap, WM8962_ADDITIONAL_CONTROL_4,
++			    WM8962_TEMP_ENA_HP_MASK, 0);
++	regmap_update_bits(wm8962->regmap, WM8962_ADDITIONAL_CONTROL_4,
++			    WM8962_TEMP_ENA_SPK_MASK, 0);
++
+ 	regcache_cache_only(wm8962->regmap, true);
+ 
+ 	/* The drivers should power up as needed */
+-- 
+2.25.1
+
