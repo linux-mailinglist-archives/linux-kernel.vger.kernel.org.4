@@ -2,106 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8CED5FA073
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F88B5FA0AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbiJJOs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 10:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
+        id S230043AbiJJOz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 10:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiJJOsw (ORCPT
+        with ESMTP id S230015AbiJJOzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 10:48:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695705F12C
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 07:48:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665413330;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tJZd3UB6IhHIssxO7zFtx8iIa2A93YDht882wbaSn9M=;
-        b=UeErqxlV+eAzoHhEWzifdL8eAbepmHsMTg5pPp7m/Zl+yLt8GWUUN9L7/q9WoJk+HKVI3p
-        92Iu27XH5TTWeWBM9yIw0IRD3KcNW8m/Wk5fmKjV1fcntGYo0wXpfgKPZINU/REDpuHUxE
-        ZZymFZpjV0u9texoFah02Svpemq23A4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-74-eX_a1Le3MxWdSHUyYQIZHA-1; Mon, 10 Oct 2022 10:48:47 -0400
-X-MC-Unique: eX_a1Le3MxWdSHUyYQIZHA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E0460101245C;
-        Mon, 10 Oct 2022 14:48:46 +0000 (UTC)
-Received: from cantor.redhat.com (unknown [10.2.16.57])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DB323145F94F;
-        Mon, 10 Oct 2022 14:48:45 +0000 (UTC)
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: [PATCH v2] iommu/vt-d: Clean up si_domain in the init_dmars() error path
-Date:   Mon, 10 Oct 2022 07:48:42 -0700
-Message-Id: <20221010144842.308890-1-jsnitsel@redhat.com>
-In-Reply-To: <20221010065608.281860-1-jsnitsel@redhat.com>
-References: <20221010065608.281860-1-jsnitsel@redhat.com>
+        Mon, 10 Oct 2022 10:55:49 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A2F26138
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 07:55:16 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id j21so4577339qkk.9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 07:55:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oZbLB4JCRD9eMPrz6hZDO0DGi49LxoO2ksZ24HFdMXE=;
+        b=Az8N6bWO/eiut7c+UDPy5gPlcSL4FZPXFgWCJe2LaqDwWujMdxCX/ZD2MmMwHGUKUY
+         NY7EmBcxMvzb82Yo6vI/iDPXUaQcQHH2aukKZnEsJaqPGcnu/06YIYZrMSxUwIU8wm+Y
+         47mASZsLd5TZ4X/6oH87EEHhhEZ5pHWD2ETH4SSPW7PHBOQPQIfTbEoetlauO7x2OVlz
+         L2OEycu4OziI6m33Sp+DS2RcSRbugoxdikbyNmUHJ2VhanKaHxVcIDl1DEcHddBxpM20
+         n3rB/Y7nZh1fHaudAcwonu1paU49Y+WnsbdKniUifzad1wEQXt/7UOAskXH+tIYlpIgv
+         1fUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oZbLB4JCRD9eMPrz6hZDO0DGi49LxoO2ksZ24HFdMXE=;
+        b=MeezNOkJ6UXfnc4mbQOxV5Zzfh2CiM9e54dUhpCwEinMMZQm3iLtZ4QKeFnKY7LDzl
+         gfYx43HfMUxOyQnLZmLcmjKAgC/7Qm1oLPGPnwkhkWE/Xnf3p3WU0jnm8PTBmdTPoWIz
+         Rbi+RvuLQL64ebkBzBbQs5rWp5QirbWSQFnJEbiZlZWdOU4upSNedAaWnVlKr8Xgpn/Q
+         rE0N2DzA9bMjERFNH6mxWdRC0LumuAa1WJEWzD/juisi4hDmimzjVJp1KyWsUJRRR6Go
+         e+MPW8eKb1kmxcoDPT1VB3c9LjEPXSKajzz2fZBcaS5TiWaBaqPB+7BxjcjEWEgn018m
+         +nPA==
+X-Gm-Message-State: ACrzQf0vJ5ivsD0QVcp9wFSpNA3L9/yMg0HaxP7SNrUJwTC5YpBbC2FL
+        6s9nTB/INmD/ayJUUwcwdnWttg==
+X-Google-Smtp-Source: AMsMyM72FXX/gmvm1GIWKH7GJ5BuHjnNd8tECzXDhUfrvSe8aAejLL/3rhQIHb4O5m2pR5KfpYpVbg==
+X-Received: by 2002:a05:620a:34e:b0:6ce:43ea:89b0 with SMTP id t14-20020a05620a034e00b006ce43ea89b0mr12941414qkm.30.1665413715416;
+        Mon, 10 Oct 2022 07:55:15 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id h7-20020ac87447000000b0039a372fbaa5sm2495397qtr.69.2022.10.10.07.55.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Oct 2022 07:55:14 -0700 (PDT)
+Message-ID: <84b6dae0-d503-bbd2-d483-80462917afa4@linaro.org>
+Date:   Mon, 10 Oct 2022 10:53:02 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 1/8] dt-bindings: ingenic: Add support for the JZ4755 SoC
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org
+References: <20221009181338.2896660-1-lis8215@gmail.com>
+ <20221009181338.2896660-2-lis8215@gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221009181338.2896660-2-lis8215@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A splat from kmem_cache_destroy() was seen with a kernel prior to
-commit ee2653bbe89d ("iommu/vt-d: Remove domain and devinfo mempool")
-when there was a failure in init_dmars(), because the iommu_domain
-cache still had objects. While the mempool code is now gone, there
-still is a leak of the si_domain memory if init_dmars() fails. So
-clean up si_domain in the init_dmars() error path.
+On 09/10/2022 14:13, Siarhei Volkau wrote:
+> JZ4755 is a low-power SoC similar to JZ4725B which is already here.
+> 
+> The patch adds compatibles for parts which aren't implemented yet and
+> they are subject of this patch serie.
+> 
+> Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/clock/ingenic,cgu.yaml   | 2 ++
+>  Documentation/devicetree/bindings/dma/ingenic,dma.yaml     | 1 +
+>  Documentation/devicetree/bindings/serial/ingenic,uart.yaml | 4 ++++
 
-Cc: Lu Baolu <baolu.lu@linux.intel.com>
-Cc: Joerg Roedel <joro@8bytes.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Fixes: 86080ccc223a ("iommu/vt-d: Allocate si_domain in init_dmars()")
-Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
----
-v2: Set si_domain to NULL after the memory it points to has been freed.
+How do you plan to merge it? Usually these go via subsystem trees...
 
- drivers/iommu/intel/iommu.c | 5 +++++
- 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 31bc50e538a3..ecc0b05b2796 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -2400,6 +2400,7 @@ static int __init si_domain_init(int hw)
- 
- 	if (md_domain_init(si_domain, DEFAULT_DOMAIN_ADDRESS_WIDTH)) {
- 		domain_exit(si_domain);
-+		si_domain = NULL;
- 		return -EFAULT;
- 	}
- 
-@@ -3042,6 +3043,10 @@ static int __init init_dmars(void)
- 		disable_dmar_iommu(iommu);
- 		free_dmar_iommu(iommu);
- 	}
-+	if (si_domain) {
-+		domain_exit(si_domain);
-+		si_domain = NULL;
-+	}
- 
- 	return ret;
- }
--- 
-2.37.2
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof
 
