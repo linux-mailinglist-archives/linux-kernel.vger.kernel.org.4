@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BEA15F99EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32A645F9966
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232251AbiJJHZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
+        id S231959AbiJJHLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232176AbiJJHZI (ORCPT
+        with ESMTP id S231895AbiJJHLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:25:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CFB1F9ED;
-        Mon, 10 Oct 2022 00:19:45 -0700 (PDT)
+        Mon, 10 Oct 2022 03:11:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAF05E550;
+        Mon, 10 Oct 2022 00:07:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88EE760E9B;
-        Mon, 10 Oct 2022 07:08:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A4E0C433D7;
-        Mon, 10 Oct 2022 07:08:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2947560E75;
+        Mon, 10 Oct 2022 07:06:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DB90C433D6;
+        Mon, 10 Oct 2022 07:06:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665385731;
-        bh=uHkFqy/3KX5ATWrvmJSZU7yLAobRW9HH8hZoqhzThtc=;
+        s=korg; t=1665385615;
+        bh=x0fo3YqqUYZJis+tob3naJg9hU3t1zBGM7M3bSodLh0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zHG3fYuww3zUvRsNCf9qrPasyVw4miQL6yNwX2LsJg279aPqOchw2bpgFdRri8uPj
-         ojbNBD1XsqOH4ddGff5RoQ8d4TvKXb86orOv2MDZWgO3JNqJK5EA/QKV1DxSguhYQ4
-         npRO1qU0Hxvh8ZjApTca94XBAk6zgVXJwBi/ffP0=
+        b=NdgOOdPnwNc3HufrXVxGp+Wcf+LaerSeOz1CB3HxwnWmwfZH2i9sBgVP2qN7WZyy6
+         b6FQQoRogvj30Al1g3cFeUTLtMoaBs1P09jvLUh7ViO/f6omp6Tmh6oxBdCyXS/5fS
+         XuXCi6gfH7zLIVAQ/idzTdua1T9B2J4eTDBXRx9c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jianglei Nie <niejianglei2021@163.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 23/37] net: atlantic: fix potential memory leak in aq_ndev_close()
-Date:   Mon, 10 Oct 2022 09:05:42 +0200
-Message-Id: <20221010070331.884476942@linuxfoundation.org>
+        stable@vger.kernel.org, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>
+Subject: [PATCH 5.19 45/48] bpf: Gate dynptr API behind CAP_BPF
+Date:   Mon, 10 Oct 2022 09:05:43 +0200
+Message-Id: <20221010070334.864403313@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221010070331.211113813@linuxfoundation.org>
-References: <20221010070331.211113813@linuxfoundation.org>
+In-Reply-To: <20221010070333.676316214@linuxfoundation.org>
+References: <20221010070333.676316214@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,42 +54,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jianglei Nie <niejianglei2021@163.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-[ Upstream commit 65e5d27df61283e5390f04b09dc79cd832f95607 ]
+commit 8addbfc7b308d591f8a5f2f6bb24d08d9d79dfbb upstream.
 
-If aq_nic_stop() fails, aq_ndev_close() returns err without calling
-aq_nic_deinit() to release the relevant memory and resource, which
-will lead to a memory leak.
+This has been enabled for unprivileged programs for only one kernel
+release, hence the expected annoyances due to this move are low. Users
+using ringbuf can stick to non-dynptr APIs. The actual use cases dynptr
+is meant to serve may not make sense in unprivileged BPF programs.
 
-We can fix it by deleting the if condition judgment and goto statement to
-call aq_nic_deinit() directly after aq_nic_stop() to fix the memory leak.
+Hence, gate these helpers behind CAP_BPF and limit use to privileged
+BPF programs.
 
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 263ae152e962 ("bpf: Add bpf_dynptr_from_mem for local dynptrs")
+Fixes: bc34dee65a65 ("bpf: Dynptr support for ring buffers")
+Fixes: 13bbbfbea759 ("bpf: Add bpf_dynptr_read and bpf_dynptr_write")
+Fixes: 34d4ef5775f7 ("bpf: Add dynptr data slices")
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Link: https://lore.kernel.org/r/20220921143550.30247-1-memxor@gmail.com
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/aquantia/atlantic/aq_main.c | 3 ---
- 1 file changed, 3 deletions(-)
+ kernel/bpf/helpers.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_main.c b/drivers/net/ethernet/aquantia/atlantic/aq_main.c
-index e22935ce9573..f069312463fb 100644
---- a/drivers/net/ethernet/aquantia/atlantic/aq_main.c
-+++ b/drivers/net/ethernet/aquantia/atlantic/aq_main.c
-@@ -89,11 +89,8 @@ static int aq_ndev_close(struct net_device *ndev)
- 	int err = 0;
- 
- 	err = aq_nic_stop(aq_nic);
--	if (err < 0)
--		goto err_exit;
- 	aq_nic_deinit(aq_nic, true);
- 
--err_exit:
- 	return err;
- }
- 
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 1f961f9982d2..3814b0fd3a2c 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1627,26 +1627,12 @@ bpf_base_func_proto(enum bpf_func_id func_id)
+ 		return &bpf_ringbuf_discard_proto;
+ 	case BPF_FUNC_ringbuf_query:
+ 		return &bpf_ringbuf_query_proto;
+-	case BPF_FUNC_ringbuf_reserve_dynptr:
+-		return &bpf_ringbuf_reserve_dynptr_proto;
+-	case BPF_FUNC_ringbuf_submit_dynptr:
+-		return &bpf_ringbuf_submit_dynptr_proto;
+-	case BPF_FUNC_ringbuf_discard_dynptr:
+-		return &bpf_ringbuf_discard_dynptr_proto;
+ 	case BPF_FUNC_for_each_map_elem:
+ 		return &bpf_for_each_map_elem_proto;
+ 	case BPF_FUNC_loop:
+ 		return &bpf_loop_proto;
+ 	case BPF_FUNC_strncmp:
+ 		return &bpf_strncmp_proto;
+-	case BPF_FUNC_dynptr_from_mem:
+-		return &bpf_dynptr_from_mem_proto;
+-	case BPF_FUNC_dynptr_read:
+-		return &bpf_dynptr_read_proto;
+-	case BPF_FUNC_dynptr_write:
+-		return &bpf_dynptr_write_proto;
+-	case BPF_FUNC_dynptr_data:
+-		return &bpf_dynptr_data_proto;
+ 	default:
+ 		break;
+ 	}
+@@ -1675,6 +1661,20 @@ bpf_base_func_proto(enum bpf_func_id func_id)
+ 		return &bpf_timer_cancel_proto;
+ 	case BPF_FUNC_kptr_xchg:
+ 		return &bpf_kptr_xchg_proto;
++	case BPF_FUNC_ringbuf_reserve_dynptr:
++		return &bpf_ringbuf_reserve_dynptr_proto;
++	case BPF_FUNC_ringbuf_submit_dynptr:
++		return &bpf_ringbuf_submit_dynptr_proto;
++	case BPF_FUNC_ringbuf_discard_dynptr:
++		return &bpf_ringbuf_discard_dynptr_proto;
++	case BPF_FUNC_dynptr_from_mem:
++		return &bpf_dynptr_from_mem_proto;
++	case BPF_FUNC_dynptr_read:
++		return &bpf_dynptr_read_proto;
++	case BPF_FUNC_dynptr_write:
++		return &bpf_dynptr_write_proto;
++	case BPF_FUNC_dynptr_data:
++		return &bpf_dynptr_data_proto;
+ 	default:
+ 		break;
+ 	}
 -- 
-2.35.1
+2.38.0
 
 
 
