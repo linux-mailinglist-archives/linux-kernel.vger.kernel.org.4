@@ -2,128 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B49905F97B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 07:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95FD45F97BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 07:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbiJJFSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 01:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
+        id S231127AbiJJFTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 01:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbiJJFST (ORCPT
+        with ESMTP id S230253AbiJJFTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 01:18:19 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429404D4C4;
-        Sun,  9 Oct 2022 22:18:18 -0700 (PDT)
-Message-ID: <8da9812d-eb84-2a84-321e-ea2826ef8981@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1665379096;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RPNRy9onik+CC8H+dbLBGG/JFwC/8JgqUDFh6TQvjgI=;
-        b=dVajeWBCcCO1PzScOej77248yySjwbUmP9SvX6xR/puhU5jnZMHgj6LOku/wZMaMMQ98Ki
-        yfo+nMCN0uF3CE04ZlxkeKXtYTYNGRGuE1oxwx74rgy0CIYe1/njfj6gTTjQAl8S86mL5O
-        rJsCdqqalBAjnegbuN5Fmk7Xe1Lqvpk=
-Date:   Sun, 9 Oct 2022 22:18:11 -0700
+        Mon, 10 Oct 2022 01:19:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C396152
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 22:19:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AC3D60D14
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 05:19:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE54BC433C1;
+        Mon, 10 Oct 2022 05:19:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665379179;
+        bh=HaGmHno5erThB6Bn0fYha6MKL7fBwTI32d41TKkMykY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rx0Ath96VHMbEDYGaqMT2zQ13EDipPadTQEx2jmANH0z+EqDnRXyJ5jCfUSQR39l4
+         hM2hAOgxZJxZVGzZCm2vfqJ40g4iZNSTl5F/8KKsaaz8oaOrhwNbIOI+0nNr3O8uZm
+         CxUZagacTpkavKoBpguBEz+13vr8LprmR7bbCW7KHKJrVnhd/yi3p7V7oHJ4ZpK4wI
+         PpQLeOF5EYovk6x67XoPzeZ9ao/LHq8wXeWZ7IzoSzZooEOUnoKq3En7fPal+bxmWB
+         n57dJTtkCirZRO8b4/JdSGJQcC+z4mpAllzBL/FSZOndJPt0NyoL/pFejO5BEj15Dy
+         MIJE0rBJWSUBQ==
+Date:   Mon, 10 Oct 2022 10:49:35 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] phy: marvell: phy-mvebu-a3700-comphy: Reset COMPHY
+ registers before USB 3.0 power on
+Message-ID: <Y0OrZ8d4GBC0Cp8q@matsya>
+References: <20220920121154.30115-1-pali@kernel.org>
+ <20220921050300.riwyofdncxscrwe3@shindev>
+ <20220921080557.jdg5wywpa5qxcyo2@pali>
+ <Yy6uaaZUbZsBSqrw@matsya>
+ <20220924083127.oht57ivvsr4obrjr@pali>
+ <20220930234541.hsf6ryketcdukpia@pali>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 4/4] arc: Use generic dump_stack_print_cmdline()
- implementation
-Content-Language: en-US
-To:     Helge Deller <deller@gmx.de>, linux-s390@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>, x86@kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
-References: <20220808130917.30760-1-deller@gmx.de>
- <20220808130917.30760-5-deller@gmx.de>
-Cc:     Alexey Brodkin <abrodkin@synopsys.com>,
-        Shahab Vahedi <Shahab.Vahedi@synopsys.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Vineet Gupta <vineet.gupta@linux.dev>
-In-Reply-To: <20220808130917.30760-5-deller@gmx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220930234541.hsf6ryketcdukpia@pali>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/8/22 06:09, Helge Deller wrote:
-> The process program name and command line is now shown in generic code
-> in dump_stack_print_info(), so drop the arc-specific implementation.
->
-> Signed-off-by: Helge Deller <deller@gmx.de>
+On 01-10-22, 01:45, Pali Rohár wrote:
+> On Saturday 24 September 2022 10:31:27 Pali Rohár wrote:
+> > On Saturday 24 September 2022 12:44:49 Vinod Koul wrote:
+> > > On 21-09-22, 10:05, Pali Rohár wrote:
+> > > > On Wednesday 21 September 2022 05:03:01 Shinichiro Kawasaki wrote:
+> > > > > On Sep 20, 2022 / 14:11, Pali Rohár wrote:
+> > > > > > Turris MOX board with older ARM Trusted Firmware version v1.5 is not able
+> > > > > > to detect any USB 3.0 device connected to USB-A port on Mox-A module after
+> > > > > > commit 0a6fc70d76bd ("phy: marvell: phy-mvebu-a3700-comphy: Remove broken
+> > > > > > reset support"). On the other hand USB 2.0 devices connected to the same
+> > > > > > USB-A port are working fine.
+> > > > > > 
+> > > > > > It looks as if the older firmware configures COMPHY registers for USB 3.0
+> > > > > > somehow incompatibly for kernel driver. Experiments show that resetting
+> > > > > > COMPHY registers via setting SFT_RST auto-clearing bit in COMPHY_SFT_RESET
+> > > > > > register fixes this issue.
+> > > > > > 
+> > > > > > Reset the COMPHY in mvebu_a3700_comphy_usb3_power_on() function as a first
+> > > > > > step after selecting COMPHY lane and USB 3.0 function. With this change
+> > > > > > Turris MOX board can successfully detect USB 3.0 devices again.
+> > > > > > 
+> > > > > > Before the above mentioned commit this reset was implemented in PHY reset
+> > > > > > method, so this is the reason why there was no issue with older firmware
+> > > > > > version then.
+> > > > > > 
+> > > > > > Fixes: 0a6fc70d76bd ("phy: marvell: phy-mvebu-a3700-comphy: Remove broken reset support")
+> > > > > > Reported-by: Marek Behún <kabel@kernel.org>
+> > > > > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > > > > ---
+> > > > > > Shinichiro, could you please check that all USB functionality still
+> > > > > > works correctly on your board?
+> > > > > > ---
+> > > > > 
+> > > > > Sure. TL;DR, this patch works ok for my espressobin v7 board.
+> > > > > 
+> > > > > Tested-by: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+> > > > > 
+> > > > > I prepared base kernel v5.19.10 applying the commit 0a6fc70d76bd. Regardless
+> > > > > whether this fix patch for Turrix MOX board is applied or not, two USB ports on
+> > > > > my esprssobin v7 board worked as expected. I confirmed it by using USB thumb
+> > > > > drive. The drive was detected and its partition was mounted successfully using
+> > > > > either of the two USB ports.
+> > > > 
+> > > > Thank you for testing! Anyway, please check that USB 3.0 device is
+> > > > working fine. Because as I wrote in commit message, on Turris Mox was
+> > > > USB 2.0 device working fine, but USB 3.0 not. And maybe check in system
+> > > 
+> > > update the log now?
+> > 
+> > What do you want to update?
+> 
+> Vinod, could you describe a bit more what is needed to update? Because
+> this patch fixes regression - USB 3.0 support on Turris Mox board.
 
-But that info printing was added back in 2018 by e36df28f532f882.
-I don't think arc is using show_regs_print_info -> dump_stack_print_info 
-yet.
-Or is there a different code path now which calls here ?
+Sorry to have missed this...
 
-> ---
->   arch/arc/kernel/troubleshoot.c | 24 ------------------------
->   1 file changed, 24 deletions(-)
->
-> diff --git a/arch/arc/kernel/troubleshoot.c b/arch/arc/kernel/troubleshoot.c
-> index 7654c2e42dc0..9807e590ee55 100644
-> --- a/arch/arc/kernel/troubleshoot.c
-> +++ b/arch/arc/kernel/troubleshoot.c
-> @@ -51,29 +51,6 @@ static void print_regs_callee(struct callee_regs *regs)
->   		regs->r24, regs->r25);
->   }
->
-> -static void print_task_path_n_nm(struct task_struct *tsk)
-> -{
-> -	char *path_nm = NULL;
-> -	struct mm_struct *mm;
-> -	struct file *exe_file;
-> -	char buf[ARC_PATH_MAX];
-> -
-> -	mm = get_task_mm(tsk);
-> -	if (!mm)
-> -		goto done;
-> -
-> -	exe_file = get_mm_exe_file(mm);
-> -	mmput(mm);
-> -
-> -	if (exe_file) {
-> -		path_nm = file_path(exe_file, buf, ARC_PATH_MAX-1);
-> -		fput(exe_file);
-> -	}
-> -
-> -done:
-> -	pr_info("Path: %s\n", !IS_ERR(path_nm) ? path_nm : "?");
-> -}
-> -
->   static void show_faulting_vma(unsigned long address)
->   {
->   	struct vm_area_struct *vma;
-> @@ -176,7 +153,6 @@ void show_regs(struct pt_regs *regs)
->   	 */
->   	preempt_enable();
+Somehow I misunderstood that the USB 3.0 was not working and log needs
+update... I will apply this once merge window closes
 
-Maybe we remove preempt* as well now (perhaps as a follow up patch) 
-since that was added by f731a8e89f8c78 "ARC: show_regs: lockdep: 
-re-enable preemption" where show_regs -> print_task_path_n_nm -> mmput 
-was triggering lockdep splat which is supposedly removed.
-
->
-> -	print_task_path_n_nm(tsk);
->   	show_regs_print_info(KERN_INFO);
->
->   	show_ecr_verbose(regs);
-> --
-> 2.37.1
->
->
-> _______________________________________________
-> linux-snps-arc mailing list
-> linux-snps-arc@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-snps-arc
-
+-- 
+~Vinod
