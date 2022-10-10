@@ -2,79 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E705F96B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 04:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D44B5F96B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 04:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbiJJCCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 22:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45816 "EHLO
+        id S230367AbiJJCDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 22:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiJJCCm (ORCPT
+        with ESMTP id S230307AbiJJCDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 22:02:42 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5AA53D17;
-        Sun,  9 Oct 2022 19:02:40 -0700 (PDT)
-Received: from kwepemi500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Mm2B72QLdz1P70Y;
-        Mon, 10 Oct 2022 09:58:07 +0800 (CST)
-Received: from huawei.com (10.67.175.34) by kwepemi500022.china.huawei.com
- (7.221.188.64) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 10 Oct
- 2022 10:02:38 +0800
-From:   Ren Zhijie <renzhijie2@huawei.com>
-To:     <laurent.pinchart@ideasonboard.com>,
-        <tomi.valkeinen+renesas@ideasonboard.com>, <airlied@gmail.com>,
-        <daniel@ffwll.ch>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-renesas-soc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Ren Zhijie <renzhijie2@huawei.com>
-Subject: [PATCH -next] drm/rcar-du: Fix undefined reference error
-Date:   Mon, 10 Oct 2022 01:58:56 +0000
-Message-ID: <20221010015856.248029-1-renzhijie2@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Sun, 9 Oct 2022 22:03:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34C253D17
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 19:03:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665367384;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=A9D5wip/7UzsP48lsG4dlIjjptcfG4NcBff3j6uyHfY=;
+        b=dQE5qXUsl6JHhbsc4RO2wDzahWnikE+XqHxJoe7zwNFv7Xyvh/0OT2fOct3M1wVGzCLen7
+        E4fZNez8G6DAqDMRnf21CCekZ7CoHoXb9yLp00u7r1vkqKwFlxlr9WfoVxijGij70suYNr
+        jK5Im7Wd5na5vFDK4a9U5vNtskCjMMc=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-320-Mjw0EbCpPH6kHSyYf6oYhQ-1; Sun, 09 Oct 2022 22:03:00 -0400
+X-MC-Unique: Mjw0EbCpPH6kHSyYf6oYhQ-1
+Received: by mail-pl1-f199.google.com with SMTP id p15-20020a170902e74f00b00181927a941fso2194308plf.17
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 19:03:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A9D5wip/7UzsP48lsG4dlIjjptcfG4NcBff3j6uyHfY=;
+        b=MMnlNrAaPuyA3Lt5769pknSdShXPh4uoU0vmmRnW4T6kgnAwMUmJFXwLki9C5NA5nF
+         ET030z27p4flno7AWRvuuRwcwI9jDf7aNwGk+P47AuXXxjo4JqZR3FThYMTYkDnta8gZ
+         BENkEhpFutlP/Uo7/nE+YUrkNMYNXUU71yWBYJ48h7PNSBu4sjSGZOby/W0xhWmkb6Qd
+         a8x0lXcB6w0q+cZSIzFogzEu4PAUEizleNYAMc9UQF0AtpaG8pcd7Nq2jjCg9Umh2AKT
+         pDQtXwcWUgRHA/FEe4mfd1iGiovepBn44MyP97QuTFbX3FhpdNQc6EXdY2qPexDuaxjE
+         CmKQ==
+X-Gm-Message-State: ACrzQf0JAO7fji6A+t5NTno5b/5YrH5KGLlhXa4wICCRN0uclPhHTXko
+        hRz1+wAuilC+VoLuAREJMxvoMgaKJK+66XY3EV8ZQIz6uSRd76trCdojtJi663+q9NVvBcidbTn
+        5145QdHqzjbcLRV1X/oORYHB4JGU6PqxaaYE07yUfD3RXFy6VX110+MRLtGNznvCUm9bNooySAQ
+        ==
+X-Received: by 2002:a17:903:11cc:b0:178:aec1:18c3 with SMTP id q12-20020a17090311cc00b00178aec118c3mr17054755plh.91.1665367379274;
+        Sun, 09 Oct 2022 19:02:59 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM52Q497ExWyGQB53YxhyR85Pul+6YxQWQ9Mz57/zd++9ekxn6RSUEmUXpw/wZAKRHHG71trjQ==
+X-Received: by 2002:a17:903:11cc:b0:178:aec1:18c3 with SMTP id q12-20020a17090311cc00b00178aec118c3mr17054717plh.91.1665367378848;
+        Sun, 09 Oct 2022 19:02:58 -0700 (PDT)
+Received: from [10.72.12.247] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id n9-20020a170903110900b00176cdd80148sm5291984plh.305.2022.10.09.19.02.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Oct 2022 19:02:58 -0700 (PDT)
+Subject: Re: [PATCH] fs/ceph/super: add mount options "snapdir{mode,uid,gid}"
+To:     Max Kellermann <max.kellermann@ionos.com>,
+        Jeff Layton <jlayton@kernel.org>
+Cc:     idryomov@gmail.com, jlayton@kernel.org, ceph-devel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220927120857.639461-1-max.kellermann@ionos.com>
+ <88f8941f-82bf-5152-b49a-56cb2e465abb@redhat.com>
+ <CAKPOu+88FT1SeFDhvnD_NC7aEJBxd=-T99w67mA-s4SXQXjQNw@mail.gmail.com>
+ <75e7f676-8c85-af0a-97b2-43664f60c811@redhat.com>
+ <CAKPOu+-rKOVsZ1T=1X-T-Y5Fe1MW2Fs9ixQh8rgq3S9shi8Thw@mail.gmail.com>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <baf42d14-9bc8-93e1-3d75-7248f93afbd2@redhat.com>
+Date:   Mon, 10 Oct 2022 10:02:51 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.34]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500022.china.huawei.com (7.221.188.64)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAKPOu+-rKOVsZ1T=1X-T-Y5Fe1MW2Fs9ixQh8rgq3S9shi8Thw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If DRM_RCAR_MIPI_DSI=m and DRM_RCAR_DU=y,
-gcc complained about undefined reference :
 
-drivers/gpu/drm/rcar-du/rcar_du_crtc.o: In function `rcar_du_crtc_atomic_enable':
-rcar_du_crtc.c:(.text+0x1958): undefined reference to `rcar_mipi_dsi_pclk_enable'
-drivers/gpu/drm/rcar-du/rcar_du_crtc.o: In function `rcar_du_crtc_atomic_disable':
-rcar_du_crtc.c:(.text+0x3cf4): undefined reference to `rcar_mipi_dsi_pclk_disable'
+On 09/10/2022 18:27, Max Kellermann wrote:
+> On Sun, Oct 9, 2022 at 10:43 AM Xiubo Li <xiubli@redhat.com> wrote:
+>> I mean CEPHFS CLIENT CAPABILITIES [1].
+> I know that, but that's suitable for me. This is client-specific, not
+> user (uid/gid) specific.
+>
+> In my use case, a server can run unprivileged user processes which
+> should not be able create snapshots for their own home directory, and
+> ideally they should not even be able to traverse into the ".snap"
+> directory and access the snapshots created of their home directory.
+> Other (non-superuser) system processes however should be able to
+> manage snapshots. It should be possible to bind-mount snapshots into
+> the user's mount namespace.
+>
+> All of that is possible with my patch, but impossible with your
+> suggestion. The client-specific approach is all-or-nothing (unless I
+> miss something vital).
+>
+>> The snapdir name is a different case.
+> But this is only about the snapdir. The snapdir does not exist on the
+> server, it is synthesized on the client (in the Linux kernel cephfs
+> code).
 
-To fix this error, add select DRM_RCAR_MIPI_DSI dependency to config DRM_RCAR_DU.
+This could be applied to it's parent dir instead as one metadata in mds 
+side and in client side it will be transfer to snapdir's metadata, just 
+like what the snapshots.
 
-Fixes: 957fe62d7d15 ("drm: rcar-du: Fix DSI enable & disable sequence")
-Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
----
- drivers/gpu/drm/rcar-du/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+But just ignore this approach.
 
-diff --git a/drivers/gpu/drm/rcar-du/Kconfig b/drivers/gpu/drm/rcar-du/Kconfig
-index c959e8c6be7d..23f6aa70f4cf 100644
---- a/drivers/gpu/drm/rcar-du/Kconfig
-+++ b/drivers/gpu/drm/rcar-du/Kconfig
-@@ -7,6 +7,7 @@ config DRM_RCAR_DU
- 	select DRM_KMS_HELPER
- 	select DRM_GEM_DMA_HELPER
- 	select VIDEOMODE_HELPERS
-+	select DRM_RCAR_MIPI_DSI
- 	help
- 	  Choose this option if you have an R-Car chipset.
- 	  If M is selected the module will be called rcar-du-drm.
--- 
-2.17.1
+>> But your current approach will introduce issues when an UID/GID is reused after an user/groud is deleted ?
+> The UID I would specify is one which exists on the client, for a
+> dedicated system user whose purpose is to manage cephfs snapshots of
+> all users. The UID is created when the machine is installed, and is
+> never deleted.
+
+This is an ideal use case IMO.
+
+I googled about reusing the UID/GID issues and found someone has hit a 
+similar issue in their use case.
+
+>> Maybe the proper approach is the posix acl. Then by default the .snap dir will inherit the permission from its parent and you can change it as you wish. This permission could be spread to all the other clients too ?
+> No, that would be impractical and unreliable.
+> Impractical because it would require me to walk the whole filesystem
+> tree and let the kernel synthesize the snapdir inode for all
+> directories and change its ACL;
+
+No, it don't have to. This could work simply as the snaprealm hierarchy 
+thing in kceph.
+
+Only the up top directory need to record the ACL and all the descendants 
+will point and use it if they don't have their own ACLs.
+
+>   impractical because walking millions
+> of directories takes longer than I am willing to wait.
+> Unreliable because there would be race problems when another client
+> (or even the local client) creates a new directory. Until my local
+> "snapdir ACL daemon" learns about the existence of the new directory
+> and is able to update its ACL, the user can already have messed with
+> it.
+
+For multiple clients case I think the cephfs capabilities [3] could 
+guarantee the consistency of this. While for the single client case if 
+before the user could update its ACL just after creating it someone else 
+has changed it or messed it up, then won't the existing ACLs have the 
+same issue ?
+
+[3] https://docs.ceph.com/en/quincy/cephfs/capabilities/
+
+
+> Both of that is not a problem with my patch.
+>
+Jeff,
+
+Any idea ?
+
+Thanks!
+
+- Xiubo
+
 
