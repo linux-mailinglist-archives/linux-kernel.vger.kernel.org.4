@@ -2,77 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8524A5FA3C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 20:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D0C5FA3D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 20:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiJJSzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 14:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        id S229537AbiJJS5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 14:57:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiJJSyz (ORCPT
+        with ESMTP id S229943AbiJJS4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 14:54:55 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5CE14003;
-        Mon, 10 Oct 2022 11:54:53 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73:8b7:7001:c8aa:b65f])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 690762D5;
-        Mon, 10 Oct 2022 18:54:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 690762D5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1665428093; bh=RPD/xnSjj1tDtInobws6ol1rUKg0qLDyurC4L4goiCM=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=LGbmbTZ3tJBotifMgJY//blSpOdICDlOwKYJ+SyoHs2QoT8JxFwVBWuF4RVo96+ar
-         aVi5kSQ7iEWogBk1myFwjeTN7G2MS8maASVGcg1QFYKA6YMDezXnF7ueKnuzzCENpA
-         1R7TjusX+KU7qrbsDQlbuNC9hatccUs6cgQvARB0DWUrExH1Ytz/BrxkEUaKoWX02l
-         74AnGdzKlnZvejd0CZKSHl0a677FIqY20BxQ7LqB51epYwnprySvsrYB5+ABnJrfDB
-         lAkwW8SKVXzELzcrhseVtJ4FhXkC8pJtVbCEYXgPyiIAtFCm2kxc6YgvB8KVFX9XYp
-         jjBSRtXk3XMKw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Yixuan Cao <caoyixuan2019@email.szu.edu.cn>,
-        akpm@linux-foundation.org
-Cc:     akiyks@gmail.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rppt@kernel.org,
-        skhan@linuxfoundation.org, yejiajian2018@email.szu.edu.cn,
-        zhangyinan2019@email.szu.edu.cn,
-        Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
-Subject: Re: [PATCH v4] Documentation/mm/page_owner.rst: delete frequently
- changing experimental data
-In-Reply-To: <20221005145525.10359-1-caoyixuan2019@email.szu.edu.cn>
-References: <89aed08f-1e0b-258c-516d-97a30fd02840@gmail.com>
- <20221005145525.10359-1-caoyixuan2019@email.szu.edu.cn>
-Date:   Mon, 10 Oct 2022 12:54:52 -0600
-Message-ID: <874jwbqzk3.fsf@meer.lwn.net>
+        Mon, 10 Oct 2022 14:56:43 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2D0564EE
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 11:56:39 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id a5so2177292qkl.6
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 11:56:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=mfdinePb/h+FQryCI1VnJk1iVMwwW9XbS8GRZ1SXnEM=;
+        b=Y1FJnNxKCCmUeBjERypSSpOT5hLZIa3B6ZfL7TmeBlDcYn7G53u+wzaqGztD4xstS6
+         H56NjZrTnnAs/mwbv/53uHY1GhzxoFxOLWj+6+255TR+XIgzukZ2wrhnTPfXH4rpl0ll
+         x20RYa7gkPKPOAB+2GjUbYRf86UKilK/+RP5mPzo1iTwxgbIcI/NL1hAwcQva+CI+c58
+         wXQg1m452/c0qjzqE/xGhDgd9xycIGhUX5tiX7SJhqTWnYftDSAsnXqQ0qceqqSNwxFf
+         a0gsQbHVGj7OQXKVN8LpCmOTHmcWT/lMPoHErC7k7GBXJjyyytJ8h/nDzI7STIfMcpme
+         CGHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mfdinePb/h+FQryCI1VnJk1iVMwwW9XbS8GRZ1SXnEM=;
+        b=yON8UXI0XiisdQVE2AZbXF8ZKvl2IYM53jpUOg0MKvyeZ3R6qp3SiJr1wacpSKEAtT
+         kAOYe2e2D6Hp9XBywKsYbMnhi7gwZyMCTpxmZ77STQUYhUHSpvqLIuXKMV/Fy+X8qtE8
+         8VWl9ykY9T3X15C8vRUOWa0YUw+ojBf92/ryXWYmzynd+bM3fEjRh29h/aZAYqA80/BI
+         aH1/8beFBuH0w6+my/OBrJDbEP3p3ENJ7Wm0w5Vne1wCcYOGxRD23WY4LW+wo/FK22Ad
+         uPumpyaxXJ4yWcUfw2MRBU4quKlI1LdlMMg9wTEFkg+8k39NM94DD5n/KkrxcqRWat0r
+         s0qw==
+X-Gm-Message-State: ACrzQf3p8gD7Mu0Li1GfKQk0NEuCNWGVtZ7sUdr6oRY/T6TPpBm3dEuv
+        T4qB3YS3C4JmY8v0KC7PtIHn4w==
+X-Google-Smtp-Source: AMsMyM4cq1ZiSompu2ffs6ddf24dPwkk/2Lnq1GVt1O6/KQn3scUPTnTqdwZ/uWcjL7riJrPyy9iDQ==
+X-Received: by 2002:a05:620a:4397:b0:6e1:345a:e080 with SMTP id a23-20020a05620a439700b006e1345ae080mr13783062qkp.677.1665428198984;
+        Mon, 10 Oct 2022 11:56:38 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
+        by smtp.gmail.com with ESMTPSA id j8-20020a05620a288800b006bb2cd2f6d1sm10684472qkp.127.2022.10.10.11.56.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 11:56:38 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1ohxx7-0012V5-CO;
+        Mon, 10 Oct 2022 15:56:37 -0300
+Date:   Mon, 10 Oct 2022 15:56:37 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Leon Romanovsky <leon@kernel.org>, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org,
+        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas_os@shipmail.org>,
+        Qiang Yu <yuq825@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Ruhl Michael J <michael.j.ruhl@intel.com>
+Subject: Re: [PATCH v6 10/21] RDMA/umem: Prepare to dynamic dma-buf locking
+ specification
+Message-ID: <Y0Rq5Zb9+63++2z/@ziepe.ca>
+References: <20220928191600.5874-1-dmitry.osipenko@collabora.com>
+ <20220928191600.5874-11-dmitry.osipenko@collabora.com>
+ <e3ba146d-8153-add5-2cf4-02fe6519abee@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e3ba146d-8153-add5-2cf4-02fe6519abee@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yixuan Cao <caoyixuan2019@email.szu.edu.cn> writes:
+On Sun, Oct 09, 2022 at 03:08:56AM +0300, Dmitry Osipenko wrote:
+> On 9/28/22 22:15, Dmitry Osipenko wrote:
+> > Prepare InfiniBand drivers to the common dynamic dma-buf locking
+> > convention by starting to use the unlocked versions of dma-buf API
+> > functions.
+> > 
+> > Acked-by: Christian König <christian.koenig@amd.com>
+> > Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> > ---
+> >  drivers/infiniband/core/umem_dmabuf.c | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/infiniband/core/umem_dmabuf.c b/drivers/infiniband/core/umem_dmabuf.c
+> > index 04c04e6d24c3..43b26bc12288 100644
+> > --- a/drivers/infiniband/core/umem_dmabuf.c
+> > +++ b/drivers/infiniband/core/umem_dmabuf.c
+> > @@ -26,7 +26,8 @@ int ib_umem_dmabuf_map_pages(struct ib_umem_dmabuf *umem_dmabuf)
+> >  	if (umem_dmabuf->sgt)
+> >  		goto wait_fence;
+> >  
+> > -	sgt = dma_buf_map_attachment(umem_dmabuf->attach, DMA_BIDIRECTIONAL);
+> > +	sgt = dma_buf_map_attachment_unlocked(umem_dmabuf->attach,
+> > +					      DMA_BIDIRECTIONAL);
+> >  	if (IS_ERR(sgt))
+> >  		return PTR_ERR(sgt);
+> >  
+> > @@ -102,8 +103,8 @@ void ib_umem_dmabuf_unmap_pages(struct ib_umem_dmabuf *umem_dmabuf)
+> >  		umem_dmabuf->last_sg_trim = 0;
+> >  	}
+> >  
+> > -	dma_buf_unmap_attachment(umem_dmabuf->attach, umem_dmabuf->sgt,
+> > -				 DMA_BIDIRECTIONAL);
+> > +	dma_buf_unmap_attachment_unlocked(umem_dmabuf->attach, umem_dmabuf->sgt,
+> > +					  DMA_BIDIRECTIONAL);
+> >  
+> >  	umem_dmabuf->sgt = NULL;
+> >  }
+> 
+> Jason / Leon,
+> 
+> Could you please ack this patch?
 
-> The kernel size changes due to many factors, such as compiler
-> version, configuration, and the build environment. This makes
-> size comparison figures irrelevant to reader's setup.
->
-> Remove these figures and describe the effects of page owner
-> to the kernel size in general instead.
->
-> Thanks for Jonathan Corbet, Bagas Sanjaya and Mike Rapoport's
-> constructive suggestions.
->
-> Signed-off-by: Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
-> ---
->  Documentation/mm/page_owner.rst | 20 ++++----------------
->  1 file changed, 4 insertions(+), 16 deletions(-)
+You probably don't need it, for something so simple, but sure
 
-Applied, thanks.
+Acked-by: Jason Gunthorpe <jgg@nvidia.com>
 
-jon
+Jason
