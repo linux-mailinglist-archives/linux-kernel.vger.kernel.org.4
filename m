@@ -2,76 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65915FA78C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 00:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B37B25FA78D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 00:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbiJJWIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 18:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
+        id S229644AbiJJWJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 18:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiJJWId (ORCPT
+        with ESMTP id S229464AbiJJWJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 18:08:33 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8965F74B83;
-        Mon, 10 Oct 2022 15:08:27 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id i9so7934549qvo.0;
-        Mon, 10 Oct 2022 15:08:27 -0700 (PDT)
+        Mon, 10 Oct 2022 18:09:54 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5740BC2F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 15:09:51 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id h29so2192570vsq.9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 15:09:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yA36micw3BB5itFGo+j/ax6sHQQCHHk83ArO+ZpWJBA=;
-        b=YL0are/S2uwkPzzcqLaf//Fp312iwfJyPpED0y9zdW8IA0uKX/Nc6tRL1m0vQXt4rt
-         Fu+btg4YNvnwfGaec/yVZ4FrHb0e20nqFGRxA410H9mVTnMrJqyzNTJjREkpv1oGNQRA
-         Br3ZFRma6/qOkHlMkiu9ussUxajjaiFdCDbHLD90N+tpspPQHB0u5PV2jxJtseVjDoWv
-         mwTIZduErYFkNFdG7CEiCshLAPIzV6+HO50oyluzfh30Xmax8PUVLpbt+n0ea0uvPTYK
-         Ed59G+E46xX0NPIcTfC47AeE/YZKGSOizt0j9Hgzx3tB8BG10sEoJQB+sxpmuLuc72Jm
-         Wfyw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=to0E26B0eTn0BoLxAdeG5AQBNHUdUnEcc0Lu0kThXsE=;
+        b=Gc2gJXUM7PqQFT3EpZSgTh3k453br1ZR08P12DPdnARuGUmO86kYnjqOIfMlQYxbjr
+         xob1LQGBIBqlSMv2U+jyVZqM1NXSdkCvL1WITUe3UwPi6/xgHyHFRd2XEY4tVX1vOtGN
+         qTpI+yUgYMmpxJVab2Wq7HdYGsPWxYVciKBQecmKIO4Dv4vS7xDIbRs13OKBeKAFoZnI
+         kpI9v8zlM+4xs3War7HIaCTXvXiSmQBAHoCm7qx2aYcS0Iu/Y6W92LaJJP59pVHw8fvV
+         d8nrVgnHU+VCuOrfxLxEiOPC36+nAFQM1J0OQyZC+0S8QbAoUIw4tG554zJB6qNSFH3q
+         4UvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yA36micw3BB5itFGo+j/ax6sHQQCHHk83ArO+ZpWJBA=;
-        b=yXfXczN5OAWRNnX4Wa4rrwEBbFCKPSPZ2EZ7jqsd826UQRLCfvKl7icDb+cH5FgrKh
-         xkfk3wp0mQnSLaZxcJH7hFg/K6W6WINX2yhYtbqqk9KODnNMbvK+Qg0LWR13Hi/I518x
-         zXtpcHPQ2LG2Mxf+gjWWWqns1fwru7DjOaDPFK5uVbTOvN9kGcfaNTlX76szs6VLcnLf
-         wqEZMO7cKJVgWKr8Z5VSRkLfAoj3PUShWgfgTviaqBDwhWGufbX6lWXslXZSK16JaCVQ
-         QgZBa8VJzIeF7/5SXnE7KB53QMvoTNPYQwn8ctM8lhvtgy93zrzjarYvyjiM0LR0bR81
-         ucMw==
-X-Gm-Message-State: ACrzQf3DjXVy6coVIoIzcOvfCR+jGeUyEX6qCSNYUSmg07Ynh0mV5KGR
-        Eksu4UTPdmMQYfqfqSQsvB8=
-X-Google-Smtp-Source: AMsMyM5YwAOLNaTjardD5q/kZ/Vzp3E2MAqlGyBcDVBU/xpJ65WvSSdpM26tY/eXD/h5Jq3ivlXjqQ==
-X-Received: by 2002:ad4:5b8b:0:b0:4b1:cd9a:e1cd with SMTP id 11-20020ad45b8b000000b004b1cd9ae1cdmr16784613qvp.7.1665439706310;
-        Mon, 10 Oct 2022 15:08:26 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id y14-20020ac87c8e000000b0035ce8965045sm4581457qtv.42.2022.10.10.15.08.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 15:08:25 -0700 (PDT)
-Message-ID: <0229091b-da13-f386-d0f9-1350adb09d3a@gmail.com>
-Date:   Mon, 10 Oct 2022 15:08:23 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=to0E26B0eTn0BoLxAdeG5AQBNHUdUnEcc0Lu0kThXsE=;
+        b=5EZCiVtoIdqQcZpmdPmmOQW2960TKAYOfsPY05J2a4yIpK6AIJ7pBkGOJQ7WdLG/rw
+         zmceANDbj+8CjnqC94XYqP49X/7CgoqxITa2lCb+vc5/XeOn5s6toV/A/oeO8fUmHBQ0
+         JdqXNI+SacgakY296oGcZaIWIfFNj+hfOu+AkayAPkRHUAhprAxFlts1eWccp/ybKV/y
+         4ugtDRtij2oVfrlBdXVv4wyF/XS1fKmNJDlrxfrLgnpCgM8yp+aZma0KjPYZIpu8wQqM
+         aJx4XdTAq/KUr2GiE+OyrxwHbiCciH22X1pnlMXrmZlaQnnq1yVojGFwRUrDvfnDHp7S
+         Itfw==
+X-Gm-Message-State: ACrzQf2zSmOj3+xhz5MlhDdVNqXHseoQAU2PQjvaNKM3ueKDs3SfKNzh
+        i4rKRqiGRCzMo5az0Sf2f0HzzsRECZjNYVF/C0FjuQ==
+X-Google-Smtp-Source: AMsMyM5jZpmN+RoyV1Xh72dXpXtBbcQJONuTh8MgttO6aBPx0KMJ2/HT//ezZZscw/eTnQEhy8C8PdayGex+oq108eQ=
+X-Received: by 2002:a05:6102:3309:b0:39a:e5eb:8508 with SMTP id
+ v9-20020a056102330900b0039ae5eb8508mr10379538vsc.65.1665439790785; Mon, 10
+ Oct 2022 15:09:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5.15 00/35] 5.15.73-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-References: <20221010191226.167997210@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221010191226.167997210@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220824141802.23395-1-mgorman@techsingularity.net>
+ <CAOUHufbxqn5gjYxnZDLsRtaKgtauFXwL+qq_829Eg5PSJaSPgg@mail.gmail.com>
+ <20221010142208.ctsasloh7hbudupc@techsingularity.net> <a7092c47-63ef-200a-8968-7e3402e19a38@suse.cz>
+In-Reply-To: <a7092c47-63ef-200a-8968-7e3402e19a38@suse.cz>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Mon, 10 Oct 2022 16:09:14 -0600
+Message-ID: <CAOUHufYck0whrXAYBN9mO6CTairoJ0cG9YyU79pMPvYjrXLrOg@mail.gmail.com>
+Subject: Re: [PATCH 1/1] mm/page_alloc: Leave IRQs enabled for per-cpu page allocations
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, Vlastimil Babka <vbabka@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,28 +76,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/10/22 12:12, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.73 release.
-> There are 35 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 12 Oct 2022 19:12:17 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.73-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Mon, Oct 10, 2022 at 2:45 PM Vlastimil Babka <vbabka@suse.cz> wrote:
+>
+> On 10/10/22 16:22, Mel Gorman wrote:
+> > On Wed, Aug 24, 2022 at 10:58:26PM -0600, Yu Zhao wrote:
+> >> On Wed, Aug 24, 2022 at 8:18 AM Mel Gorman <mgorman@techsingularity.net> wrote:
+> >>>
+> >>> The pcp_spin_lock_irqsave protecting the PCP lists is IRQ-safe as a task
+> >>> allocating from the PCP must not re-enter the allocator from IRQ context.
+> >>> In each instance where IRQ-reentrancy is possible, the lock is acquired using
+> >>> pcp_spin_trylock_irqsave() even though IRQs are disabled and re-entrancy
+> >>> is impossible.
+> >>>
+> >>> Demote the lock to pcp_spin_lock avoids an IRQ disable/enable in the common
+> >>> case at the cost of some IRQ allocations taking a slower path. If the PCP
+> >>> lists need to be refilled, the zone lock still needs to disable IRQs but
+> >>> that will only happen on PCP refill and drain. If an IRQ is raised when
+> >>> a PCP allocation is in progress, the trylock will fail and fallback to
+> >>> using the buddy lists directly. Note that this may not be a universal win
+> >>> if an interrupt-intensive workload also allocates heavily from interrupt
+> >>> context and contends heavily on the zone->lock as a result.
+> >>
+> >> Hi,
+> >>
+> >> This patch caused the following warning. Please take a look.
+> >>
+> >> Thanks.
+> >>
+> >>    WARNING: inconsistent lock state
+> >>    6.0.0-dbg-DEV #1 Tainted: G S      W  O
+> >>    --------------------------------
+> >
+> > I finally found time to take a closer look at this and I cannot reproduce
+> > it against 6.0. What workload triggered the warning, on what platform and
+> > can you post the kernel config used please? It would also help if you
+> > can remember what git commit the patch was tested upon.
+> >
+> > Thanks and sorry for the long delay.
+>
+> I didn't (try to) reproduce this, but FWIW the report looked legit to
+> me, as after the patch, pcp_spin_trylock() has to be used for both
+> allocation and freeing to be IRQ safe. free_unref_page() uses it, so
+> it's fine. But as the stack trace in the report shows,
+> free_unref_page_list() does pcp_spin_lock() and not _trylock, and that's
+> IMHO the problem.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+If this is not the case, please let me know and I'll try repro again.
