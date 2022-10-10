@@ -2,122 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB905FA672
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 641095FA677
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiJJUjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 16:39:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
+        id S230060AbiJJUlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 16:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230345AbiJJUin (ORCPT
+        with ESMTP id S229453AbiJJUlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 16:38:43 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E50356CC;
-        Mon, 10 Oct 2022 13:38:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Hjyn8dqoIEtIO27l3MzacOUF4IDEr7dDUJYhUQFgMXo=; b=F8dZ+DVrjvmQ0TStDXpOGnk/sd
-        O/3IcPkTalZQK7fEPgfOWlCFlN7txtkkDwqyn5jB+tA8vL1S9pa60z8zmuKzX8+8bxTIALJSSB1iE
-        7Njin9Y1I/oMulkxaZTXJn+6v7hNxpxR8bsEp4n2UADO5fPG54ay3+uGdf4UbBC2UycE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ohzXV-001eex-BB; Mon, 10 Oct 2022 22:38:17 +0200
-Date:   Mon, 10 Oct 2022 22:38:17 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Soha Jin <soha@lohu.info>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yangyu Chen <cyy@cyyself.name>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] net: stmmac: use fwnode instead of of to configure
- driver
-Message-ID: <Y0SCuaVpAnbpMk72@lunn.ch>
-References: <20221009162247.1336-1-soha@lohu.info>
- <20221009162247.1336-2-soha@lohu.info>
+        Mon, 10 Oct 2022 16:41:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D957A1C0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 13:41:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 262606102A
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 20:41:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26D49C43141;
+        Mon, 10 Oct 2022 20:41:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665434472;
+        bh=riedfV3ivnQOAQhla+tYKGqWnDDbhtLkrw7/hfZiCu8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NqemqHQAvm/ubhTbk9lXHu0KKl1XuOkEM0lHnwax/S3sTUYK8Sx20jbBPj8ra2FWL
+         4MFgcE+deQsZmQRNslrTZPxw6ayeQqgQd6FAMx6ZR2715dWsgCiJlmOtkneWcqinxC
+         OuQ2IL81j9fDRcdT/aC+QQhcV7MjTGSIQDIGKUva6qLbxk8KFPoVxB8Oy7zBxMyomS
+         W3/i9QcvufEvqDdFP/iGTlUV6THTXyIQOJ4xO0AHw3Blu/detNT15M1q0tDK2cnxEn
+         ZuGokmmrx17QGJvGKuWrd7qrvLo9xLQnRTnB2KpM6QpIj9E1/mNvJIOLyGHBK3M/7v
+         NsxBEZkfUn9VQ==
+Date:   Mon, 10 Oct 2022 21:41:08 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Cleo John <waterdev@galaxycrow.de>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] riscv: fix styling in ucontext header
+Message-ID: <Y0SDZEXQ5kXGJZLh@spud>
+References: <20221010182848.GA28029@watet-ms7b87>
+ <Y0RpkI66dwEKD9Kw@spud>
+ <5631093.DvuYhMxLoT@watet-ms7b87>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221009162247.1336-2-soha@lohu.info>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <5631093.DvuYhMxLoT@watet-ms7b87>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -	axi->axi_lpi_en = of_property_read_bool(np, "snps,lpi_en");
-> -	axi->axi_xit_frm = of_property_read_bool(np, "snps,xit_frm");
-> -	axi->axi_kbbe = of_property_read_bool(np, "snps,axi_kbbe");
-> -	axi->axi_fb = of_property_read_bool(np, "snps,axi_fb");
-> -	axi->axi_mb = of_property_read_bool(np, "snps,axi_mb");
-> -	axi->axi_rb =  of_property_read_bool(np, "snps,axi_rb");
-> +	axi->axi_lpi_en = fwnode_property_read_bool(fwnode, "snps,lpi_en");
-> +	axi->axi_xit_frm = fwnode_property_read_bool(fwnode, "snps,xit_frm");
-> +	axi->axi_kbbe = fwnode_property_read_bool(fwnode, "snps,axi_kbbe");
-> +	axi->axi_fb = fwnode_property_read_bool(fwnode, "snps,axi_fb");
-> +	axi->axi_mb = fwnode_property_read_bool(fwnode, "snps,axi_mb");
-> +	axi->axi_rb =  fwnode_property_read_bool(fwnode, "snps,axi_rb");
->  
-> -	if (of_property_read_u32(np, "snps,wr_osr_lmt", &axi->axi_wr_osr_lmt))
-> +	if (fwnode_property_read_u32(fwnode, "snps,wr_osr_lmt",
-> +				     &axi->axi_wr_osr_lmt))
->  		axi->axi_wr_osr_lmt = 1;
-> -	if (of_property_read_u32(np, "snps,rd_osr_lmt", &axi->axi_rd_osr_lmt))
-> +	if (fwnode_property_read_u32(fwnode, "snps,rd_osr_lmt",
-> +				     &axi->axi_rd_osr_lmt))
->  		axi->axi_rd_osr_lmt = 1;
-> -	of_property_read_u32_array(np, "snps,blen", axi->axi_blen, AXI_BLEN);
-> -	of_node_put(np);
-> +	fwnode_property_read_u32_array(fwnode, "snps,blen", axi->axi_blen,
-> +				       AXI_BLEN);
-> +	fwnode_handle_put(fwnode);
+On Mon, Oct 10, 2022 at 09:55:17PM +0200, Cleo John wrote:
+> Am Montag, 10. Oktober 2022, 20:50:56 CEST schrieb Conor Dooley:
+> > On Mon, Oct 10, 2022 at 08:28:48PM +0200, Cleo John wrote:
+> > > Change the two comments in ucontext.h by getting them up to
+> > > the coding style proposed by torvalds.
+> > > 
+> > > Signed-off-by: Cleo John <waterdev@galaxycrow.de>
+> > > ---
+> > > In my opinion this also improves the readability so I think this is a useful change to do.
+> > > Please also tell me if you have a different opinion.
+> > 
+> > I don't think it is all that /important/ of a change, but it does make
+> > things match between this file and the other headers.
+> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> > 
+> > Thanks.
+> > 
+> 
+> Yes, its not that important. Thats why I chose it. :D
 
-None of these are documented as being valid in ACPI. Do you need to
-ensure they only come from DT, or you document them for ACPI, and get
-the ACPI maintainers to ACK that they are O.K.
+:)
 
->  
->  	return axi;
->  }
->  
->  /**
-> - * stmmac_mtl_setup - parse DT parameters for multiple queues configuration
-> + * stmmac_mtl_setup - parse properties for multiple queues configuration
->   * @pdev: platform device
->   * @plat: enet data
->   */
->  static int stmmac_mtl_setup(struct platform_device *pdev,
->  			    struct plat_stmmacenet_data *plat)
->  {
-> -	struct device_node *q_node;
-> -	struct device_node *rx_node;
-> -	struct device_node *tx_node;
-> +	struct fwnode_handle *fwnode = dev_fwnode(&pdev->dev);
-> +	struct fwnode_handle *q_node;
-> +	struct fwnode_handle *rx_node;
-> +	struct fwnode_handle *tx_node;
->  	u8 queue = 0;
->  	int ret = 0;
->  
-> -	/* For backwards-compatibility with device trees that don't have any
-> +	/* For backwards-compatibility with properties that don't have any
->  	 * snps,mtl-rx-config or snps,mtl-tx-config properties, we fall back
->  	 * to one RX and TX queues each.
->  	 */
+> To be honest this is my first commit to the kernel so 
+> I wanted to do something simple to start things of
+> easy and to get more familiar with the procedure,
+> before getting my feet wet into some real kernel
+> additions.
 
-Backward compatibility only applies to DT. Anybody using ACPI should
-not expect any backwards compatibility, they should be documented
-mandatory properties right from the beginning.
+Cool, nice to have you & good luck!
 
-	  Andrew
+> Thanks for helping!
+
+nw, hopefully I wasn't too direct/negative.
+
+Conor.
+
+> 
+> > > 
+> > > Changes in v2:
+> > >  - change the styling of the top comments too
+> > > 
+> > >  arch/riscv/include/uapi/asm/ucontext.h | 12 ++++++++----
+> > >  1 file changed, 8 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/arch/riscv/include/uapi/asm/ucontext.h b/arch/riscv/include/uapi/asm/ucontext.h
+> > > index 44eb993950e5..516bd0bb0da5 100644
+> > > --- a/arch/riscv/include/uapi/asm/ucontext.h
+> > > +++ b/arch/riscv/include/uapi/asm/ucontext.h
+> > > @@ -15,19 +15,23 @@ struct ucontext {
+> > >  	struct ucontext	 *uc_link;
+> > >  	stack_t		  uc_stack;
+> > >  	sigset_t	  uc_sigmask;
+> > > -	/* There's some padding here to allow sigset_t to be expanded in the
+> > > +	/*
+> > > +	 * There's some padding here to allow sigset_t to be expanded in the
+> > >  	 * future.  Though this is unlikely, other architectures put uc_sigmask
+> > >  	 * at the end of this structure and explicitly state it can be
+> > > -	 * expanded, so we didn't want to box ourselves in here. */
+> > > +	 * expanded, so we didn't want to box ourselves in here.
+> > > +	 */
+> > >  	__u8		  __unused[1024 / 8 - sizeof(sigset_t)];
+> > > -	/* We can't put uc_sigmask at the end of this structure because we need
+> > > +	/*
+> > > +	 * We can't put uc_sigmask at the end of this structure because we need
+> > >  	 * to be able to expand sigcontext in the future.  For example, the
+> > >  	 * vector ISA extension will almost certainly add ISA state.  We want
+> > >  	 * to ensure all user-visible ISA state can be saved and restored via a
+> > >  	 * ucontext, so we're putting this at the end in order to allow for
+> > >  	 * infinite extensibility.  Since we know this will be extended and we
+> > >  	 * assume sigset_t won't be extended an extreme amount, we're
+> > > -	 * prioritizing this. */
+> > > +	 * prioritizing this.
+> > > +	 */
+> > >  	struct sigcontext uc_mcontext;
+> > >  };
+> > >  
+> > 
+> 
+
+
