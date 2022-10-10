@@ -2,137 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FAE55F9DC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:44:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531EC5F9DC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231953AbiJJLof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 07:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
+        id S232143AbiJJLoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 07:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231417AbiJJLo3 (ORCPT
+        with ESMTP id S231588AbiJJLoa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 07:44:29 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416D46EF3C;
+        Mon, 10 Oct 2022 07:44:30 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DD76F25E;
+        Mon, 10 Oct 2022 04:44:29 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id a3so16677254wrt.0;
+        Mon, 10 Oct 2022 04:44:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sXX5hX07BGx/rUvDQD47pclnXvdWt2TdZfsk0DmyS1o=;
+        b=QexsQ6NvWngVUCHCUdnqWXuh8RZErinzEE4b3IjlzZ03MmM1SmxA4a84dqAhvaBgzQ
+         eKM9/cPYLiS1VWKZ0UsZ1zIIzjOLuD4izjOLHh8mZ8uO9q8ExiSM7Ef+AYKefqt8Qs2e
+         M1hNR+FcptTA1OUk0gJNi6M+MjHlQKgTy6BEAqHS5F8com8gJGUuN/00wRoIjYviBBBK
+         tozKSitImOhpjJjHnobV4hxFWD9G5bjVLFqzfP/rGDatO2kL+4k28zPr/v5G3u3bCNRg
+         lJeuauoIq+M8ZFyzjqSbjU5sNI0Nh3PmosNakz4WhtzCBv30A6l8uzs8WpykRHMQf3Y2
+         HRaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sXX5hX07BGx/rUvDQD47pclnXvdWt2TdZfsk0DmyS1o=;
+        b=A+ihMttF6ftTjhotD7gsJhQkf+yiob1ctCs0Nt4Jn+SgkDmPuvsUtk8z7gFOgHcX1z
+         X9QpYJjRTqmGr+jfv26i118Nn7gCDQOrz9pST56D+xVRi5bVjZJKwrEe3fSwcMIL3nA9
+         TrZhMUM5z46jSPqQzLwEivnsuT49V8+vtH+//c3E2ZdLfy/ynGNi9RxwyJA/Q84H2BN+
+         rtxyf529p+WNIK35ZH6z0GbQLfMg8gOXBiMwjtw59JEOkS4OdsoXEX+wKpTY5pAV3k5F
+         LulGw44dVny5C1JkMyFsqrsL1lo4e6yGVNPUCjVp7vSQKwsmC4wNJLej7uOMpasUJmkh
+         hhsQ==
+X-Gm-Message-State: ACrzQf3MHxww3SZOUyxfWAJflyd4m2huc8CPAoQhiGCZc6vhNoEE8ChI
+        KiV8Q3UXqABBqwhrX/3B86E8NS2hstU=
+X-Google-Smtp-Source: AMsMyM4sebHFxp5Jj63tGNP0OMsIxa0DrvD6ZYUsc5f/20a2jtYEL8Ih5nU0TwPAkZujH9oIODxA6g==
+X-Received: by 2002:a05:6000:1688:b0:22e:58cd:5a2b with SMTP id y8-20020a056000168800b0022e58cd5a2bmr11111660wrd.365.1665402268389;
         Mon, 10 Oct 2022 04:44:28 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id CA3652B06782;
-        Mon, 10 Oct 2022 07:44:23 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Mon, 10 Oct 2022 07:44:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1665402263; x=1665409463; bh=PePRHbnlds
-        gbADzmJKxC8qP8GNyi0LwPoQTtijNlm68=; b=eJy94UfKZ+YBy4IXodD2BW/nwq
-        mEglXe4R32ICkaIkP08mU5Vf8eXSBPz2BC7p2HNpgljIP2D7lQYpKtVntcTttRzV
-        BKMjHwUS+0bg4jUTRUWNRyaX/8BuGKMyzrN1woYq+n/Qsp4C/F3TOZg0a4WdCewd
-        dkJDxe1sFvXTF5+RbTXtHnkFMKtAQA6Qy20iMzaqqSP/f/eVxABLb66Av/WL5o2h
-        f+oqdrd4+mVkAyXLfQXp1AXpph65eeLTOe6dQ/5xePUN/nPcKNykqyimBv7eLR81
-        wd+45k+TsBaUJCLnYrnKPfdtHdP1mqexgJbve+fU+9MBUBctf0ek+sTxj8xA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665402263; x=1665409463; bh=PePRHbnldsgbADzmJKxC8qP8GNyi
-        0LwPoQTtijNlm68=; b=fNQNl2u+WXoXKnjv/I7XaD9WJcwq80mfYd7qg9JnuQQL
-        PfEYXNlotplNCmbTxpqr0IsPmlsZM8sIK6OsTWDWtsYtv+2LyYbZSMauASebt/5V
-        8HFmWNKqVURM39m79rXJixLOmYdBG+GZDUWyXhN9qEVcx6AhvFm+Ct/yhPZeFjXN
-        lzylLO0nh8xM0RnhC10xH2hDZx/XKHb5wgsyKCg5qb1UranhSvebjfP9ZLVpzrzK
-        Xy+vp0aR+iU8u/Q6S80njncQBWXIN0nmptL+SIJ2Fwc89XS2CrJde2LYDhBiUudx
-        C02un3jbJ2aC4kiNXAOidkvrDhTT8sU0cCyR+oXi9g==
-X-ME-Sender: <xms:lgVEY46pr--FcwdqsI0PrBNs2_ptw3bzV_oNSrns5CzUo1KiZF-WlQ>
-    <xme:lgVEY57h_pr9jQ6cx1QRKsqxyGqAIgUEVTHKQ6dpVpfosHS-IdT-HaAM9enHmULBv
-    GR8pUui4m6uVQPWg5M>
-X-ME-Received: <xmr:lgVEY3dcQvZ6Ik9s-IHNAlcNf8TykifuBYDnvOOcDFCb6nC_7MdqYjmrhOF4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejgedgfeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
-    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:lgVEY9K06y2SR5b6SfdS7_LKOakX0hMLFdHqO3U8H0jvwkPQ_KmmSA>
-    <xmx:lgVEY8JtrFvbzdlDjjYVOT8LlolKdKYJ97yQ-uMwMw0wu1c3zgQUrQ>
-    <xmx:lgVEY-yjxd5-A3CyGpWQ48rQzCThzDh9_I_u5S8jU4icztqsBsUuCA>
-    <xmx:lwVEYy13mDR5fGJMRhy_jRZ3-MbaadergKB2Y54OsrTympp8xptMdMJJukU>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 10 Oct 2022 07:44:22 -0400 (EDT)
-Date:   Mon, 10 Oct 2022 13:44:20 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Daniel Vetter <daniel@ffwll.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Stephen Boyd <sboyd@kernel.org>, Emma Anholt <emma@anholt.net>,
-        Ray Jui <rjui@broadcom.com>
-Cc:     linux-rpi-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Dom Cobley <popcornmix@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 0/7] drm/vc4: Fix the core clock behaviour
-Message-ID: <20221010114420.beytjynzshjgiy6y@houat>
-References: <20220815-rpi-fix-4k-60-v2-0-983276b83f62@cerno.tech>
+Received: from [192.168.42.102] (sm4-84-91-228-85.netvisao.pt. [84.91.228.85])
+        by smtp.gmail.com with ESMTPSA id l15-20020adfe58f000000b0022ac119fcc5sm8451711wrm.60.2022.10.10.04.44.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Oct 2022 04:44:28 -0700 (PDT)
+Message-ID: <75c2aaa4-1e4d-ae30-3207-f6d88f8e55a0@gmail.com>
+Date:   Mon, 10 Oct 2022 12:44:27 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="szndb5jw7xhprqd6"
-Content-Disposition: inline
-In-Reply-To: <20220815-rpi-fix-4k-60-v2-0-983276b83f62@cerno.tech>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: [PATCH v2 1/2] fs/ntfs3: add system.ntfs_attrib_be extended attribute
+Content-Language: pt-PT
+From:   Daniel Pinto <danielpinto52@gmail.com>
+To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        ntfs3@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <c9b467dd-9294-232b-b808-48f62c3c2186@gmail.com>
+In-Reply-To: <c9b467dd-9294-232b-b808-48f62c3c2186@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+NTFS-3G provides the system.ntfs_attrib_be extended attribute, which
+has the same value as system.ntfs_attrib but represented in big-endian.
+Some utilities rely on the existence of this extended attribute.
 
---szndb5jw7xhprqd6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Improves compatibility with NTFS-3G by adding the system.ntfs_attrib_be
+extended attribute.
 
-Hi Florian,
+Signed-off-by: Daniel Pinto <danielpinto52@gmail.com>
+---
+ fs/ntfs3/xattr.c | 20 ++++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
 
-On Tue, Sep 20, 2022 at 02:50:19PM +0200, Maxime Ripard wrote:
-> Those patches used to be part of a larger clock fixes series:
-> https://lore.kernel.org/linux-clk/20220715160014.2623107-1-maxime@cerno.t=
-ech/
->=20
-> However, that series doesn't seem to be getting anywhere, so I've split o=
-ut
-> these patches that fix a regression that has been there since 5.18 and th=
-at
-> prevents the 4k output from working on the RaspberryPi4.
->=20
-> Hopefully, we will be able to merge those patches through the DRM tree to=
- avoid
-> any further disruption.
-
-Could you review this? Ideally this would be merged through drm-misc due
-to the dependencies between the new firmware functions and the DRM
-patches.
-
-Thanks!
-Maxime
-
---szndb5jw7xhprqd6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY0QFlAAKCRDj7w1vZxhR
-xVJDAQCQMencnB+k1hevkJ/oaHU3uaE6b8ragIv6N81T2VEMewEAuSUd8jpRVSai
-nRX8hZFWuLoX0OSBsltzWoU0QNyheAI=
-=bkfy
------END PGP SIGNATURE-----
-
---szndb5jw7xhprqd6--
+diff --git a/fs/ntfs3/xattr.c b/fs/ntfs3/xattr.c
+index aeee5fb12092..8620a7b4b3e6 100644
+--- a/fs/ntfs3/xattr.c
++++ b/fs/ntfs3/xattr.c
+@@ -15,9 +15,10 @@
+ #include "ntfs_fs.h"
+ 
+ // clang-format off
+-#define SYSTEM_DOS_ATTRIB    "system.dos_attrib"
+-#define SYSTEM_NTFS_ATTRIB   "system.ntfs_attrib"
+-#define SYSTEM_NTFS_SECURITY "system.ntfs_security"
++#define SYSTEM_DOS_ATTRIB     "system.dos_attrib"
++#define SYSTEM_NTFS_ATTRIB    "system.ntfs_attrib"
++#define SYSTEM_NTFS_ATTRIB_BE "system.ntfs_attrib_be"
++#define SYSTEM_NTFS_SECURITY  "system.ntfs_security"
+ // clang-format on
+ 
+ static inline size_t unpacked_ea_size(const struct EA_FULL *ea)
+@@ -796,7 +797,8 @@ static int ntfs_getxattr(const struct xattr_handler *handler, struct dentry *de,
+ 		goto out;
+ 	}
+ 
+-	if (!strcmp(name, SYSTEM_NTFS_ATTRIB)) {
++	if (!strcmp(name, SYSTEM_NTFS_ATTRIB) ||
++	    !strcmp(name, SYSTEM_NTFS_ATTRIB_BE)) {
+ 		/* system.ntfs_attrib */
+ 		if (!buffer) {
+ 			err = sizeof(u32);
+@@ -805,6 +807,8 @@ static int ntfs_getxattr(const struct xattr_handler *handler, struct dentry *de,
+ 		} else {
+ 			err = sizeof(u32);
+ 			*(u32 *)buffer = le32_to_cpu(ni->std_fa);
++			if (!strcmp(name, SYSTEM_NTFS_ATTRIB_BE))
++				*(u32 *)buffer = cpu_to_be32(*(u32 *)buffer);
+ 		}
+ 		goto out;
+ 	}
+@@ -889,10 +893,14 @@ static noinline int ntfs_setxattr(const struct xattr_handler *handler,
+ 		goto set_new_fa;
+ 	}
+ 
+-	if (!strcmp(name, SYSTEM_NTFS_ATTRIB)) {
++	if (!strcmp(name, SYSTEM_NTFS_ATTRIB) ||
++	    !strcmp(name, SYSTEM_NTFS_ATTRIB_BE)) {
+ 		if (size != sizeof(u32))
+ 			goto out;
+-		new_fa = cpu_to_le32(*(u32 *)value);
++		if (!strcmp(name, SYSTEM_NTFS_ATTRIB_BE))
++			new_fa = cpu_to_le32(be32_to_cpu(*(u32 *)value));
++		else
++			new_fa = cpu_to_le32(*(u32 *)value);
+ 
+ 		if (S_ISREG(inode->i_mode)) {
+ 			/* Process compressed/sparsed in special way. */
