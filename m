@@ -2,77 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6835F973F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 05:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7785F9744
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 05:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbiJJDtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 23:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
+        id S230336AbiJJDyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 23:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbiJJDt0 (ORCPT
+        with ESMTP id S230005AbiJJDym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 23:49:26 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773D73DF2C;
-        Sun,  9 Oct 2022 20:49:25 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id g8-20020a17090a128800b0020c79f987ceso4213078pja.5;
-        Sun, 09 Oct 2022 20:49:25 -0700 (PDT)
+        Sun, 9 Oct 2022 23:54:42 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998D3DE3
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 20:54:38 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 70so8831849pjo.4
+        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 20:54:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J5uwdgwryFHFJzjWiH++bUzGyJn8a2qBYOFkqPQdUjA=;
-        b=JiFdjcQkZ722P7s3iZCsJihWdE0H8Hb1Xp9mToLMy6UTMLVa1tCTeAPRwv7fmvPIq+
-         8rvkFwCUxFcrDK+3fTfvaFaZAMEyltqjrDVz/PytWUer59eQV1Yyqgh50XgVXauL7Vog
-         oGJr3dns0VUrublr5DdF0JtWb3Ga6TwT8XaZFY25dQ9QbyH1CVyrfzOBtJ3dDtFi+6bM
-         4FaBnTDKc+z1tQ7omh/CnHGX6k/xaRAexHIyAFJH6zA+2/22JywqrL2DD4ZlGMSFimKp
-         eCkRhSDSC5gVtOsYw2u/w2UPJ3VttbeIgjRY1oFln+qveMnci4poe3khwXzntilyOBUx
-         hiNA==
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ecXffJHGwxo/00S2RWAtsclB1H+VGDVSbXtxLQJTnkM=;
+        b=grP00eNBTJ8DjTOhbCJU4nI9Hu7ZmeHHvn4Ho6Jp8pAt7SYngKXLa6RRhOktr8j8Xn
+         vxGH9pGgLYGSffE+ViAii2S8YnyVqK8YAa3+HBmCWdO+nEIPI9/Rl2AwieDCVOhxBU8M
+         3Tn5OSS2uTvCMZ+HJR3qhNnwVqVb4EpMt7eWfm1b75P3dVh41sFS6EM5obuAj3JRr8Ch
+         N6fCFKeYq0OVN4ZyR9EPhl8S+YxFr/4ga+nIBRDcxpyP5H4SXcHIG0H6M+8qN6G6rPLJ
+         wqb+W/w0S1XL6i1+4KufJeaZOdYUxNqgbxTGy0EHdnWk6scrKELpqtVwkesLnPC3FgAr
+         0qlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=J5uwdgwryFHFJzjWiH++bUzGyJn8a2qBYOFkqPQdUjA=;
-        b=45XozZTSMTEGkmOhU8g7c2tFeJQx5G/A8ipc9WJu8r8Y1jW8NMClXXeJ22mNWDuBaB
-         gR0xLLD8tG/hsPVmQHu/xqjUhu/CU/utendLtFacxwGytYiIa2iZm5/0WvQMXdpYI6j/
-         tY7Tj7VsIPx5o3H1b5biuaoT8HlSYo0OWM5e3HCZ+YF44tWZXHapzH3K6ruc4tj5ONqw
-         BCTl01tp38E3fvI81ZL4M9iraDbC3jztPJ9gVGKNC3Ech4/kML9zwVlAU6H1v7tx6PVg
-         SGDxQbli+EK9eTCsft7AVJf938wT2Ynl6Z5M+LBOUB3lmt8obOAWlQhtHeuRCpP2ZIE0
-         b/vA==
-X-Gm-Message-State: ACrzQf3zcXVxzp72o6a1BsbtYWYwzSMm2OSzFaI96Fty6gW2nWyceUoq
-        uTF5fsV9MhHuYy72ivtPZgI=
-X-Google-Smtp-Source: AMsMyM7lHoI8Gy9V6tXanpM85kqRN40SxwDXKwUvcHAfUndnPhZXWSUKGr0roRcIdSUSsDrQ3lEemQ==
-X-Received: by 2002:a17:902:7084:b0:181:5304:fef4 with SMTP id z4-20020a170902708400b001815304fef4mr8742887plk.57.1665373764964;
-        Sun, 09 Oct 2022 20:49:24 -0700 (PDT)
-Received: from localhost ([118.208.156.99])
-        by smtp.gmail.com with ESMTPSA id h17-20020a170902f55100b001788ccecbf5sm5468419plf.31.2022.10.09.20.49.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Oct 2022 20:49:24 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 10 Oct 2022 13:49:18 +1000
-Message-Id: <CNHXQ6R5IEHG.1D2WH96LGUA1I@bobo>
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Zhouyi Zhou" <zhouzhouyi@gmail.com>
-Cc:     <mpe@ellerman.id.au>, <christophe.leroy@csgroup.eu>,
-        <atrajeev@linux.vnet.ibm.com>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-kernel@vger.kernel.org>, <lance@osuosl.org>,
-        <paulmck@kernel.org>, <rcu@vger.kernel.org>
-Subject: Re: [PATCH linux-next][RFC] powerpc: avoid lockdep when we are
- offline
-X-Mailer: aerc 0.11.0
-References: <20220927014823.11439-1-zhouzhouyi@gmail.com>
- <CN6WCMKCWHOG.LT2QV3910UJ2@bobo>
- <CAABZP2wYcNXkTo=tgX-ARziwgD2rng+-wCZ-qfQ6M30+vmLEug@mail.gmail.com>
- <CN7OZ6TMLLFS.2HER50Q3SO480@bobo>
- <CAABZP2xu5w9Ec8LmTUrF31KhY3HCcBjQYSk4xo14bdB9mxOz+A@mail.gmail.com>
-In-Reply-To: <CAABZP2xu5w9Ec8LmTUrF31KhY3HCcBjQYSk4xo14bdB9mxOz+A@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ecXffJHGwxo/00S2RWAtsclB1H+VGDVSbXtxLQJTnkM=;
+        b=alOLggXTiKB3rjyhcWH0j/Ncw6YJ/5e7OIexbqmSyZbkFBmwh9kFaBzDSl/2DR+xQ9
+         H72JSLUfKd7/tU6ulpRPiDFaRsb/Xs8Venlt4pD0l0njLkWeeniVovFKqoQomcfAAvh/
+         FgrVj3snSlWWlZ1F00QnfcRmxgtn1QZucifkQ472db2gc7Ulpz+LovwJZ6KZX1CmUCUQ
+         AUFY+UpbUP3yRH/omcYUElMznPt5I7HGr2mWlWkhJkw2jMDGrpO4kBjUMzFddLM5JxGg
+         8jkpxzqk7yhPIC2YEiqGC+VwQe3+LLy6337w52zCQIZmiMUXbISe2BcHxWgnVvK3QmB7
+         UfFA==
+X-Gm-Message-State: ACrzQf0Lf8By3YBvJ3L+5jGqQJsFQ6IeOeaoCHAcyYyD2I9nBTUt1Qtc
+        26aw1dEmzWRmnpbv2YTa9dxU7w==
+X-Google-Smtp-Source: AMsMyM7NXcG6OG9QTTjiIz3qDX+zykyjUO3Xcq/ZqGQbV6JogO0RWBM8/A5Uy+JD752XkzsFM6MTcg==
+X-Received: by 2002:a17:90b:1e07:b0:202:bb50:1963 with SMTP id pg7-20020a17090b1e0700b00202bb501963mr29459839pjb.82.1665374078008;
+        Sun, 09 Oct 2022 20:54:38 -0700 (PDT)
+Received: from [2620:15c:29:203:5c2c:f18c:2a4e:44d2] ([2620:15c:29:203:5c2c:f18c:2a4e:44d2])
+        by smtp.gmail.com with ESMTPSA id e15-20020a63ee0f000000b00434760ee36asm5231395pgi.16.2022.10.09.20.54.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Oct 2022 20:54:37 -0700 (PDT)
+Date:   Sun, 9 Oct 2022 20:54:36 -0700 (PDT)
+From:   David Rientjes <rientjes@google.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: slub: remove dead and buggy code from
+ sysfs_slab_add()
+In-Reply-To: <20220930084742.771804-1-linux@rasmusvillemoes.dk>
+Message-ID: <48a02db7-f59e-b80b-b879-3fd679623945@google.com>
+References: <20220930084742.771804-1-linux@rasmusvillemoes.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,73 +77,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu Sep 29, 2022 at 11:48 AM AEST, Zhouyi Zhou wrote:
-> On Wed, Sep 28, 2022 at 10:51 AM Nicholas Piggin <npiggin@gmail.com> wrot=
-e:
-> >
-> > On Wed Sep 28, 2022 at 11:48 AM AEST, Zhouyi Zhou wrote:
-> > > Thank Nick for reviewing my patch
-> > >
-> > > On Tue, Sep 27, 2022 at 12:25 PM Nicholas Piggin <npiggin@gmail.com> =
-wrote:
-> > > >
-> > > > On Tue Sep 27, 2022 at 11:48 AM AEST, Zhouyi Zhou wrote:
-> > > > > This is second version of my fix to PPC's  "WARNING: suspicious R=
-CU usage",
-> > > > > I improved my fix under Paul E. McKenney's guidance:
-> > > > > Link: https://lore.kernel.org/lkml/20220914021528.15946-1-zhouzho=
-uyi@gmail.com/T/
-> > > > >
-> > > > > During the cpu offlining, the sub functions of xive_teardown_cpu =
-will
-> > > > > call __lock_acquire when CONFIG_LOCKDEP=3Dy. The latter function =
-will
-> > > > > travel RCU protected list, so "WARNING: suspicious RCU usage" wil=
-l be
-> > > > > triggered.
-> > > > >
-> > > > > Avoid lockdep when we are offline.
-> > > >
-> > > > I don't see how this is safe. If RCU is no longer watching the CPU =
-then
-> > > > the memory it is accessing here could be concurrently freed. I thin=
-k the
-> > > > warning is valid.
-> > > Agree
-> > > >
-> > > > powerpc's problem is that cpuhp_report_idle_dead() is called before
-> > > > arch_cpu_idle_dead(), so it must not rely on any RCU protection the=
-re.
-> > > > I would say xive cleanup just needs to be done earlier. I wonder wh=
-y it
-> > > > is not done in __cpu_disable or thereabouts, that's where the inter=
-rupt
-> > > > controller is supposed to be stopped.
-> > > Yes, I learn flowing events sequence from kgdb debugging
-> > > __cpu_disable -> pseries_cpu_disable -> set_cpu_online(cpu, false)  =
-=3D
-> > > leads to =3D>  do_idle: if (cpu_is_offline(cpu) -> arch_cpu_idle_dead
-> > > so xive cleanup should be done in pseries_cpu_disable.
-> >
-> > It's a good catch and a reasonable approach to the problem.
-> Thank Nick for your encouragement ;-)
-> >
-> > > But as a beginner, I afraid that I am incompetent to do above
-> > > sophisticated work without error although I am very like to,
-> > > Could any expert do this for us?
-> >
-> > This will be difficult for anybody, it's tricky code. I'm not an
-> > expert at it.
-> >
-> > It looks like the interrupt controller disable split has been there
-> > since long before xive. I would try just move them together than see
-> > if that works.
-> Yes, I use "git blame" (I learned "git blame" from Paul E. McKenny ;-)
-> ) to see the same.
-> and anticipate your great works!
+On Fri, 30 Sep 2022, Rasmus Villemoes wrote:
 
-I was thinking you could try it and see if it works and what you find.
-If you are interested and have time to look into it?
+> The function sysfs_slab_add() has two callers:
+> 
+> One is slab_sysfs_init(), which first initializes slab_kset, and only
+> when that succeeds sets slab_state to FULL, and then proceeds to call
+> sysfs_slab_add() for all previously created slabs.
+> 
+> The other is __kmem_cache_create(), but only after a
+> 
+> 	if (slab_state <= UP)
+> 		return 0;
+> 
+> check.
+> 
+> So in other words, sysfs_slab_add() is never called without
+> slab_kset (aka the return value of cache_kset()) being non-NULL.
+> 
+> And this is just as well, because if we ever did take this path and
+> called kobject_init(&s->kobj), and then later when called again from
+> slab_sysfs_init() would end up calling kobject_init_and_add(), we
+> would hit
+> 
+> 	if (kobj->state_initialized) {
+> 		/* do not error out as sometimes we can recover */
+> 		pr_err("kobject (%p): tried to init an initialized object, something is seriously wrong.\n",
+> 		dump_stack();
+> 	}
+> 
+> in kobject.c.
+> 
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 
-Thanks,
-Nick
+Acked-by: David Rientjes <rientjes@google.com>
