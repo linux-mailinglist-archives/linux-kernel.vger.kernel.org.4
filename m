@@ -2,148 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2835F9FBC
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1215F9FC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiJJN75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 09:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42434 "EHLO
+        id S229646AbiJJOCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 10:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJJN7y (ORCPT
+        with ESMTP id S229452AbiJJOC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 09:59:54 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1730B7FA;
-        Mon, 10 Oct 2022 06:59:52 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id b2so25103609eja.6;
-        Mon, 10 Oct 2022 06:59:52 -0700 (PDT)
+        Mon, 10 Oct 2022 10:02:28 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573513CBD5
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 07:02:27 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id h13so9415573pfr.7
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 07:02:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=HclpZajJBvcaS2petPU7S046g6kuIpoJyWAhtDsfxkg=;
-        b=o+W0oJzdg3tdjkFqY3rNUegk/H0RCDYkUXSGmwQnVq1oZgMlycZvBnSKslU0qOZwG/
-         je/7wbDkb5d/Jm/5dSqVOggi1f+yS5EA+lK6Y2VaylnqPqHXMcXQ2/h0Gu62QsXYMf4c
-         UqJ/OlKBPlA8gO+XvtQp2lgqDgITxmUfQkwgl8TQwp45T2rGuBbjKNfiNWJc8Kfo4xIY
-         xpIOiViPkGOF6ltRlDkULsseOPIGWp7NV+5XOrp8AzDyr/4T97i2oc+LpwCDzXrmo2H1
-         wrQIpvELdphczlfAKX7sba8wCUupaLezZEOYsaG6RQJaDs2bAk46KVA06yY1tlsTgLLn
-         F3xA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8NNn3dnfIc//C5wbMysrQE6z6CNvVbu0p6YggJ7tf38=;
+        b=byf2x9651vo4lcyF35qEel62tp7si+6VYBbBD7Ee4gGTyoBazyuSpHYutfiQllLlYq
+         vO55hgibRn6oHLRoHXDzHFbhfuJl3H4AQmI+oyvAr5f0hyHCGcO7Exa4+z0FOgszJmTW
+         /E6f67OPBClNuvGvGoP6dmvJkQ/D6vE2HPukzmTJRWTEcu5Bhu50iOPYzukhbn8rPDmE
+         jxS7jvyVsCj91gSJFfg9HagzT9nykn3nnKqjlDB80nGHG14kj/wFzZVUAZV19lkEqA5x
+         kVvgSuFToCAIt3OItmJGLT101eo+zUTkfQ+/65FK9ptgLb1/qCE9/s0rA/iZ1ltbMn6e
+         vhbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HclpZajJBvcaS2petPU7S046g6kuIpoJyWAhtDsfxkg=;
-        b=OftRGRnJdYWPvL/smioFP82qMmW+ggkAq36n8dwFGljzeTdmZz4nRy1hhdiTSMuIlT
-         jUvwV6JHVNYbrfGwR6uufg0s0f7AmUGBDfDe3XZQruakZ7jYEf8v5m+rOj9SPS6Wbseq
-         KqjBzmYLeppV/DLMYDrX5CkVj2tmC3AmJzJflELvEJrrKREFwKeRgc2kcMUnLLBTbQ4j
-         9gZVk7MMhOIvKfjvA0LsG5/NsfPeXZG1z311TjaxtKtjCWiCcrMoeeEkdvFccmQUurup
-         etO4+k/wogcuta2L41qD0HXnjX7RqK9yqFiROfPPi5rVsBGiETbTo8IdhxahRKixNuEI
-         +liw==
-X-Gm-Message-State: ACrzQf1XMkb+9AeShnOCIzH2g91euU2FphY7fTUW9I6XOAFuDgT6pRu+
-        2TvuPM9+ncezlm+fRpZP3CRUmDDuHtBPBHdC1GE=
-X-Google-Smtp-Source: AMsMyM7l6207dNZz3cbDzgOZFUJRiPyebJVrntD5gCwALxo4FD4Ef3DIyil0j9CUgUB1BV1Kgeuvm0u2ahfSvCFf9Co=
-X-Received: by 2002:a17:907:2d06:b0:78d:50db:130e with SMTP id
- gs6-20020a1709072d0600b0078d50db130emr13767461ejc.371.1665410391144; Mon, 10
- Oct 2022 06:59:51 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8NNn3dnfIc//C5wbMysrQE6z6CNvVbu0p6YggJ7tf38=;
+        b=4AvPIvKFp3B7LGBIQPQnN5I0+EGbkb/9bQ99UIuHTMfm84DdB4mt9lAcq7WQp/yU+k
+         qZxuBU3Im6ew83xV1818DxlHE8f7E2aSqCe9ah63LF3qoMnmBfBwCyzz5weBU9y2QAy0
+         sVKwxGHYzYMgSFxyg+tLHIbToB3TUJbG5i9jBa+CuxqQNKc5Qg4HJItT4j/xEOJO2L1n
+         IShtJui94BHK/VAYzKLdeEo4BBOCDrEFEMgn5a8a0CUg3EZj7ocVGfNQYer/nFTAymhp
+         IV9j/k8OvbXaBwszTGHATLhtpjozI91VNI37sg5mF/WI2ScY6/PecTHAQ8QY/Ca8AE3F
+         TvgA==
+X-Gm-Message-State: ACrzQf3mpyfvbdqYivvRwLMqf05cHebt4g09ICC0x4kiD1Reqa8F2rbe
+        pkW5eH25DLvsL+l6D3ZvJuwBJ0Me5EFkS+Ysb76zkQ==
+X-Google-Smtp-Source: AMsMyM6/NCZyYzhl0pwlzjn5ERQz0dKo0AF+9b0gEEzbigVV8q/ld69kNSH3AFBt5fqebf1SB1mNF6p35++a3XB0p3Y=
+X-Received: by 2002:a63:464d:0:b0:441:5968:cd0e with SMTP id
+ v13-20020a63464d000000b004415968cd0emr17339804pgk.595.1665410546740; Mon, 10
+ Oct 2022 07:02:26 -0700 (PDT)
 MIME-Version: 1.0
-From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Mon, 10 Oct 2022 21:59:15 +0800
-Message-ID: <CAO4mrfeU0kTbu2FMJ0DSt_XaQj9yEd1w0eNCdAxkK3JnvqgqAA@mail.gmail.com>
-Subject: BUG: unable to handle kernel NULL pointer dereference in start_motor
-To:     axboe@kernel.dk, linux-block@vger.kernel.org
-Cc:     efremov@linux.com, linux-kernel@vger.kernel.org
+References: <003d34d1643242488b533dc14f69830f@hyperstone.com>
+ <e6acc89d-7d17-62ee-d67a-b78b1cdcd085@intel.com> <27343e2a17d1481f9a62d710480bc041@hyperstone.com>
+ <59847aad-6339-9a06-f743-257a4bc4229a@intel.com>
+In-Reply-To: <59847aad-6339-9a06-f743-257a4bc4229a@intel.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 10 Oct 2022 16:01:49 +0200
+Message-ID: <CAPDyKFrJXvsp3uNu+Mso9wqE4+d7b_ZtrCsJqoBhnFzYds8m5Q@mail.gmail.com>
+Subject: Re: [PATCHv2 1/2] mmc: block: Remove error check of hw_reset on reset
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        =?UTF-8?Q?Christian_L=C3=B6hle?= <cloehle@hyperstone.com>
+Cc:     Linux MMC List <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux Developer,
+On Mon, 10 Oct 2022 at 14:36, Adrian Hunter <adrian.hunter@intel.com> wrote=
+:
+>
+> On 10/10/22 11:08, Christian L=C3=B6hle wrote:
+> >
+> >>
+> >> -----Original Message-----
+> >> From: Adrian Hunter <adrian.hunter@intel.com>
+> >> Sent: Samstag, 8. Oktober 2022 10:38
+> >> To: Christian L=C3=B6hle <CLoehle@hyperstone.com>; Ulf Hansson <ulf.ha=
+nsson@linaro.org>; Linux MMC List <linux-mmc@vger.kernel.org>; linux-kernel=
+@vger.kernel.org
+> >> Subject: Re: [PATCHv2 1/2] mmc: block: Remove error check of hw_reset =
+on reset
+> >>
+> >> On 7/10/22 18:42, Christian L=C3=B6hle wrote:
+> >>> Before switching back to the right partition in mmc_blk_reset there
+> >>> used to be a check if hw_reset was even supported.
+> >>> This return value was removed, so there is no reason to check.
+> >>>
+> >>> Fixes: fefdd3c91e0a ("mmc: core: Drop superfluous validations in
+> >>> mmc_hw|sw_reset()")
+> >>> Cc: stable@vger.kernel.org
+> >>>
+> >>> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+> >>> ---
+> >>> -v2: Do not attempt to switch partitions if reset failed
+> >>>
+> >>>  drivers/mmc/core/block.c | 28 +++++++++++++---------------
+> >>>  1 file changed, 13 insertions(+), 15 deletions(-)
+> >>>
+> >>> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c inde=
+x
+> >>> ce89611a136e..8db72cba2bbe 100644
+> >>> --- a/drivers/mmc/core/block.c
+> >>> +++ b/drivers/mmc/core/block.c
+> >>> @@ -991,29 +991,27 @@ static int mmc_blk_reset(struct mmc_blk_data *m=
+d, struct mmc_host *host,
+> >>>                      int type)
+> >>>  {
+> >>>     int err;
+> >>> +   struct mmc_blk_data *main_md =3D dev_get_drvdata(&host->card->dev=
+);
+> >>> +   int part_err;
+> >>>
+> >>>     if (md->reset_done & type)
+> >>>             return -EEXIST;
+> >>>
+> >>>     md->reset_done |=3D type;
+> >>>     err =3D mmc_hw_reset(host->card);
+> >>> +   if (err)
+> >>> +           return err;
+> >>
+> >> This could be a potential source of data corruption.
+> >>
+> >> There is no guarantee that a subsequent I/O will fail just because the=
+ reset failed.  Reading / writing the wrong partition would be disastrous, =
+so we should always try to get back to the correct partition.
+> >>
+> >> I haven't looked at the possibility of just flagging the partition as =
+invalid - need to be sure any subsequent I/O attempts still go through a pa=
+th that switches the partition.
+> >
+> > I can see where youre coming from, but similarly a failing mmc_blk_part=
+_switch doesn't imply all subsequent IO will fail.
+> > Flagging the partition as invalid can be seen as rendering the system t=
+o a potentially useless state, which is a bit overboard for e.g. one CRC7 f=
+ailure on the switch.
+>
+> I wasn't clear sorry.  I meant setting main_md->part_curr to a value
+> that doesn't match any partition, thereby forcing the next I/O to
+> switch partition first.
 
-Recently when using our tool to fuzz kernel, the following crash was triggered:
+If I understand correctly, you are suggesting to ignore the return
+code from mmc_hw_reset() and then always try to switch to the correct
+partition. If we end up failing to switch the partition, then we
+should set an invalid value in main_md->part_curr and return an error
+code?
 
-HEAD commit: 64570fbc14f8 Linux 5.15-rc5
-git tree: upstream
-compiler: clang 12.0.0
-console output:
-https://drive.google.com/file/d/1uCdjFTp2Xv6bJKVrjgr7-TyTZaM3Veb5/view?usp=sharing
-kernel config: https://drive.google.com/file/d/1lNwvovjLNrcuyFGrg05IoSmgO5jaKBBJ/view?usp=sharing
+>
+> > Not sure yet what the ideal behavior is, but either way I would go with=
+ v1 1/2 and v2 2/2 for now? That already fixes imo the most relevant potent=
+ial data corruptions. (successful reset -> no switch)
+> > Then we can come up with a a good handling for mmc_blk_reset or even ar=
+ound mmc_blk_part_switch.
+> > Or what do you suggest?
+>
+> What about what I just described above.
+>
 
-Unfortunately, I don't have any reproducer for this crash yet.
+It seems reasonable to me (assuming I have understood correctly).
 
-BUG: kernel NULL pointer dereference, address: 0000000000000000
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 10cc9b067 P4D 10cc9b067 PUD 10cc9c067 PMD 0
-Oops: 0000 [#1] PREEMPT SMP
-CPU: 0 PID: 6765 Comm: kworker/u4:2 Not tainted 5.15.0-rc5 #1
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
-Workqueue: floppy fd_timer_workfn
-RIP: 0010:start_motor+0x4d/0x200 drivers/block/floppy.c:1905
-Code: 0f b6 1d 76 8b 3d 06 4b 8d 04 a4 44 0f b6 3c c5 2d 8e 98 88 89
-d9 48 8b 05 d8 9d 3d 06 83 e1 03 41 d3 e6 44 0f b6 e9 45 21 f7 <f6> 00
-04 0f 85 fb 00 00 00 e8 35 14 db fe 49 83 fc 01 0f 87 24 01
-RSP: 0018:ffffc90002253dd0 EFLAGS: 00010202
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff88810b2e0000 RSI: ffffffff825b026c RDI: ffffffff825b6710
-RBP: ffffffff825b6710 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffc90002253e70 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000010 R15: 0000000000000010
-FS:  0000000000000000(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 000000010cc9a000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- floppy_ready+0x4c/0xc60 drivers/block/floppy.c:1932
- process_one_work+0x34e/0x810 kernel/workqueue.c:2297
- worker_thread+0x42/0x4c0 kernel/workqueue.c:2444
- kthread+0x178/0x1b0 kernel/kthread.c:319
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-Modules linked in:
-Dumping ftrace buffer:
-   (ftrace buffer empty)
-CR2: 0000000000000000
----[ end trace 5df88fd80b74c734 ]---
-RIP: 0010:start_motor+0x4d/0x200 drivers/block/floppy.c:1905
-Code: 0f b6 1d 76 8b 3d 06 4b 8d 04 a4 44 0f b6 3c c5 2d 8e 98 88 89
-d9 48 8b 05 d8 9d 3d 06 83 e1 03 41 d3 e6 44 0f b6 e9 45 21 f7 <f6> 00
-04 0f 85 fb 00 00 00 e8 35 14 db fe 49 83 fc 01 0f 87 24 01
-RSP: 0018:ffffc90002253dd0 EFLAGS: 00010202
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff88810b2e0000 RSI: ffffffff825b026c RDI: ffffffff825b6710
-RBP: ffffffff825b6710 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffc90002253e70 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000010 R15: 0000000000000010
-FS:  0000000000000000(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 000000010cc9a000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0: 0f b6 1d 76 8b 3d 06 movzbl 0x63d8b76(%rip),%ebx        # 0x63d8b7d
-   7: 4b 8d 04 a4          lea    (%r12,%r12,4),%rax
-   b: 44 0f b6 3c c5 2d 8e movzbl -0x776771d3(,%rax,8),%r15d
-  12: 98 88
-  14: 89 d9                mov    %ebx,%ecx
-  16: 48 8b 05 d8 9d 3d 06 mov    0x63d9dd8(%rip),%rax        # 0x63d9df5
-  1d: 83 e1 03              and    $0x3,%ecx
-  20: 41 d3 e6              shl    %cl,%r14d
-  23: 44 0f b6 e9          movzbl %cl,%r13d
-  27: 45 21 f7              and    %r14d,%r15d
-* 2a: f6 00 04              testb  $0x4,(%rax) <-- trapping instruction
-  2d: 0f 85 fb 00 00 00    jne    0x12e
-  33: e8 35 14 db fe        callq  0xfedb146d
-  38: 49 83 fc 01          cmp    $0x1,%r12
-  3c: 0f                    .byte 0xf
-  3d: 87 24 01              xchg   %esp,(%rcx,%rax,1)
+One additional thing though. I would appreciate some comments in the
+code, so it becomes clear of what goes on.
 
-Best,
-Wei
+Kind regards
+Uffe
