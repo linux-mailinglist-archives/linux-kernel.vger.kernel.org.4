@@ -2,127 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C155F98BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 08:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82215F98E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbiJJG6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 02:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33348 "EHLO
+        id S230294AbiJJHCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiJJG6L (ORCPT
+        with ESMTP id S230187AbiJJHCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 02:58:11 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 896113C8C1;
-        Sun,  9 Oct 2022 23:58:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665385090; x=1696921090;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/TYgCQ+WcvV+CgNviSLogrXwWv9rqFXTDzpniEGJAn0=;
-  b=AVjHvZY0v8PMOD5Gi9RHoe8szsw0cP+Te4i4QjCx4c4xya410y2kDVVO
-   h/f3KvZZJNDD5w7MJy51yw398cfb/HUHemACfZNO3cj7WruKgP9WsFzT/
-   THA3CSXccu+ENlCPjQSOJMRKVHdCn9WMYoKVQgNtJBYyOrrZ9SAdJG9Pr
-   W8yBpG9iyEYBlsgPYQ1K0CTb2okOO+RAarj0X+O/iHEabZOpv0MEBGLkD
-   g9t1XfkdACFgktFLeK8vo6Hh2yrxx8ylZ5UD3E7Ek6a9TIUkeQbPT/pJi
-   1Jb5Ih3JO0PUOORwSJSoTo/3BLaXTd7SPlXVzS7dg5RQ1zn6OLGvOF6HF
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10495"; a="304145167"
-X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="304145167"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2022 23:58:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10495"; a="688683383"
-X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="688683383"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP; 09 Oct 2022 23:58:08 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ohmjn-004l6D-0Z;
-        Mon, 10 Oct 2022 09:58:07 +0300
-Date:   Mon, 10 Oct 2022 09:58:06 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     tianye@sugon.com
-Cc:     jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
-        jsd@semihalf.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: designware: slave should do WRITE_RECEIVED before
- SLAVE_STOP
-Message-ID: <Y0PCfkobAoWQ3vmG@smile.fi.intel.com>
-References: <20221010034015.7526-1-tianye@sugon.com>
+        Mon, 10 Oct 2022 03:02:35 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF5BF3B713;
+        Mon, 10 Oct 2022 00:02:31 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B193F1480;
+        Mon, 10 Oct 2022 00:02:37 -0700 (PDT)
+Received: from [192.168.99.12] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2F0E03F766;
+        Mon, 10 Oct 2022 00:02:30 -0700 (PDT)
+Message-ID: <0b3afc5d-c4a1-8a50-45c3-20c706c3ecfd@foss.arm.com>
+Date:   Mon, 10 Oct 2022 08:02:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221010034015.7526-1-tianye@sugon.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v9 02/13] perf test: Add build infra for perf test tools
+ for CoreSight tests
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Leo Yan <leo.yan@linaro.org>, Jiri Slaby <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
+        mike.leach@linaro.org, linux-perf-users@vger.kernel.org
+References: <20220909152803.2317006-1-carsten.haitzler@foss.arm.com>
+ <20220909152803.2317006-3-carsten.haitzler@foss.arm.com>
+ <Yz67SHpIN5NggKEk@kernel.org> <Yz6/zlchVnNsVlzJ@kernel.org>
+ <Yz7RAgMN6WGnD3OZ@leoy-yangtze.lan>
+ <e9f980a7-fba8-4610-a058-b74e51d6ab24@foss.arm.com>
+ <Y0AfK7sVphNkQA4q@kernel.org>
+Content-Language: en-US
+From:   Carsten Haitzler <carsten.haitzler@foss.arm.com>
+Organization: Arm Ltd.
+In-Reply-To: <Y0AfK7sVphNkQA4q@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 11:40:15AM +0800, tianye@sugon.com wrote:
-> From: Tian Ye <tianye@sugon.com>
+
+
+On 10/7/22 13:44, Arnaldo Carvalho de Melo wrote:
+> Em Fri, Oct 07, 2022 at 12:34:51PM +0100, Carsten Haitzler escreveu:
+>> On 10/6/22 13:58, Leo Yan wrote:
+>>> On Thu, Oct 06, 2022 at 08:45:18AM -0300, Arnaldo Carvalho de Melo wrote:
+>>>> Em Thu, Oct 06, 2022 at 08:26:00AM -0300, Arnaldo Carvalho de Melo escreveu:
+>>>> Also had to remove:
 > 
-> Sometimes when designware slave receive 3byte in high speed mode:
-
-DesignWare
-3 bytes
-
-> 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x514 : INTR_STAT=0x4
-> I2C_SLAVE_WRITE_REQUESTED
-> I2C_SLAVE_WRITE_RECEIVED
-> 0x1 STATUS SLAVE_ACTIVITY=0 : RAW_INTR_STAT=0x714 : INTR_STAT=0x204
-> I2C_SLAVE_WRITE_RECEIVED
-> I2C_SLAVE_STOP
-> 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x514 : INTR_STAT=0x4
-> I2C_SLAVE_WRITE_REQUESTED
-> I2C_SLAVE_WRITE_RECEIVED
+>>>> 		$(INSTALL) tests/shell/coresight/*.sh -m 644 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/coresight'
 > 
-> When second slave interrupt occus:slave rx fifo receive two bytes and
+>>>> from this patch, as it makes install fail at this point in the patchset:
+> 
+>>> Thanks a lot!
+> 
+>>> James and me had found the merging conflict and planned to send out
+>>> email for reminding it, the right change for above section would be:
+> 
+>>> @@ -1006,7 +1014,10 @@ install-tests: all install-gtk
+>>>                   $(INSTALL) tests/shell/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell'; \
+>>>                   $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
+>>>                   $(INSTALL) tests/shell/lib/*.sh -m 644 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
+>>> -               $(INSTALL) tests/shell/lib/*.py -m 644 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'
+>>> +               $(INSTALL) tests/shell/lib/*.py -m 644 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
+>>> +               $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/coresight'; \
+>>> +               $(INSTALL) tests/shell/coresight/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/coresight'
+>>> +       $(Q)$(MAKE) -C tests/shell/coresight install-tests
+> 
+>>> It's deliberately to not add '-m 644' when install coresight test
+>>> shell scripts under the folder tests/shell/coresight/ so that we can
+>>> keep the executable permission for these scripts.  On the other
+>>> flip, we set 644 mode for the scripts under tests/shell/lib/ so
+>>> these scripts will not be executed directly by perf test framework.
+> 
+>>> @Carsten, if have chance could you confirm for above change?
+> 
+>>>>     DESCEND plugins
+>>>>     GEN     /tmp/build/perf/python/perf.so
+>>>>     INSTALL trace_plugins
+>>>>     INSTALL binaries
+>>>>     INSTALL tests
+>>>> install: cannot stat 'tests/shell/coresight/*.sh': No such file or directory
+>>>> make[2]: *** [Makefile.perf:1007: install-tests] Error 1
+>>>> make[2]: *** Waiting for unfinished jobs....
+> 
+>>>> I'll add it back when the first .sh gets added to tests/shell/coresight/
+> 
+>>> Sorry for introducing extra efforts for you and thanks!
+>   
+>> oh sorry - indeed i didn't see this problem coming after fixing the
+>> conflicts. i've got an update of the patches that fix that. should i just
+>> send through the 2 updates patches as a v10 or the whole series?
+> 
+> No need, I did some fixes taking into account the comments on this
+> thread, we can go on and fix things from what I have now at
+> acme/perf/core, which I'll send to Linus today.
 
-occurs: slave Rx FIFO receives 2 bytes
-
-> stop interrupt occus at the same time.
-
-occurs
-
-...
-
-Please, do a spell check / proof reading of the commit messages.
-
-...
-
-> +	u32 rx_valid;
-
-> +		regmap_read(dev, DW_IC_RXFLR, &rx_valid);
-
-If regmap_read() fails, rx_valid will contain garbage...
-
-> +		for (; rx_valid > 0; rx_valid--) {
-
-...and this will go far beyond the expected boundaries.
-
-> +			regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
-> +			val = tmp;
-> +			if (!i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_RECEIVED,
-> +					     &val))
-
-> +				dev_vdbg(dev->dev, "Byte %X acked!", val);
-
-Why do you need this? regmap has it's own trace event mechanism, isn't it
-enough?
-
-> +		}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+oh cool. i'll let patches sit for now - let me know if there's anything 
+you want/need from me.
 
