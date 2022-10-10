@@ -2,121 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58EC65FA7B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 00:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D8D5FA7BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 00:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiJJWi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 18:38:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
+        id S229818AbiJJWkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 18:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiJJWiZ (ORCPT
+        with ESMTP id S229797AbiJJWkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 18:38:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDDB3A4A4
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 15:38:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665441503;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=P5viJ+Zb2p3oW579v/fCAvnP1g7/ho/FXg6uX+38eS8=;
-        b=FBllAw1gX7jV4j2lwfCEgmo95uxd6pg3MmbLJz/BEbEuRVHMJfWjeSrjdHjeYR4T4DKamm
-        lko9t6D0Af9xWCK+kntF95RUlzLkhr2USEmLYQ2vIeLcSlpZ5u6LL1cEjBtq8n5/9l+ADM
-        ABDGSZPFod/4/MIojiCirsLOxo1KcMo=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-631-DBGaMAtCMDe7S84P4EHGTQ-1; Mon, 10 Oct 2022 18:38:22 -0400
-X-MC-Unique: DBGaMAtCMDe7S84P4EHGTQ-1
-Received: by mail-wm1-f69.google.com with SMTP id d5-20020a05600c34c500b003b4fb42ccdeso9624515wmq.8
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 15:38:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P5viJ+Zb2p3oW579v/fCAvnP1g7/ho/FXg6uX+38eS8=;
-        b=L7jWs0eZvze2bkx2r9Ldqg/8Cy0MKB+yzOzxajy7pU6hbh/M96oTail02+hncAIuEi
-         VjqjA5Qzg/f+KHaKawErOIgQuRtfErYgQH2rHjj85C+BbIWnLcNRTvWHXc9a6HQnRp9W
-         wu6LxfjhlkrXvQTKi34xRfhesaCy8ZfMIjRKghauAuAOMof/xarfo5LkuBqGiK6clitp
-         DFseGtry/XAoP+XnP5GY/oH36y+S0m1fuT0QXBmJVmdQRVsqgLe70nbCK/wTaiQLJw3v
-         /Vhx/zWysYsyWn2nLw6XXEWNsEMYXHOVOWOA6lTaqdoH6URAVrVPqz5q3hCv7PaQwtLz
-         QFgw==
-X-Gm-Message-State: ACrzQf1UTvXrhXeP/cVUlXYjXwcYMZXZMaRjpympmCnjjU7n8rb9J5uE
-        WWs8QaRy5mrJ9BwpyOWo1xWJhWf42ys6wF4u8DQIwpGjQP2BDMHGZf0LbYpEH4POX07K/BBp2Q2
-        EvMXZNXRwVZx/y+tDhbYv190=
-X-Received: by 2002:a7b:cd15:0:b0:3c5:1b4c:7632 with SMTP id f21-20020a7bcd15000000b003c51b4c7632mr8793549wmj.2.1665441499671;
-        Mon, 10 Oct 2022 15:38:19 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5kw7kGqQ8TH8BdTKOf5QU6caDHMMwMUH/VIdiykzpENMGGS+Uk4+J39hrb/ITUTgwCbMp11g==
-X-Received: by 2002:a7b:cd15:0:b0:3c5:1b4c:7632 with SMTP id f21-20020a7bcd15000000b003c51b4c7632mr8793543wmj.2.1665441499435;
-        Mon, 10 Oct 2022 15:38:19 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id z1-20020a7bc7c1000000b003b435c41103sm21295448wmk.0.2022.10.10.15.38.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 15:38:18 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 23:38:17 +0100
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     "Elliott, Robert (Servers)" <elliott@hpe.com>
-Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: Unloaded tainted modules list with tcrypt
-Message-ID: <20221010223817.cw6gccru2k35ksn5@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <MW5PR84MB1842AE1F86F2B66A5D57DAA5AB209@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+        Mon, 10 Oct 2022 18:40:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4162578BD6;
+        Mon, 10 Oct 2022 15:40:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED40DB80E34;
+        Mon, 10 Oct 2022 22:40:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 245DDC433C1;
+        Mon, 10 Oct 2022 22:40:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665441606;
+        bh=0cKcSLCQOdzp5id98wc+RBwQs1pyzsIL5VN0NjeNlRo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UZ6SKJH0c7rUyzrJIAMr68lY07U3H1Xce7xvU/4A0IkDATfKZ9hf0X+CjDb1rIshZ
+         GG2zP8XrMGiKnYDCh9L4JUyxMC1SG/Al51nirt/DQ8GcUgv4FoP/awVylCweFtfr/j
+         TXg9sHq/9Tg+pymHCWPb9khANo+8QfLXU0Tt3nF8jX86kZOaZ4dFsrzgpqk1TIQtDf
+         tdEfsbZcYZacG/js0747AFmumOa5tJ1tHNLF7Litek21wiVRq+cUtISjI5zwdmcRPh
+         OWZwyo6gQK0aKpS6ky2zHIX3M87x/v/3Dyya5A4hYRX8GO5+WFKbl3nADFD9IWFKBN
+         RTpmEEXj4lK0A==
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E . McKenney" <paulmck@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Uladzislau Rezki <urezki@gmail.com>
+Subject: [PATCH 0/2] rcu/nocb fix and optimization
+Date:   Tue, 11 Oct 2022 00:39:54 +0200
+Message-Id: <20221010223956.1041247-1-frederic@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <MW5PR84MB1842AE1F86F2B66A5D57DAA5AB209@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-10-10 15:12 +0000, Elliott, Robert (Servers) wrote:
-> When repeatedly using the tcrypt module (which is designed to never
-> load successfully), the "Unloaded tainted modules" list grows forever:
-> 
-> Unloaded tainted modules: tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 
-> tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 
-> tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 
-> tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 
-> tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 
-> tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 
-> tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 
-> tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 tcrypt():1 
-> tcrypt():1 tcrypt():1 padlock_aes():1 padlock_aes():1 
-> isst_if_mbox_msr():1 acpi_cpufreq():1 pcc_cpufreq():1 isst_if_mbox_msr():1 
-> acpi_cpufreq():1 pcc_cpufreq():1 acpi_cpufreq():1 acpi_cpufreq():1 
-> pcc_cpufreq():1 isst_if_mbox_msr():1 acpi_cpufreq():1 acpi_cpufreq():1 
-> pcc_cpufreq():1 isst_if_mbox_msr():1 acpi_cpufreq():1 acpi_cpufreq():1 
-> isst_if_mbox_msr():1 isst_if_mbox_msr():1 
-> acpi_cpufreq():1 pcc_cpufreq():1 acpi_cpufreq():1 isst_if_mbox_msr():1
-> 
-> Some other modules like acpi_cpufreq() are repeated too.
-> 
-> Maybe this check after the name comparison:
-> 	mod_taint->taints & mod->taints
-> should be:
-> 	mod_taint->taints == mod->taints
-> 
-> or shouldn't be there at all?
-> 
+I wanted to send this a few days ago but then I faced a TREE01 stall
+(rcu_barrier() related). I just couldn't remember if it was before or
+after these patches... But finally looking at the log, I found the
+head which is e8c56bb5baa6969bf2d01b8619f22f5a71818497 (an old RCU:dev
+head from more than a month ago, way before these patches). Phew!
 
-Elliott,
+Anyway I re-launched many times TREE01 on latest RCU:dev before and
+after these patches, it has run both ways more than 600 hours without
+any issue...
 
-Actually, see Linus' tree i.e. commit 47cc75aa9283 ("module: tracking: Keep
-a record of tainted unloaded modules only").
+Frederic Weisbecker (2):
+  rcu: Fix missing nocb gp wake on rcu_barrier()
+  rcu/nocb: Spare bypass locking upon normal enqueue
 
-
-Kind regards,
+ kernel/rcu/tree.c      |  6 ++++++
+ kernel/rcu/tree.h      |  1 +
+ kernel/rcu/tree_nocb.h | 11 +++++++++--
+ 3 files changed, 16 insertions(+), 2 deletions(-)
 
 -- 
-Aaron Tomlin
+2.25.1
 
