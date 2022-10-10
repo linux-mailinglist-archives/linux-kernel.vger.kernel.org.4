@@ -2,247 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2735F9A15
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 156AC5F99F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbiJJHjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40616 "EHLO
+        id S230315AbiJJH20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232535AbiJJHik (ORCPT
+        with ESMTP id S231322AbiJJH2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:38:40 -0400
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C20220FA
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 00:32:47 -0700 (PDT)
-Received: by mail-pf1-f198.google.com with SMTP id j25-20020aa78d19000000b00561f966ae13so5427437pfe.14
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 00:32:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S4y88EBd/vb8yCVMWvZjcrFkdCPY7+pJqcZy7NSMsxM=;
-        b=125bqI1TRA7xz6inw57LUkFRrMGvO5bg5Irm9lt/++cx+7EK/7WvawcccY8/cCzwBU
-         bSnpVn/sF5H+PnMwYhfDlkoKMQeKLYmZEiN07m/yO9gATsOtSLXd1EToBSo+RFamT1HC
-         T2PYXBsmLeZlXatc5eJ7JrzYD3/ALxQynpRpohyM7XyxbbFBMNG8hv+f6dRnd/ej2FGn
-         W/gAUnEs6vo0o7F7OEaR+9X45TtDZ/5K42/ZnU6RKYHon2kG8F+kGQxMCazADJ9aX5KN
-         R74CxFrWXC3knpmzhrIALVk05x/5UPnmLtfP2U46WNdJqZ4r6LdKgJGkjiLohaj47wEF
-         vnow==
-X-Gm-Message-State: ACrzQf0AGfINSieBq4MwvQUsAmJTCAVtnkjKoUsEn2wP225wfBOnG9+r
-        1m1VlKqxrfw/JUCQq5Ff/zubfYPCM9jC2PcGiJKb4puW0y0A
-X-Google-Smtp-Source: AMsMyM7JOI3f+i2seYtu1aj5A8mpcpBQHsPGt4XiIQVb8yYLpB93xI6kd2YA0zv3NxaVXycPD3QNfNfl+zG+NuZC7VYpaqK5y+gP
+        Mon, 10 Oct 2022 03:28:06 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2070e.outbound.protection.outlook.com [IPv6:2a01:111:f400:feae::70e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3556BCC2;
+        Mon, 10 Oct 2022 00:22:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bmOjfjWqKr0fIRg3tID1noIHSpkDFdV/BMYR7zO5bM/8RoNSvARbvZX18ED/r34sSvuYrBJHP5KAOei5BwxgAovccszRfi0mqlPj8qs5cUOQidWZ/w1vbeb9Cd0+kF7KnTKJM4X/XVQ/FiGAKakF0JVXwyzakwkER57XR57MKUKEIBEcv/qvwu/s+ZJBu/WKBBApYQKcSzPTY42lhSqxrpGq4upVXL7PsR9HwXPW9ekUnR8+/KnZOmedUNxk4aQBbfBLMO0qI2x6psg+dMtuuXLNdNsP9zMvVOr6zluiQcOQm5Wj6OVgmywarlRz9u7L8Tc0bZ8YLPYeXz60OzFLGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qgbqflBWxuge+vseUXggqNFukZMjEaZtxmcYPj1C6wI=;
+ b=NEDjQZJQSGl0oBNAKKKdQMnX6oxJvpzfEK3QgxuDV2vWwo1P2UxWg6ecEzD1LD7jpczxrD4dtJtzR4qqRiwg1P9RyJaQzSuzTz711drBwFjgLkY4sQoxZUnCOo+YjBp3hcigFZr8X8WcrJjpgrwvB1vge+47QCy3Bg9j1BAMTq+95nIBeaNlevQ9zgg/YZs3ChTq8A+EVY8iebGSlcR+CmgPIGPvjUR+bHQj1j7kvUMv0Q0FIiDlrgXgLDuYSftLVgibAMp1lh+RcoVZg5xDECIvTQT3GsppU5VBgn18JtnkdcMoNwZhfAjxVZDCTlN/wxYnBzVuVWFrrN3u1qq2Xw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 145.14.71.66) smtp.rcpttodomain=kernel.dk smtp.mailfrom=zeekrlife.com;
+ dmarc=bestguesspass action=none header.from=zeekrlife.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=geely.onmicrosoft.com;
+ s=selector2-geely-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qgbqflBWxuge+vseUXggqNFukZMjEaZtxmcYPj1C6wI=;
+ b=Sh5mR1cmGojH9d5NEUNs1wxqZf0KKtRKRA5uDQTkgJRuYNsf89IEid74YMClpl2gIe7GYKPiqByAv1sf+h2heRm0SPPtFZH1cigR8w6ZQ+qZArG0C39j9btM9kJAx3YL2CDh85NRYxHB9hhPT5XLQ9RHdOPUi3eqGsvCjsQO8eE=
+Received: from PU1PR06CA0020.apcprd06.prod.outlook.com (2603:1096:803:2a::32)
+ by KL1PR02MB4834.apcprd02.prod.outlook.com (2603:1096:820:5c::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.38; Mon, 10 Oct
+ 2022 07:20:02 +0000
+Received: from PSAAPC01FT052.eop-APC01.prod.protection.outlook.com
+ (2603:1096:803:2a:cafe::47) by PU1PR06CA0020.outlook.office365.com
+ (2603:1096:803:2a::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15 via Frontend
+ Transport; Mon, 10 Oct 2022 07:20:02 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 145.14.71.66)
+ smtp.mailfrom=zeekrlife.com; dkim=none (message not signed)
+ header.d=none;dmarc=bestguesspass action=none header.from=zeekrlife.com;
+Received-SPF: Pass (protection.outlook.com: domain of zeekrlife.com designates
+ 145.14.71.66 as permitted sender) receiver=protection.outlook.com;
+ client-ip=145.14.71.66; helo=CN-BJI-EXP64.Geely.Auto; pr=C
+Received: from CN-BJI-EXP64.Geely.Auto (145.14.71.66) by
+ PSAAPC01FT052.mail.protection.outlook.com (10.13.38.166) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5709.10 via Frontend Transport; Mon, 10 Oct 2022 07:20:01 +0000
+Received: from Zbook.localdomain (10.186.26.31) by CN-BJI-EXP64.Geely.Auto
+ (10.186.65.77) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Mon, 10 Oct
+ 2022 15:19:57 +0800
+From:   Yuwei Guan <Yuwei.Guan@zeekrlife.com>
+To:     <axboe@kernel.dk>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <Yuwei.Guan@zeekrlife.com>
+Subject: [PATCH] blk-mq: initialize csd/fifo_time before use
+Date:   Mon, 10 Oct 2022 15:19:16 +0800
+Message-ID: <20221010071916.1075-1-Yuwei.Guan@zeekrlife.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Received: by 2002:a5e:c902:0:b0:6bc:22b7:200a with SMTP id
- z2-20020a5ec902000000b006bc22b7200amr2024601iol.126.1665386324995; Mon, 10
- Oct 2022 00:18:44 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 00:18:44 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000050b5f305eaa8f82d@google.com>
-Subject: [syzbot] possible deadlock in hci_conn_hash_flush
-From:   syzbot <syzbot+76a9cc07a77bc3e48ef7@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
-        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
-        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Originating-IP: [10.186.26.31]
+X-ClientProxiedBy: CN-BJI-EXP57.Geely.Auto (10.186.65.69) To
+ CN-BJI-EXP64.Geely.Auto (10.186.65.77)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PSAAPC01FT052:EE_|KL1PR02MB4834:EE_
+X-MS-Office365-Filtering-Correlation-Id: b3ee6d2e-d9e5-42ec-c34b-08daaa8fd8ab
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: U/CFsPMaa2OBNIApjR0P+aWuBF64Bhuc2v3kKvwn5SCXJDym3aEEkJ5E688PTD6Oodwmsx6ivlcnUvwiJIBZfoKWJb1PrCh8UtxJftOttPOlvx1nHMEfeUk5v9IsrCBUkOxHSYfkKqkYwFbIeDhq5wjSwAmI+qF4lkfS3i6jEvIGuBFmZC+tdl4PzD1R/x98svAKSlsKYHy06ycqZOLhCwsxo+LwhlelFYg5xSzytY9NCav47WhscRYB5P81v9gb1Uqj23tzA4m9V09eo9aepBdynL0eb8BCgtOTT6tWPFpXc04pNG0mYnF48+vGP922jy+W+o3EK6z6epEkRn823E5GMXR4OlXjKYz8RpC+X60mgev4MHAf0PescX08JAHkX03dhpmbKsGVDCAN6pTrr8c1jBHZLIrQKhWfAUMaqyDt7wY89dIAbssXFXzhK57SeqZhuqQfeW9v4n4lFdMsJX6NvyJgwoLcryncT1bVidHgzatQ8gqNPEzLVaAyWRVgzddN6mFpI9OglhyUJpjs71ecoWzi4OqivqhCDLn0N0Pdv3y9KLABaWx+Ep35IRAQfvgrqekMJvtaamcPb1vWdX0CXys2ZykdscJ6yxIl18UTRDhElfI2yHTpHwRriZ+M6c0/j8MhS3vM5T5wiwJ905bYokElf3JwExgSl2ZZNU+wrrfJDYDBdQwjwV32PJCqfkc5LmM53AN8txBDCRe0O1RvvAiD0oQKhXnOIz+6JM+ZY56INqC2Xo8QrDMOHpta88cx4ObQTlnD1QQn65P3SoMUktXGolrIsg034Slbr9I=
+X-Forefront-Antispam-Report: CIP:145.14.71.66;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CN-BJI-EXP64.Geely.Auto;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(346002)(136003)(39860400002)(451199015)(40470700004)(36840700001)(46966006)(5660300002)(8936002)(2906002)(41300700001)(316002)(6916009)(54906003)(86362001)(70586007)(70206006)(336012)(8676002)(107886003)(478600001)(6666004)(4326008)(83380400001)(186003)(356005)(36756003)(82740400003)(40460700003)(82310400005)(36860700001)(16526019)(81166007)(40480700001)(2616005)(47076005)(26005)(1076003)(36900700001);DIR:OUT;SFP:1102;
+X-OriginatorOrg: Zeekrlife.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Oct 2022 07:20:01.0402
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3ee6d2e-d9e5-42ec-c34b-08daaa8fd8ab
+X-MS-Exchange-CrossTenant-Id: 6af81d03-dafe-4d76-a257-3cc43cb0454f
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=6af81d03-dafe-4d76-a257-3cc43cb0454f;Ip=[145.14.71.66];Helo=[CN-BJI-EXP64.Geely.Auto]
+X-MS-Exchange-CrossTenant-AuthSource: PSAAPC01FT052.eop-APC01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR02MB4834
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+csd/fifo_time need to be initialized before use again,
+otherwise, it will keep the last tag value.
 
-syzbot found the following issue on:
-
-HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1247bf82880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
-dashboard link: https://syzkaller.appspot.com/bug?extid=76a9cc07a77bc3e48ef7
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+76a9cc07a77bc3e48ef7@syzkaller.appspotmail.com
-
-======================================================
-WARNING: possible circular locking dependency detected
-6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0 Not tainted
-------------------------------------------------------
-syz-executor.1/24281 is trying to acquire lock:
-ffff000130804770 ((work_completion)(&(&conn->timeout_work)->work)){+.+.}-{0:0}, at: __flush_work+0x74/0x144 kernel/workqueue.c:3069
-
-but task is already holding lock:
-ffff80000d832b98 (hci_cb_list_lock){+.+.}-{3:3}, at: hci_disconn_cfm include/net/bluetooth/hci_core.h:1776 [inline]
-ffff80000d832b98 (hci_cb_list_lock){+.+.}-{3:3}, at: hci_conn_hash_flush+0x64/0x148 net/bluetooth/hci_conn.c:2366
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #3 (hci_cb_list_lock){+.+.}-{3:3}:
-       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
-       hci_connect_cfm include/net/bluetooth/hci_core.h:1761 [inline]
-       hci_remote_features_evt+0x274/0x50c net/bluetooth/hci_event.c:3757
-       hci_event_func net/bluetooth/hci_event.c:7443 [inline]
-       hci_event_packet+0x5c4/0x60c net/bluetooth/hci_event.c:7495
-       hci_rx_work+0x1a4/0x2f4 net/bluetooth/hci_core.c:4007
-       process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
-       worker_thread+0x340/0x610 kernel/workqueue.c:2436
-       kthread+0x12c/0x158 kernel/kthread.c:376
-       ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:860
-
--> #2 (&hdev->lock){+.+.}-{3:3}:
-       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
-       sco_sock_connect+0x104/0x220 net/bluetooth/sco.c:593
-       __sys_connect_file+0xc8/0xd0 net/socket.c:1976
-       io_connect+0xc8/0x21c io_uring/net.c:1277
-       io_issue_sqe+0x1c0/0x508 io_uring/io_uring.c:1577
-       io_queue_sqe io_uring/io_uring.c:1755 [inline]
-       io_submit_sqe io_uring/io_uring.c:2013 [inline]
-       io_submit_sqes+0x18c/0x454 io_uring/io_uring.c:2124
-       __do_sys_io_uring_enter+0x16c/0x8b8 io_uring/io_uring.c:3057
-       __se_sys_io_uring_enter io_uring/io_uring.c:2987 [inline]
-       __arm64_sys_io_uring_enter+0x30/0x40 io_uring/io_uring.c:2987
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
-       el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-
--> #1 (sk_lock-AF_BLUETOOTH-BTPROTO_SCO){+.+.}-{0:0}:
-       lock_sock_nested+0x70/0xd8 net/core/sock.c:3393
-       lock_sock include/net/sock.h:1712 [inline]
-       sco_sock_timeout+0x88/0x1b8 net/bluetooth/sco.c:97
-       process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
-       worker_thread+0x340/0x610 kernel/workqueue.c:2436
-       kthread+0x12c/0x158 kernel/kthread.c:376
-       ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:860
-
--> #0 ((work_completion)(&(&conn->timeout_work)->work)){+.+.}-{0:0}:
-       check_prev_add kernel/locking/lockdep.c:3095 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
-       validate_chain kernel/locking/lockdep.c:3829 [inline]
-       __lock_acquire+0x1530/0x30a4 kernel/locking/lockdep.c:5053
-       lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
-       __flush_work+0x9c/0x144 kernel/workqueue.c:3069
-       __cancel_work_timer+0x1c4/0x2ac kernel/workqueue.c:3160
-       cancel_delayed_work_sync+0x24/0x38 kernel/workqueue.c:3301
-       sco_conn_del+0x140/0x234 net/bluetooth/sco.c:205
-       sco_disconn_cfm+0x64/0xa8 net/bluetooth/sco.c:1379
-       hci_disconn_cfm include/net/bluetooth/hci_core.h:1779 [inline]
-       hci_conn_hash_flush+0x88/0x148 net/bluetooth/hci_conn.c:2366
-       hci_dev_close_sync+0x48c/0x9e0 net/bluetooth/hci_sync.c:4476
-       hci_dev_do_close net/bluetooth/hci_core.c:554 [inline]
-       hci_rfkill_set_block+0x98/0x198 net/bluetooth/hci_core.c:947
-       rfkill_set_block+0xb4/0x1f8 net/rfkill/core.c:345
-       rfkill_fop_write+0x358/0x3f8 net/rfkill/core.c:1286
-       do_iter_write+0x1f0/0x560 fs/read_write.c:857
-       vfs_writev fs/read_write.c:928 [inline]
-       do_writev+0x12c/0x234 fs/read_write.c:971
-       __do_sys_writev fs/read_write.c:1044 [inline]
-       __se_sys_writev fs/read_write.c:1041 [inline]
-       __arm64_sys_writev+0x28/0x38 fs/read_write.c:1041
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
-       el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-
-other info that might help us debug this:
-
-Chain exists of:
-  (work_completion)(&(&conn->timeout_work)->work) --> &hdev->lock --> hci_cb_list_lock
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(hci_cb_list_lock);
-                               lock(&hdev->lock);
-                               lock(hci_cb_list_lock);
-  lock((work_completion)(&(&conn->timeout_work)->work));
-
- *** DEADLOCK ***
-
-4 locks held by syz-executor.1/24281:
- #0: ffff80000d893400 (rfkill_global_mutex){+.+.}-{3:3}, at: rfkill_fop_write+0x18c/0x3f8 net/rfkill/core.c:1278
- #1: ffff00010c626fd0 (&hdev->req_lock){+.+.}-{3:3}, at: hci_dev_do_close net/bluetooth/hci_core.c:552 [inline]
- #1: ffff00010c626fd0 (&hdev->req_lock){+.+.}-{3:3}, at: hci_rfkill_set_block+0x90/0x198 net/bluetooth/hci_core.c:947
- #2: ffff00010c626078 (&hdev->lock){+.+.}-{3:3}, at: hci_dev_close_sync+0x200/0x9e0 net/bluetooth/hci_sync.c:4463
- #3: ffff80000d832b98 (hci_cb_list_lock){+.+.}-{3:3}, at: hci_disconn_cfm include/net/bluetooth/hci_core.h:1776 [inline]
- #3: ffff80000d832b98 (hci_cb_list_lock){+.+.}-{3:3}, at: hci_conn_hash_flush+0x64/0x148 net/bluetooth/hci_conn.c:2366
-
-stack backtrace:
-CPU: 1 PID: 24281 Comm: syz-executor.1 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- print_circular_bug+0x2c4/0x2c8 kernel/locking/lockdep.c:2053
- check_noncircular+0x14c/0x154 kernel/locking/lockdep.c:2175
- check_prev_add kernel/locking/lockdep.c:3095 [inline]
- check_prevs_add kernel/locking/lockdep.c:3214 [inline]
- validate_chain kernel/locking/lockdep.c:3829 [inline]
- __lock_acquire+0x1530/0x30a4 kernel/locking/lockdep.c:5053
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
- __flush_work+0x9c/0x144 kernel/workqueue.c:3069
- __cancel_work_timer+0x1c4/0x2ac kernel/workqueue.c:3160
- cancel_delayed_work_sync+0x24/0x38 kernel/workqueue.c:3301
- sco_conn_del+0x140/0x234 net/bluetooth/sco.c:205
- sco_disconn_cfm+0x64/0xa8 net/bluetooth/sco.c:1379
- hci_disconn_cfm include/net/bluetooth/hci_core.h:1779 [inline]
- hci_conn_hash_flush+0x88/0x148 net/bluetooth/hci_conn.c:2366
- hci_dev_close_sync+0x48c/0x9e0 net/bluetooth/hci_sync.c:4476
- hci_dev_do_close net/bluetooth/hci_core.c:554 [inline]
- hci_rfkill_set_block+0x98/0x198 net/bluetooth/hci_core.c:947
- rfkill_set_block+0xb4/0x1f8 net/rfkill/core.c:345
- rfkill_fop_write+0x358/0x3f8 net/rfkill/core.c:1286
- do_iter_write+0x1f0/0x560 fs/read_write.c:857
- vfs_writev fs/read_write.c:928 [inline]
- do_writev+0x12c/0x234 fs/read_write.c:971
- __do_sys_writev fs/read_write.c:1044 [inline]
- __se_sys_writev fs/read_write.c:1041 [inline]
- __arm64_sys_writev+0x28/0x38 fs/read_write.c:1041
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-rfkill: input handler enabled
-
-
+Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ block/blk-mq.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 8070b6c10e8d..f55d41f1d150 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -383,6 +383,9 @@ static struct request *blk_mq_rq_ctx_init(struct blk_mq=
+_alloc_data *data,
+        rq->end_io =3D NULL;
+        rq->end_io_data =3D NULL;
+
++       /* initialize csd/fifo_time before use */
++       memset(&rq->csd, 0x0, sizeof(rq->csd));
++
+        blk_crypto_rq_set_defaults(rq);
+        INIT_LIST_HEAD(&rq->queuelist);
+        /* tag was already set */
+--
+2.34.1
+
+=E5=85=8D=E8=B4=A3=E5=A3=B0=E6=98=8E=EF=BC=9A=E6=9C=AC=E9=82=AE=E4=BB=B6=E6=
+=89=80=E5=8C=85=E5=90=AB=E4=BF=A1=E6=81=AF=E5=8F=91=E7=BB=99=E6=8C=87=E5=AE=
+=9A=E4=B8=AA=E4=BA=BA=E6=88=96=E6=9C=BA=E6=9E=84=EF=BC=8C=E9=82=AE=E4=BB=B6=
+=E5=8F=AF=E8=83=BD=E5=8C=85=E5=90=AB=E4=BF=9D=E5=AF=86=E6=88=96=E4=B8=93=E5=
+=B1=9E=E4=BF=A1=E6=81=AF=E3=80=82=E6=9C=AA=E7=BB=8F=E6=8E=A5=E6=94=B6=E8=80=
+=85=E8=AE=B8=E5=8F=AF=EF=BC=8C=E4=B8=8D=E5=BE=97=E9=98=85=E8=AF=BB=E3=80=81=
+=E8=BD=AC=E5=8F=91=E6=88=96=E4=BC=A0=E6=92=AD=E9=82=AE=E4=BB=B6=E5=86=85=E5=
+=AE=B9=EF=BC=8C=E6=88=96=E6=A0=B9=E6=8D=AE=E9=82=AE=E4=BB=B6=E5=86=85=E5=AE=
+=B9=E9=87=87=E5=8F=96=E4=BB=BB=E4=BD=95=E7=9B=B8=E5=85=B3=E8=A1=8C=E5=8A=A8=
+=E3=80=82=E5=A6=82=E6=9E=9C=E9=94=99=E8=AF=AF=E5=9C=B0=E6=94=B6=E5=88=B0=E4=
+=BA=86=E6=AD=A4=E9=82=AE=E4=BB=B6=EF=BC=8C=E8=AF=B7=E4=B8=8E=E6=94=B6=E4=BB=
+=B6=E4=BA=BA=E8=81=94=E7=B3=BB=E5=B9=B6=E8=87=AA=E8=A1=8C=E5=88=A0=E9=99=A4=
+=E9=82=AE=E4=BB=B6=E5=86=85=E5=AE=B9=E3=80=82
+
+Disclaimer=EF=BC=9AThe information transmitted is intended only for the per=
+son or entity to which it is addressed and may contain confidential and/or =
+privileged material. Any review, retransmission, dissemination or other use=
+ of, or taking of any action in reliance upon, this information by persons =
+or entities other than the intended recipient is prohibited. If you receive=
+d this in error , please contact the sender and delete the material from an=
+y computer .
