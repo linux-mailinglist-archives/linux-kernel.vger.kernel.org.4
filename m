@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B49D5F99D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2CC05F9963
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232431AbiJJHRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
+        id S231947AbiJJHLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232425AbiJJHRW (ORCPT
+        with ESMTP id S231751AbiJJHLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:17:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067895FF68;
-        Mon, 10 Oct 2022 00:11:26 -0700 (PDT)
+        Mon, 10 Oct 2022 03:11:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0820C10062;
+        Mon, 10 Oct 2022 00:07:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A3E060EA2;
-        Mon, 10 Oct 2022 07:08:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59AFDC433C1;
-        Mon, 10 Oct 2022 07:08:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CFC8860E7F;
+        Mon, 10 Oct 2022 07:06:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E344BC433D7;
+        Mon, 10 Oct 2022 07:06:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665385725;
-        bh=FMtJbvUlcZMfZJsHs+zcMqbDLnAq+to6DJYsgnmO13c=;
+        s=korg; t=1665385610;
+        bh=BObix2i7mUZ+lMAmfQwJ48HjJ9ZIzJkF5djtyduVrOM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nICMtLAeAXH37G2ISjQOhKuloMfQJu5krCEXvxym0m0ZWp5qri0Touyrv5QgbGGik
-         doL57NLQaOCanI+4beaSYLrydX0GIRcDyK70EfCshQ/WKO3Y4U/YZ85QTNWSLGNzva
-         gHNSgtk3zSAV1DWGWqz8KxqCC6PWw/vJQ0DhG13U=
+        b=yAZFUKzv+eS6zxtWGb2z37ptFcBlTnEF07fLKYrpMk3OoDjqW4eNlKrmF5a/J5P9y
+         cUE4yWHgK3jarQC562+foZIvHet9kytzsmjrxYJLROE4UouKX1jbh4791RboyknAdh
+         MEancDFR4SC5BlFBVAhMIP4QQEt13MhPfXa3qlBQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lukas Straub <lukasstraub2@web.de>,
-        Richard Weinberger <richard@nod.at>,
-        Sasha Levin <sashal@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH 5.15 21/37] um: Cleanup compiler warning in arch/x86/um/tls_32.c
-Date:   Mon, 10 Oct 2022 09:05:40 +0200
-Message-Id: <20221010070331.830015621@linuxfoundation.org>
+        stable@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.19 43/48] mmc: core: Terminate infinite loop in SD-UHS voltage switch
+Date:   Mon, 10 Oct 2022 09:05:41 +0200
+Message-Id: <20221010070334.814015235@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221010070331.211113813@linuxfoundation.org>
-References: <20221010070331.211113813@linuxfoundation.org>
+In-Reply-To: <20221010070333.676316214@linuxfoundation.org>
+References: <20221010070333.676316214@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,70 +54,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Straub <lukasstraub2@web.de>
+From: Brian Norris <briannorris@chromium.org>
 
-[ Upstream commit d27fff3499671dc23a08efd01cdb8b3764a391c4 ]
+commit e9233917a7e53980664efbc565888163c0a33c3f upstream.
 
-arch.tls_array is statically allocated so checking for NULL doesn't
-make sense. This causes the compiler warning below.
+This loop intends to retry a max of 10 times, with some implicit
+termination based on the SD_{R,}OCR_S18A bit. Unfortunately, the
+termination condition depends on the value reported by the SD card
+(*rocr), which may or may not correctly reflect what we asked it to do.
 
-Remove the checks to silence these warnings.
+Needless to say, it's not wise to rely on the card doing what we expect;
+we should at least terminate the loop regardless. So, check both the
+input and output values, so we ensure we will terminate regardless of
+the SD card behavior.
 
-../arch/x86/um/tls_32.c: In function 'get_free_idx':
-../arch/x86/um/tls_32.c:68:13: warning: the comparison will always evaluate as 'true' for the address of 'tls_array' will never be NULL [-Waddress]
-   68 |         if (!t->arch.tls_array)
-      |             ^
-In file included from ../arch/x86/um/asm/processor.h:10,
-                 from ../include/linux/rcupdate.h:30,
-                 from ../include/linux/rculist.h:11,
-                 from ../include/linux/pid.h:5,
-                 from ../include/linux/sched.h:14,
-                 from ../arch/x86/um/tls_32.c:7:
-../arch/x86/um/asm/processor_32.h:22:31: note: 'tls_array' declared here
-   22 |         struct uml_tls_struct tls_array[GDT_ENTRY_TLS_ENTRIES];
-      |                               ^~~~~~~~~
-../arch/x86/um/tls_32.c: In function 'get_tls_entry':
-../arch/x86/um/tls_32.c:243:13: warning: the comparison will always evaluate as 'true' for the address of 'tls_array' will never be NULL [-Waddress]
-  243 |         if (!t->arch.tls_array)
-      |             ^
-../arch/x86/um/asm/processor_32.h:22:31: note: 'tls_array' declared here
-   22 |         struct uml_tls_struct tls_array[GDT_ENTRY_TLS_ENTRIES];
-      |                               ^~~~~~~~~
+Note that SDIO learned a similar retry loop in commit 0797e5f1453b
+("mmc: core: Fixup signal voltage switch"), but that used the 'ocr'
+result, and so the current pre-terminating condition looks like:
 
-Signed-off-by: Lukas Straub <lukasstraub2@web.de>
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-Signed-off-by: Richard Weinberger <richard@nod.at>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+    rocr & ocr & R4_18V_PRESENT
+
+(i.e., it doesn't have the same bug.)
+
+This addresses a number of crash reports seen on ChromeOS that look
+like the following:
+
+    ... // lots of repeated: ...
+    <4>[13142.846061] mmc1: Skipping voltage switch
+    <4>[13143.406087] mmc1: Skipping voltage switch
+    <4>[13143.964724] mmc1: Skipping voltage switch
+    <4>[13144.526089] mmc1: Skipping voltage switch
+    <4>[13145.086088] mmc1: Skipping voltage switch
+    <4>[13145.645941] mmc1: Skipping voltage switch
+    <3>[13146.153969] INFO: task halt:30352 blocked for more than 122 seconds.
+    ...
+
+Fixes: f2119df6b764 ("mmc: sd: add support for signal voltage switch procedure")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/20220914014010.2076169-1-briannorris@chromium.org
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/um/tls_32.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/mmc/core/sd.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/um/tls_32.c b/arch/x86/um/tls_32.c
-index ac8eee093f9c..66162eafd8e8 100644
---- a/arch/x86/um/tls_32.c
-+++ b/arch/x86/um/tls_32.c
-@@ -65,9 +65,6 @@ static int get_free_idx(struct task_struct* task)
- 	struct thread_struct *t = &task->thread;
- 	int idx;
- 
--	if (!t->arch.tls_array)
--		return GDT_ENTRY_TLS_MIN;
--
- 	for (idx = 0; idx < GDT_ENTRY_TLS_ENTRIES; idx++)
- 		if (!t->arch.tls_array[idx].present)
- 			return idx + GDT_ENTRY_TLS_MIN;
-@@ -240,9 +237,6 @@ static int get_tls_entry(struct task_struct *task, struct user_desc *info,
- {
- 	struct thread_struct *t = &task->thread;
- 
--	if (!t->arch.tls_array)
--		goto clear;
--
- 	if (idx < GDT_ENTRY_TLS_MIN || idx > GDT_ENTRY_TLS_MAX)
- 		return -EINVAL;
- 
--- 
-2.35.1
-
+--- a/drivers/mmc/core/sd.c
++++ b/drivers/mmc/core/sd.c
+@@ -870,7 +870,8 @@ try_again:
+ 	 * the CCS bit is set as well. We deliberately deviate from the spec in
+ 	 * regards to this, which allows UHS-I to be supported for SDSC cards.
+ 	 */
+-	if (!mmc_host_is_spi(host) && rocr && (*rocr & SD_ROCR_S18A)) {
++	if (!mmc_host_is_spi(host) && (ocr & SD_OCR_S18R) &&
++	    rocr && (*rocr & SD_ROCR_S18A)) {
+ 		err = mmc_set_uhs_voltage(host, pocr);
+ 		if (err == -EAGAIN) {
+ 			retries--;
 
 
