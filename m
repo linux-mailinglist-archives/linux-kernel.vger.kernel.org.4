@@ -2,100 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185965F9DAF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E9E5F9DB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232112AbiJJLf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 07:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
+        id S232134AbiJJLgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 07:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232118AbiJJLfw (ORCPT
+        with ESMTP id S232166AbiJJLg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 07:35:52 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8147D6CD37;
-        Mon, 10 Oct 2022 04:35:49 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id a3so16645208wrt.0;
-        Mon, 10 Oct 2022 04:35:49 -0700 (PDT)
+        Mon, 10 Oct 2022 07:36:27 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12866F262
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:36:11 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id r14so16174279lfm.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:36:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jr6QUg4W3KCMgn//RzqzYopSrHaXWN6D/2F2E2n78+o=;
-        b=AsEfPf2TiJbvEz92D8N3jlqaxcRRjPXuD/oxHfnN7m+ZjrqWMdPul708x1RwSyRzEU
-         qt+ioz8N1jDj/WbDAJb068bSX8UHXgUcDPF12gSzrvYYIBv4O+ievYINUZUDXSEADcBX
-         BzzhbxS0aResm8dd/83NVjHxdiPUyQ7vYPqbblVk7iIsu7T27YhG620ZA2hvrW32Vaw1
-         M2SBUo8ck0gfpXfavGYpG4V+aOVtaPXSRkrhAZz5XZdpKcC61r3GLd8eV4pMTL9Nnh5w
-         QotnJ9y7aEuYUclBw4PrkQzfQNhhg8A0qZZZqt/ukal0qcrX+dnlOtCgqNTKKaLboaUI
-         1kuQ==
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rSoz9/FRpFY62QV1pyKv838T6CO3VX1FtUYWXZpyZFY=;
+        b=KEOarLU0p/YVfrQpMcSO+KSsaQZRbINQKLAiz9H2QYZqVOFKdrS065S0SSqtgMih9s
+         ImPAvBHlRlEvz/+1In+Yc7yVYCH8oy5q8KdFoYKQgMupoQp7U8xStCQQNL55H8u5667X
+         8YgGJ/7xUpCRJKibu9E1XiwDZzldoOxepJayM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jr6QUg4W3KCMgn//RzqzYopSrHaXWN6D/2F2E2n78+o=;
-        b=wpoCI02hg+qbhAGyEUeFyn7rj3TOBAQ89fRnEAoQhNVLbkOA2e/P6GXPlE8o71E82/
-         xCt8H3B10+2aEriMBvxsKb0mwJB41BLBCbPaBaPE45S7Ewiaigp9z6jtwqdrYBsRu7W4
-         p1ntxGUYwzwXisxWkglCS6bkA0opsXVK9N5IkJG2Ys33VRUE+aH3uo0INRV18h2hFlar
-         sxHNxu35phHGyU9zg4V5tnU8tiZgRN9e59i4ijrSAl8DUtRrKd0OJtxyUbvepQOuBk64
-         RDbLJP4E9IDxpid4zoNiULadGC0z4N/cuqwprLHhJbw5DPBymlCuQXK6pcleGcaoCWmD
-         2OLQ==
-X-Gm-Message-State: ACrzQf3HzHRrakJxmzSHVDxTE/LklnGuf3bCw6yGjUzGgNk3YalFO0WE
-        0zQUNp9eBO7GVNGTXXIAeRU=
-X-Google-Smtp-Source: AMsMyM45nIQ+4isA/wR9XJ47XEZguYnuBIiLPwckYxxFL6SrsVMyMMFKTBJl6gLeGNn7t14z+Shsqw==
-X-Received: by 2002:a5d:4950:0:b0:230:cc5a:f6b0 with SMTP id r16-20020a5d4950000000b00230cc5af6b0mr1643870wrs.656.1665401747925;
-        Mon, 10 Oct 2022 04:35:47 -0700 (PDT)
-Received: from [192.168.42.102] (sm4-84-91-228-85.netvisao.pt. [84.91.228.85])
-        by smtp.gmail.com with ESMTPSA id l10-20020adfe9ca000000b002286670bafasm8622031wrn.48.2022.10.10.04.35.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 04:35:47 -0700 (PDT)
-Message-ID: <f6101785-aff8-aadf-8ea7-35f60668bcf8@gmail.com>
-Date:   Mon, 10 Oct 2022 12:35:46 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: [PATCH v2 4/5] fs/ntfs3: document the hidedotfiles mount option
-Content-Language: pt-PT
-From:   Daniel Pinto <danielpinto52@gmail.com>
-To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        ntfs3@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rSoz9/FRpFY62QV1pyKv838T6CO3VX1FtUYWXZpyZFY=;
+        b=shQrHZgKkqJIZ5ILBYcYikMi5Xfx3CPjTFC4jk2yCpa8T2C9FvL4ixbOEM7UvH1C1d
+         LQ0gnORkFFZ0XnvfEM1NcEsWhZIDpdUTOo/w7u/S545CxZyU6Jz/EDzh2zI5D0X1/UKZ
+         7z13fNA0jzz16Zg4OMGNSb/x6bkYXp6q6DYn/YTA/brl0lpjWguJ5EWjZvEEYDItOq9R
+         lPe/yloODL+qaDB2RfI2Ozuza4nD+NK7Ax8UOSlY7vrFzqKK5u4rSO4EBU+ERsWV1bYS
+         J8VzwgvbXRH7J+kSCFYZ9/TtqioBhXX3CFSQyVxrWON6IEFhO99TWpPSpDX0RDtjfbsq
+         y8Ww==
+X-Gm-Message-State: ACrzQf0KIW/HOj5Qwr02C4l5T7D+7Y3iwJMSaBLnjgZ/SDeIfIruRLqH
+        aIVLGNiuMnGf10ihxIus1P2GfYNzLitih3Fv
+X-Google-Smtp-Source: AMsMyM79qcUM/JwaPV+SA4l0Uiqkukm17nWVwgWNOSKNAkzcAMK6UA/+rFFW++/PyYCptV/GXHY0Zg==
+X-Received: by 2002:a05:6512:1188:b0:4a2:4b2d:577d with SMTP id g8-20020a056512118800b004a24b2d577dmr5888900lfr.262.1665401769990;
+        Mon, 10 Oct 2022 04:36:09 -0700 (PDT)
+Received: from prevas-ravi.prevas.se ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id b12-20020a056512070c00b004a2386b8d15sm1382582lfs.212.2022.10.10.04.36.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 04:36:09 -0700 (PDT)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         linux-kernel@vger.kernel.org
-References: <9c404576-856b-6935-f2e3-c4d0749f16ea@gmail.com>
-In-Reply-To: <9c404576-856b-6935-f2e3-c4d0749f16ea@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: [PATCH] tools/nolibc/string: fix memcmp() implementation
+Date:   Mon, 10 Oct 2022 13:36:06 +0200
+Message-Id: <20221010113606.2329457-1-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for the hidedotfiles mount option.
+The C standard says that memcmp() must treat the buffers as consisting
+of "unsigned chars". If char happens to be unsigned, the casts are ok,
+but then obviously the c1 variable can never contain a negative
+value. And when char is signed, the casts are wrong, and there's still
+a problem with using an 8-bit quantity to hold the difference, because
+that can range from -255 to +255.
 
-Signed-off-by: Daniel Pinto <danielpinto52@gmail.com>
+For example, assuming char is signed, comparing two 1-byte buffers,
+one containing 0x00 and another 0x80, the current implementation would
+return -128 for both memcmp(a, b, 1) and memcmp(b, a, 1), whereas one
+of those should of course return something positive.
+
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 ---
- Documentation/filesystems/ntfs3.rst | 6 ++++++
- 1 file changed, 6 insertions(+)
+ tools/include/nolibc/string.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/filesystems/ntfs3.rst b/Documentation/filesystems/ntfs3.rst
-index d67ccd22c63b..fa03165f2310 100644
---- a/Documentation/filesystems/ntfs3.rst
-+++ b/Documentation/filesystems/ntfs3.rst
-@@ -75,6 +75,12 @@ this table marked with no it means default is without **no**.
-      - Files with the Windows-specific SYSTEM (FILE_ATTRIBUTE_SYSTEM) attribute
-        will be marked as system immutable files.
+diff --git a/tools/include/nolibc/string.h b/tools/include/nolibc/string.h
+index bef35bee9c44..cc1bddcb5927 100644
+--- a/tools/include/nolibc/string.h
++++ b/tools/include/nolibc/string.h
+@@ -19,9 +19,9 @@ static __attribute__((unused))
+ int memcmp(const void *s1, const void *s2, size_t n)
+ {
+ 	size_t ofs = 0;
+-	char c1 = 0;
++	int c1 = 0;
  
-+   * - hidedotfiles
-+     - Updates the Windows-specific HIDDEN (FILE_ATTRIBUTE_HIDDEN) attribute
-+       when creating and moving or renaming files. Files whose names start
-+       with a dot will have the HIDDEN attribute set and files whose names
-+       do not start with a dot will have it unset.
-+
-    * - discard
-      - Enable support of the TRIM command for improved performance on delete
-        operations, which is recommended for use with the solid-state drives
+-	while (ofs < n && !(c1 = ((char *)s1)[ofs] - ((char *)s2)[ofs])) {
++	while (ofs < n && !(c1 = ((unsigned char *)s1)[ofs] - ((unsigned char *)s2)[ofs])) {
+ 		ofs++;
+ 	}
+ 	return c1;
+-- 
+2.37.2
+
