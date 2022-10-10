@@ -2,153 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C7C5F9DB3
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CA845F9DB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232149AbiJJLhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 07:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
+        id S232154AbiJJLiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 07:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232139AbiJJLhQ (ORCPT
+        with ESMTP id S232109AbiJJLiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 07:37:16 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63F86E8A2;
-        Mon, 10 Oct 2022 04:37:15 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id o20-20020a05600c4fd400b003b4a516c479so6248196wmq.1;
-        Mon, 10 Oct 2022 04:37:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C2EFIm4tesO4K1a7cSrq2x4CXgXoUEITju+DVHW6+iw=;
-        b=ccPzMT3VJJ8v7DzPBzM1ZEtHzbEmIfYjtfYJ2k0FiNbwCHZPKU6nkzuSKhOr6OB8U7
-         lOuhDT2lO4vFdvHZjTKxIdL2SfTPKVDtTqPLVw6zeKALh4KG4tCEsf8OX6liE/5DIsbf
-         JRdH2aK6txpHYM6YXo/ZCSAjVKKJF10fdIajaVpj9AePxmhyOCLTUlR9RgN3TulHZ7RT
-         A4X7HTJlyzaWUQAkzUYTpk1kOOw2LRxeQ4uwIpM1ONXJXxr1S9EFre2Ie5C5/+2hY97e
-         CuSJm/IKg2/DZbUjgrkcIvuRBT6UnoYV/OI3DOpqc8/hQ4wz7R5Hs2F7/rS8ZgLGWkhv
-         ftYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C2EFIm4tesO4K1a7cSrq2x4CXgXoUEITju+DVHW6+iw=;
-        b=u7Cuemx4/FqC6i4WVJdpD8cCNKFUqy7rkjKNzidvfGBvEHLFuQmANfPSiGdxfhQIRQ
-         Oy7eUDtwejSK5eoIvPyNcIfWlzBcmCcIeyAX/YYX25pVqNIz3Sm3on5vsKGwxdqPq1kQ
-         i4RTluSG6TOWophNaHEGeH3/eNjIjTadLq8RqMv8lUoZ8ks2p17MbGTbV6A0byOj+lbt
-         YQ/4FJvn0nZJV9AZqYp9TA4PPm09E6btzGJRpZde5rswR3itIBgIOlN1p89YOvjoaU0c
-         CSxIzsAihYL078bJxQONiOe7wlEMTDq9+/Kyrg0eW21iRc6ABN/4J4uxiciQ8PqP82LM
-         epiA==
-X-Gm-Message-State: ACrzQf39fuO7yiCvhZtcFFB61tvPf0cjZGPDXLRSZMuuqQ+XX1DiruIt
-        OFJUuyCANPgDiHjJy+v3ydk=
-X-Google-Smtp-Source: AMsMyM7rSdwtUmlwD9h3eZ8YDRiviILWuOChr73nlodkc7/4oYafMcZ+iTeK/va4sRZ8PmRf0oP/7g==
-X-Received: by 2002:a7b:cb95:0:b0:3c6:c0e7:88ab with SMTP id m21-20020a7bcb95000000b003c6c0e788abmr340799wmi.147.1665401834383;
-        Mon, 10 Oct 2022 04:37:14 -0700 (PDT)
-Received: from [192.168.42.102] (sm4-84-91-228-85.netvisao.pt. [84.91.228.85])
-        by smtp.gmail.com with ESMTPSA id o18-20020a1c7512000000b003b492753826sm9794969wmc.43.2022.10.10.04.37.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 04:37:14 -0700 (PDT)
-Message-ID: <b303dfee-4f3d-d21a-0e6b-5cf2c81b6fd9@gmail.com>
-Date:   Mon, 10 Oct 2022 12:37:13 +0100
+        Mon, 10 Oct 2022 07:38:16 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F566E8A2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:38:16 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29AAv9fh012323;
+        Mon, 10 Oct 2022 11:37:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=dr6MZkLEoh7De6Bmemybv9K3SNG19brImsLFXJTfbos=;
+ b=lipqMK4/boBAHN4TDncftRy6f+IuCn8rJqpYDfU1Xlf/pfcbrcWEfhXOAtVkKL0bJ14C
+ oyvUukNm4zUQbS6s/GDq3MEX5jqTbMjBPQbTtSq3QbMHKyHQjN6EDwQYhdZoruDHATEg
+ SDaQwInvYzaZK/nnvtI4/6Hrh0daWNcwDcOaSnofwJEvtbkhPkPIeS01M9ZB+QLO7YjP
+ t/VDfoPYX2uol5jLZ5XJAoWpKX3clu8vuMGHxDgczUGr68xmx2Ha2tdI8PUU+xI+Btzi
+ UU/YziO/X65o05VHief4ipV/28zK8r3T4A8oQGHPZgMJY44+sRN9/UN5apZXBsBrT5ec 5w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3k6hj8gh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 11:37:56 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29AAFQ7V020952;
+        Mon, 10 Oct 2022 11:37:55 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3k6hj8f4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 11:37:55 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29ABbLAd009923;
+        Mon, 10 Oct 2022 11:37:52 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3k30u9a05c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 11:37:52 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29ABbnP27996132
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 10 Oct 2022 11:37:49 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C8E5A11C04A;
+        Mon, 10 Oct 2022 11:37:49 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 46D2E11C04C;
+        Mon, 10 Oct 2022 11:37:48 +0000 (GMT)
+Received: from localhost (unknown [9.43.23.98])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 10 Oct 2022 11:37:48 +0000 (GMT)
+Date:   Mon, 10 Oct 2022 17:07:46 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH v4 11/16] objtool: Add --mnop as an option to --mcount
+To:     linuxppc-dev@lists.ozlabs.org,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+Cc:     aik@ozlabs.ru, chenzhongjin@huawei.com,
+        christophe.leroy@csgroup.eu, jpoimboe@redhat.com,
+        linux-kernel@vger.kernel.org, mbenes@suse.cz, mingo@redhat.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, peterz@infradead.org,
+        rostedt@goodmis.org
+References: <20221002104240.1316480-1-sv@linux.ibm.com>
+        <20221002104240.1316480-12-sv@linux.ibm.com>
+In-Reply-To: <20221002104240.1316480-12-sv@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: [PATCH v2 5/5] fs/ntfs3: rename hidedotfiles mount option to
- hide_dot_files
-Content-Language: pt-PT
-From:   Daniel Pinto <danielpinto52@gmail.com>
-To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        ntfs3@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <9c404576-856b-6935-f2e3-c4d0749f16ea@gmail.com>
-In-Reply-To: <9c404576-856b-6935-f2e3-c4d0749f16ea@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1665401725.d3dolquorh.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: -H70vJzT512obIK1A6aY6opPudK67pRM
+X-Proofpoint-GUID: MzPjmeL3yeYEcvqH2_LYpyU-ShlyUu1X
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-10_06,2022-10-10_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ mlxscore=0 priorityscore=1501 malwarescore=0 lowpriorityscore=0
+ clxscore=1015 suspectscore=0 mlxlogscore=999 phishscore=0 impostorscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210100069
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The hidedotfiles mount option provides the same functionality as
-the NTFS-3G hide_dot_files mount option. As such, it should be
-named the same for compatibility with NTGS-3G.
+Sathvika Vasireddy wrote:
+> Some architectures (powerpc) may not support ftrace locations being nop'e=
+d
+> out at build time. Introduce CONFIG_HAVE_OBJTOOL_NOP_MCOUNT for objtool, =
+as
+> a means for architectures to enable nop'ing of ftrace locations. Add --mn=
+op
+> as an option to objtool --mcount, to indicate support for the same.
+>=20
+> Also, make sure that --mnop can be passed as an option to objtool only wh=
+en
+> --mcount is passed.
+>=20
+> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
+> ---
+>  Makefile                                |  4 +++-
+>  arch/x86/Kconfig                        |  1 +
+>  kernel/trace/Kconfig                    |  7 +++++++
+>  scripts/Makefile.lib                    |  1 +
+>  tools/objtool/builtin-check.c           | 14 ++++++++++++++
+>  tools/objtool/check.c                   | 19 ++++++++++---------
+>  tools/objtool/include/objtool/builtin.h |  1 +
+>  7 files changed, 37 insertions(+), 10 deletions(-)
+>=20
+> diff --git a/Makefile b/Makefile
+> index a5e9d9388649..b2230ad14748 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -857,7 +857,9 @@ ifdef CONFIG_FTRACE_MCOUNT_USE_CC
+>    endif
+>  endif
+>  ifdef CONFIG_FTRACE_MCOUNT_USE_OBJTOOL
+> -  CC_FLAGS_USING	+=3D -DCC_USING_NOP_MCOUNT
+> +  ifdef CONFIG_HAVE_OBJTOOL_NOP_MCOUNT
+> +    CC_FLAGS_USING	+=3D -DCC_USING_NOP_MCOUNT
+> +  endif
+>  endif
+>  ifdef CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT
+>    ifdef CONFIG_HAVE_C_RECORDMCOUNT
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index f9920f1341c8..2a79a05c4402 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -189,6 +189,7 @@ config X86
+>  	select HAVE_CONTEXT_TRACKING_USER_OFFSTACK	if HAVE_CONTEXT_TRACKING_USE=
+R
+>  	select HAVE_C_RECORDMCOUNT
+>  	select HAVE_OBJTOOL_MCOUNT		if HAVE_OBJTOOL
+> +	select HAVE_OBJTOOL_NOP_MCOUNT		if HAVE_OBJTOOL_MCOUNT
+>  	select HAVE_BUILDTIME_MCOUNT_SORT
+>  	select HAVE_DEBUG_KMEMLEAK
+>  	select HAVE_DMA_CONTIGUOUS
+> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> index 1052126bdca2..9c696cb24756 100644
+> --- a/kernel/trace/Kconfig
+> +++ b/kernel/trace/Kconfig
+> @@ -76,6 +76,13 @@ config HAVE_OBJTOOL_MCOUNT
+>  	help
+>  	  Arch supports objtool --mcount
+>=20
+> +config HAVE_OBJTOOL_NOP_MCOUNT
+> +	bool
+> +	help
+> +	  Arch supports the objtool options --mcount with --mnop.
+> +	  An architecture can select this if it wants to enable nop'ing
+> +	  of ftrace locations.
+> +
+>  config HAVE_C_RECORDMCOUNT
+>  	bool
+>  	help
+> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> index 3fb6a99e78c4..ce14e3b8577f 100644
+> --- a/scripts/Makefile.lib
+> +++ b/scripts/Makefile.lib
+> @@ -234,6 +234,7 @@ objtool_args =3D								\
+>  	$(if $(CONFIG_HAVE_NOINSTR_HACK), --hacks=3Dnoinstr)		\
+>  	$(if $(CONFIG_X86_KERNEL_IBT), --ibt)				\
+>  	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
+> +	$(if $(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT), --mnop)                 \
 
-Rename the hidedotfiles to hide_dot_files for compatbility with
-NTFS-3G.
+This still won't help: for instance, if CONFIG_FTRACE itself is=20
+disabled. I think we should make this depend on=20
+CONFIG_FTRACE_MCOUNT_USE_OBJTOOL. The below change works for me:
 
-Signed-off-by: Daniel Pinto <danielpinto52@gmail.com>
----
- Documentation/filesystems/ntfs3.rst | 2 +-
- fs/ntfs3/frecord.c                  | 2 +-
- fs/ntfs3/inode.c                    | 2 +-
- fs/ntfs3/super.c                    | 4 ++--
- 4 files changed, 5 insertions(+), 5 deletions(-)
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index 54d2d6451bdacc..fd3f55a1fdb7bb 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -245,8 +245,8 @@ objtool_args =3D                                       =
+                       \
+        $(if $(CONFIG_HAVE_JUMP_LABEL_HACK), --hacks=3Djump_label)        \
+        $(if $(CONFIG_HAVE_NOINSTR_HACK), --hacks=3Dnoinstr)              \
+        $(if $(CONFIG_X86_KERNEL_IBT), --ibt)                           \
+-       $(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)             \
+-       $(if $(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT), --mnop)                 \
++        $(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL),                       \
++             $(if $(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT), --mcount --mnop, --mc=
+ount)) \
+        $(if $(CONFIG_UNWINDER_ORC), --orc)                             \
+        $(if $(CONFIG_RETPOLINE), --retpoline)                          \
+        $(if $(CONFIG_RETHUNK), --rethunk)                              \
 
-diff --git a/Documentation/filesystems/ntfs3.rst b/Documentation/filesystems/ntfs3.rst
-index fa03165f2310..4c6eb9fe9bea 100644
---- a/Documentation/filesystems/ntfs3.rst
-+++ b/Documentation/filesystems/ntfs3.rst
-@@ -75,7 +75,7 @@ this table marked with no it means default is without **no**.
-      - Files with the Windows-specific SYSTEM (FILE_ATTRIBUTE_SYSTEM) attribute
-        will be marked as system immutable files.
- 
--   * - hidedotfiles
-+   * - hide_dot_files
-      - Updates the Windows-specific HIDDEN (FILE_ATTRIBUTE_HIDDEN) attribute
-        when creating and moving or renaming files. Files whose names start
-        with a dot will have the HIDDEN attribute set and files whose names
-diff --git a/fs/ntfs3/frecord.c b/fs/ntfs3/frecord.c
-index 41a20d71562a..552dbc5b80b1 100644
---- a/fs/ntfs3/frecord.c
-+++ b/fs/ntfs3/frecord.c
-@@ -3018,7 +3018,7 @@ int ni_add_name(struct ntfs_inode *dir_ni, struct ntfs_inode *ni,
- 	struct ATTR_FILE_NAME *de_name = (struct ATTR_FILE_NAME *)(de + 1);
- 	u16 de_key_size = le16_to_cpu(de->key_size);
- 
--	/* If option "hidedotfiles" then set hidden attribute for dot files. */
-+	/* If option "hide_dot_files" then set hidden attribute for dot files. */
- 	if (ni->mi.sbi->options->hide_dot_files) {
- 		if (de_name->name_len > 0 &&
- 		    le16_to_cpu(de_name->name[0]) == '.')
-diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
-index e9cf00d14733..7ce2bb7646db 100644
---- a/fs/ntfs3/inode.c
-+++ b/fs/ntfs3/inode.c
-@@ -1272,7 +1272,7 @@ struct inode *ntfs_create_inode(struct user_namespace *mnt_userns,
- 		fa = FILE_ATTRIBUTE_ARCHIVE;
- 	}
- 
--	/* If option "hidedotfiles" then set hidden attribute for dot files. */
-+	/* If option "hide_dot_files" then set hidden attribute for dot files. */
- 	if (sbi->options->hide_dot_files && name->name[0] == '.')
- 		fa |= FILE_ATTRIBUTE_HIDDEN;
- 
-diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
-index d796541e2a67..af67756998df 100644
---- a/fs/ntfs3/super.c
-+++ b/fs/ntfs3/super.c
-@@ -268,7 +268,7 @@ static const struct fs_parameter_spec ntfs_fs_parameters[] = {
- 	fsparam_flag_no("force",		Opt_force),
- 	fsparam_flag_no("sparse",		Opt_sparse),
- 	fsparam_flag_no("hidden",		Opt_nohidden),
--	fsparam_flag_no("hidedotfiles",		Opt_hide_dot_files),
-+	fsparam_flag_no("hide_dot_files",	Opt_hide_dot_files),
- 	fsparam_flag_no("acl",			Opt_acl),
- 	fsparam_flag_no("showmeta",		Opt_showmeta),
- 	fsparam_flag_no("prealloc",		Opt_prealloc),
-@@ -562,7 +562,7 @@ static int ntfs_show_options(struct seq_file *m, struct dentry *root)
- 	if (opts->nohidden)
- 		seq_puts(m, ",nohidden");
- 	if (opts->hide_dot_files)
--		seq_puts(m, ",hidedotfiles");
-+		seq_puts(m, ",hide_dot_files");
- 	if (opts->force)
- 		seq_puts(m, ",force");
- 	if (opts->noacsrules)
+
+- Naveen
