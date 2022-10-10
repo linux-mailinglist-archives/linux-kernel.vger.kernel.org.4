@@ -2,82 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90BF05F9BC5
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 11:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F35015F9BC7
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 11:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231588AbiJJJV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 05:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
+        id S231640AbiJJJWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 05:22:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbiJJJVw (ORCPT
+        with ESMTP id S231604AbiJJJWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 05:21:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE328422FA;
-        Mon, 10 Oct 2022 02:21:50 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D9BA91480;
-        Mon, 10 Oct 2022 02:21:56 -0700 (PDT)
-Received: from bogus (unknown [10.57.35.221])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F0A6E3F792;
-        Mon, 10 Oct 2022 02:21:46 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 10:21:44 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, james.quinlan@broadcom.com,
-        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
-        daniel.lezcano@linaro.org, tarek.el-sherbiny@arm.com,
-        adrian.slatineanu@arm.com, souvik.chakravarty@arm.com,
-        wleavitt@marvell.com, wbartczak@marvell.com,
-        dan.carpenter@oracle.com, lukasz.luba@arm.com
-Subject: Re: [PATCH v2 1/3] powercap: arm_scmi: Add SCMI Powercap based driver
-Message-ID: <20221010092144.fa2epc57vrjmtigx@bogus>
-References: <20220906142337.1697569-1-cristian.marussi@arm.com>
- <20220906142337.1697569-2-cristian.marussi@arm.com>
- <CAJZ5v0gOA+VYYHwnz=6MRdQ9ZaPmU5GfB-8xADSazZH2AE57yg@mail.gmail.com>
+        Mon, 10 Oct 2022 05:22:04 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931BB5D132;
+        Mon, 10 Oct 2022 02:22:00 -0700 (PDT)
+Received: from nazgul.tnic (unknown [46.183.103.17])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F41511EC06BD;
+        Mon, 10 Oct 2022 11:21:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1665393714;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=ETrGB0sl7q4uIl8VhsdFLNWdcz2tzkFWu01gPVIh6LI=;
+        b=n7kn6vQFklwYs/XvgVSolrdar/DypORzVjx7wknm1TlPgZt1k1euYyDdKQia/OugEatY1c
+        XvuaK9eYT0BZDeo5c63Ba71bGgbZEtRu4pZ/Apb3wHglJZIKJyCT+kN9A/l2Voh4FXI9tj
+        zMLFUmjBaKUiuIWxbTInEsHz5WZS9C8=
+Date:   Mon, 10 Oct 2022 11:21:57 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-efi@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] efi: x86: Make the deprecated EFI handover protocol
+ optional
+Message-ID: <Y0PkJWit8R2AtUmc@nazgul.tnic>
+References: <20221007172918.3131811-1-ardb@kernel.org>
+ <Y0GOKnD89SOjGzCf@nazgul.tnic>
+ <CAMj1kXHK_9iDT8CSHnZ15yB+Z=+haZXjbQ99m20jQUr0NScK4Q@mail.gmail.com>
+ <Y0GcZQZTaCgoNFGa@nazgul.tnic>
+ <CAMj1kXE6L+aNJCCcq=A3q=oG-e83JA=iA1ujSaat0BRjgyH0XA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gOA+VYYHwnz=6MRdQ9ZaPmU5GfB-8xADSazZH2AE57yg@mail.gmail.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMj1kXE6L+aNJCCcq=A3q=oG-e83JA=iA1ujSaat0BRjgyH0XA@mail.gmail.com>
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 07, 2022 at 05:09:07PM +0200, Rafael J. Wysocki wrote:
-> On Tue, Sep 6, 2022 at 4:24 PM Cristian Marussi
-> <cristian.marussi@arm.com> wrote:
-> >
-> > Add a powercap driver that, using the ARM SCMI Protocol to query the SCMI
-> > platform firmware for the list of existing Powercap domains, registers all
-> > of such discovered domains under the new 'arm-scmi' powercap control type.
-> >
-> > A new simple powercap zone and constraint is registered for all the SCMI
-> > powercap zones that are found.
-> >
-> > Cc: Rafael J. Wysocki <rafael@kernel.org>
-> > Cc: linux-pm@vger.kernel.org
-> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> 
-> Can you please fold patches [2-3/3] in the series into the first one?
-> You can add information that fixes from Dan Carpenter are included to
-> the patch changelog.
-> 
-> Also I would like the SCMI people to look at this and tell me that it
-> makes sense to them.
->
+On Mon, Oct 10, 2022 at 10:59:24AM +0200, Ard Biesheuvel wrote:
+> Yes, this is going to take time. But we simply cannot get rid of it
+> today, so the choice we have is between doing nothing at all, or
+> taking the next step in phasing out this stuff.
 
-Sorry for that, I have taken a look at this driver in the past and I was
-OK will it. Clearly I seem to have missed to officially ack it. I will do
-once Cristian has v3.
+Yes, next step ofc. This is simply the next thing we're deprecating.
+
+Thx.
 
 -- 
-Regards,
-Sudeep
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
