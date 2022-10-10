@@ -2,146 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD4A5FA6EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 23:23:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E185FA6EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 23:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbiJJVXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 17:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
+        id S230009AbiJJVXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 17:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiJJVXp (ORCPT
+        with ESMTP id S229866AbiJJVXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 17:23:45 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746A879687
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 14:23:41 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id c20so1863613plc.5
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 14:23:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+sJ/oweV4chJnDymroBgeN7mOjH5s0c90aIlCoveJ3M=;
-        b=at/GzrNip0vvaWZdMtg6b9oC+qdIP9gDHkUbM/9OPUG+MiRzOxwwQbVFm6jxmJzhnD
-         vP3qEQ5igJTvzngSoUH8yN3TqvVyKxqnR2a80cbfRCYA4epezytZt4gZJrqDU6vhtgpR
-         ZQCcsJ3g6uQ83QzDXWu0lZ0V5ULbWzOfyB2mU+TkGoHCvekxONtqbZFVTNXJPKM9itZI
-         Aa6QPe7FTR/eteIiezYGlX55cm2YoYSsZg1qc2yIVC4OOQPz/99ikKVUqV+qybwfvLFY
-         pB7CxhRDHAaWyI9OFiwYjztUORXXzvpK/wLJcVC3N7hXmd2Q9LCUH6Wd9Mq8uFx9t6M1
-         m3Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+sJ/oweV4chJnDymroBgeN7mOjH5s0c90aIlCoveJ3M=;
-        b=ADhL+h6QsmSXyH7Zy6ZTRgSykMkdgUo9HgvqKav04ShgqpOMKcgF+b+rtCQ8BN4oJT
-         xuU4I47bRoY2tNJKlpUPXxLpWEh53cnLVY9xmPm+XsgOFcJphH5kDQ8KA326y0wwrrrX
-         W7vRitKsJTyFnwCb8bqb59RVkbUIoZMJpIl4R9+716WS0ix4L8BlgzlOn5BvqiBho+8P
-         hX2OXlkfHhe5nKLVheotLKLKOwbkovq4geVDzbmUvq1m14t+AtE6fd4upAuvLo/gONnr
-         o2Lu1imZ+EwJ9Bm3Je5kBOw/vVxT7ow4wrImbHL0vdKe8uZE6bFKWEWSYaz5dJceZhVx
-         QP8Q==
-X-Gm-Message-State: ACrzQf05kBj0w0/+bxuln3SMGwqcBSshUnHERLfxwnV/mKUu5zroR/Ur
-        gHU0btPaw2FHjbTLZD1j4o8vWVdAuBjY3xv/nEHADw==
-X-Google-Smtp-Source: AMsMyM58c/JM1tzaEva2PMIuMrUgVzEel+We68/BGcV+MBNQiK2LN2GrNXYcryDyKaRMYyQSycCVwEN8m1GK+h8lyOM=
-X-Received: by 2002:a17:90b:3a88:b0:209:f35d:ad53 with SMTP id
- om8-20020a17090b3a8800b00209f35dad53mr33965063pjb.102.1665437020431; Mon, 10
- Oct 2022 14:23:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220716001616.4052225-1-ndesaulniers@google.com> <CAK8P3a0ky5w82=d2N_iZ2HYujeCDKJJqjT8P25-_+VpsZYWA_A@mail.gmail.com>
-In-Reply-To: <CAK8P3a0ky5w82=d2N_iZ2HYujeCDKJJqjT8P25-_+VpsZYWA_A@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 10 Oct 2022 14:23:28 -0700
-Message-ID: <CAKwvOdnfPeFpkD7zqt0EGk-xC_v_Lxt+2eOciMfbXihYG936Kw@mail.gmail.com>
-Subject: Re: [PATCH] arm: lib: implement aeabi_uldivmod via div64_u64_rem
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     clang-built-linux <llvm@lists.linux.dev>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Ard Biesheuval <ardb@kernel.org>, Gary Guo <gary@garyguo.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Craig Topper <craig.topper@sifive.com>,
-        Philip Reames <listmail@philipreames.com>, jh@jhauser.us
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 10 Oct 2022 17:23:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3476BD7E;
+        Mon, 10 Oct 2022 14:23:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 740B26101F;
+        Mon, 10 Oct 2022 21:23:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D8C35C433C1;
+        Mon, 10 Oct 2022 21:23:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665437025;
+        bh=Qds/az0JsA4Cni+rqkjFnWh2cVo6hS9iubDz96Ut6QE=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=kfDr2knCi1hRXY0VisZHsA7JAozGkiV83uYVYQwA6TTPBTXIij7Kjt6Yv412Kv+zj
+         G3BvxpLayuW12iBjpCHuhf56ozF7LJ+oOWsYlrL3PDgshSRuytXFBjirDloD36ytjh
+         9+YMI5hhqeIY0XmVuksIt9xA1zE5zPE7WG4bHIGqRPPTFr1tDpWwxsM/s+3d0ahDjZ
+         5qNu8z3pGCKe96LFc7cB+w8tGPOigrkw2u25Sr/nXQ+LpHnCsgp6hnjUbBrqDu32sS
+         /kfF2Ajwfaolnw1xLrLjh11hNPTPaPsHUEZVkLwUSjzyfuItEegUMH1oMRm992uI63
+         j5lxs3IzClFuQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C1E67E2A05F;
+        Mon, 10 Oct 2022 21:23:45 +0000 (UTC)
+Subject: Re: [GIT PULL] Hyper-V next for 6.1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Y0MygRaW4C+Sy2XS@liuwe-devbox-debian-v2>
+References: <Y0MygRaW4C+Sy2XS@liuwe-devbox-debian-v2>
+X-PR-Tracked-List-Id: <linux-hyperv.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Y0MygRaW4C+Sy2XS@liuwe-devbox-debian-v2>
+X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-next-signed-20221009
+X-PR-Tracked-Commit-Id: 154fb14df7a3c81dea82eca7c0c46590f5ffc3d2
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 0e0073eb1b60f4ec6faecea034a6772fe1409a88
+Message-Id: <166543702578.28157.6574303033160109411.pr-tracker-bot@kernel.org>
+Date:   Mon, 10 Oct 2022 21:23:45 +0000
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Wei Liu <wei.liu@kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
+        sthemmin@microsoft.com, Michael Kelley <mikelley@microsoft.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 16, 2022 at 2:47 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> On Sat, Jul 16, 2022 at 2:16 AM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > Compilers frequently need to defer 64b division to a libcall with this
-> > symbol name. It essentially is div64_u64_rem, just with a different
-> > signature. Kernel developers know to call div64_u64_rem, but compilers
-> > don't.
-> >
-> > Link: https://lore.kernel.org/lkml/20220524004156.0000790e@garyguo.net/
-> > Suggested-by: Gary Guo <gary@garyguo.net>
-> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+The pull request you sent on Sun, 9 Oct 2022 20:43:45 +0000:
 
-So the existing division by constant issues went away, and Craig was
-able to improve division by double-word constants in LLVM
-1. https://reviews.llvm.org/D130862
-2. https://reviews.llvm.org/D135541
-But we still have one instance left that's not div/rem by constant via
-CONFIG_FPE_NWFPE=y that's now blocking Android's compiler upgrade.
-https://github.com/ClangBuiltLinux/linux/issues/1666
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-next-signed-20221009
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm/nwfpe/softfloat.c#n2312
-Any creative ideas on how to avoid this? Perhaps putting the `aSig -=
-bSig;` in inline asm? Inserting a `barrier()` or empty asm statement
-into the loops also seems to work.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/0e0073eb1b60f4ec6faecea034a6772fe1409a88
 
-Otherwise I'd define __aeabi_uldivmod as static in
-arch/arm/nwfpe/softfloat.c (with the body from this patch) only for
-clang.
-
-I see this function seems to be based on Berkeley Softfloat
-http://www.jhauser.us/arithmetic/SoftFloat.html
-v2.  v3 looks like a total rewrite.  Looking at v3e, it looks like
-float64_rem() is now called f64_rem() and defined in f64_rem.c.  It
-doesn't look like there's anything from v3 that we could backport to
-the kernel's v2 to avoid this.
-
-Otherwise perhaps we just disable OABI_COMPAT for clang. Quite a few
-defconfigs explicitly enable FPE_NWFPE though.  Are there really a lot
-of OABI binaries still in use?
-
-There's also the hidden llvm flag:
-`-mllvm -replexitval=never` that seems to work here, though FWICT it's
-disabling 3 such loop elisions (I think all three statements in that
-do while).  That's probably the best way forward here...
-
-https://reviews.llvm.org/D9800 made the decision to do such a
-transformation when a loop can be fully elided ("deleted").
-
->
-> This has historically been strongly NAK'd, and I don't think that position
-> has changed in the meantime. A variable-argument 64-bit division is
-> really expensive, especially on 32-bit machines that lack a native
-> 32-bit division instruction, and we don't want developers to accidentally
-> insert one in their driver code.
->
-> Explicitly calling one of the division helpers in linux/math64.h is the
-> established way for driver writers to declare that a particular division
-> cannot be turned into a cheaper operation and is never run in a
-> performance critical code path. The compiler of course cannot know
-> about either of those.
->
->         Arnd
-
-
+Thank you!
 
 -- 
-Thanks,
-~Nick Desaulniers
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
