@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C885F99BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6895F995B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232280AbiJJHPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38078 "EHLO
+        id S231911AbiJJHLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232214AbiJJHNo (ORCPT
+        with ESMTP id S231855AbiJJHKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:13:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9A45AA0B;
-        Mon, 10 Oct 2022 00:09:11 -0700 (PDT)
+        Mon, 10 Oct 2022 03:10:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC95B5E327;
+        Mon, 10 Oct 2022 00:06:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 92C4260E9A;
-        Mon, 10 Oct 2022 07:08:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1E59C433D7;
-        Mon, 10 Oct 2022 07:08:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55F7160E08;
+        Mon, 10 Oct 2022 07:06:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 657F0C433C1;
+        Mon, 10 Oct 2022 07:06:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665385689;
-        bh=IL/d8xPFJDTPLYkDrOpJX95Dqn7qSOWOI6FKgv976lM=;
+        s=korg; t=1665385594;
+        bh=e1JMPfuaurNU7yamrXuJDf13lTzY2GGhqF2mchjNmik=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pbMOgxRPmLomBGUvmGzDMGgk7vvT9gBTULh/m5JIOy1UaH50bCVVEPKOF7kwMtU3J
-         5+yoUOodN3ZpDJhWRkQIbemLEGcke1Wig53cDakPTflSGOnOCat4U9RNiHaCfGDz1k
-         R3lmG7oFFO9R+5CWyD6qOs1dpUos6Hq2awYkBfPY=
+        b=ENz83DBf9AljXaPNFbiq4ogUDMONPU34tht0OawPue0dSQT1Y2Ghxe8Eug7XZQvHX
+         umiGayQ5bCDUrLacCQ7kS/ZMU2SAinsdGj6P4hal5bLvN3yCGOetBszMFZrQu6G3nz
+         oKC7Ci2PqVLwZiyxD2ZToNtRLa4d0GAcdng2iDdw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 07/37] provide arch_test_bit_acquire for architectures that define test_bit
-Date:   Mon, 10 Oct 2022 09:05:26 +0200
-Message-Id: <20221010070331.475586445@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
+        Wayne Lin <wayne.lin@amd.com>, Leo Li <sunpeng.li@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 29/48] drm/amd/display: Fix double cursor on non-video RGB MPO
+Date:   Mon, 10 Oct 2022 09:05:27 +0200
+Message-Id: <20221010070334.456327237@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221010070331.211113813@linuxfoundation.org>
-References: <20221010070331.211113813@linuxfoundation.org>
+In-Reply-To: <20221010070333.676316214@linuxfoundation.org>
+References: <20221010070333.676316214@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,130 +57,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Leo Li <sunpeng.li@amd.com>
 
-commit d6ffe6067a54972564552ea45d320fb98db1ac5e upstream.
+[ Upstream commit b261509952bc19d1012cf732f853659be6ebc61e ]
 
-Some architectures define their own arch_test_bit and they also need
-arch_test_bit_acquire, otherwise they won't compile.  We also clean up
-the code by using the generic test_bit if that is equivalent to the
-arch-specific version.
+[Why]
 
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Cc: stable@vger.kernel.org
-Fixes: 8238b4579866 ("wait_on_bit: add an acquire memory barrier")
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+DC makes use of layer_index (zpos) when picking the HW plane to enable
+HW cursor on. However, some compositors will not attach zpos information
+to each DRM plane. Consequently, in amdgpu, we default layer_index to 0
+and do not update it.
+
+This causes said DC logic to enable HW cursor on all planes of the same
+layer_index, which manifests as a double cursor issue if one of the
+planes is scaled (and hence scaling the cursor as well).
+
+[How]
+
+Use DRM core helpers to calculate a normalized_zpos value for each
+drm_plane_state under each crtc, within the atomic state.
+
+This helper will first consider existing zpos values, and if
+identical/unset, fallback to plane ID ordering.
+
+The normalized_zpos is then passed to dc_plane_info during atomic check
+for later use by the cursor logic.
+
+Reviewed-by: Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>
+Acked-by: Wayne Lin <wayne.lin@amd.com>
+Signed-off-by: Leo Li <sunpeng.li@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/alpha/include/asm/bitops.h   |    7 +++++++
- arch/hexagon/include/asm/bitops.h |   15 +++++++++++++++
- arch/ia64/include/asm/bitops.h    |    7 +++++++
- arch/m68k/include/asm/bitops.h    |    6 ++++++
- arch/s390/include/asm/bitops.h    |    7 +++++++
- arch/sh/include/asm/bitops-op32.h |    7 +++++++
- 6 files changed, 49 insertions(+)
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
---- a/arch/alpha/include/asm/bitops.h
-+++ b/arch/alpha/include/asm/bitops.h
-@@ -289,6 +289,13 @@ test_bit(int nr, const volatile void * a
- 	return (1UL & (((const int *) addr)[nr >> 5] >> (nr & 31))) != 0UL;
- }
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index 0424570c736f..c781f92db959 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -5629,7 +5629,7 @@ fill_dc_plane_info_and_addr(struct amdgpu_device *adev,
+ 	plane_info->visible = true;
+ 	plane_info->stereo_format = PLANE_STEREO_FORMAT_NONE;
  
-+static __always_inline bool
-+test_bit_acquire(unsigned long nr, const volatile unsigned long *addr)
-+{
-+	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-+	return 1UL & (smp_load_acquire(p) >> (nr & (BITS_PER_LONG-1)));
-+}
+-	plane_info->layer_index = 0;
++	plane_info->layer_index = plane_state->normalized_zpos;
+ 
+ 	ret = fill_plane_color_attributes(plane_state, plane_info->format,
+ 					  &plane_info->color_space);
+@@ -5697,7 +5697,7 @@ static int fill_dc_plane_attributes(struct amdgpu_device *adev,
+ 	dc_plane_state->global_alpha = plane_info.global_alpha;
+ 	dc_plane_state->global_alpha_value = plane_info.global_alpha_value;
+ 	dc_plane_state->dcc = plane_info.dcc;
+-	dc_plane_state->layer_index = plane_info.layer_index; // Always returns 0
++	dc_plane_state->layer_index = plane_info.layer_index;
+ 	dc_plane_state->flip_int_enabled = true;
+ 
+ 	/*
+@@ -11147,6 +11147,14 @@ static int amdgpu_dm_atomic_check(struct drm_device *dev,
+ 		}
+ 	}
+ 
++	/*
++	 * DC consults the zpos (layer_index in DC terminology) to determine the
++	 * hw plane on which to enable the hw cursor (see
++	 * `dcn10_can_pipe_disable_cursor`). By now, all modified planes are in
++	 * atomic state, so call drm helper to normalize zpos.
++	 */
++	drm_atomic_normalize_zpos(dev, state);
 +
- /*
-  * ffz = Find First Zero in word. Undefined if no zero exists,
-  * so code should check against ~0UL first..
---- a/arch/hexagon/include/asm/bitops.h
-+++ b/arch/hexagon/include/asm/bitops.h
-@@ -172,7 +172,22 @@ static inline int __test_bit(int nr, con
- 	return retval;
- }
- 
-+static inline int __test_bit_acquire(int nr, const volatile unsigned long *addr)
-+{
-+	int retval;
-+
-+	asm volatile(
-+	"{P0 = tstbit(%1,%2); if (P0.new) %0 = #1; if (!P0.new) %0 = #0;}\n"
-+	: "=&r" (retval)
-+	: "r" (addr[BIT_WORD(nr)]), "r" (nr % BITS_PER_LONG)
-+	: "p0", "memory"
-+	);
-+
-+	return retval;
-+}
-+
- #define test_bit(nr, addr) __test_bit(nr, addr)
-+#define test_bit_acquire(nr, addr) __test_bit_acquire(nr, addr)
- 
- /*
-  * ffz - find first zero in word.
---- a/arch/ia64/include/asm/bitops.h
-+++ b/arch/ia64/include/asm/bitops.h
-@@ -337,6 +337,13 @@ test_bit (int nr, const volatile void *a
- 	return 1 & (((const volatile __u32 *) addr)[nr >> 5] >> (nr & 31));
- }
- 
-+static __always_inline bool
-+test_bit_acquire(unsigned long nr, const volatile unsigned long *addr)
-+{
-+	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-+	return 1UL & (smp_load_acquire(p) >> (nr & (BITS_PER_LONG-1)));
-+}
-+
- /**
-  * ffz - find the first zero bit in a long word
-  * @x: The long word to find the bit in
---- a/arch/m68k/include/asm/bitops.h
-+++ b/arch/m68k/include/asm/bitops.h
-@@ -153,6 +153,12 @@ static inline int test_bit(int nr, const
- 	return (vaddr[nr >> 5] & (1UL << (nr & 31))) != 0;
- }
- 
-+static __always_inline bool
-+test_bit_acquire(unsigned long nr, const volatile unsigned long *addr)
-+{
-+	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-+	return 1UL & (smp_load_acquire(p) >> (nr & (BITS_PER_LONG-1)));
-+}
- 
- static inline int bset_reg_test_and_set_bit(int nr,
- 					    volatile unsigned long *vaddr)
---- a/arch/s390/include/asm/bitops.h
-+++ b/arch/s390/include/asm/bitops.h
-@@ -184,6 +184,13 @@ static inline bool arch_test_bit(unsigne
- 	return *addr & mask;
- }
- 
-+static __always_inline bool
-+arch_test_bit_acquire(unsigned long nr, const volatile unsigned long *addr)
-+{
-+	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-+	return 1UL & (smp_load_acquire(p) >> (nr & (BITS_PER_LONG-1)));
-+}
-+
- static inline bool arch_test_and_set_bit_lock(unsigned long nr,
- 					      volatile unsigned long *ptr)
- {
---- a/arch/sh/include/asm/bitops-op32.h
-+++ b/arch/sh/include/asm/bitops-op32.h
-@@ -138,4 +138,11 @@ static inline int test_bit(int nr, const
- 	return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
- }
- 
-+static __always_inline bool
-+test_bit_acquire(unsigned long nr, const volatile unsigned long *addr)
-+{
-+	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-+	return 1UL & (smp_load_acquire(p) >> (nr & (BITS_PER_LONG-1)));
-+}
-+
- #endif /* __ASM_SH_BITOPS_OP32_H */
+ 	/* Remove exiting planes if they are modified */
+ 	for_each_oldnew_plane_in_state_reverse(state, plane, old_plane_state, new_plane_state, i) {
+ 		ret = dm_update_plane_state(dc, state, plane,
+-- 
+2.35.1
+
 
 
