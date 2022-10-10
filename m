@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A03CF5FA4A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF705FA4B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiJJUPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 16:15:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
+        id S229729AbiJJUPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 16:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiJJUPG (ORCPT
+        with ESMTP id S229502AbiJJUPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 16:15:06 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394F638479;
-        Mon, 10 Oct 2022 13:15:02 -0700 (PDT)
+        Mon, 10 Oct 2022 16:15:13 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9695858B5D;
+        Mon, 10 Oct 2022 13:15:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665432903; x=1696968903;
+  t=1665432911; x=1696968911;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=b/f5qnk86K8IvDMxiisJG/aX+sY4tlL8aHadR4IA4AY=;
-  b=CYeV6/qRVPq9wlI555gP2aAkqDnhLzfFbjFpZhsI4xRBGJ6siFtU0noh
-   m4F54is6GBBfrbhb5JvVeV+MEb/xttg4L/hekRjqjw8/XP57O0tFPgSmf
-   fuEEZjoHIi17Y+GSPwVTNERIiTGS3J/ltJS9MQMIQQdpABD8IYwoDGpzS
-   dW3Nz5jI91oLEm30B2yCxGP2SDenLBkC9pUEbnAkKJufLN1S/CZGpuAy1
-   6bNjymQMnzQ0nEmvMmKrmL6Qz4Gb5Tqnzg1VsQU90L0+B/gtpNz6+iP2Z
-   jasoLHXSS3CBptDyZm1pBOf6PPehGQbIzp8pU0WfSBho9QcM5pwFZLlGK
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="303066011"
+  bh=kjXzGbYDAGDzUThAUri+8VVRFkkuppwpSy0/gaNxk3U=;
+  b=C/1i3ob18WW0WH6wswTHjghMprYU7CCRv45ZDeNZtklGyEjmA6el03JI
+   +l+m2NnHOhQHmVLJb1c2Qwwy8ru33X3pnYd9P449+zkMZLWRmizaOX/1E
+   kuEgyM5henKnRlof5MEwoa7wt5WoxwZYeg3VPIeHlVl9BMWcygd1IuIMv
+   VfcZ2CClOedlAZuwKqPEV/znjF//yHkyKxVaSLUENaBdM1Gx7B3Dz9J3j
+   lC2bZfNxpuN8PkzN/coLvEUSiG062IQUjra8A+/Iahq8+FSc1AehDXZI2
+   NDM/NgZQ/KO2pvAZ3uQOstq7XmeU13eg3FVFKQTApDDB58BPKp3FXS+lq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="301936360"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="303066011"
+   d="scan'208";a="301936360"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:01 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:10 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603862738"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603862769"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="603862738"
+   d="scan'208";a="603862769"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 10 Oct 2022 13:14:50 -0700
+  by orsmga006.jf.intel.com with ESMTP; 10 Oct 2022 13:14:59 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 5DBF01E0; Mon, 10 Oct 2022 23:15:11 +0300 (EEST)
+        id 778C82B0; Mon, 10 Oct 2022 23:15:11 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Marc Zyngier <maz@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -132,16 +132,16 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Emil Renner Berthing <kernel@esmil.dk>,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v2 01/36] gpiolib: tegra186: Add missed header(s)
-Date:   Mon, 10 Oct 2022 23:14:17 +0300
-Message-Id: <20221010201453.77401-2-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 02/36] gpiolib: cdev: Add missed header(s)
+Date:   Mon, 10 Oct 2022 23:14:18 +0300
+Message-Id: <20221010201453.77401-3-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -156,28 +156,38 @@ While at it, sort headers alphabetically.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/gpio/gpio-tegra186.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/gpio/gpiolib-cdev.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpio/gpio-tegra186.c b/drivers/gpio/gpio-tegra186.c
-index 54d9fa7da9c1..fdc5bdcd5638 100644
---- a/drivers/gpio/gpio-tegra186.c
-+++ b/drivers/gpio/gpio-tegra186.c
-@@ -7,12 +7,13 @@
-  */
- 
+diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
+index f8041d4898d1..60a60e2d60c5 100644
+--- a/drivers/gpio/gpiolib-cdev.c
++++ b/drivers/gpio/gpiolib-cdev.c
+@@ -10,8 +10,9 @@
+ #include <linux/device.h>
+ #include <linux/err.h>
+ #include <linux/file.h>
+-#include <linux/gpio.h>
  #include <linux/gpio/driver.h>
++#include <linux/gpio.h>
 +#include <linux/hte.h>
  #include <linux/interrupt.h>
- #include <linux/irq.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
- #include <linux/platform_device.h>
--#include <linux/hte.h>
+ #include <linux/irqreturn.h>
+ #include <linux/kernel.h>
+@@ -20,11 +21,12 @@
+ #include <linux/mutex.h>
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/poll.h>
 +#include <linux/seq_file.h>
+ #include <linux/spinlock.h>
+ #include <linux/timekeeping.h>
+ #include <linux/uaccess.h>
+ #include <linux/workqueue.h>
+-#include <linux/hte.h>
++
+ #include <uapi/linux/gpio.h>
  
- #include <dt-bindings/gpio/tegra186-gpio.h>
- #include <dt-bindings/gpio/tegra194-gpio.h>
+ #include "gpiolib.h"
 -- 
 2.35.1
 
