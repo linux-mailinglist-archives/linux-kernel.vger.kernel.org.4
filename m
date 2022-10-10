@@ -2,55 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F284F5FA0EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 17:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1FD95FA0EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 17:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiJJPKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 11:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
+        id S229997AbiJJPLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 11:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiJJPKi (ORCPT
+        with ESMTP id S229470AbiJJPLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 11:10:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689382408F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 08:10:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D539D60F77
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 15:10:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7C2DC433D6;
-        Mon, 10 Oct 2022 15:10:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665414636;
-        bh=ldhbd4gbQEFA+pTqtSmtstrcNM+Qhq7eBd95J2vIhdA=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=UBia0qRg3uM2Fv6m57jcY4VKFldyUhPNfLQHomhUvx5AQ+4IACfN6SN5vBoZZn2dS
-         hLFmjgW010B0xxT2620tnnbPBMUpyLMx9Q/HKXtKZTmdtxUlx8D0GpBaDrVE4ZZ+aa
-         KcxuK9bpHNnamZc4fNQO241zMTiJh3CHpKexGqq12qTbJmx0RjbmGEbYZr1NIPdNRA
-         0GZk9DljKVM6t3uc0sA/STL8FHZbwK+27mw195sqJXJWiYDt1Pix79mzhsVkIl7UF/
-         drOtb0itKvE7Ou7bGMiqAYyLdhXIw3WVXo6LMTYXECmJ8PgMDTOUAfljt3WagetiKe
-         74qKmzXLyIxmw==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Wenting Zhang <zephray@outlook.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     Wenting Zhang <zephray@outlook.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] riscv: always honor the CONFIG_CMDLINE_FORCE when
- parsing dtb
-In-Reply-To: <PSBPR04MB399135DFC54928AB958D0638B1829@PSBPR04MB3991.apcprd04.prod.outlook.com>
-References: <PSBPR04MB399135DFC54928AB958D0638B1829@PSBPR04MB3991.apcprd04.prod.outlook.com>
-Date:   Mon, 10 Oct 2022 17:10:33 +0200
-Message-ID: <87bkqjk93q.fsf@smulpajen.i-did-not-set--mail-host-address--so-tickle-me>
+        Mon, 10 Oct 2022 11:11:43 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F56C33A
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 08:11:42 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id 137so4425277iou.9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 08:11:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UpxL+9O62+3Yi0R3Js9IpvfGVnmYAvOfpk15CMpinYE=;
+        b=NlV8I03zPa10d9O79mNHx95juY5CFz3jCISY74cDjVk9Y91MH86cKTElZIHwkmomKi
+         0P9aFlc6pMVKy78t05ANHsFRngNwZrYTIoZ975gXk4k/bCmVd+cnZGed+KwegVuNToEq
+         tNC7KB3C3MvxtJecc9ZUISq8oigEjthOFUIwQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UpxL+9O62+3Yi0R3Js9IpvfGVnmYAvOfpk15CMpinYE=;
+        b=Amvw+2+OnL+HuK8w9rRROSakU90k7wfNpoN0i7cXphzgt9VXhstKYEweOxATS5MwvA
+         qNW6y2n9rvFh9z3bMzWB4MZr4csfr77fPfwL8kH0fV5VFSbdoq4/7OyUlC5mreIu5a/0
+         GaiGnvB0U5nIj1Asbd3iMKHBF68Byd+4V60l8KX1rXRzxf36+zHZG4UYW90YTf6SBR/6
+         ZEf+y6xAj3M93X9qq8p9ZmDOVwlTtkwoslw9nV6x5HFWNSr4Zipbg8RpxAUleLIGI739
+         FFh6BXiWpikzjFBdVPdECaL6tEDA7xaEqQBilW2o7M2xMwO38U8i+4uPqk92s0IxQDRM
+         qErA==
+X-Gm-Message-State: ACrzQf1WmDcsKU2fqH/XAFfjCtgd4XDCh0Npb+Ndj0zRd5pi/EqKNihO
+        w2wsP0KSule+eU7l/Rj8LAGSO1G+tAX1NMK3Iey1Dw==
+X-Google-Smtp-Source: AMsMyM4WS7C6MHejAooxG7uxy3LNO3FIWuBynEuNu2r3Fr0BbOnvDRQidjxtDMOWNByRla119AGb+DyKOOqpTsp4ZZM=
+X-Received: by 2002:a5e:9e01:0:b0:6a4:f730:624c with SMTP id
+ i1-20020a5e9e01000000b006a4f730624cmr8677672ioq.107.1665414701579; Mon, 10
+ Oct 2022 08:11:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <CALUeGD0OP4ZqDFcT10=ih40tGsm9gjjno7NP_Jwd1RxiUJZ0CQ@mail.gmail.com>
+ <0BFD3887-60A2-4C74-9D37-49B7B6E64299@joelfernandes.org> <20221010144650.fjwhjdbqqaxz4sow@wubuntu>
+In-Reply-To: <20221010144650.fjwhjdbqqaxz4sow@wubuntu>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Mon, 10 Oct 2022 11:11:31 -0400
+Message-ID: <CAEXW_YQBkgpAd0i_gJULYqUsA0f=Bui1oKh0DR47G00stD1XYA@mail.gmail.com>
+Subject: Re: Sum of weights idea for CFS PI
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     Youssef Esmat <youssefesmat@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>, bristot@redhat.com,
+        clark.williams@gmail.com, bigeasy@linutronix.de,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,24 +73,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wenting Zhang <zephray@outlook.com> writes:
-
-> When CONFIG_CMDLINE_FORCE is enabled, cmdline provided by
-> CONFIG_CMDLINE are always used. This allows CONFIG_CMDLINE to be
-> used regardless of the result of device tree scanning.
+On Mon, Oct 10, 2022 at 10:46 AM Qais Yousef <qais.yousef@arm.com> wrote:
 >
-> This especially fixes the case where a device tree without the
-> chosen node is supplied to the kernel. In such cases,
-> early_init_dt_scan would return true. But inside
-> early_init_dt_scan_chosen, the cmdline won't be updated as there
-> is no chosen node in the device tree. As a result, CONFIG_CMDLINE
-> is not copied into boot_command_line even if CONFIG_CMDLINE_FORCE
-> is enabled. This commit allows properly update boot_command_line
-> in this situation.
+> On 10/08/22 11:04, Joel Fernandes wrote:
+> >
+> >
+> > > On Oct 6, 2022, at 3:40 PM, Youssef Esmat <youssefesmat@google.com> w=
+rote:
+> > >
+> > [..]
+> > >>
+> > >>> Anyway - just trying to explain how I see it and why C is unlikely =
+to be
+> > >>> taking too much time. I could be wrong. As Youssef said, I think th=
+ere's
+> > >>> no fundamental problem here.
+> > >>
+> > >> I know on Android where they use smaller HZ, the large tick causes l=
+ots of
+> > >> problems for large nice deltas. Example if a highly niced task was t=
+o be
+> > >> preempted for 1ms, and preempts instead at 3ms, then the less-niced =
+task
+> > >> will not be so nice (even less nice than it promised to be) any more
+> > >> because of the 2ms boost that the higher niced task got. This can le=
+ad the
+> > >> the sched_latency thrown out of the window. Not adjusting the weight=
+s
+> > >> properly can potentially make that problem much worse IMO.
+> > >
+> > > Once C releases the lock it should get adjusted and A will get adjust=
+ed
+> > > also regardless of tick. At the point we adjust the weights we have
+> > > a chance to check for preemption and cause a reschedule.
+> >
+> > Yes but the lock can be held for potentially long time (and even user s=
+pace
+> > lock). I=E2=80=99m more comfortable with Peter=E2=80=99s PE patch which=
+ seems a more generic
+> > solution, than sum of weights if we can get it working. I=E2=80=99m stu=
+dying Connor=E2=80=99s
+> > patch set now=E2=80=A6
 >
-> Fixes: 8fd6e05c7463 ("arch: riscv: support kernel command line forcing wh=
-en no DTB passed")
-> Signed-off-by: Wenting Zhang <zephray@outlook.com>
+> The 2 solutions are equivalent AFAICT.
 
-Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
+Possibly. Maybe I am talking about a non-issue then, but I had to be
+careful ;-) Maybe both have the issue I was referring to, or they
+don't. But in any case, PE seems more organic.
 
+> With summation:
+>
+>    A    ,    B   ,    C   ,    D
+> sleeping, running, running, running
+>    -    ,   1/5  ,   3/5  ,   1/5
+>
+> Where we'll treat A as running but donate its bandwidth to C, the mutex o=
+wner.
+
+> With PE:
+>
+>    A    ,    B   ,    C   ,    D
+>  running, running, running, running
+>    2/5  ,   1/5  ,   1/5  ,   1/5
+>
+> Where A will donate its execution context to C, the mutex owner.
+
+Yes. It would also be great if Peter can participate in this thread,
+if he has time. Not to nitpick but to be more precise in PE
+terminology, you mean "scheduler context". The "execution context" is
+not inherited [1]
+
+If p1 is selected to run while still blocked, the lock owner p2 can
+run "on its behalf", inheriting p1's scheduler context. Execution
+context is not inherited, meaning that e.g. the CPUs where p2 can run
+are still determined by its own affinity and not p1's.
+
+[1] https://lore.kernel.org/all/73859883-78c4-1080-7846-e8d644ad397a@redhat=
+.com/t/#mdf0146cdf78e48fc5cc515c1a34cdc1d596e0ed8
+
+> In both cases we should end up with the same distribution as if neither A=
+ nor
+> C ever go to sleep because of holding the mutex.
+
+Hopefully!
+
+> I still can't see how B and D fairness will be impacted as the solution t=
+o the
+> problem is to never treat a waiter as sleeping and let the owner run for =
+more,
+> but only within the limit of what the waiter is allowed to run for. AFAIC=
+S,
+> both solutions maintain this relationship.
+
+True!
+
+ - Joel
