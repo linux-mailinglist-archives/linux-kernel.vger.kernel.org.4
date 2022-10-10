@@ -2,80 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4112F5FA175
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 17:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C565FA17C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 17:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbiJJP4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 11:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33812 "EHLO
+        id S229895AbiJJP6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 11:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbiJJP4E (ORCPT
+        with ESMTP id S229587AbiJJP6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 11:56:04 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676FE74CE1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 08:56:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=YpOA3yDkOhhLvlnmsAVbYcm3nzeMbmZuIBkpzhRIZOI=; b=p65M3v9WQrCi7bcHQV5xlVnK0j
-        ot7O6nOZ+yKjc2xMvbK2eh0JaV/tXy/1MT1h7isK40qeoia4HhmjixqIkQrjDFl8hkC367qySghQ2
-        9gHZLaAOWh+k33Q9tX1uC+QLgWtUTwq2nUWwOFm6+dfc4630y7z8zOyPNcPGIQRU5BCeVP0mx7Ele
-        VG4UdCfEVmrxZx6md1TyyyrmcgA6/7rTEzuA0ZsmYhN1tkIhcZCzItA+1dlkXXKvPs1+jwGQ/bLtl
-        Wor54DMrLbmQY1CFFXnIVDaxKlHi4dWGVrCHEnrTN1ywby77xz/py6ihrJrwPvm99mWTXZUoprGkO
-        sb34A6SA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34664)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1ohv8G-0004qc-3Z; Mon, 10 Oct 2022 16:55:57 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1ohv8B-0001xp-P9; Mon, 10 Oct 2022 16:55:51 +0100
-Date:   Mon, 10 Oct 2022 16:55:51 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] ARM: mm: Provide better message when kernel fault
-Message-ID: <Y0RAh/6e60fXUex6@shell.armlinux.org.uk>
-References: <YzF7X2PBdps2MaG/@shell.armlinux.org.uk>
- <20220927062134.99019-1-wangkefeng.wang@huawei.com>
- <4339e1f4-b5c1-0b61-3a37-e63aafe22857@huawei.com>
+        Mon, 10 Oct 2022 11:58:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D6E726A1;
+        Mon, 10 Oct 2022 08:58:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A618260F83;
+        Mon, 10 Oct 2022 15:58:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FE16C433C1;
+        Mon, 10 Oct 2022 15:58:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665417482;
+        bh=4X8G6+O+QPksuawyg4i/Nna0sKN6RLkcN88gN30z0WQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=or5Xo6bByP/+sU2YzNNgerI3psEg5NS8d6+pB4H4McSxdVROTy4ecdDYLLzj1EdQS
+         s1qOZ29tUdTt7BnP4Q8tF+qlG7NwCnF/4uPSvWD/KElohBWibmREfwob1qG14Z2NNB
+         F6QqsCqZnFrmxqYuZF2S1NVcAby0aWBqDf8ZiSH4=
+Date:   Mon, 10 Oct 2022 17:58:45 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     yong w <yongw.pur@gmail.com>
+Cc:     jaewon31.kim@samsung.com, linux-kernel@vger.kernel.org,
+        mhocko@kernel.org, stable@vger.kernel.org, wang.yong12@zte.com.cn
+Subject: Re: [PATCH v2 stable-4.19 0/3] page_alloc: consider highatomic
+ reserve in watermark fast backports to 4.19
+Message-ID: <Y0RBNTQnYpoF1r7w@kroah.com>
+References: <Yyn7MoSmV43Gxog4@kroah.com>
+ <20220925103529.13716-1-yongw.pur@gmail.com>
+ <YzmwKxYVDSWsaPCU@kroah.com>
+ <CAOH5QeB2EqpqQd6fw-P199w8K8-3QNv_t-u_Wn1BLnfaSscmCg@mail.gmail.com>
+ <Y0BWuJHsK6XDk2nx@kroah.com>
+ <CAOH5QeAX0NzO2mXqBbMRYGMzNMTAq4H1r9r_AFWC2Fj=MNWwiw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <4339e1f4-b5c1-0b61-3a37-e63aafe22857@huawei.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOH5QeAX0NzO2mXqBbMRYGMzNMTAq4H1r9r_AFWC2Fj=MNWwiw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 07:24:15PM +0800, Kefeng Wang wrote:
+On Mon, Oct 10, 2022 at 11:47:30PM +0800, yong w wrote:
+> Greg KH <gregkh@linuxfoundation.org> 于2022年10月8日周六 00:40写道：
+> >
+> > A: http://en.wikipedia.org/wiki/Top_post
+> > Q: Were do I find info about this thing called top-posting?
+> > A: Because it messes up the order in which people normally read text.
+> > Q: Why is top-posting such a bad thing?
+> > A: Top-posting.
+> > Q: What is the most annoying thing in e-mail?
+> >
+> > A: No.
+> > Q: Should I include quotations after my reply?
+> >
+> > http://daringfireball.net/2007/07/on_top
+> >
+> >
+> > On Fri, Oct 07, 2022 at 04:53:50PM +0800, yong w wrote:
+> > > Is it ok to add my signed-off-by? my signed-off-by is as follows:
+> > >
+> > >   Signed-off-by: wangyong <wang.yong12@zte.com.cn>
+> >
+> > For obvious reasons, I can not take that from a random gmail account
+> > (nor should ZTE want me to do that.)
+> >
+> > Please fix up your email systems and do this properly and send the
+> > series again.
+> >
+> > thanks,
+> >
+> > greg k-h
 > 
-> On 2022/9/27 14:21, Kefeng Wang wrote:
-> > If there is a kernel fault, see do_kernel_fault(), we only print
-> > the generic "paging request" or "NULL pointer dereference" message
-> > which don't show read, write or excute information, let's provide
-> > better fault message for them.
-> 
-> Hi Russell, what's your option about this one, if no object,
+> Sorry, our mail system cannot send external mail for some reason.
 
-LGTM.
+Sorry, then I can not attribute anything to your company.  It has
+already been warned that it can not continue to contribute to the Linux
+kernel and some of your gmail "aliases" have been banned from the
+mailing lists.
 
-> I will send to ARM patch system, thanks,
+Please fix your email system so that you can properly contribute to
+Linux.
 
-Yes please, if not already done.
+> And this is my email, I can receive an email and reply to it.
 
-Thanks.
+Yes, but I have no proof that your ZTE email is correct, only that this
+is a random gmail.com address :(
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+What would you do if you were in my situation?
+
+Please work with your IT group to fix their email systems.
+
+good luck,
+
+greg k-h
