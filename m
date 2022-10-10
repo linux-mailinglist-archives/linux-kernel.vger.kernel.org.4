@@ -2,44 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3973E606B81
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B6D606B80
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbiJTWqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 18:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40418 "EHLO
+        id S230074AbiJTWqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 18:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbiJTWqX (ORCPT
+        with ESMTP id S230166AbiJTWqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 18:46:23 -0400
+        Thu, 20 Oct 2022 18:46:21 -0400
 Received: from tartarus.angband.pl (tartarus.angband.pl [51.83.246.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1D7B97A3;
-        Thu, 20 Oct 2022 15:46:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F270139C16;
+        Thu, 20 Oct 2022 15:46:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=angband.pl;
-        s=tartarus; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:MIME-Version
-        :Subject:Date:To:From:Resent-To:Resent-Message-ID:Resent-Date:Resent-From:
-        Sender:Reply-To:Message-ID:Cc:Content-ID:Content-Description:Resent-Sender:
-        Resent-Cc:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=yhrawtb8eXhszTBMzMp3oX/egk/zUhmr7nUvZdT/NYQ=; b=Ut7JNeZhP9UNLMpPyDnduNdTwp
-        XBDHnUB6n5HXszRnR7MWHcGPnrStmgCBGbmuM0B6fZt8nZHt/bIL+GFNOAvfh1hWNC02T7U2MLM4d
-        6oMw98qbAy0uyccM0iyJ1TZtAZ/mwSR4PlD4/1w9CrFhePtSCWqfpKTKIsDKDKeA77dE=;
+        s=tartarus; h=In-Reply-To:Subject:Date:To:From:Resent-To:Resent-Message-ID:
+        Resent-Date:Resent-From:Sender:Reply-To:Message-ID:Cc:MIME-Version:
+        Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
+        Resent-Sender:Resent-Cc:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=5HLtj6M5N8x5SCdnb3ABMngx/UZALXblAVL++swe094=; b=eutvSdRkC+80sIpaXSyOkRBg9Y
+        DXIqVrzREhej/NOftb2AAYNc2wRlx6CpqzMEYRG17Hck7T1nz/EJoImtJbfGGQ4jOrgp0fROEYr8X
+        mnIQaimqtEUvAHuEzwlUkxmAM+7e1ORKhGJnkv9Gq0arPNaTEuEGFCOoCZEd3dnNIEbA=;
 Received: from kilobyte by tartarus.angband.pl with local (Exim 4.94.2)
         (envelope-from <kilobyte@angband.pl>)
-        id 1oleIf-009Ob6-BD; Fri, 21 Oct 2022 00:46:05 +0200
+        id 1oleIs-009ObH-2C; Fri, 21 Oct 2022 00:46:18 +0200
 From:   Adam Borowski <kilobyte@angband.pl>
-To:     Yong Zhi <yong.zhi@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Dan Scally <djrscally@gmail.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 16 Sep 2022 01:33:18 +0200
-Subject: [PATCH 4/6] media: ipu3-cio2: make the bridge depend on i2c
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+To:     Khalil Blaiech <kblaiech@nvidia.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 10 Oct 2022 20:33:51 +0200
+Subject: [PATCH 5/6] i2c: mlxbf: depend on ACPI; clean away ifdeffage
 In-Reply-To: <S229853AbiJTWkg/20221020224036Z+12888@vger.kernel.org>
 X-SA-Exim-Connect-IP: <locally generated>
 X-SA-Exim-Mail-From: kilobyte@angband.pl
@@ -52,31 +45,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-Message-Id: <S230158AbiJTWqt/20221020224651Z+39696@vger.kernel.org>
+Message-Id: <S230074AbiJTWqn/20221020224644Z+39693@vger.kernel.org>
 
-drivers/media/pci/intel/ipu3/cio2-bridge.c: In function ‘cio2_bridge_unregister_sensors’:
-drivers/media/pci/intel/ipu3/cio2-bridge.c:258:17: error: implicit declaration of function ‘i2c_unregister_device’; did you mean ‘spi_unregister_device’? [-Werror=implicit-function-declaration]
-  258 |                 i2c_unregister_device(sensor->vcm_i2c_client);
-      |                 ^~~~~~~~~~~~~~~~~~~~~
-      |                 spi_unregister_device
+This fixes maybe_unused warnings/errors.
 
+According to a comment during device tree removal, only ACPI is supported,
+thus let's actually require it.
+
+Fixes: be18c5ede25da39a0eda541f6de3620a30cf731f
 Signed-off-by: Adam Borowski <kilobyte@angband.pl>
 ---
- drivers/media/pci/intel/ipu3/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/i2c/busses/Kconfig     | 1 +
+ drivers/i2c/busses/i2c-mlxbf.c | 9 ---------
+ 2 files changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/drivers/media/pci/intel/ipu3/Kconfig b/drivers/media/pci/intel/ipu3/Kconfig
-index 39bd3be0b43d..65b0c1598fbf 100644
---- a/drivers/media/pci/intel/ipu3/Kconfig
-+++ b/drivers/media/pci/intel/ipu3/Kconfig
-@@ -21,6 +21,7 @@ config VIDEO_IPU3_CIO2
- config CIO2_BRIDGE
- 	bool "IPU3 CIO2 Sensors Bridge"
- 	depends on VIDEO_IPU3_CIO2 && ACPI
-+	depends on I2C
- 	help
- 	  This extension provides an API for the ipu3-cio2 driver to create
- 	  connections to cameras that are hidden in the SSDB buffer in ACPI.
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 264e780ae32e..e50f9603d189 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -764,6 +764,7 @@ config I2C_LPC2K
+ config I2C_MLXBF
+         tristate "Mellanox BlueField I2C controller"
+         depends on MELLANOX_PLATFORM && ARM64
++	depends on ACPI
+ 	select I2C_SLAVE
+         help
+           Enabling this option will add I2C SMBus support for Mellanox BlueField
+diff --git a/drivers/i2c/busses/i2c-mlxbf.c b/drivers/i2c/busses/i2c-mlxbf.c
+index e68e775f187e..1810d5791b3d 100644
+--- a/drivers/i2c/busses/i2c-mlxbf.c
++++ b/drivers/i2c/busses/i2c-mlxbf.c
+@@ -2247,7 +2247,6 @@ static struct i2c_adapter_quirks mlxbf_i2c_quirks = {
+ 	.max_write_len = MLXBF_I2C_MASTER_DATA_W_LENGTH,
+ };
+ 
+-#ifdef CONFIG_ACPI
+ static const struct acpi_device_id mlxbf_i2c_acpi_ids[] = {
+ 	{ "MLNXBF03", (kernel_ulong_t)&mlxbf_i2c_chip[MLXBF_I2C_CHIP_TYPE_1] },
+ 	{ "MLNXBF23", (kernel_ulong_t)&mlxbf_i2c_chip[MLXBF_I2C_CHIP_TYPE_2] },
+@@ -2282,12 +2281,6 @@ static int mlxbf_i2c_acpi_probe(struct device *dev, struct mlxbf_i2c_priv *priv)
+ 
+ 	return 0;
+ }
+-#else
+-static int mlxbf_i2c_acpi_probe(struct device *dev, struct mlxbf_i2c_priv *priv)
+-{
+-	return -ENOENT;
+-}
+-#endif /* CONFIG_ACPI */
+ 
+ static int mlxbf_i2c_probe(struct platform_device *pdev)
+ {
+@@ -2490,9 +2483,7 @@ static struct platform_driver mlxbf_i2c_driver = {
+ 	.remove = mlxbf_i2c_remove,
+ 	.driver = {
+ 		.name = "i2c-mlxbf",
+-#ifdef CONFIG_ACPI
+ 		.acpi_match_table = ACPI_PTR(mlxbf_i2c_acpi_ids),
+-#endif /* CONFIG_ACPI  */
+ 	},
+ };
+ 
 -- 
 2.37.2.609.g9ff673ca1a
 
