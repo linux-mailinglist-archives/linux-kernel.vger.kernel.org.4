@@ -2,126 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650B65FA41D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 21:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A305FA3DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 21:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbiJJTYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 15:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
+        id S229637AbiJJTDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 15:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiJJTXx (ORCPT
+        with ESMTP id S229531AbiJJTDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 15:23:53 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6873606AB
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 12:23:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665429832; x=1696965832;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=GoA9pNPB/aZ7nuj9piguDaWtAHjuR84sIzoHe1Tko9U=;
-  b=OdhOtzHLpqTW1P+XW3ANwW0orA43rNd2tS0IaXYZaxeO0zg9e/wuGFj2
-   1PGMpw/A47/1R9Ix8fS2Jqs/beA1YNKBSaHPCHKiL8NKBFb0IfzilUfYc
-   5FWz8NfU4WYAu/R0ua3F4r4DHFIbpJm8bCIfVxVptPkj9sLHWWv0p33T+
-   2lI6umwQHxGA76X4EZw2r2l/LbaN2/TN4/t3+dSrD7S917dbz2Ih/MXjE
-   o9WBLfhcKdOkVsaNPKtHNjPyC+FOQs6lDU/ZW+fmPXjKOvfNLBwsVi0xK
-   3O33Nk0IIKyvAq9aIAUB4OPyLBipRCuv27KQeRGkcfGgMVU3vgJZPqOIY
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="284044540"
-X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="284044540"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 12:23:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="694762697"
-X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="694762697"
-Received: from unknown (HELO fred..) ([172.25.112.68])
-  by fmsmga004.fm.intel.com with ESMTP; 10 Oct 2022 12:23:50 -0700
-From:   Xin Li <xin3.li@intel.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org
-Subject: [PATCH v2 6/6] x86/gsseg: use the LKGS instruction if available for load_gs_index()
-Date:   Mon, 10 Oct 2022 12:01:59 -0700
-Message-Id: <20221010190159.11920-7-xin3.li@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221010190159.11920-1-xin3.li@intel.com>
-References: <20221010190159.11920-1-xin3.li@intel.com>
+        Mon, 10 Oct 2022 15:03:03 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C3D6C114
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 12:03:01 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id e18so7344379wmq.3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 12:03:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IH6I6NcjzPKjFPQf55rCYBqtWBzYJLRWJqZUybSFisQ=;
+        b=SLDB+E6HI3mVhaxoZxkdrBbjmiTplPkAeBxrHHgklFWoNfBi+Ez2BIF4hXY/xMXYfb
+         63a2uPrjxyD4qajLS8etlnj11O/Lw1K5LmvYxdhlRLN8SyjvDdzaVPj4YDmHco1njJWz
+         8pDhszT9DWtRxau4UAAauOhBZdVkYcEzOJzD22ZpB09nmTqXkNDmvU34yOqRKMYgBsja
+         mTdiYhW0H630TMfRif3kZVoplRWAgxCiZDVBWCLbvGcM7ci1XOwjhn4wKOx4U8/LHnjz
+         hl9sckIoDG4elVElLba4+FHa4m9PZqKcoAQ4rKsFPvFlbLiKYVGNCa7IHuaxWfh8sxEh
+         JvjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IH6I6NcjzPKjFPQf55rCYBqtWBzYJLRWJqZUybSFisQ=;
+        b=kUjwi5IRYG2HtmOFavQvFFzOUBLeJsP/71gZaqLHXDO4y0uN9FVY5RKTG5CvoekQZ8
+         0V/Q1Rv8nfrGYxs4gLAPcR+kEyAy6bmOuIAjPOUzPJWabmSGzd6B3vE63nZ1OH5k8Rn0
+         8Ot4hx0TqZyWKe9q45iQY3LC7Fd1vmm8Vb4PirJxLmjJjQY+6M7Tng4QM3mTP0r5Klc9
+         96wt8mcPPfrRUcdk7MEkknQrcv/VV3YpcXuYLbXWJaxjiGMCJpja1H39SLctsXShIFig
+         ziyweiHnuKV9gX7q9U30RzTj4t+xZ5hstBPrW9/EU6Gexq0qP4/tGtCI8mURr0PNobfM
+         Mr3g==
+X-Gm-Message-State: ACrzQf1hT2SDS9l7x3vuKS5U4cYjKELzg1XV4lAUfhm5ll6QYWCR+8fR
+        aVBoLaEO53M/O4S8iOneRmRkD4HRQoMZRSLMipI=
+X-Google-Smtp-Source: AMsMyM4qZY1iV7wZSdC8XvhQD27cyJst3gKx9MtPbnhPZejYFK2ZBJJsDmzhOF1N/NftEn4Rei8o5g==
+X-Received: by 2002:a05:600c:154e:b0:3b4:bf17:32fc with SMTP id f14-20020a05600c154e00b003b4bf1732fcmr21269440wmg.70.1665428580308;
+        Mon, 10 Oct 2022 12:03:00 -0700 (PDT)
+Received: from localhost.localdomain ([176.61.123.135])
+        by smtp.gmail.com with ESMTPSA id o14-20020a05600c4fce00b003a531c7aa66sm11786569wmq.1.2022.10.10.12.02.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 12:02:59 -0700 (PDT)
+From:   Dragan Cvetic <dragan.m.cvetic@gmail.com>
+To:     philipp.g.hortmann@gmail.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Dragan Cvetic <dragan.m.cvetic@gmail.com>
+Subject: [PATCH] staging: rtl8192e: Remove single statement braces
+Date:   Mon, 10 Oct 2022 20:02:51 +0100
+Message-Id: <20221010190252.12402-1-dragan.m.cvetic@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "H. Peter Anvin (Intel)" <hpa@zytor.com>
+Remove braces around single line statement, to resolve checkpatch.pl
+warnings "braces {} are not necessary for single statement blocks"
 
-The LKGS instruction atomically loads a segment descriptor into the
-%gs descriptor registers, *except* that %gs.base is unchanged, and the
-base is instead loaded into MSR_IA32_KERNEL_GS_BASE, which is exactly
-what we want this function to do.
-
-Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Xin Li <xin3.li@intel.com>
-link: https://lkml.org/lkml/2022/10/7/352
-link: https://lkml.org/lkml/2022/10/7/373
+Signed-off-by: Dragan Cvetic <dragan.m.cvetic@gmail.com>
 ---
- arch/x86/include/asm/gsseg.h | 27 ++++++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/include/asm/gsseg.h b/arch/x86/include/asm/gsseg.h
-index 5e3b56a17098..4aaef7a1d68f 100644
---- a/arch/x86/include/asm/gsseg.h
-+++ b/arch/x86/include/asm/gsseg.h
-@@ -3,15 +3,40 @@
- #define _ASM_X86_GSSEG_H
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+index 702551056227..d7bfaf68291c 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+@@ -267,10 +267,8 @@ static void _rtl92e_dm_check_ac_dc_power(struct net_device *dev)
+ 			"PATH=/usr/bin:/bin",
+ 			 NULL};
  
- #include <linux/types.h>
-+
-+#include <asm/asm.h>
-+#include <asm/cpufeature.h>
-+#include <asm/alternative.h>
- #include <asm/processor.h>
-+#include <asm/nops.h>
+-	if (priv->ResetProgress == RESET_TYPE_SILENT) {
++	if (priv->ResetProgress == RESET_TYPE_SILENT)
+ 		return;
+-	}
+-
+ 	if (priv->rtllib->state != RTLLIB_LINKED)
+ 		return;
+ 	call_usermodehelper(ac_dc_script, argv, envp, UMH_WAIT_PROC);
+@@ -330,9 +328,8 @@ static void _rtl92e_dm_check_rate_adaptive(struct net_device *dev)
+ 	bool bshort_gi_enabled = false;
+ 	static u8 ping_rssi_state;
  
- #ifdef CONFIG_X86_64
+-	if (!priv->up) {
++	if (!priv->up)
+ 		return;
+-	}
  
- extern asmlinkage void asm_load_gs_index(u16 selector);
+ 	if (pra->rate_adaptive_disabled)
+ 		return;
+@@ -777,9 +774,8 @@ static void _rtl92e_dm_tx_power_tracking_cb_thermal(struct net_device *dev)
+ 		tmpRegA = rtl92e_get_bb_reg(dev, rOFDM0_XATxIQImbalance,
+ 					    bMaskDWord);
+ 		for (i = 0; i < OFDM_Table_Length; i++) {
+-			if (tmpRegA == OFDMSwingTable[i]) {
++			if (tmpRegA == OFDMSwingTable[i])
+ 				priv->OFDM_index[0] = i;
+-			}
+ 		}
  
-+/* Replace with "lkgs %di" once binutils support LKGS instruction */
-+#define LKGS_DI _ASM_BYTES(0xf2,0x0f,0x00,0xf7)
-+
- static inline void native_load_gs_index(unsigned int selector)
- {
--	asm_load_gs_index(selector);
-+	u16 sel = selector;
-+
-+	/*
-+	 * Note: the fixup is used for the LKGS instruction, but
-+	 * it needs to be attached to the primary instruction sequence
-+	 * as it isn't something that gets patched.
-+	 *
-+	 * %rax is provided to the assembly routine as a scratch
-+	 * register.
-+	 */
-+	asm_inline volatile("1:\n"
-+			    ALTERNATIVE("call asm_load_gs_index\n",
-+					_ASM_BYTES(0x3e) LKGS_DI,
-+					X86_FEATURE_LKGS)
-+			    _ASM_EXTABLE_TYPE_REG(1b, 1b, EX_TYPE_ZERO_REG, %k[sel])
-+			    : ASM_CALL_CONSTRAINT
-+			    : [sel] "D" (sel)
-+			    : "memory", _ASM_AX);
- }
+ 		TempCCk = rtl92e_get_bb_reg(dev, rCCK0_TxFilter1, bMaskByte2);
+@@ -1066,9 +1062,8 @@ void rtl92e_dm_restore_state(struct net_device *dev)
+ 	u32	reg_ratr = priv->rate_adaptive.last_ratr;
+ 	u32 ratr_value;
  
- #endif /* CONFIG_X86_64 */
+-	if (!priv->up) {
++	if (!priv->up)
+ 		return;
+-	}
+ 
+ 	if (priv->rate_adaptive.rate_adaptive_disabled)
+ 		return;
 -- 
-2.34.1
+2.25.1
 
