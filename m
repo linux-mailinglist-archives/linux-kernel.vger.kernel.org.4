@@ -2,92 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7745F9D55
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F4A5F9D58
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232027AbiJJLLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 07:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58706 "EHLO
+        id S232036AbiJJLNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 07:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232008AbiJJLLX (ORCPT
+        with ESMTP id S232007AbiJJLNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 07:11:23 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E667246D91;
-        Mon, 10 Oct 2022 04:11:22 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so6196347wmb.0;
-        Mon, 10 Oct 2022 04:11:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g284Hwqas55uYSjGq3vvwN/bg9BNQaBmJr08O4Ly1GQ=;
-        b=JMrM3DbAJpoWMS1inM2jvCxgnU7FfTrVT/1e7BBsGNQQamCIHKRvYy4dHvGNktfU7O
-         +UhmiCq3mmKc15EGXxTZqQlhYtBO9+Ye1INyeUKOmZD0j0OdAXG61kon9s/MUSADeQOj
-         2aoMHLlmXVMPi5ArvgJLNmctSUy0eCqaOsmC8Jdz/NndeaBL7dqPT7ikydXC3uLkS1Fd
-         Zhu4l+qabqSRl/jVbUx6KuiHLmIHqmTJ0hy//hFb1dvm7pRjXrap+Q0WKDOn29ZyV//W
-         26sOHMQdwEFJ2f79fKddOx0xtZ564VoT4jwnaDRNnSw7Qj9V6cD6ge1mJFyCDfFZXEkh
-         +gJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=g284Hwqas55uYSjGq3vvwN/bg9BNQaBmJr08O4Ly1GQ=;
-        b=c+42HHpESEhNz45r0f//18GDa1zfRnSHsTe5nAQRMv5C69nDPBD7ZaDHM0hm+6rdY0
-         oveOFHH0Fks1oWqu876Xlise+QlXN82LhGVCHWBKkA/JhiKh/4c2d/oJjOyM9A/TOZGh
-         uIWdIRb1K7xNjoWzSIuN74SfiMq2uT+MvIl/wPbKYliFyySqV+q+b6lwbwjv8+oTe3e7
-         kzJ051z2PwxkSFO16zoTAZKfktYm4Ck7uTcGkmjuzPt7HXwEz+qsz4lKZBjgZ3uYF48A
-         q81EqncTwnWe3TkJ2ZgThPqPg71thddDNJwFB/jzzDJmTDgny9e124lnoaf8lOtt+6us
-         ckvA==
-X-Gm-Message-State: ACrzQf3msbahLrbitcwim+ZAYHohoge2oEnUAbQhdfUN9fW//isrkH97
-        veY2qhjNC4Uf9lNJSGb+9MLngLuJss4=
-X-Google-Smtp-Source: AMsMyM5+1N6+K6LeM5JpapeQokf1CUGnZeD/IoxuHXa6dPo4LFuuBYzY3FuRusstacq5MYD+DWLEWw==
-X-Received: by 2002:a05:600c:3c84:b0:3b4:eff4:ab69 with SMTP id bg4-20020a05600c3c8400b003b4eff4ab69mr19158807wmb.104.1665400281061;
-        Mon, 10 Oct 2022 04:11:21 -0700 (PDT)
-Received: from [192.168.42.102] (sm4-84-91-228-85.netvisao.pt. [84.91.228.85])
-        by smtp.gmail.com with ESMTPSA id g20-20020a05600c4ed400b003b4ac05a8a4sm22532297wmq.27.2022.10.10.04.11.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 04:11:20 -0700 (PDT)
-Message-ID: <1b23684d-2cac-830e-88e3-1dc1c1567441@gmail.com>
-Date:   Mon, 10 Oct 2022 12:11:19 +0100
+        Mon, 10 Oct 2022 07:13:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5465C36E
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:13:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665400398;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cjfm8RmJkrxBn+xSALMff74eWGCgI/d+h1W88CDZ86U=;
+        b=cSvZNVXeuzXb/kcVPzXqeNh520fZx2W4vsXg5Z8EtFIUioLb2jBEwi/yKUm+/58eir4PKd
+        aIX6MCq0UO7KkXc645WZqAFy12lR8Pw1WRMqWIwnj8joe2r7F3iNxZAiSiHqwqRxiGTasA
+        c9bat5lmAwQwUSDYkdFGL1UusMIMy4c=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-500-utO26pQtPQSNb1oVWV2XLg-1; Mon, 10 Oct 2022 07:13:16 -0400
+X-MC-Unique: utO26pQtPQSNb1oVWV2XLg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6CCC585A583;
+        Mon, 10 Oct 2022 11:13:14 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.192.124])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 656F2B279E;
+        Mon, 10 Oct 2022 11:13:07 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com
+Subject: Re: [PATCH v2 28/39] x86/cet/shstk: Introduce map_shadow_stack syscall
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+        <20220929222936.14584-29-rick.p.edgecombe@intel.com>
+Date:   Mon, 10 Oct 2022 13:13:05 +0200
+In-Reply-To: <20220929222936.14584-29-rick.p.edgecombe@intel.com> (Rick
+        Edgecombe's message of "Thu, 29 Sep 2022 15:29:25 -0700")
+Message-ID: <87r0zg0w5a.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: pt-PT
-To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        ntfs3@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-From:   Daniel Pinto <danielpinto52@gmail.com>
-Subject: [PATCH v2 0/2] fs/ntfs3: Add windows_names mount option
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes v1->v2:
-- Add documentation for windows_names mount option.
+* Rick Edgecombe:
 
-When enabled, the windows_names mount option prevents the creation
-of files or directories with names not allowed by Windows. Use
-the same option name as NTFS-3G for compatibility.
+> When operating with shadow stacks enabled, the kernel will automatically
+> allocate shadow stacks for new threads, however in some cases userspace
+> will need additional shadow stacks. The main example of this is the
+> ucontext family of functions, which require userspace allocating and
+> pivoting to userspace managed stacks.
+>
+> Unlike most other user memory permissions, shadow stacks need to be
+> provisioned with special data in order to be useful. They need to be setup
+> with a restore token so that userspace can pivot to them via the RSTORSSP
+> instruction. But, the security design of shadow stack's is that they
+> should not be written to except in limited circumstances. This presents a
+> problem for userspace, as to how userspace can provision this special
+> data, without allowing for the shadow stack to be generally writable.
+>
+> Previously, a new PROT_SHADOW_STACK was attempted, which could be
+> mprotect()ed from RW permissions after the data was provisioned. This was
+> found to not be secure enough, as other thread's could write to the
+> shadow stack during the writable window.
+>
+> The kernel can use a special instruction, WRUSS, to write directly to
+> userspace shadow stacks. So the solution can be that memory can be mapped
+> as shadow stack permissions from the beginning (never generally writable
+> in userspace), and the kernel itself can write the restore token.
+>
+> First, a new madvise() flag was explored, which could operate on the
+> PROT_SHADOW_STACK memory. This had a couple downsides:
+> 1. Extra checks were needed in mprotect() to prevent writable memory from
+>    ever becoming PROT_SHADOW_STACK.
+> 2. Extra checks/vma state were needed in the new madvise() to prevent
+>    restore tokens being written into the middle of pre-used shadow stacks.
+>    It is ideal to prevent restore tokens being added at arbitrary
+>    locations, so the check was to make sure the shadow stack had never been
+>    written to.
+> 3. It stood out from the rest of the madvise flags, as more of direct
+>    action than a hint at future desired behavior.
+>
+> So rather than repurpose two existing syscalls (mmap, madvise) that don't
+> quite fit, just implement a new map_shadow_stack syscall to allow
+> userspace to map and setup new shadow stacks in one step. While ucontext
+> is the primary motivator, userspace may have other unforeseen reasons to
+> setup it's own shadow stacks using the WRSS instruction. Towards this
+> provide a flag so that stacks can be optionally setup securely for the
+> common case of ucontext without enabling WRSS. Or potentially have the
+> kernel set up the shadow stack in some new way.
+>
+> The following example demonstrates how to create a new shadow stack with
+> map_shadow_stack:
+> void *shstk = map_shadow_stack(adrr, stack_size, SHADOW_STACK_SET_TOKEN);
 
-Daniel Pinto (2):
-  fs/ntfs3: add windows_names mount option
-  fs/ntfs3: document windows_names mount option
+Jason has recently been working on vDSO-based getrandom acceleration.
+It needs a way for a userspace thread to allocate userspace memory in a
+specific way.  Jason proposed to use a vDSO call as the interface, not a
+system call.
 
- Documentation/filesystems/ntfs3.rst |   8 +++
- fs/ntfs3/frecord.c                  |   7 +-
- fs/ntfs3/fsntfs.c                   | 104 ++++++++++++++++++++++++++++
- fs/ntfs3/inode.c                    |   7 ++
- fs/ntfs3/ntfs_fs.h                  |   2 +
- fs/ntfs3/super.c                    |   7 ++
- 6 files changed, 134 insertions(+), 1 deletion(-)
+Maybe this approach is applicable here as well?  Or we can come up with
+a more general interface for such per-thread allocations?
+
+Thanks,
+Florian
+
