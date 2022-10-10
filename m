@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC50F5F99D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9205F99BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbiJJHR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
+        id S232289AbiJJHPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232359AbiJJHR2 (ORCPT
+        with ESMTP id S232210AbiJJHNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:17:28 -0400
+        Mon, 10 Oct 2022 03:13:43 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9805FADD;
-        Mon, 10 Oct 2022 00:11:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1945F200;
+        Mon, 10 Oct 2022 00:08:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BD15FB80E56;
-        Mon, 10 Oct 2022 07:08:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 372F3C433D6;
-        Mon, 10 Oct 2022 07:08:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5C1A5B80E69;
+        Mon, 10 Oct 2022 07:08:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7FCFC433D6;
+        Mon, 10 Oct 2022 07:08:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665385733;
-        bh=1Btak+V6mpWCjnqSLc99b3Qti2O6zO1lxM7YkezTo3I=;
+        s=korg; t=1665385736;
+        bh=HfLz4j7DE39PIpdF5+dXZg8UWtbplrHysO5ptm/cBFE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QZE/83TZ5d4k9ma2S+YuF89r0ZDQytASt4BPiSmRj5O5hhw6kl55NDRk3wRrI9+oa
-         wpawC9r+soBYeQOs0Cp9Q3G5HW6oAWy+JIEihadS3Oc5y2Vxd6/oE3kzv0sOgksMi6
-         JnqE4vvTLrK01EZEPePFOHUwgyQozx8VtBkirleM=
+        b=tH8W36jQ5G3RhTcFhBaID7s1QVBEcu1YNZJ0BrUdLdNjp9Y+650RjnIjhoEFC6IZJ
+         lOIuDNP89AtuMgRoObZG02I7ThaACngTiYaL1P2uOruM8CMlnx7viXeC0YenHceEWf
+         VA3Ms6o0DNWXqqhExz4RJGbTQXbaoqrRrp8Flg0o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
-        Wayne Lin <wayne.lin@amd.com>, Leo Li <sunpeng.li@amd.com>,
+        stable@vger.kernel.org, George Shen <George.Shen@amd.com>,
+        Wayne Lin <wayne.lin@amd.com>,
+        Michael Strauss <michael.strauss@amd.com>,
         Daniel Wheeler <daniel.wheeler@amd.com>,
         Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 24/37] drm/amd/display: Fix double cursor on non-video RGB MPO
-Date:   Mon, 10 Oct 2022 09:05:43 +0200
-Message-Id: <20221010070331.913262431@linuxfoundation.org>
+Subject: [PATCH 5.15 25/37] drm/amd/display: Assume an LTTPR is always present on fixed_vs links
+Date:   Mon, 10 Oct 2022 09:05:44 +0200
+Message-Id: <20221010070331.941157714@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221010070331.211113813@linuxfoundation.org>
 References: <20221010070331.211113813@linuxfoundation.org>
@@ -57,79 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leo Li <sunpeng.li@amd.com>
+From: Michael Strauss <michael.strauss@amd.com>
 
-[ Upstream commit b261509952bc19d1012cf732f853659be6ebc61e ]
+[ Upstream commit 29956d0fded036a570bd8e7d4ea4b1a1730307d2 ]
 
-[Why]
+[WHY]
+LTTPRs can in very rare instsances fail to increment DPCD LTTPR count.
+This results in aux-i LTTPR requests to be sent to the wrong DPCD
+address, which causes link training failure.
 
-DC makes use of layer_index (zpos) when picking the HW plane to enable
-HW cursor on. However, some compositors will not attach zpos information
-to each DRM plane. Consequently, in amdgpu, we default layer_index to 0
-and do not update it.
+[HOW]
+Override internal repeater count if fixed_vs flag is set for a given link
 
-This causes said DC logic to enable HW cursor on all planes of the same
-layer_index, which manifests as a double cursor issue if one of the
-planes is scaled (and hence scaling the cursor as well).
-
-[How]
-
-Use DRM core helpers to calculate a normalized_zpos value for each
-drm_plane_state under each crtc, within the atomic state.
-
-This helper will first consider existing zpos values, and if
-identical/unset, fallback to plane ID ordering.
-
-The normalized_zpos is then passed to dc_plane_info during atomic check
-for later use by the cursor logic.
-
-Reviewed-by: Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>
+Reviewed-by: George Shen <George.Shen@amd.com>
 Acked-by: Wayne Lin <wayne.lin@amd.com>
-Signed-off-by: Leo Li <sunpeng.li@amd.com>
+Signed-off-by: Michael Strauss <michael.strauss@amd.com>
 Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index e3dfea3d44a4..c826fc493e0f 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -5442,7 +5442,7 @@ fill_dc_plane_info_and_addr(struct amdgpu_device *adev,
- 	plane_info->visible = true;
- 	plane_info->stereo_format = PLANE_STEREO_FORMAT_NONE;
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+index 6d5dc5ab3d8c..a6ff1b17fd22 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+@@ -3703,6 +3703,14 @@ bool dp_retrieve_lttpr_cap(struct dc_link *link)
+ 				lttpr_dpcd_data[DP_PHY_REPEATER_EXTENDED_WAIT_TIMEOUT -
+ 								DP_LT_TUNABLE_PHY_REPEATER_FIELD_DATA_STRUCTURE_REV];
  
--	plane_info->layer_index = 0;
-+	plane_info->layer_index = plane_state->normalized_zpos;
- 
- 	ret = fill_plane_color_attributes(plane_state, plane_info->format,
- 					  &plane_info->color_space);
-@@ -5509,7 +5509,7 @@ static int fill_dc_plane_attributes(struct amdgpu_device *adev,
- 	dc_plane_state->global_alpha = plane_info.global_alpha;
- 	dc_plane_state->global_alpha_value = plane_info.global_alpha_value;
- 	dc_plane_state->dcc = plane_info.dcc;
--	dc_plane_state->layer_index = plane_info.layer_index; // Always returns 0
-+	dc_plane_state->layer_index = plane_info.layer_index;
- 	dc_plane_state->flip_int_enabled = true;
- 
- 	/*
-@@ -10828,6 +10828,14 @@ static int amdgpu_dm_atomic_check(struct drm_device *dev,
- 		}
- 	}
- 
-+	/*
-+	 * DC consults the zpos (layer_index in DC terminology) to determine the
-+	 * hw plane on which to enable the hw cursor (see
-+	 * `dcn10_can_pipe_disable_cursor`). By now, all modified planes are in
-+	 * atomic state, so call drm helper to normalize zpos.
-+	 */
-+	drm_atomic_normalize_zpos(dev, state);
++		/* If this chip cap is set, at least one retimer must exist in the chain
++		 * Override count to 1 if we receive a known bad count (0 or an invalid value) */
++		if (link->chip_caps & EXT_DISPLAY_PATH_CAPS__DP_FIXED_VS_EN &&
++				(dp_convert_to_count(link->dpcd_caps.lttpr_caps.phy_repeater_cnt) == 0)) {
++			ASSERT(0);
++			link->dpcd_caps.lttpr_caps.phy_repeater_cnt = 0x80;
++		}
 +
- 	/* Remove exiting planes if they are modified */
- 	for_each_oldnew_plane_in_state_reverse(state, plane, old_plane_state, new_plane_state, i) {
- 		ret = dm_update_plane_state(dc, state, plane,
+ 		/* Attempt to train in LTTPR transparent mode if repeater count exceeds 8. */
+ 		is_lttpr_present = (dp_convert_to_count(link->dpcd_caps.lttpr_caps.phy_repeater_cnt) != 0 &&
+ 				link->dpcd_caps.lttpr_caps.max_lane_count > 0 &&
 -- 
 2.35.1
 
