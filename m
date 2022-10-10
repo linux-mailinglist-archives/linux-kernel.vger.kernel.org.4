@@ -2,87 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C535F9DBF
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A37AC5F9DC2
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232215AbiJJLlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 07:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
+        id S232250AbiJJLlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 07:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232196AbiJJLlg (ORCPT
+        with ESMTP id S232224AbiJJLls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 07:41:36 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C80B6EF1F;
-        Mon, 10 Oct 2022 04:41:34 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id w18so16612529wro.7;
-        Mon, 10 Oct 2022 04:41:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iLGq1+RUh3PrwecWDEEn4QoJ194t8Cm1swty2LFq2C0=;
-        b=JHS1k+yRHEfegsCk2bQWqkr0ojnsmKytgZC8U/sabwKebvTBzbN6Cm3f9PcQGcBFhk
-         jBvLVYtkTRr5qN+mirsCx9Xor2iap608amHqsGICh6ZfvwOZTSbl62w/OiJ5mAhqPLvV
-         dynrMl1X+LXDW/kAaq+QvqkCiHds9G5kRpLJYr4hSzEhuigX280E0qtEEZQILa1weysp
-         KWqcdSxKG0+UBORmRS+V2GV3zGWSI2I3vc5jloGIV9D1rfFZk+3Y5lN7H1WtZqIsf/14
-         pI1ypXwfqMua7IH8NlVXYP2f1Bo00LROwoHrPEvD8jyFchi9EFNmB+vzcW6cduuOC67O
-         /zFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iLGq1+RUh3PrwecWDEEn4QoJ194t8Cm1swty2LFq2C0=;
-        b=2X4+I5c9Pa5b+Id+EXZNDpMI0ENMuOSX5NgwBrCryZo+lHTjHNNh0cCZLjcJCOqslD
-         2SmHdfTYwysyu2+8HOml4zD/qbhEaj1sNk2PPeXyuP/PjWUdS2bvThNAC1Kx68Vjmj20
-         LLfFJ5g4VYDZ+hhn85bHm2BMzaaqEjnTZ/d8ASmzsuKc6tcr74uAzgfeoyo+Iftaf67O
-         ie9dp9zPk59CyVesBCthgVtxxTvAeiVzNXvK+xxURQeenfRhlOL5WITsjhsYrWRauWk/
-         i+8GxdoN8aX0i1gPxM1/nMlTp1njAB0E/i8igWKZZE32/n/Q5d0M1sMchBhRR7wtVeyB
-         zwTg==
-X-Gm-Message-State: ACrzQf0BbHkhHzT/kWip9WiXHwYip8VIS0nuWYc5O6Bchyuzj3MHYBCb
-        FGQrVx0P+KbL9FFR4IL3HT2CD081Ut4=
-X-Google-Smtp-Source: AMsMyM5K65zbs1EdcjECCJ/+eItaJRr8U3ut88gE6prPBUkeB04tcwlWuTZOJqrthm3uKRj3hZyt0w==
-X-Received: by 2002:adf:ec83:0:b0:22e:51e2:7fc7 with SMTP id z3-20020adfec83000000b0022e51e27fc7mr10832677wrn.229.1665402093059;
-        Mon, 10 Oct 2022 04:41:33 -0700 (PDT)
-Received: from [192.168.42.102] (sm4-84-91-228-85.netvisao.pt. [84.91.228.85])
-        by smtp.gmail.com with ESMTPSA id j39-20020a05600c48a700b003a5537bb2besm9647924wmp.25.2022.10.10.04.41.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 04:41:32 -0700 (PDT)
-Message-ID: <c9b467dd-9294-232b-b808-48f62c3c2186@gmail.com>
-Date:   Mon, 10 Oct 2022 12:41:31 +0100
+        Mon, 10 Oct 2022 07:41:48 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82866F540;
+        Mon, 10 Oct 2022 04:41:42 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29A9NgcP024572;
+        Mon, 10 Oct 2022 11:41:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=9USQ200jqdFb44hpyR5MTzDDPPNAIylIP25hc6N5iCs=;
+ b=nZ1AwnBqT7Daf9IKmrMZB7enW+FBtVksbQa6Sjx7BgsYJR18CXTgZ7zvQY4ad+W/2J51
+ FXrTMTJOJqbki4EIfJ7CMDB2yyfAZPVtBWphPZEIXibMsWqwlqhoTL/tZG3k9p+3gxY6
+ pLB5Ps+GIHdMtQdWaA80urUUQMZE5i0BuSMyIyjMzZWZILj9Gk/1Q2I5HtlU22iHIy3w
+ 1UWYSiOqMvxzQkHn2D6DG38CfxCcE0wAUHt4nH2WuSY0EWLw9WfCnell3VIKJY//nphd
+ ZFI0710KkVPvlAIrf5EB1ISCi7lNkYh04JGCk3bQq7quTGEyFxh14R8yW4TxalWEaW8Z jg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3ju72fn9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 11:41:41 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29ABfL4j020313;
+        Mon, 10 Oct 2022 11:41:41 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3ju72fmn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 11:41:41 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29ABd384007441;
+        Mon, 10 Oct 2022 11:41:39 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 3k30u9aq7y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 11:41:39 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29ABfag325559584
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 10 Oct 2022 11:41:36 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 41FA311C04C;
+        Mon, 10 Oct 2022 11:41:36 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C50C711C04A;
+        Mon, 10 Oct 2022 11:41:35 +0000 (GMT)
+Received: from [9.171.5.210] (unknown [9.171.5.210])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 10 Oct 2022 11:41:35 +0000 (GMT)
+Message-ID: <5faebcc6-fa26-bb9b-bbbb-c67401a9443a@linux.ibm.com>
+Date:   Mon, 10 Oct 2022 13:41:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: pt-PT
-To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        ntfs3@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-From:   Daniel Pinto <danielpinto52@gmail.com>
-Subject: [PATCH v2 0/2] fs/ntfs3: Add system.ntfs_attrib_be extended attribute
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v14 2/6] KVM: s390: pv: api documentation for asynchronous
+ destroy
+Content-Language: en-US
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     borntraeger@de.ibm.com, thuth@redhat.com, david@redhat.com,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        scgl@linux.ibm.com, seiden@linux.ibm.com, nrb@linux.ibm.com
+References: <20220930140150.37463-1-imbrenda@linux.ibm.com>
+ <20220930140150.37463-3-imbrenda@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20220930140150.37463-3-imbrenda@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: edJddEvH7M_Z4lJxfV99p-MwmBeLaCdl
+X-Proofpoint-ORIG-GUID: mM_Ei450wcllVXZFsMvJ2phMIfqeiID_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-10_06,2022-10-10_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ lowpriorityscore=0 spamscore=0 bulkscore=0 priorityscore=1501
+ clxscore=1015 mlxscore=0 suspectscore=0 malwarescore=0 impostorscore=0
+ mlxlogscore=980 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210100067
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes v1->v2:
-- Add documentation for the system.ntfs_attrib_be extended attribute
+On 9/30/22 16:01, Claudio Imbrenda wrote:
+> Add documentation for the new commands added to the KVM_S390_PV_COMMAND
+> ioctl.
+> 
+> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Reviewed-by: Nico Boehr <nrb@linux.ibm.com>
 
-Improves compatibility with NTFS-3G by adding the system.ntfs_attrib_be
-extended attribute.
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
-Daniel Pinto (2):
-  fs/ntfs3: add system.ntfs_attrib_be extended attribute
-  fs/ntfs3: document system.ntfs_attrib_be extended attribute
-
- Documentation/filesystems/ntfs3.rst |  5 +++++
- fs/ntfs3/xattr.c                    | 20 ++++++++++++++------
- 2 files changed, 19 insertions(+), 6 deletions(-)
