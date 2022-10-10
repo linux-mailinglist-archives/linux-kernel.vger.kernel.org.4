@@ -2,245 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6895F983B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 08:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A96865F983C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 08:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbiJJGSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 02:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48628 "EHLO
+        id S231389AbiJJGTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 02:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbiJJGSi (ORCPT
+        with ESMTP id S231215AbiJJGTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 02:18:38 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D9654C9D
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 23:18:36 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id s206so9548118pgs.3
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 23:18:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xYWYA1/DBdsUSF1pq4Iqs0V+J1NFLRK9XVgu/yztoos=;
-        b=KgpBWhbO4lmUrxYH1zb3xhj/CgjyanZOTVJiYWT4Rrqz+0ovQXT20N74gTBBM8/71Z
-         pHKhjDcMmGkMzC2RdLL+3ttYAFWYN+R1+9VEFvQxaF4a/+lJagraV6+GnEFyYU+cDNWD
-         m+fB5ErMyVeCxDooQ5uw7qCBRyB+mMhrMdeeHnR+qwbhEyvNYJ3VQ8fHbhj3kTTYZkfM
-         uuk5Chhz/yMsjL6JRtgTY7auVtTm3fkixfoc89UkkIM/Uj4xsUwUKITlhBxeppr5mqj8
-         Or2TSjEZ/XCwZ86FKnqNFvzmtBsrL+09OBAxET3gpj774lPrM9fYWbq6TEp5NmBJwL+W
-         iuxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xYWYA1/DBdsUSF1pq4Iqs0V+J1NFLRK9XVgu/yztoos=;
-        b=GhToMY8jLABsOCP0kbGmIPd3pfxi+c2LsJ1MGVYT90ed/sDLHiHOmhGbrQ3FYYcBiN
-         Ys2KwJ0fCW+gCw4GhMYNhUh0UOyXCxvrNlFzE8WWnWFd69Vb6OIZIDz8lSgFwMFIAkYA
-         zDPjD/8e/k3E8htINSysWJUgdy5sj5lfIVGgpF8gbnORa0ht2/g2UXpl6kD32OPOxBAN
-         8dT73TNbVwfo7cj3osPuHVHJYaVSVfbWO2t7BQOVUErYb+TWaOYOSpXEhtmsZblIfP/g
-         yUg37UPKhYBJIdErmY9iTKV9vH9SUN9wlDlIXvKseZ62Nt90lG4XJ30QRhA3Nr1yJ4OV
-         Te5w==
-X-Gm-Message-State: ACrzQf1pLHxi/vWu5HIhf2C6mKjXbsdtkUZBuGXZqDZcY6E2xJVfN42y
-        6G8pCYO6qzvUbIRnNQ//GXk=
-X-Google-Smtp-Source: AMsMyM5q2sP3cRKv2s0qOn6rbuONynmWUqOSKKvRXSpiFi9HliaC+XTLQGmB3trT0BDzam90cHwk6g==
-X-Received: by 2002:a63:90c4:0:b0:45f:c571:67eb with SMTP id a187-20020a6390c4000000b0045fc57167ebmr10439170pge.541.1665382715882;
-        Sun, 09 Oct 2022 23:18:35 -0700 (PDT)
-Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
-        by smtp.gmail.com with ESMTPSA id e24-20020a63db18000000b0040caab35e5bsm5603309pgg.89.2022.10.09.23.18.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 09 Oct 2022 23:18:34 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: RFC [PATCH v4 2/7] Enable balloon drivers to report inflated
- memory
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <d55338c4-d15f-14ec-c057-806a5d5aa618@virtuozzo.com>
-Date:   Sun, 9 Oct 2022 23:18:32 -0700
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
-        Linux Virtualization <virtualization@lists.linux-foundation.org>,
+        Mon, 10 Oct 2022 02:19:00 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D5B55099
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 23:18:59 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29A3Cvph030667;
+        Mon, 10 Oct 2022 06:18:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=BKDMt7Elb+b1+7okVksf2EUwsLUUJlU6PKV1wzO1Wfc=;
+ b=R8vXxN4upo+KPUACEuexZuXrigwvnYL/wwplrJON+nsBnA8nVJEsbO1iZlYH4JLd8IJt
+ 3Uo1vM2AZ29BI5YQHd8WQyxnc8yRW/rH6LItLaRy4w2IicOLzwcQHSwDIQIelOaFGVMQ
+ 3CewMZ1MOZWpWOUPc8BffUUBtgXcWMt5QC3gmgOxsxny5GvrLUAeS8nihjomIKVJ/xy2
+ S9eFJtT0dwDkRtI0v9Ax2rFgRNi6q0ga726f8TN/cmUpanyWSbW31sv9UIio50UcN8pX
+ DdRD8vYOPE4UOFRCGVxRyef9mM4RRlfkmy9dlPzYFsvWdpIIxzcpKgnnSkOYO8PrPNae jA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k31jskfkh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 06:18:56 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29A6ItAw002352
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 06:18:55 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Sun, 9 Oct 2022 23:18:53 -0700
+Date:   Mon, 10 Oct 2022 11:48:49 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+CC:     Suren Baghdasaryan <surenb@google.com>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <71E14334-CA3B-45FB-A854-7A8D6649C798@gmail.com>
-References: <20221005090158.2801592-1-alexander.atanasov@virtuozzo.com>
- <20221005090158.2801592-3-alexander.atanasov@virtuozzo.com>
- <88EDC41D-408F-4ADF-A933-0A6F36E5F262@gmail.com>
- <a8ce5c48-3efc-5ea3-6f5c-53b9e33f65c7@virtuozzo.com>
- <42C75E59-696B-41D5-BD77-68EFF0B075C6@gmail.com>
- <d55338c4-d15f-14ec-c057-806a5d5aa618@virtuozzo.com>
-To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Charan Teja Kalla <quic_charante@quicinc.com>
+Subject: Re: PSI idle-shutoff
+Message-ID: <20221010061849.GB1474@hu-pkondeti-hyd.qualcomm.com>
+References: <20220913140817.GA9091@hu-pkondeti-hyd.qualcomm.com>
+ <20220915062027.GA14713@hu-pkondeti-hyd.qualcomm.com>
+ <CAJuCfpE_nM2uqixnds0d6wbsz4=OQ3KPoJ5HOqDhQXaxFGxwXQ@mail.gmail.com>
+ <CAJuCfpEeNzDQ-CvMN3fP5LejOzpnfgUgvkzpPj1CLF-8NqNoww@mail.gmail.com>
+ <CAJuCfpFr3JfwkWbDqkU=NUJbCYuCWGySwNusMCdmS3z95WD2AQ@mail.gmail.com>
+ <43f4d1c3-52fe-5254-7d50-c420de6d11a6@bytedance.com>
+ <ff2addac-5a6c-1aa5-5f1c-d62b0444ae4c@bytedance.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ff2addac-5a6c-1aa5-5f1c-d62b0444ae4c@bytedance.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: mbg4dInmYrkuQtaQEPiazLhyTX6wFvmg
+X-Proofpoint-ORIG-GUID: mbg4dInmYrkuQtaQEPiazLhyTX6wFvmg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-07_04,2022-10-07_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ impostorscore=0 malwarescore=0 mlxlogscore=999 priorityscore=1501
+ phishscore=0 bulkscore=0 adultscore=0 spamscore=0 lowpriorityscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210100037
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Oct 7, 2022, at 3:58 AM, Alexander Atanasov =
-<alexander.atanasov@virtuozzo.com> wrote:
+On Sun, Oct 09, 2022 at 09:17:34PM +0800, Chengming Zhou wrote:
+> On 2022/10/9 20:41, Chengming Zhou wrote:
+> > Hello,
+> > 
+> > I just saw these emails, sorry for late.
+> > 
+> > On 2022/10/6 00:32, Suren Baghdasaryan wrote:
+> >> On Sun, Oct 2, 2022 at 11:11 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> >>>
+> >>> On Fri, Sep 16, 2022 at 10:45 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> >>>>
+> >>>> On Wed, Sep 14, 2022 at 11:20 PM Pavan Kondeti
+> >>>> <quic_pkondeti@quicinc.com> wrote:
+> >>>>>
+> >>>>> On Tue, Sep 13, 2022 at 07:38:17PM +0530, Pavan Kondeti wrote:
+> >>>>>> Hi
+> >>>>>>
+> >>>>>> The fact that psi_avgs_work()->collect_percpu_times()->get_recent_times()
+> >>>>>> run from a kworker thread, PSI_NONIDLE condition would be observed as
+> >>>>>> there is a RUNNING task. So we would always end up re-arming the work.
+> >>>>>>
+> >>>>>> If the work is re-armed from the psi_avgs_work() it self, the backing off
+> >>>>>> logic in psi_task_change() (will be moved to psi_task_switch soon) can't
+> >>>>>> help. The work is already scheduled. so we don't do anything there.
+> >>>>
+> >>>> Hi Pavan,
+> >>>> Thanks for reporting the issue. IIRC [1] was meant to fix exactly this
+> >>>> issue. At the time it was written I tested it and it seemed to work.
+> >>>> Maybe I missed something or some other change introduced afterwards
+> >>>> affected the shutoff logic. I'll take a closer look next week when I'm
+> >>>> back at my computer and will consult with Johannes.
+> >>>
+> >>> Sorry for the delay. I had some time to look into this and test psi
+> >>> shutoff on my device and I think you are right. The patch I mentioned
+> >>> prevents new psi_avgs_work from being scheduled when the only non-idle
+> >>> task is psi_avgs_work itself, however the regular 2sec averaging work
+> >>> will still go on. I think we could record the fact that the only
+> >>> active task is psi_avgs_work in record_times() using a new
+> >>> psi_group_cpu.state_mask flag and then prevent psi_avgs_work() from
+> >>> rescheduling itself if that flag is set for all non-idle cpus. I'll
+> >>> test this approach and will post a patch for review if that works.
+> >>
+> >> Hi Pavan,
+> >> Testing PSI shutoff on Android proved more difficult than I expected.
+> >> Lots of tasks to silence and I keep encountering new ones.
+> >> The approach I was thinking about is something like this:
+> >>
+> >> ---
+> >>  include/linux/psi_types.h |  3 +++
+> >>  kernel/sched/psi.c        | 12 +++++++++---
+> >>  2 files changed, 12 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+> >> index c7fe7c089718..8d936f22cb5b 100644
+> >> --- a/include/linux/psi_types.h
+> >> +++ b/include/linux/psi_types.h
+> >> @@ -68,6 +68,9 @@ enum psi_states {
+> >>          NR_PSI_STATES = 7,
+> >>  };
+> >>
+> >> +/* state_mask flag to keep re-arming averaging work */
+> >> +#define PSI_STATE_WAKE_CLOCK        (1 << NR_PSI_STATES)
+> >> +
+> >>  enum psi_aggregators {
+> >>          PSI_AVGS = 0,
+> >>          PSI_POLL,
+> >> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> >> index ecb4b4ff4ce0..dd62ad28bacd 100644
+> >> --- a/kernel/sched/psi.c
+> >> +++ b/kernel/sched/psi.c
+> >> @@ -278,6 +278,7 @@ static void get_recent_times(struct psi_group
+> >> *group, int cpu,
+> >>                  if (delta)
+> >>                          *pchanged_states |= (1 << s);
+> >>          }
+> >> +        *pchanged_states |= (state_mask & PSI_STATE_WAKE_CLOCK);
+> > 
+> > If the avgs_work kworker is running on this CPU, it will still see
+> > PSI_STATE_WAKE_CLOCK set in state_mask? So the work will be re-armed?
+> > 
+> > Maybe I missed something... but I have another different idea which
+> > I want to implement later only for discussion.
+> 
+> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> index ee2ecc081422..f322e8fd8d41 100644
+> --- a/kernel/sched/psi.c
+> +++ b/kernel/sched/psi.c
+> @@ -241,11 +241,13 @@ static void get_recent_times(struct psi_group *group, int cpu,
+>                              enum psi_aggregators aggregator, u32 *times,
+>                              u32 *pchanged_states)
+>  {
+> +       int current_cpu = raw_smp_processor_id();
+>         struct psi_group_cpu *groupc = per_cpu_ptr(group->pcpu, cpu);
+>         u64 now, state_start;
+>         enum psi_states s;
+>         unsigned int seq;
+>         u32 state_mask;
+> +       bool only_avgs_work = false;
+> 
+>         *pchanged_states = 0;
+> 
+> @@ -256,6 +258,14 @@ static void get_recent_times(struct psi_group *group, int cpu,
+>                 memcpy(times, groupc->times, sizeof(groupc->times));
+>                 state_mask = groupc->state_mask;
+>                 state_start = groupc->state_start;
+> +               /*
+> +                * This CPU has only avgs_work kworker running, snapshot the
+> +                * newest times then don't need to re-arm work for this groupc.
+> +                * Normally this kworker will sleep soon and won't
+> +                * wake_clock in psi_group_change().
+> +                */
+> +               if (current_cpu == cpu && groupc->tasks[NR_RUNNING] == 1)
+> +                       only_avgs_work = true;
+>         } while (read_seqcount_retry(&groupc->seq, seq));
+> 
+>         /* Calculate state time deltas against the previous snapshot */
+> @@ -280,6 +290,10 @@ static void get_recent_times(struct psi_group *group, int cpu,
+>                 if (delta)
+>                         *pchanged_states |= (1 << s);
+>         }
+> +
+> +       /* Clear PSI_NONIDLE so avgs_work won't be re-armed for this groupc */
+> +       if (only_avgs_work)
+> +               *pchanged_states &= ~(1 << PSI_NONIDLE);
+>  }
+> 
+Thanks Chengming for the patch. I will test this patch and report my
+observations. It makes sense to consider this CPU as non-idle if the PSI kworker
+is the only task running. It could run other works but that decision is now
+deferred to schedule out path. Ideally if this is the only (or last) work
+running, we should not see PSI work not re-arming it self.
 
-> On 7.10.22 0:07, Nadav Amit wrote:
->>>>=20
->>>> I was looking through the series and I did not see actual users of =
-the
->>>> notifier. Usually, it is not great to build an API without users.
->>>=20
->>>=20
->>> You are right. I hope to get some feedback/interest from potential =
-users that i mentioned in the cover letter. I will probably split the =
-notifier
->>> in separate series. To make it usefull it will require more changes.
->>> See bellow more about them.
->> Fair, but this is something that is more suitable for RFC. Otherwise, =
-more
->> likely than not - your patches would go in as is.
->=20
-> Yes, i will remove the notifier and resend both as RFC. I think that =
-every patch is an RFC and RFC tag is used for more general changes that =
-could affect unexpected areas, change functionality, change design and =
-in general can lead to bigger impact. In the case with this it adds =
-functionality that is missing and it could hardly affect anything else.
-> In essence it provides information that you can not get without it.
-> But i will take your advice and push everything thru RFC from now on.
-
-Jus keep the version numbers as you had before. That=E2=80=99s fine and =
-better to
-prevent confusion.
-
->>>> [snip]
->>>>> +
->>>>> +static int balloon_notify(unsigned long val)
->>>>> +{
->>>>> +	return srcu_notifier_call_chain(&balloon_chain, val, NULL);
->>>> Since you know the inflated_kb value here, why not to use it as an =
-argument
->>>> to the callback? I think casting to (void *) and back is best. But =
-you can
->>>> also provide pointer to the value. Doesn=E2=80=99t it sound better =
-than having
->>>> potentially different notifiers reading different values?
->>>=20
->>> My current idea is to have a struct with current and previous value,
->>> may be change in percents. The actual value does not matter to =
-anyone
->>> but the size of change does. When a user gets notified it can act =
-upon
->>> the change - if it is small it can ignore it , if it is above some =
-threshold it can act - if it makes sense for some receiver  is can =
-accumulate changes from several notification. Other option/addition is =
-to have si_meminfo_current(..) and totalram_pages_current(..) that =
-return values adjusted with the balloon values.
->>>=20
->>> Going further - there are few places that calculate something based =
-on available memory that do not have sysfs/proc interface for setting =
-limits. Most of them work in percents so they can be converted to do =
-calculations when they get notification.
->>>=20
->>> The one that have interface for configuration but use memory values =
-can be handled in two ways - convert to use percents of what is =
-available or extend the notifier to notify userspace which in turn to do =
-calculations and update configuration.
->> I really need to see code to fully understand what you have in mind.
->=20
-> Sure - you can check some of the users with git grep totalram_pages - =
-shows self explanatory results of usage like:
-> fs/f2fs/node.c:bool f2fs_available_free_memory(struct f2fs_sb_info =
-*sbi, int type) - calculations in percents - one good example
-> fs/ceph/super.h:        congestion_kb =3D =
-(16*int_sqrt(totalram_pages())) << (PAGE_SHIFT-10);
-> fs/fuse/inode.c:                *limit =3D ((totalram_pages() << =
-PAGE_SHIFT) >> 13) / 392;
-> fs/nfs/write.c: nfs_congestion_kb =3D (16*int_sqrt(totalram_pages())) =
-<< (PAGE_SHIFT-10);
-> fs/nfsd/nfscache.c:     unsigned long low_pages =3D totalram_pages() - =
-totalhigh_pages()
-> mm/oom_kill.c:  oc->totalpages =3D totalram_pages() + =
-total_swap_pages;
->=20
->=20
-> So all balloon drivers give large amount of RAM on boot , then inflate =
-the balloon. But this places have already been initiallized and they =
-know that the system have given amount of totalram which is not true the =
-moment they start to operate. the result is that too much space gets =
-used and it degrades the userspace performance.
-> example - fs/eventpoll.c:static int __init eventpoll_init(void) - 4% =
-of ram for eventpool - when you inflate half of the ram it becomes 8% of =
-the ram - do you really need 8% of your ram to be used for eventpool?
->=20
-> To solve this you need to register and when notified update - cache =
-size, limits and for whatever is the calculated amount of memory used.
-
-Hmm.. Not sure about all of that. Most balloon drivers are manually =
-managed,
-and call adjust_managed_page_count(), and tas a result might want to =
-redo
-all the calculations that are based on totalram_pages().
-
-Side-note: That=E2=80=99s not the case for VMware balloon. I actually =
-considered
-calling adjust_managed_page_count() just to conform with other balloon
-drivers. But since we use totalram_pages() to communicate to the =
-hypervisor
-the total-ram, this would create endless (and wrong) feedback loop. I am =
-not
-claiming it is not possible to VMware balloon driver to call
-adjust_managed_page_count(), but the chances are that it would create =
-more
-harm than good.
-
-Back to the matter at hand. It seems that you wish that the notifiers =
-would
-be called following any changes that would be reflected in =
-totalram_pages().
-So, doesn't it make more sense to call it from =
-adjust_managed_page_count() ?
-
-> The difference is here:
->=20
-> mm/zswap.c:     return totalram_pages() * zswap_max_pool_percent / 100 =
-<
-> mm/zswap.c:     return totalram_pages() * zswap_accept_thr_percent / =
-100
-> uses percents and you can recalculate easy with
->=20
-> +static inline unsigned long totalram_pages_current(void)
-> +{
-> +       unsigned long inflated =3D 0;
-> +#ifdef CONFIG_MEMORY_BALLOON
-> +       extern atomic_long_t mem_balloon_inflated_free_kb;
-> +       inflated =3D atomic_long_read(&mem_balloon_inflated_free_kb);
-> +       inflated >>=3D (PAGE_SHIFT - 10);
-> +#endif
-> +       return (unsigned long)atomic_long_read(&_totalram_pages) - =
-inflated;
-> +}
->=20
-> And you are good when you switch to _current version - =
-si_meminfo_current is alike .
->=20
-> On init (probably) all use some kind of fractions to calculate but =
-when there is a set value via /proc/sys/net/ipv4/tcp_wmem for example it =
-is just a value and you can not recalculate it. And here, please, share =
-your ideas how to solve this.
-
-I don=E2=80=99t get all of that. Now that you provided some more =
-explanations, it
-sounds that what you want is adjust_managed_page_count(), which we =
-already
-have and affects the output of totalram_pages(). Therefore, =
-totalram_pages()
-anyhow accounts for the balloon memory (excluding VMware=E2=80=99s). So =
-why do we
-need to take mem_balloon_inflated_free_kb into account?
-
-Sounds to me that all you want is some notifier to be called from
-adjust_managed_page_count(). What am I missing?
-
+Thanks,
+Pavan
