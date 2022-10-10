@@ -2,103 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E735F9D9A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0745F9D9E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232080AbiJJLad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 07:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
+        id S232029AbiJJLcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 07:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231400AbiJJLaU (ORCPT
+        with ESMTP id S230421AbiJJLcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 07:30:20 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349B55141F;
-        Mon, 10 Oct 2022 04:30:17 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id bg9-20020a05600c3c8900b003bf249616b0so6213450wmb.3;
-        Mon, 10 Oct 2022 04:30:17 -0700 (PDT)
+        Mon, 10 Oct 2022 07:32:02 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C7629378
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:32:00 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id a17so1447965qtw.10
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:32:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to:from
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=K3gXHoOtP/G7cPHnJm5sliNg7u+93Tq1/waVlo7q5Aw=;
-        b=Dc2nT/4q8/jBUtQ7KRFrVaRYynz7726UdERw2EVrft35KrVuLTb7nmRSMT8vSSO+0r
-         WvZEzNZUg7yVN9JxcxHbahdTc3OVbtvsQM3OuvdXpC2zXIPZJW8MibYM79tnGacCUh/h
-         7Key3Bbpt8SVl9iwM3aFWGrDBcRRMOH3sOP1NkH1zLNWa1h+4YSro/BoBW+/JWDE5f/G
-         Y3dyaUck1t05h/fAKhiO8YXgwSpEbumBxWY7aQ2C6YWY+nex5rqsUrGnJdY2fo+HC6zd
-         d/E+rGpVFGHE9C+B7PHpunITjgA3qIfup5hP028D9qDgCRbAt+y7G8ewp6ZHnl20xs77
-         S7jw==
+        bh=udkTcYsMkDl++4/6q7yNQSkg4/Iz9OjgmrKT1oZP0DQ=;
+        b=sEerDYita79azCEkmkfrIkb1QxpBkJWvCzAxx5CGwyvQ8JL5VV9RqncCYEXf8gmnQD
+         JQFPIkP5l4N0eBSJzhsfQLDzqsa097vXeE+K1DD3qT2rge7QeEeGKpURYqcw/dddMqhX
+         lbvuMeKXmnUA2ZLbLSUgS+0cib/hQ9302zgLfkg2y+Uhm8Aeyb9P0dRTSbBY+hI/bx+d
+         wt/xbPSTzEX4cz/0uDLWnBn05sH+TA087TrvuxGHkZdCOBgqJjn6PWp3WuC4SkTpXJzC
+         ArI3NEOIPkNl+2KTnkzYO+THinNE669S3U66thuLq9p8/hu5IP1ephvD08AJcZdz8uNl
+         znSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to:from
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K3gXHoOtP/G7cPHnJm5sliNg7u+93Tq1/waVlo7q5Aw=;
-        b=Iz/7UoE1PgjY8YVkc+Di8r57X6YfF5O7QQJWl8IBJTnjsxB/O3BDj1SsTJ/VAyMp4M
-         t6Ejcl9yydI7Wat36rOq0V8kKksIcISdV/9j2ACseKZAhusgI+990Xo55irbt+Klhxll
-         4bXZAKIH3lJ0zODZVKcDLAlrOSf2MA4yZsGB/J6VvTgqgam2mPvih+QlnzphiEPQqM78
-         VHe1bCkSMLyPA/NlNEestrFo0KfeDGSovzGBRfEk5KP//ViXl52M/oHygNWDPgNNcbtO
-         +Oo6nsbmOAtduCxMZ+stQi+Z2j5IqUTAe0Ml1OcfbmcnkpP1zygQiTfkGd05unZknUFi
-         yYoA==
-X-Gm-Message-State: ACrzQf2ebSK5SRSICK0BLdZ1fQfxypafha6qFT/QLzZQk7ZCxFk04DAQ
-        zCvL8TpTaVNbuBEHp1ErxXg=
-X-Google-Smtp-Source: AMsMyM7tOmkCJQGYoo8JZxnb/78cJD3WnQS0D3xmyynREYxFhKOPx4l/iKu4rWoyju7dzol8rwaPGQ==
-X-Received: by 2002:a05:600c:221a:b0:3b4:75b8:3f7f with SMTP id z26-20020a05600c221a00b003b475b83f7fmr11998187wml.175.1665401416375;
-        Mon, 10 Oct 2022 04:30:16 -0700 (PDT)
-Received: from [192.168.42.102] (sm4-84-91-228-85.netvisao.pt. [84.91.228.85])
-        by smtp.gmail.com with ESMTPSA id t128-20020a1c4686000000b003b4a699ce8esm7713297wma.6.2022.10.10.04.30.15
+        bh=udkTcYsMkDl++4/6q7yNQSkg4/Iz9OjgmrKT1oZP0DQ=;
+        b=5m0PXxs18gVishUS0hqf2tWuS5O2OFBLzZ0tQ8VKUtEeL2fZoD8i1yWVyQCXvr2wbl
+         WxZsM37zoGe3AumOOR9WKD5mhWDyhuLzgWS89vfyTZY40JHB58VWFblIc/1y7or28P1Q
+         CJSWhQWTGnRU8stmzWyM58zqzdUZaon/+G6lHx0vg4MuMutb/4At6gjwzyCl1VMi3XAk
+         TM181lRexDwdlLhc93hVenffl3MV7GLcP4YSdGxLCCMJwkMkj/44LZKnkLBszkpLEVgt
+         h8+SwqjWYLqwoSRu7RFi6EGxjpbOPhU09qUo6GUmiXFglrxHobYA0T7euG6oiCNdOuPh
+         KL1A==
+X-Gm-Message-State: ACrzQf35eLy3lUZY7qb2/XXzzVmTmbo2FkBuOra9BqtBQNH24h/v3kN1
+        iEt6JtLnzHrcMIqunq0Amh0bKA==
+X-Google-Smtp-Source: AMsMyM6iDYU0n449yi/Poervh+Wt+/XsqG8kherp0ZrmI4+Cj/yOkKE+y4HGbuPzT3U81A0Ak8GACw==
+X-Received: by 2002:a05:622a:58d:b0:394:9d68:edc2 with SMTP id c13-20020a05622a058d00b003949d68edc2mr14696370qtb.230.1665401519621;
+        Mon, 10 Oct 2022 04:31:59 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id bs10-20020ac86f0a000000b0038d9555b580sm5056528qtb.44.2022.10.10.04.31.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 04:30:16 -0700 (PDT)
-Message-ID: <51c60bcf-82a0-efbf-438d-4925c905503e@gmail.com>
-Date:   Mon, 10 Oct 2022 12:30:15 +0100
+        Mon, 10 Oct 2022 04:31:58 -0700 (PDT)
+Message-ID: <d6765e12-715a-066e-c6c3-63e0962ee3af@linaro.org>
+Date:   Mon, 10 Oct 2022 07:31:31 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: [PATCH v2 1/5] fs/ntfs3: fix hidedotfiles mount option by reversing
- behaviour
-Content-Language: pt-PT
-From:   Daniel Pinto <danielpinto52@gmail.com>
-To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        ntfs3@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2 34/40] arm64: dts: qcom: sm6125: align TLMM pin
+ configuration with DT schema
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Iskren Chernev <iskren.chernev@gmail.com>,
+        Martin Botka <martin.botka@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <9c404576-856b-6935-f2e3-c4d0749f16ea@gmail.com>
-In-Reply-To: <9c404576-856b-6935-f2e3-c4d0749f16ea@gmail.com>
+References: <20220912061746.6311-1-krzysztof.kozlowski@linaro.org>
+ <20220912061746.6311-35-krzysztof.kozlowski@linaro.org>
+ <20221009174621.ecamh76faoibuykv@SoMainline.org>
+ <d97b7d32-6e27-5a04-336b-0af6bd92c83c@linaro.org>
+In-Reply-To: <d97b7d32-6e27-5a04-336b-0af6bd92c83c@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the hidedotfiles mount option is behaving in the reverse
-way of what would be expected: enabling it disables setting the
-hidden attribute on files or directories with names starting with a
-dot and disabling it enables the setting.
+On 10/10/2022 06:26, Krzysztof Kozlowski wrote:
+> On 09/10/2022 13:46, Marijn Suijten wrote:
+>>> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+>>> index 8c582a9e4ada..1fe3fa3ad877 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+>>> @@ -387,19 +387,19 @@ tlmm: pinctrl@500000 {
+>>>  			#interrupt-cells = <2>;
+>>>  
+>>>  			sdc2_off_state: sdc2-off-state {
+>>> -				clk {
+>>> +				clk-pins {
+>>>  					pins = "sdc2_clk";
+>>>  					drive-strength = <2>;
+>>>  					bias-disable;
+>>>  				};
+>>>  
+>>> -				cmd {
+>>> +				cmd-pins {
+>>>  					pins = "sdc2_cmd";
+>>>  					drive-strength = <2>;
+>>>  					bias-pull-up;
+>>>  				};
+>>>  
+>>> -				data {
+>>> +				data-pins {
+>>>  					pins = "sdc2_data";
+>>>  					drive-strength = <2>;
+>>>  					bias-pull-up;
+>>> @@ -413,13 +413,13 @@ clk {
+>>>  					bias-disable;
+>>>  				};
+>>>  
+>>> -				cmd {
+>>> +				cmd-pins-pins {
+>>
+>> Is this double -pins-pins suffix intended?
+>>
+> 
+> No, thanks for noticing it.
 
-Reverse the behaviour of the hidedotfiles mount option so it matches
-what is expected.
+Wait, you commented on patch which was already merged. Fix is here already:
+https://lore.kernel.org/linux-devicetree/20220930192954.242546-11-krzysztof.kozlowski@linaro.org/
 
-Signed-off-by: Daniel Pinto <danielpinto52@gmail.com>
----
- fs/ntfs3/super.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Best regards,
+Krzysztof
 
-diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
-index 1e2c04e48f98..c6fd2afde172 100644
---- a/fs/ntfs3/super.c
-+++ b/fs/ntfs3/super.c
-@@ -359,7 +359,7 @@ static int ntfs_fs_parse_param(struct fs_context *fc,
- 		opts->nohidden = result.negated ? 1 : 0;
- 		break;
- 	case Opt_hide_dot_files:
--		opts->hide_dot_files = result.negated ? 1 : 0;
-+		opts->hide_dot_files = result.negated ? 0 : 1;
- 		break;
- 	case Opt_acl:
- 		if (!result.negated)
