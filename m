@@ -2,171 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B69C5FA2B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 026C95FA303
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiJJR1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 13:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
+        id S229773AbiJJR4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 13:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiJJR1M (ORCPT
+        with ESMTP id S229893AbiJJR4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 13:27:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6627C74DDB
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:27:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D397B8105C
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 17:27:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FAD7C433C1;
-        Mon, 10 Oct 2022 17:27:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665422828;
-        bh=/lt8gfU9Y3wxLQTDMNaW8hT50rVcAlBaCz5iuLdDG9c=;
-        h=Date:From:To:Cc:Subject:From;
-        b=fPChqg/JUvc/VQr1cJLuF6NvniyAWrUrQMKS2Su4eiAT2u84Iqt1ZgVc47EUem+9x
-         ocggm5+x16xob6OVX9H7+41KvzIynf2x9KcQxpLF1I8X9pIkpPfHLW0dUpvs5S+ys9
-         +5/0WJmqGbAZ8ZlPNJjuaAg4v0XUWIiiSnaQZvjhA3syD2187CBYw+g5NmkXRxj1M1
-         3GnQHrZKteoWJoYuwtiMjtH62LeB3ETZ/g0rTgaB7MSUOF29B6O2kEWlzHy8rOBGEp
-         fJaGdaB9I58/iRSybpBrOq2y6EeyMjp6zL+KA0wOElBB/fyoAWqvS+6fdvjIh8BELS
-         AEhRQdTlgy3Fg==
-Date:   Mon, 10 Oct 2022 10:27:06 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] f2fs update for 6.1-rc1
-Message-ID: <Y0RV6kXCyXtqYuS4@google.com>
+        Mon, 10 Oct 2022 13:56:02 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA04577570;
+        Mon, 10 Oct 2022 10:55:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding;
+        bh=sfsDm3sC/TTn50BQjKeam0UJ36mIRDds577eBrehsS8=;
+        b=KD/Nevk4guldE/IC/cuYipnvGYgKo1rhbgPagt7aH7j2hoPgn9IL1ju2vxTfBK4bSkTDtyWzLGRXP
+         mrB6MfuwKyYfcQ8uRdXmkh9eL+kqfq8GDpNMMQuKWz82MA+4wzhesA8JDqunPH2LJeQHVd8yAQqjTw
+         xL5900NjLSEIMPHMZSG5rVjpeiuo1BBlRckP6CFMLEyDLTFm4qPDta3eKu+h5AZ8inAW1s65LOMybo
+         7gf/iqb8synx4i7MJbl86Bn+8DA9GrGCXUMXiIhNOLvQMNa+yyRF8cAniAitfIDIhV+u8dp/DqKuvT
+         WMWF/GIQvTwJAousUQ99snG2f9Oqn4Q==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.4.1445, Stamp: 3], Multi: [Enabled, t: (0.000010,0.026738)], BW: [Enabled, t: (0.000015,0.000001)], RTDA: [Enabled, t: (0.082433), Hit: No, Details: v2.42.0; Id: 15.52k2f2.1gf1gjqev.fd7k; mclb], total: 0(700)
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from localhost.localdomain ([92.100.86.33])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Mon, 10 Oct 2022 20:55:48 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, dg@emlix.com, j.zink@pengutronix.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        system@metrotek.ru
+Subject: [PATCH v16 0/2] Lattice sysCONFIG SPI FPGA manager
+Date:   Mon, 10 Oct 2022 20:27:32 +0300
+Message-Id: <20221010172734.26037-1-i.bornyakov@metrotek.ru>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+slave SPI sysCONFIG interface.
 
-Could you please consider this pull request?
+ChangeLog:
+  v1 -> v2:
+    * remove "spi" from compatible string
+    * reword description in dt-bindings doc
+    * add reference to spi-peripheral-props.yaml in dt-binding doc
+    * fix DTS example in dt-bindings doc: 4-spaces indentations, no
+      undersores in node names.
+  v2 -> v3:
+    * fix typo "##size-cells" -> "#size-cells" in dt-bindings example
+  v3 -> v4:
+    * dt-bindings: reword description
+    * dt-bindings: revert props order
+  v4 -> v5:
+    * dt-bindings: remove trailing dot from title
+    * dt-bindings: reword description to avoid driver reference
+    * dt-bindings: add "Reviewed-by: Krzysztof Kozlowski" tag
+  v5 -> v6:
+    * ecp5-spi: lock SPI bus for exclusive usage in
+      ecp5_ops_write_init(), release in ecp5_ops_write_complete()
+      or on error
+  v6 -> v7:
+    * ecp5-spi.c -> lattice-sysconfig-spi.c. Reworked to represent
+      generalized sysCONFIG port with implementations for ECP5 and
+      MachXO2
+    * lattice,ecp5-fpga-mgr.yaml -> lattice,sysconfig.yaml. Reworked to
+      document both ECP5 and MachXO2 sysCONFIG.
+    * dt-bindings: remove "Reviewed-by: Krzysztof Kozlowski" tag as doc
+      was rewritten by a considerable amount.
+  v7 -> v8:
+    * dt-bindings: move "program-gpios", "init-gpios" and "done-gpios"
+      to top-level properties and disallow them for MachXO2 variant.
+  v8 -> v9:
+    * dt-bindings: "program-gpios", "init-gpios" and "done-gpios" are
+      now optional for both ECP5 and MachXO2
+    * lattice-sysconfig-spi.c -> sysconfig-spi.c + sysconfig.c +
+      sysconfig.h
+        ** reworked to be one sysCONFIG FPGA Manager rather than two
+	   distinct ECP5 and MachXO2 managers
+	** splitted to port type agnostic sysconfig.c and SPI-specific
+	   sysconfig-spi.c
+	** command transfer function moved to callback for ease of
+	   adding another port type, such as I2C
+  v9 -> v10:
+    * split sysconfig_transfer() callback into separate command_write()
+      and command_write_then_read(). There are too many transfers
+      without readback.
+    * add command_write_with_data() callback which performs single
+      transfer of command + data. It's needed for better abstraction of
+      paged bitstream write routine.
+    * move sysconfig_lsc_burst_init() to bitstream_burst_write_init()
+      callback to break dependence of sysconfig.c from sysconfig-spi.c
+    * move sysconfig_lsc_burst_complete() to bitstream_burst_write_complete()
+      callback to break dependence of sysconfig.c from sysconfig-spi.c
+    * add bitstream_burst_write() to abstract fpga_manager_ops->write()
+      from bus type
+    * remove struct spi_device from struct sysconfig_priv, use
+      to_spi_device()
+    * move fpga_manager_ops initialization to sysconfig.c
+  v10 -> v11:
+    * rename sysconfig_lsc_burst_init() to sysconfig_spi_lsc_burst_init()
+    * rename sysconfig_bitstream_burst_write() to
+      sysconfig_spi_bitstream_burst_write()
+    * rename sysconfig_lsc_burst_complete() to
+      sysconfig_spi_lsc_burst_complete()
+    * rename "ecp5-fpga-mgr" to "sysconfig-ecp5"
+    * rename "machxo2-fpga-mgr" to "sysconfig-machxo2"
+    * move spi_max_speed_hz from struct sysconfig_fpga_priv to
+      struct sysconfig_spi_fpga_priv, which is local to sysconfig-spi.c
+    * remove SPI bus unlock on write error form
+      sysconfig_spi_bitstream_burst_write(), call
+      sysconfig_burst_write_complete() on error in
+      sysconfig_bitstream_burst_write() instead.
+  v11 -> v12:
+    * build sysconfig core as separate module to prevent duplication of
+      common code segments across different binaries
+    * rename sysconfig.c to lattice-sysconfig.c
+    * rename sysconfig.h to lattice-sysconfig.h
+    * rename sysconfig-spi.c to lattice-sysconfig-spi.c
+    * rename sysconfig_spi_cmd_write_then_read() to
+      sysconfig_spi_cmd_read()
+    * rename command_write_then_read() callback to command_read()
+    * rename sysconfig_cmd_write_then_read() to sysconfig_cmd_read()
+    * rename sysconfig_spi_lsc_burst_init() to
+      sysconfig_spi_bitstream_burst_init()
+    * rename sysconfig_spi_lsc_burst_complete() to
+      sysconfig_spi_bitstream_burst_complete()
+    * remove excessive !spi check from sysconfig_spi_cmd_write(),
+      sysconfig_spi_cmd_read(), sysconfig_spi_bitstream_burst_init(),
+      sysconfig_spi_bitstream_burst_write() and
+      sysconfig_spi_bitstream_burst_complete()
+    * drop MachXO2 support
+        ** drop struct sysconfig_fpga_priv
+        ** drop paged write
+        ** drop command_write_with_data() and friends
+        ** drop ISC_PROGRAM_DONE routine
+        ** drop refresh from sysconfig_isc_finish()
+        ** sysconfig_isc_erase() only erase SRAM
+	** drop MachXO2 mentions from DT bindings doc
+  v12 -> v13:
+    * use device_get_match_data() instead of of_device_get_match_data()
+      and drop of_device.h inclusion
+    * in polling routines use time_before(jiffies, timeout) instead of
+      retries count
+    * add usleep_range() to gpio polling routine
+    * check fail status of command in more pronounced way
+    * check definition of sysconfig_priv callbacks at probe
+    * (BIT(23) | BIT(24) | BIT(25)) -> GENMASK(25, 23)
+  v13 -> v14:
+    * return -ETIMEDOUT instead of -EBUSY from sysconfig_poll_busy() to
+      align with sysconfig_poll_gpio()
+  v14 -> v15:
+    * move sysCONFIG commands from stack to heap, as spi-summary doc
+      says: "I/O buffers use the usual Linux rules, and must be
+      DMA-safe. [...] Don't use the stack, or anything that's declared
+      "static"."
+        ** add u8 cmd_tx_buf[4] and u8 cmd_rx_buf[4] to
+	   struct sysconfig_priv
+	** copy commands to cmd_tx_buf before sending to the device
+	** use cmd_rx_buf for commands readback
+	** change command_write() and command_read() signatures, as
+	   command buffers are now embedded to sysconfig_priv
+	** combine sysconfig_read_busy() with sysconfig_poll_busy() to
+	   avoid same memcpy in the loop
+  v15 -> v16:
+    * revert to v14
+    * combine command_write() and command_read() to command_transfer()
+      which uses spi_write_then_read() underhood. spi_write_then_read()
+      is dma-safe for on-stack buffers.
+    * in sysconfig_spi_bitstream_burst_init() bounce on-stack buffer
+      with LSC_BITSTREAM_BURST command to the heap. Now everything
+      should be dma-safe.
 
-Thanks,
+Ivan Bornyakov (2):
+  fpga: lattice-sysconfig-spi: add Lattice sysCONFIG FPGA manager
+  dt-bindings: fpga: document Lattice sysCONFIG FPGA manager
 
-The following changes since commit dcf8e5633e2e69ad60b730ab5905608b756a032f:
+ .../bindings/fpga/lattice,sysconfig.yaml      |  81 ++++
+ drivers/fpga/Kconfig                          |  11 +
+ drivers/fpga/Makefile                         |   2 +
+ drivers/fpga/lattice-sysconfig-spi.c          | 154 +++++++
+ drivers/fpga/lattice-sysconfig.c              | 428 ++++++++++++++++++
+ drivers/fpga/lattice-sysconfig.h              |  39 ++
+ 6 files changed, 715 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+ create mode 100644 drivers/fpga/lattice-sysconfig-spi.c
+ create mode 100644 drivers/fpga/lattice-sysconfig.c
+ create mode 100644 drivers/fpga/lattice-sysconfig.h
 
-  tracing: Define the is_signed_type() macro once (2022-08-29 13:29:40 -0700)
+-- 
+2.35.1
 
-are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git tags/f2fs-for-6.1-rc1
-
-for you to fetch changes up to b4dac1203f39821c6119033cdeebcea83cf45786:
-
-  f2fs: change to use atomic_t type form sbi.atomic_files (2022-10-07 12:57:26 -0700)
-
-----------------------------------------------------------------
-f2fs-for-6.1-rc1
-
-This round looks fairly small comparing to the previous updates which includes
-mostly minor bug fixes. Nevertheless, as we've still interested in improving
-the stability, Chao added some debugging methods to diagnoze subtle runtime
-inconsistency problem.
-
-Enhancement
- - store all the corruption or failure reasons in superblock
- - detect meta inode, summary info, and block address inconsistency
- - increase the limit for reserve_root for low-end devices
- - add the number of compressed IO in iostat
-
-Bug fix
- - DIO write fix for zoned devices
- - do out-of-place writes for cold files
- - fix some stat updates (FS_CP_DATA_IO, dirty page count)
- - fix race condition on setting FI_NO_EXTENT flag
- - fix data races when freezing super
- - fix wrong continue condition check in GC
- - do not allow ATGC for LFS mode
-
-In addition, there're some code enhancement and clean-ups as usual.
-
-----------------------------------------------------------------
-Chao Yu (11):
-      f2fs: iostat: support accounting compressed IO
-      f2fs: remove gc_urgent_high_limited for cleanup
-      f2fs: fix to do sanity check on destination blkaddr during recovery
-      f2fs: fix to do sanity check on summary info
-      f2fs: fix to account FS_CP_DATA_IO correctly
-      f2fs: fix to detect corrupted meta ino
-      f2fs: introduce cp_status sysfs entry
-      f2fs: support recording stop_checkpoint reason into super_block
-      f2fs: support recording errors into superblock
-      f2fs: account swapfile inodes
-      f2fs: change to use atomic_t type form sbi.atomic_files
-
-Christian Brauner (1):
-      f2fs: port to vfs{g,u}id_t and associated helpers
-
-Eric Biggers (1):
-      f2fs: use memcpy_{to,from}_page() where possible
-
-Jaegeuk Kim (6):
-      f2fs: LFS mode does not support ATGC
-      f2fs: fix wrong continue condition in GC
-      f2fs: flush pending checkpoints when freezing super
-      f2fs: complete checkpoints during remount
-      f2fs: increase the limit for reserve_root
-      f2fs: allow direct read for zoned device
-
-Shuqi Zhang (1):
-      f2fs: fix wrong dirty page count when race between mmap and fallocate.
-
-Weichao Guo (1):
-      f2fs: let FI_OPU_WRITE override FADVISE_COLD_BIT
-
-Yonggil Song (1):
-      f2fs: fix typo
-
-Zhang Qilong (10):
-      f2fs: replace logical value "true" with a int number
-      f2fs: simplify code in f2fs_prepare_decomp_mem
-      f2fs: return the tmp_ptr directly in __bitmap_ptr
-      f2fs: use COMPRESS_MAPPING to get compress cache mapping
-      f2fs: add static init_idisk_time function to reduce the code
-      f2fs: remove redundant check in f2fs_sanity_check_cluster
-      f2fs: fix race condition on setting FI_NO_EXTENT flag
-      f2fs: add "c_len" into trace_f2fs_update_extent_tree_range for compressed file
-      f2fs: code clean and fix a type error
-      f2fs: remove the unnecessary check in f2fs_xattr_fiemap
-
- Documentation/ABI/testing/sysfs-fs-f2fs | 24 +++++++++
- fs/f2fs/acl.c                           |  2 +-
- fs/f2fs/checkpoint.c                    | 65 +++++++++++++++-------
- fs/f2fs/compress.c                      | 32 +++++------
- fs/f2fs/data.c                          | 53 ++++++++++++------
- fs/f2fs/debug.c                         |  9 +++-
- fs/f2fs/dir.c                           |  1 +
- fs/f2fs/extent_cache.c                  |  9 ++--
- fs/f2fs/f2fs.h                          | 55 +++++++++++++++----
- fs/f2fs/file.c                          | 50 ++++++++++-------
- fs/f2fs/gc.c                            | 40 ++++++++------
- fs/f2fs/inline.c                        | 17 +++---
- fs/f2fs/inode.c                         | 51 ++++++++++++------
- fs/f2fs/iostat.c                        | 74 +++++++++++++++++--------
- fs/f2fs/iostat.h                        |  4 +-
- fs/f2fs/node.c                          |  9 ++--
- fs/f2fs/recovery.c                      | 29 ++++++++--
- fs/f2fs/segment.c                       | 37 ++++++++-----
- fs/f2fs/segment.h                       |  2 +
- fs/f2fs/super.c                         | 96 ++++++++++++++++++++++++++++-----
- fs/f2fs/sysfs.c                         |  9 +++-
- fs/f2fs/verity.c                        | 12 ++---
- fs/f2fs/xattr.c                         |  8 +++
- include/linux/f2fs_fs.h                 | 40 +++++++++++++-
- include/trace/events/f2fs.h             | 37 +++++++++----
- 25 files changed, 556 insertions(+), 209 deletions(-)
