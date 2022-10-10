@@ -2,104 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 047CE5FA61F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3524D5FA623
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbiJJU0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 16:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
+        id S229502AbiJJU0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 16:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiJJUZw (ORCPT
+        with ESMTP id S229966AbiJJU0C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 16:25:52 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CDD1408C;
-        Mon, 10 Oct 2022 13:24:49 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d24so11346613pls.4;
-        Mon, 10 Oct 2022 13:24:48 -0700 (PDT)
+        Mon, 10 Oct 2022 16:26:02 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A234C20195;
+        Mon, 10 Oct 2022 13:24:55 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so7021583wmb.0;
+        Mon, 10 Oct 2022 13:24:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SWBKxcK5HE/3WshbW1q29xvyEiEvyFrYE2hY8YKFsLs=;
-        b=KEYEbq/ly8DTkiYPCrGiR6KYBxqhyiZA26Fj+t0+nmZYWUozdenaY+VoU8pmLUc9ry
-         OYmW4AJzZ9zZb9ACzz2x6+0Y+so2+IcnPsY5dEwJlHD9JFJQVEs2WbmLHhh4IcK3Ddy9
-         QWqYnt/XqsFvRwGQ1tX2ZwRzLRJwB0C4xpMvYCaEG0ECzhQayHWXI6lDge1cYEHLDA/8
-         ihOfFmF/w40sHx4RYXTIOrVRLItAuhUhgPUbQReNAD5AYi1eMzxK2HVFpdBK/eBJ3REV
-         +1bDUqpz4l0lQsnB/1J3P+hNQ48giXMkuq6/1Y5ng0xXN8DgkEPIbNjsddWIK8blwo8Y
-         hEmg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uitibauigOgCccEn2okfAVkQvelKUvNuPxyBgEXlDaY=;
+        b=et+EKQ2UH93E+D2uoLEYylnzEhMHPMcJkxCQ8Qa/drFfxI7ar+NuOEmoG2FdjVQLlw
+         RF5wo8jfcu8UzZlWh83Fcmo4HKc4GZu45be22mqPvKd9tWGz4MXbEzfB5pQ9B1CCovaW
+         H9RaLTOvsRCFcJnGUvx78D8OQGOAn3xJTIJIxwZ2EesqJEJv1RxC6yc1/c4oT8uxkQIC
+         rUd/cq/YAy50jhrgemql4uu85Nj8gP1JamZ/xUTv7A2gnQNcRgayy4b9AJtCTWjfOFu+
+         ZwGGzRL+y14SMldGbPEvL0iqqWi1liULDzAGeD5njltf0c7VWUu7HhjyiXhlp17tOd50
+         tN3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SWBKxcK5HE/3WshbW1q29xvyEiEvyFrYE2hY8YKFsLs=;
-        b=Gr1ebv/qEWnsz63E/q8wB7oPmMQB+9FSdp1hO/2rY78OsbhAjBw8x1AWAnFiYAuC49
-         ydsp9kAd291zoLFccjL5bbQWOtw9jV0PHQ4eviOirramTq8/URfm6ohOuDu6CJdeuh9C
-         P5zgbA9LFAiGhk8lObMN+O0nEedv5Irvm4mH0DXpiXvfMEOmlq0fcbtWP53ElCZxNv+N
-         zSrcjFbCsuMmzCgXBzjEUkTpp0hLAsrXj/NVB6GhP1xbFOnKviz9eYlr+H1gAaS+TskJ
-         ChBSXqUFOLdLQ2h6Qm0nR7a9VLYHxczAkRostD78eHM8SHlJlcPmdeQ0kuKChDgniqIG
-         58lA==
-X-Gm-Message-State: ACrzQf2ii2pL3kpjcRrZXSvTvZqpbJkqS+W+Oh/L/nhByWZpCM5oZ7if
-        VPbpCfdjpaTnSUiRb2cN+o8=
-X-Google-Smtp-Source: AMsMyM5rHJs/tXmnikDZoHEoGNtFEkqwFu4L6qBHwocDNhbXMW+CabS5gdq9L9A9hv30PsFIM/+Pqw==
-X-Received: by 2002:a17:902:f78b:b0:17f:9c94:b247 with SMTP id q11-20020a170902f78b00b0017f9c94b247mr20115013pln.137.1665433445393;
-        Mon, 10 Oct 2022 13:24:05 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id q18-20020a17090311d200b00174c0dd29f0sm7081535plh.144.2022.10.10.13.24.04
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uitibauigOgCccEn2okfAVkQvelKUvNuPxyBgEXlDaY=;
+        b=FEy2WkT/q43hyp9n99Wy0qy2AZSXremelfxBmaBKsXraagZSpMPRH3Tq62dOOo6YlN
+         HVMhx1MlebhOC+ZT7/lQOwaqXeD7xeuhfWRRO6PJfCtyMV62Nz1guTJDxfLZuu2R6jhP
+         iQo/FALh/9BN572jFEKOWMcsnemxblJpOOoFK7an+ADs8BrF/QCsZGfMTuxfRcO0U431
+         v1AqstTbbloGRCCNJ52qTXbEXIN0R+jqxZar1xGHlTSwTJ9ag/8PJc9pIiOCOtHb0IWj
+         3lVsurgKfnK6t9TmIJdX5i43Y3TiuHFaQGfaEh1ZPCqb9sx58p5weQvhGN/WPmeB1Rel
+         5sLg==
+X-Gm-Message-State: ACrzQf3yAkW5Il5MAGI5hH0BXw1KC3/5VgCdVEe+vpBOGHzKcznfUSbY
+        qNFOziqgGHhCWqGupo463Hs=
+X-Google-Smtp-Source: AMsMyM7Ctoqe0b6wcneTHB7G8Dcs49YteOlWsepr5gtSZfUY+ICA0db2I9hR1ZA93IKJGc06hwuWFw==
+X-Received: by 2002:a05:600c:3492:b0:3b4:9fcc:cbb6 with SMTP id a18-20020a05600c349200b003b49fcccbb6mr21690521wmq.42.1665433465419;
+        Mon, 10 Oct 2022 13:24:25 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id u16-20020adfdd50000000b002238ea5750csm12193769wrm.72.2022.10.10.13.24.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 13:24:04 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 10 Oct 2022 10:24:03 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc:     cgroups@vger.kernel.org, dan.carpenter@oracle.com,
-        hannes@cmpxchg.org, linux-kernel@vger.kernel.org,
-        lizefan.x@bytedance.com
-Subject: Re: [PATCH v3] cgroup: Reorganize css_set_lock and kernfs path
- processing
-Message-ID: <Y0R/Y/YlsynTla6m@slm.duckdns.org>
-References: <Yz21I9UpXafWMU0K@slm.duckdns.org>
- <20221010082918.3821-1-mkoutny@suse.com>
+        Mon, 10 Oct 2022 13:24:24 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] NFSD: Remove redundant assignment to variable host_err
+Date:   Mon, 10 Oct 2022 21:24:23 +0100
+Message-Id: <20221010202423.3221664-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221010082918.3821-1-mkoutny@suse.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 10:29:18AM +0200, Michal Koutný wrote:
-> The commit 74e4b956eb1c incorrectly wrapped kernfs_walk_and_get
-> (might_sleep) under css_set_lock (spinlock). css_set_lock is needed by
-> __cset_cgroup_from_root to ensure stable cset->cgrp_links but not for
-> kernfs_walk_and_get.
-> 
-> We only need to make sure that the returned root_cgrp won't be freed
-> under us. This is given in the case of global root because it is static
-> (cgrp_dfl_root.cgrp). When the root_cgrp is lower in the hierarchy, it
-> is pinned by cgroup_ns->root_cset (and `current` task cannot switch
-> namespace asynchronously so ns_proxy pins cgroup_ns).
-> 
-> Note this reasoning won't hold for root cgroups in v1 hierarchies,
-> therefore create a special-cased helper function just for the default
-> hierarchy.
-> 
-> Fixes: 74e4b956eb1c ("cgroup: Honor caller's cgroup NS when resolving path")
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Michal Koutný <mkoutny@suse.com>
+Variable host_err is assigned a value that is never read, it is being
+re-assigned a value in every different execution path in the following
+switch statement. The assignment is redundant and can be removed.
 
-Applied to cgroup/for-6.1-fixes w/ trivial comment / line break adjustments.
+Cleans up clang-scan warning:
+warning: Value stored to 'host_err' is never read [deadcode.DeadStores]
 
-Thanks.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ fs/nfsd/vfs.c | 1 -
+ 1 file changed, 1 deletion(-)
 
+diff --git a/fs/nfsd/vfs.c b/fs/nfsd/vfs.c
+index f650afedd67f..5093ae788f53 100644
+--- a/fs/nfsd/vfs.c
++++ b/fs/nfsd/vfs.c
+@@ -1304,7 +1304,6 @@ nfsd_create_locked(struct svc_rqst *rqstp, struct svc_fh *fhp,
+ 		iap->ia_mode &= ~current_umask();
+ 
+ 	err = 0;
+-	host_err = 0;
+ 	switch (type) {
+ 	case S_IFREG:
+ 		host_err = vfs_create(&init_user_ns, dirp, dchild, iap->ia_mode, true);
 -- 
-tejun
+2.37.3
+
