@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF805F9962
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3CA95F996B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231940AbiJJHLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36684 "EHLO
+        id S231987AbiJJHML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231719AbiJJHLH (ORCPT
+        with ESMTP id S231658AbiJJHLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:11:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6935D0C3;
-        Mon, 10 Oct 2022 00:07:17 -0700 (PDT)
+        Mon, 10 Oct 2022 03:11:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0611FCE7;
+        Mon, 10 Oct 2022 00:07:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B27C660E74;
-        Mon, 10 Oct 2022 07:06:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6C7FC433D6;
-        Mon, 10 Oct 2022 07:06:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E24B6B80E4B;
+        Mon, 10 Oct 2022 07:06:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5925DC433D6;
+        Mon, 10 Oct 2022 07:06:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665385605;
-        bh=TVmifSLd598vBmFBbOOzT6/vPAVc43mXl5Lyo9GcfsA=;
+        s=korg; t=1665385607;
+        bh=midXV7+XviSEoQHJ4KH9W7HgxeAwRxXmZXtAgHfw7P4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R6EccrxsrIfWexeNBak+tUlhlOvw31noaVivhkRPNRapYeka35cmLJ+N/tVbtj+xJ
-         3Kh518AKqzz0fCK/oT70aHV+UZQdu/DJKUkPhin/3BvW3pbTsxCuq6bzYHtw31Wqfj
-         xstd0H89p9HWS3dXSR3fCiSqnmPiI3PK1eayUxQo=
+        b=y0gvCQXxg0yUhkxIeLRzpuleUk2Q1/Vrsg+P1kzMly2NzbKTJ9UQVhrpVahCuf8ub
+         XmxInxNwTCltuL2GVL3+6QGEqA8CQstekm+ER4ZVL/L36PZQWmLTGEHSelJ4ga696v
+         tIfVOj9GiNzKdtaVWxkPLJ/KO9iZI2p2A9W4Hexo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Krc <reg.krn@pkrc.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH 5.19 41/48] gpiolib: acpi: Add a quirk for Asus UM325UAZ
-Date:   Mon, 10 Oct 2022 09:05:39 +0200
-Message-Id: <20221010070334.761150427@linuxfoundation.org>
+        stable@vger.kernel.org, ChanWoo Lee <cw9316.lee@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Brian Norris <briannorris@chromium.org>
+Subject: [PATCH 5.19 42/48] mmc: core: Replace with already defined values for readability
+Date:   Mon, 10 Oct 2022 09:05:40 +0200
+Message-Id: <20221010070334.787214739@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221010070333.676316214@linuxfoundation.org>
 References: <20221010070333.676316214@linuxfoundation.org>
@@ -56,50 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+From: ChanWoo Lee <cw9316.lee@samsung.com>
 
-commit 0ea76c401f9245ac209f1b1ce03a7e1fb9de36e5 upstream.
+commit e427266460826bea21b70f9b2bb29decfb2c2620 upstream.
 
-Asus UM325UAZ has GPIO 18 programmed as both an interrupt and a wake
-source, but confirmed with internal team on this design this pin is
-floating and shouldn't have been programmed. This causes lots of
-spurious IRQs on the system and horrendous battery life.
+SD_ROCR_S18A is already defined and is used to check the rocr value, so
+let's replace with already defined values for readability.
 
-Add a quirk to ignore attempts to program this pin on this system.
-
-Reported-by: Pavel Krc <reg.krn@pkrc.net>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216208
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: ChanWoo Lee <cw9316.lee@samsung.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20220706004840.24812-1-cw9316.lee@samsung.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Brian Norris <briannorris@chromium.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpio/gpiolib-acpi.c |   14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/mmc/core/sd.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpio/gpiolib-acpi.c
-+++ b/drivers/gpio/gpiolib-acpi.c
-@@ -1573,6 +1573,20 @@ static const struct dmi_system_id gpioli
- 			.ignore_wake = "INT33FF:01@0",
- 		},
- 	},
-+	{
-+		/*
-+		 * Interrupt storm caused from edge triggered floating pin
-+		 * Found in BIOS UX325UAZ.300
-+		 * https://bugzilla.kernel.org/show_bug.cgi?id=216208
-+		 */
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UAZ_UM325UAZ"),
-+		},
-+		.driver_data = &(struct acpi_gpiolib_dmi_quirk) {
-+			.ignore_interrupt = "AMDI0030:00@18",
-+		},
-+	},
- 	{} /* Terminating entry */
- };
- 
+--- a/drivers/mmc/core/sd.c
++++ b/drivers/mmc/core/sd.c
+@@ -870,7 +870,7 @@ try_again:
+ 	 * the CCS bit is set as well. We deliberately deviate from the spec in
+ 	 * regards to this, which allows UHS-I to be supported for SDSC cards.
+ 	 */
+-	if (!mmc_host_is_spi(host) && rocr && (*rocr & 0x01000000)) {
++	if (!mmc_host_is_spi(host) && rocr && (*rocr & SD_ROCR_S18A)) {
+ 		err = mmc_set_uhs_voltage(host, pocr);
+ 		if (err == -EAGAIN) {
+ 			retries--;
 
 
