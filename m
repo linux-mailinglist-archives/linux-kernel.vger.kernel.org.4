@@ -2,270 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B70205F9B2A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 10:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A968C5F9B34
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 10:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbiJJIkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 04:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55076 "EHLO
+        id S231495AbiJJIk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 04:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbiJJIkI (ORCPT
+        with ESMTP id S231503AbiJJIko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 04:40:08 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11F94AD57
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 01:40:05 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id w18so15926980wro.7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 01:40:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Kf8mKHxxKpxb09MVW+3gksJi6I82CwXsffNzmGA2To0=;
-        b=A01s1JhV6/4fcxpQ9ufTqvJFbroaoutXKSl+BV3JJUli/Ql9f81K2AUsaxwZtHcHRz
-         YoOp6HLYLFSU7CeOTvJwJRYtyUFY3eSZPe/9Oris8ozfp9Kc56zkRAvGlwsbbx5HbS0u
-         +DXBHEDWtoStzy4fvkrY0dY5WUfHY9jxgV6VRf92aqpp/nsTXp7xS8CA4wCS7bSFXOVN
-         Yr1t+T9XIn40u/daJZg0Wl9nQMat5mH1W+AcDTWhglZITe2+xaNyR1bJXFAysCh+o2kd
-         DO4CDXKzCHWWdDov+PT451+AwgHPVd4DiT9OOLVH1Sek11aHofREalCM6DT+gRhv/qd9
-         E8Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kf8mKHxxKpxb09MVW+3gksJi6I82CwXsffNzmGA2To0=;
-        b=CFh3cuNx4Y0+LUrDnXEHupNzY798+8TCwGpqxUQa3fE7bSLaQB2x41I7WZRBB+5Fvl
-         dSCeb2rFkttoNbCwVSQxc43byCxw705VcbiOZmCyEp88CNzzu2cwIjMzuH6twBDVxinI
-         q8Zufe7WReac6m9/4+AoYpxUQxWb7Lbe39M1v1pXyXAHJ8wSg9ZcN/h5TTcK4jF3g+Hm
-         NFR9jPo8qXpF9J18TG6Gdzb7teuxqIot8JZl/I8DyQD3+rXx8pdJ5i6aoS0ictnL7bCH
-         xJFWbfFYx9zLK5GCcQu8AOGr3O87A7Ebc6M4+MQj2BXG00F3v0IB8KiV7FBT61jYUWJb
-         eKzA==
-X-Gm-Message-State: ACrzQf3bJrdDxQs17sJKQBrVwEtQ+Nmp2qwYnhelRoml5CXLXQQ+eTCV
-        v5+oLOT96KuwBQcfKcMZGxNZHw==
-X-Google-Smtp-Source: AMsMyM77eLXWR+MyIpID2jk2qpGHzFUOVdJv9NH/oiJxE8GwC7nojNYrdl1CBwt9VTjuHvlort5mmQ==
-X-Received: by 2002:adf:f5c2:0:b0:22f:992b:7d9f with SMTP id k2-20020adff5c2000000b0022f992b7d9fmr5406500wrp.601.1665391204176;
-        Mon, 10 Oct 2022 01:40:04 -0700 (PDT)
-Received: from [192.168.178.32] ([51.155.200.13])
-        by smtp.gmail.com with ESMTPSA id iv19-20020a05600c549300b003b47b913901sm36776137wmb.1.2022.10.10.01.40.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 01:40:03 -0700 (PDT)
-Message-ID: <5f26a827-0220-da23-f2fb-08f35ee7412e@isovalent.com>
-Date:   Mon, 10 Oct 2022 09:40:02 +0100
+        Mon, 10 Oct 2022 04:40:44 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCED12D12;
+        Mon, 10 Oct 2022 01:40:42 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 40FFE100003;
+        Mon, 10 Oct 2022 08:40:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1665391240;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wfWJeTWAN+TH6eaAO5f+M3fCHnGC8+BLpOpuXl0+jPg=;
+        b=AsmBUcHi4+moi0R2aiLOXeWx3QTuPJJeE2lj0IZjvGq0oUgGI3m+QrVqeemtpde8zXgO0K
+        J/fTOgCdW7IqNo+vdQMUMuFvTfC++rldv+o0jd/eHCHYPWrxC6qnppyqd9tpfYY9ExlaDv
+        ES/hrCb1NWRTdw0gKSo/eT4KXrkv+tZK3Z45OevOXb8rkZ/FDm51OOFzPdScSqEBBqflnK
+        XA7RxI7jFKnyn+hyC7FxCw0HNK7TyJxcLhqHMLs8LgebpMbKZrdDHCT+I4+eay5shCf3RS
+        89VeeYwfDHmmcFLgz2xXoD5FuJZwwr+VUQOntMOB6f67Uwo9N2pVq4ALIIo9EA==
+Date:   Mon, 10 Oct 2022 10:42:10 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        robh@kernel.org, helgaas@kernel.org, max.zhen@amd.com,
+        sonal.santan@amd.com, larry.liu@amd.com, brian.xu@amd.com,
+        stefano.stabellini@xilinx.com, trix@redhat.com
+Subject: Re: [PATCH RFC 0/2] Generate device tree node for pci devicesgain,
+Message-ID: <20221010104210.68edf825@fixe.home>
+In-Reply-To: <78211af5-171c-ef4f-a8c2-17f63dc479bc@gmail.com>
+References: <1661809417-11370-1-git-send-email-lizhi.hou@amd.com>
+        <1d9faa2e-e3fc-d104-c85f-4035233848d6@gmail.com>
+        <ca35a14d-501d-265e-b196-a87e1e994cd0@amd.com>
+        <78211af5-171c-ef4f-a8c2-17f63dc479bc@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [bpf-next v7 1/3] bpftool: Add auto_attach for bpf prog
- load|loadall
-Content-Language: en-GB
-To:     wangyufen <wangyufen@huawei.com>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        trix@redhat.com
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, llvm@lists.linux.dev
-References: <1664277676-2228-1-git-send-email-wangyufen@huawei.com>
- <83307f48-bef0-bff8-e3b5-f8df7a592678@isovalent.com>
- <0242ccfe-53e5-5b9d-9fd9-73fa8bd0d7a4@huawei.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <0242ccfe-53e5-5b9d-9fd9-73fa8bd0d7a4@huawei.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sat Oct 08 2022 06:16:42 GMT+0100 ~ wangyufen <wangyufen@huawei.com>
-> 
-> 在 2022/10/1 0:26, Quentin Monnet 写道:
->> Tue Sep 27 2022 12:21:14 GMT+0100 ~ Wang Yufen <wangyufen@huawei.com>
->>> Add auto_attach optional to support one-step load-attach-pin_link.
->> Nit: Now "autoattach" instead of "auto_attach". Same in commit title.
-> will change in v8, thanks.
->>
->>> For example,
->>>     $ bpftool prog loadall test.o /sys/fs/bpf/test autoattach
->>>
->>>     $ bpftool link
->>>     26: tracing  name test1  tag f0da7d0058c00236  gpl
->>>         loaded_at 2022-09-09T21:39:49+0800  uid 0
->>>         xlated 88B  jited 55B  memlock 4096B  map_ids 3
->>>         btf_id 55
->>>     28: kprobe  name test3  tag 002ef1bef0723833  gpl
->>>         loaded_at 2022-09-09T21:39:49+0800  uid 0
->>>         xlated 88B  jited 56B  memlock 4096B  map_ids 3
->>>         btf_id 55
->>>     57: tracepoint  name oncpu  tag 7aa55dfbdcb78941  gpl
->>>         loaded_at 2022-09-09T21:41:32+0800  uid 0
->>>         xlated 456B  jited 265B  memlock 4096B  map_ids 17,13,14,15
->>>         btf_id 82
->>>
->>>     $ bpftool link
->>>     1: tracing  prog 26
->>>         prog_type tracing  attach_type trace_fentry
->>>     3: perf_event  prog 28
->>>     10: perf_event  prog 57
->>>
->>> The autoattach optional can support tracepoints, k(ret)probes,
->>> u(ret)probes.
->>>
->>> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
->>> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
->>> ---
->>> v6 -> v7: add info msg print and update doc for the skip program
->>> v5 -> v6: skip the programs not supporting auto-attach,
->>>       and change optional name from "auto_attach" to "autoattach"
->>> v4 -> v5: some formatting nits of doc
->>> v3 -> v4: rename functions, update doc, bash and do_help()
->>> v2 -> v3: switch to extend prog load command instead of extend perf
->>> v2:
->>> https://patchwork.kernel.org/project/netdevbpf/patch/20220824033837.458197-1-weiyongjun1@huawei.com/
->>> v1:
->>> https://patchwork.kernel.org/project/netdevbpf/patch/20220816151725.153343-1-weiyongjun1@huawei.com/
->>>   tools/bpf/bpftool/prog.c | 81
->>> ++++++++++++++++++++++++++++++++++++++++++++++--
->>>   1 file changed, 79 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
->>> index c81362a..84eced8 100644
->>> --- a/tools/bpf/bpftool/prog.c
->>> +++ b/tools/bpf/bpftool/prog.c
->>> @@ -1453,6 +1453,72 @@ static int do_run(int argc, char **argv)
->>>       return ret;
->>>   }
->>>   +static int
->>> +auto_attach_program(struct bpf_program *prog, const char *path)
->>> +{
->>> +    struct bpf_link *link;
->>> +    int err;
->>> +
->>> +    link = bpf_program__attach(prog);
->>> +    if (!link)
->>> +        return -1;
->>> +
->>> +    err = bpf_link__pin(link, path);
->>> +    if (err) {
->>> +        bpf_link__destroy(link);
->>> +        return err;
->>> +    }
->>> +    return 0;
->>> +}
->>> +
->>> +static int pathname_concat(const char *path, const char *name, char
->>> *buf)
->>> +{
->>> +    int len;
->>> +
->>> +    len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
->>> +    if (len < 0)
->>> +        return -EINVAL;
->>> +    if (len >= PATH_MAX)
->>> +        return -ENAMETOOLONG;
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +static int
->>> +auto_attach_programs(struct bpf_object *obj, const char *path)
->>> +{
->>> +    struct bpf_program *prog;
->>> +    char buf[PATH_MAX];
->>> +    int err;
->>> +
->>> +    bpf_object__for_each_program(prog, obj) {
->>> +        err = pathname_concat(path, bpf_program__name(prog), buf);
->>> +        if (err)
->>> +            goto err_unpin_programs;
->>> +
->>> +        err = auto_attach_program(prog, buf);
->>> +        if (!err)
->>> +            continue;
->>> +        if (errno == EOPNOTSUPP)
->>> +            p_info("Program %s does not support autoattach",
->>> +                   bpf_program__name(prog));
->>> +        else
->>> +            goto err_unpin_programs
->> With this code, if auto-attach fails, then we skip this program and move
->> on to the next. That's an improvement, but in that case the program
->> won't remain loaded in the kernel after bpftool exits. My suggestion in
->> my previous message (sorry if it was not clear) was to fall back to
->> regular pinning in that case (bpf_obj_pin()), along with the p_info()
->> message, so we can have the program pinned but not attached and let the
->> user know. If regular pinning fails as well, then we should unpin all
->> and error out, for consistency with bpf_object__pin_programs().
->>
->> And in that case, the (errno == EOPNOTSUPP) with fallback to regular
->> pinning could maybe be moved into auto_attach_program(), so that
->> auto-attaching single programs can use the fallback too?
->>
->> Thanks,
->> Quentin
-> 
-> If I understand correctly, can we just check link?  as following:
+Le Tue, 13 Sep 2022 12:41:28 -0500,
+Frank Rowand <frowand.list@gmail.com> a =C3=A9crit :
 
-Yes, this is exactly what I meant
+> >> I am not positive what part of what I wrote above is correct and would=
+ appreciate
+> >> some confirmation of what is correct or incorrect. =20
+> >=20
+> > There are 2 series devices rely on this patch:
+> >=20
+> > =C2=A0=C2=A0=C2=A0 1) Xilinx Alveo Accelerator cards (FPGA based device)
+> >=20
+> > =C2=A0=C2=A0=C2=A0 2) lan9662 PCIe card
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 please see: http=
+s://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.com/=
+ =20
+>=20
+> Thanks.  Please include this information in future versions of the patch =
+series.
+>=20
+> For device 2 I have strongly recommended using pre-boot apply of the over=
+lay to the base
+> device tree.  I realize that this suggestion is only a partial solution i=
+f one wants to
+> use hotplug to change system configuration (as opposed to using hotplug o=
+nly to replace
+> an existing device (eg a broken device) with another instance of the same=
+ device).  I
+> also realize that this increased the system administration overhead.  On =
+the other hand
+> an overlay based solution is likely to be fragile and possibly flaky.
 
-> 
-> --- a/tools/bpf/bpftool/prog.c
-> +++ b/tools/bpf/bpftool/prog.c
-> @@ -1460,9 +1460,10 @@ static int do_run(int argc, char **argv)
->         int err;
->  
->         link = bpf_program__attach(prog);
-> -       if (!link)
-> -               return -1;
-> -
-> +       if (!link) {
-> +               p_info("Program %s attach failed",
-> bpf_program__name(prog));
-> +               return bpf_obj_pin(bpf_program__fd(prog), path);
-> +       }
->         err = bpf_link__pin(link, path);
->         if (err) {
->                 bpf_link__destroy(link);
-> @@ -1499,9 +1500,6 @@ static int pathname_concat(const char *path, const
-> char *name, char *buf)
->                 err = auto_attach_program(prog, buf);
->                 if (!err)
->                         continue;
-> -               if (errno == EOPNOTSUPP)
-> -                       p_info("Program %s does not support autoattach",
+Again, applying overlays pre-boot is not an acceptable solution. Some
+systems are not based on device-tree (x86 platforms with ACPI based
+description, and I'm not even sure this is doable by modifying ACPI
+tables). PCI is meant to be plug-and-play, so patching the ACPI
+tables or device-tree pre-boot is likely not the correct answer to this
+problem.
 
-p_info("Program %s does not support autoattach, falling back to pinning"
+This would also require two different descriptions of the same card
+(for ACPI and device-tree) and would require the final user to create a
+specific overlay for its device based on the PCI slots the card is
+plugged in.
 
-> -                              bpf_program__name(prog));
->                 else
->                         goto err_unpin_programs;
->         }
-> 
-> 
-> and the doc is modified as follows:
-> 
-> If the program does not support autoattach, will do regular pin along
-> with an
-> info message such as "Program %s attach failed". If the *OBJ* contains
-> multiple
-> programs and **loadall** is used, if the program A in these programs
-> does not
-> support autoattach, the program A will do regular pin along with an info
-> message,
-> and continue to autoattach the next program.
+The solution we proposed (Lizhi and I) allows to overcome these
+problems and is way easier to use. Fixing the potential bugs that might
+exists in the overlay layer seems a way better idea that just pushing
+that away to the bootloader level. Moreover, this kind of devices is
+likely to be more common with the increasing popularity of FPGA and a
+proper solution must be found.
 
-Not sure the "program A" designation helps too much, I'd simply write this:
-
-"If a program does not support autoattach, bpftool falls back to regular
-pinning for that program instead."
-
-Which should be enough for both the "load" and "loadall" behaviours? I
-wouldn't mention the help message in the docs (the p_info() won't show
-up in the JSON output for example).
-
-Looks good otherwise, thanks!
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com
