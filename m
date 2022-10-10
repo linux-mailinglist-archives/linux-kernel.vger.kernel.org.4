@@ -2,65 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6ED5FA78A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 00:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A65915FA78C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 00:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbiJJWGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 18:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53866 "EHLO
+        id S229606AbiJJWIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 18:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiJJWF4 (ORCPT
+        with ESMTP id S229564AbiJJWId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 18:05:56 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB346792D3
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 15:05:52 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id f18-20020a170902ce9200b0017f9ac4cfb5so7671425plg.22
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 15:05:52 -0700 (PDT)
+        Mon, 10 Oct 2022 18:08:33 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8965F74B83;
+        Mon, 10 Oct 2022 15:08:27 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id i9so7934549qvo.0;
+        Mon, 10 Oct 2022 15:08:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FgyttR4VJGAchDQGcZyWgbJJNjgu5qWpEpTzk8jIr08=;
-        b=k8XoSIdChcW2X1gTOiIsNERb9YP1g9WZ5uQQwYNbanEzzG0C4erA3tm6ArBjeMRbsd
-         gJwKFYWsjKpgnBbbem2nBzM4K+yphE9EiKyeZlR9zvFNCDVGmGCj8COK5GYTkxEa+bgY
-         i1NFyfOwTR6wMDYXzHl/1hNAT12f2dsSqy6Wpw9Hu93fHzdV9NU4tpSFrm6o5PG7WsYY
-         i/NNTrFEg2S6+wjA8bMjO1EzdiB8bC815/nhMD+duXmFJMev70FTwqZI3yfuM+ssgm7P
-         A8qqFHfAvkgkzHR9PAhL2anZOTzlBe1ssitSLACQvX7WEB02VOIinZsS9YjCq3hP/2Ds
-         EnEQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yA36micw3BB5itFGo+j/ax6sHQQCHHk83ArO+ZpWJBA=;
+        b=YL0are/S2uwkPzzcqLaf//Fp312iwfJyPpED0y9zdW8IA0uKX/Nc6tRL1m0vQXt4rt
+         Fu+btg4YNvnwfGaec/yVZ4FrHb0e20nqFGRxA410H9mVTnMrJqyzNTJjREkpv1oGNQRA
+         Br3ZFRma6/qOkHlMkiu9ussUxajjaiFdCDbHLD90N+tpspPQHB0u5PV2jxJtseVjDoWv
+         mwTIZduErYFkNFdG7CEiCshLAPIzV6+HO50oyluzfh30Xmax8PUVLpbt+n0ea0uvPTYK
+         Ed59G+E46xX0NPIcTfC47AeE/YZKGSOizt0j9Hgzx3tB8BG10sEoJQB+sxpmuLuc72Jm
+         Wfyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FgyttR4VJGAchDQGcZyWgbJJNjgu5qWpEpTzk8jIr08=;
-        b=OkqUxB0wSK1lAiP0sxR+Hguo4omQuOha4RsXXuvc7pmNYObLyLI0VXzUbgSZHrq0ao
-         zWioiI1iqhkfbUEAvsd0pisCfGid5BQTU8s9fD03WXFFHegVSwJzyAH/dEUA+q41uNgB
-         hZD0oBLULwyYn+RTjSLF/mzdN+GBubxihD200xorDC5oFI4z3RABo6EZy5qJATwvZr2j
-         iKHfEWJNxJ0PByDRg5wmlDkLjG7E61qdK2iNa5LPFp8pRKU8RzoP3yrxB079kiY5X1gt
-         Mvp1Iw30raRBtkLzEwH6Nz5trC3BRX/srfm4z/HfNuHOkM2monD5qDBLD2sHzBB7crWP
-         jSJg==
-X-Gm-Message-State: ACrzQf081K3KdOojMSR/TTJOeEDn5qdC5x5IkUTtpioo5k0tEqFQl1uU
-        MfD2mgXIWpwmf3nIXWvkyhWvJ/fK5kaE
-X-Google-Smtp-Source: AMsMyM7DHexzB1rERbya1dLxjD1w0YQjOGFSjai0D1+EC8vtfXcH7AQFfRkWgV2O3sYT/AOvp8IXAFRyIMEJ
-X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:a17:90a:dc05:b0:20a:d73b:53a3 with SMTP id
- i5-20020a17090adc0500b0020ad73b53a3mr23645069pjv.67.1665439551654; Mon, 10
- Oct 2022 15:05:51 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 15:05:38 -0700
-In-Reply-To: <20221010220538.1154054-1-vipinsh@google.com>
-Mime-Version: 1.0
-References: <20221010220538.1154054-1-vipinsh@google.com>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221010220538.1154054-6-vipinsh@google.com>
-Subject: [PATCH v5 5/5] KVM: selftests: Run dirty_log_perf_test on specific CPUs
-From:   Vipin Sharma <vipinsh@google.com>
-To:     seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com
-Cc:     andrew.jones@linux.dev, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vipin Sharma <vipinsh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yA36micw3BB5itFGo+j/ax6sHQQCHHk83ArO+ZpWJBA=;
+        b=yXfXczN5OAWRNnX4Wa4rrwEBbFCKPSPZ2EZ7jqsd826UQRLCfvKl7icDb+cH5FgrKh
+         xkfk3wp0mQnSLaZxcJH7hFg/K6W6WINX2yhYtbqqk9KODnNMbvK+Qg0LWR13Hi/I518x
+         zXtpcHPQ2LG2Mxf+gjWWWqns1fwru7DjOaDPFK5uVbTOvN9kGcfaNTlX76szs6VLcnLf
+         wqEZMO7cKJVgWKr8Z5VSRkLfAoj3PUShWgfgTviaqBDwhWGufbX6lWXslXZSK16JaCVQ
+         QgZBa8VJzIeF7/5SXnE7KB53QMvoTNPYQwn8ctM8lhvtgy93zrzjarYvyjiM0LR0bR81
+         ucMw==
+X-Gm-Message-State: ACrzQf3DjXVy6coVIoIzcOvfCR+jGeUyEX6qCSNYUSmg07Ynh0mV5KGR
+        Eksu4UTPdmMQYfqfqSQsvB8=
+X-Google-Smtp-Source: AMsMyM5YwAOLNaTjardD5q/kZ/Vzp3E2MAqlGyBcDVBU/xpJ65WvSSdpM26tY/eXD/h5Jq3ivlXjqQ==
+X-Received: by 2002:ad4:5b8b:0:b0:4b1:cd9a:e1cd with SMTP id 11-20020ad45b8b000000b004b1cd9ae1cdmr16784613qvp.7.1665439706310;
+        Mon, 10 Oct 2022 15:08:26 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id y14-20020ac87c8e000000b0035ce8965045sm4581457qtv.42.2022.10.10.15.08.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Oct 2022 15:08:25 -0700 (PDT)
+Message-ID: <0229091b-da13-f386-d0f9-1350adb09d3a@gmail.com>
+Date:   Mon, 10 Oct 2022 15:08:23 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 5.15 00/35] 5.15.73-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+References: <20221010191226.167997210@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221010191226.167997210@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,223 +79,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a command line option, -c, to pin vCPUs to physical CPUs (pCPUs),
-i.e.  to force vCPUs to run on specific pCPUs.
+On 10/10/22 12:12, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.73 release.
+> There are 35 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 12 Oct 2022 19:12:17 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.73-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Requirement to implement this feature came in discussion on the patch
-"Make page tables for eager page splitting NUMA aware"
-https://lore.kernel.org/lkml/YuhPT2drgqL+osLl@google.com/
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-This feature is useful as it provides a way to analyze performance based
-on the vCPUs and dirty log worker locations, like on the different NUMA
-nodes or on the same NUMA nodes.
-
-To keep things simple, implementation is intentionally very limited,
-either all of the vCPUs will be pinned followed by an optional main
-thread or nothing will be pinned.
-
-Signed-off-by: Vipin Sharma <vipinsh@google.com>
-Suggested-by: David Matlack <dmatlack@google.com>
----
- .../selftests/kvm/dirty_log_perf_test.c       | 23 ++++++-
- .../selftests/kvm/include/perf_test_util.h    |  6 ++
- .../selftests/kvm/lib/perf_test_util.c        | 65 ++++++++++++++++++-
- 3 files changed, 91 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-index 618598ddd993..eec8bff77767 100644
---- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-@@ -353,7 +353,7 @@ static void help(char *name)
- 	puts("");
- 	printf("usage: %s [-h] [-i iterations] [-p offset] [-g] "
- 	       "[-m mode] [-n] [-b vcpu bytes] [-v vcpus] [-o] [-s mem type]"
--	       "[-x memslots]\n", name);
-+	       "[-x memslots] [-c physical cpus to run test on]\n", name);
- 	puts("");
- 	printf(" -i: specify iteration counts (default: %"PRIu64")\n",
- 	       TEST_HOST_LOOP_N);
-@@ -383,6 +383,18 @@ static void help(char *name)
- 	backing_src_help("-s");
- 	printf(" -x: Split the memory region into this number of memslots.\n"
- 	       "     (default: 1)\n");
-+	printf(" -c: Pin tasks to physical CPUs.  Takes a list of comma separated\n"
-+	       "     values (target pCPU), one for each vCPU, plus an optional\n"
-+	       "     entry for the main application task (specified via entry\n"
-+	       "     <nr_vcpus + 1>).  If used, entries must be provided for all\n"
-+	       "     vCPUs, i.e. pinning vCPUs is all or nothing.\n\n"
-+	       "     Example: ./dirty_log_perf_test -v 3 -c 22,23,24,50\n"
-+	       "     will create 3 vCPUs, and pin vCPU0=>pCPU22, vCPU1=>pCPU23\n"
-+	       "     vCPU2=>pCPU24, and pin the application task to pCPU50.\n"
-+	       "     To leave the application task unpinned, drop the final\n"
-+	       "     entry:\n"
-+	       "       ./dirty_log_perf_test -v 3 -c 22,23,24\n\n"
-+	       "     (default: no pinning)\n");
- 	puts("");
- 	exit(0);
- }
-@@ -398,6 +410,7 @@ int main(int argc, char *argv[])
- 		.slots = 1,
- 	};
- 	int opt;
-+	const char *pcpu_list = NULL;
- 
- 	dirty_log_manual_caps =
- 		kvm_check_cap(KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2);
-@@ -406,11 +419,14 @@ int main(int argc, char *argv[])
- 
- 	guest_modes_append_default();
- 
--	while ((opt = getopt(argc, argv, "b:ef:ghi:m:nop:s:v:x:")) != -1) {
-+	while ((opt = getopt(argc, argv, "b:c:ef:ghi:m:nop:s:v:x:")) != -1) {
- 		switch (opt) {
- 		case 'b':
- 			guest_percpu_mem_size = parse_size(optarg);
- 			break;
-+		case 'c':
-+			pcpu_list = optarg;
-+			break;
- 		case 'e':
- 			/* 'e' is for evil. */
- 			run_vcpus_while_disabling_dirty_logging = true;
-@@ -456,6 +472,9 @@ int main(int argc, char *argv[])
- 		}
- 	}
- 
-+	if (pcpu_list)
-+		perf_test_setup_pinning(pcpu_list, nr_vcpus);
-+
- 	TEST_ASSERT(p.iterations >= 2, "The test should have at least two iterations");
- 
- 	pr_info("Test iterations: %"PRIu64"\n",	p.iterations);
-diff --git a/tools/testing/selftests/kvm/include/perf_test_util.h b/tools/testing/selftests/kvm/include/perf_test_util.h
-index eaa88df0555a..ccfe3b9dc6bd 100644
---- a/tools/testing/selftests/kvm/include/perf_test_util.h
-+++ b/tools/testing/selftests/kvm/include/perf_test_util.h
-@@ -27,6 +27,8 @@ struct perf_test_vcpu_args {
- 	/* Only used by the host userspace part of the vCPU thread */
- 	struct kvm_vcpu *vcpu;
- 	int vcpu_idx;
-+	/* The pCPU to which this vCPU is pinned. Only valid if pin_vcpus is true. */
-+	uint32_t pcpu;
- };
- 
- struct perf_test_args {
-@@ -39,6 +41,8 @@ struct perf_test_args {
- 
- 	/* Run vCPUs in L2 instead of L1, if the architecture supports it. */
- 	bool nested;
-+	/* True if all vCPUs are pinned to pCPUs */
-+	bool pin_vcpus;
- 
- 	struct perf_test_vcpu_args vcpu_args[KVM_MAX_VCPUS];
- };
-@@ -60,4 +64,6 @@ void perf_test_guest_code(uint32_t vcpu_id);
- uint64_t perf_test_nested_pages(int nr_vcpus);
- void perf_test_setup_nested(struct kvm_vm *vm, int nr_vcpus, struct kvm_vcpu *vcpus[]);
- 
-+void perf_test_setup_pinning(const char *pcpus_string, int nr_vcpus);
-+
- #endif /* SELFTEST_KVM_PERF_TEST_UTIL_H */
-diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/selftests/kvm/lib/perf_test_util.c
-index 9618b37c66f7..520d1f896d61 100644
---- a/tools/testing/selftests/kvm/lib/perf_test_util.c
-+++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
-@@ -2,7 +2,10 @@
- /*
-  * Copyright (C) 2020, Google LLC.
-  */
-+#define _GNU_SOURCE
-+
- #include <inttypes.h>
-+#include <sched.h>
- 
- #include "kvm_util.h"
- #include "perf_test_util.h"
-@@ -240,10 +243,27 @@ void __weak perf_test_setup_nested(struct kvm_vm *vm, int nr_vcpus, struct kvm_v
- 	exit(KSFT_SKIP);
- }
- 
-+static void pin_this_task_to_pcpu(uint32_t pcpu)
-+{
-+	cpu_set_t mask;
-+	int r;
-+
-+	CPU_ZERO(&mask);
-+	CPU_SET(pcpu, &mask);
-+	r = sched_setaffinity(0, sizeof(mask), &mask);
-+	TEST_ASSERT(!r, "sched_setaffinity() failed for pCPU '%u'.\n", pcpu);
-+}
-+
- static void *vcpu_thread_main(void *data)
- {
-+	struct perf_test_vcpu_args *vcpu_args;
- 	struct vcpu_thread *vcpu = data;
- 
-+	vcpu_args = &perf_test_args.vcpu_args[vcpu->vcpu_idx];
-+
-+	if (perf_test_args.pin_vcpus)
-+		pin_this_task_to_pcpu(vcpu_args->pcpu);
-+
- 	WRITE_ONCE(vcpu->running, true);
- 
- 	/*
-@@ -255,7 +275,7 @@ static void *vcpu_thread_main(void *data)
- 	while (!READ_ONCE(all_vcpu_threads_running))
- 		;
- 
--	vcpu_thread_fn(&perf_test_args.vcpu_args[vcpu->vcpu_idx]);
-+	vcpu_thread_fn(vcpu_args);
- 
- 	return NULL;
- }
-@@ -292,3 +312,46 @@ void perf_test_join_vcpu_threads(int nr_vcpus)
- 	for (i = 0; i < nr_vcpus; i++)
- 		pthread_join(vcpu_threads[i].thread, NULL);
- }
-+
-+static uint32_t parse_pcpu(const char *cpu_str, const cpu_set_t *allowed_mask)
-+{
-+	uint32_t pcpu = atoi_non_negative(cpu_str);
-+
-+	TEST_ASSERT(CPU_ISSET(pcpu, allowed_mask),
-+		    "Not allowed to run on pCPU '%d', check cgroups?\n", pcpu);
-+	return pcpu;
-+}
-+
-+void perf_test_setup_pinning(const char *pcpus_string, int nr_vcpus)
-+{
-+	cpu_set_t allowed_mask;
-+	char *cpu, *cpu_list;
-+	char delim[2] = ",";
-+	int i, r;
-+
-+	cpu_list = strdup(pcpus_string);
-+	TEST_ASSERT(cpu_list, "strdup() allocation failed.\n");
-+
-+	r = sched_getaffinity(0, sizeof(allowed_mask), &allowed_mask);
-+	TEST_ASSERT(!r, "sched_getaffinity() failed");
-+
-+	cpu = strtok(cpu_list, delim);
-+
-+	/* 1. Get all pcpus for vcpus. */
-+	for (i = 0; i < nr_vcpus; i++) {
-+		TEST_ASSERT(cpu, "pCPU not provided for vCPU '%d'\n", i);
-+		perf_test_args.vcpu_args[i].pcpu = parse_pcpu(cpu, &allowed_mask);
-+		cpu = strtok(NULL, delim);
-+	}
-+
-+	perf_test_args.pin_vcpus = true;
-+
-+	/* 2. Check if the main worker needs to be pinned. */
-+	if (cpu) {
-+		pin_this_task_to_pcpu(parse_pcpu(cpu, &allowed_mask));
-+		cpu = strtok(NULL, delim);
-+	}
-+
-+	TEST_ASSERT(!cpu, "pCPU list contains trailing garbage characters '%s'", cpu);
-+	free(cpu_list);
-+}
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.38.0.rc1.362.ged0d419d3c-goog
-
+Florian
