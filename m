@@ -2,135 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E7AC5FA041
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61835FA043
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbiJJOdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 10:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
+        id S229909AbiJJOeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 10:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiJJOdR (ORCPT
+        with ESMTP id S229526AbiJJOeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 10:33:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329CF5F980
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 07:33:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665412393;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=p0fRFJAdAFUAuGAQ/I0Ni1IMy6KgVcr8obOryEi1qB8=;
-        b=iYF8WOU6MBO7PaQ1Ed7C3NmgEYcWV6t98hZTo/GhlqLKwx4eMs4BfSTkHXU9cHMwC/9ApG
-        lEwC9btdVDKPLIfEYvfQDA2Q7BH+2fGe6BHnufXWFC4lgLlvqMbl8SF2TTqjM7NyeTkE8M
-        b6mKu7CTsu76vBSG9j8sPcVxbffm0Q8=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-220-bXusrwQ7Nk-CHwu_DpZ-NQ-1; Mon, 10 Oct 2022 10:33:12 -0400
-X-MC-Unique: bXusrwQ7Nk-CHwu_DpZ-NQ-1
-Received: by mail-oi1-f200.google.com with SMTP id m11-20020aca1e0b000000b00350c1f42f26so6261991oic.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 07:33:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p0fRFJAdAFUAuGAQ/I0Ni1IMy6KgVcr8obOryEi1qB8=;
-        b=CyKPYSiUWobqMLLE5oW9c0sVEP08TRXRew1KXpQ2W33VUPFFdEAmxdMgfGQq3u3mQV
-         wq57pqNH6NXWPF6B1KGFF3NaRFapzDN6sRbrOrtKNKsK7Vt0lWodrxgzK9HiSWJul9OY
-         UT1NT6XAtvejnAzxrZepAFI/PT7fUo+6UtVoo2FYQF+5POwwbfbT+1sFZ6U5eXlONXBX
-         e7gVdL09EtQi8QDLVX7AM+d34YVpB31/GO9SFHVpO05lZtjjzqK5uiphPmeIU8eLL2A7
-         vWAWVBDdkqO55//3JuB8e4SSsejni/JxDuk/f4Cle1Y5vfA9G86aJJNEfv+FPt8PkI7s
-         4nZQ==
-X-Gm-Message-State: ACrzQf3MiW299VZHgEdEVznYPmgt7AhuE+FYA45atuP/JcsxapbnVP7T
-        Qa9yQKReMNCm3cPI58NbARwUWHhCx+KtxTP0P4lWchpqyJUl3AIj9drvIZvLEEq553gDufM7wkM
-        Vi2zXOk3KwdtMcZC5M3rvpuHd
-X-Received: by 2002:a05:6830:33e1:b0:655:e771:f572 with SMTP id i1-20020a05683033e100b00655e771f572mr8444998otu.245.1665412391362;
-        Mon, 10 Oct 2022 07:33:11 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM54DQDpetaOotRbUE06O9r7QYXvmMkojLsw/9Q3/76RQLMTAjat7qte6rDhtkVbQ1+y03CLxg==
-X-Received: by 2002:a05:6830:33e1:b0:655:e771:f572 with SMTP id i1-20020a05683033e100b00655e771f572mr8444979otu.245.1665412391133;
-        Mon, 10 Oct 2022 07:33:11 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id z6-20020aca6706000000b00353fe4fb4casm4324793oix.48.2022.10.10.07.33.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 07:33:10 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 07:33:09 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [PATCH] iommu/vt-d: Clean up si_domain in the init_dmars() error
- path
-Message-ID: <20221010143309.ed5pnkw2stjb26sc@cantor>
-References: <20221010065608.281860-1-jsnitsel@redhat.com>
- <35cf84fb-7672-671a-4354-0fb66bd2f8e7@linux.intel.com>
+        Mon, 10 Oct 2022 10:34:20 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB5F6050F;
+        Mon, 10 Oct 2022 07:34:18 -0700 (PDT)
+Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MmLws3kFVz67Dqh;
+        Mon, 10 Oct 2022 22:32:45 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 10 Oct 2022 16:34:16 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 10 Oct
+ 2022 15:34:16 +0100
+Date:   Mon, 10 Oct 2022 15:34:15 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+CC:     <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Alison Schofield" <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "Robert Richter" <rrichter@amd.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        "Terry Bowman" <terry.bowman@amd.com>
+Subject: Re: [PATCH 2/2] efi/cper, cxl: Decode CXL Error Log
+Message-ID: <20221010153415.00004bc0@huawei.com>
+In-Reply-To: <20221007211714.71129-3-Smita.KoralahalliChannabasappa@amd.com>
+References: <20221007211714.71129-1-Smita.KoralahalliChannabasappa@amd.com>
+        <20221007211714.71129-3-Smita.KoralahalliChannabasappa@amd.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <35cf84fb-7672-671a-4354-0fb66bd2f8e7@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 07:32:43PM +0800, Baolu Lu wrote:
-> On 2022/10/10 14:56, Jerry Snitselaar wrote:
-> > A splat from kmem_cache_destroy() was seen with a kernel prior to
-> > commit ee2653bbe89d ("iommu/vt-d: Remove domain and devinfo mempool")
-> > when there was a failure in init_dmars(), because the iommu_domain
-> > cache still had objects. While the mempool code is now gone, there
-> > still is a leak of the si_domain memory if init_dmars() fails. So
-> > clean up si_domain in the init_dmars() error path.
-> > 
-> > Cc: Lu Baolu <baolu.lu@linux.intel.com>
-> > Cc: Joerg Roedel <joro@8bytes.org>
-> > Cc: Will Deacon <will@kernel.org>
-> > Cc: Robin Murphy <robin.murphy@arm.com>
-> > Fixes: 86080ccc223a ("iommu/vt-d: Allocate si_domain in init_dmars()")
-> > Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> > ---
-> >   drivers/iommu/intel/iommu.c | 2 ++
-> >   1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> > index 31bc50e538a3..8f1f80a4d0c5 100644
-> > --- a/drivers/iommu/intel/iommu.c
-> > +++ b/drivers/iommu/intel/iommu.c
-> > @@ -3042,6 +3042,8 @@ static int __init init_dmars(void)
-> >   		disable_dmar_iommu(iommu);
-> >   		free_dmar_iommu(iommu);
-> >   	}
-> > +	if (si_domain)
-> > +		domain_exit(si_domain);
-> 
-> Thank you for the patch.
-> 
-> Above requires si_domain to be NULL or a valid pointer. So do you also
-> need to add the following change?
-> 
-> --- a/drivers/iommu/intel/iommu.c
-> +++ b/drivers/iommu/intel/iommu.c
-> @@ -2410,6 +2410,7 @@ static int __init si_domain_init(int hw)
-> 
->         if (md_domain_init(si_domain, DEFAULT_DOMAIN_ADDRESS_WIDTH)) {
->                 domain_exit(si_domain);
-> +               si_domain = NULL;
->                 return -EFAULT;
->         }
-> 
-> Best regards,
-> baolu
+On Fri, 7 Oct 2022 21:17:14 +0000
+Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com> wrote:
 
-Hi Baolu,
+> Print the CXL Error Log field as found in CXL Protocol Error Section.
+> 
+> The CXL RAS Capability structure will be reused by OS First Handling
+> and the duplication/appropriate placement will be addressed eventually.
+> 
+> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
 
-Yes. I think should add it after the domain_exit() call I added as well.
+Ah. This clearly answers at least a few comments from my patch one review.
+I should have read on!
 
-Regards,
-Jerry
+> ---
+>  drivers/firmware/efi/cper_cxl.c | 21 +++++++++++++++++++++
+>  include/linux/cxl_err.h         | 21 +++++++++++++++++++++
+>  2 files changed, 42 insertions(+)
+>  create mode 100644 include/linux/cxl_err.h
+> 
+> diff --git a/drivers/firmware/efi/cper_cxl.c b/drivers/firmware/efi/cper_cxl.c
+> index e5f48f0de1a4..c3d1d0770aef 100644
+> --- a/drivers/firmware/efi/cper_cxl.c
+> +++ b/drivers/firmware/efi/cper_cxl.c
+> @@ -8,6 +8,7 @@
+>   */
+>  
+>  #include <linux/cper.h>
+> +#include <linux/cxl_err.h>
+>  #include "cper_cxl.h"
+>  
+>  #define PROT_ERR_VALID_AGENT_TYPE		BIT_ULL(0)
+> @@ -16,6 +17,7 @@
+>  #define PROT_ERR_VALID_SERIAL_NUMBER		BIT_ULL(3)
+>  #define PROT_ERR_VALID_CAPABILITY		BIT_ULL(4)
+>  #define PROT_ERR_VALID_DVSEC			BIT_ULL(5)
+> +#define PROT_ERR_VALID_ERROR_LOG		BIT_ULL(6)
+>  
+>  static const char * const prot_err_agent_type_strs[] = {
+>  	"Restricted CXL Device",
+> @@ -84,4 +86,23 @@ void cper_print_prot_err(const char *pfx, const struct cper_sec_prot_err *prot_e
+>  			break;
+>  		}
+>  	}
+> +
+> +	if (prot_err->valid_bits & PROT_ERR_VALID_ERROR_LOG) {
+> +		size_t size = sizeof(*prot_err) + prot_err->dvsec_len;
+> +		struct ras_capability_regs *cxl_ras;
+> +
+> +		pr_info("%s Error log length: 0x%04x\n", pfx, prot_err->err_len);
+> +
+> +		pr_info("%s CXL Error Log:\n", pfx);
+> +		cxl_ras = (struct ras_capability_regs *)((long)prot_err + size);
+> +		pr_info("%s cxl_ras_uncor_status: 0x%08x, cxl_ras_uncor_mask: 0x%08x\n",
+> +			pfx, cxl_ras->uncor_status, cxl_ras->uncor_mask);
+Is it worth splitting these up, so that we get a human readable line with the
+individual fields broken out?
+
+> +		pr_info("%s cxl_ras_uncor_severity: 0x%08x\n", pfx,
+> +			cxl_ras->uncor_severity);
+> +		pr_info("%s cxl_ras_cor_status: 0x%08x, cxl_ras_cor_mask: 0x%08x\n",
+> +			pfx, cxl_ras->cor_status, cxl_ras->cor_mask);
+
+Not outputting the cap_control register?  Some of that might be useful.
+
+> +		pr_info("%s Header Log Registers:\n", pfx);
+> +		print_hex_dump(pfx, "", DUMP_PREFIX_OFFSET, 16, 4, cxl_ras->header_log,
+> +			       sizeof(cxl_ras->header_log), 0);
+> +	}
+>  }
+> diff --git a/include/linux/cxl_err.h b/include/linux/cxl_err.h
+> new file mode 100644
+> index 000000000000..c89dbb6c286f
+> --- /dev/null
+> +++ b/include/linux/cxl_err.h
+> @@ -0,0 +1,21 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2022 Advanced Micro Devices, Inc.
+> + *
+> + * Author: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+> + */
+> +
+> +#ifndef LINUX_CXL_ERR_H
+> +#define LINUX_CXL_ERR_H
+> +
+> +struct ras_capability_regs {
+
+CXL r3.0 Spec reference plus prefix it with cxl_ 
+
+Agreed with your comment at the top. Some discussion needed on where to
+put this - or whether to delay figuring that out until a later stage.
+
+> +	u32 uncor_status;
+> +	u32 uncor_mask;
+> +	u32 uncor_severity;
+> +	u32 cor_status;
+> +	u32 cor_mask;
+> +	u32 cap_control;
+> +	u32 header_log[16];
+> +};
+> +
+> +#endif //__CXL_ERR_
 
