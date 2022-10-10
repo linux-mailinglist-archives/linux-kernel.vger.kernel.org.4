@@ -2,153 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EBB75F9F56
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 851AC5F9F59
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbiJJNYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 09:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
+        id S229595AbiJJN0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 09:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiJJNYW (ORCPT
+        with ESMTP id S229475AbiJJN0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 09:24:22 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB23261D89;
-        Mon, 10 Oct 2022 06:24:20 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id nb11so24894959ejc.5;
-        Mon, 10 Oct 2022 06:24:20 -0700 (PDT)
+        Mon, 10 Oct 2022 09:26:21 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EE95C9C9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 06:26:19 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id g11so1796067qts.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 06:26:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=S4TuO/R3PUr2Z3As+PBmnhfUrFKXN0bX/gKStbzoYWY=;
-        b=lEqkby1o2P9oiUTHmDuhjFJ6WX4EvOcDTsRrkhNm9cfmmNx7LU7OTxjbhCshQd4C8V
-         JWiaxVIQaER2wIOSmq1yo/hxidyY2sp0kk7UOD8iI16ynloBS/qa0eJxpJh7naspnBmF
-         Eomb6M7bQHkWiLqwIeyExy4duhlHArJUy3ExyanWt/X5NNVXt9wl2o6quVRll7D6zJwa
-         rTSDmp3dMrkqk22HVDsEOUC0kAdacsQlvYzqCgDCJTuU86Ceg4IMY5FMmxmWVtDPaScK
-         jUpqS3al4/H7VCuFfDUZMQ1BBpGVmly4z+rGVoFTDt0J0qmQvsVjQBR/zgr61PjzpDO2
-         k8uA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bECZwqwp/UMUC2akq1A/CRAdUXQ8y+lySs9e81GJPvo=;
+        b=wFLua3qNoxv1oK422WS3Z0arUW43Mk/9YaiEu598KyMxUreaiHVlStJNCYindCI14l
+         0uih9J2kqd84xdRN2futlUGJ509Lgr0RHsCZxptFQ/CEi0EbJ4DYxtTtJ7nfsRAi5FH5
+         yQa+s18iY7BYG1txW5XasmdW/pnqnle4EKdUHckr68cK+WWlCNEbifbF/BwNLoXjjpWy
+         7hdOXNAEa9cf6nqCAQWPPR6TkkyB4J+L2ZAsE9uEpGVN8tSImHMblrh+LJR1vsQv/Nys
+         XHaWRC/3q0osdP33TtZGwBWlxyY8/rXeMolzTBml+Msj6rDrgR15IvztiGkkSOaivGWy
+         Le5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S4TuO/R3PUr2Z3As+PBmnhfUrFKXN0bX/gKStbzoYWY=;
-        b=v+eUlSBBlHV4LTTybsZA4osfnq2gAF4/BV4YRHbPT2nNcOtBNKJOytH71mwlGRo7wK
-         Z42tdNElvoxLzkSkS7kYppZJ8za6gaCVQ3obDSwWf5I/2g6yVTvIwvhA+zWkPFBA89Or
-         nzgVm91ozq1skgp3SVP1DWWE7GvARsjmtQJhhtyYdP4cz7RJy6z5N3dwhA4C2LoO67TQ
-         irjbXNvwzpqtG6DQmPFlZNh6yTQFDZELEYIPZ++kBMjlrXU+Zial3L6VNpUSLyZtMJ9G
-         H+3lsFjbh3q+50GACe2ycqYYx3gpMvJCkH91IGfgxiBGC4VyQDtYZ/TITaCh9yMR1BrD
-         Dvkg==
-X-Gm-Message-State: ACrzQf2w7nHiEPw4R5Jy5BePoQiDyMUYesSqZFmL1FllxpKQv2kqzYZf
-        AO/Ox36D7OtRY9/IF4Zn5tAzNnm7RMQAzbJ3vko=
-X-Google-Smtp-Source: AMsMyM7nNJ9G292inQymfGArq4O2cI71AqV4IIm31Y9VqNdyXyEO2cc8vT1w7LdYU88WIdncAAYGZTlouIQ8eFLSmZE=
-X-Received: by 2002:a17:907:2d06:b0:78d:50db:130e with SMTP id
- gs6-20020a1709072d0600b0078d50db130emr13651649ejc.371.1665408259027; Mon, 10
- Oct 2022 06:24:19 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bECZwqwp/UMUC2akq1A/CRAdUXQ8y+lySs9e81GJPvo=;
+        b=EMWfOmLTUz4cz/pzxk98xdM20VVOCJZ0mc/7fNSTb7mD3zbTTc8QVpDyuhko1qCeCL
+         W9N7r2bq/hVCBxcehWj2fpZpGe0VYKwSLyNDo8HvL8wE5lZwBdFc/j56tjUKRqnrJz2V
+         LoyjiJflUyPYM9ybU+LWGpP11yvO80vF+r+BYuRHirvWgkjSKY/pO3BXTUCiUjDB8+hS
+         chVbTGMbMGnQplUQS9+mtqIGZEJtm/QBJg0Xk7jIMYAojxabJGTj9DX42yDNeodHtvLc
+         1jUWMQh0IB9+0A4FMqUCEsdobAcdVS1jkgl7YI84mXyMKKu7Jr1wj52ZOpEjUepSsRkl
+         SMDA==
+X-Gm-Message-State: ACrzQf3R8kuO1AjItuTlx8cUki3K2QWgPyN0D5Mo7ObnxfhQ4tg5y2jg
+        LP+5NKI8EWgOEYi8xEm5dkrQTw==
+X-Google-Smtp-Source: AMsMyM5Y+JwiozPaIKFDE8rg9TBm8NsqgNP92weuetrqvm8DbETgSFdxRpjy0dqfKP9ATq6rHESYnw==
+X-Received: by 2002:ac8:7f4b:0:b0:35c:bfa2:8bd2 with SMTP id g11-20020ac87f4b000000b0035cbfa28bd2mr14587635qtk.644.1665408378940;
+        Mon, 10 Oct 2022 06:26:18 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id i14-20020a05620a248e00b006bba46e5eeasm10660953qkn.37.2022.10.10.06.26.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Oct 2022 06:26:17 -0700 (PDT)
+Message-ID: <ebf9e667-6b08-4a04-2241-04295cc28058@linaro.org>
+Date:   Mon, 10 Oct 2022 09:24:05 -0400
 MIME-Version: 1.0
-From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Mon, 10 Oct 2022 21:23:44 +0800
-Message-ID: <CAO4mrff8gu5pe5A-Tm7mDrduHz4yNHRyWh5B5S2=2qe3ejfgUg@mail.gmail.com>
-Subject: kernel BUG in ip6gre_header
-To:     davem@davemloft.net, Eric Dumazet <edumazet@google.com>,
-        kuba@kernel.org, pabeni@redhat.com, willemb@google.com,
-        kafai@fb.com, imagedong@tencent.com, talalahmad@google.com,
-        luiz.von.dentz@intel.com, vasily.averin@linux.dev,
-        jk@codeconstruct.com.au
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] arm64: dts: fix drive strength macros as per FSD HW UM
+To:     Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        alim.akhtar@samsung.com, chanho61.park@samsung.com,
+        linus.walleij@linaro.org, pankaj.dubey@samsung.com
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+References: <CGME20221010123120epcas5p3ba947a3a982bc6a78310472c2a65ebfe@epcas5p3.samsung.com>
+ <20221010120438.80680-1-p.rajanbabu@samsung.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221010120438.80680-1-p.rajanbabu@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux Developer,
+On 10/10/2022 08:04, Padmanabhan Rajanbabu wrote:
+> In FSD pinctrl implementation, the pinctrl driver is using drive strength
+> MACROs, which are deviating from the actual values specified in FSD HW UM
 
-Recently when using our tool to fuzz kernel, the following crash was triggered:
+But you are changing DTS, not pinctrl driver. The message is a bit
+confusing.
 
-HEAD commit: fc74e0a40e4f Linux 5.16-rc7
-git tree: upstream
-compiler: clang 12.0.0
-console output:
-https://drive.google.com/file/d/1w1j1H1ptN2F4RTwi06iAgwXM6cscQHg7/view?usp=sharing
-kernel config: https://drive.google.com/file/d/1L16y3aFu5mPQbKNsc7eQc6RH55YRd1zd/view?usp=sharing
+Add full stop to the sentence.
 
-Unfortunately, I don't have any reproducer for this crash yet.
+> 
+> This patch adds the right pinctrl drive strength values for FSD SoC. This
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: Wei Chen <harperchen1110@gmail.com>
+Do not use "This commit/patch".
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
 
-kernel BUG at net/core/skbuff.c:113!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 3152 Comm: syz-executor Not tainted 5.16.0-rc7 #4
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-RIP: 0010:skb_panic+0x14a/0x150
-Code: ca 99 8b 48 8b 74 24 08 48 8b 54 24 10 8b 0c 24 44 8b 44 24 04
-49 89 e9 31 c0 53 41 55 41 54 41 57 e8 71 e3 f0 01 48 83 c4 20 <0f> 0b
-0f 1f 40 00 55 41 57 41 56 41 55 41 54 53 48 83 ec 70 4c 89
-RSP: 0018:ffffc90009d9f820 EFLAGS: 00010282
-RAX: 000000000000008a RBX: ffff88803e85a000 RCX: 114ab6c57586dc00
-RDX: ffffc90002144000 RSI: 0000000000002f87 RDI: 0000000000002f88
-RBP: ffff88801cb30c00 R08: ffffffff8167a5e2 R09: ffffed100c7867b1
-R10: ffffed100c7867b1 R11: 0000000000000000 R12: 000000000000003c
-R13: 00000000000000c0 R14: dffffc0000000000 R15: ffff88801cb30bd8
-FS:  00007f8d37e40700(0000) GS:ffff888063c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000000 CR3: 00000000131c1000 CR4: 0000000000752ef0
-DR0: 0000000020000100 DR1: 0000000020000100 DR2: c62d86afc1fea99c
-DR3: 0000000000000d27 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-PKRU: 55555554
-Call Trace:
- <TASK>
- skb_under_panic+0x25/0x30
- skb_push+0xb2/0xd0
- ip6gre_header+0xcb/0x7b0
- vlan_dev_hard_header+0x35b/0x480
- llc_mac_hdr_init+0x116/0x190
- llc_sap_action_send_test_c+0x188/0x310
- llc_sap_state_process+0x247/0x840
- llc_ui_sendmsg+0x7da/0x1420
- __sys_sendto+0x43d/0x5a0
- __x64_sys_sendto+0xda/0xf0
- do_syscall_64+0x3d/0xb0
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f8d3a8d7c4d
-Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f8d37e3fc58 EFLAGS: 00000246 ORIG_RAX: 000000000000002c
-RAX: ffffffffffffffda RBX: 00007f8d3a9fe0a0 RCX: 00007f8d3a8d7c4d
-RDX: 0000000000000035 RSI: 0000000020000040 RDI: 0000000000000004
-RBP: 00007f8d3a950d80 R08: 0000000020000080 R09: 0000000000000010
-R10: 0000000004000000 R11: 0000000000000246 R12: 00007f8d3a9fe0a0
-R13: 00007ffc1bf6b7bf R14: 00007ffc1bf6b960 R15: 00007f8d37e3fdc0
- </TASK>
-Modules linked in:
-Dumping ftrace buffer:
-   (ftrace buffer empty)
----[ end trace a43bcba70fed35f6 ]---
-RIP: 0010:skb_panic+0x14a/0x150
-Code: ca 99 8b 48 8b 74 24 08 48 8b 54 24 10 8b 0c 24 44 8b 44 24 04
-49 89 e9 31 c0 53 41 55 41 54 41 57 e8 71 e3 f0 01 48 83 c4 20 <0f> 0b
-0f 1f 40 00 55 41 57 41 56 41 55 41 54 53 48 83 ec 70 4c 89
-RSP: 0018:ffffc90009d9f820 EFLAGS: 00010282
-RAX: 000000000000008a RBX: ffff88803e85a000 RCX: 114ab6c57586dc00
-RDX: ffffc90002144000 RSI: 0000000000002f87 RDI: 0000000000002f88
-RBP: ffff88801cb30c00 R08: ffffffff8167a5e2 R09: ffffed100c7867b1
-R10: ffffed100c7867b1 R11: 0000000000000000 R12: 000000000000003c
-R13: 00000000000000c0 R14: dffffc0000000000 R15: ffff88801cb30bd8
-FS:  00007f8d37e40700(0000) GS:ffff888063c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f300ed27000 CR3: 00000000131c1000 CR4: 0000000000752ef0
-DR0: 0000000020000100 DR1: 0000000020000100 DR2: c62d86afc1fea99c
-DR3: 0000000000000d27 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-PKRU: 55555554
+> patch also ensures that the peripherals are using right drive strength
+> MACROs in-order to function as expected
 
-Best,
-Wei
+Full stop
+
+Which commit introduced it? Add a Fixes tag.
+
+
+> 
+> Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+> ---
+>  arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi | 34 +++++++++++-----------
+>  arch/arm64/boot/dts/tesla/fsd-pinctrl.h    |  6 ++--
+>  2 files changed, 20 insertions(+), 20 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+> index d0abb9aa0e9e..e3852c946352 100644
+> --- a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+> +++ b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+> @@ -55,14 +55,14 @@
+>  		samsung,pins = "gpf5-0";
+>  		samsung,pin-function = <FSD_PIN_FUNC_2>;
+>  		samsung,pin-pud = <FSD_PIN_PULL_NONE>;
+> -		samsung,pin-drv = <FSD_PIN_DRV_LV2>;
+> +		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
+
+Are you sure? The original commit used here value of "2", your change
+also set value of "2", so what deviates from actual values?
+
+You need to describe better the problem.
+
+Best regards,
+Krzysztof
+
