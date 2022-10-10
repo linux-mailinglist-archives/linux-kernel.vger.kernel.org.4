@@ -2,108 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872895FA0B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B638E5FA0CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiJJO4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 10:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37300 "EHLO
+        id S229967AbiJJO64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 10:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiJJO4a (ORCPT
+        with ESMTP id S229658AbiJJO6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 10:56:30 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72EC2611A
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 07:56:07 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id a17so1773890qtw.10
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 07:56:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UwsU1fn/1SfZtcqL1Zfll3O9hBAK2GV/zHS0qbctt9A=;
-        b=vFfv1QykuX1R6T4Pv3s7wuWLMBDo5sYCAxir3KGVHEjCi0mdzbZew2vk7h7L4rix3k
-         Rf9SYZNWSKxwJzDt0MinCCWk2PmF6aLaMXl9clOTRhhkSAK0KWc7C0aO7U54037TBtBp
-         4WFqQ2HLFcob6z8Ev57+FwoAg7h4Bm28VhWB77XX8IRaKjbKaqyq77FLWnJ0q2FteKKn
-         psQcN8rXlsCo7oPYfisgs70YCbhs13QHkG2xCSvUGtoeOKERdZN72m1KwwMTeyBq5B82
-         tCIPlwoZiF7YhC9lP40IqRPJAuxZrd15FL1yLQZqZtt6u0BAhCS62zqGejhDSUBQCqv9
-         rcIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UwsU1fn/1SfZtcqL1Zfll3O9hBAK2GV/zHS0qbctt9A=;
-        b=uID451t18PRqcHlIqCIrm0aQ/AJ33DiEcVOqgpnxQaZpy1m6p1oCwdMuEuxxiwLz2p
-         /glhW1z5ZTYsElmiSGhczy417pxMZb6Qs/slazSeneX10BN7O/yZp/Hwz2iV0P+RdrDN
-         lCmLuxN5Q+NfScPWMGUc2jFBtlAHlHyM1SemTj3NAQIFa8StgBdCo3fBBxu52oBpHvp7
-         0w6k7WmmEvn+Y/3syqTjD8rBp3Mw/D9tesd/G5HTi3F6rJscv28k0JRp8JEoT7UoAn3I
-         m94gyrG8WjaiX10Uz5XYq43HAaHNZHlA6dJlOn97kmULkRT66U3oUbHA/xkQwi1EmqCI
-         RipQ==
-X-Gm-Message-State: ACrzQf2dOrtDP9sdPFFFz3KoBMic/AbueFxWavATPQmx0U9CzATaPohZ
-        uOR9sETtRCfppPdO1VIXxS3/Tg==
-X-Google-Smtp-Source: AMsMyM4wUdL69r1gqbyekIM8UU8nT+Iwy6V3/bmUUZzogalJHEIVc9ztR+cgKUf3W7pIPUCmGyr9vg==
-X-Received: by 2002:a05:622a:13c6:b0:39b:e62:cfc3 with SMTP id p6-20020a05622a13c600b0039b0e62cfc3mr2150730qtk.687.1665413740678;
-        Mon, 10 Oct 2022 07:55:40 -0700 (PDT)
-Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id fp3-20020a05622a508300b0039b26d92989sm1083673qtb.86.2022.10.10.07.55.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 07:55:39 -0700 (PDT)
-Message-ID: <1c10a474-7014-b56e-d2e1-3e422ae82401@linaro.org>
-Date:   Mon, 10 Oct 2022 10:55:37 -0400
+        Mon, 10 Oct 2022 10:58:37 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2161EC58
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 07:58:36 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29ABfpOe008858;
+        Mon, 10 Oct 2022 09:57:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=3cuiG9m6vIhjwqp/IWKVUxSa8Ym/VaVsO8Icgx0or3w=;
+ b=PhEkOhV1EFCAlSWBlcFbVi8iXloP49/wnrlRN4680dp+XnnqH150J260Z+p4xlcunlrL
+ I9fEvT+uNXes6at0cnhM5ekMptUU7zzfQzYeAeruxvMQy1y1ybPKcyMUzxH/3IFn4Avc
+ Z+ZlJ5YsX0/cZHlPgmxkvaOQRJ5XlC6iBDDbpAElNyciU8S7LFOj4NEameb4ecZ4ujIW
+ zSehU8XfcP1mHj5q588B+VWlALaSKLne7PX6NNhuKRgMeV034o6Se2ORnd/0heKvtdG2
+ PmGSVKLFl4QVFYb5L+N/Hp+GgJE/7KO/uHNWS+8gf7Y5cJfqd6vP77gYmahUOrRgPFHd hg== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3k36m1t472-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 09:57:28 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.12; Mon, 10 Oct
+ 2022 09:57:26 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.12 via Frontend
+ Transport; Mon, 10 Oct 2022 09:57:26 -0500
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id C2AA1468;
+        Mon, 10 Oct 2022 14:57:26 +0000 (UTC)
+Date:   Mon, 10 Oct 2022 14:57:26 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Xiaolei Wang <xiaolei.wang@windriver.com>
+CC:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <steve@sk2.org>, <geert+renesas@glider.be>,
+        <chi.minghao@zte.com.cn>, <aford173@gmail.com>,
+        <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ASoC: wm8962: Add an event handler for TEMP_HP and
+ TEMP_SPK
+Message-ID: <20221010145726.GD92394@ediswmail.ad.cirrus.com>
+References: <20221010092014.2229246-1-xiaolei.wang@windriver.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v3 1/3] dt-bindings: iommu: mediatek: add binding
- documentation for MT8365 SoC
-Content-Language: en-US
-To:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Will Deacon <will@kernel.org>, Yong Wu <yong.wu@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     iommu@lists.linux.dev,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Fabien Parent <fparent@baylibre.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        linux-mediatek@lists.infradead.org
-References: <20221001-iommu-support-v3-0-c7b3059b0d16@baylibre.com>
- <20221001-iommu-support-v3-1-c7b3059b0d16@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221001-iommu-support-v3-1-c7b3059b0d16@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221010092014.2229246-1-xiaolei.wang@windriver.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: hsjsF0xQgJbGqZcG_8mLtdHL5xkhVTFg
+X-Proofpoint-ORIG-GUID: hsjsF0xQgJbGqZcG_8mLtdHL5xkhVTFg
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/10/2022 08:54, Alexandre Mergnat wrote:
-> From: Fabien Parent <fparent@baylibre.com>
+On Mon, Oct 10, 2022 at 05:20:14PM +0800, Xiaolei Wang wrote:
+> In wm8962 driver, the WM8962_ADDITIONAL_CONTROL_4 is used as a volatile
+> register, but this register mixes a bunch of volatile status bits and a
+> bunch of non-volatile control bits. The dapm widgets TEMP_HP and
+> TEMP_SPK leverages the control bits in this register. After the wm8962
+> probe, the regmap will bet set to cache only mode, then a read error
+> like below would be triggered when trying to read the initial power
+> state of the dapm widgets TEMP_HP and TEMP_SPK.
+>   wm8962 0-001a: ASoC: error at soc_component_read_no_lock
+>   on wm8962.0-001a: -16
 > 
-> Add IOMMU binding documentation for the MT8365 SoC.
+> In order to fix this issue, we add event handler to actually power
+> up/down these widgets. With this change, we also need to explicitly
+> power off these widgets in the wm8962 probe since they are enabled
+> by default.
 > 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
 > ---
 
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-(for DT bindings and memory-controllers)
-
-Best regards,
-Krzysztof
-
+Thanks,
+Charles
