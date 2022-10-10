@@ -2,282 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CDA75FA06F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 682DD5FA072
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiJJOsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 10:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
+        id S229456AbiJJOs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 10:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiJJOrz (ORCPT
+        with ESMTP id S229923AbiJJOsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 10:47:55 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F64871708;
-        Mon, 10 Oct 2022 07:47:54 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 4A5BD32008FE;
-        Mon, 10 Oct 2022 10:47:53 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 10 Oct 2022 10:47:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1665413272; x=
-        1665499672; bh=VYzEzYyl82dyfftA+WmV6ia0U2mNve7T+OIZKjpk+VI=; b=a
-        jXQKRMH7wE5HCdF56J1sigTi3wHAH6k5wPE/t2u30MKW781Hk0sHDAx72mtBC5tr
-        LLvGte/WUbbmSxQdCKkn+1O41POODy7Y50vS4JKpQcv/xhfNcsS0nbR2pseSdoJQ
-        jqqXioYeMfrBzn7W46KEeh/+r7L+WY0TlT1wb3vsDJ+ayHbfj1EqNH+jfyPDIffk
-        l4m01PLMSV+A6TXBwEjYZPSP1njavIRchEzljt9vXkN3ed/R9RaNZnfeOOmhdXHT
-        tLtTp7qSGgNw3MP/p8stPESEq7aT1bsVHd4WOeFbjk367+OXxstP+NK348olB1k/
-        uj2x3uWx4KWJnD37yP//A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1665413272; x=
-        1665499672; bh=VYzEzYyl82dyfftA+WmV6ia0U2mNve7T+OIZKjpk+VI=; b=q
-        savttqCZcIebpZoRbGJVNbvadUG/QBI7aASNETuE7pBFp82xCt5/iax6iz0wnFql
-        LRYsv9bVUTbgMvIofP9b6KatN5QLN2QZn7Ppl7tSoyX+03tzPxZ3LRgy2uUC2Gqs
-        iD4K7r4hwXeZhHesYwDX2jfwhGuOCzvc1rlCYGgfCOW0mzGjXbMnW0rKzV+2K8B+
-        HAL+E4uRj1HLLP3O0dwWnLLrfV1BRGhx3m5lmKAFO44xx7StK3Hcy33J7cXE1I6E
-        9iHOtOCQXbSIZudRuPvQjiMdK5dCVCurjc7+TuzALGVP6mNsr7y9Z127MYG19CEx
-        +w3/gtfnWAkUoEY3DjJxg==
-X-ME-Sender: <xms:mDBEYy5AYmFMF91wYJvwSjbV4SsShgIIQEfFs1SUcaApu-UP-hfhQg>
-    <xme:mDBEY77D3BJnAlbHFg5Qcp5m57dOuqA1BISW0bHI8Ail04_flXu_f-kf4v6ks_iSd
-    8FO99eaV30a_uSTVUs>
-X-ME-Received: <xmr:mDBEYxdkZI5np61LBiy9TxArBnM4DOFsBY7yWaWTuPokpPC9g0cLRYghIXzZ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejgedgjeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffufggtgfgkfhfjgfvvefosehtkeertdertdejnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepudduudfhveejteefgedvffdvvedvjedugedukeejhedtlefhffevtefh
-    jeeltdevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:mDBEY_Kzwk6F82-S7gcMimsdl_opARjRV49NLEVOtoGD3mdiyY6JYw>
-    <xmx:mDBEY2LO7XG5a4-A8OYL3HsUY_qlUIW4cE51JwEctpr5ENrSe5zRog>
-    <xmx:mDBEYwyI6-gcZfn1XcglAt_TjTvh426dzSKsM_St-GRTlN7Uv1ZstQ>
-    <xmx:mDBEY4iCAIw5ba6AiEyDW9KhbEmJ-IaBxTYqp994QvIkVxUSiYfQpQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 10 Oct 2022 10:47:52 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-Date:   Mon, 10 Oct 2022 16:47:39 +0200
-Subject: [PATCH 2/2] clk: tests: Add tests for notifiers
+        Mon, 10 Oct 2022 10:48:16 -0400
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81C873910;
+        Mon, 10 Oct 2022 07:48:06 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id h15so2453806qtu.2;
+        Mon, 10 Oct 2022 07:48:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lpl+HJx24mQV8eDUHSlRaOdy3oKyBT3ownyekipI6Vs=;
+        b=zXnnmtyshe4ExxvhTMMUWrjECfa4bRwHvpcvp/1PFvtJ4qzfNlKaSYobA0yQjehBU0
+         pkh8tl3mHJzhed83kRR7wOBN4SEY1u6dvcaBvCfvL+3bcM72JhfaXWaDpe8Lv8t3R0Mp
+         RfjbqpzzNob5XMAwnKNUrAvBQjHcdqtaeCmDOEZnGwaSOyP0RvjS4VItIvvdLdZ4eJdR
+         QYPNYq/+q75cUtuc7uXIU3Uz5Xt6Jc54Y1BFviNmG9c7UniOXXGqkkOdDQsbAy22i9nm
+         BG8rDTHpBHRc35tUcRwnBvTTDRlOy+YIRqA2gkcIAp+3h/iYhquYBIgkXQmhunl+R20c
+         W3qQ==
+X-Gm-Message-State: ACrzQf02ZZ/Zmd2hotFonSl6ijvAFhPF46LvwO2Ys+3I+NUiequS5Ven
+        PQReBst3M+BqkFkxN+k/zYGZU4sDLFNMmvu4bZmpoJUx
+X-Google-Smtp-Source: AMsMyM4ZtvYFvkgScpyA70y2xt4xu7wifJ2vFmW1ZEkt/oe1u8zQ26DZnPalvGbmWy1jo7qEA65Krfrb1dHxefqHzCs=
+X-Received: by 2002:a05:622a:11c8:b0:35c:e912:a8ea with SMTP id
+ n8-20020a05622a11c800b0035ce912a8eamr15305962qtk.17.1665413285505; Mon, 10
+ Oct 2022 07:48:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221010-rpi-clk-fixes-again-v1-2-d87ba82ac404@cerno.tech>
-References: <20221010-rpi-clk-fixes-again-v1-0-d87ba82ac404@cerno.tech>
-In-Reply-To: <20221010-rpi-clk-fixes-again-v1-0-d87ba82ac404@cerno.tech>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-clk@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Maxime Ripard <maxime@cerno.tech>
-X-Mailer: b4 0.11.0-dev-7da52
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5977; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=qsUxVzjg5I8tBKGM4PNlOQk2kkZdya2meK9l7sVQtUI=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMkuBn31dyqmtCwuvjFBJdd4Ss7h9sXaL9fnPHixcEXlihT5
- eetmd5SyMIhxMciKKbLECJsviTs163UnG988mDmsTCBDGLg4BWAi9qsY/pnWyK1i2Jub/cHE2OX/tT
- MJ6+66Mx1eIOlVuNy2zWBD3W9GhuV7qiM38h+Ufxkd9nXFe725co94Xq5+FMK4cHNi1vF5dzgB
-X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221010141630.zfzi7mk7zvnmclzy@techsingularity.net>
+In-Reply-To: <20221010141630.zfzi7mk7zvnmclzy@techsingularity.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 10 Oct 2022 16:47:50 +0200
+Message-ID: <CAJZ5v0j9JyDZupNnQUsTUVv0WapGjK7b5S-4ewZ8-b=HOret2Q@mail.gmail.com>
+Subject: Re: Intermittent boot failure after 6492fed7d8c9 (v6.0-rc1)
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-rtc@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: multipart/mixed; boundary="00000000000049adbd05eaaf3f1a"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We're recently encountered a regression due to the rates reported
-through the clk_notifier_data being off when changing parents.
+--00000000000049adbd05eaaf3f1a
+Content-Type: text/plain; charset="UTF-8"
 
-Let's add a test suite and a test to make sure that we do get notified
-and with the proper rates.
+Hi Mel,
 
-Suggested-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
----
- drivers/clk/clk_test.c | 156 +++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 156 insertions(+)
+Thanks for the report!
 
-diff --git a/drivers/clk/clk_test.c b/drivers/clk/clk_test.c
-index 509256c5567a..f9a5c2964c65 100644
---- a/drivers/clk/clk_test.c
-+++ b/drivers/clk/clk_test.c
-@@ -2239,10 +2239,166 @@ static struct kunit_suite clk_leaf_mux_set_rate_parent_test_suite = {
- 	.test_cases = clk_leaf_mux_set_rate_parent_test_cases,
- };
- 
-+struct clk_mux_notifier_rate_change {
-+	bool done;
-+	unsigned long old_rate;
-+	unsigned long new_rate;
-+	wait_queue_head_t wq;
-+};
-+
-+struct clk_mux_notifier_ctx {
-+	struct clk_multiple_parent_ctx mux_ctx;
-+	struct clk *clk;
-+	struct notifier_block clk_nb;
-+	struct clk_mux_notifier_rate_change pre_rate_change;
-+	struct clk_mux_notifier_rate_change post_rate_change;
-+};
-+
-+#define NOTIFIER_TIMEOUT_MS 100
-+
-+static int clk_mux_notifier_callback(struct notifier_block *nb,
-+				     unsigned long action, void *data)
-+{
-+	struct clk_notifier_data *clk_data = data;
-+	struct clk_mux_notifier_ctx *ctx = container_of(nb,
-+							struct clk_mux_notifier_ctx,
-+							clk_nb);
-+
-+	if (action & PRE_RATE_CHANGE) {
-+		ctx->pre_rate_change.old_rate = clk_data->old_rate;
-+		ctx->pre_rate_change.new_rate = clk_data->new_rate;
-+		ctx->pre_rate_change.done = true;
-+		wake_up_interruptible(&ctx->pre_rate_change.wq);
-+	}
-+
-+	if (action & POST_RATE_CHANGE) {
-+		ctx->post_rate_change.old_rate = clk_data->old_rate;
-+		ctx->post_rate_change.new_rate = clk_data->new_rate;
-+		ctx->post_rate_change.done = true;
-+		wake_up_interruptible(&ctx->post_rate_change.wq);
-+	}
-+
-+	return 0;
-+}
-+
-+static int clk_mux_notifier_test_init(struct kunit *test)
-+{
-+	struct clk_mux_notifier_ctx *ctx;
-+	const char *top_parents[2] = { "parent-0", "parent-1" };
-+	int ret;
-+
-+	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
-+	if (!ctx)
-+		return -ENOMEM;
-+	test->priv = ctx;
-+	ctx->clk_nb.notifier_call = clk_mux_notifier_callback;
-+	init_waitqueue_head(&ctx->pre_rate_change.wq);
-+	init_waitqueue_head(&ctx->post_rate_change.wq);
-+
-+	ctx->mux_ctx.parents_ctx[0].hw.init = CLK_HW_INIT_NO_PARENT("parent-0",
-+								    &clk_dummy_rate_ops,
-+								    0);
-+	ctx->mux_ctx.parents_ctx[0].rate = DUMMY_CLOCK_RATE_1;
-+	ret = clk_hw_register(NULL, &ctx->mux_ctx.parents_ctx[0].hw);
-+	if (ret)
-+		return ret;
-+
-+	ctx->mux_ctx.parents_ctx[1].hw.init = CLK_HW_INIT_NO_PARENT("parent-1",
-+								    &clk_dummy_rate_ops,
-+								    0);
-+	ctx->mux_ctx.parents_ctx[1].rate = DUMMY_CLOCK_RATE_2;
-+	ret = clk_hw_register(NULL, &ctx->mux_ctx.parents_ctx[1].hw);
-+	if (ret)
-+		return ret;
-+
-+	ctx->mux_ctx.current_parent = 0;
-+	ctx->mux_ctx.hw.init = CLK_HW_INIT_PARENTS("test-mux", top_parents,
-+						   &clk_multiple_parents_mux_ops,
-+						   0);
-+	ret = clk_hw_register(NULL, &ctx->mux_ctx.hw);
-+	if (ret)
-+		return ret;
-+
-+	ctx->clk = clk_hw_get_clk(&ctx->mux_ctx.hw, NULL);
-+	ret = clk_notifier_register(ctx->clk, &ctx->clk_nb);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static void clk_mux_notifier_test_exit(struct kunit *test)
-+{
-+	struct clk_mux_notifier_ctx *ctx = test->priv;
-+	struct clk *clk = ctx->clk;
-+
-+	clk_notifier_unregister(clk, &ctx->clk_nb);
-+	clk_put(clk);
-+
-+	clk_hw_unregister(&ctx->mux_ctx.hw);
-+	clk_hw_unregister(&ctx->mux_ctx.parents_ctx[0].hw);
-+	clk_hw_unregister(&ctx->mux_ctx.parents_ctx[1].hw);
-+}
-+
-+/*
-+ * Test that if the we have a notifier registered on a mux, the core
-+ * will notify us when we switch to another parent, and with the proper
-+ * old and new rates.
-+ */
-+static void clk_mux_notifier_set_parent_test(struct kunit *test)
-+{
-+	struct clk_mux_notifier_ctx *ctx = test->priv;
-+	struct clk_hw *hw = &ctx->mux_ctx.hw;
-+	struct clk *clk = clk_hw_get_clk(hw, NULL);
-+	struct clk *new_parent = clk_hw_get_clk(&ctx->mux_ctx.parents_ctx[1].hw, NULL);
-+	int ret;
-+
-+	ret = clk_set_parent(clk, new_parent);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = wait_event_interruptible_timeout(ctx->pre_rate_change.wq,
-+					       ctx->pre_rate_change.done,
-+					       msecs_to_jiffies(NOTIFIER_TIMEOUT_MS));
-+	KUNIT_ASSERT_GT(test, ret, 0);
-+
-+	KUNIT_EXPECT_EQ(test, ctx->pre_rate_change.old_rate, DUMMY_CLOCK_RATE_1);
-+	KUNIT_EXPECT_EQ(test, ctx->pre_rate_change.new_rate, DUMMY_CLOCK_RATE_2);
-+
-+	ret = wait_event_interruptible_timeout(ctx->post_rate_change.wq,
-+					       ctx->post_rate_change.done,
-+					       msecs_to_jiffies(NOTIFIER_TIMEOUT_MS));
-+	KUNIT_ASSERT_GT(test, ret, 0);
-+
-+	KUNIT_EXPECT_EQ(test, ctx->post_rate_change.old_rate, DUMMY_CLOCK_RATE_1);
-+	KUNIT_EXPECT_EQ(test, ctx->post_rate_change.new_rate, DUMMY_CLOCK_RATE_2);
-+
-+	clk_put(new_parent);
-+	clk_put(clk);
-+}
-+
-+static struct kunit_case clk_mux_notifier_test_cases[] = {
-+	KUNIT_CASE(clk_mux_notifier_set_parent_test),
-+	{}
-+};
-+
-+/*
-+ * Test suite for a mux with multiple parents, and a notifier registered
-+ * on the mux.
-+ *
-+ * These tests exercise the behaviour of notifiers.
-+ */
-+static struct kunit_suite clk_mux_notifier_test_suite = {
-+	.name = "clk-mux-notifier",
-+	.init = clk_mux_notifier_test_init,
-+	.exit = clk_mux_notifier_test_exit,
-+	.test_cases = clk_mux_notifier_test_cases,
-+};
-+
- kunit_test_suites(
- 	&clk_leaf_mux_set_rate_parent_test_suite,
- 	&clk_test_suite,
- 	&clk_multiple_parents_mux_test_suite,
-+	&clk_mux_notifier_test_suite,
- 	&clk_orphan_transparent_multiple_parent_mux_test_suite,
- 	&clk_orphan_transparent_single_parent_test_suite,
- 	&clk_orphan_two_level_root_last_test_suite,
+On Mon, Oct 10, 2022 at 4:25 PM Mel Gorman <mgorman@techsingularity.net> wrote:
+>
+> Hi Rafael,
+>
+> I'm seeing intermittent boot failures after 6492fed7d8c9 ("rtc: rtc-cmos:
+> Do not check ACPI_FADT_LOW_POWER_S0") due to a NULL pointer exception
+> early in boot. It fails to boot 5 times after 10 boot attempts and I've
+> only observed it on one machine so far. Either a revert or the patch below
+> fixes it but it's unlikely it is the correct fix.
+>
+> --- drivers/rtc/rtc-cmos.c.orig 2022-10-10 15:11:50.335756567 +0200
+> +++ drivers/rtc/rtc-cmos.c      2022-10-10 15:11:53.211756691 +0200
+> @@ -1209,7 +1209,7 @@
+>          * Or else, ACPI SCI is enabled during suspend/resume only,
+>          * update rtc irq in that case.
+>          */
+> -       if (cmos_use_acpi_alarm())
+> +       if (cmos_use_acpi_alarm() && cmos)
+>                 cmos_interrupt(0, (void *)cmos->rtc);
+>         else {
+>                 /* Fix me: can we use cmos_interrupt() here as well? */
 
--- 
-b4 0.11.0-dev-7da52
+It looks like I've exposed a race condition there.
+
+Generally speaking, it is misguided to install an event handler that
+is not ready to handle the event at that time before making sure that
+the event is disabled.
+
+Does the attached patch help?
+
+>
+> Boot failure looks like the below, it's not a vanilla kernel but the
+> applied patch is not relevant and it's known to fail on a vanilla kernel.
+> The machine has a E5-2698 v4 CPU plugged into a SGI C2112-4GP3 platform
+> with a X10DRT-P-Series motherboard.
+>
+> [   10.924167][    C1] BUG: kernel NULL pointer dereference, address: 0000000000000000
+> [   10.928016][    C1] #PF: supervisor read access in kernel mode
+> [   10.928016][    C1] #PF: error_code(0x0000) - not-present page
+> [   10.928016][    C1] PGD 0 P4D 0
+> [   10.928016][    C1] Oops: 0000 [#1] PREEMPT SMP PTI
+> [   10.928016][    C1] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-mm-pcpnoirq-v1r2 #1 6debc4647ebcbe3e91270f1109aebc1e85510e3e
+> [   10.928016][    C1] Hardware name: SGI.COM C2112-4GP3/X10DRT-P-Series, BIOS 2.0a 05/09/2016
+> [   10.928016][    C1] RIP: 0010:rtc_handler+0x73/0xd0
+> [   10.928016][    C1] Code: df e8 41 62 f9 ff bf 04 00 00 00 e8 a3 bf e7 ff 31 f6 bf 04 00 00 00 e8 08 c2 e7 ff b8 01 00 00 00 5b 5d 41 5c c3 cc cc cc cc <48> 8b 75 00 31 ff e8 72 fe ff ff eb c0 bf 0b 00 00 00 e8 56 81 77
+> [   10.928016][    C1] RSP: 0000:ffffaf7f8003eec0 EFLAGS: 00010002
+> [   10.928016][    C1] RAX: ffffffffad6d0c00 RBX: ffff94049801a000 RCX: 0000000000000000
+> [   10.928016][    C1] RDX: 0000000000000040 RSI: ffffffffadf00460 RDI: ffff94049801a000
+> [   10.928016][    C1] RBP: 0000000000000000 R08: 0000000000000000 R09: 00000000000004d0
+> [   10.928016][    C1] R10: 0000000000000000 R11: ffffaf7f8003eff8 R12: 0000000000000000
+> [   10.928016][    C1] R13: ffffffffae228d82 R14: 0000000000000004 R15: 0000000000000000
+> [   10.928016][    C1] FS:  0000000000000000(0000) GS:ffff94037ea80000(0000) knlGS:0000000000000000
+> [   10.928016][    C1] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   10.928016][    C1] CR2: 0000000000000000 CR3: 00000002c7e26001 CR4: 00000000003706e0
+> [   10.928016][    C1] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [   10.928016][    C1] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [   10.928016][    C1] Call Trace:
+> [   10.928016][    C1]  <IRQ>
+> [   10.928016][    C1]  acpi_ev_fixed_event_detect+0x14a/0x18c
+> [   10.928016][    C1]  acpi_ev_sci_xrupt_handler+0x2c/0x6e
+> [   10.928016][    C1]  acpi_irq+0x18/0x40
+> [   10.928016][    C1]  __handle_irq_event_percpu+0x3e/0x2d0
+> [   10.928016][    C1]  handle_irq_event_percpu+0xf/0x40
+> [   10.928016][    C1]  handle_irq_event+0x34/0x60
+> [   10.928016][    C1]  handle_fasteoi_irq+0x7b/0x140
+> [   10.928016][    C1]  __common_interrupt+0x4b/0x100
+> [   10.928016][    C1]  common_interrupt+0x58/0xa0
+> [   10.928016][    C1]  </IRQ>
+> [   10.928016][    C1]  <TASK>
+> [   10.928016][    C1]  asm_common_interrupt+0x22/0x40
+> [   10.928016][    C1] RIP: 0010:cmos_wake_setup.part.9+0x2f/0x120
+> [   10.928016][    C1] Code: 80 3d 65 16 4a 01 00 53 48 89 fb 0f 84 a5 00 00 00 48 89 da 48 c7 c6 00 0c 6d ad bf 04 00 00 00 e8 53 b8 e7 ff bf 04 00 00 00 <e8> 98 c6 e7 ff 31 f6 bf 04 00 00 00 e8 fd c8 e7 ff 0f b6 0d 34 ce
+> [   10.928016][    C1] RSP: 0000:ffffaf7f800d7ca8 EFLAGS: 00000246
+> [   10.928016][    C1] RAX: 0000000000000000 RBX: ffff94049801a000 RCX: 0000000000000004
+> [   10.928016][    C1] RDX: ffffffffadefef10 RSI: ffffffffadefee20 RDI: 0000000000000004
+> [   10.928016][    C1] RBP: ffffffffaeaf98a0 R08: 0000000000000000 R09: 0000000000000000
+> [   10.928016][    C1] R10: 0000000000000000 R11: 000000000000000a R12: ffffffffad6d1750
+> [   10.928016][    C1] R13: 0000000000000000 R14: ffff93c5111191a0 R15: ffffffffaefe47f8
+> [   10.928016][    C1]  ? rdinit_setup+0x2f/0x2f
+> [   10.928016][    C1]  ? cmos_do_probe+0x570/0x570
+> [   10.928016][    C1]  ? cmos_wake_setup.part.9+0x2a/0x120
+> [   10.928016][    C1]  cmos_pnp_probe+0x6c/0xa0
+> [   10.928016][    C1]  pnp_device_probe+0x5b/0xb0
+> [   10.928016][    C1]  ? driver_sysfs_add+0x75/0xe0
+> [   10.928016][    C1]  really_probe+0x109/0x3e0
+> [   10.928016][    C1]  ? pm_runtime_barrier+0x4f/0xa0
+> [   10.928016][    C1]  __driver_probe_device+0x79/0x170
+> [   10.928016][    C1]  driver_probe_device+0x1f/0xa0
+> [   10.928016][    C1]  __driver_attach+0x11e/0x180
+> [   10.928016][    C1]  ? __device_attach_driver+0x110/0x110
+> [   10.928016][    C1]  bus_for_each_dev+0x79/0xc0
+> [   10.928016][    C1]  bus_add_driver+0x1ba/0x250
+> [   10.928016][    C1]  ? rtc_dev_init+0x34/0x34
+> [   10.928016][    C1]  driver_register+0x5f/0x100
+> [   10.928016][    C1]  ? rtc_dev_init+0x34/0x34
+> [   10.928016][    C1]  cmos_init+0x12/0x70
+> [   10.928016][    C1]  do_one_initcall+0x5b/0x310
+> [   10.928016][    C1]  ? rcu_read_lock_held_common+0xe/0x50
+> [   10.928016][    C1]  ? rcu_read_lock_sched_held+0x23/0x80
+> [   10.928016][    C1]  kernel_init_freeable+0x2b7/0x319
+> [   10.928016][    C1]  ? rest_init+0x1b0/0x1b0
+> [   10.928016][    C1]  kernel_init+0x16/0x140
+> [   10.928016][    C1]  ret_from_fork+0x22/0x30
+> [   10.928016][    C1]  </TASK>
+> [   10.928016][    C1] Modules linked in:
+> [   10.928016][    C1] CR2: 0000000000000000
+> [   10.928016][    C1] ---[ end trace 0000000000000000 ]---
+> [   10.928016][    C1] RIP: 0010:rtc_handler+0x73/0xd0
+> [   10.928016][    C1] Code: df e8 41 62 f9 ff bf 04 00 00 00 e8 a3 bf e7 ff 31 f6 bf 04 00 00 00 e8 08 c2 e7 ff b8 01 00 00 00 5b 5d 41 5c c3 cc cc cc cc <48> 8b 75 00 31 ff e8 72 fe ff ff eb c0 bf 0b 00 00 00 e8 56 81 77
+> [   10.928016][    C1] RSP: 0000:ffffaf7f8003eec0 EFLAGS: 00010002
+> [   10.928016][    C1] RAX: ffffffffad6d0c00 RBX: ffff94049801a000 RCX: 0000000000000000
+> [   10.928016][    C1] RDX: 0000000000000040 RSI: ffffffffadf00460 RDI: ffff94049801a000
+> [   10.928016][    C1] RBP: 0000000000000000 R08: 0000000000000000 R09: 00000000000004d0
+> [   10.928016][    C1] R10: 0000000000000000 R11: ffffaf7f8003eff8 R12: 0000000000000000
+> [   10.928016][    C1] R13: ffffffffae228d82 R14: 0000000000000004 R15: 0000000000000000
+> [   10.928016][    C1] FS:  0000000000000000(0000) GS:ffff94037ea80000(0000) knlGS:0000000000000000
+> [   10.928016][    C1] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   10.928016][    C1] CR2: 0000000000000000 CR3: 00000002c7e26001 CR4: 00000000003706e0
+> [   10.928016][    C1] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [   10.928016][    C1] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [   10.928016][    C1] Kernel panic - not syncing: Fatal exception in interrupt
+> [   10.928016][    C1] Kernel Offset: 0x2be00000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+> [   10.928016][    C1] ---[ end Kernel panic - not syncing: Fatal exception in interrupt ]---
+>
+> --
+> Mel Gorman
+> SUSE Labs
+
+--00000000000049adbd05eaaf3f1a
+Content-Type: text/x-patch; charset="US-ASCII"; name="rtc-handler-wake-setup-debug.patch"
+Content-Disposition: attachment; 
+	filename="rtc-handler-wake-setup-debug.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l92w0wne0>
+X-Attachment-Id: f_l92w0wne0
+
+LS0tCiBkcml2ZXJzL3J0Yy9ydGMtY21vcy5jIHwgICAgNyArKystLS0tCiAxIGZpbGUgY2hhbmdl
+ZCwgMyBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQoKSW5kZXg6IGxpbnV4LXBtL2RyaXZl
+cnMvcnRjL3J0Yy1jbW9zLmMKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PQotLS0gbGludXgtcG0ub3JpZy9kcml2ZXJzL3J0
+Yy9ydGMtY21vcy5jCisrKyBsaW51eC1wbS9kcml2ZXJzL3J0Yy9ydGMtY21vcy5jCkBAIC0xMjMz
+LDEzICsxMjMzLDEyIEBAIHN0YXRpYyB1MzIgcnRjX2hhbmRsZXIodm9pZCAqY29udGV4dCkKIAog
+c3RhdGljIGlubGluZSB2b2lkIHJ0Y193YWtlX3NldHVwKHN0cnVjdCBkZXZpY2UgKmRldikKIHsK
+LQlhY3BpX2luc3RhbGxfZml4ZWRfZXZlbnRfaGFuZGxlcihBQ1BJX0VWRU5UX1JUQywgcnRjX2hh
+bmRsZXIsIGRldik7CiAJLyoKLQkgKiBBZnRlciB0aGUgUlRDIGhhbmRsZXIgaXMgaW5zdGFsbGVk
+LCB0aGUgRml4ZWRfUlRDIGV2ZW50IHNob3VsZAotCSAqIGJlIGRpc2FibGVkLiBPbmx5IHdoZW4g
+dGhlIFJUQyBhbGFybSBpcyBzZXQgd2lsbCBpdCBiZSBlbmFibGVkLgorCSAqIERpc2FibGUgdGhl
+IEZpeGVkX1JUQyBldmVudCBiZWZvcmUgaW5zdGFsbGluZyB0aGUgUlRDIGhhbmRsZXIuICBJdAor
+CSAqIGNhbiBiZSBlbmFibGVkIG9ubHkgd2hlbiB0aGUgUlRDIGFsYXJtIGlzIHNldC4KIAkgKi8K
+LQlhY3BpX2NsZWFyX2V2ZW50KEFDUElfRVZFTlRfUlRDKTsKIAlhY3BpX2Rpc2FibGVfZXZlbnQo
+QUNQSV9FVkVOVF9SVEMsIDApOworCWFjcGlfaW5zdGFsbF9maXhlZF9ldmVudF9oYW5kbGVyKEFD
+UElfRVZFTlRfUlRDLCBydGNfaGFuZGxlciwgZGV2KTsKIH0KIAogc3RhdGljIHZvaWQgcnRjX3dh
+a2Vfb24oc3RydWN0IGRldmljZSAqZGV2KQo=
+--00000000000049adbd05eaaf3f1a--
