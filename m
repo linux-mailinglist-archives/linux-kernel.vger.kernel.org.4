@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94CFA5F97D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 07:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B25FF5F97D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 07:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbiJJFgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 01:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
+        id S231322AbiJJFgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 01:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231173AbiJJFgH (ORCPT
+        with ESMTP id S231260AbiJJFgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 01:36:07 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A23DEE9;
-        Sun,  9 Oct 2022 22:36:06 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id gf8so8965460pjb.5;
-        Sun, 09 Oct 2022 22:36:06 -0700 (PDT)
+        Mon, 10 Oct 2022 01:36:08 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FA7C2D;
+        Sun,  9 Oct 2022 22:36:08 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id x31-20020a17090a38a200b0020d2afec803so2401177pjb.2;
+        Sun, 09 Oct 2022 22:36:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dMQ9Nr134jTsiGubldmik2SSGo5GiaQNz3NaNpTchwQ=;
-        b=VRkFyJlBI5IZ1Et9MvJK2iqInmhfh7AoF/MlT7QEroFzWtAnIqRwqxkUZoW2ixzOIz
-         ZDMrrTmBF9kJRdPlIP3v3ictLW7oqdkX6VQdbRpy9pKXwesfzzMR1FTmESuLUdneEya7
-         16+FhT4SBVCwLQV6hlHvSBEKqG7MXjyTZFQT5c88DzXt6dNSKwV/xnNWLtj2wvzVTwyu
-         Ko6Ua6HQ54aITfo53Um8aUfw/svAUro1MTXO/OMgTG39yBXxC6jhnDDmmYozMUTO9Lp2
-         wzr3BO9t9QruOoLHp5HW/Pkc6/HBV3kNMhTGid/N14IlHVhsSn+/kClLiSAvPB9UUcde
-         04+Q==
+        bh=nF8kS7IC9JmJWu9CYOcUcUJa+w2IlroRMDwbSXBYpmk=;
+        b=Yc8pHoS+9/AC7UuJ/pmqRT8wRDxYpXIm/mBBrtek1R4uxS3iNwqlKwu1zHWW1Qu0CV
+         Yq/gUBUOtklBxVI2zT+MWCz2apKJLZfLGDciPLGSjGm5RSlq1TkEC3Ef9PvJrJ7fhgqY
+         4KkmReo3mGiTMGxf9pUfahS04mxmZC4hrmms9X/yuWwJ7W1HngMEKNBTuVaK3rBgGBXw
+         Y+RjAbosp8GJYpY0USrkDGfc6ocNBDs+WUPS9Oni6lgMuhdI9j8BIDlfH5ktepflbz5M
+         W++eC12Z/13CeTGu/0acXueD6NI2VN1pvut+eSSBLutqXGv8c5ERnrLiDIZumx+kuEej
+         i/GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=dMQ9Nr134jTsiGubldmik2SSGo5GiaQNz3NaNpTchwQ=;
-        b=O9F7g13DJ4afVvdGyfRBCQPenh+m1DhoU5JW/Un75qcPU6K9YVlmnyJTZdaEZfhmyJ
-         GcOO7MTUCxylziYanj6dpGe4k2qrc/QYWFBcpwRNnDRoIqcu5zUNAClg7VRt8eTN2qbx
-         4SsiJuf5LmVWR2gwsAok0jXQAKLnTc3eJnQ2DVxyEspN6E8xFCsWO41bGZZzKMR6C+Qo
-         VpajHHaHCzTUVKTFyPdwcyA8u+3dlbK/5KV+7NZauTnToHxqaT7b3r5C0owKYwfVa87f
-         09Fb6GKZ9g2Hcwswi++SNAAoASI2boUBvpDtd87jICKXNMFF/zX40QPjCQO1tPEfVItI
-         ccsw==
-X-Gm-Message-State: ACrzQf28VjVEKm+r/2f3fm+WaTWwsHADYxfIfhTXHumGY8bwW/QPZWME
-        iZcNpH4YPTdnZpHufLu62Y4Om159CVk=
-X-Google-Smtp-Source: AMsMyM5iFsnTvLuvizpAJciGkx89svCIdMIVWr3MaIlqyjVda2kbJs00dSZY4Jqye98bczq+VgyQHA==
-X-Received: by 2002:a17:902:e88b:b0:17f:8514:cf5f with SMTP id w11-20020a170902e88b00b0017f8514cf5fmr17599210plg.163.1665380166013;
-        Sun, 09 Oct 2022 22:36:06 -0700 (PDT)
+        bh=nF8kS7IC9JmJWu9CYOcUcUJa+w2IlroRMDwbSXBYpmk=;
+        b=w1zeFDEEMpsxwq762K1u6y/tF/iy9j4ejJikwQ1Te65bmCmmsIDkvdP4IbxPpnPuQc
+         3Hnw9U5JWvkj5jiFNQa12aZJStGEc0+yAJ/8PpT44FUwzCWylM3+nptQCkNGduCmyuxa
+         hVbVYYUE54ZNdP11eqxdNnRjESqxok2SDZ53WJUj06vFJFHOzFFMrlaGp8G21G6bG8LG
+         xx9n4hsw92OG2CDRHQw+7FJhb90m7/iS4FRTmXiw3KW1RbH2f/fzzT2G+5BSnOdxWB2c
+         tZ4W4awHq6EyqW4A0FdGzXIhxb7w9ohpmt+S/4vA3hBAgVBV2Sl+IuxBw4tWcTCOXPHL
+         ek6w==
+X-Gm-Message-State: ACrzQf18CwZfT2ltAh/3QaZ1J3rRRbZbijtvOZ+fI1EGqqjhDbfVU3Cl
+        dHeHuR72qNbpVZ5mHowhtlM=
+X-Google-Smtp-Source: AMsMyM7GovfJMFHHeCX8D2vgcYLfofnuje5OANpz82zMrTWJMMclqmfitALDMVe3Gvk2ZW7Cqf6/FA==
+X-Received: by 2002:a17:902:cf03:b0:179:b7fe:dc90 with SMTP id i3-20020a170902cf0300b00179b7fedc90mr17863467plg.112.1665380167525;
+        Sun, 09 Oct 2022 22:36:07 -0700 (PDT)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:862f:cd0e:bf30:6d69])
-        by smtp.gmail.com with ESMTPSA id u13-20020a170902e80d00b0017f7e0f4a4esm5667594plg.35.2022.10.09.22.36.04
+        by smtp.gmail.com with ESMTPSA id u13-20020a170902e80d00b0017f7e0f4a4esm5667594plg.35.2022.10.09.22.36.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 22:36:05 -0700 (PDT)
+        Sun, 09 Oct 2022 22:36:07 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -65,9 +65,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
         James Clark <james.clark@arm.com>,
         Xing Zhengjun <zhengjun.xing@linux.intel.com>
-Subject: [PATCH 02/19] perf tools: Use pmu info in evsel__is_hybrid()
-Date:   Sun,  9 Oct 2022 22:35:43 -0700
-Message-Id: <20221010053600.272854-3-namhyung@kernel.org>
+Subject: [PATCH 03/19] perf stat: Use evsel__is_hybrid() more
+Date:   Sun,  9 Oct 2022 22:35:44 -0700
+Message-Id: <20221010053600.272854-4-namhyung@kernel.org>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 In-Reply-To: <20221010053600.272854-1-namhyung@kernel.org>
 References: <20221010053600.272854-1-namhyung@kernel.org>
@@ -83,27 +83,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If evsel has pmu, it can use pmu->is_hybrid directly.
+In the stat-display code, it needs to check if the current evsel is
+hybrid but it uses perf_pmu__has_hybrid() which can return true for
+non-hybrid event too.  I think it's better to use evsel__is_hybrid().
+
+Also remove a NULL check for the 'config' parameter in the
+hybrid_merge() since it's called after config->no_merge check.
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/util/evsel.c | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/perf/util/stat-display.c | 20 ++++----------------
+ 1 file changed, 4 insertions(+), 16 deletions(-)
 
-diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index 196f8e4859d7..a6ea91c72659 100644
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@ -3132,6 +3132,9 @@ void evsel__zero_per_pkg(struct evsel *evsel)
- 
- bool evsel__is_hybrid(struct evsel *evsel)
- {
-+	if (evsel->pmu)
-+		return evsel->pmu->is_hybrid;
-+
- 	return evsel->pmu_name && perf_pmu__is_hybrid(evsel->pmu_name);
+diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+index 5c47ee9963a7..4113aa86772f 100644
+--- a/tools/perf/util/stat-display.c
++++ b/tools/perf/util/stat-display.c
+@@ -704,7 +704,7 @@ static void uniquify_event_name(struct evsel *counter)
+ 			counter->name = new_name;
+ 		}
+ 	} else {
+-		if (perf_pmu__has_hybrid()) {
++		if (evsel__is_hybrid(counter)) {
+ 			ret = asprintf(&new_name, "%s/%s/",
+ 				       counter->pmu_name, counter->name);
+ 		} else {
+@@ -744,26 +744,14 @@ static void collect_all_aliases(struct perf_stat_config *config, struct evsel *c
+ 	}
  }
  
+-static bool is_uncore(struct evsel *evsel)
+-{
+-	struct perf_pmu *pmu = evsel__find_pmu(evsel);
+-
+-	return pmu && pmu->is_uncore;
+-}
+-
+-static bool hybrid_uniquify(struct evsel *evsel)
+-{
+-	return perf_pmu__has_hybrid() && !is_uncore(evsel);
+-}
+-
+ static bool hybrid_merge(struct evsel *counter, struct perf_stat_config *config,
+ 			 bool check)
+ {
+-	if (hybrid_uniquify(counter)) {
++	if (evsel__is_hybrid(counter)) {
+ 		if (check)
+-			return config && config->hybrid_merge;
++			return config->hybrid_merge;
+ 		else
+-			return config && !config->hybrid_merge;
++			return !config->hybrid_merge;
+ 	}
+ 
+ 	return false;
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
