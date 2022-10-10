@@ -2,92 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 522FC5F973B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 05:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEDA05F973E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 05:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbiJJDsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 9 Oct 2022 23:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
+        id S229607AbiJJDs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 9 Oct 2022 23:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbiJJDsM (ORCPT
+        with ESMTP id S230370AbiJJDsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 9 Oct 2022 23:48:12 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D7F18B07
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 20:48:11 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id 70so8824471pjo.4
-        for <linux-kernel@vger.kernel.org>; Sun, 09 Oct 2022 20:48:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BHae+p8OlAHp+V5lhftHxU9vRo8UGtSzWUWZi2uZEnk=;
-        b=P7t0mqMCOuB5RvBoKMUGbz+MzOHE+IGp1gucnTKj1tV4clKyMILD90ZzH0HHUe+HBg
-         jyHFRibs0rWZOQm891YZFCRDawzdORXxL2BWf0QY+FZd3HC2ouL0WBwFVGe6SVLneJT+
-         wTSe4hdw8bDqSGiMymGyy1VLRZqAE1KEZ0mH/MOIQ+1758iLP2zNCh8HKzpy3ygE78Z3
-         dKPRy13AyfIHxhGc0PLgBiaok4ewGk1uf9H2FjxtBFMl/DLg8C2JHzfyBy67K1OrNcDH
-         usWTR5AdwX6Lgh9Py1UtgnDI16vKpTudE3KLZ64VkHtBXTJAGlFrS+COMiodTwY1VKgC
-         h9tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BHae+p8OlAHp+V5lhftHxU9vRo8UGtSzWUWZi2uZEnk=;
-        b=12Q1NOGEYtTwBHUDRIvC9EbDpzQhwrS1T3uWccPhTeSz3MdAiRWuAqdf8ei8UmXIsn
-         0lVCkUW8lCJTueX6BX1M4Su2r6c5E2AMlHg1fyrqsLL13vm0NIlRwUy9LrAFePZ4dz8p
-         boPzpmsEL/OZxLoF9JSjkUAI2uLLY36c2kMbV7UQiQQ7AO8pyM19lajanyLiPmW9QZUX
-         CgyA3rM/UkNb5UklV2NCYrYzGxrQTNnVV54riR/HD6Uu+47IDl8AZigVFiZkFG4vB3Z8
-         5dHuyNu6rzRulNjFvELgiAgyLqu37f1JwQUmlvVSQiAMfOGvSHKu4yzEAcXRcI36GMkc
-         AfeQ==
-X-Gm-Message-State: ACrzQf3M9+rpp49I0HUYYb2eLdBPIYb+UWlCpvapS2WuGkkVvT0pIBVR
-        L31paqDj1+95THYUTMz/rSnEqQ==
-X-Google-Smtp-Source: AMsMyM4MXwciU8DYG7uPa2SAOYMKJ8KEgCki82/BHRPDAigNEfSbvZ116To5uehaJ23f51x2THoeFQ==
-X-Received: by 2002:a17:903:1205:b0:178:ac4e:70b8 with SMTP id l5-20020a170903120500b00178ac4e70b8mr16920946plh.52.1665373690619;
-        Sun, 09 Oct 2022 20:48:10 -0700 (PDT)
-Received: from [2620:15c:29:203:5c2c:f18c:2a4e:44d2] ([2620:15c:29:203:5c2c:f18c:2a4e:44d2])
-        by smtp.gmail.com with ESMTPSA id 65-20020a630244000000b0045913a96837sm5293845pgc.24.2022.10.09.20.48.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 20:48:09 -0700 (PDT)
-Date:   Sun, 9 Oct 2022 20:48:08 -0700 (PDT)
-From:   David Rientjes <rientjes@google.com>
-To:     Alexander Aring <aahringo@redhat.com>
-cc:     cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com,
-        akpm@linux-foundation.org, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, cluster-devel@redhat.com
-Subject: Re: [PATCH] mm: slab: comment __GFP_ZERO case for kmem_cache_alloc
-In-Reply-To: <20221008020312.1932347-1-aahringo@redhat.com>
-Message-ID: <fe5780fe-7d52-53e1-4572-38112c4f69e8@google.com>
-References: <20221008020312.1932347-1-aahringo@redhat.com>
+        Sun, 9 Oct 2022 23:48:19 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116833E775;
+        Sun,  9 Oct 2022 20:48:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=IcIYXTLRcwKaMMbRHPLJSn98o6CCKkxx9ceIyhJNs7Q=; b=Q9a+YOI3JrySsIP0kLFRuDT6tp
+        VgeY3Mk30/OSUyGsxtM6NkPZRb4mWLm4/ZA8tBj9gABZ3KUtBZ5CL9nXQiqTjj+4Kor+yTgmT3ELv
+        YzgVZMDaiPPDQXCJR3ylNHNr5SOlCte0ZvOzfxqGdK0oN71XazNXf4FeI4e/vF9rFyXQ7Psl2Jniu
+        VCxaXcr1VsW3cAVVMx0t7LEPV+uf4YGj9eaA5P3KEXlL7Qwu9kxL0lYBzrH2dEqncvkGFKq4X+Jwd
+        V/y3YqjNE3ldq5JjEFee9hNKZUNJPSrYdljaBnD5efQy2z4RfY3QxAUDbj7NWLu8Dm4roOuEcX075
+        +2FJ5Lmw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ohjm8-003vCb-EA; Mon, 10 Oct 2022 03:48:20 +0000
+Date:   Mon, 10 Oct 2022 04:48:20 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     syzbot <syzbot+cceb1394467dba9c62d9@syzkaller.appspotmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk,
+        ntfs3@lists.linux.dev, almaz.alexandrovich@paragon-software.com
+Subject: Re: [syzbot] BUG: scheduling while atomic in exit_to_user_mode_loop
+Message-ID: <Y0OWBChTBr86DdNv@casper.infradead.org>
+References: <00000000000006aa2405ea93b166@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00000000000006aa2405ea93b166@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Oct 2022, Alexander Aring wrote:
 
-> diff --git a/mm/slab.c b/mm/slab.c
-> index 10e96137b44f..7a84c2aae85a 100644
-> --- a/mm/slab.c
-> +++ b/mm/slab.c
-> @@ -3482,7 +3482,8 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *cachep, struct list_lru *lru,
->   * @flags: See kmalloc().
->   *
->   * Allocate an object from this cache.  The flags are only relevant
-> - * if the cache has no available objects.
-> + * if the cache has no available objects. Except flag __GFP_ZERO which
-> + * will zero the returned object.
+Yet another ntfs bug.  It's getting really noisy.  Maybe stop testing
+ntfs until some more bugs get fixed?
 
-Minor nit: it's probably better to do "... has no available objects, 
-except flag ..." and not seperate sentences.  After that is done, feel 
-free to add
-
-	Acked-by: David Rientjes <rientjes@google.com>
+On Sat, Oct 08, 2022 at 10:55:34PM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    0326074ff465 Merge tag 'net-next-6.1' of git://git.kernel...
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=15b1382a880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=d323d85b1f8a4ed7
+> dashboard link: https://syzkaller.appspot.com/bug?extid=cceb1394467dba9c62d9
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1755e8b2880000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/c40d70ae7512/disk-0326074f.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/3603ce065271/vmlinux-0326074f.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/738016e3c6ba/mount_1.gz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+cceb1394467dba9c62d9@syzkaller.appspotmail.com
+> 
+> ntfs3: loop2: Different NTFS' sector size (1024) and media sector size (512)
+> BUG: scheduling while atomic: syz-executor.2/9901/0x00000002
+> 2 locks held by syz-executor.2/9901:
+>  #0: ffff888075f880e0 (&type->s_umount_key#47/1){+.+.}-{3:3}, at: alloc_super+0x212/0x920 fs/super.c:228
+>  #1: ffff8880678e78f0 (&sb->s_type->i_lock_key#33){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:349 [inline]
+>  #1: ffff8880678e78f0 (&sb->s_type->i_lock_key#33){+.+.}-{2:2}, at: _atomic_dec_and_lock+0x9d/0x110 lib/dec_and_lock.c:28
+> Modules linked in:
+> Preemption disabled at:
+> [<0000000000000000>] 0x0
+> Kernel panic - not syncing: scheduling while atomic
+> CPU: 1 PID: 9901 Comm: syz-executor.2 Not tainted 6.0.0-syzkaller-02734-g0326074ff465 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+>  panic+0x2d6/0x715 kernel/panic.c:274
+>  __schedule_bug+0x1ff/0x250 kernel/sched/core.c:5725
+>  schedule_debug+0x1d3/0x3c0 kernel/sched/core.c:5754
+>  __schedule+0xfb/0xdf0 kernel/sched/core.c:6389
+>  schedule+0xcb/0x190 kernel/sched/core.c:6571
+>  exit_to_user_mode_loop+0xe5/0x150 kernel/entry/common.c:157
+>  exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:201
+>  irqentry_exit_to_user_mode+0x5/0x30 kernel/entry/common.c:307
+>  asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
+> RIP: 000f:lock_acquire+0x1e1/0x3c0
+> RSP: 0018:ffffc9000563f900 EFLAGS: 00000206
+> RAX: 1ffff92000ac7f28 RBX: 0000000000000001 RCX: ffff8880753be2f0
+> RDX: dffffc0000000000 RSI: ffffffff8a8d9060 RDI: ffffffff8aecb5e0
+> RBP: ffffc9000563fa28 R08: dffffc0000000000 R09: fffffbfff1fc4229
+> R10: fffffbfff1fc4229 R11: 1ffffffff1fc4228 R12: dffffc0000000000
+> R13: 1ffff92000ac7f24 R14: ffffc9000563f940 R15: 0000000000000246
+>  </TASK>
+> Kernel Offset: disabled
+> Rebooting in 86400 seconds..
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
