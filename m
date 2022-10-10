@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4B55F9DD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CEE85F9DDA
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232299AbiJJLqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 07:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
+        id S232324AbiJJLqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 07:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbiJJLq2 (ORCPT
+        with ESMTP id S232261AbiJJLqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 07:46:28 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C38D5809A
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:46:24 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id y1so6465181qky.12
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:46:24 -0700 (PDT)
+        Mon, 10 Oct 2022 07:46:31 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DF458517
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:46:26 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id f22so2326142qto.3
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 04:46:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GMZcJTRYOrd3F7iZT1AszVcqnx3Byk1q+Y3x6xxN8ow=;
-        b=hnM3nEZ+442OjsNTDkM5sZUoNnVjyHeShP7nciF2wL3jGiGpZX38YYarUJNPILdujN
-         mTGnTdoWBd7OBsIUrkEKmprj9G2IYzluM6509b+gzhkJmPVSvsIATXbVF/Scd1jA+PET
-         eerMv/T/OjIEZVcP6PohwTZLBEOmBVtwKilG/++MZClSEF8DDL4Jmu2U8u3LFidguJlg
-         hE4OAbY/8CDsg/GphW6woi69cZuDhN2QUA4/FoeB5KaGMqoELO9nvN0rEydd7WH4BnMc
-         0ymWRLS1wdzjqDoIKzU8fH8Us7GHDu1PZVwi6Dzzh3w8XEArEnwBAQTlWgH7zwi5+EtR
-         +Zjg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=87LarcGZUBDgr/oOLmODSXoRJIoY9TQRZN+1jE9/e80=;
+        b=CUbfd3EmiObZ7AW/AzD4QlPimlqSNg5htPQDL8HerNQ/f2WXOAsdZhltEmy6U+/NMZ
+         2TkSw07tOa+UAeXZIeaE4TxkXo8sRpLTF+QquCxZAdpunLoqGRyiYk37WTuU8Y06u8wB
+         yPrlWpFaQmSxb0LN+kI9nNn568JdQLLZOKgVxtvj0ccfBBdvdfPs0KwgauW3hFb11LAk
+         J7w8SFIy9sJ6LMOmIIMAJGdd/1TlhHQ+zLk4Vyqf1TytIe1QdUYmELZhEDIqBetrNKAU
+         WLaJ4EJnuuk1XxiblZeVoxLV3Bp5bAM/ZPTjUSgOoxWVCGv18h3jt8K3Zta8KySTCTzO
+         P5IA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GMZcJTRYOrd3F7iZT1AszVcqnx3Byk1q+Y3x6xxN8ow=;
-        b=pQzRI0DTmfod2qBofhJr8+uhwwIskNg+kp2WMwTst5fm3vmsfsxyt92nimDmL9PPlN
-         q7FTZjbKR3JHuZ8DcIr6Y3goU5jDEKNaUlWJoYS7FMlry7hd1Oto5EtwH5l5tSYq85Ix
-         LUmYBsipLs91RMhKyEvndvYxoa6TpGKCGLmHv0y+AtzQc6C8PIC6smn3cyokdkj+z3UC
-         u/NNUCfRuKHvWYeVdU4GIIPmwOd0px5lFe+iXTvMkixO/1sed9m1uHlls79FbsAsmoHQ
-         W04DVL/gdSZ/9fVWDKv1PPQ57LubxcAEBTumnE32AhKzbq+QUdDcQIvD1ebbGrawIfxB
-         d1lg==
-X-Gm-Message-State: ACrzQf07Pc/dYxKSP0gY5v+MwLgtSDk3YHFZpiUCN25InlUp3b9hI6vx
-        A+OTesPo1j/7MXbIgm6raDKL1A==
-X-Google-Smtp-Source: AMsMyM6smuzPSfSeAGr95sYjw2m5FSUruavsvL8hBh5rr9xabNGg5j3Ie0GoffN4wAiNqMpkD7uKfw==
-X-Received: by 2002:a37:9303:0:b0:6ec:5678:8119 with SMTP id v3-20020a379303000000b006ec56788119mr4088916qkd.765.1665402383233;
-        Mon, 10 Oct 2022 04:46:23 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=87LarcGZUBDgr/oOLmODSXoRJIoY9TQRZN+1jE9/e80=;
+        b=OG+eRzdkk8zT3EQFnxlyAnqJZxVd1/v/MUSHuzhjDjzJoonrQIxcIR3wSxKF3fseIA
+         XkKK7ofzSXiRc4eQYm928aEHkRrPViuDWwO8iHQt3ZCPUr1PM15ZSlDEl5Y92J0RWrgv
+         Jh3MxEUjj8xNygJYWss72ITFsOJAkF+JaHWVYeNuJCuhfOqIX8NNf+o9mHUwaiRHyGdv
+         jIw6xClVPD+sCKqtZrWzJERCqcahYujJrMp87SSXQY8YaeJ09VQICDZ0M0mz+XGtm/3h
+         kHkZbbZWEPQeQQcwtiN+JQKfNTu2XClSr4Cmz9+0wUoUBYcS/UVcutuJW1ZhDWOP5f0v
+         8Bgw==
+X-Gm-Message-State: ACrzQf1KRFTRVEz0fU206Cz/HuM0Qg3B/LAFIUAW5FUbywNorxnid38y
+        xC7briGJsPjBHHYjl2igdrsFDA==
+X-Google-Smtp-Source: AMsMyM6trnS53gwTrdqygRdoUjSYxGTV9WcA33cxuAALJD3Pc1LKGNP7e82qp23PpDB3Z9T/7jcEwQ==
+X-Received: by 2002:ac8:5f4d:0:b0:392:f942:911b with SMTP id y13-20020ac85f4d000000b00392f942911bmr14376591qta.26.1665402384895;
+        Mon, 10 Oct 2022 04:46:24 -0700 (PDT)
 Received: from krzk-bin.home (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id s12-20020a05622a178c00b003972790deb9sm6698707qtk.84.2022.10.10.04.46.21
+        by smtp.gmail.com with ESMTPSA id s12-20020a05622a178c00b003972790deb9sm6698707qtk.84.2022.10.10.04.46.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 04:46:22 -0700 (PDT)
+        Mon, 10 Oct 2022 04:46:24 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -65,11 +66,14 @@ To:     Andy Gross <agross@kernel.org>,
         Molly Sophia <mollysophia379@gmail.com>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 1/6] arm64: dts: qcom: sdm630: fix UART1 pin bias
-Date:   Mon, 10 Oct 2022 07:44:12 -0400
-Message-Id: <20221010114417.29859-1-krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH v2 2/6] arm64: dts: qcom: sdm845-db845c: correct SPI2 pins drive strength
+Date:   Mon, 10 Oct 2022 07:44:13 -0400
+Message-Id: <20221010114417.29859-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221010114417.29859-1-krzysztof.kozlowski@linaro.org>
+References: <20221010114417.29859-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,37 +86,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no "bias-no-pull" property.  Assume intentions were disabling
-bias.
+The pin configuration (done with generic pin controller helpers and
+as expressed by bindings) requires children nodes with either:
+1. "pins" property and the actual configuration,
+2. another set of nodes with above point.
 
-Fixes: b190fb010664 ("arm64: dts: qcom: sdm630: Add sdm630 dts file")
+The qup_spi2_default pin configuration uses alreaady the second method
+with a "pinmux" child, so configure drive-strength similarly in
+"pinconf".  Otherwise the PIN drive strength would not be applied.
+
+Fixes: 8d23a0040475 ("arm64: dts: qcom: db845c: add Low speed expansion i2c and spi nodes")
+Cc: <stable@vger.kernel.org>
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
 ---
-
-Changes since v1:
-1. Drop cc-stable.
-2. Add tags.
 
 Not tested on hardware.
----
- arch/arm64/boot/dts/qcom/sdm630.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-index b51b85f583e5..e119060ac56c 100644
---- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-@@ -779,7 +779,7 @@ rx-cts-rts {
- 					pins = "gpio17", "gpio18", "gpio19";
- 					function = "gpio";
- 					drive-strength = <2>;
--					bias-no-pull;
-+					bias-disable;
- 				};
- 			};
+Changes since v1:
+1. Put it under pinconf instead of pinmux, as suggested by Doug.
+---
+ arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+index 132417e2d11e..a3e15dedd60c 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+@@ -1123,7 +1123,10 @@ &wifi {
  
+ /* PINCTRL - additions to nodes defined in sdm845.dtsi */
+ &qup_spi2_default {
+-	drive-strength = <16>;
++	pinconf {
++		pins = "gpio27", "gpio28", "gpio29", "gpio30";
++		drive-strength = <16>;
++	};
+ };
+ 
+ &qup_uart3_default{
 -- 
 2.34.1
 
