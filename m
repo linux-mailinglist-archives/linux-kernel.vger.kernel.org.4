@@ -2,146 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E045FA71F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 23:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86ABC5FA725
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 23:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiJJVk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 17:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
+        id S229501AbiJJVvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 17:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiJJVkt (ORCPT
+        with ESMTP id S229454AbiJJVve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 17:40:49 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8C57D7A3;
-        Mon, 10 Oct 2022 14:40:43 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id y100so17597054ede.6;
-        Mon, 10 Oct 2022 14:40:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YMm42EDaG2xyenP4cqz7LgZCKvvRWqD9+usRBzVHGfc=;
-        b=fFJbmdOl/YV8OjteSQwffjfxHeWRPRJ30eoFYJyNj1kJRMsmeXSaq8EnsbOtkkvhFW
-         HRLAuVvz4SispDPW6uITgsAXqKr3QdyKEYG08RbNc6/BAWtS73Vwg4CWwcWxSpXAyfVN
-         mmtlZU9cX2nZSs9qZV6Qsfh2guswB8vDvAHDuWgR5LxdozJotrMEG5DawcCKYORDp2K2
-         0XAk40eNjAoHZ/lhOtUaJmScHR8SSTVBU2lGjyJK9sp/z9H/fRnZmrzymumkLGeg13Tl
-         YiZ4t4BorJNi1C5eV3yjQrmQ0vdygo3cjUjWvWHBaHINprmO0HGiUdd0hB2W4ZElRb0P
-         UQYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YMm42EDaG2xyenP4cqz7LgZCKvvRWqD9+usRBzVHGfc=;
-        b=2qrZSXqWqW8iZsLLoQpb9mpmFCLPYW+r+A9CkmN7a1PM7xpOoUjL+C5v6I0S0e3i8p
-         cGbULh236kys3zfQW8syxw6L9MRbvOjpOsqPGzCBFw0uY9YrpwOSxj9mFvzLMqmWjShW
-         m2oiA2UgXDhdQTUqXYB5i5WrlJ6cyvt8YCDd7y9smIY1IAq79fYuS+l9yEZ/lbFvCoOL
-         xp5QNZ8sfdvGbkhMz275ARzyUtfUNqpWCQ2FMFbowsWGuhVIq2C+xIweWGrGm0eY8hIv
-         gXQ6gCu6sR99nG3cZP3zPXJN+C1PHrqTaht0JULj4dtZ92IUGx0C1g8hVIZd/bTppsmH
-         VJhA==
-X-Gm-Message-State: ACrzQf1qcjCNnwwcFNFthpHBGWaCU7wNZO/0eO6Vn40e9BnnlxLeYcvS
-        7sdkMbIiCdJ47Qxdvw+WyWVf0YLNHlllisYo/zA=
-X-Google-Smtp-Source: AMsMyM5C7u2F0QtafFz7eTH6G0n466XMMI5XD7JZp8CrNqA63PgghDU4nBrmjb/SeSw9qslHcEfa9zDzf4RoYBtKVP0=
-X-Received: by 2002:a05:6402:909:b0:435:a8b:5232 with SMTP id
- g9-20020a056402090900b004350a8b5232mr19660325edz.240.1665438041735; Mon, 10
- Oct 2022 14:40:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221003215734.7l3cnb2zy57nrxkk@synopsys.com> <YzvusOI89ju9e5+0@smile.fi.intel.com>
- <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com> <20221005021212.qwnbmq6p7t26c3a4@synopsys.com>
- <2886b82d-a1f6-d288-e8d1-edae54046b4f@gmail.com> <20221006021204.hz7iteao65dgsev6@synopsys.com>
- <d52cc102-6a4f-78e9-6176-b33e2813fd1d@gmail.com> <20221007021122.nnwmqc6sq43e5xbn@synopsys.com>
- <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com> <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
- <Y0PFZGLaREQUazVP@smile.fi.intel.com>
-In-Reply-To: <Y0PFZGLaREQUazVP@smile.fi.intel.com>
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-Date:   Mon, 10 Oct 2022 14:40:30 -0700
-Message-ID: <CAHQ1cqG73UAoU=ag9qSuKdp+MzT9gYJcwGv8k8BOa=e8gWwzSg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
- if extcon is present"
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Ferry Toth <fntoth@gmail.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
+        Mon, 10 Oct 2022 17:51:34 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281D251400
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 14:51:33 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id C42B25C010C;
+        Mon, 10 Oct 2022 17:51:30 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 10 Oct 2022 17:51:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1665438690; x=
+        1665525090; bh=rpBVhQk5UAQBeLz9Wj9al8x+/KWr2QPTJzXQc8qVA3Y=; b=H
+        1MMxhne69iw66AdXtMiewZX4q90l8HAGeTWeIOvfjlrL7RLDMv0fT+njsF4KrEnG
+        NCBm9IBdjAJ/VxPS/eqiUz9vVdOya8eN3SoOE/vLrsEz5yDnZ/ht/GWA7zoPJkYI
+        gWcTWyYecYfRcQ4Nj0zsUXIqBzF1aRgW9nc10RQm5ewrIwdZiyEDHqlp4dJJN+8C
+        0KDuRj7wFSzjkCNCNAI6AeW3l0uDPSYXK4gX/W1pTTFQ6kPn3vQGYelmcZ4wBxFc
+        1bz6H74VTdx/DCiLlp0wXUlLwoUGcUqtK5rSWjyLFSB5nSU02ef76w+v6Bgl0QRV
+        hSSEnUpL5qXz+TrWTeLtQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1665438690; x=
+        1665525090; bh=rpBVhQk5UAQBeLz9Wj9al8x+/KWr2QPTJzXQc8qVA3Y=; b=M
+        I/DX6XAVtlo+vMeCQlHDN9gN/BkKLNTXTj5RLSoFq7aVjVsz5h8deP8CUZGD9pvO
+        8FEfsmcdMWYiuHde5Y5oP3tjttT7AovpaauWFD+k/J+3oCfp9BJP3zK7h+Rm4OMB
+        f28jCIFLxZRGaUcYQLnU72TbffI4zydMWmfGFU2HWq3W36qfbzZYJBwqGL7ntaQ5
+        FuwiA9MKWoaBxfvXWbBXMFoOkrlw9kBmX73EAPWP/WKRlforOiu7SYOCIlobIZO8
+        0oy9Q8lraOwyqzDQ6Sj/c+w4SiMvkVM2ycEfwhe4Cvyw+74HUBQDQL7s90F0I1p0
+        BB6coXjDfGw/OG8BDQG5Q==
+X-ME-Sender: <xms:4ZNEY00MXSo8vAfJaSdLeToykZqUrdp6EQEpcGYKtvOwEjq75DCmHg>
+    <xme:4ZNEY_GGnQfAinBjoEMAys0K7zN8kokG7McbDZMB66sAx4dgrzVYvLxfGd6E3x5ER
+    C_gnulbspLeFWGL59U>
+X-ME-Received: <xmr:4ZNEY85S2yA58xybut3SH7kIonoVxLKAQHg2M6oDlc6emX-8rP6cj-OcgGSGVs3VFuZZfA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejhedgtdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkffuhffvveffjghftgfgfgggsehtqhertddtreejnecuhfhrohhmpefnuhhk
+    vgculfhonhgvshcuoehluhhkvgeslhhjohhnvghsrdguvghvqeenucggtffrrghtthgvrh
+    hnpeekfeffueejveeujeeugeelleehtdegvdeludektddtfffhieefledvudehfeejieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvg
+    eslhhjohhnvghsrdguvghv
+X-ME-Proxy: <xmx:4ZNEY93BkkghopCCxueFIxIXOJv5kxKoZwxWZxRBKu5Eh7FpBkPojw>
+    <xmx:4ZNEY3HdqFrvb8DS8rLpN4v1CAm_rx--kQlqEPz4M51jpz1m8iO8xQ>
+    <xmx:4ZNEY29r7PMNZKqRprjOIpVG5GgZXZGtZh82t5DeARmBNs_ntOyNEg>
+    <xmx:4pNEY8THbX7nhFh9oLv6MmsEZOSzUrRM2aLxnKB_YwGQ-5B7Jw8Irg>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 10 Oct 2022 17:51:26 -0400 (EDT)
+Message-ID: <e5de59f50c8e4141edc96f882253feb4a12a6536.camel@ljones.dev>
+Subject: Re: [PATCH] Fixes bc2c23549ccd ("ALSA: hda/realtek: Add pincfg for
+ ASUS G533Z HP jack")
+From:   Luke Jones <luke@ljones.dev>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        tiwai@suse.com, perex@perex.cz
+Date:   Tue, 11 Oct 2022 10:50:29 +1300
+In-Reply-To: <87zge3etjw.wl-tiwai@suse.de>
+References: <20221010065702.35190-1-luke@ljones.dev>
+         <87zge3etjw.wl-tiwai@suse.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.0 (by Flathub.org)) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 12:13 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Sun, Oct 09, 2022 at 10:02:26PM -0700, Andrey Smirnov wrote:
-> > On Fri, Oct 7, 2022 at 6:07 AM Ferry Toth <fntoth@gmail.com> wrote:
->
-> Thank you for the testing on your side!
->
-> ...
->
-> > OK, Ferry, I think I'm going to need clarification on specifics on
-> > your test setup. Can you share your kernel config, maybe your
-> > "/proc/config.gz", somewhere? When you say you are running vanilla
-> > Linux, do you mean it or do you mean vanilla tree + some patch delta?
-> >
-> > The reason I'm asking is because I'm having a hard time reproducing
-> > the problem on my end. In fact, when I build v6.0
-> > (4fe89d07dcc2804c8b562f6c7896a45643d34b2f) and then do a
-> >
-> > git revert 8bd6b8c4b100 0f0101719138 (original revert proposed by Andy)
-> >
-> > I get an infinite loop of reprobing that looks something like (some
-> > debug tracing, function name + line number, included):
->
-> Yes, this is (one of) known drawback(s) of deferred probe hack. I think
-> the kernel that Ferry runs has a patch that basically reverts one from
-> 2014 [1] and allows to have extcon as a module. (1)
->
-> [1]: 58b116bce136 ("drivercore: deferral race condition fix")
->
-> > which renders the system completely unusable, but USB host is
-> > definitely going to be broken too. Now, ironically, with my patch
-> > in-place, an attempt to probe extcon that ends up deferring the probe
-> > happens before the ULPI driver failure (which wasn't failing driver
-> > probe prior to https://lore.kernel.org/all/20220213130524.18748-7-hdegoede@redhat.com/),
-> > there no "driver binding" event that re-triggers deferred probe
-> > causing the loop, so the system progresses to a point where extcon is
-> > available and dwc3 driver eventually loads.
-> >
-> > After that, and I don't know if I'm doing the same test, USB host
-> > seems to work as expected. lsusb works, my USB stick enumerates as
-> > expected. Switching the USB mux to micro-USB and back shuts the host
-> > functionality down and brings it up as expected. Now I didn't try to
-> > load any gadgets to make sure USB gadget works 100%, but since you
-> > were saying it was USB host that was broken, I wasn't concerned with
-> > that. Am I doing the right test?
->
-> Hmm... What you described above sounds more like a yet another attempt to
-> workaround (1). _If_ this is the case, we probably can discuss how to fix
-> it in generic way (somewhere in dd.c, rather than in the certain driver).
->
+On Mon, 2022-10-10 at 14:45 +0200, Takashi Iwai wrote:
+> On Mon, 10 Oct 2022 08:57:02 +0200,
+> Luke D. Jones wrote:
+> >=20
+> > The initial fix for ASUS G533Z was based on faulty information.
+> > This
+> > fixes the pincfg to values that have been verified with no existing
+> > module options or other hacks enabled.
+> >=20
+> > Enables headphone jack, and 5.1 surround.
+> >=20
+> > Signed-off-by: Luke D. Jones <luke@ljones.dev>
+>=20
+> The changes look OK, but the subject line should be rather describing
+> what about the patch is about.=C2=A0 I corrected the subject and put the
+> proper Fixes tag (as well as Cc-to-stable).
+>=20
+> Also, the indent level wasn't right, so I corrected it locally, too.
 
-No, I'm not describing an attempt to fix anything. Just how vanilla
-v6.0 (where my patch is not reverted) works and where my patch, fixing
-a logical problem in which extcon was requested too late causing a
-forced OTG -> "gadget only" switch, also changed the ordering enough
-to accidentally avoid the loop.
+Oh... Sorry about the hassle there, I could have sworn it was correct.
+Thanks for accepting regardless :)
 
-> That said, the real test case should be performed on top of clean kernel
-> before judging if it's good or bad.
->
+>=20
+> thanks,
+>=20
+> Takashi
 
-Given your level of involvemnt with this particular platform and you
-being the author of
-https://github.com/edison-fw/meta-intel-edison/blob/master/meta-intel-edison-bsp/recipes-kernel/linux/files/0043b-TODO-driver-core-Break-infinite-loop-when-deferred-p.patch
-I assumed/expected you to double check this before sending this revert
-out. Please do so next time.
