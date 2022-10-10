@@ -2,69 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F7755FA3FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 21:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D44B5FA402
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 21:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbiJJTKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 15:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48198 "EHLO
+        id S229939AbiJJTLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 15:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiJJTKR (ORCPT
+        with ESMTP id S229462AbiJJTL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 15:10:17 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB305A8BC
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 12:10:15 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id f140so11563486pfa.1
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 12:10:15 -0700 (PDT)
+        Mon, 10 Oct 2022 15:11:26 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B349B635C;
+        Mon, 10 Oct 2022 12:11:25 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id w10so17207110edd.4;
+        Mon, 10 Oct 2022 12:11:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z5BpwJeooaNqLb0o57KkHofFKyfb+8Mur+oZp67XkDo=;
-        b=Wrj2Hh11MKBW6vnDlZKz+Wjo2Lf7S9XTYS+JIfUB/BIOR2jY1eywKt5ne37CyMo7p4
-         wSqp6hUGuB5ZWXriuNdgQTmx778C16S9e94qZLfM8WczxsUkk4t+qEWJamh0+cjRHDqG
-         oGxbsc/7bFb4pHdQn+pmASw7Ix2z3YkHLEw1cKjXcS1qXuGob7o4Ay+7morkaYqCJYC5
-         +6KzTMXR0AKFNFitgGveCz5JXbOM2mYuyfnQNpElb2lcKbmaXI4DBo/u904IrpLQnEMt
-         in5fKTS1NJlcWTTU1zVNFiqiytrv8JeSUrO6l9NpnfXT8jE0GcIad7+4dHzKArsKm/Te
-         F3+g==
+        bh=+RG/4rWr2Io1JrEQJ5IlfsShd0SpiopfiVrMk4/IvCI=;
+        b=o/DfF+VXOR0Vp8DHbq9AcPEp2oyQfep+GnvqBOJ2gDZNGHelivd1jnC/VcrU0QwhbL
+         7YSjFMszOq2qs1gCtoHuCAz1CljJeRo0tXmIEKswERKiksnK7QQK0zR21K4+WqXXyBLU
+         X2M4k35AKTC1Y/z2JcDNR8isGAOQBASFIvPRw2u3Y+fvID84mSpeKOkNFyz9G2WSWvmw
+         Hl6tNgV1ZJTkOnRv4ugHr64mFZkTQUsdvG0RlObrgOflJFr2N1Alx2TqBgvEiq9C+lHs
+         twNPS0jv6cfjP/nFabbjKPE9FBUkz5sFpwEAGySaBxKySYgqR1R8eXtZZNoRMhVUHKhn
+         YsKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=z5BpwJeooaNqLb0o57KkHofFKyfb+8Mur+oZp67XkDo=;
-        b=n+/CZH1YUyYSsyex64QSeGkGHPjHC5R7tzfOpqAZ3OYbGQuby1EGGM63Qv+Pz3Kwt9
-         K9madPHjawq/d5MANudViJHz/d6AmoDI2wYjtbimr7pFzJ8w/FQH5Mj2eWeMitFnhz0C
-         upK60f5Vz/+CKByjgQG31YzTt6QP7qB0J1MpCC2Fc5RryEgoBIgdaBvqV++RClEI//UY
-         MsNyI67BvpTvlPXRnn3+uCXJ30hziXLJrnXjdFffqlF/dLBM6E6s9NySJ2g9JIUE85Ic
-         SF9DhqoH0gkhv5VMrSWiChCPUsPgIig0mxd9s6ERewucYIIXSm6euDt1BOi9CWRcSWxX
-         UETQ==
-X-Gm-Message-State: ACrzQf0D9uhU3+1NcSgdnvH77L8CUEjYQRObg7AxOnlXfDB1wOkTeo85
-        Vjh3kYCzPdtR3HRjD/p2wt1bkA==
-X-Google-Smtp-Source: AMsMyM50uZVscSHU6tPxPPEAG+/ig4eDnOeNl640kaomo5gFOjwQytA9YTk58OIjZ5UYi+jOftnFIw==
-X-Received: by 2002:a05:6a00:e1b:b0:537:7c74:c405 with SMTP id bq27-20020a056a000e1b00b005377c74c405mr20817517pfb.43.1665429015045;
-        Mon, 10 Oct 2022 12:10:15 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id l2-20020a170903244200b00176683cde9bsm6989045pls.294.2022.10.10.12.10.14
+        bh=+RG/4rWr2Io1JrEQJ5IlfsShd0SpiopfiVrMk4/IvCI=;
+        b=A6regy9herW/gkL0X/gGXMA0i8ZUNOOzAs36yiU8i/lQ47xSOUmgUFST8FaGd1+VlP
+         UM9I+ReKsiNpBvXRNn5NO9XteQzdbc7oOWamaGk9tUC0sffvGEbwJpUAaWx7D+qnCoMc
+         Fuvj0oOihQGpoAC/FuCpd6dprzRAn2dF8s/pEkIHAzUFAOrE9aLX6Z7WXVy4z/Do5NAx
+         wI/MXLHotaYLdB7FEFWEJOQsQGbH73sd7ih6mW7QS2dOLt13Q1y243TSEfcdhdVR0p6k
+         nXQYPE/uQlFmm8+xqfjVTW3x7xPjqk85GDoGk2aNSxVOZfqvXzx5KEmc0f12sMk0NY9m
+         9ZZw==
+X-Gm-Message-State: ACrzQf2NrkFnIJ1aafJFypXl91tcWmFUF6XIqWzL+O/OgqQNMIcjDuwE
+        O1bLktk1lA5lJIRv744u1zmo03z81HnFyA==
+X-Google-Smtp-Source: AMsMyM7Y3ezQhXU9KxyPvca7iwwZzD9jVEwDXSWlTLEM+ZC3VTxHewwZ0V3AhLRezWAc63++ABviTw==
+X-Received: by 2002:a05:6402:1587:b0:458:fbea:436c with SMTP id c7-20020a056402158700b00458fbea436cmr19208258edv.407.1665429084057;
+        Mon, 10 Oct 2022 12:11:24 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id b1-20020a1709063ca100b007305d408b3dsm5727243ejh.78.2022.10.10.12.11.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 12:10:14 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 19:10:11 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jun Miao <jun.miao@intel.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: Align two spacebar after period key in annotation
-Message-ID: <Y0RuE2fDAkjVpZE1@google.com>
-References: <20221010074052.72197-1-jun.miao@intel.com>
+        Mon, 10 Oct 2022 12:11:23 -0700 (PDT)
+Date:   Mon, 10 Oct 2022 22:11:20 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v3 net-next 12/14] dt-bindings: net: dsa: ocelot: add
+ ocelot-ext documentation
+Message-ID: <20221010191120.cqbxkn6x25vjfwoy@skbuf>
+References: <YzzLCYHmTcrHbZcH@colin-ia-desktop>
+ <455e31be-dc87-39b3-c7fe-22384959c556@linaro.org>
+ <Yz2mSOXf68S16Xg/@colin-ia-desktop>
+ <28b4d9f9-f41a-deca-aa61-26fb65dcc873@linaro.org>
+ <20221008000014.vs2m3vei5la2r2nd@skbuf>
+ <c9ce1d83-d1ca-4640-bba2-724e18e6e56b@linaro.org>
+ <20221010130707.6z63hsl43ipd5run@skbuf>
+ <d27d7740-bf35-b8d4-d68c-bb133513fa19@linaro.org>
+ <20221010174856.nd3n4soxk7zbmcm7@skbuf>
+ <Y0RoraHpuPbN5O4C@COLIN-DESKTOP1.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221010074052.72197-1-jun.miao@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <Y0RoraHpuPbN5O4C@COLIN-DESKTOP1.localdomain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,13 +97,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022, Jun Miao wrote:
-> After you hit the period key, you'd hit the spacebar twice in a line.
-> A little change in annotation does not affect code.
+On Mon, Oct 10, 2022 at 11:47:09AM -0700, Colin Foster wrote:
+> Thank you for laying this path out for me. Hopefully when I go
+> heads-down to implement this there won't be any gotchas. It seems pretty
+> straightforward.
+> 
+> Maybe my only question would be where to send these patches. If these
+> can all go through net-next it seems like there'd be no issue when step
+> 8 (add 7512 documentation) comes along with this current patch set.
+> 
+> Otherwise this sounds good. I'll switch to getting a patch set of steps
+> 1-7 as you suggest.
 
-I'm a firm believer in two spaces after a period and think one-spacers are
-misguided heathens, but I'd prefer not to fix up existing comments.  IMO the potential
-for unnecessary conflicts with in-flight development isn't worth the almost negligible
-benefits.  And unless checkpatch complains about using a single space, which it
-currently does not, there's zero chance we'll be able to enforce this the preferred
-KVM style.
+Generally patches on dt-bindings go through the subsystem to which they
+belong, for example net-next etc. I don't think there are other dependencies?
