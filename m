@@ -2,121 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F3A95FA42F
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 21:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90BDB5FA43A
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 21:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbiJJT3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 15:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        id S229697AbiJJTal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 15:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiJJT3T (ORCPT
+        with ESMTP id S229459AbiJJTai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 15:29:19 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0534501BE
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 12:29:15 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id z20so11213708plb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 12:29:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1rYd5wKmTtTEZzMnTT5DcQpclFJ5bKOFkPhGQYkmSBw=;
-        b=RqTAm/DuxqwDzCmHthDOl9UX9v3KDK9uWW3dB7gJ26kgzCp6X0VUMtZERm5waSuAJp
-         WRwYeIUdSWz+yOsPSDH6pMUkKbBp5ltb6DE46I20hh7n5sfZcr+/UWI/e6JIo+kQ7pAn
-         XmqH/cj8c75Mn9wCipbjMGSHNGvGjHkcJp9XYSiUnt9nvkyBi9hXjxq6aV1bSDVNDMlY
-         3IDCmibgKH3c062sEM4Lw1b/enoGGXVrOYjCOEhSRZKFkfN0FJYor5O5Dbn3dNriRI8V
-         qsTahCejPuFksgdzmV+iCfhVJXFhiqetk/cvxFiNOTSSKl2vnSWYxB0NWJVPOrJszZov
-         ePDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1rYd5wKmTtTEZzMnTT5DcQpclFJ5bKOFkPhGQYkmSBw=;
-        b=Am3TW7p46GAaYoriHCnx4oqbJ06Avdn+fsaL4goFovZLRPv9dh20diF8Zryit9Vz3I
-         uVNN1UuJuL7j1KA2TujFeXkVfQv92BxZU93sSguwnVXMItopRy1VVHtZ3Ol7nZEwKtXR
-         an4mDRSmDAffGcciITwllsKhZvolJWtjG/34nPL4sRdXVZB9sgnFDEKEhIjRVhiXjSKQ
-         Xvbo5L3ZaCs7TN2mDrCPDJDx+m6eFaJWue46XF+lZxCuHHn/zkXZbRGWPwmTB685Tuqw
-         aO1UkiKRIex4f/yQXH8viMu7uaZt0fxQtHOWNvM4/5wZFvBWbUlrcnAdorrV8Bn92t7s
-         QNmQ==
-X-Gm-Message-State: ACrzQf239TtihDQ/3/lwxLXiomWXVeG2dcZhsmbCJEkxfUi+YzmPZV8S
-        C6d4DbNRscjWQUd6SRvBydH5LQ==
-X-Google-Smtp-Source: AMsMyM7TXibQhFguBkFno2yp6rWxynGT/DZUk5/HtH4gACpcfFw+oDohMV2x5Th9cvxfTdfMTVSHjg==
-X-Received: by 2002:a17:90b:1a8b:b0:20d:4c24:af5 with SMTP id ng11-20020a17090b1a8b00b0020d4c240af5mr5660039pjb.213.1665430155292;
-        Mon, 10 Oct 2022 12:29:15 -0700 (PDT)
-Received: from hermes.local (204-195-120-218.wavecable.com. [204.195.120.218])
-        by smtp.gmail.com with ESMTPSA id q4-20020a170902dac400b001728ac8af94sm7018956plx.248.2022.10.10.12.29.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 12:29:15 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 12:29:13 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Jouke Witteveen <j.witteveen@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH] Documentation: update urls to Linux Foundation wiki
-Message-ID: <20221010122913.6a91b117@hermes.local>
-In-Reply-To: <87v8orpkda.fsf@meer.lwn.net>
-References: <20221001112058.22387-1-j.witteveen@gmail.com>
-        <87v8orpkda.fsf@meer.lwn.net>
+        Mon, 10 Oct 2022 15:30:38 -0400
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914F4402D6;
+        Mon, 10 Oct 2022 12:30:34 -0700 (PDT)
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 29AJUD3V008989;
+        Tue, 11 Oct 2022 04:30:13 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 29AJUD3V008989
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1665430213;
+        bh=1w6TuZjh4cZPhVH0ezwJnT2FKBA5+a4r8Ml6K7U/ao4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Oh18wZlOWElB3yLE1YdvDnud2ipuPKF8y/aa+3CAgZrRnJIEeMUiP+jpJZGSB+ljm
+         VvtY/hyqCT2Bz53nIVxI4aiBWCrKyZFwxn3M21yOEPgw/80fMBhUQ5Mks8XbtytcCd
+         9ggv6HnvlT4jcx4QXj1MjLTPYLsDMWDDZ6DP9xGnNQ4LYnYog6NwCo/54goWKPIB0h
+         jnck7Dzr6B12KkmT4U+DEv0kMlVHCUWbGbOujHNOB4eB4ue+G7RyikfkfGfaM8h2sW
+         yf+lq6Qt0T8NlWH1V9IK0HVTXpwSWsgRfQnekh3QaRFrfiI01vC4croekCnUp4+u0Z
+         Ozd0/OpujxgmQ==
+X-Nifty-SrcIP: [209.85.167.182]
+Received: by mail-oi1-f182.google.com with SMTP id w196so7339612oiw.8;
+        Mon, 10 Oct 2022 12:30:13 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1sVTNggxfza4kjfwi9NNmM4AQplN7m5AEpO4fShDWP2KDyC1v9
+        uuEZT6UnLoZqA5Vcbe39he1sKENeAB9FPqvMXZs=
+X-Google-Smtp-Source: AMsMyM6AVz0CCOkmJV4/obYbhKP/mdI0EeZI/muZ+6mbOH62KIO2Ma5Xu/X64wdPvAEGsxix0yp/vF0GkHbr4R42hpQ=
+X-Received: by 2002:aca:bbd4:0:b0:353:f167:6fd3 with SMTP id
+ l203-20020acabbd4000000b00353f1676fd3mr9686854oif.287.1665430212351; Mon, 10
+ Oct 2022 12:30:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220928063947.299333-3-masahiroy@kernel.org> <202210090942.a159fe4-yujie.liu@intel.com>
+In-Reply-To: <202210090942.a159fe4-yujie.liu@intel.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 11 Oct 2022 04:29:36 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASUhDMo72eNge_GvdfbmOkpBCJA88Xw=_V69jcf+_072Q@mail.gmail.com>
+Message-ID: <CAK7LNASUhDMo72eNge_GvdfbmOkpBCJA88Xw=_V69jcf+_072Q@mail.gmail.com>
+Subject: Re: [kbuild] b3830bad81: System_halted
+To:     kernel test robot <yujie.liu@intel.com>
+Cc:     lkp@lists.01.org, lkp@intel.com, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nicolas Pitre <npitre@baylibre.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Oct 2022 13:08:17 -0600
-Jonathan Corbet <corbet@lwn.net> wrote:
+On Sun, Oct 9, 2022 at 10:21 AM kernel test robot <yujie.liu@intel.com> wrote:
+>
+> Greeting,
+>
+> FYI, we noticed the following commit (built with gcc-11):
+>
+> commit: b3830bad81e872632431363853c810c5f652a040 ("[PATCH v3 2/8] kbuild: rebuild .vmlinux.export.o when its prerequisite is updated")
+> url: https://github.com/intel-lab-lkp/linux/commits/Masahiro-Yamada/Unify-linux-export-h-and-asm-export-h-remove-EXPORT_DATA_SYMBOL-faster-TRIM_UNUSED_KSYMS/20220928-144539
+> base: https://git.kernel.org/cgit/linux/kernel/git/masahiroy/linux-kbuild.git for-next
+> patch link: https://lore.kernel.org/linux-kbuild/20220928063947.299333-3-masahiroy@kernel.org
+>
+> in testcase: boot
+>
+> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+>
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
 
-> Jouke Witteveen <j.witteveen@gmail.com> writes:
-> 
-> > The redirects from the old urls stopped working recently.
-> >
-> > Signed-off-by: Jouke Witteveen <j.witteveen@gmail.com>  
-> 
-> I see the LF has done its annual web-site replacement; I have no idea
-> why they are so enamored with breaking URLs...
-> 
-> Anyway, This is networking documentation, so it should go to the folks
-> at netdev [CC'd] rather than me.
-> 
-> >  Documentation/networking/bridge.rst                           | 2 +-
-> >  Documentation/networking/dccp.rst                             | 4 ++--
-> >  .../networking/device_drivers/ethernet/intel/ice.rst          | 2 +-
-> >  Documentation/networking/generic_netlink.rst                  | 2 +-
-> >  MAINTAINERS                                                   | 2 +-
-> >  net/ipv4/Kconfig                                              | 2 +-
-> >  net/sched/Kconfig                                             | 2 +-
-> >  7 files changed, 8 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/Documentation/networking/bridge.rst b/Documentation/networking/bridge.rst
-> > index 4aef9cddde2f..c859f3c1636e 100644
-> > --- a/Documentation/networking/bridge.rst
-> > +++ b/Documentation/networking/bridge.rst
-> > @@ -8,7 +8,7 @@ In order to use the Ethernet bridging functionality, you'll need the
-> >  userspace tools.
-> >  
-> >  Documentation for Linux bridging is on:
-> > -   http://www.linuxfoundation.org/collaborate/workgroups/networking/bridge
-> > +   https://wiki.linuxfoundation.org/networking/bridge  
-> 
-> So this page is full of encouraging stuff like:
-> 
-> > The code is updated as part of the 2.4 and 2.6 kernels available at
-> > kernel.org.  
-> 
-> ...and tells us about an encouraging prototype implementation in 2.6.18.
-> I'd apply the patch because working URLs are better than broken ones,
-> but I also question the value of this material at all in 2022... there
-> should be better documents to link to at this point?
 
-This is ancient networking wiki.
-I took old stuff put it on wiki back when I was working at LF
-but never updated since then.
+I think this is a false-positive alarm.
+
+As I replied before [1], I know my patch set is broken.
+I think 0day bot is testing the patch set I had already retracted.
+
+I only picked up low-hanging fruits with fixes to my tree,
+and did boot tests.
+
+Please let me know if linux-next is broken.
+
+
+[1] : https://lore.kernel.org/linux-kbuild/CAK7LNATcD6k+R66YFVg_mhe7-FGNc0nYaTPuORCcd34Qw3ra2g@mail.gmail.com/T/#t
+
+
+
+
+
+
+
+
+
+
+>
+> early console in setup code
+> Probing EDD (edd=off to disable)... ok
+> No EFI environment detected.
+> early console in extract_kernel
+> input_data: 0x0000000002e5740d
+> input_len: 0x000000000099c37e
+> output: 0x0000000001000000
+> output_len: 0x000000000234aa00
+> kernel_total_size: 0x0000000002828000
+> needed_size: 0x0000000002a00000
+> trampoline_32bit: 0x000000000009d000
+>
+> Decompressing Linux... Parsing ELF...
+>
+> Alignment of LOAD segment isn't multiple of 2MB
+>
+>  -- System haltedBUG: kernel hang in boot stage
+>
+>
+>
+> 61682ee38a ("kbuild: move modules.builtin(.modinfo) rules to Makefile.vmlinux_o")
+> b3830bad81 ("kbuild: rebuild .vmlinux.export.o when its prerequisite is updated")
+>
+> +----------------+------------+------------+
+> |                | 61682ee38a | b3830bad81 |
+> +----------------+------------+------------+
+> | boot_successes | 24         | 0          |
+> | boot_failures  | 0          | 18         |
+> | System_halted  | 0          | 18         |
+> +----------------+------------+------------+
+>
+>
+> If you fix the issue, kindly add following tag
+> | Reported-by: kernel test robot <yujie.liu@intel.com>
+> | Link: https://lore.kernel.org/r/202210090942.a159fe4-yujie.liu@intel.com
+>
+>
+> To reproduce:
+>
+>         # build kernel
+>         cd linux
+>         cp config-6.0.0-rc7-00038-gb3830bad81e8 .config
+>         make HOSTCC=gcc-11 CC=gcc-11 ARCH=x86_64 olddefconfig prepare modules_prepare bzImage modules
+>         make HOSTCC=gcc-11 CC=gcc-11 ARCH=x86_64 INSTALL_MOD_PATH=<mod-install-dir> modules_install
+>         cd <mod-install-dir>
+>         find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
+>
+>
+>         git clone https://github.com/intel/lkp-tests.git
+>         cd lkp-tests
+>         bin/lkp qemu -k <bzImage> -m modules.cgz job-script # job-script is attached in this email
+>
+>         # if come across any failure that blocks the test,
+>         # please remove ~/.lkp and /lkp dir to run from a clean state.
+>
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
