@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 302135F97D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 07:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A556B5F97D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 07:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbiJJFgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 01:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
+        id S231274AbiJJFgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 01:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbiJJFgG (ORCPT
+        with ESMTP id S231246AbiJJFgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 10 Oct 2022 01:36:06 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE42AC61;
-        Sun,  9 Oct 2022 22:36:03 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id gf8so8965407pjb.5;
-        Sun, 09 Oct 2022 22:36:03 -0700 (PDT)
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D15165C8;
+        Sun,  9 Oct 2022 22:36:05 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id y1so2733002pfr.3;
+        Sun, 09 Oct 2022 22:36:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=RVA4JJdT2Z+v9/KhnhYIqf9xYvMnR3eukQaugJJM+U8=;
-        b=bLIZ3d3eHeOaDGt1urkqoq2g6Y78PHAGlXq567mdLeHoXSw9+xhGdENQk8DLp9edDc
-         KoNvuys7RZq0/9yG+zMr0l/LQv153dOBNC076WuOqN+qG3tr1xb0pUgOdo3YMBUdlQZP
-         iGDRIUhP6LOYW/b6Vn9ZmMF34KKUfcKYRL00GQVKNGbD9Ybxtwx5o6Q8WVF/PAsoMGar
-         L525d1qKjmkL6/gRWikKKDcCp8h21yKImRZ9+dHcGobbgrYiXceFx5IpzJ6ORuqHdxe+
-         GSMutzSbZh85lbfyiDFZDJ9kwTqAop7F+ZxoBNZFtFCVZpmubk75s+HrxTYHdO0xNDHY
-         VJsw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IqmTs8/sjxR4VW7dikRv4ZzGywAqvgIN6RnXpX4I2Jo=;
+        b=kQWkjIoRNTUVJrr5XxB2gmdd4cybLHh7z3juvacMMlcsuyald5iLs0qAh1oMKWF1ap
+         7At+CSNrHBVNVFGd6jGfiw6HdLHHRflhJMuUCf7ML6oDo+bo80be3IrlTEH5caHnNaJ6
+         e/kbG2CyRclKPQXRkcY7WJ5D+KLR16NIJ25O0w6LfEj49HXsZ+DMBNt0BUshf08GAIsA
+         rmmqr+QjEDMp4qFZs2XRIuabq07AzoK9FlgFJ6Vb54xKidzlKnDNUPz8CVMGuPz7sISQ
+         I1iOZPyglnSaRbRrSgIDspLdlP8xioyiRbNytT/XY6visyVByDD+BqpuZ7lCiU6rfC76
+         s2wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RVA4JJdT2Z+v9/KhnhYIqf9xYvMnR3eukQaugJJM+U8=;
-        b=AekTw1mfelHnTZPEKHqtSUla85QsloSM/z+HA9bcL2LU/0OHCk4h0tRJJJa1ffQw0d
-         le9OBj/EG3t1Xhxu9aZuU6oJSfaL/HuxO3Mv5taDTr1gSD1HaQ8s77Jllswm4UKV/A3h
-         OXk5yT7owBLQu7eEOyavR5GQkGI43x7N2i7ijhOSChIbh/sZsUcNVfzWTSPpOqQcQNZ0
-         aXrswnFGv1ioD30xwxRL2eJG+yJunuXLEVFOPgv6kO8S54pDFeUio9hJ9UX4UyBxXdSZ
-         xZDjxTu1YkEVk7j62psAMWyBn9PZ3M2uoq1L6HZD4aWnerNBAqDrvk9Pl5KITIjsWkTs
-         WYWw==
-X-Gm-Message-State: ACrzQf1nuuRe6gdQB9cvsRw3+IXZEUqfDlaxf1PShNrxqmGvHGo9zmcf
-        U46ubXmZEmFBnWckg8nGFmk=
-X-Google-Smtp-Source: AMsMyM4NNv/w6yg8VVoGSh7fu9xHl5THSzfo/1bKk08Wadsu5JPji3guNF7tPdYTqXigfsWpcih45g==
-X-Received: by 2002:a17:90b:4b87:b0:202:d760:9b00 with SMTP id lr7-20020a17090b4b8700b00202d7609b00mr29997403pjb.194.1665380163139;
-        Sun, 09 Oct 2022 22:36:03 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=IqmTs8/sjxR4VW7dikRv4ZzGywAqvgIN6RnXpX4I2Jo=;
+        b=EadQnzDpuV/C6tN2hIZ7FsyxNI7atXWr10QqTqXf9V0UQQiKHsABjXE3fy1jYFfhNY
+         xFNwugl3QB2o8nR6RnjNZxJ8zpkHIY+NmA1YEZ7/jb9cU574u5QglVPM9ayPmeWjp6vj
+         C7soSLcylBB1Do7sff5j2srUwbrSHVomrT8tWUm2MQGGWEJSN9mNGrFkaO/w0CNH9Das
+         CzTwQYlfeLX/hYnKLwNeNGub9LiTsZ8N0+2oShmU44dAm0xj0C2W6Nx+0pW9hDme7YE8
+         A+dp3djr+m1q7upkGg7Nf271jWd8XYvB7ckKKA2oPV9Z2CFIayYW+4aG63i3A6mu3aht
+         Dz+w==
+X-Gm-Message-State: ACrzQf3+2fzLhWRDR+8iR0khMUztyKyrJQY6vP+73rHGgnlLEr5cfQq3
+        p+ixSJ11dxNPQzT8MzJb2R0=
+X-Google-Smtp-Source: AMsMyM5/cp0ZNFNqhjmDC3p1nAUrOCIVEUWfJoepRmT8AXe0HNFOL+b/NsGdB5vby8+KD/WEp/TsNA==
+X-Received: by 2002:a05:6a00:1a55:b0:557:b7a3:6738 with SMTP id h21-20020a056a001a5500b00557b7a36738mr17926206pfv.61.1665380164590;
+        Sun, 09 Oct 2022 22:36:04 -0700 (PDT)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:862f:cd0e:bf30:6d69])
-        by smtp.gmail.com with ESMTPSA id u13-20020a170902e80d00b0017f7e0f4a4esm5667594plg.35.2022.10.09.22.36.01
+        by smtp.gmail.com with ESMTPSA id u13-20020a170902e80d00b0017f7e0f4a4esm5667594plg.35.2022.10.09.22.36.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 22:36:02 -0700 (PDT)
+        Sun, 09 Oct 2022 22:36:04 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -64,10 +65,12 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
         James Clark <james.clark@arm.com>,
         Xing Zhengjun <zhengjun.xing@linux.intel.com>
-Subject: [RFC/PATCHSET 00/19] perf stat: Cleanup counter aggregation (v1)
-Date:   Sun,  9 Oct 2022 22:35:41 -0700
-Message-Id: <20221010053600.272854-1-namhyung@kernel.org>
+Subject: [PATCH 01/19] perf tools: Save evsel->pmu in parse_events()
+Date:   Sun,  9 Oct 2022 22:35:42 -0700
+Message-Id: <20221010053600.272854-2-namhyung@kernel.org>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+In-Reply-To: <20221010053600.272854-1-namhyung@kernel.org>
+References: <20221010053600.272854-1-namhyung@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,68 +83,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Now evsel has a pmu pointer, let's save the info and use it like in
+evsel__find_pmu().
 
-Current perf stat code is somewhat hard to follow since it handles
-many combinations of PMUs/events for given display and aggregation
-options.  This is my attempt to clean it up a little. ;-)
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/util/evsel.c        | 1 +
+ tools/perf/util/parse-events.c | 1 +
+ tools/perf/util/pmu.c          | 4 ++++
+ 3 files changed, 6 insertions(+)
 
-My first concern is that aggregation and display routines are intermixed
-and processed differently depends on the aggregation mode.  I'd like to
-separate them apart and make the logic clearer.
-
-To do that, I added struct perf_stat_aggr to save the aggregated counter
-values and other info.  It'll be allocated and processed according to
-the aggr_mode and display logic will use it.
-
-The code is available at 'perf/stat-aggr-v1' branch in
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
-
-Thanks,
-Namhyung
-
-
-Namhyung Kim (19):
-  perf tools: Save evsel->pmu in parse_events()
-  perf tools: Use pmu info in evsel__is_hybrid()
-  perf stat: Use evsel__is_hybrid() more
-  perf stat: Add aggr id for global mode
-  perf stat: Add cpu aggr id for no aggregation mode
-  perf stat: Add 'needs_sort' argument to cpu_aggr_map__new()
-  perf stat: Add struct perf_stat_aggr to perf_stat_evsel
-  perf stat: Allocate evsel->stats->aggr properly
-  perf stat: Aggregate events using evsel->stats->aggr
-  perf stat: Aggregate per-thread stats using evsel->stats->aggr
-  perf stat: Allocate aggr counts for recorded data
-  perf stat: Reset aggr counts for each interval
-  perf stat: Split process_counters()
-  perf stat: Add perf_stat_merge_counters()
-  perf stat: Add perf_stat_process_percore()
-  perf stat: Add perf_stat_process_shadow_stats()
-  perf stat: Display event stats using aggr counts
-  perf stat: Display percore events properly
-  perf stat: Remove unused perf_counts.aggr field
-
- tools/perf/builtin-script.c                   |   4 +-
- tools/perf/builtin-stat.c                     | 177 +++++--
- tools/perf/tests/parse-metric.c               |   2 +-
- tools/perf/tests/pmu-events.c                 |   2 +-
- tools/perf/util/counts.c                      |   1 -
- tools/perf/util/counts.h                      |   1 -
- tools/perf/util/cpumap.c                      |  16 +-
- tools/perf/util/cpumap.h                      |   8 +-
- tools/perf/util/evsel.c                       |  13 +-
- tools/perf/util/parse-events.c                |   1 +
- tools/perf/util/pmu.c                         |   4 +
- .../scripting-engines/trace-event-python.c    |   6 -
- tools/perf/util/stat-display.c                | 472 +++---------------
- tools/perf/util/stat.c                        | 383 +++++++++++---
- tools/perf/util/stat.h                        |  29 +-
- 15 files changed, 590 insertions(+), 529 deletions(-)
-
-
-base-commit: d79310700590b8b40d8c867012d6c899ea6fd505
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index 76605fde3507..196f8e4859d7 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -467,6 +467,7 @@ struct evsel *evsel__clone(struct evsel *orig)
+ 	evsel->collect_stat = orig->collect_stat;
+ 	evsel->weak_group = orig->weak_group;
+ 	evsel->use_config_name = orig->use_config_name;
++	evsel->pmu = orig->pmu;
+ 
+ 	if (evsel__copy_config_terms(evsel, orig) < 0)
+ 		goto out_err;
+diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+index 437389dacf48..9e704841273d 100644
+--- a/tools/perf/util/parse-events.c
++++ b/tools/perf/util/parse-events.c
+@@ -263,6 +263,7 @@ __add_event(struct list_head *list, int *idx,
+ 	evsel->core.own_cpus = perf_cpu_map__get(cpus);
+ 	evsel->core.requires_cpu = pmu ? pmu->is_uncore : false;
+ 	evsel->auto_merge_stats = auto_merge_stats;
++	evsel->pmu = pmu;
+ 
+ 	if (name)
+ 		evsel->name = strdup(name);
+diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+index 74a2cafb4e8d..15bf5943083a 100644
+--- a/tools/perf/util/pmu.c
++++ b/tools/perf/util/pmu.c
+@@ -1048,11 +1048,15 @@ struct perf_pmu *evsel__find_pmu(struct evsel *evsel)
+ {
+ 	struct perf_pmu *pmu = NULL;
+ 
++	if (evsel->pmu)
++		return evsel->pmu;
++
+ 	while ((pmu = perf_pmu__scan(pmu)) != NULL) {
+ 		if (pmu->type == evsel->core.attr.type)
+ 			break;
+ 	}
+ 
++	evsel->pmu = pmu;
+ 	return pmu;
+ }
+ 
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
