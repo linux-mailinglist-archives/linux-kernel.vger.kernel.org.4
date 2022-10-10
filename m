@@ -2,144 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEFF25FA6B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8145FA6C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbiJJU7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 16:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
+        id S230433AbiJJU7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 16:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbiJJU6i (ORCPT
+        with ESMTP id S231334AbiJJU6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 16:58:38 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2837EFC5;
-        Mon, 10 Oct 2022 13:58:22 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MmWTh0PNnz4x1D;
-        Tue, 11 Oct 2022 07:58:16 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1665435497;
-        bh=d+P08bQm7lw1yI2lY2EcaHxG6OhotVqkVTSQ762CItU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=J8OpcPdhboJJZyqYQSCK4f0knAqWpdbmUU6uOD0D14d2Cs4m5iPkyH6Zc3Zdz9Hep
-         GDign9icoD8yaVwHl55sWeAx9bnvb0rAbSrmZQgYzstenfhCTdgNduP5qWIzOKped4
-         fjgaVYCe54fGrRCi0r8P3knXo+eIQBHO+A6+9GA1CFMhdUdqcT9cBe5lIlspGwulT5
-         3lsF1AI9j/0BKo67I5Iw7bE724pWJD9nOOYudD6NoA0ethoHBLZxVrs2Og84Rov0xN
-         ub5t2oQoBJK6wj5Wixw6VJMh1+sxFC92Rl//WkjzAyeEive4XN+0QHtnWl44ztSgt4
-         Uo5Po5BTf8/0A==
-Date:   Tue, 11 Oct 2022 07:57:48 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Tejun Heo <tj@kernel.org>,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the cgroup tree
-Message-ID: <20221011075748.3db42926@canb.auug.org.au>
-In-Reply-To: <20220912161812.072aaa3b@canb.auug.org.au>
-References: <20220912161812.072aaa3b@canb.auug.org.au>
+        Mon, 10 Oct 2022 16:58:34 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F857E020;
+        Mon, 10 Oct 2022 13:58:17 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29AItFiN003151;
+        Mon, 10 Oct 2022 20:58:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=JemLN4s2DlwZ342CFWdBzSb6ZQFVPC8/pfjeskdzVbg=;
+ b=pmpktESDSH68Sj6F4UwldlygtwdKuCWpXIIcJqk9zrxZBUXgZh1iha8LEf2SqgObWOmj
+ Nia3nGnkRDRcf69PccdHOjd1WtcK/3/m1lSn0i6+XPk6MW/Pjg6u7CL38Pz0/rVBSmeL
+ mfIpXUDhtEOtGwisKbaNfNLzsF0nBMPGpUatCrXPe45cUTtK+LrkX2wySyHAE392nRcD
+ q9fQHzckUcnSBp1GO/QCPG3FmWQYSotGS4NVQBkazCIk2b7as63h1qDomsMhbS2TkbK0
+ QDzNsJEFY+aHc0lLJGy8/QZ1+PQil2CcCAn1q7PyYOWrRb0pb2kStn/WlUHYyHTqAILR qw== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k4rx2g8nk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 20:58:03 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29AKw2Xj007507
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 20:58:02 GMT
+Received: from [10.110.10.240] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 10 Oct
+ 2022 13:58:01 -0700
+Message-ID: <ca42d89e-9e19-0536-0951-2c123d898892@quicinc.com>
+Date:   Mon, 10 Oct 2022 13:58:00 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6kl/oNG8V108UU=TVCV/Gag";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 14/14] tty: gunyah: Add tty console driver for RM
+ Console Services
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Jiri Slaby <jirislaby@kernel.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Jassi Brar" <jassisinghbrar@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Marc Zyngier" <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, <devicetree@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220928195633.2348848-1-quic_eberman@quicinc.com>
+ <20220928195633.2348848-15-quic_eberman@quicinc.com>
+ <YzbePxTF8hRbWNRU@kroah.com>
+ <14d0ff9f-60f3-71cc-ea42-ceee389298ac@quicinc.com>
+ <Yz/YBDqqwBUlswgX@kroah.com>
+ <615493a8-449d-b105-709e-0642dfb5359b@quicinc.com>
+ <Y0R/QbysXa6ebNd8@kroah.com>
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <Y0R/QbysXa6ebNd8@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: JVk-a2uHWaQg5Q69tWKDC589IcS8uUqv
+X-Proofpoint-ORIG-GUID: JVk-a2uHWaQg5Q69tWKDC589IcS8uUqv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-10_12,2022-10-10_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=858
+ impostorscore=0 malwarescore=0 lowpriorityscore=0 mlxscore=0 phishscore=0
+ suspectscore=0 bulkscore=0 spamscore=0 priorityscore=1501 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210100124
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/6kl/oNG8V108UU=TVCV/Gag
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-On Mon, 12 Sep 2022 16:18:12 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> After merging the cgroup tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> kernel/cgroup/cgroup.c:5275:26: error: 'CFTYPE_PRESSURE' undeclared here =
-(not in a function)
->  5275 |                 .flags =3D CFTYPE_PRESSURE,
->       |                          ^~~~~~~~~~~~~~~
->=20
-> Caused by commit
->=20
->   8a693f7766f9 ("cgroup: Remove CFTYPE_PRESSURE")
->=20
-> inteacting with commits
->=20
->   52b1364ba0b1 ("sched/psi: Add PSI_IRQ to track IRQ/SOFTIRQ pressure")
->   34f26a15611a ("sched/psi: Per-cgroup PSI accounting disable/re-enable i=
-nterface")
->=20
-> from the tip tree.
->=20
-> I have applied the following merge fix patch.
->=20
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 12 Sep 2022 16:15:33 +1000
-> Subject: [PATCH] sched/psi: fix up for "cgroup: Remove CFTYPE_PRESSURE"
->=20
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  kernel/cgroup/cgroup.c | 2 --
->  1 file changed, 2 deletions(-)
->=20
-> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-> index 974ca46c6d7b..829aa42e773e 100644
-> --- a/kernel/cgroup/cgroup.c
-> +++ b/kernel/cgroup/cgroup.c
-> @@ -5272,7 +5272,6 @@ static struct cftype cgroup_psi_files[] =3D {
->  #ifdef CONFIG_IRQ_TIME_ACCOUNTING
->  	{
->  		.name =3D "irq.pressure",
-> -		.flags =3D CFTYPE_PRESSURE,
->  		.file_offset =3D offsetof(struct cgroup, psi_files[PSI_IRQ]),
->  		.seq_show =3D cgroup_irq_pressure_show,
->  		.write =3D cgroup_irq_pressure_write,
-> @@ -5282,7 +5281,6 @@ static struct cftype cgroup_psi_files[] =3D {
->  #endif
->  	{
->  		.name =3D "cgroup.pressure",
-> -		.flags =3D CFTYPE_PRESSURE,
->  		.seq_show =3D cgroup_pressure_show,
->  		.write =3D cgroup_pressure_write,
->  	},
-> --=20
-> 2.35.1
+On 10/10/2022 1:23 PM, Greg Kroah-Hartman wrote:
+> On Sun, Oct 09, 2022 at 01:59:21PM -0700, Elliot Berman wrote:
+>>
+>>
+>> On 10/7/2022 12:40 AM, Greg Kroah-Hartman wrote:
+>>> On Thu, Oct 06, 2022 at 10:59:51PM -0700, Elliot Berman wrote:
+>>>>
+>>>> "GH" is the shorthand we've been using for "Gunyah". I didn't find
+>>>> documentation for dynamically assigned char devices, but if it exists, I can
+>>>> add entry for ttyGH.
+>>>
+>>> Why use a new name at all?  Why not stick with the existing tty names
+>>> and device numbers?
+>>>
+>>
+>> I can use hvc framework, although driver-level buffering is needed on
+>> both the get_chars/put_chars paths because:
+> 
+> I'm not asking about the framework (although that is a good question,
+> you need to document why this has to be new.)  I'm asking why pick a new
+> name?  You will not have a name conflict in your system with this device
+> with any other tty name right?
+> 
 
-This is now a conflict between the tip tree and Linus' tree.
+That's correct, I didn't see any other instances of "ttyGH" in kernel.
 
---=20
-Cheers,
-Stephen Rothwell
+>>   - get_chars wants to poll for characters, but Gunyah will push
+>>     characters to Linux
+>>   - put_chars can be called in atomic context in the printk console path.
+>>     Gunyah RM calls can sleep, so we add to buffer and queue work to
+>>     write the characters.
+>>
+>> I also chose to use new tty driver because the Gunyah hypervisor call to
+>> open the console (gh_rm_console_open) can only be done after starting the
+>> VM. Gunyah will only forward characters sent from the other VM to Linux
+>> after the gh_rm_console_open call is made. When launching a VM, users would
+>> want to open console before VM starts so they can get startup messages from
+>> the VM. I planned to use the carrier_raised() to hold
+>> tty_port_block_until_ready until the VM is started and the
+>> gh_rm_console_open() happens.
+> 
+> I'm sorry, but I don't understand this.
+> 
+> Why is this all a new api at all?  What about the virtio api?  Why not
+> just use that instead?
 
---Sig_/6kl/oNG8V108UU=TVCV/Gag
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+We want to support virtual machines and Virtual Machine Managers (the 
+userspace component) that don't support virtio. Qualcomm has some 
+lightweight VMs that have a Gunyah driver stack but no virtio stack. 
+Further, implementing a simple userspace VMM to launch a Linux kernel is 
+much easier with the Gunyah console as no device paravirtualization is 
+needed to get some output from Linux. I don't anticipate these VMs to be 
+commonplace, but they do exist.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNEh0wACgkQAVBC80lX
-0GzVfgf/T4fr7DVteETpQN9rKT8kRx8msuYeKOuo797mybS1bV/vkU6eow0Z3nt9
-B20Sq0ZT4qaLQJ6gx+xehEFHR3mZi5RK+jtakzh4tk8L8RJLM/SuVZ7DkYqRcnCz
-YQ7uGUwoL9XkAXn19AM4+GgAfTcyx5gArX3nIwiF/iYed8igNavDrIjlIzS5Ve4m
-2otSwIWjswZMvc1b5zG3ZFMtz2N+Qf+vUP+Q7X2hCTsLMj4UqQNtu+eLAt6Lxm6m
-usOueRVumo8H6onChRlsjL3uZ+B2iL41+FbK+m5E1Iv5OQ52R/TLZr/jhD1xvwLT
-BjYP/3Bm1kbhUNJ9upRFVov74NXnLw==
-=gAW3
------END PGP SIGNATURE-----
-
---Sig_/6kl/oNG8V108UU=TVCV/Gag--
+Thanks,
+Elliot
