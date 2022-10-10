@@ -2,123 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59AF75FA61D
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 047CE5FA61F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbiJJUZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 16:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
+        id S230043AbiJJU0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 16:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231370AbiJJUYs (ORCPT
+        with ESMTP id S229759AbiJJUZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 16:24:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0F27C1CD;
-        Mon, 10 Oct 2022 13:23:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0122FB810D2;
-        Mon, 10 Oct 2022 20:22:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36D30C433D6;
-        Mon, 10 Oct 2022 20:22:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665433365;
-        bh=CHynigbFeyVcxvAoFQLwXJcDP7G6kpYQrKkE1dE9CSc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CF5T9mxCd+XOc59MIW/z3FQPNegwAu9mRPPpzHF5fL/flQaQdxMvVKxG8OhUpN8xI
-         UfJ0RkWL6ObjBUX6G/fCxetSew7VvVCFJkz7zEvBSoqRbb1+TBUhDmHJIOkjEGQLPn
-         eqp3Jak+hwhrFq0IDHhRkWM358HPzOSW21aXse1A=
-Date:   Mon, 10 Oct 2022 22:23:29 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Elliot Berman <quic_eberman@quicinc.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 14/14] tty: gunyah: Add tty console driver for RM
- Console Services
-Message-ID: <Y0R/QbysXa6ebNd8@kroah.com>
-References: <20220928195633.2348848-1-quic_eberman@quicinc.com>
- <20220928195633.2348848-15-quic_eberman@quicinc.com>
- <YzbePxTF8hRbWNRU@kroah.com>
- <14d0ff9f-60f3-71cc-ea42-ceee389298ac@quicinc.com>
- <Yz/YBDqqwBUlswgX@kroah.com>
- <615493a8-449d-b105-709e-0642dfb5359b@quicinc.com>
+        Mon, 10 Oct 2022 16:25:52 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CDD1408C;
+        Mon, 10 Oct 2022 13:24:49 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d24so11346613pls.4;
+        Mon, 10 Oct 2022 13:24:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SWBKxcK5HE/3WshbW1q29xvyEiEvyFrYE2hY8YKFsLs=;
+        b=KEYEbq/ly8DTkiYPCrGiR6KYBxqhyiZA26Fj+t0+nmZYWUozdenaY+VoU8pmLUc9ry
+         OYmW4AJzZ9zZb9ACzz2x6+0Y+so2+IcnPsY5dEwJlHD9JFJQVEs2WbmLHhh4IcK3Ddy9
+         QWqYnt/XqsFvRwGQ1tX2ZwRzLRJwB0C4xpMvYCaEG0ECzhQayHWXI6lDge1cYEHLDA/8
+         ihOfFmF/w40sHx4RYXTIOrVRLItAuhUhgPUbQReNAD5AYi1eMzxK2HVFpdBK/eBJ3REV
+         +1bDUqpz4l0lQsnB/1J3P+hNQ48giXMkuq6/1Y5ng0xXN8DgkEPIbNjsddWIK8blwo8Y
+         hEmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SWBKxcK5HE/3WshbW1q29xvyEiEvyFrYE2hY8YKFsLs=;
+        b=Gr1ebv/qEWnsz63E/q8wB7oPmMQB+9FSdp1hO/2rY78OsbhAjBw8x1AWAnFiYAuC49
+         ydsp9kAd291zoLFccjL5bbQWOtw9jV0PHQ4eviOirramTq8/URfm6ohOuDu6CJdeuh9C
+         P5zgbA9LFAiGhk8lObMN+O0nEedv5Irvm4mH0DXpiXvfMEOmlq0fcbtWP53ElCZxNv+N
+         zSrcjFbCsuMmzCgXBzjEUkTpp0hLAsrXj/NVB6GhP1xbFOnKviz9eYlr+H1gAaS+TskJ
+         ChBSXqUFOLdLQ2h6Qm0nR7a9VLYHxczAkRostD78eHM8SHlJlcPmdeQ0kuKChDgniqIG
+         58lA==
+X-Gm-Message-State: ACrzQf2ii2pL3kpjcRrZXSvTvZqpbJkqS+W+Oh/L/nhByWZpCM5oZ7if
+        VPbpCfdjpaTnSUiRb2cN+o8=
+X-Google-Smtp-Source: AMsMyM5rHJs/tXmnikDZoHEoGNtFEkqwFu4L6qBHwocDNhbXMW+CabS5gdq9L9A9hv30PsFIM/+Pqw==
+X-Received: by 2002:a17:902:f78b:b0:17f:9c94:b247 with SMTP id q11-20020a170902f78b00b0017f9c94b247mr20115013pln.137.1665433445393;
+        Mon, 10 Oct 2022 13:24:05 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id q18-20020a17090311d200b00174c0dd29f0sm7081535plh.144.2022.10.10.13.24.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 13:24:04 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 10 Oct 2022 10:24:03 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     cgroups@vger.kernel.org, dan.carpenter@oracle.com,
+        hannes@cmpxchg.org, linux-kernel@vger.kernel.org,
+        lizefan.x@bytedance.com
+Subject: Re: [PATCH v3] cgroup: Reorganize css_set_lock and kernfs path
+ processing
+Message-ID: <Y0R/Y/YlsynTla6m@slm.duckdns.org>
+References: <Yz21I9UpXafWMU0K@slm.duckdns.org>
+ <20221010082918.3821-1-mkoutny@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <615493a8-449d-b105-709e-0642dfb5359b@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221010082918.3821-1-mkoutny@suse.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 01:59:21PM -0700, Elliot Berman wrote:
+On Mon, Oct 10, 2022 at 10:29:18AM +0200, Michal Koutný wrote:
+> The commit 74e4b956eb1c incorrectly wrapped kernfs_walk_and_get
+> (might_sleep) under css_set_lock (spinlock). css_set_lock is needed by
+> __cset_cgroup_from_root to ensure stable cset->cgrp_links but not for
+> kernfs_walk_and_get.
 > 
+> We only need to make sure that the returned root_cgrp won't be freed
+> under us. This is given in the case of global root because it is static
+> (cgrp_dfl_root.cgrp). When the root_cgrp is lower in the hierarchy, it
+> is pinned by cgroup_ns->root_cset (and `current` task cannot switch
+> namespace asynchronously so ns_proxy pins cgroup_ns).
 > 
-> On 10/7/2022 12:40 AM, Greg Kroah-Hartman wrote:
-> > On Thu, Oct 06, 2022 at 10:59:51PM -0700, Elliot Berman wrote:
-> > > 
-> > > "GH" is the shorthand we've been using for "Gunyah". I didn't find
-> > > documentation for dynamically assigned char devices, but if it exists, I can
-> > > add entry for ttyGH.
-> > 
-> > Why use a new name at all?  Why not stick with the existing tty names
-> > and device numbers?
-> > 
+> Note this reasoning won't hold for root cgroups in v1 hierarchies,
+> therefore create a special-cased helper function just for the default
+> hierarchy.
 > 
-> I can use hvc framework, although driver-level buffering is needed on
-> both the get_chars/put_chars paths because:
+> Fixes: 74e4b956eb1c ("cgroup: Honor caller's cgroup NS when resolving path")
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Michal Koutný <mkoutny@suse.com>
 
-I'm not asking about the framework (although that is a good question,
-you need to document why this has to be new.)  I'm asking why pick a new
-name?  You will not have a name conflict in your system with this device
-with any other tty name right?
+Applied to cgroup/for-6.1-fixes w/ trivial comment / line break adjustments.
 
->  - get_chars wants to poll for characters, but Gunyah will push
->    characters to Linux
->  - put_chars can be called in atomic context in the printk console path.
->    Gunyah RM calls can sleep, so we add to buffer and queue work to
->    write the characters.
-> 
-> I also chose to use new tty driver because the Gunyah hypervisor call to
-> open the console (gh_rm_console_open) can only be done after starting the
-> VM. Gunyah will only forward characters sent from the other VM to Linux
-> after the gh_rm_console_open call is made. When launching a VM, users would
-> want to open console before VM starts so they can get startup messages from
-> the VM. I planned to use the carrier_raised() to hold
-> tty_port_block_until_ready until the VM is started and the
-> gh_rm_console_open() happens.
+Thanks.
 
-I'm sorry, but I don't understand this.
-
-Why is this all a new api at all?  What about the virtio api?  Why not
-just use that instead?
-
-thanks,
-
-greg k-h
+-- 
+tejun
