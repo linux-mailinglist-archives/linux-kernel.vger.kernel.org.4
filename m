@@ -2,71 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3A45FA313
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 123925FA3F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 21:08:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229446AbiJJR7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 13:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53534 "EHLO
+        id S229923AbiJJTIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 15:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiJJR7a (ORCPT
+        with ESMTP id S229832AbiJJTIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 13:59:30 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B4A78230;
-        Mon, 10 Oct 2022 10:59:30 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id f140so11415104pfa.1;
-        Mon, 10 Oct 2022 10:59:30 -0700 (PDT)
+        Mon, 10 Oct 2022 15:08:25 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC005AC74;
+        Mon, 10 Oct 2022 12:08:24 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id u21so17146419edi.9;
+        Mon, 10 Oct 2022 12:08:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zN/KjsCEx2zMtEPwS1BKpAmSphZD0IO6nl7YyDXtL7I=;
-        b=fXqfedqDgMytgQwcbHuYJGLHuxZEy/2DeKE1BMP/BK7EE8oS6TfYEqNPVIyhccsp/l
-         LUlusXsTq9E2Ee2ia5OV3eHfC+28hTurg5cErnPhMRmfAmLWsTrt+Bdg1pXJ6WMEXTmv
-         KaMiGz9iIvUV5CzTiGzZr2gUV2KBq8lt8zITykuIuU/FlsoHhrKPEpFFUq/I19wFxjn3
-         RzZTDCYcVo1NkapqwtvsbbpER0pJkuyat96JdDk8/LPZ4ptMUJay4/jxN4KZthYsRSQw
-         2IufrFfGB0edloAJcxBhv7jzYJGoolZmjPXy1+NxUc2YJhq/BcHLrypgFeQeBEPpj44F
-         Xlyw==
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=8ZWQI6EaAdyld4xWyI/4YqlkKhYX2A2+TTbGbUbetgY=;
+        b=bs8dQiS0WqpLHv+OnV7+mwwcm+a+DGPPnskG8ISDlRKzqXg/gzx9ebBk0KHNJTaRv0
+         FNxyMmejLeZ4/iEZoAqA59guqJi5322dn2J+yVtu2dVfwPjtZ45TuUKGLjAmKpue5gru
+         xPjQUNlYwc9k7Hk6t5JSMbHZQFLdnwhSDDMvSfkISmtuo6N763tELMzhXAQhraSllQfR
+         lzD/K6VYszSF83BWLvaxNt06NSKoFgftAca39Zs+qv50ud25Q1vY/g03nD1BxgftW9EC
+         vjSSMn3YJa8qL7N9ZN3urhtzekDIhLp2i+jSGkdwQE0TtYrkHCjKtXoCcfwFA+UkixRn
+         j7CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zN/KjsCEx2zMtEPwS1BKpAmSphZD0IO6nl7YyDXtL7I=;
-        b=NSrR3B7rSfKcQ+ILrYLbYAizITmgCbatd3AWfHOW9orwG+tUznUNyXoOP0sV5XAzlW
-         pqRH7gLH58DbZ4kCYYJmKsvBQY8x377TZFSFg5fi2j7VSWHfp9UQPbMQ0Zz76fRQo25Y
-         5tATXFLPHHmm/i8Vv5yxDS8GYRnbHmLUCNkxgfciQAiVBgOSlgnSDJkeEc5zrDeNXs2+
-         OvJFNNoZGpQ48gPhZggYjHvdlKe6hblzJZILNC1H0LlQV3Cyp5+ub6og7//QFNOznxVd
-         49R9KyyYUrLDDlbdDleyt+ovbLUnF2F9ST2tx9AR3ebfGmTfIzA+AenZboH0JETUlR0O
-         wNeQ==
-X-Gm-Message-State: ACrzQf0DGCy1p2Wk5j8nfNQ9yeoPb9aZaw89I87ItTjnLLO5ssg2fVPv
-        H/iGcPpnuanFOtc40LRzVXA=
-X-Google-Smtp-Source: AMsMyM5T1heBkPii4UShM09nkXeqTs9kRM0l2fFArAYuUIGT76FaBWaRlltgwohNj//2CUSAPg83dg==
-X-Received: by 2002:a63:814a:0:b0:460:9253:bf8e with SMTP id t71-20020a63814a000000b004609253bf8emr10193428pgd.469.1665424769299;
-        Mon, 10 Oct 2022 10:59:29 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:bff:9bd3:c2da:5f42])
-        by smtp.gmail.com with ESMTPSA id z4-20020aa79e44000000b0054223a0185asm7237591pfq.161.2022.10.10.10.59.27
+        bh=8ZWQI6EaAdyld4xWyI/4YqlkKhYX2A2+TTbGbUbetgY=;
+        b=AW6XLSWvRuO0jMCJKGlV0ofBAccngPNdo8bKota6MHlCxP7IzlBOOu+YCjGN9LnHQY
+         KrJ2praCuw1kyEevCup+tO+lEqLWSU7FUOLagPddYlSSYNQJbW+NTMVEffNIhxqe7PFd
+         Nkqv0OiCUgHobmUIDF/68Ml5dAaBNUY+/kS+Trb/zBF479j9mkMggEzOqAO+0tmla2j0
+         Pm4vowAce6W0X7dixb+RCG9gAY+K1Os+ZdBvry5Pnirz6wa8EvihqtiGNJqgvNFy7+a2
+         TerqTo2dzga/Tuj6jBb5ayMDgH+3CMzM82/9gLQdaQE8cCrrolPZ0hxdi28nCs5Ec9yM
+         4n5g==
+X-Gm-Message-State: ACrzQf3UNHZp5SWTuQgQt9YSHaaygopOxbPPpdfS7k988mp53jtzjAUc
+        x5a8LreO/jU6ffWiFlHyQlY=
+X-Google-Smtp-Source: AMsMyM7QTV2piy1lJlSMEFJV3mTssB40YHw8zbM4UKY9gTn2KK8AiewB9/TEvg4rxyiC7XD+0tMUpg==
+X-Received: by 2002:a05:6402:520d:b0:45a:31cb:f5bd with SMTP id s13-20020a056402520d00b0045a31cbf5bdmr16366411edd.119.1665428902229;
+        Mon, 10 Oct 2022 12:08:22 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
+        by smtp.gmail.com with ESMTPSA id p9-20020a05640243c900b004573052bf5esm7580959edc.49.2022.10.10.12.08.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 10:59:28 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 10:59:25 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Patrice Chotard <patrice.chotard@foss.st.com>
-Subject: Re: [PATCH v1 1/1] pinctrl: st: Switch to use fwnode instead of
- of_node
-Message-ID: <Y0RdfcC5FVRX/XI9@google.com>
-References: <20221010075615.43244-1-andriy.shevchenko@linux.intel.com>
+        Mon, 10 Oct 2022 12:08:21 -0700 (PDT)
+Message-ID: <63446da5.050a0220.92e81.d3fb@mx.google.com>
+X-Google-Original-Message-ID: <Y0QTvo45WKoO5KKE@Ansuel-xps.>
+Date:   Mon, 10 Oct 2022 14:44:46 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pawel Dembicki <paweldembicki@gmail.com>,
+        Lech Perczak <lech.perczak@gmail.com>
+Subject: Re: [net PATCH 1/2] net: dsa: qca8k: fix inband mgmt for big-endian
+ systems
+References: <20221010111459.18958-1-ansuelsmth@gmail.com>
+ <Y0RqDd/P3XkrSzc3@lunn.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221010075615.43244-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <Y0RqDd/P3XkrSzc3@lunn.ch>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,48 +83,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 10:56:15AM +0300, Andy Shevchenko wrote:
-> The OF node in the GPIO library is deprecated and soon
-> will be removed.
+On Mon, Oct 10, 2022 at 08:53:01PM +0200, Andrew Lunn wrote:
+> >  /* Special struct emulating a Ethernet header */
+> >  struct qca_mgmt_ethhdr {
+> > -	u32 command;		/* command bit 31:0 */
+> > -	u32 seq;		/* seq 63:32 */
+> > -	u32 mdio_data;		/* first 4byte mdio */
+> > +	__le32 command;		/* command bit 31:0 */
+> > +	__le32 seq;		/* seq 63:32 */
+> > +	__le32 mdio_data;		/* first 4byte mdio */
+> >  	__be16 hdr;		/* qca hdr */
+> >  } __packed;
 > 
-> GPIO library now accepts fwnode as a firmware node, so
-> switch the driver to use it.
+> It looks odd that hdr is BE while the rest are LE. Did you check this?
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>    Andrew
 
-Reviewed-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Yes we did many test to analyze this and I just checked with some
+tcpdump that the hdr is BE everytime. If you want I can provide you some
+tcpdump from 2 different systems.
 
-> ---
->  drivers/pinctrl/pinctrl-st.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pinctrl/pinctrl-st.c b/drivers/pinctrl/pinctrl-st.c
-> index cf7f9cbe6044..987878c83349 100644
-> --- a/drivers/pinctrl/pinctrl-st.c
-> +++ b/drivers/pinctrl/pinctrl-st.c
-> @@ -1175,7 +1175,7 @@ static int st_pctl_dt_calculate_pin(struct st_pinctrl *info,
->  
->  	for (i = 0; i < info->nbanks; i++) {
->  		chip = &info->banks[i].gpio_chip;
-> -		if (chip->of_node == np) {
-> +		if (chip->fwnode == of_fwnode_handle(np)) {
->  			if (offset < chip->ngpio)
->  				retval = chip->base + offset;
->  			break;
-> @@ -1518,7 +1518,7 @@ static int st_gpiolib_register_bank(struct st_pinctrl *info,
->  	bank->gpio_chip = st_gpio_template;
->  	bank->gpio_chip.base = bank_num * ST_GPIO_PINS_PER_BANK;
->  	bank->gpio_chip.ngpio = ST_GPIO_PINS_PER_BANK;
-> -	bank->gpio_chip.of_node = np;
-> +	bank->gpio_chip.fwnode = of_fwnode_handle(np);
->  	bank->gpio_chip.parent = dev;
->  	spin_lock_init(&bank->lock);
->  
-> -- 
-> 2.35.1
-> 
+Anyway it looks like this family switch treats the hdr in a standard way
+with the network byte order and for anything else stick to LE.
 
-Thanks.
+Also as a side note the tagger worked correctly before the mgmt feature
+on BE systems and also works correctly now... just any command is slow
+as the mgmt system has to timeout and fallback to legacy mdio.
 
 -- 
-Dmitry
+	Ansuel
