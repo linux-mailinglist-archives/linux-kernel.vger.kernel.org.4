@@ -2,111 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B34735FA29A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA115FA29E
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiJJRRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 13:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55064 "EHLO
+        id S229795AbiJJRSv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 10 Oct 2022 13:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiJJRRo (ORCPT
+        with ESMTP id S229450AbiJJRSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 13:17:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D6976542
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:17:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665422257;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EAkHWJV5i1XmoybWMpHm1PpCVGOwPrjFpBbuDSPlj3U=;
-        b=MkyM8Xuh+aZoGppES/A5FEvlBI7k3UrqmIg4LU8ZE5ZHLlT+wTvvPXU5P3/QlMDj3Q8TUt
-        0fhlw8la5A6YS5fT7DQ1LLO7VfbfM8DwO8iTu+rIUkm1OvkfiOCYJNzjgWOX3ZHRt589VF
-        4I36S00p0RXR2KB5FVcgqQ0trkkDIFQ=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-510-HNUrfeAgPCOzd_tYeuvymg-1; Mon, 10 Oct 2022 13:17:36 -0400
-X-MC-Unique: HNUrfeAgPCOzd_tYeuvymg-1
-Received: by mail-wm1-f72.google.com with SMTP id b7-20020a05600c4e0700b003bde2d860d1so7266082wmq.8
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:17:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EAkHWJV5i1XmoybWMpHm1PpCVGOwPrjFpBbuDSPlj3U=;
-        b=6b51ZeGKTxGhw6b+W3X/H8wep8eUdz/4zfIDIIPxz77ueBEc1Lozl6mgD6DAWly6Le
-         gVV9ukwl4uZo5hmfKZqoWxnR+zCet7ezQaQFr3ecw+bdx4TIvWB0tQopt+Zj3L7E11X/
-         x8kG9IRVMmEM49C78yySDNy0RAfRd+gzqJxF200qDm2hZGwQzl406kQKxQ4cpk1kdhe6
-         juAJxdOrXTPOXiyIYVrElWCuH2wmO0J0fgGoXkpYfwgjM9M+4BX13tP2lLrw8MLUH1dB
-         Iehqf+DQObHsKYTRJeRkFb0njychQiMjXI4KyuJkgDZauRyUsglkwkMIQFgPvhCYx10C
-         tUgg==
-X-Gm-Message-State: ACrzQf09hCSK9y7FEw0EOoVHw0xyFgOIA/I1LExiEvhnkLGR5m9jnvLN
-        u/cv1Ez/2YLThkykR/aAlda58Gsikoxlz8P3wAPA2h3qkDaPq7oKJyUZplCuS+64VfwjR7BBk03
-        EG+gvh8ZC1047ncwERuyQ9LkS
-X-Received: by 2002:a5d:47a6:0:b0:22e:7c73:feb2 with SMTP id 6-20020a5d47a6000000b0022e7c73feb2mr12117208wrb.715.1665422255074;
-        Mon, 10 Oct 2022 10:17:35 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4pMbOL5Iwp6GXNIfNT4x8U3HJ5wmOn8CEMD/qC/+mMgXvo1QpQIRtd9FSIb027UG14KZk1NQ==
-X-Received: by 2002:a5d:47a6:0:b0:22e:7c73:feb2 with SMTP id 6-20020a5d47a6000000b0022e7c73feb2mr12117196wrb.715.1665422254860;
-        Mon, 10 Oct 2022 10:17:34 -0700 (PDT)
-Received: from redhat.com ([2.55.183.131])
-        by smtp.gmail.com with ESMTPSA id b21-20020a05600c151500b003c6b9749505sm2344218wmg.30.2022.10.10.10.17.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 10:17:34 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 13:17:29 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Deming Wang <wangdeming@inspur.com>
-Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] virtio_ring: split: Operators use unified style
-Message-ID: <20221007091431-mutt-send-email-mst@kernel.org>
-References: <20220926022202.1516-1-wangdeming@inspur.com>
+        Mon, 10 Oct 2022 13:18:47 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFBF74DE9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:18:43 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-173-85kE4w7ePByO9GmJH6Worw-1; Mon, 10 Oct 2022 18:18:41 +0100
+X-MC-Unique: 85kE4w7ePByO9GmJH6Worw-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Mon, 10 Oct
+ 2022 18:18:40 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Mon, 10 Oct 2022 18:18:40 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
+CC:     "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "zx2c4@kernel.org" <zx2c4@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [crng-random:jd/get_random_u32_below 23/23]
+ include/linux/random.h:64:69: sparse: sparse: cast truncates bits from
+ constant value (1f4 becomes f4)
+Thread-Topic: [crng-random:jd/get_random_u32_below 23/23]
+ include/linux/random.h:64:69: sparse: sparse: cast truncates bits from
+ constant value (1f4 becomes f4)
+Thread-Index: AQHY3DtVD69rv9eDCUyAI1FFBLG+sa4H2CJg
+Date:   Mon, 10 Oct 2022 17:18:40 +0000
+Message-ID: <a473cc4da4874235b2b98fd1a57e782e@AcuMS.aculab.com>
+References: <202210100722.Wc2gmfS6-lkp@intel.com>
+In-Reply-To: <202210100722.Wc2gmfS6-lkp@intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926022202.1516-1-wangdeming@inspur.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 25, 2022 at 10:22:02PM -0400, Deming Wang wrote:
-> The operators of vring_alloc_queue_split should use the unified style.Add
-> space for the '|' ,make it be looked more pretty.
+From: kernel test robot <lkp@intel.com>
+> Sent: 10 October 2022 00:32
+> To: Jason A. Donenfeld <zx2c4@kernel.org>
+...
+
+I'm missing the main mailing list email for this change.
+I'm guessing the non-inlined code for non-constant ceil
+is similar.
+
+> vim +64 include/linux/random.h
 > 
-> Signed-off-by: Deming Wang <wangdeming@inspur.com>
+>     53
+>     54	u32 __get_random_u32_below(u32 ceil);
+>     55	/* Returns a random integer in the interval [0, ceil), with uniform distribution. */
+>     56	static inline u32 get_random_u32_below(u32 ceil)
+>     57	{
+>     58		if (!__builtin_constant_p(ceil))
+>     59			return __get_random_u32_below(ceil);
+>     60
+>     61		for (;;) {
+>     62			if (ceil <= 1U << 8) {
+>     63				u32 mult = ceil * get_random_u8();
+>   > 64				if (is_power_of_2(ceil) || (u8)mult >= -(u8)ceil % ceil)
+>     65					return mult >> 8;
 
-Thanks for the patch!
-Since this is about cosmetics let's make the patch look good:
+If you are going to check is_power_of_2() then you might as well do:
+		u32 val = get_random_u8();
+		if (is_power_of_2(ceil))
+			return ceil == 0x100 ? val : val & (ceil - 1);
+Except that you don't want to loop on zero - so !(ceil & (ceil - 1))
+is arguably better since it is absolutely explicit.
+Or (for the constant case) a BUILD_BUG_ON(ceil == 0)?
 
-Pls tweak the commit log. Space after . and , no space before ,
-unified style -> kernel coding style
-make it be looked more pretty -> make it prettier.
+Notwithstanding the completely untested code the bot complained about
+doing a division here is unnecessary and expensive.
+(Except this is the constant path...)
+I think:
+		val *= ceil;
+		if ((val + ceil - 1) >> 8 == val >> 8)
+			return val >> 8;
+has the desired property.
 
+It is also definitely worth a comment like:
+	/* In the worst case this loops 50% of the time.
+	 * While the loop is unbounded the average number
+	 * of iterations (for the worst ceil) is 2. */
 
-> ---
->  drivers/virtio/virtio_ring.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index 8974c34b40fd..7510163565b7 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -1074,7 +1074,7 @@ static int vring_alloc_queue_split(struct vring_virtqueue_split *vring_split,
->  	if (!queue) {
->  		/* Try to get a single page. You are my only hope! */
->  		queue = vring_alloc_queue(vdev, vring_size(num, vring_align),
-> -					  &dma_addr, GFP_KERNEL|__GFP_ZERO);
-> +					  &dma_addr, GFP_KERNEL | __GFP_ZERO);
->  	}
->  	if (!queue)
->  		return -ENOMEM;
-> -- 
-> 2.27.0
+There are also a lot of places where having the values
+evenly spread is enough - even if some values are returned
+one more time than others.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
