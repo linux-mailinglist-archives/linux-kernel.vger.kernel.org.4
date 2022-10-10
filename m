@@ -2,80 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9EE95F9A08
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F27345F99E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:24:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232468AbiJJHeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
+        id S232143AbiJJHY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:24:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbiJJHdo (ORCPT
+        with ESMTP id S232624AbiJJHYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:33:44 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B08A14098;
-        Mon, 10 Oct 2022 00:27:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=M4V6DUHEa0iMWKs/q90JaFl9Qnfe85nSTpeyO1KArSQ=; b=yB98tdt79M0VcDWKSkNvz3O4AK
-        Z0u4FYDmyapo1srbCOKG5pbltYrYfW3sqer1B8Lfo1RvQRPH4CmfYrbuERKhxjIGT8GSLEkSAet2l
-        5aY4hW/BroU8v1G8z9uw38yZWXGnhFMEO5Vknyvsq1ekzVIbBBCJjkso+pH03UxR6BozshF7YEB1l
-        C28cwWUeB0tdj6ziI+aBuj8t9036wL7NM4HZPnPAIC128hkk3l715B23PDn6lFKqq3KZ36HFWg+5I
-        tYGxgkhHxioERF7YOR99lPcv7eEMvCCh3w3pgqeSCtHyfuzK1m5MbZuvUmfYN9C0ruu1TZuFyNL+t
-        SmYa9dWA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34652)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1ohn0n-0004Ls-GD; Mon, 10 Oct 2022 08:15:41 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1ohn0l-0001fj-9i; Mon, 10 Oct 2022 08:15:39 +0100
-Date:   Mon, 10 Oct 2022 08:15:39 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>, andrew@lunn.ch,
-        hkallweit1@gmail.com, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, netdev@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 6.0 53/77] net: sfp: move quirk handling into
- sfp.c
-Message-ID: <Y0PGm4OWNwc6VJuF@shell.armlinux.org.uk>
-References: <20221009220754.1214186-1-sashal@kernel.org>
- <20221009220754.1214186-53-sashal@kernel.org>
+        Mon, 10 Oct 2022 03:24:02 -0400
+Received: from mail-il1-x146.google.com (mail-il1-x146.google.com [IPv6:2607:f8b0:4864:20::146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCDB631CC
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 00:18:58 -0700 (PDT)
+Received: by mail-il1-x146.google.com with SMTP id s2-20020a056e02216200b002f9de38e484so8153048ilv.8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 00:18:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vCa7TH1sl0Q1IpGb50MlQfuRrA1RLMNxxrA1yMYGY/Y=;
+        b=eZy55LSyoAmYYZvw11aoGMx6dNDR6QKx+7eAuYWwQ5cBgLUF9s9ehZtne2JkacrPaB
+         Wro9hQObR73bAje2deUQFDErtTdYkI9ZOxYABs9IV95TT/nZeKxqA4qssCzxACMzkaEt
+         RsrhBqE5RstvYpJRpV/2bA3F7swPVPFQu96VwqcPktytJ/yWrsAPli7cUm+BKUb3SVEU
+         xCrdhEjsmh/mGbZmr6aLRW702rSZ0mTcpWbQcFdu6X+cxQuFlq2U0AgP6jwI6j3xYyDD
+         Pz8ZestWM5donJfjbJgwkEWVAHjBiVb7wO3hoPdk1kH973VXDQqKolzeqDLFF+hIva1a
+         +xlA==
+X-Gm-Message-State: ACrzQf1sa3RJkT9Atcb+oVUf7GQkaHHWTgw8zVQ5Pc9RAkFmKUmOhKZ7
+        HbypF+OJ1rpehy5EN9IKaBbESqGgnS3emUFbsn55q3f3iHZB
+X-Google-Smtp-Source: AMsMyM5wXLfZuXpoghbXB3acvvURDwnFPz6sa4OSldczs0sxnWd9sgMGJBmDxvyLIfUrXkhLXhPRgbwfd+hLYm0kdhRcJ6hOwp8q
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221009220754.1214186-53-sashal@kernel.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:12d6:b0:35a:801c:2136 with SMTP id
+ v22-20020a05663812d600b0035a801c2136mr9252511jas.309.1665386145911; Mon, 10
+ Oct 2022 00:15:45 -0700 (PDT)
+Date:   Mon, 10 Oct 2022 00:15:45 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a418e405eaa8ed24@google.com>
+Subject: [syzbot] WARNING: locking bug in find_lock_entries
+From:   syzbot <syzbot+17eb1d8cd53dbad65d63@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 06:07:30PM -0400, Sasha Levin wrote:
-> From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-> 
-> [ Upstream commit 23571c7b96437483d28a990c906cc81f5f66374e ]
-> 
-> We need to handle more quirks than just those which affect the link
-> modes of the module. Move the quirk lookup into sfp.c, and pass the
-> quirk to sfp-bus.c
+Hello,
 
-NAK.
+syzbot found the following issue on:
 
-There is absolutely no point in stable picking up this commit. On its
-own, it doesn't do anything beneficial. It isn't a fix for anything.
-It isn't stable material.
+HEAD commit:    833477fce7a1 Merge tag 'sound-6.1-rc1' of git://git.kernel..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1268e884880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=dd3623e135f4c106
+dashboard link: https://syzkaller.appspot.com/bug?extid=17eb1d8cd53dbad65d63
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=171bc9a2880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=152e2e1c880000
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/7c58f480421f/disk-833477fc.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/8a50ac7bd40b/vmlinux-833477fc.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/763012bec257/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+17eb1d8cd53dbad65d63@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(chain_key != INITIAL_CHAIN_KEY)
+WARNING: CPU: 1 PID: 7921 at kernel/locking/lockdep.c:5031 __lock_acquire+0x16a2/0x1f60 kernel/locking/lockdep.c:5031
+Modules linked in:
+CPU: 1 PID: 7921 Comm: syz-executor252 Not tainted 6.0.0-syzkaller-05118-g833477fce7a1 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+RIP: 0010:__lock_acquire+0x16a2/0x1f60 kernel/locking/lockdep.c:5031
+Code: 85 bb 08 00 00 83 3d c4 a6 a5 0c 00 0f 85 e7 fe ff ff 45 31 f6 48 c7 c7 80 7d 8d 8a 48 c7 c6 00 a6 8d 8a 31 c0 e8 4e 45 e8 ff <0f> 0b e9 c8 fe ff ff 0f 0b e9 24 fb ff ff 48 c7 c1 94 96 0c 8e 80
+RSP: 0018:ffffc9000b927448 EFLAGS: 00010046
+RAX: 89f46c2ecaded100 RBX: 0000000000000028 RCX: ffff88807e309d80
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: 0000000000000001 R08: ffffffff816af64d R09: ffffed1017364f13
+R10: ffffed1017364f13 R11: 1ffff11017364f12 R12: 1ffff1100fc614fd
+R13: d9e18f2b6560b4e9 R14: 0000000000000000 R15: ffff88807e30a818
+FS:  0000555555677300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f4123ae45b0 CR3: 000000007a13c000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5666
+ rcu_lock_acquire+0x2a/0x30 include/linux/rcupdate.h:304
+ rcu_read_lock include/linux/rcupdate.h:738 [inline]
+ find_lock_entries+0x173/0x1040 mm/filemap.c:2099
+ truncate_inode_pages_range+0x1a2/0x1780 mm/truncate.c:364
+ ntfs_evict_inode+0x18/0xb0 fs/ntfs3/inode.c:1741
+ evict+0x2a4/0x620 fs/inode.c:665
+ ntfs_fill_super+0x3af3/0x42a0 fs/ntfs3/super.c:1190
+ get_tree_bdev+0x400/0x620 fs/super.c:1323
+ vfs_get_tree+0x88/0x270 fs/super.c:1530
+ do_new_mount+0x289/0xad0 fs/namespace.c:3040
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f4123ab5b3a
+Code: 48 c7 c2 c0 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 a8 00 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe8fd49088 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f4123ab5b3a
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffe8fd490a0
+RBP: 00007ffe8fd490a0 R08: 00007ffe8fd490e0 R09: 00007ffe8fd490e0
+R10: 0000000000000000 R11: 0000000000000286 R12: 0000000000000004
+R13: 00007ffe8fd490e0 R14: 000000000000010e R15: 0000000020001b50
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
