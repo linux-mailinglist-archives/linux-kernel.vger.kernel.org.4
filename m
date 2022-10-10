@@ -2,196 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1455FA13B
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 17:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C125FA13D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 17:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiJJPik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 11:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54854 "EHLO
+        id S229599AbiJJPkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 11:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiJJPii (ORCPT
+        with ESMTP id S229511AbiJJPkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 11:38:38 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E40471BF9;
-        Mon, 10 Oct 2022 08:38:33 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id k2so25726179ejr.2;
-        Mon, 10 Oct 2022 08:38:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=JsuMjhs+MgihkzMBVcqrltQP1hvZ675h8QTvnBZuxEE=;
-        b=kDMwTT+Rj5hxx1lZbEUEtlfS6ukzhNrwf6nUd79f4T9FSu5l6X0LjA2fZWQFUQrAY+
-         2qH3H+ZJatgwWwrRorX/xqPy8ygn07Z1B7tNbCopToadNG5fRbtLtLVvh7QT5D1zuYOA
-         QNVuovmubRzuQh65LU2im/RzMjVvXCKHO7d/nTSiIx+KrxFnvQTXAlGgOrlm/fyfMFVp
-         YmcEJPON90u2GYj4spnikpRyd6DXEwP4wres4UjZ+ksKl22yoHsqBYoV6U1qOZSTsQ2x
-         Hzkhn0wOKU7XXMXwj5vBYXAaZMhcKJPvR8E2hpXBkHltOH1Oec12QSjaNTD33rTnf/CO
-         /gYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JsuMjhs+MgihkzMBVcqrltQP1hvZ675h8QTvnBZuxEE=;
-        b=bKD1nE/tVK8kHX/gon3TETLglPuiOGDuVNzw1wrPr/1wngnwTN4gkWbORfislTae9t
-         S+9luU/kybimLT/c2U6Uzr57e1GA0QUfg7AitcNOwHO5nvZlG2M7qsVMfLda+TOh8/lz
-         HoptaxVh16JgbXQBqATkhVpXHJDZEW2JxYJK/OONduIWv1SYDAUf8CFt+BLds2kTSxHv
-         CFXoZcwKsE4fzm6nfl1U5122qz3bzclGWMyFKBXDwrU/f88GgjfvIjGBKsnhHYDPGqGR
-         b8Fv+RIOrP8Dprwp5NfvzM4G1XtxNDp588knBQnrN0M/J/zW7RjCkZ8AQlM8crOLIqpr
-         w8Jw==
-X-Gm-Message-State: ACrzQf3kZLusftlaDuvirQaPQLnxtSAPuyqeMQUKG3K35Q6D3elgoSPF
-        MpE6llM21Jbdeh22fG/7tme3v68v76d1hObEdTzmBkvR2w+ShA==
-X-Google-Smtp-Source: AMsMyM58pkBmUY7F4411V5D2meYesnsY6fT61KQY/XKUqSt592qflVaY7wNVxFaW+w33GGuxsbZRoefkpdOKPHXxvwo=
-X-Received: by 2002:a17:907:2c75:b0:78d:c201:e9aa with SMTP id
- ib21-20020a1709072c7500b0078dc201e9aamr2789950ejc.235.1665416311890; Mon, 10
- Oct 2022 08:38:31 -0700 (PDT)
+        Mon, 10 Oct 2022 11:40:20 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C004040E29
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 08:40:18 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 165D722300;
+        Mon, 10 Oct 2022 15:40:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1665416417; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a0EXuz87ayCNYLxfqLFzQ+nL8I+4PdhmxNw3qkfSm/4=;
+        b=jhu+c6weveRJzlNsOonxeIXudXKRpe9WBr4ygUcBi94yFA+bCw4BkrhIVTmXrMVfN6hymr
+        zNdbq6zk16+8MVqRGw8nXxCSGqNcX2U34gCEN+hAijflG2Y9sQtmU5XDungiinSj5YPZdB
+        /KIVpOmuIchfYFJ8YK00o0HHKUAeSek=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B6B452C141;
+        Mon, 10 Oct 2022 15:40:16 +0000 (UTC)
+Date:   Mon, 10 Oct 2022 17:40:13 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk 17/18] printk: Use an output descriptor struct for
+ emit
+Message-ID: <Y0Q83TZnQcCF/mDi@alley>
+References: <20220924000454.3319186-1-john.ogness@linutronix.de>
+ <20220924000454.3319186-18-john.ogness@linutronix.de>
 MIME-Version: 1.0
-From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Mon, 10 Oct 2022 23:37:55 +0800
-Message-ID: <CAO4mrfctv+6_iBjhALswxUTpbFGzj+NGnVnj-5ezwnPRHYCWFA@mail.gmail.com>
-Subject: INFO: rcu detected stall in net_rx_action
-To:     davem@davemloft.net, Eric Dumazet <edumazet@google.com>,
-        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        kpsingh@kernel.org, bigeasy@linutronix.de, imagedong@tencent.com,
-        petrm@nvidia.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220924000454.3319186-18-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux Developer,
+On Sat 2022-09-24 02:10:53, John Ogness wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> To prepare for a new console infrastructure that is independent of the
+> console BKL, wrap the output mode into a descriptor struct so the new
+> infrastrucure can share the emit code that dumps the ringbuffer record
+> into the output text buffers.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> ---
+>  include/linux/console.h | 15 +++++++
+>  kernel/printk/printk.c  | 88 ++++++++++++++++++++++++++++++-----------
+>  2 files changed, 79 insertions(+), 24 deletions(-)
+> 
+> diff --git a/include/linux/console.h b/include/linux/console.h
+> index 05c7325e98f9..590ab62c01d9 100644
+> --- a/include/linux/console.h
+> +++ b/include/linux/console.h
+> @@ -187,6 +187,21 @@ struct cons_text_buf {
+>  	char		text[CONSOLE_LOG_MAX];
+>  };
+>  
+> +/**
+> + * struct cons_outbuf_desc - console output buffer descriptor
+> + * @txtbuf:		Pointer to buffer for storing the text
+> + * @outbuf:		Pointer to the position in @buffer for
+> + *			writing it out to the device
 
-Recently when using our tool to fuzz kernel, the following crash was triggered:
+This sounds like this pointer might point into the middle of
+some buffer. It sounds scarry without providing the remaining
+size of the buffer.
 
-HEAD commit: 64570fbc14f8 Linux 5.15-rc5
-git tree: upstream
-compiler: clang 12.0.0
-console output:
-https://drive.google.com/file/d/1BOhVEmi3RPIxx-F0LMLsgflaj0r0MyKv/view?usp=sharing
-kernel config: https://drive.google.com/file/d/1lNwvovjLNrcuyFGrg05IoSmgO5jaKBBJ/view?usp=sharing
+It seems that the pointer is actually used to point to
+one of the buffers in txtbuf struct. Then it is again
+a bit scarry without the size. I know that it is defined
+by @len. But it is not obvious that it is related.
 
-Unfortunately, I don't have any reproducer for this crash yet.
+> + * @len:		Message length
 
-rcu: INFO: rcu_preempt self-detected stall on CPU
-rcu: 0-...!: (88 ticks this GP) idle=4c5/1/0x4000000000000000
-softirq=42739/42739 fqs=1
-(t=15633 jiffies g=62957 q=125)
-rcu: rcu_preempt kthread starved for 15193 jiffies! g62957 f0x0
-RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=0
-rcu: Unless rcu_preempt kthread gets sufficient CPU time, OOM is now
-expected behavior.
-rcu: RCU grace-period kthread stack dump:
-task:rcu_preempt     state:R  running task     stack:27696 pid:   14
-ppid:     2 flags:0x00004000
-Call Trace:
- __schedule+0xc1a/0x11e0
- schedule+0x14b/0x210
- schedule_timeout+0x1b4/0x310
- rcu_gp_fqs_loop+0x1fd/0x770
- rcu_gp_kthread+0xa5/0x340
- kthread+0x419/0x510
- ret_from_fork+0x1f/0x30
-rcu: Stack dump where RCU GP kthread last ran:
-NMI backtrace for cpu 0
-CPU: 0 PID: 13 Comm: ksoftirqd/0 Not tainted 5.15.0-rc5+ #14
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-Call Trace:
- <IRQ>
- dump_stack_lvl+0x1d8/0x2c4
- nmi_cpu_backtrace+0x452/0x480
- nmi_trigger_cpumask_backtrace+0x1a3/0x330
- rcu_check_gp_kthread_starvation+0x1f9/0x270
- rcu_sched_clock_irq+0x1de4/0x2bc0
- update_process_times+0x1ab/0x220
- tick_sched_timer+0x2a0/0x440
- __hrtimer_run_queues+0x51a/0xae0
- hrtimer_interrupt+0x3c9/0x1130
- __sysvec_apic_timer_interrupt+0xf9/0x280
- sysvec_apic_timer_interrupt+0x8c/0xb0
- </IRQ>
- asm_sysvec_apic_timer_interrupt+0x12/0x20
-RIP: 0010:e1000_clean+0x15ad/0x40b0
-Code: c5 c8 04 00 00 4c 89 eb 48 c1 eb 03 42 80 3c 23 00 74 08 4c 89
-ef e8 a2 2c 65 fc 49 8b 45 00 b9 9d 00 00 00 89 88 d0 00 00 00 <42> 80
-3c 23 00 74 08 4c 89 ef e8 84 2c 65 fc 49 8b 45 00 8b 40 08
-RSP: 0018:ffffc90000707840 EFLAGS: 00000246
-RAX: ffffc900065c0000 RBX: 1ffff1100371f229 RCX: 000000000000009d
-RDX: 0000000000000100 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffffc90000707ac8 R08: ffffffff856f35c6 R09: ffffed100371f2a7
-R10: ffffed100371f2a7 R11: 0000000000000000 R12: dffffc0000000000
-R13: ffff88801b8f9148 R14: 0000000000004e20 R15: 1ffff920000e0f2c
- __napi_poll+0xbd/0x550
- net_rx_action+0x67b/0xfc0
- __do_softirq+0x372/0x783
- run_ksoftirqd+0xa2/0x100
- smpboot_thread_fn+0x570/0xa20
- kthread+0x419/0x510
- ret_from_fork+0x1f/0x30
-NMI backtrace for cpu 0
-CPU: 0 PID: 13 Comm: ksoftirqd/0 Not tainted 5.15.0-rc5+ #14
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-Call Trace:
- <IRQ>
- dump_stack_lvl+0x1d8/0x2c4
- nmi_cpu_backtrace+0x452/0x480
- nmi_trigger_cpumask_backtrace+0x1a3/0x330
- rcu_dump_cpu_stacks+0x22d/0x390
- rcu_sched_clock_irq+0x1de9/0x2bc0
- update_process_times+0x1ab/0x220
- tick_sched_timer+0x2a0/0x440
- __hrtimer_run_queues+0x51a/0xae0
- hrtimer_interrupt+0x3c9/0x1130
- __sysvec_apic_timer_interrupt+0xf9/0x280
- sysvec_apic_timer_interrupt+0x8c/0xb0
- </IRQ>
- asm_sysvec_apic_timer_interrupt+0x12/0x20
-RIP: 0010:e1000_clean+0x15ad/0x40b0
-Code: c5 c8 04 00 00 4c 89 eb 48 c1 eb 03 42 80 3c 23 00 74 08 4c 89
-ef e8 a2 2c 65 fc 49 8b 45 00 b9 9d 00 00 00 89 88 d0 00 00 00 <42> 80
-3c 23 00 74 08 4c 89 ef e8 84 2c 65 fc 49 8b 45 00 8b 40 08
-RSP: 0018:ffffc90000707840 EFLAGS: 00000246
-RAX: ffffc900065c0000 RBX: 1ffff1100371f229 RCX: 000000000000009d
-RDX: 0000000000000100 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffffc90000707ac8 R08: ffffffff856f35c6 R09: ffffed100371f2a7
-R10: ffffed100371f2a7 R11: 0000000000000000 R12: dffffc0000000000
-R13: ffff88801b8f9148 R14: 0000000000004e20 R15: 1ffff920000e0f2c
- __napi_poll+0xbd/0x550
- net_rx_action+0x67b/0xfc0
- __do_softirq+0x372/0x783
- run_ksoftirqd+0xa2/0x100
- smpboot_thread_fn+0x570/0xa20
- kthread+0x419/0x510
- ret_from_fork+0x1f/0x30
-----------------
-Code disassembly (best guess), 1 bytes skipped:
-   0: c8 04 00 00          enterq $0x4,$0x0
-   4: 4c 89 eb              mov    %r13,%rbx
-   7: 48 c1 eb 03          shr    $0x3,%rbx
-   b: 42 80 3c 23 00        cmpb   $0x0,(%rbx,%r12,1)
-  10: 74 08                je     0x1a
-  12: 4c 89 ef              mov    %r13,%rdi
-  15: e8 a2 2c 65 fc        callq  0xfc652cbc
-  1a: 49 8b 45 00          mov    0x0(%r13),%rax
-  1e: b9 9d 00 00 00        mov    $0x9d,%ecx
-  23: 89 88 d0 00 00 00    mov    %ecx,0xd0(%rax)
-* 29: 42 80 3c 23 00        cmpb   $0x0,(%rbx,%r12,1) <-- trapping instruction
-  2e: 74 08                je     0x38
-  30: 4c 89 ef              mov    %r13,%rdi
-  33: e8 84 2c 65 fc        callq  0xfc652cbc
-  38: 49 8b 45 00          mov    0x0(%r13),%rax
-  3c: 8b 40 08              mov    0x8(%rax),%eax
+It is not clear that it is length of the outbuf.
 
-Best,
-Wei
+> + * @extmsg:		Select extended format printing
+
+It would be nice to make it obvious (variable name)
+that it is bool and not another buffer.
+
+This actually defines which buffer will be used
+in txtbuf.
+
+> + */
+> +struct cons_outbuf_desc {
+> +	struct cons_text_buf	*txtbuf;
+> +	char			*outbuf;
+> +	unsigned int		len;
+> +	bool			extmsg;
+> +};
+
+Sigh, I somehow do not like this structure. I think that the main
+problem is that it combines both input and output values.
+
+Also there is too much assignments here and there.
+
+What about?
+
+1. Storing "struct cons_text_buf *txtbuf" into struct console.
+   Normal consoles might point to a global txtbuf.
+   Atomic consoles might point to the allocated ones.
+
+2. Create structure for writing the next record
+   on the console, for example:
+
+   struct console_record {	/* like struct printk_record */
+	char *buf;
+	int size;
+	int len;
+   }
+
+Then we could implement:
+
+bool console_get_record(struct console *con,
+			struct console_record *cr)
+{
+	struct cons_text_buf *txtbuf = con->txtbuf;
+	struct printk_info info;
+	struct printk_record r;
+	char *write_text;
+	size_t len;
+
+	cr->buf = NULL;
+	cr->size = 0;
+	cr->len = 0;
+
+	prb_rec_init_rd(&r, &info, txtbuf->text, sizeof(txtbuf->text);
+
+	if (!prb_read_valid(prb, desc->seq, &r))
+		return false;
+
+	/* Skip record that has level above the console loglevel. */
+	if (suppress_message_printing(r.info->level)) {
+		return true;
+	}
+
+	if (con->flags & CON_EXTENDED) {
+		cr->buf = txtbuf->ext_text;
+		cr->size = sizeof(txtbuf->ext_text);
+		info_print_ext_header(cr, r.info);
+		msg_print_ext_body(cr, &r);
+	} else {
+		cr->buf = txtbuf->text;
+		cr->size = sizeof(txtbuf->text);
+		record_print_text(cr, &r, console_msg_format & MSG_FORMAT_SYSLOG, printk_time);
+
+		cons_print_dropped(cr, con);
+	}
+
+	return true;
+}
+
+and
+
+static bool console_emit_next_record(struct console *con,
+				     bool *handover)
+{
+	struct console_record cr;
+	unsigned long flags;
+
+	*handover = false;
+
+	if (!console_get_next_record(con, cr))
+		return false;
+
+	/* supressed? */
+	if (!cr->buf) {
+		con->seq++;
+		return true;
+	}
+
+	/*
+	 * While actively printing out messages, if another printk()
+	 * were to occur on another CPU, it may wait for this one to
+	 * finish. This task can not be preempted if there is a
+	 * waiter waiting to take over.
+	 *
+	 * Interrupts are disabled because the hand over to a waiter
+	 * must not be interrupted until the hand over is completed
+	 * (@console_waiter is cleared).
+	 */
+	printk_safe_enter_irqsave(flags);
+	console_lock_spinning_enable();
+
+	/* don't trace print latency */
+	stop_critical_timings();
+	/* Write everything out to the hardware */
+	con->write(con, cr->buf, cr->len);
+	start_critical_timings();
+
+	con->seq++;
+
+	*handover = console_lock_spinning_disable_and_check();
+	printk_safe_exit_irqrestore(flags);
+
+	return true;
+}
+
+Advantages:
+
+	+ even less parameters
+	+ less assignments (read/write directly in struct console)
+	+ struct console_record has just output buffer =>
+	  no confusion about the names
+
+How does that sound, please?
+
+Best Regards,
+Petr
