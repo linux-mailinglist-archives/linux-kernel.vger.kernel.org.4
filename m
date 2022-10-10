@@ -2,219 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96865F983C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 08:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3D45F9844
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 08:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbiJJGTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 02:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
+        id S231366AbiJJGVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 02:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbiJJGTA (ORCPT
+        with ESMTP id S229492AbiJJGVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 02:19:00 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D5B55099
-        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 23:18:59 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29A3Cvph030667;
-        Mon, 10 Oct 2022 06:18:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=BKDMt7Elb+b1+7okVksf2EUwsLUUJlU6PKV1wzO1Wfc=;
- b=R8vXxN4upo+KPUACEuexZuXrigwvnYL/wwplrJON+nsBnA8nVJEsbO1iZlYH4JLd8IJt
- 3Uo1vM2AZ29BI5YQHd8WQyxnc8yRW/rH6LItLaRy4w2IicOLzwcQHSwDIQIelOaFGVMQ
- 3CewMZ1MOZWpWOUPc8BffUUBtgXcWMt5QC3gmgOxsxny5GvrLUAeS8nihjomIKVJ/xy2
- S9eFJtT0dwDkRtI0v9Ax2rFgRNi6q0ga726f8TN/cmUpanyWSbW31sv9UIio50UcN8pX
- DdRD8vYOPE4UOFRCGVxRyef9mM4RRlfkmy9dlPzYFsvWdpIIxzcpKgnnSkOYO8PrPNae jA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k31jskfkh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Oct 2022 06:18:56 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29A6ItAw002352
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 Oct 2022 06:18:55 GMT
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Sun, 9 Oct 2022 23:18:53 -0700
-Date:   Mon, 10 Oct 2022 11:48:49 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-CC:     Suren Baghdasaryan <surenb@google.com>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Charan Teja Kalla <quic_charante@quicinc.com>
-Subject: Re: PSI idle-shutoff
-Message-ID: <20221010061849.GB1474@hu-pkondeti-hyd.qualcomm.com>
-References: <20220913140817.GA9091@hu-pkondeti-hyd.qualcomm.com>
- <20220915062027.GA14713@hu-pkondeti-hyd.qualcomm.com>
- <CAJuCfpE_nM2uqixnds0d6wbsz4=OQ3KPoJ5HOqDhQXaxFGxwXQ@mail.gmail.com>
- <CAJuCfpEeNzDQ-CvMN3fP5LejOzpnfgUgvkzpPj1CLF-8NqNoww@mail.gmail.com>
- <CAJuCfpFr3JfwkWbDqkU=NUJbCYuCWGySwNusMCdmS3z95WD2AQ@mail.gmail.com>
- <43f4d1c3-52fe-5254-7d50-c420de6d11a6@bytedance.com>
- <ff2addac-5a6c-1aa5-5f1c-d62b0444ae4c@bytedance.com>
+        Mon, 10 Oct 2022 02:21:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DD24BD05
+        for <linux-kernel@vger.kernel.org>; Sun,  9 Oct 2022 23:21:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D185860E00
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 06:21:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8E02C433C1;
+        Mon, 10 Oct 2022 06:21:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665382868;
+        bh=0V6gSXjp/sWlxKzKLIEPESr+SZWzxGexcSKsBK0amRk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yLOilthaslZpyup0QLTvfvjf6fD4VoVZkTM1kjkFPjNXjtioP99F+sXoCk7ZiiBrR
+         mSdASGa2xzYAtC9S8lT/SFRjRHRkkifEkCjx2zq5ME7avnZD5MQNH+pDz3XsLJDqVG
+         E/i81lgBoetDMmV2q7u/BaufGy4DwgDzotvEfJ5Q=
+Date:   Mon, 10 Oct 2022 08:21:51 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Soha Jin <soha@lohu.info>
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
+        'Wende Tan' <twd2.me@gmail.com>
+Subject: Re: PING: [PATCH] platform: use fwnode_irq_get_byname instead of
+ of_irq_get_byname to get irq
+Message-ID: <Y0O5//6A3VvT7S5Z@kroah.com>
+References: <0E39B15006ADC205+02a601d8d4f8$a00a09e0$e01e1da0$@lohu.info>
+ <F789F6E98A6F9BF5+1d8501d8dc56$74036f70$5c0a4e50$@lohu.info>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ff2addac-5a6c-1aa5-5f1c-d62b0444ae4c@bytedance.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: mbg4dInmYrkuQtaQEPiazLhyTX6wFvmg
-X-Proofpoint-ORIG-GUID: mbg4dInmYrkuQtaQEPiazLhyTX6wFvmg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-07_04,2022-10-07_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- impostorscore=0 malwarescore=0 mlxlogscore=999 priorityscore=1501
- phishscore=0 bulkscore=0 adultscore=0 spamscore=0 lowpriorityscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210100037
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <F789F6E98A6F9BF5+1d8501d8dc56$74036f70$5c0a4e50$@lohu.info>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 09:17:34PM +0800, Chengming Zhou wrote:
-> On 2022/10/9 20:41, Chengming Zhou wrote:
-> > Hello,
+On Mon, Oct 10, 2022 at 11:14:46AM +0800, Soha Jin wrote:
+> > -----Original Message-----
+> > From: soha@lohu.info <soha@lohu.info>
+> > Sent: Saturday, October 1, 2022 2:15 AM
+> > To: gregkh@linuxfoundation.org
+> > Cc: rafael@kernel.org; linux-kernel@vger.kernel.org; 'Wende Tan'
+> > <twd2.me@gmail.com>
+> > Subject: [PATCH] platform: use fwnode_irq_get_byname instead of
+> > of_irq_get_byname to get irq
 > > 
-> > I just saw these emails, sorry for late.
+> > >From 02df97f4d814b9893eef2c2118b85d2b4b9d61ae Mon Sep 17
+> > 00:00:00 2001
+> > From: Soha Jin <soha@lohu.info>
+> > Date: Sat, 1 Oct 2022 00:26:04 +0800
+> > Subject: [PATCH] platform: use fwnode_irq_get_byname instead of
+> > of_irq_get_byname to get irq
 > > 
-> > On 2022/10/6 00:32, Suren Baghdasaryan wrote:
-> >> On Sun, Oct 2, 2022 at 11:11 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> >>>
-> >>> On Fri, Sep 16, 2022 at 10:45 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> >>>>
-> >>>> On Wed, Sep 14, 2022 at 11:20 PM Pavan Kondeti
-> >>>> <quic_pkondeti@quicinc.com> wrote:
-> >>>>>
-> >>>>> On Tue, Sep 13, 2022 at 07:38:17PM +0530, Pavan Kondeti wrote:
-> >>>>>> Hi
-> >>>>>>
-> >>>>>> The fact that psi_avgs_work()->collect_percpu_times()->get_recent_times()
-> >>>>>> run from a kworker thread, PSI_NONIDLE condition would be observed as
-> >>>>>> there is a RUNNING task. So we would always end up re-arming the work.
-> >>>>>>
-> >>>>>> If the work is re-armed from the psi_avgs_work() it self, the backing off
-> >>>>>> logic in psi_task_change() (will be moved to psi_task_switch soon) can't
-> >>>>>> help. The work is already scheduled. so we don't do anything there.
-> >>>>
-> >>>> Hi Pavan,
-> >>>> Thanks for reporting the issue. IIRC [1] was meant to fix exactly this
-> >>>> issue. At the time it was written I tested it and it seemed to work.
-> >>>> Maybe I missed something or some other change introduced afterwards
-> >>>> affected the shutoff logic. I'll take a closer look next week when I'm
-> >>>> back at my computer and will consult with Johannes.
-> >>>
-> >>> Sorry for the delay. I had some time to look into this and test psi
-> >>> shutoff on my device and I think you are right. The patch I mentioned
-> >>> prevents new psi_avgs_work from being scheduled when the only non-idle
-> >>> task is psi_avgs_work itself, however the regular 2sec averaging work
-> >>> will still go on. I think we could record the fact that the only
-> >>> active task is psi_avgs_work in record_times() using a new
-> >>> psi_group_cpu.state_mask flag and then prevent psi_avgs_work() from
-> >>> rescheduling itself if that flag is set for all non-idle cpus. I'll
-> >>> test this approach and will post a patch for review if that works.
-> >>
-> >> Hi Pavan,
-> >> Testing PSI shutoff on Android proved more difficult than I expected.
-> >> Lots of tasks to silence and I keep encountering new ones.
-> >> The approach I was thinking about is something like this:
-> >>
-> >> ---
-> >>  include/linux/psi_types.h |  3 +++
-> >>  kernel/sched/psi.c        | 12 +++++++++---
-> >>  2 files changed, 12 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
-> >> index c7fe7c089718..8d936f22cb5b 100644
-> >> --- a/include/linux/psi_types.h
-> >> +++ b/include/linux/psi_types.h
-> >> @@ -68,6 +68,9 @@ enum psi_states {
-> >>          NR_PSI_STATES = 7,
-> >>  };
-> >>
-> >> +/* state_mask flag to keep re-arming averaging work */
-> >> +#define PSI_STATE_WAKE_CLOCK        (1 << NR_PSI_STATES)
-> >> +
-> >>  enum psi_aggregators {
-> >>          PSI_AVGS = 0,
-> >>          PSI_POLL,
-> >> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> >> index ecb4b4ff4ce0..dd62ad28bacd 100644
-> >> --- a/kernel/sched/psi.c
-> >> +++ b/kernel/sched/psi.c
-> >> @@ -278,6 +278,7 @@ static void get_recent_times(struct psi_group
-> >> *group, int cpu,
-> >>                  if (delta)
-> >>                          *pchanged_states |= (1 << s);
-> >>          }
-> >> +        *pchanged_states |= (state_mask & PSI_STATE_WAKE_CLOCK);
+> > Not only platform devices described by OF have named interrupts, but
+> > devices described by ACPI also have named interrupts. The fwnode is an
+> > abstraction to different standards, and using fwnode_irq_get_byname can
+> > support more devices.
 > > 
-> > If the avgs_work kworker is running on this CPU, it will still see
-> > PSI_STATE_WAKE_CLOCK set in state_mask? So the work will be re-armed?
+> > Signed-off-by: Soha Jin <soha@lohu.info>
+> > Tested-by: Wende Tan <twd2.me@gmail.com>
+> > ---
+> >  drivers/base/platform.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
 > > 
-> > Maybe I missed something... but I have another different idea which
-> > I want to implement later only for discussion.
+> > diff --git a/drivers/base/platform.c b/drivers/base/platform.c index
+> > 51bb22898..968f3d71e 100644
+> > --- a/drivers/base/platform.c
+> > +++ b/drivers/base/platform.c
+> > @@ -441,8 +441,8 @@ static int __platform_get_irq_byname(struct
+> > platform_device *dev,
+> >  	struct resource *r;
+> >  	int ret;
+> > 
+> > -	if (IS_ENABLED(CONFIG_OF_IRQ) && dev->dev.of_node) {
+> > -		ret = of_irq_get_byname(dev->dev.of_node, name);
+> > +	if (!dev->dev.of_node || IS_ENABLED(CONFIG_OF_IRQ)) {
+> > +		ret = fwnode_irq_get_byname(dev_fwnode(&dev->dev), name);
+> >  		if (ret > 0 || ret == -EPROBE_DEFER)
+> >  			return ret;
+> >  	}
+> > --
+> > 2.30.2
+> > 
+> > 
 > 
-> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> index ee2ecc081422..f322e8fd8d41 100644
-> --- a/kernel/sched/psi.c
-> +++ b/kernel/sched/psi.c
-> @@ -241,11 +241,13 @@ static void get_recent_times(struct psi_group *group, int cpu,
->                              enum psi_aggregators aggregator, u32 *times,
->                              u32 *pchanged_states)
->  {
-> +       int current_cpu = raw_smp_processor_id();
->         struct psi_group_cpu *groupc = per_cpu_ptr(group->pcpu, cpu);
->         u64 now, state_start;
->         enum psi_states s;
->         unsigned int seq;
->         u32 state_mask;
-> +       bool only_avgs_work = false;
-> 
->         *pchanged_states = 0;
-> 
-> @@ -256,6 +258,14 @@ static void get_recent_times(struct psi_group *group, int cpu,
->                 memcpy(times, groupc->times, sizeof(groupc->times));
->                 state_mask = groupc->state_mask;
->                 state_start = groupc->state_start;
-> +               /*
-> +                * This CPU has only avgs_work kworker running, snapshot the
-> +                * newest times then don't need to re-arm work for this groupc.
-> +                * Normally this kworker will sleep soon and won't
-> +                * wake_clock in psi_group_change().
-> +                */
-> +               if (current_cpu == cpu && groupc->tasks[NR_RUNNING] == 1)
-> +                       only_avgs_work = true;
->         } while (read_seqcount_retry(&groupc->seq, seq));
-> 
->         /* Calculate state time deltas against the previous snapshot */
-> @@ -280,6 +290,10 @@ static void get_recent_times(struct psi_group *group, int cpu,
->                 if (delta)
->                         *pchanged_states |= (1 << s);
->         }
-> +
-> +       /* Clear PSI_NONIDLE so avgs_work won't be re-armed for this groupc */
-> +       if (only_avgs_work)
-> +               *pchanged_states &= ~(1 << PSI_NONIDLE);
->  }
-> 
-Thanks Chengming for the patch. I will test this patch and report my
-observations. It makes sense to consider this CPU as non-idle if the PSI kworker
-is the only task running. It could run other works but that decision is now
-deferred to schedule out path. Ideally if this is the only (or last) work
-running, we should not see PSI work not re-arming it self.
+> Any updates on this 10-day-ago patch?
 
-Thanks,
-Pavan
+It's the middle of the merge window, we can't do anything until after
+6.1-rc1 is out, please relax and wait for that.
+
+And what is the rush here, what is broken without this change?
+
+thanks,
+
+greg k-h
