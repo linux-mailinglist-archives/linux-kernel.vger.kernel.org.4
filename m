@@ -2,113 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11BF15FA62C
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 249CA5FA630
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbiJJU27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 16:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57154 "EHLO
+        id S229798AbiJJU3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 16:29:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiJJU2h (ORCPT
+        with ESMTP id S229552AbiJJU33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 16:28:37 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C44786ED;
-        Mon, 10 Oct 2022 13:26:54 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id h13so10258072pfr.7;
-        Mon, 10 Oct 2022 13:26:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZVV8n5eD6h2TRn2sT93lXmeC6TkQyEPF4f8atiLgu/c=;
-        b=IdIHWhIt/4LgFLk+ereoqBvDtQJrdY25MOknBRDc33BecqWtkmyV/jj6U4i8dWshGJ
-         OUEqTDFnF0lZPvp3uWNQQK7tBMTGQPJo6as+UVRUem5njExsBj6X0E8zmiWJdIYM5Bvb
-         5kklJ0NNraGUI4mKfH9xSMlvXi5dPm3Ldbns8rg6Y3S/mZt99lamxDMqZmtF6NGwc1vO
-         txDWxxVQNZaKFn2zPbdP/t4jJvAm6xaEWGhGKgg/NxbKDypNmkbKPieOY9iGzHClSYeG
-         lcg55CCl6gZtjHfvLr7yJvLNe+oZEc6Viuw8kLjCYFzdO0y3fSPWDlXm1jgJUdfLaHjD
-         CYHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZVV8n5eD6h2TRn2sT93lXmeC6TkQyEPF4f8atiLgu/c=;
-        b=ob9dJ69A9X7Gt4m+OCUCo6T6IHRz1QjKNzknQ98r1Bjcls2UESGvCz72+JtDCCwiTO
-         /uFH0ARnXqYvtfQ63nhdhO6jibMUMfCGBE5n47SDuvUlYN7XuVYRNlHvzXYyZFKa+iv0
-         M9Bj4+TtWHXoGGGI7Ee2k+dxvqia6ZMOV8uX9TweglnSyb+4JogMZ3wsfQGiEa6vm9Iu
-         Nl1xD0NzE9JD3F+lFMAJQ6UzBPs/BDjeBfraKaXtcFinfWwGPmnALdXUPbxH+UIDSx0s
-         +lpGDQoOEzEg6ouaKmBTguDD9UIs5/g3cRhd+8CT/WvAOQ48P1CLkIyMwM2Ero08Q/Lu
-         ulqA==
-X-Gm-Message-State: ACrzQf0XsRN1wDevpQBIDepAmZca+2+7hbztDiImgmGp2ctR6vVDxy1q
-        hOeiLNSHYGUBZ++SyrLsUt0=
-X-Google-Smtp-Source: AMsMyM5DUq8BBmtBCtYtnKq2ezJNl+BZ2BlgOTTciMu1ii3hZ3g5BY3VqNXOYXu2U64dlDaibqe1Pw==
-X-Received: by 2002:a63:d54a:0:b0:454:395a:73d6 with SMTP id v10-20020a63d54a000000b00454395a73d6mr18340097pgi.531.1665433612539;
-        Mon, 10 Oct 2022 13:26:52 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id kx14-20020a17090b228e00b0020d24a9ad1fsm3641084pjb.52.2022.10.10.13.26.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 13:26:51 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 10 Oct 2022 10:26:50 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Kemeng Shi <shikemeng@huawei.com>
-Cc:     axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] blk-cgroup: correct comment for blk_alloc_queue and
- blk_exit_queue
-Message-ID: <Y0SACpAv4+ETrS6Z@slm.duckdns.org>
-References: <20221010023859.11896-1-shikemeng@huawei.com>
- <20221010023859.11896-3-shikemeng@huawei.com>
+        Mon, 10 Oct 2022 16:29:29 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A93BDB7;
+        Mon, 10 Oct 2022 13:27:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=BMbzY36+8ww6wrsdbaWxNYcMSlmO1bp/yAVsU2BxNyU=; b=ccUta+uyPGpcVmzwBFHJWeZt9R
+        UmW6COD6OsXOF0IqhbYsQjLSMw7qplzfnUtkTL2CrDlKC/FbzzcBUQHd7xi+nO2z2/qXlcRuTko3E
+        I9qcdnObgt92HViBUeNHKcr542o6oGsqE2J8qjuAWgbMxS2QyF6yUcFDpDxBgWLkaADnHagGmoNlw
+        rW9uX/M2Jg8ksd1XU+V1W6vqPRJNds2ZV0G0NEQAvQf6WsRjGT6oUEhV/WSBRfoUuo4yIgfn/I5YS
+        4MWzbiOO+76grXOTYUmwJJADIvfltwszl6/w2LNa9nQxG0ene+/93fzm53dJwDvEB1ZKGuiVgbG7W
+        vK3aZvZQ==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ohzNF-002BCV-0i; Mon, 10 Oct 2022 20:27:41 +0000
+Message-ID: <55ec854a-69a7-8272-e8a7-93b75577ed0a@infradead.org>
+Date:   Mon, 10 Oct 2022 13:27:38 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221010023859.11896-3-shikemeng@huawei.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] docs/howto: Replace abundoned URL of gmane.org
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>, Akira Yokosawa <akiyks@gmail.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>
+References: <20220930021936.26238-1-akiyks@gmail.com>
+ <87r0zfpkbf.fsf@meer.lwn.net>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <87r0zfpkbf.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 10:38:57AM +0800, Kemeng Shi wrote:
-> Since commit 1059699f87eb("block: move blkcg initialization/destroy into
-> disk allocation/release handler"), blk_alloc_queue and blk_exit_queue is
-> called directly from gendisk. Update the corresponding comment.
+
+
+On 10/10/22 12:09, Jonathan Corbet wrote:
+> Akira Yokosawa <akiyks@gmail.com> writes:
 > 
-> Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
-> ---
->  block/blk-cgroup.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>> Somehow, there remains a link to gmane.org, which stopped working
+>> in 2016, in howto.rst. Replace it with the one at lore.kernel.org.
+>> Do the same changes under translations/ as well.
+>>
+>> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+>> Cc: Federico Vaga <federico.vaga@vaga.pv.it>
+>> Cc: Alex Shi <alexs@kernel.org>
+>> Cc: Yanteng Si <siyanteng@loongson.cn>
+>> Cc: Hu Haowen <src.res@email.cn>
+>> ---
+>>  Documentation/process/howto.rst                    | 2 +-
+>>  Documentation/translations/it_IT/process/howto.rst | 2 +-
+>>  Documentation/translations/ja_JP/howto.rst         | 2 +-
+>>  Documentation/translations/ko_KR/howto.rst         | 2 +-
+>>  Documentation/translations/zh_CN/process/howto.rst | 2 +-
+>>  Documentation/translations/zh_TW/process/howto.rst | 2 +-
+>>  6 files changed, 6 insertions(+), 6 deletions(-)
 > 
-> diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-> index bc4dec705572..463c568d3e86 100644
-> --- a/block/blk-cgroup.c
-> +++ b/block/blk-cgroup.c
-> @@ -1259,7 +1259,7 @@ static int blkcg_css_online(struct cgroup_subsys_state *css)
->   * blkcg_init_queue - initialize blkcg part of request queue
->   * @q: request_queue to initialize
->   *
-> - * Called from blk_alloc_queue(). Responsible for initializing blkcg
-> + * Called from gendisk. Responsible for initializing blkcg
+> Applied, thanks.
 
-Maybe be a bit more specific and say blk_alloc_disk()?
-
->   * part of new request_queue @q.
->   *
->   * RETURNS:
-> @@ -1321,7 +1321,7 @@ int blkcg_init_queue(struct request_queue *q)
->   * blkcg_exit_queue - exit and release blkcg part of request_queue
->   * @q: request_queue being released
->   *
-> - * Called from blk_exit_queue().  Responsible for exiting blkcg part.
-> + * Called from gendisk.  Responsible for exiting blkcg part.
-
-Ditto.
+Just FYI, news.gmane.io still works via nntp but not the old web interface.
+But lore.kernel.org works either way. :)
 
 -- 
-tejun
+~Randy
