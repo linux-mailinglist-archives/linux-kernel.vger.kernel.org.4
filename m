@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3145F9E7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 14:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BF3A5F9E83
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 14:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbiJJML6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 08:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48172 "EHLO
+        id S232513AbiJJMMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 08:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbiJJMLj (ORCPT
+        with ESMTP id S232307AbiJJMLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 08:11:39 -0400
+        Mon, 10 Oct 2022 08:11:41 -0400
 Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58566581F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 05:11:29 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id BE6FC2B05E7C;
-        Mon, 10 Oct 2022 08:11:24 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D436CF4D
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 05:11:37 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 086BC2B0652C;
+        Mon, 10 Oct 2022 08:11:31 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 10 Oct 2022 08:11:29 -0400
+  by compute3.internal (MEProxy); Mon, 10 Oct 2022 08:11:36 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1665403884; x=
-        1665411084; bh=EUBVg2jb+lnRA76hHrrpz9kERc9bhmowp7vu/vjyvG4=; b=G
-        t9fRM2X979WRZOF3BV5FgPSsJQhRuOvgTtZ6XKEoQQNGX7aO1ZXQa1TwqZssDtX6
-        oayF0GTPlWPc0vy1l8D4sVR9zkKiyyPXqiY2fi6oC2lkwpYtGyy3iwcMmoghNHlP
-        7nQukqapcM9/lUDlaYZDjF008S0sGQ3MIk+jwkEsDqOl7n+3+biB+UJzG8gBosiN
-        /g6NaHhokHkSWvEn1abvTUFKOgboeq7Tge8ql7CjjXAM+YkfFAE5KnKZQN/OGNv9
-        sPSJ5ND82UNXEVOngu1hsQKcWKCvP7naxxDg65zWjltjzgGlfSW5QTurzBGx+aFu
-        bb2wtHB1jl/54eL+SaPvA==
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1665403891; x=
+        1665411091; bh=vRm7+WmZAhRa5yrqCAa1OvaqLCpV3QJHnoFPD/kwJUk=; b=t
+        7JHUYh3iY/qHO0nLu9pFFjSFd+EwQvae/pkjocSgxemsQ3hYmfDE8wELqxEWJ7eb
+        YFLSulmjs64K36WZ9uvlrxbom8SELPS31g5zLFlMRqZJf6Wz2sMDOjS6CVkIEval
+        Y7DunjkiD6j7EEM9MrDR78HxNDuhZQvChy0x3vY/7Gr7uFtGCMEz2teHxIRA8fx2
+        nAp0w9g/2LYhk1DgoYCdc5/Z1CbcnzYBitmA7nxOn6RlbDIwk/jJ3+Nw7hxM2Mwz
+        hcwEQD157OpreliBTiQVWIDovhD9tR7DMsXsR3Hmi7rvRiX0TVUT53i8alUQRHVN
+        LWqR6V2PUfVU9zE6kE+iQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1665403884; x=
-        1665411084; bh=EUBVg2jb+lnRA76hHrrpz9kERc9bhmowp7vu/vjyvG4=; b=G
-        y/F7lNZMzV5J6qcaREM1QpFo35J8VaUCmgNH01UjHmzRGwvKL0+XX2dLJtJFNHeC
-        wr+XEAjHUHYsoOUXz1E2JkOkmm+CE5/O1GGJyHAyGDJW9y25VhdQ6s+YwcOdGOxG
-        /yxdW4pGjz8JKdBejFPdi9Vnwv04RT0A+rGlpS+j94rF0EFUXsgl0UGcm5Ev3bEf
-        SHml+JcaDNOKUdp305T53Zehlbd8bcABwALjY7mOQFg9PWa4R87cj/wVuGn4uOEQ
-        hR807Cgab5W97uzsHA7sL4o8mTuRKFv12QwOBMhHA+8U/XJFY8Q0Qwb7HW8BTSSL
-        aRClD5xFmVKTQYnweesGw==
-X-ME-Sender: <xms:7AtEY1mz6bnBjUqcX-nth4ntnJSbxLGAO8fpg81HjpIfhxxKxGQ__Q>
-    <xme:7AtEYw1vpesKzCKzHvOorGwYTh_BuNtI9Z3wONMsYSs3Ms-JV-EU00fbnAf6e8LzE
-    skRvnHgxlZAhXe4hkU>
-X-ME-Received: <xmr:7AtEY7pOkpR9X0rV0V78_7Cuh1sPUBYJqsTliOO7H3i_SwyoudYaaRuJlGza>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1665403891; x=
+        1665411091; bh=vRm7+WmZAhRa5yrqCAa1OvaqLCpV3QJHnoFPD/kwJUk=; b=m
+        tlnFNIV+gjVMYFpaC8R7BpdMXXlkfc0yHLhYYbc9JmzxX2VBtyoVe++rb2jrC/+L
+        WZpGokwjLCZO3wSDxyPVI7MpVqp3YjNHROapvoDBePTXq0FNdZ45ehnAXDX59O6w
+        E2fsSg8PpbFPDy/+qsVz++YHhbTIrdT9iH0R1i3bNgwoo+ASA80f053Gyk3CdjRy
+        aOHwfJwyaYH/h007Tg9CW2R8tn3Qazp2K/6EUMaqTXMhbfVmR7ucy+1jxvqn4OmP
+        rg+QdMXbq+t4TUBoCLeO6Syi6FHEJ4O0rAQV5gDeOBaduL2xpQqy2XPgnHx3pYEG
+        x4PKn+DSbT3E9wq/Vi25Q==
+X-ME-Sender: <xms:8wtEY2_CGNCUe2Co5AL-K-EtsTUKmFR7f9GZalRsm5std5o-GFS2Gg>
+    <xme:8wtEY2ufhKGajwTv5nhJ6ZtWjCMdigpjE5LROdjTZOCkSqFAyhZeyRpPHW2sXTHii
+    3YQIGChQxGce5qLkPA>
+X-ME-Received: <xmr:8wtEY8BatqTCo5z8FEUJt2LLLBg4ieVs7thWOR6LS4qsGCzhK7LlMssFF3Au>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejgedggeegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -56,30 +56,30 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejgedggeegucetufdoteggod
     grthhtvghrnhepueeigefghfffffeifeehudeiuedvteegueefffevgfetvdffheehkeff
     vedufeeinecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomh
     epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:7AtEY1kNYtmgwSM6iJoTMnSepwLYV5-pX3I1KmT7B7QpsRxhvUF5GA>
-    <xmx:7AtEYz1pDV8ARLwjOCDaszudrMvMqIVUpBkAhEN0XLLZs6dAXND_0g>
-    <xmx:7AtEY0s5ZfAmEY9kBp08SP81Jr0bda_8my4lpExAu5xI6IHacusG5w>
-    <xmx:7AtEY7RWlXQL37Vl35Ag7ATDw_G_jYLjKbqWn4fO3ORRQlZKOGDzX61CLps>
+X-ME-Proxy: <xmx:8wtEY-ePEGXpDC2-RABS_12V7gYliG9PwXfb2N16YEGqkCd22wefZQ>
+    <xmx:8wtEY7OTjiCYJmRZZiPJ2IlssEB3RvBGBqzBmbwkmDPaxCwPURhWgg>
+    <xmx:8wtEY4lRUtk5eMQT9Q9Ukn8nPKpDMXpt8jCBelgTkWHsaKuM15Op_w>
+    <xmx:8wtEYyrnlJ5wf-dN0GgiMee_lrpgP7L6Ug0HCrJfdVIy55mdvyLX7GJxSJQ>
 Feedback-ID: i8771445c:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 10 Oct 2022 08:11:23 -0400 (EDT)
+ 10 Oct 2022 08:11:30 -0400 (EDT)
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Karol Herbst <kherbst@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Ben Skeggs <bskeggs@redhat.com>,
         Jani Nikula <jani.nikula@linux.intel.com>,
         Samuel Holland <samuel@sholland.org>,
         Maxime Ripard <mripard@kernel.org>,
         Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Chen-Yu Tsai <wens@csie.org>,
+        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Emma Anholt <emma@anholt.net>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         Lyude Paul <lyude@redhat.com>,
         Maxime Ripard <maxime@cerno.tech>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
 Cc:     Dom Cobley <dom@raspberrypi.com>, nouveau@lists.freedesktop.org,
         intel-gfx@lists.freedesktop.org,
         Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
@@ -91,12 +91,12 @@ Cc:     Dom Cobley <dom@raspberrypi.com>, nouveau@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         dri-devel@lists.freedesktop.org,
         Hans de Goede <hdegoede@redhat.com>
-Subject: Re: (subset) [PATCH v4 13/30] drm/modes: parse_cmdline: Add support for named modes containing dashes
-Date:   Mon, 10 Oct 2022 14:10:41 +0200
-Message-Id: <166540374295.183315.13152036706758597010.b4-ty@cerno.tech>
+Subject: Re: (subset) [PATCH v4 25/30] drm/vc4: vec: Fix definition of PAL-M mode
+Date:   Mon, 10 Oct 2022 14:10:42 +0200
+Message-Id: <166540374295.183315.18200738975920089518.b4-ty@cerno.tech>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220728-rpi-analog-tv-properties-v4-13-60d38873f782@cerno.tech>
-References: <20220728-rpi-analog-tv-properties-v4-0-60d38873f782@cerno.tech> <20220728-rpi-analog-tv-properties-v4-13-60d38873f782@cerno.tech>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v4-25-60d38873f782@cerno.tech>
+References: <20220728-rpi-analog-tv-properties-v4-0-60d38873f782@cerno.tech> <20220728-rpi-analog-tv-properties-v4-25-60d38873f782@cerno.tech>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -109,13 +109,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Sep 2022 18:31:07 +0200, Maxime Ripard wrote:
-> From: Geert Uytterhoeven <geert@linux-m68k.org>
+On Thu, 29 Sep 2022 18:31:19 +0200, Maxime Ripard wrote:
+> From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
 > 
-> It is fairly common for named video modes to contain dashes (e.g.
-> "tt-mid" on Atari, "dblntsc-ff" on Amiga).  Currently such mode names
-> are not recognized, as the dash is considered to be a separator between
-> mode name and bpp.
+> PAL-M is a Brazilian analog TV standard that uses a PAL-style chroma
+> subcarrier at 3.575611[888111] MHz on top of 525-line (480i60) timings.
+> This commit makes the driver actually use the proper VEC preset for this
+> mode instead of just changing PAL subcarrier frequency.
 > 
 > [...]
 
