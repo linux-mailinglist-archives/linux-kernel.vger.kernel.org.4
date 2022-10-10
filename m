@@ -2,67 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985A85FA1CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 18:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C455FA1D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 18:23:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbiJJQWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 12:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
+        id S229971AbiJJQXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 12:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiJJQWa (ORCPT
+        with ESMTP id S229911AbiJJQXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 12:22:30 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F0F74DCC
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 09:22:26 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id z3so15628323edc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 09:22:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=B4sl24uBHZcm0siB/6w/a46eJ+9xC++sD5qFOt3+D2o=;
-        b=Tp9IXfvuRVFXVlk9X0BvrpejPIqpeaNWsHDNRuAq2M0/ZqOtUlkqiPEuPam2OHb8xe
-         G8uxayWZj9bI65jSb9967UJDMX/CbhFi4CYFD4IWOIFQwKASKI6z8rbptU9Sg7AddTzq
-         2HSO3Sbk77TfXQ5+my0hBHNgI8UqvBF9CpyamA+CroGVKGsxxDqCCTJ8HaCJe2dl/1Tp
-         iKCTh3ZaLTbUS6hZLCfDfjZ8L8tXHNWIwiUxCy1pJIoORgYn35kNMFlu/gQsdkgoxSa/
-         FcxNxccNrxjoNcx20FJGuDNVQ+FSiWDB4EuZ6FdJSEAIHyHf07dKxnNcWQuJmOgg7nr1
-         MXtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B4sl24uBHZcm0siB/6w/a46eJ+9xC++sD5qFOt3+D2o=;
-        b=TNVoDEdeOXYV+5ggSsUFtDGNAOnwnAs3avPztfU7+/rgpZGp7/9ZEK0gvygxQWrqm2
-         FFRt0tjhN7ufXZadWBAX/diAanEZb71b9nGnL60a18tsCyov83mP44g2sATXjT8R0IZD
-         fskDGva/laus6dvZ8IjxGJ6g2nocp7Q69MopFNL9COrBIRxf9eieIWWDiqZQYskw99eW
-         Vyi691AiCRSX3iA1FPtJlnMFdg9FIjN/kvuIQoIoAWZ6zxuC92KbjUGBXfDSya0Ut4TH
-         tO4VvG1SnbPePGk+IJGzhXN+LSYeXGd3dSyrGGwEDIXojAu8CJGaiP40ybtFYeyVSznJ
-         2kGg==
-X-Gm-Message-State: ACrzQf2dojCpA7fWvT522yyPCuzCQc33hGYdo6IasCO/guGIZcuaEYkt
-        UYjOJa2vdPNcAJ88DYjuAHYKVcVPIXavb3JfvY2ipA==
-X-Google-Smtp-Source: AMsMyM5cL2Ux8zVe54QHezX88oEm60srycMNSA07hfb7FF9hoz2fJ1MbNnpuIY76T/VVQ0Mp9ZDXi+Th4biDAMmt8bU=
-X-Received: by 2002:a05:6402:2201:b0:44f:443e:2a78 with SMTP id
- cq1-20020a056402220100b0044f443e2a78mr18351251edb.76.1665418944965; Mon, 10
- Oct 2022 09:22:24 -0700 (PDT)
+        Mon, 10 Oct 2022 12:23:16 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2089.outbound.protection.outlook.com [40.107.223.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374BD74DCC;
+        Mon, 10 Oct 2022 09:23:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LsFDRfI2vwiAxjMZVje1yxnIHwmQepKEX6/Jrk123MMvfUYk0v3dPjiGobT+j+LlGRTfmawvRRs3iv+GsZMMEege8pcgQY6hNaHzSyRAsY1joIvkKIZr20VebaEPnJvNcnbZv+1QmDFyBjTGMrndmFgyl5a2/Raxo1gUtZwtOZHzynaCgCLRlOfnfEGKXBxB/oEfJc5SUV4cyx2pcJUVRDbTyKl6puYLb1YBUFQw67lbKgGH87ArbBWH0HNH6o1cQ+1NTVBITgYDKcLc46tjxrpwLBFpc3JRuyVn25GFA3QnDbWQvyHQNTgmzypiXE95/P4CDsm2tic4pLvJzgLOQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZGE3Q2g7q0AE02svgvlnNtxZa/WHehXpI3skk6UMRRY=;
+ b=kHbFpVJOJPpMf67pVOgsrCV1v5yX2BK32lfCgkaWFJXpMuuCtnktY0A4+PkjlBmgK6Bu1Khn2qCNEfP3ieNziE1f7ywDthJPt6P8fSp03QvaaTcw1H5Nx2xsMVreY0BznLAmrvQwt2afOxwR38uM3F3g8putJzaZw+g9QhjlILbpM70vtHPPpPhCZVWCtmJ2V9vlhMAGwccAphgYK5R7Ap/mPA3bg5+nvihli69rnitkZgfL3/vHI4DQSLKTd3SDCjLZpc5jQLnrsis0QKaVe3SEFy5CHAC41hdBPUguxjVQ0JakcET/M7MGM4ztTjGur3/djOwAmMfIXEQakJLM3Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZGE3Q2g7q0AE02svgvlnNtxZa/WHehXpI3skk6UMRRY=;
+ b=KO3Whu0c0LhLdRBKh+RiXWlcfvp67xZIvQM7fN/3ON9Pz74JzAaHJ0n9Kcj9hUwM7khzyZaKOqx4P9Go52owjOuqFxNPwun480yCfv+PMrHXJpRkJPRNUzNq4N7Phq7y2Qwy717hxCKDuIZYmz6qBm399SPYn06vB2rAwAzadeg=
+Received: from DM6PR06CA0055.namprd06.prod.outlook.com (2603:10b6:5:54::32) by
+ BY5PR12MB4998.namprd12.prod.outlook.com (2603:10b6:a03:1d4::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23; Mon, 10 Oct
+ 2022 16:23:13 +0000
+Received: from DM6NAM11FT112.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:54:cafe::b1) by DM6PR06CA0055.outlook.office365.com
+ (2603:10b6:5:54::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.19 via Frontend
+ Transport; Mon, 10 Oct 2022 16:23:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT112.mail.protection.outlook.com (10.13.173.77) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5709.10 via Frontend Transport; Mon, 10 Oct 2022 16:23:12 +0000
+Received: from pyuan-Cloudripper.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Mon, 10 Oct 2022 11:23:05 -0500
+From:   Perry Yuan <Perry.Yuan@amd.com>
+To:     <rafael.j.wysocki@intel.com>, <ray.huang@amd.com>,
+        <viresh.kumar@linaro.org>
+CC:     <Deepak.Sharma@amd.com>, <Mario.Limonciello@amd.com>,
+        <Nathan.Fontenot@amd.com>, <Alexander.Deucher@amd.com>,
+        <Shimmer.Huang@amd.com>, <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Perry Yuan <Perry.Yuan@amd.com>
+Subject: [RESEND PATCH V2 0/9] Implement AMD Pstate EPP Driver
+Date:   Tue, 11 Oct 2022 00:22:39 +0800
+Message-ID: <20221010162248.348141-1-Perry.Yuan@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221010094842.4123037-1-hezhongkun.hzk@bytedance.com>
-In-Reply-To: <20221010094842.4123037-1-hezhongkun.hzk@bytedance.com>
-From:   Frank van der Linden <fvdl@google.com>
-Date:   Mon, 10 Oct 2022 09:22:13 -0700
-Message-ID: <CAPTztWYTGOb8ZQzfgThqJn+fyi4ZB8=JQQZi5_rUoDhdftKtvg@mail.gmail.com>
-Subject: Re: [RFC] mm: add new syscall pidfd_set_mempolicy()
-To:     Zhongkun He <hezhongkun.hzk@bytedance.com>
-Cc:     corbet@lwn.net, mhocko@suse.com, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        wuyun.abel@bytedance.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT112:EE_|BY5PR12MB4998:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2aaf37ee-19cc-40b9-77df-08daaadbba57
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ktoHTkW3MJWXzenzxVBjyCEXos2jb3QRS7auZeuKm1ewlQ2DKKCnQZILHX0rty9JaiJAyWKhmzPDnikoxyhku9+S1KXuI+4tZllJ9PB9+ByUSC+8Tti01OEqfXLtqaL/b0UjYNR7614BMG62R1u5D6q0Blod1KBmi4u6b+OqQCKnpAM+SFOc3EqWkiAEaWZmUOgq4psYeJPYCPMho1dixJrjp2E5ttofuFFgGbTXzeQv635poI6yzvnMEmOvDMVf/a98iDi6asG9N1sN3ldFkEtRqTaRrhOrboNosK1bN7PJVQNRCaeiJ3jSWvjl6dK7NOWqE5V7quAo7kSQ0zvQSRRREAITY3AoZeN1EaSX8Fxh6vZ0aVaff/sWmGrlaknQ/TTyAwqd1dKq8Vbtz/EWB1+FECug+ruSBky2yKc5YPrspTrq9JeciY8CNx04W2pk36XAYjsusR5bC8NF+ebKY6yN32O8zVt4b/u6r6T1GaMQp5UhPXuGrI8eQ//uZQKZZbyZ2UAVRo3dO2iZ8rNB7DjP9BtKDbluynPCAp+lAzQx1usgi4TG9aac+F1rxI69yzdUbjVAYwxpZVkz4uBM/7zBGX5rFVd/lfj2IX1+Z6NOHFI58ljkbKvoiunZoVTGip3mVqsIa10z3km7K3h1n0qc/Lu+qvgScv0UcRcUOuXrWPqNNxo6aFFNVtEljCUB9laBk90RRrOpzJprNcP77eVMt3mctJUtFTrTIYyOsuWl4g5iFOwkim04I65cEMjDkQ2diFTZYAryuO29a9EXbFuGkbHH+cHt9GiIXdjKs0TMxGRD6z/KOxuKSqW0ByjtOE0eB04CuI1nHu4t7Qm4lzhyxtFdMmLfM1NNC7Hl3eM=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(346002)(396003)(451199015)(46966006)(40470700004)(36840700001)(2616005)(83380400001)(336012)(16526019)(186003)(1076003)(26005)(70206006)(70586007)(82310400005)(2906002)(86362001)(8676002)(4326008)(5660300002)(6666004)(316002)(7696005)(40480700001)(966005)(36860700001)(478600001)(356005)(110136005)(54906003)(47076005)(426003)(82740400003)(45080400002)(8936002)(41300700001)(40460700003)(36756003)(81166007)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Oct 2022 16:23:12.6419
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2aaf37ee-19cc-40b9-77df-08daaadbba57
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT112.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4998
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,462 +101,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For consistency with process_madvise(), I would suggest calling it
-process_set_mempolicy. Other than that, this makes sense. To complete
-the set, perhaps a process_mbind() should be added as well. What do
-you think?
+Hi all,
 
-- Frank
+This patchset implements one new AMD CPU frequency driver
+"amd-pstate-epp” instance for better performance and power control.
+CPPC has a parameter called energy preference performance (EPP).
+The EPP is used in the CCLK DPM controller to drive the frequency that a core
+is going to operate during short periods of activity.
+EPP values will be utilized for different OS profiles (balanced, performance, power savings).
 
-On Mon, Oct 10, 2022 at 2:49 AM Zhongkun He
-<hezhongkun.hzk@bytedance.com> wrote:
->
-> There is usecase that System Management Software(SMS) want to give a
-> memory policy to other processes to make better use of memory.
->
-> The information about how to use memory is not known to the app.
-> Instead, it is known to the userspace daemon(SMS), and that daemon
-> will decide the memory usage policy based on different factors.
->
-> To solve the issue, this patch introduces a new syscall
-> pidfd_set_mempolicy(2).  it sets the NUMA memory policy of the thread
-> specified in pidfd.
->
-> In current process context there is no locking because only the process
-> accesses its own memory policy, so task_work is used in
-> pidfd_set_mempolicy() to update the mempolicy of the process specified
-> in pidfd, avoid using locks and race conditions.
->
-> The API is as follows,
->
->                 long pidfd_set_mempolicy(int pidfd, int mode,
->                                      const unsigned long __user *nmask,
->                                      unsigned long maxnode,
->                                      unsigned int flags);
->
-> Set's the [pidfd] task's "task/process memory policy". The pidfd argument
-> is a PID file descriptor (see pidfd_open(2) man page) that specifies the
-> process to which the mempolicy is to be applied. The flags argument is
-> reserved for future use; currently, this argument must be specified as 0.
-> Please see the set_mempolicy(2) man page for more details about
-> other's arguments.
->
-> Suggested-by: Michal Hocko <mhocko@suse.com>
-> Signed-off-by: Zhongkun He <hezhongkun.hzk@bytedance.com>
-> ---
->  .../admin-guide/mm/numa_memory_policy.rst     | 21 ++++-
->  arch/alpha/kernel/syscalls/syscall.tbl        |  1 +
->  arch/arm/tools/syscall.tbl                    |  1 +
->  arch/arm64/include/asm/unistd.h               |  2 +-
->  arch/arm64/include/asm/unistd32.h             |  3 +-
->  arch/ia64/kernel/syscalls/syscall.tbl         |  1 +
->  arch/m68k/kernel/syscalls/syscall.tbl         |  1 +
->  arch/microblaze/kernel/syscalls/syscall.tbl   |  1 +
->  arch/mips/kernel/syscalls/syscall_n32.tbl     |  1 +
->  arch/mips/kernel/syscalls/syscall_n64.tbl     |  1 +
->  arch/mips/kernel/syscalls/syscall_o32.tbl     |  1 +
->  arch/parisc/kernel/syscalls/syscall.tbl       |  1 +
->  arch/powerpc/kernel/syscalls/syscall.tbl      |  1 +
->  arch/s390/kernel/syscalls/syscall.tbl         |  1 +
->  arch/sh/kernel/syscalls/syscall.tbl           |  1 +
->  arch/sparc/kernel/syscalls/syscall.tbl        |  1 +
->  arch/x86/entry/syscalls/syscall_32.tbl        |  1 +
->  arch/x86/entry/syscalls/syscall_64.tbl        |  1 +
->  arch/xtensa/kernel/syscalls/syscall.tbl       |  1 +
->  include/linux/mempolicy.h                     | 11 +++
->  include/linux/syscalls.h                      |  4 +
->  include/uapi/asm-generic/unistd.h             |  5 +-
->  kernel/sys_ni.c                               |  1 +
->  mm/mempolicy.c                                | 89 +++++++++++++++++++
->  24 files changed, 146 insertions(+), 6 deletions(-)
->
-> diff --git a/Documentation/admin-guide/mm/numa_memory_policy.rst b/Documentation/admin-guide/mm/numa_memory_policy.rst
-> index 5a6afecbb0d0..b864dd88b2d2 100644
-> --- a/Documentation/admin-guide/mm/numa_memory_policy.rst
-> +++ b/Documentation/admin-guide/mm/numa_memory_policy.rst
-> @@ -408,9 +408,10 @@ follows:
->  Memory Policy APIs
->  ==================
->
-> -Linux supports 4 system calls for controlling memory policy.  These APIS
-> -always affect only the calling task, the calling task's address space, or
-> -some shared object mapped into the calling task's address space.
-> +Linux supports 5 system calls for controlling memory policy.  The first four
-> +APIS affect only the calling task, the calling task's address space, or some
-> +shared object mapped into the calling task's address space. The last one can
-> +set the mempolicy of task specified in pidfd.
->
->  .. note::
->     the headers that define these APIs and the parameter data types for
-> @@ -473,6 +474,20 @@ closest to which page allocation will come from. Specifying the home node overri
->  the default allocation policy to allocate memory close to the local node for an
->  executing CPU.
->
-> +Set [pidfd Task] Memory Policy::
-> +
-> +        long sys_pidfd_set_mempolicy(int pidfd, int mode,
-> +                                     const unsigned long __user *nmask,
-> +                                     unsigned long maxnode,
-> +                                     unsigned int flags);
-> +
-> +Set's the [pidfd] task's "task/process memory policy". The pidfd argument is
-> +a PID file descriptor (see pidfd_open(2) man page) that specifies the process
-> +to which the mempolicy is to be applied. The flags argument is reserved for
-> +future use; currently, this argument must be specified as 0. Please see the
-> +set_mempolicy(2) man page for more details about other's arguments.
-> +
-> +
->
->  Memory Policy Command Line Interface
->  ====================================
-> diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
-> index 3515bc4f16a4..d86baa5a6eca 100644
-> --- a/arch/alpha/kernel/syscalls/syscall.tbl
-> +++ b/arch/alpha/kernel/syscalls/syscall.tbl
-> @@ -490,3 +490,4 @@
->  558    common  process_mrelease                sys_process_mrelease
->  559    common  futex_waitv                     sys_futex_waitv
->  560    common  set_mempolicy_home_node         sys_ni_syscall
-> +561    common  pidfd_set_mempolicy             sys_ni_syscall
-> diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
-> index ac964612d8b0..a7ccab8aafef 100644
-> --- a/arch/arm/tools/syscall.tbl
-> +++ b/arch/arm/tools/syscall.tbl
-> @@ -464,3 +464,4 @@
->  448    common  process_mrelease                sys_process_mrelease
->  449    common  futex_waitv                     sys_futex_waitv
->  450    common  set_mempolicy_home_node         sys_set_mempolicy_home_node
-> +451    common  pidfd_set_mempolicy             sys_pidfd_set_mempolicy
-> diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
-> index 037feba03a51..64a514f90131 100644
-> --- a/arch/arm64/include/asm/unistd.h
-> +++ b/arch/arm64/include/asm/unistd.h
-> @@ -39,7 +39,7 @@
->  #define __ARM_NR_compat_set_tls                (__ARM_NR_COMPAT_BASE + 5)
->  #define __ARM_NR_COMPAT_END            (__ARM_NR_COMPAT_BASE + 0x800)
->
-> -#define __NR_compat_syscalls           451
-> +#define __NR_compat_syscalls           452
->  #endif
->
->  #define __ARCH_WANT_SYS_CLONE
-> diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
-> index 604a2053d006..2e178e9152e6 100644
-> --- a/arch/arm64/include/asm/unistd32.h
-> +++ b/arch/arm64/include/asm/unistd32.h
-> @@ -907,7 +907,8 @@ __SYSCALL(__NR_process_mrelease, sys_process_mrelease)
->  __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
->  #define __NR_set_mempolicy_home_node 450
->  __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
-> -
-> +#define __NR_pidfd_set_mempolicy 451
-> +__SYSCALL(__NR_pidfd_set_mempolicy, sys_pidfd_set_mempolicy)
->  /*
->   * Please add new compat syscalls above this comment and update
->   * __NR_compat_syscalls in asm/unistd.h.
-> diff --git a/arch/ia64/kernel/syscalls/syscall.tbl b/arch/ia64/kernel/syscalls/syscall.tbl
-> index 78b1d03e86e1..4e5bca7a985c 100644
-> --- a/arch/ia64/kernel/syscalls/syscall.tbl
-> +++ b/arch/ia64/kernel/syscalls/syscall.tbl
-> @@ -371,3 +371,4 @@
->  448    common  process_mrelease                sys_process_mrelease
->  449    common  futex_waitv                     sys_futex_waitv
->  450    common  set_mempolicy_home_node         sys_set_mempolicy_home_node
-> +451    common  pidfd_set_mempolicy             sys_pidfd_set_mempolicy
-> diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
-> index b1f3940bc298..8e50bf8ec41d 100644
-> --- a/arch/m68k/kernel/syscalls/syscall.tbl
-> +++ b/arch/m68k/kernel/syscalls/syscall.tbl
-> @@ -450,3 +450,4 @@
->  448    common  process_mrelease                sys_process_mrelease
->  449    common  futex_waitv                     sys_futex_waitv
->  450    common  set_mempolicy_home_node         sys_set_mempolicy_home_node
-> +451    common  pidfd_set_mempolicy             sys_pidfd_set_mempolicy
-> diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
-> index 820145e47350..f48e32532c5f 100644
-> --- a/arch/microblaze/kernel/syscalls/syscall.tbl
-> +++ b/arch/microblaze/kernel/syscalls/syscall.tbl
-> @@ -456,3 +456,4 @@
->  448    common  process_mrelease                sys_process_mrelease
->  449    common  futex_waitv                     sys_futex_waitv
->  450    common  set_mempolicy_home_node         sys_set_mempolicy_home_node
-> +451    common  pidfd_set_mempolicy             sys_pidfd_set_mempolicy
-> diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
-> index 253ff994ed2e..58e7c3140f4a 100644
-> --- a/arch/mips/kernel/syscalls/syscall_n32.tbl
-> +++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
-> @@ -389,3 +389,4 @@
->  448    n32     process_mrelease                sys_process_mrelease
->  449    n32     futex_waitv                     sys_futex_waitv
->  450    n32     set_mempolicy_home_node         sys_set_mempolicy_home_node
-> +451    n32     pidfd_set_mempolicy             sys_pidfd_set_mempolicy
-> diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
-> index 3f1886ad9d80..70090c3ada16 100644
-> --- a/arch/mips/kernel/syscalls/syscall_n64.tbl
-> +++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
-> @@ -365,3 +365,4 @@
->  448    n64     process_mrelease                sys_process_mrelease
->  449    n64     futex_waitv                     sys_futex_waitv
->  450    common  set_mempolicy_home_node         sys_set_mempolicy_home_node
-> +451    n64     pidfd_set_mempolicy             sys_pidfd_set_mempolicy
-> diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
-> index 8f243e35a7b2..b0b0bad64fa0 100644
-> --- a/arch/mips/kernel/syscalls/syscall_o32.tbl
-> +++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
-> @@ -438,3 +438,4 @@
->  448    o32     process_mrelease                sys_process_mrelease
->  449    o32     futex_waitv                     sys_futex_waitv
->  450    o32     set_mempolicy_home_node         sys_set_mempolicy_home_node
-> +451    o32     pidfd_set_mempolicy             sys_pidfd_set_mempolicy
-> diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
-> index 8a99c998da9b..4dfd328490ad 100644
-> --- a/arch/parisc/kernel/syscalls/syscall.tbl
-> +++ b/arch/parisc/kernel/syscalls/syscall.tbl
-> @@ -448,3 +448,4 @@
->  448    common  process_mrelease                sys_process_mrelease
->  449    common  futex_waitv                     sys_futex_waitv
->  450    common  set_mempolicy_home_node         sys_set_mempolicy_home_node
-> +451    common  pidfd_set_mempolicy             sys_pidfd_set_mempolicy
-> diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
-> index 2600b4237292..20381463b2b5 100644
-> --- a/arch/powerpc/kernel/syscalls/syscall.tbl
-> +++ b/arch/powerpc/kernel/syscalls/syscall.tbl
-> @@ -530,3 +530,4 @@
->  448    common  process_mrelease                sys_process_mrelease
->  449    common  futex_waitv                     sys_futex_waitv
->  450    nospu   set_mempolicy_home_node         sys_set_mempolicy_home_node
-> +451    nospu   pidfd_set_mempolicy             sys_pidfd_set_mempolicy
-> diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
-> index 799147658dee..5e170dca81f6 100644
-> --- a/arch/s390/kernel/syscalls/syscall.tbl
-> +++ b/arch/s390/kernel/syscalls/syscall.tbl
-> @@ -453,3 +453,4 @@
->  448  common    process_mrelease        sys_process_mrelease            sys_process_mrelease
->  449  common    futex_waitv             sys_futex_waitv                 sys_futex_waitv
->  450  common    set_mempolicy_home_node sys_set_mempolicy_home_node     sys_set_mempolicy_home_node
-> +451  common    pidfd_set_mempolicy     sys_pidfd_set_mempolicy         sys_pidfd_set_mempolicy
-> diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
-> index 2de85c977f54..bd3a24a9b41f 100644
-> --- a/arch/sh/kernel/syscalls/syscall.tbl
-> +++ b/arch/sh/kernel/syscalls/syscall.tbl
-> @@ -453,3 +453,4 @@
->  448    common  process_mrelease                sys_process_mrelease
->  449    common  futex_waitv                     sys_futex_waitv
->  450    common  set_mempolicy_home_node         sys_set_mempolicy_home_node
-> +451    common  pidfd_set_mempolicy             sys_pidfd_set_mempolicy
-> diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
-> index 4398cc6fb68d..bea2b5c6314b 100644
-> --- a/arch/sparc/kernel/syscalls/syscall.tbl
-> +++ b/arch/sparc/kernel/syscalls/syscall.tbl
-> @@ -496,3 +496,4 @@
->  448    common  process_mrelease                sys_process_mrelease
->  449    common  futex_waitv                     sys_futex_waitv
->  450    common  set_mempolicy_home_node         sys_set_mempolicy_home_node
-> +451    common  pidfd_set_mempolicy             sys_pidfd_set_mempolicy
-> diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
-> index 320480a8db4f..97bc70f5a8f7 100644
-> --- a/arch/x86/entry/syscalls/syscall_32.tbl
-> +++ b/arch/x86/entry/syscalls/syscall_32.tbl
-> @@ -455,3 +455,4 @@
->  448    i386    process_mrelease        sys_process_mrelease
->  449    i386    futex_waitv             sys_futex_waitv
->  450    i386    set_mempolicy_home_node         sys_set_mempolicy_home_node
-> +451    i386    pidfd_set_mempolicy     sys_pidfd_set_mempolicy
-> diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-> index c84d12608cd2..ba6d19dbd8f8 100644
-> --- a/arch/x86/entry/syscalls/syscall_64.tbl
-> +++ b/arch/x86/entry/syscalls/syscall_64.tbl
-> @@ -372,6 +372,7 @@
->  448    common  process_mrelease        sys_process_mrelease
->  449    common  futex_waitv             sys_futex_waitv
->  450    common  set_mempolicy_home_node sys_set_mempolicy_home_node
-> +451    common  pidfd_set_mempolicy     sys_pidfd_set_mempolicy
->
->  #
->  # Due to a historical design error, certain syscalls are numbered differently
-> diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
-> index 52c94ab5c205..9f7c563da4fb 100644
-> --- a/arch/xtensa/kernel/syscalls/syscall.tbl
-> +++ b/arch/xtensa/kernel/syscalls/syscall.tbl
-> @@ -421,3 +421,4 @@
->  448    common  process_mrelease                sys_process_mrelease
->  449    common  futex_waitv                     sys_futex_waitv
->  450    common  set_mempolicy_home_node         sys_set_mempolicy_home_node
-> +451    common  pidfd_set_mempolicy             sys_pidfd_set_mempolicy
-> diff --git a/include/linux/mempolicy.h b/include/linux/mempolicy.h
-> index 668389b4b53d..f3c522e8eb38 100644
-> --- a/include/linux/mempolicy.h
-> +++ b/include/linux/mempolicy.h
-> @@ -54,6 +54,17 @@ struct mempolicy {
->         } w;
->  };
->
-> +/*
-> + *  The information of mempolicy used by task_work
-> + *  to update it dynamically.
-> + */
-> +struct mpol_worker {
-> +       unsigned short mode;
-> +       unsigned short flags;
-> +       nodemask_t nodes;
-> +       struct rcu_head update_work;
-> +};
-> +
->  /*
->   * Support for managing mempolicy data objects (clone, copy, destroy)
->   * The default fast path of a NULL MPOL_DEFAULT policy is always inlined.
-> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-> index a34b0f9a9972..e611c088050b 100644
-> --- a/include/linux/syscalls.h
-> +++ b/include/linux/syscalls.h
-> @@ -1056,6 +1056,10 @@ asmlinkage long sys_memfd_secret(unsigned int flags);
->  asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long len,
->                                             unsigned long home_node,
->                                             unsigned long flags);
-> +asmlinkage long sys_pidfd_set_mempolicy(int pidfd, int mode,
-> +                                       const unsigned long __user *nmask,
-> +                                       unsigned long maxnode,
-> +                                       unsigned int flags);
->
->  /*
->   * Architecture-specific system calls
-> diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-> index 45fa180cc56a..c38013bbf5b0 100644
-> --- a/include/uapi/asm-generic/unistd.h
-> +++ b/include/uapi/asm-generic/unistd.h
-> @@ -886,8 +886,11 @@ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
->  #define __NR_set_mempolicy_home_node 450
->  __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
->
-> +#define __NR_pidfd_set_mempolicy 451
-> +__SYSCALL(__NR_pidfd_set_mempolicy, sys_pidfd_set_mempolicy)
-> +
->  #undef __NR_syscalls
-> -#define __NR_syscalls 451
-> +#define __NR_syscalls 452
->
->  /*
->   * 32 bit systems traditionally used different
-> diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
-> index 860b2dcf3ac4..5053deb888f7 100644
-> --- a/kernel/sys_ni.c
-> +++ b/kernel/sys_ni.c
-> @@ -299,6 +299,7 @@ COND_SYSCALL(set_mempolicy);
->  COND_SYSCALL(migrate_pages);
->  COND_SYSCALL(move_pages);
->  COND_SYSCALL(set_mempolicy_home_node);
-> +COND_SYSCALL(pidfd_set_mempolicy);
->
->  COND_SYSCALL(perf_event_open);
->  COND_SYSCALL(accept4);
-> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-> index b73d3248d976..2ce9be1a9dfd 100644
-> --- a/mm/mempolicy.c
-> +++ b/mm/mempolicy.c
-> @@ -102,6 +102,7 @@
->  #include <linux/mmu_notifier.h>
->  #include <linux/printk.h>
->  #include <linux/swapops.h>
-> +#include <linux/task_work.h>
->
->  #include <asm/tlbflush.h>
->  #include <asm/tlb.h>
-> @@ -1572,6 +1573,94 @@ SYSCALL_DEFINE3(set_mempolicy, int, mode, const unsigned long __user *, nmask,
->         return kernel_set_mempolicy(mode, nmask, maxnode);
->  }
->
-> +/*
-> + *  In process context there is no locking, so task_work is used to update
-> + *  the mempolicy of process specified in pidfd, avoid using locks.
-> + */
-> +static void pidfd_update_mpol(struct callback_head *cb)
-> +{
-> +       struct mpol_worker *worker = container_of(cb, struct mpol_worker, update_work);
-> +
-> +       do_set_mempolicy(worker->mode, worker->flags, &worker->nodes);
-> +       kfree(worker);
-> +}
-> +
-> +/* Set the memory policy of the process specified in pidfd. */
-> +static long do_pidfd_set_mempolicy(int pidfd, int mode, const unsigned long __user *nmask,
-> +               unsigned long maxnode, unsigned int flags)
-> +{
-> +       nodemask_t nodes, task_nodes, tmp;
-> +       struct mpol_worker *worker;
-> +       struct task_struct *task;
-> +       unsigned short mode_flags;
-> +       int ret, lmode = mode;
-> +       unsigned int f_flags;
-> +
-> +       if (flags)
-> +               return -EINVAL;
-> +
-> +       task = pidfd_get_task(pidfd, &f_flags);
-> +       if (IS_ERR(task))
-> +               return PTR_ERR(task);
-> +       /*
-> +        * Check if this process has the right to modify the specified
-> +        * process.
-> +        */
-> +       if (!ptrace_may_access(task, PTRACE_MODE_ATTACH_REALCREDS)) {
-> +               ret = -EPERM;
-> +               goto out;
-> +       }
-> +
-> +       /*
-> +        * Require CAP_SYS_NICE for influencing process performance.
-> +        * User's task is allowed only.
-> +        */
-> +       if (!capable(CAP_SYS_NICE) || (task->flags & PF_KTHREAD)) {
-> +               ret = -EPERM;
-> +               goto out;
-> +       }
-> +
-> +       ret = get_nodes(&nodes, nmask, maxnode);
-> +       if (ret)
-> +               goto out;
-> +
-> +       ret = sanitize_mpol_flags(&lmode, &mode_flags);
-> +       if (ret)
-> +               goto out;
-> +
-> +       task_nodes = cpuset_mems_allowed(task);
-> +
-> +       if (mode_flags & MPOL_F_RELATIVE_NODES)
-> +               mpol_relative_nodemask(&tmp, &nodes, &task_nodes);
-> +       else
-> +               nodes_and(tmp, nodes, task_nodes);
-> +
-> +       if (nodes_empty(tmp)) {
-> +               ret = -EINVAL;
-> +               goto out;
-> +       }
-> +       worker = kzalloc(sizeof(struct mpol_worker), GFP_KERNEL | __GFP_NOWARN);
-> +       if (!worker) {
-> +               ret = -ENOMEM;
-> +               goto out;
-> +       }
-> +       init_task_work(&worker->update_work, pidfd_update_mpol);
-> +       worker->flags = mode_flags;
-> +       worker->mode = lmode;
-> +       worker->nodes = nodes;
-> +
-> +       ret = task_work_add(task, &worker->update_work, TWA_SIGNAL);
-> +out:
-> +       put_task_struct(task);
-> +       return ret;
-> +}
-> +
-> +SYSCALL_DEFINE5(pidfd_set_mempolicy, int, pidfd, int, mode, const unsigned long __user *, nmask,
-> +               unsigned long, maxnode, unsigned int, flags)
-> +{
-> +       return do_pidfd_set_mempolicy(pidfd, mode, nmask, maxnode, flags);
-> +}
-> +
->  static int kernel_migrate_pages(pid_t pid, unsigned long maxnode,
->                                 const unsigned long __user *old_nodes,
->                                 const unsigned long __user *new_nodes)
-> --
-> 2.25.1
->
->
+AMD Energy Performance Preference (EPP) provides a hint to the hardware
+if software wants to bias toward performance (0x0) or energy efficiency (0xff)
+The lowlevel power firmware will calculate the runtime frequency according to the EPP preference 
+value. So the EPP hint will impact the CPU cores frequency responsiveness.
+
+We use the RAPL interface with "perf" tool to get the energy data of the package power.
+Performance Per Watt (PPW) Calculation:
+
+The PPW calculation is referred by below paper:
+https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fsoftware.intel.com%2Fcontent%2Fdam%2Fdevelop%2Fexternal%2Fus%2Fen%2Fdocuments%2Fperformance-per-what-paper.pdf&amp;data=04%7C01%7CPerry.Yuan%40amd.com%7Cac66e8ce98044e9b062708d9ab47c8d8%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637729147708574423%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=TPOvCE%2Frbb0ptBreWNxHqOi9YnVhcHGKG88vviDLb00%3D&amp;reserved=0
+
+Below formula is referred from below spec to measure the PPW:
+
+(F / t) / P = F * t / (t * E) = F / E,
+
+"F" is the number of frames per second.
+"P" is power measured in watts.
+"E" is energy measured in joules.
+
+Gitsouce Benchmark Data on ROME Server CPU
++------------------------------+------------------------------+------------+------------------+
+| Kernel Module                | PPW (1 / s * J)              |Energy(J) | PPW Improvement (%)|
++==============================+==============================+============+==================+
+| acpi-cpufreq:schedutil       | 5.85658E-05                  | 17074.8    | base             |
++------------------------------+------------------------------+------------+------------------+
+| acpi-cpufreq:ondemand        | 5.03079E-05                  | 19877.6    | -14.10%          |
++------------------------------+------------------------------+------------+------------------+
+| acpi-cpufreq:performance     | 5.88132E-05                  | 17003      | 0.42%            |
++------------------------------+------------------------------+------------+------------------+
+| amd-pstate:ondemand          | 4.60295E-05                  | 21725.2    | -21.41%          |
++------------------------------+------------------------------+------------+------------------+
+| amd-pstate:schedutil         | 4.70026E-05                  | 21275.4    | -19.7%           |
++------------------------------+------------------------------+------------+------------------+
+| amd-pstate:performance       | 5.80094E-05                  | 17238.6    | -0.95%           |
++------------------------------+------------------------------+------------+------------------+
+| EPP:performance              | 5.8292E-05                   | 17155      | -0.47%           |
++------------------------------+------------------------------+------------+------------------+
+| EPP: balance performance:    | 6.71709E-05                  | 14887.4    | 14.69%           |
++------------------------------+------------------------------+------------+------------------+
+| EPP:power                    | 6.66951E-05                  | 4993.6     | 13.88%           |
++------------------------------+------------------------------+------------+------------------+
+
+Tbench Benchmark Data on ROME Server CPU
++---------------------------------------------+-------------------+--------------+-------------+------------------+
+| Kernel Module                               | PPW MB / (s * J)  |Throughput(MB/s)| Energy (J)|PPW Improvement(%)|
++=============================================+===================+==============+=============+==================+
+| acpi_cpufreq: schedutil                     | 46.39             | 17191        | 37057.3     | base             |
++---------------------------------------------+-------------------+--------------+-------------+------------------+
+| acpi_cpufreq: ondemand                      | 51.51             | 19269.5      | 37406.5     | 11.04 %          |
++---------------------------------------------+-------------------+--------------+-------------+------------------+
+| acpi_cpufreq: performance                   | 45.96             | 17063.7      | 37123.7     | -0.74 %          |
++---------------------------------------------+-------------------+--------------+-------------+------------------+
+| EPP:powersave: performance(0)               | 54.46             | 20263.1      | 37205       | 17.87 %          |
++---------------------------------------------+-------------------+--------------+-------------+------------------+
+| EPP:powersave: balance performance          | 55.03             | 20481.9      | 37221.5     | 19.14 %          |
++---------------------------------------------+-------------------+--------------+-------------+------------------+
+| EPP:powersave: balance_power                | 54.43             | 20245.9      | 37194.2     | 17.77 %          |
++---------------------------------------------+-------------------+--------------+-------------+------------------+
+| EPP:powersave: power(255)                   | 54.26             | 20181.7      | 37197.4     | 17.40 %          |
++---------------------------------------------+-------------------+--------------+-------------+------------------+
+| amd-pstate: schedutil                       | 48.22             | 17844.9      | 37006.6     | 3.80 %           |
++---------------------------------------------+-------------------+--------------+-------------+------------------+
+| amd-pstate: ondemand                        | 61.30             | 22988        | 37503.4     | 33.72 %          |
++---------------------------------------------+-------------------+--------------+-------------+------------------+
+| amd-pstate: performance                     | 54.52             | 20252.6      | 37147.8     | 17.81 %          |
++---------------------------------------------+-------------------+--------------+-------------+------------------+
+
+changes from v1:
+ * rebased to v6.0
+ * drive feedbacks from Mario for the suspend/resume patch
+ * drive feedbacks from Nathan for the EPP support on msr type
+ * fix some typos and code style indent problems
+ * update commit comments for patch 4/7
+ * change the `epp_enabled` module param name to `epp`
+ * set the default epp mode to be false
+ * add testing for the x86_energy_perf_policy utility patchset(will
+   send that utility patchset with another thread)
+
+Perry Yuan (9):
+  ACPI: CPPC: Add AMD pstate energy performance preference cppc control
+  cpufreq: amd_pstate: add module parameter to load amd pstate EPP
+    driver
+  cpufreq: cpufreq: export cpufreq cpu release and acquire
+  x86/msr: Add the MSR definition for AMD CPPC boost state
+  Documentation: amd-pstate: add EPP profiles introduction
+  cpufreq: amd_pstate: add AMD pstate EPP support for shared memory type
+    processor
+  cpufreq: amd_pstate: add AMD Pstate EPP support for the MSR based
+    processors
+  cpufreq: amd_pstate: implement amd pstate cpu online and offline
+    callback
+  cpufreq: amd-pstate: implement suspend and resume callbacks
+
+ Documentation/admin-guide/pm/amd-pstate.rst |  19 +
+ arch/x86/include/asm/msr-index.h            |   7 +
+ drivers/acpi/cppc_acpi.c                    | 128 ++-
+ drivers/cpufreq/amd-pstate.c                | 949 +++++++++++++++++++-
+ drivers/cpufreq/cpufreq.c                   |   2 +
+ include/acpi/cppc_acpi.h                    |  17 +
+ 6 files changed, 1115 insertions(+), 7 deletions(-)
+
+-- 
+2.34.1
+
