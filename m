@@ -2,88 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7DC5F9D08
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 12:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78DDB5F9D0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 12:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbiJJKqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 06:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
+        id S231453AbiJJKt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 06:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbiJJKqe (ORCPT
+        with ESMTP id S230437AbiJJKt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 06:46:34 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1C1D67C95;
-        Mon, 10 Oct 2022 03:46:32 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E548E1480;
-        Mon, 10 Oct 2022 03:46:38 -0700 (PDT)
-Received: from [10.57.5.39] (unknown [10.57.5.39])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 50A333F792;
-        Mon, 10 Oct 2022 03:46:31 -0700 (PDT)
-Message-ID: <7ded9241-6c21-6631-8910-9f1150db6724@arm.com>
-Date:   Mon, 10 Oct 2022 11:46:29 +0100
+        Mon, 10 Oct 2022 06:49:26 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE5F5FAD0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 03:49:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665398965; x=1696934965;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rhy7kGOCOYV3cl0qx/Rbp7vAd0IYqrbC4amiV1bgRrU=;
+  b=jppb4a9KhCp3euVikoi2nPSpe8wSNsH9QAj/e0y/llz2ZMlP1MLHq+C5
+   8PjcnnPZ+XobwxazBx0elo8gxG6VLTi1yofwk32pt/ktBxegavqvYrnEK
+   bOgzgbI0Z/6yPMEYfd2gLnMAR5/KUlRp22agvlmo5P+r4BIBYYGGc/ATt
+   WpRcLfPrqzHBldDoiZS7vJtplnC+wEHuF7qMIbaTkd8YKcDIdY40V1w5/
+   AfL0ttBUJFEH/EB64ubURPQ7eci+d8tFmTppt42S/TE27XaPbnObA+OUN
+   7ZYRRQFiO1woKEfEfp3enT0csD6niDna8i1NW/ttY42wbWHiqimzH1yHA
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10495"; a="390503513"
+X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
+   d="scan'208";a="390503513"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 03:49:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10495"; a="656891795"
+X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
+   d="scan'208";a="656891795"
+Received: from lkp-server01.sh.intel.com (HELO 2af0a69ca4e0) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 10 Oct 2022 03:49:24 -0700
+Received: from kbuild by 2af0a69ca4e0 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ohqLb-0001iq-1t;
+        Mon, 10 Oct 2022 10:49:23 +0000
+Date:   Mon, 10 Oct 2022 18:48:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/fam0-uapi-warnings] BUILD SUCCESS
+ fa2ad63ff42c407ad38a094fd4d435f162625e05
+Message-ID: <6343f890.7CYLUcfSaJwcC0XG%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] cpufreq: Update CPU capacity reduction in
- store_scaling_max_freq()
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        linux-pm@vger.kernel.org, Dietmar.Eggemann@arm.com,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
-References: <20220930094821.31665-1-lukasz.luba@arm.com>
- <20220930094821.31665-2-lukasz.luba@arm.com>
- <20221010053902.5rofnpzvyynumw3e@vireshk-i7>
- <3f9a4123-171b-5fa7-f506-341355f71483@arm.com>
- <CAKfTPtBPqcTm5_-M_Ka3y46yQ2322TmH8KS-QyDbAiKk5B6hEQ@mail.gmail.com>
- <8a7968c2-dbf7-5316-ef36-6d45143e0605@arm.com>
- <CAKfTPtB3Lk5bc9k634O+Yi8wwP=MVeKS5NPbpaqwhX1F4t5EbA@mail.gmail.com>
- <9611971c-d8dd-7877-6f50-c5afbf38b171@arm.com>
- <Y0Py/Ol9t+LMM1pI@hirez.programming.kicks-ass.net>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <Y0Py/Ol9t+LMM1pI@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fam0-uapi-warnings
+branch HEAD: fa2ad63ff42c407ad38a094fd4d435f162625e05  USB: usbfs: Fix flexible-array warning in user-space
 
-+CC Daniel, since I have mentioned a few times DTPM
+elapsed time: 724m
 
-On 10/10/22 11:25, Peter Zijlstra wrote:
-> On Mon, Oct 10, 2022 at 11:12:06AM +0100, Lukasz Luba wrote:
->> BTW, those Android user space max freq requests are not that long,
->> mostly due to camera capturing (you can see a few in this file,
->> e.g. [1]).
-> 
-> It does what now ?!? Why is Android using this *at*all* ?
+configs tested: 93
+configs skipped: 2
 
-It tries to balance the power budget, before bad things happen
-randomly (throttling different devices w/o a good context what's
-going on). Please keep in mind that we have ~3 Watts total power
-budget in a phone, while several devices might be suddenly used:
-1. big CPU with max power ~3-3.5 Watts (and we have 2 cores on pixel6)
-2. GPU with max power ~6Watts (normally ~1-2Watts when lightly used)
-3. ISP (Image Signal Processor) up to ~2Watts
-4. DSP also up to 1-2Watts
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-We don't have currently a good mechanism which could be aware
-of the total power/thermal budget and relations between those
-devices. Vendors and OEMs run experiments on devices and profile
-them to work more predictable in those 'important to users' scenarios.
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+alpha                               defconfig
+arm                                 defconfig
+x86_64                              defconfig
+i386                                defconfig
+x86_64                               rhel-8.3
+arm64                            allyesconfig
+i386                 randconfig-a014-20221010
+x86_64               randconfig-a011-20221010
+arm                              allyesconfig
+i386                 randconfig-a012-20221010
+x86_64               randconfig-a014-20221010
+i386                 randconfig-a011-20221010
+x86_64                          rhel-8.3-func
+s390                                defconfig
+x86_64               randconfig-a012-20221010
+x86_64                    rhel-8.3-kselftests
+x86_64                           allyesconfig
+x86_64               randconfig-a013-20221010
+s390                             allmodconfig
+x86_64                           rhel-8.3-syz
+i386                 randconfig-a013-20221010
+x86_64                        randconfig-a002
+x86_64                         rhel-8.3-kunit
+x86_64               randconfig-a016-20221010
+x86_64               randconfig-a015-20221010
+powerpc                           allnoconfig
+arc                               allnoconfig
+x86_64                           rhel-8.3-kvm
+alpha                             allnoconfig
+i386                             allyesconfig
+riscv                             allnoconfig
+csky                              allnoconfig
+i386                 randconfig-a015-20221010
+i386                 randconfig-a016-20221010
+mips                             allyesconfig
+arc                              allyesconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+s390                             allyesconfig
+arc                  randconfig-r043-20221009
+x86_64                        randconfig-a004
+alpha                            allyesconfig
+sh                               allmodconfig
+m68k                             allyesconfig
+ia64                             allmodconfig
+riscv                randconfig-r042-20221009
+m68k                             allmodconfig
+s390                 randconfig-r044-20221009
+arm                         vf610m4_defconfig
+arm                         lubbock_defconfig
+powerpc                      tqm8xx_defconfig
+sh                          lboxre2_defconfig
+mips                    maltaup_xpa_defconfig
+powerpc                      mgcoge_defconfig
+mips                        bcm47xx_defconfig
+xtensa                  nommu_kc705_defconfig
+arm                           sama5_defconfig
+arm                          pxa910_defconfig
+arm                           h5000_defconfig
+arm                        keystone_defconfig
+sh                      rts7751r2d1_defconfig
+x86_64               randconfig-k001-20221010
+sh                            shmin_defconfig
+powerpc                      pcm030_defconfig
+powerpc                 canyonlands_defconfig
+sh                        sh7785lcr_defconfig
+i386                 randconfig-c001-20221010
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+arm                       omap2plus_defconfig
+m68k                                defconfig
+sh                          sdk7780_defconfig
+parisc                generic-64bit_defconfig
+mips                          rb532_defconfig
+parisc64                         alldefconfig
 
-AFAIK Daniel Lescano is trying to help with this new interface
-for PowerCap: DTMP. It might be use as a new interface for those known
-scenarios like the camera snapshot. But that interface is on the list
-that I have also mentioned - it's missing the notification mechanism
-for the scheduler reduced capacity due to user-space new scenario.
+clang tested configs:
+i386                 randconfig-a003-20221010
+x86_64                        randconfig-a005
+hexagon              randconfig-r045-20221009
+i386                 randconfig-a004-20221010
+i386                 randconfig-a002-20221010
+hexagon              randconfig-r041-20221009
+i386                 randconfig-a005-20221010
+x86_64                        randconfig-a001
+i386                 randconfig-a001-20221010
+i386                 randconfig-a006-20221010
+x86_64                        randconfig-a003
+powerpc                  mpc885_ads_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
