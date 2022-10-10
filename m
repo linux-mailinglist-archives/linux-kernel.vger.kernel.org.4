@@ -2,132 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D99C5F9904
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A115F9914
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbiJJHFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
+        id S231490AbiJJHGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiJJHEs (ORCPT
+        with ESMTP id S231171AbiJJHFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:04:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B502558B78;
-        Mon, 10 Oct 2022 00:04:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF0F860E7F;
-        Mon, 10 Oct 2022 07:04:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3935C433D7;
-        Mon, 10 Oct 2022 07:04:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665385456;
-        bh=Jaz0AY+s7g0Ayj++Xk/Qjt2WzNkoORlTkMLlmVWP6jI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ahiCzZEMVvLwwo6G2msOO/DNVlP/fTBjpzrMF5Yf5GZGc3tAy4POWpUXdpUuSXI6v
-         FGFe/O7+SLKEkDAbX+T/45+ADUv/jF0oZreAVifcRoYwK3SpV1WShajhnwcItBHSWh
-         DM+UFy39DrV7hovaLW9lkfk1i19QGO3GmHVMCW8I=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: [PATCH 6.0 14/17] bpf: Gate dynptr API behind CAP_BPF
-Date:   Mon, 10 Oct 2022 09:04:37 +0200
-Message-Id: <20221010070330.633241098@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221010070330.159911806@linuxfoundation.org>
-References: <20221010070330.159911806@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Mon, 10 Oct 2022 03:05:31 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BAE55F47
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 00:04:39 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id a9-20020a056e0208a900b002f6b21181f5so8201912ilt.10
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 00:04:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0X1SP32dQ7IVi48NKuPgJ/r/8mWAp5JP0WnIefznseA=;
+        b=VmV7ZLcpdrRxaCtRvZ2JXMWIOwQ5JrQblxBb9uvt3N8vWVbALtbuJ5hekic7LGfllg
+         ndZgkRlSMOGNppmd8KAarxhR1DOvuWa3rIOVaFZgvdklL/7VKwVMAGlCa0Nk0f7JT1UA
+         oYR9tPXh5qWOcUtvrCHkJZeWE9/k8le/6wp/nE1oZvbHfES4ED0z45BdH46XJrcDnAKL
+         EWF8FxrJ0Aas0gxYF1uvumvFL2jJDfgY+aRZKfv03sx+zFR8RgItODyet4JY95vfakhQ
+         Kpsfn3Ead6jNrlRZyWrhBcefONFU/HEXzX5puAgEzALtFOVfd44H7I4ohl/dgELNhiGM
+         sGfw==
+X-Gm-Message-State: ACrzQf3LM151NyKmazGyLbP5vMGk/USm2ogVJHtiYi5TcSOCxgLtaCf6
+        nXTzOd/hossHdlYr0RcnTjVoCkf1iXPmPwyWB4RB1Ts/96ur
+X-Google-Smtp-Source: AMsMyM5QbuEzWkmxmDs+r1bbA9DaTR6NIW0gno1Tobys1elgtZI3gJYUCUvZekWeVeI+VU8cjpbP2UAUugrQ4EOQk1cuqqIoyCqi
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:1396:b0:357:148d:8705 with SMTP id
+ w22-20020a056638139600b00357148d8705mr8558185jad.61.1665385477671; Mon, 10
+ Oct 2022 00:04:37 -0700 (PDT)
+Date:   Mon, 10 Oct 2022 00:04:37 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cf908705eaa8c5a7@google.com>
+Subject: [syzbot] WARNING in __kernel_write_iter
+From:   syzbot <syzbot+12e098239d20385264d3@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Hello,
 
-commit 8addbfc7b308d591f8a5f2f6bb24d08d9d79dfbb upstream.
+syzbot found the following issue on:
 
-This has been enabled for unprivileged programs for only one kernel
-release, hence the expected annoyances due to this move are low. Users
-using ringbuf can stick to non-dynptr APIs. The actual use cases dynptr
-is meant to serve may not make sense in unprivileged BPF programs.
+HEAD commit:    a6afa4199d3d Merge tag 'mailbox-v6.1' of git://git.linaro...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=110f6f0a880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
+dashboard link: https://syzkaller.appspot.com/bug?extid=12e098239d20385264d3
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Hence, gate these helpers behind CAP_BPF and limit use to privileged
-BPF programs.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Fixes: 263ae152e962 ("bpf: Add bpf_dynptr_from_mem for local dynptrs")
-Fixes: bc34dee65a65 ("bpf: Dynptr support for ring buffers")
-Fixes: 13bbbfbea759 ("bpf: Add bpf_dynptr_read and bpf_dynptr_write")
-Fixes: 34d4ef5775f7 ("bpf: Add dynptr data slices")
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Link: https://lore.kernel.org/r/20220921143550.30247-1-memxor@gmail.com
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/12e24d042ff9/disk-a6afa419.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/4862ae4e2edf/vmlinux-a6afa419.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+12e098239d20385264d3@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 20347 at fs/read_write.c:504 __kernel_write_iter+0x639/0x740
+Modules linked in:
+CPU: 1 PID: 20347 Comm: syz-executor.1 Not tainted 6.0.0-syzkaller-09039-ga6afa4199d3d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+RIP: 0010:__kernel_write_iter+0x639/0x740 fs/read_write.c:504
+Code: 25 28 00 00 00 48 3b 84 24 e0 00 00 00 0f 85 17 01 00 00 4c 89 f0 48 8d 65 d8 5b 41 5c 41 5d 41 5e 41 5f 5d c3 e8 07 b0 9e ff <0f> 0b 49 c7 c6 f7 ff ff ff eb a5 e8 f7 af 9e ff 4c 8b 74 24 18 eb
+RSP: 0018:ffffc90015997740 EFLAGS: 00010287
+RAX: ffffffff81e81fe9 RBX: 00000000000a801d RCX: 0000000000040000
+RDX: ffffc90004875000 RSI: 0000000000000c05 RDI: 0000000000000c06
+RBP: ffffc90015997870 R08: ffffffff81e81a5d R09: fffffbfff1c19fd6
+R10: fffffbfff1c19fd6 R11: 1ffffffff1c19fd5 R12: 1ffff92002b32ef4
+R13: 1ffff1100f3c659f R14: ffff888079e32c80 R15: dffffc0000000000
+FS:  00007f320c219700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000c023d85000 CR3: 000000007765a000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __kernel_write fs/read_write.c:537 [inline]
+ kernel_write+0x1c5/0x340 fs/read_write.c:558
+ write_buf fs/btrfs/send.c:590 [inline]
+ send_header fs/btrfs/send.c:708 [inline]
+ send_subvol+0x1a7/0x4b60 fs/btrfs/send.c:7648
+ btrfs_ioctl_send+0x1e34/0x2340 fs/btrfs/send.c:8014
+ _btrfs_ioctl_send+0x2e8/0x420 fs/btrfs/ioctl.c:5233
+ btrfs_ioctl+0x5eb/0xc10
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f320b08a5a9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f320c219168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f320b1abf80 RCX: 00007f320b08a5a9
+RDX: 0000000020000040 RSI: 0000000040489426 RDI: 0000000000000003
+RBP: 00007f320b0e5580 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffca50575cf R14: 00007f320c219300 R15: 0000000000022000
+ </TASK>
+
+
 ---
- kernel/bpf/helpers.c |   28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1627,26 +1627,12 @@ bpf_base_func_proto(enum bpf_func_id fun
- 		return &bpf_ringbuf_discard_proto;
- 	case BPF_FUNC_ringbuf_query:
- 		return &bpf_ringbuf_query_proto;
--	case BPF_FUNC_ringbuf_reserve_dynptr:
--		return &bpf_ringbuf_reserve_dynptr_proto;
--	case BPF_FUNC_ringbuf_submit_dynptr:
--		return &bpf_ringbuf_submit_dynptr_proto;
--	case BPF_FUNC_ringbuf_discard_dynptr:
--		return &bpf_ringbuf_discard_dynptr_proto;
- 	case BPF_FUNC_for_each_map_elem:
- 		return &bpf_for_each_map_elem_proto;
- 	case BPF_FUNC_loop:
- 		return &bpf_loop_proto;
- 	case BPF_FUNC_strncmp:
- 		return &bpf_strncmp_proto;
--	case BPF_FUNC_dynptr_from_mem:
--		return &bpf_dynptr_from_mem_proto;
--	case BPF_FUNC_dynptr_read:
--		return &bpf_dynptr_read_proto;
--	case BPF_FUNC_dynptr_write:
--		return &bpf_dynptr_write_proto;
--	case BPF_FUNC_dynptr_data:
--		return &bpf_dynptr_data_proto;
- 	default:
- 		break;
- 	}
-@@ -1675,6 +1661,20 @@ bpf_base_func_proto(enum bpf_func_id fun
- 		return &bpf_timer_cancel_proto;
- 	case BPF_FUNC_kptr_xchg:
- 		return &bpf_kptr_xchg_proto;
-+	case BPF_FUNC_ringbuf_reserve_dynptr:
-+		return &bpf_ringbuf_reserve_dynptr_proto;
-+	case BPF_FUNC_ringbuf_submit_dynptr:
-+		return &bpf_ringbuf_submit_dynptr_proto;
-+	case BPF_FUNC_ringbuf_discard_dynptr:
-+		return &bpf_ringbuf_discard_dynptr_proto;
-+	case BPF_FUNC_dynptr_from_mem:
-+		return &bpf_dynptr_from_mem_proto;
-+	case BPF_FUNC_dynptr_read:
-+		return &bpf_dynptr_read_proto;
-+	case BPF_FUNC_dynptr_write:
-+		return &bpf_dynptr_write_proto;
-+	case BPF_FUNC_dynptr_data:
-+		return &bpf_dynptr_data_proto;
- 	default:
- 		break;
- 	}
-
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
