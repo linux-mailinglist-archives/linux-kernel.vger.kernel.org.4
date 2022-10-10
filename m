@@ -2,142 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7BB75F9F8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9CCB5F9F8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 15:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbiJJNkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 09:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42104 "EHLO
+        id S229513AbiJJNlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 09:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiJJNkj (ORCPT
+        with ESMTP id S229463AbiJJNlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 09:40:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55DEF54667
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 06:40:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665409236;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uRewDE0rZn6hJgooSIadeEW16yLPv94UEqowboDO7Tg=;
-        b=Cvs8g1e+2AaPLynfK/jcOx5eSdCTrBfJqAOhlkf7o2KF6GfZhOnFQsl0DwM2syquZ4X027
-        cw7dngx91MM7Sc0LJ430XP/Ww+LqELEhTmfg4E4MPHadlo4Rg8YP15Qhf6CSAJ2E6AyX85
-        56BVMsQJafdt6a6bm03kwHd2db20v6s=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-290-1jG5H1LFPHOCdfbzFg3Vtg-1; Mon, 10 Oct 2022 09:40:29 -0400
-X-MC-Unique: 1jG5H1LFPHOCdfbzFg3Vtg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9A3E01C05157;
-        Mon, 10 Oct 2022 13:40:27 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.39.192.124])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E2C5EC210E;
-        Mon, 10 Oct 2022 13:40:19 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Andrew Cooper <Andrew.Cooper3@citrix.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        "joao.moreira@intel.com" <joao.moreira@intel.com>,
-        John Allen <john.allen@amd.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "eranian@google.com" <eranian@google.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 18/39] mm: Add guard pages around a shadow stack.
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
-        <20220929222936.14584-19-rick.p.edgecombe@intel.com>
-        <202210031127.C6CF796@keescook>
-        <37ef8d93-8bd2-ae5e-4508-9be090231d06@citrix.com>
-        <87bkqj26zp.fsf@oldenburg.str.redhat.com>
-        <6e75eb27-c16b-ccfe-08b9-856edeff51eb@citrix.com>
-Date:   Mon, 10 Oct 2022 15:40:18 +0200
-In-Reply-To: <6e75eb27-c16b-ccfe-08b9-856edeff51eb@citrix.com> (Andrew
-        Cooper's message of "Mon, 10 Oct 2022 13:32:51 +0000")
-Message-ID: <87tu4bztj1.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Mon, 10 Oct 2022 09:41:42 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A795F20C
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 06:41:40 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id h8so1293661lja.11
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 06:41:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/mk2nPyPDHF2nSoHYsdcPx4I1t1gE9idID2faOY4LJU=;
+        b=nQlBVngNS6jdjjoSNjCE8ArZ+rJTFkbZgMSi9LIvsZWVR0Fqr/hdPvjWFhfyBjwwry
+         hpbm4Z03SpWIY+cVIAIiZDqwtByCNf37gfgIggBhGi3jK3lfjbJC2AHcRRg1Ji5ZDVIB
+         kF8GOiMLoxbLH5io8ya9GU+ELTEShWnsP0bfecOMfm8TucEmnbKREFnZuU2k/KJh7JVZ
+         nHf829K8dGf0cwKgHU22Frek+UnZR7xtPeKJU2+wS14wDBY3qHSTSSBjU6eXrFHplkqr
+         NuoBdYphRkJsODZ2bTjnGmeE0dCvsrB3OxunF7mfGs1j6ApnLaplqtkCxCiA+21Ijghy
+         ENVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/mk2nPyPDHF2nSoHYsdcPx4I1t1gE9idID2faOY4LJU=;
+        b=i1WeIiLGKDV6nnkdE245NJ7Qpv01Gd76vMBX08N9xHC1NB0nWff5fGBdGUauBw4LMd
+         R85H5Md1PLRxSFnQISHZ5tEUdC0QnhMtv9MDtBxhrveaUemPkQPz0F+qD8HWNqjZNsAp
+         xkYZqe51l8MeBwOzugu+E1HRepr+Zv5WgKm4id2MnJk2ifIVz7ffzivLsXZE/DgTj2hi
+         iomSNPiYaVGE5j7/CTqzxY/6Qvu3OdUffcuGZdcLn5UEhHCdM+tx0qkv/meQJxPDktdh
+         N0WXvrnwKz/Od7H4SKjZQkwaj/3/usfKGGajksKGs3yZa7EcDjZwOXLsQf9fqhsDr7ob
+         HGZg==
+X-Gm-Message-State: ACrzQf3VWbN6gNrzjRjBlhWpn8RuwhltE40w4KnAE/L7kDw5EJNjpMQy
+        IGljY27rP3KuEcKiZLj4El8N9hnAfASiyetJIqc=
+X-Google-Smtp-Source: AMsMyM6mxStJAOUXUeJGjk20Dm0Vi6Rqx2hCSTNStiWghAPLhAhgWOF5ENn1mYXXhPfY3yssKRWQkeW8ZHrrZ1CIROg=
+X-Received: by 2002:a2e:3510:0:b0:26f:aecf:e0c6 with SMTP id
+ z16-20020a2e3510000000b0026faecfe0c6mr971421ljz.483.1665409299206; Mon, 10
+ Oct 2022 06:41:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Sender: essoweatakati@gmail.com
+Received: by 2002:a05:6520:68f:b0:1f9:75a5:d7d8 with HTTP; Mon, 10 Oct 2022
+ 06:41:38 -0700 (PDT)
+From:   Miss Katie <katiehiggins302@gmail.com>
+Date:   Mon, 10 Oct 2022 13:41:38 +0000
+X-Google-Sender-Auth: cOvPCjxCeEUJTzUoUBXK8wseBjs
+Message-ID: <CALyJv2r984m=5MCq4-1atv_oU0Ux3PN2DcegCeQ_FdkxeuBiLg@mail.gmail.com>
+Subject: RE: HELLO DEAR
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_HK_NAME_FM_MR_MRS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Andrew Cooper:
+Hej,
 
-> On 10/10/2022 13:33, Florian Weimer wrote:
->> * Andrew Cooper:
->>
->>> You don't actually need a hole to create a guard.=C2=A0 Any mapping of =
-type
->>> !=3D shstk will do.
->>>
->>> If you've got a load of threads, you can tightly pack stack / shstk /
->>> stack / shstk with no holes, and they each act as each other guard page=
-s.
->> Can userspace read the shadow stack directly?  Writing is obviously
->> blocked, but reading?
->
-> Yes - regular reads are permitted to shstk memory.
->
-> It's actually a great way to get backtraces with no extra metadata
-> needed.
+Modtog du min tidligere besked? Jeg kontaktede dig f=C3=B8r, men beskeden
+kom ikke tilbage, s=C3=A5 jeg besluttede at skrive igen. Bekr=C3=A6ft venli=
+gst,
+om du modtager dette, s=C3=A5 jeg kan forts=C3=A6tte,
 
-Indeed, I hope shadow stacks can be used to put the discussion around
-frame pointers to a rest, at least when it comes to profiling. 8-)
+venter p=C3=A5 dit svar.
 
->> POSIX does not appear to require PROT_NONE mappings
->> for the stack guard region, either.  However, the
->> pthread_attr_setguardsize manual page pretty clearly says that it's got
->> to be unreadable and unwriteable.  Hence my question.
->
-> Hmm.=C2=A0 If that's what the manuals say, then fine.
->
-> But honestly, you don't get very far at all without faulting on a
-> read-only stack.
-
-I guess we can update the manual page proactively.  It does look like a
-tempting optimization.
-
-Thanks,
-Florian
-
+Med venlig hilsen
+Fr=C3=B8ken Katie
