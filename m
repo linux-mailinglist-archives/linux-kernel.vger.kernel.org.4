@@ -2,82 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D3D5F9A74
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D2D5F9A79
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbiJJHv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38756 "EHLO
+        id S231139AbiJJHwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231953AbiJJHuy (ORCPT
+        with ESMTP id S229461AbiJJHwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:50:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BE917E05;
-        Mon, 10 Oct 2022 00:49:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0017E60E75;
-        Mon, 10 Oct 2022 07:49:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64026C433D6;
-        Mon, 10 Oct 2022 07:49:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665388192;
-        bh=XzSPUlFclW0ZT9yGjU4jJfL3cyzm5SGlmsXOFLYFHS0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FEfi9vyV9guaQaHEIdM695B2FrzfkFzQTIO4Ay1e0PeVo5hvT7bCPVw91eW+m1hBR
-         gogYIj1z3Drml0eEpCzJdRb4hpixLpfiVUzcgy9vmbJQuZ6wwEIu+Rvc21mpVKUX6p
-         T2vSFb5+6j4b0IqjTxq8osZDLu6EGYTOY0sAIFj3fH524B7r3PLpBairUX1JuCLntr
-         m/tzIA/nR4C6e/Eig1rFmxkdBqeR4K/EQct/JcBa3BcZVDxKnWAYSUAj6nr27LguKn
-         wmg2kjRwF7Ji3kFdTC7jmQgUNFSjbduoFQBH67ZWO9X7/kgRTtJZ6bm8X3hmzgGQ3d
-         ixznRVnddti4A==
-Date:   Mon, 10 Oct 2022 08:49:45 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Richard Acayan <mailingradian@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v9 0/3] SDM670 Pin Control Driver
-Message-ID: <Y0POmQ+xrQ/HT7RF@google.com>
-References: <20221007213241.84962-1-mailingradian@gmail.com>
+        Mon, 10 Oct 2022 03:52:31 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0D8131;
+        Mon, 10 Oct 2022 00:52:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665388350; x=1696924350;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nKoNqwSE/vKT2owlDayb4xvZLmMsG+86Uz7TmrW4nH8=;
+  b=eh/rgPhstPajUfBZruoiECeZaUY0hDoBQX0586Aab+ukIlzrIkVrRg0z
+   0DqR0y4V9tBW/sRqkYZXaRNvHxjKIy0//8i0RBXL/YuBpnK45u0mmlDc7
+   6T/Rb5R12j/31wYZ9H6oX6e1Lk62I9ssUg50eHtPDZTzfYn2FEMvVUH/m
+   KXU4SXFuRZOMyhdLr0nbPNZBVMX5OHubIZBSPDsvZs7CrpybWtCVOcger
+   fiA9Bq9no/JZlp83l8JgBlU7hh0DFe2jCI4gRN9CbKTJ09ABp29zoJlZC
+   bT2550YWqd7W4XnlaapF6lKkbBmR+Gm6QLODcq3+DT2y7QhKCEioAtVct
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10495"; a="287405065"
+X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
+   d="scan'208";a="287405065"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 00:52:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10495"; a="768299794"
+X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
+   d="scan'208";a="768299794"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 10 Oct 2022 00:52:25 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 10 Oct 2022 10:52:24 +0300
+Date:   Mon, 10 Oct 2022 10:52:24 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Bastian Rieck <bastian@rieck.me>, grzegorz.alibozek@gmail.com,
+        andrew.co@free.fr, meven29@gmail.com, pchernik@gmail.com,
+        jorge.cep.mart@gmail.com, danielmorgan@disroot.org,
+        bernie@codewiz.org, saipavanchitta1998@gmail.com,
+        rubin@starset.net, maniette@gmail.com, nate@kde.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v1 0/2] usb: typec: UCSI resume fix
+Message-ID: <Y0PPOBFFuWzFj0Oy@kuha.fi.intel.com>
+References: <20221007100951.43798-1-heikki.krogerus@linux.intel.com>
+ <Y0A6Pb5owOWVVQET@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221007213241.84962-1-mailingradian@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y0A6Pb5owOWVVQET@kroah.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 07 Oct 2022, Richard Acayan wrote:
-> Richard Acayan (3):
->   dt-bindings: pinctrl: qcom: add sdm670 pinctrl
->   pinctrl: qcom: do not reinitialize gpio valid mask
->   pinctrl: qcom: add sdm670 pinctrl
+On Fri, Oct 07, 2022 at 04:39:57PM +0200, Greg Kroah-Hartman wrote:
+> On Fri, Oct 07, 2022 at 01:09:49PM +0300, Heikki Krogerus wrote:
+> > Hi Greg,
+> > 
+> > These two patches fix an issue where the ucsi drivers fail to detect
+> > changes on the connection status (connections/disconnections) that
+> > happen while the system is suspended.
+> > 
+> > 
+> > Heikki Krogerus (2):
+> >   usb: typec: ucsi: Check the connection on resume
+> >   usb: typec: ucsi: acpi: Implement resume callback
+> > 
+> >  drivers/usb/typec/ucsi/ucsi.c      | 42 +++++++++++++++++++++---------
+> >  drivers/usb/typec/ucsi/ucsi_acpi.c | 10 +++++++
+> >  2 files changed, 39 insertions(+), 13 deletions(-)
 > 
->  .../bindings/pinctrl/qcom,sdm670-tlmm.yaml    |  127 ++
->  drivers/pinctrl/qcom/Kconfig                  |    9 +
->  drivers/pinctrl/qcom/Makefile                 |    1 +
->  drivers/pinctrl/qcom/pinctrl-msm.c            |    3 +-
->  drivers/pinctrl/qcom/pinctrl-sdm670.c         | 1345 +++++++++++++++++
+> These are ok to go in after -rc1, right?
 
-And I'm receiving this because ... ?
+Yes, I think so.
 
->  5 files changed, 1483 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml
->  create mode 100644 drivers/pinctrl/qcom/pinctrl-sdm670.c
-> 
+thanks,
 
 -- 
-Lee Jones [李琼斯]
+heikki
