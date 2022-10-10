@@ -2,147 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A78F5F9BB3
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 11:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 111D75F9BB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 11:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbiJJJNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 05:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
+        id S230493AbiJJJP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 05:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbiJJJNc (ORCPT
+        with ESMTP id S230201AbiJJJPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 05:13:32 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EAD5B79A;
-        Mon, 10 Oct 2022 02:13:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1665393211; x=1696929211;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FSafgwpHtjewaVf768ABQg/kdcKmfRXlnif/dgM4eK0=;
-  b=q9GkwMyi9188gqlzRm7/2Xm4A8jkSgm8/SmpmXTbA97ZXWnIJphQz5yK
-   leIPiiRDq2unEjNPRpF6JcuqKG0S/E+54KwKOEvpOlRN5EuqdG27ZTigy
-   lyfuVExSTNRPFh4XgELVqZDRbClmz2SzFKSZdlgHE0ZcnqNoUO5l32cP+
-   +gBUa9/S7r1G+ZQMxA6htHm2UMnHYEBYPhkUNjBXenxlNWyuNaWxNPBVI
-   UsKaMTFe4W8D8Dc3O6cQgUHDtkzz9aJTFeR88RSFGcg25RezvDP4PXYNy
-   1mCiKvprcIIt2fZeQdXwO3RlD//2p7i4x/ZjNm7TzZLn+a18/KW8HH2G5
-   A==;
-X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="177929212"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Oct 2022 02:13:31 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 10 Oct 2022 02:13:28 -0700
-Received: from [10.12.72.60] (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Mon, 10 Oct 2022 02:13:26 -0700
-Message-ID: <8a335e97-c880-d42f-a455-9ea8f3e65267@microchip.com>
-Date:   Mon, 10 Oct 2022 11:13:26 +0200
+        Mon, 10 Oct 2022 05:15:24 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEC34A801
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 02:15:21 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id f9so12505619ljk.12
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 02:15:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=j3Nc5ybSmm3MUhdS+5MVyvIh/NesSmD7wvi1u6Qup6U=;
+        b=WvK1AiGto8CcgCMoI4sx/iJk9ekcDIyGNkFYy2f2pDxuQOp0q5v+wcrG7IBca2IV1s
+         znSltlhtNZ8+BVPfpKUSFa9tIBmTEEsUHTEfEIYn0IHVjuqjKmbxJo9OAc9ARf8hCQDi
+         jwg9o/Dc8npSCgHL/x5WJNEHdipO5+9NUHk6ekjr97xicnLV4wFisvLghRIgePZgQK38
+         wC/5kHf12eXMbUtv1ecfoslc8iiMRFY/KomLaMHBt4SaPrVl2YDOY0gepcmlT+HwGYTK
+         eThmRHUzAxzvTlSmSEk68nq0aprAxQmgNH9qBnWrri2+LavXZZogk1NFT75YlH6N4Q+d
+         vINQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j3Nc5ybSmm3MUhdS+5MVyvIh/NesSmD7wvi1u6Qup6U=;
+        b=iiaBUKZYAcNcAYumm0CDIycQnD8MhAxpVu2eLobDyAmPyukM97Ub3nRN/gDqXWGAjC
+         C5wZm651O+vV2ASShwKpbMBP9FQNfu4+sVPGYSdNwH++Vo2xy2oXmkk5mM5sGef3B28e
+         omYfmC1wVYS/vkMcEav5PE/HoRiBEn3zgiktUNb2lgLrhd6aIG0MH7D0fvuRtr3qi2S7
+         MjjSbvAQ61ZALMrtYxC0bDxU7LTcEpeFdUeB5CS3zgUSBQWS9pKW0+GbJdQL47HmWR62
+         w5bkgP9iKN5S61MLbkgxDxEPAwaK3Nw46ER2JGmcJ7Hsq6AreAR2pvASMG2h0khHw7Cn
+         r+OA==
+X-Gm-Message-State: ACrzQf0LRfdpxCAzQLNcnf6SPpT/9/pQXJ2pJRw17d65On5IPJw2XHsA
+        lkinwMxbJSKtuPkNOpPp2GM/i/iLSedIZYEJwCqf4w==
+X-Google-Smtp-Source: AMsMyM7XBI1ABDkrZqxzLTRibptq5a/rT9db9D7b8Bn/dCWyKGKlV7NV/NHvtCAM8VXRGDJxyei9o4KLHB6J3JoS1k0=
+X-Received: by 2002:a2e:9919:0:b0:26e:59a:3449 with SMTP id
+ v25-20020a2e9919000000b0026e059a3449mr6189634lji.494.1665393319687; Mon, 10
+ Oct 2022 02:15:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] pinctrl: at91-pio4: Add configuration to userspace
-Content-Language: en-US
-To:     <Ryan.Wanner@microchip.com>, <linus.walleij@linaro.org>,
-        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-gpio@vger.kernel.org>, <ludovic.desroches@microchip.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221007151647.98222-1-Ryan.Wanner@microchip.com>
- <20221007151647.98222-2-Ryan.Wanner@microchip.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20221007151647.98222-2-Ryan.Wanner@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220930094821.31665-1-lukasz.luba@arm.com> <20220930094821.31665-2-lukasz.luba@arm.com>
+ <20221010053902.5rofnpzvyynumw3e@vireshk-i7> <3f9a4123-171b-5fa7-f506-341355f71483@arm.com>
+In-Reply-To: <3f9a4123-171b-5fa7-f506-341355f71483@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Mon, 10 Oct 2022 11:15:07 +0200
+Message-ID: <CAKfTPtBPqcTm5_-M_Ka3y46yQ2322TmH8KS-QyDbAiKk5B6hEQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] cpufreq: Update CPU capacity reduction in store_scaling_max_freq()
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-kernel@vger.kernel.org, rafael@kernel.org,
+        linux-pm@vger.kernel.org, Dietmar.Eggemann@arm.com,
+        peterz@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/10/2022 at 17:16, Ryan.Wanner@microchip.com wrote:
-> From: Ryan Wanner <Ryan.Wanner@microchip.com>
-> 
-> Adding support for line bias flags that have been implented in gpio API.
+On Mon, 10 Oct 2022 at 11:02, Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+>
+>
+> On 10/10/22 06:39, Viresh Kumar wrote:
+> > Would be good to always CC Scheduler maintainers for such a patch.
+>
+> Agree, I'll do that.
+>
+> >
+> > On 30-09-22, 10:48, Lukasz Luba wrote:
+> >> When the new max frequency value is stored, the task scheduler must
+> >> know about it. The scheduler uses the CPUs capacity information in the
+> >> task placement. Use the existing mechanism which provides information
+> >> about reduced CPU capacity to the scheduler due to thermal capping.
+> >>
+> >> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> >> ---
+> >>   drivers/cpufreq/cpufreq.c | 18 +++++++++++++++++-
+> >>   1 file changed, 17 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> >> index 1f8b93f42c76..205d9ea9c023 100644
+> >> --- a/drivers/cpufreq/cpufreq.c
+> >> +++ b/drivers/cpufreq/cpufreq.c
+> >> @@ -27,6 +27,7 @@
+> >>   #include <linux/slab.h>
+> >>   #include <linux/suspend.h>
+> >>   #include <linux/syscore_ops.h>
+> >> +#include <linux/thermal.h>
+> >>   #include <linux/tick.h>
+> >>   #include <linux/units.h>
+> >>   #include <trace/events/power.h>
+> >> @@ -718,6 +719,8 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
+> >>   static ssize_t store_scaling_max_freq
+> >>   (struct cpufreq_policy *policy, const char *buf, size_t count)
+> >>   {
+> >> +    unsigned int frequency;
+> >> +    struct cpumask *cpus;
+> >>      unsigned long val;
+> >>      int ret;
+> >>
+> >> @@ -726,7 +729,20 @@ static ssize_t store_scaling_max_freq
+> >>              return -EINVAL;
+> >>
+> >>      ret = freq_qos_update_request(policy->max_freq_req, val);
+> >> -    return ret >= 0 ? count : ret;
+> >> +    if (ret >= 0) {
+> >> +            /*
+> >> +             * Make sure that the task scheduler sees these CPUs
+> >> +             * capacity reduction. Use the thermal pressure mechanism
+> >> +             * to propagate this information to the scheduler.
+> >> +             */
+> >> +            cpus = policy->related_cpus;
+> >
+> > No need of this, just use related_cpus directly.
+> >
+> >> +            frequency = __resolve_freq(policy, val, CPUFREQ_RELATION_HE);
+> >> +            arch_update_thermal_pressure(cpus, frequency);
+> >
+> > I wonder if using the thermal-pressure API here is the right thing to
+> > do. It is a change coming from User, which may or may not be
+> > thermal-related.
+>
+> Yes, I thought the same. Thermal-pressure name might be not the
+> best for covering this use case. I have been thinking about this
+> thermal pressure mechanism for a while, since there are other
+> use cases like PowerCap DTPM which also reduces CPU capacity
+> because of power policy from user-space. We don't notify
+> the scheduler about it. There might be also an issue with virtual
+> guest OS and how that kernel 'sees' the capacity of CPUs.
+> We might try to use this 'thermal-pressure' in the guest kernel
+> to notify about available CPU capacity (just a proposal, not
+> even an RFC, since we are missing requirements, but issues where
+> discussed on LPC 2022 on ChromeOS+Android_guest)
 
-Typo: implemented
+The User space setting scaling_max_freq is a long scale event and it
+should be considered as a new running environnement instead of a
+transient event. I would suggest updating the EM is and capacity orig
+of the system in this case. Similarly, we rebuild sched_domain with a
+cpu hotplug. scaling_max_freq interface should not be used to do any
+kind of dynamic scaling.
 
-> There are functions in the gpiod library that can control line bias from
-> userspace this adds that functionality to this driver.
-> 
-> Adding .pin_config_set allows the driver's pin configuration to be
-> accessed from userspace. The general idea for this as been taken from
-> stm32, intel, and rockchip drivers that have userspace access for bias
-> flags.
-> 
-> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-
-Tested-by: Nicolas Ferre <nicolas.ferre@microchip.com> # on sama5d27 som1 ek
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-
-Thanks, best regards,
-   Nicolas
-
-> ---
->   drivers/pinctrl/pinctrl-at91-pio4.c | 22 ++++++++++++++++++++++
->   1 file changed, 22 insertions(+)
-> 
-> diff --git a/drivers/pinctrl/pinctrl-at91-pio4.c b/drivers/pinctrl/pinctrl-at91-pio4.c
-> index 517f2a6330ad..13b77f1eb6e2 100644
-> --- a/drivers/pinctrl/pinctrl-at91-pio4.c
-> +++ b/drivers/pinctrl/pinctrl-at91-pio4.c
-> @@ -902,6 +902,25 @@ static int atmel_conf_pin_config_group_set(struct pinctrl_dev *pctldev,
->   	return 0;
->   }
->   
-> +static int atmel_conf_pin_config_set(struct pinctrl_dev *pctldev,
-> +				     unsigned pin,
-> +				     unsigned long *configs,
-> +				     unsigned num_configs)
-> +{
-> +	struct atmel_group *grp = atmel_pctl_find_group_by_pin(pctldev, pin);
-> +
-> +	return atmel_conf_pin_config_group_set(pctldev, grp->pin, configs, num_configs);
-> +}
-> +
-> +static int atmel_conf_pin_config_get(struct pinctrl_dev *pctldev,
-> +				     unsigned pin,
-> +				     unsigned long *configs)
-> +{
-> +	struct atmel_group *grp = atmel_pctl_find_group_by_pin(pctldev, pin);
-> +
-> +	return atmel_conf_pin_config_group_get(pctldev, grp->pin, configs);
-> +}
-> +
->   static void atmel_conf_pin_config_dbg_show(struct pinctrl_dev *pctldev,
->   					   struct seq_file *s,
->   					   unsigned int pin_id)
-> @@ -949,6 +968,8 @@ static const struct pinconf_ops atmel_confops = {
->   	.pin_config_group_get	= atmel_conf_pin_config_group_get,
->   	.pin_config_group_set	= atmel_conf_pin_config_group_set,
->   	.pin_config_dbg_show	= atmel_conf_pin_config_dbg_show,
-> +	.pin_config_set	        = atmel_conf_pin_config_set,
-> +	.pin_config_get	        = atmel_conf_pin_config_get,
->   };
->   
->   static struct pinctrl_desc atmel_pinctrl_desc = {
-> @@ -1139,6 +1160,7 @@ static int atmel_pinctrl_probe(struct platform_device *pdev)
->   	atmel_pioctrl->gpio_chip->label = dev_name(dev);
->   	atmel_pioctrl->gpio_chip->parent = dev;
->   	atmel_pioctrl->gpio_chip->names = atmel_pioctrl->group_names;
-> +	atmel_pioctrl->gpio_chip->set_config = gpiochip_generic_config;
->   
->   	atmel_pioctrl->pm_wakeup_sources = devm_kcalloc(dev,
->   			atmel_pioctrl->nbanks,
-
-
--- 
-Nicolas Ferre
+>
+> Android middleware has 'powerhits' (IIRC since ~4-5 versions now)
+> but our capacity in task scheduler is not aware of those reductions.
+>
+> IMO thermal-pressure mechanism is good, but the naming convention
+> just might be a bit more 'generic' to cover those two users.
+>
+> Some proposals of better naming:
+> 1. Performance capping
+> 2. Capacity capping
+> 3. Performance reduction
+>
+> What do you think about changing the name of this and cover
+> those two users: PowerCap DTPM and this user-space cpufreq?
