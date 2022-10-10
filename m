@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD885FA2EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6685FA2F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 19:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbiJJRtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 13:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60530 "EHLO
+        id S229805AbiJJRvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 13:51:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiJJRtg (ORCPT
+        with ESMTP id S229537AbiJJRvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 13:49:36 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9FF77644D;
-        Mon, 10 Oct 2022 10:49:16 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id l4so11016021plb.8;
-        Mon, 10 Oct 2022 10:49:16 -0700 (PDT)
+        Mon, 10 Oct 2022 13:51:43 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1721B15800
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:51:43 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id o4-20020a258d84000000b006bcfc1aafbdso11341580ybl.14
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 10:51:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WVa4kiMsJL7oEORpbzWjtM3OlO9r8o5QjkRtb8k39Z8=;
-        b=ORFQV/44fTAqju9rNTuADHE9sbZ0iGjW4vQNJobL6oEB+ITyWcBMdQgKaFDmsjB72K
-         yUXknIY+sl6c3/CsQTaFn++5ymhRrpvEYpwUEcG3eGgsHl7qswXBCGymlOM0fg3h1XnY
-         /quZrq5tB+btZC0NgoJllza6y1e/UDSEh9r9ACctuP7q+A09rxxzNqWclS7vfvqQMWGm
-         QF9OweHa4TZfi5S9+D0vP6ItL4CWqcr09iJt7XuCBc2OiZomu6A52TgMgQlhocJSN/ZU
-         9yWckOeb3g7mMAwwzpCJIjnyVdcwm9UJSLa/9xe3gQ8Wjt5JPjMRRsurDmE5pw8TcxJf
-         Ln4A==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fBlnd4XOswp/sg9aQW3gv5szg86tXu6TkQ8l/Mwzfog=;
+        b=nk/3rxvqJoK9SyUHQWL4FrcBRa1u5cO4vRwonLiomf+mwgVgWWJI1zDI2WrsG4X70S
+         nmYcNaaINMTJvz4X+rhldlAAsnDEIdQ1m/0le3N3a4jcmuJBnx7ADpYTD37EtiIQ8Ek4
+         UdZRVtpQ9jRuCSlVU0a7FPDzhLIVxEVRtxg1As+928YvNnSFB/ebJx9BGRXZ+TqF7Yvx
+         1RE2jxe2d5hBME089OeAg4k07EJx1sEL1FXum8kBR1LYise8GCM5CrRWtjtenaTYKGO8
+         7ToFnDGrUdgCeG5TNXYr09gkPBJU4y/mo/PCaw7hg1fsyCBRDaiMRFl5EKrZexrFlMpB
+         5aaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WVa4kiMsJL7oEORpbzWjtM3OlO9r8o5QjkRtb8k39Z8=;
-        b=oQJgmBmbkRiHFlHAfZX6NI+7iiS6idf987iO8M8CrIdc9JPwDq+F8IWh2rAll95kDx
-         nxUGJXLapIgygD2kXCwE6roZgQSp0IbDFPD4yIwlFUpUgWiByith4G2hQMg4uuNIwsc/
-         +OeU/NngdZt4oKSplXhSykryA5JOCBGFqZZBs5zhaJCZZaq9vpeQnPTbdg0wBqVKh/6L
-         VQZW6YT6dKWBE9yxiOHtyHIspHW3o6lfv56gjj6XmH32i3xHUAOMNBfyTfV4G+cpGq5I
-         nYcICTMK4ClYtT5tm+O0AHBvStZRQQJWPiuy8sFvKw0ViD9FigoFrVvwddP5eqtVCtIT
-         lmVA==
-X-Gm-Message-State: ACrzQf3RjwJrQPCJwSHwS/T5I0yM86ogM3UPe3LWU97iGBxhdtD2K9Mt
-        7ROIg8wLdt/uwvY9EdhmtdpF02cg8w+PfA==
-X-Google-Smtp-Source: AMsMyM4Iouh6yM3lmxysFwKctzJoyuPGvKXfdNnFCYUz5OK/Ftej5/NVqIf+yj0rTjc5N7bSJjrXUA==
-X-Received: by 2002:a17:90b:3a8a:b0:20a:7e68:91a with SMTP id om10-20020a17090b3a8a00b0020a7e68091amr22355044pjb.206.1665424155616;
-        Mon, 10 Oct 2022 10:49:15 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l6-20020a170902f68600b0017f92246e4dsm6974792plg.181.2022.10.10.10.49.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 10:49:13 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <09eca44e-4d91-a060-d48c-d0aa41ac5045@roeck-us.net>
-Date:   Mon, 10 Oct 2022 10:49:10 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-References: <20221010070331.211113813@linuxfoundation.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 5.15 00/37] 5.15.73-rc1 review
-In-Reply-To: <20221010070331.211113813@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fBlnd4XOswp/sg9aQW3gv5szg86tXu6TkQ8l/Mwzfog=;
+        b=6QGaUOqdvG3ITk7OeMKQbH1x2MtEyONPXZdUOj/CgBxacVcZdO3+kykbmb1gz2IfT5
+         zxR9MYSVYNwSfpfd3HWBnbyZrvQw0Rta87EKRzOt5Rn0B04T94fZ70faaYATFKCXGO4M
+         JBjAjPQG23PUosIXsNFj3RiVR2AFC9mPaAK7l0HMSuczbBGyDbeiHoYZCUArQ6l3Y52J
+         29JhG1DxEAM4/5+2LmmvuIRKKzZ3S9QVMWrLbp2O70Doldim6M3wSNJzFRtEzZzNeWI8
+         5E3FNqTMjcmAW1qSkumdDvezZyuI9TetO7JGLDi5p0M5c6Z5Kc7FFTL/tVKZov2OY73E
+         2YNQ==
+X-Gm-Message-State: ACrzQf2i88HR0Xlj12lWUKhH/JN/v1fzLwUDGnWOb4DSSGgMNiOJkMwM
+        nHOJDxH78TdKPB9KJQCZeATOEJ5QPm1Rxnr/HRI=
+X-Google-Smtp-Source: AMsMyM5jkqv1zz43050m6pWEovXCAiaua+rKQiGXBtEfN0TkeuKfcUR3yW7cLziDOqKL4IlVFs/66K0FaURGRe5s6Ow=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:0:100e:712:883d:1c60:2d47:598d])
+ (user=ndesaulniers job=sendgmr) by 2002:a81:d45:0:b0:356:d50d:d010 with SMTP
+ id 66-20020a810d45000000b00356d50dd010mr18174102ywn.437.1665424302401; Mon,
+ 10 Oct 2022 10:51:42 -0700 (PDT)
+Date:   Mon, 10 Oct 2022 10:51:34 -0700
+In-Reply-To: <202210072120.V1O2SuKY-lkp@intel.com>
+Mime-Version: 1.0
+References: <202210072120.V1O2SuKY-lkp@intel.com>
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1665424294; l=2791;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=79P/bvbEb7lOxoUitL3cE1zzO5WZPlSo0wty3dVeQAY=;
+ b=B5zs5846RZppHTs/CE8/c+09IEq445Jvsd3Vdr73h8bHw68EC4yYmabbF1udsPYDDSop/Y6KuyI3
+ Q9t55mKQDsfxtPXBKw7hoZQJMbxVuxixwsIYFa/HaIIjtnJ9joA3
+X-Mailer: git-send-email 2.38.0.rc2.412.g84df46c1b4-goog
+Message-ID: <20221010175134.2671410-1-ndesaulniers@google.com>
+Subject: [PATCH] lib/xor: use r10 rather than r7 in xor_arm4regs_{2|3}
+From:   Nick Desaulniers <ndesaulniers@google.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,39 +79,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/10/22 00:05, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.73 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 12 Oct 2022 07:03:19 +0000.
-> Anything received after that time might be too late.
-> 
+kbuild test robot reports:
+In file included from crypto/xor.c:17:
+./arch/arm/include/asm/xor.h:61:3: error: write to reserved register 'R7'
+                GET_BLOCK_4(p1);
+                ^
+./arch/arm/include/asm/xor.h:20:10: note: expanded from macro 'GET_BLOCK_4'
+        __asm__("ldmia  %0, {%1, %2, %3, %4}" \
+                ^
+./arch/arm/include/asm/xor.h:63:3: error: write to reserved register 'R7'
+                PUT_BLOCK_4(p1);
+                ^
+./arch/arm/include/asm/xor.h:42:23: note: expanded from macro 'PUT_BLOCK_4'
+        __asm__ __volatile__("stmia     %0!, {%2, %3, %4, %5}" \
+                             ^
+./arch/arm/include/asm/xor.h:83:3: error: write to reserved register 'R7'
+                GET_BLOCK_4(p1);
+                ^
+./arch/arm/include/asm/xor.h:20:10: note: expanded from macro 'GET_BLOCK_4'
+        __asm__("ldmia  %0, {%1, %2, %3, %4}" \
+                ^
+./arch/arm/include/asm/xor.h:86:3: error: write to reserved register 'R7'
+                PUT_BLOCK_4(p1);
+                ^
+./arch/arm/include/asm/xor.h:42:23: note: expanded from macro 'PUT_BLOCK_4'
+        __asm__ __volatile__("stmia     %0!, {%2, %3, %4, %5}" \
+                             ^
+Thumb2 uses r7 rather than r11 as the frame pointer. Let's use r10
+rather than r7 for these temporaries.
 
-Building h8300:allnoconfig ... failed
---------------
-Error log:
-In file included from include/linux/fs.h:6,
-                  from include/linux/huge_mm.h:8,
-                  from include/linux/mm.h:727,
-                  from include/linux/pid_namespace.h:7,
-                  from include/linux/ptrace.h:10,
-                  from arch/h8300/kernel/asm-offsets.c:15:
-include/linux/wait_bit.h: In function 'wait_on_bit':
-include/linux/wait_bit.h:74:14: error: implicit declaration of function 'test_bit_acquire'; did you mean 'test_bit_le'? [-Werror=implicit-function-declaration]
-    74 |         if (!test_bit_acquire(bit, word))
-       |              ^~~~~~~~~~~~~~~~
-       |              test_bit_le
+Link: https://github.com/ClangBuiltLinux/linux/issues/1732
+Link: https://lore.kernel.org/llvm/202210072120.V1O2SuKY-lkp@intel.com/
+Reported-by: kernel test robot <lkp@intel.com>
+Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+ arch/arm/include/asm/xor.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-This affects h8300 builds in all branches all the way back to v4.9.y.
-It also affects release candidates for various other architectures
-in v4.9.y..v5.10.y. In v4.9.y.queue, for example, I see 56 build
-failures out of 164 builds; most if not all of those can be attributed
-to problems with test_bit_acquire() - either due to a missing or due
-to a bad backport.
+diff --git a/arch/arm/include/asm/xor.h b/arch/arm/include/asm/xor.h
+index 669cad5194d3..934b549905f5 100644
+--- a/arch/arm/include/asm/xor.h
++++ b/arch/arm/include/asm/xor.h
+@@ -51,7 +51,7 @@ xor_arm4regs_2(unsigned long bytes, unsigned long * __restrict p1,
+ 	register unsigned int a1 __asm__("r4");
+ 	register unsigned int a2 __asm__("r5");
+ 	register unsigned int a3 __asm__("r6");
+-	register unsigned int a4 __asm__("r7");
++	register unsigned int a4 __asm__("r10");
+ 	register unsigned int b1 __asm__("r8");
+ 	register unsigned int b2 __asm__("r9");
+ 	register unsigned int b3 __asm__("ip");
+@@ -73,7 +73,7 @@ xor_arm4regs_3(unsigned long bytes, unsigned long * __restrict p1,
+ 	register unsigned int a1 __asm__("r4");
+ 	register unsigned int a2 __asm__("r5");
+ 	register unsigned int a3 __asm__("r6");
+-	register unsigned int a4 __asm__("r7");
++	register unsigned int a4 __asm__("r10");
+ 	register unsigned int b1 __asm__("r8");
+ 	register unsigned int b2 __asm__("r9");
+ 	register unsigned int b3 __asm__("ip");
+-- 
+2.38.0.rc2.412.g84df46c1b4-goog
 
-I can only hope that fix for the the problem that required the
-test_bit_acquire() backport is worth the trouble it causes.
-
-Guenter
