@@ -2,87 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63FA25FA64A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FFE65FA64C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiJJUbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 16:31:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54892 "EHLO
+        id S230247AbiJJUbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 16:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiJJUaF (ORCPT
+        with ESMTP id S230097AbiJJUaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 10 Oct 2022 16:30:05 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACF36175;
-        Mon, 10 Oct 2022 13:29:39 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id s206so11153640pgs.3;
-        Mon, 10 Oct 2022 13:29:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qJvdR5sFA7841TfkHWBXVf+L88za68VvtqLkISWSSSU=;
-        b=mzi+/WBX/eFPhWGRK9wk25LbdDWrPtoko+QoLbYq0hvYx6m4vETmFUGiPPn3VsV0gA
-         i+6WjDzaxoqyRXmWtvngaiuaryYkBi+wK7hwrLWOAH9u1CdCLDXYFeA0iZTQpNeKhY78
-         txA6yTR3Po4vsfLRmHO7bUvUB1VB4pNCFef8LirwRR7MmCj8cL64TBK32FD+5V1y5eit
-         /ZbkipPrix/XLAUNcNSqLNygx2pwxjox3ZbUIUapUf9darLgWGmBgSe6EaoUlGzs79gg
-         T/o8f+CuAjAQoZZsN7jFqFh8VWcmYy9Z0J6GYR1w+ChMabKGOHmxt0j3x+9LyNMxX1EP
-         3Jew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qJvdR5sFA7841TfkHWBXVf+L88za68VvtqLkISWSSSU=;
-        b=b07NXCiIbtwWn5R7nNvx39btWfWlsOQkNF4Oc69Yp1a1Syr5YnjFwlbE/HbVdk0ODL
-         1CUdNXnBUa9Y7Vb2C01t3hg3zj6TBkWRJkdbfE+plW3zz/4qM6MG0p9siyGzuvRDoPnR
-         kkwmpqHHoTTye98eOtYRrjDQubrdoA2VK7ji8gtmKjW7Abzo8CfrEfnXyxTYGdK61Ro5
-         UroRmlFCq2fVANlhsBsRElt1Bf13ZjIIOr/bqv2xwaXOgcbU63zxAZKYXC92KFKp/Shf
-         u+bfYF6NyaBHC8If1dGclv4BbfM0yC93yh/Vo8lHdRqYi9S1HV7Mhluje3YdsFIaw5RJ
-         KD5A==
-X-Gm-Message-State: ACrzQf3HL5dKwErxAH+e5MbA6vtaRtRgJvBmvUSVsnJsDVCG3IAx9vuz
-        a36s7/NH+XkMw3rVALVQ7Fg=
-X-Google-Smtp-Source: AMsMyM5LtnhoGQVPF1/aZdx0Ww5Twiu2AUPSNLg9xfOIYwLgbnmpUSxpyBsVvLUI4irke88ri3dgig==
-X-Received: by 2002:a63:5158:0:b0:45a:8a3d:9da1 with SMTP id r24-20020a635158000000b0045a8a3d9da1mr18164926pgl.539.1665433777637;
-        Mon, 10 Oct 2022 13:29:37 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id g7-20020a6544c7000000b0043ae1797e2bsm6460011pgs.63.2022.10.10.13.29.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 13:29:37 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 10 Oct 2022 10:29:36 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Kemeng Shi <shikemeng@huawei.com>
-Cc:     axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] blk-cgroup: Fix typo in comment
-Message-ID: <Y0SAsFcIgLvkPpPi@slm.duckdns.org>
-References: <20221010023859.11896-1-shikemeng@huawei.com>
- <20221010023859.11896-5-shikemeng@huawei.com>
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB660A469;
+        Mon, 10 Oct 2022 13:29:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665433781; x=1696969781;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pj1tfEUCE/wJH4QG9Wqos5hm0JlIhucQm+V+ho/BGWU=;
+  b=FB4xj1SNUzpr9ddA2IEhruOiNK/aOaowmkfXZ1bkVP82M17XJ47rBMB2
+   OAHSje80C4HSV4IZCk7oz/ixkTGeMxfAcIqlkjyLRLu2pRJsIDaTXugQU
+   F1vszebuBs8lxAYgpNvoYfAhZN4oAwJujB+jBUc8QUxVWVzy1srJZgLZ9
+   R20ewZ+lk2HY6QkWtpm9HMJkfVrrFgA58CASBnRKS2xcERmw4KR5S3fTb
+   HPd2DmzeLpseXCYsXb4i1mVQ33pPZO1/Q4JhfruR/NLcz9REuCqVZ+Abg
+   nGmu0j11amalJArBMsSmLN8h9j8ZkY5ulYukbzExZdjVImwHxmpJ7HDQx
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="305952274"
+X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
+   d="scan'208";a="305952274"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:29:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="768534240"
+X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
+   d="scan'208";a="768534240"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Oct 2022 13:29:39 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ohzP7-00512U-1i;
+        Mon, 10 Oct 2022 23:29:37 +0300
+Date:   Mon, 10 Oct 2022 23:29:37 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v1 1/1] mac_pton: Don't access memory over expected length
+Message-ID: <Y0SAsQoD0/5oDlGX@smile.fi.intel.com>
+References: <20221005164301.14381-1-andriy.shevchenko@linux.intel.com>
+ <Y0R+ZU6kdbeUER1c@lunn.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221010023859.11896-5-shikemeng@huawei.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y0R+ZU6kdbeUER1c@lunn.ch>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 10:38:59AM +0800, Kemeng Shi wrote:
-> Replace assocating with associating.
-> Replace assocaited with associated.
+On Mon, Oct 10, 2022 at 10:19:49PM +0200, Andrew Lunn wrote:
+> On Wed, Oct 05, 2022 at 07:43:01PM +0300, Andy Shevchenko wrote:
+> > The strlen() may go too far when estimating the length of
+> > the given string. In some cases it may go over the boundary
+> > and crash the system which is the case according to the commit
+> > 13a55372b64e ("ARM: orion5x: Revert commit 4904dbda41c8.").
+> > 
+> > Rectify this by switching to strnlen() for the expected
+> > maximum length of the string.
 > 
-> Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
+> This seems like something which should have a fixes: tag, and be
+> against net, not net-next.
 
-Acked-by: Tejun Heo <tj@kernel.org>
-
-Thanks.
+I can (re-)send it that way. Just need a consensus by net maintainers.
 
 -- 
-tejun
+With Best Regards,
+Andy Shevchenko
+
+
