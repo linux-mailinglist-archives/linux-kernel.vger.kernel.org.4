@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A15A75FA4CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1FE35FA4E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 22:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbiJJUPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 16:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
+        id S229879AbiJJUPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 16:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiJJUPW (ORCPT
+        with ESMTP id S229696AbiJJUPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 16:15:22 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D5F65269;
-        Mon, 10 Oct 2022 13:15:13 -0700 (PDT)
+        Mon, 10 Oct 2022 16:15:24 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4110D6EF31;
+        Mon, 10 Oct 2022 13:15:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665432914; x=1696968914;
+  t=1665432918; x=1696968918;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=1RmxBnijmSLNIyL2ITdFJrA7Z6UfQyPxRAWlXDyYJM4=;
-  b=EP6h9KisNKKLpCHqZwfyZdMUrKXmdGi0BKVVqn3SVgG1xrhz+YlU/d0/
-   yNLJDvemm7AE0wodpcotZQZ29hQiZ/CmxSbXRMNznbN6OzM1UCx4eUd2E
-   95+NpNDRDdQCTC6L2ql+hTg6f5tsWfy6Dkb6yBLZp1XAmk+NLKyFNKTSo
-   FjCdliaiYKLTmlu1VhGmp3eho1axxsEfFUsZhrku8F6Edtk3f66oA74Y0
-   uKeiJbBUk3ASTkI0r2A7Cp5w/oCCz1DMHL2Wt/LBvlZwOsI/ZnbGbX1qX
-   pIaomDv32uD9kEWDDtesHww4gTzJSGX2M1FpT4ez1OigOXMv1cLQWi9QV
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="284706578"
+  bh=CqemTGOdGp4RFKaxsArxDkHX9Dedwc8sdTjVd9O3UKk=;
+  b=iOoYe8XwfxzsBwAifuBosbTjQn2Ivl29GTNEfHDZzXh35TnZRrCWLoCy
+   eWxVzxK0k5TYA1m2pX3qso2o3GpbtKetbP5f/nfx6lVCsL3fYqEnBBdIo
+   Biu5T3JTYFlsRk04CREJs3KS7XSGjzOspHzgJ3JeUu0Wh/c0atWZMssc/
+   FPX3G+kDftIg5ClUkmBSHKItbz0aafANrp1WtCeZTwxCNyG1OTIPvtbde
+   Z0rj/h2ZOO0rHMIqe0yxRUFuR5cOxsDtGZ8y3/q/cREakW/r3HVhwXNyb
+   PZc3hcJeTCfifTLPejnVnkfCYX/6zgGrKRq7lp4R7WuuBV1aQ6AbpkXD+
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="291638356"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="284706578"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:12 -0700
+   d="scan'208";a="291638356"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:14 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="715240688"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603862808"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="715240688"
+   d="scan'208";a="603862808"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Oct 2022 13:15:02 -0700
+  by orsmga006.jf.intel.com with ESMTP; 10 Oct 2022 13:15:02 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 9D391331; Mon, 10 Oct 2022 23:15:11 +0300 (EEST)
+        id B3C0FD0; Mon, 10 Oct 2022 23:15:11 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Marc Zyngier <maz@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -132,17 +132,18 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Emil Renner Berthing <kernel@esmil.dk>,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v2 04/36] pinctrl: actions: Add missed header(s)
-Date:   Mon, 10 Oct 2022 23:14:20 +0300
-Message-Id: <20221010201453.77401-5-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 05/36] pinctrl: aspeed: Add missed header(s)
+Date:   Mon, 10 Oct 2022 23:14:21 +0300
+Message-Id: <20221010201453.77401-6-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -156,33 +157,21 @@ While at it, sort headers alphabetically.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/actions/pinctrl-owl.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/pinctrl/aspeed/pinctrl-aspeed.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/pinctrl/actions/pinctrl-owl.c b/drivers/pinctrl/actions/pinctrl-owl.c
-index ed46abc15d72..a84ace6e451e 100644
---- a/drivers/pinctrl/actions/pinctrl-owl.c
-+++ b/drivers/pinctrl/actions/pinctrl-owl.c
-@@ -17,13 +17,15 @@
- #include <linux/module.h>
- #include <linux/of.h>
+diff --git a/drivers/pinctrl/aspeed/pinctrl-aspeed.c b/drivers/pinctrl/aspeed/pinctrl-aspeed.c
+index a30912a92f05..3945612900e6 100644
+--- a/drivers/pinctrl/aspeed/pinctrl-aspeed.c
++++ b/drivers/pinctrl/aspeed/pinctrl-aspeed.c
+@@ -5,6 +5,7 @@
+ 
+ #include <linux/mfd/syscon.h>
  #include <linux/platform_device.h>
 +#include <linux/seq_file.h>
-+#include <linux/slab.h>
-+#include <linux/spinlock.h>
-+
- #include <linux/pinctrl/machine.h>
-+#include <linux/pinctrl/pinconf-generic.h>
-+#include <linux/pinctrl/pinconf.h>
- #include <linux/pinctrl/pinctrl.h>
- #include <linux/pinctrl/pinmux.h>
--#include <linux/pinctrl/pinconf.h>
--#include <linux/pinctrl/pinconf-generic.h>
--#include <linux/slab.h>
--#include <linux/spinlock.h>
- 
+ #include <linux/slab.h>
+ #include <linux/string.h>
  #include "../core.h"
- #include "../pinctrl-utils.h"
 -- 
 2.35.1
 
