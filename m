@@ -2,61 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2F25FA6E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 23:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD4A5FA6EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 23:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiJJVVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 17:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37052 "EHLO
+        id S229969AbiJJVXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 17:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiJJVVb (ORCPT
+        with ESMTP id S229926AbiJJVXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 17:21:31 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922446B8C7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 14:21:30 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id y205so14329200yby.13
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 14:21:30 -0700 (PDT)
+        Mon, 10 Oct 2022 17:23:45 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746A879687
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 14:23:41 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id c20so1863613plc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 14:23:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nag5rgT1SyO7bS/Cq33CDAgI3PT/7kZb4HJKMhW5zgA=;
-        b=NM5cev8ZO7w7Cw9buCqJLgS4gcx9OjMJq17QWOeXvmsCZpZnd0KWdep/mI8b+j//DD
-         3NkaXZ8gC+Ix/JNMmaKzFqmWNvqH6nK9gzHIRj2O8RxnwesTEqdC2YI+dBR1FBK7jf//
-         lQ8uN/J23pZAoBMs7Aa2ApMvueho400uo0mhi7v12SvncZDvkOpAShTB2n2UIXV5LMwz
-         XI0WANq6eiv5NisGbJ1PHxdv2BvCvfW2fH/uxGeEj24rgNFUfBb/oKtdegOgLNvHUlBF
-         RJXDiGUi3WadFqsDpdWsTZXR/x5w9HklrZRkbt4Ckshy81ds13NZpbIo8sv6lyIzE2DJ
-         /eGQ==
+        bh=+sJ/oweV4chJnDymroBgeN7mOjH5s0c90aIlCoveJ3M=;
+        b=at/GzrNip0vvaWZdMtg6b9oC+qdIP9gDHkUbM/9OPUG+MiRzOxwwQbVFm6jxmJzhnD
+         vP3qEQ5igJTvzngSoUH8yN3TqvVyKxqnR2a80cbfRCYA4epezytZt4gZJrqDU6vhtgpR
+         ZQCcsJ3g6uQ83QzDXWu0lZ0V5ULbWzOfyB2mU+TkGoHCvekxONtqbZFVTNXJPKM9itZI
+         Aa6QPe7FTR/eteIiezYGlX55cm2YoYSsZg1qc2yIVC4OOQPz/99ikKVUqV+qybwfvLFY
+         pB7CxhRDHAaWyI9OFiwYjztUORXXzvpK/wLJcVC3N7hXmd2Q9LCUH6Wd9Mq8uFx9t6M1
+         m3Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Nag5rgT1SyO7bS/Cq33CDAgI3PT/7kZb4HJKMhW5zgA=;
-        b=Vc7qwNlBdgwmVAOir8nAbl0UGvuKcOp8xiFGtiAEP7aErgFCPJiwX38yodzBiHOPNw
-         XJQDHLRikdKxewWBJn0Aj1io1q0irdu9h2saaeBWqTps5lR3+K/buPa4WlKYaAo4Qt40
-         lolIXx45zM+XsgCYP18Ermi0taS6mPzyRjLKgK9d0Weh/LBgfwvJJd45zApPzw4dQE1q
-         fdAlL1fp96ub2HUHrrQNJ1n98/GvRMsXteBRoMzrc5QYASTIgIRvOiOnRSJFmuG1uaB6
-         XwU6OQWRguohzO84Fsw9HlyY88hlAWEtrxaPLs8qjHJNSbi82vSdoYZGdDB8cIjB6WvI
-         hoMg==
-X-Gm-Message-State: ACrzQf3umQzsX4SwCfj0cfYuxQdrhyz7iokBUSPg9EelRgtQEO3Os1Vx
-        Yfj8mDOLSogfYj1p6s3D+m8NdMVH67lCbzhLTBm2bDb8o+oGVA==
-X-Google-Smtp-Source: AMsMyM6DBuyiasTa+OZ5xeuQH81jewPmMskPgJJhNUJf3yaKMgjmrvaHLt+UIKC9ESlJ17Q2283TkRJXp8Gb5b99QDg=
-X-Received: by 2002:a05:6902:70a:b0:6be:e740:9c0a with SMTP id
- k10-20020a056902070a00b006bee7409c0amr20226702ybt.316.1665436889604; Mon, 10
- Oct 2022 14:21:29 -0700 (PDT)
+        bh=+sJ/oweV4chJnDymroBgeN7mOjH5s0c90aIlCoveJ3M=;
+        b=ADhL+h6QsmSXyH7Zy6ZTRgSykMkdgUo9HgvqKav04ShgqpOMKcgF+b+rtCQ8BN4oJT
+         xuU4I47bRoY2tNJKlpUPXxLpWEh53cnLVY9xmPm+XsgOFcJphH5kDQ8KA326y0wwrrrX
+         W7vRitKsJTyFnwCb8bqb59RVkbUIoZMJpIl4R9+716WS0ix4L8BlgzlOn5BvqiBho+8P
+         hX2OXlkfHhe5nKLVheotLKLKOwbkovq4geVDzbmUvq1m14t+AtE6fd4upAuvLo/gONnr
+         o2Lu1imZ+EwJ9Bm3Je5kBOw/vVxT7ow4wrImbHL0vdKe8uZE6bFKWEWSYaz5dJceZhVx
+         QP8Q==
+X-Gm-Message-State: ACrzQf05kBj0w0/+bxuln3SMGwqcBSshUnHERLfxwnV/mKUu5zroR/Ur
+        gHU0btPaw2FHjbTLZD1j4o8vWVdAuBjY3xv/nEHADw==
+X-Google-Smtp-Source: AMsMyM58c/JM1tzaEva2PMIuMrUgVzEel+We68/BGcV+MBNQiK2LN2GrNXYcryDyKaRMYyQSycCVwEN8m1GK+h8lyOM=
+X-Received: by 2002:a17:90b:3a88:b0:209:f35d:ad53 with SMTP id
+ om8-20020a17090b3a8800b00209f35dad53mr33965063pjb.102.1665437020431; Mon, 10
+ Oct 2022 14:23:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220913140817.GA9091@hu-pkondeti-hyd.qualcomm.com> <20221010104206.12184-1-zhouchengming@bytedance.com>
-In-Reply-To: <20221010104206.12184-1-zhouchengming@bytedance.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 10 Oct 2022 14:21:18 -0700
-Message-ID: <CAJuCfpF7Z+CYhk-f_aaDTE232+m9z_n-QfjGfdLje7QrX9bFtw@mail.gmail.com>
-Subject: Re: [PATCH] sched/psi: Fix avgs_work re-arm in psi_avgs_work()
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     hannes@cmpxchg.org, quic_pkondeti@quicinc.com,
-        peterz@infradead.org, quic_charante@quicinc.com,
-        linux-kernel@vger.kernel.org
+References: <20220716001616.4052225-1-ndesaulniers@google.com> <CAK8P3a0ky5w82=d2N_iZ2HYujeCDKJJqjT8P25-_+VpsZYWA_A@mail.gmail.com>
+In-Reply-To: <CAK8P3a0ky5w82=d2N_iZ2HYujeCDKJJqjT8P25-_+VpsZYWA_A@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 10 Oct 2022 14:23:28 -0700
+Message-ID: <CAKwvOdnfPeFpkD7zqt0EGk-xC_v_Lxt+2eOciMfbXihYG936Kw@mail.gmail.com>
+Subject: Re: [PATCH] arm: lib: implement aeabi_uldivmod via div64_u64_rem
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     clang-built-linux <llvm@lists.linux.dev>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Ard Biesheuval <ardb@kernel.org>, Gary Guo <gary@garyguo.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Craig Topper <craig.topper@sifive.com>,
+        Philip Reames <listmail@philipreames.com>, jh@jhauser.us
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -69,96 +75,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 3:42 AM Chengming Zhou
-<zhouchengming@bytedance.com> wrote:
+On Sat, Jul 16, 2022 at 2:47 AM Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> Pavan reported a problem that PSI avgs_work idle shutoff is not
-> working at all. Because PSI_NONIDLE condition would be observed in
-> psi_avgs_work()->collect_percpu_times()->get_recent_times() even if
-> only the kworker running avgs_work on the CPU.
->
-> Although commit 1b69ac6b40eb ("psi: fix aggregation idle shut-off")
-> avoided the ping-pong wake problem when the worker sleep, psi_avgs_work()
-> still will always re-arm the avgs_work, so shutoff is not working.
->
-> This patch changes to consider current CPU groupc as IDLE if the
-> kworker running avgs_work is the only task running and no IOWAIT
-> or MEMSTALL sleep tasks, in which case we will shut off the avgs_work
-> if other CPUs' groupc are also IDLE.
->
-> One potential problem is that the brief period of non-idle time
-> incurred between the aggregation run and the kworker's dequeue will
-> be stranded in the per-cpu buckets until avgs_work run next time.
-> The buckets can hold 4s worth of time, and future activity will wake
-> the avgs_work with a 2s delay, giving us 2s worth of data we can leave
-> behind when shut off the avgs_work. If the kworker run other works after
-> avgs_work shut off and doesn't have any scheduler activities for 2s,
-> this maybe a problem.
->
-> Reported-by: Pavan Kondeti <quic_pkondeti@quicinc.com>
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> On Sat, Jul 16, 2022 at 2:16 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > Compilers frequently need to defer 64b division to a libcall with this
+> > symbol name. It essentially is div64_u64_rem, just with a different
+> > signature. Kernel developers know to call div64_u64_rem, but compilers
+> > don't.
+> >
+> > Link: https://lore.kernel.org/lkml/20220524004156.0000790e@garyguo.net/
+> > Suggested-by: Gary Guo <gary@garyguo.net>
+> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Copying my comments from
-https://lore.kernel.org/all/CAJuCfpHyYMak-mfVmtEN9Z-hGYQ6Wko57TLjukz9HaN26EDAuA@mail.gmail.com/
-in case you want to continue the discussion here...
+So the existing division by constant issues went away, and Craig was
+able to improve division by double-word constants in LLVM
+1. https://reviews.llvm.org/D130862
+2. https://reviews.llvm.org/D135541
+But we still have one instance left that's not div/rem by constant via
+CONFIG_FPE_NWFPE=y that's now blocking Android's compiler upgrade.
+https://github.com/ClangBuiltLinux/linux/issues/1666
 
-> ---
->  kernel/sched/psi.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm/nwfpe/softfloat.c#n2312
+Any creative ideas on how to avoid this? Perhaps putting the `aSig -=
+bSig;` in inline asm? Inserting a `barrier()` or empty asm statement
+into the loops also seems to work.
+
+Otherwise I'd define __aeabi_uldivmod as static in
+arch/arm/nwfpe/softfloat.c (with the body from this patch) only for
+clang.
+
+I see this function seems to be based on Berkeley Softfloat
+http://www.jhauser.us/arithmetic/SoftFloat.html
+v2.  v3 looks like a total rewrite.  Looking at v3e, it looks like
+float64_rem() is now called f64_rem() and defined in f64_rem.c.  It
+doesn't look like there's anything from v3 that we could backport to
+the kernel's v2 to avoid this.
+
+Otherwise perhaps we just disable OABI_COMPAT for clang. Quite a few
+defconfigs explicitly enable FPE_NWFPE though.  Are there really a lot
+of OABI binaries still in use?
+
+There's also the hidden llvm flag:
+`-mllvm -replexitval=never` that seems to work here, though FWICT it's
+disabling 3 such loop elisions (I think all three statements in that
+do while).  That's probably the best way forward here...
+
+https://reviews.llvm.org/D9800 made the decision to do such a
+transformation when a loop can be fully elided ("deleted").
+
 >
-> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> index ee2ecc081422..f4cdf6f184ba 100644
-> --- a/kernel/sched/psi.c
-> +++ b/kernel/sched/psi.c
-> @@ -242,6 +242,8 @@ static void get_recent_times(struct psi_group *group, int cpu,
->                              u32 *pchanged_states)
->  {
->         struct psi_group_cpu *groupc = per_cpu_ptr(group->pcpu, cpu);
-> +       int current_cpu = raw_smp_processor_id();
-> +       bool only_avgs_work = false;
->         u64 now, state_start;
->         enum psi_states s;
->         unsigned int seq;
-> @@ -256,6 +258,15 @@ static void get_recent_times(struct psi_group *group, int cpu,
->                 memcpy(times, groupc->times, sizeof(groupc->times));
->                 state_mask = groupc->state_mask;
->                 state_start = groupc->state_start;
-> +               /*
-> +                * This CPU has only avgs_work kworker running, snapshot the
-> +                * newest times then don't need to re-arm for this groupc.
-> +                * Normally this kworker will sleep soon and won't wake
-> +                * avgs_work back up in psi_group_change().
-> +                */
-> +               if (current_cpu == cpu && groupc->tasks[NR_RUNNING] == 1 &&
-> +                   !groupc->tasks[NR_IOWAIT] && !groupc->tasks[NR_MEMSTALL])
-> +                       only_avgs_work = true;
-
-Why do you determine only_avgs_work while taking a snapshot? The
-read_seqcount_retry() might fail and the loop gets retried, which
-might lead to a wrong only_avgs_work value if the state changes
-between retries. I think it's safer to do this after the snapshot was
-taken and to use tasks[NR_RUNNING] instead of  roupc->tasks.
-
->         } while (read_seqcount_retry(&groupc->seq, seq));
+> This has historically been strongly NAK'd, and I don't think that position
+> has changed in the meantime. A variable-argument 64-bit division is
+> really expensive, especially on 32-bit machines that lack a native
+> 32-bit division instruction, and we don't want developers to accidentally
+> insert one in their driver code.
 >
->         /* Calculate state time deltas against the previous snapshot */
-> @@ -280,6 +291,10 @@ static void get_recent_times(struct psi_group *group, int cpu,
->                 if (delta)
->                         *pchanged_states |= (1 << s);
->         }
-> +
-> +       /* Clear PSI_NONIDLE so avgs_work won't be re-armed for this groupc */
-> +       if (only_avgs_work)
-> +               *pchanged_states &= ~(1 << PSI_NONIDLE);
-
-This seems to be safe because changed_states&(1<< PSI_NONIDLE) is used
-only for re-arming psi_avgs_work, however semantically this is
-incorrect. The CPU was not idle when it was executing psi_avgs_work.
-IMO a separate flag would avoid this confusion.
-
->  }
+> Explicitly calling one of the division helpers in linux/math64.h is the
+> established way for driver writers to declare that a particular division
+> cannot be turned into a cheaper operation and is never run in a
+> performance critical code path. The compiler of course cannot know
+> about either of those.
 >
->  static void calc_avgs(unsigned long avg[3], int missed_periods,
-> --
-> 2.37.2
->
+>         Arnd
+
+
+
+-- 
+Thanks,
+~Nick Desaulniers
