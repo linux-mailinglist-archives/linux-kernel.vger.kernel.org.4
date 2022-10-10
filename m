@@ -2,104 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6E35F9E40
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 14:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D40A65F9E43
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 14:01:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbiJJMBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 08:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
+        id S232399AbiJJMBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 08:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232319AbiJJMA7 (ORCPT
+        with ESMTP id S232356AbiJJMBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 08:00:59 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB1B422E1;
-        Mon, 10 Oct 2022 05:00:53 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1321a1e94b3so12228828fac.1;
-        Mon, 10 Oct 2022 05:00:53 -0700 (PDT)
+        Mon, 10 Oct 2022 08:01:00 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B460346233;
+        Mon, 10 Oct 2022 05:00:55 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id n83so12431403oif.11;
+        Mon, 10 Oct 2022 05:00:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cvr1/y9Of9lpkIqcjV6G6ntkRJTdHb+csNczqS1QY0Y=;
-        b=a0lHkpgWoOGnGl0rGq+SGanzJp45Y+NbjugJ01P+TbmlUhls0YLMny8DJclbTuXRQ/
-         MV+NDx2CYa7hnLQxgyvpCSt2xsIZm03tgJAEAFGPYYC9aNGYHIvWRLNM7Lv5W02jlaX5
-         ODtGCqhvasunRbPb1A6regiJO4BzK4CKVeBSglbn38Sv9qgpcbAlPhWqKTA8dXCc0xFL
-         nvll7Ug+8QE/v3FT4sz4o0+3wh6kNVr0XzPveW0nN/rK9b2eYOLIvfCPWifKzqMTQB20
-         uN79xJYxtnY8eGHjpsaYeX7ebCuXUJuRZZh+fIxpmYjWyRREDHDMv5ATB5fvPwqnuNxh
-         h9Pg==
-X-Gm-Message-State: ACrzQf1lL4o+7Ia8f1nRd9SrxztGyVEhPgK3rHkKSMXI6ll5sFX4lXAs
-        UXSMDXzfedJZphZVLNyROQ==
-X-Google-Smtp-Source: AMsMyM6oqRBqHzumn9e+K1gFlq5Z/OR4uNPi3VN2ZTest9ElNqOUJS2cK92n+F5XlbQMAf0fzRMWgw==
-X-Received: by 2002:a05:6870:e88e:b0:132:411:99 with SMTP id q14-20020a056870e88e00b0013204110099mr14412955oan.226.1665403252857;
-        Mon, 10 Oct 2022 05:00:52 -0700 (PDT)
+        bh=BB5C5dB8R9ENRGYGbuAkJYdFcwZHeHFPMA7Qnx1N4Po=;
+        b=nve1PcMDHBYHJo4krQ2UT0takT8GT7eDzrYWWqge7lVbRCCNcfFDVl0a/KA9YztZny
+         PrugzLQNO/kMDXBzLgaCyJRiSb2R70zveGRUt7ckLCEo8c00uhDc3ku7c2S1NRis2Fsp
+         8SMuTtaTECrpPrnFAfBL6rntzVHVeHSq77n33g2+2RJFyqMdQ3YZuMh/66dFGz94G2vG
+         3bNetMqTxLPgK+NgwN3qpt9baZNpkqpr9TKJ0xomJD+/SSob+vCpQo4tJfB3WJvpkwl8
+         2yjn/AoNERIF7hApW1mec6IPvKWlcknDYKuTeJLNvCb4ZkiGXbHEvGv7VHKGHqPsG6Sc
+         mm2w==
+X-Gm-Message-State: ACrzQf2mJ4QBGUYd3KwnMnH24iZk7wsGIavT6teghAph8MvSy8PIeJUW
+        hq0deGJv1tTBwQYXYxDTTg==
+X-Google-Smtp-Source: AMsMyM7so91mjca1PxJAqekTE4APV934U2Cp5biFwGAriDr6yHsVVJRuVRhBi5ZKmglwrRSdFidPVA==
+X-Received: by 2002:a05:6808:1142:b0:350:cbdd:c9d4 with SMTP id u2-20020a056808114200b00350cbddc9d4mr8440348oiu.124.1665403254375;
+        Mon, 10 Oct 2022 05:00:54 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y21-20020a4ae715000000b00425678b9c4bsm4100932oou.0.2022.10.10.05.00.51
+        by smtp.gmail.com with ESMTPSA id r4-20020acaf304000000b0035179b87ba5sm4141187oih.20.2022.10.10.05.00.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 05:00:52 -0700 (PDT)
-Received: (nullmailer pid 412149 invoked by uid 1000);
+        Mon, 10 Oct 2022 05:00:53 -0700 (PDT)
+Received: (nullmailer pid 412152 invoked by uid 1000);
         Mon, 10 Oct 2022 12:00:53 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     festevam@gmail.com, linux-arm-kernel@lists.infradead.org,
-        shawnguo@kernel.org, linux-usb@vger.kernel.org, jun.li@nxp.com,
-        linux-imx@nxp.com, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        gregkh@linuxfoundation.org, devicetree@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org
-In-Reply-To: <20221010101816.298334-2-peng.fan@oss.nxp.com>
-References: <20221010101816.298334-1-peng.fan@oss.nxp.com> <20221010101816.298334-2-peng.fan@oss.nxp.com>
-Message-Id: <166540304239.403876.13950596185888758085.robh@kernel.org>
-Subject: Re: [PATCH 1/6] dt-bindings: usb: ci-hdrc-usb2: convert to yaml
+Cc:     Peng Fan <peng.fan@nxp.com>, linux-arm-kernel@lists.infradead.org,
+        jun.li@nxp.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        s.hauer@pengutronix.de, krzysztof.kozlowski+dt@linaro.org,
+        kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        shawnguo@kernel.org, festevam@gmail.com
+In-Reply-To: <20221010101816.298334-6-peng.fan@oss.nxp.com>
+References: <20221010101816.298334-1-peng.fan@oss.nxp.com> <20221010101816.298334-6-peng.fan@oss.nxp.com>
+Message-Id: <166540306019.408420.11115678117503768156.robh@kernel.org>
+Subject: Re: [PATCH 5/6] dt-bindings: usb: usbmisc-imx: add clocks property
 Date:   Mon, 10 Oct 2022 07:00:53 -0500
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Oct 2022 18:18:11 +0800, Peng Fan (OSS) wrote:
+On Mon, 10 Oct 2022 18:18:15 +0800, Peng Fan (OSS) wrote:
 > From: Peng Fan <peng.fan@nxp.com>
 > 
-> Convert the binding to yaml format
+> Add optional clocks property
 > 
 > Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > ---
->  .../devicetree/bindings/usb/ci-hdrc-usb2.txt  | 158 ---------
->  .../devicetree/bindings/usb/ci-hdrc-usb2.yaml | 306 ++++++++++++++++++
->  2 files changed, 306 insertions(+), 158 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt
->  create mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+>  Documentation/devicetree/bindings/usb/usbmisc-imx.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-yamllint warnings/errors:
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.example.dtb: usb@f7ed0000: clocks: [[4294967295, 29]] is too short
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.example.dtb: usb@2184400: clocks: [[4294967295, 162]] is too short
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+Full log is available here: https://patchwork.ozlabs.org/patch/
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/
+usbmisc@2184800: compatible: 'oneOf' conditional failed, one must be fixed:
+	arch/arm/boot/dts/imx6sl-evk.dtb
+	arch/arm/boot/dts/imx6sll-evk.dtb
+	arch/arm/boot/dts/imx6sll-kobo-clarahd.dtb
+	arch/arm/boot/dts/imx6sll-kobo-librah2o.dtb
+	arch/arm/boot/dts/imx6sl-tolino-shine2hd.dtb
+	arch/arm/boot/dts/imx6sl-tolino-shine3.dtb
+	arch/arm/boot/dts/imx6sl-tolino-vision5.dtb
+	arch/arm/boot/dts/imx6sl-warp.dtb
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+usbmisc@32e40200: compatible: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/freescale/imx8mm-beacon-kit.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-data-modul-edm-sbc.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-ddr4-evk.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-emcon-avari.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-evk.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-icore-mx8mm-ctouch2.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-icore-mx8mm-edimm2.2.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-mx8menlo.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-nitrogen-r2.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-phyboard-polis-rdk.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-tqma8mqml-mba8mx.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-var-som-symphony.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx-0x.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dahlia.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dev.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dahlia.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dev.dtb
+	arch/arm64/boot/dts/freescale/imx8mn-beacon-kit.dtb
+	arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2.dtb
+	arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dtb
+	arch/arm64/boot/dts/freescale/imx8mn-ddr3l-evk.dtb
+	arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dtb
+	arch/arm64/boot/dts/freescale/imx8mn-evk.dtb
+	arch/arm64/boot/dts/freescale/imx8mn-tqma8mqnl-mba8mx.dtb
+	arch/arm64/boot/dts/freescale/imx8mn-var-som-symphony.dtb
+	arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dtb
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+usbmisc@32e50200: compatible: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/freescale/imx8mm-beacon-kit.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-data-modul-edm-sbc.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-ddr4-evk.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-emcon-avari.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-evk.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-icore-mx8mm-ctouch2.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-icore-mx8mm-edimm2.2.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-mx8menlo.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-nitrogen-r2.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-phyboard-polis-rdk.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-tqma8mqml-mba8mx.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-var-som-symphony.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx-0x.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dahlia.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dev.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dahlia.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dev.dtb
 
