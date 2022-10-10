@@ -2,74 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F125FA06A
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F505FA06D
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 16:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbiJJOru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 10:47:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46358 "EHLO
+        id S229520AbiJJOr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 10:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiJJOrs (ORCPT
+        with ESMTP id S229769AbiJJOrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 10:47:48 -0400
+        Mon, 10 Oct 2022 10:47:52 -0400
 Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3893761133;
-        Mon, 10 Oct 2022 07:47:47 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 108BA32001FC;
-        Mon, 10 Oct 2022 10:47:45 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 10 Oct 2022 10:47:46 -0400
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F24647DE;
+        Mon, 10 Oct 2022 07:47:51 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 3ACA532007BE;
+        Mon, 10 Oct 2022 10:47:50 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Mon, 10 Oct 2022 10:47:50 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1665413265; x=1665499665; bh=XBBYtTJT3f
-        u3050JNCv4u7dVMEfnQsHU3OS3x5Ym9d4=; b=XXE4ZODVP+jz3lD7kmVqPPUFPA
-        3oCdLtm3dTcMUAdINjqdapPX2FNMEO/WpAdbjJvHAGaexMN+dLUUyWy3UP9nDdGs
-        BK7Q3qX11OK0dhJlYWO++uJR23O7d2IJjOGJ7lVCz2ejOKEKyZMZT6gnb8JxKo+u
-        /o9EGnVAEZM5XK1Bu4Ibcs0eewRCu0knTLHVuy/TNFS4dPxcPjoK5VWP+yRjJP9W
-        RNf69sxmgURwk6VRhj078+VIBQK2nxkeIfWBqATwR7OKr3B0gVPWfY3GzzyanpIG
-        xGKwyebcSySMoyLhO0eiEERXDVnMwpZlWYWyhJfz9CSklik3WuUCyhkT5mZw==
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1665413268; x=
+        1665499668; bh=9sqFsZNNl51RhUWDFFlTZugs83JAbNTW+MguCcEIsH0=; b=R
+        wXAGvxeGYuGznb+t5u66uyzl7wfOu5fA7zC1AjsAejrvAM0nLM+zmT6G+qEvLctf
+        FQFeqFqo6w9GRs/gSyvT/WrP1gYQYZMV/PqjehqtrgyX2Dyu9UrE32fS84egV9UU
+        o0Kh6rAPOmzLthZIRaRC4DqYirWJo+WFyyxBjxgszEg/Ddp8MG1NHkB3jTd6TTUw
+        aQGn3jBAaM9yRNBX5zLxzepl6GurR3q1UL6acV9Q685QK6KcP4jMk2//dCBAYmfG
+        gPAP2g9UUcmJYWTwjup8QGoJF5fXDieWE63wQduPYkt4xHDxcqtkBHDmVdX3x2PO
+        WjQTtbAHVnRg3z7d8UvzQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1665413265; x=1665499665; bh=XBBYtTJT3fu30
-        50JNCv4u7dVMEfnQsHU3OS3x5Ym9d4=; b=q3WoF3gzmdiNiZVqk7hN+RYy+Nfqi
-        qEJg7drCuQ4QHabaQdV+dh1sVcJy4x5Gx9E5VqLP17mHQFYkj+UXkZF2CubvQizN
-        Ou2CwEpsMpDaPTaic+SZ3h7XmDObigwpbWbHYjzEn7VjtZ9x9vfCwArgcEKiS2mw
-        nYg9f35uEmU4t67x4uBTNm/5wvEYnNlvUI6psnLWlQbCpY/OHuuhA7DdGM0XiEYx
-        DN8l/+gAYLPRNDFGK9RcDQQw9C8BzjrABdVytBJJl33MjDeUyZX8CT5xRZHWqFFn
-        rE0BioaVTrZ0dG41Y4BipittNb2zf91DK17L0a14BrsrZwm7M7zv71ROQ==
-X-ME-Sender: <xms:kDBEY0cZoY2bpPdXedszdu-0K7nDDwnBIFkAqncxayQu6oAF9U6gRA>
-    <xme:kDBEY2OptzEVx3TUWWLP-beN5SXS2M_bO3O4BO0cEaOibrDpjPiKIE8-LBuy0EJiC
-    2VywqQcWfz40Liqros>
-X-ME-Received: <xmr:kDBEY1hpBiYLivc1bEA6f-H-E72mUJfODD3b0ErVe8EcFVaZejaMA83s2mt3>
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1665413268; x=
+        1665499668; bh=9sqFsZNNl51RhUWDFFlTZugs83JAbNTW+MguCcEIsH0=; b=o
+        39NGHgyFpPHHvz3+Jx6udxEoub0JqoGQ8egJP4tZA3baYizTnoIPu4EaBWE9i2Uu
+        tDvOGk3rQPgyMR2XoMr2jLcWiGtW7KcGeiU+Aa+3O6PiFefC7jmxPfgEnSXUr4sC
+        wQT83nlsYVoGJ1+QJNaAFAJClWueiy9LI5myzvimDQVvjuXU/H7oIQkKwViiOJsL
+        LhqD4pWDgU8g/VbAr3dESz+Jd2gTOqQBmghxpGLmzUYEnFJxfK2I2p44+pKJCzhe
+        Nq8132pZ/7iZnPB7Z5Zurptcqjv10RVjH7sbUKaElAxphFRL9ZnwK1sJXe0Ol2h/
+        S093IMGTaa+ItMBLTyy7g==
+X-ME-Sender: <xms:lDBEY8Hf7Uabw9xfWCqDkjSf3D_aLq0lr8dGkxqJOpMFMJ55K0b1MQ>
+    <xme:lDBEY1XHMdalWt-5aiUoDiDeNpQiD81lgU7PLOUCZaFxj9tZZ-j4DhyQMP9dc-rOG
+    reRo4bBMcvU6bF2O6E>
+X-ME-Received: <xmr:lDBEY2KVBFxaD6wd9t8-t1DuoLCu-36FpQc0EVhZvuPDEG2zxSjyulnNVl2o>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejgedgjeehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepufggtgfghfffkffvvefosehtkeertdertdejnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepieegfeehleekkeduteefheejgfeiffejgeefheeugedtfeekgfdvveegtdev
-    feehnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:kDBEY59WY6W5UvyEwChCkrQfGr-84wTXD8_IN8_84Uw8Z2EzZ3yXzA>
-    <xmx:kDBEYwuA9qNjyJbKR9uCA9KIsB9uA-PxpqomYEiZLfoPzAHV1drMMQ>
-    <xmx:kDBEYwEDCVxCnCD7e9bk3X8wWgmavlKF7H4GAPGG92MbeZK3oqmA1A>
-    <xmx:kTBEY6U1xBI6mt_-H1cbRs2CKFCSQCQJFZH334IuLz9n3Nu_IJ8Tpw>
+    cujfgurhephfffufggtgfgkfhfjgfvvefosehtkeertdertdejnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnheplefhjedthedtgfdvgeetkeegfeeggfeifedvtdegffekteeivdehveef
+    geekffejnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
+    tghh
+X-ME-Proxy: <xmx:lDBEY-ESZUPeeqVbvSHlfsGq6z383fhrpKvA4m4f2mXmupObrfwzhA>
+    <xmx:lDBEYyX0rkLDkMp0rDSRWWR6KMz-O1dxDMI3dRPfH-4sb4nTfMIuPg>
+    <xmx:lDBEYxPO2TwgkgietOPjJSD1PzAxFilyHmj5fxjcWLW51c1v6rojTg>
+    <xmx:lDBEY0feflghHESyWi_A1eIcpkvtqijjUs64eL0OZTBLWB91ot7vTw>
 Feedback-ID: i8771445c:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 10 Oct 2022 10:47:44 -0400 (EDT)
-Subject: [PATCH 0/2] clk: More Range Fixes
+ 10 Oct 2022 10:47:48 -0400 (EDT)
+From:   Maxime Ripard <maxime@cerno.tech>
+Date:   Mon, 10 Oct 2022 16:47:38 +0200
+Subject: [PATCH 1/2] clk: Update req_rate on __clk_recalc_rates()
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-b4-tracking: H4sIAIkwRGMC/w3LQQqAMAwAwa9IzgbagqD+JtaowRKlQRHEv5vjsOwLxlXYYGxeqHyLyaGO2DaQN9
- KVUWY3pJBSDDFgPQVz2XGRhw1pJVGkoYt94MV7D35OZIxTJc2bv3qV8n0/2rANVGoAAAA=
-From:   Maxime Ripard <maxime@cerno.tech>
-Date:   Mon, 10 Oct 2022 16:47:37 +0200
-Message-Id: <20221010-rpi-clk-fixes-again-v1-0-d87ba82ac404@cerno.tech>
+Message-Id: <20221010-rpi-clk-fixes-again-v1-1-d87ba82ac404@cerno.tech>
+References: <20221010-rpi-clk-fixes-again-v1-0-d87ba82ac404@cerno.tech>
+In-Reply-To: <20221010-rpi-clk-fixes-again-v1-0-d87ba82ac404@cerno.tech>
 To:     Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>
 Cc:     linux-clk@vger.kernel.org, Mark Brown <broonie@kernel.org>,
@@ -77,11 +80,11 @@ Cc:     linux-clk@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Maxime Ripard <maxime@cerno.tech>
 X-Mailer: b4 0.11.0-dev-7da52
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1127; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=TFa7qcW7NCwE1LLk8e+al5tmxEiAYshiaEnShrmJHI0=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMkuBn2+b/+eCGtZvmKy9Le858HJ8zzXZO/M3bzUN82vSabq
- wtzwjlIWBjEuBlkxRZYYYfMlcadmve5k45sHM4eVCWQIAxenAEzExpbhn1HjUrML28rUdyfXM7z6pp
- YxubNsU9KKT9sb8hoEp+xZv5Lhn7pb4o/Vm08kzipbZCo490H5/cwYyxMiOoxLJp45fW3KF24A
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5969; i=maxime@cerno.tech;
+ h=from:subject:message-id; bh=Ks0lq0K5/EYAMogpYjI5VVgAh5118kcALUO3PZkjYvk=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMkuBn3HNypNM5xaOKe9d+nf7nsGbilnb0fb/1F7HsumzHxz
+ Th9HRykLgxgXg6yYIkuMsPmSuFOzXney8c2DmcPKBDKEgYtTACbi95uR4ZXVxAZBp3npd6S+51ccv6
+ PYfWd9bpbh7yl8996ZR79X3srIMPtRJW+02Z8t8iHxfW83Ldit8uqgueyep3t2bdjhzM/nyggA
 X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -93,39 +96,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Commit cb1b1dd96241 ("clk: Set req_rate on reparenting") introduced a
+new function, clk_core_update_orphan_child_rates(), that updates the
+req_rate field on reparenting.
 
-Here are patches that might address the issues reported by Marek and Mark,
-according to Stephen's intuition :)
+It turns out that that function will interfere with the clock notifying
+done by __clk_recalc_rates(). This ends up reporting the new rate in
+both the old_rate and new_rate fields of struct clk_notifier_data.
 
-Either way, it's still fixing and adding test coverage for a regression
-introduced by my recent work.
+Since clk_core_update_orphan_child_rates() is basically
+__clk_recalc_rates() without the notifiers, and with the req_rate field
+update, we can drop clk_core_update_orphan_child_rates() entirely, and
+make __clk_recalc_rates() update req_rate.
 
-If it's easier for you to test, this series is also pushed here:
-https://github.com/mripard/linux/tree/rpi/clk-fixes-again
+However, __clk_recalc_rates() is being called in several code paths:
+when retrieving a rate (most likely through clk_get_rate()), when changing
+parents (through clk_set_rate() or clk_hw_reparent()), or when updating
+the orphan status (through clk_core_reparent_orphans_nolock(), called at
+registration).
 
-Maxime
+Updating req_rate on reparenting or initialisation makes sense, but we
+shouldn't do it on clk_get_rate(). Thus an extra flag has been added to
+update or not req_rate depending on the context.
 
-To: Michael Turquette <mturquette@baylibre.com>
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: linux-clk@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+Fixes: cb1b1dd96241 ("clk: Set req_rate on reparenting")
+Link: https://lore.kernel.org/linux-clk/0acc7217-762c-7c0d-45a0-55c384824ce4@samsung.com/
+Link: https://lore.kernel.org/linux-clk/Y0QNSx+ZgqKSvPOC@sirena.org.uk/
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Reported-by: Mark Brown <broonie@kernel.org>
+Suggested-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-
 ---
-Maxime Ripard (2):
-      clk: Update req_rate on __clk_recalc_rates()
-      clk: tests: Add tests for notifiers
+ drivers/clk/clk.c | 39 +++++++++++----------------------------
+ 1 file changed, 11 insertions(+), 28 deletions(-)
 
- drivers/clk/clk.c      |  39 ++++---------
- drivers/clk/clk_test.c | 156 +++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 167 insertions(+), 28 deletions(-)
----
-base-commit: cd9fd78f5c11b5e165d9317ef11e613f4aef4dd1
-change-id: 20221010-rpi-clk-fixes-again-a95180ef0108
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index dee5f39bfa90..c3c3f8c07258 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -1759,6 +1759,7 @@ static unsigned long clk_recalc(struct clk_core *core,
+ /**
+  * __clk_recalc_rates
+  * @core: first clk in the subtree
++ * @update_req: Whether req_rate should be updated with the new rate
+  * @msg: notification type (see include/linux/clk.h)
+  *
+  * Walks the subtree of clks starting with clk and recalculates rates as it
+@@ -1768,7 +1769,8 @@ static unsigned long clk_recalc(struct clk_core *core,
+  * clk_recalc_rates also propagates the POST_RATE_CHANGE notification,
+  * if necessary.
+  */
+-static void __clk_recalc_rates(struct clk_core *core, unsigned long msg)
++static void __clk_recalc_rates(struct clk_core *core, bool update_req,
++			       unsigned long msg)
+ {
+ 	unsigned long old_rate;
+ 	unsigned long parent_rate = 0;
+@@ -1782,6 +1784,8 @@ static void __clk_recalc_rates(struct clk_core *core, unsigned long msg)
+ 		parent_rate = core->parent->rate;
+ 
+ 	core->rate = clk_recalc(core, parent_rate);
++	if (update_req)
++		core->req_rate = core->rate;
+ 
+ 	/*
+ 	 * ignore NOTIFY_STOP and NOTIFY_BAD return values for POST_RATE_CHANGE
+@@ -1791,13 +1795,13 @@ static void __clk_recalc_rates(struct clk_core *core, unsigned long msg)
+ 		__clk_notify(core, msg, old_rate, core->rate);
+ 
+ 	hlist_for_each_entry(child, &core->children, child_node)
+-		__clk_recalc_rates(child, msg);
++		__clk_recalc_rates(child, update_req, msg);
+ }
+ 
+ static unsigned long clk_core_get_rate_recalc(struct clk_core *core)
+ {
+ 	if (core && (core->flags & CLK_GET_RATE_NOCACHE))
+-		__clk_recalc_rates(core, 0);
++		__clk_recalc_rates(core, false, 0);
+ 
+ 	return clk_core_get_rate_nolock(core);
+ }
+@@ -1900,23 +1904,6 @@ static void clk_core_update_orphan_status(struct clk_core *core, bool is_orphan)
+ 		clk_core_update_orphan_status(child, is_orphan);
+ }
+ 
+-/*
+- * Update the orphan rate and req_rate of @core and all its children.
+- */
+-static void clk_core_update_orphan_child_rates(struct clk_core *core)
+-{
+-	struct clk_core *child;
+-	unsigned long parent_rate = 0;
+-
+-	if (core->parent)
+-		parent_rate = core->parent->rate;
+-
+-	core->rate = core->req_rate = clk_recalc(core, parent_rate);
+-
+-	hlist_for_each_entry(child, &core->children, child_node)
+-		clk_core_update_orphan_child_rates(child);
+-}
+-
+ static void clk_reparent(struct clk_core *core, struct clk_core *new_parent)
+ {
+ 	bool was_orphan = core->orphan;
+@@ -1986,8 +1973,6 @@ static struct clk_core *__clk_set_parent_before(struct clk_core *core,
+ 	clk_reparent(core, parent);
+ 	clk_enable_unlock(flags);
+ 
+-	clk_core_update_orphan_child_rates(core);
+-
+ 	return old_parent;
+ }
+ 
+@@ -2033,7 +2018,6 @@ static int __clk_set_parent(struct clk_core *core, struct clk_core *parent,
+ 		clk_reparent(core, old_parent);
+ 		clk_enable_unlock(flags);
+ 
+-		clk_core_update_orphan_child_rates(core);
+ 		__clk_set_parent_after(core, old_parent, parent);
+ 
+ 		return ret;
+@@ -2657,9 +2641,8 @@ static void clk_core_reparent(struct clk_core *core,
+ 				  struct clk_core *new_parent)
+ {
+ 	clk_reparent(core, new_parent);
+-	clk_core_update_orphan_child_rates(core);
+ 	__clk_recalc_accuracies(core);
+-	__clk_recalc_rates(core, POST_RATE_CHANGE);
++	__clk_recalc_rates(core, true, POST_RATE_CHANGE);
+ }
+ 
+ void clk_hw_reparent(struct clk_hw *hw, struct clk_hw *new_parent)
+@@ -2743,9 +2726,9 @@ static int clk_core_set_parent_nolock(struct clk_core *core,
+ 
+ 	/* propagate rate an accuracy recalculation accordingly */
+ 	if (ret) {
+-		__clk_recalc_rates(core, ABORT_RATE_CHANGE);
++		__clk_recalc_rates(core, true, ABORT_RATE_CHANGE);
+ 	} else {
+-		__clk_recalc_rates(core, POST_RATE_CHANGE);
++		__clk_recalc_rates(core, true, POST_RATE_CHANGE);
+ 		__clk_recalc_accuracies(core);
+ 	}
+ 
+@@ -3642,7 +3625,7 @@ static void clk_core_reparent_orphans_nolock(void)
+ 			__clk_set_parent_before(orphan, parent);
+ 			__clk_set_parent_after(orphan, parent, NULL);
+ 			__clk_recalc_accuracies(orphan);
+-			__clk_recalc_rates(orphan, 0);
++			__clk_recalc_rates(orphan, true, 0);
+ 
+ 			/*
+ 			 * __clk_init_parent() will set the initial req_rate to
 
-Best regards,
 -- 
-Maxime Ripard <maxime@cerno.tech>
+b4 0.11.0-dev-7da52
