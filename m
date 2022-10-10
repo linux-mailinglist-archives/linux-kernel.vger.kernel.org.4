@@ -2,173 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C035F9D32
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015CC5F9D35
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 13:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231853AbiJJLAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 07:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35780 "EHLO
+        id S231861AbiJJLAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 07:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231801AbiJJLAH (ORCPT
+        with ESMTP id S231715AbiJJLAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 07:00:07 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2067.outbound.protection.outlook.com [40.107.102.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC9C4BA65;
-        Mon, 10 Oct 2022 04:00:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UN8vaHplcP2tzp/tqGaY/JBAKQV06BwNboybozgtqaWtAeO88r6YGp9ugaAj2kwM48p0H4O7MAdnJfeuO3KARClVQCIF2s6+5rtm2r+0OtDYG7ULCASrk9iEYCr71D6D+rVpmJIa1OZZgMtypLJ1vS413snRVYY+7nbqwR+pbCCID05ssNcW5O3CtdkFUdwvAVqPuW1nKU/EgGiYnIqVOzk7NJ1AISxLMtVrpEfJ9T1XSqy7bgOwW/G98BK5E4y3uqGJMRwYnXU3aCm+ccpCzhFS4/n11XgziosX9yMp42MUiSAflitAfbGsw1Nd+fmRMwvkBbOxZmmOywTaO2pW0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QvbLCsVgqSSYj5HBtQqqIdcpp2QxjCyPZs24Xo6xsD4=;
- b=GsQ4KE3AjspdqhzXq4YDgNIF7cZh0NQBCLA65RNIlxZlEKB3tKjzD1AFCV3HL42K+LW7m1KqBDVXdu/K4CBYueyct8mAAnnEbW+wC1TDF6bh2vlM4bFiJyLYP3ots7ZCcdbvlz9PITZ9eAz8jdwnHQeack0yTZV9nt6ZSPBqnThiJhPDEdPDlIMGZ2q7BTq862tatFUTHkRBYYTW3zaCm5n4/2i6HRUpKk02sRO34G5OTDuTpp3UbUlPUjfEC/JVrSy5ngX7l8yvNFYTDq1kE1SIOugCc2b5e2XVoWRn3kLl6sxXUm0whisiYztIFtpXPlsnX+oPkh30OIyqvjkadQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QvbLCsVgqSSYj5HBtQqqIdcpp2QxjCyPZs24Xo6xsD4=;
- b=GyKwSCVva14Vf6d9soGPkjWPYEmEw2JbRSQBZGKaVnqTpsRZ58hCqC+kO21BI/P7UrwElSATtwAS5Eo8FsmndvDeTBhbDZHoEmNd1RnJ/jwUJN/5K9ZgiWFkvfWWtC+hKRCCafR1us4qJAvgDc7JpSbZuHxvXF3QxY+HAUe4FKs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
- by DM6PR12MB4284.namprd12.prod.outlook.com (2603:10b6:5:21a::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15; Mon, 10 Oct
- 2022 11:00:02 +0000
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::4a1c:7d22:b1b:1adc]) by PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::4a1c:7d22:b1b:1adc%6]) with mapi id 15.20.5676.032; Mon, 10 Oct 2022
- 11:00:02 +0000
-Message-ID: <aa2484ea-03b1-f3fd-339e-145e3fb79c78@amd.com>
-Date:   Mon, 10 Oct 2022 16:29:45 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] perf: Rewrite core context handling
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
-        eranian@google.com, ak@linux.intel.com, mark.rutland@arm.com,
-        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
-        will@kernel.org, robh@kernel.org, mingo@redhat.com,
-        catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com, Ravi Bangoria <ravi.bangoria@amd.com>
-References: <20220829113347.295-1-ravi.bangoria@amd.com>
- <e1d933d1-4772-1357-9cf1-6e5b842508c8@amd.com>
- <Y0PwgBz6asJOHSan@hirez.programming.kicks-ass.net>
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-In-Reply-To: <Y0PwgBz6asJOHSan@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0011.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:25::16) To PH7PR12MB6588.namprd12.prod.outlook.com
- (2603:10b6:510:210::10)
+        Mon, 10 Oct 2022 07:00:38 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D8A6D574;
+        Mon, 10 Oct 2022 04:00:32 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29AAhSjT025614;
+        Mon, 10 Oct 2022 11:00:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=M9EMeZjkhjQVWcAHZnlu9y0f5IYkwlTt+gfNtWBWWyM=;
+ b=qaA7MqtiZvvOfS/L/vTsujHdrT48/EL8jIi2A+CFxPodO8U24GVcRyT6FLd8nR0725Hq
+ bVBORMfANc0hQ1jcJTC/Z8QKQepNu+Lq4/rfQt9jG2KTt/NyGSHwMJNUkrz1p6Qyf5Bk
+ eu7nDp5fQzmysIAch+P35Eq6mP3gtmPotKQTyVnwFQJ49I9jEjJeRYrO/qCe/MnqTT7A
+ i9QMfcQWyvYIb5aT+tohyrg8UD1dHTQM1Prv5Im+1manqTGTBuz1L3cKAmoo3UOMS0dZ
+ rjpH0Shf9Rzlc+28iLABxRm+21Te3tWy5WBa/3dCgOUBXl+ELEDXBw/tzAFX1dfmUdja jg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3k9893sr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 11:00:25 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29A9gO45016220;
+        Mon, 10 Oct 2022 11:00:25 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k3k9893r7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 11:00:25 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29AArUNf029557;
+        Mon, 10 Oct 2022 11:00:23 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3k30fj1yb4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Oct 2022 11:00:22 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29AB0puV53150162
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 10 Oct 2022 11:00:51 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A93C411C04A;
+        Mon, 10 Oct 2022 11:00:20 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C5BFB11C04C;
+        Mon, 10 Oct 2022 11:00:17 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.59.13])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon, 10 Oct 2022 11:00:17 +0000 (GMT)
+Date:   Mon, 10 Oct 2022 16:30:14 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Jan Kara <jack@suse.cz>
+Cc:     linux-ext4@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        rookxu <brookxu.cn@gmail.com>,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Subject: Re: [PATCH 7/8] ext4: Use rbtrees to manage PAs instead of inode
+ i_prealloc_list
+Message-ID: <Y0P7Pu0/KQFdgnp/@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <cover.1665088164.git.ojaswin@linux.ibm.com>
+ <ee2dd0087cea34b5fdfdbee5d9bc56fb4dd22e54.1665088164.git.ojaswin@linux.ibm.com>
+ <20221010093826.uc3zvxyhcyjqosrg@quack3>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|DM6PR12MB4284:EE_
-X-MS-Office365-Filtering-Correlation-Id: a6859159-301d-46cf-88ce-08daaaae9451
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fsRmK0sZ8Sq2jNZzNhMFbYfIKpO0pK71euV5GXRyM+36nfPZeDfExYo7HIgA9wLsMsgWfpDbAdWMeWTvM13kK7twRfqStcr5KHBDy9542YWbW6Vg6JJr/TjltAGGPVlVL3BQu4+/3A8JuXwGPcdW0pPZ9eLxVv6qTqcXTAPEJn9wxIDNAKRjOcJX9fozVqThKJxW+tywNDyHL8hNDxl3T04eVq7UDLLk5lZ6cNfOy5dGd+8Luxel+kxkE9jWrreTW6YgoBweC/MBdn/m50GxVK9L6Lb31zacSvTzTNq5wShuW2j68hvOkummDeVIv4lHXDWkgd1Lua+n6cwh9qZDLaBLihQkYMJPh0EtwJN5gkOwzYIQ+OCk0j8LdghksBFJgcxhp6ME1GcFWm8RTYbudArzvHTtegBQUOXrB+G/p05FMCJkJukYt3eAs68P4L85XOYItczON9i7VVd6+m/Abmlwxt8u+hstv+lhuLbY64PwjNB1iT+8ZUXFcUUiI03MDZhdq6Y1AFE/+cSZ2UJKd7iTEoWxPJviqu2cAAaaDN4R3ePmnYMuIgzPAn7L6TEzyubBPNY0k31XllZCEHHLoOIGU4xMF691ZMN/iUCKlU4TgWSyHGSfBc1d09uVXk+lR4v/fnA5vHZR4WG7CWFyy7ako8r3Vhfw7gExf+StwN4vGjsimXhgobB0GH62kDOXZajm/l6auggPeGD4BBBK4pC8Dj7XLzQ/yebQUAskvHZ0JjHv+A10sR8Ad0nGu0FcTGinye+qPLLskYkO2RkinR9CE0Hc1JhzwyjbOCSIP3/oIeqXeBhmC3Xx2vzsNC5I
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(366004)(396003)(346002)(451199015)(86362001)(31696002)(38100700002)(316002)(36756003)(6916009)(478600001)(6486002)(8936002)(7416002)(5660300002)(44832011)(4326008)(66946007)(66476007)(2906002)(41300700001)(66556008)(83380400001)(6506007)(53546011)(6666004)(8676002)(2616005)(6512007)(26005)(186003)(31686004)(21314003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ekV4TVlPMW5iNEIySmNVczlsUWc5clY3NDgwQVZ4dEVOVkI2d29mRUhqbjRw?=
- =?utf-8?B?RzUxamt5TVlPb3JqSzJaK3dhck9sSGZicnZCOUM0ZWhEYmpwc0VXZDJLQzN3?=
- =?utf-8?B?MTh1dGN3QitKNXpKU0JPazZLWVpVQTFaV3loMGFlUWFwUXc4S2xZZm5NclRs?=
- =?utf-8?B?ODBGN2tCeWpsZDdjM0dxekFsVG5CV1ZzNVlJTytla1ZtYjJFdUJIcDR3dkZw?=
- =?utf-8?B?TENhRWR5WktyMUVEN2Nid1JFUW00UENtODhSOW93NjYvdVYwNXMzcnpRUlR3?=
- =?utf-8?B?RHd3UHlzN0dVNjVqeHh2L0l3c1lkUHhOUjZnVk16RHJyL2RpWnp3TzFOVFQ5?=
- =?utf-8?B?OTZ2Q1JLalhQRlVrUmg3VW1IM0ZIc2UrZmxPeW1HSzNXRjU1bHV3dGV2WnhX?=
- =?utf-8?B?eHpobnIzZ3lMTG9PcnVPYzdnMk9wVlpBL29jU3c1VW9WQ1NESEZ4amRhcWth?=
- =?utf-8?B?NzFSUG9YS1dlREc5cXhXV0xVMVFPNWlwTnVRbWFFLzJCTkhZcDl4MkNaUTcw?=
- =?utf-8?B?WmczZGp1NG4yZ2cwb01tSGx0R2wyZ2o0TjAyd3J0TWtXWEtRc2dLbTVFekxE?=
- =?utf-8?B?RWtHZmdWUWZsTUY2Ty9wZlhNYnFISmx6dGoyd09oeEd3c1ljOU5HUHNyZVlH?=
- =?utf-8?B?V2gzcnZZcHZCdmRwVExENS9idENjRlNpTDQzUUNvdlV0b1VhaFZ0dXdhYzIx?=
- =?utf-8?B?VUhWSStxZXVOb253SHNJSG1tTCsrdm9xdWhKcmVXb0VnbnJha3dIc2FNSi9o?=
- =?utf-8?B?SHBpQmJ2STlIZlhqN0ZKTHdHUmMzeW9uRktkZ2RwdEVVVTZ2YW9YT0FkV25l?=
- =?utf-8?B?QTFYWWMzN29nU3o1VUFjZEd3a3NYcmxmVDZZTTYvc202V3ZiSm9QNS9xcFgy?=
- =?utf-8?B?WkVQN1pLeldQN0RldFNjeXJnVDh6NmpzR3BsbVowRzFiaGg5WTFyS2ZveTgv?=
- =?utf-8?B?RjkxQ2RxSXE5ZmJFSXpQZjlKb3ZrRnc3SDYzV2pKS05PSGNISWdsRW8zZW9r?=
- =?utf-8?B?S3lUQW9abXdPYUN4TVFBWGtyQUkwWk9HcWtENmthMEJLMkFVL0VBTjZFdHYz?=
- =?utf-8?B?ZU5LTFdRa29jUms3UEgxMkdhMlhvLzRGZzhPNWNqaTREZDR2ZHJ2eUdvZGJW?=
- =?utf-8?B?V2ltSWJObFJpSTZLd3RIeDVtZGFBMVhDVFlWTmVMd2xoYXRCWWRDWGtKbVo2?=
- =?utf-8?B?bnI5MkcrN3pmY2doNDU1V1lScTQzMEFPTFA0RGdtNGhmalg5dU9iZi9zTjJm?=
- =?utf-8?B?ZXlRb2d2ekRnd2JyeEhLbXpSZmw2TzNtTVJiRG9TU0NiTExSVXAxZ2lWN2pE?=
- =?utf-8?B?bVBRQVBsS0pIaGRWa3NqU0NhZTA2aC9QT0RWZW13MjJITlhzem9YRUNiNU1m?=
- =?utf-8?B?R1Vna2U2SzZ6RHR3dzJ3TmEvOEZYWkhZbFoxZExpZ0k3eGVYVFFwOVFMbnRX?=
- =?utf-8?B?SHpNc21SUnBmUU9LSGFUdXgvc2pCMnRqQzM2aVdJSTZiR3luUnAwM2FoSkpN?=
- =?utf-8?B?UkcyQkwwQ1dXMVlCV004aDA0TzdlMHczMDFRV3Vjd3pqTkVDMTk2Q3JlVFpk?=
- =?utf-8?B?eEtsQ0kvL1F0MUVFK3ZRUXExV3lRTzdsaGM0eFArUXhaMi91Y2FCbFNva09L?=
- =?utf-8?B?Nk13TFdQeEtWY0JZdWx6M0hLcFBnM0ROL3FwUGFXOWN3blFWSC9seDVRMndL?=
- =?utf-8?B?R091NHhiK00yM0E1MDFxUDRNdFFEb0RIK09aK0ZHUzN0RTdBbmtLR2J6NzR2?=
- =?utf-8?B?WEYwK0FjcmZZOHhma1JlRUdmRmp3Y3NvY0MzbDdlZ1ZSck1DZ3I0Y29vQzNL?=
- =?utf-8?B?aDhwdjl6cHQ4c2xFdnh0MWhvN05Ud2ZFcGxhMk43VVhUeEVFNTNiNzZsWFVo?=
- =?utf-8?B?N2NHdmUvY2RvK1VNSHUyaStMTTN4TjZZd2hJdTNqWmlOdE1iTW9VU3ZFcnd4?=
- =?utf-8?B?UE1SS25iV2tlMnJkYUNwVUZCb2RHdEx4NHhHTkZ2WWpPNktvaVMyUDVvUkR0?=
- =?utf-8?B?bGZjSnRhUFpwZVpCMnpvY0cyV1ZnOGpMZk5zaGZRSS9WeHYzcVFsQlZRQThx?=
- =?utf-8?B?a3NMWUVQcVB6RWVRV0kyUCtvRjI4SDQ2Zk1PY3pudlpmNS9uVWFNcjRmV1Bu?=
- =?utf-8?Q?e284L3iuPVLyzM+kk5+7N40kD?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a6859159-301d-46cf-88ce-08daaaae9451
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Oct 2022 11:00:01.9810
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 59EthyghzGF0rpskTNtgzOLp8wME86RGWyjIzFbJanziGi5mtpKGfqjSIqR93WvEXg1p4j4n66SwLXUtmsj44g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4284
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221010093826.uc3zvxyhcyjqosrg@quack3>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: BByjOUzRN0574ALx0EhWfEmk0WJ7EkOK
+X-Proofpoint-ORIG-GUID: sl7tY1w06NSGMmYi24H_atE55YKrMfiO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-10_05,2022-10-10_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ mlxscore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0 phishscore=0
+ priorityscore=1501 malwarescore=0 mlxlogscore=824 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210100063
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10-Oct-22 3:44 PM, Peter Zijlstra wrote:
-> On Wed, Sep 07, 2022 at 04:58:49PM +0530, Ravi Bangoria wrote:
->>> -static void
->>> -ctx_flexible_sched_in(struct perf_event_context *ctx,
->>> -		      struct perf_cpu_context *cpuctx)
->>> +/* XXX .busy thingy from Peter's patch */
->>> +static void ctx_flexible_sched_in(struct perf_event_context *ctx, struct pmu *pmu)
->>
->> This one turned out to be very easy. Given that, we iterate over each
->> pmu, we can just return error if we fail to schedule any flexible event.
->> (It wouldn't be straight forward like this if we needed to implement
->> pmu=NULL optimization.)
->>
->> ---
->> diff --git a/kernel/events/core.c b/kernel/events/core.c
->> index e0232e0bb74e..923656af73fe 100644
->> --- a/kernel/events/core.c
->> +++ b/kernel/events/core.c
->> @@ -3751,6 +3751,7 @@ static int merge_sched_in(struct perf_event *event, void *data)
->>  			cpc = this_cpu_ptr(event->pmu_ctx->pmu->cpu_pmu_context);
->>  			perf_mux_hrtimer_restart(cpc);
->>  			group_update_userpage(event);
->> +			return -EBUSY;
->>  		}
->>  	}
->>  
+On Mon, Oct 10, 2022 at 11:38:26AM +0200, Jan Kara wrote:
+> On Fri 07-10-22 02:16:18, Ojaswin Mujoo wrote:
+> > Currently, the kernel uses i_prealloc_list to hold all the inode
+> > preallocations. This is known to cause degradation in performance in
+> > workloads which perform large number of sparse writes on a single file.
+> > This is mainly because functions like ext4_mb_normalize_request() and
+> > ext4_mb_use_preallocated() iterate over this complete list, resulting in
+> > slowdowns when large number of PAs are present.
+> > 
+> > Patch 27bc446e2 partially fixed this by enforcing a limit of 512 for
+> > the inode preallocation list and adding logic to continually trim the
+> > list if it grows above the threshold, however our testing revealed that
+> > a hardcoded value is not suitable for all kinds of workloads.
+> > 
+> > To optimize this, add an rbtree to the inode and hold the inode
+> > preallocations in this rbtree. This will make iterating over inode PAs
+> > faster and scale much better than a linked list. Additionally, we also
+> > had to remove the LRU logic that was added during trimming of the list
+> > (in ext4_mb_release_context()) as it will add extra overhead in rbtree.
+> > The discards now happen in the lowest-logical-offset-first order.
+> > 
+> > ** Locking notes **
+> > 
+> > With the introduction of rbtree to maintain inode PAs, we can't use RCU
+> > to walk the tree for searching since it can result in partial traversals
+> > which might miss some nodes(or entire subtrees) while discards happen
+> > in parallel (which happens under a lock).  Hence this patch converts the
+> > ei->i_prealloc_lock spin_lock to rw_lock.
+> > 
+> > Almost all the codepaths that read/modify the PA rbtrees are protected
+> > by the higher level inode->i_data_sem (except
+> > ext4_mb_discard_group_preallocations() and ext4_clear_inode()) IIUC, the
+> > only place we need lock protection is when one thread is reading
+> > "searching" the PA rbtree (earlier protected under rcu_read_lock()) and
+> > another is "deleting" the PAs in ext4_mb_discard_group_preallocations()
+> > function (which iterates all the PAs using the grp->bb_prealloc_list and
+> > deletes PAs from the tree without taking any inode lock (i_data_sem)).
+> > 
+> > So, this patch converts all rcu_read_lock/unlock() paths for inode list
+> > PA to use read_lock() and all places where we were using
+> > ei->i_prealloc_lock spinlock will now be using write_lock().
+> > 
+> > Note that this makes the fast path (searching of the right PA e.g.
+> > ext4_mb_use_preallocated() or ext4_mb_normalize_request()), now use
+> > read_lock() instead of rcu_read_lock/unlock().  Ths also will now block
+> > due to slow discard path (ext4_mb_discard_group_preallocations()) which
+> > uses write_lock().
+> > 
+> > But this is not as bad as it looks. This is because -
+> > 
+> > 1. The slow path only occurs when the normal allocation failed and we
+> >    can say that we are low on disk space.  One can argue this scenario
+> >    won't be much frequent.
+> > 
+> > 2. ext4_mb_discard_group_preallocations(), locks and unlocks the rwlock
+> >    for deleting every individual PA.  This gives enough opportunity for
+> >    the fast path to acquire the read_lock for searching the PA inode
+> >    list.
+> > 
+> > Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+> > Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
 > 
-> I'm afraid this breaks things; consider:
+> Looks mostly good to me now. Just three nits below. With those fixes feel
+> free to add:
 > 
->   f79256532682 ("perf/core: fix userpage->time_enabled of inactive events")
+> Reviewed-by: Jan Kara <jack@suse.cz>
 > 
-> I totally hate this -- because it means we *HAVE* to iterate the
-> inactive events, but alas.
+> > @@ -4031,19 +4054,27 @@ ext4_mb_pa_adjust_overlap(struct ext4_allocation_context *ac,
+> >  	new_end = *end;
+> >  
+> >  	/* check we don't cross already preallocated blocks */
+> > -	rcu_read_lock();
+> > -	list_for_each_entry_rcu(tmp_pa, &ei->i_prealloc_list, pa_node.inode_list) {
+> > -		if (tmp_pa->pa_deleted)
+> > +	read_lock(&ei->i_prealloc_lock);
+> > +	for (iter = ei->i_prealloc_node.rb_node; iter;
+> > +	     iter = ext4_mb_pa_rb_next_iter(new_start, tmp_pa_start, iter)) {
+> > +		tmp_pa = rb_entry(iter, struct ext4_prealloc_space,
+> > +				  pa_node.inode_node);
+> > +		tmp_pa_start = tmp_pa->pa_lstart;
+> > +		tmp_pa_end = tmp_pa->pa_lstart + EXT4_C2B(sbi, tmp_pa->pa_len);
+> > +
+> > +		/*
+> > +		 * If pa is deleted, ignore overlaps and just iterate in rbtree
+> > +		 * based on tmp_pa_start
+> > +		 */
+> > +		if (tmp_pa->pa_deleted) {
+> >  			continue;
+> > +		}
+> 
+> Curly braces here are pointless.
+> 
+> > @@ -4408,17 +4439,21 @@ ext4_mb_use_preallocated(struct ext4_allocation_context *ac)
+> >  		return false;
+> >  
+> >  	/* first, try per-file preallocation */
+> > -	rcu_read_lock();
+> > -	list_for_each_entry_rcu(tmp_pa, &ei->i_prealloc_list, pa_node.inode_list) {
+> > +	read_lock(&ei->i_prealloc_lock);
+> > +	for (iter = ei->i_prealloc_node.rb_node; iter;
+> > +	     iter = ext4_mb_pa_rb_next_iter(ac->ac_o_ex.fe_logical, tmp_pa_start, iter)) {
+> > +		tmp_pa = rb_entry(iter, struct ext4_prealloc_space, pa_node.inode_node);
+> >  
+> >  		/* all fields in this condition don't change,
+> >  		 * so we can skip locking for them */
+> >  		tmp_pa_start = tmp_pa->pa_lstart;
+> >  		tmp_pa_end = tmp_pa->pa_lstart + EXT4_C2B(sbi, tmp_pa->pa_len);
+> >  
+> > +		/* original request start doesn't lie in this PA */
+> >  		if (ac->ac_o_ex.fe_logical < tmp_pa_start ||
+> > -		    ac->ac_o_ex.fe_logical >= tmp_pa_end)
+> > +		    ac->ac_o_ex.fe_logical >= tmp_pa_end) {
+> >  			continue;
+> > +		}
+> 
+> Again, curly braces here are pointless.
+> 
+> > +static void ext4_mb_rb_insert(struct rb_root *root, struct rb_node *new,
+> > +                       int (*cmp)(struct rb_node *, struct rb_node *))
+> > +{
+> > +       struct rb_node **iter = &root->rb_node, *parent = NULL;
+> > +
+> > +       while (*iter) {
+> > +               parent = *iter;
+> > +               if (cmp(new, *iter) < 0)
+> > +                       iter = &((*iter)->rb_left);
+> > +               else
+> > +                       iter = &((*iter)->rb_right);
+> > +       }
+> > +
+> > +       rb_link_node(new, parent, iter);
+> > +       rb_insert_color(new, root);
+> > +}
+> 
+> I think I wrote it already last time: ext4_mb_rb_insert() is always called
+> with ext4_mb_pa_cmp() as the comparison function. Furthemore
+> ext4_mb_pa_cmp() is used nowhere else. So I'd just opencode
+> ext4_mb_pa_cmp() in ext4_mb_rb_insert() and get rid of the indirect call.
+> Better for speed as well as readability.
 
-Sure. Will drop this.
+Hi Jan,
+
+As mentioned in change notes, I intentionally left it as it is to make
+ext4_mb_rb_insert() helper function reusable. However, I agree with your 
+point about readability so I'll just merge the 2 functions and send a
+next version.
 
 Thanks,
-Ravi
+Ojaswin
+> 
+> 								Honza
+> -- 
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
