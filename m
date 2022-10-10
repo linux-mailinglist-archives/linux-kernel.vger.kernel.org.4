@@ -2,155 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DD15FA709
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 23:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A6A25FA70C
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 23:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbiJJVf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 17:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
+        id S229614AbiJJVgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 17:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiJJVfz (ORCPT
+        with ESMTP id S229612AbiJJVgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 17:35:55 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E95E7D1D7
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 14:35:51 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id l16-20020a05600c4f1000b003c6c0d2a445so1051003wmq.4
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 14:35:51 -0700 (PDT)
+        Mon, 10 Oct 2022 17:36:12 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCA87D792;
+        Mon, 10 Oct 2022 14:36:07 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id qw20so26903112ejc.8;
+        Mon, 10 Oct 2022 14:36:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sigma-star.at; s=google;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VMldxqHe7oqZnxhOWbNDSf+/ipc4cdrY3PI40/wIFyY=;
-        b=CAEjxiNCW9LHGV0xN0Q++SUzIDZqtVfDFAw45WPF7haNM/KA16A0B7RWvuzWIX4/Tg
-         u4rVcvonRwwbM+VKFKRgS+gqIftQVevj3jrBCQuhibhDTjXeX63XVCHR4iHyB6O7L38z
-         AeBm6A46eDkB5FzYqTvpSF0KewaxxhG9qiX05EX21km//OEPWyb7Dd8kO+Wf8FMMwRtj
-         7YUouRiS4jFlHvoTM7OX1ayed0QHJKGrKUEQpbLLsu4tZqbc4wDwe81sJSfUo+Hxi6j9
-         b8rfj36BGLda+/XjH5/Beh0FU0mPZY/E6Q4oqA3K6qc+0XUvje2G2qlvtZEMXJQjhFP/
-         peNw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eaKA3eg592NEgHw3Ggx57EkA5thH66cxyv45s8inS6M=;
+        b=IMtFN13fpHi7td1QySWaDnM6O37Vwx5vAtmS+3LVL5IW9iTcXMTTknCT3rCBSccp4F
+         EAKkKNc3PW3gYMTSy0oTMKU1llvVBbbLCsdMWPzVaXZklSr7ERUaZtBW2VRYhzrpaHgc
+         qPPJf2l2Cd8trMP3g+8ZSJ7oHT9rDYKsRo8tQ4TPIMktCRu7YGkN6B7npjUllX+46sW4
+         eg5F+3vZ6JE6AkxkmK6QFDr8qNPD7zudof0tjY0l/ZW2hsVWnYZNwGUhtYyDnI7Axp00
+         n0660ndw9un52I+TYDGlTor0Ab+GWBl4RiGVKaIqLxTCR5XyD+bfo5cwSdm+pVlBtSVP
+         AN2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VMldxqHe7oqZnxhOWbNDSf+/ipc4cdrY3PI40/wIFyY=;
-        b=TdWPrJR0vQ23HRf3NaLAY3o5czvW+5VnJLr/JaDPv9tXgKL/JLLUz5tz09BRZiFZmy
-         FR3ynl/oceLKYf2zoLHqRW5qJcCxEzRO746M2iisRX8ut/HC3qREBT8GWziHnvHO1ewF
-         jQ5W5NMk7C8eJydby52MEc6gv+afJX6sCAUMvtVBHJZldxQseRPgmwIPVHmhDZRqaZUD
-         cO5L6K1Ikk92V5NUELUKme+XCRmp4HuDLqPy4rMTBucw6u88qzdx2jkuXz/Ava25Q73f
-         J5fTQI4P8DKLHucO1TVBPyT8UeCEKhKXKAfyiuDMCYGajTWxVIaSc28oqseuC5vhlsG3
-         k/FQ==
-X-Gm-Message-State: ACrzQf1jw7HzhOqOQifb9YY/VlledIcpPJv3/v1aPr2wqDpF7VTO+KzK
-        4udNK/IZOoTDNh0rBky0qxx8bQ==
-X-Google-Smtp-Source: AMsMyM5/zWG+cYg4AJpExgutt6xqdD3M9Ya1ZzEuWcFffeTxg7i3FbXoZgFGVEUzHmTeWTpvgmTmHQ==
-X-Received: by 2002:a05:600c:444b:b0:3b4:cb9e:bd5c with SMTP id v11-20020a05600c444b00b003b4cb9ebd5cmr21012193wmn.124.1665437749904;
-        Mon, 10 Oct 2022 14:35:49 -0700 (PDT)
-Received: from smtpclient.apple (17-14-114.cgnat.fonira.net. [185.17.14.114])
-        by smtp.gmail.com with ESMTPSA id l5-20020adfe9c5000000b0022da3977ec5sm9674476wrn.113.2022.10.10.14.35.48
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 10 Oct 2022 14:35:49 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [EXT] [PATCH v0 3/8] crypto: hbk flags & info added to the tfm
-From:   David Gstir <david@sigma-star.at>
-In-Reply-To: <Y0Q3JKnWSNIC4Xlu@zx2c4.com>
-Date:   Mon, 10 Oct 2022 23:35:47 +0200
-Cc:     Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        "gilad@benyossef.com" <gilad@benyossef.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "john.ernberg@actia.se" <john.ernberg@actia.se>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eaKA3eg592NEgHw3Ggx57EkA5thH66cxyv45s8inS6M=;
+        b=feXM4bt9CxeZOWEQYUkolz5tOZMeFIUX2b4fbs/cSLLJEYq1zQjumQ3VO/y+AuVYQ0
+         LRFrjCYJiRT8Nuoy0Zbq/eeEOT4Re4xeolk03y/5WB8Z3aukeJOzb5Vygf/ROdehGglZ
+         2xiH3OzzuL+jm6n3trIksG2QidDGnzC7lTFN8xzPFgRkIdjIysw8WqyuW4Td9JqNorxD
+         P79Jk6puL/Ewi1wCNA4i+qG9dNXjQk80R1U2U5+onP9IyboEYDTFhQ6Alsy47lt0Fqkc
+         9pLQEmopWJlm1TiahJb4S/IRdrY9FZ5g94RzqGHsLB17eODhU9KiUtOWMtQwJdm/LRQx
+         SqAw==
+X-Gm-Message-State: ACrzQf05A4ZA5xA5eTns2VMFmQ3Ukdo/0O3O6kSue8Ky3k4mSFibvCMh
+        nc4l24nn+z7IEb40ZuPj0OWtpCSodxV2cpRQ2LI=
+X-Google-Smtp-Source: AMsMyM4DGg7Jh1t/BI6u1Xawoa1rez9M1KZDD9rYYUShp3+SMYQQwnUgsDGn1lVKz1Iqnf5rxh3RWr4s/3yloz3rbUY=
+X-Received: by 2002:a17:907:2cd8:b0:78d:9c3c:d788 with SMTP id
+ hg24-20020a1709072cd800b0078d9c3cd788mr9699644ejc.327.1665437765676; Mon, 10
+ Oct 2022 14:36:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220927155332.10762-1-andriy.shevchenko@linux.intel.com>
+ <20220927155332.10762-3-andriy.shevchenko@linux.intel.com>
+ <20221003215734.7l3cnb2zy57nrxkk@synopsys.com> <YzvusOI89ju9e5+0@smile.fi.intel.com>
+ <a7724993-6c04-92c5-3a26-3aef6d29c9e3@gmail.com> <20221005021212.qwnbmq6p7t26c3a4@synopsys.com>
+ <2886b82d-a1f6-d288-e8d1-edae54046b4f@gmail.com> <20221006021204.hz7iteao65dgsev6@synopsys.com>
+ <d52cc102-6a4f-78e9-6176-b33e2813fd1d@gmail.com> <20221007021122.nnwmqc6sq43e5xbn@synopsys.com>
+ <ade865f1-8ed5-a8e3-e441-cb7688c6d001@gmail.com> <CAHQ1cqGSmNSg73DzURrcP=a-cCd6KdVUtUmnonhP54vWVDmEhw@mail.gmail.com>
+ <4e73bbb9-eae1-6a90-d716-c721a1eeced3@gmail.com> <7e9519c6-f65f-5f83-1d17-a3510103469f@gmail.com>
+In-Reply-To: <7e9519c6-f65f-5f83-1d17-a3510103469f@gmail.com>
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+Date:   Mon, 10 Oct 2022 14:35:53 -0700
+Message-ID: <CAHQ1cqE5=j9i8uYvBwdNUK8TrX3Wxy7iUML6K+gBQx-KRtkS7w@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] Revert "usb: dwc3: Don't switch OTG -> peripheral
+ if extcon is present"
+To:     Ferry Toth <fntoth@gmail.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        Sahil Malhotra <sahil.malhotra@nxp.com>,
-        Kshitiz Varshney <kshitiz.varshney@nxp.com>,
-        =?utf-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>,
-        Varun Sethi <V.Sethi@nxp.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <6A3D70F9-1206-4EBB-BFCC-CA3733688EFC@sigma-star.at>
-References: <20221006130837.17587-1-pankaj.gupta@nxp.com>
- <20221006130837.17587-4-pankaj.gupta@nxp.com>
- <Yz/OEwDtyTm+VH0p@gondor.apana.org.au>
- <DU2PR04MB8630CBBB8ABDC3768320C18195209@DU2PR04MB8630.eurprd04.prod.outlook.com>
- <Y0Q3JKnWSNIC4Xlu@zx2c4.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
+        Felipe Balbi <balbi@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Oct 10, 2022 at 1:52 PM Ferry Toth <fntoth@gmail.com> wrote:
+>
+> Hi
+>
+> Op 10-10-2022 om 13:04 schreef Ferry Toth:
+> > Hi
+> >
+> > On 10-10-2022 07:02, Andrey Smirnov wrote:
+> >> On Fri, Oct 7, 2022 at 6:07 AM Ferry Toth <fntoth@gmail.com> wrote:
+> >>>
+> >>> On 07-10-2022 04:11, Thinh Nguyen wrote:
+> >>>> On Thu, Oct 06, 2022, Ferry Toth wrote:
+> >>>>> Hi
+> >>>>>
+> >>>>> On 06-10-2022 04:12, Thinh Nguyen wrote:
+> >>>>>> On Wed, Oct 05, 2022, Ferry Toth wrote:
+> >>>>>>> Hi,
+> >>>>>>>
+> >>>>>>>        Thanks!
+> >>>>>>>
+> >>>>>>>        Does the failure only happen the first time host is
+> >>>>>>> initialized? Or can
+> >>>>>>>        it recover after switching to device then back to host mode?
+> >>>>>>>
+> >>>>>>> I can switch back and forth and device mode works each time,
+> >>>>>>> host mode remains
+> >>>>>>> dead.
+> >>>>>> Ok.
+> >>>>>>
+> >>>>>>>        Probably the failure happens if some step(s) in
+> >>>>>>> dwc3_core_init() hasn't
+> >>>>>>>        completed.
+> >>>>>>>
+> >>>>>>>        tusb1210 is a phy driver right? The issue is probably
+> >>>>>>> because we didn't
+> >>>>>>>        initialize the phy yet. So, I suspect placing
+> >>>>>>> dwc3_get_extcon() after
+> >>>>>>>        initializing the phy will probably solve the dependency
+> >>>>>>> problem.
+> >>>>>>>
+> >>>>>>>        You can try something for yourself or I can provide
+> >>>>>>> something to test
+> >>>>>>>        later if you don't mind (maybe next week if it's ok).
+> >>>>>>>
+> >>>>>>> Yes, the code move I mentioned above "moves dwc3_get_extcon()
+> >>>>>>> until after
+> >>>>>>> dwc3_core_init() but just before dwc3_core_init_mode(). AFAIU
+> >>>>>>> initially
+> >>>>>>> dwc3_get_extcon() was called from within dwc3_core_init_mode()
+> >>>>>>> but only for
+> >>>>>>> case USB_DR_MODE_OTG. So with this change order of events is
+> >>>>>>> more or less
+> >>>>>>> unchanged" solves the issue.
+> >>>>>>>
+> >>>>>> I saw the experiment you did from the link you provided. We want
+> >>>>>> to also
+> >>>>>> confirm exactly which step in dwc3_core_init() was needed.
+> >>>>> Ok. I first tried the code move suggested by Andrey (didn't work).
+> >>>>> Then
+> >>>>> after reading the actual code I moved a bit further.
+> >>>>>
+> >>>>> This move was on top of -rc6 without any reverts. I did not make
+> >>>>> additional
+> >>>>> changes to dwc3_core_init()
+> >>>>>
+> >>>>> So current v6.0 has: dwc3_get_extcon - dwc3_get_dr_mode - ... -
+> >>>>> dwc3_core_init - .. - dwc3_core_init_mode (not working)
+> >>>>>
+> >>>>> I changed to: dwc3_get_dr_mode - dwc3_get_extcon - .. -
+> >>>>> dwc3_core_init - ..
+> >>>>> - dwc3_core_init_mode (no change)
+> >>>>>
+> >>>>> Then to: dwc3_get_dr_mode - .. - dwc3_core_init - .. -
+> >>>>> dwc3_get_extcon -
+> >>>>> dwc3_core_init_mode (works)
+> >>>>>
+> >>>>> .. are what I believe for this issue irrelevant calls to
+> >>>>> dwc3_alloc_scratch_buffers, dwc3_check_params and dwc3_debugfs_init.
+> >>>>>
+> >>>> Right. Thanks for narrowing it down. There are still many steps in
+> >>>> dwc3_core_init(). We have some suspicion, but we still haven't
+> >>>> confirmed
+> >>>> the exact cause of the failure. We can write a proper patch once we
+> >>>> know
+> >>>> the reason.
+> >>> If you would like me to test your suspicion, just tell me what to do
+> >>> :-)
+> >>
+> >> OK, Ferry, I think I'm going to need clarification on specifics on
+> >> your test setup. Can you share your kernel config, maybe your
+> >> "/proc/config.gz", somewhere? When you say you are running vanilla
+> >> Linux, do you mean it or do you mean vanilla tree + some patch delta?
+> >
+> > For v6.0 I can get the exacts tonight. But earlier I had this for v5.17:
+> >
+> > https://github.com/htot/meta-intel-edison/blob/master/meta-intel-edison-bsp/recipes-kernel/linux/linux-yocto_5.17.bb
+> >
+> >
+> > There are 2 patches referred in #67 and #68. One is related to the
+> > infinite loop. The other is I believe also needed to get dwc3 to work.
+> >
+> > All the kernel config are applied as .cfg.
+> >
+> > Patches and cfs's here:
+> >
+> > https://github.com/htot/meta-intel-edison/tree/master/meta-intel-edison-bsp/recipes-kernel/linux/files
+> >
+>
+> Updated Yocto recipe for v6.0 here:
+>
+> https://github.com/htot/meta-intel-edison/blob/honister/meta-intel-edison-bsp/recipes-kernel/linux/linux-yocto_6.0.bb
+>
+> #75-#77 are the 2 reverts from Andy, + one SOF revert (not related to
+> this thread).
 
-
-> On 10.10.2022, at 17:15, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->=20
-> On Mon, Oct 10, 2022 at 11:15:00AM +0000, Pankaj Gupta wrote:
->>> Nack.  You still have not provided a convincing argument why this is =
-necessary
->>> since there are plenty of existing drivers in the kernel already =
-providing similar
->>> features.
->>>=20
->> CAAM is used as a trusted source for trusted keyring. CAAM can expose
->> these keys either as plain key or HBK(hardware bound key- managed by
->> the hardware only and never visible in plain outside of hardware).
->>=20
->> Thus, Keys that are inside CAAM-backed-trusted-keyring, can either be
->> plain key or HBK. So the trusted-key-payload requires additional flag
->> & info(key-encryption-protocol)  to help differentiate it from each
->> other. Now when CAAM trusted-key is presented to the kernel crypto
->> framework, the additional information associated with the key, needs
->> to be passed to the hardware driver. Currently the kernel keyring and
->> kernel crypto frameworks are associated for plain key, but completely
->> dis-associated for HBK. This patch addresses this problem.
->>=20
->> Similar capabilities (trusted source), are there in other crypto
->> accelerators on NXP SoC(s). Having hardware specific crypto algorithm
->> name, does not seems to be a scalable solution.
->=20
-> Do you mean to say that other drivers that use hardware-backed keys do
-> so by setting "cra_name" to something particular? Like instead of =
-"aes"
-> it'd be "aes-but-special-for-this-driver"? If so, that would seem to
-> break the design of the crypto API. Which driver did you see that does
-> this? Or perhaps, more generally, what are the drivers that Herbert is
-> talking about when he mentions the "plenty of existing drivers" that
-> already do this?
-
-I believe what Herbert means are drivers registered with the cipher name=20=
-
-prefix =E2=80=9Cp=E2=80=9D. E.g. [1] registers multiple =E2=80=9Cpaes=E2=80=
-=9D variants. There was a
-previous patch set for CAAM where this was suggested as well [2].
-
-- David
-
-[1] =
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/dr=
-ivers/crypto/ccree/cc_cipher.c#n1011
-[2] =
-https://lore.kernel.org/linux-crypto/20200716073610.GA28215@gondor.apana.o=
-rg.au/=
+Please drop all of this
+https://github.com/htot/meta-intel-edison/blob/honister/meta-intel-edison-bsp/recipes-kernel/linux/linux-yocto_6.0.bb#L69-L77
+and re do the testing. Assuming things are still broken, that's how
+you want to do the bisecting.
