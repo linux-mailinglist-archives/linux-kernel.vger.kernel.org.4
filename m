@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B445E5F993E
-	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 230F45F9943
+	for <lists+linux-kernel@lfdr.de>; Mon, 10 Oct 2022 09:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231794AbiJJHJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 03:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44474 "EHLO
+        id S231630AbiJJHKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 03:10:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231235AbiJJHIm (ORCPT
+        with ESMTP id S231714AbiJJHJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 03:08:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB1A5F77;
+        Mon, 10 Oct 2022 03:09:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7CFAE6B;
         Mon, 10 Oct 2022 00:06:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A82660E75;
-        Mon, 10 Oct 2022 07:06:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FBC4C433D6;
-        Mon, 10 Oct 2022 07:06:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB2C960E33;
+        Mon, 10 Oct 2022 07:06:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0868C433C1;
+        Mon, 10 Oct 2022 07:06:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1665385563;
-        bh=FMtJbvUlcZMfZJsHs+zcMqbDLnAq+to6DJYsgnmO13c=;
+        s=korg; t=1665385566;
+        bh=Ij9qIbVDOEwLjRKRVfWKa91KXVvfWGsn+1ZqzNaeZok=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J7EdcCnXmOSAWGahPylrhrqzVKB/ODf/Xo3tzN3UNEqYZAbtOoEWIBa2z8jpUIgJj
-         QckBtLoE14Bzi466baF1DkCUhljt/2OuwRg6vZmTc9U6+xCTjnfbb6Hl1FObpIIixi
-         6JbCDDEMaXJpgQRaC5Geg5CNwZijS7aFztS129AU=
+        b=Wxc7/YbPME7n9T6wrAyjmUS4O2toFhRM/oIkjlw74NGLTdv0dxUEZsR/H6DJrcGwx
+         oITaULULj/RuJ+6Bi373UkAZG9pkVYpox5BCgVZlVwXUVM1X/ylpG4a9XhnY3oTx93
+         HdQi9iytWJ1ngou6UJ2gEZnAJM5eEtg74658HLyU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lukas Straub <lukasstraub2@web.de>,
-        Richard Weinberger <richard@nod.at>,
-        Sasha Levin <sashal@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH 5.19 24/48] um: Cleanup compiler warning in arch/x86/um/tls_32.c
-Date:   Mon, 10 Oct 2022 09:05:22 +0200
-Message-Id: <20221010070334.333060460@linuxfoundation.org>
+        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 25/48] gpio: ftgpio010: Make irqchip immutable
+Date:   Mon, 10 Oct 2022 09:05:23 +0200
+Message-Id: <20221010070334.359746429@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221010070333.676316214@linuxfoundation.org>
 References: <20221010070333.676316214@linuxfoundation.org>
@@ -55,68 +55,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Straub <lukasstraub2@web.de>
+From: Linus Walleij <linus.walleij@linaro.org>
 
-[ Upstream commit d27fff3499671dc23a08efd01cdb8b3764a391c4 ]
+[ Upstream commit ab637d48363d7b8ee67ae089808a8bc6051d53c4 ]
 
-arch.tls_array is statically allocated so checking for NULL doesn't
-make sense. This causes the compiler warning below.
+This turns the FTGPIO010 irqchip immutable.
 
-Remove the checks to silence these warnings.
+Tested on the D-Link DIR-685.
 
-../arch/x86/um/tls_32.c: In function 'get_free_idx':
-../arch/x86/um/tls_32.c:68:13: warning: the comparison will always evaluate as 'true' for the address of 'tls_array' will never be NULL [-Waddress]
-   68 |         if (!t->arch.tls_array)
-      |             ^
-In file included from ../arch/x86/um/asm/processor.h:10,
-                 from ../include/linux/rcupdate.h:30,
-                 from ../include/linux/rculist.h:11,
-                 from ../include/linux/pid.h:5,
-                 from ../include/linux/sched.h:14,
-                 from ../arch/x86/um/tls_32.c:7:
-../arch/x86/um/asm/processor_32.h:22:31: note: 'tls_array' declared here
-   22 |         struct uml_tls_struct tls_array[GDT_ENTRY_TLS_ENTRIES];
-      |                               ^~~~~~~~~
-../arch/x86/um/tls_32.c: In function 'get_tls_entry':
-../arch/x86/um/tls_32.c:243:13: warning: the comparison will always evaluate as 'true' for the address of 'tls_array' will never be NULL [-Waddress]
-  243 |         if (!t->arch.tls_array)
-      |             ^
-../arch/x86/um/asm/processor_32.h:22:31: note: 'tls_array' declared here
-   22 |         struct uml_tls_struct tls_array[GDT_ENTRY_TLS_ENTRIES];
-      |                               ^~~~~~~~~
-
-Signed-off-by: Lukas Straub <lukasstraub2@web.de>
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Cc: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Acked-by: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/um/tls_32.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/gpio/gpio-ftgpio010.c | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/um/tls_32.c b/arch/x86/um/tls_32.c
-index ac8eee093f9c..66162eafd8e8 100644
---- a/arch/x86/um/tls_32.c
-+++ b/arch/x86/um/tls_32.c
-@@ -65,9 +65,6 @@ static int get_free_idx(struct task_struct* task)
- 	struct thread_struct *t = &task->thread;
- 	int idx;
+diff --git a/drivers/gpio/gpio-ftgpio010.c b/drivers/gpio/gpio-ftgpio010.c
+index f422c3e129a0..f77a965f5780 100644
+--- a/drivers/gpio/gpio-ftgpio010.c
++++ b/drivers/gpio/gpio-ftgpio010.c
+@@ -41,14 +41,12 @@
+  * struct ftgpio_gpio - Gemini GPIO state container
+  * @dev: containing device for this instance
+  * @gc: gpiochip for this instance
+- * @irq: irqchip for this instance
+  * @base: remapped I/O-memory base
+  * @clk: silicon clock
+  */
+ struct ftgpio_gpio {
+ 	struct device *dev;
+ 	struct gpio_chip gc;
+-	struct irq_chip irq;
+ 	void __iomem *base;
+ 	struct clk *clk;
+ };
+@@ -70,6 +68,7 @@ static void ftgpio_gpio_mask_irq(struct irq_data *d)
+ 	val = readl(g->base + GPIO_INT_EN);
+ 	val &= ~BIT(irqd_to_hwirq(d));
+ 	writel(val, g->base + GPIO_INT_EN);
++	gpiochip_disable_irq(gc, irqd_to_hwirq(d));
+ }
  
--	if (!t->arch.tls_array)
--		return GDT_ENTRY_TLS_MIN;
--
- 	for (idx = 0; idx < GDT_ENTRY_TLS_ENTRIES; idx++)
- 		if (!t->arch.tls_array[idx].present)
- 			return idx + GDT_ENTRY_TLS_MIN;
-@@ -240,9 +237,6 @@ static int get_tls_entry(struct task_struct *task, struct user_desc *info,
+ static void ftgpio_gpio_unmask_irq(struct irq_data *d)
+@@ -78,6 +77,7 @@ static void ftgpio_gpio_unmask_irq(struct irq_data *d)
+ 	struct ftgpio_gpio *g = gpiochip_get_data(gc);
+ 	u32 val;
+ 
++	gpiochip_enable_irq(gc, irqd_to_hwirq(d));
+ 	val = readl(g->base + GPIO_INT_EN);
+ 	val |= BIT(irqd_to_hwirq(d));
+ 	writel(val, g->base + GPIO_INT_EN);
+@@ -221,6 +221,16 @@ static int ftgpio_gpio_set_config(struct gpio_chip *gc, unsigned int offset,
+ 	return 0;
+ }
+ 
++static const struct irq_chip ftgpio_irq_chip = {
++	.name = "FTGPIO010",
++	.irq_ack = ftgpio_gpio_ack_irq,
++	.irq_mask = ftgpio_gpio_mask_irq,
++	.irq_unmask = ftgpio_gpio_unmask_irq,
++	.irq_set_type = ftgpio_gpio_set_irq_type,
++	.flags = IRQCHIP_IMMUTABLE,
++	 GPIOCHIP_IRQ_RESOURCE_HELPERS,
++};
++
+ static int ftgpio_gpio_probe(struct platform_device *pdev)
  {
- 	struct thread_struct *t = &task->thread;
+ 	struct device *dev = &pdev->dev;
+@@ -277,14 +287,8 @@ static int ftgpio_gpio_probe(struct platform_device *pdev)
+ 	if (!IS_ERR(g->clk))
+ 		g->gc.set_config = ftgpio_gpio_set_config;
  
--	if (!t->arch.tls_array)
--		goto clear;
+-	g->irq.name = "FTGPIO010";
+-	g->irq.irq_ack = ftgpio_gpio_ack_irq;
+-	g->irq.irq_mask = ftgpio_gpio_mask_irq;
+-	g->irq.irq_unmask = ftgpio_gpio_unmask_irq;
+-	g->irq.irq_set_type = ftgpio_gpio_set_irq_type;
 -
- 	if (idx < GDT_ENTRY_TLS_MIN || idx > GDT_ENTRY_TLS_MAX)
- 		return -EINVAL;
- 
+ 	girq = &g->gc.irq;
+-	girq->chip = &g->irq;
++	gpio_irq_chip_set_chip(girq, &ftgpio_irq_chip);
+ 	girq->parent_handler = ftgpio_gpio_irq_handler;
+ 	girq->num_parents = 1;
+ 	girq->parents = devm_kcalloc(dev, 1, sizeof(*girq->parents),
 -- 
 2.35.1
 
