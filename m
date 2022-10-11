@@ -2,56 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2745F5FACB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 08:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E4B5FACAE
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 08:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbiJKGXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 02:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
+        id S229980AbiJKGW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 02:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiJKGXH (ORCPT
+        with ESMTP id S229724AbiJKGWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 02:23:07 -0400
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3411288DF8;
-        Mon, 10 Oct 2022 23:22:32 -0700 (PDT)
-Received: by mail-wr1-f43.google.com with SMTP id j16so19972362wrh.5;
-        Mon, 10 Oct 2022 23:22:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tUmVSog6DafYW00ovmcYQ82S07flTbx/yM+Khtpjc6Q=;
-        b=fogBWlSF+F66RMFv6uxgnCTx/XL8mKg6cQwVPd6ZFpBUuM9oQrydY+6+jZmmy7JLaF
-         FKQVyZLaQ0B8pM+2mn17QX7IOBTVmGYJ/QA/d6SvnQkr/xxjn8VpxttT/x0HdAmDedQE
-         Tz7mwtl2i4avpVsHNvZSMjtYKidgjpMMng2kpKXAb8jpMyPhGBRxf+t1jw3enDW8I5Jq
-         Qurc7ZWFxssjh5adJ419g4+8pV9vFDxQqxv9+NCuaiBD9RQW1DD/D1x31K8gMTvi58ZU
-         6Q/32GEQl9X+zV8zk1kqal6fdIwgEoeqIgP9WH4PrjJbR1vt+TuL85fWuWhjFc2aEQiN
-         iuCA==
-X-Gm-Message-State: ACrzQf0gh+zvVyvkNj9G7mKqMEP8z+cpQ9H/LfyNzfxpLftLqL9RI9D/
-        9aICjNMb+fbXJMcbBa5C2gU=
-X-Google-Smtp-Source: AMsMyM7YsvlisljG56rl4mKbWpZ8mWhhcw6Yxtv533MdMmZZxuLe54/n0F/l5XBSXRmdo4e+D8PzGw==
-X-Received: by 2002:a5d:588c:0:b0:231:891c:6fc1 with SMTP id n12-20020a5d588c000000b00231891c6fc1mr522132wrf.25.1665469325767;
-        Mon, 10 Oct 2022 23:22:05 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id p17-20020a5d4591000000b0022e32f4c06asm10301834wrq.11.2022.10.10.23.22.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 23:22:05 -0700 (PDT)
-Message-ID: <2b6804ff-5386-06bd-7c01-4e1cd4ad23f3@kernel.org>
-Date:   Tue, 11 Oct 2022 08:22:03 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v5 5/13] virt: gunyah: Add hypercalls to identify Gunyah
-Content-Language: en-US
-To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Tue, 11 Oct 2022 02:22:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DD688DF2;
+        Mon, 10 Oct 2022 23:22:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3931E61089;
+        Tue, 11 Oct 2022 06:21:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26C7BC433B5;
+        Tue, 11 Oct 2022 06:21:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1665469311;
+        bh=ZEn+9l/tLbnAqejF5hooJf26ogqUNObWamKwtHfGaAw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MV1nZhLog3CLEEINQ29wAaICGOCBYEFGmmAJOAB93L55BORkUhc7Lk9V15gZTxjy8
+         Rp3DLoj4Nmfs9DrAAWoW5s4SCVLgLOhBIhBtP20B6lceAP3TCv6JHCFn6SaU4Co7sf
+         UCciOXhBv7NtuNQe8WsQX3ROlNK3XDd0NLGFBZxw=
+Date:   Tue, 11 Oct 2022 08:22:34 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Elliot Berman <quic_eberman@quicinc.com>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
         Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
         Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
         Carl van Schaik <quic_cvanscha@quicinc.com>,
@@ -60,89 +43,76 @@ Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Jassi Brar <jassisinghbrar@gmail.com>,
         linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
         Marc Zyngier <maz@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Will Deacon <will@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221011000840.289033-1-quic_eberman@quicinc.com>
- <20221011000840.289033-6-quic_eberman@quicinc.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20221011000840.289033-6-quic_eberman@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 14/14] tty: gunyah: Add tty console driver for RM
+ Console Services
+Message-ID: <Y0ULqlIMKTc6gdeV@kroah.com>
+References: <20220928195633.2348848-1-quic_eberman@quicinc.com>
+ <20220928195633.2348848-15-quic_eberman@quicinc.com>
+ <YzbePxTF8hRbWNRU@kroah.com>
+ <14d0ff9f-60f3-71cc-ea42-ceee389298ac@quicinc.com>
+ <Yz/YBDqqwBUlswgX@kroah.com>
+ <615493a8-449d-b105-709e-0642dfb5359b@quicinc.com>
+ <Y0R/QbysXa6ebNd8@kroah.com>
+ <ca42d89e-9e19-0536-0951-2c123d898892@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ca42d89e-9e19-0536-0951-2c123d898892@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11. 10. 22, 2:08, Elliot Berman wrote:
-> Add hypercalls to identify when Linux is running a virtual machine under
-> Gunyah.
+On Mon, Oct 10, 2022 at 01:58:00PM -0700, Elliot Berman wrote:
 > 
-> There are two calls to help identify Gunyah:
 > 
-> 1. gh_hypercall_get_uid() returns a UID when running under a Gunyah
->     hypervisor.
-> 2. gh_hypercall_hyp_identify() returns build information and a set of
->     feature flags that are supported by Gunyah.
-...
-> --- /dev/null
-> +++ b/arch/arm64/gunyah/hypercall.c
-> @@ -0,0 +1,71 @@
-...
-> +/**
-> + * gh_hypercall_get_uid() - Returns a UID when running under a Gunyah hypervisor.
-> + * @uid: An array of 4 u32's (u32 uid[4];)
-> + *
-> + * The UID will be either QC_HYP_UID or GUNYAH_UID defined in include/asm-generic/gunyah.h.
-> + * QC_HYP_UID is returned on platforms using Qualcomm's version of Gunyah.
-> + * GUNYAH_UID is returned on platforms using open source version of Gunyah.
-> + * If the uid is not one of the above two UIDs, then it is assumed that the hypervisor or firmware
-> + * is not Gunyah.
-> + */
-> +void gh_hypercall_get_uid(u32 *uid)
+> On 10/10/2022 1:23 PM, Greg Kroah-Hartman wrote:
+> > On Sun, Oct 09, 2022 at 01:59:21PM -0700, Elliot Berman wrote:
+> > > 
+> > > > > > On 10/7/2022 12:40 AM, Greg Kroah-Hartman wrote:
+> > > > On Thu, Oct 06, 2022 at 10:59:51PM -0700, Elliot Berman wrote:
+> > > > > 
+> > > > > "GH" is the shorthand we've been using for "Gunyah". I didn't find
+> > > > > documentation for dynamically assigned char devices, but if it exists, I can
+> > > > > add entry for ttyGH.
+> > > > 
+> > > > Why use a new name at all?  Why not stick with the existing tty names
+> > > > and device numbers?
+> > > > 
+> > > 
+> > > I can use hvc framework, although driver-level buffering is needed on
+> > > both the get_chars/put_chars paths because:
+> > 
+> > I'm not asking about the framework (although that is a good question,
+> > you need to document why this has to be new.)  I'm asking why pick a new
+> > name?  You will not have a name conflict in your system with this device
+> > with any other tty name right?
+> > 
+> 
+> That's correct, I didn't see any other instances of "ttyGH" in kernel.
 
-So why this isn't u32 uid[4], or u32 uid[static 4] to aid the compiler 
-(and limit users)?
+Do you see any instances of ttyS?  Any other existing name?  Why pick a
+new name at all?
 
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_hvc(GH_HYPERCALL_CALL_UID, &res);
-> +
-> +	uid[0] = res.a0;
-> +	uid[1] = res.a1;
-> +	uid[2] = res.a2;
-> +	uid[3] = res.a3;
-> +}
-> +EXPORT_SYMBOL_GPL(gh_hypercall_get_uid);
+And if you do pick a new name, you need to document it really really
+well, not bury it downn within the tty driver code.
 
-...
+thanks,
 
-> --- a/include/asm-generic/gunyah.h
-> +++ b/include/asm-generic/gunyah.h
-> @@ -71,4 +71,40 @@ static inline int gh_remap_error(int gh_error)
-...
-> +#define GH_API_INFO_API_VERSION(x)	(((x) >> 0) & 0x3fff)
-> +#define GH_API_INFO_BIG_ENDIAN(x)	(((x) >> 14) & 1)
-> +#define GH_API_INFO_IS_64BIT(x)		(((x) >> 15) & 1)
-> +#define GH_API_INFO_VARIANT(x)		(((x) >> 56) & 0xff)
-
-Use GET_FIELD()?
-
-regards,
--- 
--- 
-js
-suse labs
-
+greg k-h
