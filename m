@@ -2,169 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35AB25FB2DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 15:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 257705FB2E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 15:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiJKNHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 09:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52644 "EHLO
+        id S229953AbiJKNJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 09:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiJKNHG (ORCPT
+        with ESMTP id S229546AbiJKNJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 09:07:06 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736B92CE30;
-        Tue, 11 Oct 2022 06:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0kl7dlvjnuqfiBoL2flcqsA/Ux8iLqViAUlVpL1x4Uo=; b=PMDKwr0KWdXbhAaPTSlYSSmTYv
-        mIRgI5rrLsxLj0eUfhOvczUj0+VhBlzjcUYHbk6NdI7Al5eUjP/uSvg79Q5+Jsznybyc9383/SYUv
-        ng18nHoA7ujD0h4YtYCNt1xVNzQ1YDUS9R63z6eWL0Bk8+5/7y6qF+74JHtZldJWX9DI1RX5g8r2K
-        5102+Mwj1jyeFqD3UvqF0YSfOkiqTwR9tT49PIeLt9SBkkefqpoMKpbMUcKhC+ShVrGWwkIFtop/9
-        ga/OE6Nm+E1fje6qeCFeFSdhNNt5HzglmD1H5lIx/4tCaAByHdCUrQBOew4zb2b3DVO6+jVUzS7WH
-        mTLEO1kw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oiEyI-004yPP-BO; Tue, 11 Oct 2022 13:06:59 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Tue, 11 Oct 2022 09:09:16 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2216D7FFAB
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 06:09:15 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C2F7830004F;
-        Tue, 11 Oct 2022 15:06:52 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A693029A09944; Tue, 11 Oct 2022 15:06:52 +0200 (CEST)
-Date:   Tue, 11 Oct 2022 15:06:52 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, Dmitry Vyukov <dvyukov@google.com>
-Subject: Re: [PATCH v2] perf: Fix missing SIGTRAPs
-Message-ID: <Y0VqbNDKIHUcC7Ha@hirez.programming.kicks-ass.net>
-References: <20220927121322.1236730-1-elver@google.com>
- <Yz7ZLaT4jW3Y9EYS@hirez.programming.kicks-ass.net>
- <Y0Ue2L5CsaQwDrEs@hirez.programming.kicks-ass.net>
- <Y0VofNVMBXPOJJr7@elver.google.com>
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CA7DF20155;
+        Tue, 11 Oct 2022 13:09:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1665493753; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aVRCc4SS1007RNLbmU/9GhJmW5jB+5FC8+AOsCDQce0=;
+        b=rtOzjKK72O82+tGko5I4jx2aW/y9gLAmJxb0tPqpv8r4YqDqIk2tBNtwdE9ry1nbdyQDw2
+        y4UzELE/6kVoZcvaMzMN80/sy9ymfDtBpstb1dmhyTip/c5X8CgVyymSUi58w/KRHv2aAY
+        TYHpxwi/aocFPiGGLCYjraXqv0s+hiM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1665493753;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aVRCc4SS1007RNLbmU/9GhJmW5jB+5FC8+AOsCDQce0=;
+        b=3B42zoImFJPO/6UYbKurx/wx4F2DGU1+z6g4xYv0W0kD2JWrqejX6KwgKhwblXH4Wux5N7
+        I3rhSPF0vNJJ4lAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9327213AAC;
+        Tue, 11 Oct 2022 13:09:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kCWOIvlqRWPeYwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 11 Oct 2022 13:09:13 +0000
+Message-ID: <b48728b3-96b9-f684-8adb-5b944c4ba759@suse.de>
+Date:   Tue, 11 Oct 2022 15:09:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0VofNVMBXPOJJr7@elver.google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 2/3] drm/ssd130x: Do not call
+ drm_atomic_add_affected_planes()
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org
+References: <20221010170203.274949-1-javierm@redhat.com>
+ <20221010170203.274949-3-javierm@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20221010170203.274949-3-javierm@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------NXNgIx7VyJdQLP9iQc9UdRpF"
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 02:58:36PM +0200, Marco Elver wrote:
-> On Tue, Oct 11, 2022 at 09:44AM +0200, Peter Zijlstra wrote:
-> > Subject: perf: Fix missing SIGTRAPs
-> > From: Peter Zijlstra <peterz@infradead.org>
-> > Date: Thu Oct 6 15:00:39 CEST 2022
-> > 
-> > Marco reported:
-> > 
-> > Due to the implementation of how SIGTRAP are delivered if
-> > perf_event_attr::sigtrap is set, we've noticed 3 issues:
-> > 
-> >   1. Missing SIGTRAP due to a race with event_sched_out() (more
-> >      details below).
-> > 
-> >   2. Hardware PMU events being disabled due to returning 1 from
-> >      perf_event_overflow(). The only way to re-enable the event is
-> >      for user space to first "properly" disable the event and then
-> >      re-enable it.
-> > 
-> >   3. The inability to automatically disable an event after a
-> >      specified number of overflows via PERF_EVENT_IOC_REFRESH.
-> > 
-> > The worst of the 3 issues is problem (1), which occurs when a
-> > pending_disable is "consumed" by a racing event_sched_out(), observed
-> > as follows:
-> > 
-> > 		CPU0			|	CPU1
-> > 	--------------------------------+---------------------------
-> > 	__perf_event_overflow()		|
-> > 	 perf_event_disable_inatomic()	|
-> > 	  pending_disable = CPU0	| ...
-> > 					| _perf_event_enable()
-> > 					|  event_function_call()
-> > 					|   task_function_call()
-> > 					|    /* sends IPI to CPU0 */
-> > 	<IPI>				| ...
-> > 	 __perf_event_enable()		+---------------------------
-> > 	  ctx_resched()
-> > 	   task_ctx_sched_out()
-> > 	    ctx_sched_out()
-> > 	     group_sched_out()
-> > 	      event_sched_out()
-> > 	       pending_disable = -1
-> > 	</IPI>
-> > 	<IRQ-work>
-> > 	 perf_pending_event()
-> > 	  perf_pending_event_disable()
-> > 	   /* Fails to send SIGTRAP because no pending_disable! */
-> > 	</IRQ-work>
-> > 
-> > In the above case, not only is that particular SIGTRAP missed, but also
-> > all future SIGTRAPs because 'event_limit' is not reset back to 1.
-> > 
-> > To fix, rework pending delivery of SIGTRAP via IRQ-work by introduction
-> > of a separate 'pending_sigtrap', no longer using 'event_limit' and
-> > 'pending_disable' for its delivery.
-> > 
-> > Additionally; and different to Marco's proposed patch:
-> > 
-> >  - recognise that pending_disable effectively duplicates oncpu for
-> >    the case where it is set. As such, change the irq_work handler to
-> >    use ->oncpu to target the event and use pending_* as boolean toggles.
-> > 
-> >  - observe that SIGTRAP targets the ctx->task, so the context switch
-> >    optimization that carries contexts between tasks is invalid. If
-> >    the irq_work were delayed enough to hit after a context switch the
-> >    SIGTRAP would be delivered to the wrong task.
-> > 
-> >  - observe that if the event gets scheduled out
-> >    (rotation/migration/context-switch/...) the irq-work would be
-> >    insufficient to deliver the SIGTRAP when the event gets scheduled
-> >    back in (the irq-work might still be pending on the old CPU).
-> > 
-> >    Therefore have event_sched_out() convert the pending sigtrap into a
-> >    task_work which will deliver the signal at return_to_user.
-> > 
-> > Fixes: 97ba62b27867 ("perf: Add support for SIGTRAP on perf events")
-> > Reported-by: Marco Elver <elver@google.com>
-> > Debugged-by: Marco Elver <elver@google.com>
-> 
-> Reviewed-by: Marco Elver <elver@google.com>
-> Tested-by: Marco Elver <elver@google.com>
-> 
-> .. fuzzing, and lots of concurrent sigtrap_threads with this patch:
-> 
-> 	https://lore.kernel.org/all/20221011124534.84907-1-elver@google.com/
-> 
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> 
-> My original patch also attributed Dmitry:
-> 
-> 	Reported-by: Dmitry Vyukov <dvyukov@google.com>
-> 	Debugged-by: Dmitry Vyukov <dvyukov@google.com>
-> 
-> ... we all melted our brains on this one. :-)
-> 
-> Would be good to get the fix into one of the upcoming 6.1-rc.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------NXNgIx7VyJdQLP9iQc9UdRpF
+Content-Type: multipart/mixed; boundary="------------KY5qVJqJXClzdHUkY5KSXhzz";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+ dri-devel@lists.freedesktop.org
+Message-ID: <b48728b3-96b9-f684-8adb-5b944c4ba759@suse.de>
+Subject: Re: [PATCH 2/3] drm/ssd130x: Do not call
+ drm_atomic_add_affected_planes()
+References: <20221010170203.274949-1-javierm@redhat.com>
+ <20221010170203.274949-3-javierm@redhat.com>
+In-Reply-To: <20221010170203.274949-3-javierm@redhat.com>
 
-Updated and yes, I'm planning on queueing this in perf/urgent the moment
--rc1 happens.
+--------------KY5qVJqJXClzdHUkY5KSXhzz
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Thanks!
+DQoNCkFtIDEwLjEwLjIyIHVtIDE5OjAyIHNjaHJpZWIgSmF2aWVyIE1hcnRpbmV6IENhbmls
+bGFzOg0KPiBUaGVyZSdzIG5vIG5lZWQgdG8gYWRkIHBsYW5lcyB0byB0aGUgYXRvbWljIHN0
+YXRlLiBSZW1vdmUgdGhlIGNhbGwNCj4gdG8gZHJtX2F0b21pY19hZGRfYWZmZWN0ZWRfcGxh
+bmVzKCkgZnJvbSBzc2QxMzB4Lg0KPiANCj4gT24gZnVsbCBtb2Rlc2V0cywgdGhlIERSTSBo
+ZWxwZXJzIGFscmVhZHkgYWRkIGEgQ1JUQydzIHBsYW5lcyB0byB0aGUNCj4gYXRvbWljIHN0
+YXRlOyBzZWUgZHJtX2F0b21pY19oZWxwZXJfY2hlY2tfbW9kZXNldCgpLiBUaGVyZSdzIG5v
+IHJlYXNvbg0KPiB0byBjYWxsIGRybV9hdG9taWNfYWRkX2FmZmVjdGVkX3BsYW5lcygpIHVu
+Y29uZGl0aW9uYWxseSBpbiB0aGUgQ1JUQydzDQo+IGF0b21pY19jaGVjaygpIGluIHNzZDEz
+MHguIEl0J3MgYWxzbyB0b28gbGF0ZSwgYXMgdGhlIGF0b21pY19jaGVjaygpDQo+IG9mIHRo
+ZSBhZGRlZCBwbGFuZXMgd2lsbCBub3QgYmUgY2FsbGVkIGJlZm9yZSB0aGUgY29tbWl0Lg0K
+PiANCj4gU3VnZ2VzdGVkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3Vz
+ZS5kZT4NCj4gU2lnbmVkLW9mZi1ieTogSmF2aWVyIE1hcnRpbmV6IENhbmlsbGFzIDxqYXZp
+ZXJtQHJlZGhhdC5jb20+DQoNClJldmlld2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHpp
+bW1lcm1hbm5Ac3VzZS5kZT4NCg0KPiAtLS0NCj4gDQo+ICAgZHJpdmVycy9ncHUvZHJtL3Nv
+bG9tb24vc3NkMTMweC5jIHwgMTAgKystLS0tLS0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAy
+IGluc2VydGlvbnMoKyksIDggZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJp
+dmVycy9ncHUvZHJtL3NvbG9tb24vc3NkMTMweC5jIGIvZHJpdmVycy9ncHUvZHJtL3NvbG9t
+b24vc3NkMTMweC5jDQo+IGluZGV4IDU3ZTQ4MzU1YzAwOC4uMGQ0YWI2NTIzM2RiIDEwMDY0
+NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4LmMNCj4gKysrIGIv
+ZHJpdmVycy9ncHUvZHJtL3NvbG9tb24vc3NkMTMweC5jDQo+IEBAIC02NDksMTcgKzY0OSwx
+MSBAQCBzdGF0aWMgaW50IHNzZDEzMHhfY3J0Y19oZWxwZXJfYXRvbWljX2NoZWNrKHN0cnVj
+dCBkcm1fY3J0YyAqY3J0YywNCj4gICAJCQkJCSAgICBzdHJ1Y3QgZHJtX2F0b21pY19zdGF0
+ZSAqbmV3X3N0YXRlKQ0KPiAgIHsNCj4gICAJc3RydWN0IGRybV9jcnRjX3N0YXRlICpuZXdf
+Y3J0Y19zdGF0ZSA9IGRybV9hdG9taWNfZ2V0X25ld19jcnRjX3N0YXRlKG5ld19zdGF0ZSwg
+Y3J0Yyk7DQo+IC0JaW50IHJldDsNCj4gICANCj4gICAJaWYgKCFuZXdfY3J0Y19zdGF0ZS0+
+ZW5hYmxlKQ0KPiAtCQlnb3RvIG91dDsNCj4gLQ0KPiAtCXJldCA9IGRybV9hdG9taWNfaGVs
+cGVyX2NoZWNrX2NydGNfcHJpbWFyeV9wbGFuZShuZXdfY3J0Y19zdGF0ZSk7DQo+IC0JaWYg
+KHJldCkNCj4gLQkJcmV0dXJuIHJldDsNCj4gKwkJcmV0dXJuIDA7DQo+ICAgDQo+IC1vdXQ6
+DQo+IC0JcmV0dXJuIGRybV9hdG9taWNfYWRkX2FmZmVjdGVkX3BsYW5lcyhuZXdfc3RhdGUs
+IGNydGMpOw0KPiArCXJldHVybiBkcm1fYXRvbWljX2hlbHBlcl9jaGVja19jcnRjX3ByaW1h
+cnlfcGxhbmUobmV3X2NydGNfc3RhdGUpOw0KPiAgIH0NCj4gICANCj4gICAvKg0KDQotLSAN
+ClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNv
+ZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7D
+vHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0
+c2bDvGhyZXI6IEl2byBUb3Rldg0K
+
+--------------KY5qVJqJXClzdHUkY5KSXhzz--
+
+--------------NXNgIx7VyJdQLP9iQc9UdRpF
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmNFavkFAwAAAAAACgkQlh/E3EQov+B1
+9xAAxIWDeHL4WTyY/N4B2/tT8bddpytix2/jul3SMO3gYVxHv527K4Q7pFhvvIoAGucGqEHyE7PX
+dphDX4D9PtuGrd1wseLJdbUZxKOd64WKAnmM2NXPwYNs5X/v2VRDNFM3Zi1MYUEfpgryFO2U6jiu
+5DG8AkWrELFvR9o7xPqDWGUIFlB5W8l+YQhAxTbbkxetV68KqjADjyEeq6tmy36jB3GN6jZpsP7E
+8+dMhIXeDgfGNiDOLMr5gyUNOmqGfmuvwiO2nBaJhFOiKtKPLy0YpZcuvu9o4vXg9Ma7KKzpAQtH
+tF+PldE+4NxQKVUvNTy4g0ei37nXLMznfQ9N+EgVkfcX/99ki+X8yfsCbsLL69licEFg6hMxuYtH
+Elb1VakCfg2DX0JFBs6x8qXueDuSsuGMgNLkIuqr8yFXIDFq+U7/gpoT6RN4aSvYMXGhDQ9AL42S
+VggvdzLwxmifuLaovnnz9st19Tvii53Ti3H/WimRpuHq7DdhvT+vBtCkCktrzpxbyYSocVmGguOE
+GlG2SqJd8IEA6b4YfWPjwXwYaRzRnwshapfl2LTpL5vjIILUbehdVI6X9dBEr3oEAUIJNRE4gyNf
+dSNjnkqd9mA0vR34qI5j9Dv32E7KinRQJsoXR4iagw0KgpCgTwRQhuBEK0ESLecnvIN1bcSFe17+
+CWk=
+=Ms6e
+-----END PGP SIGNATURE-----
+
+--------------NXNgIx7VyJdQLP9iQc9UdRpF--
