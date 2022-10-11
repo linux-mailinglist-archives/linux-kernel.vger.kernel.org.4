@@ -2,185 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8325B5FAA24
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 03:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 698CC5FAA21
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 03:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbiJKBdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 21:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
+        id S230203AbiJKBcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 21:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiJKBc4 (ORCPT
+        with ESMTP id S230193AbiJKBc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 21:32:56 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1EB97A741
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 18:32:54 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MmdTR5PPMzVhnD;
-        Tue, 11 Oct 2022 09:28:27 +0800 (CST)
-Received: from huawei.com (10.67.175.88) by kwepemi500012.china.huawei.com
- (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 11 Oct
- 2022 09:32:51 +0800
-From:   Li Zetao <lizetao1@huawei.com>
-To:     <keescook@chromium.org>, <tglx@linutronix.de>, <mingo@redhat.com>,
-        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, <kirill.shutemov@linux.intel.com>,
-        <tony.luck@intel.com>, <masahiroy@kernel.org>,
-        <michael.roth@amd.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-CC:     <lizetao1@huawei.com>, <nathan@kernel.org>,
-        <ndesaulniers@google.com>, <brijesh.singh@amd.com>,
-        <peterz@infradead.org>, <venu.busireddy@oracle.com>,
-        <linux-kernel@vger.kernel.org>, <akpm@linux-foundation.org>
-Subject: [PATCH -next v4 2/2] x86/boot/compressed: Add "-Wall" flag to Makefile
-Date:   Tue, 11 Oct 2022 01:29:04 +0000
-Message-ID: <20221011012904.2330473-3-lizetao1@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221011012904.2330473-1-lizetao1@huawei.com>
-References: <202210090815.526C76396@keescook>
- <20221011012904.2330473-1-lizetao1@huawei.com>
+        Mon, 10 Oct 2022 21:32:27 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833B04B48A;
+        Mon, 10 Oct 2022 18:32:26 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id ot12so28336499ejb.1;
+        Mon, 10 Oct 2022 18:32:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+NKtm6G8YQNfFwN3Ue52dHfcO0qlV3rWsxLksVaUPeA=;
+        b=qNtDwWLQXq78lblYJDPejDvP4LibPyThq63vVxh+atl/ER80wUxO6JTt5FOvlUM0O8
+         MtLjgy29WjWrcXjQW5S/6+0pLjLNk0hKrX684dKLFul+Omw9FCmr/D5QdYyFD7E3x6VO
+         BNWeA+T5YJVWTEYARJXmiyHjEtWR6anWV6fckpyJLLRAnoNe9C+N7JKE3E/QCrjOOQNp
+         lCnX9bwYx2xQc8rGIQlcI3bbIXBEAmAPbDHO6dthwYvTjwhHyDBdPDPmN+oxVpLVyCl/
+         G2nv5eBhhpF+R0q+Ora5cgmIP2ZeC9viXRKLLX2UPiUdkaouqYJJiAIt9DAzG9BZEYLi
+         9I4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+NKtm6G8YQNfFwN3Ue52dHfcO0qlV3rWsxLksVaUPeA=;
+        b=mCNF8oLCDZqCSvUnj7PISapSbDXDNNtNUrFIpeww6MIC0xs8gghCk9CWmNHqJeMxMH
+         kp/iA2Eww0zL8xIBFjGX1TeF/TjTZ+HvcoKoyqsu1usTAequcsgbP1TWBEHU3AEQcJ5d
+         gLPKeMr+I23j7IhxwI327Nrf8OhylJ2HEX0Y64o0rbGO9iV2VoIoqlJrdCxVI2DaMTS2
+         CfQTXXJzyNuwqIcKqrIT7aPDsVkTyh8gUoEw90201FLW+lNVx+qLryn2XfVE0kCYWIyi
+         DD7iqrTRAmE0tsuWu5P3yRC3c8Av7UTejcvhmph/it5noM7yQZSBWRd0wTNXL7vfC8A/
+         iilw==
+X-Gm-Message-State: ACrzQf203EzsRycaAZDC0oTSQVmMrN5aqj2bHGXTeMiSyjKi/vbN9CF2
+        wqlUuwOpReAY9gS6H6WpMNsaTxn2mDnvh+6KSS4=
+X-Google-Smtp-Source: AMsMyM5IHMoQ9wF287/Oh+NipdB6ytQa6VOwcgs3RqStIzpO9MUIOlWn7reiPpZeADgzAj3mL+rCnTqUX5mX2GmZS+s=
+X-Received: by 2002:a17:906:99c5:b0:73d:70c5:1a4f with SMTP id
+ s5-20020a17090699c500b0073d70c51a4fmr16677432ejn.302.1665451944976; Mon, 10
+ Oct 2022 18:32:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.88]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221010142553.776550-1-xukuohai@huawei.com> <20221010142553.776550-2-xukuohai@huawei.com>
+In-Reply-To: <20221010142553.776550-2-xukuohai@huawei.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 10 Oct 2022 18:32:13 -0700
+Message-ID: <CAEf4BzZkesCVVRniTQyGeQMQmoMMUG7FXY4Eh3=Pbm_AcbuvEg@mail.gmail.com>
+Subject: Re: [PATCH bpf v3 1/6] libbpf: Fix use-after-free in btf_dump_name_dups
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Delyan Kratunov <delyank@fb.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Compressed/Makefile does not have "-Wall" flag, this is the old problem of
-x86 not sharing makefiles. Fix by adding "-Wall" flag to Makefile. But when
-"-Wall" flag added to Makefile, a few extra warnings were found.
+On Mon, Oct 10, 2022 at 7:08 AM Xu Kuohai <xukuohai@huawei.com> wrote:
+>
+> ASAN reports an use-after-free in btf_dump_name_dups:
+>
+> ERROR: AddressSanitizer: heap-use-after-free on address 0xffff927006db at pc 0xaaaab5dfb618 bp 0xffffdd89b890 sp 0xffffdd89b928
+> READ of size 2 at 0xffff927006db thread T0
+>     #0 0xaaaab5dfb614 in __interceptor_strcmp.part.0 (test_progs+0x21b614)
+>     #1 0xaaaab635f144 in str_equal_fn tools/lib/bpf/btf_dump.c:127
+>     #2 0xaaaab635e3e0 in hashmap_find_entry tools/lib/bpf/hashmap.c:143
+>     #3 0xaaaab635e72c in hashmap__find tools/lib/bpf/hashmap.c:212
+>     #4 0xaaaab6362258 in btf_dump_name_dups tools/lib/bpf/btf_dump.c:1525
+>     #5 0xaaaab636240c in btf_dump_resolve_name tools/lib/bpf/btf_dump.c:1552
+>     #6 0xaaaab6362598 in btf_dump_type_name tools/lib/bpf/btf_dump.c:1567
+>     #7 0xaaaab6360b48 in btf_dump_emit_struct_def tools/lib/bpf/btf_dump.c:912
+>     #8 0xaaaab6360630 in btf_dump_emit_type tools/lib/bpf/btf_dump.c:798
+>     #9 0xaaaab635f720 in btf_dump__dump_type tools/lib/bpf/btf_dump.c:282
+>     #10 0xaaaab608523c in test_btf_dump_incremental tools/testing/selftests/bpf/prog_tests/btf_dump.c:236
+>     #11 0xaaaab6097530 in test_btf_dump tools/testing/selftests/bpf/prog_tests/btf_dump.c:875
+>     #12 0xaaaab6314ed0 in run_one_test tools/testing/selftests/bpf/test_progs.c:1062
+>     #13 0xaaaab631a0a8 in main tools/testing/selftests/bpf/test_progs.c:1697
+>     #14 0xffff9676d214 in __libc_start_main ../csu/libc-start.c:308
+>     #15 0xaaaab5d65990  (test_progs+0x185990)
+>
+> 0xffff927006db is located 11 bytes inside of 16-byte region [0xffff927006d0,0xffff927006e0)
+> freed by thread T0 here:
+>     #0 0xaaaab5e2c7c4 in realloc (test_progs+0x24c7c4)
+>     #1 0xaaaab634f4a0 in libbpf_reallocarray tools/lib/bpf/libbpf_internal.h:191
+>     #2 0xaaaab634f840 in libbpf_add_mem tools/lib/bpf/btf.c:163
+>     #3 0xaaaab636643c in strset_add_str_mem tools/lib/bpf/strset.c:106
+>     #4 0xaaaab6366560 in strset__add_str tools/lib/bpf/strset.c:157
+>     #5 0xaaaab6352d70 in btf__add_str tools/lib/bpf/btf.c:1519
+>     #6 0xaaaab6353e10 in btf__add_field tools/lib/bpf/btf.c:2032
+>     #7 0xaaaab6084fcc in test_btf_dump_incremental tools/testing/selftests/bpf/prog_tests/btf_dump.c:232
+>     #8 0xaaaab6097530 in test_btf_dump tools/testing/selftests/bpf/prog_tests/btf_dump.c:875
+>     #9 0xaaaab6314ed0 in run_one_test tools/testing/selftests/bpf/test_progs.c:1062
+>     #10 0xaaaab631a0a8 in main tools/testing/selftests/bpf/test_progs.c:1697
+>     #11 0xffff9676d214 in __libc_start_main ../csu/libc-start.c:308
+>     #12 0xaaaab5d65990  (test_progs+0x185990)
+>
+> previously allocated by thread T0 here:
+>     #0 0xaaaab5e2c7c4 in realloc (test_progs+0x24c7c4)
+>     #1 0xaaaab634f4a0 in libbpf_reallocarray tools/lib/bpf/libbpf_internal.h:191
+>     #2 0xaaaab634f840 in libbpf_add_mem tools/lib/bpf/btf.c:163
+>     #3 0xaaaab636643c in strset_add_str_mem tools/lib/bpf/strset.c:106
+>     #4 0xaaaab6366560 in strset__add_str tools/lib/bpf/strset.c:157
+>     #5 0xaaaab6352d70 in btf__add_str tools/lib/bpf/btf.c:1519
+>     #6 0xaaaab6353ff0 in btf_add_enum_common tools/lib/bpf/btf.c:2070
+>     #7 0xaaaab6354080 in btf__add_enum tools/lib/bpf/btf.c:2102
+>     #8 0xaaaab6082f50 in test_btf_dump_incremental tools/testing/selftests/bpf/prog_tests/btf_dump.c:162
+>     #9 0xaaaab6097530 in test_btf_dump tools/testing/selftests/bpf/prog_tests/btf_dump.c:875
+>     #10 0xaaaab6314ed0 in run_one_test tools/testing/selftests/bpf/test_progs.c:1062
+>     #11 0xaaaab631a0a8 in main tools/testing/selftests/bpf/test_progs.c:1697
+>     #12 0xffff9676d214 in __libc_start_main ../csu/libc-start.c:308
+>     #13 0xaaaab5d65990  (test_progs+0x185990)
+>
+> The reason is that the key stored in hash table name_map is a string
+> address, and the string memory is allocated by realloc() function, when
+> the memory is resized by realloc() later, the old memory may be freed,
+> so the address stored in name_map references to a freed memory, causing
+> use-after-free.
+>
+> Fix it by storing duplicated string address in name_map.
+>
+> Fixes: 351131b51c7a ("libbpf: add btf_dump API for BTF-to-C conversion")
 
-1.
-In file included from arch/x86/boot/compressed/misc.c:15:
-  In file included from arch/x86/boot/compressed/misc.h:24:
-  In file included from ./include/linux/elf.h:6:
-  In file included from ./arch/x86/include/asm/elf.h:8:
-  In file included from ./include/linux/thread_info.h:60:
-  ./arch/x86/include/asm/thread_info.h:175:13: warning: calling
-  "__builtin_frame_address" with a nonzero argument is unsafe
-  [-Wframe-address]
-    oldframe = __builtin_frame_address(1);
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~
+this is not quite correct, because when btf_dump API was added struct
+btf was immutable. So fixes tag should point to commit that added
+btf__add_xxx() APIs, which at that point broke btf_dump APIs.
 
-./arch/x86/include/asm/thread_info.h:177:11: warning: calling
-  "__builtin_frame_address" with a nonzero argument is unsafe
-  [-Wframe-address]
-    frame = __builtin_frame_address(2);
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> ---
+>  tools/lib/bpf/btf_dump.c | 47 +++++++++++++++++++++++++++++++---------
+>  1 file changed, 37 insertions(+), 10 deletions(-)
+>
+> diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+> index e4da6de68d8f..8365d801cbd0 100644
+> --- a/tools/lib/bpf/btf_dump.c
+> +++ b/tools/lib/bpf/btf_dump.c
+> @@ -219,6 +219,17 @@ static int btf_dump_resize(struct btf_dump *d)
+>         return 0;
+>  }
+>
+> +static void btf_dump_free_names(struct hashmap *map)
+> +{
+> +       size_t bkt;
+> +       struct hashmap_entry *cur;
+> +
+> +       hashmap__for_each_entry(map, cur, bkt)
+> +               free((void *)cur->key);
+> +
+> +       hashmap__free(map);
+> +}
+> +
+>  void btf_dump__free(struct btf_dump *d)
+>  {
+>         int i;
+> @@ -237,8 +248,8 @@ void btf_dump__free(struct btf_dump *d)
+>         free(d->cached_names);
+>         free(d->emit_queue);
+>         free(d->decl_stack);
+> -       hashmap__free(d->type_names);
+> -       hashmap__free(d->ident_names);
+> +       btf_dump_free_names(d->type_names);
+> +       btf_dump_free_names(d->ident_names);
+>
+>         free(d);
+>  }
+> @@ -634,8 +645,8 @@ static void btf_dump_emit_type_chain(struct btf_dump *d,
+>
+>  static const char *btf_dump_type_name(struct btf_dump *d, __u32 id);
+>  static const char *btf_dump_ident_name(struct btf_dump *d, __u32 id);
+> -static size_t btf_dump_name_dups(struct btf_dump *d, struct hashmap *name_map,
+> -                                const char *orig_name);
+> +static ssize_t btf_dump_name_dups(struct btf_dump *d, struct hashmap *name_map,
+> +                                 const char *orig_name);
+>
+>  static bool btf_dump_is_blacklisted(struct btf_dump *d, __u32 id)
+>  {
+> @@ -995,7 +1006,7 @@ static void btf_dump_emit_enum32_val(struct btf_dump *d,
+>         bool is_signed = btf_kflag(t);
+>         const char *fmt_str;
+>         const char *name;
+> -       size_t dup_cnt;
+> +       ssize_t dup_cnt;
+>         int i;
+>
+>         for (i = 0; i < vlen; i++, v++) {
+> @@ -1020,7 +1031,7 @@ static void btf_dump_emit_enum64_val(struct btf_dump *d,
+>         bool is_signed = btf_kflag(t);
+>         const char *fmt_str;
+>         const char *name;
+> -       size_t dup_cnt;
+> +       ssize_t dup_cnt;
+>         __u64 val;
+>         int i;
+>
+> @@ -1521,14 +1532,30 @@ static void btf_dump_emit_type_cast(struct btf_dump *d, __u32 id,
+>  }
+>
+>  /* return number of duplicates (occurrences) of a given name */
+> -static size_t btf_dump_name_dups(struct btf_dump *d, struct hashmap *name_map,
+> -                                const char *orig_name)
+> +static ssize_t btf_dump_name_dups(struct btf_dump *d, struct hashmap *name_map,
+> +                                 const char *orig_name)
+>  {
+> -       size_t dup_cnt = 0;
+> +       int err;
+> +       char *old_name;
+> +       char *new_name;
+> +       ssize_t dup_cnt = 0;
+> +
+> +       new_name = strdup(orig_name);
+> +       if (!new_name)
+> +               return -ENOMEM;
+>
+>         hashmap__find(name_map, orig_name, (void **)&dup_cnt);
+>         dup_cnt++;
+> -       hashmap__set(name_map, orig_name, (void *)dup_cnt, NULL, NULL);
+> +
+> +       err = hashmap__set(name_map, new_name, (void *)dup_cnt,
+> +                          (const void **)&old_name, NULL);
+> +       if (err) {
+> +               free(new_name);
+> +               return err;
+> +       }
+> +
+> +       if (old_name)
+> +               free(old_name);
+>
 
-This warning is disabled in the main Makefile for this reason so we
-should just be able to disable it, adding "frame-address" flag to
-Makefile.
+you'll notice that btf_dump has lots of void functions and has a bit
+different approach to error handling. When the error isn't leading to
+a crash, we just ignore it with the idea that if some memory
+allocation failed (a quite unlikely event in general), we'll end up
+generating incomplete btf_dump output. Same here, no one is checking
+btf_dump_name_dups() return result for errors (e.g.,
+btf_dump_emit_enum32_val doesn't).
 
-2.
-arch/x86/boot/compressed/kaslr.c:627:6: warning: unused variable
-  "i" [-Wunused-variable]
-    int i;
-        ^
+So, I propose to follow that approach here. strdup(orig_name), if that
+failed, return 1. Which is exactly the behavior if hashmap__set()
+failed due to memory allocation failure.
 
-This happens when CONFIG_MEMORY_HOTREMOVE or CONFIG_ACPI are "n".
-Fix by adding "-std=gnu11" flag to Makefile, and we should put
-the variable "i" within the for loop.
-
-3.
-arch/x86/boot/compressed/acpi.c:23:1: warning: unused function
-  "__efi_get_rsdp_addr" [-Wunused-function]
-
-This happens when CONFIG_EFI is disabled for the reason that
-function "__efi_get_rsdp_addr" is only called in efi_get_rsdp_addr
-when CONFIG_EFI enable. So function "__efi_get_rsdp_addr" should
-not be defined when CONFIG_EFI is disabled.
-
-Signed-off-by: Li Zetao <lizetao1@huawei.com>
----
-v1 -> v2: Patch is new
-v2 -> v3: Resolve extra warnings after "-Wall" flag added
-v3 -> v4: Put this patch at the end
-
- arch/x86/boot/compressed/Makefile | 3 ++-
- arch/x86/boot/compressed/acpi.c   | 5 +++--
- arch/x86/boot/compressed/kaslr.c  | 3 +--
- 3 files changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 3a261abb6d15..8918a8306dff 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -35,7 +35,7 @@ targets := vmlinux vmlinux.bin vmlinux.bin.gz vmlinux.bin.bz2 vmlinux.bin.lzma \
- # be valid.
- KBUILD_CFLAGS := -m$(BITS) -O2 $(CLANG_FLAGS)
- KBUILD_CFLAGS += -fno-strict-aliasing -fPIE
--KBUILD_CFLAGS += -Wundef
-+KBUILD_CFLAGS += -Wundef -Wall -std=gnu11
- KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
- cflags-$(CONFIG_X86_32) := -march=i386
- cflags-$(CONFIG_X86_64) := -mcmodel=small -mno-red-zone
-@@ -44,6 +44,7 @@ KBUILD_CFLAGS += -mno-mmx -mno-sse
- KBUILD_CFLAGS += -ffreestanding -fshort-wchar
- KBUILD_CFLAGS += -fno-stack-protector
- KBUILD_CFLAGS += $(call cc-disable-warning, address-of-packed-member)
-+KBUILD_CFLAGS += $(call cc-disable-warning, frame-address)
- KBUILD_CFLAGS += $(call cc-disable-warning, gnu)
- KBUILD_CFLAGS += -Wno-pointer-sign
- KBUILD_CFLAGS += $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
-diff --git a/arch/x86/boot/compressed/acpi.c b/arch/x86/boot/compressed/acpi.c
-index 21febd9f21ab..c062a8230e9c 100644
---- a/arch/x86/boot/compressed/acpi.c
-+++ b/arch/x86/boot/compressed/acpi.c
-@@ -19,10 +19,10 @@
-  */
- struct mem_vector immovable_mem[MAX_NUMNODES*2];
- 
-+#ifdef CONFIG_EFI
- static acpi_physical_address
- __efi_get_rsdp_addr(unsigned long cfg_tbl_pa, unsigned int cfg_tbl_len)
- {
--#ifdef CONFIG_EFI
- 	unsigned long rsdp_addr;
- 
- 	/*
-@@ -41,9 +41,10 @@ __efi_get_rsdp_addr(unsigned long cfg_tbl_pa, unsigned int cfg_tbl_len)
- 		return (acpi_physical_address)rsdp_addr;
- 
- 	debug_putstr("Error getting RSDP address.\n");
--#endif
-+
- 	return 0;
- }
-+#endif
- 
- static acpi_physical_address efi_get_rsdp_addr(void)
- {
-diff --git a/arch/x86/boot/compressed/kaslr.c b/arch/x86/boot/compressed/kaslr.c
-index e476bcbd9b42..4abc9c42cf4d 100644
---- a/arch/x86/boot/compressed/kaslr.c
-+++ b/arch/x86/boot/compressed/kaslr.c
-@@ -625,7 +625,6 @@ static bool process_mem_region(struct mem_vector *region,
- 			       unsigned long minimum,
- 			       unsigned long image_size)
- {
--	int i;
- 	/*
- 	 * If no immovable memory found, or MEMORY_HOTREMOVE disabled,
- 	 * use @region directly.
-@@ -645,7 +644,7 @@ static bool process_mem_region(struct mem_vector *region,
- 	 * If immovable memory found, filter the intersection between
- 	 * immovable memory and @region.
- 	 */
--	for (i = 0; i < num_immovable_mem; i++) {
-+	for (int i = 0; i < num_immovable_mem; i++) {
- 		u64 start, end, entry_end, region_end;
- 		struct mem_vector entry;
- 
--- 
-2.34.1
-
+>         return dup_cnt;
+>  }
+> --
+> 2.30.2
+>
