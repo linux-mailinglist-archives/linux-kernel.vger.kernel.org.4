@@ -2,103 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 741715FBDF3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 00:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0765FBDF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Oct 2022 00:50:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiJKWtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 18:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45104 "EHLO
+        id S229552AbiJKWuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 18:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiJKWtn (ORCPT
+        with ESMTP id S229569AbiJKWt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 18:49:43 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DF92DD7
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 15:49:42 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id z197so7173961iof.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 15:49:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j6c6RloR1f1meVJL/BrGR4Y0ez6uzlYlKHhaiRNYhs0=;
-        b=GEoUpWzyQJ1EOpEsREXd5rTYPMHiuAtqAlmA0RR0NMubUUPrnJ4/XkiOaDGQLJrOu8
-         FuvNQm2L8j7Lcya9lRWWV+Bs+fCZTboDyWd/H71oavlGvovpnNwepb9T5Az1cjsOxmCl
-         4b2f9h3cdBvjSOva+H1+oKdfmwZwoIgQAI7hpsGP2hm01xv2Xp8lTmeJCXfCQ5qwmpwv
-         lWiZ4lphzHITpaEyXvNgHDhDJlBIWdgrhKw8Ds6IFnbhypMaypZ7MsrGhvMuq/Ti5DjW
-         S0Yzrpr+ovSetT0en3/fIhcod5jPEX/deYIEdxuJTAvTGY7URssjTt7/yAtymbdJDmD5
-         au4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j6c6RloR1f1meVJL/BrGR4Y0ez6uzlYlKHhaiRNYhs0=;
-        b=bMHy9kZGauhsuCNWhFmIxxilMN4RKirQ5yCva7+/L7ZpCY+tv00k+/xHkY/3RLrJpA
-         q8Hma5j8+0QZRwGvPOYQquKjBuXgWdX1oqq7F+rxO4OBSFaJ63qr5GRwlf8wodkR0bln
-         tOR2bRUa5lBoRa9fk/Ln14vJDLrBgj2NGtGWUWIJotEuuvsyU9QXLBXj1PVbpP5AoN31
-         196uPiOSMuqC72JUBctMerGH2YIHGs1Sjl4T+dqTXBWfvUI+PoX9elF4VgDktxgIDpaQ
-         MUn9vEf6mmVleWgaZ+S1tFVba7Hb/YQfwbL02n0DmovlUT4RiwTc/z8yZYDlQ17CYX53
-         e5Tw==
-X-Gm-Message-State: ACrzQf2rDGrwpKt6jcrAU9SpdtBMcO5mve1ICYIbUJ1ha+3aOQ9FulA0
-        mqVRQhbHQ53Iyjeeg+5GHvwcLHvrXr1IxtIndI8=
-X-Google-Smtp-Source: AMsMyM7lj2VaHp6DpaLYCPCiyTlfN8Mg/6zisqjcfW7o7ASVVQ4oZXaJvGu9y1QaAD+MjDAzjEMpD4rowwV/MJw0dKE=
-X-Received: by 2002:a05:6638:2641:b0:363:a80a:644f with SMTP id
- n1-20020a056638264100b00363a80a644fmr9546775jat.205.1665528581803; Tue, 11
- Oct 2022 15:49:41 -0700 (PDT)
+        Tue, 11 Oct 2022 18:49:59 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C14E016;
+        Tue, 11 Oct 2022 15:49:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id EC3251F8B0;
+        Tue, 11 Oct 2022 22:49:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1665528590; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=u0K+tDxY91S4wQ9H7TDLz0f3SDpyKHNBEKeqLz2Ae3E=;
+        b=sRgOJGXbQ4Y3bEg3wrJ7A91VzzgXRjufB+WWTXw8Fvy7noUoSGSDXSs6i+RP7FuuoQxyKM
+        OZ42YOHiwgn+lb3fpKyHmerwrlfQ9fIIgtZgY+j3SIh+VCXYA53HRYuicgJBETxnjZzP7M
+        HP/LiAFOy76J8FmaE7ocDvFjuRyLPpc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1665528590;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=u0K+tDxY91S4wQ9H7TDLz0f3SDpyKHNBEKeqLz2Ae3E=;
+        b=3kKi1MuqL0ir4LNRL+T46XoZVejEqg5Nos7qmaiO9BTUJUH92HmjoMulxxlooPVJx+Eiyc
+        1ekIowgP/bfXWhCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9DB9C13AAC;
+        Tue, 11 Oct 2022 22:49:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kZXdJA7zRWMXDAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 11 Oct 2022 22:49:50 +0000
+Date:   Wed, 12 Oct 2022 00:49:49 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        kernel test robot <lkp@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chenglin Xu <chenglin.xu@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH AUTOSEL 6.0 04/46] soc: mediatek: Let PMIC Wrapper and
+ SCPSYS depend on OF
+Message-ID: <20221012004949.06d45f74@endymion.delvare>
+In-Reply-To: <20221011145015.1622882-4-sashal@kernel.org>
+References: <20221011145015.1622882-1-sashal@kernel.org>
+        <20221011145015.1622882-4-sashal@kernel.org>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Received: by 2002:a4f:f154:0:0:0:0:0 with HTTP; Tue, 11 Oct 2022 15:49:41
- -0700 (PDT)
-Reply-To: mmrstephen16@gmail.com
-From:   "Mr. Stephen Melvin" <mr.bruceross22@gmail.com>
-Date:   Tue, 11 Oct 2022 15:49:41 -0700
-Message-ID: <CAKeG-00cDdf1Sks1M9piNQsn=prK3xGE-zsZwdw+ZV8SH52BRw@mail.gmail.com>
-Subject: Reply and let me know if you received this email.!!!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:d43 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5028]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mmrstephen16[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mr.bruceross22[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mr.bruceross22[at]gmail.com]
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dear, How are you today and your family? Want to believe you are
-all doing great.
+Hi Sasha,
 
-Please reply to me as fast as possible. I have important information for you.
+On Tue, 11 Oct 2022 10:49:32 -0400, Sasha Levin wrote:
+> From: Jean Delvare <jdelvare@suse.de>
+>=20
+> [ Upstream commit 2778caedb5667239823a29148dfc48b26a8b3c2a ]
+>=20
+> With the following configuration options:
+> CONFIG_OF is not set
+> CONFIG_MTK_PMIC_WRAP=3Dy
+> CONFIG_MTK_SCPSYS=3Dy
+> we get the following build warnings:
+>=20
+>   CC      drivers/soc/mediatek/mtk-pmic-wrap.o
+> drivers/soc/mediatek/mtk-pmic-wrap.c:2138:34: warning: =E2=80=98of_pwrap_=
+match_tbl=E2=80=99 defined but not used [-Wunused-const-variable=3D]
+> drivers/soc/mediatek/mtk-pmic-wrap.c:1953:34: warning: =E2=80=98of_slave_=
+match_tbl=E2=80=99 defined but not used [-Wunused-const-variable=3D]
+>   CC      drivers/soc/mediatek/mtk-scpsys.o
+> drivers/soc/mediatek/mtk-scpsys.c:1084:34: warning: =E2=80=98of_scpsys_ma=
+tch_tbl=E2=80=99 defined but not used [-Wunused-const-variable=3D]
+> (...)
 
-Kind Regards,
-Mr. Stephen Melvin.
+This is warning only, pretty harmless, so I don't think this qualifies
+for stable kernel trees.
+
+Thanks,
+--=20
+Jean Delvare
+SUSE L3 Support
