@@ -2,146 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71D575FABB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 06:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E94115FABB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 06:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbiJKEle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 00:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
+        id S229560AbiJKEoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 00:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiJKElb (ORCPT
+        with ESMTP id S229454AbiJKEoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 00:41:31 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C73E140FA
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 21:41:30 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id r18so11845133pgr.12
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 21:41:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=omnom-net.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RIvDTD88Q5aqj0y5uenzJkWztoDkBAY3byn/dBOudeE=;
-        b=EVA5wQHpq0CK/mlaafqza8TV+2AW5CwpjLiSkAtQMcrFNtma67C98aFiD6LL7oumiJ
-         4Z/4sh82hlDE9sHeBUO1GTAN5NfO8eXvfzZAz2yhpjIelZ5qyah8J4SZuY6grAcCgoES
-         1AX3vKcks4rGIpnMFwkxsJGhIL+Zd+/u9A9l8370pQAGbB3Y1kCXa6qJMxN4rDuyfsG6
-         rPP367hdQPMa9RTQ4xbwhFQGxpc00kwISKPWO1E2jK0z2Lq+lNu8+DqYGLcfU7aYb23E
-         KDbkB8X6gp6a/z9b6DNoRmTJ6BkfIVnSBs9u1wUEhZTWjrx0u9PFesGBfCUGL34TZ99H
-         W8aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RIvDTD88Q5aqj0y5uenzJkWztoDkBAY3byn/dBOudeE=;
-        b=rTNL0j+G+rVkhJLj8TnCZGaGsuJo6MJw24qfes+CB4Yxbsd8uVCpPbIqPWTWXtLBvD
-         iUo70Dleif64+GWD3ER7yepywneVn4fQ7mwGqivIdjbMqjovJYl0QdRMZnWE5TalN8Um
-         qG1XUCgqkl2lgSt6D58Y40hx3XfpMMWUJJf5OQVCqg4IKjFjeoxaOKyEA0AEdWcvvOrV
-         lZM68rhD+1GvmPc2sfhcPOzKR4anKvz4YTCD1YGr1ep8YiFYh02jaJin/biT3HYPXejy
-         oyQWqVTva+Rm0pInOX0UeDSWND9Tgt+mWFsTkCrj6tl1D89FxMQOApdMEc668WBKDP/M
-         pykw==
-X-Gm-Message-State: ACrzQf3fw4g2Kc8Oq473gnLTG2nWB/gs7QpEWXLpHxTUmF1xcV1SIjhd
-        Nrd4aC/ORNPtTyNTzjpFasNTkg==
-X-Google-Smtp-Source: AMsMyM5Ez+kjDNPf2UflpLcuXB5SAY/OVRHOD5ckuoNILqYaRp1mBkiKDWnx55PKC1x4lOInCKyTEw==
-X-Received: by 2002:aa7:9d11:0:b0:563:9272:b659 with SMTP id k17-20020aa79d11000000b005639272b659mr4800544pfp.86.1665463290135;
-        Mon, 10 Oct 2022 21:41:30 -0700 (PDT)
-Received: from [172.21.10.158] (119-18-16-128.771210.mel.static.aussiebb.net. [119.18.16.128])
-        by smtp.gmail.com with ESMTPSA id 123-20020a620481000000b00562832fc0ffsm7768342pfe.56.2022.10.10.21.41.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 21:41:29 -0700 (PDT)
-Message-ID: <5bec43fe-ff81-bc68-7b62-9e605b7e1f42@omnom.net>
-Date:   Tue, 11 Oct 2022 15:41:20 +1100
+        Tue, 11 Oct 2022 00:44:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E3B3740C;
+        Mon, 10 Oct 2022 21:44:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 248AB61055;
+        Tue, 11 Oct 2022 04:44:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 858DDC433C1;
+        Tue, 11 Oct 2022 04:44:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665463456;
+        bh=7TqsL4hnKmjV7++OVS50pm4RzZd1na3jTJfA3fxJHjI=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=Rm2S/KmMXj702Hrka5YmeTlQFUlrJ98+bIYCztj35ROZdsxZT7ueKK7jPLrAzVPIH
+         ePfoC5rA6lql5mUaQvhbk/QVANzSWHsvN2S7erbeb8q/WyOc6cuo2gvFced4mcBog/
+         EPdPnhxIk6U8OCweBO7GhUaIkXArcm0yEtA4fPuZera4iSm8V/tT2QX9B1xhXzxC70
+         Y+RIXiFWSFPVFBkgq27VOSgNRlA6cPGNh5rF0JpQUdRnwpTuvH2TTuq5rbcoAKs/oz
+         KLEUZWNY9zvN6Rp9zvB25qFKM6HzVbVBZ3q0lYW+HmgqXwQB4ryzoPbteA9cTyEqvs
+         aNaBn+2tLHhag==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v5 1/5] dt-bindings: phy: rockchip: add PCIe v3 phy
-Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Frank Wunderlich <linux@fw-web.de>
-Cc:     Rob Herring <robh@kernel.org>, linux-rockchip@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Simon Xue <xxm@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20220825193836.54262-1-linux@fw-web.de>
- <20220825193836.54262-2-linux@fw-web.de>
- <20221004150929.GA1506199-robh@kernel.org>
- <EC42D2C8-ACA5-4B6A-BC95-534CBDFC36C8@fw-web.de>
- <20221004205744.q5eybgbx6syszsqq@mercury.elektranox.org>
-From:   Andrew Powers-Holmes <aholmes@omnom.net>
-In-Reply-To: <20221004205744.q5eybgbx6syszsqq@mercury.elektranox.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v5] ath9k: verify the expected usb_endpoints are present
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20221008211532.74583-1-pchelkin@ispras.ru>
+References: <20221008211532.74583-1-pchelkin@ispras.ru>
+To:     Fedor Pchelkin <pchelkin@ispras.ru>
+Cc:     =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Fedor Pchelkin <pchelkin@ispras.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Alan Stern <stern@rowland.harvard.edu>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <166546344936.5539.12313131081543335412.kvalo@kernel.org>
+Date:   Tue, 11 Oct 2022 04:44:13 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/10/2022 7:57 am, Sebastian Reichel wrote:
-> Hi,
+Fedor Pchelkin <pchelkin@ispras.ru> wrote:
+
+> The bug arises when a USB device claims to be an ATH9K but doesn't
+> have the expected endpoints. (In this case there was an interrupt
+> endpoint where the driver expected a bulk endpoint.) The kernel
+> needs to be able to handle such devices without getting an internal error.
 > 
-> On Tue, Oct 04, 2022 at 05:19:11PM +0200, Frank Wunderlich wrote:
->> Am 4. Oktober 2022 17:09:29 MESZ schrieb Rob Herring <robh@kernel.org>:
->>> On Thu, Aug 25, 2022 at 09:38:32PM +0200, Frank Wunderlich wrote:
->>>> From: Frank Wunderlich <frank-w@public-files.de>
->>
->>>> +properties:
->>>> +  compatible:
->>>> +    enum:
->>>> +      - rockchip,rk3568-pcie3-phy
->>>
->>> The driver also has 'rockchip,rk3588-pcie3-phy'. Please send a fix 
->>> adding it here or removing from the driver. Are they not compatible with 
->>> each other?
->>
->> Right, original driver has rk3588 support,but we can't test it.
->> Initialization and lane-mapping (bifurcation) was bit different.
->> So we wanted to upstream rk3568 first (but have not removed this
->> part from driver).
->>
->> I see that someone added rk3588 basic support and if he can test
->> rk3588 i can send compatible for it.
+> usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+> WARNING: CPU: 3 PID: 500 at drivers/usb/core/urb.c:493 usb_submit_urb+0xce2/0x1430 drivers/usb/core/urb.c:493
+> Modules linked in:
+> CPU: 3 PID: 500 Comm: kworker/3:2 Not tainted 5.10.135-syzkaller #0
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
+> Workqueue: events request_firmware_work_func
+> RIP: 0010:usb_submit_urb+0xce2/0x1430 drivers/usb/core/urb.c:493
+> Call Trace:
+>  ath9k_hif_usb_alloc_rx_urbs drivers/net/wireless/ath/ath9k/hif_usb.c:908 [inline]
+>  ath9k_hif_usb_alloc_urbs+0x75e/0x1010 drivers/net/wireless/ath/ath9k/hif_usb.c:1019
+>  ath9k_hif_usb_dev_init drivers/net/wireless/ath/ath9k/hif_usb.c:1109 [inline]
+>  ath9k_hif_usb_firmware_cb+0x142/0x530 drivers/net/wireless/ath/ath9k/hif_usb.c:1242
+>  request_firmware_work_func+0x12e/0x240 drivers/base/firmware_loader/main.c:1097
+>  process_one_work+0x9af/0x1600 kernel/workqueue.c:2279
+>  worker_thread+0x61d/0x12f0 kernel/workqueue.c:2425
+>  kthread+0x3b4/0x4a0 kernel/kthread.c:313
+>  ret_from_fork+0x22/0x30 arch/x86/entry/entry_64.S:299
 > 
-> Basic rk3588 support is still WIP. At the moment patches for the CRU
-> are still pending as well as base DT. I hope to land them for v6.2
-> (so next merge window). At the same time I don't think PCIe support
-> is realistic before v6.3.
+> Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+> 
+> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+> Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-Hi all,
+Patch applied to ath-next branch of ath.git, thanks.
 
-I can confirm this patchset successfully brings up the PCIe 3.0
-controller/PHY on an RK3588 - I'm using a Pine64 QuartzPro64, which is
-very similar to the Rockchip RK3588-EVB1 board. Runs fine at x1, x2, x4
-lane widths and full 8GT/s lane throughput.
+16ef02bad239 wifi: ath9k: verify the expected usb_endpoints are present
 
-The PCIe 2.0 lanes (which use the same PCIe controller driver) need some
-changes to the rockchip-naneng-combphy driver that I've not quite gotten
-to a working state, but that's unrelated to this series.
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20221008211532.74583-1-pchelkin@ispras.ru/
 
-I have a (very messy) tree based on v6.0 (on GitHub at [0]) with
-Sebastian's other RK3588 support patches dropped in, along with this
-series and a few other tweaks. Works quite well :)
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
-So insofar as RK3588 support is concerned,
-
-Tested-By: Andrew Powers-Holmes <aholmes@omnom.net>
-
-[0] https://github.com/neggles/linux-quartz64/tree/qp64-pcie
-
-Cheers,
-A
