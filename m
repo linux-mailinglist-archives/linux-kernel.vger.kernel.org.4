@@ -2,79 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFAA5FAB10
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 05:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF275FAB15
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 05:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiJKDTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 23:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
+        id S229864AbiJKDUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 23:20:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiJKDSy (ORCPT
+        with ESMTP id S229804AbiJKDUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 23:18:54 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300EE72EDE;
-        Mon, 10 Oct 2022 20:18:54 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id g8-20020a17090a128800b0020c79f987ceso6959476pja.5;
-        Mon, 10 Oct 2022 20:18:54 -0700 (PDT)
+        Mon, 10 Oct 2022 23:20:07 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B512C18369
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 20:20:01 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id u15so8700667oie.2
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 20:20:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=q7jpzO8Ke7O+Q8EQ2ck6VZGI9qoGjYzStkg/yGmX7Ug=;
-        b=R8mh4ensz5GfJoIKug/4zEh1uYifTe3XlhWWIGHN4orJPXdsH7Ur7jcuGYmlNKCJna
-         0dJb1q3MUeUvbRnkbw+wK1ubs66uhSm3ocX6fAjmPMCfZF78Ga5cHMWvbcJ9AHes/ouI
-         1ogcarJAZcNBy5aHSHOnlRAc286i9RI5kDqXAGSGfM3bcLQsvGr5xh+w9dH4uc67aLb7
-         vBjMShQzXoH5evOR4RAgbax8vMTa8tpGuMEBPgsJjHZEEweE0EVqCxOrUpw1F5s7t6F4
-         3N2wrqpf+SIaTrBV0o8gXHzikz9u51gJr8+eyXCMVQq4Psgl3x7b1FSwpDe+wPsdb5s0
-         UYhw==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=t1BVZAdPTxFxg7htOV+murrsY5ewQUXBRikH12qoJyY=;
+        b=Gyb29+Q9yQfLY6mNF1kL2uDuCDDOq+5XuvnECS3WY8ZmpRIeu52yqk5VAu6WTTSbm4
+         iwj2FcStEqxkuNrMBOLqajvs8Y5zPIFbTb/1pVkFDkmxIxmjyr1ofsFxtftvAlPk80Wu
+         GysbjOm0DKyJOFaixiQTpyCqbTcq/NH9Q6J4U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=q7jpzO8Ke7O+Q8EQ2ck6VZGI9qoGjYzStkg/yGmX7Ug=;
-        b=oGd8eknHuiPKGZU4SNH0UGw+F6Ix9ArwGhJbEbjU9X8Zsm9S5AKCP545BTKmKuS4gS
-         nZqGv5+0JdlhWJf0kowr7yqkS64kZaG+m7wUW+nJf0RsTqQ6lIE1DgkJL/Bj1SJhGi49
-         djlnSSmWCwzgT/qZeGpnRNWfPVyW36BK5ObGAB9ShOxfuyrUtVCyk+RI8QYEywKp19CX
-         +DOI7Zt4/gCB9cMEkGfPduaqY5GBap3fwTyL/nGrNU9Q3opqP4WGkGMa55EmJ8lFWDov
-         zjimAFxEZi4X1XNVZ2uUOy3YXkRNbaCTXKvsZ7bayOAAHQktco9h9zG+QztR6a0JE0e2
-         F7Aw==
-X-Gm-Message-State: ACrzQf20oWbwKO6l3BMeNIVjEUvO5FL7yyC3LzUZqsHCg5keBupKyev5
-        OhvRhIr6MYdyJjS7esTXTWWO6EDLPTNlCw==
-X-Google-Smtp-Source: AMsMyM4d8+fgF7xwyqlkT0MuUWNph7sRO7tN/Rm2AtTXS6h66bzA9XHvfl4Z4APNlVdy9994kdcV5A==
-X-Received: by 2002:a17:90b:2246:b0:205:97a5:520e with SMTP id hk6-20020a17090b224600b0020597a5520emr35686812pjb.244.1665458333691;
-        Mon, 10 Oct 2022 20:18:53 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l1-20020a170902ec0100b001782a6fbcacsm7368255pld.101.2022.10.10.20.18.51
+        bh=t1BVZAdPTxFxg7htOV+murrsY5ewQUXBRikH12qoJyY=;
+        b=2hljqpThgpUgwXlf1DU5swYMVxcu6D7ls57t9bfvkTPRmodUHvfqNV+I+i/ON+wHx4
+         tbxqtqgr1DSDoxqxVBn5yik8ovCjM+J4BoJ8fiYYAep5eRbrNZj695vVgZN3G3fXAvsg
+         SvRfonZVOUDVFeBzNihf26LPy3jkA4wgxjLk0DltIPjFKSWMe9Qom+M24LWHh2i6Y286
+         DvcJ04Ms4Az3VZhtpDLwTNaNFrUDB8KKpKYn1u6GWHUR4W8l2TZmcGudZHAx3tynxboR
+         yUcs4Cs8yCROQpJVoLRWGx+e/62GmI9sy58whpj5g1roQgIgMu+7MHILlRl/Y/Hm37TT
+         vaIg==
+X-Gm-Message-State: ACrzQf1EIXMwWJg9keyGxHE5/VHzmqZlymT/7+1rW/nAQNMbfmM35FFO
+        CLRfF2gqCoaql/Gt4KuulNzGqk7kK/Whog==
+X-Google-Smtp-Source: AMsMyM6EmzjQ/aaAG5P8TDbWw5QZhoils5bC1EPZAGGj39Mk+UTEx25bwyhE4z8RbvZVXiiKBI9hjg==
+X-Received: by 2002:a05:6808:1142:b0:350:cbdd:c9d4 with SMTP id u2-20020a056808114200b00350cbddc9d4mr10235335oiu.124.1665458400395;
+        Mon, 10 Oct 2022 20:20:00 -0700 (PDT)
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com. [209.85.167.178])
+        by smtp.gmail.com with ESMTPSA id d19-20020a4ad353000000b0044b22632d51sm4839098oos.2.2022.10.10.20.19.59
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 20:18:52 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f519c545-b250-0196-8f26-7fc56173ceaf@roeck-us.net>
-Date:   Mon, 10 Oct 2022 20:18:50 -0700
+        Mon, 10 Oct 2022 20:19:59 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id m81so14641612oia.1
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 20:19:59 -0700 (PDT)
+X-Received: by 2002:aca:b957:0:b0:351:4ecf:477d with SMTP id
+ j84-20020acab957000000b003514ecf477dmr10488141oif.126.1665458399254; Mon, 10
+ Oct 2022 20:19:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 6.0 00/17] 6.0.1-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-References: <20221010070330.159911806@linuxfoundation.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20221010070330.159911806@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <YzpC+uJlYq1nbcIw@yury-laptop> <CAHk-=wgO5YjyPRz9dfP8AyZ8kKZPSQ78xyEbi8WmuHe09R36Hg@mail.gmail.com>
+ <CAHk-=whf2zgBzGMse-y-yD_oTfofRHQQV-gy3O-iQBE7oOiSGA@mail.gmail.com> <Y0TeAGLngwVbgtuK@yury-laptop>
+In-Reply-To: <Y0TeAGLngwVbgtuK@yury-laptop>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 10 Oct 2022 20:19:43 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi5n7w-HXeQZCzsr=8cH_6tTsm_4-bCsU3ChrSjCFoASA@mail.gmail.com>
+Message-ID: <CAHk-=wi5n7w-HXeQZCzsr=8cH_6tTsm_4-bCsU3ChrSjCFoASA@mail.gmail.com>
+Subject: Re: [GIT PULL] bitmap changes for v6.0-rc1
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,21 +76,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/10/22 00:04, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.1 release.
-> There are 17 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 12 Oct 2022 07:03:19 +0000.
-> Anything received after that time might be too late.
-> 
+On Mon, Oct 10, 2022 at 8:09 PM Yury Norov <yury.norov@gmail.com> wrote:
+>
+> > So I _think_ all the nr_cpu_id's games are mainly because we don't
+> > want to allocate huge arrays when  you can't actually have that many
+> > CPU's - but for a small NR_CPUS situation that just isn't an issue
+> > anyway.
+> >
+> > Yes? No?
+>
+> You're talking about .data section. FORCE_NR_CPUS is about .text and
+> code generation.
 
-Build results:
-	total: 149 pass: 149 fail: 0
-Qemu test results:
-	total: 490 pass: 490 fail: 0
+No, it's more than just code size that you compare.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+It's also the "walk over big arrays".
 
-Guenter
+It doesn't matter if the *code* is simpler, if it's a fixed walk over
+64 long-words because the code uses a fixed 4096-bit bitmap.
+
+Yes, that constant 64 is simpler than loading a variable, but it's not
+*better*. It's worse. It has allocated more memory, and then it wastes
+time walking over it.
+
+So just looking at code size and "simplicity" is bogus.
+
+Yes, a constant loop is smaller and simpler, but unless the constant
+is also *small*, it sure isn't better.
+
+              Linus
