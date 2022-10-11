@@ -2,60 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F065FB046
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 12:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53EBC5FB04C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 12:19:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbiJKKSM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Oct 2022 06:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52016 "EHLO
+        id S229612AbiJKKT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 06:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiJKKSJ (ORCPT
+        with ESMTP id S229541AbiJKKT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 06:18:09 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8B86FA1E
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 03:18:07 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-286-09IWco5YP-G3TOKGjGh0fQ-1; Tue, 11 Oct 2022 11:18:04 +0100
-X-MC-Unique: 09IWco5YP-G3TOKGjGh0fQ-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Tue, 11 Oct
- 2022 11:18:03 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Tue, 11 Oct 2022 11:18:03 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Willy Tarreau' <w@1wt.eu>
-CC:     Alexey Dobriyan <adobriyan@gmail.com>,
-        "lkp@intel.com" <lkp@intel.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: RE: tools/nolibc: fix missing strlen() definition and infinite loop
- with gcc-12
-Thread-Topic: tools/nolibc: fix missing strlen() definition and infinite loop
- with gcc-12
-Thread-Index: AQHY3A4FfEAIYReKOkCQTHoqkpVhA64HYvoggAFHY4CAACsgsA==
-Date:   Tue, 11 Oct 2022 10:18:03 +0000
-Message-ID: <b5de4f7b61f1467baea10267c96d6db4@AcuMS.aculab.com>
-References: <Y0LsreRGq3nbe2xC@localhost.localdomain>
- <20221009175920.GA28685@1wt.eu> <20221009183604.GA29069@1wt.eu>
- <9e16965f1d494084981eaa90d73ca80e@AcuMS.aculab.com>
- <20221011062055.GC5107@1wt.eu>
-In-Reply-To: <20221011062055.GC5107@1wt.eu>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 11 Oct 2022 06:19:26 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F116FA14
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 03:19:24 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id l1so12746794pld.13
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 03:19:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yq/9loxiQhBqkMGuBqVSVER97PU6eqNrwXcwJJSQ4o8=;
+        b=YQMKAEJu2Lqp0lr6XC66P8V857rodeAZ2poxsUDkoWg3pWPdvuULNzsOWa02Zg/92T
+         lxqyY11dROObYQy7jaqYxhREieGrky1SSz0bgsk/fWFgWgEUq5QP5+M51hpDBdXo5izF
+         GnXG6kwB2iRS53lBKhVLXKuhjjLlcNr/EMfqE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Yq/9loxiQhBqkMGuBqVSVER97PU6eqNrwXcwJJSQ4o8=;
+        b=Lig6pqUh0QoNSmp1V7K6B7AnMCelgH/aqMEJuNW5jTziPVaMg4pAO9yZZ7iqBzR3PH
+         Gpmx+DDJPxZMm03RIqnf0xFuA901JkjwHN/pU9hsSvAhsEKbAB8EtkCxxiQBeoJvtThE
+         JnSWESjHzK6CwFInjhzc+Q6s1Cy3OPrsykqEDJgjFyTPQ3EHT73yL31TRchUiyl6JXZL
+         TzgTqCGl7sTshwTOLUaLhJWjhonopUrBebdh8A62tZL487qXd844JQ+2LpSwIYgB+8VA
+         bMH2ZcJf31JSmOudoTQjDHGenu+gmEW8jI7fzGezMeIGKV73e9XuOZlXj2wvLTDG3AgM
+         rGSg==
+X-Gm-Message-State: ACrzQf06Ajo1F5WzXLu533zM1tu6jm99zK7qFaO1gzbb2lnO49Ny+kv1
+        QYKQxtPyRQqgInROb5ELJR+jjQ==
+X-Google-Smtp-Source: AMsMyM4LINEjb4g0hFCLAALDCXfaB3pcV4PVIko37wfdn2j6GQwmNRf85N9NgRqisdThg1hBRZsIyA==
+X-Received: by 2002:a17:902:6a87:b0:181:c6c6:1d38 with SMTP id n7-20020a1709026a8700b00181c6c61d38mr12889488plk.74.1665483564107;
+        Tue, 11 Oct 2022 03:19:24 -0700 (PDT)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:31e6:a0c9:ff22:7e86])
+        by smtp.gmail.com with ESMTPSA id y12-20020a17090a1f4c00b0020d75e90d32sm488402pjy.17.2022.10.11.03.19.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 03:19:23 -0700 (PDT)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     Douglas Anderson <dianders@chromium.org>,
+        Sean Paul <seanpaul@chromium.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm_bridge: register content protect property
+Date:   Tue, 11 Oct 2022 18:18:51 +0800
+Message-Id: <20221011101850.200455-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,91 +70,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Willy Tarreau
-> Sent: 11 October 2022 07:21
-> 
-> On Mon, Oct 10, 2022 at 10:03:53AM +0000, David Laight wrote:
-> > From: Willy Tarreau <w@1wt.eu>
-> > > Sent: 09 October 2022 19:36
-> > ...
-> > > By the way, just for the sake of completeness, the one that consistently
-> > > gives me a better output is this one:
-> > >
-> > >   size_t strlen(const char *str)
-> > >   {
-> > >           const char *s0 = str--;
-> > >
-> > >           while (*++str)
-> > >   		;
-> > >           return str - s0;
-> > >   }
-> > >
-> > > Which gives me this:
-> > >
-> > >
-> > >   0000000000000000 <strlen>:
-> > >      0:   48 8d 47 ff             lea    -0x1(%rdi),%rax
-> > >      4:   48 ff c0                inc    %rax
-> > >      7:   80 38 00                cmpb   $0x0,(%rax)
-> > >      a:   75 f8                   jne    4 <len+0x4>
-> > >      c:   48 29 f8                sub    %rdi,%rax
-> > >      f:   c3                      ret
-> > >
-> > > But this is totally ruined by the addition of asm() in the loop. However
-> > > I suspect that the construct is difficult to match against a real strlen()
-> > > since it starts on an extra character, thus placing the asm() statement
-> > > before the loop could durably preserve it. It does work here (the code
-> > > remains the exact same one), but for how long, that's the question. Maybe
-> > > we can revisit the various loop-based functions in the future with this in
-> > > mind.
-> >
-> > clang wilfully and persistently generates:
-> >
-> > strlen:                                 # @strlen
-> >         movq    $-1, %rax
-> > .LBB0_1:                                # =>This Inner Loop Header: Depth=1
-> >         cmpb    $0, 1(%rdi,%rax)
-> >         leaq    1(%rax), %rax
-> >         jne     .LBB0_1
-> >         retq
-> >
-> > But feed the C for that into gcc and it generates a 'jmp strlen'
-> > at everything above -O1.
-> 
-> Interesting, that's not the case for me here with 12.2 from kernel.org
-> on x86_64, which gives this at -O1, -O2, -O3 and -Ofast:
-> 
->   0000000000000000 <strlen>:
->      0:   48 8d 47 ff             lea    -0x1(%rdi),%rax
->      4:   0f 1f 40 00             nopl   0x0(%rax)
->      8:   48 83 c0 01             add    $0x1,%rax
->      c:   80 38 00                cmpb   $0x0,(%rax)
->      f:   75 f7                   jne    8 <strlen+0x8>
->     11:   48 29 f8                sub    %rdi,%rax
->     14:   c3                      ret
-> 
-> Out of curiosity what version were you using ?
+Some bridges are able to update HDCP status from userspace requests if
+they support HDCP.
 
-Clang 12.0.0 onwards, see https://godbolt.org/z/67Gnzs8js
+HDCP property is the same as other connector properties that need to be
+created after the connecter is initialized and before the connector is
+registered.
 
-> > I suspect that might run with less clocks/byte than the code above.
-> 
-> Certainly for large strings, but not for short ones.
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+---
+ drivers/gpu/drm/drm_bridge_connector.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-For short strings not needing the final sub and not having
-the read depend on the increment should make the leal one faster.
-(The nop to align the loop label is monumentally pointless.)
-
-For long strings what matters is how many clocks it takes
-to schedule the 4 uops in the loop.
-It might be possible to get down to 2 clocks - but I think
-both the loops are 3 clocks (assuming the adjacent cmp/jne fuse).
-
-I'm not going to try to instrument the loops though!
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+diff --git a/drivers/gpu/drm/drm_bridge_connector.c b/drivers/gpu/drm/drm_bridge_connector.c
+index 1c7d936523df5..a3b9ef8dc3f0b 100644
+--- a/drivers/gpu/drm/drm_bridge_connector.c
++++ b/drivers/gpu/drm/drm_bridge_connector.c
+@@ -7,6 +7,7 @@
+ #include <linux/module.h>
+ #include <linux/slab.h>
+ 
++#include <drm/display/drm_hdcp_helper.h>
+ #include <drm/drm_atomic_state_helper.h>
+ #include <drm/drm_bridge.h>
+ #include <drm/drm_bridge_connector.h>
+@@ -398,6 +399,8 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
+ 	if (panel_bridge)
+ 		drm_panel_bridge_set_orientation(connector, panel_bridge);
+ 
++	drm_connector_attach_content_protection_property(connector, true);
++
+ 	return connector;
+ }
+ EXPORT_SYMBOL_GPL(drm_bridge_connector_init);
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
 
