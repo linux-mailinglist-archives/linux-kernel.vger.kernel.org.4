@@ -2,107 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34ABA5FB0F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E485FB10C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbiJKLGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 07:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55470 "EHLO
+        id S229711AbiJKLJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 07:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiJKLGx (ORCPT
+        with ESMTP id S229501AbiJKLJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 07:06:53 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB05D8BB89
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 04:06:51 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id i7-20020a17090a65c700b0020ad9666a86so15682068pjs.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 04:06:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kingston-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/+57ZqvNhATXLr/1cd2ohAamNcyquwTAjd/E20cKw2s=;
-        b=VcFLBz+4MS1GumDcQtPFx6tVseQBByOcIHhTXPA82TisbjpEtb65HgNCMwG6u5+jnO
-         YGgC3hTHIiRAi9EDKn69/5eRQkQ+4n8RuokPoV8062RX84Uk8nc3Jp5fvnl3PGNOtHzx
-         aXTVo3aBmiDMQtF2Fk6wsz0Mdtxm2echPDrXw+hAnkLAFAaOzu2Vqwdt3G8OyWOfC+ss
-         hUd13ApwQAeXVKvNONSN8id/jl6mT8AnBgltyO30rFDxMx8Oc+2nUWuQxIL6sBX3n6rq
-         wcIP/yqE0G9R1ZHpAoYUfMyHN5xuNNdKFxZbGC0IEuuVMfUI2vBwPzrLqFJzV3nVBqze
-         /3JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/+57ZqvNhATXLr/1cd2ohAamNcyquwTAjd/E20cKw2s=;
-        b=UhgxE5RvgtvGT1UzdlrLFBz9Ss69GRyGw4sA9hISjvmzUBAjOw2zLOMZaWsMYB+b3g
-         zYnFKdomOL/H7faV3wNecq8BTJKdGhucKs6yV7QBqhh/B422JG030NpPVQAYg9b84qrB
-         Ls8ht7omx1dyV1oiczHNkX2njxn6Ve37CzBsmL19T2eENMcPt0lCz3AJtEmZy/qeMv32
-         jPJMECGWReiF2ya1j3OWLBcLdFptwJoLNiHve38Y3EbYldCmTmKf1L6m5jihKVLqqouu
-         lUmqXNOrJnRcyBQl7dXZDPSd+FyM+xnTYVz8K42plevGX2FwNhu5suLUlkrWVeUdv8eZ
-         d3IQ==
-X-Gm-Message-State: ACrzQf3Af/1KD/HwJsSvfmW8l9aV0A+wAgMpq/gO+Ht/d0yq0XWHApEh
-        WsJx6bbwzjrfbqBNIoPT+YStLw==
-X-Google-Smtp-Source: AMsMyM4UQwQoNpu+6donIYg/lUKUPw1egJCzLRU1XqQhLs8AcQBG6QxtKsMhD7hX5G1bCWeC4Sd/ZA==
-X-Received: by 2002:a17:902:f7c4:b0:182:25d6:fc4b with SMTP id h4-20020a170902f7c400b0018225d6fc4bmr11247623plw.63.1665486411414;
-        Tue, 11 Oct 2022 04:06:51 -0700 (PDT)
-Received: from sped.tw.kingston.corp ([123.51.141.8])
-        by smtp.gmail.com with ESMTPSA id x14-20020aa7940e000000b00562677968aesm8752001pfo.72.2022.10.11.04.06.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 04:06:50 -0700 (PDT)
-From:   Xander Li <xander_li@kingston.corp-partner.google.com>
-To:     bvanassche@acm.org, paulburton@kernel.org, kbusch@kernel.org,
-        axboe@fb.com, hch@lst.de, sagi@grimberg.me,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     ralf@linux-mips.org, jhogan@kernel.org, christian@brauner.io,
-        jeff_yang@kingston.corp-partner.google.com,
-        dora_chueh@kingston.corp-partner.google.com,
-        james_liu@kingston.corp-partner.google.com,
-        vincent_wu@kingston.com, xander_li@kingston.com.tw,
-        Xander Li <xander_li@kingston.corp-partner.google.com>
-Subject: [PATCH] nvme-pci: disable write zeroes on Kingston SSD
-Date:   Tue, 11 Oct 2022 04:06:42 -0700
-Message-Id: <20221011110642.4333-1-xander_li@kingston.corp-partner.google.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 11 Oct 2022 07:09:41 -0400
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60591D73;
+        Tue, 11 Oct 2022 04:09:37 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 005F72B066FE;
+        Tue, 11 Oct 2022 07:09:34 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Tue, 11 Oct 2022 07:09:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1665486574; x=1665490174; bh=RM6oJ+Wm8I
+        //KZ/oFLABpSMFlOHOa+xN+BM+5SLLxTE=; b=aSIYxCtYdt1yek8Ky0J+MBBZGd
+        YNsaNQ38C8MlliiHZiynR73WHIEKlaMYrUM/xptOq/d1VGxGKHilri/wt4TPhIFl
+        64pWwEtnf3Mm+GBlyIbpVJpQnIu9y4g0d9eCxZLWYdqXFtjPyxTjbNw9ilvakv0s
+        kTrl5vahN583XPq/hWNgme/dnMN0//GaRZfS9XwvyoL/O8sPfeDb8mVlY1H3DBz1
+        tsPsgCvF/r+aJNF6QQAjG70KR4G0PF6amSQjNEACaEL8rf2MK4osNJnaWCfaBIl3
+        xyB1psknJFftHp9vNRmjc1vTmSguTPn70u5jJmIgnouMXY3jQ+mF8YwbruLA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665486574; x=1665490174; bh=RM6oJ+Wm8I//KZ/oFLABpSMFlOHO
+        a+xN+BM+5SLLxTE=; b=jflLYEknFINqe7qRTsk0daaR0znwMVl7nJ1IGdyv2ncY
+        bVqpuAfif81zf9VlFFkyx4IUQoxDrHT8FtR/CGpTze63zrHIVbL1Q+fMroo/Z2dY
+        pyd8G7jevH56aCaY4REcLf7jDd/DM4ioJvsToesOIgYmUg/Pp9v0fjWsbM/ULdQU
+        1llbnH6kO5bK+hMIMfzpiS1/CL6hZahPp9t3/yDhMt37JQWUfw/SiWQgJwCEJvVY
+        PvBWDFObOFEzSiPMWB9n8kguEKV6oVYvvMC84SfDlTANpR8pJEx/QXM66QIjwJv/
+        UnKlF1rNoJ6V+kVms7q4RXjJxWsUchfap5IawwCxrQ==
+X-ME-Sender: <xms:7k5FY_vwrB21dr5I-_tycqIxrn-vjDge8tsH9Kv-V3NzbDTGvWAYaA>
+    <xme:7k5FYwc5fhyKd0kE9p10FFRWBbghqc2bpSz8sAVxmXT-fPPSE19_4I3ahqnTcZyWJ
+    Frr_J0OVNjkEC2Muhs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejiedgfedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:7k5FYyzqziQBZRQ0Hlsh_jpYvdINfcj15npmDLShu1EAKIwtbms89g>
+    <xmx:7k5FY-Oo8N9U2caNl5qYk7udqrpZq0DOZs-IaO1W7RR3e_HA2KbNNg>
+    <xmx:7k5FY_-eu1g9YafbA0dDkaMf1xZB_23gMIJaN56laXcOXrjUYnx6oA>
+    <xmx:7k5FY384T46l2ky4ckvjowwTBWaP2xs0Q-JhSsNpZGfEEsn6w0lE2z_SfE0>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 2CA43B60086; Tue, 11 Oct 2022 07:09:34 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
+Mime-Version: 1.0
+Message-Id: <85ca7eb4-3e0c-4ffb-8bac-a435594ca0f7@app.fastmail.com>
+In-Reply-To: <7438406d-b446-201e-0ec3-5cf0a5b9f32c@kernel.org>
+References: <20221011000840.289033-1-quic_eberman@quicinc.com>
+ <20221011000840.289033-14-quic_eberman@quicinc.com>
+ <7438406d-b446-201e-0ec3-5cf0a5b9f32c@kernel.org>
+Date:   Tue, 11 Oct 2022 13:09:13 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Jiri Slaby" <jirislaby@kernel.org>,
+        "Elliot Berman" <quic_eberman@quicinc.com>,
+        "Bjorn Andersson" <quic_bjorande@quicinc.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     "Murali Nalajala" <quic_mnalajal@quicinc.com>,
+        "Trilok Soni" <quic_tsoni@quicinc.com>,
+        "Srivatsa Vaddagiri" <quic_svaddagi@quicinc.com>,
+        "Carl van Schaik" <quic_cvanscha@quicinc.com>,
+        "Prakruthi Deepak Heragu" <quic_pheragu@quicinc.com>,
+        "Andy Gross" <agross@kernel.org>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        "Jassi Brar" <jassisinghbrar@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
+        "Sudeep Holla" <sudeep.holla@arm.com>,
+        "Marc Zyngier" <maz@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Will Deacon" <will@kernel.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 13/13] tty: gunyah: Add tty console driver for RM Console
+ Services
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-signed-off-by: Xander Li <xander_li@kingston.com.tw>
+On Tue, Oct 11, 2022, at 8:02 AM, Jiri Slaby wrote:
+> On 11. 10. 22, 2:08, Elliot Berman wrote:
+>> +
+>> +	/* below are for printk console.
+>> +	 * gh_rm_console_* calls will sleep and console_write can be called from
+>> +	 * atomic ctx. Two xmit buffers are used. The active buffer is tracked with
+>> +	 * co_xmit_idx. Writes go into the co_xmit_buf[co_xmit_idx] buffer.
+>> +	 * A work is scheduled to flush the bytes. The work will swap the active buffer
+>> +	 * and write out the other buffer.
+>> +	 */
+>
+> Ugh, why? This is too ugly and unnecessary. What about passing the kfifo 
+> to gh_rm_console_write() instead? You do memcpy() there anyway.
 
-Kingston SSDs do support NVMe Write_Zeroes cmd but take long time to process.
-The firmware version is locked by these SSDs, we can not expect firmware improvement, so disable Write_Zeroes cmd.
----
- drivers/nvme/host/pci.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Another problem here is that you really want the console output to be
+printed from atomic context, otherwise one would never see e.g. the
+output of a panic() call. Having a deferred write is probably fine for
+normal tty operations, but you probably want a different device for the
+console here, e.g. the hvc_dcc driver.
 
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index 98864b853eef..d08c8c854f3a 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -3503,6 +3503,16 @@ static const struct pci_device_id nvme_id_table[] = {
- 		.driver_data = NVME_QUIRK_NO_DEEPEST_PS, },
- 	{ PCI_DEVICE(0x2646, 0x2263),   /* KINGSTON A2000 NVMe SSD  */
- 		.driver_data = NVME_QUIRK_NO_DEEPEST_PS, },
-+	{ PCI_DEVICE(0x2646, 0x5018),   /* KINGSTON OM8SFP4xxxxP OS21012 NVMe SSD */
-+		.driver_data = NVME_QUIRK_DISABLE_WRITE_ZEROES, },
-+	{ PCI_DEVICE(0x2646, 0x5016),   /* KINGSTON OM3PGP4xxxxP OS21011 NVMe SSD */
-+		.driver_data = NVME_QUIRK_DISABLE_WRITE_ZEROES, },
-+	{ PCI_DEVICE(0x2646, 0x501A),   /* KINGSTON OM8PGP4xxxxP OS21005 NVMe SSD */
-+		.driver_data = NVME_QUIRK_DISABLE_WRITE_ZEROES, },
-+	{ PCI_DEVICE(0x2646, 0x501B),   /* KINGSTON OM8PGP4xxxxQ OS21005 NVMe SSD */
-+		.driver_data = NVME_QUIRK_DISABLE_WRITE_ZEROES, },
-+	{ PCI_DEVICE(0x2646, 0x501E),   /* KINGSTON OM3PGP4xxxxQ OS21011 NVMe SSD */
-+		.driver_data = NVME_QUIRK_DISABLE_WRITE_ZEROES, },
- 	{ PCI_DEVICE(0x1e4B, 0x1001),   /* MAXIO MAP1001 */
- 		.driver_data = NVME_QUIRK_BOGUS_NID, },
- 	{ PCI_DEVICE(0x1e4B, 0x1002),   /* MAXIO MAP1002 */
--- 
-2.25.1
-
+     Arnd
