@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5426A5FBA13
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD50A5FBA14
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbiJKSC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 14:02:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47868 "EHLO
+        id S230250AbiJKSDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 14:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiJKSCX (ORCPT
+        with ESMTP id S230023AbiJKSCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 11 Oct 2022 14:02:23 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA466D559
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C4269198
         for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:02:18 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id cj27so8749524qtb.7
+Received: by mail-qk1-x732.google.com with SMTP id a18so6105180qko.0
         for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:02:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qdhlIj+6HcqRKTVWPc10GaEiGeAKWAIvBWIoYXYLCMk=;
-        b=qYmNR34LcxDkzJOEnT6+PNcqkE2xLNpaeiJaJT3FbtB76+Ta7EtjclA6vXTHrJidA/
-         cromdLzJq0zsPrm/wiEInQW3QlK+lbEbviw9g2HON841vdJ6w+bMRTCpV0Vrxq8F2gNk
-         5cdcOUi0pxXmuNreBTbfb+GLR49WYoSR/l5h0=
+        bh=u0y+DmjJhTq9monYJaUr4qwh4aRYR5iDLKa+yKUX59E=;
+        b=irIdIFBl2ehbWbpq+w2qg+L5notVUkLMqwnI/fnXUI+vv4U+5vNVd7k0yjp/EDNZXA
+         u6N3i/Gl2hq5hyg7WFsi2P9IEBC7llVQ089FaXhnGCzyGCRRSJNTjwonk2ABGnje5UtS
+         IEfDrEIayfWCrL8i/DiXv8ifXoFjkBPS88LUY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qdhlIj+6HcqRKTVWPc10GaEiGeAKWAIvBWIoYXYLCMk=;
-        b=OyHHhtIuXz03P8gOobyjHjp957uOzNOMIVpAUWLQSj1gLZnjLZAejNPddiSRKn9Rmi
-         ps/uN16rZd1qJPMNN2cYaxmwJb5CdJ+mFjPrt1YijO5Dp3mZBlkifbSRFvRvb/xSzIh5
-         RjSTUzAJepdFXS2d6YLhOjje0BW9COXVdtIj2Um5JYzLCbuNxA7ZGRu7TfIhjN69EgoG
-         qTS5njs4D8kYqIHgGb1MREK6QQeLJoytYqwi2nru6wZ0e2A8/57B3FhFflTKm/AavEnf
-         iviME7G4A1QilrlBgc2fwXX5UuKZvGb2Z9x76g2N30ExhYZ/WuI9cFZQjxIzZPPqInVE
-         LGWg==
-X-Gm-Message-State: ACrzQf3uqAOmxcKcmkWMzJGPlOshl1n0cal16vB0hjf3f+5Ty9CBmBhg
-        r1aAKRqlE5X/aVCjrNT9UwMk1Q==
-X-Google-Smtp-Source: AMsMyM7iHDTOAo/am5jyfXTS3XqJquXNhZYTGraRR62aZTYIM5rBX/5GH98UEa4LuEFOd1dzvITjSg==
-X-Received: by 2002:a05:622a:1904:b0:35c:c657:14e4 with SMTP id w4-20020a05622a190400b0035cc65714e4mr20308128qtc.65.1665511337402;
-        Tue, 11 Oct 2022 11:02:17 -0700 (PDT)
+        bh=u0y+DmjJhTq9monYJaUr4qwh4aRYR5iDLKa+yKUX59E=;
+        b=mZxx/9Qs7DtfWc3D2pSFpQ3lbi0GNT83XRPhTkU+zEmiOkQIz4ZYxHLxUcTNWU+5yS
+         vhzu95Zhw0PXMgALc+YAC9leVhxoidDERFaEugPg6DWBeI8181LYRxC5mFq4TmCTdb4V
+         wB1gTEetGqcecDh198IBhd93rDjN8fJI2ObQDTRuOufosstFEC4AAU7jG7lJoHnlyDCG
+         9xm8US6qwXCjikwKNjgvC8emZ+kg5FnYyaiXNYQmrKm73K5RMB2WK7e+ep4JAoSXC9xz
+         Wod7ktsvmoD2i97Ls5a0aXCxndCzHZXhd3lLMpip4O+Kl6izjLoVWt7WS+FPipiiWU1y
+         TRvA==
+X-Gm-Message-State: ACrzQf13FOOvhoMLH/35bs6EUB2Lot/rlYBiR3VXED0KRu7TmU/E+/tC
+        65ItP+U15EciE4UEe8+/GU1b0w==
+X-Google-Smtp-Source: AMsMyM7hnN8IlnHhSERMzjYvPOFqcwoe0X5Tz/ptPbXWucNDzvsSp3/KKI5+UZWMNj0N/KDlIhWTGQ==
+X-Received: by 2002:a05:620a:1507:b0:6ec:eedd:aa57 with SMTP id i7-20020a05620a150700b006eceeddaa57mr8041254qkk.704.1665511338331;
+        Tue, 11 Oct 2022 11:02:18 -0700 (PDT)
 Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id w22-20020a05620a425600b006cbc00db595sm13464375qko.23.2022.10.11.11.02.16
+        by smtp.gmail.com with ESMTPSA id w22-20020a05620a425600b006cbc00db595sm13464375qko.23.2022.10.11.11.02.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 11:02:16 -0700 (PDT)
+        Tue, 11 Oct 2022 11:02:17 -0700 (PDT)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
         urezki@gmail.com, neeraj.iitr10@gmail.com, frederic@kernel.org,
         paulmck@kernel.org, rostedt@goodmis.org, youssefesmat@google.com,
-        surenb@google.com, Joel Fernandes <joel@joelfernandes.org>
-Subject: [PATCH v8 11/13] workqueue: Make queue_rcu_work() use call_rcu_flush()
-Date:   Tue, 11 Oct 2022 18:01:40 +0000
-Message-Id: <20221011180142.2742289-12-joel@joelfernandes.org>
+        surenb@google.com,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Subject: [PATCH v8 12/13] rxrpc: Use call_rcu_flush() instead of call_rcu()
+Date:   Tue, 11 Oct 2022 18:01:41 +0000
+Message-Id: <20221011180142.2742289-13-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 In-Reply-To: <20221011180142.2742289-1-joel@joelfernandes.org>
 References: <20221011180142.2742289-1-joel@joelfernandes.org>
@@ -70,32 +71,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uladzislau Rezki <urezki@gmail.com>
-
-call_rcu() changes to save power will slow down RCU workqueue items
-queued via queue_rcu_work(). This may not be an issue, however we cannot
-assume that workqueue users are OK with long delays. Use
+call_rcu() changes to save power may cause slowness. Use the
 call_rcu_flush() API instead which reverts to the old behavior.
 
-Signed-off-by: Uladzislau Rezki <urezki@gmail.com>
+We find this via inspection that the RCU callback does a wakeup of a
+thread. This usually indicates that something is waiting on it. To be
+safe, let us use call_rcu_flush() here instead.
+
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- kernel/workqueue.c | 2 +-
+ net/rxrpc/conn_object.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index aeea9731ef80..fe1146d97f1a 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -1771,7 +1771,7 @@ bool queue_rcu_work(struct workqueue_struct *wq, struct rcu_work *rwork)
+diff --git a/net/rxrpc/conn_object.c b/net/rxrpc/conn_object.c
+index 22089e37e97f..fdcfb509cc44 100644
+--- a/net/rxrpc/conn_object.c
++++ b/net/rxrpc/conn_object.c
+@@ -253,7 +253,7 @@ void rxrpc_kill_connection(struct rxrpc_connection *conn)
+ 	 * must carry a ref on the connection to prevent us getting here whilst
+ 	 * it is queued or running.
+ 	 */
+-	call_rcu(&conn->rcu, rxrpc_destroy_connection);
++	call_rcu_flush(&conn->rcu, rxrpc_destroy_connection);
+ }
  
- 	if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT, work_data_bits(work))) {
- 		rwork->wq = wq;
--		call_rcu(&rwork->rcu, rcu_work_rcufn);
-+		call_rcu_flush(&rwork->rcu, rcu_work_rcufn);
- 		return true;
- 	}
- 
+ /*
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
