@@ -2,131 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513575FB01A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 12:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADDB5FB01F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 12:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiJKKEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 06:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49892 "EHLO
+        id S229599AbiJKKFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 06:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbiJKKD4 (ORCPT
+        with ESMTP id S229464AbiJKKFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 06:03:56 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1433D80F6C;
-        Tue, 11 Oct 2022 03:03:41 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id ECBB16601A43;
-        Tue, 11 Oct 2022 11:03:38 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1665482619;
-        bh=YFompAbEZpl5sUt2ZzyaB7q3wd5uHfsTnGM53GDNAE4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fsEDbvlwrzvonnlugI5t2jEPPiJ3djT16/VaLCIBCgmVXCBkHRhKCVmnX6UOvnVSW
-         uSySuM70tuWkkX6z06E2/vWsI+OLDfI9TngpoNo27Hl9tDFPoaXIIxJajIRHf5lelm
-         CTQdQlHFZ3BL1jQbFPQB/YRTcpqgNaWYhZ+dPMq9GZf/vCzL4er0kKVP6uqVk5EtU1
-         EUx9LTZLbpxtIoQ9v2IIaVv3M8bkNbO6yaLpTgL2VZXPPiDmnCKHlX0WEwl250w5vD
-         rblGws+K8gSYXtuW3Z9kGlh0k2YsNqviYKaYT6QWtUtt4h5rCvGVJ9H55xkfvGberZ
-         i5ImRbq1FR9bA==
-Message-ID: <4ffd76b2-92bc-4c56-a520-960ea8635cd4@collabora.com>
-Date:   Tue, 11 Oct 2022 12:03:36 +0200
+        Tue, 11 Oct 2022 06:05:05 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A1A25C42
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 03:05:02 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29B8sWaB022147;
+        Tue, 11 Oct 2022 10:04:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=531PP2slAzevmF8cBzq78LE4QxMYe3eymOF5fHWH9cM=;
+ b=WC0/AsWWR46u3dgfi3rQfWfjhA1cpFGJ4WC1XIHTWEUKr05FKmkGqLoGE41aXkCiEpKm
+ wQoiEyuLuP/yaasgEPCh7uxI1XeAsC1z//meVxrfVzLa6I+sNweji7MXPUqR2TBjkyfm
+ lD8h/5yf4xLfnaVWzzJ7cK5dmyNfUfC0UTHx2/Ga1Z206FF2xNjjMV8elneQ+K+hzAfM
+ cyS73qm1p1FsfQ6gtZ4FFakH7i47JNIRDvIs68xo0VyOoSN0FJHhjZfdmQ+DEyQCSb6m
+ ATvQvESyZjW94tFCM8rlMU9IHbAATWeOYkeFg1csW1U0uk36o5/Xg4zrI2mpFfzuUXHZ JQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k4rxc9quq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Oct 2022 10:04:53 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29BA4qU3021902
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Oct 2022 10:04:52 GMT
+Received: from [10.216.14.58] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 11 Oct
+ 2022 03:04:50 -0700
+Message-ID: <b1de7e87-9590-3aad-d62b-167a7685746a@quicinc.com>
+Date:   Tue, 11 Oct 2022 15:34:45 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3 05/10] dt-bindings: pinctrl: mediatek,pinctrl-mt6795:
- Fix interrupt count
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: Query regarding "firmware: arm_scmi: Free mailbox channels if
+ probe fails"
+To:     Cristian Marussi <cristian.marussi@arm.com>
+CC:     <sudeep.holla@arm.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <quic_rgottimu@quicinc.com>
+References: <cfa26ff3-c95a-1986-58fc-b49fc9be49d5@quicinc.com>
+ <Yyx3IAcMX309QEjB@e120937-lin> <Yyx/DKcc7XupQmnx@e120937-lin>
+ <c81540cc-e485-0c45-9e4e-248d3279e1ea@quicinc.com>
+ <YzriGCLf+MFNGO2n@e120937-lin>
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Yassine Oudjana <yassine.oudjana@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Andy Teng <andy.teng@mediatek.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20221007125904.55371-1-y.oudjana@protonmail.com>
- <20221007125904.55371-6-y.oudjana@protonmail.com>
- <0769c6c8-567d-68c0-323a-9aaee1241e13@linaro.org>
- <6c889c7e-4c5a-a201-e37c-bf95b6826584@collabora.com>
- <20221010125758.GA468288-robh@kernel.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221010125758.GA468288-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Shivnandan Kumar <quic_kshivnan@quicinc.com>
+In-Reply-To: <YzriGCLf+MFNGO2n@e120937-lin>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: mTi2pUms4kXM99u23PKxuV3NuS55JEUX
+X-Proofpoint-GUID: mTi2pUms4kXM99u23PKxuV3NuS55JEUX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-11_03,2022-10-10_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=999 priorityscore=1501 bulkscore=0 lowpriorityscore=0
+ spamscore=0 mlxscore=0 suspectscore=0 adultscore=0 clxscore=1015
+ malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2210110056
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/10/22 14:57, Rob Herring ha scritto:
-> On Mon, Oct 10, 2022 at 01:47:18PM +0200, AngeloGioacchino Del Regno wrote:
->> Il 10/10/22 13:13, Krzysztof Kozlowski ha scritto:
->>> On 07/10/2022 08:58, Yassine Oudjana wrote:
->>>> From: Yassine Oudjana <y.oudjana@protonmail.com>
->>>>
->>>> The document currently states a maximum of 1 interrupt, but the DT
->>>> has 2 specified causing a dtbs_check error. Replace the maximum limit
->>>> with a minimum and add per-interrupt descriptions to pass the check.
->>>>
->>>> Suggested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>>> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
->>>> ---
->>>>    .../devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml | 5 ++++-
->>>>    1 file changed, 4 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
->>>> index 73ae6e11410b..a3a3f7fb9605 100644
->>>> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
->>>> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
->>>> @@ -47,7 +47,10 @@ properties:
->>>>      interrupts:
->>>>        description: The interrupt outputs to sysirq.
->>>> -    maxItems: 1
->>>> +    minItems: 1
->>>> +    items:
->>>> +      - description: EINT interrupt
->>>> +      - description: EINT event_b interrupt
->>>
->>> Is second interrupt really optional or you just wanted to silence the
->>> warning?
->>>
+
+Hi Cristian,
+
+ >>Ok, just out of curiosity, once done, can you point me at your 
+downstream public sources so I can see the issue and the fix that you 
+are applying to your trees ?
+
+https://source.codeaurora.org/quic/la/kernel/msm-5.10/tree/drivers/soc/qcom/qcom_rimps.c?h=KERNEL.PLATFORM.1.0.r1-07800-kernel.0
+
+I have added lock while accessing con_priv inside irq handler and 
+shutdown function.
+
+
+I have one input regarding timeout from firmware, can we enable BUG on 
+response  time out in function do_xfer based on some debug config 
+flag,this will help to debug firmware timeout issue faster.
+
+We will only enable that config flag during internal testing.
+
+
+Thanks,
+
+Shivnandan
+
+On 10/3/2022 6:52 PM, Cristian Marussi wrote:
+> On Fri, Sep 30, 2022 at 06:29:02PM +0530, Shivnandan Kumar wrote:
+>> hi Cristian,
+> Hi Shivnandan,
+>> Thanks for your support in providing the patch to try.
 >>
->> The event_b interrupt exists (and fires on certain events, if configured to do so),
->> but it's currently unused.
+>> I found one race condition in our downstream mbox controller driver while
+>> accessing con_priv, when I serialized access to this, issue is not seen on 3
+>> days of testing.
+> Good to hear that you find the issue.
+>
+>> As you rightly mentioned that your provided patch will impact all the other
+>> users.
 >>
->> It's really optional.
-> 
-> Optional for DT means may or may not be wired up in the h/w, not what
-> some OS 'currently' uses.
-> 
-> However, you can't really add new required properties or entries to an
-> existing DT without breaking compatibility. Maybe that is not yet a
-> concern.
-> 
-
-Right. I don't think that compatibility is a concern in this case anyway, but I
-just noticed that this commit has no Fixes tag, even though it is indeed fixing
-the binding, as mt6795 does have this interrupt and its devicetree does already
-define the second interrupt in the pinctrl node.
-
-Yassine, can you please resend this with a Fixes tag?
-
-Fixes: 81557a71564a ("dt-bindings: pinctrl: Add MediaTek MT6795 pinctrl bindings")
-
-
-
-
+>> Also if  we take your provided patch, same race still exists while accessing
+>> con_priv in our downstream mbox controller so this issue will still be
+>> there.
+>>
+> Yes indeed, even though I think that race in the mailbox core between RX path
+> and chan_free could still be theoretically possible it does not seem to me
+> appropriate to try to fix it now that you cannot reproduce it anymore and
+> no other mailbox user has ever raised this concern (even though, as said, the
+> proper solution to that race wont probably be directly in the mailbox-core as
+> in my experimental two liners..)
+>
+>> So, we are planning to merge the patch( serialized access to con_priv) in
+>> our downstream mbox controller now.
+>>
+> Ok, just out of curiosity, once done, can you point me at your downstream public
+> sources so I can see the issue and the fix that you are applying to your trees ?
+>
+> Thanks,
+> Cristian
