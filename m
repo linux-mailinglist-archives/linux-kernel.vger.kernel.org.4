@@ -2,92 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E1B5FA945
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 02:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 720925FA946
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 02:25:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbiJKAY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Oct 2022 20:24:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
+        id S229514AbiJKAZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Oct 2022 20:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiJKAY4 (ORCPT
+        with ESMTP id S229538AbiJKAZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Oct 2022 20:24:56 -0400
-Received: from sonata.ens-lyon.org (domu-toccata.ens-lyon.fr [140.77.166.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCDF175AE
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Oct 2022 17:24:53 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by sonata.ens-lyon.org (Postfix) with ESMTP id A8B0420166;
-        Tue, 11 Oct 2022 02:24:51 +0200 (CEST)
-Received: from sonata.ens-lyon.org ([127.0.0.1])
-        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id PG3SXhi9Mn50; Tue, 11 Oct 2022 02:24:50 +0200 (CEST)
-Received: from begin.home (lfbn-bor-1-376-208.w109-215.abo.wanadoo.fr [109.215.91.208])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by sonata.ens-lyon.org (Postfix) with ESMTPSA id AF3E920165;
-        Tue, 11 Oct 2022 02:24:50 +0200 (CEST)
-Received: from samy by begin.home with local (Exim 4.96)
-        (envelope-from <samuel.thibault@ens-lyon.org>)
-        id 1oi34k-007ZK6-37;
-        Tue, 11 Oct 2022 02:24:50 +0200
-Date:   Tue, 11 Oct 2022 02:24:50 +0200
-From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
-To:     Yureka <yuka@yuka.dev>
-Cc:     w.d.hubbs@gmail.com, chris@the-brannons.com,
-        gregkh@linuxfoundation.org, speakup@linux-speakup.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] speakup: remove usage of non-standard u_char
-Message-ID: <20221011002450.d25x3gvgu5snsozm@begin>
-Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        Yureka <yuka@yuka.dev>, w.d.hubbs@gmail.com, chris@the-brannons.com,
-        gregkh@linuxfoundation.org, speakup@linux-speakup.org,
-        linux-kernel@vger.kernel.org
-References: <9b7e4894-deec-39ba-bb7c-3c6d6427fa1d@yuka.dev>
+        Mon, 10 Oct 2022 20:25:27 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EFC1EAC5;
+        Mon, 10 Oct 2022 17:25:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665447926; x=1696983926;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Hi/39ZWjxqkQ6aMFAuB2tPrMoMeUZtt47pv6m/lcuTc=;
+  b=EZYLV5DLC9HGFBldfehzuS6RixO4N7wfpg1RBo86LR+FW/FL0jdEyEig
+   RzhNsBEG9vCKeZ3uEm2odNlmae4vvlqtZ1riwr5OxVxM9EBthXBkISIZd
+   RK8rcMbQ5jfifSPn3UZTd9EyT7xCx51yCa+uKx35wEI4pE9KrZVpXiWo6
+   yyEJnZvgkudscRfcumF6lNELDPeKJNWO0FNnS8r8tOoN9QB1eIsoxGcIK
+   0DqI3pTILzkurENmGRfUiySnyv5RNJyS7uk0rz3pphHlwR7tYyRi4iRqn
+   WjxNxHT9fGlfX7KxJJC07KTpd1f01sWdS2xr5njWTUy6axE/EBF0hv9tl
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="303106782"
+X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
+   d="scan'208";a="303106782"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 17:25:26 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="689010780"
+X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
+   d="scan'208";a="689010780"
+Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.212.62.34]) ([10.212.62.34])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 17:25:21 -0700
+Message-ID: <ebc8e57e-1584-5f47-48d8-3bc38497799b@linux.intel.com>
+Date:   Mon, 10 Oct 2022 20:25:16 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9b7e4894-deec-39ba-bb7c-3c6d6427fa1d@yuka.dev>
-Organization: I am not organized
-User-Agent: NeoMutt/20170609 (1.8.3)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [RFC/PATCHSET 00/19] perf stat: Cleanup counter aggregation (v1)
+To:     Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>
+References: <20221010053600.272854-1-namhyung@kernel.org>
+Content-Language: en-US
+From:   Andi Kleen <ak@linux.intel.com>
+In-Reply-To: <20221010053600.272854-1-namhyung@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yureka, le mar. 11 oct. 2022 02:17:43 +0200, a ecrit:
-> From: Yureka Lilian <yuka@yuka.dev>
-> 
-> This code is included in the build tools makemapdata and genmap, and it
-> expects that libc exposes a definition of u_char. But u_char is not
-> defined in either C or POSIX standards, and some systems don't have it.
-> Namely this breaks the build on hosts using musl libc, because musl only
-> exposes u_char if _GNU_SOURCE is defined.
-> 
-> Signed-off-by: Yureka Lilian <yuka@yuka.dev>
 
-Reviewed-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+On 10/10/2022 10:35 PM, Namhyung Kim wrote:
+> Hello,
+>
+> Current perf stat code is somewhat hard to follow since it handles
+> many combinations of PMUs/events for given display and aggregation
+> options.  This is my attempt to clean it up a little. ;-)
 
-> ---
->  drivers/accessibility/speakup/utils.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/accessibility/speakup/utils.h b/drivers/accessibility/speakup/utils.h
-> index 4bf2ee8ac..4ce9a12f7 100644
-> --- a/drivers/accessibility/speakup/utils.h
-> +++ b/drivers/accessibility/speakup/utils.h
-> @@ -54,7 +54,7 @@ static inline int oops(const char *msg, const char *info)
->  
->  static inline struct st_key *hash_name(char *name)
->  {
-> -   u_char *pn = (u_char *)name;
-> +   unsigned char *pn = (unsigned char *)name;
->     int hash = 0;
->  
->     while (*pn) {
-> -- 
-> 2.37.3
+
+My main concern would be subtle regressions since there are so many 
+different combinations and way to travel through the code, and a lot of 
+things are not covered by unit tests. When I worked on the code it was 
+difficult to keep it all working. I assume you have some way to 
+enumerate them all and tested that the output is identical?
+
+-Andi
+
