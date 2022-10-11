@@ -2,113 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218235FB8AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 18:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE965FB8AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 18:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiJKQz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 12:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43156 "EHLO
+        id S229759AbiJKQ4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 12:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbiJKQzS (ORCPT
+        with ESMTP id S229885AbiJKQ4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 12:55:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DC2222B3;
-        Tue, 11 Oct 2022 09:55:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B5BCB81636;
-        Tue, 11 Oct 2022 16:55:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18D53C433C1;
-        Tue, 11 Oct 2022 16:55:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665507311;
-        bh=XhAZyckRCPAFshg1YwE1cWtM5ptq2V0EJ1cI4a3T4lk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eyZNjF9l9nEHnymnGoqS9M5gQlP0iK8MgO7fbz4RABuHtVDGxZaeAJ0L0dO01LqRu
-         vDo1//wYKRhP22Saxjkt3NRzR5jVsKcseMrst8wKP0wEtaWg9d3YoHdvQiUMHztYES
-         z/RKDsM0gxlNIvesdFrrfsTz6PeOZd0dVReGcceCd39wBORuoPM+dBmfOwi+4eG0Hf
-         YFWF4oNC+vTt3Vpv7+dr4K6rM7yxl8DUwOFsfEgWj5BHtndMo3W0ERAJ/VRvq/NMwq
-         5cowW8DisOULOy0O0+nE9JlUGOTbijZti0U0VtgeKFf+L9D7YRuCcr86e/6QdcZk1S
-         aTCJPtGxFPqfA==
-Received: by pali.im (Postfix)
-        id 1F1CF7B3; Tue, 11 Oct 2022 18:55:08 +0200 (CEST)
-Date:   Tue, 11 Oct 2022 18:55:08 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Vidya Sagar <vidyas@nvidia.com>, linux-tegra@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: tegra: Use PCI_CONF1_EXT_ADDRESS() macro
-Message-ID: <20221011165508.ezpwvmzmxywqoj4u@pali>
-References: <20220928121911.14994-1-pali@kernel.org>
- <220b0fe7-8b7b-cf9b-e28d-d9d81647fb80@nvidia.com>
- <20221011161638.ycxpg3ox2wv63vym@pali>
- <18a48407-9fd7-175d-0c7f-5702b077f13d@nvidia.com>
+        Tue, 11 Oct 2022 12:56:13 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E62B2A4B93;
+        Tue, 11 Oct 2022 09:56:11 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1112)
+        id B4B7E20EC332; Tue, 11 Oct 2022 09:56:11 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B4B7E20EC332
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1665507371;
+        bh=oA6Cyk055mFQo6DgJ18D3XBOGVfdOg6mfEbcaZCFXzc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=axgBLjzyI8Ms6DdzFjNhV+1m2CjSSVmXM8cCuVr/XweLArBrtsHT47sEbulGrjfCR
+         HZpmbIo3wK7PcuCF+YTM0FCKlfqlARh10ZpDsTZQgBCMMqBGHlp9GsDlBHjBOAK7li
+         n97GA/j1OzM3Eaij27QRzd4TJsQHvJnSLWegwPUw=
+Date:   Tue, 11 Oct 2022 09:56:11 -0700
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     seh@panix.com
+Subject: kernel BUG at net/core/skbuff.c:4219
+Message-ID: <20221011165611.GA8735@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <18a48407-9fd7-175d-0c7f-5702b077f13d@nvidia.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 11 October 2022 17:47:50 Jon Hunter wrote:
-> On 11/10/2022 17:16, Pali Rohár wrote:
-> 
-> ...
-> 
-> > I see, this is stupid mistake. PCIe config read and write operations
-> > needs to be 4-byte aligned, so normally it is done by calculating 4-byte
-> > aligned base address and then using appropriate cpu load/store
-> > instruction to access just defined size/offset of 4-byte config space
-> > register.
-> > 
-> > pci-tegra.c is using common helper functions pci_generic_config_read()
-> > and pci_generic_config_write(), which expects final address with offset,
-> > and not 4-byte aligned address.
-> > 
-> > I'm not sure what should be the proper fix, but for me it looks like
-> > that pci_generic_config_read() and pci_generic_config_write() could be
-> > adjusted to handle it.
-> > 
-> > In any case, above patch is a regressions and I see there two options
-> > for now:
-> > 
-> > 1) Reverting that patch
-> > 
-> > 2) Adding "offset |= where & 0x3;" after the PCI_CONF1_EXT_ADDRESS()
-> >     macro to set also lower 2 bits of accessed register.
-> > 
-> > Jon, Lorenzo, what do you think? Could you test if 2) is working fine?
-> 
-> 
-> I tested 'offset |= where & 0xff' which is essentially the same as the above
-> and that is working and so I am sure that the above works too. However, I do
-> wonder if reverting is simpler because we already have a '&
-> ~PCI_CONF1_ENABLE' and now adding '| where & 0x3' seems to diminish the
-> value of this change.
-> 
-> Cheers
-> Jon
-> 
-> -- 
-> nvpublic
+Hi,
 
-Well, if decision would be that pci_generic_config_read() could be
-modified in the future to handle aligning, then '|= where & 0x3' block
-would be moved from driver to generic function...
+One of our Flatcar users has been hitting the kernel BUG in the subject line
+for the past year (https://github.com/flatcar/Flatcar/issues/378). This was
+first reported when on 5.10.25, but has been happening across kernel updates,
+most recently with 5.15.63. The nodes where this happens are AWS EC2 instances,
+using ENA and calico networking in eBPF mode with VXLAN encapsulation. When
+GRO/GSO is enabled, the host hits this bug and prints the following stacktrace:
 
-I'm really not sure which option to choose.
+[Mon Oct 10 18:22:24 2022] ------------[ cut here ]------------
+[Mon Oct 10 18:22:24 2022] kernel BUG at net/core/skbuff.c:4219!
+[Mon Oct 10 18:22:24 2022] invalid opcode: 0000 [#1] SMP PTI
+[Mon Oct 10 18:22:24 2022] CPU: 6 PID: 0 Comm: swapper/6 Not tainted 5.15.63-flatcar #1
+[Mon Oct 10 18:22:24 2022] Hardware name: Amazon EC2 z1d.12xlarge/, BIOS 1.0 10/16/2017
+[Mon Oct 10 18:22:24 2022] RIP: 0010:skb_segment+0xc70/0xe80
+[Mon Oct 10 18:22:24 2022] Code: 44 24 50 48 89 44 24 30 48 8b 44 24 10 48 89 44 24 50 e9 16 f7 ff ff 0f 0b 89 44 24 2c c7 44 24 4c 00 00 00 00 e9 44 fe ff ff <0f> 0b 0f 0b 0f 0b 41 8b 7d 74 85 ff 0f 85 91 01 00 00 49 8b 95 c0
+[Mon Oct 10 18:22:24 2022] RSP: 0018:ffffa2d38c780838 EFLAGS: 00010246
+[Mon Oct 10 18:22:24 2022] RAX: ffff8954dd8312c0 RBX: ffff89293fbde300 RCX: ffff8957bd3d2fa0
+[Mon Oct 10 18:22:24 2022] RDX: 0000000000000000 RSI: ffff89293fbde2c0 RDI: ffffffffffffffff
+[Mon Oct 10 18:22:24 2022] RBP: ffffa2d38c780908 R08: 0000000000009db6 R09: 0000000000000000
+[Mon Oct 10 18:22:24 2022] R10: 000000000000a356 R11: 000000000000a31a R12: 000000000000000b
+[Mon Oct 10 18:22:24 2022] R13: ffff892940566100 R14: 000000000000a31a R15: ffff891ad0e5c600
+[Mon Oct 10 18:22:24 2022] FS:  0000000000000000(0000) GS:ffff8948b9b80000(0000) knlGS:0000000000000000
+[Mon Oct 10 18:22:24 2022] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[Mon Oct 10 18:22:24 2022] CR2: 000000c011faf000 CR3: 0000000d66a0a001 CR4: 00000000007706e0
+[Mon Oct 10 18:22:24 2022] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[Mon Oct 10 18:22:24 2022] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[Mon Oct 10 18:22:24 2022] PKRU: 55555554
+[Mon Oct 10 18:22:24 2022] Call Trace:
+[Mon Oct 10 18:22:24 2022]  <IRQ>
+[Mon Oct 10 18:22:24 2022] ? csum_block_add_ext (include/net/checksum.h:117)
+[Mon Oct 10 18:22:24 2022] ? reqsk_fastopen_remove (include/linux/bitops.h:119 include/net/checksum.h:87 include/net/checksum.h:94 include/net/checksum.h:100)
+[Mon Oct 10 18:22:24 2022] tcp_gso_segment (net/ipv4/tcp_offload.c:99)
+[Mon Oct 10 18:22:24 2022] inet_gso_segment (net/ipv4/af_inet.c:1385)
+[Mon Oct 10 18:22:24 2022] skb_mac_gso_segment (net/core/dev.c:3339)
+[Mon Oct 10 18:22:24 2022] __skb_gso_segment (net/core/dev.c:3414 (discriminator 3))
+[Mon Oct 10 18:22:24 2022] ? netif_skb_features (include/net/mpls.h:21 net/core/dev.c:3463 net/core/dev.c:3483 net/core/dev.c:3574)
+[Mon Oct 10 18:22:24 2022] validate_xmit_skb.constprop.0 (net/core/dev.c:3672)
+[Mon Oct 10 18:22:24 2022] validate_xmit_skb_list (net/core/dev.c:3722)
+[Mon Oct 10 18:22:24 2022] sch_direct_xmit (net/sched/sch_generic.c:327)
+[Mon Oct 10 18:22:24 2022] __dev_queue_xmit (net/core/dev.c:3858 net/core/dev.c:4185)
+[Mon Oct 10 18:22:24 2022] ip_finish_output2 (include/net/neighbour.h:500 include/net/neighbour.h:514 net/ipv4/ip_output.c:228)
+[Mon Oct 10 18:22:24 2022] ? ip_route_input_rcu (net/ipv4/route.c:1745 net/ipv4/route.c:2499 net/ipv4/route.c:2458)
+[Mon Oct 10 18:22:24 2022] ? skb_gso_validate_network_len (net/core/skbuff.c:5561 net/core/skbuff.c:5636)
+[Mon Oct 10 18:22:24 2022] ? __ip_finish_output (net/ipv4/ip_output.c:249 net/ipv4/ip_output.c:301 net/ipv4/ip_output.c:288)
+[Mon Oct 10 18:22:24 2022] ip_sublist_rcv_finish (include/net/dst.h:460 net/ipv4/ip_input.c:565)
+[Mon Oct 10 18:22:24 2022] ip_sublist_rcv (net/ipv4/ip_input.c:624)
+[Mon Oct 10 18:22:24 2022] ? ip_sublist_rcv (net/ipv4/ip_input.c:422)
+[Mon Oct 10 18:22:24 2022] ip_list_rcv (net/ipv4/ip_input.c:659)
+[Mon Oct 10 18:22:24 2022] __netif_receive_skb_list_core (net/core/dev.c:5498 net/core/dev.c:5546)
+[Mon Oct 10 18:22:24 2022] netif_receive_skb_list_internal (net/core/dev.c:5600 net/core/dev.c:5689)
+[Mon Oct 10 18:22:24 2022] ? inet_gro_complete (net/ipv4/af_inet.c:1645)
+[Mon Oct 10 18:22:24 2022] napi_gro_complete.constprop.0.isra.0 (include/linux/list.h:35 net/core/dev.c:5844 net/core/dev.c:5839 net/core/dev.c:5856 net/core/dev.c:5892)
+[Mon Oct 10 18:22:24 2022] dev_gro_receive (net/core/dev.c:6119)
+[Mon Oct 10 18:22:24 2022] napi_gro_receive (net/core/dev.c:6223)
+[Mon Oct 10 18:22:24 2022]  0xffffffffc069d699
+[Mon Oct 10 18:22:24 2022] ? scheduler_tick (kernel/sched/core.c:7053 kernel/sched/core.c:5278)
+[Mon Oct 10 18:22:24 2022] __napi_poll (net/core/dev.c:7005)
+[Mon Oct 10 18:22:24 2022] net_rx_action (net/core/dev.c:7074 net/core/dev.c:7159)
+[Mon Oct 10 18:22:24 2022] __do_softirq (arch/x86/include/asm/jump_label.h:27 include/linux/jump_label.h:212 include/trace/events/irq.h:142 kernel/softirq.c:559)
+[Mon Oct 10 18:22:24 2022] irq_exit_rcu (kernel/softirq.c:432 kernel/softirq.c:636 kernel/softirq.c:648)
+[Mon Oct 10 18:22:24 2022] common_interrupt (arch/x86/kernel/irq.c:240 (discriminator 14))
+[Mon Oct 10 18:22:24 2022]  </IRQ>
+[Mon Oct 10 18:22:24 2022]  <TASK>
+[Mon Oct 10 18:22:24 2022]  asm_common_interrupt+0x21/0x40
+[Mon Oct 10 18:22:24 2022] RIP: 0010:cpuidle_enter_state+0xc7/0x350
+[Mon Oct 10 18:22:24 2022] Code: 8b 3d f5 e1 9b 4d e8 08 bb a7 ff 49 89 c5 0f 1f 44 00 00 31 ff e8 09 c9 a7 ff 45 84 ff 0f 85 fe 00 00 00 fb 66 0f 1f 44 00 00 <45> 85 f6 0f 88 0a 01 00 00 49 63 c6 4c 2b 2c 24 48 8d 14 40 48 8d
+[Mon Oct 10 18:22:24 2022] RSP: 0018:ffffa2d38c527ea8 EFLAGS: 00000246
+[Mon Oct 10 18:22:24 2022] RAX: ffff8948b9bac100 RBX: 0000000000000003 RCX: 00000000ffffffff
+[Mon Oct 10 18:22:24 2022] RDX: 0000000000000006 RSI: 0000000000000006 RDI: 0000000000000000
+[Mon Oct 10 18:22:24 2022] RBP: ffff8948b9bb6000 R08: 0000043f38b90644 R09: 0000043f6c0b1df3
+[Mon Oct 10 18:22:24 2022] R10: 0000000000000014 R11: 0000000000000008 R12: ffffffffb3bbd7e0
+[Mon Oct 10 18:22:24 2022] R13: 0000043f38b90644 R14: 0000000000000003 R15: 0000000000000000
+[Mon Oct 10 18:22:24 2022]  ? cpuidle_enter_state+0xb7/0x350
+[Mon Oct 10 18:22:24 2022]  cpuidle_enter+0x29/0x40
+[Mon Oct 10 18:22:24 2022]  do_idle+0x1e9/0x280
+[Mon Oct 10 18:22:24 2022]  cpu_startup_entry+0x19/0x20
+[Mon Oct 10 18:22:24 2022]  secondary_startup_64_no_verify+0xc2/0xcb
+[Mon Oct 10 18:22:24 2022]  </TASK>
+[Mon Oct 10 18:22:24 2022] Modules linked in: xt_CT ip_set_hash_net ip_set vxlan cls_bpf sch_ingress veth xt_comment xt_mark xt_conntrack nft_chain_nat xt_MASQUERADE nf_nat nf_conntrack_netlink nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 xfrm_user xfrm_algo nft_counter xt_addrtype nft_compat nf_tables nfnetlink nls_ascii nls_cp437 vfat fat mousedev intel_rapl_msr intel_rapl_common psmouse evdev i2c_piix4 i2c_core button sch_fq_codel fuse configfs ext4 crc16 mbcache jbd2 dm_verity dm_bufio aesni_intel nvme nvme_core libaes crypto_simd ena cryptd t10_pi crc_t10dif crct10dif_generic crct10dif_common btrfs blake2b_generic zstd_compress lzo_compress raid6_pq libcrc32c crc32c_generic crc32c_intel dm_mirror dm_region_hash dm_log dm_mod qla4xxx iscsi_boot_sysfs iscsi_tcp libiscsi_tcp libiscsi br_netfilter bridge scsi_transport_iscsi stp llc overlay scsi_mod scsi_common
+[Mon Oct 10 18:22:24 2022] ---[ end trace 86a2732b8f4d0b13 ]---
+
+Disabling GSO/GRO *seems* to prevent the BUG_ON() from getting hit but is too
+costly in terms of performance. There are also suggestions that this happens
+more often under heavy network load, and has also been observed when running on
+Vmware.
+
+If anyone has any suggestions or needs more information to come up with a
+theory, we'd love to get to the bottom of this.
+
+Jeremi
