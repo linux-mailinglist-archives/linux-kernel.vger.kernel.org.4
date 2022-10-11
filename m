@@ -2,221 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC385FB9E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 19:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 367F55FB9E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 19:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiJKRsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 13:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
+        id S229912AbiJKRuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 13:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiJKRsf (ORCPT
+        with ESMTP id S229468AbiJKRuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 13:48:35 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54BC4BD38;
-        Tue, 11 Oct 2022 10:48:34 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1322fa1cf6fso16786273fac.6;
-        Tue, 11 Oct 2022 10:48:34 -0700 (PDT)
+        Tue, 11 Oct 2022 13:50:39 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F52EB70
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 10:50:34 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id a67so11857352edf.12
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 10:50:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EixwyBKn7iBL+poJU/p3WD3TAxyLefj9KcUIHMqhAqI=;
+        b=ka+z7kKogude0U+qRksQQDsj/nQoVPIZBahfe3f17eJYR+HShhmyB1HMjLesqtxqdO
+         h49qYEYUIBUdo/w77xu0G9BIjwE+cNOKDTf7mVtoqrb7rHkLVcgl/8krirO0eEzE19u7
+         eU/77LZPoyHmmbtmCi1rmnw9vwjNhXLh4RkvMWxV7FGA553eR3Gt62rDbEkkOzqEMkjU
+         itDQes/EVSPAmMRQUtXkDxzCkX9YkqtCmluO1YKUEE3EwY9r77n6glfnl2f7ysnzdGCG
+         wgRYdeEV6r1EeKd5S77rxnffvgWssKOGdH3xj3GlAdWIsGqqEZQKUlDSNzf9gOHlsiEz
+         oe6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XFEDgKRLNBXIcQQzG3utcKdq1fAEvCe7vcubsOS0pX8=;
-        b=YeRbJuyKX79RudwGWkXmF9v5+N5e6njLqeM6LPkjH8f1GAZTQ+sVieYvFgaIKZWfQX
-         otTQBmV4YoIfIZBrVXVWmR45kI4yhZlLglyi+LbGdH8uns77RocP+D1SJ3PnJWHKPvZr
-         6ksx+8ZJ+a/IT0Aundc029cPjjJQdmzF/SB1mJTxzV6YQqqD/0vzwJkbVgw0KyTZybZk
-         UV40jbdxkW+myg8YS8VAgwQily4tUmL9+3XJi+p0rBl9rTjAfOHCCr7UpI88f8U5KJFP
-         ia2hZW3dqXvet83z9gC6oj6M7PxgXmJRVM0ZjuaFAnbQvpMI9yEoVErzAkhQBfMW1RVZ
-         7adA==
-X-Gm-Message-State: ACrzQf1E8zYXRTwkzXYqoKcdU4LGyaFKKt6/7wP71bfL961oPwYpQF7K
-        XKv47prgad3ua1D6vgSUlk+tbJzArRFpMKUCoRE=
-X-Google-Smtp-Source: AMsMyM66bgb9X76VWSKpfpzMqYCIBKG1unh2EwtVeopVQm7t7fTpcpWmVH3/lff8MkTOECp7z/au55vCQzqoKcWTBsQ=
-X-Received: by 2002:a05:6870:82ac:b0:133:34b:6f10 with SMTP id
- q44-20020a05687082ac00b00133034b6f10mr203116oae.218.1665510513845; Tue, 11
- Oct 2022 10:48:33 -0700 (PDT)
+        bh=EixwyBKn7iBL+poJU/p3WD3TAxyLefj9KcUIHMqhAqI=;
+        b=6bPkTAN0p0gPR7lSc/2J0rO/9m2gFKyUr4iBy1ogMIGlDHKu2AdCCnUP7Z/eR5tR6T
+         KedGe9SJauR/iNzoqHts+GJtiMMjpJfKYNXRhCP1ACKe0VoWsCyP8JEaEIymi4fEPPa6
+         0K+89gBkGijUUa427vds5X0ydO9GbEdF/yCSr5BJ5/pmRLUWudq3MicgfIhLegEwM9rt
+         MYxwK4qBR1BECxKAHpBlLClONq47h3MHD2cVQTyDzcLYVe+qYPJKW/ip1JoziGEl72Ej
+         v6uHwKL9gfn2zWep0kVTKmurW6TAQK5aic3SaolXSHMIquWskzUWk4yO8SD9KZKS5IbT
+         Nptg==
+X-Gm-Message-State: ACrzQf2Nep2+dhLy4HIxixbqrEL9ZEQtAmdqfKXCKYiNE+ZKGYBoQP6o
+        2l17Pm/anrJ3peyEMzS3OHEiRQ==
+X-Google-Smtp-Source: AMsMyM6e+0lvFn2+Tk9pBogs5ha/l9c+HybhYzGWNPwzC22vN0c8k01iCb2fo5xiEzEu3CYE1uquYg==
+X-Received: by 2002:a05:6402:1e8e:b0:459:f7cd:7c09 with SMTP id f14-20020a0564021e8e00b00459f7cd7c09mr23509240edf.405.1665510632963;
+        Tue, 11 Oct 2022 10:50:32 -0700 (PDT)
+Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
+        by smtp.gmail.com with ESMTPSA id bl3-20020a170906c24300b007838e332d78sm35575ejb.128.2022.10.11.10.50.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 10:50:32 -0700 (PDT)
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     x86@kernel.org, linux-kernel@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Yury Norov <yury.norov@gmail.com>
+Subject: [PATCH] x86: Fix /proc/cpuinfo cpumask warning
+Date:   Tue, 11 Oct 2022 19:50:31 +0200
+Message-Id: <20221011175031.1782748-1-ajones@ventanamicro.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <20220926144948.223641-1-james.clark@arm.com> <20220926144948.223641-2-james.clark@arm.com>
- <d18181a2-ce9c-5d7f-17ca-43154fc6470f@arm.com>
-In-Reply-To: <d18181a2-ce9c-5d7f-17ca-43154fc6470f@arm.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 11 Oct 2022 10:48:22 -0700
-Message-ID: <CAM9d7ci3+gq6avXuhBsPH_v8PQDFJY=4JFOG9_BQ7xvEFazZTw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] perf test: Fix attr tests for PERF_FORMAT_LOST
-To:     James Clark <james.clark@arm.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
+Upcoming cpumask changes will start issuing warnings[*] when cpu
+indices equal to nr_cpu_ids are passed to cpumask_next* functions.
+Ensure we don't generate a warning when reading /proc/cpuinfo by
+validating the cpu index before calling cpumask_next().
 
-On Tue, Oct 11, 2022 at 6:00 AM James Clark <james.clark@arm.com> wrote:
->
->
->
-> On 26/09/2022 15:49, James Clark wrote:
-> > Since PERF_FORMAT_LOST was added, the default read format has that bit
-> > set, so add it to the tests. When running on an older kernel the tests
-> > will still fail because Perf will not set that bit.
-> >
-> > This fixes the following failure:
-> >
-> >   expected read_format=0|4, got 20
-> >   FAILED './tests/attr/test-record-C0' - match failure
-> >
-> > Fixes: 85b425f31c88 ("perf record: Set PERF_FORMAT_LOST by default")
-> > Signed-off-by: James Clark <james.clark@arm.com>
-> > ---
-> >  tools/perf/tests/attr/base-record                | 2 +-
-> >  tools/perf/tests/attr/system-wide-dummy          | 2 +-
-> >  tools/perf/tests/attr/test-record-group          | 4 ++--
-> >  tools/perf/tests/attr/test-record-group-sampling | 6 +++---
-> >  tools/perf/tests/attr/test-record-group1         | 4 ++--
-> >  tools/perf/tests/attr/test-record-group2         | 4 ++--
-> >  6 files changed, 11 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/tools/perf/tests/attr/base-record b/tools/perf/tests/attr/base-record
-> > index 8c10955eff93..9758e22daf9c 100644
-> > --- a/tools/perf/tests/attr/base-record
-> > +++ b/tools/perf/tests/attr/base-record
-> > @@ -9,7 +9,7 @@ size=128
-> >  config=0
-> >  sample_period=*
-> >  sample_type=263
-> > -read_format=0|4
-> > +read_format=0|20
->
-> Hi Namhyung,
->
-> Did you manage to take a look at this review? Are you ok with it being
-> 0|20 or should I change it to 0|4|20?
+[*] Warnings will only appear with DEBUG_PER_CPU_MAPS enabled.
 
-I'm sorry I missed this.  It'd be nice if it can succeed on old kernels too.
-Please go with 0|4|20 and the like.
+Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+Cc: Yury Norov <yury.norov@gmail.com>
+---
+ arch/x86/kernel/cpu/proc.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-Thanks,
-Namhyung
+diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
+index 099b6f0d96bd..584ae6cb5b87 100644
+--- a/arch/x86/kernel/cpu/proc.c
++++ b/arch/x86/kernel/cpu/proc.c
+@@ -153,9 +153,12 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+ 
+ static void *c_start(struct seq_file *m, loff_t *pos)
+ {
+-	*pos = cpumask_next(*pos - 1, cpu_online_mask);
+-	if ((*pos) < nr_cpu_ids)
+-		return &cpu_data(*pos);
++	if (*pos < nr_cpu_ids) {
++		*pos = cpumask_next(*pos - 1, cpu_online_mask);
++		if (*pos < nr_cpu_ids)
++			return &cpu_data(*pos);
++	}
++
+ 	return NULL;
+ }
+ 
+-- 
+2.37.3
 
-
->
-> >  disabled=1
-> >  inherit=1
-> >  pinned=0
-> > diff --git a/tools/perf/tests/attr/system-wide-dummy b/tools/perf/tests/attr/system-wide-dummy
-> > index 86a15dd359d9..0df8a997fe51 100644
-> > --- a/tools/perf/tests/attr/system-wide-dummy
-> > +++ b/tools/perf/tests/attr/system-wide-dummy
-> > @@ -11,7 +11,7 @@ size=128
-> >  config=9
-> >  sample_period=4000
-> >  sample_type=455
-> > -read_format=4
-> > +read_format=20
-> >  # Event will be enabled right away.
-> >  disabled=0
-> >  inherit=1
-> > diff --git a/tools/perf/tests/attr/test-record-group b/tools/perf/tests/attr/test-record-group
-> > index 14ee60fd3f41..09aa40af841c 100644
-> > --- a/tools/perf/tests/attr/test-record-group
-> > +++ b/tools/perf/tests/attr/test-record-group
-> > @@ -7,14 +7,14 @@ ret     = 1
-> >  fd=1
-> >  group_fd=-1
-> >  sample_type=327
-> > -read_format=4
-> > +read_format=20
-> >
-> >  [event-2:base-record]
-> >  fd=2
-> >  group_fd=1
-> >  config=1
-> >  sample_type=327
-> > -read_format=4
-> > +read_format=20
-> >  mmap=0
-> >  comm=0
-> >  task=0
-> > diff --git a/tools/perf/tests/attr/test-record-group-sampling b/tools/perf/tests/attr/test-record-group-sampling
-> > index 300b9f7e6d69..3ad68c3405c8 100644
-> > --- a/tools/perf/tests/attr/test-record-group-sampling
-> > +++ b/tools/perf/tests/attr/test-record-group-sampling
-> > @@ -7,7 +7,7 @@ ret     = 1
-> >  fd=1
-> >  group_fd=-1
-> >  sample_type=343
-> > -read_format=12
-> > +read_format=28
-> >  inherit=0
-> >
-> >  [event-2:base-record]
-> > @@ -21,8 +21,8 @@ config=3
-> >  # default | PERF_SAMPLE_READ
-> >  sample_type=343
-> >
-> > -# PERF_FORMAT_ID | PERF_FORMAT_GROUP
-> > -read_format=12
-> > +# PERF_FORMAT_ID | PERF_FORMAT_GROUP  | PERF_FORMAT_LOST
-> > +read_format=28
-> >  task=0
-> >  mmap=0
-> >  comm=0
-> > diff --git a/tools/perf/tests/attr/test-record-group1 b/tools/perf/tests/attr/test-record-group1
-> > index 3ffe246e0228..53e1ba38febc 100644
-> > --- a/tools/perf/tests/attr/test-record-group1
-> > +++ b/tools/perf/tests/attr/test-record-group1
-> > @@ -7,7 +7,7 @@ ret     = 1
-> >  fd=1
-> >  group_fd=-1
-> >  sample_type=327
-> > -read_format=4
-> > +read_format=20
-> >
-> >  [event-2:base-record]
-> >  fd=2
-> > @@ -15,7 +15,7 @@ group_fd=1
-> >  type=0
-> >  config=1
-> >  sample_type=327
-> > -read_format=4
-> > +read_format=20
-> >  mmap=0
-> >  comm=0
-> >  task=0
-> > diff --git a/tools/perf/tests/attr/test-record-group2 b/tools/perf/tests/attr/test-record-group2
-> > index 6b9f8d182ce1..ca21b5ce71aa 100644
-> > --- a/tools/perf/tests/attr/test-record-group2
-> > +++ b/tools/perf/tests/attr/test-record-group2
-> > @@ -9,7 +9,7 @@ group_fd=-1
-> >  config=0|1
-> >  sample_period=1234000
-> >  sample_type=87
-> > -read_format=12
-> > +read_format=28
-> >  inherit=0
-> >  freq=0
-> >
-> > @@ -19,7 +19,7 @@ group_fd=1
-> >  config=0|1
-> >  sample_period=6789000
-> >  sample_type=87
-> > -read_format=12
-> > +read_format=28
-> >  disabled=0
-> >  inherit=0
-> >  mmap=0
