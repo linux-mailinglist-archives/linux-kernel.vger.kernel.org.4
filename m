@@ -2,107 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA7F5FBA20
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74DFB5FBA2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 20:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiJKSHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 14:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34740 "EHLO
+        id S229848AbiJKSRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 14:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiJKSHi (ORCPT
+        with ESMTP id S229436AbiJKSRT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 14:07:38 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D55B2D75E
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:07:35 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-360871745b0so74722637b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:07:35 -0700 (PDT)
+        Tue, 11 Oct 2022 14:17:19 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEB5F012
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:17:18 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id r17so33209623eja.7
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 11:17:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b7nMl+IIoVXIZCC/DKHT3CXI2Xf2HP4geGz0+dJZi9s=;
-        b=FG0qA4ikAjxVKa3sHpnmD3r0ovEhAB/bTmLX8VaAqEoTpZLQ8gI6+KCa2X7rXzcUx3
-         rJST5MEvmq0VI70J8hjHeW0BnsDmXHjn1DU19Jfy8L1wC2sLYsljtxyV47EilRh2TLtC
-         9cB+K0rCTEfq02tPXJzGGRr2QF9LJd3mCke8WtuRcb9fZqpXu9hc5PKyEH03JR7y3FCa
-         fR9MC0LDUvDah73tE2PvE3mCpnHEUVEXCgJH/S+cEMd13lcLv9SWquKndDYNyeOjDrAV
-         6YYxGSJpZ+hIfCaCTY2Nyncsf03owIdhplfLFZJjPMseBggOY0NJfZkPV3LWUppYNKkJ
-         0fRQ==
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=s61i+pH9FZB5bmErB62bJ6mkpIWasrC0YJTzljapRO0=;
+        b=Xim7TYvCya4GVHh39kMEmXRdXmFH/PR994kU/2snslQ6CKiKjnm84UmFO3P3+sYmaO
+         vRV+rIhg6nb959wZXfzeHAfUgIME0yMc/0X8r+Jym1knbtCtlDKF2q37ZqWx3zHRB+e4
+         qjxPkDUoZLI+9wqn7QzzlJj9TCG9ZrQGyxTjcKi5H386CXM3a+SHqsAWr/71HIpbFbaN
+         pZMd6RoHJamw478D93N2pXiLctNOcaW5QYXNrTZRW3tPiD1nEjr0/mKO3vP8/NLJ5x4U
+         haxoVML4Zc3nUXZ27QIrhYOOhg9aBmS1hr83y70hfE3hW8p+n090VkHUA/aDSaX5D1KF
+         seCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b7nMl+IIoVXIZCC/DKHT3CXI2Xf2HP4geGz0+dJZi9s=;
-        b=P0apyP3Z53UCOsfLKEOuC4moXHID+bIj+gDrCsKfK5l7cMNDmJRLWYzN9F/aBCQ2Gj
-         uDAu85nkMM7O5EYSsk7S+2le43SzZftaD1pjvt8EeW+NULVLvAvOTfRwZVgtM4ppRkgO
-         MWCRQKseITheEYVS1DFt4UQacDCIMvWKBSNftsTv3jwSbhCfVaYDzdS616zIIeOCRB/Y
-         4WPC1rbsp+9rO8+o5morcqpdgwDD3LBfsEsn8b9twti0017+5esZw04pVn5MZtWspmgP
-         UxS+4IsPooxZ5vjQaEStmdmKyVjg0q+tqSx+WEXIwL3oN+vII4K86W1wOMI4lFT6H707
-         BS/A==
-X-Gm-Message-State: ACrzQf1FpxpbwP5i9JCKG7Tiltai/mgITYyAb3TaIaXeRXkQEsWerGBW
-        J6RzwV9b3RMcpN7XRNdgy+jIpqGH8L5u9QnK014=
-X-Google-Smtp-Source: AMsMyM6OCvagOVxxxTEsfErq9xBhIJJgtNqp5+7CYXRzAiyXlU45PahqHzXqTx5VO8MUR+9wqIhH0LJTIZYEhX9SSJw=
-X-Received: by 2002:a81:6907:0:b0:34a:51ce:3b38 with SMTP id
- e7-20020a816907000000b0034a51ce3b38mr23284332ywc.151.1665511654327; Tue, 11
- Oct 2022 11:07:34 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s61i+pH9FZB5bmErB62bJ6mkpIWasrC0YJTzljapRO0=;
+        b=CHPaFDUVoy4n0VbkB3YuzwjP4MTxW6eEkjz+Dphn0fwdtH41fCbOok4qLlRY2mVFnF
+         SmtMCb6VTTE3wxtW0E1PWTN14gDod0NP0+YxYOc1SQMxnuTzcN9L4gOHmHKGcCvYmGa9
+         w/o0vWCdO8RKZ7I3eFxak+II3jH3vRTUy95yapt5AD30Qj2SkqTRiXA4rHVavrqJ+H2c
+         qIEtVfKQa9h8X0knWzR03fjvQBnWm/gE6/TctjosfIVOeiwnDii5jcI2fV5sXE63bR6s
+         UkMC4see8V5hY7UxgOYpCajWO6ZReGO56p9Ri6fjeZIl6jQMs9xIGwnGieUahDPkrNpu
+         hJ3Q==
+X-Gm-Message-State: ACrzQf0HcfAGSmqr084M/U4pUsAT+YqCs5/afX4l4JvqRlEhZAHTlaLD
+        A7lcx7xAIDesFC1NLBR7y0E/Tj7xcRVv/g==
+X-Google-Smtp-Source: AMsMyM6QeD0epfM203Pe/bLJJa6W/QhR+KGtuNfJJkrmmA+3VHA67IIHvGa9wwgyrAz6zmtP58PZ9w==
+X-Received: by 2002:a17:907:2d8b:b0:781:c864:fffd with SMTP id gt11-20020a1709072d8b00b00781c864fffdmr19090020ejc.681.1665512237210;
+        Tue, 11 Oct 2022 11:17:17 -0700 (PDT)
+Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
+        by smtp.gmail.com with ESMTPSA id b17-20020a50b411000000b00454546561cfsm9618273edh.82.2022.10.11.11.17.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 11:17:16 -0700 (PDT)
+Date:   Tue, 11 Oct 2022 20:17:15 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Yury Norov <yury.norov@gmail.com>
+Subject: Re: [PATCH] x86: Fix /proc/cpuinfo cpumask warning
+Message-ID: <20221011181715.dpayrpjueha7kxoj@kamzik>
+References: <20221011175031.1782748-1-ajones@ventanamicro.com>
+ <Y0WvX9Mp0kuohNdq@zn.tnic>
 MIME-Version: 1.0
-Received: by 2002:a05:7000:1749:b0:3c5:f473:56e4 with HTTP; Tue, 11 Oct 2022
- 11:07:33 -0700 (PDT)
-Reply-To: illuminatiinitiationcenter56@gmail.com
-From:   Garry Lee <johnalinda8@gmail.com>
-Date:   Tue, 11 Oct 2022 21:07:33 +0300
-Message-ID: <CA+Dt0k_wprVPDRPoDepuruBYd2vtSZ60hGqdrTRy=NsRMSYouA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
-        UNDISC_FREEM,UPPERCASE_75_100 autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:112f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [illuminatiinitiationcenter56[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [johnalinda8[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [johnalinda8[at]gmail.com]
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 UPPERCASE_75_100 message body is 75-100% uppercase
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
-        *      information
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0WvX9Mp0kuohNdq@zn.tnic>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-DO YOU WANT TO BE RICH AND FAMOUS? JOIN THE GREAT ILLUMINATI ORDER OF
-RICHES, POWER/FAME  NOW AND ACHIEVE ALL YOUR DREAMS? IF YES EMAIL US :
-MAIL: illuminatiinitiationcenter56@gmail.com
-YOUR FULL NAME:
-PHONE NUMBER :
-COUNTRY :
-GENDER:
+On Tue, Oct 11, 2022 at 08:01:03PM +0200, Borislav Petkov wrote:
+> On Tue, Oct 11, 2022 at 07:50:31PM +0200, Andrew Jones wrote:
+> > Upcoming cpumask changes will start issuing warnings[*] when cpu
+> 
+> What upcoming changes?
+> 
+> This needs a concrete pointer to a commit or so.
+
+Hi Boris,
+
+Sorry, I should have pointed this out. The upcoming change is
+
+linux-next/master commit a314123c8bdb ("cpumask: fix checking valid cpu
+range")
+
+And also an ongoing discussion here
+https://lore.kernel.org/lkml/20221011170949.upxk3tcfcwnkytwm@kamzik/
+
+I'm hoping that Yury will pick these patches up and integrate
+them at the front of his series when introducing the warnings.
+I wasn't sure how to call that out other than with the generic
+"upcoming change".
+
+> 
+> > indices equal to nr_cpu_ids are passed to cpumask_next* functions.
+> 
+> How do those indices get passed here? I think you need to explain how
+> exactly this happens.
+
+I took a stab at explaining it in the discussion thread[1] just now and I
+can bring that explanation into the commit message for v2.
+
+[1] https://lore.kernel.org/lkml/20221011180442.cwjtcvjioias3qt6@kamzik/
+
+> 
+> > Ensure we don't generate a warning when reading /proc/cpuinfo by
+> 
+> Please use passive voice in your commit message: no "we" or "I", etc,
+> and describe your changes in imperative mood.
+
+I'll change to "Ensure no warning is generated ..."
+
+> 
+> > validating the cpu index before calling cpumask_next().
+> 
+> s/cpu/CPU/g
+> 
+> > [*] Warnings will only appear with DEBUG_PER_CPU_MAPS enabled.
+> > 
+> > Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+> > Cc: Yury Norov <yury.norov@gmail.com>
+> > ---
+> >  arch/x86/kernel/cpu/proc.c | 9 ++++++---
+> >  1 file changed, 6 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
+> > index 099b6f0d96bd..584ae6cb5b87 100644
+> > --- a/arch/x86/kernel/cpu/proc.c
+> > +++ b/arch/x86/kernel/cpu/proc.c
+> > @@ -153,9 +153,12 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+> >  
+> >  static void *c_start(struct seq_file *m, loff_t *pos)
+> >  {
+> > -	*pos = cpumask_next(*pos - 1, cpu_online_mask);
+> > -	if ((*pos) < nr_cpu_ids)
+> > -		return &cpu_data(*pos);
+> > +	if (*pos < nr_cpu_ids) {
+> > +		*pos = cpumask_next(*pos - 1, cpu_online_mask);
+> > +		if (*pos < nr_cpu_ids)
+> > +			return &cpu_data(*pos);
+> > +	}
+> 
+> Simpler: on function entry:
+> 
+> 	if (*pos >= nr_cpu_ids)
+> 		return NULL;
+> 
+> 	 /* the rest remains unchanged */
+
+Will do for v2.
+
+Thanks,
+drew
