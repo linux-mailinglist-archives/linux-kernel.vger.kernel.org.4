@@ -2,150 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7360A5FB126
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8EC5FB14C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbiJKLLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 07:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35336 "EHLO
+        id S229800AbiJKLQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 07:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiJKLLG (ORCPT
+        with ESMTP id S229526AbiJKLQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 07:11:06 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537AD8D0F2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 04:11:05 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id p3-20020a17090a284300b0020a85fa3ffcso15667176pjf.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 04:11:05 -0700 (PDT)
+        Tue, 11 Oct 2022 07:16:55 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88257167DF;
+        Tue, 11 Oct 2022 04:16:51 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id l4so12891944plb.8;
+        Tue, 11 Oct 2022 04:16:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xyNu7ihVwa1kCmrsin+0WcnVl1ur8OzhltqOfbUTT10=;
-        b=UZwIeeRg3uQhc+cpCzs6z0nQw2QZwvYVcjh3Tev6Nh1AaxET6iyPGP8LvCk7pGfNNO
-         CWqx4NbFYdHi9MUlsJRCQzG47fLY3YozQb9exZzE5yn8D1Wq2HZSCyRL7nHPBv1r52w1
-         KkCuYotEuqz/mv/klQcC8SUuxpd51/SjhC6Fi8XwDfmemRt+sDiQ48X+nnDTHoXRQw6f
-         P0rBoCWkOT9k5qjy6h8dKhHD7NI2milNdGmYpnTOSju/+qlLaE51yISSZJeZhs+xML1u
-         rjZWufVDRRbWpwRM/RxUzMPhDOkwdlkApaMv2pcm6VhtVpoyNBwiKy++7bIrIyWOvc8c
-         CLZg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=i4WAsnhbo3mj6+qRptDWdWyrS7sjNQ20usVEoY9BN20=;
+        b=IK0W1JCopDHO3FpVF9n+RPJadViBF+kTshKxvh136W2VuPTpjvlRMiUxKRsrOixqxa
+         5T99NE4XznLUWsd9jV3vCmm1sfSt2hxRtYDLvNbwPFguMyWCsZ9VX2Tk2VjxS2BoBwDv
+         LT8VNvWwoD786nbCibPy6Mnho3OWhscs+sO8ngbCFHKWxGWvkfO7KiNfRQ6A59uEdtr+
+         QIwegXEPplXIT0Y+7oPME5PGfySTofgnyC3JiRKE65e1b5gGm1tdheBppmQOmsrA4RWW
+         nKh/rY9uKHZgBlyb1ghXiVzRjBD4ZWfiCQOko/XgvaihXPv0nFBauQcfogOMQNGfcpog
+         bPhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xyNu7ihVwa1kCmrsin+0WcnVl1ur8OzhltqOfbUTT10=;
-        b=cgU/kaChvDVxhWqugYdRmxpCP37rGYBWnzsTfbDciX+e5JNkJgkpWxDZRzkOe68l2D
-         4ohbNLgNzCEuZs0NUeDpEiRgbf2jA0fnZwfXL13aHcyOC6HZkTL3lBoPtSCsP/FT7bqi
-         cbmztUE50n9mTyktsty0A6jgaE70FfP/2+b1d2NxN/FJVeH38feUsem58hx+MPOQEvlz
-         U8kLaEKk5bB6Woe9LaeCTt2FcfsBVTft+WAX2JAifX10qtTdMg296xOJRotriZbHAWbY
-         9mACet9HgtiUx/i9KK66Pt1i68ncrkRJ1n/wVtpQn5lYsNbstgAdof+g4CVN97FDu/9W
-         JwGQ==
-X-Gm-Message-State: ACrzQf30i04SxFTjYo4m1DgQNfNZ9sVPhwDJyhnHvYg1CQPa4LO8/le0
-        DMZw29QceDlKxvSfrwg2Ix9vzjJf/kG/Yc4BXQyDaw==
-X-Google-Smtp-Source: AMsMyM7X9jF5KQTbREd1W8ZkKnNsDJAq+kh9AegZu7oAqTnFNWKJTzxtA4V3YI69PYMg7pEsV3hi+SDJhsdAHk7UZyc=
-X-Received: by 2002:a17:90b:4b4b:b0:20a:926f:3c2e with SMTP id
- mi11-20020a17090b4b4b00b0020a926f3c2emr25763482pjb.87.1665486664825; Tue, 11
- Oct 2022 04:11:04 -0700 (PDT)
+        bh=i4WAsnhbo3mj6+qRptDWdWyrS7sjNQ20usVEoY9BN20=;
+        b=uVJdQcBxU9TOnJyBXkhUp3xAiQl4VI8d9bTXTHPzAhlk9cFWS8fQUVfGNKej310uJL
+         Jw7yUkceK2zuSN4Dy/eR2a2FQVD1F38MDOAxEp5+ODjmz1XtDtPTjGdkcciW+pEPjVDG
+         +g9ijskTowKz3QIzdD90am7SNpJBaxpnCDF4KWm5IGP1Z68hvA2Z/KGv2wgcgzOFBxlc
+         7TbojweYcWtzjiuPIC+GYwux9LyaRwmfbkLheefcX57H5pF5ZcnKHK0lp12GwWPl3YtV
+         brasNMgJz2m3KkHXiVBOCDHspAbR2b1jH+MX39eEmb4GqTTXuxg7Azaw4fuXDqot7rEx
+         Rlkw==
+X-Gm-Message-State: ACrzQf3qNfXeqb21hEbJYzOS7UKE930kbp9UHNCpBAhBTQnXci3xwNVh
+        /gzmUAfHn2hxtj/un1dWk4o=
+X-Google-Smtp-Source: AMsMyM57ZWctsmlsdd6OOXLvsYniC7b+6zsqhFJ/dmNGqaEKN05YOuL3+RvxwzXFfbiONbkGUWd7GQ==
+X-Received: by 2002:a17:90b:3805:b0:20d:4e77:371f with SMTP id mq5-20020a17090b380500b0020d4e77371fmr9137587pjb.170.1665487010884;
+        Tue, 11 Oct 2022 04:16:50 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id s4-20020a170902ea0400b0017300ec80b0sm4510907plg.308.2022.10.11.04.16.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 04:16:49 -0700 (PDT)
+From:   yexingchen116@gmail.com
+X-Google-Original-From: ye.xingchen@zte.com.cn
+To:     anthony.l.nguyen@intel.com
+Cc:     jesse.brandeburg@intel.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>
+Subject: [PATCH linux-next] iavf: Replace __FUNCTION__ with __func__
+Date:   Tue, 11 Oct 2022 11:16:38 +0000
+Message-Id: <20221011111638.324346-1-ye.xingchen@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220809223401.24599-1-mike.leach@linaro.org> <20220809223401.24599-4-mike.leach@linaro.org>
- <65e70db9-9f85-7285-0602-f2d29887550a@arm.com> <CAJ9a7Vgz+0xEQO-MvGUzbsr_LBh4pDep7JJtFoA+cAeiAERJFw@mail.gmail.com>
- <55170f1f-99f7-6e25-55d3-5d7247737afc@arm.com>
-In-Reply-To: <55170f1f-99f7-6e25-55d3-5d7247737afc@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Tue, 11 Oct 2022 12:10:53 +0100
-Message-ID: <CAJ9a7VgrJ3L6o9e0600G_JL6S_PXLsZcQDLPR_YGpSu4L=pOMg@mail.gmail.com>
-Subject: Re: [PATCH v3 03/13] coresight: stm: Update STM driver to use Trace
- ID API
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, mathieu.poirier@linaro.org,
-        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        linux-perf-users@vger.kernel.org, leo.yan@linaro.org,
-        quic_jinlmao@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi suzuki,
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-On Fri, 7 Oct 2022 at 18:53, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
->
-> On 06/10/2022 14:54, Mike Leach wrote:
-> > Hi Suzuki,
-> >
-> > On Mon, 3 Oct 2022 at 10:04, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
-> >>
-> >> On 09/08/2022 23:33, Mike Leach wrote:
-> >>> Updates the STM driver to use the trace ID allocation API.
-> >>> This uses the _system_id calls to allocate an ID on device poll,
-> >>> and release on device remove.
-> >>>
-> >>> The sysfs access to the STMTRACEIDR register has been changed from RW
-> >>> to RO. Having this value as writable is not appropriate for the new
-> >>> Trace ID scheme - and had potential to cause errors in the previous
-> >>> scheme if values clashed with other sources.
-> >>>
-> >>> Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> >>> Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
->
-> >>> @@ -854,7 +830,7 @@ static void stm_init_generic_data(struct stm_drvdata *drvdata,
-> >>>
-> >>>    static int stm_probe(struct amba_device *adev, const struct amba_id *id)
-> >>>    {
-> >>> -     int ret;
-> >>> +     int ret, trace_id;
-> >>>        void __iomem *base;
-> >>>        struct device *dev = &adev->dev;
-> >>>        struct coresight_platform_data *pdata = NULL;
-> >>> @@ -938,12 +914,22 @@ static int stm_probe(struct amba_device *adev, const struct amba_id *id)
-> >>>                goto stm_unregister;
-> >>>        }
-> >>>
-> >>> +     trace_id = coresight_trace_id_get_system_id();
-> >>> +     if (trace_id < 0) {
-> >>
-> >> The above API returns "INVALID_ID" and not a negative error status.
-> >> I think it is better to fix the API to return:
-> >>
-> >>     ret < 0  - If there is any error
-> >>              - Otherwise a positive integer
-> >> And the users should be kept unaware of which ID is valid or invalid.
-> >>
-> >
-> > coresight_trace_id_get_system_id() returns the ID if one can be
-> > allocated or -EINVAL if not.
-> >
-> > Not sure what you are looking at here.
->
-> Sorry, indeed I was mistaken there. It is the get_cpu_id() which
-> returns the INVALID_ID on failure. Please could we make that
-> consistent with this scheme ? i.e, < 0 on error.
->
+__FUNCTION__ exists only for backwards compatibility reasons with old
+gcc versions. Replace it with __func__.
 
-That also returns -EINVAL, as both call the same underlying allocator.
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/net/ethernet/intel/iavf/iavf_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-However happy to add on the comments for the exported functions
-
-Regards
-
-Mike
-> Also, please could we add a comment above the exported functions
-> on their entry/exit criteria ? It is not clearly evident, unless
-> we follow the code and figure out.
->
-> Cheers
-> Suzuki
->
-
-
+diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
+index 3fc572341781..98ab11972f5c 100644
+--- a/drivers/net/ethernet/intel/iavf/iavf_main.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
+@@ -4820,7 +4820,7 @@ static void iavf_shutdown(struct pci_dev *pdev)
+ 		iavf_close(netdev);
+ 
+ 	if (iavf_lock_timeout(&adapter->crit_lock, 5000))
+-		dev_warn(&adapter->pdev->dev, "failed to acquire crit_lock in %s\n", __FUNCTION__);
++		dev_warn(&adapter->pdev->dev, "failed to acquire crit_lock in %s\n", __func__);
+ 	/* Prevent the watchdog from running. */
+ 	iavf_change_state(adapter, __IAVF_REMOVE);
+ 	adapter->aq_required = 0;
 -- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+2.25.1
+
