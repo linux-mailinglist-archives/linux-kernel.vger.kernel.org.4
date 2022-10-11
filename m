@@ -2,74 +2,401 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064985FB163
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC3C5FB16F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Oct 2022 13:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiJKLXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Oct 2022 07:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
+        id S229701AbiJKL2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Oct 2022 07:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiJKLXm (ORCPT
+        with ESMTP id S229591AbiJKL2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Oct 2022 07:23:42 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A4274B9E;
-        Tue, 11 Oct 2022 04:23:37 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=cuibixuan@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VRxIyWq_1665487410;
-Received: from 30.221.148.143(mailfrom:cuibixuan@linux.alibaba.com fp:SMTPD_---0VRxIyWq_1665487410)
-          by smtp.aliyun-inc.com;
-          Tue, 11 Oct 2022 19:23:32 +0800
-Message-ID: <9ac447b9-0cb5-2b03-12b5-9c3f1cc7e5fe@linux.alibaba.com>
-Date:   Tue, 11 Oct 2022 19:23:30 +0800
+        Tue, 11 Oct 2022 07:28:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA80B7D7B0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 04:28:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665487696;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aa9rEIaSn1XKnPUSEdi4rRdOmXJSmzcOUjeGaw5Yfa8=;
+        b=Y3eSH9fzbBrbVAuU2QI2xBFupuDZOgcDb3KbR7X6iCEPWoHtbs96OAMgCVezMSL9ap6W5h
+        vivZS6t63vOHGlL7BbcRrqCTkLsm6n5Yqg7s02vJxInnkkGcPtSaTn59YHjbA2gKqc8gsD
+        MHrA7vwRNzTgU81pWTwg8z/xCvQ1WBA=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-342-kb84xJIVOp-qA-ktX9SjXA-1; Tue, 11 Oct 2022 07:28:14 -0400
+X-MC-Unique: kb84xJIVOp-qA-ktX9SjXA-1
+Received: by mail-wm1-f70.google.com with SMTP id fc12-20020a05600c524c00b003b5054c70d3so8313473wmb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Oct 2022 04:28:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aa9rEIaSn1XKnPUSEdi4rRdOmXJSmzcOUjeGaw5Yfa8=;
+        b=lXV/0Qc4bv+aCKEwiwcbCf74OtsloKYgF8clRfylFK8faOn5XBBXlpW7+J5pww2dOI
+         2RHvd4l+uIHlyt8iFLsSvpYAzLQecocr86UgGbZsTATtAFBzHYk3ORKH5mh1Jcg5mL3l
+         V4/juPxx7fv0PvlJtZHdG0li/6YXKqYla/RYJvFGkRSTx4kensXk8lBKDRY/w+qWydyF
+         6phYMVzQtOOrwrS/aK5PmyYtLQm1KqZUE1QQ7GsS8nCioJLuR6svnHosy31RpSW9Rh6Z
+         YjKeMFNbLvIsEuD8h3NOYChiAm7mZGIuC+DoNw3FMmV/rG+qV+gnygwMIkhWC3Zzxghn
+         xqxA==
+X-Gm-Message-State: ACrzQf3vQXgQlOBeTrroiQFMt8mBrJxuhUzk2M8d2xhyTveBYG7UCSqK
+        MfWZQ+nHcc7G+D6mHBGWt/ychlacMo8XrvJKjEL9eMj1X5Qw0DpZFZeNCWBSx1kKBGC5sJNGHsl
+        xtVGMvAR3m0+5Mpa666SMZ9gU
+X-Received: by 2002:adf:ebcf:0:b0:22c:9eb4:d6f6 with SMTP id v15-20020adfebcf000000b0022c9eb4d6f6mr14757930wrn.251.1665487693675;
+        Tue, 11 Oct 2022 04:28:13 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4hmahkxyUwJGtpeiLFWx/q2ULJ7bnP3bKOkB/1vC5wPnv42O7k6V8WN7yvieL5dBNizbCdOQ==
+X-Received: by 2002:adf:ebcf:0:b0:22c:9eb4:d6f6 with SMTP id v15-20020adfebcf000000b0022c9eb4d6f6mr14757907wrn.251.1665487693369;
+        Tue, 11 Oct 2022 04:28:13 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-103-235.dyn.eolo.it. [146.241.103.235])
+        by smtp.gmail.com with ESMTPSA id c8-20020a05600c0a4800b003b4fdbb6319sm20569971wmq.21.2022.10.11.04.28.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 04:28:12 -0700 (PDT)
+Message-ID: <a2e418db45228cdaf59e7679d81b2d0bcb657377.camel@redhat.com>
+Subject: Re: [PATCH v1 net 2/3] soreuseport: Fix socket selection for
+ SO_INCOMING_CPU.
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Martin KaFai Lau <martin.lau@kernel.org>
+Cc:     Craig Gallek <kraig@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Kuniyuki Iwashima <kuni1840@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kazuho Oku <kazuhooku@gmail.com>
+Date:   Tue, 11 Oct 2022 13:28:11 +0200
+In-Reply-To: <20221010174351.11024-3-kuniyu@amazon.com>
+References: <20221010174351.11024-1-kuniyu@amazon.com>
+         <20221010174351.11024-3-kuniyu@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH -next] jbd2: use the correct print format
-To:     Jason Yan <yanaijie@huawei.com>, rostedt@goodmis.org,
-        mhiramat@kernel.org, bvanassche@acm.org, axboe@kernel.dk,
-        tytso@mit.edu, linux-kernel@vger.kernel.org,
-        linux-ext4@vger.kernel.org
-References: <1665389343-35572-1-git-send-email-cuibixuan@linux.alibaba.com>
- <c30377f7-f9b8-5774-b509-a4285210b40f@huawei.com>
-From:   Bixuan Cui <cuibixuan@linux.alibaba.com>
-In-Reply-To: <c30377f7-f9b8-5774-b509-a4285210b40f@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-12.8 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 2022-10-10 at 10:43 -0700, Kuniyuki Iwashima wrote:
+> Kazuho Oku reported that setsockopt(SO_INCOMING_CPU) does not work
+> with setsockopt(SO_REUSEPORT) for TCP since v4.6.
+> 
+> With the combination of SO_REUSEPORT and SO_INCOMING_CPU, we could
+> build a highly efficient server application.
+> 
+> setsockopt(SO_INCOMING_CPU) associates a CPU with a TCP listener
+> or UDP socket, and then incoming packets processed on the CPU will
+> likely be distributed to the socket.  Technically, a socket could
+> even receive packets handled on another CPU if no sockets in the
+> reuseport group have the same CPU receiving the flow.
+> 
+> The logic exists in compute_score() so that a socket will get a higher
+> score if it has the same CPU with the flow.  However, the score gets
+> ignored after the cited two commits, which introduced a faster socket
+> selection algorithm for SO_REUSEPORT.
+> 
+> This patch introduces a counter of sockets with SO_INCOMING_CPU in
+> a reuseport group to check if we should iterate all sockets to find
+> a proper one.  We increment the counter when
+> 
+>   * calling listen() if the socket has SO_INCOMING_CPU and SO_REUSEPORT
+> 
+>   * enabling SO_INCOMING_CPU if the socket is in a reuseport group
+> 
+> Also, we decrement it when
+> 
+>   * detaching a socket out of the group to apply SO_INCOMING_CPU to
+>     migrated TCP requests
+> 
+>   * disabling SO_INCOMING_CPU if the socket is in a reuseport group
+> 
+> When the counter reaches 0, we can get back to the O(1) selection
+> algorithm.
+> 
+> The overall changes are negligible for the non-SO_INCOMING_CPU case,
+> and the only notable thing is that we have to update sk_incomnig_cpu
+> under reuseport_lock.  Otherwise, the race below traps us in the O(n)
+> algorithm even after disabling SO_INCOMING_CPU for all sockets in the
+> group.
+> 
+>  cpu1 (setsockopt)               cpu2 (listen)
+> +-----------------+             +-------------+
+> 
+> lock_sock(sk1)                  lock_sock(sk2)
+> 
+> reuseport_incoming_cpu_update(sk, val)
+> .
+> > - spin_lock_bh(&reuseport_lock)
+> > 
+> >   /* increment reuse->incoming_cpu, but
+> >    * sk1->sk_incoming_cpu is still -1.
+> >    */
+> > - __reuseport_incoming_cpu_inc(sk1, reuse)
+> > 
+> > - spin_unlock_bh(&reuseport_lock)
+> > 
+> >                               spin_lock_bh(&reuseport_lock)
+> >                               reuseport_grow(sk2, reuse)
+> >                               .
+> >                               | - more_socks_size = reuse->max_socks * 2U;
+> >                               | - if (more_socks_size > U16_MAX &&
+> >                               |       reuse->num_closed_socks)
+> >                               |   .
+> >                               |   `- __reuseport_detach_closed_sock(sk1, reuse)
+> >                               |      .
+> >                               |      ` - reuseport_incoming_cpu_dec(sk1, reuse)
+> >                                          .
+> >                                          `- if (sk1->sk_incoming_cpu >= 0)
+> >                                             /* read shutdown()ed sk1's sk_incoming_cpu
+> >                                              * without lock_sock(), and ... do nothing!
+> `- WRITE_ONCE(sk1->incoming_cpu, 0)            *
+>                                                * leak 1 count of reuse->incoming_cpu.
+>                                                */
+> 
+>                                 spin_unlock_bh(&reuseport_lock)
+> 
+> Fixes: e32ea7e74727 ("soreuseport: fast reuseport UDP socket selection")
+> Fixes: c125e80b8868 ("soreuseport: fast reuseport TCP socket selection")
+> Reported-by: Kazuho Oku <kazuhooku@gmail.com>
+> Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> ---
+>  include/net/sock_reuseport.h |  2 +
+>  net/core/sock.c              |  5 +-
+>  net/core/sock_reuseport.c    | 88 ++++++++++++++++++++++++++++++++++--
+>  3 files changed, 89 insertions(+), 6 deletions(-)
+> 
+> diff --git a/include/net/sock_reuseport.h b/include/net/sock_reuseport.h
+> index fe9779e6d90f..d69fbea3d6cb 100644
+> --- a/include/net/sock_reuseport.h
+> +++ b/include/net/sock_reuseport.h
+> @@ -16,6 +16,7 @@ struct sock_reuseport {
+>  	u16			max_socks;		/* length of socks */
+>  	u16			num_socks;		/* elements in socks */
+>  	u16			num_closed_socks;	/* closed elements in socks */
+> +	u16			incoming_cpu;
+>  	/* The last synq overflow event timestamp of this
+>  	 * reuse->socks[] group.
+>  	 */
+> @@ -28,6 +29,7 @@ struct sock_reuseport {
+>  	struct sock		*socks[];	/* array of sock pointers */
+>  };
+>  
+> +void reuseport_incoming_cpu_update(struct sock *sk, int val);
+>  extern int reuseport_alloc(struct sock *sk, bool bind_inany);
+>  extern int reuseport_add_sock(struct sock *sk, struct sock *sk2,
+>  			      bool bind_inany);
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index eeb6cbac6f49..ad67aba947e1 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -1436,7 +1436,10 @@ int sk_setsockopt(struct sock *sk, int level, int optname,
+>  		break;
+>  		}
+>  	case SO_INCOMING_CPU:
+> -		WRITE_ONCE(sk->sk_incoming_cpu, val);
+> +		if (rcu_access_pointer(sk->sk_reuseport_cb))
+> +			reuseport_incoming_cpu_update(sk, val);
+> +		else
+> +			WRITE_ONCE(sk->sk_incoming_cpu, val);
 
-在 2022/10/10 22:35, Jason Yan 写道:
-> While you are at it, can you make all the tid tracing consistent. Some 
-> tracing points using unsigned long such as:
->
-> TRACE_EVENT(jbd2_handle_extend,
->     TP_PROTO(dev_t dev, unsigned long tid, unsigned int type,
->          unsigned int line_no, int buffer_credits,
->          int requested_blocks),
->
->     TP_ARGS(dev, tid, type, line_no, buffer_credits, requested_blocks),
->
->
-> and the caller passing transaction->t_tid which is tid_t(unsigned int).
->
->     trace_jbd2_handle_extend(journal->j_fs_dev->bd_dev,
->                  transaction->t_tid,
->                  handle->h_type, handle->h_line_no,
->                  handle->h_total_credits,
->                  nblocks); 
+I woould call the helper regardless of sk->sk_reuseport_cb and let it
+do the correct thing, will make the code simpler and possibly safer.
 
-Ok, I'll send another patch to fix this problem.
+>  		break;
+>  
+>  	case SO_CNX_ADVICE:
+> diff --git a/net/core/sock_reuseport.c b/net/core/sock_reuseport.c
+> index 5daa1fa54249..6f5cda58b2d4 100644
+> --- a/net/core/sock_reuseport.c
+> +++ b/net/core/sock_reuseport.c
+> @@ -21,6 +21,64 @@ static DEFINE_IDA(reuseport_ida);
+>  static int reuseport_resurrect(struct sock *sk, struct sock_reuseport *old_reuse,
+>  			       struct sock_reuseport *reuse, bool bind_inany);
+>  
+> +static void __reuseport_incoming_cpu_inc(struct sock *sk, struct sock_reuseport *reuse)
+> +{
+> +	/* paired with READ_ONCE() in reuseport_select_sock_by_hash() */
+> +	WRITE_ONCE(reuse->incoming_cpu, reuse->incoming_cpu + 1);
+> +}
 
+I find this helper name confusing (and I'm also horrible at picking
+good names). Perhaps
+__reuseport_use_cpu_inc()/__reuseport_use_cpu_dev() ?!?
+> +
+> +static void __reuseport_incoming_cpu_dec(struct sock *sk, struct sock_reuseport *reuse)
+> +{
+> +	/* paired with READ_ONCE() in reuseport_select_sock_by_hash() */
+> +	WRITE_ONCE(reuse->incoming_cpu, reuse->incoming_cpu - 1);
+> +}
+> +
+> +static void reuseport_incoming_cpu_inc(struct sock *sk, struct sock_reuseport *reuse)
+> +{
+> +	if (sk->sk_incoming_cpu >= 0)
+> +		__reuseport_incoming_cpu_inc(sk, reuse);
+> +}
+> +
+> +static void reuseport_incoming_cpu_dec(struct sock *sk, struct sock_reuseport *reuse)
+> +{
+> +	if (sk->sk_incoming_cpu >= 0)
+> +		__reuseport_incoming_cpu_dec(sk, reuse);
+> +}
+> +
+> +void reuseport_incoming_cpu_update(struct sock *sk, int val)
+> +{
+> +	struct sock_reuseport *reuse;
+> +
+> +	spin_lock_bh(&reuseport_lock);
+> +	reuse = rcu_dereference_protected(sk->sk_reuseport_cb,
+> +					  lockdep_is_held(&reuseport_lock));
+> +
+> +	if (!reuse) {
+> +		/* reuseport_grow() has detached a shutdown()ed
+> +		 * sk, and sk_state is TCP_CLOSE, so no one can
+> +		 * read this sk_incoming_cpu concurrently.
+> +		 */
+> +		sk->sk_incoming_cpu = val;
+> +		goto out;
+> +	}
+> +
+> +	/* This must be done under reuseport_lock to avoid a race with
+> +	 * reuseport_grow(), which accesses sk->sk_incoming_cpu without
+> +	 * lock_sock() when detaching a shutdown()ed sk.
+> +	 *
+> +	 * paired with READ_ONCE() in reuseport_select_sock_by_hash()
+> +	 */
+> +	WRITE_ONCE(sk->sk_incoming_cpu, val);
+> +
+> +	if (sk->sk_incoming_cpu < 0 && val >= 0)
 
-Thanks
+I don't see how the above condition can be true given the previous
+statement ?!?
 
-Bixuan Cui
+Possibly you can use something alike:
+
+	old_sk_incoming_cpu = sk->sk_incoming_cpu
+	WRITE_ONCE(sk->sk_incoming_cpu, val);
+	if (!reuse)
+		goto out;
+
+	if (old_sk_incoming_cpu < 0)
+		reuseport_incoming_cpu_inc()
+
+So that:
+- can additonal avoid the '__' helper variants
+- a single write statement, no need to optimize out the WRITE_ONCE in
+the !reuse corner case
+
+> +		__reuseport_incoming_cpu_inc(sk, reuse);
+> +	else if (sk->sk_incoming_cpu >= 0 && val < 0)
+> +		__reuseport_incoming_cpu_dec(sk, reuse);
+> +
+> +out:
+> +	spin_unlock_bh(&reuseport_lock);
+> +}
+> +
+>  static int reuseport_sock_index(struct sock *sk,
+>  				const struct sock_reuseport *reuse,
+>  				bool closed)
+> @@ -48,6 +106,7 @@ static void __reuseport_add_sock(struct sock *sk,
+>  	/* paired with smp_rmb() in reuseport_(select|migrate)_sock() */
+>  	smp_wmb();
+>  	reuse->num_socks++;
+> +	reuseport_incoming_cpu_inc(sk, reuse);
+>  }
+>  
+>  static bool __reuseport_detach_sock(struct sock *sk,
+> @@ -60,6 +119,7 @@ static bool __reuseport_detach_sock(struct sock *sk,
+>  
+>  	reuse->socks[i] = reuse->socks[reuse->num_socks - 1];
+>  	reuse->num_socks--;
+> +	reuseport_incoming_cpu_dec(sk, reuse);
+>  
+>  	return true;
+>  }
+> @@ -70,6 +130,7 @@ static void __reuseport_add_closed_sock(struct sock *sk,
+>  	reuse->socks[reuse->max_socks - reuse->num_closed_socks - 1] = sk;
+>  	/* paired with READ_ONCE() in inet_csk_bind_conflict() */
+>  	WRITE_ONCE(reuse->num_closed_socks, reuse->num_closed_socks + 1);
+> +	reuseport_incoming_cpu_inc(sk, reuse);
+>  }
+>  
+>  static bool __reuseport_detach_closed_sock(struct sock *sk,
+> @@ -83,6 +144,7 @@ static bool __reuseport_detach_closed_sock(struct sock *sk,
+>  	reuse->socks[i] = reuse->socks[reuse->max_socks - reuse->num_closed_socks];
+>  	/* paired with READ_ONCE() in inet_csk_bind_conflict() */
+>  	WRITE_ONCE(reuse->num_closed_socks, reuse->num_closed_socks - 1);
+> +	reuseport_incoming_cpu_dec(sk, reuse);
+>  
+>  	return true;
+>  }
+> @@ -150,6 +212,7 @@ int reuseport_alloc(struct sock *sk, bool bind_inany)
+>  	reuse->bind_inany = bind_inany;
+>  	reuse->socks[0] = sk;
+>  	reuse->num_socks = 1;
+> +	reuseport_incoming_cpu_inc(sk, reuse);
+>  	rcu_assign_pointer(sk->sk_reuseport_cb, reuse);
+>  
+>  out:
+> @@ -193,6 +256,7 @@ static struct sock_reuseport *reuseport_grow(struct sock_reuseport *reuse)
+>  	more_reuse->reuseport_id = reuse->reuseport_id;
+>  	more_reuse->bind_inany = reuse->bind_inany;
+>  	more_reuse->has_conns = reuse->has_conns;
+> +	more_reuse->incoming_cpu = reuse->incoming_cpu;
+>  
+>  	memcpy(more_reuse->socks, reuse->socks,
+>  	       reuse->num_socks * sizeof(struct sock *));
+> @@ -442,18 +506,32 @@ static struct sock *run_bpf_filter(struct sock_reuseport *reuse, u16 socks,
+>  static struct sock *reuseport_select_sock_by_hash(struct sock_reuseport *reuse,
+>  						  u32 hash, u16 num_socks)
+>  {
+> +	struct sock *first_valid_sk = NULL;
+>  	int i, j;
+>  
+>  	i = j = reciprocal_scale(hash, num_socks);
+> -	while (reuse->socks[i]->sk_state == TCP_ESTABLISHED) {
+> +	do {
+> +		struct sock *sk = reuse->socks[i];
+> +
+> +		if (sk->sk_state != TCP_ESTABLISHED) {
+> +			/* paired with WRITE_ONCE() in __reuseport_incoming_cpu_(inc|dec)() */
+> +			if (!READ_ONCE(reuse->incoming_cpu))
+> +				return sk;
+> +
+> +			/* paired with WRITE_ONCE() in reuseport_incoming_cpu_update() */
+> +			if (READ_ONCE(sk->sk_incoming_cpu) == raw_smp_processor_id())
+> +				return sk;
+> +
+> +			if (!first_valid_sk)
+> +				first_valid_sk = sk;
+> +		}
+> +
+>  		i++;
+>  		if (i >= num_socks)
+>  			i = 0;
+> -		if (i == j)
+> -			return NULL;
+> -	}
+> +	} while (i != j);
+>  
+> -	return reuse->socks[i];
+> +	return first_valid_sk;
+>  }
+> 
+IMHO this looks a bit too complex and possibly dangerous for -net. Have
+you considered a net-next target?
+
+Thanks,
+
+Paolo
 
